@@ -1,5 +1,5 @@
 {
-  "version": "0.7.0",
+  "version": "0.7.1",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
   "workspaces": [
@@ -25,7 +25,7 @@
     "test:coverage:combine": "yarn test:coverage && yarn test:coverage:collect && yarn test:coverage:report",
     "test:ct": "yarn workspaces foreach --verbose run test-ct",
     "g:cli": "yarn workspace @sisense/sdk-cli run cli",
-    "version:all": "./scripts/version-all.sh",
+    "version-and-publish": "./scripts/version-all.sh",
     "version:current": "node ./scripts/current-version.cjs",
     "publish": "yarn workspaces foreach --no-private --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue npm publish --tolerate-republish",
     "docs:gen": "TYPEDOC_MODE=PUBLIC typedoc --options typedoc.config.cjs",

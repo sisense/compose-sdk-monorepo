@@ -19,7 +19,12 @@ new_tag="v$(yarn version:current)"
 
 git add .
 git commit -m "chore(release): bump all packages to ${new_tag} [skip ci]"
-git push origin HEAD:$CI_COMMIT_BRANCH
 
+yarn build:prod
+yarn config set npmPublishRegistry "${NPM_REGISTRY_URL}"
+yarn config set npmAuthIdent "${NPM_REGISTRY_AUTH_TOKEN}"
+yarn publish
+
+git push origin HEAD:${CI_COMMIT_BRANCH}
 git tag ${new_tag}
 git push origin ${new_tag}

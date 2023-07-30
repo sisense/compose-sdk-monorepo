@@ -49,7 +49,7 @@ workflow:
   echo 'Git client is configured successfully'
 
 .configure_yarn: &configure_yarn |-
-  yarn config set npmScopes.sisense.npmAuthToken ${GITHUB_PACKAGE_REGISTRY_AUTH_TOKEN}
+  yarn config set npmAuthToken ${GITHUB_PACKAGE_REGISTRY_AUTH_TOKEN}
 
 stages:
   - test
@@ -168,11 +168,8 @@ version-and-publish-to-npm:
     - *configure_git
     - *configure_yarn
     - yarn install --immutable
-    - yarn version:all "${BUMP_STRATEGY}"
-    - yarn config set npmPublishRegistry "${NPM_REGISTRY_URL}"
-    - yarn config set npmAuthIdent "${NPM_REGISTRY_AUTH_TOKEN}"
-    - yarn build:prod
-    - yarn publish
+    - yarn config unset npmAuthToken
+    - yarn version-and-publish "${BUMP_STRATEGY}"
   variables:
     BUMP_STRATEGY: patch
   rules:
