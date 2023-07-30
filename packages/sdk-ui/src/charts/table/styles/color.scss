@@ -1,0 +1,119 @@
+// See http://sisense.sdk.gitlab-pages.sisense.com/styleguide/demo/#!/
+// under "Examples of usage". This enables usage of all scss mixins and
+// variables defined in @sbi/styleguide.
+// Some of these may only reflect default values, not current selections.
+// Test thoroughly to be certain they do what you expect.
+//@import '~@sbi/styleguide/src/sass/base';
+
+// Use http://chir.ag/projects/name-that-color/#6195ED to get color names
+$ABBEY: #45464a;
+$ALABASTER: #f7f7f7;
+$ALTO: #d3d3d3;
+$ALTO2: #dadada;
+$ALUMINIUM: #a4a8b0;
+$ATHENS_GRAY_DARK: #edeef1;
+$ATHENS_GRAY_DARK2: #e3e5ea;
+$ATHENS_GRAY_LIGHT: #f9f9fb;
+$ATHENS_GRAY: #f4f4f8;
+$BLACK: #000000;
+$BRIGHT_GRAY: #373c48;
+$CARNATION: #fa5556;
+$CHARADE: #272a34;
+$DODGER_BLUE: #1faff3;
+$EMPEROR: #4f4f4f;
+$EBONY: #080e18;
+$EBONY_CLAY: #272d39;
+$FRENCH_GRAY: #bdc1c7;
+$GALLERY_DARK: #ebebeb;
+$GALLERY: #efefef;
+$GHOST: #cbced7;
+$GHOST2: #c6c9ce;
+$GRAY_CHATEAU: #9ea2ab;
+$HALF_AND_HALF: #ffffde;
+$MAKO: #444a55;
+$MERCURY: #e5e5e5;
+$MISCHKA: #d1d1d7;
+$NEVADA: #686a6c;
+$NOBEL: #b6b6b6;
+$OSLO_GRAY: #888c92;
+$OXFORD_BLUE: #3a4356;
+$PALE_CANERY: #ffff9c;
+$PALE_SKY: #6e7785;
+$PORCELAIN: #f0f1f2;
+$PROCELAIN_GRAY: #e7e8ea;
+$POWDER_BLUE: #b1e4d7;
+$REGENT_GREY: #7f899c;
+$SEASHELL: #f1f1f1;
+$SELECTIVE_YELLOW: #fbbc04;
+$SELECTIVE_YELLOW2: #f2b900;
+$SHARK: #23252d;
+$SHUTTLE_GRAY_DARK: #5b6372;
+$SHUTTLE_GRAY: #5c6372;
+$SILVER: #bbbbbb;
+$SILVER2: #c5c5c5;
+$SILVER_CHALICE: #acacac;
+$SUPERNOVA_YELLOW: #ffcb05;
+$TURQUOISE: #35d7be;
+$TROPICAL_BLUE: #c1e1f6;
+$TROUT: #515866;
+$WILD_SAND: #f5f5f5;
+$WISTFUL: #a4a4d5;
+$WHITE: #ffffff;
+$GHOST: #c7c9d5;
+$SCIENCE_BLUE: #0065e3;
+$MEDIUM_AQUA_MARINE: #35d7be;
+
+// Temporary constants for summary_stats until UX comes back with
+// real constants.
+$ALABASTER: #f9f9f9;
+$ALABASTER_DARK: #f7f7f7;
+$EASTERN_BLUE: #22ab9f;
+$HONEY_FLOWER: #53206b;
+$MANATEE: #9898a4;
+$MIRAGE: #131326;
+$RUM: #735482;
+$STORM_GRAY: #6a6a7c;
+$TUNA: #363649;
+$MORTAR: #463a4c;
+$SPARTAN_GRAY: #e0e1eb;
+$LIGHT_WISTERIA: #bface1;
+$EAST_SIDE: #a087cd;
+
+$MOON_RAKER: #cbb7ef;
+$DULL_LAVENDAR: #b297e3;
+
+// This is the color that appears when the user hovers over toolbar icon buttons
+$ICON_BUTTON_HOVER_BACKGROUND: rgba(70, 70, 70, 0.1);
+// Copied directly from default theme.
+$SECONDARY_BUTTON_HOVER: #d0d3db;
+
+$TOOLTIP_ZINDEX: 125;
+$NORMAL_ANIMATION_TIME: 500ms;
+$FAST_ANIMATION_TIME: 250ms;
+@mixin CSS_ANIMATE($properties, $duration: $NORMAL_ANIMATION_TIME) {
+  -webkit-transition-duration: $duration;
+  -moz-transition-duration: $duration;
+  transition-duration: $duration;
+  -webkit-transition-property: $properties;
+  -moz-transition-property: $properties;
+  transition-property: $properties;
+}
+
+// exported so typescript files can import constants
+:export {
+  athensGray: $ATHENS_GRAY;
+  athensGrayDark: $ATHENS_GRAY_DARK;
+  athensGrayDark2: $ATHENS_GRAY_DARK2;
+  athensGrayLight: $ATHENS_GRAY_LIGHT;
+  defaultBrandColor: $SUPERNOVA_YELLOW;
+  dodgerBlue: $DODGER_BLUE;
+  mercury: $MERCURY;
+  shuttleGrayDark: $SHUTTLE_GRAY_DARK;
+  oxfordBlue: $OXFORD_BLUE;
+  // some backgrounds in dark mode are not customizable,
+  // and instead simply default to the following:
+  darkModeDefaultBackground: #3c3c42;
+  // certain legacy charts use this value, equivalent to rgb(163, 163, 163)
+  indicatorGrey: #a3a3a3;
+  secondaryButtonHover: $SECONDARY_BUTTON_HOVER;
+}

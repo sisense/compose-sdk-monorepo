@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "target": "ES6",
+    "lib": ["ES2017", "dom", "ES2020.String"]
+  },
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../sdk-rest-client" }]
+}

@@ -1,0 +1,27 @@
+@import './icons.scss';
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+  box-sizing: border-box;
+  display: inline-block;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+.numberIcon {
+  background-image: $NUMBER_ICON;
+}
+
+.dateIcon {
+  background-image: $DATE_ICON;
+}
+
+.textIcon {
+  background-image: $TEXT_ICON;
+}
+
+.booleanIcon {
+  background-image: $BOOLEAN_ICON;
+}

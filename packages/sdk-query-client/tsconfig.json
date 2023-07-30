@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "target": "ES6",
+    "lib": ["ES2017", "dom", "ES2020.String"],
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../sdk-data" }]
+}

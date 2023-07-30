@@ -1,0 +1,22 @@
+{
+  "output": "markdown",
+  "exclude": [
+    "@sisense/task-manager",
+    "@sisense/sisense-charts",
+    "@sisense/commitlint-config",
+    "@sisense/eslint-config",
+    "@sisense/prettier-config",
+    "@sisense/utils-shared-configs",
+    "@sisense/sdk-common",
+    "@sisense/sdk-cli",
+    "@sisense/sdk-data",
+    "@sisense/sdk-modeling",
+    "@sisense/sdk-query-client",
+    "@sisense/sdk-rest-client",
+    "@sisense/sdk-ui",
+    "@sisense/sdk-ui-angular",
+    "@sisense/sdk-ui-preact",
+    "@sisense/sdk-ui-vue"
+  ],
+  "fields": ["name", "licenseType", "link", "installedVersion", "remoteVersion", "author"]
+}
