@@ -11,7 +11,7 @@ Compose SDK is a Software Development Kit that enables a composable, code-driven
 
 ## What you need to know
 
- - **Compose SDK is currently in Beta** - Packages, APIs, and anything else is bound to change
+ - **Compose SDK is currently in Beta** - Packages, APIs, and anything else are bound to change
  - Compose SDK requires a Sisense license & access to a Sisense instance
  - Compose SDK supports Sisense version L2022.11 or newer
  - Compose SDK currently supports development using Typescript & React
@@ -19,7 +19,7 @@ Compose SDK is a Software Development Kit that enables a composable, code-driven
 
 ## Documentation
 
-You can find documentation for Compose SDK on the [Sisense Developer Portal](https://www.sisense.dev).
+You can find documentation for Compose SDK on the [Sisense Developer Portal](https://sisense.dev).
 
 A demo application for Compose SDK + Typescript + React is available in: [compose-sdk-react-demo](https://github.com/sisense/compose-sdk-react-demo).
 
@@ -56,4 +56,4 @@ From `packages/sdk-ui`, run:
 yarn storybook
 ```
 
-You can find more information about setting up an app using this SDK in quickstart.md
+You can find more information about setting up an app using this SDK in [quickstart.md](quickstart.md).

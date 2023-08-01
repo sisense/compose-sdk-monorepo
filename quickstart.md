@@ -300,7 +300,7 @@ Your chart should look like this:
 
 ![Line chart rendered by the Chart component](./media/chart-data-source-example-2.png)
 
-See the [SisenseContextProvider]([./functions/_sisense_sdk_ui.SisenseContextProvider.html](http://sisenseteam.gitlab-pages.sisense.com/compose-sdk-monorepo/functions/_sisense_sdk_ui.SisenseContextProvider.html)) and [Chart](http://sisenseteam.gitlab-pages.sisense.com/compose-sdk-monorepo//functions/_sisense_sdk_ui.Chart.html) docs for more details on supported props.
+See the [API doc](https://sisense.dev/guides/sdk/) for more details on `SisenseContextProvider` and `Chart`.
 
 ## Next Steps
 
