@@ -18,6 +18,7 @@ import { writeFileSync } from 'fs';
 import path from 'path';
 import { DimensionalQueryClient } from '@sisense/sdk-query-client';
 import { PKG_VERSION } from '../package-version.js';
+import { trackCliError } from '@sisense/sdk-common';
 
 function getHttpClient(
   url: string,
@@ -33,56 +34,60 @@ function getHttpClient(
   return new HttpClient(url, auth, 'sdk-cli' + (PKG_VERSION ? `-${PKG_VERSION}` : ''));
 }
 
+export const handleHttpClientLogin = async (httpClient: HttpClient) => {
+  console.log('Logging in... ');
+
+  try {
+    const isLoggedIn = await httpClient.login();
+    if (!isLoggedIn) {
+      console.log(
+        `Failed. ${
+          httpClient.auth instanceof WatAuthenticator ||
+          httpClient.auth instanceof BearerAuthenticator
+            ? 'Double-check your token'
+            : 'Wrong credentials'
+        }.\r\n`,
+      );
+    }
+    console.log('OK!\r\n');
+    console.log('Getting fields... ');
+  } catch (err) {
+    console.log(`Error connecting to ${httpClient.url}. \r\n${err}\r\n`);
+    return Promise.reject();
+  }
+
+  return Promise.resolve();
+};
+
 /**
  * Create a data model for a Sisense data source
  */
-function createDataModel(httpClient: HttpClient, dataSource: string): Promise<DataModel> {
-  return new Promise((resolve, reject) => {
-    console.log('Logging in... ');
+async function createDataModel(httpClient: HttpClient, dataSource: string): Promise<DataModel> {
+  const queryClient = new DimensionalQueryClient(httpClient);
 
-    httpClient
-      .login()
-      .then((isLoggedIn) => {
-        if (!isLoggedIn) {
-          console.log(
-            `Failed. ${
-              httpClient.auth instanceof WatAuthenticator ||
-              httpClient.auth instanceof BearerAuthenticator
-                ? 'Double-check your token'
-                : 'Wrong credentials'
-            }.\r\n`,
-          );
-          reject();
-          return;
-        }
+  try {
+    return await queryClient.getDataSourceFields(dataSource).then((fields) => {
+      console.log('OK!\r\n');
+      const dataModel = {
+        name: dataSource,
+        dataSource: dataSource,
+        metadata: fields,
+      };
 
-        console.log('OK!\r\n');
-        console.log('Getting fields... ');
-
-        const queryClient = new DimensionalQueryClient(httpClient);
-
-        queryClient
-          .getDataSourceFields(dataSource)
-          .then((fields) => {
-            console.log('OK!\r\n');
-            const dataModel = {
-              name: dataSource,
-              dataSource: dataSource,
-              metadata: fields,
-            };
-
-            resolve(rewriteDataModel(dataModel));
-          })
-          .catch((err) => {
-            console.log(`Error fetching metadata. Reason: ${err}\r\n`);
-            reject();
-          });
-      })
-      .catch((err) => {
-        console.log(`Error connecting to ${httpClient.url}. \r\n${err}\r\n`);
-        reject();
-      });
-  });
+      return rewriteDataModel(dataModel);
+    });
+  } catch (err) {
+    trackCliError(
+      {
+        packageVersion: PKG_VERSION,
+        component: 'createDataModel',
+        error: err as Error | string,
+      },
+      httpClient,
+    ).catch(() => {});
+    console.log(`Error fetching metadata. Reason: ${err}\r\n`);
+    return Promise.reject();
+  }
 }
 
 function rewriteDataModel(dataModel: any): DataModel {

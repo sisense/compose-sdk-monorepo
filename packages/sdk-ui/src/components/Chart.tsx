@@ -49,10 +49,10 @@ import { getDefaultStyleOptions } from '../chart-options-processor/chart_options
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Mixed chart component used for easily switching chart types or rendering multiple series of different types.
+ * A React component component used for easily switching chart types or rendering multiple series of different chart types.
  *
  * @example
- * (1) Example of using the `Chart` component to
+ * (1) An example of using the `Chart` component to
  * plot a column chart of the Sample ECommerce data source hosted in a Sisense instance:
  * ```tsx
  * <Chart
@@ -70,7 +70,7 @@ import { TrackingContextProvider, useTrackComponentInit } from '../useTrackCompo
  * ##
  * <img src="media://chart-data-source-example-1.png" width="800px" />
  *
- * (2) Example of using the `Chart` component to
+ * (2) An example of using the `Chart` component to
  * plot a pie chart of static data provided in code:
  * ```tsx
  * <Chart
@@ -129,11 +129,12 @@ import { TrackingContextProvider, useTrackComponentInit } from '../useTrackCompo
  For all the details, please refer to the UnwrappedChart component.
  */
 export const Chart: FunctionComponent<ChartProps> = (props) => {
-  useTrackComponentInit('Chart', props);
+  const displayName = 'Chart';
+  useTrackComponentInit(displayName, props);
 
   return (
     <TrackingContextProvider>
-      <ErrorBoundary>
+      <ErrorBoundary componentName={displayName}>
         <UnwrappedChart {...props} />
       </ErrorBoundary>
     </TrackingContextProvider>

@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.7.3] - 2023-08-03
+
+### Changed
+
+- Support usage tracking of CLI commands
+- Support error tracking of UI components and CLI commands
+
+## [0.7.2] - 2023-08-01
+
+### Changed
+
+- Update `README.md` and `quickstart.md` for beta release
+
+## [0.7.1] - 2023-07-29
+
+### Changed
+
+- Clean up internal code references for beta release
+
 ## [0.7.0] - 2023-07-29
 
 ### Changed

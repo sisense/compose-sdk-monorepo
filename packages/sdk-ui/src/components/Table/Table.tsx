@@ -138,11 +138,12 @@ export const UnwrappedTable = ({
  * @returns Table component
  */
 export const Table = (props: TableProps) => {
-  useTrackComponentInit('Table', props);
+  const displayName = 'Table';
+  useTrackComponentInit(displayName, props);
 
   return (
     <TrackingContextProvider>
-      <ErrorBoundary>
+      <ErrorBoundary componentName={displayName}>
         <UnwrappedTable {...props} />
       </ErrorBoundary>
     </TrackingContextProvider>

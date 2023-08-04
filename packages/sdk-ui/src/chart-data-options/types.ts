@@ -325,7 +325,7 @@ export type TableDataOptions = {
 };
 
 /**
- * Configuration for how to query aggregate data and assign data to chart encodings.
+ * Configuration for querying aggregate data and assigning data to chart encodings.
  *
  * There are separate configurations for {@link CartesianChartDataOptions | Cartesian},
  * {@link CategoricalChartDataOptions | Categorical},

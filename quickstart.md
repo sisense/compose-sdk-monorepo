@@ -70,50 +70,51 @@ Compose SDK contains three packages for public use:
 * @sisense/sdk-data: Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
 * @sisense/sdk-cli: A command-line tool for generating TypeScript representation of a Sisense data model.
 
-The Compose SDK packages are deployed via Github Packages. To install the packages:
+The Compose SDK packages are deployed via GitHub Packages. To install the packages:
 
 1. Add the Namespace to your Project using the following command:
 
-    For npm:
+   For npm:
 
     ```bash
     npm config set "@sisense:registry" "https://npm.pkg.github.com" --userconfig .npmrc
     ```
 
-    For Yarn 2+:
+   For Yarn 2+:
 
     ```bash
     yarn config set "npmScopes.sisense.npmRegistryServer" "https://npm.pkg.github.com"
     ```
 
-2. Add the GitHub package authentication. Create a personal access token with the `read:packages` permission. Then, configure your package manager to authenticate with Github packages using the token you created. Replace __YOUR_TOKEN__ with your access token.
+2. Add the GitHub package authentication. Create a personal access token with the `read:packages` permission. Then, configure your package manager to authenticate with GitHub packages using the token you created.
+Replace `__YOUR_GITHUB_USERNAME__` and `__YOUR_TOKEN__` with your GitHub username and access token, respectively.
 
-    For npm:
+   For npm:
 
     ```bash
-    npm config set "always-auth" true --userconfig .npmrc
+    npm config set "always-auth" true --userconfig .npmrc   # Required for npm version less than 6.x
     npm config set "//npm.pkg.github.com/:_authToken" "__YOUR_TOKEN__" --userconfig .npmrc
     ```
 
-    For Yarn 2+
+   For Yarn 2+
 
     ```bash
     yarn config set "npmScopes.sisense.npmAlwaysAuth" true
     yarn config set "npmScopes.sisense.npmAuthIdent" "__YOUR_GITHUB_USERNAME__:__YOUR_TOKEN__"
     ```
 
-    For more information, see [Github Packages documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
+   For more information, see [GitHub Packages documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
 
 3. Install the packages into your application using the following commands:
 
-    For npm:
+   For npm:
 
     ```sh
     npm i @sisense/sdk-ui @sisense/sdk-data
     npm i @sisense/sdk-cli --save-dev
     ```
 
-    For yarn:
+   For yarn:
 
     ```sh
     yarn add @sisense/sdk-ui @sisense/sdk-data
@@ -300,7 +301,7 @@ Your chart should look like this:
 
 ![Line chart rendered by the Chart component](./media/chart-data-source-example-2.png)
 
-See the [SisenseContextProvider]([./functions/_sisense_sdk_ui.SisenseContextProvider.html](http://sisenseteam.gitlab-pages.sisense.com/compose-sdk-monorepo/functions/_sisense_sdk_ui.SisenseContextProvider.html)) and [Chart](http://sisenseteam.gitlab-pages.sisense.com/compose-sdk-monorepo//functions/_sisense_sdk_ui.Chart.html) docs for more details on supported props.
+See the [API doc](https://sisense.dev/guides/sdk/) for more details on `SisenseContextProvider` and `Chart`.
 
 ## Next Steps
 

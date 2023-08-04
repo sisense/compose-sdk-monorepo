@@ -163,11 +163,12 @@ export const UnwrappedChartWidget: FunctionComponent<ChartWidgetProps> = (props)
  * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType}
  */
 export const ChartWidget: FunctionComponent<ChartWidgetProps> = (props) => {
-  useTrackComponentInit('ChartWidget', props);
+  const displayName = 'ChartWidget';
+  useTrackComponentInit(displayName, props);
 
   return (
     <TrackingContextProvider>
-      <ErrorBoundary>
+      <ErrorBoundary componentName={displayName}>
         <UnwrappedChartWidget {...props} />
       </ErrorBoundary>
     </TrackingContextProvider>

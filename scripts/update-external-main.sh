@@ -19,7 +19,7 @@ git checkout -B external-main origin/external-main
 last_published_tag=$(git describe --tags --abbrev=0 --always)
 
 # Reset your local external-main branch to the specified ref and stage changes.
-git diff ${last_published_tag} ${1:-'origin/master'} | git apply --whitespace=fix
+git diff ${last_published_tag} ${1:-'origin/master'} --binary | git apply --whitespace=fix
 
 # Remove sensitive or irrelevant information
 rm -f CONTRIBUTING.md

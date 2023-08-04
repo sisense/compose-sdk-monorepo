@@ -93,11 +93,12 @@ const UnwrappedMemberFilterTile: FunctionComponent<MemberFilterTileProps> = (pro
  * @returns Member filter tile component
  */
 export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = (props) => {
-  useTrackComponentInit('MemberFilterTile', props);
+  const displayName = 'MemberFilterTile';
+  useTrackComponentInit(displayName, props);
 
   return (
     <TrackingContextProvider>
-      <ErrorBoundary>
+      <ErrorBoundary componentName={displayName}>
         <UnwrappedMemberFilterTile {...props} />
       </ErrorBoundary>
     </TrackingContextProvider>

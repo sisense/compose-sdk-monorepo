@@ -15,6 +15,7 @@
     { "path": "../sdk-data" },
     { "path": "../sdk-modeling" },
     { "path": "../sdk-rest-client" },
-    { "path": "../sdk-query-client" }
+    { "path": "../sdk-query-client" },
+    { "path": "../sdk-common" }
   ]
 }

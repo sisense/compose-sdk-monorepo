@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-modeling",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
@@ -9,7 +9,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@sisense/sdk-data": "^0.7.2"
+    "@sisense/sdk-data": "^0.7.3"
   },
   "scripts": {
     "build": "tsc --build",

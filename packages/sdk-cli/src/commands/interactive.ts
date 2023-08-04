@@ -9,9 +9,9 @@
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import inquirer from 'inquirer';
-import { getDataModelCommand, Options } from './get-data-model.js';
+import { getDataModel } from './get-data-model.js';
 import { ArgumentsCamelCase } from 'yargs';
-import { Command } from '../types.js';
+import { Command, GetDataModelOptions } from '../types.js';
 
 const command: Command = 'interactive';
 const desc = 'Run in interactive mode';
@@ -112,8 +112,8 @@ export const promptDataModel = () =>
     },
   ]);
 
-export const handleHelper = (combinedAnswers: ArgumentsCamelCase<Options>) =>
-  getDataModelCommand.handler(combinedAnswers);
+export const handleHelper = (combinedAnswers: ArgumentsCamelCase<GetDataModelOptions>) =>
+  getDataModel(combinedAnswers, 'interactive');
 
 const handler = async () => {
   const cmd = await promptCommand();

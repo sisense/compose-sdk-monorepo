@@ -1,3 +1,5 @@
+import { DataSource } from '@sisense/sdk-data';
+
 const COMMANDS = ['get-data-model', 'interactive'] as const;
 
 /**
@@ -11,3 +13,13 @@ const COMMANDS = ['get-data-model', 'interactive'] as const;
   to meet this requirement.
 */
 export type Command = (typeof COMMANDS)[number];
+
+export type GetDataModelOptions = {
+  url: string;
+  dataSource: DataSource;
+  username: string | undefined;
+  password: string | undefined;
+  token: string | undefined;
+  wat: string | undefined;
+  output: string | undefined;
+};

@@ -3,9 +3,8 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Area Chart Component.
- * The Area Chart component is similar to a Line Chart,
- * but with filled-in areas under each line and the option to display them as stacked.
+ * A React component similar to a Line Chart,
+ * but with filled in areas under each line and an option to display them as stacked.
  * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
  *
  * @example

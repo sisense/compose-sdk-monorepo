@@ -93,11 +93,12 @@ export const UnwrappedDashboardWidget: FunctionComponent<DashboardWidgetProps> =
  * ```
  */
 export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = (props) => {
-  useTrackComponentInit('DashboardWidget', props);
+  const displayName = 'DashboardWidget';
+  useTrackComponentInit(displayName, props);
 
   return (
     <TrackingContextProvider>
-      <ErrorBoundary>
+      <ErrorBoundary componentName={displayName}>
         <UnwrappedDashboardWidget {...props} />
       </ErrorBoundary>
     </TrackingContextProvider>

@@ -57,29 +57,26 @@ export function handleUnauthorizedResponse(
 }
 
 /**
- * Checks if the given response error indicates a CORS error.
+ * Checks if the given response error indicates a Network error.
+ *
+ * It is impossible to distinguish between a CORS error and other network errors, such as
+ * 'net::ERR_SSL_PROTOCOL_ERROR' and 'net::ERR_EMPTY_RESPONSE'. This information is hidden by the browser.
  *
  * @param responseError - The error object received from the failed response.
  */
-export function isCorsError(responseError: Error & { request?: Request }): boolean {
-  return !!(
-    responseError.request &&
-    responseError.request.mode === 'cors' &&
-    responseError.request.credentials === 'same-origin' &&
-    responseError.message === 'Failed to fetch' &&
-    responseError.name === 'TypeError'
-  );
+export function isNetworkError(responseError: Error): boolean {
+  return !!(responseError.message === 'Failed to fetch' && responseError.name === 'TypeError');
 }
 
 /**
- * Handles a CORS error.
+ * Handles a Network error.
  *
  * @returns A promise that rejects with an error message.
  */
-export function handleCorsError(): Promise<never> {
+export function handleNetworkError(): Promise<never> {
   return Promise.reject(
     new Error(
-      "Cross-origin requests blocked. To enable, add your domain to 'CORS Allowed Origins' in Sisense Admin Panel -> Security Settings.",
+      "Network error. Probably you forgot to add your domain to 'CORS Allowed Origins' in Sisense Admin Panel -> Security Settings.",
     ),
   );
 }

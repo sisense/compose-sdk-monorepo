@@ -249,25 +249,25 @@ export interface BaseChartProps extends ChartEventProps {
 }
 
 /**
- * Props shared across {@link Chart} components
+ * Props shared across {@link Chart} components.
  */
 export interface ChartProps extends BaseChartProps {
   /**
-   * Default chart type of each series
+   * Default chart type of each series.
    *
    * @category Chart
    */
   chartType: ChartType;
 
   /**
-   * Configurations for how to interpret and present the data passed to the chart
+   * Configurations for how to interpret and present data passed to the chart.
    *
    * @category Chart
    */
   dataOptions: ChartDataOptions;
 
   /**
-   * Style options union across chart types
+   * Style options union across chart types.
    *
    * @category Chart
    */
@@ -287,13 +287,13 @@ export interface ChartProps extends BaseChartProps {
  */
 export interface AreaChartProps extends BaseChartProps {
   /**
-   * Configurations for how to interpret and present the data passed to the chart
+   * Configurations for how to interpret and present data passed to the chart.
    *
    * @category Chart
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines the functional style of the various chart elements.
    *
    * @category Chart
    */
@@ -359,13 +359,13 @@ export interface FunnelChartProps extends BaseChartProps {
  */
 export interface LineChartProps extends BaseChartProps {
   /**
-   * Configurations for how to interpret and present the data passed to the chart
+   * Configurations for how to interpret and present data passed to the chart.
    *
    * @category Chart
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines the functional style of the various chart elements.
    *
    * @category Chart
    */

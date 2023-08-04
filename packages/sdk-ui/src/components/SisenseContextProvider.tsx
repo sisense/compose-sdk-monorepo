@@ -9,13 +9,18 @@ import React, {
 } from 'react';
 import { SisenseContextProviderProps } from '../props';
 import { ThemeProvider } from './ThemeProvider';
-import { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
+import { DisconnectedErrorBoundary } from './ErrorBoundary/DisconnectedErrorBoundary';
 
-const SisenseContext = createContext<{
+export type SisenseContextPayload = {
   isInitialized: boolean;
   app?: ClientApplication;
   enableTracking: boolean;
-}>({ isInitialized: false, enableTracking: true });
+};
+
+export const SisenseContext = createContext<SisenseContextPayload>({
+  isInitialized: false,
+  enableTracking: true,
+});
 export const useSisenseContext = () => useContext(SisenseContext);
 
 /**
@@ -105,8 +110,8 @@ export const SisenseContextProvider: FunctionComponent<
 > = (props) => {
   const { showRuntimeErrors = true } = props;
   return (
-    <ErrorBoundary showErrorBox={showRuntimeErrors}>
+    <DisconnectedErrorBoundary showErrorBox={showRuntimeErrors}>
       <UnwrappedSisenseContextProvider {...props} />
-    </ErrorBoundary>
+    </DisconnectedErrorBoundary>
   );
 };

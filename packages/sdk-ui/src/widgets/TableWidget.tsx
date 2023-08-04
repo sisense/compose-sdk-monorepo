@@ -13,6 +13,7 @@ import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/
 import { Table } from '../components/Table';
 import { useRef } from 'react';
 import { useEffect } from 'react';
+import { useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
  * @internal
@@ -117,8 +118,11 @@ export const UnwrappedTableWidget: FunctionComponent<TableWidgetProps> = (props)
  * @internal
  */
 export const TableWidget: FunctionComponent<TableWidgetProps> = (props) => {
+  const displayName = 'TableWidget';
+  useTrackComponentInit(displayName, props);
+
   return (
-    <ErrorBoundary>
+    <ErrorBoundary componentName={displayName}>
       <UnwrappedTableWidget {...props} />
     </ErrorBoundary>
   );

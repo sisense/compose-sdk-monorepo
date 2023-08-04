@@ -4,10 +4,10 @@
 import { Authenticator } from './interfaces.js';
 import fetchIntercept from 'fetch-intercept';
 import {
-  handleCorsError,
+  handleNetworkError,
   handleErrorResponse,
   handleUnauthorizedResponse,
-  isCorsError,
+  isNetworkError,
 } from './interceptors.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
@@ -38,9 +38,9 @@ export class HttpClient {
         }
         return response;
       },
-      responseError: (error: Error & { request?: Request }) => {
-        if (isCorsError(error)) {
-          return handleCorsError();
+      responseError: (error: Error) => {
+        if (isNetworkError(error)) {
+          return handleNetworkError();
         }
         return Promise.reject(error);
       },

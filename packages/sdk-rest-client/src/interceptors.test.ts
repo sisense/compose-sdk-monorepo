@@ -5,10 +5,10 @@
 
 import { FetchInterceptorResponse } from 'fetch-intercept';
 import {
-  handleCorsError,
+  handleNetworkError,
   handleErrorResponse,
   handleUnauthorizedResponse,
-  isCorsError,
+  isNetworkError,
 } from './interceptors';
 import { PasswordAuthenticator } from './password-authenticator';
 import { BearerAuthenticator } from './bearer-authenticator';
@@ -106,20 +106,16 @@ describe('Error interceptor', () => {
   });
 });
 
-describe('CORS error', () => {
-  describe('isCorsError', () => {
-    it('should return true for CORS error', () => {
-      const responseError = new TypeError('Failed to fetch') as Error & { request?: Request };
-      responseError.request = {
-        mode: 'cors',
-        credentials: 'same-origin',
-      } as Request;
-      expect(isCorsError(responseError)).toBeTruthy();
+describe('Network error', () => {
+  describe('isNetworkError', () => {
+    it('should return true for Network error', () => {
+      const responseError = new TypeError('Failed to fetch');
+      expect(isNetworkError(responseError)).toBeTruthy();
     });
   });
-  describe('handleCorsError', () => {
-    it("should reject with an error message constains 'CORS'", () => {
-      return expect(handleCorsError()).rejects.toThrow(/CORS/);
+  describe('handleNetworkError', () => {
+    it("should reject with an error message constains 'Network error'", () => {
+      return expect(handleNetworkError()).rejects.toThrow(/Network error/);
     });
   });
 });

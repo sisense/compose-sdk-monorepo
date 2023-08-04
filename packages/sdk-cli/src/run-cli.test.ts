@@ -6,10 +6,11 @@ import { runCli } from './run-cli';
 import * as interactive from './commands/interactive';
 import * as helpers from './commands/helpers';
 import * as getDataModel from './commands/get-data-model';
+import * as tracking from './tracking';
 import { ArgumentsCamelCase } from 'yargs';
-import { Options } from './commands/get-data-model';
 import { HttpClient, PasswordAuthenticator } from '@sisense/sdk-rest-client';
 import { PKG_VERSION } from './package-version';
+import { GetDataModelOptions } from './types';
 
 // Reference: https://kgajera.com/blog/how-to-test-yargs-cli-with-jest/
 const COMMAND_GET_DATA_MODEL = 'get-data-model';
@@ -113,7 +114,7 @@ describe('CLI', () => {
 
     // mock handleHelper function
     const handleHelperSpy = jest.spyOn(interactive, 'handleHelper');
-    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<Options>) => {
+    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<GetDataModelOptions>) => {
       // somehow when inquirer.prompt is spied on, toHaveBeenCalledWith does not work
       // as a workaround, we do the assertion in the mock implementation
       expect(answers).toStrictEqual(expectedAnswers);
@@ -129,7 +130,7 @@ describe('CLI', () => {
     const expectedAnswers = mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'token');
     // mock handleHelper function
     const handleHelperSpy = jest.spyOn(interactive, 'handleHelper');
-    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<Options>) => {
+    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<GetDataModelOptions>) => {
       expect(answers).toStrictEqual(expectedAnswers);
       return new Promise(() => {
         return answers;
@@ -143,7 +144,7 @@ describe('CLI', () => {
     const expectedAnswers = mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'web access token');
     // mock handleHelper function
     const handleHelperSpy = jest.spyOn(interactive, 'handleHelper');
-    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<Options>) => {
+    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<GetDataModelOptions>) => {
       expect(answers).toStrictEqual(expectedAnswers);
       return new Promise(() => {
         return answers;
@@ -159,68 +160,90 @@ describe('CLI', () => {
     expect(expectedAnswers).toStrictEqual({});
   });
 
-  it('should run get-data-model command with --username and --password', () => {
-    // mock createDataModel function
+  describe('should run get-data-model command', () => {
     const createDataModelSpy = jest.spyOn(helpers, 'createDataModel');
-    createDataModelSpy.mockImplementation(
-      (httpClient: HttpClient, dataSource: string) =>
-        new Promise(() => ({ dataSource, httpClient })),
-    );
+    const handleHttpClientLoginSpy = jest.spyOn(helpers, 'handleHttpClientLogin');
+    const trackExecutionSpy = jest.spyOn(tracking, 'trackExecution');
 
-    runCommand(
-      COMMAND_GET_DATA_MODEL,
-      '--url',
-      fakeUrl,
-      '--username',
-      fakeUsername,
-      '--password',
-      fakePassword,
-      '-d',
-      fakeDataSource,
-      '-o',
-      fakeOutput,
-    );
+    beforeAll(() => {
+      createDataModelSpy.mockImplementation(
+        (httpClient: HttpClient, dataSource: string) =>
+          new Promise(() => ({ dataSource, httpClient })),
+      );
+      handleHttpClientLoginSpy.mockImplementation(() => Promise.resolve());
+      trackExecutionSpy.mockImplementation(() => Promise.resolve());
+    });
 
-    const expectedHttpClient = new HttpClient(
-      fakeUrl,
-      new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
-      `sdk-cli-${PKG_VERSION as string}`,
-    );
+    afterEach(() => {
+      createDataModelSpy.mockClear();
+      handleHttpClientLoginSpy.mockClear();
+      trackExecutionSpy.mockClear();
+    });
 
-    expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
-  });
+    it('with --username and --password', async () => {
+      // mock createDataModel function
 
-  it('should run get-data-model command with --username and without --password value', () => {
-    // mock promptPasswordInteractive function
-    jest
-      .spyOn(getDataModel, 'promptPasswordInteractive')
-      .mockResolvedValue({ maskedPassword: fakePassword });
+      runCommand(
+        COMMAND_GET_DATA_MODEL,
+        '--url',
+        fakeUrl,
+        '--username',
+        fakeUsername,
+        '--password',
+        fakePassword,
+        '-d',
+        fakeDataSource,
+        '-o',
+        fakeOutput,
+      );
 
-    // mock createDataModel function
-    const createDataModelSpy = jest.spyOn(helpers, 'createDataModel');
-    createDataModelSpy.mockImplementation((httpClient: HttpClient, dataSource: string) => {
-      // somehow when inquirer.prompt is spied on, toHaveBeenCalledWith does not work
-      // as a workaround, we do the assertion in the mock implementation
+      await new Promise(process.nextTick); // eslint-disable-line
+
       const expectedHttpClient = new HttpClient(
         fakeUrl,
         new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
         `sdk-cli-${PKG_VERSION as string}`,
       );
-      expect(httpClient).toStrictEqual(expectedHttpClient);
-      return new Promise(() => ({ dataSource, httpClient }));
+
+      expect(trackExecutionSpy).toHaveBeenCalled();
+      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
     });
 
-    runCommand(
-      COMMAND_GET_DATA_MODEL,
-      '--url',
-      fakeUrl,
-      '--username',
-      fakeUsername,
-      '--password',
-      '-d',
-      fakeDataSource,
-      '-o',
-      fakeOutput,
-    );
+    it('should run get-data-model command with --username and without --password value', () => {
+      // mock promptPasswordInteractive function
+      jest
+        .spyOn(getDataModel, 'promptPasswordInteractive')
+        .mockResolvedValue({ maskedPassword: fakePassword });
+
+      // mock createDataModel function
+      createDataModelSpy.mockImplementation((httpClient: HttpClient, dataSource: string) => {
+        // somehow when inquirer.prompt is spied on, toHaveBeenCalledWith does not work
+        // as a workaround, we do the assertion in the mock implementation
+
+        const expectedHttpClient = new HttpClient(
+          fakeUrl,
+          new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
+          `sdk-cli-${PKG_VERSION as string}`,
+        );
+        expect(httpClient).toStrictEqual(expectedHttpClient);
+        return new Promise(() => ({ dataSource, httpClient }));
+      });
+
+      handleHttpClientLoginSpy.mockImplementation(() => Promise.resolve());
+      trackExecutionSpy.mockImplementation(() => Promise.resolve());
+
+      runCommand(
+        COMMAND_GET_DATA_MODEL,
+        '--url',
+        fakeUrl,
+        '--username',
+        fakeUsername,
+        '--password',
+        '-d',
+        fakeDataSource,
+        '-o',
+        fakeOutput,
+      );
+    });
   });
 });

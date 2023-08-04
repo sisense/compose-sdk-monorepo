@@ -2,24 +2,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
 import { Arguments, ArgumentsCamelCase, Argv, CommandModule } from 'yargs';
-import { getHttpClient, createDataModel, writeFile } from './helpers.js';
+import { getHttpClient, createDataModel, writeFile, handleHttpClientLogin } from './helpers.js';
 import inquirer from 'inquirer';
-import { DataSource } from '@sisense/sdk-data';
-import { Command } from '../types.js';
+import { Command, GetDataModelOptions } from '../types.js';
+import { trackExecution } from '../tracking.js';
 
 const command: Command = 'get-data-model';
 const describe =
   'Write the TypeScript representation of a data model from the given Sisense url and data source';
-
-export type Options = {
-  url: string;
-  dataSource: DataSource;
-  username: string | undefined;
-  password: string | undefined;
-  token: string | undefined;
-  wat: string | undefined;
-  output: string | undefined;
-};
 
 const builder = (yargs: Argv<unknown>) =>
   yargs
@@ -88,31 +78,12 @@ export const promptPasswordInteractive = (username: string) =>
     },
   ]);
 
-export const getDataModel = (
-  url: string,
-  dataSource: DataSource,
-  output?: string,
-  username?: string,
-  password?: string,
-  token?: string,
-  wat?: string,
+export const getDataModel = async (
+  options: Arguments<GetDataModelOptions>,
+  commandName: Command,
 ) => {
-  const httpClient = getHttpClient(url, username, password, token, wat);
-
-  createDataModel(httpClient, dataSource)
-    .then((model) => {
-      return writeFile(model, 'ts', output);
-    })
-    .catch((err) => {
-      if (err) console.log(err);
-      // exit code 1: One or more generic errors encountered upon exit
-      process.exit(1);
-    });
-};
-
-const handler = async (argv: Arguments<Options>) => {
-  const { url, dataSource, username, token, wat, output } = argv;
-  let { password } = argv;
+  const { url, dataSource, username, token, wat, output } = options;
+  let { password } = options;
 
   // validate url
   if (!/^(http|https):\/\//.test(url)) {
@@ -130,10 +101,25 @@ const handler = async (argv: Arguments<Options>) => {
     password = maskedPassword as string;
   }
 
-  getDataModel(url, dataSource, output, username, password, token, wat);
+  const httpClient = getHttpClient(url, username, password, token, wat);
+
+  try {
+    await handleHttpClientLogin(httpClient);
+    trackExecution(httpClient, commandName, options);
+    await createDataModel(httpClient, dataSource).then((model) => {
+      return writeFile(model, 'ts', output);
+    });
+  } catch (err) {
+    if (err) console.log(err);
+    // exit code 1: One or more generic errors encountered upon exit
+    process.exit(1);
+  }
 };
 
-export const getDataModelCommand: CommandModule<unknown, Options> = {
+const handler = (options: Arguments<GetDataModelOptions>) =>
+  getDataModel(options, 'get-data-model');
+
+export const getDataModelCommand: CommandModule<unknown, GetDataModelOptions> = {
   command,
   describe,
   builder,

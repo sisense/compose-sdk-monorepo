@@ -77,11 +77,12 @@ export const UnwrappedExecuteQuery: FunctionComponent<ExecuteQueryProps> = ({
  * @returns ExecuteQuery component
  */
 export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = (props) => {
-  useTrackComponentInit('ExecuteQuery', props);
+  const displayName = 'ExecuteQuery';
+  useTrackComponentInit(displayName, props);
 
   return (
     <TrackingContextProvider>
-      <ErrorBoundary>
+      <ErrorBoundary componentName={displayName}>
         <UnwrappedExecuteQuery {...props} />
       </ErrorBoundary>
     </TrackingContextProvider>

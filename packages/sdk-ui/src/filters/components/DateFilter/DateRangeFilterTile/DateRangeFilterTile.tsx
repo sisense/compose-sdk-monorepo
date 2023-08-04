@@ -104,11 +104,12 @@ export const UnwrappedDateRangeFilterTile = (props: DateRangeFilterTileProps) =>
  * @returns Date Range Filter Tile component
  */
 export const DateRangeFilterTile = (props: DateRangeFilterTileProps) => {
-  useTrackComponentInit('DateRangeFilterTile', props);
+  const displayName = 'DateRangeFilterTile';
+  useTrackComponentInit(displayName, props);
 
   return (
     <TrackingContextProvider>
-      <ErrorBoundary>
+      <ErrorBoundary componentName={displayName}>
         <UnwrappedDateRangeFilterTile {...props} />
       </ErrorBoundary>
     </TrackingContextProvider>

@@ -1,4 +1,27 @@
-# Compose SDK Monorepo
+# Compose SDK Monorepo - BETA
+
+Compose SDK is a Software Development Kit that enables a composable, code-driven way to use Sisense platform capabilities. Build analytics and data-driven experiences into your product with code using Compose SDK, a set of client-side libraries and components for query composition, data visualization, and more.
+
+- **Create Sisense queries, charts, and filters directly from your application code**
+  No predefined dashboards or widgets required - or render existing widgets by ID. Mix and match approaches to fit your needs.
+- **Composable, modular and extensible**
+  Use our components, customize them, or bring your own. Compose SDK works equally well for building new applications or upgrading existing ones to use Sisense’s powerful analytics platform.
+- **Built with developer experience in mind**
+  The SDK is available via GitHub and NPM, supports Typescript and React, and includes documentation, code samples and CLI tools that help you get things done with ease.
+
+## What you need to know
+
+- **Compose SDK is currently in Beta** - Packages, APIs, and anything else are bound to change
+- Compose SDK requires a Sisense license & access to a Sisense instance
+- Compose SDK supports Sisense version L2022.11 or newer
+- Compose SDK currently supports development using Typescript & React
+- This repository is a monorepo containing all SDK packages. You can find the individual packages [here](https://github.com/orgs/sisense/packages?repo_name=compose-sdk-monorepo)
+
+## Documentation
+
+You can find documentation for Compose SDK on the [Sisense Developer Portal](https://sisense.dev).
+
+A demo application for Compose SDK + Typescript + React is available in: [compose-sdk-react-demo](https://github.com/sisense/compose-sdk-react-demo).
 
 ## Overview of Development Tools
 
@@ -33,4 +56,4 @@ From `packages/sdk-ui`, run:
 yarn storybook
 ```
 
-You can find more information about setting up an app using this SDK in quickstart.md
+You can find more information about setting up an app using this SDK in [quickstart.md](quickstart.md).
