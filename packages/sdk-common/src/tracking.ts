@@ -34,7 +34,7 @@ export const trackProductEvent = async (
       // for some reason, this endpoint returns an empty text response on
       // success. Swallow this error since (so far) this is the only endpoint
       // that behaves like this.
-      if (e instanceof SyntaxError && e.message === 'Unexpected end of JSON input') {
+      if (e instanceof Error && e.message.includes('Unexpected end of JSON input')) {
         return;
       }
 

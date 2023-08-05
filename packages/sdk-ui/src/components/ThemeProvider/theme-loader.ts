@@ -1,12 +1,12 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
 import type { ThemeOid, CompleteThemeSettings } from '../../types';
 import {
-  type PwcDesignSettings,
-  type PwcPalette,
-  type PwcPaletteError,
+  type LegacyDesignSettings,
+  type LegacyPalette,
+  type LegacyPaletteError,
   convertToThemeSettings,
   getPaletteName,
-} from './pwc-design-settings';
+} from './legacy-design-settings';
 
 /**
  * Fetches theme settings from the Sisense instance and converts them to CompleteThemeSettings.
@@ -19,21 +19,21 @@ export async function getThemeSettingsByOid(
   themeOid: ThemeOid,
   httpClient: Pick<HttpClient, 'get'>,
 ): Promise<CompleteThemeSettings> {
-  const pwcDesignSettings = await httpClient
-    .get<PwcDesignSettings>(`api/v1/themes/${themeOid}`)
+  const legacyDesignSettings = await httpClient
+    .get<LegacyDesignSettings>(`api/v1/themes/${themeOid}`)
     .catch(() => {
       throw new Error(`Theme with oid ${themeOid} not found in the Sisense instance`);
     });
 
-  const paletteName = getPaletteName(pwcDesignSettings);
-  const pwcPalette = await httpClient.get<PwcPalette | PwcPaletteError>(
+  const paletteName = getPaletteName(legacyDesignSettings);
+  const legacyPalette = await httpClient.get<LegacyPalette | LegacyPaletteError>(
     `api/palettes/${paletteName}`,
   );
-  if ('status' in pwcPalette && pwcPalette.status === 'error') {
+  if ('status' in legacyPalette && legacyPalette.status === 'error') {
     throw new Error(
-      `Palette '${paletteName}' for the theme '${pwcDesignSettings.name}' not found in the Sisense instance`,
+      `Palette '${paletteName}' for the theme '${legacyDesignSettings.name}' not found in the Sisense instance`,
     );
   }
 
-  return convertToThemeSettings(pwcDesignSettings, pwcPalette as PwcPalette);
+  return convertToThemeSettings(legacyDesignSettings, legacyPalette as LegacyPalette);
 }

@@ -1,9 +1,9 @@
 import { ThemeOid, CompleteThemeSettings } from '../../types';
 
 /**
- * Legacy analog of CompleteThemeSettings used in PWC (PrismWebClient).
+ * Legacy analog of CompleteThemeSettings used in Sisense UI.
  */
-export type PwcDesignSettings = {
+export type LegacyDesignSettings = {
   oid: ThemeOid;
   dashboards: {
     toolbarBackgroundColor: string;
@@ -58,9 +58,9 @@ export type PwcDesignSettings = {
 };
 
 /**
- * Palette object used in PWC.
+ * Palette object used in legacy (form Sisense UI).
  */
-export type PwcPalette = {
+export type LegacyPalette = {
   _id: string;
   colors: string[];
   name: string;
@@ -72,43 +72,43 @@ export type PwcPalette = {
 /**
  * Error object returned by server when palette is not found.
  */
-export type PwcPaletteError = {
+export type LegacyPaletteError = {
   message: string;
   status: 'error';
 };
 
 /**
- * Converts PWC design settings and it's palette object to CompleteThemeSettings.
+ * Converts legacy (used in Sisense UI) design settings and it's palette object to CompleteThemeSettings.
  *
- * @param pwcDesignSettings - PWC design settings.
- * @param pwcPalette - PWC palette object.
+ * @param legacyDesignSettings - legacy design settings.
+ * @param legacyPalette - legacy palette object.
  * @returns
  */
 export function convertToThemeSettings(
-  pwcDesignSettings: PwcDesignSettings,
-  pwcPalette: PwcPalette,
+  legacyDesignSettings: LegacyDesignSettings,
+  legacyPalette: LegacyPalette,
 ): CompleteThemeSettings {
   const themeSettings: CompleteThemeSettings = {
     chart: {
-      textColor: pwcDesignSettings.dashboards.widgetTextColor,
-      backgroundColor: pwcDesignSettings.dashboards.widgetBackgroundColor,
-      secondaryTextColor: pwcDesignSettings.dashboards.widgetSecondaryTextColor,
+      textColor: legacyDesignSettings.dashboards.widgetTextColor,
+      backgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
+      secondaryTextColor: legacyDesignSettings.dashboards.widgetSecondaryTextColor,
     },
     typography: {
-      fontFamily: pwcDesignSettings.typography.fontFamily,
+      fontFamily: legacyDesignSettings.typography.fontFamily,
     },
     palette: {
-      variantColors: pwcPalette.colors,
+      variantColors: legacyPalette.colors,
     },
     general: {
-      brandColor: pwcDesignSettings.general.brandColor,
-      backgroundColor: pwcDesignSettings.general.backgroundColor,
-      primaryButtonTextColor: pwcDesignSettings.general.primaryButtonTextColor,
+      brandColor: legacyDesignSettings.general.brandColor,
+      backgroundColor: legacyDesignSettings.general.backgroundColor,
+      primaryButtonTextColor: legacyDesignSettings.general.primaryButtonTextColor,
     },
   };
   return themeSettings;
 }
 
-export function getPaletteName(pwcDesignSettings: PwcDesignSettings): string {
-  return pwcDesignSettings.dashboards.colorPaletteName;
+export function getPaletteName(legacyDesignSettings: LegacyDesignSettings): string {
+  return legacyDesignSettings.dashboards.colorPaletteName;
 }

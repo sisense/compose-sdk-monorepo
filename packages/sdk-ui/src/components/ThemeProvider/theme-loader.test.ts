@@ -1,12 +1,12 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
 import { getThemeSettingsByOid } from './theme-loader';
-import { PwcDesignSettings, PwcPalette } from './pwc-design-settings';
+import { LegacyDesignSettings, LegacyPalette } from './legacy-design-settings';
 import { ThemeOid, ThemeSettings } from '../../types';
 import {
   corporatePalette,
-  redPwcDesignSettings,
+  redLegacyDesignSettings,
   redThemeSettings,
-} from './__mocks__/pwc-design-settings.mock';
+} from './__mocks__/legacy-design-settings.mock';
 
 describe('getThemeSettingsByOid', () => {
   const httpClientMock: jest.Mocked<Pick<HttpClient, 'get'>> = {
@@ -18,16 +18,16 @@ describe('getThemeSettingsByOid', () => {
   });
 
   it('should return the converted theme settings when successful', async () => {
-    const pwcDesignSettings: PwcDesignSettings = redPwcDesignSettings;
-    const themeOid: ThemeOid = pwcDesignSettings.oid;
+    const legacyDesignSettings: LegacyDesignSettings = redLegacyDesignSettings;
+    const themeOid: ThemeOid = legacyDesignSettings.oid;
 
-    const pwcPalette: PwcPalette = corporatePalette;
-    const paletteName = pwcPalette.name;
+    const legacyPalette: LegacyPalette = corporatePalette;
+    const paletteName = legacyPalette.name;
 
     const expectedThemeSettings: ThemeSettings = redThemeSettings;
 
-    httpClientMock.get.mockResolvedValueOnce(pwcDesignSettings);
-    httpClientMock.get.mockResolvedValueOnce(pwcPalette);
+    httpClientMock.get.mockResolvedValueOnce(legacyDesignSettings);
+    httpClientMock.get.mockResolvedValueOnce(legacyPalette);
 
     const themeSettings = await getThemeSettingsByOid(themeOid, httpClientMock);
     expect(httpClientMock.get).toHaveBeenCalledTimes(2);
@@ -45,15 +45,15 @@ describe('getThemeSettingsByOid', () => {
   });
 
   it('should throw an Error when the palette is not found', () => {
-    const pwcDesignSettings: PwcDesignSettings = redPwcDesignSettings;
-    const themeOid: ThemeOid = pwcDesignSettings.oid;
+    const legacyDesignSettings: LegacyDesignSettings = redLegacyDesignSettings;
+    const themeOid: ThemeOid = legacyDesignSettings.oid;
 
     const errorResponse = {
       status: 'error',
       message: 'Palette not found',
     };
 
-    httpClientMock.get.mockResolvedValueOnce(pwcDesignSettings);
+    httpClientMock.get.mockResolvedValueOnce(legacyDesignSettings);
     httpClientMock.get.mockResolvedValueOnce(errorResponse);
 
     return expect(getThemeSettingsByOid(themeOid, httpClientMock)).rejects.toThrow(/not found/);

@@ -1,7 +1,7 @@
-import { ThemeSettings } from '../../../types';
-import { PwcDesignSettings, PwcPalette } from '../pwc-design-settings';
+import { ThemeSettings } from '../../../types.js';
+import { LegacyDesignSettings, LegacyPalette } from '../legacy-design-settings.js';
 
-export const redPwcDesignSettings: PwcDesignSettings = {
+export const redLegacyDesignSettings: LegacyDesignSettings = {
   oid: '64a408e0affe66003378c8d7',
   typography: {
     customFontSelected: false,
@@ -74,7 +74,7 @@ export const redThemeSettings: ThemeSettings = {
   },
 };
 
-export const corporatePalette: PwcPalette = {
+export const corporatePalette: LegacyPalette = {
   _id: '64106b7c984c23001b2d472e',
   colors: ['#779fa8', '#bf1e1d', '#787070'],
   name: 'Corporate',
