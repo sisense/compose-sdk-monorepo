@@ -28,9 +28,9 @@ export function App() {
         <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
       </div>
       <SisenseContextProvider
-        url="http://10.177.10.35:30845/"
-        username="admin@sisense.com"
-        password="sisense"
+        url='http://'
+        username=''
+        password=''
         defaultDataSource={'Sample ECommerce'}
       />
       <ExecuteQuery

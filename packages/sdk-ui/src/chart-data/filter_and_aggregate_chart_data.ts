@@ -33,9 +33,7 @@ export const filterAndAggregateChartData = (
     ),
   );
 
-  //TODO we have a ticket to implement filters when user supplies data
-  // const filteredTable =
-  // filters && locale ? filterBy(sourceTable, filters, locale) : sourceTable;
+  //TODO implement filters when user supplies data
   const filteredTable = sourceTable;
   const measuresColumns = measures.map((value) => ({
     // uses original data column name

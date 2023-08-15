@@ -13,11 +13,6 @@ import {
   isCategory,
 } from '../chart-data-options/types';
 
-/**
- * The scatter chart data below including unit tests were adapted from
- * https://gitlab.sisense.com/SisenseTeam/Product/FE/node-modules/sisense-charter/-/blob/master/src/charts/scatter/
- */
-
 export const defaultScatterDataValue: ComparableData = { displayValue: '0' };
 
 export type AxisColumnName = 'xAxis' | 'yAxis';

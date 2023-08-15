@@ -77,12 +77,7 @@ export type Navigator = {
 
 /** Configuration that defines line width */
 export type LineWidth = {
-  /**
-   * Type of line width
-   *
-   * @privateRemarks
-   * TODO: Consult with Moti changing the structure of this object - can we use only 'string' type instead of complex structure?
-   */
+  /** Line width type */
   width: 'thin' | 'bold' | 'thick';
 };
 
@@ -157,11 +152,11 @@ export type AxisLabel = {
   max?: number;
   /**
    * Boolean flag that defines if the Y axis should have grid lines extending the ticks across the plot area
-   *
-   * @privateRemarks
-   * This property is specific to Y axis and not relevant to all other possible axes.
-   * It should be moved to separate specific type.
    */
+  /* @privateRemarks
+   This property is specific to Y axis and not relevant to all other possible axes.
+   It should be moved to separate specific type.
+  */
   templateMainYHasGridLines?: boolean;
   /** Configuration for title of the axis */
   title?: {
@@ -170,13 +165,11 @@ export type AxisLabel = {
     /** Textual content of the title */
     text?: string;
   };
-  /**
-   * Configuration for title of the second X axis
-   *
-   * @privateRemarks
-   * This property is specific to the second X axis and not relevant to all other possible axes.
-   * It should be moved to separate specific type.
-   */
+  /** Configuration for title of the second X axis */
+  /* @privateRemarks
+   This property is specific to the second X axis and not relevant to all other possible axes.
+   It should be moved to separate specific type.
+  */
   x2Title?: X2Title;
 };
 
@@ -239,9 +232,6 @@ export interface BaseStyleOptions extends ReservedStyleOptions {
   /**
    * Configuration for series labels - titles/names identifying data series in a chart
    *
-   * @privateRemarks
-   * Hide seriesLabels in TSDoc for now, as there is a related issue with SeriesLabels.labels
-   * in https://sisenseglobal.atlassian.net/browse/SNS-89484.
    * @internal
    */
   seriesLabels?: SeriesLabels;
@@ -274,13 +264,11 @@ export interface AreaStyleOptions extends BaseStyleOptions {
 /** Configuration options that define functional style of the various elements of stackable charts, like Column or Bar */
 
 export interface StackableStyleOptions extends BaseStyleOptions {
-  /**
-   * Subtype of stackable chart
-   *
-   * @privateRemarks
-   * We should split subtypes for columns and bars separately - currently it is possible to have
-   * Bar chart with 'column/classic' subtype and Column chart with 'bar/classic' subtype
-   */
+  /** Subtype of stackable chart */
+  /* @privateRemarks
+   Subtypes for columns and bars should be separate - currently it is possible to have
+   Bar chart with 'column/classic' subtype and Column chart with 'bar/classic' subtype
+  */
   subtype?: StackableSubtype;
 }
 

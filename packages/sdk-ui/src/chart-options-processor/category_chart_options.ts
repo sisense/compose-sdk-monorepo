@@ -38,7 +38,6 @@ export const getCategoricalChartOptions = (
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
   const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
 
-  // TODO Following code will be refactored per https://sisenseglobal.atlassian.net/browse/SNS-76482
   const topSpacings = 20;
   switch (chartType) {
     case 'pie':

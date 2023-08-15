@@ -5,8 +5,6 @@ const TRACKING_CATEGORY = 'composesdk';
 
 export type TrackingDetails = Record<string, number | string | boolean | undefined>;
 
-// This is mostly ported from:
-// https://gitlab.sisense.com/SisenseTeam/warehouse-client/-/blob/987ca76f5efd00f91445b645528f11efbb279d90/src/utils/tracking_utils.ts#L55-84
 export const trackProductEvent = async (
   action: string,
   details: TrackingDetails,

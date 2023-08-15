@@ -68,7 +68,7 @@ const builder = (yargs: Argv<unknown>) =>
     })
     .example([
       [
-        '$0 get-data-model --url http://10.10.1.5:30845 -u admin@sisense.com -d "Sample ECommerce" -o MySampleEComm.ts',
+        '$0 get-data-model --url https://domain.sisense.com -u user@domain.com -d "Sample ECommerce" -o MySampleEComm.ts',
       ],
     ]);
 

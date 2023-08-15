@@ -122,10 +122,11 @@ import { TrackingContextProvider, useTrackComponentInit } from '../useTrackCompo
  * <img src="media://chart-local-data-example-1.png" width="800px" />
  * @param props - Chart properties
  * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType}
- * @privateRemarks
- * This component is just an UnwrappedChart wrapped in a ErrorBoundary
- * Such approach allows to catch errors thrown by the chart and display an error message
- * For all the details, please refer to the UnwrappedChart component.
+ */
+/* @privateRemarks
+ This component is just an UnwrappedChart wrapped in a ErrorBoundary
+ Such approach allows to catch errors thrown by the chart and display an error message
+ For all the details, please refer to the UnwrappedChart component.
  */
 export const Chart: FunctionComponent<ChartProps> = (props) => {
   useTrackComponentInit('Chart', props);
@@ -143,20 +144,20 @@ export const Chart: FunctionComponent<ChartProps> = (props) => {
  * Unwrapped in the name means that this component is not wrapped in error boundary
  * ##
  * <img src="media://chart-local-data-example-1.png" width="800px" />
- *
- * @privateRemarks
- * Roughly speaking, there are 10 steps to transform chart props to highcharts options:
- *  1. Get Attributes and Measures from dataOptions and chartType
- *  2. Translate dataOptions of type ChartDataOptions to ChartDataOptionsInternal
- *  3. If a data source is specified, execute the query constructed from
- *  data source, attributes, measures, filters, highlights. Then apply date formats to the query result data.
- *  4. Create a Data Table from Data
- *  5. For user-provided data, filter and aggregate the Data Table
- *  6. Using chart data service, transform Data Table to Chart Data based on the chart type
- *  7. Translate StyleOptions to DesignOptions
- *  8. Using highchartsOptionsService, build highcharts options based on the chart type
- *  9. Apply event handlers to highcharts options
- *  10. Apply themeSettings to highcharts options
+ */
+/* @privateRemarks
+ Roughly speaking, there are 10 steps to transform chart props to highcharts options:
+   1. Get Attributes and Measures from dataOptions and chartType
+   2. Translate dataOptions of type ChartDataOptions to ChartDataOptionsInternal
+   3. If a data source is specified, execute the query constructed from
+   data source, attributes, measures, filters, highlights. Then apply date formats to the query result data.
+   4. Create a Data Table from Data
+   5. For user-provided data, filter and aggregate the Data Table
+   6. Using chart data service, transform Data Table to Chart Data based on the chart type
+   7. Translate StyleOptions to DesignOptions
+   8. Using highchartsOptionsService, build highcharts options based on the chart type
+   9. Apply event handlers to highcharts options
+   10. Apply themeSettings to highcharts options
  */
 export const UnwrappedChart: FunctionComponent<ChartProps> = (props) => {
   const {
@@ -224,7 +225,7 @@ export const UnwrappedChart: FunctionComponent<ChartProps> = (props) => {
       );
     }
 
-    // TODO instead of showing Error Box (from ErrorBoundary), we should show No Results Box as in PrismWebClient
+    // TODO: instead of Error Box (from ErrorBoundary), No Results Box should be shown
     if (isDataTableEmpty(dataTable)) {
       throw new Error(translation.errors.chartNoData);
     }

@@ -1,9 +1,7 @@
 /* eslint-disable max-params */
-/*
- * NOTE(norman): In all the helper functions here, Date instances are never mutated.
- * A new Date instance is created if a different Date is needed. Functions in the
- * `date-fns` library also do not mutate Date instances and always return a new Date instance.
- */
+//  In all the helper functions here, Date instances are never mutated.
+//  A new Date instance is created if a different Date is needed. Functions in the
+//  `date-fns` library also do not mutate Date instances and always return a new Date instance.
 
 import { setYear } from 'date-fns';
 import { format as formatLocalTimezone } from 'date-fns-tz';
@@ -70,23 +68,10 @@ export const SAT: DayOfWeek = 6;
  * Date configurations
  */
 export type DateConfig = {
-  /**
-   * Boolean flag whether fiscal year is enabled
-   *
-   * @privateRemarks
-   * NOTE(norman): It's still unclear to me whether originally comes from
-   * `fiscalOn.value` or `query.fiscalOn.enabled`.
-   * (Both of them are configurable in `/app/configuration/base`.)
-   */
+  /** Boolean flag whether fiscal year is enabled */
   isFiscalOn: boolean;
 
-  /**
-   * First month of the fiscal year that is configured
-   *
-   * @privateRemarks
-   * See https://gitlab.sisense.com/SisenseTeam/Product/FE/PrismWebClient/-/blob/85603973a3718cf659aae4ddb62be876d8a99593/src/base.module/services/fiscalYear.6.js#L105-127
-   * about dataSource-specific fiscalMonth settings.
-   */
+  /** First month of the fiscal year that is configured */
   fiscalMonth: MonthOfYear;
 
   /**
@@ -131,12 +116,6 @@ export function applyDateFormat(
     date = setYear(date, 1900 + date.getFullYear());
   }
 
-  // NOTE(norman): This was ported from PrismWebClient. But it does not make any sense to me.
-  // Why would this apply when isFiscalOn is false???
-  // Is this somehow compensating for server-side fiscal-year-related date adjustments
-  // happening at be/services/query/query-core/src/main/java/com/sisense/query/formatters/BaseResultSetFormatter.java ?
-  // Or perhaps this is when `query.fiscalOn.enabled` is true, and not when `fiscalOn.value` is true?
-  // (Both of them are configurable in `/app/configuration/base`.)
   if (!cfg.isFiscalOn) {
     date = subtractYearForFiscal(date, cfg.selectedDateLevel, cfg.fiscalMonth);
   }
@@ -158,9 +137,8 @@ export function applyDateFormat(
     cfg.fiscalMonth,
   );
 
-  // TODO(norman): Port over or rewrite the non-Unicode behavior related to week numbering masks (`w` and `ww`)
+  // TODO: Port over or rewrite the non-Unicode behavior related to week numbering masks (`w` and `ww`)
   // for the scenario when `fiscalMonth` is not January.
-  // Maybe a lot of the logic can be replaced by functionality in `date-fns` functions.
 
   if (!cfg.isFiscalOn && cfg.selectedDateLevel === QUARTERS) {
     date = shiftMonthForFiscal(date, cfg.fiscalMonth);

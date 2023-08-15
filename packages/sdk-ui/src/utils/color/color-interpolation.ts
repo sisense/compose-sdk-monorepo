@@ -93,7 +93,6 @@ function isBright(color: Color) {
   return getDarkFactor(color) < 0.9;
 }
 
-// https://gitlab.sisense.com/sisense.sdk/styleguide/-/blob/975add632ad292d80dcfec2e074fd91400e49710/src/designSettings/styleUtils.js#L82
 export const getSlightlyDifferentColor = (
   colorString: string,
   percent = 0.05,

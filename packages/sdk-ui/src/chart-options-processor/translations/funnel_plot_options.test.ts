@@ -83,11 +83,6 @@ describe('getFunnelPlotOptions', () => {
   });
 });
 
-/**
- * The following tests were adapted from
- * https://gitlab.sisense.com/SisenseTeam/Product/FE/node-modules/sisense-charter/-/tree/master/__tests__/charts/funnel
- */
-
 describe('Funnel width and height calculation', () => {
   describe('funnel chart width', () => {
     it('Defaults to max width when no renderTo', () => {

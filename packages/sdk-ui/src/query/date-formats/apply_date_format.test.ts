@@ -20,7 +20,7 @@ const zero = new Date(0);
 const dec292009 = new Date('2009-12-29T06:28:13.999Z');
 const apr142012 = new Date('2012-04-14T23:49:57.028Z');
 const feb292020 = new Date('2020-02-29T15:03:44.851Z');
-const aug220013 = new Date('0013-08-22T13:21:36.007Z'); // SNS-43527: years 00xx should render as 19xx
+const aug220013 = new Date('0013-08-22T13:21:36.007Z'); // years 00xx should render as 19xx
 
 describe('when the fiscal year feature flag is disabled', () => {
   const fiscalDisabledConfig: DateConfig = defaultDateConfig;
@@ -245,13 +245,6 @@ describe('when the fiscal year feature flag is disabled', () => {
   });
 });
 
-// TODO(norman): Add more test case permutations to check:
-// - Fiscal year yyyy is correct
-// - Fiscal quarter Q is correct
-// - Fiscal week number ww is correct
-//   - This still needs code to be reimplemented in a simpler way, perhaps using
-//     https://date-fns.org/v2.29.3/docs/getWeekYear and its options.weekStartsOn,
-//     or perhaps just copying over the existing PrismWebClient code for `ww` and `w`.
 describe.skip('when the fiscal year feature flag is enabled', () => {
   const UTC = 'UTC';
 
@@ -321,14 +314,7 @@ describe('behavior that is the same regardless of fiscal year settings', () => {
     );
   });
 
-  describe('24-hour characters date-fns supports, but were added to PrismWebClient using moment.js', () => {
-    // https://code.angularjs.org/1.8.2/docs/api/ng/filter/date is the `var def = filter('date');` in PrismWebClient's
-    // https://gitlab.sisense.com/SisenseTeam/Product/FE/PrismWebClient/-/blob/f4b97f057ed22e578fc8ca27491096a275c89eca/src/base.module/filters/levelDateFilter.js
-    // implementation. Because Angular's `date` filter did not have
-    // support for these formats below, there was additional Moment.js
-    // code in PrismWebClient to support these. But `date-fns` already
-    // supports these formats below, which these cases confirm.
-
+  describe('24-hour characters date-fns supports, but were added using moment.js', () => {
     test.each([
       { locale: enUS, date: zero, format: 'k', expected: '24' },
       { locale: enUS, date: zero, format: 'kk', expected: '24' },

@@ -1,7 +1,7 @@
 {
   "name": "@sisense/sdk-cli",
   "description": "CLI for generating programmatic interface from Sisense data model",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -10,10 +10,10 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "bin": "./dist/index.js",
   "dependencies": {
-    "@sisense/sdk-data": "^0.7.1",
-    "@sisense/sdk-modeling": "^0.7.1",
-    "@sisense/sdk-query-client": "^0.7.1",
-    "@sisense/sdk-rest-client": "^0.7.1",
+    "@sisense/sdk-data": "^0.7.2",
+    "@sisense/sdk-modeling": "^0.7.2",
+    "@sisense/sdk-query-client": "^0.7.2",
+    "@sisense/sdk-rest-client": "^0.7.2",
     "cross-fetch": "^4.0.0",
     "inquirer": "^8.1.2",
     "yargs": "17.7.1"

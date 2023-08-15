@@ -13,11 +13,6 @@ import {
   CategoricalChartDataOptionsInternal,
 } from '../../chart-data-options/types';
 
-/**
- * The plot options below were adapted from
- * https://gitlab.sisense.com/SisenseTeam/Product/FE/node-modules/sisense-charter/-/blob/master/src/charts/funnel/funnelPlot.ts
- */
-
 export const DefaultFunnelLabels: FunnelLabels = {
   enabled: true,
   showCategories: true,

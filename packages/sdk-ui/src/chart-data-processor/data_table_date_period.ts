@@ -145,7 +145,7 @@ export const periodCompareValueForFuturePeriod = (
 ) => getTime(startOfPeriod(period, ADD_PERIOD_FN[period](refDate, num), locale));
 
 // used in some lists as extended options within
-// same dropdown as DatePeriod. See SNS-56030.
+// same dropdown as DatePeriod
 export enum PseudoDatePeriod {
   QUARTER_NUM = 'quarterNumber',
   MONTH_NAME = 'monthName',

@@ -1,10 +1,6 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
-/**
- * The code here is mostly reverse-engineered from
- * https://gitlab.sisense.com/SisenseTeam/warehouse-client/-/blob/736a0921bd4143fc9fbf63f498b92b1bd31bb3c4/src/components/notebooks/editor/chart_to_dashboard/widget_translator/translate_chart_config.ts
- */
 
 import { ChartDataOptions, StyleOptions, CompleteThemeSettings, TableStyleOptions } from '../types';
 import { WidgetDto, WidgetSubtype } from './types';

@@ -14,6 +14,10 @@ mkdir -p ~/.ssh
 # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
 cat ${GITHUB_KNOWN_HOSTS} >> ~/.ssh/known_hosts
 
+# Remove .gitlab-ci.yml from the repo.
+rm -f .gitlab-ci.yml
+git add .
+
 # Re-commit with compose-sdk-release-bot's author metadata.
 git commit --amend --no-edit --reset-author
 
@@ -34,3 +38,6 @@ fi
 git remote add external ${GITHUB_URL}
 git fetch external
 git push external HEAD:main
+
+# Force update external-main in GitLab (since the bot amended the last commit)
+git push -f origin external-main

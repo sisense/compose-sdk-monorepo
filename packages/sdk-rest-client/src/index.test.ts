@@ -3,12 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { PasswordAuthenticator, HttpClient } from './index';
 
-/**
- * This is a mock test to be refactored and extended [TODO]
- */
-
 describe('Authenticator and HttpClient', () => {
-  // sample tests that should pass
   const auth = new PasswordAuthenticator('10.0.0.1', 'username', 'password');
   test('auth should not be null"', () => {
     expect(auth).toBeTruthy();

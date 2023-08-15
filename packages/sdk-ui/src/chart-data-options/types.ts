@@ -28,8 +28,6 @@ export interface CategoryStyle {
   /**
    * Toggle flag for this category/column in the chart.
    *
-   * @privateRemarks
-   * We still need to decide on the behavior of this flag. Marked as internal for now.
    * @internal
    */
   enabled?: boolean;
@@ -99,8 +97,6 @@ export type ValueStyle = {
   /**
    * Toggle flag for this value/measure in the chart.
    *
-   * @privateRemarks
-   * We still need to decide on the behavior of this flag. Marked as internal for now.
    * @internal
    */
   enabled?: boolean;

@@ -32,7 +32,6 @@ import { seriesDataColorService } from './series-data-color-service';
 import { SortDirection } from '../types';
 import { getDataOptionTitle } from '../chart-data-options/utils';
 
-//TODO we need to handle enabled
 export const validateCartesianChartDataOptions = (
   chartDataOptions: CartesianChartDataOptionsInternal,
 ): CartesianChartDataOptionsInternal => {

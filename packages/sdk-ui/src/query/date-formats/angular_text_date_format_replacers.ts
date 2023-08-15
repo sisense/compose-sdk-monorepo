@@ -15,10 +15,6 @@ export type AngularTextDate = (typeof angularTextDates)[number];
 
 type AngularTextDatesForLocale = Record<AngularTextDate, DateFormat>;
 
-// This was copied from
-// https://github.com/angular/angular.js/blob/47bf11ee94664367a26ed8c91b9b586d3dd420f5/src/ngLocale/angular-locale_en-us.js#L101-L108
-// which is the same as:
-// https://gitlab.sisense.com/SisenseTeam/Product/FE/PrismWebClient/-/blob/66ab2c1a8b32079e9ee1e406934c80b48f594cb8/src/base.module/resources/localization/angular-locale_en-us.js#L101-108
 const enUSTextDates: AngularTextDatesForLocale = Object.freeze({
   fullDate: 'EEEE, MMMM d, y',
   longDate: 'MMMM d, y',
@@ -32,14 +28,6 @@ const enUSTextDates: AngularTextDatesForLocale = Object.freeze({
 
 type LocaleCode = string;
 
-// NOTE(norman): If Angular-style text dates need to be supported for other locales,
-// this implementation needs to be extended for more locales.
-//
-// PrismWebClient has a copy of all Angular locales code in https://gitlab.sisense.com/SisenseTeam/Product/FE/PrismWebClient/-/tree/develop/src/base.module/resources/localization
-// so many locales are actually supported.
-//
-// Perhaps this SDK could also bundle in all of those Angular locales files.
-// But that might be too much excess code.
 const textDates: Record<LocaleCode, AngularTextDatesForLocale> = Object.freeze({
   'en-US': enUSTextDates,
 });

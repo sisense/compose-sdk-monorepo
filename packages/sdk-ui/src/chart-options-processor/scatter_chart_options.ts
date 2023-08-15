@@ -17,11 +17,6 @@ import { buildScatterSeries } from './translations/scatter_series';
 import { getScatterTooltipSettings } from './translations/scatter_tooltip';
 import { categoriesSliceWarning } from '../utils/dataLimitWarning';
 
-/**
- * The scatter chart options below including unit tests were adapted from
- * https://gitlab.sisense.com/SisenseTeam/Product/FE/node-modules/sisense-charter/-/blob/master/src/charts/scatter/
- */
-
 const SPACING = 20;
 const MARGIN_TOP = 30;
 

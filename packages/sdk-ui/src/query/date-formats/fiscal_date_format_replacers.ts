@@ -1,16 +1,9 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/naming-convention */
-/*
- * A lot of this code was ported from
- * https://gitlab.sisense.com/SisenseTeam/Product/FE/PrismWebClient/-/blob/f4b97f057ed22e578fc8ca27491096a275c89eca/src/base.module/filters/levelDateFilter.js
- * and modified so that:
- * - TypeScript types were added
- * - variable and function names were changed to be more readable
- * - Date instances are never mutated; new Date instances are created if a different Date is needed
- *
- * Functions in the `date-fns` library also do not mutate Date instances
- * and always return a new Date instance.
- */
+
+// Date instances are never mutated; new Date instances are created if a different Date is needed
+// Functions in the `date-fns` library also do not mutate Date instances
+// and always return a new Date instance.
 
 import { addYears, subYears, setMonth } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -18,14 +11,6 @@ import type { DateFormat, DateLevel, MonthOfYear } from './apply_date_format';
 import { JAN, YEARS, QUARTERS, MONTHS, WEEKS, DAYS } from './apply_date_format';
 import { newDateFormat } from './new_date_format';
 
-// NOTE(norman): A lot of this code was ported from PrismWebClient.
-// But a lot of the fiscal-year-related adjustments do not make any sense to me.
-// Perhaps these are simply bugs in the existing implementation? There are no existing PrismWebClient unit
-// tests related to fiscal year reformatting of the year, quarter, and week number. So it's possible
-// that the existing PrismWebClient implementation for fiscal-year-related adjustments
-// has various bugs.
-
-// TODO(norman): Perhaps rename this function
 export function subtractYearForFiscal(
   date: Date,
   selectedDateLevel: DateLevel,
@@ -57,15 +42,12 @@ function shouldConvert(
   );
 }
 
-// TODO(norman): Perhaps rename this function
 function addYearForFiscal(
   date: Date,
   selectedDateLevel: DateLevel,
   fiscalMonth: MonthOfYear,
   isFiscalOn: boolean,
 ): Date {
-  // NOTE(norman): This was ported from PrismWebClient. But it does not make any sense to me.
-  // Why would this apply when isFiscalOn is false???
   if (!isFiscalOn && shouldConvert(date, selectedDateLevel, fiscalMonth)) {
     return addYears(date, 1);
   }

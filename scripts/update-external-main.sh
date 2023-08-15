@@ -9,8 +9,10 @@
 set -o errexit
 set -o xtrace
 
-git checkout external-main
 git clean -df
+
+git fetch origin
+git checkout -B external-main origin/external-main
 
 # Get latest tag on this branch. If no tag is found, then the commit hash of
 # HEAD is returned.
@@ -18,6 +20,22 @@ last_published_tag=$(git describe --tags --abbrev=0 --always)
 
 # Reset your local external-main branch to the specified ref and stage changes.
 git diff ${last_published_tag} ${1:-'origin/master'} | git apply --whitespace=fix
+
+# Remove sensitive or irrelevant information
+rm -f CONTRIBUTING.md
+rm -f quickstart.md
+
+rm -rf ./examples
+rm -rf ./packages/sdk-query-client/src/__test_helpers__
+
+# Substitute README.md
+rm -f README.md
+mv README-public.md README.md
+
+# Substitute quickstart.md
+rm -f quickstart.md
+mv quickstart-public.md quickstart.md
+
 git add .
 
 # Run script with node directly instead of yarn version:current so we avoid
