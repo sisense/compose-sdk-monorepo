@@ -1,0 +1,47 @@
+Reservation ID,Person Name,Party Size,Reservation Date,Reservation Time,Walk In,Shift
+1,John Doe,2,2023-05-06,17:00,False,Dinner
+3,Mark Johnson,3,2023-05-06,17:30,False,Dinner
+4,Sara Lee,2,2023-05-06,17:45,False,Dinner
+5,Robert Brown,5,2023-05-06,18:00,False,Dinner
+6,Anna White,2,2023-05-06,18:15,False,Dinner
+7,David Kim,4,2023-05-06,18:30,False,Dinner
+8,Emma Davis,3,2023-05-06,18:45,False,Dinner
+9,Jason Green,2,2023-05-06,19:00,False,Dinner
+10,Michelle Nguyen,5,2023-05-06,19:15,True,Dinner
+11,Chris Wilson,2,2023-05-06,19:30,False,Dinner
+12,Emily Taylor,4,2023-05-06,19:45,False,Dinner
+13,James Lee,3,2023-05-06,20:00,False,Dinner
+14,Olivia Martinez,2,2023-05-06,20:15,False,Dinner
+15,William Brown,5,2023-05-06,20:30,True,Dinner
+16,Grace Kim,2,2023-05-06,20:45,False,Dinner
+17,Michael Johnson,4,2023-05-06,21:00,True,Dinner
+18,Sophia Lee,3,2023-05-06,21:15,False,Dinner
+19,Andrew Davis,2,2023-05-06,21:30,False,Dinner
+20,Avery Green,5,2023-05-06,21:45,True,Dinner
+21,Eric Chen,3,2023-05-06,18:30,False,Dinner
+22,Sharon Lee,2,2023-05-06,19:00,True,Dinner
+23,Brian Kim,4,2023-05-06,19:30,False,Dinner
+24,Karen Davis,3,2023-05-06,20:00,False,Dinner
+25,Steven Brown,2,2023-05-06,20:30,False,Dinner
+26,Mary Johnson,5,2023-05-06,21:00,True,Dinner
+27,Matthew Lee,2,2023-05-06,21:30,False,Dinner
+28,Katie Smith,4,2023-05-06,18:30,False,Dinner
+29,Joseph Kim,3,2023-05-06,19:00,False,Dinner
+30,Ashley Davis,2,2023-05-06,19:30,False,Dinner
+31,Christopher Brown,5,2023-05-06,20:00,False,Dinner
+32,Lauren Johnson,2,2023-05-06,20:30,True,Dinner
+33,Timothy Lee,4,2023-05-06,21:00,False,Dinner
+34,Megan White,3,2023-05-06,21:30,False,Dinner
+35,Nathan Chen,2,2023-05-06,18:30,False,Dinner
+36,Rebecca Lee,5,2023-05-06,19:00,True,Dinner
+100,Alice,4,2023-05-06,11:30,True,Lunch
+101,Bob,2,2023-05-06,11:45,False,Lunch
+102,Charlie,6,2023-05-06,12:00,True,Lunch
+103,Dave,3,2023-05-06,12:15,False,Lunch
+104,Eve,5,2023-05-06,12:30,True,Lunch
+105,Frank,2,2023-05-06,12:45,False,Lunch
+106,Grace,8,2023-05-06,13:00,False,Lunch
+107,Harry,1,2023-05-06,13:15,True,Lunch
+108,Iris,7,2023-05-06,13:30,True,Lunch
+109,John,2,2023-05-06,13:45,False,Lunch
+110,Kate,4,2023-05-06,14:00,True,Lunch

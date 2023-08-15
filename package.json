@@ -1,0 +1,69 @@
+{
+  "version": "0.7.0",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "examples/*",
+    "e2e/"
+  ],
+  "scripts": {
+    "dev": "yarn workspace @sisense/sdk-ui dev",
+    "demo": "VITE_APP_SISENSE_URL=http://$(kubectl config -n sisense current-context):30845/  yarn workspace react-ts-demo dev",
+    "build": "yarn workspaces foreach --no-private --verbose --topological run build",
+    "build:prod": "yarn workspaces foreach --no-private --verbose --topological --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue run build:prod",
+    "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output",
+    "reset": "yarn clean && rm -rf ./node_modules",
+    "lint": "yarn workspaces foreach run lint",
+    "lint:changed": "yarn workspaces foreach --since run lint",
+    "format": "yarn workspaces foreach run format",
+    "format:check": "yarn workspaces foreach run format:check",
+    "test": "yarn workspaces foreach --verbose run test",
+    "test:coverage": "yarn workspaces foreach -vA run test:coverage",
+    "test:coverage:collect": "mkdir -p .nyc_output && node ./ci/collect-coverage-files.cjs collectFiles --pattern='packages/**/coverage-final.json' --target='.nyc_output'",
+    "test:coverage:report": "nyc report --reporter lcov --reporter text-summary --reporter cobertura",
+    "test:coverage:combine": "yarn test:coverage && yarn test:coverage:collect && yarn test:coverage:report",
+    "test:ct": "yarn workspaces foreach --verbose run test-ct",
+    "g:cli": "yarn workspace @sisense/sdk-cli run cli",
+    "version:all": "./scripts/version-all.sh",
+    "version:current": "node ./scripts/current-version.cjs",
+    "publish": "yarn workspaces foreach --no-private --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue npm publish --tolerate-republish",
+    "docs:gen": "TYPEDOC_MODE=PUBLIC typedoc --options typedoc.config.cjs",
+    "docs:serve": "node ./scripts/serve-static.cjs docs",
+    "docs:gen:internal": "TYPEDOC_MODE=INTERNAL typedoc --options typedoc.config.cjs",
+    "docs:serve:internal": "node ./serve-static.mjs docs-internal",
+    "docs:gen:markdown": "TYPEDOC_MODE=PUBLIC TYPEDOC_FORMAT=MARKDOWN typedoc --options typedoc.config.cjs",
+    "prepare": "husky install"
+  },
+  "files": [
+    "packages/**/dist/*"
+  ],
+  "packageManager": "yarn@3.2.3",
+  "volta": {
+    "node": "18.16.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@sisense/commitlint-config": "^1.9.9",
+    "@sisense/eslint-config": "1.9.12",
+    "@sisense/prettier-config": "^1.9.9",
+    "eslint": "^8.40.0",
+    "eslint-plugin-tsdoc": "0.2.17",
+    "express": "^4.18.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.8.8",
+    "typedoc": "0.24.8",
+    "typedoc-plugin-markdown": "^3.15.3",
+    "typedoc-plugin-versions": "^0.2.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,yaml,yml,md}": [
+      "prettier --write"
+    ]
+  }
+}

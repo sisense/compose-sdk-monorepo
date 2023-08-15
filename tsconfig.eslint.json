@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["docs/", "docs-internal/", "node_modules", ".vscode"]
+}

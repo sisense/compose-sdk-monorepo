@@ -1,0 +1,89 @@
+@import 'color';
+@import 'icons';
+
+.headerCell {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-left: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: normal;
+  width: 100%;
+  cursor: pointer;
+}
+
+.headerCell:hover {
+  .noSort.standard {
+    background-image: $SORT_ASCENDING;
+  }
+}
+
+.headerCell:hover {
+  .noSort.caret {
+    background-image: $CARET_DOWN;
+  }
+}
+
+.headerLabel {
+  text-align: left;
+  overflow: hidden;
+  flex-shrink: 10;
+}
+
+.icon {
+  margin-right: 10px;
+  width: 20px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.numberIcon {
+  background-image: $NUMBER_ICON;
+}
+
+.dateIcon {
+  background-image: $DATE_ICON;
+}
+
+.textIcon {
+  background-image: $TEXT_ICON;
+}
+
+.booleanIcon {
+  background-image: $BOOLEAN_ICON;
+}
+
+.sortIcon {
+  position: absolute;
+  right: 0px;
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+  flex-shrink: 0;
+  background-repeat: no-repeat;
+}
+
+.sortAscending.standard {
+  background-image: $SORT_ASCENDING;
+}
+
+.sortDescending.standard {
+  background-image: $SORT_DESCENDING;
+}
+
+.sortAscending.caret {
+  background-image: $CARET_DOWN;
+}
+
+.sortDescending.caret {
+  background-image: $CARET_DOWN;
+  transform: rotate(180deg);
+}
+
+.headerLabel {
+  text-align: left;
+  overflow: hidden;
+  flex-shrink: 10;
+}

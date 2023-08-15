@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "target": "ES2020",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+    "importHelpers": false
+  },
+  "include": ["./src/**/*"],
+  "references": [
+    { "path": "../sdk-data" },
+    { "path": "../sdk-modeling" },
+    { "path": "../sdk-rest-client" },
+    { "path": "../sdk-query-client" }
+  ]
+}

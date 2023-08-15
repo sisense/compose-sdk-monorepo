@@ -1,0 +1,31 @@
+{
+  "name": "@sisense/sdk-common",
+  "version": "0.7.0",
+  "type": "module",
+  "exports": "./dist/sdk-common.js",
+  "main": "./dist/sdk-common.js",
+  "module": "./dist/sdk-common.js",
+  "types": "./dist/index.d.ts",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Sisense",
+  "scripts": {
+    "build": "tsc --noEmit && vite build --mode development",
+    "build:prod": "tsc --noEmit && vite build",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage && rm -rf tsconfig.tsbuildinfo",
+    "format": "run -T prettier --write .",
+    "format:check": "run -T prettier --check .",
+    "lint": "run -T eslint . --fix"
+  },
+  "dependencies": {
+    "@sisense/sdk-rest-client": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "4.8.4",
+    "vite": "4.1.4",
+    "vite-plugin-dts": "^2.3.0"
+  },
+  "packageManager": "yarn@3.2.3",
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

@@ -1,0 +1,22 @@
+name: publish-to-packages
+run-name: publishing to GitHub Packages
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: yarn --version
+      - run: yarn config set npmScopes.sisense.npmRegistryServer https://npm.pkg.github.com
+      - run: yarn config set npmPublishRegistry https://npm.pkg.github.com
+      - run: yarn config set npmAuthToken "${{ secrets.GITHUB_TOKEN }}"
+      - run: yarn install --immutable
+      - run: yarn build:prod
+      - run: ls -lha
+      - run: yarn publish

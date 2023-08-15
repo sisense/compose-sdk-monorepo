@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.ts", "test-helpers/**/*.ts"],
+
+  "exclude": []
+}
