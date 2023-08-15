@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { applyDateFormats } from './query_result_date_formatting';
 import cloneDeep from 'lodash/cloneDeep';
-import { jest } from '@jest/globals';
 import type { Cell, QueryResultData } from '@sisense/sdk-data';
 
 describe('applyDateFormats', () => {
@@ -244,7 +243,7 @@ describe('applyDateFormats', () => {
           rows: [[{ data: '2009-01-01-01-01 0:0', text: '2009' }]],
         };
 
-        const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementationOnce(() => {});
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementationOnce(() => {});
         const dataOut = applyDateFormats(dataIn, {
           x: [{ name: 'Years', type: 'datelevel', dateFormat: 'yy' }],
           breakBy: [],

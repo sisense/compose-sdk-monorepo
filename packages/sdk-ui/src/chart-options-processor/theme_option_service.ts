@@ -14,6 +14,8 @@ const DEFAULT_THEME_SETTINGS: CompleteThemeSettings = {
   },
   typography: {
     fontFamily: 'Open Sans',
+    primaryTextColor: '#5B6372',
+    secondaryTextColor: '#9EA2AB',
   },
   palette: {
     variantColors: ['#00cee6', '#9b9bd7', '#6eda55', '#fc7570', '#fbb755', '#218a8c'],

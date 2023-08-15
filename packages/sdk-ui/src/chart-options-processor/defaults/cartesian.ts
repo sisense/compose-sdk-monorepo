@@ -229,7 +229,10 @@ export const columnDefaults = (stacking?: Stacking) => ({
       groupPadding: 0.1,
       pointPadding: 0.01,
       pointPlacement: null,
-      ...(stacking && { stacking }),
+      ...(stacking && {
+        stacking,
+        borderWidth: 0,
+      }),
     },
   },
 });
@@ -257,7 +260,10 @@ export const barDefaults = (stacking?: Stacking) => ({
       groupPadding: 0.1,
       pointPadding: 0.01,
       pointPlacement: null,
-      ...(stacking && { stacking }),
+      ...(stacking && {
+        stacking,
+        borderWidth: 0,
+      }),
     },
   },
 });

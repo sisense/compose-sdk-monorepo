@@ -14,13 +14,13 @@ const props: MemberListProps = {
     { key: '2015-01-01T00:00:00', title: '2015', inactive: true },
   ],
   disabled: false,
-  onSelectMember: jest.fn(),
-  selectAllMembers: jest.fn(),
-  clearAllMembers: jest.fn(),
+  onSelectMember: vi.fn(),
+  selectAllMembers: vi.fn(),
+  clearAllMembers: vi.fn(),
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('"change all" checkbox', () => {
@@ -94,12 +94,12 @@ describe('when disabled', () => {
 describe('when enabled', () => {
   // https://testing-library.com/docs/using-fake-timers/
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   it('renders clickable member rows', async () => {
@@ -131,8 +131,8 @@ describe('when enabled', () => {
     // React state, which needs to be wrapped in act().
     //
     // This is talked about more here:
-    // https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#1-when-using-jestusefaketimers
-    act(() => jest.advanceTimersByTime(300));
+    // https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#1-when-using-viusefaketimers
+    await act(() => vi.advanceTimersByTime(300));
 
     expect(screen.queryByLabelText('2013')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('2014')).toBeInTheDocument();

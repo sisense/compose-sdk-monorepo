@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { PasswordAuthenticator, HttpClient } from './index';
+import { PasswordAuthenticator, HttpClient } from './index.js';
 
 describe('Authenticator and HttpClient', () => {
   const auth = new PasswordAuthenticator('10.0.0.1', 'username', 'password');

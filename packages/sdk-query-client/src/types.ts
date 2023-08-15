@@ -82,6 +82,7 @@ export type DataSourceField = {
 
 export type JaqlResponse = {
   metadata?: MetadataItem[];
+  headers?: string[];
   values?: Cell[][] | Cell[];
   error?: boolean;
   details?: string;

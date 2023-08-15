@@ -25,13 +25,16 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   .react-datepicker__header {
     background-color: ${({ theme }) => theme.general.backgroundColor};
   }
+  .react-datepicker__day-name {
+    color: ${({ theme }) => theme.typography.secondaryTextColor};
+  }
   .react-datepicker__day {
     width: 2rem;
     margin-left: 0;
     margin-right: 0;
     border-radius: 0;
     background-color: ${({ theme }) => theme.general.backgroundColor};
-    color: ${({ theme }) => theme.general.primaryButtonTextColor};
+    color: ${({ theme }) => theme.typography.primaryTextColor};
     position: relative;
     z-index: 1;
   }
@@ -55,6 +58,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   .react-datepicker__month--selecting-range .react-datepicker__day--in-range {
     &:not(.react-datepicker__day--in-selecting-range) {
       background-color: ${({ theme }) => theme.general.backgroundColor};
+      color: ${({ theme }) => theme.typography.secondaryTextColor};
       &:before {
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
       }
@@ -75,6 +79,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
         left: 0%;
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
       }
+      color: ${({ theme }) => theme.typography.secondaryTextColor};
     }
     &.react-datepicker__day--selecting-range-start {
       &:before {
@@ -144,7 +149,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     & .react-datepicker__day--selecting-range-start,
     .react-datepicker__day--selecting-range-end {
       &:after {
-        border: 1px solid ${({ theme }) => theme.general.primaryButtonTextColor};
+        border: 1px solid ${({ theme }) => theme.typography.primaryTextColor};
       }
     }
   }
@@ -189,7 +194,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   }
 
   .react-datepicker__day--disabled {
-    color: ${({ theme }) => applyOpacity(theme.general.primaryButtonTextColor, 0.5)};
+    color: ${({ theme }) => applyOpacity(theme.typography.primaryTextColor, 0.5)};
   }
 
   // Hower on day out of the possible selecting range
@@ -208,7 +213,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
           height: calc(100% + 2px);
           border-radius: 50%;
           z-index: -1;
-          border: 1px solid ${({ theme }) => theme.general.primaryButtonTextColor};
+          border: 1px solid ${({ theme }) => theme.typography.primaryTextColor};
         }
       }
     }

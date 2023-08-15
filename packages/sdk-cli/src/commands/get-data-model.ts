@@ -2,14 +2,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
 import { Arguments, ArgumentsCamelCase, Argv, CommandModule } from 'yargs';
-import { getHttpClient, createDataModel, writeFile, handleHttpClientLogin } from './helpers.js';
-import inquirer from 'inquirer';
+import {
+  getHttpClient,
+  createDataModel,
+  writeFile,
+  handleHttpClientLogin,
+  getFilePathInfo,
+  isSupportedOutputFile,
+} from './helpers.js';
+import { promptPasswordInteractive } from './prompts.js';
 import { Command, GetDataModelOptions } from '../types.js';
 import { trackExecution } from '../tracking.js';
 
 const command: Command = 'get-data-model';
 const describe =
-  'Write the TypeScript representation of a data model from the given Sisense url and data source';
+  'Write the TypeScript or JavaScript representation of a data model from the given Sisense URL and data source';
 
 const builder = (yargs: Argv<unknown>) =>
   yargs
@@ -39,7 +46,7 @@ const builder = (yargs: Argv<unknown>) =>
 
       output: {
         type: 'string',
-        describe: 'Specify the output TypeScript (.ts) filename',
+        describe: 'Specify the output TypeScript (.ts) or JavaScript (.js) filename',
         alias: ['o'],
       },
 
@@ -62,22 +69,6 @@ const builder = (yargs: Argv<unknown>) =>
       ],
     ]);
 
-export const promptPasswordInteractive = (username: string) =>
-  inquirer.prompt([
-    {
-      type: 'password',
-      name: 'maskedPassword',
-      mask: '*',
-      message: `Enter password for username '${username}':`,
-      validate: (answer: string) => {
-        if (!answer || answer === '') {
-          return 'Password cannot be blank';
-        }
-        return true;
-      },
-    },
-  ]);
-
 export const getDataModel = async (
   options: Arguments<GetDataModelOptions>,
   commandName: Command,
@@ -89,6 +80,20 @@ export const getDataModel = async (
   if (!/^(http|https):\/\//.test(url)) {
     console.log(`Error connecting to ${url}`);
     console.log('ValidationError: URL must start with http:// or https://');
+    // exit code 2: Incorrect usage, such as invalid options or missing arguments
+    process.exit(2);
+  }
+
+  //validate output file path
+  const outputInfo = getFilePathInfo({
+    filePath: output,
+    defaultBaseName: dataSource,
+    defaultFileExtension: '.ts',
+  });
+  if (!isSupportedOutputFile(outputInfo)) {
+    console.log(
+      `Invalid output file extension: ${outputInfo.extension}. Only TypeScript (.ts) or JavaScript (.js) file is supported.`,
+    );
     // exit code 2: Incorrect usage, such as invalid options or missing arguments
     process.exit(2);
   }
@@ -107,7 +112,7 @@ export const getDataModel = async (
     await handleHttpClientLogin(httpClient);
     trackExecution(httpClient, commandName, options);
     await createDataModel(httpClient, dataSource).then((model) => {
-      return writeFile(model, 'ts', output);
+      return writeFile(model, outputInfo);
     });
   } catch (err) {
     if (err) console.log(err);

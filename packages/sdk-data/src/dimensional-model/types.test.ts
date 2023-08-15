@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { MetadataTypes } from './types';
+import { MetadataTypes } from './types.js';
 describe('MetadataTypes', () => {
   describe('isMeasure', () => {
     it('should fail validation for an invalid measure', () => {

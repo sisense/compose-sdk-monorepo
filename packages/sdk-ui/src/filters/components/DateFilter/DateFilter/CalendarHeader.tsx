@@ -16,14 +16,13 @@ type HeaderProps = {
 const MonthTitle = styled.span<{ theme: CompleteThemeSettings }>`
   font-size: 1.2rem;
   font-weight: 500;
-  color: ${({ theme }) => theme.general.primaryButtonTextColor};
+  color: ${({ theme }) => theme.typography.primaryTextColor};
 `;
 
 const MonthSelectionButton = styled.button<{ theme: CompleteThemeSettings }>`
   border: none;
   background-color: transparent;
-  color: ${({ theme, disabled }) =>
-    disabled ? 'transparent' : theme.general.primaryButtonTextColor};
+  color: ${({ theme, disabled }) => (disabled ? 'transparent' : theme.typography.primaryTextColor)};
   margin: 0 0.5rem;
   :hover {
     border-radius: 50%;

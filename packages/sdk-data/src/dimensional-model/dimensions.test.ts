@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { DimensionalAttribute } from './attributes';
-import { DimensionalDateDimension, DimensionalDimension } from './dimensions';
-import { Sort } from './types';
+import { DimensionalAttribute } from './attributes.js';
+import { DimensionalDateDimension, DimensionalDimension } from './dimensions.js';
+import { Sort } from './types.js';
 
 describe('Dimension jaql preparations', () => {
   it('must prepare simple text dimension jaql', () => {
-    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]' } };
+    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]', datatype: 'text' } };
 
     const dimension = new DimensionalDimension(
       'Brand',
@@ -22,7 +22,7 @@ describe('Dimension jaql preparations', () => {
   });
 
   it('must prepare simple text dimension with default attribute jaql', () => {
-    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]' } };
+    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]', datatype: 'text' } };
 
     const attribute = new DimensionalAttribute('Brand', '[Brand.Brand]');
     const dimension = new DimensionalDimension(
@@ -39,7 +39,7 @@ describe('Dimension jaql preparations', () => {
   });
 
   it('must prepare simple text dimension with nested dimension jaql', () => {
-    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]' } };
+    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]', datatype: 'text' } };
 
     const dimension = new DimensionalDimension(
       'Brand',
@@ -67,6 +67,7 @@ describe('Dimension jaql preparations', () => {
         title: 'Date',
         dim: '[Commerce.Date (Calendar)]',
         level: 'years',
+        datatype: 'datetime',
       },
       format: { mask: { years: 'yyyy' } },
     };

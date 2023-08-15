@@ -1,7 +1,14 @@
 /* eslint-disable complexity */
 import dayjs from 'dayjs';
 import { SecondaryButton } from '../../common/index.js';
-import { SecondaryButtonWithTooltip } from '../../common/Buttons.js';
+import {
+  ButtonProps,
+  ButtonWithTooltipProps,
+  SecondaryButtonWithTooltip,
+} from '../../common/Buttons';
+import styled from '@emotion/styled';
+import { CompleteThemeSettings } from '../../../../types';
+import { useThemeContext } from '../../../../components/ThemeProvider';
 
 type ButtonId = 'earliest' | 'today' | 'latest';
 type QuickDateSelectionButtonsProps = {
@@ -12,7 +19,34 @@ type QuickDateSelectionButtonsProps = {
     minDate: dayjs.Dayjs;
   };
 };
+
+type ThemePropMixin = {
+  theme: CompleteThemeSettings;
+};
+
+type ThemedButtonProps = ButtonProps & ThemePropMixin;
+
+const ThemedSecondaryButton = styled(SecondaryButton)<ThemedButtonProps>`
+  background-color: ${({ theme }) => theme.general.brandColor};
+  color: ${({ theme }) => theme.general.primaryButtonTextColor};
+`;
+
+type ThemedSecondaryButtonWithTooltipProps = ButtonWithTooltipProps & ThemePropMixin;
+
+const ThemedSecondaryButtonWithTooltip = styled(
+  SecondaryButtonWithTooltip,
+)<ThemedSecondaryButtonWithTooltipProps>`
+  background-color: ${({ theme }) => theme.general.brandColor};
+  color: ${({ theme }) => theme.general.primaryButtonTextColor};
+`;
+
+const ThemedButtonsContainer = styled.div<ThemePropMixin>`
+  background-color: ${({ theme }) => theme.general.backgroundColor};
+`;
+
 export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps) => {
+  const { themeSettings } = useThemeContext();
+
   const today = dayjs(new Date());
   const maxDate = props.limit.maxDate;
   const minDate = props.limit.minDate;
@@ -20,25 +54,27 @@ export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps)
   const isTodayAfterMaxDate = maxDate && today.isAfter(maxDate);
   const isTodayOutOfAllowedDateRange = isTodayBeforeMinDate || isTodayAfterMaxDate;
   return (
-    <div
+    <ThemedButtonsContainer
       className={
         (props.enabledButtons.includes('earliest') ? 'left-[16px]' : 'right-[16px]') + ' p-[16px]'
       }
+      theme={themeSettings}
     >
       {props.enabledButtons.includes('earliest') && (
-        <SecondaryButton
+        <ThemedSecondaryButton
           className="mr-[12px]"
           onClick={() => {
             const selectedDate = dayjs(props.limit?.minDate || new Date());
             props.onDateSelected(selectedDate);
           }}
+          theme={themeSettings}
         >
           Earliest Date
-        </SecondaryButton>
+        </ThemedSecondaryButton>
       )}
 
       {props.enabledButtons.includes('today') && (
-        <SecondaryButtonWithTooltip
+        <ThemedSecondaryButtonWithTooltip
           className="mr-[12px]"
           onClick={() => {
             const selectedDate = dayjs(new Date());
@@ -47,20 +83,22 @@ export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps)
           disabled={isTodayOutOfAllowedDateRange}
           tooltipTitle="Today is out of available date range"
           disableTooltip={!isTodayOutOfAllowedDateRange}
+          theme={themeSettings}
         >
           Today
-        </SecondaryButtonWithTooltip>
+        </ThemedSecondaryButtonWithTooltip>
       )}
       {props.enabledButtons.includes('latest') && (
-        <SecondaryButton
+        <ThemedSecondaryButton
           onClick={() => {
             const selectedDate = dayjs(props.limit?.maxDate || new Date());
             props.onDateSelected(selectedDate);
           }}
+          theme={themeSettings}
         >
           Latest Day
-        </SecondaryButton>
+        </ThemedSecondaryButton>
       )}
-    </div>
+    </ThemedButtonsContainer>
   );
 };

@@ -169,3 +169,81 @@ export interface QueryResultData {
 export function isDataSource(arg: DataSource | Data): arg is DataSource {
   return arg === undefined || typeof arg === 'string';
 }
+
+/**
+ * Trend formula options.
+ */
+export type TrendFormulaOptions = {
+  /**
+   * Trend analysis model type to be used for the operation.
+   *
+   * @defaultValue "linear"
+   */
+  modelType?: 'linear' | 'logarithmic' | 'advancedSmoothing' | 'localEstimates';
+  /**
+   * Boolean flag that enables the function to automatically identify and ignore
+   * anomalous values in the series. This can be particularly useful when you want
+   * to maintain the integrity of your analysis by avoiding potential outliers.
+   *
+   * @defaultValue false
+   */
+  ignoreAnomalies?: boolean;
+};
+
+/**
+ * Forecast formula options.
+ */
+export type ForecastFormulaOptions = {
+  /**
+   * Number of data points to be predicted.
+   * The accepted value range is between 1-1,000
+   *
+   * @defaultValue 3
+   */
+  forecastHorizon: number;
+  /**
+   * Forecasting model type. The 'auto' option automatically
+   * fits the best combination of models.
+   *
+   * @defaultValue "auto"
+   */
+  modelType?: 'auto' | 'autoArima' | 'holtWinters' | 'prophet';
+  /**
+   * Start date of the time series data that the forecasting model will
+   * be trained on. This parameter can be used to discard the beginning of
+   * the series. Specify a ISO 8601 date string or Date object.
+   */
+  startDate?: string | Date;
+  /**
+   * End date of the time series data that the forecasting model will be
+   * trained on. This parameter can be used to discard the end of the series.
+   * Specify a ISO 8601 date string or Date object.
+   */
+  endDate?: string | Date;
+  /**
+   * Confidence interval showing the probabilistic upper and lower limits of the
+   * forecasted series according to the uncertainty level. The valid range is (0.8 <= X < 1).
+   *
+   * @defaultValue 0.8
+   */
+  confidenceInterval?: number;
+  /**
+   * Expected lower limit to improve the forecast accuracy when reaching
+   * the limit. Note that values in the confidence interval can exceed
+   * this limit.
+   */
+  lowerBound?: number;
+  /**
+   * Expected upper limit to improve the forecast accuracy when reaching
+   * the limit. Note that values in the confidence interval can exceed
+   * this limit.
+   */
+  upperBound?: number;
+  /**
+   * Boolean flag to round the predicted result to an integer if set to true.
+   * Otherwise, the predicted result is left as a float
+   *
+   * @defaultValue false
+   */
+  roundToInt?: boolean;
+};

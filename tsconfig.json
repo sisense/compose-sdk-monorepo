@@ -31,17 +31,8 @@
     "paths": {
       // workaround for vscode-jest plugin - it requires to have esm module's typedefs instead of cjs
       "ts-deepmerge": ["node_modules/ts-deepmerge/esm/index"]
-    }
+    },
+    "types": ["vitest/globals"]
   },
-  "include": ["**/*.ts"],
-  "exclude": [
-    "docs/",
-    "docs-internal/",
-    "node_modules",
-    "./node_modules/*",
-    "lib",
-    "**/*.test.*",
-    ".vscode",
-    "**/__test_helpers__/**"
-  ]
+  "include": ["**/*.ts"]
 }

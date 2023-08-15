@@ -1,4 +1,4 @@
-import { ThemeOid, CompleteThemeSettings } from '../../types';
+import { ThemeOid, CompleteThemeSettings } from '../types.js';
 
 /**
  * Legacy analog of CompleteThemeSettings used in Sisense UI.
@@ -96,6 +96,8 @@ export function convertToThemeSettings(
     },
     typography: {
       fontFamily: legacyDesignSettings.typography.fontFamily,
+      primaryTextColor: legacyDesignSettings.typography.primaryTextColor,
+      secondaryTextColor: legacyDesignSettings.typography.secondaryTextColor,
     },
     palette: {
       variantColors: legacyPalette.colors,

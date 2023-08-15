@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { measures } from '../../';
-import { createDimension, createDateDimension } from '../dimensions';
-import * as filters from './factory';
+import { measures } from '../../index.js';
+import { createDimension, createDateDimension } from '../dimensions.js';
+import * as filters from './factory.js';
 import {
   DateOperators,
   DateRangeFilter,
@@ -19,7 +19,7 @@ import {
   RelativeDateFilter,
   TextFilter,
   TextOperators,
-} from './filters';
+} from './filters.js';
 
 const TextDim = createDimension({
   name: 'text',

@@ -3,13 +3,12 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Pie Chart Component.
- * A pie chart is a circular graph that represents data as slices of a whole,
+ * A React component representing data in circular graph with the data shown as slices of a whole,
  * with each slice representing a proportion of the total.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/pie-chart.htm).
+ * See [Pie Chart](https://docs.sisense.com/main/SisenseLinux/pie-chart.htm) for more information.
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source:
+ * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
  * <PieChart
  *   dataSet={DM.DataSource}

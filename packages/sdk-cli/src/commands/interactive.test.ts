@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import { validateNotEmpty } from './interactive';
+import { validateNotEmpty } from './interactive.js';
 
 describe('validateNotEmpty', () => {
   it('should validate empty', async () => {

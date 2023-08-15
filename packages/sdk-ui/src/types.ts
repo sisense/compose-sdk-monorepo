@@ -498,6 +498,8 @@ export interface ThemeSettings {
   typography?: {
     /** Font family name to style component text */
     fontFamily?: string;
+    primaryTextColor?: string;
+    secondaryTextColor?: string;
   };
   /** General theme settings */
   general?: {

@@ -3,13 +3,12 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Column Chart Component.
- * A Column Chart represents categorical data with vertical rectangular bars
- * with heights proportional to the values that they represent.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/column-chart.htm).
+ * A React component representing categorical data with vertical rectangular bars
+ * whose heights are proportional to the values that they represent.
+ * See [Column Chart](https://docs.sisense.com/main/SisenseLinux/column-chart.htm) for more information.
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source:
+ * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
  * <ColumnChart
  *   dataSet={DM.DataSource}

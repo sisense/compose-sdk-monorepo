@@ -120,6 +120,7 @@ type ChartPlotOptions = {
   animation?: boolean;
   shadow: boolean;
   marker?: MarkerSettings;
+  borderWidth?: number;
 };
 
 export type Stacking = 'normal' | 'percent';

@@ -23,7 +23,21 @@ export function setup(jsx: ReactElement, useFakeTimers = false): SetupResult {
   return {
     // Need to set "advanceTimers" if we're using Jest's fake timers.
     // https://github.com/testing-library/user-event/issues/833#issuecomment-1171452841
-    user: userEvent.setup(useFakeTimers ? { advanceTimers: jest.advanceTimersByTime } : undefined),
+    user: userEvent.setup(
+      useFakeTimers ? { advanceTimers: (ms) => vi.advanceTimersByTime(ms) } : undefined,
+    ),
     ...render(jsx),
   };
 }
+
+export const MockedHighchartsWrapper = ({
+  options,
+}: {
+  /**
+   * Highcharts chart configuration object.
+   * Please refer to the Highcharts (API documentation)[https://api.highcharts.com/highcharts/].
+   */
+  options: object;
+}) => {
+  return <div>{JSON.stringify(options)}</div>;
+};

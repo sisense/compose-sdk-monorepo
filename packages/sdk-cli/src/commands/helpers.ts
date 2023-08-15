@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -13,8 +14,7 @@ import {
   BearerAuthenticator,
 } from '@sisense/sdk-rest-client';
 import { DataModel, MetadataTypes } from '@sisense/sdk-data';
-import { writeTypescript } from '@sisense/sdk-modeling';
-import { writeFileSync } from 'fs';
+import { writeTypescript, writeJavascript } from '@sisense/sdk-modeling';
 import path from 'path';
 import { DimensionalQueryClient } from '@sisense/sdk-query-client';
 import { PKG_VERSION } from '../package-version.js';
@@ -154,30 +154,76 @@ function rewriteDataModel(dataModel: any): DataModel {
   return dataModel;
 }
 
-function writeFile(dataModel: DataModel, type: 'ts' | 'json', filename?: string) {
-  return new Promise((resolve, reject) => {
-    // setting default if filename is not provided
-    filename = filename || `./${dataModel.name}.${type}`;
-    // adding extension if not provided
-    filename = path.extname(filename) ? filename : `${filename}.${type}`;
-
-    try {
-      console.log(`Writing '${filename}'... `);
-
-      if (type === 'json') {
-        writeFileSync(filename, JSON.stringify(dataModel, null, '    '), 'utf-8');
-      } else if (type === 'ts') {
-        writeTypescript(dataModel, { filename });
-      } else {
-        throw new Error(`Invalid file type: ${type}`);
-      }
-      console.log(`OK!\r\n`);
-      resolve(true);
-    } catch (err) {
-      console.log(`Error writing file. Reason: ${err}\r\n`);
-      reject();
+async function writeFile(dataModel: DataModel, outputFilePathInfo: SupportedOutputFilePathInfo) {
+  const { dir, baseName, extension } = outputFilePathInfo;
+  try {
+    console.log(`Writing '${getFullFilePath(outputFilePathInfo)}'...`);
+    if (extension === '.ts') {
+      await writeTypescript(dataModel, { filename: baseName, dir });
+    } else if (extension === '.js') {
+      await writeJavascript(dataModel, { filename: baseName, dir });
+      // Currently, we don't allow writing JSON files. Can be uncommented in the future to enable supporting JSON.
+      // } else if (extension === '.json') {
+      //   writeFileSync(outputFileName, JSON.stringify(dataModel, null, '    '), 'utf-8');
+      // }
     }
-  });
+    console.log(`OK!\r\n`);
+  } catch (err) {
+    console.log(`Error writing file. Reason: ${err}\r\n`);
+    throw err;
+  }
 }
 
-export { getHttpClient, createDataModel, rewriteDataModel, writeFile };
+export type FilePathInfo = { dir: string; baseName: string; extension: string };
+
+/**
+ * Gets the directory, base name, and extension of a file path.
+ * If the file path is not provided, the default values are used.
+ */
+function getFilePathInfo({
+  filePath,
+  defaultBaseName,
+  defaultFileExtension,
+}: {
+  filePath?: string;
+  defaultFileExtension: SupportedOutputFileExtension;
+  defaultBaseName: string;
+}): FilePathInfo {
+  const dir = filePath ? path.dirname(filePath) : '.';
+  const extension = filePath ? getExtension(filePath, defaultFileExtension) : defaultFileExtension;
+  const baseName = filePath ? path.basename(filePath, extension) : defaultBaseName;
+  return { dir, baseName, extension };
+}
+
+function getExtension(filePath: string, defaultFileExtension: string): string {
+  const extname = path.extname(filePath);
+  if (extname === '') {
+    return defaultFileExtension;
+  } else {
+    return extname;
+  }
+}
+
+function getFullFilePath(filePathInfo: FilePathInfo) {
+  return path.join(filePathInfo.dir, filePathInfo.baseName + filePathInfo.extension);
+}
+
+export type SupportedOutputFileExtension = '.ts' | '.js';
+export type SupportedOutputFilePathInfo = FilePathInfo & {
+  extension: SupportedOutputFileExtension;
+};
+
+function isSupportedOutputFile(
+  filePathInfo: FilePathInfo,
+): filePathInfo is SupportedOutputFilePathInfo {
+  return ['.ts', '.js'].includes(filePathInfo.extension);
+}
+
+export {
+  getHttpClient,
+  createDataModel,
+  rewriteDataModel,
+  writeFile,
+  getFilePathInfo,
+  isSupportedOutputFile,
+};

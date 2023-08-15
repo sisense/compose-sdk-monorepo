@@ -3,23 +3,20 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Scatter Chart Component.
+ * A React component displaying the distribution of two variables on an X-Axis, Y-Axis,
+ * and two additional fields of data that are shown as colored circles scattered across the chart.
  *
- * A Scatter Chart displays the distribution of two variables on an X-Axis, Y-Axis,
- * and two additional fields of data that are shown as colored circles scattered across the chart:
+ * **Point**: A field that for each of its members a scatter point is drawn. The maximum amount of data points is 500.
  *
- * **Point:** A field that for each of its members a scatter point is drawn.
- * Note: the maximum amount of data points is 500.
- *
- * **Size:** An optional field represented by the size of the circles.
+ * **Size**: An optional field represented by the size of the circles.
  * If omitted, all scatter points are equal in size. If used, the circle size is relative to their value.
  *
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm).
+ * See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm) for more information.
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source.
+ * An example of using the component to visualize the `Sample ECommerce` data source.
  *
- * The chart shows top Categories by Total Revenue and Total Quantity on x-axis and y-axis in logarithmic scale
+ * The chart shows top Categories by Total Revenue on the x-axis, and Total Quantity on the y-axis in logarithmic scale
  * with Gender breakdown by color and Total Cost encoded by the size of the bubbles.
  * ```tsx
  * <ScatterChart

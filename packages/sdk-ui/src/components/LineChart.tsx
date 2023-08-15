@@ -3,11 +3,11 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * A React component Displaying data as a series of points connected by a line. Used to show trends or changes over time.
+ * A React component displaying data as a series of points connected by a line. Used to show trends or changes over time.
  * See [Line Chart](https://docs.sisense.com/main/SisenseLinux/line-chart.htm) for more information.
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source:
+ * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
  * <LineChart
  *   dataSet={DM.DataSource}

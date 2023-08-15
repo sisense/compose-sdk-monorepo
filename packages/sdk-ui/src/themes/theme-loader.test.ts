@@ -1,20 +1,21 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
 import { getThemeSettingsByOid } from './theme-loader';
 import { LegacyDesignSettings, LegacyPalette } from './legacy-design-settings';
-import { ThemeOid, ThemeSettings } from '../../types';
 import {
   corporatePalette,
   redLegacyDesignSettings,
   redThemeSettings,
-} from './__mocks__/legacy-design-settings.mock';
+} from './__mocks__/legacy-design-settings.mock.js';
+import { ThemeOid, ThemeSettings } from '../types';
+import { Mocked } from 'vitest';
 
 describe('getThemeSettingsByOid', () => {
-  const httpClientMock: jest.Mocked<Pick<HttpClient, 'get'>> = {
-    get: jest.fn(),
+  const httpClientMock: Mocked<Pick<HttpClient, 'get'>> = {
+    get: vi.fn().mockImplementation(() => {}),
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return the converted theme settings when successful', async () => {

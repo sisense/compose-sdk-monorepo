@@ -2,12 +2,13 @@
 
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
-import { SelectorMode } from './CalendarDateSelector.js';
-import { CalendarDateSelector } from './CalendarDateSelector.js';
-import { DEFAULT_FORMAT } from '../consts.js';
-import { DateFilterRange } from '../types.js';
+import { SelectorMode } from './CalendarDateSelector';
+import { CalendarDateSelector } from './CalendarDateSelector';
+import { DEFAULT_FORMAT } from '../consts';
+import { DateFilterRange } from '../types';
 import Popover from '@mui/material/Popover';
-import { DateRangeFieldButton } from '../../common/DateRangeFieldButton.js';
+import { DateRangeFieldButton } from '../../common/DateRangeFieldButton';
+import { useThemeContext } from '../../../../components/ThemeProvider/ThemeProvider';
 
 const DATE_RANGE = 'date-range';
 
@@ -93,6 +94,8 @@ export function DateFilter(props: DateRangeFilterProps) {
     setIsDateRangeSelectorOpen(true);
   };
 
+  const { themeSettings } = useThemeContext();
+
   return (
     <div>
       <div aria-label="date range filter" className="w-fit flex flex-wrap" ref={filterContainerRef}>
@@ -101,12 +104,14 @@ export function DateFilter(props: DateRangeFilterProps) {
           label="From"
           onClick={() => openDateRangeSelector('fromSelector')}
           isActive={isDateRangeSelectorOpen && activeSelectorMode === 'fromSelector'}
+          theme={themeSettings}
         />
         <DateRangeFieldButton
           onClick={() => openDateRangeSelector('toSelector')}
           value={toVal ? toVal.format(DEFAULT_FORMAT) : 'Today'}
           label="To"
           isActive={isDateRangeSelectorOpen && activeSelectorMode === 'toSelector'}
+          theme={themeSettings}
         />
         <Popover
           id={id}

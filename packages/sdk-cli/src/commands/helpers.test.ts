@@ -1,112 +1,157 @@
-/* eslint-disable jest/no-mocks-import */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { createDataModel, getHttpClient, rewriteDataModel, writeFile } from './helpers';
-import { fieldsECommerce, dimensionalModelECommerce } from '../__mocks__/dataModelECommerce';
-import { fieldsOrdersDB, dimensionalModelOrdersDB } from '../__mocks__/dataModelOrdersDB';
+import {
+  createDataModel,
+  FilePathInfo,
+  getFilePathInfo,
+  getHttpClient,
+  isSupportedOutputFile,
+  rewriteDataModel,
+  writeFile,
+} from './helpers.js';
+import { fieldsECommerce, dimensionalModelECommerce } from '../__mocks__/dataModelECommerce.js';
+import { fieldsOrdersDB, dimensionalModelOrdersDB } from '../__mocks__/dataModelOrdersDB.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
-import fs from 'fs';
 import { DataModel } from '@sisense/sdk-data';
-import { writeTypescript } from '@sisense/sdk-modeling';
+import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
 
-jest.mock('@sisense/sdk-modeling', () => ({
-  writeTypescript: jest.fn(),
+vi.mock('@sisense/sdk-modeling', () => ({
+  writeTypescript: vi.fn(),
+  writeJavascript: vi.fn(),
 }));
 
-describe('createDataModel', () => {
-  it('createDataModel helper is a function', () => {
-    expect(createDataModel).toBeDefined();
-    expect(typeof createDataModel === 'function').toBe(true);
-  });
-});
-
-describe('getHttpClient', () => {
-  const fakeUsername = 'username';
-  const fakePassword = 'password';
-  const fakeDeploymentUrl = '10.0.0.1';
-
-  it('should return HttpClient', () => {
-    const httpClient = getHttpClient(
-      fakeDeploymentUrl,
-      fakeUsername,
-      fakePassword,
-      undefined,
-      undefined,
-    );
-    expect(httpClient).toBeInstanceOf(HttpClient);
+describe('helpers', () => {
+  describe('createDataModel', () => {
+    it('createDataModel helper is a function', () => {
+      expect(createDataModel).toBeDefined();
+      expect(typeof createDataModel === 'function').toBe(true);
+    });
   });
 
-  it('should throw error', () => {
-    expect(() => {
-      getHttpClient(fakeDeploymentUrl, undefined, undefined, undefined, undefined);
-    }).toThrow();
-  });
-});
+  describe('getHttpClient', () => {
+    const fakeUsername = 'username';
+    const fakePassword = 'password';
+    const fakeDeploymentUrl = '10.0.0.1';
 
-describe('rewriteDataModel', () => {
-  it('should clean and group simple data model', () => {
-    expect(rewriteDataModel(fieldsECommerce)).toEqual(dimensionalModelECommerce);
+    it('should return HttpClient', () => {
+      const httpClient = getHttpClient(
+        fakeDeploymentUrl,
+        fakeUsername,
+        fakePassword,
+        undefined,
+        undefined,
+      );
+      expect(httpClient).toBeInstanceOf(HttpClient);
+    });
+
+    it('should throw error', () => {
+      expect(() => {
+        getHttpClient(fakeDeploymentUrl, undefined, undefined, undefined, undefined);
+      }).toThrow();
+    });
   });
 
-  it('should clean and group complex data model', () => {
-    expect(rewriteDataModel(fieldsOrdersDB)).toEqual(dimensionalModelOrdersDB);
-  });
+  describe('rewriteDataModel', () => {
+    it('should clean and group simple data model', () => {
+      expect(rewriteDataModel(fieldsECommerce)).toEqual(dimensionalModelECommerce);
+    });
 
+    it('should clean and group complex data model', () => {
+      expect(rewriteDataModel(fieldsOrdersDB)).toEqual(dimensionalModelOrdersDB);
+    });
+  });
   describe('writeFile', () => {
-    fs.writeFileSync = jest.fn();
-
     const fakeDataModel = { name: 'fakeDataModel' } as DataModel;
 
-    describe('json type', () => {
-      it("should generate a filename if it's not provided for", () => {
-        writeFile(fakeDataModel, 'json');
-        expect(fs.writeFileSync).toHaveBeenCalledWith(
-          './fakeDataModel.json',
-          expect.anything(),
-          expect.anything(),
-        );
-      });
-
-      it('should generate a file extension if not provided', () => {
-        writeFile(fakeDataModel, 'json', './no-extension-file');
-        expect(fs.writeFileSync).toHaveBeenCalledWith(
-          './no-extension-file.json',
-          expect.anything(),
-          expect.anything(),
-        );
-      });
-
-      it('should not add file extension if one is provided', () => {
-        writeFile(fakeDataModel, 'json', './file.txt');
-        expect(fs.writeFileSync).toHaveBeenCalledWith(
-          './file.txt',
-          expect.anything(),
-          expect.anything(),
-        );
+    describe('writing TypeScript', () => {
+      it("should call 'writeTypescript' function with filename without extension", async () => {
+        await writeFile(fakeDataModel, { baseName: 'MyDataModel', dir: '.', extension: '.ts' });
+        expect(writeTypescript).toHaveBeenCalledWith(expect.anything(), {
+          filename: 'MyDataModel',
+          dir: '.',
+        });
       });
     });
 
-    describe('ts type', () => {
-      it("should generate a filename if it's not provided for", () => {
-        writeFile(fakeDataModel, 'ts');
-        expect(writeTypescript).toHaveBeenCalledWith(expect.anything(), {
-          filename: './fakeDataModel.ts',
+    describe('writing JavaScript', () => {
+      it("should call 'writeJavascript' function with filename and dir", async () => {
+        await writeFile(fakeDataModel, {
+          baseName: 'MyDataModel',
+          dir: '../js-project',
+          extension: '.js',
         });
+        expect(writeJavascript).toHaveBeenCalledWith(expect.anything(), {
+          filename: 'MyDataModel',
+          dir: '../js-project',
+        });
+      });
+    });
+  });
+
+  describe('getFilePathInfo', () => {
+    it('should return default file path info when no filePath is provided', () => {
+      const result = getFilePathInfo({
+        defaultFileExtension: '.ts',
+        defaultBaseName: 'defaultFile',
       });
 
-      it('should generate a file extension if not provided', () => {
-        writeFile(fakeDataModel, 'ts', './no-extension-file');
-        expect(writeTypescript).toHaveBeenCalledWith(expect.anything(), {
-          filename: './no-extension-file.ts',
-        });
+      expect(result).toEqual({
+        dir: '.',
+        baseName: 'defaultFile',
+        extension: '.ts',
+      });
+    });
+
+    it('should correctly parse the provided filePath', () => {
+      const result = getFilePathInfo({
+        filePath: '/path/to/customFile.js',
+        defaultFileExtension: '.ts',
+        defaultBaseName: 'defaultFile',
       });
 
-      it('should not add file extension if one is provided', () => {
-        writeFile(fakeDataModel, 'ts', './file.txt');
-        expect(writeTypescript).toHaveBeenCalledWith(expect.anything(), {
-          filename: './file.txt',
-        });
+      expect(result).toEqual({
+        dir: '/path/to',
+        baseName: 'customFile',
+        extension: '.js',
       });
+    });
+
+    it('should correctly parse the provided filePath with no extension', () => {
+      const result = getFilePathInfo({
+        filePath: '/path/to/customFile',
+        defaultFileExtension: '.ts',
+        defaultBaseName: 'defaultFile',
+      });
+
+      expect(result).toEqual({
+        dir: '/path/to',
+        baseName: 'customFile',
+        extension: '.ts',
+      });
+    });
+  });
+
+  describe('isSupportedOutputFile', () => {
+    it('should return true for supported file extensions', () => {
+      const filePathInfo: FilePathInfo = {
+        dir: '.',
+        baseName: 'file',
+        extension: '.ts',
+      };
+
+      const result = isSupportedOutputFile(filePathInfo);
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false for unsupported file extensions', () => {
+      const filePathInfo: FilePathInfo = {
+        dir: '.',
+        baseName: 'file',
+        extension: '.json',
+      };
+
+      const result = isSupportedOutputFile(filePathInfo);
+
+      expect(result).toBe(false);
     });
   });
 });

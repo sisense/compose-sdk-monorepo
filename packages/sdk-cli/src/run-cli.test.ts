@@ -1,19 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { runCli } from './run-cli';
-import * as interactive from './commands/interactive';
-import * as helpers from './commands/helpers';
-import * as getDataModel from './commands/get-data-model';
-import * as tracking from './tracking';
-import { ArgumentsCamelCase } from 'yargs';
-import { HttpClient, PasswordAuthenticator } from '@sisense/sdk-rest-client';
-import { PKG_VERSION } from './package-version';
-import { GetDataModelOptions } from './types';
+import {
+  BearerAuthenticator,
+  HttpClient,
+  PasswordAuthenticator,
+  WatAuthenticator,
+} from '@sisense/sdk-rest-client';
+import * as prompts from './commands/prompts.js';
+import * as helpers from './commands/helpers.js';
+import { PKG_VERSION } from './package-version.js';
+import { runCli } from './run-cli.js';
+import * as tracking from './tracking.js';
 
 // Reference: https://kgajera.com/blog/how-to-test-yargs-cli-with-jest/
 const COMMAND_GET_DATA_MODEL = 'get-data-model';
+const HTTP_CLIENT_ENV = `sdk-cli-${PKG_VERSION as string}`;
 
 /**
  * Programmatically set arguments and execute the CLI script
@@ -43,145 +42,136 @@ describe('CLI', () => {
   const fakeDataSource = 'data source name';
   const fakeOutput = 'output.ts';
 
-  const mockInteractivePrompts = (command: string, auth: string) => {
-    jest.spyOn(interactive, 'promptCommand').mockResolvedValue({ command });
-    if (command !== COMMAND_GET_DATA_MODEL) {
-      return {};
-    }
-    // mock other prompt functions
-    jest
-      .spyOn(interactive, 'promptUrl')
-      .mockResolvedValue({ hostname: fakeHost, port: fakePort, protocol: fakeProtocol });
-    const url = `${fakeProtocol}://${fakeHost}:${fakePort}`;
-    jest
-      .spyOn(interactive, 'promptDataModel')
-      .mockResolvedValue({ dataSource: fakeDataSource, output: fakeOutput });
-    jest.spyOn(interactive, 'promptAuth').mockResolvedValue({ auth: auth });
-    switch (auth) {
-      case 'password':
-        jest
-          .spyOn(interactive, 'promptPasswordAuth')
-          .mockResolvedValue({ username: fakeUsername, password: fakePassword });
-        return {
-          username: fakeUsername,
-          password: fakePassword,
-          dataSource: fakeDataSource,
-          output: fakeOutput,
-          url,
-        };
-      case 'token':
-        jest.spyOn(interactive, 'promptTokenAuth').mockResolvedValue({ token: fakeToken });
-        return {
-          token: fakeToken,
-          dataSource: fakeDataSource,
-          output: fakeOutput,
-          url,
-        };
-      case 'web access token':
-        jest.spyOn(interactive, 'promptWatAuth').mockResolvedValue({ wat: fakeWat });
-        return {
-          wat: fakeWat,
-          dataSource: fakeDataSource,
-          output: fakeOutput,
-          url,
-        };
-    }
-
-    return {};
-  };
-
   let originalArgv: string[];
 
-  beforeEach(() => {
-    // Remove all cached modules. The cache needs to be cleared before running
-    // each command, otherwise you will see the same results from the command
-    // run in your first test in subsequent tests.
-    jest.resetModules();
+  const createDataModelSpy = vi.spyOn(helpers, 'createDataModel');
+  const handleHttpClientLoginSpy = vi.spyOn(helpers, 'handleHttpClientLogin');
+  const trackExecutionSpy = vi.spyOn(tracking, 'trackExecution');
 
+  beforeEach(() => {
     // Each test overwrites process arguments so store the original arguments
     originalArgv = process.argv;
+
+    createDataModelSpy.mockImplementation(
+      (httpClient: HttpClient, dataSource: string) =>
+        new Promise(() => ({ dataSource, httpClient })),
+    );
+    handleHttpClientLoginSpy.mockImplementation(() => Promise.resolve());
+    trackExecutionSpy.mockImplementation(() => {});
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-
     // Set process arguments back to the original value
     process.argv = originalArgv;
+
+    vi.resetAllMocks();
   });
 
-  it('should run interactive command - password auth', () => {
-    const expectedAnswers = mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'password');
-
-    // mock handleHelper function
-    const handleHelperSpy = jest.spyOn(interactive, 'handleHelper');
-    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<GetDataModelOptions>) => {
-      // somehow when inquirer.prompt is spied on, toHaveBeenCalledWith does not work
-      // as a workaround, we do the assertion in the mock implementation
-      expect(answers).toStrictEqual(expectedAnswers);
-      return new Promise(() => {
-        return answers;
+  describe('interactive command', () => {
+    const mockInteractivePrompts = (command: string, auth: string) => {
+      vi.spyOn(prompts, 'promptCommand').mockResolvedValue({ command });
+      if (command !== COMMAND_GET_DATA_MODEL) {
+        return {};
+      }
+      // mock other prompt functions
+      vi.spyOn(prompts, 'promptUrl').mockResolvedValue({
+        hostname: fakeHost,
+        port: fakePort,
+        protocol: fakeProtocol,
       });
-    });
-
-    runCommand('interactive');
-  });
-
-  it('should run interactive command - token auth', () => {
-    const expectedAnswers = mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'token');
-    // mock handleHelper function
-    const handleHelperSpy = jest.spyOn(interactive, 'handleHelper');
-    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<GetDataModelOptions>) => {
-      expect(answers).toStrictEqual(expectedAnswers);
-      return new Promise(() => {
-        return answers;
+      vi.spyOn(prompts, 'promptDataModel').mockResolvedValue({
+        dataSource: fakeDataSource,
+        output: fakeOutput,
       });
-    });
 
-    runCommand('interactive');
-  });
+      vi.spyOn(prompts, 'promptAuth').mockResolvedValue({ auth: auth });
 
-  it('should run interactive command - wat auth', () => {
-    const expectedAnswers = mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'web access token');
-    // mock handleHelper function
-    const handleHelperSpy = jest.spyOn(interactive, 'handleHelper');
-    handleHelperSpy.mockImplementation((answers: ArgumentsCamelCase<GetDataModelOptions>) => {
-      expect(answers).toStrictEqual(expectedAnswers);
-      return new Promise(() => {
-        return answers;
-      });
-    });
+      switch (auth) {
+        case 'password':
+          vi.spyOn(prompts, 'promptPasswordAuth').mockResolvedValue({
+            username: fakeUsername,
+            password: fakePassword,
+          });
+          break;
+        case 'token':
+          vi.spyOn(prompts, 'promptTokenAuth').mockResolvedValue({ token: fakeToken });
+          break;
+        case 'web access token':
+          vi.spyOn(prompts, 'promptWatAuth').mockResolvedValue({ wat: fakeWat });
+          break;
+      }
 
-    runCommand('interactive');
-  });
+      return {};
+    };
 
-  it('should not run interactive with incorrect command', () => {
-    const expectedAnswers = mockInteractivePrompts('invalid_command', 'password');
-    runCommand('interactive');
-    expect(expectedAnswers).toStrictEqual({});
-  });
+    it('should run with password auth', async () => {
+      expect.assertions(2);
 
-  describe('should run get-data-model command', () => {
-    const createDataModelSpy = jest.spyOn(helpers, 'createDataModel');
-    const handleHttpClientLoginSpy = jest.spyOn(helpers, 'handleHttpClientLogin');
-    const trackExecutionSpy = jest.spyOn(tracking, 'trackExecution');
+      mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'password');
 
-    beforeAll(() => {
-      createDataModelSpy.mockImplementation(
-        (httpClient: HttpClient, dataSource: string) =>
-          new Promise(() => ({ dataSource, httpClient })),
+      runCommand('interactive');
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      const expectedHttpClient = new HttpClient(
+        fakeUrl,
+        new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
+        HTTP_CLIENT_ENV,
       );
-      handleHttpClientLoginSpy.mockImplementation(() => Promise.resolve());
-      trackExecutionSpy.mockImplementation(() => Promise.resolve());
+
+      expect(trackExecutionSpy).toHaveBeenCalled();
+      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
     });
 
-    afterEach(() => {
-      createDataModelSpy.mockClear();
-      handleHttpClientLoginSpy.mockClear();
-      trackExecutionSpy.mockClear();
+    it('should run with token auth', async () => {
+      expect.assertions(2);
+
+      mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'token');
+
+      runCommand('interactive');
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      const expectedHttpClient = new HttpClient(
+        fakeUrl,
+        new BearerAuthenticator(fakeUrl, fakeToken),
+        HTTP_CLIENT_ENV,
+      );
+
+      expect(trackExecutionSpy).toHaveBeenCalled();
+      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
     });
 
-    it('with --username and --password', async () => {
-      // mock createDataModel function
+    it('should run with wat auth', async () => {
+      expect.assertions(2);
+
+      mockInteractivePrompts(COMMAND_GET_DATA_MODEL, 'web access token');
+
+      runCommand('interactive');
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      const expectedHttpClient = new HttpClient(
+        fakeUrl,
+        new WatAuthenticator(fakeUrl, fakeWat),
+        HTTP_CLIENT_ENV,
+      );
+
+      expect(trackExecutionSpy).toHaveBeenCalled();
+      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+    });
+
+    it('should not run with incorrect command', () => {
+      expect.assertions(1);
+      const expectedAnswers = mockInteractivePrompts('invalid_command', 'password');
+      runCommand('interactive');
+      expect(expectedAnswers).toStrictEqual({});
+    });
+  });
+
+  describe('get-data-model command', () => {
+    it('should run with --username and --password', async () => {
+      expect.assertions(2);
 
       runCommand(
         COMMAND_GET_DATA_MODEL,
@@ -202,35 +192,20 @@ describe('CLI', () => {
       const expectedHttpClient = new HttpClient(
         fakeUrl,
         new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
-        `sdk-cli-${PKG_VERSION as string}`,
+        HTTP_CLIENT_ENV,
       );
 
       expect(trackExecutionSpy).toHaveBeenCalled();
       expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
     });
 
-    it('should run get-data-model command with --username and without --password value', () => {
+    it('should run with --username and without --password value', async () => {
+      expect.assertions(2);
+
       // mock promptPasswordInteractive function
-      jest
-        .spyOn(getDataModel, 'promptPasswordInteractive')
-        .mockResolvedValue({ maskedPassword: fakePassword });
-
-      // mock createDataModel function
-      createDataModelSpy.mockImplementation((httpClient: HttpClient, dataSource: string) => {
-        // somehow when inquirer.prompt is spied on, toHaveBeenCalledWith does not work
-        // as a workaround, we do the assertion in the mock implementation
-
-        const expectedHttpClient = new HttpClient(
-          fakeUrl,
-          new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
-          `sdk-cli-${PKG_VERSION as string}`,
-        );
-        expect(httpClient).toStrictEqual(expectedHttpClient);
-        return new Promise(() => ({ dataSource, httpClient }));
+      vi.spyOn(prompts, 'promptPasswordInteractive').mockResolvedValue({
+        maskedPassword: fakePassword,
       });
-
-      handleHttpClientLoginSpy.mockImplementation(() => Promise.resolve());
-      trackExecutionSpy.mockImplementation(() => Promise.resolve());
 
       runCommand(
         COMMAND_GET_DATA_MODEL,
@@ -244,6 +219,71 @@ describe('CLI', () => {
         '-o',
         fakeOutput,
       );
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      const expectedHttpClient = new HttpClient(
+        fakeUrl,
+        new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
+        HTTP_CLIENT_ENV,
+      );
+
+      expect(trackExecutionSpy).toHaveBeenCalled();
+      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+    });
+
+    it('should run with --token', async () => {
+      expect.assertions(2);
+
+      runCommand(
+        COMMAND_GET_DATA_MODEL,
+        '--url',
+        fakeUrl,
+        '--token',
+        fakeToken,
+        '-d',
+        fakeDataSource,
+        '-o',
+        fakeOutput,
+      );
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      const expectedHttpClient = new HttpClient(
+        fakeUrl,
+        new BearerAuthenticator(fakeUrl, fakeToken),
+        HTTP_CLIENT_ENV,
+      );
+
+      expect(trackExecutionSpy).toHaveBeenCalled();
+      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+    });
+
+    it('should run with --wat', async () => {
+      expect.assertions(2);
+
+      runCommand(
+        COMMAND_GET_DATA_MODEL,
+        '--url',
+        fakeUrl,
+        '--wat',
+        fakeWat,
+        '-d',
+        fakeDataSource,
+        '-o',
+        fakeOutput,
+      );
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      const expectedHttpClient = new HttpClient(
+        fakeUrl,
+        new WatAuthenticator(fakeUrl, fakeWat),
+        HTTP_CLIENT_ENV,
+      );
+
+      expect(trackExecutionSpy).toHaveBeenCalled();
+      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
     });
   });
 });

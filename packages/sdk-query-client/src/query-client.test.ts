@@ -12,27 +12,28 @@ import {
   getExecuteJaqlTestDataset,
 } from './__test_helpers__/execute-jaql-test-dataset-loader.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
+import type { Mocked } from 'vitest';
 
 describe('DimensionalQueryClient', () => {
-  let httpClientMock: jest.Mocked<HttpClient>;
+  let httpClientMock: Mocked<HttpClient>;
   let queryClient: DimensionalQueryClient;
 
   beforeEach(() => {
     httpClientMock = {
-      post: jest.fn(),
-    } as unknown as jest.Mocked<HttpClient>;
+      post: vi.fn(),
+    } as unknown as Mocked<HttpClient>;
     queryClient = new DimensionalQueryClient(httpClientMock);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('executeQuery', () => {
     let testDataset: ExecuteJaqlTestDataset;
 
-    beforeAll(async () => {
-      testDataset = await getExecuteJaqlTestDataset();
+    beforeAll(() => {
+      testDataset = getExecuteJaqlTestDataset();
     });
 
     describe('for all test samples', () => {
@@ -75,8 +76,8 @@ describe('DimensionalQueryClient', () => {
   describe('getDataSourceFields', () => {
     let testDataset: DatasourceFieldsTestDataset;
 
-    beforeAll(async () => {
-      testDataset = await getDatasourceFieldsTestDataset();
+    beforeAll(() => {
+      testDataset = getDatasourceFieldsTestDataset();
     });
 
     it('should resolve the data source fields', async () => {

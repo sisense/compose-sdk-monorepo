@@ -1,6 +1,3 @@
-/* eslint-disable jest/expect-expect */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { fireEvent, render } from '@testing-library/react';
 import { Chart } from './Chart';
 import { HighchartsOptions } from '../chart-options-processor/chart_options_service';
@@ -8,8 +5,11 @@ import { DAYS, JAN, MON } from '../query/date-formats/apply_date_format';
 import { IndicatorStyleOptions } from '../types';
 import { Table } from './Table';
 import { ThemeProvider } from './ThemeProvider';
-
-jest.mock('./HighchartsWrapper', () => {
+import type { useSisenseContext } from './SisenseContextProvider';
+import { getDefaultThemeSettings } from '../chart-options-processor/theme_option_service';
+import { getBaseDateFnsLocale } from '../chart-data-processor/data_table_date_period';
+import type { ClientApplication } from '../app/client-application';
+vi.mock('./HighchartsWrapper', () => {
   return {
     HighchartsWrapper: ({ options }: { options: object }) => {
       return <div>{JSON.stringify(options)}</div>;
@@ -17,22 +17,33 @@ jest.mock('./HighchartsWrapper', () => {
   };
 });
 
-jest.mock('./SisenseContextProvider', () => {
-  return {
-    useSisenseContext: () => ({
-      app: {
-        appConfig: {
-          dateConfig: {
-            weekFirstDay: MON,
-            isFiscalOn: false,
-            fiscalMonth: JAN,
-            selectedDateLevel: DAYS,
-            timeZone: 'UTC',
-          },
-          local: 'en-US',
+vi.mock('./SisenseContextProvider', async () => {
+  const actual: typeof import('./SisenseContextProvider') = await vi.importActual(
+    './SisenseContextProvider',
+  );
+
+  const useSisenseContextMock: typeof useSisenseContext = () => ({
+    app: {
+      settings: {
+        dateConfig: {
+          weekFirstDay: MON,
+          isFiscalOn: false,
+          fiscalMonth: JAN,
+          selectedDateLevel: DAYS,
+          timeZone: 'UTC',
         },
+        serverThemeSettings: getDefaultThemeSettings(),
+        locale: getBaseDateFnsLocale(),
       },
-    }),
+    } as ClientApplication,
+
+    isInitialized: true,
+    enableTracking: true,
+  });
+
+  return {
+    ...actual,
+    useSisenseContext: useSisenseContextMock,
   };
 });
 
@@ -110,9 +121,9 @@ it('add handlers to a chart', () => {
         expect(options).toMatchSnapshot();
         return options;
       }}
-      onDataPointClick={jest.fn()}
-      onDataPointContextMenu={jest.fn()}
-      onDataPointsSelected={jest.fn()}
+      onDataPointClick={vi.fn()}
+      onDataPointContextMenu={vi.fn()}
+      onDataPointsSelected={vi.fn()}
     />,
   );
 });
@@ -160,7 +171,7 @@ it('render a bar chart with breakBy and two x-axes', () => {
 });
 
 it('render a line chart that has errors', () => {
-  const spy = jest.spyOn(console, 'error');
+  const spy = vi.spyOn(console, 'error');
   spy.mockImplementation(() => {});
 
   const { container } = render(
@@ -264,4 +275,41 @@ it('render indicator numericBar chart', () => {
 it('render Table', () => {
   const { container } = render(<Table dataSet={dataSet} dataOptions={{ columns: [cat1, cat2] }} />);
   expect(container).toMatchSnapshot();
+});
+
+it('should show No Results overlay in Chart when data missing', () => {
+  const container = render(
+    <Chart
+      dataSet={{
+        columns: dataSet.columns,
+        rows: [],
+      }}
+      chartType={'line'}
+      dataOptions={{
+        category: [cat1],
+        value: [meas1],
+        breakBy: [],
+      }}
+    />,
+  );
+  const overlayTitle = container.queryByText('No Results');
+
+  expect(overlayTitle).toBeTruthy();
+});
+
+it('should show No Results overlay in Table when data missing', () => {
+  const container = render(
+    <Table
+      dataSet={{
+        columns: dataSet.columns,
+        rows: [],
+      }}
+      dataOptions={{
+        columns: [cat1],
+      }}
+    />,
+  );
+  const overlayTitle = container.queryByText('No Results');
+
+  expect(overlayTitle).toBeTruthy();
 });

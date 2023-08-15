@@ -123,13 +123,11 @@ export const scatterData = (
 
   const xCategories = getCategories(scatterDataTable, 'xAxis', xAxis);
   const yCategories = getCategories(scatterDataTable, 'yAxis', yAxis);
-  const axisCategoriesMap = createCategoriesMap(xCategories, yCategories);
 
   return {
     type: 'scatter',
     scatterDataTable,
     xCategories,
     yCategories,
-    axisCategoriesMap,
   };
 };

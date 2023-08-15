@@ -6,10 +6,9 @@ import { HttpClient, Authenticator, getAuthenticator } from '@sisense/sdk-rest-c
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import { DataSource } from '@sisense/sdk-data';
 import { SisenseContextProviderProps } from '../props';
-import { DateConfig, defaultDateConfig } from '../query/date-formats';
-import merge from 'ts-deepmerge';
-import { getBaseDateFnsLocale } from '../chart-data-processor/data_table_date_period';
+import { DateConfig } from '../query/date-formats';
 import { translation } from '../locales/en';
+import { AppSettings, getSettings } from './settings/settings';
 
 /**
  * Application configuration
@@ -18,15 +17,13 @@ export type AppConfig = {
   /**
    * A [date-fns Locale](https://date-fns.org/v2.30.0/docs/Locale)
    */
-  locale: Locale;
+  locale?: Locale;
 
   /**
    * Date Configurations
    */
-  dateConfig: DateConfig;
+  dateConfig?: DateConfig;
 };
-
-const defaultAppConfig = { locale: getBaseDateFnsLocale(), dateConfig: defaultDateConfig };
 
 /**
  * Stands for a Sisense Client Application which connects to a Sisense Environment
@@ -50,9 +47,9 @@ export class ClientApplication {
   readonly defaultDataSource: DataSource;
 
   /**
-   * Gets the application configuration
+   * Gets the application settings
    */
-  readonly appConfig: AppConfig;
+  settings: AppSettings;
 
   /**
    * Construct new Sisense Client Application
@@ -60,14 +57,8 @@ export class ClientApplication {
    * @param url - URL to the sisense environment
    * @param auth - Authentication to be used
    * @param defaultDataSource - Default data source to be used by child components by default
-   * @param appConfig - Application configuration
    */
-  constructor(
-    url: string,
-    auth: Authenticator,
-    defaultDataSource?: DataSource,
-    appConfig?: AppConfig,
-  ) {
+  constructor(url: string, auth: Authenticator, defaultDataSource?: DataSource) {
     window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
       // TODO: replace this with custom logger
       if (event.reason instanceof Error) {
@@ -83,8 +74,6 @@ export class ClientApplication {
       'sdk-ui' + (__PACKAGE_VERSION__ ? `-${__PACKAGE_VERSION__}` : ''),
     );
     this.queryClient = new DimensionalQueryClient(this.httpClient);
-
-    this.appConfig = merge(defaultAppConfig, appConfig ?? {});
 
     if (defaultDataSource !== undefined) {
       this.defaultDataSource = defaultDataSource;
@@ -107,8 +96,9 @@ export const createClientApplication = async ({
     const auth = getAuthenticator(url, username, password, token, wat, ssoEnabled);
 
     if (auth) {
-      const app = new ClientApplication(url, auth, defaultDataSource, appConfig);
+      const app = new ClientApplication(url, auth, defaultDataSource);
       await app.httpClient.login();
+      app.settings = await getSettings(appConfig || {}, app.httpClient, 'wat' in auth);
 
       return app;
     }

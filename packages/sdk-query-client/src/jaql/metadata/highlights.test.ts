@@ -18,11 +18,13 @@ describe('Highlight filters applying', () => {
       jaql: {
         title: 'Gender',
         dim: '[Commerce.Gender]',
+        datatype: 'text',
         in: {
           selected: {
             jaql: {
               title: 'CommerceGender',
               dim: '[Commerce.Gender]',
+              datatype: 'text',
               filter: { members: ['Female'] },
             },
           },
@@ -47,12 +49,14 @@ describe('Highlight filters applying', () => {
         title: 'Date',
         dim: '[Commerce.Date (Calendar)]',
         level: 'years',
+        datatype: 'datetime',
         in: {
           selected: {
             jaql: {
               title: 'CommerceDateCalendar',
               dim: '[Commerce.Date (Calendar)]',
               level: 'years',
+              datatype: 'datetime',
               filter: { exclude: { members: ['2010-01-01T00:00:00'] } },
             },
           },
@@ -77,7 +81,7 @@ describe('Highlight filters applying', () => {
   });
 
   it('must not apply highlight filter to metadata item', () => {
-    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]' } };
+    const result = { jaql: { title: 'Brand', dim: '[Brand.Brand]', datatype: 'text' } };
     const attribute = new DimensionalAttribute('Brand', '[Brand.Brand]', 'text-attribute');
 
     const filter = new MembersFilter(

@@ -1,5 +1,6 @@
 {
-  "version": "0.7.4",
+  "version": "0.8.0",
+  "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
   "workspaces": [
@@ -14,7 +15,7 @@
     "build:prod": "yarn workspaces foreach --no-private --verbose --topological --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue run build:prod",
     "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output",
     "reset": "yarn clean && rm -rf ./node_modules",
-    "lint": "yarn workspaces foreach run lint",
+    "lint": "yarn workspaces foreach --verbose run lint",
     "lint:changed": "yarn workspaces foreach --since run lint",
     "format": "yarn workspaces foreach run format",
     "format:check": "yarn workspaces foreach run format:check",
@@ -47,16 +48,20 @@
     "@sisense/commitlint-config": "^1.9.9",
     "@sisense/eslint-config": "1.9.12",
     "@sisense/prettier-config": "^1.9.9",
+    "@vitest/coverage-istanbul": "0.34.1",
     "eslint": "^8.40.0",
     "eslint-plugin-tsdoc": "0.2.17",
+    "eslint-plugin-vitest": "0.2.8",
     "express": "^4.18.2",
     "husky": "^8.0.3",
+    "jest-transform-stub": "^2.0.0",
     "lint-staged": "^13.2.1",
     "nyc": "^15.1.0",
     "prettier": "^2.8.8",
     "typedoc": "0.24.8",
     "typedoc-plugin-markdown": "^3.15.3",
-    "typedoc-plugin-versions": "^0.2.3"
+    "typedoc-plugin-versions": "^0.2.3",
+    "vitest": "0.34.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

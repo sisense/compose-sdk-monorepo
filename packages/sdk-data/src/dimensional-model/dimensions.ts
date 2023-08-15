@@ -14,7 +14,11 @@ import { Attribute, LevelAttribute, Dimension, DateDimension } from './interface
 
 import { Sort, DateLevels, MetadataTypes } from './types.js';
 
-import { DimensionalAttribute, DimensionalLevelAttribute } from './attributes.js';
+import {
+  DimensionalAttribute,
+  DimensionalLevelAttribute,
+  jaqlSimpleColumnType,
+} from './attributes.js';
 
 import { DimensionalElement, normalizeName } from './base.js';
 
@@ -210,6 +214,7 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
       jaql: {
         title: this.name,
         dim: this.expression,
+        datatype: jaqlSimpleColumnType(this.type),
       },
     };
 

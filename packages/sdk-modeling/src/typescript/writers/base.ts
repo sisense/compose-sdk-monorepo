@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { WriteStream } from 'fs';
 
 export const NEWLINE = '\n';
 
-export function writeIndented(stream: WriteStream, s: string, idnt: number) {
+export function writeIndented(stream: NodeJS.WritableStream, s: string, idnt: number) {
   if (idnt > 0) {
     stream.write(indent(idnt));
   }
@@ -50,5 +49,5 @@ export abstract class BaseWriter<T> {
     this.name = name;
   }
 
-  abstract write(stream: WriteStream, ident: number): any;
+  abstract write(stream: NodeJS.WritableStream, ident: number): any;
 }

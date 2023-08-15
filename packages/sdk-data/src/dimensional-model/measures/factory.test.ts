@@ -1,20 +1,21 @@
+/* eslint-disable vitest/expect-expect */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable jest/no-identical-title */
-import { DimensionalAttribute } from '../attributes';
-import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures';
-import { createDimension } from '../dimensions';
-import { AggregationTypes } from '../types';
-import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces';
-import { normalizeName } from '../base';
-import * as filters from '../filters/factory';
-import * as measures from './factory';
+/* eslint-disable vitest/no-identical-title */
+import { DimensionalAttribute } from '../attributes.js';
+import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
+import { createDimension } from '../dimensions.js';
+import { AggregationTypes } from '../types.js';
+import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';
+import { normalizeName } from '../base.js';
+import * as filters from '../filters/factory.js';
+import * as measures from './factory.js';
 
-const sampleAttribute = new DimensionalAttribute('Cost', '[Commerce.Cost]');
+const sampleAttribute = new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute');
 const sampleMeasureName = 'measure name';
 const sampleMeasureFormat = '00.00';
 const sampleMeasure1 = new DimensionalBaseMeasure(
@@ -264,6 +265,152 @@ describe('measures factory', () => {
         '[measure1]': sampleMeasure1,
         [getContextName(filter)]: filter,
       });
+    });
+  });
+
+  describe('advanced analytics functions', () => {
+    test('measures.trend() with no options', () => {
+      const m = measures.sum(sampleAttribute);
+      const mTrend = measures.trend(m);
+
+      expect(mTrend.jaql()).toStrictEqual({
+        jaql: {
+          title: 'sum Cost Trend',
+          formula: 'trend([sumCost])',
+          context: {
+            '[sumCost]': {
+              title: 'sum Cost',
+              dim: '[Commerce.Cost]',
+              datatype: 'numeric',
+              agg: 'sum',
+            },
+          },
+        },
+      });
+    });
+
+    test('measures.trend() with modelType=advancedSmoothing', () => {
+      const m = measures.sum(sampleAttribute);
+      const mTrend = measures.trend(m, 'Trend', {
+        modelType: 'advancedSmoothing',
+        ignoreAnomalies: true,
+      });
+
+      expect(mTrend.jaql()).toStrictEqual({
+        jaql: {
+          context: {
+            '[sumCost]': {
+              agg: 'sum',
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'sum Cost',
+            },
+          },
+          formula: 'trend([sumCost], "modelType=Advanced Smoothing","ignoreAnomalies=true")',
+          title: 'Trend',
+        },
+      });
+    });
+
+    test('measures.trend() with modelType=localEstimates', () => {
+      const m = measures.sum(sampleAttribute);
+      const mTrend = measures.trend(m, 'Trend', {
+        modelType: 'localEstimates',
+      });
+
+      expect(mTrend.jaql()).toStrictEqual({
+        jaql: {
+          context: {
+            '[sumCost]': {
+              agg: 'sum',
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'sum Cost',
+            },
+          },
+          formula: 'trend([sumCost], "modelType=Local Estimates")',
+          title: 'Trend',
+        },
+      });
+    });
+    test('measures.forecast() with no options', () => {
+      const m = measures.sum(sampleAttribute);
+      const mTrend = measures.forecast(m);
+
+      expect(mTrend.jaql()).toStrictEqual({
+        jaql: {
+          formula: 'forecast([sumCost], "forecastHorizon=3")',
+          title: 'sum Cost Forecast',
+          context: {
+            '[sumCost]': {
+              title: 'sum Cost',
+              dim: '[Commerce.Cost]',
+              datatype: 'numeric',
+              agg: 'sum',
+            },
+          },
+        },
+      });
+    });
+
+    test('measures.forecast() with all options', () => {
+      const m = measures.sum(sampleAttribute);
+      const mTrend = measures.forecast(m, 'Forecast', {
+        forecastHorizon: 6,
+        modelType: 'holtWinters',
+        startDate: new Date('2023-01-01'),
+        endDate: new Date('2023-06-01'),
+        confidenceInterval: 0.9,
+        lowerBound: 1000,
+        upperBound: 100000,
+        roundToInt: true,
+      });
+
+      expect(mTrend.jaql()).toStrictEqual({
+        jaql: {
+          formula:
+            'forecast([sumCost], "forecastHorizon=6","modelType=holtWinters","startDate=2023-01-01T00:00:00","endDate=2023-06-01T00:00:00","confidenceInterval=0.9","lowerBound=1000","upperBound=100000","roundToInt=true")',
+          title: 'Forecast',
+          context: {
+            '[sumCost]': {
+              title: 'sum Cost',
+              dim: '[Commerce.Cost]',
+              datatype: 'numeric',
+              agg: 'sum',
+            },
+          },
+        },
+      });
+    });
+  });
+
+  test('measures.forecast() with ISO string dates', () => {
+    const m = measures.sum(sampleAttribute);
+    const mTrend = measures.forecast(m, 'Forecast', {
+      forecastHorizon: 6,
+      modelType: 'holtWinters',
+      startDate: '2023-01-01',
+      endDate: '2023-06-01',
+      confidenceInterval: 0.9,
+      lowerBound: 1000,
+      upperBound: 100000,
+      roundToInt: true,
+    });
+
+    expect(mTrend.jaql()).toStrictEqual({
+      jaql: {
+        formula:
+          'forecast([sumCost], "forecastHorizon=6","modelType=holtWinters","startDate=2023-01-01T00:00:00","endDate=2023-06-01T00:00:00","confidenceInterval=0.9","lowerBound=1000","upperBound=100000","roundToInt=true")',
+        title: 'Forecast',
+        context: {
+          '[sumCost]': {
+            title: 'sum Cost',
+            dim: '[Commerce.Cost]',
+            datatype: 'numeric',
+            agg: 'sum',
+          },
+        },
+      },
     });
   });
 });

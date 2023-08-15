@@ -3,13 +3,12 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Bar Chart Component.
- * A Bar Chart represents categorical data with horizontal rectangular bars
- * with lengths proportional to the values that they represent.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm).
+ * A React component representing categorical data with horizontal rectangular bars,
+ * whose lengths are proportional to the values that they represent.
+ * See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for more information.
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source:
+ * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
  * <BarChart
  *   dataSet={DM.DataSource}

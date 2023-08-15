@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-lines */
-import { WriteStream } from 'fs';
 
 import {
   Dimension,
@@ -49,7 +48,7 @@ export class DimensionWriter extends BaseWriter<Dimension> {
     return this.isCustom() ? this.name + 'Dimension' : 'Dimension';
   }
 
-  writeInterface(stream: WriteStream) {
+  writeInterface(stream: NodeJS.WritableStream) {
     if (!this.isCustom()) {
       return;
     }
@@ -73,7 +72,7 @@ export class DimensionWriter extends BaseWriter<Dimension> {
     stream.write(`}${NEWLINE}`);
   }
 
-  writeDef(stream: WriteStream, ident: number) {
+  writeDef(stream: NodeJS.WritableStream, ident: number) {
     writeIndented(stream, `createDimension({${rnt(ident + 1)}name: '${this.element.name}',`, ident);
 
     this.attributes.forEach((att) => {
@@ -97,7 +96,7 @@ export class DimensionWriter extends BaseWriter<Dimension> {
     }
   }
 
-  write(stream: WriteStream, ident: number): any {
+  write(stream: NodeJS.WritableStream, ident: number): any {
     if (!this.isNested) {
       // creating a dedicated interface for dimensions with multiple attributes
       this.writeInterface(stream);
@@ -133,7 +132,7 @@ export class DateDimensionWriter extends BaseWriter<DateDimension> {
     return this.isCustom() ? this.name + 'DateDimension' : 'DateDimension';
   }
 
-  writeInterface(stream: WriteStream) {
+  writeInterface(stream: NodeJS.WritableStream) {
     if (!this.isCustom()) {
       return;
     }
@@ -151,7 +150,7 @@ export class DateDimensionWriter extends BaseWriter<DateDimension> {
     stream.write(`${NEWLINE}} ${NEWLINE}`);
   }
 
-  writeDef(stream: WriteStream, ident: number) {
+  writeDef(stream: NodeJS.WritableStream, ident: number) {
     writeIndented(stream, `createDateDimension({${NEWLINE}`, 0);
     writeIndented(stream, `name: '${this.element.name}',${NEWLINE}`, ident + 1);
     writeIndented(stream, `expression: '${this.element.expression}',`, ident + 1);
@@ -164,7 +163,7 @@ export class DateDimensionWriter extends BaseWriter<DateDimension> {
     }
   }
 
-  write(stream: WriteStream, ident: number): any {
+  write(stream: NodeJS.WritableStream, ident: number): any {
     if (!this.isNested) {
       // creating a dedicated interface for dimensions with multiple attributes
       this.writeInterface(stream);
@@ -183,7 +182,7 @@ export class AttributeWriter extends BaseWriter<Attribute> {
     super(attribute, normalizeName(attribute.name));
   }
 
-  write(stream: WriteStream, ident: number): any {
+  write(stream: NodeJS.WritableStream, ident: number): any {
     writeIndented(
       stream,
       `createAttribute({\
@@ -201,7 +200,7 @@ export class LevelWriter extends BaseWriter<LevelAttribute> {
     super(level, normalizeName(level.name));
   }
 
-  write(stream: WriteStream, ident: number): any {
+  write(stream: NodeJS.WritableStream, ident: number): any {
     writeIndented(
       stream,
       `createAttribute({name: '${this.name}', expression: '${this.element.expression}', granularity: '${this.element.granularity}'}),`,

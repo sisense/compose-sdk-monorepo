@@ -1,25 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 import { FetchInterceptorResponse } from 'fetch-intercept';
 import {
   handleNetworkError,
   handleErrorResponse,
   handleUnauthorizedResponse,
   isNetworkError,
-} from './interceptors';
-import { PasswordAuthenticator } from './password-authenticator';
-import { BearerAuthenticator } from './bearer-authenticator';
-import { WatAuthenticator } from './wat-authenticator';
-import { SsoAuthenticator } from './sso-authenticator';
+} from './interceptors.js';
+import { PasswordAuthenticator } from './password-authenticator.js';
+import { BearerAuthenticator } from './bearer-authenticator.js';
+import { WatAuthenticator } from './wat-authenticator.js';
+import { SsoAuthenticator } from './sso-authenticator.js';
 
 const fakeDeploymentUrl = 'https://10.0.0.1';
 
 describe('Auth interceptor', () => {
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should notify user about failed password authentication', () => {
@@ -64,7 +59,7 @@ describe('Auth interceptor', () => {
 
     const auth = new SsoAuthenticator(fakeDeploymentUrl);
 
-    global.fetch = jest.fn().mockImplementation(() => {
+    global.fetch = vi.fn().mockImplementation(() => {
       return Promise.resolve({
         json: () =>
           Promise.resolve({

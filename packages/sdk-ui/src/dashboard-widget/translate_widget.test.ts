@@ -14,7 +14,7 @@ import {
   IndicatorDataOptions,
   ScatterChartDataOptions,
 } from '../types';
-import { BaseJaql, PanelItem, SortDirection, WidgetDto } from './types';
+import { BaseJaql, FilterJaql, PanelItem, SortDirection, WidgetDto } from './types';
 import { jaqlMock } from './__mocks__/jaqlMock';
 import { AnyColumn } from '../chart-data-options/types';
 
@@ -46,12 +46,15 @@ function getSortTypeFromPanelItem(panelItem: PanelItem) {
   }
 }
 
-function compareBaseJaqls(sourceJaql: BaseJaql, targetJaql: BaseJaql) {
+function compareBaseJaqls(sourceJaql: BaseJaql | FilterJaql, targetJaql: BaseJaql | FilterJaql) {
   expect(sourceJaql.dim).toEqual(targetJaql.dim);
   expect(sourceJaql.level).toEqual(targetJaql.level);
   expect(sourceJaql.agg).toEqual(targetJaql.agg);
   expect(sourceJaql.title).toEqual(targetJaql.title);
   expect(sourceJaql.sort).toEqual(targetJaql.sort);
+  if ('filter' in sourceJaql || 'filter' in targetJaql) {
+    expect((sourceJaql as FilterJaql).filter).toEqual((targetJaql as FilterJaql).filter);
+  }
 }
 
 function verifyColumn(column: AnyColumn, panelItem: PanelItem) {
@@ -72,12 +75,12 @@ function verifyColumn(column: AnyColumn, panelItem: PanelItem) {
   if (isFormulaJaql) {
     expect(jaql.formula).toEqual(panelJaql.formula);
 
-    return Object.keys(panelJaql.context || {}).every((jaqlContextKey) =>
+    Object.keys(panelJaql.context || {}).forEach((jaqlContextKey) =>
       compareBaseJaqls(panelJaql.context![jaqlContextKey], jaql.context[jaqlContextKey]),
     );
+  } else {
+    compareBaseJaqls(jaql, panelJaql);
   }
-
-  return compareBaseJaqls(jaql, panelJaql);
 }
 
 describe('translate widget', () => {
@@ -390,6 +393,50 @@ describe('translate widget', () => {
       expect(() => {
         extractWidgetProps(widget);
       }).toThrow("Can't extract props for unsupported widget type - unsupported-type");
+    });
+
+    it('should returns correct data options for chart with "measured value" formula', () => {
+      const widget: WidgetDto = {
+        ...widgetMock,
+        type: 'chart/column',
+        metadata: {
+          panels: [
+            {
+              name: 'categories',
+              items: [
+                {
+                  jaql: jaqlMock.category,
+                },
+              ],
+            },
+            {
+              name: 'values',
+              items: [
+                {
+                  jaql: {
+                    formula: '([Total Cost], [Age Range Filter])',
+                    title: 'Measured Value',
+                    context: {
+                      '[Total Cost]': jaqlMock.costAggregated,
+                      '[Age Range Filter]': {
+                        ...jaqlMock.ageRange,
+                        filter: {
+                          members: ['0-18', '19-24'],
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      };
+      const { dataOptions } = extractWidgetProps(widget).props;
+      const { category, value } = dataOptions as CartesianChartDataOptions;
+
+      verifyColumn(category[0], widget.metadata.panels[0].items[0]);
+      verifyColumn(value[0], widget.metadata.panels[1].items[0]);
     });
   });
 });

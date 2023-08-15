@@ -6,8 +6,8 @@ export const jaqlMock = {
     title: 'AgeRange',
   } as BaseJaql,
   category: {
-    dim: '[Commerce.Age Range]',
-    title: 'AgeRange',
+    dim: '[Commerce.Category]',
+    title: 'Category',
     sort: 'desc',
   } as BaseJaql,
   costAggregated: {

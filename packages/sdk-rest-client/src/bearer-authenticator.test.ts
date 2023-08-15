@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { BearerAuthenticator } from './bearer-authenticator';
+import { BearerAuthenticator } from './bearer-authenticator.js';
 
 describe('BearerAuthenticator', () => {
   const fakeDeploymentUrl = '10.0.0.1';

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { ThemeOid, ThemeSettings, isThemeOid, CompleteThemeSettings } from '../../types';
 import { useThemeContext } from './ThemeProvider';
 import { useSisenseContext } from '../SisenseContextProvider';
-import { getThemeSettingsByOid } from './theme-loader';
+import { getThemeSettingsByOid } from './../../themes/theme-loader';
 import { getDefaultThemeSettings } from '../../chart-options-processor/theme_option_service';
 
 /**

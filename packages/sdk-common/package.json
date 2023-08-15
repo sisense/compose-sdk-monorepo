@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-common",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "type": "module",
   "exports": {
     "types": "./dist/index.d.ts",
@@ -15,19 +15,19 @@
   "scripts": {
     "build": "tsc --noEmit && vite build --mode development",
     "build:prod": "tsc --noEmit && vite build",
-    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage && rm -rf tsconfig.tsbuildinfo",
+    "clean": "rm -rf dist coverage tsconfig.tsbuildinfo tsconfig.prod.tsbuildinfo",
     "format": "run -T prettier --write .",
     "format:check": "run -T prettier --check .",
     "lint": "run -T eslint . --fix",
-    "test": "jest",
-    "test:coverage": "jest --coverage"
+    "vitest": "run -T vitest",
+    "test": "run vitest run",
+    "test:watch": "run vitest watch",
+    "test:coverage": "run vitest run --coverage"
   },
   "dependencies": {
     "@sisense/sdk-rest-client": "workspace:^"
   },
   "devDependencies": {
-    "jest": "29.1.2",
-    "ts-jest": "29.0.3",
     "typescript": "4.8.4",
     "vite": "4.1.4",
     "vite-plugin-dts": "^2.3.0"

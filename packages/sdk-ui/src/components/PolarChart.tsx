@@ -3,12 +3,11 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Polar Chart Component.
- * Use the polar (radar) chart to compare multiple categories/variables with a spacial perspective in a radial chart.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm).
+ * A React component comparing multiple categories/variables with a spacial perspective in a radial chart.
+ * See [Polar Chart](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm) for more information.
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source:
+ * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
  * <PolarChart
  *   dataSet={DM.DataSource}

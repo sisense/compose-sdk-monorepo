@@ -5,18 +5,18 @@ import {
   DimensionalBaseMeasure,
   DimensionalCalculatedMeasure,
   DimensionalMeasureTemplate,
-} from './measures';
-import { DimensionalAttribute } from '../attributes';
-import { AggregationTypes } from '../types';
+} from './measures.js';
+import { DimensionalAttribute } from '../attributes.js';
+import { AggregationTypes } from '../types.js';
 
 describe('Measures jaql preparations', () => {
   it('must prepare simple measure jaql', () => {
     const result = {
-      jaql: { title: 'Cost', agg: 'sum', dim: '[Commerce.Cost]' },
+      jaql: { title: 'Cost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
     };
     const measure = new DimensionalBaseMeasure(
       'Cost',
-      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
+      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
       'sum',
     );
 
@@ -46,8 +46,8 @@ describe('Measures jaql preparations', () => {
         title: 'sum([Cost] + [Total Revenue])',
         formula: 'sum([M1] + [M2])',
         context: {
-          '[M1]': { title: 'Revenue', agg: 'sum', dim: '[Commerce.Revenue]' },
-          '[M2]': { title: 'Cost', agg: 'sum', dim: '[Commerce.Cost]' },
+          '[M1]': { title: 'Revenue', agg: 'sum', dim: '[Commerce.Revenue]', datatype: 'numeric' },
+          '[M2]': { title: 'Cost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
         },
       },
     };
@@ -57,12 +57,12 @@ describe('Measures jaql preparations', () => {
       {
         '[M1]': new DimensionalBaseMeasure(
           'Revenue',
-          new DimensionalAttribute('[Commerce.Revenue]', '[Commerce.Revenue]'),
+          new DimensionalAttribute('[Commerce.Revenue]', '[Commerce.Revenue]', 'numeric-attribute'),
           'sum',
         ),
         '[M2]': new DimensionalBaseMeasure(
           'Cost',
-          new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
+          new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
           'sum',
         ),
       },
@@ -75,11 +75,11 @@ describe('Measures jaql preparations', () => {
 
   it('must prepare template measure jaql', () => {
     const result = {
-      jaql: { title: 'sum CommerceCost', agg: 'sum', dim: '[Commerce.Cost]' },
+      jaql: { title: 'sum CommerceCost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
     };
     const measure = new DimensionalMeasureTemplate(
       'Count',
-      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
+      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
     );
 
     const jaql = measure.jaql();

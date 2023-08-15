@@ -5,11 +5,19 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable sonarjs/no-nested-switch */
 import { Attribute, LevelAttribute } from './interfaces.js';
 
 import { Sort, MetadataTypes, DateLevels } from './types.js';
 
 import { DimensionalElement, normalizeName } from './base.js';
+import { simpleColumnType } from './simple_column_types.js';
+
+/**
+ * @internal
+ */
+export const jaqlSimpleColumnType = (datatype: string) =>
+  simpleColumnType(datatype).replace('number', 'numeric');
 
 /**
  * @internal
@@ -62,6 +70,7 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
       jaql: {
         title: this.name,
         dim: this.expression,
+        datatype: jaqlSimpleColumnType(this.type),
       },
     };
 
@@ -203,6 +212,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       jaql: {
         title: this.name,
         dim: this.expression,
+        datatype: jaqlSimpleColumnType(this.type),
         ...this.translateGranularityToJaql(),
       },
     };
@@ -270,6 +280,58 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       default:
         console.warn('Unsupported level');
         return { level: this.granularity };
+    }
+  }
+
+  static translateJaqlToGranularity(json: any) {
+    const returnUnsupported = (lvl: string) => {
+      console.warn('Unsupported granularity');
+      return lvl;
+    };
+
+    if (json.dateTimeLevel) {
+      if (json.dateTimeLevel !== 'minutes') {
+        return returnUnsupported(json.dateTimeLevel);
+      }
+
+      switch (json.bucket) {
+        case '60':
+          return DateLevels.Hours;
+        case '30':
+          return DateLevels.MinutesRoundTo30;
+        case '15':
+          return DateLevels.MinutesRoundTo15;
+        default:
+          return returnUnsupported(json.dateTimeLevel);
+      }
+    }
+
+    switch (json.level) {
+      case 'years':
+        return DateLevels.Years;
+      case 'quarters':
+        return DateLevels.Quarters;
+      case 'months':
+        return DateLevels.Months;
+      case 'weeks':
+        return DateLevels.Weeks;
+      case 'days':
+        return DateLevels.Days;
+      case 'minutes':
+        switch (json.bucket) {
+          case '60':
+            return DateLevels.AggHours;
+          case '30':
+            return DateLevels.AggMinutesRoundTo30;
+          case '15':
+            return DateLevels.AggMinutesRoundTo15;
+          case '1':
+            return DateLevels.AggMinutesRoundTo1;
+          default:
+            return returnUnsupported(json.level);
+        }
+      default:
+        return returnUnsupported(json.level);
     }
   }
 }

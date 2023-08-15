@@ -7,6 +7,6 @@
     "lib": ["ES2017", "dom", "ES2020.String"],
     "outDir": "./dist"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.json"],
   "references": [{ "path": "../sdk-data" }]
 }

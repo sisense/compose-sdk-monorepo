@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-ui-angular",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "type": "module",
   "main": "./dist/index.d.ts",
   "module": "./dist/index.d.ts",

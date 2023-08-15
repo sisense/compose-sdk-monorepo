@@ -69,13 +69,18 @@ function transformBackgroundFilter(jaql: FilterJaql) {
  * @returns - The created Filter object.
  */
 // TODO: rewrite to transform into valid dimensional element filter object
-function createFilterFromJaql(jaql: FilterJaql): Filter {
+export function createFilterFromJaql(jaql: FilterJaql): Filter {
   const filterJaql = transformBackgroundFilter(jaql);
   return {
-    jaql: () => ({
-      jaql: filterJaql,
-      panel: 'scope',
-    }),
+    jaql: (nested?: boolean) => {
+      if (nested) {
+        return filterJaql;
+      }
+      return {
+        jaql: filterJaql,
+        panel: 'scope',
+      };
+    },
     type: 'filter',
   } as Filter;
 }

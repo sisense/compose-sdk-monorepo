@@ -18,6 +18,7 @@ import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures
 
 import { AggregationTypes, MetadataTypes } from '../types.js';
 import { normalizeName } from '../base.js';
+import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
 
 /**
  * Defines the different numeric operators that can be used with numeric filters
@@ -85,11 +86,15 @@ function measureFunction(
   measure: Measure,
   name: string,
   func: string,
+  options?: string,
 ): DimensionalCalculatedMeasure {
   const context = <MeasureContext>{};
 
   const builder = [func + '('];
   addToFormula(builder, context, measure);
+  if (options) {
+    builder.push(`, ${options}`);
+  }
   builder.push(')');
 
   return new DimensionalCalculatedMeasure(name, builder.join(''), context);
@@ -646,6 +651,88 @@ export function pastYear(measure: Measure, name?: string): CalculatedMeasure {
  */
 export function contribution(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + ' Contribution', 'contribution');
+}
+
+/**
+ * Fits a specified trend type to your measure. The trend types include linear,
+ * logarithmic, advanced smoothing, and local estimates. It allows for an optional
+ * feature to automatically identify and ignore anomalous values in the series.
+ *
+ * Trend requires a Sisense instance version of L2023.6.0 or greater.
+ *
+ * @param measure - Measure to apply the trend logic to
+ * @param name - Name for the new measure
+ * @param options - Trend options
+ * @returns A Calculated Measure instance
+ */
+export function trend(
+  measure: Measure,
+  name?: string,
+  options?: TrendFormulaOptions,
+): CalculatedMeasure {
+  let params: string | undefined;
+  const adjustValues = (value: string) =>
+    value
+      .replace('advancedSmoothing', 'Advanced Smoothing')
+      .replace('localEstimates', 'Local Estimates');
+  if (options) {
+    // make a comma separated name=value string based on options
+    params = Object.entries(options)
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      .map((e) => adjustValues(`"${e[0]}=${e[1]}"`))
+      .join(',');
+  }
+  return measureFunction(measure, name ?? measure.name + ' Trend', 'trend', params);
+}
+
+/**
+ * Calculates Forecast leveraging advanced autoML techniques to generate
+ * a forecast for a given measure.
+ *
+ * This function offers flexibility with auto-selection of the best
+ * statistical model or user-selected models, and it also provides control
+ * over the time period used for training the model, as well as options to
+ * improve forecast accuracy by supplying expected lower and upper limits.
+ *
+ * In addition to forecast, upper and lower confidence interval is returned
+ * with the name of the new measure and a suffix of _upper and _lower
+ * respectively.
+ *
+ * Forecast requires a Sisense instance version of L2023.6.0 or greater.
+ *
+ * @param measure - Measure to apply the forecast logic to
+ * @param name - Name for the new measure
+ * @param options - Forecast options
+ * @returns A Calculated Measure instance
+ */
+export function forecast(
+  measure: Measure,
+  name?: string,
+  options?: ForecastFormulaOptions,
+): CalculatedMeasure {
+  let params: string | undefined;
+
+  if (options) {
+    // create ISO string values for any Date objects
+    const adjustedOptions = { ...options };
+    if (adjustedOptions.startDate) {
+      const startDate = new Date(adjustedOptions.startDate);
+      adjustedOptions.startDate = startDate.toISOString().replace(/.\d+Z$/g, '');
+    }
+    if (adjustedOptions.endDate) {
+      const endDate = new Date(adjustedOptions.endDate);
+      adjustedOptions.endDate = endDate.toISOString().replace(/.\d+Z$/g, '');
+    }
+
+    // make a comma separated name=value string based on options
+    params = Object.entries(adjustedOptions)
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      .map((e) => `"${e[0]}=${e[1]}"`)
+      .join(',');
+  } else {
+    params = '"forecastHorizon=3"';
+  }
+  return measureFunction(measure, name ?? measure.name + ' Forecast', 'forecast', params);
 }
 
 /**

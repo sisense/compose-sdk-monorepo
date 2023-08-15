@@ -67,14 +67,16 @@ export const UnwrappedSisenseContextProvider: FunctionComponent<
 
   return (
     <SisenseContext.Provider value={{ isInitialized: true, app, enableTracking }}>
-      <ThemeProvider skipTracking>{children}</ThemeProvider>
+      <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
+        {children}
+      </ThemeProvider>
     </SisenseContext.Provider>
   );
 };
 
 /**
- * Sisense Context Provider Component, which allows you to connect to
- * a Sisense instance and provide that Sisense context
+ * Sisense Context Provider Component allowing you to connect to
+ * a Sisense instance and provide that context
  * to all Compose SDK components in your application.
  *
  * @example

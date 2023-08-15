@@ -52,7 +52,13 @@ export function CalendarDateSelector({
   const maxDate = limit.maxDate.toDate();
   return (
     <div
-      style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        backgroundColor: themeSettings.general.backgroundColor,
+      }}
       aria-label="date range filter calendar container"
     >
       <QuickDateSelectionButtons

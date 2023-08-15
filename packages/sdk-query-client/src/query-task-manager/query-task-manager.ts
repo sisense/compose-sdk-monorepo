@@ -1,7 +1,7 @@
 import { AbstractTaskManager, Task, Step } from '@sisense/task-manager';
 import { AbortRequestFunction, EmptyObject, JaqlQueryPayload, JaqlResponse } from '../types.js';
 import { QueryTaskPassport } from './query-task-passport.js';
-import { QueryResultData } from '@sisense/sdk-data';
+import { QueryResultData, Element } from '@sisense/sdk-data';
 import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher.js';
 import { getJaqlQueryPayload } from '../jaql/get-jaql-query-payload.js';
 import { getDataFromQueryResult } from '../query-result/index.js';
@@ -37,10 +37,14 @@ export class QueryTaskManager extends AbstractTaskManager {
 
     validateJaqlResponse(jaqlResponse);
 
-    return getDataFromQueryResult(jaqlResponse, [
-      ...queryDescription.attributes,
-      ...queryDescription.measures,
-    ]);
+    const metadata = [...queryDescription.attributes, ...queryDescription.measures];
+
+    // extra columns are assumed to have been added by advanced analytics functions
+    const extraColumns = (jaqlResponse.headers || [])
+      .slice(metadata.length)
+      .map((c) => ({ name: c, type: 'number' })) as Element[];
+
+    return getDataFromQueryResult(jaqlResponse, [...metadata, ...extraColumns]);
   }
 
   private cancelJaqlQuery(task: QueryTask) {

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { SsoAuthenticator } from './sso-authenticator';
+import { SsoAuthenticator } from './sso-authenticator.js';
 
 describe('SSOAuthenticator', () => {
   const fakeDeploymentUrl = '10.0.0.1';

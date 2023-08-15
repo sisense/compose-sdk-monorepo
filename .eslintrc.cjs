@@ -8,8 +8,8 @@ module.exports = {
   },
   overrides: [
     /**
-      Configuration for linting production source files
-    */
+     * Configuration for linting production source files
+     */
     {
       files: ['*.{ts,js,tsx,jsx}'],
       excludedFiles: [
@@ -57,8 +57,8 @@ module.exports = {
       ],
     },
     /**
-      Configuration for linting Jest tests
-    */
+     * Configuration for linting unit tests and test utilities
+     */
     {
       files: [
         '**/__mocks__/*.{ts,tsx}',
@@ -66,11 +66,38 @@ module.exports = {
         '**/*.test.{ts,tsx}',
         '**/test-helpers/*.{ts,tsx}',
       ],
-      extends: ['@sisense/eslint-config/typescript/react-jest'],
+      extends: ['@sisense/eslint-config/typescript/react', 'plugin:vitest/recommended'],
       rules: {
         'sonarjs/no-duplicate-string': 'off',
-        'jest/no-mocks-import': 'off',
+        'vitest/no-mocks-import': 'off',
         'no-unused-vars': 'error',
+
+        // These are copied over so we continue to extend Sisense's react
+        // config, but omit the jest-specific configs.
+        'import/no-extraneous-dependencies': 'off',
+        'node/no-unpublished-require': 'off',
+        'no-console': 'off',
+        'no-unused-expressions': 'off',
+        'max-classes-per-file': 'off',
+        'func-names': ['warn', 'as-needed'],
+        'security/detect-object-injection': 'off',
+        'jsdoc/require-returns-description': 'off',
+        'no-process-exit': 'off',
+        'security/detect-child-process': 'off',
+        'max-lines-per-function': 'off',
+        'max-lines': 'off',
+        'no-global-assign': ['error', { exceptions: ['window', 'document'] }], // need to mutate 'document', 'window' during tests
+
+        // These rules from eslint-plugin-vitest are enabled to closely match
+        // the rules enabled in the plugin:jest/recommended config.
+        'vitest/expect-expect': 'warn',
+        'vitest/no-alias-methods': 'error',
+        'vitest/no-conditional-expect': 'error',
+        'vitest/no-done-callback': 'error',
+        'vitest/no-focused-tests': 'error',
+        'vitest/no-interpolation-in-snapshots': 'error',
+        'vitest/no-standalone-expect': 'error',
+        'vitest/no-test-prefixes': 'error',
       },
     },
   ],

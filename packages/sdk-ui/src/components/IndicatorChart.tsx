@@ -3,12 +3,11 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Indicator Chart Component.
- * An indicator chart is a chart that displays a single value.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/indicator.htm).
+ * A React component that displays a single value.
+ * See [Indicator](https://docs.sisense.com/main/SisenseLinux/indicator.htm) for more information.
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source:
+ * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
  * <IndicatorChart
  *   dataOptions={{

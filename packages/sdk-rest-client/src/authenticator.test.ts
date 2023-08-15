@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { getAuthenticator } from './authenticator';
-import { PasswordAuthenticator } from './password-authenticator';
-import { BearerAuthenticator } from './bearer-authenticator';
-import { WatAuthenticator } from './wat-authenticator';
-import { SsoAuthenticator } from './sso-authenticator';
+import { getAuthenticator } from './authenticator.js';
+import { PasswordAuthenticator } from './password-authenticator.js';
+import { BearerAuthenticator } from './bearer-authenticator.js';
+import { WatAuthenticator } from './wat-authenticator.js';
+import { SsoAuthenticator } from './sso-authenticator.js';
 describe('getAuthenticator', () => {
   const fakeUsername = 'username';
   const fakePassword = 'password';

@@ -47,9 +47,11 @@ import { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
 import { useSetError } from './ErrorBoundary/useSetError';
 import { getDefaultStyleOptions } from '../chart-options-processor/chart_options_service';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
+import { useRef } from 'react';
+import { NoResultsOverlay } from './NoResultsOverlay/NoResultsOverlay';
 
 /**
- * A React component component used for easily switching chart types or rendering multiple series of different chart types.
+ * A React component used for easily switching chart types or rendering multiple series of different chart types.
  *
  * @example
  * (1) An example of using the `Chart` component to
@@ -210,6 +212,7 @@ export const UnwrappedChart: FunctionComponent<ChartProps> = (props) => {
     // will always update when a new chartType is selected.
   }, [styleOptions, chartDataOptions]);
 
+  const isNoResults = useRef(false);
   const chartData = useMemo((): ChartData | null => {
     if (!data || !chartDataOptions) {
       return null;
@@ -226,10 +229,7 @@ export const UnwrappedChart: FunctionComponent<ChartProps> = (props) => {
       );
     }
 
-    // TODO: instead of Error Box (from ErrorBoundary), No Results Box should be shown
-    if (isDataTableEmpty(dataTable)) {
-      throw new Error(translation.errors.chartNoData);
-    }
+    isNoResults.current = isDataTableEmpty(dataTable);
 
     return chartDataService(chartType, chartDataOptions, dataTable);
     // chartType is omitted from the dependency array because chartDataOptions
@@ -238,6 +238,10 @@ export const UnwrappedChart: FunctionComponent<ChartProps> = (props) => {
 
   if (!chartData || !chartDataOptions || !designOptions) {
     return null;
+  }
+
+  if (isNoResults.current) {
+    return <NoResultsOverlay iconType={chartType} />;
   }
 
   if (chartType === 'indicator') {
@@ -308,8 +312,8 @@ const useSyncedData = (
               ? applyDateFormats(
                   queryResultData,
                   chartDataOptions,
-                  app.appConfig.locale,
-                  app.appConfig.dateConfig,
+                  app.settings.locale,
+                  app.settings.dateConfig,
                 )
               : queryResultData;
 
@@ -337,8 +341,8 @@ const useSyncedData = (
           ? applyDateFormats(
               dataSet,
               chartDataOptions,
-              app?.appConfig.locale,
-              app?.appConfig.dateConfig,
+              app?.settings.locale,
+              app?.settings.dateConfig,
             )
           : dataSet;
 

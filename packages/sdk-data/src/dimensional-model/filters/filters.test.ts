@@ -15,10 +15,10 @@ import {
   RelativeDateFilter,
   TextFilter,
   TextOperators,
-} from './filters';
-import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes';
-import { DimensionalBaseMeasure } from '../measures/measures';
-import { DateLevels } from '../types';
+} from './filters.js';
+import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
+import { DimensionalBaseMeasure } from '../measures/measures.js';
+import { DateLevels } from '../types.js';
 
 describe('Filters jaql preparations', () => {
   it('must prepare members filter jaql', () => {
@@ -26,6 +26,7 @@ describe('Filters jaql preparations', () => {
       jaql: {
         title: 'CommerceGender',
         dim: '[Commerce.Gender]',
+        datatype: 'text',
         filter: { members: ['Female'] },
       },
     };
@@ -44,6 +45,7 @@ describe('Filters jaql preparations', () => {
       jaql: {
         title: 'CommerceGender',
         dim: '[Commerce.Gender]',
+        datatype: 'text',
         filter: { exclude: { members: ['Female'] } },
       },
     };
@@ -64,6 +66,7 @@ describe('Filters jaql preparations', () => {
         title: 'Years',
         dim: '[Commerce.Date (Calendar)]',
         level: 'years',
+        datatype: 'datetime',
         filter: {
           from: '2010-01-01T00:00:00.000Z',
           to: '2012-01-01T00:00:00.000Z',
@@ -107,6 +110,7 @@ describe('Filters jaql preparations', () => {
       jaql: {
         title: 'CommerceGender',
         dim: '[Commerce.Gender]',
+        datatype: 'text',
         filter: {
           or: [{ members: ['Female'] }, { exclude: { members: ['Male'] } }],
         },
@@ -136,6 +140,7 @@ describe('Filters jaql preparations', () => {
       jaql: {
         title: 'Cost',
         dim: '[Commerce.Cost]',
+        datatype: 'numeric',
         agg: 'sum',
         filter: {},
       },
@@ -144,7 +149,7 @@ describe('Filters jaql preparations', () => {
       new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
       new DimensionalBaseMeasure(
         'Cost',
-        new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
+        new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
         'sum',
       ),
     );
@@ -160,6 +165,7 @@ describe('Filters jaql preparations', () => {
         title: 'Years',
         dim: '[Commerce.Date (Calendar)]',
         level: 'years',
+        datatype: 'datetime',
         filter: {
           last: { offset: 0, count: 2, anchor: '2012-01-01T00:00:00.000Z' },
         },
@@ -185,6 +191,7 @@ describe('Filters jaql preparations', () => {
         dim: '[Commerce.Date (Calendar)]',
         level: 'minutes',
         bucket: '15',
+        datatype: 'datetime',
         filter: {
           last: { offset: 0, count: 2, anchor: '2012-01-01T00:00:00.000Z' },
         },
@@ -212,6 +219,7 @@ describe('Filters jaql preparations', () => {
       jaql: {
         title: 'CommerceGender',
         dim: '[Commerce.Gender]',
+        datatype: 'text',
         filter: { contains: 'Male' },
       },
     };
@@ -231,11 +239,12 @@ describe('Filters jaql preparations', () => {
       jaql: {
         title: 'CommerceCost',
         dim: '[Commerce.Cost]',
+        datatype: 'numeric',
         filter: { from: 1, to: 3 },
       },
     };
     const filter = new NumericFilter(
-      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
+      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
       NumericOperators.From,
       1,
       NumericOperators.To,
@@ -252,17 +261,18 @@ describe('Filters jaql preparations', () => {
       jaql: {
         title: 'CommerceCost',
         dim: '[Commerce.Cost]',
+        datatype: 'numeric',
         filter: {
           top: 2,
-          by: { title: 'Cost', agg: 'sum', dim: '[Commerce.Cost]' },
+          by: { title: 'Cost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
         },
       },
     };
     const filter = new RankingFilter(
-      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
+      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
       new DimensionalBaseMeasure(
         'Cost',
-        new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
+        new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
         'sum',
       ),
       RankingOperators.Top,

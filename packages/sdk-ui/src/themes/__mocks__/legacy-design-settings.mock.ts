@@ -1,4 +1,4 @@
-import { ThemeSettings } from '../../../types.js';
+import { ThemeSettings } from '../../types.js';
 import { LegacyDesignSettings, LegacyPalette } from '../legacy-design-settings.js';
 
 export const redLegacyDesignSettings: LegacyDesignSettings = {
@@ -63,6 +63,8 @@ export const redThemeSettings: ThemeSettings = {
   },
   typography: {
     fontFamily: 'Open Sans',
+    primaryTextColor: '#ff0000',
+    secondaryTextColor: '#f9a8a8',
   },
   palette: {
     variantColors: ['#779fa8', '#bf1e1d', '#787070'],

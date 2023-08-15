@@ -4,8 +4,6 @@ export const translation = {
 
     sisenseContextNoAuthentication: 'Authentication method is not specified',
 
-    chartNoData: 'No Results',
-
     chartNoSisenseContext:
       'Sisense Context for Chart not found. To fix, add a dataSet to the Chart or wrap the component inside a Sisense context provider.',
 
@@ -20,5 +18,8 @@ export const translation = {
       'Sisense Context for Execute Query not found. To fix, wrap the component inside a Sisense context provider.',
 
     executeQueryNoDataSource: 'No dataSource provided to execute query',
+  },
+  common: {
+    chartNoData: 'No Results',
   },
 };

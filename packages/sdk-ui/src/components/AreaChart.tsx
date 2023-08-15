@@ -3,12 +3,12 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * A React component similar to a Line Chart,
+ * A React component similar to a {@link LineChart},
  * but with filled in areas under each line and an option to display them as stacked.
  * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
  *
  * @example
- * Example of using the component to visualize the `Sample ECommerce` data source:
+ * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
  * <AreaChart
  *   dataSet={DM.DataSource}

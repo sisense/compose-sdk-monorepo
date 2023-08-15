@@ -4,8 +4,8 @@ import { chartDataService } from './chart_data_service';
 import { indicatorData } from './indicator_data';
 import { ChartType } from '../types';
 
-jest.mock('./indicator_data'); // Mock the indicatorData module
-jest.mock('./table_data'); // Mock the tableData module
+vi.mock('./indicator_data'); // Mock the indicatorData module
+vi.mock('./table_data'); // Mock the tableData module
 
 describe('chartDataService', () => {
   it("should call indicatorData() if chartType is 'indicator'", () => {

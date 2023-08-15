@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { WatAuthenticator } from './wat-authenticator';
+import { WatAuthenticator } from './wat-authenticator.js';
 
 describe('WatAuthenticator', () => {
   const fakeDeploymentUrl = 'https://10.0.0.1';
@@ -17,18 +17,18 @@ describe('WatAuthenticator', () => {
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   const mockAuthenticateSuccessfully = () => {
     const response = {
       ok: true,
-      json: jest
+      json: vi
         .fn()
         .mockResolvedValue({ webSessionToken: fakeSessionToken, initialiser: fakeInitialiser }),
     };
 
-    global.fetch = jest.fn().mockImplementation(() => {
+    global.fetch = vi.fn().mockImplementation(() => {
       return Promise.resolve(response);
     });
 
@@ -74,7 +74,7 @@ describe('WatAuthenticator', () => {
       statusText: 'Unauthorized',
     };
 
-    global.fetch = jest.fn().mockImplementation(() => {
+    global.fetch = vi.fn().mockImplementation(() => {
       return Promise.resolve(response);
     });
 

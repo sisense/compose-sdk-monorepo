@@ -2,19 +2,26 @@ import { ScatterChartData } from '../chart-data/types';
 import { ScatterChartDesignOptions } from './translations/design_options';
 import { getScatterChartOptions, getScatterLegendSettings } from './scatter_chart_options';
 import { SERIES_CAPACITY } from './translations/base_design_options';
+import { ScatterCustomPointOptions } from './translations/scatter_tooltip';
 
 const customCategoriesCapacity = 2;
 
 describe('getScatterChartOptions', () => {
   const chartData: ScatterChartData = {
     type: 'scatter',
-    scatterDataTable: [],
+    scatterDataTable: [
+      {
+        xAxis: { displayValue: 'xCategory1' },
+        yAxis: { displayValue: 'yCategory2' },
+      },
+      // data item outside the categories data capacity limit
+      {
+        xAxis: { displayValue: 'xCategory3' },
+        yAxis: { displayValue: 'yCategory3' },
+      },
+    ],
     xCategories: ['xCategory1', 'xCategory2', 'xCategory3'],
     yCategories: ['yCategory1', 'yCategory2', 'yCategory3'],
-    axisCategoriesMap: {
-      xCategoriesMap: new Map(),
-      yCategoriesMap: new Map(),
-    },
   };
   const chartType = 'scatter';
   const chartDesignOptions: ScatterChartDesignOptions = {
@@ -127,6 +134,17 @@ describe('getScatterChartOptions', () => {
     expect(chartData.yCategories?.length).toBeGreaterThan(customCategoriesCapacity);
     expect(options.xAxis[0].categories).toHaveLength(customCategoriesCapacity);
     expect(options.yAxis![0].categories).toHaveLength(customCategoriesCapacity);
+  });
+
+  it('should generate series without points related to categories restricted data limits', () => {
+    const xCategoriesAllowed = chartData.xCategories?.slice(0, customCategoriesCapacity);
+    const yCategoriesAllowed = chartData.yCategories?.slice(0, customCategoriesCapacity);
+
+    options.series[0].data.forEach((point) => {
+      const { maskedX, maskedY } = point.custom as unknown as ScatterCustomPointOptions;
+      expect(xCategoriesAllowed).toContain(maskedX);
+      expect(yCategoriesAllowed).toContain(maskedY);
+    });
   });
 });
 

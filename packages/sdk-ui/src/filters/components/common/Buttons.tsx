@@ -1,7 +1,7 @@
 import Tooltip from '@mui/material/Tooltip';
 import { forwardRef, type ButtonHTMLAttributes, type FunctionComponent } from 'react';
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export const PrimaryButton: FunctionComponent<ButtonProps> = (props) => {
   return (
     <button
@@ -34,9 +34,12 @@ export const SecondaryButton: FunctionComponent<ButtonProps> = forwardRef<
   );
 });
 
-export const SecondaryButtonWithTooltip: FunctionComponent<
-  ButtonProps & { tooltipTitle: string; disableTooltip: boolean }
-> = (props) => {
+export type ButtonWithTooltipProps = ButtonProps & {
+  tooltipTitle: string;
+  disableTooltip: boolean;
+};
+
+export const SecondaryButtonWithTooltip: FunctionComponent<ButtonWithTooltipProps> = (props) => {
   const { tooltipTitle, disableTooltip, children, disabled, ...buttonProps } = props;
   return (
     <Tooltip title={tooltipTitle} disableHoverListener={disableTooltip}>

@@ -25,22 +25,21 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     sourcemap: mode === 'production' ? false : true,
+    target: 'es6',
     lib: {
-      // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/index.ts'),
-      name: '@sisense/sdk-ui',
-      formats: ['es', 'umd'],
-      // the proper extensions will be added
-      fileName: (format) => `index.${format}.js`,
+      formats: ['es'],
+      // Force name to be "index.js" instead of the default "sdk-ui.js" so this
+      // matches the name of "index.d.ts" produced by vite-plugin-dts. This
+      // means we don't have to manually specify an exports.types value in our
+      // package.json, since the declaration file is co-located.
+      //
+      // More info about how TypeScript works with "exports" in package.json:
+      // https://www.typescriptlang.org/docs/handbook/esm-node.html#packagejson-exports-imports-and-self-referencing
+      fileName: 'index',
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-        },
-      },
     },
   },
 }));

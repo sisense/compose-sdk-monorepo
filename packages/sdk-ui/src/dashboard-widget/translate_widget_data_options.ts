@@ -23,6 +23,7 @@ import { Panel, PanelItem, Jaql, WidgetType, DataType } from './types';
 import { createValueToColorMap, createValueColorOptions } from './translate_panel_color_format';
 import { getEnabledPanelItems, getSortType, getRootPanelItem } from './utils';
 import { TableDataOptions } from '../chart-data-options/types';
+import { createFilterFromJaql } from './translate_widget_filters';
 
 function createDimensionalElementFromJaql(jaql: Jaql, format?: { mask?: Record<string, string> }) {
   const isFormulaJaql = 'formula' in jaql;
@@ -54,11 +55,10 @@ function createDimensionalElementFromJaql(jaql: Jaql, format?: { mask?: Record<s
       ? MetadataTypes.NumericAttribute
       : MetadataTypes.TextAttribute;
   const attribute = isDatatypeDatetime
-    ? // todo: fully translate jaql to granularity
-      new DimensionalLevelAttribute(
+    ? new DimensionalLevelAttribute(
         jaql.title,
         jaql.dim,
-        jaql.level!,
+        DimensionalLevelAttribute.translateJaqlToGranularity(jaql),
         format?.mask?.[jaql.level!],
         undefined,
         sort,
@@ -74,6 +74,10 @@ function createDimensionalElementFromJaql(jaql: Jaql, format?: { mask?: Record<s
       undefined,
       sort,
     );
+  }
+
+  if ('filter' in jaql) {
+    return createFilterFromJaql(jaql);
   }
 
   return attribute;

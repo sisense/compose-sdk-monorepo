@@ -90,7 +90,7 @@ export type BaseJaql = {
 };
 
 type FormulaID = string;
-type FormulaContext = BaseJaql;
+type FormulaContext = BaseJaql | FilterJaql;
 
 export type FormulaJaql = {
   type?: 'measure';

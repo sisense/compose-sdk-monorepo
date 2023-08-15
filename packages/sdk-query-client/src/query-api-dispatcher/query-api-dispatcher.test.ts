@@ -2,21 +2,22 @@
 import { QueryApiDispatcher } from './query-api-dispatcher.js';
 import { JaqlQueryPayload } from '../types.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
+import { Mocked } from 'vitest';
 
 describe('QueryApiDispatcher', () => {
-  let httpClient: jest.Mocked<HttpClient>;
+  let httpClient: Mocked<HttpClient>;
   let queryApi: QueryApiDispatcher;
 
   beforeEach(() => {
     // Initialize the httpClient and queryApi for each test
     httpClient = {
-      post: jest.fn(),
-    } as unknown as jest.Mocked<HttpClient>;
+      post: vi.fn(),
+    } as unknown as Mocked<HttpClient>;
     queryApi = new QueryApiDispatcher(httpClient);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getDataSourceFields', () => {

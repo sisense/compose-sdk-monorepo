@@ -15,6 +15,8 @@ import { generateUniqueDataColumnsNames } from '../../chart-data-options/validat
 import { isValue, TableDataOptionsInternal } from '../../chart-data-options/types';
 import { isDataSource } from '@sisense/sdk-data';
 import { TrackingContextProvider, useTrackComponentInit } from '../../useTrackComponentInit';
+import { isDataTableEmpty } from '../../chart-data-processor/table_creators';
+import { NoResultsOverlay } from '../NoResultsOverlay/NoResultsOverlay';
 
 export const UnwrappedTable = ({
   dataSet,
@@ -73,6 +75,10 @@ export const UnwrappedTable = ({
   };
 
   if (!dataTable || !innerDataOptions) return null;
+
+  if (isDataTableEmpty(dataTable)) {
+    return <NoResultsOverlay iconType={'table'} />;
+  }
 
   const paginatedTable = {
     columns: dataTable.columns,

@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.8.0] - 2023-08-15
+
+### Added
+
+- Add measures `trend` and `forecast` for advanced analytics
+- Support data model representation in JavaScript by specifying `.js` output file in CLI commands
+  – in addition to TypeScript (`.ts` output file)
+- Detect and apply theme settings as defined in Web Access Token's payload – the `thm` claim
+
+### Changed
+
+- Display No Results overlay, instead of an error box, when there are no results to visualize
+- Apply theme settings to component `DateRangeFilterTile`
+- Migrate from `jest` to `vitest` for unit tests
+- Produce only ESM bundle for `@sisense/sdk-ui` and target ES6 instead of default ES20221
+
+## [0.7.4] - 2023-08-05
+
+### Fixed
+
+- Fix CLI usage tracking for Node.js 16
+
 ## [0.7.3] - 2023-08-03
 
 ### Changed

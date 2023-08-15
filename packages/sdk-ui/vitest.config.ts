@@ -1,0 +1,24 @@
+import { mergeConfig, UserConfig } from 'vitest/config';
+import baseConfig from '../../vitest.config.js';
+
+const config: UserConfig = {
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/__test_helpers__/setup-vitest.ts'],
+    // The next few lines are based off of https://github.com/wobsoriano/vitest-canvas-mock#usage.
+    deps: {
+      inline: ['vitest-canvas-mock'],
+    },
+    threads: false,
+    environmentOptions: {
+      jsdom: {
+        resources: 'usable',
+      },
+    },
+    coverage: {
+      exclude: ['src/__test_helpers__', 'src/__demo__', 'src/__stories__', 'src/@types'],
+    },
+  },
+};
+
+export default mergeConfig(baseConfig, config);

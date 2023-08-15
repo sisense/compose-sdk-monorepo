@@ -3,9 +3,8 @@ import { Chart } from './Chart';
 import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
 
 /**
- * Funnel Chart Component.
- * A Funnel chart represents data progressively decreasing in size or quantity through a conical shape.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/funnel-chart.htm).
+ * A React component representing data progressively decreasing in size or quantity through a conical shape.
+ * See [Funnel Chart](https://docs.sisense.com/main/SisenseLinux/funnel-chart.htm) for more information.
  *
  * @example
  * An example of visualizing sales funnel data:

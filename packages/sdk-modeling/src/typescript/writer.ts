@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { createWriteStream } from 'fs';
+import path from 'path';
 
 import {
   BaseMeasure,
@@ -20,6 +21,8 @@ import { BaseMeasureWriter, MeasureTemplateWriter } from './writers/measures.js'
 import { DimensionWriter, DateDimensionWriter } from './writers/dimensions.js';
 
 import { BaseWriter, NEWLINE, indent } from './writers/base.js';
+import { createInMemoryDuplexStream } from './utils/create-in-memory-duplex-stream.js';
+import { compileTsCode } from './utils/compile-ts-code.js';
 
 function getWriter(item: Element): BaseWriter<any> {
   if (MetadataTypes.isDateDimension(item.type)) {
@@ -37,11 +40,13 @@ function getWriter(item: Element): BaseWriter<any> {
   throw 'unsupported metadata type';
 }
 
-export function write(json: any, config: any) {
-  if (!config.filename) {
-    throw new Error('filename must be specified');
-  }
+type WriteConfig = {
+  filename: string;
+  dir?: string;
+  datamodule?: string;
+};
 
+function fillStreamWithTsCode(stream: NodeJS.WritableStream, json: any, config: WriteConfig) {
   // generating a dimensional data model from the input json
   const dm = DimensionalDataModel.fromConfig(json);
 
@@ -50,9 +55,6 @@ export function write(json: any, config: any) {
     writers.push(getWriter(dm.metadata[i]));
   }
 
-  const stream = createWriteStream(config.filename, { encoding: 'utf-8' });
-
-  //
   // writing imports
   const datamodule = config.datamodule || '@sisense/sdk-data';
   stream.write(`import {\
@@ -70,7 +72,56 @@ ${NEWLINE}${indent(1)}createDimension,${NEWLINE}} from '${datamodule}';${NEWLINE
     writers[i].write(stream, 0);
     stream.write(NEWLINE);
   }
+  return stream;
+}
 
-  // close the stream
-  stream.end();
+export async function writeTypescript(json: any, config: WriteConfig) {
+  if (!config.filename) {
+    throw new Error('filename must be specified');
+  }
+  const filePath = path.join(config.dir || '', `${config.filename}.ts`);
+  const fileStream = createWriteStream(filePath, { encoding: 'utf-8' });
+  const tsCodeStream = createInMemoryDuplexStream();
+  tsCodeStream.pipe(fileStream);
+  fillStreamWithTsCode(tsCodeStream, json, config);
+  tsCodeStream.end();
+
+  return new Promise<void>((resolve) => {
+    fileStream.on('finish', () => {
+      resolve();
+    });
+  });
+}
+
+export async function writeJavascript(json: any, config: WriteConfig) {
+  if (!config.filename) {
+    throw new Error('filename must be specified');
+  }
+  const tsCodeStream = createInMemoryDuplexStream();
+  const jsFilePath = path.join(config.dir || '', `${config.filename}.js`);
+  const dtsFilePath = path.join(config.dir || '', `${config.filename}.d.ts`);
+  const jsFileStream = createWriteStream(jsFilePath, { encoding: 'utf-8' });
+  const dtsFileStream = createWriteStream(dtsFilePath, { encoding: 'utf-8' });
+  fillStreamWithTsCode(tsCodeStream, json, config);
+  tsCodeStream.end();
+  const tsCode = tsCodeStream.getStringData();
+  const { jsCode, typeDefs } = compileTsCode(tsCode);
+  jsFileStream.write(jsCode);
+  dtsFileStream.write(typeDefs);
+
+  jsFileStream.end();
+  dtsFileStream.end();
+
+  return Promise.all([
+    new Promise<void>((resolve) => {
+      jsFileStream.on('finish', () => {
+        resolve();
+      });
+    }),
+    new Promise<void>((resolve) => {
+      dtsFileStream.on('finish', () => {
+        resolve();
+      });
+    }),
+  ]);
 }

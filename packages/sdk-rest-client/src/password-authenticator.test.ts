@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { PasswordAuthenticator } from './password-authenticator';
+import { PasswordAuthenticator } from './password-authenticator.js';
 
 describe('PasswordAuthenticator', () => {
   const fakeDeploymentUrl = 'https://10.0.0.1';
@@ -15,7 +15,7 @@ describe('PasswordAuthenticator', () => {
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('auth should be valid upon creation', () => {
@@ -31,10 +31,10 @@ describe('PasswordAuthenticator', () => {
     const fakeToken = 'token';
     const response = {
       ok: true,
-      json: jest.fn().mockResolvedValue({ access_token: fakeToken }),
+      json: vi.fn().mockResolvedValue({ access_token: fakeToken }),
     };
 
-    global.fetch = jest.fn().mockImplementation(() => {
+    global.fetch = vi.fn().mockImplementation(() => {
       return Promise.resolve(response);
     });
 
@@ -62,7 +62,7 @@ describe('PasswordAuthenticator', () => {
       statusText: 'Unauthorized',
     };
 
-    global.fetch = jest.fn().mockImplementation(() => {
+    global.fetch = vi.fn().mockImplementation(() => {
       return Promise.resolve({ json: () => response });
     });
 

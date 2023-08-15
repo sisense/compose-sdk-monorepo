@@ -1,16 +1,10 @@
 {
   "name": "@sisense/sdk-ui",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
-    }
-  },
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
+  "exports": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -19,9 +13,9 @@
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.11.6",
     "@sisense/sdk-common": "workspace:^",
-    "@sisense/sdk-data": "^0.7.4",
-    "@sisense/sdk-query-client": "^0.7.4",
-    "@sisense/sdk-rest-client": "^0.7.4",
+    "@sisense/sdk-data": "^0.8.0",
+    "@sisense/sdk-query-client": "^0.8.0",
+    "@sisense/sdk-rest-client": "^0.8.0",
     "@sisense/sisense-charts": "5.1.0-alpha-812d1e70.0",
     "classnames": "^2.3.2",
     "colorjs.io": "^0.4.3",
@@ -47,9 +41,10 @@
     "lint": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "TZ=utc jest",
-    "test.watch": "TZ=utc yarn test --watch --coverage",
-    "test:coverage": "TZ=utc jest --coverage",
+    "vitest": "run -T vitest",
+    "test": "TZ=utc run vitest run",
+    "test:watch": "TZ=utc run vitest watch",
+    "test:coverage": "TZ=utc run vitest run --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -72,7 +67,6 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/fixed-data-table-2": "^0.8.8",
-    "@types/jest": "29.1.2",
     "@types/lodash": "^4.14.194",
     "@types/react": "18.2.0",
     "@types/react-datepicker": "^4.11.2",
@@ -80,9 +74,7 @@
     "@vitejs/plugin-react-swc": "^3.3.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.40.0",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "29.1.2",
-    "jest-canvas-mock": "^2.5.2",
+    "jsdom": "^22.1.0",
     "postcss": "^8.4.22",
     "prettier": "2.8.4",
     "react": "18.2.0",
@@ -90,11 +82,11 @@
     "sass": "1.58.3",
     "storybook": "7.0.24",
     "tailwindcss": "^3.3.1",
-    "ts-jest": "29.0.3",
     "typescript": "4.8.4",
     "vite": "4.1.4",
     "vite-plugin-css-injected-by-js": "3.0.1",
-    "vite-plugin-dts": "^2.3.0"
+    "vite-plugin-dts": "^2.3.0",
+    "vitest-canvas-mock": "^0.3.2"
   },
   "peerDependencies": {
     "react": "^18.2.0"

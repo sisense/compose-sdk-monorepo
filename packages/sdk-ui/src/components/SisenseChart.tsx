@@ -54,7 +54,7 @@ export const SisenseChart = ({
 
   const dateFormatter = useCallback(
     (date: Date, format: string) =>
-      applyDateFormat(date, format, app?.appConfig?.locale, app?.appConfig?.dateConfig),
+      applyDateFormat(date, format, app?.settings.locale, app?.settings.dateConfig),
     [],
   );
 

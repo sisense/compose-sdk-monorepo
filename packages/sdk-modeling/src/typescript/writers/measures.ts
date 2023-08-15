@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 /* eslint-disable sonarjs/no-nested-template-literals */
-import { WriteStream } from 'fs';
 
 import { BaseMeasure, MeasureTemplate, normalizeName } from '@sisense/sdk-data';
 
@@ -17,9 +16,9 @@ export abstract class MeasureWriter<T> extends BaseWriter<T> {
     this.isNested = isNested;
   }
 
-  abstract writeDef(stream: WriteStream, ident: number): void;
+  abstract writeDef(stream: NodeJS.WritableStream, ident: number): void;
 
-  write(stream: WriteStream, ident: number): any {
+  write(stream: NodeJS.WritableStream, ident: number): any {
     if (!this.isNested) {
       stream.write(`export const ${this.name} = `);
     }
@@ -37,7 +36,7 @@ export class BaseMeasureWriter extends MeasureWriter<BaseMeasure> {
     super(measure, isNested);
   }
 
-  writeDef(stream: WriteStream, idnt: number): void {
+  writeDef(stream: NodeJS.WritableStream, idnt: number): void {
     writeIndented(
       stream,
       `<BaseMeasure>createMeasure({\
@@ -75,7 +74,7 @@ export class MeasureTemplateWriter extends MeasureWriter<MeasureTemplate> {
     super(measure, isNested);
   }
 
-  writeDef(stream: WriteStream, ident: number): void {
+  writeDef(stream: NodeJS.WritableStream, ident: number): void {
     writeIndented(
       stream,
       `<MeasureTemplate>createMeasure({\

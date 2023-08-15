@@ -12,13 +12,13 @@ import cloneDeep from 'lodash/cloneDeep';
 import '../../../chart-data-options/coloring';
 import { IndicatorTypeOptions } from './indicator_legacy_chart_options';
 
-const getColorMock = jest.fn().mockReturnValue('red');
+const getColorMock = vi.fn().mockReturnValue('red');
 const coloringServiceMock: ColoringService<AllowedIndicatorColoringTypes> = {
   type: 'Static',
   getColor: getColorMock,
 };
 
-jest.mock('../../../chart-data-options/coloring', () => {
+vi.mock('../../../chart-data-options/coloring', () => {
   return {
     __esModule: true,
     getColoringServiceByColorOptions: () => coloringServiceMock,

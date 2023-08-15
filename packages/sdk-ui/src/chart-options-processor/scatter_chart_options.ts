@@ -16,6 +16,7 @@ import { getScatterXAxisSettings, getScatterYAxisSettings } from './translations
 import { buildScatterSeries } from './translations/scatter_series';
 import { getScatterTooltipSettings } from './translations/scatter_tooltip';
 import { categoriesSliceWarning } from '../utils/dataLimitWarning';
+import { createCategoriesMap } from '../chart-data/scatter_data';
 
 const SPACING = 20;
 const MARGIN_TOP = 30;
@@ -63,26 +64,29 @@ export const getScatterChartOptions = (
 
   const scatterDesignOptions = chartDesignOptions as ScatterChartDesignOptions;
   const scatterDataOptions = dataOptions as ScatterChartDataOptionsInternal;
-  const { scatterDataTable, xCategories, yCategories, axisCategoriesMap } = chartData;
-
+  const { scatterDataTable } = chartData;
   const { seriesCapacity, categoriesCapacity } = chartDesignOptions.dataLimits;
 
-  const { series, alerts: scatterSeriesErrors } = buildScatterSeries(
-    scatterDataTable,
-    axisCategoriesMap,
-    scatterDataOptions,
-    themeSettings,
-    seriesCapacity,
-  );
-  alerts.push(...scatterSeriesErrors);
+  let { xCategories, yCategories } = chartData;
 
   if (xCategories && xCategories.length > categoriesCapacity) {
     alerts.push(categoriesSliceWarning('x', xCategories.length, categoriesCapacity));
+    xCategories = xCategories.slice(0, categoriesCapacity);
   }
 
   if (yCategories && yCategories.length > categoriesCapacity) {
     alerts.push(categoriesSliceWarning('y', yCategories.length, categoriesCapacity));
+    yCategories = yCategories.slice(0, categoriesCapacity);
   }
+
+  const { series, alerts: scatterSeriesErrors } = buildScatterSeries(
+    scatterDataTable,
+    createCategoriesMap(xCategories, yCategories),
+    scatterDataOptions,
+    themeSettings,
+    seriesCapacity,
+  );
+  alerts.unshift(...scatterSeriesErrors);
 
   const options = {
     title: { text: null },

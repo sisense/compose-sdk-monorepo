@@ -68,7 +68,6 @@ export type ScatterChartData = {
   scatterDataTable: ScatterDataTable;
   xCategories: ScatterCategories;
   yCategories: ScatterCategories;
-  axisCategoriesMap: ScatterAxisCategoriesMap;
 };
 
 /**

@@ -1,4 +1,4 @@
-import { trackCliError, trackProductEvent, trackUiError } from '@sisense/sdk-common';
+import { trackCliError, trackProductEvent, trackUiError } from './tracking';
 import { HttpClient } from '@sisense/sdk-rest-client';
 
 const fakeAction = 'fakeAction';
@@ -11,7 +11,7 @@ const expectedOptions = {
 };
 
 describe('tracking', () => {
-  const postMock = jest.fn();
+  const postMock = vi.fn();
   const httpClient = { post: postMock } as unknown as HttpClient;
 
   beforeEach(() => {
