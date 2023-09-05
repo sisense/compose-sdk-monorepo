@@ -2,6 +2,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable complexity */
 /* eslint-disable sonarjs/cognitive-complexity */
+/* eslint-disable max-lines */
 import React, { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../components/Chart';
@@ -9,16 +10,42 @@ import { DataPoint, CompleteThemeSettings } from '../types';
 import { ChartWidgetProps } from '../props';
 import { ContextMenu, MenuPosition } from './common/ContextMenu';
 import { useWidgetDrilldown } from './common/useWidgetDrilldown';
-import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { WidgetHeader } from './common/WidgetHeader';
 import { ThemeProvider, useThemeContext } from '../components/ThemeProvider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widgetStyleUtils';
-import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
+import { asSisenseComponent } from '../components/decorators/as-sisense-component';
+import { DynamicSizeContainer, getWidgetDefaultSize } from '../components/DynamicSizeContainer';
 
 /**
- * @internal
+ * The Chart Widget component extending the {@link Chart} component to support advanced BI
+ * capabilities such as drilldown.
+ *
+ * @example
+ * Example of using the `ChartWidget` component to
+ * plot a bar chart of the `Sample ECommerce` data source hosted in a Sisense instance.
+ * Drill-down capability is enabled.
+ * ```tsx
+ * <ChartWidget
+ *   dataSource={DM.DataSource}
+ *   chartType="bar"
+ *   dataOptions={{
+ *     category: [DM.Category.Category],
+ *     value: [measures.sum(DM.Commerce.Revenue)],
+ *     breakBy: [],
+ *   }}
+ *   drilldownOptions={{
+ *     drilldownCategories: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
+ *   }}
+ * />
+ * ```
+ * ###
+ * <img src="media://widget-with-drilldown-example-1.png" width="800px" />
+ * @param props - ChartWidget properties
+ * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType}
  */
-export const UnwrappedChartWidget: FunctionComponent<ChartWidgetProps> = (props) => {
+export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseComponent({
+  componentName: 'ChartWidget',
+})((props) => {
   const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
 
   const [refreshCounter, setRefreshCounter] = useState(0);
@@ -36,6 +63,7 @@ export const UnwrappedChartWidget: FunctionComponent<ChartWidgetProps> = (props)
     title,
     description,
     widgetStyleOptions,
+    styleOptions,
     ...restProps
   } = props;
 
@@ -46,9 +74,15 @@ export const UnwrappedChartWidget: FunctionComponent<ChartWidgetProps> = (props)
     onContextMenuClose?.();
   }, [setContextMenuPos, onContextMenuClose]);
 
+  const defaultSize = getWidgetDefaultSize(props.chartType, {
+    hasHeader: !widgetStyleOptions?.header?.hidden,
+  });
+  const { width, height, ...styleOptionsWithoutSizing } = styleOptions || {};
+
   const chartProps = {
     ...restProps,
     dataSet: dataSource,
+    styleOptions: styleOptionsWithoutSizing,
     onDataPointContextMenu: useMemo(
       () =>
         contextMenuItems
@@ -82,95 +116,75 @@ export const UnwrappedChartWidget: FunctionComponent<ChartWidgetProps> = (props)
   }
 
   return (
-    <div className={'w-full h-full overflow-hidden'}>
-      <div
-        style={{
-          padding: WidgetSpaceAround[widgetStyleOptions?.spaceAround || 'None'],
-        }}
-      >
+    <DynamicSizeContainer
+      defaultSize={defaultSize}
+      size={{
+        width,
+        height,
+      }}
+    >
+      <div className={'csdk-w-full csdk-h-full csdk-overflow-hidden'}>
         <div
-          className="overflow-hidden"
+          className={'csdk-h-full'}
           style={{
-            borderWidth: widgetStyleOptions?.border ? '1px' : 0,
-            borderColor: widgetStyleOptions?.borderColor || themeSettings.chart.textColor,
-            borderRadius: widgetStyleOptions?.cornerRadius
-              ? WidgetCornerRadius[widgetStyleOptions.cornerRadius]
-              : 0,
-            boxShadow: getShadowValue(widgetStyleOptions),
+            padding: WidgetSpaceAround[widgetStyleOptions?.spaceAround || 'None'],
           }}
         >
-          {!widgetStyleOptions?.header?.hidden && (
-            <WidgetHeader
-              title={title}
-              description={description}
-              dataSetName={chartProps.dataSet}
-              styleOptions={widgetStyleOptions?.header}
-              onRefresh={() => setRefreshCounter(refreshCounter + 1)}
-            />
-          )}
-          {topSlot}
-
-          <ContextMenu
-            position={contextMenuPos}
-            itemSections={contextMenuItems}
-            closeContextMenu={closeContextMenu}
-          />
-          <ThemeProvider
-            theme={
-              {
-                chart: {
-                  backgroundColor:
-                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-                },
-              } as CompleteThemeSettings
-            }
+          <div
+            className={'csdk-h-full csdk-overflow-hidden'}
+            style={{
+              borderWidth: widgetStyleOptions?.border ? '1px' : 0,
+              borderColor: widgetStyleOptions?.borderColor || themeSettings.chart.textColor,
+              borderRadius: widgetStyleOptions?.cornerRadius
+                ? WidgetCornerRadius[widgetStyleOptions.cornerRadius]
+                : 0,
+              boxShadow: getShadowValue(widgetStyleOptions),
+              display: 'flex',
+              flexDirection: 'column',
+            }}
           >
-            <Chart {...chartProps} refreshCounter={refreshCounter} />
-          </ThemeProvider>
+            {!widgetStyleOptions?.header?.hidden && (
+              <WidgetHeader
+                title={title}
+                description={description}
+                dataSetName={chartProps.dataSet}
+                styleOptions={widgetStyleOptions?.header}
+                onRefresh={() => setRefreshCounter(refreshCounter + 1)}
+              />
+            )}
+            {topSlot}
 
-          {bottomSlot}
+            <ContextMenu
+              position={contextMenuPos}
+              itemSections={contextMenuItems}
+              closeContextMenu={closeContextMenu}
+            />
+            <ThemeProvider
+              theme={
+                {
+                  chart: {
+                    backgroundColor:
+                      widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                  },
+                } as CompleteThemeSettings
+              }
+            >
+              <div
+                style={{
+                  flexGrow: 1,
+                  // prevents 'auto' behavior of using content size as minimal size for container
+                  minWidth: 0,
+                  minHeight: 0,
+                }}
+              >
+                <Chart {...chartProps} refreshCounter={refreshCounter} />
+              </div>
+            </ThemeProvider>
+
+            {bottomSlot}
+          </div>
         </div>
       </div>
-    </div>
+    </DynamicSizeContainer>
   );
-};
-
-/**
- * The Chart Widget component extending the {@link Chart} component to support advanced BI
- * capabilities such as drilldown.
- *
- * @example
- * Example of using the `ChartWidget` component to
- * plot a bar chart of the `Sample ECommerce` data source hosted in a Sisense instance.
- * Drill-down capability is enabled.
- * ```tsx
- * <ChartWidget
- *   dataSource={DM.DataSource}
- *   chartType="bar"
- *   dataOptions={{
- *     category: [DM.Category.Category],
- *     value: [measures.sum(DM.Commerce.Revenue)],
- *     breakBy: [],
- *   }}
- *   drilldownOptions={{
- *     drilldownCategories: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
- *   }}
- * />
- * ```
- * ###
- * <img src="media://widget-with-drilldown-example-1.png" width="800px" />
- * @param props - ChartWidget properties
- * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType}
- */
-export const ChartWidget: FunctionComponent<ChartWidgetProps> = (props) => {
-  const displayName = 'ChartWidget';
-  useTrackComponentInit(displayName, props);
-
-  return (
-    <TrackingContextProvider>
-      <ErrorBoundary componentName={displayName}>
-        <UnwrappedChartWidget {...props} />
-      </ErrorBoundary>
-    </TrackingContextProvider>
-  );
-};
+});

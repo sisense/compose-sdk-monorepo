@@ -3,7 +3,7 @@ import { ArgumentsCamelCase } from 'yargs';
 import { validateNotEmpty } from './interactive.js';
 
 export const promptPasswordInteractive = (username: string) =>
-  inquirer.prompt([
+  inquirer.prompt<ArgumentsCamelCase<{ maskedPassword: string }>>([
     {
       type: 'password',
       name: 'maskedPassword',

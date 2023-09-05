@@ -46,23 +46,6 @@ exports[`renders a categorical line chart 1`] = `
     "enabled": false,
   },
   "plotOptions": {
-    "line": {
-      "dataLabels": {
-        "align": "center",
-        "allowOverlap": false,
-        "enabled": false,
-        "rotation": 0,
-        "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
-          "fontSize": "13px",
-          "fontWeight": "normal",
-          "pointerEvents": "none",
-          "textOutline": "none",
-        },
-      },
-      "shadow": false,
-    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -400,24 +383,7 @@ exports[`renders a categorical line chart with two x axes 1`] = `
     "enabled": false,
   },
   "plotOptions": {
-    "area": {
-      "dataLabels": {
-        "align": "center",
-        "allowOverlap": false,
-        "enabled": false,
-        "rotation": 0,
-        "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
-          "fontSize": "13px",
-          "fontWeight": "normal",
-          "pointerEvents": "none",
-          "textOutline": "none",
-        },
-        "y": -5,
-      },
-      "shadow": false,
-    },
+    "area": {},
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -905,23 +871,6 @@ exports[`renders a time series chart with break by 1`] = `
     "enabled": false,
   },
   "plotOptions": {
-    "line": {
-      "dataLabels": {
-        "align": "center",
-        "allowOverlap": false,
-        "enabled": false,
-        "rotation": 0,
-        "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
-          "fontSize": "13px",
-          "fontWeight": "normal",
-          "pointerEvents": "none",
-          "textOutline": "none",
-        },
-      },
-      "shadow": false,
-    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -1505,23 +1454,6 @@ exports[`renders a time series with granularity Month 1`] = `
     "enabled": false,
   },
   "plotOptions": {
-    "line": {
-      "dataLabels": {
-        "align": "center",
-        "allowOverlap": false,
-        "enabled": false,
-        "rotation": 0,
-        "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
-          "fontSize": "13px",
-          "fontWeight": "normal",
-          "pointerEvents": "none",
-          "textOutline": "none",
-        },
-      },
-      "shadow": false,
-    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -2077,23 +2009,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
     "enabled": false,
   },
   "plotOptions": {
-    "line": {
-      "dataLabels": {
-        "align": "center",
-        "allowOverlap": false,
-        "enabled": false,
-        "rotation": 0,
-        "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
-          "fontSize": "13px",
-          "fontWeight": "normal",
-          "pointerEvents": "none",
-          "textOutline": "none",
-        },
-      },
-      "shadow": false,
-    },
     "series": {
       "connectNulls": false,
       "dataLabels": {

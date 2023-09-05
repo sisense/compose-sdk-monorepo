@@ -1,7 +1,7 @@
 import { Alert, Tab, Tabs } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
-import { SisenseContextProvider } from '../components/SisenseContextProvider';
+import { useEffect, useState } from 'react';
+import { SisenseContextProvider } from '../components/sisense-context/SisenseContextProvider';
 import { SisenseContextProviderProps } from '../props';
 import { ChartsFromExampleApp } from './pages/ChartsFromExampleApp';
 import { ECommerceDemo } from './pages/ECommerceDemo';
@@ -15,21 +15,26 @@ import { WidgetDemo } from './pages/WidgetDemo';
 // if this becomes popular
 const pages = [WidgetDemo, ECommerceDemo, ChartsFromExampleApp, MiscDemo];
 
-const { VITE_APP_SISENSE_URL, VITE_APP_SISENSE_USERNAME, VITE_APP_SISENSE_PASSWORD } = import.meta
-  .env;
+const { VITE_APP_SISENSE_URL, VITE_APP_SISENSE_TOKEN } = import.meta.env;
+
+const selectedTabIndexKey = 'selectedTabIndex';
 
 export function App() {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(
+    Math.min(Number(sessionStorage.getItem(selectedTabIndexKey)) || 0, pages.length - 1),
+  );
 
-  const shouldShowAlert =
-    !VITE_APP_SISENSE_URL || !VITE_APP_SISENSE_USERNAME || !VITE_APP_SISENSE_PASSWORD;
+  const shouldShowAlert = !VITE_APP_SISENSE_URL || !VITE_APP_SISENSE_TOKEN;
 
   const sisenseContextProps: SisenseContextProviderProps = {
     url: VITE_APP_SISENSE_URL ?? '',
-    username: VITE_APP_SISENSE_USERNAME,
-    password: VITE_APP_SISENSE_PASSWORD,
+    token: VITE_APP_SISENSE_TOKEN,
     defaultDataSource: 'Sample ECommerce',
   };
+
+  useEffect(() => {
+    sessionStorage.setItem(selectedTabIndexKey, selectedTabIndex.toString());
+  }, [selectedTabIndex]);
 
   return (
     <>
@@ -40,27 +45,25 @@ export function App() {
         </Alert>
       )}
       <SisenseContextProvider {...sisenseContextProps}>
-        <div style={{ width: '100vw', height: '100vh' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={selectedTabIndex}
-              onChange={(e, value: number) => setSelectedTabIndex(value)}
-            >
-              {pages.map((page, i) => (
-                <Tab key={i} label={page.name} sx={{ textTransform: 'none' }} />
-              ))}
-            </Tabs>
-          </Box>
-          {pages.map((Page, i) => (
-            <div key={i} hidden={selectedTabIndex !== i}>
-              {selectedTabIndex === i && (
-                <Box sx={{ p: 3 }}>
-                  <Page />
-                </Box>
-              )}
-            </div>
-          ))}
-        </div>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={selectedTabIndex}
+            onChange={(e, value: number) => setSelectedTabIndex(value)}
+          >
+            {pages.map((page, i) => (
+              <Tab key={i} label={page.name} sx={{ textTransform: 'none' }} />
+            ))}
+          </Tabs>
+        </Box>
+        {pages.map((Page, i) => (
+          <div key={i} hidden={selectedTabIndex !== i}>
+            {selectedTabIndex === i && (
+              <Box sx={{ p: 3 }}>
+                <Page />
+              </Box>
+            )}
+          </div>
+        ))}
       </SisenseContextProvider>
     </>
   );

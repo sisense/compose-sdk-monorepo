@@ -31,13 +31,11 @@ export function handleUnauthorizedResponse(
   // skip login redirect for token auth
   if (auth instanceof PasswordAuthenticator) {
     throw Error(
-      `${ERROR_PREFIX} Username and password authentication was not successful. Check credentials or choose another method`,
+      `${ERROR_PREFIX} Username and password authentication was not successful. Check credentials.`,
     );
   }
   if (auth instanceof BearerAuthenticator || auth instanceof WatAuthenticator) {
-    throw Error(
-      `${ERROR_PREFIX} Token authentication was not successful. Check credentials or choose another method`,
-    );
+    throw Error(`${ERROR_PREFIX} Token authentication was not successful. Check credentials.`);
   }
 
   if (auth instanceof SsoAuthenticator) {

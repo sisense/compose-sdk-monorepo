@@ -2,6 +2,9 @@ import matchers, { TestingLibraryMatchers } from '@testing-library/jest-dom/matc
 import { cleanup } from '@testing-library/react';
 import 'vitest-canvas-mock';
 
+import createFetchMock from 'vitest-fetch-mock';
+import { vi } from 'vitest';
+
 // Add types for matchers from @testing-library/jest-dom
 // https://github.com/testing-library/jest-dom/issues/439#issuecomment-1536524120
 declare module 'vitest' {
@@ -18,3 +21,9 @@ afterEach(() => {
 });
 
 vi.stubGlobal('__PACKAGE_VERSION__', '0.0.0');
+
+// enable fetch mocking but don't mock anything by default
+// and let tests decide to mock or not
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+fetchMocker.dontMock();

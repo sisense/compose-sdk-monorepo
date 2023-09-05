@@ -83,7 +83,7 @@ export type IndicatorStyleType = 'numeric' | 'gauge';
 export type NumericIndicatorSubType = 'numericSimple' | 'numericBar';
 export type IndicatorSkin = 'vertical' | 'horizontal' | 1 | 2;
 
-/** Configuration options that define components of an indicator chart */
+/** Configuration options that define components of an indicator chart. */
 export type IndicatorComponents = {
   /** The main title of the indicator chart */
   title?: {
@@ -92,9 +92,9 @@ export type IndicatorComponents = {
     /** The text of the title */
     text?: string;
   };
-  /** The secondary title of the indicator chart */
+  /** The secondary title of the indicator chart to be shown when `secondary` is specified in {@link IndicatorDataOptions} */
   secondaryTitle?: {
-    /** Whether the secondary title should be shown */
+    /** The text of the secondary title */
     text?: string;
   };
   /** The ticks displayed on the indicator chart */

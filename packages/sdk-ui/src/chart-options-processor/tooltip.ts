@@ -16,6 +16,9 @@ export type TooltipSettings = {
   borderWidth?: number;
   useHTML?: boolean;
   formatter?: () => string;
+  style?: {
+    fontFamily?: string;
+  };
 };
 
 export type InternalSeries = {

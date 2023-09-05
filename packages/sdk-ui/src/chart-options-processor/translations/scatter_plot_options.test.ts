@@ -103,7 +103,7 @@ describe('getScatterPlotOptions', () => {
           },
         );
 
-        const formatter = options.series.dataLabels.formatter;
+        const formatter = options.series.dataLabels?.formatter;
         const formattedValue = formatter?.call({
           point: {
             custom: {
@@ -129,7 +129,7 @@ describe('getScatterPlotOptions', () => {
           },
         );
 
-        const formatter = options.series.dataLabels.formatter;
+        const formatter = options.series.dataLabels?.formatter;
         const formattedValue = formatter?.call({
           point: {
             custom: {
@@ -155,7 +155,7 @@ describe('getScatterPlotOptions', () => {
           },
         );
 
-        const formatter = options.series.dataLabels.formatter;
+        const formatter = options.series.dataLabels?.formatter;
         const formattedValue = formatter?.call({
           point: {
             custom: {
@@ -181,7 +181,7 @@ describe('getScatterPlotOptions', () => {
           },
         );
 
-        const formatter = options.series.dataLabels.formatter;
+        const formatter = options.series.dataLabels?.formatter;
         const formattedValue = formatter?.call({
           point: {
             custom: {

@@ -1,7 +1,6 @@
 /* eslint-disable max-lines-per-function */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
-import { Arguments, ArgumentsCamelCase, Argv, CommandModule } from 'yargs';
+import { Arguments, Argv, CommandModule } from 'yargs';
 import {
   getHttpClient,
   createDataModel,
@@ -100,10 +99,7 @@ export const getDataModel = async (
 
   // if username is provided but password is not, prompt for password interactively
   if (username && !password) {
-    const passwordAnswers: ArgumentsCamelCase = await promptPasswordInteractive(username);
-
-    const { maskedPassword } = passwordAnswers;
-    password = maskedPassword as string;
+    ({ maskedPassword: password } = await promptPasswordInteractive(username));
   }
 
   const httpClient = getHttpClient(url, username, password, token, wat);

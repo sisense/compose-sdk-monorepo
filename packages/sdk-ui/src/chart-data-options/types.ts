@@ -39,7 +39,7 @@ export interface CategoryStyle {
  * Wrapped {@link @sisense/sdk-data!Column} with styles controlling how the column is visualized in a chart.
  *
  * @example
- * Example of using `StyledColumn` to change the date format of the months displayed on the x-axis.
+ * An example of using `StyledColumn` to change the date format of the months displayed on the x-axis.
  *
  *
  * ```tsx
@@ -68,7 +68,7 @@ export interface CategoryStyle {
  * ###
  * <img src="media://chart-mixed-series-example-1.png" width="800px" />
  *
- * See also {@link StyledMeasureColumn}.
+ * Also, see {@link StyledMeasureColumn}.
  */
 export interface StyledColumn extends CategoryStyle {
   /** Wrapped Column */
@@ -307,7 +307,7 @@ export function isMeasureColumn(
 }
 
 /**
- * Configuration for how to query data and assign data to {@link Table}
+ * Configuration for how to query data and assign data to {@link Table}.
  *
  */
 export type TableDataOptions = {

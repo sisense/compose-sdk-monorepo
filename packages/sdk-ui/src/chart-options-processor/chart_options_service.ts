@@ -128,7 +128,7 @@ export type Stacking = 'normal' | 'percent';
 export type PlotOptions = {
   series: {
     lineWidth?: number;
-    dataLabels: ValueLabelSettings;
+    dataLabels?: ValueLabelSettings;
     marker?: MarkerSettings;
     stacking?: Stacking;
     stickyTracking?: boolean;
@@ -147,6 +147,9 @@ export type PlotOptions = {
     turboThreshold?: number;
     fillOpacity?: number;
     connectNulls?: boolean;
+    animation?: {
+      duration?: number;
+    };
   };
   line?: ChartPlotOptions;
   area?: ChartPlotOptions;
@@ -159,7 +162,6 @@ export type PlotOptions = {
 
 /**
  * Highcharts options internal
- 
  */
 export type HighchartsOptionsInternal = {
   chart: {
@@ -173,6 +175,9 @@ export type HighchartsOptionsInternal = {
     marginTop?: number;
     alignTicks?: boolean;
     polar: boolean;
+    animation?: {
+      duration?: number;
+    };
   };
   title?: {
     text: string | null;

@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable complexity */
+/* eslint-disable max-params */
 import { Style } from '../chart_options_service';
 import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
 import { defaultConfig, applyFormatPlainText } from './number_format_config';
@@ -15,6 +16,7 @@ export type ValueLabelSettings = {
   crop?: boolean;
   rotation?: number;
   y?: number;
+  x?: number;
   style?: Style;
   overflow?: string;
   allowOverlap?: boolean;
@@ -49,10 +51,25 @@ const createValueLabelFormatter = (chartDataOptions: CartesianChartDataOptionsIn
   };
 };
 
+const getRotation = (valueLabel: ValueLabel) => {
+  switch (valueLabel) {
+    case 'horizontal':
+      return 0;
+    case 'diagonal':
+      return -45;
+    case 'vertical':
+      return -90;
+    default:
+      return 0;
+  }
+};
+
+/* eslint-disable-next-line max-params */
 export const getValueLabelSettings = (
   xAxisOrientation: AxisOrientation,
   valueLabel: ValueLabel,
   chartDataOptions: CartesianChartDataOptionsInternal,
+  inside?: boolean,
 ): ValueLabelSettings => {
   if (!valueLabel) {
     return { enabled: false };
@@ -61,60 +78,42 @@ export const getValueLabelSettings = (
   const settings: ValueLabelSettings = {
     ...defaultValueLabelSettings,
     formatter: createValueLabelFormatter(chartDataOptions),
+    align: 'center',
+    verticalAlign: 'middle',
+    rotation: getRotation(valueLabel),
   };
+
+  if (inside) {
+    return settings;
+  }
 
   if (xAxisOrientation === 'vertical') {
     // Bar chart's value label has different settings from other charts,
     // because it's x-axis is vertical and other charts it's horizontal
-    switch (valueLabel) {
-      case 'horizontal':
-        return {
-          ...settings,
-          align: 'left',
-          verticalAlign: 'middle',
-          padding: 5,
-        };
-      case 'diagonal':
-        return {
-          ...settings,
-          align: 'top',
-          rotation: -45,
-          y: -15,
-          verticalAlign: 'bottom',
-        };
-      case 'vertical':
-        return {
-          ...settings,
-          align: 'top',
-          rotation: -90,
-          y: -10,
-          verticalAlign: 'bottom',
-        };
-    }
+    return {
+      ...settings,
+      align: valueLabel === 'horizontal' ? 'left' : 'center',
+    };
   } else {
     switch (valueLabel) {
       case 'horizontal':
         return {
           ...settings,
-          align: 'center',
           verticalAlign: 'bottom',
           padding: 5,
         };
       case 'diagonal':
         return {
           ...settings,
-          align: 'top',
-          rotation: -45,
-          y: -15,
-          verticalAlign: 'middle',
+          align: 'left',
+          y: -10,
+          x: -2,
         };
       case 'vertical':
         return {
           ...settings,
-          align: 'top',
-          rotation: -90,
+          align: 'left',
           y: -10,
-          verticalAlign: 'middle',
         };
     }
   }
@@ -129,30 +128,12 @@ export const getPolarValueLabelSettings = (
     return { enabled: false };
   }
 
-  const settings: ValueLabelSettings = {
+  return {
     ...defaultValueLabelSettings,
     verticalAlign: polarType === 'line' ? 'bottom' : 'middle',
+    rotation: getRotation(valueLabel),
+    align: valueLabel == 'vertical' ? 'left' : 'center',
     padding: 5,
     formatter: createValueLabelFormatter(chartDataOptions),
   };
-
-  switch (valueLabel) {
-    case 'horizontal':
-      return {
-        ...settings,
-        align: 'center',
-      };
-    case 'diagonal':
-      return {
-        ...settings,
-        align: 'center',
-        rotation: -45,
-      };
-    case 'vertical':
-      return {
-        ...settings,
-        align: 'left',
-        rotation: -90,
-      };
-  }
 };

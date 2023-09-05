@@ -13,7 +13,7 @@ const DEFAULT_THEME_SETTINGS: CompleteThemeSettings = {
     secondaryTextColor: '#E4E4E4',
   },
   typography: {
-    fontFamily: 'Open Sans',
+    fontFamily: '"Open Sans","Roboto","Helvetica","Arial",sans-serif',
     primaryTextColor: '#5B6372',
     secondaryTextColor: '#9EA2AB',
   },
@@ -34,27 +34,61 @@ export const applyThemeToChart = (
   if (!themeSettings) {
     return chartOptions;
   }
-  const basicOptions = {
-    chart: {
-      backgroundColor: themeSettings.chart.backgroundColor,
-    },
-    legend: {
-      itemStyle: {
+
+  const pie = {
+    allowPointSelect: false,
+    cursor: 'pointer',
+    showInLegend: true,
+    innerSize: '0%' as const,
+    dataLabels: {
+      style: {
         color: themeSettings.chart.textColor,
         fontFamily: themeSettings.typography.fontFamily,
       },
-    },
-    plotOptions: {
-      series: {
-        dataLabels: {
-          style: {
-            color: themeSettings.chart.textColor,
-            fontFamily: themeSettings.typography.fontFamily,
-          },
-        },
-      },
+      showPercentLabels: true,
+      showDecimals: false,
+      pieMinimumFontSizeToTextLabel: 8,
     },
   };
+
+  const chart = {
+    backgroundColor: themeSettings.chart.backgroundColor,
+  };
+
+  const tooltip = {
+    style: {
+      fontFamily: themeSettings.typography.fontFamily,
+    },
+  };
+
+  const legend = {
+    itemStyle: {
+      color: themeSettings.chart.textColor,
+      fontFamily: themeSettings.typography.fontFamily,
+    },
+  };
+
+  const seriesDataLabelsStyle = {
+    style: {
+      color: themeSettings.chart.textColor,
+      fontFamily: themeSettings.typography.fontFamily,
+    },
+  };
+
+  const plotOptions = {
+    series: {
+      dataLabels: seriesDataLabelsStyle,
+    },
+    pie,
+  };
+
+  const basicOptions = {
+    chart,
+    tooltip,
+    legend,
+    plotOptions,
+  };
+
   const axisOptions = {
     labels: {
       style: {

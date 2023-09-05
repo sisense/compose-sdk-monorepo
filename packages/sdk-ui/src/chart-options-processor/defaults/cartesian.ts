@@ -101,7 +101,7 @@ export const chartOptionsDefaults = (
 ): HighchartsOptionsInternal => {
   switch (chartType) {
     case 'line':
-      return merge(cartesianDefaults, lineDefaults);
+      return cartesianDefaults;
     case 'area':
       return merge(cartesianDefaults, areaDefaults(stacking));
     case 'bar':
@@ -173,36 +173,16 @@ export const cartesianDefaults: HighchartsOptionsInternal = {
   },
 };
 
-export const lineDefaults = {
-  plotOptions: {
-    line: {
-      dataLabels: {
-        align: 'center',
-        rotation: 0,
-        enabled: false,
-        allowOverlap: false,
-        style: fontStyleDefault,
-      },
-      shadow: false,
-    },
-  },
-};
-
 export const areaDefaults = (stacking?: Stacking) => ({
   plotOptions: {
     area: {
-      dataLabels: {
-        align: 'center',
-        rotation: 0,
-        enabled: false,
-        allowOverlap: false,
-        style: fontStyleDefault,
-        y: -5,
-      },
-      shadow: false,
+      ...(stacking && {
+        lineColor: '#ffffff',
+      }),
+    },
+    series: {
       ...(stacking && {
         stacking,
-        lineColor: '#ffffff',
       }),
     },
   },
@@ -210,60 +190,26 @@ export const areaDefaults = (stacking?: Stacking) => ({
 
 export const columnDefaults = (stacking?: Stacking) => ({
   plotOptions: {
-    series: {
-      dataLabels: {
-        overflow: 'justify',
-      },
-      groupPadding: 0.1,
-      pointPadding: 0.01,
-    },
     column: {
-      dataLabels: {
-        align: 'center',
-        rotation: 0,
-        enabled: false,
-        allowOverlap: false,
-        style: fontStyleDefault,
-        overflow: 'justify',
-      },
       groupPadding: 0.1,
       pointPadding: 0.01,
-      pointPlacement: null,
-      ...(stacking && {
-        stacking,
-        borderWidth: 0,
-      }),
+      ...(stacking && { borderWidth: 0 }),
+    },
+    series: {
+      ...(stacking && { stacking }),
     },
   },
 });
 
 export const barDefaults = (stacking?: Stacking) => ({
   plotOptions: {
-    series: {
-      dataLabels: {
-        y: 0,
-        verticalAlign: 'middle',
-        overflow: 'justify',
-      },
-      groupPadding: 0.1,
-      pointPadding: 0.01,
-    },
     bar: {
-      dataLabels: {
-        align: 'center',
-        rotation: 0,
-        enabled: false,
-        allowOverlap: false,
-        style: fontStyleDefault,
-        overflow: 'justify',
-      },
       groupPadding: 0.1,
       pointPadding: 0.01,
-      pointPlacement: null,
-      ...(stacking && {
-        stacking,
-        borderWidth: 0,
-      }),
+      ...(stacking && { borderWidth: 0 }),
+    },
+    series: {
+      ...(stacking && { stacking }),
     },
   },
 });

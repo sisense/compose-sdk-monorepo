@@ -20,6 +20,7 @@ import {
 } from './table_processor';
 import { createSortableTable, TableData } from './table_creators';
 import { parseISO } from 'date-fns';
+import cloneDeep from 'lodash/cloneDeep';
 
 const tableData: TableData = {
   columns: [
@@ -320,6 +321,34 @@ describe('Table Processor', () => {
     expect(groupByTable.columns[1].name).toBe(`Total ${numberColumn.name}`);
     expect(groupByTable.columns[1].index).toBe(1);
     expect(groupByTable.rows.map((r) => r[0].displayValue)).toEqual(['z', 'a']);
+    expect(groupByTable.rows.map((r) => r[1].displayValue)).toEqual(['NaN', '43.618']);
+  });
+
+  it('aggregate retains color and blur', () => {
+    const newTable = cloneDeep(sortableTable);
+    const varcharColumn = newTable.columns[varcharColumnIndex];
+    const numberColumn = newTable.columns[numberColumnIndex];
+    newTable.rows = newTable.rows.map((r, rowIndex) =>
+      r.map((c, colIndex) =>
+        rowIndex === 1 && colIndex === numberColumnIndex ? { ...c, blur: true, color: 'red' } : c,
+      ),
+    );
+    const aggColumn = {
+      column: numberColumn.name,
+      agg: 'sum',
+      title: `Total ${numberColumn.name}`,
+    };
+    const groupByTable = orderBy(groupBy(newTable, [varcharColumn], [aggColumn]), [varcharColumn]);
+    expect(groupByTable.columns).toHaveLength(2);
+    expect(groupByTable.rows).toHaveLength(2);
+    expect(groupByTable.columns.map((c) => c.name)).toEqual(['col_string', 'Total col_number']);
+    expect(groupByTable.columns[0].name).toEqual(varcharColumn.name);
+    expect(groupByTable.columns[0].index).toBe(0);
+    expect(groupByTable.columns[1].name).toBe(`Total ${numberColumn.name}`);
+    expect(groupByTable.columns[1].index).toBe(1);
+    expect(groupByTable.rows.map((r) => r[0].displayValue)).toEqual(['z', 'a']);
+    expect(groupByTable.rows.map((r) => r[1].blur)).toEqual([undefined, true]);
+    expect(groupByTable.rows.map((r) => r[1].color)).toEqual([undefined, 'red']);
     expect(groupByTable.rows.map((r) => r[1].displayValue)).toEqual(['NaN', '43.618']);
   });
 

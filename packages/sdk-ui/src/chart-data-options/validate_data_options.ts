@@ -1,9 +1,17 @@
 /* eslint-disable max-params */
 
-import { CategoricalChartDataOptionsInternal, ChartDataOptionsInternal, Value } from './types';
+import {
+  CategoricalChartDataOptions,
+  CategoricalChartDataOptionsInternal,
+  ChartDataOptions,
+  ChartDataOptionsInternal,
+  Value,
+} from './types';
 import { ChartType } from '../types';
 import merge from 'ts-deepmerge';
 import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
+import { DataTable } from '../chart-data-processor/table_processor';
+import { translation } from '../locales/en';
 
 export type DataColumnNamesMapping = Record<string, string>;
 
@@ -57,7 +65,7 @@ export const applyDefaultChartDataOptions = (
  * Validates attributes, measures, filters, and highlights against the columns in data.
  */
 export const validateDataOptionsAgainstData = (
-  data: Data,
+  data: Data | DataTable,
   attributes: Attribute[],
   measures: Measure[],
   dataColumnNamesMapping: DataColumnNamesMapping,
@@ -109,3 +117,18 @@ export const validateDataOptionsAgainstData = (
 
   return true;
 };
+
+function validateCategoricalChartDataOptions(dataOptions: CategoricalChartDataOptions) {
+  if (!dataOptions.value || dataOptions.value.length === 0) {
+    throw new Error(translation.errors.dataOptions.emptyValueArray);
+  }
+}
+
+export function validateDataOptions(chartType: ChartType, dataOptions: ChartDataOptions) {
+  switch (chartType) {
+    case 'pie':
+    case 'funnel':
+      validateCategoricalChartDataOptions(dataOptions as CategoricalChartDataOptions);
+      break;
+  }
+}

@@ -31,6 +31,7 @@ const defaultAppConfig = { locale: getBaseDateFnsLocale(), dateConfig: defaultDa
 
 /**
  * Gets the application settings
+ *
  * @param customConfig - Custom application configuration
  * @param httpClient - Sisense REST API client
  * @param isWat - Whether the application is running with WAT authentication
@@ -52,6 +53,7 @@ export async function getSettings(
 
 /**
  * Loads the server settings
+ *
  * @param httpClient - Sisense REST API client
  * @param isWat - Whether the application is running with WAT authentication
  * @returns - Server settings

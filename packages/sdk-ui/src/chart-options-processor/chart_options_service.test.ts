@@ -420,7 +420,7 @@ it('applyNumberFormatToPlotBands should work for x1 and x2 if type is number', (
     y: [],
     breakBy: [],
   };
-  const categories = ['.10', '.20', '.30', '.40'];
+  const categories = ['.10', '', '.20', '', '.30', '', '.40'];
   const indexMap = [1, 2, 3, 4];
   const plotBands = [
     { text: '10000', from: 0, to: 1 },
@@ -434,7 +434,7 @@ it('applyNumberFormatToPlotBands should work for x1 and x2 if type is number', (
     plotBands,
   });
   expect(results).toEqual({
-    categories: ['10%', '20%', '30%', '40%'],
+    categories: ['10%', '', '20%', '', '30%', '', '40%'],
     indexMap: [1, 2, 3, 4],
     plotBands: [
       {

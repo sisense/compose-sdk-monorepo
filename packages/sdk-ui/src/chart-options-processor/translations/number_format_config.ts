@@ -41,7 +41,7 @@ export const defaultConfig: NumberFormatConfig = {
 };
 
 export const applyFormatStaticMarkup = (config: NumberFormatConfig, value: number) => {
-  return `<span>${applyFormat(config, value)}</span>`;
+  return isNaN(value) ? `` : `<span>${applyFormat(config, value)}</span>`;
 };
 
 /**

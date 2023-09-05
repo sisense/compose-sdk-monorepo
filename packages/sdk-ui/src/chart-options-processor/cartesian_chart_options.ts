@@ -234,7 +234,12 @@ export const getCartesianChartOptions = (
           lineWidth: chartDesignOptions.lineWidth,
           dataLabels: isPolarChart
             ? getPolarValueLabelSettings(chartDesignOptions.valueLabel, dataOptions, polarType!)
-            : getValueLabelSettings(xAxisOrientation, chartDesignOptions.valueLabel, dataOptions),
+            : getValueLabelSettings(
+                xAxisOrientation,
+                chartDesignOptions.valueLabel,
+                dataOptions,
+                stacking && chartType !== 'area',
+              ),
           marker: getMarkerSettings(chartDesignOptions.marker),
           ...(stacking && { stacking: stacking }),
           connectNulls: false,
@@ -246,7 +251,6 @@ export const getCartesianChartOptions = (
         chartData.xValues.length,
       ),
       tooltip: getTooltipSettings(undefined, dataOptions),
-      boost: { useGPUTranslations: true, usePreAllocated: true },
     },
   );
 

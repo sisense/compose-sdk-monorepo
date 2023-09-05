@@ -101,6 +101,13 @@ const _getAggregatedValues = (
     //TODO will need to handle invalid floats
     const dataArray = rows.filter((r) => !!r[col.index] && r[col.index].displayValue !== '');
 
+    // retain first color
+    const color = dataArray.find((row) => row !== undefined && row?.[col.index]?.color)?.[col.index]
+      ?.color;
+
+    // any points are blur, then keep blur
+    const blur = dataArray.some((row) => row[col.index].blur);
+
     if (isDatetime(col.type)) {
       const data = dataArray.map((r) => parseISO(r[col.index].displayValue).valueOf());
       value = new Distribution(data).getStat(aggFunc);
@@ -112,7 +119,11 @@ const _getAggregatedValues = (
       const categoricalData = dataArray.map((r) => r[col.index].displayValue);
       value = new CategoricalDistribution(categoricalData).getStat(aggFunc);
     }
-    row.push({ displayValue: `${value}` });
+    row.push({
+      displayValue: `${value}`,
+      ...(color && { color }),
+      ...(blur && { blur }),
+    });
   }
   return row;
 };

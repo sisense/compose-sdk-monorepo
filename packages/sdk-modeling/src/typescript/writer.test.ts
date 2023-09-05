@@ -60,7 +60,7 @@ describe('writer', () => {
     it('should throw an error if filename is not specified', async () => {
       await expect(
         writeTypescript(dimensionalModelECommerce, {} as { filename: string }),
-      ).rejects.toThrowError('filename must be specified');
+      ).rejects.toThrow('filename must be specified');
     });
   });
 
@@ -79,7 +79,7 @@ describe('writer', () => {
     it('should throw an error if filename is not specified', async () => {
       await expect(
         writeJavascript(dimensionalModelECommerce, {} as { filename: string }),
-      ).rejects.toThrowError('filename must be specified');
+      ).rejects.toThrow('filename must be specified');
     });
   });
 });

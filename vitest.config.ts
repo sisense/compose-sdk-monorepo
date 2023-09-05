@@ -8,6 +8,7 @@ const config: UserConfig = {
       all: true,
       provider: 'istanbul',
       include: ['src'],
+      exclude: ['src/__test_helpers__', 'src/**/__mocks__/**'],
     },
   },
 };

@@ -131,7 +131,7 @@ You need to authenticate the application with your Sisense instance. You will ne
 Use the following links to set up your authentication method:
 
 * To use WAT, see [Using Web Access Tokens](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
-* To use an API token, see [Using the Sisense API](https://sisense.dev/guides/rest/using-rest-api.html).
+* To use an API token, see [Using the Sisense API](https://sisense.dev/guides/restApi/using-rest-api.html).
 * To use SSO, see [Using SSO to Access Sisense](https://docs.sisense.com/main/SisenseLinux/using-single-sign-on-to-access-sisense.htm).
 
 >**Note:**
@@ -236,7 +236,7 @@ export default App;
 ```
 
 >**Note:**
->The above example uses the API token (also called *bearer authentication*) to connect to a Sisense instance. To generate an API token for your Sisense user account, see Using the Sisense API (https://sisense.dev/guides/rest/using-rest-api.html). The `SisenseContextProvider` also supports other authentication mechanisms including WAT, SSO, and username/password.
+>The above example uses the API token (also called *bearer authentication*) to connect to a Sisense instance. To generate an API token for your Sisense user account, see Using the Sisense API (https://sisense.dev/guides/restApi/using-rest-api.html). The `SisenseContextProvider` also supports other authentication mechanisms including WAT, SSO, and username/password.
 
 To render a chart in your application that queries your data model, use the `Chart` component, the `measures` and `filters` utilities, and your previously generated data model file.
 

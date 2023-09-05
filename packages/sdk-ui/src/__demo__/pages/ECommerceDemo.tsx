@@ -121,9 +121,9 @@ export const ECommerceDemo = () => {
   }, [activeFilters]);
 
   return (
-    <div className="flex w-full justify-center">
-      <div className="flex flex-col">
-        <div className="w-full my-4">
+    <div className="csdk-flex csdk-w-full csdk-justify-center">
+      <div className="csdk-flex csdk-flex-col">
+        <div className="csdk-w-full csdk-my-4">
           <b>
             <h1>
               Dashboard Implemented In Code:
@@ -133,9 +133,9 @@ export const ECommerceDemo = () => {
             </h1>
           </b>
         </div>
-        <div className="flex flex-row">
-          <div className="flex flex-col w-48">
-            <div className={'flex-1 border border-lightgray w-full'}>
+        <div className="csdk-flex csdk-flex-row csdk-h-[850px]">
+          <div className="csdk-flex csdk-flex-col csdk-w-48">
+            <div className={'csdk-flex-1 csdk-border csdk-border-lightgray csdk-w-full'}>
               <IndicatorChart
                 dataOptions={{
                   value: [
@@ -153,7 +153,7 @@ export const ECommerceDemo = () => {
               />
             </div>
 
-            <div className={'border border-lightgray flex-1 w-full'}>
+            <div className={'csdk-border csdk-border-lightgray csdk-flex-1 csdk-w-full'}>
               <IndicatorChart
                 dataOptions={{
                   value: [DM.Measures.Quantity],
@@ -166,7 +166,7 @@ export const ECommerceDemo = () => {
               />
             </div>
 
-            <div className={'border flex-1 border-lightgray w-full'}>
+            <div className={'csdk-border csdk-flex-1 csdk-border-lightgray csdk-w-full'}>
               <IndicatorChart
                 dataOptions={{
                   value: [measures.countDistinct(DM.Commerce.VisitID)],
@@ -179,7 +179,7 @@ export const ECommerceDemo = () => {
               />
             </div>
 
-            <div className={'border border-lightgray flex-1 w-full'}>
+            <div className={'csdk-border csdk-border-lightgray csdk-flex-1 csdk-w-full'}>
               <IndicatorChart
                 dataOptions={{
                   value: [measures.countDistinct(DM.Brand.BrandID)],
@@ -192,8 +192,8 @@ export const ECommerceDemo = () => {
               />
             </div>
           </div>
-          <div className="flex flex-col">
-            <div className="flex flex-1 w-full border border-gray-200 h-1/2">
+          <div className="csdk-flex csdk-flex-col csdk-w-[450px]">
+            <div className="csdk-flex csdk-flex-1 csdk-w-full csdk-border csdk-border-gray-200 csdk-h-1/2">
               <ChartWidget
                 title={'REVENUE vs.UNITS SOLD'}
                 dataSource={DM.DataSource}
@@ -222,8 +222,8 @@ export const ECommerceDemo = () => {
                 }}
               />
             </div>
-            <div className="flex flex-row flex-1 h-1/2">
-              <div className="flex flex-1 w-full border border-gray-200">
+            <div className="csdk-flex csdk-flex-row csdk-flex-1 csdk-h-1/2">
+              <div className="csdk-flex csdk-flex-1 csdk-w-full csdk-border csdk-border-gray-200">
                 <ChartWidget
                   title={'GENDER BREAKDOWN'}
                   chartType={'pie'}
@@ -237,7 +237,7 @@ export const ECommerceDemo = () => {
                 />
               </div>
 
-              <div className="flex flex-1 w-full border border-gray-200">
+              <div className="csdk-flex csdk-flex-1 csdk-w-full csdk-border csdk-border-gray-200">
                 <ChartWidget
                   title={'AGE RANGE BREAKDOWN'}
                   chartType={'pie'}
@@ -252,8 +252,8 @@ export const ECommerceDemo = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col">
-            <div className="flex flex-1 w-full border border-gray-200 h-1/2">
+          <div className="csdk-flex csdk-flex-col csdk-w-[480px]">
+            <div className="csdk-flex csdk-flex-1 csdk-w-full csdk-border csdk-border-gray-200 csdk-h-1/2">
               <ChartWidget
                 title={'TOP CATEGORIES BY REVENUE, UNITS SOLD AND GENDER'}
                 chartType={'scatter'}
@@ -270,7 +270,7 @@ export const ECommerceDemo = () => {
                 styleOptions={scatterStyleOptions}
               />
             </div>
-            <div className="flex flex-1 w-full border border-gray-200 h-1/2">
+            <div className="csdk-flex csdk-flex-1 csdk-w-full csdk-border csdk-border-gray-200 csdk-h-1/2">
               <ChartWidget
                 title={'TOP 3 CATEGORIES BY REVENUE AND AGE'}
                 chartType={'bar'}
@@ -285,10 +285,10 @@ export const ECommerceDemo = () => {
               />
             </div>
           </div>
-          <div className="bg-gray-200 h-full">
-            <p className="m-3 text-sm font-sans font-medium">Filters</p>
-            <hr className="border-t border-gray-400 m-2" />
-            <div className="flex flex-col bg-white m-2">
+          <div className="csdk-bg-gray-200 csdk-h-full">
+            <p className="csdk-m-3 csdk-text-sm csdk-font-sans csdk-font-medium">Filters</p>
+            <hr className="csdk-border-t csdk-border-gray-400 csdk-m-2" />
+            <div className="csdk-flex csdk-flex-col csdk-bg-white m-2">
               <MemberFilterTile
                 title={'Year'}
                 attribute={DM.Commerce.Date.Years}

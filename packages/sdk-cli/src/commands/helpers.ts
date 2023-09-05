@@ -50,7 +50,6 @@ export const handleHttpClientLogin = async (httpClient: HttpClient) => {
       );
     }
     console.log('OK!\r\n');
-    console.log('Getting fields... ');
   } catch (err) {
     console.log(`Error connecting to ${httpClient.url}. \r\n${err}\r\n`);
     return Promise.reject();
@@ -65,6 +64,7 @@ export const handleHttpClientLogin = async (httpClient: HttpClient) => {
 async function createDataModel(httpClient: HttpClient, dataSource: string): Promise<DataModel> {
   const queryClient = new DimensionalQueryClient(httpClient);
 
+  console.log('Getting fields... ');
   try {
     return await queryClient.getDataSourceFields(dataSource).then((fields) => {
       console.log('OK!\r\n');

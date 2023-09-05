@@ -3,9 +3,10 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import { Chart } from '@sisense/sdk-ui';
 import { SisenseContextProvider } from '@sisense/sdk-ui';
 import { data, attributes, measures } from './__mocks__/dataMocks';
+import { Data } from '@sisense/sdk-data';
 
 const props = {
-  chartType: 'line',
+  chartType: 'line' as const,
   dataSet: data,
   dataOptions: {
     category: [attributes.years],
@@ -25,10 +26,10 @@ const props = {
 };
 
 test.describe('React ChartErrorBoundary', () => {
-  test('should render error when something went wrong', async ({ mount, page }) => {
+  test('should render error when broken context provided', async ({ mount, page }) => {
     const errorBoundary = await mount(
-      <SisenseContextProvider>
-        <Chart {...props} dataSet={4} />
+      <SisenseContextProvider url={'http://unexisting.com'} token={'broken-token'}>
+        <Chart {...props} />
       </SisenseContextProvider>,
     );
     // check for error picture
@@ -47,13 +48,13 @@ test.describe('React ChartErrorBoundary', () => {
     await expect(errorBoundary).toContainText(props.dataOptions.value[0].column.title);
   });
 
-  test('should render error just for a chart where something went wrong', async ({
+  test('should render error just for a chart with broken dataSet provided', async ({
     mount,
     page,
   }) => {
     const errorBoundary = await mount(
       <div>
-        <Chart {...props} dataSet={4} />
+        <Chart {...props} dataSet={4 as unknown as Data} />
         <Chart {...props} />
       </div>,
     );

@@ -1,7 +1,8 @@
 import type { Config } from 'tailwindcss';
-import colorsConfig from './tailwind.colors.config';
+import colorsConfig from './src/themes/tailwind.colors';
 
 const config: Config = {
+  prefix: 'csdk-',
   presets: [colorsConfig],
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {

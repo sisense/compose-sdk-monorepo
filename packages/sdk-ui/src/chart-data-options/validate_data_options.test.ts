@@ -1,9 +1,10 @@
-import { CategoricalChartDataOptionsInternal, Value } from './types';
+import { CategoricalChartDataOptionsInternal, ChartDataOptions, Value } from './types';
 import {
   generateUniqueDataColumnsNames,
   DataColumnNamesMapping,
   applyDefaultChartDataOptions,
   validateDataOptionsAgainstData,
+  validateDataOptions,
 } from './validate_data_options';
 import { Attribute, Filter, Measure } from '@sisense/sdk-data';
 
@@ -171,5 +172,61 @@ describe('validateDataOptionsAgainstData', () => {
         highlights,
       ),
     ).toThrow();
+  });
+});
+
+describe('isDataOptionsValid', () => {
+  it('should truly validate correct categorical chart dataOptions', () => {
+    const validDataOptions = {
+      category: [],
+      value: [{ name: 'Revenue' }],
+    } as ChartDataOptions;
+
+    it('should truly validate correct pie chart dataOptions', () => {
+      let errorThrownForPie = false;
+      try {
+        validateDataOptions('pie', validDataOptions);
+      } catch (e) {
+        errorThrownForPie = true;
+      }
+      expect(errorThrownForPie).toBeFalsy();
+    });
+
+    it('should truly validate correct funnel chart dataOptions', () => {
+      let errorThrownForPie = false;
+      try {
+        validateDataOptions('funnel', validDataOptions);
+      } catch (e) {
+        errorThrownForPie = true;
+      }
+      expect(errorThrownForPie).toBeFalsy();
+    });
+  });
+
+  it('should falsy validate incorrect categorical chart dataOptions', () => {
+    const invalidDataOptions = {
+      category: [],
+      value: [],
+    } as ChartDataOptions;
+
+    it('should falsy validate incorrect pie chart dataOptions', () => {
+      let errorThrownForPie = false;
+      try {
+        validateDataOptions('pie', invalidDataOptions);
+      } catch (e) {
+        errorThrownForPie = true;
+      }
+      expect(errorThrownForPie).toBeTruthy();
+    });
+
+    it('should falsy validate incorrect funnel chart dataOptions', () => {
+      let errorThrownForPie = false;
+      try {
+        validateDataOptions('funnel', invalidDataOptions);
+      } catch (e) {
+        errorThrownForPie = true;
+      }
+      expect(errorThrownForPie).toBeTruthy();
+    });
   });
 });

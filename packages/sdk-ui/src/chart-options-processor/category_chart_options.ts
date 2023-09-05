@@ -71,7 +71,6 @@ export const getCategoricalChartOptions = (
           dataOptions,
         ),
         tooltip: getTooltipSettings(pieDesignOptions.pieLabels?.showDecimals, dataOptions),
-        boost: { useGPUTranslations: true, usePreAllocated: true },
       };
       return { options: pieOptions, alerts };
     case 'funnel':
@@ -101,7 +100,6 @@ export const getCategoricalChartOptions = (
         series: funnelSeries,
         plotOptions: getFunnelPlotOptions(funnelDesignOptions, dataOptions),
         tooltip: getTooltipSettings(funnelDesignOptions.funnelLabels?.showDecimals, dataOptions),
-        boost: { useGPUTranslations: true, usePreAllocated: true },
       };
       return { options: funnelOptions, alerts };
     default:

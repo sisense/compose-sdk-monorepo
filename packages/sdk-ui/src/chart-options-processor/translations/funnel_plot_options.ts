@@ -164,7 +164,7 @@ export const getFunnelPlotOptions = (
   };
 
   const numberFormatConfig =
-    (chartDataOptions as CategoricalChartDataOptionsInternal).y[0].numberFormatConfig ??
+    (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig ??
     defaultConfig;
 
   const renderTo = null;

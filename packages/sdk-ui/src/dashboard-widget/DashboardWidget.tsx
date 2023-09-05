@@ -6,16 +6,27 @@ import { extractWidgetProps } from './translate_widget';
 import { fetchWidget } from './fetch_widget';
 import { WidgetDto } from './types';
 import { DashboardWidgetProps } from '../props';
-import { useSisenseContext } from '../components/SisenseContextProvider';
+import { useSisenseContext } from '../components/sisense-context/sisense-context';
 import { useThemeContext } from '../components/ThemeProvider';
 import { translation } from '../locales/en';
-import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
-import { TrackingContextProvider, useTrackComponentInit } from '../useTrackComponentInit';
+import { asSisenseComponent } from '../components/decorators/as-sisense-component';
 
 /**
- * @internal
+ * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
+ * used to render a widget created in the Sisense instance.
+ *
+ * @example
+ * The example below renders a dashboard widget with the specified widget and dashboard OIDs.
+ * ```tsx
+ * <DashboardWidget
+ *   widgetOid={'64473e07dac1920034bce77f'}
+ *   dashboardOid={'6441e728dac1920034bce737'}
+ * />
+ * ```
  */
-export const UnwrappedDashboardWidget: FunctionComponent<DashboardWidgetProps> = (props) => {
+export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisenseComponent({
+  componentName: 'DashboardWidget',
+})((props) => {
   const [error, setError] = useState<Error>();
   if (error) {
     throw error;
@@ -65,7 +76,15 @@ export const UnwrappedDashboardWidget: FunctionComponent<DashboardWidgetProps> =
     return null;
   }
   return widgetType === 'table' ? (
-    <TableWidget {...fetchedProps} {...restProps} filters={filters} />
+    <TableWidget
+      {...fetchedProps}
+      {...restProps}
+      filters={filters}
+      styleOptions={{
+        ...fetchedProps.styleOptions,
+        ...props.styleOptions,
+      }}
+    />
   ) : (
     <ChartWidget
       {...fetchedProps}
@@ -75,32 +94,10 @@ export const UnwrappedDashboardWidget: FunctionComponent<DashboardWidgetProps> =
         ...fetchedProps.drilldownOptions,
         ...props.drilldownOptions,
       }}
+      styleOptions={{
+        ...fetchedProps.styleOptions,
+        ...props.styleOptions,
+      }}
     />
   );
-};
-
-/**
- * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
- * used to render a widget created in the Sisense instance.
- *
- * @example
- * The example below renders a dashboard widget with the specified widget and dashboard OIDs.
- * ```tsx
- * <DashboardWidget
- *   widgetOid={'64473e07dac1920034bce77f'}
- *   dashboardOid={'6441e728dac1920034bce737'}
- * />
- * ```
- */
-export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = (props) => {
-  const displayName = 'DashboardWidget';
-  useTrackComponentInit(displayName, props);
-
-  return (
-    <TrackingContextProvider>
-      <ErrorBoundary componentName={displayName}>
-        <UnwrappedDashboardWidget {...props} />
-      </ErrorBoundary>
-    </TrackingContextProvider>
-  );
-};
+});

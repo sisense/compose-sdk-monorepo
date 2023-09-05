@@ -29,9 +29,9 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
       align: 'left',
       enabled: true,
       formatter: expect.any(Function),
-      padding: 5,
       types: types,
       verticalAlign: 'middle',
+      rotation: 0,
     });
   });
 
@@ -42,13 +42,12 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
       chartDataOption,
     );
     expect(valueLabelSettings).toEqual({
-      align: 'top',
+      align: 'center',
       enabled: true,
       formatter: expect.any(Function),
       rotation: -45,
       types: types,
-      verticalAlign: 'bottom',
-      y: -15,
+      verticalAlign: 'middle',
     });
   });
 
@@ -59,13 +58,12 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
       chartDataOption,
     );
     expect(valueLabelSettings).toEqual({
-      align: 'top',
+      align: 'center',
       enabled: true,
       formatter: expect.any(Function),
       rotation: -90,
       types: types,
-      verticalAlign: 'bottom',
-      y: -10,
+      verticalAlign: 'middle',
     });
   });
 });
@@ -84,6 +82,7 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
       padding: 5,
       types: types,
       verticalAlign: 'bottom',
+      rotation: 0,
     });
   });
   it('diagonal', () => {
@@ -93,13 +92,14 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
       chartDataOption,
     );
     expect(valueLabelSettings).toEqual({
-      align: 'top',
+      align: 'left',
       enabled: true,
       formatter: expect.any(Function),
       rotation: -45,
       types: types,
       verticalAlign: 'middle',
-      y: -15,
+      x: -2,
+      y: -10,
     });
   });
   it('vertical', () => {
@@ -109,7 +109,7 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
       chartDataOption,
     );
     expect(valueLabelSettings).toEqual({
-      align: 'top',
+      align: 'left',
       enabled: true,
       formatter: expect.any(Function),
       rotation: -90,
@@ -139,6 +139,7 @@ describe('getPolarValueLabelSettings()', () => {
     types: types,
     formatter: expect.any(Function),
     padding: 5,
+    rotation: 0,
   };
 
   it('should return "horizontal" settings for "area" type polar', () => {

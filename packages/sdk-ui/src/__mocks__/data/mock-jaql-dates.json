@@ -1,0 +1,48 @@
+{
+  "headers": ["min Years", "max Years"],
+  "metadata": [
+    {
+      "jaql": {
+        "agg": "min",
+        "datatype": "datetime",
+        "level": "years",
+        "dim": "[Commerce.Date (Calendar)]",
+        "title": "min Years"
+      }
+    },
+    {
+      "jaql": {
+        "agg": "max",
+        "datatype": "datetime",
+        "level": "years",
+        "dim": "[Commerce.Date (Calendar)]",
+        "title": "max Years"
+      }
+    }
+  ],
+  "datasource": {
+    "revisionId": "TBD",
+    "fullname": "LocalHost/Sample ECommerce"
+  },
+  "processingInfo": {
+    "cacheType": "result",
+    "cacheTime": "2023-08-14T04:49:07.948Z"
+  },
+  "translationInfo": {
+    "translationServiceProvider": "NewTranslationService",
+    "isTranslationFallback": false,
+    "isQueryFallback": false,
+    "translationDuration": 0.001,
+    "sqlFromCache": true
+  },
+  "values": [
+    {
+      "data": "2009-01-01T00:00:00",
+      "text": "1/1/2009 00:00:00 AM"
+    },
+    {
+      "data": "2013-01-01T00:00:00",
+      "text": "1/1/2013 00:00:00 AM"
+    }
+  ]
+}

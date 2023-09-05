@@ -13,7 +13,7 @@ const drilldownOptions = {
 };
 
 export const DashboardWidgetDemo = () => (
-  <div className="h-fit">
+  <div className="csdk-h-fit">
     <DashboardWidget
       widgetOid={widgetOid}
       dashboardOid={dashboardOid}

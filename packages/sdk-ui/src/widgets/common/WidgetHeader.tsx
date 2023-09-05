@@ -45,15 +45,15 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
   return (
     <>
       <div
-        className={'flex flex-row items-center px-2'}
+        className={'csdk-flex csdk-flex-row csdk-items-center csdk-px-2'}
         style={{
           backgroundColor: styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
         }}
       >
         <div
           className={classNames(
-            styleOptions?.titleAlignment === 'Center' ? 'text-center' : 'text-left',
-            'w-full whitespace-nowrap overflow-hidden',
+            styleOptions?.titleAlignment === 'Center' ? 'csdk-text-center' : 'csdk-text-left',
+            'csdk-w-full csdk-whitespace-nowrap csdk-overflow-hidden',
           )}
           style={{
             color: styleOptions?.titleTextColor || themeSettings.chart?.textColor,
@@ -62,7 +62,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
         >
           {title || ''}
         </div>
-        <div className={'ml-auto'}>
+        <div className={'csdk-ml-auto'}>
           <Tooltip
             title="Click to view full details"
             style={{
@@ -101,9 +101,11 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
             horizontal: 'center',
           }}
         >
-          <Card raised={true} className={'max-w-xs'}>
+          <Card raised={true} className={'csdk-max-w-xs'}>
             <div
-              className={'flex flex-row justify-between items-center p-2 pl-4'}
+              className={
+                'csdk-flex csdk-flex-row csdk-justify-between csdk-items-center csdk-p-2 csdk-pl-4'
+              }
               style={{
                 backgroundColor: themeSettings.chart?.secondaryTextColor,
               }}

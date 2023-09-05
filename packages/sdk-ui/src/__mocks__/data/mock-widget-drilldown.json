@@ -1,0 +1,319 @@
+{
+  "_id": "64a6371dd70aac00335b9723",
+  "title": "COLUMN CHART WITH DRILLDOWN",
+  "type": "chart/column",
+  "subtype": "column/classic",
+  "oid": "64a6371dd70aac00335b9722",
+  "desc": null,
+  "source": null,
+  "owner": "63742d045f74f4001a9dab88",
+  "userId": "63742d045f74f4001a9dab88",
+  "created": "2023-07-06T03:38:05.593Z",
+  "lastUpdated": "2023-07-17T04:19:41.279Z",
+  "instanceType": "owner",
+  "datasource": {
+    "fullname": "localhost/Sample ECommerce",
+    "id": "localhost_aSampleIAAaECommerce",
+    "address": "LocalHost",
+    "database": "aSampleIAAaECommerce",
+    "live": false,
+    "title": "Sample ECommerce",
+    "lastBuildTime": "2023-01-11T16:52:48.333Z"
+  },
+  "selection": null,
+  "metadata": {
+    "drillHistory": [
+      {
+        "jaql": {
+          "table": "Category",
+          "column": "Category",
+          "dim": "[Category.Category]",
+          "datatype": "text",
+          "merged": true,
+          "title": "Category"
+        },
+        "parent": {
+          "jaql": {
+            "table": "Commerce",
+            "column": "Age Range",
+            "dim": "[Commerce.Age Range]",
+            "datatype": "text",
+            "merged": true,
+            "title": "Age Range"
+          },
+          "instanceid": "2FD34-8FA3-9B"
+        },
+        "through": {
+          "jaql": {
+            "datatype": "text",
+            "dim": "[Commerce.Age Range]",
+            "title": "Age Range",
+            "column": "Age Range",
+            "table": "Commerce",
+            "filter": {
+              "explicit": true,
+              "multiSelection": true,
+              "members": ["35-44", "45-54"]
+            }
+          }
+        }
+      },
+      {
+        "jaql": {
+          "table": "Commerce",
+          "column": "Condition",
+          "dim": "[Commerce.Condition]",
+          "datatype": "text",
+          "merged": true,
+          "title": "Condition"
+        },
+        "parent": {
+          "jaql": {
+            "table": "Commerce",
+            "column": "Age Range",
+            "dim": "[Commerce.Age Range]",
+            "datatype": "text",
+            "merged": true,
+            "title": "Age Range"
+          },
+          "instanceid": "2FD34-8FA3-9B"
+        },
+        "through": {
+          "jaql": {
+            "datatype": "text",
+            "dim": "[Commerce.Age Range]",
+            "title": "Age Range",
+            "column": "Age Range",
+            "table": "Commerce",
+            "filter": {
+              "explicit": true,
+              "multiSelection": true,
+              "members": ["25-34", "35-44"]
+            }
+          }
+        }
+      }
+    ],
+    "ignore": {
+      "dimensions": [],
+      "ids": [],
+      "all": false
+    },
+    "panels": [
+      {
+        "name": "categories",
+        "items": [
+          {
+            "jaql": {
+              "table": "Commerce",
+              "column": "Condition",
+              "dim": "[Commerce.Condition]",
+              "datatype": "text",
+              "merged": true,
+              "title": "Condition"
+            },
+            "parent": {
+              "jaql": {
+                "table": "Commerce",
+                "column": "Age Range",
+                "dim": "[Commerce.Age Range]",
+                "datatype": "text",
+                "merged": true,
+                "title": "Age Range"
+              },
+              "instanceid": "2FD34-8FA3-9B"
+            },
+            "through": {
+              "jaql": {
+                "datatype": "text",
+                "dim": "[Commerce.Age Range]",
+                "title": "Age Range",
+                "column": "Age Range",
+                "table": "Commerce",
+                "filter": {
+                  "explicit": true,
+                  "multiSelection": true,
+                  "members": ["25-34", "35-44"]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "values",
+        "items": [
+          {
+            "jaql": {
+              "table": "Commerce",
+              "column": "Cost",
+              "dim": "[Commerce.Cost]",
+              "datatype": "numeric",
+              "agg": "sum",
+              "title": "Total Cost"
+            },
+            "instanceid": "45DE6-485A-7E",
+            "format": {
+              "mask": {
+                "type": "number",
+                "abbreviations": {
+                  "t": true,
+                  "b": true,
+                  "m": true,
+                  "k": true
+                },
+                "separated": true,
+                "decimals": "auto",
+                "isdefault": true
+              },
+              "color_bkp": {
+                "colorIndex": 0,
+                "type": "color"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "break by",
+        "items": [
+          {
+            "jaql": {
+              "table": "Commerce",
+              "column": "Gender",
+              "dim": "[Commerce.Gender]",
+              "datatype": "text",
+              "merged": true,
+              "title": "Gender"
+            },
+            "instanceid": "F8C56-BA6C-16",
+            "format": {
+              "members": {}
+            }
+          }
+        ]
+      },
+      {
+        "name": "filters",
+        "items": []
+      }
+    ],
+    "usedFormulasMapping": {}
+  },
+  "tags": [],
+  "style": {
+    "legend": {
+      "enabled": true,
+      "position": "bottom"
+    },
+    "seriesLabels": {
+      "enabled": false,
+      "rotation": 0,
+      "labels": {
+        "enabled": false,
+        "types": {
+          "count": false,
+          "percentage": false,
+          "relative": false,
+          "totals": false
+        },
+        "stacked": false,
+        "stackedPercentage": false
+      }
+    },
+    "xAxis": {
+      "enabled": true,
+      "ticks": true,
+      "labels": {
+        "enabled": true,
+        "rotation": 0
+      },
+      "title": {
+        "enabled": false
+      },
+      "x2Title": {
+        "enabled": false
+      },
+      "gridLines": true,
+      "isIntervalEnabled": false
+    },
+    "yAxis": {
+      "inactive": false,
+      "enabled": true,
+      "ticks": true,
+      "labels": {
+        "enabled": true,
+        "rotation": 0
+      },
+      "title": {
+        "enabled": false
+      },
+      "gridLines": true,
+      "logarithmic": false,
+      "hideMinMax": false,
+      "isIntervalEnabled": true
+    },
+    "y2Axis": {
+      "inactive": true,
+      "enabled": true,
+      "ticks": true,
+      "labels": {
+        "enabled": true,
+        "rotation": 0
+      },
+      "title": {
+        "enabled": false
+      },
+      "gridLines": false,
+      "logarithmic": false,
+      "hideMinMax": false,
+      "isIntervalEnabled": true
+    },
+    "navigator": {
+      "enabled": true
+    },
+    "dataLimits": {
+      "seriesCapacity": 50,
+      "categoriesCapacity": 100000
+    },
+    "narration": {
+      "enabled": false,
+      "display": "above",
+      "format": "bullets",
+      "verbosity": "medium",
+      "up_sentiment": "good",
+      "aggregation": "sum",
+      "labels": [
+        {
+          "id": "age_range",
+          "title": "Age Range",
+          "singular": "Age Range",
+          "plural": "Age Range"
+        },
+        {
+          "id": "gender",
+          "title": "Gender",
+          "singular": "Gender",
+          "plural": "Gender"
+        }
+      ]
+    }
+  },
+  "instanceid": "E734F-25D8-4C",
+  "realTimeRefreshing": false,
+  "options": {
+    "dashboardFiltersMode": "select",
+    "selector": true,
+    "triggersDomready": true,
+    "autoUpdateOnEveryChange": true,
+    "drillToAnywhere": true,
+    "previousScrollerLocation": {
+      "min": null,
+      "max": null
+    }
+  },
+  "dashboardid": "64a4336ed70aac00335b971f",
+  "viewState": {
+    "activeTab": "filters"
+  }
+}

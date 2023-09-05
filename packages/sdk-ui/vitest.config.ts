@@ -16,7 +16,13 @@ const config: UserConfig = {
       },
     },
     coverage: {
-      exclude: ['src/__test_helpers__', 'src/__demo__', 'src/__stories__', 'src/@types'],
+      exclude: [
+        'src/__test_helpers__',
+        'src/**/__mocks__/**',
+        'src/__demo__',
+        'src/__stories__',
+        'src/@types',
+      ],
     },
   },
 };

@@ -119,7 +119,7 @@ const addOtherToSeries = (series: SeriesType[], otherSeriesData: SeriesPointStru
 };
 
 const convolutionByPercentage = (series: SeriesType[], convolution: Convolution) => {
-  if (convolution?.minimalIndependentSlicePercentage === undefined) {
+  if (convolution?.minimalIndependentSlicePercentage === undefined || series.length === 0) {
     return series;
   }
   const minFraction = convolution.minimalIndependentSlicePercentage / 100.0;

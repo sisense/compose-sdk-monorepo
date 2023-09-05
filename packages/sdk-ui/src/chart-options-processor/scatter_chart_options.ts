@@ -112,7 +112,6 @@ export const getScatterChartOptions = (
     series,
     plotOptions: getScatterPlotOptions(scatterDesignOptions, scatterDataOptions),
     tooltip: getScatterTooltipSettings(scatterDataOptions),
-    boost: { useGPUTranslations: true, usePreAllocated: true },
   };
 
   return { options, alerts };

@@ -243,6 +243,23 @@ export interface BaseStyleOptions extends ReservedStyleOptions {
   y2Axis?: AxisLabel;
   /** Data limit for series or categories that will be plotted */
   dataLimits?: DataLimits;
+  /**
+   * Total width of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels)
+   * 2. Width of the container wrapping this component
+   * 3. Default value of 400px
+   *
+   */
+  width?: number;
+  /**
+   * Total height of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels).
+   * 2. Height of the container wrapping this component
+   * 3. Default value of 400px (for component without header) or 425px (for component with header).
+   */
+  height?: number;
 }
 
 /** Configuration options that define functional style of the various elements of {@link LineChart} */
@@ -306,10 +323,29 @@ export interface PolarStyleOptions extends BaseStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of {@link IndicatorChart} */
-export type IndicatorStyleOptions =
+export type IndicatorStyleOptions = (
   | NumericSimpleIndicatorStyleOptions
   | NumericBarIndicatorStyleOptions
-  | GaugeIndicatorStyleOptions;
+  | GaugeIndicatorStyleOptions
+) & {
+  /**
+   * Total width of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels)
+   * 2. Width of the container wrapping this component
+   * 3. Default value of 200px
+   *
+   */
+  width?: number;
+  /**
+   * Total height of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels).
+   * 2. Height of the container wrapping this component
+   * 3. Default value of 200px (for component without header) or 225px (for component with header).
+   */
+  height?: number;
+};
 
 /** Configuration options that define functional style of the various elements of {@link Table} */
 export interface TableStyleOptions {
@@ -333,15 +369,20 @@ export interface TableStyleOptions {
    */
   rowsPerPage?: number;
   /**
-   * Table width in pixels
+   * Total width of the component, which is considered in the following order of priority:
    *
-   * Default value is 400
+   * 1. Value passed to this property (in pixels)
+   * 2. Width of the container wrapping this component
+   * 3. Default value of 400px
+   *
    */
   width?: number;
   /**
-   * Table height in pixels
+   * Total height of the component, which is considered in the following order of priority:
    *
-   * Default value is 500
+   * 1. Value passed to this property (in pixels).
+   * 2. Height of the container wrapping this component
+   * 3. Default value of 500px (for component without header) or 525px (for component with header).
    */
   height?: number;
 }

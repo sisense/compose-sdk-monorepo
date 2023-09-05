@@ -1,5 +1,5 @@
 {
-  "version": "0.8.0",
+  "version": "0.9.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "dev": "yarn workspace @sisense/sdk-ui dev",
-    "demo": "VITE_APP_SISENSE_URL=http://$(kubectl config -n sisense current-context):30845/  yarn workspace react-ts-demo dev",
+    "demo": "yarn workspace react-ts-demo dev",
     "build": "yarn workspaces foreach --no-private --verbose --topological run build",
     "build:prod": "yarn workspaces foreach --no-private --verbose --topological --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue run build:prod",
     "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output",
@@ -54,7 +54,6 @@
     "eslint-plugin-vitest": "0.2.8",
     "express": "^4.18.2",
     "husky": "^8.0.3",
-    "jest-transform-stub": "^2.0.0",
     "lint-staged": "^13.2.1",
     "nyc": "^15.1.0",
     "prettier": "^2.8.8",

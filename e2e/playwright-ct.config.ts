@@ -18,7 +18,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [ ['html'], ['junit', { outputFile: 'results.xml' }] ],
+  reporter: [['html'], ['junit', { outputFile: 'results.xml' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -26,6 +26,9 @@ export default defineConfig({
 
     /* Port to use for Playwright component endpoint. */
     ctPort: 3100,
+
+    /* Use `aria-label` as test id attribute */
+    testIdAttribute: 'aria-label',
   },
 
   /* Configure projects for major browsers */

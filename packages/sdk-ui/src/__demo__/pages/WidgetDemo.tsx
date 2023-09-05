@@ -16,7 +16,7 @@ const drilldownOptions = {
 };
 
 export const WidgetDemo = () => (
-  <div className="h-fit">
+  <div className="csdk-h-fit">
     With Drilldown
     <ChartWidget
       dataSource={DM.DataSource}

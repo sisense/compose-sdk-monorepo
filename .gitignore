@@ -51,3 +51,4 @@ lerna-debug.log*
 # generated docs from typedoc
 docs/
 docs-internal/
+e2e/results.xml

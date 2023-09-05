@@ -56,14 +56,22 @@ export interface SisenseContextProviderProps {
    */
   ssoEnabled?: boolean;
 
-  /** Username for basic username/password authentication */
+  /**
+   * Username for basic username/password authentication
+   *
+   * @deprecated Use {@link SisenseContextProviderProps.token} instead.
+   */
   username?: string;
 
-  /** Password for basic username/password authentication */
+  /**
+   * Password for basic username/password authentication
+   *
+   * @deprecated Use {@link SisenseContextProviderProps.token} instead.
+   */
   password?: string;
 
   /**
-   * Token for [bearer authentication](https://sisense.dev/guides/rest/using-rest-api.html).
+   * Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
    *
    * This is used only when basic username/password authentication is not specified.
    */
@@ -526,11 +534,35 @@ export interface DashboardWidgetProps
    */
   description?: string;
   /**
-   * Style options for both the widget as a whole and specifically for the widget header
+   * Style options for the widget container including the widget header
    *
    * @category Widget
    */
   widgetStyleOptions?: WidgetStyleOptions;
+  /**
+   * General style options for the visual component of the widget – for example, chart or table.
+   *
+   * @category Widget
+   */
+  styleOptions?: {
+    /**
+     * Total width of the component, which is considered in the following order of priority:
+     *
+     * 1. Value passed to this property (in pixels)
+     * 2. Width of the container wrapping this component
+     * 3. Default value as specified per chart type
+     *
+     */
+    width?: number;
+    /**
+     * Total height of the component, which is considered in the following order of priority:
+     *
+     * 1. Value passed to this property (in pixels).
+     * 2. Height of the container wrapping this component
+     * 3. Default value as specified per chart type
+     */
+    height?: number;
+  };
   /**
    * {@inheritDoc ChartWidgetProps.drilldownOptions}
    *

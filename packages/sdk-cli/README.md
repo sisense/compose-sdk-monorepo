@@ -39,7 +39,7 @@ You will be prompted for the password.
 
 The resulting file is created in the current directory.
 
-Instead of `--username "<username>"`, you can also use `--token <token>` to authenticate with [an API token](https://sisense.dev/guides/rest/using-rest-api.html).
+Instead of `--username "<username>"`, you can also use `--token <token>` to authenticate with [an API token](https://sisense.dev/guides/restApi/using-rest-api.html).
 Substitute `<token>`, `<instance url>`, `<data source name>` with the values for your instance.
 
 With npm:

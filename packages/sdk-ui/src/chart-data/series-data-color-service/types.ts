@@ -10,10 +10,10 @@ export type DataColorOptions =
   | ConditionalDataColorOptions;
 
 /**
- * Uniform color options for data. This is similar to the Single Color option in the Sisense UI.
+ * Uniform color options for data similar to the Single Color option in the Sisense UI.
  *
  * @example
- * Below is an example of specifying red as a uniform color for all data values.
+ * An example of specifying red as a uniform color for all data values.
  *
  * ```ts
  * {
@@ -35,17 +35,17 @@ export type UniformDataColorOptions = {
 };
 
 /**
- * Range color options for data. This is similar to the Range option in the Sisense UI.
+ * Range color options for data similar to the Range option in the Sisense UI.
  *
  * Use `minColor` and `maxColor` to define the start and end color of the range.
- * Color name, e.g., `red`, or a hexadecimal value, e.g., `#ff0000` can be specified.
+ * A color name (for example, `red`), or a hexadecimal value (for example, `#ff0000`) can be specified.
  *
  * By default, the color range is set to match the minimum and maximum values of the data.
- * Alternatively, you can override the default value range by
+ * You can also override the default value range by
  * setting the `minValue`, `midValue`, and `maxValue` properties.
  *
  * @example
- * Below is an example of specifying colors for data values ranging
+ * An example of specifying colors for data values ranging
  * from red (for min value) to blue (for max value)
  * with 2 more colors in between for a total of 4 colors:
  *
@@ -91,15 +91,15 @@ export type RangeDataColorOptions = {
 };
 
 /**
- * Conditional color options for a data. This is similar to the Conditional Color option in the Sisense UI.
+ * Conditional color options for data similar to the Conditional Color option in the Sisense UI.
  *
  * This option allows you to define color conditions.
  * Each condition is a logical expression that defines how data values are mapped into colors.
  * These conditions are evaluated in the order in which they appear in the array.
  *
  * @example
- * A condition states that a negative data value is displayed in red
- * and another condition states that a positive data value is green.
+ * An example of a condition stating that a negative data value is displayed in red
+ * and another condition stating that a positive data value is green.
  *
  * ```ts
  * {
@@ -131,7 +131,7 @@ export type ConditionalDataColorOptions = {
 /**
  * Color condition for {@link ConditionalDataColorOptions} represented as a logical expression.
  *
- * See examples in {@link ConditionalDataColorOptions}.
+ * See {@link ConditionalDataColorOptions} for examples.
  *
  * @see {@link https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm | Selecting Colors in Widgets}
  */

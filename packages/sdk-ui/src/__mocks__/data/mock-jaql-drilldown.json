@@ -1,0 +1,270 @@
+{
+  "headers": ["Condition", "Gender", "Total Cost"],
+  "metadata": [
+    {
+      "through": {
+        "jaql": {
+          "filter": {
+            "explicit": true,
+            "members": ["25-34", "35-44"],
+            "multiSelection": true
+          },
+          "datatype": "text",
+          "column": "Age Range",
+          "dim": "[Commerce.Age Range]",
+          "title": "Age Range",
+          "table": "Commerce"
+        }
+      },
+      "parent": {
+        "jaql": {
+          "datatype": "text",
+          "column": "Age Range",
+          "merged": true,
+          "dim": "[Commerce.Age Range]",
+          "title": "Age Range",
+          "table": "Commerce"
+        },
+        "instanceid": "2FD34-8FA3-9B"
+      },
+      "jaql": {
+        "datatype": "text",
+        "column": "Condition",
+        "merged": true,
+        "dim": "[Commerce.Condition]",
+        "title": "Condition",
+        "table": "Commerce"
+      },
+      "wpanel": "xAxis"
+    },
+    {
+      "jaql": {
+        "datatype": "text",
+        "column": "Gender",
+        "merged": true,
+        "dim": "[Commerce.Gender]",
+        "title": "Gender",
+        "table": "Commerce"
+      },
+      "instanceid": "F8C56-BA6C-16",
+      "wpanel": "series",
+      "format": {}
+    },
+    {
+      "jaql": {
+        "agg": "sum",
+        "datatype": "numeric",
+        "column": "Cost",
+        "dim": "[Commerce.Cost]",
+        "title": "Total Cost",
+        "table": "Commerce"
+      },
+      "instanceid": "45DE6-485A-7E",
+      "wpanel": "series",
+      "format": {
+        "color_bkp": {
+          "color": "#00cee6",
+          "colorIndex": 0,
+          "type": "color"
+        },
+        "mask": {
+          "decimals": "auto",
+          "separated": true,
+          "isdefault": true,
+          "type": "number",
+          "abbreviations": {
+            "b": true,
+            "t": true,
+            "k": true,
+            "m": true
+          }
+        }
+      }
+    }
+  ],
+  "datasource": {
+    "revisionId": "TBD",
+    "fullname": "LocalHost/Sample ECommerce"
+  },
+  "processingInfo": {
+    "cacheType": "none",
+    "cacheTime": "2023-07-17T04:19:41.312Z"
+  },
+  "translationInfo": {
+    "translationServiceProvider": "NewTranslationService",
+    "isTranslationFallback": false,
+    "isQueryFallback": false,
+    "translationDuration": 0.008,
+    "sqlFromCache": false
+  },
+  "values": [
+    [
+      {
+        "data": "New",
+        "text": "New"
+      },
+      {
+        "data": "Female",
+        "text": "Female"
+      },
+      {
+        "data": 1068513.8840562804,
+        "text": "1068513.88405628"
+      }
+    ],
+    [
+      {
+        "data": "New",
+        "text": "New"
+      },
+      {
+        "data": "Male",
+        "text": "Male"
+      },
+      {
+        "data": 4705018.1398279965,
+        "text": "4705018.139828"
+      }
+    ],
+    [
+      {
+        "data": "New",
+        "text": "New"
+      },
+      {
+        "data": "Unspecified",
+        "text": "Unspecified"
+      },
+      {
+        "data": 14190004.424424909,
+        "text": "14190004.4244249"
+      }
+    ],
+    [
+      {
+        "data": "Refurbished",
+        "text": "Refurbished"
+      },
+      {
+        "data": "Female",
+        "text": "Female"
+      },
+      {
+        "data": 143567.35889291763,
+        "text": "143567.358892918"
+      }
+    ],
+    [
+      {
+        "data": "Refurbished",
+        "text": "Refurbished"
+      },
+      {
+        "data": "Male",
+        "text": "Male"
+      },
+      {
+        "data": 634999.3107186556,
+        "text": "634999.310718656"
+      }
+    ],
+    [
+      {
+        "data": "Refurbished",
+        "text": "Refurbished"
+      },
+      {
+        "data": "Unspecified",
+        "text": "Unspecified"
+      },
+      {
+        "data": 2101206.902459887,
+        "text": "2101206.90245989"
+      }
+    ],
+    [
+      {
+        "data": "Unspecified",
+        "text": "Unspecified"
+      },
+      {
+        "data": "Female",
+        "text": "Female"
+      },
+      {
+        "data": 269381.76787142456,
+        "text": "269381.767871425"
+      }
+    ],
+    [
+      {
+        "data": "Unspecified",
+        "text": "Unspecified"
+      },
+      {
+        "data": "Male",
+        "text": "Male"
+      },
+      {
+        "data": 1059817.6978902426,
+        "text": "1059817.69789024"
+      }
+    ],
+    [
+      {
+        "data": "Unspecified",
+        "text": "Unspecified"
+      },
+      {
+        "data": "Unspecified",
+        "text": "Unspecified"
+      },
+      {
+        "data": 2489896.587605199,
+        "text": "2489896.5876052"
+      }
+    ],
+    [
+      {
+        "data": "Used",
+        "text": "Used"
+      },
+      {
+        "data": "Female",
+        "text": "Female"
+      },
+      {
+        "data": 914747.5124741467,
+        "text": "914747.512474147"
+      }
+    ],
+    [
+      {
+        "data": "Used",
+        "text": "Used"
+      },
+      {
+        "data": "Male",
+        "text": "Male"
+      },
+      {
+        "data": 4044817.0983704287,
+        "text": "4044817.09837043"
+      }
+    ],
+    [
+      {
+        "data": "Used",
+        "text": "Used"
+      },
+      {
+        "data": "Unspecified",
+        "text": "Unspecified"
+      },
+      {
+        "data": 13205855.729609301,
+        "text": "13205855.7296093"
+      }
+    ]
+  ]
+}

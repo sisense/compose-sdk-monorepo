@@ -11,7 +11,7 @@
     "lib": ["es2017", "dom"],
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"],
   "exclude": [],
   "references": [
     { "path": "../sdk-data" },

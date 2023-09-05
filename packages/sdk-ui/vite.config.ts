@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
+import checker from 'vite-plugin-checker';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,6 +14,12 @@ export default defineConfig(({ mode }) => ({
       insertTypesEntry: true,
       tsConfigFilePath:
         mode === 'production' ? resolve(__dirname, './tsconfig.prod.json') : undefined,
+    }),
+    checker({
+      typescript: true,
+      overlay: {
+        initialIsOpen: false,
+      },
     }),
   ],
   define: {

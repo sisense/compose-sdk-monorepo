@@ -27,12 +27,12 @@
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
-    "baseUrl": "./",
+    "types": ["vitest/globals"],
+    "baseUrl": ".",
     "paths": {
-      // workaround for vscode-jest plugin - it requires to have esm module's typedefs instead of cjs
-      "ts-deepmerge": ["node_modules/ts-deepmerge/esm/index"]
-    },
-    "types": ["vitest/globals"]
+      // workaround for https://github.com/IanVS/vitest-fetch-mock/issues/10
+      "vitest-fetch-mock": ["node_modules/vitest-fetch-mock/types/index.d.ts"]
+    }
   },
   "include": ["**/*.ts"]
 }

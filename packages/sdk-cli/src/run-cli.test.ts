@@ -9,6 +9,12 @@ import * as helpers from './commands/helpers.js';
 import { PKG_VERSION } from './package-version.js';
 import { runCli } from './run-cli.js';
 import * as tracking from './tracking.js';
+import { ArgumentsCamelCase } from 'yargs';
+
+import createFetchMock from 'vitest-fetch-mock';
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+fetchMocker.dontMock();
 
 // Reference: https://kgajera.com/blog/how-to-test-yargs-cli-with-jest/
 const COMMAND_GET_DATA_MODEL = 'get-data-model';
@@ -205,7 +211,7 @@ describe('CLI', () => {
       // mock promptPasswordInteractive function
       vi.spyOn(prompts, 'promptPasswordInteractive').mockResolvedValue({
         maskedPassword: fakePassword,
-      });
+      } as ArgumentsCamelCase<{ maskedPassword: string }>);
 
       runCommand(
         COMMAND_GET_DATA_MODEL,
@@ -284,6 +290,103 @@ describe('CLI', () => {
 
       expect(trackExecutionSpy).toHaveBeenCalled();
       expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+    });
+  });
+
+  describe('get-api-token command', () => {
+    const consoleLogSpy = vi.spyOn(console, 'log');
+
+    beforeEach(() => {
+      consoleLogSpy.mockClear();
+
+      fetchMock.resetMocks();
+      fetchMock.mockResponseOnce(
+        JSON.stringify({
+          token: 'fake-token',
+        }),
+      );
+    });
+
+    it('gets a token with password provided as parameter and sends a tracking event', async () => {
+      expect.assertions(4);
+
+      runCommand(
+        'get-api-token',
+        '--url',
+        fakeUrl,
+        '--username',
+        fakeUsername,
+        '--password',
+        fakePassword,
+      );
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      expect(consoleLogSpy).toHaveBeenCalledOnce();
+      expect(consoleLogSpy).toHaveBeenCalledWith({
+        token: 'fake-token',
+      });
+      expect(trackExecutionSpy).toHaveBeenCalledOnce();
+      expect(trackExecutionSpy).toHaveBeenCalledWith(
+        expect.any(HttpClient),
+        'get-api-token',
+        expect.objectContaining({
+          url: fakeUrl,
+          username: fakeUsername,
+          password: fakePassword,
+        }),
+      );
+    });
+
+    it('gets a token with password provided through answered prompt and sends a tracking event', async () => {
+      expect.assertions(4);
+
+      vi.spyOn(prompts, 'promptPasswordInteractive').mockResolvedValueOnce({
+        maskedPassword: fakePassword,
+      } as ArgumentsCamelCase<{ maskedPassword: string }>);
+
+      runCommand('get-api-token', '--url', fakeUrl, '--username', fakeUsername);
+
+      await new Promise(process.nextTick); // eslint-disable-line
+
+      expect(consoleLogSpy).toHaveBeenCalledOnce();
+      expect(consoleLogSpy).toHaveBeenCalledWith({
+        token: 'fake-token',
+      });
+      expect(trackExecutionSpy).toHaveBeenCalledOnce();
+      expect(trackExecutionSpy).toHaveBeenCalledWith(
+        expect.any(HttpClient),
+        'get-api-token',
+        expect.objectContaining({
+          url: fakeUrl,
+          username: fakeUsername,
+        }),
+      );
+    });
+
+    it('fails if a required parameter is not specified', async () => {
+      expect.assertions(2);
+
+      // For some reason, this is the only way I can successfully spy on
+      // process.exit for this file. For any other file, this will work without
+      // vi.hoisted().
+      // This will also fail if we return a value from vi.hoisted() and assign
+      // it to a variable.
+      vi.hoisted(() => {
+        const spy = vi.spyOn(process, 'exit');
+
+        spy.mockImplementation((() => {}) as () => never);
+      });
+
+      runCommand('get-api-token');
+      await new Promise(process.nextTick); // eslint-disable-line
+      expect(process.exit).toHaveBeenCalledWith(1); // eslint-disable-line
+
+      vi.mocked(process.exit).mockClear(); // eslint-disable-line
+
+      runCommand('get-api-token', '--url', fakeUrl);
+      await new Promise(process.nextTick); // eslint-disable-line
+      expect(process.exit).toHaveBeenCalledWith(1); // eslint-disable-line
     });
   });
 });

@@ -31,7 +31,7 @@ export type PieType = (typeof pieTypes)[number];
 
 export type PieOptions = {
   allowPointSelect: boolean;
-  cursor: 'pointer';
+  cursor: string;
   dataLabels: ValueLabelSettings & {
     showPercentLabels: boolean;
     showDecimals: boolean;
@@ -74,6 +74,7 @@ export const getPiePlotOptions = (
   pieType: PieType = DefaultPieType,
   pieLabels: PieLabels = DefaultPieLabels,
   chartDataOptions: ChartDataOptionsInternal,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): PlotOptions => {
   const pieOptions = defaultPieOptions();
   const seriesOptions = defaultSeriesOptions();
@@ -88,7 +89,7 @@ export const getPiePlotOptions = (
     pieDataLabels.showDecimals = pieLabels.showDecimals;
 
     const numberFormatConfig =
-      (chartDataOptions as CategoricalChartDataOptionsInternal).y[0].numberFormatConfig ??
+      (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig ??
       defaultConfig;
     pieDataLabels.formatter = function (this: InternalSeries) {
       const name = this.point.name || this.series.name;
@@ -100,7 +101,7 @@ export const getPiePlotOptions = (
         </div>`;
     };
 
-    seriesOptions.dataLabels.enabled = dataLabelsEnabled;
+    if (seriesOptions.dataLabels) seriesOptions.dataLabels.enabled = dataLabelsEnabled;
   }
 
   return {

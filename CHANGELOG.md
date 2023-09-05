@@ -1,10 +1,33 @@
 # Changelog
 
+## [0.9.0] - 2023-09-05
+
+### Added
+
+- Support `useExecuteQuery` hook to execute a data query.
+  This approach, which offers an alternative to `ExecuteQuery` component,
+  is similar to React Query's `useQuery` hook.
+- Add CLI command `get-api-token` to generate an API token that can be used in `SisenseContextProviderProps`
+- Extend `StyleOptions` with `width` and `height` props for controlling the size of a UI component
+  such as `Chart` and `ChartWidget`
+
+### Changed
+
+- Mark `username` and `password` as `@deprecated` in `SisenseContextProviderProps`.
+  This authentication method will be removed in future releases of Compose SDK.
+  This change does not affect the username/password authentication supported by the CLI tool.
+- Add prefix `csdk-` to all Tailwind CSS classes to avoid conflicts with user-defined classes
+- Refactor common logic behind data-driven UI components into a higher-order component, `asSisenseComponent`
+- Improve validation of data options for `Table` component
+- Reorganize API reference (on sisense.dev) by splitting API items into individual files
+  and group individual files by modules and types.
+
 ## [0.8.0] - 2023-08-15
 
 ### Added
 
-- Add measures `trend` and `forecast` for advanced analytics
+- Add measures `trend` and `forecast` for advanced analytics.
+  To use these measures, Sisense version of `L2023.6.0` or greater is required.
 - Support data model representation in JavaScript by specifying `.js` output file in CLI commands
   – in addition to TypeScript (`.ts` output file)
 - Detect and apply theme settings as defined in Web Access Token's payload – the `thm` claim
