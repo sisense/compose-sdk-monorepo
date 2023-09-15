@@ -1,12 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-lines */
-import { AxisSettings } from '../translations/axis_section';
+import { AxisSettings } from '../translations/axis-section';
 import { DeepPick } from 'ts-essentials';
-import { Style, HighchartsOptionsInternal, Stacking } from '../chart_options_service';
+import { Style, HighchartsOptionsInternal, Stacking } from '../chart-options-service';
 import { ChartType } from '../../types';
 import merge from 'deepmerge';
-import { PolarType } from '../translations/design_options';
+import { PolarType } from '../translations/design-options';
 
 export const lineColorDefault = '#d1d1d7';
 const titleMargin = 25;

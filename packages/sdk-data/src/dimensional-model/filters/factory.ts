@@ -27,7 +27,7 @@ import {
   RelativeDateFilter,
 } from './filters.js';
 
-// LOGICAL
+// LOGICAL FILTERS
 
 /**
  * Creates a filter representing a union of multiple filters of the same attribute.
@@ -62,7 +62,7 @@ export function exclude(filter: Filter, input?: Filter): Filter {
   return new ExcludeFilter(filter, input);
 }
 
-// TEXT / NUMERIC
+// TEXT / NUMERIC FILTERS
 
 /**
  * Creates a "doesn't contain" filter.
@@ -281,7 +281,7 @@ export function members(attribute: Attribute, members: string[]): Filter {
 /**
  * Creates a filter on all values starting at the given date of the given level.
  *
- * @param level - Date level to filter. See {@link DateLevels} for supported levels.
+ * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
  * @param from - Date or String representing the value to filter from
  * @returns A filter instance filtering all values starting at the given value
  */
@@ -292,7 +292,7 @@ export function dateFrom(level: LevelAttribute, from: Date | string): Filter {
 /**
  * Creates a filter on all values ending at the given date of the given level.
  *
- * @param level - Date level to filter. See {@link DateLevels} for supported levels.
+ * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
  * @param to - Date or String representing the last member to filter to
  * @returns A filter instance filtering all values ending at the given value
  */
@@ -303,7 +303,7 @@ export function dateTo(level: LevelAttribute, to: Date | string): Filter {
 /**
  * Creates a range filter between the given "from" and "to" arguments.
  *
- * @param level - Date level to filter. See {@link DateLevels} for supported levels.
+ * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
  * @param from - Date or String representing the start member to filter from
  * @param to - Date or String representing the end member to filter to
  * @returns A filter instance filtering all values ending at the given value
@@ -315,7 +315,7 @@ export function dateRange(level: LevelAttribute, from?: Date | string, to?: Date
 /**
  * Creates a relative date filter.
  *
- * @param level - Date level to filter. See {@link DateLevels} for supported levels.
+ * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
  * @param offset - offset to skip from the given anchor, or Today if not provided,
  * positive/negative to skip forward/backward
  * @param count - number of members to filter
@@ -334,7 +334,7 @@ export function dateRelative(
 /**
  * Creates a relative date filter from the given anchor date.
  *
- * @param level - Date level to filter. See {@link DateLevels} for supported levels.
+ * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
  * @param offset - offset to skip from the given anchor, or Today if not provided
  * @param count - number of members to filter
  * @param anchor - Anchor to filter from, Today is used if not provided
@@ -352,7 +352,7 @@ export function dateRelativeFrom(
 /**
  * Creates a relative date filter to the given anchor date.
  *
- * @param level - Date level to filter. See {@link DateLevels} for supported levels.
+ * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
  * @param offset - offset to skip from the given anchor, or Today if not provided
  * @param count - number of members to filter
  * @param anchor - Anchor to filter from, Today is used if not provided
@@ -407,7 +407,7 @@ export function today(dimension: DateDimension): Filter {
   return dateRelativeTo(dimension.Days, 0, 1);
 }
 
-// MEASURE
+// MEASURE-RELATED FILTERS
 
 /**
  * Creates a filter on all measure values matching the provided criteria.
@@ -496,7 +496,7 @@ export function measureBetweenNotEqual(
   );
 }
 
-// RANKING
+// RANKING FILTERS
 
 /**
  * Creates a filter representing a top ranking logic.

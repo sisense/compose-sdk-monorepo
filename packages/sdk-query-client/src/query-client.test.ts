@@ -4,13 +4,13 @@ import { Attribute, Measure, QueryResultData } from '@sisense/sdk-data';
 import {
   DatasourceFieldsTestDataset,
   getDatasourceFieldsTestDataset,
-} from './__test_helpers__/get-datasource-fields-test-dataset-loader.js';
+} from './__test-helpers__/get-datasource-fields-test-dataset-loader.js';
 import { DimensionalQueryClient } from './query-client.js';
 import { JaqlQueryPayload, QueryDescription } from './types.js';
 import {
   ExecuteJaqlTestDataset,
   getExecuteJaqlTestDataset,
-} from './__test_helpers__/execute-jaql-test-dataset-loader.js';
+} from './__test-helpers__/execute-jaql-test-dataset-loader.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import type { Mocked } from 'vitest';
 

@@ -106,6 +106,7 @@ export function convertToThemeSettings(
       brandColor: legacyDesignSettings.general.brandColor,
       backgroundColor: legacyDesignSettings.general.backgroundColor,
       primaryButtonTextColor: legacyDesignSettings.general.primaryButtonTextColor,
+      primaryButtonHoverColor: legacyDesignSettings.general.primaryButtonHoverColor,
     },
   };
   return themeSettings;

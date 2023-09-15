@@ -26,15 +26,10 @@ rm -f CONTRIBUTING.md
 rm -f quickstart.md
 
 rm -rf ./examples
-rm -rf ./packages/sdk-query-client/src/__test_helpers__
+rm -rf ./packages/sdk-query-client/src/__test-helpers__
 
-# Substitute README.md
-rm -f README.md
-mv README-public.md README.md
-
-# Substitute quickstart.md
-rm -f quickstart.md
-mv quickstart-public.md quickstart.md
+# Remove code for features that are under development.
+rm -rf packages/sdk-ui/src/__exclude__
 
 # need to regenerate the yarn.lock file after all the changes
 yarn install
@@ -46,7 +41,7 @@ git add .
 current_version=$(node ./scripts/current-version.cjs)
 target_tag="v${current_version}"
 
-# Commit changes usinng current package.json.
+# Commit changes using current package.json.
 git commit -m "Release ${target_tag}"
 
 # Push to the destination branch. This should be a fast-forward update, so no

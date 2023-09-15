@@ -1,6 +1,6 @@
 import { NumberFormatConfig } from '../types';
 import { IndicatorChartType } from '../chart-options-processor/translations/types';
-import { ComparableData, Value } from '../chart-data-processor/table_processor';
+import { ComparableData, Value } from '../chart-data-processor/table-processor';
 
 export type CategoricalXValues = {
   key: string;

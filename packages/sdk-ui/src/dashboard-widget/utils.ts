@@ -1,4 +1,4 @@
-import { ChartSubtype } from '../chart-options-processor/subtype_to_design_options';
+import { ChartSubtype } from '../chart-options-processor/subtype-to-design-options';
 import { ChartType, SortDirection } from '../types';
 import {
   Panel,

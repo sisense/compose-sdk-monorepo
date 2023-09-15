@@ -1,0 +1,61 @@
+%fixed-data-table-custom :global {
+  .public_fixedDataTable_header,
+  .public_fixedDataTable_scrollbarSpacer,
+  .public_fixedDataTable_header .public_fixedDataTableCell_main {
+    background-color: transparent;
+    background-image: none;
+    border-bottom: 1px solid #edeef1;
+  }
+
+  .public_fixedDataTable_scrollbarSpacer {
+    margin-left: 3px;
+  }
+
+  .public_fixedDataTable_main,
+  .fixedDataTableLayout_main {
+    border: none;
+  }
+
+  .public_fixedDataTableRow_highlighted,
+  .public_fixedDataTableRow_highlighted .public_fixedDataTableCell_main {
+    background-color: transparent;
+  }
+
+  .public_fixedDataTableRow_main {
+    background-color: transparent;
+  }
+
+  .public_fixedDataTableCell_main {
+    background-color: transparent;
+    border-color: #edeef1;
+  }
+
+  .public_fixedDataTable_header,
+  .public_fixedDataTable_hasBottomBorder,
+  .public_fixedDataTable_scrollbarSpacer {
+    border-bottom: none;
+  }
+
+  .public_fixedDataTable_header .fixedDataTableCellGroupLayout_cellGroup {
+    border-top: 1px solid #edeef1;
+    border-bottom: 1px solid #edeef1;
+  }
+
+  .public_Scrollbar_main.public_Scrollbar_mainActive,
+  .public_Scrollbar_main {
+    border-left: none;
+    background-color: transparent;
+  }
+
+  .fixedDataTableRowLayout_rowWrapper {
+    border-left: 1px solid #edeef1;
+  }
+
+  .public_Scrollbar_main.public_Scrollbar_mainOpaque {
+    left: -1px;
+  }
+
+  .public_fixedDataTableCell_cellContent {
+    padding: 0px 12px;
+  }
+}

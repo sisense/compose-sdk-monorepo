@@ -31,7 +31,7 @@ export class HttpClient {
     fetchIntercept.register({
       response: (response) => {
         if (response.status === 401) {
-          return handleUnauthorizedResponse(response, auth, url);
+          return handleUnauthorizedResponse(response, auth);
         }
         if (!response.ok) {
           return handleErrorResponse(response);

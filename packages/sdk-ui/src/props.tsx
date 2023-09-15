@@ -20,7 +20,7 @@ import {
   ThemeOid,
   WidgetStyleOptions,
 } from './types';
-import { HighchartsOptions } from './chart-options-processor/chart_options_service';
+import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { PropsWithChildren, ReactNode } from 'react';
 import {
   IndicatorDataOptions,
@@ -30,11 +30,12 @@ import {
 import {
   DataPointEventHandler,
   DataPointsEventHandler,
-} from './chart-options-processor/apply_event_handlers';
+} from './chart-options-processor/apply-event-handlers';
 import { AppConfig } from './app/client-application';
-import { MenuItemSection } from './widgets/common/ContextMenu';
+import { MenuItemSection } from './widgets/common/context-menu';
+import { ExecuteQueryParams } from './components/query-execution';
 
-export type { DataPointEventHandler, DataPointsEventHandler, MenuItemSection };
+export type { DataPointEventHandler, DataPointsEventHandler, MenuItemSection, HighchartsOptions };
 
 /**
  * Props for {@link SisenseContextProvider} component
@@ -53,27 +54,17 @@ export interface SisenseContextProviderProps {
    *
    * This is used when user wants to use sso authentication. Default is false.
    * If set to true, this will override any other authentication method.
+   *
+   * @category Authentication
    */
   ssoEnabled?: boolean;
-
-  /**
-   * Username for basic username/password authentication
-   *
-   * @deprecated Use {@link SisenseContextProviderProps.token} instead.
-   */
-  username?: string;
-
-  /**
-   * Password for basic username/password authentication
-   *
-   * @deprecated Use {@link SisenseContextProviderProps.token} instead.
-   */
-  password?: string;
 
   /**
    * Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
    *
    * This is used only when basic username/password authentication is not specified.
+   *
+   * @category Authentication
    */
   token?: string;
 
@@ -81,6 +72,8 @@ export interface SisenseContextProviderProps {
    * [Web Access Token](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
    *
    * This is used only when neither username, password, and token is specified.
+   *
+   * @category Authentication
    */
   wat?: string;
 
@@ -780,4 +773,21 @@ export interface TableWidgetProps {
    * @category Widget
    */
   description?: string;
+}
+
+/**
+ * Props for {@link ExecuteQueryByWidgetId} component.
+ */
+export interface ExecuteQueryByWidgetIdProps {
+  /** Identifier of the widget */
+  widgetOid: string;
+
+  /** Identifier of the dashboard that contains the widget */
+  dashboardOid: string;
+
+  /** Function as child component that is called to render the query results */
+  children?: (queryResult: QueryResultData, queryParams: ExecuteQueryParams) => ReactNode;
+
+  /** Callback function that is evaluated when query results are ready */
+  onDataChanged?: (data: QueryResultData, queryParams: ExecuteQueryParams) => void;
 }

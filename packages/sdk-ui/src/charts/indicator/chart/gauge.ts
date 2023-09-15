@@ -8,7 +8,7 @@
 /* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable sonarjs/cognitive-complexity */
-import { IndicatorLegacyChartDataOptions } from '../indicator_legacy_chart_data_options.js';
+import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options.js';
 import {
   BaseMeasure,
   FitSecondaryMeasure,

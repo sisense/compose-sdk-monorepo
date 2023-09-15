@@ -68,3 +68,7 @@ export const translateCategoryToAttribute = (category: Category) => category as 
 export const getDataOptionTitle = (option: Category | Value) => {
   return (option as Value).title ?? option.name;
 };
+
+export const translateColumnToAttribure = (c: StyledColumn | Column) => {
+  return translateCategoryToAttribute(translateColumnToCategory(c));
+};

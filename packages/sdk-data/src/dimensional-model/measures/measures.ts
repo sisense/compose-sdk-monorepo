@@ -276,7 +276,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
 /**
  * Stands for a Calculated Measure
  *
- * @see {https://sisense.dev/guides/query/jaql/#step-7-adding-a-formula}
+ * @see {https://sisense.dev/guides/querying/useJaql/#step-7-adding-a-formula}
  * @internal
  */
 export class DimensionalCalculatedMeasure extends AbstractMeasure implements CalculatedMeasure {

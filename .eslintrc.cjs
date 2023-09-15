@@ -14,7 +14,7 @@ module.exports = {
       files: ['*.{ts,js,tsx,jsx}'],
       excludedFiles: [
         '**/__mocks__/*.{ts,tsx}',
-        '**/__test_helpers__/*.{ts,tsx}',
+        '**/__test-helpers__/*.{ts,tsx}',
         '**/*.test.{ts,tsx}',
         '**/*.config.{ts,js}',
         '**/test-helpers/*.{ts,tsx}',
@@ -62,7 +62,7 @@ module.exports = {
     {
       files: [
         '**/__mocks__/*.{ts,tsx}',
-        '**/__test_helpers__/*.{ts,tsx}',
+        '**/__test-helpers__/*.{ts,tsx}',
         '**/*.test.{ts,tsx}',
         '**/test-helpers/*.{ts,tsx}',
       ],

@@ -6,11 +6,6 @@ import { PasswordAuthenticator } from './password-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 import { ERROR_PREFIX } from './constants.js';
 
-interface IsAuthResponse {
-  isAuthenticated: boolean;
-  loginUrl: string;
-}
-
 export function handleErrorResponse(response: FetchInterceptorResponse): FetchInterceptorResponse {
   if (!response.ok) {
     throw Error(
@@ -25,7 +20,6 @@ export function handleErrorResponse(response: FetchInterceptorResponse): FetchIn
 export function handleUnauthorizedResponse(
   response: FetchInterceptorResponse,
   auth: Authenticator,
-  url: string,
 ): FetchInterceptorResponse {
   auth.invalidate();
   // skip login redirect for token auth
@@ -39,17 +33,14 @@ export function handleUnauthorizedResponse(
   }
 
   if (auth instanceof SsoAuthenticator) {
-    // redirect to login page
-    void fetch(`${url}api/auth/isauth`, {
-      headers: { Internal: 'true' },
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((res: IsAuthResponse) => {
-        if (!res.isAuthenticated) {
-          window.location.href = `${res.loginUrl}?return_to=${window.location.href}`;
-        }
-      });
+    if (!auth.isAuthenticating()) {
+      // try to reauthenticate
+      void auth.authenticate();
+    }
+    // throw error to display while waiting for redirect
+    throw Error(
+      `${ERROR_PREFIX} Not authenticated. Please wait for redirect or check SSO provider.`,
+    );
   }
   return response;
 }

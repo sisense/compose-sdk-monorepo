@@ -9,7 +9,7 @@
 /* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { IndicatorLegacyChartDataOptions } from '../indicator_legacy_chart_data_options';
+import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options';
 import {
   BaseMeasure,
   FitSecondaryMeasure,

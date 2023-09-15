@@ -4,30 +4,48 @@ let baseConfig = {
   // To allow TypeDoc to resolve references across packages,
   // "declaration" and "declarationMap" in tsconfig.json must be set to true
   entryPointStrategy: 'packages',
-  plugin: ['./typedoc-plugins/typedoc-plugin-expand-type-aliases.cjs'],
-  readme: './quickstart.md',
+  plugin: ['./typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs'],
+  readme: './README.md',
   // Media directory that will be copied to the output file
   media: './media',
+  out: 'docs',
 };
 
-if (process.env.TYPEDOC_FORMAT === 'MARKDOWN') {
+if (process.env.TYPEDOC_FORMAT === 'MD') {
   baseConfig = {
     ...baseConfig,
-    plugin: ['typedoc-plugin-markdown', './typedoc-plugins/typedoc-plugin-expand-type-aliases.cjs'],
+    plugin: [
+      'typedoc-plugin-markdown',
+      './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
+    ],
+    githubPages: false,
+    outputFileStrategy: 'members',
+    flattenOutputFiles: false,
+    entryFileName: 'index.md',
+    indexFileName: 'index.md',
+    indexPageTitle: 'Compose SDK [BETA]',
+    skipIndexPage: false,
+    excludeGroups: false,
+    hidePageHeader: true,
+    hidePageTitle: false,
+    hideBreadcrumbs: true,
+    hideInPageTOC: true,
+    titleTemplate: '{kind} {name}',
+    readme: './README.md',
+    out: 'docs-md/sdk/modules',
   };
 }
 
 if (process.env.TYPEDOC_MODE === 'PUBLIC') {
-  /** @type {import('typedoc').TypeDocOptionValues} */
+  /** @type {import("typedoc").TypeDocOptionValues} */
   module.exports = {
     ...baseConfig,
     name: 'Compose SDK',
     entryPoints: ['packages/sdk-cli', 'packages/sdk-data', 'packages/sdk-ui'],
     hideGenerator: true,
-    out: 'docs',
   };
 } else {
-  /** @type {import('typedoc').TypeDocOptionValues} */
+  /** @type {import("typedoc").TypeDocOptionValues} */
   module.exports = {
     ...baseConfig,
     name: 'Compose SDK [INTERNAL]',

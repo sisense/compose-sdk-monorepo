@@ -1,1 +1,1 @@
-export * from './getDataFromQueryResult.js';
+export * from './get-data-from-query-result.js';

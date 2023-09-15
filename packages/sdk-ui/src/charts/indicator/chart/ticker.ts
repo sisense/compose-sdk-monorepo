@@ -8,7 +8,7 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-depth */
-import { IndicatorLegacyChartDataOptions } from '../indicator_legacy_chart_data_options';
+import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options';
 import { LegacyIndicatorChartOptions } from '../types';
 import { IndicatorHelper } from './indicator-helper';
 const $indicatorHelper = new IndicatorHelper();

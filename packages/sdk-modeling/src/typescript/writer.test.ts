@@ -5,7 +5,7 @@ import { writeJavascript, writeTypescript } from './writer.js';
 import {
   dimensionalModelECommerce,
   generatedModelECommerce,
-} from '../__mocks__/dataModelECommerce.js';
+} from '../__mocks__/data-model-ecommerce.js';
 import { Writable } from 'stream';
 
 // A class for mocking fs.createWriteStream.

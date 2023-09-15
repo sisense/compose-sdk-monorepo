@@ -1,19 +1,26 @@
 import { Alert, Tab, Tabs } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
-import { SisenseContextProvider } from '../components/sisense-context/SisenseContextProvider';
+import { ComponentType, Suspense, useEffect, useState } from 'react';
+import { SisenseContextProvider } from '../components/sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../props';
-import { ChartsFromExampleApp } from './pages/ChartsFromExampleApp';
-import { ECommerceDemo } from './pages/ECommerceDemo';
-import { MiscDemo } from './pages/MiscDemo';
-import { WidgetDemo } from './pages/WidgetDemo';
+import { loadAdditionalPages } from './load-additional-pages';
+import { ChartsFromExampleApp } from './pages/charts-from-example-app';
+import { ECommerceDemo } from './pages/ecommerce-demo';
+import { MiscDemo } from './pages/misc-demo';
+import { WidgetDemo } from './pages/widget-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
 // Simply add a page to the `pages` array and it will show up in `yarn dev`
 // Suggest adding a router or at least sessionStorage var for selectedTabIndex
 // if this becomes popular
-const pages = [WidgetDemo, ECommerceDemo, ChartsFromExampleApp, MiscDemo];
+const pages: ComponentType[] = [
+  WidgetDemo,
+  ECommerceDemo,
+  ChartsFromExampleApp,
+  MiscDemo,
+  ...loadAdditionalPages(),
+];
 
 const { VITE_APP_SISENSE_URL, VITE_APP_SISENSE_TOKEN } = import.meta.env;
 
@@ -37,7 +44,7 @@ export function App() {
   }, [selectedTabIndex]);
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       {shouldShowAlert && (
         <Alert severity="warning">
           One or more expected env vars are missing. You may want to check your
@@ -51,7 +58,7 @@ export function App() {
             onChange={(e, value: number) => setSelectedTabIndex(value)}
           >
             {pages.map((page, i) => (
-              <Tab key={i} label={page.name} sx={{ textTransform: 'none' }} />
+              <Tab key={i} label={page.name || `Page${i}`} sx={{ textTransform: 'none' }} />
             ))}
           </Tabs>
         </Box>
@@ -65,6 +72,6 @@ export function App() {
           </div>
         ))}
       </SisenseContextProvider>
-    </>
+    </Suspense>
   );
 }

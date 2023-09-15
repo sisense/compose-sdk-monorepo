@@ -30,6 +30,7 @@ export * from './dimensional-model/filters/filters.js';
  * greater than 1000.
  * ```tsx
  * <ExecuteQuery
+ *   dataSource={DM.DataSource}
  *   dimensions={[DM.Commerce.AgeRange]}
  *   measures={[measures.sum(DM.Commerce.Revenue)]}
  *   filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
@@ -63,6 +64,7 @@ export * from './dimensional-model/measures/measures.js';
  * Function `measures.sum` is used to create a measure that sums the `Revenue` column.
  * ```tsx
  * <ExecuteQuery
+ *   dataSource={DM.DataSource}
  *   dimensions={[DM.Commerce.AgeRange]}
  *   measures={[measures.sum(DM.Commerce.Revenue)]}
  *   filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
@@ -80,4 +82,4 @@ export * from './dimensional-model/measures/measures.js';
  */
 export * as measures from './dimensional-model/measures/factory.js';
 
-export * from './dimensional-model/simple_column_types.js';
+export * from './dimensional-model/simple-column-types.js';

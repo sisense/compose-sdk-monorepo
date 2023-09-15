@@ -14,7 +14,7 @@ Compose SDK is a Software Development Kit that enables a composable, code-driven
 - **Compose SDK is currently in Beta** - Packages, APIs, and anything else are bound to change
 - Compose SDK requires a Sisense license & access to a Sisense instance
 - Compose SDK supports Sisense version L2022.11 or newer
-- Compose SDK currently supports development using Typescript & React
+- Compose SDK currently supports development using JavaScript/Typescript and React
 - This repository is a monorepo containing all SDK packages. You can find the individual packages [here](https://github.com/orgs/sisense/packages?repo_name=compose-sdk-monorepo)
 
 ## Documentation
@@ -32,6 +32,23 @@ and [the Yarn version plugin](https://yarnpkg.com/features/release-workflow) for
 Using [Volta](https://docs.volta.sh/guide/getting-started) as
 your Node.js version manager is **strongly** recommended, but Node Version Manager `nvm` is also supported.
 Currently, the project is tested with Node.js 18.16.0 or newer.
+
+## Setup GitHub personal access token (classic)
+
+GitHub requires a (classic) personal access token (with `read:packages` permission)
+to access NPM packages in GitHub Packages Registry (GPR) — see the doc [here](https://docs.github.com/en/packages/learn-github-packages/about-permissions-for-github-packages#about-scopes-and-permissions-for-package-registries).
+
+Any developers working with this repo can easily generate an access token in their GitHub account and use it.
+Once you have that token value, from the root directory of the repo, run the following command:
+
+```
+yarn config set npmAuthToken [TOKEN_VALUE] -H
+```
+
+This will put the token in `.yarnrc.yml` in __your home directory__.
+This way, the `.yarnrc.yml` file in this repo will not be updated.
+
+This is a temporary solution, which will be no longer needed once our packages are in public NPM repository.
 
 ## Installation
 
@@ -56,4 +73,5 @@ From `packages/sdk-ui`, run:
 yarn storybook
 ```
 
-You can find more information about setting up an app using this SDK in [quickstart.md](quickstart.md).
+### Set up another app
+You can find more information about setting up an app using this SDK in [quickstart.md](./docs-md/sdk/quickstart.md).

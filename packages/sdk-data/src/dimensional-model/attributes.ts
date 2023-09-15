@@ -11,7 +11,7 @@ import { Attribute, LevelAttribute } from './interfaces.js';
 import { Sort, MetadataTypes, DateLevels } from './types.js';
 
 import { DimensionalElement, normalizeName } from './base.js';
-import { simpleColumnType } from './simple_column_types.js';
+import { simpleColumnType } from './simple-column-types.js';
 
 /**
  * @internal

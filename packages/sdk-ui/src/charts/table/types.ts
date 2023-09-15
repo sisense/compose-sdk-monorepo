@@ -1,5 +1,5 @@
-import { Column, DataTable } from '../../chart-data-processor/table_processor';
-import { TableDesignOptions } from '../../chart-options-processor/translations/design_options';
+import { Column, DataTable } from '../../chart-data-processor/table-processor';
+import { TableDesignOptions } from '../../chart-options-processor/translations/design-options';
 import { CompleteThemeSettings } from '../../types';
 import { TableDataOptionsInternal } from '../../chart-data-options/types';
 

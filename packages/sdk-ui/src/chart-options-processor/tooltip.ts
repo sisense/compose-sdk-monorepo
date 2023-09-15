@@ -4,8 +4,8 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { colorChineseSilver, colorWhite } from './chart_options_service';
-import { applyFormat, defaultConfig } from './translations/number_format_config';
+import { colorChineseSilver, colorWhite } from './chart-options-service';
+import { applyFormat, defaultConfig } from './translations/number-format-config';
 
 export type TooltipSettings = {
   enabled?: boolean;

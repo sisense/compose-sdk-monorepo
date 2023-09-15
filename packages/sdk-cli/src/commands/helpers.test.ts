@@ -7,8 +7,8 @@ import {
   rewriteDataModel,
   writeFile,
 } from './helpers.js';
-import { fieldsECommerce, dimensionalModelECommerce } from '../__mocks__/dataModelECommerce.js';
-import { fieldsOrdersDB, dimensionalModelOrdersDB } from '../__mocks__/dataModelOrdersDB.js';
+import { fieldsECommerce, dimensionalModelECommerce } from '../__mocks__/data-model-ecommerce.js';
+import { fieldsOrdersDB, dimensionalModelOrdersDB } from '../__mocks__/data-model-orders-db.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { DataModel } from '@sisense/sdk-data';
 import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';

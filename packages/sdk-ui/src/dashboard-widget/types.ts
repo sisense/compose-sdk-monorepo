@@ -85,7 +85,7 @@ export type BaseJaql = {
   table: string;
   column: string;
   title: string;
-  level?: string;
+  level?: 'years' | 'quarters' | 'months' | 'weeks' | 'minutes' | 'days';
   sort?: SortDirection;
 };
 
@@ -136,10 +136,45 @@ export type Jaql = BaseJaql | FormulaJaql | FilterJaql;
 
 type SeriesType = 'auto' | 'line' | 'spline' | 'areaspline' | 'bar' | 'area' | 'column';
 
+interface DecimalAbbreviations {
+  k: boolean;
+  m: boolean;
+  b: boolean;
+  t: boolean;
+}
+
+export enum CurrencyPosition {
+  PRE = 'pre',
+  POST = 'post',
+}
+
+export type NumericMask = {
+  isdefault?: boolean;
+  abbreviations?: DecimalAbbreviations;
+  decimals?: 'auto' | number;
+  currency?: { symbol: string; position: CurrencyPosition };
+  percent?: boolean;
+  number?: { separated: boolean };
+  separated?: boolean;
+  type?: string;
+};
+
+export type DatetimeMask = {
+  isdefault?: boolean;
+  years: string;
+  quarters: string;
+  months: string;
+  weeks: string;
+  minutes: string;
+  days: string;
+  type: string;
+  dateAndTime?: string;
+};
+
 export type PanelItem = {
   format?: {
     color?: PanelColorFormat;
-    mask?: Record<string, string>;
+    mask?: DatetimeMask | NumericMask;
     members?: PanelMembersFormat;
   };
   jaql: Jaql;
@@ -222,7 +257,7 @@ type AxisTitleStyle = {
   text?: string;
 };
 
-type AxisStyle = {
+export type AxisStyle = {
   enabled: boolean;
   ticks: boolean;
   labels: LabelsStyle;
@@ -230,6 +265,8 @@ type AxisStyle = {
   gridLines: boolean;
   isIntervalEnabled: boolean;
   logarithmic?: boolean;
+  min?: number | null;
+  max?: number | null;
 };
 
 type BaseWidgetStyle = {

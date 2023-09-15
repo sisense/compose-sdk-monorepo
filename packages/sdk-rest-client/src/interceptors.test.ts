@@ -24,7 +24,7 @@ describe('Auth interceptor', () => {
 
     const auth = new PasswordAuthenticator(fakeDeploymentUrl, 'user', 'pass');
 
-    expect(() => handleUnauthorizedResponse(response, auth, fakeDeploymentUrl)).toThrow();
+    expect(() => handleUnauthorizedResponse(response, auth)).toThrow();
   });
 
   it('should notify user about failed API token authentication', () => {
@@ -33,7 +33,7 @@ describe('Auth interceptor', () => {
     } as FetchInterceptorResponse;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
-    expect(() => handleUnauthorizedResponse(response, auth, fakeDeploymentUrl)).toThrow();
+    expect(() => handleUnauthorizedResponse(response, auth)).toThrow();
   });
 
   it('should notify user about failed WAT authentication', () => {
@@ -43,7 +43,7 @@ describe('Auth interceptor', () => {
 
     const auth = new WatAuthenticator(fakeDeploymentUrl, 'wat');
 
-    expect(() => handleUnauthorizedResponse(response, auth, fakeDeploymentUrl)).toThrow();
+    expect(() => handleUnauthorizedResponse(response, auth)).toThrow();
   });
 
   it('should redirect to login page for SSO authentication', async () => {
@@ -69,11 +69,21 @@ describe('Auth interceptor', () => {
       } as Response);
     });
 
-    handleUnauthorizedResponse(response, auth, fakeDeploymentUrl);
+    let caughtErr = '';
+
+    try {
+      handleUnauthorizedResponse(response, auth);
+    } catch (err) {
+      caughtErr = (<Error>err).message;
+    }
 
     // flush promises
     await new Promise((resolve) => setImmediate(resolve));
 
+    // check that useer will see meaningfull error on charts failed to render
+    expect(caughtErr).toBe(
+      '[request-error] Not authenticated. Please wait for redirect or check SSO provider.',
+    );
     expect(window.location.href).toBe(`${fakeLoginUrl}?return_to=${fakeDeploymentUrl}`);
   });
 });

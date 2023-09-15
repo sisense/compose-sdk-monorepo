@@ -1,7 +1,7 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import merge from 'ts-deepmerge';
-import { getBaseDateFnsLocale } from '../../chart-data-processor/data_table_date_period.js';
-import { getDefaultThemeSettings } from '../../chart-options-processor/theme_option_service.js';
+import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period.js';
+import { getDefaultThemeSettings } from '../../chart-options-processor/theme-option-service.js';
 
 import { defaultDateConfig } from '../../query/date-formats';
 import {

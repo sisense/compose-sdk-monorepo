@@ -7,14 +7,14 @@ import {
   PieSubtype,
   PolarSubtype,
   StackableSubtype,
-} from './chart-options-processor/subtype_to_design_options';
-import { IndicatorComponents } from './chart-options-processor/translations/design_options';
+} from './chart-options-processor/subtype-to-design-options';
+import { IndicatorComponents } from './chart-options-processor/translations/design-options';
 import {
   FunnelDirection,
   FunnelSize,
   FunnelType,
-} from './chart-options-processor/translations/funnel_plot_options';
-import { ScatterMarkerSize } from './chart-options-processor/translations/scatter_plot_options';
+} from './chart-options-processor/translations/funnel-plot-options';
+import { ScatterMarkerSize } from './chart-options-processor/translations/scatter-plot-options';
 import {
   CartesianChartType,
   ScatterChartType,
@@ -58,7 +58,7 @@ export type {
   ScatterMarkerSize,
 };
 
-export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply_date_format';
+export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
 
 /**
  * @internal
@@ -550,6 +550,8 @@ export interface ThemeSettings {
     backgroundColor?: string;
     /** Text color for primary buttons */
     primaryButtonTextColor?: string;
+    /** Hover color for primary buttons */
+    primaryButtonHoverColor?: string;
   };
 }
 

@@ -72,6 +72,7 @@ export const redThemeSettings: ThemeSettings = {
   general: {
     brandColor: '#ff0505',
     primaryButtonTextColor: '#3A4356',
+    primaryButtonHoverColor: '#F2B900',
     backgroundColor: '#16161C',
   },
 };

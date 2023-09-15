@@ -10,7 +10,7 @@ import {
   IndicatorChartDesignOptions,
   PolarChartDesignOptions,
   ScatterChartDesignOptions,
-} from './design_options';
+} from './design-options';
 
 export const POLAR_CHART_TYPES = ['polar'] as const;
 export type PolarChartType = (typeof POLAR_CHART_TYPES)[number];

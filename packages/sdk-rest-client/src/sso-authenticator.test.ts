@@ -23,8 +23,27 @@ describe('SSOAuthenticator', () => {
   });
 
   it('should authenticate successfully and return true', async () => {
-    const result = await auth.authenticate();
+    const fakeLoginUrl = 'http://login.url';
 
-    expect(result).toBe(true);
+    global.window = {
+      location: { href: fakeDeploymentUrl } as Location,
+    } as Window & typeof globalThis;
+
+    global.fetch = vi.fn().mockImplementation(() => {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            isAuthenticated: false,
+            loginUrl: fakeLoginUrl,
+          }),
+      } as Response);
+    });
+
+    await auth.authenticate();
+
+    // flush promises
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(window.location.href).toBe(`${fakeLoginUrl}?return_to=${fakeDeploymentUrl}`);
   });
 });

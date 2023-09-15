@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.0] - 2023-09-15
+
+### Added
+
+- Support React hook `useExecuteQueryByWidgetId` and component `ExecuteQueryByWidgetId`
+  to execute a data query extracted from an existing widget in the Sisense instance.
+
+### Changed
+- **Breaking:** Remove `username` and `password` from `SisenseContextProviderProps`
+- Fix axis min/max configuration
+- Match number format in the `DashboardWidget` component
+- Make `HighchartsOptions` importable from `@sisense/sdk-ui`
+- Update supported react/react-dom versions in `peerDependencies`: `^16.14.0`, `^17.0.0`, or `^18.0.0`
+- Rename directories and files to consistent kebab-case
+
 ## [0.9.0] - 2023-09-05
 
 ### Added

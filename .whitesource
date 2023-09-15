@@ -1,3 +1,14 @@
 {
-  "settingsInheritedFrom": "whitesource-config/whitesource-config@master"
+  "settingsInheritedFrom": "whitesource-config/whitesource-config@master",
+  "remediateSettings": {
+    "enableRenovate": true,
+    "baseBranches": ["master", "develop", "main"],
+    "extends": [
+      "config:base",
+      "schedule:quarterly",
+      ":ignoreUnstable"
+    ],
+    "prConcurrentLimit": 10,
+    "prHourlyLimit": 5
+  }
 }

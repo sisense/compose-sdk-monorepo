@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo, useState } from 'react';
 
-import {
-  ChartDataOptions,
-  DataPoint,
-  StyledColumn,
-  DrilldownOptions,
-  DrilldownSelection,
-} from '../../types';
+import { ChartDataOptions, DataPoint, DrilldownOptions, DrilldownSelection } from '../../types';
 import { Attribute, MembersFilter, filters as filterFactory } from '@sisense/sdk-data';
+import { translateColumnToAttribure } from '../../chart-data-options/utils';
 
 export const useDrilldown = (
   dataOptions: ChartDataOptions,
@@ -74,14 +69,14 @@ const processDrilldownSelections = (
   }
 
   const [firstCategory, ...otherCategories] = dataOptions.category;
-  let currentCategory = ((firstCategory as StyledColumn).column ?? firstCategory) as Attribute;
+  let currentCategory = firstCategory;
   const drilldownFilters: MembersFilter[] = [];
   const drilldownFiltersDisplayValues: string[][] = [];
 
   drilldownSelections.forEach(({ points, nextCategory }) => {
     drilldownFilters.push(
       filterFactory.members(
-        currentCategory,
+        translateColumnToAttribure(currentCategory),
         points.map((point) => `${point.categoryValue}`),
       ) as MembersFilter,
     );
@@ -94,7 +89,7 @@ const processDrilldownSelections = (
   return {
     drilldownFilters,
     drilldownFiltersDisplayValues,
-    drilldownCategory: currentCategory,
+    drilldownCategory: translateColumnToAttribure(currentCategory),
     dataOptionsWithDrilldown: {
       ...dataOptions,
       category: [currentCategory, ...otherCategories],

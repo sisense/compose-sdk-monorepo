@@ -10,7 +10,7 @@ import { NumericSimple } from './numeric-simple.js';
 import { NumericBar } from './numeric-bar.js';
 import { Gauge } from './gauge.js';
 import { Ticker } from './ticker.js';
-import { IndicatorLegacyChartDataOptions } from '../indicator_legacy_chart_data_options.js';
+import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options.js';
 import { LegacyIndicatorChartOptions, LegacyIndicatorChartTypes } from '../types.js';
 
 const $indicatorHelper = new IndicatorHelper();

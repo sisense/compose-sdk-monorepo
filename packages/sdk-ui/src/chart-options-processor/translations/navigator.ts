@@ -1,6 +1,6 @@
-import { colorChineseSilver, colorWhite } from '../chart_options_service';
-import { AxisSettings } from './axis_section';
-import { HighchartsType } from './translations_to_highcharts';
+import { colorChineseSilver, colorWhite } from '../chart-options-service';
+import { AxisSettings } from './axis-section';
+import { HighchartsType } from './translations-to-highcharts';
 
 type Navigator = {
   series: { type: HighchartsType; dataGrouping: { enabled: boolean } };
