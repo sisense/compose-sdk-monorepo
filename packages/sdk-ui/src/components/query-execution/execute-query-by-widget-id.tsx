@@ -32,23 +32,36 @@ import { useExecuteQueryByWidgetId } from './use-execute-query-by-widget-id';
 export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdProps> =
   asSisenseComponent({
     componentName: 'ExecuteQueryByWidgetId',
-  })(({ widgetOid, dashboardOid, children, onDataChanged }) => {
-    const { data, query, error } = useExecuteQueryByWidgetId({
+  })(
+    ({
       widgetOid,
       dashboardOid,
-    });
+      children,
+      onDataChanged,
+      filters,
+      highlights,
+      filtersMergeStrategy,
+    }) => {
+      const { data, query, error } = useExecuteQueryByWidgetId({
+        widgetOid,
+        dashboardOid,
+        filters,
+        highlights,
+        filtersMergeStrategy,
+      });
 
-    const [prevData, setPrevData] = useState(data);
-    if (prevData !== data) {
-      setPrevData(data);
-      if (data && query) {
-        onDataChanged?.(data, query);
+      const [prevData, setPrevData] = useState(data);
+      if (prevData !== data) {
+        setPrevData(data);
+        if (data && query) {
+          onDataChanged?.(data, query);
+        }
       }
-    }
 
-    if (error) {
-      throw error;
-    }
+      if (error) {
+        throw error;
+      }
 
-    return <>{data && query && children?.(data, query)}</>;
-  });
+      return <>{data && query && children?.(data, query)}</>;
+    },
+  );

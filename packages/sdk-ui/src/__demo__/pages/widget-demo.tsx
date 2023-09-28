@@ -12,14 +12,13 @@ const styleOptions = {};
 const filters: Filter[] = [];
 
 const drilldownOptions = {
-  drilldownCategories: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
+  drilldownDimensions: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
 };
 
 export const WidgetDemo = () => (
   <div className="csdk-h-fit">
     With Drilldown
     <ChartWidget
-      dataSource={DM.DataSource}
       chartType="bar"
       filters={filters}
       dataOptions={dataOptions}
@@ -28,7 +27,6 @@ export const WidgetDemo = () => (
     />
     No Drilldown
     <ChartWidget
-      dataSource={DM.DataSource}
       chartType="bar"
       filters={filters}
       dataOptions={dataOptions}

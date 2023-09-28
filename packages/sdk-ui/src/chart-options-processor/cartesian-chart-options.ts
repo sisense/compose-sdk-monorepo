@@ -32,7 +32,7 @@ import {
   getColorSetting,
   formatSeriesContinuousXAxis,
 } from './translations/translations-to-highcharts';
-import { getTooltipSettings } from './tooltip';
+import { getTooltipSettings } from './translations/tooltip';
 import merge from 'deepmerge';
 import { chartOptionsDefaults } from './defaults/cartesian';
 import { onlyY } from '../chart-data/utils';

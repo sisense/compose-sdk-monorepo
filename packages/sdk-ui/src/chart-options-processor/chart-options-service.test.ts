@@ -339,7 +339,7 @@ it('for cartesian data, limit series to 50 and categories to 100', () => {
     },
     TestChartDataOptions,
   );
-  expect(chartOptions?.xAxis[0].categories?.length).toBe(100);
+  expect(chartOptions?.xAxis?.[0].categories?.length).toBe(100);
   expect(chartOptions?.series.length).toBe(50);
 });
 
@@ -653,9 +653,9 @@ describe('cartesianData', () => {
     );
     // x-axis values are formatted when the chart is rendered,
     // for the test we check that the formatter method is properly defined
-    const formatterNoFormat = chartOptionsNoFormat.xAxis[0].labels?.formatter;
+    const formatterNoFormat = chartOptionsNoFormat.xAxis?.[0].labels?.formatter;
     expect(
-      chartOptionsNoFormat.xAxis[0].categories?.map((value) => {
+      chartOptionsNoFormat.xAxis?.[0].categories?.map((value) => {
         if (!formatterNoFormat) return 'no formatter defined';
 
         const point = {
@@ -665,7 +665,7 @@ describe('cartesianData', () => {
 
         return point.formatter.call({
           value,
-          axis: { categories: chartOptionsNoFormat.xAxis[0].categories || [] },
+          axis: { categories: chartOptionsNoFormat.xAxis?.[0].categories || [] },
         });
       }),
     ).toEqual(['15', '20', '25']);
@@ -690,9 +690,9 @@ describe('cartesianData', () => {
     );
     // x-axis values are formatted when the chart is rendered,
     // for the test we check that the formatter method is properly defined
-    const formatter = chartOptions.xAxis[0].labels?.formatter;
+    const formatter = chartOptions.xAxis?.[0].labels?.formatter;
     expect(
-      chartOptions.xAxis[0].categories?.map((value) => {
+      chartOptions.xAxis?.[0].categories?.map((value) => {
         if (!formatter) return 'no formatter defined';
 
         const point = {
@@ -702,7 +702,7 @@ describe('cartesianData', () => {
 
         return point.formatter.call({
           value,
-          axis: { categories: chartOptionsNoFormat.xAxis[0].categories || [] },
+          axis: { categories: chartOptionsNoFormat.xAxis?.[0].categories || [] },
         });
       }),
     ).toEqual(['15.0', '20.0', '25.0']);
@@ -759,7 +759,7 @@ describe('cartesianData', () => {
       TestChartDataOptions,
     );
 
-    expect(chartOptions.xAxis[0].categories).toEqual(['Pies', 'Wine', 'Pasta']);
+    expect(chartOptions.xAxis?.[0].categories).toEqual(['Pies', 'Wine', 'Pasta']);
     expect(chartOptions.series[0].data).toMatchObject([
       { selected: false },
       { selected: true, marker: { enabled: false } },
@@ -803,7 +803,7 @@ describe('cartesianData', () => {
     expect(chartData.series).toHaveLength(2);
     expect(chartData.xValues.map((x) => x.key)).toHaveLength(3);
     expect(chartOptions.series).toHaveLength(1);
-    expect(chartOptions.xAxis[0].categories ?? []).toHaveLength(2);
+    expect(chartOptions.xAxis?.[0].categories ?? []).toHaveLength(2);
   });
 });
 

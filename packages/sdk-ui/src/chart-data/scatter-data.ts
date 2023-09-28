@@ -12,6 +12,8 @@ import {
   Value,
   isCategory,
 } from '../chart-data-options/types';
+import { isNumber } from '@sisense/sdk-data';
+import { applyFormatPlainText } from '../chart-options-processor/translations/number-format-config';
 
 export const defaultScatterDataValue: ComparableData = { displayValue: '0' };
 
@@ -96,13 +98,42 @@ export const groupData = (
   dataTable: DataTable,
 ): ScatterDataTable => {
   const indexes = defineIndexes(chartDataOptions, dataTable);
-  return dataTable.rows.map((row) => ({
-    xAxis: defineValue(indexes.x, row),
-    yAxis: defineValue(indexes.y, row),
-    breakByPoint: row[indexes.breakByPoint],
-    breakByColor: row[indexes.breakByColor],
-    size: row[indexes.size],
-  }));
+  const pointNumFormatConfig =
+    chartDataOptions?.breakByPoint && isNumber(chartDataOptions.breakByPoint.type)
+      ? chartDataOptions.breakByPoint?.numberFormatConfig
+      : undefined;
+  const colorNumFormatConfig =
+    chartDataOptions?.breakByColor &&
+    (!isCategory(chartDataOptions.breakByColor) || isNumber(chartDataOptions.breakByColor.type))
+      ? chartDataOptions.breakByColor?.numberFormatConfig
+      : undefined;
+
+  return dataTable.rows.map((row) => {
+    const byPointData = { ...row[indexes.breakByPoint] };
+    if (pointNumFormatConfig)
+      byPointData.displayValue = applyFormatPlainText(
+        pointNumFormatConfig,
+        byPointData.compareValue
+          ? (byPointData.compareValue.value as number)
+          : parseFloat(byPointData.displayValue),
+      );
+    const byColorData = { ...row[indexes.breakByColor] };
+    if (colorNumFormatConfig)
+      byColorData.displayValue = applyFormatPlainText(
+        colorNumFormatConfig,
+        byColorData.compareValue
+          ? (byColorData.compareValue.value as number)
+          : parseFloat(byColorData.displayValue),
+      );
+
+    return {
+      xAxis: defineValue(indexes.x, row),
+      yAxis: defineValue(indexes.y, row),
+      breakByPoint: byPointData,
+      breakByColor: byColorData,
+      size: row[indexes.size],
+    };
+  });
 };
 
 /**

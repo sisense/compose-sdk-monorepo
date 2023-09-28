@@ -98,13 +98,24 @@ export type PolarSubtype = 'polar/column' | 'polar/area' | 'polar/line';
  */
 export type IndicatorSubtype = 'indicator/numeric' | 'indicator/gauge';
 
+/**
+ *
+ * Subtype of {@link TreemapChart}
+ *
+ * **Values**
+ *
+ * - `treemap` - default treemap.
+ */
+export type TreemapSubtype = 'treemap';
+
 export type ChartSubtype =
   | LineSubtype
   | AreaSubtype
   | StackableSubtype
   | PieSubtype
   | PolarSubtype
-  | IndicatorSubtype;
+  | IndicatorSubtype
+  | TreemapSubtype;
 
 export const chartSubtypeToDesignOptions = Object.freeze<
   Record<
@@ -140,4 +151,5 @@ export const chartSubtypeToDesignOptions = Object.freeze<
   'polar/line': { polarType: 'line' },
   'indicator/numeric': { indicatorType: 'numeric' },
   'indicator/gauge': { indicatorType: 'gauge' },
+  treemap: {},
 });

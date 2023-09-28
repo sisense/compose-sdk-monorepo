@@ -92,6 +92,16 @@ CategoryStyle.granularity
 
 ***
 
+### isColored
+
+> **isColored**?: `boolean`
+
+#### Inherited from
+
+CategoryStyle.isColored
+
+***
+
 ### numberFormatConfig
 
 > **numberFormatConfig**?: [`NumberFormatConfig`](../type-aliases/type-alias.NumberFormatConfig.md)

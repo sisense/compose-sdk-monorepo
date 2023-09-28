@@ -1,13 +1,19 @@
+/* eslint-disable complexity */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Alert, Tab, Tabs } from '@mui/material';
 import { Box } from '@mui/system';
-import { ComponentType, Suspense, useEffect, useState } from 'react';
+import { ComponentType, Suspense, useState } from 'react';
 import { SisenseContextProvider } from '../components/sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '../props';
 import { loadAdditionalPages } from './load-additional-pages';
 import { ChartsFromExampleApp } from './pages/charts-from-example-app';
 import { ECommerceDemo } from './pages/ecommerce-demo';
 import { MiscDemo } from './pages/misc-demo';
 import { WidgetDemo } from './pages/widget-demo';
+import { NumberFormating } from './pages/NumberFormating';
+import { DrilldownWidgetDemo } from './pages/drilldown-widget-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -16,32 +22,45 @@ import { WidgetDemo } from './pages/widget-demo';
 // if this becomes popular
 const pages: ComponentType[] = [
   WidgetDemo,
+  NumberFormating,
   ECommerceDemo,
   ChartsFromExampleApp,
   MiscDemo,
+  DrilldownWidgetDemo,
   ...loadAdditionalPages(),
 ];
 
-const { VITE_APP_SISENSE_URL, VITE_APP_SISENSE_TOKEN } = import.meta.env;
+const {
+  VITE_APP_SISENSE_URL,
+  VITE_APP_SISENSE_TOKEN,
+  VITE_APP_SISENSE_WAT,
+  VITE_APP_SISENSE_SSO_ENABLED,
+} = import.meta.env;
 
-const selectedTabIndexKey = 'selectedTabIndex';
-
-export function App() {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(
-    Math.min(Number(sessionStorage.getItem(selectedTabIndexKey)) || 0, pages.length - 1),
-  );
-
-  const shouldShowAlert = !VITE_APP_SISENSE_URL || !VITE_APP_SISENSE_TOKEN;
-
-  const sisenseContextProps: SisenseContextProviderProps = {
-    url: VITE_APP_SISENSE_URL ?? '',
-    token: VITE_APP_SISENSE_TOKEN,
+const sisenseContextProviderProps = () => {
+  const baseOptions = {
+    url: VITE_APP_SISENSE_URL || '',
     defaultDataSource: 'Sample ECommerce',
   };
+  const wat = VITE_APP_SISENSE_WAT;
+  const token = VITE_APP_SISENSE_TOKEN;
+  const ssoEnabled = VITE_APP_SISENSE_SSO_ENABLED;
 
-  useEffect(() => {
-    sessionStorage.setItem(selectedTabIndexKey, selectedTabIndex.toString());
-  }, [selectedTabIndex]);
+  if (ssoEnabled) {
+    return { ...baseOptions, ssoEnabled: ssoEnabled?.toLowercase() === 'true' };
+  } else if (wat) {
+    return { ...baseOptions, wat };
+  } else if (token) {
+    return { ...baseOptions, token };
+  } else {
+    return baseOptions;
+  }
+};
+
+export function App() {
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+
+  const shouldShowAlert = !VITE_APP_SISENSE_URL;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -51,7 +70,7 @@ export function App() {
           <code>.env.local</code> file.
         </Alert>
       )}
-      <SisenseContextProvider {...sisenseContextProps}>
+      <SisenseContextProvider {...sisenseContextProviderProps()}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={selectedTabIndex}

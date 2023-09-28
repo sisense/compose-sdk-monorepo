@@ -5,7 +5,7 @@ import { fontStyleDefault } from '../defaults/cartesian';
 import { ValueLabelSettings } from './value-label-section';
 import { defaultConfig, applyFormatPlainText } from './number-format-config';
 import { NumberFormatConfig } from '../../types';
-import { InternalSeries } from '../tooltip';
+import { InternalSeries } from './tooltip-utils';
 import { FunnelChartDesignOptions } from './design-options';
 import { withPercentSign, fraction, fromFraction } from '../../chart-data/utils';
 import {

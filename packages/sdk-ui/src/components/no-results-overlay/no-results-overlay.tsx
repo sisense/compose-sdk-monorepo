@@ -2,7 +2,7 @@ import styles from './no-results-overlay.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useThemeContext } from '../theme-provider';
 import { ChartType, TableType } from '../../types';
-import { noResultOverlayImages } from './images';
+import { getNoResultOverlayImage } from './images';
 import { translation } from '../../locales/en';
 
 /**
@@ -30,7 +30,7 @@ export const NoResultsOverlay = ({ iconType }: { iconType: ChartType | TableType
     }
   }, []);
 
-  const icon = noResultOverlayImages[iconType];
+  const icon = getNoResultOverlayImage(iconType);
 
   return (
     <div ref={wrapper} className={styles.wrapper}>

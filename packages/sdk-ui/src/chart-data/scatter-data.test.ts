@@ -2,6 +2,7 @@ import { buildCategories, defaultScatterDataValue, groupData } from './scatter-d
 import { ScatterDataTable } from './types';
 import { DataTable } from '../chart-data-processor/table-processor';
 import { ScatterChartDataOptionsInternal } from '../chart-data-options/types';
+import { defaultConfig } from '../chart-options-processor/translations/number-format-config';
 
 describe('Scatter Chart Data', () => {
   const mockData: DataTable = {
@@ -27,7 +28,7 @@ describe('Scatter Chart Data', () => {
           displayValue: 'S2',
         },
         {
-          displayValue: '34',
+          displayValue: '34.001234',
         },
       ],
     ],
@@ -88,7 +89,7 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill break by / point', () => {
       const dataOptions = {
-        breakByPoint: { name: 'col_1' },
+        breakByPoint: { name: 'col_1', type: 'string' },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -108,7 +109,7 @@ describe('Scatter Chart Data', () => {
       const dataOptions = {
         x: { name: 'col_1' },
         y: { name: 'col_2' },
-        breakByPoint: { name: 'col_3' },
+        breakByPoint: { name: 'col_3', type: 'string' },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -124,9 +125,39 @@ describe('Scatter Chart Data', () => {
       expect(groupedData).toMatchObject(expected);
     });
 
+    it('should correct fill x-axis, y-axis, point with numeric break by', () => {
+      const dataOptions = {
+        x: { name: 'col_1' },
+        y: { name: 'col_2' },
+        breakByPoint: {
+          name: 'col_5',
+          type: 'number',
+          numberFormatConfig: { ...defaultConfig, decimalScale: 1 },
+        },
+        breakByColor: {
+          name: 'col_5',
+          type: 'number',
+          numberFormatConfig: { ...defaultConfig, decimalScale: 2 },
+        },
+      } as ScatterChartDataOptionsInternal;
+
+      const groupedData = groupData(dataOptions, mockData);
+
+      const expected = [
+        {
+          xAxis: { displayValue: '7' },
+          yAxis: { displayValue: '14' },
+          breakByPoint: { displayValue: '34.0' },
+          breakByColor: { displayValue: '34.00' },
+        },
+      ];
+
+      expect(groupedData).toMatchObject(expected);
+    });
+
     it('should correct fill break by / color', () => {
       const dataOptions = {
-        breakByColor: { name: 'col_1' },
+        breakByColor: { name: 'col_1', type: 'string' },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -146,7 +177,7 @@ describe('Scatter Chart Data', () => {
       const dataOptions = {
         x: { name: 'col_1' },
         y: { name: 'col_2' },
-        breakByColor: { name: 'col_3' },
+        breakByColor: { name: 'col_3', type: 'string' },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -173,7 +204,7 @@ describe('Scatter Chart Data', () => {
         {
           xAxis: defaultScatterDataValue,
           yAxis: defaultScatterDataValue,
-          size: { displayValue: '34' },
+          size: { displayValue: '34.001234' },
         },
       ];
 
@@ -184,7 +215,7 @@ describe('Scatter Chart Data', () => {
       const dataOptions = {
         x: { name: 'col_1' },
         y: { name: 'col_2' },
-        breakByPoint: { name: 'col_3' },
+        breakByPoint: { name: 'col_3', type: 'string' },
         size: { name: 'col_5' },
       } as ScatterChartDataOptionsInternal;
 
@@ -195,7 +226,7 @@ describe('Scatter Chart Data', () => {
           xAxis: { displayValue: '7' },
           yAxis: { displayValue: '14' },
           breakByPoint: { displayValue: 'S1' },
-          size: { displayValue: '34' },
+          size: { displayValue: '34.001234' },
         },
       ];
 

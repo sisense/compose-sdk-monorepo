@@ -32,7 +32,7 @@ export const createCompareValue = (
     value,
     valueUndefined,
     valueIsNaN,
-    lowercaseValue,
+    ...(lowercaseValue && { lowercaseValue }),
   };
 };
 

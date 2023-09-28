@@ -37,7 +37,7 @@ Drill-down capability is enabled.
     breakBy: [],
   }}
   drilldownOptions={{
-    drilldownCategories: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
+    drilldownDimensions: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
   }}
 />
 ```

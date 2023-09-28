@@ -6,9 +6,9 @@
 import React, { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../components/chart';
-import { DataPoint, CompleteThemeSettings } from '../types';
+import { DataPoint, CompleteThemeSettings, MenuPosition } from '../types';
 import { ChartWidgetProps } from '../props';
-import { ContextMenu, MenuPosition } from './common/context-menu';
+import { ContextMenu } from './common/context-menu';
 import { useWidgetDrilldown } from './common/use-widget-drilldown';
 import { WidgetHeader } from './common/widget-header';
 import { ThemeProvider, useThemeContext } from '../components/theme-provider';
@@ -34,7 +34,7 @@ import { DynamicSizeContainer, getWidgetDefaultSize } from '../components/dynami
  *     breakBy: [],
  *   }}
  *   drilldownOptions={{
- *     drilldownCategories: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
+ *     drilldownDimensions: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
  *   }}
  * />
  * ```

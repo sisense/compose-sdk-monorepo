@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable complexity */
 /* eslint-disable sonarjs/cognitive-complexity */
@@ -27,6 +28,9 @@ const oneKilo = 1000;
 const oneMillion = oneKilo * 1000;
 const oneBillion = oneMillion * 1000;
 const oneTrillion = oneBillion * 1000;
+const localeNumericSep = (1000.1).toLocaleString().replace(/\d/g, '');
+const thousandSep = localeNumericSep[0];
+const decimalSep = localeNumericSep[1];
 
 export const defaultConfig: NumberFormatConfig = {
   name: 'Numbers',
@@ -125,9 +129,10 @@ export const applyFormat = (config: NumberFormatConfig, value: number) => {
   // while `numericFormatter` simply truncates the decimal portion beyond `decimalScale`.
   return numericFormatter(`${roundNumber(newValue, decimalScale)}`, {
     displayType: 'text',
-    thousandSeparator: thousandSeparator,
+    thousandSeparator: thousandSeparator ? thousandSep : undefined,
     fixedDecimalScale: fixedDecimalScale,
     decimalScale: decimalScale,
+    decimalSeparator: decimalSep,
     prefix: prefix,
     suffix: suffix,
   });

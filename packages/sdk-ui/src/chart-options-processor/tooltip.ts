@@ -6,19 +6,14 @@ import {
 } from '../chart-data-options/types';
 import { colorChineseSilver, colorWhite } from './chart-options-service';
 import { applyFormat, defaultConfig } from './translations/number-format-config';
+import { TooltipOptions } from '@sisense/sisense-charts';
 
-export type TooltipSettings = {
-  enabled?: boolean;
-  animation?: boolean;
-  backgroundColor?: string;
-  borderColor?: string;
-  borderRadius?: number;
-  borderWidth?: number;
-  useHTML?: boolean;
-  formatter?: () => string;
-  style?: {
-    fontFamily?: string;
-  };
+export type TooltipSettings = TooltipOptions;
+
+export type InternalSeriesNode = {
+  val: number;
+  name: string;
+  parentNode?: InternalSeriesNode;
 };
 
 export type InternalSeries = {
@@ -29,8 +24,10 @@ export type InternalSeries = {
     name: string;
     color: string;
     custom?: { number1?: number; string1?: string; xDisplayValue?: string };
+    node?: InternalSeriesNode;
   };
   percentage?: number;
+  color?: string;
 };
 
 export const getTooltipSettings = (

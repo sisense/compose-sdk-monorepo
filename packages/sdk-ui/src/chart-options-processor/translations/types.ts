@@ -10,6 +10,7 @@ import {
   IndicatorChartDesignOptions,
   PolarChartDesignOptions,
   ScatterChartDesignOptions,
+  TreemapChartDesignOptions,
 } from './design-options';
 
 export const POLAR_CHART_TYPES = ['polar'] as const;
@@ -25,7 +26,7 @@ export const CARTESIAN_CHART_TYPES = [
 /** Cartesian family of chart types @expandType */
 export type CartesianChartType = (typeof CARTESIAN_CHART_TYPES)[number];
 
-export const CATEGORICAL_CHART_TYPES = ['pie', 'funnel'] as const;
+export const CATEGORICAL_CHART_TYPES = ['pie', 'funnel', 'treemap'] as const;
 /** Categorical family of chart types  @expandType */
 export type CategoricalChartType = (typeof CATEGORICAL_CHART_TYPES)[number];
 
@@ -58,7 +59,8 @@ export type ChartDesignOptions =
   | FunnelChartDesignOptions
   | PolarChartDesignOptions
   | IndicatorChartDesignOptions
-  | ScatterChartDesignOptions;
+  | ScatterChartDesignOptions
+  | TreemapChartDesignOptions;
 
 export type ChartConfig = {
   chartType: ChartType;

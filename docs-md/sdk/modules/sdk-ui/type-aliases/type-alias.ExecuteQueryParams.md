@@ -28,6 +28,16 @@ Dimensions of the query
 
 ***
 
+### `enabled`
+
+**enabled**?: `boolean`
+
+Boolean flag to control if query is executed
+
+If not specified, the default value is `true`
+
+***
+
 ### `filters`
 
 **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]

@@ -4,7 +4,7 @@
 import { Style } from '../chart-options-service';
 import { defaultConfig, applyFormatPlainText, NumberFormatConfig } from './number-format-config';
 import { AxisOrientation } from './axis-section';
-import { InternalSeries } from '../tooltip';
+import { InternalSeries } from './tooltip-utils';
 import { PolarType } from './design-options';
 
 export type ValueLabel = 'horizontal' | 'diagonal' | 'vertical' | null;

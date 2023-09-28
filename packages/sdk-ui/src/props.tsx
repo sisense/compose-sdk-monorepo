@@ -19,6 +19,10 @@ import {
   TableStyleOptions,
   ThemeOid,
   WidgetStyleOptions,
+  TreemapStyleOptions,
+  CustomDrilldownResult,
+  MenuPosition,
+  MenuItemSection,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { PropsWithChildren, ReactNode } from 'react';
@@ -32,8 +36,8 @@ import {
   DataPointsEventHandler,
 } from './chart-options-processor/apply-event-handlers';
 import { AppConfig } from './app/client-application';
-import { MenuItemSection } from './widgets/common/context-menu';
 import { ExecuteQueryParams } from './components/query-execution';
+import { FiltersMergeStrategy } from './dashboard-widget/types';
 
 export type { DataPointEventHandler, DataPointsEventHandler, MenuItemSection, HighchartsOptions };
 
@@ -511,6 +515,12 @@ export interface DashboardWidgetProps
    */
   highlights?: Filter[];
   /**
+   * {@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy}
+   *
+   * @category Data
+   */
+  filtersMergeStrategy?: FiltersMergeStrategy;
+  /**
    * Title of the widget
    *
    * If not specified, it takes the existing value from the widget configuration.
@@ -605,7 +615,7 @@ export interface ChartWidgetProps extends ChartEventProps {
    *
    * @category Data
    */
-  dataSource: DataSource;
+  dataSource?: DataSource;
 
   /**
    * Filters that will slice query results
@@ -716,7 +726,7 @@ export interface TableWidgetProps {
    *
    * @category Data
    */
-  dataSource: DataSource;
+  dataSource?: DataSource;
 
   /**
    * Filters that will slice query results
@@ -785,9 +795,146 @@ export interface ExecuteQueryByWidgetIdProps {
   /** Identifier of the dashboard that contains the widget */
   dashboardOid: string;
 
+  /**
+   * Filters that will slice query results.
+   *
+   * The provided filters will be merged with the existing widget filters based on `filtersMergeStrategy`
+   */
+  filters?: Filter[];
+
+  /** Highlight filters that will highlight results that pass filter criteria */
+  highlights?: Filter[];
+
+  /**
+   * Strategy for merging the existing widget filters with the filters provided via the `filters` prop:
+   *
+   * - `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
+   * - `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
+   * - `codeOnly` - applies only the provided filters and completely ignores the widget filters.
+   *
+   * If not specified, the default strategy is `widgetFirst`.
+   */
+  filtersMergeStrategy?: FiltersMergeStrategy;
+
   /** Function as child component that is called to render the query results */
   children?: (queryResult: QueryResultData, queryParams: ExecuteQueryParams) => ReactNode;
 
   /** Callback function that is evaluated when query results are ready */
   onDataChanged?: (data: QueryResultData, queryParams: ExecuteQueryParams) => void;
 }
+
+/**
+ * Props of the {@link TreemapChart} component.
+ */
+export interface TreemapChartProps extends BaseChartProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: CategoricalChartDataOptions;
+  /**
+   * Configuration that define functional style of the various chart elements
+   *
+   * @category Chart
+   */
+  styleOptions?: TreemapStyleOptions;
+}
+
+/**
+ * Props for {@link ContextMenu} component.
+ */
+export type ContextMenuProps = {
+  /**
+   * Position of the context menu
+   *
+   * @category Widget
+   */
+  position?: MenuPosition | null;
+  /**
+   * Callback function that is evaluated when context menu is closed
+   *
+   * @category Widget
+   */
+  closeContextMenu: () => void;
+  /**
+   * Sections of menu items
+   *
+   * @category Widget
+   */
+  itemSections?: MenuItemSection[];
+  /**
+   * React nodes to be rendered at the bottom of the context menu
+   *
+   * @category Widget
+   */
+  children?: React.ReactNode;
+};
+
+export type DrilldownBreadcrumbsProps = {
+  /**
+   * List of drilldown filters formatted to be displayed as breadcrumbs
+   *
+   * @category Widget
+   */
+  filtersDisplayValues: string[][];
+  /**
+   * Currently selected drilldown dimension
+   *
+   * @category Widget
+   */
+  currentDimension: Attribute;
+  /**
+   * Callback function that is evaluated when X button is clicked
+   *
+   * @category Widget
+   */
+  clearDrilldownSelections: () => void;
+  /**
+   * Callback function that is evaluated when a breadcrumb is clicked
+   *
+   * @category Widget
+   */
+  sliceDrilldownSelections: (i: number) => void;
+};
+
+/**
+ * Props for the {@link DrilldownWidget} component
+ */
+export type DrilldownWidgetProps = {
+  /**
+   * List of dimensions to allow drilldowns on
+   *
+   * @category Widget
+   */
+  drilldownDimensions: Attribute[];
+  /**
+   * Initial dimension to apply first set of filters to
+   *
+   * @category Widget
+   */
+  initialDimension: Attribute;
+  /**
+   * React component to be rendered as breadcrumbs
+   *
+   * {@link DrilldownBreadcrumbs} will be used if not provided
+   *
+   * @category Widget
+   */
+  breadcrumbsComponent?: (drilldownBreadcrumbProps: DrilldownBreadcrumbsProps) => JSX.Element;
+  /**
+   * React component to be rendered as context menu
+   *
+   * {@link ContextMenu} will be used if not provided
+   *
+   * @category Widget
+   */
+  contextMenuComponent?: (contextMenuProps: ContextMenuProps) => JSX.Element;
+  /**
+   * A function that allows to pass calculated drilldown filters
+   * and new dimension to a ReactNode to be rendered (custom chart)
+   *
+   * @category Widget
+   */
+  children: (customDrilldownResult: CustomDrilldownResult) => ReactNode;
+};

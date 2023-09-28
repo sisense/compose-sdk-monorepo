@@ -7,7 +7,7 @@ import {
   ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
 } from '../../chart-data-options/types';
-import { InternalSeries } from '../tooltip';
+import { InternalSeries } from './tooltip-utils';
 
 export const DefaultPieLabels: PieLabels = {
   enabled: true,

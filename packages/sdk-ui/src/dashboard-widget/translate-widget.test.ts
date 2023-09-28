@@ -219,18 +219,18 @@ describe('translate widget', () => {
       const { category } = dataOptions as CartesianChartDataOptions;
 
       verifyColumn(category[0], widget.metadata.panels[0].items[0].parent!.parent!);
-      verifyColumn(drilldownOptions?.drilldownCategories![1]!, widget.metadata.panels[0].items[0]);
+      verifyColumn(drilldownOptions?.drilldownDimensions![1]!, widget.metadata.panels[0].items[0]);
       verifyColumn(
-        drilldownOptions?.drilldownCategories![0]!,
+        drilldownOptions?.drilldownDimensions![0]!,
         widget.metadata.panels[0].items[0].parent!,
       );
 
       verifyColumn(
-        drilldownOptions?.drilldownSelections![1].nextCategory!,
+        drilldownOptions?.drilldownSelections![1].nextDimension!,
         widget.metadata.panels[0].items[0],
       );
       verifyColumn(
-        drilldownOptions?.drilldownSelections![0].nextCategory!,
+        drilldownOptions?.drilldownSelections![0].nextDimension!,
         widget.metadata.panels[0].items[0].parent!,
       );
       expect(drilldownOptions?.drilldownSelections![1].points).toEqual([

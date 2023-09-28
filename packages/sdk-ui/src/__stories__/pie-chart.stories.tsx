@@ -20,36 +20,6 @@ const styleOptions: PieStyleOptions = {
     enabled: true,
     position: 'bottom',
   },
-  navigator: {
-    enabled: true,
-  },
-  markers: { enabled: true, fill: 'hollow', size: 'small' },
-  xAxis: {
-    enabled: true,
-    gridLines: true,
-    isIntervalEnabled: false,
-    labels: {
-      enabled: true,
-    },
-    logarithmic: false,
-    title: {
-      enabled: true,
-      text: 'X Axis title',
-    },
-  },
-  yAxis: {
-    enabled: true,
-    gridLines: true,
-    isIntervalEnabled: false,
-    labels: {
-      enabled: true,
-    },
-    logarithmic: false,
-    title: {
-      enabled: true,
-      text: 'Y Axis title',
-    },
-  },
 };
 
 const group = {

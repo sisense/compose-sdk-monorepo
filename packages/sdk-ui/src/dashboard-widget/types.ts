@@ -6,6 +6,7 @@ export const enum WidgetType {
   LineChart = 'chart/line',
   AreaChart = 'chart/area',
   FunnelChart = 'chart/funnel',
+  TreemapChart = 'treemap',
   ScatterChart = 'chart/scatter',
   IndicatorChart = 'indicator',
   PolarChart = 'chart/polar',
@@ -36,7 +37,8 @@ export type WidgetSubtype =
   | 'line/polar'
   | 'indicator/numeric'
   | 'indicator/gauge'
-  | 'bubble/scatter';
+  | 'bubble/scatter'
+  | 'treemap';
 
 /**
  * The data transfer object (DTO) containing info of a widget on a dashboard.
@@ -184,6 +186,7 @@ export type PanelItem = {
   through?: PanelItem;
   singleSeriesType?: SeriesType;
   categoriesSorting?: SortDirection;
+  isColored?: boolean;
 };
 
 export type PanelColorFormat =
@@ -396,10 +399,27 @@ export type IndicatorWidgetStyle = {
   };
 };
 
+export type TreemapWidgetStyle = {
+  'title/1': boolean;
+  'title/2': boolean;
+  'title/3': boolean;
+  'tooltip/contribution': boolean;
+  'tooltip/value': boolean;
+};
+
 export type WidgetStyle =
   | CartesianWidgetStyle
   | PolarWidgetStyle
   | FunnelWidgetStyle
   | ScatterWidgetStyle
   | TableWidgetStyle
-  | IndicatorWidgetStyle;
+  | IndicatorWidgetStyle
+  | TreemapWidgetStyle;
+
+export enum FiltersMergeStrategyEnum {
+  WIDGET_FIRST = 'widgetFirst',
+  CODE_FIRST = 'codeFirst',
+  CODE_ONLY = 'codeOnly',
+}
+
+export type FiltersMergeStrategy = `${FiltersMergeStrategyEnum}`;

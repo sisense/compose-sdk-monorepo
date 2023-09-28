@@ -256,7 +256,7 @@ exports[`Table > should render Table 1`] = `
                                         style="max-width: 102px;"
                                       >
                                         <div>
-                                          1000
+                                          1K
                                         </div>
                                       </div>
                                     </div>
@@ -366,7 +366,7 @@ exports[`Table > should render Table 1`] = `
                                         style="max-width: 102px;"
                                       >
                                         <div>
-                                          19.123
+                                          19.12
                                         </div>
                                       </div>
                                     </div>

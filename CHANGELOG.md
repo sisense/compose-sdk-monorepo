@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.11.0] - 2023-09-28
+
+### Added
+
+- Add component `TreemapChart`
+  and support Treemap chart type in components `Chart`, `ChartWidget`, and `DashboardWidget`
+- Add component `DrilldownWidget`, which allows adding drilldown functionality to any type of chart
+
+### Changed
+- Refactor `HttpClient` to return raw response – in addition to JSON
+- Support internationalization for numbers and improve tooltip consistency
+- Make `dataSource` optional in `ChartWidgetProps` and `TableWidgetProps`
+- Extend component `ExecuteQueryByWidgetId` and hook `useExecuteQueryByWidgetId`
+  to support `filters`, `highlights`, and `filtersMergeStrategy`
+- Extend hook `useExecuteQuery` to support boolean flag `enabled`
+- Extend component `DashboardWidget` to support `filtersMergeStrategy`
+- Move `markers`, `navigator`, `xAxis`, `yAxis`, and `yAxis2` out of `BaseStyleOptions`
+  and into `BaseAxisStyleOptions`
+- Bump `sisense-charts` version after fixing chart freeze on navigator update
+- Improve styling of the Drilldown Breadcrumbs
+
 ## [0.10.0] - 2023-09-15
 
 ### Added

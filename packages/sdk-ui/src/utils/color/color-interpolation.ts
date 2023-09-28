@@ -89,7 +89,7 @@ export const getDarkFactor = (color: Color) => {
   return 1 - (0.299 * R + 0.587 * G + 0.114 * B) / 255;
 };
 
-function isBright(color: Color) {
+export function isBright(color: Color) {
   return getDarkFactor(color) < 0.9;
 }
 

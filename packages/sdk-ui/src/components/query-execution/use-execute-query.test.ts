@@ -62,6 +62,21 @@ describe('useExecuteQuery', () => {
     });
   });
 
+  it('if enabled is set to false, should return initial state', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteQuery({ ...params, enabled: false }));
+
+    expect(result.current.isLoading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+      expect(result.current.isSuccess).toBe(false);
+      expect(result.current.data).toBeUndefined();
+    });
+  });
+
   it('should handle query error', async () => {
     const mockError = new Error('Test error');
     executeQueryMock.mockRejectedValue(mockError);

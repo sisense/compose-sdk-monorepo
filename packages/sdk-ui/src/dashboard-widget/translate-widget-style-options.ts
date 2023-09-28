@@ -8,7 +8,6 @@ import {
   AreaStyleOptions,
   StackableStyleOptions,
   AxisLabel,
-  BaseStyleOptions,
   PolarStyleOptions,
   ScatterStyleOptions,
   FunnelStyleOptions,
@@ -17,6 +16,8 @@ import {
   NumericBarIndicatorStyleOptions,
   NumericSimpleIndicatorStyleOptions,
   GaugeIndicatorStyleOptions,
+  TreemapStyleOptions,
+  BaseAxisStyleOptions,
 } from '../types';
 import {
   Panel,
@@ -29,6 +30,7 @@ import {
   ScatterWidgetStyle,
   TableWidgetStyle,
   IndicatorWidgetStyle,
+  TreemapWidgetStyle,
   AxisStyle,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
@@ -53,7 +55,7 @@ function extractAxisStyleOptions(widgetAxisStyleOptions?: AxisStyle) {
   };
 }
 
-type AxisStyleOptions = Pick<BaseStyleOptions, 'xAxis' | 'yAxis' | 'y2Axis'>;
+type AxisStyleOptions = Pick<BaseAxisStyleOptions, 'xAxis' | 'yAxis' | 'y2Axis'>;
 
 function prepareCartesianChartAxisOptions(
   widgetType: WidgetType,
@@ -320,6 +322,21 @@ function extractIndicatorChartStyleOptions(
   };
 }
 
+function extractTreemapChartStyleOptions(widgetStyle: TreemapWidgetStyle): TreemapStyleOptions {
+  return {
+    labels: {
+      category: [
+        { enabled: widgetStyle['title/1'] ?? true },
+        { enabled: widgetStyle['title/2'] ?? true },
+        { enabled: widgetStyle['title/3'] ?? true },
+      ],
+    },
+    tooltip: {
+      mode: widgetStyle['tooltip/value'] ?? true ? 'value' : 'contribution',
+    },
+  };
+}
+
 export function extractStyleOptions(
   widgetType: WidgetType,
   widgetSubtype: WidgetSubtype,
@@ -343,6 +360,8 @@ export function extractStyleOptions(
       return extractScatterChartDataOptions(widgetSubtype, style as ScatterWidgetStyle, panels);
     case WidgetType.FunnelChart:
       return extractFunnelChartDataOptions(widgetSubtype, style as FunnelWidgetStyle);
+    case WidgetType.TreemapChart:
+      return extractTreemapChartStyleOptions(style as TreemapWidgetStyle);
     case WidgetType.PieChart:
       return extractBaseStyleOptions(widgetSubtype, style);
     case WidgetType.Table:

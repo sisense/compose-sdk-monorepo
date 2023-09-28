@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Format numbers when x-axis, y-axis, break by / point, color, and size 1`] = `"x<br /><span style=\\"fill:#FFF\\">$22.1</span><br />y<br /><span style=\\"fill:#FFF\\">!2.2</span><br />p<br /><span style=\\"fill:#FFF\\">13.57976</span><br />c<br /><span style=\\"fill:#FFF\\">3.1456</span><br />x<br /><span style=\\"fill:#FFF\\">@12.3</span>"`;

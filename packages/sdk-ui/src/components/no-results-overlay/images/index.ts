@@ -8,8 +8,10 @@ import pieChartNoResultsImage from './pie-no-results-small.svg';
 import scatterChartNoResultsImage from './scatter-no-results-small.svg';
 import indicatorChartNoResultsImage from './indicator-no-results-small.svg';
 import tableNoResultsImage from './table-no-results-small.svg';
+import treemapChartNoResultsImage from './treemap-no-results-small.svg';
+import { ChartType, TableType } from '../../../types';
 
-export const noResultOverlayImages = {
+const noResultOverlayImages = {
   area: areaChartNoResultsImage,
   line: lineChartNoResultsImage,
   bar: barChartNoResultsImage,
@@ -20,4 +22,10 @@ export const noResultOverlayImages = {
   scatter: scatterChartNoResultsImage,
   indicator: indicatorChartNoResultsImage,
   table: tableNoResultsImage,
+  treemap: treemapChartNoResultsImage,
 };
+
+export function getNoResultOverlayImage(type: ChartType | TableType) {
+  const defaultTypeFallback = 'bar';
+  return noResultOverlayImages[type] ?? noResultOverlayImages[defaultTypeFallback];
+}

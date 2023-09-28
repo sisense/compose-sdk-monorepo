@@ -20,7 +20,10 @@ const seriesToColorMap = {
   Unspecified: '#6eda55',
 };
 
-const getIndicatorStyleOptions = (title: string, secondaryTitle = ''): IndicatorStyleOptions => {
+export const getIndicatorStyleOptions = (
+  title: string,
+  secondaryTitle = '',
+): IndicatorStyleOptions => {
   return {
     indicatorComponents: {
       title: {

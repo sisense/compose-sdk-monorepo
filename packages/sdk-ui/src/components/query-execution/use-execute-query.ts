@@ -29,6 +29,13 @@ export type ExecuteQueryParams = {
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
+
+  /**
+   * Boolean flag to control if query is executed
+   *
+   * If not specified, the default value is `true`
+   */
+  enabled?: boolean;
 };
 
 /**
@@ -79,6 +86,9 @@ export const useExecuteQuery = (params: ExecuteQueryParams): QueryState => {
       });
     }
     if (!app) {
+      return;
+    }
+    if (params?.enabled === false) {
       return;
     }
     if (isNeverExecuted || isQueryParamsChanged(prevParams, params)) {

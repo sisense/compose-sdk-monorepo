@@ -6,14 +6,20 @@ title: DrilldownSelection
 
 > **DrilldownSelection**: `object`
 
+Selection for the drilldown
+
 ## Type declaration
 
-### `nextCategory`
+### `nextDimension`
 
-**nextCategory**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
+**nextDimension**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
+
+Dimension to drilldown to
 
 ***
 
 ### `points`
 
 **points**: [`DataPoint`](type-alias.DataPoint.md)[]
+
+Points selected for drilldown

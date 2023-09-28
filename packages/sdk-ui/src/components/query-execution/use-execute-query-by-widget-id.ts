@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { Attribute, Measure, Filter, MetadataTypes } from '@sisense/sdk-data';
 import { ExecuteQueryParams } from './index.js';
@@ -7,20 +8,35 @@ import { translation } from '../../locales/en.js';
 import { fetchWidget } from '../../dashboard-widget/fetch-widget';
 import { createDimensionalElementFromJaql } from '../../dashboard-widget/translate-widget-data-options';
 import { executeQuery } from '../../query/execute-query.js';
-import { getRootPanelItem } from '../../dashboard-widget/utils.js';
-import { WidgetDto } from '../../dashboard-widget/types.js';
+import {
+  getRootPanelItem,
+  mergeFilters,
+  mergeFiltersByStrategy,
+} from '../../dashboard-widget/utils.js';
+import { FiltersMergeStrategy, WidgetDto } from '../../dashboard-widget/types.js';
 import { usePrevious } from './use-execute-query.js';
 import { isEqual } from 'lodash';
+import { isFiltersChanged } from '../../utils/filters-comparator.js';
 
 /**
  * Parameters for {@link useExecuteQueryByWidgetId} hook.
  */
-export type ExecuteQueryByWidgetIdParams = {
-  /** Identifier of the widget */
+export interface ExecuteQueryByWidgetIdParams {
+  /** {@inheritDoc ExecuteQueryByWidgetIdProps.widgetOid} */
   widgetOid: string;
-  /** Identifier of the dashboard */
+
+  /** {@inheritDoc ExecuteQueryByWidgetIdProps.dashboardOid} */
   dashboardOid: string;
-};
+
+  /** {@inheritDoc ExecuteQueryByWidgetIdProps.filters} */
+  filters?: Filter[];
+
+  /** {@inheritDoc ExecuteQueryByWidgetIdProps.highlights} */
+  highlights?: Filter[];
+
+  /** {@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy} */
+  filtersMergeStrategy?: FiltersMergeStrategy;
+}
 
 export type QueryByWidgetIdState = QueryState & {
   /** Query parameters constructed over the widget */
@@ -91,8 +107,19 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
 
       void fetchWidget(widgetOid, dashboardOid, app)
         .then((fetchedWidget: WidgetDto) => {
-          const { dataSource, dimensions, measures, filters, highlights } =
-            extractQueryFromWidget(fetchedWidget);
+          const {
+            dataSource,
+            dimensions,
+            measures,
+            filters: widgetFilters,
+            highlights: widgetHighlights,
+          } = extractQueryFromWidget(fetchedWidget);
+          const filters = mergeFiltersByStrategy(
+            widgetFilters,
+            params.filters,
+            params.filtersMergeStrategy,
+          );
+          const highlights = mergeFilters(params.highlights, widgetHighlights);
           query.current = { dataSource, dimensions, measures, filters, highlights };
           return executeQuery(dataSource, dimensions, measures, filters, highlights, app);
         })
@@ -121,8 +148,16 @@ function isParamsChanged(
   if (!prevParams && newParams) {
     return true;
   }
-  return ['widgetOid', 'dashboardOid'].some(
-    (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
+
+  const isRegularFiltersChanged = isFiltersChanged(prevParams!.filters, newParams.filters);
+  const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
+
+  return (
+    ['widgetOid', 'dashboardOid'].some(
+      (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
+    ) ||
+    isRegularFiltersChanged ||
+    isHighlightFiltersChanged
   );
 }
 

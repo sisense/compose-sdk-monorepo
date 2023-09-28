@@ -8,7 +8,7 @@ Configuration options that define functional style of the various elements of st
 
 ## Extends
 
-- `BaseStyleOptions`
+- `BaseStyleOptions`.`BaseAxisStyleOptions`
 
 ## Properties
 
@@ -60,7 +60,7 @@ Configuration for markers - symbols or data points that highlight specific value
 
 #### Inherited from
 
-BaseStyleOptions.markers
+BaseAxisStyleOptions.markers
 
 ***
 
@@ -72,7 +72,7 @@ Configuration for navigator - zoom/pan tool for large datasets in a chart
 
 #### Inherited from
 
-BaseStyleOptions.navigator
+BaseAxisStyleOptions.navigator
 
 ***
 
@@ -108,7 +108,7 @@ Configuration for X axis
 
 #### Inherited from
 
-BaseStyleOptions.xAxis
+BaseAxisStyleOptions.xAxis
 
 ***
 
@@ -120,7 +120,7 @@ Configuration for second Y axis
 
 #### Inherited from
 
-BaseStyleOptions.y2Axis
+BaseAxisStyleOptions.y2Axis
 
 ***
 
@@ -132,4 +132,4 @@ Configuration for Y axis
 
 #### Inherited from
 
-BaseStyleOptions.yAxis
+BaseAxisStyleOptions.yAxis

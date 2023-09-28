@@ -32,18 +32,32 @@ export type HighchartsType = ChartType | 'spline' | 'areaspline' | 'bubble';
 export type HighchartsSeriesValues = {
   name: string;
   data: SeriesPointStructure[];
+  levels?: any;
 };
 
 export type SeriesPointStructure = {
   name?: string;
-  y: number | null;
+  y?: number | null;
   x?: number | null;
   z?: number | null;
   color?: string;
-  marker?: { enabled: boolean; isIsolatedPoint: boolean };
+  marker?: {
+    enabled?: boolean;
+    isIsolatedPoint?: boolean;
+    lineColor?: string;
+    lineWidth?: number;
+  };
   selected?: boolean;
-  custom?: { number1?: number; string1?: string; [k: string]: unknown };
+  custom?: {
+    number1?: number;
+    string1?: string;
+    level?: number;
+    [k: string]: unknown;
+  };
+  value?: number | null;
+  id?: string;
   drilldown?: string;
+  parent?: string;
 };
 
 /**

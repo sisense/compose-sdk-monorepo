@@ -9,7 +9,7 @@ const dashboardOid = '642314fe48cbdd002900ccca';
 const filters: Filter[] = [];
 
 const drilldownOptions = {
-  drilldownCategories: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
+  drilldownDimensions: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
 };
 
 export const DashboardWidgetDemo = () => (

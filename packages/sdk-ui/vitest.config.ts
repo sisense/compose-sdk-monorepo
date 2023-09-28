@@ -22,6 +22,7 @@ const config: UserConfig = {
         'src/__demo__',
         'src/__stories__',
         'src/@types',
+        'src/widgets/common/drilldown-breadcrumbs',
       ],
     },
   },

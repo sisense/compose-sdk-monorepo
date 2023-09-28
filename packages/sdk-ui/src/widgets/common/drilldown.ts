@@ -9,22 +9,22 @@ export const useDrilldown = (
   dataOptions: ChartDataOptions,
   drilldownOptions?: DrilldownOptions,
 ) => {
-  const { drilldownCategories = [], drilldownSelections: initialSelections = [] } =
+  const { drilldownDimensions = [], drilldownSelections: initialSelections = [] } =
     drilldownOptions ?? {};
 
   const [drilldownSelections, setDrilldownSelections] = useState(initialSelections);
 
   const availableDrilldowns = useMemo(
     () =>
-      drilldownCategories.filter(({ expression }) =>
-        drilldownSelections.every(({ nextCategory }) => nextCategory.expression !== expression),
+      drilldownDimensions.filter(({ expression }) =>
+        drilldownSelections.every(({ nextDimension }) => nextDimension.expression !== expression),
       ),
-    [drilldownCategories, drilldownSelections],
+    [drilldownDimensions, drilldownSelections],
   );
 
   const selectDrilldown = useCallback(
-    (points: DataPoint[], nextCategory: Attribute) => {
-      setDrilldownSelections((state) => [...state, { points, nextCategory }]);
+    (points: DataPoint[], nextDimension: Attribute) => {
+      setDrilldownSelections((state) => [...state, { points, nextDimension }]);
     },
     [setDrilldownSelections],
   );
@@ -63,36 +63,36 @@ const processDrilldownSelections = (
     return {
       drilldownFilters: [],
       drilldownFiltersDisplayValues: [],
-      drilldownCategory: undefined,
+      drilldownDimension: undefined,
       dataOptionsWithDrilldown: dataOptions,
     };
   }
 
   const [firstCategory, ...otherCategories] = dataOptions.category;
-  let currentCategory = firstCategory;
+  let currentDimension = firstCategory;
   const drilldownFilters: MembersFilter[] = [];
   const drilldownFiltersDisplayValues: string[][] = [];
 
-  drilldownSelections.forEach(({ points, nextCategory }) => {
+  drilldownSelections.forEach(({ points, nextDimension }) => {
     drilldownFilters.push(
       filterFactory.members(
-        translateColumnToAttribure(currentCategory),
+        translateColumnToAttribure(currentDimension),
         points.map((point) => `${point.categoryValue}`),
       ) as MembersFilter,
     );
     drilldownFiltersDisplayValues.push(
       points.map((point) => `${point.categoryDisplayValue ?? point.categoryValue}`),
     );
-    currentCategory = nextCategory;
+    currentDimension = nextDimension;
   });
 
   return {
     drilldownFilters,
     drilldownFiltersDisplayValues,
-    drilldownCategory: translateColumnToAttribure(currentCategory),
+    drilldownDimension: translateColumnToAttribure(currentDimension),
     dataOptionsWithDrilldown: {
       ...dataOptions,
-      category: [currentCategory, ...otherCategories],
+      category: [currentDimension, ...otherCategories],
     },
   };
 };

@@ -1,6 +1,6 @@
 import { Chart } from '../components/chart';
 import { templateForComponent } from './template';
-import { StyleOptions } from '../types';
+import { FunnelStyleOptions } from '../types';
 
 const template = templateForComponent(Chart);
 
@@ -13,7 +13,7 @@ export default {
 };
 
 // WIDGET STYLES
-const styleOptions: StyleOptions = {
+const styleOptions: FunnelStyleOptions = {
   legend: {
     enabled: true,
     position: 'left',
@@ -25,10 +25,6 @@ const styleOptions: StyleOptions = {
     percent: true,
     value: true,
   },
-  navigator: {
-    enabled: true,
-  },
-  markers: { enabled: true, fill: 'hollow', size: 'small' },
   funnelDirection: 'regular',
 };
 

@@ -17,6 +17,7 @@ export type SeriesValueData = {
   xValue?: (string | number)[];
   xDisplayValue?: string[];
   xCompareValue?: (string | number)[];
+  parent?: string;
 };
 export type CategoricalSeriesValues = {
   name: string;

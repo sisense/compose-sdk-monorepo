@@ -2,30 +2,14 @@ import Divider from '@mui/material/Divider';
 import ListSubheader from '@mui/material/ListSubheader';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
-export type MenuPosition = {
-  left: number;
-  top: number;
-};
-
-export type MenuItemSection = {
-  /** Optional section title */
-  sectionTitle?: string;
-  /** Optional list of menu items */
-  items?: { key?: string; onClick?: () => void; caption: string }[];
-};
+import { ContextMenuProps } from '../../props';
 
 export const ContextMenu = ({
   position,
   closeContextMenu,
   itemSections,
   children,
-}: {
-  position?: MenuPosition | null;
-  closeContextMenu: () => void;
-  itemSections?: MenuItemSection[];
-  children?: React.ReactNode;
-}) => {
+}: ContextMenuProps) => {
   const open = !!position;
 
   return (

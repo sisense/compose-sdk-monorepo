@@ -67,6 +67,7 @@ export const HighchartsWrapper: FunctionComponent<Props> = ({
 }) => {
   const chartRef = useRef<any>(null);
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
   const chartContainerDefaultStyles = {
     // Container should inherit parent size for correct chart size calculation by Highcharts
     height: '100%',
@@ -112,13 +113,15 @@ export const HighchartsWrapper: FunctionComponent<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (allowChartUpdate) {
+    if (allowChartUpdate && !isFirstRender.current) {
       if (immutable || !chartRef.current) {
         createChart();
       } else {
         chartRef.current.update(options, ...(updateArgs || [true, true]));
       }
     }
+
+    isFirstRender.current = false;
   }, [allowChartUpdate, immutable, options]);
 
   return <div style={chartContainerDefaultStyles} ref={chartContainerRef}></div>;

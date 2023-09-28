@@ -14,7 +14,7 @@ This approach, which offers an alternative to [ExecuteQueryByWidgetId](function.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`ExecuteQueryByWidgetIdParams`](../type-aliases/type-alias.ExecuteQueryByWidgetIdParams.md) | Parameters to identify the target widget |
+| `params` | [`ExecuteQueryByWidgetIdParams`](../interfaces/interface.ExecuteQueryByWidgetIdParams.md) | Parameters to identify the target widget |
 
 ## Returns
 

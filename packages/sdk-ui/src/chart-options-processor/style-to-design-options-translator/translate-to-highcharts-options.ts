@@ -16,6 +16,7 @@ import {
   FunnelStyleOptions,
   ScatterStyleOptions,
   BaseStyleOptions,
+  TreemapStyleOptions,
 } from '../../types';
 import { Axis } from '../translations/axis-section';
 import {
@@ -33,6 +34,7 @@ import {
   PolarType,
   ScatterChartDesignOptions,
   AreaChartDesignOptions,
+  TreemapChartDesignOptions,
 } from '../translations/design-options';
 import { LegendPosition } from '../translations/legend-section';
 import { Marker } from '../translations/marker-section';
@@ -305,6 +307,12 @@ export const getFunnelChartDesignOptions = (
     legend: getLegend(legend),
     dataLimits,
   };
+};
+
+export const getTreemapChartDesignOptions = (
+  styleOptions: TreemapStyleOptions,
+): TreemapChartDesignOptions => {
+  return styleOptions as TreemapChartDesignOptions;
 };
 
 const DefaultPolarType: PolarType = 'column';

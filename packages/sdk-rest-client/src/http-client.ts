@@ -51,7 +51,7 @@ export class HttpClient {
     return this.auth.authenticate();
   }
 
-  async call<T = unknown>(url: string, config: RequestInit): Promise<T> {
+  async call(url: string, config: RequestInit): Promise<Response> {
     if (this.auth.isAuthenticating()) {
       return new Promise((res) => {
         const retry = () => {
@@ -61,7 +61,7 @@ export class HttpClient {
             return;
           }
 
-          void this.call(url, config).then((r) => res(r as T));
+          void this.call(url, config).then((r) => res(r));
         };
 
         retry();
@@ -82,7 +82,7 @@ export class HttpClient {
       trc: this.env,
     });
 
-    return fetch(trackedUrl, config).then((response) => response.json()) as T;
+    return fetch(trackedUrl, config);
   }
 
   // eslint-disable-next-line max-params
@@ -103,11 +103,19 @@ export class HttpClient {
       ...options,
     };
 
-    return this.call(this.url + endpoint, request);
+    const res = await this.call(this.url + endpoint, request);
+    return res.json() as T;
   }
 
-  async get<T = any>(endpoint: string, request: RequestInit = {}): Promise<T> {
+  async get<T>(endpoint: string, request: RequestInit = {}): Promise<T> {
     request.method = 'GET';
+
+    const res = await this.call(this.url + endpoint, request);
+    return res.json() as T;
+  }
+
+  async delete(endpoint: string, request: RequestInit = {}): Promise<Response> {
+    request.method = 'DELETE';
 
     return this.call(this.url + endpoint, request);
   }

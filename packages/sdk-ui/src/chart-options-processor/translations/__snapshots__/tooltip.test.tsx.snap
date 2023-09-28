@@ -1,0 +1,29 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should display cartesian tooltip for point 1`] = `
+"<div
+                   style=\\"minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px\\">
+              3.14
+              <br />
+              <span style=\\"color: red\\">
+              @42.0009
+
+            </span>
+            <hr style=\\"margin: 5px 0px\\" />!9.877
+            <hr style=\\"margin: 5px 0px\\" />$1.26
+            </div>"
+`;
+
+exports[`should display pie tooltip for point 1`] = `
+"<div
+                   style=\\"minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px\\">
+              3.14
+              <br />
+              <span style=\\"color: red\\">
+              @42.0009
+               / 20%
+            </span>
+
+
+            </div>"
+`;

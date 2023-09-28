@@ -1,6 +1,8 @@
 import { getScatterTooltipSettings, tooltipFormatter } from './scatter-tooltip';
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
-import { InternalSeries } from '../tooltip';
+import { InternalSeries } from './tooltip-utils';
+import { NumberFormatConfig, defaultConfig } from './number-format-config';
+import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 
 describe('Scatter tooltip', () => {
   it('should be enabled', () => {
@@ -49,7 +51,7 @@ describe('Scatter tooltip', () => {
           maskedY: 'Apple',
         },
       },
-    } as InternalSeries;
+    } as unknown as TooltipFormatterContextObject;
 
     const dataOptions = {
       x: {
@@ -292,4 +294,73 @@ describe('Scatter tooltip', () => {
 
     expect(tooltip).toEqual(expected);
   });
+});
+
+it('Format numbers when x-axis, y-axis, break by / point, color, and size', () => {
+  const format1: NumberFormatConfig = {
+    ...defaultConfig,
+    name: 'Currency',
+    symbol: '$',
+    decimalScale: 1,
+  };
+  const format2: NumberFormatConfig = {
+    ...defaultConfig,
+    name: 'Currency',
+    symbol: '!',
+    decimalScale: 1,
+  };
+  const format3: NumberFormatConfig = {
+    ...defaultConfig,
+    name: 'Currency',
+    symbol: '@',
+    decimalScale: 1,
+  };
+
+  const tooltipContext = {
+    series: { name: '3.14', color: '#FFF' },
+    x: '22.10009',
+    y: 2.234567,
+    point: {
+      name: '3.14',
+      color: '#FFF',
+      x: '22.10009',
+      y: 2.234567,
+      z: 12.345678,
+      custom: {
+        maskedX: '10M',
+        maskedY: 'Apple',
+        maskedBreakByPoint: '13.57976',
+        maskedBreakByColor: '3.1456',
+        maskedSize: '12.345678',
+      },
+    },
+  } as InternalSeries;
+
+  const dataOptions: ScatterChartDataOptionsInternal = {
+    x: {
+      name: 'x',
+      type: 'number',
+      numberFormatConfig: format1,
+    },
+    y: {
+      name: 'y',
+      numberFormatConfig: format2,
+    },
+    breakByPoint: {
+      name: 'p',
+      type: 'number',
+      numberFormatConfig: format3,
+    },
+    breakByColor: {
+      name: 'c',
+      type: 'number',
+      numberFormatConfig: format3,
+    },
+    size: {
+      name: 'x',
+      numberFormatConfig: format3,
+    },
+  } as ScatterChartDataOptionsInternal;
+  const tooltip = tooltipFormatter(tooltipContext, dataOptions);
+  expect(tooltip).toMatchSnapshot();
 });

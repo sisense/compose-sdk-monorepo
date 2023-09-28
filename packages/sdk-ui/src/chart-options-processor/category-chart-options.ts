@@ -4,7 +4,11 @@
 import type { SeriesPieOptions } from '@sisense/sisense-charts';
 import { ChartDesignOptions } from './translations/types';
 import { getLegendSettings } from './translations/legend-section';
-import { PieChartDesignOptions, FunnelChartDesignOptions } from './translations/design-options';
+import {
+  PieChartDesignOptions,
+  FunnelChartDesignOptions,
+  TreemapChartDesignOptions,
+} from './translations/design-options';
 import { determineHighchartsChartType } from './translations/translations-to-highcharts';
 import { getTooltipSettings } from './tooltip';
 import { getPiePlotOptions } from './translations/pie-plot-options';
@@ -18,6 +22,7 @@ import {
   ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
 } from '../chart-data-options/types';
+import { prepareTreemapOptions } from './translations/treemap/treemap-options';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -115,6 +120,16 @@ export const getCategoricalChartOptions = (
         tooltip: getTooltipSettings(funnelDesignOptions.funnelLabels?.showDecimals, dataOptions),
       };
       return { options: funnelOptions, alerts };
+    case 'treemap':
+      return {
+        options: prepareTreemapOptions(
+          chartData,
+          dataOptions as CategoricalChartDataOptionsInternal,
+          chartDesignOptions as TreemapChartDesignOptions,
+          themeSettings,
+        ),
+        alerts,
+      };
     default:
       throw new Error('Unexpected chart type');
   }

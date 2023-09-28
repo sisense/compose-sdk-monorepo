@@ -192,9 +192,9 @@ export type HighchartsOptionsInternal = {
     text: string | null;
   };
   series: SeriesType[];
-  xAxis: AxisSettings[];
+  xAxis?: AxisSettings[];
   yAxis?: AxisSettings[];
-  legend: LegendSettings;
+  legend?: LegendSettings;
   plotOptions?: PlotOptions;
   navigator?: Navigator | { enabled: boolean };
   tooltip?: TooltipSettings;

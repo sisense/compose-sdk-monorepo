@@ -181,6 +181,7 @@ export const MiscDemo = () => {
               backgroundColor: '#333333',
               textColor: 'orange',
               secondaryTextColor: 'purple',
+              panelBackgroundColor: '#F6F6F6',
             },
             typography: {
               fontFamily: 'impact',

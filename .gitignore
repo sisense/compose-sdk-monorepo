@@ -52,3 +52,6 @@ lerna-debug.log*
 docs/
 docs-internal/
 e2e/results.xml
+
+# generated from storybook build
+storybook-static/

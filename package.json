@@ -1,5 +1,5 @@
 {
-  "version": "0.10.0",
+  "version": "0.11.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -12,6 +12,7 @@
     "dev": "yarn workspace @sisense/sdk-ui dev",
     "demo": "yarn workspace react-ts-demo dev",
     "build": "yarn workspaces foreach --no-private --verbose --topological run build",
+    "storybook": "yarn workspace @sisense/sdk-ui storybook",
     "build:prod": "yarn workspaces foreach --no-private --verbose --topological --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue run build:prod",
     "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output",
     "reset": "yarn clean && rm -rf ./node_modules",

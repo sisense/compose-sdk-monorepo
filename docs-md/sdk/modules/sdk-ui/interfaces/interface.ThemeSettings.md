@@ -22,6 +22,12 @@ Chart theme settings
 >
 > Background color
 >
+> ##### `chart.panelBackgroundColor`
+>
+> **panelBackgroundColor**?: `string`
+>
+> Toolbar Background color, can be used as a secondary background color
+>
 > ##### `chart.secondaryTextColor`
 >
 > **secondaryTextColor**?: `string`

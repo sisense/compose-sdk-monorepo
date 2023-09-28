@@ -69,30 +69,6 @@ BaseStyleOptions.legend
 
 ***
 
-### markers
-
-> **markers**?: [`Markers`](../type-aliases/type-alias.Markers.md)
-
-Configuration for markers - symbols or data points that highlight specific values
-
-#### Inherited from
-
-BaseStyleOptions.markers
-
-***
-
-### navigator
-
-> **navigator**?: [`Navigator`](../type-aliases/type-alias.Navigator.md)
-
-Configuration for navigator - zoom/pan tool for large datasets in a chart
-
-#### Inherited from
-
-BaseStyleOptions.navigator
-
-***
-
 ### subtype
 
 > **subtype**?: [`PieSubtype`](../type-aliases/type-alias.PieSubtype.md)
@@ -114,39 +90,3 @@ Total width of the component, which is considered in the following order of prio
 #### Inherited from
 
 BaseStyleOptions.width
-
-***
-
-### xAxis
-
-> **xAxis**?: [`AxisLabel`](../type-aliases/type-alias.AxisLabel.md)
-
-Configuration for X axis
-
-#### Inherited from
-
-BaseStyleOptions.xAxis
-
-***
-
-### y2Axis
-
-> **y2Axis**?: [`AxisLabel`](../type-aliases/type-alias.AxisLabel.md)
-
-Configuration for second Y axis
-
-#### Inherited from
-
-BaseStyleOptions.y2Axis
-
-***
-
-### yAxis
-
-> **yAxis**?: [`AxisLabel`](../type-aliases/type-alias.AxisLabel.md)
-
-Configuration for Y axis
-
-#### Inherited from
-
-BaseStyleOptions.yAxis

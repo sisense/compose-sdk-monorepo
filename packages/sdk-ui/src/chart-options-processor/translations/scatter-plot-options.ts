@@ -3,7 +3,7 @@ import { isValue, ScatterChartDataOptionsInternal } from '../../chart-data-optio
 import { PlotOptions } from '../chart-options-service';
 import { ValueLabel, ValueLabelSettings } from './value-label-section';
 import { ScatterChartDesignOptions } from './design-options';
-import { InternalSeries } from '../tooltip';
+import { InternalSeries } from './tooltip-utils';
 import { ScatterCustomPointOptions } from './scatter-tooltip';
 import {
   applyFormatPlainText,

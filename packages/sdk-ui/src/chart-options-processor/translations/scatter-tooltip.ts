@@ -1,4 +1,9 @@
-import { InternalSeries, TooltipSettings } from '../tooltip';
+import {
+  InternalSeries,
+  TooltipSettings,
+  formatTooltipValue,
+  formatTooltipXValue,
+} from './tooltip-utils';
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { getDataOptionTitle } from '../../chart-data-options/utils';
 
@@ -26,14 +31,22 @@ const block = (element: string, title?: string): string => `${title || ''}<br />
 const buildTooltip = (blocks: string[]): string =>
   blocks.reduce((tooltip, value) => tooltip + (value !== '<br />' ? `<br />${value}` : ''));
 
-const buildSpans = (ctx: InternalSeries): ScatterTooltipElements => {
+const buildSpans = (
+  ctx: InternalSeries,
+  dataOptions: ScatterChartDataOptionsInternal,
+): ScatterTooltipElements => {
   const { maskedX, maskedY, maskedBreakByPoint, maskedSize, maskedBreakByColor } = ctx.point
     .custom as ScatterCustomPointOptions;
-  const x = spanSegment(maskedX, ctx.point.color);
-  const y = spanSegment(maskedY, ctx.point.color);
+
+  const formatedX = formatTooltipXValue(dataOptions.x, ctx.point.x, maskedX);
+  const formatedY = formatTooltipValue(dataOptions.y, ctx.point.y, maskedY);
+  const formatedSize = formatTooltipValue(dataOptions.size, ctx.point.z, maskedSize || '');
+
+  const x = spanSegment(formatedX, ctx.point.color);
+  const y = spanSegment(formatedY, ctx.point.color);
   const breakByPoint = spanSegment(maskedBreakByPoint || '', ctx.point.color);
   const breakByColor = spanSegment(maskedBreakByColor || '', ctx.point.color);
-  const size = spanSegment(maskedSize || '', ctx.point.color);
+  const size = spanSegment(formatedSize, ctx.point.color);
 
   return {
     x,
@@ -73,7 +86,7 @@ export const tooltipFormatter = (
   ctx: InternalSeries,
   dataOptions: ScatterChartDataOptionsInternal,
 ): string => {
-  const spans = buildSpans(ctx);
+  const spans = buildSpans(ctx, dataOptions);
   const { x, y, breakByPoint, breakByColor, size } = buildBlocks(spans, dataOptions);
 
   return buildTooltip([x, y, breakByPoint, breakByColor, size]);

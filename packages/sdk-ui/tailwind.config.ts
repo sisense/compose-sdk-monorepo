@@ -7,6 +7,9 @@ const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      boxShadow: {
+        ['ai-shadow-sm']: '0px 1px 2px rgba(9, 9, 10, 0.1), 0px 2px 4px rgba(9, 9, 10, 0.1)',
+      },
       gridTemplateColumns: {
         // Simple 16 column grid
         auto: 'repeat(auto-fit, minmax(0, 1fr))',

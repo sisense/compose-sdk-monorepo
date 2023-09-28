@@ -60,6 +60,7 @@ export const redThemeSettings: ThemeSettings = {
     textColor: '#FFFFFF',
     backgroundColor: '#ec4646',
     secondaryTextColor: '#C5C8CF',
+    panelBackgroundColor: '#313138',
   },
   typography: {
     fontFamily: 'Open Sans',

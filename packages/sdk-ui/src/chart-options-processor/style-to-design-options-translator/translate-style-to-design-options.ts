@@ -11,6 +11,7 @@ import {
   IndicatorStyleOptions,
   ScatterStyleOptions,
   AreaStyleOptions,
+  TreemapStyleOptions,
 } from '../../types';
 import { ChartDesignOptions } from '../translations/types';
 import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
@@ -24,6 +25,7 @@ import {
   getPolarChartDesignOptions,
   getScatterChartDesignOptions,
   getAreaChartDesignOptions,
+  getTreemapChartDesignOptions,
 } from './translate-to-highcharts-options';
 
 export const translateStyleOptionsToDesignOptions = (
@@ -62,6 +64,9 @@ export const translateStyleOptionsToDesignOptions = (
       break;
     case 'funnel':
       intermediateDesignOptions = getFunnelChartDesignOptions(styleOptions as FunnelStyleOptions);
+      break;
+    case 'treemap':
+      intermediateDesignOptions = getTreemapChartDesignOptions(styleOptions as TreemapStyleOptions);
       break;
     case 'polar':
       intermediateDesignOptions = getPolarChartDesignOptions(styleOptions as PolarStyleOptions);

@@ -4,7 +4,7 @@ import {
   extractStyleOptions,
   getIndicatorTypeSpecificOptions,
 } from './translate-widget-style-options';
-import { AreaStyleOptions, BaseStyleOptions } from '../types';
+import { AreaStyleOptions, BaseAxisStyleOptions, BaseStyleOptions } from '../types';
 import {
   CartesianWidgetStyle,
   FunnelWidgetStyle,
@@ -12,10 +12,13 @@ import {
   PanelItem,
   PolarWidgetStyle,
   ScatterWidgetStyle,
+  TreemapWidgetStyle,
   WidgetSubtype,
   WidgetType,
 } from './types';
 import { jaqlMock } from './__mocks__/jaql-mock';
+
+type BaseStyleOptionsWithAxes = BaseStyleOptions & BaseAxisStyleOptions;
 
 function generateWidgetAxisOptions(options = {}) {
   const defaultOptions = {
@@ -92,7 +95,7 @@ describe('translate widget style options', () => {
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
-      ) as BaseStyleOptions;
+      ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis).toEqual({
         ...widgetStyle.xAxis,
@@ -115,7 +118,7 @@ describe('translate widget style options', () => {
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
-      ) as BaseStyleOptions;
+      ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis?.title?.text).toEqual(widgetPanels[0].items[1].jaql.title);
       expect(styleOptions.xAxis?.x2Title?.text).toEqual(widgetPanels[0].items[0].jaql.title);
@@ -181,7 +184,7 @@ describe('translate widget style options', () => {
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
-      ) as BaseStyleOptions;
+      ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis).toEqual(widgetStyle.categories);
       expect(styleOptions.yAxis).toEqual({
@@ -204,7 +207,7 @@ describe('translate widget style options', () => {
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
-      ) as BaseStyleOptions;
+      ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis?.title?.text).toEqual(widgetPanels[0].items[0].jaql.title);
     });
@@ -241,7 +244,7 @@ describe('translate widget style options', () => {
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
-      ) as BaseStyleOptions;
+      ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis).toEqual(widgetStyle.xAxis);
       expect(styleOptions.yAxis).toEqual(widgetStyle.yAxis);
@@ -258,7 +261,7 @@ describe('translate widget style options', () => {
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
-      ) as BaseStyleOptions;
+      ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis?.title?.text).toEqual(widgetPanels[0].items[0].jaql.title);
       expect(styleOptions.yAxis?.title?.text).toEqual(widgetPanels[1].items[0].jaql.title);
@@ -438,6 +441,66 @@ describe('translate widget style options', () => {
       expect(
         getIndicatorTypeSpecificOptions(widgetSubtype, widgetStyle as IndicatorWidgetStyle),
       ).toStrictEqual(expectedResult);
+    });
+  });
+
+  describe('should prepare correct treemap style options', () => {
+    it('case 1 - default', () => {
+      const widgetStyle = {
+        'title/1': true,
+        'title/2': true,
+        'title/3': true,
+        'tooltip/value': true,
+      } as TreemapWidgetStyle;
+
+      const expected = {
+        labels: {
+          category: [{ enabled: true }, { enabled: true }, { enabled: true }],
+        },
+        tooltip: {
+          mode: 'value',
+        },
+      };
+      const result = extractStyleOptions(WidgetType.TreemapChart, 'treemap', widgetStyle, []);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('case 2 - disabled labels and contribution mode', () => {
+      const widgetStyle = {
+        'title/1': false,
+        'title/2': false,
+        'title/3': false,
+        'tooltip/value': false,
+      } as TreemapWidgetStyle;
+
+      const expected = {
+        labels: {
+          category: [{ enabled: false }, { enabled: false }, { enabled: false }],
+        },
+        tooltip: {
+          mode: 'contribution',
+        },
+      };
+      const result = extractStyleOptions(WidgetType.TreemapChart, 'treemap', widgetStyle, []);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('case 3 - empty widget style', () => {
+      const widgetStyle = {} as TreemapWidgetStyle;
+
+      const expected = {
+        labels: {
+          category: [{ enabled: true }, { enabled: true }, { enabled: true }],
+        },
+        tooltip: {
+          mode: 'value',
+        },
+      };
+      const result = extractStyleOptions(WidgetType.TreemapChart, 'treemap', widgetStyle, []);
+
+      expect(result).toEqual(expected);
     });
   });
 });

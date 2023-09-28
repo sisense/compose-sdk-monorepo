@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Treemap Chart tooltip formatter > contribution mode 1`] = `
+"
+      <div
+        style=\\"minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px; background: white\\">
+
+          <div style=\\"display: flex; justify-content: space-between;\\">
+            <span>Three</span>
+            <span>75.0%</span>
+          </div>
+          <hr style=\\"margin: 5px 0px\\" />
+
+          <div style=\\"display: flex; justify-content: space-between;\\">
+            <span>Two</span>
+            <span>50.0%</span>
+          </div>
+          <hr style=\\"margin: 5px 0px\\" />
+
+          <div style=\\"display: flex; justify-content: space-between;\\">
+            <span>One</span>
+            <span>25.0%</span>
+          </div>
+          <hr style=\\"margin: 5px 0px\\" />
+
+        <div>
+          <span style=\\"color:blue\\">25.0%</span> of test
+        </div>
+        <div>
+          <span style=\\"color:blue\\">50.0%%</span> of Two
+        </div>
+      </div>"
+`;
+
+exports[`Treemap Chart tooltip formatter > single category tooltip 1`] = `
+"
+      <div
+        style=\\"minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px; background: white\\">
+
+          <div style=\\"display: flex; justify-content: space-between;\\">
+            <span>One</span>
+            <span>1</span>
+          </div>
+          <hr style=\\"margin: 5px 0px\\" />
+
+        <div>
+          <span style=\\"color:red\\">1</span> of test
+        </div>
+        <div>
+
+        </div>
+      </div>"
+`;
+
+exports[`Treemap Chart tooltip formatter > three categories tooltip 1`] = `
+"
+      <div
+        style=\\"minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px; background: white\\">
+
+          <div style=\\"display: flex; justify-content: space-between;\\">
+            <span>Three</span>
+            <span>3</span>
+          </div>
+          <hr style=\\"margin: 5px 0px\\" />
+
+          <div style=\\"display: flex; justify-content: space-between;\\">
+            <span>Two</span>
+            <span>2</span>
+          </div>
+          <hr style=\\"margin: 5px 0px\\" />
+
+          <div style=\\"display: flex; justify-content: space-between;\\">
+            <span>One</span>
+            <span>1</span>
+          </div>
+          <hr style=\\"margin: 5px 0px\\" />
+
+        <div>
+          <span style=\\"color:blue\\">1</span> of test
+        </div>
+        <div>
+          <span style=\\"color:blue\\">50.0%%</span> of Two
+        </div>
+      </div>"
+`;

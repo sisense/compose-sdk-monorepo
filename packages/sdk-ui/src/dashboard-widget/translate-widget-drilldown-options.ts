@@ -13,9 +13,9 @@ const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
 /* eslint complexity: ['error', 9] */
 const getDrilldownSelections = (
   item?: PanelItem,
-): { nextCategory: Attribute; points: DataPoint[] }[] => {
+): { nextDimension: Attribute; points: DataPoint[] }[] => {
   if (item?.parent && item.through && 'filter' in item.through.jaql) {
-    const nextCategory = createDataColumn(item).column as Attribute;
+    const nextDimension = createDataColumn(item).column as Attribute;
     const { jaql, format: { mask } = {} } = item.parent;
     const dateFormat = 'level' in jaql && jaql.level && mask && (mask as DatetimeMask)[jaql.level];
 
@@ -29,7 +29,7 @@ const getDrilldownSelections = (
           : (member) => ({ categoryValue: member }),
       ) ?? [];
 
-    return [...getDrilldownSelections(item.parent), { nextCategory, points }];
+    return [...getDrilldownSelections(item.parent), { nextDimension, points }];
   }
   return [];
 };
@@ -44,9 +44,9 @@ export const extractDrilldownOptions = (
 
   const item = getEnabledPanelItems(panels, categoriesPanelName)[0];
   const drilldownSelections = getDrilldownSelections(item);
-  const drilldownCategories = getAvailableDrilldowns(item);
+  const drilldownDimensions = getAvailableDrilldowns(item);
   return {
-    drilldownCategories,
+    drilldownDimensions,
     drilldownSelections,
   };
 };

@@ -8,9 +8,12 @@ describe('formatNumbers', () => {
     const table: DataTable = {
       columns: [
         { name: 'item', type: 'string', index: 0, direction: 0 },
-        { name: 'price', type: 'int', index: 1, direction: 0 },
+        { name: 'price', type: 'number', index: 1, direction: 0 },
+        { name: 'revenue', type: 'number', index: 1, direction: 0 },
       ],
-      rows: [[{ displayValue: 'abc' }, { displayValue: '1000' }]],
+      rows: [
+        [{ displayValue: 'abc' }, { displayValue: '54321.54321' }, { displayValue: '12345.12345' }],
+      ],
     };
 
     const chartDataOptions: TableDataOptions = {
@@ -22,9 +25,14 @@ describe('formatNumbers', () => {
         },
         {
           name: 'price',
-          type: 'int',
+          type: 'number',
           enabled: true,
-          numberFormatConfig: defaultConfig,
+        },
+        {
+          name: 'revenue',
+          type: 'number',
+          enabled: true,
+          numberFormatConfig: { ...defaultConfig, name: 'Currency' },
         },
       ],
     };
@@ -41,7 +49,13 @@ describe('formatNumbers', () => {
           direction: 0,
           index: 1,
           name: 'price',
-          type: 'int',
+          type: 'number',
+        },
+        {
+          direction: 0,
+          index: 1,
+          name: 'revenue',
+          type: 'number',
         },
       ],
       rows: [
@@ -51,11 +65,19 @@ describe('formatNumbers', () => {
           },
           {
             compareValue: {
-              value: 1000,
+              value: 54321.54321,
               valueIsNaN: false,
               valueUndefined: false,
             },
-            displayValue: '1K',
+            displayValue: '54.32K',
+          },
+          {
+            compareValue: {
+              value: 12345.12345,
+              valueIsNaN: false,
+              valueUndefined: false,
+            },
+            displayValue: '$12.35K',
           },
         ],
       ],

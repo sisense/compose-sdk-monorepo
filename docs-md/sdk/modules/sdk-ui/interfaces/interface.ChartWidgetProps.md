@@ -16,7 +16,7 @@ Props for the [ChartWidget](../functions/function.ChartWidget.md) component
 
 #### dataSource
 
-> **dataSource**: `string`
+> **dataSource**?: `string`
 
 Data source the query is run against - e.g. `Sample ECommerce`
 

@@ -4,6 +4,7 @@ export const darkThemeSettings: ThemeSettings = {
   chart: {
     backgroundColor: '#333333',
     textColor: '#FFFFFF',
+    panelBackgroundColor: '#F6F6F6',
   },
   typography: {
     fontFamily: 'impact',

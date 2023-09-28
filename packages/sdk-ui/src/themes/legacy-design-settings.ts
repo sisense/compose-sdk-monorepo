@@ -93,6 +93,7 @@ export function convertToThemeSettings(
       textColor: legacyDesignSettings.dashboards.widgetTextColor,
       backgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
       secondaryTextColor: legacyDesignSettings.dashboards.widgetSecondaryTextColor,
+      panelBackgroundColor: legacyDesignSettings.dashboards.panelBackgroundColor,
     },
     typography: {
       fontFamily: legacyDesignSettings.typography.fontFamily,

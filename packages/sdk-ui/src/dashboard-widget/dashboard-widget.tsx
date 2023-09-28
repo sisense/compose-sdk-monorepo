@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState, type FunctionComponent } from 'react';
-import unionBy from 'lodash/unionBy';
 import { ChartWidget } from '../widgets/chart-widget';
 import { TableWidget } from '../widgets/table-widget';
 import { extractWidgetProps } from './translate-widget';
@@ -10,6 +9,7 @@ import { useSisenseContext } from '../components/sisense-context/sisense-context
 import { useThemeContext } from '../components/theme-provider';
 import { translation } from '../locales/en';
 import { asSisenseComponent } from '../components/decorators/as-sisense-component';
+import { mergeFiltersByStrategy } from './utils';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -64,12 +64,10 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     [fetchedWidget, themeSettings],
   );
 
-  const filters = unionBy(
+  const filters = mergeFiltersByStrategy(
     fetchedProps?.filters,
     restProps.filters,
-    // TODO: remove fallback on 'filter.jaql()' after removing temporal 'jaql()' workaround from filter translation layer
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    (filter) => filter.attribute?.expression ?? filter.jaql().jaql.dim,
+    restProps.filtersMergeStrategy,
   );
 
   if (!fetchedProps) {

@@ -33,6 +33,7 @@ export interface CategoryStyle {
   enabled?: boolean;
   /** {@inheritDoc SortDirection} */
   sortType?: SortDirection;
+  isColored?: boolean;
 }
 
 /**

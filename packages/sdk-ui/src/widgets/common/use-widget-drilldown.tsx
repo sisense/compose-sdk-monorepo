@@ -13,7 +13,7 @@ import {
 import { ChartWidgetProps } from '../../props';
 import { useDrilldown } from './drilldown';
 import { DrilldownBreadcrumbs } from './drilldown-breadcrumbs';
-import { MenuItemSection } from './context-menu';
+import { MenuItemSection } from '../../types';
 
 const defaultDataOptions = { category: [], value: [], breakBy: [] };
 const defaultFilters: Filter[] = [];
@@ -38,13 +38,13 @@ export const useWidgetDrilldown = (props: ChartWidgetProps): ChartWidgetProps =>
     availableDrilldowns,
     drilldownFilters,
     drilldownFiltersDisplayValues,
-    drilldownCategory,
+    drilldownDimension,
     dataOptionsWithDrilldown,
   } = useDrilldown(dataOptions, drilldownOptions);
 
   const onMenuDrilldownClick = useCallback(
-    (selectedPoints: DataPoint[], nextCategory: Attribute) => {
-      selectDrilldown(selectedPoints, nextCategory);
+    (selectedPoints: DataPoint[], nextDimension: Attribute) => {
+      selectDrilldown(selectedPoints, nextDimension);
     },
     [selectDrilldown],
   );
@@ -115,7 +115,7 @@ export const useWidgetDrilldown = (props: ChartWidgetProps): ChartWidgetProps =>
   const contextMenuItems = useMemo(() => {
     if (drilldownOptions) {
       const drillDownMenuItems: MenuItemSection[] = [
-        ...(drilldownCategory ? [{ sectionTitle: drilldownCategory?.name }] : []),
+        ...(drilldownDimension ? [{ sectionTitle: drilldownDimension?.name }] : []),
         ...(selectedDataPoints.length
           ? [
               {
@@ -135,7 +135,7 @@ export const useWidgetDrilldown = (props: ChartWidgetProps): ChartWidgetProps =>
   }, [
     restProps.contextMenuItems,
     drilldownOptions,
-    drilldownCategory,
+    drilldownDimension,
     selectedDataPoints,
     availableDrilldowns,
     onMenuDrilldownClick,
@@ -156,10 +156,10 @@ export const useWidgetDrilldown = (props: ChartWidgetProps): ChartWidgetProps =>
     topSlot: (
       <>
         {restProps.topSlot}
-        {drilldownCategory && (
+        {drilldownDimension && (
           <DrilldownBreadcrumbs
             filtersDisplayValues={drilldownFiltersDisplayValues}
-            currentCategory={drilldownCategory}
+            currentDimension={drilldownDimension}
             clearDrilldownSelections={clearDrilldownSelections}
             sliceDrilldownSelections={sliceDrilldownSelections}
           />

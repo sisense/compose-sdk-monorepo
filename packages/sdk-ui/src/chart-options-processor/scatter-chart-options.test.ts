@@ -132,7 +132,7 @@ describe('getScatterChartOptions', () => {
   it('should apply data limits to axes', () => {
     expect(chartData.xCategories?.length).toBeGreaterThan(customCategoriesCapacity);
     expect(chartData.yCategories?.length).toBeGreaterThan(customCategoriesCapacity);
-    expect(options.xAxis[0].categories).toHaveLength(customCategoriesCapacity);
+    expect(options.xAxis![0].categories).toHaveLength(customCategoriesCapacity);
     expect(options.yAxis![0].categories).toHaveLength(customCategoriesCapacity);
   });
 

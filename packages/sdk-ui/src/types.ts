@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute, MembersFilter } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 import {
   AreaSubtype,
@@ -22,6 +22,7 @@ import {
   IndicatorChartType,
   TableType,
 } from './chart-options-processor/translations/types';
+import { DataPointsEventHandler } from './props';
 
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
@@ -225,22 +226,12 @@ export interface DataLimits {
 export interface BaseStyleOptions extends ReservedStyleOptions {
   /** Configuration for legend - a key that provides information about the data series or colors used in chart */
   legend?: Legend;
-  /** Configuration for markers - symbols or data points that highlight specific values */
-  markers?: Markers;
-  /** Configuration for navigator - zoom/pan tool for large datasets in a chart */
-  navigator?: Navigator;
   /**
    * Configuration for series labels - titles/names identifying data series in a chart
    *
    * @internal
    */
   seriesLabels?: SeriesLabels;
-  /** Configuration for X axis */
-  xAxis?: AxisLabel;
-  /** Configuration for Y axis */
-  yAxis?: AxisLabel;
-  /** Configuration for second Y axis */
-  y2Axis?: AxisLabel;
   /** Data limit for series or categories that will be plotted */
   dataLimits?: DataLimits;
   /**
@@ -262,8 +253,26 @@ export interface BaseStyleOptions extends ReservedStyleOptions {
   height?: number;
 }
 
+/**
+ * Configuration options that define functional style of axes and related elements
+ *
+ * @internal
+ */
+export interface BaseAxisStyleOptions {
+  /** Configuration for markers - symbols or data points that highlight specific values */
+  markers?: Markers;
+  /** Configuration for navigator - zoom/pan tool for large datasets in a chart */
+  navigator?: Navigator;
+  /** Configuration for X axis */
+  xAxis?: AxisLabel;
+  /** Configuration for Y axis */
+  yAxis?: AxisLabel;
+  /** Configuration for second Y axis */
+  y2Axis?: AxisLabel;
+}
+
 /** Configuration options that define functional style of the various elements of {@link LineChart} */
-export interface LineStyleOptions extends BaseStyleOptions {
+export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Configuration that defines line width */
   lineWidth?: LineWidth;
   /** Subtype of {@link LineChart}*/
@@ -271,7 +280,7 @@ export interface LineStyleOptions extends BaseStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of {@link AreaChart} */
-export interface AreaStyleOptions extends BaseStyleOptions {
+export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Configuration that defines line width */
   lineWidth?: LineWidth;
   /** Subtype of {@link AreaChart}*/
@@ -279,8 +288,7 @@ export interface AreaStyleOptions extends BaseStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of stackable charts, like Column or Bar */
-
-export interface StackableStyleOptions extends BaseStyleOptions {
+export interface StackableStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of stackable chart */
   /* @privateRemarks
    Subtypes for columns and bars should be separate - currently it is possible to have
@@ -317,7 +325,7 @@ export interface FunnelStyleOptions extends BaseStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of {@link PolarChart} */
-export interface PolarStyleOptions extends BaseStyleOptions {
+export interface PolarStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of {@link PolarChart}*/
   subtype?: PolarSubtype;
 }
@@ -416,10 +424,27 @@ export interface GaugeIndicatorStyleOptions extends BaseIndicatorStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of {@link ScatterChart} */
-export interface ScatterStyleOptions extends BaseStyleOptions {
+export interface ScatterStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of {@link ScatterChart}*/
   subtype?: never;
   markerSize?: ScatterMarkerSize;
+}
+
+/** Configuration options that define functional style of the various elements of {@link TreemapChart} */
+export interface TreemapStyleOptions extends BaseStyleOptions {
+  /** Labels options object */
+  labels?: {
+    /** Array with single label options objects (order of items relative to dataOptions.category) */
+    category?: {
+      /** Define visibility of label */
+      enabled?: boolean;
+    }[];
+  };
+  /** Tooltip options object */
+  tooltip?: {
+    /** Define mode of data showing */
+    mode?: 'value' | 'contribution';
+  };
 }
 
 /**
@@ -433,7 +458,8 @@ export type StyleOptions =
   | FunnelStyleOptions
   | PolarStyleOptions
   | IndicatorStyleOptions
-  | ScatterStyleOptions;
+  | ScatterStyleOptions
+  | TreemapStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = Record<string, string>;
@@ -532,6 +558,8 @@ export interface ThemeSettings {
     secondaryTextColor?: string;
     /** Background color */
     backgroundColor?: string;
+    /** Toolbar Background color, can be used as a secondary background color */
+    panelBackgroundColor?: string;
   };
   /** Collection of colors used to color various elements */
   palette?: ColorPaletteTheme;
@@ -619,14 +647,20 @@ export declare type ColorPaletteTheme = {
   variantColors: Color[];
 };
 
+/** Configuration for the drilldown */
 export type DrilldownOptions = {
-  drilldownCategories?: Attribute[];
+  /** Dimensions that can be used for drilldown */
+  drilldownDimensions?: Attribute[];
+  /** Current selections for multiple drilldowns */
   drilldownSelections?: DrilldownSelection[];
 };
 
+/** Selection for the drilldown */
 export type DrilldownSelection = {
+  /** Points selected for drilldown */
   points: DataPoint[];
-  nextCategory: Attribute;
+  /** Dimension to drilldown to */
+  nextDimension: Attribute;
 };
 
 /** Data point in a chart. */
@@ -707,4 +741,52 @@ export type OptionsWithAlerts<T> = {
 export type SeriesWithAlerts<T> = {
   series: T;
   alerts: string[];
+};
+
+/**
+ * Context menu position coordinates
+ * Used in {@link ContextMenu} component
+ */
+export type MenuPosition = {
+  /** Horizontal position */
+  left: number;
+  /** Vertical position */
+  top: number;
+};
+
+/**
+ * Context menu section
+ * Used in {@link ContextMenu} component
+ */
+export type MenuItemSection = {
+  /** Optional section title */
+  sectionTitle?: string;
+  /** Optional list of menu items */
+  items?: { key?: string; onClick?: () => void; caption: string }[];
+};
+
+/**
+ * Result of custom drilldown execution
+ *
+ * User provides selected points and desired category to drilldown to
+ * and receives set of filters to apply and new category to display
+ *
+ */
+export type CustomDrilldownResult = {
+  /**
+   * The drilldown filters that should be applied to the next drilldown
+   */
+  drilldownFilters: MembersFilter[];
+  /**
+   * New dimension that should replace the current dimension
+   */
+  drilldownDimension: Attribute;
+  /**
+   * Callback to provide next points to drilldown to
+   */
+  onDataPointsSelected: DataPointsEventHandler;
+  /**
+   * Callback to open context menu
+   */
+  onContextMenu: (menuPosition: MenuPosition) => void;
 };

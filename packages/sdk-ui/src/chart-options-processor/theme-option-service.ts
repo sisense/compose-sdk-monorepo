@@ -5,12 +5,14 @@ import merge from 'ts-deepmerge';
 import { CompleteThemeSettings } from '../types';
 import { HighchartsOptionsInternal } from './chart-options-service';
 import cloneDeep from 'lodash/cloneDeep';
+import { LegendSettings } from './translations/legend-section';
 
 const DEFAULT_THEME_SETTINGS: CompleteThemeSettings = {
   chart: {
     backgroundColor: '#FFFFFF',
     textColor: '#000000',
     secondaryTextColor: '#E4E4E4',
+    panelBackgroundColor: '#F6F6F6',
   },
   typography: {
     fontFamily: '"Open Sans","Roboto","Helvetica","Arial",sans-serif',
@@ -66,7 +68,7 @@ export const applyThemeToChart = (
       color: themeSettings.chart.textColor,
       fontFamily: themeSettings.typography.fontFamily,
     },
-  };
+  } as LegendSettings;
 
   const seriesDataLabelsStyle = {
     style: {
@@ -137,7 +139,7 @@ export const applyThemeToChart = (
 
   const mergedOptions = merge(chartOptions, basicOptions);
 
-  mergedOptions.xAxis = mergedOptions.xAxis.map((axis) => {
+  mergedOptions.xAxis = mergedOptions.xAxis?.map((axis) => {
     axis.plotBands = axis.plotBands?.map((plotBand) => {
       return merge(plotBand, plotBandOptions);
     });

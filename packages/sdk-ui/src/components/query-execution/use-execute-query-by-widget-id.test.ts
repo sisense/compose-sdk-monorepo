@@ -1,6 +1,10 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
-import { QueryResultData } from '@sisense/sdk-data';
+import {
+  QueryResultData,
+  filters as filtersFactory,
+  DimensionalAttribute,
+} from '@sisense/sdk-data';
 import {
   useExecuteQueryByWidgetId,
   ExecuteQueryByWidgetIdParams,
@@ -9,7 +13,12 @@ import { executeQuery } from '../../query/execute-query.js';
 import { ClientApplication } from '../../app/client-application.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { fetchWidget } from '../../dashboard-widget/fetch-widget';
-import { BaseJaql, FilterJaql, WidgetDto } from '../../dashboard-widget/types.js';
+import {
+  BaseJaql,
+  FilterJaql,
+  IncludeMembersFilter,
+  WidgetDto,
+} from '../../dashboard-widget/types.js';
 
 vi.mock('../../query/execute-query', () => ({
   executeQuery: vi.fn(),
@@ -50,6 +59,51 @@ const mockWidget = {
   },
 } as unknown as WidgetDto;
 
+const mockWidgetWithMetadataItems = {
+  ...mockWidget,
+  metadata: {
+    panels: [
+      {
+        name: 'some panel with dimensions',
+        items: [
+          {
+            jaql: {
+              title: 'some dimension title',
+              dim: 'some dimension',
+            } as unknown as BaseJaql,
+          },
+        ],
+      },
+      {
+        name: 'some panel with measures',
+        items: [
+          {
+            jaql: {
+              title: 'some measure title',
+              dim: 'some measure',
+              agg: 'sum',
+            } as unknown as BaseJaql,
+          },
+        ],
+      },
+      {
+        name: 'some panel with filters',
+        items: [
+          {
+            jaql: {
+              title: 'some fitler title',
+              dim: 'some filter',
+              filter: {
+                members: ['some member'],
+              },
+            } as unknown as FilterJaql,
+          },
+        ],
+      },
+    ],
+  },
+};
+
 describe('useExecuteQueryByWidgetId', () => {
   const params: ExecuteQueryByWidgetIdParams = {
     widgetOid: '64473e07dac1920034bce77f',
@@ -84,50 +138,7 @@ describe('useExecuteQueryByWidgetId', () => {
 
   it('should correctly generate query over the widget', async () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
-    const mockWidgetWithMetadataItems = {
-      ...mockWidget,
-      metadata: {
-        panels: [
-          {
-            name: 'some panel with dimensions',
-            items: [
-              {
-                jaql: {
-                  title: 'some dimension title',
-                  dim: 'some dimension',
-                } as unknown as BaseJaql,
-              },
-            ],
-          },
-          {
-            name: 'some panel with measures',
-            items: [
-              {
-                jaql: {
-                  title: 'some measure title',
-                  dim: 'some measure',
-                  agg: 'sum',
-                } as unknown as BaseJaql,
-              },
-            ],
-          },
-          {
-            name: 'some panel with filters',
-            items: [
-              {
-                jaql: {
-                  title: 'some fitler title',
-                  dim: 'some filter',
-                  filter: {
-                    members: ['some member'],
-                  },
-                } as unknown as FilterJaql,
-              },
-            ],
-          },
-        ],
-      },
-    };
+
     executeQueryMock.mockResolvedValue(mockData);
     fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
 
@@ -149,6 +160,166 @@ describe('useExecuteQueryByWidgetId', () => {
       expect(result.current.query?.filters?.length).toBe(1);
       expect((result.current.query?.filters?.[0].jaql(true) as FilterJaql).dim).toBe(
         mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql.dim,
+      );
+    });
+  });
+
+  it('should add provided "filters" and "highlights" to the query', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    const filters = [
+      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+        'some value',
+      ]),
+    ];
+    const highlights = [
+      filtersFactory.members(
+        new DimensionalAttribute('some name', 'some new highlight filter attribute'),
+        ['some value'],
+      ),
+    ];
+
+    executeQueryMock.mockResolvedValue(mockData);
+    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        filters,
+        highlights,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      // verifies query filters
+      expect(result.current.query?.filters?.length).toBe(2); // one widget filter + one provided filter via props
+      expect(
+        result.current.query?.filters?.find(
+          (filter) => (filter.jaql(true) as FilterJaql).dim === filters[0].attribute.expression,
+        ),
+      ).toBeDefined();
+
+      // verifies highlight filters
+      expect(result.current.query?.highlights?.length).toBe(1); // one provided highlight filter via props
+      expect(
+        result.current.query?.highlights?.find(
+          (filter) => (filter.jaql(true) as FilterJaql).dim === highlights[0].attribute.expression,
+        ),
+      ).toBeDefined();
+    });
+  });
+
+  it('should merge provided "filters" with existing widget filters using default `widgetFirst` strategy', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    const filters = [
+      // filter with the same target attribure as already exist in widget
+      filtersFactory.members(
+        new DimensionalAttribute(
+          'some name',
+          mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql.dim,
+        ),
+        ['some value of provided filter'],
+      ),
+    ];
+
+    executeQueryMock.mockResolvedValue(mockData);
+    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        filters,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      // verifies that query contain only widget filter, while provided filter was ignored due to the lower priority
+      expect(result.current.query?.filters?.length).toBe(1);
+      expect(
+        (
+          (result.current.query?.filters?.[0].jaql(true) as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      ).toStrictEqual(
+        (
+          (mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      );
+    });
+  });
+
+  it('should merge provided "filters" with existing widget filters using `codeFirst` strategy', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    const filters = [
+      // filter with the same target attribure as already exist in widget
+      filtersFactory.members(
+        new DimensionalAttribute(
+          'some name',
+          mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql.dim,
+        ),
+        ['some value of provided filter'],
+      ),
+    ];
+
+    executeQueryMock.mockResolvedValue(mockData);
+    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        filters,
+        filtersMergeStrategy: 'codeFirst',
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      // verifies that query contain only provided filter, while widget filter was ignored due to the lower priority
+      expect(result.current.query?.filters?.length).toBe(1);
+      expect(
+        (
+          (result.current.query?.filters?.[0].jaql(true) as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      ).toStrictEqual(
+        ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+      );
+    });
+  });
+
+  it('should merge provided "filters" with existing widget filters using `codeOnly` strategy', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    const filters = [
+      // filter with the new target attribure that not exist in widget
+      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+        'some value of provided filter',
+      ]),
+    ];
+
+    executeQueryMock.mockResolvedValue(mockData);
+    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        filters,
+        filtersMergeStrategy: 'codeOnly',
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      // verifies that query contain only provided filter, while widget filter was fully ignored
+      expect(result.current.query?.filters?.length).toBe(1);
+      expect(
+        (
+          (result.current.query?.filters?.[0].jaql(true) as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      ).toStrictEqual(
+        ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
       );
     });
   });

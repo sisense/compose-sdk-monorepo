@@ -2,14 +2,17 @@ import { DataTable } from '../../../chart-data-processor/table-processor';
 import { TableDataOptionsInternal } from '../../../chart-data-options/types';
 import { isNumber } from '@sisense/sdk-data';
 import { createCompareValue } from '../../../chart-data-processor/row-comparator';
-import { applyFormatPlainText } from '../../../chart-options-processor/translations/number-format-config';
+import {
+  applyFormatPlainText,
+  defaultConfig,
+} from '../../../chart-options-processor/translations/number-format-config';
 
 export const formatNumbers = (
   table: DataTable,
   chartDataOptions: TableDataOptionsInternal,
 ): DataTable => {
   // If there are no numberFormatConfigs, there is no formatting to be done
-  if (!chartDataOptions.columns.some((c) => c.numberFormatConfig)) return table;
+  if (!table.columns.some((c) => isNumber(c.type))) return table;
 
   // This reads the number format config from chartDataOptions,
   // and apply the format to display value
@@ -20,7 +23,7 @@ export const formatNumbers = (
     return row.map((r, index) => {
       const columnType = columns[index].type;
 
-      const numberConfig = chartDataOptions.columns[index].numberFormatConfig;
+      const numberConfig = chartDataOptions.columns[index].numberFormatConfig || defaultConfig;
       if (isNumber(columnType) && numberConfig) {
         const compareValue = createCompareValue(r.displayValue, columnType);
         return {

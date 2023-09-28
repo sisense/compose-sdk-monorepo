@@ -136,6 +136,7 @@ export function createDataColumn(item: PanelItem, themeSettings?: CompleteThemeS
 
   return {
     column: element,
+    isColored: item.isColored ?? false,
     ...(sortType && { sortType }),
     ...(numberFormatConfig && { numberFormatConfig }),
   } as StyledColumn;
@@ -179,12 +180,18 @@ function extractCategoricalChartDataOptions(
 ): CategoricalChartDataOptions {
   const category = createColumnsFromPanelItems(panels, 'categories', themeSettings);
   const value = createColumnsFromPanelItems(panels, 'values', themeSettings);
-  const membersFormat = getEnabledPanelItems(panels, 'categories')[0]?.format?.members;
+  const size = createColumnsFromPanelItems(panels, 'size', themeSettings);
+  let membersFormat = getEnabledPanelItems(panels, 'categories')[0]?.format?.members;
+
+  if (getEnabledPanelItems(panels, 'color').length) {
+    membersFormat = getEnabledPanelItems(panels, 'color')[0]?.format?.members;
+  }
+
   const seriesToColorMap = membersFormat && createValueToColorMap(membersFormat);
 
   return {
     category: category as StyledColumn[],
-    value,
+    value: [...value, ...size],
     ...(seriesToColorMap && { seriesToColorMap }),
   };
 }
@@ -251,6 +258,7 @@ export function extractDataOptions(
       return extractCartesianChartDataOptions(panels, widgetType, themeSettings);
     case WidgetType.PieChart:
     case WidgetType.FunnelChart:
+    case WidgetType.TreemapChart:
       return extractCategoricalChartDataOptions(panels, themeSettings);
     case WidgetType.ScatterChart:
       return extractScatterChartDataOptions(panels, themeSettings);
