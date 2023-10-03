@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-query-client",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -9,8 +9,8 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-data": "^0.11.0",
-    "@sisense/sdk-rest-client": "^0.11.0",
+    "@sisense/sdk-data": "^0.11.1",
+    "@sisense/sdk-rest-client": "^0.11.1",
     "@sisense/task-manager": "^0.1.0",
     "numeral": "^2.0.6",
     "uuid": "^9.0.0"

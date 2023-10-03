@@ -13,6 +13,9 @@ export function ChartsFromExampleApp() {
           breakByPoint: exampleData.group,
           size: exampleData.returns,
         }}
+        onDataPointClick={(point) => {
+          console.log(point.x);
+        }}
       />
     </>
   );

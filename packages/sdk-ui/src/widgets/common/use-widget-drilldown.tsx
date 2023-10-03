@@ -1,5 +1,6 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { useCallback, useState, useMemo } from 'react';
 
@@ -28,6 +29,10 @@ export const useWidgetDrilldown = (props: ChartWidgetProps): ChartWidgetProps =>
     onBeforeRender: _onBeforeRender,
     ...restProps
   } = props;
+
+  if (['bubble', 'scatter'].includes(restProps.chartType)) {
+    throw new Error(`Drilldown is not supported for chart type ${restProps.chartType}`);
+  }
 
   const [selectedDataPoints, setSelectedDataPoints] = useState<DataPoint[]>([]);
 

@@ -6,6 +6,8 @@ import {
   applyEventHandlersToChart,
   DataPointEventHandler,
   DataPointsEventHandler,
+  ScatterDataPointEventHandler,
+  ScatterDataPointsEventHandler,
 } from '../chart-options-processor/apply-event-handlers';
 import { BeforeRenderHandler } from '../props';
 import {
@@ -28,9 +30,9 @@ interface Props {
   chartDataOptions: ChartDataOptionsInternal;
   designOptions: ChartDesignOptions;
   themeSettings?: CompleteThemeSettings;
-  onDataPointClick?: DataPointEventHandler;
-  onDataPointContextMenu?: DataPointEventHandler;
-  onDataPointsSelected?: DataPointsEventHandler;
+  onDataPointClick?: DataPointEventHandler | ScatterDataPointEventHandler;
+  onDataPointContextMenu?: DataPointEventHandler | ScatterDataPointEventHandler;
+  onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
   onBeforeRender?: BeforeRenderHandler;
 }
 

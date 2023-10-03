@@ -50,7 +50,10 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
 
   const [refreshCounter, setRefreshCounter] = useState(0);
 
-  props = useWidgetDrilldown(props);
+  // drilldown is not supported for scatter charts
+  if (props.chartType !== 'scatter') {
+    props = useWidgetDrilldown(props);
+  }
 
   const {
     onDataPointContextMenu,

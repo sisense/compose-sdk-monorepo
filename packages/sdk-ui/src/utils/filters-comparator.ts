@@ -3,6 +3,7 @@ import { isEqual, isEqualWith } from 'lodash';
 
 /**
  * Checks if the filters have changed by deep comparison.
+ *
  * @param prevFilters - Previous filters
  * @param newFilters - New filters
  * @returns Whether the filters have changed
@@ -30,21 +31,24 @@ export function isFiltersChanged(
     return false;
   }
   // compare filters with ignoring randomly generated names
-  return !prevFilters!.some((prevFilter, i) =>
-    isEqualWith(
-      prevFilter,
-      newFilters![i]!,
-      (prevFilterWithRandomName: Filter, newFilterWithRandomName: Filter) => {
-        const prevFilterWithoutRandomName = {
-          ...(prevFilterWithRandomName.toJSON() as Record<string, unknown>),
-          name: undefined,
-        };
-        const newFilterWithoutRandomName = {
-          ...(newFilterWithRandomName.toJSON() as Record<string, unknown>),
-          name: undefined,
-        };
-        return isEqual(prevFilterWithoutRandomName, newFilterWithoutRandomName);
-      },
-    ),
+  // if filters at some index in the two arrays do not equal,
+  // return true (filters have changed)
+  return prevFilters!.some(
+    (prevFilter, i) =>
+      !isEqualWith(
+        prevFilter,
+        newFilters![i]!,
+        (prevFilterWithRandomName: Filter, newFilterWithRandomName: Filter) => {
+          const prevFilterWithoutRandomName = {
+            ...(prevFilterWithRandomName.toJSON() as Record<string, unknown>),
+            name: undefined,
+          };
+          const newFilterWithoutRandomName = {
+            ...(newFilterWithRandomName.toJSON() as Record<string, unknown>),
+            name: undefined,
+          };
+          return isEqual(prevFilterWithoutRandomName, newFilterWithoutRandomName);
+        },
+      ),
   );
 }

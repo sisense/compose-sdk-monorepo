@@ -197,7 +197,7 @@ describe('getScatterPlotOptions', () => {
     it('should have correct series options', () => {
       const options = getScatterPlotOptions(chartDesignOptions, {});
       expect(options.series).toMatchObject({
-        allowPointSelect: true,
+        allowPointSelect: false,
         boostThreshold: 0,
         stickyTracking: false,
         turboThreshold: 0,

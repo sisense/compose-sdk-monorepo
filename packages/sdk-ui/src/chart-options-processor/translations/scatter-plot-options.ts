@@ -133,7 +133,7 @@ export const getScatterPlotOptions = (
       ),
     },
     series: {
-      allowPointSelect: true,
+      allowPointSelect: false,
       boostThreshold: 0,
       dataLabels: getScatterValueLabelSettings(chartDesignOptions.valueLabel, dataOptions),
       stickyTracking: false,

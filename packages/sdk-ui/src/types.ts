@@ -663,6 +663,9 @@ export type DrilldownSelection = {
   nextDimension: Attribute;
 };
 
+// only arrays of same elements
+export type DataPoints = DataPoint[] | ScatterDataPoint[];
+
 /** Data point in a chart. */
 export type DataPoint = {
   /** Value of the data point */
@@ -673,6 +676,15 @@ export type DataPoint = {
   categoryDisplayValue?: string;
   /** Series associated with the data point */
   seriesValue?: string | number;
+};
+
+/** Data point in a chart. */
+export type ScatterDataPoint = {
+  x?: string | number;
+  y?: string | number;
+  size?: number;
+  breakByPoint?: string;
+  breakByColor?: string;
 };
 
 /**
@@ -699,7 +711,11 @@ export type HighchartsSelectEvent = {
 /**
  * @internal
  */
-export type HighchartsSelectEventAxis = { axis: { series: Series[] }; min: number; max: number };
+export type HighchartsSelectEventAxis = {
+  axis: { series: Series[]; coll: 'xAxis' | 'yAxis' };
+  min: number;
+  max: number;
+};
 /**
  * @internal
  */
@@ -711,11 +727,21 @@ export type Series = {
  */
 export type HighchartsPoint = {
   category: string;
+  name?: string;
+  options: {
+    name: string;
+    custom: {
+      number1?: number;
+    };
+  };
   custom: {
+    maskedBreakByPoint?: string;
+    maskedBreakByColor?: string;
     rawValue?: string | number;
     xValue?: (string | number)[];
   };
   series: {
+    initialType: string;
     options: {
       custom?: { rawValue?: string | number[] };
     };
@@ -725,6 +751,7 @@ export type HighchartsPoint = {
   };
   x: number;
   y: number;
+  z: number;
 };
 
 /**

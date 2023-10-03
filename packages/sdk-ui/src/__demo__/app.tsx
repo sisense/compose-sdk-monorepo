@@ -14,6 +14,7 @@ import { MiscDemo } from './pages/misc-demo';
 import { WidgetDemo } from './pages/widget-demo';
 import { NumberFormating } from './pages/NumberFormating';
 import { DrilldownWidgetDemo } from './pages/drilldown-widget-demo';
+import { ChartFilterCycle } from './pages/chart-filter-cycle';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -27,6 +28,7 @@ const pages: ComponentType[] = [
   ChartsFromExampleApp,
   MiscDemo,
   DrilldownWidgetDemo,
+  ChartFilterCycle,
   ...loadAdditionalPages(),
 ];
 

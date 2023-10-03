@@ -7,6 +7,8 @@ import {
   HighchartsSelectEvent,
   HighchartsPoint,
   HighchartsSelectEventAxis,
+  ScatterDataPoint,
+  DataPoints,
 } from '../types';
 import { HighchartsOptionsInternal } from '../chart-options-processor/chart-options-service';
 
@@ -24,6 +26,22 @@ export type DataPointEventHandler = (
   point: DataPoint,
   /** Native PointerEvent */
   nativeEvent: PointerEvent,
+) => void;
+
+/** Click handler for when a scatter data point is clicked */
+export type ScatterDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: ScatterDataPoint,
+  /** Native PointerEvent */
+  nativeEvent: PointerEvent,
+) => void;
+
+/** Click handler for when multiple scatter data points are selected. */
+export type ScatterDataPointsEventHandler = (
+  /** Data points that were selected */
+  points: ScatterDataPoint[],
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
 ) => void;
 
 type HighchartsEventOptions = {
@@ -47,9 +65,9 @@ export const applyEventHandlersToChart = (
     onDataPointContextMenu,
     onDataPointsSelected,
   }: {
-    onDataPointClick?: DataPointEventHandler;
-    onDataPointContextMenu?: DataPointEventHandler;
-    onDataPointsSelected?: DataPointsEventHandler;
+    onDataPointClick?: DataPointEventHandler | ScatterDataPointEventHandler;
+    onDataPointContextMenu?: DataPointEventHandler | ScatterDataPointEventHandler;
+    onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
   } = {},
 ): HighchartsOptionsInternal => {
   const eventOptions: HighchartsEventOptions = {
@@ -59,10 +77,21 @@ export const applyEventHandlersToChart = (
 
   if (onDataPointsSelected) {
     eventOptions.chart.zoomType = 'x';
+    onDataPointsSelected = onDataPointsSelected as DataPointsEventHandler;
+    onDataPointClick = onDataPointClick as DataPointEventHandler;
+    // make selection two dimensional for scatter charts
+    if (['scatter', 'bubble'].includes(chartOptions.chart?.type)) {
+      eventOptions.chart.zoomType = 'xy';
+      onDataPointsSelected = onDataPointsSelected as ScatterDataPointsEventHandler;
+      onDataPointClick = onDataPointClick as ScatterDataPointEventHandler;
+    }
     eventOptions.chart.events.selection = (nativeEvent: HighchartsSelectEvent) => {
       nativeEvent.preventDefault();
-      const { xAxis, originalEvent } = nativeEvent;
-      onDataPointsSelected(getSelections(xAxis[0]), originalEvent);
+      const { xAxis, yAxis, originalEvent } = nativeEvent;
+      (onDataPointsSelected as DataPointsEventHandler | ScatterDataPointsEventHandler)(
+        getSelections(xAxis[0], yAxis[0]),
+        originalEvent,
+      );
     };
   }
 
@@ -84,19 +113,52 @@ export const applyEventHandlersToChart = (
   return merge(chartOptions, eventOptions);
 };
 
-const getDataPoint = (point: HighchartsPoint): DataPoint => {
-  const value = point.custom.rawValue;
-  const categoryValue = point.custom.xValue?.[0];
-  const seriesValue = point.series.options.custom?.rawValue?.[0];
-  const categoryDisplayValue = point.category;
-  return {
-    value,
-    categoryValue,
-    seriesValue,
-    categoryDisplayValue,
-  };
+const getDataPoint = (point: HighchartsPoint): DataPoint | ScatterDataPoint => {
+  switch (point.series.initialType) {
+    case 'bubble':
+    case 'scatter':
+      return getScatterDataPoint(point);
+    case 'funnel':
+      return getFunnelDataPoint(point);
+    default:
+      return getCartesianDataPoint(point);
+  }
 };
 
-const getSelections = ({ min, max, axis }: HighchartsSelectEventAxis): DataPoint[] => {
-  return axis.series[0].points.filter(({ x }) => x >= min && x <= max).map(getDataPoint);
+const getSelections = (
+  xAxis: HighchartsSelectEventAxis,
+  yAxis?: HighchartsSelectEventAxis,
+): DataPoints => {
+  const xPoints = xAxis.axis.series
+    .flatMap((series) => series.points)
+    .filter(({ x }) => x >= xAxis.min && x <= xAxis.max);
+
+  if (!yAxis) return xPoints.map(getDataPoint) as DataPoints;
+
+  const yPoints = yAxis.axis.series
+    .flatMap((series) => series.points)
+    .filter(({ y }) => y >= yAxis.min && y <= xAxis.max);
+
+  return xPoints.filter((point) => yPoints.includes(point)).map(getDataPoint) as DataPoints;
 };
+
+const getCartesianDataPoint = (point: HighchartsPoint): DataPoint => ({
+  value: point.custom.rawValue,
+  categoryValue: point.custom.xValue?.[0],
+  seriesValue: point.series.options.custom?.rawValue?.[0],
+  categoryDisplayValue: point.category,
+});
+
+const getScatterDataPoint = (point: HighchartsPoint): ScatterDataPoint => ({
+  x: point.x,
+  y: point.y,
+  size: point.z,
+  breakByPoint: point.custom.maskedBreakByPoint,
+  breakByColor: point.custom.maskedBreakByColor,
+});
+
+const getFunnelDataPoint = (point: HighchartsPoint): DataPoint => ({
+  value: point.options.custom.number1,
+  categoryValue: point.options.name,
+  categoryDisplayValue: point.name,
+});

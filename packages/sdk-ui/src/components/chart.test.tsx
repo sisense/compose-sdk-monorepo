@@ -9,6 +9,8 @@ import type { useSisenseContext } from './sisense-context/sisense-context';
 import { getDefaultThemeSettings } from '../chart-options-processor/theme-option-service';
 import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
 import type { ClientApplication } from '../app/client-application';
+import { DataPointEventHandler, DataPointsEventHandler } from '../props';
+
 vi.mock('./highcharts-wrapper', () => {
   return {
     HighchartsWrapper: ({ options }: { options: object }) => {
@@ -122,9 +124,9 @@ it('add handlers to a chart', () => {
         expect(options).toMatchSnapshot();
         return options;
       }}
-      onDataPointClick={vi.fn()}
-      onDataPointContextMenu={vi.fn()}
-      onDataPointsSelected={vi.fn()}
+      onDataPointClick={vi.fn() as DataPointEventHandler}
+      onDataPointContextMenu={vi.fn() as DataPointEventHandler}
+      onDataPointsSelected={vi.fn() as DataPointsEventHandler}
     />,
   );
 });

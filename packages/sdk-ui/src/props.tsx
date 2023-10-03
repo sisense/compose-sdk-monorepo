@@ -34,12 +34,21 @@ import {
 import {
   DataPointEventHandler,
   DataPointsEventHandler,
+  ScatterDataPointEventHandler,
+  ScatterDataPointsEventHandler,
 } from './chart-options-processor/apply-event-handlers';
 import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams } from './components/query-execution';
 import { FiltersMergeStrategy } from './dashboard-widget/types';
 
-export type { DataPointEventHandler, DataPointsEventHandler, MenuItemSection, HighchartsOptions };
+export type {
+  ScatterDataPointEventHandler,
+  ScatterDataPointsEventHandler,
+  DataPointEventHandler,
+  DataPointsEventHandler,
+  MenuItemSection,
+  HighchartsOptions,
+};
 
 /**
  * Props for {@link SisenseContextProvider} component
@@ -184,6 +193,37 @@ interface ChartEventProps {
    *
    * @category Callbacks
    */
+  onDataPointClick?: DataPointEventHandler | ScatterDataPointEventHandler;
+  /**
+   * Context menu handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?: DataPointEventHandler | ScatterDataPointEventHandler;
+  /**
+   * Handler callback for selection of multiple data points
+   *
+   * @category Callbacks
+   */
+  onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
+
+  /**
+   * Before render handler callback that allows adjusting
+   * detail chart options prior to render
+   *
+   * This callback is not yet supported for {@link IndicatorChart}
+   *
+   * @category Callbacks
+   */
+  onBeforeRender?: BeforeRenderHandler;
+}
+
+interface CartesianChartEventProps extends ChartEventProps {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
   onDataPointClick?: DataPointEventHandler;
   /**
    * Context menu handler callback for a data point
@@ -197,16 +237,27 @@ interface ChartEventProps {
    * @category Callbacks
    */
   onDataPointsSelected?: DataPointsEventHandler;
+}
 
+interface ScatterChartEventProps extends ChartEventProps {
   /**
-   * Before render handler callback that allows adjusting
-   * detail chart options prior to render
-   *
-   * This callback is not yet supported for {@link IndicatorChart}
+   * Click handler callback for a data point
    *
    * @category Callbacks
    */
-  onBeforeRender?: BeforeRenderHandler;
+  onDataPointClick?: ScatterDataPointEventHandler;
+  /**
+   * Context menu handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?: ScatterDataPointEventHandler;
+  /**
+   * Handler callback for selection of multiple data points
+   *
+   * @category Callbacks
+   */
+  onDataPointsSelected?: ScatterDataPointsEventHandler;
 }
 
 /**
@@ -214,7 +265,7 @@ interface ChartEventProps {
  *
  * @internal
  */
-export interface BaseChartProps extends ChartEventProps {
+export interface BaseChartProps {
   /**
    * Data set for this chart, which supports two options:
    *
@@ -256,7 +307,7 @@ export interface BaseChartProps extends ChartEventProps {
 /**
  * Props shared across {@link Chart} components.
  */
-export interface ChartProps extends BaseChartProps {
+export interface ChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Default chart type of each series.
    *
@@ -290,7 +341,7 @@ export interface ChartProps extends BaseChartProps {
 /**
  * Props of the {@link AreaChart} component.
  */
-export interface AreaChartProps extends BaseChartProps {
+export interface AreaChartProps extends BaseChartProps, CartesianChartEventProps {
   /**
    * Configurations for how to interpret and present data passed to the chart.
    *
@@ -308,7 +359,7 @@ export interface AreaChartProps extends BaseChartProps {
 /**
  * Props of the {@link BarChart} component.
  */
-export interface BarChartProps extends BaseChartProps {
+export interface BarChartProps extends BaseChartProps, CartesianChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -326,7 +377,7 @@ export interface BarChartProps extends BaseChartProps {
 /**
  * Props of the {@link ColumnChart} component.
  */
-export interface ColumnChartProps extends BaseChartProps {
+export interface ColumnChartProps extends BaseChartProps, CartesianChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -344,7 +395,7 @@ export interface ColumnChartProps extends BaseChartProps {
 /**
  * Props of the {@link FunnelChart} component.
  */
-export interface FunnelChartProps extends BaseChartProps {
+export interface FunnelChartProps extends BaseChartProps, CartesianChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -362,7 +413,7 @@ export interface FunnelChartProps extends BaseChartProps {
 /**
  * Props of the {@link LineChart} component.
  */
-export interface LineChartProps extends BaseChartProps {
+export interface LineChartProps extends BaseChartProps, CartesianChartEventProps {
   /**
    * Configurations for how to interpret and present data passed to the chart.
    *
@@ -380,7 +431,7 @@ export interface LineChartProps extends BaseChartProps {
 /**
  * Props of the {@link PieChart} component.
  */
-export interface PieChartProps extends BaseChartProps {
+export interface PieChartProps extends BaseChartProps, CartesianChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -398,7 +449,7 @@ export interface PieChartProps extends BaseChartProps {
 /**
  * Props of the {@link PolarChart} component.
  */
-export interface PolarChartProps extends BaseChartProps {
+export interface PolarChartProps extends BaseChartProps, CartesianChartEventProps {
   /** Configurations for how to interpret and present the data passed to the chart */
   dataOptions: CartesianChartDataOptions;
   /** Configuration that define functional style of the various chart elements */
@@ -467,7 +518,7 @@ export interface TableProps {
 /**
  * Props of the {@link ScatterChart} component.
  */
-export interface ScatterChartProps extends BaseChartProps {
+export interface ScatterChartProps extends BaseChartProps, ScatterChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -487,7 +538,8 @@ export interface ScatterChartProps extends BaseChartProps {
  *
  */
 export interface DashboardWidgetProps
-  extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'> {
+  extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'>,
+    ChartEventProps {
   /**
    * Identifier of the widget
    *
@@ -573,34 +625,6 @@ export interface DashboardWidgetProps
    * @internal
    */
   drilldownOptions?: DrilldownOptions;
-  /**
-   * {@inheritDoc ChartWidgetProps.onDataPointClick}
-   *
-   * @category Callbacks
-   * @internal
-   */
-  onDataPointClick?: DataPointEventHandler;
-  /**
-   * {@inheritDoc ChartWidgetProps.onDataPointContextMenu}
-   *
-   * @category Callbacks
-   * @internal
-   */
-  onDataPointContextMenu?: DataPointEventHandler;
-  /**
-   * {@inheritDoc ChartWidgetProps.onDataPointsSelected}
-   *
-   * @category Callbacks
-   * @internal
-   */
-  onDataPointsSelected?: DataPointsEventHandler;
-  /**
-   * {@inheritDoc ChartWidgetProps.onBeforeRender}
-   *
-   * @category Callbacks
-   * @internal
-   */
-  onBeforeRender?: BeforeRenderHandler;
 }
 
 /**
@@ -826,7 +850,7 @@ export interface ExecuteQueryByWidgetIdProps {
 /**
  * Props of the {@link TreemapChart} component.
  */
-export interface TreemapChartProps extends BaseChartProps {
+export interface TreemapChartProps extends BaseChartProps, CartesianChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *

@@ -10,6 +10,7 @@ import {
   StackableStyleOptions,
   MemberFilterTile,
   ChartWidget,
+  DataPointEventHandler,
 } from '../../index';
 import * as DM from '../sample-ecommerce';
 import { Filter, filters, measures } from '@sisense/sdk-data';
@@ -220,9 +221,11 @@ export const ECommerceDemo = () => {
                   breakBy: [],
                 }}
                 styleOptions={lineChartStyleOptions}
-                onDataPointClick={(...args) => {
-                  console.log('onDataPointClick', ...args);
-                }}
+                onDataPointClick={
+                  ((...args) => {
+                    console.log('onDataPointClick', ...args);
+                  }) as DataPointEventHandler
+                }
               />
             </div>
             <div className="csdk-flex csdk-flex-row csdk-flex-1 csdk-h-1/2">

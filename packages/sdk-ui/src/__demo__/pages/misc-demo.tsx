@@ -18,6 +18,7 @@ import { PolarChart } from '../../components/polar-chart';
 import { ScatterChart } from '../../components/scatter-chart';
 import { ThemeProvider } from '../../components/theme-provider';
 import { Chart } from '../../components/chart';
+import { DataPoint, DataPoints, ScatterDataPoint } from '../../types';
 
 /**
 This page is used by Tuan for testing quickly the SDK UI components for API Doc.
@@ -27,16 +28,13 @@ export const MiscDemo = () => {
   const allMembers = ['United States', 'Canada', 'Mexico'].map((m) => ({ key: m, title: m }));
   const selectedMembers = ['United States', 'Mexico'].map((m) => ({ key: m, title: m }));
 
+  const onDataPointsSelected = (points: DataPoints) => console.log('Point selected', points);
+  const onDataPointClicked = (point: DataPoint | ScatterDataPoint) =>
+    console.log('Point clicked', point);
+
   const [dateRangeFilter, setDateRangeFilter] = useState<Filter>(
     filters.dateRange(DM.Commerce.Date.Days),
   );
-  /* const [{ filter }, setDateRangeFilter] = useState<DateFilterRange>({
-    type: 'date-range',
-    filter: {
-      from: '2019-06-08',
-      to: '2019-06-16',
-    },
-  });*/
 
   return (
     <div className="csdk-h-fit">
@@ -89,6 +87,8 @@ export const MiscDemo = () => {
           ],
           breakBy: [],
         }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <ScatterChart
         dataSet={DM.DataSource}
@@ -128,9 +128,8 @@ export const MiscDemo = () => {
             },
           },
         }}
-        onDataPointClick={(point, nativeEvent) => {
-          console.log('clicked', point, nativeEvent);
-        }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <PolarChart
         dataSet={DM.DataSource}
@@ -140,9 +139,8 @@ export const MiscDemo = () => {
           breakBy: [DM.Commerce.Gender],
         }}
         filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
-        onDataPointClick={(point, nativeEvent) => {
-          console.log('clicked', point, nativeEvent);
-        }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <PieChart
         dataSet={DM.DataSource}
@@ -151,9 +149,8 @@ export const MiscDemo = () => {
           value: [measures.sum(DM.Commerce.Revenue)],
         }}
         filters={[filters.measureGreaterThanOrEqual(measures.sum(DM.Commerce.Revenue), 1600000)]}
-        onDataPointClick={(point, nativeEvent) => {
-          console.log('clicked', point, nativeEvent);
-        }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <LineChart
         dataSet={DM.DataSource}
@@ -163,9 +160,8 @@ export const MiscDemo = () => {
           breakBy: [DM.Commerce.Gender],
         }}
         filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
-        onDataPointClick={(point, nativeEvent) => {
-          console.log('clicked', point, nativeEvent);
-        }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <IndicatorChart
         dataSet={DM.DataSource}
@@ -241,9 +237,8 @@ export const MiscDemo = () => {
           breakBy: [DM.Commerce.Gender],
         }}
         filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
-        onDataPointClick={(point, nativeEvent) => {
-          console.log('clicked', point, nativeEvent);
-        }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <BarChart
         dataSet={DM.DataSource}
@@ -253,9 +248,8 @@ export const MiscDemo = () => {
           breakBy: [DM.Commerce.Gender],
         }}
         filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
-        onDataPointClick={(point, nativeEvent) => {
-          console.log('clicked', point, nativeEvent);
-        }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <AreaChart
         dataSet={DM.DataSource}
@@ -266,9 +260,8 @@ export const MiscDemo = () => {
         }}
         styleOptions={{ subtype: 'area/stacked' }}
         filters={[filters.members(DM.Commerce.Gender, ['Female', 'Male'])]}
-        onDataPointClick={(point, nativeEvent) => {
-          console.log('clicked', point, nativeEvent);
-        }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       Copy
       <FunnelChart
@@ -299,6 +292,8 @@ export const MiscDemo = () => {
             },
           ],
         }}
+        onDataPointsSelected={onDataPointsSelected}
+        onDataPointClick={onDataPointClicked}
       />
       <DateRangeFilterTile
         title="Date Range"

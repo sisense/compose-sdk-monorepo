@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-rest-client",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
