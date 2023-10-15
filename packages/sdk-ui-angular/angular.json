@@ -7,7 +7,7 @@
       "projectType": "library",
       "root": "",
       "sourceRoot": "src",
-      "prefix": "lib",
+      "prefix": "csdk",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

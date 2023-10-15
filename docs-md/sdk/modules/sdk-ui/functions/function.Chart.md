@@ -38,7 +38,7 @@ plot a column chart of the Sample ECommerce data source hosted in a Sisense inst
   onDataPointClick= {(point, nativeEvent) => { console.log('clicked', point, nativeEvent); }}
 />
 ```
-##
+
 <img src="../../../img/chart-data-source-example-1.png" width="800px" />
 
 (2) An example of using the `Chart` component to
@@ -89,5 +89,5 @@ plot a pie chart of static data provided in code:
    }}
  />
 ```
-##
+
 <img src="../../../img/chart-local-data-example-1.png" width="800px" />

@@ -10,6 +10,16 @@ Parameters for [useExecuteQuery](../functions/function.useExecuteQuery.md) hook.
 
 ## Type declaration
 
+### `count`
+
+**count**?: `number`
+
+Number of rows to return in the query result
+
+If not specified, the default value is `20000`
+
+***
+
 ### `dataSource`
 
 **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
@@ -59,3 +69,13 @@ Highlight filters that will highlight results that pass filter criteria
 **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
 Measures of the query
+
+***
+
+### `offset`
+
+**offset**?: `number`
+
+Offset of the first row to return
+
+If not specified, the default value is `0`

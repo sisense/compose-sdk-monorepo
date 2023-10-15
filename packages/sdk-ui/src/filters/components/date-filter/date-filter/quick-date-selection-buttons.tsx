@@ -8,7 +8,7 @@ import {
 } from '../../common/buttons';
 import styled from '@emotion/styled';
 import { CompleteThemeSettings } from '../../../../types';
-import { useThemeContext } from '../../../../components/theme-provider';
+import { useThemeContext } from '../../../../theme-provider';
 
 type ButtonId = 'earliest' | 'today' | 'latest';
 type QuickDateSelectionButtonsProps = {
@@ -27,7 +27,7 @@ type ThemePropMixin = {
 type ThemedButtonProps = ButtonProps & ThemePropMixin;
 
 const ThemedSecondaryButton = styled(SecondaryButton)<ThemedButtonProps>`
-  background-color: ${({ theme }) => theme.general.brandColor};
+  background-color: #edeef1;
   color: ${({ theme }) => theme.general.primaryButtonTextColor};
 `;
 
@@ -36,7 +36,7 @@ type ThemedSecondaryButtonWithTooltipProps = ButtonWithTooltipProps & ThemePropM
 const ThemedSecondaryButtonWithTooltip = styled(
   SecondaryButtonWithTooltip,
 )<ThemedSecondaryButtonWithTooltipProps>`
-  background-color: ${({ theme }) => theme.general.brandColor};
+  background-color: #edeef1;
   color: ${({ theme }) => theme.general.primaryButtonTextColor};
 `;
 
@@ -56,50 +56,48 @@ export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps)
   return (
     <ThemedButtonsContainer
       className={
-        (props.enabledButtons.includes('earliest') ? 'csdk-left-[16px]' : 'csdk-right-[16px]') +
-        ' csdk-p-[16px]'
+        (props.enabledButtons.includes('earliest') ? 'csdk-left-[10px]' : 'csdk-right-[10px]') +
+        ' csdk-p-[10px] csdk-pb-[0px]'
       }
       theme={themeSettings}
     >
-      {props.enabledButtons.includes('earliest') && (
-        <ThemedSecondaryButton
-          className="csdk-mr-[12px]"
-          onClick={() => {
-            const selectedDate = dayjs(props.limit?.minDate || new Date());
-            props.onDateSelected(selectedDate);
-          }}
-          theme={themeSettings}
-        >
-          Earliest Date
-        </ThemedSecondaryButton>
-      )}
+      <ThemedSecondaryButton
+        className="csdk-mr-[10px]"
+        onClick={() => {
+          const selectedDate = dayjs(props.limit?.minDate || new Date());
+          props.onDateSelected(selectedDate);
+        }}
+        theme={themeSettings}
+        style={{ visibility: props.enabledButtons.includes('earliest') ? 'visible' : 'hidden' }}
+      >
+        Earliest Date
+      </ThemedSecondaryButton>
 
-      {props.enabledButtons.includes('today') && (
-        <ThemedSecondaryButtonWithTooltip
-          className="csdk-mr-[12px]"
-          onClick={() => {
-            const selectedDate = dayjs(new Date());
-            props.onDateSelected(selectedDate);
-          }}
-          disabled={isTodayOutOfAllowedDateRange}
-          tooltipTitle="Today is out of available date range"
-          disableTooltip={!isTodayOutOfAllowedDateRange}
-          theme={themeSettings}
-        >
-          Today
-        </ThemedSecondaryButtonWithTooltip>
-      )}
-      {props.enabledButtons.includes('latest') && (
-        <ThemedSecondaryButton
-          onClick={() => {
-            const selectedDate = dayjs(props.limit?.maxDate || new Date());
-            props.onDateSelected(selectedDate);
-          }}
-          theme={themeSettings}
-        >
-          Latest Day
-        </ThemedSecondaryButton>
-      )}
+      <ThemedSecondaryButtonWithTooltip
+        className="csdk-mr-[12px]"
+        onClick={() => {
+          const selectedDate = dayjs(new Date());
+          props.onDateSelected(selectedDate);
+        }}
+        disabled={isTodayOutOfAllowedDateRange}
+        tooltipTitle="Today is out of available date range"
+        disableTooltip={!isTodayOutOfAllowedDateRange}
+        theme={themeSettings}
+        style={{ visibility: props.enabledButtons.includes('today') ? 'visible' : 'hidden' }}
+      >
+        Today
+      </ThemedSecondaryButtonWithTooltip>
+
+      <ThemedSecondaryButton
+        onClick={() => {
+          const selectedDate = dayjs(props.limit?.maxDate || new Date());
+          props.onDateSelected(selectedDate);
+        }}
+        theme={themeSettings}
+        style={{ visibility: props.enabledButtons.includes('latest') ? 'visible' : 'hidden' }}
+      >
+        Latest Day
+      </ThemedSecondaryButton>
     </ThemedButtonsContainer>
   );
 };

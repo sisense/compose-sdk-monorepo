@@ -22,11 +22,15 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   display: flex;
   align-items: stretch;
   flex-direction: column;
+  padding-bottom: 10px;
   .react-datepicker__header {
     background-color: ${({ theme }) => theme.general.backgroundColor};
+    border-bottom: none;
+    padding-bottom: 0;
   }
   .react-datepicker__day-name {
-    color: ${({ theme }) => theme.typography.secondaryTextColor};
+    color: ${({ theme }) => theme.typography.primaryTextColor};
+    font-weight: 700;
   }
   .react-datepicker__day {
     width: 2rem;
@@ -39,19 +43,61 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     z-index: 1;
   }
 
-  // ----------------- Days in range styling ------------------------------
-  .react-datepicker__day--in-range {
+  .react-datepicker__day {
     &:before {
       content: '';
       position: absolute;
       display: block;
       background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.5)};
-      width: calc(100% + 1px);
+      width: calc(100%);
       top: -1px;
       height: calc(100% + 2px);
       z-index: -1;
       left: 0%;
+      visibility: hidden;
     }
+
+    &:first-child:before {
+      border-radius: 100% 0 0 100%;
+    }
+
+    &:last-child:before {
+      border-radius: 0 100% 100% 0;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      display: block;
+      background-color: ${({ theme }) => theme.general.brandColor};
+      width: 92%;
+      padding-top: 92%;
+      top: 50%;
+      right: 4%;
+      transform: translateY(-50%);
+      border-radius: 100%;
+      z-index: -1;
+      visibility: hidden;
+    }
+  }
+
+  // ----------------- Days in range styling ------------------------------
+  .react-datepicker__day--in-range:before {
+    visibility: visible;
+  }
+
+  .react-datepicker__day--in-range.react-datepicker__day--selecting-range-start {
+    &:before {
+      border-radius: 100% 0 0 100%;
+    }
+  }
+  .react-datepicker__day--in-range.react-datepicker__day--selecting-range-end {
+    &:before {
+      border-radius: 0 100% 100% 0;
+    }
+  }
+  .react-datepicker__day--in-range.react-datepicker__day--selecting-range-start.react-datepicker__day--selecting-range-end {
+    border-radius: 100%;
   }
 
   // Days in range that becomes out of selecting range when user is hovering dates in calendar
@@ -60,6 +106,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
       background-color: ${({ theme }) => theme.general.backgroundColor};
       color: ${({ theme }) => theme.typography.secondaryTextColor};
       &:before {
+        visibility: visible;
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
       }
     }
@@ -69,29 +116,10 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   .react-datepicker__month--selecting-range .react-datepicker__day--in-selecting-range {
     &:not(.react-datepicker__day--in-range) {
       &:before {
-        content: '';
-        position: absolute;
-        display: block;
-        width: calc(100% + 1px);
-        top: -1px;
-        height: calc(100% + 2px);
-        z-index: -1;
-        left: 0%;
+        visibility: visible;
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
       }
       color: ${({ theme }) => theme.typography.secondaryTextColor};
-    }
-    &.react-datepicker__day--selecting-range-start {
-      &:before {
-        width: calc(50% + 1px);
-        left: 50%;
-      }
-    }
-    &.react-datepicker__day--selecting-range-end {
-      &:before {
-        width: calc(50% + 1px);
-        right: 50%;
-      }
     }
   }
 
@@ -101,37 +129,26 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   .react-datepicker__day--range-end,
   .react-datepicker__month--selecting-range .react-datepicker__day--selecting-range-end {
     &:after {
-      content: '';
-      position: absolute;
-      display: block;
-      background-color: ${({ theme }) => theme.general.brandColor};
-      width: 100%;
-      top: -1px;
-      height: calc(100% + 2px);
-      border-radius: 50%;
-      z-index: -1;
+      visibility: visible;
     }
 
     &:before {
-      content: '';
-      position: absolute;
-      display: block;
+      visibility: visible;
       background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.5)};
-      width: calc(50% + 1px);
-      top: -1px;
-      height: calc(100% + 2px);
-      z-index: -1;
     }
 
     &.react-datepicker__day--range-start {
       &:before {
-        left: 50%;
+        width: 90%;
+        left: 10%;
+        border-radius: 100% 0 0 100%;
       }
     }
 
     &.react-datepicker__day--range-end {
-      &.before {
-        right: 50%;
+      &:before {
+        width: 90%;
+        border-radius: 0 100% 100% 0;
       }
     }
   }
@@ -140,7 +157,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   .react-datepicker__month:not(.react-datepicker__month--selecting-range)
     .react-datepicker__day--range-start.react-datepicker__day--range-end {
     &:before {
-      display: none;
+      visibility: hidden;
     }
   }
 
@@ -149,24 +166,23 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     & .react-datepicker__day--selecting-range-start,
     .react-datepicker__day--selecting-range-end {
       &:after {
-        border: 1px solid ${({ theme }) => theme.typography.primaryTextColor};
+        visibility: visible;
+        opacity: 0.5;
       }
     }
   }
 
-  // Fix for a bug in react-datepicker with range-start day in each month highlighted as a data-range-start
+  // Fix for a bug in react-datepicker with rangeeact-datepicker__day--selecting-range-start-start day in each month highlighted as a data-range-start
   .react-datepicker__month:not(.react-datepicker__month--selecting-range) {
     & .react-datepicker__day--selecting-range-start:not(.react-datepicker__day--range-start),
     & .react-datepicker__day--selecting-range-end:not(.react-datepicker__day--range-end) {
       &.react-datepicker__day--in-range {
         &:not(.react-datepicker__day--range-start, .react-datepicker__day--range-end) {
           &:after {
-            display: none;
+            visibility: hidden;
           }
           &:before {
-            width: calc(100% + 1px);
-            left: 0%;
-            right: 0%;
+            visibility: visible;
           }
         }
       }
@@ -180,15 +196,13 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     &.react-datepicker__day--selecting-range-end {
       &:before {
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
-        left: 0;
-        right: 50%;
+        visibility: visible;
       }
     }
     &.react-datepicker__day--selecting-range-start {
       &:before {
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
-        left: 50%;
-        right: 0;
+        visibility: visible;
       }
     }
   }
@@ -197,23 +211,15 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     color: ${({ theme }) => applyOpacity(theme.typography.primaryTextColor, 0.5)};
   }
 
-  // Hower on day out of the possible selecting range
+  // Hover on day out of the possible selecting range
   // (trying to select 'start day' after selected 'end day' and vice versa)
   .react-datepicker__month--selecting-range .react-datepicker__day {
     &:not(.react-datepicker__day--in-range),
     &:not(.react-datepicker__day--in-selecting-range) {
       &:hover {
         &:after {
-          content: '';
-          position: absolute;
-          display: block;
+          visibility: visible;
           background-color: ${({ theme }) => theme.general.brandColor};
-          width: 100%;
-          top: -1px;
-          height: calc(100% + 2px);
-          border-radius: 50%;
-          z-index: -1;
-          border: 1px solid ${({ theme }) => theme.typography.primaryTextColor};
         }
       }
     }

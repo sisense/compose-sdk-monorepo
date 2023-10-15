@@ -17,10 +17,11 @@ const config: UserConfig = {
     },
     coverage: {
       exclude: [
+        'src/__demo__',
+        'src/__exclude__',
+        'src/__stories__',
         'src/__test-helpers__',
         'src/**/__mocks__/**',
-        'src/__demo__',
-        'src/__stories__',
         'src/@types',
         'src/widgets/common/drilldown-breadcrumbs',
       ],

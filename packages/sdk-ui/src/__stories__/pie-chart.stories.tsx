@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { Chart } from '../components/chart';
+import { Chart } from '../chart';
 import { PieChartProps } from '../props';
 import { NumberFormatConfig, PieStyleOptions } from '../types';
 import { templateForComponent } from './template';
@@ -91,6 +91,22 @@ const pieArgs: PieChartProps = {
 };
 
 export const Pie = template({ ...pieArgs, chartType: 'pie' });
+
+export const PieDonut = template({
+  ...pieArgs,
+  chartType: 'pie',
+  styleOptions: {
+    subtype: 'pie/donut',
+  },
+});
+
+export const PieRing = template({
+  ...pieArgs,
+  chartType: 'pie',
+  styleOptions: {
+    subtype: 'pie/ring',
+  },
+});
 
 export const OrderedClockwise = template({
   ...pieArgs,

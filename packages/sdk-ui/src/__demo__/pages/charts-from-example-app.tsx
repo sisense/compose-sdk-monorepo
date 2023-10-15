@@ -1,6 +1,6 @@
 import React from 'react';
 import { exampleData } from '../example-data';
-import { ScatterChart } from '../../components/scatter-chart';
+import { ScatterChart } from '../../scatter-chart';
 
 export function ChartsFromExampleApp() {
   return (

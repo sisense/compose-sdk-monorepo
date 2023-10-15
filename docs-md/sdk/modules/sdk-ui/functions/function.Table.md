@@ -39,7 +39,7 @@ Table component
   styleOptions={{ width: 600, height: 750 }}
 />
 ```
-###
+
 <img src="../../../img/table-example-1.png" width="800px" />
 
 (2) Example of Table of aggregated data from the same data model:
@@ -61,5 +61,5 @@ Table component
   }}
 />
 ```
-###
+
 <img src="../../../img/table-example-2.png" width="800px" />

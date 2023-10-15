@@ -35,17 +35,23 @@ const config: Config = {
       fontSize: {
         pill: '13px',
         ['tile-title']: '13px',
+        'ai-sm': ['13px', '18px'],
+        'ai-base': ['15px', '22px'],
+        'ai-lg': ['18px', '22px'],
       },
       borderRadius: {
         pill: '4px',
       },
       margin: {
-        radio: '6px 12px 6px 6px',
-        checkbox: '6px 12px 6px 6px',
+        radio: '6px 10px 6px 6px',
+        checkbox: '6px 10px 6px 6px',
       },
     },
   },
   plugins: [],
+  corePlugins: {
+    preflight: false,
+  },
 };
 
 export default config;

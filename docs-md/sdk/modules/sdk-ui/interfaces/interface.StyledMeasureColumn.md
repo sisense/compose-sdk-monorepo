@@ -37,7 +37,7 @@ style options.
   }}
 />
 ```
-###
+
 <img src="../../../img/chart-mixed-series-example-1.png" width="800px" />
 
 See also [StyledColumn](interface.StyledColumn.md).

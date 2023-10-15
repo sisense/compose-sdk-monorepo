@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import { useThemeContext } from '../../../components/theme-provider';
+import { useThemeContext } from '../../../theme-provider';
 import { SelectedMember } from './members-reducer';
 
 interface PillProps {
@@ -20,7 +20,7 @@ const Pill = ({ name, active, disabled, onClick }: PillProps) => {
   return (
     <button
       onClick={onClick}
-      className="csdk-rounded-pill csdk-text-pill csdk-px-2 csdk-py-[3px] csdk-tracking-[0.3px] csdk-select-none"
+      className="csdk-border-0 csdk-whitespace-nowrap csdk-text-ellipsis csdk-rounded-pill csdk-leading-[18px] csdk-text-pill csdk-px-2 csdk-py-[3px] csdk-tracking-[0.3px] csdk-select-none"
       style={{
         backgroundColor,
         color: textColor,

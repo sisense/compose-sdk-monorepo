@@ -6,7 +6,8 @@ import { Authenticator } from './interfaces.js';
 
 interface IsAuthResponse {
   isAuthenticated: boolean;
-  loginUrl: string;
+  ssoEnabled?: boolean;
+  loginUrl?: string;
 }
 
 export class SsoAuthenticator implements Authenticator {
@@ -47,6 +48,11 @@ export class SsoAuthenticator implements Authenticator {
       .then((res: IsAuthResponse) => {
         this._authenticating = false;
         if (!res.isAuthenticated) {
+          // SSO is disabled on instance, do not proceed
+          if (!res.ssoEnabled)
+            throw new Error(
+              'SSO is not enabled on target instance, please choose another authentication method',
+            );
           // redirect to login page
           window.location.href = `${res.loginUrl}?return_to=${window.location.href}`;
         }

@@ -41,5 +41,5 @@ Drill-down capability is enabled.
   }}
 />
 ```
-###
+
 <img src="../../../img/chart-widget-with-drilldown-example-1.png" width="800px" />

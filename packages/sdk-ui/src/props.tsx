@@ -38,7 +38,7 @@ import {
   ScatterDataPointsEventHandler,
 } from './chart-options-processor/apply-event-handlers';
 import { AppConfig } from './app/client-application';
-import { ExecuteQueryParams } from './components/query-execution';
+import { ExecuteQueryParams } from './query-execution';
 import { FiltersMergeStrategy } from './dashboard-widget/types';
 
 export type {
@@ -138,6 +138,20 @@ export interface ExecuteQueryProps {
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
+
+  /**
+   * Number of rows to return in the query result
+   *
+   * If not specified, the default value is `20000`
+   */
+  count?: number;
+
+  /**
+   * Offset of the first row to return
+   *
+   * If not specified, the default value is `0`
+   */
+  offset?: number;
 
   /** Function as child component that is called to render the query results */
   children?: (queryResult: QueryResultData) => ReactNode;
@@ -513,6 +527,14 @@ export interface TableProps {
    * @category Chart
    */
   styleOptions?: TableStyleOptions;
+
+  /**
+   * Used to force a refresh of the table from outside the table component
+   * Since added to dependencies of useEffect, will trigger a query execution
+   *
+   * @internal
+   */
+  refreshCounter?: number;
 }
 
 /**
@@ -828,6 +850,12 @@ export interface ExecuteQueryByWidgetIdProps {
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
+
+  /** {@inheritDoc ExecuteQueryProps.count} */
+  count?: number;
+
+  /** {@inheritDoc ExecuteQueryProps.offset} */
+  offset?: number;
 
   /**
    * Strategy for merging the existing widget filters with the filters provided via the `filters` prop:

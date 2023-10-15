@@ -1,5 +1,5 @@
 import { templateForComponent } from './template';
-import ErrorBoundaryBox from '../components/error-boundary/error-boundary-box';
+import ErrorBoundaryBox from '../error-boundary/error-boundary-box';
 
 const template = templateForComponent(ErrorBoundaryBox);
 

@@ -240,7 +240,7 @@ export default App;
 ```
 
 > **Note:**
-> The above example uses the API token (also called _bearer authentication_) to connect to a Sisense instance. To generate an API token for your Sisense user account, see Using the Sisense API (https://sisense.dev/guides/restApi/using-rest-api.html). The `SisenseContextProvider` also supports other authentication mechanisms including WAT, SSO, and username/password.
+> The above example uses the API token (also called _bearer authentication_) to connect to a Sisense instance. To generate an API token for your Sisense user account, see Using the Sisense API (https://sisense.dev/guides/restApi/using-rest-api.html). The `SisenseContextProvider` also supports other authentication mechanisms including WAT and SSO.
 
 To render a chart in your application that queries your data model, use the `Chart` component, the `measures` and `filters` utilities, and your previously generated data model file.
 

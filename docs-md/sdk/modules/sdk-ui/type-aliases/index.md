@@ -2,7 +2,7 @@
 title: Type Aliases
 ---
 
-## Type Aliases
+# Type Aliases
 
 - [AppConfig](type-alias.AppConfig.md)
 - [AreaSubtype](type-alias.AreaSubtype.md)
@@ -22,6 +22,7 @@ title: Type Aliases
 - [DataColorOptions](type-alias.DataColorOptions.md)
 - [DataPoint](type-alias.DataPoint.md)
 - [DataPointEventHandler](type-alias.DataPointEventHandler.md)
+- [DataPoints](type-alias.DataPoints.md)
 - [DataPointsEventHandler](type-alias.DataPointsEventHandler.md)
 - [DateConfig](type-alias.DateConfig.md)
 - [DateLevel](type-alias.DateLevel.md)
@@ -54,6 +55,9 @@ title: Type Aliases
 - [QuerySuccessState](type-alias.QuerySuccessState.md)
 - [RangeDataColorOptions](type-alias.RangeDataColorOptions.md)
 - [ScatterChartType](type-alias.ScatterChartType.md)
+- [ScatterDataPoint](type-alias.ScatterDataPoint.md)
+- [ScatterDataPointEventHandler](type-alias.ScatterDataPointEventHandler.md)
+- [ScatterDataPointsEventHandler](type-alias.ScatterDataPointsEventHandler.md)
 - [ScatterMarkerSize](type-alias.ScatterMarkerSize.md)
 - [SeriesChartType](type-alias.SeriesChartType.md)
 - [SeriesLabels](type-alias.SeriesLabels.md)

@@ -8,6 +8,16 @@ Parameters for [useExecuteQueryByWidgetId](../functions/function.useExecuteQuery
 
 ## Properties
 
+### count
+
+> **count**?: `number`
+
+Number of rows to return in the query result
+
+If not specified, the default value is `20000`
+
+***
+
 ### dashboardOid
 
 > **dashboardOid**: `string`
@@ -45,6 +55,16 @@ If not specified, the default strategy is `widgetFirst`.
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Highlight filters that will highlight results that pass filter criteria
+
+***
+
+### offset
+
+> **offset**?: `number`
+
+Offset of the first row to return
+
+If not specified, the default value is `0`
 
 ***
 

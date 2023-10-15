@@ -8,7 +8,7 @@ Props for the [DashboardWidget](../functions/function.DashboardWidget.md) compon
 
 ## Extends
 
-- `Omit`\< [`ChartWidgetProps`](interface.ChartWidgetProps.md), `"dataSource"` \| `"dataOptions"` \| `"chartType"` \| `"styleOptions"` \>
+- `Omit`\< [`ChartWidgetProps`](interface.ChartWidgetProps.md), `"dataSource"` \| `"dataOptions"` \| `"chartType"` \| `"styleOptions"` \>.`ChartEventProps`
 
 ## Properties
 
@@ -139,3 +139,54 @@ Style options for the widget container including the widget header
 ##### Overrides
 
 Omit.widgetStyleOptions
+
+### Callbacks
+
+#### onBeforeRender
+
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+
+Before render handler callback that allows adjusting
+detail chart options prior to render
+
+This callback is not yet supported for [IndicatorChart](../functions/function.IndicatorChart.md)
+
+##### Inherited from
+
+Omit.onBeforeRender
+
+***
+
+#### onDataPointClick
+
+> **onDataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
+
+Click handler callback for a data point
+
+##### Inherited from
+
+Omit.onDataPointClick
+
+***
+
+#### onDataPointContextMenu
+
+> **onDataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
+
+Context menu handler callback for a data point
+
+##### Inherited from
+
+Omit.onDataPointContextMenu
+
+***
+
+#### onDataPointsSelected
+
+> **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../type-aliases/type-alias.ScatterDataPointsEventHandler.md)
+
+Handler callback for selection of multiple data points
+
+##### Inherited from
+
+Omit.onDataPointsSelected

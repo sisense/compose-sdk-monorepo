@@ -13,7 +13,7 @@ const SearchBox: FunctionComponent<{
 
   return (
     <input
-      className="csdk-text-[13px] focus:csdk-outline-none csdk-pl-2"
+      className="csdk-text-[13px] focus:csdk-outline-none csdk-pl-3"
       placeholder="Start typing to search..."
       disabled={disabled}
       onChange={(e) => {
@@ -72,7 +72,7 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
 
   return (
     <div className={'csdk-p-3'}>
-      <div className="csdk-flex">
+      <div className="csdk-flex csdk-mb-[3px]">
         <Checkbox
           aria-label="change-all"
           checked={allSelected}

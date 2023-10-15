@@ -40,5 +40,5 @@ return (
   />
 );
 ```
-###
+
 <img src="../../../img/date-filter-example-1.png" width="800px" />

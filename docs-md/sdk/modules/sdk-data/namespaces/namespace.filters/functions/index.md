@@ -33,7 +33,7 @@ greater than 1000.
 </ExecuteQuery>
 ```
 
-## Functions
+# Functions
 
 - [between](function.between.md)
 - [betweenNotEqual](function.betweenNotEqual.md)

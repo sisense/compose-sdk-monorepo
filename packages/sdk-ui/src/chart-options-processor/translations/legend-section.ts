@@ -14,9 +14,21 @@ export type LegendSettings = {
   borderWidth?: string;
   borderColor?: string;
   backgroundColor?: string;
+  title?: {
+    style?: {
+      [key: string]: string | number;
+    };
+  };
 };
 
 export const getLegendSettings = (position: LegendPosition): LegendSettings => {
+  const additionalSettings = {
+    symbolRadius: 0,
+    itemStyle: {
+      fontWeight: 'normal',
+    },
+  };
+
   switch (position) {
     case 'bottom':
       return {
@@ -24,7 +36,7 @@ export const getLegendSettings = (position: LegendPosition): LegendSettings => {
         align: 'center',
         verticalAlign: 'bottom',
         layout: 'horizontal',
-        symbolRadius: 0,
+        ...additionalSettings,
       };
     case 'left':
       return {
@@ -32,7 +44,7 @@ export const getLegendSettings = (position: LegendPosition): LegendSettings => {
         align: 'left',
         verticalAlign: 'middle',
         layout: 'vertical',
-        symbolRadius: 0,
+        ...additionalSettings,
       };
     case 'right':
       return {
@@ -40,7 +52,7 @@ export const getLegendSettings = (position: LegendPosition): LegendSettings => {
         align: 'right',
         verticalAlign: 'middle',
         layout: 'vertical',
-        symbolRadius: 0,
+        ...additionalSettings,
       };
     case 'top':
       return {
@@ -48,7 +60,7 @@ export const getLegendSettings = (position: LegendPosition): LegendSettings => {
         align: 'center',
         verticalAlign: 'top',
         layout: 'horizontal',
-        symbolRadius: 0,
+        ...additionalSettings,
       };
     default:
       return {
@@ -56,7 +68,6 @@ export const getLegendSettings = (position: LegendPosition): LegendSettings => {
         align: 'center',
         verticalAlign: 'bottom',
         layout: 'horizontal',
-        symbolRadius: 0,
       };
   }
 };

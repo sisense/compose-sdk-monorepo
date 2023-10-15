@@ -15,11 +15,8 @@ type ThemeMixin = {
 export type DateRangeFieldButtonProps = InputProps & ThemeMixin;
 
 const CalendarButton = styled.button<DateRangeFieldButtonProps>`
-  background-color: ${({ theme, isActive }) =>
-    isActive ? theme.general.brandColor : theme.general.backgroundColor};
   color: ${({ theme, isActive }) =>
     isActive ? theme.general.primaryButtonTextColor : theme.typography.primaryTextColor};
-  border: 1px solid ${({ theme }) => theme.general.primaryButtonTextColor};
 `;
 
 type CalendarLabelProps = LabelHTMLAttributes<HTMLLabelElement> & ThemeMixin;
@@ -29,10 +26,10 @@ const CalendarLabel = styled.label<CalendarLabelProps>`
 
 export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> = (props) => {
   const defaultClass =
-    'csdk-text-left csdk-w-[200px] csdk-outline-0  csdk-border-none  csdk-p-input csdk-h-button  csdk-rounded-md ';
+    'csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-button csdk-rounded-[4px] ';
   const disabled = 'disabled:csdk-placeholder:csdk-opacity-30 disabled:csdk-cursor-not-allowed ';
   const focus = 'focus:csdk-border-solid focus:csdk-border-input focus:csdk-border-UI-default ';
-  const hover = 'hover:csdk-border-2 hover:csdk-border-guiding csdk-text-text-active ';
+  const hover = 'hover:csdk-border-guiding csdk-text-text-active ';
 
   return (
     <div
@@ -42,7 +39,9 @@ export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> 
       {props.label && (
         <CalendarLabel
           htmlFor={props.id}
-          className={'csdk-text-text-content csdk-pr-2 csdk-w-[50px]'}
+          className={
+            'csdk-text-text-content csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px]'
+          }
           theme={props.theme}
         >
           {props.label}
@@ -57,17 +56,17 @@ export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> 
             disabled +
             focus +
             hover +
-            'csdk-pl-4 csdk-pr-10 csdk-overflow-hidden ' +
+            'csdk-pl-2.5 csdk-pr-10 csdk-overflow-hidden ' +
             (props.className || '')
           }
         >
           {props.value}
           <div
             aria-label="DateRangeFieldIcon"
-            className="csdk-absolute csdk-right-2 csdk-top-1/2 csdk-transform -csdk-translate-y-1/2"
+            className="csdk-absolute csdk-right-[4px] csdk-top-1/2 csdk-transform -csdk-translate-y-1/2"
           >
             <DateIcon
-              className=" csdk-text-text-active"
+              className="csdk-flex csdk-text-text-active"
               aria-hidden="true"
               iconColor={
                 props.isActive

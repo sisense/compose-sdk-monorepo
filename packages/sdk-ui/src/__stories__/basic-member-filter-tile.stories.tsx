@@ -1,5 +1,5 @@
 import type { Meta } from '@storybook/react';
-import { ThemeProvider } from '../components/theme-provider';
+import { ThemeProvider } from '../theme-provider';
 import { BasicMemberFilterTile } from '../filters';
 import type {
   Member,

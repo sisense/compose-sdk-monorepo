@@ -89,7 +89,7 @@ export const createClientApplication = async ({
   wat,
   ssoEnabled,
   appConfig,
-}: SisenseContextProviderProps): Promise<ClientApplication | undefined> => {
+}: SisenseContextProviderProps): Promise<ClientApplication> => {
   if (url !== undefined) {
     const auth = getAuthenticator(url, undefined, undefined, token, wat, ssoEnabled);
 

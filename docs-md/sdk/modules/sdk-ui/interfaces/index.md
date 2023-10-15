@@ -2,7 +2,7 @@
 title: Interfaces
 ---
 
-## Interfaces
+# Interfaces
 
 - [AreaChartProps](interface.AreaChartProps.md)
 - [AreaStyleOptions](interface.AreaStyleOptions.md)

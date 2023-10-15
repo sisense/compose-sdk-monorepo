@@ -2,7 +2,7 @@
 title: Functions
 ---
 
-## Functions
+# Functions
 
 - [AreaChart](function.AreaChart.md)
 - [BarChart](function.BarChart.md)

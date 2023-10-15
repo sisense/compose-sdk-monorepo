@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.11.2] - 2023-10-12
+
+### Changed
+- Add props `count` and `offset` to `ExecuteQuery`, `useExecuteQuery`, `ExecuteQueryByWidgetId`, and `useExecuteQueryByWidgetId`
+  to support pagination
+- Upgrade `postcss` to from 8.4.22 to 8.4.31 to address a vulnerability
+- Handle use case that SSO enabled in `SisenseContextProvider` but not enabled in the Sisense instance
+- Replace component `HighchartsWrapper` with the official `HighchartsReact` wrapper component
+  from `highcharts-react-official` package
+- Improve styles of tooltips, `MemberFilterTile`, and `DateRangeFilterTile`
+- Fix refresh of table in `DashboardWidget`
+- Turn off tailwindcss Preflight (CSS normalization) and add explicit styles instead
+- Fix issues with subtypes of Pie chart
+- Return loading state from `useExecuteQuery` when params change
+- Re-organize files in the `packages/sdk-ui/src/components` directory
+
+## [0.11.1] - 2023-10-03
+
+### Changed
+- Fix an issue that hook `useExecuteQuery` does not re-run in some cases when input prop `filters` are updated
+- Add `ScaterDataPoint` and event handlers for it to support additional data point structures
+- Support rubber band selection for scatter chart
+
 ## [0.11.0] - 2023-09-28
 
 ### Added

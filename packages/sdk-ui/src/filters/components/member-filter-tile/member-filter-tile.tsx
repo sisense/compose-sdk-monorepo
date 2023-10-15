@@ -3,8 +3,8 @@ import { filters as filterFactory } from '@sisense/sdk-data';
 import { FunctionComponent, useMemo } from 'react';
 import { BasicMemberFilterTile } from './basic-member-filter-tile';
 import { Member } from './members-reducer';
-import { asSisenseComponent } from '../../../components/decorators/as-sisense-component';
-import { useExecuteQuery } from '../../../components/query-execution/use-execute-query';
+import { asSisenseComponent } from '../../../decorators/as-sisense-component';
+import { useExecuteQuery } from '../../../query-execution/use-execute-query';
 
 /**
  * Props for {@link MemberFilterTile}
@@ -45,7 +45,7 @@ export interface MemberFilterTileProps {
  * />
  * );
  * ```
- * ###
+ *
  * <img src="media://member-filter-tile-example-1.png" width="300px" />
  * @param props - Member filter tile props
  * @returns Member filter tile component

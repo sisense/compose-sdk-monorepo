@@ -2,6 +2,6 @@
 title: Enumerations
 ---
 
-## Enumerations
+# Enumerations
 
 - [Sort](enumeration.Sort.md)

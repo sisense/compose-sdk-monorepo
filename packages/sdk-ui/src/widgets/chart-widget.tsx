@@ -5,16 +5,16 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
-import { Chart } from '../components/chart';
+import { Chart } from '../chart';
 import { DataPoint, CompleteThemeSettings, MenuPosition } from '../types';
 import { ChartWidgetProps } from '../props';
 import { ContextMenu } from './common/context-menu';
 import { useWidgetDrilldown } from './common/use-widget-drilldown';
 import { WidgetHeader } from './common/widget-header';
-import { ThemeProvider, useThemeContext } from '../components/theme-provider';
+import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
-import { asSisenseComponent } from '../components/decorators/as-sisense-component';
-import { DynamicSizeContainer, getWidgetDefaultSize } from '../components/dynamic-size-container';
+import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support advanced BI
@@ -38,7 +38,7 @@ import { DynamicSizeContainer, getWidgetDefaultSize } from '../components/dynami
  *   }}
  * />
  * ```
- * ###
+ *
  * <img src="media://chart-widget-with-drilldown-example-1.png" width="800px" />
  * @param props - ChartWidget properties
  * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType}

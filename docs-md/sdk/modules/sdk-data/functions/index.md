@@ -2,7 +2,7 @@
 title: Functions
 ---
 
-## Functions
+# Functions
 
 - [createAttribute](function.createAttribute.md)
 - [createDateDimension](function.createDateDimension.md)

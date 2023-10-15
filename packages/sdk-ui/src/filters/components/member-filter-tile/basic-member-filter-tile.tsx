@@ -48,7 +48,7 @@ export interface BasicMemberFilterTileProps {
  *     </div>
  *   );
  * ```
- * ###
+ *
  * <img src="media://basic-member-filter-tile-example-1.png" width="300px" />
  * @param props - Basic member filter tile props
  * @returns Basic member filter tile component

@@ -41,6 +41,22 @@ module.exports = {
             'jsdoc/check-param-names': 0,
             'jsdoc/check-tag-names': 0,
             'jsdoc/require-returns': 0,
+            // These rules are modified because they are overly restrictive
+            'import/extensions': 'off',
+            '@typescript-eslint/no-floating-promises': 'off',
+            'max-params': 'off',
+            '@typescript-eslint/restrict-template-expressions': 'off',
+            '@typescript-eslint/no-unsafe-member-access': 'off',
+            '@typescript-eslint/no-unsafe-assignment': 'off',
+            '@typescript-eslint/no-unsafe-call': 'off',
+            '@typescript-eslint/no-unsafe-return': 'off',
+            '@typescript-eslint/no-unsafe-argument': 'off',
+            '@typescript-eslint/no-use-before-define': 'warn',
+            '@typescript-eslint/no-shadow': 'off',
+            '@typescript-eslint/require-await': 'warn',
+            'complexity': 'warn',
+            '@typescript-eslint/no-throw-literal': 'off',
+            'no-underscore-dangle': 'off',
           },
         },
         {
@@ -52,6 +68,7 @@ module.exports = {
           files: ['**/__demo__/**/*'],
           rules: {
             'import/no-extraneous-dependencies': 'off', // allow importing devDependencies in demo files
+            'sonarjs/no-duplicate-string': 'off', // prevent auto-generated files from throwing errors
           },
         },
       ],

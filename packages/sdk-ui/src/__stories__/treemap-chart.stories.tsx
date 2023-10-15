@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { Chart } from '../components/chart';
+import { Chart } from '../chart';
 import { TreemapChartProps } from '../props';
 import { TreemapStyleOptions } from '../types';
 import { templateForComponent } from './template';

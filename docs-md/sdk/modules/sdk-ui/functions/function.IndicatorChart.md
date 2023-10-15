@@ -71,5 +71,5 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
   }}
 />
 ```
-###
+
 <img src="../../../img/indicator-chart-example-1.png" width="400px" />

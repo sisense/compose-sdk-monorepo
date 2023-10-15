@@ -2,7 +2,7 @@
 title: Interfaces
 ---
 
-## Interfaces
+# Interfaces
 
 - [Attribute](interface.Attribute.md)
 - [BaseMeasure](interface.BaseMeasure.md)

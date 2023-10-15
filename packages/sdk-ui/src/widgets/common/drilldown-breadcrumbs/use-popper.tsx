@@ -43,30 +43,30 @@ const PopperContent: React.FC<{
   currentColumn: string;
 }> = ({ themeProps, filterDisplayValues, currentTable, currentColumn }) => (
   <div
-    className="csdk-w-50 csdk-pl-4 csdk-pr-4 csdk-shadow-md csdk-shadow-gray-500 csdk-rounded-md csdk-bg-white"
+    className="csdk-w-50 csdk-px-[12px] csdk-shadow-md csdk-shadow-gray-500 csdk-rounded-md csdk-bg-white"
     style={{ backgroundColor: themeProps.chartBackgroundColor, color: themeProps.primaryTextColor }}
   >
-    <div className="csdk-border-b csdk-border-gray-300 csdk-p-3 csdk-pl-1">
-      <Typography variant="body2" fontFamily={themeProps.fontFamily}>
+    <div className="csdk-border-b csdk-border-[#e4e4e4] csdk-p-3 csdk-pl-1">
+      <Typography variant="body2" fontFamily={themeProps.fontFamily} fontSize={11}>
         Members
       </Typography>
-      <Typography variant="body2" fontFamily={themeProps.fontFamily}>
+      <Typography variant="body2" fontFamily={themeProps.fontFamily} fontSize={13}>
         {filterDisplayValues.join(', ')}
       </Typography>
     </div>
-    <div className="csdk-border-b csdk-border-gray-300 csdk-p-3 csdk-pl-1">
-      <Typography variant="body2" fontFamily={themeProps.fontFamily}>
+    <div className="csdk-border-b csdk-border-[#e4e4e4] csdk-p-3 csdk-pl-1">
+      <Typography variant="body2" fontFamily={themeProps.fontFamily} fontSize={11}>
         Table
       </Typography>
-      <Typography variant="body2" fontFamily={themeProps.fontFamily}>
+      <Typography variant="body2" fontFamily={themeProps.fontFamily} fontSize={13}>
         {currentTable}
       </Typography>
     </div>
     <div className="csdk-p-3 csdk-pl-1">
-      <Typography variant="body2" fontFamily={themeProps.fontFamily}>
+      <Typography variant="body2" fontFamily={themeProps.fontFamily} fontSize={11}>
         Column
       </Typography>
-      <Typography variant="body2" fontFamily={themeProps.fontFamily}>
+      <Typography variant="body2" fontFamily={themeProps.fontFamily} fontSize={13}>
         {currentColumn}
       </Typography>
     </div>

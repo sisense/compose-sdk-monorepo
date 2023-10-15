@@ -7,6 +7,7 @@ import {
 import { colorChineseSilver, colorWhite } from './chart-options-service';
 import { applyFormat, defaultConfig } from './translations/number-format-config';
 import { TooltipOptions } from '@sisense/sisense-charts';
+import { spanSegment, tooltipSeparator, tooltipWrapper } from './translations/scatter-tooltip';
 
 export type TooltipSettings = TooltipOptions;
 
@@ -64,16 +65,18 @@ export const getTooltipSettings = (
         numberFormatConfig = defaultConfig;
       }
       const xValue = that.point?.custom?.xDisplayValue ?? that.x;
-      return `<div
-                   style="minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px">
-              ${that.point.name || that.series.name}
-              <br />
-              <span style="color: ${that.point.color || that.series.color}">
-              ${applyFormat(numberFormatConfig, that.y)}
-              ${percentage ? ` / ${percentage}%` : ''}
-            </span>
-            ${xValue ? `<hr style="margin: 5px 0px" />${xValue}` : ''}
-            </div>`;
+      const value =
+        applyFormat(numberFormatConfig, that.y) + (percentage ? ` / ${percentage}%` : '');
+      const color = that.point.color || that.series.color;
+
+      return tooltipWrapper(`
+          ${that.series.name || ''}
+          ${that.series.name && that.point.name ? ' - ' : ''}
+          ${that.point.name || ''}
+          <br />
+          ${spanSegment(value, color)}
+          ${xValue ? tooltipSeparator() + xValue : ''}
+        `);
     },
   };
 };

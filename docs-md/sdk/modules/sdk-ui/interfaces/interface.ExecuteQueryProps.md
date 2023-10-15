@@ -26,6 +26,16 @@ Function as child component that is called to render the query results
 
 ***
 
+### count
+
+> **count**?: `number`
+
+Number of rows to return in the query result
+
+If not specified, the default value is `20000`
+
+***
+
 ### dataSource
 
 > **dataSource**?: `string`
@@ -65,6 +75,16 @@ Highlight filters that will highlight results that pass filter criteria
 > **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
 Measures of the query
+
+***
+
+### offset
+
+> **offset**?: `number`
+
+Offset of the first row to return
+
+If not specified, the default value is `0`
 
 ***
 

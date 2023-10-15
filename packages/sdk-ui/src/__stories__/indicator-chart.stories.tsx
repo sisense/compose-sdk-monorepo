@@ -2,8 +2,8 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Data } from '@sisense/sdk-data';
 import { IndicatorDataOptions } from '../chart-data-options/types';
-import { Chart } from '../components/chart';
-import { IndicatorChart } from '../components/indicator-chart';
+import { Chart } from '../chart';
+import { IndicatorChart } from '../indicator-chart';
 import { IndicatorStyleOptions, NumberFormatConfig } from '../types';
 import { templateForComponent } from './template';
 const template = templateForComponent(Chart);

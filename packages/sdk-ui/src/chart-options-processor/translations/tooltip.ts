@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable complexity */
+/* eslint-disable sonarjs/cognitive-complexity */
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -11,6 +12,7 @@ import {
   formatTooltipValue,
   formatTooltipXValue,
 } from './tooltip-utils';
+import { spanSegment, tooltipSeparator, tooltipWrapper } from './scatter-tooltip';
 
 export const getTooltipSettings = (
   showDecimals: boolean | undefined,
@@ -57,17 +59,30 @@ export const getTooltipSettings = (
         x2Value = formatTooltipXValue(cartesianChartDataOptions.x[1], maskedX1, maskedX1);
       }
 
-      return `<div
-                   style="minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px">
-              ${that.point.name || that.series.name}
+      const value = yValue + (percentage ? ` / ${percentage}%` : '');
+      const color = that.point.color || that.series.color;
+
+      return tooltipWrapper(`
+                ${that.point.name || that.series.name}
               <br />
-              <span style="color: ${that.point.color || that.series.color}">
-              ${yValue}
-              ${percentage ? ` / ${percentage}%` : ''}
-            </span>
-            ${x2Value ? `<hr style="margin: 5px 0px" />${x2Value}` : ''}
-            ${x1Value ? `<hr style="margin: 5px 0px" />${x1Value}` : ''}
-            </div>`;
+              ${spanSegment(value, color)}
+              ${x2Value || x1Value ? tooltipSeparator() : ''}
+              ${x2Value ? x2Value : ''}
+              ${
+                x2Value && x1Value
+                  ? `
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="18" viewBox="0 0 24 24" style="display: inline-block">
+                  <path
+                    fill="#5B6372"
+                    fillRule="nonzero"
+                    d="M6.84 8.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z"
+                  />
+                </svg>
+              `
+                  : ''
+              }
+              ${x1Value ? x1Value : ''}
+            `);
     },
   };
 };

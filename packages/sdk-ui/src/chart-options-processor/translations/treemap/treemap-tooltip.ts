@@ -1,10 +1,12 @@
 /* eslint-disable max-lines-per-function */
+/* eslint-disable sonarjs/cognitive-complexity */
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
 import { InternalSeriesNode, TooltipSettings } from '../../tooltip';
 import { colorChineseSilver, colorWhite } from '../../chart-options-service';
 import { applyFormat, defaultConfig } from '../number-format-config';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
+import './treemap-tooltip.scss';
 
 export const getTreemapTooltipSettings = (
   chartDataOptions: CategoricalChartDataOptionsInternal,
@@ -15,12 +17,42 @@ export const getTreemapTooltipSettings = (
   borderColor: colorChineseSilver,
   borderRadius: 10,
   borderWidth: 1,
+  padding: 1,
   useHTML: true,
   outside: true,
   formatter: function (this) {
     return treemapTooltipFormatter(this, chartDataOptions, designOptions);
   },
 });
+
+const triangle = `
+  <div style="position: absolute; top: 100%; right: 40px; z-index: 1">
+    <div style="
+      border: solid transparent;
+      content: ' ';
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(136,136,136,0);
+      border-top-color: #ccc;
+      border-width: 7px 12px 12px 12px;
+      margin-left: -7px;
+    "></div>
+     <div style="
+       border: solid transparent;
+       content: ' ';
+       height: 0;
+       width: 0;
+       position: absolute;
+       pointer-events: none;
+       border-color: rgba(255,255,255,0);
+       border-top-color: #fff;
+       border-width: 6px 11px 11px 11px;
+       margin-left: -6px;
+     "></div>
+  </div>
+`;
 
 function getContribution(value: number, total: number) {
   return value / (total / 100);
@@ -56,39 +88,47 @@ export function treemapTooltipFormatter(
 
   return `
       <div
-        style="minWidth: 100px; color: #acacac; fontSize: 13px; lineHeight: 20px; background: white">
+        class="csdk-treemap-tooltip-wrapper">
         ${[...nodesToShow]
           .reverse()
-          .map(
-            (node) => `
-          <div style="display: flex; justify-content: space-between;">
-            <span>${node.name}</span>
-            <span>${
-              isContributionMode
-                ? getFormattedContribution(node.val, rootValue)
-                : applyFormat(numberFormatConfig, node.val)
-            }</span>
-          </div>
-          <hr style="margin: 5px 0px" />
-        `,
-          )
+          .map((node, index) => {
+            const isLastNode = index === nodesToShow.length - 1;
+            return `
+                <div
+                  class="csdk-treemap-tooltip-level"
+                  style="background: ${isLastNode ? '#f2f2f2' : 'white'};"
+                  >
+                  <span
+                    style="color: ${isLastNode ? color : 'currentColor'}"
+                  >${node.name}</span>
+                  <span
+                    style="color: ${isLastNode ? '#5B6372' : 'currentColor'}"
+                  >${
+                    isContributionMode
+                      ? getFormattedContribution(node.val, rootValue)
+                      : applyFormat(numberFormatConfig, node.val)
+                  }</span>
+                  ${isLastNode ? '' : triangle}
+                </div>`;
+          })
           .join('')}
-        <div>
-          <span style="color:${color}">${
+        <div class="csdk-treemap-tooltip-value">
+          <span style="color:${color}; font-size: 15px">${
     isContributionMode
       ? getFormattedContribution(nodesToShow[0].val, rootValue)
       : applyFormat(numberFormatConfig, nodesToShow[0]?.val)
   }</span> of ${valueTitle}
         </div>
-        <div>
-          ${
-            nodesToShow[1]
-              ? `<span style="color:${color}">${getFormattedContribution(
-                  nodesToShow[0]?.val,
-                  nodesToShow[1]?.val,
-                )}%</span> of ${nodesToShow[1]?.name}`
-              : ''
-          }
+        ${
+          nodesToShow[1]
+            ? `<div class="csdk-treemap-tooltip-value" style="padding-top: 4px;">
+                  <span style="color:${color}; font-size: 15px">${getFormattedContribution(
+                nodesToShow[0]?.val,
+                nodesToShow[1]?.val,
+              )}</span> of ${nodesToShow[1]?.name}
+                </div>`
+            : ''
+        }
         </div>
       </div>`;
 }

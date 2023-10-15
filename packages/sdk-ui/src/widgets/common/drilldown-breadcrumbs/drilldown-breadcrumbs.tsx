@@ -56,13 +56,15 @@ const StyledDrillButton = styled(Button)<StyledButtonProps>`
       active === 'true' ? theme.primaryTextColor : theme.secondaryTextColor};
     background-color: ${({ active, theme }) =>
       active === 'true' ? theme.activeDrillBackgroundColor : theme.chartBackgroundColor};
-    left: ${({ index }) => (index === 0 ? '-1.875rem' : index === 2 ? '-3.188rem' : '-2.55rem')};
     padding-right: 1.25rem;
     padding-left: 1.875rem;
-    height: 1.85rem;
+    height: 1.64rem;
+    font-size: 13px;
     text-transform: none;
     transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
     cursor: ${({ active }) => (active === 'true' ? 'pointer' : 'auto')};
+    margin-right: ${({ active }) => (active === 'true' ? '5px' : '0px')};
 
     &:hover {
       background-color: ${({ active, theme }) =>
@@ -70,8 +72,23 @@ const StyledDrillButton = styled(Button)<StyledButtonProps>`
       border: 1px solid ${BREADCRUMBS_BORDER_COLOR};
       border-right: none;
     }
+
+    .MuiTouchRipple-root {
+      display: none;
+    }
   }
 `;
+
+const StyledBreadcrumbs = styled(Breadcrumbs)`
+  .MuiBreadcrumbs-ol {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .MuiBreadcrumbs-separator {
+    display: none;
+  }
+`;
+
 const DrillButton: React.FC<DrillButtonProps> = ({
   isActive,
   filterDisplayValue,
@@ -98,7 +115,7 @@ const DrillButton: React.FC<DrillButtonProps> = ({
         </span>
         {isActive ? (
           <span
-            className="csdk-absolute csdk-bottom-1 csdk-right-0 csdk-h-5 csdk-w-5 csdk-translate-x-1/2 csdk-rotate-45"
+            className="csdk-absolute csdk-right-0 csdk-h-[18px] csdk-w-[18px] csdk-top-[3px] csdk-translate-x-1/2 csdk-rotate-45"
             style={{
               backgroundColor:
                 filterDisplayValue === popperParams?.filterDisplayValues
@@ -112,14 +129,17 @@ const DrillButton: React.FC<DrillButtonProps> = ({
           />
         ) : undefined}
         <span
-          className={`csdk-absolute csdk-bottom-1 -csdk-right-4 ${
-            isActive ? 'csdk-h-5 csdk-w-5' : 'csdk-h-3 csdk-w-3 csdk-top-2'
+          className={`csdk-absolute ${
+            isActive
+              ? 'csdk-h-[18px] csdk-w-[18px] csdk-top-[3px] csdk-right-[-15px]'
+              : 'csdk-h-[10px] csdk-w-[10px] csdk-top-[7px] csdk-right-[-5px]'
           } csdk-transform translate-x-1/2 csdk-rotate-45`}
           style={{
             backgroundColor: themeProps.chartBackgroundColor,
             borderTop: `1px solid ${BREADCRUMBS_BORDER_COLOR}`,
             borderRight: `1px solid ${BREADCRUMBS_BORDER_COLOR}`,
             zIndex: 7,
+            transition: 'background-color 0.2s, border-color 0.2s, color 0.2s',
           }}
         ></span>
       </span>
@@ -142,7 +162,6 @@ export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = ({
   const { CancelButton, CurrentDrillButton } = useButtons({
     clearDrilldownSelections,
     currentDimension,
-    filtersDisplayValues,
     isHovered,
     setIsHovered,
     themeProps,
@@ -164,9 +183,9 @@ export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = ({
   if (!filtersDisplayValues.length) return null;
 
   return (
-    <Breadcrumbs
-      separator={''}
-      sx={{ backgroundColor: themeProps.chartBackgroundColor, paddingLeft: '1rem' }}
+    <StyledBreadcrumbs
+      separator={null}
+      sx={{ backgroundColor: themeProps.chartBackgroundColor, padding: '4px' }}
     >
       <CancelButton />
       {filtersDisplayValues.map((filterDisplayValue, i) => {
@@ -194,6 +213,6 @@ export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = ({
         currentDimension={currentDimension}
         themeProps={themeProps}
       />
-    </Breadcrumbs>
+    </StyledBreadcrumbs>
   );
 };

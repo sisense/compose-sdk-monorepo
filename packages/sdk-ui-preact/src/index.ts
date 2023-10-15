@@ -1,2 +1,3 @@
 export * from '@sisense/sdk-ui';
-export { preactRenderComponent } from './render';
+export * from './render';
+export * from './component-adapter';

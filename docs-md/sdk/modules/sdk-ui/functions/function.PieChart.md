@@ -39,5 +39,5 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
   }}
 />
 ```
-###
+
 <img src="../../../img/pie-chart-example-1.png" width="600px" />

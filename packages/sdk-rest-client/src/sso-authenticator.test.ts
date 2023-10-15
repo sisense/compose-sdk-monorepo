@@ -34,6 +34,7 @@ describe('SSOAuthenticator', () => {
         json: () =>
           Promise.resolve({
             isAuthenticated: false,
+            ssoEnabled: true,
             loginUrl: fakeLoginUrl,
           }),
       } as Response);
@@ -45,5 +46,21 @@ describe('SSOAuthenticator', () => {
     await new Promise((resolve) => setImmediate(resolve));
 
     expect(window.location.href).toBe(`${fakeLoginUrl}?return_to=${fakeDeploymentUrl}`);
+  });
+
+  it('should throw an error if sso is not enabled on the instance', async () => {
+    global.fetch = vi.fn().mockImplementation(() => {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            isAuthenticated: false,
+            ssoEnabled: false,
+          }),
+      } as Response);
+    });
+
+    await expect(auth.authenticate()).rejects.toThrow(
+      'SSO is not enabled on target instance, please choose another authentication method',
+    );
   });
 });

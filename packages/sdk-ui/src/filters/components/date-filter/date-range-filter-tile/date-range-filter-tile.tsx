@@ -1,7 +1,7 @@
 import { DateFilter } from '..';
 import { LevelAttribute, DataSource, Filter, DateRangeFilter, filters } from '@sisense/sdk-data';
 import { useDateLimits } from './use-date-limits';
-import { asSisenseComponent } from '../../../../components/decorators/as-sisense-component';
+import { asSisenseComponent } from '../../../../decorators/as-sisense-component';
 
 export interface DateRangeFilterTileProps {
   /**
@@ -59,7 +59,7 @@ export interface DateRangeFilterTileProps {
  *   />
  * );
  * ```
- * ###
+ *
  * <img src="media://date-filter-example-1.png" width="800px" />
  * @param props - Date Range Filter Tile Props
  * @returns Date Range Filter Tile component

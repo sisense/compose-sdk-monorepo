@@ -7,11 +7,11 @@ import React, { useState, type FunctionComponent } from 'react';
 import { ThemeSettings } from '../types';
 import { TableWidgetProps } from '../props';
 import { WidgetHeader } from './common/widget-header';
-import { ThemeProvider, useThemeContext } from '../components/theme-provider';
+import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
-import { Table } from '../components/table';
-import { asSisenseComponent } from '../components/decorators/as-sisense-component';
-import { DynamicSizeContainer, getWidgetDefaultSize } from '../components/dynamic-size-container';
+import { Table } from '../table';
+import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 
 /**
  * The TableWidget component extending the {@link Table} component to support advanced BI
@@ -29,7 +29,6 @@ import { DynamicSizeContainer, getWidgetDefaultSize } from '../components/dynami
  *   }}
  * />
  * ```
- * ###
  * @param props - Table Widget properties
  * @returns Widget component representing a table
  * @internal
@@ -107,6 +106,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
                   dataOptions={props.dataOptions}
                   styleOptions={styleOptionsWithoutSizing}
                   filters={props.filters}
+                  refreshCounter={refreshCounter}
                 />
               </div>
             </ThemeProvider>

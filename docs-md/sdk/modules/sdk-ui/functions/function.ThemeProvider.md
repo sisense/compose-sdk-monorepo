@@ -40,17 +40,14 @@ Example of a theme provider, which changes the colors and font of the nested ind
   <IndicatorChart {...chartOptions} />
 </ThemeProvider>
 ```
-###
+
 Indicator chart with custom theme settings:
 
 <img src="../../../img/indicator-chart-example-2.png" width="400px" />
 
-###
-
 For comparison, indicator chart with default theme settings:
 
 <img src="../../../img/indicator-chart-example-1.png" width="400px" />
-###
 
 ## See
 

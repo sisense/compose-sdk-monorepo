@@ -79,5 +79,5 @@ with Gender breakdown by color and Total Cost encoded by the size of the bubbles
   }}
 />
 ```
-###
+
 <img src="../../../img/scatter-chart-example-1.png" width="800px" />

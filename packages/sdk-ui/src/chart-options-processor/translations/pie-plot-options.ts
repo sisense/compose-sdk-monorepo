@@ -39,7 +39,7 @@ export type PieOptions = {
     formatter?: () => string;
   };
   showInLegend: boolean;
-  innerSize: InnerSize;
+  innerSize?: InnerSize;
 };
 
 type InnerSize = '0%' | '40%' | '80%';

@@ -66,7 +66,7 @@ export interface CategoryStyle {
  *   }}
  * />
  * ```
- * ###
+ *
  * <img src="media://chart-mixed-series-example-1.png" width="800px" />
  *
  * Also, see {@link StyledMeasureColumn}.
@@ -138,7 +138,7 @@ export type ValueStyle = {
  *   }}
  * />
  * ```
- * ###
+ *
  * <img src="media://chart-mixed-series-example-1.png" width="800px" />
  *
  * See also {@link StyledColumn}.

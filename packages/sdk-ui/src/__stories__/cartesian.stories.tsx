@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { Chart } from '../components/chart';
+import { Chart } from '../chart';
 import { templateForComponent } from './template';
 import { NumberFormatConfig, StyleOptions } from '../types';
 import { Data } from '@sisense/sdk-data';

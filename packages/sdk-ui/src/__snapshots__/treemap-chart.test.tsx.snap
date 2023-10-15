@@ -1,0 +1,1492 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Treemap Chart > render a treemap with coloring 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "treemap",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "legend": {
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+  },
+  "series": [
+    {
+      "clip": false,
+      "color": "rgb(0, 206, 230)",
+      "data": [
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2009",
+          "name": "2009-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2010",
+          "name": "2010-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2011",
+          "name": "2011-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2012",
+          "name": "2012-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2013",
+          "name": "2013-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2014",
+          "name": "2014-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2015",
+          "name": "2015-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2016",
+          "name": "2016-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2018",
+          "name": "2018-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2009_A",
+          "name": "A",
+          "parent": "2009-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2010_A",
+          "name": "A",
+          "parent": "2010-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2011_B",
+          "name": "B",
+          "parent": "2011-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2012_B",
+          "name": "B",
+          "parent": "2012-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2013_A",
+          "name": "A",
+          "parent": "2013-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2014_B",
+          "name": "B",
+          "parent": "2014-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2015_A",
+          "name": "A",
+          "parent": "2015-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2016_B",
+          "name": "B",
+          "parent": "2016-01-01T00:00:00.000Z",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2018_B",
+          "name": "B",
+          "parent": "2018-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2009-01-01T00:00:00.000Z_A",
+          "value": 1322,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2009-01-01T00:00:00.000Z_A",
+          "value": 6781,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2010-01-01T00:00:00.000Z_A",
+          "value": 2343,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2010-01-01T00:00:00.000Z_A",
+          "value": 4471,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2011-01-01T00:00:00.000Z_B",
+          "value": 1244,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2011-01-01T00:00:00.000Z_B",
+          "value": 1812,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2012-01-01T00:00:00.000Z_B",
+          "value": 3422,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2012-01-01T00:00:00.000Z_B",
+          "value": 5001,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2013-01-01T00:00:00.000Z_A",
+          "value": 2045,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2014-01-01T00:00:00.000Z_B",
+          "value": 3010,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2015-01-01T00:00:00.000Z_A",
+          "value": 5447,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2016-01-01T00:00:00.000Z_B",
+          "value": 4242,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2018-01-01T00:00:00.000Z_B",
+          "value": 936,
+        },
+      ],
+      "dataLabels": {
+        "style": {
+          "textOutline": "none",
+        },
+      },
+      "layoutAlgorithm": "strip",
+      "layoutStartingDirection": "horizontal",
+      "levels": [
+        {
+          "borderColor": "white",
+          "borderWidth": 4,
+          "dataLabels": {
+            "align": "left",
+            "allowOverlap": true,
+            "enabled": true,
+            "formatter": [Function],
+            "padding": 0,
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "useHTML": true,
+            "verticalAlign": "top",
+          },
+          "layoutAlgorithm": "squarifiedWithTopSpacing",
+          "level": 1,
+        },
+        {
+          "borderColor": "white",
+          "borderWidth": 2,
+          "colorVariation": {
+            "key": "brightness",
+            "to": 0.15,
+          },
+          "dataLabels": {
+            "align": "left",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "verticalAlign": "top",
+          },
+          "level": 2,
+        },
+        {
+          "borderColor": "black",
+          "borderWidth": 1,
+          "colorVariation": {
+            "key": "brightness",
+            "to": 0.15,
+          },
+          "dataLabels": {
+            "align": "center",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+            },
+            "verticalAlign": "middle",
+          },
+          "level": 3,
+        },
+      ],
+      "name": "Quantity",
+      "type": "treemap",
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "outside": true,
+    "padding": 1,
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": undefined,
+}
+`;
+
+exports[`Treemap Chart > render a treemap with single category 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "treemap",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "legend": {
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+  },
+  "series": [
+    {
+      "clip": false,
+      "color": "rgb(0, 206, 230)",
+      "data": [
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2009",
+          "parent": "",
+          "value": 8103,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2010",
+          "parent": "",
+          "value": 6814,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2011",
+          "parent": "",
+          "value": 3056,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2012",
+          "parent": "",
+          "value": 8423,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2013",
+          "parent": "",
+          "value": 2045,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2014",
+          "parent": "",
+          "value": 3010,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2015",
+          "parent": "",
+          "value": 5447,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2016",
+          "parent": "",
+          "value": 4242,
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2018",
+          "parent": "",
+          "value": 936,
+        },
+      ],
+      "dataLabels": {
+        "style": {
+          "textOutline": "none",
+        },
+      },
+      "layoutAlgorithm": "strip",
+      "layoutStartingDirection": "horizontal",
+      "levels": [
+        {
+          "borderColor": "black",
+          "borderWidth": 1,
+          "dataLabels": {
+            "align": "left",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "verticalAlign": "top",
+          },
+          "layoutAlgorithm": "strip",
+          "level": 1,
+        },
+        {
+          "borderColor": "white",
+          "borderWidth": 2,
+          "dataLabels": {
+            "align": "left",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "verticalAlign": "top",
+          },
+          "level": 2,
+        },
+        {
+          "borderColor": "black",
+          "borderWidth": 1,
+          "dataLabels": {
+            "align": "center",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+            },
+            "verticalAlign": "middle",
+          },
+          "level": 3,
+        },
+      ],
+      "name": "Quantity",
+      "type": "treemap",
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "outside": true,
+    "padding": 1,
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": undefined,
+}
+`;
+
+exports[`Treemap Chart > render a treemap with three categories 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "treemap",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "legend": {
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+  },
+  "series": [
+    {
+      "clip": false,
+      "color": "rgb(0, 206, 230)",
+      "data": [
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2009",
+          "name": "2009-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2010",
+          "name": "2010-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2011",
+          "name": "2011-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2012",
+          "name": "2012-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2013",
+          "name": "2013-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2014",
+          "name": "2014-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2015",
+          "name": "2015-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2016",
+          "name": "2016-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2018",
+          "name": "2018-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2009_A",
+          "name": "A",
+          "parent": "2009-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2010_A",
+          "name": "A",
+          "parent": "2010-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2011_B",
+          "name": "B",
+          "parent": "2011-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2012_B",
+          "name": "B",
+          "parent": "2012-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2013_A",
+          "name": "A",
+          "parent": "2013-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2014_B",
+          "name": "B",
+          "parent": "2014-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2015_A",
+          "name": "A",
+          "parent": "2015-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2016_B",
+          "name": "B",
+          "parent": "2016-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2018_B",
+          "name": "B",
+          "parent": "2018-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2009-01-01T00:00:00.000Z_A",
+          "value": 1322,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2009-01-01T00:00:00.000Z_A",
+          "value": 6781,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2010-01-01T00:00:00.000Z_A",
+          "value": 2343,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2010-01-01T00:00:00.000Z_A",
+          "value": 4471,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2011-01-01T00:00:00.000Z_B",
+          "value": 1244,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2011-01-01T00:00:00.000Z_B",
+          "value": 1812,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Female",
+          "parent": "2012-01-01T00:00:00.000Z_B",
+          "value": 3422,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2012-01-01T00:00:00.000Z_B",
+          "value": 5001,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2013-01-01T00:00:00.000Z_A",
+          "value": 2045,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2014-01-01T00:00:00.000Z_B",
+          "value": 3010,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2015-01-01T00:00:00.000Z_A",
+          "value": 5447,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2016-01-01T00:00:00.000Z_B",
+          "value": 4242,
+        },
+        {
+          "custom": {
+            "level": 3,
+            "levelsCount": 3,
+          },
+          "name": "Male",
+          "parent": "2018-01-01T00:00:00.000Z_B",
+          "value": 936,
+        },
+      ],
+      "dataLabels": {
+        "style": {
+          "textOutline": "none",
+        },
+      },
+      "layoutAlgorithm": "strip",
+      "layoutStartingDirection": "horizontal",
+      "levels": [
+        {
+          "borderColor": "white",
+          "borderWidth": 4,
+          "dataLabels": {
+            "align": "left",
+            "allowOverlap": true,
+            "enabled": true,
+            "formatter": [Function],
+            "padding": 0,
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "useHTML": true,
+            "verticalAlign": "top",
+          },
+          "layoutAlgorithm": "squarifiedWithTopSpacing",
+          "level": 1,
+        },
+        {
+          "borderColor": "white",
+          "borderWidth": 2,
+          "dataLabels": {
+            "align": "left",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "verticalAlign": "top",
+          },
+          "level": 2,
+        },
+        {
+          "borderColor": "black",
+          "borderWidth": 1,
+          "dataLabels": {
+            "align": "center",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+            },
+            "verticalAlign": "middle",
+          },
+          "level": 3,
+        },
+      ],
+      "name": "Quantity",
+      "type": "treemap",
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "outside": true,
+    "padding": 1,
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": undefined,
+}
+`;
+
+exports[`Treemap Chart > render a treemap with two categories 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "treemap",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "legend": {
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+  },
+  "series": [
+    {
+      "clip": false,
+      "color": "rgb(0, 206, 230)",
+      "data": [
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2009",
+          "name": "2009-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2010",
+          "name": "2010-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2011",
+          "name": "2011-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2012",
+          "name": "2012-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2013",
+          "name": "2013-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2014",
+          "name": "2014-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2015",
+          "name": "2015-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2016",
+          "name": "2016-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2018",
+          "name": "2018-01-01T00:00:00.000Z",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2009-01-01T00:00:00.000Z",
+          "value": 8103,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2010-01-01T00:00:00.000Z",
+          "value": 6814,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2011-01-01T00:00:00.000Z",
+          "value": 3056,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2012-01-01T00:00:00.000Z",
+          "value": 8423,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2013-01-01T00:00:00.000Z",
+          "value": 2045,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2014-01-01T00:00:00.000Z",
+          "value": 3010,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2015-01-01T00:00:00.000Z",
+          "value": 5447,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2016-01-01T00:00:00.000Z",
+          "value": 4242,
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2018-01-01T00:00:00.000Z",
+          "value": 936,
+        },
+      ],
+      "dataLabels": {
+        "style": {
+          "textOutline": "none",
+        },
+      },
+      "layoutAlgorithm": "strip",
+      "layoutStartingDirection": "horizontal",
+      "levels": [
+        {
+          "borderColor": "white",
+          "borderWidth": 4,
+          "dataLabels": {
+            "align": "left",
+            "allowOverlap": true,
+            "enabled": true,
+            "formatter": [Function],
+            "padding": 0,
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "useHTML": true,
+            "verticalAlign": "top",
+          },
+          "layoutAlgorithm": "squarifiedWithTopSpacing",
+          "level": 1,
+        },
+        {
+          "borderColor": "black",
+          "borderWidth": 1,
+          "dataLabels": {
+            "align": "left",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "14px",
+            },
+            "verticalAlign": "top",
+          },
+          "level": 2,
+        },
+        {
+          "borderColor": "black",
+          "borderWidth": 1,
+          "dataLabels": {
+            "align": "center",
+            "enabled": true,
+            "formatter": [Function],
+            "style": {
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+            },
+            "verticalAlign": "middle",
+          },
+          "level": 3,
+        },
+      ],
+      "name": "Quantity",
+      "type": "treemap",
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "outside": true,
+    "padding": 1,
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": undefined,
+}
+`;

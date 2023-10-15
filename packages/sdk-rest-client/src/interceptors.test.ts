@@ -64,6 +64,7 @@ describe('Auth interceptor', () => {
         json: () =>
           Promise.resolve({
             isAuthenticated: false,
+            ssoEnabled: true,
             loginUrl: fakeLoginUrl,
           }),
       } as Response);

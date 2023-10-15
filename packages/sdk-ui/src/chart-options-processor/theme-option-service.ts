@@ -41,7 +41,6 @@ export const applyThemeToChart = (
   const pie = {
     allowPointSelect: false,
     showInLegend: true,
-    innerSize: '0%' as const,
     dataLabels: {
       style: {
         color: themeSettings.chart.textColor,
@@ -162,6 +161,8 @@ export const applyThemeToChart = (
  * Returns default theme settings, which can be used as base for custom theme options.
  *
  * @returns Theme settings object
+ *
+ * @internal
  */
 export const getDefaultThemeSettings = (): CompleteThemeSettings =>
   cloneDeep(DEFAULT_THEME_SETTINGS);

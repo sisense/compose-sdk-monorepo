@@ -41,3 +41,8 @@ Query state that contains the status of the query execution, the result data, or
  }
  return null;
 ```
+
+See also hook [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md), which extracts data from an existing widget in the Sisense instance.
+
+See [this blog post]( https://www.sisense.com/blog/take-control-of-your-data-visualizations/) for examples
+of using the hook to fetch data from Sisense for third-party charts.

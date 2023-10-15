@@ -39,5 +39,5 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
   }}
 />
 ```
-###
+
 <img src="../../../img/line-chart-example-1.png" width="800px" />

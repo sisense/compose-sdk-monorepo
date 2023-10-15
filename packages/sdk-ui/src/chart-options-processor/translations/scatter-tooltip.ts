@@ -24,12 +24,30 @@ export interface ScatterCustomPointOptions {
 }
 
 export const spanSegment = (value: number | string, color?: string): string =>
-  value !== '' ? `<span style="fill:${color ?? 'currentColor'}">${value}</span>` : '';
+  value !== ''
+    ? `<span style="color:${
+        color ?? 'currentColor'
+      }; font-size: 15px; line-height: 18px">${value}</span>`
+    : '';
 
-const block = (element: string, title?: string): string => `${title || ''}<br />${element || ''}`;
+const block = (element: string, title?: string): string => {
+  return `${title || ''}${title && element ? '<br />' : ''}${element || ''}`;
+};
 
-const buildTooltip = (blocks: string[]): string =>
-  blocks.reduce((tooltip, value) => tooltip + (value !== '<br />' ? `<br />${value}` : ''));
+export const tooltipWrapper = (content: string) =>
+  `<div style="minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px">
+    ${content}
+  </div>`;
+
+export const tooltipSeparator = () => '<hr class="csdk-border-t" style="margin: 7px 0px" />';
+
+const buildTooltip = (blocks: string[]): string => {
+  const content = blocks
+    .map((value, index) => (value && index > 0 ? tooltipSeparator() + value : value))
+    .join('');
+
+  return tooltipWrapper(content);
+};
 
 const buildSpans = (
   ctx: InternalSeries,
@@ -96,6 +114,7 @@ export const getScatterTooltipSettings = (
   dataOptions: ScatterChartDataOptionsInternal,
 ): TooltipSettings => ({
   enabled: true,
+  useHTML: true,
   formatter(): string {
     const ctx: InternalSeries = this as InternalSeries;
     return tooltipFormatter(ctx, dataOptions);

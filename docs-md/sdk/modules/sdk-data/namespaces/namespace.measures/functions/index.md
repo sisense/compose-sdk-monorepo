@@ -33,7 +33,7 @@ Function `measures.sum` is used to create a measure that sums the `Revenue` colu
 </ExecuteQuery>
 ```
 
-## Functions
+# Functions
 
 - [add](function.add.md)
 - [aggregate](function.aggregate.md)

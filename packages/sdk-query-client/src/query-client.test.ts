@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Attribute, Measure, QueryResultData } from '@sisense/sdk-data';
+import { Attribute, createAttribute, Measure, QueryResultData } from '@sisense/sdk-data';
 import {
   DatasourceFieldsTestDataset,
   getDatasourceFieldsTestDataset,
@@ -126,6 +126,36 @@ describe('DimensionalQueryClient', () => {
             enabled: true,
           } as unknown as Measure,
         ],
+      };
+      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+    });
+
+    it('should throw when invalid count', () => {
+      const queryDescription: QueryDescription = {
+        ...baseQueryDescription,
+        attributes: [
+          createAttribute({
+            name: 'BrandID',
+            type: 'numeric-attribute',
+            expression: '[Commerce.Brand ID]',
+          }),
+        ],
+        count: -100,
+      };
+      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+    });
+
+    it('should throw when invalid offset', () => {
+      const queryDescription: QueryDescription = {
+        ...baseQueryDescription,
+        attributes: [
+          createAttribute({
+            name: 'BrandID',
+            type: 'numeric-attribute',
+            expression: '[Commerce.Brand ID]',
+          }),
+        ],
+        offset: -100,
       };
       expect(() => queryClient.executeQuery(queryDescription)).toThrow();
     });

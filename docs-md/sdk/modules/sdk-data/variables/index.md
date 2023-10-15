@@ -2,7 +2,7 @@
 title: Variables
 ---
 
-## Variables
+# Variables
 
 - [AggregationTypes](variable.AggregationTypes.md)
 - [DateLevels](variable.DateLevels.md)

@@ -64,6 +64,13 @@ export interface Element {
    * @internal
    */
   jaql(nested?: boolean): any;
+
+  /**
+   * Skip any validation of this instance.
+   *
+   * @internal
+   */
+  skipValidation?: boolean;
 }
 
 /**

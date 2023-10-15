@@ -1,4 +1,4 @@
-import { Chart } from '../components/chart';
+import { Chart } from '../chart';
 import { StyleOptions } from '../types';
 import { templateForComponent } from './template';
 

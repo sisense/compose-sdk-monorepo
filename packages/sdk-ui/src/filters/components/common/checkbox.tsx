@@ -28,7 +28,7 @@ export const Checkbox: FunctionComponent<CheckboxProps> = (props) => {
           },
         )}
       />
-      {label && <span className="csdk-border-l csdk-pl-2">{label}</span>}
+      {label && <span className="csdk-border-l csdk-pl-3">{label}</span>}
     </label>
   );
 };

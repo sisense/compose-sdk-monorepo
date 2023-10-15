@@ -2,7 +2,7 @@
 /* eslint-disable complexity */
 import dayjs from 'dayjs';
 import { StyledDatePicker } from './styled-date-picker.js';
-import { useThemeContext } from '../../../../components/theme-provider/index.js';
+import { useThemeContext } from '../../../../theme-provider/index.js';
 import { CalendarHeader } from './calendar-header.js';
 import { QuickDateSelectionButtons } from './quick-date-selection-buttons.js';
 import { calculateNewDateRange } from './date-range-calculator.js';

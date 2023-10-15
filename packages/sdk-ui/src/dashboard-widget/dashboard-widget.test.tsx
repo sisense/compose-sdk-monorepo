@@ -8,7 +8,7 @@ import {
 
 import { render, waitFor } from '@testing-library/react';
 import { DashboardWidget } from './dashboard-widget';
-import { SisenseContextProvider } from '../components/sisense-context/sisense-context-provider';
+import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
 
 describe('DashboardWidget', () => {
   beforeEach(() => {

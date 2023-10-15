@@ -44,7 +44,7 @@ export type ScatterDataPointsEventHandler = (
   nativeEvent: MouseEvent,
 ) => void;
 
-type HighchartsEventOptions = {
+export type HighchartsEventOptions = {
   chart: { zoomType?: string; events: { selection?: (ev: HighchartsSelectEvent) => void } };
   plotOptions: {
     series: {

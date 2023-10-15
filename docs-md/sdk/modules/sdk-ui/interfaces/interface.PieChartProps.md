@@ -8,7 +8,7 @@ Props of the [PieChart](../functions/function.PieChart.md) component.
 
 ## Extends
 
-- `BaseChartProps`
+- `BaseChartProps`.`CartesianChartEventProps`
 
 ## Properties
 
@@ -92,7 +92,7 @@ This callback is not yet supported for [IndicatorChart](../functions/function.In
 
 ##### Inherited from
 
-BaseChartProps.onBeforeRender
+CartesianChartEventProps.onBeforeRender
 
 ***
 
@@ -104,7 +104,7 @@ Click handler callback for a data point
 
 ##### Inherited from
 
-BaseChartProps.onDataPointClick
+CartesianChartEventProps.onDataPointClick
 
 ***
 
@@ -116,7 +116,7 @@ Context menu handler callback for a data point
 
 ##### Inherited from
 
-BaseChartProps.onDataPointContextMenu
+CartesianChartEventProps.onDataPointContextMenu
 
 ***
 
@@ -128,4 +128,4 @@ Handler callback for selection of multiple data points
 
 ##### Inherited from
 
-BaseChartProps.onDataPointsSelected
+CartesianChartEventProps.onDataPointsSelected

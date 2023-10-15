@@ -14,6 +14,8 @@ import {
  * @param themeOid - Theme oid.
  * @param httpClient - Sisense REST API client.
  * @returns CompleteThemeSettings from server.
+ *
+ * @internal
  */
 export async function getThemeSettingsByOid(
   themeOid: ThemeOid,

@@ -41,3 +41,4 @@ The example below executes a query over the existing dashboard widget with the s
  }
  return null;
 ```
+See also hook [useExecuteQuery](function.useExecuteQuery.md), which execute a query specified in code.

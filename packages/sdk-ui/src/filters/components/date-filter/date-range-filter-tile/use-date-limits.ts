@@ -1,5 +1,5 @@
 import { DataSource, LevelAttribute, measures } from '@sisense/sdk-data';
-import { useSisenseContext } from '../../../../components/sisense-context/sisense-context';
+import { useSisenseContext } from '../../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { executeQuery } from '../../../../query/execute-query';
 

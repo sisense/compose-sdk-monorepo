@@ -1,7 +1,10 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 import { CompleteThemeSettings } from '../../../../types.js';
-import { useThemeContext } from '../../../../components/theme-provider/index.js';
+import { useThemeContext } from '../../../../theme-provider/index.js';
+import { ArrowRightIcon } from '../../icons/arrow-right-icon';
+import { DoubleArrowRightIcon } from '../../icons/double-arrow-right-icon';
 
 type HeaderProps = {
   date: Date;
@@ -14,16 +17,18 @@ type HeaderProps = {
 };
 
 const MonthTitle = styled.span<{ theme: CompleteThemeSettings }>`
-  font-size: 1.2rem;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 700;
   color: ${({ theme }) => theme.typography.primaryTextColor};
+  width: 70px;
+  text-align: center;
 `;
 
 const MonthSelectionButton = styled.button<{ theme: CompleteThemeSettings }>`
   border: none;
   background-color: transparent;
   color: ${({ theme, disabled }) => (disabled ? 'transparent' : theme.typography.primaryTextColor)};
-  margin: 0 0.5rem;
+  margin: 0 5px;
   :hover {
     border-radius: 50%;
 
@@ -33,9 +38,9 @@ const MonthSelectionButton = styled.button<{ theme: CompleteThemeSettings }>`
 
 const HeaderBlock = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: 0.5rem 10px;
 `;
 
 export const CalendarHeader = (props: HeaderProps) => {
@@ -50,14 +55,22 @@ export const CalendarHeader = (props: HeaderProps) => {
         theme={theme}
         disabled={props.prevMonthButtonDisabled}
       >
-        {'<<'}
+        <DoubleArrowRightIcon
+          className={`csdk-scale-x-[-1] csdk-transition ${
+            props.prevMonthButtonDisabled ? 'csdk-opacity-0' : ''
+          }`}
+        />
       </MonthSelectionButton>
       <MonthSelectionButton
         theme={theme}
         onClick={props.decreaseMonth}
         disabled={props.prevMonthButtonDisabled}
       >
-        {'<'}
+        <ArrowRightIcon
+          className={`csdk-scale-x-[-1] csdk-transition ${
+            props.prevMonthButtonDisabled ? 'csdk-opacity-0' : ''
+          }`}
+        />
       </MonthSelectionButton>
       <MonthTitle theme={theme}>{dayjs(props.date).format('MMM YYYY')}</MonthTitle>
       <MonthSelectionButton
@@ -65,7 +78,9 @@ export const CalendarHeader = (props: HeaderProps) => {
         onClick={props.increaseMonth}
         disabled={props.nextMonthButtonDisabled}
       >
-        {'>'}
+        <ArrowRightIcon
+          className={`csdk-transition ${props.nextMonthButtonDisabled ? 'csdk-opacity-0' : ''}`}
+        />
       </MonthSelectionButton>
       <MonthSelectionButton
         theme={theme}
@@ -74,7 +89,9 @@ export const CalendarHeader = (props: HeaderProps) => {
         }}
         disabled={props.nextMonthButtonDisabled}
       >
-        {'>>'}
+        <DoubleArrowRightIcon
+          className={`csdk-transition ${props.nextMonthButtonDisabled ? 'csdk-opacity-0' : ''}`}
+        />
       </MonthSelectionButton>
     </HeaderBlock>
   );

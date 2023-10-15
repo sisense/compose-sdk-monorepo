@@ -63,57 +63,6 @@ Highlight filters that will highlight results that pass filter criteria
 
 BaseChartProps.highlights
 
-### Callbacks
-
-#### onBeforeRender
-
-> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
-
-Before render handler callback that allows adjusting
-detail chart options prior to render
-
-This callback is not yet supported for [IndicatorChart](../functions/function.IndicatorChart.md)
-
-##### Inherited from
-
-BaseChartProps.onBeforeRender
-
-***
-
-#### onDataPointClick
-
-> **onDataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
-
-Click handler callback for a data point
-
-##### Inherited from
-
-BaseChartProps.onDataPointClick
-
-***
-
-#### onDataPointContextMenu
-
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
-
-Context menu handler callback for a data point
-
-##### Inherited from
-
-BaseChartProps.onDataPointContextMenu
-
-***
-
-#### onDataPointsSelected
-
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md)
-
-Handler callback for selection of multiple data points
-
-##### Inherited from
-
-BaseChartProps.onDataPointsSelected
-
 ### Other
 
 #### dataOptions

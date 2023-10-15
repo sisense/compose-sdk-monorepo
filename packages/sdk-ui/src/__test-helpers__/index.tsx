@@ -4,10 +4,7 @@
 import { PropsWithChildren, ReactElement } from 'react';
 import { render, RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  SisenseContext,
-  SisenseContextPayload,
-} from '../components/sisense-context/sisense-context';
+import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { ClientApplication } from '../app/client-application';
 

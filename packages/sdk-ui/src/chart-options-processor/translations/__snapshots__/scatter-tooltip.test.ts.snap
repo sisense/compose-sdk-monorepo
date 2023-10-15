@@ -1,3 +1,61 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Format numbers when x-axis, y-axis, break by / point, color, and size 1`] = `"x<br /><span style=\\"fill:#FFF\\">$22.1</span><br />y<br /><span style=\\"fill:#FFF\\">!2.2</span><br />p<br /><span style=\\"fill:#FFF\\">13.57976</span><br />c<br /><span style=\\"fill:#FFF\\">3.1456</span><br />x<br /><span style=\\"fill:#FFF\\">@12.3</span>"`;
+exports[`Format numbers when x-axis, y-axis, break by / point, color, and size 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    x<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">$22.1</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />y<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">!2.2</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />p<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">13.57976</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />c<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">3.1456</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />x<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">@12.3</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When only break by / color 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    <span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Brand<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Sisense</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When only break by / point 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    <span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Brand<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Sisense</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When only size 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    <span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When only x-axis 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">0</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When only y-axis 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    <span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">0</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Category<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When x-axis and y-axis (call through options) 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Category<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When x-axis, y-axis and break by / point 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Category<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Brand<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Sisense</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When x-axis, y-axis, break by / point and size 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Category<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Brand<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Sisense</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">124</span>
+  </div>"
+`;
+
+exports[`Scatter tooltip > When x-axis, y-axis, break by / point, color, and size 1`] = `
+"<div style=\\"minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px\\">
+    Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">10M</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Category<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Apple</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Brand<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Sisense</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Brand<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">Google</span><hr class=\\"csdk-border-t\\" style=\\"margin: 7px 0px\\" />Total Costs<br /><span style=\\"color:#FFF; font-size: 15px; line-height: 18px\\">124</span>
+  </div>"
+`;

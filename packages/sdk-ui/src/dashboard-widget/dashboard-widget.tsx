@@ -5,10 +5,10 @@ import { extractWidgetProps } from './translate-widget';
 import { fetchWidget } from './fetch-widget';
 import { WidgetDto } from './types';
 import { DashboardWidgetProps } from '../props';
-import { useSisenseContext } from '../components/sisense-context/sisense-context';
-import { useThemeContext } from '../components/theme-provider';
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { useThemeContext } from '../theme-provider';
 import { translation } from '../locales/en';
-import { asSisenseComponent } from '../components/decorators/as-sisense-component';
+import { asSisenseComponent } from '../decorators/as-sisense-component';
 import { mergeFiltersByStrategy } from './utils';
 
 /**

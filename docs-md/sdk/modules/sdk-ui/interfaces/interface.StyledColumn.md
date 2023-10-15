@@ -33,7 +33,7 @@ An example of using `StyledColumn` to change the date format of the months displ
   }}
 />
 ```
-###
+
 <img src="../../../img/chart-mixed-series-example-1.png" width="800px" />
 
 Also, see [StyledMeasureColumn](interface.StyledMeasureColumn.md).

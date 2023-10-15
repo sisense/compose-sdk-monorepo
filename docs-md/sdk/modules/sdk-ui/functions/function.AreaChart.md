@@ -41,5 +41,5 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
   }}
 />
 ```
-###
+
 <img src="../../../img/area-chart-example-1.png" width="800"/>

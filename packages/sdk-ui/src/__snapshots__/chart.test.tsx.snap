@@ -1,0 +1,4195 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`add handlers to a chart 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {
+      "selection": [Function],
+    },
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "line",
+    "zoomType": "x",
+  },
+  "credits": {
+    "enabled": false,
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "exporting": {
+    "enabled": true,
+  },
+  "legend": {
+    "align": "center",
+    "backgroundColor": "transparent",
+    "borderColor": "transparent",
+    "borderWidth": "",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "cursor": "default",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontSize": "13px",
+      "fontWeight": "normal",
+      "pointerEvents": "none",
+      "textOutline": "none",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "navigator": {
+    "enabled": false,
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "connectNulls": false,
+      "dataLabels": {
+        "crop": false,
+        "enabled": false,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineWidth": 1,
+      "marker": {
+        "enabled": true,
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
+      "point": {
+        "events": {
+          "click": [Function],
+          "contextmenu": [Function],
+        },
+      },
+      "states": {
+        "select": {
+          "borderColor": "transparent",
+          "color": null,
+          "opacity": 0.3,
+        },
+      },
+      "stickyTracking": false,
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "color": "#00cee6",
+      "data": [
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 6781,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4471,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 1812,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 5001,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 2045,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 3010,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 5447,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4242,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 936,
+        },
+      ],
+      "dataLabels": {
+        "formatter": [Function],
+      },
+      "name": "Quantity",
+      "showInNavigator": true,
+      "stickyTracking": false,
+      "turboThreshold": 0,
+      "yAxis": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [
+    {
+      "categories": [
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2018",
+      ],
+      "endOnTick": false,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "overflow": "none",
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": null,
+      "min": null,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "plotBands": [],
+      "plotLines": [],
+      "startOnTick": false,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "X Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+  "yAxis": [
+    {
+      "endOnTick": true,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": 6781,
+      "min": 936,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineDashStyle": "Dot",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "minorTickWidth": 0,
+      "plotBands": undefined,
+      "showLastLabel": true,
+      "stackLabels": {
+        "allowOverlap": false,
+        "crop": true,
+        "enabled": false,
+        "labelrank": 99999,
+        "rotation": 0,
+        "style": {
+          "color": "#56535b",
+          "fontFamily": "Open Sans",
+          "fontSize": "13px",
+          "fontWeight": "bold",
+          "pointerEvents": "none",
+          "textOutline": "none",
+          "textOverflow": "ellipsis",
+        },
+      },
+      "startOnTick": true,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "Y Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+}
+`;
+
+exports[`change theme of a chart 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "blue",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "line",
+  },
+  "credits": {
+    "enabled": false,
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "red",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "exporting": {
+    "enabled": true,
+  },
+  "legend": {
+    "align": "center",
+    "backgroundColor": "transparent",
+    "borderColor": "transparent",
+    "borderWidth": "",
+    "enabled": true,
+    "itemStyle": {
+      "color": "red",
+      "cursor": "default",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontSize": "13px",
+      "fontWeight": "normal",
+      "pointerEvents": "none",
+      "textOutline": "none",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "navigator": {
+    "enabled": false,
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "red",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "connectNulls": false,
+      "dataLabels": {
+        "crop": false,
+        "enabled": false,
+        "style": {
+          "color": "red",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineWidth": 1,
+      "marker": {
+        "enabled": true,
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
+      "point": {
+        "events": {},
+      },
+      "states": {
+        "select": {
+          "borderColor": "transparent",
+          "color": null,
+          "opacity": 0.3,
+        },
+      },
+      "stickyTracking": false,
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "color": "#00cee6",
+      "data": [
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 6781,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4471,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 1812,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 5001,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 2045,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 3010,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 5447,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4242,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 936,
+        },
+      ],
+      "dataLabels": {
+        "formatter": [Function],
+      },
+      "name": "Quantity",
+      "showInNavigator": true,
+      "stickyTracking": false,
+      "turboThreshold": 0,
+      "yAxis": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [
+    {
+      "categories": [
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2018",
+      ],
+      "endOnTick": false,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "overflow": "none",
+        "style": {
+          "color": "red",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": null,
+      "min": null,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "plotBands": [],
+      "plotLines": [],
+      "startOnTick": false,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "red",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "X Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+  "yAxis": [
+    {
+      "endOnTick": true,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "style": {
+          "color": "red",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": 6781,
+      "min": 936,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineDashStyle": "Dot",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "minorTickWidth": 0,
+      "plotBands": undefined,
+      "showLastLabel": true,
+      "stackLabels": {
+        "allowOverlap": false,
+        "crop": true,
+        "enabled": false,
+        "labelrank": 99999,
+        "rotation": 0,
+        "style": {
+          "color": "#56535b",
+          "fontFamily": "Open Sans",
+          "fontSize": "13px",
+          "fontWeight": "bold",
+          "pointerEvents": "none",
+          "textOutline": "none",
+          "textOverflow": "ellipsis",
+        },
+      },
+      "startOnTick": true,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "red",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "Y Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+}
+`;
+
+exports[`render Table 1`] = `
+<div>
+  <div
+    style="width: 100%; height: 100%;"
+  >
+    <div
+      style="width: 400px; height: 500px;"
+    >
+      <div
+        aria-label="table-root"
+        style="display: flex; flex-direction: column; align-items: center; background-color: rgb(255, 255, 255);"
+      >
+        <div
+          class="_component_2a48df"
+        >
+          <div
+            class="_tableWrapper_4b88bf"
+          >
+            <div
+              aria-rowcount="10"
+              class="_table_4b88bf fixedDataTableLayout_main public_fixedDataTable_main"
+              role="grid"
+              style="height: 500px; width: 400px;"
+            >
+              <div
+                class="fixedDataTableLayout_rowsContainer"
+                style="height: 498px; width: 400px;"
+              >
+                <div
+                  class="fixedDataTableColumnResizerLineLayout_main fixedDataTableColumnResizerLineLayout_hiddenElem public_fixedDataTableColumnResizerLine_main"
+                  style="width: 0px; height: 500px; left: 0px;"
+                >
+                  <div
+                    class="fixedDataTableColumnResizerLineLayout_mouseArea"
+                    style="height: 500px;"
+                  />
+                </div>
+                <div
+                  class="fixedDataTableRowLayout_rowWrapper"
+                  style="width: 400px; height: 26px; z-index: 1; visibility: visible; transform: translate3d(0px,0px,0);"
+                >
+                  <div
+                    aria-rowindex="1"
+                    class="fixedDataTableRowLayout_main public_fixedDataTableRow_main fixedDataTableLayout_header public_fixedDataTable_header"
+                    role="row"
+                    style="width: 400px; height: 26px;"
+                  >
+                    <div
+                      class="fixedDataTableRowLayout_body"
+                    >
+                      <div
+                        class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                        style="height: 26px; width: 0px; left: 0px;"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroup"
+                          style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                        />
+                      </div>
+                      <div
+                        class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                        style="height: 26px; width: 400px; left: 0px;"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroup"
+                          style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                        >
+                          <div
+                            class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                            role="columnheader"
+                            style="height: 26px; width: 126px; left: 0px;"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
+                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                >
+                                  <div
+                                    class="public_fixedDataTableCell_cellContent"
+                                  >
+                                    <div
+                                      class="_headerCell_d9b667"
+                                    >
+                                      <span
+                                        class="_headerLabel_d9b667"
+                                      >
+                                        <div
+                                          class="_tableCellContent_4b88bf"
+                                          style="max-width: 66px;"
+                                        >
+                                          <div>
+                                            Years
+                                          </div>
+                                        </div>
+                                      </span>
+                                      <div
+                                        class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                            role="columnheader"
+                            style="height: 26px; width: 126px; left: 126px;"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
+                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                >
+                                  <div
+                                    class="public_fixedDataTableCell_cellContent"
+                                  >
+                                    <div
+                                      class="_headerCell_d9b667"
+                                    >
+                                      <span
+                                        class="_headerLabel_d9b667"
+                                      >
+                                        <div
+                                          class="_tableCellContent_4b88bf"
+                                          style="max-width: 66px;"
+                                        >
+                                          <div>
+                                            Group
+                                          </div>
+                                        </div>
+                                      </span>
+                                      <div
+                                        class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class=""
+                        style="left: 0px; height: 26px;"
+                      />
+                      <div
+                        class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                        style="height: 26px; width: 0px; left: 400px;"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroup"
+                          style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="transform: translate3d(0px,26px,0);"
+                >
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,0px,0);"
+                  >
+                    <div
+                      aria-rowindex="2"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2009
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          A
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,26px,0);"
+                  >
+                    <div
+                      aria-rowindex="3"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_highlighted public_fixedDataTableRow_odd public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2010
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          A
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,52px,0);"
+                  >
+                    <div
+                      aria-rowindex="4"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2011
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          B
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,78px,0);"
+                  >
+                    <div
+                      aria-rowindex="5"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_highlighted public_fixedDataTableRow_odd public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2012
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          B
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,104px,0);"
+                  >
+                    <div
+                      aria-rowindex="6"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2013
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          A
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,130px,0);"
+                  >
+                    <div
+                      aria-rowindex="7"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_highlighted public_fixedDataTableRow_odd public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2014
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          B
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,156px,0);"
+                  >
+                    <div
+                      aria-rowindex="8"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2015
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          A
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,182px,0);"
+                  >
+                    <div
+                      aria-rowindex="9"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_highlighted public_fixedDataTableRow_odd public_fixedDataTable_bodyRow"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2016
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          B
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,208px,0);"
+                  >
+                    <div
+                      aria-rowindex="10"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow fixedDataTableLayout_hasBottomBorder public_fixedDataTable_hasBottomBorder"
+                      role="row"
+                      style="width: 400px; height: 26px;"
+                    >
+                      <div
+                        class="fixedDataTableRowLayout_body"
+                      >
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 400px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          >
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 0px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          2018
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="gridcell"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_tableCellContent_4b88bf"
+                                        style="max-width: 102px;"
+                                      >
+                                        <div>
+                                          B
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 400px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`render a bar chart with breakBy and two x-axes 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      90,
+      20,
+      20,
+    ],
+    "type": "bar",
+  },
+  "credits": {
+    "enabled": false,
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "exporting": {
+    "enabled": true,
+  },
+  "legend": {
+    "align": "center",
+    "backgroundColor": "transparent",
+    "borderColor": "transparent",
+    "borderWidth": "",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "cursor": "default",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontSize": "13px",
+      "fontWeight": "normal",
+      "pointerEvents": "none",
+      "textOutline": "none",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "navigator": {
+    "enabled": false,
+  },
+  "plotOptions": {
+    "bar": {
+      "groupPadding": 0.1,
+      "pointPadding": 0.01,
+    },
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "connectNulls": false,
+      "dataLabels": {
+        "crop": false,
+        "enabled": false,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
+      "point": {
+        "events": {},
+      },
+      "states": {
+        "select": {
+          "borderColor": "transparent",
+          "color": null,
+          "opacity": 0.3,
+        },
+      },
+      "stickyTracking": false,
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "color": "#00cee6",
+      "data": [
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 6781,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 4471,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 1812,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 5001,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 2045,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 3010,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 5447,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 4242,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 936,
+        },
+      ],
+      "dataLabels": {
+        "formatter": [Function],
+      },
+      "name": "Quantity",
+      "showInNavigator": true,
+      "stickyTracking": false,
+      "turboThreshold": 0,
+      "yAxis": 0,
+    },
+    {
+      "boostThreshold": 0,
+      "color": "#9b9bd7",
+      "data": [
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 10,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 70,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 50,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 60,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 40,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 90,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+              "A",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 80,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 70,
+        },
+        {
+          "y": null,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+              "B",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 20,
+        },
+      ],
+      "dataLabels": {
+        "formatter": [Function],
+      },
+      "name": "Units",
+      "showInNavigator": true,
+      "stickyTracking": false,
+      "turboThreshold": 0,
+      "yAxis": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [
+    {
+      "categories": [
+        "A",
+        " ",
+        "A",
+        " ",
+        "B",
+        " ",
+        "B",
+        " ",
+        "A",
+        " ",
+        "B",
+        " ",
+        "A",
+        " ",
+        "B",
+        " ",
+        "B",
+      ],
+      "endOnTick": false,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "overflow": "none",
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": null,
+      "min": null,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "plotBands": [
+        {
+          "color": "#FFFFFF",
+          "from": -0.5,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2009",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 1,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 1,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2010",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 3,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 3,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2011",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 5,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 5,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2012",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 7,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 7,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2013",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 9,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 9,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2014",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 11,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 11,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2015",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 13,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 13,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2016",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 15,
+        },
+        {
+          "color": "#FFFFFF",
+          "from": 15,
+          "isPlotBand": true,
+          "label": {
+            "align": "right",
+            "style": {
+              "color": "#000000",
+              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontSize": "13px",
+              "fontWeight": "normal",
+              "pointerEvents": "none",
+              "textOutline": "none",
+              "textOverflow": "ellipsis",
+              "width": "70px",
+            },
+            "text": "2018",
+            "textAlign": "left",
+            "x": 5,
+            "y": 0,
+          },
+          "to": 16.5,
+        },
+      ],
+      "plotLines": [
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 1,
+          "width": 1,
+        },
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 3,
+          "width": 1,
+        },
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 5,
+          "width": 1,
+        },
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 7,
+          "width": 1,
+        },
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 9,
+          "width": 1,
+        },
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 11,
+          "width": 1,
+        },
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 13,
+          "width": 1,
+        },
+        {
+          "color": "#C0D0E0",
+          "dashStyle": "shortDot",
+          "value": 15,
+          "width": 1,
+        },
+      ],
+      "startOnTick": false,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "X Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+  "yAxis": [
+    {
+      "endOnTick": true,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": 6781,
+      "min": 0,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineDashStyle": "Dot",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "minorTickWidth": 0,
+      "plotBands": undefined,
+      "showLastLabel": true,
+      "stackLabels": {
+        "allowOverlap": false,
+        "crop": true,
+        "enabled": false,
+        "labelrank": 99999,
+        "rotation": 0,
+        "style": {
+          "color": "#56535b",
+          "fontFamily": "Open Sans",
+          "fontSize": "13px",
+          "fontWeight": "bold",
+          "pointerEvents": "none",
+          "textOutline": "none",
+          "textOverflow": "ellipsis",
+        },
+      },
+      "startOnTick": true,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "Y Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+}
+`;
+
+exports[`render a columm chart with breakBy 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "column",
+  },
+  "credits": {
+    "enabled": false,
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "exporting": {
+    "enabled": true,
+  },
+  "legend": {
+    "align": "center",
+    "backgroundColor": "transparent",
+    "borderColor": "transparent",
+    "borderWidth": "",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "cursor": "default",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontSize": "13px",
+      "fontWeight": "normal",
+      "pointerEvents": "none",
+      "textOutline": "none",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "navigator": {
+    "enabled": false,
+  },
+  "plotOptions": {
+    "column": {
+      "groupPadding": 0.1,
+      "pointPadding": 0.01,
+    },
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "connectNulls": false,
+      "dataLabels": {
+        "crop": false,
+        "enabled": false,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
+      "point": {
+        "events": {},
+      },
+      "states": {
+        "select": {
+          "borderColor": "transparent",
+          "color": null,
+          "opacity": 0.3,
+        },
+      },
+      "stickyTracking": false,
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "color": "#00cee6",
+      "custom": {
+        "rawValue": [
+          "A",
+        ],
+      },
+      "data": [
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 6781,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4471,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 2045,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 5447,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": NaN,
+        },
+      ],
+      "dataLabels": {
+        "formatter": [Function],
+      },
+      "name": "A",
+      "showInNavigator": true,
+      "stickyTracking": false,
+      "turboThreshold": 0,
+      "yAxis": 0,
+    },
+    {
+      "boostThreshold": 0,
+      "color": "#9b9bd7",
+      "custom": {
+        "rawValue": [
+          "B",
+        ],
+      },
+      "data": [
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 1812,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 5001,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+          },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
+          "selected": false,
+          "y": 3010,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": NaN,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4242,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 936,
+        },
+      ],
+      "dataLabels": {
+        "formatter": [Function],
+      },
+      "name": "B",
+      "showInNavigator": true,
+      "stickyTracking": false,
+      "turboThreshold": 0,
+      "yAxis": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [
+    {
+      "categories": [
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2018",
+      ],
+      "endOnTick": false,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "overflow": "none",
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": null,
+      "min": null,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "plotBands": [],
+      "plotLines": [],
+      "startOnTick": false,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "X Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+  "yAxis": [
+    {
+      "endOnTick": true,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": 6781,
+      "min": 0,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineDashStyle": "Dot",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "minorTickWidth": 0,
+      "plotBands": undefined,
+      "showLastLabel": true,
+      "stackLabels": {
+        "allowOverlap": false,
+        "crop": true,
+        "enabled": false,
+        "labelrank": 99999,
+        "rotation": 0,
+        "style": {
+          "color": "#56535b",
+          "fontFamily": "Open Sans",
+          "fontSize": "13px",
+          "fontWeight": "bold",
+          "pointerEvents": "none",
+          "textOutline": "none",
+          "textOverflow": "ellipsis",
+        },
+      },
+      "startOnTick": true,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "Y Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+}
+`;
+
+exports[`render a line chart 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "line",
+  },
+  "credits": {
+    "enabled": false,
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "exporting": {
+    "enabled": true,
+  },
+  "legend": {
+    "align": "center",
+    "backgroundColor": "transparent",
+    "borderColor": "transparent",
+    "borderWidth": "",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "cursor": "default",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontSize": "13px",
+      "fontWeight": "normal",
+      "pointerEvents": "none",
+      "textOutline": "none",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "navigator": {
+    "enabled": false,
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "connectNulls": false,
+      "dataLabels": {
+        "crop": false,
+        "enabled": false,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineWidth": 1,
+      "marker": {
+        "enabled": true,
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
+      "point": {
+        "events": {},
+      },
+      "states": {
+        "select": {
+          "borderColor": "transparent",
+          "color": null,
+          "opacity": 0.3,
+        },
+      },
+      "stickyTracking": false,
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "color": "#00cee6",
+      "data": [
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 6781,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4471,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 1812,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 5001,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 2045,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 3010,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 5447,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 4242,
+        },
+        {
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+          },
+          "selected": false,
+          "y": 936,
+        },
+      ],
+      "dataLabels": {
+        "formatter": [Function],
+      },
+      "name": "Quantity",
+      "showInNavigator": true,
+      "stickyTracking": false,
+      "turboThreshold": 0,
+      "yAxis": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [
+    {
+      "categories": [
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2018",
+      ],
+      "endOnTick": false,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "overflow": "none",
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": null,
+      "min": null,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "plotBands": [],
+      "plotLines": [],
+      "startOnTick": false,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "X Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+  "yAxis": [
+    {
+      "endOnTick": true,
+      "gridLineColor": "#d1d1d7",
+      "gridLineDashStyle": "Dot",
+      "gridLineWidth": 1,
+      "labels": {
+        "autoRotation": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50,
+          -60,
+          -70,
+          -80,
+          -90,
+        ],
+        "enabled": true,
+        "formatter": [Function],
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "lineColor": "#d1d1d7",
+      "lineWidth": 1,
+      "max": 6781,
+      "min": 936,
+      "minorGridLineColor": "#d1d1d7",
+      "minorGridLineDashStyle": "Dot",
+      "minorGridLineWidth": 0,
+      "minorTickColor": "#d1d1d7",
+      "minorTickWidth": 0,
+      "plotBands": undefined,
+      "showLastLabel": true,
+      "stackLabels": {
+        "allowOverlap": false,
+        "crop": true,
+        "enabled": false,
+        "labelrank": 99999,
+        "rotation": 0,
+        "style": {
+          "color": "#56535b",
+          "fontFamily": "Open Sans",
+          "fontSize": "13px",
+          "fontWeight": "bold",
+          "pointerEvents": "none",
+          "textOutline": "none",
+          "textOverflow": "ellipsis",
+        },
+      },
+      "startOnTick": true,
+      "tickColor": "#d1d1d7",
+      "tickInterval": null,
+      "tickWidth": 0,
+      "tickmarkPlacement": "on",
+      "title": {
+        "enabled": false,
+        "margin": 25,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+        "text": "Y Axis title",
+      },
+      "type": "linear",
+    },
+  ],
+}
+`;
+
+exports[`render a line chart that has errors 1`] = `
+<div>
+  <div
+    class="_container_a59050"
+  >
+    <div
+      class="_card_a59050"
+    >
+      <div
+        class="_icon_a59050"
+        title=""
+      >
+        <svg
+          height="53px"
+          viewBox="0 0 53 53"
+          width="53px"
+        >
+          <g
+            fill="none"
+            fill-rule="evenodd"
+            stroke="none"
+            stroke-width="1"
+          >
+            <g>
+              <polygon
+                points="26.4996 -0.000100000005 -0.000400000001 26.5009 26.4996 52.9999 53.0006 26.5009"
+              />
+              <path
+                d="M24.5,39.054 L24.5,35.054 L28.5,35.054 L28.5,39.054 L24.5,39.054 Z M28.5,31.0536 L24.5,31.0536 L23.5,13.0536 L29.5,13.0536 L28.5,31.0536 Z"
+                fill="#FFFFFF"
+              />
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`render indicator chart 1`] = `
+<div>
+  <div
+    style="width: 100%; height: 100%;"
+  >
+    <div
+      style="width: 200px; height: 200px;"
+    >
+      <div
+        aria-label="indicator-root"
+        style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center;"
+      >
+        <canvas
+          height="38"
+          style="width: -14px; height: 38px;"
+          width="300"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`render indicator gauge chart 1`] = `
+<div>
+  <div
+    style="width: 100%; height: 100%;"
+  >
+    <div
+      style="width: 200px; height: 200px;"
+    >
+      <div
+        aria-label="indicator-root"
+        style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center;"
+      >
+        <canvas
+          height="131"
+          style="width: -18px; height: 131px;"
+          width="300"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`render indicator numericBar chart 1`] = `
+<div>
+  <div
+    style="width: 100%; height: 100%;"
+  >
+    <div
+      style="width: 200px; height: 200px;"
+    >
+      <div
+        aria-label="indicator-root"
+        style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center;"
+      >
+        <canvas
+          height="48"
+          style="width: -30px; height: 48px;"
+          width="300"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`render pie chart 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "pie",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+      "cursor": "pointer",
+      "fontWeight": "bold",
+      "textDecoration": "none",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+    "series": [],
+  },
+  "legend": {
+    "align": "center",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontWeight": "normal",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "align": "center",
+        "enabled": true,
+        "formatter": [Function],
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "innerSize": "0%",
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "enabled": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "data": [
+        {
+          "color": "#00cee6",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2009",
+          "y": 6781,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2010",
+          "y": 4471,
+        },
+        {
+          "color": "#6eda55",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2011",
+          "y": 1812,
+        },
+        {
+          "color": "#fc7570",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2012",
+          "y": 5001,
+        },
+        {
+          "color": "#fbb755",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2013",
+          "y": 2045,
+        },
+        {
+          "color": "#218a8c",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2014",
+          "y": 3010,
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2015",
+          "y": 5447,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2016",
+          "y": 4242,
+        },
+        {
+          "color": "#6eda55",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2018",
+          "y": 936,
+        },
+      ],
+      "name": "Quantity",
+      "turboThreshold": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [],
+  "yAxis": [],
+}
+`;

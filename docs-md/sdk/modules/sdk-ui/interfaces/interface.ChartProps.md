@@ -8,7 +8,7 @@ Props shared across [Chart](../functions/function.Chart.md) components.
 
 ## Extends
 
-- `BaseChartProps`
+- `BaseChartProps`.`ChartEventProps`
 
 ## Properties
 
@@ -100,40 +100,40 @@ This callback is not yet supported for [IndicatorChart](../functions/function.In
 
 ##### Inherited from
 
-BaseChartProps.onBeforeRender
+ChartEventProps.onBeforeRender
 
 ***
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
 
 Click handler callback for a data point
 
 ##### Inherited from
 
-BaseChartProps.onDataPointClick
+ChartEventProps.onDataPointClick
 
 ***
 
 #### onDataPointContextMenu
 
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
+> **onDataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
 
 Context menu handler callback for a data point
 
 ##### Inherited from
 
-BaseChartProps.onDataPointContextMenu
+ChartEventProps.onDataPointContextMenu
 
 ***
 
 #### onDataPointsSelected
 
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md)
+> **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
 
 ##### Inherited from
 
-BaseChartProps.onDataPointsSelected
+ChartEventProps.onDataPointsSelected

@@ -1,4 +1,4 @@
-import { useThemeContext } from '../../../components/theme-provider';
+import { useThemeContext } from '../../../theme-provider';
 import { darken } from '@mui/material';
 
 export const useThemeForBreadcrumbs = () => {

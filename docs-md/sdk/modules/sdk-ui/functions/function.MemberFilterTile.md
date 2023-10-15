@@ -38,5 +38,5 @@ return (
 />
 );
 ```
-###
+
 <img src="../../../img/member-filter-tile-example-1.png" width="300px" />

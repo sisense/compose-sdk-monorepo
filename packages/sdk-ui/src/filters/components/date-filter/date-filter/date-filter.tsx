@@ -9,7 +9,7 @@ import { DEFAULT_FORMAT } from '../consts';
 import { DateFilterRange } from '../types';
 import Popover from '@mui/material/Popover';
 import { DateRangeFieldButton } from '../../common/date-range-field-button';
-import { useThemeContext } from '../../../../components/theme-provider/theme-provider';
+import { useThemeContext } from '../../../../theme-provider/theme-provider';
 
 const DATE_RANGE = 'date-range';
 
@@ -66,7 +66,7 @@ export type DateRangeFilterProps = {
  *   />
  * );
  * ```
- * ###
+ *
  * <img src="media://date-filter-example-1.png" width="800px" />
  * @param props - Date Filter Props
  * @returns Date Filter component

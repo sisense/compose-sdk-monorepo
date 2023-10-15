@@ -56,7 +56,7 @@ An example of visualizing sales funnel data:
   }}
 />
 ```
-###
+
 <img src="../../../img/funnel-chart-example-1.png" width="800"/>
 
 Note that the chart sorts the measure, `Unique Users`, in descending order by default.

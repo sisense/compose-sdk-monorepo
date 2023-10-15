@@ -11,7 +11,7 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { useThemeContext } from '../../components/theme-provider';
+import { useThemeContext } from '../../theme-provider';
 import { WidgetStyleOptions } from '../../types';
 import classNames from 'classnames';
 
@@ -45,7 +45,9 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
   return (
     <>
       <div
-        className={'csdk-flex csdk-flex-row csdk-items-center csdk-px-2'}
+        className={
+          'csdk-flex csdk-flex-row csdk-items-center csdk-px-2 csdk-min-h-[32px] csdk-border-b'
+        }
         style={{
           backgroundColor: styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
         }}
@@ -58,6 +60,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
           style={{
             color: styleOptions?.titleTextColor || themeSettings.chart?.textColor,
             fontFamily: themeSettings.typography?.fontFamily,
+            fontSize: 15,
           }}
         >
           {title || ''}
@@ -101,13 +104,13 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
             horizontal: 'center',
           }}
         >
-          <Card raised={true} className={'csdk-max-w-xs'}>
+          <Card raised={true} className={'csdk-max-w-xs csdk-w-[300px]'}>
             <div
               className={
-                'csdk-flex csdk-flex-row csdk-justify-between csdk-items-center csdk-p-2 csdk-pl-4'
+                'csdk-flex csdk-flex-row csdk-justify-between csdk-items-center csdk-py-[5px] csdk-px-[12px]'
               }
               style={{
-                backgroundColor: themeSettings.chart?.secondaryTextColor,
+                backgroundColor: '#f9f9f9',
               }}
             >
               <Typography
@@ -129,31 +132,40 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
                 </svg>
               </IconButton>
             </div>
-            <CardContent style={{ backgroundColor: themeSettings.chart?.backgroundColor }}>
+            <CardContent
+              style={{
+                backgroundColor: themeSettings.chart?.backgroundColor,
+                padding: 12,
+              }}
+            >
               {dataSetName && (
                 <Typography
                   variant="body2"
                   style={{
                     color: themeSettings.chart?.textColor,
                     fontFamily: themeSettings.typography?.fontFamily,
+                    fontSize: 13,
                   }}
                 >
                   {dataSetName}
                 </Typography>
               )}
-              <Divider
-                sx={{ my: 2 }}
-                style={{ backgroundColor: themeSettings.chart?.secondaryTextColor }}
-              />
-              <Typography
-                variant="body2"
-                style={{
-                  color: themeSettings.chart?.textColor,
-                  fontFamily: themeSettings.typography?.fontFamily,
-                }}
-              >
-                {description || 'No description'}
-              </Typography>
+
+              {!!description && (
+                <>
+                  <Divider sx={{ my: 1 }} style={{ backgroundColor: '#e4e4e4' }} />
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: themeSettings.chart?.textColor,
+                      fontFamily: themeSettings.typography?.fontFamily,
+                      fontSize: 13,
+                    }}
+                  >
+                    {description}
+                  </Typography>
+                </>
+              )}
             </CardContent>
           </Card>
         </Popover>
@@ -161,8 +173,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
       {styleOptions?.dividerLine && (
         <Divider
           style={{
-            backgroundColor:
-              styleOptions?.dividerLineColor || themeSettings.chart?.secondaryTextColor,
+            backgroundColor: styleOptions?.dividerLineColor || '#d5d5d5',
           }}
         />
       )}

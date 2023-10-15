@@ -5,8 +5,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Alert, Tab, Tabs } from '@mui/material';
 import { Box } from '@mui/system';
-import { ComponentType, Suspense, useState } from 'react';
-import { SisenseContextProvider } from '../components/sisense-context/sisense-context-provider';
+import { ComponentType, Suspense, useEffect, useState } from 'react';
+import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
 import { loadAdditionalPages } from './load-additional-pages';
 import { ChartsFromExampleApp } from './pages/charts-from-example-app';
 import { ECommerceDemo } from './pages/ecommerce-demo';
@@ -15,6 +15,8 @@ import { WidgetDemo } from './pages/widget-demo';
 import { NumberFormating } from './pages/NumberFormating';
 import { DrilldownWidgetDemo } from './pages/drilldown-widget-demo';
 import { ChartFilterCycle } from './pages/chart-filter-cycle';
+import { MuiDataGridDemo } from './pages/mui-data-grid-demo';
+import { PreviousData } from './pages/use-execute-query-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -28,7 +30,9 @@ const pages: ComponentType[] = [
   ChartsFromExampleApp,
   MiscDemo,
   DrilldownWidgetDemo,
+  MuiDataGridDemo,
   ChartFilterCycle,
+  PreviousData,
   ...loadAdditionalPages(),
 ];
 
@@ -48,8 +52,8 @@ const sisenseContextProviderProps = () => {
   const token = VITE_APP_SISENSE_TOKEN;
   const ssoEnabled = VITE_APP_SISENSE_SSO_ENABLED;
 
-  if (ssoEnabled) {
-    return { ...baseOptions, ssoEnabled: ssoEnabled?.toLowercase() === 'true' };
+  if (ssoEnabled && ssoEnabled?.toLowerCase() === 'true') {
+    return { ...baseOptions, ssoEnabled: true };
   } else if (wat) {
     return { ...baseOptions, wat };
   } else if (token) {
@@ -59,10 +63,18 @@ const sisenseContextProviderProps = () => {
   }
 };
 
+const SELECTED_TAB_INDEX_KEY = 'selectedTabIndex';
+
 export function App() {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(
+    Math.min(Number(sessionStorage.getItem(SELECTED_TAB_INDEX_KEY)) || 0, pages.length - 1),
+  );
 
   const shouldShowAlert = !VITE_APP_SISENSE_URL;
+
+  useEffect(() => {
+    sessionStorage.setItem(SELECTED_TAB_INDEX_KEY, selectedTabIndex.toString());
+  }, [selectedTabIndex]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

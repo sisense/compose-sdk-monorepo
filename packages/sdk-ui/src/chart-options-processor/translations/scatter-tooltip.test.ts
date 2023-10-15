@@ -33,9 +33,7 @@ describe('Scatter tooltip', () => {
 
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `Total Costs<br /><span style="fill:#FFF">10M</span><br /><br /><span style="fill:#FFF">0</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When x-axis and y-axis (call through options)', () => {
@@ -65,9 +63,7 @@ describe('Scatter tooltip', () => {
     const options = getScatterTooltipSettings(dataOptions);
     const tooltip = options.formatter?.call(tooltipContext);
 
-    const expected = `Total Costs<br /><span style="fill:#FFF">10M</span><br />Category<br /><span style="fill:#FFF">Apple</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When only y-axis', () => {
@@ -92,9 +88,7 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `<br /><span style="fill:#FFF">0</span><br />Category<br /><span style="fill:#FFF">Apple</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When x-axis, y-axis and break by / point', () => {
@@ -126,9 +120,7 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `Total Costs<br /><span style="fill:#FFF">10M</span><br />Category<br /><span style="fill:#FFF">Apple</span><br />Brand<br /><span style="fill:#FFF">Sisense</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When x-axis, y-axis, break by / point and size', () => {
@@ -164,9 +156,7 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `Total Costs<br /><span style="fill:#FFF">10M</span><br />Category<br /><span style="fill:#FFF">Apple</span><br />Brand<br /><span style="fill:#FFF">Sisense</span><br />Total Costs<br /><span style="fill:#FFF">124</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When x-axis, y-axis, break by / point, color, and size', () => {
@@ -206,9 +196,7 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `Total Costs<br /><span style="fill:#FFF">10M</span><br />Category<br /><span style="fill:#FFF">Apple</span><br />Brand<br /><span style="fill:#FFF">Sisense</span><br />Brand<br /><span style="fill:#FFF">Google</span><br />Total Costs<br /><span style="fill:#FFF">124</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When only break by / point', () => {
@@ -234,9 +222,7 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `<br /><span style="fill:#FFF">10M</span><br /><br /><span style="fill:#FFF">Apple</span><br />Brand<br /><span style="fill:#FFF">Sisense</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When only break by / color', () => {
@@ -262,9 +248,7 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `<br /><span style="fill:#FFF">10M</span><br /><br /><span style="fill:#FFF">Apple</span><br />Brand<br /><span style="fill:#FFF">Sisense</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 
   it('When only size', () => {
@@ -290,9 +274,7 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
 
-    const expected = `<br /><span style="fill:#FFF">10M</span><br /><br /><span style="fill:#FFF">Apple</span><br />Total Costs<br /><span style="fill:#FFF">10M</span>`;
-
-    expect(tooltip).toEqual(expected);
+    expect(tooltip).toMatchSnapshot();
   });
 });
 
@@ -362,5 +344,6 @@ it('Format numbers when x-axis, y-axis, break by / point, color, and size', () =
     },
   } as ScatterChartDataOptionsInternal;
   const tooltip = tooltipFormatter(tooltipContext, dataOptions);
+
   expect(tooltip).toMatchSnapshot();
 });

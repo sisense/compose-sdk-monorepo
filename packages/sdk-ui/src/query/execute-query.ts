@@ -6,6 +6,8 @@ import { translation } from '../locales/en';
 
 /** @internal */
 export const QUERY_DEFAULT_LIMIT = 20000;
+/** @internal */
+export const QUERY_DEFAULT_OFFSET = 0;
 
 /** @internal */
 export const executeQuery = (
@@ -16,7 +18,7 @@ export const executeQuery = (
   highlights: Filter[] = [],
   app: ClientApplication,
   count = QUERY_DEFAULT_LIMIT,
-  offset?: number,
+  offset = QUERY_DEFAULT_OFFSET,
 ): Promise<QueryResultData> => {
   // We use "dimensions" in the API because the term is closer to the query and charting
   // as used in the industry (Sisense included).

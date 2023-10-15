@@ -1,4 +1,4 @@
-import { Chart } from '../components/chart';
+import { Chart } from '../chart';
 import { templateForComponent } from './template';
 import { FunnelStyleOptions } from '../types';
 
