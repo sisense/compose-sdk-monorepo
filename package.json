@@ -1,5 +1,5 @@
 {
-  "version": "0.11.2",
+  "version": "0.11.3",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -49,6 +49,7 @@
     "@sisense/commitlint-config": "^1.9.9",
     "@sisense/eslint-config": "1.9.12",
     "@sisense/prettier-config": "^1.9.9",
+    "@sisense/typedoc-plugin-markdown": "^4.0.0-next.42",
     "@vitest/coverage-istanbul": "0.34.1",
     "eslint": "^8.40.0",
     "eslint-plugin-tsdoc": "0.2.17",
@@ -59,7 +60,6 @@
     "nyc": "^15.1.0",
     "prettier": "^2.8.8",
     "typedoc": "0.24.8",
-    "typedoc-plugin-markdown": "https://github.com/imtuanpham/typedoc-plugin-markdown#head=compose-sdk-api-doc-md&workspace=typedoc-plugin-markdown",
     "typedoc-plugin-versions": "^0.2.3",
     "vitest": "0.34.1"
   },

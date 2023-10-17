@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.11.3] - 2023-10-16
+
+### Changed
+- Switch GitHub CI to publish to NPM instead of GitHub Packages
+- Allow override of breadcrumb position in component `DrilldownWidget`
+
 ## [0.11.2] - 2023-10-12
 
 ### Changed

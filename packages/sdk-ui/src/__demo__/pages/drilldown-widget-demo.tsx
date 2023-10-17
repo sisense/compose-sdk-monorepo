@@ -6,6 +6,7 @@ import { ExecuteQuery } from '../../query-execution/execute-query';
 import { DataPoint } from '../../types';
 import { Chart } from '../../chart';
 import { PlotlyDotChart } from './plotly-dot-chart';
+import { DrilldownBreadcrumbs } from '../../widgets/common/drilldown-breadcrumbs';
 
 const dataOptions = {
   category: [DM.Category.Category],
@@ -22,8 +23,18 @@ export const DrilldownWidgetDemo = () => (
         <DrilldownWidget
           drilldownDimensions={[DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition]}
           initialDimension={dataOptions.category[0]}
+          config={{
+            isBreadcrumbsDetached: true,
+            breadcrumbsComponent: DrilldownBreadcrumbs,
+          }}
         >
-          {({ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }) => {
+          {({
+            drilldownFilters,
+            drilldownDimension,
+            onDataPointsSelected,
+            onContextMenu,
+            breadcrumbsComponent,
+          }) => {
             const onPointsSelected = (points: DataPoint[], nativeEvent: MouseEvent) => {
               onDataPointsSelected(points, nativeEvent);
               onContextMenu({
@@ -41,16 +52,19 @@ export const DrilldownWidgetDemo = () => (
             };
 
             return (
-              <Chart
-                chartType={'column'}
-                dataOptions={{
-                  ...dataOptions,
-                  category: [drilldownDimension],
-                }}
-                filters={drilldownFilters}
-                onDataPointsSelected={onPointsSelected}
-                onDataPointContextMenu={onPointClick}
-              />
+              <>
+                <Chart
+                  chartType={'column'}
+                  dataOptions={{
+                    ...dataOptions,
+                    category: [drilldownDimension],
+                  }}
+                  filters={drilldownFilters}
+                  onDataPointsSelected={onPointsSelected}
+                  onDataPointContextMenu={onPointClick}
+                />
+                <div>{breadcrumbsComponent}</div>
+              </>
             );
           }}
         </DrilldownWidget>

@@ -1,5 +1,5 @@
 name: publish-to-packages
-run-name: publishing to GitHub Packages
+run-name: publishing to NPM
 on:
   push:
     branches:
@@ -13,10 +13,10 @@ jobs:
         with:
           node-version: '16'
       - run: yarn --version
-      - run: yarn config set npmScopes.sisense.npmRegistryServer https://npm.pkg.github.com
-      - run: yarn config set npmPublishRegistry https://npm.pkg.github.com
-      - run: yarn config set npmAuthToken "${{ secrets.GITHUB_TOKEN }}"
+      - run: yarn config set npmScopes.sisense.npmRegistryServer https://registry.npmjs.org/
+      - run: yarn config set npmPublishRegistry https://registry.npmjs.org/
+      - run: yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
       - run: yarn install --immutable
       - run: yarn build:prod
       - run: ls -lha
-      - run: yarn publish
+      - run: yarn publish --access public

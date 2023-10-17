@@ -25,7 +25,7 @@ import {
   MenuItemSection,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { PropsWithChildren, ReactNode } from 'react';
+import { ComponentType, PropsWithChildren, ReactNode } from 'react';
 import {
   IndicatorDataOptions,
   ScatterChartDataOptions,
@@ -951,6 +951,32 @@ export type DrilldownBreadcrumbsProps = {
 };
 
 /**
+ * An object that allows users to pass advanced configuration options as a prop for the {@link DrilldownWidget} component
+ */
+export type DrilldownWidgetConfig = {
+  /**
+   * Boolean to override default breadcrumbs location and instead only return them as a property of the 'children' function
+   *
+   * @category Widget
+   */
+  isBreadcrumbsDetached?: boolean;
+  /**
+   * React component to be rendered as breadcrumbs
+   *
+   * {@link DrilldownBreadcrumbs} will be used if not provided
+   *
+   * @category Widget
+   */
+  breadcrumbsComponent?: ComponentType<DrilldownBreadcrumbsProps>;
+  /**
+   * Boolean to override default breadcrumbs location and instead only return them as a property of the 'children' function
+   *
+   * @category Widget
+   */
+  contextMenuComponent?: (contextMenuProps: ContextMenuProps) => JSX.Element;
+};
+
+/**
  * Props for the {@link DrilldownWidget} component
  */
 export type DrilldownWidgetProps = {
@@ -967,24 +993,15 @@ export type DrilldownWidgetProps = {
    */
   initialDimension: Attribute;
   /**
-   * React component to be rendered as breadcrumbs
-   *
-   * {@link DrilldownBreadcrumbs} will be used if not provided
+   * An object that allows users to pass advanced configuration options as a prop for the {@link DrilldownWidget} component
    *
    * @category Widget
    */
-  breadcrumbsComponent?: (drilldownBreadcrumbProps: DrilldownBreadcrumbsProps) => JSX.Element;
+  config?: DrilldownWidgetConfig;
   /**
    * React component to be rendered as context menu
    *
    * {@link ContextMenu} will be used if not provided
-   *
-   * @category Widget
-   */
-  contextMenuComponent?: (contextMenuProps: ContextMenuProps) => JSX.Element;
-  /**
-   * A function that allows to pass calculated drilldown filters
-   * and new dimension to a ReactNode to be rendered (custom chart)
    *
    * @category Widget
    */

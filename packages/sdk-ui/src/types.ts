@@ -816,4 +816,8 @@ export type CustomDrilldownResult = {
    * Callback to open context menu
    */
   onContextMenu: (menuPosition: MenuPosition) => void;
+  /**
+   * Breadcrumbs that only allow for selection slicing, clearing, & navigation
+   */
+  breadcrumbsComponent?: JSX.Element;
 };

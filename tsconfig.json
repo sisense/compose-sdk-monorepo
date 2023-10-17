@@ -34,5 +34,5 @@
       "vitest-fetch-mock": ["node_modules/vitest-fetch-mock/types/index.d.ts"]
     }
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

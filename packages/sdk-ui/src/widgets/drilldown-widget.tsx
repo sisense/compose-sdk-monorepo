@@ -51,22 +51,20 @@ import { DrilldownWidgetProps } from '../props';
  *   )}
  * </DrilldownWidget>
  * ```
- *
  * @param props - DrilldownWidget properties
  * @returns DrilldownWidget wrapper component
  */
 export const DrilldownWidget = ({
   drilldownDimensions,
   initialDimension,
-  contextMenuComponent,
-  breadcrumbsComponent,
+  config,
   children,
 }: DrilldownWidgetProps) => {
   const [selectedDataPoints, setSelectedDataPoints] = useState<DataPoint[]>([]);
   const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
 
-  const ContextMenuComponent = contextMenuComponent ?? ContextMenu;
-  const BreadcrumbsComponent = breadcrumbsComponent ?? DrilldownBreadcrumbs;
+  const ContextMenuComponent = config?.contextMenuComponent ?? ContextMenu;
+  const BreadcrumbsComponent = config?.breadcrumbsComponent ?? DrilldownBreadcrumbs;
 
   const {
     selectDrilldown,
@@ -80,6 +78,25 @@ export const DrilldownWidget = ({
     drilldownDimensions,
     initialDimension,
   });
+
+  const breadcrumbs = useMemo(() => {
+    return (
+      drilldownDimension && (
+        <BreadcrumbsComponent
+          filtersDisplayValues={drilldownFiltersDisplayValues}
+          currentDimension={drilldownDimension}
+          clearDrilldownSelections={clearDrilldownSelections}
+          sliceDrilldownSelections={sliceDrilldownSelections}
+        />
+      )
+    );
+  }, [
+    BreadcrumbsComponent,
+    clearDrilldownSelections,
+    drilldownDimension,
+    drilldownFiltersDisplayValues,
+    sliceDrilldownSelections,
+  ]);
 
   const openContextMenu = (menuPos: { top: number; left: number }) => {
     setContextMenuPos(menuPos);
@@ -125,19 +142,13 @@ export const DrilldownWidget = ({
         itemSections={drilldownMenuItems}
         closeContextMenu={closeContextMenu}
       />
-      {drilldownDimension && (
-        <BreadcrumbsComponent
-          filtersDisplayValues={drilldownFiltersDisplayValues}
-          currentDimension={drilldownDimension}
-          clearDrilldownSelections={clearDrilldownSelections}
-          sliceDrilldownSelections={sliceDrilldownSelections}
-        />
-      )}
+      {drilldownDimension && !config?.isBreadcrumbsDetached && breadcrumbs}
       {children({
         drilldownFilters,
         drilldownDimension,
         onDataPointsSelected,
         onContextMenu: openContextMenu,
+        breadcrumbsComponent: config?.isBreadcrumbsDetached ? breadcrumbs : undefined,
       })}
     </>
   );
