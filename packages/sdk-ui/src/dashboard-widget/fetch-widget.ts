@@ -1,6 +1,6 @@
 import { ClientApplication } from '../app/client-application';
+import { TranslatableError } from '../translation/translatable-error';
 import { WidgetDto } from './types';
-import { translation } from '../locales/en';
 
 /**
  * Fetch a dashboard widget from the default Sisense instance using POC
@@ -20,6 +20,6 @@ export async function fetchWidget(
   try {
     return await app.httpClient.get(`api/v1/dashboards/${dashboardOid}/widgets/${widgetOid}`);
   } catch (error) {
-    throw new Error(translation.errors.dashboardWidgetInvalidIdentifiers);
+    throw new TranslatableError('errors.dashboardWidgetInvalidIdentifiers');
   }
 }

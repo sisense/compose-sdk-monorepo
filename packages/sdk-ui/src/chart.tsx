@@ -43,7 +43,6 @@ import {
   validateDataOptionsAgainstData,
 } from './chart-data-options/validate-data-options';
 import { translateAttributeToCategory, translateMeasureToValue } from './chart-data-options/utils';
-import { translation } from './locales/en';
 import { useSetError } from './error-boundary/use-set-error';
 import { getDefaultStyleOptions } from './chart-options-processor/chart-options-service';
 import { NoResultsOverlay } from './no-results-overlay/no-results-overlay';
@@ -147,6 +146,7 @@ export const shouldSkipSisenseContextWaiting = (props: ChartProps) =>
 export const Chart = asSisenseComponent({
   componentName: 'Chart',
   shouldSkipSisenseContextWaiting,
+  customContextErrorMessageKey: 'errors.chartNoSisenseContext',
 })((props: ChartProps) => {
   const {
     chartType,
@@ -289,29 +289,21 @@ const useSyncedData = (
   const setError = useSetError();
 
   const [data, setData] = useState<Data>();
-  const { isInitialized, app } = useSisenseContext();
+  const { app } = useSisenseContext();
 
   useEffect(() => {
     let ignore = false;
 
     if (dataSet === undefined || isDataSource(dataSet)) {
-      if (!isInitialized) {
-        setError(new Error(translation.errors.chartNoSisenseContext));
-      }
-
-      if (!app) {
-        return;
-      }
-
-      executeQuery(dataSet, attributes, measures, filters, highlights, app)
+      executeQuery(dataSet, attributes, measures, filters, highlights, app!)
         .then((queryResultData) => {
           const dataWithDateFormatting =
             'breakBy' in chartDataOptions
               ? applyDateFormats(
                   queryResultData,
                   chartDataOptions,
-                  app.settings.locale,
-                  app.settings.dateConfig,
+                  app?.settings.locale,
+                  app?.settings.dateConfig,
                 )
               : queryResultData;
 
@@ -362,11 +354,11 @@ const useSyncedData = (
 
 const useTranslatedDataOptions = (dataOptions: ChartDataOptions, chartType: ChartType) => {
   return useMemo(() => {
-    validateDataOptions(chartType, dataOptions);
+    const validatedDataOptions = validateDataOptions(chartType, dataOptions);
 
     // translate to internal options and apply default options
     const chartDataOptions = applyDefaultChartDataOptions(
-      translateChartDataOptions(chartType, dataOptions),
+      translateChartDataOptions(chartType, validatedDataOptions),
       chartType,
     );
     const attributes = getAttributes(chartDataOptions, chartType);

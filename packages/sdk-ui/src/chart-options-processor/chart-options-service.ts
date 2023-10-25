@@ -271,7 +271,7 @@ const DEFAULT_STYLE_OPTIONS = {
     },
   },
   y2Axis: {
-    enabled: false,
+    enabled: true,
     gridLines: true,
     isIntervalEnabled: false,
     labels: {

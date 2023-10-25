@@ -38,7 +38,7 @@ Strategy for merging the existing widget filters with the filters provided via t
 - `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
 - `codeOnly` - applies only the provided filters and completely ignores the widget filters.
 
-If not specified, the default strategy is `widgetFirst`.
+If not specified, the default strategy is `codeFirst`.
 
 ***
 

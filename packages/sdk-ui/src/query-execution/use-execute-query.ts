@@ -1,11 +1,12 @@
 import { Attribute, DataSource, Filter, Measure } from '@sisense/sdk-data';
 import { isEqual } from 'lodash';
-import { useEffect, useReducer, useRef, useState } from 'react';
-import { translation } from '../locales/en';
+import { useEffect, useReducer, useState } from 'react';
+import { usePrevious } from '../common/hooks/use-previous';
 import { executeQuery } from '../query/execute-query';
 import { isFiltersChanged } from '../utils/filters-comparator';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { QueryState, queryStateReducer } from './query-state-reducer';
+import { TranslatableError } from '../translation/translatable-error';
 
 /**
  * Parameters for {@link useExecuteQuery} hook.
@@ -93,7 +94,7 @@ export const useExecuteQuery = (params: ExecuteQueryParams): QueryState => {
     if (!isInitialized) {
       dispatch({
         type: 'error',
-        error: new Error(translation.errors.executeQueryNoSisenseContext),
+        error: new TranslatableError('errors.executeQueryNoSisenseContext'),
       });
     }
     if (!app) {
@@ -126,20 +127,6 @@ export const useExecuteQuery = (params: ExecuteQueryParams): QueryState => {
 
   return queryState;
 };
-
-/**
- * Hook that returns the value from the previous render.
- *
- * @param value - Value to return from the previous render.
- * @returns Value from the previous render.
- */
-export function usePrevious<T>(value: T): T | undefined {
-  const ref = useRef<T | undefined>(undefined);
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
-}
 
 /**
  * Checks if the query parameters have changed by deep comparison.

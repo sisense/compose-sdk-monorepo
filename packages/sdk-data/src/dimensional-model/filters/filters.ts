@@ -9,13 +9,12 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+import hash from 'object-hash';
 import { LevelAttribute, Attribute, Measure, Filter } from '../interfaces.js';
 
 import { DimensionalElement } from '../base.js';
 
 import { DateLevels, MetadataTypes } from '../types.js';
-
-import { Guid } from 'guid-typescript';
 
 import { create } from '../factory.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
@@ -119,11 +118,15 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
   readonly filterType: string;
 
   constructor(att: Attribute, filterType: string) {
-    super(Guid.create().toString(), MetadataTypes.Filter);
+    super('filter', MetadataTypes.Filter);
     this.filterType = filterType;
 
     AbstractFilter.checkAttributeSupport(att);
     this.attribute = att;
+  }
+
+  get name(): string {
+    return hash(this.jaql());
   }
 
   /**

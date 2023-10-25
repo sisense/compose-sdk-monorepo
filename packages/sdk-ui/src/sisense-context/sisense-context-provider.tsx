@@ -4,6 +4,7 @@ import { SisenseContextProviderProps } from '../props';
 import { ThemeProvider } from '../theme-provider';
 import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext } from './sisense-context';
+import { I18nProvider } from '../translation/i18n-provider';
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -56,6 +57,7 @@ export const SisenseContextProvider: FunctionComponent<
   const [clientApplicationError, setClientApplicationError] = useState<Error>();
 
   useEffect(() => {
+    let ignore = false;
     void createClientApplication({
       defaultDataSource,
       url,
@@ -64,20 +66,29 @@ export const SisenseContextProvider: FunctionComponent<
       ssoEnabled,
       appConfig,
     })
-      .then(setApp)
+      .then((newApp) => {
+        if (!ignore) {
+          setApp(newApp);
+        }
+      })
       .catch((asyncError: Error) => {
         // set error state to trigger rerender and throw synchronous error
         setClientApplicationError(asyncError);
       });
+    return () => {
+      ignore = true;
+    };
   }, [defaultDataSource, url, token, wat, ssoEnabled, appConfig]);
 
   return (
-    <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
-      <SisenseContext.Provider value={{ isInitialized: true, app, enableTracking }}>
-        <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
-          {children}
-        </ThemeProvider>
-      </SisenseContext.Provider>
-    </ErrorBoundary>
+    <I18nProvider userLanguage={app?.settings.language || app?.settings.serverLanguage}>
+      <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
+        <SisenseContext.Provider value={{ isInitialized: true, app, enableTracking }}>
+          <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
+            {children}
+          </ThemeProvider>
+        </SisenseContext.Provider>
+      </ErrorBoundary>
+    </I18nProvider>
   );
 };

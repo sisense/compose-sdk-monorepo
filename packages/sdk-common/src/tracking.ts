@@ -30,14 +30,6 @@ export const trackProductEvent = async (
       referrerPolicy: 'same-origin', // capture the same-origin URL from which this method was called
     })
     .catch((e) => {
-      // Our HttpClient always parses responses from Sisense APIs as JSON, but
-      // for some reason, this endpoint returns an empty text response on
-      // success. Swallow this error since (so far) this is the only endpoint
-      // that behaves like this.
-      if (e instanceof Error && e.message.includes('Unexpected end of JSON input')) {
-        return;
-      }
-
       console.error(`unable to log action=${action}, category=${TRACKING_CATEGORY}`, e);
     });
 };

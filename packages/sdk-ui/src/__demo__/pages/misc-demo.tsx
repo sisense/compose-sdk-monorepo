@@ -6,6 +6,7 @@ import { ExecuteQuery, ExecuteQueryByWidgetId } from '../../query-execution';
 import { DashboardWidget } from '../../dashboard-widget/dashboard-widget';
 import React, { useState } from 'react';
 import { BasicMemberFilterTile, DateRangeFilterTile } from '../../filters';
+import LanguageSwitcher from './helper-components/language-switcher';
 import { Table } from '../../table';
 import { FunnelChart } from '../../funnel-chart';
 import { AreaChart } from '../../area-chart';
@@ -38,6 +39,8 @@ export const MiscDemo = () => {
 
   return (
     <div className="csdk-h-fit">
+      <LanguageSwitcher />
+      <br />
       Chart with No Local Data
       <Chart
         chartType={'pie'}

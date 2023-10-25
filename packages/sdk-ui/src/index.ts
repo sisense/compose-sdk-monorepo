@@ -1,3 +1,6 @@
+import './translation/initialize-i18n';
+import './index.css';
+
 /**
  * @packageDocumentation
  * @beta
@@ -31,10 +34,26 @@ export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
 export { getThemeSettingsByOid } from './themes/theme-loader';
 export { getDefaultThemeSettings } from './chart-options-processor/theme-option-service';
+export {
+  useGetDashboardModel,
+  useGetDashboardModels,
+  getDashboardModel,
+  getDashboardModels,
+  type DashboardModel,
+  type GetDashboardModelParams,
+  type GetDashboardModelsParams,
+  type DashboardModelState,
+  type DashboardModelLoadingState,
+  type DashboardModelSuccessState,
+  type DashboardModelErrorState,
+  type DashboardModelsState,
+  type DashboardModelsLoadingState,
+  type DashboardModelsSuccessState,
+  type DashboardModelsErrorState,
+  type WidgetModel,
+} from './models';
 
 export * from './props';
 export * from './types';
 
 export * from './filters';
-
-import './index.css';

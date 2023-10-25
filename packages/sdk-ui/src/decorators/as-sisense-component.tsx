@@ -3,6 +3,7 @@ import { flow } from 'lodash';
 import { withTracking } from './with-tracking';
 import { withErrorBoundary } from './with-error-boundary';
 import { withSisenseContextValidation } from './with-sisense-context-validation';
+import { withDefaultTranslations } from './with-default-translations';
 
 /**
  * Configuration for the {@link asSisenseComponent} decorator
@@ -14,6 +15,8 @@ export type SisenseComponentConfig = {
   shouldSkipSisenseContextWaiting?: boolean | ((props: any) => boolean);
   /** If set to true (or function returns true), the component will not be tracked */
   shouldSkipTracking?: boolean | ((props: any) => boolean);
+  /** If set, the error message for wrong SisenseContext will be overridden with the provided key */
+  customContextErrorMessageKey?: string;
 };
 
 export type ComponentDecorator<DecoratorConfig> = (
@@ -28,13 +31,20 @@ export type ComponentDecorator<DecoratorConfig> = (
  * @returns A component with sisense-specific functionality
  */
 export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (componentConfig) => {
-  const { componentName, shouldSkipSisenseContextWaiting, shouldSkipTracking } = componentConfig;
+  const {
+    componentName,
+    shouldSkipSisenseContextWaiting,
+    shouldSkipTracking,
+    customContextErrorMessageKey,
+  } = componentConfig;
   return (Component) =>
     flow(
       withSisenseContextValidation({
         shouldSkipSisenseContextWaiting,
+        customContextErrorMessageKey: customContextErrorMessageKey,
       }),
       withTracking({ componentName, shouldSkipTracking }),
       withErrorBoundary(),
+      withDefaultTranslations(),
     )(Component);
 };

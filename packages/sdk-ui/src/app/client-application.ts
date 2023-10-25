@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -7,8 +8,8 @@ import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import { DataSource } from '@sisense/sdk-data';
 import { SisenseContextProviderProps } from '../props';
 import { DateConfig } from '../query/date-formats';
-import { translation } from '../locales/en';
 import { AppSettings, getSettings } from './settings/settings';
+import { TranslatableError } from '../translation/translatable-error';
 
 /**
  * Application configuration
@@ -18,6 +19,13 @@ export type AppConfig = {
    * A [date-fns Locale](https://date-fns.org/v2.30.0/docs/Locale)
    */
   locale?: Locale;
+
+  /**
+   * Language code to be used for translations
+   *
+   * @internal
+   */
+  language?: string;
 
   /**
    * Date Configurations
@@ -97,10 +105,9 @@ export const createClientApplication = async ({
       const app = new ClientApplication(url, auth, defaultDataSource);
       await app.httpClient.login();
       app.settings = await getSettings(appConfig || {}, app.httpClient, 'wat' in auth);
-
       return app;
     }
   }
 
-  throw Error(translation.errors.sisenseContextNoAuthentication);
+  throw new TranslatableError('errors.sisenseContextNoAuthentication');
 };

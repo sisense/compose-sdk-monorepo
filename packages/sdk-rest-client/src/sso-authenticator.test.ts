@@ -5,7 +5,7 @@
 import { SsoAuthenticator } from './sso-authenticator.js';
 
 describe('SSOAuthenticator', () => {
-  const fakeDeploymentUrl = '10.0.0.1';
+  const fakeDeploymentUrl = 'https://random.awesome-app.com/cool-path/';
 
   let auth: SsoAuthenticator;
 

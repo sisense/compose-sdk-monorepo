@@ -39,7 +39,7 @@ export class SsoAuthenticator implements Authenticator {
 
   async authenticate(): Promise<boolean> {
     this._authenticating = true;
-    const fetchUrl = `${this.url}/api/auth/isauth`.replace('//', '/');
+    const fetchUrl = `${this.url}${!this.url.endsWith('/') ? '/' : ''}api/auth/isauth`;
     return fetch(fetchUrl, {
       headers: { Internal: 'true' },
       credentials: 'include',

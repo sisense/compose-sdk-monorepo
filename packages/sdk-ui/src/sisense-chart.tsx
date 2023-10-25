@@ -123,6 +123,7 @@ export const SisenseChart = ({
   return (
     options && (
       <div
+        aria-label="chart-root"
         style={{
           display: 'flex',
           justifyContent: 'center',

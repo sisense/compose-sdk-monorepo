@@ -127,7 +127,6 @@ export function mergeFilters(sourceFilters: Filter[] = [], targetFilters: Filter
  * @param {Filter[]} widgetFilters - The filters from the widget.
  * @param {Filter[]} codeFilters - The filters from the code.
  * @param {FiltersMergeStrategy} [mergeStrategy] - The strategy to use for merging filters.
- *
  * @returns {Filter[]} The merged filters based on the selected strategy.
  */
 export function mergeFiltersByStrategy(
@@ -143,7 +142,7 @@ export function mergeFiltersByStrategy(
     case FiltersMergeStrategyEnum.CODE_ONLY:
       return codeFilters;
     default:
-      // apply 'widgetFirst' filters merge strategy by default
-      return mergeFilters(codeFilters, widgetFilters);
+      // apply 'codeFirst' filters merge strategy by default
+      return mergeFilters(widgetFilters, codeFilters);
   }
 }

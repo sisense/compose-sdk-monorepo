@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useThemeContext } from '../theme-provider';
 import { ChartType, TableType } from '../types';
 import { getNoResultOverlayImage } from './images';
-import { translation } from '../locales/en';
+import { useTranslation } from 'react-i18next';
 
 /**
  * This component displays `No Results` overlay for visualization (e.g., Chart, Table) with no data
@@ -32,6 +32,7 @@ export const NoResultsOverlay = ({ iconType }: { iconType: ChartType | TableType
 
   const icon = getNoResultOverlayImage(iconType);
 
+  const { t } = useTranslation();
   return (
     <div ref={wrapper} className={styles.wrapper}>
       <div
@@ -41,7 +42,7 @@ export const NoResultsOverlay = ({ iconType }: { iconType: ChartType | TableType
           fontSize: calculateTitleFontSize(size.width, size.height),
         }}
       >
-        {translation.common.chartNoData}
+        {t('chartNoData')}
       </div>
       {icon ? <img className={styles.image} src={icon} /> : null}
     </div>

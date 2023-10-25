@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -17,6 +16,7 @@ import { DrilldownWidgetDemo } from './pages/drilldown-widget-demo';
 import { ChartFilterCycle } from './pages/chart-filter-cycle';
 import { MuiDataGridDemo } from './pages/mui-data-grid-demo';
 import { PreviousData } from './pages/use-execute-query-demo';
+import { ChartTypeSwitchingDemo } from './pages/chart-type-switching';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -33,6 +33,7 @@ const pages: ComponentType[] = [
   MuiDataGridDemo,
   ChartFilterCycle,
   PreviousData,
+  ChartTypeSwitchingDemo,
   ...loadAdditionalPages(),
 ];
 
@@ -43,7 +44,7 @@ const {
   VITE_APP_SISENSE_SSO_ENABLED,
 } = import.meta.env;
 
-const sisenseContextProviderProps = () => {
+const sisenseContextProviderProps = (() => {
   const baseOptions = {
     url: VITE_APP_SISENSE_URL || '',
     defaultDataSource: 'Sample ECommerce',
@@ -61,7 +62,7 @@ const sisenseContextProviderProps = () => {
   } else {
     return baseOptions;
   }
-};
+})();
 
 const SELECTED_TAB_INDEX_KEY = 'selectedTabIndex';
 
@@ -84,7 +85,7 @@ export function App() {
           <code>.env.local</code> file.
         </Alert>
       )}
-      <SisenseContextProvider {...sisenseContextProviderProps()}>
+      <SisenseContextProvider {...sisenseContextProviderProps}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={selectedTabIndex}

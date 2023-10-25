@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.12.0] - 2023-10-24
+
+### Added
+- Add `i18n` module based on the `i18next` package to support internationalization
+- Add React hooks `useGetDashboardModel` and `useGetDashboardModels` to retrieve dashboards
+  from the Sisense instance
+
+### Changed
+- Fix invalid URL constructed for SSO authenticator
+- Enable y2-axis (right axis) in style options by default for Cartesian charts.
+  It is visible only when there is a value assigned to it
+- Adjust REST client methods to return `undefined` when the status code is `204 (No Content)` or
+  `304 (Not Modified)` or when the response body is empty
+- Switch default value of `filtersMergeStrategy` from `widgetFirst` to `codeFirst`
+  in component `ExecuteQueryByWidgetId`, hook `useExecuteQueryByWidgetId`, and component `DashboardWidget`
+- Limit the allowed number of categories and values in the `dataOptions` of Categorical charts (Pie, Funnel, and Treemap)
+
 ## [0.11.3] - 2023-10-16
 
 ### Changed

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Attribute, createAttribute, Measure, QueryResultData } from '@sisense/sdk-data';
+import { Attribute, createAttribute, Filter, Measure, QueryResultData } from '@sisense/sdk-data';
 import {
   DatasourceFieldsTestDataset,
   getDatasourceFieldsTestDataset,
 } from './__test-helpers__/get-datasource-fields-test-dataset-loader.js';
-import { DimensionalQueryClient } from './query-client.js';
+import { DimensionalQueryClient, validateQueryDescription } from './query-client.js';
 import { JaqlQueryPayload, QueryDescription } from './types.js';
 import {
   ExecuteJaqlTestDataset,
@@ -158,6 +158,48 @@ describe('DimensionalQueryClient', () => {
         offset: -100,
       };
       expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+    });
+
+    describe('skipping validation', () => {
+      const queryDescriptionWithOneAttribute: QueryDescription = {
+        ...baseQueryDescription,
+        attributes: [{ skipValidation: true } as Attribute],
+      };
+
+      it('should not throw errors for attributes that have skipValidation set to true', () => {
+        const queryDescription: QueryDescription = {
+          ...queryDescriptionWithOneAttribute,
+        };
+
+        expect(() => validateQueryDescription(queryDescription)).not.toThrow();
+      });
+
+      it('should not throw errors for measures that have skipValidation set to true', () => {
+        const queryDescription: QueryDescription = {
+          ...queryDescriptionWithOneAttribute,
+          measures: [{ skipValidation: true } as Measure],
+        };
+
+        expect(() => validateQueryDescription(queryDescription)).not.toThrow();
+      });
+
+      it('should not throw errors for filters that have skipValidation set to true', () => {
+        const queryDescription: QueryDescription = {
+          ...queryDescriptionWithOneAttribute,
+          filters: [{ skipValidation: true } as Filter],
+        };
+
+        expect(() => validateQueryDescription(queryDescription)).not.toThrow();
+      });
+
+      it('should not throw errors for highlights that have skipValidation set to true', () => {
+        const queryDescription: QueryDescription = {
+          ...queryDescriptionWithOneAttribute,
+          highlights: [{ skipValidation: true } as Filter],
+        };
+
+        expect(() => validateQueryDescription(queryDescription)).not.toThrow();
+      });
     });
   });
 });

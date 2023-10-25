@@ -1,3 +1,4 @@
+/** @vitest-environment jsdom */
 import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
 import {
@@ -13,7 +14,6 @@ import {
 import { executeQuery } from '../query/execute-query.js';
 import { ClientApplication } from '../app/client-application.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
-import { fetchWidget } from '../dashboard-widget/fetch-widget';
 import {
   BaseJaql,
   FilterJaql,
@@ -34,8 +34,11 @@ vi.mock('../sisense-context/sisense-context', async () => {
     useSisenseContext: vi.fn(),
   };
 });
-vi.mock('../dashboard-widget/fetch-widget.ts', () => ({
-  fetchWidget: vi.fn(),
+const getWidgetMock = vi.fn();
+vi.mock('../api/rest-api', () => ({
+  RestApi: class {
+    getWidget = getWidgetMock;
+  },
 }));
 
 const executeQueryMock = executeQuery as Mock<
@@ -45,10 +48,6 @@ const executeQueryMock = executeQuery as Mock<
 const useSisenseContextMock = useSisenseContext as Mock<
   Parameters<typeof useSisenseContext>,
   ReturnType<typeof useSisenseContext>
->;
-const fetchWidgetMock = fetchWidget as Mock<
-  Parameters<typeof fetchWidget>,
-  ReturnType<typeof fetchWidget>
 >;
 
 const mockWidget = {
@@ -113,7 +112,7 @@ describe('useExecuteQueryByWidgetId', () => {
 
   beforeEach(() => {
     executeQueryMock.mockClear();
-    fetchWidgetMock.mockClear();
+    getWidgetMock.mockClear();
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,
@@ -124,7 +123,7 @@ describe('useExecuteQueryByWidgetId', () => {
   it('should fetch data successfully', async () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     executeQueryMock.mockResolvedValue(mockData);
-    fetchWidgetMock.mockResolvedValue(mockWidget);
+    getWidgetMock.mockResolvedValue(mockWidget);
 
     const { result } = renderHook(() => useExecuteQueryByWidgetId(params));
 
@@ -141,7 +140,7 @@ describe('useExecuteQueryByWidgetId', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
 
     executeQueryMock.mockResolvedValue(mockData);
-    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
 
     const { result } = renderHook(() => useExecuteQueryByWidgetId(params));
 
@@ -180,7 +179,7 @@ describe('useExecuteQueryByWidgetId', () => {
     ];
 
     executeQueryMock.mockResolvedValue(mockData);
-    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
 
     const { result } = renderHook(() =>
       useExecuteQueryByWidgetId({
@@ -210,7 +209,7 @@ describe('useExecuteQueryByWidgetId', () => {
     });
   });
 
-  it('should merge provided "filters" with existing widget filters using default `widgetFirst` strategy', async () => {
+  it('should merge provided "filters" with existing widget filters using `widgetFirst` strategy', async () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const filters = [
       // filter with the same target attribute as already exist in widget
@@ -224,12 +223,13 @@ describe('useExecuteQueryByWidgetId', () => {
     ];
 
     executeQueryMock.mockResolvedValue(mockData);
-    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
 
     const { result } = renderHook(() =>
       useExecuteQueryByWidgetId({
         ...params,
         filters,
+        filtersMergeStrategy: 'widgetFirst',
       }),
     );
 
@@ -251,7 +251,7 @@ describe('useExecuteQueryByWidgetId', () => {
     });
   });
 
-  it('should merge provided "filters" with existing widget filters using `codeFirst` strategy', async () => {
+  it('should merge provided "filters" with existing widget filters using DEFAULT `codeFirst` strategy', async () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const filters = [
       // filter with the same target attribute as already exist in widget
@@ -265,19 +265,18 @@ describe('useExecuteQueryByWidgetId', () => {
     ];
 
     executeQueryMock.mockResolvedValue(mockData);
-    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
 
     const { result } = renderHook(() =>
       useExecuteQueryByWidgetId({
         ...params,
         filters,
-        filtersMergeStrategy: 'codeFirst',
       }),
     );
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
-      // verifies that query contain only provided filter, while widget filter was ignored due to the lower priority
+      // verifies that query contains only provided filter, while widget filter was ignored due to the lower priority
       expect(result.current.query?.filters?.length).toBe(1);
       expect(
         (
@@ -300,7 +299,7 @@ describe('useExecuteQueryByWidgetId', () => {
     ];
 
     executeQueryMock.mockResolvedValue(mockData);
-    fetchWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
 
     const { result } = renderHook(() =>
       useExecuteQueryByWidgetId({
@@ -312,7 +311,7 @@ describe('useExecuteQueryByWidgetId', () => {
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
-      // verifies that query contain only provided filter, while widget filter was fully ignored
+      // verifies that query contains only provided filter, while widget filter was fully ignored
       expect(result.current.query?.filters?.length).toBe(1);
       expect(
         (
@@ -327,7 +326,7 @@ describe('useExecuteQueryByWidgetId', () => {
 
   it('should handle widget fetch error', async () => {
     const mockError = new Error('Widget fetch error');
-    fetchWidgetMock.mockRejectedValueOnce(mockError);
+    getWidgetMock.mockRejectedValueOnce(mockError);
 
     const { result } = renderHook(() => useExecuteQueryByWidgetId(params));
 
@@ -354,7 +353,7 @@ describe('useExecuteQueryByWidgetId', () => {
   });
 
   it('should handle widget translation error', async () => {
-    fetchWidgetMock.mockResolvedValue({
+    getWidgetMock.mockResolvedValue({
       ...mockWidget,
       metadata: {
         panels: 123, // invalid widget object structure

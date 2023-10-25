@@ -1,18 +1,19 @@
 import { Component, ReactNode } from 'react';
 import ErrorBoundaryBox from './error-boundary-box';
 import { SisenseContextPayload } from '../sisense-context/sisense-context';
+import { AbstractTranslatableError } from '@sisense/sdk-common';
 
 /**
  * @internal
  */
 interface ErrorBoundaryProps {
   showErrorBox?: boolean;
-  error?: Error | string;
+  error?: AbstractTranslatableError | Error | string;
   children: ReactNode;
   resetKeys?: any[];
 }
 
-type ErrorBoundaryState = { error: Error | string | null };
+type ErrorBoundaryState = { error: AbstractTranslatableError | Error | string | null };
 
 /**
  * This component is used to catch errors thrown by the UI component and display an error message
@@ -50,7 +51,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render() {
     const error = this.state.error || this.props.error;
     if (error) {
-      return this.showErrorBox ? <ErrorBoundaryBox errorText={error.toString()} /> : <div />;
+      return this.showErrorBox ? <ErrorBoundaryBox error={error} /> : <div />;
     }
 
     return this.props.children;

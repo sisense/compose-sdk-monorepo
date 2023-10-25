@@ -13,6 +13,14 @@ and receives set of filters to apply and new category to display
 
 ## Type declaration
 
+### `breadcrumbsComponent`
+
+**breadcrumbsComponent**?: `JSX.Element`
+
+Breadcrumbs that only allow for selection slicing, clearing, & navigation
+
+***
+
 ### `drilldownDimension`
 
 **drilldownDimension**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)

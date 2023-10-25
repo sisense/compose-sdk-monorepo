@@ -1,45 +1,11 @@
+/** @vitest-environment jsdom */
 import { fireEvent, render } from '@testing-library/react';
 import { Chart } from './chart';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { DAYS, JAN, MON } from './query/date-formats/apply-date-format';
 import { IndicatorStyleOptions } from './types';
 import { Table } from './table';
 import { ThemeProvider } from './theme-provider';
-import type { useSisenseContext } from './sisense-context/sisense-context';
-import { getDefaultThemeSettings } from './chart-options-processor/theme-option-service';
-import { getBaseDateFnsLocale } from './chart-data-processor/data-table-date-period';
-import type { ClientApplication } from './app/client-application';
 import { DataPointEventHandler, DataPointsEventHandler } from './props';
-
-vi.mock('./sisense-context/sisense-context', async () => {
-  const actual: typeof import('./sisense-context/sisense-context') = await vi.importActual(
-    './sisense-context/sisense-context',
-  );
-
-  const useSisenseContextMock: typeof useSisenseContext = () => ({
-    app: {
-      settings: {
-        dateConfig: {
-          weekFirstDay: MON,
-          isFiscalOn: false,
-          fiscalMonth: JAN,
-          selectedDateLevel: DAYS,
-          timeZone: 'UTC',
-        },
-        serverThemeSettings: getDefaultThemeSettings(),
-        locale: getBaseDateFnsLocale(),
-      },
-    } as ClientApplication,
-
-    isInitialized: true,
-    enableTracking: true,
-  });
-
-  return {
-    ...actual,
-    useSisenseContext: useSisenseContextMock,
-  };
-});
 
 const dataSet = {
   columns: [
@@ -80,19 +46,36 @@ const meas2 = {
   column: { name: 'Units', aggregation: 'sum' },
   showOnRightAxis: false,
 };
+describe('Chart', () => {
+  it('change theme of a chart', async () => {
+    const { findByLabelText } = render(
+      <ThemeProvider
+        theme={{
+          chart: {
+            textColor: 'red',
+            secondaryTextColor: 'green',
+            backgroundColor: 'blue',
+            panelBackgroundColor: '#F6F6F6',
+          },
+        }}
+      >
+        <Chart
+          dataSet={dataSet}
+          chartType={'line'}
+          dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return options;
+          }}
+        />
+      </ThemeProvider>,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
 
-it('change theme of a chart', () => {
-  render(
-    <ThemeProvider
-      theme={{
-        chart: {
-          textColor: 'red',
-          secondaryTextColor: 'green',
-          backgroundColor: 'blue',
-          panelBackgroundColor: '#F6F6F6',
-        },
-      }}
-    >
+  it('add handlers to a chart', async () => {
+    const { findByLabelText } = render(
       <Chart
         dataSet={dataSet}
         chartType={'line'}
@@ -101,210 +84,222 @@ it('change theme of a chart', () => {
           expect(options).toMatchSnapshot();
           return options;
         }}
-      />
-    </ThemeProvider>,
-  );
-});
+        onDataPointClick={vi.fn() as DataPointEventHandler}
+        onDataPointContextMenu={vi.fn() as DataPointEventHandler}
+        onDataPointsSelected={vi.fn() as DataPointsEventHandler}
+      />,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
 
-it('add handlers to a chart', () => {
-  render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'line'}
-      dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
-      onBeforeRender={(options: HighchartsOptions) => {
-        expect(options).toMatchSnapshot();
-        return options;
-      }}
-      onDataPointClick={vi.fn() as DataPointEventHandler}
-      onDataPointContextMenu={vi.fn() as DataPointEventHandler}
-      onDataPointsSelected={vi.fn() as DataPointsEventHandler}
-    />,
-  );
-});
+  it('render a line chart', async () => {
+    const { findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'line'}
+        dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
 
-it('render a line chart', () => {
-  render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'line'}
-      dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
-      onBeforeRender={(options: HighchartsOptions) => {
-        expect(options).toMatchSnapshot();
-        return options;
-      }}
-    />,
-  );
-});
+  it('render a columm chart with breakBy', async () => {
+    const { findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'column'}
+        dataOptions={{ category: [cat1], value: [meas1], breakBy: [cat2] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
 
-it('render a columm chart with breakBy', () => {
-  render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'column'}
-      dataOptions={{ category: [cat1], value: [meas1], breakBy: [cat2] }}
-      onBeforeRender={(options: HighchartsOptions) => {
-        expect(options).toMatchSnapshot();
-        return options;
-      }}
-    />,
-  );
-});
+  it('render a bar chart with breakBy and two x-axes', async () => {
+    const { findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'bar'}
+        dataOptions={{ category: [cat1, cat2], value: [meas1, meas2], breakBy: [] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
 
-it('render a bar chart with breakBy and two x-axes', () => {
-  render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'bar'}
-      dataOptions={{ category: [cat1, cat2], value: [meas1, meas2], breakBy: [] }}
-      onBeforeRender={(options: HighchartsOptions) => {
-        expect(options).toMatchSnapshot();
-        return options;
-      }}
-    />,
-  );
-});
+  it('render a line chart that has errors', async () => {
+    const spy = vi.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
 
-it('render a line chart that has errors', () => {
-  const spy = vi.spyOn(console, 'error');
-  spy.mockImplementation(() => {});
+    const { findByLabelText, findByText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'line'}
+        dataOptions={{
+          category: [{ ...cat1, name: 'foo' }],
+          value: [{ ...meas1, name: 'bar' }],
+          breakBy: [],
+        }}
+      />,
+    );
 
-  const { container } = render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'line'}
-      dataOptions={{
-        category: [{ ...cat1, name: 'foo' }],
-        value: [{ ...meas1, name: 'bar' }],
-        breakBy: [],
-      }}
-    />,
-  );
-  const errorBoxContainer = container.querySelector('.container') || container;
-  fireEvent.mouseEnter(errorBoxContainer);
-  expect(errorBoxContainer).toMatchSnapshot();
+    const errorBoxContainer = await findByLabelText('error-box');
+    fireEvent.mouseEnter(errorBoxContainer);
+    const errorBoxText = await findByText(/Error/);
+    expect(errorBoxText).toBeTruthy();
 
-  spy.mockRestore();
-});
+    spy.mockRestore();
+  });
 
-it('render pie chart', () => {
-  render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'pie'}
-      dataOptions={{ category: [cat1], value: [meas1] }}
-      onBeforeRender={(options: HighchartsOptions) => {
-        expect(options).toMatchSnapshot();
-        return options;
-      }}
-    />,
-  );
-});
+  /**
+   * Test is skipped because of the 'jsdom' doesn't support SVGTextElement which is used in
+   * `@sisense/sisense-charts` for pie chart rendering.
+   * https://github.com/jsdom/jsdom/issues/3310
+   * It is currently impossible to render pie-chart in the test environment.
+   */
+  it.skip('render pie chart', async () => {
+    const { findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'pie'}
+        dataOptions={{ category: [cat1], value: [meas1] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
 
-it('render indicator chart', () => {
-  const { container } = render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'indicator'}
-      dataOptions={{ value: [meas1], secondary: [meas2] }}
-      onBeforeRender={(options: HighchartsOptions) => {
-        expect(options).toMatchSnapshot();
-        return options;
-      }}
-    />,
-  );
-  expect(container).toMatchSnapshot();
-});
+  it('render indicator chart', async () => {
+    const { container, findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'indicator'}
+        dataOptions={{ value: [meas1], secondary: [meas2] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+    const indicator = await findByLabelText('indicator-root');
+    expect(indicator).toBeTruthy();
+    expect(container).toMatchSnapshot();
+  });
 
-it('render indicator gauge chart', () => {
-  const styleOptions: IndicatorStyleOptions = {
-    subtype: 'indicator/gauge',
-    skin: 1,
-    indicatorComponents: {
-      title: {
-        shouldBeShown: true,
-        text: 'Total Cost',
+  it('render indicator gauge chart', async () => {
+    const styleOptions: IndicatorStyleOptions = {
+      subtype: 'indicator/gauge',
+      skin: 1,
+      indicatorComponents: {
+        title: {
+          shouldBeShown: true,
+          text: 'Total Cost',
+        },
+        secondaryTitle: {
+          text: 'Total Revenue',
+        },
+        ticks: {
+          shouldBeShown: true,
+        },
+        labels: {
+          shouldBeShown: true,
+        },
       },
-      secondaryTitle: {
-        text: 'Total Revenue',
-      },
-      ticks: {
-        shouldBeShown: true,
-      },
-      labels: {
-        shouldBeShown: true,
-      },
-    },
-  };
-  const { container } = render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'indicator'}
-      dataOptions={{ value: [meas1], secondary: [meas2] }}
-      onBeforeRender={(options: HighchartsOptions) => {
-        expect(options).toMatchSnapshot();
-        return options;
-      }}
-      styleOptions={styleOptions}
-    />,
-  );
-  expect(container).toMatchSnapshot();
-});
+    };
+    const { container, findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'indicator'}
+        dataOptions={{ value: [meas1], secondary: [meas2] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+        styleOptions={styleOptions}
+      />,
+    );
+    const indicator = await findByLabelText('indicator-root');
+    expect(indicator).toBeTruthy();
+    expect(container).toMatchSnapshot();
+  });
 
-it('render indicator numericBar chart', () => {
-  const styleOptions: IndicatorStyleOptions = {
-    subtype: 'indicator/numeric',
-    numericSubtype: 'numericBar',
-  };
-  const { container } = render(
-    <Chart
-      dataSet={dataSet}
-      chartType={'indicator'}
-      dataOptions={{ value: [meas2], secondary: [meas2] }}
-      styleOptions={styleOptions}
-    />,
-  );
-  expect(container).toMatchSnapshot();
-});
+  it('render indicator numericBar chart', async () => {
+    const styleOptions: IndicatorStyleOptions = {
+      subtype: 'indicator/numeric',
+      numericSubtype: 'numericBar',
+    };
+    const { container, findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'indicator'}
+        dataOptions={{ value: [meas2], secondary: [meas2] }}
+        styleOptions={styleOptions}
+      />,
+    );
+    const indicator = await findByLabelText('indicator-root');
+    expect(indicator).toBeTruthy();
+    expect(container).toMatchSnapshot();
+  });
 
-it('render Table', () => {
-  const { container } = render(<Table dataSet={dataSet} dataOptions={{ columns: [cat1, cat2] }} />);
-  expect(container).toMatchSnapshot();
-});
+  it('render Table', async () => {
+    const { container, findByLabelText } = render(
+      <Table dataSet={dataSet} dataOptions={{ columns: [cat1, cat2] }} />,
+    );
+    const table = await findByLabelText('table-root');
+    expect(table).toBeTruthy();
+    expect(container).toMatchSnapshot();
+  });
 
-it('should show No Results overlay in Chart when data missing', () => {
-  const container = render(
-    <Chart
-      dataSet={{
-        columns: dataSet.columns,
-        rows: [],
-      }}
-      chartType={'line'}
-      dataOptions={{
-        category: [cat1],
-        value: [meas1],
-        breakBy: [],
-      }}
-    />,
-  );
-  const overlayTitle = container.queryByText('No Results');
+  it('should show No Results overlay in Chart when data missing', async () => {
+    const container = render(
+      <Chart
+        dataSet={{
+          columns: dataSet.columns,
+          rows: [],
+        }}
+        chartType={'line'}
+        dataOptions={{
+          category: [cat1],
+          value: [meas1],
+          breakBy: [],
+        }}
+      />,
+    );
+    const overlayTitle = await container.findByText('No Results');
+    expect(overlayTitle).toBeTruthy();
+  });
 
-  expect(overlayTitle).toBeTruthy();
-});
-
-it('should show No Results overlay in Table when data missing', () => {
-  const container = render(
-    <Table
-      dataSet={{
-        columns: dataSet.columns,
-        rows: [],
-      }}
-      dataOptions={{
-        columns: [cat1],
-      }}
-    />,
-  );
-  const overlayTitle = container.queryByText('No Results');
-
-  expect(overlayTitle).toBeTruthy();
+  it('should show No Results overlay in Table when data missing', async () => {
+    const container = render(
+      <Table
+        dataSet={{
+          columns: dataSet.columns,
+          rows: [],
+        }}
+        dataOptions={{
+          columns: [cat1],
+        }}
+      />,
+    );
+    const overlayTitle = await container.findByText('No Results');
+    expect(overlayTitle).toBeTruthy();
+  });
 });

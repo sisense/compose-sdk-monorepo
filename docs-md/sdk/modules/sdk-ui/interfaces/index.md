@@ -21,6 +21,8 @@ title: Interfaces
 - [FunnelChartProps](interface.FunnelChartProps.md)
 - [FunnelStyleOptions](interface.FunnelStyleOptions.md)
 - [GaugeIndicatorStyleOptions](interface.GaugeIndicatorStyleOptions.md)
+- [GetDashboardModelParams](interface.GetDashboardModelParams.md)
+- [GetDashboardModelsParams](interface.GetDashboardModelsParams.md)
 - [IndicatorChartProps](interface.IndicatorChartProps.md)
 - [IndicatorDataOptions](interface.IndicatorDataOptions.md)
 - [LineChartProps](interface.LineChartProps.md)

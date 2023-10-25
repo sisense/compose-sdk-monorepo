@@ -166,7 +166,7 @@ export interface QueryResultData {
  * @param arg
  * @internal
  */
-export function isDataSource(arg: DataSource | Data): arg is DataSource {
+export function isDataSource(arg: DataSource | Data | undefined): arg is DataSource {
   return arg === undefined || typeof arg === 'string';
 }
 

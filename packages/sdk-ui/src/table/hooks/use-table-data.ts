@@ -3,10 +3,11 @@
 import { Attribute, Data, DataSource, Filter, isDataSource, Measure } from '@sisense/sdk-data';
 import { useEffect, useRef, useState } from 'react';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
+
 import { executeQuery } from '../../query/execute-query';
 import { isMeasureColumn, TableDataOptionsInternal } from '../../chart-data-options/types';
-import { translation } from '../../locales/en';
 import { useSetError } from '../../error-boundary/use-set-error';
+import { TranslatableError } from '../../translation/translatable-error';
 
 type UseDataProps = {
   dataSet: Data | DataSource | undefined;
@@ -51,7 +52,7 @@ export const useTableData = ({
 
     if (dataSet === undefined || isDataSource(dataSet)) {
       if (!isInitialized) {
-        setError(new Error(translation.errors.chartNoSisenseContext));
+        setError(new TranslatableError('errors.chartNoSisenseContext'));
       }
 
       if (!app || (!isMoreDataAvailable.current && offset > 0)) return;

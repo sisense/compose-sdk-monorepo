@@ -1,4 +1,4 @@
-import { CategoricalChartDataOptionsInternal, ChartDataOptions, Value } from './types';
+import { CategoricalChartDataOptionsInternal, ChartDataOptions, Value } from '../types';
 import {
   generateUniqueDataColumnsNames,
   DataColumnNamesMapping,

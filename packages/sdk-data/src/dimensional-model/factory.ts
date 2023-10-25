@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-throw-literal */
 import { MetadataTypes } from './types.js';
+import { Element } from './interfaces.js';
 import { DimensionalElement } from './base.js';
 
 import { createMeasure } from './measures/measures.js';
@@ -16,7 +17,7 @@ import { createAttribute } from './attributes.js';
  * @returns a dimensional model instances
  * @internal
  */
-export function createAll(items: Array<any>): DimensionalElement[] {
+export function createAll(items: Array<any>): Element[] {
   return items.map((e) => <DimensionalElement>create(e));
 }
 
@@ -27,7 +28,7 @@ export function createAll(items: Array<any>): DimensionalElement[] {
  * @returns a dimensional model instance
  * @internal
  */
-export function create(item: any): DimensionalElement | DimensionalElement[] {
+export function create(item: any): Element | Element[] {
   if (Array.isArray(item)) {
     return createAll(item);
   }

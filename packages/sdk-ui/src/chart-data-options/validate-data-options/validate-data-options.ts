@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-params */
 
 import {
@@ -6,12 +7,13 @@ import {
   ChartDataOptions,
   ChartDataOptionsInternal,
   Value,
-} from './types';
-import { ChartType } from '../types';
+} from '../types';
+import { ChartType } from '../../types';
 import merge from 'ts-deepmerge';
 import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
-import { DataTable } from '../chart-data-processor/table-processor';
-import { translation } from '../locales/en';
+import { TranslatableError } from '../../translation/translatable-error';
+import { DataTable } from '../../chart-data-processor/table-processor';
+import { validateCategoricalChartDataOptions } from './validate-categorical-data-options';
 
 export type DataColumnNamesMapping = Record<string, string>;
 
@@ -64,6 +66,7 @@ export const applyDefaultChartDataOptions = (
 /**
  * Validates attributes, measures, filters, and highlights against the columns in data.
  */
+// eslint-disable-next-line max-lines-per-function
 export const validateDataOptionsAgainstData = (
   data: Data | DataTable,
   attributes: Attribute[],
@@ -72,18 +75,16 @@ export const validateDataOptionsAgainstData = (
   filters?: Filter[],
   highlights?: Filter[],
 ): boolean => {
-  // TODO get error messages into translation file after setting up i18n in new package sdk-common
-
   if (attributes.length + measures.length === 0) {
-    throw new Error(
-      'Neither dimensions nor measures found. Data options should have at least one dimension or measure.',
-    );
+    throw new TranslatableError('errors.dataOptions.noDimensionsAndMeasures');
   }
 
   attributes.forEach((attribute) => {
     const index = data.columns.findIndex((column) => column.name === attribute.name);
     if (index === -1) {
-      throw new Error(`Attribute "${attribute.name}" not found in the data`);
+      throw new TranslatableError('errors.dataOptions.attributeNotFound', {
+        attributeName: attribute.name,
+      });
     }
   });
 
@@ -93,7 +94,9 @@ export const validateDataOptionsAgainstData = (
         column.name === measure.name || column.name === dataColumnNamesMapping[measure.name],
     );
     if (index === -1) {
-      throw new Error(`Measure "${dataColumnNamesMapping[measure.name]}" not found in the data`);
+      throw new TranslatableError('errors.dataOptions.measureNotFound', {
+        measureName: dataColumnNamesMapping[measure.name],
+      });
     }
   });
 
@@ -101,7 +104,9 @@ export const validateDataOptionsAgainstData = (
     filters.forEach((filter) => {
       const index = data.columns.findIndex((column) => column.name === filter.attribute.name);
       if (index === -1) {
-        throw new Error(`Filter attribute "${filter.attribute.name}" not found in the data`);
+        throw new TranslatableError('errors.dataOptions.filterAttributeNotFound', {
+          attributeName: filter.attribute.name,
+        });
       }
     });
   }
@@ -110,7 +115,9 @@ export const validateDataOptionsAgainstData = (
     highlights.forEach((highlight) => {
       const index = data.columns.findIndex((column) => column.name === highlight.attribute.name);
       if (index === -1) {
-        throw new Error(`Highlight attribute "${highlight.attribute.name}" not found in the data`);
+        throw new TranslatableError('errors.dataOptions.highlightAttributeNotFound', {
+          attributeName: highlight.attribute.name,
+        });
       }
     });
   }
@@ -118,17 +125,19 @@ export const validateDataOptionsAgainstData = (
   return true;
 };
 
-function validateCategoricalChartDataOptions(dataOptions: CategoricalChartDataOptions) {
-  if (!dataOptions.value || dataOptions.value.length === 0) {
-    throw new Error(translation.errors.dataOptions.emptyValueArray);
-  }
-}
-
-export function validateDataOptions(chartType: ChartType, dataOptions: ChartDataOptions) {
+export function validateDataOptions(
+  chartType: ChartType,
+  dataOptions: ChartDataOptions,
+): ChartDataOptions {
   switch (chartType) {
     case 'pie':
     case 'funnel':
-      validateCategoricalChartDataOptions(dataOptions as CategoricalChartDataOptions);
-      break;
+    case 'treemap':
+      return validateCategoricalChartDataOptions(
+        chartType,
+        dataOptions as CategoricalChartDataOptions,
+      );
+    default:
+      return dataOptions;
   }
 }

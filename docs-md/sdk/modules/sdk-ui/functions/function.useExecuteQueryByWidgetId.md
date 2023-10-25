@@ -27,7 +27,7 @@ Query state that contains the status of the query execution, the result data, th
 The example below executes a query over the existing dashboard widget with the specified widget and dashboard OIDs.
 ```ts
  const { data, isLoading, isError } = useExecuteQueryByWidgetId({
-   widgetOid: '64473e07dac1920034bce77f'
+   widgetOid: '64473e07dac1920034bce77f',
    dashboardOid: '6441e728dac1920034bce737'
  });
  if (isLoading) {

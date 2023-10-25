@@ -1,4 +1,5 @@
 import { QueryResultData } from '@sisense/sdk-data';
+import { DataLoadAction, dataLoadStateReducer } from '../common/hooks/data-load-state-reducer';
 
 /**
  * State of a query execution.
@@ -59,59 +60,8 @@ export type QuerySuccessState = {
   status: 'success';
 };
 
-export type QueryAction =
-  | {
-      type: 'loading';
-    }
-  | {
-      type: 'success';
-      data: QueryResultData;
-    }
-  | {
-      type: 'error';
-      error: Error;
-    };
+export type QueryAction = DataLoadAction<QueryResultData>;
 
 export function queryStateReducer(state: QueryState, action: QueryAction): QueryState {
-  switch (action.type) {
-    case 'loading':
-      return startLoading(state);
-    case 'success':
-      return applySuccessData(action.data);
-    case 'error':
-      return applyError(action.error);
-  }
-}
-
-function startLoading(state: QueryState): QueryLoadingState {
-  return {
-    ...state,
-    isLoading: true,
-    isError: false,
-    isSuccess: false,
-    status: 'loading',
-    error: undefined,
-  };
-}
-
-function applySuccessData(data: QueryResultData): QuerySuccessState {
-  return {
-    isLoading: false,
-    isError: false,
-    isSuccess: true,
-    data,
-    status: 'success',
-    error: undefined,
-  };
-}
-
-function applyError(error: Error): QueryErrorState {
-  return {
-    isLoading: false,
-    isError: true,
-    isSuccess: false,
-    data: undefined,
-    status: 'error',
-    error,
-  };
+  return dataLoadStateReducer<QueryResultData>(state, action);
 }

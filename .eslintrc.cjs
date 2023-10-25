@@ -35,6 +35,12 @@ module.exports = {
               },
             ],
             'promise/always-return': ['error', { ignoreLastCallback: true }],
+            'react-hooks/exhaustive-deps': [
+              'error',
+              {
+                additionalHooks: 'useChatApiQuery',
+              },
+            ],
 
             // the following jsdoc rules are disabled as they are interfering with eslint-plugin-tsdoc
             'jsdoc/require-param': 0,
@@ -54,7 +60,7 @@ module.exports = {
             '@typescript-eslint/no-use-before-define': 'warn',
             '@typescript-eslint/no-shadow': 'off',
             '@typescript-eslint/require-await': 'warn',
-            'complexity': 'warn',
+            complexity: 'warn',
             '@typescript-eslint/no-throw-literal': 'off',
             'no-underscore-dangle': 'off',
           },

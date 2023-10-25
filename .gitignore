@@ -55,3 +55,4 @@ e2e/results.xml
 
 # generated from storybook build
 storybook-static/
+packages/sdk-ui-vue/vite.config.ts.timestamp-*

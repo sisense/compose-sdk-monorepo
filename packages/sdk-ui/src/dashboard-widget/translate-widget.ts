@@ -11,6 +11,7 @@ import { isSupportedWidgetType, getChartType, isTableWidget } from './utils';
 import { extractFilters } from './translate-widget-filters';
 import { TableDataOptions } from '../chart-data-options/types';
 import { ChartWidgetProps, TableWidgetProps } from '../props';
+import { TranslatableError } from '../translation/translatable-error';
 
 export type TableWidgetExtractedProps = {
   type: 'table';
@@ -29,7 +30,7 @@ export function extractWidgetProps(
   const widgetType = widget.type;
 
   if (!isSupportedWidgetType(widgetType)) {
-    throw new Error(`Can't extract props for unsupported widget type - ${widgetType}`);
+    throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }
 
   return isTableWidget(widgetType)

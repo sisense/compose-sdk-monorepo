@@ -38,7 +38,10 @@ test.describe('React ChartErrorBoundary', () => {
 
     // check for error message on hover
     await errorBoundary.hover();
-    await expect(errorBoundary).toContainText('Error');
+    await expect(errorBoundary).toContainText(
+      // different browsers have different error messages for network errors
+      /Load failed|NetworkError|Network error/,
+    );
   });
 
   test('should render chart when nothing went wrong', async ({ mount, page }) => {

@@ -14,6 +14,8 @@ export class ErrorTracker extends Component<ErrorTrackerProps, { error: Error | 
 
   httpClient?: HttpClient;
 
+  postponedErrors: Error[] = [];
+
   constructor(props: ErrorTrackerProps) {
     super(props);
     this.componentName = props.componentName;
@@ -29,20 +31,33 @@ export class ErrorTracker extends Component<ErrorTrackerProps, { error: Error | 
 
   componentDidCatch(error: Error) {
     if (this.context.enableTracking) {
-      trackUiError(
-        {
-          packageVersion: __PACKAGE_VERSION__,
-          component: this.componentName,
-          error,
-        },
-        this.httpClient as HttpClient,
-      ).catch(() => console.log('Failed to send tracking error event'));
+      if (!this.httpClient) {
+        this.postponedErrors.push(error);
+      } else {
+        this.sendErrorTracking(error, this.httpClient);
+      }
     }
-
     throw error;
   }
 
+  private sendErrorTracking(error: Error, httpClient: HttpClient) {
+    trackUiError(
+      {
+        packageVersion: __PACKAGE_VERSION__,
+        component: this.componentName,
+        error,
+      },
+      httpClient,
+    ).catch((trackingSendingError) =>
+      console.log('Failed to send tracking error event: ', trackingSendingError),
+    );
+  }
+
   render(): ReactNode {
+    if (this.httpClient && this.postponedErrors.length > 0) {
+      this.postponedErrors.forEach((error) => this.sendErrorTracking(error, this.httpClient!));
+    }
+    this.postponedErrors = [];
     return this.props.children;
   }
 }

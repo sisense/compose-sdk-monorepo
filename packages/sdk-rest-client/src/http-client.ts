@@ -51,7 +51,7 @@ export class HttpClient {
     return this.auth.authenticate();
   }
 
-  async call(url: string, config: RequestInit): Promise<Response> {
+  async call<T = unknown>(url: string, config: RequestInit): Promise<T> {
     if (this.auth.isAuthenticating()) {
       return new Promise((res) => {
         const retry = () => {
@@ -61,7 +61,7 @@ export class HttpClient {
             return;
           }
 
-          void this.call(url, config).then((r) => res(r));
+          void this.call(url, config).then((r) => res(r as T));
         };
 
         retry();
@@ -82,11 +82,28 @@ export class HttpClient {
       trc: this.env,
     });
 
-    return fetch(trackedUrl, config);
+    const response = await fetch(trackedUrl, config);
+    if (
+      response.status === 204 || // No content
+      response.status === 304 // Not modified
+    ) {
+      return undefined as T;
+    }
+    try {
+      return (await response.json()) as T;
+    } catch (e) {
+      // some of APIs in Sisense returns 200 with empty body - so it's not possible
+      // to understand definitely is it empty or not until you will try to parse it
+      if (e instanceof Error && e.message.includes('Unexpected end of JSON input')) {
+        return undefined as T;
+      } else {
+        throw e;
+      }
+    }
   }
 
   // eslint-disable-next-line max-params
-  async post<T>(
+  async post<T = unknown>(
     endpoint: string,
     data: unknown,
     options: RequestInit = {},
@@ -103,20 +120,18 @@ export class HttpClient {
       ...options,
     };
 
-    const res = await this.call(this.url + endpoint, request);
-    return res.json() as T;
+    return this.call<T>(this.url + endpoint, request);
   }
 
-  async get<T>(endpoint: string, request: RequestInit = {}): Promise<T> {
+  async get<T = unknown>(endpoint: string, request: RequestInit = {}): Promise<T> {
     request.method = 'GET';
 
-    const res = await this.call(this.url + endpoint, request);
-    return res.json() as T;
+    return this.call<T>(this.url + endpoint, request);
   }
 
-  async delete(endpoint: string, request: RequestInit = {}): Promise<Response> {
+  async delete<T = void>(endpoint: string, request: RequestInit = {}): Promise<T> {
     request.method = 'DELETE';
 
-    return this.call(this.url + endpoint, request);
+    return this.call<T>(this.url + endpoint, request);
   }
 }

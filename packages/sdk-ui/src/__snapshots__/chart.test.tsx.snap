@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`add handlers to a chart 1`] = `
+exports[`Chart > add handlers to a chart 1`] = `
 {
   "accessibility": {
     "enabled": false,
@@ -412,7 +412,7 @@ exports[`add handlers to a chart 1`] = `
 }
 `;
 
-exports[`change theme of a chart 1`] = `
+exports[`Chart > change theme of a chart 1`] = `
 {
   "accessibility": {
     "enabled": false,
@@ -818,7 +818,7 @@ exports[`change theme of a chart 1`] = `
 }
 `;
 
-exports[`render Table 1`] = `
+exports[`Chart > render Table 1`] = `
 <div>
   <div
     style="width: 100%; height: 100%;"
@@ -1991,7 +1991,7 @@ exports[`render Table 1`] = `
 </div>
 `;
 
-exports[`render a bar chart with breakBy and two x-axes 1`] = `
+exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
 {
   "accessibility": {
     "enabled": false,
@@ -2908,7 +2908,7 @@ exports[`render a bar chart with breakBy and two x-axes 1`] = `
 }
 `;
 
-exports[`render a columm chart with breakBy 1`] = `
+exports[`Chart > render a columm chart with breakBy 1`] = `
 {
   "accessibility": {
     "enabled": false,
@@ -3452,7 +3452,7 @@ exports[`render a columm chart with breakBy 1`] = `
 }
 `;
 
-exports[`render a line chart 1`] = `
+exports[`Chart > render a line chart 1`] = `
 {
   "accessibility": {
     "enabled": false,
@@ -3858,47 +3858,7 @@ exports[`render a line chart 1`] = `
 }
 `;
 
-exports[`render a line chart that has errors 1`] = `
-<div>
-  <div
-    class="_container_a59050"
-  >
-    <div
-      class="_card_a59050"
-    >
-      <div
-        class="_icon_a59050"
-        title=""
-      >
-        <svg
-          height="53px"
-          viewBox="0 0 53 53"
-          width="53px"
-        >
-          <g
-            fill="none"
-            fill-rule="evenodd"
-            stroke="none"
-            stroke-width="1"
-          >
-            <g>
-              <polygon
-                points="26.4996 -0.000100000005 -0.000400000001 26.5009 26.4996 52.9999 53.0006 26.5009"
-              />
-              <path
-                d="M24.5,39.054 L24.5,35.054 L28.5,35.054 L28.5,39.054 L24.5,39.054 Z M28.5,31.0536 L24.5,31.0536 L23.5,13.0536 L29.5,13.0536 L28.5,31.0536 Z"
-                fill="#FFFFFF"
-              />
-            </g>
-          </g>
-        </svg>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`render indicator chart 1`] = `
+exports[`Chart > render indicator chart 1`] = `
 <div>
   <div
     style="width: 100%; height: 100%;"
@@ -3921,7 +3881,7 @@ exports[`render indicator chart 1`] = `
 </div>
 `;
 
-exports[`render indicator gauge chart 1`] = `
+exports[`Chart > render indicator gauge chart 1`] = `
 <div>
   <div
     style="width: 100%; height: 100%;"
@@ -3944,7 +3904,7 @@ exports[`render indicator gauge chart 1`] = `
 </div>
 `;
 
-exports[`render indicator numericBar chart 1`] = `
+exports[`Chart > render indicator numericBar chart 1`] = `
 <div>
   <div
     style="width: 100%; height: 100%;"
@@ -3967,7 +3927,461 @@ exports[`render indicator numericBar chart 1`] = `
 </div>
 `;
 
-exports[`render pie chart 1`] = `
+exports[`Chart > render pie chart 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "pie",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+      "cursor": "pointer",
+      "fontWeight": "bold",
+      "textDecoration": "none",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+    "series": [],
+  },
+  "legend": {
+    "align": "center",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontWeight": "normal",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "align": "center",
+        "enabled": true,
+        "formatter": [Function],
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "innerSize": "0%",
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "enabled": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "data": [
+        {
+          "color": "#00cee6",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2008-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2009",
+          "y": 6781,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2010",
+          "y": 4471,
+        },
+        {
+          "color": "#6eda55",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2011",
+          "y": 1812,
+        },
+        {
+          "color": "#fc7570",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2012",
+          "y": 5001,
+        },
+        {
+          "color": "#fbb755",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2013",
+          "y": 2045,
+        },
+        {
+          "color": "#218a8c",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2014",
+          "y": 3010,
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2015",
+          "y": 5447,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2016",
+          "y": 4242,
+        },
+        {
+          "color": "#6eda55",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2017-12-31T22:00:00.000Z",
+            ],
+          },
+          "name": "2018",
+          "y": 936,
+        },
+      ],
+      "name": "Quantity",
+      "turboThreshold": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [],
+  "yAxis": [],
+}
+`;
+
+exports[`Chart > render pie chart 2`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "pie",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+      "cursor": "pointer",
+      "fontWeight": "bold",
+      "textDecoration": "none",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+    "series": [],
+  },
+  "legend": {
+    "align": "center",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontWeight": "normal",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "align": "center",
+        "enabled": true,
+        "formatter": [Function],
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
+        },
+      },
+      "innerSize": "0%",
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "enabled": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+  },
+  "series": [
+    {
+      "boostThreshold": 0,
+      "data": [
+        {
+          "color": "#00cee6",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2009",
+          "y": 6781,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2010",
+          "y": 4471,
+        },
+        {
+          "color": "#6eda55",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2011",
+          "y": 1812,
+        },
+        {
+          "color": "#fc7570",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2012",
+          "y": 5001,
+        },
+        {
+          "color": "#fbb755",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2013",
+          "y": 2045,
+        },
+        {
+          "color": "#218a8c",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2014",
+          "y": 3010,
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2015",
+          "y": 5447,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2016",
+          "y": 4242,
+        },
+        {
+          "color": "#6eda55",
+          "custom": {
+            "rawValue": undefined,
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2018",
+          "y": 936,
+        },
+      ],
+      "name": "Quantity",
+      "turboThreshold": 0,
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": [],
+  "yAxis": [],
+}
+`;
+
+exports[`Chart > render pie chart 3`] = `
 {
   "accessibility": {
     "enabled": false,

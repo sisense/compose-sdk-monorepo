@@ -9,31 +9,32 @@ import {
   createElement,
 } from '@sisense/sdk-ui-preact';
 import type { Arguments } from '../utility-types';
+import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
  * Filter Tile Component
  */
 @Component({
   selector: 'csdk-basic-member-filter-tile',
-  template: `<div #preact></div>`,
+  template,
 })
 export class BasicMemberFilterTileComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('preact')
+  @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
-  @Input('title')
+  @Input()
   title!: BasicMemberFilterTileProps['title'];
 
-  @Input('allMembers')
+  @Input()
   allMembers!: BasicMemberFilterTileProps['allMembers'];
 
-  @Input('initialSelectedMembers')
+  @Input()
   initialSelectedMembers: BasicMemberFilterTileProps['initialSelectedMembers'];
 
-  @Input('maxAllowedMembers')
+  @Input()
   maxAllowedMembers: BasicMemberFilterTileProps['maxAllowedMembers'];
 
-  @Output('selectedMembersUpdated')
+  @Output()
   selectedMembersUpdated = new EventEmitter<
     Arguments<BasicMemberFilterTileProps['onUpdateSelectedMembers']>[0]
   >();

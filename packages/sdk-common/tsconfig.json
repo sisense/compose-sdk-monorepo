@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "target": "es6",
+    "module": "es2020",
+    // "moduleResolution": "node",
     "composite": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "suppressImplicitAnyIndexErrors": false
+    "suppressImplicitAnyIndexErrors": false,
+    "lib": ["ES2017", "dom", "ES2020.String", "ESNext"]
   },
   "include": ["./src/**/*"],
   "references": [{ "path": "../sdk-rest-client" }]

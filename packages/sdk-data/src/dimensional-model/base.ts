@@ -6,16 +6,27 @@ import { Element } from './interfaces.js';
  * @internal
  */
 export abstract class DimensionalElement implements Element {
-  constructor(name: string, type: string, desc?: string) {
-    this.name = name;
-    this.type = type;
-    this.description = desc || '';
-  }
+  /**
+   * @internal
+   */
+  private _name: string;
 
   /**
    * Defines the element's name
    */
-  name: string;
+  get name(): string {
+    return this._name;
+  }
+
+  set name(value: string) {
+    this._name = value;
+  }
+
+  constructor(name: string, type: string, desc?: string) {
+    this._name = name;
+    this.type = type;
+    this.description = desc || '';
+  }
 
   /**
    * gets the element's description

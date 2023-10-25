@@ -2,7 +2,7 @@
 /* eslint-disable max-params */
 import { Attribute, DataSource, Filter, Measure, QueryResultData } from '@sisense/sdk-data';
 import { ClientApplication } from '../app/client-application';
-import { translation } from '../locales/en';
+import { TranslatableError } from '../translation/translatable-error';
 
 /** @internal */
 export const QUERY_DEFAULT_LIMIT = 20000;
@@ -36,7 +36,7 @@ export const executeQuery = (
   // specified in the Sisense context provider
   const dataSourceToQuery = dataSource || app?.defaultDataSource;
   if (!dataSourceToQuery) {
-    throw new Error(translation.errors.executeQueryNoDataSource);
+    throw new TranslatableError('errors.executeQueryNoDataSource');
   }
 
   return app.queryClient.executeQuery({

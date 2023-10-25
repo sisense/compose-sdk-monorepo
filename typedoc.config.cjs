@@ -15,7 +15,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
   baseConfig = {
     ...baseConfig,
     plugin: [
-      'typedoc-plugin-markdown',
+      '@sisense/typedoc-plugin-markdown',
       './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
     ],
     githubPages: false,

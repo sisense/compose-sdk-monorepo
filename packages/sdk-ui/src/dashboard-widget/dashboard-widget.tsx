@@ -2,14 +2,14 @@ import React, { useEffect, useMemo, useState, type FunctionComponent } from 'rea
 import { ChartWidget } from '../widgets/chart-widget';
 import { TableWidget } from '../widgets/table-widget';
 import { extractWidgetProps } from './translate-widget';
-import { fetchWidget } from './fetch-widget';
 import { WidgetDto } from './types';
 import { DashboardWidgetProps } from '../props';
+
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { useThemeContext } from '../theme-provider';
-import { translation } from '../locales/en';
 import { asSisenseComponent } from '../decorators/as-sisense-component';
 import { mergeFiltersByStrategy } from './utils';
+import { useGetApi } from '../api/rest-api';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -26,8 +26,11 @@ import { mergeFiltersByStrategy } from './utils';
  */
 export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisenseComponent({
   componentName: 'DashboardWidget',
+  customContextErrorMessageKey: 'errors.dashboardWidgetNoSisenseContext',
 })((props) => {
   const [error, setError] = useState<Error>();
+  const api = useGetApi();
+
   if (error) {
     throw error;
   }
@@ -40,21 +43,14 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
   const { isInitialized, app } = useSisenseContext();
 
   useEffect(() => {
-    if (!isInitialized) {
-      setError(new Error(translation.errors.dashboardWidgetNoSisenseContext));
-    }
-
-    if (!app) {
-      return;
-    }
-
-    void fetchWidget(widgetOid, dashboardOid, app)
+    api
+      .getWidget(widgetOid, dashboardOid)
       .then(setFetchedWidget)
       .catch((asyncError: Error) => {
         // set error state to trigger rerender and throw synchronous error
         setError(asyncError);
       });
-  }, [widgetOid, dashboardOid, app, isInitialized]);
+  }, [widgetOid, dashboardOid, app, isInitialized, api]);
 
   const { type: widgetType, props: fetchedProps } = useMemo(
     () =>

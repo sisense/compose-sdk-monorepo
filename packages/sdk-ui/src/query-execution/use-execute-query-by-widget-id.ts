@@ -4,16 +4,16 @@ import { type Filter } from '@sisense/sdk-data';
 import { ExecuteQueryParams } from './index.js';
 import { queryStateReducer, QueryState } from './query-state-reducer.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
-import { translation } from '../locales/en.js';
-import { fetchWidget } from '../dashboard-widget/fetch-widget';
 import { executeQuery } from '../query/execute-query.js';
 import { mergeFilters, mergeFiltersByStrategy } from '../dashboard-widget/utils.js';
 import { FiltersMergeStrategy, WidgetDto } from '../dashboard-widget/types.js';
-import { usePrevious } from './use-execute-query.js';
 import { isEqual } from 'lodash';
 import { isFiltersChanged } from '../utils/filters-comparator.js';
 import { ClientApplication } from '../app/client-application.js';
 import { extractQueryFromWidget } from './utils.js';
+import { TranslatableError } from '../translation/translatable-error.js';
+import { RestApi } from '../api/rest-api.js';
+import { usePrevious } from '../common/hooks/use-previous.js';
 
 /**
  * Parameters for {@link useExecuteQueryByWidgetId} hook.
@@ -56,7 +56,7 @@ export type QueryByWidgetIdState = QueryState & {
  * The example below executes a query over the existing dashboard widget with the specified widget and dashboard OIDs.
  ```tsx
   const { data, isLoading, isError } = useExecuteQueryByWidgetId({
-    widgetOid: '64473e07dac1920034bce77f'
+    widgetOid: '64473e07dac1920034bce77f',
     dashboardOid: '6441e728dac1920034bce737'
   });
   if (isLoading) {
@@ -92,7 +92,7 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
     if (!isInitialized) {
       dispatch({
         type: 'error',
-        error: new Error(translation.errors.executeQueryNoSisenseContext),
+        error: new TranslatableError('errors.executeQueryNoSisenseContext'),
       });
     }
 
@@ -170,7 +170,8 @@ export async function executeQueryByWidgetId({
   offset,
   app,
 }: ExecuteQueryByWidgetIdParams & { app: ClientApplication }) {
-  const fetchedWidget: WidgetDto = await fetchWidget(widgetOid, dashboardOid, app);
+  const api = new RestApi(app.httpClient);
+  const fetchedWidget: WidgetDto = await api.getWidget(widgetOid, dashboardOid);
   const {
     dataSource,
     dimensions,

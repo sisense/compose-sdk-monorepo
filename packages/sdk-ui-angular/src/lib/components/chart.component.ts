@@ -17,50 +17,51 @@ import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../component-wrapper-helpers';
+import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
  * Chart Component
  */
 @Component({
   selector: 'csdk-chart',
-  template: `<div #preact></div>`,
+  template,
 })
 export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('preact')
+  @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
-  @Input('chartType')
+  @Input()
   chartType!: ChartProps['chartType'];
 
-  @Input('dataSet')
+  @Input()
   dataSet: ChartProps['dataSet'];
 
-  @Input('dataOptions')
+  @Input()
   dataOptions!: ChartProps['dataOptions'];
 
-  @Input('filters')
+  @Input()
   filters: ChartProps['filters'];
 
-  @Input('highlights')
+  @Input()
   highlights: ChartProps['highlights'];
 
-  @Input('styleOptions')
+  @Input()
   styleOptions: ChartProps['styleOptions'];
 
-  @Input('beforeRender')
+  @Input()
   beforeRender: ChartProps['onBeforeRender'];
 
-  @Output('dataPointClick')
+  @Output()
   dataPointClick = new EventEmitter<
     ArgumentsAsObject<ChartProps['onDataPointClick'], ['point', 'nativeEvent']>
   >();
 
-  @Output('dataPointContextMenu')
+  @Output()
   dataPointContextMenu = new EventEmitter<
     ArgumentsAsObject<ChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
   >();
 
-  @Output('dataPointsSelect')
+  @Output()
   dataPointsSelect = new EventEmitter<
     ArgumentsAsObject<ChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
   >();
@@ -68,8 +69,8 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   private componentAdapter: ComponentAdapter;
 
   constructor(
-    private sisenseContextService: SisenseContextService,
-    private themeService: ThemeService,
+    public sisenseContextService: SisenseContextService,
+    public themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(
       () => this.createPreactComponent(),

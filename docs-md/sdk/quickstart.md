@@ -61,45 +61,11 @@ yarn run dev
 
 Compose SDK contains three packages for public use:
 
-- @sisense/sdk-ui: React components for rendering charts and executing queries against a Sisense instance.
-- @sisense/sdk-data: Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
-- @sisense/sdk-cli: A command-line tool for generating TypeScript representation of a Sisense data model.
+- [@sisense/sdk-ui](https://www.npmjs.com/package/@sisense/sdk-ui): React components and hooks for rendering charts and executing queries against a Sisense instance.
+- [@sisense/sdk-data](https://www.npmjs.com/package/@sisense/sdk-data): Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
+- [@sisense/sdk-cli](https://www.npmjs.com/package/@sisense/sdk-cli): A command-line tool for generating TypeScript representation of a Sisense data model.
 
-The Compose SDK packages are deployed via GitHub Packages. To install the packages:
-
-1. Add the Namespace to your Project using the following command:
-
-   For npm:
-
-   ```bash
-   npm config set "@sisense:registry" "https://npm.pkg.github.com" --userconfig .npmrc
-   ```
-
-   For Yarn 2+:
-
-   ```bash
-   yarn config set "npmScopes.sisense.npmRegistryServer" "https://npm.pkg.github.com"
-   ```
-
-2. Add the GitHub package authentication. Create a personal access token with the `read:packages` permission. Then, configure your package manager to authenticate with GitHub packages using the token you created. Replace **YOUR_TOKEN** with your access token.
-
-   For npm:
-
-   ```bash
-   npm config set "always-auth" true --userconfig .npmrc
-   npm config set "//npm.pkg.github.com/:_authToken" "__YOUR_TOKEN__" --userconfig .npmrc
-   ```
-
-   For Yarn 2+
-
-   ```bash
-   yarn config set "npmScopes.sisense.npmAlwaysAuth" true
-   yarn config set "npmScopes.sisense.npmAuthIdent" "__YOUR_GITHUB_USERNAME__:__YOUR_TOKEN__"
-   ```
-
-   For more information, see [GitHub Packages documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
-
-3. Install the packages into your application using the following commands:
+The Compose SDK packages are deployed via public NPM Registry. To install the packages:
 
    For npm:
 
@@ -114,6 +80,38 @@ The Compose SDK packages are deployed via GitHub Packages. To install the packag
    yarn add @sisense/sdk-ui @sisense/sdk-data
    yarn add @sisense/sdk-cli --dev
    ```
+### Change package registry from GitHub Packages to public NPM
+
+Starting from version `0.11.3`, Compose SDK packages and its dependencies are hosted on public NPM registry,
+instead of GitHub Packages Registry (GPR). For existing projects that are installing SDK packages from GPR,
+below are simple steps to switch to public NPM:
+
+For npm:
+
+1. Remove the following lines in `.npmrc`:
+
+```
+@sisense:registry=https://npm.pkg.github.com
+always-auth=true
+//npm.pkg.github.com/:_authToken=[YOUR_TOKEN]
+```
+
+2. Remove directory `node_modules` and file `package-lock.json` before running `npm install`.
+
+For Yarn 2+:
+
+1. Remove the following lines in `.yarnrc.yml`:
+
+```
+npmScopes:
+  sisense:
+    npmRegistryServer: "https://npm.pkg.github.com"
+    npmAlwaysAuth: true
+    npmAuthIdent: "[YOUR_GITHUB_USERNAME]:[YOUR_TOKEN]"
+```
+
+2. Remove directory `node_modules` and file `yarn.lock` before running `yarn install`.
+
 
 ## Sisense Instance Authentication
 
@@ -157,7 +155,7 @@ Once you have a TypeScript representation of your data model, you define measure
 Run the following command to create a `sample-ecommerce.ts` file in directory `src/` of the application. The file contains a TypeScript representation of the Sample ECommerce data model.
 
 ```sh
-npx sdk-cli get-data-model --username "<username>" --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url <your_instance_url>
+npx @sisense/sdk-cli get-data-model --username "<username>" --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url <your_instance_url>
 ```
 
 Enter your password to complete the command and generate the data model representation.
@@ -206,7 +204,7 @@ Feel free to move the data model files to any directory as long as the applicati
 
 In this section, you will modify the main `app` component to embed a chart visualizing data from the Sample ECommerce data source.
 
-Use the two components,` SisenseContextProvider` and `Chart`, from `@sisense/sdk-ui` along with the `measures` and `filters` utilities from `@sisense/sdk-data`.
+Use the two components, `SisenseContextProvider` and `Chart`, from `@sisense/sdk-ui` along with the `measures` and `filters` utilities from `@sisense/sdk-data`.
 
 > **Note:**
 > The following assumptions are made about your application:
@@ -240,7 +238,7 @@ export default App;
 ```
 
 > **Note:**
-> The above example uses the API token (also called _bearer authentication_) to connect to a Sisense instance. To generate an API token for your Sisense user account, see Using the Sisense API (https://sisense.dev/guides/restApi/using-rest-api.html). The `SisenseContextProvider` also supports other authentication mechanisms including WAT and SSO.
+> The above example uses the API token (also called _bearer authentication_) to connect to a Sisense instance. To generate an API token for your Sisense user account, see the Sisense Instance Authentication section above. The `SisenseContextProvider` also supports other authentication mechanisms including WAT and SSO.
 
 To render a chart in your application that queries your data model, use the `Chart` component, the `measures` and `filters` utilities, and your previously generated data model file.
 

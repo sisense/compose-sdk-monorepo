@@ -2,6 +2,12 @@
 
 set -o xtrace
 
+# It looks like the external URL is not set up correctly for GitLab
+# It is probably set to http://gitlab.sisense.com/ instead of https://gitlab.sisense.com/ (HTTP instead of HTTPS)
+# Reference: https://docs.gitlab.com/omnibus/settings/configuration.html#configure-the-external-url-for-gitlab
+# As a temporary workaround, we are setting the remote URL manually
+git remote set-url origin https://gitlab-ci-token:"$GITLAB_TOKEN"@gitlab.sisense.com/SisenseTeam/compose-sdk-monorepo.git
+
 if [[ "$CI_COMMIT_REF_NAME" == "" ]]; then
 	echo '$CI_COMMIT_REF_NAME missing'
 	exit 1

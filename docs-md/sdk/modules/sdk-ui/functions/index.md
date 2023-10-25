@@ -29,3 +29,5 @@ title: Functions
 - [TreemapChart](function.TreemapChart.md)
 - [useExecuteQuery](function.useExecuteQuery.md)
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md)
+- [useGetDashboardModel](function.useGetDashboardModel.md)
+- [useGetDashboardModels](function.useGetDashboardModels.md)

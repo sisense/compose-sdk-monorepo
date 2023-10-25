@@ -1,4 +1,5 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
+import { TranslatableError } from '../translation/translatable-error';
 import type { ThemeOid, CompleteThemeSettings } from '../types';
 import {
   type LegacyDesignSettings,
@@ -30,7 +31,7 @@ export async function getThemeSettingsByOid(
 
 async function getLegacyDesignSettings(themeOid: ThemeOid, httpClient: Pick<HttpClient, 'get'>) {
   return httpClient.get<LegacyDesignSettings>(`api/v1/themes/${themeOid}`).catch(() => {
-    throw new Error(`Theme with oid ${themeOid} not found in the Sisense instance`);
+    throw new TranslatableError('errors.themeNotFound', { themeOid });
   });
 }
 
@@ -39,7 +40,7 @@ export async function getLegacyPalette(paletteName: string, httpClient: Pick<Htt
     `api/palettes/${paletteName}`,
   );
   if ('status' in legacyPalette && legacyPalette.status === 'error') {
-    throw new Error(`Palette '${paletteName}' not found in the Sisense instance`);
+    throw new TranslatableError('errors.paletteNotFound', { paletteName });
   }
   return legacyPalette as LegacyPalette;
 }

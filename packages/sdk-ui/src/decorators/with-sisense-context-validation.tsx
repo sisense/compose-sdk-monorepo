@@ -1,10 +1,11 @@
 import { isFunction, isBoolean } from 'lodash';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { ComponentDecorator, SisenseComponentConfig } from './as-sisense-component';
+import { TranslatableError } from '../translation/translatable-error';
 
 type SisenseContextValidationConfig = Pick<
   SisenseComponentConfig,
-  'shouldSkipSisenseContextWaiting'
+  'shouldSkipSisenseContextWaiting' | 'customContextErrorMessageKey'
 >;
 
 /**
@@ -12,18 +13,17 @@ type SisenseContextValidationConfig = Pick<
  */
 export const withSisenseContextValidation: ComponentDecorator<SisenseContextValidationConfig> = ({
   shouldSkipSisenseContextWaiting,
+  customContextErrorMessageKey,
 }) => {
   return (Component) => {
     return (props) => {
-      if (
-        (isBoolean(shouldSkipSisenseContextWaiting) && shouldSkipSisenseContextWaiting) ||
-        (isFunction(shouldSkipSisenseContextWaiting) && shouldSkipSisenseContextWaiting(props))
-      ) {
+      if (canRenderWithoutSisenseContextWaiting(shouldSkipSisenseContextWaiting, props)) {
         return <Component {...props} />;
       }
       const { app, isInitialized } = useSisenseContext();
       if (!isInitialized) {
-        throw new Error('Sisense context is not initialized');
+        const errorMessageKey = customContextErrorMessageKey || 'errors.noSisenseContext';
+        throw new TranslatableError(errorMessageKey);
       }
       if (!app) {
         return <LoadingIndicator />;
@@ -32,6 +32,16 @@ export const withSisenseContextValidation: ComponentDecorator<SisenseContextVali
     };
   };
 };
+
+function canRenderWithoutSisenseContextWaiting(
+  shouldSkipSisenseContextWaiting: SisenseContextValidationConfig['shouldSkipSisenseContextWaiting'],
+  props: Record<string, any>,
+): boolean | undefined {
+  return (
+    (isBoolean(shouldSkipSisenseContextWaiting) && shouldSkipSisenseContextWaiting) ||
+    (isFunction(shouldSkipSisenseContextWaiting) && shouldSkipSisenseContextWaiting(props))
+  );
+}
 
 function LoadingIndicator() {
   // TODO: add a nice loading indicator (SNS-94466)

@@ -6,7 +6,7 @@
 import React, { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../chart';
-import { DataPoint, CompleteThemeSettings, MenuPosition } from '../types';
+import { DataPoint, MenuPosition } from '../types';
 import { ChartWidgetProps } from '../props';
 import { ContextMenu } from './common/context-menu';
 import { useWidgetDrilldown } from './common/use-widget-drilldown';
@@ -163,14 +163,12 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
               closeContextMenu={closeContextMenu}
             />
             <ThemeProvider
-              theme={
-                {
-                  chart: {
-                    backgroundColor:
-                      widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-                  },
-                } as CompleteThemeSettings
-              }
+              theme={{
+                chart: {
+                  backgroundColor:
+                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                },
+              }}
             >
               <div
                 style={{

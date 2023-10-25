@@ -25,6 +25,7 @@ type ConfigurableAppSettings = AppConfig;
 
 type ServerSettings = {
   serverThemeSettings: ThemeSettings;
+  serverLanguage: string;
 };
 
 const defaultAppConfig = { locale: getBaseDateFnsLocale(), dateConfig: defaultDateConfig };
@@ -69,6 +70,7 @@ async function loadServerSettings(
     : await getLegacyPalette(getPaletteName(globals.designSettings), httpClient);
   const serverSettings: ServerSettings = {
     serverThemeSettings: convertToThemeSettings(globals.designSettings, palette),
+    serverLanguage: globals.language,
   };
   return serverSettings;
 }

@@ -8,6 +8,6 @@ export default {
   component: ErrorBoundaryBox,
 };
 
-export const regular = template({});
+export const regular = template({ error: '' });
 
-export const customMessage = template({ errorText: 'A defined error has been encountered' });
+export const customMessage = template({ error: 'A defined error has been encountered' });

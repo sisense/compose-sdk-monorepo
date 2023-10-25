@@ -40,6 +40,13 @@ export type WidgetSubtype =
   | 'bubble/scatter'
   | 'treemap';
 
+export type Datasource = {
+  title: string;
+  id: string;
+  fullname?: string;
+  live: boolean;
+};
+
 /**
  * The data transfer object (DTO) containing info of a widget on a dashboard.
  *
@@ -50,12 +57,7 @@ export interface WidgetDto {
   oid: string;
   type: WidgetType | string;
   subtype: WidgetSubtype | string;
-  datasource: {
-    title: string;
-    id: string;
-    fullname: string;
-    live: boolean;
-  };
+  datasource: Datasource;
   metadata: {
     panels: Panel[];
   };
