@@ -225,6 +225,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular/common@npm:^15.2.0":
+  version: 15.2.10
+  resolution: "@angular/common@npm:15.2.10"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    "@angular/core": 15.2.10
+    rxjs: ^6.5.3 || ^7.4.0
+  checksum: 785689f074ae3f6ae1e91b0b2906d3eadf4f2f9fee2bc42e2a2787979133fa2cd887d6c390e9f1554956fa7220fc03dc11c57bf01515dc4e4937406eaf81bc50
+  languageName: node
+  linkType: hard
+
 "@angular/compiler-cli@npm:^15.2.0":
   version: 15.2.10
   resolution: "@angular/compiler-cli@npm:15.2.10"
@@ -247,6 +259,32 @@ __metadata:
     ngc: bundles/src/bin/ngc.js
     ngcc: bundles/ngcc/main-ngcc.js
   checksum: ff4ee944b936bde42e30fe44734e8884f914a262ad5476306e495ef8a64aacbebee484d2a5043f43bb59f507f7630c5f414e7ecad2b87e855bc11e7832e53f3e
+  languageName: node
+  linkType: hard
+
+"@angular/compiler@npm:^15.2.0":
+  version: 15.2.10
+  resolution: "@angular/compiler@npm:15.2.10"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    "@angular/core": 15.2.10
+  peerDependenciesMeta:
+    "@angular/core":
+      optional: true
+  checksum: b3b2e04ec9addab904ce2ddd4b81b7e5063c3b94efa51cbd17101a271b57f16a72da98106f48d7778c206eac3338483a220f9d7a779bbbc80e7b27af89b4ab16
+  languageName: node
+  linkType: hard
+
+"@angular/core@npm:^15.2.0":
+  version: 15.2.10
+  resolution: "@angular/core@npm:15.2.10"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    rxjs: ^6.5.3 || ^7.4.0
+    zone.js: ~0.11.4 || ~0.12.0 || ~0.13.0
+  checksum: bf189e956e8b70df5ea6b75410bdcc8e020a54a1e1ff7b65bfbec7642bac10c1f15c6e8ebe1e1acab168eeb13de5815384f93b9d41af44b13a6a0abfe9829c23
   languageName: node
   linkType: hard
 
@@ -4761,11 +4799,11 @@ __metadata:
   resolution: "@sisense/sdk-cli@workspace:packages/sdk-cli"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^0.12.0
-    "@sisense/sdk-data": ^0.12.0
-    "@sisense/sdk-modeling": ^0.12.0
-    "@sisense/sdk-query-client": ^0.12.0
-    "@sisense/sdk-rest-client": ^0.12.0
+    "@sisense/sdk-common": ^0.12.1
+    "@sisense/sdk-data": ^0.12.1
+    "@sisense/sdk-modeling": ^0.12.1
+    "@sisense/sdk-query-client": ^0.12.1
+    "@sisense/sdk-rest-client": ^0.12.1
     "@types/inquirer": 8.2.6
     "@types/yargs": ^17.0.22
     cross-fetch: ^4.0.0
@@ -4780,7 +4818,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-common@^0.12.0, @sisense/sdk-common@workspace:packages/sdk-common":
+"@sisense/sdk-common@^0.12.1, @sisense/sdk-common@workspace:packages/sdk-common":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-common@workspace:packages/sdk-common"
   dependencies:
@@ -4791,12 +4829,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-data@^0.12.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
+"@sisense/sdk-data@^0.12.1, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-data@workspace:packages/sdk-data"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-rest-client": ^0.12.0
+    "@sisense/sdk-rest-client": ^0.12.1
     "@types/numeral": 2.0.2
     "@types/object-hash": ^3.0.5
     eslint: ^8.40.0
@@ -4808,25 +4846,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-modeling@^0.12.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
+"@sisense/sdk-modeling@^0.12.1, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-modeling@workspace:packages/sdk-modeling"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-data": ^0.12.0
+    "@sisense/sdk-data": ^0.12.1
     eslint: ^8.40.0
     prettier: 2.8.4
     typescript: 4.8.4
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-query-client@^0.12.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
+"@sisense/sdk-query-client@^0.12.1, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-query-client@workspace:packages/sdk-query-client"
   dependencies:
-    "@sisense/sdk-common": ^0.12.0
-    "@sisense/sdk-data": ^0.12.0
-    "@sisense/sdk-rest-client": ^0.12.0
+    "@sisense/sdk-common": ^0.12.1
+    "@sisense/sdk-data": ^0.12.1
+    "@sisense/sdk-rest-client": ^0.12.1
     "@sisense/task-manager": ^0.1.0
     "@types/tar": ^6.1.4
     "@types/uuid": ^9.0.0
@@ -4842,7 +4880,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-rest-client@^0.12.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
+"@sisense/sdk-rest-client@^0.12.1, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-rest-client@workspace:packages/sdk-rest-client"
   dependencies:
@@ -4860,7 +4898,10 @@ __metadata:
   dependencies:
     "@angular-devkit/build-angular": ^15.2.4
     "@angular/cli": ~15.2.4
+    "@angular/common": ^15.2.0
+    "@angular/compiler": ^15.2.0
     "@angular/compiler-cli": ^15.2.0
+    "@angular/core": ^15.2.0
     "@sisense/sdk-data": "workspace:^"
     "@sisense/sdk-ui-preact": "workspace:^"
     eslint: ^8.40.0
@@ -4883,7 +4924,7 @@ __metadata:
   dependencies:
     "@preact/preset-vite": 2.5.0
     "@sisense/sdk-data": "workspace:^"
-    "@sisense/sdk-ui": ^0.12.0
+    "@sisense/sdk-ui": ^0.12.1
     "@types/node": ^18.16.0
     eslint: ^8.40.0
     preact: ^10.13.2
@@ -4917,7 +4958,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-ui@^0.12.0, @sisense/sdk-ui@workspace:^, @sisense/sdk-ui@workspace:packages/sdk-ui":
+"@sisense/sdk-ui@^0.12.1, @sisense/sdk-ui@workspace:^, @sisense/sdk-ui@workspace:packages/sdk-ui":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-ui@workspace:packages/sdk-ui"
   dependencies:
@@ -4929,10 +4970,10 @@ __metadata:
     "@mui/x-data-grid": ^6.16.0
     "@mui/x-data-grid-generator": ^6.16.0
     "@mui/x-data-grid-pro": ^6.16.0
-    "@sisense/sdk-common": ^0.12.0
-    "@sisense/sdk-data": ^0.12.0
-    "@sisense/sdk-query-client": ^0.12.0
-    "@sisense/sdk-rest-client": ^0.12.0
+    "@sisense/sdk-common": ^0.12.1
+    "@sisense/sdk-data": ^0.12.1
+    "@sisense/sdk-query-client": ^0.12.1
+    "@sisense/sdk-rest-client": ^0.12.1
     "@sisense/sisense-charts": 5.1.0-alpha-04052758.0
     "@storybook/addon-actions": 7.0.24
     "@storybook/addon-docs": 7.0.24

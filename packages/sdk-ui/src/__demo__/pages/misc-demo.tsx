@@ -29,6 +29,14 @@ export const MiscDemo = () => {
   const allMembers = ['United States', 'Canada', 'Mexico'].map((m) => ({ key: m, title: m }));
   const selectedMembers = ['United States', 'Mexico'].map((m) => ({ key: m, title: m }));
 
+  const LONG_LIST_LEN = 2000;
+  const randomArray = Array.from({ length: LONG_LIST_LEN }, (_, idx) => 'v' + (idx + 1).toString());
+
+  const allMembersLongList = randomArray.map((m) => ({ key: m, title: m }));
+  const selectedMembersLongList = randomArray
+    .slice(0, LONG_LIST_LEN - 1)
+    .map((m) => ({ key: m, title: m }));
+
   const onDataPointsSelected = (points: DataPoints) => console.log('Point selected', points);
   const onDataPointClicked = (point: DataPoint | ScatterDataPoint) =>
     console.log('Point clicked', point);
@@ -39,6 +47,13 @@ export const MiscDemo = () => {
 
   return (
     <div className="csdk-h-fit">
+      <BasicMemberFilterTile
+        title={'Large List'}
+        allMembers={allMembersLongList}
+        initialSelectedMembers={selectedMembersLongList}
+      />
+      <br />
+      <br />
       <LanguageSwitcher />
       <br />
       Chart with No Local Data

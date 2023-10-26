@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.12.1] - 2023-10-26
+
+### Changed
+- Increase `maxAllowedMembers` in `BasicMemberFilterTile` from 1000 to 2000
+- Fix build of `sdk-ui-angular` by adding missed devDependencies
+
 ## [0.12.0] - 2023-10-24
 
 ### Added

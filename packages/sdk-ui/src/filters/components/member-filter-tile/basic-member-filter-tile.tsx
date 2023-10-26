@@ -59,7 +59,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
   allMembers,
   initialSelectedMembers = [],
   onUpdateSelectedMembers,
-  maxAllowedMembers = 1000,
+  maxAllowedMembers = 2000,
 }) => {
   const [disabled, setDisabled] = useState(false);
 
