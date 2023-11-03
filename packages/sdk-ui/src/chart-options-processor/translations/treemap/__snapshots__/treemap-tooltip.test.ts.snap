@@ -9,11 +9,12 @@ exports[`Treemap Chart tooltip formatter > contribution mode 1`] = `
                   class=\\"csdk-treemap-tooltip-level\\"
                   style=\\"background: white;\\"
                   >
+
                   <span
                     style=\\"color: currentColor\\"
                   >Three</span>
                   <span
-                    style=\\"color: currentColor\\"
+                    style=\\"color: currentColor; margin-left: auto;\\"
                   >75.0%</span>
 
   <div style=\\"position: absolute; top: 100%; right: 40px; z-index: 1\\">
@@ -48,11 +49,12 @@ exports[`Treemap Chart tooltip formatter > contribution mode 1`] = `
                   class=\\"csdk-treemap-tooltip-level\\"
                   style=\\"background: white;\\"
                   >
+
                   <span
                     style=\\"color: currentColor\\"
                   >Two</span>
                   <span
-                    style=\\"color: currentColor\\"
+                    style=\\"color: currentColor; margin-left: auto;\\"
                   >50.0%</span>
 
   <div style=\\"position: absolute; top: 100%; right: 40px; z-index: 1\\">
@@ -87,11 +89,12 @@ exports[`Treemap Chart tooltip formatter > contribution mode 1`] = `
                   class=\\"csdk-treemap-tooltip-level\\"
                   style=\\"background: #f2f2f2;\\"
                   >
+
                   <span
                     style=\\"color: blue\\"
                   >One</span>
                   <span
-                    style=\\"color: #5B6372\\"
+                    style=\\"color: #5B6372; margin-left: auto;\\"
                   >25.0%</span>
 
                 </div>
@@ -99,8 +102,10 @@ exports[`Treemap Chart tooltip formatter > contribution mode 1`] = `
           <span style=\\"color:blue; font-size: 15px\\">25.0%</span> of test
         </div>
         <div class=\\"csdk-treemap-tooltip-value\\" style=\\"padding-top: 4px;\\">
-                  <span style=\\"color:blue; font-size: 15px\\">50.0%</span> of Two
+                  <span style=\\"color:blue; font-size: 15px\\">50.0%
+                  </span> of Two
                 </div>
+
         </div>
       </div>"
 `;
@@ -114,17 +119,19 @@ exports[`Treemap Chart tooltip formatter > single category tooltip 1`] = `
                   class=\\"csdk-treemap-tooltip-level\\"
                   style=\\"background: #f2f2f2;\\"
                   >
+
                   <span
                     style=\\"color: red\\"
                   >One</span>
                   <span
-                    style=\\"color: #5B6372\\"
+                    style=\\"color: #5B6372; margin-left: auto;\\"
                   >1</span>
 
                 </div>
         <div class=\\"csdk-treemap-tooltip-value\\">
           <span style=\\"color:red; font-size: 15px\\">1</span> of test
         </div>
+
 
         </div>
       </div>"
@@ -139,11 +146,12 @@ exports[`Treemap Chart tooltip formatter > three categories tooltip 1`] = `
                   class=\\"csdk-treemap-tooltip-level\\"
                   style=\\"background: white;\\"
                   >
+
                   <span
                     style=\\"color: currentColor\\"
                   >Three</span>
                   <span
-                    style=\\"color: currentColor\\"
+                    style=\\"color: currentColor; margin-left: auto;\\"
                   >3</span>
 
   <div style=\\"position: absolute; top: 100%; right: 40px; z-index: 1\\">
@@ -178,11 +186,12 @@ exports[`Treemap Chart tooltip formatter > three categories tooltip 1`] = `
                   class=\\"csdk-treemap-tooltip-level\\"
                   style=\\"background: white;\\"
                   >
+
                   <span
                     style=\\"color: currentColor\\"
                   >Two</span>
                   <span
-                    style=\\"color: currentColor\\"
+                    style=\\"color: currentColor; margin-left: auto;\\"
                   >2</span>
 
   <div style=\\"position: absolute; top: 100%; right: 40px; z-index: 1\\">
@@ -217,11 +226,12 @@ exports[`Treemap Chart tooltip formatter > three categories tooltip 1`] = `
                   class=\\"csdk-treemap-tooltip-level\\"
                   style=\\"background: #f2f2f2;\\"
                   >
+
                   <span
                     style=\\"color: blue\\"
                   >One</span>
                   <span
-                    style=\\"color: #5B6372\\"
+                    style=\\"color: #5B6372; margin-left: auto;\\"
                   >1</span>
 
                 </div>
@@ -229,8 +239,10 @@ exports[`Treemap Chart tooltip formatter > three categories tooltip 1`] = `
           <span style=\\"color:blue; font-size: 15px\\">1</span> of test
         </div>
         <div class=\\"csdk-treemap-tooltip-value\\" style=\\"padding-top: 4px;\\">
-                  <span style=\\"color:blue; font-size: 15px\\">50.0%</span> of Two
+                  <span style=\\"color:blue; font-size: 15px\\">50.0%
+                  </span> of Two
                 </div>
+
         </div>
       </div>"
 `;

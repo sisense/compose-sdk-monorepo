@@ -11,6 +11,40 @@ import {
 import { SisenseContextService } from './sisense-context.service';
 
 export { type ThemeConfig };
+
+/**
+ * Token used to inject {@link ThemeConfig} into your application
+ *
+ * @example
+ *
+ * Example of injecting both {@link SisenseContextConfig} and {@link ThemeConfig} into your application:
+ *
+ * ```ts
+ * export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
+ *   url="<instance url>" // replace with the URL of your Sisense instance
+ *   token="<api token>" // replace with the API token of your user account
+ *   defaultDataSource: DM.DataSource,
+ * };
+ *
+ * @NgModule({
+ *   imports: [
+ *     BrowserModule,
+ *     SdkUiModule,
+ *   ],
+ *   declarations: [AppComponent],
+ *   providers: [
+ *     { provide: SISENSE_CONTEXT_CONFIG_TOKEN, useValue: SISENSE_CONTEXT_CONFIG },
+ *     {
+ *       provide: THEME_CONFIG_TOKEN,
+ *       useValue: {
+ *         // initial theme settings
+ *       } as ThemeConfig,
+ *     },
+ *   ],
+ *   bootstrap: [AppComponent],
+ * })
+ * ```
+ */
 export const THEME_CONFIG_TOKEN = new InjectionToken<ThemeConfig>('theme configuration');
 
 @Injectable({

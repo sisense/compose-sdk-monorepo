@@ -1,8 +1,21 @@
-/* eslint-disable @typescript-eslint/default-param-last */
-/* eslint-disable max-params */
-import { Attribute, DataSource, Filter, Measure, QueryResultData } from '@sisense/sdk-data';
+import { Attribute, QueryResultData } from '@sisense/sdk-data';
+import type {
+  QueryDescription as InternalQueryDescription,
+  QueryExecutionConfig,
+} from '@sisense/sdk-query-client';
 import { ClientApplication } from '../app/client-application';
 import { TranslatableError } from '../translation/translatable-error';
+
+/**
+ * All the properties that fully describe a query you want to send.
+ *
+ * We use "dimensions" it public interface because the term is closer to the query and charting
+ * as used in the industry (Sisense included).
+ * internally, "dimensions" are represented by attributes as the latter is closer to the data model.
+ */
+export type QueryDescription = Partial<Omit<InternalQueryDescription, 'attributes'>> & {
+  dimensions?: Attribute[];
+};
 
 /** @internal */
 export const QUERY_DEFAULT_LIMIT = 20000;
@@ -11,19 +24,19 @@ export const QUERY_DEFAULT_OFFSET = 0;
 
 /** @internal */
 export const executeQuery = (
-  dataSource: DataSource | undefined,
-  dimensions: Attribute[] = [],
-  measures: Measure[] = [],
-  filters: Filter[] = [],
-  highlights: Filter[] = [],
+  queryDescription: QueryDescription,
   app: ClientApplication,
-  count = QUERY_DEFAULT_LIMIT,
-  offset = QUERY_DEFAULT_OFFSET,
+  executionConfig?: QueryExecutionConfig,
 ): Promise<QueryResultData> => {
-  // We use "dimensions" in the API because the term is closer to the query and charting
-  // as used in the industry (Sisense included).
-  // internally, "dimensions" are represented by attributes as the latter is closer to the data model.
-  const attributes = dimensions;
+  const {
+    dataSource,
+    dimensions = [],
+    measures = [],
+    filters = [],
+    highlights = [],
+    count = QUERY_DEFAULT_LIMIT,
+    offset = QUERY_DEFAULT_OFFSET,
+  } = queryDescription;
 
   if (filters) {
     filters.forEach((f) => (f.isScope = true));
@@ -39,13 +52,16 @@ export const executeQuery = (
     throw new TranslatableError('errors.executeQueryNoDataSource');
   }
 
-  return app.queryClient.executeQuery({
-    dataSource: dataSourceToQuery,
-    attributes,
-    measures,
-    filters,
-    highlights,
-    count,
-    offset,
-  }).resultPromise;
+  return app.queryClient.executeQuery(
+    {
+      dataSource: dataSourceToQuery,
+      attributes: dimensions, // internally, dimensions are represented by attributes
+      measures,
+      filters,
+      highlights,
+      count,
+      offset,
+    },
+    executionConfig,
+  ).resultPromise;
 };

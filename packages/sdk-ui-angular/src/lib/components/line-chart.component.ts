@@ -22,38 +22,84 @@ import { type ArgumentsAsObject } from '../utility-types';
   `,
 })
 export class LineChartComponent {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataSet}
+   *
+   * @category Data
+   */
   @Input()
   dataSet: LineChartProps['dataSet'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   dataOptions!: LineChartProps['dataOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: LineChartProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   highlights: LineChartProps['highlights'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.styleOptions}
+   *
+   * @category Chart
+   */
   @Input()
   styleOptions: LineChartProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onBeforeRender}
+   *
+   * @category Callbacks
+   */
   @Input()
   beforeRender: LineChartProps['onBeforeRender'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointClick = new EventEmitter<
     ArgumentsAsObject<LineChartProps['onDataPointClick'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointContextMenu = new EventEmitter<
     ArgumentsAsObject<LineChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointsSelected}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointsSelect = new EventEmitter<
     ArgumentsAsObject<LineChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
   >();
 
+  /** @internal */
   public chartType: ChartType = 'line';
 }

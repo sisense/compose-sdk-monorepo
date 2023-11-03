@@ -1,3 +1,5 @@
+/** @vitest-environment jsdom */
+
 import { renderHook, waitFor } from '@testing-library/react';
 import { useExecuteQuery, ExecuteQueryParams } from './use-execute-query';
 import { executeQuery } from '../query/execute-query';
@@ -99,5 +101,29 @@ describe('useExecuteQuery', () => {
 
     expect(result.current.isError).toBe(true);
     expect(result.current.error?.message).toMatch(/Sisense Context .* not found/i);
+  });
+
+  it('should pass "onBeforeQuery" callback to \'executeQuery\' executionConfig', async () => {
+    const onBeforeQuery = vi.fn();
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() =>
+      useExecuteQuery({
+        ...params,
+        onBeforeQuery,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(executeQueryMock).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.objectContaining({
+          onBeforeQuery,
+        }),
+      );
+    });
   });
 });

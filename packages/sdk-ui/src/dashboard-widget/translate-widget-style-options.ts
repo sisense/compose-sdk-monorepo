@@ -18,6 +18,7 @@ import {
   GaugeIndicatorStyleOptions,
   TreemapStyleOptions,
   BaseAxisStyleOptions,
+  SunburstStyleOptions,
 } from '../types';
 import {
   Panel,
@@ -32,6 +33,7 @@ import {
   IndicatorWidgetStyle,
   TreemapWidgetStyle,
   AxisStyle,
+  SunburstWidgetStyle,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
 
@@ -337,6 +339,18 @@ function extractTreemapChartStyleOptions(widgetStyle: TreemapWidgetStyle): Treem
   };
 }
 
+function extractSunburstChartStyleOptions(widgetStyle: SunburstWidgetStyle): SunburstStyleOptions {
+  return {
+    legend: {
+      enabled: widgetStyle['legend/enabled'],
+      position: widgetStyle['legend/position'],
+    },
+    tooltip: {
+      mode: widgetStyle['tooltip/value'] ?? true ? 'value' : 'contribution',
+    },
+  };
+}
+
 export function extractStyleOptions(
   widgetType: WidgetType,
   widgetSubtype: WidgetSubtype,
@@ -362,6 +376,8 @@ export function extractStyleOptions(
       return extractFunnelChartDataOptions(widgetSubtype, style as FunnelWidgetStyle);
     case WidgetType.TreemapChart:
       return extractTreemapChartStyleOptions(style as TreemapWidgetStyle);
+    case WidgetType.SunburstChart:
+      return extractSunburstChartStyleOptions(style as SunburstWidgetStyle);
     case WidgetType.PieChart:
       return extractBaseStyleOptions(widgetSubtype, style);
     case WidgetType.Table:

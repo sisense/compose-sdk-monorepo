@@ -1,7 +1,12 @@
-import { DataSourceField, ExecutingQueryResult, QueryDescription } from './types.js';
+import {
+  DataSourceField,
+  ExecutingQueryResult,
+  QueryDescription,
+  QueryExecutionConfig,
+} from './types.js';
 import { DataSource } from '@sisense/sdk-data';
 
 export interface QueryClient {
-  executeQuery(params: QueryDescription): ExecutingQueryResult;
+  executeQuery(params: QueryDescription, config?: QueryExecutionConfig): ExecutingQueryResult;
   getDataSourceFields(dataSource: DataSource): Promise<DataSourceField[]>;
 }

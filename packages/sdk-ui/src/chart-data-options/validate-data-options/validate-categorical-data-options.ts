@@ -37,6 +37,10 @@ const maxCategoricalDataOptionsLengthsMap: MaxCategoricalDataOptionsLengthsMap =
     category: 3,
     value: 1,
   },
+  sunburst: {
+    category: 6,
+    value: 1,
+  },
 };
 
 /**

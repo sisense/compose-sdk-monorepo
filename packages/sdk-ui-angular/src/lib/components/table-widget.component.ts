@@ -23,6 +23,8 @@ import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
  * Table Widget Component
+ *
+ * @internal
  */
 @Component({
   selector: 'csdk-table-widget',
@@ -38,9 +40,19 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   @Input()
   dataOptions!: TableWidgetProps['dataOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: TableWidgetProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   *
+   * @category Representation
+   */
   @Input()
   styleOptions: TableWidgetProps['styleOptions'];
 

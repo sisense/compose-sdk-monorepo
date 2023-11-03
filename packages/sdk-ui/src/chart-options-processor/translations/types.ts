@@ -26,7 +26,7 @@ export const CARTESIAN_CHART_TYPES = [
 /** Cartesian family of chart types @expandType */
 export type CartesianChartType = (typeof CARTESIAN_CHART_TYPES)[number];
 
-export const CATEGORICAL_CHART_TYPES = ['pie', 'funnel', 'treemap'] as const;
+export const CATEGORICAL_CHART_TYPES = ['pie', 'funnel', 'treemap', 'sunburst'] as const;
 /** Categorical family of chart types  @expandType */
 export type CategoricalChartType = (typeof CATEGORICAL_CHART_TYPES)[number];
 

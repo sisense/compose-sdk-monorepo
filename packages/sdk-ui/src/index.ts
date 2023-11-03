@@ -30,6 +30,7 @@ export * from './scatter-chart';
 export * from './indicator-chart';
 export * from './table';
 export * from './treemap-chart';
+export * from './sunburst-chart';
 export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
 export { getThemeSettingsByOid } from './themes/theme-loader';

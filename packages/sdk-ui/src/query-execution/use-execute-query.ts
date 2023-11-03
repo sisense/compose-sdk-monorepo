@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Attribute, DataSource, Filter, Measure } from '@sisense/sdk-data';
 import { isEqual } from 'lodash';
 import { useEffect, useReducer, useState } from 'react';
@@ -43,6 +44,11 @@ export type ExecuteQueryParams = {
    * If not specified, the default value is `true`
    */
   enabled?: boolean;
+
+  /**
+   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+   */
+  onBeforeQuery?: (jaql: any) => any | Promise<any>;
 };
 
 /**
@@ -108,8 +114,21 @@ export const useExecuteQuery = (params: ExecuteQueryParams): QueryState => {
         setIsNeverExecuted(false);
       }
       dispatch({ type: 'loading' });
-      const { dataSource, dimensions, measures, filters, highlights, count, offset } = params;
-      void executeQuery(dataSource, dimensions, measures, filters, highlights, app, count, offset)
+      const {
+        dataSource,
+        dimensions,
+        measures,
+        filters,
+        highlights,
+        count,
+        offset,
+        onBeforeQuery,
+      } = params;
+      void executeQuery(
+        { dataSource, dimensions, measures, filters, highlights, count, offset },
+        app,
+        { onBeforeQuery },
+      )
         .then((data) => {
           dispatch({ type: 'success', data });
         })

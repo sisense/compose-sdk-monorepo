@@ -1,5 +1,5 @@
 {
-  "version": "0.12.1",
+  "version": "0.13.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -13,7 +13,7 @@
     "demo": "yarn workspace react-ts-demo dev",
     "build": "yarn workspaces foreach --no-private --verbose --topological run build",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
-    "build:prod": "yarn workspaces foreach --no-private --verbose --topological --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue run build:prod",
+    "build:prod": "yarn workspaces foreach --no-private --verbose --topological --exclude @sisense/sdk-ui-vue run build:prod",
     "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output",
     "reset": "yarn clean && rm -rf ./node_modules",
     "lint": "yarn workspaces foreach --verbose run lint",
@@ -29,7 +29,7 @@
     "g:cli": "yarn workspace @sisense/sdk-cli run cli",
     "version-and-publish": "./scripts/version-all.sh",
     "version:current": "node ./scripts/current-version.cjs",
-    "publish": "yarn workspaces foreach --no-private --exclude @sisense/sdk-ui-angular --exclude @sisense/sdk-ui-preact --exclude @sisense/sdk-ui-vue npm publish --tolerate-republish",
+    "publish": "yarn workspaces foreach --no-private --exclude @sisense/sdk-ui-vue npm publish --tolerate-republish",
     "docs:gen": "TYPEDOC_MODE=PUBLIC typedoc --options typedoc.config.cjs",
     "docs:serve": "node ./scripts/serve-static.cjs docs",
     "docs:gen:internal": "TYPEDOC_MODE=INTERNAL typedoc --options typedoc.config.cjs",
@@ -59,7 +59,7 @@
     "lint-staged": "^13.2.1",
     "nyc": "^15.1.0",
     "prettier": "^2.8.8",
-    "typedoc": "0.24.8",
+    "typedoc": "0.25.3",
     "typedoc-plugin-versions": "^0.2.3",
     "vitest": "0.34.1"
   },

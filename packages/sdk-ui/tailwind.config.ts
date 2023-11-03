@@ -35,6 +35,7 @@ const config: Config = {
       fontSize: {
         pill: '13px',
         ['tile-title']: '13px',
+        'ai-xs': ['11px', '18px'],
         'ai-sm': ['13px', '18px'],
         'ai-base': ['15px', '22px'],
         'ai-lg': ['18px', '22px'],

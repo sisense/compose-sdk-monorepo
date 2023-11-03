@@ -14,11 +14,11 @@ Props of the [Table](../functions/function.Table.md) component.
 
 > **dataSet**?: `string` \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
-Data set for this chart, which supports two options:
+Data set for this component, which supports two options:
 
 (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
 the chart will have an internal [ExecuteQuery](../functions/function.ExecuteQuery.md) connect to the data source
-and load the data as specified in [dataOptions](interface.TableProps.md#dataoptions) and [filters](interface.TableProps.md#filters).
+and load the data as specified in [dataOptions](interface.TableProps.md#dataoptions), [filters](interface.TableProps.md#filters), and [highlights](interface.ChartProps.md#highlights).
 
 OR
 
@@ -39,13 +39,13 @@ the chart will use the `defaultDataSource` specified in the parent [SisenseConte
 
 Filters that will slice query results
 
-### Chart
+### Representation
 
 #### dataOptions
 
 > **dataOptions**: [`TableDataOptions`](../type-aliases/type-alias.TableDataOptions.md)
 
-Configurations for how to interpret and present the data passed to the chart
+Configurations for how to interpret and present the data passed to the component
 
 ***
 
@@ -53,4 +53,4 @@ Configurations for how to interpret and present the data passed to the chart
 
 > **styleOptions**?: [`TableStyleOptions`](interface.TableStyleOptions.md)
 
-Configurations that define functional style of the various chart elements
+Configurations that define functional style of the various table elements

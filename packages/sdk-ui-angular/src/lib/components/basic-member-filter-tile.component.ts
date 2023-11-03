@@ -12,13 +12,16 @@ import type { Arguments } from '../utility-types';
 import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
- * Filter Tile Component
+ * Basic Member Filter Tile Component
+ *
+ * @internal
  */
 @Component({
   selector: 'csdk-basic-member-filter-tile',
   template,
 })
 export class BasicMemberFilterTileComponent implements AfterViewInit, OnChanges, OnDestroy {
+  /** @internal */
   @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
@@ -45,16 +48,19 @@ export class BasicMemberFilterTileComponent implements AfterViewInit, OnChanges,
     this.componentAdapter = new ComponentAdapter(() => this.createPreactComponent());
   }
 
+  /** @internal */
   ngAfterViewInit() {
     this.componentAdapter.render(this.preactRef.nativeElement);
   }
 
+  /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
       this.componentAdapter.render(this.preactRef.nativeElement);
     }
   }
 
+  /** @internal */
   ngOnDestroy() {
     this.componentAdapter.destroy();
   }

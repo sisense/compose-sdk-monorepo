@@ -17,6 +17,7 @@ import { ChartFilterCycle } from './pages/chart-filter-cycle';
 import { MuiDataGridDemo } from './pages/mui-data-grid-demo';
 import { PreviousData } from './pages/use-execute-query-demo';
 import { ChartTypeSwitchingDemo } from './pages/chart-type-switching';
+import { SelectionFilterDemo } from './pages/selection-highlight/selection-filter-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -34,6 +35,7 @@ const pages: ComponentType[] = [
   ChartFilterCycle,
   PreviousData,
   ChartTypeSwitchingDemo,
+  SelectionFilterDemo,
   ...loadAdditionalPages(),
 ];
 

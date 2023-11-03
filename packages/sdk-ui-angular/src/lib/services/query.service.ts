@@ -14,17 +14,13 @@ export class QueryService {
   constructor(private sisenseContextService: SisenseContextService) {}
 
   async executeQuery(params: ExecuteQueryParams) {
-    const { dataSource, dimensions, measures, filters, highlights, count, offset } = params;
+    const { dataSource, dimensions, measures, filters, highlights, count, offset, onBeforeQuery } =
+      params;
     const app = await this.sisenseContextService.getApp();
     const data = await executeQuery(
-      dataSource,
-      dimensions,
-      measures,
-      filters,
-      highlights,
+      { dataSource, dimensions, measures, filters, highlights, count, offset },
       app,
-      count,
-      offset,
+      { onBeforeQuery },
     );
 
     return { data };

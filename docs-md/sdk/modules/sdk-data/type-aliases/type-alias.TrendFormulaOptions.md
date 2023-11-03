@@ -20,7 +20,9 @@ to maintain the integrity of your analysis by avoiding potential outliers.
 
 #### Default Value
 
+```ts
 false
+```
 
 ***
 
@@ -32,4 +34,6 @@ Trend analysis model type to be used for the operation.
 
 #### Default Value
 
+```ts
 "linear"
+```

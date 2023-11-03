@@ -23,6 +23,7 @@ import {
   CategoricalChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import { prepareTreemapOptions } from './translations/treemap/treemap-options';
+import { prepareSunburstOptions } from './translations/sunburst/sunburst-options';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -123,6 +124,16 @@ export const getCategoricalChartOptions = (
     case 'treemap':
       return {
         options: prepareTreemapOptions(
+          chartData,
+          dataOptions as CategoricalChartDataOptionsInternal,
+          chartDesignOptions as TreemapChartDesignOptions,
+          themeSettings,
+        ),
+        alerts,
+      };
+    case 'sunburst':
+      return {
+        options: prepareSunburstOptions(
           chartData,
           dataOptions as CategoricalChartDataOptionsInternal,
           chartDesignOptions as TreemapChartDesignOptions,

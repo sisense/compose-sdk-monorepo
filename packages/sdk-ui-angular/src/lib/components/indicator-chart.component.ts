@@ -17,20 +17,46 @@ import { type ChartType, type IndicatorChartProps } from '@sisense/sdk-ui-preact
   `,
 })
 export class IndicatorChartComponent {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataSet}
+   *
+   * @category Data
+   */
   @Input()
   dataSet: IndicatorChartProps['dataSet'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataOptions}
+   *
+   * @category Chart
+   */
   @Input()
   dataOptions!: IndicatorChartProps['dataOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: IndicatorChartProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   highlights: IndicatorChartProps['highlights'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.styleOptions}
+   *
+   * @category Chart
+   */
   @Input()
   styleOptions: IndicatorChartProps['styleOptions'];
 
+  /** @internal */
   public chartType: ChartType = 'indicator';
 }

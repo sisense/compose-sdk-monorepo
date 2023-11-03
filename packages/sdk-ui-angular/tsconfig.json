@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compileOnSave": false,
   "compilerOptions": {
+    "rootDir": "./src",
     "baseUrl": ".",
     "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,
@@ -11,15 +12,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
-    "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022",
+    "module": "es2015",
     "useDefineForClassFields": false,
-    "lib": ["ES2022", "dom"]
+    "lib": ["dom", "es2015"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -27,5 +27,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
+  "include": ["src/**/*.ts", "src/**/*.json"],
   "references": [{ "path": "../sdk-data" }, { "path": "../sdk-ui-preact" }]
 }

@@ -24,6 +24,7 @@ title: Functions
 - [PolarChart](function.PolarChart.md)
 - [ScatterChart](function.ScatterChart.md)
 - [SisenseContextProvider](function.SisenseContextProvider.md)
+- [SunburstChart](function.SunburstChart.md)
 - [Table](function.Table.md)
 - [ThemeProvider](function.ThemeProvider.md)
 - [TreemapChart](function.TreemapChart.md)

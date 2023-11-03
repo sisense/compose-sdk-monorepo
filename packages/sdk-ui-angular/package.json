@@ -1,9 +1,9 @@
 {
   "name": "@sisense/sdk-ui-angular",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "type": "module",
-  "main": "./dist/index.d.ts",
-  "module": "./dist/index.d.ts",
+  "main": "./dist",
+  "module": "./dist",
   "types": "./dist/index.d.ts",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -23,9 +23,9 @@
     "test:coverage": "echo 'Tests disabled for now.'"
   },
   "peerDependencies": {
-    "@angular/common": "^15.2.0",
-    "@angular/compiler": "^15.2.0",
-    "@angular/core": "^15.2.0"
+    "@angular/common": "^15.0.0 || ^16.0.0",
+    "@angular/compiler": "^15.0.0 || ^16.0.0",
+    "@angular/core": "^15.0.0 || ^16.0.0"
   },
   "dependencies": {
     "@sisense/sdk-ui-preact": "workspace:^",

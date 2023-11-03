@@ -2,6 +2,7 @@ import { type FunctionComponent, type VNode } from 'preact';
 import type { Observable } from 'rxjs';
 import { createElement } from '../render';
 
+/** @internal */
 export type ContextConnector<T> = {
   prepareContext: () => T | Promise<T> | Observable<T>;
   renderContextProvider: (contextData: T, children: VNode, error?: Error) => VNode;
@@ -9,6 +10,7 @@ export type ContextConnector<T> = {
 
 type AbstractContextProviderProps = { context?: any; error?: Error };
 
+/** @internal */
 export function createContextProviderRenderer<T extends AbstractContextProviderProps>(
   provider: FunctionComponent<T>,
 ) {

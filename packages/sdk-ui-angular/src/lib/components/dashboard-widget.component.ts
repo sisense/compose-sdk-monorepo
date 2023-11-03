@@ -29,6 +29,7 @@ import { template, rootId } from '../component-wrapper-helpers/template';
   template,
 })
 export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
+  /** @internal */
   @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
@@ -38,6 +39,11 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   @Input()
   dashboardOid!: DashboardWidgetProps['dashboardOid'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: DashboardWidgetProps['filters'];
 
@@ -53,6 +59,11 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   @Input()
   description: DashboardWidgetProps['description'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   *
+   * @category Chart
+   */
   @Input()
   styleOptions: DashboardWidgetProps['styleOptions'];
 
@@ -77,16 +88,19 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
     );
   }
 
+  /** @internal */
   ngAfterViewInit() {
     this.componentAdapter.render(this.preactRef.nativeElement);
   }
 
+  /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
       this.componentAdapter.render(this.preactRef.nativeElement);
     }
   }
 
+  /** @internal */
   private createPreactComponent() {
     const props = {
       widgetOid: this.widgetOid,
@@ -104,6 +118,7 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
     return createElement(DashboardWidget, props);
   }
 
+  /** @internal */
   ngOnDestroy() {
     this.componentAdapter.destroy();
   }

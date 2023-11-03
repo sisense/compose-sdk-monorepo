@@ -12,6 +12,7 @@ type Context = {
   error?: Error;
 };
 
+/** @internal */
 export class ComponentAdapter {
   private rootElement: HTMLElement;
 

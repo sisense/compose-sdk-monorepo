@@ -5,7 +5,7 @@ import { LegendPosition } from './legend-section';
 import { LineType, StackType } from './translations-to-highcharts';
 import { PieType, PieLabels } from './pie-plot-options';
 import { FunnelSize, FunnelType, FunnelDirection, FunnelLabels } from './funnel-plot-options';
-import { Convolution, TreemapStyleOptions } from '../../types';
+import { Convolution, SunburstStyleOptions, TreemapStyleOptions } from '../../types';
 import { ScatterMarkerSize } from './scatter-plot-options';
 
 type DataLimits = {
@@ -54,6 +54,8 @@ export type FunnelChartDesignOptions = BaseDesignOptionsType & {
 };
 
 export type TreemapChartDesignOptions = BaseDesignOptionsType & TreemapStyleOptions;
+
+export type SunburstChartDesignOptions = BaseDesignOptionsType & SunburstStyleOptions;
 
 export type ScatterChartDesignOptions = BaseDesignOptionsType & {
   markerSize?: ScatterMarkerSize;

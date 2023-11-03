@@ -43,6 +43,7 @@ export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdPro
       count,
       offset,
       filtersMergeStrategy,
+      onBeforeQuery,
     }) => {
       const { data, query, error } = useExecuteQueryByWidgetId({
         widgetOid,
@@ -52,6 +53,7 @@ export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdPro
         count,
         offset,
         filtersMergeStrategy,
+        onBeforeQuery,
       });
 
       const [prevData, setPrevData] = useState(data);

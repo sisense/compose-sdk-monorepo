@@ -7,6 +7,7 @@ export const enum WidgetType {
   AreaChart = 'chart/area',
   FunnelChart = 'chart/funnel',
   TreemapChart = 'treemap',
+  SunburstChart = 'sunburst',
   ScatterChart = 'chart/scatter',
   IndicatorChart = 'indicator',
   PolarChart = 'chart/polar',
@@ -38,7 +39,8 @@ export type WidgetSubtype =
   | 'indicator/numeric'
   | 'indicator/gauge'
   | 'bubble/scatter'
-  | 'treemap';
+  | 'treemap'
+  | 'sunburst';
 
 export type Datasource = {
   title: string;
@@ -409,6 +411,13 @@ export type TreemapWidgetStyle = {
   'tooltip/value': boolean;
 };
 
+export type SunburstWidgetStyle = {
+  'legend/enabled': boolean;
+  'legend/position': 'top' | 'bottom' | 'left' | 'right';
+  'tooltip/contribution': boolean;
+  'tooltip/value': boolean;
+};
+
 export type WidgetStyle =
   | CartesianWidgetStyle
   | PolarWidgetStyle
@@ -416,7 +425,8 @@ export type WidgetStyle =
   | ScatterWidgetStyle
   | TableWidgetStyle
   | IndicatorWidgetStyle
-  | TreemapWidgetStyle;
+  | TreemapWidgetStyle
+  | SunburstWidgetStyle;
 
 export enum FiltersMergeStrategyEnum {
   WIDGET_FIRST = 'widgetFirst',

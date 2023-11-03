@@ -141,7 +141,7 @@ export const shouldSkipSisenseContextWaiting = (props: ChartProps) =>
  *
  * <img src="media://chart-local-data-example-1.png" width="800px" />
  * @param props - Chart properties
- * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType}
+ * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType | chartType}
  */
 export const Chart = asSisenseComponent({
   componentName: 'Chart',
@@ -295,7 +295,10 @@ const useSyncedData = (
     let ignore = false;
 
     if (dataSet === undefined || isDataSource(dataSet)) {
-      executeQuery(dataSet, attributes, measures, filters, highlights, app!)
+      executeQuery(
+        { dataSource: dataSet, dimensions: attributes, measures, filters, highlights },
+        app!,
+      )
         .then((queryResultData) => {
           const dataWithDateFormatting =
             'breakBy' in chartDataOptions

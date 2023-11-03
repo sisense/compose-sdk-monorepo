@@ -3,8 +3,35 @@ import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-prea
 import type { SisenseContextProviderProps as SisenseContextConfig } from '@sisense/sdk-ui-preact';
 
 export { type SisenseContextConfig };
+
+/**
+ * Token used to inject {@link SisenseContextConfig} into your application
+ *
+ * @example
+ * Example of importing {@link SdkUiModule} and injecting {@link SisenseContextConfig} into your application:
+ *
+ * ```ts
+ * export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
+ *   url="<instance url>" // replace with the URL of your Sisense instance
+ *   token="<api token>" // replace with the API token of your user account
+ *   defaultDataSource: DM.DataSource,
+ * };
+ *
+ * @NgModule({
+ *   imports: [
+ *     BrowserModule,
+ *     SdkUiModule,
+ *   ],
+ *   declarations: [AppComponent],
+ *   providers: [
+ *     { provide: SISENSE_CONTEXT_CONFIG_TOKEN, useValue: SISENSE_CONTEXT_CONFIG },
+ *   ],
+ *   bootstrap: [AppComponent],
+ * })
+ * ```
+ */
 export const SISENSE_CONTEXT_CONFIG_TOKEN = new InjectionToken<SisenseContextConfig>(
-  'props for authenticating with Sisense app',
+  'Props for connecting to Sisense instance',
 );
 
 @Injectable({

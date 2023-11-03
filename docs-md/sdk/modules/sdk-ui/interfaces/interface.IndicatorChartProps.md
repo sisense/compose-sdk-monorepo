@@ -18,7 +18,7 @@ Props of the [IndicatorChart](../functions/function.IndicatorChart.md) component
 
 > **dataSet**?: `string` \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
-Data set for this chart, which supports two options:
+Data set for this component, which supports two options:
 
 (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
 the chart will have an internal [ExecuteQuery](../functions/function.ExecuteQuery.md) connect to the data source

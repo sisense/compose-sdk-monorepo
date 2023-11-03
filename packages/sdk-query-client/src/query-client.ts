@@ -1,6 +1,11 @@
 /* eslint-disable complexity */
 /* eslint-disable sonarjs/cognitive-complexity */
-import { DataSourceField, ExecutingQueryResult, QueryDescription } from './types.js';
+import {
+  DataSourceField,
+  ExecutingQueryResult,
+  QueryDescription,
+  QueryExecutionConfig,
+} from './types.js';
 import { QueryClient } from './interfaces.js';
 import { QueryTaskManager } from './query-task-manager/query-task-manager.js';
 import { QueryTaskPassport } from './query-task-manager/query-task-passport.js';
@@ -35,14 +40,16 @@ export class DimensionalQueryClient implements QueryClient {
    * @returns promise that resolves to query result data and cancel function that can be used to cancel sent query
    * @throws Error if query description is invalid
    */
-  public executeQuery(queryDescription: QueryDescription): ExecutingQueryResult {
+  public executeQuery(
+    queryDescription: QueryDescription,
+    config?: QueryExecutionConfig,
+  ): ExecutingQueryResult {
     validateQueryDescription(queryDescription);
 
-    const taskPassport = new QueryTaskPassport(
-      'SEND_JAQL_QUERY',
-      queryDescription,
-      this.shouldSkipHighlightsWithoutAttributes,
-    );
+    const taskPassport = new QueryTaskPassport('SEND_JAQL_QUERY', queryDescription, {
+      ...(config ? config : {}),
+      shouldSkipHighlightsWithoutAttributes: this.shouldSkipHighlightsWithoutAttributes || false,
+    });
     return {
       resultPromise: new Promise((resolve, reject) => {
         void this.taskManager.executeQuerySending(taskPassport).then((executionResult) => {

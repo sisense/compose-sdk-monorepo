@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable sonarjs/cognitive-complexity */
+/* eslint-disable max-lines */
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
 import { InternalSeriesNode, TooltipSettings } from '../../tooltip';
@@ -8,9 +9,16 @@ import { applyFormat, defaultConfig } from '../number-format-config';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './treemap-tooltip.scss';
 
+type TooltipFormatterOptions = {
+  displayTotalContribution: boolean;
+  displayColorCircles: boolean;
+  shouldSkip: (context: TooltipFormatterContextObject) => boolean;
+};
+
 export const getTreemapTooltipSettings = (
   chartDataOptions: CategoricalChartDataOptionsInternal,
   designOptions: TreemapChartDesignOptions,
+  formatterOptions?: TooltipFormatterOptions,
 ): TooltipSettings => ({
   animation: false,
   backgroundColor: colorWhite,
@@ -21,7 +29,7 @@ export const getTreemapTooltipSettings = (
   useHTML: true,
   outside: true,
   formatter: function (this) {
-    return treemapTooltipFormatter(this, chartDataOptions, designOptions);
+    return treemapTooltipFormatter(this, chartDataOptions, designOptions, formatterOptions);
   },
 });
 
@@ -66,7 +74,11 @@ export function treemapTooltipFormatter(
   context: TooltipFormatterContextObject,
   chartDataOptions: CategoricalChartDataOptionsInternal,
   designOptions: TreemapChartDesignOptions,
+  formatterOptions?: TooltipFormatterOptions,
 ) {
+  if (formatterOptions?.shouldSkip && formatterOptions.shouldSkip(context)) {
+    return false;
+  }
   const numberFormatConfig = chartDataOptions.y?.[0]?.numberFormatConfig ?? defaultConfig;
   const isContributionMode = designOptions?.tooltip?.mode === 'contribution';
   const valueTitle = chartDataOptions.y?.[0]?.title ?? chartDataOptions.y?.[0]?.name;
@@ -98,11 +110,16 @@ export function treemapTooltipFormatter(
                   class="csdk-treemap-tooltip-level"
                   style="background: ${isLastNode ? '#f2f2f2' : 'white'};"
                   >
+                  ${
+                    formatterOptions?.displayColorCircles
+                      ? prepareTooltipColorCircle(node.color as string)
+                      : ''
+                  }
                   <span
                     style="color: ${isLastNode ? color : 'currentColor'}"
                   >${node.name}</span>
                   <span
-                    style="color: ${isLastNode ? '#5B6372' : 'currentColor'}"
+                    style="color: ${isLastNode ? '#5B6372' : 'currentColor'}; margin-left: auto;"
                   >${
                     isContributionMode
                       ? getFormattedContribution(node.val, rootValue)
@@ -125,10 +142,34 @@ export function treemapTooltipFormatter(
                   <span style="color:${color}; font-size: 15px">${getFormattedContribution(
                 nodesToShow[0]?.val,
                 nodesToShow[1]?.val,
-              )}</span> of ${nodesToShow[1]?.name}
+              )}
+                  </span> of ${nodesToShow[1]?.name}
                 </div>`
+            : ''
+        }
+        ${
+          formatterOptions?.displayTotalContribution && !isContributionMode
+            ? `<div class="csdk-treemap-tooltip-value" style="padding-top: 4px;">
+                    <span style="color:${color}; font-size: 15px">${getFormattedContribution(
+                nodesToShow[0]?.val,
+                rootValue,
+              )}
+                    </span> of total
+                   </div>`
             : ''
         }
         </div>
       </div>`;
+}
+
+function prepareTooltipColorCircle(color: string) {
+  return `
+    <div style="
+      width: 12px;
+      height: 12px;
+      border-radius: 100%;
+      background-color: ${color};
+      margin-right: 6px;
+    "></div>
+  `;
 }

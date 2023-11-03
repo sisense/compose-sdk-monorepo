@@ -41,7 +41,13 @@ if (process.env.TYPEDOC_MODE === 'PUBLIC') {
   module.exports = {
     ...baseConfig,
     name: 'Compose SDK',
-    entryPoints: ['packages/sdk-cli', 'packages/sdk-data', 'packages/sdk-ui'],
+    entryPoints: [
+      'packages/sdk-cli',
+      'packages/sdk-data',
+      'packages/sdk-ui',
+      'packages/sdk-ui-preact',
+      'packages/sdk-ui-angular',
+    ],
     hideGenerator: true,
   };
 } else {

@@ -42,7 +42,7 @@ export const useThemeContext = () => useContext(ThemeContext);
  * For comparison, indicator chart with default theme settings:
  *
  * <img src="media://indicator-chart-example-1.png" width="400px" />
- * @see {@link ThemeSettings}, {@link getDefaultThemeSettings}, {@link IndicatorChart}
+ * @see {@link ThemeSettings} and {@link IndicatorChart}
  * @param props - Theme provider props
  * @returns A Theme Provider component
  */

@@ -13,6 +13,20 @@ export type QueryDescription = {
   offset?: number;
 };
 
+/**
+ * Additional configuration for query execution.
+ */
+export type QueryExecutionConfig = {
+  /**
+   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+   */
+  onBeforeQuery?: (jaql: JaqlQueryPayload) => JaqlQueryPayload | Promise<JaqlQueryPayload>;
+};
+
+export type QueryExecutionConfigInternal = QueryExecutionConfig & {
+  shouldSkipHighlightsWithoutAttributes: boolean;
+};
+
 export type QueryOptions = {
   // notice datasource (in lower case) is expected by JAQL API
   datasource: string;

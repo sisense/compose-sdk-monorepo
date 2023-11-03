@@ -8,7 +8,7 @@ title: ThemeProviderProps
   `theme`: [`ThemeOid`](type-alias.ThemeOid.md) \| [`ThemeSettings`](../interfaces/interface.ThemeSettings.md);
  } \>
 
-Props for [ThemeProvider](../functions/function.ThemeProvider.md) component.
+Configurations for Theme.
 
 Two options are supported:
 

@@ -11,6 +11,9 @@ indexTopics:
     description: Visit the Compose SDK GitHub Monorepo
     link: https://github.com/sisense/compose-sdk-monorepo
     external: true
+  - title: Troubleshooting
+    description: Find solutions to common issues
+    link: ./troubleshooting
   # - title: Online Demo
   #   description: Check out a quick demo built with Compose SDK
   #   link: https://github.com/sisense/compose-sdk-monorepo

@@ -84,7 +84,7 @@ CategoryStyle.dateFormat
 
 Date granularity that works with continuous timeline.
 
-Values from [DateLevels](../../sdk-data/variables/variable.DateLevels.md).
+Values from [@sisense/sdk-data!DateLevels](../../sdk-data/variables/variable.DateLevels.md).
 
 #### Inherited from
 

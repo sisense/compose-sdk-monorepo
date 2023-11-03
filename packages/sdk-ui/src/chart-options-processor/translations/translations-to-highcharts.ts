@@ -52,6 +52,8 @@ export type SeriesPointStructure = {
     number1?: number;
     string1?: string;
     level?: number;
+    maskedBreakByPoint?: string;
+    maskedBreakByColor?: string;
     [k: string]: unknown;
   };
   value?: number | null;

@@ -22,6 +22,7 @@ export function getChartType(widgetType: WidgetType) {
     [WidgetType.PieChart]: 'pie',
     [WidgetType.FunnelChart]: 'funnel',
     [WidgetType.TreemapChart]: 'treemap',
+    [WidgetType.SunburstChart]: 'sunburst',
     [WidgetType.ScatterChart]: 'scatter',
     [WidgetType.IndicatorChart]: 'indicator',
   };
@@ -54,6 +55,7 @@ export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | un
     'indicator/numeric': 'indicator/numeric',
     'indicator/gauge': 'indicator/gauge',
     treemap: 'treemap',
+    sunburst: 'sunburst',
   };
   return widgetSubtypeToChartSubtype[widgetSubtype];
 }
@@ -70,6 +72,7 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
     WidgetType.PieChart,
     WidgetType.FunnelChart,
     WidgetType.TreemapChart,
+    WidgetType.SunburstChart,
     WidgetType.ScatterChart,
     WidgetType.IndicatorChart,
     WidgetType.Table,

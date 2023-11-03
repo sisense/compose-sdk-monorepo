@@ -20,7 +20,30 @@ import {
 } from './components';
 
 /**
- * SDK UI Module
+ * SDK UI Module, which is a container for components.
+ *
+ * @example
+ * Example of importing `SdkUiModule` and injecting {@link SisenseContextConfig} into your application:
+ *
+ * ```ts
+ * export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
+ *   url="<instance url>" // replace with the URL of your Sisense instance
+ *   token="<api token>" // replace with the API token of your user account
+ *   defaultDataSource: DM.DataSource,
+ * };
+ *
+ * @NgModule({
+ *   imports: [
+ *     BrowserModule,
+ *     SdkUiModule,
+ *   ],
+ *   declarations: [AppComponent],
+ *   providers: [
+ *     { provide: SISENSE_CONTEXT_CONFIG_TOKEN, useValue: SISENSE_CONTEXT_CONFIG },
+ *   ],
+ *   bootstrap: [AppComponent],
+ * })
+ * ```
  */
 @NgModule({
   declarations: [

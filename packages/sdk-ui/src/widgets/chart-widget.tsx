@@ -3,18 +3,22 @@
 /* eslint-disable complexity */
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable max-lines */
-import React, { useCallback, useMemo, useState, type FunctionComponent } from 'react';
+import { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../chart';
-import { DataPoint, MenuPosition } from '../types';
+import { DataPoint, CartesianChartDataOptions, ScatterDataPoint, DataPoints } from '../types';
 import { ChartWidgetProps } from '../props';
-import { ContextMenu } from './common/context-menu';
-import { useWidgetDrilldown } from './common/use-widget-drilldown';
 import { WidgetHeader } from './common/widget-header';
 import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
 import { asSisenseComponent } from '../decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
+import {
+  HighchartsOptions,
+  HighchartsOptionsInternal,
+} from '../chart-options-processor/chart-options-service';
+import { isCartesian } from '../chart-options-processor/translations/types';
+import { ChartWidgetDeprecated } from './chart-widget-deprecated';
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support advanced BI
@@ -23,7 +27,6 @@ import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-cont
  * @example
  * Example of using the `ChartWidget` component to
  * plot a bar chart of the `Sample ECommerce` data source hosted in a Sisense instance.
- * Drill-down capability is enabled.
  * ```tsx
  * <ChartWidget
  *   dataSource={DM.DataSource}
@@ -33,88 +36,188 @@ import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-cont
  *     value: [measures.sum(DM.Commerce.Revenue)],
  *     breakBy: [],
  *   }}
- *   drilldownOptions={{
- *     drilldownDimensions: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
- *   }}
  * />
  * ```
  *
  * <img src="media://chart-widget-with-drilldown-example-1.png" width="800px" />
  * @param props - ChartWidget properties
- * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType}
+ * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType | chartType}
  */
 export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseComponent({
   componentName: 'ChartWidget',
 })((props) => {
-  const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
+  const { chartType, drilldownOptions, highlightSelectionDisabled = false } = props;
 
-  const [refreshCounter, setRefreshCounter] = useState(0);
-
-  // drilldown is not supported for scatter charts
-  if (props.chartType !== 'scatter') {
-    props = useWidgetDrilldown(props);
+  // TODO: remove this once drilldownOptions are removed from ChartWidgetProps
+  if (drilldownOptions) {
+    console.warn(
+      'drilldownOptions in ChartWidget are deprecated, please use DrilldownWidget instead',
+    );
+    return <ChartWidgetDeprecated {...props} />;
   }
 
+  const [refreshCounter, setRefreshCounter] = useState(0);
+  const [selectedDataPoints, setSelectedDataPoints] = useState<DataPoints>([]);
+
+  const { themeSettings } = useThemeContext();
+
+  const isCartesianChart = useMemo(() => isCartesian(chartType), [chartType]);
+  const isScatterChart = useMemo(() => chartType === 'scatter', [chartType]);
+  const isDrilldownEnabled = useMemo(() => !!drilldownOptions, [drilldownOptions]);
+
+  const isSelectionAllowed = useMemo(
+    () =>
+      !highlightSelectionDisabled &&
+      !isDrilldownEnabled &&
+      ((isCartesianChart &&
+        (props.dataOptions as CartesianChartDataOptions).category?.length === 1) ||
+        isScatterChart),
+    [
+      isDrilldownEnabled,
+      props.dataOptions,
+      isCartesianChart,
+      isScatterChart,
+      highlightSelectionDisabled,
+    ],
+  );
+
   const {
-    onDataPointContextMenu,
-    onDataPointsSelected,
-    onContextMenuClose,
     dataSource,
     topSlot,
     bottomSlot,
-    contextMenuItems,
     title,
     description,
     widgetStyleOptions,
     styleOptions,
+    dataOptions,
+    onDataPointsSelected: originalOnDataPointsSelected,
+    onDataPointClick: originalOnDataPointClick,
+    onBeforeRender: originalOnBeforeRender,
     ...restProps
   } = props;
 
-  const { themeSettings } = useThemeContext();
+  const applyPointSelections = useMemo(() => {
+    if (selectedDataPoints.length === 0) {
+      return (options: HighchartsOptionsInternal) =>
+        ({
+          ...options,
+          series: options.series.map((s) => ({
+            ...s,
+            data: s.data.map((d) => ({ ...d, selected: false })),
+          })),
+        } as HighchartsOptions);
+    }
+    if (isScatterChart) {
+      return (options: HighchartsOptionsInternal) =>
+        ({
+          ...options,
+          series: options.series.map((s) => ({
+            ...s,
+            data: s.data.map((d) => {
+              return {
+                ...d,
+                selected: !(selectedDataPoints as ScatterDataPoint[]).some(
+                  (point) =>
+                    point.x === d.x &&
+                    point.y === d.y &&
+                    point.size === d.z &&
+                    point.breakByPoint === d.custom?.maskedBreakByPoint &&
+                    point.breakByColor === d.custom?.maskedBreakByColor,
+                ),
+              };
+            }),
+          })),
+        } as HighchartsOptions);
+    } else {
+      const categoryValueMap = (selectedDataPoints as DataPoint[]).reduce(
+        (accu, { categoryValue }) => {
+          if (categoryValue) {
+            accu[`${categoryValue}`] = true;
+          }
+          return accu;
+        },
+        {},
+      );
 
-  const closeContextMenu = useCallback(() => {
-    setContextMenuPos(null);
-    onContextMenuClose?.();
-  }, [setContextMenuPos, onContextMenuClose]);
+      return (options: HighchartsOptionsInternal) => ({
+        ...options,
+        series: options.series.map((s) => ({
+          ...s,
+          data: s.data.map((d) =>
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            categoryValueMap[d.custom?.xValue?.[0]] ? d : { ...d, selected: true },
+          ),
+        })),
+      });
+    }
+  }, [selectedDataPoints, isScatterChart]);
 
-  const defaultSize = getWidgetDefaultSize(props.chartType, {
+  const setOnClickOutside = useMemo(
+    () => (options: HighchartsOptions) =>
+      ({
+        ...options,
+        chart: {
+          ...options.chart,
+          events: {
+            ...options.chart?.events,
+            click: () => {
+              setSelectedDataPoints([]);
+            },
+          },
+        },
+      } as HighchartsOptions),
+    [],
+  );
+
+  const onBeforeRender = useCallback(
+    (options: HighchartsOptions) => {
+      if (isSelectionAllowed) {
+        options = applyPointSelections(options as HighchartsOptionsInternal) as HighchartsOptions;
+        options = setOnClickOutside(options);
+      }
+      options = originalOnBeforeRender?.(options) ?? options;
+      return options;
+    },
+    [originalOnBeforeRender, applyPointSelections, setOnClickOutside, isSelectionAllowed],
+  );
+
+  const onDataPointsSelected = useCallback(
+    (dataPoints: DataPoints, event: MouseEvent): void => {
+      if (isSelectionAllowed) {
+        setSelectedDataPoints(dataPoints);
+      }
+      originalOnDataPointsSelected?.(dataPoints, event);
+    },
+    [isSelectionAllowed, originalOnDataPointsSelected],
+  );
+
+  const onDataPointClick = useCallback(
+    (dataPoint: DataPoint | ScatterDataPoint, event: PointerEvent) => {
+      if (isSelectionAllowed) {
+        setSelectedDataPoints([dataPoint] as DataPoints);
+      }
+      originalOnDataPointClick?.(dataPoint, event);
+    },
+    [isSelectionAllowed, originalOnDataPointClick],
+  );
+
+  const defaultSize = getWidgetDefaultSize(chartType, {
     hasHeader: !widgetStyleOptions?.header?.hidden,
   });
   const { width, height, ...styleOptionsWithoutSizing } = styleOptions || {};
 
   const chartProps = {
     ...restProps,
+    chartType,
+    dataOptions,
     dataSet: dataSource,
     styleOptions: styleOptionsWithoutSizing,
-    onDataPointContextMenu: useMemo(
-      () =>
-        contextMenuItems
-          ? (point: DataPoint, nativeEvent: PointerEvent) => {
-              if (onDataPointContextMenu?.(point, nativeEvent)) {
-                return;
-              }
-              const { clientX: left, clientY: top } = nativeEvent;
-              setContextMenuPos({ left, top });
-            }
-          : onDataPointContextMenu,
-      [contextMenuItems, onDataPointContextMenu, setContextMenuPos],
-    ),
-    onDataPointsSelected: useMemo(
-      () =>
-        contextMenuItems
-          ? (points: DataPoint[], nativeEvent: MouseEvent) => {
-              if (onDataPointsSelected?.(points, nativeEvent)) {
-                return;
-              }
-              const { clientX: left, clientY: top } = nativeEvent;
-              setContextMenuPos({ left, top });
-            }
-          : onDataPointsSelected,
-      [contextMenuItems, onDataPointsSelected, setContextMenuPos],
-    ),
+    onBeforeRender,
+    onDataPointClick,
+    onDataPointsSelected,
   };
 
-  if (!props.chartType || !props.dataOptions) {
+  if (!chartType || !dataOptions) {
     return null;
   }
 
@@ -156,12 +259,6 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
               />
             )}
             {topSlot}
-
-            <ContextMenu
-              position={contextMenuPos}
-              itemSections={contextMenuItems}
-              closeContextMenu={closeContextMenu}
-            />
             <ThemeProvider
               theme={{
                 chart: {

@@ -1,0 +1,994 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sunburst Chart > render a sunburst with single category 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "sunburst",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "legend": {
+    "align": "center",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontWeight": "normal",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+    "sunburst": {
+      "events": {
+        "legendItemClick": [Function],
+      },
+    },
+  },
+  "series": [
+    {
+      "borderWidth": 0,
+      "data": [
+        {
+          "custom": {
+            "level": 0,
+            "levelsCount": 1,
+          },
+          "id": "SUNBURST_ROOT_PARENT_ID",
+          "name": "Quantity",
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2009",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 8103,
+        },
+        {
+          "color": "#00b9cf",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2010",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 6814,
+        },
+        {
+          "color": "#00a5b8",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2011",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 3056,
+        },
+        {
+          "color": "#0090a1",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2012",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 8423,
+        },
+        {
+          "color": "#007c8a",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2013",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 2045,
+        },
+        {
+          "color": "#006773",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2014",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 3010,
+        },
+        {
+          "color": "#00525c",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2015",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 5447,
+        },
+        {
+          "color": "#003e45",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2016",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 4242,
+        },
+        {
+          "color": "#00292e",
+          "custom": {
+            "level": 1,
+            "levelsCount": 1,
+          },
+          "name": "2018",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 936,
+        },
+      ],
+      "dataLabels": {
+        "style": {
+          "textOutline": "none",
+        },
+      },
+      "levels": [
+        {
+          "color": "white",
+          "dataLabels": {
+            "className": "!csdk-overflow-visible",
+            "enabled": true,
+            "formatter": [Function],
+            "useHTML": true,
+          },
+          "level": 1,
+          "levelSize": {
+            "unit": "pixels",
+            "value": 60,
+          },
+        },
+        {
+          "dataLabels": {
+            "enabled": false,
+            "formatter": [Function],
+          },
+          "level": 2,
+        },
+      ],
+      "name": "Root",
+      "showInLegend": false,
+      "type": "sunburst",
+    },
+    {
+      "color": "#00cee6",
+      "data": [],
+      "name": "Years",
+      "showInLegend": true,
+      "states": {
+        "hover": {
+          "enabled": false,
+        },
+      },
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "outside": true,
+    "padding": 1,
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": undefined,
+}
+`;
+
+exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "sunburst",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "legend": {
+    "align": "center",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontWeight": "normal",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+    "sunburst": {
+      "events": {
+        "legendItemClick": [Function],
+      },
+    },
+  },
+  "series": [
+    {
+      "borderWidth": 0,
+      "data": [
+        {
+          "custom": {
+            "level": 0,
+            "levelsCount": 2,
+          },
+          "id": "SUNBURST_ROOT_PARENT_ID",
+          "name": "Quantity",
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2009-01-01T00:00:00.000Z",
+          "name": "2009",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00b9cf",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2010-01-01T00:00:00.000Z",
+          "name": "2010",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00a5b8",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2011-01-01T00:00:00.000Z",
+          "name": "2011",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#0090a1",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2012-01-01T00:00:00.000Z",
+          "name": "2012",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#007c8a",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2013-01-01T00:00:00.000Z",
+          "name": "2013",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#006773",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2014-01-01T00:00:00.000Z",
+          "name": "2014",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00525c",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2015-01-01T00:00:00.000Z",
+          "name": "2015",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#003e45",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2016-01-01T00:00:00.000Z",
+          "name": "2016",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00292e",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2018-01-01T00:00:00.000Z",
+          "name": "2018",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2009-01-01T00:00:00.000Z",
+          "value": 8103,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2010-01-01T00:00:00.000Z",
+          "value": 6814,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2011-01-01T00:00:00.000Z",
+          "value": 3056,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2012-01-01T00:00:00.000Z",
+          "value": 8423,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2013-01-01T00:00:00.000Z",
+          "value": 2045,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2014-01-01T00:00:00.000Z",
+          "value": 3010,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2015-01-01T00:00:00.000Z",
+          "value": 5447,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2016-01-01T00:00:00.000Z",
+          "value": 4242,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2018-01-01T00:00:00.000Z",
+          "value": 936,
+        },
+      ],
+      "dataLabels": {
+        "style": {
+          "textOutline": "none",
+        },
+      },
+      "levels": [
+        {
+          "color": "white",
+          "dataLabels": {
+            "className": "!csdk-overflow-visible",
+            "enabled": true,
+            "formatter": [Function],
+            "useHTML": true,
+          },
+          "level": 1,
+          "levelSize": {
+            "unit": "pixels",
+            "value": 60,
+          },
+        },
+        {
+          "dataLabels": {
+            "enabled": false,
+            "formatter": [Function],
+          },
+          "level": 2,
+        },
+        {
+          "dataLabels": {
+            "enabled": false,
+            "formatter": [Function],
+          },
+          "level": 3,
+        },
+      ],
+      "name": "Root",
+      "showInLegend": false,
+      "type": "sunburst",
+    },
+    {
+      "color": "#00cee6",
+      "data": [],
+      "name": "Years",
+      "showInLegend": true,
+      "states": {
+        "hover": {
+          "enabled": false,
+        },
+      },
+    },
+    {
+      "color": "#9b9bd7",
+      "data": [],
+      "name": "Group",
+      "showInLegend": true,
+      "states": {
+        "hover": {
+          "enabled": false,
+        },
+      },
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "outside": true,
+    "padding": 1,
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": undefined,
+}
+`;
+
+exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] = `
+{
+  "accessibility": {
+    "enabled": false,
+  },
+  "boost": {
+    "useGPUTranslations": true,
+    "usePreAllocated": true,
+  },
+  "chart": {
+    "alignTicks": false,
+    "animation": {
+      "duration": 300,
+    },
+    "backgroundColor": "#FFFFFF",
+    "events": {},
+    "polar": false,
+    "spacing": [
+      20,
+      20,
+      20,
+      20,
+    ],
+    "type": "sunburst",
+  },
+  "drilldown": {
+    "activeDataLabelStyle": {
+      "color": "#000000",
+    },
+    "breadcrumbs": {
+      "buttonTheme": {
+        "fill": "#ffcb05",
+        "states": {
+          "hover": {
+            "fill": "#f2b900",
+            "stroke": "#f2b900",
+          },
+        },
+        "stroke": "#ffcb05",
+        "style": {
+          "color": "#3a4356",
+        },
+      },
+    },
+  },
+  "legend": {
+    "align": "center",
+    "enabled": true,
+    "itemStyle": {
+      "color": "#000000",
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontWeight": "normal",
+    },
+    "layout": "horizontal",
+    "symbolRadius": 0,
+    "verticalAlign": "bottom",
+  },
+  "plotOptions": {
+    "pie": {
+      "allowPointSelect": false,
+      "dataLabels": {
+        "pieMinimumFontSizeToTextLabel": 8,
+        "showDecimals": false,
+        "showPercentLabels": true,
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "showInLegend": true,
+    },
+    "series": {
+      "animation": {
+        "duration": 600,
+      },
+      "dataLabels": {
+        "style": {
+          "color": "#000000",
+          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+        },
+      },
+      "point": {
+        "events": {},
+      },
+    },
+    "sunburst": {
+      "events": {
+        "legendItemClick": [Function],
+      },
+    },
+  },
+  "series": [
+    {
+      "borderWidth": 0,
+      "data": [
+        {
+          "custom": {
+            "level": 0,
+            "levelsCount": 2,
+          },
+          "id": "SUNBURST_ROOT_PARENT_ID",
+          "name": "Quantity",
+        },
+        {
+          "color": "#00cee6",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2009-01-01T00:00:00.000Z",
+          "name": "2009",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00b9cf",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2010-01-01T00:00:00.000Z",
+          "name": "2010",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00a5b8",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2011-01-01T00:00:00.000Z",
+          "name": "2011",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#0090a1",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2012-01-01T00:00:00.000Z",
+          "name": "2012",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#007c8a",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2013-01-01T00:00:00.000Z",
+          "name": "2013",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#006773",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2014-01-01T00:00:00.000Z",
+          "name": "2014",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00525c",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2015-01-01T00:00:00.000Z",
+          "name": "2015",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#003e45",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2016-01-01T00:00:00.000Z",
+          "name": "2016",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#00292e",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+          },
+          "id": "2018-01-01T00:00:00.000Z",
+          "name": "2018",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2009-01-01T00:00:00.000Z",
+          "value": 8103,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2010-01-01T00:00:00.000Z",
+          "value": 6814,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2011-01-01T00:00:00.000Z",
+          "value": 3056,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2012-01-01T00:00:00.000Z",
+          "value": 8423,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2013-01-01T00:00:00.000Z",
+          "value": 2045,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2014-01-01T00:00:00.000Z",
+          "value": 3010,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "A",
+          "parent": "2015-01-01T00:00:00.000Z",
+          "value": 5447,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2016-01-01T00:00:00.000Z",
+          "value": 4242,
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 2,
+          },
+          "name": "B",
+          "parent": "2018-01-01T00:00:00.000Z",
+          "value": 936,
+        },
+      ],
+      "dataLabels": {
+        "style": {
+          "textOutline": "none",
+        },
+      },
+      "levels": [
+        {
+          "color": "white",
+          "dataLabels": {
+            "className": "!csdk-overflow-visible",
+            "enabled": true,
+            "formatter": [Function],
+            "useHTML": true,
+          },
+          "level": 1,
+          "levelSize": {
+            "unit": "pixels",
+            "value": 60,
+          },
+        },
+        {
+          "dataLabels": {
+            "enabled": false,
+            "formatter": [Function],
+          },
+          "level": 2,
+        },
+        {
+          "dataLabels": {
+            "enabled": false,
+            "formatter": [Function],
+          },
+          "level": 3,
+        },
+      ],
+      "name": "Root",
+      "showInLegend": false,
+      "type": "sunburst",
+    },
+    {
+      "color": "#00cee6",
+      "data": [],
+      "name": "Years",
+      "showInLegend": true,
+      "states": {
+        "hover": {
+          "enabled": false,
+        },
+      },
+    },
+    {
+      "color": "#9b9bd7",
+      "data": [],
+      "name": "Group",
+      "showInLegend": true,
+      "states": {
+        "hover": {
+          "enabled": false,
+        },
+      },
+    },
+  ],
+  "title": {
+    "text": null,
+  },
+  "tooltip": {
+    "animation": false,
+    "backgroundColor": "#FFFFFF",
+    "borderColor": "#CCCCCC",
+    "borderRadius": 10,
+    "borderWidth": 1,
+    "formatter": [Function],
+    "outside": true,
+    "padding": 1,
+    "style": {
+      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+    },
+    "useHTML": true,
+  },
+  "xAxis": undefined,
+}
+`;

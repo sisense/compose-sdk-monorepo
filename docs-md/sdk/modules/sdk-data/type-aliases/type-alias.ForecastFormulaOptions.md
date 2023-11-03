@@ -19,7 +19,9 @@ forecasted series according to the uncertainty level. The valid range is (0.8 <=
 
 #### Default Value
 
+```ts
 0.8
+```
 
 ***
 
@@ -42,7 +44,9 @@ The accepted value range is between 1-1,000
 
 #### Default Value
 
+```ts
 3
+```
 
 ***
 
@@ -65,7 +69,9 @@ fits the best combination of models.
 
 #### Default Value
 
+```ts
 "auto"
+```
 
 ***
 
@@ -78,7 +84,9 @@ Otherwise, the predicted result is left as a float
 
 #### Default Value
 
+```ts
 false
+```
 
 ***
 

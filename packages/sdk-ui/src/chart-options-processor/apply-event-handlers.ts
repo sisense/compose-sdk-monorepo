@@ -137,14 +137,14 @@ const getSelections = (
 
   const yPoints = yAxis.axis.series
     .flatMap((series) => series.points)
-    .filter(({ y }) => y >= yAxis.min && y <= xAxis.max);
+    .filter(({ y }) => y >= yAxis.min && y <= yAxis.max);
 
   return xPoints.filter((point) => yPoints.includes(point)).map(getDataPoint) as DataPoints;
 };
 
 const getCartesianDataPoint = (point: HighchartsPoint): DataPoint => ({
-  value: point.custom.rawValue,
-  categoryValue: point.custom.xValue?.[0],
+  value: point.custom?.rawValue,
+  categoryValue: point.custom?.xValue?.[0],
   seriesValue: point.series.options.custom?.rawValue?.[0],
   categoryDisplayValue: point.category,
 });

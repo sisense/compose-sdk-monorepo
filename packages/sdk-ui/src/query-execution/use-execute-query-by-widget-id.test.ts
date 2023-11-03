@@ -377,6 +377,31 @@ describe('useExecuteQueryByWidgetId', () => {
     expect(result.current.isError).toBe(true);
     expect(result.current.error?.message).toMatch(/Sisense Context .* not found/i);
   });
+
+  it('should pass "onBeforeQuery" callback to \'executeQuery\' executionConfig', async () => {
+    const onBeforeQuery = vi.fn();
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+    getWidgetMock.mockResolvedValue(mockWidget);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        onBeforeQuery,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(executeQueryMock).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.objectContaining({
+          onBeforeQuery,
+        }),
+      );
+    });
+  });
 });
 
 describe('isParamsChanged', () => {

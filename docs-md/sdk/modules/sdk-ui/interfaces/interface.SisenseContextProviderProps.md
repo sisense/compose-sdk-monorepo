@@ -4,7 +4,7 @@ title: SisenseContextProviderProps
 
 # Interface SisenseContextProviderProps
 
-Props for [SisenseContextProvider](../functions/function.SisenseContextProvider.md) component
+Configurations for Sisense Context
 
 ## Properties
 

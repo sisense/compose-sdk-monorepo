@@ -17,8 +17,12 @@ cp -f ${docs_path}/../index-modules.md ${docs_path}/modules/index.md
 
 # Copy media files. This is to work around a bug in typedoc-plugin-markdown 4.x
 # that media files are not copied to the output directory.
-
 cp -Rf ./media/* ${docs_path}/img/
+
+# Adjust the links in the markdown files of sdk-ui-angular to point to objects in sdk-ui, instead of sdk-ui-preact
+find ${docs_path}/modules/sdk-ui-angular \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|sdk-ui-preact|sdk-ui|g'
+find ${docs_path}/modules/sdk-ui-angular \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|-1.md|.md|g'
+rm -rf ${docs_path}/modules/sdk-ui-preact
 
 # Adjust the media paths in the markdown files
 find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|media://|../../../img/|g'

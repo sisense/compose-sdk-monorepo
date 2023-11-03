@@ -8,7 +8,7 @@ Props shared across [Chart](../functions/function.Chart.md) components.
 
 ## Extends
 
-- `BaseChartProps`.`ChartEventProps`
+- `BaseChartProps`.`BaseChartEventProps`
 
 ## Properties
 
@@ -18,7 +18,7 @@ Props shared across [Chart](../functions/function.Chart.md) components.
 
 > **dataSet**?: `string` \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
-Data set for this chart, which supports two options:
+Data set for this component, which supports two options:
 
 (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
 the chart will have an internal [ExecuteQuery](../functions/function.ExecuteQuery.md) connect to the data source
@@ -100,7 +100,7 @@ This callback is not yet supported for [IndicatorChart](../functions/function.In
 
 ##### Inherited from
 
-ChartEventProps.onBeforeRender
+BaseChartEventProps.onBeforeRender
 
 ***
 
@@ -112,7 +112,7 @@ Click handler callback for a data point
 
 ##### Inherited from
 
-ChartEventProps.onDataPointClick
+BaseChartEventProps.onDataPointClick
 
 ***
 
@@ -124,7 +124,7 @@ Context menu handler callback for a data point
 
 ##### Inherited from
 
-ChartEventProps.onDataPointContextMenu
+BaseChartEventProps.onDataPointContextMenu
 
 ***
 
@@ -136,4 +136,4 @@ Handler callback for selection of multiple data points
 
 ##### Inherited from
 
-ChartEventProps.onDataPointsSelected
+BaseChartEventProps.onDataPointsSelected

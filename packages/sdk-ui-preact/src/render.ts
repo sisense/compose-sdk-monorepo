@@ -7,6 +7,7 @@ import {
   type ComponentChild,
 } from 'preact';
 
+/** @internal */
 export const preactRenderComponent = <P>(
   rootElement: HTMLDivElement,
   component: FunctionComponent<P>,
@@ -15,6 +16,7 @@ export const preactRenderComponent = <P>(
   render(h(component, componentProps as P & h.JSX.HTMLAttributes), rootElement);
 };
 
+/** @internal */
 export const createElement = <P>(
   component: FunctionComponent<P>,
   props: P & h.JSX.HTMLAttributes,

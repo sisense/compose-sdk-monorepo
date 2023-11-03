@@ -2,7 +2,11 @@
 /* eslint-disable max-params */
 /* eslint-disable max-lines */
 import cloneDeep from 'lodash/cloneDeep';
-import type { Options, DrilldownOptions } from '@sisense/sisense-charts';
+import type {
+  Options,
+  DrilldownOptions,
+  SeriesLegendItemClickCallbackFunction,
+} from '@sisense/sisense-charts';
 import { ChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
 import { LegendSettings } from './translations/legend-section';
@@ -124,9 +128,12 @@ type ChartPlotOptions = {
   pointPadding?: number;
   pointPlacement?: null;
   animation?: boolean;
-  shadow: boolean;
+  shadow?: boolean;
   marker?: MarkerSettings;
   borderWidth?: number;
+  events?: {
+    legendItemClick?: SeriesLegendItemClickCallbackFunction;
+  };
 };
 
 export type Stacking = 'normal' | 'percent';
@@ -164,6 +171,7 @@ export type PlotOptions = {
   pie?: PieOptions;
   funnel?: FunnelOptions;
   bubble?: ScatterBubbleOptions;
+  sunburst?: ChartPlotOptions;
 };
 
 /**

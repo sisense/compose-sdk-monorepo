@@ -1,3 +1,9 @@
+/** @vitest-environment jsdom */
+
+// explicit import as workaround for 'Vitest' plugin in VSCode
+// https://github.com/IanVS/vitest-fetch-mock/issues/4
+import '../__test-helpers__/setup-vitest';
+
 import { render, waitFor } from '@testing-library/react';
 import {
   mockUrl,
@@ -69,5 +75,29 @@ describe('ExecuteQueryByWidgetId', () => {
     expect(data.rows.length).toBe(12);
     expect(query.dimensions?.length).toBe(2);
     expect(query.measures?.length).toBe(1);
+  });
+
+  it('should execute "onBeforeQuery" callback before query execution', async () => {
+    const onBeforeQueryMock = vi.fn<[ExecuteQueryParams]>();
+
+    const TEXT_TO_DIPLAY = 'Query result ready';
+
+    const { getByText } = render(
+      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+        <ExecuteQueryByWidgetId
+          widgetOid={mockWidgetId}
+          dashboardOid={mockDashboardId}
+          onBeforeQuery={onBeforeQueryMock}
+        >
+          {() => <div>{TEXT_TO_DIPLAY}</div>}
+        </ExecuteQueryByWidgetId>
+      </SisenseContextProvider>,
+    );
+
+    await waitFor(() => {
+      expect(getByText(TEXT_TO_DIPLAY)).toBeInTheDocument();
+    });
+
+    expect(onBeforeQueryMock).toHaveBeenCalledOnce();
   });
 });

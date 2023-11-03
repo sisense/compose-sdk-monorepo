@@ -32,6 +32,7 @@ import { template, rootId } from '../component-wrapper-helpers/template';
   template,
 })
 export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
+  /** @internal */
   @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
@@ -41,15 +42,30 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   @Input()
   dataSource: ChartWidgetProps['dataSource'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.dataOptions}
+   *
+   * @category Chart
+   */
   @Input()
   dataOptions!: ChartWidgetProps['dataOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: ChartWidgetProps['filters'];
 
   @Input()
   highlights: ChartWidgetProps['highlights'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   *
+   * @category Chart
+   */
   @Input()
   styleOptions: ChartWidgetProps['styleOptions'];
 
@@ -65,19 +81,39 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   @Input()
   description: ChartWidgetProps['description'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+   *
+   * @category Callbacks
+   */
   @Input()
   beforeRender: ChartWidgetProps['onBeforeRender'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointClick = new EventEmitter<
     ArgumentsAsObject<ChartWidgetProps['onDataPointClick'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointContextMenu = new EventEmitter<
     ArgumentsAsObject<ChartWidgetProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointsSelect = new EventEmitter<
     ArgumentsAsObject<ChartWidgetProps['onDataPointsSelected'], ['points', 'nativeEvent']>
@@ -98,10 +134,12 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
     );
   }
 
+  /** @internal */
   ngAfterViewInit() {
     this.componentAdapter.render(this.preactRef.nativeElement);
   }
 
+  /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
       this.componentAdapter.render(this.preactRef.nativeElement);
@@ -135,6 +173,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
     return createElement(ChartWidget, props);
   }
 
+  /** @internal */
   ngOnDestroy() {
     this.componentAdapter.destroy();
   }

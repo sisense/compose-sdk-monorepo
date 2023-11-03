@@ -17,6 +17,7 @@ import {
   ScatterStyleOptions,
   BaseStyleOptions,
   TreemapStyleOptions,
+  SunburstStyleOptions,
 } from '../../types';
 import { Axis } from '../translations/axis-section';
 import {
@@ -35,6 +36,7 @@ import {
   ScatterChartDesignOptions,
   AreaChartDesignOptions,
   TreemapChartDesignOptions,
+  SunburstChartDesignOptions,
 } from '../translations/design-options';
 import { LegendPosition } from '../translations/legend-section';
 import { Marker } from '../translations/marker-section';
@@ -49,7 +51,7 @@ import { StackType } from '../translations/translations-to-highcharts';
 import { ValueLabel } from '../translations/value-label-section';
 import { defaultScatterMarkerSize, ScatterMarkerSize } from '../translations/scatter-plot-options';
 
-const getLegend = (legend?: Legend): LegendPosition => {
+export const getLegend = (legend?: Legend): LegendPosition => {
   if (legend?.enabled) {
     return (legend.position || null) as LegendPosition;
   }
@@ -313,6 +315,12 @@ export const getTreemapChartDesignOptions = (
   styleOptions: TreemapStyleOptions,
 ): TreemapChartDesignOptions => {
   return styleOptions as TreemapChartDesignOptions;
+};
+
+export const getSunburstChartDesignOptions = (
+  styleOptions: SunburstStyleOptions,
+): SunburstChartDesignOptions => {
+  return styleOptions as SunburstChartDesignOptions;
 };
 
 const DefaultPolarType: PolarType = 'column';

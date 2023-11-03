@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Attribute, createAttribute, Filter, Measure, QueryResultData } from '@sisense/sdk-data';
+import {
+  Attribute,
+  createAttribute,
+  DimensionalAttribute,
+  Filter,
+  Measure,
+  QueryResultData,
+} from '@sisense/sdk-data';
 import {
   DatasourceFieldsTestDataset,
   getDatasourceFieldsTestDataset,
@@ -20,7 +27,7 @@ describe('DimensionalQueryClient', () => {
 
   beforeEach(() => {
     httpClientMock = {
-      post: vi.fn(),
+      post: vi.fn().mockResolvedValue({}),
     } as unknown as Mocked<HttpClient>;
     queryClient = new DimensionalQueryClient(httpClientMock);
   });
@@ -62,11 +69,25 @@ describe('DimensionalQueryClient', () => {
         }
       });
     });
+    it("should call 'onBeforeQuery' callback if it passed in config", async () => {
+      const onBeforeQuery = vi.fn();
+      const queryDescription: QueryDescription = {
+        dataSource: 'test',
+        attributes: [new DimensionalAttribute('AgeRange', '[Commerce.Age Range]', 'attribute')],
+        measures: [],
+        filters: [],
+        highlights: [],
+      };
+      const executionResult = queryClient.executeQuery(queryDescription, { onBeforeQuery });
+      expect(executionResult.resultPromise).toBeInstanceOf(Promise);
+      await executionResult.resultPromise;
+      expect(onBeforeQuery).toHaveBeenCalledOnce();
+    });
+
     it('should cancel the query execution', async () => {
       const queryDescription: QueryDescription = testDataset[0].queryInput;
       const executionResult = queryClient.executeQuery(queryDescription);
       expect(executionResult.resultPromise).toBeInstanceOf(Promise);
-      expect(httpClientMock.post).toHaveBeenCalled();
       const cancelingReason = 'BECAUSE I CAN!';
       executionResult.cancel(cancelingReason);
       await expect(executionResult.resultPromise).rejects.toThrow(new RegExp(cancelingReason));

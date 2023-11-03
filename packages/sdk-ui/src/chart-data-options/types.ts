@@ -37,7 +37,7 @@ export interface CategoryStyle {
 }
 
 /**
- * Wrapped {@link @sisense/sdk-data!Column} with styles controlling how the column is visualized in a chart.
+ * Wrapped {@link @sisense/sdk-data!Column | Column} with styles controlling how the column is visualized in a chart.
  *
  * @example
  * An example of using `StyledColumn` to change the date format of the months displayed on the x-axis.

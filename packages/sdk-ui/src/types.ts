@@ -447,6 +447,23 @@ export interface TreemapStyleOptions extends BaseStyleOptions {
   };
 }
 
+/** Configuration options that define functional style of the various elements of {@link SunburstChart} */
+export interface SunburstStyleOptions extends BaseStyleOptions {
+  /** Labels options object */
+  labels?: {
+    /** Array with single label options objects (order of items relative to dataOptions.category) */
+    category?: {
+      /** Define visibility of label */
+      enabled?: boolean;
+    }[];
+  };
+  /** Tooltip options object */
+  tooltip?: {
+    /** Define mode of data showing */
+    mode?: 'value' | 'contribution';
+  };
+}
+
 /**
  * Configuration options that define functional style of the various elements of chart.
  */
@@ -459,10 +476,13 @@ export type StyleOptions =
   | PolarStyleOptions
   | IndicatorStyleOptions
   | ScatterStyleOptions
-  | TreemapStyleOptions;
+  | TreemapStyleOptions
+  | SunburstStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = Record<string, string>;
+/** Mapping of each of the chart value series to colors. */
+export type ValueToColorMultiColumnsMap = Record<string, Record<string, string>>;
 
 /**
  * Chart type of one of the supported chart families

@@ -8,7 +8,7 @@ Props for the [DashboardWidget](../functions/function.DashboardWidget.md) compon
 
 ## Extends
 
-- `Omit`\< [`ChartWidgetProps`](interface.ChartWidgetProps.md), `"dataSource"` \| `"dataOptions"` \| `"chartType"` \| `"styleOptions"` \>.`ChartEventProps`
+- `Omit`\< [`ChartWidgetProps`](interface.ChartWidgetProps.md), `"dataSource"` \| `"dataOptions"` \| `"chartType"` \| `"styleOptions"` \>.`BaseChartEventProps`
 
 ## Properties
 
@@ -73,6 +73,22 @@ If not specified, it takes the existing value from the widget configuration.
 ##### Overrides
 
 Omit.description
+
+***
+
+#### highlightSelectionDisabled
+
+> **highlightSelectionDisabled**?: `boolean`
+
+Boolean flag whether selecting data points triggers highlight filter of the selected data
+
+Recommended to turn on when the ChartWidget is enhanced with data drilldown by [DrilldownWidget](../functions/function.DrilldownWidget.md)
+
+If not specified, the default value is `false`
+
+##### Inherited from
+
+Omit.highlightSelectionDisabled
 
 ***
 

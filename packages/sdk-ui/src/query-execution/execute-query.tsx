@@ -46,6 +46,7 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
     offset,
     children,
     onDataChanged,
+    onBeforeQuery,
   }) => {
     const { data, error } = useExecuteQuery({
       dataSource,
@@ -55,6 +56,7 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
       highlights,
       count,
       offset,
+      onBeforeQuery,
     });
 
     // TODO: discuss if we need API like 'onDataChanged' for this component as we providing 'useExecuteQuery' hook

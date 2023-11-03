@@ -90,80 +90,8 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
             "level": 1,
             "levelsCount": 3,
           },
-          "id": "2009",
-          "name": "2009-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2010",
-          "name": "2010-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2011",
-          "name": "2011-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2012",
-          "name": "2012-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2013",
-          "name": "2013-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2014",
-          "name": "2014-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2015",
-          "name": "2015-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2016",
-          "name": "2016-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2018",
-          "name": "2018-01-01T00:00:00.000Z",
+          "id": "2009-01-01T00:00:00.000Z",
+          "name": "2009",
           "parent": "",
         },
         {
@@ -172,59 +100,113 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2009_A",
+          "id": "2009-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2009-01-01T00:00:00.000Z",
         },
         {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2010-01-01T00:00:00.000Z",
+          "name": "2010",
+          "parent": "",
+        },
+        {
           "color": "#00cee6",
           "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2010_A",
+          "id": "2010-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2010-01-01T00:00:00.000Z",
         },
         {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2011-01-01T00:00:00.000Z",
+          "name": "2011",
+          "parent": "",
+        },
+        {
           "color": "#9b9bd7",
           "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2011_B",
+          "id": "2011-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2011-01-01T00:00:00.000Z",
         },
         {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2012-01-01T00:00:00.000Z",
+          "name": "2012",
+          "parent": "",
+        },
+        {
           "color": "#9b9bd7",
           "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2012_B",
+          "id": "2012-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2012-01-01T00:00:00.000Z",
         },
         {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2013-01-01T00:00:00.000Z",
+          "name": "2013",
+          "parent": "",
+        },
+        {
           "color": "#00cee6",
           "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2013_A",
+          "id": "2013-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2013-01-01T00:00:00.000Z",
         },
         {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2014-01-01T00:00:00.000Z",
+          "name": "2014",
+          "parent": "",
+        },
+        {
           "color": "#9b9bd7",
           "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2014_B",
+          "id": "2014-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2014-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2015-01-01T00:00:00.000Z",
+          "name": "2015",
+          "parent": "",
         },
         {
           "color": "#00cee6",
@@ -232,19 +214,18 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2015_A",
+          "id": "2015-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2015-01-01T00:00:00.000Z",
         },
         {
-          "color": "#9b9bd7",
           "custom": {
-            "level": 2,
+            "level": 1,
             "levelsCount": 3,
           },
-          "id": "2016_B",
-          "name": "B",
-          "parent": "2016-01-01T00:00:00.000Z",
+          "id": "2016-01-01T00:00:00.000Z",
+          "name": "2016",
+          "parent": "",
         },
         {
           "color": "#9b9bd7",
@@ -252,7 +233,26 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2018_B",
+          "id": "2016-01-01T00:00:00.000Z_B",
+          "name": "B",
+          "parent": "2016-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2018-01-01T00:00:00.000Z",
+          "name": "2018",
+          "parent": "",
+        },
+        {
+          "color": "#9b9bd7",
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2018-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2018-01-01T00:00:00.000Z",
         },
@@ -802,80 +802,8 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
             "level": 1,
             "levelsCount": 3,
           },
-          "id": "2009",
-          "name": "2009-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2010",
-          "name": "2010-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2011",
-          "name": "2011-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2012",
-          "name": "2012-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2013",
-          "name": "2013-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2014",
-          "name": "2014-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2015",
-          "name": "2015-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2016",
-          "name": "2016-01-01T00:00:00.000Z",
-          "parent": "",
-        },
-        {
-          "custom": {
-            "level": 1,
-            "levelsCount": 3,
-          },
-          "id": "2018",
-          "name": "2018-01-01T00:00:00.000Z",
+          "id": "2009-01-01T00:00:00.000Z",
+          "name": "2009",
           "parent": "",
         },
         {
@@ -883,79 +811,151 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2009_A",
+          "id": "2009-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2009-01-01T00:00:00.000Z",
         },
         {
           "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2010-01-01T00:00:00.000Z",
+          "name": "2010",
+          "parent": "",
+        },
+        {
+          "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2010_A",
+          "id": "2010-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2010-01-01T00:00:00.000Z",
         },
         {
           "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2011-01-01T00:00:00.000Z",
+          "name": "2011",
+          "parent": "",
+        },
+        {
+          "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2011_B",
+          "id": "2011-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2011-01-01T00:00:00.000Z",
         },
         {
           "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2012-01-01T00:00:00.000Z",
+          "name": "2012",
+          "parent": "",
+        },
+        {
+          "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2012_B",
+          "id": "2012-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2012-01-01T00:00:00.000Z",
         },
         {
           "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2013-01-01T00:00:00.000Z",
+          "name": "2013",
+          "parent": "",
+        },
+        {
+          "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2013_A",
+          "id": "2013-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2013-01-01T00:00:00.000Z",
         },
         {
           "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2014-01-01T00:00:00.000Z",
+          "name": "2014",
+          "parent": "",
+        },
+        {
+          "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2014_B",
+          "id": "2014-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2014-01-01T00:00:00.000Z",
         },
         {
           "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2015-01-01T00:00:00.000Z",
+          "name": "2015",
+          "parent": "",
+        },
+        {
+          "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2015_A",
+          "id": "2015-01-01T00:00:00.000Z_A",
           "name": "A",
           "parent": "2015-01-01T00:00:00.000Z",
         },
         {
           "custom": {
-            "level": 2,
+            "level": 1,
             "levelsCount": 3,
           },
-          "id": "2016_B",
-          "name": "B",
-          "parent": "2016-01-01T00:00:00.000Z",
+          "id": "2016-01-01T00:00:00.000Z",
+          "name": "2016",
+          "parent": "",
         },
         {
           "custom": {
             "level": 2,
             "levelsCount": 3,
           },
-          "id": "2018_B",
+          "id": "2016-01-01T00:00:00.000Z_B",
+          "name": "B",
+          "parent": "2016-01-01T00:00:00.000Z",
+        },
+        {
+          "custom": {
+            "level": 1,
+            "levelsCount": 3,
+          },
+          "id": "2018-01-01T00:00:00.000Z",
+          "name": "2018",
+          "parent": "",
+        },
+        {
+          "custom": {
+            "level": 2,
+            "levelsCount": 3,
+          },
+          "id": "2018-01-01T00:00:00.000Z_B",
           "name": "B",
           "parent": "2018-01-01T00:00:00.000Z",
         },
@@ -1250,8 +1250,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2009",
-          "name": "2009-01-01T00:00:00.000Z",
+          "id": "2009-01-01T00:00:00.000Z",
+          "name": "2009",
           "parent": "",
         },
         {
@@ -1259,8 +1259,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2010",
-          "name": "2010-01-01T00:00:00.000Z",
+          "id": "2010-01-01T00:00:00.000Z",
+          "name": "2010",
           "parent": "",
         },
         {
@@ -1268,8 +1268,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2011",
-          "name": "2011-01-01T00:00:00.000Z",
+          "id": "2011-01-01T00:00:00.000Z",
+          "name": "2011",
           "parent": "",
         },
         {
@@ -1277,8 +1277,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2012",
-          "name": "2012-01-01T00:00:00.000Z",
+          "id": "2012-01-01T00:00:00.000Z",
+          "name": "2012",
           "parent": "",
         },
         {
@@ -1286,8 +1286,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2013",
-          "name": "2013-01-01T00:00:00.000Z",
+          "id": "2013-01-01T00:00:00.000Z",
+          "name": "2013",
           "parent": "",
         },
         {
@@ -1295,8 +1295,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2014",
-          "name": "2014-01-01T00:00:00.000Z",
+          "id": "2014-01-01T00:00:00.000Z",
+          "name": "2014",
           "parent": "",
         },
         {
@@ -1304,8 +1304,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2015",
-          "name": "2015-01-01T00:00:00.000Z",
+          "id": "2015-01-01T00:00:00.000Z",
+          "name": "2015",
           "parent": "",
         },
         {
@@ -1313,8 +1313,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2016",
-          "name": "2016-01-01T00:00:00.000Z",
+          "id": "2016-01-01T00:00:00.000Z",
+          "name": "2016",
           "parent": "",
         },
         {
@@ -1322,8 +1322,8 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "level": 1,
             "levelsCount": 2,
           },
-          "id": "2018",
-          "name": "2018-01-01T00:00:00.000Z",
+          "id": "2018-01-01T00:00:00.000Z",
+          "name": "2018",
           "parent": "",
         },
         {

@@ -19,17 +19,28 @@ export class QueryTaskManager extends AbstractTaskManager {
     this.queryApi = queryApi;
   }
 
-  private async sendJaqlQuery(task: QueryTask): Promise<QueryResultData> {
-    const { queryDescription, shouldSkipHighlightsWithoutAttributes } = task.passport;
+  private async prepareJaqlPayload(task: QueryTask): Promise<JaqlQueryPayload> {
+    const { queryDescription, executionConfig } = task.passport;
     const jaqlPayload: JaqlQueryPayload = getJaqlQueryPayload(
       queryDescription,
-      shouldSkipHighlightsWithoutAttributes,
+      executionConfig.shouldSkipHighlightsWithoutAttributes,
     );
+    const onBeforeQuery = task.passport.executionConfig.onBeforeQuery;
+    if (onBeforeQuery) {
+      return onBeforeQuery(jaqlPayload);
+    }
+    return jaqlPayload;
+  }
+
+  private async sendJaqlQuery(
+    task: QueryTask,
+    jaqlPayload: JaqlQueryPayload,
+  ): Promise<QueryResultData> {
+    const { queryDescription, taskId } = task.passport;
     const { responsePromise, abortHttpRequest } = this.queryApi.sendJaqlRequest(
       task.passport.queryDescription.dataSource,
       jaqlPayload,
     );
-    const taskId = task.passport.taskId;
     this.sentRequestsAbortersMap.set(taskId, abortHttpRequest);
     const jaqlResponse = await responsePromise.finally(() => {
       this.sentRequestsAbortersMap.delete(taskId);
@@ -61,6 +72,7 @@ export class QueryTaskManager extends AbstractTaskManager {
   }
 
   public executeQuerySending = super.createFlow<QueryTaskPassport, EmptyObject, QueryResultData>([
+    new Step('PREPARE_JAQL_PAYLOAD', this.prepareJaqlPayload.bind(this), async () => {}),
     new Step('SEND_JAQL_QUERY', this.sendJaqlQuery.bind(this), this.cancelJaqlQuery.bind(this)),
   ]);
 }

@@ -51,4 +51,4 @@ For comparison, indicator chart with default theme settings:
 
 ## See
 
-[ThemeSettings](../interfaces/interface.ThemeSettings.md), getDefaultThemeSettings, [IndicatorChart](function.IndicatorChart.md)
+[ThemeSettings](../interfaces/interface.ThemeSettings.md) and [IndicatorChart](function.IndicatorChart.md)

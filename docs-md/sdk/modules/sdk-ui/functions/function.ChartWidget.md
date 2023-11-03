@@ -26,7 +26,6 @@ ChartWidget component representing a chart type as specified in `ChartWidgetProp
 
 Example of using the `ChartWidget` component to
 plot a bar chart of the `Sample ECommerce` data source hosted in a Sisense instance.
-Drill-down capability is enabled.
 ```ts
 <ChartWidget
   dataSource={DM.DataSource}
@@ -35,9 +34,6 @@ Drill-down capability is enabled.
     category: [DM.Category.Category],
     value: [measures.sum(DM.Commerce.Revenue)],
     breakBy: [],
-  }}
-  drilldownOptions={{
-    drilldownDimensions: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
   }}
 />
 ```

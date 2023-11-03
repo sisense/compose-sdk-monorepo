@@ -108,6 +108,8 @@ export type IndicatorSubtype = 'indicator/numeric' | 'indicator/gauge';
  */
 export type TreemapSubtype = 'treemap';
 
+export type SunburstSubtype = 'sunburst';
+
 export type ChartSubtype =
   | LineSubtype
   | AreaSubtype
@@ -115,7 +117,8 @@ export type ChartSubtype =
   | PieSubtype
   | PolarSubtype
   | IndicatorSubtype
-  | TreemapSubtype;
+  | TreemapSubtype
+  | SunburstSubtype;
 
 export const chartSubtypeToDesignOptions = Object.freeze<
   Record<
@@ -152,4 +155,5 @@ export const chartSubtypeToDesignOptions = Object.freeze<
   'indicator/numeric': { indicatorType: 'numeric' },
   'indicator/gauge': { indicatorType: 'gauge' },
   treemap: {},
+  sunburst: {},
 });

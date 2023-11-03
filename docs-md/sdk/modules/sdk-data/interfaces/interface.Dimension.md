@@ -11,10 +11,6 @@ and other [DateDimension](interface.DateDimension.md)(s).
 
 - `Element`.[`Attribute`](interface.Attribute.md)
 
-## Indexable
-
- \[`propName`: `string`\]: `any`
-
 ## Properties
 
 ### expression

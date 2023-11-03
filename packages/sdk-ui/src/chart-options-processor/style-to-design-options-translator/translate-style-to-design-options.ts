@@ -12,6 +12,7 @@ import {
   ScatterStyleOptions,
   AreaStyleOptions,
   TreemapStyleOptions,
+  SunburstStyleOptions,
 } from '../../types';
 import { ChartDesignOptions } from '../translations/types';
 import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
@@ -26,6 +27,7 @@ import {
   getScatterChartDesignOptions,
   getAreaChartDesignOptions,
   getTreemapChartDesignOptions,
+  getSunburstChartDesignOptions,
 } from './translate-to-highcharts-options';
 
 export const translateStyleOptionsToDesignOptions = (
@@ -67,6 +69,11 @@ export const translateStyleOptionsToDesignOptions = (
       break;
     case 'treemap':
       intermediateDesignOptions = getTreemapChartDesignOptions(styleOptions as TreemapStyleOptions);
+      break;
+    case 'sunburst':
+      intermediateDesignOptions = getSunburstChartDesignOptions(
+        styleOptions as SunburstStyleOptions,
+      );
       break;
     case 'polar':
       intermediateDesignOptions = getPolarChartDesignOptions(styleOptions as PolarStyleOptions);

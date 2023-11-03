@@ -22,11 +22,10 @@ export const useDateLimits = (
     }
 
     void executeQuery(
-      dataSource,
-      [],
-      [measures.min(attribute), measures.max(attribute)],
-      [],
-      [],
+      {
+        dataSource,
+        measures: [measures.min(attribute), measures.max(attribute)],
+      },
       app,
     ).then((data) => {
       const queryMembers = data.rows[0];

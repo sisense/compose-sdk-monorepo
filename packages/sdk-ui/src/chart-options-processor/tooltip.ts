@@ -15,6 +15,7 @@ export type InternalSeriesNode = {
   val: number;
   name: string;
   parentNode?: InternalSeriesNode;
+  color?: string;
 };
 
 export type InternalSeries = {

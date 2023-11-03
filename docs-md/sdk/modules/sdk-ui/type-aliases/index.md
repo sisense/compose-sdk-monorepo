@@ -80,5 +80,6 @@ title: Type Aliases
 - [ThemeProviderProps](type-alias.ThemeProviderProps.md)
 - [UniformDataColorOptions](type-alias.UniformDataColorOptions.md)
 - [ValueToColorMap](type-alias.ValueToColorMap.md)
+- [ValueToColorMultiColumnsMap](type-alias.ValueToColorMultiColumnsMap.md)
 - [WidgetModel](type-alias.WidgetModel.md)
 - [X2Title](type-alias.X2Title.md)

@@ -22,38 +22,84 @@ import { type ArgumentsAsObject } from '../utility-types';
   `,
 })
 export class BarChartComponent {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataSet}
+   *
+   * @category Data
+   */
   @Input()
   dataSet: BarChartProps['dataSet'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataOptions}
+   *
+   * @category Chart
+   */
   @Input()
   dataOptions!: BarChartProps['dataOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: BarChartProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   highlights: BarChartProps['highlights'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.styleOptions}
+   *
+   * @category Chart
+   */
   @Input()
   styleOptions: BarChartProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onBeforeRender}
+   *
+   * @category Callbacks
+   */
   @Input()
   beforeRender: BarChartProps['onBeforeRender'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointClick = new EventEmitter<
     ArgumentsAsObject<BarChartProps['onDataPointClick'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointContextMenu = new EventEmitter<
     ArgumentsAsObject<BarChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointsSelected}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointsSelect = new EventEmitter<
     ArgumentsAsObject<BarChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
   >();
 
+  /** @internal */
   public chartType: ChartType = 'bar';
 }

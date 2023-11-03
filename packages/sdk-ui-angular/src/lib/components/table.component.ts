@@ -24,18 +24,39 @@ import { template, rootId } from '../component-wrapper-helpers/template';
   template,
 })
 export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
+  /** @internal */
   @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.dataSet}
+   *
+   * @category Data
+   */
   @Input()
   dataSet: TableProps['dataSet'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   dataOptions!: TableProps['dataOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: TableProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   *
+   * @category Representation
+   */
   @Input()
   styleOptions: TableProps['styleOptions'];
 
@@ -54,10 +75,12 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
     );
   }
 
+  /** @internal */
   ngAfterViewInit() {
     this.componentAdapter.render(this.preactRef.nativeElement);
   }
 
+  /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
       this.componentAdapter.render(this.preactRef.nativeElement);
@@ -75,6 +98,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
     return createElement(Table, props);
   }
 
+  /** @internal */
   ngOnDestroy() {
     this.componentAdapter.destroy();
   }

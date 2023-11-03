@@ -23,6 +23,7 @@ import {
   CustomDrilldownResult,
   MenuPosition,
   MenuItemSection,
+  SunburstStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -51,7 +52,7 @@ export type {
 };
 
 /**
- * Props for {@link SisenseContextProvider} component
+ * Configurations for Sisense Context
  */
 export interface SisenseContextProviderProps {
   /**
@@ -158,10 +159,15 @@ export interface ExecuteQueryProps {
 
   /** Callback function that is evaluated when query results are ready */
   onDataChanged?: (data: QueryResultData) => void;
+
+  /**
+   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+   */
+  onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
 
 /**
- * Props for {@link ThemeProvider} component.
+ * Configurations for Theme.
  *
  * Two options are supported:
  *
@@ -201,7 +207,7 @@ export type BeforeRenderHandler = (
   highchartsOptions: HighchartsOptions,
 ) => HighchartsOptions;
 
-interface ChartEventProps {
+interface BaseChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -232,7 +238,7 @@ interface ChartEventProps {
   onBeforeRender?: BeforeRenderHandler;
 }
 
-interface CartesianChartEventProps extends ChartEventProps {
+interface ChartEventProps extends BaseChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -253,7 +259,7 @@ interface CartesianChartEventProps extends ChartEventProps {
   onDataPointsSelected?: DataPointsEventHandler;
 }
 
-interface ScatterChartEventProps extends ChartEventProps {
+interface ScatterChartEventProps extends BaseChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -281,7 +287,7 @@ interface ScatterChartEventProps extends ChartEventProps {
  */
 export interface BaseChartProps {
   /**
-   * Data set for this chart, which supports two options:
+   * Data set for this component, which supports two options:
    *
    * (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
    * the chart will have an internal {@link ExecuteQuery} connect to the data source
@@ -289,7 +295,7 @@ export interface BaseChartProps {
    *
    * OR
    *
-   * (2) Explicit {@link @sisense/sdk-data!Data}, which is made up of
+   * (2) Explicit {@link @sisense/sdk-data!Data | Data}, which is made up of
    * an array of {@link @sisense/sdk-data!Column | columns}
    * and a two-dimensional array of data {@link @sisense/sdk-data!Cell | cells}.
    * This allows the chart component to be used
@@ -321,7 +327,7 @@ export interface BaseChartProps {
 /**
  * Props shared across {@link Chart} components.
  */
-export interface ChartProps extends BaseChartProps, ChartEventProps {
+export interface ChartProps extends BaseChartProps, BaseChartEventProps {
   /**
    * Default chart type of each series.
    *
@@ -355,7 +361,7 @@ export interface ChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link AreaChart} component.
  */
-export interface AreaChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface AreaChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Configurations for how to interpret and present data passed to the chart.
    *
@@ -373,7 +379,7 @@ export interface AreaChartProps extends BaseChartProps, CartesianChartEventProps
 /**
  * Props of the {@link BarChart} component.
  */
-export interface BarChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface BarChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -391,7 +397,7 @@ export interface BarChartProps extends BaseChartProps, CartesianChartEventProps 
 /**
  * Props of the {@link ColumnChart} component.
  */
-export interface ColumnChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface ColumnChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -409,7 +415,7 @@ export interface ColumnChartProps extends BaseChartProps, CartesianChartEventPro
 /**
  * Props of the {@link FunnelChart} component.
  */
-export interface FunnelChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface FunnelChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -427,7 +433,7 @@ export interface FunnelChartProps extends BaseChartProps, CartesianChartEventPro
 /**
  * Props of the {@link LineChart} component.
  */
-export interface LineChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface LineChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Configurations for how to interpret and present data passed to the chart.
    *
@@ -445,7 +451,7 @@ export interface LineChartProps extends BaseChartProps, CartesianChartEventProps
 /**
  * Props of the {@link PieChart} component.
  */
-export interface PieChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface PieChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -463,7 +469,7 @@ export interface PieChartProps extends BaseChartProps, CartesianChartEventProps 
 /**
  * Props of the {@link PolarChart} component.
  */
-export interface PolarChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface PolarChartProps extends BaseChartProps, ChartEventProps {
   /** Configurations for how to interpret and present the data passed to the chart */
   dataOptions: CartesianChartDataOptions;
   /** Configuration that define functional style of the various chart elements */
@@ -485,22 +491,7 @@ export interface IndicatorChartProps extends BaseChartProps {
  */
 export interface TableProps {
   /**
-   * Data set for this chart, which supports two options:
-   *
-   * (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
-   * the chart will have an internal {@link ExecuteQuery} connect to the data source
-   * and load the data as specified in {@link dataOptions} and {@link filters}.
-   *
-   * OR
-   *
-   * (2) Explicit {@link @sisense/sdk-data!Data}, which is made up of
-   * an array of {@link @sisense/sdk-data!Column | columns}
-   * and a two-dimensional array of data {@link @sisense/sdk-data!Cell | cells}.
-   * This allows the chart component to be used
-   * with user-provided data.
-   *
-   * If neither option is specified,
-   * the chart will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * {@inheritDoc ChartProps.dataSet}
    *
    *
    * @category Data
@@ -508,9 +499,9 @@ export interface TableProps {
   dataSet?: DataSource | Data;
 
   /**
-   * Configurations for how to interpret and present the data passed to the chart
+   * Configurations for how to interpret and present the data passed to the component
    *
-   * @category Chart
+   * @category Representation
    */
   dataOptions: TableDataOptions;
 
@@ -522,9 +513,9 @@ export interface TableProps {
   filters?: Filter[];
 
   /**
-   * Configurations that define functional style of the various chart elements
+   * Configurations that define functional style of the various table elements
    *
-   * @category Chart
+   * @category Representation
    */
   styleOptions?: TableStyleOptions;
 
@@ -561,7 +552,7 @@ export interface ScatterChartProps extends BaseChartProps, ScatterChartEventProp
  */
 export interface DashboardWidgetProps
   extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'>,
-    ChartEventProps {
+    BaseChartEventProps {
   /**
    * Identifier of the widget
    *
@@ -653,7 +644,7 @@ export interface DashboardWidgetProps
  * Props for the {@link ChartWidget} component
  *
  */
-export interface ChartWidgetProps extends ChartEventProps {
+export interface ChartWidgetProps extends BaseChartEventProps {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
@@ -708,6 +699,7 @@ export interface ChartWidgetProps extends ChartEventProps {
   /**
    * List of categories to allow drilldowns on
    *
+   * @deprecated Use {@link DrilldownWidget} instead
    * @category Widget
    */
   drilldownOptions?: DrilldownOptions;
@@ -757,6 +749,17 @@ export interface ChartWidgetProps extends ChartEventProps {
    * @category Widget
    */
   description?: string;
+
+  /**
+   * Boolean flag whether selecting data points triggers highlight filter of the selected data
+   *
+   * Recommended to turn on when the ChartWidget is enhanced with data drilldown by {@link DrilldownWidget}
+   *
+   * If not specified, the default value is `false`
+   *
+   * @category Widget
+   */
+  highlightSelectionDisabled?: boolean;
 }
 
 /**
@@ -873,12 +876,17 @@ export interface ExecuteQueryByWidgetIdProps {
 
   /** Callback function that is evaluated when query results are ready */
   onDataChanged?: (data: QueryResultData, queryParams: ExecuteQueryParams) => void;
+
+  /**
+   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+   */
+  onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
 
 /**
  * Props of the {@link TreemapChart} component.
  */
-export interface TreemapChartProps extends BaseChartProps, CartesianChartEventProps {
+export interface TreemapChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -891,6 +899,24 @@ export interface TreemapChartProps extends BaseChartProps, CartesianChartEventPr
    * @category Chart
    */
   styleOptions?: TreemapStyleOptions;
+}
+
+/**
+ * Props of the {@link SunburstChart} component.
+ */
+export interface SunburstChartProps extends BaseChartProps, ChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: CategoricalChartDataOptions;
+  /**
+   * Configuration that define functional style of the various chart elements
+   *
+   * @category Chart
+   */
+  styleOptions?: SunburstStyleOptions;
 }
 
 /**

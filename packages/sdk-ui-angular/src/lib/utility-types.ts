@@ -6,11 +6,13 @@ type ZipTuplesAsObject<Keys extends readonly PropertyKey[], Values extends reado
   [T in ZipTuples<Keys, Values>[number] as T[0]]: T[1];
 };
 
+/** @internal */
 export type ArgumentsAsObject<
   Fn extends ((...params: readonly any[]) => any) | undefined,
   Keys extends readonly PropertyKey[],
 > = ZipTuplesAsObject<Keys, Parameters<NonNullable<Fn>>>;
 
+/** @internal */
 export type Arguments<T extends ((...args: any[]) => void) | undefined> = Parameters<
   NonNullable<T>
 >;

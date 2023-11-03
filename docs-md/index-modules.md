@@ -2,8 +2,11 @@
 title: Modules
 indexTopics:
   - title: SDK-UI
-    description: React UI components
+    description: React UI components and hooks
     link: ./sdk-ui
+  - title: SDK-UI-ANGULAR
+    description: Angular UI components and services
+    link: ./sdk-ui-angular
   - title: SDK-DATA
     description: Composable queries
     link: ./sdk-data

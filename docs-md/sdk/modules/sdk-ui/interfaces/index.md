@@ -42,6 +42,8 @@ title: Interfaces
 - [StackableStyleOptions](interface.StackableStyleOptions.md)
 - [StyledColumn](interface.StyledColumn.md)
 - [StyledMeasureColumn](interface.StyledMeasureColumn.md)
+- [SunburstChartProps](interface.SunburstChartProps.md)
+- [SunburstStyleOptions](interface.SunburstStyleOptions.md)
 - [TableProps](interface.TableProps.md)
 - [TableStyleOptions](interface.TableStyleOptions.md)
 - [ThemeSettings](interface.ThemeSettings.md)

@@ -13,6 +13,9 @@ export const PreviousData = () => {
     dimensions: [DM.Commerce.Date[dateGrouping]],
     measures: [measureFactory.sum(Ecom.Commerce.Revenue, 'Total Revenue')],
     filters: [filterFactory.greaterThan(Ecom.Commerce.Revenue, 1000)],
+    onBeforeQuery: (jaql) => {
+      return { ...jaql, queryGuid: 'compose-sdk-is-cool' };
+    },
   });
 
   if (data) {

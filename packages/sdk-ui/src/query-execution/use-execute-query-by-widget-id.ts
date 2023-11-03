@@ -39,6 +39,9 @@ export interface ExecuteQueryByWidgetIdParams {
 
   /** {@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy} */
   filtersMergeStrategy?: FiltersMergeStrategy;
+
+  /** {@inheritDoc ExecuteQueryByWidgetIdProps.onBeforeQuery} */
+  onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
 
 export type QueryByWidgetIdState = QueryState & {
@@ -101,8 +104,16 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
     }
 
     if (isNeverExecuted || isParamsChanged(prevParams, params)) {
-      const { widgetOid, dashboardOid, filters, highlights, filtersMergeStrategy, count, offset } =
-        params;
+      const {
+        widgetOid,
+        dashboardOid,
+        filters,
+        highlights,
+        filtersMergeStrategy,
+        count,
+        offset,
+        onBeforeQuery,
+      } = params;
 
       if (isNeverExecuted) {
         setIsNeverExecuted(false);
@@ -119,6 +130,7 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
         app,
         count,
         offset,
+        onBeforeQuery,
       })
         .then(({ data, query: executedQuery }) => {
           query.current = executedQuery;
@@ -169,6 +181,7 @@ export async function executeQueryByWidgetId({
   count,
   offset,
   app,
+  onBeforeQuery,
 }: ExecuteQueryByWidgetIdParams & { app: ClientApplication }) {
   const api = new RestApi(app.httpClient);
   const fetchedWidget: WidgetDto = await api.getWidget(widgetOid, dashboardOid);
@@ -183,27 +196,19 @@ export async function executeQueryByWidgetId({
   const mergedFilters = mergeFiltersByStrategy(widgetFilters, filters, filtersMergeStrategy);
   const mergedHighlights = mergeFilters(highlights, widgetHighlights);
 
-  const data = await executeQuery(
+  const executeQueryParams: ExecuteQueryParams = {
     dataSource,
     dimensions,
     measures,
-    mergedFilters,
-    mergedHighlights,
-    app,
+    filters: mergedFilters,
+    highlights: mergedHighlights,
     count,
     offset,
-  );
+  };
+  const data = await executeQuery(executeQueryParams, app, { onBeforeQuery });
 
   return {
     data,
-    query: {
-      dataSource,
-      dimensions,
-      measures,
-      filters: mergedFilters,
-      highlights: mergedHighlights,
-      count,
-      offset,
-    } as ExecuteQueryParams,
+    query: executeQueryParams,
   };
 }

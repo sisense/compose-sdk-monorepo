@@ -1,23 +1,23 @@
 import { TaskPassport } from '@sisense/task-manager';
-import { QueryDescription } from '../types.js';
+import { QueryDescription, QueryExecutionConfigInternal } from '../types.js';
 
 type TaskType = 'SEND_JAQL_QUERY';
 
 export class QueryTaskPassport extends TaskPassport {
   public queryDescription: QueryDescription;
 
-  public shouldSkipHighlightsWithoutAttributes: boolean;
+  public executionConfig: QueryExecutionConfigInternal;
 
   public type: TaskType;
 
   constructor(
     type: TaskType,
     queryDescription: QueryDescription,
-    shouldSkipHighlightsWithoutAttributes?: boolean,
+    executionConfig: QueryExecutionConfigInternal,
   ) {
     super();
     this.queryDescription = queryDescription;
     this.type = type;
-    this.shouldSkipHighlightsWithoutAttributes = shouldSkipHighlightsWithoutAttributes ?? false;
+    this.executionConfig = executionConfig;
   }
 }

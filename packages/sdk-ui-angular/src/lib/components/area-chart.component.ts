@@ -22,38 +22,84 @@ import { type ArgumentsAsObject } from '../utility-types';
   `,
 })
 export class AreaChartComponent {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.dataSet}
+   *
+   * @category Data
+   */
   @Input()
   dataSet: AreaChartProps['dataSet'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.dataOptions}
+   *
+   * @category Chart
+   */
   @Input()
   dataOptions!: AreaChartProps['dataOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.filters}
+   *
+   * @category Data
+   */
   @Input()
   filters: AreaChartProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   highlights: AreaChartProps['highlights'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.styleOptions}
+   *
+   * @category Chart
+   */
   @Input()
   styleOptions: AreaChartProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onBeforeRender}
+   *
+   * @category Callbacks
+   */
   @Input()
   beforeRender: AreaChartProps['onBeforeRender'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointClick = new EventEmitter<
     ArgumentsAsObject<AreaChartProps['onDataPointClick'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointContextMenu = new EventEmitter<
     ArgumentsAsObject<AreaChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
   >();
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointsSelected}
+   *
+   * @category Callbacks
+   */
   @Output()
   dataPointsSelect = new EventEmitter<
     ArgumentsAsObject<AreaChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
   >();
 
+  /** @internal */
   public chartType: ChartType = 'area';
 }

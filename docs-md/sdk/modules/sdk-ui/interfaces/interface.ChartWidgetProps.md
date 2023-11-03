@@ -8,7 +8,7 @@ Props for the [ChartWidget](../functions/function.ChartWidget.md) component
 
 ## Extends
 
-- `ChartEventProps`
+- `BaseChartEventProps`
 
 ## Properties
 
@@ -78,6 +78,22 @@ Description of the widget
 
 List of categories to allow drilldowns on
 
+::: warning Deprecated
+Use [DrilldownWidget](../functions/function.DrilldownWidget.md) instead
+:::
+
+***
+
+#### highlightSelectionDisabled
+
+> **highlightSelectionDisabled**?: `boolean`
+
+Boolean flag whether selecting data points triggers highlight filter of the selected data
+
+Recommended to turn on when the ChartWidget is enhanced with data drilldown by [DrilldownWidget](../functions/function.DrilldownWidget.md)
+
+If not specified, the default value is `false`
+
 ***
 
 #### title
@@ -107,7 +123,7 @@ This callback is not yet supported for [IndicatorChart](../functions/function.In
 
 ##### Inherited from
 
-ChartEventProps.onBeforeRender
+BaseChartEventProps.onBeforeRender
 
 ***
 
@@ -119,7 +135,7 @@ Click handler callback for a data point
 
 ##### Inherited from
 
-ChartEventProps.onDataPointClick
+BaseChartEventProps.onDataPointClick
 
 ***
 
@@ -131,7 +147,7 @@ Context menu handler callback for a data point
 
 ##### Inherited from
 
-ChartEventProps.onDataPointContextMenu
+BaseChartEventProps.onDataPointContextMenu
 
 ***
 
@@ -143,4 +159,4 @@ Handler callback for selection of multiple data points
 
 ##### Inherited from
 
-ChartEventProps.onDataPointsSelected
+BaseChartEventProps.onDataPointsSelected

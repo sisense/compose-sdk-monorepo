@@ -259,6 +259,7 @@ export function extractDataOptions(
     case WidgetType.PieChart:
     case WidgetType.FunnelChart:
     case WidgetType.TreemapChart:
+    case WidgetType.SunburstChart:
       return extractCategoricalChartDataOptions(panels, themeSettings);
     case WidgetType.ScatterChart:
       return extractScatterChartDataOptions(panels, themeSettings);

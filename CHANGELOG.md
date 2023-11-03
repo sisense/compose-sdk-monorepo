@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.13.0] - 2023-11-02
+
+### Added
+- Publish `@sisense/sdk-ui-angular` and related dependencies to NPM registry for internal testing.
+- Add component `SunburstChart`
+  and support the `sunburst` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget`
+- Add troubleshooting guides for common issues
+
+### Changed
+- Mark `drilldownOptions` as `@deprecated` in `ChartWidgetProps` – use `DrilldownWidget` instead
+- Support `onBeforeExecute` callback in `ExecuteQuery`, `ExecuteQueryByWidgetId`,
+  `useExecuteQuery`, and `useExecuteQueryByWidgetId` to allow modifying the JAQL query before it is executed
+- Support highlight filters of selected points on `ChartWidget`
+
 ## [0.12.1] - 2023-10-26
 
 ### Changed
@@ -57,7 +71,7 @@
 ### Added
 
 - Add component `TreemapChart`
-  and support Treemap chart type in components `Chart`, `ChartWidget`, and `DashboardWidget`
+  and support the `treemap` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget`
 - Add component `DrilldownWidget`, which allows adding drilldown functionality to any type of chart
 
 ### Changed

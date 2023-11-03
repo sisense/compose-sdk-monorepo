@@ -32,6 +32,7 @@ const getAttributesAndMeasures = (dataOptions: TableDataOptionsInternal) => {
   return { attributes, measures };
 };
 
+// eslint-disable-next-line max-lines-per-function
 export const useTableData = ({
   dataSet,
   dataOptions,
@@ -57,7 +58,17 @@ export const useTableData = ({
 
       if (!app || (!isMoreDataAvailable.current && offset > 0)) return;
 
-      executeQuery(dataSet, attributes, measures, filters, [], app, count + 1, offset)
+      executeQuery(
+        {
+          dataSource: dataSet,
+          dimensions: attributes,
+          measures,
+          filters,
+          count: count + 1,
+          offset,
+        },
+        app,
+      )
         .then((queryResult) => {
           if (ignore) return;
 
