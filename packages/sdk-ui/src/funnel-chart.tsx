@@ -1,9 +1,8 @@
 import { FunnelChartProps } from './props';
 import { Chart, shouldSkipSisenseContextWaiting } from './chart';
-import { asSisenseComponent } from './decorators/as-sisense-component';
-
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
- * A React component representing data progressively decreasing in size or quantity through a conical shape.
+ * A React component representing data progressively decreasing in size or quantity through a funnel shape.
  * See [Funnel Chart](https://docs.sisense.com/main/SisenseLinux/funnel-chart.htm) for more information.
  *
  * @example

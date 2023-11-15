@@ -22,7 +22,8 @@ import {
 import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
- * Dashboard Widget Component
+ * The Dashboard Widget component, which is a thin wrapper on {@link ChartWidgetComponent},
+ * used to render a widget created in the Sisense instance.
  */
 @Component({
   selector: 'csdk-dashboard-widget',

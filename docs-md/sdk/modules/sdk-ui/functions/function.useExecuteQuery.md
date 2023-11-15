@@ -4,16 +4,16 @@ title: useExecuteQuery
 
 # Function useExecuteQuery
 
-> **useExecuteQuery**(`params`): [`QueryState`](../type-aliases/type-alias.QueryState.md)
+> **useExecuteQuery**(...`args`): [`QueryState`](../type-aliases/type-alias.QueryState.md)
 
 React hook that executes a data query.
 This approach, which offers an alternative to [ExecuteQuery](function.ExecuteQuery.md) component, is similar to React Query's `useQuery` hook.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | [`ExecuteQueryParams`](../type-aliases/type-alias.ExecuteQueryParams.md) | Parameters of the query |
+| Parameter | Type |
+| :------ | :------ |
+| ...`args` | [[`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md)] |
 
 ## Returns
 

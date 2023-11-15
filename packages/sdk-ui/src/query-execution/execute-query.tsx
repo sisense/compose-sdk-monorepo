@@ -1,8 +1,8 @@
-import { useExecuteQuery } from './use-execute-query';
+import { useExecuteQueryInternal } from './use-execute-query';
 import { useState, type FunctionComponent } from 'react';
 import { ExecuteQueryProps } from '../props';
 
-import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 
 /**
  * Executes a query and renders a function as child component. The child
@@ -48,7 +48,7 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
     onDataChanged,
     onBeforeQuery,
   }) => {
-    const { data, error } = useExecuteQuery({
+    const { data, error } = useExecuteQueryInternal({
       dataSource,
       dimensions,
       measures,

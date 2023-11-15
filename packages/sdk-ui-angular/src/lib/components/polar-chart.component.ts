@@ -3,7 +3,8 @@ import { type ChartType, type PolarChartProps } from '@sisense/sdk-ui-preact';
 import { type ArgumentsAsObject } from '../utility-types';
 
 /**
- * Polar Chart Component
+ * A component comparing multiple categories/variables with a spacial perspective in a radial chart.
+ * See [Polar Chart](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm) for more information.
  */
 @Component({
   selector: 'csdk-polar-chart',

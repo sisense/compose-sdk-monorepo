@@ -8,15 +8,16 @@ import { isFiltersChanged } from '../utils/filters-comparator';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { QueryState, queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
+import { withTracking } from '../decorators/hook-decorators';
 
 /**
  * Parameters for {@link useExecuteQuery} hook.
  */
-export type ExecuteQueryParams = {
+export interface ExecuteQueryParams {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    */
   dataSource?: DataSource;
 
@@ -45,11 +46,9 @@ export type ExecuteQueryParams = {
    */
   enabled?: boolean;
 
-  /**
-   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
-   */
+  /** {@inheritDoc ExecuteQueryProps.onBeforeQuery} */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
-};
+}
 
 /**
  * React hook that executes a data query.
@@ -82,7 +81,14 @@ export type ExecuteQueryParams = {
  * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  */
-export const useExecuteQuery = (params: ExecuteQueryParams): QueryState => {
+export const useExecuteQuery = withTracking('useExecuteQuery')(useExecuteQueryInternal);
+
+/**
+ * {@link useExecuteQuery} without tracking to be used inside other hooks or components in Compose SDK.
+ *
+ * @internal
+ */
+export function useExecuteQueryInternal(params: ExecuteQueryParams): QueryState {
   const prevParams = usePrevious(params);
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
@@ -145,7 +151,17 @@ export const useExecuteQuery = (params: ExecuteQueryParams): QueryState => {
   }
 
   return queryState;
-};
+}
+
+/** List of parameters that can be compared by deep comparison */
+const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
+  'dataSource',
+  'dimensions',
+  'measures',
+  'count',
+  'offset',
+  'onBeforeQuery',
+];
 
 /**
  * Checks if the query parameters have changed by deep comparison.
@@ -160,7 +176,6 @@ function isQueryParamsChanged(
   if (!prevParams && newParams) {
     return true;
   }
-  const simplySerializableParamNames = ['dataSource', 'dimensions', 'measures', 'count', 'offset'];
   const isSimplySerializableParamsChanged = simplySerializableParamNames.some(
     (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
   );

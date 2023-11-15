@@ -18,7 +18,7 @@ import { writeTypescript, writeJavascript } from '@sisense/sdk-modeling';
 import path from 'path';
 import { DimensionalQueryClient } from '@sisense/sdk-query-client';
 import { PKG_VERSION } from '../package-version.js';
-import { trackCliError } from '@sisense/sdk-common';
+import { trackCliError } from '@sisense/sdk-tracking';
 
 function getHttpClient(
   url: string,

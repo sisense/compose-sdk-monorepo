@@ -13,7 +13,7 @@ import { useWidgetDrilldown } from './common/use-widget-drilldown';
 import { WidgetHeader } from './common/widget-header';
 import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
-import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 
 /**

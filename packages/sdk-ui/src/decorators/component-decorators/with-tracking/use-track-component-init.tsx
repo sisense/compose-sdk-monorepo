@@ -1,5 +1,5 @@
-import { TrackingDetails, trackProductEvent } from '@sisense/sdk-common';
-import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { TrackingDetails, trackProductEvent } from '@sisense/sdk-tracking';
+import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { createContext, ReactNode, useContext, useEffect, useRef } from 'react';
 
 const action = 'sdkComponentInit';

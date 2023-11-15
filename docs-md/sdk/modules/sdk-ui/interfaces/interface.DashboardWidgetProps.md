@@ -32,7 +32,7 @@ Omit.filters
 
 > **filtersMergeStrategy**?: `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
 
-Strategy for merging the existing widget filters with the filters provided via the `filters` prop:
+Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
 
 - `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
 - `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
@@ -51,6 +51,16 @@ Highlight filters that will highlight results that pass filter criteria
 ##### Overrides
 
 Omit.highlights
+
+***
+
+#### includeDashboardFilters
+
+> **includeDashboardFilters**?: `boolean`
+
+Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
+
+If not specified, the default value is `false`.
 
 ### Widget
 
@@ -82,7 +92,7 @@ Omit.description
 
 Boolean flag whether selecting data points triggers highlight filter of the selected data
 
-Recommended to turn on when the ChartWidget is enhanced with data drilldown by [DrilldownWidget](../functions/function.DrilldownWidget.md)
+Recommended to turn on when the Chart Widget component is enhanced with data drilldown by the Drilldown Widget component
 
 If not specified, the default value is `false`
 
@@ -165,7 +175,7 @@ Omit.widgetStyleOptions
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for [IndicatorChart](../functions/function.IndicatorChart.md)
+This callback is not yet supported for Indicator Chart
 
 ##### Inherited from
 

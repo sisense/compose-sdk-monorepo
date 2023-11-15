@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSisenseContext } from '../sisense-context/sisense-context';
-import { I18nProvider } from '../translation/i18n-provider';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { I18nProvider } from '../../translation/i18n-provider';
 import { ComponentDecorator } from './as-sisense-component';
 
 /**

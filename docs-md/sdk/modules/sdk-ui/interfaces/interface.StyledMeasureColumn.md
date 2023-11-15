@@ -81,6 +81,18 @@ Wrapped MeasureColumn or CalculatedMeasureColumn
 
 ***
 
+### connectNulls
+
+> **connectNulls**?: `boolean`
+
+Boolean flag whether to connect a graph line across null points or render a gap
+
+#### Inherited from
+
+ValueStyle.connectNulls
+
+***
+
 ### numberFormatConfig
 
 > **numberFormatConfig**?: [`NumberFormatConfig`](../type-aliases/type-alias.NumberFormatConfig.md)

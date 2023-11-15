@@ -20,7 +20,7 @@ Props for the [ChartWidget](../functions/function.ChartWidget.md) component
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
-If not specified, the query will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../functions/function.SisenseContextProvider.md) component.
+If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
 
 ***
 
@@ -90,7 +90,7 @@ Use [DrilldownWidget](../functions/function.DrilldownWidget.md) instead
 
 Boolean flag whether selecting data points triggers highlight filter of the selected data
 
-Recommended to turn on when the ChartWidget is enhanced with data drilldown by [DrilldownWidget](../functions/function.DrilldownWidget.md)
+Recommended to turn on when the Chart Widget component is enhanced with data drilldown by the Drilldown Widget component
 
 If not specified, the default value is `false`
 
@@ -119,7 +119,7 @@ Style options for both the widget as a whole and specifically for the widget hea
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for [IndicatorChart](../functions/function.IndicatorChart.md)
+This callback is not yet supported for Indicator Chart
 
 ##### Inherited from
 

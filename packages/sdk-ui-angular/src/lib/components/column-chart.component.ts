@@ -3,7 +3,9 @@ import { type ChartType, type ColumnChartProps } from '@sisense/sdk-ui-preact';
 import { type ArgumentsAsObject } from '../utility-types';
 
 /**
- * Column Chart Component
+ * A component representing categorical data with vertical rectangular bars
+ * whose heights are proportional to the values that they represent.
+ * See [Column Chart](https://docs.sisense.com/main/SisenseLinux/column-chart.htm) for more information.
  */
 @Component({
   selector: 'csdk-column-chart',
@@ -47,13 +49,18 @@ export class ColumnChartComponent {
   filters: ColumnChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.styleOptions}
+   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.highlights}
    *
-   * @category Chart
+   * @category Data
    */
   @Input()
   highlights: ColumnChartProps['highlights'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.styleOptions}
+   *
+   * @category Chart
+   */
   @Input()
   styleOptions: ColumnChartProps['styleOptions'];
 

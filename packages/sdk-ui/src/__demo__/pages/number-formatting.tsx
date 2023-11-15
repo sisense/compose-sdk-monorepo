@@ -52,7 +52,7 @@ const filters: Filter[] = [
   filtersFactory.members(DM.Commerce.CountryID, ['1', '2']),
 ];
 
-export const NumberFormating = () => (
+export const NumberFormatting = () => (
   <div className="h-fit">
     Number Formatting
     <ChartWidget

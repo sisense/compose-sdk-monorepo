@@ -4,7 +4,8 @@ title: IndicatorChartComponent
 
 # Class IndicatorChartComponent
 
-Indicator Chart Component
+A component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
+See [Indicator](https://docs.sisense.com/main/SisenseLinux/indicator.htm) for more information.
 
 ## Constructors
 
@@ -27,7 +28,7 @@ Indicator Chart Component
 Data set for this component, which supports two options:
 
 (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
-the chart will have an internal [ExecuteQuery](../../sdk-ui/functions/function.ExecuteQuery.md) connect to the data source
+the chart will have an internal query connect to the data source
 and load the data as specified in [dataOptions](class.IndicatorChartComponent.md#dataoptions), [filters](class.IndicatorChartComponent.md#filters), and [highlights](class.IndicatorChartComponent.md#highlights).
 
 OR
@@ -39,7 +40,7 @@ This allows the chart component to be used
 with user-provided data.
 
 If neither option is specified,
-the chart will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../../sdk-ui/functions/function.SisenseContextProvider.md) component.
+the chart will use the `defaultDataSource` specified in the parent Sisense Context.
 
 ***
 

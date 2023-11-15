@@ -31,29 +31,42 @@ export function prepareSunburstDataItems(
     return item;
   });
 
-  const coloredDataItems = handleSunburstSeriesColor(dataItems, themeSettings);
+  const coloredDataItems = handleSunburstSeriesColor(dataItems, dataOptions, themeSettings);
 
   return [rootDataItem, ...coloredDataItems];
 }
 
 function handleSunburstSeriesColor(
   series: SeriesPointStructure[],
+  dataOptions: CategoricalChartDataOptionsInternal,
   themeSettings?: CompleteThemeSettings,
 ) {
+  const seriesColorMapByLevels = prepareColorMapByLevels(dataOptions);
   const colorStepMap = {};
 
   return series.map((value) => {
     const parent = value?.parent || '';
+    const colorBySeriesName =
+      seriesColorMapByLevels[value.custom?.level || '']?.[value?.name || ''];
     const colorStep = (colorStepMap[parent] =
       parent in colorStepMap ? (colorStepMap[parent] as number) + 1 : 0);
-    const palleteColor = getAPaletteColor(
+    const paletteColor = getAPaletteColor(
       themeSettings?.palette.variantColors,
       (value.custom?.level || 1) - 1,
     );
 
     return {
       ...value,
-      color: scaleBrightness(palleteColor, -(colorStep * 0.1)),
+      color: colorBySeriesName || scaleBrightness(paletteColor, -(colorStep * 0.1)),
     };
   });
+}
+
+function prepareColorMapByLevels(dataOptions: CategoricalChartDataOptionsInternal) {
+  return dataOptions.breakBy.reduce((map, column, index) => {
+    if (dataOptions?.seriesToColorMap?.[column.name]) {
+      map[index + 1] = dataOptions.seriesToColorMap[column.name];
+    }
+    return map;
+  }, {});
 }

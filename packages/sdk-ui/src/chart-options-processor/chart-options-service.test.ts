@@ -174,6 +174,26 @@ it('renders a time series with multiple measures and no break by', () => {
   expect(chartOptions).toMatchSnapshot();
 });
 
+it('renders a time series with connectNulls true on one measure', () => {
+  const dataOptions: CartesianChartDataOptionsInternal = {
+    x: [months],
+    y: [{ ...meas1, connectNulls: true }, meas2],
+    breakBy: [],
+  };
+  const chartData = cartesianData(dataOptions, TimeSeriesData);
+
+  const { options: chartOptions } = highchartsOptionsService(
+    chartData,
+    'line',
+    BaseDesignOptions,
+    dataOptions,
+    themeSettings,
+    dateFormatter,
+  );
+
+  expect(chartOptions).toMatchSnapshot();
+});
+
 it('renders a time series with granularity Month', () => {
   const { options: chartOptions } = continuousWithGranularityMonths();
   expect(chartOptions).toMatchSnapshot();
@@ -183,6 +203,26 @@ it('renders a time series chart with break by', () => {
   const dataOptions: CartesianChartDataOptionsInternal = {
     x: [months],
     y: [meas1],
+    breakBy: [area],
+  };
+  const chartData = cartesianData(dataOptions, TimeSeriesData);
+
+  const { options: chartOptions } = highchartsOptionsService(
+    chartData,
+    'line',
+    BaseDesignOptions,
+    dataOptions,
+    themeSettings,
+    dateFormatter,
+  );
+
+  expect(chartOptions).toMatchSnapshot();
+});
+
+it('renders a time series chart with break by with connectNulls true', () => {
+  const dataOptions: CartesianChartDataOptionsInternal = {
+    x: [months],
+    y: [{ ...meas1, connectNulls: true }],
     breakBy: [area],
   };
   const chartData = cartesianData(dataOptions, TimeSeriesData);
@@ -808,15 +848,16 @@ describe('cartesianData', () => {
 });
 
 describe('categoricalCharts', () => {
+  const columns = [
+    { name: 'Years', type: 'date' },
+    { name: 'Group', type: 'string' },
+    { name: 'Quantity', type: 'number' },
+    { name: 'Units', type: 'number' },
+    { name: 'Returns', type: 'number' },
+    { name: 'Inventory', type: 'number' },
+  ];
   const pieData = createDataTableFromData({
-    columns: [
-      { name: 'Years', type: 'date' },
-      { name: 'Group', type: 'string' },
-      { name: 'Quantity', type: 'number' },
-      { name: 'Units', type: 'number' },
-      { name: 'Returns', type: 'number' },
-      { name: 'Inventory', type: 'number' },
-    ],
+    columns,
     rows: [
       ['2009', 'A', 6781, 1500, 3420, 200],
       ['2011', 'B', 1812, 5000, 1234, 3434],
@@ -1108,6 +1149,65 @@ describe('categoricalCharts', () => {
         '1.30K',
         '1.81K',
         '6.78K',
+      ]);
+    });
+
+    it('pie chart with highlights', () => {
+      const chartDataWithHighlights = createDataTableFromData({
+        columns,
+        rows: [
+          ['2009', 'A', 6781, 1500, 3420, 200],
+          ['2011', 'B', 1812, 5000, 1234, 3434],
+          ['2012', 'C', 1300, { data: 9000, blur: true }, 5667, 1235],
+          ['2013', 'D', 800, 10000, 800, 5566],
+          ['2014', 'E', 700, { data: 300, blur: true }, 2500, 678],
+        ],
+      });
+      const chartData = categoricalData(pieDataOptions, chartDataWithHighlights);
+
+      const { options: chartOptions } = highchartsOptionsService(
+        chartData,
+        'pie',
+        BaseDesignOptions,
+        pieDataOptions,
+      );
+      expect(chartOptions?.series[0].data).toEqual([
+        {
+          name: 'A',
+          y: 1500,
+          color: '#00cee6',
+          selected: true,
+          sliced: true,
+          custom: expect.objectContaining({ rawValue: 1500, xValue: ['A'] }),
+        },
+        {
+          name: 'B',
+          y: 5000,
+          color: '#9b9bd7',
+          selected: true,
+          sliced: true,
+          custom: expect.objectContaining({ rawValue: 5000, xValue: ['B'] }),
+        },
+        {
+          name: 'C',
+          y: 9000,
+          color: '#6eda55',
+          custom: expect.objectContaining({ rawValue: 9000, xValue: ['C'] }),
+        },
+        {
+          name: 'D',
+          y: 10000,
+          color: '#fc7570',
+          selected: true,
+          sliced: true,
+          custom: expect.objectContaining({ rawValue: 10000, xValue: ['D'] }),
+        },
+        {
+          name: 'E',
+          y: 300,
+          color: '#fbb755',
+          custom: expect.objectContaining({ rawValue: 300, xValue: ['E'] }),
+        },
       ]);
     });
   });

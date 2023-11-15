@@ -1,11 +1,13 @@
 ---
-title: Quickstart Guide
+title: Quickstart Guide (React)
 ---
 
-# Compose SDK Quickstart Guide
+# Compose SDK with React: Quickstart Guide
 
 Follow this guide to get started developing applications with Compose SDK.
 
+>**Note**:
+>This guide is for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart). We also have a Quickstart Guide for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular).
 ## Prerequisites
 
 Compose SDK contains a set of React components needed to interface with your Sisense instance. The following prerequisites are needed in order to use the SDK:
@@ -82,8 +84,8 @@ The Compose SDK packages are deployed via public NPM Registry. To install the pa
    ```
 ### Change package registry from GitHub Packages to public NPM
 
-Starting from version `0.11.3`, Compose SDK packages and its dependencies are hosted on public NPM registry,
-instead of GitHub Packages Registry (GPR). For existing projects that are installing SDK packages from GPR,
+Starting from version `0.11.3`, Compose SDK packages and their dependencies are hosted on the public NPM registry,
+instead of the GitHub Packages Registry (GPR). For existing projects that are installing SDK packages from GPR,
 below are simple steps to switch to public NPM:
 
 For npm:
@@ -196,9 +198,7 @@ export const Brand = createDimension({
 }) as BrandDimension;
 ```
 
-This works for any of your own data models. Replace `"Sample ECommerce"` with your own data model from your instance.
-
-Feel free to move the data model files to any directory as long as the application has access to it.
+This works for any data model, including models you create. Just replace `"Sample Healthcare"` with the name of your data model.
 
 ## Embedding a Chart in your Application
 

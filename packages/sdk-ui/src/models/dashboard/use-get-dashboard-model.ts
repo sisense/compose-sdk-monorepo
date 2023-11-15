@@ -7,6 +7,7 @@ import { type DashboardModel } from './types';
 import { getDashboardModel, GetDashboardModelOptions } from './get-dashboard-model';
 import { HookEnableParam } from '../../common/hooks/types';
 import { TranslatableError } from '../../translation/translatable-error';
+import { withTracking } from '../../decorators/hook-decorators';
 
 /**
  * Parameters for {@link useGetDashboardModel} hook.
@@ -111,7 +112,15 @@ export type DashboardModelSuccessState = {
  * @param params - Parameters of the dashboard to be retrieved
  * @returns Dashboard load state that contains the status of the execution, the result dashboard model, or the error if any
  */
-export const useGetDashboardModel = (params: GetDashboardModelParams) => {
+export const useGetDashboardModel = withTracking('useGetDashboardModel')(
+  useGetDashboardModelInternal,
+);
+
+/**
+ * {@link useGetDashboardModel} without tracking to be used inside other hooks or components in Compose SDK.
+ * @internal
+ */
+export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
   const prevParams = usePrevious(params);
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<DashboardModel>, {
     isLoading: true,
@@ -163,7 +172,7 @@ export const useGetDashboardModel = (params: GetDashboardModelParams) => {
   }
 
   return translateToDashboardResponse(dataState);
-};
+}
 
 /**
  * Checks if the parameters have changed by deep comparison.

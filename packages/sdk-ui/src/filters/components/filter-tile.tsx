@@ -1,6 +1,6 @@
+/* eslint-disable complexity */
 import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
-
 import { SisenseSwitchButton } from './common';
 import { ArrowDownIcon } from './icons';
 import { useThemeContext } from '../../theme-provider';
@@ -10,8 +10,8 @@ import { styled } from '@mui/material/styles';
 interface Props {
   title: string;
   renderContent: (collapsed: boolean, tileDisabled: boolean) => ReactNode;
-  disabled: boolean;
-  onToggleDisabled: () => void;
+  disabled?: boolean;
+  onToggleDisabled?: () => void;
 }
 
 const GroupHoverWrapper = styled('div')({
@@ -42,14 +42,13 @@ export const FilterTile: FunctionComponent<Props> = ({
   const { themeSettings } = useThemeContext();
 
   const { backgroundColor: bgColor } = themeSettings.general;
+  const { primaryTextColor: textColor } = themeSettings.typography;
   const disabledBgColor = getSlightlyDifferentColor(bgColor, 0.1);
 
   return (
     <GroupHoverWrapper>
       <div
-        className={
-          'csdk-w-[216px] csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start'
-        }
+        className={`csdk-w-min csdk-min-w-[216px] csdk-p-px csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start`}
         style={{
           backgroundColor: disabled ? disabledBgColor : bgColor,
         }}
@@ -73,12 +72,12 @@ export const FilterTile: FunctionComponent<Props> = ({
             className={
               'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
             }
+            style={{ color: textColor }}
           >
             {title}
           </span>
         </header>
-
-        <main>{renderContent(collapsed, disabled)}</main>
+        <main style={{ color: textColor }}>{renderContent(collapsed, disabled ?? false)}</main>
 
         <footer
           className={
@@ -88,7 +87,7 @@ export const FilterTile: FunctionComponent<Props> = ({
           <SisenseSwitchButton
             checked={!disabled}
             size="small"
-            onChange={() => onToggleDisabled()}
+            onChange={() => onToggleDisabled?.()}
             inputProps={{ role: 'switch', name: 'tile-switch' }}
           />
         </footer>

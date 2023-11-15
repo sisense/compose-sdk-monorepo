@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.14.0] - 2023-11-14
+
+### Added
+- Add `CriteriaFilterTile` for vertical single input use case.
+
+### Changed
+- Support dashboard filters by boolean flag `includeDashboardFilters` in component `DashboardWidget`, component `ExecuteQueryByWidgetId`, and hook `useExecuteQueryByWidgetId`
+- Extend `fitlersMergeStrategy` to support highlight filters
+- Extend hooks `useExecuteQuery` and `useExecuteQueryByWidgetId` to re-execute on `onBeforeQuery` changes
+- Fix issues related to date formatting and continuous timeline
+- Show the No Result image for scatter chart without data
+- Support highlights for scatter chart and pie chart
+- Implement colors by series in sunburst chart
+- Implement usage tracking of public hooks
+- Extract usage tracking logic into a separate package `@sisense/sdk-tracking`
+
 ## [0.13.0] - 2023-11-02
 
 ### Added

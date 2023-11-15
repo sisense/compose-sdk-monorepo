@@ -480,9 +480,14 @@ export type StyleOptions =
   | SunburstStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
-export type ValueToColorMap = Record<string, string>;
-/** Mapping of each of the chart value series to colors. */
-export type ValueToColorMultiColumnsMap = Record<string, Record<string, string>>;
+export type ValueToColorMap = {
+  [value: string]: string;
+};
+
+/** Mapping of each of the chart columns with mapping of each value series to colors. */
+export type MultiColumnValueToColorMap = {
+  [columnName: string]: ValueToColorMap;
+};
 
 /**
  * Chart type of one of the supported chart families

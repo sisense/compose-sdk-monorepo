@@ -1,7 +1,7 @@
 import { isFunction, isBoolean } from 'lodash';
-import { useSisenseContext } from '../sisense-context/sisense-context';
 import { ComponentDecorator, SisenseComponentConfig } from './as-sisense-component';
-import { TranslatableError } from '../translation/translatable-error';
+import { TranslatableError } from '../../translation/translatable-error';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
 
 type SisenseContextValidationConfig = Pick<
   SisenseComponentConfig,

@@ -1,8 +1,17 @@
 import { WidgetDto, Datasource, FilterJaql } from '../../dashboard-widget/types';
 
-type Filter = {
+export type Filter = {
+  isCascading?: false;
   jaql: FilterJaql;
-  isCascading: boolean;
+  instanceid?: string;
+  disabled?: boolean;
+};
+
+export type CascadingFilter = {
+  isCascading: true;
+  levels: FilterJaql[];
+  instanceid?: string;
+  disabled?: boolean;
 };
 
 export type DashboardDto = {
@@ -10,5 +19,5 @@ export type DashboardDto = {
   title: string;
   datasource: Datasource;
   widgets?: WidgetDto[];
-  filters?: Filter[];
+  filters?: Array<Filter | CascadingFilter>;
 };

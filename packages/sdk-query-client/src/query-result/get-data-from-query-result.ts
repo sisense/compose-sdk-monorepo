@@ -25,18 +25,32 @@ export function prepareResultAsColsAndRows(
   };
 }
 
+/**
+ * Sets the `blur` property for each cell in a 2D array of data cells based on the `selected` property.
+ *
+ * @param rows - The 2D array of data cells representing rows and columns.
+ * @returns A new 2D array of cells with the `blur` property set.
+ */
 export function setCellsBlur(rows: DataCell[][]): Cell[][] {
-  const selectedFieldFound = rows.some((r) => r[0].selected);
+  // An array indicating whether `blur` is enabled per each column.
+  const blurEnabledPerColumn = rows[0]?.map((_value, index) => {
+    return rows.some((r) => 'selected' in r[index]);
+  });
 
-  return rows.map((r) =>
-    r.map(
+  return rows.map((r) => {
+    // calculates a single `blur` value for a whole row based on each column (cell) configuration.
+    const blur = blurEnabledPerColumn.some((isBlurEnabled, columnIndex) => {
+      return isBlurEnabled && !r[columnIndex].selected;
+    });
+
+    return r.map(
       (d): Cell => ({
         data: d.data,
         text: d.text,
-        blur: selectedFieldFound && !r[0].selected,
+        blur,
       }),
-    ),
-  );
+    );
+  });
 }
 
 export function getQueryResultValues({ values = [], metadata = [] }: JaqlResponse): DataCell[][] {

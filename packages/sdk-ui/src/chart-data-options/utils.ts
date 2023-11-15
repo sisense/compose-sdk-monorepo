@@ -2,8 +2,10 @@ import {
   Attribute,
   CalculatedMeasureColumn,
   Column,
+  LevelAttribute,
   Measure,
   MeasureColumn,
+  isDatetime,
 } from '@sisense/sdk-data';
 import {
   Category,
@@ -33,8 +35,12 @@ const safeMerge = (sourceToInherit: AnyObject, sourceToAbsorb: AnyObject): AnyOb
 export const translateColumnToCategory = (c: StyledColumn | Column): Category => {
   const isStyledColumn = 'column' in c;
   const column = isStyledColumn ? c.column : c;
-  const style = isStyledColumn ? c : {};
-
+  const levelDimensionDateFormat = isDatetime(column.type)
+    ? (column as LevelAttribute)?.getFormat?.()
+    : undefined;
+  const style = isStyledColumn
+    ? { ...c, dateFormat: c.dateFormat || levelDimensionDateFormat }
+    : {};
   return safeMerge(column, style) as Category;
 };
 

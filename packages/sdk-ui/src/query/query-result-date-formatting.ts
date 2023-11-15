@@ -8,7 +8,7 @@ import { Data, isDatetime } from '@sisense/sdk-data';
 import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
 import { applyDateFormat, defaultDateConfig } from './date-formats';
 import type { DateFormat, DateConfig } from './date-formats';
-import { Category } from '../chart-data-options/types';
+import { Category, isCategory } from '../chart-data-options/types';
 import type { Column, Cell, QueryResultData } from '@sisense/sdk-data';
 import { isCell } from '../chart-data-processor/table-creators';
 import { createCompareValue } from '../chart-data-processor/row-comparator';
@@ -23,19 +23,23 @@ export function applyDateFormats(
 ): QueryResultData | Data {
   type ColumnIndex = number;
   const dateFormats = new Map<ColumnIndex, DateFormat>();
-
   [
     ...(chartDataOptions.breakBy ? chartDataOptions.breakBy : []),
-    ...(chartDataOptions.x ? chartDataOptions.x : []),
+    ...(chartDataOptions.x
+      ? Array.isArray(chartDataOptions.x)
+        ? chartDataOptions.x
+        : [chartDataOptions.x]
+      : []),
+    ...(chartDataOptions.columns ? chartDataOptions.columns : []),
   ].forEach(function collectDateFormatsFromCategoriesOptions(cat: Category): void {
-    if (!cat.dateFormat) {
+    if (!isCategory(cat) || !cat.dateFormat) {
       return;
     }
 
     const columnIndex = data.columns.findIndex(function isDatetimeColumnWithSameNameSameType(
       column: Column,
     ): boolean {
-      return column.name === cat.name && column.type === cat.type && isDatetime(column.type);
+      return column.name === cat.name && isDatetime(cat.type) && isDatetime(column.type);
     });
 
     if (columnIndex === -1) {
@@ -64,7 +68,7 @@ export function applyDateFormats(
       let newCell;
       let date;
       if (isCell(oldCell)) {
-        newCell = oldCell;
+        newCell = { ...oldCell };
       } else {
         // oldCell is a date string, emulate how JAQL results treats dates
         const compareValue = createCompareValue(`${oldCell}`, 'datetime');

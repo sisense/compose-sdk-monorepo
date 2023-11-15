@@ -6,8 +6,8 @@ title: ChartWidget
 
 > **ChartWidget**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
-The Chart Widget component extending the [Chart](function.Chart.md) component to support advanced BI
-capabilities such as drilldown.
+The Chart Widget component extending the [Chart](function.Chart.md) component to support widget style options.
+It can be used along with the [DrilldownWidget](function.DrilldownWidget.md) component to support advanced data drilldown.
 
 ## Parameters
 

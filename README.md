@@ -57,4 +57,4 @@ yarn storybook
 ```
 
 ### Set up another app
-You can find more information about setting up an app using this SDK in [quickstart.md](./docs-md/sdk/quickstart.md).
+You can find more information about setting up an app using this SDK in [quickstart.md](./docs-md/sdk/quickstart.md) or [quickstart-angular.md](./docs-md/sdk/quickstart-angular.md).

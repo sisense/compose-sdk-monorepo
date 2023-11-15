@@ -30,11 +30,11 @@ export const categoricalData = (
   chartDataOptions: CategoricalChartDataOptionsInternal,
   dataTable: DataTable, // 	chartSourceData: ChartSource,
 ): CategoricalChartData => {
-  const cartesianChartDataOptions: CartesianChartDataOptionsInternal = {
+  const cartesianChartDataOptions = {
     ...chartDataOptions,
     x: chartDataOptions.breakBy,
     breakBy: [],
-  };
+  } as CartesianChartDataOptionsInternal;
   let cartesianChartData = cartesianData(cartesianChartDataOptions, dataTable);
 
   // maybe format break By values

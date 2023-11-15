@@ -1,13 +1,13 @@
 ## What is this directory, `docs-md`, for?
 This directory contains the source files for the Compose SDK documentation on `sisense.dev`.
 
-This includes the Quickstart guide (`docs-md/sdk/quickstart.md`) and the generated API reference (`docs-md/sdk/modules`).
+This includes the CHANGELOG (`docs-md/sdk/CHANGELOG.md`), Quickstart guide for React (`docs-md/sdk/quickstart.md`), and Angular (`docs-md/sdk/quickstart-angular.md`) as well as the generated API reference (`docs-md/sdk/modules`).
 
 All changes to the Compose SDK documentation should be made here and then moved to the repo
 for the `sisense.dev` site.
 
 ## How to update the Quickstart guide?
-Open `docs-md/sdk/quickstart.md` and make your changes as usual.
+Open `docs-md/sdk/quickstart.md` or `docs-md/sdk/quickstart-angular.md` and make your changes as usual.
 
 ## How to generate the API reference?
 From the root directory of this monorepo, run
@@ -19,6 +19,18 @@ yarn docs:gen:md
 The generated files will be placed in `docs-md/sdk/modules`.
 
 DO NOT MANUALLY EDIT FILES IN THIS DIRECTORY.
+
+## How to update the CHANGELOG?
+DO NOT MANUALLY EDIT CHANGELOG.MD IN `docs-md/sdk`.
+
+Instead, make changes in `CHANGELOG.md` in the root directory of this monorepo and then re-run
+
+```sh
+yarn docs:gen:md
+```
+
+The process will copy `./CHANGELOG.md` to `docs-md/sdk/CHANGELOG.md`.
+
 
 ## How to move the changes to the repo for `sisense.dev`?
 From the root directory of this monorepo, run

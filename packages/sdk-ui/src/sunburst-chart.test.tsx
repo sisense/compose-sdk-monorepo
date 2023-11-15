@@ -6,6 +6,7 @@ import { getDefaultThemeSettings } from './chart-options-processor/theme-option-
 import { getBaseDateFnsLocale } from './chart-data-processor/data-table-date-period';
 import { ClientApplication } from './app/client-application';
 import { SunburstChart } from './sunburst-chart';
+import { HighchartsSeriesValues } from './chart-options-processor/translations/translations-to-highcharts';
 
 vi.mock('./HighchartsWrapper', () => {
   return {
@@ -125,6 +126,47 @@ describe('Sunburst Chart', () => {
         }}
         onBeforeRender={(options: HighchartsOptions) => {
           expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+  });
+
+  it('render a sunburst with series coloring', () => {
+    render(
+      <SunburstChart
+        dataSet={dataSet}
+        dataOptions={{
+          category: [cat1, cat2],
+          value: [meas1],
+          seriesToColorMap: {
+            Years: {
+              '2009': 'red',
+            },
+            Group: {
+              B: 'green',
+            },
+          },
+        }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          const items2009 = (options.series?.[0] as HighchartsSeriesValues).data.filter(
+            (item) => item.name === '2009',
+          );
+          const itemsB = (options.series?.[0] as HighchartsSeriesValues).data.filter(
+            (item) => item.name === 'B',
+          );
+
+          expect(items2009.length > 0).toBeTruthy();
+          expect(itemsB.length > 0).toBeTruthy();
+
+          items2009.forEach((item2009) => {
+            expect(item2009.color).toBe('red');
+          });
+
+          itemsB.forEach((itemB) => {
+            expect(itemB.color).toBe('green');
+          });
+
           return options;
         }}
       />,

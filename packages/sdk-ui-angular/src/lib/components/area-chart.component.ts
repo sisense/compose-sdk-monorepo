@@ -3,7 +3,9 @@ import { type ChartType, type AreaChartProps } from '@sisense/sdk-ui-preact';
 import { type ArgumentsAsObject } from '../utility-types';
 
 /**
- * Area Chart Component
+ * A component similar to a {@link LineChartComponent},
+ * but with filled in areas under each line and an option to display them as stacked.
+ * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
  */
 @Component({
   selector: 'csdk-area-chart',

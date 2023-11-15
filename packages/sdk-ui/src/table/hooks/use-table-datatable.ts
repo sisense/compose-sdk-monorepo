@@ -14,6 +14,8 @@ import {
   DataColumnNamesMapping,
   validateDataOptionsAgainstData,
 } from '../../chart-data-options/validate-data-options';
+import { applyDateFormats } from '../../query/query-result-date-formatting';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
 
 type UseTableDataTableProps = {
   data: null | Data;
@@ -28,10 +30,13 @@ export const useTableDataTable = ({
   dataColumnNamesMapping,
   needToAggregate = false,
 }: UseTableDataTableProps) => {
+  const { app } = useSisenseContext();
   return useMemo(() => {
     if (!data || !innerDataOptions) return null;
 
-    let table = createDataTableFromData(data);
+    let table = createDataTableFromData(
+      applyDateFormats(data, innerDataOptions, app?.settings.locale, app?.settings.dateConfig),
+    );
     const attributes = innerDataOptions.columns.filter((c) => isCategory(c));
     const measures = innerDataOptions.columns.filter((c) => isValue(c));
 
@@ -52,5 +57,5 @@ export const useTableDataTable = ({
     }
 
     return tableData(innerDataOptions, table);
-  }, [data, innerDataOptions, needToAggregate, dataColumnNamesMapping]);
+  }, [data, innerDataOptions, needToAggregate, dataColumnNamesMapping, app]);
 };

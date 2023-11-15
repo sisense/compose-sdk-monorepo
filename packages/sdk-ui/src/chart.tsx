@@ -46,7 +46,7 @@ import { translateAttributeToCategory, translateMeasureToValue } from './chart-d
 import { useSetError } from './error-boundary/use-set-error';
 import { getDefaultStyleOptions } from './chart-options-processor/chart-options-service';
 import { NoResultsOverlay } from './no-results-overlay/no-results-overlay';
-import { asSisenseComponent } from './decorators/as-sisense-component';
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getChartDefaultSize } from './dynamic-size-container';
 
 /*
@@ -232,7 +232,9 @@ export const Chart = asSisenseComponent({
       }}
     >
       {() => {
-        const hasNoResults = 'series' in chartData && chartData.series.length === 0;
+        const hasNoResults =
+          ('series' in chartData && chartData.series.length === 0) ||
+          ('scatterDataTable' in chartData && chartData.scatterDataTable.length === 0);
         if (hasNoResults) {
           return <NoResultsOverlay iconType={chartType} />;
         }
@@ -300,15 +302,12 @@ const useSyncedData = (
         app!,
       )
         .then((queryResultData) => {
-          const dataWithDateFormatting =
-            'breakBy' in chartDataOptions
-              ? applyDateFormats(
-                  queryResultData,
-                  chartDataOptions,
-                  app?.settings.locale,
-                  app?.settings.dateConfig,
-                )
-              : queryResultData;
+          const dataWithDateFormatting = applyDateFormats(
+            queryResultData,
+            chartDataOptions,
+            app?.settings.locale,
+            app?.settings.dateConfig,
+          );
 
           if (!ignore) {
             setData(dataWithDateFormatting);
@@ -331,15 +330,12 @@ const useSyncedData = (
         highlights,
       );
 
-      const dataWithDateFormatting =
-        'breakBy' in chartDataOptions
-          ? applyDateFormats(
-              dataSet,
-              chartDataOptions,
-              app?.settings.locale,
-              app?.settings.dateConfig,
-            )
-          : dataSet;
+      const dataWithDateFormatting = applyDateFormats(
+        dataSet,
+        chartDataOptions,
+        app?.settings.locale,
+        app?.settings.dateConfig,
+      );
 
       setData(dataWithDateFormatting);
     }

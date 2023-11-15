@@ -1,9 +1,24 @@
+/** @vitest-environment jsdom */
 import { renderHook, waitFor } from '@testing-library/react';
+import { trackProductEvent } from '@sisense/sdk-tracking';
 import type { Mock } from 'vitest';
 import { useGetDashboardModels } from './use-get-dashboard-models.js';
 import { getDashboardModels } from './get-dashboard-models.js';
 import { useSisenseContext } from '../../sisense-context/sisense-context.js';
 import { type ClientApplication } from '../../app/client-application.js';
+
+vi.mock('@sisense/sdk-tracking', async () => {
+  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
+    '@sisense/sdk-tracking',
+  );
+  return {
+    ...actual,
+    trackProductEvent: vi.fn().mockImplementation(() => {
+      console.log('trackProductEvent');
+      return Promise.resolve();
+    }),
+  };
+});
 
 vi.mock('../../sisense-context/sisense-context', async () => {
   const actual: typeof import('../../sisense-context/sisense-context.js') = await vi.importActual(
@@ -35,6 +50,11 @@ const getDashboarsdModelsMock = getDashboardModels as Mock<
 const useSisenseContextMock = useSisenseContext as Mock<
   Parameters<typeof useSisenseContext>,
   ReturnType<typeof useSisenseContext>
+>;
+
+const trackProductEventMock = trackProductEvent as Mock<
+  Parameters<typeof trackProductEvent>,
+  ReturnType<typeof trackProductEvent>
 >;
 
 describe('useGetDashboardModels', () => {
@@ -71,5 +91,34 @@ describe('useGetDashboardModels', () => {
       expect(result.current.isError).toBe(true);
       expect(result.current.error).toBe(mockError);
     });
+  });
+
+  it('should send tracking for the first execution', async () => {
+    getDashboarsdModelsMock.mockResolvedValue(dashboardsMock);
+
+    useSisenseContextMock.mockReturnValue({
+      app: { httpClient: {} } as ClientApplication,
+      isInitialized: true,
+      enableTracking: true,
+    });
+    vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
+
+    const { result } = renderHook(() => useGetDashboardModels());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.dashboards).toBe(dashboardsMock);
+    });
+
+    expect(trackProductEventMock).toHaveBeenCalledOnce();
+    expect(trackProductEventMock).toHaveBeenCalledWith(
+      'sdkHookInit',
+      expect.objectContaining({
+        hookName: 'useGetDashboardModels',
+      }),
+      expect.anything(),
+      expect.any(Boolean),
+    );
   });
 });

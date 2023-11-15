@@ -26,6 +26,16 @@ Identifier of the dashboard that contains the widget
 
 ***
 
+### enabled
+
+> **enabled**?: `boolean`
+
+Boolean flag to control if query is executed
+
+If not specified, the default value is `true`
+
+***
+
 ### filters
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
@@ -40,7 +50,7 @@ The provided filters will be merged with the existing widget filters based on `f
 
 > **filtersMergeStrategy**?: `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
 
-Strategy for merging the existing widget filters with the filters provided via the `filters` prop:
+Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
 
 - `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
 - `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
@@ -58,6 +68,16 @@ Highlight filters that will highlight results that pass filter criteria
 
 ***
 
+### includeDashboardFilters
+
+> **includeDashboardFilters**?: `boolean`
+
+Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
+
+If not specified, the default value is `false`.
+
+***
+
 ### offset
 
 > **offset**?: `number`
@@ -65,6 +85,32 @@ Highlight filters that will highlight results that pass filter criteria
 Offset of the first row to return
 
 If not specified, the default value is `0`
+
+***
+
+### onBeforeQuery
+
+> **onBeforeQuery**?: (`jaql`) => `any`
+
+Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+
+**Note:** wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+```ts
+const onBeforeQuery = useCallback((jaql) => {
+  // modify jaql here
+  return jaql;
+}, []);
+```
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `jaql` | `any` |
+
+#### Returns
+
+`any`
 
 ***
 

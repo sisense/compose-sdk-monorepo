@@ -1,7 +1,14 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Color, Convolution, SeriesWithAlerts, CompleteThemeSettings } from '../../types';
+import {
+  Color,
+  Convolution,
+  SeriesWithAlerts,
+  CompleteThemeSettings,
+  ValueToColorMap,
+} from '../../types';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
 import { DEFAULT_SERIES_COLORS, SeriesType } from '../chart-options-service';
 import { formatSeries, getColorSetting, SeriesPointStructure } from './translations-to-highcharts';
@@ -63,6 +70,7 @@ export const formatCategoricalChartData = (
           .map((v, index) => {
             return {
               ...v,
+              ...(v.selected && { sliced: true }),
               name: categories[index],
               color:
                 getColorSetting(dataOptions, seriesValues[index].name) ??
@@ -84,15 +92,27 @@ export const formatCategoricalChartData = (
     const indexMap = categories.map((category: string, i: number) => i);
     const categoryColors = categories.map(
       (c, i) =>
-        dataOptions.seriesToColorMap?.[c] ??
+        (dataOptions.seriesToColorMap as ValueToColorMap)?.[c] ??
         getAPaletteColor(themeSettings?.palette?.variantColors, i),
     );
-
-    series = chartData.series.map((v: CategoricalSeriesValues) => ({
-      ...formatSeries(v, indexMap, false, categories, categoryColors),
-      boostThreshold: 0,
-      turboThreshold: 0,
-    }));
+    series = chartData.series.map((v: CategoricalSeriesValues) => {
+      const { data, ...otherSeriesOptions } = formatSeries(
+        v,
+        indexMap,
+        false,
+        categories,
+        categoryColors,
+      );
+      return {
+        ...otherSeriesOptions,
+        data: data.map((v) => ({
+          ...v,
+          ...(v.selected && { sliced: true }),
+        })),
+        boostThreshold: 0,
+        turboThreshold: 0,
+      };
+    });
   }
 
   const convolution = designOptions?.convolution;

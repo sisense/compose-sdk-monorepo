@@ -10,12 +10,11 @@ import { WidgetHeader } from './common/widget-header';
 import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
 import { Table } from '../table';
-import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 
 /**
- * The TableWidget component extending the {@link Table} component to support advanced BI
- * capabilities such as header.
+ * The TableWidget component extending the {@link Table} component to support widget style options.
  *
  * @example
  * Example of using the `Widget` component to

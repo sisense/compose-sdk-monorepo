@@ -28,11 +28,13 @@ title: QueryService
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
  } \>
 
+Executes a data query.
+
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | [`ExecuteQueryParams`](../../sdk-ui/type-aliases/type-alias.ExecuteQueryParams.md) |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `params` | [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md) | Query parameters<br />return Query result |
 
 #### Returns
 
@@ -46,18 +48,22 @@ title: QueryService
 
 > **executeQueryByWidgetId**(`params`): `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-  `query`: [`ExecuteQueryParams`](../../sdk-ui/type-aliases/type-alias.ExecuteQueryParams.md);
+  `query`: [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md);
  } \>
+
+Executes a data query extracted from an existing widget in the Sisense instance.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | [`ExecuteQueryByWidgetIdParams`](../../sdk-ui/interfaces/interface.ExecuteQueryByWidgetIdParams.md) |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `params` | [`ExecuteQueryByWidgetIdParams`](../../sdk-ui/interfaces/interface.ExecuteQueryByWidgetIdParams.md) | Parameters to identify the target widget |
 
 #### Returns
 
 `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-  `query`: [`ExecuteQueryParams`](../../sdk-ui/type-aliases/type-alias.ExecuteQueryParams.md);
+  `query`: [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md);
  } \>
+
+Query result

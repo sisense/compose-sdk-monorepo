@@ -1,7 +1,6 @@
 import { ColumnChartProps } from './props';
 import { Chart, shouldSkipSisenseContextWaiting } from './chart';
-import { asSisenseComponent } from './decorators/as-sisense-component';
-
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
  * A React component representing categorical data with vertical rectangular bars
  * whose heights are proportional to the values that they represent.

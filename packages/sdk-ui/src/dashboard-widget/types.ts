@@ -42,6 +42,11 @@ export type WidgetSubtype =
   | 'treemap'
   | 'sunburst';
 
+export enum WidgetDashboardFilterMode {
+  FILTER = 'filter',
+  SELECT = 'select',
+}
+
 export type Datasource = {
   title: string;
   id: string;
@@ -61,12 +66,22 @@ export interface WidgetDto {
   subtype: WidgetSubtype | string;
   datasource: Datasource;
   metadata: {
+    ignore?: FiltersIgnoringRules;
     panels: Panel[];
   };
   style: WidgetStyle;
   title: string;
   desc: string;
+  options?: {
+    dashboardFiltersMode: `${WidgetDashboardFilterMode}`;
+  };
 }
+
+export type FiltersIgnoringRules = {
+  dimensions?: string[];
+  ids: string[];
+  all: boolean;
+};
 
 export const enum DataType {
   TEXT = 'text',
@@ -106,7 +121,7 @@ export type FormulaJaql = {
   context?: Record<FormulaID, FormulaContext>;
 };
 
-type IncludeAllFilter = {
+export type IncludeAllFilter = {
   all: true;
 };
 
@@ -124,7 +139,9 @@ export type MembersFilter = IncludeMembersFilter | ExcludeMembersFilter;
 
 type BaseFilter = IncludeAllFilter | MembersFilter;
 
-type BackgroundFilter = BaseFilter;
+export type BackgroundFilter = BaseFilter & {
+  level?: 'string';
+};
 
 type TurnOffMembersFilter = ExcludeMembersFilter & {
   turnedOff: boolean;

@@ -18,8 +18,10 @@ import {
   BaseJaql,
   FilterJaql,
   IncludeMembersFilter,
+  WidgetDashboardFilterMode,
   WidgetDto,
 } from '../dashboard-widget/types.js';
+import { trackProductEvent } from '@sisense/sdk-tracking';
 
 vi.mock('../query/execute-query', () => ({
   executeQuery: vi.fn(),
@@ -35,11 +37,27 @@ vi.mock('../sisense-context/sisense-context', async () => {
   };
 });
 const getWidgetMock = vi.fn();
+const getDashboardMock = vi.fn();
 vi.mock('../api/rest-api', () => ({
   RestApi: class {
     getWidget = getWidgetMock;
+
+    getDashboard = getDashboardMock;
   },
 }));
+
+vi.mock('@sisense/sdk-tracking', async () => {
+  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
+    '@sisense/sdk-tracking',
+  );
+  return {
+    ...actual,
+    trackProductEvent: vi.fn().mockImplementation(() => {
+      console.log('trackProductEvent');
+      return Promise.resolve();
+    }),
+  };
+});
 
 const executeQueryMock = executeQuery as Mock<
   Parameters<typeof executeQuery>,
@@ -49,13 +67,21 @@ const useSisenseContextMock = useSisenseContext as Mock<
   Parameters<typeof useSisenseContext>,
   ReturnType<typeof useSisenseContext>
 >;
+const trackProductEventMock = trackProductEvent as Mock<
+  Parameters<typeof trackProductEvent>,
+  ReturnType<typeof trackProductEvent>
+>;
 
 const mockWidget = {
+  type: 'chart/column',
   datasource: {
     title: 'Some elasticube',
   },
   metadata: {
     panels: [],
+  },
+  options: {
+    dashboardFiltersMode: WidgetDashboardFilterMode.SELECT,
   },
 } as unknown as WidgetDto;
 
@@ -64,7 +90,7 @@ const mockWidgetWithMetadataItems = {
   metadata: {
     panels: [
       {
-        name: 'some panel with dimensions',
+        name: 'categories',
         items: [
           {
             jaql: {
@@ -75,7 +101,7 @@ const mockWidgetWithMetadataItems = {
         ],
       },
       {
-        name: 'some panel with measures',
+        name: 'values',
         items: [
           {
             jaql: {
@@ -87,7 +113,7 @@ const mockWidgetWithMetadataItems = {
         ],
       },
       {
-        name: 'some panel with filters',
+        name: 'filters',
         items: [
           {
             jaql: {
@@ -104,6 +130,20 @@ const mockWidgetWithMetadataItems = {
   },
 };
 
+const mockDashboard = {
+  filters: [
+    {
+      jaql: {
+        title: 'some dashboard filter title',
+        dim: 'some dimension',
+        filter: {
+          members: ['some member'],
+        },
+      } as unknown as FilterJaql,
+    },
+  ],
+};
+
 describe('useExecuteQueryByWidgetId', () => {
   const params: ExecuteQueryByWidgetIdParams = {
     widgetOid: '64473e07dac1920034bce77f',
@@ -113,6 +153,7 @@ describe('useExecuteQueryByWidgetId', () => {
   beforeEach(() => {
     executeQueryMock.mockClear();
     getWidgetMock.mockClear();
+    getDashboardMock.mockClear();
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,
@@ -400,6 +441,164 @@ describe('useExecuteQueryByWidgetId', () => {
           onBeforeQuery,
         }),
       );
+    });
+  });
+
+  it('should send tracking for the first execution', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+    getWidgetMock.mockResolvedValue(mockWidget);
+    useSisenseContextMock.mockReturnValue({
+      app: { httpClient: {} } as ClientApplication,
+      isInitialized: true,
+      enableTracking: true,
+    });
+    vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
+
+    const { result } = renderHook(() => useExecuteQueryByWidgetId(params));
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockData);
+    });
+
+    expect(trackProductEventMock).toHaveBeenCalledOnce();
+    expect(trackProductEventMock).toHaveBeenCalledWith(
+      'sdkHookInit',
+      expect.objectContaining({
+        hookName: 'useExecuteQueryByWidgetId',
+      }),
+      expect.anything(),
+      expect.any(Boolean),
+    );
+  });
+
+  it("shouldn't send query if 'enabled' set to false", async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteQueryByWidgetId({ ...params, enabled: false }));
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+      expect(result.current.isSuccess).toBe(false);
+      expect(result.current.data).toBeUndefined();
+    });
+
+    expect(executeQueryMock).not.toHaveBeenCalled();
+  });
+
+  it('should merge provided "highlights" with existing widget "highlights" (inhereted from dashboard) using default `codeFirst` strategy', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    const highlights = [
+      // filter with the new target attribute that not exist in widget
+      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+        'some value of provided filter',
+      ]),
+    ];
+
+    executeQueryMock.mockResolvedValue(mockData);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getDashboardMock.mockResolvedValue(mockDashboard);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        highlights,
+        includeDashboardFilters: true,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      // verifies that query contains "highlights" filters both passed via props and taken from widget/dashboard model
+      expect(result.current.query?.highlights?.length).toBe(2);
+      expect(
+        (
+          (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      ).toStrictEqual(
+        ((highlights[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+      );
+      expect(
+        (
+          (result.current.query?.highlights?.[1].jaql(true) as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      ).toStrictEqual((mockDashboard.filters[0].jaql.filter as IncludeMembersFilter).members);
+    });
+  });
+
+  it('should merge provided "highlights" with existing widget "highlights" (inhereted from dashboard) using `codeOnly` strategy', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    const highlights = [
+      // filter with the new target attribute that not exist in widget
+      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+        'some value of provided filter',
+      ]),
+    ];
+
+    executeQueryMock.mockResolvedValue(mockData);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getDashboardMock.mockResolvedValue(mockDashboard);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        highlights,
+        includeDashboardFilters: true,
+        filtersMergeStrategy: 'codeOnly',
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      // verifies that query contains "highlights" filters only taken from props
+      expect(result.current.query?.highlights?.length).toBe(1);
+      expect(
+        (
+          (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      ).toStrictEqual(
+        ((highlights[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+      );
+    });
+  });
+
+  it('should merge provided "highlights" with existing widget "highlights" (inhereted from dashboard) using `widgetFirst` strategy', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    const highlights = [
+      // filter with the target attribute that exists in widget
+      filtersFactory.members(new DimensionalAttribute('some name', 'some dimension'), [
+        'some value of provided filter',
+      ]),
+    ];
+
+    executeQueryMock.mockResolvedValue(mockData);
+    getWidgetMock.mockResolvedValue(mockWidgetWithMetadataItems);
+    getDashboardMock.mockResolvedValue(mockDashboard);
+
+    const { result } = renderHook(() =>
+      useExecuteQueryByWidgetId({
+        ...params,
+        highlights,
+        includeDashboardFilters: true,
+        filtersMergeStrategy: 'widgetFirst',
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      // verifies that query contains "highlights" filters only taken from widget/dashboard model
+      expect(result.current.query?.highlights?.length).toBe(1);
+      expect(
+        (
+          (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
+            .filter as IncludeMembersFilter
+        ).members,
+      ).toStrictEqual((mockDashboard.filters[0].jaql.filter as IncludeMembersFilter).members);
     });
   });
 });

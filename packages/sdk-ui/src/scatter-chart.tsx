@@ -1,7 +1,6 @@
 import { ScatterChartProps } from './props';
 import { Chart, shouldSkipSisenseContextWaiting } from './chart';
-import { asSisenseComponent } from './decorators/as-sisense-component';
-
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
  * A React component displaying the distribution of two variables on an X-Axis, Y-Axis,
  * and two additional fields of data that are shown as colored circles scattered across the chart.
@@ -9,7 +8,7 @@ import { asSisenseComponent } from './decorators/as-sisense-component';
  * **Point**: A field that for each of its members a scatter point is drawn. The maximum amount of data points is 500.
  *
  * **Size**: An optional field represented by the size of the circles.
- * If omitted, all scatter points are equal in size. If used, the circle size is relative to their value.
+ * If omitted, all scatter points are equal in size. If used, the circle sizes are relative to their values.
  *
  * See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm) for more information.
  *

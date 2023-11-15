@@ -252,3 +252,16 @@ export const WithDataLimits = template({
   styleOptions: { ...styleOptions, dataLimits: { seriesCapacity: 2 } },
   chartType: 'pie',
 });
+
+export const WithHighlights = template({
+  ...pieArgs,
+  chartType: 'pie',
+  dataSet: {
+    columns: dataSet.columns,
+    rows: [
+      ['2009', 'A', 6781, 1500, 3420],
+      ['2011', 'B', 1812, { data: 5000, blur: true }, 1234],
+      ['2011', 'C', 1300, { data: 9000, blur: true }, 5667],
+    ],
+  },
+});

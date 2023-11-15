@@ -1,19 +1,24 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines */
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { type Filter } from '@sisense/sdk-data';
-import { ExecuteQueryParams } from './index.js';
-import { queryStateReducer, QueryState } from './query-state-reducer.js';
-import { useSisenseContext } from '../sisense-context/sisense-context.js';
-import { executeQuery } from '../query/execute-query.js';
-import { mergeFilters, mergeFiltersByStrategy } from '../dashboard-widget/utils.js';
-import { FiltersMergeStrategy, WidgetDto } from '../dashboard-widget/types.js';
 import { isEqual } from 'lodash';
-import { isFiltersChanged } from '../utils/filters-comparator.js';
-import { ClientApplication } from '../app/client-application.js';
-import { extractQueryFromWidget } from './utils.js';
-import { TranslatableError } from '../translation/translatable-error.js';
-import { RestApi } from '../api/rest-api.js';
-import { usePrevious } from '../common/hooks/use-previous.js';
+import { type Filter } from '@sisense/sdk-data';
+import { withTracking } from '../decorators/hook-decorators';
+import { ExecuteQueryParams } from './';
+import { queryStateReducer, QueryState } from './query-state-reducer';
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { executeQuery } from '../query/execute-query';
+import { mergeFilters, mergeFiltersByStrategy } from '../dashboard-widget/utils';
+import { FiltersMergeStrategy } from '../dashboard-widget/types';
+import { isFiltersChanged } from '../utils/filters-comparator';
+import { ClientApplication } from '../app/client-application';
+import { extractQueryFromWidget } from './utils';
+import { TranslatableError } from '../translation/translatable-error';
+import { RestApi } from '../api/rest-api';
+import { usePrevious } from '../common/hooks/use-previous';
+import { extractDashboardFiltersForWidget } from '../dashboard-widget/translate-dashboard-filters';
+import { fetchWidgetDtoModel } from '../dashboard-widget/use-fetch-widget-dto-model';
 
 /**
  * Parameters for {@link useExecuteQueryByWidgetId} hook.
@@ -40,8 +45,18 @@ export interface ExecuteQueryByWidgetIdParams {
   /** {@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy} */
   filtersMergeStrategy?: FiltersMergeStrategy;
 
+  /** {@inheritDoc ExecuteQueryByWidgetIdProps.includeDashboardFilters} */
+  includeDashboardFilters?: boolean;
+
   /** {@inheritDoc ExecuteQueryByWidgetIdProps.onBeforeQuery} */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
+
+  /**
+   * Boolean flag to control if query is executed
+   *
+   * If not specified, the default value is `true`
+   */
+  enabled?: boolean;
 }
 
 export type QueryByWidgetIdState = QueryState & {
@@ -77,7 +92,15 @@ export type QueryByWidgetIdState = QueryState & {
  * @param params - Parameters to identify the target widget
  * @returns Query state that contains the status of the query execution, the result data, the constructed query parameters, or the error if any occurred
  */
-export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) => {
+export const useExecuteQueryByWidgetId = withTracking('useExecuteQueryByWidgetId')(
+  useExecuteQueryByWidgetIdInternal,
+);
+
+/**
+ * {@link useExecuteQueryByWidgetId} without tracking to be used inside other hooks or components in Compose SDK.
+ * @internal
+ */
+export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetIdParams) {
   const prevParams = usePrevious(params);
   const { isInitialized, app } = useSisenseContext();
   const [isNeverExecuted, setIsNeverExecuted] = useState(true);
@@ -103,6 +126,10 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
       return;
     }
 
+    if (params?.enabled === false) {
+      return;
+    }
+
     if (isNeverExecuted || isParamsChanged(prevParams, params)) {
       const {
         widgetOid,
@@ -112,6 +139,7 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
         filtersMergeStrategy,
         count,
         offset,
+        includeDashboardFilters,
         onBeforeQuery,
       } = params;
 
@@ -130,6 +158,7 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
         app,
         count,
         offset,
+        includeDashboardFilters,
         onBeforeQuery,
       })
         .then(({ data, query: executedQuery }) => {
@@ -143,7 +172,18 @@ export const useExecuteQueryByWidgetId = (params: ExecuteQueryByWidgetIdParams) 
   }, [params, prevParams, isNeverExecuted, app, isInitialized]);
 
   return { ...queryState, query: query.current } as QueryByWidgetIdState;
-};
+}
+
+/** List of parameters that can be compared by deep comparison */
+const simplySerializableParamNames: (keyof ExecuteQueryByWidgetIdParams)[] = [
+  'widgetOid',
+  'dashboardOid',
+  'count',
+  'offset',
+  'filtersMergeStrategy',
+  'includeDashboardFilters',
+  'onBeforeQuery',
+];
 
 /**
  * Checks if the parameters have changed by deep comparison.
@@ -163,7 +203,7 @@ export function isParamsChanged(
   const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
 
   return (
-    ['widgetOid', 'dashboardOid', 'count', 'offset'].some(
+    simplySerializableParamNames.some(
       (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
     ) ||
     isRegularFiltersChanged ||
@@ -180,21 +220,34 @@ export async function executeQueryByWidgetId({
   filtersMergeStrategy,
   count,
   offset,
+  includeDashboardFilters,
   app,
   onBeforeQuery,
 }: ExecuteQueryByWidgetIdParams & { app: ClientApplication }) {
   const api = new RestApi(app.httpClient);
-  const fetchedWidget: WidgetDto = await api.getWidget(widgetOid, dashboardOid);
-  const {
-    dataSource,
-    dimensions,
-    measures,
-    filters: widgetFilters,
-    highlights: widgetHighlights,
-  } = extractQueryFromWidget(fetchedWidget);
+  const { widget: fetchedWidget, dashboard: fetchedDashboard } = await fetchWidgetDtoModel({
+    widgetOid,
+    dashboardOid,
+    includeDashboard: includeDashboardFilters,
+    api,
+  });
+  const widgetQuery = extractQueryFromWidget(fetchedWidget);
+  const { dataSource, dimensions, measures } = widgetQuery;
+  let { filters: widgetFilters, highlights: widgetHighlights } = widgetQuery;
+
+  if (includeDashboardFilters) {
+    const { filters: dashboardFilters, highlights: dashboardHighlight } =
+      extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
+    widgetFilters = mergeFilters(dashboardFilters, widgetFilters);
+    widgetHighlights = mergeFilters(dashboardHighlight, widgetHighlights);
+  }
 
   const mergedFilters = mergeFiltersByStrategy(widgetFilters, filters, filtersMergeStrategy);
-  const mergedHighlights = mergeFilters(highlights, widgetHighlights);
+  const mergedHighlights = mergeFiltersByStrategy(
+    widgetHighlights,
+    highlights,
+    filtersMergeStrategy,
+  );
 
   const executeQueryParams: ExecuteQueryParams = {
     dataSource,

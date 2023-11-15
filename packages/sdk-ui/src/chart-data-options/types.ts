@@ -1,5 +1,11 @@
 import type { DataColorOptions } from '../chart-data/series-data-color-service';
-import type { NumberFormatConfig, SeriesChartType, SortDirection, ValueToColorMap } from '../types';
+import type {
+  NumberFormatConfig,
+  SeriesChartType,
+  SortDirection,
+  ValueToColorMap,
+  MultiColumnValueToColorMap,
+} from '../types';
 import { Column, MeasureColumn, CalculatedMeasureColumn } from '@sisense/sdk-data';
 
 /**
@@ -14,6 +20,9 @@ export interface CategoryStyle {
    * Date format.
    *
    * See [ECMAScript Date Time String Format](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-date-time-string-format)
+   *
+   * Note that 'YYYY' and 'DD' have been disabled since they often get confused with 'yyyy' and 'dd'
+   * and can produce unexpected results.
    */
   dateFormat?: string;
   /** Boolean flag to toggle continuous timeline on this date column. */
@@ -103,6 +112,8 @@ export type ValueStyle = {
   enabled?: boolean;
   /** Boolean flag whether null values are treated as zeros in the chart */
   treatNullDataAsZeros?: boolean;
+  /** Boolean flag whether to connect a graph line across null points or render a gap */
+  connectNulls?: boolean;
 };
 
 /**
@@ -210,8 +221,9 @@ export interface CategoricalChartDataOptions {
   category: (Column | StyledColumn)[];
   /**
    * Optional mapping of each of the series to colors.
+   * ({@link MultiColumnValueToColorMap} used only for {@link SunburstChart})
    */
-  seriesToColorMap?: ValueToColorMap;
+  seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
 }
 
 /**
@@ -311,7 +323,7 @@ export function isMeasureColumn(
  * Configuration for how to query data and assign data to {@link Table}.
  *
  */
-export type TableDataOptions = {
+export interface TableDataOptions {
   /**
    * Columns (or attributes) whose values represent data columns in table
    *
@@ -323,7 +335,7 @@ export type TableDataOptions = {
     | CalculatedMeasureColumn
     | StyledMeasureColumn
   )[];
-};
+}
 
 /**
  * Configuration for querying aggregate data and assigning data to chart encodings.
@@ -374,7 +386,7 @@ export interface CartesianChartDataOptionsInternal {
 export interface CategoricalChartDataOptionsInternal {
   y: Value[];
   breakBy: Category[];
-  seriesToColorMap?: ValueToColorMap;
+  seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
 }
 
 /** @internal */

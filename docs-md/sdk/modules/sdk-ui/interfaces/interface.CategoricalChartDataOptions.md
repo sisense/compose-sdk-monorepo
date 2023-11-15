@@ -19,9 +19,10 @@ Columns (or attributes) whose values represent categories in the chart.
 
 ### seriesToColorMap
 
-> **seriesToColorMap**?: [`ValueToColorMap`](../type-aliases/type-alias.ValueToColorMap.md)
+> **seriesToColorMap**?: [`ValueToColorMap`](../type-aliases/type-alias.ValueToColorMap.md) \| [`MultiColumnValueToColorMap`](../type-aliases/type-alias.MultiColumnValueToColorMap.md)
 
 Optional mapping of each of the series to colors.
+([MultiColumnValueToColorMap](../type-aliases/type-alias.MultiColumnValueToColorMap.md) used only for [SunburstChart](../functions/function.SunburstChart.md))
 
 ***
 

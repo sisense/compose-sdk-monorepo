@@ -1,7 +1,7 @@
-import { trackUiError } from '@sisense/sdk-common';
+import { trackUiError } from '@sisense/sdk-tracking';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { Component, ReactNode } from 'react';
-import { SisenseContext, SisenseContextPayload } from '../../sisense-context/sisense-context';
+import { SisenseContext, SisenseContextPayload } from '../../../sisense-context/sisense-context';
 
 type ErrorTrackerProps = {
   children: ReactNode;

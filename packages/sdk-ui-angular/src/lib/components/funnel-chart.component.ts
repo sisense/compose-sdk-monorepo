@@ -3,7 +3,8 @@ import { type ChartType, type FunnelChartProps } from '@sisense/sdk-ui-preact';
 import { type ArgumentsAsObject } from '../utility-types';
 
 /**
- * Funnel Chart Component
+ * A component representing data progressively decreasing in size or quantity through a funnel shape.
+ * See [Funnel Chart](https://docs.sisense.com/main/SisenseLinux/funnel-chart.htm) for more information.
  */
 @Component({
   selector: 'csdk-funnel-chart',

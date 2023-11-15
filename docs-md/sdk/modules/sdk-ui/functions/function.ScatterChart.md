@@ -12,7 +12,7 @@ and two additional fields of data that are shown as colored circles scattered ac
 **Point**: A field that for each of its members a scatter point is drawn. The maximum amount of data points is 500.
 
 **Size**: An optional field represented by the size of the circles.
-If omitted, all scatter points are equal in size. If used, the circle size is relative to their value.
+If omitted, all scatter points are equal in size. If used, the circle sizes are relative to their values.
 
 See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm) for more information.
 

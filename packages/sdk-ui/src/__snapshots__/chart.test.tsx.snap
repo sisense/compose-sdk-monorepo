@@ -144,6 +144,7 @@ exports[`Chart > add handlers to a chart 1`] = `
     {
       "boostThreshold": 0,
       "color": "#00cee6",
+      "connectNulls": false,
       "data": [
         {
           "custom": {
@@ -550,6 +551,7 @@ exports[`Chart > change theme of a chart 1`] = `
     {
       "boostThreshold": 0,
       "color": "#00cee6",
+      "connectNulls": false,
       "data": [
         {
           "custom": {
@@ -2133,6 +2135,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
     {
       "boostThreshold": 0,
       "color": "#00cee6",
+      "connectNulls": false,
       "data": [
         {
           "custom": {
@@ -2306,6 +2309,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
     {
       "boostThreshold": 0,
       "color": "#9b9bd7",
+      "connectNulls": false,
       "data": [
         {
           "custom": {
@@ -3050,6 +3054,7 @@ exports[`Chart > render a columm chart with breakBy 1`] = `
     {
       "boostThreshold": 0,
       "color": "#00cee6",
+      "connectNulls": false,
       "custom": {
         "rawValue": [
           "A",
@@ -3171,6 +3176,7 @@ exports[`Chart > render a columm chart with breakBy 1`] = `
     {
       "boostThreshold": 0,
       "color": "#9b9bd7",
+      "connectNulls": false,
       "custom": {
         "rawValue": [
           "B",
@@ -3590,6 +3596,7 @@ exports[`Chart > render a line chart 1`] = `
     {
       "boostThreshold": 0,
       "color": "#00cee6",
+      "connectNulls": false,
       "data": [
         {
           "custom": {

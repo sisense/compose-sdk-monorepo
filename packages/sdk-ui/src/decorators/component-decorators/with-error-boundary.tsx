@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '../error-boundary/error-boundary';
+import { ErrorBoundary } from '../../error-boundary/error-boundary';
 import { ComponentDecorator } from './as-sisense-component';
 
 /**

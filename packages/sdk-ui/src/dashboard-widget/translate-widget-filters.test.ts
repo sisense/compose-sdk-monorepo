@@ -17,7 +17,9 @@ describe('extractFilters', () => {
             },
           },
           {
-            jaql: {},
+            jaql: {
+              filter: {},
+            },
             disabled: true,
           },
         ],
@@ -32,7 +34,7 @@ describe('extractFilters', () => {
     expect(MetadataTypes.isFilter(filters[0])).toBeTruthy();
   });
 
-  test('should extract filter with "background" configuration from the widget panel', () => {
+  test('should extract filter with additional "background" filter from the widget panel', () => {
     const filter = {
       members: ['val2'],
     };
@@ -57,12 +59,13 @@ describe('extractFilters', () => {
 
     const filters = extractFilters(panels);
 
-    // verifies correct background filter transformation
+    // verifies filter
     expect(filters[0].jaql().jaql).toEqual({
-      filter: {
-        ...backgroundFilter,
-        filter,
-      },
+      filter,
+    });
+    // verifies background filter
+    expect(filters[1].jaql().jaql).toEqual({
+      filter: backgroundFilter,
     });
   });
 

@@ -3,7 +3,9 @@ import { type ChartType, type BarChartProps } from '@sisense/sdk-ui-preact';
 import { type ArgumentsAsObject } from '../utility-types';
 
 /**
- * Bar Chart Component
+ * A component representing categorical data with horizontal rectangular bars,
+ * whose lengths are proportional to the values that they represent.
+ * See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for more information.
  */
 @Component({
   selector: 'csdk-bar-chart',

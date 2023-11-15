@@ -29,3 +29,6 @@ find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | x
 
 # Replace tsx code blocks with ts as required by sisense.dev
 find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|```tsx|```ts|g'
+
+# Copy CHANGELOG.md from the root directory to the docs-md so it can be published to sisense.dev
+cp -Rf ./CHANGELOG.md ${docs_path}/

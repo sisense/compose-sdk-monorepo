@@ -4,15 +4,15 @@ title: useGetDashboardModel
 
 # Function useGetDashboardModel
 
-> **useGetDashboardModel**(`params`): [`DashboardModelState`](../type-aliases/type-alias.DashboardModelState.md)
+> **useGetDashboardModel**(...`args`): [`DashboardModelState`](../type-aliases/type-alias.DashboardModelState.md)
 
 React hook that retrieves an existing dashboard model from the Sisense instance.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | [`GetDashboardModelParams`](../interfaces/interface.GetDashboardModelParams.md) | Parameters of the dashboard to be retrieved |
+| Parameter | Type |
+| :------ | :------ |
+| ...`args` | [[`GetDashboardModelParams`](../interfaces/interface.GetDashboardModelParams.md)] |
 
 ## Returns
 

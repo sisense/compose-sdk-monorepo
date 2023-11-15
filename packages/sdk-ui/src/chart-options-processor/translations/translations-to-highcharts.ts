@@ -7,7 +7,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable sonarjs/no-ignored-return */
-import { ChartType } from '../../types';
+import { ChartType, ValueToColorMap } from '../../types';
 import {
   ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
@@ -48,6 +48,7 @@ export type SeriesPointStructure = {
     lineWidth?: number;
   };
   selected?: boolean;
+  sliced?: boolean;
   custom?: {
     number1?: number;
     string1?: string;
@@ -130,11 +131,22 @@ export const formatSeriesContinuousXAxis = (
   treatNullDataAsZeros: boolean,
   interval: number,
   maxCategories: number,
+  dateFormatter: (time: number) => string,
 ): HighchartsSeriesValues => {
   const input = formatData(series, treatNullDataAsZeros);
+  const { title, ...seriesWithoutTitle } = series;
   return {
-    ...series,
-    data: translateNumbersContinuousXAxis(input, indexMap, interval, maxCategories),
+    ...seriesWithoutTitle,
+    name: title ?? series.name,
+
+    data: translateNumbersContinuousXAxis(
+      input,
+      indexMap,
+      interval,
+      maxCategories,
+      treatNullDataAsZeros,
+      dateFormatter,
+    ),
   };
 };
 
@@ -143,6 +155,8 @@ const translateNumbersContinuousXAxis = (
   indexMap: number[],
   interval: number,
   maxCategories: number,
+  treatNullDataAsZeros: boolean,
+  dateFormatter: (time: number) => string,
 ): SeriesPointStructure[] => {
   // eslint-disable-next-line sonarjs/prefer-immediate-return
   const seriesData = indexMap.map((index: number, indexOfIndex: number): SeriesPointStructure => {
@@ -177,18 +191,29 @@ const translateNumbersContinuousXAxis = (
     if (s.x && nextTick === -1) {
       nextTick = s.x + halfInterval;
     }
-    // add empty values to have break in lines
-    while (s.x && s.x > nextTick) {
-      addedTickCount++;
-      if (addedTickCount > maxCategories) break;
-      seriesDataWithNulls.push({
-        x: nextTick - halfInterval,
-        y: null,
-      });
-      nextTick += interval;
+
+    if (s.x && s.x > nextTick) {
+      let missingTicks = Math.round((s.x - (nextTick - halfInterval)) / interval);
+      while (missingTicks > 0) {
+        addedTickCount++;
+        if (addedTickCount > maxCategories) break;
+        const ticValue = s.x - interval * missingTicks;
+        seriesDataWithNulls.push({
+          custom: { xDisplayValue: dateFormatter(ticValue) },
+          x: ticValue,
+          y: treatNullDataAsZeros ? 0 : null,
+        });
+        missingTicks--;
+        nextTick += interval;
+      }
     }
     seriesDataWithNulls.push(s);
-    nextTick += interval;
+    if (s.x) {
+      nextTick = s.x + interval + halfInterval;
+    } else {
+      // if null data then just increment
+      nextTick += interval;
+    }
   });
 
   return seriesDataWithNulls;
@@ -242,6 +267,8 @@ const translateNumbersToSeriesPointStructure = (
   categories?: string[],
   categoryColors?: string[],
 ): SeriesPointStructure[] => {
+  const hasBlurred = input.some((v) => v.blur);
+
   return indexMap.map((index: number, indexOfIndex: number): SeriesPointStructure => {
     if (index < 0) {
       return { y: null };
@@ -253,6 +280,7 @@ const translateNumbersToSeriesPointStructure = (
         name: categories[index],
         y: value,
         color: color ?? categoryColors?.[index],
+        ...(hasBlurred && !blur && { selected: true }),
         custom: { rawValue, xValue },
       };
     } else {
@@ -420,9 +448,9 @@ export const autoCalculateYAxisMinMax = (
 export const determineYAxisOptions = (
   chartData: ChartData,
   dataOptions: ChartDataOptionsInternal,
-): [number[], (HighchartsType | undefined)[], boolean[]] => {
+): [number[], (HighchartsType | undefined)[], boolean[], boolean[]] => {
   if (chartData.type !== 'cartesian') {
-    return [[], [], []];
+    return [[], [], [], []];
   }
   // Determine whether the Y value is on the left side or right side
   let yAxisSide: number[] = [];
@@ -430,6 +458,7 @@ export const determineYAxisOptions = (
 
   const cartesianDataOptions = dataOptions as CartesianChartDataOptionsInternal;
   let yTreatNullDataAsZeros = cartesianDataOptions.y.map((y) => !!y.treatNullDataAsZeros);
+  let yConnectNulls = cartesianDataOptions.y.map((y) => !!y.connectNulls);
   if (cartesianDataOptions.breakBy.length === 0) {
     // Each Y value has individual axis setting, 0 is on left axis, 1 is on right axis
     yAxisSide = cartesianDataOptions.y.map((y) => (y.showOnRightAxis ? 1 : 0));
@@ -460,8 +489,9 @@ export const determineYAxisOptions = (
     yAxisSide = chartData.series.map(() => onRightAxis);
     yAxisChartType = chartData.series.map(() => undefined);
     yTreatNullDataAsZeros = chartData.series.map(() => yTreatNullDataAsZeros[0]);
+    yConnectNulls = chartData.series.map(() => yConnectNulls[0]);
   }
-  return [yAxisSide, yAxisChartType, yTreatNullDataAsZeros];
+  return [yAxisSide, yAxisChartType, yTreatNullDataAsZeros, yConnectNulls];
 };
 
 export const getColorSetting = (
@@ -472,6 +502,6 @@ export const getColorSetting = (
     const colorOpts = dataOptions.y.find((v) => v.name === key)?.color;
     return legendColor(colorOpts);
   } else {
-    return dataOptions.seriesToColorMap?.[key];
+    return (dataOptions.seriesToColorMap as ValueToColorMap)?.[key];
   }
 };

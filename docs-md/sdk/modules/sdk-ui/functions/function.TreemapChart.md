@@ -7,8 +7,7 @@ title: TreemapChart
 > **TreemapChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component displaying hierarchical data in the form of nested rectangles.
-This type of chart can be used in different scenarios, for example,
-instead of a column chart if you have to compare too many categories and sub-categories.
+This type of chart can be used instead of a column chart for comparing a large number of categories and sub-categories.
 See [Treemap Chart](https://docs.sisense.com/main/SisenseLinux/treemap.htm) for more information.
 
 ## Parameters

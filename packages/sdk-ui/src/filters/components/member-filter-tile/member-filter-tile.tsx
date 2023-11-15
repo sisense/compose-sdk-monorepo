@@ -3,8 +3,8 @@ import { filters as filterFactory } from '@sisense/sdk-data';
 import { FunctionComponent, useMemo } from 'react';
 import { BasicMemberFilterTile } from './basic-member-filter-tile';
 import { Member } from './members-reducer';
-import { asSisenseComponent } from '../../../decorators/as-sisense-component';
-import { useExecuteQuery } from '../../../query-execution/use-execute-query';
+import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
+import { useExecuteQueryInternal } from '../../../query-execution/use-execute-query';
 
 /**
  * Props for {@link MemberFilterTile}
@@ -15,7 +15,7 @@ export interface MemberFilterTileProps {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    */
   dataSource?: DataSource;
   /** Attribute to filter on. A query will be run to fetch all this attribute's members */
@@ -59,7 +59,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   // "dimensions" does not change on every render, causing infinite rerenders.
   const dimensions = useMemo(() => [attribute], [attribute]);
 
-  const { data } = useExecuteQuery({ dataSource, dimensions });
+  const { data } = useExecuteQueryInternal({ dataSource, dimensions });
   if (!data) {
     return null;
   }

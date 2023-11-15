@@ -25,7 +25,7 @@ import {
 import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
- * Chart Widget Component
+ * The Chart Widget component extending {@link ChartComponent} to support widget style options.
  */
 @Component({
   selector: 'csdk-chart-widget',
@@ -36,14 +36,24 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.chartType}
+   *
+   * @category Chart
+   */
   @Input()
   chartType!: ChartWidgetProps['chartType'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
+   *
+   * @category Data
+   */
   @Input()
   dataSource: ChartWidgetProps['dataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.dataOptions}
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
    *
    * @category Chart
    */
@@ -51,35 +61,69 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   dataOptions!: ChartWidgetProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.filters}
    *
    * @category Data
    */
   @Input()
   filters: ChartWidgetProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   highlights: ChartWidgetProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
    *
    * @category Chart
    */
   @Input()
   styleOptions: ChartWidgetProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.widgetStyleOptions}
+   *
+   * @category Widget
+   */
   @Input()
   widgetStyleOptions: ChartWidgetProps['widgetStyleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
+   *
+   * @category Widget
+   * @internal
+   */
   @Input()
   drilldownOptions: ChartWidgetProps['drilldownOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
+   *
+   * @category Widget
+   */
   @Input()
   title: ChartWidgetProps['title'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.description}
+   *
+   * @category Widget
+   */
   @Input()
   description: ChartWidgetProps['description'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
+   *
+   * @category Widget
+   */
+  @Input()
+  highlightSelectionDisabled: ChartWidgetProps['highlightSelectionDisabled'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
@@ -158,6 +202,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,
+      highlightSelectionDisabled: this.highlightSelectionDisabled,
       onBeforeRender: this.beforeRender?.bind(this),
       onDataPointClick: (
         ...[point, nativeEvent]: Arguments<ChartWidgetProps['onDataPointClick']>

@@ -1,7 +1,7 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-lines-per-function */
-import { Color, SeriesWithAlerts, CompleteThemeSettings } from '../../types';
+import { Color, SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';
 import { DEFAULT_SERIES_COLORS, SeriesType } from '../chart-options-service';
 import {
   formatSeries,
@@ -86,7 +86,7 @@ export const formatFunnelChartData = (
     const indexMap = categories.map((category: string, i: number) => i);
     const categoryColors = categories.map(
       (c, i) =>
-        dataOptions.seriesToColorMap?.[c] ??
+        (dataOptions.seriesToColorMap as ValueToColorMap)?.[c] ??
         getAPaletteColor(themeSettings?.palette?.variantColors, i),
     );
 

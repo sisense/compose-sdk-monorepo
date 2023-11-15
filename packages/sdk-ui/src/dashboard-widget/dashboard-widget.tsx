@@ -1,15 +1,13 @@
-import React, { useEffect, useMemo, useState, type FunctionComponent } from 'react';
+import React, { useMemo, type FunctionComponent } from 'react';
 import { ChartWidget } from '../widgets/chart-widget';
 import { TableWidget } from '../widgets/table-widget';
 import { extractWidgetProps } from './translate-widget';
-import { WidgetDto } from './types';
-import { DashboardWidgetProps } from '../props';
-
-import { useSisenseContext } from '../sisense-context/sisense-context';
+import { ChartWidgetProps, DashboardWidgetProps } from '../props';
 import { useThemeContext } from '../theme-provider';
-import { asSisenseComponent } from '../decorators/as-sisense-component';
-import { mergeFiltersByStrategy } from './utils';
-import { useGetApi } from '../api/rest-api';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
+import { mergeFilters, mergeFiltersByStrategy } from './utils';
+import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
+import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -28,41 +26,51 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
   componentName: 'DashboardWidget',
   customContextErrorMessageKey: 'errors.dashboardWidgetNoSisenseContext',
 })((props) => {
-  const [error, setError] = useState<Error>();
-  const api = useGetApi();
+  const { widgetOid, dashboardOid, includeDashboardFilters, ...restProps } = props;
+  const { themeSettings } = useThemeContext();
+  const {
+    widget: fetchedWidget,
+    dashboard: fetchedDashboard,
+    error: fetchError,
+  } = useFetchWidgetDtoModel({
+    widgetOid,
+    dashboardOid,
+    includeDashboard: includeDashboardFilters,
+  });
 
-  if (error) {
-    throw error;
+  if (fetchError) {
+    throw fetchError;
   }
 
-  const { widgetOid, dashboardOid, ...restProps } = props;
-  const { themeSettings } = useThemeContext();
+  const { type: widgetType, props: fetchedProps } = useMemo(() => {
+    if (!fetchedWidget) {
+      return { type: null, props: null };
+    }
 
-  const [fetchedWidget, setFetchedWidget] = useState<WidgetDto>();
+    const extractedWidgetProps = extractWidgetProps(fetchedWidget, themeSettings);
 
-  const { isInitialized, app } = useSisenseContext();
+    if (includeDashboardFilters) {
+      const { filters: dashboardFilters, highlights: dashboardHighlights } =
+        extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
+      extractedWidgetProps.props.filters = mergeFilters(
+        dashboardFilters,
+        extractedWidgetProps.props.filters,
+      );
+      (extractedWidgetProps.props as ChartWidgetProps).highlights = dashboardHighlights;
+    }
 
-  useEffect(() => {
-    api
-      .getWidget(widgetOid, dashboardOid)
-      .then(setFetchedWidget)
-      .catch((asyncError: Error) => {
-        // set error state to trigger rerender and throw synchronous error
-        setError(asyncError);
-      });
-  }, [widgetOid, dashboardOid, app, isInitialized, api]);
-
-  const { type: widgetType, props: fetchedProps } = useMemo(
-    () =>
-      fetchedWidget
-        ? { ...extractWidgetProps(fetchedWidget, themeSettings), themeSettings }
-        : { type: null, props: null },
-    [fetchedWidget, themeSettings],
-  );
+    return extractedWidgetProps;
+  }, [fetchedWidget, fetchedDashboard, themeSettings, includeDashboardFilters]);
 
   const filters = mergeFiltersByStrategy(
     fetchedProps?.filters,
     restProps.filters,
+    restProps.filtersMergeStrategy,
+  );
+
+  const highlights = mergeFiltersByStrategy(
+    (fetchedProps as ChartWidgetProps)?.highlights,
+    restProps.highlights,
     restProps.filtersMergeStrategy,
   );
 
@@ -84,6 +92,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
       {...fetchedProps}
       {...restProps}
       filters={filters}
+      highlights={highlights}
       drilldownOptions={{
         ...fetchedProps.drilldownOptions,
         ...props.drilldownOptions,

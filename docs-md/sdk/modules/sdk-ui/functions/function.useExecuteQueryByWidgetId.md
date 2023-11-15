@@ -4,7 +4,7 @@ title: useExecuteQueryByWidgetId
 
 # Function useExecuteQueryByWidgetId
 
-> **useExecuteQueryByWidgetId**(`params`): [`QueryByWidgetIdState`](../type-aliases/type-alias.QueryByWidgetIdState.md)
+> **useExecuteQueryByWidgetId**(...`args`): [`QueryByWidgetIdState`](../type-aliases/type-alias.QueryByWidgetIdState.md)
 
 React hook that executes a data query extracted from an existing widget in the Sisense instance.
 
@@ -12,9 +12,9 @@ This approach, which offers an alternative to [ExecuteQueryByWidgetId](function.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | [`ExecuteQueryByWidgetIdParams`](../interfaces/interface.ExecuteQueryByWidgetIdParams.md) | Parameters to identify the target widget |
+| Parameter | Type |
+| :------ | :------ |
+| ...`args` | [[`ExecuteQueryByWidgetIdParams`](../interfaces/interface.ExecuteQueryByWidgetIdParams.md)] |
 
 ## Returns
 

@@ -94,6 +94,13 @@ const dataSet: Data = {
   ],
 };
 
+const withBlurredRows = (dataSet: Data, rowsIndexes: number[]) => ({
+  ...dataSet,
+  rows: dataSet.rows.map((row, rowIndex) =>
+    row.map((cell) => (rowsIndexes.includes(rowIndex) ? { data: cell, blur: true } : cell)),
+  ),
+});
+
 const defaultNumberFormat: NumberFormatConfig = {
   name: 'Numbers',
   decimalScale: 3,
@@ -141,8 +148,20 @@ export const Line = template({
   chartType: 'line',
 });
 
+export const LineWithBlur = template({
+  ...cartesianArgs,
+  dataSet: withBlurredRows(dataSet, [0, 1, 5, 6, 7, 8]),
+  chartType: 'line',
+});
+
 export const Area = template({
   ...cartesianArgs,
+  chartType: 'area',
+});
+
+export const AreaWithBlur = template({
+  ...cartesianArgs,
+  dataSet: withBlurredRows(dataSet, [0, 1, 5, 6, 7, 8]),
   chartType: 'area',
 });
 

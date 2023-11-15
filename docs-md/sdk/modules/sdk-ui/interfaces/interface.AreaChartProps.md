@@ -21,7 +21,7 @@ Props of the [AreaChart](../functions/function.AreaChart.md) component.
 Data set for this component, which supports two options:
 
 (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
-the chart will have an internal [ExecuteQuery](../functions/function.ExecuteQuery.md) connect to the data source
+the chart will have an internal query connect to the data source
 and load the data as specified in [dataOptions](interface.AreaChartProps.md#dataoptions), [filters](interface.AreaChartProps.md#filters), and [highlights](interface.AreaChartProps.md#highlights).
 
 OR
@@ -33,7 +33,7 @@ This allows the chart component to be used
 with user-provided data.
 
 If neither option is specified,
-the chart will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../functions/function.SisenseContextProvider.md) component.
+the chart will use the `defaultDataSource` specified in the parent Sisense Context.
 
 ##### Inherited from
 
@@ -88,7 +88,7 @@ Configuration that defines the functional style of the various chart elements.
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for [IndicatorChart](../functions/function.IndicatorChart.md)
+This callback is not yet supported for Indicator Chart
 
 ##### Inherited from
 

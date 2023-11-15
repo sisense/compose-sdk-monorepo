@@ -11,5 +11,5 @@
     "lib": ["ES2017", "dom", "ES2020.String", "ESNext"]
   },
   "include": ["./src/**/*"],
-  "references": [{ "path": "../sdk-rest-client" }]
+  "references": []
 }

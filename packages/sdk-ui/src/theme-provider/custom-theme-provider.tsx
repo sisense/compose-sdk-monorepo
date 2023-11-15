@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { CompleteThemeSettings } from '../types';
-import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { ThemeContext } from './theme-provider';
 
 /** @internal */

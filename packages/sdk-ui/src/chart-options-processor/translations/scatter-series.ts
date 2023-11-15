@@ -43,6 +43,7 @@ export interface AxisComputedProperties {
   maskedBreakByColor?: string;
   maskedSize?: string;
   color?: string;
+  selected?: boolean;
 }
 
 export const handleNumberValue = (cell: ComparableData): number | null => {
@@ -67,6 +68,7 @@ const getComputedProperties = (
   const { xCategoriesMap, yCategoriesMap } = categoriesMap;
   const xCategory = xCategoriesMap.get(xAxis.displayValue);
   const yCategory = yCategoriesMap.get(yAxis.displayValue);
+  const selected = xAxis.blur || yAxis.blur || breakByPoint?.blur;
 
   return {
     x: xCategory !== undefined ? xCategory : handleNumberValue(xAxis),
@@ -78,6 +80,7 @@ const getComputedProperties = (
     maskedBreakByColor: breakByColor?.displayValue,
     color: breakByColor?.color,
     maskedSize: size?.displayValue,
+    selected,
   };
 };
 
@@ -230,6 +233,7 @@ const fillSeriesWithPoints = (
       maskedSize,
       color,
       maskedBreakByColor,
+      selected,
     }: AxisComputedProperties = getComputedProperties(row, categoriesMap);
 
     if (x !== null && y !== null) {
@@ -247,6 +251,7 @@ const fillSeriesWithPoints = (
           maskedBreakByColor,
           maskedSize,
         },
+        selected,
       };
 
       currentSeries.data.push(bubble);

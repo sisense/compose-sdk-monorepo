@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable complexity */
+/* eslint-disable max-lines-per-function */
 import mapValues from 'lodash/mapValues';
 import {
   MetadataTypes,
@@ -30,7 +31,11 @@ import {
   CurrencyPosition,
   DatetimeMask,
 } from './types';
-import { createValueToColorMap, createValueColorOptions } from './translate-panel-color-format';
+import {
+  createValueToColorMap,
+  createValueColorOptions,
+  createValueToColorMultiColumnsMap,
+} from './translate-panel-color-format';
 import { getEnabledPanelItems, getSortType, getRootPanelItem } from './utils';
 import { TableDataOptions } from '../chart-data-options/types';
 import { createFilterFromJaql } from './translate-widget-filters';
@@ -175,19 +180,27 @@ function extractCartesianChartDataOptions(
 }
 
 function extractCategoricalChartDataOptions(
+  widgetType: WidgetType,
   panels: Panel[],
   themeSettings?: CompleteThemeSettings,
 ): CategoricalChartDataOptions {
   const category = createColumnsFromPanelItems(panels, 'categories', themeSettings);
   const value = createColumnsFromPanelItems(panels, 'values', themeSettings);
   const size = createColumnsFromPanelItems(panels, 'size', themeSettings);
-  let membersFormat = getEnabledPanelItems(panels, 'categories')[0]?.format?.members;
+  let membersFormat, seriesToColorMap;
+  if (widgetType === WidgetType.SunburstChart) {
+    seriesToColorMap = createValueToColorMultiColumnsMap(
+      getEnabledPanelItems(panels, 'categories'),
+    );
+  } else {
+    membersFormat = getEnabledPanelItems(panels, 'categories')[0]?.format?.members;
 
-  if (getEnabledPanelItems(panels, 'color').length) {
-    membersFormat = getEnabledPanelItems(panels, 'color')[0]?.format?.members;
+    if (getEnabledPanelItems(panels, 'color').length) {
+      membersFormat = getEnabledPanelItems(panels, 'color')[0]?.format?.members;
+    }
+
+    seriesToColorMap = membersFormat && createValueToColorMap(membersFormat);
   }
-
-  const seriesToColorMap = membersFormat && createValueToColorMap(membersFormat);
 
   return {
     category: category as StyledColumn[],
@@ -260,7 +273,7 @@ export function extractDataOptions(
     case WidgetType.FunnelChart:
     case WidgetType.TreemapChart:
     case WidgetType.SunburstChart:
-      return extractCategoricalChartDataOptions(panels, themeSettings);
+      return extractCategoricalChartDataOptions(widgetType, panels, themeSettings);
     case WidgetType.ScatterChart:
       return extractScatterChartDataOptions(panels, themeSettings);
     case WidgetType.IndicatorChart:

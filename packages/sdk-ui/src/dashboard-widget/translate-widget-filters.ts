@@ -1,6 +1,5 @@
 import { Filter } from '@sisense/sdk-data';
-import { FilterJaql, Panel } from './types';
-import { getEnabledPanelItems } from './utils';
+import { FilterJaql, IncludeAllFilter, IncludeMembersFilter, Panel, PanelItem } from './types';
 
 /**
  * Extracts filter model components from a FilterJaql object.
@@ -8,7 +7,7 @@ import { getEnabledPanelItems } from './utils';
  * @param {FilterJaql} jaql - The FilterJaql object.
  * @returns {object} - An object containing the extracted filter model components, including filter, backgroundFilter, and turnOffMembersFilter.
  */
-function extractFilterFromJaql(jaql: FilterJaql) {
+export function extractFilterModelFromJaql(jaql: FilterJaql) {
   const { filter: nestedFilter, ...filter } = jaql.filter;
   const isNestedTurnOffMembersFilter =
     nestedFilter && 'turnedOff' in nestedFilter && nestedFilter.turnedOff;
@@ -21,45 +20,19 @@ function extractFilterFromJaql(jaql: FilterJaql) {
     backgroundFilter = nestedFilter;
   }
 
+  // Transforms member filter without selected items into "include all" filter
+  if (
+    (filter as IncludeMembersFilter).members &&
+    (filter as IncludeMembersFilter).members.length === 0
+  ) {
+    (filter as IncludeAllFilter).all = true;
+  }
+
   return {
     filter,
     backgroundFilter,
     turnOffMembersFilter,
   };
-}
-
-/**
- * Transforms filter jaql with background filter to a valid nested filter structure.
- *
- * @param jaql - The filter JAQL object.
- * @returns - The transformed filter JAQL object.
- */
-function transformBackgroundFilter(jaql: FilterJaql) {
-  const { filter, backgroundFilter } = extractFilterFromJaql(jaql);
-
-  if (backgroundFilter) {
-    const isIncludeAllFilter = 'all' in filter && filter.all;
-    const isExcludeFilter = 'exclude' in filter;
-    const isExcludeBackgroundFilter = 'exclude' in backgroundFilter;
-
-    if (isExcludeFilter && isExcludeBackgroundFilter) {
-      return {
-        ...jaql,
-        filter: {
-          exclude: {
-            members: [...backgroundFilter.exclude.members, ...filter.exclude.members],
-          },
-        },
-      };
-    }
-
-    return {
-      ...jaql,
-      filter: { ...backgroundFilter, ...(!isIncludeAllFilter && { filter: filter }) },
-    };
-  }
-
-  return jaql;
 }
 
 /**
@@ -70,21 +43,66 @@ function transformBackgroundFilter(jaql: FilterJaql) {
  */
 // TODO: rewrite to transform into valid dimensional element filter object
 export function createFilterFromJaql(jaql: FilterJaql): Filter {
-  const filterJaql = transformBackgroundFilter(jaql);
   return {
     jaql: (nested?: boolean) => {
       if (nested) {
-        return filterJaql;
+        return jaql;
       }
       return {
-        jaql: filterJaql,
+        jaql,
         panel: 'scope',
       };
+    },
+    attribute: {
+      id: jaql.dim,
     },
     type: 'filter',
   } as Filter;
 }
 
+function splitComplexFilterItem(filterItem: PanelItem): PanelItem[] {
+  const { filter, backgroundFilter, turnOffMembersFilter } = extractFilterModelFromJaql(
+    filterItem.jaql as FilterJaql,
+  );
+  const filterItems = [
+    {
+      ...filterItem,
+      jaql: {
+        ...filterItem.jaql,
+        filter: {
+          ...filter,
+          ...(turnOffMembersFilter && {
+            filter: turnOffMembersFilter,
+          }),
+        },
+      },
+    },
+  ];
+
+  if (backgroundFilter) {
+    filterItems.push({
+      ...filterItem,
+      jaql: {
+        ...filterItem.jaql,
+        filter: backgroundFilter,
+      },
+      // "background" filters always enabled
+      disabled: false,
+    });
+  }
+
+  return filterItems;
+}
+
+function getEnabledFilterPanelItems(panels: Panel[]): PanelItem[] {
+  const filterPanel = panels.find((p) => p.name === 'filters');
+  const filterItems: PanelItem[] = [];
+  filterPanel?.items.forEach((item) => {
+    filterItems.push(...splitComplexFilterItem(item).filter(({ disabled }) => !disabled));
+  });
+
+  return filterItems;
+}
 /**
  * Extracts filters from the widget panel.
  *
@@ -92,6 +110,7 @@ export function createFilterFromJaql(jaql: FilterJaql): Filter {
  * @returns {Filter[]} - The extracted filters.
  */
 export function extractFilters(panels: Panel[]) {
-  const filterPanel = getEnabledPanelItems(panels, 'filters');
-  return filterPanel.map((f) => createFilterFromJaql(f.jaql as FilterJaql));
+  return getEnabledFilterPanelItems(panels).map((filterItem) =>
+    createFilterFromJaql(filterItem.jaql as FilterJaql),
+  );
 }

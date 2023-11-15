@@ -20,6 +20,7 @@ import {
   Axis,
   getXAxisDatetimeSettings,
   getCategoricalCompareValue,
+  getDateFormatter,
 } from './translations/axis-section';
 import { StackableChartDesignOptions, PolarType } from './translations/design-options';
 import {
@@ -100,7 +101,7 @@ export const getCartesianChartOptions = (
     ),
   );
 
-  const [yAxisSide, yAxisChartType, yTreatNullDataAsZeros] = determineYAxisOptions(
+  const [yAxisSide, yAxisChartType, yTreatNullDataAsZeros, yConnectNulls] = determineYAxisOptions(
     chartData,
     dataOptions,
   );
@@ -217,6 +218,7 @@ export const getCartesianChartOptions = (
                   treatNullDataAsZeros || yTreatNullDataAsZeros[index],
                   xAxisSettings[0].tickInterval as number,
                   chartDesignOptions.dataLimits.categoriesCapacity,
+                  getDateFormatter(dataOptions.x[0], dateFormatter),
                 )
               : onlyY(dataOptions) && !stacking
               ? formatSeries(
@@ -237,6 +239,7 @@ export const getCartesianChartOptions = (
               formatter: createValueLabelFormatter(dataOption?.numberFormatConfig),
             },
             ...(yAxisChartType[index] && { type: yAxisChartType[index] }),
+            connectNulls: yConnectNulls[index],
           };
         }),
       plotOptions: {

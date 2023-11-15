@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 import { type ChartType, type IndicatorChartProps } from '@sisense/sdk-ui-preact';
 
 /**
- * Indicator Chart Component
+ * A component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
+ * See [Indicator](https://docs.sisense.com/main/SisenseLinux/indicator.htm) for more information.
  */
 @Component({
   selector: 'csdk-indicator-chart',

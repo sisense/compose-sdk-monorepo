@@ -1,7 +1,7 @@
 import { DateFilter } from '..';
 import { LevelAttribute, DataSource, Filter, DateRangeFilter, filters } from '@sisense/sdk-data';
 import { useDateLimits } from './use-date-limits';
-import { asSisenseComponent } from '../../../../decorators/as-sisense-component';
+import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
 
 export interface DateRangeFilterTileProps {
   /**
@@ -15,7 +15,7 @@ export interface DateRangeFilterTileProps {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    */
   dataSource?: DataSource;
   /**

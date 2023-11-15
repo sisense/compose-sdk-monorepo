@@ -20,7 +20,7 @@ Date level attribute the filter is based on
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
-If not specified, the query will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../functions/function.SisenseContextProvider.md) component.
+If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
 
 ***
 

@@ -3,7 +3,8 @@ import { type ChartType, type LineChartProps } from '@sisense/sdk-ui-preact';
 import { type ArgumentsAsObject } from '../utility-types';
 
 /**
- * Line Chart Component
+ * A component displaying data as a series of points connected by a line. Used to show trends or changes over time.
+ * See [Line Chart](https://docs.sisense.com/main/SisenseLinux/line-chart.htm) for more information.
  */
 @Component({
   selector: 'csdk-line-chart',

@@ -24,6 +24,10 @@ git diff ${last_published_tag} ${1:-'origin/master'} --binary | git apply --whit
 # Remove sensitive or irrelevant information
 rm -f CONTRIBUTING.md
 rm -f quickstart.md
+rm -f quickstart-angular.md
+
+# Remove internal scripts
+rm -f ./scripts/get-mrs.cjs
 
 rm -rf ./examples
 rm -rf ./packages/sdk-query-client/src/__test-helpers__

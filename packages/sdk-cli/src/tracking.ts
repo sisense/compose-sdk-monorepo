@@ -1,4 +1,4 @@
-import { TrackingDetails, trackProductEvent } from '@sisense/sdk-common';
+import { TrackingDetails, trackProductEvent } from '@sisense/sdk-tracking';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { PKG_VERSION } from './package-version.js';
 import { TrackingActions } from './constants.js';

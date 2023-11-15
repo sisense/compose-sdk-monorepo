@@ -22,7 +22,7 @@ import {
 import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
- * Table Widget Component
+ * The Table Widget component extending {@link TableComponent} component to support widget style options.
  *
  * @internal
  */
@@ -31,17 +31,28 @@ import { template, rootId } from '../component-wrapper-helpers/template';
   template,
 })
 export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
+  /** @internal */
   @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.dataSource}
+   *
+   * @category Data
+   */
   @Input()
   dataSource: TableWidgetProps['dataSource'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.dataOptions}
+   *
+   * @category Data
+   */
   @Input()
   dataOptions!: TableWidgetProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.filters}
    *
    * @category Data
    */
@@ -49,19 +60,34 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   filters: TableWidgetProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.styleOptions}
    *
    * @category Representation
    */
   @Input()
   styleOptions: TableWidgetProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.widgetStyleOptions}
+   *
+   * @category Representation
+   */
   @Input()
   widgetStyleOptions: TableWidgetProps['widgetStyleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.title}
+   *
+   * @category Widget
+   */
   @Input()
   title: TableWidgetProps['title'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.description}
+   *
+   * @category Widget
+   */
   @Input()
   description: TableWidgetProps['description'];
 

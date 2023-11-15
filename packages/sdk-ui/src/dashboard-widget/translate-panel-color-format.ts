@@ -4,14 +4,16 @@ import { DEFAULT_COLOR } from '../chart-data-options/coloring/consts';
 import { getUniformColorOptionsFromString } from '../chart-data-options/coloring/uniform-coloring';
 import { DataColorOptions, RangeDataColorOptions } from '../chart-data/series-data-color-service';
 import { getAPaletteColor } from '../chart-options-processor/translations/pie-series';
-import { CompleteThemeSettings, ValueToColorMap } from '../types';
+import { CompleteThemeSettings, ValueToColorMap, MultiColumnValueToColorMap } from '../types';
 import { scaleBrightness, toGray } from '../utils/color';
 import {
   PanelColorFormat,
   PanelColorFormatConditionSimple,
   PanelColorFormatRange,
+  PanelItem,
   PanelMembersFormat,
 } from './types';
+import { normalizeName } from '@sisense/sdk-data';
 
 const getDefaultColor = (themeSettings?: CompleteThemeSettings, index = 0) =>
   getAPaletteColor(themeSettings?.palette.variantColors, index);
@@ -104,5 +106,16 @@ export const createValueToColorMap = (membersFormat: PanelMembersFormat): ValueT
   return Object.entries(membersFormat).reduce((acc, [member, { color }]) => {
     acc[member] = color;
     return acc;
+  }, {});
+};
+
+export const createValueToColorMultiColumnsMap = (
+  items: PanelItem[],
+): MultiColumnValueToColorMap => {
+  return items.reduce((map: MultiColumnValueToColorMap, item: PanelItem) => {
+    if (item.format?.members) {
+      map[normalizeName(item.jaql.title)] = createValueToColorMap(item.format?.members);
+    }
+    return map;
   }, {});
 };

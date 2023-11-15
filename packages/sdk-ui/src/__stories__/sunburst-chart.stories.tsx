@@ -123,3 +123,24 @@ export const WithLabels = template({
     },
   },
 });
+
+export const WithSeriesColoring = template({
+  ...sunburstArgs,
+  chartType: 'sunburst',
+  dataOptions: {
+    value: [
+      {
+        column: units,
+      },
+    ],
+    category: [group, years],
+    seriesToColorMap: {
+      Group: {
+        A: 'red',
+      },
+      Years: {
+        '2009': 'green',
+      },
+    },
+  },
+});

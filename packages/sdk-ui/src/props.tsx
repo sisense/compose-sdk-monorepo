@@ -124,7 +124,7 @@ export interface ExecuteQueryProps {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    */
   dataSource?: DataSource;
 
@@ -162,6 +162,14 @@ export interface ExecuteQueryProps {
 
   /**
    * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+   *
+   * **Note:** wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+   * ```tsx
+   * const onBeforeQuery = useCallback((jaql) => {
+   *   // modify jaql here
+   *   return jaql;
+   * }, []);
+   * ```
    */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
@@ -231,7 +239,7 @@ interface BaseChartEventProps {
    * Before render handler callback that allows adjusting
    * detail chart options prior to render
    *
-   * This callback is not yet supported for {@link IndicatorChart}
+   * This callback is not yet supported for Indicator Chart
    *
    * @category Callbacks
    */
@@ -290,7 +298,7 @@ export interface BaseChartProps {
    * Data set for this component, which supports two options:
    *
    * (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
-   * the chart will have an internal {@link ExecuteQuery} connect to the data source
+   * the chart will have an internal query connect to the data source
    * and load the data as specified in {@link dataOptions}, {@link filters}, and {@link highlights}.
    *
    * OR
@@ -302,7 +310,7 @@ export interface BaseChartProps {
    * with user-provided data.
    *
    * If neither option is specified,
-   * the chart will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * the chart will use the `defaultDataSource` specified in the parent Sisense Context.
    *
    *
    * @category Data
@@ -586,6 +594,12 @@ export interface DashboardWidgetProps
    */
   filtersMergeStrategy?: FiltersMergeStrategy;
   /**
+   * {@inheritDoc ExecuteQueryByWidgetIdProps.includeDashboardFilters}
+   *
+   * @category Data
+   */
+  includeDashboardFilters?: boolean;
+  /**
    * Title of the widget
    *
    * If not specified, it takes the existing value from the widget configuration.
@@ -648,7 +662,7 @@ export interface ChartWidgetProps extends BaseChartEventProps {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    *
    * @category Data
    */
@@ -753,7 +767,7 @@ export interface ChartWidgetProps extends BaseChartEventProps {
   /**
    * Boolean flag whether selecting data points triggers highlight filter of the selected data
    *
-   * Recommended to turn on when the ChartWidget is enhanced with data drilldown by {@link DrilldownWidget}
+   * Recommended to turn on when the Chart Widget component is enhanced with data drilldown by the Drilldown Widget component
    *
    * If not specified, the default value is `false`
    *
@@ -771,7 +785,7 @@ export interface TableWidgetProps {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider} component.
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    *
    * @category Data
    */
@@ -861,7 +875,7 @@ export interface ExecuteQueryByWidgetIdProps {
   offset?: number;
 
   /**
-   * Strategy for merging the existing widget filters with the filters provided via the `filters` prop:
+   * Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
    *
    * - `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
    * - `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
@@ -871,6 +885,13 @@ export interface ExecuteQueryByWidgetIdProps {
    */
   filtersMergeStrategy?: FiltersMergeStrategy;
 
+  /**
+   * Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
+   *
+   * If not specified, the default value is `false`.
+   */
+  includeDashboardFilters?: boolean;
+
   /** Function as child component that is called to render the query results */
   children?: (queryResult: QueryResultData, queryParams: ExecuteQueryParams) => ReactNode;
 
@@ -879,6 +900,14 @@ export interface ExecuteQueryByWidgetIdProps {
 
   /**
    * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+   *
+   * **Note:** wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+   * ```tsx
+   * const onBeforeQuery = useCallback((jaql) => {
+   *   // modify jaql here
+   *   return jaql;
+   * }, []);
+   * ```
    */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }

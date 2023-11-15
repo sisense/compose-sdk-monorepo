@@ -1,6 +1,6 @@
 import { SunburstChartProps } from './props';
 import { Chart, shouldSkipSisenseContextWaiting } from './chart';
-import { asSisenseComponent } from './decorators/as-sisense-component';
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 
 /**
  * A React component displaying hierarchical data in the form of nested circle slices.

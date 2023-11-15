@@ -194,6 +194,18 @@ const getDefaultDateFormat = (granularity?: string) => {
   return 'M/d/yy HH';
 };
 
+export const getDateFormatter = (
+  category: Category,
+  dateFormatter?: (date: Date, format: string) => string,
+) => {
+  const format = category?.dateFormat || getDefaultDateFormat(category?.granularity);
+  if (!dateFormatter || !format) return (time: number) => `${time}`;
+
+  return function (time: number) {
+    return dateFormatter(new Date(time), format);
+  };
+};
+
 export const getXAxisDatetimeSettings = (
   axis: Axis,
   category: Category,

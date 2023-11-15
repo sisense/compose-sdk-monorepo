@@ -1,7 +1,6 @@
 import { PolarChartProps } from './props';
 import { Chart, shouldSkipSisenseContextWaiting } from './chart';
-import { asSisenseComponent } from './decorators/as-sisense-component';
-
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
  * A React component comparing multiple categories/variables with a spacial perspective in a radial chart.
  * See [Polar Chart](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm) for more information.

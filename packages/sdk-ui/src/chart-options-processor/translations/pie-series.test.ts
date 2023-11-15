@@ -77,7 +77,7 @@ describe('formatCategoricalChartData', () => {
       series: [
         {
           name: 'y1',
-          data: [{ value: 123.4 }, { value: 567.8 }, { value: 912.3 }],
+          data: [{ value: 123.4 }, { value: 567.8, blur: true }, { value: 912.3, blur: true }],
         },
       ],
       xAxisCount: 1,
@@ -115,6 +115,7 @@ describe('formatCategoricalChartData', () => {
             name: 'v1',
             y: 123.4,
             color: '#a1a1a1',
+            sliced: true,
           }),
           expect.objectContaining({
             name: 'v2',

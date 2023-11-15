@@ -42,7 +42,7 @@ If not specified, the default value is `20000`
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
-If not specified, the query will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../functions/function.SisenseContextProvider.md) component.
+If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
 
 ***
 
@@ -85,6 +85,32 @@ Measures of the query
 Offset of the first row to return
 
 If not specified, the default value is `0`
+
+***
+
+### onBeforeQuery
+
+> **onBeforeQuery**?: (`jaql`) => `any`
+
+Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+
+**Note:** wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+```ts
+const onBeforeQuery = useCallback((jaql) => {
+  // modify jaql here
+  return jaql;
+}, []);
+```
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `jaql` | `any` |
+
+#### Returns
+
+`any`
 
 ***
 

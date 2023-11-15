@@ -4,7 +4,7 @@ title: ChartWidgetComponent
 
 # Class ChartWidgetComponent
 
-Chart Widget Component
+The Chart Widget component extending [ChartComponent](class.ChartComponent.md) to support widget style options.
 
 ## Implements
 
@@ -33,19 +33,45 @@ Chart Widget Component
 
 ### Data
 
+#### dataSource
+
+> **dataSource**: `undefined` \| `string`
+
+Data source the query is run against - e.g. `Sample ECommerce`
+
+If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
+
+***
+
 #### filters
 
 > **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters that will slice query results
 
+***
+
+#### highlights
+
+> **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+Highlight filters that will highlight results that pass filter criteria
+
 ### Chart
+
+#### chartType
+
+> **chartType**: [`ChartType`](../../sdk-ui/type-aliases/type-alias.ChartType.md)
+
+Default chart type of each series
+
+***
 
 #### dataOptions
 
 > **dataOptions**: [`ChartDataOptions`](../../sdk-ui/type-aliases/type-alias.ChartDataOptions.md)
 
-Configurations for how to interpret and present data passed to the chart.
+Configurations for how to interpret and present the data passed to the chart
 
 ***
 
@@ -53,7 +79,43 @@ Configurations for how to interpret and present data passed to the chart.
 
 > **styleOptions**: `undefined` \| [`StyleOptions`](../../sdk-ui/type-aliases/type-alias.StyleOptions.md)
 
-Style options union across chart types.
+Style options union across chart types
+
+### Widget
+
+#### description
+
+> **description**: `undefined` \| `string`
+
+Description of the widget
+
+***
+
+#### highlightSelectionDisabled
+
+> **highlightSelectionDisabled**: `undefined` \| `boolean`
+
+Boolean flag whether selecting data points triggers highlight filter of the selected data
+
+Recommended to turn on when the Chart Widget component is enhanced with data drilldown by the Drilldown Widget component
+
+If not specified, the default value is `false`
+
+***
+
+#### title
+
+> **title**: `undefined` \| `string`
+
+Title of the widget
+
+***
+
+#### widgetStyleOptions
+
+> **widgetStyleOptions**: `undefined` \| [`WidgetStyleOptions`](../../sdk-ui/interfaces/interface.WidgetStyleOptions.md)
+
+Style options for both the widget as a whole and specifically for the widget header
 
 ### Callbacks
 
@@ -64,7 +126,7 @@ Style options union across chart types.
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for [IndicatorChart](../../sdk-ui/functions/function.IndicatorChart.md)
+This callback is not yet supported for Indicator Chart
 
 ***
 
@@ -89,45 +151,3 @@ Context menu handler callback for a data point
 > **dataPointsSelect**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md), [`"points"`, `"nativeEvent"`] \> \>
 
 Handler callback for selection of multiple data points
-
-### Other
-
-#### chartType
-
-> **chartType**: [`ChartType`](../../sdk-ui/type-aliases/type-alias.ChartType.md)
-
-***
-
-#### dataSource
-
-> **dataSource**: `undefined` \| `string`
-
-***
-
-#### description
-
-> **description**: `undefined` \| `string`
-
-***
-
-#### drilldownOptions
-
-> **drilldownOptions**: `undefined` \| [`DrilldownOptions`](../../sdk-ui/type-aliases/type-alias.DrilldownOptions.md)
-
-***
-
-#### highlights
-
-> **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
-
-***
-
-#### title
-
-> **title**: `undefined` \| `string`
-
-***
-
-#### widgetStyleOptions
-
-> **widgetStyleOptions**: `undefined` \| [`WidgetStyleOptions`](../../sdk-ui/interfaces/interface.WidgetStyleOptions.md)

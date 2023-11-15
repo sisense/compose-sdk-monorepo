@@ -1,6 +1,7 @@
 /** @vitest-environment jsdom */
 
 import { renderHook, waitFor } from '@testing-library/react';
+import { trackProductEvent } from '@sisense/sdk-tracking';
 import { useExecuteQuery, ExecuteQueryParams } from './use-execute-query';
 import { executeQuery } from '../query/execute-query';
 import type { Mock } from 'vitest';
@@ -22,6 +23,19 @@ vi.mock('../sisense-context/sisense-context', async () => {
   };
 });
 
+vi.mock('@sisense/sdk-tracking', async () => {
+  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
+    '@sisense/sdk-tracking',
+  );
+  return {
+    ...actual,
+    trackProductEvent: vi.fn().mockImplementation(() => {
+      console.log('trackProductEvent');
+      return Promise.resolve();
+    }),
+  };
+});
+
 const executeQueryMock = executeQuery as Mock<
   Parameters<typeof executeQuery>,
   ReturnType<typeof executeQuery>
@@ -29,6 +43,11 @@ const executeQueryMock = executeQuery as Mock<
 const useSisenseContextMock = useSisenseContext as Mock<
   Parameters<typeof useSisenseContext>,
   ReturnType<typeof useSisenseContext>
+>;
+
+const trackProductEventMock = trackProductEvent as Mock<
+  Parameters<typeof trackProductEvent>,
+  ReturnType<typeof trackProductEvent>
 >;
 
 describe('useExecuteQuery', () => {
@@ -125,5 +144,34 @@ describe('useExecuteQuery', () => {
         }),
       );
     });
+  });
+
+  it('should send tracking for the first execution', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+    useSisenseContextMock.mockReturnValue({
+      app: { httpClient: {} } as ClientApplication,
+      isInitialized: true,
+      enableTracking: true,
+    });
+    vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
+
+    const { result } = renderHook(() => useExecuteQuery(params));
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockData);
+    });
+
+    expect(trackProductEventMock).toHaveBeenCalledOnce();
+    expect(trackProductEventMock).toHaveBeenCalledWith(
+      'sdkHookInit',
+      expect.objectContaining({
+        hookName: 'useExecuteQuery',
+      }),
+      expect.anything(),
+      expect.any(Boolean),
+    );
   });
 });

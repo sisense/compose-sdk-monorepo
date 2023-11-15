@@ -11,13 +11,15 @@ import { ChartsFromExampleApp } from './pages/charts-from-example-app';
 import { ECommerceDemo } from './pages/ecommerce-demo';
 import { MiscDemo } from './pages/misc-demo';
 import { WidgetDemo } from './pages/widget-demo';
-import { NumberFormating } from './pages/NumberFormating';
+import { NumberFormatting } from './pages/number-formatting';
 import { DrilldownWidgetDemo } from './pages/drilldown-widget-demo';
 import { ChartFilterCycle } from './pages/chart-filter-cycle';
 import { MuiDataGridDemo } from './pages/mui-data-grid-demo';
-import { PreviousData } from './pages/use-execute-query-demo';
+import { UseExecuteQueryDemo } from './pages/use-execute-query-demo';
 import { ChartTypeSwitchingDemo } from './pages/chart-type-switching';
 import { SelectionFilterDemo } from './pages/selection-highlight/selection-filter-demo';
+import { TimeseriesCharts } from './pages/timeseries-charts';
+import { CriteriaFilterDemo } from './pages/criteria-filter-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -25,15 +27,17 @@ import { SelectionFilterDemo } from './pages/selection-highlight/selection-filte
 // Suggest adding a router or at least sessionStorage var for selectedTabIndex
 // if this becomes popular
 const pages: ComponentType[] = [
+  TimeseriesCharts,
   WidgetDemo,
-  NumberFormating,
+  NumberFormatting,
   ECommerceDemo,
   ChartsFromExampleApp,
   MiscDemo,
   DrilldownWidgetDemo,
   MuiDataGridDemo,
   ChartFilterCycle,
-  PreviousData,
+  CriteriaFilterDemo,
+  UseExecuteQueryDemo,
   ChartTypeSwitchingDemo,
   SelectionFilterDemo,
   ...loadAdditionalPages(),
@@ -92,6 +96,8 @@ export function App() {
           <Tabs
             value={selectedTabIndex}
             onChange={(e, value: number) => setSelectedTabIndex(value)}
+            variant="scrollable"
+            scrollButtons="auto"
           >
             {pages.map((page, i) => (
               <Tab key={i} label={page.name || `Page${i}`} sx={{ textTransform: 'none' }} />

@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-common",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
@@ -24,7 +24,6 @@
     "test:coverage": "run vitest run --coverage"
   },
   "dependencies": {
-    "@sisense/sdk-rest-client": "workspace:^",
     "i18next": "23.3.0"
   },
   "devDependencies": {

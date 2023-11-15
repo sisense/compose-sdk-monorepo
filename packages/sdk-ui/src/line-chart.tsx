@@ -1,7 +1,6 @@
 import { LineChartProps } from './props';
 import { Chart, shouldSkipSisenseContextWaiting } from './chart';
-import { asSisenseComponent } from './decorators/as-sisense-component';
-
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
  * A React component displaying data as a series of points connected by a line. Used to show trends or changes over time.
  * See [Line Chart](https://docs.sisense.com/main/SisenseLinux/line-chart.htm) for more information.

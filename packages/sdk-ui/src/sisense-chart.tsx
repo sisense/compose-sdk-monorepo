@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-lines-per-function */
-import { useCallback, useMemo } from 'react';
-import Highcharts from '@sisense/sisense-charts';
-import HighchartsReact from 'highcharts-react-official';
+import { useCallback, useMemo, useRef } from 'react';
 import { ChartDataOptionsInternal } from './chart-data-options/types';
 import { ChartData } from './chart-data/types';
 import {
@@ -11,7 +9,6 @@ import {
   DataPointsEventHandler,
   ScatterDataPointEventHandler,
   ScatterDataPointsEventHandler,
-  HighchartsEventOptions,
 } from './chart-options-processor/apply-event-handlers';
 import { BeforeRenderHandler } from './props';
 import {
@@ -26,9 +23,8 @@ import { ChartType, CompleteThemeSettings } from './types';
 import { useSisenseContext } from './sisense-context/sisense-context';
 import { applyDateFormat } from './query/date-formats';
 import AlertBox from './alert-box/alert-box';
-
-// TODO: move this import once we decide where to do all our highcharts customizations
-import './highcharts-overrides';
+import isEqual from 'lodash/isEqual';
+import { HighchartsReactMemoized } from './highcharts-memorized';
 
 interface Props {
   chartType: ChartType;
@@ -42,6 +38,8 @@ interface Props {
   onBeforeRender?: BeforeRenderHandler;
 }
 
+const defaultOnBeforeRender = (options: HighchartsOptions) => options;
+
 /**
  * @internal
  */
@@ -54,9 +52,10 @@ export const SisenseChart = ({
   onDataPointClick,
   onDataPointContextMenu,
   onDataPointsSelected,
-  onBeforeRender = (options) => options,
+  onBeforeRender = defaultOnBeforeRender,
 }: Props) => {
   const { app } = useSisenseContext();
+  const prevOptions = useRef<HighchartsOptionsInternal | null>(null);
 
   const alerts: string[] = [];
 
@@ -93,9 +92,17 @@ export const SisenseChart = ({
       highchartsOptionsWithEventHandlers,
       themeSettings,
     );
-    return onBeforeRender(
+
+    const newOptions = onBeforeRender(
       highchartsThemedOptions as HighchartsOptions,
     ) as HighchartsOptionsInternal;
+
+    // return previous options if no changes to reduce re-rendering
+    if (prevOptions.current && isEqual(prevOptions.current, newOptions)) {
+      return prevOptions.current;
+    } else {
+      return newOptions;
+    }
   }, [
     chartData,
     chartDataOptions,
@@ -106,19 +113,14 @@ export const SisenseChart = ({
     onBeforeRender,
   ]);
 
-  const onChartCreated = useCallback(
-    (chart: Highcharts.Chart) => {
-      const chartOptions = options as HighchartsOptions & HighchartsEventOptions;
-      // if there are no on click handlers, allow parent to capture events
-      if (
-        !chartOptions?.plotOptions?.series?.point?.events?.click &&
-        !chartOptions?.plotOptions?.series?.point?.events?.contextmenu
-      ) {
-        chart.container.onclick = null;
-      }
-    },
-    [options],
-  );
+  // changing axis type requires a chart re-initialization
+  const immutable =
+    prevOptions.current?.xAxis &&
+    options?.xAxis &&
+    prevOptions.current?.xAxis[0]?.type !== options?.xAxis[0]?.type;
+
+  // update previous options for comparisons
+  prevOptions.current = options;
 
   return (
     options && (
@@ -132,18 +134,7 @@ export const SisenseChart = ({
         }}
       >
         {!!alerts.length && <AlertBox alerts={alerts} />}
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={options}
-          containerProps={{
-            style: {
-              // Container should inherit parent size for correct chart size calculation by Highcharts
-              height: '100%',
-              width: '100%',
-            },
-          }}
-          callback={onChartCreated}
-        ></HighchartsReact>
+        <HighchartsReactMemoized options={options} immutable={immutable} />
       </div>
     )
   );

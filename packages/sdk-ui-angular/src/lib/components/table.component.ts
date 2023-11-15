@@ -17,7 +17,7 @@ import {
 import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
- * Table Component
+ * Table with aggregation and pagination.
  */
 @Component({
   selector: 'csdk-table',
@@ -29,7 +29,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.dataSet}
+   * {@inheritDoc @sisense/sdk-ui!TableProps.dataSet}
    *
    * @category Data
    */
@@ -37,7 +37,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataSet: TableProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.highlights}
+   * {@inheritDoc @sisense/sdk-ui!TableProps.dataOptions}
    *
    * @category Data
    */
@@ -45,7 +45,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataOptions!: TableProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   * {@inheritDoc @sisense/sdk-ui!TableProps.filters}
    *
    * @category Data
    */
@@ -53,7 +53,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   filters: TableProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   * {@inheritDoc @sisense/sdk-ui!TableProps.styleOptions}
    *
    * @category Representation
    */

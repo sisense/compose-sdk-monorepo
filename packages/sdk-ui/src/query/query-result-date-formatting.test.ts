@@ -170,14 +170,14 @@ describe('applyDateFormats', () => {
         expect(dataOut).toStrictEqual(newData());
       });
 
-      it('does not mutate `text` on cells when the column is a datetime column, but the `type` does not match', () => {
+      it('does mutate `text` on cells when the column is a datetime column, but the `type` does not match', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
           x: [{ name: 'Years', type: 'timewithtimezone', dateFormat: 'yy' }],
           breakBy: [],
-        });
-        expect(dataOut).toBe(dataIn);
-        expect(dataOut).toStrictEqual(newData());
+        }) as QueryResultData;
+        expect(dataOut.rows[0][1].text).toBe('09');
+        expect(dataOut.rows[1][1].text).toBe('10');
       });
 
       it('does not mutate `text` on non-datetime columns that are configured with a `dateFormat`', () => {

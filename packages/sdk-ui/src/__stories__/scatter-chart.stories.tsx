@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+import { filters, createAttribute } from '@sisense/sdk-data';
 import { Chart } from '../chart';
 import { StyleOptions } from '../types';
 import { templateForComponent } from './template';
@@ -140,4 +142,103 @@ export const WithCategoriesDataLimit = template({
     },
   },
   chartType: 'scatter',
+});
+
+const dataSetWithHighlights = {
+  columns: [
+    { name: 'AgeRange', type: 'text' },
+    { name: 'Gender', type: 'text' },
+    { name: 'Quantity', type: 'number' },
+    { name: 'Cost', type: 'number' },
+  ],
+  rows: [
+    [
+      { data: '0-18', text: '0-18', blur: true },
+      { data: 'Female', text: 'Female', blur: true },
+      { data: 232, text: '232', blur: true },
+      { data: 27495.804228067398, text: '27495.8042280674', blur: true },
+    ],
+    [
+      { data: '0-18', text: '0-18', blur: false },
+      { data: 'Male', text: 'Male', blur: false },
+      { data: 782, text: '782', blur: false },
+      { data: 106794.48240566254, text: '106794.482405663', blur: false },
+    ],
+    [
+      { data: '0-18', text: '0-18', blur: true },
+      { data: 'Unspecified', text: 'Unspecified', blur: true },
+      { data: 2760, text: '2760', blur: true },
+      { data: 422713.5982968807, text: '422713.598296881', blur: true },
+    ],
+    [
+      { data: '19-24', text: '19-24', blur: true },
+      { data: 'Female', text: 'Female', blur: true },
+      { data: 455, text: '455', blur: true },
+      { data: 62488.35704255104, text: '62488.357042551', blur: true },
+    ],
+    [
+      { data: '19-24', text: '19-24', blur: true },
+      { data: 'Male', text: 'Male', blur: true },
+      { data: 1604, text: '1604', blur: true },
+      { data: 254258.1622428391, text: '254258.162242839', blur: true },
+    ],
+    [
+      { data: '19-24', text: '19-24', blur: true },
+      { data: 'Unspecified', text: 'Unspecified', blur: true },
+      { data: 5436, text: '5436', blur: true },
+      { data: 837450.8899597526, text: '837450.889959753', blur: true },
+    ],
+    [
+      { data: '65+', text: '65+', blur: false },
+      { data: 'Male', text: 'Male', blur: false },
+      { data: 3286, text: '3286', blur: false },
+      { data: 499720.10396651924, text: '499720.103966519', blur: false },
+    ],
+    [
+      { data: '65+', text: '65+', blur: true },
+      { data: 'Unspecified', text: 'Unspecified', blur: true },
+      { data: 10364, text: '10364', blur: true },
+      { data: 1537689.6738053188, text: '1537689.67380532', blur: true },
+    ],
+  ],
+};
+
+const attrAgeRange = {
+  name: 'AgeRange',
+  type: 'string',
+};
+
+const attrGender = {
+  name: 'Gender',
+  type: 'string',
+};
+
+const measureQuantity = { name: 'Quantity', aggregation: 'sum' };
+const measureCost = { name: 'Cost', aggregation: 'sum' };
+
+const mockAttributeGender = createAttribute({
+  name: 'Gender',
+  type: 'text-attribute',
+  expression: '[Commerce.Gender]',
+});
+
+const mockAttributeAgeRange = createAttribute({
+  name: 'AgeRange',
+  type: 'text-attribute',
+  expression: '[Commerce.Age Range]',
+});
+
+export const WithHighlights = template({
+  chartType: 'scatter',
+  dataSet: dataSetWithHighlights,
+  dataOptions: {
+    x: attrAgeRange,
+    y: measureQuantity,
+    breakByPoint: attrGender,
+    size: measureCost,
+  },
+  highlights: [
+    filters.members(mockAttributeGender, ['Male']),
+    filters.members(mockAttributeAgeRange, ['65+', '0-18']),
+  ],
 });

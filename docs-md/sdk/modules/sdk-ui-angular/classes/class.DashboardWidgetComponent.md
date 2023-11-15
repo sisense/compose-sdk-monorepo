@@ -4,7 +4,8 @@ title: DashboardWidgetComponent
 
 # Class DashboardWidgetComponent
 
-Dashboard Widget Component
+The Dashboard Widget component, which is a thin wrapper on [ChartWidgetComponent](class.ChartWidgetComponent.md),
+used to render a widget created in the Sisense instance.
 
 ## Implements
 

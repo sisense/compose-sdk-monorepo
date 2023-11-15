@@ -72,6 +72,9 @@ Date format.
 
 See [ECMAScript Date Time String Format](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-date-time-string-format)
 
+Note that 'YYYY' and 'DD' have been disabled since they often get confused with 'yyyy' and 'dd'
+and can produce unexpected results.
+
 #### Inherited from
 
 CategoryStyle.dateFormat

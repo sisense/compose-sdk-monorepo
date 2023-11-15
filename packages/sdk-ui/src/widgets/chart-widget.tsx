@@ -11,7 +11,7 @@ import { ChartWidgetProps } from '../props';
 import { WidgetHeader } from './common/widget-header';
 import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
-import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 import {
   HighchartsOptions,
@@ -21,8 +21,8 @@ import { isCartesian } from '../chart-options-processor/translations/types';
 import { ChartWidgetDeprecated } from './chart-widget-deprecated';
 
 /**
- * The Chart Widget component extending the {@link Chart} component to support advanced BI
- * capabilities such as drilldown.
+ * The Chart Widget component extending the {@link Chart} component to support widget style options.
+ * It can be used along with the {@link DrilldownWidget} component to support advanced data drilldown.
  *
  * @example
  * Example of using the `ChartWidget` component to

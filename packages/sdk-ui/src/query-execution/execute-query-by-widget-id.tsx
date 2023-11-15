@@ -1,7 +1,7 @@
 import React, { useState, type FunctionComponent } from 'react';
 import { ExecuteQueryByWidgetIdProps } from '../props';
-import { asSisenseComponent } from '../decorators/as-sisense-component';
-import { useExecuteQueryByWidgetId } from './use-execute-query-by-widget-id';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
+import { useExecuteQueryByWidgetIdInternal } from './use-execute-query-by-widget-id';
 
 /**
  * Executes a query over the existing widget and renders a function as child component.
@@ -44,8 +44,9 @@ export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdPro
       offset,
       filtersMergeStrategy,
       onBeforeQuery,
+      includeDashboardFilters,
     }) => {
-      const { data, query, error } = useExecuteQueryByWidgetId({
+      const { data, query, error } = useExecuteQueryByWidgetIdInternal({
         widgetOid,
         dashboardOid,
         filters,
@@ -54,6 +55,7 @@ export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdPro
         offset,
         filtersMergeStrategy,
         onBeforeQuery,
+        includeDashboardFilters,
       });
 
       const [prevData, setPrevData] = useState(data);

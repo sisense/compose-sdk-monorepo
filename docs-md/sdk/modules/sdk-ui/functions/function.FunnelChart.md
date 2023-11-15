@@ -6,7 +6,7 @@ title: FunnelChart
 
 > **FunnelChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
-A React component representing data progressively decreasing in size or quantity through a conical shape.
+A React component representing data progressively decreasing in size or quantity through a funnel shape.
 See [Funnel Chart](https://docs.sisense.com/main/SisenseLinux/funnel-chart.htm) for more information.
 
 ## Parameters

@@ -15,7 +15,7 @@ import { generateUniqueDataColumnsNames } from '../chart-data-options/validate-d
 import { isValue, TableDataOptionsInternal } from '../chart-data-options/types';
 import { isDataTableEmpty } from '../chart-data-processor/table-creators';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
-import { asSisenseComponent } from '../decorators/as-sisense-component';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { shouldSkipSisenseContextWaiting } from '../chart';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 

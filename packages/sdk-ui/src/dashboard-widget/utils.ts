@@ -1,5 +1,4 @@
-import { type Filter } from '@sisense/sdk-data';
-import unionBy from 'lodash/unionBy';
+import { DimensionalLevelAttribute, type Filter } from '@sisense/sdk-data';
 import { ChartSubtype } from '../chart-options-processor/subtype-to-design-options';
 import { ChartType, SortDirection } from '../types';
 import {
@@ -107,21 +106,47 @@ export function getSortType(jaqlSort: JaqlSortDirection | undefined): SortDirect
 }
 
 /**
+ * Gets a unique identifier for a filter, combining its attribute expression and granularity if available.
+ *
+ * @param {Filter} filter - The filter object to generate the unique identifier for.
+ * @returns {string} - The unique identifier for the filter.
+ */
+function getFilterCompareId(filter: Filter): string {
+  // TODO: remove fallback on 'filter.jaql()' after removing temporal 'jaql()' workaround from filter translation layer
+  const { attribute: filterAttribute } = filter;
+  const filterJaql = filter.jaql().jaql;
+  const expression = filterAttribute.expression || filterJaql.dim;
+  const granularity =
+    (filterAttribute as DimensionalLevelAttribute).granularity ||
+    (filterJaql.datatype === 'datetime'
+      ? DimensionalLevelAttribute.translateJaqlToGranularity(filterJaql)
+      : '');
+
+  return `${expression}${granularity}`;
+}
+
+/**
  * Merges two arrays of filter objects, prioritizing 'targetFilters' over 'sourceFilters',
- * and removes duplicates based on filter attribute expression (dim)
+ * and removes duplicates based on filter compare id
  *
  * @param {Filter[]} [sourceFilters=[]] - The source array of filter objects.
  * @param {Filter[]} [targetFilters=[]] - The target array of filter objects.
  * @returns {Filter[]} - The merged array of filter objects.
  */
 export function mergeFilters(sourceFilters: Filter[] = [], targetFilters: Filter[] = []) {
-  return unionBy(
-    targetFilters,
-    sourceFilters,
-    // TODO: remove fallback on 'filter.jaql()' after removing temporal 'jaql()' workaround from filter translation layer
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    (filter) => filter.attribute?.expression ?? filter.jaql().jaql.dim,
-  );
+  const filters = [...targetFilters];
+
+  sourceFilters.forEach((filter) => {
+    const isFilterAlreadyExist = targetFilters.some(
+      (existingFilter) => getFilterCompareId(filter) === getFilterCompareId(existingFilter),
+    );
+
+    if (!isFilterAlreadyExist) {
+      filters.push(filter);
+    }
+  });
+
+  return filters;
 }
 
 /**

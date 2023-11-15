@@ -4,6 +4,10 @@ title: ValueToColorMap
 
 # Type alias ValueToColorMap
 
-> **ValueToColorMap**: `Record`\< `string`, `string` \>
+> **ValueToColorMap**: `object`
 
 Mapping of each of the chart value series to colors.
+
+## Index signature
+
+ \[`value`: `string`\]: `string`
