@@ -28,7 +28,9 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 > **earliestDate**?: `string`
 
-Earliest valid date in date range select. If not specified a query will run.
+Earliest allowed date for selection.
+
+If not specified, the earliest date of the target date-level attribute will be used.
 
 ***
 
@@ -44,7 +46,9 @@ Date range filter.
 
 > **lastDate**?: `string`
 
-Last valid date in date range select. If not specified a query will run.
+Latest allowed date for selection.
+
+If not specified, the latest date of the target date-level attribute will be used.
 
 ***
 
@@ -66,8 +70,16 @@ Callback function that is called when the date range filter object should be upd
 
 ***
 
+### parentFilters
+
+> **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+List of filters this filter is dependent on.
+
+***
+
 ### title
 
 > **title**: `string`
 
-Title of the filter tile
+Filter tile title

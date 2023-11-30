@@ -1,4 +1,8 @@
-import { DimensionalLevelAttribute, type Filter } from '@sisense/sdk-data';
+import {
+  DimensionalLevelAttribute,
+  type Filter,
+  SortDirection as JaqlSortDirection,
+} from '@sisense/sdk-data';
 import { ChartSubtype } from '../chart-options-processor/subtype-to-design-options';
 import { ChartType, SortDirection } from '../types';
 import {
@@ -6,7 +10,6 @@ import {
   FiltersMergeStrategyEnum,
   Panel,
   PanelItem,
-  SortDirection as JaqlSortDirection,
   WidgetSubtype,
   WidgetType,
 } from './types';

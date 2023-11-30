@@ -4,7 +4,6 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useState, type FunctionComponent } from 'react';
 
-import { ThemeSettings } from '../types';
 import { TableWidgetProps } from '../props';
 import { WidgetHeader } from './common/widget-header';
 import { ThemeProvider, useThemeContext } from '../theme-provider';
@@ -90,16 +89,20 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
             {topSlot}
 
             <ThemeProvider
-              theme={
-                {
-                  chart: {
-                    backgroundColor:
-                      widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-                  },
-                } as ThemeSettings
-              }
+              theme={{
+                chart: {
+                  backgroundColor:
+                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                },
+              }}
             >
-              <div style={{ flexGrow: 1 }}>
+              <div
+                style={{
+                  flexGrow: 1,
+                  backgroundColor:
+                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                }}
+              >
                 <Table
                   dataSet={props.dataSource}
                   dataOptions={props.dataOptions}

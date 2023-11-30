@@ -12,13 +12,16 @@ import {
   MeasureContext,
   CalculatedMeasure,
   BaseMeasure,
+  CustomFormulaContext,
 } from '../interfaces.js';
-
 import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
 
-import { AggregationTypes, MetadataTypes } from '../types.js';
+import { AggregationTypes, FormulaContext, FormulaJaql, MetadataTypes, Sort } from '../types.js';
 import { normalizeName } from '../base.js';
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
+import { mapValues } from 'lodash';
+import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
+import { isDatetime, isNumber } from './../simple-column-types.js';
 
 /**
  * Defines the different numeric operators that can be used with numeric filters
@@ -98,6 +101,132 @@ function measureFunction(
   builder.push(')');
 
   return new DimensionalCalculatedMeasure(name, builder.join(''), context);
+}
+
+function transformCustomFormulaJaql(
+  jaql: (FormulaJaql & { context?: FormulaJaql | FormulaContext }) | FormulaContext,
+) {
+  const isFormulaJaql = 'formula' in jaql;
+
+  let sort;
+  if (jaql.sort) {
+    sort = jaql.sort === 'asc' ? Sort.Ascending : Sort.Descending;
+  }
+
+  if (isFormulaJaql) {
+    const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) =>
+      jaqlContextValue ? transformCustomFormulaJaql(jaqlContextValue) : {},
+    );
+
+    return new DimensionalCalculatedMeasure(
+      jaql.title,
+      jaql.formula,
+      context,
+      undefined,
+      undefined,
+      sort,
+    );
+  }
+
+  const hasAggregation = !!jaql.agg;
+  const isDatatypeDatetime = isDatetime(jaql.datatype);
+  const attributeType = isNumber(jaql.datatype)
+    ? MetadataTypes.NumericAttribute
+    : MetadataTypes.TextAttribute;
+  const attribute = isDatatypeDatetime
+    ? new DimensionalLevelAttribute(
+        jaql.title,
+        jaql.dim,
+        DimensionalLevelAttribute.translateJaqlToGranularity(jaql),
+        undefined,
+        undefined,
+        sort,
+      )
+    : new DimensionalAttribute(jaql.title, jaql.dim, attributeType, undefined, sort);
+
+  if (hasAggregation) {
+    return new DimensionalBaseMeasure(
+      jaql.title,
+      attribute,
+      DimensionalBaseMeasure.aggregationFromJAQL(jaql.agg || ''),
+      undefined,
+      undefined,
+      sort,
+    );
+  }
+
+  return attribute;
+}
+
+/**
+ * Creates a calculated measure for a [valid custom formula](https://docs.sisense.com/main/SisenseLinux/dashboard-functions-reference.htm).
+ *
+ * Use square brackets within the `formula` to include dimensions or measures.
+ * Each unique dimension or measure included in the `formula` must be defined using a property:value pair in the `context` parameter.
+ *
+ * You can nest custom formulas by placing one inside the `formula` parameter of another
+ *
+ *
+ * Note: Shared formula must be fetched prior to use (see {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}).
+ *
+ * @example
+ * An example of constructing a `customFormula` using dimensions, measures, and nested custom formulas:
+ * ```tsx
+ *  const profitabilityRatio = measures.customFormula(
+ *   'Profitability Ratio',
+ *   '([totalRevenue] - SUM([cost])) / [totalRevenue]',
+ *   {
+ *     totalRevenue: measures.sum(DM.Commerce.Revenue),
+ *     cost: DM.Commerce.Cost,
+ *   },
+ * );
+ *
+ * const profitabilityRatioRank = measures.customFormula(
+ *   'Profitability Ratio Rank',
+ *   'RANK([profRatio], "ASC", "1224")',
+ *   {
+ *     profRatio: profitabilityRatio,
+ *   },
+ * );
+ *
+ * return (
+ *   <Chart
+ *     dataSet={DM.DataSource}
+ *     chartType="line"
+ *     dataOptions={{
+ *       category: [DM.Commerce.AgeRange],
+ *       value: [
+ *         profitabilityRatioRank,
+ *         {
+ *           column: measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
+ *           showOnRightAxis: true,
+ *           chartType: 'column',
+ *         },
+ *         {
+ *           column: measures.sum(DM.Commerce.Cost, 'Total Cost'),
+ *           showOnRightAxis: true,
+ *           chartType: 'column',
+ *         },
+ *       ],
+ *     }}
+ *   />
+ * );
+ * ```
+ * @param title - Title of the measure to be displayed in legend
+ * @param formula - Formula to be used for the measure
+ * @param context - Formula context as a map of strings to measures or attributes
+ * @returns A calculated measure object that may be used in a chart or a query
+ */
+export function customFormula(
+  title: string,
+  formula: string,
+  context: CustomFormulaContext,
+): Attribute | Measure {
+  const newContext = Object.entries(context).reduce((acc, [key, val]) => {
+    acc[`[${key}]`] = val.jaql().jaql;
+    return acc;
+  }, {});
+  return transformCustomFormulaJaql({ title, formula, context: newContext });
 }
 
 function arithmetic(

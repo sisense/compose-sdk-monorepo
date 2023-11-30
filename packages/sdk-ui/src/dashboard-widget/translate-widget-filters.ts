@@ -1,5 +1,5 @@
-import { Filter } from '@sisense/sdk-data';
-import { FilterJaql, IncludeAllFilter, IncludeMembersFilter, Panel, PanelItem } from './types';
+import { Filter, FilterJaql, IncludeMembersFilter, IncludeAllFilter } from '@sisense/sdk-data';
+import { Panel, PanelItem } from './types';
 
 /**
  * Extracts filter model components from a FilterJaql object.

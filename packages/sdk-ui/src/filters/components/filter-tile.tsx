@@ -1,16 +1,20 @@
 /* eslint-disable complexity */
 import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
-import { SisenseSwitchButton } from './common';
+
+import { SisenseSwitchButton, TriangleIndicator } from './common';
 import { ArrowDownIcon } from './icons';
 import { useThemeContext } from '../../theme-provider';
 import { getSlightlyDifferentColor } from '../../utils/color';
 import { styled } from '@mui/material/styles';
+import { FilterVariant, isVertical } from './criteria-filter-tile/criteria-filter-operations';
 
 interface Props {
   title: string;
   renderContent: (collapsed: boolean, tileDisabled: boolean) => ReactNode;
+  arrangement?: FilterVariant;
   disabled?: boolean;
+  isDependent?: boolean;
   onToggleDisabled?: () => void;
 }
 
@@ -34,8 +38,10 @@ const GroupHoverWrapper = styled('div')({
 export const FilterTile: FunctionComponent<Props> = ({
   title,
   renderContent,
+  arrangement = 'vertical',
   disabled,
   onToggleDisabled,
+  isDependent,
 }) => {
   const [collapsed, setCollapsed] = useState(true);
 
@@ -48,49 +54,60 @@ export const FilterTile: FunctionComponent<Props> = ({
   return (
     <GroupHoverWrapper>
       <div
-        className={`csdk-w-min csdk-min-w-[216px] csdk-p-px csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start`}
+        className={`${isVertical(arrangement) ? 'csdk-min-w-[216px]' : ''} ${
+          isDependent ? '' : 'csdk-p-px'
+        } csdk-w-min csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start`}
         style={{
           backgroundColor: disabled ? disabledBgColor : bgColor,
         }}
       >
-        <header
-          className={
-            'csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]'
-          }
-        >
-          <ArrowDownIcon
-            aria-label="arrow-down"
-            width="16"
-            height="16"
-            fill="#5B6372"
-            className={`csdk-transition csdk-ml-[4px] csdk-cursor-pointer ${
-              collapsed ? '-csdk-rotate-90' : ''
-            }`}
-            onClick={() => setCollapsed((value) => !value)}
-          />
-          <span
-            className={
-              'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
-            }
-            style={{ color: textColor }}
-          >
-            {title}
-          </span>
-        </header>
+        {isVertical(arrangement) && (
+          <>
+            {isDependent && <TriangleIndicator />}
+            <header
+              className={
+                'csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]'
+              }
+              style={{ color: textColor }}
+            >
+              <ArrowDownIcon
+                aria-label="arrow-down"
+                width="16"
+                height="16"
+                fill={`${textColor ?? '#5B6372'}`}
+                className={`csdk-transition csdk-ml-[4px] csdk-cursor-pointer ${
+                  collapsed ? '-csdk-rotate-90' : ''
+                }`}
+                onClick={() => setCollapsed((value) => !value)}
+              />
+              <span
+                className={
+                  'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
+                }
+                style={{ color: textColor }}
+              >
+                {title}
+              </span>
+            </header>
+          </>
+        )}
+
         <main style={{ color: textColor }}>{renderContent(collapsed, disabled ?? false)}</main>
 
-        <footer
-          className={
-            'csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]'
-          }
-        >
-          <SisenseSwitchButton
-            checked={!disabled}
-            size="small"
-            onChange={() => onToggleDisabled?.()}
-            inputProps={{ role: 'switch', name: 'tile-switch' }}
-          />
-        </footer>
+        {isVertical(arrangement) && (
+          <footer
+            className={
+              'csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]'
+            }
+          >
+            <SisenseSwitchButton
+              checked={!disabled}
+              size="small"
+              onChange={() => onToggleDisabled?.()}
+              inputProps={{ role: 'switch', name: 'tile-switch' }}
+            />
+          </footer>
+        )}
       </div>
     </GroupHoverWrapper>
   );

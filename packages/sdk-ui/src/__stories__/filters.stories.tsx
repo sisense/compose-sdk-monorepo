@@ -2,6 +2,8 @@ import { templateForComponent } from './template';
 import { DateFilter } from '../filters';
 
 const template = templateForComponent(DateFilter);
+const minDate = '2020-01-01';
+const maxDate = '2020-12-31';
 
 export default {
   title: 'filters/date',
@@ -13,11 +15,26 @@ export const DateRangeFilter = template({
     console.log('onChange', filter);
   },
   value: {
-    from: '2020-01-01',
-    to: '2020-12-31',
+    from: minDate,
+    to: maxDate,
   },
   limit: {
-    maxDate: '2020-12-31',
-    minDate: '2020-01-01',
+    maxDate,
+    minDate,
   },
+});
+
+export const DateRangeFilterWithParentFilters = template({
+  onChange(filter) {
+    console.log('onChange', filter);
+  },
+  value: {
+    from: minDate,
+    to: maxDate,
+  },
+  limit: {
+    maxDate,
+    minDate,
+  },
+  isDependent: true,
 });

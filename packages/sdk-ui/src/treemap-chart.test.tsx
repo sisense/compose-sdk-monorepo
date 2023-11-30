@@ -6,6 +6,7 @@ import { getDefaultThemeSettings } from './chart-options-processor/theme-option-
 import { getBaseDateFnsLocale } from './chart-data-processor/data-table-date-period';
 import { ClientApplication } from './app/client-application';
 import { TreemapChart } from './treemap-chart';
+import type { Data } from '@sisense/sdk-data';
 
 vi.mock('./HighchartsWrapper', () => {
   return {
@@ -45,7 +46,7 @@ vi.mock('./sisense-context/sisense-context', async () => {
   };
 });
 
-const dataSet = {
+const dataSet: Data = {
   columns: [
     { name: 'Gender', type: 'string' },
     { name: 'Years', type: 'date' },
@@ -69,6 +70,13 @@ const dataSet = {
     ['Male', '2018', 'B', 936, 20],
   ],
 };
+
+const withBlurredRows = (data: Data, rowsIndexes: number[]) => ({
+  ...data,
+  rows: data.rows.map((row, rowIndex) =>
+    row.map((cell) => (rowsIndexes.includes(rowIndex) ? { data: cell, blur: true } : cell)),
+  ),
+});
 
 const cat1 = {
   name: 'Years',
@@ -135,6 +143,18 @@ describe('Treemap Chart', () => {
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, { column: cat2, isColored: true }, cat3], value: [meas1] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+  });
+  it('render a treemap with highlights', () => {
+    render(
+      <TreemapChart
+        dataSet={withBlurredRows(dataSet, [0, 1, 2, 3, 4])}
+        dataOptions={{ category: [cat1, { column: cat2 }, cat3], value: [meas1] }}
         onBeforeRender={(options: HighchartsOptions) => {
           expect(options).toMatchSnapshot();
           return options;

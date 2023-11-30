@@ -20,6 +20,16 @@ it('renders pills in its initial state', () => {
 
   const pill2013 = screen.getByRole('button', { name: '2013' });
   expect(pill2013).toBeInTheDocument();
+
+  const triangle = screen.queryByTestId('triangle-indicator');
+  expect(triangle).not.toBeInTheDocument();
+});
+
+it('renders triangle if dependent', () => {
+  setup(<BasicMemberFilterTile {...props} isDependent={true} />);
+
+  const triangle = screen.queryByTestId('triangle-indicator');
+  expect(triangle).toBeInTheDocument();
 });
 
 it('renders a list of members when expanded', async () => {

@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-lines */
-import { NumericSimpleOptions, NumericBarOptions, GaugeOptions } from '../types';
+import { NumericSimpleOptions, NumericBarOptions, GaugeOptions, TickerOptions } from '../types';
 
 export const defaultNumericSimpleOptions: NumericSimpleOptions = {
   fontFamily: 'opensansregular, sans-serif',
@@ -294,4 +294,37 @@ export const defaultGaugeOptions: GaugeOptions = {
     'valueSectionHeight',
     'secSectionHeight',
   ],
+};
+
+export const defaultTickerOptions: TickerOptions = {
+  fontFamily: 'Open Sans',
+  fontSize: 15,
+  title: {
+    color: 'rgb(68, 81, 102)',
+  },
+  value: {
+    fontWeight: 800,
+  },
+  secondaryTitle: {
+    color: 'rgb(163, 163, 163)',
+  },
+  secondaryValue: {
+    color: 'rgb(163, 163, 163)',
+  },
+  textKeys: ['title', 'value', 'secondaryTitle', 'secondaryValue'],
+  backgroundColor: 'transparent',
+  dividerColor: 'rgb(39, 42, 52)',
+  barHandleColor: 'rgb(43, 51, 66)',
+  height: 35,
+  horizontalMargin: 15,
+  barWidth: 100,
+  barHeight: 11,
+  barOpacity: 0.5,
+  tickerBarWidth: 2,
+  tickerBarHeight: 13,
+  horizontalPadding: 9,
+  textPadding: 6,
+  sectionMinWidth: 20,
+  dividerWidth: 1,
+  dividerHeight: 13,
 };

@@ -413,4 +413,74 @@ describe('measures factory', () => {
       },
     });
   });
+
+  describe('measures.customFormula()', () => {
+    test('with atrribute and measure', () => {
+      const m = measures.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', {
+        Attribute: sampleAttribute,
+        'Average Measure': sampleMeasure2,
+      });
+
+      expect(m.jaql()).toStrictEqual({
+        jaql: {
+          context: {
+            '[Attribute]': {
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'Cost',
+            },
+            '[Average Measure]': {
+              agg: 'avg',
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'measure 2',
+            },
+          },
+          formula: 'SUM([Attribute]) - [Average Measure]',
+          title: 'Total Attribute',
+        },
+      });
+    });
+
+    test('with nested formula', () => {
+      const nestedMeasure = measures.customFormula(
+        'Total Attribute',
+        'SUM([Attribute]) - [Average Measure]',
+        {
+          Attribute: sampleAttribute,
+          'Average Measure': sampleMeasure2,
+        },
+      );
+
+      const m = measures.customFormula('Nested formula', 'RANK([Nested], "ASC", "1224")', {
+        Nested: nestedMeasure,
+      });
+
+      expect(m.jaql()).toStrictEqual({
+        jaql: {
+          context: {
+            '[Nested]': {
+              context: {
+                '[Attribute]': {
+                  datatype: 'numeric',
+                  dim: '[Commerce.Cost]',
+                  title: 'Cost',
+                },
+                '[Average Measure]': {
+                  agg: 'avg',
+                  datatype: 'numeric',
+                  dim: '[Commerce.Cost]',
+                  title: 'measure 2',
+                },
+              },
+              formula: 'SUM([Attribute]) - [Average Measure]',
+              title: 'Total Attribute',
+            },
+          },
+          formula: 'RANK([Nested], "ASC", "1224")',
+          title: 'Nested formula',
+        },
+      });
+    });
+  });
 });

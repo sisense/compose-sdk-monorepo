@@ -78,10 +78,6 @@ Description of the widget
 
 List of categories to allow drilldowns on
 
-::: warning Deprecated
-Use [DrilldownWidget](../functions/function.DrilldownWidget.md) instead
-:::
-
 ***
 
 #### highlightSelectionDisabled

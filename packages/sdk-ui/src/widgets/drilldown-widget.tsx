@@ -136,20 +136,29 @@ export const DrilldownWidget = ({
   );
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <ContextMenuComponent
         position={contextMenuPos}
         itemSections={drilldownMenuItems}
         closeContextMenu={closeContextMenu}
       />
       {drilldownDimension && !config?.isBreadcrumbsDetached && breadcrumbs}
-      {children({
-        drilldownFilters,
-        drilldownDimension,
-        onDataPointsSelected,
-        onContextMenu: openContextMenu,
-        breadcrumbsComponent: config?.isBreadcrumbsDetached ? breadcrumbs : undefined,
-      })}
-    </>
+      <div
+        style={{
+          flexGrow: 1,
+          // prevents 'auto' behavior of using content size as minimal for element
+          minWidth: 0,
+          minHeight: 0,
+        }}
+      >
+        {children({
+          drilldownFilters,
+          drilldownDimension,
+          onDataPointsSelected,
+          onContextMenu: openContextMenu,
+          breadcrumbsComponent: config?.isBreadcrumbsDetached ? breadcrumbs : undefined,
+        })}
+      </div>
+    </div>
   );
 };

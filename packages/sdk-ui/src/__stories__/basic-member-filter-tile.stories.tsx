@@ -90,3 +90,10 @@ export const WithCustomThemeSettings = template(
     ),
   ],
 );
+
+export const WithParentFilters = template({
+  title: 'dim1',
+  allMembers,
+  initialSelectedMembers: selectedMembers,
+  isDependent: true,
+});

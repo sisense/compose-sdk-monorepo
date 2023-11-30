@@ -25,7 +25,7 @@ This allows for complete control over the chart's dimensions to be handed over t
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `props` | [`DrilldownWidgetProps`](../type-aliases/type-alias.DrilldownWidgetProps.md) | DrilldownWidget properties |
+| `props` | [`DrilldownWidgetProps`](../interfaces/interface.DrilldownWidgetProps.md) | DrilldownWidget properties |
 
 ## Returns
 

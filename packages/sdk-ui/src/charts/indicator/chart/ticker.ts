@@ -9,7 +9,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-depth */
 import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options';
-import { LegacyIndicatorChartOptions } from '../types';
+import { LegacyIndicatorChartOptions, TickerOptions } from '../types';
 import { IndicatorHelper } from './indicator-helper';
 const $indicatorHelper = new IndicatorHelper();
 
@@ -25,7 +25,7 @@ export class Ticker {
   render(
     canvas: HTMLCanvasElement,
     data: IndicatorLegacyChartDataOptions,
-    options: LegacyIndicatorChartOptions | any,
+    options: TickerOptions,
     container: HTMLElement,
   ) {
     const ctx = canvas.getContext('2d')!;
@@ -38,9 +38,8 @@ export class Ticker {
     let titleWidth = 0;
     let secTitleWidth = 0;
     let neededWidth;
-    let valueMaxWidth = 0;
 
-    ctx.font = options.valueFont;
+    ctx.font = options.valueFont!;
 
     neededWidth = $indicatorHelper.getStringWidth(ctx, data.value.text);
     options.offsetX = 0;
@@ -51,7 +50,7 @@ export class Ticker {
     }
 
     if (data.showTitle) {
-      ctx.font = options.titleFont;
+      ctx.font = options.titleFont!;
 
       titleWidth = $indicatorHelper.getStringWidth(ctx, data.title.text);
       titleMinWidth = titleWidth < sectionMinWidth ? titleWidth : sectionMinWidth;
@@ -59,14 +58,14 @@ export class Ticker {
     }
 
     if (data.showSecondary) {
-      ctx.font = options.secondaryValueFont;
+      ctx.font = options.secondaryValueFont!;
 
       const secValueWidth = $indicatorHelper.getStringWidth(ctx, data.secondary.text);
 
       secValueMinWidth = secValueWidth < sectionMinWidth ? secValueWidth : sectionMinWidth;
       neededWidth += secValueMinWidth;
 
-      ctx.font = options.secondaryTitleFont;
+      ctx.font = options.secondaryTitleFont || '';
 
       secTitleWidth = $indicatorHelper.getStringWidth(ctx, data.secondaryTitle.text);
       secTitleMinWidth = secTitleWidth < sectionMinWidth ? secTitleWidth : sectionMinWidth;
@@ -90,12 +89,13 @@ export class Ticker {
     canvasWidth += data.showSecondary
       ? options.horizontalPadding * 2 + options.dividerWidth + options.textPadding
       : 0;
-    valueMaxWidth = maxWidth - canvasWidth - titleMinWidth - secTitleMinWidth - secValueMinWidth;
+    const valueMaxWidth =
+      maxWidth - canvasWidth - titleMinWidth - secTitleMinWidth - secValueMinWidth;
     options.fitValueMeasure = $indicatorHelper.getFitStringMeasure(
       ctx,
       data.value.text,
       valueMaxWidth,
-      options.valueFont,
+      options.valueFont!,
     );
     canvasWidth += options.fitValueMeasure.width;
 
@@ -107,7 +107,7 @@ export class Ticker {
         ctx,
         data.secondary.text,
         secValueMaxWidth,
-        options.secondaryValueFont,
+        options.secondaryValueFont!,
       );
       canvasWidth += options.fitSecValueMeasure.width;
       const freeWidth = maxWidth - canvasWidth;
@@ -133,7 +133,7 @@ export class Ticker {
         ctx,
         data.secondaryTitle.text,
         secTitleMaxWidth,
-        options.secondaryTitleFont,
+        options.secondaryTitleFont!,
       );
       canvasWidth += options.fitSecTitleMeasure.width;
     }
@@ -145,7 +145,7 @@ export class Ticker {
         ctx,
         data.title.text,
         titleMaxWidth,
-        options.titleFont,
+        options.titleFont!,
       );
       canvasWidth += options.fitTitleMeasure.width;
     }

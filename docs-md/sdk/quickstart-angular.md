@@ -73,25 +73,27 @@ The Compose SDK packages are deployed via public NPM Registry. To install the pa
    npm i @sisense/sdk-cli --save-dev
    ```
 
-## Sisense Instance Authentication
-You need to authenticate the application with your Sisense instance. Use one of the following:
-- REST API token (see below)
-- Web Access Token (WAT): [Using Web Access Tokens](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm). Make sure to issue an Opaque Token (By Reference).
-- Single Sign On (SSO): [Using SSO to Access Sisense](https://docs.sisense.com/main/SisenseLinux/using-single-sign-on-to-access-sisense.htm).
-#### Generating API Token
-To get an API token via Compose SDK CLI tool, use the `get-api-token` command:
+## Sisense Authentication and Security
+
+In order to retrieve data, you need to authenticate your application with your Sisense instance and set up CORS.
+
+### Authentication
+
+There are a number different ways you can authenticate your application. To learn more, see [Authentication and Security](./authentication-security.md#authentication).
+
+Here, we'll use an API Token that we retrieve using the Compose SDK tool. To do so, run the `get-api-token` command:
+
 ```sh
-npx @sisense/sdk-cli get-api-token --url <your_instance_url> --username "<username>"
+npx @sisense/sdk-cli get-api-token --url <your_instance_url> --username <username>
 ```
-You can also get an API token directly from a user's profile page or through the Sisense API.
 
-For more details, see [Using the Sisense API](https://sisense.dev/guides/restApi/using-rest-api.html).
+Hold on to the API Token. You'll need it later when adding Compose SDK code to your application.
 
-#### Modifying CORS Settings
+### CORS Settings
 
-Add your application domain name to your Sisense instance CORS Allowed Origins configuration.
+There are also a number of different ways you can set up CORS. To learn more, see [Authentication and Security](./authentication-security.md#cross-origin-resource-sharing-cors).
 
-To set up CORS using the REST API, see [Cross Origin Resource Sharing](https://docs.sisense.com/main/SisenseLinux/cross-origin-resource-sharing.htm?Highlight=CORS).
+Here we'll use the Sisense UI. To do so, in your Sisense instance, go to **Admin > Security & Access > Security Settings > General** and add your application's domain to the **CORS Allowed Origins** list.
 
 ## Adding Sisense to Your Application
 

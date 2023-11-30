@@ -6,10 +6,12 @@ import {
   type ExecuteQueryByWidgetIdParams,
 } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from './sisense-context.service';
+import { TrackableService } from '../decorators/trackable.decorator';
 
 @Injectable({
   providedIn: 'root',
 })
+@TrackableService<QueryService>(['executeQuery', 'executeQueryByWidgetId'])
 export class QueryService {
   constructor(private sisenseContextService: SisenseContextService) {}
 

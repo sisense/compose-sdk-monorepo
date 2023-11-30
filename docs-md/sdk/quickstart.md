@@ -115,34 +115,27 @@ npmScopes:
 2. Remove directory `node_modules` and file `yarn.lock` before running `yarn install`.
 
 
-## Sisense Instance Authentication
+## Sisense Authentication and Security
 
-You need to authenticate the application with your Sisense instance. You will need a Web Access Token (WAT), a REST API token, or enable Single Sign On (SSO).
+In order to retrieve data, you need to authenticate your application with your Sisense instance and set up CORS.
 
-### WAT
+### Authentication
 
-To use WAT, see [Using Web Access Tokens](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
-::: tip Note
-Make sure to issue an Opaque Token (By Reference).
-:::
+There are a number different ways you can authenticate your application. To learn more, see [Authentication and Security](./authentication-security.md#authentication).
 
-### API Token
-
-To get an API token, use the `get-api-token` command:
+Here, we'll use an API Token that we retrieve using the Compose SDK tool. To do so, run the `get-api-token` command:
 
 ```sh
-npx @sisense/sdk-cli get-api-token --url <your_instance_url> --username "<username>"
+npx @sisense/sdk-cli get-api-token --url <your_instance_url> --username <username>
 ```
 
-For more details, see [Using the Sisense API](https://sisense.dev/guides/restApi/using-rest-api.html).
+Hold on to the API Token. You'll need it later when adding Compose SDK code to your application.
 
-### SSO
+### CORS Settings
 
-To use SSO, see [Using SSO to Access Sisense](https://docs.sisense.com/main/SisenseLinux/using-single-sign-on-to-access-sisense.htm).
+There are also a number of different ways you can set up CORS. To learn more, see [Authentication and Security](./authentication-security.md#cross-origin-resource-sharing-cors).
 
-### Modify CORS Settings
-
-Add your application domain name to your Sisense instance CORS Allowed Origins configuration. To set up CORS using the REST API, see [Cross Origin Resource Sharing](https://docs.sisense.com/main/SisenseLinux/cross-origin-resource-sharing.htm?Highlight=CORS).
+Here we'll use the Sisense UI. To do so, in your Sisense instance, go to **Admin > Security & Access > Security Settings > General** and add your application's domain to the **CORS Allowed Origins** list.
 
 ## Adding Sisense to Your Application
 

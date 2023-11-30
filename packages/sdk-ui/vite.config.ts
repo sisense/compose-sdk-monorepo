@@ -9,7 +9,12 @@ import checker from 'vite-plugin-checker';
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
-    cssInjectedByJsPlugin({ topExecutionPriority: false }),
+    cssInjectedByJsPlugin({
+      topExecutionPriority: false,
+      jsAssetsFilterFunction: function customJsAssetsfilterFunction(outputChunk) {
+        return ['index.js', 'ai.js'].includes(outputChunk.fileName);
+      },
+    }),
     dts({
       insertTypesEntry: true,
       tsConfigFilePath:
@@ -34,16 +39,11 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === 'production' ? false : true,
     target: 'es6',
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        ai: resolve(__dirname, 'src/ai/index.ts'),
+      },
       formats: ['es'],
-      // Force name to be "index.js" instead of the default "sdk-ui.js" so this
-      // matches the name of "index.d.ts" produced by vite-plugin-dts. This
-      // means we don't have to manually specify an exports.types value in our
-      // package.json, since the declaration file is co-located.
-      //
-      // More info about how TypeScript works with "exports" in package.json:
-      // https://www.typescriptlang.org/docs/handbook/esm-node.html#packagejson-exports-imports-and-self-referencing
-      fileName: 'index',
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],

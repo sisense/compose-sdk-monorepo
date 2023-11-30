@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-modeling",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
@@ -9,7 +9,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@sisense/sdk-data": "^0.14.0",
+    "@sisense/sdk-data": "^0.15.0",
     "typescript": "4.8.4"
   },
   "scripts": {

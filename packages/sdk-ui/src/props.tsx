@@ -41,6 +41,7 @@ import {
 import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams } from './query-execution';
 import { FiltersMergeStrategy } from './dashboard-widget/types';
+import { HookEnableParam } from './common/hooks/types';
 
 export type {
   ScatterDataPointEventHandler,
@@ -713,7 +714,6 @@ export interface ChartWidgetProps extends BaseChartEventProps {
   /**
    * List of categories to allow drilldowns on
    *
-   * @deprecated Use {@link DrilldownWidget} instead
    * @category Widget
    */
   drilldownOptions?: DrilldownOptions;
@@ -951,21 +951,21 @@ export interface SunburstChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props for {@link ContextMenu} component.
  */
-export type ContextMenuProps = {
+export interface ContextMenuProps {
   /**
-   * Position of the context menu
+   * Context menu position
    *
    * @category Widget
    */
   position?: MenuPosition | null;
   /**
-   * Callback function that is evaluated when context menu is closed
+   * Callback function that is evaluated when the context menu is closed
    *
    * @category Widget
    */
   closeContextMenu: () => void;
   /**
-   * Sections of menu items
+   * Menu item sections
    *
    * @category Widget
    */
@@ -976,9 +976,9 @@ export type ContextMenuProps = {
    * @category Widget
    */
   children?: React.ReactNode;
-};
+}
 
-export type DrilldownBreadcrumbsProps = {
+export interface DrilldownBreadcrumbsProps {
   /**
    * List of drilldown filters formatted to be displayed as breadcrumbs
    *
@@ -992,7 +992,7 @@ export type DrilldownBreadcrumbsProps = {
    */
   currentDimension: Attribute;
   /**
-   * Callback function that is evaluated when X button is clicked
+   * Callback function that is evaluated when the close (X) button is clicked
    *
    * @category Widget
    */
@@ -1003,7 +1003,7 @@ export type DrilldownBreadcrumbsProps = {
    * @category Widget
    */
   sliceDrilldownSelections: (i: number) => void;
-};
+}
 
 /**
  * An object that allows users to pass advanced configuration options as a prop for the {@link DrilldownWidget} component
@@ -1034,7 +1034,7 @@ export type DrilldownWidgetConfig = {
 /**
  * Props for the {@link DrilldownWidget} component
  */
-export type DrilldownWidgetProps = {
+export interface DrilldownWidgetProps {
   /**
    * List of dimensions to allow drilldowns on
    *
@@ -1061,4 +1061,24 @@ export type DrilldownWidgetProps = {
    * @category Widget
    */
   children: (customDrilldownResult: CustomDrilldownResult) => ReactNode;
-};
+}
+
+/**
+ * Params of the {@link useGetSharedFormula} hook
+ *
+ * Can consist either of an oid or a name/dataSource pair
+ */
+export interface UseGetSharedFormulaParams extends HookEnableParam {
+  /**
+   * Formula identifier
+   */
+  oid?: string;
+  /**
+   * Formula name
+   */
+  name?: string;
+  /**
+   * Data source - e.g. `Sample ECommerce`
+   */
+  dataSource?: DataSource;
+}

@@ -1,6 +1,6 @@
 import { DataSource } from '@sisense/sdk-data';
 
-const COMMANDS = ['get-data-model', 'interactive', 'get-api-token'] as const;
+const COMMANDS = ['get-data-model', 'get-api-token'] as const;
 
 /**
  * The commands supported by the CLI tool.

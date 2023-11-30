@@ -18,6 +18,7 @@ import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { shouldSkipSisenseContextWaiting } from '../chart';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
+import { LoadingIndicator } from '../common/components/loading-indicator';
 
 /**
  * Table with aggregation and pagination.
@@ -121,14 +122,7 @@ export const Table = asSisenseComponent({
     }
   };
 
-  if (!dataTable || !innerDataOptions) return null;
-
-  const paginatedTable = {
-    columns: dataTable.columns,
-    rows: dataTable.rows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage),
-  };
-  const pagesCount = Math.ceil(dataTable.rows.length / rowsPerPage);
-  const paginationHeight = pagesCount > 1 ? 32 : 0;
+  if (!innerDataOptions) return null;
 
   return (
     <DynamicSizeContainer
@@ -139,9 +133,20 @@ export const Table = asSisenseComponent({
       }}
     >
       {(size) => {
+        if (!dataTable) {
+          return <LoadingIndicator themeSettings={themeSettings} />;
+        }
+
         if (isDataTableEmpty(dataTable)) {
           return <NoResultsOverlay iconType={'table'} />;
         }
+
+        const paginatedTable = {
+          columns: dataTable.columns,
+          rows: dataTable.rows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage),
+        };
+        const pagesCount = Math.ceil(dataTable.rows.length / rowsPerPage);
+        const paginationHeight = pagesCount > 1 ? 32 : 0;
 
         return (
           <div

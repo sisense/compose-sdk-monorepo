@@ -394,3 +394,7 @@ export interface Filter extends Element {
    */
   filterJaql(): any;
 }
+
+export interface CustomFormulaContext {
+  [key: string]: Attribute | Measure;
+}

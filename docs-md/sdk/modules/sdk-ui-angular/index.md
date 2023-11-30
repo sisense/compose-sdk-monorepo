@@ -11,16 +11,23 @@ title: sdk-ui-angular
 - [ChartComponent](classes/class.ChartComponent.md)
 - [ChartWidgetComponent](classes/class.ChartWidgetComponent.md)
 - [ColumnChartComponent](classes/class.ColumnChartComponent.md)
+- [ContextMenuComponent](classes/class.ContextMenuComponent.md)
+- [DashboardService](classes/class.DashboardService.md)
 - [DashboardWidgetComponent](classes/class.DashboardWidgetComponent.md)
+- [DateRangeFilterTileComponent](classes/class.DateRangeFilterTileComponent.md)
+- [DrilldownBreadcrumbsComponent](classes/class.DrilldownBreadcrumbsComponent.md)
+- [DrilldownWidgetComponent](classes/class.DrilldownWidgetComponent.md)
 - [FunnelChartComponent](classes/class.FunnelChartComponent.md)
 - [IndicatorChartComponent](classes/class.IndicatorChartComponent.md)
 - [LineChartComponent](classes/class.LineChartComponent.md)
+- [MemberFilterTileComponent](classes/class.MemberFilterTileComponent.md)
 - [PieChartComponent](classes/class.PieChartComponent.md)
 - [PolarChartComponent](classes/class.PolarChartComponent.md)
 - [QueryService](classes/class.QueryService.md)
 - [ScatterChartComponent](classes/class.ScatterChartComponent.md)
 - [SdkUiModule](classes/class.SdkUiModule.md)
 - [SisenseContextService](classes/class.SisenseContextService.md)
+- [SunburstChartComponent](classes/class.SunburstChartComponent.md)
 - [TableComponent](classes/class.TableComponent.md)
 - [ThemeService](classes/class.ThemeService.md)
 - [TreemapChartComponent](classes/class.TreemapChartComponent.md)
@@ -31,6 +38,7 @@ title: sdk-ui-angular
 
 ## Type Aliases
 
+- [CustomDrilldownResult](type-aliases/type-alias.CustomDrilldownResult-2.md)
 - [ThemeConfig](type-aliases/type-alias.ThemeConfig.md)
 
 ## Variables

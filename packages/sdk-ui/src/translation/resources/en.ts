@@ -28,9 +28,35 @@ export const translation = {
     sisenseContextNotFound: 'Sisense Context not found. Please ensure it is provided.',
     dashboardInvalidIdentifier:
       'Failed to retrieve dashboard. Please make sure the dashboard exists and is accessible.',
+    sharedFormula: {
+      identifierExpected:
+        'Failed to identify shared formula. Please provide oid or both name and datasource',
+      failedToFetch: 'Failed to fetch shared formula',
+    },
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
+  criteriaFilter: {
+    equals: 'Equals {{val}}',
+    notEquals: 'Does not equal {{val}}',
+    lessThan: 'Less than {{val}}',
+    lessThanOrEqual: 'Less than or equal to {{val}}',
+    greaterThan: 'Greater than {{val}}',
+    greaterThanOrEqual: 'Greater than or equal to {{val}}',
+    between: 'Between {{valA}} and {{valB}}',
+    notBetween: 'Not between {{valA}} and {{valB}}',
+    top: 'Top {{valA}} by {{valB}}',
+    bottom: 'Last {{valA}} by {{valB}}',
+    is: 'Is {{val}}',
+    isNot: 'Is not {{val}}',
+    contains: 'Contains {{val}}',
+    notContains: `Doesn't contain {{val}}`,
+    startsWith: 'Starts with {{val}}',
+    notStartsWith: `Doesn't start with {{val}}`,
+    endsWith: 'Ends with {{val}}',
+    notEndsWith: `Doesn't end with {{val}}`,
+    like: 'Is like {{val}}',
+  },
 };
 
 export type TranslationDictionary = typeof translation;

@@ -106,6 +106,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#00cee6",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -116,6 +117,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#00b9cf",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -126,6 +128,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#00a5b8",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -136,6 +139,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#0090a1",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -146,6 +150,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#007c8a",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -156,6 +161,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#006773",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -166,6 +172,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#00525c",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -176,6 +183,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#003e45",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -186,6 +194,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         {
           "color": "#00292e",
           "custom": {
+            "blur": false,
             "level": 1,
             "levelsCount": 1,
           },
@@ -455,6 +464,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -465,6 +475,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -475,6 +486,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -485,6 +497,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -495,6 +508,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -505,6 +519,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -515,6 +530,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -525,6 +541,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -535,6 +552,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -822,6 +840,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -832,6 +851,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -842,6 +862,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -852,6 +873,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -862,6 +884,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -872,6 +895,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -882,6 +906,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -892,6 +917,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },
@@ -902,6 +928,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         {
           "color": "#9b9bd7",
           "custom": {
+            "blur": false,
             "level": 2,
             "levelsCount": 2,
           },

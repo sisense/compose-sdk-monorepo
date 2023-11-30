@@ -9,7 +9,10 @@ import {
   DimensionalLevelAttribute,
   DimensionalCalculatedMeasure,
   MeasureContext,
+  DataType,
   Sort,
+  Jaql,
+  BaseJaql,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -21,16 +24,7 @@ import {
   CompleteThemeSettings,
   NumberFormatConfig,
 } from '../types';
-import {
-  Panel,
-  PanelItem,
-  Jaql,
-  WidgetType,
-  DataType,
-  NumericMask,
-  CurrencyPosition,
-  DatetimeMask,
-} from './types';
+import { Panel, PanelItem, WidgetType, NumericMask, CurrencyPosition, DatetimeMask } from './types';
 import {
   createValueToColorMap,
   createValueColorOptions,
@@ -49,9 +43,12 @@ export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem[
   }
 
   if (isFormulaJaql) {
-    const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) =>
-      createDimensionalElementFromJaql(jaqlContextValue),
-    );
+    const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) => {
+      if (typeof jaqlContextValue === 'string') {
+        return jaqlContextValue;
+      }
+      return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
+    });
 
     return new DimensionalCalculatedMeasure(
       jaql.title,
@@ -99,7 +96,7 @@ export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem[
 }
 
 function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
-  const isNumeric = 'datatype' in item.jaql && item.jaql.datatype === 'numeric';
+  const isNumeric = (item.jaql as BaseJaql).datatype === 'numeric' || 'context' in item.jaql;
   const numberFormat = item.format?.mask as NumericMask;
 
   if (isNumeric && numberFormat) {

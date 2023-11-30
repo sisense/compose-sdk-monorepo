@@ -48,6 +48,7 @@ import { getDefaultStyleOptions } from './chart-options-processor/chart-options-
 import { NoResultsOverlay } from './no-results-overlay/no-results-overlay';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getChartDefaultSize } from './dynamic-size-container';
+import { LoadingIndicator } from './common/components/loading-indicator';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -219,7 +220,7 @@ export const Chart = asSisenseComponent({
     // will always update when a new chartType is selected.
   }, [data, chartDataOptions]);
 
-  if (!chartData || !chartDataOptions || !designOptions) {
+  if (!chartDataOptions || !designOptions) {
     return null;
   }
 
@@ -232,6 +233,9 @@ export const Chart = asSisenseComponent({
       }}
     >
       {() => {
+        if (!chartData) {
+          return <LoadingIndicator themeSettings={themeSettings} />;
+        }
         const hasNoResults =
           ('series' in chartData && chartData.series.length === 0) ||
           ('scatterDataTable' in chartData && chartData.scatterDataTable.length === 0);

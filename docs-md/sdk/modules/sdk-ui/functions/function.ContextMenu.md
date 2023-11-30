@@ -10,7 +10,7 @@ title: ContextMenu
 
 | Parameter | Type |
 | :------ | :------ |
-| `__namedParameters` | [`ContextMenuProps`](../type-aliases/type-alias.ContextMenuProps.md) |
+| `__namedParameters` | [`ContextMenuProps`](../interfaces/interface.ContextMenuProps.md) |
 
 ## Returns
 

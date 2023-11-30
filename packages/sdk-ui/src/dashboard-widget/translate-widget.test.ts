@@ -6,6 +6,9 @@ import {
   DimensionalAttribute,
   DimensionalBaseMeasure,
   DimensionalCalculatedMeasure,
+  SortDirection,
+  FilterJaql,
+  BaseJaql,
 } from '@sisense/sdk-data';
 import { ChartWidgetExtractedProps, extractWidgetProps } from './translate-widget';
 import {
@@ -14,7 +17,7 @@ import {
   IndicatorDataOptions,
   ScatterChartDataOptions,
 } from '../types';
-import { BaseJaql, DatetimeMask, FilterJaql, PanelItem, SortDirection, WidgetDto } from './types';
+import { DatetimeMask, PanelItem, WidgetDto } from './types';
 import { jaqlMock } from './__mocks__/jaql-mock';
 import { AnyColumn } from '../chart-data-options/types';
 
@@ -76,7 +79,10 @@ function verifyColumn(column: AnyColumn, panelItem: PanelItem) {
     expect(jaql.formula).toEqual(panelJaql.formula);
 
     Object.keys(panelJaql.context || {}).forEach((jaqlContextKey) =>
-      compareBaseJaqls(panelJaql.context![jaqlContextKey], jaql.context[jaqlContextKey]),
+      compareBaseJaqls(
+        panelJaql.context![jaqlContextKey] as BaseJaql,
+        jaql.context[jaqlContextKey],
+      ),
     );
   } else {
     compareBaseJaqls(jaql, panelJaql);

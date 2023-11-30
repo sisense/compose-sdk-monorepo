@@ -219,3 +219,59 @@ export const numericIndicatorWithConditionalColorOptions = template({
     skin: 'vertical',
   },
 });
+
+export const tickerNumericIndicator = () => {
+  return (
+    <div style={{ height: 40 }}>
+      <IndicatorChart
+        dataSet={indicatorData}
+        dataOptions={{
+          value: indicatorDataOptions.value,
+        }}
+        styleOptions={{
+          ...basicStyleOptions,
+          subtype: 'indicator/numeric',
+          numericSubtype: 'numericSimple',
+          skin: 'vertical',
+        }}
+      />
+    </div>
+  );
+};
+
+export const TickerNumericIndicatorWithSecondaryValue = () => {
+  return (
+    <div style={{ height: 40 }}>
+      <IndicatorChart
+        dataSet={indicatorData}
+        dataOptions={indicatorDataOptions}
+        styleOptions={{
+          ...basicStyleOptions,
+          subtype: 'indicator/numeric',
+          numericSubtype: 'numericSimple',
+          skin: 'vertical',
+        }}
+      />
+    </div>
+  );
+};
+
+export const TickerGaugeIndicator = () => {
+  return (
+    <div style={{ height: 40 }}>
+      <IndicatorChart
+        dataSet={indicatorData}
+        dataOptions={{
+          value: indicatorDataOptions.value,
+          min: indicatorDataOptions.min,
+          max: indicatorDataOptions.max,
+        }}
+        styleOptions={{
+          ...basicStyleOptions,
+          subtype: 'indicator/gauge',
+          skin: 1,
+        }}
+      />
+    </div>
+  );
+};

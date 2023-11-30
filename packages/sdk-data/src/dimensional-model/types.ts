@@ -341,3 +341,69 @@ export const DateLevels = {
     ];
   },
 };
+
+export enum DataType {
+  TEXT = 'text',
+  NUMERIC = 'numeric',
+  DATETIME = 'datetime',
+}
+
+export enum SortDirection {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export type Jaql = BaseJaql | FormulaJaql | FilterJaql;
+
+export type BaseJaql = {
+  agg?: string;
+  datatype: DataType;
+  dim: string;
+  table: string;
+  column: string;
+  title: string;
+  level?: 'years' | 'quarters' | 'months' | 'weeks' | 'minutes' | 'days';
+  sort?: SortDirection;
+};
+
+export type FormulaID = string;
+
+export type FormulaContext = BaseJaql | FormulaJaql | FilterJaql;
+
+export type FormulaJaql = {
+  type?: 'measure';
+  sort?: SortDirection;
+  title: string;
+  formula: string;
+  context?: Record<FormulaID, FormulaContext>;
+};
+
+export type BaseFilter = IncludeAllFilter | IncludeMembersFilter | ExcludeMembersFilter;
+
+export type BackgroundFilter = BaseFilter & {
+  level?: 'string';
+};
+
+export type IncludeAllFilter = {
+  all: true;
+};
+
+export type IncludeMembersFilter = {
+  members: string[];
+};
+
+export type ExcludeMembersFilter = {
+  exclude: {
+    members: string[];
+  };
+};
+
+export type TurnOffMembersFilter = ExcludeMembersFilter & {
+  turnedOff: boolean;
+};
+
+export type FilterJaql = BaseJaql & {
+  filter: BaseFilter & {
+    filter?: BackgroundFilter | TurnOffMembersFilter;
+  };
+};

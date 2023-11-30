@@ -9,6 +9,7 @@ import {
   type ThemeSettings,
 } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from './sisense-context.service';
+import { TrackableService } from '../decorators/trackable.decorator';
 
 export { type ThemeConfig };
 
@@ -50,6 +51,7 @@ export const THEME_CONFIG_TOKEN = new InjectionToken<ThemeConfig>('theme configu
 @Injectable({
   providedIn: 'root',
 })
+@TrackableService<ThemeService>(['updateThemeSettings'])
 export class ThemeService {
   private themeSettings$: BehaviorSubject<CompleteThemeSettings> =
     new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
@@ -68,7 +70,7 @@ export class ThemeService {
     await this.applyThemeSettings(app.settings.serverThemeSettings);
 
     if (theme) {
-      await this.applyThemeSettings(theme);
+      await this.updateThemeSettings(theme);
     }
   }
 

@@ -65,21 +65,27 @@ Style options union across chart types.
 
 ***
 
-#### drilldownOptions
-
-> **drilldownOptions**: `undefined` \| [`DrilldownOptions`](../../sdk-ui/type-aliases/type-alias.DrilldownOptions.md)
-
-***
-
 #### filtersMergeStrategy
 
 > **filtersMergeStrategy**: `undefined` \| `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
 
 ***
 
+#### highlightSelectionDisabled
+
+> **highlightSelectionDisabled**: `undefined` \| `boolean`
+
+***
+
 #### highlights
 
 > **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+***
+
+#### includeDashboardFilters
+
+> **includeDashboardFilters**: `undefined` \| `boolean`
 
 ***
 

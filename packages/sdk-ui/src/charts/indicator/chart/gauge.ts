@@ -14,6 +14,7 @@ import {
   FitSecondaryMeasure,
   FitTitleMeasure,
   FitValueMeasure,
+  GaugeOptions,
   LegacyIndicatorChartOptions,
 } from '../types.js';
 import { IndicatorHelper } from './indicator-helper.js';
@@ -90,15 +91,13 @@ function getBiggestPossibleBaseMeasure(
       neededHeight += secSectionHeight;
     }
 
-    const isSmallestAvailableGaugeHeight = index === gaugeHeights.length - 1;
-
-    if (neededHeight <= maxHeight || isSmallestAvailableGaugeHeight) {
+    if (neededHeight <= maxHeight) {
       const gaugeWidth = getFloorValue(gaugeHeight, measures.gaugeWidth);
       const bracketWidth = getFloorValue(gaugeHeight, measures.bracketWidth);
       const horizontalMargins = indicatorMargin * 2;
       const neededWidth = gaugeWidth + bracketWidth * 2 + horizontalMargins;
 
-      if (neededWidth <= maxWidth || isSmallestAvailableGaugeHeight) {
+      if (neededWidth <= maxWidth) {
         return {
           ...item,
           maxWidth: maxWidth - horizontalMargins,
@@ -119,12 +118,13 @@ export class Gauge {
     options: LegacyIndicatorChartOptions,
     container: HTMLElement,
   ): BaseMeasure | null {
-    const gaugeHeights = 'gaugeHeights' in options ? options.gaugeHeights : undefined;
+    const gaugeOptions = options as GaugeOptions;
+    const gaugeHeights = 'gaugeHeights' in gaugeOptions ? gaugeOptions.gaugeHeights : undefined;
     if (!gaugeHeights) {
       return null;
     }
-    const relativeSizes = options.relativeSizes;
-    const measureKeys = options.measureKeys.concat();
+    const relativeSizes = gaugeOptions.relativeSizes;
+    const measureKeys = gaugeOptions.measureKeys.concat();
     const maxWidth = Math.floor(container.clientWidth);
     const maxHeight = Math.floor(container.clientHeight);
     const measures: MeasuresObject = getMeasuresObject(

@@ -8,4 +8,23 @@ import Highcharts from '@sisense/sisense-charts';
   // Use the legend drawing method from area
   // Based off of https://stackoverflow.com/a/17990505
   H.seriesTypes.line.prototype.drawLegendSymbol = H.seriesTypes.area.prototype.drawLegendSymbol;
+
+  // Use blur effect for treemap chart
+  Highcharts.wrap(
+    Highcharts.Series.types.treemap.prototype,
+    'pointAttribs',
+    function (this: Highcharts.Series, original, ...args) {
+      const attr = original.call(this, ...args);
+      const point: Highcharts.Point = args[0];
+      if (point.options.custom?.blur) {
+        attr.fill = Highcharts.color(point.color as string)
+          .setOpacity(0.2)
+          .get('rgba');
+        attr.stroke = Highcharts.color(attr.stroke as string)
+          .setOpacity(0.2)
+          .get('rgba');
+      }
+      return attr;
+    },
+  );
 })(Highcharts);

@@ -6,6 +6,7 @@ import {
   type VNode,
   type ComponentChild,
 } from 'preact';
+import { CustomElement } from './component-adapter';
 
 /** @internal */
 export const preactRenderComponent = <P>(
@@ -19,9 +20,35 @@ export const preactRenderComponent = <P>(
 /** @internal */
 export const createElement = <P>(
   component: FunctionComponent<P>,
-  props: P & h.JSX.HTMLAttributes,
+  props: P,
   children: ComponentChildren = [],
 ): VNode => {
   const childrenArray = Array.isArray(children) ? (children as ComponentChild[]) : [children];
-  return h(component, props, ...childrenArray) as VNode;
+  return h(component, props as P & h.JSX.HTMLAttributes, ...childrenArray) as VNode;
+};
+
+/** @internal */
+export const createWrapperElement = (nativeElement: HTMLDivElement): VNode =>
+  createElement(CustomElement, { nativeElement });
+
+type AnyObject = Record<string, any>;
+
+/** @internal */
+export const createWrapperElementHandler = <P extends AnyObject>(
+  handler: (props: P) => HTMLDivElement,
+) => {
+  return (props: P) => {
+    const nativeElement = handler(props);
+    return createWrapperElement(nativeElement);
+  };
+};
+
+/** @internal */
+export type ComponentRenderer = (containerElement: HTMLDivElement) => void;
+
+/** @internal */
+export const createComponentRenderer = (component: VNode): ComponentRenderer => {
+  return (containerElement: HTMLDivElement) => {
+    render(component, containerElement);
+  };
 };

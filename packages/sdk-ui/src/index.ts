@@ -52,9 +52,12 @@ export {
   type DashboardModelsSuccessState,
   type DashboardModelsErrorState,
   type WidgetModel,
+  type GetDashboardModelOptions,
+  type GetDashboardModelsOptions,
 } from './models';
 
 export * from './props';
 export * from './types';
 
 export * from './filters';
+export * from './formulas';

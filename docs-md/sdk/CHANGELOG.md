@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.15.0] - 2023-11-30
+
+### Added
+- AI `Chatbot` component and related logic in `@sisense/sdk-ui/ai` namespace for internal testing
+- Full support of Compose SDK for Angular in `@sisense/sdk-ui-angular` package
+- Loading indicators for charts and tables
+- `CriteriaFilterMenu` component for vertical double-input and horizontal use cases
+- Additional `ticker` mode for `Indicator` chart
+- `useGetSharedFormula` hook to retrieve shared formulas
+- Support for custom formulas in code
+- Authentication user guide
+
+### Changed
+- Support for Angular v17 in `@sisense/sdk-ui-angular`
+- Extend `widgetStyleOptions` with ability to render custom chart header in widget
+- Support text inputs in criteria filters
+- Support dependent filters
+
 ## [0.14.0] - 2023-11-14
 
 ### Added

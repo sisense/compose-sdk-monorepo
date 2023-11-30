@@ -162,3 +162,37 @@ export const WithTooltipContributionMode = template({
     },
   },
 });
+
+export const WithBlur = template({
+  ...treemapArgs,
+  dataSet: {
+    ...dataSet,
+    rows: [
+      ['Male', '2009', 'A', 6781, 1500, 3420],
+      [
+        { data: 'Male', blur: true },
+        { data: '2011', blur: true },
+        { data: 'B', blur: true },
+        { data: 1812, blur: true },
+        { data: 5000, blur: true },
+        { data: 1234, blur: true },
+      ],
+      ['Male', '2011', 'C', 1812, 5000, 1234],
+      ['Female', '2011', 'C', 1300, 9000, 5667],
+    ],
+  },
+  chartType: 'treemap',
+  dataOptions: {
+    value: [
+      {
+        column: units,
+      },
+    ],
+    category: [gender, group, years],
+  },
+  styleOptions: {
+    tooltip: {
+      mode: 'contribution',
+    },
+  },
+});

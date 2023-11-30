@@ -5,7 +5,7 @@ import { asSisenseComponent } from '../../../../decorators/component-decorators/
 
 export interface DateRangeFilterTileProps {
   /**
-   * Title of the filter tile
+   * Filter tile title
    */
   title: string;
   /**
@@ -23,11 +23,15 @@ export interface DateRangeFilterTileProps {
    */
   filter: Filter;
   /**
-   * Earliest valid date in date range select. If not specified a query will run.
+   * Earliest allowed date for selection.
+   *
+   * If not specified, the earliest date of the target date-level attribute will be used.
    */
   earliestDate?: string;
   /**
-   * Last valid date in date range select. If not specified a query will run.
+   * Latest allowed date for selection.
+   *
+   * If not specified, the latest date of the target date-level attribute will be used.
    */
   lastDate?: string;
   /**
@@ -36,6 +40,10 @@ export interface DateRangeFilterTileProps {
    * @param filter - Date range filter
    */
   onChange: (filter: Filter) => void;
+  /**
+   * List of filters this filter is dependent on.
+   */
+  parentFilters?: Filter[];
 }
 
 /**
@@ -67,7 +75,16 @@ export interface DateRangeFilterTileProps {
 export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRangeFilterTile' })(
   (props: DateRangeFilterTileProps) => {
     const dateRangeFilter = props.filter as DateRangeFilter;
-    const { attribute, dataSource, onChange, earliestDate, lastDate } = props;
+    const {
+      attribute,
+      dataSource,
+      onChange,
+      earliestDate,
+      lastDate,
+      parentFilters: rawParentFilters,
+    } = props;
+    const parentFilters =
+      rawParentFilters && rawParentFilters?.filter((filter) => filter && filter !== null);
     const dateLimits = useDateLimits(
       {
         minDate: earliestDate,
@@ -75,6 +92,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
       },
       attribute,
       dataSource,
+      parentFilters,
     );
 
     if (!dateLimits) {
@@ -99,6 +117,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
           to: toDate,
         }}
         limit={dateLimits}
+        isDependent={parentFilters && parentFilters.length > 0}
       />
     );
   },

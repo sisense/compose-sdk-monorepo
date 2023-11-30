@@ -21,7 +21,10 @@ const config: StorybookConfig = {
     // really only needed when building sdk-ui in library mode anyway.
     //
     // This is inspired by https://krzysztofzuraw.com/blog/2023/storybook-vite-config/.
-    config.plugins = await withoutVitePlugins(config.plugins, ['vite-plugin-css-injected-by-js']);
+    config.plugins = await withoutVitePlugins(config.plugins, [
+      'vite-plugin-css-injected-by-js',
+      'vite:dts',
+    ]);
     return config;
   },
   docs: {

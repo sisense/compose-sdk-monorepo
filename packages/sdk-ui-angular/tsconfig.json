@@ -28,5 +28,9 @@
     "strictTemplates": true
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
-  "references": [{ "path": "../sdk-data" }, { "path": "../sdk-ui-preact" }]
+  "references": [
+    { "path": "../sdk-data" },
+    { "path": "../sdk-ui-preact" },
+    { "path": "../sdk-tracking" }
+  ]
 }

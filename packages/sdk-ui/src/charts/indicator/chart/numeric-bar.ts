@@ -94,14 +94,12 @@ function getBiggestPossibleBaseMeasure(
       neededHeight += secSectionHeight;
     }
 
-    const isSmallestAvailableSize = sizeIndex === allPossibleSizes.length - 1;
-
-    if (neededHeight <= maxHeight || isSmallestAvailableSize) {
+    if (neededHeight <= maxHeight) {
       const width = getFloorValue(height, measures.numericMinWidth);
       const horizontalMargins = indicatorMargin * 2;
       const neededWidth = width + bracketThickness * 2 + horizontalMargins;
 
-      if (neededWidth <= maxWidth || isSmallestAvailableSize) {
+      if (neededWidth <= maxWidth) {
         return {
           ...sizeItem,
           maxWidth: maxWidth - horizontalMargins,

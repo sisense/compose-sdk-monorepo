@@ -16,6 +16,7 @@ import { type ArgumentsAsObject } from '../utility-types';
       [dataOptions]="dataOptions"
       [filters]="filters"
       [highlights]="highlights"
+      [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
       (dataPointClick)="dataPointClick.emit($event)"
       (dataPointContextMenu)="dataPointContextMenu.emit($event)"

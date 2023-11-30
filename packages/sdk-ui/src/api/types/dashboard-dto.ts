@@ -1,4 +1,5 @@
-import { WidgetDto, Datasource, FilterJaql } from '../../dashboard-widget/types';
+import { WidgetDto, Datasource } from '../../dashboard-widget/types';
+import { FilterJaql } from '@sisense/sdk-data';
 
 export type Filter = {
   isCascading?: false;

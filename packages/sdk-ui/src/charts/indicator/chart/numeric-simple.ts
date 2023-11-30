@@ -16,6 +16,7 @@ import {
   FitTitleMeasure,
   FitValueMeasure,
   LegacyIndicatorChartOptions,
+  NumericSimpleOptions,
 } from '../types';
 import { IndicatorHelper } from './indicator-helper';
 const $indicatorHelper = new IndicatorHelper();
@@ -94,15 +95,13 @@ function getBiggestPossibleBaseMeasure(
       neededHeight += secSectionHeight + topMargin + (borderWidth || 0);
     }
 
-    const isSmallestAvailableSize = sizeIndex === allPossibleSizes.length - 1;
-
-    if (neededHeight <= maxHeight || isSmallestAvailableSize) {
+    if (neededHeight <= maxHeight) {
       const width = getFloorValue(height, measures.numericMinWidth);
       const indicatorHorizontalMargin = getFloorValue(height, measures.indicatorHorizontalMargin);
       const horizontalMargins = indicatorHorizontalMargin * 2;
       const neededWidth = width + horizontalMargins;
 
-      if (neededWidth <= maxWidth || isSmallestAvailableSize) {
+      if (neededWidth <= maxWidth) {
         return {
           ...sizeItem,
           maxWidth: maxWidth - horizontalMargins,
@@ -129,9 +128,10 @@ export class NumericSimple {
     options: LegacyIndicatorChartOptions,
     container: HTMLElement,
   ): BaseMeasure | null {
-    const allPossibleSizes = 'sizes' in options ? options.sizes : [];
-    const relativeSizes = options.relativeSizes;
-    const measureKeys = options.measureKeys.concat();
+    const numericSimpleOptions = options as NumericSimpleOptions;
+    const allPossibleSizes = 'sizes' in numericSimpleOptions ? numericSimpleOptions.sizes : [];
+    const relativeSizes = numericSimpleOptions.relativeSizes;
+    const measureKeys = numericSimpleOptions.measureKeys.concat();
     const maxWidth = Math.floor(container.clientWidth);
     const maxHeight = Math.floor(container.clientHeight);
     const measures: MeasuresObject = getMeasuresObject(
@@ -145,7 +145,7 @@ export class NumericSimple {
       showTitle: data.showTitle,
       showSecondary: data.showSecondary,
       skin: data.skin as 'horizontal' | 'vertical',
-      borderWidth: 'borderWidth' in options ? options.borderWidth : 0,
+      borderWidth: 'borderWidth' in numericSimpleOptions ? numericSimpleOptions.borderWidth : 0,
     });
   }
 

@@ -1,33 +1,38 @@
 {
   "name": "@sisense/sdk-ui-angular",
-  "version": "0.14.0",
-  "type": "module",
-  "main": "./dist",
-  "module": "./dist",
-  "types": "./dist/index.d.ts",
+  "version": "0.15.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
+  "main": "dist",
+  "module": "dist/fesm2015/sisense-sdk-ui-angular.mjs",
+  "es2020": "dist/fesm2020/sisense-sdk-ui-angular.mjs",
+  "esm2020": "dist/esm2020/sisense-sdk-ui-angular.mjs",
+  "fesm2020": "dist/fesm2020/sisense-sdk-ui-angular.mjs",
+  "fesm2015": "dist/fesm2015/sisense-sdk-ui-angular.mjs",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
   "scripts": {
     "ng": "ng",
-    "build": "ng build",
-    "build:prod": "ng build",
+    "build": "yarn sync-version && ng build",
+    "build:prod": "yarn sync-version && ng build",
     "watch": "ng build --watch --configuration development",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "echo 'Tests disabled for now.'",
-    "test:coverage": "echo 'Tests disabled for now.'"
+    "test:coverage": "echo 'Tests disabled for now.'",
+    "sync-version": "node ./scripts/sync-version.cjs"
   },
   "peerDependencies": {
-    "@angular/common": "^15.0.0 || ^16.0.0",
-    "@angular/compiler": "^15.0.0 || ^16.0.0",
-    "@angular/core": "^15.0.0 || ^16.0.0"
+    "@angular/common": "^15.0.0 || ^16.0.0 || ^17.0.0",
+    "@angular/compiler": "^15.0.0 || ^16.0.0 || ^17.0.0",
+    "@angular/core": "^15.0.0 || ^16.0.0 || ^17.0.0"
   },
   "dependencies": {
+    "@sisense/sdk-tracking": "workspace:^",
     "@sisense/sdk-ui-preact": "workspace:^",
     "rxjs": "^7.8.1",
     "ts-deepmerge": "^6.2.0",

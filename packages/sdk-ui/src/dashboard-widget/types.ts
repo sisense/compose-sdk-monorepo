@@ -1,3 +1,5 @@
+import { Jaql, SortDirection } from '@sisense/sdk-data';
+
 /* eslint-disable max-lines */
 export const enum WidgetType {
   PieChart = 'chart/pie',
@@ -83,79 +85,10 @@ export type FiltersIgnoringRules = {
   all: boolean;
 };
 
-export const enum DataType {
-  TEXT = 'text',
-  NUMERIC = 'numeric',
-  DATETIME = 'datetime',
-}
-
 export type Panel = {
   name: string;
   items: PanelItem[];
 };
-
-export enum SortDirection {
-  ASC = 'asc',
-  DESC = 'desc',
-}
-
-export type BaseJaql = {
-  agg?: string;
-  datatype: DataType;
-  dim: string;
-  table: string;
-  column: string;
-  title: string;
-  level?: 'years' | 'quarters' | 'months' | 'weeks' | 'minutes' | 'days';
-  sort?: SortDirection;
-};
-
-type FormulaID = string;
-type FormulaContext = BaseJaql | FilterJaql;
-
-export type FormulaJaql = {
-  type?: 'measure';
-  sort?: SortDirection;
-  title: string;
-  formula: string;
-  context?: Record<FormulaID, FormulaContext>;
-};
-
-export type IncludeAllFilter = {
-  all: true;
-};
-
-export type IncludeMembersFilter = {
-  members: string[];
-};
-
-type ExcludeMembersFilter = {
-  exclude: {
-    members: string[];
-  };
-};
-
-export type MembersFilter = IncludeMembersFilter | ExcludeMembersFilter;
-
-type BaseFilter = IncludeAllFilter | MembersFilter;
-
-export type BackgroundFilter = BaseFilter & {
-  level?: 'string';
-};
-
-type TurnOffMembersFilter = ExcludeMembersFilter & {
-  turnedOff: boolean;
-};
-
-type Filter = BaseFilter & {
-  filter?: BackgroundFilter | TurnOffMembersFilter;
-};
-
-export type FilterJaql = BaseJaql & {
-  filter: Filter;
-};
-
-export type Jaql = BaseJaql | FormulaJaql | FilterJaql;
 
 type SeriesType = 'auto' | 'line' | 'spline' | 'areaspline' | 'bar' | 'area' | 'column';
 

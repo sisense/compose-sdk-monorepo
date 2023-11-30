@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-data",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
@@ -12,8 +12,9 @@
   "author": "Sisense ",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-rest-client": "^0.14.0",
+    "@sisense/sdk-rest-client": "^0.15.0",
     "guid-typescript": "^1.0.9",
+    "lodash": "^4.17.21",
     "numeral": "^2.0.6",
     "object-hash": "^3.0.0"
   },
@@ -37,6 +38,7 @@
   ],
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
+    "@types/lodash": "^4.14.201",
     "@types/numeral": "2.0.2",
     "@types/object-hash": "^3.0.5",
     "eslint": "^8.40.0",

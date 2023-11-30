@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 export type LegacyIndicatorChartTypes = 'numericSimple' | 'numericBar' | 'gauge' | 'ticker';
 
 export type BaseMeasure = {
@@ -39,20 +40,21 @@ type CommonOptions = {
   fontFamily: string;
   title: {
     color: string;
-    fontSizes: FontSizes;
+    fontSizes?: FontSizes;
   };
   value: {
     color?: string;
-    fontSizes: FontSizes;
+    fontSizes?: FontSizes;
+    fontWeight?: number;
   };
   secondaryTitle: {
     color: string;
-    fontSizes: FontSizes;
+    fontSizes?: FontSizes;
   };
   secondaryValue: {
-    fontWeight: number;
+    fontWeight?: number;
     color: string;
-    fontSizes: FontSizes;
+    fontSizes?: FontSizes;
   };
   textKeys: string[];
   backgroundColor: string;
@@ -128,4 +130,49 @@ export type GaugeOptions = CommonOptions & {
   measureKeys: string[];
 };
 
-export type LegacyIndicatorChartOptions = NumericBarOptions | NumericSimpleOptions | GaugeOptions;
+export type TickerOptions = CommonOptions & {
+  fontSize: number;
+  dividerColor: string;
+  barHandleColor: string;
+  height: number;
+  horizontalMargin: number;
+  barWidth: number;
+  barHeight: number;
+  barOpacity: number;
+  tickerBarWidth: number;
+  tickerBarHeight: number;
+  horizontalPadding: number;
+  textPadding: number;
+  sectionMinWidth: number;
+  dividerWidth: number;
+  dividerHeight: number;
+  valueFont?: string;
+  titleFont?: string;
+  secondaryValueFont?: string;
+  secondaryTitleFont?: string;
+  offsetX?: number;
+  showTickerBar?: boolean;
+  fitValueMeasure?: {
+    string: string;
+    width: number;
+  };
+  fitSecValueMeasure?: {
+    string: string;
+    width: number;
+  };
+  fitSecTitleMeasure?: {
+    string: string;
+    width: number;
+  };
+  fitTitleMeasure?: {
+    string: string;
+    width: number;
+  };
+  width?: number;
+};
+
+export type LegacyIndicatorChartOptions =
+  | NumericBarOptions
+  | NumericSimpleOptions
+  | GaugeOptions
+  | TickerOptions;

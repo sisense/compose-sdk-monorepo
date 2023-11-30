@@ -10,7 +10,7 @@ title: DrilldownBreadcrumbs
 
 | Parameter | Type |
 | :------ | :------ |
-| `props` | [`DrilldownBreadcrumbsProps`](../type-aliases/type-alias.DrilldownBreadcrumbsProps.md) |
+| `props` | [`DrilldownBreadcrumbsProps`](../interfaces/interface.DrilldownBreadcrumbsProps.md) |
 | `context`? | `any` |
 
 ## Returns

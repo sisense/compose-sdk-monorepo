@@ -14,7 +14,7 @@ import { withTracking } from '../../decorators/hook-decorators';
  */
 export interface GetDashboardModelParams extends GetDashboardModelOptions, HookEnableParam {
   /**
-   * Identifier of the dashboard that contains the widget
+   * Dashboard identifier
    */
   dashboardOid: string;
 }

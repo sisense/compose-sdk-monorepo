@@ -12,7 +12,7 @@ Props for [MemberFilterTile](../functions/function.MemberFilterTile.md)
 
 > **attribute**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
 
-Attribute to filter on. A query will be run to fetch all this attribute's members
+Attribute to filter on. A query will run to fetch all this attribute's members
 
 ***
 
@@ -49,6 +49,14 @@ Callback indicating when the source member filter object should be updated
 #### Returns
 
 `void`
+
+***
+
+### parentFilters
+
+> **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+List of filters this filter is dependent on
 
 ***
 

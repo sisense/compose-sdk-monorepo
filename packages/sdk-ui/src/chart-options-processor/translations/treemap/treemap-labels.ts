@@ -95,7 +95,8 @@ export function prepareTreemapLevels(
 }
 
 export function treemapLabelFormatter(this: PointLabelObject): string {
-  const isDarkBG = getDarkFactor(toColor(this.color as string)) > 0.4;
+  const isDarkBG =
+    getDarkFactor(toColor(this.color as string)) > 0.4 && !this.point.options?.custom?.blur;
   const { width } = getPointSize(this.point);
 
   if (!isEnoughSpaceForLabel(this.point)) {

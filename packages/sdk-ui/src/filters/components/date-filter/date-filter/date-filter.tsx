@@ -8,7 +8,7 @@ import { CalendarDateSelector } from './calendar-date-selector';
 import { DEFAULT_FORMAT } from '../consts';
 import { DateFilterRange } from '../types';
 import Popover from '@mui/material/Popover';
-import { DateRangeFieldButton } from '../../common/date-range-field-button';
+import { DateRangeFieldButton, TriangleIndicator } from '../../common';
 import { useThemeContext } from '../../../../theme-provider/theme-provider';
 
 const DATE_RANGE = 'date-range';
@@ -37,6 +37,10 @@ export type DateRangeFilterProps = {
     maxDate: string;
     minDate: string;
   };
+  /**
+   * Whether this is a dependent filter.
+   */
+  isDependent?: boolean;
 };
 
 /**
@@ -99,6 +103,11 @@ export function DateFilter(props: DateRangeFilterProps) {
 
   return (
     <div>
+      {props.isDependent && (
+        <div className="csdk-h-[20px]">
+          <TriangleIndicator />
+        </div>
+      )}
       <div
         aria-label="date range filter"
         className="csdk-w-fit csdk-flex csdk-flex-wrap"

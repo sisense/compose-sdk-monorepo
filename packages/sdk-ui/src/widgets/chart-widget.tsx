@@ -50,9 +50,6 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
 
   // TODO: remove this once drilldownOptions are removed from ChartWidgetProps
   if (drilldownOptions) {
-    console.warn(
-      'drilldownOptions in ChartWidget are deprecated, please use DrilldownWidget instead',
-    );
     return <ChartWidgetDeprecated {...props} />;
   }
 
@@ -273,6 +270,8 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
                   // prevents 'auto' behavior of using content size as minimal size for container
                   minWidth: 0,
                   minHeight: 0,
+                  backgroundColor:
+                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
                 }}
               >
                 <Chart {...chartProps} refreshCounter={refreshCounter} />

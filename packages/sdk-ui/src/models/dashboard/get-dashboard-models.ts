@@ -6,7 +6,7 @@ export interface GetDashboardModelsOptions {
   /**
    * Dashboard title to search by
    *
-   * The dashboard title is not unique, therefore, the result may return multiple dashboards.
+   * Dashboard titles are not necessarily unique, so the result may contain multiple dashboards.
    */
   searchByTitle?: string;
   /**

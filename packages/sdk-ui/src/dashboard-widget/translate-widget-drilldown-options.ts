@@ -1,6 +1,6 @@
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute, IncludeMembersFilter } from '@sisense/sdk-data';
 import { createDataColumn } from './translate-widget-data-options';
-import { DatetimeMask, IncludeMembersFilter, Panel, PanelItem, WidgetType } from './types';
+import { DatetimeMask, Panel, PanelItem, WidgetType } from './types';
 import { getEnabledPanelItems } from './utils';
 import { DataPoint, DrilldownOptions } from '../types';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';

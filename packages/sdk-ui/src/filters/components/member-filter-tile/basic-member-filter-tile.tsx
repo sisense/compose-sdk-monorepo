@@ -22,6 +22,8 @@ export interface BasicMemberFilterTileProps {
   onUpdateSelectedMembers?: (members: string[]) => void;
   /** Configurable limit on size of allowedMembers */
   maxAllowedMembers?: number;
+  /** Whether this is a dependent filter */
+  isDependent?: boolean;
 }
 
 /**
@@ -60,6 +62,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
   initialSelectedMembers = [],
   onUpdateSelectedMembers,
   maxAllowedMembers = 2000,
+  isDependent,
 }) => {
   const [disabled, setDisabled] = useState(false);
 
@@ -125,6 +128,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
       }}
       disabled={disabled}
       onToggleDisabled={() => setDisabled((v) => !v)}
+      isDependent={isDependent}
     />
   );
 };

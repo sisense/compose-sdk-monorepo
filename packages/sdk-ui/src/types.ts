@@ -651,6 +651,12 @@ export interface WidgetStyleOptions {
     dividerLineColor?: string;
     /** Header background color */
     backgroundColor?: string;
+    /**
+     * Custom toolbar to render to the right of the title
+     *
+     * @internal
+     */
+    renderToolbar?: (onRefresh: () => void) => JSX.Element;
   };
 }
 

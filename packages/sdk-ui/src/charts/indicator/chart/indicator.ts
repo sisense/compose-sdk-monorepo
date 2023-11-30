@@ -11,7 +11,15 @@ import { NumericBar } from './numeric-bar.js';
 import { Gauge } from './gauge.js';
 import { Ticker } from './ticker.js';
 import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options.js';
-import { LegacyIndicatorChartOptions, LegacyIndicatorChartTypes } from '../types.js';
+import {
+  GaugeOptions,
+  LegacyIndicatorChartOptions,
+  LegacyIndicatorChartTypes,
+  NumericBarOptions,
+  NumericSimpleOptions,
+} from '../types.js';
+import { defaultTickerOptions } from '../indicator-legacy-chart-options/default-options';
+import cloneDeep from 'lodash/cloneDeep.js';
 
 const $indicatorHelper = new IndicatorHelper();
 const $numericSimple = new NumericSimple();
@@ -54,7 +62,7 @@ export class Indicator {
     options: LegacyIndicatorChartOptions,
     container: HTMLElement,
   ) {
-    const typeService = this.getService(legacyDataOptions.type);
+    let typeService = this.getService(legacyDataOptions.type);
     const baseMeasure =
       'getBaseMeasure' in typeService
         ? typeService.getBaseMeasure(legacyDataOptions, options, container)
@@ -63,16 +71,14 @@ export class Indicator {
     // if we don't have baseMeasure, it means there isn't enough space to render usual types =>
     // render ticker indicator
     if (!baseMeasure) {
-      // const type = 'ticker';
-      // instance.type = type;
-      // options = instance.getOptions(type);
-      // this.setTextOptions(options);
-      // typeService = this.getService(type);
-      // typeService.render(canvas, legacyDataOptions, options, container);
+      typeService = this.getService('ticker');
+      const tickerOptions = cloneDeep(defaultTickerOptions);
+      this.setTextOptions(tickerOptions);
+      (typeService as Ticker).render(canvas, legacyDataOptions, tickerOptions, container);
       return;
     }
 
-    this.calculateRelativeSizes(legacyDataOptions, options, baseMeasure.value);
+    this.calculateRelativeSizes(legacyDataOptions, options as NumericBarOptions, baseMeasure.value);
     this.setTextOptions(options, baseMeasure.size);
     (typeService as NumericSimple | NumericBar | Gauge).render(
       canvas,
@@ -94,7 +100,7 @@ export class Indicator {
     options: LegacyIndicatorChartOptions,
     baseValue: number,
   ) {
-    const { relativeSizes } = options;
+    const { relativeSizes } = options as NumericSimpleOptions | GaugeOptions;
 
     relativeSizes.forEach(function (item) {
       let originalValue: number;
@@ -118,7 +124,7 @@ export class Indicator {
    * @param {object} options
    * @param {string} size
    */
-  setTextOptions(options: LegacyIndicatorChartOptions, size: string) {
+  setTextOptions(options: LegacyIndicatorChartOptions, size?: string) {
     options.textKeys.forEach(function (key) {
       const textOptions = options[key];
       const fontStyle = textOptions.fontStyle ? `${textOptions.fontStyle} ` : '';

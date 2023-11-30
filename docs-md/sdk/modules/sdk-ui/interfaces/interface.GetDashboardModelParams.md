@@ -8,7 +8,7 @@ Parameters for [useGetDashboardModel](../functions/function.useGetDashboardModel
 
 ## Extends
 
-- `GetDashboardModelOptions`.`HookEnableParam`
+- [`GetDashboardModelOptions`](interface.GetDashboardModelOptions.md).`HookEnableParam`
 
 ## Properties
 
@@ -16,7 +16,7 @@ Parameters for [useGetDashboardModel](../functions/function.useGetDashboardModel
 
 > **dashboardOid**: `string`
 
-Identifier of the dashboard that contains the widget
+Dashboard identifier
 
 ***
 
@@ -44,4 +44,4 @@ If not specified, the default value is `false`
 
 #### Inherited from
 
-GetDashboardModelOptions.includeWidgets
+[`GetDashboardModelOptions`](interface.GetDashboardModelOptions.md).[`includeWidgets`](interface.GetDashboardModelOptions.md#includewidgets)

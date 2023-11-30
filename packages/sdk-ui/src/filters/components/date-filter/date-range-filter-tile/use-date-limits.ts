@@ -1,4 +1,4 @@
-import { DataSource, LevelAttribute, measures } from '@sisense/sdk-data';
+import { DataSource, Filter, LevelAttribute, measures } from '@sisense/sdk-data';
 import { useSisenseContext } from '../../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { executeQuery } from '../../../../query/execute-query';
@@ -12,6 +12,7 @@ export const useDateLimits = (
   userLimits: DateLimits,
   attribute: LevelAttribute,
   dataSource?: DataSource,
+  parentFilters?: Filter[],
 ): Required<DateLimits> | null => {
   const [fetchedLimits, setFetchedLimits] = useState<Required<DateLimits> | null>(null);
   const { isInitialized: isAppInitialized, app } = useSisenseContext();
@@ -25,6 +26,7 @@ export const useDateLimits = (
       {
         dataSource,
         measures: [measures.min(attribute), measures.max(attribute)],
+        filters: parentFilters,
       },
       app,
     ).then((data) => {
@@ -34,7 +36,7 @@ export const useDateLimits = (
         maxDate: queryMembers[1].data as string,
       });
     });
-  }, [app, attribute, dataSource, shouldFetchLimits]);
+  }, [app, attribute, dataSource, shouldFetchLimits, parentFilters]);
   return mergeDateLimits(userLimits, fetchedLimits);
 };
 

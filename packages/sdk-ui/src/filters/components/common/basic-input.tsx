@@ -17,9 +17,13 @@ export const BasicInput: FunctionComponent<BasicInputProps> = (props) => {
   const variant = props.variant === 'white' ? white : grey;
 
   return (
-    <div className={'csdk-flex csdk-items-center csdk-gap-x-2 csdk-m-px csdk-justify-end'}>
-      {props.label && <label htmlFor={props.id}>{props.label}</label>}
-      <div className="csdk-h-6">
+    <div className={'csdk-flex csdk-items-center csdk-gap-x-2 csdk-m-px csdk-justify-end csdk-h-6'}>
+      {props.label && (
+        <label className={'csdk-min-w-fit'} htmlFor={props.id}>
+          {props.label}
+        </label>
+      )}
+      <div className="">
         <input
           {...restProps}
           ref={inputRef}

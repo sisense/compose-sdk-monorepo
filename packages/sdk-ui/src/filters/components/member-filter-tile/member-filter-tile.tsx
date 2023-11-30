@@ -18,12 +18,14 @@ export interface MemberFilterTileProps {
    * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
    */
   dataSource?: DataSource;
-  /** Attribute to filter on. A query will be run to fetch all this attribute's members */
+  /** Attribute to filter on. A query will run to fetch all this attribute's members */
   attribute: Attribute;
   /** Source filter object. Caller is responsible for keeping track of filter state */
   filter: Filter | null;
   /** Callback indicating when the source member filter object should be updated */
   onChange: (filter: Filter | null) => void;
+  /** List of filters this filter is dependent on */
+  parentFilters?: Filter[];
 }
 
 /**
@@ -53,13 +55,13 @@ export interface MemberFilterTileProps {
 export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSisenseComponent({
   componentName: 'MemberFilterTile',
 })((props) => {
-  const { title, attribute, filter, dataSource, onChange } = props;
+  const { title, attribute, filter, dataSource, onChange, parentFilters } = props;
 
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
   // "dimensions" does not change on every render, causing infinite rerenders.
   const dimensions = useMemo(() => [attribute], [attribute]);
 
-  const { data } = useExecuteQueryInternal({ dataSource, dimensions });
+  const { data } = useExecuteQueryInternal({ dataSource, dimensions, filters: parentFilters });
   if (!data) {
     return null;
   }
@@ -90,6 +92,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       allMembers={allMembers}
       initialSelectedMembers={selectedMembers}
       onUpdateSelectedMembers={(members) => onChange(filterFactory.members(attribute, members))}
+      isDependent={parentFilters && parentFilters.length > 0}
     />
   );
 });

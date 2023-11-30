@@ -12,7 +12,7 @@ An object that allows users to pass advanced configuration options as a prop for
 
 ### `breadcrumbsComponent`
 
-**breadcrumbsComponent**?: `ComponentType`\< [`DrilldownBreadcrumbsProps`](type-alias.DrilldownBreadcrumbsProps.md) \>
+**breadcrumbsComponent**?: `ComponentType`\< [`DrilldownBreadcrumbsProps`](../interfaces/interface.DrilldownBreadcrumbsProps.md) \>
 
 React component to be rendered as breadcrumbs
 
@@ -30,7 +30,7 @@ Boolean to override default breadcrumbs location and instead only return them as
 
 | Parameter | Type |
 | :------ | :------ |
-| `contextMenuProps` | [`ContextMenuProps`](type-alias.ContextMenuProps.md) |
+| `contextMenuProps` | [`ContextMenuProps`](../interfaces/interface.ContextMenuProps.md) |
 
 #### Returns
 

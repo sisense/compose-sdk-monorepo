@@ -120,7 +120,7 @@ ValueStyle.showOnRightAxis
 
 ### sortType
 
-> **sortType**?: [`SortDirection`](../type-aliases/type-alias.SortDirection.md)
+> **sortType**?: [`SortDirection`](../type-aliases/type-alias.SortDirection-1.md)
 
 Sorting direction, either by Ascending order, Descending order, or None
 

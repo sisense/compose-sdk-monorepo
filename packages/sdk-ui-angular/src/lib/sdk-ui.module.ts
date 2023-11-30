@@ -15,9 +15,16 @@ import {
   FunnelChartComponent,
   PolarChartComponent,
   TreemapChartComponent,
+  SunburstChartComponent,
   TableWidgetComponent,
   DashboardWidgetComponent,
+  MemberFilterTileComponent,
+  DrilldownWidgetComponent,
+  DateRangeFilterTileComponent,
+  DrilldownBreadcrumbsComponent,
+  ContextMenuComponent,
 } from './components';
+import { DecoratorsModule } from './decorators/decorators.module';
 
 /**
  * SDK UI Module, which is a container for components.
@@ -61,10 +68,16 @@ import {
     FunnelChartComponent,
     PolarChartComponent,
     TreemapChartComponent,
+    SunburstChartComponent,
     TableWidgetComponent,
     DashboardWidgetComponent,
+    MemberFilterTileComponent,
+    DrilldownWidgetComponent,
+    DateRangeFilterTileComponent,
+    DrilldownBreadcrumbsComponent,
+    ContextMenuComponent,
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, DecoratorsModule],
   exports: [
     BasicMemberFilterTileComponent,
     ChartComponent,
@@ -80,8 +93,14 @@ import {
     FunnelChartComponent,
     PolarChartComponent,
     TreemapChartComponent,
+    SunburstChartComponent,
     TableWidgetComponent,
     DashboardWidgetComponent,
+    MemberFilterTileComponent,
+    DrilldownWidgetComponent,
+    DateRangeFilterTileComponent,
+    DrilldownBreadcrumbsComponent,
+    ContextMenuComponent,
   ],
   providers: [],
 })

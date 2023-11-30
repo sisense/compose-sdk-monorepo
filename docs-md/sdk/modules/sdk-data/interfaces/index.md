@@ -10,6 +10,7 @@ title: Interfaces
 - [CalculatedMeasureColumn](interface.CalculatedMeasureColumn.md)
 - [Cell](interface.Cell.md)
 - [Column](interface.Column.md)
+- [CustomFormulaContext](interface.CustomFormulaContext.md)
 - [Data](interface.Data.md)
 - [DateDimension](interface.DateDimension.md)
 - [Dimension](interface.Dimension.md)

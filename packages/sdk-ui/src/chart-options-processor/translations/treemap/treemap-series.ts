@@ -22,6 +22,7 @@ export function prepareTreemapDataItems(
       custom: {
         level: chartData.xAxisCount,
         levelsCount: chartData.xAxisCount,
+        blur: item.blur,
       },
     };
   });

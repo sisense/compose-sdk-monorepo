@@ -42,6 +42,7 @@ Function `measures.sum` is used to create a measure that sums the `Revenue` colu
 - [contribution](function.contribution.md)
 - [count](function.count.md)
 - [countDistinct](function.countDistinct.md)
+- [customFormula](function.customFormula.md)
 - [diffPastMonth](function.diffPastMonth.md)
 - [diffPastQuarter](function.diffPastQuarter.md)
 - [diffPastWeek](function.diffPastWeek.md)

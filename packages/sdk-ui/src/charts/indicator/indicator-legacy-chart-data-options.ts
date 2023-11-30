@@ -29,13 +29,9 @@ const getValueCustomBackgroundColor = (
   chartDesignOptions: IndicatorChartDesignOptions,
   chartDataOptions: IndicatorDataOptions,
 ) => {
-  const isValueBgColorCase = !(
-    chartDesignOptions.indicatorType === 'numeric' &&
-    chartDesignOptions.numericSubtype === 'numericSimple'
-  );
   const colorOptions = getValueColorOptions(chartDataOptions);
 
-  if (isValueBgColorCase && colorOptions && chartData.value) {
+  if (colorOptions && chartData.value) {
     const coloringService = getColoringServiceByColorOptions(
       colorOptions,
     ) as ColoringService<AllowedIndicatorColoringTypes>;

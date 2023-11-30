@@ -8,7 +8,7 @@ Parameters for [useGetDashboardModels](../functions/function.useGetDashboardMode
 
 ## Extends
 
-- `GetDashboardModelsOptions`.`HookEnableParam`
+- [`GetDashboardModelsOptions`](interface.GetDashboardModelsOptions.md).`HookEnableParam`
 
 ## Properties
 
@@ -36,7 +36,7 @@ If not specified, the default value is `false`
 
 #### Inherited from
 
-GetDashboardModelsOptions.includeWidgets
+[`GetDashboardModelsOptions`](interface.GetDashboardModelsOptions.md).[`includeWidgets`](interface.GetDashboardModelsOptions.md#includewidgets)
 
 ***
 
@@ -46,8 +46,8 @@ GetDashboardModelsOptions.includeWidgets
 
 Dashboard title to search by
 
-The dashboard title is not unique, therefore, the result may return multiple dashboards.
+Dashboard titles are not necessarily unique, so the result may contain multiple dashboards.
 
 #### Inherited from
 
-GetDashboardModelsOptions.searchByTitle
+[`GetDashboardModelsOptions`](interface.GetDashboardModelsOptions.md).[`searchByTitle`](interface.GetDashboardModelsOptions.md#searchbytitle)

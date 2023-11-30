@@ -10,6 +10,7 @@ title: Functions
 - [ChartWidget](function.ChartWidget.md)
 - [ColumnChart](function.ColumnChart.md)
 - [ContextMenu](function.ContextMenu.md)
+- [CriteriaFilterTile](function.CriteriaFilterTile.md)
 - [DashboardWidget](function.DashboardWidget.md)
 - [DateRangeFilterTile](function.DateRangeFilterTile.md)
 - [DrilldownBreadcrumbs](function.DrilldownBreadcrumbs.md)
@@ -32,3 +33,4 @@ title: Functions
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md)
 - [useGetDashboardModel](function.useGetDashboardModel.md)
 - [useGetDashboardModels](function.useGetDashboardModels.md)
+- [useGetSharedFormula](function.useGetSharedFormula.md)

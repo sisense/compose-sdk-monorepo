@@ -14,6 +14,7 @@ import { type ChartType, type IndicatorChartProps } from '@sisense/sdk-ui-preact
       [dataOptions]="dataOptions"
       [filters]="filters"
       [highlights]="highlights"
+      [styleOptions]="styleOptions"
     />
   `,
 })

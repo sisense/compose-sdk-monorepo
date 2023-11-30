@@ -55,6 +55,9 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   filtersMergeStrategy: DashboardWidgetProps['filtersMergeStrategy'];
 
   @Input()
+  includeDashboardFilters: DashboardWidgetProps['includeDashboardFilters'];
+
+  @Input()
   title: DashboardWidgetProps['title'];
 
   @Input()
@@ -71,6 +74,10 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   @Input()
   widgetStyleOptions: DashboardWidgetProps['widgetStyleOptions'];
 
+  @Input()
+  highlightSelectionDisabled: DashboardWidgetProps['highlightSelectionDisabled'];
+
+  /** @internal */
   @Input()
   drilldownOptions: DashboardWidgetProps['drilldownOptions'];
 
@@ -109,10 +116,12 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
       filters: this.filters,
       highlights: this.highlights,
       filtersMergeStrategy: this.filtersMergeStrategy,
+      includeDashboardFilters: this.includeDashboardFilters,
       title: this.title,
       description: this.description,
       styleOptions: this.styleOptions,
       widgetStyleOptions: this.widgetStyleOptions,
+      highlightSelectionDisabled: this.highlightSelectionDisabled,
       drilldownOptions: this.drilldownOptions,
     };
 

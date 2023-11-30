@@ -1,5 +1,6 @@
 /* eslint-disable promise/param-names */
 /* eslint-disable @typescript-eslint/no-throw-literal */
+/* eslint-disable complexity */
 /// <reference lib="dom" />
 import { Authenticator } from './interfaces.js';
 import fetchIntercept from 'fetch-intercept';
@@ -11,6 +12,10 @@ import {
 } from './interceptors.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
+
+export interface HttpClientRequestConfig {
+  skipTrackingParam: boolean;
+}
 
 export class HttpClient {
   readonly auth: Authenticator;
@@ -51,7 +56,11 @@ export class HttpClient {
     return this.auth.authenticate();
   }
 
-  async call<T = unknown>(url: string, config: RequestInit): Promise<T> {
+  async call<T = unknown>(
+    url: string,
+    config: RequestInit,
+    requestConfig?: HttpClientRequestConfig,
+  ): Promise<T> {
     if (this.auth.isAuthenticating()) {
       return new Promise((res) => {
         const retry = () => {
@@ -61,7 +70,7 @@ export class HttpClient {
             return;
           }
 
-          void this.call(url, config).then((r) => res(r as T));
+          void this.call(url, config, requestConfig).then((r) => res(r as T));
         };
 
         retry();
@@ -82,7 +91,7 @@ export class HttpClient {
       trc: this.env,
     });
 
-    const response = await fetch(trackedUrl, config);
+    const response = await fetch(requestConfig?.skipTrackingParam ? url : trackedUrl, config);
     if (
       response.status === 204 || // No content
       response.status === 304 // Not modified
@@ -108,6 +117,7 @@ export class HttpClient {
     data: unknown,
     options: RequestInit = {},
     abortSignal?: AbortSignal,
+    config?: HttpClientRequestConfig,
   ): Promise<T> {
     const request = {
       method: 'POST',
@@ -120,18 +130,26 @@ export class HttpClient {
       ...options,
     };
 
-    return this.call<T>(this.url + endpoint, request);
+    return this.call<T>(this.url + endpoint, request, config);
   }
 
-  async get<T = unknown>(endpoint: string, request: RequestInit = {}): Promise<T> {
+  async get<T = unknown>(
+    endpoint: string,
+    request: RequestInit = {},
+    config?: HttpClientRequestConfig,
+  ): Promise<T> {
     request.method = 'GET';
 
-    return this.call<T>(this.url + endpoint, request);
+    return this.call<T>(this.url + endpoint, request, config);
   }
 
-  async delete<T = void>(endpoint: string, request: RequestInit = {}): Promise<T> {
+  async delete<T = void>(
+    endpoint: string,
+    request: RequestInit = {},
+    config?: HttpClientRequestConfig,
+  ): Promise<T> {
     request.method = 'DELETE';
 
-    return this.call<T>(this.url + endpoint, request);
+    return this.call<T>(this.url + endpoint, request, config);
   }
 }

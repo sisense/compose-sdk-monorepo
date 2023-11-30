@@ -1,16 +1,15 @@
 import { DashboardDto, Filter, CascadingFilter } from '../api/types/dashboard-dto';
 import { createFilterFromJaql, extractFilterModelFromJaql } from './translate-widget-filters';
 import {
-  BackgroundFilter,
-  BaseJaql,
   FiltersIgnoringRules,
-  IncludeAllFilter,
   PanelItem,
   WidgetDashboardFilterMode,
   WidgetDto,
   WidgetType,
 } from './types';
 import { getEnabledPanelItems } from './utils';
+
+import { BackgroundFilter, BaseJaql, IncludeAllFilter } from '@sisense/sdk-data';
 
 /**
  * Extracts dashboard filters applicable to a widget.

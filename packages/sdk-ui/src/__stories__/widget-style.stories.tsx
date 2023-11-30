@@ -1,17 +1,35 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable max-lines */
 import { DataSource } from '@sisense/sdk-data';
+import { Meta } from '@storybook/react';
+import { SisenseContextProviderProps } from '../index';
+import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
+import { StyleOptions } from '../types';
 import { ChartWidget } from '../widgets/chart-widget';
 import { templateForComponent } from './template';
-import { StyleOptions } from '../types';
+
+const sisenseContextProps: SisenseContextProviderProps = {
+  url: import.meta.env.VITE_APP_SISENSE_URL ?? '',
+  token: import.meta.env.VITE_APP_SISENSE_TOKEN,
+};
 
 const template = templateForComponent(ChartWidget);
 
-export default {
+const meta: Meta<typeof ChartWidget> = {
   title: 'Widget/Style',
   component: ChartWidget,
   argTypes: {
     chartType: { options: ['line', 'area', 'column', 'bar'] },
   },
+  decorators: [
+    (Story) => (
+      <SisenseContextProvider {...sisenseContextProps}>
+        <Story />
+      </SisenseContextProvider>
+    ),
+  ],
 };
+export default meta;
 
 const cat1 = {
   name: 'Years',
@@ -155,6 +173,24 @@ export const WithCustomizedHeader = template({
       titleAlignment: 'Center',
       backgroundColor: 'bisque',
       titleTextColor: 'chocolate',
+    },
+  },
+});
+
+export const WithCustomToolbar = template({
+  title: 'Widget With Customized Header and Custom Toolbar',
+  ...cartesianArgs,
+  widgetStyleOptions: {
+    header: {
+      titleAlignment: 'Center',
+      backgroundColor: 'bisque',
+      titleTextColor: 'chocolate',
+      renderToolbar: (onRefresh) => (
+        <>
+          <button onClick={onRefresh}>Refresh</button>
+          <button>Other Button</button>
+        </>
+      ),
     },
   },
 });

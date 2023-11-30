@@ -5,6 +5,9 @@ import {
   QueryResultData,
   filters as filtersFactory,
   DimensionalAttribute,
+  BaseJaql,
+  FilterJaql,
+  IncludeMembersFilter,
 } from '@sisense/sdk-data';
 import {
   useExecuteQueryByWidgetId,
@@ -14,13 +17,7 @@ import {
 import { executeQuery } from '../query/execute-query.js';
 import { ClientApplication } from '../app/client-application.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
-import {
-  BaseJaql,
-  FilterJaql,
-  IncludeMembersFilter,
-  WidgetDashboardFilterMode,
-  WidgetDto,
-} from '../dashboard-widget/types.js';
+import { WidgetDashboardFilterMode, WidgetDto } from '../dashboard-widget/types.js';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 
 vi.mock('../query/execute-query', () => ({
