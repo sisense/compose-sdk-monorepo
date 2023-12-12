@@ -3,14 +3,12 @@
 /* eslint-disable max-lines */
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { isEqual } from 'lodash';
-import { type Filter } from '@sisense/sdk-data';
 import { withTracking } from '../decorators/hook-decorators';
 import { ExecuteQueryParams } from './';
-import { queryStateReducer, QueryState } from './query-state-reducer';
+import { queryStateReducer } from './query-state-reducer';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { executeQuery } from '../query/execute-query';
 import { mergeFilters, mergeFiltersByStrategy } from '../dashboard-widget/utils';
-import { FiltersMergeStrategy } from '../dashboard-widget/types';
 import { isFiltersChanged } from '../utils/filters-comparator';
 import { ClientApplication } from '../app/client-application';
 import { extractQueryFromWidget } from './utils';
@@ -19,50 +17,7 @@ import { RestApi } from '../api/rest-api';
 import { usePrevious } from '../common/hooks/use-previous';
 import { extractDashboardFiltersForWidget } from '../dashboard-widget/translate-dashboard-filters';
 import { fetchWidgetDtoModel } from '../dashboard-widget/use-fetch-widget-dto-model';
-
-/**
- * Parameters for {@link useExecuteQueryByWidgetId} hook.
- */
-export interface ExecuteQueryByWidgetIdParams {
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.widgetOid} */
-  widgetOid: string;
-
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.dashboardOid} */
-  dashboardOid: string;
-
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.filters} */
-  filters?: Filter[];
-
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.highlights} */
-  highlights?: Filter[];
-
-  /** {@inheritDoc ExecuteQueryProps.count} */
-  count?: number;
-
-  /** {@inheritDoc ExecuteQueryProps.offset} */
-  offset?: number;
-
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy} */
-  filtersMergeStrategy?: FiltersMergeStrategy;
-
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.includeDashboardFilters} */
-  includeDashboardFilters?: boolean;
-
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.onBeforeQuery} */
-  onBeforeQuery?: (jaql: any) => any | Promise<any>;
-
-  /**
-   * Boolean flag to control if query is executed
-   *
-   * If not specified, the default value is `true`
-   */
-  enabled?: boolean;
-}
-
-export type QueryByWidgetIdState = QueryState & {
-  /** Query parameters constructed over the widget */
-  query: ExecuteQueryParams | undefined;
-};
+import { ExecuteQueryByWidgetIdParams, QueryByWidgetIdState } from './types';
 
 /**
  * React hook that executes a data query extracted from an existing widget in the Sisense instance.

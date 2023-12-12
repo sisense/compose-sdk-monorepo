@@ -47,6 +47,26 @@ export class QueryApiDispatcher {
     };
   }
 
+  public sendDownloadCsvRequest(
+    dataSource: DataSource,
+    jaqlPayload: JaqlQueryPayload,
+  ): RequestSendingResult<ReadableStream> {
+    const url = getDownloadCsvUrl(dataSource);
+    const abortController = new AbortController();
+    const params = new URLSearchParams();
+    params.append('data', encodeURIComponent(JSON.stringify(jaqlPayload)));
+    return {
+      responsePromise: this.httpClient.post(
+        url,
+        params,
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+        abortController.signal,
+        { nonJSONBody: true, returnBlob: true },
+      ),
+      abortHttpRequest: (reason?: string) => abortController.abort(reason),
+    };
+  }
+
   /**
    * Sends a request to cancel a JAQL query.
    *
@@ -92,7 +112,7 @@ export class QueryApiDispatcher {
  */
 function getRegularCancelQueryUrl(dataSource: DataSource): string {
   const datasourcePath = encodeURIComponent(dataSource);
-  return `${API_DATASOURCES_BASE_PATH}/${datasourcePath}/cancel_queries`;
+  return `${API_DATASOURCES_BASE_PATH}/localhost/${datasourcePath}/cancel_queries`;
 }
 
 /**
@@ -114,4 +134,13 @@ function getLiveCancelQueryUrl(dataSource: DataSource): string {
 function getJaqlUrl(dataSource: DataSource): string {
   const dataSourcePath = encodeURIComponent(dataSource);
   return `${API_DATASOURCES_BASE_PATH}/${dataSourcePath}/jaql`;
+}
+
+/**
+ * Returns the URL for sending a Download CSV request.
+ *
+ * @param dataSource - The data source of the query.
+ */
+function getDownloadCsvUrl(dataSource: DataSource): string {
+  return `${getJaqlUrl(dataSource)}/csv`;
 }

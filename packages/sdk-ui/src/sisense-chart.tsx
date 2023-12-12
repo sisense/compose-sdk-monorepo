@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-lines-per-function */
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ChartDataOptionsInternal } from './chart-data-options/types';
 import { ChartData } from './chart-data/types';
 import {
@@ -23,7 +23,6 @@ import { ChartType, CompleteThemeSettings } from './types';
 import { useSisenseContext } from './sisense-context/sisense-context';
 import { applyDateFormat } from './query/date-formats';
 import AlertBox from './alert-box/alert-box';
-import isEqual from 'lodash/isEqual';
 import { HighchartsReactMemoized } from './highcharts-memorized';
 
 interface Props {
@@ -55,7 +54,6 @@ export const SisenseChart = ({
   onBeforeRender = defaultOnBeforeRender,
 }: Props) => {
   const { app } = useSisenseContext();
-  const prevOptions = useRef<HighchartsOptionsInternal | null>(null);
 
   const alerts: string[] = [];
 
@@ -93,17 +91,11 @@ export const SisenseChart = ({
       themeSettings,
     );
 
-    const newOptions = onBeforeRender(
+    return onBeforeRender(
       highchartsThemedOptions as HighchartsOptions,
     ) as HighchartsOptionsInternal;
-
-    // return previous options if no changes to reduce re-rendering
-    if (prevOptions.current && isEqual(prevOptions.current, newOptions)) {
-      return prevOptions.current;
-    } else {
-      return newOptions;
-    }
   }, [
+    chartType,
     chartData,
     chartDataOptions,
     designOptions,
@@ -112,15 +104,6 @@ export const SisenseChart = ({
     onDataPointContextMenu,
     onBeforeRender,
   ]);
-
-  // changing axis type requires a chart re-initialization
-  const immutable =
-    prevOptions.current?.xAxis &&
-    options?.xAxis &&
-    prevOptions.current?.xAxis[0]?.type !== options?.xAxis[0]?.type;
-
-  // update previous options for comparisons
-  prevOptions.current = options;
 
   return (
     options && (
@@ -134,7 +117,7 @@ export const SisenseChart = ({
         }}
       >
         {!!alerts.length && <AlertBox alerts={alerts} />}
-        <HighchartsReactMemoized options={options} immutable={immutable} />
+        <HighchartsReactMemoized options={options} />
       </div>
     )
   );

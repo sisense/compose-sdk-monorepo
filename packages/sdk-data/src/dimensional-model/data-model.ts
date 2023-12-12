@@ -6,18 +6,19 @@ import { create } from './factory.js';
 
 import { DimensionalElement } from './base.js';
 import { DataSource } from '../interfaces.js';
+import { TranslatableError } from '../translation/translatable-error.js';
 
 /**
  * @internal
  */
 export class DimensionalDataModel implements DataModel {
   static fromConfig(config: any): DimensionalDataModel {
-    if (!config && config.name) {
-      throw new Error('name must be specified');
+    if (config && !config.name) {
+      throw new TranslatableError('errors.dataModel.noName');
     }
 
-    if (!config && config.metadata) {
-      throw new Error('metadata must be specified');
+    if (config && !config.metadata) {
+      throw new TranslatableError('errors.dataModel.noMetadata');
     }
 
     const metadata = new Array<Element>();

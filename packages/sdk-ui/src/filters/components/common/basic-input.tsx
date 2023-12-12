@@ -30,7 +30,7 @@ export const BasicInput: FunctionComponent<BasicInputProps> = (props) => {
           className={
             'csdk-box-border csdk-h-full csdk-border-solid csdk-border-UI-default csdk-border-input csdk-rounded-md invalid:csdk-border-semantic-error disabled:csdk-placeholder:opacity-30 disabled:csdk-cursor-not-allowed csdk-text-text-active ' +
             variant +
-            'pl-10 csdk-text-[13px]' +
+            ' csdk-pl-1.5 csdk-text-[13px] ' +
             className
           }
           style={{ borderWidth: '1px!important' }}

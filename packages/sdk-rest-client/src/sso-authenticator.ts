@@ -3,6 +3,7 @@
 /* eslint-disable no-underscore-dangle */
 
 import { Authenticator } from './interfaces.js';
+import { TranslatableError } from './translation/translatable-error.js';
 
 interface IsAuthResponse {
   isAuthenticated: boolean;
@@ -49,10 +50,7 @@ export class SsoAuthenticator implements Authenticator {
         this._authenticating = false;
         if (!res.isAuthenticated) {
           // SSO is disabled on instance, do not proceed
-          if (!res.ssoEnabled)
-            throw new Error(
-              'SSO is not enabled on target instance, please choose another authentication method',
-            );
+          if (!res.ssoEnabled) throw new TranslatableError('errors.ssoNotEnabled');
           // redirect to login page
           window.location.href = `${res.loginUrl}?return_to=${window.location.href}`;
         }

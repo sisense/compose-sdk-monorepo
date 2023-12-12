@@ -1,9 +1,7 @@
-import React from 'react';
-import { test, expect } from '@playwright/experimental-ct-react';
-import { Chart } from '@sisense/sdk-ui';
-import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { data, attributes, measures } from './__mocks__/dataMocks';
+import { expect, test } from '@playwright/experimental-ct-react';
 import { Data } from '@sisense/sdk-data';
+import { Chart, SisenseContextProvider } from '@sisense/sdk-ui';
+import { attributes, data, measures } from './__mocks__/dataMocks';
 
 const props = {
   chartType: 'line' as const,
@@ -44,7 +42,7 @@ test.describe('React ChartErrorBoundary', () => {
     );
   });
 
-  test('should render chart when nothing went wrong', async ({ mount, page }) => {
+  test('should render chart when nothing went wrong', async ({ mount }) => {
     const errorBoundary = await mount(<Chart {...props} />);
 
     // chart legend will contain column title

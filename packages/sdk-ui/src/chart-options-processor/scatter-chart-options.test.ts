@@ -157,11 +157,13 @@ describe('Scatter legend', () => {
 
   it('should have correct item styles', () => {
     expect(options.itemStyle).toStrictEqual({
-      color: '#5B6372',
+      color: '#5b6372',
       cursor: 'default',
       fontFamily: 'Open Sans',
       fontSize: '13px',
       fontWeight: 'normal',
+      pointerEvents: 'auto',
+      textOutline: 'none',
     });
   });
 
@@ -169,7 +171,7 @@ describe('Scatter legend', () => {
     expect(options).toMatchObject({
       backgroundColor: 'transparent',
       borderColor: 'transparent',
-      borderWidth: '0',
+      borderWidth: 0,
     });
   });
 

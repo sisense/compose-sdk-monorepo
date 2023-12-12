@@ -14,7 +14,6 @@ import {
   ScatterWidgetStyle,
   TreemapWidgetStyle,
   WidgetSubtype,
-  WidgetType,
 } from './types';
 import { jaqlMock } from './__mocks__/jaql-mock';
 
@@ -91,7 +90,7 @@ describe('translate widget style options', () => {
       } as CartesianWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.ColumnChart,
+        'chart/column',
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
@@ -114,7 +113,7 @@ describe('translate widget style options', () => {
       } as CartesianWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.ColumnChart,
+        'chart/column',
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
@@ -132,7 +131,7 @@ describe('translate widget style options', () => {
       } as CartesianWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.AreaChart,
+        'chart/area',
         '' as WidgetSubtype,
         widgetStyle,
         [],
@@ -147,7 +146,7 @@ describe('translate widget style options', () => {
       } as CartesianWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.AreaChart,
+        'chart/area',
         '' as WidgetSubtype,
         widgetStyle,
         [],
@@ -180,7 +179,7 @@ describe('translate widget style options', () => {
       } as PolarWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.PolarChart,
+        'chart/polar',
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
@@ -203,7 +202,7 @@ describe('translate widget style options', () => {
       } as PolarWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.PolarChart,
+        'chart/polar',
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
@@ -240,7 +239,7 @@ describe('translate widget style options', () => {
       } as ScatterWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.ScatterChart,
+        'chart/scatter',
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
@@ -257,7 +256,7 @@ describe('translate widget style options', () => {
       } as ScatterWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.ScatterChart,
+        'chart/scatter',
         '' as WidgetSubtype,
         widgetStyle,
         widgetPanels,
@@ -288,7 +287,7 @@ describe('translate widget style options', () => {
       } as FunnelWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.FunnelChart,
+        'chart/funnel',
         '' as WidgetSubtype,
         widgetStyle,
         [],
@@ -317,12 +316,12 @@ describe('translate widget style options', () => {
         headersColor: true,
       };
 
-      expect(extractStyleOptions(WidgetType.Table, '' as WidgetSubtype, widgetStyle, [])).toEqual(
+      expect(extractStyleOptions('tablewidget', '' as WidgetSubtype, widgetStyle, [])).toEqual(
         expectedOptions,
       );
-      expect(
-        extractStyleOptions(WidgetType.TableWithAggregation, '' as WidgetSubtype, widgetStyle, []),
-      ).toEqual(expectedOptions);
+      expect(extractStyleOptions('tablewidgetagg', '' as WidgetSubtype, widgetStyle, [])).toEqual(
+        expectedOptions,
+      );
     });
   });
 
@@ -344,7 +343,7 @@ describe('translate widget style options', () => {
       } as IndicatorWidgetStyle;
 
       const styleOptions = extractStyleOptions(
-        WidgetType.IndicatorChart,
+        'indicator',
         'indicator/numeric' as WidgetSubtype,
         widgetStyle,
         [
@@ -461,7 +460,7 @@ describe('translate widget style options', () => {
           mode: 'value',
         },
       };
-      const result = extractStyleOptions(WidgetType.TreemapChart, 'treemap', widgetStyle, []);
+      const result = extractStyleOptions('treemap', 'treemap', widgetStyle, []);
 
       expect(result).toEqual(expected);
     });
@@ -482,7 +481,7 @@ describe('translate widget style options', () => {
           mode: 'contribution',
         },
       };
-      const result = extractStyleOptions(WidgetType.TreemapChart, 'treemap', widgetStyle, []);
+      const result = extractStyleOptions('treemap', 'treemap', widgetStyle, []);
 
       expect(result).toEqual(expected);
     });
@@ -498,7 +497,7 @@ describe('translate widget style options', () => {
           mode: 'value',
         },
       };
-      const result = extractStyleOptions(WidgetType.TreemapChart, 'treemap', widgetStyle, []);
+      const result = extractStyleOptions('treemap', 'treemap', widgetStyle, []);
 
       expect(result).toEqual(expected);
     });

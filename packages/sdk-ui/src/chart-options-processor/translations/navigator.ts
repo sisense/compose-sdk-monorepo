@@ -1,4 +1,4 @@
-import { colorChineseSilver, colorWhite } from '../chart-options-service';
+import { colorChineseSilver, colorWhite } from '../../chart-data-options/coloring/consts';
 import { AxisSettings } from './axis-section';
 import { HighchartsType } from './translations-to-highcharts';
 

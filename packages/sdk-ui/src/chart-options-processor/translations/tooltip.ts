@@ -5,7 +5,7 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../../chart-data-options/types';
-import { colorChineseSilver, colorWhite } from '../chart-options-service';
+import { colorChineseSilver, colorWhite } from '../../chart-data-options/coloring/consts';
 import {
   InternalSeries,
   TooltipSettings,

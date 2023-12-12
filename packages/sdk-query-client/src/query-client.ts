@@ -2,6 +2,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import {
   DataSourceField,
+  ExecutingCsvQueryResult,
   ExecutingQueryResult,
   QueryDescription,
   QueryExecutionConfig,
@@ -65,6 +66,31 @@ export class DimensionalQueryClient implements QueryClient {
     };
   }
 
+  public executeCsvQuery(
+    queryDescription: QueryDescription,
+    config?: QueryExecutionConfig,
+  ): ExecutingCsvQueryResult {
+    validateQueryDescription(queryDescription, { ignoreQueryLimit: true });
+
+    const taskPassport = new QueryTaskPassport('SEND_DOWNLOAD_CSV_QUERY', queryDescription, {
+      ...(config ? config : {}),
+      shouldSkipHighlightsWithoutAttributes: this.shouldSkipHighlightsWithoutAttributes || false,
+    });
+    return {
+      resultPromise: new Promise((resolve, reject) => {
+        void this.taskManager.executeDownloadCsvSending(taskPassport).then((executionResult) => {
+          if (executionResult.status === ExecutionResultStatus.SUCCESS) {
+            resolve(executionResult.result!);
+          } else {
+            reject(executionResult.error);
+          }
+        });
+      }),
+      cancel: (reason?: string) =>
+        this.taskManager.cancel(taskPassport.taskId, reason || 'Unspecified reason'),
+    };
+  }
+
   public async getDataSourceFields(
     dataSource: DataSource,
     count = 9999,
@@ -80,14 +106,17 @@ export class DimensionalQueryClient implements QueryClient {
  * @param queryDescription - query description to validate
  * @throws Error if query description is invalid
  */
-export function validateQueryDescription(queryDescription: QueryDescription): void {
+export function validateQueryDescription(
+  queryDescription: QueryDescription,
+  config?: { ignoreQueryLimit?: boolean },
+): void {
   const { attributes, measures, filters, highlights, count, offset } = queryDescription;
 
   if (count && count < 0) {
     throw new TranslatableError('errors.invalidCountNegative', { count: count.toString() });
   }
 
-  if (count && count > QUERY_DEFAULT_LIMIT) {
+  if (!config?.ignoreQueryLimit && count && count > QUERY_DEFAULT_LIMIT) {
     throw new TranslatableError('errors.invalidCountLimit', {
       count: count.toString(),
       limit: QUERY_DEFAULT_LIMIT.toString(),

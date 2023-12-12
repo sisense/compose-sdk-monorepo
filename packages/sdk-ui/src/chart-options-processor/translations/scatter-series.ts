@@ -14,7 +14,7 @@ import { ScatterAxisCategoriesMap, ScatterDataRow, ScatterDataTable } from '../.
 import { MarkerSettings } from './marker-section';
 import { ComparableData } from '../../chart-data-processor/table-processor';
 import { SeriesPointStructure } from './translations-to-highcharts';
-import { getAPaletteColor } from './pie-series';
+import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 import { SeriesWithAlerts, CompleteThemeSettings } from '../../types';
 import {
   DataColorOptions,
@@ -121,7 +121,7 @@ const fillColors = (
     .forEach(([key, color], index) => {
       sortedColorsMap.set(key, {
         // applies default color from themeSettings
-        color: color ?? getAPaletteColor(themeSettings?.palette.variantColors, index),
+        color: color ?? getPaletteColor(themeSettings?.palette.variantColors, index),
         index,
       });
     });

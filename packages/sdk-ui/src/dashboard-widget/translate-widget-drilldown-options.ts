@@ -38,9 +38,8 @@ export const extractDrilldownOptions = (
   widgetType: WidgetType,
   panels: Panel[],
 ): DrilldownOptions => {
-  const categoriesPanelName = [WidgetType.LineChart, WidgetType.AreaChart].includes(widgetType)
-    ? 'x-axis'
-    : 'categories';
+  const widgetTypesWithXAxis: WidgetType[] = ['chart/line', 'chart/area'];
+  const categoriesPanelName = widgetTypesWithXAxis.includes(widgetType) ? 'x-axis' : 'categories';
 
   const item = getEnabledPanelItems(panels, categoriesPanelName)[0];
   const drilldownSelections = getDrilldownSelections(item);

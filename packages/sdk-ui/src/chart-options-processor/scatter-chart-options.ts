@@ -27,19 +27,8 @@ const MARGIN_TOP = 30;
  */
 export const getScatterLegendSettings = (position: LegendPosition): LegendSettings => ({
   ...getLegendSettings(position),
-  backgroundColor: 'transparent',
-  borderColor: 'transparent',
-  borderWidth: '0',
-  itemStyle: {
-    color: '#5B6372',
-    cursor: 'default',
-    fontFamily: 'Open Sans',
-    fontSize: '13px',
-    fontWeight: 'normal',
-  },
   symbolHeight: 12,
   symbolWidth: 12,
-  symbolRadius: 0,
 });
 
 /**

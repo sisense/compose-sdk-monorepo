@@ -37,19 +37,17 @@ const IncludeAllPill = ({ disabled }: { disabled: boolean }) => (
 );
 
 export interface PillSectionProps {
-  membersSize: number;
   selectedMembers: SelectedMember[];
   onToggleSelectedMember: (key: string) => void;
   disabled: boolean;
 }
 
 export const PillSection: FunctionComponent<PillSectionProps> = ({
-  membersSize: membersSize,
   selectedMembers,
   onToggleSelectedMember,
   disabled,
 }) => {
-  const showIncludeAll = membersSize === selectedMembers.length || selectedMembers.length === 0;
+  const showIncludeAll = selectedMembers.length === 0;
   return (
     <div
       className={

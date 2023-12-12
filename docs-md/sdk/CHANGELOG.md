@@ -1,19 +1,37 @@
 # Changelog
 
+## [0.16.0] - 2023-12-12
+
+### Added
+- Add React hook `useExecuteCsvQuery` to execute a data query and return the result in CSV format
+- Add React hook `useGetWidgetModel` to retrieve a dashboard widget from the Sisense instance
+
+### Changed
+- Fix `ChartWidget` rendering issue when updating filters
+- Adjust the SSO authentication flow to not show error while waiting for SSO redirect
+- Fix named export error in `@sisense/sdk-cli`
+- Adjust the range of axes when `treatNullAsZero` is enabled for time series
+- Support cross filtering when clicking on data points in charts
+- Correct `modelType` of the `trend()` measure function to match the values expected by the backend API
+- Add translations for messages in `@sisense/sdk-rest-client` and `@sisense/sdk-data`
+- Extend components `MemberFilterTile` and `DateRangeFilterTile` to show UI errors in case of JAQL query failures
+- Extend `CriteriaFilterTile` and `CriteriaFilterMenu` to support ranking criteria filter options
+- Make minor UI improvements to highcharts legends, drilldown breadcrumbs, chart markers, and transition animation between chart types
+
 ## [0.15.0] - 2023-11-30
 
 ### Added
-- AI `Chatbot` component and related logic in `@sisense/sdk-ui/ai` namespace for internal testing
-- Full support of Compose SDK for Angular in `@sisense/sdk-ui-angular` package
-- Loading indicators for charts and tables
-- `CriteriaFilterMenu` component for vertical double-input and horizontal use cases
-- Additional `ticker` mode for `Indicator` chart
-- `useGetSharedFormula` hook to retrieve shared formulas
-- Support for custom formulas in code
-- Authentication user guide
+- Add AI `Chatbot` component and related logic in `@sisense/sdk-ui/ai` namespace for internal testing
+- Support fully Angular in `@sisense/sdk-ui-angular` package
+- Add loading indicators for charts and tables
+- Implement `CriteriaFilterMenu` component for vertical double-input and horizontal use cases
+- Extend `IndicatorChart` with the `ticker` mode
+- Add `useGetSharedFormula` hook to retrieve shared formulas
+- Add support for custom formulas in code
+- Add Authentication user guide
 
 ### Changed
-- Support for Angular v17 in `@sisense/sdk-ui-angular`
+- Support Angular v17 in `@sisense/sdk-ui-angular`
 - Extend `widgetStyleOptions` with ability to render custom chart header in widget
 - Support text inputs in criteria filters
 - Support dependent filters

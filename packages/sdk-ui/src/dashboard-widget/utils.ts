@@ -16,17 +16,17 @@ import {
 
 export function getChartType(widgetType: WidgetType) {
   const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
-    [WidgetType.LineChart]: 'line',
-    [WidgetType.AreaChart]: 'area',
-    [WidgetType.BarChart]: 'bar',
-    [WidgetType.ColumnChart]: 'column',
-    [WidgetType.PolarChart]: 'polar',
-    [WidgetType.PieChart]: 'pie',
-    [WidgetType.FunnelChart]: 'funnel',
-    [WidgetType.TreemapChart]: 'treemap',
-    [WidgetType.SunburstChart]: 'sunburst',
-    [WidgetType.ScatterChart]: 'scatter',
-    [WidgetType.IndicatorChart]: 'indicator',
+    'chart/line': 'line',
+    'chart/area': 'area',
+    'chart/bar': 'bar',
+    'chart/column': 'column',
+    'chart/polar': 'polar',
+    'chart/pie': 'pie',
+    'chart/funnel': 'funnel',
+    treemap: 'treemap',
+    sunburst: 'sunburst',
+    'chart/scatter': 'scatter',
+    indicator: 'indicator',
   };
 
   return widgetTypeToChartType[widgetType];
@@ -65,26 +65,26 @@ export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | un
 type WidgetTypeOrString = string | WidgetType;
 
 export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetType is WidgetType {
-  const supportedWidgetTypes = [
-    WidgetType.LineChart,
-    WidgetType.AreaChart,
-    WidgetType.BarChart,
-    WidgetType.ColumnChart,
-    WidgetType.PolarChart,
-    WidgetType.PieChart,
-    WidgetType.FunnelChart,
-    WidgetType.TreemapChart,
-    WidgetType.SunburstChart,
-    WidgetType.ScatterChart,
-    WidgetType.IndicatorChart,
-    WidgetType.Table,
-    WidgetType.TableWithAggregation,
+  const supportedWidgetTypes: WidgetType[] = [
+    'chart/line',
+    'chart/area',
+    'chart/bar',
+    'chart/column',
+    'chart/polar',
+    'chart/pie',
+    'chart/funnel',
+    'treemap',
+    'sunburst',
+    'chart/scatter',
+    'indicator',
+    'tablewidget',
+    'tablewidgetagg',
   ];
   return supportedWidgetTypes.includes(widgetType as WidgetType);
 }
 
-export function isTableWidget(widgetType: WidgetTypeOrString) {
-  return widgetType === WidgetType.Table || widgetType === WidgetType.TableWithAggregation;
+export function isTabularWidget(widgetType: WidgetTypeOrString) {
+  return widgetType === 'tablewidget' || widgetType === 'tablewidgetagg';
 }
 
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {

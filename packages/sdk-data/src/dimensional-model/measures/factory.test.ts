@@ -306,7 +306,7 @@ describe('measures factory', () => {
               title: 'sum Cost',
             },
           },
-          formula: 'trend([sumCost], "modelType=Advanced Smoothing","ignoreAnomalies=true")',
+          formula: 'trend([sumCost], "modelType=smooth","ignoreAnomalies=true")',
           title: 'Trend',
         },
       });
@@ -328,7 +328,7 @@ describe('measures factory', () => {
               title: 'sum Cost',
             },
           },
-          formula: 'trend([sumCost], "modelType=Local Estimates")',
+          formula: 'trend([sumCost], "modelType=local")',
           title: 'Trend',
         },
       });
@@ -341,6 +341,28 @@ describe('measures factory', () => {
         jaql: {
           formula: 'forecast([sumCost], "forecastHorizon=3")',
           title: 'sum Cost Forecast',
+          context: {
+            '[sumCost]': {
+              title: 'sum Cost',
+              dim: '[Commerce.Cost]',
+              datatype: 'numeric',
+              agg: 'sum',
+            },
+          },
+        },
+      });
+    });
+
+    test('measures.forecast() with only modelType', () => {
+      const m = measures.sum(sampleAttribute);
+      const mTrend = measures.forecast(m, 'Forecast', {
+        modelType: 'holtWinters',
+      });
+
+      expect(mTrend.jaql()).toStrictEqual({
+        jaql: {
+          formula: 'forecast([sumCost], "forecastHorizon=3","modelType=holtWinters")',
+          title: 'Forecast',
           context: {
             '[sumCost]': {
               title: 'sum Cost',

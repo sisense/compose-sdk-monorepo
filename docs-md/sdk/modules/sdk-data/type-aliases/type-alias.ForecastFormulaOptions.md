@@ -37,7 +37,7 @@ Specify a ISO 8601 date string or Date object.
 
 ### `forecastHorizon`
 
-**forecastHorizon**: `number`
+**forecastHorizon**?: `number`
 
 Number of data points to be predicted.
 The accepted value range is between 1-1,000

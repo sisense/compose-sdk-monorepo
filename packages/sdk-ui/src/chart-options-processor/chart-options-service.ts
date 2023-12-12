@@ -17,7 +17,7 @@ import { HighchartsType, HighchartsSeriesValues } from './translations/translati
 import { TooltipSettings } from './tooltip';
 import { PieOptions } from './translations/pie-plot-options';
 import { FunnelOptions } from './translations/funnel-plot-options';
-import { ChartType, OptionsWithAlerts, CompleteThemeSettings } from '../types';
+import { ChartType, OptionsWithAlerts, CompleteThemeSettings, StyleOptions } from '../types';
 import { getCartesianChartOptions } from './cartesian-chart-options';
 import { getCategoricalChartOptions } from './category-chart-options';
 import { getScatterChartOptions } from './scatter-chart-options';
@@ -88,24 +88,6 @@ export const highchartsOptionsService = (
       throw new Error('Unexpected chart type');
   }
 };
-
-// temp until we implement series colors
-export const colorChineseSilver = '#CCCCCC';
-export const colorWhite = '#FFFFFF';
-export const DEFAULT_SERIES_COLORS = [
-  '#00cee6',
-  '#9b9bd7',
-  '#6eda55',
-  '#fc7570',
-  '#fbb755',
-  '#218a8c',
-  '#08e5ff',
-  '#b3b3f7',
-  '#7efb62',
-  '#ff8a87',
-  '#ffc26a',
-  '#279fa1',
-];
 
 export type SeriesType = HighchartsSeriesValues & {
   index?: number;
@@ -242,7 +224,7 @@ type Navigator = {
   tooltipFormatter?: (min: number, max: number) => { left: string; right: string };
 };
 
-const DEFAULT_STYLE_OPTIONS = {
+const DEFAULT_STYLE_OPTIONS: StyleOptions = {
   legend: {
     enabled: true,
     position: 'bottom',
@@ -250,7 +232,7 @@ const DEFAULT_STYLE_OPTIONS = {
   navigator: {
     enabled: true,
   },
-  markers: { enabled: true, fill: 'hollow', size: 'small' },
+  markers: { enabled: false, fill: 'filled', size: 'small' },
   seriesLabels: { enabled: false, rotation: 0 },
   xAxis: {
     enabled: true,

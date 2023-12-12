@@ -5,7 +5,6 @@ import { setup } from '../../../__test-helpers__';
 import { PillSection, PillSectionProps } from './pill-section';
 
 const props: PillSectionProps = {
-  membersSize: 3,
   selectedMembers: [
     { key: '2013-01-01T00:00:00', title: '2013' },
     { key: '2015-01-01T00:00:00', title: '2015', inactive: true },
@@ -42,8 +41,8 @@ it('executes correct callback when pill is clicked', async () => {
   expect(props.onToggleSelectedMember).toHaveBeenCalledWith('2013-01-01T00:00:00');
 });
 
-it('when selected members matches size of members, the "Include all" pill is shown', () => {
-  setup(<PillSection {...props} membersSize={2} />);
+it('when selected members matches size is zero, the "Include all" pill is shown', () => {
+  setup(<PillSection {...props} selectedMembers={[]} />);
 
   expect(screen.queryByRole('button', { name: '2013' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '2015' })).not.toBeInTheDocument();

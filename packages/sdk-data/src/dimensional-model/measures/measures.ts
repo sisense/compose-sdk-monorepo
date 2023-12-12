@@ -8,7 +8,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-throw-literal */
 import * as m from './factory.js';
 import {
   Attribute,
@@ -27,6 +26,7 @@ import { DimensionalElement } from '../base.js';
 import { DimensionalAttribute, createAttribute } from '../attributes.js';
 
 import { create } from '../factory.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
 
 /**
  * @internal
@@ -554,7 +554,7 @@ export function createMeasure(json: any): Measure | BaseMeasure {
 
   if (MetadataTypes.isCalculatedMeasure(json)) {
     if (json.context === undefined) {
-      throw new Error(`DimensionalCalculatedMeasure must have context property`);
+      throw new TranslatableError('errors.measure.dimensionalCalculatedMeasure.noContext');
     }
 
     const context = {};
@@ -573,22 +573,22 @@ export function createMeasure(json: any): Measure | BaseMeasure {
     );
   } else if (MetadataTypes.isMeasureTemplate(json)) {
     if (att === undefined) {
-      throw new Error(`DimensionalBaseMeasure must have attribute/dim/expression property`);
+      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
     }
 
     return new DimensionalMeasureTemplate(name, att, format, desc);
   } else if (MetadataTypes.isBaseMeasure(json)) {
     if (att === undefined) {
-      throw new Error(`DimensionalBaseMeasure must have attribute/dim/expression property`);
+      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
     }
 
     const agg = json.agg || json.aggregation;
     if (!agg) {
-      throw `DimensionalBaseMeasure must have agg or aggregation property`;
+      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAggAggregation');
     }
 
     return new DimensionalBaseMeasure(name, att, agg, format, desc);
   }
 
-  throw 'unsupported measure type';
+  throw new TranslatableError('errors.measure.unsupportedType');
 }

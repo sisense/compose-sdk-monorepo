@@ -1,8 +1,9 @@
+import './translation/initialize-i18n.js';
+
 /**
  * @packageDocumentation
  * @beta
  */
-
 export * from './interfaces.js';
 
 export * from './dimensional-model/types.js';

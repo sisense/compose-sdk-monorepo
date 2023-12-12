@@ -1,31 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/** @vitest-environment jsdom */
+
 import { getDashboardModel, type GetDashboardModelOptions } from './get-dashboard-model';
 import { type HttpClient } from '@sisense/sdk-rest-client';
-import { DashboardDto } from '../../api/types/dashboard-dto';
+import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { type RestApi } from '../../api/rest-api';
-
-const dashboardMock = {
-  oid: 'dashboard-123',
-  title: 'Test Dashboard',
-  datasource: {
-    title: 'Test Datasource',
-  },
-  widgets: [
-    {
-      oid: 'widget-1',
-      title: 'Test Widget 1',
-      datasource: {
-        title: 'Test Datasource',
-      },
-    },
-    {
-      oid: 'widget-2',
-      title: 'Test Widget 2',
-      datasource: {
-        title: 'Test Datasource 2',
-      },
-    },
-  ],
-} as DashboardDto;
+import { WidgetModel } from '../widget';
 
 const getDashboardMock = vi.fn<Parameters<RestApi['getDashboard']>>(
   (_dashboardOid, { expand } = {}) => {
@@ -73,11 +54,9 @@ describe('getDashboardModel', () => {
       oid: dashboardMock.oid,
       title: dashboardMock.title,
       dataSource: dashboardMock.datasource.title,
-      widgets: dashboardMock.widgets?.map((widgetMock) => ({
-        oid: widgetMock.oid,
-        title: widgetMock.title,
-        dataSource: widgetMock.datasource.title,
-      })),
+      widgets: expect.arrayContaining(
+        Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
+      ),
     });
   });
 });

@@ -6,6 +6,14 @@ import { useGetDashboardModels } from './use-get-dashboard-models.js';
 import { getDashboardModels } from './get-dashboard-models.js';
 import { useSisenseContext } from '../../sisense-context/sisense-context.js';
 import { type ClientApplication } from '../../app/client-application.js';
+import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
+import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
+import { DashboardModel } from './types.js';
+import { translateDashboard } from './translate-dashboard.js';
+const dashboardModelsMock: DashboardModel[] = [
+  sampleEcommerceDashboard,
+  sampleHealthcareDashboard,
+].map(translateDashboard);
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
@@ -35,14 +43,6 @@ vi.mock('./get-dashboard-models', () => ({
   getDashboardModels: vi.fn(),
 }));
 
-const dashboardsMock = [
-  {
-    oid: 'dashboard-123',
-    title: 'Test Dashboard',
-    dataSource: 'Test Datasource',
-  },
-];
-
 const getDashboarsdModelsMock = getDashboardModels as Mock<
   Parameters<typeof getDashboardModels>,
   ReturnType<typeof getDashboardModels>
@@ -68,14 +68,14 @@ describe('useGetDashboardModels', () => {
   });
 
   it('should fetch dashboard models', async () => {
-    getDashboarsdModelsMock.mockResolvedValue(dashboardsMock);
+    getDashboarsdModelsMock.mockResolvedValue(dashboardModelsMock);
     const { result } = renderHook(() => useGetDashboardModels());
 
     expect(result.current.isLoading).toBe(true);
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
       expect(result.current.isSuccess).toBe(true);
-      expect(result.current.dashboards).toBe(dashboardsMock);
+      expect(result.current.dashboards).toBe(dashboardModelsMock);
     });
   });
 
@@ -94,7 +94,7 @@ describe('useGetDashboardModels', () => {
   });
 
   it('should send tracking for the first execution', async () => {
-    getDashboarsdModelsMock.mockResolvedValue(dashboardsMock);
+    getDashboarsdModelsMock.mockResolvedValue(dashboardModelsMock);
 
     useSisenseContextMock.mockReturnValue({
       app: { httpClient: {} } as ClientApplication,
@@ -108,7 +108,7 @@ describe('useGetDashboardModels', () => {
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
       expect(result.current.isSuccess).toBe(true);
-      expect(result.current.dashboards).toBe(dashboardsMock);
+      expect(result.current.dashboards).toBe(dashboardModelsMock);
     });
 
     expect(trackProductEventMock).toHaveBeenCalledOnce();

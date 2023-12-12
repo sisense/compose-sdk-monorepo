@@ -4,15 +4,15 @@ import { WatAuthenticator } from './wat-authenticator.js';
 import { Authenticator } from './interfaces.js';
 import { PasswordAuthenticator } from './password-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
-import { ERROR_PREFIX } from './constants.js';
+import { TranslatableError } from './translation/translatable-error.js';
 
 export function handleErrorResponse(response: FetchInterceptorResponse): FetchInterceptorResponse {
   if (!response.ok) {
-    throw Error(
-      `${ERROR_PREFIX} Status: ${response.status}${
-        response.statusText ? ' - ' + response.statusText : ''
-      }`,
-    );
+    throw new TranslatableError('errors.responseError', {
+      status: response.status.toString(),
+      statusText: response.statusText,
+      context: response.statusText ? 'withStatusText' : 'onlyStatus',
+    });
   }
   return response;
 }
@@ -24,23 +24,15 @@ export function handleUnauthorizedResponse(
   auth.invalidate();
   // skip login redirect for token auth
   if (auth instanceof PasswordAuthenticator) {
-    throw Error(
-      `${ERROR_PREFIX} Username and password authentication was not successful. Check credentials.`,
-    );
+    throw new TranslatableError('errors.passwordAuthFailed');
   }
   if (auth instanceof BearerAuthenticator || auth instanceof WatAuthenticator) {
-    throw Error(`${ERROR_PREFIX} Token authentication was not successful. Check credentials.`);
+    throw new TranslatableError('errors.tokenAuthFailed');
   }
 
-  if (auth instanceof SsoAuthenticator) {
-    if (!auth.isAuthenticating()) {
-      // try to reauthenticate
-      void auth.authenticate();
-    }
-    // throw error to display while waiting for redirect
-    throw Error(
-      `${ERROR_PREFIX} Not authenticated. Please wait for redirect or check SSO provider.`,
-    );
+  if (auth instanceof SsoAuthenticator && !auth.isAuthenticating()) {
+    // try to reauthenticate
+    void auth.authenticate();
   }
   return response;
 }
@@ -63,9 +55,5 @@ export function isNetworkError(responseError: Error): boolean {
  * @returns A promise that rejects with an error message.
  */
 export function handleNetworkError(): Promise<never> {
-  return Promise.reject(
-    new Error(
-      "Network error. Probably you forgot to add your domain to 'CORS Allowed Origins' in Sisense Admin Panel -> Security Settings.",
-    ),
-  );
+  return Promise.reject(new TranslatableError('errors.networkError'));
 }

@@ -1,21 +1,36 @@
 import { Jaql, SortDirection } from '@sisense/sdk-data';
 
 /* eslint-disable max-lines */
-export const enum WidgetType {
-  PieChart = 'chart/pie',
-  ColumnChart = 'chart/column',
-  BarChart = 'chart/bar',
-  LineChart = 'chart/line',
-  AreaChart = 'chart/area',
-  FunnelChart = 'chart/funnel',
-  TreemapChart = 'treemap',
-  SunburstChart = 'sunburst',
-  ScatterChart = 'chart/scatter',
-  IndicatorChart = 'indicator',
-  PolarChart = 'chart/polar',
-  Table = 'tablewidget',
-  TableWithAggregation = 'tablewidgetagg',
-}
+
+/**
+ * The type of a widget on a dashboard that is a variant of Cartesian widget.
+ */
+export type CartesianWidgetType =
+  | 'chart/line'
+  | 'chart/area'
+  | 'chart/bar'
+  | 'chart/column'
+  | 'chart/polar';
+
+/**
+ * The type of a widget on a dashboard that is a variant of Categorical widget.
+ */
+export type CategoricalWidgetType = 'chart/pie' | 'chart/funnel' | 'treemap' | 'sunburst';
+
+/**
+ * The type of a widget on a dashboard that is a variant of tabular widget.
+ */
+export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg';
+
+/**
+ * The type of a widget on a dashboard.
+ */
+export type WidgetType =
+  | CartesianWidgetType
+  | CategoricalWidgetType
+  | 'chart/scatter'
+  | 'indicator'
+  | TabularWidgetType;
 
 export type WidgetSubtype =
   | 'area/basic'
@@ -53,7 +68,9 @@ export type Datasource = {
   title: string;
   id: string;
   fullname?: string;
-  live: boolean;
+  live?: boolean;
+  address?: string;
+  database?: string;
 };
 
 /**
@@ -73,7 +90,7 @@ export interface WidgetDto {
   };
   style: WidgetStyle;
   title: string;
-  desc: string;
+  desc: string | null;
   options?: {
     dashboardFiltersMode: `${WidgetDashboardFilterMode}`;
   };

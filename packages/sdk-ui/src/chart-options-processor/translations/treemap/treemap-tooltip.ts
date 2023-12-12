@@ -4,7 +4,7 @@
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
 import { InternalSeriesNode, TooltipSettings } from '../../tooltip';
-import { colorChineseSilver, colorWhite } from '../../chart-options-service';
+import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import { applyFormat, defaultConfig } from '../number-format-config';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './treemap-tooltip.scss';

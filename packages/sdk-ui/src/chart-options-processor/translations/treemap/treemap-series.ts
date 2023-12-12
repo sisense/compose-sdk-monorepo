@@ -2,7 +2,7 @@ import { CategoricalChartData } from '../../../chart-data/types';
 import { getColorSetting, SeriesPointStructure } from '../translations-to-highcharts';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CompleteThemeSettings } from '../../../types';
-import { getAPaletteColor } from '../pie-series';
+import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 
 export function prepareTreemapDataItems(
   chartData: CategoricalChartData,
@@ -72,7 +72,7 @@ function handleTreemapSeriesColor(
         ...item,
         color:
           getColorSetting(dataOptions, item.name as string) ??
-          getAPaletteColor(
+          getPaletteColor(
             themeSettings?.palette.variantColors,
             coloringSeriesIndexMap.get(item.name) as number,
           ),

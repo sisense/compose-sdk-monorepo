@@ -2,6 +2,7 @@ import { DataSource, Filter, LevelAttribute, measures } from '@sisense/sdk-data'
 import { useSisenseContext } from '../../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { executeQuery } from '../../../../query/execute-query';
+import { useSetError } from '../../../../error-boundary/use-set-error';
 
 type DateLimits = {
   minDate?: string;
@@ -16,6 +17,7 @@ export const useDateLimits = (
 ): Required<DateLimits> | null => {
   const [fetchedLimits, setFetchedLimits] = useState<Required<DateLimits> | null>(null);
   const { isInitialized: isAppInitialized, app } = useSisenseContext();
+  const setError = useSetError();
   const shouldFetchLimits = !isLimitsDefinedByUser(userLimits) && isAppInitialized && app;
   useEffect(() => {
     if (!shouldFetchLimits) {
@@ -29,14 +31,16 @@ export const useDateLimits = (
         filters: parentFilters,
       },
       app,
-    ).then((data) => {
-      const queryMembers = data.rows[0];
-      setFetchedLimits({
-        minDate: queryMembers[0].data as string,
-        maxDate: queryMembers[1].data as string,
-      });
-    });
-  }, [app, attribute, dataSource, shouldFetchLimits, parentFilters]);
+    )
+      .then((data) => {
+        const queryMembers = data.rows[0];
+        setFetchedLimits({
+          minDate: queryMembers[0].data as string,
+          maxDate: queryMembers[1].data as string,
+        });
+      })
+      .catch((error) => setError(error));
+  }, [app, attribute, dataSource, shouldFetchLimits, parentFilters, setError]);
   return mergeDateLimits(userLimits, fetchedLimits);
 };
 

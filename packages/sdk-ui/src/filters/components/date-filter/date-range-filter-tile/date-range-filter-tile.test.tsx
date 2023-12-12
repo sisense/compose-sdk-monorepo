@@ -37,4 +37,34 @@ describe('DateRangeFilterTile', () => {
     fireEvent.click(dateButton);
     expect(dateButton).toMatchSnapshot();
   });
+
+  it('should render a DateRangeFilterTile component with jaql error', async () => {
+    expect.assertions(1);
+
+    // Set failed jaql response
+    fetchMock.mockResponses(fetchMocks.globals, fetchMocks.palettes, [
+      JSON.stringify({ error: true }),
+      { status: 500 },
+    ]);
+
+    const dateRangeFilter = filters.dateRange(DM.Commerce.Date.Years);
+
+    const { findByLabelText, findByText } = render(
+      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+        <DateRangeFilterTile
+          title="Date Range"
+          dataSource={DM.DataSource}
+          attribute={DM.Commerce.Date.Years}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+        />
+      </SisenseContextProvider>,
+    );
+
+    const errorBoxContainer = await findByLabelText('error-box');
+    fireEvent.mouseEnter(errorBoxContainer);
+    const errorBoxText = await findByText(/Error/);
+
+    expect(errorBoxText).toBeTruthy();
+  });
 });

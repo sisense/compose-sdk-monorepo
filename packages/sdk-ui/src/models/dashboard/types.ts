@@ -1,5 +1,5 @@
 import { type DataSource } from '@sisense/sdk-data';
-import { type WidgetModel } from '../widget/types';
+import { WidgetModel } from '../widget/widget-model';
 
 export type DashboardModel = {
   oid: string;

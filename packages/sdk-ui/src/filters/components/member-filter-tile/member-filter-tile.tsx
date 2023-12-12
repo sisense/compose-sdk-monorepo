@@ -1,10 +1,22 @@
 import type { Attribute, DataSource, Filter, MembersFilter } from '@sisense/sdk-data';
-import { filters as filterFactory } from '@sisense/sdk-data';
+import { MembersFilter as MembersFilterClass } from '@sisense/sdk-data';
 import { FunctionComponent, useMemo } from 'react';
 import { BasicMemberFilterTile } from './basic-member-filter-tile';
 import { Member } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { useExecuteQueryInternal } from '../../../query-execution/use-execute-query';
+
+/**
+ * @internal
+ */
+class MembersFilterInternal extends MembersFilterClass {
+  internal = true;
+
+  constructor(attribute: Attribute, members: string[]) {
+    super(attribute, members);
+    this.internal = true;
+  }
+}
 
 /**
  * Props for {@link MemberFilterTile}
@@ -61,29 +73,41 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   // "dimensions" does not change on every render, causing infinite rerenders.
   const dimensions = useMemo(() => [attribute], [attribute]);
 
-  const { data } = useExecuteQueryInternal({ dataSource, dimensions, filters: parentFilters });
-  if (!data) {
-    return null;
-  }
+  const { data, error } = useExecuteQueryInternal({
+    dataSource,
+    dimensions,
+    filters: parentFilters,
+  });
 
   const memberFilter = filter as MembersFilter;
-  const selectedMembersData = memberFilter?.members || [];
-  const queryMembers = data.rows.map((r) => r[0]);
-  const allMembers: Member[] = queryMembers.map((t) => ({
-    key: t.data as string,
-    title: t.text ?? (t.data as string),
-  }));
-  const selectedMembers: Member[] = queryMembers
-    .filter((qM) => selectedMembersData.includes(qM.data))
-    .map((qM) => ({
-      key: qM.data as string,
-      title: qM.text ?? (qM.data as string),
-    }));
+  const queryMembers = useMemo(() => (!data ? [] : data.rows.map((r) => r[0])), [data]);
 
-  if (selectedMembers.length !== selectedMembersData.length) {
-    console.warn(
-      `Some initially selected members were ignored. You may want to check your initialization logic for the "${title}" filter`,
-    );
+  const selectedMembers: Member[] = useMemo(
+    () =>
+      queryMembers
+        .filter((qM) => (memberFilter?.members || []).includes(qM.data))
+        .map((qM) => ({
+          key: qM.data as string,
+          title: qM.text ?? (qM.data as string),
+        })),
+    [memberFilter?.members, queryMembers],
+  );
+
+  const allMembers: Member[] = useMemo(
+    () =>
+      queryMembers.map((t) => ({
+        key: t.data as string,
+        title: t.text ?? (t.data as string),
+      })),
+    [queryMembers],
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    return null;
   }
 
   return (
@@ -91,7 +115,8 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       title={title}
       allMembers={allMembers}
       initialSelectedMembers={selectedMembers}
-      onUpdateSelectedMembers={(members) => onChange(filterFactory.members(attribute, members))}
+      shouldUpdateSelectedMembers={!(filter as MembersFilterInternal)?.internal}
+      onUpdateSelectedMembers={(members) => onChange(new MembersFilterInternal(attribute, members))}
       isDependent={parentFilters && parentFilters.length > 0}
     />
   );

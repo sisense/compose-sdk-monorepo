@@ -19,7 +19,7 @@ import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures
 import { AggregationTypes, FormulaContext, FormulaJaql, MetadataTypes, Sort } from '../types.js';
 import { normalizeName } from '../base.js';
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
-import { mapValues } from 'lodash';
+import mapValues from 'lodash/mapValues.js';
 import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
 import { isDatetime, isNumber } from './../simple-column-types.js';
 
@@ -273,16 +273,6 @@ export function aggregate(
   name?: string,
   format?: string,
 ): BaseMeasure {
-  // if (aggregationType == AggregationTypes.Average || aggregationType == AggregationTypes.Max ||
-  //     aggregationType == AggregationTypes.Min || aggregationType == AggregationTypes.Median ||
-  //     aggregationType == AggregationTypes.Sum) {
-
-  //         if (!MetadataTypes.isNumericDimension(attribute.type)) {
-
-  //             throw `${aggregationType} is supported for numeric attributes only, where ${attribute.name} is ${attribute.type}`;
-  //         }
-  //     }
-
   return new DimensionalBaseMeasure(
     name ?? `${aggregationType.toString()} ${attribute.name}`,
     attribute,
@@ -801,9 +791,7 @@ export function trend(
 ): CalculatedMeasure {
   let params: string | undefined;
   const adjustValues = (value: string) =>
-    value
-      .replace('advancedSmoothing', 'Advanced Smoothing')
-      .replace('localEstimates', 'Local Estimates');
+    value.replace('advancedSmoothing', 'smooth').replace('localEstimates', 'local');
   if (options) {
     // make a comma separated name=value string based on options
     params = Object.entries(options)
@@ -843,7 +831,7 @@ export function forecast(
 
   if (options) {
     // create ISO string values for any Date objects
-    const adjustedOptions = { ...options };
+    const adjustedOptions = { forecastHorizon: 3, ...options };
     if (adjustedOptions.startDate) {
       const startDate = new Date(adjustedOptions.startDate);
       adjustedOptions.startDate = startDate.toISOString().replace(/.\d+Z$/g, '');

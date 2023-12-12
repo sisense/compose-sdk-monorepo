@@ -42,3 +42,8 @@ type Subtract<A, C> = A extends C ? never : A;
 type PickTypeOf<T, K extends string | number | symbol> = K extends AllKeys<T>
   ? PickType<T, K>
   : never;
+
+/**
+ * Abstract object with any unknown values
+ */
+export type AnyObject = Record<string, any>;

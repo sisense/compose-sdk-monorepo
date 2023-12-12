@@ -12,7 +12,11 @@ import {
   DatasourceFieldsTestDataset,
   getDatasourceFieldsTestDataset,
 } from './__test-helpers__/get-datasource-fields-test-dataset-loader.js';
-import { DimensionalQueryClient, validateQueryDescription } from './query-client.js';
+import {
+  DimensionalQueryClient,
+  QUERY_DEFAULT_LIMIT,
+  validateQueryDescription,
+} from './query-client.js';
 import { JaqlQueryPayload, QueryDescription } from './types.js';
 import {
   ExecuteJaqlTestDataset,
@@ -94,6 +98,61 @@ describe('DimensionalQueryClient', () => {
     });
   });
 
+  describe('executeCsvQuery', () => {
+    let testDataset: ExecuteJaqlTestDataset;
+
+    beforeAll(() => {
+      testDataset = getExecuteJaqlTestDataset();
+    });
+
+    describe('for all test samples', () => {
+      // all tests must be added synchronously and can't be added in runtime,
+      // so we need to have single 'it' for testing all data-samples
+      it('should execute the query and resolve with the result', async () => {
+        for await (const testSample of testDataset) {
+          const queryDescription = testSample.queryInput;
+          const expectedCsvQueryResultData = testSample.testJaqlData.expectedCsvQueryResultData;
+          const expectedHeaders = { 'Content-Type': 'application/x-www-form-urlencoded' };
+          const expectedConfig = { nonJSONBody: true, returnBlob: true };
+          const mockData = new Blob([expectedCsvQueryResultData], { type: 'text/csv' });
+          httpClientMock.post.mockResolvedValue(mockData);
+          const queryResultData = await queryClient.executeCsvQuery(queryDescription).resultPromise;
+          expect(queryResultData).toStrictEqual(mockData);
+          expect(httpClientMock.post).toHaveBeenCalledWith(
+            expect.any(String),
+            expect.any(URLSearchParams),
+            { headers: expectedHeaders },
+            expect.any(AbortSignal),
+            expectedConfig,
+          );
+        }
+      });
+    });
+    it("should call 'onBeforeQuery' callback if it passed in config", async () => {
+      const onBeforeQuery = vi.fn();
+      const queryDescription: QueryDescription = {
+        dataSource: 'test',
+        attributes: [new DimensionalAttribute('AgeRange', '[Commerce.Age Range]', 'attribute')],
+        measures: [],
+        filters: [],
+        highlights: [],
+      };
+      const executionResult = queryClient.executeCsvQuery(queryDescription, { onBeforeQuery });
+      expect(executionResult.resultPromise).toBeInstanceOf(Promise);
+      await executionResult.resultPromise;
+      expect(onBeforeQuery).toHaveBeenCalledOnce();
+    });
+
+    it('should cancel the query execution', async () => {
+      const queryDescription: QueryDescription = testDataset[0].queryInput;
+      const executionResult = queryClient.executeCsvQuery(queryDescription);
+      expect(executionResult.resultPromise).toBeInstanceOf(Promise);
+      const cancelingReason = 'BECAUSE I CAN!';
+      executionResult.cancel(cancelingReason);
+      await expect(executionResult.resultPromise).rejects.toThrow(new RegExp(cancelingReason));
+    });
+  });
+
   describe('getDataSourceFields', () => {
     let testDataset: DatasourceFieldsTestDataset;
 
@@ -166,6 +225,21 @@ describe('DimensionalQueryClient', () => {
       expect(() => queryClient.executeQuery(queryDescription)).toThrow();
     });
 
+    it('should throw when count is above query limit', () => {
+      const queryDescription: QueryDescription = {
+        ...baseQueryDescription,
+        attributes: [
+          createAttribute({
+            name: 'BrandID',
+            type: 'numeric-attribute',
+            expression: '[Commerce.Brand ID]',
+          }),
+        ],
+        count: QUERY_DEFAULT_LIMIT + 1,
+      };
+      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+    });
+
     it('should throw when invalid offset', () => {
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
@@ -220,6 +294,38 @@ describe('DimensionalQueryClient', () => {
         };
 
         expect(() => validateQueryDescription(queryDescription)).not.toThrow();
+      });
+
+      it('should not throw when count is above query limit, but it is ignored', () => {
+        const queryDescription: QueryDescription = {
+          ...baseQueryDescription,
+          attributes: [
+            createAttribute({
+              name: 'BrandID',
+              type: 'numeric-attribute',
+              expression: '[Commerce.Brand ID]',
+            }),
+          ],
+          count: QUERY_DEFAULT_LIMIT + 1,
+        };
+        expect(() =>
+          validateQueryDescription(queryDescription, { ignoreQueryLimit: true }),
+        ).not.toThrow();
+      });
+
+      it('should not throw when count is above query limit for CSV downloads', () => {
+        const queryDescription: QueryDescription = {
+          ...baseQueryDescription,
+          attributes: [
+            createAttribute({
+              name: 'BrandID',
+              type: 'numeric-attribute',
+              expression: '[Commerce.Brand ID]',
+            }),
+          ],
+          count: QUERY_DEFAULT_LIMIT + 1,
+        };
+        expect(() => queryClient.executeCsvQuery(queryDescription)).not.toThrow();
       });
     });
   });

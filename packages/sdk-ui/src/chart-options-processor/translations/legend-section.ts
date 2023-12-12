@@ -11,7 +11,7 @@ export type LegendSettings = {
   symbolRadius?: number;
   symbolHeight?: number;
   symbolWidth?: number;
-  borderWidth?: string;
+  borderWidth?: number;
   borderColor?: string;
   backgroundColor?: string;
   title?: {
@@ -21,12 +21,23 @@ export type LegendSettings = {
   };
 };
 
+export const legendItemStyleDefault: LegendSettings['itemStyle'] = {
+  cursor: 'default',
+  fontFamily: 'Open Sans',
+  fontSize: '13px',
+  fontWeight: 'normal',
+  color: '#5b6372',
+  textOutline: 'none',
+  pointerEvents: 'auto',
+};
+
 export const getLegendSettings = (position: LegendPosition): LegendSettings => {
   const additionalSettings = {
     symbolRadius: 0,
-    itemStyle: {
-      fontWeight: 'normal',
-    },
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderWidth: 0,
+    itemStyle: legendItemStyleDefault,
   };
 
   switch (position) {

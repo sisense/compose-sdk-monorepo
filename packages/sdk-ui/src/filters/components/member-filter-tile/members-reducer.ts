@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { produce } from 'immer';
 
 export interface Member {
@@ -28,6 +29,16 @@ type SelectAllMembersAction = {
   type: 'selectAllMembers';
 };
 
+type UpdatePossibleMembersAction = {
+  type: 'updatePossibleMembers';
+  members: Member[];
+};
+
+type UpdateMembersAction = {
+  type: 'updateMembers';
+  members: SelectedMember[];
+};
+
 type ClearAllMembersAction = {
   type: 'clearAllMembers';
 };
@@ -41,6 +52,8 @@ export type MembersAction =
   | SelectMemberAction
   | DeselectMemberAction
   | SelectAllMembersAction
+  | UpdatePossibleMembersAction
+  | UpdateMembersAction
   | ClearAllMembersAction
   | ToggleSelectedMemberAction;
 
@@ -52,8 +65,12 @@ export function membersReducer(state: MembersState, action: MembersAction): Memb
       return deselectMemberReducer(state, action.memberIndex);
     case 'selectAllMembers':
       return selectAllReducer(state);
+    case 'updateMembers':
+      return updateMembersAction(state, action.members);
     case 'clearAllMembers':
       return clearAllReducer(state);
+    case 'updatePossibleMembers':
+      return updatePossibleMembersAction(state, action.members);
     case 'toggleSelectedMember':
       return toggleSelectedMemberReducer(state, action.memberKey);
   }
@@ -74,6 +91,25 @@ function deselectMemberReducer(state: MembersState, index: number): MembersState
 function selectAllReducer(state: MembersState): MembersState {
   return produce(state, (draft) => {
     draft.selectedMembers = draft.members;
+  });
+}
+
+function updateMembersAction(state: MembersState, members: SelectedMember[]): MembersState {
+  return produce(state, (draft) => {
+    draft.selectedMembers = members;
+  });
+}
+
+function updatePossibleMembersAction(state: MembersState, members: SelectedMember[]): MembersState {
+  return produce(state, (draft) => {
+    draft.members = members;
+    if (members.some((m) => !draft.selectedMembers.some((sm) => m.key === sm.key))) {
+      draft.selectedMembers = [];
+    } else {
+      draft.selectedMembers = draft.selectedMembers.filter((sm) =>
+        members.some((m) => m.key === sm.key),
+      );
+    }
   });
 }
 

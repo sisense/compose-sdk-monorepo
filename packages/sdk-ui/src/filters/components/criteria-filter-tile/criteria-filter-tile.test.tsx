@@ -6,15 +6,50 @@
 import { render, screen } from '@testing-library/react';
 import { MockedSisenseContextProvider, setup } from '../../../__test-helpers__/index.js';
 import { CriteriaFilterTile, CriteriaFilterTileProps } from './criteria-filter-tile';
-import { NumericFilter, createAttribute, filters } from '@sisense/sdk-data';
+import {
+  NumericFilter,
+  RankingFilter,
+  TextFilter,
+  createAttribute,
+  createMeasure,
+  filters,
+} from '@sisense/sdk-data';
 
 const mockAttribute = createAttribute({
   name: 'BrandID',
   type: 'numeric-attribute',
   expression: '[Commerce.Brand ID]',
 });
+const measureAOutline = {
+  name: 'avg Revenue',
+  type: 'basemeasure',
+  desc: '',
+  sort: 0,
+  aggregation: 'avg',
+  attribute: mockAttribute,
+};
+const measureBOutline = {
+  name: 'sum Revenue',
+  type: 'basemeasure',
+  desc: '',
+  sort: 0,
+  aggregation: 'sum',
+  attribute: mockAttribute,
+};
+const measureCOutline = {
+  name: 'max Revenue',
+  type: 'basemeasure',
+  desc: '',
+  sort: 0,
+  aggregation: 'max',
+  attribute: mockAttribute,
+};
+const mockMeasureA = createMeasure(measureAOutline);
+const mockMeasureB = createMeasure(measureBOutline);
+const mockMeasureC = createMeasure(measureCOutline);
+const measures = [mockMeasureA, mockMeasureB, mockMeasureC];
 
-const props: CriteriaFilterTileProps = {
+const propsBetween: CriteriaFilterTileProps = {
   title: 'Test Title',
   filter: filters.between(mockAttribute, 0, 100) as NumericFilter,
   onUpdate: vi.fn(),
@@ -37,7 +72,7 @@ describe('criteria tests', () => {
   it('renders collapsed display text by default', () => {
     render(
       <MockedSisenseContextProvider>
-        <CriteriaFilterTile {...props} />
+        <CriteriaFilterTile {...propsBetween} />
       </MockedSisenseContextProvider>,
     );
     const element = screen.getByText('criteriaFilter.between');
@@ -47,7 +82,7 @@ describe('criteria tests', () => {
   it('renders input boxes when expanded', async () => {
     const { user } = setup(
       <MockedSisenseContextProvider>
-        <CriteriaFilterTile {...props} />
+        <CriteriaFilterTile {...propsBetween} />
       </MockedSisenseContextProvider>,
     );
     const textElt = screen.getByText('criteriaFilter.between');
@@ -56,5 +91,73 @@ describe('criteria tests', () => {
     expect(textElt).not.toBeInTheDocument();
     expect(screen.getByText('≥')).toBeInTheDocument();
     expect(screen.getByText('≤')).toBeInTheDocument();
+  });
+
+  it('renders text input boxes when expanded', async () => {
+    const propsNotContain: CriteriaFilterTileProps = {
+      title: 'Test Title',
+      filter: filters.doesntContain(mockAttribute, 'boop') as TextFilter,
+      onUpdate: vi.fn(),
+    };
+    const { user } = setup(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsNotContain} />
+      </MockedSisenseContextProvider>,
+    );
+    const textElt = screen.getByText('criteriaFilter.notContains');
+    expect(textElt).toBeInTheDocument();
+    await user.click(screen.getByLabelText('arrow-down'));
+    expect(textElt).not.toBeInTheDocument();
+    expect(screen.getByDisplayValue('boop')).toBeInTheDocument();
+  });
+
+  it('renders ranked controls when expanded', async () => {
+    const propsTopRank: CriteriaFilterTileProps = {
+      title: 'Test Title',
+      filter: filters.topRanking(mockAttribute, mockMeasureB, 5) as RankingFilter,
+      onUpdate: vi.fn(),
+      measures,
+    };
+    const { user } = setup(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsTopRank} />
+      </MockedSisenseContextProvider>,
+    );
+    const textElt = screen.getByText('criteriaFilter.top');
+    expect(textElt).toBeInTheDocument();
+    await user.click(screen.getByLabelText('arrow-down'));
+    expect(textElt).not.toBeInTheDocument();
+    expect(screen.getByText('criteriaFilter.byMeasure')).toBeInTheDocument();
+    expect(screen.getByLabelText(mockMeasureB.name)).toBeChecked();
+  });
+
+  it('renders dropdown for horizontal ranked variant', async () => {
+    const propsTopRank: CriteriaFilterTileProps = {
+      title: 'Test Title',
+      filter: filters.bottomRanking(mockAttribute, mockMeasureA, 5) as RankingFilter,
+      arrangement: 'horizontal',
+      onUpdate: vi.fn(),
+      measures,
+    };
+    const { user } = setup(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsTopRank} />
+      </MockedSisenseContextProvider>,
+    );
+    const label = screen.getByText('Last');
+    expect(label).toBeInTheDocument();
+    const button1 = screen.getByText('avg Revenue');
+    expect(button1).toBeInTheDocument();
+    await user.click(button1);
+    const menu = screen.getByRole('menu');
+    expect(menu).toBeInTheDocument();
+    const item = screen.getByText('max Revenue');
+    expect(item).toBeInTheDocument();
+    await user.click(item);
+    expect(propsTopRank.onUpdate).toHaveBeenCalledWith(
+      filters.bottomRanking(mockAttribute, mockMeasureC, 5),
+    );
+    expect(button1).not.toBeInTheDocument();
+    expect(screen.getByText('max Revenue')).toBeInTheDocument();
   });
 });

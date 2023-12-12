@@ -1,7 +1,7 @@
 import { TaskPassport } from '@sisense/task-manager';
 import { QueryDescription, QueryExecutionConfigInternal } from '../types.js';
 
-type TaskType = 'SEND_JAQL_QUERY';
+type TaskType = 'SEND_JAQL_QUERY' | 'SEND_DOWNLOAD_CSV_QUERY';
 
 export class QueryTaskPassport extends TaskPassport {
   public queryDescription: QueryDescription;

@@ -1,5 +1,6 @@
 {
   "name": "e2e",
+  "type": "module",
   "private": true,
   "devDependencies": {
     "@playwright/experimental-ct-react": "1.36.2",
@@ -11,6 +12,7 @@
     "test:debug": "playwright test -c playwright-ct.config.ts --project=chromium --debug"
   },
   "dependencies": {
+    "@sisense/sdk-data": "workspace:^",
     "@sisense/sdk-ui": "workspace:^",
     "@sisense/sdk-ui-vue": "workspace:^"
   }

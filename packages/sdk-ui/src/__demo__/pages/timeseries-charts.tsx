@@ -18,7 +18,6 @@ export const TimeseriesCharts = () => {
 
   return (
     <>
-      {'Turn off StrictMode for this Page!'}
       {isLoading && <div>Loading...</div>}
       {isError && <div>Error</div>}
       {data && (

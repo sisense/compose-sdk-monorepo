@@ -1,0 +1,76 @@
+{
+  "headers": ["Age Range"],
+  "metadata": [
+    {
+      "jaql": {
+        "datatype": "text",
+        "column": "Age Range",
+        "merged": true,
+        "dim": "[Commerce.Age Range]",
+        "title": "Age Range",
+        "table": "Commerce"
+      },
+      "instanceid": "859B4-BBF5-B8",
+      "panel": "rows"
+    }
+  ],
+  "datasource": {
+    "revisionId": "TBD",
+    "fullname": "LocalHost/Sample ECommerce"
+  },
+  "processingInfo": {
+    "cacheType": "none",
+    "cacheTime": "2023-12-07T13:54:29.289Z"
+  },
+  "translationInfo": {
+    "translationServiceProvider": "NewTranslationService",
+    "isTranslationFallback": false,
+    "isQueryFallback": false,
+    "translationDuration": 0.02,
+    "sqlFromCache": false
+  },
+  "values": [
+    [
+      {
+        "data": "0-18",
+        "text": "0-18"
+      }
+    ],
+    [
+      {
+        "data": "19-24",
+        "text": "19-24"
+      }
+    ],
+    [
+      {
+        "data": "25-34",
+        "text": "25-34"
+      }
+    ],
+    [
+      {
+        "data": "35-44",
+        "text": "35-44"
+      }
+    ],
+    [
+      {
+        "data": "45-54",
+        "text": "45-54"
+      }
+    ],
+    [
+      {
+        "data": "55-64",
+        "text": "55-64"
+      }
+    ],
+    [
+      {
+        "data": "65+",
+        "text": "65+"
+      }
+    ]
+  ]
+}

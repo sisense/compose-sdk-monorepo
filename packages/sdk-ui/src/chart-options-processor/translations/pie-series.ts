@@ -2,15 +2,9 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import {
-  Color,
-  Convolution,
-  SeriesWithAlerts,
-  CompleteThemeSettings,
-  ValueToColorMap,
-} from '../../types';
+import { Convolution, SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
-import { DEFAULT_SERIES_COLORS, SeriesType } from '../chart-options-service';
+import { SeriesType } from '../chart-options-service';
 import { formatSeries, getColorSetting, SeriesPointStructure } from './translations-to-highcharts';
 import { PieChartDesignOptions } from './design-options';
 import {
@@ -19,17 +13,11 @@ import {
   CategoricalXValues,
 } from '../../chart-data/types';
 import { seriesSliceWarning } from '../../utils/data-limit-warning';
+import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 
 const CONVOLUTION_OTHERS_NAME = 'Other';
 const CONVOLUTION_OTHERS_ID = 'Others';
 const CONVOLUTION_OTHERS_COLOR = '#525A6B';
-
-// Returns a color from the given array based on index.
-// If no color supplied, returns a default color.
-export const getAPaletteColor = (colors: Color[] | undefined, index: number) => {
-  const noNull = colors?.filter((c) => c) as string[];
-  return (noNull && noNull[index % noNull.length]) ?? DEFAULT_SERIES_COLORS[index % 10];
-};
 
 type FormattedPieChartData = SeriesWithAlerts<SeriesType[]> & {
   convolutionSeries: SeriesType[];
@@ -74,7 +62,7 @@ export const formatCategoricalChartData = (
               name: categories[index],
               color:
                 getColorSetting(dataOptions, seriesValues[index].name) ??
-                getAPaletteColor(themeSettings?.palette.variantColors, index),
+                getPaletteColor(themeSettings?.palette.variantColors, index),
             };
           }),
         boostThreshold: 0,
@@ -93,7 +81,7 @@ export const formatCategoricalChartData = (
     const categoryColors = categories.map(
       (c, i) =>
         (dataOptions.seriesToColorMap as ValueToColorMap)?.[c] ??
-        getAPaletteColor(themeSettings?.palette?.variantColors, i),
+        getPaletteColor(themeSettings?.palette?.variantColors, i),
     );
     series = chartData.series.map((v: CategoricalSeriesValues) => {
       const { data, ...otherSeriesOptions } = formatSeries(

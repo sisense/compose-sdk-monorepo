@@ -9,16 +9,13 @@ import {
   FilterJaql,
   IncludeMembersFilter,
 } from '@sisense/sdk-data';
-import {
-  useExecuteQueryByWidgetId,
-  ExecuteQueryByWidgetIdParams,
-  isParamsChanged,
-} from './use-execute-query-by-widget-id';
+import { useExecuteQueryByWidgetId, isParamsChanged } from './use-execute-query-by-widget-id';
 import { executeQuery } from '../query/execute-query.js';
 import { ClientApplication } from '../app/client-application.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { WidgetDashboardFilterMode, WidgetDto } from '../dashboard-widget/types.js';
 import { trackProductEvent } from '@sisense/sdk-tracking';
+import { ExecuteQueryByWidgetIdParams } from './types';
 
 vi.mock('../query/execute-query', () => ({
   executeQuery: vi.fn(),

@@ -1,5 +1,5 @@
 import { extractDataOptions } from './translate-widget-data-options';
-import { Panel, WidgetType } from './types';
+import { Panel } from './types';
 import { StyledColumn, TableDataOptions } from '../chart-data-options/types';
 import { DimensionalAttribute } from '@sisense/sdk-data';
 
@@ -22,7 +22,7 @@ describe('extractDataOptions', () => {
       },
     ] as Panel[];
 
-    const tableDataOptions = extractDataOptions(WidgetType.Table, panels) as TableDataOptions;
+    const tableDataOptions = extractDataOptions('tablewidget', panels) as TableDataOptions;
 
     expect(
       (tableDataOptions.columns[0] as StyledColumn).column instanceof DimensionalAttribute,

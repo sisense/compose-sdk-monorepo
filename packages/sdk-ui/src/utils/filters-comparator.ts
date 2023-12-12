@@ -27,6 +27,7 @@ export function isFiltersChanged(
     return true;
   }
   // if both filters are empty - nothing has changed
+
   if (prevFilters!.length === 0 && newFilters!.length === 0) {
     return false;
   }
@@ -39,16 +40,28 @@ export function isFiltersChanged(
         prevFilter,
         newFilters![i]!,
         (prevFilterWithRandomName: Filter, newFilterWithRandomName: Filter) => {
-          const prevFilterWithoutRandomName = {
-            ...(prevFilterWithRandomName.toJSON() as Record<string, unknown>),
-            name: undefined,
-          };
-          const newFilterWithoutRandomName = {
-            ...(newFilterWithRandomName.toJSON() as Record<string, unknown>),
-            name: undefined,
-          };
+          const prevFilterWithoutRandomName = isRealCSDKFilter(prevFilterWithRandomName)
+            ? {
+                ...(prevFilterWithRandomName.toJSON() as Record<string, unknown>),
+                name: undefined,
+              }
+            : prevFilterWithRandomName;
+          const newFilterWithoutRandomName = isRealCSDKFilter(newFilterWithRandomName)
+            ? {
+                ...(newFilterWithRandomName.toJSON() as Record<string, unknown>),
+                name: undefined,
+              }
+            : newFilterWithRandomName;
           return isEqual(prevFilterWithoutRandomName, newFilterWithoutRandomName);
         },
       ),
   );
+}
+
+/**
+ * Validates if the filter is a real Compose SDK Filter with all props and methods or a partially converted filter from widget DTO
+ * @returns
+ */
+function isRealCSDKFilter(filter: Filter): filter is Filter {
+  return 'toJSON' in filter && typeof filter.toJSON === 'function';
 }

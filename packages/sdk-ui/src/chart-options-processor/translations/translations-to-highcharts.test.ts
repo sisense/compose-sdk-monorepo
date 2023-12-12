@@ -132,6 +132,10 @@ describe('formatSeries', () => {
           y: 20,
           custom: { rawValue: 20, xValue: ['xAxis 2'] },
           selected: false,
+          marker: {
+            enabled: true,
+            isIsolatedPoint: false,
+          },
         },
         {
           y: 30,

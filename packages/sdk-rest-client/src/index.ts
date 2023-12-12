@@ -1,3 +1,5 @@
+import './translation/initialize-i18n.js';
+
 export * from './interfaces.js';
 export { PasswordAuthenticator } from './password-authenticator.js';
 export { SsoAuthenticator } from './sso-authenticator.js';

@@ -70,6 +70,39 @@ describe('QueryApiDispatcher', () => {
     });
   });
 
+  describe('sendDownloadCsvRequest', () => {
+    it('should call httpClient.post with the correct URL, payload, and abort signal', async () => {
+      // Arrange
+      const dataSource = 'exampleDataSource';
+      const jaqlPayload: JaqlQueryPayload = {
+        metadata: [],
+        datasource: dataSource,
+        by: 'ComposeSDK',
+        queryGuid: '12312',
+      };
+      const expectedUrl = 'api/datasources/exampleDataSource/jaql/csv';
+      const expectedResponse = new Blob(['result'], { type: 'text/csv' });
+      const expectedHeaders = { 'Content-Type': 'application/x-www-form-urlencoded' };
+      const expectedConfig = { nonJSONBody: true, returnBlob: true };
+      httpClient.post.mockResolvedValue(expectedResponse);
+
+      // Act
+      const result = queryApi.sendDownloadCsvRequest(dataSource, jaqlPayload);
+
+      // Assert
+      expect(httpClient.post).toHaveBeenCalledWith(
+        expectedUrl,
+        expect.any(URLSearchParams),
+        { headers: expectedHeaders },
+        expect.any(AbortSignal),
+        expectedConfig,
+      );
+      expect(result.abortHttpRequest).toBeInstanceOf(Function);
+      const response = await result.responsePromise;
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
   describe('sendCancelQueryRequest', () => {
     it('should call sendCancelMultipleQueriesRequest with a single guid', async () => {
       // Arrange
@@ -81,7 +114,7 @@ describe('QueryApiDispatcher', () => {
 
       // Assert
       expect(httpClient.post).toHaveBeenCalledWith(
-        `api/datasources/${encodeURIComponent(dataSource)}/cancel_queries`,
+        `api/datasources/localhost/${encodeURIComponent(dataSource)}/cancel_queries`,
         { queries: guid },
       );
       expect(result).toBeUndefined();
@@ -93,7 +126,9 @@ describe('QueryApiDispatcher', () => {
       // Arrange
       const dataSource = 'exampleDataSource';
       const guids = ['12345', '67890'];
-      const expectedUrl = `api/datasources/${encodeURIComponent(dataSource)}/cancel_queries`;
+      const expectedUrl = `api/datasources/localhost/${encodeURIComponent(
+        dataSource,
+      )}/cancel_queries`;
       const expectedPayload = { queries: '12345;67890' };
 
       httpClient.post.mockResolvedValue(undefined);

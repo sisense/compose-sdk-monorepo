@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines */
+/* eslint-disable max-lines-per-function */
 import { useState } from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
@@ -9,6 +10,7 @@ import { useThemeForBreadcrumbs } from './use-theme-for-breadcrumbs';
 import React from 'react';
 import styled from '@emotion/styled';
 
+import { DrilldownBreadcrumbsNavigation } from './drilldown-breadcrumbs-navigation';
 import { DrilldownBreadcrumbsProps } from '../../../props';
 
 interface DrillButtonProps {
@@ -82,7 +84,7 @@ const StyledDrillButton = styled(Button)<StyledButtonProps>`
 const StyledBreadcrumbs = styled(Breadcrumbs)`
   .MuiBreadcrumbs-ol {
     flex-wrap: nowrap;
-    overflow-x: auto;
+    overflow: hidden;
   }
   .MuiBreadcrumbs-separator {
     display: none;
@@ -183,36 +185,38 @@ export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = ({
   if (!filtersDisplayValues.length) return null;
 
   return (
-    <StyledBreadcrumbs
-      separator={null}
-      sx={{ backgroundColor: themeProps.chartBackgroundColor, padding: '4px' }}
-    >
-      <CancelButton />
-      {filtersDisplayValues.map((filterDisplayValue, i) => {
-        const isActive = isActiveDrill(i);
-        const isLastActive = isLastActiveDrill(i);
-        return (
-          <div key={i}>
-            <DrillButton
-              isActive={isActive}
-              isLastActive={isLastActive}
-              filterDisplayValue={filterDisplayValue}
-              handleMouseEnter={handleMouseEnter(filterDisplayValue)}
-              handleMouseLeave={handleMouseLeave}
-              handleClick={() => sliceDrilldownSelections(i + 1)}
-              themeProps={themeProps}
-              popperParams={popperParams}
-              index={i}
-            />
-          </div>
-        );
-      })}
-      <CurrentDrillButton />
-      <DrillPopper
-        popperParams={popperParams}
-        currentDimension={currentDimension}
-        themeProps={themeProps}
-      />
-    </StyledBreadcrumbs>
+    <DrilldownBreadcrumbsNavigation currentDimension={currentDimension}>
+      <StyledBreadcrumbs
+        separator={null}
+        sx={{ backgroundColor: themeProps.chartBackgroundColor, padding: '4px' }}
+      >
+        <CancelButton />
+        {filtersDisplayValues.map((filterDisplayValue, i) => {
+          const isActive = isActiveDrill(i);
+          const isLastActive = isLastActiveDrill(i);
+          return (
+            <div key={i}>
+              <DrillButton
+                isActive={isActive}
+                isLastActive={isLastActive}
+                filterDisplayValue={filterDisplayValue}
+                handleMouseEnter={handleMouseEnter(filterDisplayValue)}
+                handleMouseLeave={handleMouseLeave}
+                handleClick={() => sliceDrilldownSelections(i + 1)}
+                themeProps={themeProps}
+                popperParams={popperParams}
+                index={i}
+              />
+            </div>
+          );
+        })}
+        <CurrentDrillButton />
+        <DrillPopper
+          popperParams={popperParams}
+          currentDimension={currentDimension}
+          themeProps={themeProps}
+        />
+      </StyledBreadcrumbs>
+    </DrilldownBreadcrumbsNavigation>
   );
 };

@@ -4,6 +4,7 @@ import mockPalettes from './data/mock-palettes.json';
 import mockWidgetDrilldown from './data/mock-widget-drilldown.json';
 import mockJaqlDrilldown from './data/mock-jaql-drilldown.json';
 import mockJaqlDates from './data/mock-jaql-dates.json';
+import mockJaqlAgeRange from './data/mock-jaql-age-range.json';
 
 export const mockUrl = `http://10.50.0.1:30845`;
 export const mockToken = 'fake-token';
@@ -16,4 +17,5 @@ export const fetchMocks: Record<string, [string, MockParams]> = {
   widgetDrilldown: [JSON.stringify(mockWidgetDrilldown), { status: 200 }],
   jaqlDrilldown: [JSON.stringify(mockJaqlDrilldown), { status: 200 }],
   jaqlDates: [JSON.stringify(mockJaqlDates), { status: 200 }],
+  jaqlAgeRange: [JSON.stringify(mockJaqlAgeRange), { status: 200 }],
 };

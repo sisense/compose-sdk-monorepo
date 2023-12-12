@@ -4,6 +4,10 @@ title: sdk-ui
 
 # Module sdk-ui
 
+## Classes
+
+- [WidgetModel](classes/class.WidgetModel.md)
+
 ## Interfaces
 
 - [AreaChartProps](interfaces/interface.AreaChartProps.md)
@@ -21,6 +25,7 @@ title: sdk-ui
 - [DateRangeFilterTileProps](interfaces/interface.DateRangeFilterTileProps.md)
 - [DrilldownBreadcrumbsProps](interfaces/interface.DrilldownBreadcrumbsProps.md)
 - [DrilldownWidgetProps](interfaces/interface.DrilldownWidgetProps.md)
+- [ExecuteCsvQueryParams](interfaces/interface.ExecuteCsvQueryParams.md)
 - [ExecuteQueryByWidgetIdParams](interfaces/interface.ExecuteQueryByWidgetIdParams.md)
 - [ExecuteQueryByWidgetIdProps](interfaces/interface.ExecuteQueryByWidgetIdProps.md)
 - [ExecuteQueryParams](interfaces/interface.ExecuteQueryParams.md)
@@ -33,6 +38,7 @@ title: sdk-ui
 - [GetDashboardModelsOptions](interfaces/interface.GetDashboardModelsOptions.md)
 - [GetDashboardModelsParams](interfaces/interface.GetDashboardModelsParams.md)
 - [GetSharedFormulaParams](interfaces/interface.GetSharedFormulaParams.md)
+- [GetWidgetModelParams](interfaces/interface.GetWidgetModelParams.md)
 - [IndicatorChartProps](interfaces/interface.IndicatorChartProps.md)
 - [IndicatorDataOptions](interfaces/interface.IndicatorDataOptions.md)
 - [LineChartProps](interfaces/interface.LineChartProps.md)
@@ -70,7 +76,9 @@ title: sdk-ui
 - [AxisLabel](type-aliases/type-alias.AxisLabel.md)
 - [BeforeRenderHandler](type-aliases/type-alias.BeforeRenderHandler.md)
 - [CartesianChartType](type-aliases/type-alias.CartesianChartType.md)
+- [CartesianWidgetType](type-aliases/type-alias.CartesianWidgetType.md)
 - [CategoricalChartType](type-aliases/type-alias.CategoricalChartType.md)
+- [CategoricalWidgetType](type-aliases/type-alias.CategoricalWidgetType.md)
 - [ChartDataOptions](type-aliases/type-alias.ChartDataOptions.md)
 - [ChartType](type-aliases/type-alias.ChartType.md)
 - [Color](type-aliases/type-alias.Color.md)
@@ -78,6 +86,10 @@ title: sdk-ui
 - [ConditionalDataColorOptions](type-aliases/type-alias.ConditionalDataColorOptions.md)
 - [Convolution](type-aliases/type-alias.Convolution.md)
 - [CriteriaFilterType](type-aliases/type-alias.CriteriaFilterType.md)
+- [CsvQueryErrorState](type-aliases/type-alias.CsvQueryErrorState.md)
+- [CsvQueryLoadingState](type-aliases/type-alias.CsvQueryLoadingState.md)
+- [CsvQueryState](type-aliases/type-alias.CsvQueryState.md)
+- [CsvQuerySuccessState](type-aliases/type-alias.CsvQuerySuccessState.md)
 - [CustomDrilldownResult](type-aliases/type-alias.CustomDrilldownResult.md)
 - [DashboardModel](type-aliases/type-alias.DashboardModel.md)
 - [DashboardModelErrorState](type-aliases/type-alias.DashboardModelErrorState.md)
@@ -139,11 +151,17 @@ title: sdk-ui
 - [StackableSubtype](type-aliases/type-alias.StackableSubtype.md)
 - [StyleOptions](type-aliases/type-alias.StyleOptions.md)
 - [TableType](type-aliases/type-alias.TableType.md)
+- [TabularWidgetType](type-aliases/type-alias.TabularWidgetType.md)
 - [ThemeOid](type-aliases/type-alias.ThemeOid.md)
 - [ThemeProviderProps](type-aliases/type-alias.ThemeProviderProps.md)
 - [UniformDataColorOptions](type-aliases/type-alias.UniformDataColorOptions.md)
 - [ValueToColorMap](type-aliases/type-alias.ValueToColorMap.md)
-- [WidgetModel](type-aliases/type-alias.WidgetModel.md)
+- [WidgetDataOptions](type-aliases/type-alias.WidgetDataOptions.md)
+- [WidgetModelErrorState](type-aliases/type-alias.WidgetModelErrorState.md)
+- [WidgetModelLoadingState](type-aliases/type-alias.WidgetModelLoadingState.md)
+- [WidgetModelState](type-aliases/type-alias.WidgetModelState.md)
+- [WidgetModelSuccessState](type-aliases/type-alias.WidgetModelSuccessState.md)
+- [WidgetType](type-aliases/type-alias.WidgetType.md)
 - [X2Title](type-aliases/type-alias.X2Title.md)
 
 ## Functions
@@ -173,8 +191,10 @@ title: sdk-ui
 - [Table](functions/function.Table.md)
 - [ThemeProvider](functions/function.ThemeProvider.md)
 - [TreemapChart](functions/function.TreemapChart.md)
+- [useExecuteCsvQuery](functions/function.useExecuteCsvQuery.md)
 - [useExecuteQuery](functions/function.useExecuteQuery.md)
 - [useExecuteQueryByWidgetId](functions/function.useExecuteQueryByWidgetId.md)
 - [useGetDashboardModel](functions/function.useGetDashboardModel.md)
 - [useGetDashboardModels](functions/function.useGetDashboardModels.md)
 - [useGetSharedFormula](functions/function.useGetSharedFormula.md)
+- [useGetWidgetModel](functions/function.useGetWidgetModel.md)

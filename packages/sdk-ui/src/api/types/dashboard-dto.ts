@@ -1,9 +1,10 @@
 import { WidgetDto, Datasource } from '../../dashboard-widget/types';
 import { FilterJaql } from '@sisense/sdk-data';
+import { AnyObject } from '../../utils/utility-types';
 
 export type Filter = {
   isCascading?: false;
-  jaql: FilterJaql;
+  jaql: FilterJaql & AnyObject;
   instanceid?: string;
   disabled?: boolean;
 };
@@ -21,4 +22,4 @@ export type DashboardDto = {
   datasource: Datasource;
   widgets?: WidgetDto[];
   filters?: Array<Filter | CascadingFilter>;
-};
+} & AnyObject;

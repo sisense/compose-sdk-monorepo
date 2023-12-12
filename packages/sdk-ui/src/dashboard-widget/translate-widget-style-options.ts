@@ -2,6 +2,7 @@
 /* eslint-disable max-lines */
 /* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
+import { TranslatableError } from '../translation/translatable-error';
 import {
   StyleOptions,
   LineStyleOptions,
@@ -69,9 +70,8 @@ function prepareCartesianChartAxisOptions(
     yAxis: extractAxisStyleOptions(widgetStyle.yAxis),
     y2Axis: extractAxisStyleOptions(widgetStyle.y2Axis),
   } as AxisStyleOptions;
-  const xAxesRelatedPanelName = [WidgetType.LineChart, WidgetType.AreaChart].includes(widgetType)
-    ? 'x-axis'
-    : 'categories';
+  const widgetTypesWithXAxis: WidgetType[] = ['chart/line', 'chart/area'];
+  const xAxesRelatedPanelName = widgetTypesWithXAxis.includes(widgetType) ? 'x-axis' : 'categories';
   const xAxesRelatedPanelItems = getEnabledPanelItems(panels, xAxesRelatedPanelName);
   const yAxesRelatedPanelItems = getEnabledPanelItems(panels, 'values');
   const hasX2Axis = xAxesRelatedPanelItems.length === 2;
@@ -351,43 +351,45 @@ function extractSunburstChartStyleOptions(widgetStyle: SunburstWidgetStyle): Sun
   };
 }
 
-export function extractStyleOptions(
-  widgetType: WidgetType,
+export function extractStyleOptions<WType extends WidgetType>(
+  widgetType: WType,
   widgetSubtype: WidgetSubtype,
   style: WidgetStyle,
   panels: Panel[],
 ): StyleOptions | TableStyleOptions {
   switch (widgetType) {
-    case WidgetType.LineChart:
-    case WidgetType.AreaChart:
-    case WidgetType.BarChart:
-    case WidgetType.ColumnChart:
+    case 'chart/line':
+    case 'chart/area':
+    case 'chart/bar':
+    case 'chart/column':
       return extractCartesianChartStyleOptions(
         widgetType,
         widgetSubtype,
         style as CartesianWidgetStyle,
         panels,
       );
-    case WidgetType.PolarChart:
+    case 'chart/polar':
       return extractPolarChartStyleOptions(widgetSubtype, style as PolarWidgetStyle, panels);
-    case WidgetType.ScatterChart:
+    case 'chart/scatter':
       return extractScatterChartDataOptions(widgetSubtype, style as ScatterWidgetStyle, panels);
-    case WidgetType.FunnelChart:
+    case 'chart/funnel':
       return extractFunnelChartDataOptions(widgetSubtype, style as FunnelWidgetStyle);
-    case WidgetType.TreemapChart:
+    case 'treemap':
       return extractTreemapChartStyleOptions(style as TreemapWidgetStyle);
-    case WidgetType.SunburstChart:
+    case 'sunburst':
       return extractSunburstChartStyleOptions(style as SunburstWidgetStyle);
-    case WidgetType.PieChart:
+    case 'chart/pie':
       return extractBaseStyleOptions(widgetSubtype, style);
-    case WidgetType.Table:
-    case WidgetType.TableWithAggregation:
+    case 'tablewidget':
+    case 'tablewidgetagg':
       return extractTableChartStyleOptions(style as TableWidgetStyle);
-    case WidgetType.IndicatorChart:
+    case 'indicator':
       return extractIndicatorChartStyleOptions(
         widgetSubtype,
         style as IndicatorWidgetStyle,
         panels,
       );
+    default:
+      throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }
 }

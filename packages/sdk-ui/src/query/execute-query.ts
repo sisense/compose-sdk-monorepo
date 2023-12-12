@@ -23,11 +23,10 @@ export const QUERY_DEFAULT_LIMIT = 20000;
 export const QUERY_DEFAULT_OFFSET = 0;
 
 /** @internal */
-export const executeQuery = (
+const prepareQueryParams = (
   queryDescription: QueryDescription,
-  app: ClientApplication,
-  executionConfig?: QueryExecutionConfig,
-): Promise<QueryResultData> => {
+  defaultDataSource: string,
+): InternalQueryDescription => {
   const {
     dataSource,
     dimensions = [],
@@ -47,21 +46,40 @@ export const executeQuery = (
 
   // if data source is not explicitly specified, use the default data source
   // specified in the Sisense context provider
-  const dataSourceToQuery = dataSource || app?.defaultDataSource;
+  const dataSourceToQuery = dataSource || defaultDataSource;
   if (!dataSourceToQuery) {
     throw new TranslatableError('errors.executeQueryNoDataSource');
   }
 
-  return app.queryClient.executeQuery(
-    {
-      dataSource: dataSourceToQuery,
-      attributes: dimensions, // internally, dimensions are represented by attributes
-      measures,
-      filters,
-      highlights,
-      count,
-      offset,
-    },
-    executionConfig,
-  ).resultPromise;
+  return {
+    dataSource: dataSourceToQuery,
+    attributes: dimensions, // internally, dimensions are represented by attributes
+    measures,
+    filters,
+    highlights,
+    count,
+    offset,
+  };
+};
+
+/** @internal */
+export const executeQuery = (
+  queryDescription: QueryDescription,
+  app: ClientApplication,
+  executionConfig?: QueryExecutionConfig,
+): Promise<QueryResultData> => {
+  const queryParams = prepareQueryParams(queryDescription, app?.defaultDataSource);
+
+  return app.queryClient.executeQuery(queryParams, executionConfig).resultPromise;
+};
+
+/** @internal */
+export const executeCsvQuery = (
+  queryDescription: QueryDescription,
+  app: ClientApplication,
+  executionConfig?: QueryExecutionConfig,
+): Promise<Blob> => {
+  const queryParams = prepareQueryParams(queryDescription, app?.defaultDataSource);
+
+  return app.queryClient.executeCsvQuery(queryParams, executionConfig).resultPromise;
 };

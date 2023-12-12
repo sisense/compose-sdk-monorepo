@@ -33,6 +33,10 @@ export const translation = {
         'Failed to identify shared formula. Please provide oid or both name and datasource',
       failedToFetch: 'Failed to fetch shared formula',
     },
+    widgetModel: {
+      tabularWidgetNotSupported: 'Tabular widgets are not supported for method {{methodName}}',
+      onlyTabularWidgetsSupported: 'Only tabular widgets are supported for method {{methodName}}',
+    },
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
@@ -56,6 +60,8 @@ export const translation = {
     endsWith: 'Ends with {{val}}',
     notEndsWith: `Doesn't end with {{val}}`,
     like: 'Is like {{val}}',
+    byMeasure: 'By measure',
+    by: 'by',
   },
 };
 

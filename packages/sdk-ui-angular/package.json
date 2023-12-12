@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-ui-angular",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "dist",

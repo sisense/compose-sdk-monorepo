@@ -72,8 +72,7 @@ export const Table = asSisenseComponent({
   componentName: 'Table',
   shouldSkipSisenseContextWaiting,
 })(({ dataSet, dataOptions, styleOptions = {}, filters, refreshCounter }: TableProps) => {
-  const { rowsPerPage = 25, width, height } = styleOptions;
-  const pagesCountLoadingStep = 10;
+  const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE, width, height } = styleOptions;
   const { themeSettings } = useThemeContext();
   const [innerDataOptions, setInnerDataOptions] = useState<TableDataOptionsInternal | null>(null);
   const [dataColumnNamesMapping, setDataColumnNamesMapping] = useState({});
@@ -82,7 +81,7 @@ export const Table = asSisenseComponent({
     dataSet,
     dataOptions: innerDataOptions,
     filters,
-    count: rowsPerPage * pagesCountLoadingStep,
+    count: rowsPerPage * PAGES_BATCH_SIZE,
     offset,
   });
   const [currentPage, setCurrentPage] = useState(1);
@@ -182,3 +181,8 @@ export const Table = asSisenseComponent({
     </DynamicSizeContainer>
   );
 });
+
+export const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
+
+/** How many pages of data will be loaded in one query */
+export const PAGES_BATCH_SIZE = 10;

@@ -28,4 +28,4 @@ title: DashboardModel
 
 ### `widgets`
 
-**widgets**?: [`WidgetModel`](type-alias.WidgetModel.md)[]
+**widgets**?: [`WidgetModel`](../classes/class.WidgetModel.md)[]

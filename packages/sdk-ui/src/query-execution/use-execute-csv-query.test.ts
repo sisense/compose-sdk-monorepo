@@ -1,0 +1,193 @@
+/** @vitest-environment jsdom */
+
+import 'blob-polyfill';
+import { renderHook, waitFor } from '@testing-library/react';
+import { trackProductEvent } from '@sisense/sdk-tracking';
+import { useExecuteCsvQuery } from './use-execute-csv-query.js';
+import { executeCsvQuery } from '../query/execute-query.js';
+import type { Mock } from 'vitest';
+import { ClientApplication } from '../app/client-application.js';
+import { useSisenseContext } from '../sisense-context/sisense-context.js';
+import { ExecuteQueryParams } from './types';
+
+vi.mock('../query/execute-query', () => ({
+  executeCsvQuery: vi.fn(),
+}));
+vi.mock('../sisense-context/sisense-context', async () => {
+  const actual: typeof import('../sisense-context/sisense-context.js') = await vi.importActual(
+    '../sisense-context/sisense-context',
+  );
+
+  return {
+    ...actual,
+    useSisenseContext: vi.fn(),
+  };
+});
+
+vi.mock('@sisense/sdk-tracking', async () => {
+  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
+    '@sisense/sdk-tracking',
+  );
+  return {
+    ...actual,
+    trackProductEvent: vi.fn().mockImplementation(() => {
+      console.log('trackProductEvent');
+      return Promise.resolve();
+    }),
+  };
+});
+
+const executeCsvQueryMock = executeCsvQuery as Mock<
+  Parameters<typeof executeCsvQuery>,
+  ReturnType<typeof executeCsvQuery>
+>;
+const useSisenseContextMock = useSisenseContext as Mock<
+  Parameters<typeof useSisenseContext>,
+  ReturnType<typeof useSisenseContext>
+>;
+
+const trackProductEventMock = trackProductEvent as Mock<
+  Parameters<typeof trackProductEvent>,
+  ReturnType<typeof trackProductEvent>
+>;
+
+const mockCsv = 'Name,Age,Location\nJohn,25,New York\nEmma,28,Los Angeles';
+const mockData = new Blob([mockCsv], { type: 'text/csv' });
+
+describe('useExecuteCsvQuery', () => {
+  const params: ExecuteQueryParams = {
+    dataSource: 'Sample ECommerce',
+    dimensions: [],
+    measures: [],
+    filters: [],
+    highlights: [],
+  };
+
+  beforeEach(() => {
+    executeCsvQueryMock.mockClear();
+    useSisenseContextMock.mockReturnValue({
+      app: {} as ClientApplication,
+      isInitialized: true,
+      enableTracking: false,
+    });
+  });
+
+  it('should fetch data successfully', async () => {
+    executeCsvQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteCsvQuery(params));
+
+    expect(result.current.isLoading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockCsv);
+    });
+  });
+
+  it('should provide data stream successfully', async () => {
+    executeCsvQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() =>
+      useExecuteCsvQuery({ ...params, config: { asDataStream: true } }),
+    );
+
+    expect(result.current.isLoading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockData);
+    });
+  });
+
+  it('if enabled is set to false, should return initial state', async () => {
+    executeCsvQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteCsvQuery({ ...params, enabled: false }));
+
+    expect(result.current.isLoading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+      expect(result.current.isSuccess).toBe(false);
+      expect(result.current.data).toBeUndefined();
+    });
+  });
+
+  it('should handle query error', async () => {
+    const mockError = new Error('Test error');
+    executeCsvQueryMock.mockRejectedValue(mockError);
+
+    const { result } = renderHook(() => useExecuteCsvQuery(params));
+
+    expect(result.current.isLoading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isError).toBe(true);
+      expect(result.current.error).toBe(mockError);
+    });
+  });
+
+  it('should handle missing Sisense context', () => {
+    useSisenseContextMock.mockReturnValue({ isInitialized: false, enableTracking: false });
+
+    const { result } = renderHook(() => useExecuteCsvQuery(params));
+
+    expect(result.current.isError).toBe(true);
+    expect(result.current.error?.message).toMatch(/Sisense Context .* not found/i);
+  });
+
+  it('should pass "onBeforeQuery" callback to \'executeCsvQuery\' executionConfig', async () => {
+    const onBeforeQuery = vi.fn();
+    executeCsvQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() =>
+      useExecuteCsvQuery({
+        ...params,
+        onBeforeQuery,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(executeCsvQueryMock).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.objectContaining({
+          onBeforeQuery,
+        }),
+      );
+    });
+  });
+
+  it('should send tracking for the first execution', async () => {
+    executeCsvQueryMock.mockResolvedValue(mockData);
+    useSisenseContextMock.mockReturnValue({
+      app: { httpClient: {} } as ClientApplication,
+      isInitialized: true,
+      enableTracking: true,
+    });
+    vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
+
+    const { result } = renderHook(() => useExecuteCsvQuery(params));
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockCsv);
+    });
+
+    expect(trackProductEventMock).toHaveBeenCalledOnce();
+    expect(trackProductEventMock).toHaveBeenCalledWith(
+      'sdkHookInit',
+      expect.objectContaining({
+        hookName: 'useExecuteCsvQuery',
+      }),
+      expect.anything(),
+      expect.any(Boolean),
+    );
+  });
+});

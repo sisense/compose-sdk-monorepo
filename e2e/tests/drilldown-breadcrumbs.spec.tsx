@@ -1,16 +1,14 @@
-import React from 'react';
 import { test, expect } from '@playwright/experimental-ct-react';
-import { DrilldownBreadcrumbs } from '../../packages/sdk-ui/src/widgets/common/drilldown-breadcrumbs';
+import { DrilldownBreadcrumbs } from '@sisense/sdk-ui';
+import { createAttribute } from '@sisense/sdk-data';
 
 test.describe('DrilldownBreadcrumbs Component', () => {
   const filtersDisplayValues = [['Apple Macbooks'], ['Category'], ['Gender']];
-  const currentDimension = {
+  const currentDimension = createAttribute({
     name: 'AgeRange',
     type: 'text-attribute',
-    desc: '',
-    __serializable: 'DimensionalElement',
     expression: '[Commerce.Age Range]',
-  };
+  });
 
   const clearDrilldownSelections = () => filtersDisplayValues.slice(0, 2);
   const sliceDrilldownSelections = (i: any) =>

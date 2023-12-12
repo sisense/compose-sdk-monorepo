@@ -11,6 +11,9 @@ indexTopics:
     description: Visit the Compose SDK GitHub Monorepo
     link: https://github.com/sisense/compose-sdk-monorepo
     external: true
+  - title: Changelog
+    description: Get informed about the evolution of Compose SDK
+    link: ./CHANGELOG
   - title: Troubleshooting
     description: Find solutions to common issues
     link: ./troubleshooting
@@ -34,7 +37,7 @@ Compose SDK is a software development kit that enables a composable, code-driven
 ::: warning You should know
  - **Compose SDK is currently in Beta** - Packages, APIs, and anything else is bound to change
  - Compose SDK currently supports development using TypeScript & React. Additional frameworks will be supported in the future
- - The [Compose SDK GitHub repository](https://github.com/sisense/compose-sdk-monorepo) is a monorepo containing all SDK packages. You can find the individual packages [here](https://github.com/orgs/sisense/packages?repo_name=compose-sdk-monorepo)
+ - The [Compose SDK GitHub repository](https://github.com/sisense/compose-sdk-monorepo) is a monorepo containing all SDK packages. You can find the individual packages [here](https://www.npmjs.com/search?q=%40sisense)
 :::
 
 <SectionIndex />

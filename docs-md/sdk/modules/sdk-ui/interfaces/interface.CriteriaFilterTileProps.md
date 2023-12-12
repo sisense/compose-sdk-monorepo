@@ -24,6 +24,14 @@ Text or numeric filter object to initialize filter type and default values
 
 ***
 
+### measures
+
+> **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
+
+List of available measures to rank by. Required only for ranking filters.
+
+***
+
 ### onUpdate
 
 > **onUpdate**: (`filter`) => `void`

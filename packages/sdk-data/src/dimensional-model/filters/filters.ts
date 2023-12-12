@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-throw-literal */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable max-lines */
 /* eslint-disable max-params */
@@ -18,6 +17,7 @@ import { DateLevels, MetadataTypes } from '../types.js';
 
 import { create } from '../factory.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
 
 /**
  * Different text operators that can be used with text filters
@@ -190,9 +190,7 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
       granularity === DateLevels.MinutesRoundTo30 ||
       granularity === DateLevels.MinutesRoundTo15
     ) {
-      throw new Error(
-        'Filters do not support the next "datetime" levels: Hours, MinutesRoundTo30, MinutesRoundTo15',
-      );
+      throw new TranslatableError('errors.filter.unsupportedDatetimeLevel');
     }
   }
 }
@@ -254,7 +252,9 @@ export class MembersFilter extends AbstractFilter {
     this.members = members ?? [];
 
     if (this.members.filter((m) => m === null || m === undefined).length > 0) {
-      throw `MembersFilter of ${attribute.id} - member cannot be null`;
+      throw new TranslatableError('errors.filter.membersFilterNullMember', {
+        attributeId: attribute.id,
+      });
     }
   }
 
@@ -564,11 +564,6 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
     valueB?: number,
   ) {
     super(att, FilterTypes.numeric, operatorA, valueA, operatorB, valueB);
-
-    // if (att.dimension && !MetadataTypes.isTextDimension(att.dimension.type)) {
-
-    //     throw 'Dimension must be of Text type to be applied with Text filter';
-    // }
   }
 }
 
@@ -578,11 +573,6 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
 export class TextFilter extends DoubleOperatorFilter<string> {
   constructor(att: Attribute, operator: string, value: string) {
     super(att, FilterTypes.text, operator, value);
-
-    // if (att.dimension && !MetadataTypes.isTextDimension(att.dimension.type)) {
-
-    //     throw 'Dimension must be of Text type to be applied with Text filter';
-    // }
   }
 }
 
@@ -789,5 +779,7 @@ export function createFilter(json: any): Filter {
       break;
   }
 
-  throw 'unsupported filter type';
+  throw new TranslatableError('errors.filter.unsupportedType', {
+    filterType: json.filterType,
+  });
 }

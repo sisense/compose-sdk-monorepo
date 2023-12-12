@@ -15,7 +15,7 @@ import {
 import { ExecuteQueryByWidgetId } from './execute-query-by-widget-id';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
 import { QueryResultData } from '@sisense/sdk-data';
-import { ExecuteQueryParams } from './use-execute-query';
+import { ExecuteQueryParams } from './types';
 
 describe('ExecuteQueryByWidgetId', () => {
   beforeEach(() => {

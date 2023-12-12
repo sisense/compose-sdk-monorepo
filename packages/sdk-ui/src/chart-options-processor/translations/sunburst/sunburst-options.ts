@@ -5,7 +5,7 @@ import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options
 import { CompleteThemeSettings } from '../../../types';
 import { SunburstChartDesignOptions } from '../design-options';
 import { getTreemapTooltipSettings } from '../treemap/treemap-tooltip';
-import { getAPaletteColor } from '../pie-series';
+import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { prepareSunburstLevels } from './sunburst-levels';
 import { prepareSunburstDataItems, SUNBURST_ROOT_PARENT_ID } from './sunburst-series';
 import { getLegendSettings } from '../legend-section';
@@ -66,7 +66,7 @@ export function prepareSunburstOptions(
       ...dataOptions.breakBy.map((column, index) => ({
         name: column.title || column.name,
         showInLegend: true,
-        color: getAPaletteColor(themeSettings?.palette.variantColors, index),
+        color: getPaletteColor(themeSettings?.palette.variantColors, index),
         data: [],
         states: {
           hover: {

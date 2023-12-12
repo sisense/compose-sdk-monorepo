@@ -9,6 +9,7 @@ import { PasswordAuthenticator } from './password-authenticator.js';
 import { BearerAuthenticator } from './bearer-authenticator.js';
 import { WatAuthenticator } from './wat-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
+import { TranslatableError } from './translation/translatable-error.js';
 
 const fakeDeploymentUrl = 'https://10.0.0.1';
 
@@ -70,21 +71,11 @@ describe('Auth interceptor', () => {
       } as Response);
     });
 
-    let caughtErr = '';
-
-    try {
-      handleUnauthorizedResponse(response, auth);
-    } catch (err) {
-      caughtErr = (<Error>err).message;
-    }
+    handleUnauthorizedResponse(response, auth);
 
     // flush promises
     await new Promise((resolve) => setImmediate(resolve));
 
-    // check that useer will see meaningfull error on charts failed to render
-    expect(caughtErr).toBe(
-      '[request-error] Not authenticated. Please wait for redirect or check SSO provider.',
-    );
     expect(window.location.href).toBe(`${fakeLoginUrl}?return_to=${fakeDeploymentUrl}`);
   });
 });
@@ -97,7 +88,7 @@ describe('Error interceptor', () => {
       statusText: 'Bad Request',
     } as FetchInterceptorResponse;
 
-    expect(() => handleErrorResponse(response)).toThrow();
+    expect(() => handleErrorResponse(response)).toThrow(TranslatableError);
   });
 
   it('should pass response through on success', () => {

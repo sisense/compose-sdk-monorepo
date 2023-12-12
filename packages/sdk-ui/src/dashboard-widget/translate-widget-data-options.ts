@@ -21,18 +21,29 @@ import {
   IndicatorDataOptions,
   StyledMeasureColumn,
   StyledColumn,
-  CompleteThemeSettings,
   NumberFormatConfig,
+  Color,
 } from '../types';
-import { Panel, PanelItem, WidgetType, NumericMask, CurrencyPosition, DatetimeMask } from './types';
+import {
+  CartesianWidgetType,
+  CategoricalWidgetType,
+  Panel,
+  PanelItem,
+  WidgetType,
+  NumericMask,
+  CurrencyPosition,
+  DatetimeMask,
+} from './types';
 import {
   createValueToColorMap,
   createValueColorOptions,
   createValueToColorMultiColumnsMap,
 } from './translate-panel-color-format';
-import { getEnabledPanelItems, getSortType, getRootPanelItem } from './utils';
+import { getEnabledPanelItems, getSortType, getRootPanelItem, isTabularWidget } from './utils';
 import { TableDataOptions } from '../chart-data-options/types';
 import { createFilterFromJaql } from './translate-widget-filters';
+import { WidgetDataOptions } from '../models';
+import { TranslatableError } from '../translation/translatable-error';
 
 export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem['format']) {
   const isFormulaJaql = 'formula' in jaql;
@@ -116,13 +127,13 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
   return null;
 }
 
-export function createDataColumn(item: PanelItem, themeSettings?: CompleteThemeSettings) {
+export function createDataColumn(item: PanelItem, customPaletteColors?: Color[]) {
   const element = createDimensionalElementFromJaql(item.jaql, item.format);
   const sortType = getSortType(item.jaql.sort ?? item.categoriesSorting);
   const numberFormatConfig = extractNumberFormat(item);
 
   if (MetadataTypes.isMeasure(element)) {
-    const color = createValueColorOptions(item.format?.color, themeSettings);
+    const color = createValueColorOptions(item.format?.color, customPaletteColors);
     const showOnRightAxis = item.y2;
     const chartType = item.singleSeriesType;
 
@@ -147,24 +158,23 @@ export function createDataColumn(item: PanelItem, themeSettings?: CompleteThemeS
 function createColumnsFromPanelItems(
   panels: Panel[],
   panelName: string,
-  themeSettings?: CompleteThemeSettings,
+  customPaletteColors?: Color[],
 ) {
   return getEnabledPanelItems(panels, panelName)
     .map(getRootPanelItem)
-    .map((item) => createDataColumn(item, themeSettings));
+    .map((item) => createDataColumn(item, customPaletteColors));
 }
 
 function extractCartesianChartDataOptions(
   panels: Panel[],
-  widgetType: WidgetType,
-  themeSettings?: CompleteThemeSettings,
+  widgetType: CartesianWidgetType,
+  paletteColors?: Color[],
 ): CartesianChartDataOptions {
-  const categoriesPanelName = [WidgetType.LineChart, WidgetType.AreaChart].includes(widgetType)
-    ? 'x-axis'
-    : 'categories';
-  const category = createColumnsFromPanelItems(panels, categoriesPanelName, themeSettings);
-  const value = createColumnsFromPanelItems(panels, 'values', themeSettings);
-  const breakBy = createColumnsFromPanelItems(panels, 'break by', themeSettings);
+  const widgetTypesWithXAxis: WidgetType[] = ['chart/line', 'chart/area'];
+  const categoriesPanelName = widgetTypesWithXAxis.includes(widgetType) ? 'x-axis' : 'categories';
+  const category = createColumnsFromPanelItems(panels, categoriesPanelName, paletteColors);
+  const value = createColumnsFromPanelItems(panels, 'values', paletteColors);
+  const breakBy = createColumnsFromPanelItems(panels, 'break by', paletteColors);
   const membersFormat = getEnabledPanelItems(panels, 'break by')[0]?.format?.members;
   const seriesToColorMap = membersFormat && createValueToColorMap(membersFormat);
 
@@ -179,13 +189,13 @@ function extractCartesianChartDataOptions(
 function extractCategoricalChartDataOptions(
   widgetType: WidgetType,
   panels: Panel[],
-  themeSettings?: CompleteThemeSettings,
+  customPaletteColors?: Color[],
 ): CategoricalChartDataOptions {
-  const category = createColumnsFromPanelItems(panels, 'categories', themeSettings);
-  const value = createColumnsFromPanelItems(panels, 'values', themeSettings);
-  const size = createColumnsFromPanelItems(panels, 'size', themeSettings);
+  const category = createColumnsFromPanelItems(panels, 'categories', customPaletteColors);
+  const value = createColumnsFromPanelItems(panels, 'values', customPaletteColors);
+  const size = createColumnsFromPanelItems(panels, 'size', customPaletteColors);
   let membersFormat, seriesToColorMap;
-  if (widgetType === WidgetType.SunburstChart) {
+  if (widgetType === 'sunburst') {
     seriesToColorMap = createValueToColorMultiColumnsMap(
       getEnabledPanelItems(panels, 'categories'),
     );
@@ -208,13 +218,13 @@ function extractCategoricalChartDataOptions(
 
 function extractScatterChartDataOptions(
   panels: Panel[],
-  themeSettings?: CompleteThemeSettings,
+  paletteColors?: Color[],
 ): ScatterChartDataOptions {
-  const [x] = createColumnsFromPanelItems(panels, 'x-axis', themeSettings);
-  const [y] = createColumnsFromPanelItems(panels, 'y-axis', themeSettings);
-  const [breakByPoint] = createColumnsFromPanelItems(panels, 'point', themeSettings);
-  const [breakByColor] = createColumnsFromPanelItems(panels, 'Break By / Color', themeSettings);
-  const [size] = createColumnsFromPanelItems(panels, 'size', themeSettings);
+  const [x] = createColumnsFromPanelItems(panels, 'x-axis', paletteColors);
+  const [y] = createColumnsFromPanelItems(panels, 'y-axis', paletteColors);
+  const [breakByPoint] = createColumnsFromPanelItems(panels, 'point', paletteColors);
+  const [breakByColor] = createColumnsFromPanelItems(panels, 'Break By / Color', paletteColors);
+  const [size] = createColumnsFromPanelItems(panels, 'size', paletteColors);
   const membersFormat = getEnabledPanelItems(panels, 'Break By / Color')[0]?.format?.members;
   const seriesToColorMap = membersFormat && createValueToColorMap(membersFormat);
 
@@ -230,12 +240,12 @@ function extractScatterChartDataOptions(
 
 function extractIndicatorChartDataOptions(
   panels: Panel[],
-  themeSettings?: CompleteThemeSettings,
+  paletteColors?: Color[],
 ): IndicatorDataOptions {
-  const value = createColumnsFromPanelItems(panels, 'value', themeSettings);
-  const secondary = createColumnsFromPanelItems(panels, 'secondary', themeSettings);
-  const min = createColumnsFromPanelItems(panels, 'min', themeSettings);
-  const max = createColumnsFromPanelItems(panels, 'max', themeSettings);
+  const value = createColumnsFromPanelItems(panels, 'value', paletteColors);
+  const secondary = createColumnsFromPanelItems(panels, 'secondary', paletteColors);
+  const min = createColumnsFromPanelItems(panels, 'min', paletteColors);
+  const max = createColumnsFromPanelItems(panels, 'max', paletteColors);
 
   return {
     value,
@@ -245,38 +255,41 @@ function extractIndicatorChartDataOptions(
   };
 }
 
-function extractTableChartDataOptions(
-  panels: Panel[],
-  themeSettings?: CompleteThemeSettings,
-): TableDataOptions {
+function extractTableChartDataOptions(panels: Panel[], paletteColors?: Color[]): TableDataOptions {
   return {
-    columns: createColumnsFromPanelItems(panels, 'columns', themeSettings),
+    columns: createColumnsFromPanelItems(panels, 'columns', paletteColors),
   };
 }
 
 export function extractDataOptions(
   widgetType: WidgetType,
   panels: Panel[],
-  themeSettings?: CompleteThemeSettings,
-) {
-  switch (widgetType) {
-    case WidgetType.LineChart:
-    case WidgetType.AreaChart:
-    case WidgetType.BarChart:
-    case WidgetType.ColumnChart:
-    case WidgetType.PolarChart:
-      return extractCartesianChartDataOptions(panels, widgetType, themeSettings);
-    case WidgetType.PieChart:
-    case WidgetType.FunnelChart:
-    case WidgetType.TreemapChart:
-    case WidgetType.SunburstChart:
-      return extractCategoricalChartDataOptions(widgetType, panels, themeSettings);
-    case WidgetType.ScatterChart:
-      return extractScatterChartDataOptions(panels, themeSettings);
-    case WidgetType.IndicatorChart:
-      return extractIndicatorChartDataOptions(panels, themeSettings);
-    case WidgetType.Table:
-    case WidgetType.TableWithAggregation:
-      return extractTableChartDataOptions(panels, themeSettings);
+  customPaletteColors?: Color[],
+): WidgetDataOptions {
+  if (isCartesianWidget(widgetType)) {
+    return extractCartesianChartDataOptions(panels, widgetType, customPaletteColors);
   }
+  if (isCategoricalWidget(widgetType)) {
+    return extractCategoricalChartDataOptions(widgetType, panels, customPaletteColors);
+  }
+  if (widgetType === 'chart/scatter') {
+    return extractScatterChartDataOptions(panels, customPaletteColors);
+  }
+  if (widgetType === 'indicator') {
+    return extractIndicatorChartDataOptions(panels, customPaletteColors);
+  }
+  if (isTabularWidget(widgetType)) {
+    return extractTableChartDataOptions(panels, customPaletteColors);
+  }
+  throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
+}
+
+function isCartesianWidget(widgetType: WidgetType): widgetType is CartesianWidgetType {
+  return ['chart/line', 'chart/area', 'chart/bar', 'chart/column', 'chart/polar'].includes(
+    widgetType,
+  );
+}
+
+function isCategoricalWidget(widgetType: WidgetType): widgetType is CategoricalWidgetType {
+  return ['chart/pie', 'chart/funnel', 'treemap', 'sunburst'].includes(widgetType);
 }

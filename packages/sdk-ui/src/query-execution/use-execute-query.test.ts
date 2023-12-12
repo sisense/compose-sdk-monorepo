@@ -2,12 +2,13 @@
 
 import { renderHook, waitFor } from '@testing-library/react';
 import { trackProductEvent } from '@sisense/sdk-tracking';
-import { useExecuteQuery, ExecuteQueryParams } from './use-execute-query';
+import { useExecuteQuery } from './use-execute-query';
 import { executeQuery } from '../query/execute-query';
 import type { Mock } from 'vitest';
 import { QueryResultData } from '@sisense/sdk-data';
 import { ClientApplication } from '../app/client-application';
 import { useSisenseContext } from '../sisense-context/sisense-context';
+import { ExecuteQueryParams } from './types';
 
 vi.mock('../query/execute-query', () => ({
   executeQuery: vi.fn(),

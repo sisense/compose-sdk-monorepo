@@ -17,7 +17,7 @@ type UseDataProps = {
   offset: number;
 };
 
-const getAttributesAndMeasures = (dataOptions: TableDataOptionsInternal) => {
+export const getTableAttributesAndMeasures = (dataOptions: TableDataOptionsInternal) => {
   const attributes: Attribute[] = [];
   const measures: Measure[] = [];
 
@@ -49,7 +49,7 @@ export const useTableData = ({
     let ignore = false;
 
     if (!dataOptions) return;
-    const { attributes, measures } = getAttributesAndMeasures(dataOptions);
+    const { attributes, measures } = getTableAttributesAndMeasures(dataOptions);
 
     if (dataSet === undefined || isDataSource(dataSet)) {
       if (!isInitialized) {

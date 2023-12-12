@@ -39,6 +39,11 @@ export type ExecutingQueryResult = {
   cancel: (reason?: string) => Promise<void>;
 };
 
+export type ExecutingCsvQueryResult = {
+  resultPromise: Promise<Blob>;
+  cancel: (reason?: string) => Promise<void>;
+};
+
 export type MetadataItem = {
   measure?: MetadataItemJaql;
   jaql: MetadataItemJaql;

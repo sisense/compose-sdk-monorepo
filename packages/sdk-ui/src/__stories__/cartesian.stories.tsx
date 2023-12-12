@@ -23,7 +23,6 @@ const styleOptions: StyleOptions = {
   navigator: {
     enabled: true,
   },
-  markers: { enabled: true, fill: 'hollow', size: 'small' },
   xAxis: {
     enabled: true,
     gridLines: true,
@@ -434,13 +433,22 @@ export const ConditionalDataColorOptions = template({
 
 export const ContinuousYearDatetimeAxis = template({
   ...cartesianArgs,
-  dataSet: { ...dataSet, rows: dataSet.rows.filter((r) => r[0] !== '2011' && r[0] !== '2012') },
+  dataSet: {
+    ...dataSet,
+    rows: dataSet.rows.filter(
+      (r) => r[0] !== '2009' && r[0] !== '2017' && r[0] !== '2013' && r[0] !== '2012',
+    ),
+  },
   chartType: 'line',
   dataOptions: {
     category: [{ column: cat1, continuous: true }],
-    value: [meas1],
+    value: [
+      { ...meas1, treatNullDataAsZeros: true },
+      { ...meas2, treatNullDataAsZeros: true, showOnRightAxis: true },
+    ],
     breakBy: [],
   },
+  styleOptions: { yAxis: { enabled: true, min: -500 }, y2Axis: { enabled: true, min: -500 } },
 });
 
 const monthRows = [

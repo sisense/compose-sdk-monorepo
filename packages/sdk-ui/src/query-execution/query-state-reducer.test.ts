@@ -1,5 +1,6 @@
 import { QueryResultData } from '@sisense/sdk-data';
-import { queryStateReducer, QueryState, QueryAction } from './query-state-reducer';
+import { queryStateReducer } from './query-state-reducer';
+import { QueryState, QueryAction } from './types';
 
 describe('queryStateReducer', () => {
   let initialState: QueryState;

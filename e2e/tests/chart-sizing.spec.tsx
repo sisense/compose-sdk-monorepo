@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable max-lines-per-function */
+/* eslint-disable sonarjs/no-duplicate-string */
 import { test, expect } from '@playwright/experimental-ct-react';
 import {
   Chart,
@@ -34,8 +35,8 @@ test.describe('React Chart sizing', () => {
       const chart = component.locator('> *');
       const highchartsRoot = chart.locator('.highcharts-root');
 
-      await expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
-      await expect(await highchartsRoot.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await highchartsRoot.boundingBox()).toMatchObject(expectedChartSize);
     });
 
     test('should render Pie chart with sizes of the containing element', async ({ mount }) => {
@@ -59,8 +60,8 @@ test.describe('React Chart sizing', () => {
       const chart = component.locator('> *');
       const highchartsRoot = chart.locator('.highcharts-root');
 
-      await expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
-      await expect(await highchartsRoot.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await highchartsRoot.boundingBox()).toMatchObject(expectedChartSize);
     });
   });
 
@@ -86,8 +87,8 @@ test.describe('React Chart sizing', () => {
       const chart = component.locator('> *');
       const tableRoot = component.getByTestId('table-root');
 
-      await expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
-      await expect(await tableRoot.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await tableRoot.boundingBox()).toMatchObject(expectedChartSize);
     });
 
     test('should render Table chart with sizes of the containing element', async ({ mount }) => {
@@ -103,8 +104,8 @@ test.describe('React Chart sizing', () => {
       const chart = component.locator('> *');
       const tableRoot = component.getByTestId('table-root');
 
-      await expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
-      await expect(await tableRoot.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await tableRoot.boundingBox()).toMatchObject(expectedChartSize);
     });
   });
 
@@ -117,7 +118,7 @@ test.describe('React Chart sizing', () => {
       },
     };
 
-    test('should render Indicator chart with default sizes', async ({ mount, page }) => {
+    test('should render Indicator chart with default sizes', async ({ mount }) => {
       const expectedChartSize = {
         width: 200,
         height: 200,
@@ -131,8 +132,8 @@ test.describe('React Chart sizing', () => {
       const chart = component.locator('> *');
       const indicatorRoot = component.getByTestId('indicator-root');
 
-      await expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
-      await expect(await indicatorRoot.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await indicatorRoot.boundingBox()).toMatchObject(expectedChartSize);
     });
 
     test('should render Indicator chart with sizes of the containing element', async ({
@@ -150,8 +151,8 @@ test.describe('React Chart sizing', () => {
       const chart = component.locator('> *');
       const indicatorRoot = component.getByTestId('indicator-root');
 
-      await expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
-      await expect(await indicatorRoot.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await chart.boundingBox()).toMatchObject(expectedChartSize);
+      expect(await indicatorRoot.boundingBox()).toMatchObject(expectedChartSize);
     });
   });
 });

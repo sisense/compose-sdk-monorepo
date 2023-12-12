@@ -1,6 +1,7 @@
 /* eslint-disable promise/param-names */
 /* eslint-disable @typescript-eslint/no-throw-literal */
 /* eslint-disable complexity */
+/* eslint-disable sonarjs/cognitive-complexity */
 /// <reference lib="dom" />
 import { Authenticator } from './interfaces.js';
 import fetchIntercept from 'fetch-intercept';
@@ -14,7 +15,9 @@ import { SsoAuthenticator } from './sso-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
 
 export interface HttpClientRequestConfig {
-  skipTrackingParam: boolean;
+  skipTrackingParam?: boolean;
+  nonJSONBody?: boolean;
+  returnBlob?: boolean;
 }
 
 export class HttpClient {
@@ -99,7 +102,7 @@ export class HttpClient {
       return undefined as T;
     }
     try {
-      return (await response.json()) as T;
+      return (requestConfig?.returnBlob ? await response.blob() : await response.json()) as T;
     } catch (e) {
       // some of APIs in Sisense returns 200 with empty body - so it's not possible
       // to understand definitely is it empty or not until you will try to parse it
@@ -121,7 +124,7 @@ export class HttpClient {
   ): Promise<T> {
     const request = {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: (config?.nonJSONBody ? data : JSON.stringify(data)) as BodyInit,
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json;charset=UTF-8',

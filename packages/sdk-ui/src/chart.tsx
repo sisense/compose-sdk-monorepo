@@ -9,11 +9,6 @@
 /* eslint-disable max-lines-per-function */
 import { Attribute, Data, DataSource, Filter, isDataSource, Measure } from '@sisense/sdk-data';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  getAttributes,
-  getMeasures,
-  translateChartDataOptions,
-} from './chart-data-options/translate-data-options';
 import { ChartDataOptionsInternal } from './chart-data-options/types';
 import { createDataTableFromData } from './chart-data-processor/table-creators';
 import { chartDataService } from './chart-data/chart-data-service';
@@ -36,10 +31,8 @@ import { useSisenseContext } from './sisense-context/sisense-context';
 import merge from 'ts-deepmerge';
 import { useThemeContext } from './theme-provider';
 import {
-  applyDefaultChartDataOptions,
   DataColumnNamesMapping,
   generateUniqueDataColumnsNames,
-  validateDataOptions,
   validateDataOptionsAgainstData,
 } from './chart-data-options/validate-data-options';
 import { translateAttributeToCategory, translateMeasureToValue } from './chart-data-options/utils';
@@ -49,6 +42,7 @@ import { NoResultsOverlay } from './no-results-overlay/no-results-overlay';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getChartDefaultSize } from './dynamic-size-container';
 import { LoadingIndicator } from './common/components/loading-indicator';
+import { getTranslatedDataOptions } from './chart-data-options/get-translated-data-options';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -357,19 +351,13 @@ const useSyncedData = (
 
 const useTranslatedDataOptions = (dataOptions: ChartDataOptions, chartType: ChartType) => {
   return useMemo(() => {
-    const validatedDataOptions = validateDataOptions(chartType, dataOptions);
-
-    // translate to internal options and apply default options
-    const chartDataOptions = applyDefaultChartDataOptions(
-      translateChartDataOptions(chartType, validatedDataOptions),
+    const { chartDataOptions, attributes, measures } = getTranslatedDataOptions(
+      dataOptions,
       chartType,
     );
-    const attributes = getAttributes(chartDataOptions, chartType);
-    const measures = getMeasures(chartDataOptions, chartType);
     const dataColumnNamesMapping = generateUniqueDataColumnsNames(
       measures.map(translateMeasureToValue),
     );
-
     return {
       chartDataOptions,
       attributes,

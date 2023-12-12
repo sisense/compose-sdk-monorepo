@@ -21,7 +21,7 @@ import {
 } from '../../chart-data/types';
 import { legendColor } from '../../chart-data/series-data-color-service';
 import { PolarChartDesignOptions, StackableChartDesignOptions } from './design-options';
-import { AxisMinMax } from './axis-section';
+import { AxisMinMax, AxisSettings } from './axis-section';
 import { Stacking } from '../chart-options-service';
 import { ChartDesignOptions, isPolar } from './types';
 
@@ -62,6 +62,8 @@ export type SeriesPointStructure = {
   drilldown?: string;
   parent?: string;
 };
+
+export type AxisClipped = { minClipped: boolean; maxClipped: boolean };
 
 /**
  * Translate public-facing chart type and chart design options to internal highcharts chart type
@@ -132,6 +134,8 @@ export const formatSeriesContinuousXAxis = (
   interval: number,
   maxCategories: number,
   dateFormatter: (time: number) => string,
+  yAxisSettings: AxisSettings,
+  axisClipped: AxisClipped,
 ): HighchartsSeriesValues => {
   const input = formatData(series, treatNullDataAsZeros);
   const { title, ...seriesWithoutTitle } = series;
@@ -146,8 +150,19 @@ export const formatSeriesContinuousXAxis = (
       maxCategories,
       treatNullDataAsZeros,
       dateFormatter,
+      yAxisSettings,
+      axisClipped,
     ),
   };
+};
+
+const adjustAxis = (yAxisSettings: AxisSettings, axisClipped: AxisClipped) => {
+  if (!axisClipped.minClipped && yAxisSettings?.min && yAxisSettings?.min > 0) {
+    yAxisSettings.min = 0;
+  }
+  if (!axisClipped.maxClipped && yAxisSettings?.max && yAxisSettings?.max < 0) {
+    yAxisSettings.max = 0;
+  }
 };
 
 const translateNumbersContinuousXAxis = (
@@ -157,6 +172,8 @@ const translateNumbersContinuousXAxis = (
   maxCategories: number,
   treatNullDataAsZeros: boolean,
   dateFormatter: (time: number) => string,
+  yAxisSettings: AxisSettings,
+  axisClipped: AxisClipped,
 ): SeriesPointStructure[] => {
   // eslint-disable-next-line sonarjs/prefer-immediate-return
   const seriesData = indexMap.map((index: number, indexOfIndex: number): SeriesPointStructure => {
@@ -203,6 +220,10 @@ const translateNumbersContinuousXAxis = (
           x: ticValue,
           y: treatNullDataAsZeros ? 0 : null,
         });
+        if (treatNullDataAsZeros && yAxisSettings?.min && yAxisSettings?.min > 0) {
+          adjustAxis(yAxisSettings, axisClipped);
+        }
+
         missingTicks--;
         nextTick += interval;
       }
@@ -285,7 +306,7 @@ const translateNumbersToSeriesPointStructure = (
       };
     } else {
       const shouldShowIsolatedPoint = isIsolatedPoint(input, indexMap, index, indexOfIndex);
-      const hasMarker = shouldShowIsolatedPoint || blur;
+      const hasMarker = shouldShowIsolatedPoint || hasBlurred;
       const marker = {
         enabled: !blur,
         isIsolatedPoint: shouldShowIsolatedPoint,

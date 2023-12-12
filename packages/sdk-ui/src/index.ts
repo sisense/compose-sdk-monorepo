@@ -11,6 +11,12 @@ export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
 export { DashboardWidget } from './dashboard-widget/dashboard-widget';
+export {
+  type WidgetType,
+  type CartesianWidgetType,
+  type CategoricalWidgetType,
+  type TabularWidgetType,
+} from './dashboard-widget/types';
 export * from './query-execution';
 export { executeQuery } from './query/execute-query';
 export { SisenseContextProvider } from './sisense-context/sisense-context-provider';
@@ -40,6 +46,8 @@ export {
   useGetDashboardModels,
   getDashboardModel,
   getDashboardModels,
+  useGetWidgetModel,
+  getWidgetModel,
   type DashboardModel,
   type GetDashboardModelParams,
   type GetDashboardModelsParams,
@@ -52,6 +60,12 @@ export {
   type DashboardModelsSuccessState,
   type DashboardModelsErrorState,
   type WidgetModel,
+  type WidgetDataOptions,
+  type WidgetModelState,
+  type WidgetModelLoadingState,
+  type WidgetModelErrorState,
+  type WidgetModelSuccessState,
+  type GetWidgetModelParams,
   type GetDashboardModelOptions,
   type GetDashboardModelsOptions,
 } from './models';

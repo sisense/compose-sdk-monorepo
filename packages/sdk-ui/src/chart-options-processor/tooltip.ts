@@ -4,10 +4,10 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { colorChineseSilver, colorWhite } from './chart-options-service';
 import { applyFormat, defaultConfig } from './translations/number-format-config';
 import { TooltipOptions } from '@sisense/sisense-charts';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './translations/scatter-tooltip';
+import { colorChineseSilver, colorWhite } from '../chart-data-options/coloring/consts';
 
 export type TooltipSettings = TooltipOptions;
 

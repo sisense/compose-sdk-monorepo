@@ -7,7 +7,7 @@ import { WidgetDto, WidgetSubtype } from './types';
 import { extractDataOptions } from './translate-widget-data-options';
 import { extractDrilldownOptions } from './translate-widget-drilldown-options';
 import { extractStyleOptions } from './translate-widget-style-options';
-import { isSupportedWidgetType, getChartType, isTableWidget } from './utils';
+import { isSupportedWidgetType, getChartType, isTabularWidget } from './utils';
 import { extractFilters } from './translate-widget-filters';
 import { TableDataOptions } from '../chart-data-options/types';
 import { ChartWidgetProps, TableWidgetProps } from '../props';
@@ -33,17 +33,17 @@ export function extractWidgetProps(
     throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }
 
-  return isTableWidget(widgetType)
+  return isTabularWidget(widgetType)
     ? {
         type: 'table',
         props: {
           dataSource: widget.datasource.title,
           title: widget.title,
-          description: widget.desc,
+          description: widget.desc || '',
           dataOptions: extractDataOptions(
             widgetType,
             widget.metadata.panels,
-            themeSettings,
+            themeSettings?.palette.variantColors,
           ) as TableDataOptions,
           styleOptions: extractStyleOptions(
             widgetType,
@@ -60,11 +60,11 @@ export function extractWidgetProps(
           dataSource: widget.datasource.title,
           chartType: getChartType(widgetType),
           title: widget.title,
-          description: widget.desc,
+          description: widget.desc || '',
           dataOptions: extractDataOptions(
             widgetType,
             widget.metadata.panels,
-            themeSettings,
+            themeSettings?.palette.variantColors,
           ) as ChartDataOptions,
           drilldownOptions: extractDrilldownOptions(widgetType, widget.metadata.panels),
           styleOptions: extractStyleOptions(

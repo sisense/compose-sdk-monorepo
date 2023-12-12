@@ -187,16 +187,16 @@ function getAllowedWidgetHighlightAttributes(widget: WidgetDto) {
  */
 function getHighlightsAllowedPanelNames(widgetType: WidgetType) {
   switch (widgetType) {
-    case WidgetType.LineChart:
-    case WidgetType.AreaChart:
+    case 'chart/line':
+    case 'chart/area':
       return ['x-axis'];
-    case WidgetType.BarChart:
-    case WidgetType.ColumnChart:
-    case WidgetType.PolarChart:
-    case WidgetType.PieChart:
-    case WidgetType.TreemapChart:
+    case 'chart/bar':
+    case 'chart/column':
+    case 'chart/polar':
+    case 'chart/pie':
+    case 'treemap':
       return ['categories'];
-    case WidgetType.ScatterChart:
+    case 'chart/scatter':
       return ['x-axis', 'y-axis', 'point'];
     default:
       // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator

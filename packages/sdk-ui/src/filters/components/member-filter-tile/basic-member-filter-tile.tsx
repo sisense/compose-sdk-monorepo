@@ -1,4 +1,6 @@
-import { FunctionComponent, useState } from 'react';
+/* eslint-disable complexity */
+/* eslint-disable max-lines-per-function */
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
 import { useMembers } from './use-members';
@@ -24,6 +26,8 @@ export interface BasicMemberFilterTileProps {
   maxAllowedMembers?: number;
   /** Whether this is a dependent filter */
   isDependent?: boolean;
+  /** Flag to update selected members when caused by an external change */
+  shouldUpdateSelectedMembers?: boolean;
 }
 
 /**
@@ -63,6 +67,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
   onUpdateSelectedMembers,
   maxAllowedMembers = 2000,
   isDependent,
+  shouldUpdateSelectedMembers,
 }) => {
   const [disabled, setDisabled] = useState(false);
 
@@ -98,6 +103,59 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
     }
   };
 
+  const pills = useMemo(
+    () =>
+      members
+        .filter(
+          (m) =>
+            selectedMembers.some((sm) => m.key === sm.key) ||
+            initialSelectedMembers.some((sm) => m.key === sm.key),
+        )
+        .map((m) => ({ ...m, inactive: !initialSelectedMembers.some((sm) => m.key === sm.key) })),
+    [initialSelectedMembers, members, selectedMembers],
+  );
+
+  useEffect(() => {
+    const initialMembersAreNotAllSelected =
+      initialSelectedMembers.filter((m) =>
+        selectedMembers.some((sm) => m.key === sm.key && !!m.inactive === !!sm.inactive),
+      ).length !== initialSelectedMembers.length;
+    const otherMembersAreSelected =
+      selectedMembers.filter(
+        (sm) => !initialSelectedMembers.some((m) => sm.key === m.key) && !sm.inactive,
+      ).length !== 0;
+
+    const doesNotMatchCurrentSelectedMembers =
+      initialMembersAreNotAllSelected || otherMembersAreSelected;
+
+    if (shouldUpdateSelectedMembers && doesNotMatchCurrentSelectedMembers) {
+      dispatchMembersAction({
+        type: 'updateMembers',
+        members: pills,
+      });
+      if (disabled && initialSelectedMembers.length > 0) {
+        setDisabled((v) => !v);
+      }
+    }
+
+    if (allMembers !== members) {
+      dispatchMembersAction({
+        type: 'updatePossibleMembers',
+        members: allMembers,
+      });
+    }
+  }, [
+    allMembers,
+    disabled,
+    dispatchMembersAction,
+    initialSelectedMembers,
+    members,
+    pills,
+    selectedMembers,
+    title,
+    shouldUpdateSelectedMembers,
+  ]);
+
   return (
     <FilterTile
       title={title}
@@ -105,16 +163,14 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
         if (collapsed) {
           return (
             <PillSection
-              membersSize={members.length}
               selectedMembers={selectedMembers}
-              onToggleSelectedMember={(memberKey) =>
-                dispatchMembersAction({ type: 'toggleSelectedMember', memberKey })
-              }
+              onToggleSelectedMember={(memberKey) => {
+                dispatchMembersAction({ type: 'toggleSelectedMember', memberKey });
+              }}
               disabled={tileDisabled}
             />
           );
         }
-
         return (
           <MemberList
             members={members}

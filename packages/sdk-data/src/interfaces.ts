@@ -200,7 +200,7 @@ export type ForecastFormulaOptions = {
    *
    * @defaultValue 3
    */
-  forecastHorizon: number;
+  forecastHorizon?: number;
   /**
    * Forecasting model type. The 'auto' option automatically
    * fits the best combination of models.

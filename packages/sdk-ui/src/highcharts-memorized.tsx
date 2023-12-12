@@ -1,4 +1,7 @@
 import { memo, useCallback } from 'react';
+import isEqualWith from 'lodash/isEqualWith';
+import isFunction from 'lodash/isFunction';
+import cloneDeep from 'lodash/cloneDeep';
 import Highcharts from '@sisense/sisense-charts';
 import HighchartsReact from 'highcharts-react-official';
 import { HighchartsEventOptions } from './chart-options-processor/apply-event-handlers';
@@ -6,18 +9,18 @@ import {
   HighchartsOptionsInternal,
   HighchartsOptions,
 } from './chart-options-processor/chart-options-service';
+import { usePrevious } from './common/hooks/use-previous';
 
 // TODO: move this import once we decide where to do all our highcharts customizations
 import './highcharts-overrides';
 
+type HighchartsReactMemoizedProps = {
+  options: HighchartsOptionsInternal;
+};
+
 export const HighchartsReactMemoized = memo(
-  ({
-    options,
-    immutable,
-  }: {
-    options: HighchartsOptionsInternal;
-    immutable: boolean | null | undefined;
-  }) => {
+  ({ options }: HighchartsReactMemoizedProps) => {
+    const prevOptions = usePrevious(options);
     const onChartCreated = useCallback(
       (chart: Highcharts.Chart) => {
         const chartOptions = options as HighchartsOptions & HighchartsEventOptions;
@@ -32,10 +35,27 @@ export const HighchartsReactMemoized = memo(
       [options],
     );
 
+    // changing axis type requires a chart re-initialization
+    const isAxisTypeChanged =
+      prevOptions?.xAxis &&
+      options?.xAxis &&
+      prevOptions?.xAxis[0]?.type !== options?.xAxis[0]?.type;
+
+    // changing navigation enablement requires a chart re-initialization
+    const isNavigatorStateChanged =
+      !!prevOptions && prevOptions?.navigator?.enabled !== options?.navigator?.enabled;
+
+    // changing chart type requires a chart re-initialization
+    const isChartTypeChanged = !!prevOptions && prevOptions?.chart?.type !== options?.chart?.type;
+
+    const immutable = isAxisTypeChanged || isNavigatorStateChanged || isChartTypeChanged;
+
     return (
       <HighchartsReact
         highcharts={Highcharts}
-        options={options}
+        // provides deep copy in order to prevent "options" prop mutation, that leads to an extra rerender of current momoized component
+        // See: https://github.com/highcharts/highcharts-react?tab=readme-ov-file#why-highcharts-mutates-my-data
+        options={cloneDeep(options)}
         containerProps={{
           style: {
             // Container should inherit parent size for correct chart size calculation by Highcharts
@@ -47,5 +67,15 @@ export const HighchartsReactMemoized = memo(
         callback={onChartCreated}
       />
     );
+  },
+  // A memoization props comparator that performs a deep object comparison instead of using
+  // the default comparator based on `Object.is`, which cannot compare different objects
+  (prevProps: HighchartsReactMemoizedProps, newProps: HighchartsReactMemoizedProps) => {
+    return isEqualWith(prevProps, newProps, (objValue, othValue) => {
+      // compares function properties based on their string representations
+      return isFunction(objValue) && isFunction(othValue)
+        ? objValue.toString() === othValue.toString()
+        : undefined;
+    });
   },
 );

@@ -7,6 +7,7 @@ import { Style, HighchartsOptionsInternal, Stacking } from '../chart-options-ser
 import { ChartType } from '../../types';
 import merge from 'deepmerge';
 import { PolarType } from '../translations/design-options';
+import { getLegendSettings } from '../translations/legend-section';
 
 export const lineColorDefault = '#d1d1d7';
 const titleMargin = 25;
@@ -125,19 +126,7 @@ export const cartesianDefaults: HighchartsOptionsInternal = {
     alignTicks: false,
     polar: false,
   },
-  legend: {
-    itemStyle: {
-      cursor: 'default',
-      ...fontStyleDefault,
-    },
-    enabled: false,
-    align: 'center',
-    verticalAlign: 'bottom',
-    layout: 'horizontal',
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
-    borderWidth: '',
-  },
+  legend: getLegendSettings(null),
   credits: {
     enabled: false,
   },

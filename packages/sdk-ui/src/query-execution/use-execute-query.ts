@@ -1,54 +1,14 @@
 /* eslint-disable max-lines-per-function */
-import { Attribute, DataSource, Filter, Measure } from '@sisense/sdk-data';
 import { isEqual } from 'lodash';
 import { useEffect, useReducer, useState } from 'react';
 import { usePrevious } from '../common/hooks/use-previous';
 import { executeQuery } from '../query/execute-query';
 import { isFiltersChanged } from '../utils/filters-comparator';
 import { useSisenseContext } from '../sisense-context/sisense-context';
-import { QueryState, queryStateReducer } from './query-state-reducer';
+import { queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
 import { withTracking } from '../decorators/hook-decorators';
-
-/**
- * Parameters for {@link useExecuteQuery} hook.
- */
-export interface ExecuteQueryParams {
-  /**
-   * Data source the query is run against - e.g. `Sample ECommerce`
-   *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
-   */
-  dataSource?: DataSource;
-
-  /** Dimensions of the query */
-  dimensions?: Attribute[];
-
-  /** Measures of the query */
-  measures?: Measure[];
-
-  /** Filters that will slice query results */
-  filters?: Filter[];
-
-  /** Highlight filters that will highlight results that pass filter criteria */
-  highlights?: Filter[];
-
-  /** {@inheritDoc ExecuteQueryProps.count} */
-  count?: number;
-
-  /** {@inheritDoc ExecuteQueryProps.offset} */
-  offset?: number;
-
-  /**
-   * Boolean flag to control if query is executed
-   *
-   * If not specified, the default value is `true`
-   */
-  enabled?: boolean;
-
-  /** {@inheritDoc ExecuteQueryProps.onBeforeQuery} */
-  onBeforeQuery?: (jaql: any) => any | Promise<any>;
-}
+import { ExecuteQueryParams, QueryState } from './types';
 
 /**
  * React hook that executes a data query.
@@ -169,7 +129,7 @@ const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
  * @param prevParams - Previous query parameters
  * @param newParams - New query parameters
  */
-function isQueryParamsChanged(
+export function isQueryParamsChanged(
   prevParams: ExecuteQueryParams | undefined,
   newParams: ExecuteQueryParams,
 ): boolean {

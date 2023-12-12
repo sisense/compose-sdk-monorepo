@@ -3,7 +3,7 @@ import { CategoricalChartData } from '../../../chart-data/types';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CompleteThemeSettings } from '../../../types';
 import { SeriesPointStructure } from '../translations-to-highcharts';
-import { getAPaletteColor } from '../pie-series';
+import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { scaleBrightness } from '../../../utils/color';
 
 export const SUNBURST_ROOT_PARENT_ID = 'SUNBURST_ROOT_PARENT_ID';
@@ -50,7 +50,7 @@ function handleSunburstSeriesColor(
       seriesColorMapByLevels[value.custom?.level || '']?.[value?.name || ''];
     const colorStep = (colorStepMap[parent] =
       parent in colorStepMap ? (colorStepMap[parent] as number) + 1 : 0);
-    const paletteColor = getAPaletteColor(
+    const paletteColor = getPaletteColor(
       themeSettings?.palette.variantColors,
       (value.custom?.level || 1) - 1,
     );

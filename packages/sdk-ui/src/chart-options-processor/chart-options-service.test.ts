@@ -646,6 +646,132 @@ describe('cartesianData', () => {
     expect(chartOptionsWithZeros?.series[1].data.map((d) => d.y)).toEqual([1000, 0, 0]);
   });
 
+  it('timeseries treat null as zero', () => {
+    const timeSeriesDataWithNulls = createDataTableFromData({
+      columns: [
+        { name: 'Months', type: 'date' },
+        { name: 'Area', type: 'string' },
+        { name: 'Quantity', type: 'number' },
+        { name: 'Units', type: 'number' },
+      ],
+      rows: [
+        ['2020-01', 'A', 6781, 10],
+        ['2020-02', 'A', 4471, 70],
+        ['2020-03', 'B', 1812, 50],
+        ['2020-06', 'B', 5001, 60],
+        ['2020-07', 'A', '', 40],
+        ['2020-08', 'B', 3010, 90],
+        ['2020-09', 'A', 5447, 80],
+        ['2020-10', 'B', 4242, ''],
+        ['2020-11', 'B', 936, 20],
+      ],
+    });
+
+    const months2 = {
+      name: 'Months',
+      type: 'date',
+      continuous: true,
+      granularity: DateLevels.Months,
+      dateFormat: 'Y-MM',
+    };
+    const dataOptions: CartesianChartDataOptionsInternal = {
+      x: [months2],
+      y: [
+        { ...meas1, treatNullDataAsZeros: true },
+        { ...meas2, treatNullDataAsZeros: true, showOnRightAxis: true },
+      ],
+      breakBy: [],
+    };
+    const chartData = cartesianData(dataOptions, timeSeriesDataWithNulls);
+
+    const chartOptions = highchartsOptionsService(
+      chartData,
+      'line',
+      BaseDesignOptions,
+      dataOptions,
+      themeSettings,
+      dateFormatter,
+    );
+    expect(chartOptions).toMatchSnapshot();
+
+    const chartOptions2 = highchartsOptionsService(
+      chartData,
+      'line',
+      {
+        ...BaseDesignOptions,
+        yAxis: { enabled: true, min: 1000, max: 5000 },
+        y2Axis: { enabled: true, min: 50, max: 100 },
+      },
+      dataOptions,
+      themeSettings,
+      dateFormatter,
+    );
+    expect(chartOptions2).toMatchSnapshot();
+  });
+
+  it('timeseries treat null as zero when negative values', () => {
+    const timeSeriesDataWithNulls = createDataTableFromData({
+      columns: [
+        { name: 'Months', type: 'date' },
+        { name: 'Area', type: 'string' },
+        { name: 'Quantity', type: 'number' },
+        { name: 'Units', type: 'number' },
+      ],
+      rows: [
+        ['2020-01', 'A', -6781, -10],
+        ['2020-02', 'A', -4471, -70],
+        ['2020-03', 'B', -1812, -50],
+        ['2020-06', 'B', -5001, -60],
+        ['2020-07', 'A', '', -40],
+        ['2020-08', 'B', -3010, -90],
+        ['2020-09', 'A', -5447, -80],
+        ['2020-10', 'B', -4242, ''],
+        ['2020-11', 'B', -936, -20],
+      ],
+    });
+
+    const months2 = {
+      name: 'Months',
+      type: 'date',
+      continuous: true,
+      granularity: DateLevels.Months,
+      dateFormat: 'Y-MM',
+    };
+    const dataOptions: CartesianChartDataOptionsInternal = {
+      x: [months2],
+      y: [
+        { ...meas1, treatNullDataAsZeros: true },
+        { ...meas2, treatNullDataAsZeros: true, showOnRightAxis: true },
+      ],
+      breakBy: [],
+    };
+    const chartData = cartesianData(dataOptions, timeSeriesDataWithNulls);
+
+    const chartOptions = highchartsOptionsService(
+      chartData,
+      'line',
+      BaseDesignOptions,
+      dataOptions,
+      themeSettings,
+      dateFormatter,
+    );
+    expect(chartOptions).toMatchSnapshot();
+
+    const chartOptions2 = highchartsOptionsService(
+      chartData,
+      'line',
+      {
+        ...BaseDesignOptions,
+        yAxis: { enabled: true, min: -1000, max: -5000 },
+        y2Axis: { enabled: true, min: -50, max: -100 },
+      },
+      dataOptions,
+      themeSettings,
+      dateFormatter,
+    );
+    expect(chartOptions2).toMatchSnapshot();
+  });
+
   it('format break by number', () => {
     const dataOptionsWithNoFormat = {
       ...TestChartDataOptions,

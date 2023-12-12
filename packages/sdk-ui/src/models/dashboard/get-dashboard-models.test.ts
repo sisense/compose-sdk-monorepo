@@ -1,41 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/** @vitest-environment jsdom */
+
 import { getDashboardModels, type GetDashboardModelsOptions } from './get-dashboard-models.js';
 import { type HttpClient } from '@sisense/sdk-rest-client';
 import { DashboardDto } from '../../api/types/dashboard-dto.js';
 import { type RestApi } from '../../api/rest-api.js';
+import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
+import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
+import { WidgetModel } from '../widget/widget-model.js';
 
-const dashboardsMock = [
-  {
-    oid: 'dashboard-1',
-    title: 'Test Dashboard',
-    datasource: {
-      title: 'Test Datasource',
-    },
-    widgets: [
-      {
-        oid: 'widget-1',
-        title: 'Test Widget 1',
-        datasource: {
-          title: 'Test Datasource',
-        },
-      },
-      {
-        oid: 'widget-2',
-        title: 'Test Widget 2',
-        datasource: {
-          title: 'Test Datasource 2',
-        },
-      },
-    ],
-  },
-  {
-    oid: 'dashboard-2',
-    title: 'Test Dashboard 2',
-    datasource: {
-      title: 'Test Datasource',
-    },
-    widgets: [],
-  },
-] as DashboardDto[];
+const dashboardsMock: DashboardDto[] = [sampleEcommerceDashboard, sampleHealthcareDashboard];
 
 const getDashboardsMock = vi.fn<Parameters<RestApi['getDashboards']>>(
   ({ expand, searchByTitle } = {}) => {
@@ -53,6 +28,28 @@ const getDashboardsMock = vi.fn<Parameters<RestApi['getDashboards']>>(
   },
 );
 
+/**
+ * Custom 'expect' extension to check if a value is in an array
+ */
+const oneOfExpectExtension = (received: unknown, expected: unknown[]) => {
+  const pass = expected.includes(received);
+  const receivedString = JSON.stringify(received);
+  const expectedString = JSON.stringify(expected);
+  if (pass) {
+    return {
+      message: () => `expected ${receivedString} not to be in ${expectedString}`,
+      pass: true,
+    };
+  } else {
+    return {
+      message: () => `expected ${receivedString} to be in ${expectedString}`,
+      pass: false,
+    };
+  }
+};
+
+type ExpectWithOneOfExtention = typeof expect & { oneOf: (arr: unknown[]) => unknown };
+
 vi.mock('../../api/rest-api', () => ({
   RestApi: class {
     getDashboards = getDashboardsMock;
@@ -62,6 +59,9 @@ vi.mock('../../api/rest-api', () => ({
 const httpClientMock: HttpClient = {} as HttpClient;
 
 describe('getDashboardModels', () => {
+  expect.extend({
+    oneOf: oneOfExpectExtension,
+  });
   beforeEach(() => {
     getDashboardsMock.mockClear();
   });
@@ -73,7 +73,10 @@ describe('getDashboardModels', () => {
       dashboardsMock.map((dashboardMock) => ({
         oid: dashboardMock.oid,
         title: dashboardMock.title,
-        dataSource: dashboardMock.datasource.title,
+        dataSource: (expect as ExpectWithOneOfExtention).oneOf([
+          dashboardMock.datasource.title,
+          dashboardMock.datasource.fullname,
+        ]),
       })),
     );
   });
@@ -88,12 +91,13 @@ describe('getDashboardModels', () => {
       dashboardsMock.map((dashboardMock) => ({
         oid: dashboardMock.oid,
         title: dashboardMock.title,
-        dataSource: dashboardMock.datasource.title,
-        widgets: dashboardMock.widgets?.map((widgetMock) => ({
-          oid: widgetMock.oid,
-          title: widgetMock.title,
-          dataSource: widgetMock.datasource.title,
-        })),
+        dataSource: (expect as ExpectWithOneOfExtention).oneOf([
+          dashboardMock.datasource.title,
+          dashboardMock.datasource.fullname,
+        ]),
+        widgets: expect.arrayContaining(
+          Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
+        ),
       })),
     );
   });
@@ -111,7 +115,10 @@ describe('getDashboardModels', () => {
     expect(result[0]).toEqual({
       oid: targetDashboardMock.oid,
       title: targetDashboardMock.title,
-      dataSource: targetDashboardMock.datasource.title,
+      dataSource: (expect as ExpectWithOneOfExtention).oneOf([
+        targetDashboardMock.datasource.title,
+        targetDashboardMock.datasource.fullname,
+      ]),
     });
   });
 });

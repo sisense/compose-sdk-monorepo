@@ -1,6 +1,5 @@
 /* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-throw-literal */
 import { MetadataTypes } from './types.js';
 import { Element } from './interfaces.js';
 import { DimensionalElement } from './base.js';
@@ -9,6 +8,7 @@ import { createMeasure } from './measures/measures.js';
 import { createFilter } from './filters/filters.js';
 import { createDimension } from './dimensions.js';
 import { createAttribute } from './attributes.js';
+import { TranslatableError } from '../translation/translatable-error.js';
 
 /**
  * Generate an array of dimension model instances out of the given JSON array
@@ -54,5 +54,5 @@ export function create(item: any): Element | Element[] {
     return createDimension(item);
   }
 
-  throw 'unsupported';
+  throw new TranslatableError('errors.unsupportedDimesionalElement');
 }

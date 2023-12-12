@@ -20,6 +20,8 @@ import { ChartTypeSwitchingDemo } from './pages/chart-type-switching';
 import { SelectionFilterDemo } from './pages/selection-highlight/selection-filter-demo';
 import { TimeseriesCharts } from './pages/timeseries-charts';
 import { CriteriaFilterDemo } from './pages/criteria-filter-demo';
+import { UseGetWidgetModelDemo } from './pages/use-get-widget-model-demo';
+import { PageCrossFiltering } from './pages/cross-filtering-page';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -27,6 +29,8 @@ import { CriteriaFilterDemo } from './pages/criteria-filter-demo';
 // Suggest adding a router or at least sessionStorage var for selectedTabIndex
 // if this becomes popular
 const pages: ComponentType[] = [
+  PageCrossFiltering,
+  SelectionFilterDemo,
   TimeseriesCharts,
   WidgetDemo,
   NumberFormatting,
@@ -39,7 +43,7 @@ const pages: ComponentType[] = [
   CriteriaFilterDemo,
   UseExecuteQueryDemo,
   ChartTypeSwitchingDemo,
-  SelectionFilterDemo,
+  UseGetWidgetModelDemo,
   ...loadAdditionalPages(),
 ];
 

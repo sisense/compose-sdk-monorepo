@@ -58,7 +58,22 @@ export class QueryTaskManager extends AbstractTaskManager {
     return getDataFromQueryResult(jaqlResponse, [...metadata, ...extraColumns]);
   }
 
-  private cancelJaqlQuery(task: QueryTask) {
+  private async sendCsvQuery(
+    task: QueryTask,
+    jaqlPayload: JaqlQueryPayload,
+  ): Promise<ReadableStream | void> {
+    const { taskId } = task.passport;
+    const { responsePromise, abortHttpRequest } = this.queryApi.sendDownloadCsvRequest(
+      task.passport.queryDescription.dataSource,
+      jaqlPayload,
+    );
+    this.sentRequestsAbortersMap.set(taskId, abortHttpRequest);
+    return responsePromise.finally(() => {
+      this.sentRequestsAbortersMap.delete(taskId);
+    });
+  }
+
+  private cancelDataRetrievalQuery(task: QueryTask) {
     const taskId = task.passport.taskId;
     const abortInitialRequest = this.sentRequestsAbortersMap.get(taskId);
     if (abortInitialRequest) {
@@ -73,7 +88,20 @@ export class QueryTaskManager extends AbstractTaskManager {
 
   public executeQuerySending = super.createFlow<QueryTaskPassport, EmptyObject, QueryResultData>([
     new Step('PREPARE_JAQL_PAYLOAD', this.prepareJaqlPayload.bind(this), async () => {}),
-    new Step('SEND_JAQL_QUERY', this.sendJaqlQuery.bind(this), this.cancelJaqlQuery.bind(this)),
+    new Step(
+      'SEND_JAQL_QUERY',
+      this.sendJaqlQuery.bind(this),
+      this.cancelDataRetrievalQuery.bind(this),
+    ),
+  ]);
+
+  public executeDownloadCsvSending = super.createFlow<QueryTaskPassport, EmptyObject, Blob>([
+    new Step('PREPARE_JAQL_PAYLOAD', this.prepareJaqlPayload.bind(this), async () => {}),
+    new Step(
+      'SEND_DOWNLOAD_CSV_QUERY',
+      this.sendCsvQuery.bind(this),
+      this.cancelDataRetrievalQuery.bind(this),
+    ),
   ]);
 }
 

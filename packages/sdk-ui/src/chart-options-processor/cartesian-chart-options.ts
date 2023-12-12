@@ -16,7 +16,6 @@ import { getMarkerSettings } from './translations/marker-section';
 import {
   getXAxisSettings,
   getYAxisSettings,
-  AxisSettings,
   Axis,
   getXAxisDatetimeSettings,
   getCategoricalCompareValue,
@@ -37,7 +36,6 @@ import { getTooltipSettings } from './translations/tooltip';
 import merge from 'deepmerge';
 import { chartOptionsDefaults } from './defaults/cartesian';
 import { onlyY } from '../chart-data/utils';
-import { getAPaletteColor } from './translations/pie-series';
 import { ChartType, CompleteThemeSettings } from '../types';
 import { CartesianChartDataOptionsInternal } from '../chart-data-options/types';
 import { applyNumberFormatToPlotBands, getCategoriesIndexMapAndPlotBands } from './plot-bands';
@@ -46,6 +44,7 @@ import { getNavigator } from './translations/navigator';
 import { isDatetime } from '@sisense/sdk-data';
 import { categoriesSliceWarning, seriesSliceWarning } from '../utils/data-limit-warning';
 import { OptionsWithAlerts } from './../types';
+import { getPaletteColor } from '../chart-data-options/coloring/utils';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -134,14 +133,18 @@ export const getCartesianChartOptions = (
     yTreatNullDataAsZeros,
     0,
   );
-  const y2AxisMinMax = autoCalculateYAxisMinMax(
-    chartType,
-    chartData,
-    chartDesignOptions,
-    yAxisSide,
-    yTreatNullDataAsZeros,
-    1,
-  );
+
+  // only calculate y2 if a value has showOnRightAxis
+  const y2AxisMinMax = yAxisSide.some((v) => v === 1)
+    ? autoCalculateYAxisMinMax(
+        chartType,
+        chartData,
+        chartDesignOptions,
+        yAxisSide,
+        yTreatNullDataAsZeros,
+        1,
+      )
+    : undefined;
 
   const { stacking, showTotal } = addStackingIfSpecified(
     chartType,
@@ -166,7 +169,7 @@ export const getCartesianChartOptions = (
     };
   }
 
-  const yAxisSettings: AxisSettings[] = getYAxisSettings(
+  const [yAxisSettings, axisClipped] = getYAxisSettings(
     yAxis,
     chartDesignOptions.y2Axis,
     yAxisMinMax,
@@ -219,6 +222,8 @@ export const getCartesianChartOptions = (
                   xAxisSettings[0].tickInterval as number,
                   chartDesignOptions.dataLimits.categoriesCapacity,
                   getDateFormatter(dataOptions.x[0], dateFormatter),
+                  yAxisSettings[index],
+                  axisClipped[index],
                 )
               : onlyY(dataOptions) && !stacking
               ? formatSeries(
@@ -233,7 +238,7 @@ export const getCartesianChartOptions = (
             turboThreshold: 0,
             color:
               getColorSetting(dataOptions, v.name) ??
-              getAPaletteColor(themeSettings?.palette?.variantColors, index),
+              getPaletteColor(themeSettings?.palette?.variantColors, index),
             yAxis: yAxisSide[index],
             dataLabels: {
               formatter: createValueLabelFormatter(dataOption?.numberFormatConfig),

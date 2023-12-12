@@ -2,9 +2,13 @@
 /* eslint-disable complexity */
 import { DEFAULT_COLOR } from '../chart-data-options/coloring/consts';
 import { getUniformColorOptionsFromString } from '../chart-data-options/coloring/uniform-coloring';
-import { DataColorOptions, RangeDataColorOptions } from '../chart-data/series-data-color-service';
-import { getAPaletteColor } from '../chart-options-processor/translations/pie-series';
-import { CompleteThemeSettings, ValueToColorMap, MultiColumnValueToColorMap } from '../types';
+import {
+  ConditionalDataColorOptions,
+  DataColorOptions,
+  RangeDataColorOptions,
+  UniformDataColorOptions,
+} from '../chart-data/series-data-color-service';
+import { ValueToColorMap, MultiColumnValueToColorMap, Color } from '../types';
 import { scaleBrightness, toGray } from '../utils/color';
 import {
   PanelColorFormat,
@@ -14,14 +18,12 @@ import {
   PanelMembersFormat,
 } from './types';
 import { normalizeName } from '@sisense/sdk-data';
+import { getPaletteColor } from '../chart-data-options/coloring/utils';
 
-const getDefaultColor = (themeSettings?: CompleteThemeSettings, index = 0) =>
-  getAPaletteColor(themeSettings?.palette.variantColors, index);
-
-const createRangeValueColorOptions = (
+const createRangeDataColorOptions = (
   format: PanelColorFormatRange,
-  themeSettings?: CompleteThemeSettings,
-) => {
+  paletteColors?: Color[],
+): RangeDataColorOptions => {
   let options: RangeDataColorOptions = {
     type: 'range',
     steps: format.steps,
@@ -40,7 +42,7 @@ const createRangeValueColorOptions = (
     };
   }
 
-  const baseColor = getDefaultColor(themeSettings);
+  const baseColor = getPaletteColor(paletteColors, 0);
   const defaultMinColor = scaleBrightness(baseColor, 0.2);
   const defaultMaxColor = scaleBrightness(baseColor, -0.2);
 
@@ -74,7 +76,7 @@ const createRangeValueColorOptions = (
 
 export const createValueColorOptions = (
   format?: PanelColorFormat,
-  themeSettings?: CompleteThemeSettings,
+  customPaletteColors?: Color[],
 ): DataColorOptions | undefined => {
   if (format === undefined) {
     return undefined;
@@ -84,10 +86,10 @@ export const createValueColorOptions = (
     case 'color':
       return {
         type: 'uniform',
-        color: format.color || getDefaultColor(themeSettings, format.colorIndex),
-      };
+        color: format.color || getPaletteColor(customPaletteColors, format.colorIndex || 0),
+      } as UniformDataColorOptions;
     case 'range':
-      return createRangeValueColorOptions(format, themeSettings);
+      return createRangeDataColorOptions(format, customPaletteColors);
     case 'condition':
       return {
         type: 'conditional',
@@ -95,10 +97,10 @@ export const createValueColorOptions = (
           (condition): condition is PanelColorFormatConditionSimple =>
             typeof condition.expression === 'string',
         ),
-        defaultColor: getDefaultColor(themeSettings),
-      };
+        defaultColor: getPaletteColor(customPaletteColors, 0),
+      } as ConditionalDataColorOptions;
     default:
-      return getUniformColorOptionsFromString(getDefaultColor(themeSettings));
+      return getUniformColorOptionsFromString(getPaletteColor(customPaletteColors, 0));
   }
 };
 

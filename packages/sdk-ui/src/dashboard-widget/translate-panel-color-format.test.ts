@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '../types';
+import { Color } from '../types';
 import { createValueColorOptions, createValueToColorMap } from './translate-panel-color-format';
 import {
   PanelColorFormat,
@@ -8,7 +8,7 @@ import {
 } from './types';
 
 describe('createValueColorOptions', () => {
-  const themeSettings = { palette: { variantColors: ['#00cee6'] } } as CompleteThemeSettings;
+  const paletteColors = ['#00cee6'] as Color[];
 
   it('should return undefined when format is not provided', () => {
     expect(createValueColorOptions(undefined, undefined)).toBeUndefined();
@@ -19,7 +19,7 @@ describe('createValueColorOptions', () => {
       type: 'color',
       color: 'blue',
     } as PanelColorFormatSingle;
-    const options = createValueColorOptions(format, themeSettings);
+    const options = createValueColorOptions(format, paletteColors);
 
     expect(options).toEqual({
       type: 'uniform',
@@ -34,7 +34,7 @@ describe('createValueColorOptions', () => {
       steps: 5,
     } as PanelColorFormatRange;
 
-    const options = createValueColorOptions(format, themeSettings);
+    const options = createValueColorOptions(format, paletteColors);
 
     expect(options).toEqual({
       type: 'range',
@@ -52,7 +52,7 @@ describe('createValueColorOptions', () => {
       min: '#0000ff',
       max: '#ff0000',
     } as PanelColorFormatRange;
-    const options = createValueColorOptions(format, themeSettings);
+    const options = createValueColorOptions(format, paletteColors);
 
     expect(options).toEqual({
       type: 'range',
@@ -69,7 +69,7 @@ describe('createValueColorOptions', () => {
       steps: 4,
       min: '#0000ff',
     } as PanelColorFormatRange;
-    const options = createValueColorOptions(format, themeSettings);
+    const options = createValueColorOptions(format, paletteColors);
 
     expect(options).toEqual({
       type: 'range',
@@ -86,7 +86,7 @@ describe('createValueColorOptions', () => {
       steps: 3,
       max: '#ff0000',
     } as PanelColorFormatRange;
-    const options = createValueColorOptions(format, themeSettings);
+    const options = createValueColorOptions(format, paletteColors);
 
     expect(options).toEqual({
       type: 'range',
@@ -104,7 +104,7 @@ describe('createValueColorOptions', () => {
         { expression: 'value < 0', color: '#00cee6' },
       ],
     } as PanelColorFormatConditional;
-    const options = createValueColorOptions(format, themeSettings);
+    const options = createValueColorOptions(format, paletteColors);
 
     expect(options).toEqual({
       type: 'conditional',
@@ -120,7 +120,7 @@ describe('createValueColorOptions', () => {
     const format = {
       type: 'unknown',
     } as unknown as PanelColorFormat;
-    const options = createValueColorOptions(format, themeSettings);
+    const options = createValueColorOptions(format, paletteColors);
 
     expect(options).toEqual({
       type: 'uniform',

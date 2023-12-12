@@ -6,6 +6,10 @@ title: ExecuteQueryParams
 
 Parameters for [useExecuteQuery](../functions/function.useExecuteQuery.md) hook.
 
+## Extended By
+
+- [`ExecuteCsvQueryParams`](interface.ExecuteCsvQueryParams.md)
+
 ## Properties
 
 ### count

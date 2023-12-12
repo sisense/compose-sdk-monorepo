@@ -1,4 +1,4 @@
-import { colorWhite } from '../chart-options-service';
+import { colorWhite } from '../../chart-data-options/coloring/consts';
 
 export type Marker = {
   enabled: boolean;

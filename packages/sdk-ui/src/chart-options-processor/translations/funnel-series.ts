@@ -1,8 +1,8 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-lines-per-function */
-import { Color, SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';
-import { DEFAULT_SERIES_COLORS, SeriesType } from '../chart-options-service';
+import { SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';
+import { SeriesType } from '../chart-options-service';
 import {
   formatSeries,
   getColorSetting,
@@ -18,15 +18,7 @@ import {
 import { fromFraction } from '../../chart-data/utils';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
 import { seriesSliceWarning } from '../../utils/data-limit-warning';
-
-// Returns a color from the given array based on index.
-// If no color supplied, returns a default color.
-export const getAPaletteColor = (colors: Color[] | undefined, index: number) => {
-  const noNull = colors?.filter((c) => c) as string[];
-  return (noNull && noNull[index % noNull.length]) ?? DEFAULT_SERIES_COLORS[index % 10];
-};
-
-// TODO refactor pie_series.ts and funnel_series.ts to handle both pie and funnel charts
+import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 
 /**
  * Convert categorical chart data into renderable highcharts funnel series. *
@@ -66,7 +58,7 @@ export const formatFunnelChartData = (
               name: categories[index],
               color:
                 getColorSetting(dataOptions, seriesValues[index].name) ??
-                getAPaletteColor(themeSettings?.palette.variantColors, index),
+                getPaletteColor(themeSettings?.palette.variantColors, index),
             };
           }),
         boostThreshold: 0,
@@ -87,7 +79,7 @@ export const formatFunnelChartData = (
     const categoryColors = categories.map(
       (c, i) =>
         (dataOptions.seriesToColorMap as ValueToColorMap)?.[c] ??
-        getAPaletteColor(themeSettings?.palette?.variantColors, i),
+        getPaletteColor(themeSettings?.palette?.variantColors, i),
     );
 
     series = chartData.series.map((v: CategoricalSeriesValues) => ({

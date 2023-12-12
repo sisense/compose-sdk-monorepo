@@ -22,6 +22,15 @@ afterEach(() => {
 
 vi.stubGlobal('__PACKAGE_VERSION__', '0.0.0');
 
+// Mock ResizeObserver
+const ResizeObserverMock = vi.fn(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+
+vi.stubGlobal('ResizeObserver', ResizeObserverMock);
+
 // enable fetch mocking but don't mock anything by default
 // and let tests decide to mock or not
 const fetchMocker = createFetchMock(vi);

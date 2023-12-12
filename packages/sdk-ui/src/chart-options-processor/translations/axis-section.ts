@@ -26,6 +26,7 @@ import {
 import { ChartType } from '../../types';
 import { isPolar } from './types';
 import { CategoricalXValues } from '../../chart-data/types';
+import { AxisClipped } from './translations-to-highcharts';
 
 export type Axis = {
   enabled?: boolean;
@@ -94,6 +95,7 @@ export type AxisSettings = {
   minorGridLineDashStyle?: string;
   stackLabels?: StackLabel;
   showLastLabel?: boolean;
+  visible?: boolean;
 };
 
 export type StackLabel = {
@@ -401,10 +403,10 @@ export const getYAxisSettings = (
   axis: Axis,
   axis2: Axis | undefined,
   axisMinMax: AxisMinMax,
-  axis2MinMax: AxisMinMax,
+  axis2MinMax: AxisMinMax | undefined,
   showTotal: boolean,
   chartDataOptions: ChartDataOptionsInternal,
-): AxisSettings[] => {
+): [AxisSettings[], AxisClipped[]] => {
   const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
     chartDataOptions as CartesianChartDataOptionsInternal;
   const y1NumberFormatConfig =
@@ -413,7 +415,11 @@ export const getYAxisSettings = (
   const y2NumberFormatConfig =
     cartesianChartDataOptions.y.find((y) => y.showOnRightAxis)?.numberFormatConfig ?? defaultConfig;
 
-  let array: AxisSettings[] = [
+  const axisClipped = [
+    { minClipped: !!(axis.enabled && axis.min), maxClipped: !!(axis.enabled && axis.max) },
+  ];
+
+  const array: AxisSettings[] = [
     merge(yAxisDefaults, {
       type: axis.type,
       title: { enabled: axis.enabled && axis.titleEnabled, text: axis.title },
@@ -430,7 +436,7 @@ export const getYAxisSettings = (
           return applyFormatPlainText(y1NumberFormatConfig, (this as any).value);
         },
       },
-      startOnTick: axis.min ? false : true,
+      startOnTick: axis.enabled && axis.min ? false : true,
       ...(axis.min && { minPadding: 0 }),
       ...(axis.max && { maxPadding: 0 }),
       min: axis.enabled ? axis.min ?? axisMinMax.min : null,
@@ -440,30 +446,44 @@ export const getYAxisSettings = (
     }),
   ];
 
-  if (axis2) {
-    // Y2 doesn't have gridLine
-    array = array.concat(
-      merge(yAxisDefaults, {
-        opposite: true,
-        gridLineWidth: 0,
-        title: {
-          enabled: axis2.enabled && axis2.titleEnabled,
-          text: axis2.title,
-        },
-        labels: {
-          enabled: axis2.enabled && axis2.labels,
-          style: fontStyleDefault,
-          formatter: function () {
-            return applyFormatPlainText(y2NumberFormatConfig, (this as any).value);
+  if (axis2MinMax) {
+    axisClipped.push({
+      minClipped: !!(axis2?.enabled && axis2.min),
+      maxClipped: !!(axis2?.enabled && axis2.max),
+    });
+
+    const axis2MinMaxOptions = {
+      startOnTick: axis2?.enabled && axis2.min ? false : true,
+      min: axis2?.enabled ? axis2.min || axis2MinMax.min : null,
+      max: axis2?.enabled ? axis2.max || axis2MinMax.max : null,
+    };
+
+    const axis2OtherOptions = axis2?.enabled
+      ? {
+          opposite: true,
+          gridLineWidth: 0,
+          title: {
+            enabled: axis2.enabled && axis2.titleEnabled,
+            text: axis2.title,
           },
-        },
-        startOnTick: axis.min ? false : true,
-        min: axis2.enabled ? axis2.min || axis2MinMax.min : null,
-        max: axis2.enabled ? axis2.max || axis2MinMax.max : null,
-        tickInterval: axis2.enabled ? axis2.tickInterval : null,
-        stackLabels: { enabled: showTotal },
-      }),
+          labels: {
+            enabled: axis2.enabled && axis2.labels,
+            style: fontStyleDefault,
+            formatter: function () {
+              return applyFormatPlainText(y2NumberFormatConfig, (this as any).value);
+            },
+          },
+          tickInterval: axis2.enabled ? axis2.tickInterval : null,
+          stackLabels: { enabled: showTotal },
+        }
+      : ({ visible: false } as AxisSettings);
+
+    array.push(
+      merge(yAxisDefaults, {
+        ...axis2MinMaxOptions,
+        ...axis2OtherOptions,
+      } as AxisSettings),
     );
   }
-  return array;
+  return [array, axisClipped];
 };
