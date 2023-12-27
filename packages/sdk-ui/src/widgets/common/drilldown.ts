@@ -2,7 +2,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { ChartDataOptions, DataPoint, DrilldownOptions, DrilldownSelection } from '../../types';
-import { Attribute, MembersFilter, filters as filterFactory } from '@sisense/sdk-data';
+import { Attribute, MembersFilter, filterFactory } from '@sisense/sdk-data';
 import { translateColumnToAttribure } from '../../chart-data-options/utils';
 
 export const useDrilldown = (
@@ -59,7 +59,7 @@ const processDrilldownSelections = (
   dataOptions: ChartDataOptions,
   drilldownSelections: DrilldownSelection[],
 ) => {
-  if (!('category' in dataOptions) || !dataOptions.category.length) {
+  if (!('category' in dataOptions) || !dataOptions.category[0]) {
     return {
       drilldownFilters: [],
       drilldownFiltersDisplayValues: [],

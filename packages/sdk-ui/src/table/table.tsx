@@ -19,6 +19,7 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
 import { shouldSkipSisenseContextWaiting } from '../chart';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
+import { getFilterListAndRelations } from '@sisense/sdk-data';
 
 /**
  * Table with aggregation and pagination.
@@ -51,8 +52,8 @@ import { LoadingIndicator } from '../common/components/loading-indicator';
  *   dataOptions={{
  *     columns: [
  *       DM.Commerce.AgeRange,
- *       measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
- *       measures.sum(DM.Commerce.Cost, 'Total Cost'),
+ *       measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+ *       measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
  *     ],
  *   }}
  *   styleOptions={{
@@ -77,10 +78,12 @@ export const Table = asSisenseComponent({
   const [innerDataOptions, setInnerDataOptions] = useState<TableDataOptionsInternal | null>(null);
   const [dataColumnNamesMapping, setDataColumnNamesMapping] = useState({});
   const [offset, setOffset] = useState(0);
+  const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
   const data = useTableData({
     dataSet,
     dataOptions: innerDataOptions,
-    filters,
+    filters: filterList,
+    filterRelations,
     count: rowsPerPage * PAGES_BATCH_SIZE,
     offset,
   });

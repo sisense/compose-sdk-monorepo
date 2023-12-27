@@ -46,7 +46,7 @@ the chart will use the `defaultDataSource` specified in the parent Sisense Conte
 
 #### filters
 
-> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 
@@ -72,7 +72,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 > **styleOptions**: `undefined` \| [`FunnelStyleOptions`](../../sdk-ui/interfaces/interface.FunnelStyleOptions.md)
 
-Configuration that define functional style of the various chart elements
+Configuration that defines functional style of the various chart elements
 
 ### Callbacks
 

@@ -11,6 +11,8 @@ import {
   PolarChartDesignOptions,
   ScatterChartDesignOptions,
   TreemapChartDesignOptions,
+  BoxplotChartDesignOptions,
+  ScattermapChartDesignOptions,
 } from './design-options';
 
 export const POLAR_CHART_TYPES = ['polar'] as const;
@@ -42,8 +44,16 @@ const INDICATOR_CHART_TYPES = ['indicator'] as const;
 /** Indicator chart types @expandType */
 export type IndicatorChartType = (typeof INDICATOR_CHART_TYPES)[number];
 
+const BOXPLOT_CHART_TYPES = ['boxplot'] as const;
+/** Boxplot chart types  @expandType */
+export type BoxplotChartType = (typeof BOXPLOT_CHART_TYPES)[number];
+
 const IMAGE_CHART_TYPES = ['image'] as const;
 export type ImageChartType = (typeof IMAGE_CHART_TYPES)[number];
+
+export const SCATTERMAP_CHART_TYPES = ['scattermap'] as const;
+/** Scattermap chart types  @expandType */
+export type ScattermapChartType = (typeof SCATTERMAP_CHART_TYPES)[number];
 
 // ChartDataType is the category of data structure for a group of charts,
 // e.g. the ChartDataType of both "line" and "bar" charts is "cartesian",
@@ -60,7 +70,9 @@ export type ChartDesignOptions =
   | PolarChartDesignOptions
   | IndicatorChartDesignOptions
   | ScatterChartDesignOptions
-  | TreemapChartDesignOptions;
+  | TreemapChartDesignOptions
+  | BoxplotChartDesignOptions
+  | ScattermapChartDesignOptions;
 
 export type ChartConfig = {
   chartType: ChartType;
@@ -83,6 +95,11 @@ export const isScatter = (chartType: ChartType): chartType is ScatterChartType =
   return SCATTER_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
 
+export const isScattermap = (chartType: ChartType): chartType is ScattermapChartType => {
+  // Use .find instead of .includes for a more flexible type signature
+  return SCATTERMAP_CHART_TYPES.find((value) => value === chartType) !== undefined;
+};
+
 export const isIndicator = (chartType: ChartType): chartType is 'indicator' => {
   return INDICATOR_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
@@ -93,6 +110,10 @@ export const isPolar = (chartType: ChartType): chartType is PolarChartType => {
 
 export const isTable = (chartType: ChartType | TableType): chartType is TableType => {
   return TABLE_TYPES.find((value) => value === chartType) !== undefined;
+};
+
+export const isBoxplot = (chartType: ChartType): chartType is BoxplotChartType => {
+  return BOXPLOT_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
 
 /*

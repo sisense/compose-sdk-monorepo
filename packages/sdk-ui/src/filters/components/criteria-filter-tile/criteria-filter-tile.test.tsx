@@ -12,7 +12,7 @@ import {
   TextFilter,
   createAttribute,
   createMeasure,
-  filters,
+  filterFactory,
 } from '@sisense/sdk-data';
 
 const mockAttribute = createAttribute({
@@ -51,7 +51,7 @@ const measures = [mockMeasureA, mockMeasureB, mockMeasureC];
 
 const propsBetween: CriteriaFilterTileProps = {
   title: 'Test Title',
-  filter: filters.between(mockAttribute, 0, 100) as NumericFilter,
+  filter: filterFactory.between(mockAttribute, 0, 100) as NumericFilter,
   onUpdate: vi.fn(),
 };
 
@@ -96,7 +96,7 @@ describe('criteria tests', () => {
   it('renders text input boxes when expanded', async () => {
     const propsNotContain: CriteriaFilterTileProps = {
       title: 'Test Title',
-      filter: filters.doesntContain(mockAttribute, 'boop') as TextFilter,
+      filter: filterFactory.doesntContain(mockAttribute, 'boop') as TextFilter,
       onUpdate: vi.fn(),
     };
     const { user } = setup(
@@ -114,7 +114,7 @@ describe('criteria tests', () => {
   it('renders ranked controls when expanded', async () => {
     const propsTopRank: CriteriaFilterTileProps = {
       title: 'Test Title',
-      filter: filters.topRanking(mockAttribute, mockMeasureB, 5) as RankingFilter,
+      filter: filterFactory.topRanking(mockAttribute, mockMeasureB, 5) as RankingFilter,
       onUpdate: vi.fn(),
       measures,
     };
@@ -134,7 +134,7 @@ describe('criteria tests', () => {
   it('renders dropdown for horizontal ranked variant', async () => {
     const propsTopRank: CriteriaFilterTileProps = {
       title: 'Test Title',
-      filter: filters.bottomRanking(mockAttribute, mockMeasureA, 5) as RankingFilter,
+      filter: filterFactory.bottomRanking(mockAttribute, mockMeasureA, 5) as RankingFilter,
       arrangement: 'horizontal',
       onUpdate: vi.fn(),
       measures,
@@ -154,9 +154,10 @@ describe('criteria tests', () => {
     const item = screen.getByText('max Revenue');
     expect(item).toBeInTheDocument();
     await user.click(item);
-    expect(propsTopRank.onUpdate).toHaveBeenCalledWith(
-      filters.bottomRanking(mockAttribute, mockMeasureC, 5),
-    );
+    expect(propsTopRank.onUpdate).toHaveBeenCalledWith({
+      ...filterFactory.bottomRanking(mockAttribute, mockMeasureC, 5),
+      guid: expect.any(String),
+    });
     expect(button1).not.toBeInTheDocument();
     expect(screen.getByText('max Revenue')).toBeInTheDocument();
   });

@@ -12,8 +12,8 @@ import { createDimension } from '../dimensions.js';
 import { AggregationTypes } from '../types.js';
 import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';
 import { normalizeName } from '../base.js';
-import * as filters from '../filters/factory.js';
-import * as measures from './factory.js';
+import * as filterFactory from '../filters/factory.js';
+import * as measureFactory from './factory.js';
 
 const sampleAttribute = new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute');
 const sampleMeasureName = 'measure name';
@@ -53,44 +53,48 @@ const verifyCalculatedMeasure = (
   expect(m).toHaveProperty('name', expectedName ?? sampleMeasureName);
 };
 
-describe('measures factory', () => {
+describe('measureFactory', () => {
   describe('constant', () => {
-    test('measure.constant()', () => {
-      const m = measures.constant(42);
+    test('measureFactory.constant()', () => {
+      const m = measureFactory.constant(42);
       verifyCalculatedMeasure(m, '42', {}, '42');
     });
   });
   describe('aggregations', () => {
-    test('measures.sum()', () => {
-      const m = measures.sum(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.sum()', () => {
+      const m = measureFactory.sum(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(m, AggregationTypes.Sum);
     });
-    test('measures.average()', () => {
-      const m = measures.average(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.average()', () => {
+      const m = measureFactory.average(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(m, AggregationTypes.Average);
     });
-    test('measures.min()', () => {
-      const m = measures.min(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.min()', () => {
+      const m = measureFactory.min(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(m, AggregationTypes.Min);
     });
-    test('measures.max()', () => {
-      const m = measures.max(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.max()', () => {
+      const m = measureFactory.max(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(m, AggregationTypes.Max);
     });
-    test('measures.max()', () => {
-      const m = measures.max(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.max()', () => {
+      const m = measureFactory.max(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(m, AggregationTypes.Max);
     });
-    test('measures.median()', () => {
-      const m = measures.median(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.median()', () => {
+      const m = measureFactory.median(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(m, AggregationTypes.Median);
     });
-    test('measures.count()', () => {
-      const m = measures.count(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.count()', () => {
+      const m = measureFactory.count(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(m, AggregationTypes.Count);
     });
-    test('measures.countDistinct()', () => {
-      const m = measures.countDistinct(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+    test('measureFactory.countDistinct()', () => {
+      const m = measureFactory.countDistinct(
+        sampleAttribute,
+        sampleMeasureName,
+        sampleMeasureFormat,
+      );
       verifyMeasure(m, AggregationTypes.CountDistinct);
     });
   });
@@ -99,92 +103,92 @@ describe('measures factory', () => {
       '[measure1]': sampleMeasure1,
     };
 
-    test('measures.yearToDateSum()', () => {
-      const m = measures.yearToDateSum(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.yearToDateSum()', () => {
+      const m = measureFactory.yearToDateSum(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'YTDSum([measure1])', expectedContext);
     });
-    test('measures.quarterToDateSum()', () => {
-      const m = measures.quarterToDateSum(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.quarterToDateSum()', () => {
+      const m = measureFactory.quarterToDateSum(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'QTDSum([measure1])', expectedContext);
     });
-    test('measures.monthToDateSum()', () => {
-      const m = measures.monthToDateSum(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.monthToDateSum()', () => {
+      const m = measureFactory.monthToDateSum(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'MTDSum([measure1])', expectedContext);
     });
-    test('measures.weekToDateSum()', () => {
-      const m = measures.weekToDateSum(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.weekToDateSum()', () => {
+      const m = measureFactory.weekToDateSum(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'WTDSum([measure1])', expectedContext);
     });
-    test('measures.runningSum()', () => {
-      const m = measures.runningSum(sampleMeasure1, false, sampleMeasureName);
+    test('measureFactory.runningSum()', () => {
+      const m = measureFactory.runningSum(sampleMeasure1, false, sampleMeasureName);
       verifyCalculatedMeasure(m, 'RSum([measure1])', expectedContext);
     });
-    test('measures.growth()', () => {
-      const m = measures.growth(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.growth()', () => {
+      const m = measureFactory.growth(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'growth([measure1])', expectedContext);
     });
-    test('measures.growthRate()', () => {
-      const m = measures.growthRate(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.growthRate()', () => {
+      const m = measureFactory.growthRate(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'growthrate([measure1])', expectedContext);
     });
-    test('measures.growthPastWeek()', () => {
-      const m = measures.growthPastWeek(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.growthPastWeek()', () => {
+      const m = measureFactory.growthPastWeek(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'growthpastweek([measure1])', expectedContext);
     });
-    test('measures.growthPastMonth()', () => {
-      const m = measures.growthPastMonth(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.growthPastMonth()', () => {
+      const m = measureFactory.growthPastMonth(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'growthpastmonth([measure1])', expectedContext);
     });
-    test('measures.growthPastQuarter()', () => {
-      const m = measures.growthPastQuarter(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.growthPastQuarter()', () => {
+      const m = measureFactory.growthPastQuarter(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'growthpastquarter([measure1])', expectedContext);
     });
-    test('measures.growthPastYear()', () => {
-      const m = measures.growthPastYear(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.growthPastYear()', () => {
+      const m = measureFactory.growthPastYear(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'growthpastyear([measure1])', expectedContext);
     });
-    test('measures.difference()', () => {
-      const m = measures.difference(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.difference()', () => {
+      const m = measureFactory.difference(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'diffpastperiod([measure1])', expectedContext);
     });
-    test('measures.diffPastWeek()', () => {
-      const m = measures.diffPastWeek(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.diffPastWeek()', () => {
+      const m = measureFactory.diffPastWeek(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'diffpastweek([measure1])', expectedContext);
     });
-    test('measures.diffPastMonth()', () => {
-      const m = measures.diffPastMonth(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.diffPastMonth()', () => {
+      const m = measureFactory.diffPastMonth(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'diffpastmonth([measure1])', expectedContext);
     });
-    test('measures.diffPastQuarter()', () => {
-      const m = measures.diffPastQuarter(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.diffPastQuarter()', () => {
+      const m = measureFactory.diffPastQuarter(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'diffpastquarter([measure1])', expectedContext);
     });
-    test('measures.diffPastYear()', () => {
-      const m = measures.diffPastYear(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.diffPastYear()', () => {
+      const m = measureFactory.diffPastYear(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'diffpastyear([measure1])', expectedContext);
     });
-    test('measures.pastDay()', () => {
-      const m = measures.pastDay(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.pastDay()', () => {
+      const m = measureFactory.pastDay(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'pastday([measure1])', expectedContext);
     });
-    test('measures.pastWeek()', () => {
-      const m = measures.pastWeek(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.pastWeek()', () => {
+      const m = measureFactory.pastWeek(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'pastweek([measure1])', expectedContext);
     });
-    test('measures.pastMonth()', () => {
-      const m = measures.pastMonth(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.pastMonth()', () => {
+      const m = measureFactory.pastMonth(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'pastmonth([measure1])', expectedContext);
     });
-    test('measures.pastQuarter()', () => {
-      const m = measures.pastQuarter(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.pastQuarter()', () => {
+      const m = measureFactory.pastQuarter(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'pastquarter([measure1])', expectedContext);
     });
-    test('measures.pastYear()', () => {
-      const m = measures.pastYear(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.pastYear()', () => {
+      const m = measureFactory.pastYear(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'pastyear([measure1])', expectedContext);
     });
-    test('measures.contribution()', () => {
-      const m = measures.contribution(sampleMeasure1, sampleMeasureName);
+    test('measureFactory.contribution()', () => {
+      const m = measureFactory.contribution(sampleMeasure1, sampleMeasureName);
       verifyCalculatedMeasure(m, 'contribution([measure1])', expectedContext);
     });
   });
@@ -195,20 +199,20 @@ describe('measures factory', () => {
         '[measure2]': sampleMeasure2,
       };
 
-      test('measures.add()', () => {
-        const m = measures.add(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
+      test('measureFactory.add()', () => {
+        const m = measureFactory.add(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
         verifyCalculatedMeasure(m, '[measure1]+[measure2]', expectedContext);
       });
-      test('measures.subtract()', () => {
-        const m = measures.subtract(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
+      test('measureFactory.subtract()', () => {
+        const m = measureFactory.subtract(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
         verifyCalculatedMeasure(m, '[measure1]-[measure2]', expectedContext);
       });
-      test('measures.multiply()', () => {
-        const m = measures.multiply(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
+      test('measureFactory.multiply()', () => {
+        const m = measureFactory.multiply(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
         verifyCalculatedMeasure(m, '[measure1]*[measure2]', expectedContext);
       });
-      test('measures.divide()', () => {
-        const m = measures.divide(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
+      test('measureFactory.divide()', () => {
+        const m = measureFactory.divide(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
         verifyCalculatedMeasure(m, '[measure1]/[measure2]', expectedContext);
       });
     });
@@ -218,32 +222,32 @@ describe('measures factory', () => {
       };
       const numberOperand = 10;
 
-      test('measures.add()', () => {
-        const m = measures.add(sampleMeasure1, numberOperand, sampleMeasureName, true);
+      test('measureFactory.add()', () => {
+        const m = measureFactory.add(sampleMeasure1, numberOperand, sampleMeasureName, true);
         verifyCalculatedMeasure(m, `([measure1]+${numberOperand})`, expectedContext);
       });
-      test('measures.subtract()', () => {
-        const m = measures.subtract(sampleMeasure1, numberOperand, sampleMeasureName, true);
+      test('measureFactory.subtract()', () => {
+        const m = measureFactory.subtract(sampleMeasure1, numberOperand, sampleMeasureName, true);
         verifyCalculatedMeasure(m, `([measure1]-${numberOperand})`, expectedContext);
       });
-      test('measures.multiply()', () => {
-        const m = measures.multiply(sampleMeasure1, numberOperand, sampleMeasureName, true);
+      test('measureFactory.multiply()', () => {
+        const m = measureFactory.multiply(sampleMeasure1, numberOperand, sampleMeasureName, true);
         verifyCalculatedMeasure(m, `([measure1]*${numberOperand})`, expectedContext);
       });
-      test('measures.divide()', () => {
-        const m = measures.divide(sampleMeasure1, numberOperand, sampleMeasureName, true);
+      test('measureFactory.divide()', () => {
+        const m = measureFactory.divide(sampleMeasure1, numberOperand, sampleMeasureName, true);
         verifyCalculatedMeasure(m, `([measure1]/${numberOperand})`, expectedContext);
       });
     });
   });
   describe('rank formula function', () => {
-    test('measures.rank()', () => {
+    test('measureFactory.rank()', () => {
       const groupByAttribute = new DimensionalAttribute('Age Range', '[Commerce.Age Range]');
-      const m = measures.rank(
+      const m = measureFactory.rank(
         sampleMeasure1,
         sampleMeasureName,
-        measures.RankingSortTypes.Descending,
-        measures.RankingTypes.Dense,
+        measureFactory.RankingSortTypes.Descending,
+        measureFactory.RankingTypes.Dense,
         [groupByAttribute],
       );
       verifyCalculatedMeasure(m, 'rank([measure1],DESC,1223,[AgeRange])', {
@@ -253,14 +257,14 @@ describe('measures factory', () => {
     });
   });
   describe('measuredValue formula function', () => {
-    test('measures.measuredValue()', () => {
+    test('measureFactory.measuredValue()', () => {
       const textDimension = createDimension({
         name: 'Age Range',
         type: 'textdimension',
         expression: '[Commerce.Age Range]',
       });
-      const filter = filters.equals(textDimension, '65+');
-      const m = measures.measuredValue(sampleMeasure1, [filter], sampleMeasureName);
+      const filter = filterFactory.equals(textDimension, '65+');
+      const m = measureFactory.measuredValue(sampleMeasure1, [filter], sampleMeasureName);
       verifyCalculatedMeasure(m, `([measure1],${getContextName(filter)})`, {
         '[measure1]': sampleMeasure1,
         [getContextName(filter)]: filter,
@@ -269,9 +273,9 @@ describe('measures factory', () => {
   });
 
   describe('advanced analytics functions', () => {
-    test('measures.trend() with no options', () => {
-      const m = measures.sum(sampleAttribute);
-      const mTrend = measures.trend(m);
+    test('measureFactory.trend() with no options', () => {
+      const m = measureFactory.sum(sampleAttribute);
+      const mTrend = measureFactory.trend(m);
 
       expect(mTrend.jaql()).toStrictEqual({
         jaql: {
@@ -289,9 +293,9 @@ describe('measures factory', () => {
       });
     });
 
-    test('measures.trend() with modelType=advancedSmoothing', () => {
-      const m = measures.sum(sampleAttribute);
-      const mTrend = measures.trend(m, 'Trend', {
+    test('measureFactory.trend() with modelType=advancedSmoothing', () => {
+      const m = measureFactory.sum(sampleAttribute);
+      const mTrend = measureFactory.trend(m, 'Trend', {
         modelType: 'advancedSmoothing',
         ignoreAnomalies: true,
       });
@@ -312,9 +316,9 @@ describe('measures factory', () => {
       });
     });
 
-    test('measures.trend() with modelType=localEstimates', () => {
-      const m = measures.sum(sampleAttribute);
-      const mTrend = measures.trend(m, 'Trend', {
+    test('measureFactory.trend() with modelType=localEstimates', () => {
+      const m = measureFactory.sum(sampleAttribute);
+      const mTrend = measureFactory.trend(m, 'Trend', {
         modelType: 'localEstimates',
       });
 
@@ -333,9 +337,9 @@ describe('measures factory', () => {
         },
       });
     });
-    test('measures.forecast() with no options', () => {
-      const m = measures.sum(sampleAttribute);
-      const mTrend = measures.forecast(m);
+    test('measureFactory.forecast() with no options', () => {
+      const m = measureFactory.sum(sampleAttribute);
+      const mTrend = measureFactory.forecast(m);
 
       expect(mTrend.jaql()).toStrictEqual({
         jaql: {
@@ -353,9 +357,9 @@ describe('measures factory', () => {
       });
     });
 
-    test('measures.forecast() with only modelType', () => {
-      const m = measures.sum(sampleAttribute);
-      const mTrend = measures.forecast(m, 'Forecast', {
+    test('measureFactory.forecast() with only modelType', () => {
+      const m = measureFactory.sum(sampleAttribute);
+      const mTrend = measureFactory.forecast(m, 'Forecast', {
         modelType: 'holtWinters',
       });
 
@@ -375,9 +379,9 @@ describe('measures factory', () => {
       });
     });
 
-    test('measures.forecast() with all options', () => {
-      const m = measures.sum(sampleAttribute);
-      const mTrend = measures.forecast(m, 'Forecast', {
+    test('measureFactory.forecast() with all options', () => {
+      const m = measureFactory.sum(sampleAttribute);
+      const mTrend = measureFactory.forecast(m, 'Forecast', {
         forecastHorizon: 6,
         modelType: 'holtWinters',
         startDate: new Date('2023-01-01'),
@@ -406,9 +410,9 @@ describe('measures factory', () => {
     });
   });
 
-  test('measures.forecast() with ISO string dates', () => {
-    const m = measures.sum(sampleAttribute);
-    const mTrend = measures.forecast(m, 'Forecast', {
+  test('measureFactory.forecast() with ISO string dates', () => {
+    const m = measureFactory.sum(sampleAttribute);
+    const mTrend = measureFactory.forecast(m, 'Forecast', {
       forecastHorizon: 6,
       modelType: 'holtWinters',
       startDate: '2023-01-01',
@@ -436,12 +440,16 @@ describe('measures factory', () => {
     });
   });
 
-  describe('measures.customFormula()', () => {
-    test('with atrribute and measure', () => {
-      const m = measures.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', {
-        Attribute: sampleAttribute,
-        'Average Measure': sampleMeasure2,
-      });
+  describe('measureFactory.customFormula()', () => {
+    test('with attribute and measure', () => {
+      const m = measureFactory.customFormula(
+        'Total Attribute',
+        'SUM([Attribute]) - [Average Measure]',
+        {
+          Attribute: sampleAttribute,
+          'Average Measure': sampleMeasure2,
+        },
+      );
 
       expect(m.jaql()).toStrictEqual({
         jaql: {
@@ -465,7 +473,7 @@ describe('measures factory', () => {
     });
 
     test('with nested formula', () => {
-      const nestedMeasure = measures.customFormula(
+      const nestedMeasure = measureFactory.customFormula(
         'Total Attribute',
         'SUM([Attribute]) - [Average Measure]',
         {
@@ -474,7 +482,7 @@ describe('measures factory', () => {
         },
       );
 
-      const m = measures.customFormula('Nested formula', 'RANK([Nested], "ASC", "1224")', {
+      const m = measureFactory.customFormula('Nested formula', 'RANK([Nested], "ASC", "1224")', {
         Nested: nestedMeasure,
       });
 

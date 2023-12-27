@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-lines */
+import merge from 'ts-deepmerge';
 import {
   AxisLabel,
   Legend,
@@ -18,6 +19,8 @@ import {
   BaseStyleOptions,
   TreemapStyleOptions,
   SunburstStyleOptions,
+  BoxplotStyleOptions,
+  ScattermapStyleOptions,
 } from '../../types';
 import { Axis } from '../translations/axis-section';
 import {
@@ -37,6 +40,8 @@ import {
   AreaChartDesignOptions,
   TreemapChartDesignOptions,
   SunburstChartDesignOptions,
+  BoxplotChartDesignOptions,
+  ScattermapChartDesignOptions,
 } from '../translations/design-options';
 import { LegendPosition } from '../translations/legend-section';
 import { Marker } from '../translations/marker-section';
@@ -120,18 +125,17 @@ const getLineWidth = (lineWidth: LineWidth): number => {
 
 export const DefaultStackType: StackType = 'classic';
 const getCartesianChartStyle = (
-  styleOptions: LineStyleOptions | AreaStyleOptions | StackableStyleOptions | PolarStyleOptions,
+  styleOptions:
+    | LineStyleOptions
+    | AreaStyleOptions
+    | StackableStyleOptions
+    | PolarStyleOptions
+    | BoxplotStyleOptions,
   hasY2Axis: boolean,
 ): LineChartDesignOptions => {
   const legend = getLegend(styleOptions.legend);
-
-  let valueLabel = null;
-  if (styleOptions.seriesLabels) {
-    valueLabel = getSeriesLabels(styleOptions.seriesLabels);
-  }
-
   const dataLimits = getDataLimits(styleOptions, 'cartesian');
-
+  const valueLabel = styleOptions.seriesLabels ? getSeriesLabels(styleOptions.seriesLabels) : null;
   const xAxis = getAxisLabel(styleOptions.xAxis, BaseDesignOptions.xAxis);
   let x2Axis = null;
   if (styleOptions?.xAxis?.x2Title?.enabled && styleOptions?.xAxis?.x2Title?.text) {
@@ -350,5 +354,35 @@ export const getScatterChartDesignOptions = (
     dataLimits: getDataLimits(styleOptions, 'scatter'),
     markerSize: getScatterChartMarkerSize(styleOptions.markerSize),
     legend: getLegend(styleOptions.legend),
+  };
+};
+
+export const getBoxplotChartDesignOptions = (
+  styleOptions: BoxplotStyleOptions,
+): BoxplotChartDesignOptions => {
+  return {
+    ...getCartesianChartStyle(styleOptions, false),
+    boxplotType: styleOptions.subtype === 'boxplot/hollow' ? 'hollow' : 'full',
+  };
+};
+
+const defaultScattermapMarkers: ScattermapChartDesignOptions['markers'] = {
+  fill: 'filled',
+  size: {
+    defaultSize: 4,
+    minSize: 4,
+    maxSize: 24,
+  },
+};
+
+export const getScattermapChartDesignOptions = (
+  styleOptions: ScattermapStyleOptions,
+): ScattermapChartDesignOptions => {
+  return {
+    ...BaseDesignOptions,
+    markers: merge(
+      defaultScattermapMarkers,
+      styleOptions.markers || {},
+    ) as ScattermapChartDesignOptions['markers'],
   };
 };

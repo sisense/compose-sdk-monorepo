@@ -115,6 +115,7 @@ export const useGetWidgetModel = withTracking('useGetWidgetModel')(useGetWidgetM
 
 /**
  * {@link useGetWidgetModel} without tracking to be used inside other hooks or components in Compose SDK.
+ *
  * @internal
  */
 export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetModelState {

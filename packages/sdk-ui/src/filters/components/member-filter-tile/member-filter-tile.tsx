@@ -1,6 +1,6 @@
 import type { Attribute, DataSource, Filter, MembersFilter } from '@sisense/sdk-data';
 import { MembersFilter as MembersFilterClass } from '@sisense/sdk-data';
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useMemo, useRef } from 'react';
 import { BasicMemberFilterTile } from './basic-member-filter-tile';
 import { Member } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
@@ -68,6 +68,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   componentName: 'MemberFilterTile',
 })((props) => {
   const { title, attribute, filter, dataSource, onChange, parentFilters } = props;
+  const initialFilter = useRef(filter);
 
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
   // "dimensions" does not change on every render, causing infinite rerenders.
@@ -115,8 +116,12 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       title={title}
       allMembers={allMembers}
       initialSelectedMembers={selectedMembers}
-      shouldUpdateSelectedMembers={!(filter as MembersFilterInternal)?.internal}
-      onUpdateSelectedMembers={(members) => onChange(new MembersFilterInternal(attribute, members))}
+      shouldUpdateSelectedMembers={
+        initialFilter.current !== filter && !(filter as MembersFilterInternal)?.internal
+      }
+      onUpdateSelectedMembers={(members) => {
+        onChange(new MembersFilterInternal(attribute, members));
+      }}
       isDependent={parentFilters && parentFilters.length > 0}
     />
   );

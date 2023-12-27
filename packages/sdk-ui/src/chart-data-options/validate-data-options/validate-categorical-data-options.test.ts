@@ -1,15 +1,15 @@
 import { validateCategoricalChartDataOptions } from './validate-categorical-data-options';
 import * as DM from '../../__demo__/sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 
 describe('validateCategoricalChartDataOptions', () => {
   const CATEGORY_1 = DM.Commerce.Condition;
   const CATEGORY_2 = DM.Commerce.AgeRange;
   const CATEGORY_3 = DM.Commerce.Gender;
   const CATEGORY_4 = DM.Commerce.CountryID;
-  const VALUE_1 = measures.sum(DM.Commerce.Revenue);
-  const VALUE_2 = measures.sum(DM.Commerce.Cost);
-  const VALUE_3 = measures.sum(DM.Commerce.Quantity);
+  const VALUE_1 = measureFactory.sum(DM.Commerce.Revenue);
+  const VALUE_2 = measureFactory.sum(DM.Commerce.Cost);
+  const VALUE_3 = measureFactory.sum(DM.Commerce.Quantity);
 
   it('should throw an error when dataOptions.value is empty', () => {
     const chartType = 'pie';

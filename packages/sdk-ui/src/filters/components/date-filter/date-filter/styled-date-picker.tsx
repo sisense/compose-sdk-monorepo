@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { CompleteThemeSettings } from '../../../../types.js';
 import DatePicker, { type ReactDatePickerProps } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { applyOpacity } from '../../../../utils/color/index.js';
+import { applyOpacity, getSlightlyDifferentColor } from '../../../../utils/color/index.js';
 
 type DatePickerProps = ReactDatePickerProps & {
   theme: CompleteThemeSettings;
@@ -22,25 +22,46 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
   display: flex;
   align-items: stretch;
   flex-direction: column;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   .react-datepicker__header {
     background-color: ${({ theme }) => theme.general.backgroundColor};
     border-bottom: none;
     padding-bottom: 0;
+    & > div > button {
+      height: 34px;
+      width: 34px;
+      &:hover {
+        background-color: ${({ theme }) =>
+          getSlightlyDifferentColor(theme.general.backgroundColor)};
+        transition: 0.1s;
+      }
+      &:disabled {
+        background-color: ${({ theme }) => theme.general.backgroundColor};
+      }
+    }
   }
   .react-datepicker__day-name {
     color: ${({ theme }) => theme.typography.primaryTextColor};
     font-weight: 700;
   }
   .react-datepicker__day {
-    width: 2rem;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
     margin-left: 0;
     margin-right: 0;
-    border-radius: 0;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 100%;
     background-color: ${({ theme }) => theme.general.backgroundColor};
     color: ${({ theme }) => theme.typography.primaryTextColor};
     position: relative;
     z-index: 1;
+    &:hover {
+      background-color: ${({ theme }) => theme.general.brandColor};
+      color: ${({ theme }) => theme.typography.primaryTextColor};
+      transition: 0.1s;
+    }
   }
 
   .react-datepicker__day {
@@ -49,18 +70,17 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
       position: absolute;
       display: block;
       background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.5)};
-      width: calc(100%);
-      top: -1px;
-      height: calc(100% + 2px);
+      width: 100%;
+      height: 100%;
       z-index: -1;
       left: 0%;
       visibility: hidden;
     }
 
+    // rounds ends of the week rows
     &:first-child:before {
       border-radius: 100% 0 0 100%;
     }
-
     &:last-child:before {
       border-radius: 0 100% 100% 0;
     }
@@ -70,10 +90,9 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
       position: absolute;
       display: block;
       background-color: ${({ theme }) => theme.general.brandColor};
-      width: 92%;
-      padding-top: 92%;
+      width: 100%;
+      padding-top: 100%;
       top: 50%;
-      right: 4%;
       transform: translateY(-50%);
       border-radius: 100%;
       z-index: -1;
@@ -139,15 +158,12 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
 
     &.react-datepicker__day--range-start {
       &:before {
-        width: 90%;
-        left: 10%;
         border-radius: 100% 0 0 100%;
       }
     }
 
     &.react-datepicker__day--range-end {
       &:before {
-        width: 90%;
         border-radius: 0 100% 100% 0;
       }
     }
@@ -158,17 +174,6 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     .react-datepicker__day--range-start.react-datepicker__day--range-end {
     &:before {
       visibility: hidden;
-    }
-  }
-
-  // Circle around 'hovered' day. Didn't use :hover to avoid flickering
-  .react-datepicker__month--selecting-range {
-    & .react-datepicker__day--selecting-range-start,
-    .react-datepicker__day--selecting-range-end {
-      &:after {
-        visibility: visible;
-        opacity: 0.5;
-      }
     }
   }
 
@@ -222,6 +227,12 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
           background-color: ${({ theme }) => theme.general.brandColor};
         }
       }
+    }
+  }
+
+  .react-datepicker__day--selected {
+    &:after {
+      visibility: visible;
     }
   }
 `;

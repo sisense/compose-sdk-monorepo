@@ -8,6 +8,8 @@ import {
   Measure,
   Filter,
   BaseMeasure,
+  FilterRelationNode,
+  FilterRelation,
 } from '../interfaces.js';
 
 import {
@@ -520,4 +522,61 @@ export function topRanking(attribute: Attribute, measure: Measure, count: number
  */
 export function bottomRanking(attribute: Attribute, measure: Measure, count: number): Filter {
   return new RankingFilter(attribute, measure, RankingOperators.Bottom, count);
+}
+
+const relate = (node: FilterRelationNode): FilterRelationNode => {
+  if (Array.isArray(node)) {
+    const [first, ...rest] = node;
+    return rest.length === 0
+      ? relate(first)
+      : {
+          operator: 'AND',
+          left: relate(first),
+          right: relate(rest),
+        };
+  }
+  return node;
+};
+
+/**
+ * Set of logic operators for filter relation construction
+ *
+ * These operators are still in beta.
+ *
+ * @example
+ ```tsx
+ import { filters } from '@sisense/sdk-data';
+
+ // define filters
+ const revenueFilter = filters.greaterThan(DM.Commerce.Revenue, 1000);
+ const countryFilter = filters.members(DM.Commerce.Country, ['USA', 'Canada']);
+ const genderFilter = filters.doesntContain(DM.Commerce.Gender, 'Unspecified');
+ const costFilter = filters.between(DM.Commerce.Cost, 1000, 2000);
+
+ // create filter relation of two filters
+ const orFilerRelations = filterFactory.logic.or(revenueFilter, countryFilter);
+ // revenueFilter OR countryFilter
+
+ // filter relations can have nested filter relations
+ const mixedFilterRelations = filterFactory.logic.and(genderFilter, orFilerRelations);
+ // genderFilter AND (revenueFilter OR countryFilter)
+
+ // array, specified in filter relations, will be converted to an intersection of filters automatically
+ const arrayFilterRelations = filterFactory.logic.or([genderFilter, costFilter], mixedFilterRelations);
+ // (genderFilter AND costFilter) OR (genderFilter AND (revenueFilter OR countryFilter))
+ ```
+ * @beta
+ */
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace logic {
+  export const and = (left: FilterRelationNode, right: FilterRelationNode): FilterRelation => ({
+    operator: 'AND',
+    left: relate(left),
+    right: relate(right),
+  });
+  export const or = (left: FilterRelationNode, right: FilterRelationNode): FilterRelation => ({
+    operator: 'OR',
+    left: relate(left),
+    right: relate(right),
+  });
 }

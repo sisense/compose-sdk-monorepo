@@ -4,9 +4,9 @@ export type LegendPosition = 'top' | 'left' | 'right' | 'bottom' | null;
 
 export type LegendSettings = {
   enabled: boolean;
-  align: 'center' | 'left' | 'right';
-  verticalAlign: 'top' | 'middle' | 'bottom';
-  layout: 'horizontal' | 'vertical';
+  align?: 'center' | 'left' | 'right';
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  layout?: 'horizontal' | 'vertical';
   itemStyle?: Style & { cursor?: string };
   symbolRadius?: number;
   symbolHeight?: number;
@@ -19,6 +19,7 @@ export type LegendSettings = {
       [key: string]: string | number;
     };
   };
+  maxHeight?: number;
 };
 
 export const legendItemStyleDefault: LegendSettings['itemStyle'] = {

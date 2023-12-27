@@ -4,14 +4,14 @@ import dayjs from 'dayjs';
 import { StyledDatePicker } from './styled-date-picker.js';
 import { useThemeContext } from '../../../../theme-provider/index.js';
 import { CalendarHeader } from './calendar-header.js';
-import { QuickDateSelectionButtons } from './quick-date-selection-buttons.js';
+import { ButtonId, QuickDateSelectionButtons } from './quick-date-selection-buttons.js';
 import { calculateNewDateRange } from './date-range-calculator.js';
 
-export type SelectorMode = 'fromSelector' | 'toSelector';
+export type SelectorMode = 'fromSelector' | 'toSelector' | 'pointSelector';
 
 export type DateRangeLimits = {
-  maxDate: dayjs.Dayjs;
-  minDate: dayjs.Dayjs;
+  maxDate?: dayjs.Dayjs;
+  minDate?: dayjs.Dayjs;
 };
 
 type DayjsDateRange = {
@@ -21,10 +21,12 @@ type DayjsDateRange = {
 
 export type CalendarDateSelectorProps = {
   selectorMode: SelectorMode;
-  limit: DateRangeLimits;
-  onDateRangeChanged: (dateRange: DayjsDateRange) => void;
-  onSelectorModeChanged: (newSelectorMode: SelectorMode) => void;
-  selectedDateRange: DayjsDateRange;
+  limit?: DateRangeLimits;
+  onDateRangeChanged?: (dateRange: DayjsDateRange) => void;
+  onSelectorModeChanged?: (newSelectorMode: SelectorMode) => void;
+  selectedDateRange?: DayjsDateRange;
+  onDateChanged?: (selectedDate: dayjs.Dayjs) => void;
+  selectedDate?: dayjs.Dayjs;
 };
 
 export function CalendarDateSelector({
@@ -33,23 +35,32 @@ export function CalendarDateSelector({
   onDateRangeChanged,
   selectorMode,
   onSelectorModeChanged,
+  onDateChanged,
+  selectedDate,
 }: CalendarDateSelectorProps) {
   const onDateSelected = (selectedDate: dayjs.Dayjs) => {
-    onDateRangeChanged(
-      calculateNewDateRange(
-        { from: selectedDateRange.from, to: selectedDateRange.to },
-        selectedDate,
-        selectorMode,
-      ),
-    );
-    onSelectorModeChanged(selectorMode === 'fromSelector' ? 'toSelector' : 'fromSelector');
+    if (selectorMode === 'pointSelector' && onDateChanged) {
+      onDateChanged(selectedDate);
+    } else if (limit && onDateRangeChanged && onSelectorModeChanged && selectedDateRange) {
+      onDateRangeChanged?.(
+        calculateNewDateRange(
+          { from: selectedDateRange.from, to: selectedDateRange.to },
+          selectedDate,
+          selectorMode,
+        ),
+      );
+      onSelectorModeChanged(selectorMode === 'fromSelector' ? 'toSelector' : 'fromSelector');
+    }
   };
 
   const { themeSettings } = useThemeContext();
-  const startDate = selectedDateRange.from.toDate();
-  const endDate = selectedDateRange.to.toDate();
-  const minDate = limit.minDate.toDate();
-  const maxDate = limit.maxDate.toDate();
+  const startDate = selectedDateRange?.from.toDate();
+  const endDate = selectedDateRange?.to.toDate();
+  const minDate = limit?.minDate?.toDate();
+  const maxDate = limit?.maxDate?.toDate();
+  const buttons = [minDate && 'earliest', 'today', maxDate && 'latest'].filter(
+    (elt) => elt !== undefined,
+  ) as ButtonId[];
   return (
     <div
       style={{
@@ -61,18 +72,24 @@ export function CalendarDateSelector({
       }}
       aria-label="date range filter calendar container"
     >
-      <QuickDateSelectionButtons
-        enabledButtons={
-          selectorMode === 'fromSelector' ? ['earliest', 'today'] : ['today', 'latest']
-        }
-        limit={limit}
-        onDateSelected={(selectedDate) => {
-          onDateSelected(dayjs(selectedDate));
-        }}
-      />
+      {limit && (
+        <QuickDateSelectionButtons
+          enabledButtons={buttons}
+          limit={limit}
+          onDateSelected={(selectedDate) => {
+            onDateSelected(dayjs(selectedDate));
+          }}
+        />
+      )}
       <StyledDatePicker
         theme={themeSettings}
-        selected={selectorMode === 'fromSelector' ? startDate : endDate}
+        selected={
+          selectorMode === 'pointSelector'
+            ? selectedDate?.toDate()
+            : selectorMode === 'fromSelector'
+            ? startDate
+            : endDate
+        }
         onChange={(selectedDate) => {
           if (selectedDate instanceof Date) {
             onDateSelected(dayjs(selectedDate));

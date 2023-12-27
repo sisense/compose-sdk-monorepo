@@ -26,9 +26,9 @@ style options.
       },
     ],
     value: [
-      measures.sum(DM.Commerce.Revenue),
+      measureFactory.sum(DM.Commerce.Revenue),
       {
-        column: measures.sum(DM.Commerce.Quantity),
+        column: measureFactory.sum(DM.Commerce.Quantity),
         showOnRightAxis: true,
         chartType: 'column',
       },

@@ -5,7 +5,12 @@ import { LegendPosition } from './legend-section';
 import { LineType, StackType } from './translations-to-highcharts';
 import { PieType, PieLabels } from './pie-plot-options';
 import { FunnelSize, FunnelType, FunnelDirection, FunnelLabels } from './funnel-plot-options';
-import { Convolution, SunburstStyleOptions, TreemapStyleOptions } from '../../types';
+import {
+  Convolution,
+  ScattermapMarkers,
+  SunburstStyleOptions,
+  TreemapStyleOptions,
+} from '../../types';
 import { ScatterMarkerSize } from './scatter-plot-options';
 
 type DataLimits = {
@@ -96,7 +101,7 @@ export type IndicatorComponents = {
     /** The text of the title */
     text?: string;
   };
-  /** The secondary title of the indicator chart to be shown when `secondary` is specified in {@link IndicatorDataOptions} */
+  /** The secondary title of the indicator chart to be shown when `secondary` is specified in {@link IndicatorChartDataOptions} */
   secondaryTitle?: {
     /** The text of the secondary title */
     text?: string;
@@ -138,4 +143,14 @@ export type NumericSpecificDesignOptions<
 export type PolarType = 'line' | 'area' | 'column';
 export type PolarChartDesignOptions = BaseDesignOptionsType & {
   polarType: PolarType;
+};
+
+export type BoxplotType = 'full' | 'hollow';
+export type BoxplotChartDesignOptions = BaseDesignOptionsType & {
+  boxplotType: BoxplotType;
+};
+
+// todo: remove `BaseDesignOptionsType` after refactor of `ChartDesignOptions` usage
+export type ScattermapChartDesignOptions = BaseDesignOptionsType & {
+  markers: Required<ScattermapMarkers>;
 };

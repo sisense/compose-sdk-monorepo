@@ -4,7 +4,7 @@ import { DataSource } from '@sisense/sdk-data';
 import { Meta } from '@storybook/react';
 import { SisenseContextProviderProps } from '../index';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
-import { StyleOptions } from '../types';
+import { ChartStyleOptions } from '../types';
 import { ChartWidget } from '../widgets/chart-widget';
 import { templateForComponent } from './template';
 
@@ -41,7 +41,7 @@ const meas1 = {
   showOnRightAxis: false,
 };
 
-const styleOptions: StyleOptions = {
+const chartStyleOptions: ChartStyleOptions = {
   legend: {
     enabled: false,
   },
@@ -99,13 +99,13 @@ const cartesianArgs = {
     value: [meas1],
     breakBy: [],
   },
-  styleOptions,
 };
 
 export const WithoutHeader = template({
   title: 'Widget Without Header',
   ...cartesianArgs,
-  widgetStyleOptions: {
+  styleOptions: {
+    ...chartStyleOptions,
     header: {
       hidden: true,
     },
@@ -115,7 +115,8 @@ export const WithoutHeader = template({
 export const WithBorder = template({
   title: 'Widget With Border',
   ...cartesianArgs,
-  widgetStyleOptions: {
+  styleOptions: {
+    ...chartStyleOptions,
     border: true,
     borderColor: 'lightgray',
     header: {
@@ -128,7 +129,8 @@ export const WithBorder = template({
 export const WithRoundedCorners = template({
   ...cartesianArgs,
   title: 'Widget With Rounded Corners',
-  widgetStyleOptions: {
+  styleOptions: {
+    ...chartStyleOptions,
     border: true,
     borderColor: 'lightgray',
     cornerRadius: 'Medium',
@@ -142,7 +144,8 @@ export const WithRoundedCorners = template({
 export const WithShadow = template({
   title: 'Widget With Shadow',
   ...cartesianArgs,
-  widgetStyleOptions: {
+  styleOptions: {
+    ...chartStyleOptions,
     border: true,
     borderColor: 'lightgray',
     spaceAround: 'Large',
@@ -157,7 +160,8 @@ export const WithShadow = template({
 export const WithCustomBackground = template({
   title: 'Widget With Custom Background',
   ...cartesianArgs,
-  widgetStyleOptions: {
+  styleOptions: {
+    ...chartStyleOptions,
     backgroundColor: 'beige',
     header: {
       backgroundColor: 'bisque',
@@ -168,7 +172,8 @@ export const WithCustomBackground = template({
 export const WithCustomizedHeader = template({
   title: 'Widget With Customized Header',
   ...cartesianArgs,
-  widgetStyleOptions: {
+  styleOptions: {
+    ...chartStyleOptions,
     header: {
       titleAlignment: 'Center',
       backgroundColor: 'bisque',
@@ -180,7 +185,8 @@ export const WithCustomizedHeader = template({
 export const WithCustomToolbar = template({
   title: 'Widget With Customized Header and Custom Toolbar',
   ...cartesianArgs,
-  widgetStyleOptions: {
+  styleOptions: {
+    ...chartStyleOptions,
     header: {
       titleAlignment: 'Center',
       backgroundColor: 'bisque',

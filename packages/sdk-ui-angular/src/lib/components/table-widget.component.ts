@@ -68,14 +68,6 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   styleOptions: TableWidgetProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.widgetStyleOptions}
-   *
-   * @category Representation
-   */
-  @Input()
-  widgetStyleOptions: TableWidgetProps['widgetStyleOptions'];
-
-  /**
    * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.title}
    *
    * @category Widget
@@ -122,7 +114,6 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
       dataOptions: this.dataOptions,
       filters: this.filters,
       styleOptions: this.styleOptions,
-      widgetStyleOptions: this.widgetStyleOptions,
       title: this.title,
       description: this.description,
     };

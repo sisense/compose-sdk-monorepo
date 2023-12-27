@@ -14,6 +14,18 @@ Props for the [DashboardWidget](../functions/function.DashboardWidget.md) compon
 
 ### Data
 
+#### filterRelations
+
+> **filterRelations**?: [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
+
+Specifies the logical relationship between multiple filters (AND, OR)
+
+##### Inherited from
+
+Omit.filterRelations
+
+***
+
 #### filters
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
@@ -104,33 +116,9 @@ Omit.highlightSelectionDisabled
 
 #### styleOptions
 
-> **styleOptions**?: `object`
+> **styleOptions**?: [`DashboardWidgetStyleOptions`](interface.DashboardWidgetStyleOptions.md)
 
-General style options for the visual component of the widget – for example, chart or table.
-
-##### Type declaration
-
-> ###### `styleOptions.height`
->
-> **height**?: `number`
->
-> Total height of the component, which is considered in the following order of priority:
->
-> 1. Value passed to this property (in pixels).
-> 2. Height of the container wrapping this component
-> 3. Default value as specified per chart type
->
-> ###### `styleOptions.width`
->
-> **width**?: `number`
->
-> Total width of the component, which is considered in the following order of priority:
->
-> 1. Value passed to this property (in pixels)
-> 2. Width of the container wrapping this component
-> 3. Default value as specified per chart type
->
->
+Style options for the the widget including the widget container and the chart or table inside.
 
 ***
 
@@ -153,18 +141,6 @@ Omit.title
 > **widgetOid**: `string`
 
 Identifier of the widget
-
-***
-
-#### widgetStyleOptions
-
-> **widgetStyleOptions**?: [`WidgetStyleOptions`](interface.WidgetStyleOptions.md)
-
-Style options for the widget container including the widget header
-
-##### Overrides
-
-Omit.widgetStyleOptions
 
 ### Callbacks
 

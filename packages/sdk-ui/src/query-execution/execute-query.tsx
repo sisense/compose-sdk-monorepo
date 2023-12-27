@@ -6,7 +6,7 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
 
 /**
  * Executes a query and renders a function as child component. The child
- * component is passed the results of the query.
+ * component is passed the state of the query as defined in {@link QueryState}.
  *
  * This component takes the Children Prop Pattern and
  * offers an alternative approach to the {@link useExecuteQuery} hook.
@@ -17,15 +17,22 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
  * <ExecuteQuery
  *   dataSource={DM.DataSource}
  *   dimensions={[DM.Commerce.AgeRange]}
- *   measures={[measures.sum(DM.Commerce.Revenue)]}
- *   filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
+ *   measures={[measureFactory.sum(DM.Commerce.Revenue)]}
+ *   filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
  * >
  * {
- *   (data) => {
+ *   ({data, isLoading, isError}) => {
+ *     if (isLoading) {
+ *       return <div>Loading...</div>;
+ *     }
+ *     if (isError) {
+ *       return <div>Error</div>;
+ *     }
  *     if (data) {
  *       console.log(data);
  *       return <div>{`Total Rows: ${data.rows.length}`}</div>;
  *     }
+ *     return null;
  *   }
  * }
  * </ExecuteQuery>
@@ -48,7 +55,7 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
     onDataChanged,
     onBeforeQuery,
   }) => {
-    const { data, error } = useExecuteQueryInternal({
+    const queryState = useExecuteQueryInternal({
       dataSource,
       dimensions,
       measures,
@@ -59,19 +66,15 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
       onBeforeQuery,
     });
 
-    // TODO: discuss if we need API like 'onDataChanged' for this component as we providing 'useExecuteQuery' hook
-    const [prevData, setPrevData] = useState(data);
-    if (prevData !== data) {
-      setPrevData(data);
-      if (data) {
-        onDataChanged?.(data);
+    const queryStateData = queryState.data;
+    const [prevData, setPrevData] = useState(queryStateData);
+    if (prevData !== queryStateData) {
+      setPrevData(queryStateData);
+      if (queryStateData) {
+        onDataChanged?.(queryStateData);
       }
     }
 
-    if (error) {
-      throw error;
-    }
-
-    return <>{data && children?.(data)}</>;
+    return <>{queryState && children?.(queryState)}</>;
   },
 );

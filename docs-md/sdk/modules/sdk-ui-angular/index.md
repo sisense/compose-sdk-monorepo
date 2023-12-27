@@ -8,6 +8,7 @@ title: sdk-ui-angular
 
 - [AreaChartComponent](classes/class.AreaChartComponent.md)
 - [BarChartComponent](classes/class.BarChartComponent.md)
+- [BoxplotChartComponent](classes/class.BoxplotChartComponent.md)
 - [ChartComponent](classes/class.ChartComponent.md)
 - [ChartWidgetComponent](classes/class.ChartWidgetComponent.md)
 - [ColumnChartComponent](classes/class.ColumnChartComponent.md)
@@ -25,6 +26,7 @@ title: sdk-ui-angular
 - [PolarChartComponent](classes/class.PolarChartComponent.md)
 - [QueryService](classes/class.QueryService.md)
 - [ScatterChartComponent](classes/class.ScatterChartComponent.md)
+- [ScattermapChartComponent](classes/class.ScattermapChartComponent.md)
 - [SdkUiModule](classes/class.SdkUiModule.md)
 - [SisenseContextService](classes/class.SisenseContextService.md)
 - [SunburstChartComponent](classes/class.SunburstChartComponent.md)

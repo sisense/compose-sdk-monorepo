@@ -7,6 +7,9 @@ indexTopics:
   - title: SDK-UI-ANGULAR
     description: Angular UI components and services
     link: ./sdk-ui-angular
+  - title: SDK-UI-VUE
+    description: Vue UI components and hooks
+    link: ./sdk-ui-vue
   - title: SDK-DATA
     description: Composable queries
     link: ./sdk-data

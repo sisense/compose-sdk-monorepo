@@ -4,7 +4,7 @@
 /* eslint-disable max-lines-per-function */
 import { TranslatableError } from '../translation/translatable-error';
 import {
-  StyleOptions,
+  ChartStyleOptions,
   LineStyleOptions,
   AreaStyleOptions,
   StackableStyleOptions,
@@ -20,6 +20,8 @@ import {
   TreemapStyleOptions,
   BaseAxisStyleOptions,
   SunburstStyleOptions,
+  BoxplotStyleOptions,
+  ScattermapStyleOptions,
 } from '../types';
 import {
   Panel,
@@ -35,18 +37,20 @@ import {
   TreemapWidgetStyle,
   AxisStyle,
   SunburstWidgetStyle,
+  BoxplotWidgetStyle,
+  ScattermapWidgetStyle,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
 
 function extractBaseStyleOptions(
   widgetSubtype: WidgetSubtype,
   widgetStyle: WidgetStyle,
-): StyleOptions {
+): ChartStyleOptions {
   const chartSubtype = getChartSubtype(widgetSubtype);
   return {
     ...widgetStyle,
     ...(chartSubtype && { subtype: chartSubtype }),
-  } as StyleOptions;
+  } as ChartStyleOptions;
 }
 
 function extractAxisStyleOptions(widgetAxisStyleOptions?: AxisStyle) {
@@ -203,6 +207,42 @@ function prepareScatterChartAxisOptions(
   return axisOptions;
 }
 
+function prepareBoxplotChartAxisOptions(
+  widgetStyle: BoxplotWidgetStyle,
+  panels: Panel[],
+): AxisStyleOptions {
+  const axisOptions = {
+    xAxis: extractAxisStyleOptions(widgetStyle.xAxis),
+    yAxis: extractAxisStyleOptions(widgetStyle.yAxis),
+  } as AxisStyleOptions;
+  const xAxisRelatedPanelItem = getEnabledPanelItems(panels, 'category')[0];
+  const yAxisRelatedPanelItem = getEnabledPanelItems(panels, 'value')[0];
+
+  const hasXAxisTitleText = !!(axisOptions.xAxis?.title && 'text' in axisOptions.xAxis.title);
+  if (!hasXAxisTitleText && xAxisRelatedPanelItem) {
+    axisOptions.xAxis = {
+      ...axisOptions.xAxis,
+      title: {
+        ...axisOptions.xAxis?.title,
+        text: xAxisRelatedPanelItem.jaql.title,
+      },
+    } as AxisLabel;
+  }
+
+  const hasYAxisTitleText = !!(axisOptions.yAxis?.title && 'text' in axisOptions.yAxis.title);
+  if (!hasYAxisTitleText && yAxisRelatedPanelItem) {
+    axisOptions.yAxis = {
+      ...axisOptions.yAxis,
+      title: {
+        ...axisOptions.yAxis?.title,
+        text: yAxisRelatedPanelItem.jaql.title,
+      },
+    } as AxisLabel;
+  }
+
+  return axisOptions;
+}
+
 type CartesianChartStyleOptions = LineStyleOptions | AreaStyleOptions | StackableStyleOptions;
 
 function extractCartesianChartStyleOptions(
@@ -351,12 +391,40 @@ function extractSunburstChartStyleOptions(widgetStyle: SunburstWidgetStyle): Sun
   };
 }
 
+function extractBoxplotChartStyleOptions(
+  widgetSubtype: WidgetSubtype,
+  widgetStyle: BoxplotWidgetStyle,
+  panels: Panel[],
+): BoxplotStyleOptions {
+  return {
+    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
+    ...prepareBoxplotChartAxisOptions(widgetStyle, panels),
+  } as BoxplotStyleOptions;
+}
+
+function extractScattermapChartStyleOptions(
+  widgetSubtype: WidgetSubtype,
+  widgetStyle: ScattermapWidgetStyle,
+): ScattermapStyleOptions {
+  return {
+    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
+    markers: {
+      fill: widgetStyle.markers.fill,
+      size: {
+        defaultSize: widgetStyle.markers.size.defaultSize,
+        minSize: widgetStyle.markers.size.min,
+        maxSize: widgetStyle.markers.size.max,
+      },
+    },
+  } as ScattermapStyleOptions;
+}
+
 export function extractStyleOptions<WType extends WidgetType>(
   widgetType: WType,
   widgetSubtype: WidgetSubtype,
   style: WidgetStyle,
   panels: Panel[],
-): StyleOptions | TableStyleOptions {
+): ChartStyleOptions | TableStyleOptions {
   switch (widgetType) {
     case 'chart/line':
     case 'chart/area':
@@ -389,6 +457,10 @@ export function extractStyleOptions<WType extends WidgetType>(
         style as IndicatorWidgetStyle,
         panels,
       );
+    case 'chart/boxplot':
+      return extractBoxplotChartStyleOptions(widgetSubtype, style as BoxplotWidgetStyle, panels);
+    case 'map/scatter':
+      return extractScattermapChartStyleOptions(widgetSubtype, style as ScattermapWidgetStyle);
     default:
       throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }

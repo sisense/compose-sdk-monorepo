@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
-import { filters, createAttribute } from '@sisense/sdk-data';
+import { filterFactory, createAttribute } from '@sisense/sdk-data';
 import { Chart } from '../chart';
-import { StyleOptions } from '../types';
+import { ChartStyleOptions } from '../types';
 import { templateForComponent } from './template';
 
 const template = templateForComponent(Chart);
@@ -15,7 +15,7 @@ export default {
 };
 
 // WIDGET STYLES
-const styleOptions: StyleOptions = {
+const styleOptions: ChartStyleOptions = {
   legend: {
     enabled: true,
     position: 'bottom',
@@ -238,7 +238,7 @@ export const WithHighlights = template({
     size: measureCost,
   },
   highlights: [
-    filters.members(mockAttributeGender, ['Male']),
-    filters.members(mockAttributeAgeRange, ['65+', '0-18']),
+    filterFactory.members(mockAttributeGender, ['Male']),
+    filterFactory.members(mockAttributeAgeRange, ['65+', '0-18']),
   ],
 });

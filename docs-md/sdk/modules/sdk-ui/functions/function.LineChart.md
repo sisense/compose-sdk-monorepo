@@ -30,10 +30,10 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
   dataSet={DM.DataSource}
   dataOptions={{
     category: [DM.Commerce.Date.Years],
-    value: [measures.sum(DM.Commerce.Revenue)],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
     breakBy: [DM.Commerce.Gender],
   }}
-  filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
+  filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
   onDataPointClick= {(point, nativeEvent) => {
     console.log('clicked', point, nativeEvent);
   }}

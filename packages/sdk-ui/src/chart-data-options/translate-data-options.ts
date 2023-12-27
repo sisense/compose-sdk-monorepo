@@ -10,8 +10,11 @@ import {
   isCategorical,
   isScatter,
   isIndicator,
+  isBoxplot,
+  isScattermap,
 } from '../chart-options-processor/translations/types';
 import { ChartType } from '../types';
+import { translateBoxplotDataOptions } from './translate-boxplot-data-options';
 import {
   ChartDataOptions,
   CartesianChartDataOptions,
@@ -21,14 +24,17 @@ import {
   ChartDataOptionsInternal,
   ScatterChartDataOptions,
   ScatterChartDataOptionsInternal,
-  IndicatorDataOptionsInternal,
-  IndicatorDataOptions,
+  IndicatorChartDataOptionsInternal,
+  IndicatorChartDataOptions,
   TableDataOptionsInternal,
   TableDataOptions,
   Value,
   isCategory,
   isValue,
   Category,
+  BoxplotChartDataOptions,
+  BoxplotChartCustomDataOptions,
+  ScattermapChartDataOptions,
 } from './types';
 import {
   translateColumnToCategory,
@@ -37,6 +43,7 @@ import {
   translateCategoryToAttribute,
   translateValueToMeasure,
 } from './utils';
+import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
 
 export function translateChartDataOptions(
   chartType: ChartType,
@@ -47,9 +54,15 @@ export function translateChartDataOptions(
   else if (isCategorical(chartType))
     return translateCategoricalChartDataOptions(dataOptions as CategoricalChartDataOptions);
   else if (isIndicator(chartType)) {
-    return translateIndicatorChartDataOptions(dataOptions as IndicatorDataOptions);
+    return translateIndicatorChartDataOptions(dataOptions as IndicatorChartDataOptions);
   } else if (isScatter(chartType)) {
     return translateScatterChartDataOptions(dataOptions as ScatterChartDataOptions);
+  } else if (isBoxplot(chartType)) {
+    return translateBoxplotDataOptions(
+      dataOptions as BoxplotChartDataOptions | BoxplotChartCustomDataOptions,
+    );
+  } else if (isScattermap(chartType)) {
+    return translateScattermapChartDataOptions(dataOptions as ScattermapChartDataOptions);
   } else throw new Error(`Unexpected chart type: ${chartType}`);
 }
 
@@ -76,13 +89,17 @@ const translateCategoricalChartDataOptions = (
 };
 
 const translateIndicatorChartDataOptions = (
-  indicatorDataOptions: IndicatorDataOptions,
-): IndicatorDataOptionsInternal => {
+  indicatorChartDataOptions: IndicatorChartDataOptions,
+): IndicatorChartDataOptionsInternal => {
   return {
-    value: indicatorDataOptions.value?.map(translateColumnToValue),
-    secondary: indicatorDataOptions.secondary?.map(translateColumnToValue),
-    min: indicatorDataOptions.min?.map(translateColumnToValue)?.map(withDefaultAggregation('min')),
-    max: indicatorDataOptions.max?.map(translateColumnToValue)?.map(withDefaultAggregation('max')),
+    value: indicatorChartDataOptions.value?.map(translateColumnToValue),
+    secondary: indicatorChartDataOptions.secondary?.map(translateColumnToValue),
+    min: indicatorChartDataOptions.min
+      ?.map(translateColumnToValue)
+      ?.map(withDefaultAggregation('min')),
+    max: indicatorChartDataOptions.max
+      ?.map(translateColumnToValue)
+      ?.map(withDefaultAggregation('max')),
   };
 };
 
@@ -128,11 +145,20 @@ export function getAttributes(
     categories = ['x', 'breakBy'].flatMap((key) => {
       return dataOptions[key] ?? [];
     });
+  } else if (isBoxplot(chartType)) {
+    categories = ['category', 'outliers'].flatMap((key) => {
+      return dataOptions[key] ? [dataOptions[key]] : [];
+    });
+  } else if (isScattermap(chartType)) {
+    categories = ['locations'].flatMap((key) => {
+      return dataOptions[key] ?? [];
+    });
   }
 
   return categories.map(translateCategoryToAttribute);
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function getMeasures(
   dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
@@ -140,23 +166,33 @@ export function getMeasures(
   let values: Value[] = [];
 
   if (isIndicator(chartType)) {
-    values = getIndicatorValues(dataOptions as IndicatorDataOptionsInternal);
+    values = getIndicatorValues(dataOptions as IndicatorChartDataOptionsInternal);
   } else if (isScatter(chartType)) {
     values = ['x', 'y', 'breakByColor', 'size'].flatMap((key) => {
       return dataOptions[key] && isValue(dataOptions[key]) ? [dataOptions[key]] : [];
     });
   } else if (isCartesian(chartType) || isCategorical(chartType)) {
     values = (dataOptions as CartesianChartDataOptionsInternal).y;
+  } else if (isBoxplot(chartType)) {
+    values = ['boxMin', 'boxMedian', 'boxMax', 'whiskerMin', 'whiskerMax', 'outliersCount'].flatMap(
+      (key) => {
+        return dataOptions[key] ? [dataOptions[key]] : [];
+      },
+    );
+  } else if (isScattermap(chartType)) {
+    values = ['size', 'colorBy', 'details'].flatMap((key) => {
+      return dataOptions[key] && isValue(dataOptions[key]) ? [dataOptions[key]] : [];
+    });
   }
 
   return values.map(translateValueToMeasure);
 }
 
-function getIndicatorValues(indicatorDataOptions: IndicatorDataOptionsInternal): Value[] {
-  const value = indicatorDataOptions.value?.[0];
-  const secondary = indicatorDataOptions.secondary?.[0];
-  const min = indicatorDataOptions.min?.[0];
-  const max = indicatorDataOptions.max?.[0];
+function getIndicatorValues(indicatorChartDataOptions: IndicatorChartDataOptionsInternal): Value[] {
+  const value = indicatorChartDataOptions.value?.[0];
+  const secondary = indicatorChartDataOptions.secondary?.[0];
+  const min = indicatorChartDataOptions.min?.[0];
+  const max = indicatorChartDataOptions.max?.[0];
 
   return [value, secondary, min, max].filter((item): item is Value => !!item);
 }

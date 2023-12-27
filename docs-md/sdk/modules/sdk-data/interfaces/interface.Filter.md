@@ -4,7 +4,7 @@ title: Filter
 
 # Interface Filter
 
-Base interface for filter. See [filters](../namespaces/namespace.filters/index.md) for how to create filters.
+Base interface for filter. See [filterFactory](../namespaces/namespace.filterFactory/index.md) for how to create filters.
 
 ## Extends
 
@@ -17,6 +17,14 @@ Base interface for filter. See [filters](../namespaces/namespace.filters/index.m
 > **`readonly`** **attribute**: [`Attribute`](interface.Attribute.md)
 
 Attribute this filter instance is filtering
+
+***
+
+### guid
+
+> **`readonly`** **guid**: `string`
+
+Global filter identifier
 
 ***
 

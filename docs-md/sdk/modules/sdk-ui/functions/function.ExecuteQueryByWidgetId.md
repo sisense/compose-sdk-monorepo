@@ -7,7 +7,7 @@ title: ExecuteQueryByWidgetId
 > **ExecuteQueryByWidgetId**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 Executes a query over the existing widget and renders a function as child component.
-The child component is passed the results of the query.
+The child component is passed the state of the query as defined in [QueryByWidgetIdState](../type-aliases/type-alias.QueryByWidgetIdState.md).
 
 This component takes the Children Prop Pattern and
 offers an alternative approach to the [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md) hook.
@@ -34,10 +34,18 @@ The example below executes a query over the existing dashboard widget with the s
   dashboardOid={'6441e728dac1920034bce737'}
 >
 {
-  (data, query) => {
+  ({data, isLoading, isError}) => {
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+    if (isError) {
+      return <div>Error</div>;
+    }
     if (data) {
+      console.log(data);
       return <div>{`Total Rows: ${data.rows.length}`}</div>;
     }
+    return null;
   }
 }
 </ExecuteQueryByWidgetId>

@@ -109,7 +109,7 @@ describe('Chart', () => {
     expect(chart).toBeTruthy();
   });
 
-  it('render a columm chart with breakBy', async () => {
+  it('render a column chart with breakBy', async () => {
     const { findByLabelText } = render(
       <Chart
         dataSet={dataSet}

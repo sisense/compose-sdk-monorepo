@@ -1,5 +1,5 @@
 import { LineType, StackType } from './translations/translations-to-highcharts';
-import { IndicatorStyleType, PolarType } from './translations/design-options';
+import { IndicatorStyleType, PolarType, BoxplotType } from './translations/design-options';
 import { PieType } from './translations/pie-plot-options';
 
 /**
@@ -110,6 +110,10 @@ export type TreemapSubtype = 'treemap';
 
 export type SunburstSubtype = 'sunburst';
 
+export type BoxplotSubtype = 'boxplot/full' | 'boxplot/hollow';
+
+export type ScattermapSubtype = 'scattermap';
+
 export type ChartSubtype =
   | LineSubtype
   | AreaSubtype
@@ -118,7 +122,9 @@ export type ChartSubtype =
   | PolarSubtype
   | IndicatorSubtype
   | TreemapSubtype
-  | SunburstSubtype;
+  | SunburstSubtype
+  | BoxplotSubtype
+  | ScattermapSubtype;
 
 export const chartSubtypeToDesignOptions = Object.freeze<
   Record<
@@ -129,6 +135,7 @@ export const chartSubtypeToDesignOptions = Object.freeze<
       pieType?: PieType;
       polarType?: PolarType;
       indicatorType?: IndicatorStyleType;
+      boxplotType?: BoxplotType;
     }
   >
 >({
@@ -156,4 +163,7 @@ export const chartSubtypeToDesignOptions = Object.freeze<
   'indicator/gauge': { indicatorType: 'gauge' },
   treemap: {},
   sunburst: {},
+  'boxplot/full': { boxplotType: 'full' },
+  'boxplot/hollow': { boxplotType: 'hollow' },
+  scattermap: {},
 });

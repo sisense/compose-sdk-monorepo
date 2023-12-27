@@ -27,8 +27,8 @@ Query state that contains the status of the query execution, the result data, or
  const { data, isLoading, isError } = useExecuteQuery({
    dataSource: DM.DataSource,
    dimensions: [DM.Commerce.AgeRange],
-   measures: [measures.sum(DM.Commerce.Revenue)],
-   filters: [filters.greaterThan(DM.Commerce.Revenue, 1000)],
+   measures: [measureFactory.sum(DM.Commerce.Revenue)],
+   filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
  });
  if (isLoading) {
    return <div>Loading...</div>;

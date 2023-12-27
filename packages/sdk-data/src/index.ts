@@ -2,7 +2,6 @@ import './translation/initialize-i18n.js';
 
 /**
  * @packageDocumentation
- * @beta
  */
 export * from './interfaces.js';
 
@@ -26,32 +25,33 @@ export * from './dimensional-model/filters/filters.js';
  * and {@link @sisense/sdk-ui!ExecuteQueryProps | ExecuteQuery}.
  *
  * @example
- * Example of using the component to query the `Sample ECommerce` data source.
- * Function `filters.greaterThan` is used to create a filter on `Revenue` to get values
+ * Example of using React hook `useExecuteQuery` to query the `Sample ECommerce` data source.
+ * Factory function `filterFactory.greaterThan()` is used to create a filter on `Revenue` to get values
  * greater than 1000.
  * ```tsx
- * <ExecuteQuery
- *   dataSource={DM.DataSource}
- *   dimensions={[DM.Commerce.AgeRange]}
- *   measures={[measures.sum(DM.Commerce.Revenue)]}
- *   filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
- * >
- * {
- *   (data) => {
- *     if (data) {
- *       console.log(data);
- *       return <div>{`Total Rows: ${data.rows.length}`}</div>;
- *     }
+ *   const { data, isLoading, isError } = useExecuteQuery({
+ *     dataSource: DM.DataSource,
+ *     dimensions: [DM.Commerce.AgeRange],
+ *     measures: [measureFactory.sum(DM.Commerce.Revenue)],
+ *     filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
+ *   });
+ *   if (isLoading) {
+ *     return <div>Loading...</div>;
  *   }
- * }
- * </ExecuteQuery>
+ *   if (isError) {
+ *     return <div>Error</div>;
+ *   }
+ *   if (data) {
+ *     return <div>{`Total Rows: ${data.rows.length}`}</div>;
+ *   }
+ *   return null;
  * ```
  */
-export * as filters from './dimensional-model/filters/factory.js';
+export * as filterFactory from './dimensional-model/filters/factory.js';
 
 export * from './dimensional-model/measures/measures.js';
 /**
- * Functions to build formulas that aggregate, summarize, and accumulate data,
+ * Functions to create measures that aggregate, summarize, and accumulate data,
  * plus show changes in data over time.
  *
  * They are similar to [Formulas](https://docs.sisense.com/main/SisenseLinux/build-formulas.htm) in Sisense.
@@ -61,26 +61,34 @@ export * from './dimensional-model/measures/measures.js';
  * and {@link @sisense/sdk-ui!ExecuteQueryProps | ExecuteQuery}.
  *
  * @example
- * Example of using the component to query the `Sample ECommerce` data source.
- * Function `measures.sum` is used to create a measure that sums the `Revenue` column.
+ * Example of using React hook useExecuteQuery to query the `Sample ECommerce` data source.
+ * Factory function `measureFactory.sum()` is used to create a measure that sums the `Revenue` column.
  * ```tsx
- * <ExecuteQuery
- *   dataSource={DM.DataSource}
- *   dimensions={[DM.Commerce.AgeRange]}
- *   measures={[measures.sum(DM.Commerce.Revenue)]}
- *   filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
- * >
- * {
- *   (data) => {
- *     if (data) {
- *       console.log(data);
- *       return <div>{`Total Rows: ${data.rows.length}`}</div>;
- *     }
+ *   const { data, isLoading, isError } = useExecuteQuery({
+ *     dataSource: DM.DataSource,
+ *     dimensions: [DM.Commerce.AgeRange],
+ *     measures: [measureFactory.sum(DM.Commerce.Revenue)],
+ *     filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
+ *   });
+ *   if (isLoading) {
+ *     return <div>Loading...</div>;
  *   }
- * }
- * </ExecuteQuery>
+ *   if (isError) {
+ *     return <div>Error</div>;
+ *   }
+ *   if (data) {
+ *     return <div>{`Total Rows: ${data.rows.length}`}</div>;
+ *   }
+ *   return null;
  * ```
  */
-export * as measures from './dimensional-model/measures/factory.js';
+export * as measureFactory from './dimensional-model/measures/factory.js';
 
 export * from './dimensional-model/simple-column-types.js';
+
+/**
+ * Functions to create elements for advanced analytics – for example, attributes and measures for constructing a custom Boxplot chart
+ */
+export * as analyticsFactory from './dimensional-model/analytics/factory.js';
+
+export * from './utils.js';

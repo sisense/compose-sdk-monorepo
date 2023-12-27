@@ -17,6 +17,7 @@ export type {
   CsvQueryErrorState,
   ExecuteQueryParams,
   ExecuteCsvQueryParams,
+  ExecuteCSVQueryConfig,
   ExecuteQueryByWidgetIdParams,
   QueryByWidgetIdState,
 } from './types';

@@ -9,7 +9,7 @@ import { TranslatableError } from '../translation/translatable-error';
 /**
  * All the properties that fully describe a query you want to send.
  *
- * We use "dimensions" it public interface because the term is closer to the query and charting
+ * We use "dimensions" in public interface because the term is closer to the query and charting
  * as used in the industry (Sisense included).
  * internally, "dimensions" are represented by attributes as the latter is closer to the data model.
  */
@@ -32,6 +32,7 @@ const prepareQueryParams = (
     dimensions = [],
     measures = [],
     filters = [],
+    filterRelations,
     highlights = [],
     count = QUERY_DEFAULT_LIMIT,
     offset = QUERY_DEFAULT_OFFSET,
@@ -56,6 +57,7 @@ const prepareQueryParams = (
     attributes: dimensions, // internally, dimensions are represented by attributes
     measures,
     filters,
+    filterRelations,
     highlights,
     count,
     offset,

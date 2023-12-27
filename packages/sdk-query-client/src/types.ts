@@ -1,4 +1,12 @@
-import { Filter, Measure, Attribute, Cell, QueryResultData, DataSource } from '@sisense/sdk-data';
+import {
+  Filter,
+  Measure,
+  Attribute,
+  Cell,
+  QueryResultData,
+  DataSource,
+  FilterRelation,
+} from '@sisense/sdk-data';
 
 /**
  * All the properties that fully describe a query you want to send.
@@ -9,6 +17,7 @@ export type QueryDescription = {
   measures: Measure[];
   filters: Filter[];
   highlights: Filter[];
+  filterRelations?: FilterRelation;
   count?: number;
   offset?: number;
 };
@@ -45,6 +54,7 @@ export type ExecutingCsvQueryResult = {
 };
 
 export type MetadataItem = {
+  instanceid?: string;
   measure?: MetadataItemJaql;
   jaql: MetadataItemJaql;
   panel?: string;
@@ -85,6 +95,7 @@ export type MetadataItemJaql = {
 };
 
 export type JaqlQueryPayload = QueryOptions & {
+  filterRelations?: FilterRelation;
   metadata: MetadataItem[];
 };
 

@@ -18,6 +18,7 @@ import { usePrevious } from '../common/hooks/use-previous';
 import { extractDashboardFiltersForWidget } from '../dashboard-widget/translate-dashboard-filters';
 import { fetchWidgetDtoModel } from '../dashboard-widget/use-fetch-widget-dto-model';
 import { ExecuteQueryByWidgetIdParams, QueryByWidgetIdState } from './types';
+import { Filter } from '@sisense/sdk-data';
 
 /**
  * React hook that executes a data query extracted from an existing widget in the Sisense instance.
@@ -53,6 +54,7 @@ export const useExecuteQueryByWidgetId = withTracking('useExecuteQueryByWidgetId
 
 /**
  * {@link useExecuteQueryByWidgetId} without tracking to be used inside other hooks or components in Compose SDK.
+ *
  * @internal
  */
 export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetIdParams) {
@@ -186,6 +188,7 @@ export async function executeQueryByWidgetId({
     includeDashboard: includeDashboardFilters,
     api,
   });
+  // TODO: support filter relations extraction from widget
   const widgetQuery = extractQueryFromWidget(fetchedWidget);
   const { dataSource, dimensions, measures } = widgetQuery;
   let { filters: widgetFilters, highlights: widgetHighlights } = widgetQuery;
@@ -193,18 +196,22 @@ export async function executeQueryByWidgetId({
   if (includeDashboardFilters) {
     const { filters: dashboardFilters, highlights: dashboardHighlight } =
       extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
-    widgetFilters = mergeFilters(dashboardFilters, widgetFilters);
+    widgetFilters = mergeFilters(dashboardFilters, widgetFilters as Filter[]);
     widgetHighlights = mergeFilters(dashboardHighlight, widgetHighlights);
   }
 
-  const mergedFilters = mergeFiltersByStrategy(widgetFilters, filters, filtersMergeStrategy);
+  const mergedFilters = mergeFiltersByStrategy(
+    widgetFilters as Filter[],
+    filters,
+    filtersMergeStrategy,
+  );
   const mergedHighlights = mergeFiltersByStrategy(
     widgetHighlights,
     highlights,
     filtersMergeStrategy,
   );
 
-  const executeQueryParams: ExecuteQueryParams = {
+  const executeQueryParams: Omit<ExecuteQueryParams, 'filters'> & { filters?: Filter[] } = {
     dataSource,
     dimensions,
     measures,

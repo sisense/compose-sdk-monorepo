@@ -14,7 +14,7 @@ import { ChartWidgetExtractedProps, extractWidgetProps } from './translate-widge
 import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
-  IndicatorDataOptions,
+  IndicatorChartDataOptions,
   ScatterChartDataOptions,
 } from '../types';
 import { DatetimeMask, PanelItem, WidgetDto } from './types';
@@ -323,7 +323,7 @@ describe('translate widget', () => {
         },
       };
       const { dataOptions } = extractWidgetProps(widget).props;
-      const { value, secondary, min, max } = dataOptions as IndicatorDataOptions;
+      const { value, secondary, min, max } = dataOptions as IndicatorChartDataOptions;
 
       verifyColumn(value![0], widget.metadata.panels[0].items[0]);
       verifyColumn(secondary![0], widget.metadata.panels[1].items[0]);

@@ -35,7 +35,7 @@ the chart will use the `defaultDataSource` specified in the parent Sisense Conte
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 

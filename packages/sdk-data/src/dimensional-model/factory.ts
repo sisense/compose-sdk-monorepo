@@ -54,5 +54,5 @@ export function create(item: any): Element | Element[] {
     return createDimension(item);
   }
 
-  throw new TranslatableError('errors.unsupportedDimesionalElement');
+  throw new TranslatableError('errors.unsupportedDimensionalElement');
 }

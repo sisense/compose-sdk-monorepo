@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as DM from '../sample-ecommerce';
-import { filters, measures } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import { Chart } from '../../chart';
 import { ChartType } from '../../types';
 
@@ -17,16 +17,16 @@ const switchableChartTypes: ChartType[] = [
 const dataOptions = {
   category: [DM.Commerce.Condition],
   value: [
-    measures.divide(
-      measures.sum(DM.Commerce.Revenue),
-      measures.count(DM.Commerce.VisitID),
+    measureFactory.divide(
+      measureFactory.sum(DM.Commerce.Revenue),
+      measureFactory.count(DM.Commerce.VisitID),
       'Custom Average',
     ),
-    measures.count(DM.Commerce.Revenue),
+    measureFactory.count(DM.Commerce.Revenue),
   ],
   breakBy: [DM.Commerce.AgeRange],
 };
-const chartFilters = [filters.greaterThan(DM.Commerce.Revenue, 0)];
+const chartFilters = [filterFactory.greaterThan(DM.Commerce.Revenue, 0)];
 const styleOptions = {
   legend: {
     enabled: true,

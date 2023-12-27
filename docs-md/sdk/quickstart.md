@@ -7,7 +7,7 @@ title: Quickstart Guide (React)
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
->This guide is for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart). We also have a Quickstart Guide for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular).
+>This guide is for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart). We also have a Quickstart Guide for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue).
 ## Prerequisites
 
 Compose SDK contains a set of React components needed to interface with your Sisense instance. The following prerequisites are needed in order to use the SDK:
@@ -33,31 +33,45 @@ Follow the instructions on the [Scaffolding Your First Vite Project](https://vit
 
 Navigate to your project and install the dependencies.
 
+<div style="display: flex; margin-right: 10px;">
+  <div style="flex: 1; overflow-x: auto; max-width: calc(50% - 5px);">
+
 For npm:
 
 ```sh
 npm install
 ```
+  </div>
+  <div style="flex: 1; margin-left: 10px; overflow-x: auto; max-width: calc(50% - 5px);">
 
 For Yarn:
 
 ```sh
-yarn install
+yarn
 ```
+  </div>
+</div>
 
 To run the Vite application, use:
+
+<div style="display: flex; margin-right: 10px;">
+  <div style="flex: 1; overflow-x: auto; max-width: calc(50% - 5px);">
 
 For npm:
 
 ```sh
 npm run dev
 ```
+  </div>
+  <div style="flex: 1; margin-left: 10px; overflow-x: auto; max-width: calc(50% - 5px);">
 
-For Yarn,
+For Yarn:
 
 ```sh
-yarn run dev
+yarn dev
 ```
+  </div>
+</div>
 
 ## Installing the SDK Packages
 
@@ -69,19 +83,27 @@ Compose SDK contains three packages for public use:
 
 The Compose SDK packages are deployed via public NPM Registry. To install the packages:
 
-   For npm:
+<div style="display: flex; margin-right: 10px;">
+  <div style="flex: 1; overflow-x: auto; max-width: calc(50% - 5px);">
 
-   ```sh
-   npm i @sisense/sdk-ui @sisense/sdk-data
-   npm i @sisense/sdk-cli --save-dev
-   ```
+For npm:
 
-   For yarn:
+```sh
+npm i @sisense/sdk-ui @sisense/sdk-data
+npm i @sisense/sdk-cli --save-dev
+```
+  </div>
+  <div style="flex: 1; margin-left: 10px; overflow-x: auto; max-width: calc(50% - 5px);">
 
-   ```sh
-   yarn add @sisense/sdk-ui @sisense/sdk-data
-   yarn add @sisense/sdk-cli --dev
-   ```
+For Yarn:
+
+```sh
+yarn add @sisense/sdk-ui @sisense/sdk-data
+yarn add @sisense/sdk-cli --dev
+```
+  </div>
+</div>
+
 ### Change package registry from GitHub Packages to public NPM
 
 Starting from version `0.11.3`, Compose SDK packages and their dependencies are hosted on the public NPM registry,
@@ -161,14 +183,8 @@ Enter your password to complete the command and generate the data model represen
 The resulting file, which is created in the `src/` directory, should look something like below:
 
 ```ts
-import {
-  Dimension,
-  DateDimension,
-  Attribute,
-  createAttribute,
-  createDateDimension,
-  createDimension,
-} from '@sisense/sdk-data';
+import type { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
+import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
 
 export const DataSource = 'Sample ECommerce';
 
@@ -191,20 +207,20 @@ export const Brand = createDimension({
 }) as BrandDimension;
 ```
 
-This works for any data model, including models you create. Just replace `"Sample Healthcare"` with the name of your data model.
+This works for any data model, including models you create. Just replace `"Sample ECommerce"` with the name of your data model.
 
 ## Embedding a Chart in your Application
 
 In this section, you will modify the main `app` component to embed a chart visualizing data from the Sample ECommerce data source.
 
-Use the two components, `SisenseContextProvider` and `Chart`, from `@sisense/sdk-ui` along with the `measures` and `filters` utilities from `@sisense/sdk-data`.
+Use the two components, `SisenseContextProvider` and `Chart`, from `@sisense/sdk-ui` along with the `measureFactory` and `filterFactory` utilities from `@sisense/sdk-data`.
 
 > **Note:**
 > The following assumptions are made about your application:
 >
 > - The `src/App.tsx` file is the main React component.
 > - The `sample-ecommerce.ts` file generated earlier resides in `src/`.
-> - The URL to your application (for example, http://localhost:5173), is already added as an entry to CORS Allowed Origins section on your Sisense instance. If not, you can do so on your Sisense instance by going to _Admin_, then _Security Settings_.
+> - The URL to your application (f.e. http://localhost:5173) is already added as an entry to CORS Allowed Origins section on your Sisense instance. If not, you can do so on your Sisense instance by going to _Admin_, then _Security Settings_.
 
 ### Connecting to a Sisense Instance
 
@@ -233,7 +249,9 @@ export default App;
 > **Note:**
 > The above example uses the API token (also called _bearer authentication_) to connect to a Sisense instance. To generate an API token for your Sisense user account, see the Sisense Instance Authentication section above. The `SisenseContextProvider` also supports other authentication mechanisms including WAT and SSO.
 
-To render a chart in your application that queries your data model, use the `Chart` component, the `measures` and `filters` utilities, and your previously generated data model file.
+### Adding a chart
+
+To render a chart in your application that queries your data model, use the `Chart` component, the `measureFactory` and `filterFactory` utilities, and your previously generated data model file.
 
 Use the `dataOptions` property (`ChartProps` interface) to assign table columns or attributes from your data model to the categories and values of a chart. This is similar to the **Data** panel in the **Sisense Widget Editor**, where you can drag and drop columns to the **Categories**, **Values**, and **Break By** fields. For example, if you wanted to render a line chart with `Age Range` on the X-axis and a sum aggregation of `Revenue` on the Y-axis, your `dataOptions` object would look like:
 
@@ -241,13 +259,13 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 // chartType={'line'}
 {
   category: [DM.Commerce.AgeRange],
-  value: [measures.sum(DM.Commerce.Revenue)],
+  value: [measureFactory.sum(DM.Commerce.Revenue)],
   breakBy: [],
 }
 ```
 
 > **Note**
-> Use `measures.sum()` from the example above to specify the `sum` type aggregation on the `Revenue` category. This `measures` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measures`](./modules/sdk-data/namespaces/namespace.measures/index.md) documentation for more information.
+> Use `measureFactory.sum()` from the example above to specify the `sum` type aggregation on the `Revenue` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/namespaces/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 
@@ -256,7 +274,7 @@ The following is a complete example of a rendered chart in an application.
 
 import { Chart, SisenseContextProvider } from '@sisense/sdk-ui';
 import * as DM from './sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 
 function App() {
   return (
@@ -270,7 +288,7 @@ function App() {
           chartType={'line'}
           dataOptions={{
             category: [DM.Commerce.AgeRange],
-            value: [measures.sum(DM.Commerce.Revenue)],
+            value: [measureFactory.sum(DM.Commerce.Revenue)],
             breakBy: [],
           }}
           styleOptions={{

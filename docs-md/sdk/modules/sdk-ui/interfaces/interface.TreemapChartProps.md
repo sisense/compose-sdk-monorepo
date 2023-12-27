@@ -43,7 +43,7 @@ BaseChartProps.dataSet
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 
@@ -77,7 +77,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 > **styleOptions**?: [`TreemapStyleOptions`](interface.TreemapStyleOptions.md)
 
-Configuration that define functional style of the various chart elements
+Configuration that defines functional style of the various chart elements
 
 ### Callbacks
 

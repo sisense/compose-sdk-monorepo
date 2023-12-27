@@ -4738,12 +4738,12 @@ __metadata:
   resolution: "@sisense/sdk-cli@workspace:packages/sdk-cli"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^0.16.0
-    "@sisense/sdk-data": ^0.16.0
-    "@sisense/sdk-modeling": ^0.16.0
-    "@sisense/sdk-query-client": ^0.16.0
-    "@sisense/sdk-rest-client": ^0.16.0
-    "@sisense/sdk-tracking": ^0.16.0
+    "@sisense/sdk-common": ^1.0.0
+    "@sisense/sdk-data": ^1.0.0
+    "@sisense/sdk-modeling": ^1.0.0
+    "@sisense/sdk-query-client": ^1.0.0
+    "@sisense/sdk-rest-client": ^1.0.0
+    "@sisense/sdk-tracking": ^1.0.0
     "@types/inquirer": 8.2.6
     "@types/yargs": ^17.0.22
     cross-fetch: ^4.0.0
@@ -4758,7 +4758,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-common@^0.16.0, @sisense/sdk-common@workspace:packages/sdk-common":
+"@sisense/sdk-common@^1.0.0, @sisense/sdk-common@workspace:packages/sdk-common":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-common@workspace:packages/sdk-common"
   dependencies:
@@ -4768,13 +4768,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-data@^0.16.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
+"@sisense/sdk-data@^1.0.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-data@workspace:packages/sdk-data"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^0.16.0
-    "@sisense/sdk-rest-client": ^0.16.0
+    "@sisense/sdk-common": ^1.0.0
+    "@sisense/sdk-rest-client": ^1.0.0
     "@types/lodash": ^4.14.201
     "@types/numeral": 2.0.2
     "@types/object-hash": ^3.0.5
@@ -4788,25 +4788,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-modeling@^0.16.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
+"@sisense/sdk-modeling@^1.0.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-modeling@workspace:packages/sdk-modeling"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-data": ^0.16.0
+    "@sisense/sdk-data": ^1.0.0
     eslint: ^8.40.0
     prettier: 2.8.4
     typescript: 4.8.4
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-query-client@^0.16.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
+"@sisense/sdk-query-client@^1.0.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-query-client@workspace:packages/sdk-query-client"
   dependencies:
-    "@sisense/sdk-common": ^0.16.0
-    "@sisense/sdk-data": ^0.16.0
-    "@sisense/sdk-rest-client": ^0.16.0
+    "@sisense/sdk-common": ^1.0.0
+    "@sisense/sdk-data": ^1.0.0
+    "@sisense/sdk-rest-client": ^1.0.0
     "@sisense/task-manager": ^0.1.0
     "@types/tar": ^6.1.4
     "@types/uuid": ^9.0.0
@@ -4822,12 +4822,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-rest-client@^0.16.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
+"@sisense/sdk-rest-client@^1.0.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-rest-client@workspace:packages/sdk-rest-client"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^0.16.0
+    "@sisense/sdk-common": ^1.0.0
     eslint: ^8.40.0
     fetch-intercept: ^2.4.0
     prettier: 2.8.4
@@ -4835,7 +4835,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-tracking@^0.16.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
+"@sisense/sdk-tracking@^1.0.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-tracking@workspace:packages/sdk-tracking"
   dependencies:
@@ -4858,6 +4858,7 @@ __metadata:
     "@sisense/sdk-data": "workspace:^"
     "@sisense/sdk-tracking": "workspace:^"
     "@sisense/sdk-ui-preact": "workspace:^"
+    "@testing-library/angular": ^15.0.0
     eslint: ^8.40.0
     ng-packagr: ^15.2.2
     prettier: 2.8.4
@@ -4865,6 +4866,7 @@ __metadata:
     ts-deepmerge: ^6.2.0
     tslib: ^2.3.0
     typescript: ~4.9.4
+    vitest: ^0.34.6
   peerDependencies:
     "@angular/common": ^15.0.0 || ^16.0.0 || ^17.0.0
     "@angular/compiler": ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -4878,7 +4880,7 @@ __metadata:
   dependencies:
     "@preact/preset-vite": 2.5.0
     "@sisense/sdk-data": "workspace:^"
-    "@sisense/sdk-ui": ^0.16.0
+    "@sisense/sdk-ui": ^1.0.0
     "@types/node": ^18.16.0
     eslint: ^8.40.0
     preact: ^10.13.2
@@ -4912,7 +4914,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-ui@^0.16.0, @sisense/sdk-ui@workspace:^, @sisense/sdk-ui@workspace:packages/sdk-ui":
+"@sisense/sdk-ui@^1.0.0, @sisense/sdk-ui@workspace:^, @sisense/sdk-ui@workspace:packages/sdk-ui":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-ui@workspace:packages/sdk-ui"
   dependencies:
@@ -4923,11 +4925,11 @@ __metadata:
     "@mui/material": ^5.11.6
     "@mui/x-data-grid": ^6.16.0
     "@mui/x-data-grid-pro": ^6.16.0
-    "@sisense/sdk-common": ^0.16.0
-    "@sisense/sdk-data": ^0.16.0
-    "@sisense/sdk-query-client": ^0.16.0
-    "@sisense/sdk-rest-client": ^0.16.0
-    "@sisense/sdk-tracking": ^0.16.0
+    "@sisense/sdk-common": ^1.0.0
+    "@sisense/sdk-data": ^1.0.0
+    "@sisense/sdk-query-client": ^1.0.0
+    "@sisense/sdk-rest-client": ^1.0.0
+    "@sisense/sdk-tracking": ^1.0.0
     "@sisense/sisense-charts": 5.1.0-alpha-04052758.0
     "@storybook/addon-actions": 7.0.24
     "@storybook/addon-docs": 7.0.24
@@ -4943,6 +4945,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@types/fixed-data-table-2": ^0.8.8
+    "@types/leaflet": ^1.9.8
     "@types/lodash": ^4.14.194
     "@types/react": 18.2.0
     "@types/react-datepicker": ^4.11.2
@@ -4963,6 +4966,7 @@ __metadata:
     highcharts-react-official: ^3.2.1
     immer: ^10.0.2
     jsdom: ^22.1.0
+    leaflet: ^1.9.4
     lodash: ^4.17.21
     merge-deep: ^3.0.3
     plotly.js: ^2.25.2
@@ -6183,6 +6187,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@testing-library/angular@npm:^15.0.0":
+  version: 15.0.0
+  resolution: "@testing-library/angular@npm:15.0.0"
+  dependencies:
+    "@testing-library/dom": ^9.0.0
+    tslib: ^2.3.1
+  peerDependencies:
+    "@angular/common": ">= 17.0.0"
+    "@angular/core": ">= 17.0.0"
+    "@angular/platform-browser": ">= 17.0.0"
+    "@angular/router": ">= 17.0.0"
+  checksum: 5b52b4b643e5858251d2ee733fe450d9d5350da8be19ac39c54e137123199db1c1ca61bc513ecbf0792342cbb3dc3ba0e4e3c395c40d7d58583d4456236fa08e
+  languageName: node
+  linkType: hard
+
 "@testing-library/dom@npm:^9.0.0":
   version: 9.3.3
   resolution: "@testing-library/dom@npm:9.3.3"
@@ -6567,6 +6586,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:*":
+  version: 7946.0.13
+  resolution: "@types/geojson@npm:7946.0.13"
+  checksum: b3b68457c89bc3f0445dc9eb54d07e6f89658672867c54989bc7f71f87d54e562195b291d43e1b84476493351271d7ccb9f5c6ab2012b29fbafbb0e8e43c4bca
+  languageName: node
+  linkType: hard
+
 "@types/glob@npm:^7.1.3":
   version: 7.2.0
   resolution: "@types/glob@npm:7.2.0"
@@ -6677,6 +6703,15 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:^1.9.8":
+  version: 1.9.8
+  resolution: "@types/leaflet@npm:1.9.8"
+  dependencies:
+    "@types/geojson": "*"
+  checksum: d6a33d5db0bdf608957cd52701b17ee89e936034a8f0ab619b8e7ef70312a0da177837dd125756e83af036276a8b299cc724c9ffb3caa7d22893fea2791e1e13
   languageName: node
   linkType: hard
 
@@ -15490,6 +15525,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"leaflet@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "leaflet@npm:1.9.4"
+  checksum: bfc79f17a247b37b92d84b3c78702501603392d6589fde606de4a825d11f1609d90225388834f2e0709dac327e52dcd4b4b9cc9fd3d590060c5b1e53b84fa6c6
+  languageName: node
+  linkType: hard
+
 "less-loader@npm:11.1.0":
   version: 11.1.0
   resolution: "less-loader@npm:11.1.0"
@@ -19733,6 +19775,7 @@ __metadata:
     prettier: ^2.8.8
     typedoc: 0.25.3
     typedoc-plugin-versions: ^0.2.3
+    typedoc-plugin-vue: ^1.1.0
     vitest: 0.34.1
   languageName: unknown
   linkType: soft
@@ -21498,7 +21541,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.4.0, tslib@npm:^2.5.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.5.0":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
@@ -21721,6 +21764,15 @@ __metadata:
   peerDependencies:
     typedoc: ^0.23
   checksum: abaaa57613845f5159a016b445f33b4e27fbd38f20f9b3c40614833531eb2a170a990ee7ccca8b357d4598076915d3ec087a3da398a00bf119a0d4fd488bb9d9
+  languageName: node
+  linkType: hard
+
+"typedoc-plugin-vue@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "typedoc-plugin-vue@npm:1.1.0"
+  peerDependencies:
+    typedoc: 0.25.x
+  checksum: b689dab5716a38c76e9c0848932cb0118e2af3c482b0b0ea80c67680a006c6ee35a024db819b0dc972af52e572a04b0d008862c6874bca7d7547872cc2e6caac
   languageName: node
   linkType: hard
 
@@ -22514,7 +22566,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^0.34.3":
+"vitest@npm:^0.34.3, vitest@npm:^0.34.6":
   version: 0.34.6
   resolution: "vitest@npm:0.34.6"
   dependencies:

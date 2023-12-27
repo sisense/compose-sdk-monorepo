@@ -2,7 +2,7 @@ import {
   IndicatorStyleType,
   NumericIndicatorSubType,
 } from '../../../chart-options-processor/translations/design-options';
-import { IndicatorDataOptions, ThemeSettings } from '../../../types';
+import { IndicatorChartDataOptions, ThemeSettings } from '../../../types';
 import { LegacyIndicatorChartOptions } from '../types';
 import {
   defaultGaugeOptions,
@@ -16,7 +16,7 @@ import { getValueColorOptions, overrideWithValueColor } from './override-with-va
 
 export type ChartRenderingOptions = {
   chartData: IndicatorChartData;
-  dataOptions: IndicatorDataOptions;
+  dataOptions: IndicatorChartDataOptions;
   themeSettings?: ThemeSettings;
 };
 

@@ -48,7 +48,9 @@ Executes a data query.
 
 > **executeQueryByWidgetId**(`params`): `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-  `query`: [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md);
+  `query`: `Omit`\< [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md), `"filters"` \> & \{
+    `filters`: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[];
+  };
  } \>
 
 Executes a data query extracted from an existing widget in the Sisense instance.
@@ -63,7 +65,9 @@ Executes a data query extracted from an existing widget in the Sisense instance.
 
 `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-  `query`: [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md);
+  `query`: `Omit`\< [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md), `"filters"` \> & \{
+    `filters`: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[];
+  };
  } \>
 
 Query result

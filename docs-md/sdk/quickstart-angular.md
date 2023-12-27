@@ -9,7 +9,7 @@ title: Quickstart Guide (Angular)
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
-This guide is for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart).
+This guide is for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue).
 
 ## Prerequisites
 
@@ -63,7 +63,7 @@ You can achieve this by adding the `allowSyntheticDefaultImports` flag to the `c
 
 Compose SDK for Angular contains three packages for public use:
 
-- [@sisense/sdk-ui-angular](https://www.npmjs.com/package/@sisense/sdk-ui-angular): Angular components for rendering charts and executing queries against a Sisense instance.
+- [@sisense/sdk-ui-angular](https://www.npmjs.com/package/@sisense/sdk-ui-angular): Angular components and services for rendering charts and executing queries against a Sisense instance.
 - [@sisense/sdk-data](https://www.npmjs.com/package/@sisense/sdk-data): Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
 - [@sisense/sdk-cli](https://www.npmjs.com/package/@sisense/sdk-cli): A command-line tool for generating a TypeScript representation of a Sisense data model.
 
@@ -79,7 +79,7 @@ In order to retrieve data, you need to authenticate your application with your S
 
 ### Authentication
 
-There are a number different ways you can authenticate your application. To learn more, see [Authentication and Security](./authentication-security.md#authentication).
+There are a number of different ways you can authenticate your application. To learn more, see [Authentication and Security](./authentication-security.md#authentication).
 
 Here, we'll use an API Token that we retrieve using the Compose SDK tool. To do so, run the `get-api-token` command:
 
@@ -119,14 +119,8 @@ Enter your password to complete the command and generate the data model represen
 The resulting file, which is created in the `src/` directory, should look something like below:
 
 ```ts
-import {
-  Dimension,
-  DateDimension,
-  Attribute,
-  createAttribute,
-  createDateDimension,
-  createDimension,
-} from '@sisense/sdk-data';
+import type { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
+import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
 
 export const DataSource = 'Sample Healthcare';
 
@@ -165,7 +159,7 @@ In this section, you will add a new component and modify the main app module to 
 > The following assumptions are made about your application:
 >
 > - The `sample-healthcare.ts` file generated earlier resides in `src/`.
-> - The URL to your application (f.e. http://localhost:4200), is already added as an entry to CORS Allowed Origins section on your Sisense instance
+> - The URL to your application (f.e. http://localhost:4200) is already added as an entry to CORS Allowed Origins section on your Sisense instance
 
 ### Connecting to a Sisense Instance
 
@@ -262,13 +256,13 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 // chartType={'line'}
 {
   category: [DM.Doctors.Specialty],
-  value: [measures.average(DM.Admissions.TimeofStay)],
+  value: [measureFactory.average(DM.Admissions.TimeofStay)],
   breakBy: [],
 }
 ```
 
 > **Note:**
-> Use `measures.average()` from the example above to specify the `average` type aggregation on the `TimeofStay` category. This `measures` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measures`](./modules/sdk-data/namespaces/namespace.measures/index.md) documentation for more information.
+> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `TimeofStay` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/namespaces/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 
@@ -276,7 +270,7 @@ The following is a complete example of a rendered chart in an application.
 // src/app/analytics/analytics.component.ts
 
 import { Component } from '@angular/core';
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 import * as DM from '../../sample-healthcare';
 
 @Component({
@@ -290,7 +284,7 @@ export class AnalyticsComponent {
     dataSet: DM.DataSource,
     dataOptions: {
       category: [DM.Doctors.Specialty],
-      value: [measures.average(DM.Admissions.TimeofStay, 'Average time of stay')],
+      value: [measureFactory.average(DM.Admissions.TimeofStay, 'Average time of stay')],
       breakBy: [],
     },
     styleOptions: {
@@ -325,7 +319,7 @@ You first Compose SDK chart with Angular should look something like this:
 
 ![Line chart rendered by the Angular component](./img/angular-quickstart-chart-example.png)
 
-See the [SisenseContextProvider](./modules/sdk-ui/functions/function.SisenseContextProvider.md) and [Chart](./modules/sdk-ui/functions/function.Chart.md) docs for more details on supported props.
+See the [SISENSE_CONTEXT_CONFIG_TOKEN](./modules/sdk-ui-angular/variables/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md) and [ChartComponent](./modules/sdk-ui-angular/classes/class.ChartComponent.md) docs for more details on supported props.
 
 ## Next Steps
 

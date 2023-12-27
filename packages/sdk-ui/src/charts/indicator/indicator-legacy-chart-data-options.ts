@@ -5,7 +5,7 @@ import {
   defaultConfig,
   applyFormatPlainText,
 } from '../../chart-options-processor/translations/number-format-config';
-import { IndicatorDataOptions } from '../../chart-data-options/types';
+import { IndicatorChartDataOptions } from '../../chart-data-options/types';
 import {
   IndicatorChartDesignOptions,
   NumericIndicatorSubType,
@@ -27,7 +27,7 @@ export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChar
 const getValueCustomBackgroundColor = (
   chartData: IndicatorChartData,
   chartDesignOptions: IndicatorChartDesignOptions,
-  chartDataOptions: IndicatorDataOptions,
+  chartDataOptions: IndicatorChartDataOptions,
 ) => {
   const colorOptions = getValueColorOptions(chartDataOptions);
 
@@ -45,7 +45,7 @@ const getValueCustomBackgroundColor = (
 export const createLegacyChartDataOptions = (
   chartData: IndicatorChartData,
   chartDesignOptions: IndicatorChartDesignOptions,
-  chartDataOptions: IndicatorDataOptions,
+  chartDataOptions: IndicatorChartDataOptions,
 ) => {
   const min = chartData.min || 0;
   const max = chartData.max || 100;
@@ -110,8 +110,8 @@ function convertToLegacyChartType(
 }
 
 function getNumberFormatConfigForColumn(
-  chartDataOptions: IndicatorDataOptions,
-  columnName: keyof IndicatorDataOptions,
+  chartDataOptions: IndicatorChartDataOptions,
+  columnName: keyof IndicatorChartDataOptions,
 ): NumberFormatConfig | undefined {
   const column = chartDataOptions[columnName]?.[0];
   if (column && 'numberFormatConfig' in column) {

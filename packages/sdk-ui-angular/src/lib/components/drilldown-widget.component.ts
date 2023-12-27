@@ -61,7 +61,7 @@ export type CustomDrilldownResult = CustomDrilldownResultBase & {
  * chart = {
  *   dataOptions: {
  *     category: [DM.Divisions.Divison_name],
- *     value: [measures.sum(DM.Admissions.Cost_of_admission)],
+ *     value: [measureFactory.sum(DM.Admissions.Cost_of_admission)],
  *     breakBy: [],
  *   },
  *   dataPointContextMenu: ({ point, nativeEvent }: { point: any; nativeEvent: MouseEvent }) => {

@@ -8,6 +8,7 @@ export type DropdownProps = {
   elements: JSX.Element[];
   icon?: JSX.Element;
   selectedIdx?: number;
+  disabled?: boolean;
 } & React.ComponentProps<typeof MenuList>;
 
 export const Dropdown: FunctionComponent<DropdownProps> = (props) => {
@@ -26,19 +27,21 @@ export const Dropdown: FunctionComponent<DropdownProps> = (props) => {
     color: themeSettings.typography.primaryTextColor,
   };
 
-  const menuItems = props.elements.map((element) => {
+  const menuItems = props.elements.map((element, idx) => {
     return (
       <MenuItem
-        key={element.key}
+        key={idx}
         onClick={() => {
           setOpen(false);
         }}
         sx={{
           ...muiSx,
+          minHeight: 'unset',
           '&:hover': {
             backgroundColor: getSlightlyDifferentColor(themeSettings.general.backgroundColor),
           },
         }}
+        disabled={props.disabled}
       >
         {element}
       </MenuItem>
@@ -49,17 +52,19 @@ export const Dropdown: FunctionComponent<DropdownProps> = (props) => {
       <Button
         ref={anchorRef}
         onClick={toggleOpen}
-        className={'csdk-h-full csdk-border-solid csdk-border-input'}
+        className={'csdk-h-full csdk-border-solid csdk-border-input csdk-box-border'}
         sx={{
           ...muiSx,
           border: '1px solid rgb(110 115 125 / var(--tw-border-opacity))',
           marginLeft: '5px',
           marginRight: '5px',
           borderRadius: '0.375rem',
+          verticalAlign: 'unset',
           '&:hover': {
             backgroundColor: getSlightlyDifferentColor(themeSettings.general.backgroundColor),
           },
         }}
+        disabled={props.disabled}
       >
         {props.icon ?? selected !== null ? props.elements[selected ?? 0] : <div>{'Select...'}</div>}
       </Button>

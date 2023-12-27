@@ -1,7 +1,7 @@
 import {
   Filter,
-  measures,
-  filters,
+  measureFactory,
+  filterFactory,
   NumericFilter,
   TextFilter,
   RankingFilter,
@@ -14,7 +14,7 @@ import { CriteriaFilterTile } from '../../filters/components/criteria-filter-til
 const CriteriaFilterDemoChart1 = () => {
   const dataOptions = {
     category: [DM.Category.Category],
-    value: [measures.sum(DM.Commerce.Revenue, 'Revenue')],
+    value: [measureFactory.sum(DM.Commerce.Revenue, 'Revenue')],
     breakBy: [],
   };
   const styleOptions = {};
@@ -27,16 +27,16 @@ const CriteriaFilterDemoChart1 = () => {
     ],
   };
 
-  const initialRevenueFilter = filters.greaterThanOrEqual(DM.Commerce.Revenue, 10000);
+  const initialRevenueFilter = filterFactory.greaterThanOrEqual(DM.Commerce.Revenue, 10000);
   const [revenueFilter, setRevenueFilter] = useState<Filter | null>(initialRevenueFilter);
 
-  const initialCostFilter = filters.between(DM.Commerce.Cost, 0, 10000);
+  const initialCostFilter = filterFactory.between(DM.Commerce.Cost, 0, 10000);
   const [costFilter, setCostFilter] = useState<Filter | null>(initialCostFilter);
 
-  const initialCategoryFilter = filters.doesntContain(DM.Category.Category, 'Cameras');
+  const initialCategoryFilter = filterFactory.doesntContain(DM.Category.Category, 'Cameras');
   const [categoryFilter, setCategoryFilter] = useState<Filter | null>(initialCategoryFilter);
 
-  const initialCountryFilter = filters.doesntStartWith(DM.Country.Country, 'United');
+  const initialCountryFilter = filterFactory.doesntStartWith(DM.Country.Country, 'United');
   const [countryFilter, setCountryFilter] = useState<Filter | null>(initialCountryFilter);
 
   const appliedFilters = useMemo(() => {
@@ -84,9 +84,9 @@ const CriteriaFilterDemoChart1 = () => {
 };
 
 const CriteriaFilterDemoChart2 = () => {
-  const measureSumRevenue = measures.sum(DM.Commerce.Revenue, 'sum Revenue');
-  const measureSumQuantity = measures.sum(DM.Commerce.Quantity, 'sum Quantity');
-  const measureAvgQuantity = measures.average(DM.Commerce.Quantity, 'avg Quantity');
+  const measureSumRevenue = measureFactory.sum(DM.Commerce.Revenue, 'sum Revenue');
+  const measureSumQuantity = measureFactory.sum(DM.Commerce.Quantity, 'sum Quantity');
+  const measureAvgQuantity = measureFactory.average(DM.Commerce.Quantity, 'avg Quantity');
   const dataOptions = {
     category: [DM.Category.Category],
     value: [measureSumRevenue],
@@ -102,7 +102,7 @@ const CriteriaFilterDemoChart2 = () => {
     ],
   };
 
-  const initialRankedFilter = filters.topRanking(DM.Category.Category, measureSumQuantity, 5);
+  const initialRankedFilter = filterFactory.topRanking(DM.Category.Category, measureSumQuantity, 5);
   const [rankedFilter, setRankedFilter] = useState<Filter | null>(initialRankedFilter);
 
   const appliedFilters = useMemo(() => {

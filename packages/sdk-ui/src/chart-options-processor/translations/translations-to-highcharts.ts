@@ -19,7 +19,7 @@ import {
   ChartData,
   CartesianChartData,
 } from '../../chart-data/types';
-import { legendColor } from '../../chart-data/series-data-color-service';
+import { legendColor } from '../../chart-data/data-coloring';
 import { PolarChartDesignOptions, StackableChartDesignOptions } from './design-options';
 import { AxisMinMax, AxisSettings } from './axis-section';
 import { Stacking } from '../chart-options-service';
@@ -340,7 +340,7 @@ const addPaddingForValueLabels = (min: number, max: number, minPadding = 0.1) =>
   };
 };
 
-const adjustMinMaxWhenInvalid = (explicitAxis: AxisMinMax, autoMinMax: AxisMinMax) => {
+export const adjustMinMaxWhenInvalid = (explicitAxis: AxisMinMax, autoMinMax: AxisMinMax) => {
   const adjustedAutoMinMax = { ...autoMinMax };
   // adjust so that min will not greater or equal to max
   if (explicitAxis.min && explicitAxis.min >= adjustedAutoMinMax.max) {

@@ -1,4 +1,5 @@
-import type { DataColorOptions } from '../chart-data/series-data-color-service';
+/* eslint-disable max-lines */
+import type { DataColorOptions } from '../chart-data/data-coloring';
 import type {
   NumberFormatConfig,
   SeriesChartType,
@@ -64,9 +65,9 @@ export interface CategoryStyle {
  *       },
  *     ],
  *     value: [
- *       measures.sum(DM.Commerce.Revenue),
+ *       measureFactory.sum(DM.Commerce.Revenue),
  *       {
- *         column: measures.sum(DM.Commerce.Quantity),
+ *         column: measureFactory.sum(DM.Commerce.Quantity),
  *         showOnRightAxis: true,
  *         chartType: 'column',
  *       },
@@ -138,9 +139,9 @@ export type ValueStyle = {
  *       },
  *     ],
  *     value: [
- *       measures.sum(DM.Commerce.Revenue),
+ *       measureFactory.sum(DM.Commerce.Revenue),
  *       {
- *         column: measures.sum(DM.Commerce.Quantity),
+ *         column: measureFactory.sum(DM.Commerce.Quantity),
  *         showOnRightAxis: true,
  *         chartType: 'column',
  *       },
@@ -230,7 +231,7 @@ export interface CategoricalChartDataOptions {
  * Configuration for how to query aggregate data and assign data
  * to a {@link IndicatorChartType | Indicator chart}.
  */
-export interface IndicatorDataOptions {
+export interface IndicatorChartDataOptions {
   /** Measure columns (or measures) whose values are used for main value of indicator. */
   value?: (MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn)[];
   /** Measure columns (or measures) whose values are used for secondary value of indicator. */
@@ -338,17 +339,117 @@ export interface TableDataOptions {
 }
 
 /**
+ * Geographic location level for a Scattermap column.
+ * This type can have one of the following values:
+ * - 'auto': Automatically determines the appropriate location level.
+ * - 'country': Represents the country level in the geographical hierarchy.
+ * - 'state': Represents the state or province level in the geographical hierarchy.
+ * - 'city': Represents the city level in the geographical hierarchy.
+ */
+export type ScattermapLocationLevel = 'auto' | 'country' | 'state' | 'city';
+/**
+ * Scattermap column that allows to specify the geographic location level.
+ */
+export interface ScattermapColumn extends StyledColumn {
+  level: ScattermapLocationLevel;
+}
+
+/**
+ * Configuration for how to query aggregate data and assign data
+ * to axes of a Scattermap chart.
+ */
+export interface ScattermapChartDataOptions {
+  /**
+   * Columns (or attributes) whose values represent locations on the map.
+   */
+  locations: (Column | StyledColumn | ScattermapColumn)[];
+  /**
+   * Measure column (or measure) representing the size of the points on the map.
+   */
+  size?: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  /**
+   * Measure column (or measure) representing the color of the points on the map.
+   */
+  colorBy?: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  /**
+   * Column or measure column representing the additional details for the points on the map.
+   */
+  details?: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+}
+
+/**
+ * Represents the type of box whisker data algorithm, which can be either `iqr`, `extremums`, or `standardDeviation`.
+ */
+export type BoxWhiskerType = 'iqr' | 'extremums' | 'standardDeviation';
+
+/**
+ * Configuration for how to query aggregate data and assign data
+ * to axes of a Boxplot chart.
+ *
+ * The Boxplot chart can receive a singular numeric column, which is utilized internally to calculate multiple metrics
+ * such as `whisker max`, `whisker min`, `box max`, `box median`, and `box min`.
+ */
+export type BoxplotChartDataOptions = {
+  /**
+   * Columns (or attributes) whose values represent categories in the chart.
+   */
+  category: [(Column | StyledColumn)?];
+  /**
+   * Columns (or attributes) whose values represent the target numeric value column for computing boxplot metrics according to the selected `boxType`
+   */
+  value: [Column | StyledColumn];
+  /**
+   * The type of box whisker data algorithm to be used.
+   */
+  boxType: BoxWhiskerType;
+  /**
+   * Toggle flag whether outliers should be enabled in the boxplot chart.
+   */
+  outliersEnabled?: boolean;
+};
+
+/**
+ * Configuration for how to query aggregate data and assign data
+ * to axes of a Boxplot chart.
+ *
+ * The Boxplot chart can receive multiple numeric columns, which represent all the metrics
+ * such as `whisker max`, `whisker min`, `box max`, `box median`, and `box min`.
+ */
+export type BoxplotChartCustomDataOptions = {
+  /**
+   * Columns (or attributes) whose values represent categories in the chart.
+   */
+  category: [(Column | StyledColumn)?];
+  /**
+   * Measure columns (or measures) representing the target numeric values used for computing boxplot metrics.
+   */
+  value: (Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn)[];
+  /**
+   * Optional measure columns (or measures) representing the boxplot outliers value.
+   */
+  outliers?: [Column | StyledColumn];
+  /**
+   * The title for the numeric value column in the chart.
+   */
+  valueTitle: string;
+};
+
+/**
  * Configuration for querying aggregate data and assigning data to chart encodings.
  *
  * There are separate configurations for {@link CartesianChartDataOptions | Cartesian},
  * {@link CategoricalChartDataOptions | Categorical},
- * {@link ScatterChartDataOptions | Scatter}, and {@link IndicatorDataOptions | Indicator} charts.
+ * {@link ScatterChartDataOptions | Scatter}, {@link IndicatorChartDataOptions | Indicator},
+ * and {@link BoxplotChartDataOptions | Boxplot} charts.
  */
 export type ChartDataOptions =
   | CartesianChartDataOptions
   | CategoricalChartDataOptions
   | ScatterChartDataOptions
-  | IndicatorDataOptions;
+  | IndicatorChartDataOptions
+  | BoxplotChartDataOptions
+  | BoxplotChartCustomDataOptions
+  | ScattermapChartDataOptions;
 
 /** @internal */
 export interface Category extends CategoryStyle {
@@ -400,6 +501,15 @@ export interface ScatterChartDataOptionsInternal {
 }
 
 /** @internal */
+export interface ScattermapChartDataOptionsInternal {
+  locations: Category[];
+  size?: Value;
+  colorBy?: Value;
+  details?: Category | Value;
+  locationLevel: ScattermapLocationLevel;
+}
+
+/** @internal */
 export type TableDataOptionsInternal = {
   columns: (Category | Value)[];
 };
@@ -409,12 +519,27 @@ export type ChartDataOptionsInternal =
   | CartesianChartDataOptionsInternal
   | CategoricalChartDataOptionsInternal
   | ScatterChartDataOptionsInternal
-  | IndicatorDataOptionsInternal;
+  | IndicatorChartDataOptionsInternal
+  | BoxplotChartDataOptionsInternal
+  | ScattermapChartDataOptionsInternal;
 
 /** @internal */
-export type IndicatorDataOptionsInternal = {
+export type IndicatorChartDataOptionsInternal = {
   min?: Value[];
   max?: Value[];
   value?: Value[];
   secondary?: Value[];
 };
+
+/** @internal */
+export interface BoxplotChartDataOptionsInternal {
+  category?: Category;
+  boxMin: Value;
+  boxMedian: Value;
+  boxMax: Value;
+  whiskerMin: Value;
+  whiskerMax: Value;
+  outliersCount: Value;
+  outliers?: Category;
+  valueTitle: string;
+}

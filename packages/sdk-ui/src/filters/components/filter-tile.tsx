@@ -7,7 +7,7 @@ import { ArrowDownIcon } from './icons';
 import { useThemeContext } from '../../theme-provider';
 import { getSlightlyDifferentColor } from '../../utils/color';
 import { styled } from '@mui/material/styles';
-import { FilterVariant, isVertical } from './criteria-filter-tile/criteria-filter-operations';
+import { FilterVariant, isVertical } from './common/filter-utils';
 
 interface Props {
   title: string;

@@ -50,8 +50,8 @@ Table component
   dataOptions={{
     columns: [
       DM.Commerce.AgeRange,
-      measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
-      measures.sum(DM.Commerce.Cost, 'Total Cost'),
+      measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+      measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
     ],
   }}
   styleOptions={{

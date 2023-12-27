@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable complexity */
 /* eslint-disable max-params */
+import type { DataLabelsOptions } from '@sisense/sisense-charts';
 import { Style } from '../chart-options-service';
 import { defaultConfig, applyFormatPlainText, NumberFormatConfig } from './number-format-config';
 import { AxisOrientation } from './axis-section';
@@ -26,7 +27,7 @@ export type ValueLabelSettings = {
     relative: boolean;
     totals: boolean;
   };
-  formatter?: (this: InternalSeries) => string;
+  formatter?: (this: InternalSeries, options?: DataLabelsOptions, valuePropName?: string) => string;
 };
 
 const defaultValueLabelSettings: ValueLabelSettings = {

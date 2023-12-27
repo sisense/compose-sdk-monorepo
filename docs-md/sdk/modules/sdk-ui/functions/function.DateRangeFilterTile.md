@@ -26,7 +26,7 @@ Date Range Filter Tile component
 React example of configuring the date min max values and handling onChange event.
 ```ts
 const [dateRangeFilter, setDateRangeFilter] = useState<Filter>(
-  filters.dateRange(DM.Commerce.Date.Years),
+  filterFactory.dateRange(DM.Commerce.Date.Years),
 );
 
 return (

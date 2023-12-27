@@ -22,6 +22,9 @@ import { TimeseriesCharts } from './pages/timeseries-charts';
 import { CriteriaFilterDemo } from './pages/criteria-filter-demo';
 import { UseGetWidgetModelDemo } from './pages/use-get-widget-model-demo';
 import { PageCrossFiltering } from './pages/cross-filtering-page';
+import { RelativeDateFilterDemo } from './pages/relative-date-filter-demo';
+import { BoxplotChartDemo } from './pages/boxplot-chart-demo';
+import { ScattermapChartDemo } from './pages/scattermap-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -41,9 +44,12 @@ const pages: ComponentType[] = [
   MuiDataGridDemo,
   ChartFilterCycle,
   CriteriaFilterDemo,
+  RelativeDateFilterDemo,
   UseExecuteQueryDemo,
   ChartTypeSwitchingDemo,
   UseGetWidgetModelDemo,
+  BoxplotChartDemo,
+  ScattermapChartDemo,
   ...loadAdditionalPages(),
 ];
 

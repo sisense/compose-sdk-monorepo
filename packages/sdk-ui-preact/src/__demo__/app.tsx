@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 import { ExecuteQuery, SisenseContextProvider } from '@sisense/sdk-ui';
 import { useState } from 'preact/hooks';
 import './app.css';
@@ -28,18 +28,18 @@ export function App() {
         <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
       </div>
       <SisenseContextProvider
-        url='http://'
-        username=''
-        password=''
+        url="http://"
+        username=""
+        password=""
         defaultDataSource={'Sample ECommerce'}
       />
       <ExecuteQuery
         dataSource={DM.DataSource}
         dimensions={[DM.Commerce.Date.Years]}
-        measures={[measures.sum(DM.Commerce.Cost)]}
+        measures={[measureFactory.sum(DM.Commerce.Cost)]}
         filters={[]}
       >
-        {(data) => {
+        {({ data }) => {
           if (!data || !data.rows[0] || !data.rows[0][1]) {
             return;
           }

@@ -32,7 +32,7 @@ import { template, rootId } from '../component-wrapper-helpers/template';
  *   dataSet: DM.DataSource,
  *   dataOptions: {
  *     category: [DM.Admissions.Admission_Time.Months],
- *     value: [measures.count(DM.Admissions.Patient_ID, 'Total Patients')],
+ *     value: [measureFactory.count(DM.Admissions.Patient_ID, 'Total Patients')],
  *     breakBy: [],
  *   },
  *   filters: [filterFactory.members(DM.Doctors.Specialty, ['Oncology', 'Cardiology'])],

@@ -7,7 +7,7 @@ import {
   DataColorOptions,
   RangeDataColorOptions,
   UniformDataColorOptions,
-} from '../chart-data/series-data-color-service';
+} from '../chart-data/data-coloring';
 import { ValueToColorMap, MultiColumnValueToColorMap, Color } from '../types';
 import { scaleBrightness, toGray } from '../utils/color';
 import {

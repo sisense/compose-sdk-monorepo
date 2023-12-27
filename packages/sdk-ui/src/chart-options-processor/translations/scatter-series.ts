@@ -16,14 +16,11 @@ import { ComparableData } from '../../chart-data-processor/table-processor';
 import { SeriesPointStructure } from './translations-to-highcharts';
 import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 import { SeriesWithAlerts, CompleteThemeSettings } from '../../types';
-import {
-  DataColorOptions,
-  generateColorsForDataStructures,
-  legendColor,
-} from '../../chart-data/series-data-color-service';
+import { DataColorOptions, legendColor } from '../../chart-data/data-coloring';
 import { seriesSliceWarning } from '../../utils/data-limit-warning';
 import { getDataOptionTitle } from '../../chart-data-options/utils';
 import { compareValues, SortDirectionValue } from '../../chart-data-processor/row-comparator';
+import { createDataColoringFunction } from '../../chart-data/data-coloring/create-data-coloring-function';
 
 const defaultSeriesColor = '#00cee6';
 
@@ -177,31 +174,25 @@ const getSeriesIndex = (colors: ScatterSeriesColorsMap, maskedBreakByColor?: str
 };
 
 const fillSeriesPointsWithColors = (series: SeriesType[], colorOptions: DataColorOptions) => {
-  const getValueFromSeries = (seriesValue: SeriesPointStructure) =>
-    parseFloat(`${seriesValue.custom?.maskedBreakByColor as string}`);
-  const applyColorToSeries = (
-    seriesValue: SeriesPointStructure,
-    color: string | undefined,
-  ): SeriesPointStructure => ({
-    ...seriesValue,
-    color,
+  const seriesColoringFunction = createDataColoringFunction({
+    getValueFromDataStructure: (seriesValue: SeriesPointStructure) =>
+      parseFloat(`${seriesValue.custom?.maskedBreakByColor as string}`),
+    applyColorToDataStructure: (seriesValue: SeriesPointStructure, color?: string) => ({
+      ...seriesValue,
+      color,
+    }),
   });
 
   return series.map((currentSeries) => ({
     ...currentSeries,
-    data: generateColorsForDataStructures(
-      currentSeries.data,
-      colorOptions,
-      getValueFromSeries,
-      applyColorToSeries,
-    ),
+    data: seriesColoringFunction(currentSeries.data, colorOptions),
   }));
 };
 
 const getColorOptions = (
   breakByColor: Category | Value | undefined,
 ): DataColorOptions | undefined => {
-  if (breakByColor && isValue(breakByColor)) {
+  if (breakByColor && isValue(breakByColor) && breakByColor.color) {
     return breakByColor.color;
   }
   return undefined;

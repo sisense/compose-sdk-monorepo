@@ -161,7 +161,6 @@ export const applyThemeToChart = (
  * Returns default theme settings, which can be used as base for custom theme options.
  *
  * @returns Theme settings object
- *
  * @internal
  */
 export const getDefaultThemeSettings = (): CompleteThemeSettings =>

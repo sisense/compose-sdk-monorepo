@@ -1,5 +1,11 @@
 import { DateFilter } from '..';
-import { LevelAttribute, DataSource, Filter, DateRangeFilter, filters } from '@sisense/sdk-data';
+import {
+  LevelAttribute,
+  DataSource,
+  Filter,
+  DateRangeFilter,
+  filterFactory,
+} from '@sisense/sdk-data';
 import { useDateLimits } from './use-date-limits';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
 
@@ -53,7 +59,7 @@ export interface DateRangeFilterTileProps {
  * React example of configuring the date min max values and handling onChange event.
  * ```tsx
  * const [dateRangeFilter, setDateRangeFilter] = useState<Filter>(
- *   filters.dateRange(DM.Commerce.Date.Years),
+ *   filterFactory.dateRange(DM.Commerce.Date.Years),
  * );
  *
  * return (
@@ -105,7 +111,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     return (
       <DateFilter
         onChange={(dateFilter) => {
-          const newFilter = filters.dateRange(
+          const newFilter = filterFactory.dateRange(
             attribute,
             dateFilter.filter.from,
             dateFilter.filter.to,

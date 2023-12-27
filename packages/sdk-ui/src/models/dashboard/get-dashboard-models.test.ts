@@ -30,6 +30,9 @@ const getDashboardsMock = vi.fn<Parameters<RestApi['getDashboards']>>(
 
 /**
  * Custom 'expect' extension to check if a value is in an array
+ *
+ * @param received
+ * @param expected
  */
 const oneOfExpectExtension = (received: unknown, expected: unknown[]) => {
   const pass = expected.includes(received);
@@ -48,7 +51,7 @@ const oneOfExpectExtension = (received: unknown, expected: unknown[]) => {
   }
 };
 
-type ExpectWithOneOfExtention = typeof expect & { oneOf: (arr: unknown[]) => unknown };
+type ExpectWithOneOfExtension = typeof expect & { oneOf: (arr: unknown[]) => unknown };
 
 vi.mock('../../api/rest-api', () => ({
   RestApi: class {
@@ -73,7 +76,7 @@ describe('getDashboardModels', () => {
       dashboardsMock.map((dashboardMock) => ({
         oid: dashboardMock.oid,
         title: dashboardMock.title,
-        dataSource: (expect as ExpectWithOneOfExtention).oneOf([
+        dataSource: (expect as ExpectWithOneOfExtension).oneOf([
           dashboardMock.datasource.title,
           dashboardMock.datasource.fullname,
         ]),
@@ -91,7 +94,7 @@ describe('getDashboardModels', () => {
       dashboardsMock.map((dashboardMock) => ({
         oid: dashboardMock.oid,
         title: dashboardMock.title,
-        dataSource: (expect as ExpectWithOneOfExtention).oneOf([
+        dataSource: (expect as ExpectWithOneOfExtension).oneOf([
           dashboardMock.datasource.title,
           dashboardMock.datasource.fullname,
         ]),
@@ -115,7 +118,7 @@ describe('getDashboardModels', () => {
     expect(result[0]).toEqual({
       oid: targetDashboardMock.oid,
       title: targetDashboardMock.title,
-      dataSource: (expect as ExpectWithOneOfExtention).oneOf([
+      dataSource: (expect as ExpectWithOneOfExtension).oneOf([
         targetDashboardMock.datasource.title,
         targetDashboardMock.datasource.fullname,
       ]),

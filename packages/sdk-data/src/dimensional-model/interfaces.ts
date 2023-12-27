@@ -75,7 +75,7 @@ export interface Element {
 
 /**
  * Base interface for measure, which is typically numeric aggregation over {@link Attribute}(s).
- * See {@link measures} for how to create measures.
+ * See {@link measureFactory} for how to create measures.
  *
  */
 export interface Measure extends Element {
@@ -374,9 +374,14 @@ export interface LevelAttribute extends Attribute {
 }
 
 /**
- * Base interface for filter. See {@link filters} for how to create filters.
+ * Base interface for filter. See {@link filterFactory} for how to create filters.
  */
 export interface Filter extends Element {
+  /**
+   * Global filter identifier
+   */
+  readonly guid: string;
+
   /**
    * Attribute this filter instance is filtering
    */
@@ -398,3 +403,13 @@ export interface Filter extends Element {
 export interface CustomFormulaContext {
   [key: string]: Attribute | Measure;
 }
+
+export type FilterRelationNode = Filter | Filter[] | FilterRelation | FilterRelationJaqlNode;
+
+export interface FilterRelation {
+  left: FilterRelationNode;
+  right: FilterRelationNode;
+  operator: 'AND' | 'OR';
+}
+
+export type FilterRelationJaqlNode = { instanceid: string };

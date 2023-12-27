@@ -53,13 +53,13 @@ export const THEME_CONFIG_TOKEN = new InjectionToken<ThemeConfig>('theme configu
 })
 @TrackableService<ThemeService>(['updateThemeSettings'])
 export class ThemeService {
-  private themeSettings$: BehaviorSubject<CompleteThemeSettings> =
-    new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
+  private themeSettings$: BehaviorSubject<CompleteThemeSettings>;
 
   constructor(
     private sisenseContextService: SisenseContextService,
     @Optional() @Inject(THEME_CONFIG_TOKEN) themeConfig?: ThemeConfig,
   ) {
+    this.themeSettings$ = new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
     void this.initThemeSettings(themeConfig?.theme);
   }
 

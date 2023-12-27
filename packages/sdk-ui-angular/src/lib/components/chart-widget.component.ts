@@ -79,18 +79,10 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
    *
-   * @category Chart
-   */
-  @Input()
-  styleOptions: ChartWidgetProps['styleOptions'];
-
-  /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.widgetStyleOptions}
-   *
    * @category Widget
    */
   @Input()
-  widgetStyleOptions: ChartWidgetProps['widgetStyleOptions'];
+  styleOptions: ChartWidgetProps['styleOptions'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
@@ -198,7 +190,6 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
-      widgetStyleOptions: this.widgetStyleOptions,
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,

@@ -10,7 +10,7 @@ Props for [ExecuteQuery](../functions/function.ExecuteQuery.md) component.
 
 ### children
 
-> **children**?: (`queryResult`) => `ReactNode`
+> **children**?: (`queryState`) => `ReactNode`
 
 Function as child component that is called to render the query results
 
@@ -18,7 +18,7 @@ Function as child component that is called to render the query results
 
 | Parameter | Type |
 | :------ | :------ |
-| `queryResult` | [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md) |
+| `queryState` | [`QueryState`](../type-aliases/type-alias.QueryState.md) |
 
 #### Returns
 
@@ -56,7 +56,7 @@ Dimensions of the query
 
 ### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 

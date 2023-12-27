@@ -13,7 +13,7 @@ import {
   DataPointEventHandler,
 } from '../../index';
 import * as DM from '../sample-ecommerce';
-import { Filter, filters, measures } from '@sisense/sdk-data';
+import { Filter, filterFactory, measureFactory } from '@sisense/sdk-data';
 
 const seriesToColorMap = {
   Female: '#00cee6',
@@ -88,7 +88,7 @@ const lineChartStyleOptions: LineStyleOptions = {
 
 export const ECommerceDemo = () => {
   const [yearFilter, setYearFilter] = useState<Filter | null>(
-    filters.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
+    filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
   );
   const [countryFilter, setCountryFilter] = useState<Filter | null>(null);
   const [quantityFilter, setQuantityFilter] = useState<Filter | null>(null);
@@ -99,12 +99,12 @@ export const ECommerceDemo = () => {
       yearFilter,
       countryFilter,
       quantityFilter,
-      filters.greaterThan(DM.Commerce.Revenue, 0),
+      filterFactory.greaterThan(DM.Commerce.Revenue, 0),
     ].filter((f) => !!f) as Filter[];
   }, [yearFilter, countryFilter, quantityFilter]);
 
   const pieActiveFilters = useMemo<Filter[]>(() => {
-    return [...activeFilters, filters.members(DM.Commerce.Gender, ['Male', 'Female'])].filter(
+    return [...activeFilters, filterFactory.members(DM.Commerce.Gender, ['Male', 'Female'])].filter(
       (f) => !!f,
     );
   }, [activeFilters]);
@@ -112,15 +112,15 @@ export const ECommerceDemo = () => {
   const scatterActiveFilters = useMemo<Filter[]>(() => {
     return [
       ...activeFilters,
-      filters.members(DM.Commerce.Gender, ['Male', 'Female']),
-      filters.topRanking(DM.Category.Category, DM.Measures.SumRevenue, 10),
+      filterFactory.members(DM.Commerce.Gender, ['Male', 'Female']),
+      filterFactory.topRanking(DM.Category.Category, DM.Measures.SumRevenue, 10),
     ].filter((f) => !!f);
   }, [activeFilters]);
 
   const barActiveFilters = useMemo<Filter[]>(() => {
     return [
       ...activeFilters,
-      filters.topRanking(DM.Category.Category, DM.Measures.SumRevenue, 3),
+      filterFactory.topRanking(DM.Category.Category, DM.Measures.SumRevenue, 3),
     ].filter((f) => !!f);
   }, [activeFilters]);
 
@@ -149,8 +149,8 @@ export const ECommerceDemo = () => {
                     },
                   ],
                   secondary: [],
-                  min: [measures.constant(0)],
-                  max: [measures.constant(125000000)],
+                  min: [measureFactory.constant(0)],
+                  max: [measureFactory.constant(125000000)],
                 }}
                 filters={activeFilters}
                 styleOptions={getIndicatorStyleOptions('Total Revenue')}
@@ -162,8 +162,8 @@ export const ECommerceDemo = () => {
                 dataOptions={{
                   value: [DM.Measures.Quantity],
                   secondary: [],
-                  min: [measures.constant(0)],
-                  max: [measures.constant(250000)],
+                  min: [measureFactory.constant(0)],
+                  max: [measureFactory.constant(250000)],
                 }}
                 filters={activeFilters}
                 styleOptions={getIndicatorStyleOptions('Total Units Sold')}
@@ -173,10 +173,10 @@ export const ECommerceDemo = () => {
             <div className={'csdk-border csdk-flex-1 csdk-border-lightgray csdk-w-full'}>
               <IndicatorChart
                 dataOptions={{
-                  value: [measures.countDistinct(DM.Commerce.VisitID)],
+                  value: [measureFactory.countDistinct(DM.Commerce.VisitID)],
                   secondary: [],
-                  min: [measures.constant(0)],
-                  max: [measures.constant(100000)],
+                  min: [measureFactory.constant(0)],
+                  max: [measureFactory.constant(100000)],
                 }}
                 filters={activeFilters}
                 styleOptions={getIndicatorStyleOptions('Total Sales')}
@@ -186,10 +186,10 @@ export const ECommerceDemo = () => {
             <div className={'csdk-border csdk-border-lightgray csdk-flex-1 csdk-w-full'}>
               <IndicatorChart
                 dataOptions={{
-                  value: [measures.countDistinct(DM.Brand.BrandID)],
+                  value: [measureFactory.countDistinct(DM.Brand.BrandID)],
                   secondary: [],
-                  min: [measures.constant(0)],
-                  max: [measures.constant(2500)],
+                  min: [measureFactory.constant(0)],
+                  max: [measureFactory.constant(2500)],
                 }}
                 filters={activeFilters}
                 styleOptions={getIndicatorStyleOptions('Total Brands')}

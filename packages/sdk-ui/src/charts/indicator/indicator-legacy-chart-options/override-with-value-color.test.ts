@@ -1,5 +1,5 @@
 import { ColoringService } from '../../../chart-data-options/coloring';
-import { IndicatorDataOptions, DataColorOptions } from '../../../types';
+import { IndicatorChartDataOptions, DataColorOptions } from '../../../types';
 import { LegacyIndicatorChartOptions } from '../types';
 import {
   getValueColorOptions,
@@ -26,8 +26,8 @@ vi.mock('../../../chart-data-options/coloring', () => {
 });
 
 describe('getValueColorOptions', () => {
-  it('should return the color options from IndicatorDataOptions', () => {
-    const dataOptions: IndicatorDataOptions = {
+  it('should return the color options from IndicatorChartDataOptions', () => {
+    const dataOptions: IndicatorChartDataOptions = {
       value: [
         {
           name: 'Some Data',
@@ -42,7 +42,7 @@ describe('getValueColorOptions', () => {
   });
 
   it('should return undefined if color options are not found', () => {
-    const dataOptions: IndicatorDataOptions = {
+    const dataOptions: IndicatorChartDataOptions = {
       value: [
         {
           name: 'Some Data',

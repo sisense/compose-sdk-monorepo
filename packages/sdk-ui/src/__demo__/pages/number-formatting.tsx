@@ -1,4 +1,4 @@
-import { Filter, filters as filtersFactory, measures as measureFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory, measureFactory } from '@sisense/sdk-data';
 import { ChartWidget } from '../../widgets/chart-widget';
 import * as DM from '../sample-ecommerce';
 import { defaultConfig } from '../../chart-options-processor/translations/number-format-config';
@@ -48,8 +48,8 @@ const dataOptions: CartesianChartDataOptions = {
 };
 
 const filters: Filter[] = [
-  filtersFactory.members(DM.Commerce.BrandID, ['1', '2']),
-  filtersFactory.members(DM.Commerce.CountryID, ['1', '2']),
+  filterFactory.members(DM.Commerce.BrandID, ['1', '2']),
+  filterFactory.members(DM.Commerce.CountryID, ['1', '2']),
 ];
 
 export const NumberFormatting = () => (

@@ -73,14 +73,6 @@ Default chart type of each series
 
 Configurations for how to interpret and present the data passed to the chart
 
-***
-
-#### styleOptions
-
-> **styleOptions**: `undefined` \| [`StyleOptions`](../../sdk-ui/type-aliases/type-alias.StyleOptions.md)
-
-Style options union across chart types
-
 ### Widget
 
 #### description
@@ -103,19 +95,19 @@ If not specified, the default value is `false`
 
 ***
 
+#### styleOptions
+
+> **styleOptions**: `undefined` \| [`ChartWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartWidgetStyleOptions.md)
+
+Style options for both the chart and widget including the widget header
+
+***
+
 #### title
 
 > **title**: `undefined` \| `string`
 
 Title of the widget
-
-***
-
-#### widgetStyleOptions
-
-> **widgetStyleOptions**: `undefined` \| [`WidgetStyleOptions`](../../sdk-ui/interfaces/interface.WidgetStyleOptions.md)
-
-Style options for both the widget as a whole and specifically for the widget header
 
 ### Callbacks
 

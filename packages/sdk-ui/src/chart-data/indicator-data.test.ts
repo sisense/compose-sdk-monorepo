@@ -1,6 +1,6 @@
 import { indicatorData } from './indicator-data';
 import { DataTable } from '../chart-data-processor/table-processor';
-import { IndicatorDataOptionsInternal } from '../chart-data-options/types';
+import { IndicatorChartDataOptionsInternal } from '../chart-data-options/types';
 import { IndicatorChartData } from './types';
 
 describe('indicatorData', () => {
@@ -58,7 +58,7 @@ describe('indicatorData', () => {
     ],
   };
 
-  const indicatorDataOptions: IndicatorDataOptionsInternal = {
+  const indicatorChartDataOptions: IndicatorChartDataOptionsInternal = {
     value: [
       {
         name: 'Total Cost',
@@ -111,7 +111,7 @@ describe('indicatorData', () => {
       max: 255,
     };
 
-    const result: IndicatorChartData = indicatorData(indicatorDataOptions, dataTable);
+    const result: IndicatorChartData = indicatorData(indicatorChartDataOptions, dataTable);
 
     expect(result).toEqual(expectedResult);
   });
@@ -119,7 +119,7 @@ describe('indicatorData', () => {
   it("should return empty chart data when dataOptions for 'value' are not specified", () => {
     const result: IndicatorChartData = indicatorData(
       {
-        ...indicatorDataOptions,
+        ...indicatorChartDataOptions,
         value: undefined,
       },
       dataTable,
@@ -143,7 +143,7 @@ describe('indicatorData', () => {
       columns: columnsWithBrokenColumnName,
     };
     const result: IndicatorChartData = indicatorData(
-      indicatorDataOptions,
+      indicatorChartDataOptions,
       dataTableWithBrokenColumnForValue,
     );
 

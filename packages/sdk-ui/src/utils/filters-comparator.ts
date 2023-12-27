@@ -60,6 +60,7 @@ export function isFiltersChanged(
 
 /**
  * Validates if the filter is a real Compose SDK Filter with all props and methods or a partially converted filter from widget DTO
+ *
  * @returns
  */
 function isRealCSDKFilter(filter: Filter): filter is Filter {

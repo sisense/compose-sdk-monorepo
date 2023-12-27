@@ -1,6 +1,17 @@
 {
   "name": "@sisense/sdk-ui",
-  "version": "0.16.0",
+  "homepage": "https://sisense.dev/guides/sdk/",
+  "description": "Compose SDK package containing general UI elements and related logic tailored for React development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sisense/compose-sdk-monorepo",
+    "directory": "packages/sdk-ui"
+  },
+  "keywords": [
+    "Sisense",
+    "Compose SDK"
+  ],
+  "version": "1.0.0",
   "type": "module",
   "exports": {
     ".": {
@@ -28,11 +39,11 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.11.6",
-    "@sisense/sdk-common": "^0.16.0",
-    "@sisense/sdk-data": "^0.16.0",
-    "@sisense/sdk-query-client": "^0.16.0",
-    "@sisense/sdk-rest-client": "^0.16.0",
-    "@sisense/sdk-tracking": "^0.16.0",
+    "@sisense/sdk-common": "^1.0.0",
+    "@sisense/sdk-data": "^1.0.0",
+    "@sisense/sdk-query-client": "^1.0.0",
+    "@sisense/sdk-rest-client": "^1.0.0",
+    "@sisense/sdk-tracking": "^1.0.0",
     "@sisense/sisense-charts": "5.1.0-alpha-04052758.0",
     "@tanstack/react-query": "4.36.1",
     "classnames": "^2.3.2",
@@ -44,6 +55,7 @@
     "guid-typescript": "^1.0.9",
     "highcharts-react-official": "^3.2.1",
     "immer": "^10.0.2",
+    "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "merge-deep": "^3.0.3",
     "react-datepicker": "^4.16.0",
@@ -93,6 +105,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/fixed-data-table-2": "^0.8.8",
+    "@types/leaflet": "^1.9.8",
     "@types/lodash": "^4.14.194",
     "@types/react": "18.2.0",
     "@types/react-datepicker": "^4.11.2",

@@ -27,6 +27,7 @@ export type ComponentDecorator<DecoratorConfig> = (
 
 /**
  * Decorator that adds sisense-specific functionality to a component
+ *
  * @param componentConfig - component configuration
  * @returns A component with sisense-specific functionality
  */

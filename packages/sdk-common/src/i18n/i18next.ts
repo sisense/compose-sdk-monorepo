@@ -19,6 +19,7 @@ export type I18NextInitResult = {
 
 /**
  * Basic i18next instance with default resources
+ *
  * @type {I18NextInstance}
  */
 export const basicI18nextInstance: I18NextInstance = i18next.createInstance({
@@ -38,6 +39,7 @@ alreadyLoadedNamespaces.set('common', basicI18Next);
 
 /**
  * Initialize i18next with the given configuration
+ *
  * @param config - i18next configuration
  * @returns i18next instance
  */

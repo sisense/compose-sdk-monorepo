@@ -64,15 +64,12 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   description: DashboardWidgetProps['description'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.styleOptions}
    *
-   * @category Chart
+   * @category Widget
    */
   @Input()
   styleOptions: DashboardWidgetProps['styleOptions'];
-
-  @Input()
-  widgetStyleOptions: DashboardWidgetProps['widgetStyleOptions'];
 
   @Input()
   highlightSelectionDisabled: DashboardWidgetProps['highlightSelectionDisabled'];
@@ -120,7 +117,6 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
       title: this.title,
       description: this.description,
       styleOptions: this.styleOptions,
-      widgetStyleOptions: this.widgetStyleOptions,
       highlightSelectionDisabled: this.highlightSelectionDisabled,
       drilldownOptions: this.drilldownOptions,
     };

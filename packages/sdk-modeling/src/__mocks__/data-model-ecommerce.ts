@@ -125,14 +125,8 @@ export const dimensionalModelECommerce = {
 };
 
 export const generatedModelECommerce = {
-  tsCode: `import {
-    Dimension,
-    DateDimension,
-    Attribute,
-    createAttribute,
-    createDateDimension,
-    createDimension,
-  } from '@sisense/sdk-data';
+  tsCode: `import type { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
+  import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
 
   export const DataSource = 'Sample ECommerce';
 
@@ -267,7 +261,7 @@ export const generatedModelECommerce = {
     }),
   }) as CountryDimension;
   `,
-  jsCode: `import { createAttribute, createDateDimension, createDimension, } from '@sisense/sdk-data';
+  jsCode: `import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
   export var DataSource = 'Sample ECommerce';
   export var Brand = createDimension({
       name: 'Brand',
@@ -372,7 +366,7 @@ export const generatedModelECommerce = {
   });
   `,
   dtsCode: `
-  import { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
+  import type { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
   export declare const DataSource = "Sample ECommerce";
   interface BrandDimension extends Dimension {
       Brand: Attribute;

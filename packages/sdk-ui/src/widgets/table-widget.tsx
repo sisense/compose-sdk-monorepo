@@ -36,12 +36,12 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
 })((props) => {
   const [refreshCounter, setRefreshCounter] = useState(0);
 
-  const { topSlot, bottomSlot, title, description, widgetStyleOptions } = props;
+  const { topSlot, bottomSlot, title, description, styleOptions } = props;
 
   const { themeSettings } = useThemeContext();
 
   const defaultSize = getWidgetDefaultSize('table', {
-    hasHeader: !widgetStyleOptions?.header?.hidden,
+    hasHeader: !styleOptions?.header?.hidden,
   });
   const { width, height, ...styleOptionsWithoutSizing } = props.styleOptions || {};
 
@@ -61,28 +61,28 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
         <div
           className={'csdk-h-full'}
           style={{
-            padding: WidgetSpaceAround[widgetStyleOptions?.spaceAround || 'None'],
+            padding: WidgetSpaceAround[styleOptions?.spaceAround || 'None'],
           }}
         >
           <div
             className="csdk-h-full csdk-overflow-hidden"
             style={{
-              borderWidth: widgetStyleOptions?.border ? '1px' : 0,
-              borderColor: widgetStyleOptions?.borderColor || themeSettings.chart.textColor,
-              borderRadius: widgetStyleOptions?.cornerRadius
-                ? WidgetCornerRadius[widgetStyleOptions.cornerRadius]
+              borderWidth: styleOptions?.border ? '1px' : 0,
+              borderColor: styleOptions?.borderColor || themeSettings.chart.textColor,
+              borderRadius: styleOptions?.cornerRadius
+                ? WidgetCornerRadius[styleOptions.cornerRadius]
                 : 0,
-              boxShadow: getShadowValue(widgetStyleOptions),
+              boxShadow: getShadowValue(styleOptions),
               display: 'flex',
               flexDirection: 'column',
             }}
           >
-            {!widgetStyleOptions?.header?.hidden && (
+            {!styleOptions?.header?.hidden && (
               <WidgetHeader
                 title={title}
                 description={description}
                 dataSetName={props.dataSource}
-                styleOptions={widgetStyleOptions?.header}
+                styleOptions={styleOptions?.header}
                 onRefresh={() => setRefreshCounter(refreshCounter + 1)}
               />
             )}
@@ -92,7 +92,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
               theme={{
                 chart: {
                   backgroundColor:
-                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
                 },
               }}
             >
@@ -100,7 +100,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
                 style={{
                   flexGrow: 1,
                   backgroundColor:
-                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
                 }}
               >
                 <Table

@@ -1,4 +1,4 @@
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 
 import {
   Commerce,
@@ -12,9 +12,9 @@ export { Commerce, Brand, Category, Country, DataSource };
 
 /** adding predefined set of measures */
 export const Measures = {
-  SumCost: measures.sum(Commerce.Cost).format('0,0$'),
-  AvgCost: measures.average(Commerce.Cost).format('0,0$'),
-  SumRevenue: measures.sum(Commerce.Revenue, 'Total Revenue').format('0,0$'),
-  Quantity: measures.sum(Commerce.Quantity, 'Total Quantity').format('0,0'),
-  CountBrands: measures.countDistinct(Commerce.BrandID).format('0,0'),
+  SumCost: measureFactory.sum(Commerce.Cost).format('0,0$'),
+  AvgCost: measureFactory.average(Commerce.Cost).format('0,0$'),
+  SumRevenue: measureFactory.sum(Commerce.Revenue, 'Total Revenue').format('0,0$'),
+  Quantity: measureFactory.sum(Commerce.Quantity, 'Total Quantity').format('0,0'),
+  CountBrands: measureFactory.countDistinct(Commerce.BrandID).format('0,0'),
 };

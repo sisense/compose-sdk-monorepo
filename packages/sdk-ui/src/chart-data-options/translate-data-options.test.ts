@@ -3,7 +3,7 @@ import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ScatterChartDataOptions,
-  IndicatorDataOptions,
+  IndicatorChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
   ChartDataOptions,
@@ -68,7 +68,7 @@ const categoricalDataOptions: CategoricalChartDataOptions = {
 
 const meas1min: MeasureColumn = { ...meas1, aggregation: 'min' };
 const meas1max: MeasureColumn = { ...meas1, aggregation: 'max' };
-const indicatorDataOptions: IndicatorDataOptions = {
+const indicatorChartDataOptions: IndicatorChartDataOptions = {
   value: [meas1Styled],
   secondary: [meas2Styled],
   min: [meas1min],
@@ -123,7 +123,7 @@ describe('translate data options', () => {
 
     it('returns correct attributes for indicator data options', () => {
       const chartType = 'indicator';
-      const chartDataOptions = translateChartDataOptions(chartType, indicatorDataOptions);
+      const chartDataOptions = translateChartDataOptions(chartType, indicatorChartDataOptions);
       verifyColumns(getAttributes(chartDataOptions, chartType), []);
     });
 
@@ -155,7 +155,7 @@ describe('translate data options', () => {
 
     it('returns correct measures for indicator data options', () => {
       const chartType = 'indicator';
-      const chartDataOptions = translateChartDataOptions(chartType, indicatorDataOptions);
+      const chartDataOptions = translateChartDataOptions(chartType, indicatorChartDataOptions);
       verifyColumns(getMeasures(chartDataOptions, chartType), [meas1, meas2, meas1min, meas1max]);
     });
 

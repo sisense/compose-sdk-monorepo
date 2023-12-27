@@ -4,5 +4,6 @@ title: Namespaces
 
 # Namespaces
 
-- [filters](namespace.filters/index.md)
-- [measures](namespace.measures/index.md)
+- [analyticsFactory](namespace.analyticsFactory/index.md)
+- [filterFactory](namespace.filterFactory/index.md)
+- [measureFactory](namespace.measureFactory/index.md)

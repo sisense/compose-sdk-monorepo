@@ -34,7 +34,7 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
        DM.Commerce.Сondition,
        DM.Commerce.Date.Years
      ],
-    value: [measures.sum(DM.Commerce.Quantity)],
+    value: [measureFactory.sum(DM.Commerce.Quantity)],
   }}
 />
 ```

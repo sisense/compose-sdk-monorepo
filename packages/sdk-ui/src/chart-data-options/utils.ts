@@ -7,6 +7,7 @@ import {
   MeasureColumn,
   isDatetime,
 } from '@sisense/sdk-data';
+import { isEmpty } from 'lodash';
 import {
   Category,
   Value,
@@ -14,6 +15,7 @@ import {
   StyledMeasureColumn,
   isMeasureColumn,
   AnyColumn,
+  CategoryStyle,
 } from './types';
 
 type AnyObject = Record<string, any>;
@@ -32,15 +34,33 @@ const safeMerge = (sourceToInherit: AnyObject, sourceToAbsorb: AnyObject): AnyOb
   return Object.assign(Object.create(sourceToInherit), sourceToAbsorb) as AnyObject;
 };
 
-export const translateColumnToCategory = (c: StyledColumn | Column): Category => {
+export const splitColumn = (c: StyledColumn | Column) => {
   const isStyledColumn = 'column' in c;
-  const column = isStyledColumn ? c.column : c;
+  let column: Column = c as Column;
+  let style: CategoryStyle | undefined;
+
+  if (isStyledColumn) {
+    const { column: extractedColumn, ...extractedStyle } = c;
+    column = extractedColumn;
+    if (!isEmpty(extractedStyle)) {
+      style = extractedStyle;
+    }
+  }
+
+  return {
+    column,
+    style,
+  };
+};
+
+export const translateColumnToCategory = (c: StyledColumn | Column): Category => {
+  const { column, style: baseStyle } = splitColumn(c);
+
   const levelDimensionDateFormat = isDatetime(column.type)
     ? (column as LevelAttribute)?.getFormat?.()
     : undefined;
-  const style = isStyledColumn
-    ? { ...c, dateFormat: c.dateFormat || levelDimensionDateFormat }
-    : {};
+  const style = { ...baseStyle, dateFormat: baseStyle?.dateFormat || levelDimensionDateFormat };
+
   return safeMerge(column, style) as Category;
 };
 
@@ -77,4 +97,9 @@ export const getDataOptionTitle = (option: Category | Value) => {
 
 export const translateColumnToAttribure = (c: StyledColumn | Column) => {
   return translateCategoryToAttribute(translateColumnToCategory(c));
+};
+export const translateColumnToMeasure = (
+  c: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn,
+) => {
+  return translateValueToMeasure(translateColumnToValue(c));
 };

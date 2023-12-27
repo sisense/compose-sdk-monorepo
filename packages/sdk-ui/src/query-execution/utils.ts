@@ -1,8 +1,13 @@
 import { Attribute, Measure, Filter, MetadataTypes } from '@sisense/sdk-data';
 import type { ExecuteQueryParams } from './index';
-import { createDimensionalElementFromJaql } from '../dashboard-widget/translate-widget-data-options';
+import {
+  createDimensionalElementFromJaql,
+  extractBoxplotBoxType,
+} from '../dashboard-widget/translate-widget-data-options';
 import { getRootPanelItem } from '../dashboard-widget/utils';
-import type { WidgetDto } from '../dashboard-widget/types';
+import type { BoxplotWidgetStyle, WidgetDto } from '../dashboard-widget/types';
+import { generateBoxplotValues } from '../chart-data-options/translate-boxplot-data-options';
+import { translateColumnToMeasure } from '../chart-data-options/utils';
 
 /**
  * Extracts query parameters from a widget object.
@@ -18,11 +23,23 @@ export function extractQueryFromWidget(widget: WidgetDto): ExecuteQueryParams {
   const filters: Filter[] = [];
 
   panels.forEach((panel) => {
-    panel?.items
+    const { name: panelName, items } = panel || {};
+    items
       ?.filter((item) => !item.disabled)
       .forEach((item) => {
         const root = getRootPanelItem(item);
         const element = createDimensionalElementFromJaql(root.jaql, root.format);
+
+        if (widget.type === 'chart/boxplot' && panelName === 'value') {
+          const boxPlotStyle = widget.style as BoxplotWidgetStyle;
+          const { values } = generateBoxplotValues(
+            element,
+            extractBoxplotBoxType(boxPlotStyle),
+            false,
+          );
+          measures.push(...values.map(translateColumnToMeasure));
+          return;
+        }
 
         if (MetadataTypes.isFilter(element)) {
           filters.push(element as Filter);

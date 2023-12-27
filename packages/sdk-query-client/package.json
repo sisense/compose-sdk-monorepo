@@ -1,6 +1,17 @@
 {
   "name": "@sisense/sdk-query-client",
-  "version": "0.16.0",
+  "homepage": "https://sisense.dev/guides/sdk/",
+  "description": "Compose SDK package for handling data queries against Sisense data sources",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sisense/compose-sdk-monorepo",
+    "directory": "packages/sdk-query-client"
+  },
+  "keywords": [
+    "Sisense",
+    "Compose SDK"
+  ],
+  "version": "1.0.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -9,9 +20,9 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "^0.16.0",
-    "@sisense/sdk-data": "^0.16.0",
-    "@sisense/sdk-rest-client": "^0.16.0",
+    "@sisense/sdk-common": "^1.0.0",
+    "@sisense/sdk-data": "^1.0.0",
+    "@sisense/sdk-rest-client": "^1.0.0",
     "@sisense/task-manager": "^0.1.0",
     "numeral": "^2.0.6",
     "uuid": "^9.0.0"

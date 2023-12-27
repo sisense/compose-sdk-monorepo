@@ -12,10 +12,10 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *   dataSet={DM.DataSource}
  *   dataOptions={{
  *     category: [DM.Commerce.AgeRange],
- *     value: [measures.sum(DM.Commerce.Revenue)],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue)],
  *     breakBy: [DM.Commerce.Gender],
  *   }}
- *   filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
+ *   filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
  *   onDataPointClick= {(point, nativeEvent) => {
  *     console.log('clicked', point, nativeEvent);
  *   }}

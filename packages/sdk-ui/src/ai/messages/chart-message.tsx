@@ -55,17 +55,19 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
 
       chartElement = (
         <div className="csdk-h-[245px]">
-          <TableWidget {...tableWidgetProps} widgetStyleOptions={widgetStyleOptions} />
+          <TableWidget {...tableWidgetProps} styleOptions={widgetStyleOptions} />
         </div>
       );
       expandedElement = (
-        <TableWidget {...tableWidgetProps} widgetStyleOptions={{ header: { hidden: true } }} />
+        <TableWidget {...tableWidgetProps} styleOptions={{ header: { hidden: true } }} />
       );
     } else {
-      const { dataOptions, styleOptions, expandedStyleOptions } = getChartOptions(
+      const { dataOptions, chartStyleOptions, expandedChartStyleOptions } = getChartOptions(
         metadata,
         chartRecommendations,
       );
+
+      const styleOptions = { ...chartStyleOptions, ...widgetStyleOptions };
 
       const chartWidgetProps: ChartWidgetProps = {
         chartType,
@@ -76,20 +78,15 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
 
       chartElement = (
         <div>
-          <ChartWidget
-            {...chartWidgetProps}
-            styleOptions={styleOptions}
-            widgetStyleOptions={widgetStyleOptions}
-          />
+          <ChartWidget {...chartWidgetProps} styleOptions={styleOptions} />
         </div>
       );
-      expandedElement = (
-        <ChartWidget
-          {...chartWidgetProps}
-          styleOptions={expandedStyleOptions}
-          widgetStyleOptions={{ header: { hidden: true } }}
-        />
-      );
+
+      const expandedStyleOptions = {
+        ...expandedChartStyleOptions,
+        header: { hidden: true },
+      };
+      expandedElement = <ChartWidget {...chartWidgetProps} styleOptions={expandedStyleOptions} />;
     }
     return { chartElement, expandedElement };
   }, [content, dataSource]);

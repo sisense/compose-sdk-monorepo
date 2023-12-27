@@ -4,8 +4,6 @@ import {
   FilterInfo,
   CRITERIA_FILTER_MAP,
   filterToOption,
-  isVertical,
-  FilterVariant,
   CriteriaFilterValueType,
   filterToDefaultValues,
   valuesToDisplayValues,
@@ -22,6 +20,7 @@ import {
 } from '@sisense/sdk-data';
 import { CriteriaFilterDisplay } from './criteria-filter-display.js';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
+import { FilterVariant, isVertical } from '../common/filter-utils.js';
 
 /**
  * Props for {@link CriteriaFilterTile}
@@ -49,7 +48,7 @@ export type CriteriaFilterType = NumericFilter | TextFilter | RankingFilter | Ex
  *
  * @example
  * ```tsx
- * const initialRevenueFilter = filters.greaterThanOrEqual(DM.Commerce.Revenue, 10000);
+ * const initialRevenueFilter = filterFactory.greaterThanOrEqual(DM.Commerce.Revenue, 10000);
  * const [revenueFilter, setRevenueFilter] = useState<Filter | null>(initialRevenueFilter);
  *
  * return (

@@ -63,6 +63,21 @@ export const translation = {
     byMeasure: 'By measure',
     by: 'by',
   },
+  dateFilter: {
+    last: 'Last',
+    next: 'Next',
+    from: 'From',
+    count: 'Count',
+    today: 'Today',
+    days: 'Days',
+    weeks: 'Weeks',
+    months: 'Months',
+    quarters: 'Quarters',
+    years: 'Years',
+    earliestDate: 'Earliest Date',
+    latestDate: 'Latest Date',
+    todayOutOfRange: 'Today is out of available date range',
+  },
 };
 
 export type TranslationDictionary = typeof translation;

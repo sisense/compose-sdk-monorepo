@@ -9,6 +9,7 @@ import { queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
 import { withTracking } from '../decorators/hook-decorators';
 import { ExecuteQueryParams, QueryState } from './types';
+import { getFilterListAndRelations } from '@sisense/sdk-data';
 
 /**
  * React hook that executes a data query.
@@ -19,8 +20,8 @@ import { ExecuteQueryParams, QueryState } from './types';
   const { data, isLoading, isError } = useExecuteQuery({
     dataSource: DM.DataSource,
     dimensions: [DM.Commerce.AgeRange],
-    measures: [measures.sum(DM.Commerce.Revenue)],
-    filters: [filters.greaterThan(DM.Commerce.Revenue, 1000)],
+    measures: [measureFactory.sum(DM.Commerce.Revenue)],
+    filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
   });
   if (isLoading) {
     return <div>Loading...</div>;
@@ -90,8 +91,20 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): QueryState 
         offset,
         onBeforeQuery,
       } = params;
+
+      const { filters: filterList, relations: filterRelations } =
+        getFilterListAndRelations(filters);
       void executeQuery(
-        { dataSource, dimensions, measures, filters, highlights, count, offset },
+        {
+          dataSource,
+          dimensions,
+          measures,
+          filters: filterList,
+          filterRelations,
+          highlights,
+          count,
+          offset,
+        },
         app,
         { onBeforeQuery },
       )
@@ -139,8 +152,20 @@ export function isQueryParamsChanged(
   const isSimplySerializableParamsChanged = simplySerializableParamNames.some(
     (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
   );
-  const isRegularFiltersChanged = isFiltersChanged(prevParams!.filters, newParams.filters);
+
+  const { filters: prevFilterList } = getFilterListAndRelations(prevParams?.filters);
+  const { filters: newFilterList } = getFilterListAndRelations(newParams?.filters);
+
+  // TODO: check if relations are changed
+  // Function has to compare logical structure of relations, not just references
+  const isRelationsChanged = false;
+  const isSliceFiltersChanged = isFiltersChanged(prevFilterList, newFilterList);
   const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
 
-  return isSimplySerializableParamsChanged || isRegularFiltersChanged || isHighlightFiltersChanged;
+  return (
+    isSimplySerializableParamsChanged ||
+    isSliceFiltersChanged ||
+    isHighlightFiltersChanged ||
+    isRelationsChanged
+  );
 }

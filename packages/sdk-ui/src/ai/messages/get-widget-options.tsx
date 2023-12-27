@@ -9,7 +9,7 @@ import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ChartType,
-  StyleOptions,
+  ChartStyleOptions,
 } from '../../types';
 import { AxesMapping, ChartRecommendations } from '../api/types';
 import { createJaqlElement } from './jaql-element';
@@ -22,7 +22,7 @@ export const getTableOptions = (jaql: MetadataItem[]) => {
   };
 };
 
-const DEFAULT_STYLE_OPTIONS = Object.freeze<StyleOptions>({
+const DEFAULT_STYLE_OPTIONS = Object.freeze<ChartStyleOptions>({
   convolution: {
     enabled: true,
     selectedConvolutionType: 'bySlicesCount',
@@ -99,10 +99,10 @@ export const getChartOptions = (jaql: MetadataItem[], chartRecs: ChartRecommenda
     dataOptions = mapToCartesianDataOptions(jaql, chartRecs.axesMapping);
   }
 
-  const styleOptions = merge(DEFAULT_STYLE_OPTIONS, {
+  const chartStyleOptions = merge(DEFAULT_STYLE_OPTIONS, {
     subtype: DEFAULT_SUBTYPE_FOR[chartRecs.chartType],
-  }) as StyleOptions;
-  const expandedStyleOptions = merge(styleOptions, {
+  }) as ChartStyleOptions;
+  const expandedChartStyleOptions = merge(chartStyleOptions, {
     legend: {
       enabled: true,
       position: 'right',
@@ -119,11 +119,11 @@ export const getChartOptions = (jaql: MetadataItem[], chartRecs: ChartRecommenda
         text: getDataOptionTitle(translateColumnToCategoryOrValue(dataOptions.category[0] ?? {})),
       },
     },
-  }) as StyleOptions;
+  }) as ChartStyleOptions;
 
   return {
     dataOptions,
-    styleOptions,
-    expandedStyleOptions,
+    chartStyleOptions,
+    expandedChartStyleOptions,
   };
 };

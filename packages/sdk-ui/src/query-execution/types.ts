@@ -1,4 +1,11 @@
-import { Attribute, DataSource, Filter, Measure, QueryResultData } from '@sisense/sdk-data';
+import {
+  Attribute,
+  DataSource,
+  Filter,
+  FilterRelation,
+  Measure,
+  QueryResultData,
+} from '@sisense/sdk-data';
 import { DataLoadAction } from '../common/hooks/data-load-state-reducer';
 import { FiltersMergeStrategy } from '../dashboard-widget/types';
 
@@ -186,7 +193,7 @@ export interface ExecuteQueryParams {
   measures?: Measure[];
 
   /** Filters that will slice query results */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelation;
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
@@ -208,14 +215,17 @@ export interface ExecuteQueryParams {
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
 
+/** Configuration for {@link useExecuteCsvQuery} hook. */
+export type ExecuteCSVQueryConfig = {
+  /**
+   * If set to true, the data will be returned as a Blob.
+   */
+  asDataStream?: boolean;
+};
+
 /**
  * Parameters for {@link useExecuteCsvQuery} hook.
  */
 export interface ExecuteCsvQueryParams extends ExecuteQueryParams {
-  config?: {
-    /**
-     * If set to true, the data will be returned as a Blob.
-     */
-    asDataStream?: boolean;
-  };
+  config?: ExecuteCSVQueryConfig;
 }

@@ -1,5 +1,5 @@
-import LoadingIcon from '../icons/loading-icon';
 import { CompleteThemeSettings } from '../../types';
+import { LoadingDots } from './loading-dots';
 
 /**
  * Component that displays a loading indicator.
@@ -27,7 +27,7 @@ export const LoadingIndicator = ({
         style={panelBackgroundColor}
         className="csdk-h-full csdk-bg-background-priority csdk-flex csdk-flex-col csdk-gap-y-4 csdk-items-center csdk-justify-center"
       >
-        <LoadingIcon spin={true} />
+        <LoadingDots color={themeSettings?.chart.textColor} />
         {onCancel && (
           <div
             className="csdk-text-ai-sm csdk-text-text-link csdk-cursor-pointer"

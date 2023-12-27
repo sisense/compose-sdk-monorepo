@@ -24,7 +24,7 @@ export const translation = {
         'Filters do not support the next "datetime" levels: Hours, MinutesRoundTo30, MinutesRoundTo15',
       membersFilterNullMember: 'MembersFilter of {{attributeId}} - member cannot be null',
     },
-    unsupportedDimesionalElement: 'Unsupported dimensional element type',
+    unsupportedDimensionalElement: 'Unsupported dimensional element type',
   },
 };
 

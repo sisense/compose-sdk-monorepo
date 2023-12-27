@@ -20,7 +20,7 @@ import { BaseMeasureWriter, MeasureTemplateWriter } from './writers/measures.js'
 
 import { DimensionWriter, DateDimensionWriter } from './writers/dimensions.js';
 
-import { BaseWriter, NEWLINE, indent } from './writers/base.js';
+import { BaseWriter, NEWLINE } from './writers/base.js';
 import { createInMemoryDuplexStream } from './utils/create-in-memory-duplex-stream.js';
 import { compileTsCode } from './utils/compile-ts-code.js';
 
@@ -57,13 +57,8 @@ function fillStreamWithTsCode(stream: NodeJS.WritableStream, json: any, config: 
 
   // writing imports
   const datamodule = config.datamodule || '@sisense/sdk-data';
-  stream.write(`import {\
-${NEWLINE}${indent(1)}Dimension,\
-${NEWLINE}${indent(1)}DateDimension,\
-${NEWLINE}${indent(1)}Attribute,\
-${NEWLINE}${indent(1)}createAttribute,\
-${NEWLINE}${indent(1)}createDateDimension,\
-${NEWLINE}${indent(1)}createDimension,${NEWLINE}} from '${datamodule}';${NEWLINE}${NEWLINE}`);
+  stream.write(`import type { Dimension, DateDimension, Attribute } from '${datamodule}';${NEWLINE}
+import { createAttribute, createDateDimension, createDimension } from '${datamodule}';${NEWLINE}${NEWLINE}`);
 
   stream.write(`export const DataSource = '${dm.dataSource}';${NEWLINE}`);
 

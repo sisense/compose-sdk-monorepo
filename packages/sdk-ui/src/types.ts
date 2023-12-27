@@ -3,6 +3,7 @@ import { Attribute, MembersFilter } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 import {
   AreaSubtype,
+  BoxplotSubtype,
   LineSubtype,
   PieSubtype,
   PolarSubtype,
@@ -21,6 +22,8 @@ import {
   CategoricalChartType,
   IndicatorChartType,
   TableType,
+  BoxplotChartType,
+  ScattermapChartType,
 } from './chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
 
@@ -32,7 +35,7 @@ export type {
   CategoricalChartDataOptions,
   ChartDataOptions,
   ScatterChartDataOptions,
-  IndicatorDataOptions,
+  IndicatorChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
 } from './chart-data-options/types';
@@ -42,19 +45,22 @@ export type {
   DataColorOptions,
   RangeDataColorOptions,
   UniformDataColorOptions,
-} from './chart-data/series-data-color-service/types';
+} from './chart-data/data-coloring/types';
 // export the following types for TSDoc
 export type {
   CartesianChartType,
   CategoricalChartType,
   ScatterChartType,
   IndicatorChartType,
+  BoxplotChartType,
+  ScattermapChartType,
   TableType,
   AreaSubtype,
   LineSubtype,
   PieSubtype,
   PolarSubtype,
   StackableSubtype,
+  BoxplotSubtype,
   IndicatorComponents,
   ScatterMarkerSize,
 };
@@ -464,10 +470,39 @@ export interface SunburstStyleOptions extends BaseStyleOptions {
   };
 }
 
+/** Configuration options that define functional style of the various elements of {@link BoxplotChart} */
+export interface BoxplotStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+  /** Subtype of {@link BoxplotChart}*/
+  subtype?: BoxplotSubtype;
+}
+
+/**
+ * Markers style configuration of Scattermap chart
+ */
+export type ScattermapMarkers = {
+  /** Specifies the fill style of the markers */
+  fill?: 'filled' | 'filled-light' | 'hollow' | 'hollow-bold';
+  /** Specifies the size configuration for the markers */
+  size?: {
+    /** The default size of the markers */
+    defaultSize?: number;
+    /** The minimum size of the markers when using a "size" data field */
+    minSize?: number;
+    /** The maximum size of the markers when using a "size" data field */
+    maxSize?: number;
+  };
+};
+
+/** Configuration options that define functional style of the various elements of {@link ScattermapChart} */
+export interface ScattermapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
+  subtype?: never;
+  markers?: ScattermapMarkers;
+}
+
 /**
  * Configuration options that define functional style of the various elements of chart.
  */
-export type StyleOptions =
+export type ChartStyleOptions =
   | LineStyleOptions
   | AreaStyleOptions
   | StackableStyleOptions
@@ -477,7 +512,9 @@ export type StyleOptions =
   | IndicatorStyleOptions
   | ScatterStyleOptions
   | TreemapStyleOptions
-  | SunburstStyleOptions;
+  | SunburstStyleOptions
+  | BoxplotStyleOptions
+  | ScattermapStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = {
@@ -496,7 +533,9 @@ export type ChartType =
   | CartesianChartType
   | CategoricalChartType
   | ScatterChartType
-  | IndicatorChartType;
+  | IndicatorChartType
+  | BoxplotChartType
+  | ScattermapChartType;
 
 /**
  * Series chart type, which is used with {@link StyledMeasureColumn} to customize
@@ -660,6 +699,37 @@ export interface WidgetStyleOptions {
   };
 }
 
+/** Style settings defining the look and feel of {@link DashboardWidget} */
+export interface DashboardWidgetStyleOptions extends WidgetStyleOptions {
+  /**
+   * Total width of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels)
+   * 2. Width of the container wrapping this component
+   * 3. Default value as specified per chart type
+   *
+   */
+  width?: number;
+  /**
+   * Total height of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels).
+   * 2. Height of the container wrapping this component
+   * 3. Default value as specified per chart type
+   */
+  height?: number;
+}
+
+/** Style settings defining the look and feel of {@link ChartWidget} */
+export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetStyleOptions;
+
+/**
+ * Style settings defining the look and feel of TableWidget}
+ *
+ * @internal
+ */
+export type TableWidgetStyleOptions = TableStyleOptions & WidgetStyleOptions;
+
 /**
  * Runs type guard check for ThemeOid.
  *
@@ -718,6 +788,16 @@ export type ScatterDataPoint = {
   breakByColor?: string;
 };
 
+export type BoxplotDataPoint = {
+  boxMin: number;
+  boxMedian: number;
+  boxMax: number;
+  whiskerMin: number;
+  whiskerMax: number;
+  categoryValue?: string | number;
+  categoryDisplayValue?: string;
+};
+
 /**
  * This is the minimum definition of Highcharts
  * events, Series, and Point that we require. As
@@ -764,6 +844,11 @@ export type HighchartsPoint = {
     custom: {
       number1?: number;
     };
+    q1?: number;
+    median?: number;
+    q3?: number;
+    low?: number;
+    high?: number;
   };
   custom: {
     maskedBreakByPoint?: string;
@@ -773,6 +858,7 @@ export type HighchartsPoint = {
   };
   series: {
     initialType: string;
+    type: string;
     options: {
       custom?: { rawValue?: string | number[] };
     };

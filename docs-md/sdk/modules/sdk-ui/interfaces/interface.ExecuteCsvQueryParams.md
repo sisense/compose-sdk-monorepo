@@ -14,17 +14,7 @@ Parameters for [useExecuteCsvQuery](../functions/function.useExecuteCsvQuery.md)
 
 ### config
 
-> **config**?: `object`
-
-#### Type declaration
-
-> ##### `config.asDataStream`
->
-> **asDataStream**?: `boolean`
->
-> If set to true, the data will be returned as a Blob.
->
->
+> **config**?: [`ExecuteCSVQueryConfig`](../type-aliases/type-alias.ExecuteCSVQueryConfig.md)
 
 ***
 
@@ -84,7 +74,7 @@ If not specified, the default value is `true`
 
 ### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 

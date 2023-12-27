@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { Chart } from '../chart';
 import { templateForComponent } from './template';
-import { NumberFormatConfig, StyleOptions } from '../types';
+import { NumberFormatConfig, ChartStyleOptions } from '../types';
 import { Data } from '@sisense/sdk-data';
 
 const template = templateForComponent(Chart);
@@ -15,7 +15,7 @@ export default {
 };
 
 // WIDGET STYLES
-const styleOptions: StyleOptions = {
+const styleOptions: ChartStyleOptions = {
   legend: {
     enabled: true,
     position: 'bottom',

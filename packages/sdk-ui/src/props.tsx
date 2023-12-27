@@ -1,5 +1,13 @@
 /* eslint-disable max-lines */
-import { Attribute, Filter, Measure, DataSource, Data, QueryResultData } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Filter,
+  Measure,
+  DataSource,
+  Data,
+  QueryResultData,
+  FilterRelation,
+} from '@sisense/sdk-data';
 import {
   ChartDataOptions,
   CartesianChartDataOptions,
@@ -12,25 +20,32 @@ import {
   AreaStyleOptions,
   FunnelStyleOptions,
   ScatterStyleOptions,
-  StyleOptions,
+  ChartStyleOptions,
   ChartType,
   IndicatorStyleOptions,
   DrilldownOptions,
   TableStyleOptions,
   ThemeOid,
-  WidgetStyleOptions,
   TreemapStyleOptions,
   CustomDrilldownResult,
   MenuPosition,
   MenuItemSection,
   SunburstStyleOptions,
+  ChartWidgetStyleOptions,
+  TableWidgetStyleOptions,
+  DashboardWidgetStyleOptions,
+  BoxplotStyleOptions,
+  ScattermapStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
 import {
-  IndicatorDataOptions,
+  IndicatorChartDataOptions,
+  BoxplotChartCustomDataOptions,
+  BoxplotChartDataOptions,
   ScatterChartDataOptions,
   TableDataOptions,
+  ScattermapChartDataOptions,
 } from './chart-data-options/types';
 import {
   DataPointEventHandler,
@@ -39,7 +54,7 @@ import {
   ScatterDataPointsEventHandler,
 } from './chart-options-processor/apply-event-handlers';
 import { AppConfig } from './app/client-application';
-import { ExecuteQueryParams } from './query-execution';
+import { ExecuteQueryParams, QueryByWidgetIdState, QueryState } from './query-execution';
 import { FiltersMergeStrategy } from './dashboard-widget/types';
 import { HookEnableParam } from './common/hooks/types';
 
@@ -136,7 +151,7 @@ export interface ExecuteQueryProps {
   measures?: Measure[];
 
   /** Filters that will slice query results */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelation;
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
@@ -156,7 +171,7 @@ export interface ExecuteQueryProps {
   offset?: number;
 
   /** Function as child component that is called to render the query results */
-  children?: (queryResult: QueryResultData) => ReactNode;
+  children?: (queryState: QueryState) => ReactNode;
 
   /** Callback function that is evaluated when query results are ready */
   onDataChanged?: (data: QueryResultData) => void;
@@ -323,7 +338,7 @@ export interface BaseChartProps {
    *
    * @category Data
    */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelation;
 
   /**
    * Highlight filters that will highlight results that pass filter criteria
@@ -356,7 +371,7 @@ export interface ChartProps extends BaseChartProps, BaseChartEventProps {
    *
    * @category Chart
    */
-  styleOptions?: StyleOptions;
+  styleOptions?: ChartStyleOptions;
 
   /**
    * Used to force a refresh of the chart from outside the chart component
@@ -396,7 +411,7 @@ export interface BarChartProps extends BaseChartProps, ChartEventProps {
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    * @category Chart
    */
@@ -414,7 +429,7 @@ export interface ColumnChartProps extends BaseChartProps, ChartEventProps {
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    * @category Chart
    */
@@ -432,7 +447,7 @@ export interface FunnelChartProps extends BaseChartProps, ChartEventProps {
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    * @category Chart
    */
@@ -468,7 +483,7 @@ export interface PieChartProps extends BaseChartProps, ChartEventProps {
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    * @category Chart
    */
@@ -481,7 +496,7 @@ export interface PieChartProps extends BaseChartProps, ChartEventProps {
 export interface PolarChartProps extends BaseChartProps, ChartEventProps {
   /** Configurations for how to interpret and present the data passed to the chart */
   dataOptions: CartesianChartDataOptions;
-  /** Configuration that define functional style of the various chart elements */
+  /** Configuration that defines functional style of the various chart elements */
   styleOptions?: PolarStyleOptions;
 }
 
@@ -490,8 +505,8 @@ export interface PolarChartProps extends BaseChartProps, ChartEventProps {
  */
 export interface IndicatorChartProps extends BaseChartProps {
   /** Configurations for how to interpret and present the data passed to the chart */
-  dataOptions: IndicatorDataOptions;
-  /** Configuration that define functional style of the various chart elements */
+  dataOptions: IndicatorChartDataOptions;
+  /** Configuration that defines functional style of the various chart elements */
   styleOptions?: IndicatorStyleOptions;
 }
 
@@ -519,7 +534,7 @@ export interface TableProps {
    *
    * @category Data
    */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelation;
 
   /**
    * Configurations that define functional style of the various table elements
@@ -548,7 +563,7 @@ export interface ScatterChartProps extends BaseChartProps, ScatterChartEventProp
    */
   dataOptions: ScatterChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    * @category Chart
    */
@@ -617,35 +632,12 @@ export interface DashboardWidgetProps
    */
   description?: string;
   /**
-   * Style options for the widget container including the widget header
+   * Style options for the the widget including the widget container and the chart or table inside.
+   *
    *
    * @category Widget
    */
-  widgetStyleOptions?: WidgetStyleOptions;
-  /**
-   * General style options for the visual component of the widget – for example, chart or table.
-   *
-   * @category Widget
-   */
-  styleOptions?: {
-    /**
-     * Total width of the component, which is considered in the following order of priority:
-     *
-     * 1. Value passed to this property (in pixels)
-     * 2. Width of the container wrapping this component
-     * 3. Default value as specified per chart type
-     *
-     */
-    width?: number;
-    /**
-     * Total height of the component, which is considered in the following order of priority:
-     *
-     * 1. Value passed to this property (in pixels).
-     * 2. Height of the container wrapping this component
-     * 3. Default value as specified per chart type
-     */
-    height?: number;
-  };
+  styleOptions?: DashboardWidgetStyleOptions;
   /**
    * {@inheritDoc ChartWidgetProps.drilldownOptions}
    *
@@ -677,6 +669,13 @@ export interface ChartWidgetProps extends BaseChartEventProps {
   filters?: Filter[];
 
   /**
+   * Specifies the logical relationship between multiple filters (AND, OR)
+   *
+   * @category Data
+   */
+  filterRelations?: FilterRelation;
+
+  /**
    * Highlight filters that will highlight results that pass filter criteria
    *
    * @category Data
@@ -698,18 +697,11 @@ export interface ChartWidgetProps extends BaseChartEventProps {
   dataOptions: ChartDataOptions;
 
   /**
-   * Style options for both the widget as a whole and specifically for the widget header
+   * Style options for both the chart and widget including the widget header
    *
    * @category Widget
    */
-  widgetStyleOptions?: WidgetStyleOptions;
-
-  /**
-   * Style options union across chart types
-   *
-   * @category Chart
-   */
-  styleOptions?: StyleOptions;
+  styleOptions?: ChartWidgetStyleOptions;
 
   /**
    * List of categories to allow drilldowns on
@@ -796,7 +788,7 @@ export interface TableWidgetProps {
    *
    * @category Data
    */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelation;
 
   /**
    * Configurations for how to interpret and present the data passed to the table
@@ -806,18 +798,11 @@ export interface TableWidgetProps {
   dataOptions: TableDataOptions;
 
   /**
-   * Style options for both the widget as a whole and specifically for the widget header
+   * Style options for both the table and widget including the widget header
    *
    * @category Widget
    */
-  widgetStyleOptions?: WidgetStyleOptions;
-
-  /**
-   * Style options for table
-   *
-   * @category Chart
-   */
-  styleOptions?: TableStyleOptions;
+  styleOptions?: TableWidgetStyleOptions;
 
   /**
    * React nodes to be rendered at the top of component, before the table
@@ -893,7 +878,7 @@ export interface ExecuteQueryByWidgetIdProps {
   includeDashboardFilters?: boolean;
 
   /** Function as child component that is called to render the query results */
-  children?: (queryResult: QueryResultData, queryParams: ExecuteQueryParams) => ReactNode;
+  children?: (queryState: QueryByWidgetIdState) => ReactNode;
 
   /** Callback function that is evaluated when query results are ready */
   onDataChanged?: (data: QueryResultData, queryParams: ExecuteQueryParams) => void;
@@ -923,7 +908,7 @@ export interface TreemapChartProps extends BaseChartProps, ChartEventProps {
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    * @category Chart
    */
@@ -941,11 +926,47 @@ export interface SunburstChartProps extends BaseChartProps, ChartEventProps {
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    * @category Chart
    */
   styleOptions?: SunburstStyleOptions;
+}
+
+/**
+ * Props of the {@link BoxplotChart} component.
+ */
+export interface BoxplotChartProps extends BaseChartProps, ChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: BoxplotChartDataOptions | BoxplotChartCustomDataOptions;
+  /**
+   * Configuration that defines functional style of the various chart elements
+   *
+   * @category Chart
+   */
+  styleOptions?: BoxplotStyleOptions;
+}
+
+/**
+ * Props of the {@link ScattermapChart} component.
+ */
+export interface ScattermapChartProps extends BaseChartProps, ChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: ScattermapChartDataOptions;
+  /**
+   * Configuration that defines functional style of the various chart elements
+   *
+   * @category Chart
+   */
+  styleOptions?: ScattermapStyleOptions;
 }
 
 /**

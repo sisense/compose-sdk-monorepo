@@ -40,16 +40,13 @@ used to render a widget created in the Sisense instance.
 
 Filters that will slice query results
 
-### Chart
+### Widget
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| \{
-  `height`: `number`;
-  `width`: `number`;
- }
+> **styleOptions**: `undefined` \| [`DashboardWidgetStyleOptions`](../../sdk-ui/interfaces/interface.DashboardWidgetStyleOptions.md)
 
-Style options union across chart types.
+Style options for the the widget including the widget container and the chart or table inside.
 
 ### Other
 
@@ -98,9 +95,3 @@ Style options union across chart types.
 #### widgetOid
 
 > **widgetOid**: `string`
-
-***
-
-#### widgetStyleOptions
-
-> **widgetStyleOptions**: `undefined` \| [`WidgetStyleOptions`](../../sdk-ui/interfaces/interface.WidgetStyleOptions.md)

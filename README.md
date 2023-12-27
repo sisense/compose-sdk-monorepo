@@ -1,4 +1,4 @@
-# Compose SDK Monorepo - BETA
+# Compose SDK Monorepo
 
 Compose SDK is a Software Development Kit that enables a composable, code-driven way to use Sisense platform capabilities. Build analytics and data-driven experiences into your product with code using Compose SDK, a set of client-side libraries and components for query composition, data visualization, and more.
 
@@ -11,7 +11,6 @@ Compose SDK is a Software Development Kit that enables a composable, code-driven
 
 ## What you need to know
 
-- **Compose SDK is currently in Beta** - Packages, APIs, and anything else are bound to change
 - Compose SDK requires a Sisense license & access to a Sisense instance
 - Compose SDK supports Sisense version L2022.11 or newer
 - Compose SDK currently supports development using JavaScript/Typescript and React

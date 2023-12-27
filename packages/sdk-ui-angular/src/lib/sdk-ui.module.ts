@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { BasicMemberFilterTileComponent } from './components/basic-member-filter-tile.component';
 import { CommonModule } from '@angular/common';
 import {
+  BasicMemberFilterTileComponent,
   ChartComponent,
   TableComponent,
   ChartWidgetComponent,
@@ -23,6 +23,8 @@ import {
   DateRangeFilterTileComponent,
   DrilldownBreadcrumbsComponent,
   ContextMenuComponent,
+  BoxplotChartComponent,
+  ScattermapChartComponent,
 } from './components';
 import { DecoratorsModule } from './decorators/decorators.module';
 
@@ -76,6 +78,8 @@ import { DecoratorsModule } from './decorators/decorators.module';
     DateRangeFilterTileComponent,
     DrilldownBreadcrumbsComponent,
     ContextMenuComponent,
+    BoxplotChartComponent,
+    ScattermapChartComponent,
   ],
   imports: [CommonModule, DecoratorsModule],
   exports: [
@@ -101,6 +105,8 @@ import { DecoratorsModule } from './decorators/decorators.module';
     DateRangeFilterTileComponent,
     DrilldownBreadcrumbsComponent,
     ContextMenuComponent,
+    BoxplotChartComponent,
+    ScattermapChartComponent,
   ],
   providers: [],
 })

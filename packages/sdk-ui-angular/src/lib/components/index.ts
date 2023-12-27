@@ -20,3 +20,5 @@ export * from './drilldown-widget.component';
 export * from './date-range-filter-tile.component';
 export * from './drilldown-breadcrumbs.component';
 export * from './context-menu.component';
+export * from './boxplot-chart.component';
+export * from './scattermap-chart.component';

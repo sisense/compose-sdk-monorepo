@@ -27,6 +27,8 @@ export function getChartType(widgetType: WidgetType) {
     sunburst: 'sunburst',
     'chart/scatter': 'scatter',
     indicator: 'indicator',
+    'chart/boxplot': 'boxplot',
+    'map/scatter': 'scattermap',
   };
 
   return widgetTypeToChartType[widgetType];
@@ -58,6 +60,9 @@ export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | un
     'indicator/gauge': 'indicator/gauge',
     treemap: 'treemap',
     sunburst: 'sunburst',
+    'boxplot/full': 'boxplot/full',
+    'boxplot/hollow': 'boxplot/hollow',
+    'map/scatter': 'scattermap',
   };
   return widgetSubtypeToChartSubtype[widgetSubtype];
 }
@@ -79,6 +84,8 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
     'indicator',
     'tablewidget',
     'tablewidgetagg',
+    'chart/boxplot',
+    'map/scatter',
   ];
   return supportedWidgetTypes.includes(widgetType as WidgetType);
 }

@@ -1,6 +1,14 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable complexity */
-import { Attribute, Data, DataSource, Filter, isDataSource, Measure } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Data,
+  DataSource,
+  Filter,
+  FilterRelation,
+  isDataSource,
+  Measure,
+} from '@sisense/sdk-data';
 import { useEffect, useRef, useState } from 'react';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 
@@ -13,6 +21,7 @@ type UseDataProps = {
   dataSet: Data | DataSource | undefined;
   dataOptions: TableDataOptionsInternal | null;
   filters: Filter[] | undefined;
+  filterRelations: FilterRelation | undefined;
   count: number;
   offset: number;
 };
@@ -37,6 +46,7 @@ export const useTableData = ({
   dataSet,
   dataOptions,
   filters,
+  filterRelations,
   count,
   offset,
 }: UseDataProps): Data | null => {
@@ -64,6 +74,7 @@ export const useTableData = ({
           dimensions: attributes,
           measures,
           filters,
+          filterRelations,
           count: count + 1,
           offset,
         },
@@ -97,7 +108,7 @@ export const useTableData = ({
     return () => {
       ignore = true;
     };
-  }, [app, dataSet, dataOptions, filters, offset, count, isInitialized, setError]);
+  }, [app, dataSet, dataOptions, filters, filterRelations, offset, count, isInitialized, setError]);
 
   return data;
 };

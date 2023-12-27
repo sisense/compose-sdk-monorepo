@@ -24,6 +24,14 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 ***
 
+#### filterRelations
+
+> **filterRelations**?: [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
+
+Specifies the logical relationship between multiple filters (AND, OR)
+
+***
+
 #### filters
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
@@ -53,14 +61,6 @@ Default chart type of each series
 > **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
-
-***
-
-#### styleOptions
-
-> **styleOptions**?: [`StyleOptions`](../type-aliases/type-alias.StyleOptions.md)
-
-Style options union across chart types
 
 ### Widget
 
@@ -92,19 +92,19 @@ If not specified, the default value is `false`
 
 ***
 
+#### styleOptions
+
+> **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md)
+
+Style options for both the chart and widget including the widget header
+
+***
+
 #### title
 
 > **title**?: `string`
 
 Title of the widget
-
-***
-
-#### widgetStyleOptions
-
-> **widgetStyleOptions**?: [`WidgetStyleOptions`](interface.WidgetStyleOptions.md)
-
-Style options for both the widget as a whole and specifically for the widget header
 
 ### Callbacks
 

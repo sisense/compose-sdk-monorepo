@@ -43,7 +43,7 @@ BaseChartProps.dataSet
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 
@@ -83,7 +83,7 @@ Configurations for how to interpret and present data passed to the chart.
 
 #### styleOptions
 
-> **styleOptions**?: [`StyleOptions`](../type-aliases/type-alias.StyleOptions.md)
+> **styleOptions**?: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
 
 Style options union across chart types.
 

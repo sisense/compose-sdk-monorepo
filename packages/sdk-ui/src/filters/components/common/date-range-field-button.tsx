@@ -2,21 +2,47 @@ import styled from '@emotion/styled';
 import { CompleteThemeSettings } from '../../../types';
 import { type FunctionComponent, type ButtonHTMLAttributes, LabelHTMLAttributes } from 'react';
 import { DateIcon } from '../icons';
+import { getSlightlyDifferentColor } from '../../../utils/color';
+
+type Variant = 'white' | 'grey';
 
 type InputProps = {
-  variant?: 'white' | 'grey';
-  label: string;
+  variant?: Variant;
+  label?: string;
   isActive?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
+
+const isWhite = (variant: Variant | undefined) => variant === 'white';
 
 type ThemeMixin = {
   theme: CompleteThemeSettings;
 };
 export type DateRangeFieldButtonProps = InputProps & ThemeMixin;
 
+const disabledBg = 'rgb(240, 240, 240)';
+const disabledColor = 'rgba(0, 0, 0, 0.26)';
+
 const CalendarButton = styled.button<DateRangeFieldButtonProps>`
-  color: ${({ theme, isActive }) =>
-    isActive ? theme.general.primaryButtonTextColor : theme.typography.primaryTextColor};
+  cursor: pointer;
+  background-color: ${({ theme, variant, disabled }) =>
+    disabled ? disabledBg : isWhite(variant) ? theme.general.backgroundColor : '#f4f4f8'};
+  border: ${({ variant }) =>
+    isWhite(variant) ? '1px solid rgb(110 115 125 / var(--tw-border-opacity))' : 'none'};
+  color: ${({ theme, isActive, disabled }) =>
+    disabled
+      ? disabledColor
+      : isActive
+      ? theme.general.primaryButtonTextColor
+      : theme.typography.primaryTextColor};
+  border-radius: 0.375rem;
+  &:hover {
+    background-color: ${({ theme, variant, disabled }) =>
+      disabled
+        ? disabledBg
+        : getSlightlyDifferentColor(isWhite(variant) ? theme.general.backgroundColor : '#f4f4f8')};
+    transition: 0.2s;
+  }
+  transition: color 250ms;
 `;
 
 type CalendarLabelProps = LabelHTMLAttributes<HTMLLabelElement> & ThemeMixin;
@@ -25,31 +51,33 @@ const CalendarLabel = styled.label<CalendarLabelProps>`
 `;
 
 export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> = (props) => {
+  const { variant = 'grey', label, isActive, theme } = props;
   const defaultClass =
-    'csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-button csdk-rounded-[4px] ';
+    'csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-6 csdk-rounded-[4px] ';
   const disabled = 'disabled:csdk-placeholder:csdk-opacity-30 disabled:csdk-cursor-not-allowed ';
   const focus = 'focus:csdk-border-solid focus:csdk-border-input focus:csdk-border-UI-default ';
   const hover = 'hover:csdk-border-guiding csdk-text-text-active ';
 
   return (
     <div
-      className={'csdk-relative csdk-flex csdk-mr-2 csdk-cursor-pointer'}
+      className={'csdk-relative csdk-flex csdk-mr-[5px] csdk-cursor-pointer'}
       aria-label={'DateRangeField'}
     >
-      {props.label && (
+      {label && (
         <CalendarLabel
           htmlFor={props.id}
           className={
             'csdk-text-text-content csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px]'
           }
-          theme={props.theme}
+          theme={theme}
         >
-          {props.label}
+          {label}
         </CalendarLabel>
       )}
-      <div className={'csdk-relative csdk-h-button'}>
+      <div className={'csdk-relative csdk-h-6'}>
         <CalendarButton
           {...props}
+          variant={variant}
           aria-label={'DateRangeFieldButton'}
           className={
             defaultClass +
@@ -69,9 +97,7 @@ export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> 
               className="csdk-flex csdk-text-text-active"
               aria-hidden="true"
               iconColor={
-                props.isActive
-                  ? props.theme.general.primaryButtonTextColor
-                  : props.theme.typography.primaryTextColor
+                isActive ? theme.general.primaryButtonTextColor : theme.typography.primaryTextColor
               }
             />
           </div>

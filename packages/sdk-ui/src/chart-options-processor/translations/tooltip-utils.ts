@@ -51,6 +51,11 @@ export type InternalSeries = {
     x?: number | string;
     y?: number;
     z?: number;
+    high?: number;
+    low?: number;
+    q1?: number;
+    q3?: number;
+    median?: number;
     name: string;
     color: string;
     custom?: {

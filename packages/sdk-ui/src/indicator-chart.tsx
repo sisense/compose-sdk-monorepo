@@ -13,7 +13,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *   dataOptions={{
  *     value: [
  *       {
- *         column: measures.sum(DM.Commerce.Revenue),
+ *         column: measureFactory.sum(DM.Commerce.Revenue),
  *         numberFormatConfig: {
  *           name: 'Numbers',
  *           decimalScale: 2,
@@ -28,10 +28,10 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *       },
  *     ],
  *     secondary: [],
- *     min: [measures.constant(0)],
- *     max: [measures.constant(125000000)],
+ *     min: [measureFactory.constant(0)],
+ *     max: [measureFactory.constant(125000000)],
  *   }}
- *   filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
+ *   filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
  *   styleOptions={{
  *     indicatorComponents: {
  *       title: {

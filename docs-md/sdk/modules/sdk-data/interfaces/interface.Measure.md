@@ -5,7 +5,7 @@ title: Measure
 # Interface Measure
 
 Base interface for measure, which is typically numeric aggregation over [Attribute](interface.Attribute.md)(s).
-See [measures](../namespaces/namespace.measures/index.md) for how to create measures.
+See [measureFactory](../namespaces/namespace.measureFactory/index.md) for how to create measures.
 
 ## Extends
 

@@ -6,8 +6,6 @@ import { BasicInput, RadioGroup } from '../common';
 import {
   FilterOptionType,
   CRITERIA_FILTER_MAP,
-  isVertical,
-  FilterVariant,
   translatedMsgNoVal,
   CriteriaFilterValueType,
   filterTypeToInputType,
@@ -16,6 +14,7 @@ import { useThemeContext } from '../../../../src/theme-provider';
 import { useTranslation } from 'react-i18next';
 import { FilterTypes, Measure } from '@sisense/sdk-data';
 import { Dropdown } from '../common/dropdown';
+import { FilterVariant, isVertical } from '../common/filter-utils';
 
 /**
  * Props for {@link CriteriaFilterMenu}

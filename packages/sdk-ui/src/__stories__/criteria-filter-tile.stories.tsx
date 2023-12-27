@@ -1,4 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+/* eslint-disable max-lines */
 import { templateForComponent } from './template.js';
 import { CriteriaFilterTile } from '../filters/components/criteria-filter-tile/criteria-filter-tile.js';
 import {
@@ -8,7 +9,7 @@ import {
   TextFilter,
   createAttribute,
   createMeasure,
-  filters,
+  filterFactory,
 } from '@sisense/sdk-data';
 
 const template = templateForComponent(CriteriaFilterTile);
@@ -105,66 +106,76 @@ const onUpdate = (filter: Filter | null) => {
 
 export const VerticalWithTextInput = template({
   title: 'VerticalWithTextInput',
-  filter: (filters.doesntContain(mockAttributeA, 'foo') as TextFilter).serializable(),
+  filter: (filterFactory.doesntContain(mockAttributeA, 'foo') as TextFilter).serializable(),
   onUpdate,
 });
 
 export const VerticalWithSingleInput = template({
   title: 'VerticalWithSingleInput',
-  filter: (filters.equals(mockAttributeA, 0) as NumericFilter).serializable(),
+  filter: (filterFactory.equals(mockAttributeA, 0) as NumericFilter).serializable(),
   onUpdate,
 });
 
 export const VerticalWithDoubleInput = template({
   title: 'VerticalWithDoubleInput',
-  filter: filters.exclude(filters.between(mockAttributeA, 0, 100) as NumericFilter).serializable(),
+  filter: filterFactory
+    .exclude(filterFactory.between(mockAttributeA, 0, 100) as NumericFilter)
+    .serializable(),
   onUpdate,
 });
 
 export const HorizontalWithSingleInput = template({
   title: 'HorizontalWithSingleInput',
-  filter: (filters.lessThanOrEqual(mockAttributeA, 10) as NumericFilter).serializable(),
+  filter: (filterFactory.lessThanOrEqual(mockAttributeA, 10) as NumericFilter).serializable(),
   arrangement: 'horizontal',
   onUpdate,
 });
 
 export const HorizontalWithDoubleInput = template({
   title: 'HorizontalWithDoubleInput',
-  filter: (filters.between(mockAttributeA, 0, 100) as NumericFilter).serializable(),
+  filter: (filterFactory.between(mockAttributeA, 0, 100) as NumericFilter).serializable(),
   arrangement: 'horizontal',
   onUpdate,
 });
 
 export const HorizontalWithTextInput = template({
   title: 'HorizontalWithTextInput',
-  filter: (filters.doesntStartWith(mockAttributeA, 'bar') as TextFilter).serializable(),
+  filter: (filterFactory.doesntStartWith(mockAttributeA, 'bar') as TextFilter).serializable(),
   arrangement: 'horizontal',
   onUpdate,
 });
 
 export const VerticalRanked = template({
   title: 'VerticalRanked',
-  filter: (filters.topRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter).serializable(),
+  filter: (
+    filterFactory.topRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter
+  ).serializable(),
   onUpdate,
 });
 
 export const HorizontalRanked = template({
   title: 'HorizontalRanked',
-  filter: (filters.bottomRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter).serializable(),
+  filter: (
+    filterFactory.bottomRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter
+  ).serializable(),
   arrangement: 'horizontal',
   onUpdate,
 });
 
 export const VerticalRankedMulti = template({
   title: 'VerticalRanked',
-  filter: (filters.topRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter).serializable(),
+  filter: (
+    filterFactory.topRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter
+  ).serializable(),
   onUpdate,
   measures,
 });
 
 export const HorizontalRankedMulti = template({
   title: 'HorizontalRanked',
-  filter: (filters.bottomRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter).serializable(),
+  filter: (
+    filterFactory.bottomRanking(mockAttributeA, mockMeasureB, 5) as RankingFilter
+  ).serializable(),
   arrangement: 'horizontal',
   onUpdate,
   measures,

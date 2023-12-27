@@ -7,13 +7,17 @@ import {
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
-  IndicatorDataOptionsInternal,
+  IndicatorChartDataOptionsInternal,
+  BoxplotChartDataOptionsInternal,
+  ScattermapChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import {
   isCartesian,
   isCategorical,
   isScatter,
   isIndicator,
+  isBoxplot,
+  isScattermap,
 } from '../chart-options-processor/translations/types';
 import { DataTable } from '../chart-data-processor/table-processor';
 import { ChartType, NumberFormatConfig, SeriesChartType } from '../types';
@@ -23,6 +27,8 @@ import { scatterData } from './scatter-data';
 import { indicatorData } from './indicator-data';
 
 import { ChartData } from './types';
+import { boxplotData } from './boxplot-data';
+import { scattermapData } from './scattermap-data';
 
 export const chartDataService = (
   chartType: ChartType,
@@ -35,8 +41,15 @@ export const chartDataService = (
     return categoricalData(chartDataOptions as CategoricalChartDataOptionsInternal, dataTable);
   } else if (isScatter(chartType)) {
     return scatterData(chartDataOptions as ScatterChartDataOptionsInternal, dataTable);
+  } else if (isScattermap(chartType)) {
+    return scattermapData(chartDataOptions as ScattermapChartDataOptionsInternal, dataTable);
   } else if (isIndicator(chartType)) {
-    return indicatorData(chartDataOptions as unknown as IndicatorDataOptionsInternal, dataTable);
+    return indicatorData(
+      chartDataOptions as unknown as IndicatorChartDataOptionsInternal,
+      dataTable,
+    );
+  } else if (isBoxplot(chartType)) {
+    return boxplotData(chartDataOptions as BoxplotChartDataOptionsInternal, dataTable);
   } else throw new Error(`Unexpected chart type: ${chartType}`);
 };
 

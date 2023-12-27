@@ -1,22 +1,24 @@
 // TypeDoc base config for each package to extend from.
 const baseConfig = {
   includeVersion: true,
-  entryPoints: ["src/index.ts"],
+  entryPoints: ['src/index.ts'],
   // sort the code items by alphabetical order
-  sort: ["alphabetical"],
+  sort: ['alphabetical'],
   categorizeByGroup: true,
-  categoryOrder: ["Data", "Chart", "Widget", "Callbacks", "*"]
+  categoryOrder: ['Data', 'Chart', 'Widget', 'Callbacks', '*'],
 };
 
-if (process.env.TYPEDOC_MODE === "PUBLIC") {
+if (process.env.TYPEDOC_MODE === 'PUBLIC') {
   /** @type {import("typedoc").TypeDocOptionValues} */
   module.exports = {
     ...baseConfig,
     excludePrivate: true,
     excludeInternal: true,
+    excludeExternals: true,
+    excludeProtected: true,
     // hide text describing where a code item is located in the source
     disableSources: true,
-    hideGenerator: true
+    hideGenerator: true,
   };
 } else {
   /** @type {import("typedoc").TypeDocOptionValues} */
@@ -28,6 +30,6 @@ if (process.env.TYPEDOC_MODE === "PUBLIC") {
     excludeTags: [],
     // show text describing where a code item is located in the source
     disableSources: false,
-    hideGenerator: false
+    hideGenerator: false,
   };
 }

@@ -32,7 +32,7 @@ plot a bar chart of the `Sample ECommerce` data source hosted in a Sisense insta
   chartType="bar"
   dataOptions={{
     category: [DM.Category.Category],
-    value: [measures.sum(DM.Commerce.Revenue)],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
     breakBy: [],
   }}
 />

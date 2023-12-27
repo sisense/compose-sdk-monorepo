@@ -7,23 +7,35 @@
 /* eslint-disable complexity */
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable max-lines-per-function */
-import { Attribute, Data, DataSource, Filter, isDataSource, Measure } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Data,
+  DataSource,
+  Filter,
+  FilterRelation,
+  isDataSource,
+  Measure,
+} from '@sisense/sdk-data';
 import { useEffect, useMemo, useState } from 'react';
-import { ChartDataOptionsInternal } from './chart-data-options/types';
+import {
+  BoxplotChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+  ScattermapChartDataOptionsInternal,
+} from './chart-data-options/types';
 import { createDataTableFromData } from './chart-data-processor/table-creators';
 import { chartDataService } from './chart-data/chart-data-service';
 import { filterAndAggregateChartData } from './chart-data/filter-and-aggregate-chart-data';
-import { ChartData } from './chart-data/types';
+import { ChartData, ScattermapChartData } from './chart-data/types';
 import { translateStyleOptionsToDesignOptions } from './chart-options-processor/style-to-design-options-translator/translate-style-to-design-options';
 import { ChartDesignOptions } from './chart-options-processor/translations/types';
 import { ChartProps } from './props';
 import { executeQuery } from './query/execute-query';
 import { applyDateFormats } from './query/query-result-date-formatting';
-import { ChartDataOptions, ChartType, StyleOptions } from './types';
+import { ChartDataOptions, ChartType, ChartStyleOptions } from './types';
 import {
   IndicatorCanvas,
   isIndicatorChartData,
-  isIndicatorDataOptionsInternal,
+  isIndicatorChartDataOptionsInternal,
   isIndicatorDesignOptions,
 } from './indicator-canvas';
 import { SisenseChart } from './sisense-chart';
@@ -43,6 +55,11 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
 import { DynamicSizeContainer, getChartDefaultSize } from './dynamic-size-container';
 import { LoadingIndicator } from './common/components/loading-indicator';
 import { getTranslatedDataOptions } from './chart-data-options/get-translated-data-options';
+import { executeBoxplotQuery } from './boxplot-utils';
+import { Scattermap } from './charts/scattermap/scattermap';
+import { isString } from 'lodash';
+import { ScattermapChartDesignOptions } from './chart-options-processor/translations/design-options';
+import { getFilterListAndRelations } from '@sisense/sdk-data';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -75,10 +92,10 @@ export const shouldSkipSisenseContextWaiting = (props: ChartProps) =>
  *   dataSet={DM.DataSource}
  *   dataOptions={{
  *     category: [DM.Commerce.AgeRange],
- *     value: [measures.sum(DM.Commerce.Revenue)],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue)],
  *     breakBy: [DM.Commerce.Gender],
  *   }}
- *   filters={[filters.members(DM.Commerce.Gender,['Female', 'Male'])]}
+ *   filters={[filterFactory.members(DM.Commerce.Gender,['Female', 'Male'])]}
  *   onDataPointClick= {(point, nativeEvent) => { console.log('clicked', point, nativeEvent); }}
  * />
  * ```
@@ -186,7 +203,7 @@ export const Chart = asSisenseComponent({
       },
       getDefaultStyleOptions(),
       styleOptions ?? {},
-    ) as StyleOptions;
+    ) as ChartStyleOptions;
 
     return translateStyleOptionsToDesignOptions(chartType, mergedStyleOptions, chartDataOptions);
     // chartType is omitted from the dependency array because chartDataOptions
@@ -237,10 +254,26 @@ export const Chart = asSisenseComponent({
           return <NoResultsOverlay iconType={chartType} />;
         }
 
+        if (chartType === 'scattermap') {
+          const scattermapChartData = chartData as ScattermapChartData;
+          const scattermapChartDataOptions = chartDataOptions as ScattermapChartDataOptionsInternal;
+          const ScattermapChartDesignOptions =
+            designOptions as unknown as ScattermapChartDesignOptions;
+          return (
+            <Scattermap
+              chartData={scattermapChartData}
+              dataOptions={scattermapChartDataOptions}
+              designOptions={ScattermapChartDesignOptions}
+              dataSource={isString(dataSet) ? dataSet : null}
+              filters={filters}
+            />
+          );
+        }
+
         if (chartType === 'indicator') {
           if (
             isIndicatorChartData(chartData) &&
-            isIndicatorDataOptionsInternal(chartDataOptions) &&
+            isIndicatorChartDataOptionsInternal(chartDataOptions) &&
             isIndicatorDesignOptions(designOptions)
           ) {
             return (
@@ -282,7 +315,7 @@ const useSyncedData = (
   attributes: Attribute[],
   measures: Measure[],
   dataColumnNamesMapping: DataColumnNamesMapping,
-  filters?: Filter[],
+  filters?: Filter[] | FilterRelation,
   highlights?: Filter[],
   refreshCounter?: number,
 ) => {
@@ -294,11 +327,35 @@ const useSyncedData = (
   useEffect(() => {
     let ignore = false;
 
+    const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
     if (dataSet === undefined || isDataSource(dataSet)) {
-      executeQuery(
-        { dataSource: dataSet, dimensions: attributes, measures, filters, highlights },
-        app!,
-      )
+      let executeQueryPromise;
+
+      if (chartType === 'boxplot') {
+        executeQueryPromise = executeBoxplotQuery({
+          app: app!,
+          chartDataOptions: chartDataOptions as BoxplotChartDataOptionsInternal,
+          dataSource: dataSet,
+          attributes,
+          measures,
+          filters: filterList,
+          highlights,
+        });
+      } else {
+        executeQueryPromise = executeQuery(
+          {
+            dataSource: dataSet,
+            dimensions: attributes,
+            measures,
+            filters: filterList,
+            filterRelations,
+            highlights,
+          },
+          app!,
+        );
+      }
+
+      executeQueryPromise
         .then((queryResultData) => {
           const dataWithDateFormatting = applyDateFormats(
             queryResultData,
@@ -324,7 +381,7 @@ const useSyncedData = (
         attributes,
         measures,
         dataColumnNamesMapping,
-        filters,
+        filterList,
         highlights,
       );
 

@@ -37,8 +37,8 @@ export class ComponentAdapter {
       const context = prepareContext();
 
       if (isObservable(context)) {
-        const unsubscribe = context.subscribe(
-          (data: ContextData) => {
+        const unsubscribe = context.subscribe({
+          next: (data: ContextData) => {
             contextStore.data = data;
             contextStore.isReady = true;
 
@@ -46,7 +46,7 @@ export class ComponentAdapter {
               this.renderComponentWithContext(this.rootElement);
             }
           },
-          (error: Error) => {
+          error: (error: Error) => {
             contextStore.error = error;
             contextStore.isReady = true;
 
@@ -54,7 +54,7 @@ export class ComponentAdapter {
               this.renderComponentWithContext(this.rootElement);
             }
           },
-        );
+        });
         this.subscriptions.push(unsubscribe);
       } else if (isPromise(context)) {
         context

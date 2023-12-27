@@ -17,15 +17,24 @@ import { HighchartsType, HighchartsSeriesValues } from './translations/translati
 import { TooltipSettings } from './tooltip';
 import { PieOptions } from './translations/pie-plot-options';
 import { FunnelOptions } from './translations/funnel-plot-options';
-import { ChartType, OptionsWithAlerts, CompleteThemeSettings, StyleOptions } from '../types';
+import {
+  ChartType,
+  OptionsWithAlerts,
+  CompleteThemeSettings,
+  ChartStyleOptions,
+  HighchartsSelectEvent,
+} from '../types';
 import { getCartesianChartOptions } from './cartesian-chart-options';
 import { getCategoricalChartOptions } from './category-chart-options';
 import { getScatterChartOptions } from './scatter-chart-options';
 import {
+  BoxplotChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import { ScatterBubbleOptions } from './translations/scatter-plot-options';
+import { getBoxplotChartOptions } from './boxplot-chart-options';
+import { BoxplotChartDesignOptions } from './translations/design-options';
 
 // Notes: extends type by recreating it via `Pick` in order to force IntelliSense to use it as target type.
 /**
@@ -83,6 +92,13 @@ export const highchartsOptionsService = (
         themeSettings,
       );
     }
+    case 'boxplot': {
+      return getBoxplotChartOptions(
+        chartData,
+        chartDesignOptions as BoxplotChartDesignOptions,
+        dataOptions as BoxplotChartDataOptionsInternal,
+      );
+    }
     default:
       // TODO: "typescript exhaustive union type switch" so this is a compile error
       throw new Error('Unexpected chart type');
@@ -102,6 +118,14 @@ export type SeriesType = HighchartsSeriesValues & {
   marker?: MarkerSettings;
   type?: string;
   id?: string;
+  medianWidth?: number;
+  maxPointWidth?: number;
+  minPointWidth?: number;
+  whiskerWidth?: number;
+  whiskerLength?: number | string;
+  fillOpacity?: number;
+  strokeOpacity?: number;
+  legendIndex?: number;
 };
 
 type ChartPlotOptions = {
@@ -140,6 +164,7 @@ export type PlotOptions = {
     allowPointSelect?: boolean;
     boostThreshold?: number;
     turboThreshold?: number;
+    softThreshold?: boolean;
     fillOpacity?: number;
     connectNulls?: boolean;
     animation?: {
@@ -154,6 +179,8 @@ export type PlotOptions = {
   funnel?: FunnelOptions;
   bubble?: ScatterBubbleOptions;
   sunburst?: ChartPlotOptions;
+  boxplot?: ChartPlotOptions;
+  scatter?: ChartPlotOptions;
 };
 
 /**
@@ -166,6 +193,7 @@ export type HighchartsOptionsInternal = {
     events?: {
       load?: () => void;
       redraw?: () => void;
+      selection?: (nativeEvent: HighchartsSelectEvent) => void;
     };
     spacing?: number[];
     marginTop?: number;
@@ -173,6 +201,9 @@ export type HighchartsOptionsInternal = {
     polar: boolean;
     animation?: {
       duration?: number;
+    };
+    zooming?: {
+      type: string;
     };
   };
   title?: {
@@ -206,15 +237,19 @@ export type Style = {
 };
 
 type Navigator = {
-  series: { type: HighchartsType; dataGrouping: { enabled: boolean } };
+  series: {
+    type: HighchartsType;
+    dataGrouping: { enabled: boolean };
+    color?: string;
+  };
   enabled: boolean;
   margin: number;
   height: number;
   xAxis: AxisSettings;
   handles: {
-    symbols: string[];
-    backgroundColor: string;
-    borderColor: string;
+    symbols?: string[];
+    backgroundColor?: string;
+    borderColor?: string;
   };
   maskInside: boolean;
   maskFill: string;
@@ -224,7 +259,7 @@ type Navigator = {
   tooltipFormatter?: (min: number, max: number) => { left: string; right: string };
 };
 
-const DEFAULT_STYLE_OPTIONS: StyleOptions = {
+const DEFAULT_STYLE_OPTIONS: ChartStyleOptions = {
   legend: {
     enabled: true,
     position: 'bottom',

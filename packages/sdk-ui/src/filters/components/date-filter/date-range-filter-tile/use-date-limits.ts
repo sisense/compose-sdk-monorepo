@@ -1,4 +1,4 @@
-import { DataSource, Filter, LevelAttribute, measures } from '@sisense/sdk-data';
+import { DataSource, Filter, LevelAttribute, measureFactory } from '@sisense/sdk-data';
 import { useSisenseContext } from '../../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { executeQuery } from '../../../../query/execute-query';
@@ -27,7 +27,7 @@ export const useDateLimits = (
     void executeQuery(
       {
         dataSource,
-        measures: [measures.min(attribute), measures.max(attribute)],
+        measures: [measureFactory.min(attribute), measureFactory.max(attribute)],
         filters: parentFilters,
       },
       app,

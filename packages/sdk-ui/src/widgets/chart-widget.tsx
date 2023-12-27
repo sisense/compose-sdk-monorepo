@@ -33,7 +33,7 @@ import { ChartWidgetDeprecated } from './chart-widget-deprecated';
  *   chartType="bar"
  *   dataOptions={{
  *     category: [DM.Category.Category],
- *     value: [measures.sum(DM.Commerce.Revenue)],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue)],
  *     breakBy: [],
  *   }}
  * />
@@ -84,7 +84,6 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     bottomSlot,
     title,
     description,
-    widgetStyleOptions,
     styleOptions,
     dataOptions,
     onDataPointsSelected: originalOnDataPointsSelected,
@@ -199,7 +198,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   );
 
   const defaultSize = getWidgetDefaultSize(chartType, {
-    hasHeader: !widgetStyleOptions?.header?.hidden,
+    hasHeader: !styleOptions?.header?.hidden,
   });
   const { width, height, ...styleOptionsWithoutSizing } = styleOptions || {};
 
@@ -230,28 +229,28 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
         <div
           className={'csdk-h-full'}
           style={{
-            padding: WidgetSpaceAround[widgetStyleOptions?.spaceAround || 'None'],
+            padding: WidgetSpaceAround[styleOptions?.spaceAround || 'None'],
           }}
         >
           <div
             className={'csdk-h-full csdk-overflow-hidden'}
             style={{
-              borderWidth: widgetStyleOptions?.border ? '1px' : 0,
-              borderColor: widgetStyleOptions?.borderColor || themeSettings.chart.textColor,
-              borderRadius: widgetStyleOptions?.cornerRadius
-                ? WidgetCornerRadius[widgetStyleOptions.cornerRadius]
+              borderWidth: styleOptions?.border ? '1px' : 0,
+              borderColor: styleOptions?.borderColor || themeSettings.chart.textColor,
+              borderRadius: styleOptions?.cornerRadius
+                ? WidgetCornerRadius[styleOptions.cornerRadius]
                 : 0,
-              boxShadow: getShadowValue(widgetStyleOptions),
+              boxShadow: getShadowValue(styleOptions),
               display: 'flex',
               flexDirection: 'column',
             }}
           >
-            {!widgetStyleOptions?.header?.hidden && (
+            {!styleOptions?.header?.hidden && (
               <WidgetHeader
                 title={title}
                 description={description}
                 dataSetName={chartProps.dataSet}
-                styleOptions={widgetStyleOptions?.header}
+                styleOptions={styleOptions?.header}
                 onRefresh={() => setRefreshCounter(refreshCounter + 1)}
               />
             )}
@@ -260,7 +259,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
               theme={{
                 chart: {
                   backgroundColor:
-                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
                 },
               }}
             >
@@ -271,7 +270,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
                   minWidth: 0,
                   minHeight: 0,
                   backgroundColor:
-                    widgetStyleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
                 }}
               >
                 <Chart {...chartProps} refreshCounter={refreshCounter} />

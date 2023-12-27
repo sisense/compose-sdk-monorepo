@@ -47,10 +47,10 @@ query the `Sample ECommerce` data source hosted in a Sisense instance.
     <ExecuteQuery
       dataSource={DM.DataSource}
       dimensions={[drilldownDimension]}
-      measures={measure.sum(DM.Commerce.Revenue)}
+      measures={measureFactory.sum(DM.Commerce.Revenue)}
       filters={drilldownFilters}
     >
-      {(data) => (
+      {({data}) => (
         <MyCustomChart
           rawData={data}
           onContextMenu={onContextMenu}

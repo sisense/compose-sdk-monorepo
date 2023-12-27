@@ -21,7 +21,7 @@ export type TableProps = {
    */
   dataOptions: TableDataOptionsInternal;
   /**
-   * Configuration that define functional style of the various chart elements
+   * Configuration that defines functional style of the various chart elements
    *
    */
   designOptions?: TableDesignOptions;

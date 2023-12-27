@@ -74,7 +74,7 @@ Unique identifier of the widget.
 
 ### styleOptions
 
-> **styleOptions**: [`StyleOptions`](../type-aliases/type-alias.StyleOptions.md) \| [`TableStyleOptions`](../interfaces/interface.TableStyleOptions.md)
+> **styleOptions**: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md) \| [`TableStyleOptions`](../interfaces/interface.TableStyleOptions.md)
 
 Widget style options.
 

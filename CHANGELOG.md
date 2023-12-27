@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.0] - 2023-12-27
+
+### Added
+- Publish `@sisense/sdk-ui-vue` and related dependencies to NPM registry for internal testing.
+- Add component `ScattermapChart`
+  and support the `scattermap` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget` for beta testing
+- Add component `BoxplotChart`
+  and support the `boxplot` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget` for beta testing
+- Support filter relations (logic operators `and` and `or`) for beta testing
+- Add UI component `RelativeDateFilterTile`
+
+### Changed
+- **Breaking:** Refactor `ExecuteQuery` and `ExecuteQueryByWidgetId` to return `QueryState` and `QueryByWidgetIdState`, respectively
+- **Breaking:** Rename type alias `StyleOptions` to `ChartStyleOptions`
+- **Breaking:** Combine prop `widgetStyleOptions` into `styleOptions` for `ChartWidget` and `DashboardWidget`
+- **Breaking:** Rename type `IndicatorDataOptions` to `IndicatorChartDataOptions`
+- **Breaking:** Rename namespace `measures` to `measureFactory` and namespace `filters` to `filterFactory`
+
+_See [migration guide](./guides/migration-guide-1.0.0.md) for more details._
+
 ## [0.16.0] - 2023-12-12
 
 ### Added
@@ -39,7 +59,7 @@
 ## [0.14.0] - 2023-11-14
 
 ### Added
-- Add `CriteriaFilterTile` for vertical single input use case.
+- Add component `CriteriaFilterTile` for vertical single input use case.
 
 ### Changed
 - Support dashboard filters by boolean flag `includeDashboardFilters` in component `DashboardWidget`, component `ExecuteQueryByWidgetId`, and hook `useExecuteQueryByWidgetId`

@@ -27,7 +27,7 @@ Criteria filter tile component
 ## Example
 
 ```ts
-const initialRevenueFilter = filters.greaterThanOrEqual(DM.Commerce.Revenue, 10000);
+const initialRevenueFilter = filterFactory.greaterThanOrEqual(DM.Commerce.Revenue, 10000);
 const [revenueFilter, setRevenueFilter] = useState<Filter | null>(initialRevenueFilter);
 
 return (

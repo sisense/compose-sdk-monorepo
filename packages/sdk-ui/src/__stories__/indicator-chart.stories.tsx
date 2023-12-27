@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Data } from '@sisense/sdk-data';
-import { IndicatorDataOptions } from '../chart-data-options/types';
+import { IndicatorChartDataOptions } from '../chart-data-options/types';
 import { Chart } from '../chart';
 import { IndicatorChart } from '../indicator-chart';
 import { IndicatorStyleOptions, NumberFormatConfig } from '../types';
@@ -35,7 +35,7 @@ const indicatorData: Data = {
   rows: [[107.27, 38.76, 0, 255]],
 };
 
-const indicatorDataOptions: IndicatorDataOptions = {
+const indicatorChartDataOptions: IndicatorChartDataOptions = {
   value: [
     {
       name: 'Total Cost',
@@ -72,7 +72,7 @@ const basicStyleOptions: Partial<IndicatorStyleOptions> = {
 
 const indicatorProps = {
   dataSet: indicatorData,
-  dataOptions: indicatorDataOptions,
+  dataOptions: indicatorChartDataOptions,
   styleOptions: basicStyleOptions,
 };
 
@@ -109,10 +109,10 @@ export const simpleVerticalNumericIndicatorWithCustomNumberFormatting = template
     skin: 'vertical',
   },
   dataOptions: {
-    ...indicatorDataOptions,
+    ...indicatorChartDataOptions,
     value: [
       {
-        ...indicatorDataOptions.value![0],
+        ...indicatorChartDataOptions.value![0],
         numberFormatConfig: customNumberFormat,
       },
     ],
@@ -226,7 +226,7 @@ export const tickerNumericIndicator = () => {
       <IndicatorChart
         dataSet={indicatorData}
         dataOptions={{
-          value: indicatorDataOptions.value,
+          value: indicatorChartDataOptions.value,
         }}
         styleOptions={{
           ...basicStyleOptions,
@@ -244,7 +244,7 @@ export const TickerNumericIndicatorWithSecondaryValue = () => {
     <div style={{ height: 40 }}>
       <IndicatorChart
         dataSet={indicatorData}
-        dataOptions={indicatorDataOptions}
+        dataOptions={indicatorChartDataOptions}
         styleOptions={{
           ...basicStyleOptions,
           subtype: 'indicator/numeric',
@@ -262,9 +262,9 @@ export const TickerGaugeIndicator = () => {
       <IndicatorChart
         dataSet={indicatorData}
         dataOptions={{
-          value: indicatorDataOptions.value,
-          min: indicatorDataOptions.min,
-          max: indicatorDataOptions.max,
+          value: indicatorChartDataOptions.value,
+          min: indicatorChartDataOptions.min,
+          max: indicatorChartDataOptions.max,
         }}
         styleOptions={{
           ...basicStyleOptions,

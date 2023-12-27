@@ -7,8 +7,7 @@ import { WidgetDto } from './types';
  * Fetches a Widget DTO model and, optionally, a Dashboard DTO model.
  *
  * @internal
- *
- * @param {Object} options - The options for fetching the DTO models.
+ * @param {object} options - The options for fetching the DTO models.
  * @param {string} options.widgetOid - The OID of the widget to fetch.
  * @param {string} options.dashboardOid - The OID of the dashboard to which the widget belongs.
  * @param {boolean} [options.includeDashboard] - (Optional) Whether to include the associated dashboard.
@@ -37,8 +36,7 @@ export const fetchWidgetDtoModel = async ({
  * Custom hook for fetching Widget DTO and Dashboard DTO models.
  *
  * @internal
- *
- * @param {Object} options - The options for fetching the DTO models.
+ * @param {object} options - The options for fetching the DTO models.
  * @param {string} options.widgetOid - The OID of the widget to fetch.
  * @param {string} options.dashboardOid - The OID of the dashboard to which the widget belongs.
  * @param {boolean} [options.includeDashboard] - (Optional) Whether to include the associated dashboard.

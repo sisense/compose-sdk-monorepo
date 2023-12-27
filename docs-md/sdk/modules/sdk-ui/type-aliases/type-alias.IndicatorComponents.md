@@ -30,7 +30,7 @@ The value labels of the indicator chart
 
 **secondaryTitle**?: `object`
 
-The secondary title of the indicator chart to be shown when `secondary` is specified in [IndicatorDataOptions](../interfaces/interface.IndicatorDataOptions.md)
+The secondary title of the indicator chart to be shown when `secondary` is specified in [IndicatorChartDataOptions](../interfaces/interface.IndicatorChartDataOptions.md)
 
 > #### `secondaryTitle.text`
 >

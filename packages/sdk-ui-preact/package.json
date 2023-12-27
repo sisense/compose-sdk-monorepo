@@ -1,6 +1,17 @@
 {
   "name": "@sisense/sdk-ui-preact",
-  "version": "0.16.0",
+  "homepage": "https://sisense.dev/guides/sdk/",
+  "description": "Compose SDK package containing general UI elements and related logic tailored for Preact development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sisense/compose-sdk-monorepo",
+    "directory": "packages/sdk-ui-preact"
+  },
+  "keywords": [
+    "Sisense",
+    "Compose SDK"
+  ],
+  "version": "1.0.0",
   "type": "module",
   "exports": {
     ".": {
@@ -14,7 +25,7 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-ui": "^0.16.0",
+    "@sisense/sdk-ui": "^1.0.0",
     "preact": "^10.13.2"
   },
   "scripts": {

@@ -3,11 +3,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import { CartesianChartDataOptions, Chart, DataPoint, MemberFilterTile } from '../../index';
 import * as DM from '../sample-ecommerce';
-import { filters, Filter, measures, MembersFilter } from '@sisense/sdk-data';
+import { filterFactory, Filter, measureFactory, MembersFilter } from '@sisense/sdk-data';
 
 export const PageCrossFiltering = () => {
   const [yearFilter, setYearFilter] = useState<Filter | null>(
-    filters.members(DM.Commerce.Date.Years, ['2010-01-01T00:00:00']),
+    filterFactory.members(DM.Commerce.Date.Years, ['2010-01-01T00:00:00']),
   );
   const [genderFilter, setGenderFilter] = useState<Filter | null>(null);
 
@@ -17,19 +17,19 @@ export const PageCrossFiltering = () => {
       return;
     }
     const members = typeof value === 'string' ? [value] : value;
-    setYearFilter(filters.members(DM.Commerce.Date.Years, members));
+    setYearFilter(filterFactory.members(DM.Commerce.Date.Years, members));
   }, []);
 
   // accumulate only filters with sub selection
   const activeFilters = useMemo<Filter[]>(() => {
-    return [yearFilter, genderFilter, filters.greaterThan(DM.Commerce.Revenue, 0)].filter(
+    return [yearFilter, genderFilter, filterFactory.greaterThan(DM.Commerce.Revenue, 0)].filter(
       (f) => !!f,
     ) as Filter[];
   }, [yearFilter, genderFilter]);
 
   const dataOptions: CartesianChartDataOptions = {
     category: [DM.Commerce.Date.Years],
-    value: [measures.sum(DM.Commerce.Revenue)],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
     breakBy: [DM.Commerce.AgeRange],
   };
 
@@ -42,13 +42,16 @@ export const PageCrossFiltering = () => {
       <button
         onClick={() =>
           setYearFilter(
-            filters.members(DM.Commerce.Date.Years, ['2009-01-01T00:00:00', '2010-01-01T00:00:00']),
+            filterFactory.members(DM.Commerce.Date.Years, [
+              '2009-01-01T00:00:00',
+              '2010-01-01T00:00:00',
+            ]),
           )
         }
       >
         {`Set Filter to 2009 and 2010`}
       </button>
-      <button onClick={() => setYearFilter(filters.members(DM.Commerce.Date.Years, []))}>
+      <button onClick={() => setYearFilter(filterFactory.members(DM.Commerce.Date.Years, []))}>
         {'Clear Filter'}
       </button>
       <br />

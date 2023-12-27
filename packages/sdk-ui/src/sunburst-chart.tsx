@@ -17,7 +17,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *        DM.Commerce.Сondition,
  *        DM.Commerce.Date.Years
  *      ],
- *     value: [measures.sum(DM.Commerce.Quantity)],
+ *     value: [measureFactory.sum(DM.Commerce.Quantity)],
  *   }}
  * />
  * ```

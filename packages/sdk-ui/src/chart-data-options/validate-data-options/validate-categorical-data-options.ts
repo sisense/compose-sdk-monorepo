@@ -45,6 +45,7 @@ const maxCategoricalDataOptionsLengthsMap: MaxCategoricalDataOptionsLengthsMap =
 
 /**
  * Filter data options by allowed length of attributes for specific chart type.
+ *
  * @param chartType
  * @param dataOptions
  * @returns

@@ -13,7 +13,7 @@ import { ExecuteQueryParams } from '../../query-execution';
 import { getTableAttributesAndMeasures } from '../../table/hooks/use-table-data';
 import { DEFAULT_TABLE_ROWS_PER_PAGE, PAGES_BATCH_SIZE } from '../../table/table';
 import { TranslatableError } from '../../translation/translatable-error';
-import { ChartType, DrilldownOptions, StyleOptions, TableStyleOptions } from '../../types';
+import { ChartType, DrilldownOptions, ChartStyleOptions, TableStyleOptions } from '../../types';
 
 /**
  * Widget data options.
@@ -57,7 +57,7 @@ export class WidgetModel {
   /**
    * Widget style options.
    */
-  styleOptions: StyleOptions | TableStyleOptions;
+  styleOptions: ChartStyleOptions | TableStyleOptions;
 
   /**
    * Widget filters.
@@ -83,7 +83,6 @@ export class WidgetModel {
    * Creates a new widget model.
    *
    * @param widgetDto - The widget DTO to be converted to a widget model
-   *
    * @internal
    */
   constructor(widgetDto: WidgetDto) {
@@ -98,7 +97,11 @@ export class WidgetModel {
     }
 
     this.widgetType = widgetType;
-    this.dataOptions = extractDataOptions(this.widgetType, widgetDto.metadata.panels);
+    this.dataOptions = extractDataOptions(
+      this.widgetType,
+      widgetDto.metadata.panels,
+      widgetDto.style,
+    );
 
     this.styleOptions = extractStyleOptions(
       widgetType,
@@ -170,7 +173,7 @@ export class WidgetModel {
     return {
       chartType: this.chartType!,
       dataOptions: this.dataOptions as ChartDataOptions,
-      styleOptions: this.styleOptions as StyleOptions,
+      styleOptions: this.styleOptions as ChartStyleOptions,
       dataSet: this.dataSource,
       filters: this.filters,
       highlights: this.highlights,
@@ -179,6 +182,7 @@ export class WidgetModel {
 
   /**
    * Returns the props to be used for rendering a table.
+   *
    * @example
    * ```tsx
    * <Table {...widget.getTableProps()} />
@@ -203,6 +207,7 @@ export class WidgetModel {
 
   /**
    * Returns the props to be used for rendering a chart widget.
+   *
    * @example
    * ```tsx
    * <ChartWidget {...widget.getChartWidgetProps()} />
@@ -217,7 +222,7 @@ export class WidgetModel {
     return {
       chartType: this.chartType!,
       dataOptions: this.dataOptions as ChartDataOptions,
-      styleOptions: this.styleOptions as StyleOptions,
+      styleOptions: this.styleOptions as ChartStyleOptions,
       dataSource: this.dataSource,
       filters: this.filters,
       highlights: this.highlights,
@@ -229,6 +234,7 @@ export class WidgetModel {
 
   /**
    * Returns the props to be used for rendering a table widget.
+   *
    * @example
    * ```tsx
    * <TableWidget {...widget.getTableWidgetProps()} />
@@ -236,7 +242,6 @@ export class WidgetModel {
    *
    * Note: this method is not supported for chart widgets.
    * Use {@link getChartWidgetProps} instead for getting props for the <ChartWidget> component.
-   *
    * @internal
    */
   getTableWidgetProps(): TableWidgetProps {

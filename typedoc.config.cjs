@@ -4,7 +4,7 @@ let baseConfig = {
   // To allow TypeDoc to resolve references across packages,
   // "declaration" and "declarationMap" in tsconfig.json must be set to true
   entryPointStrategy: 'packages',
-  plugin: ['./typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs'],
+  plugin: ['typedoc-plugin-vue', './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs'],
   readme: './README.md',
   // Media directory that will be copied to the output file
   media: './media',
@@ -16,6 +16,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
     ...baseConfig,
     plugin: [
       '@sisense/typedoc-plugin-markdown',
+      'typedoc-plugin-vue',
       './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
     ],
     githubPages: false,
@@ -23,7 +24,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
     flattenOutputFiles: false,
     entryFileName: 'index.md',
     indexFileName: 'index.md',
-    indexPageTitle: 'Compose SDK [BETA]',
+    indexPageTitle: 'Compose SDK',
     skipIndexPage: false,
     excludeGroups: false,
     hidePageHeader: true,
@@ -47,6 +48,7 @@ if (process.env.TYPEDOC_MODE === 'PUBLIC') {
       'packages/sdk-ui',
       'packages/sdk-ui-preact',
       'packages/sdk-ui-angular',
+      'packages/sdk-ui-vue',
     ],
     hideGenerator: true,
   };

@@ -31,7 +31,7 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
   dataOptions={{
     value: [
       {
-        column: measures.sum(DM.Commerce.Revenue),
+        column: measureFactory.sum(DM.Commerce.Revenue),
         numberFormatConfig: {
           name: 'Numbers',
           decimalScale: 2,
@@ -46,10 +46,10 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
       },
     ],
     secondary: [],
-    min: [measures.constant(0)],
-    max: [measures.constant(125000000)],
+    min: [measureFactory.constant(0)],
+    max: [measureFactory.constant(125000000)],
   }}
-  filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
+  filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
   styleOptions={{
     indicatorComponents: {
       title: {

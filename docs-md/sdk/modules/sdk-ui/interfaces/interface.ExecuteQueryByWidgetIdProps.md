@@ -10,7 +10,7 @@ Props for [ExecuteQueryByWidgetId](../functions/function.ExecuteQueryByWidgetId.
 
 ### children
 
-> **children**?: (`queryResult`, `queryParams`) => `ReactNode`
+> **children**?: (`queryState`) => `ReactNode`
 
 Function as child component that is called to render the query results
 
@@ -18,8 +18,7 @@ Function as child component that is called to render the query results
 
 | Parameter | Type |
 | :------ | :------ |
-| `queryResult` | [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md) |
-| `queryParams` | [`ExecuteQueryParams`](interface.ExecuteQueryParams.md) |
+| `queryState` | [`QueryByWidgetIdState`](../type-aliases/type-alias.QueryByWidgetIdState.md) |
 
 #### Returns
 

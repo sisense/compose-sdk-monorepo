@@ -1,0 +1,50 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+import { templateForComponent } from './template.js';
+import { RelativeDateFilterTile } from '../filters/components/date-filter/relative-date-filter-tile/index.js';
+import {
+  DateLevels,
+  DimensionalLevelAttribute,
+  Filter,
+  RelativeDateFilter,
+  filterFactory as filters,
+} from '@sisense/sdk-data';
+
+const template = templateForComponent(RelativeDateFilterTile);
+
+export default {
+  title: 'filters/RelativeDateFilterTile',
+  component: RelativeDateFilterTile,
+};
+
+const mockAttributeDays = new DimensionalLevelAttribute(
+  DateLevels.Days,
+  '[Commerce.Date (Calendar)]',
+  DateLevels.Days,
+);
+const mockAttributeYears = new DimensionalLevelAttribute(
+  'Years',
+  '[Commerce.Date (Calendar)]',
+  DateLevels.Years,
+);
+
+const onUpdate = (filter: Filter | null) => {
+  console.log('onUpdate:', filter);
+};
+
+export const Vertical = template({
+  title: 'Relative Date: Vertical',
+  filter: (filters.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter).serializable(),
+  arrangement: 'vertical',
+  onUpdate,
+  limit: {
+    maxDate: '2025-01-01',
+    minDate: '2019-01-01',
+  },
+});
+
+export const Horizontal = template({
+  title: 'Relative Date: Horizontal',
+  filter: (filters.dateRelativeFrom(mockAttributeYears, 0, 1) as RelativeDateFilter).serializable(),
+  arrangement: 'horizontal',
+  onUpdate,
+});

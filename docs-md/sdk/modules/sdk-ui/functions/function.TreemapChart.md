@@ -32,12 +32,12 @@ An example of using the component to visualize the `Sample ECommerce` data sourc
   dataOptions={{
     category: [
        {
-         column: DM.Commerce.Сondition,
+         column: DM.Commerce.Condition,
          isColored: true,
        },
        DM.Commerce.Date.Years
      ],
-    value: [measures.sum(DM.Commerce.Quantity)],
+    value: [measureFactory.sum(DM.Commerce.Quantity)],
   }}
   onDataPointClick= {(point, nativeEvent) => {
     console.log('clicked', point, nativeEvent);

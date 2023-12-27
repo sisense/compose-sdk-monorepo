@@ -6,7 +6,7 @@ import {
   Attribute,
   ExcludeFilter,
   Filter,
-  filters,
+  filterFactory,
   FilterTypes,
   Measure,
   MetadataTypes,
@@ -52,7 +52,6 @@ export const FilterOption = {
 };
 
 export type FilterOptionType = keyof typeof FilterOption;
-export type FilterVariant = 'vertical' | 'horizontal';
 
 /**
  * Object containing related information for a filter option,
@@ -79,7 +78,7 @@ export type FilterInfo = {
  */
 export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
   [FilterOption.EQUALS]: {
-    fn: filters.equals,
+    fn: filterFactory.equals,
     inputCount: 1,
     symbols: ['='],
     message: 'criteriaFilter.equals',
@@ -87,7 +86,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.NOT_EQUALS]: {
-    fn: filters.doesntEqual,
+    fn: filterFactory.doesntEqual,
     inputCount: 1,
     symbols: ['≠'],
     message: 'criteriaFilter.notEquals',
@@ -95,7 +94,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.LESS_THAN]: {
-    fn: filters.lessThan,
+    fn: filterFactory.lessThan,
     inputCount: 1,
     symbols: ['<'],
     message: 'criteriaFilter.lessThan',
@@ -103,7 +102,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.LESS_THAN_OR_EQUAL]: {
-    fn: filters.lessThanOrEqual,
+    fn: filterFactory.lessThanOrEqual,
     inputCount: 1,
     symbols: ['≤'],
     message: 'criteriaFilter.lessThanOrEqual',
@@ -111,7 +110,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.GREATER_THAN]: {
-    fn: filters.greaterThan,
+    fn: filterFactory.greaterThan,
     inputCount: 1,
     symbols: ['>'],
     message: 'criteriaFilter.greaterThan',
@@ -119,7 +118,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.GREATER_THAN_OR_EQUAL]: {
-    fn: filters.greaterThanOrEqual,
+    fn: filterFactory.greaterThanOrEqual,
     inputCount: 1,
     symbols: ['≥'],
     message: 'criteriaFilter.greaterThanOrEqual',
@@ -127,7 +126,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.BETWEEN]: {
-    fn: filters.between,
+    fn: filterFactory.between,
     inputCount: 2,
     symbols: ['≥', '≤'],
     message: 'criteriaFilter.between',
@@ -136,7 +135,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
   },
   [FilterOption.NOT_BETWEEN]: {
     fn: (attribute: Attribute, valueA: number, valueB: number): Filter => {
-      return filters.exclude(filters.between(attribute, valueA, valueB));
+      return filterFactory.exclude(filterFactory.between(attribute, valueA, valueB));
     },
     inputCount: 2,
     symbols: ['≤', '≥'],
@@ -145,7 +144,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.exclude,
   },
   [FilterOption.TOP]: {
-    fn: filters.topRanking,
+    fn: filterFactory.topRanking,
     inputCount: 2,
     symbols: ['Top', 'by'],
     message: 'criteriaFilter.top',
@@ -153,7 +152,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.ranking,
   },
   [FilterOption.BOTTOM]: {
-    fn: filters.bottomRanking,
+    fn: filterFactory.bottomRanking,
     inputCount: 2,
     symbols: ['Last', 'by'],
     message: 'criteriaFilter.bottom',
@@ -161,7 +160,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.ranking,
   },
   [FilterOption.IS]: {
-    fn: filters.equals,
+    fn: filterFactory.equals,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.is',
@@ -169,7 +168,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.IS_NOT]: {
-    fn: filters.doesntEqual,
+    fn: filterFactory.doesntEqual,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.isNot',
@@ -177,7 +176,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.CONTAINS]: {
-    fn: filters.contains,
+    fn: filterFactory.contains,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.contains',
@@ -185,7 +184,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.NOT_CONTAIN]: {
-    fn: filters.doesntContain,
+    fn: filterFactory.doesntContain,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.notContains',
@@ -193,7 +192,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.STARTS_WITH]: {
-    fn: filters.startsWith,
+    fn: filterFactory.startsWith,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.startsWith',
@@ -201,7 +200,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.NOT_STARTS_WITH]: {
-    fn: filters.doesntStartWith,
+    fn: filterFactory.doesntStartWith,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.notStartsWith',
@@ -209,7 +208,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.ENDS_WITH]: {
-    fn: filters.endsWith,
+    fn: filterFactory.endsWith,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.endsWith',
@@ -217,7 +216,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.NOT_ENDS_WITH]: {
-    fn: filters.doesntEndWith,
+    fn: filterFactory.doesntEndWith,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.notEndsWith',
@@ -225,7 +224,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
   [FilterOption.LIKE]: {
-    fn: filters.like,
+    fn: filterFactory.like,
     inputCount: 1,
     symbols: [],
     message: 'criteriaFilter.like',
@@ -233,15 +232,6 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.text,
   },
 };
-
-/**
- * Determines whether the arrangement of the filter menu is vertical.
- *
- * @param arrangement - Arrangement of the filter menu
- * @returns True if the arrangement is vertical, false otherwise
- * @internal
- */
-export const isVertical = (arrangement: FilterVariant) => arrangement === 'vertical';
 
 /**
  * Given an input filter, use the filterType and operators to determine

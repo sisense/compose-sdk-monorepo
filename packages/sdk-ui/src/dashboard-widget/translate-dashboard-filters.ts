@@ -16,7 +16,7 @@ import { BackgroundFilter, BaseJaql, IncludeAllFilter } from '@sisense/sdk-data'
  *
  * @param {DashboardDto} dashboard - The dashboard containing the filters.
  * @param {WidgetDto} widget - The widget to extract filters from.
- * @returns {Object} An object containing an array of filters and an array of highlights.
+ * @returns {object} An object containing an array of filters and an array of highlights.
  */
 export function extractDashboardFiltersForWidget(dashboard: DashboardDto, widget: WidgetDto) {
   const filtersIgnoringRules = widget.metadata.ignore;
@@ -118,7 +118,7 @@ function getDashboardBackgroundFilters(dashboard: DashboardDto) {
  *
  * @param {Filter[]} dashboardFilters - The array of dashboard filters.
  * @param {WidgetDto} widget - The widget that filters are applied to.
- * @returns {Object} An object containing an array of filters and an array of highlights.
+ * @returns {object} An object containing an array of filters and an array of highlights.
  */
 function groupDashboardFilters(
   dashboardFilters: Filter[],
@@ -198,6 +198,10 @@ function getHighlightsAllowedPanelNames(widgetType: WidgetType) {
       return ['categories'];
     case 'chart/scatter':
       return ['x-axis', 'y-axis', 'point'];
+    case 'chart/boxplot':
+      return ['category'];
+    case 'map/scatter':
+      return ['geo'];
     default:
       // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator
       return [];

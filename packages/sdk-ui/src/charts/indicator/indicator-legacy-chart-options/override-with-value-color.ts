@@ -5,7 +5,7 @@ import {
   ColoringService,
 } from '../../../chart-data-options/coloring';
 import {
-  IndicatorDataOptions,
+  IndicatorChartDataOptions,
   ConditionalDataColorOptions,
   DataColorOptions,
   UniformDataColorOptions,
@@ -31,7 +31,7 @@ export type AllowedIndicatorColoringTypes = 'Static' | 'Absolute';
  * @param dataOptions - The indicator data options to extract the color options from.
  * @returns The color options from the indicator data options.
  */
-export function getValueColorOptions(dataOptions: IndicatorDataOptions) {
+export function getValueColorOptions(dataOptions: IndicatorChartDataOptions) {
   const value = dataOptions.value?.[0];
   if (value && 'color' in value) {
     return value.color;

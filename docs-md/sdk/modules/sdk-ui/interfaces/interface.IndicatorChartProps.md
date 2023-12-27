@@ -43,7 +43,7 @@ BaseChartProps.dataSet
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 
@@ -67,7 +67,7 @@ BaseChartProps.highlights
 
 #### dataOptions
 
-> **dataOptions**: [`IndicatorDataOptions`](interface.IndicatorDataOptions.md)
+> **dataOptions**: [`IndicatorChartDataOptions`](interface.IndicatorChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -77,4 +77,4 @@ Configurations for how to interpret and present the data passed to the chart
 
 > **styleOptions**?: [`IndicatorStyleOptions`](../type-aliases/type-alias.IndicatorStyleOptions.md)
 
-Configuration that define functional style of the various chart elements
+Configuration that defines functional style of the various chart elements

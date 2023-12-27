@@ -55,7 +55,7 @@ the chart will use the `defaultDataSource` specified in the parent Sisense Conte
 
 #### filters
 
-> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 
@@ -73,7 +73,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 > **styleOptions**: `undefined` \| [`PieStyleOptions`](../../sdk-ui/interfaces/interface.PieStyleOptions.md)
 
-Configuration that define functional style of the various chart elements
+Configuration that defines functional style of the various chart elements
 
 ### Callbacks
 

@@ -3,7 +3,6 @@ import './index.css';
 
 /**
  * @packageDocumentation
- * @beta
  */
 
 export { ClientApplication, createClientApplication } from './app/client-application';
@@ -37,6 +36,8 @@ export * from './indicator-chart';
 export * from './table';
 export * from './treemap-chart';
 export * from './sunburst-chart';
+export * from './boxplot-chart';
+export * from './scattermap-chart';
 export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
 export { getThemeSettingsByOid } from './themes/theme-loader';
@@ -69,6 +70,7 @@ export {
   type GetDashboardModelOptions,
   type GetDashboardModelsOptions,
 } from './models';
+export { boxWhiskerProcessResult } from './boxplot-utils';
 
 export * from './props';
 export * from './types';

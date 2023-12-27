@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /**
  * @packageDocumentation
- * @beta
  */
 
 // Native fetch() is not available in Node.js until version 18.

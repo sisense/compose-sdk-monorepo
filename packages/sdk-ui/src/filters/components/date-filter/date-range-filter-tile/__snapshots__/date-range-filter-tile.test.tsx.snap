@@ -9,7 +9,7 @@ exports[`DateRangeFilterTile > should render DateRangeFilterTile 1`] = `
     >
       <div
         aria-label="DateRangeField"
-        class="csdk-relative csdk-flex csdk-mr-2 csdk-cursor-pointer"
+        class="csdk-relative csdk-flex csdk-mr-[5px] csdk-cursor-pointer"
       >
         <label
           class="csdk-text-text-content csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px] css-1ny4au0"
@@ -17,11 +17,11 @@ exports[`DateRangeFilterTile > should render DateRangeFilterTile 1`] = `
           From
         </label>
         <div
-          class="csdk-relative csdk-h-button"
+          class="csdk-relative csdk-h-6"
         >
           <button
             aria-label="DateRangeFieldButton"
-            class="csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-button csdk-rounded-[4px] disabled:csdk-placeholder:csdk-opacity-30 disabled:csdk-cursor-not-allowed focus:csdk-border-solid focus:csdk-border-input focus:csdk-border-UI-default hover:csdk-border-guiding csdk-text-text-active csdk-pl-2.5 csdk-pr-10 csdk-overflow-hidden  css-ewq8jt"
+            class="csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-6 csdk-rounded-[4px] disabled:csdk-placeholder:csdk-opacity-30 disabled:csdk-cursor-not-allowed focus:csdk-border-solid focus:csdk-border-input focus:csdk-border-UI-default hover:csdk-border-guiding csdk-text-text-active csdk-pl-2.5 csdk-pr-10 csdk-overflow-hidden  css-1yw6u95"
             label="From"
             value="2009-01-01"
           >
@@ -51,7 +51,7 @@ exports[`DateRangeFilterTile > should render DateRangeFilterTile 1`] = `
       </div>
       <div
         aria-label="DateRangeField"
-        class="csdk-relative csdk-flex csdk-mr-2 csdk-cursor-pointer"
+        class="csdk-relative csdk-flex csdk-mr-[5px] csdk-cursor-pointer"
       >
         <label
           class="csdk-text-text-content csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px] css-1ny4au0"
@@ -59,11 +59,11 @@ exports[`DateRangeFilterTile > should render DateRangeFilterTile 1`] = `
           To
         </label>
         <div
-          class="csdk-relative csdk-h-button"
+          class="csdk-relative csdk-h-6"
         >
           <button
             aria-label="DateRangeFieldButton"
-            class="csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-button csdk-rounded-[4px] disabled:csdk-placeholder:csdk-opacity-30 disabled:csdk-cursor-not-allowed focus:csdk-border-solid focus:csdk-border-input focus:csdk-border-UI-default hover:csdk-border-guiding csdk-text-text-active csdk-pl-2.5 csdk-pr-10 csdk-overflow-hidden  css-ewq8jt"
+            class="csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-6 csdk-rounded-[4px] disabled:csdk-placeholder:csdk-opacity-30 disabled:csdk-cursor-not-allowed focus:csdk-border-solid focus:csdk-border-input focus:csdk-border-UI-default hover:csdk-border-guiding csdk-text-text-active csdk-pl-2.5 csdk-pr-10 csdk-overflow-hidden  css-1yw6u95"
             label="To"
             value="2013-01-01"
           >

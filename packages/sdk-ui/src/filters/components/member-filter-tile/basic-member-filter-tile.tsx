@@ -7,6 +7,7 @@ import { useMembers } from './use-members';
 import { FilterTile } from '../filter-tile';
 import { Member, SelectedMember } from './members-reducer';
 import { useValidatedMembers } from './use-validate-members';
+import { isEqual } from 'lodash';
 
 /**
  * Props for {@link BasicMemberFilterTile}
@@ -138,7 +139,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
       }
     }
 
-    if (allMembers !== members) {
+    if (!isEqual(allMembers, members)) {
       dispatchMembersAction({
         type: 'updatePossibleMembers',
         members: allMembers,

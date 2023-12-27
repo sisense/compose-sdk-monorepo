@@ -28,7 +28,7 @@ import { CartesianChartDataOptionsInternal, Category, Value } from '../chart-dat
 import { isEnabled } from './utils';
 import { isNumber } from '@sisense/sdk-data';
 import { applyFormatPlainText } from '../chart-options-processor/translations/number-format-config';
-import { seriesDataColorService } from './series-data-color-service';
+import { seriesDataColoringFunction } from './data-coloring';
 import { SortDirection } from '../types';
 import { getDataOptionTitle } from '../chart-data-options/utils';
 
@@ -109,7 +109,7 @@ export const cartesianData = (
   return cartesianChartData;
 };
 
-const sortDirection = (sortType: SortDirection | undefined) => {
+export const sortDirection = (sortType: SortDirection | undefined) => {
   switch (sortType) {
     case 'sortNone': // retain order from source data
       return 0;
@@ -121,7 +121,7 @@ const sortDirection = (sortType: SortDirection | undefined) => {
   }
 };
 
-const getOrderedXValues = (
+export const getOrderedXValues = (
   dataTable: DataTable,
   sortedMeasures: Value[],
   xColumns: Column[],
@@ -255,7 +255,7 @@ const withMultipleValues = (
 
     const colorOpts = optionsByColumn[yAggColumn.name].color;
     if (colorOpts) {
-      seriesYValues = seriesDataColorService(seriesYValues, colorOpts);
+      seriesYValues = seriesDataColoringFunction(seriesYValues, colorOpts);
     }
 
     return {

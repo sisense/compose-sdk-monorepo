@@ -6,8 +6,9 @@ title: sdk-data
 
 ## Namespaces
 
-- [filters](namespaces/namespace.filters/index.md)
-- [measures](namespaces/namespace.measures/index.md)
+- [analyticsFactory](namespaces/namespace.analyticsFactory/index.md)
+- [filterFactory](namespaces/namespace.filterFactory/index.md)
+- [measureFactory](namespaces/namespace.measureFactory/index.md)
 
 ## Enumerations
 
@@ -28,6 +29,7 @@ title: sdk-data
 - [DateDimension](interfaces/interface.DateDimension.md)
 - [Dimension](interfaces/interface.Dimension.md)
 - [Filter](interfaces/interface.Filter.md)
+- [FilterRelation](interfaces/interface.FilterRelation.md)
 - [LevelAttribute](interfaces/interface.LevelAttribute.md)
 - [Measure](interfaces/interface.Measure.md)
 - [MeasureColumn](interfaces/interface.MeasureColumn.md)
@@ -42,6 +44,8 @@ title: sdk-data
 - [DataSource](type-aliases/type-alias.DataSource.md)
 - [ExcludeMembersFilter](type-aliases/type-alias.ExcludeMembersFilter.md)
 - [FilterJaql](type-aliases/type-alias.FilterJaql.md)
+- [FilterRelationJaqlNode](type-aliases/type-alias.FilterRelationJaqlNode.md)
+- [FilterRelationNode](type-aliases/type-alias.FilterRelationNode.md)
 - [ForecastFormulaOptions](type-aliases/type-alias.ForecastFormulaOptions.md)
 - [FormulaContext](type-aliases/type-alias.FormulaContext.md)
 - [FormulaID](type-aliases/type-alias.FormulaID.md)

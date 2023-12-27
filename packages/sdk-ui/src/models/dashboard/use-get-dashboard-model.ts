@@ -118,6 +118,7 @@ export const useGetDashboardModel = withTracking('useGetDashboardModel')(
 
 /**
  * {@link useGetDashboardModel} without tracking to be used inside other hooks or components in Compose SDK.
+ *
  * @internal
  */
 export function useGetDashboardModelInternal(params: GetDashboardModelParams) {

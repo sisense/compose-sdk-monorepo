@@ -1,16 +1,16 @@
 import { ComparableData, DataTable, Row } from '../chart-data-processor/table-processor';
 import {
-  ScatterDataRow,
+  ScatterAxisCategoriesMap,
   ScatterCategories,
   ScatterChartData,
-  ScatterAxisCategoriesMap,
+  ScatterDataRow,
   ScatterDataTable,
 } from './types';
 import {
-  ScatterChartDataOptionsInternal,
   Category,
-  Value,
   isCategory,
+  ScatterChartDataOptionsInternal,
+  Value,
 } from '../chart-data-options/types';
 import { isNumber } from '@sisense/sdk-data';
 import { applyFormatPlainText } from '../chart-options-processor/translations/number-format-config';
@@ -137,7 +137,7 @@ export const groupData = (
 };
 
 /**
- * Creates data for scatter charts given chart data table and data options,
+ * Creates data for scatter charts given chart data table and data options
  *
  * @param chartDataOptions - Data options for scatter chart
  * @param dataTable - Chart data table

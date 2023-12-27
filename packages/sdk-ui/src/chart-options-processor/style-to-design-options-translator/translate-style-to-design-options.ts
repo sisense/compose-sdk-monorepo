@@ -7,12 +7,14 @@ import {
   LineStyleOptions,
   FunnelStyleOptions,
   ChartType,
-  StyleOptions,
+  ChartStyleOptions,
   IndicatorStyleOptions,
   ScatterStyleOptions,
   AreaStyleOptions,
   TreemapStyleOptions,
   SunburstStyleOptions,
+  BoxplotStyleOptions,
+  ScattermapStyleOptions,
 } from '../../types';
 import { ChartDesignOptions } from '../translations/types';
 import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
@@ -28,11 +30,13 @@ import {
   getAreaChartDesignOptions,
   getTreemapChartDesignOptions,
   getSunburstChartDesignOptions,
+  getBoxplotChartDesignOptions,
+  getScattermapChartDesignOptions,
 } from './translate-to-highcharts-options';
 
 export const translateStyleOptionsToDesignOptions = (
   chartType: ChartType,
-  styleOptions: StyleOptions,
+  styleOptions: ChartStyleOptions,
   dataOptions: ChartDataOptionsInternal,
 ): ChartDesignOptions => {
   const hasY2Axis =
@@ -85,6 +89,14 @@ export const translateStyleOptionsToDesignOptions = (
       break;
     case 'scatter':
       intermediateDesignOptions = getScatterChartDesignOptions(styleOptions as ScatterStyleOptions);
+      break;
+    case 'boxplot':
+      intermediateDesignOptions = getBoxplotChartDesignOptions(styleOptions as BoxplotStyleOptions);
+      break;
+    case 'scattermap':
+      intermediateDesignOptions = getScattermapChartDesignOptions(
+        styleOptions as ScattermapStyleOptions,
+      );
       break;
   }
 

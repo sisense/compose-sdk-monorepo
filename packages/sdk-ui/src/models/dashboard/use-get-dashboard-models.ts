@@ -77,7 +77,7 @@ export type DashboardModelsSuccessState = {
 };
 
 /**
-  * React hook that retrieves existing dashboards that the user can access to from the Sisense instance.
+ * React hook that retrieves existing dashboards that the user can access to from the Sisense instance.
  *
  * @example
  ```tsx
@@ -102,6 +102,7 @@ export const useGetDashboardModels = withTracking('useGetDashboardModels')(
 
 /**
  * {@link useGetDashboardModels} without tracking to be used inside other hooks or components in Compose SDK.
+ *
  * @internal
  */
 export function useGetDashboardModelsInternal(params: GetDashboardModelsParams = {}) {

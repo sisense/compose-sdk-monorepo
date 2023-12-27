@@ -8,6 +8,7 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
 import { mergeFilters, mergeFiltersByStrategy } from './utils';
 import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
 import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model';
+import { Filter } from '@sisense/sdk-data';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -54,7 +55,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
         extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
       extractedWidgetProps.props.filters = mergeFilters(
         dashboardFilters,
-        extractedWidgetProps.props.filters,
+        extractedWidgetProps.props.filters as Filter[],
       );
       (extractedWidgetProps.props as ChartWidgetProps).highlights = dashboardHighlights;
     }
@@ -63,7 +64,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
   }, [fetchedWidget, fetchedDashboard, themeSettings, includeDashboardFilters]);
 
   const filters = mergeFiltersByStrategy(
-    fetchedProps?.filters,
+    fetchedProps?.filters as Filter[],
     restProps.filters,
     restProps.filtersMergeStrategy,
   );

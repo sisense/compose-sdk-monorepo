@@ -10,6 +10,8 @@ title: Type Aliases
 - [DataSource](type-alias.DataSource.md)
 - [ExcludeMembersFilter](type-alias.ExcludeMembersFilter.md)
 - [FilterJaql](type-alias.FilterJaql.md)
+- [FilterRelationJaqlNode](type-alias.FilterRelationJaqlNode.md)
+- [FilterRelationNode](type-alias.FilterRelationNode.md)
 - [ForecastFormulaOptions](type-alias.ForecastFormulaOptions.md)
 - [FormulaContext](type-alias.FormulaContext.md)
 - [FormulaID](type-alias.FormulaID.md)

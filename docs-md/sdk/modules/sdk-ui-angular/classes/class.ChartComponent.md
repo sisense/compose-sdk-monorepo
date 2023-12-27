@@ -17,7 +17,7 @@ chart = {
   dataSet: DM.DataSource,
   dataOptions: {
     category: [DM.Admissions.Admission_Time.Months],
-    value: [measures.count(DM.Admissions.Patient_ID, 'Total Patients')],
+    value: [measureFactory.count(DM.Admissions.Patient_ID, 'Total Patients')],
     breakBy: [],
   },
   filters: [filterFactory.members(DM.Doctors.Specialty, ['Oncology', 'Cardiology'])],
@@ -106,7 +106,7 @@ the chart will use the `defaultDataSource` specified in the parent Sisense Conte
 
 #### filters
 
-> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
 
 Filters that will slice query results
 
@@ -138,7 +138,7 @@ Configurations for how to interpret and present data passed to the chart.
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`StyleOptions`](../../sdk-ui/type-aliases/type-alias.StyleOptions.md)
+> **styleOptions**: `undefined` \| [`ChartStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartStyleOptions.md)
 
 Style options union across chart types.
 

@@ -1,5 +1,5 @@
 import { getColumnByName, getValue, DataTable } from '../chart-data-processor/table-processor';
-import { IndicatorDataOptionsInternal, Value } from '../chart-data-options/types';
+import { IndicatorChartDataOptionsInternal, Value } from '../chart-data-options/types';
 import { IndicatorChartData } from './types';
 
 const valueFromFirstRow = (
@@ -18,7 +18,7 @@ const valueFromFirstRow = (
 
 // Given chart source and data options, generate indicator data
 export const indicatorData = (
-  chartDataOptions: IndicatorDataOptionsInternal,
+  chartDataOptions: IndicatorChartDataOptionsInternal,
   dataTable: DataTable,
 ): IndicatorChartData => {
   const emptyIndicatorData: IndicatorChartData = { type: 'indicator' };

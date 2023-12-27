@@ -26,6 +26,6 @@ export const translation: TranslationDictionary = {
         'Фільтри не підтримують наступні рівні "datetime": Hours, MinutesRoundTo30, MinutesRoundTo15',
       membersFilterNullMember: 'MembersFilter у {{attributeId}} - member не може бути нульовим',
     },
-    unsupportedDimesionalElement: 'Непідтримуваний тип елемента',
+    unsupportedDimensionalElement: 'Непідтримуваний тип елемента',
   },
 };

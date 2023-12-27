@@ -30,7 +30,9 @@ export type WidgetType =
   | CategoricalWidgetType
   | 'chart/scatter'
   | 'indicator'
-  | TabularWidgetType;
+  | TabularWidgetType
+  | 'chart/boxplot'
+  | 'map/scatter';
 
 export type WidgetSubtype =
   | 'area/basic'
@@ -57,7 +59,10 @@ export type WidgetSubtype =
   | 'indicator/gauge'
   | 'bubble/scatter'
   | 'treemap'
-  | 'sunburst';
+  | 'sunburst'
+  | 'boxplot/full'
+  | 'boxplot/hollow'
+  | 'map/scatter';
 
 export enum WidgetDashboardFilterMode {
   FILTER = 'filter',
@@ -158,6 +163,7 @@ export type PanelItem = {
   singleSeriesType?: SeriesType;
   categoriesSorting?: SortDirection;
   isColored?: boolean;
+  geoLevel?: 'country' | 'state' | 'city';
 };
 
 export type PanelColorFormat =
@@ -385,6 +391,30 @@ export type SunburstWidgetStyle = {
   'tooltip/value': boolean;
 };
 
+export type BoxplotWidgetStyle = {
+  xAxis: AxisStyle;
+  yAxis: AxisStyle;
+  whisker: {
+    'whisker/iqr': boolean;
+    'whisker/extremums': boolean;
+    'whisker/deviation': boolean;
+  };
+  outliers: {
+    enabled: boolean;
+  };
+};
+
+export type ScattermapWidgetStyle = {
+  markers: {
+    fill: 'filled' | 'filled-light' | 'hollow' | 'hollow-bold';
+    size: {
+      defaultSize: number;
+      min: number;
+      max: number;
+    };
+  };
+};
+
 export type WidgetStyle =
   | CartesianWidgetStyle
   | PolarWidgetStyle
@@ -393,7 +423,9 @@ export type WidgetStyle =
   | TableWidgetStyle
   | IndicatorWidgetStyle
   | TreemapWidgetStyle
-  | SunburstWidgetStyle;
+  | SunburstWidgetStyle
+  | BoxplotWidgetStyle
+  | ScattermapWidgetStyle;
 
 export enum FiltersMergeStrategyEnum {
   WIDGET_FIRST = 'widgetFirst',

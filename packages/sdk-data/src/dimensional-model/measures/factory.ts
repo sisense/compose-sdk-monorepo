@@ -30,22 +30,22 @@ import { isDatetime, isNumber } from './../simple-column-types.js';
  */
 export const RankingTypes = {
   /**
-   * In competition ranking, items that compare equal receive the same ranking number, and then a gap is left in the ranking numbers.
+   * In competition ranking, items that rank equally receive the same ranking number, and then a gap is left after the equally ranked items in the ranking numbers.
    */
   StandardCompetition: '1224',
 
   /**
-   * Sometimes, competition ranking is done by leaving the gaps in the ranking numbers before the sets of equal-ranking items (rather than after them as in standard competition ranking)
+   * In modified competition ranking, items that rank equally receive the same ranking number, and a gap is left before the equally ranked items in the ranking numbers.
    */
   ModifiedCompetition: '1334',
 
   /**
-   * In dense ranking, items that compare equally receive the same ranking number, and the next items receive the immediately following ranking number.
+   * In dense ranking, items that rank equally receive the same ranking number, and the next items receive the immediately following ranking number.
    */
   Dense: '1223',
 
   /**
-   * In ordinal ranking, all items receive distinct ordinal numbers, including items that compare equal. The assignment of distinct ordinal numbers is arbitrarily.
+   * In ordinal ranking, all items receive distinct ordinal numbers, including items that rank equally. The assignment of distinct ordinal numbers for equal-ranking items is arbitrary.
    */
   Ordinal: '1234',
 };
@@ -159,63 +159,43 @@ function transformCustomFormulaJaql(
 }
 
 /**
- * Creates a calculated measure for a [valid custom formula](https://docs.sisense.com/main/SisenseLinux/dashboard-functions-reference.htm).
+ * Creates a calculated measure for a valid custom formula built from [base functions](https://docs.sisense.com/main/SisenseLinux/dashboard-functions-reference.htm).
  *
- * Use square brackets within the `formula` to include dimensions or measures.
+ * Use square brackets (`[]`) within the `formula` property to include dimensions or measures.
  * Each unique dimension or measure included in the `formula` must be defined using a property:value pair in the `context` parameter.
  *
- * You can nest custom formulas by placing one inside the `formula` parameter of another
+ * You can nest custom formulas by placing one inside the `formula` parameter of another.
  *
- *
- * Note: Shared formula must be fetched prior to use (see {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}).
+ * Note: [Shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm) must be
+ * fetched prior to use (see {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}).
  *
  * @example
- * An example of constructing a `customFormula` using dimensions, measures, and nested custom formulas:
- * ```tsx
- *  const profitabilityRatio = measures.customFormula(
+ * An example of constructing a custom formulas using dimensions, measures, and nested custom formulas
+ * from the Sample Ecommerce data model.
+ * ```ts
+ * // Custom formula
+ * const profitabilityRatio = measureFactory.customFormula(
  *   'Profitability Ratio',
  *   '([totalRevenue] - SUM([cost])) / [totalRevenue]',
  *   {
- *     totalRevenue: measures.sum(DM.Commerce.Revenue),
+ *     totalRevenue: measureFactory.sum(DM.Commerce.Revenue),
  *     cost: DM.Commerce.Cost,
  *   },
  * );
  *
- * const profitabilityRatioRank = measures.customFormula(
+ * // Nested custom formula
+ * const profitabilityRatioRank = measureFactory.customFormula(
  *   'Profitability Ratio Rank',
  *   'RANK([profRatio], "ASC", "1224")',
  *   {
  *     profRatio: profitabilityRatio,
  *   },
  * );
- *
- * return (
- *   <Chart
- *     dataSet={DM.DataSource}
- *     chartType="line"
- *     dataOptions={{
- *       category: [DM.Commerce.AgeRange],
- *       value: [
- *         profitabilityRatioRank,
- *         {
- *           column: measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
- *           showOnRightAxis: true,
- *           chartType: 'column',
- *         },
- *         {
- *           column: measures.sum(DM.Commerce.Cost, 'Total Cost'),
- *           showOnRightAxis: true,
- *           chartType: 'column',
- *         },
- *       ],
- *     }}
- *   />
- * );
  * ```
  * @param title - Title of the measure to be displayed in legend
  * @param formula - Formula to be used for the measure
  * @param context - Formula context as a map of strings to measures or attributes
- * @returns A calculated measure object that may be used in a chart or a query
+ * @returns A calculated measure instance
  */
 export function customFormula(
   title: string,
@@ -257,15 +237,21 @@ function arithmetic(
 }
 
 /**
- * Creates a basic aggregated measure.
- * This is a base function to build other aggregation functions (e.g., `sum`, `average`, etc)
+ * Creates an aggregated measure.
+ *
+ * This is a base function to build other aggregation functions (e.g., `sum`, `average`, etc.)
  * as listed in {@link AggregationTypes}.
  *
+ * @example
+ * Calculate the total cost across all items in a category from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.aggregate(DM.Commerce.Cost, 'sum'),
+ * ```
  * @param attribute - Attribute to aggregate
  * @param aggregationType - Aggregation type. See {@link AggregationTypes}
  * @param name - Optional name for the new measure
- * @param format - Numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function aggregate(
   attribute: Attribute,
@@ -282,93 +268,139 @@ export function aggregate(
 }
 
 /**
- * Returns a numeric value as a measure.
+ * Creates a calculated measure from a numeric value.
  *
+ * @example
+ * Creates a calculated measure from a numeric value.
+ * ```ts
+ * measureFactory.constant(42)
+ * ```
  * @param value - Value to be returned as a measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function constant(value: number): CalculatedMeasure {
   return new DimensionalCalculatedMeasure(`${value}`, `${value}`, {});
 }
 
 /**
- * Creates a sum aggregation over the given attribute.
+ * Creates a sum aggregation measure over the given attribute.
  *
+ * To create a running sum, use {@link runningSum}.
+ *
+ * @example
+ * Calculate the total cost across all items in a category from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.sum(DM.Commerce.Cost)
+ * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function sum(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Sum, name, format);
 }
 
 /**
- * Creates an average aggregation over the given attribute.
+ * Creates an average aggregation measure over the given attribute.
  *
+ * @example
+ * Calculate the average cost across all items in a category from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.average(DM.Commerce.Cost)
+ * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function average(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Average, name, format);
 }
 
 /**
- * Creates a min aggregation over the given attribute.
+ * Creates a min aggregation measure over the given attribute.
  *
+ * @example
+ * Calculate the minimum cost across all items in a category from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.min(DM.Commerce.Cost)
+ * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function min(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Min, name, format);
 }
 
 /**
- * Creates a max aggregation over the given attribute.
+ * Creates a max aggregation measure over the given attribute.
  *
+ * @example
+ * Calculate the maximum cost across all items in a category from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.max(DM.Commerce.Cost)
+ * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function max(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Max, name, format);
 }
 
 /**
- * Creates a median aggregation over the given attribute.
+ * Creates a median aggregation measure over the given attribute.
  *
+ * @example
+ * Calculate the median cost across all items in a category from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.median(DM.Commerce.Cost)
+ * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function median(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Median, name, format);
 }
 
 /**
- * Creates a count aggregation over the given attribute.
+ * Creates a count aggregation measure over the given attribute.
  *
+ * To count distinct values in the given attribute, use {@link countDistinct}.
+ *
+ * @example
+ * Counts the number of Commerce items from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.count(DM.Commerce.BrandID)
+ * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function count(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Count, name, format);
 }
 /**
- * Creates a count distinct aggregation over the given attribute.
+ * Creates a count distinct aggregation measure over the given attribute.
  *
+ * To count all values in the given attribute, use {@link count}.
+ *
+ * @example
+ * Calculate the number of distinct brands from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.countDistinct(DM.Brand.BrandID)
+ * ```
  * @param attribute - Attribute to aggregate
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  */
 export function countDistinct(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.CountDistinct, name, format);
@@ -377,11 +409,28 @@ export function countDistinct(attribute: Attribute, name?: string, format?: stri
 /**
  * Creates a measured value with the given measure and set of filters.
  *
+ * A measured value only includes values from items that match the provided filters.
+ *
+ * For example you can use a measured value to get a total cost for all items where the cost is greater than 100.
+ *
+ * Note that the filters on the measured value override the filters on the query, chart, or table the
+ * measured value is used in.
+ *
+ * @example
+ * Calculate the total cost across all items in a category from the Sample Ecommerce data model,
+ * where the cost is greater than 100. Additional filtering on the cost will not affect this measure.
+ * ```ts
+ * measureFactory.measuredValue(
+ *   measureFactory.sum(DM.Commerce.Cost),
+ *   [filters.greaterThan(DM.Commerce.Cost, 100)],
+ *   'Cost Greater Than 100'
+ * ),
+ * ```
  * @param measure - Measure to filter
  * @param filters - Filters to apply to the measure
  * @param name - Optional name for the new measure
- * @param format - Optional numeric formatting to apply
- * @returns A Calculated Measure instance
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A calculated measure instance
  */
 export function measuredValue(
   measure: Measure,
@@ -410,13 +459,19 @@ export function measuredValue(
 }
 
 /**
- * Adds the two given values.
+ * Creates a calculated measure by adding two given numbers or measures.
  *
+ * @example
+ * ```ts
+ * const measure1 = measureFactory.sum(DM.Dimension.Attribute1);
+ * const measure2 = measureFactory.sum(DM.Dimension.Attribute2);
+ * const measureSum = measureFactory.add(measure1, measure2);
+ * ```
  * @param value1 - First value
  * @param value2 - Second value
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function add(
   value1: Measure | number,
@@ -428,13 +483,19 @@ export function add(
 }
 
 /**
- * Subtract value2 from value1.
+ * Creates a calculated measure by subtracting two given numbers or measures. Subtracts `value2` from `value1`.
  *
+ * @example
+ * ```ts
+ * const measure1 = measureFactory.sum(DM.Dimension.Attribute1);
+ * const measure2 = measureFactory.sum(DM.Dimension.Attribute2);
+ * const measureDifference = measureFactory.subtract(measure1, measure2);
+ * ```
  * @param value1 - First value
  * @param value2 - Second value
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function subtract(
   value1: Measure | number,
@@ -446,13 +507,19 @@ export function subtract(
 }
 
 /**
- * Multiply value1 with value2.
+ * Creates a calculated measure by multiplying two given numbers or measures.
  *
+ * @example
+ * ```ts
+ * const measure1 = measureFactory.sum(DM.Dimension.Attribute1);
+ * const measure2 = measureFactory.sum(DM.Dimension.Attribute2);
+ * const measureProduct = measureFactory.multiply(measure1, measure2);
+ * ```
  * @param value1 - First value
  * @param value2 - Second value
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function multiply(
   value1: Measure | number,
@@ -464,13 +531,19 @@ export function multiply(
 }
 
 /**
- * Divide value1 by value2.
+ * Creates a calculated measure by dividing two given numbers or measures. Divides `value1` by `value2`.
  *
+ * @example
+ * ```ts
+ * const measure1 = measureFactory.sum(DM.Dimension.Attribute1);
+ * const measure2 = measureFactory.sum(DM.Dimension.Attribute2);
+ * const measureQuotient = measureFactory.divide(measure1, measure2);
+ * ```
  * @param value1 - First value
  * @param value2 - Second value
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function divide(
   value1: Measure | number,
@@ -482,67 +555,115 @@ export function divide(
 }
 
 /**
- * Calculates year to date (YTD) sum of the given measure. Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the running total starting from the beginning
+ * of the year up to the current day, week, month, or quarter.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
+ * beginning of the year up to the current day, week, month, or quarter.
+ * ```ts
+ * measureFactory.yearToDateSum(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply the YTD Sum to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function yearToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'YTD ' + measure.name, 'YTDSum');
 }
 
 /**
- * Calculates quarter to date (QTD) sum of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the running total starting from the beginning
+ * of the quarter up to the current day, week, or month.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
+ * beginning of the quarter up to the current day, week, or month.
+ * ```ts
+ * measureFactory.quarterToDateSum(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply the QTD Sum to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function quarterToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'QTD ' + name, 'QTDSum');
 }
 
 /**
- * Calculates month to date (MTD) sum of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the running total starting from the beginning
+ * of the month up to the current day or week.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
+ * beginning of the month up to the current day or week.
+ * ```ts
+ * measureFactory.monthToDateSum(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply the MTD Sum to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function monthToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'MTD ' + measure.name, 'MTDSum');
 }
 
 /**
- * Calculates week to date (WTD) sum of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the running total starting from the beginning
+ * of the week up to the current day.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate the running total of total cost from the Sample Ecommerce data model, starting from the
+ * beginning of the week up to the current day.
+ * ```ts
+ * measureFactory.weekToDateSum(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply the WTD Sum to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function weekToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'MTD ' + measure.name, 'WTDSum');
 }
 
 /**
- * Returns the running total of the measure by the defined dimension
- * according to the current sorting order in the query.
+ * Creates a calculated measure that calculates the running total of a given measure.
  *
- * By default, `RSUM` accumulates a measure by the sorting order of the dimension.
- * To accumulate by another order, the relevant measure should be added as an additional column and sorted.
+ * The running sum is calculated using the current sort order of the query it's used in.
  *
- * Note: Filtering the `RSUM` column by Values,
- * filters the dimensions and recalculates the `RSUM` from the first filtered value.
+ * @example
+ * Calculate the running sum of the total cost from the Sample Ecommerce data model across all categories.
+ * ```ts
+ * measureFactory.runningSum(measureFactory.sum(DM.Commerce.Cost)),
+ * ```
  *
- * @param measure - Measure to apply the Running Sum to
+ * Running sum values from the Sample Ecommerce data model when categorizing by age range.
+ * | AgeRange | Cost | Running Cost |
+ * | --- | --- | --- |
+ * | 0-18 | 4.32M | 4.32M |
+ * | 19-24 | 8.66M | 12.98M |
+ * | 25-34 | 21.19M | 34.16M |
+ * | 35-44 | 23.64M | 57.8M |
+ * | 45-54 | 20.39M | 78.19M |
+ * | 55-64 | 11.82M | 90.01M |
+ * | 65+ | 17.26M | 107.27M |
+ * @param measure - Measure to apply the running sum to
  * @param _continuous - Boolean flag whether to accumulate the sum continuously
- * when there are two or more dimensions. The default value is False.
+ * when there are two or more dimensions. The default value is false.
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function runningSum(
   measure: Measure,
@@ -553,236 +674,438 @@ export function runningSum(
 }
 
 /**
- * Calculates growth over time. The time dimension to be used is determined by the time resolution in the query.
+ * Creates a calculated measure that calculates growth over a period of time.
  *
- * Formula: `(current value – compared value) / compared value`.
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * Growth is calculated using the following formula: `(currentPeriod – previousPeriod) / previousPeriod`.
+ *
+ * For example, if this period the value is 12 and the previous period's value was 10, the growth for
+ * this period is 20%, returned as '0.2' (calculation: `(12 – 10) / 10 = 0.2`).
+ *
+ * If the previous period's value is greater than the current period, the growth will be negative.
+ *
+ * For example, if this period the value is 80, and the previous period's was 100, the growth for
+ * this period is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
  *
  * @example
- *
- * If this month your value is 12, and last month it was 10, your Growth for this month is 20% (0.2).
- *
- * Calculation: `(12 – 10) / 10 = 0.2`
- *
- * If this year your value is 80, and last year it was 100, your Growth for this year is -20% ( -0.2).
- *
- * Calculation: `(80 – 100) / 100 = -0.2`
+ * Calculate the growth in total cost this period in comparison to the previous period from the
+ * Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.growth(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function growth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growth');
 }
 
 /**
- * Calculates growth rate over time. The time dimension to be used is determined by the time resolution in the query.
+ * Creates a calculated measure that calculates growth rate over a period of time.
+ *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * Growth rate is calculated using the following formula: `currentPeriod / previousPeriod`.
+ *
+ * For example, if this period the value is 12 and the previous period's value was 10, the growth rate for
+ * this period is 120%, returned as '1.2' (calculation: `12 / 10 = 1.2`).
+ *
+ * If the previous period's value is greater than the current period, the growth rate will be less than one.
+ *
+ * For example, if this period the value is 80, and the previous period's was 100, the growth for
+ * this period is 80%, returned as `0.8` (calculation: `80 / 100 = .8`).
  *
  * @example
- * If this month your value is 12, and last month it was 10, your Growth Rate for this month is 12/10 = 120% (1.2).
- *
- * Calculation: `12 / 10 = 1.2`
- *
- * If this year your value is 80, and last year it was 100, your Growth for this year is 80/100 = 80% ( 0.8).
- *
- * Calculation: `80 / 100 = 0.8`
+ * Calculate the growth rate in total cost this period in comparison to the previous period from the
+ * Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.growthRate(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply the Growth rate
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function growthRate(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthrate');
 }
 
 /**
- * Calculates the growth from past week of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the growth from the previous week to the current week.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * Growth is calculated using the following formula: `(currentWeek – previousWeek) / previousWeek`.
+ *
+ * For example, if this week the value is 12 and the previous week's value was 10, the growth for
+ * this week is 20%, returned as '0.2' (calculation: `(12 – 10) / 10 = 0.2`).
+ *
+ * If the previous week's value is greater than the current week, the growth will be negative.
+ *
+ * For example, if this week the value is 80, and the previous week's was 100, the growth for
+ * this week is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
+ *
+ * @example
+ * Calculate the growth in total cost this week in comparison to the previous week from the Sample
+ * Ecommerce data model.
+ * ```ts
+ * measureFactory.growthPastWeek(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function growthPastWeek(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastweek');
 }
 
 /**
- * Calculates the growth from past month of the given measure.
- * Date dimension will be dynamically taken from the query
+ * Creates a calculated measure that calculates the growth from the previous month to the current month.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * Growth is calculated using the following formula: `(currentMonth – previousMonth) / previousMonth`.
+ *
+ * For example, if this month the value is 12 and the previous month's value was 10, the growth for
+ * this month is 20%, returned as '0.2' (calculation: `(12 – 10) / 10 = 0.2`).
+ *
+ * If the previous month's value is greater than the current month, the growth will be negative.
+ *
+ * For example, if this month the value is 80, and the previous month's was 100, the growth for
+ * this month is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
+ *
+ * @example
+ * Calculate the growth in total cost this month in comparison to the previous month from the Sample
+ * Ecommerce data model.
+ * ```ts
+ * measureFactory.growthPastMonth(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function growthPastMonth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastmonth');
 }
 
 /**
- * Calculates the growth from past quarter of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the growth from the previous quarter to the current quarter.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * Growth is calculated using the following formula: `(currentQuarter – previousQuarter) / previousQuarter`.
+ *
+ * For example, if this quarter the value is 12 and the previous quarter's value was 10, the growth for
+ * this quarter is 20%, returned as '0.2' (calculation: `(12 – 10) / 10 = 0.2`).
+ *
+ * If the previous quarter's value is greater than the current quarter, the growth will be negative.
+ *
+ * For example, if this quarter the value is 80, and the previous quarter's was 100, the growth for
+ * this quarter is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
+ *
+ * @example
+ * Calculate the growth in total cost this quarter in comparison to the previous quarter from the
+ * Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.growthPastQuarter(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function growthPastQuarter(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastquarter');
 }
 
 /**
- * Calculates the growth from past year of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the growth from the previous year to the current year.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * Growth is calculated using the following formula: `(currentYear – previousYear) / previousYear`.
+ *
+ * For example, if this year the value is 12 and the previous year's value was 10, the growth for
+ * this year is 20%, returned as '0.2' (calculation: `(12 – 10) / 10 = 0.2`).
+ *
+ * If the previous year's value is greater than the current year, the growth will be negative.
+ *
+ * For example, if this year the value is 80, and the previous year's was 100, the growth for
+ * this year is -20%, returned as `-0.2` (calculation: `(80 – 100) / 100 = -0.2`).
+ *
+ * @example
+ * Calculate the growth in total cost this year in comparison to the previous year from the Sample
+ * Ecommerce data model.
+ * ```ts
+ * measureFactory.growthPastYear(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function growthPastYear(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastyear');
 }
 
 /**
- * Calculates the difference of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the difference between this period's data
+ * and the data from the previous period for the given measure.
  *
- * @param measure - measure to apply difference to
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate the difference between this period's total cost and the previous period's total cost
+ * from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.difference(measureFactory.sum(DM.Commerce.Cost))
+ * ```
+ * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function difference(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastperiod');
 }
 
 /**
- * Calculates the difference from past week of the given measure.
- * Ddate dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the difference between this week's data
+ * and the data from the previous week for the given measure.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * @example
+ * Calculate the difference between this week's total cost and the previous week's total cost from
+ * the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.diffPastWeek(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function diffPastWeek(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastweek');
 }
 
 /**
- * Calculates the difference from past month of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the difference between this month's data
+ * and the data from the previous month for the given measure.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * @example
+ * Calculate the difference between this month's total cost and the previous month's total cost from
+ * the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.diffPastMonth(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function diffPastMonth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastmonth');
 }
 
 /**
- * Calculates the difference from past quarter of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the difference between this quarter's data
+ * and the data from the previous quarter for the given measure.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * @example
+ * Calculate the difference between this quarter's total cost and the previous quarter's total cost
+ * from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.diffPastQuarter(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function diffPastQuarter(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastquarter');
 }
 
 /**
- * Calculates the difference from past year of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the difference between this year's data
+ * and the data from the previous year for the given measure.
  *
+ * The date dimension will be dynamically taken from the query that uses the returned measure.
+ *
+ * @example
+ * Calculate the difference between this year's total cost and the previous year's total cost from
+ * the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.diffPastYear(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function diffPastYear(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastyear');
 }
 
 /**
- * Calculates the value of the past day of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the value for the previous day.
  *
+ * @example
+ * Calculate total cost for the previous day from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.pastDay(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function pastDay(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Day', 'pastday');
 }
 
 /**
- * Calculates the value of the past week of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the value for the same day in the previous week.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate total cost for the corresponding day one week ago from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.pastWeek(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function pastWeek(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Week', 'pastweek');
 }
 
 /**
- * Calculates the value of the path month of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the value for the same day or week in the previous month.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate total cost for the corresponding day or week one month ago from the Sample Ecommerce
+ * data model.
+ * ```ts
+ * measureFactory.pastMonth(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function pastMonth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Month', 'pastmonth');
 }
 
 /**
- * Calculates the value of the past quarter of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the value for the same day, week, or month in the previous quarter.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate total cost for the corresponding day, week, or month one quarter ago from the Sample
+ * Ecommerce data model.
+ * ```ts
+ * measureFactory.pastQuarter(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function pastQuarter(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Quarter', 'pastquarter');
 }
 
 /**
- * Calculates the value of the past year of the given measure.
- * Date dimension will be dynamically taken from the query.
+ * Creates a calculated measure that calculates the value for the same day, week, month, or quarter in the previous year.
  *
+ * The time resolution is determined by the minimum date level of the date dimension in the query
+ * that uses the returned measure.
+ *
+ * @example
+ * Calculate total cost for the corresponding day, week, month, or quarter one year ago from the
+ * Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.pastYear(measureFactory.sum(DM.Commerce.Cost))
+ * ```
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function pastYear(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Year', 'pastyear');
 }
 
 /**
- * Calculates contribution.
+ * Creates a calculated contribution measure.
  *
+ * A contribution measure calculates the contribution, in percentage, of a measure towards the total.
+ * Percentages are expressed as a number between 0 and 1 (e.g. 42% is `0.42`).
+ *
+ * For example, using the Sample Ecommerce data model you can retrieve the total cost of products
+ * categorized by age range. Using a contribution measure you can calculate how much each age range's
+ * total cost contributes to the total cost across all age ranges. So, the total cost for the 35-44
+ * age range is 23.64M, which is 22% of the 107.27M of all age ranges together. Therefore, the
+ * contribution of the 35-44 age range is `.22`.
+ *
+ * @example
+ * Calculates the percentage of the total cost across all categories for items in a category from the
+ * Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.contribution(measureFactory.sum(DM.Commerce.Cost))
+ * ```
+ *
+ * Contribution values from the Sample Ecommerce data model when categorizing by age range.
+ * | AgeRange | Cost | Contribution |
+ * | --- | --- | --- |
+ * | 0-18 | 4.32M | 0.04 |
+ * | 19-24 | 8.66M | 0.08 |
+ * | 25-34 | 21.19M | 0.2 |
+ * | 35-44 | 23.64M | 0.22 |
+ * | 45-54 | 20.39M | 0.19 |
+ * | 55-64 | 11.82M | 0.11 |
+ * | 65+ | 17.26M | 0.16 |
  * @param measure - Measure to apply the Contribution logic to
  * @param name - Name for the new measure
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function contribution(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + ' Contribution', 'contribution');
 }
 
 /**
- * Fits a specified trend type to your measure. The trend types include linear,
- * logarithmic, advanced smoothing, and local estimates. It allows for an optional
- * feature to automatically identify and ignore anomalous values in the series.
+ * Creates a calculated measure that computes a specified trend type for a given measure.
+ *
+ * The trend types include linear (the default), logarithmic, advanced smoothing, and local estimates.
+ * You can also opt to automatically identify and ignore anomalous values in the series.
  *
  * Trend requires a Sisense instance version of L2023.6.0 or greater.
  *
+ * @example
+ * Calculate the trend in total cost from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.trend(
+ *   measureFactory.sum(DM.Commerce.Cost),
+ *   'Total Cost Trend',
+ *   {
+ *     modelType: 'advancedSmoothing',
+ *     ignoreAnomalies: true,
+ *   }
+ * )
+ * ```
  * @param measure - Measure to apply the trend logic to
  * @param name - Name for the new measure
  * @param options - Trend options
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function trend(
   measure: Measure,
@@ -803,24 +1126,37 @@ export function trend(
 }
 
 /**
- * Calculates Forecast leveraging advanced autoML techniques to generate
- * a forecast for a given measure.
+ * Creates a calculated measure that generates a forecast based on a specified measure employing
+ * advanced autoML techniques.
  *
- * This function offers flexibility with auto-selection of the best
- * statistical model or user-selected models, and it also provides control
- * over the time period used for training the model, as well as options to
- * improve forecast accuracy by supplying expected lower and upper limits.
+ * This function offers flexible options allowing you to:
+ * + Let the function auto-select the best statistical model or explicitly choose a preferred model
+ * + Control the time period used for training the model
+ * + Set additional options to improve forecast accuracy by supplying expected lower and upper limits.
  *
- * In addition to forecast, upper and lower confidence interval is returned
+ * In addition to the forecast, upper and lower confidence intervals are returned
  * with the name of the new measure and a suffix of _upper and _lower
  * respectively.
  *
  * Forecast requires a Sisense instance version of L2023.6.0 or greater.
  *
+ * @example
+ * Calculate a forecast for total cost from the Sample Ecommerce data model from the Sample
+ * Ecommerce data model.
+ * ```ts
+ * measureFactory.forecast(
+ *   measureFactory.sum(DM.Commerce.Cost),
+ *   'Total Cost Forecast',
+ *   {
+ *     modelType: 'prophet',
+ *     roundToInt: true,
+ *   }
+ * )
+ * ```
  * @param measure - Measure to apply the forecast logic to
  * @param name - Name for the new measure
  * @param options - Forecast options
- * @returns A Calculated Measure instance
+ * @returns A calculated measure instance
  */
 export function forecast(
   measure: Measure,
@@ -853,19 +1189,53 @@ export function forecast(
 }
 
 /**
- * Calculates the rank of a value in a list of values.
+ * Creates a calculated measure that calculates the rank of a value in a list of values.
+ *
+ * This function includes options that allow you do customize the ranking order and how to handle
+ * equally ranked items.
+ *
+ * The order options are:
+ * + `'DESC'` (default): Descending, meaning the largest number is ranked first.
+ * + `'ASC'`: Ascending, meaning the smallest number is ranked first.
+ *
+ * The rank type options are:
+ * + `'1224'`: Standard competition, meaning items that rank equally receive the same ranking number,
+ *   and then a gap is left after the equally ranked items in the ranking numbers.
+ * + `'1334'`: Modified competition ranking, meaning items that rank equally receive the same ranking number,
+ *   and a gap is left before the equally ranked items in the ranking numbers.
+ * + `'1223'`: Dense ranking, meaning items that rank equally receive the same ranking number,
+ *   and the next items receive the immediately following ranking number.
+ * + `'1234'`: Ordinal ranking, meaning all items receive distinct ordinal numbers,
+ *   including items that rank equally. The assignment of distinct ordinal numbers for equal-ranking items is arbitrary.
  *
  * @example
- * `RANK(Total Cost, “ASC”, “1224”, Product, Years)`
- * will return the rank of the total annual cost per each product were sorted in ascending order.
- * @param measure - Measure to apply the Contribution logic to
+ * Calculate the rank of the total cost per category, sorted with the smallest cost ranked first,
+ * and ranking ties are handled using the ordinal ranking type from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.rank(
+ *   measureFactory.sum(DM.Commerce.Cost),
+ *   'Cost Rank',
+ *   measureFactory.RankingSortTypes.Ascending,
+ *   measureFactory.RankingTypes.Ordinal
+ * )
+ * ```
+ *
+ * Ranking values from the Sample Ecommerce data model when categorizing by age range using the above ranking.
+ * | AgeRange | Cost | Cost Rank |
+ * | --- | --- | --- |
+ * | 0-18 | 4.32M | 1 |
+ * | 19-24 | 8.66M | 2 |
+ * | 25-34 | 21.19M | 6 |
+ * | 35-44 | 23.64M | 7 |
+ * | 45-54 | 20.39M | 5 |
+ * | 55-64 | 11.82M | 3 |
+ * | 65+ | 17.26M | 4 |
+ * @param measure - Measure to apply the ranking logic to
  * @param name - Name for the new measure
- * @param sort - By default sort order is descending.
- * @param rankType - By default the type is standard competition ranking `(“1224” ranking)`.
- * Supports also modified competition ranking `(“1334” ranking)`, dense ranking `(“1223” ranking)`,
- * and ordinal ranking `(“1234” ranking)`.
- * @param groupBy - Rank partitions attributes
- * @returns A rank measure
+ * @param sort - Sorting for ranking. By default sort order is descending, where the largest number is ranked first.
+ * @param rankType - How to handle equally ranked items. By default the type is standard competition ranking.
+ * @param groupBy - Rank partition attributes
+ * @returns A calculated measure instance
  */
 export function rank(
   measure: Measure,

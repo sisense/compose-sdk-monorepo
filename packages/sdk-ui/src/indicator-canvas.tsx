@@ -1,4 +1,7 @@
-import { ChartDataOptionsInternal, IndicatorDataOptionsInternal } from './chart-data-options/types';
+import {
+  ChartDataOptionsInternal,
+  IndicatorChartDataOptionsInternal,
+} from './chart-data-options/types';
 import { useEffect, useRef, type FunctionComponent } from 'react';
 import { IndicatorChartData } from './chart-data/types';
 import { IndicatorChartDesignOptions } from './chart-options-processor/translations/design-options';
@@ -14,7 +17,7 @@ import { ThemeSettings } from './types';
 
 interface Props {
   chartData: IndicatorChartData;
-  dataOptions: IndicatorDataOptionsInternal;
+  dataOptions: IndicatorChartDataOptionsInternal;
   designOptions: IndicatorChartDesignOptions;
   themeSettings?: ThemeSettings;
 }
@@ -82,9 +85,9 @@ export const isIndicatorChartData = (chartData: ChartData): chartData is Indicat
   return chartData.type === 'indicator';
 };
 
-export const isIndicatorDataOptionsInternal = (
+export const isIndicatorChartDataOptionsInternal = (
   dataOptions: ChartDataOptionsInternal,
-): dataOptions is IndicatorDataOptionsInternal => {
+): dataOptions is IndicatorChartDataOptionsInternal => {
   return 'min' in dataOptions;
 };
 

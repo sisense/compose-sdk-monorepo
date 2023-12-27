@@ -1,6 +1,17 @@
 {
   "name": "@sisense/sdk-ui-vue",
-  "version": "0.16.0",
+  "homepage": "https://sisense.dev/guides/sdk/",
+  "description": "Compose SDK package containing general UI elements and related logic tailored for Vue development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sisense/compose-sdk-monorepo",
+    "directory": "packages/sdk-ui-vue"
+  },
+  "keywords": [
+    "Sisense",
+    "Compose SDK"
+  ],
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -18,7 +29,7 @@
     "build-only": "vite build --mode development",
     "build-only:prod": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext .vue,.js,.jsx,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { DataPoint, StyledColumn, DrilldownSelection } from '../../types.js';
-import { Attribute, Column, MembersFilter, filters as filterFactory } from '@sisense/sdk-data';
+import { Attribute, Column, MembersFilter, filterFactory } from '@sisense/sdk-data';
 
 export const useCustomDrilldown = ({
   drilldownDimensions,

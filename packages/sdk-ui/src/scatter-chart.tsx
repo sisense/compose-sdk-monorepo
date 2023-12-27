@@ -20,13 +20,13 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * ```tsx
  * <ScatterChart
  *   dataSet={DM.DataSource}
- *   filters={[filters.greaterThan(DM.Commerce.Revenue, 10)]}
+ *   filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 10)]}
  *   dataOptions={{
- *     x: measures.sum(DM.Commerce.Revenue),
- *     y: measures.sum(DM.Commerce.Quantity),
+ *     x: measureFactory.sum(DM.Commerce.Revenue),
+ *     y: measureFactory.sum(DM.Commerce.Quantity),
  *     breakByPoint: DM.Category.Category,
  *     breakByColor: DM.Commerce.Gender,
- *     size: measures.sum(DM.Commerce.Cost),
+ *     size: measureFactory.sum(DM.Commerce.Cost),
  *   }}
  *   styleOptions={{
  *     xAxis: {

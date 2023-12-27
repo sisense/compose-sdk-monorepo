@@ -5,7 +5,7 @@ import { useExecuteQueryByWidgetIdInternal } from './use-execute-query-by-widget
 
 /**
  * Executes a query over the existing widget and renders a function as child component.
- * The child component is passed the results of the query.
+ * The child component is passed the state of the query as defined in {@link QueryByWidgetIdState}.
  *
  * This component takes the Children Prop Pattern and
  * offers an alternative approach to the {@link useExecuteQueryByWidgetId} hook.
@@ -18,10 +18,18 @@ import { useExecuteQueryByWidgetIdInternal } from './use-execute-query-by-widget
  *   dashboardOid={'6441e728dac1920034bce737'}
  * >
  * {
- *   (data, query) => {
+ *   ({data, isLoading, isError}) => {
+ *     if (isLoading) {
+ *       return <div>Loading...</div>;
+ *     }
+ *     if (isError) {
+ *       return <div>Error</div>;
+ *     }
  *     if (data) {
+ *       console.log(data);
  *       return <div>{`Total Rows: ${data.rows.length}`}</div>;
  *     }
+ *     return null;
  *   }
  * }
  * </ExecuteQueryByWidgetId>
@@ -46,7 +54,7 @@ export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdPro
       onBeforeQuery,
       includeDashboardFilters,
     }) => {
-      const { data, query, error } = useExecuteQueryByWidgetIdInternal({
+      const queryState = useExecuteQueryByWidgetIdInternal({
         widgetOid,
         dashboardOid,
         filters,
@@ -58,6 +66,8 @@ export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdPro
         includeDashboardFilters,
       });
 
+      const { data, query } = queryState;
+
       const [prevData, setPrevData] = useState(data);
       if (prevData !== data) {
         setPrevData(data);
@@ -66,10 +76,6 @@ export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdPro
         }
       }
 
-      if (error) {
-        throw error;
-      }
-
-      return <>{data && query && children?.(data, query)}</>;
+      return <>{queryState && children?.(queryState)}</>;
     },
   );

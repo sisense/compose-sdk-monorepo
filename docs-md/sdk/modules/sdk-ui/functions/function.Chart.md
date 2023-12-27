@@ -31,10 +31,10 @@ plot a column chart of the Sample ECommerce data source hosted in a Sisense inst
   dataSet={DM.DataSource}
   dataOptions={{
     category: [DM.Commerce.AgeRange],
-    value: [measures.sum(DM.Commerce.Revenue)],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
     breakBy: [DM.Commerce.Gender],
   }}
-  filters={[filters.members(DM.Commerce.Gender,['Female', 'Male'])]}
+  filters={[filterFactory.members(DM.Commerce.Gender,['Female', 'Male'])]}
   onDataPointClick= {(point, nativeEvent) => { console.log('clicked', point, nativeEvent); }}
 />
 ```

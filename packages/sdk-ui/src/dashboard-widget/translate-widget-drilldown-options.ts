@@ -34,13 +34,29 @@ const getDrilldownSelections = (
   return [];
 };
 
+/**
+ * Gets the panel name allowed for drilling based on the widget type.
+ *
+ * @param {WidgetType} widgetType - The type of the widget.
+ * @returns {string[]} An array of panel names allowed for drilling.
+ */
+function getDrilldownAllowedPanelName(widgetType: WidgetType) {
+  switch (widgetType) {
+    case 'chart/line':
+    case 'chart/area':
+      return 'x-axis';
+    case 'chart/boxplot':
+      return 'category';
+    default:
+      return 'categories';
+  }
+}
+
 export const extractDrilldownOptions = (
   widgetType: WidgetType,
   panels: Panel[],
 ): DrilldownOptions => {
-  const widgetTypesWithXAxis: WidgetType[] = ['chart/line', 'chart/area'];
-  const categoriesPanelName = widgetTypesWithXAxis.includes(widgetType) ? 'x-axis' : 'categories';
-
+  const categoriesPanelName = getDrilldownAllowedPanelName(widgetType);
   const item = getEnabledPanelItems(panels, categoriesPanelName)[0];
   const drilldownSelections = getDrilldownSelections(item);
   const drilldownDimensions = getAvailableDrilldowns(item);

@@ -25,6 +25,34 @@ export type CategoricalSeriesValues = {
   data: SeriesValueData[];
 };
 
+export type BoxplotSeriesValueData = {
+  low: number;
+  median: number;
+  high: number;
+  q1: number;
+  q3: number;
+  outliers: number[];
+  blur?: boolean;
+};
+
+export type BoxplotSeriesValues = {
+  name: string;
+  title?: string;
+  data: BoxplotSeriesValueData[];
+};
+
+export type BoxplotOutliersSeriesValueData = {
+  x: number;
+  y: number;
+  blur?: boolean;
+};
+
+export type BoxplotOutliersSeriesValues = {
+  name: string;
+  title?: string;
+  data: BoxplotOutliersSeriesValueData[];
+};
+
 export type Column = {
   name: string;
   type: string;
@@ -71,6 +99,19 @@ export type ScatterChartData = {
   yCategories: ScatterCategories;
 };
 
+export type ScattermapChartLocation = {
+  name: string;
+  value: number;
+  colorValue?: number;
+  details?: number | string[];
+  blur: boolean;
+};
+
+export type ScattermapChartData = {
+  type: 'scattermap';
+  locations: ScattermapChartLocation[];
+};
+
 /**
  * Fact final data that will be passed to chart-component to render
  *
@@ -89,9 +130,22 @@ export type IndicatorChartData = {
  *
  * @internal
  */
+export type BoxplotChartData = {
+  type: 'boxplot';
+  xValues: CategoricalXValues[];
+  series: [BoxplotSeriesValues, BoxplotOutliersSeriesValues?];
+};
+
+/**
+ * Fact final data that will be passed to chart-component to render
+ *
+ * @internal
+ */
 
 export type ChartData =
   | CartesianChartData
   | CategoricalChartData
   | ScatterChartData
-  | IndicatorChartData;
+  | IndicatorChartData
+  | BoxplotChartData
+  | ScattermapChartData;

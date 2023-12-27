@@ -18,7 +18,7 @@ import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ScatterChartDataOptions,
-  IndicatorDataOptions,
+  IndicatorChartDataOptions,
   StyledMeasureColumn,
   StyledColumn,
   NumberFormatConfig,
@@ -33,6 +33,8 @@ import {
   NumericMask,
   CurrencyPosition,
   DatetimeMask,
+  WidgetStyle,
+  BoxplotWidgetStyle,
 } from './types';
 import {
   createValueToColorMap,
@@ -40,10 +42,16 @@ import {
   createValueToColorMultiColumnsMap,
 } from './translate-panel-color-format';
 import { getEnabledPanelItems, getSortType, getRootPanelItem, isTabularWidget } from './utils';
-import { TableDataOptions } from '../chart-data-options/types';
+import {
+  BoxplotChartDataOptions,
+  ScattermapChartDataOptions,
+  ScattermapColumn,
+  TableDataOptions,
+} from '../chart-data-options/types';
 import { createFilterFromJaql } from './translate-widget-filters';
 import { WidgetDataOptions } from '../models';
 import { TranslatableError } from '../translation/translatable-error';
+import { findKey } from 'lodash';
 
 export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem['format']) {
   const isFormulaJaql = 'formula' in jaql;
@@ -241,7 +249,7 @@ function extractScatterChartDataOptions(
 function extractIndicatorChartDataOptions(
   panels: Panel[],
   paletteColors?: Color[],
-): IndicatorDataOptions {
+): IndicatorChartDataOptions {
   const value = createColumnsFromPanelItems(panels, 'value', paletteColors);
   const secondary = createColumnsFromPanelItems(panels, 'secondary', paletteColors);
   const min = createColumnsFromPanelItems(panels, 'min', paletteColors);
@@ -261,9 +269,79 @@ function extractTableChartDataOptions(panels: Panel[], paletteColors?: Color[]):
   };
 }
 
+export function extractBoxplotBoxType(style: BoxplotWidgetStyle) {
+  const widgetBoxTypesMapping = {
+    'whisker/iqr': 'iqr',
+    'whisker/extremums': 'extremums',
+    'whisker/deviation': 'standardDeviation',
+  } as const;
+  const widgetBoxType = findKey(
+    style.whisker,
+    (selected) => selected,
+  ) as keyof BoxplotWidgetStyle['whisker'];
+  return widgetBoxTypesMapping[widgetBoxType];
+}
+
+function extractBoxplotChartDataOptions(
+  panels: Panel[],
+  style: BoxplotWidgetStyle,
+  paletteColors?: Color[],
+): BoxplotChartDataOptions {
+  const category = createColumnsFromPanelItems(panels, 'category', paletteColors) as [StyledColumn];
+  const value = createColumnsFromPanelItems(panels, 'value', paletteColors) as [StyledColumn];
+  const boxType = extractBoxplotBoxType(style);
+  const outliersEnabled = style.outliers.enabled;
+
+  return {
+    category,
+    value,
+    boxType,
+    outliersEnabled,
+  };
+}
+
+function createLocationColumnsFromPanelItems(panels: Panel[], customPaletteColors?: Color[]) {
+  return getEnabledPanelItems(panels, 'geo')
+    .map(getRootPanelItem)
+    .map((item) => {
+      const column = createDataColumn(item, customPaletteColors) as StyledColumn;
+
+      if ('geoLevel' in item) {
+        return {
+          ...column,
+          level: item.geoLevel,
+        } as ScattermapColumn;
+      }
+
+      return column;
+    });
+}
+
+function extractScattermapChartDataOptions(
+  panels: Panel[],
+  paletteColors?: Color[],
+): ScattermapChartDataOptions {
+  const locations = createLocationColumnsFromPanelItems(panels, paletteColors);
+  const size = createColumnsFromPanelItems(panels, 'size', paletteColors)[0] as StyledMeasureColumn;
+  const colorBy = createColumnsFromPanelItems(
+    panels,
+    'color',
+    paletteColors,
+  )[0] as StyledMeasureColumn;
+  const details = createColumnsFromPanelItems(panels, 'details', paletteColors)[0];
+
+  return {
+    locations,
+    size,
+    colorBy,
+    details,
+  };
+}
+
 export function extractDataOptions(
   widgetType: WidgetType,
   panels: Panel[],
+  style: WidgetStyle,
   customPaletteColors?: Color[],
 ): WidgetDataOptions {
   if (isCartesianWidget(widgetType)) {
@@ -280,6 +358,12 @@ export function extractDataOptions(
   }
   if (isTabularWidget(widgetType)) {
     return extractTableChartDataOptions(panels, customPaletteColors);
+  }
+  if (widgetType === 'chart/boxplot') {
+    return extractBoxplotChartDataOptions(panels, style as BoxplotWidgetStyle, customPaletteColors);
+  }
+  if (widgetType === 'map/scatter') {
+    return extractScattermapChartDataOptions(panels, customPaletteColors);
   }
   throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
 }

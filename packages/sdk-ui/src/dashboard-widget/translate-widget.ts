@@ -2,7 +2,12 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 
-import { ChartDataOptions, StyleOptions, CompleteThemeSettings, TableStyleOptions } from '../types';
+import {
+  ChartDataOptions,
+  ChartStyleOptions,
+  CompleteThemeSettings,
+  TableStyleOptions,
+} from '../types';
 import { WidgetDto, WidgetSubtype } from './types';
 import { extractDataOptions } from './translate-widget-data-options';
 import { extractDrilldownOptions } from './translate-widget-drilldown-options';
@@ -43,6 +48,7 @@ export function extractWidgetProps(
           dataOptions: extractDataOptions(
             widgetType,
             widget.metadata.panels,
+            widget.style,
             themeSettings?.palette.variantColors,
           ) as TableDataOptions,
           styleOptions: extractStyleOptions(
@@ -64,6 +70,7 @@ export function extractWidgetProps(
           dataOptions: extractDataOptions(
             widgetType,
             widget.metadata.panels,
+            widget.style,
             themeSettings?.palette.variantColors,
           ) as ChartDataOptions,
           drilldownOptions: extractDrilldownOptions(widgetType, widget.metadata.panels),
@@ -72,7 +79,7 @@ export function extractWidgetProps(
             widget.subtype as WidgetSubtype,
             widget.style,
             widget.metadata.panels,
-          ) as StyleOptions,
+          ) as ChartStyleOptions,
           filters: extractFilters(widget.metadata.panels),
         },
       };

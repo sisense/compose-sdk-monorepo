@@ -1,6 +1,17 @@
 {
   "name": "@sisense/sdk-ui-angular",
-  "version": "0.16.0",
+  "homepage": "https://sisense.dev/guides/sdk/",
+  "description": "Compose SDK package containing general UI elements and related logic tailored for Angular development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sisense/compose-sdk-monorepo",
+    "directory": "packages/sdk-ui-angular"
+  },
+  "keywords": [
+    "Sisense",
+    "Compose SDK"
+  ],
+  "version": "1.0.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "dist",
@@ -22,8 +33,10 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "echo 'Tests disabled for now.'",
-    "test:coverage": "echo 'Tests disabled for now.'",
+    "test": "TZ=utc run vitest run",
+    "test:update": "TZ=utc run vitest -u",
+    "test:watch": "TZ=utc run vitest watch",
+    "test:coverage": "TZ=utc run vitest run --coverage",
     "sync-version": "node ./scripts/sync-version.cjs"
   },
   "peerDependencies": {
@@ -32,6 +45,7 @@
     "@angular/core": "^15.0.0 || ^16.0.0 || ^17.0.0"
   },
   "dependencies": {
+    "@sisense/sdk-data": "workspace:^",
     "@sisense/sdk-tracking": "workspace:^",
     "@sisense/sdk-ui-preact": "workspace:^",
     "rxjs": "^7.8.1",
@@ -45,11 +59,12 @@
     "@angular/compiler": "^15.2.0",
     "@angular/compiler-cli": "^15.2.0",
     "@angular/core": "^15.2.0",
-    "@sisense/sdk-data": "workspace:^",
+    "@testing-library/angular": "^15.0.0",
     "eslint": "^8.40.0",
     "ng-packagr": "^15.2.2",
     "prettier": "2.8.4",
-    "typescript": "~4.9.4"
+    "typescript": "~4.9.4",
+    "vitest": "^0.34.6"
   },
   "volta": {
     "extends": "../../package.json"

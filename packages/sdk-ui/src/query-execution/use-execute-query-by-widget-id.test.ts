@@ -3,11 +3,12 @@ import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
 import {
   QueryResultData,
-  filters as filtersFactory,
+  filterFactory,
   DimensionalAttribute,
   BaseJaql,
   FilterJaql,
   IncludeMembersFilter,
+  Filter,
 } from '@sisense/sdk-data';
 import { useExecuteQueryByWidgetId, isParamsChanged } from './use-execute-query-by-widget-id';
 import { executeQuery } from '../query/execute-query.js';
@@ -191,9 +192,11 @@ describe('useExecuteQueryByWidgetId', () => {
       expect((result.current.query?.measures?.[0].jaql(true) as BaseJaql).dim).toBe(
         mockWidgetWithMetadataItems.metadata.panels[1].items[0].jaql.dim,
       );
+
+      const queryFilters = result.current.query?.filters as Filter[] | undefined;
       // verifies query filters
-      expect(result.current.query?.filters?.length).toBe(1);
-      expect((result.current.query?.filters?.[0].jaql(true) as FilterJaql).dim).toBe(
+      expect(queryFilters?.length).toBe(1);
+      expect((queryFilters?.[0].jaql(true) as FilterJaql).dim).toBe(
         mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql.dim,
       );
     });
@@ -202,12 +205,12 @@ describe('useExecuteQueryByWidgetId', () => {
   it('should add provided "filters" and "highlights" to the query', async () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const filters = [
-      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+      filterFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
         'some value',
       ]),
     ];
     const highlights = [
-      filtersFactory.members(
+      filterFactory.members(
         new DimensionalAttribute('some name', 'some new highlight filter attribute'),
         ['some value'],
       ),
@@ -226,10 +229,11 @@ describe('useExecuteQueryByWidgetId', () => {
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
+      const queryFilters = result.current.query?.filters as Filter[] | undefined;
       // verifies query filters
-      expect(result.current.query?.filters?.length).toBe(2); // one widget filter + one provided filter via props
+      expect(queryFilters?.length).toBe(2); // one widget filter + one provided filter via props
       expect(
-        result.current.query?.filters?.find(
+        queryFilters?.find(
           (filter) => (filter.jaql(true) as FilterJaql).dim === filters[0].attribute.expression,
         ),
       ).toBeDefined();
@@ -248,7 +252,7 @@ describe('useExecuteQueryByWidgetId', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const filters = [
       // filter with the same target attribute as already exist in widget
-      filtersFactory.members(
+      filterFactory.members(
         new DimensionalAttribute(
           'some name',
           mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql.dim,
@@ -270,13 +274,11 @@ describe('useExecuteQueryByWidgetId', () => {
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
+      const queryFilters = result.current.query?.filters as Filter[] | undefined;
       // verifies that query contains only widget filter, while provided filter was ignored due to the lower priority
-      expect(result.current.query?.filters?.length).toBe(1);
+      expect(queryFilters?.length).toBe(1);
       expect(
-        (
-          (result.current.query?.filters?.[0].jaql(true) as FilterJaql)
-            .filter as IncludeMembersFilter
-        ).members,
+        ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
       ).toStrictEqual(
         (
           (mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql as FilterJaql)
@@ -290,7 +292,7 @@ describe('useExecuteQueryByWidgetId', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const filters = [
       // filter with the same target attribute as already exist in widget
-      filtersFactory.members(
+      filterFactory.members(
         new DimensionalAttribute(
           'some name',
           mockWidgetWithMetadataItems.metadata.panels[2].items[0].jaql.dim,
@@ -311,13 +313,11 @@ describe('useExecuteQueryByWidgetId', () => {
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
+      const queryFilters = result.current.query?.filters as Filter[] | undefined;
       // verifies that query contains only provided filter, while widget filter was ignored due to the lower priority
-      expect(result.current.query?.filters?.length).toBe(1);
+      expect(queryFilters?.length).toBe(1);
       expect(
-        (
-          (result.current.query?.filters?.[0].jaql(true) as FilterJaql)
-            .filter as IncludeMembersFilter
-        ).members,
+        ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
       ).toStrictEqual(
         ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
       );
@@ -328,7 +328,7 @@ describe('useExecuteQueryByWidgetId', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const filters = [
       // filter with the new target attribute that not exist in widget
-      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+      filterFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
         'some value of provided filter',
       ]),
     ];
@@ -346,13 +346,11 @@ describe('useExecuteQueryByWidgetId', () => {
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
+      const queryFilters = result.current.query?.filters as Filter[] | undefined;
       // verifies that query contains only provided filter, while widget filter was fully ignored
-      expect(result.current.query?.filters?.length).toBe(1);
+      expect(queryFilters?.length).toBe(1);
       expect(
-        (
-          (result.current.query?.filters?.[0].jaql(true) as FilterJaql)
-            .filter as IncludeMembersFilter
-        ).members,
+        ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
       ).toStrictEqual(
         ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
       );
@@ -486,7 +484,7 @@ describe('useExecuteQueryByWidgetId', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const highlights = [
       // filter with the new target attribute that not exist in widget
-      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+      filterFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
         'some value of provided filter',
       ]),
     ];
@@ -528,7 +526,7 @@ describe('useExecuteQueryByWidgetId', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const highlights = [
       // filter with the new target attribute that not exist in widget
-      filtersFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
+      filterFactory.members(new DimensionalAttribute('some name', 'some new filter attribute'), [
         'some value of provided filter',
       ]),
     ];
@@ -565,7 +563,7 @@ describe('useExecuteQueryByWidgetId', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     const highlights = [
       // filter with the target attribute that exists in widget
-      filtersFactory.members(new DimensionalAttribute('some name', 'some dimension'), [
+      filterFactory.members(new DimensionalAttribute('some name', 'some dimension'), [
         'some value of provided filter',
       ]),
     ];

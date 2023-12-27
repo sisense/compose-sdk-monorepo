@@ -5,12 +5,18 @@ import { applyDefaultChartDataOptions, validateDataOptions } from './validate-da
 export function getTranslatedDataOptions(dataOptions: ChartDataOptions, chartType: ChartType) {
   {
     const validatedDataOptions = validateDataOptions(chartType, dataOptions);
+    // translate to internal options
+    const chartDataOptionsWithoutDefaults = translateChartDataOptions(
+      chartType,
+      validatedDataOptions,
+    );
 
-    // translate to internal options and apply default options
+    // apply default options
     const chartDataOptions = applyDefaultChartDataOptions(
-      translateChartDataOptions(chartType, validatedDataOptions),
+      chartDataOptionsWithoutDefaults,
       chartType,
     );
+
     const attributes = getAttributes(chartDataOptions, chartType);
     const measures = getMeasures(chartDataOptions, chartType);
 

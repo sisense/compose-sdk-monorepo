@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { type MembersFilter, filters } from '@sisense/sdk-data';
+import { type MembersFilter, filterFactory } from '@sisense/sdk-data';
 import { MemberFilterTile } from './member-filter-tile';
 import { mockUrl, mockToken, fetchMocks } from '../../../__mocks__/fetch-mocks';
 import { SisenseContextProvider } from '../../../sisense-context/sisense-context-provider';
@@ -17,7 +17,7 @@ describe('MemberFilterTile', () => {
     fetchMock.mockResponses(fetchMocks.globals, fetchMocks.palettes, fetchMocks.jaqlAgeRange);
 
     const filterTitle = 'Member Filter Title';
-    const filter = filters.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
     render(
       <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
         <MemberFilterTile
@@ -48,12 +48,12 @@ describe('MemberFilterTile', () => {
       { status: 500 },
     ]);
 
-    const filterTilte = 'Member Filter Title';
-    const filter = filters.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
     const { findByLabelText, findByText } = render(
       <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
         <MemberFilterTile
-          title={filterTilte}
+          title={filterTitle}
           dataSource={'Some datasource'}
           attribute={DM.Commerce.AgeRange}
           filter={filter}

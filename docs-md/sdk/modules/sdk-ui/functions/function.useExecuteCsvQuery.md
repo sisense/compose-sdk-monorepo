@@ -28,8 +28,8 @@ An example of using the hook to obtain data in a CSV string:
 const { data, isLoading, isError } = useExecuteCsvQuery({
   dataSource: DM.DataSource,
   dimensions: [DM.Commerce.AgeRange],
-  measures: [measures.sum(DM.Commerce.Revenue)],
-  filters: [filters.greaterThan(DM.Commerce.Revenue, 1000)],
+  measures: [measureFactory.sum(DM.Commerce.Revenue)],
+  filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
 });
 if (isLoading) {
   return <div>Loading...</div>;
@@ -47,8 +47,8 @@ An example of using the hook to obtain data in CSV format as a stream, translati
 const { data, isLoading, isError } = useExecuteCsvQuery({
   dataSource: DM.DataSource,
   dimensions: [DM.Commerce.AgeRange],
-  measures: [measures.sum(DM.Commerce.Revenue)],
-  filters: [filters.greaterThan(DM.Commerce.Revenue, 1000)],
+  measures: [measureFactory.sum(DM.Commerce.Revenue)],
+  filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
   config: { asDataStream: true },
 });
 if (isLoading) {

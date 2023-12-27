@@ -9,6 +9,7 @@ import {
   HighchartsSelectEventAxis,
   ScatterDataPoint,
   DataPoints,
+  BoxplotDataPoint,
 } from '../types';
 import { HighchartsOptionsInternal } from '../chart-options-processor/chart-options-service';
 
@@ -114,12 +115,14 @@ export const applyEventHandlersToChart = (
 };
 
 const getDataPoint = (point: HighchartsPoint): DataPoint | ScatterDataPoint => {
-  switch (point.series.initialType) {
+  switch (point.series.initialType || point.series.type) {
     case 'bubble':
     case 'scatter':
       return getScatterDataPoint(point);
     case 'funnel':
       return getFunnelDataPoint(point);
+    case 'boxplot':
+      return getBoxplotDataPoint(point);
     default:
       return getCartesianDataPoint(point);
   }
@@ -153,8 +156,8 @@ const getScatterDataPoint = (point: HighchartsPoint): ScatterDataPoint => ({
   x: point.x,
   y: point.y,
   size: point.z,
-  breakByPoint: point.custom.maskedBreakByPoint,
-  breakByColor: point.custom.maskedBreakByColor,
+  breakByPoint: point.custom?.maskedBreakByPoint,
+  breakByColor: point.custom?.maskedBreakByColor,
 });
 
 const getFunnelDataPoint = (point: HighchartsPoint): DataPoint => ({
@@ -162,3 +165,15 @@ const getFunnelDataPoint = (point: HighchartsPoint): DataPoint => ({
   categoryValue: point.options.name,
   categoryDisplayValue: point.name,
 });
+
+const getBoxplotDataPoint = (point: HighchartsPoint): BoxplotDataPoint => {
+  return {
+    boxMin: point.options.q1!,
+    boxMedian: point.options.median!,
+    boxMax: point.options.q3!,
+    whiskerMin: point.options.low!,
+    whiskerMax: point.options.high!,
+    categoryValue: point.category,
+    categoryDisplayValue: point.category,
+  };
+};

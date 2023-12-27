@@ -18,6 +18,7 @@ import { DateLevels, MetadataTypes } from '../types.js';
 import { create } from '../factory.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
 import { TranslatableError } from '../../translation/translatable-error.js';
+import { guidFast } from '../../utils.js';
 
 /**
  * Different text operators that can be used with text filters
@@ -117,12 +118,19 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    */
   readonly filterType: string;
 
+  /**
+   * Global filter identifier
+   */
+  readonly guid: string;
+
   constructor(att: Attribute, filterType: string) {
     super('filter', MetadataTypes.Filter);
     this.filterType = filterType;
 
     AbstractFilter.checkAttributeSupport(att);
     this.attribute = att;
+
+    this.guid = guidFast(13);
   }
 
   get name(): string {

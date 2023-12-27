@@ -7,6 +7,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from './sisense-context.service';
 import { TrackableService } from '../decorators/trackable.decorator';
+import { getFilterListAndRelations } from '@sisense/sdk-data';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +26,18 @@ export class QueryService {
     const { dataSource, dimensions, measures, filters, highlights, count, offset, onBeforeQuery } =
       params;
     const app = await this.sisenseContextService.getApp();
+    const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
     const data = await executeQuery(
-      { dataSource, dimensions, measures, filters, highlights, count, offset },
+      {
+        dataSource,
+        dimensions,
+        measures,
+        filters: filterList,
+        filterRelations,
+        highlights,
+        count,
+        offset,
+      },
       app,
       { onBeforeQuery },
     );

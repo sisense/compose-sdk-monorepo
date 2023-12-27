@@ -44,7 +44,7 @@ export type AxisMinMax = { min: number; max: number };
 
 export type AxisOrientation = 'horizontal' | 'vertical';
 
-interface AxisLabelsFormatterContextObject {
+export interface AxisLabelsFormatterContextObject {
   value: string | number;
   axis: {
     categories: (string | number)[];

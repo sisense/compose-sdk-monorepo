@@ -13,11 +13,11 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *   dataSet={DM.DataSource}
  *   dataOptions={{
  *     category: [DM.Commerce.Date.Years],
- *     value: [measures.sum(DM.Commerce.Revenue)],
+ *     value: [measureFactory.sum(DM.Commerce.Revenue)],
  *     breakBy: [DM.Commerce.Gender],
  *   }}
  *   styleOptions={{ subtype: 'area/stacked' }}
- *   filters={[filters.members(DM.Commerce.Gender, ['Female', 'Male'])]}
+ *   filters={[filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])]}
  *   onDataPointClick={(point, nativeEvent) => {
  *     console.log('clicked', point, nativeEvent);
  *   }}

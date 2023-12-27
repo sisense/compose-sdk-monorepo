@@ -9,14 +9,16 @@ import {
 import styled from '@emotion/styled';
 import { CompleteThemeSettings } from '../../../../types';
 import { useThemeContext } from '../../../../theme-provider';
+import { useTranslation } from 'react-i18next';
+import { getSlightlyDifferentColor } from '../../../../utils/color/index.js';
 
-type ButtonId = 'earliest' | 'today' | 'latest';
+export type ButtonId = 'earliest' | 'today' | 'latest';
 type QuickDateSelectionButtonsProps = {
   onDateSelected: (selectedDate: dayjs.Dayjs) => void;
   enabledButtons: ButtonId[];
-  limit: {
-    maxDate: dayjs.Dayjs;
-    minDate: dayjs.Dayjs;
+  limit?: {
+    maxDate?: dayjs.Dayjs;
+    minDate?: dayjs.Dayjs;
   };
 };
 
@@ -29,6 +31,10 @@ type ThemedButtonProps = ButtonProps & ThemePropMixin;
 const ThemedSecondaryButton = styled(SecondaryButton)<ThemedButtonProps>`
   background-color: #edeef1;
   color: ${({ theme }) => theme.general.primaryButtonTextColor};
+  &:hover {
+    background-color: ${() => getSlightlyDifferentColor('#edeef1')};
+    transition: 0.2s;
+  }
 `;
 
 type ThemedSecondaryButtonWithTooltipProps = ButtonWithTooltipProps & ThemePropMixin;
@@ -38,6 +44,10 @@ const ThemedSecondaryButtonWithTooltip = styled(
 )<ThemedSecondaryButtonWithTooltipProps>`
   background-color: #edeef1;
   color: ${({ theme }) => theme.general.primaryButtonTextColor};
+  &:hover {
+    background-color: ${() => getSlightlyDifferentColor('#edeef1')};
+    transition: 0.2s;
+  }
 `;
 
 const ThemedButtonsContainer = styled.div<ThemePropMixin>`
@@ -46,23 +56,20 @@ const ThemedButtonsContainer = styled.div<ThemePropMixin>`
 
 export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps) => {
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   const today = dayjs(new Date());
-  const maxDate = props.limit.maxDate;
-  const minDate = props.limit.minDate;
+  const maxDate = props.limit?.maxDate;
+  const minDate = props.limit?.minDate;
   const isTodayBeforeMinDate = minDate && today.isBefore(minDate);
   const isTodayAfterMaxDate = maxDate && today.isAfter(maxDate);
   const isTodayOutOfAllowedDateRange = isTodayBeforeMinDate || isTodayAfterMaxDate;
   return (
     <ThemedButtonsContainer
-      className={
-        (props.enabledButtons.includes('earliest') ? 'csdk-left-[10px]' : 'csdk-right-[10px]') +
-        ' csdk-p-[10px] csdk-pb-[0px]'
-      }
+      className={'csdk-flex csdk-justify-evenly csdk-gap-1 csdk-p-[10px] csdk-pb-[0px]'}
       theme={themeSettings}
     >
       <ThemedSecondaryButton
-        className="csdk-mr-[10px]"
         onClick={() => {
           const selectedDate = dayjs(props.limit?.minDate || new Date());
           props.onDateSelected(selectedDate);
@@ -70,22 +77,21 @@ export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps)
         theme={themeSettings}
         style={{ visibility: props.enabledButtons.includes('earliest') ? 'visible' : 'hidden' }}
       >
-        Earliest Date
+        {t('dateFilter.earliestDate')}
       </ThemedSecondaryButton>
 
       <ThemedSecondaryButtonWithTooltip
-        className="csdk-mr-[12px]"
         onClick={() => {
           const selectedDate = dayjs(new Date());
           props.onDateSelected(selectedDate);
         }}
         disabled={isTodayOutOfAllowedDateRange}
-        tooltipTitle="Today is out of available date range"
+        tooltipTitle={t('dateFilter.todayOutOfRange')}
         disableTooltip={!isTodayOutOfAllowedDateRange}
         theme={themeSettings}
         style={{ visibility: props.enabledButtons.includes('today') ? 'visible' : 'hidden' }}
       >
-        Today
+        {t('dateFilter.today')}
       </ThemedSecondaryButtonWithTooltip>
 
       <ThemedSecondaryButton
@@ -96,7 +102,7 @@ export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps)
         theme={themeSettings}
         style={{ visibility: props.enabledButtons.includes('latest') ? 'visible' : 'hidden' }}
       >
-        Latest Day
+        {t('dateFilter.latestDate')}
       </ThemedSecondaryButton>
     </ThemedButtonsContainer>
   );

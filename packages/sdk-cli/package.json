@@ -1,7 +1,17 @@
 {
   "name": "@sisense/sdk-cli",
-  "description": "CLI for generating programmatic interface from Sisense data model",
-  "version": "0.16.0",
+  "homepage": "https://sisense.dev/guides/sdk/",
+  "description": "Compose SDK package for interacting with Sisense via CLI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sisense/compose-sdk-monorepo",
+    "directory": "packages/sdk-cli"
+  },
+  "keywords": [
+    "Sisense",
+    "Compose SDK"
+  ],
+  "version": "1.0.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -10,12 +20,12 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "bin": "./dist/index.js",
   "dependencies": {
-    "@sisense/sdk-common": "^0.16.0",
-    "@sisense/sdk-data": "^0.16.0",
-    "@sisense/sdk-modeling": "^0.16.0",
-    "@sisense/sdk-query-client": "^0.16.0",
-    "@sisense/sdk-rest-client": "^0.16.0",
-    "@sisense/sdk-tracking": "^0.16.0",
+    "@sisense/sdk-common": "^1.0.0",
+    "@sisense/sdk-data": "^1.0.0",
+    "@sisense/sdk-modeling": "^1.0.0",
+    "@sisense/sdk-query-client": "^1.0.0",
+    "@sisense/sdk-rest-client": "^1.0.0",
+    "@sisense/sdk-tracking": "^1.0.0",
     "cross-fetch": "^4.0.0",
     "inquirer": "^8.1.2",
     "yargs": "17.7.1"

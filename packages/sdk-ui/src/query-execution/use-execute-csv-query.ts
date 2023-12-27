@@ -9,6 +9,7 @@ import { withTracking } from '../decorators/hook-decorators/index.js';
 import { isQueryParamsChanged } from './use-execute-query.js';
 import { downloadCsvQueryStateReducer } from './csv-query-state-reducer.js';
 import { CsvQueryState, ExecuteCsvQueryParams } from './types.js';
+import { getFilterListAndRelations } from '@sisense/sdk-data';
 
 /**
  * React hook that executes a CSV data query.
@@ -20,8 +21,8 @@ import { CsvQueryState, ExecuteCsvQueryParams } from './types.js';
  const { data, isLoading, isError } = useExecuteCsvQuery({
    dataSource: DM.DataSource,
    dimensions: [DM.Commerce.AgeRange],
-   measures: [measures.sum(DM.Commerce.Revenue)],
-   filters: [filters.greaterThan(DM.Commerce.Revenue, 1000)],
+   measures: [measureFactory.sum(DM.Commerce.Revenue)],
+   filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
  });
  if (isLoading) {
    return <div>Loading...</div>;
@@ -39,8 +40,8 @@ import { CsvQueryState, ExecuteCsvQueryParams } from './types.js';
  const { data, isLoading, isError } = useExecuteCsvQuery({
    dataSource: DM.DataSource,
    dimensions: [DM.Commerce.AgeRange],
-   measures: [measures.sum(DM.Commerce.Revenue)],
-   filters: [filters.greaterThan(DM.Commerce.Revenue, 1000)],
+   measures: [measureFactory.sum(DM.Commerce.Revenue)],
+   filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
    config: { asDataStream: true },
  });
  if (isLoading) {
@@ -79,8 +80,6 @@ import { CsvQueryState, ExecuteCsvQueryParams } from './types.js';
  }
  return null;
  ```
-
- *
  * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  */
@@ -134,8 +133,19 @@ export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQu
         config,
         onBeforeQuery,
       } = params;
+      const { filters: filterList, relations: filterRelations } =
+        getFilterListAndRelations(filters);
       void executeCsvQuery(
-        { dataSource, dimensions, measures, filters, highlights, count, offset },
+        {
+          dataSource,
+          dimensions,
+          measures,
+          filters: filterList,
+          filterRelations,
+          highlights,
+          count,
+          offset,
+        },
         app,
         { onBeforeQuery },
       )
