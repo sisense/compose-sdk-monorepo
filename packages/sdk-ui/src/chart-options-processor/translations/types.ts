@@ -12,6 +12,7 @@ import {
   ScatterChartDesignOptions,
   TreemapChartDesignOptions,
   BoxplotChartDesignOptions,
+  AreamapChartDesignOptions,
   ScattermapChartDesignOptions,
 } from './design-options';
 
@@ -48,6 +49,10 @@ const BOXPLOT_CHART_TYPES = ['boxplot'] as const;
 /** Boxplot chart types  @expandType */
 export type BoxplotChartType = (typeof BOXPLOT_CHART_TYPES)[number];
 
+const AREAMAP_CHART_TYPES = ['areamap'] as const;
+/** Areamap chart types @expandType */
+export type AreamapChartType = (typeof AREAMAP_CHART_TYPES)[number];
+
 const IMAGE_CHART_TYPES = ['image'] as const;
 export type ImageChartType = (typeof IMAGE_CHART_TYPES)[number];
 
@@ -58,7 +63,13 @@ export type ScattermapChartType = (typeof SCATTERMAP_CHART_TYPES)[number];
 // ChartDataType is the category of data structure for a group of charts,
 // e.g. the ChartDataType of both "line" and "bar" charts is "cartesian",
 // but a bubble/scatter chart would be a different data type.
-export type ChartDataType = 'cartesian' | 'categorical' | 'scatter' | 'table' | 'indicator';
+export type ChartDataType =
+  | 'cartesian'
+  | 'categorical'
+  | 'scatter'
+  | 'table'
+  | 'indicator'
+  | 'areamap';
 
 export type ChartDesignOptions =
   | LineChartDesignOptions
@@ -72,6 +83,7 @@ export type ChartDesignOptions =
   | ScatterChartDesignOptions
   | TreemapChartDesignOptions
   | BoxplotChartDesignOptions
+  | AreamapChartDesignOptions
   | ScattermapChartDesignOptions;
 
 export type ChartConfig = {
@@ -114,6 +126,10 @@ export const isTable = (chartType: ChartType | TableType): chartType is TableTyp
 
 export const isBoxplot = (chartType: ChartType): chartType is BoxplotChartType => {
   return BOXPLOT_CHART_TYPES.find((value) => value === chartType) !== undefined;
+};
+
+export const isAreamap = (chartType: ChartType): chartType is AreamapChartType => {
+  return AREAMAP_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
 
 /*

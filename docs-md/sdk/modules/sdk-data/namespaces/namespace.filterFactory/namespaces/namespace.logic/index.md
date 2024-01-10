@@ -14,10 +14,10 @@ These operators are still in beta.
 import { filters } from '@sisense/sdk-data';
 
 // define filters
-const revenueFilter = filters.greaterThan(DM.Commerce.Revenue, 1000);
-const countryFilter = filters.members(DM.Commerce.Country, ['USA', 'Canada']);
-const genderFilter = filters.doesntContain(DM.Commerce.Gender, 'Unspecified');
-const costFilter = filters.between(DM.Commerce.Cost, 1000, 2000);
+const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 1000);
+const countryFilter = filterFactory.members(DM.Commerce.Country, ['USA', 'Canada']);
+const genderFilter = filterFactory.doesntContain(DM.Commerce.Gender, 'Unspecified');
+const costFilter = filterFactory.between(DM.Commerce.Cost, 1000, 2000);
 
 // create filter relation of two filters
 const orFilerRelations = filterFactory.logic.or(revenueFilter, countryFilter);

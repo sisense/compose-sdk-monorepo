@@ -1,3 +1,4 @@
+import { TFunction } from '@sisense/sdk-common';
 import { BoxplotChartData } from '../chart-data/types';
 import { determineHighchartsChartType } from './translations/translations-to-highcharts';
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types';
@@ -22,6 +23,7 @@ export const getBoxplotChartOptions = (
   chartData: BoxplotChartData,
   chartDesignOptions: BoxplotChartDesignOptions,
   dataOptions: BoxplotChartDataOptionsInternal,
+  translate: TFunction,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const sisenseChartType = determineHighchartsChartType('boxplot', chartDesignOptions);
   const { series, alerts } = buildBoxplotSeries(chartData, chartDesignOptions);
@@ -55,7 +57,7 @@ export const getBoxplotChartOptions = (
       chartDesignOptions.autoZoom,
       chartData.xValues.length,
     ),
-    tooltip: getBoxplotTooltipSettings(dataOptions),
+    tooltip: getBoxplotTooltipSettings(dataOptions, translate),
   };
 
   return { options: boxplotOptions, alerts };

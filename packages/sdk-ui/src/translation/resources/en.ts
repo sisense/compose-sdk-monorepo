@@ -24,6 +24,7 @@ export const translation = {
     },
     themeNotFound: 'Theme with oid {{themeOid}} not found in the Sisense instance',
     paletteNotFound: "Palette '{{paletteName}}' not found in the Sisense instance",
+    chartTypeNotSupported: 'Chart type {{chartType}} is not supported',
     unsupportedWidgetType: "Can't extract props for unsupported widget type - {{widgetType}}",
     sisenseContextNotFound: 'Sisense Context not found. Please ensure it is provided.',
     dashboardInvalidIdentifier:
@@ -77,6 +78,15 @@ export const translation = {
     earliestDate: 'Earliest Date',
     latestDate: 'Latest Date',
     todayOutOfRange: 'Today is out of available date range',
+  },
+  boxplot: {
+    tooltip: {
+      whiskers: 'Whiskers',
+      box: 'Box',
+      min: 'Min',
+      median: 'Median',
+      max: 'Max',
+    },
   },
 };
 

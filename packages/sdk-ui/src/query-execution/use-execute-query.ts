@@ -3,7 +3,7 @@ import { isEqual } from 'lodash';
 import { useEffect, useReducer, useState } from 'react';
 import { usePrevious } from '../common/hooks/use-previous';
 import { executeQuery } from '../query/execute-query';
-import { isFiltersChanged } from '../utils/filters-comparator';
+import { isFiltersChanged, isRelationsChanged } from '../utils/filters-comparator';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
@@ -153,19 +153,25 @@ export function isQueryParamsChanged(
     (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
   );
 
-  const { filters: prevFilterList } = getFilterListAndRelations(prevParams?.filters);
-  const { filters: newFilterList } = getFilterListAndRelations(newParams?.filters);
+  const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelations(
+    prevParams?.filters,
+  );
+  const { filters: newFilterList, relations: newRelationsList } = getFilterListAndRelations(
+    newParams?.filters,
+  );
 
   // TODO: check if relations are changed
   // Function has to compare logical structure of relations, not just references
-  const isRelationsChanged = false;
   const isSliceFiltersChanged = isFiltersChanged(prevFilterList, newFilterList);
+  const isFilterRelationsChanged =
+    isSliceFiltersChanged ||
+    isRelationsChanged(prevFilterList, newFilterList, prevRelationsList, newRelationsList);
   const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
 
   return (
     isSimplySerializableParamsChanged ||
     isSliceFiltersChanged ||
     isHighlightFiltersChanged ||
-    isRelationsChanged
+    isFilterRelationsChanged
   );
 }

@@ -1,48 +1,15 @@
 import { render } from '@testing-library/react';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { useSisenseContext } from './sisense-context/sisense-context';
-import { DAYS, JAN, MON } from './query/date-formats/apply-date-format';
-import { getDefaultThemeSettings } from './chart-options-processor/theme-option-service';
-import { getBaseDateFnsLocale } from './chart-data-processor/data-table-date-period';
-import { ClientApplication } from './app/client-application';
-import { TreemapChart } from './treemap-chart';
 import type { Data } from '@sisense/sdk-data';
+import { TreemapChart } from './treemap-chart';
 
-vi.mock('./HighchartsWrapper', () => {
-  return {
-    HighchartsWrapper: ({ options }: { options: object }) => {
-      return <div>{JSON.stringify(options)}</div>;
-    },
-  };
-});
-
-vi.mock('./sisense-context/sisense-context', async () => {
-  const actual: typeof import('./sisense-context/sisense-context') = await vi.importActual(
-    './sisense-context/sisense-context',
+// Mocks highcharts to prevent internal `sisense-charts` related error in testing environment
+vi.mock('highcharts-react-official', async () => {
+  const { MockedHighchartsReact }: typeof import('./__test-helpers__') = await vi.importActual(
+    './__test-helpers__',
   );
-
-  const useSisenseContextMock: typeof useSisenseContext = () => ({
-    app: {
-      settings: {
-        dateConfig: {
-          weekFirstDay: MON,
-          isFiscalOn: false,
-          fiscalMonth: JAN,
-          selectedDateLevel: DAYS,
-          timeZone: 'UTC',
-        },
-        serverThemeSettings: getDefaultThemeSettings(),
-        locale: getBaseDateFnsLocale(),
-      },
-    } as ClientApplication,
-
-    isInitialized: true,
-    enableTracking: true,
-  });
-
   return {
-    ...actual,
-    useSisenseContext: useSisenseContextMock,
+    default: MockedHighchartsReact,
   };
 });
 
@@ -99,8 +66,8 @@ const meas1 = {
 };
 
 describe('Treemap Chart', () => {
-  it('render a treemap with single category', () => {
-    render(
+  it('render a treemap with single category', async () => {
+    const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1], value: [meas1] }}
@@ -110,10 +77,12 @@ describe('Treemap Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('render a treemap with two categories', () => {
-    render(
+  it('render a treemap with two categories', async () => {
+    const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2], value: [meas1] }}
@@ -123,10 +92,12 @@ describe('Treemap Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('render a treemap with three categories', () => {
-    render(
+  it('render a treemap with three categories', async () => {
+    const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2, cat3], value: [meas1] }}
@@ -136,10 +107,12 @@ describe('Treemap Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('render a treemap with coloring', () => {
-    render(
+  it('render a treemap with coloring', async () => {
+    const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, { column: cat2, isColored: true }, cat3], value: [meas1] }}
@@ -149,9 +122,11 @@ describe('Treemap Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
-  it('render a treemap with highlights', () => {
-    render(
+  it('render a treemap with highlights', async () => {
+    const { findByLabelText } = render(
       <TreemapChart
         dataSet={withBlurredRows(dataSet, [0, 1, 2, 3, 4])}
         dataOptions={{ category: [cat1, { column: cat2 }, cat3], value: [meas1] }}
@@ -161,5 +136,7 @@ describe('Treemap Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 });

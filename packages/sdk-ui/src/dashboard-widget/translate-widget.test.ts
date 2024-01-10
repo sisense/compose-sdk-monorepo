@@ -19,7 +19,7 @@ import {
 } from '../types';
 import { DatetimeMask, PanelItem, WidgetDto } from './types';
 import { jaqlMock } from './__mocks__/jaql-mock';
-import { AnyColumn } from '../chart-data-options/types';
+import { AnyColumn, BoxplotChartDataOptions } from '../chart-data-options/types';
 
 const widgetMock = {
   datasource: {
@@ -389,6 +389,44 @@ describe('translate widget', () => {
       verifyColumn(breakByPoint!, widget.metadata.panels[2].items[0]);
       verifyColumn(breakByColor!, widget.metadata.panels[3].items[0]);
       verifyColumn(size!, widget.metadata.panels[4].items[0]);
+    });
+
+    it('should returns correct data options for boxplot chart', () => {
+      const widget: WidgetDto = {
+        ...widgetMock,
+        type: 'chart/boxplot',
+        metadata: {
+          panels: [
+            {
+              name: 'category',
+              items: [
+                {
+                  jaql: jaqlMock.date,
+                },
+              ],
+            },
+            {
+              name: 'value',
+              items: [
+                {
+                  jaql: jaqlMock.cost,
+                },
+              ],
+            },
+          ],
+        },
+        style: {
+          outliers: {
+            enabled: true,
+          },
+        } as WidgetDto['style'],
+      };
+      const { dataOptions } = extractWidgetProps(widget).props;
+
+      const { category, value } = dataOptions as BoxplotChartDataOptions;
+
+      verifyColumn(category[0]!, widget.metadata.panels[0].items[0]);
+      verifyColumn(value[0]!, widget.metadata.panels[1].items[0]);
     });
 
     it('should throw an error for unsupported widget type', () => {

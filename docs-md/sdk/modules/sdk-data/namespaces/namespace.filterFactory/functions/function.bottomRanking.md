@@ -9,7 +9,7 @@ title: bottomRanking
   `measure`,
   `count`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter representing a bottom ranking logic.
+Creates a filter to isolate items that rank towards the bottom for a given measure.
 
 ## Parameters
 
@@ -23,4 +23,15 @@ Creates a filter representing a bottom ranking logic.
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A filter representing a bottom ranking logic on the given attribute by the given measure
+A filter instance
+
+## Example
+
+Filter for age ranges with the bottom 3 lowest total revenue in the Sample ECommerce data model.
+```ts
+filterFactory.bottomRanking(
+  DM.Commerce.AgeRange,
+  measures.sum(DM.Commerce.Revenue),
+  3
+)
+```

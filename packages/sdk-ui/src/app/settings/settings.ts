@@ -26,6 +26,7 @@ type ConfigurableAppSettings = AppConfig;
 type ServerSettings = {
   serverThemeSettings: ThemeSettings;
   serverLanguage: string;
+  serverVersion: string;
 };
 
 const defaultAppConfig = { locale: getBaseDateFnsLocale(), dateConfig: defaultDateConfig };
@@ -71,6 +72,7 @@ async function loadServerSettings(
   const serverSettings: ServerSettings = {
     serverThemeSettings: convertToThemeSettings(globals.designSettings, palette),
     serverLanguage: globals.language,
+    serverVersion: globals.version,
   };
   return serverSettings;
 }

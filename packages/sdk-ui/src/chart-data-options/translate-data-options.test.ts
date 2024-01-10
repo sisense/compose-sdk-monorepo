@@ -9,9 +9,22 @@ import {
   ChartDataOptions,
   AnyColumn,
   Category,
+  BoxplotChartDataOptions,
+  BoxplotChartCustomDataOptions,
 } from './types';
-import { Attribute, Column, Measure, MeasureColumn } from '@sisense/sdk-data';
+import { Attribute, Column, Measure, MeasureColumn, analyticsFactory } from '@sisense/sdk-data';
 import { ChartType } from '../types';
+
+vi.mock('@sisense/sdk-data', async () => {
+  const actual: typeof import('@sisense/sdk-data') = await vi.importActual('@sisense/sdk-data');
+  return {
+    ...actual,
+    analyticsFactory: {
+      ...actual.analyticsFactory,
+      boxWhiskerIqrOutliers: vi.fn(),
+    },
+  };
+});
 
 const col1: Column = {
   name: 'Years',
@@ -25,6 +38,12 @@ const col2: Column = {
 const col3: Column = {
   name: 'Category',
   type: 'string',
+};
+
+const colCost = {
+  name: 'Cost',
+  type: 'number',
+  jaql: () => ({}),
 };
 
 const col3Styled: StyledColumn = {
@@ -90,6 +109,20 @@ const scatterDataOptions2: ScatterChartDataOptions = {
   size: meas3,
 };
 
+const boxplotDataOptions: BoxplotChartDataOptions = {
+  category: [col3],
+  value: [colCost],
+  boxType: 'iqr',
+  outliersEnabled: true,
+};
+
+const boxplotCustomDataOptions: BoxplotChartCustomDataOptions = {
+  category: [col3],
+  value: [meas1, meas1, meas1, meas1, meas1, meas1],
+  outliers: [colCost],
+  valueTitle: 'Cost',
+};
+
 type ConvertableToColumn = Measure | Attribute | Category | AnyColumn;
 
 function verifyColumn(column: ConvertableToColumn, expectedColumn: AnyColumn) {
@@ -107,6 +140,11 @@ function verifyColumns(columns: ConvertableToColumn[], expectedColumns: AnyColum
 }
 
 describe('translate data options', () => {
+  beforeEach(() => {
+    vi.mocked(analyticsFactory.boxWhiskerIqrOutliers).mockReset();
+    vi.mocked(analyticsFactory.boxWhiskerIqrOutliers).mockReturnValue(colCost as Attribute);
+  });
+
   describe('getAttributes', () => {
     it('returns correct attributes for cartesian data options', () => {
       const chartType = 'column';
@@ -137,6 +175,20 @@ describe('translate data options', () => {
       const chartType = 'scatter';
       const chartDataOptions = translateChartDataOptions(chartType, scatterDataOptions2);
       verifyColumns(getAttributes(chartDataOptions, chartType), [col1, col2]);
+    });
+
+    it('returns correct attributes for boxplot data options', () => {
+      const chartType = 'boxplot';
+      const chartDataOptions = translateChartDataOptions(chartType, boxplotDataOptions);
+
+      verifyColumns(getAttributes(chartDataOptions, chartType), [col3, colCost]);
+    });
+
+    it('returns correct attributes for boxplot custom data options', () => {
+      const chartType = 'boxplot';
+      const chartDataOptions = translateChartDataOptions(chartType, boxplotCustomDataOptions);
+
+      verifyColumns(getAttributes(chartDataOptions, chartType), [col3, colCost]);
     });
   });
 
@@ -184,6 +236,21 @@ describe('translate data options', () => {
         y: colUnits,
       });
       verifyColumns(getMeasures(chartDataOptions, chartType), [meas2, measUnits, meas3]);
+    });
+
+    it('returns correct measures for boxplot data options', () => {
+      const chartType = 'boxplot';
+      const chartDataOptions = translateChartDataOptions(chartType, boxplotDataOptions);
+      verifyColumns(
+        getMeasures(chartDataOptions, chartType),
+        analyticsFactory.boxWhiskerIqrValues(boxplotDataOptions.value[0] as Attribute),
+      );
+    });
+
+    it('returns correct measures for boxplot custom data options', () => {
+      const chartType = 'boxplot';
+      const chartDataOptions = translateChartDataOptions(chartType, boxplotCustomDataOptions);
+      verifyColumns(getMeasures(chartDataOptions, chartType), boxplotCustomDataOptions.value);
     });
   });
 

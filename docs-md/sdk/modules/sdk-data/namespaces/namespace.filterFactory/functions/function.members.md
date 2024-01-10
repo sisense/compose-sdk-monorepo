@@ -6,17 +6,27 @@ title: members
 
 > **members**(`attribute`, `members`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter on the given members of the given attribute.
+Creates a filter to isolate attribute values that match any of the specified strings.
+
+Matching is case sensitive.
 
 ## Parameters
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Attribute to filter |
+| `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Attribute to filter on |
 | `members` | `string`[] | Array of member values to filter by |
 
 ## Returns
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A filter instance representing the given members of the given attribute
+A filter instance
+
+## Example
+
+Filter for items where the condition is 'Used' or 'Refurbished'
+from the Sample ECommerce data model.
+```ts
+filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished'])
+```

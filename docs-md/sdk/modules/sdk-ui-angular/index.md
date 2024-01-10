@@ -7,6 +7,7 @@ title: sdk-ui-angular
 ## Classes
 
 - [AreaChartComponent](classes/class.AreaChartComponent.md)
+- [AreamapChartComponent](classes/class.AreamapChartComponent.md)
 - [BarChartComponent](classes/class.BarChartComponent.md)
 - [BoxplotChartComponent](classes/class.BoxplotChartComponent.md)
 - [ChartComponent](classes/class.ChartComponent.md)

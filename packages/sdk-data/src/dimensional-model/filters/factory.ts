@@ -32,31 +32,71 @@ import {
 // LOGICAL FILTERS
 
 /**
- * Creates a filter representing a union of multiple filters of the same attribute.
+ * Creates a filter representing the union of multiple filters on the same attribute. The resulting
+ * union filter filters on items that match any of the given filters.
  *
- * @param filters - Filters, of the same attribute, to union
- * @returns A filter representing a union of the given filters
+ * To create 'or' filters using different attributes, use the {@link logic.and | `or()`} function.
+ *
+ * @example
+ * Filter for countries that start with the letter 'A' **or** end with the letter 'A'
+ * in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.union([
+ *   filterFactory.startsWith(DM.Country.Country, 'A'),
+ *   filterFactory.endsWith(DM.Country.Country, 'A'),
+ * ])
+ * ```
+ * @param filters - Filters to union. The filters must all be on the same attribute.
+ * @returns A filter instance
  */
 export function union(filters: Filter[]): Filter {
   return new LogicalAttributeFilter(filters, LogicalOperators.Union);
 }
 
 /**
- * Creates a filter representing an intersection of multiple filters of the same attribute.
+ * Creates a filter representing the intersection of multiple filters on the same attribute. The resulting
+ * intersection filter filters on items that match all of the given filters.
  *
- * @param filters - Filters, of the same attribute, to intersect
- * @returns A filter representing an intersection of the given filters
+ * To create 'and' filters using different attributes, use the {@link logic.and | `and()`} function.
+ *
+ * @example
+ * Filter for countries that start with the letter 'A' **and** end with the letter 'A'
+ * in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.intersection([
+ *   filterFactory.startsWith(DM.Country.Country, 'A'),
+ *   filterFactory.endsWith(DM.Country.Country, 'A'),
+ * ])
+ * ```
+ * @param filters - Filters to intersect. The filters must all be on the same attribute.
+ * @returns A filter instance
  */
 export function intersection(filters: Filter[]): Filter {
   return new LogicalAttributeFilter(filters, LogicalOperators.Intersection);
 }
 
 /**
- * Creates a filter representing an exclusion of the given filter
- * from all attribute members or from the optional input filter.
+ * Creates a filter that excludes items matching the given filter
+ * from all items or from items matching the optional input filter.
  *
+ * @example
+ * Filter for items where the country name does not contain the letter 'A'
+ * from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.exclude(filterFactory.contains(DM.Country.Country, 'A'))
+ * ```
+ *
+ * Filter for items where the country name starts with the letter 'B' but does not contain the letter 'A'
+ * from the Sample ECommerce data model. This filter will match countries like 'Belgium', but will not
+ * match countries like 'Bermuda'.
+ * ```ts
+ * filterFactory.exclude(
+ *   filterFactory.contains(DM.Country.Country, 'A'),
+ *   filterFactory.startsWith(DM.Country.Country, 'B')
+ * )
+ * ```
  * @param filter - Filter to exclude
- * @param input - Input filter to exclude from (optional)
+ * @param input - Input filter to exclude from, on the same attribute. If not provided, the filter excludes from all items.
  * @returns A filter representing an exclusion of the given filter
  * from all attribute members or from the optional input filter
  */
@@ -67,88 +107,181 @@ export function exclude(filter: Filter, input?: Filter): Filter {
 // TEXT / NUMERIC FILTERS
 
 /**
- * Creates a "doesn't contain" filter.
+ * Creates a filter to isolate attribute values that do not contain a specified string.
  *
- * @param attribute - Text attribute to filter
+ * Matching is case insensitive.
+ *
+ * You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for categories in the Sample ECommerce data model where the category name doesn't contain
+ * 'digital'. This filter matches categories not like 'Digital Cameras' and 'MP3 & Digital Media Players'.
+ * ```ts
+ * filterFactory.contains(DM.Category.Category, 'digital')
+ * ```
+ * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
- * @returns A text filter of the given attribute
+ * @returns A filter instance
  */
 export function doesntContain(attribute: Attribute, value: string): Filter {
   return new TextFilter(attribute, TextOperators.DoesntContain, value);
 }
 
 /**
- * Creates a "doesn't end with" filter.
+ * Creates a filter to isolate attribute values that do not end with a specified string.
  *
- * @param attribute - Text attribute to filter
+ * Matching is case insensitive.
+ *
+ * You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for countries in the Sample ECommerce data model where the country name doesn't end with
+ * 'land'. This filter matches countries not like 'Iceland' and 'Ireland'.
+ * ```ts
+ * filterFactory.doesntEndWith(DM.Country.Country, 'land')
+ * ```
+ * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
- * @returns A text filter of the given attribute
+ * @returns A filter instance
  */
 export function doesntEndWith(attribute: Attribute, value: string): Filter {
   return new TextFilter(attribute, TextOperators.DoesntEndWith, value);
 }
 
 /**
- * Creates a "doesn't start with" filter.
+ * Creates a filter to isolate attribute values that do not start with a specified string.
  *
- * @param attribute - Text attribute to filter
+ * Matching is case insensitive.
+ *
+ * You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for countries in the Sample ECommerce data model where the country name doesn't start with
+ * 'United'. This filter matches countries not like 'United States' and 'United Kingdom'.
+ * ```ts
+ * filterFactory.doesntStartWith(DM.Country.Country, 'United')
+ * ```
+ * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
- * @returns A text filter of the given attribute
+ * @returns A filter instance
  */
 export function doesntStartWith(attribute: Attribute, value: string): Filter {
   return new TextFilter(attribute, TextOperators.DoesntStartWith, value);
 }
 
 /**
- * Creates a "contains" filter.
+ * Creates a filter to isolate attribute values that contain a specified string.
  *
- * @param attribute - Text attribute to filter
+ * Matching is case insensitive.
+ *
+ * You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for categories in the Sample ECommerce data model where the category name contains
+ * 'digital'. This filter matches categories like 'Digital Cameras' and 'MP3 & Digital Media Players'.
+ * ```ts
+ * filterFactory.contains(DM.Category.Category, 'digital')
+ * ```
+ * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
- * @returns A text filter of the given attribute
+ * @returns A filter instance
  */
 export function contains(attribute: Attribute, value: string): Filter {
   return new TextFilter(attribute, TextOperators.Contains, value);
 }
 
 /**
- * Creates an "ends with" filter.
+ * Creates a filter to isolate attribute values that end with a specified string.
  *
- * @param attribute - Text attribute to filter
+ * Matching is case insensitive.
+ *
+ * You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for countries in the Sample ECommerce data model where the country name ends with
+ * 'land'. This filter matches countries like 'Ireland' and 'Iceland'.
+ * ```ts
+ * filterFactory.endsWith(DM.Country.Country, 'land')
+ * ```
+ * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
- * @returns A text filter of the given attribute
+ * @returns A filter instance
  */
 export function endsWith(attribute: Attribute, value: string): Filter {
   return new TextFilter(attribute, TextOperators.EndsWith, value);
 }
 
 /**
- * Creates a "starts with" filter.
+ * Creates a filter to isolate attribute values that start with a specified string.
  *
- * @param attribute - Text attribute to filter
+ * Matching is case insensitive.
+ *
+ * You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for countries in the Sample ECommerce data model where the country name starts with
+ * 'United'. This filter matches countries like 'United States' and 'United Kingdom'.
+ * ```ts
+ * filterFactory.startsWith(DM.Country.Country, 'United')
+ * ```
+ * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
- * @returns A text filter of the given attribute
+ * @returns A filter instance
  */
 export function startsWith(attribute: Attribute, value: string): Filter {
   return new TextFilter(attribute, TextOperators.StartsWith, value);
 }
 
 /**
- * Creates a "like" filter.
+ * Creates a filter to isolate attribute values that match a specified string pattern.
  *
- * @param attribute - Text attribute to filter
+ * The pattern can include the following wildcard characters:
+ *
+ * + `_`: Matches a single character
+ * + `%`: Matches multiple characters
+ *
+ * To search for a literal underscore (`_`) or percent symbol (`%`), use the backslash (`\`) escape
+ * character.
+ *
+ * Matching is case insensitive.
+ *
+ * @example
+ * Filter for countries from the Sample ECommerce data model where the country name starts with an
+ * 'A' and ends with an 'a'. This filter matches countries like 'Argentina' and 'Australia'.
+ * ```ts
+ * filterFactory.like(DM.Country.Country, 'A%a')
+ * ```
+ * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
- * @returns A text filter of the given attribute
+ * @returns A filter instance
  */
 export function like(attribute: Attribute, value: string): Filter {
   return new TextFilter(attribute, TextOperators.Like, value);
 }
 
 /**
- * Creates a "doesn't equal" filter.
+ * Creates a filter to isolate attribute values that do not equal a specified string or number.
  *
- * @param attribute - Text or numeric attribute to filter
+ * When filtering against a string:
+ *
+ *  + Matching is case insensitive.
+ *  + You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for items not in new condition from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.doesntEqual(DM.Commerce.Condition, 'New')
+ * ```
+ * @param attribute - Text or numeric attribute to filter on
  * @param value - Value to filter by
- * @returns A filter of the given attribute
+ * @returns A filter instance
  */
 export function doesntEqual(attribute: Attribute, value: string | number): Filter {
   if (typeof value === 'string') {
@@ -159,11 +292,22 @@ export function doesntEqual(attribute: Attribute, value: string | number): Filte
 }
 
 /**
- * Creates an "equals" filter.
+ * Creates a filter to isolate attribute values that equal a specified string or number.
  *
- * @param attribute - Text or numeric attribute to filter
+ * When filtering against a string:
+ *
+ *  + Matching is case insensitive.
+ *  + You can optionally use wildcard characters for pattern matching, as described in the
+ * {@link like | `like()`} function.
+ *
+ * @example
+ * Filter for items in new condition from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.equals(DM.Commerce.Condition, 'New')
+ * ```
+ * @param attribute - Text or numeric attribute to filter on
  * @param value - Value to filter by
- * @returns A filter of the given attribute
+ * @returns A filter instance
  */
 export function equals(attribute: Attribute, value: string | number): Filter {
   if (typeof value === 'string') {
@@ -174,68 +318,98 @@ export function equals(attribute: Attribute, value: string | number): Filter {
 }
 
 /**
- * Creates a "greater than" filter.
+ * Creates a filter to isolate attribute values strictly greater than a specified number.
  *
- * @param attribute - Numeric attribute to filter
+ * @example
+ * Filter for items where the cost is greater than 100 from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.greaterThan(DM.Commerce.Cost, 100)
+ * ```
+ * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
- * @returns A numeric filter of the given attribute
+ * @returns A filter instance
  */
 export function greaterThan(attribute: Attribute, value: number): Filter {
   return numeric(attribute, NumericOperators.FromNotEqual, value);
 }
 
 /**
- * Creates a "greater than or equal" filter.
+ * Creates a filter to isolate attribute values greater than or equal to a specified number.
  *
- * @param attribute - Numeric attribute to filter
+ * @example
+ * Filter for items where the cost is greater than or equal to 100 from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.greaterThanOrEqual(DM.Commerce.Cost, 100)
+ * ```
+ * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
- * @returns A numeric filter of the given attribute
+ * @returns A filter instance
  */
 export function greaterThanOrEqual(attribute: Attribute, value: number): Filter {
   return numeric(attribute, NumericOperators.From, value);
 }
 
 /**
- * Creates a "less than" filter.
+ * Creates a filter to isolate attribute values strictly less than a specified number.
  *
- * @param attribute - Numeric attribute to filter
+ * @example
+ * Filter for items where the cost is less than 100 from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.lessThan(DM.Commerce.Cost, 100)
+ * ```
+ * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
- * @returns A numeric filter of the given attribute
+ * @returns A filter instance
  */
 export function lessThan(attribute: Attribute, value: number): Filter {
   return numeric(attribute, NumericOperators.ToNotEqual, value);
 }
 
 /**
- * Creates a "less than or equal" filter.
+ * Creates a filter to isolate attribute values less than or equal to a specified number.
  *
- * @param attribute - Numeric attribute to filter
+ * @example
+ * Filter for items where the cost is less than or equal to 100 from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.lessThanOrEqual(DM.Commerce.Cost, 100)
+ * ```
+ * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
- * @returns A numeric filter of the given attribute
+ * @returns A filter instance
  */
 export function lessThanOrEqual(attribute: Attribute, value: number): Filter {
   return numeric(attribute, NumericOperators.To, value);
 }
 
 /**
- * Creates a "between" filter.
+ * Creates a filter to isolate attribute values within or exactly matching two specified numerical boundaries.
  *
- * @param attribute - Numeric attribute to filter
+ * @example
+ * Filter for items from the Sample ECommerce data model where the cost is greater than or equal to 100 and less than or equal to 200.
+ * ```ts
+ * filterFactory.between(DM.Commerce.Cost, 100, 200)
+ * ```
+ * @param attribute - Numeric attribute to filter on
  * @param valueA - Value to filter from
  * @param valueB - Value to filter to
- * @returns A numeric filter of the given attribute
+ * @returns A filter instance
  */
 export function between(attribute: Attribute, valueA: number, valueB: number): Filter {
   return numeric(attribute, NumericOperators.From, valueA, NumericOperators.To, valueB);
 }
 
 /**
- * Creates a "between, but not equal" filter.
+ * Creates a filter that isolates attribute values strictly within two specified numerical boundaries.
  *
- * @param attribute - Numeric attribute to filter
+ * @example
+ * Filter for items from the Sample ECommerce data model where the cost is greater than 100 and less than 200.
+ * ```ts
+ * filterFactory.betweenNotEqual(DM.Commerce.Cost, 100, 200)
+ * ```
+ * @param attribute - Numeric attribute to filter on
  * @param valueA - Value to filter from
  * @param valueB - Value to filter to
- * @returns A numeric filter of the given attribute
+ * @returns A filter instance
  */
 export function betweenNotEqual(attribute: Attribute, valueA: number, valueB: number): Filter {
   return numeric(
@@ -248,8 +422,20 @@ export function betweenNotEqual(attribute: Attribute, valueA: number, valueB: nu
 }
 
 /**
- * Creates a custom numeric filter.
+ * Creates a custom numeric filter that filters for given attribute values.
  *
+ * @example
+ * Filter for items where the cost is greater than 100 and less than 200
+ * from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.numeric(
+ *   DM.Commerce.Cost,
+ *   NumericOperators.From,
+ *   100,
+ *   NumericOperators.To,
+ *   200
+ * )
+ * ```
  * @param attribute - Numeric attribute to filter
  * @param operatorA - First operator
  * @param valueA - First value
@@ -268,11 +454,19 @@ export function numeric(
 }
 
 /**
- * Creates a filter on the given members of the given attribute.
+ * Creates a filter to isolate attribute values that match any of the specified strings.
  *
- * @param attribute - Attribute to filter
+ * Matching is case sensitive.
+ *
+ * @example
+ * Filter for items where the condition is 'Used' or 'Refurbished'
+ * from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished'])
+ * ```
+ * @param attribute - Attribute to filter on
  * @param members - Array of member values to filter by
- * @returns A filter instance representing the given members of the given attribute
+ * @returns A filter instance
  */
 export function members(attribute: Attribute, members: string[]): Filter {
   return new MembersFilter(attribute, members);
@@ -281,48 +475,84 @@ export function members(attribute: Attribute, members: string[]): Filter {
 // DATE FILTERS
 
 /**
- * Creates a filter on all values starting at the given date of the given level.
+ * Creates a filter to isolate date values starting from and including the given date and level.
  *
- * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
- * @param from - Date or String representing the value to filter from
- * @returns A filter instance filtering all values starting at the given value
+ * @example
+ * Filter for items in the Sample ECommerce data model where the date is not before the year 2010.
+ * ```ts
+ * filterFactory.dateFrom(DM.Commerce.Date.Years, '2010-01')
+ * ```
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param from - Date or string representing the value to filter from
+ * @returns A filter instance
  */
 export function dateFrom(level: LevelAttribute, from: Date | string): Filter {
   return dateRange(level, from, undefined);
 }
 
 /**
- * Creates a filter on all values ending at the given date of the given level.
+ * Creates a filter to isolate items up until and including the given date and level.
  *
- * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
- * @param to - Date or String representing the last member to filter to
- * @returns A filter instance filtering all values ending at the given value
+ * @example
+ * Filter for items where the date is from the year 2010 or earlier in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.dateTo(DM.Commerce.Date.Years, '2010-01')
+ * ```
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param to - Date or string representing the last member to filter to
+ * @returns A filter instance
  */
 export function dateTo(level: LevelAttribute, to: Date | string): Filter {
   return dateRange(level, undefined, to);
 }
 
 /**
- * Creates a range filter between the given "from" and "to" arguments.
+ * Creates a filter to isolate items between and including the given dates and level.
  *
- * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
- * @param from - Date or String representing the start member to filter from
- * @param to - Date or String representing the end member to filter to
- * @returns A filter instance filtering all values ending at the given value
+ * @example
+ * Filter for items in the Sample ECommerce data model where the date is from the years 2009, 2010, or 2011.
+ * ```ts
+ * filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01', '2011-01')
+ * ```
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param from - Date or string representing the start member to filter from
+ * @param to - Date or string representing the end member to filter to
+ * @returns A filter instance
  */
 export function dateRange(level: LevelAttribute, from?: Date | string, to?: Date | string): Filter {
   return new DateRangeFilter(level, from, to);
 }
 
 /**
- * Creates a relative date filter.
+ * Creates a filter to isolate items with a date dimension value within a specified range after a
+ * given date and level.
  *
- * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
- * @param offset - offset to skip from the given anchor, or Today if not provided,
- * positive/negative to skip forward/backward
- * @param count - number of members to filter
- * @param anchor - Anchor to filter from, Today is used if not provided
- * @returns A relative date filter
+ * Although the `offset` can be used to set a beginning date prior to the `anchor`, the filter range always
+ * continues forward after the offset beginning date. So, using an `offset` of `-6` and a `count` of `18` when `level`
+ * is a month level creates a range that begins 6 month before the `anchor` date and extends to 12 months after
+ * the `anchor` date.
+ *
+ * @example
+ * Filter for items in the Sample ECommerce data model where the date is in 2011 or the first half of 2012.
+ * ```ts
+ * filterFactory.dateRelative(DM.Commerce.Date.Months, 0, 18, '2011-01'),
+ * ```
+ *
+ * Filter for items in the Sample ECommerce data model where the date is in the second half of 2010 or in 2011.
+ * ```ts
+ * filterFactory.dateRelative(DM.Commerce.Date.Months, -6, 18, '2011-01'),
+ * ```
+ *
+ * Filter for items in the Sample ECommerce data model where the date is in the past 6 months.
+ * ```ts
+ * filterFactory.dateRelative(DM.Commerce.Date.Months, -6, 6),
+ * ```
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param offset - Number of levels to skip from the given `anchor` or the default of the current day.
+ * Positive numbers skip forwards and negative numbers skip backwards (e.g. `-6` is 6 months backwards when `level` is a months level attribute)
+ * @param count - Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute)
+ * @param anchor - Date to filter from, defaults to the current day
+ * @returns A filter instance
  */
 export function dateRelative(
   level: LevelAttribute,
@@ -334,13 +564,19 @@ export function dateRelative(
 }
 
 /**
- * Creates a relative date filter from the given anchor date.
+ * Creates a filter to isolate items with a date dimension value within a specified range after a
+ * given date and level.
  *
- * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
- * @param offset - offset to skip from the given anchor, or Today if not provided
- * @param count - number of members to filter
- * @param anchor - Anchor to filter from, Today is used if not provided
- * @returns A relative date filter
+ * @example
+ * Filter for items in the Sample ECommerce data model where the date is in 2011 or the first half of 2012.
+ * ```ts
+ * filterFactory.dateRelativeFrom(DM.Commerce.Date.Months, 0, 18, '2011-01'),
+ * ```
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param offset - Number of levels to skip from the given `anchor` or the default of the current day (e.g. `6` is 6 months when `level` is a months level attribute)
+ * @param count - Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute)
+ * @param anchor - Date to filter from, defaults to the current day
+ * @returns A filter instance
  */
 export function dateRelativeFrom(
   level: LevelAttribute,
@@ -352,13 +588,19 @@ export function dateRelativeFrom(
 }
 
 /**
- * Creates a relative date filter to the given anchor date.
+ * Creates a filter to isolate items with a date dimension value within a specified range before a
+ * given date and level.
  *
- * @param level - Date level attribute to filter. See {@link DateLevels} for supported levels.
- * @param offset - offset to skip from the given anchor, or Today if not provided
- * @param count - number of members to filter
- * @param anchor - Anchor to filter from, Today is used if not provided
- * @returns A relative date filter
+ * @example
+ * Filter for items in the Sample ECommerce data model where the date is in the first half of 2010 or in 2011.
+ * ```ts
+ * filterFactory.dateRelativeTo(DM.Commerce.Date.Months, 0, 18, '2011-12'),
+ * ```
+ * @param level - Date {@link LevelAttribute} to filter on
+ * @param offset - Number of levels to skip from the given `anchor` or the default of the current day (e.g. `6` is 6 months when `level` is a months level attribute)
+ * @param count - Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute)
+ * @param anchor - Date to filter to, defaults to the current day
+ * @returns A filter instance
  */
 export function dateRelativeTo(
   level: LevelAttribute,
@@ -370,40 +612,60 @@ export function dateRelativeTo(
 }
 
 /**
- * Creates a filter on "This Year" of the given date dimension.
+ * Creates a filter to isolate items with a date dimension value in the current calendar year.
  *
- * @param dimension - date dimension to filter
- * @returns A "This Year" filter of the given dimension
+ * @example
+ * Filter for items where the date is in the current calendar year in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.thisYear(DM.Commerce.Date)
+ * ```
+ * @param dimension - Date dimension to filter
+ * @returns A filter instance
  */
 export function thisYear(dimension: DateDimension): Filter {
   return dateRelativeTo(dimension.Years, 0, 1);
 }
 
 /**
- * Creates a filter on "This Month" of the given date dimension.
+ * Creates a filter to isolate items with a date dimension value in the current calendar month.
  *
- * @param dimension - date dimension to filter
- * @returns A "This Month" filter of the given dimension
+ * @example
+ * Filter for items where the date is in the current calendar month in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.thisMonth(DM.Commerce.Date)
+ * ```
+ * @param dimension - Date dimension to filter
+ * @returns A filter instance
  */
 export function thisMonth(dimension: DateDimension): Filter {
   return dateRelativeTo(dimension.Months, 0, 1);
 }
 
 /**
- * Creates a filter on "This Quarter" of the given date dimension.
+ * Creates a filter to isolate items with a date dimension value in the current quarter.
  *
- * @param dimension - date dimension to filter
- * @returns A "This Quarter" filter of the given dimension
+ * @example
+ * Filter for items where the date is in the current quarter in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.thisQuarter(DM.Commerce.Date)
+ * ```
+ * @param dimension - Date dimension to filter
+ * @returns A filter instance
  */
 export function thisQuarter(dimension: DateDimension): Filter {
   return dateRelativeTo(dimension.Quarters, 0, 1);
 }
 
 /**
- * Creates a filter on "Today" of the given date dimension.
+ * Creates a filter to isolate items with a date dimension value of the current date.
  *
+ * @example
+ * Filter for items where the date is today in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.today(DM.Commerce.Date)
+ * ```
  * @param dimension - date dimension to filter
- * @returns A "Today" filter of the given dimension
+ * @returns A filter instance
  */
 export function today(dimension: DateDimension): Filter {
   return dateRelativeTo(dimension.Days, 0, 1);
@@ -435,34 +697,62 @@ export function measureBase(
 }
 
 /**
- * Creates a filter on all measure values that are greater than or equal to the given value.
+ * Creates a filter to isolate a measure value greater than or equal to a given number.
  *
+ * @example
+ * Filter for categories that have an average revenue greater than
+ * or equal to 50 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureGreaterThanOrEqual(
+ *   measures.average(DM.Commerce.Revenue),
+ *   50
+ * )
+ * ```
  * @param measure - Measure to filter by
  * @param value - Min value
- * @returns A filter representing the "greater than or equal to" logic
+ * @returns A filter instance
  */
 export function measureGreaterThanOrEqual(measure: BaseMeasure, value: number): Filter {
   return measureBase(measure.attribute, measure, NumericOperators.From, value);
 }
 
 /**
- * Creates a filter on all measure values less than or equal to the given value.
+ * Creates a filter to isolate a measure value less than or equal to a given number.
  *
+ * @example
+ * Filter for categories that have an average revenue less than
+ * or equal to 100 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureLessThanOrEqual(
+ *   measures.average(DM.Commerce.Revenue),
+ *   100
+ * )
+ * ```
  * @param measure - Measure to filter by
  * @param value - Max value
- * @returns A filter representing the "less than or equal to" logic
+ * @returns A filter instance
  */
 export function measureLessThanOrEqual(measure: BaseMeasure, value: number): Filter {
   return measureBase(measure.attribute, measure, NumericOperators.To, value);
 }
 
 /**
- * Creates a filter on all measure values within a range.
+ * Creates a filter to isolate a measure value between or equal to two given numbers.
  *
+ * @example
+ * Filter for categories that have an average revenue greater than or equal to 50 and less than
+ * or equal to 100 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureBetween(
+ *   measures.average(DM.Commerce.Revenue),
+ *   50,
+ *   100
+ * )
+ * ```
  * @param measure - Measure to filter by
  * @param valueA - Min value
  * @param valueB - Max value
- * @returns A filter representing the "between" logic
+ * @returns A filter instance
  */
 export function measureBetween(measure: BaseMeasure, valueA: number, valueB: number): Filter {
   return measureBase(
@@ -476,12 +766,22 @@ export function measureBetween(measure: BaseMeasure, valueA: number, valueB: num
 }
 
 /**
- * Creates a filter on all measure values within a range but not equal to the min and max values.
+ * Creates a filter to isolate a measure value between but not equal to two given numbers.
  *
+ * @example
+ * Filter for categories that have an average revenue greater than 50 and less than
+ * 100 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureBetweenNotEqual(
+ *   measures.average(DM.Commerce.Revenue),
+ *   50,
+ *   100
+ * )
+ * ```
  * @param measure - Measure to filter by
  * @param valueA - Min value
  * @param valueB - Max value
- * @returns A filter representing the "between, not equal" logic
+ * @returns A filter instance
  */
 export function measureBetweenNotEqual(
   measure: BaseMeasure,
@@ -501,24 +801,42 @@ export function measureBetweenNotEqual(
 // RANKING FILTERS
 
 /**
- * Creates a filter representing a top ranking logic.
+ * Creates a filter to isolate items that rank towards the top for a given measure.
  *
+ * @example
+ * Filter for age ranges with the top 3 highest total revenue in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.topRanking(
+ *   DM.Commerce.AgeRange,
+ *   measures.sum(DM.Commerce.Revenue),
+ *   3
+ * )
+ * ```
  * @param attribute - Attribute to filter
  * @param measure - Measure to filter by
  * @param count - Number of members to return
- * @returns A filter representing a top ranking logic on the given attribute by the given measure
+ * @returns A filter instance
  */
 export function topRanking(attribute: Attribute, measure: Measure, count: number): Filter {
   return new RankingFilter(attribute, measure, RankingOperators.Top, count);
 }
 
 /**
- * Creates a filter representing a bottom ranking logic.
+ * Creates a filter to isolate items that rank towards the bottom for a given measure.
  *
+ * @example
+ * Filter for age ranges with the bottom 3 lowest total revenue in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.bottomRanking(
+ *   DM.Commerce.AgeRange,
+ *   measures.sum(DM.Commerce.Revenue),
+ *   3
+ * )
+ * ```
  * @param attribute - Attribute to filter
  * @param measure - Measure to filter by
  * @param count - Number of members to return
- * @returns A filter representing a bottom ranking logic on the given attribute by the given measure
+ * @returns A filter instance
  */
 export function bottomRanking(attribute: Attribute, measure: Measure, count: number): Filter {
   return new RankingFilter(attribute, measure, RankingOperators.Bottom, count);
@@ -544,36 +862,70 @@ const relate = (node: FilterRelationNode): FilterRelationNode => {
  * These operators are still in beta.
  *
  * @example
- ```tsx
- import { filters } from '@sisense/sdk-data';
-
- // define filters
- const revenueFilter = filters.greaterThan(DM.Commerce.Revenue, 1000);
- const countryFilter = filters.members(DM.Commerce.Country, ['USA', 'Canada']);
- const genderFilter = filters.doesntContain(DM.Commerce.Gender, 'Unspecified');
- const costFilter = filters.between(DM.Commerce.Cost, 1000, 2000);
-
- // create filter relation of two filters
- const orFilerRelations = filterFactory.logic.or(revenueFilter, countryFilter);
- // revenueFilter OR countryFilter
-
- // filter relations can have nested filter relations
- const mixedFilterRelations = filterFactory.logic.and(genderFilter, orFilerRelations);
- // genderFilter AND (revenueFilter OR countryFilter)
-
- // array, specified in filter relations, will be converted to an intersection of filters automatically
- const arrayFilterRelations = filterFactory.logic.or([genderFilter, costFilter], mixedFilterRelations);
- // (genderFilter AND costFilter) OR (genderFilter AND (revenueFilter OR countryFilter))
- ```
+ * ```ts
+ * import { filters } from '@sisense/sdk-data';
+ *
+ * // define filters
+ * const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 1000);
+ * const countryFilter = filterFactory.members(DM.Commerce.Country, ['USA', 'Canada']);
+ * const genderFilter = filterFactory.doesntContain(DM.Commerce.Gender, 'Unspecified');
+ * const costFilter = filterFactory.between(DM.Commerce.Cost, 1000, 2000);
+ *
+ * // create filter relation of two filters
+ * const orFilerRelations = filterFactory.logic.or(revenueFilter, countryFilter);
+ * // revenueFilter OR countryFilter
+ *
+ * // filter relations can have nested filter relations
+ * const mixedFilterRelations = filterFactory.logic.and(genderFilter, orFilerRelations);
+ * // genderFilter AND (revenueFilter OR countryFilter)
+ *
+ * // array, specified in filter relations, will be converted to an intersection of filters automatically
+ * const arrayFilterRelations = filterFactory.logic.or([genderFilter, costFilter], mixedFilterRelations);
+ * // (genderFilter AND costFilter) OR (genderFilter AND (revenueFilter OR countryFilter))
+ * ```
  * @beta
  */
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace logic {
+  /**
+   * Creates an 'AND' filter relation
+   *
+   * @example
+   * Create a filter relation for items that have a revenue greater than 100 and are in new condition
+   * in the Sample ECommerce data model.
+   * ```ts
+   * const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 100);
+   * const conditionFilter = filterFactory.equals(DM.Commerce.Condition, 'New');
+   *
+   * const andFilerRelation = filterFactory.logic.and(revenueFilter, conditionFilter);
+   * ```
+   * @param left First filter or filter relation
+   * @param right Second filter or filter relation
+   * @returns A filter relation
+   * @beta
+   */
   export const and = (left: FilterRelationNode, right: FilterRelationNode): FilterRelation => ({
     operator: 'AND',
     left: relate(left),
     right: relate(right),
   });
+  /**
+   * Creates an 'OR' filter relation
+   *
+   * @example
+   * Create a filter relation for items that have a revenue greater than 100 or are in new condition
+   * in the Sample ECommerce data model.
+   * ```ts
+   * const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 100);
+   * const conditionFilter = filterFactory.equals(DM.Commerce.Condition, 'New');
+   *
+   * const orFilerRelation = filterFactory.logic.or(revenueFilter, conditionFilter);
+   * ```
+   * @param left First filter or filter relation
+   * @param right Second filter or filter relation
+   * @returns A filter relation
+   * @beta
+   */
   export const or = (left: FilterRelationNode, right: FilterRelationNode): FilterRelation => ({
     operator: 'OR',
     left: relate(left),

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as DM from '../sample-ecommerce';
 import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import { Chart } from '../../chart';
-import { ChartType } from '../../types';
+import { ChartType, ChartStyleOptions } from '../../types';
 
 const switchableChartTypes: ChartType[] = [
   'line',
@@ -27,7 +27,7 @@ const dataOptions = {
   breakBy: [DM.Commerce.AgeRange],
 };
 const chartFilters = [filterFactory.greaterThan(DM.Commerce.Revenue, 0)];
-const styleOptions = {
+const styleOptions: ChartStyleOptions = {
   legend: {
     enabled: true,
     position: 'bottom',

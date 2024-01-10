@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import { Alert, Tab, Tabs } from '@mui/material';
+import { Alert, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { Box } from '@mui/system';
 import { ComponentType, Suspense, useEffect, useState } from 'react';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
@@ -24,7 +20,9 @@ import { UseGetWidgetModelDemo } from './pages/use-get-widget-model-demo';
 import { PageCrossFiltering } from './pages/cross-filtering-page';
 import { RelativeDateFilterDemo } from './pages/relative-date-filter-demo';
 import { BoxplotChartDemo } from './pages/boxplot-chart-demo';
+import { AreamapChartDemo } from './pages/areamap-demo';
 import { ScattermapChartDemo } from './pages/scattermap-demo';
+import { AiDemo } from './pages/ai-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -50,6 +48,8 @@ const pages: ComponentType[] = [
   UseGetWidgetModelDemo,
   BoxplotChartDemo,
   ScattermapChartDemo,
+  AreamapChartDemo,
+  AiDemo,
   ...loadAdditionalPages(),
 ];
 
@@ -80,18 +80,53 @@ const sisenseContextProviderProps = (() => {
   }
 })();
 
-const SELECTED_TAB_INDEX_KEY = 'selectedTabIndex';
+const drawerWidth = 240;
+
+function LeftNav({
+  currentItem,
+  onSelectItem,
+}: {
+  currentItem: number;
+  onSelectItem: (index: number) => void;
+}) {
+  return (
+    <Drawer
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <List>
+        {pages.map((page, i) => (
+          <ListItem key={i} disablePadding>
+            <ListItemButton onClick={() => onSelectItem(i)} selected={currentItem === i}>
+              <ListItemText primary={page.name} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
+  );
+}
+
+const SELECTED_PAGE_INDEX_KEY = 'selectedPageIndex';
 
 export function App() {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(
-    Math.min(Number(sessionStorage.getItem(SELECTED_TAB_INDEX_KEY)) || 0, pages.length - 1),
+  const [selectedPageIndex, setSelectedPageIndex] = useState(
+    Math.min(Number(sessionStorage.getItem(SELECTED_PAGE_INDEX_KEY)) || 0, pages.length - 1),
   );
 
   const shouldShowAlert = !VITE_APP_SISENSE_URL;
 
   useEffect(() => {
-    sessionStorage.setItem(SELECTED_TAB_INDEX_KEY, selectedTabIndex.toString());
-  }, [selectedTabIndex]);
+    sessionStorage.setItem(SELECTED_PAGE_INDEX_KEY, selectedPageIndex.toString());
+  }, [selectedPageIndex]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -102,27 +137,16 @@ export function App() {
         </Alert>
       )}
       <SisenseContextProvider {...sisenseContextProviderProps}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs
-            value={selectedTabIndex}
-            onChange={(e, value: number) => setSelectedTabIndex(value)}
-            variant="scrollable"
-            scrollButtons="auto"
-          >
-            {pages.map((page, i) => (
-              <Tab key={i} label={page.name || `Page${i}`} sx={{ textTransform: 'none' }} />
+        <Box sx={{ display: 'flex' }}>
+          <LeftNav currentItem={selectedPageIndex} onSelectItem={setSelectedPageIndex} />
+          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            {pages.map((Page, i) => (
+              <div key={i} hidden={selectedPageIndex !== i}>
+                {selectedPageIndex === i && <Page />}
+              </div>
             ))}
-          </Tabs>
+          </Box>
         </Box>
-        {pages.map((Page, i) => (
-          <div key={i} hidden={selectedTabIndex !== i}>
-            {selectedTabIndex === i && (
-              <Box sx={{ p: 3 }}>
-                <Page />
-              </Box>
-            )}
-          </div>
-        ))}
       </SisenseContextProvider>
     </Suspense>
   );

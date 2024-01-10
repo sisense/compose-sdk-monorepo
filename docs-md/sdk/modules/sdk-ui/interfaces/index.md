@@ -6,6 +6,9 @@ title: Interfaces
 
 - [AreaChartProps](interface.AreaChartProps.md)
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
+- [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
+- [AreamapChartProps](interface.AreamapChartProps.md)
+- [AreamapStyleOptions](interface.AreamapStyleOptions.md)
 - [BarChartProps](interface.BarChartProps.md)
 - [BoxplotChartProps](interface.BoxplotChartProps.md)
 - [BoxplotStyleOptions](interface.BoxplotStyleOptions.md)

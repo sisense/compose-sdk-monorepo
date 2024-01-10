@@ -1,0 +1,41 @@
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import { BoxplotChart as BoxplotChartPreact } from '@sisense/sdk-ui-preact';
+import type { BoxplotChartProps } from '@sisense/sdk-ui-preact';
+import { setupHelper } from '../../setup-helper';
+
+/**
+ * A Vue component that wraps the BoxplotChart Preact component for use in Vue applications.
+ * It maintains compatibility with Vue's reactivity system while preserving the functionality of the BoxplotChart.
+ *
+ * @example
+ * Here's how you can use the BoxplotChart component in a Vue application:
+ * ```vue
+ * <template>
+ *   <BoxplotChart :props="boxplotChartProps" />
+ * </template>
+ *
+ * <script setup lang="ts">
+ * import { ref } from 'vue';
+ * import BoxplotChart from '@sisense/sdk-ui-vue/BoxplotChart';
+ *
+ * const boxplotChartProps = ref({
+ *   // Configure your BoxplotChartProps here
+ * });
+ * </script>
+ * ```
+ */
+export const BoxplotChart = defineComponent({
+  props: {
+    dataOptions: Object as PropType<BoxplotChartProps['dataOptions']>,
+    dataSet: Object as PropType<BoxplotChartProps['dataSet']>,
+    filters: Object as PropType<BoxplotChartProps['filters']>,
+    highlights: Object as PropType<BoxplotChartProps['highlights']>,
+    styleOptions: Object as PropType<BoxplotChartProps['styleOptions']>,
+    onBeforeRender: Function as PropType<BoxplotChartProps['onBeforeRender']>,
+    onDataPointClick: Function as PropType<BoxplotChartProps['onDataPointClick']>,
+    onDataPointContextMenu: Function as PropType<BoxplotChartProps['onDataPointContextMenu']>,
+    onDataPointsSelected: Function as PropType<BoxplotChartProps['onDataPointsSelected']>,
+  },
+  setup: (props) => setupHelper(BoxplotChartPreact, props),
+});

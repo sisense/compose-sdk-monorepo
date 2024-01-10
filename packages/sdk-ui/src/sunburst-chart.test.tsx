@@ -1,50 +1,7 @@
 import { render } from '@testing-library/react';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { useSisenseContext } from './sisense-context/sisense-context';
-import { DAYS, JAN, MON } from './query/date-formats/apply-date-format';
-import { getDefaultThemeSettings } from './chart-options-processor/theme-option-service';
-import { getBaseDateFnsLocale } from './chart-data-processor/data-table-date-period';
-import { ClientApplication } from './app/client-application';
 import { SunburstChart } from './sunburst-chart';
 import { HighchartsSeriesValues } from './chart-options-processor/translations/translations-to-highcharts';
-
-vi.mock('./HighchartsWrapper', () => {
-  return {
-    HighchartsWrapper: ({ options }: { options: object }) => {
-      return <div>{JSON.stringify(options)}</div>;
-    },
-  };
-});
-
-vi.mock('./sisense-context/sisense-context', async () => {
-  const actual: typeof import('./sisense-context/sisense-context') = await vi.importActual(
-    './sisense-context/sisense-context',
-  );
-
-  const useSisenseContextMock: typeof useSisenseContext = () => ({
-    app: {
-      settings: {
-        dateConfig: {
-          weekFirstDay: MON,
-          isFiscalOn: false,
-          fiscalMonth: JAN,
-          selectedDateLevel: DAYS,
-          timeZone: 'UTC',
-        },
-        serverThemeSettings: getDefaultThemeSettings(),
-        locale: getBaseDateFnsLocale(),
-      },
-    } as ClientApplication,
-
-    isInitialized: true,
-    enableTracking: true,
-  });
-
-  return {
-    ...actual,
-    useSisenseContext: useSisenseContextMock,
-  };
-});
 
 const dataSet = {
   columns: [
@@ -87,8 +44,8 @@ const meas1 = {
 };
 
 describe('Sunburst Chart', () => {
-  it('render a sunburst with single category', () => {
-    render(
+  it('render a sunburst with single category', async () => {
+    const { findByLabelText } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1], value: [meas1] }}
@@ -98,10 +55,12 @@ describe('Sunburst Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('render a sunburst with two categories', () => {
-    render(
+  it('render a sunburst with two categories', async () => {
+    const { findByLabelText } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2], value: [meas1] }}
@@ -111,10 +70,12 @@ describe('Sunburst Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('render a sunburst with two categories and legend', () => {
-    render(
+  it('render a sunburst with two categories and legend', async () => {
+    const { findByLabelText } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2], value: [meas1] }}
@@ -130,10 +91,12 @@ describe('Sunburst Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('render a sunburst with series coloring', () => {
-    render(
+  it('render a sunburst with series coloring', async () => {
+    const { findByLabelText } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{
@@ -171,5 +134,7 @@ describe('Sunburst Chart', () => {
         }}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 });

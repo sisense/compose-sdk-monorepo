@@ -1,40 +1,15 @@
 import { render } from '@testing-library/react';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { DAYS, JAN, MON } from './query/date-formats/apply-date-format';
 import { PieStyleOptions } from './types';
-import type { useSisenseContext } from './sisense-context/sisense-context';
-import { getDefaultThemeSettings } from './chart-options-processor/theme-option-service';
-import { getBaseDateFnsLocale } from './chart-data-processor/data-table-date-period';
-import type { ClientApplication } from './app/client-application';
 import { PieChart } from './pie-chart';
 
-vi.mock('./sisense-context/sisense-context', async () => {
-  const actual: typeof import('./sisense-context/sisense-context') = await vi.importActual(
-    './sisense-context/sisense-context',
+// Mocks highcharts to prevent internal `sisense-charts` related error in testing environment
+vi.mock('highcharts-react-official', async () => {
+  const { MockedHighchartsReact }: typeof import('./__test-helpers__') = await vi.importActual(
+    './__test-helpers__',
   );
-
-  const useSisenseContextMock: typeof useSisenseContext = () => ({
-    app: {
-      settings: {
-        dateConfig: {
-          weekFirstDay: MON,
-          isFiscalOn: false,
-          fiscalMonth: JAN,
-          selectedDateLevel: DAYS,
-          timeZone: 'UTC',
-        },
-        serverThemeSettings: getDefaultThemeSettings(),
-        locale: getBaseDateFnsLocale(),
-      },
-    } as ClientApplication,
-
-    isInitialized: true,
-    enableTracking: false,
-  });
-
   return {
-    ...actual,
-    useSisenseContext: useSisenseContextMock,
+    default: MockedHighchartsReact,
   };
 });
 
@@ -69,11 +44,11 @@ const cat1 = {
 };
 
 describe('Pie chart types', () => {
-  it('should prepare correct options for classic type', () => {
+  it('should prepare correct options for classic type', async () => {
     const styleOptions: PieStyleOptions = {
       subtype: 'pie/classic',
     };
-    render(
+    const { findByLabelText } = render(
       <PieChart
         dataSet={dataSet}
         dataOptions={{ value: [meas1], category: [cat1] }}
@@ -84,13 +59,15 @@ describe('Pie chart types', () => {
         styleOptions={styleOptions}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('should prepare correct options for donut type', () => {
+  it('should prepare correct options for donut type', async () => {
     const styleOptions: PieStyleOptions = {
       subtype: 'pie/donut',
     };
-    render(
+    const { findByLabelText } = render(
       <PieChart
         dataSet={dataSet}
         dataOptions={{ value: [meas1], category: [cat1] }}
@@ -101,13 +78,15 @@ describe('Pie chart types', () => {
         styleOptions={styleOptions}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
-  it('should prepare correct options for ring type', () => {
+  it('should prepare correct options for ring type', async () => {
     const styleOptions: PieStyleOptions = {
       subtype: 'pie/ring',
     };
-    render(
+    const { findByLabelText } = render(
       <PieChart
         dataSet={dataSet}
         dataOptions={{ value: [meas1], category: [cat1] }}
@@ -118,5 +97,7 @@ describe('Pie chart types', () => {
         styleOptions={styleOptions}
       />,
     );
+
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 });

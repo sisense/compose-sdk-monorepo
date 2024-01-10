@@ -3,18 +3,19 @@ import 'leaflet/dist/leaflet.css';
 import leaflet from 'leaflet';
 import { useEffect, useMemo, useRef } from 'react';
 import { useLocations } from './hooks/use-locations.js';
-import { ScattermapChartData } from '../../chart-data/types.js';
+import { ScattermapChartData } from '../../../chart-data/types.js';
 import { getLocationsMarkerSizes } from './utils/size.js';
 import { useGeoSettings } from './hooks/use-settings.js';
 import { getLocationsMarkerColors } from './utils/color.js';
 import { createMarker, removeMarkers } from './utils/markers.js';
 import { addCopyright } from './utils/copyright.js';
 import { fitMapToBounds } from './utils/map.js';
-import { ScattermapChartDataOptionsInternal } from '../../chart-data-options/types.js';
-import { ScattermapChartDesignOptions } from '../../chart-options-processor/translations/design-options.js';
+import { ScattermapChartDataOptionsInternal } from '../../../chart-data-options/types.js';
+import { ScattermapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
 import { useTooltipHandler } from './hooks/use-tooltip-handler.js';
 import { DataSource, Filter, FilterRelation, getFilterListAndRelations } from '@sisense/sdk-data';
 
+import '../map-charts.scss';
 import './scattermap.scss';
 
 export type ScattermapProps = {
@@ -35,24 +36,22 @@ export const Scattermap = ({
   const { locations } = chartData;
   const geoSettings = useGeoSettings();
 
-  const locationsProps = useMemo(() => locations.map((l) => l.name), [locations]);
-  const locationsWithCoordinates = useLocations(locationsProps, dataOptions.locationLevel);
+  const locationsWithCoordinates = useLocations(locations, dataOptions.locationLevel);
 
   const { filters: filterList } = getFilterListAndRelations(filters);
-
   const tooltipHandler = useTooltipHandler({
     dataOptions,
     dataSource,
     filters: filterList,
   });
 
-  const mapElement = useRef(null);
+  const mapContainer = useRef(null);
   const mapInstance = useRef<leaflet.Map | null>(null);
 
   const markerSizes = useMemo(
     () =>
       getLocationsMarkerSizes(
-        locations,
+        locationsWithCoordinates,
         dataOptions.size
           ? designOptions.markers.size.minSize
           : designOptions.markers.size.defaultSize,
@@ -60,11 +59,11 @@ export const Scattermap = ({
           ? designOptions.markers.size.maxSize
           : designOptions.markers.size.defaultSize,
       ),
-    [locations, dataOptions, designOptions],
+    [locationsWithCoordinates, dataOptions, designOptions],
   );
   const markerColors = useMemo(
-    () => getLocationsMarkerColors(locations, dataOptions.colorBy?.color),
-    [locations, dataOptions],
+    () => getLocationsMarkerColors(locationsWithCoordinates, dataOptions.colorBy?.color),
+    [locationsWithCoordinates, dataOptions],
   );
 
   const markersRef = useRef<leaflet.CircleMarker[]>([]);
@@ -74,8 +73,8 @@ export const Scattermap = ({
   const copyrightRef = useRef<leaflet.Control.Attribution | null>(null);
 
   useEffect(() => {
-    if (mapElement.current && !mapInstance.current) {
-      mapInstance.current = leaflet.map(mapElement.current, {
+    if (mapContainer.current && !mapInstance.current) {
+      mapInstance.current = leaflet.map(mapContainer.current, {
         attributionControl: false,
         scrollWheelZoom: true,
         minZoom: 1,
@@ -95,15 +94,15 @@ export const Scattermap = ({
 
     if (locationsWithCoordinates) {
       locationsWithCoordinates.forEach((locationWithCoordinates, index) => {
-        if (!locationWithCoordinates) return;
+        if (!locationWithCoordinates.coordinates) return;
 
         const marker = createMarker({
-          coordinates: locationWithCoordinates.latLng,
+          coordinates: locationWithCoordinates.coordinates,
           style: {
             color: markerColors[index],
             size: markerSizes[index],
             fill: designOptions.markers.fill,
-            blur: locations[index].blur,
+            blur: locationWithCoordinates.blur,
           },
         });
 
@@ -111,7 +110,7 @@ export const Scattermap = ({
         marker.addTo(markersLayerRef.current);
 
         marker.bindTooltip(() => {
-          const { content, postponedContent } = tooltipHandler(locations[index]);
+          const { content, postponedContent } = tooltipHandler(locationWithCoordinates);
 
           postponedContent?.then((updatedContent) => marker.setTooltipContent(updatedContent));
 
@@ -121,14 +120,7 @@ export const Scattermap = ({
 
       fitMapToBounds(mapInstance.current!, markersRef.current);
     }
-  }, [
-    locationsWithCoordinates,
-    locations,
-    markerColors,
-    markerSizes,
-    designOptions,
-    tooltipHandler,
-  ]);
+  }, [locationsWithCoordinates, markerColors, markerSizes, designOptions, tooltipHandler]);
 
   useEffect(() => {
     if (!geoSettings) {
@@ -153,8 +145,8 @@ export const Scattermap = ({
 
   return (
     <div
-      className="csdk-scattermap-root"
-      ref={mapElement}
+      className="csdk-map-container"
+      ref={mapContainer}
       style={{
         width: '100%',
         height: '100%',

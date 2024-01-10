@@ -1,5 +1,6 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { useMemo } from 'react';
+import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { WidgetDto } from '../dashboard-widget/types';
 import type { DashboardDto } from './types/dashboard-dto';
@@ -71,6 +72,20 @@ export class RestApi {
       // to remedy, catch error and throw a more informative error message
       throw new TranslatableError('errors.dashboardWidgetInvalidIdentifiers');
     }
+  };
+
+  /**
+   * Get a GeoJSON data for all countries
+   */
+  public getCountriesGeoJson = async (): Promise<GeoJsonFeatureCollection> => {
+    return this.httpClient.get(`api/v1/geo/geojson/world`);
+  };
+
+  /**
+   * Get a GeoJSON data for all USA states
+   */
+  public getUsaStatesGeoJson = async (): Promise<GeoJsonFeatureCollection> => {
+    return this.httpClient.get(`api/v1/geo/geojson/usa`);
   };
 }
 

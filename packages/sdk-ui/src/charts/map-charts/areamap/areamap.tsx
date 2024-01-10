@@ -1,0 +1,51 @@
+import {
+  AreamapChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+} from '../../../chart-data-options/types.js';
+import { AreamapData, ChartData } from '../../../chart-data/types.js';
+import { AreamapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
+import { ChartDesignOptions } from '../../../chart-options-processor/translations/types.js';
+import { ThemeSettings } from '../../../types.js';
+import { AreamapMap } from './areamap-map.js';
+import { useGeoJson } from './use-geo-json.js';
+
+export type AreamapChartProps = {
+  chartData: AreamapData;
+  dataOptions: AreamapChartDataOptionsInternal;
+  designOptions: AreamapChartDesignOptions;
+  themeSettings: ThemeSettings;
+};
+
+export const Areamap: React.FC<AreamapChartProps> = ({ chartData, dataOptions, designOptions }) => {
+  const { geoJson } = useGeoJson(designOptions.mapType);
+  return (
+    <>
+      {geoJson && (
+        <AreamapMap
+          geoJson={geoJson}
+          geoData={chartData.geoData}
+          dataOptions={{
+            originalValueTitle: dataOptions.color.title || dataOptions.color.name,
+          }}
+          mapType={designOptions.mapType}
+        />
+      )}
+    </>
+  );
+};
+
+export const isAreamapData = (chartData: ChartData): chartData is AreamapData => {
+  return chartData.type === 'areamap';
+};
+
+export const isAreamapDataOptions = (
+  dataOptions: ChartDataOptionsInternal,
+): dataOptions is AreamapChartDataOptionsInternal => {
+  return 'geo' in dataOptions && 'color' in dataOptions;
+};
+
+export const isAreamapChartDesignOptions = (
+  designOptions: ChartDesignOptions,
+): designOptions is AreamapChartDesignOptions => {
+  return 'mapType' in designOptions;
+};

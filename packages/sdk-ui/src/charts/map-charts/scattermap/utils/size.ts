@@ -1,5 +1,5 @@
 import { getValuesMinMax } from './values.js';
-import { ScattermapChartLocation } from '../../../chart-data/types.js';
+import { ScattermapChartLocation } from '../../../../chart-data/types.js';
 
 export function getLocationsMarkerSizes(
   locations: ScattermapChartLocation[],

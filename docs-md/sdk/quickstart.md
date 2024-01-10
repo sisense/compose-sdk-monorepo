@@ -7,7 +7,7 @@ title: Quickstart Guide (React)
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
->This guide is for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart). We also have a Quickstart Guide for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue).
+>This guide is for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart). We also have a Quickstart Guide for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (alpha).
 ## Prerequisites
 
 Compose SDK contains a set of React components needed to interface with your Sisense instance. The following prerequisites are needed in order to use the SDK:

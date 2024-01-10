@@ -78,6 +78,7 @@ export const translateColumnToValue = (
   }) as Value;
 
   value.aggregation = value.aggregation || 'sum';
+
   return value;
 };
 

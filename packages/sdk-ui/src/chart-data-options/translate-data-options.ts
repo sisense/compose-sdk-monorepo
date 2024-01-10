@@ -11,6 +11,7 @@ import {
   isScatter,
   isIndicator,
   isBoxplot,
+  isAreamap,
   isScattermap,
 } from '../chart-options-processor/translations/types';
 import { ChartType } from '../types';
@@ -34,6 +35,8 @@ import {
   Category,
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
+  AreamapChartDataOptions,
+  AreamapChartDataOptionsInternal,
   ScattermapChartDataOptions,
 } from './types';
 import {
@@ -61,6 +64,8 @@ export function translateChartDataOptions(
     return translateBoxplotDataOptions(
       dataOptions as BoxplotChartDataOptions | BoxplotChartCustomDataOptions,
     );
+  } else if (isAreamap(chartType)) {
+    return translateAreamapDataOptions(dataOptions as AreamapChartDataOptions);
   } else if (isScattermap(chartType)) {
     return translateScattermapChartDataOptions(dataOptions as ScattermapChartDataOptions);
   } else throw new Error(`Unexpected chart type: ${chartType}`);
@@ -131,6 +136,15 @@ const translateScatterChartDataOptions = (
   } as ScatterChartDataOptionsInternal;
 };
 
+const translateAreamapDataOptions = (
+  dataOptions: AreamapChartDataOptions,
+): AreamapChartDataOptionsInternal => {
+  return {
+    geo: dataOptions.geo && translateColumnToCategory(dataOptions.geo[0]),
+    color: dataOptions.color && translateColumnToValue(dataOptions.color[0]),
+  };
+};
+
 export function getAttributes(
   dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
@@ -149,6 +163,8 @@ export function getAttributes(
     categories = ['category', 'outliers'].flatMap((key) => {
       return dataOptions[key] ? [dataOptions[key]] : [];
     });
+  } else if (isAreamap(chartType)) {
+    categories = [(dataOptions as AreamapChartDataOptionsInternal).geo];
   } else if (isScattermap(chartType)) {
     categories = ['locations'].flatMap((key) => {
       return dataOptions[key] ?? [];
@@ -179,6 +195,8 @@ export function getMeasures(
         return dataOptions[key] ? [dataOptions[key]] : [];
       },
     );
+  } else if (isAreamap(chartType)) {
+    values = [(dataOptions as AreamapChartDataOptionsInternal).color];
   } else if (isScattermap(chartType)) {
     values = ['size', 'colorBy', 'details'].flatMap((key) => {
       return dataOptions[key] && isValue(dataOptions[key]) ? [dataOptions[key]] : [];

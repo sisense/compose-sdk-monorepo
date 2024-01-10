@@ -29,6 +29,7 @@ export function getChartType(widgetType: WidgetType) {
     indicator: 'indicator',
     'chart/boxplot': 'boxplot',
     'map/scatter': 'scattermap',
+    'map/area': 'areamap',
   };
 
   return widgetTypeToChartType[widgetType];
@@ -86,6 +87,7 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
     'tablewidgetagg',
     'chart/boxplot',
     'map/scatter',
+    'map/area',
   ];
   return supportedWidgetTypes.includes(widgetType as WidgetType);
 }

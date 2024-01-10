@@ -43,6 +43,7 @@ import {
 } from './translate-panel-color-format';
 import { getEnabledPanelItems, getSortType, getRootPanelItem, isTabularWidget } from './utils';
 import {
+  AreamapChartDataOptions,
   BoxplotChartDataOptions,
   ScattermapChartDataOptions,
   ScattermapColumn,
@@ -300,7 +301,7 @@ function extractBoxplotChartDataOptions(
   };
 }
 
-function createLocationColumnsFromPanelItems(panels: Panel[], customPaletteColors?: Color[]) {
+function createGeoColumnsFromPanelItems(panels: Panel[], customPaletteColors?: Color[]) {
   return getEnabledPanelItems(panels, 'geo')
     .map(getRootPanelItem)
     .map((item) => {
@@ -321,7 +322,7 @@ function extractScattermapChartDataOptions(
   panels: Panel[],
   paletteColors?: Color[],
 ): ScattermapChartDataOptions {
-  const locations = createLocationColumnsFromPanelItems(panels, paletteColors);
+  const geo = createGeoColumnsFromPanelItems(panels, paletteColors);
   const size = createColumnsFromPanelItems(panels, 'size', paletteColors)[0] as StyledMeasureColumn;
   const colorBy = createColumnsFromPanelItems(
     panels,
@@ -331,10 +332,27 @@ function extractScattermapChartDataOptions(
   const details = createColumnsFromPanelItems(panels, 'details', paletteColors)[0];
 
   return {
-    locations,
+    geo,
     size,
     colorBy,
     details,
+  };
+}
+
+function extractAreamapChartDataOptions(
+  panels: Panel[],
+  paletteColors?: Color[],
+): AreamapChartDataOptions {
+  const geo: [StyledColumn] = [
+    createColumnsFromPanelItems(panels, 'geo', paletteColors)[0] as StyledColumn,
+  ];
+  const color: [StyledColumn] = [
+    createColumnsFromPanelItems(panels, 'color', paletteColors)[0] as StyledColumn,
+  ];
+
+  return {
+    geo,
+    color,
   };
 }
 
@@ -364,6 +382,9 @@ export function extractDataOptions(
   }
   if (widgetType === 'map/scatter') {
     return extractScattermapChartDataOptions(panels, customPaletteColors);
+  }
+  if (widgetType === 'map/area') {
+    return extractAreamapChartDataOptions(panels, customPaletteColors);
   }
   throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
 }

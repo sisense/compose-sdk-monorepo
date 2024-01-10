@@ -17,7 +17,7 @@ const locationLevelPriorityMap = {
   auto: 1,
 } as const;
 
-export function getLocationLevel(locationDataOptions: ScattermapChartDataOptions['locations']) {
+export function getLocationLevel(locationDataOptions: ScattermapChartDataOptions['geo']) {
   const locationLevels = locationDataOptions
     .filter((option) => 'level' in option && option.level)
     .map((option) => (option as ScattermapColumn).level);
@@ -36,13 +36,13 @@ export function getLocationLevel(locationDataOptions: ScattermapChartDataOptions
 export function translateScattermapChartDataOptions(
   scattermap: ScattermapChartDataOptions,
 ): ScattermapChartDataOptionsInternal {
-  const { locations, size, colorBy, details } = scattermap;
+  const { geo, size, colorBy, details } = scattermap;
 
   return {
-    locations: locations && locations.map(translateColumnToCategory),
+    locations: geo && geo.map(translateColumnToCategory),
     size: size && translateColumnToValue(size),
     colorBy: colorBy && translateColumnToValue(colorBy),
     details: details && translateColumnToCategoryOrValue(details),
-    locationLevel: getLocationLevel(locations),
+    locationLevel: getLocationLevel(geo),
   } as ScattermapChartDataOptionsInternal;
 }

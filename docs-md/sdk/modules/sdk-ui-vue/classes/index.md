@@ -5,8 +5,10 @@ title: Classes
 # Classes
 
 - [AreaChart](class.AreaChart-2.md)
+- [AreamapChart](class.AreamapChart-2.md)
 - [BarChart](class.BarChart-2.md)
 - [BasicMemberFilterTile](class.BasicMemberFilterTile.md)
+- [BoxplotChart](class.BoxplotChart-2.md)
 - [Chart](class.Chart-2.md)
 - [ChartWidget](class.ChartWidget-2.md)
 - [ColumnChart](class.ColumnChart-2.md)

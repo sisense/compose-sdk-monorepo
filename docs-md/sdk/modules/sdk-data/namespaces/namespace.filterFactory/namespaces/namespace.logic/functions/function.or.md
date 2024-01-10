@@ -6,13 +6,28 @@ title: or
 
 > **or**(`left`, `right`): [`FilterRelation`](../../../../../interfaces/interface.FilterRelation.md)
 
+Creates an 'OR' filter relation
+
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `left` | [`FilterRelationNode`](../../../../../type-aliases/type-alias.FilterRelationNode.md) |
-| `right` | [`FilterRelationNode`](../../../../../type-aliases/type-alias.FilterRelationNode.md) |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `left` | [`FilterRelationNode`](../../../../../type-aliases/type-alias.FilterRelationNode.md) | First filter or filter relation |
+| `right` | [`FilterRelationNode`](../../../../../type-aliases/type-alias.FilterRelationNode.md) | Second filter or filter relation |
 
 ## Returns
 
 [`FilterRelation`](../../../../../interfaces/interface.FilterRelation.md)
+
+A filter relation
+
+## Example
+
+Create a filter relation for items that have a revenue greater than 100 or are in new condition
+in the Sample ECommerce data model.
+```ts
+const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 100);
+const conditionFilter = filterFactory.equals(DM.Commerce.Condition, 'New');
+
+const orFilerRelation = filterFactory.logic.or(revenueFilter, conditionFilter);
+```

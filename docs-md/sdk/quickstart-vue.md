@@ -3,13 +3,13 @@ title: Quickstart Guide (Vue)
 ---
 
 ::: warning Released for internal testing, may potentially demonstrate instability
-# Compose SDK with Vue: Quickstart Guide
+# Compose SDK with Vue  <Badge type="alpha" text="Alpha" />: Quickstart Guide
 :::
 
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
-This guide is for [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular).
+This guide is for [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (alpha). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta).
 
 ## Prerequisites
 

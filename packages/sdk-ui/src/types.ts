@@ -22,10 +22,12 @@ import {
   CategoricalChartType,
   IndicatorChartType,
   TableType,
+  AreamapChartType,
   BoxplotChartType,
   ScattermapChartType,
 } from './chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
+import { LegendPosition } from './chart-options-processor/translations/legend-section';
 
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
@@ -54,6 +56,7 @@ export type {
   IndicatorChartType,
   BoxplotChartType,
   ScattermapChartType,
+  AreamapChartType,
   TableType,
   AreaSubtype,
   LineSubtype,
@@ -63,6 +66,7 @@ export type {
   BoxplotSubtype,
   IndicatorComponents,
   ScatterMarkerSize,
+  LegendPosition,
 };
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
@@ -120,7 +124,7 @@ export type Legend = {
   /** Boolean flag that defines if legend should be shown on the chart */
   enabled: boolean;
   /** Position of the legend */
-  position?: string;
+  position?: LegendPosition;
 };
 
 /** Configuration that defines behavior of data labels on chart */
@@ -477,6 +481,19 @@ export interface BoxplotStyleOptions extends BaseStyleOptions, BaseAxisStyleOpti
 }
 
 /**
+ * Type of map to display on {@link AreamapChart}
+ */
+export type AreamapType = 'world' | 'usa';
+
+/**
+ * Configuration options that define functional style of the various elements of {@link AreamapChart}
+ */
+export interface AreamapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
+  /** Type of map to display on {@link AreamapChart} */
+  mapType?: AreamapType;
+}
+
+/**
  * Markers style configuration of Scattermap chart
  */
 export type ScattermapMarkers = {
@@ -514,6 +531,7 @@ export type ChartStyleOptions =
   | TreemapStyleOptions
   | SunburstStyleOptions
   | BoxplotStyleOptions
+  | AreamapStyleOptions
   | ScattermapStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
@@ -534,6 +552,7 @@ export type ChartType =
   | CategoricalChartType
   | ScatterChartType
   | IndicatorChartType
+  | AreamapChartType
   | BoxplotChartType
   | ScattermapChartType;
 

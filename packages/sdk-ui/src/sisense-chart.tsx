@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-lines-per-function */
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChartDataOptionsInternal } from './chart-data-options/types';
 import { ChartData } from './chart-data/types';
 import {
@@ -54,6 +55,7 @@ export const SisenseChart = ({
   onBeforeRender = defaultOnBeforeRender,
 }: Props) => {
   const { app } = useSisenseContext();
+  const { t: translate } = useTranslation();
 
   const alerts: string[] = [];
 
@@ -70,6 +72,7 @@ export const SisenseChart = ({
         chartType,
         designOptions,
         chartDataOptions,
+        translate,
         themeSettings,
         dateFormatter,
       );
@@ -103,6 +106,7 @@ export const SisenseChart = ({
     onDataPointClick,
     onDataPointContextMenu,
     onBeforeRender,
+    translate,
   ]);
 
   return (

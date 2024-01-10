@@ -5,6 +5,7 @@ title: Classes
 # Classes
 
 - [AreaChartComponent](class.AreaChartComponent.md)
+- [AreamapChartComponent](class.AreamapChartComponent.md)
 - [BarChartComponent](class.BarChartComponent.md)
 - [BoxplotChartComponent](class.BoxplotChartComponent.md)
 - [ChartComponent](class.ChartComponent.md)

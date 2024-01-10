@@ -25,6 +25,7 @@ export const translation: TranslationDictionary = {
     },
     themeNotFound: 'Тему з oid {{themeOid}} не знайдено на Sisense-сервері',
     paletteNotFound: 'Палітру "{{paletteName}}" не знайдено на Sisense-сервері',
+    chartTypeNotSupported: 'Тип діаграми {{chartType}} не підтримується',
     unsupportedWidgetType:
       'Неможливо отримати властивості для непідтримуваного типу віджета - {{widgetType}}',
     sisenseContextNotFound: 'Контекст Sisense не знайдено. Переконайтеся, що він наданий.',
@@ -80,5 +81,14 @@ export const translation: TranslationDictionary = {
     earliestDate: 'Earliest Date',
     latestDate: 'Latest Date',
     todayOutOfRange: 'Today is out of available date range',
+  },
+  boxplot: {
+    tooltip: {
+      whiskers: 'Вуса',
+      box: 'Коробка',
+      min: 'Мінімум',
+      median: 'Медіана',
+      max: 'Максимум',
+    },
   },
 };

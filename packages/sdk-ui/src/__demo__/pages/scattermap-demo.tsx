@@ -6,7 +6,7 @@ import { ScattermapStyleOptions } from '../../types.js';
 import { ScattermapChart } from '../../scattermap-chart.js';
 
 const dataOptions: ScattermapChartDataOptions = {
-  locations: [DM.Country.Country],
+  geo: [DM.Country.Country],
   size: measureFactory.sum(DM.Commerce.Cost, 'Size by Cost'),
   colorBy: {
     column: measureFactory.sum(DM.Commerce.Revenue, 'Color by Revenue'),

@@ -9,7 +9,7 @@ title: measureBetween
   `valueA`,
   `valueB`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter on all measure values within a range.
+Creates a filter to isolate a measure value between or equal to two given numbers.
 
 ## Parameters
 
@@ -23,4 +23,16 @@ Creates a filter on all measure values within a range.
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A filter representing the "between" logic
+A filter instance
+
+## Example
+
+Filter for categories that have an average revenue greater than or equal to 50 and less than
+or equal to 100 in the Sample ECommerce data model.
+```ts
+filterFactory.measureBetween(
+  measures.average(DM.Commerce.Revenue),
+  50,
+  100
+)
+```

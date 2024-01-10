@@ -36,6 +36,7 @@ import {
   DashboardWidgetStyleOptions,
   BoxplotStyleOptions,
   ScattermapStyleOptions,
+  AreamapStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -46,6 +47,7 @@ import {
   ScatterChartDataOptions,
   TableDataOptions,
   ScattermapChartDataOptions,
+  AreamapChartDataOptions,
 } from './chart-data-options/types';
 import {
   DataPointEventHandler,
@@ -967,6 +969,24 @@ export interface ScattermapChartProps extends BaseChartProps, ChartEventProps {
    * @category Chart
    */
   styleOptions?: ScattermapStyleOptions;
+}
+
+/**
+ * Props of the {@link AreamapChart} component.
+ */
+export interface AreamapChartProps extends BaseChartProps, ChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: AreamapChartDataOptions;
+  /**
+   * Configuration that defines functional style of the various chart elements
+   *
+   * @category Chart
+   */
+  styleOptions?: AreamapStyleOptions;
 }
 
 /**

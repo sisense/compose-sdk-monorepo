@@ -56,10 +56,17 @@ import { DynamicSizeContainer, getChartDefaultSize } from './dynamic-size-contai
 import { LoadingIndicator } from './common/components/loading-indicator';
 import { getTranslatedDataOptions } from './chart-data-options/get-translated-data-options';
 import { executeBoxplotQuery } from './boxplot-utils';
-import { Scattermap } from './charts/scattermap/scattermap';
+import { Scattermap } from './charts/map-charts/scattermap/scattermap';
 import { isString } from 'lodash';
 import { ScattermapChartDesignOptions } from './chart-options-processor/translations/design-options';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
+
+import {
+  Areamap,
+  isAreamapData,
+  isAreamapDataOptions,
+  isAreamapChartDesignOptions,
+} from './charts/map-charts/areamap/areamap';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -286,6 +293,24 @@ export const Chart = asSisenseComponent({
             );
           }
 
+          return null;
+        }
+
+        if (chartType === 'areamap') {
+          if (
+            isAreamapData(chartData) &&
+            isAreamapDataOptions(chartDataOptions) &&
+            isAreamapChartDesignOptions(designOptions)
+          ) {
+            return (
+              <Areamap
+                chartData={chartData}
+                dataOptions={chartDataOptions}
+                designOptions={designOptions}
+                themeSettings={themeSettings}
+              />
+            );
+          }
           return null;
         }
 

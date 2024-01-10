@@ -6,7 +6,7 @@ title: measureLessThanOrEqual
 
 > **measureLessThanOrEqual**(`measure`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter on all measure values less than or equal to the given value.
+Creates a filter to isolate a measure value less than or equal to a given number.
 
 ## Parameters
 
@@ -19,4 +19,15 @@ Creates a filter on all measure values less than or equal to the given value.
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A filter representing the "less than or equal to" logic
+A filter instance
+
+## Example
+
+Filter for categories that have an average revenue less than
+or equal to 100 in the Sample ECommerce data model.
+```ts
+filterFactory.measureLessThanOrEqual(
+  measures.average(DM.Commerce.Revenue),
+  100
+)
+```

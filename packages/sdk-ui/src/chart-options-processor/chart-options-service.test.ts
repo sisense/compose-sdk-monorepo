@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { SeriesPieOptions } from '@sisense/sisense-charts';
+import { TFunction } from '@sisense/sdk-common';
 import { highchartsOptionsService, HighchartsOptionsInternal } from './chart-options-service';
 import { CartesianChartData, CategoricalChartData } from '../chart-data/types';
 import { cartesianData } from '../chart-data/cartesian-data';
@@ -18,6 +19,8 @@ import { ChartDesignOptions } from './translations/types';
 import { DateLevels } from '@sisense/sdk-data';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';
 import { getDefaultThemeSettings } from './theme-option-service';
+
+const translateMock = ((key: string) => key) as TFunction;
 
 const TestChartDataOptionsMultipleXandYValues: CartesianChartDataOptionsInternal = {
   x: [
@@ -149,6 +152,7 @@ const continuousWithGranularityMonths = () => {
     'line',
     BaseDesignOptions,
     dataOptions,
+    translateMock,
     themeSettings,
     dateFormatter,
   );
@@ -167,6 +171,7 @@ it('renders a time series with multiple measures and no break by', () => {
     'line',
     BaseDesignOptions,
     dataOptions,
+    translateMock,
     themeSettings,
     dateFormatter,
   );
@@ -187,6 +192,7 @@ it('renders a time series with connectNulls true on one measure', () => {
     'line',
     BaseDesignOptions,
     dataOptions,
+    translateMock,
     themeSettings,
     dateFormatter,
   );
@@ -212,6 +218,7 @@ it('renders a time series chart with break by', () => {
     'line',
     BaseDesignOptions,
     dataOptions,
+    translateMock,
     themeSettings,
     dateFormatter,
   );
@@ -232,6 +239,7 @@ it('renders a time series chart with break by with connectNulls true', () => {
     'line',
     BaseDesignOptions,
     dataOptions,
+    translateMock,
     themeSettings,
     dateFormatter,
   );
@@ -247,6 +255,7 @@ it('renders a categorical line chart', () => {
     'line',
     BaseDesignOptions,
     TestChartDataOptions,
+    translateMock,
   );
 
   expect(chartOptions).toMatchSnapshot();
@@ -260,6 +269,7 @@ it('renders a categorical line chart with two x axes', () => {
     'area',
     BaseDesignOptions,
     TestChartDataOptionsMultipleXandYValues,
+    translateMock,
   );
 
   expect(chartOptions).toMatchSnapshot();
@@ -290,6 +300,7 @@ it('chart navigator is on if x axis count is greater than 70 and autoZoom true',
       autoZoom: true,
     },
     TestChartDataOptions,
+    translateMock,
   );
   expect(chartOptions?.navigator?.enabled).toBe(true);
 });
@@ -319,6 +330,7 @@ it('chart navigator is off if x axis count is greater than 70 and autoZoom false
       autoZoom: false,
     },
     TestChartDataOptions,
+    translateMock,
   );
   expect(chartOptions?.navigator?.enabled).toBe(false);
 });
@@ -348,6 +360,7 @@ it('chart navigator is off if x axis count is less than 70 and autoZoom true', (
       autoZoom: true,
     },
     TestChartDataOptions,
+    translateMock,
   );
   expect(chartOptions?.navigator?.enabled).toBe(false);
 });
@@ -378,6 +391,7 @@ it('for cartesian data, limit series to 50 and categories to 100', () => {
       dataLimits: { seriesCapacity: 50, categoriesCapacity: 100 },
     },
     TestChartDataOptions,
+    translateMock,
   );
   expect(chartOptions?.xAxis?.[0].categories?.length).toBe(100);
   expect(chartOptions?.series.length).toBe(50);
@@ -405,6 +419,7 @@ it('for categorical with multiple values (e.g. pie charts), limit series to 1000
       dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
     } as ChartDesignOptions,
     TestChartDataOptions,
+    translateMock,
   );
   expect(chartOptions?.series[0].data.length).toBe(100);
 });
@@ -435,6 +450,7 @@ it('for categorical with value and categories (e.g. pie charts), limit series to
       dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
     } as ChartDesignOptions,
     TestChartDataOptions,
+    translateMock,
   );
   expect(chartOptions?.series[0].data.length).toBe(100);
 });
@@ -633,6 +649,7 @@ describe('cartesianData', () => {
       'line',
       BaseDesignOptions,
       TestChartDataOptions,
+      translateMock,
     );
     expect(chartOptions?.series[1].data.map((d) => d.y)).toEqual([1000, NaN, NaN]);
 
@@ -642,6 +659,7 @@ describe('cartesianData', () => {
       'line',
       BaseDesignOptions,
       chartDataOptionsTreatNullsAsZeros,
+      translateMock,
     );
     expect(chartOptionsWithZeros?.series[1].data.map((d) => d.y)).toEqual([1000, 0, 0]);
   });
@@ -689,6 +707,7 @@ describe('cartesianData', () => {
       'line',
       BaseDesignOptions,
       dataOptions,
+      translateMock,
       themeSettings,
       dateFormatter,
     );
@@ -703,6 +722,7 @@ describe('cartesianData', () => {
         y2Axis: { enabled: true, min: 50, max: 100 },
       },
       dataOptions,
+      translateMock,
       themeSettings,
       dateFormatter,
     );
@@ -752,6 +772,7 @@ describe('cartesianData', () => {
       'line',
       BaseDesignOptions,
       dataOptions,
+      translateMock,
       themeSettings,
       dateFormatter,
     );
@@ -766,6 +787,7 @@ describe('cartesianData', () => {
         y2Axis: { enabled: true, min: -50, max: -100 },
       },
       dataOptions,
+      translateMock,
       themeSettings,
       dateFormatter,
     );
@@ -816,6 +838,7 @@ describe('cartesianData', () => {
       'line',
       BaseDesignOptions,
       dataOptionsWithNoFormat,
+      translateMock,
     );
     // x-axis values are formatted when the chart is rendered,
     // for the test we check that the formatter method is properly defined
@@ -853,6 +876,7 @@ describe('cartesianData', () => {
       'line',
       BaseDesignOptions,
       dataOptions,
+      translateMock,
     );
     // x-axis values are formatted when the chart is rendered,
     // for the test we check that the formatter method is properly defined
@@ -923,6 +947,7 @@ describe('cartesianData', () => {
       'line',
       BaseDesignOptions,
       TestChartDataOptions,
+      translateMock,
     );
 
     expect(chartOptions.xAxis?.[0].categories).toEqual(['Pies', 'Wine', 'Pasta']);
@@ -946,6 +971,7 @@ describe('cartesianData', () => {
       'polar',
       { ...BaseDesignOptions, polarType: 'area' } as ChartDesignOptions,
       TestChartDataOptions,
+      translateMock,
     );
 
     expect(chartOptions.yAxis?.[0].title).toMatchObject({
@@ -964,6 +990,7 @@ describe('cartesianData', () => {
         dataLimits: { seriesCapacity: 1, categoriesCapacity: 2 },
       } as ChartDesignOptions,
       TestChartDataOptions,
+      translateMock,
     );
 
     expect(chartData.series).toHaveLength(2);
@@ -1037,6 +1064,7 @@ describe('categoricalCharts', () => {
         'pie',
         BaseDesignOptions,
         pieDataOptions,
+        translateMock,
       );
       expect(chartOptions?.series[0].data).toEqual([
         {
@@ -1090,6 +1118,7 @@ describe('categoricalCharts', () => {
         'pie',
         styleOptionsWithConvolution,
         pieDataOptions,
+        translateMock,
       );
       expect(chartOptions?.series[0].data).toEqual([
         {
@@ -1151,6 +1180,7 @@ describe('categoricalCharts', () => {
         'pie',
         styleOptionsWithConvolution,
         pieDataOptions,
+        translateMock,
       );
       expect(chartOptions?.series[0].data).toEqual([
         {
@@ -1212,6 +1242,7 @@ describe('categoricalCharts', () => {
         'pie',
         styleOptionsWithConvolution,
         pieDataOptions,
+        translateMock,
       );
       expect(chartOptions?.series[0].data).toEqual([
         {
@@ -1268,6 +1299,7 @@ describe('categoricalCharts', () => {
         'pie',
         BaseDesignOptions,
         pieDataOptions,
+        translateMock,
       );
       expect(chartOptions?.series[0].data.map((d) => d.name)).toEqual([
         '700.00',
@@ -1296,6 +1328,7 @@ describe('categoricalCharts', () => {
         'pie',
         BaseDesignOptions,
         pieDataOptions,
+        translateMock,
       );
       expect(chartOptions?.series[0].data).toEqual([
         {
@@ -1356,6 +1389,7 @@ describe('categoricalCharts', () => {
         'pie',
         BaseDesignOptions,
         pieDataOptions,
+        translateMock,
       );
       expect(chartOptions?.series[0].data).toEqual([
         {
@@ -1429,6 +1463,7 @@ describe('funnelChart', () => {
         'funnel',
         BaseDesignOptions,
         funnelDataOptions,
+        translateMock,
       );
       chartOptions = highchartsOptions;
     });

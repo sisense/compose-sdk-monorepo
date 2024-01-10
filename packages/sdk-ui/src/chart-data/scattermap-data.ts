@@ -7,7 +7,7 @@ import {
   getValue,
   isBlurred,
 } from '../chart-data-processor/table-processor.js';
-import { combineLocationNames } from '../charts/scattermap/utils/location.js';
+import { combineLocationNames } from '../charts/map-charts/scattermap/utils/location.js';
 import { ScattermapChartData } from './types.js';
 
 const DATA_VALUE_N_A = 'N\\A';

@@ -9,7 +9,7 @@ title: topRanking
   `measure`,
   `count`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter representing a top ranking logic.
+Creates a filter to isolate items that rank towards the top for a given measure.
 
 ## Parameters
 
@@ -23,4 +23,15 @@ Creates a filter representing a top ranking logic.
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A filter representing a top ranking logic on the given attribute by the given measure
+A filter instance
+
+## Example
+
+Filter for age ranges with the top 3 highest total revenue in the Sample ECommerce data model.
+```ts
+filterFactory.topRanking(
+  DM.Commerce.AgeRange,
+  measures.sum(DM.Commerce.Revenue),
+  3
+)
+```

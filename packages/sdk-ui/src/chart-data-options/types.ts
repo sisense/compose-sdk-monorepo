@@ -307,6 +307,17 @@ export interface ScatterChartDataOptions {
 }
 
 /**
+ * Configuration for how to query aggregate data and assign data
+ * to geographic features of an Areamap chart.
+ */
+export interface AreamapChartDataOptions {
+  /** Column or attribute representing the countries (or states) on the map. */
+  geo: [Column | StyledColumn];
+  /** Measure column (or measure) encoded by the color of the countries (or states) on the map. */
+  color: [MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn];
+}
+
+/**
  * Checks if the given argument is a measure column.
  *
  * @param arg
@@ -362,7 +373,7 @@ export interface ScattermapChartDataOptions {
   /**
    * Columns (or attributes) whose values represent locations on the map.
    */
-  locations: (Column | StyledColumn | ScattermapColumn)[];
+  geo: (Column | StyledColumn | ScattermapColumn)[];
   /**
    * Measure column (or measure) representing the size of the points on the map.
    */
@@ -439,8 +450,11 @@ export type BoxplotChartCustomDataOptions = {
  *
  * There are separate configurations for {@link CartesianChartDataOptions | Cartesian},
  * {@link CategoricalChartDataOptions | Categorical},
- * {@link ScatterChartDataOptions | Scatter}, {@link IndicatorChartDataOptions | Indicator},
- * and {@link BoxplotChartDataOptions | Boxplot} charts.
+ * {@link ScatterChartDataOptions | Scatter},
+ * {@link IndicatorChartDataOptions | Indicator},
+ * {@link BoxplotChartDataOptions | Boxplot},
+ * {@link AreamapChartDataOptions | Areamap}, and
+ * {@link ScattermapChartDataOptions | Scattermap} charts.
  */
 export type ChartDataOptions =
   | CartesianChartDataOptions
@@ -449,6 +463,7 @@ export type ChartDataOptions =
   | IndicatorChartDataOptions
   | BoxplotChartDataOptions
   | BoxplotChartCustomDataOptions
+  | AreamapChartDataOptions
   | ScattermapChartDataOptions;
 
 /** @internal */
@@ -521,6 +536,7 @@ export type ChartDataOptionsInternal =
   | ScatterChartDataOptionsInternal
   | IndicatorChartDataOptionsInternal
   | BoxplotChartDataOptionsInternal
+  | AreamapChartDataOptionsInternal
   | ScattermapChartDataOptionsInternal;
 
 /** @internal */
@@ -543,3 +559,9 @@ export interface BoxplotChartDataOptionsInternal {
   outliers?: Category;
   valueTitle: string;
 }
+
+/** @internal */
+export type AreamapChartDataOptionsInternal = {
+  geo: Category;
+  color: Value;
+};

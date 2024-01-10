@@ -6,16 +6,23 @@ title: thisMonth
 
 > **thisMonth**(`dimension`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter on "This Month" of the given date dimension.
+Creates a filter to isolate items with a date dimension value in the current calendar month.
 
 ## Parameters
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `dimension` | [`DateDimension`](../../../interfaces/interface.DateDimension.md) | date dimension to filter |
+| `dimension` | [`DateDimension`](../../../interfaces/interface.DateDimension.md) | Date dimension to filter |
 
 ## Returns
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A "This Month" filter of the given dimension
+A filter instance
+
+## Example
+
+Filter for items where the date is in the current calendar month in the Sample ECommerce data model.
+```ts
+filterFactory.thisMonth(DM.Commerce.Date)
+```

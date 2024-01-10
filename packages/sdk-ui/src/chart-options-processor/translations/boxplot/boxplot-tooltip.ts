@@ -1,3 +1,4 @@
+import { TFunction } from '@sisense/sdk-common';
 import { BoxplotChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import {
@@ -13,6 +14,7 @@ import './boxplot-tooltip.scss';
 // eslint-disable-next-line max-lines-per-function
 export const getBoxplotTooltipSettings = (
   dataOptions: BoxplotChartDataOptionsInternal,
+  translate: TFunction,
 ): TooltipSettings => {
   return {
     animation: false,
@@ -63,27 +65,27 @@ export const getBoxplotTooltipSettings = (
       );
 
       return tooltipWrapper(`
-        <div>Whiskers</div>
+        <div>${translate('boxplot.tooltip.whiskers')}</div>
         <div class="csdk-boxplot-tooltip-row">
-          Max
+          <span>${translate('boxplot.tooltip.max')}</span>
           ${spanSegment(formatedWhiskerMax, this.point.color)}
         </div>
         <div class="csdk-boxplot-tooltip-row">
-          Min
+          <span>${translate('boxplot.tooltip.min')}</span>
           ${spanSegment(formatedWhiskerMin, this.point.color)}
         </div>
         ${tooltipSeparator()}
-        <div>Box</div>
+        <div>${translate('boxplot.tooltip.box')}</div>
         <div class="csdk-boxplot-tooltip-row">
-          Max
+          <span>${translate('boxplot.tooltip.max')}</span>
           ${spanSegment(formatedBoxMax, this.point.color)}
         </div>
         <div class="csdk-boxplot-tooltip-row">
-          Min
+          <span>${translate('boxplot.tooltip.min')}</span>
           ${spanSegment(formatedBoxMin, this.point.color)}
         </div>
         <div class="csdk-boxplot-tooltip-row">
-        Median
+          <span>${translate('boxplot.tooltip.median')}</span>
           ${spanSegment(formatedBoxMedian, this.point.color)}
         </div>
         ${tooltipSeparator()}

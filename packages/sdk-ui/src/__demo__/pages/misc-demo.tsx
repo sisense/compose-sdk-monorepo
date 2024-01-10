@@ -381,6 +381,15 @@ export const MiscDemo = () => {
           alternatingRowsColor: true,
         }}
       />
+      <Chart
+        dataSet={DM.DataSource}
+        chartType={'boxplot'}
+        dataOptions={{
+          category: [DM.Commerce.AgeRange],
+          value: [DM.Commerce.Cost],
+          boxType: 'iqr',
+        }}
+      />
     </div>
   );
 };

@@ -16,6 +16,11 @@ export const jaqlMock = {
     agg: 'sum',
     sort: 'asc',
   } as BaseJaql,
+  cost: {
+    dim: '[Commerce.Cost]',
+    title: 'Cost',
+    sort: 'asc',
+  } as BaseJaql,
   date: {
     dim: '[Commerce.Date (Calendar)',
     datatype: 'datetime',

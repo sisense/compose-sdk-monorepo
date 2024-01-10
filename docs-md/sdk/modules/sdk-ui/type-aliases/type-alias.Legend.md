@@ -20,6 +20,6 @@ Boolean flag that defines if legend should be shown on the chart
 
 ### `position`
 
-**position**?: `string`
+**position**?: [`LegendPosition`](type-alias.LegendPosition.md)
 
 Position of the legend

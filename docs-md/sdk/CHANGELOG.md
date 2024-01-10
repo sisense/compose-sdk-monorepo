@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] - 2024-01-10
+
+### Added
+- Add component `AreamapChart`
+  and support the `areamap` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget` for beta testing
+- Mark `@sisense/sdk-ui-angular` package as ready for public beta testing
+- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for internal testing
+
+### Changed
+- **Breaking:** Rename `ScattermapChartDataOptions.locations` to `ScattermapChartDataOptions.geo` for `ScattermapChart` (beta)
+- Make minor improvements to chart legend position type, xAxis gridlines, and filter relations.
+
 ## [1.0.0] - 2023-12-27
 
 ### Added

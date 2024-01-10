@@ -5,6 +5,7 @@ title: Functions
 # Functions
 
 - [AreaChart](function.AreaChart.md)
+- [AreamapChart](function.AreamapChart.md)
 - [BarChart](function.BarChart.md)
 - [BoxplotChart](function.BoxplotChart.md)
 - [Chart](function.Chart.md)

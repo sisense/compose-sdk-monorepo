@@ -15,7 +15,7 @@ TODO Document
 
 | Parameter | Type |
 | :------ | :------ |
-| `params` | [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md) |
+| `params` | [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams-2.md) |
 
 ## Returns
 

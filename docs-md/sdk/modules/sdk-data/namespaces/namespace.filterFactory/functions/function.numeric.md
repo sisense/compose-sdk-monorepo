@@ -11,7 +11,7 @@ title: numeric
   `operatorB`?,
   `valueB`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a custom numeric filter.
+Creates a custom numeric filter that filters for given attribute values.
 
 ## Parameters
 
@@ -28,3 +28,17 @@ Creates a custom numeric filter.
 [`Filter`](../../../interfaces/interface.Filter.md)
 
 A custom numeric filter of the given attribute
+
+## Example
+
+Filter for items where the cost is greater than 100 and less than 200
+from the Sample ECommerce data model.
+```ts
+filterFactory.numeric(
+  DM.Commerce.Cost,
+  NumericOperators.From,
+  100,
+  NumericOperators.To,
+  200
+)
+```

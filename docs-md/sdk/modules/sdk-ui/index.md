@@ -12,6 +12,9 @@ title: sdk-ui
 
 - [AreaChartProps](interfaces/interface.AreaChartProps.md)
 - [AreaStyleOptions](interfaces/interface.AreaStyleOptions.md)
+- [AreamapChartDataOptions](interfaces/interface.AreamapChartDataOptions.md)
+- [AreamapChartProps](interfaces/interface.AreamapChartProps.md)
+- [AreamapStyleOptions](interfaces/interface.AreamapStyleOptions.md)
 - [BarChartProps](interfaces/interface.BarChartProps.md)
 - [BoxplotChartProps](interfaces/interface.BoxplotChartProps.md)
 - [BoxplotStyleOptions](interfaces/interface.BoxplotStyleOptions.md)
@@ -81,6 +84,8 @@ title: sdk-ui
 
 - [AppConfig](type-aliases/type-alias.AppConfig.md)
 - [AreaSubtype](type-aliases/type-alias.AreaSubtype.md)
+- [AreamapChartType](type-aliases/type-alias.AreamapChartType.md)
+- [AreamapType](type-aliases/type-alias.AreamapType.md)
 - [AxisLabel](type-aliases/type-alias.AxisLabel.md)
 - [BeforeRenderHandler](type-aliases/type-alias.BeforeRenderHandler.md)
 - [BoxWhiskerType](type-aliases/type-alias.BoxWhiskerType.md)
@@ -136,6 +141,7 @@ title: sdk-ui
 - [IndicatorStyleOptions](type-aliases/type-alias.IndicatorStyleOptions.md)
 - [Labels](type-aliases/type-alias.Labels.md)
 - [Legend](type-aliases/type-alias.Legend.md)
+- [LegendPosition](type-aliases/type-alias.LegendPosition.md)
 - [LineSubtype](type-aliases/type-alias.LineSubtype.md)
 - [LineWidth](type-aliases/type-alias.LineWidth.md)
 - [Markers](type-aliases/type-alias.Markers.md)
@@ -186,6 +192,7 @@ title: sdk-ui
 ## Functions
 
 - [AreaChart](functions/function.AreaChart.md)
+- [AreamapChart](functions/function.AreamapChart.md)
 - [BarChart](functions/function.BarChart.md)
 - [BoxplotChart](functions/function.BoxplotChart.md)
 - [Chart](functions/function.Chart.md)

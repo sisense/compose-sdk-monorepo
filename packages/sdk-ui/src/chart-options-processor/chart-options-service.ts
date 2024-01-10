@@ -7,6 +7,7 @@ import type {
   DrilldownOptions,
   SeriesLegendItemClickCallbackFunction,
 } from '@sisense/sisense-charts';
+import { TFunction } from '@sisense/sdk-common';
 import { ChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
 import { LegendSettings } from './translations/legend-section';
@@ -52,6 +53,7 @@ export type HighchartsOptions = Pick<Options, keyof Options>;
  * @param chartType -
  * @param chartDesignOptions -
  * @param dataOptions -
+ * @param translate - translation function
  * @param themeSettings -
  * @param dateFormatter
  */
@@ -60,6 +62,7 @@ export const highchartsOptionsService = (
   chartType: ChartType,
   chartDesignOptions: ChartDesignOptions,
   dataOptions: ChartDataOptionsInternal,
+  translate: TFunction,
   themeSettings?: CompleteThemeSettings,
   dateFormatter?: (date: Date, format: string) => string,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
@@ -97,6 +100,7 @@ export const highchartsOptionsService = (
         chartData,
         chartDesignOptions as BoxplotChartDesignOptions,
         dataOptions as BoxplotChartDataOptionsInternal,
+        translate,
       );
     }
     default:
@@ -271,7 +275,7 @@ const DEFAULT_STYLE_OPTIONS: ChartStyleOptions = {
   seriesLabels: { enabled: false, rotation: 0 },
   xAxis: {
     enabled: true,
-    gridLines: true,
+    gridLines: false,
     isIntervalEnabled: false,
     labels: {
       enabled: true,

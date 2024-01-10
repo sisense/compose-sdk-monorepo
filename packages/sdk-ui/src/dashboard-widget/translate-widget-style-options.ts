@@ -22,6 +22,8 @@ import {
   SunburstStyleOptions,
   BoxplotStyleOptions,
   ScattermapStyleOptions,
+  AreamapStyleOptions,
+  AreamapType,
 } from '../types';
 import {
   Panel,
@@ -419,6 +421,23 @@ function extractScattermapChartStyleOptions(
   } as ScattermapStyleOptions;
 }
 
+function extractAreamapChartStyleOptions(widgetSubtype: WidgetSubtype): AreamapStyleOptions {
+  let mapType: AreamapType;
+  switch (widgetSubtype) {
+    case 'areamap/world':
+      mapType = 'world';
+      break;
+    case 'areamap/usa':
+      mapType = 'usa';
+      break;
+    default:
+      throw new TranslatableError('errors.unsupportedWidgetType', { widgetSubtype });
+  }
+  return {
+    mapType,
+  };
+}
+
 export function extractStyleOptions<WType extends WidgetType>(
   widgetType: WType,
   widgetSubtype: WidgetSubtype,
@@ -461,6 +480,8 @@ export function extractStyleOptions<WType extends WidgetType>(
       return extractBoxplotChartStyleOptions(widgetSubtype, style as BoxplotWidgetStyle, panels);
     case 'map/scatter':
       return extractScattermapChartStyleOptions(widgetSubtype, style as ScattermapWidgetStyle);
+    case 'map/area':
+      return extractAreamapChartStyleOptions(widgetSubtype);
     default:
       throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }

@@ -25,9 +25,9 @@ Column or measure column representing the additional details for the points on t
 
 ***
 
-### locations
+### geo
 
-> **locations**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`ScattermapColumn`](interface.ScattermapColumn.md))[]
+> **geo**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`ScattermapColumn`](interface.ScattermapColumn.md))[]
 
 Columns (or attributes) whose values represent locations on the map.
 

@@ -3,6 +3,8 @@
  */
 import { PropsWithChildren, ReactElement } from 'react';
 import { render, RenderResult } from '@testing-library/react';
+import type { Cell, Data } from '@sisense/sdk-data';
+import { isObject } from 'lodash';
 import userEvent from '@testing-library/user-event';
 import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
@@ -34,7 +36,7 @@ export function setup(jsx: ReactElement, useFakeTimers = false): SetupResult {
   };
 }
 
-export const MockedHighchartsWrapper = ({
+export const MockedHighchartsReact = ({
   options,
 }: {
   /**
@@ -66,3 +68,24 @@ export const MockedSisenseContextProvider = ({
     </SisenseContext.Provider>
   );
 };
+
+/**
+ * Extends the provided data by blurring specified rows.
+ *
+ * @param {Data} data - The original data object.
+ * @param {number[]} blurRowsIndexes - An array of row indexes to be blurred.
+ * @returns {Data} The data object with blurred rows.
+ */
+export const withBlurredRows = (data: Data, blurRowsIndexes: number[]) => ({
+  ...data,
+  rows: data.rows.map((row, rowIndex) =>
+    row.map((value) => {
+      const cell: Cell = isObject(value) ? value : { data: value };
+
+      if (blurRowsIndexes.includes(rowIndex)) {
+        return { ...cell, blur: true };
+      }
+      return cell;
+    }),
+  ),
+});

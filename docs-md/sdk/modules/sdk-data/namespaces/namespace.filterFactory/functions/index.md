@@ -2,13 +2,13 @@
 title: Functions
 ---
 
-Functions to create date, text, or numeric filters on certain data columns
+Functions to create date, text, or numeric filters on specified data.
 
-They are similar to [Dashboard and Widget Filters](https://docs.sisense.com/main/SisenseLinux/build-formulas.htm) in Sisense.
+Filters created with these functions can be used to:
 
-Filters created with these functions can be used in the data options of UI components such as
-[Chart](../../../../sdk-ui/interfaces/interface.ChartProps.md), [ChartWidget](../../../../sdk-ui/interfaces/interface.ChartWidgetProps.md),
-and [ExecuteQuery](../../../../sdk-ui/interfaces/interface.ExecuteQueryProps.md).
++ Filter explicit queries by query components or query functions
++ Filter or highlight queries used by UI components, such as charts
++ Set the filters of filter components
 
 ## Example
 

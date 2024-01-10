@@ -6,7 +6,7 @@ title: measureGreaterThanOrEqual
 
 > **measureGreaterThanOrEqual**(`measure`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter on all measure values that are greater than or equal to the given value.
+Creates a filter to isolate a measure value greater than or equal to a given number.
 
 ## Parameters
 
@@ -19,4 +19,15 @@ Creates a filter on all measure values that are greater than or equal to the giv
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A filter representing the "greater than or equal to" logic
+A filter instance
+
+## Example
+
+Filter for categories that have an average revenue greater than
+or equal to 50 in the Sample ECommerce data model.
+```ts
+filterFactory.measureGreaterThanOrEqual(
+  measures.average(DM.Commerce.Revenue),
+  50
+)
+```

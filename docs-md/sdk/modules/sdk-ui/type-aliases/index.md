@@ -6,6 +6,8 @@ title: Type Aliases
 
 - [AppConfig](type-alias.AppConfig.md)
 - [AreaSubtype](type-alias.AreaSubtype.md)
+- [AreamapChartType](type-alias.AreamapChartType.md)
+- [AreamapType](type-alias.AreamapType.md)
 - [AxisLabel](type-alias.AxisLabel.md)
 - [BeforeRenderHandler](type-alias.BeforeRenderHandler.md)
 - [BoxWhiskerType](type-alias.BoxWhiskerType.md)
@@ -61,6 +63,7 @@ title: Type Aliases
 - [IndicatorStyleOptions](type-alias.IndicatorStyleOptions.md)
 - [Labels](type-alias.Labels.md)
 - [Legend](type-alias.Legend.md)
+- [LegendPosition](type-alias.LegendPosition.md)
 - [LineSubtype](type-alias.LineSubtype.md)
 - [LineWidth](type-alias.LineWidth.md)
 - [Markers](type-alias.Markers.md)

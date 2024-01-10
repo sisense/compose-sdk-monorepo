@@ -1,15 +1,15 @@
 import { useCallback } from 'react';
 import { delay } from 'lodash';
-import { ScattermapChartLocation } from '../../../chart-data/types';
-import { useSisenseContext } from '../../../sisense-context/sisense-context.js';
+import { ScattermapChartLocation } from '../../../../chart-data/types';
+import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
 import {
   ScattermapChartDataOptionsInternal,
   isMeasureColumn,
-} from '../../../chart-data-options/types.js';
-import { QueryDescription, executeQuery } from '../../../query/execute-query.js';
+} from '../../../../chart-data-options/types.js';
+import { QueryDescription, executeQuery } from '../../../../query/execute-query.js';
 import { DataSource, Filter, filterFactory } from '@sisense/sdk-data';
-import { mergeFilters } from '../../../dashboard-widget/utils.js';
-import { translateCategoryToAttribute } from '../../../chart-data-options/utils.js';
+import { mergeFilters } from '../../../../dashboard-widget/utils.js';
+import { translateCategoryToAttribute } from '../../../../chart-data-options/utils.js';
 import { TooltipShowDetails, createScattermapTooltip } from '../utils/tooltip';
 import { splitLocationName } from '../utils/location';
 

@@ -14,6 +14,7 @@ import {
   TreemapStyleOptions,
   SunburstStyleOptions,
   BoxplotStyleOptions,
+  AreamapStyleOptions,
   ScattermapStyleOptions,
 } from '../../types';
 import { ChartDesignOptions } from '../translations/types';
@@ -33,6 +34,8 @@ import {
   getBoxplotChartDesignOptions,
   getScattermapChartDesignOptions,
 } from './translate-to-highcharts-options';
+import { TranslatableError } from '../../translation/translatable-error';
+import { getAreamapChartDesignOptions } from './translate-to-areamap-options';
 
 export const translateStyleOptionsToDesignOptions = (
   chartType: ChartType,
@@ -93,11 +96,16 @@ export const translateStyleOptionsToDesignOptions = (
     case 'boxplot':
       intermediateDesignOptions = getBoxplotChartDesignOptions(styleOptions as BoxplotStyleOptions);
       break;
+    case 'areamap':
+      intermediateDesignOptions = getAreamapChartDesignOptions(styleOptions as AreamapStyleOptions);
+      break;
     case 'scattermap':
       intermediateDesignOptions = getScattermapChartDesignOptions(
         styleOptions as ScattermapStyleOptions,
       );
       break;
+    default:
+      throw new TranslatableError('errors.chartTypeNotSupported', { chartType });
   }
 
   const subtype =

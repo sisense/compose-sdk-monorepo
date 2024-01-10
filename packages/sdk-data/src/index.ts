@@ -16,13 +16,13 @@ export * from './dimensional-model/factory.js';
 export * from './dimensional-model/filters/filters.js';
 
 /**
- * Functions to create date, text, or numeric filters on certain data columns
+ * Functions to create date, text, or numeric filters on specified data.
  *
- * They are similar to [Dashboard and Widget Filters](https://docs.sisense.com/main/SisenseLinux/build-formulas.htm) in Sisense.
+ * Filters created with these functions can be used to:
  *
- * Filters created with these functions can be used in the data options of UI components such as
- * {@link @sisense/sdk-ui!ChartProps | Chart}, {@link @sisense/sdk-ui!ChartWidgetProps | ChartWidget},
- * and {@link @sisense/sdk-ui!ExecuteQueryProps | ExecuteQuery}.
+ * + Filter explicit queries by query components or query functions
+ * + Filter or highlight queries used by UI components, such as charts
+ * + Set the filters of filter components
  *
  * @example
  * Example of using React hook `useExecuteQuery` to query the `Sample ECommerce` data source.

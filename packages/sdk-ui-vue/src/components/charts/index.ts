@@ -14,3 +14,5 @@ export { ChartWidget } from './chart-widget';
 export { Chart } from './chart';
 export { DashboardWidget } from './dashboard-widget';
 export { TableWidget } from './table-widget';
+export { BoxplotChart } from './boxplot-chart';
+export { AreamapChart } from './areamap-chart';

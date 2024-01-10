@@ -6,16 +6,23 @@ title: thisYear
 
 > **thisYear**(`dimension`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter on "This Year" of the given date dimension.
+Creates a filter to isolate items with a date dimension value in the current calendar year.
 
 ## Parameters
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `dimension` | [`DateDimension`](../../../interfaces/interface.DateDimension.md) | date dimension to filter |
+| `dimension` | [`DateDimension`](../../../interfaces/interface.DateDimension.md) | Date dimension to filter |
 
 ## Returns
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A "This Year" filter of the given dimension
+A filter instance
+
+## Example
+
+Filter for items where the date is in the current calendar year in the Sample ECommerce data model.
+```ts
+filterFactory.thisYear(DM.Commerce.Date)
+```

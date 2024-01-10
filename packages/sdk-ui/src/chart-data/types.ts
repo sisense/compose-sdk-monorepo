@@ -1,6 +1,10 @@
-import { NumberFormatConfig } from '../types';
-import { IndicatorChartType } from '../chart-options-processor/translations/types';
+import { Color, NumberFormatConfig } from '../types';
+import {
+  AreamapChartType,
+  IndicatorChartType,
+} from '../chart-options-processor/translations/types';
 import { ComparableData, Value } from '../chart-data-processor/table-processor';
+import { Coordinates } from '../charts/map-charts/scattermap/types';
 
 export type CategoricalXValues = {
   key: string;
@@ -105,6 +109,7 @@ export type ScattermapChartLocation = {
   colorValue?: number;
   details?: number | string[];
   blur: boolean;
+  coordinates?: Coordinates;
 };
 
 export type ScattermapChartData = {
@@ -123,6 +128,32 @@ export type IndicatorChartData = {
   secondary?: number;
   min?: number;
   max?: number;
+};
+/**
+ * Raw GeoDataElement from data
+ * @internal
+ */
+export type RawGeoDataElement = {
+  geoName: string;
+  originalValue: number;
+  formattedOriginalValue: string;
+};
+
+/**
+ * GeoDataElement with color property, calculated from `originalValue`
+ * @internal
+ */
+export type GeoDataElement = RawGeoDataElement & {
+  color?: Color;
+};
+
+/**
+ * Fact final data that will be passed to Areamap-component to render
+ * @internal
+ */
+export type AreamapData = {
+  type: AreamapChartType;
+  geoData: GeoDataElement[];
 };
 
 /**
@@ -148,4 +179,5 @@ export type ChartData =
   | ScatterChartData
   | IndicatorChartData
   | BoxplotChartData
+  | AreamapData
   | ScattermapChartData;

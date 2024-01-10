@@ -1,0 +1,7 @@
+// remove ugly rectangle outline for selected map elements
+// https://gis.stackexchange.com/questions/447502/prevent-leaflet-map-from-showing-rectangle-around-layer-on-click
+.csdk-map-container {
+  .leaflet-interactive {
+    outline: none;
+  }
+}

@@ -6,7 +6,7 @@ title: today
 
 > **today**(`dimension`): [`Filter`](../../../interfaces/interface.Filter.md)
 
-Creates a filter on "Today" of the given date dimension.
+Creates a filter to isolate items with a date dimension value of the current date.
 
 ## Parameters
 
@@ -18,4 +18,11 @@ Creates a filter on "Today" of the given date dimension.
 
 [`Filter`](../../../interfaces/interface.Filter.md)
 
-A "Today" filter of the given dimension
+A filter instance
+
+## Example
+
+Filter for items where the date is today in the Sample ECommerce data model.
+```ts
+filterFactory.today(DM.Commerce.Date)
+```

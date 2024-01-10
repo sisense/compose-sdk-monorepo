@@ -1,6 +1,7 @@
 import { LineType, StackType } from './translations/translations-to-highcharts';
 import { IndicatorStyleType, PolarType, BoxplotType } from './translations/design-options';
 import { PieType } from './translations/pie-plot-options';
+import { AreamapType } from '../types';
 
 /**
  * Property of {@link LineStyleOptions}
@@ -114,6 +115,8 @@ export type BoxplotSubtype = 'boxplot/full' | 'boxplot/hollow';
 
 export type ScattermapSubtype = 'scattermap';
 
+export type AreamapSubtype = 'areamap/world' | 'areamap/usa';
+
 export type ChartSubtype =
   | LineSubtype
   | AreaSubtype
@@ -124,7 +127,8 @@ export type ChartSubtype =
   | TreemapSubtype
   | SunburstSubtype
   | BoxplotSubtype
-  | ScattermapSubtype;
+  | ScattermapSubtype
+  | AreamapSubtype;
 
 export const chartSubtypeToDesignOptions = Object.freeze<
   Record<
@@ -136,6 +140,7 @@ export const chartSubtypeToDesignOptions = Object.freeze<
       polarType?: PolarType;
       indicatorType?: IndicatorStyleType;
       boxplotType?: BoxplotType;
+      mapType?: AreamapType;
     }
   >
 >({
@@ -166,4 +171,6 @@ export const chartSubtypeToDesignOptions = Object.freeze<
   'boxplot/full': { boxplotType: 'full' },
   'boxplot/hollow': { boxplotType: 'hollow' },
   scattermap: {},
+  'areamap/world': { mapType: 'world' },
+  'areamap/usa': { mapType: 'usa' },
 });

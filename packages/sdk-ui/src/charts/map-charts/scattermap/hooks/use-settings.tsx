@@ -1,4 +1,4 @@
-import { useSisenseContext } from '../../../sisense-context/sisense-context.js';
+import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
 import { useCallback, useEffect, useState } from 'react';
 
 type GeoSettings = {

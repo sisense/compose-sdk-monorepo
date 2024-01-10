@@ -32,7 +32,8 @@ export type WidgetType =
   | 'indicator'
   | TabularWidgetType
   | 'chart/boxplot'
-  | 'map/scatter';
+  | 'map/scatter'
+  | 'map/area';
 
 export type WidgetSubtype =
   | 'area/basic'
@@ -62,7 +63,9 @@ export type WidgetSubtype =
   | 'sunburst'
   | 'boxplot/full'
   | 'boxplot/hollow'
-  | 'map/scatter';
+  | 'map/scatter'
+  | 'areamap/world'
+  | 'areamap/usa';
 
 export enum WidgetDashboardFilterMode {
   FILTER = 'filter',
@@ -415,6 +418,9 @@ export type ScattermapWidgetStyle = {
   };
 };
 
+/** Currently, WidgetStyle for areamap is an empty object */
+export type AreamapWidgetStyle = {};
+
 export type WidgetStyle =
   | CartesianWidgetStyle
   | PolarWidgetStyle
@@ -425,7 +431,8 @@ export type WidgetStyle =
   | TreemapWidgetStyle
   | SunburstWidgetStyle
   | BoxplotWidgetStyle
-  | ScattermapWidgetStyle;
+  | ScattermapWidgetStyle
+  | AreamapWidgetStyle;
 
 export enum FiltersMergeStrategyEnum {
   WIDGET_FIRST = 'widgetFirst',
