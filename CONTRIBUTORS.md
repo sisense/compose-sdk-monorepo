@@ -7,4 +7,5 @@
 * [Ray Luxembourg](https://github.com/RayLuxembourg)
 * [Chris Boston](https://github.com/bostonc)
 * [Oleh Zaichenko](https://github.com/ozadev)
+* [Ivan Biletskyi](https://github.com/ivanbiletskyi)
 *
