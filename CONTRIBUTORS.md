@@ -9,4 +9,5 @@
 * [Oleh Zaichenko](https://github.com/ozadev)
 * [Ivan Biletskyi](https://github.com/ivanbiletskyi)
 * [Steve Lewis](https://github.com/stevelewis99)
+* [Dmytro Zapisochnyi](https://github.com/i-dz)
 *
