@@ -39,23 +39,66 @@ export class SsoAuthenticator implements Authenticator {
   }
 
   async authenticate(): Promise<boolean> {
-    this._authenticating = true;
+    try {
+      this._authenticating = true;
+      return await this.checkAuthentication();
+    } catch (error) {
+      return false;
+    } finally {
+      this._authenticating = false;
+    }
+  }
+
+  /**
+   * Check if the user is authenticated.
+   *
+   * If the user is not authenticated, it will try to authenticate with silent SSO.
+   * If silent SSO fails, it will redirect the user to the login page.
+   *
+   * @param silent
+   * @private
+   */
+  private async checkAuthentication(silent: boolean = true): Promise<boolean> {
     const fetchUrl = `${this.url}${!this.url.endsWith('/') ? '/' : ''}api/auth/isauth`;
-    return fetch(fetchUrl, {
-      headers: { Internal: 'true' },
+    const response = await fetch(fetchUrl, {
+      headers: {Internal: 'true'},
       credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((res: IsAuthResponse) => {
-        this._authenticating = false;
-        if (!res.isAuthenticated) {
-          // SSO is disabled on instance, do not proceed
-          if (!res.ssoEnabled) throw new TranslatableError('errors.ssoNotEnabled');
-          // redirect to login page
-          window.location.href = `${res.loginUrl}?return_to=${window.location.href}`;
-        }
-        // no authentication needed, indicate success
-        return true;
-      });
+    });
+
+    const {isAuthenticated, ssoEnabled, loginUrl}: IsAuthResponse = await response.json();
+
+    if (isAuthenticated) {
+      return true;
+    }
+
+    if (!ssoEnabled || loginUrl === undefined) {
+      throw new TranslatableError('errors.ssoNotEnabled');
+    }
+
+    // try with silent SSO first and check again with silent=false
+    if (silent) {
+      await this.authenticateWithSilentSSO(loginUrl);
+      return this.checkAuthentication(false);
+    }
+
+    // if silent SSO failed, redirect to login page
+    window.location.href = `${loginUrl}?return_to=${window.location.href}`;
+    return false;
+  }
+
+  private async authenticateWithSilentSSO(loginUrl: string): Promise<void> {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    iframe.src = `${loginUrl}?return_to=${window.location.href}`;
+
+    await new Promise((resolve) => {
+      iframe.onload = () => {
+        resolve(true);
+      };
+    });
+
+    document.body.removeChild(iframe);
   }
 }
+
