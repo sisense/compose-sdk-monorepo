@@ -20,4 +20,7 @@ title: Interfaces
 - [Measure](interface.Measure.md)
 - [MeasureColumn](interface.MeasureColumn.md)
 - [MeasureContext](interface.MeasureContext.md)
+- [PivotAttribute](interface.PivotAttribute.md)
+- [PivotMeasure](interface.PivotMeasure.md)
+- [PivotQueryResultData](interface.PivotQueryResultData.md)
 - [QueryResultData](interface.QueryResultData.md)

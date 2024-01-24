@@ -9,6 +9,7 @@ import type {
   GetNlgQueryResultResponse,
   LlmConfig,
   Perspective,
+  QueryRecommendationConfig,
   QueryRecommendationResponse,
 } from './types';
 
@@ -37,9 +38,12 @@ export class ChatRestApi {
   };
 
   private getQueryRecommendations = async (
-    contextId: string,
+    contextTitle: string,
+    config: QueryRecommendationConfig,
   ): Promise<QueryRecommendationResponse> => {
-    return this.httpClient.get(`api/v2/ai/recommendations/query/${contextId}`);
+    return this.httpClient.get(
+      `api/v2/ai/recommendations/query/${contextTitle}/${config.numOfRecommendations}`,
+    );
   };
 
   private setLlmConfig = async (config: LlmConfig) => {

@@ -5,8 +5,6 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * A React component for visualizing geographical data as polygons on a map.
  * See [Areamap Chart](https://docs.sisense.com/main/SisenseLinux/area-map.htm) for more information.
  *
- * This component is still in beta.
- *
  * @example
  * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx
@@ -21,7 +19,6 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *   }}
  * />
  * ```
- *
  * @param props - Areamap chart properties
  * @returns Areamap Chart component
  * @beta

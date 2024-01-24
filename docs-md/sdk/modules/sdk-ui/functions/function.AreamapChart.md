@@ -2,14 +2,12 @@
 title: AreamapChart
 ---
 
-# Function AreamapChart
+# Function AreamapChart <Badge type="beta" text="Beta" />
 
 > **AreamapChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component for visualizing geographical data as polygons on a map.
 See [Areamap Chart](https://docs.sisense.com/main/SisenseLinux/area-map.htm) for more information.
-
-This component is still in beta.
 
 ## Parameters
 

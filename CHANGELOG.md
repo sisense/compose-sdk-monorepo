@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0] - 2024-01-24
+
+### Added
+- Add React hook `useExecutePivotQuery` (alpha) to execute a pivot data query and return the result in both table and tree structures
+- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for internal testing
+
+### Changed
+- Re-export common types of `sdk-ui` from `sdk-ui-angular`
+- Support coordinates via user-provided data for `ScattermapChart`
+- Make improvements to the AI `Chatbot` component including format of chat messages,
+  the question recommendations, and the mapping from NLQ response to chart's axes
+- Improve the SSO flow by checking the redirect completion,
+  skipping the fetch of color palette, and adding null check for the `window` object
+
 ## [1.1.0] - 2024-01-10
 
 ### Added
@@ -284,7 +298,7 @@ _See [migration guide](./guides/migration-guide-1.0.0.md) for more details._
 - Support partial assignment of the `StyleOptions` and `ThemeSettings` properties
 - Fix issues with Web Access Token authentication
 - Bundle `@sisense/sisense-charts`, which is a React wrapper of `highcharts`,
-with `@sisense/sdk-ui`
+  with `@sisense/sdk-ui`
 - Bundle `@sisense/task-manager` with `@sisense/sdk-query-client`
 
 ## [0.3.0] - 2023-07-13

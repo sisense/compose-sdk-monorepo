@@ -2,7 +2,7 @@
 title: logic
 ---
 
-# Namespace logic
+# Namespace logic <Badge type="beta" text="Beta" />
 
 Set of logic operators for filter relation construction
 
@@ -36,5 +36,5 @@ const arrayFilterRelations = filterFactory.logic.or([genderFilter, costFilter], 
 
 ### Functions
 
-- [and](functions/function.and.md)
-- [or](functions/function.or.md)
+- [and](functions/function.and.md) <Badge type="beta" text="Beta" />
+- [or](functions/function.or.md) <Badge type="beta" text="Beta" />

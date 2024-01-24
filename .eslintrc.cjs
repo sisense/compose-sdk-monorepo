@@ -57,6 +57,7 @@ module.exports = {
             complexity: 'warn',
             '@typescript-eslint/no-throw-literal': 'off',
             'no-underscore-dangle': 'off',
+            '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }]
           },
         },
         {

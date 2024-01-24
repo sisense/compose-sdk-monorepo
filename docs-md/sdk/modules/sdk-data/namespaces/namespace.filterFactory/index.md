@@ -40,7 +40,7 @@ greater than 1000.
 
 ### Namespaces
 
-- [logic](namespaces/namespace.logic/index.md)
+- [logic](namespaces/namespace.logic/index.md) <Badge type="beta" text="Beta" />
 
 ### Functions
 

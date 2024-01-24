@@ -1,17 +1,14 @@
 import { MetadataItem } from '@sisense/sdk-query-client';
 import merge from 'ts-deepmerge';
-import {
-  getDataOptionTitle,
-  translateColumnToCategoryOrValue,
-} from '../../chart-data-options/utils';
 import { ChartSubtype } from '../../chart-options-processor/subtype-to-design-options';
 import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
+  ChartDataOptions,
   ChartType,
   ChartStyleOptions,
 } from '../../types';
-import { AxesMapping, ChartRecommendations } from '../api/types';
+import { ChartRecommendations } from '../api/types';
 import { createJaqlElement } from './jaql-element';
 
 export const getTableOptions = (jaql: MetadataItem[]) => {
@@ -28,6 +25,7 @@ const DEFAULT_STYLE_OPTIONS = Object.freeze<ChartStyleOptions>({
     selectedConvolutionType: 'bySlicesCount',
     independentSlicesCount: 7,
   },
+  lineWidth: { width: 'bold' },
   markers: {
     enabled: false,
   },
@@ -45,62 +43,82 @@ const DEFAULT_STYLE_OPTIONS = Object.freeze<ChartStyleOptions>({
 const DEFAULT_SUBTYPE_FOR = Object.freeze<Partial<Record<ChartType, ChartSubtype>>>({
   line: 'line/spline',
   pie: 'pie/donut',
+  bar: 'bar/stacked',
+  column: 'column/stackedcolumn',
 });
 
-const mapToCartesianDataOptions = (
+const mapToDataOptions = (
   metadataItems: MetadataItem[],
-  axesMapping: AxesMapping,
-): CartesianChartDataOptions => {
+  chartRecommendations: ChartRecommendations,
+): ChartDataOptions => {
+  const { axesMapping, chartFamily } = chartRecommendations;
   const metadataItemByTitle = metadataItems.reduce((acc, item) => {
     acc[item.jaql.title!] = item;
     return acc;
   }, {} as Record<string, MetadataItem>);
 
-  return {
-    category:
-      axesMapping.category?.map((item) => createJaqlElement(metadataItemByTitle[item.name])) ?? [],
-    value:
-      axesMapping.value?.map((item) => ({
-        column: createJaqlElement(metadataItemByTitle[item.name]),
-        sortType: 'sortNone',
-      })) ?? [],
-    breakBy:
-      axesMapping.breakBy?.map((item) => createJaqlElement(metadataItemByTitle[item.name])) ?? [],
-  };
-};
+  const intermediateOptions = Object.entries(axesMapping).reduce((acc, item) => {
+    const [key, value] = item;
 
-// TODO: this should be removed once the backend is giving us data in the
-// "category" field instead of "breakBy" for categorical charts.
-const mapToCategoricalDataOptions = (
-  metadataItems: MetadataItem[],
-  axesMapping: AxesMapping,
-): CategoricalChartDataOptions => {
-  const metadataItemByTitle = metadataItems.reduce((acc, item) => {
-    acc[item.jaql.title!] = item;
+    acc[key] = value.map((v) => {
+      const m = metadataItemByTitle[v.name];
+      const column = createJaqlElement(m);
+
+      if (m.panel === 'measures') {
+        return {
+          column,
+          sortType: 'sortNone',
+        };
+      }
+
+      return column;
+    });
+
     return acc;
-  }, {} as Record<string, MetadataItem>);
+  }, {});
 
-  return {
-    category:
-      axesMapping.breakBy?.map((item) => createJaqlElement(metadataItemByTitle[item.name])) ?? [],
-    value:
-      axesMapping.value?.map((item) => ({
-        column: createJaqlElement(metadataItemByTitle[item.name]),
-        sortType: 'sortNone',
-      })) ?? [],
-  };
-};
-
-export const getChartOptions = (jaql: MetadataItem[], chartRecs: ChartRecommendations) => {
-  let dataOptions: CategoricalChartDataOptions | CartesianChartDataOptions;
-  if (chartRecs.chartFamily === 'categorical') {
-    dataOptions = mapToCategoricalDataOptions(jaql, chartRecs.axesMapping);
-  } else {
-    dataOptions = mapToCartesianDataOptions(jaql, chartRecs.axesMapping);
+  if (chartFamily === 'cartesian') {
+    return {
+      category: [],
+      value: [],
+      breakBy: [],
+      ...intermediateOptions,
+    } as CartesianChartDataOptions;
+  } else if (chartFamily === 'categorical') {
+    return {
+      category: [],
+      value: [],
+      ...intermediateOptions,
+    } as CategoricalChartDataOptions;
+  } else if (chartFamily === 'scatter') {
+    Object.keys(intermediateOptions).forEach((key) => {
+      intermediateOptions[key] = intermediateOptions[key][0];
+    });
   }
 
+  return intermediateOptions;
+};
+
+const getAxisTitle = (chartRecommendations: ChartRecommendations, axis: 'x' | 'y') => {
+  if (axis === 'x') {
+    return (chartRecommendations.axesMapping.category ?? chartRecommendations.axesMapping.x)
+      ?.map((item) => item.name)
+      .join(', ');
+  }
+
+  return (chartRecommendations.axesMapping.value ?? chartRecommendations.axesMapping.y)
+    ?.map((item) => item.name)
+    .join(', ');
+};
+
+export const getChartOptions = (
+  jaql: MetadataItem[],
+  chartRecommendations: ChartRecommendations,
+) => {
+  const dataOptions = mapToDataOptions(jaql, chartRecommendations);
+
   const chartStyleOptions = merge(DEFAULT_STYLE_OPTIONS, {
-    subtype: DEFAULT_SUBTYPE_FOR[chartRecs.chartType],
+    subtype: DEFAULT_SUBTYPE_FOR[chartRecommendations.chartType],
   }) as ChartStyleOptions;
   const expandedChartStyleOptions = merge(chartStyleOptions, {
     legend: {
@@ -110,13 +128,13 @@ export const getChartOptions = (jaql: MetadataItem[], chartRecs: ChartRecommenda
     yAxis: {
       title: {
         enabled: true,
-        text: getDataOptionTitle(translateColumnToCategoryOrValue(dataOptions.value[0] ?? {})),
+        text: getAxisTitle(chartRecommendations, 'y'),
       },
     },
     xAxis: {
       title: {
         enabled: true,
-        text: getDataOptionTitle(translateColumnToCategoryOrValue(dataOptions.category[0] ?? {})),
+        text: getAxisTitle(chartRecommendations, 'x'),
       },
     },
   }) as ChartStyleOptions;

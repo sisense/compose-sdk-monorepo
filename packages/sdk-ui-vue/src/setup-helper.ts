@@ -1,6 +1,6 @@
-import { h, ref, toRaw, type FunctionalComponent, isReactive } from 'vue';
+import { h, ref, toRaw, type FunctionalComponent, isReactive, type Slots } from 'vue';
 import { createSisenseContextConnector, createThemeContextConnector } from './providers';
-import { ComponentAdapter, createElement } from '@sisense/sdk-ui-preact';
+import { ComponentAdapter, createElement, createWrapperElement } from '@sisense/sdk-ui-preact';
 
 export function isObject(value: unknown): boolean {
   return value !== null && !Array.isArray(value) && typeof value === 'object';
@@ -26,11 +26,14 @@ export function toDeepRaw<T>(data: T): T {
   return rawData; // much better: structuredClone(rawData)
 }
 
+/**
+ * @internal
+ * @description This is a helper function to render a component without children.
+ */
 export const setupHelper = <P, C>(component: C, props: P) => {
   if (!props) return null;
   const refElement = ref<HTMLDivElement | null>(null);
   const rawProps = toDeepRaw<P>(props);
-
   const createPreactComponent = () => {
     return createElement(component as FunctionalComponent, rawProps as P);
   };
@@ -44,5 +47,38 @@ export const setupHelper = <P, C>(component: C, props: P) => {
       componentAdapter.render(refElement.value);
     }
     return h('div', { ref: refElement });
+  };
+};
+
+/**
+ * @internal
+ * @description This is a helper function to render a component with children.
+ */
+export const setupHelperWithChildren = <P, C>(
+  component: C,
+  props: P,
+  slots: Slots,
+  contexts?: [],
+) => {
+  const rawProps = toDeepRaw(props) as P;
+  const contextMenuRef = ref<HTMLDivElement>();
+  const contextMenuChildrenRef = ref<HTMLDivElement>();
+
+  return () => {
+    if (contextMenuRef.value && contextMenuChildrenRef.value) {
+      const children = createWrapperElement(contextMenuChildrenRef.value);
+      const componentAdapter = new ComponentAdapter(
+        () => {
+          return createElement(component as FunctionalComponent, rawProps, children);
+        },
+        contexts ? contexts : [createSisenseContextConnector(), createThemeContextConnector()],
+      );
+
+      componentAdapter.render(contextMenuRef.value);
+    }
+    return [
+      h('div', { ref: contextMenuRef }),
+      h('div', { ref: contextMenuChildrenRef }, slots.default ? slots.default() : []),
+    ];
   };
 };

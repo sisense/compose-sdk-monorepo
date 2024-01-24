@@ -4,6 +4,10 @@ import {
   Filter,
   FilterRelation,
   Measure,
+  PivotAttribute,
+  PivotGrandTotals,
+  PivotMeasure,
+  PivotQueryResultData,
   QueryResultData,
 } from '@sisense/sdk-data';
 import { DataLoadAction } from '../common/hooks/data-load-state-reducer';
@@ -228,4 +232,156 @@ export type ExecuteCSVQueryConfig = {
  */
 export interface ExecuteCsvQueryParams extends ExecuteQueryParams {
   config?: ExecuteCSVQueryConfig;
+}
+
+/**
+ * State of a pivot query execution.
+ */
+export type PivotQueryState =
+  | PivotQueryLoadingState
+  | PivotQueryErrorState
+  | PivotQuerySuccessState;
+
+/**
+ * State of a query execution that is loading.
+ */
+export type PivotQueryLoadingState = {
+  /** Whether the query is loading */
+  isLoading: true;
+  /** Whether the query has failed */
+  isError: false;
+  /** Whether the query has succeeded */
+  isSuccess: false;
+  /** The error if any occurred */
+  error: undefined;
+  /** The result data if the query has succeeded */
+  data: PivotQueryResultData | undefined;
+  /** The status of the query execution */
+  status: 'loading';
+};
+
+/**
+ * State of a query execution that has failed.
+ */
+export type PivotQueryErrorState = {
+  /** Whether the query is loading */
+  isLoading: false;
+  /** Whether the query has failed */
+  isError: true;
+  /** Whether the query has succeeded */
+  isSuccess: false;
+  /** The error if any occurred */
+  error: Error;
+  /** The result data if the query has succeeded */
+  data: undefined;
+  /** The status of the query execution */
+  status: 'error';
+};
+
+/**
+ * State of a query execution that has succeeded.
+ */
+export type PivotQuerySuccessState = {
+  /** Whether the query is loading */
+  isLoading: false;
+  /** Whether the query has failed */
+  isError: false;
+  /** Whether the query has succeeded */
+  isSuccess: true;
+  /** The error if any occurred */
+  error: undefined;
+  /** The result data if the query has succeeded */
+  data: PivotQueryResultData;
+  /** The status of the query execution */
+  status: 'success';
+};
+
+export type PivotQueryAction = DataLoadAction<PivotQueryResultData>;
+
+/**
+ * Parameters for {@link useExecutePivotQuery} hook.
+ */
+export interface ExecutePivotQueryParams {
+  /**
+   * Data source the query is run against - e.g. `Sample ECommerce`
+   *
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
+   *
+   * @category Data Options
+   */
+  dataSource?: DataSource;
+
+  /**
+   * Dimensions for the rows of the pivot table
+   *
+   * @category Data Options
+   */
+  rows?: (Attribute | PivotAttribute)[];
+
+  /**
+   * Dimensions for the columns of the pivot table
+   *
+   * @category Data Options
+   */
+  columns?: (Attribute | PivotAttribute)[];
+
+  /**
+   * Measures for the values of the pivot table
+   *
+   * @category Data Options
+   */
+  values?: (Measure | PivotMeasure)[];
+
+  /**
+   * Options for grand totals
+   *
+   * @category Data Options
+   */
+  grandTotals?: PivotGrandTotals;
+
+  /**
+   * Filters that will slice query results
+   *
+   * @category Filtering
+   */
+  filters?: Filter[] | FilterRelation;
+
+  /**
+   * Highlight filters that will highlight results that pass filter criteria
+   *
+   * @category Filtering
+   */
+  highlights?: Filter[];
+
+  /**
+   * {@inheritDoc ExecuteQueryProps.count}
+   *
+   * @category Pagination
+   *
+   * [To be reviewed for pivot table]
+   * @internal
+   */
+  count?: number;
+
+  /**
+   * {@inheritDoc ExecuteQueryProps.offset}
+   *
+   * @category Pagination
+   *
+   * [To be reviewed for pivot table]
+   * @internal
+   */
+  offset?: number;
+
+  /**
+   * Boolean flag to control if query is executed
+   *
+   * If not specified, the default value is `true`
+   *
+   * @category Control
+   */
+  enabled?: boolean;
+
+  /** {@inheritDoc ExecuteQueryProps.onBeforeQuery} */
+  onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }

@@ -2,15 +2,13 @@
 title: BoxplotChart
 ---
 
-# Function BoxplotChart
+# Function BoxplotChart <Badge type="beta" text="Beta" />
 
 > **BoxplotChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component representing data in a way that visually describes the distribution, variability,
 and center of a data set along an axis.
 See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-plot.htm) for more information.
-
-This component is still in beta.
 
 ## Parameters
 

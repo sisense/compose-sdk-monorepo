@@ -1,4 +1,5 @@
 import { MetadataItem } from '@sisense/sdk-query-client';
+import { ChartDataOptions } from '../../types';
 
 export interface ChatContext {
   id: string;
@@ -63,11 +64,18 @@ interface TextResponse {
   responseType: 'Text';
 }
 
-export interface AxesMapping {
-  category?: { name: string; type: string }[];
-  value?: { name: string; type: string }[];
-  breakBy?: { name: string; type: string }[];
-}
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+type AllPossibleChartOptionKeys = KeysOfUnion<ChartDataOptions>;
+type AxesMappingKey = Exclude<AllPossibleChartOptionKeys, 'seriesToColorMap'>;
+export type AxesMapping = Partial<
+  Record<
+    AxesMappingKey,
+    Array<{
+      name: string;
+      type: string;
+    }>
+  >
+>;
 
 export interface ChartRecommendations {
   chartFamily: string;
@@ -94,16 +102,23 @@ export interface NlqResponse {
 }
 export type ChatResponse = NlqResponse | TextResponse;
 
+export interface QueryRecommendationConfig {
+  numOfRecommendations: number;
+}
+
 export interface QueryRecommendation {
-  query: string;
-  jaql: object;
-}
-export interface QueryRecommendationResponse {
-  data: {
-    answer: QueryRecommendation[];
+  nlqPrompt: string;
+  chartRecommendations: ChartRecommendations;
+  jaql: {
+    datasource?: {
+      title: string;
+    };
+    metadata: MetadataItem[];
   };
-  responseType: 'Array';
+  queryTitle: string;
+  detailedDescription: string;
 }
+export type QueryRecommendationResponse = QueryRecommendation[];
 
 export interface DataModel {
   oid: string;

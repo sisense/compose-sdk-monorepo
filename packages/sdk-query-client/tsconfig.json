@@ -8,5 +8,5 @@
     "outDir": "./dist"
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
-  "references": [{ "path": "../sdk-data" }]
+  "references": [{ "path": "../sdk-data" }, { "path": "../sdk-pivot-client" }]
 }

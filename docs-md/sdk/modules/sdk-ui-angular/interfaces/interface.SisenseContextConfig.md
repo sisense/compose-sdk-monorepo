@@ -43,7 +43,7 @@ This is used only when neither username, password, and token is specified.
 
 #### appConfig
 
-> **appConfig**?: [`AppConfig`](../../sdk-ui/type-aliases/type-alias.AppConfig.md)
+> **appConfig**?: [`AppConfig`](../type-aliases/type-alias.AppConfig.md)
 
 Application specific configurations such as locale and date formats.
 

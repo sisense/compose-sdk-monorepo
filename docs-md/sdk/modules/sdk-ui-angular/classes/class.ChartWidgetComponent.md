@@ -61,7 +61,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### chartType
 
-> **chartType**: [`ChartType`](../../sdk-ui/type-aliases/type-alias.ChartType.md)
+> **chartType**: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 Default chart type of each series
 
@@ -69,7 +69,7 @@ Default chart type of each series
 
 #### dataOptions
 
-> **dataOptions**: [`ChartDataOptions`](../../sdk-ui/type-aliases/type-alias.ChartDataOptions.md)
+> **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -97,7 +97,7 @@ If not specified, the default value is `false`
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`ChartWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartWidgetStyleOptions.md)
+> **styleOptions**: `undefined` \| [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md)
 
 Style options for both the chart and widget including the widget header
 
@@ -113,7 +113,7 @@ Title of the widget
 
 #### beforeRender
 
-> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render

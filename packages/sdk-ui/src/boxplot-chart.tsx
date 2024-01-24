@@ -6,8 +6,6 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * and center of a data set along an axis.
  * See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-plot.htm) for more information.
  *
- * This component is still in beta.
- *
  * @example
  * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx

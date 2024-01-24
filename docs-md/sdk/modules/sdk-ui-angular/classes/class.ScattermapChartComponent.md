@@ -62,7 +62,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### dataOptions
 
-> **dataOptions**: [`ScattermapChartDataOptions`](../../sdk-ui/interfaces/interface.ScattermapChartDataOptions.md)
+> **dataOptions**: [`ScattermapChartDataOptions`](../interfaces/interface.ScattermapChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -70,6 +70,6 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`ScattermapStyleOptions`](../../sdk-ui/interfaces/interface.ScattermapStyleOptions.md)
+> **styleOptions**: `undefined` \| [`ScattermapStyleOptions`](../interfaces/interface.ScattermapStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements

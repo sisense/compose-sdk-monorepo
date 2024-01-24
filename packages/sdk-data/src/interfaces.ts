@@ -161,6 +161,140 @@ export interface QueryResultData {
 }
 
 /**
+ * Tree node representing data in a pivot table
+ */
+export type TreeNode = {
+  /**
+   * Raw data
+   */
+  value?: string;
+  /**
+   * Raw data
+   *
+   * @internal
+   */
+  content?: string;
+  // style object
+  // style?: InputStyles;
+  /**
+   * Matched index for condition formatting
+   *
+   * @internal
+   */
+  cf?: number;
+  /**
+   * List of children of this node
+   */
+  children?: Array<TreeNode>;
+  /**
+   * Data list for rows nodes
+   */
+  data?: Array<any>;
+  /**
+   * Index in data list for columns nodes
+   */
+  index?: number;
+  /**
+   * Current node's index divergence
+   *
+   * @internal
+   */
+  indexDivergence?: number;
+  /**
+   * Initial child count in raw data from server
+   *
+   * @internal
+   */
+  size?: number;
+  /**
+   * Boolean flag if node is some part of real node
+   *
+   * @internal
+   */
+  isPart?: boolean;
+  /**
+   * Max number of children (measures) nodes to insert
+   *
+   * @internal
+   */
+  maxChilds?: number;
+  /**
+   * Node deep level
+   *
+   * @internal
+   */
+  level?: number;
+  /**
+   * Node min deep level, for columns nodes with values at the and
+   *
+   * @internal
+   */
+  minLevel?: number;
+
+  /**
+   * Internal cache, to make sure that node was already mapped
+   *
+   * @internal
+   */
+  isMapped?: boolean;
+
+  /**
+   * Internal cache, for child count
+   *
+   * @internal
+   */
+  childCount?: number;
+  /**
+   * Internal cache, for child deep
+   *
+   * @internal
+   */
+  childDeep?: number;
+  /**
+   * Internal data store
+   *
+   * @internal
+   */
+  store?: { [key: string]: any };
+};
+
+/**
+ * Grid of tree nodes
+ */
+export type PivotGrid = Array<Array<TreeNode | string>>;
+/**
+ * Pivot query result data set, which includes both a flat table of {@link QueryResultData} and grids of tree structures.
+ */
+export interface PivotQueryResultData {
+  /**
+   * Flat table structure
+   *
+   * @category Table
+   */
+  table: QueryResultData;
+  /**
+   * Grids of tree structures
+   *
+   * @category Tree Structures
+   */
+  grids?: {
+    corner: PivotGrid;
+    rows: PivotGrid;
+    columns: PivotGrid;
+    values: PivotGrid;
+  };
+}
+
+/**
+ * Empty pivot query result data set
+ *
+ * @internal
+ */
+export const EMPTY_PIVOT_QUERY_RESULT_DATA: PivotQueryResultData = {
+  table: { columns: [], rows: [] },
+};
+
+/**
  * Runs type guard check for DataSource.
  *
  * @param arg

@@ -79,9 +79,15 @@ export const useLocations = (
   useEffect(() => {
     if (locations) {
       currentLocations.current = locations;
-      getLocations();
+      const isAlreadyHaveCoordinates = locations.some((location) => !!location.coordinates);
+
+      if (isAlreadyHaveCoordinates) {
+        setLocationsWithCoordinates(locations);
+      } else {
+        getLocations();
+      }
     }
-  }, [locations, app, getLocations]);
+  }, [locations, app, getLocations, setLocationsWithCoordinates]);
 
   return locationsWithCoordinates;
 };

@@ -5,9 +5,9 @@ title: Functions
 # Functions
 
 - [AreaChart](function.AreaChart.md)
-- [AreamapChart](function.AreamapChart.md)
+- [AreamapChart](function.AreamapChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](function.BarChart.md)
-- [BoxplotChart](function.BoxplotChart.md)
+- [BoxplotChart](function.BoxplotChart.md) <Badge type="beta" text="Beta" />
 - [Chart](function.Chart.md)
 - [ChartWidget](function.ChartWidget.md)
 - [ColumnChart](function.ColumnChart.md)
@@ -27,7 +27,7 @@ title: Functions
 - [PolarChart](function.PolarChart.md)
 - [RelativeDateFilterTile](function.RelativeDateFilterTile.md)
 - [ScatterChart](function.ScatterChart.md)
-- [ScattermapChart](function.ScattermapChart.md)
+- [ScattermapChart](function.ScattermapChart.md) <Badge type="beta" text="Beta" />
 - [SisenseContextProvider](function.SisenseContextProvider.md)
 - [SunburstChart](function.SunburstChart.md)
 - [Table](function.Table.md)
@@ -35,6 +35,7 @@ title: Functions
 - [TreemapChart](function.TreemapChart.md)
 - [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md)
 - [useExecuteCsvQuery](function.useExecuteCsvQuery.md)
+- [useExecutePivotQuery](function.useExecutePivotQuery.md) <Badge type="alpha" text="Alpha" />
 - [useExecuteQuery](function.useExecuteQuery.md)
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md)
 - [useGetDashboardModel](function.useGetDashboardModel.md)

@@ -1,23 +1,31 @@
 /* eslint-disable complexity */
+/* eslint-disable max-lines */
 /* eslint-disable sonarjs/cognitive-complexity */
 import {
   DataSourceField,
   ExecutingCsvQueryResult,
+  ExecutingPivotQueryResult,
   ExecutingQueryResult,
+  PivotQueryDescription,
   QueryDescription,
   QueryExecutionConfig,
 } from './types.js';
 import { QueryClient } from './interfaces.js';
 import { QueryTaskManager } from './query-task-manager/query-task-manager.js';
-import { QueryTaskPassport } from './query-task-manager/query-task-passport.js';
+import {
+  PivotQueryTaskPassport,
+  QueryTaskPassport,
+} from './query-task-manager/query-task-passport.js';
 import { ExecutionResultStatus } from '@sisense/task-manager';
 import { QueryApiDispatcher } from './query-api-dispatcher/query-api-dispatcher.js';
 import { DataSource, MetadataTypes } from '@sisense/sdk-data';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { TranslatableError } from './translation/translatable-error.js';
+import { PivotClient } from '@sisense/sdk-pivot-client';
 
 /** @internal */
 export const QUERY_DEFAULT_LIMIT = 20000;
+const UNSPECIFIED_REASON = 'Unspecified reason';
 
 export class DimensionalQueryClient implements QueryClient {
   private taskManager: QueryTaskManager;
@@ -26,11 +34,16 @@ export class DimensionalQueryClient implements QueryClient {
 
   private shouldSkipHighlightsWithoutAttributes: boolean;
 
-  constructor(httpClient: HttpClient, shouldSkipHighlightsWithoutAttributes?: boolean) {
+  constructor(
+    httpClient: HttpClient,
+    pivotClient: PivotClient = new PivotClient(httpClient),
+    shouldSkipHighlightsWithoutAttributes?: boolean,
+  ) {
     validateHttpClient(httpClient);
 
     this.queryApi = new QueryApiDispatcher(httpClient);
-    this.taskManager = new QueryTaskManager(this.queryApi);
+
+    this.taskManager = new QueryTaskManager(this.queryApi, pivotClient);
     this.shouldSkipHighlightsWithoutAttributes = shouldSkipHighlightsWithoutAttributes ?? false;
   }
 
@@ -38,6 +51,7 @@ export class DimensionalQueryClient implements QueryClient {
    * Executes query
    *
    * @param queryDescription - all options that describe query
+   * @param config - query execution configuration
    * @returns promise that resolves to query result data and cancel function that can be used to cancel sent query
    * @throws Error if query description is invalid
    */
@@ -62,7 +76,7 @@ export class DimensionalQueryClient implements QueryClient {
         });
       }),
       cancel: (reason?: string) =>
-        this.taskManager.cancel(taskPassport.taskId, reason || 'Unspecified reason'),
+        this.taskManager.cancel(taskPassport.taskId, reason || UNSPECIFIED_REASON),
     };
   }
 
@@ -87,7 +101,40 @@ export class DimensionalQueryClient implements QueryClient {
         });
       }),
       cancel: (reason?: string) =>
-        this.taskManager.cancel(taskPassport.taskId, reason || 'Unspecified reason'),
+        this.taskManager.cancel(taskPassport.taskId, reason || UNSPECIFIED_REASON),
+    };
+  }
+
+  /**
+   * Executes pivot query
+   *
+   * @param pivotQueryDescription - all options that describe the pivot query
+   * @param config - query execution configuration
+   * @returns promise that resolves to pivot query result data and cancel function that can be used to cancel sent query
+   * @throws Error if query description is invalid
+   */
+  public executePivotQuery(
+    pivotQueryDescription: PivotQueryDescription,
+    config?: QueryExecutionConfig,
+  ): ExecutingPivotQueryResult {
+    validatePivotQueryDescription(pivotQueryDescription);
+
+    const taskPassport = new PivotQueryTaskPassport('SEND_JAQL_QUERY', pivotQueryDescription, {
+      ...(config ? config : {}),
+      shouldSkipHighlightsWithoutAttributes: this.shouldSkipHighlightsWithoutAttributes || false,
+    });
+    return {
+      resultPromise: new Promise((resolve, reject) => {
+        void this.taskManager.executePivotQuerySending(taskPassport).then((executionResult) => {
+          if (executionResult.status === ExecutionResultStatus.SUCCESS) {
+            resolve(executionResult.result!);
+          } else {
+            reject(executionResult.error);
+          }
+        });
+      }),
+      cancel: (reason?: string) =>
+        this.taskManager.cancel(taskPassport.taskId, reason || UNSPECIFIED_REASON),
     };
   }
 
@@ -104,6 +151,7 @@ export class DimensionalQueryClient implements QueryClient {
  * Validates query description
  *
  * @param queryDescription - query description to validate
+ * @param config - query execution configuration
  * @throws Error if query description is invalid
  */
 export function validateQueryDescription(
@@ -142,6 +190,48 @@ export function validateQueryDescription(
       throw new TranslatableError('errors.invalidMeasure', { measureName: measure.name });
     }
   });
+
+  filters.forEach((filter) => {
+    if (!filter.skipValidation && !MetadataTypes.isFilter(filter)) {
+      throw new TranslatableError('errors.invalidFilter', { filterName: filter.name });
+    }
+  });
+
+  highlights.forEach((highlight) => {
+    if (!highlight.skipValidation && !MetadataTypes.isFilter(highlight)) {
+      throw new TranslatableError('errors.invalidHighlight', { highlightName: highlight.name });
+    }
+  });
+}
+
+/**
+ * Validates pivot query description
+ *
+ * @param queryDescription - pivot query description to validate
+ * @throws Error if query description is invalid
+ */
+export function validatePivotQueryDescription(queryDescription: PivotQueryDescription): void {
+  const { rowsAttributes, columnsAttributes, measures, filters, highlights, count, offset } =
+    queryDescription;
+
+  if (count && count < 0) {
+    throw new TranslatableError('errors.invalidCountNegative', { count: count.toString() });
+  }
+
+  if (count && count > QUERY_DEFAULT_LIMIT) {
+    throw new TranslatableError('errors.invalidCountLimit', {
+      count: count.toString(),
+      limit: QUERY_DEFAULT_LIMIT.toString(),
+    });
+  }
+
+  if (offset && offset < 0) {
+    throw new TranslatableError('errors.invalidOffset', { offset: offset.toString() });
+  }
+
+  if (rowsAttributes.length + columnsAttributes.length + measures.length === 0) {
+    throw new TranslatableError('errors.noDimensionsOrMeasures');
+  }
 
   filters.forEach((filter) => {
     if (!filter.skipValidation && !MetadataTypes.isFilter(filter)) {

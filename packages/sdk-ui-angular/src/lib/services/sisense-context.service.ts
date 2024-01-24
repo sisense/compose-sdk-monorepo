@@ -53,6 +53,7 @@ export class SisenseContextService {
     };
   }
 
+  /** @internal */
   getApp(): Promise<ClientApplication> {
     return this.appPromise;
   }

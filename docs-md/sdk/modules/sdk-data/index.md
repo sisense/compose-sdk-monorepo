@@ -34,6 +34,9 @@ title: sdk-data
 - [Measure](interfaces/interface.Measure.md)
 - [MeasureColumn](interfaces/interface.MeasureColumn.md)
 - [MeasureContext](interfaces/interface.MeasureContext.md)
+- [PivotAttribute](interfaces/interface.PivotAttribute.md)
+- [PivotMeasure](interfaces/interface.PivotMeasure.md)
+- [PivotQueryResultData](interfaces/interface.PivotQueryResultData.md)
 - [QueryResultData](interfaces/interface.QueryResultData.md)
 
 ## Type Aliases
@@ -53,6 +56,10 @@ title: sdk-data
 - [IncludeAllFilter](type-aliases/type-alias.IncludeAllFilter.md)
 - [IncludeMembersFilter](type-aliases/type-alias.IncludeMembersFilter.md)
 - [Jaql](type-aliases/type-alias.Jaql.md)
+- [PivotGrandTotals](type-aliases/type-alias.PivotGrandTotals.md)
+- [PivotGrid](type-aliases/type-alias.PivotGrid.md)
+- [TotalsCalculation](type-aliases/type-alias.TotalsCalculation.md)
+- [TreeNode](type-aliases/type-alias.TreeNode.md)
 - [TrendFormulaOptions](type-aliases/type-alias.TrendFormulaOptions.md)
 - [TurnOffMembersFilter](type-aliases/type-alias.TurnOffMembersFilter.md)
 

@@ -47,15 +47,17 @@ export class SsoAuthenticator implements Authenticator {
     })
       .then((res) => res.json())
       .then((res: IsAuthResponse) => {
-        this._authenticating = false;
         if (!res.isAuthenticated) {
           // SSO is disabled on instance, do not proceed
           if (!res.ssoEnabled) throw new TranslatableError('errors.ssoNotEnabled');
           // redirect to login page
-          window.location.href = `${res.loginUrl}?return_to=${window.location.href}`;
+          window?.location?.assign(`${res.loginUrl}?return_to=${window.location.href}`);
+          return false;
+        } else {
+          // no authentication needed, indicate success
+          this._authenticating = false;
+          return true;
         }
-        // no authentication needed, indicate success
-        return true;
       });
   }
 }

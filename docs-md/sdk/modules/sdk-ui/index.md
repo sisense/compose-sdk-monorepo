@@ -32,6 +32,7 @@ title: sdk-ui
 - [DrilldownBreadcrumbsProps](interfaces/interface.DrilldownBreadcrumbsProps.md)
 - [DrilldownWidgetProps](interfaces/interface.DrilldownWidgetProps.md)
 - [ExecuteCsvQueryParams](interfaces/interface.ExecuteCsvQueryParams.md)
+- [ExecutePivotQueryParams](interfaces/interface.ExecutePivotQueryParams.md)
 - [ExecuteQueryByWidgetIdParams](interfaces/interface.ExecuteQueryByWidgetIdParams.md)
 - [ExecuteQueryByWidgetIdProps](interfaces/interface.ExecuteQueryByWidgetIdProps.md)
 - [ExecuteQueryParams](interfaces/interface.ExecuteQueryParams.md)
@@ -152,6 +153,10 @@ title: sdk-ui
 - [Navigator](type-aliases/type-alias.Navigator.md)
 - [NumberFormatConfig](type-aliases/type-alias.NumberFormatConfig.md)
 - [PieSubtype](type-aliases/type-alias.PieSubtype.md)
+- [PivotQueryErrorState](type-aliases/type-alias.PivotQueryErrorState.md)
+- [PivotQueryLoadingState](type-aliases/type-alias.PivotQueryLoadingState.md)
+- [PivotQueryState](type-aliases/type-alias.PivotQueryState.md)
+- [PivotQuerySuccessState](type-aliases/type-alias.PivotQuerySuccessState.md)
 - [PolarSubtype](type-aliases/type-alias.PolarSubtype.md)
 - [QueryByWidgetIdState](type-aliases/type-alias.QueryByWidgetIdState.md)
 - [QueryErrorState](type-aliases/type-alias.QueryErrorState.md)
@@ -173,7 +178,7 @@ title: sdk-ui
 - [SharedFormulaLoadingState](type-aliases/type-alias.SharedFormulaLoadingState.md)
 - [SharedFormulaState](type-aliases/type-alias.SharedFormulaState.md)
 - [SharedFormulaSuccessState](type-aliases/type-alias.SharedFormulaSuccessState.md)
-- [SortDirection](type-aliases/type-alias.SortDirection-1.md)
+- [SortDirection](type-aliases/type-alias.SortDirection.md)
 - [StackableSubtype](type-aliases/type-alias.StackableSubtype.md)
 - [TableType](type-aliases/type-alias.TableType.md)
 - [TabularWidgetType](type-aliases/type-alias.TabularWidgetType.md)
@@ -192,9 +197,9 @@ title: sdk-ui
 ## Functions
 
 - [AreaChart](functions/function.AreaChart.md)
-- [AreamapChart](functions/function.AreamapChart.md)
+- [AreamapChart](functions/function.AreamapChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](functions/function.BarChart.md)
-- [BoxplotChart](functions/function.BoxplotChart.md)
+- [BoxplotChart](functions/function.BoxplotChart.md) <Badge type="beta" text="Beta" />
 - [Chart](functions/function.Chart.md)
 - [ChartWidget](functions/function.ChartWidget.md)
 - [ColumnChart](functions/function.ColumnChart.md)
@@ -214,7 +219,7 @@ title: sdk-ui
 - [PolarChart](functions/function.PolarChart.md)
 - [RelativeDateFilterTile](functions/function.RelativeDateFilterTile.md)
 - [ScatterChart](functions/function.ScatterChart.md)
-- [ScattermapChart](functions/function.ScattermapChart.md)
+- [ScattermapChart](functions/function.ScattermapChart.md) <Badge type="beta" text="Beta" />
 - [SisenseContextProvider](functions/function.SisenseContextProvider.md)
 - [SunburstChart](functions/function.SunburstChart.md)
 - [Table](functions/function.Table.md)
@@ -222,6 +227,7 @@ title: sdk-ui
 - [TreemapChart](functions/function.TreemapChart.md)
 - [boxWhiskerProcessResult](functions/function.boxWhiskerProcessResult.md)
 - [useExecuteCsvQuery](functions/function.useExecuteCsvQuery.md)
+- [useExecutePivotQuery](functions/function.useExecutePivotQuery.md) <Badge type="alpha" text="Alpha" />
 - [useExecuteQuery](functions/function.useExecuteQuery.md)
 - [useExecuteQueryByWidgetId](functions/function.useExecuteQueryByWidgetId.md)
 - [useGetDashboardModel](functions/function.useGetDashboardModel.md)

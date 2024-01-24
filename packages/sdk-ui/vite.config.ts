@@ -49,4 +49,9 @@ export default defineConfig(({ mode }) => ({
       external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
 }));

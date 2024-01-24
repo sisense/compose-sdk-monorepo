@@ -32,3 +32,4 @@ title: Classes
 - [TableComponent](class.TableComponent.md)
 - [ThemeService](class.ThemeService.md)
 - [TreemapChartComponent](class.TreemapChartComponent.md)
+- [WidgetModel](class.WidgetModel.md)

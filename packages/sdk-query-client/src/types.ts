@@ -6,6 +6,10 @@ import {
   QueryResultData,
   DataSource,
   FilterRelation,
+  PivotAttribute,
+  PivotMeasure,
+  PivotQueryResultData,
+  PivotGrandTotals,
 } from '@sisense/sdk-data';
 
 /**
@@ -15,6 +19,22 @@ export type QueryDescription = {
   dataSource: DataSource;
   attributes: Attribute[];
   measures: Measure[];
+  filters: Filter[];
+  highlights: Filter[];
+  filterRelations?: FilterRelation;
+  count?: number;
+  offset?: number;
+};
+
+/**
+ * All the properties that fully describe a pivot query you want to send.
+ */
+export type PivotQueryDescription = {
+  dataSource: DataSource;
+  rowsAttributes: (Attribute | PivotAttribute)[];
+  columnsAttributes: (Attribute | PivotAttribute)[];
+  measures: (Measure | PivotMeasure)[];
+  grandTotals: PivotGrandTotals;
   filters: Filter[];
   highlights: Filter[];
   filterRelations?: FilterRelation;
@@ -41,6 +61,17 @@ export type QueryOptions = {
   datasource: string;
   by: string;
   queryGuid: string;
+
+  /* PIVOT OPTIONS START */
+  dashboard?: string;
+  widget?: string;
+  format?: string;
+  grandTotals?: {
+    title?: string;
+    columns?: boolean;
+    rows?: boolean;
+  };
+  /* PIVOT OPTIONS END */
 };
 
 export type ExecutingQueryResult = {
@@ -50,6 +81,11 @@ export type ExecutingQueryResult = {
 
 export type ExecutingCsvQueryResult = {
   resultPromise: Promise<Blob>;
+  cancel: (reason?: string) => Promise<void>;
+};
+
+export type ExecutingPivotQueryResult = {
+  resultPromise: Promise<PivotQueryResultData>;
   cancel: (reason?: string) => Promise<void>;
 };
 
@@ -64,7 +100,25 @@ export type MetadataItem = {
       [level: string]: string | undefined;
     };
     number?: string;
+    /* PIVOT OPTIONS START */
+    subtotal?: boolean;
+    width?: number;
+    databars?: boolean;
+    color?: {
+      type: string;
+      color?: string;
+      conditions?: Array<{
+        color: string;
+        operator: string;
+        expression: string | Record<string, any>;
+      }>;
+    };
   };
+  field?: {
+    id?: string;
+    index?: number;
+  };
+  /* PIVOT OPTIONS END */
   filter?: MetadataItem;
   exclude?: MetadataItem;
   by?: MetadataItemJaql;

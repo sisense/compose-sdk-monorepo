@@ -4,6 +4,7 @@ import {
   Attribute,
   createAttribute,
   DimensionalAttribute,
+  EMPTY_PIVOT_QUERY_RESULT_DATA,
   Filter,
   Measure,
   QueryResultData,
@@ -17,23 +18,32 @@ import {
   QUERY_DEFAULT_LIMIT,
   validateQueryDescription,
 } from './query-client.js';
-import { JaqlQueryPayload, QueryDescription } from './types.js';
+import { JaqlQueryPayload, PivotQueryDescription, QueryDescription } from './types.js';
 import {
   ExecuteJaqlTestDataset,
   getExecuteJaqlTestDataset,
 } from './__test-helpers__/execute-jaql-test-dataset-loader.js';
+import {
+  ExecutePivotJaqlTestDataset,
+  getExecutePivotJaqlTestDataset,
+} from './__test-helpers__/execute-pivot-jaql-test-dataset-loader.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import type { Mocked } from 'vitest';
+import { PivotClient } from '@sisense/sdk-pivot-client';
 
 describe('DimensionalQueryClient', () => {
   let httpClientMock: Mocked<HttpClient>;
+  let pivotClientMock: Mocked<PivotClient>;
   let queryClient: DimensionalQueryClient;
 
   beforeEach(() => {
     httpClientMock = {
       post: vi.fn().mockResolvedValue({}),
     } as unknown as Mocked<HttpClient>;
-    queryClient = new DimensionalQueryClient(httpClientMock);
+    pivotClientMock = {
+      queryData: vi.fn().mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA),
+    } as unknown as Mocked<PivotClient>;
+    queryClient = new DimensionalQueryClient(httpClientMock, pivotClientMock);
   });
 
   afterEach(() => {
@@ -149,6 +159,64 @@ describe('DimensionalQueryClient', () => {
       expect(executionResult.resultPromise).toBeInstanceOf(Promise);
       const cancelingReason = 'BECAUSE I CAN!';
       executionResult.cancel(cancelingReason);
+      await expect(executionResult.resultPromise).rejects.toThrow(new RegExp(cancelingReason));
+    });
+  });
+
+  describe('executePivotQuery', () => {
+    let testDataset: ExecutePivotJaqlTestDataset;
+
+    beforeAll(() => {
+      testDataset = getExecutePivotJaqlTestDataset();
+    });
+
+    describe('for all test samples', () => {
+      // all tests must be added synchronously and can't be added in runtime,
+      // so we need to have single 'it' for testing all data-samples
+      it('should execute the pivot query and resolve with the result', async () => {
+        for await (const testSample of testDataset) {
+          const queryDescription = testSample.queryInput;
+          const expectedJaqlRequestBody: JaqlQueryPayload = {
+            ...testSample.testPivotJaqlData?.requestBody,
+            queryGuid: expect.any(String) as string,
+            datasource: queryDescription.dataSource,
+            by: 'ComposeSDK',
+          } as JaqlQueryPayload;
+          const queryResultData = await queryClient.executePivotQuery(queryDescription)
+            .resultPromise;
+          expect(queryResultData).toStrictEqual(EMPTY_PIVOT_QUERY_RESULT_DATA);
+          expect(pivotClientMock.queryData).toHaveBeenCalledWith(
+            expectedJaqlRequestBody,
+            true,
+            QUERY_DEFAULT_LIMIT,
+            false,
+          );
+        }
+      });
+    });
+    it("should call 'onBeforeQuery' callback if it passed in config", async () => {
+      const onBeforeQuery = vi.fn();
+      const queryDescription: PivotQueryDescription = {
+        dataSource: 'test',
+        rowsAttributes: [new DimensionalAttribute('AgeRange', '[Commerce.Age Range]', 'attribute')],
+        columnsAttributes: [],
+        measures: [],
+        grandTotals: {},
+        filters: [],
+        highlights: [],
+      };
+      const executionResult = queryClient.executePivotQuery(queryDescription, { onBeforeQuery });
+      expect(executionResult.resultPromise).toBeInstanceOf(Promise);
+      await executionResult.resultPromise;
+      expect(onBeforeQuery).toHaveBeenCalledOnce();
+    });
+
+    it('should cancel the query execution', async () => {
+      const queryDescription: PivotQueryDescription = testDataset[0].queryInput;
+      const executionResult = queryClient.executePivotQuery(queryDescription);
+      expect(executionResult.resultPromise).toBeInstanceOf(Promise);
+      const cancelingReason = 'BECAUSE I CAN!';
+      await executionResult.cancel(cancelingReason);
       await expect(executionResult.resultPromise).rejects.toThrow(new RegExp(cancelingReason));
     });
   });

@@ -32,5 +32,5 @@ const arrayFilterRelations = filterFactory.logic.or([genderFilter, costFilter], 
 
 # Functions
 
-- [and](function.and.md)
-- [or](function.or.md)
+- [and](function.and.md) <Badge type="beta" text="Beta" />
+- [or](function.or.md) <Badge type="beta" text="Beta" />

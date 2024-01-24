@@ -61,6 +61,9 @@ export const useCustomDrilldown = ({
   };
 };
 
+/**
+ * @internal
+ */
 export const processDrilldownSelections = (
   drilldownSelections: DrilldownSelection[],
   initialDimension: Column | StyledColumn | null,

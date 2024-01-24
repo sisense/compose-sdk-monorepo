@@ -22,16 +22,6 @@ title: SisenseContextService
 
 ## Methods
 
-### getApp
-
-> **getApp**(): `Promise`\< `ClientApplication` \>
-
-#### Returns
-
-`Promise`\< `ClientApplication` \>
-
-***
-
 ### getConfig
 
 > **getConfig**(): [`SisenseContextConfig`](../interfaces/interface.SisenseContextConfig.md)

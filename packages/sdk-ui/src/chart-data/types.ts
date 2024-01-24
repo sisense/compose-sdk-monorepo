@@ -131,6 +131,7 @@ export type IndicatorChartData = {
 };
 /**
  * Raw GeoDataElement from data
+ *
  * @internal
  */
 export type RawGeoDataElement = {
@@ -141,6 +142,7 @@ export type RawGeoDataElement = {
 
 /**
  * GeoDataElement with color property, calculated from `originalValue`
+ *
  * @internal
  */
 export type GeoDataElement = RawGeoDataElement & {
@@ -149,6 +151,7 @@ export type GeoDataElement = RawGeoDataElement & {
 
 /**
  * Fact final data that will be passed to Areamap-component to render
+ *
  * @internal
  */
 export type AreamapData = {

@@ -12,7 +12,7 @@ Note that you can also get the data from a dashboard widget and use it in a Comp
 
 ## DashboardWidget Properties
 
-Many of the properties of dashboard widget component’s properties are the same as the properties for other Compose SDK charts. To learn more about those properties, see [Compose SDK charts](./composeSdkCharts.md).
+Many of the properties of dashboard widget component’s properties are the same as the properties for other Compose SDK charts. To learn more about those properties, see [Compose SDK charts](./guide-compose-sdk-charts.md).
 
 There are also some properties which are specific to Dashboard Widget components.
 

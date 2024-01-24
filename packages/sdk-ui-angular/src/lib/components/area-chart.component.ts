@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ChartType, type AreaChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../utility-types';
+import { type ChartType } from '../sdk-ui-core-exports';
+import { type AreaChartProps } from '@sisense/sdk-ui-preact';
+import { ArgumentsAsObject } from '../types';
 
 /**
  * A component similar to a {@link LineChartComponent},

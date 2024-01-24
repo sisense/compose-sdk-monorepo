@@ -1,5 +1,5 @@
 import leaflet from 'leaflet';
-import { ScattermapMarkers } from 'packages/sdk-ui/src/types';
+import { ScattermapMarkers } from '@/types';
 
 type PrepareMarkerOptionsProps = {
   color: string;

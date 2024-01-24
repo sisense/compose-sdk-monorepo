@@ -95,8 +95,8 @@ export const useChat = (id: string | undefined) => {
  * @internal
  */
 export interface UseGetQueryRecommendationsParams {
-  /** Data model or perspective ID */
-  contextId: string;
+  /** Data model title or perspective title */
+  contextTitle: string;
 }
 
 /**
@@ -107,14 +107,19 @@ export interface UseGetQueryRecommendationsParams {
  * @internal
  */
 export function useGetQueryRecommendations(params: UseGetQueryRecommendationsParams) {
-  const { contextId } = params;
+  const DEFAULT_NUM_OF_RECOMMENDATIONS = 4;
+
+  const { contextTitle } = params;
 
   const api = useChatApi();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['getQueryRecommendations', api, contextId],
-    queryFn: () => api?.ai.getQueryRecommendations(contextId),
-    select: (data) => data?.data.answer.map((r) => r.query),
+    queryKey: ['getQueryRecommendations', api, contextTitle],
+    queryFn: () =>
+      api?.ai.getQueryRecommendations(contextTitle, {
+        numOfRecommendations: DEFAULT_NUM_OF_RECOMMENDATIONS,
+      }),
+    select: (data) => data?.map((r) => r.nlqPrompt),
     enabled: !!api,
   });
 

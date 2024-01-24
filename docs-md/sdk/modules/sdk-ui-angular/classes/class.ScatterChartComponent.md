@@ -30,7 +30,7 @@ See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm
 
 #### dataOptions
 
-> **dataOptions**: [`ScatterChartDataOptions`](../../sdk-ui/interfaces/interface.ScatterChartDataOptions.md)
+> **dataOptions**: [`ScatterChartDataOptions`](../interfaces/interface.ScatterChartDataOptions.md)
 
 Highlight filters that will highlight results that pass filter criteria
 
@@ -77,7 +77,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`ScatterStyleOptions`](../../sdk-ui/interfaces/interface.ScatterStyleOptions.md)
+> **styleOptions**: `undefined` \| [`ScatterStyleOptions`](../interfaces/interface.ScatterStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
 
@@ -85,7 +85,7 @@ Configuration that defines functional style of the various chart elements
 
 #### beforeRender
 
-> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render

@@ -8,7 +8,7 @@ import {
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
-import type { Arguments } from '../utility-types';
+import type { Arguments } from '../types/utility-types';
 import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { type ChartType, type ScattermapChartProps } from '@sisense/sdk-ui-preact';
+import { type ChartType } from '../sdk-ui-core-exports';
+import { type ScattermapChartProps } from '@sisense/sdk-ui-preact';
 
 /**
  * An Angular component that allows to visualize geographical data as data points on a map.

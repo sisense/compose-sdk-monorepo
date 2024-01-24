@@ -42,9 +42,9 @@ const defaultAppConfig = { locale: getBaseDateFnsLocale(), dateConfig: defaultDa
 export async function getSettings(
   customConfig: ConfigurableAppSettings,
   httpClient: Pick<HttpClient, 'get'>,
-  isWat: boolean,
+  useDefaultPalette: boolean,
 ): Promise<AppSettings> {
-  const serverSettings = await loadServerSettings(httpClient, isWat);
+  const serverSettings = await loadServerSettings(httpClient, useDefaultPalette);
   return merge.withOptions(
     { mergeArrays: false },
     defaultAppConfig,
@@ -62,11 +62,10 @@ export async function getSettings(
  */
 async function loadServerSettings(
   httpClient: Pick<HttpClient, 'get'>,
-  isWat: boolean,
+  useDefaultPalette = false,
 ): Promise<ServerSettings> {
   const globals = await httpClient.get<GlobalsObject>('api/globals');
-  // TODO: Remove this once the server will be able to return the palette under the WAT
-  const palette = isWat
+  const palette = useDefaultPalette
     ? ({ colors: getDefaultThemeSettings().palette.variantColors } as LegacyPalette)
     : await getLegacyPalette(getPaletteName(globals.designSettings), httpClient);
   const serverSettings: ServerSettings = {

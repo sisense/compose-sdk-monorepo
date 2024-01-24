@@ -413,3 +413,56 @@ export interface FilterRelation {
 }
 
 export type FilterRelationJaqlNode = { instanceid: string };
+
+/**
+ * Wrapped attribute with additional options for pivot table
+ */
+export interface PivotAttribute {
+  attribute: Attribute;
+  includeSubTotals?: boolean;
+}
+
+/**
+ * Runs type guard check for PivotAttribute.
+ *
+ * @param arg - object to check
+ * @internal
+ */
+export function isPivotAttribute(arg: Attribute | PivotAttribute): arg is PivotAttribute {
+  return 'attribute' in arg;
+}
+
+export type TotalsCalculation = 'sum' | 'max' | 'min' | 'avg' | 'median';
+
+/**
+ * Wrapped measure with additional options for pivot table
+ */
+export interface PivotMeasure {
+  measure: Measure;
+  totalsCalculation: TotalsCalculation;
+  // TODO add dataBars
+}
+
+/**
+ * Runs type guard check for PivotMeasure.
+ *
+ * @param arg - object to check
+ * @internal
+ */
+export function isPivotMeasure(arg: Measure | PivotMeasure): arg is PivotMeasure {
+  return 'measure' in arg;
+}
+
+/**
+ * Data options for grand totals of a pivot table
+ */
+export type PivotGrandTotals = { title?: string; rows?: boolean; columns?: boolean };
+
+/**
+ * @internal
+ */
+export const DEFAULT_PIVOT_GRAND_TOTALS: PivotGrandTotals = {
+  title: 'Grand Total',
+  rows: false,
+  columns: false,
+};

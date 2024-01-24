@@ -2,7 +2,6 @@ import { Alert, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mu
 import { Box } from '@mui/system';
 import { ComponentType, Suspense, useEffect, useState } from 'react';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
-import { loadAdditionalPages } from './load-additional-pages';
 import { ChartsFromExampleApp } from './pages/charts-from-example-app';
 import { ECommerceDemo } from './pages/ecommerce-demo';
 import { MiscDemo } from './pages/misc-demo';
@@ -23,6 +22,7 @@ import { BoxplotChartDemo } from './pages/boxplot-chart-demo';
 import { AreamapChartDemo } from './pages/areamap-demo';
 import { ScattermapChartDemo } from './pages/scattermap-demo';
 import { AiDemo } from './pages/ai-demo';
+import { PivotQueryDemo } from './pages/pivot-query-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -45,12 +45,13 @@ const pages: ComponentType[] = [
   RelativeDateFilterDemo,
   UseExecuteQueryDemo,
   ChartTypeSwitchingDemo,
+  SelectionFilterDemo,
   UseGetWidgetModelDemo,
   BoxplotChartDemo,
   ScattermapChartDemo,
   AreamapChartDemo,
   AiDemo,
-  ...loadAdditionalPages(),
+  PivotQueryDemo,
 ];
 
 const {

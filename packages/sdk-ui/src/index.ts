@@ -20,6 +20,7 @@ export * from './query-execution';
 export { executeQuery } from './query/execute-query';
 export { SisenseContextProvider } from './sisense-context/sisense-context-provider';
 export { DrilldownWidget } from './widgets/drilldown-widget';
+export { processDrilldownSelections } from './widgets/common/custom-drilldown';
 export { ChartWidget } from './widgets/chart-widget';
 export { TableWidget } from './widgets/table-widget';
 export { ContextMenu } from './widgets/common/context-menu';

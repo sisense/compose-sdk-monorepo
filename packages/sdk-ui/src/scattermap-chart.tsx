@@ -5,8 +5,6 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * A React component that allows to visualize geographical data as data points on a map.
  * See [Scattermap Chart](https://docs.sisense.com/main/SisenseLinux/scatter-map.htm) for more information.
  *
- * This component is still in beta.
- *
  * @example
  * An example of using the component to visualize the `Sample ECommerce` data source:
  * ```tsx

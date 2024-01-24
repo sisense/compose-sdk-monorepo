@@ -18,7 +18,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
-import type { ArgumentsAsObject } from '../utility-types';
+import type { ArgumentsAsObject } from '../types/utility-types';
 import {
   createSisenseContextConnector,
   createThemeContextConnector,

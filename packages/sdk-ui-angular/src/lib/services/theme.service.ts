@@ -6,8 +6,8 @@ import {
   getThemeSettingsByOid,
   type ThemeProviderProps as ThemeConfig,
   type CompleteThemeSettings,
-  type ThemeSettings,
 } from '@sisense/sdk-ui-preact';
+import { type ThemeSettings } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
 import { TrackableService } from '../decorators/trackable.decorator';
 
@@ -96,6 +96,7 @@ export class ThemeService {
     }
   }
 
+  /** @internal */
   getThemeSettings() {
     return this.themeSettings$.asObservable();
   }

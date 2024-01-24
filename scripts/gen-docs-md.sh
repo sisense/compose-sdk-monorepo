@@ -12,6 +12,14 @@ TYPEDOC_MODE=PUBLIC TYPEDOC_FORMAT=MD typedoc --options typedoc.config.cjs
 
 docs_path="./docs-md/sdk"
 
+# https://stackoverflow.com/questions/43171648/sed-gives-sed-cant-read-no-such-file-or-directory
+# Default case for Linux sed, just use "-i"
+sed_option=(-i)
+case "$(uname)" in
+  # For macOS, use two parameters
+  Darwin*) sed_option=(-i "")
+esac
+
 # Replace modules/index.md with a customized version
 cp -f ${docs_path}/../index-modules.md ${docs_path}/modules/index.md
 
@@ -20,15 +28,15 @@ cp -f ${docs_path}/../index-modules.md ${docs_path}/modules/index.md
 cp -Rf ./media/* ${docs_path}/img/
 
 # Adjust the links in the markdown files of sdk-ui-angular to point to objects in sdk-ui, instead of sdk-ui-preact
-find ${docs_path}/modules/sdk-ui-angular \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|sdk-ui-preact|sdk-ui|g'
-find ${docs_path}/modules/sdk-ui-angular \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|-1.md|.md|g'
+find ${docs_path}/modules/sdk-ui-angular \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed "${sed_option[@]}" -e 's|sdk-ui-preact|sdk-ui|g'
+find ${docs_path}/modules/sdk-ui-angular \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed "${sed_option[@]}" -e 's|-1.md|.md|g'
 rm -rf ${docs_path}/modules/sdk-ui-preact
 
 # Adjust the media paths in the markdown files
-find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|media://|../../../img/|g'
+find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed "${sed_option[@]}" -e 's|media://|../../../img/|g'
 
 # Replace tsx code blocks with ts as required by sisense.dev
-find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i '' -e 's|```tsx|```ts|g'
+find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed "${sed_option[@]}" -e 's|```tsx|```ts|g'
 
 # Copy CHANGELOG.md from the root directory to the docs-md so it can be published to sisense.dev
 cp -Rf ./CHANGELOG.md ${docs_path}/

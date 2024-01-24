@@ -34,7 +34,7 @@ Executes a data query.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md) | Query parameters<br />return Query result |
+| `params` | [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md) | Query parameters<br />return Query result |
 
 #### Returns
 
@@ -59,7 +59,7 @@ Executes a data query extracted from an existing widget in the Sisense instance.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`ExecuteQueryByWidgetIdParams`](../../sdk-ui/interfaces/interface.ExecuteQueryByWidgetIdParams.md) | Parameters to identify the target widget |
+| `params` | [`ExecuteQueryByWidgetIdParams`](../interfaces/interface.ExecuteQueryByWidgetIdParams.md) | Parameters to identify the target widget |
 
 #### Returns
 

@@ -1,12 +1,16 @@
 import { AbstractTaskManager, Task, Step } from '@sisense/task-manager';
 import { AbortRequestFunction, EmptyObject, JaqlQueryPayload, JaqlResponse } from '../types.js';
-import { QueryTaskPassport } from './query-task-passport.js';
-import { QueryResultData, Element } from '@sisense/sdk-data';
+import { PivotQueryTaskPassport, QueryTaskPassport } from './query-task-passport.js';
+import { QueryResultData, Element, PivotQueryResultData } from '@sisense/sdk-data';
 import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher.js';
-import { getJaqlQueryPayload } from '../jaql/get-jaql-query-payload.js';
+import { getJaqlQueryPayload, getPivotJaqlQueryPayload } from '../jaql/get-jaql-query-payload.js';
 import { getDataFromQueryResult } from '../query-result/index.js';
+import { JaqlRequest, PivotClient } from '@sisense/sdk-pivot-client';
+
+import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
 
 type QueryTask = Task<QueryTaskPassport>;
+type PivotQueryTask = Task<PivotQueryTaskPassport>;
 
 export class QueryTaskManager extends AbstractTaskManager {
   /** Map of aborters by task id to be able to cancel sent requests */
@@ -14,9 +18,15 @@ export class QueryTaskManager extends AbstractTaskManager {
 
   private queryApi: QueryApiDispatcher;
 
-  constructor(queryApi: QueryApiDispatcher) {
+  /**
+   * Client for handling pivot data
+   */
+  private pivotClient: PivotClient;
+
+  constructor(queryApi: QueryApiDispatcher, pivotClient: PivotClient) {
     super();
     this.queryApi = queryApi;
+    this.pivotClient = pivotClient;
   }
 
   private async prepareJaqlPayload(task: QueryTask): Promise<JaqlQueryPayload> {
@@ -86,6 +96,57 @@ export class QueryTaskManager extends AbstractTaskManager {
     );
   }
 
+  /**
+   * Prepares the JAQL payload for the pivot query
+   *
+   * @param task
+   * @returns JAQL payload
+   */
+  private async preparePivotJaqlPayload(task: PivotQueryTask): Promise<JaqlQueryPayload> {
+    const { pivotQueryDescription, executionConfig } = task.passport;
+    const jaqlPayload: JaqlQueryPayload = getPivotJaqlQueryPayload(
+      pivotQueryDescription,
+      executionConfig.shouldSkipHighlightsWithoutAttributes,
+    );
+    const onBeforeQuery = task.passport.executionConfig.onBeforeQuery;
+    if (onBeforeQuery) {
+      return onBeforeQuery(jaqlPayload);
+    }
+    return jaqlPayload;
+  }
+
+  /**
+   * Executes the pivot query and returns the result
+   *
+   * @param task
+   * @param jaqlPayload
+   */
+  private sendPivotJaqlQuery(
+    task: PivotQueryTask,
+    jaqlPayload: JaqlQueryPayload,
+  ): Promise<PivotQueryResultData> {
+    const { pivotQueryDescription } = task.passport;
+    return this.pivotClient.queryData(
+      jaqlPayload as unknown as JaqlRequest,
+      true,
+      pivotQueryDescription.count ?? QUERY_DEFAULT_LIMIT,
+      false,
+    );
+  }
+
+  private cancelPivotJaqlQuery(task: PivotQueryTask) {
+    const taskId = task.passport.taskId;
+    const abortInitialRequest = this.sentRequestsAbortersMap.get(taskId);
+    if (abortInitialRequest) {
+      abortInitialRequest();
+      this.sentRequestsAbortersMap.delete(taskId);
+    }
+    return this.queryApi.sendCancelJaqlQueryRequest(
+      taskId,
+      task.passport.pivotQueryDescription.dataSource,
+    );
+  }
+
   public executeQuerySending = super.createFlow<QueryTaskPassport, EmptyObject, QueryResultData>([
     new Step('PREPARE_JAQL_PAYLOAD', this.prepareJaqlPayload.bind(this), async () => {}),
     new Step(
@@ -101,6 +162,19 @@ export class QueryTaskManager extends AbstractTaskManager {
       'SEND_DOWNLOAD_CSV_QUERY',
       this.sendCsvQuery.bind(this),
       this.cancelDataRetrievalQuery.bind(this),
+    ),
+  ]);
+
+  public executePivotQuerySending = super.createFlow<
+    PivotQueryTaskPassport,
+    EmptyObject,
+    PivotQueryResultData
+  >([
+    new Step('PREPARE_JAQL_PAYLOAD', this.preparePivotJaqlPayload.bind(this), async () => {}),
+    new Step(
+      'SEND_JAQL_QUERY',
+      this.sendPivotJaqlQuery.bind(this),
+      this.cancelPivotJaqlQuery.bind(this),
     ),
   ]);
 }

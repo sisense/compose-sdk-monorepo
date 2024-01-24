@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -35,6 +35,7 @@
     "docs:gen:internal": "TYPEDOC_MODE=INTERNAL typedoc --options typedoc.config.cjs",
     "docs:serve:internal": "node ./scripts/serve-static.cjs docs-internal",
     "docs:gen:md": "./scripts/gen-docs-md.sh",
+    "docs:check:md": "./scripts/check-docs-md.sh",
     "prepare": "husky install"
   },
   "files": [
@@ -49,7 +50,7 @@
     "@sisense/commitlint-config": "^1.9.9",
     "@sisense/eslint-config": "1.9.12",
     "@sisense/prettier-config": "^1.9.9",
-    "@sisense/typedoc-plugin-markdown": "^4.0.0-next.42",
+    "@sisense/typedoc-plugin-markdown": "^4.0.0-next.45",
     "@vitest/coverage-istanbul": "0.34.1",
     "eslint": "^8.40.0",
     "eslint-plugin-tsdoc": "0.2.17",

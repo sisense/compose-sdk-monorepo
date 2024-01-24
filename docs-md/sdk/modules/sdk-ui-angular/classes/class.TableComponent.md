@@ -35,7 +35,7 @@ Table with aggregation and pagination.
 
 #### dataOptions
 
-> **dataOptions**: [`TableDataOptions`](../../sdk-ui/interfaces/interface.TableDataOptions.md)
+> **dataOptions**: [`TableDataOptions`](../interfaces/interface.TableDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the component
 
@@ -74,6 +74,6 @@ Filters that will slice query results
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`TableStyleOptions`](../../sdk-ui/interfaces/interface.TableStyleOptions.md)
+> **styleOptions**: `undefined` \| [`TableStyleOptions`](../interfaces/interface.TableStyleOptions.md)
 
 Configurations that define functional style of the various table elements

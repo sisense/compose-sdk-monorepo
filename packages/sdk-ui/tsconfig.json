@@ -9,13 +9,18 @@
     "module": "es2020",
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"],
   "exclude": [],
   "references": [
     { "path": "../sdk-data" },
     { "path": "../sdk-rest-client" },
+    { "path": "../sdk-pivot-client" },
     { "path": "../sdk-query-client" },
     { "path": "../sdk-common" },
     { "path": "../sdk-tracking" },

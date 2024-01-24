@@ -2,14 +2,12 @@
 title: ScattermapChart
 ---
 
-# Function ScattermapChart
+# Function ScattermapChart <Badge type="beta" text="Beta" />
 
 > **ScattermapChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component that allows to visualize geographical data as data points on a map.
 See [Scattermap Chart](https://docs.sisense.com/main/SisenseLinux/scatter-map.htm) for more information.
-
-This component is still in beta.
 
 ## Parameters
 

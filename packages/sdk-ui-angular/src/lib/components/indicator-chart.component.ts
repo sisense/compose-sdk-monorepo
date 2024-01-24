@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { type ChartType, type IndicatorChartProps } from '@sisense/sdk-ui-preact';
+import { type ChartType } from '../sdk-ui-core-exports';
+import { type IndicatorChartProps } from '@sisense/sdk-ui-preact';
 
 /**
  * A component that provides various options for displaying one or two numeric values as a number, gauge or ticker.

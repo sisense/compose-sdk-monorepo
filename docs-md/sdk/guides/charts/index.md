@@ -35,7 +35,7 @@ Compose charts are currently available as React, Angular, and Vue components.
 
 Compose SDK charts should be your default choice for any project where you’ll be creating new charts, especially with data from a Sisense instance.
 
-To learn more about Compose SDK charts, see [Compose SDK Charts](./composeSdkCharts.md).
+To learn more about Compose SDK charts, see [Compose SDK Charts](./guide-compose-sdk-charts.md).
 
 ## Sisense Fusion Widgets
 
@@ -45,7 +45,7 @@ Note: Sisense Fusion widgets can also be used to update existing projects that e
 
 Use Fusion charts when you already have the charts you need in your Sisense instance.
 
-To learn more about Fusion charts, see [Sisense Fusion Widgets](./fusionWidgets.md).
+To learn more about Fusion charts, see [Sisense Fusion Widgets](./guide-fusion-widgets.md).
 
 ## External Charts
 
@@ -53,4 +53,4 @@ Using the query APIs of Compose SDK, you can use the data you retrieve from your
 
 Use external charting libraries if you are already familiar with them and want to continue using them or if they offer functionality not currently available in Compose SDK charts.
 
-To learn more about External Charts, see [External Charts](./externalCharts.md).
+To learn more about External Charts, see [External Charts](./guide-external-charts.md).

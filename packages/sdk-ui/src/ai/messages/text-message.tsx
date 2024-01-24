@@ -10,7 +10,7 @@ export default function TextMessage({ children, align, onClick }: Props) {
     align === 'left' ? 'csdk-justify-start csdk-text-left' : 'csdk-justify-end csdk-text-right';
 
   const messageStyle =
-    'csdk-max-w-[414px] csdk-p-2 csdk-rounded-[10px] csdk-text-ai-sm csdk-text-text-content';
+    'csdk-max-w-[414px] csdk-p-2 csdk-rounded-[10px] csdk-text-ai-sm csdk-text-text-content csdk-whitespace-pre-wrap';
 
   const clickableStyle = onClick
     ? 'csdk-group csdk-cursor-pointer csdk-bg-background-priority hover:csdk-text-white hover:csdk-bg-text-content csdk-rounded-[20px] csdk-border csdk-border-text-content'

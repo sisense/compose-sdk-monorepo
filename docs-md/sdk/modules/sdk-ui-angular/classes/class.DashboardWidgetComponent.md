@@ -44,7 +44,7 @@ Filters that will slice query results
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`DashboardWidgetStyleOptions`](../../sdk-ui/interfaces/interface.DashboardWidgetStyleOptions.md)
+> **styleOptions**: `undefined` \| [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
 
 Style options for the the widget including the widget container and the chart or table inside.
 

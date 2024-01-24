@@ -55,7 +55,12 @@ describe('Auth interceptor', () => {
     const fakeLoginUrl = 'http://login.url';
 
     global.window = {
-      location: { href: fakeDeploymentUrl } as Location,
+      location: {
+        href: fakeDeploymentUrl,
+        assign: (url) => {
+          global.window.location.href = url.toString();
+        },
+      } as Location,
     } as Window & typeof globalThis;
 
     const auth = new SsoAuthenticator(fakeDeploymentUrl);

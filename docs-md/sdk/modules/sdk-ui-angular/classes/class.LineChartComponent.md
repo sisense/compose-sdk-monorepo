@@ -23,7 +23,7 @@ See [Line Chart](https://docs.sisense.com/main/SisenseLinux/line-chart.htm) for 
 
 #### dataOptions
 
-> **dataOptions**: [`CartesianChartDataOptions`](../../sdk-ui/interfaces/interface.CartesianChartDataOptions.md)
+> **dataOptions**: [`CartesianChartDataOptions`](../interfaces/interface.CartesianChartDataOptions.md)
 
 Highlight filters that will highlight results that pass filter criteria
 
@@ -70,7 +70,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`LineStyleOptions`](../../sdk-ui/interfaces/interface.LineStyleOptions.md)
+> **styleOptions**: `undefined` \| [`LineStyleOptions`](../interfaces/interface.LineStyleOptions.md)
 
 Configuration that defines the functional style of the various chart elements.
 
@@ -78,7 +78,7 @@ Configuration that defines the functional style of the various chart elements.
 
 #### beforeRender
 
-> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render

@@ -23,7 +23,7 @@ export default function ChatBox({ selectedContext }: ChatBoxProps) {
   const { setSelectedContext } = useChatbotContext();
 
   const { data: questions, isLoading: recommendationsLoading } = useGetQueryRecommendations({
-    contextId: selectedContext.id,
+    contextTitle: selectedContext.name,
   });
 
   const { history, isAwaitingResponse, clearHistory, sendMessage, isLoading } = useChatSession(

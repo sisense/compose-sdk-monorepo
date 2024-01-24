@@ -12,7 +12,7 @@ import {
 import { Chart, type ChartProps, ComponentAdapter, createElement } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
-import type { Arguments, ArgumentsAsObject } from '../utility-types';
+import type { Arguments, ArgumentsAsObject } from '../types/utility-types';
 import {
   createSisenseContextConnector,
   createThemeContextConnector,

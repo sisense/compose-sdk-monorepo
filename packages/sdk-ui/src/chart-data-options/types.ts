@@ -372,6 +372,8 @@ export interface ScattermapColumn extends StyledColumn {
 export interface ScattermapChartDataOptions {
   /**
    * Columns (or attributes) whose values represent locations on the map.
+   * Support field(s) that contain geographic data (Country, City, State/Province, etc)
+   * To visualize latitude and longitude data, you have to add one field containing latitude data, and another field containing longitude data, in this order.
    */
   geo: (Column | StyledColumn | ScattermapColumn)[];
   /**

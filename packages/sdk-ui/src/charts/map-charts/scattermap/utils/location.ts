@@ -1,5 +1,5 @@
 import { trim } from 'lodash';
-import { ScattermapLocationLevel } from 'packages/sdk-ui/src/chart-data-options/types';
+import { ScattermapLocationLevel } from '@/chart-data-options/types';
 
 export const LOCATION_DELIMITER = ',';
 

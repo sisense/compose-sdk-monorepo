@@ -63,7 +63,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### dataOptions
 
-> **dataOptions**: [`CategoricalChartDataOptions`](../../sdk-ui/interfaces/interface.CategoricalChartDataOptions.md)
+> **dataOptions**: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -71,7 +71,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`TreemapStyleOptions`](../../sdk-ui/interfaces/interface.TreemapStyleOptions.md)
+> **styleOptions**: `undefined` \| [`TreemapStyleOptions`](../interfaces/interface.TreemapStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
 
@@ -79,7 +79,7 @@ Configuration that defines functional style of the various chart elements
 
 #### beforeRender
 
-> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render

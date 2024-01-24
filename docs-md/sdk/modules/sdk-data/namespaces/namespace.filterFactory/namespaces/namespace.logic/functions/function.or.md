@@ -2,7 +2,7 @@
 title: or
 ---
 
-# Function or
+# Function or <Badge type="beta" text="Beta" />
 
 > **or**(`left`, `right`): [`FilterRelation`](../../../../../interfaces/interface.FilterRelation.md)
 

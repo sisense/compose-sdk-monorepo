@@ -172,7 +172,7 @@ List of dimensions to allow drilldowns on
 
 #### drilldownResultChange
 
-> **drilldownResultChange**: `EventEmitter`\< [`CustomDrilldownResult`](../type-aliases/type-alias.CustomDrilldownResult-2.md) \>
+> **drilldownResultChange**: `EventEmitter`\< [`CustomDrilldownResult`](../type-aliases/type-alias.CustomDrilldownResult.md) \>
 
 ***
 

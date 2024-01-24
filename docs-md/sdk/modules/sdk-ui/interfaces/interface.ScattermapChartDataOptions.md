@@ -30,6 +30,8 @@ Column or measure column representing the additional details for the points on t
 > **geo**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`ScattermapColumn`](interface.ScattermapColumn.md))[]
 
 Columns (or attributes) whose values represent locations on the map.
+Support field(s) that contain geographic data (Country, City, State/Province, etc)
+To visualize latitude and longitude data, you have to add one field containing latitude data, and another field containing longitude data, in this order.
 
 ***
 

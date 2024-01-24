@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ChartType, type BarChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../utility-types';
+import { type ChartType } from '../sdk-ui-core-exports';
+import { type BarChartProps } from '@sisense/sdk-ui-preact';
+import { type ArgumentsAsObject } from '../types/utility-types';
 
 /**
  * A component representing categorical data with horizontal rectangular bars,

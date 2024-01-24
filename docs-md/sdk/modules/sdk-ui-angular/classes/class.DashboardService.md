@@ -24,7 +24,7 @@ title: DashboardService
 
 ### getDashboardModel
 
-> **getDashboardModel**(`dashboardOid`, `options`?): `Promise`\< [`DashboardModel`](../../sdk-ui/type-aliases/type-alias.DashboardModel.md) \>
+> **getDashboardModel**(`dashboardOid`, `options`?): `Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md) \>
 
 Retrieves an existing dashboard model from the Sisense instance.
 
@@ -33,11 +33,11 @@ Retrieves an existing dashboard model from the Sisense instance.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `dashboardOid` | `string` | Identifier of the dashboard |
-| `options`? | [`GetDashboardModelOptions`](../../sdk-ui/interfaces/interface.GetDashboardModelOptions.md) | Advanced configuration options |
+| `options`? | [`GetDashboardModelOptions`](../interfaces/interface.GetDashboardModelOptions.md) | Advanced configuration options |
 
 #### Returns
 
-`Promise`\< [`DashboardModel`](../../sdk-ui/type-aliases/type-alias.DashboardModel.md) \>
+`Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md) \>
 
 Dashboard model
 
@@ -45,7 +45,7 @@ Dashboard model
 
 ### getDashboardModels
 
-> **getDashboardModels**(`options`?): `Promise`\< [`DashboardModel`](../../sdk-ui/type-aliases/type-alias.DashboardModel.md)[] \>
+> **getDashboardModels**(`options`?): `Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md)[] \>
 
 Retrieves existing dashboard models from the Sisense instance.
 
@@ -53,10 +53,10 @@ Retrieves existing dashboard models from the Sisense instance.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `options`? | [`GetDashboardModelsOptions`](../../sdk-ui/interfaces/interface.GetDashboardModelsOptions.md) | Advanced configuration options |
+| `options`? | [`GetDashboardModelsOptions`](../interfaces/interface.GetDashboardModelsOptions.md) | Advanced configuration options |
 
 #### Returns
 
-`Promise`\< [`DashboardModel`](../../sdk-ui/type-aliases/type-alias.DashboardModel.md)[] \>
+`Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md)[] \>
 
 Dashboard models array

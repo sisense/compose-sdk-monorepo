@@ -26,6 +26,7 @@ title: Interfaces
 - [DrilldownBreadcrumbsProps](interface.DrilldownBreadcrumbsProps.md)
 - [DrilldownWidgetProps](interface.DrilldownWidgetProps.md)
 - [ExecuteCsvQueryParams](interface.ExecuteCsvQueryParams.md)
+- [ExecutePivotQueryParams](interface.ExecutePivotQueryParams.md)
 - [ExecuteQueryByWidgetIdParams](interface.ExecuteQueryByWidgetIdParams.md)
 - [ExecuteQueryByWidgetIdProps](interface.ExecuteQueryByWidgetIdProps.md)
 - [ExecuteQueryParams](interface.ExecuteQueryParams.md)

@@ -2,7 +2,7 @@
 title: and
 ---
 
-# Function and
+# Function and <Badge type="beta" text="Beta" />
 
 > **and**(`left`, `right`): [`FilterRelation`](../../../../../interfaces/interface.FilterRelation.md)
 

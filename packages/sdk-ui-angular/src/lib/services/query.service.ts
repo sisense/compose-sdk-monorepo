@@ -2,12 +2,23 @@ import { Injectable } from '@angular/core';
 import {
   executeQuery,
   executeQueryByWidgetId,
-  type ExecuteQueryParams,
-  type ExecuteQueryByWidgetIdParams,
+  type ExecuteQueryParams as ExecuteQueryParamsPreact,
+  type ExecuteQueryByWidgetIdParams as ExecuteQueryByWidgetIdParamsPreact,
 } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from './sisense-context.service';
 import { TrackableService } from '../decorators/trackable.decorator';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
+
+/**
+ * Parameters for data query execution.
+ */
+export interface ExecuteQueryParams extends Omit<ExecuteQueryParamsPreact, 'enabled'> {}
+
+/**
+ * Parameters for data query by widget id execution.
+ */
+export interface ExecuteQueryByWidgetIdParams
+  extends Omit<ExecuteQueryByWidgetIdParamsPreact, 'enabled'> {}
 
 @Injectable({
   providedIn: 'root',

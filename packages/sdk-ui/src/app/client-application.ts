@@ -10,6 +10,7 @@ import { SisenseContextProviderProps } from '../props';
 import { DateConfig } from '../query/date-formats';
 import { AppSettings, getSettings } from './settings/settings';
 import { TranslatableError } from '../translation/translatable-error';
+import { PivotClient } from '@sisense/sdk-pivot-client';
 
 /**
  * Application configuration
@@ -43,6 +44,11 @@ export class ClientApplication {
    * Gets the underlying HTTP Client
    */
   readonly httpClient: HttpClient;
+
+  /**
+   * Gets the underlying Pivot Client
+   */
+  readonly pivotClient: PivotClient;
 
   /**
    * Gets the underlying Query Client
@@ -81,7 +87,8 @@ export class ClientApplication {
       auth,
       'sdk-ui' + (__PACKAGE_VERSION__ ? `-${__PACKAGE_VERSION__}` : ''),
     );
-    this.queryClient = new DimensionalQueryClient(this.httpClient);
+    this.pivotClient = new PivotClient(this.httpClient);
+    this.queryClient = new DimensionalQueryClient(this.httpClient, this.pivotClient);
 
     if (defaultDataSource !== undefined) {
       this.defaultDataSource = defaultDataSource;
@@ -103,8 +110,12 @@ export const createClientApplication = async ({
 
     if (auth) {
       const app = new ClientApplication(url, auth, defaultDataSource);
-      await app.httpClient.login();
-      app.settings = await getSettings(appConfig || {}, app.httpClient, 'wat' in auth);
+      const loginSuccess = await app.httpClient.login();
+      // do not fetch palette settings from server if login failed
+      // SSO redirect is considered failed login as there will be another login attempt
+      // TODO: Remove WAT check once the server will be able to return the palette under the WAT
+      const useDefaultPalette = 'wat' in auth || !loginSuccess;
+      app.settings = await getSettings(appConfig || {}, app.httpClient, useDefaultPalette);
       return app;
     }
   }
