@@ -16,6 +16,6 @@
 * [Steve Lewis](https://github.com/stevelewis99)
 * [Steven Griffith](https://github.com/stevenwgriffith)
 * [Tuan Pham](https://github.com/imtuanpham)
-* Yaroslav Shcherban
-* Yevhen Soroka
+* [Yaroslav Shcherban](https://github.com/yshcherban)
+* [Yevhen Soroka](https://github.com/EugeneSoroka)
 * [Yi Hsuan (Jeddie) Chuang](https://www.linkedin.com/in/jeddiechuang/)
