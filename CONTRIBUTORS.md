@@ -7,7 +7,6 @@
 * [David Toner](https://github.com/david-sisense)
 * [Dmytro Zapisochnyi](https://github.com/i-dz)
 * [Eilon Vainboim](https://www.linkedin.com/in/eilon-vainboim-b42939168/)
-* [Ivan Biletskyi](https://github.com/ivanbiletskyi)
 * [Moti Granovsky](https://github.com/motigra)
 * [Nathaniel Ho](https://github.com/nxho)
 * [Oleh Zaichenko](https://github.com/ozadev)
