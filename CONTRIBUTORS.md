@@ -11,7 +11,6 @@
 * [Moti Granovsky](https://github.com/motigra)
 * [Nathaniel Ho](https://github.com/nxho)
 * [Oleh Zaichenko](https://github.com/ozadev)
-* [Ray Luxembourg](https://github.com/RayLuxembourg)
 * [Sam Markowitz](https://github.com/SamMarkowitz)
 * [Steve Lewis](https://github.com/stevelewis99)
 * [Steven Griffith](https://github.com/stevenwgriffith)
@@ -19,3 +18,4 @@
 * [Yaroslav Shcherban](https://github.com/yshcherban)
 * [Yevhen Soroka](https://github.com/EugeneSoroka)
 * [Yi Hsuan (Jeddie) Chuang](https://www.linkedin.com/in/jeddiechuang/)
+* [Ray Luxembourg](https://github.com/RayLuxembourg)
