@@ -1,7 +1,15 @@
+/* eslint-disable max-lines */
+/* eslint-disable sonarjs/cognitive-complexity */
 import {
   DimensionalLevelAttribute,
   type Filter,
   SortDirection as JaqlSortDirection,
+  FilterRelations,
+  FilterRelationsNode,
+  FilterRelationsModelNode,
+  FilterRelationsModel,
+  FilterRelationsJaql,
+  FilterRelationsJaqlNode,
 } from '@sisense/sdk-data';
 import { ChartSubtype } from '../chart-options-processor/subtype-to-design-options';
 import { ChartType, SortDirection } from '../types';
@@ -13,6 +21,8 @@ import {
   WidgetSubtype,
   WidgetType,
 } from './types';
+import { cloneDeep } from 'lodash';
+import { TranslatableError } from '../translation/translatable-error';
 
 export function getChartType(widgetType: WidgetType) {
   const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
@@ -185,4 +195,139 @@ export function mergeFiltersByStrategy(
       // apply 'codeFirst' filters merge strategy by default
       return mergeFilters(widgetFilters, codeFilters);
   }
+}
+
+/**
+ * Replaces nodes of filter reations tree with fetched filters by instance id.
+ *
+ * @param filters - The filters from the dashboard.
+ * @param filterRelations - Fetched filter relations.
+ * @returns {FilterRelations} Filter relations with filters in nodes.
+ */
+/* eslint-disable-next-line sonarjs/cognitive-complexity */
+export function getFilterRelationsFromJaql(
+  filters: Filter[],
+  filterRelations: FilterRelationsJaql | undefined,
+): FilterRelations | Filter[] {
+  if (!filterRelations) {
+    return filters;
+  }
+
+  const mergedFilterRelations = cloneDeep(filterRelations);
+
+  function traverse(
+    node: FilterRelationsJaqlNode | FilterRelationsNode,
+  ): FilterRelationsJaqlNode | FilterRelationsNode {
+    if ('instanceid' in node) {
+      const filter = filters.find((filter) => filter.guid === node.instanceid);
+      if (!filter) {
+        throw new TranslatableError('errors.unknownFilterInFilterRelations');
+      }
+      return filter;
+    }
+    if ('operator' in node) {
+      const newNode = { operator: node.operator } as FilterRelations | FilterRelationsJaql;
+      if ('left' in node) {
+        newNode.left = traverse(node.left);
+      }
+      if ('right' in node) {
+        newNode.right = traverse(node.right);
+      }
+      return newNode;
+    }
+    return node;
+  }
+
+  return traverse(mergedFilterRelations) as FilterRelations;
+}
+
+/**
+ * Converts filter relations model to filter relations jaql.
+ *
+ * @param filterRelations - Filter relations model.
+ * @returns {FilterRelationsJaql} Filter relations jaql.
+ */
+export function convertFilterRelationsModelToJaql(
+  filterRelations: FilterRelationsModel | undefined,
+): FilterRelationsJaql | undefined {
+  if (!filterRelations) {
+    return filterRelations;
+  }
+
+  const convertedFilterRelations = cloneDeep(filterRelations);
+
+  function traverse(
+    node: FilterRelationsModelNode | FilterRelationsJaqlNode,
+  ): FilterRelationsModelNode | FilterRelationsJaqlNode {
+    if ('instanceId' in node) {
+      return { instanceid: node.instanceId };
+    }
+    if ('value' in node) {
+      return traverse(node.value);
+    }
+    if ('operator' in node) {
+      const newNode = { operator: node.operator } as FilterRelationsModel | FilterRelationsJaql;
+      if ('left' in node) {
+        newNode.left = traverse(node.left);
+      }
+      if ('right' in node) {
+        newNode.right = traverse(node.right);
+      }
+      return newNode;
+    }
+    return node;
+  }
+
+  return traverse(convertedFilterRelations) as FilterRelationsJaql;
+}
+
+/**
+ * Replaces filters for same dimensions in filter relations jaql.
+ * Widget filters have higher priority than dashboard filters.
+ *
+ * @param widgetFilters - The filters from the widget.
+ * @param dashboardFilters -  The filters from the dashboard.
+ * @param relations - The filter relations before replacement.
+ * @returns {FilterRelationsJaql} The filter relations after replacement.
+ */
+export function applyWidgetFiltersToRelations(
+  widgetFilters: Filter[],
+  dashboardFilters: Filter[],
+  relations: FilterRelationsJaql | undefined,
+) {
+  if (!relations || !widgetFilters || !widgetFilters.length) {
+    return relations;
+  }
+
+  const newRelations = cloneDeep(relations);
+
+  const replacementsMap = {};
+  widgetFilters.forEach((widgetFilter) => {
+    if (widgetFilter.guid) {
+      const correspondingFilter = dashboardFilters.find(
+        (dashboardFilter) =>
+          getFilterCompareId(dashboardFilter) === getFilterCompareId(widgetFilter),
+      );
+      if (correspondingFilter && correspondingFilter.guid) {
+        replacementsMap[correspondingFilter.guid] = widgetFilter.guid;
+      }
+    }
+  });
+
+  function findAndReplace(node: FilterRelationsJaqlNode, replacementsDone = 0) {
+    if (replacementsDone >= Object.keys(replacementsMap).length) return;
+    if ('instanceid' in node && node.instanceid in replacementsMap) {
+      node.instanceid = replacementsMap[node.instanceid];
+      replacementsDone += 1;
+    }
+    if ('left' in node) {
+      findAndReplace(node.left, replacementsDone);
+    }
+    if ('right' in node) {
+      findAndReplace(node.right, replacementsDone);
+    }
+  }
+
+  findAndReplace(newRelations);
+  return newRelations;
 }

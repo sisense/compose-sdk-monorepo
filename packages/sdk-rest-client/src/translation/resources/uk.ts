@@ -10,6 +10,7 @@ export const translation: TranslationDictionary = {
       'Помилка мережі. Можливо ви забули додати свій домен до «CORS Allowed Origins» в панелі адміністратора Sisense -> Security Settings.',
     ssoNotEnabled:
       'SSO не ввімкнено на цьому сервері, будь ласка, виберіть інший метод аутентифікації',
+    ssoNoLoginUrl: 'Неможливо отримати loginUrl з сервера. Перевірте налаштування SSO.',
     passwordAuthFailed:
       '$t(errorPrefix) Помилка автентифікації за допомогою імені користувача та пароля. Перевірте дані для входу.',
     tokenAuthFailed:

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Attribute, Filter, Measure } from '@sisense/sdk-data';
 import { getTranslatedDataOptions } from '../../chart-data-options/get-translated-data-options';
 import { translateTableDataOptions } from '../../chart-data-options/translate-data-options';
@@ -13,7 +14,13 @@ import { ExecuteQueryParams } from '../../query-execution';
 import { getTableAttributesAndMeasures } from '../../table/hooks/use-table-data';
 import { DEFAULT_TABLE_ROWS_PER_PAGE, PAGES_BATCH_SIZE } from '../../table/table';
 import { TranslatableError } from '../../translation/translatable-error';
-import { ChartType, DrilldownOptions, ChartStyleOptions, TableStyleOptions } from '../../types';
+import {
+  ChartType,
+  DrilldownOptions,
+  ChartStyleOptions,
+  TableStyleOptions,
+  CompleteThemeSettings,
+} from '../../types';
 
 /**
  * Widget data options.
@@ -85,10 +92,14 @@ export class WidgetModel {
    * @param widgetDto - The widget DTO to be converted to a widget model
    * @internal
    */
-  constructor(widgetDto: WidgetDto) {
+  constructor(
+    widgetDto: WidgetDto,
+    // todo: remove after making palette-dependant colors calculation inside the chart component
+    themeSettings?: CompleteThemeSettings,
+  ) {
     this.oid = widgetDto.oid;
     this.title = widgetDto.title;
-    this.dataSource = widgetDto.datasource.fullname ?? widgetDto.datasource.title;
+    this.dataSource = widgetDto.datasource.title;
     this.description = widgetDto.desc || '';
 
     const widgetType = widgetDto.type;
@@ -101,6 +112,7 @@ export class WidgetModel {
       this.widgetType,
       widgetDto.metadata.panels,
       widgetDto.style,
+      themeSettings?.palette.variantColors,
     );
 
     this.styleOptions = extractStyleOptions(
@@ -134,6 +146,7 @@ export class WidgetModel {
         );
       dimensions = tableAttributes;
       measures = tableMeasures;
+      count = DEFAULT_TABLE_ROWS_PER_PAGE * PAGES_BATCH_SIZE + 1;
     } else {
       const { attributes: chartAttributes, measures: chartMeasures } = getTranslatedDataOptions(
         this.dataOptions as ChartDataOptions,
@@ -141,7 +154,6 @@ export class WidgetModel {
       );
       dimensions = chartAttributes;
       measures = chartMeasures;
-      count = DEFAULT_TABLE_ROWS_PER_PAGE * PAGES_BATCH_SIZE + 1;
     }
     return {
       dataSource: this.dataSource,

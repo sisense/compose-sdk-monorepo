@@ -20,7 +20,7 @@ import {
   Filter,
   PivotGrandTotals,
   DEFAULT_PIVOT_GRAND_TOTALS,
-  FilterRelation,
+  FilterRelationsJaql,
 } from '@sisense/sdk-data';
 import { applyHighlightFilters, matchHighlightsWithAttributes } from './metadata/highlights.js';
 
@@ -55,7 +55,7 @@ type MetadataDescription = Pick<
 function prepareFilterMetadata(
   attributesMetadata: MetadataItem[],
   filters: Filter[],
-  filterRelations: FilterRelation | undefined,
+  filterRelations: FilterRelationsJaql | undefined,
   highlights: Filter[],
   shouldSkipHighlightsWithoutAttributes: boolean,
 ): MetadataItem[] {

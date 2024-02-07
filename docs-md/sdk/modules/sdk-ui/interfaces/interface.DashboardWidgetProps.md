@@ -8,23 +8,11 @@ Props for the [DashboardWidget](../functions/function.DashboardWidget.md) compon
 
 ## Extends
 
-- `Omit`\< [`ChartWidgetProps`](interface.ChartWidgetProps.md), `"dataSource"` \| `"dataOptions"` \| `"chartType"` \| `"styleOptions"` \>.`BaseChartEventProps`
+- `Omit`\< [`ChartWidgetProps`](interface.ChartWidgetProps.md), `"dataSource"` \| `"dataOptions"` \| `"chartType"` \| `"styleOptions"` \>
 
 ## Properties
 
 ### Data
-
-#### filterRelations
-
-> **filterRelations**?: [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
-
-Specifies the logical relationship between multiple filters (AND, OR)
-
-##### Inherited from
-
-Omit.filterRelations
-
-***
 
 #### filters
 
@@ -151,7 +139,7 @@ Identifier of the widget
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for Indicator Chart
+This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
 
 ##### Inherited from
 
@@ -161,7 +149,7 @@ Omit.onBeforeRender
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
+> **onDataPointClick**?: [`AreamapDataPointEventHandler`](../type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md)
 
 Click handler callback for a data point
 
@@ -173,7 +161,7 @@ Omit.onDataPointClick
 
 #### onDataPointContextMenu
 
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
+> **onDataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md)
 
 Context menu handler callback for a data point
 

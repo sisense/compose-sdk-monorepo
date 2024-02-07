@@ -24,7 +24,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { MenuPosition } from '../../types';
 import { Box } from '@mui/system';
 import { DrilldownWidget } from '../../widgets/drilldown-widget';
-import { DataPointsEventHandler } from '../../chart-options-processor/apply-event-handlers';
+import { DataPointsEventHandler } from '../../props';
 
 const MAX_ROW_LENGTH = 100000;
 const PAGE_SIZE = 50;

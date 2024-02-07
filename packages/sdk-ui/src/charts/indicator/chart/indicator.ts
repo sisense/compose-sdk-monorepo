@@ -70,10 +70,23 @@ export class Indicator {
 
     // if we don't have baseMeasure, it means there isn't enough space to render usual types =>
     // render ticker indicator
-    if (!baseMeasure) {
+    if (!baseMeasure || options.forceTickerView) {
       typeService = this.getService('ticker');
       const tickerOptions = cloneDeep(defaultTickerOptions);
+      tickerOptions.forceTickerView = options.forceTickerView;
+
+      if ((options as GaugeOptions).tickerBarHeight) {
+        const barHeight = (options as GaugeOptions).tickerBarHeight as number;
+        tickerOptions.barHeight = barHeight;
+        tickerOptions.tickerBarHeight = barHeight + 2;
+      }
+
+      if (tickerOptions.forceTickerView) {
+        defaultTickerOptions.height = container.offsetHeight;
+      }
+
       this.setTextOptions(tickerOptions);
+
       (typeService as Ticker).render(canvas, legacyDataOptions, tickerOptions, container);
       return;
     }

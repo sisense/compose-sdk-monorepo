@@ -6,7 +6,7 @@ title: ScatterDataPoint
 
 > **ScatterDataPoint**: `object`
 
-Data point in a chart.
+Data point in a Scatter chart.
 
 ## Type declaration
 

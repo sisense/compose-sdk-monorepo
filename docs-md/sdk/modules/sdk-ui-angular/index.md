@@ -39,6 +39,8 @@ title: sdk-ui-angular
 ## Interfaces
 
 - [AreaStyleOptions](interfaces/interface.AreaStyleOptions.md)
+- [AreamapChartDataOptions](interfaces/interface.AreamapChartDataOptions.md)
+- [AreamapStyleOptions](interfaces/interface.AreamapStyleOptions.md)
 - [BoxplotStyleOptions](interfaces/interface.BoxplotStyleOptions.md)
 - [CartesianChartDataOptions](interfaces/interface.CartesianChartDataOptions.md)
 - [CategoricalChartDataOptions](interfaces/interface.CategoricalChartDataOptions.md)
@@ -77,6 +79,7 @@ title: sdk-ui-angular
 
 - [AppConfig](type-aliases/type-alias.AppConfig.md)
 - [AreaSubtype](type-aliases/type-alias.AreaSubtype.md)
+- [AreamapChartType](type-aliases/type-alias.AreamapChartType.md)
 - [AxisLabel](type-aliases/type-alias.AxisLabel.md)
 - [BeforeRenderHandler](type-aliases/type-alias.BeforeRenderHandler.md)
 - [BoxWhiskerType](type-aliases/type-alias.BoxWhiskerType.md)
@@ -103,7 +106,6 @@ title: sdk-ui-angular
 - [DataColorCondition](type-aliases/type-alias.DataColorCondition.md)
 - [DataColorOptions](type-aliases/type-alias.DataColorOptions.md)
 - [DataPoint](type-aliases/type-alias.DataPoint.md)
-- [DataPoints](type-aliases/type-alias.DataPoints.md)
 - [DateConfig](type-aliases/type-alias.DateConfig.md)
 - [DateLevel](type-aliases/type-alias.DateLevel.md)
 - [DayOfWeek](type-aliases/type-alias.DayOfWeek.md)

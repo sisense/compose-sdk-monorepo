@@ -4,7 +4,10 @@ import {
 } from './chart-data-options/types';
 import { useEffect, useRef, type FunctionComponent } from 'react';
 import { IndicatorChartData } from './chart-data/types';
-import { IndicatorChartDesignOptions } from './chart-options-processor/translations/design-options';
+import {
+  GaugeSpecificDesignOptions,
+  IndicatorChartDesignOptions,
+} from './chart-options-processor/translations/design-options';
 import { Indicator } from './charts/indicator/chart/indicator';
 import {
   createLegacyChartDataOptions,
@@ -49,6 +52,8 @@ export const IndicatorCanvas: FunctionComponent<Props> = ({
         type: designOptions.indicatorType,
         numericSubtype:
           'numericSubtype' in designOptions ? designOptions.numericSubtype : undefined,
+        forceTickerView: designOptions.forceTickerView,
+        tickerBarHeight: (designOptions as GaugeSpecificDesignOptions).tickerBarHeight,
       },
       {
         chartData,

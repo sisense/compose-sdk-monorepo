@@ -5,6 +5,8 @@ title: Interfaces
 # Interfaces
 
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
+- [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
+- [AreamapStyleOptions](interface.AreamapStyleOptions.md)
 - [BoxplotStyleOptions](interface.BoxplotStyleOptions.md)
 - [CartesianChartDataOptions](interface.CartesianChartDataOptions.md)
 - [CategoricalChartDataOptions](interface.CategoricalChartDataOptions.md)

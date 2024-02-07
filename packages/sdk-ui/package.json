@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.2.0",
+  "version": "1.3.0",
   "type": "module",
   "exports": {
     ".": {
@@ -39,12 +39,12 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.11.6",
-    "@sisense/sdk-common": "^1.2.0",
-    "@sisense/sdk-data": "^1.2.0",
-    "@sisense/sdk-pivot-client": "^1.2.0",
-    "@sisense/sdk-query-client": "^1.2.0",
-    "@sisense/sdk-rest-client": "^1.2.0",
-    "@sisense/sdk-tracking": "^1.2.0",
+    "@sisense/sdk-common": "^1.3.0",
+    "@sisense/sdk-data": "^1.3.0",
+    "@sisense/sdk-pivot-client": "^1.3.0",
+    "@sisense/sdk-query-client": "^1.3.0",
+    "@sisense/sdk-rest-client": "^1.3.0",
+    "@sisense/sdk-tracking": "^1.3.0",
     "@sisense/sisense-charts": "5.1.0-alpha-04052758.0",
     "@tanstack/react-query": "4.36.1",
     "classnames": "^2.3.2",

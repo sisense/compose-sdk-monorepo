@@ -1,31 +1,31 @@
-import { Filter, FilterRelation } from './index.js';
+import { Filter } from './index.js';
 import { getFilterListAndRelations, guidFast } from './utils.js';
 
 const mockFilter1 = { guid: 'filter-1', name: 'Filter 1' } as Filter;
 const mockFilter2 = { guid: 'filter-2', name: 'Filter 2' } as Filter;
 
 const mockSimpleFilterRelations = {
-  operator: 'OR',
+  operator: 'OR' as const,
   left: mockFilter1,
   right: mockFilter2,
-} as FilterRelation;
+};
 
 const mockNestedFilterRelations = {
-  operator: 'AND',
+  operator: 'AND' as const,
   left: mockFilter1,
   right: mockSimpleFilterRelations,
-} as FilterRelation;
+};
 
-const simpleFilterRealtionsResult = {
-  operator: 'OR',
+const simpleFilterRelationsResult = {
+  operator: 'OR' as const,
   left: { instanceid: mockFilter1.guid },
   right: { instanceid: mockFilter2.guid },
 };
 
 const nestedFilterRelationsResult = {
-  operator: 'AND',
+  operator: 'AND' as const,
   left: { instanceid: mockFilter1.guid },
-  right: simpleFilterRealtionsResult,
+  right: simpleFilterRelationsResult,
 };
 
 describe('utils', () => {
@@ -68,12 +68,12 @@ describe('utils', () => {
       expect(result.filters).toEqual(filterArray);
       expect(result.relations).toBeUndefined();
     });
-    test('should return filter list and relations when input is a simple FilterRelation', () => {
+    test('should return filter list and relations when input is a simple FilterRelations', () => {
       const result = getFilterListAndRelations(mockSimpleFilterRelations);
       expect(result.filters).toEqual([mockFilter1, mockFilter2]);
-      expect(result.relations).toEqual(simpleFilterRealtionsResult);
+      expect(result.relations).toEqual(simpleFilterRelationsResult);
     });
-    test('should return filter list and relations when input is a nested FilterRelation', () => {
+    test('should return filter list and relations when input is a nested FilterRelations', () => {
       const result = getFilterListAndRelations(mockNestedFilterRelations);
       expect(result.filters).toEqual([mockFilter1, mockFilter2]);
       expect(result.relations).toEqual(nestedFilterRelationsResult);

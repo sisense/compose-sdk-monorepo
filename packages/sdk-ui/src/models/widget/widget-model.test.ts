@@ -90,7 +90,7 @@ describe('WidgetModel', () => {
       const executeQueryParams = tableWidgetModel.getExecuteQueryParams();
 
       expect(executeQueryParams).toMatchObject({
-        dataSource: 'LocalHost/Sample Healthcare',
+        dataSource: 'Sample Healthcare',
         dimensions: [expect.objectContaining({ name: 'DIAGNOSIS' })],
         measures: expect.arrayContaining([
           expect.objectContaining({
@@ -194,7 +194,7 @@ describe('WidgetModel', () => {
           alternatingRowsColor: expect.any(Boolean),
           headersColor: expect.any(Boolean),
         }),
-        dataSet: 'LocalHost/Sample Healthcare',
+        dataSet: 'Sample Healthcare',
         filters: [
           {
             attribute: {
@@ -299,7 +299,7 @@ describe('WidgetModel', () => {
           alternatingRowsColor: expect.any(Boolean),
           headersColor: expect.any(Boolean),
         }),
-        dataSource: 'LocalHost/Sample Healthcare',
+        dataSource: 'Sample Healthcare',
         filters: [
           {
             attribute: {

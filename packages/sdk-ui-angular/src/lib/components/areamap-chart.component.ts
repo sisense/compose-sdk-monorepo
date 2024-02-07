@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType, type AreamapChartProps } from '@sisense/sdk-ui-preact';
+import { ArgumentsAsObject } from '../types/utility-types';
 
 /**
  * An Angular component that allows to visualize geographical data as polygons on a map.
@@ -15,6 +16,7 @@ import { type ChartType, type AreamapChartProps } from '@sisense/sdk-ui-preact';
       [filters]="filters"
       [highlights]="highlights"
       [styleOptions]="styleOptions"
+      (dataPointClick)="dataPointClick.emit($event)"
     />
   `,
 })
@@ -58,6 +60,16 @@ export class AreamapChartComponent {
    */
   @Input()
   styleOptions: AreamapChartProps['styleOptions'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  @Output()
+  dataPointClick = new EventEmitter<
+    ArgumentsAsObject<AreamapChartProps['onDataPointClick'], ['point', 'nativeEvent']>
+  >();
 
   /** @internal */
   public chartType: ChartType = 'areamap';

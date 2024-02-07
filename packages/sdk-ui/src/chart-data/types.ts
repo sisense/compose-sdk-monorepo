@@ -131,21 +131,21 @@ export type IndicatorChartData = {
 };
 /**
  * Raw GeoDataElement from data
- *
- * @internal
  */
 export type RawGeoDataElement = {
+  /** Name of geo-element (country or state) */
   geoName: string;
+  /** Original numeric measure value for this geo-element */
   originalValue: number;
+  /** Formatted measure value for this geo-element to display*/
   formattedOriginalValue: string;
 };
 
 /**
  * GeoDataElement with color property, calculated from `originalValue`
- *
- * @internal
  */
 export type GeoDataElement = RawGeoDataElement & {
+  /** Calculated color for this geo-element */
   color?: Color;
 };
 

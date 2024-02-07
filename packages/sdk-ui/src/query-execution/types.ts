@@ -2,7 +2,7 @@ import {
   Attribute,
   DataSource,
   Filter,
-  FilterRelation,
+  FilterRelations,
   Measure,
   PivotAttribute,
   PivotGrandTotals,
@@ -197,7 +197,7 @@ export interface ExecuteQueryParams {
   measures?: Measure[];
 
   /** Filters that will slice query results */
-  filters?: Filter[] | FilterRelation;
+  filters?: Filter[] | FilterRelations;
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
@@ -344,7 +344,7 @@ export interface ExecutePivotQueryParams {
    *
    * @category Filtering
    */
-  filters?: Filter[] | FilterRelation;
+  filters?: Filter[] | FilterRelations;
 
   /**
    * Highlight filters that will highlight results that pass filter criteria

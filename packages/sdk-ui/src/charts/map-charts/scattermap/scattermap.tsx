@@ -13,7 +13,7 @@ import { fitMapToBounds } from './utils/map.js';
 import { ScattermapChartDataOptionsInternal } from '../../../chart-data-options/types.js';
 import { ScattermapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
 import { useTooltipHandler } from './hooks/use-tooltip-handler.js';
-import { DataSource, Filter, FilterRelation, getFilterListAndRelations } from '@sisense/sdk-data';
+import { DataSource, Filter, FilterRelations, getFilterListAndRelations } from '@sisense/sdk-data';
 
 import '../map-charts.scss';
 import './scattermap.scss';
@@ -23,7 +23,7 @@ export type ScattermapProps = {
   dataOptions: ScattermapChartDataOptionsInternal;
   designOptions: ScattermapChartDesignOptions;
   dataSource: DataSource | null;
-  filters?: Filter[] | FilterRelation;
+  filters?: Filter[] | FilterRelations;
 };
 
 export const Scattermap = ({

@@ -342,19 +342,23 @@ export const DateLevels = {
   },
 };
 
+/** @internal */
 export enum DataType {
   TEXT = 'text',
   NUMERIC = 'numeric',
   DATETIME = 'datetime',
 }
 
+/** @internal */
 export enum SortDirection {
   ASC = 'asc',
   DESC = 'desc',
 }
 
+/** @internal */
 export type Jaql = BaseJaql | FormulaJaql | FilterJaql;
 
+/** @internal */
 export type BaseJaql = {
   agg?: string;
   datatype: DataType;
@@ -366,10 +370,13 @@ export type BaseJaql = {
   sort?: SortDirection;
 };
 
+/** @internal */
 export type FormulaID = string;
 
+/** @internal */
 export type FormulaContext = BaseJaql | FormulaJaql | FilterJaql;
 
+/** @internal */
 export type FormulaJaql = {
   type?: 'measure';
   sort?: SortDirection;
@@ -378,30 +385,37 @@ export type FormulaJaql = {
   context?: Record<FormulaID, FormulaContext>;
 };
 
+/** @internal */
 export type BaseFilter = IncludeAllFilter | IncludeMembersFilter | ExcludeMembersFilter;
 
+/** @internal */
 export type BackgroundFilter = BaseFilter & {
   level?: 'string';
 };
 
+/** @internal */
 export type IncludeAllFilter = {
   all: true;
 };
 
+/** @internal */
 export type IncludeMembersFilter = {
   members: string[];
 };
 
+/** @internal */
 export type ExcludeMembersFilter = {
   exclude: {
     members: string[];
   };
 };
 
+/** @internal */
 export type TurnOffMembersFilter = ExcludeMembersFilter & {
   turnedOff: boolean;
 };
 
+/** @internal */
 export type FilterJaql = BaseJaql & {
   filter: BaseFilter & {
     filter?: BackgroundFilter | TurnOffMembersFilter;

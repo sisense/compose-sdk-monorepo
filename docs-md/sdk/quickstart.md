@@ -318,3 +318,5 @@ See the [SisenseContextProvider](./modules/sdk-ui/functions/function.SisenseCont
 ## Next Steps
 
 The sample application in this quickstart guide is designed to give you a basis for what you can do with Compose SDK. Build on the code sample by using other components from Compose SDK to add Sisense analytical experiences to your applications.
+
+Check out our demo application for Compose SDK with [React](https://csdk-react.sisense.com).

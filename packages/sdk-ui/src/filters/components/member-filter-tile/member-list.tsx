@@ -28,12 +28,14 @@ const MemberRow: FunctionComponent<{
   label: string;
   checked: boolean;
   onCheck: () => void;
+  inactive: boolean;
   disabled: boolean;
-}> = ({ label, checked, onCheck, disabled }) => {
+}> = ({ label, checked, onCheck, disabled, inactive }) => {
   return (
     <Checkbox
       wrapperClassName="csdk-border-b hover:csdk-bg-row-hover"
       label={label}
+      isLabelInactive={inactive}
       checked={checked}
       readOnly
       onChange={onCheck}
@@ -96,6 +98,7 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
             checked={!!selectedMembers.find((sm) => m.key === sm.key)}
             onCheck={() => onSelectMember(m)}
             disabled={disabled}
+            inactive={selectedMembers.find((sm) => m.key === sm.key)?.inactive ?? false}
           />
         ))}
       </div>

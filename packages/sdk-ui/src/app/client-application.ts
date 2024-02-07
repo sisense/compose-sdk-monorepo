@@ -11,6 +11,7 @@ import { DateConfig } from '../query/date-formats';
 import { AppSettings, getSettings } from './settings/settings';
 import { TranslatableError } from '../translation/translatable-error';
 import { PivotClient } from '@sisense/sdk-pivot-client';
+import { LoadingIndicatorConfig } from '../types';
 
 /**
  * Application configuration
@@ -32,6 +33,11 @@ export type AppConfig = {
    * Date Configurations
    */
   dateConfig?: DateConfig;
+
+  /**
+   * Loading Indicator Configurations
+   */
+  loadingIndicatorConfig?: LoadingIndicatorConfig;
 };
 
 /**
@@ -104,9 +110,18 @@ export const createClientApplication = async ({
   wat,
   ssoEnabled,
   appConfig,
+  enableSilentPreAuth,
 }: SisenseContextProviderProps): Promise<ClientApplication> => {
   if (url !== undefined) {
-    const auth = getAuthenticator(url, undefined, undefined, token, wat, ssoEnabled);
+    const auth = getAuthenticator(
+      url,
+      undefined,
+      undefined,
+      token,
+      wat,
+      ssoEnabled,
+      enableSilentPreAuth,
+    );
 
     if (auth) {
       const app = new ClientApplication(url, auth, defaultDataSource);

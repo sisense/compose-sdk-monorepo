@@ -8,7 +8,7 @@ Props of the [AreamapChart](../functions/function.AreamapChart.md) component.
 
 ## Extends
 
-- `BaseChartProps`.`ChartEventProps`
+- `BaseChartProps`.`AreamapChartEventProps`
 
 ## Properties
 
@@ -43,7 +43,7 @@ BaseChartProps.dataSet
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters that will slice query results
 
@@ -81,51 +81,12 @@ Configuration that defines functional style of the various chart elements
 
 ### Callbacks
 
-#### onBeforeRender
-
-> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
-
-Before render handler callback that allows adjusting
-detail chart options prior to render
-
-This callback is not yet supported for Indicator Chart
-
-##### Inherited from
-
-ChartEventProps.onBeforeRender
-
-***
-
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
+> **onDataPointClick**?: [`AreamapDataPointEventHandler`](../type-aliases/type-alias.AreamapDataPointEventHandler.md)
 
 Click handler callback for a data point
 
 ##### Inherited from
 
-ChartEventProps.onDataPointClick
-
-***
-
-#### onDataPointContextMenu
-
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
-
-Context menu handler callback for a data point
-
-##### Inherited from
-
-ChartEventProps.onDataPointContextMenu
-
-***
-
-#### onDataPointsSelected
-
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md)
-
-Handler callback for selection of multiple data points
-
-##### Inherited from
-
-ChartEventProps.onDataPointsSelected
+AreamapChartEventProps.onDataPointClick

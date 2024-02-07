@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo, useState } from 'react';
 
-import { ChartDataOptions, DataPoint, DrilldownOptions, DrilldownSelection } from '../../types';
+import {
+  ChartDataOptions,
+  ChartDataPoint,
+  DataPoint,
+  DrilldownOptions,
+  DrilldownSelection,
+} from '../../types';
 import { Attribute, MembersFilter, filterFactory } from '@sisense/sdk-data';
 import { translateColumnToAttribure } from '../../chart-data-options/utils';
 
@@ -77,12 +83,10 @@ const processDrilldownSelections = (
     drilldownFilters.push(
       filterFactory.members(
         translateColumnToAttribure(currentDimension),
-        points.map((point) => `${point.categoryValue}`),
+        points.map(getMemberNameFromDataPoint),
       ) as MembersFilter,
     );
-    drilldownFiltersDisplayValues.push(
-      points.map((point) => `${point.categoryDisplayValue ?? point.categoryValue}`),
-    );
+    drilldownFiltersDisplayValues.push(points.map(getDisplayMemberNameFromDataPoint));
     currentDimension = nextDimension;
   });
 
@@ -96,3 +100,23 @@ const processDrilldownSelections = (
     },
   };
 };
+
+export function getMemberNameFromDataPoint(point: ChartDataPoint) {
+  // only DataPoint is currently supported for drilldown
+  if ('categoryValue' in point) {
+    return `${point.categoryValue}`;
+  } else {
+    return '';
+  }
+}
+
+export function getDisplayMemberNameFromDataPoint(point: ChartDataPoint) {
+  // only DataPoint is currently supported for drilldown
+  if ('categoryDisplayValue' in point) {
+    return `${point.categoryDisplayValue}`;
+  } else if ('categoryValue' in point) {
+    return `${point.categoryValue}`;
+  } else {
+    return '';
+  }
+}

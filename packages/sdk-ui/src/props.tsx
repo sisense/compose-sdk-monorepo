@@ -6,7 +6,7 @@ import {
   DataSource,
   Data,
   QueryResultData,
-  FilterRelation,
+  FilterRelations,
 } from '@sisense/sdk-data';
 import {
   ChartDataOptions,
@@ -37,6 +37,11 @@ import {
   BoxplotStyleOptions,
   ScattermapStyleOptions,
   AreamapStyleOptions,
+  DataPoint,
+  ScatterDataPoint,
+  AreamapDataPoint,
+  BoxplotDataPoint,
+  ChartDataPoints,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -49,25 +54,12 @@ import {
   ScattermapChartDataOptions,
   AreamapChartDataOptions,
 } from './chart-data-options/types';
-import {
-  DataPointEventHandler,
-  DataPointsEventHandler,
-  ScatterDataPointEventHandler,
-  ScatterDataPointsEventHandler,
-} from './chart-options-processor/apply-event-handlers';
 import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams, QueryByWidgetIdState, QueryState } from './query-execution';
 import { FiltersMergeStrategy } from './dashboard-widget/types';
 import { HookEnableParam } from './common/hooks/types';
 
-export type {
-  ScatterDataPointEventHandler,
-  ScatterDataPointsEventHandler,
-  DataPointEventHandler,
-  DataPointsEventHandler,
-  MenuItemSection,
-  HighchartsOptions,
-};
+export type { MenuItemSection, HighchartsOptions };
 
 /**
  * Configurations for Sisense Context
@@ -133,6 +125,16 @@ export interface SisenseContextProviderProps {
    * @internal
    */
   enableTracking?: boolean;
+
+  /**
+   * Boolean flag to enable sending silent pre-authentication requests to the Sisense instance.
+   * Used to check if user is already authenticated, check is performed in an ivisible iframe.
+   * Used only with SSO authentication.
+   * If not specified, the default value is `false`.
+   *
+   * @internal
+   */
+  enableSilentPreAuth?: boolean;
 }
 
 /**
@@ -153,7 +155,7 @@ export interface ExecuteQueryProps {
   measures?: Measure[];
 
   /** Filters that will slice query results */
-  filters?: Filter[] | FilterRelation;
+  filters?: Filter[] | FilterRelations;
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
@@ -233,38 +235,85 @@ export type BeforeRenderHandler = (
   highchartsOptions: HighchartsOptions,
 ) => HighchartsOptions;
 
-interface BaseChartEventProps {
-  /**
-   * Click handler callback for a data point
-   *
-   * @category Callbacks
-   */
-  onDataPointClick?: DataPointEventHandler | ScatterDataPointEventHandler;
-  /**
-   * Context menu handler callback for a data point
-   *
-   * @category Callbacks
-   */
-  onDataPointContextMenu?: DataPointEventHandler | ScatterDataPointEventHandler;
-  /**
-   * Handler callback for selection of multiple data points
-   *
-   * @category Callbacks
-   */
-  onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
+/**
+ * Click handler for when an abstract data point (data point of any chart) is clicked
+ */
+export type ChartDataPointsEventHandler = (
+  /** Abstract data points that were selected */
+  points: ChartDataPoints,
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent | PointerEvent,
+) => void;
 
+/** Click handler for when multiple data points are selected. */
+export type DataPointsEventHandler = (
+  /** Data points that were selected */
+  points: DataPoint[],
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/** Click handler for when a data point is clicked. One parameter, `DataPoint`, is passed to the function. */
+export type DataPointEventHandler = (
+  /** Data point that was clicked */
+  point: DataPoint,
+  /** Native PointerEvent */
+  nativeEvent: PointerEvent,
+) => void;
+
+/** Click handler for when a scatter data point is clicked */
+export type ScatterDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: ScatterDataPoint,
+  /** Native PointerEvent */
+  nativeEvent: PointerEvent,
+) => void;
+
+/** Click handler for when multiple scatter data points are selected. */
+export type ScatterDataPointsEventHandler = (
+  /** Data points that were selected */
+  points: ScatterDataPoint[],
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Click handler for when a data point on Areamap is clicked.
+ */
+export type AreamapDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: AreamapDataPoint,
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Click handler for when a data point on Boxplot is clicked.
+ */
+export type BoxplotDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: BoxplotDataPoint,
+  /** Native PointerEvent */
+  nativeEvent: PointerEvent,
+) => void;
+
+interface HighchartsBasedChartEventProps {
   /**
    * Before render handler callback that allows adjusting
    * detail chart options prior to render
    *
-   * This callback is not yet supported for Indicator Chart
+   * This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
    *
    * @category Callbacks
    */
   onBeforeRender?: BeforeRenderHandler;
 }
 
-interface ChartEventProps extends BaseChartEventProps {
+/**
+ * Event props for regular (non-specific) charts which uses DataPoint type
+ * to describe data points for events.
+ */
+interface RegularChartEventProps extends HighchartsBasedChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -285,7 +334,11 @@ interface ChartEventProps extends BaseChartEventProps {
   onDataPointsSelected?: DataPointsEventHandler;
 }
 
-interface ScatterChartEventProps extends BaseChartEventProps {
+/**
+ * Event props for Scatter chart which uses ScatterDataPoint type
+ * to describe data points for events.
+ */
+interface ScatterChartEventProps extends HighchartsBasedChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -304,6 +357,46 @@ interface ScatterChartEventProps extends BaseChartEventProps {
    * @category Callbacks
    */
   onDataPointsSelected?: ScatterDataPointsEventHandler;
+}
+
+/**
+ * Event props for Areamap chart which uses AreamapDataPoint type
+ * to describe data points for events.
+ */
+interface AreamapChartEventProps {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?: AreamapDataPointEventHandler;
+}
+
+/**
+ * Event props for Boxplot chart which uses BoxplotDataPoint type
+ * to describe data points for events.
+ */
+interface BoxplotChartEventProps extends HighchartsBasedChartEventProps {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?: BoxplotDataPointEventHandler;
+
+  /**
+   * Context menu handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?: BoxplotDataPointEventHandler;
+
+  /**
+   * Handler callback for selection of multiple data points
+   *
+   * @category Callbacks
+   */
+  onDataPointsSelected?: DataPointsEventHandler;
 }
 
 /**
@@ -340,7 +433,7 @@ export interface BaseChartProps {
    *
    * @category Data
    */
-  filters?: Filter[] | FilterRelation;
+  filters?: Filter[] | FilterRelations;
 
   /**
    * Highlight filters that will highlight results that pass filter criteria
@@ -351,9 +444,42 @@ export interface BaseChartProps {
 }
 
 /**
+ * Chart props to be able to react on chart events.
+ */
+interface ChartEventProps extends HighchartsBasedChartEventProps {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?:
+    | DataPointEventHandler
+    | ScatterDataPointEventHandler
+    | AreamapDataPointEventHandler
+    | BoxplotDataPointEventHandler;
+
+  /**
+   * Context menu handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?:
+    | DataPointEventHandler
+    | ScatterDataPointEventHandler
+    | BoxplotDataPointEventHandler;
+
+  /**
+   * Handler callback for selection of multiple data points
+   *
+   * @category Callbacks
+   */
+  onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
+}
+
+/**
  * Props shared across {@link Chart} components.
  */
-export interface ChartProps extends BaseChartProps, BaseChartEventProps {
+export interface ChartProps extends BaseChartProps, ChartEventProps {
   /**
    * Default chart type of each series.
    *
@@ -387,7 +513,10 @@ export interface ChartProps extends BaseChartProps, BaseChartEventProps {
 /**
  * Props of the {@link AreaChart} component.
  */
-export interface AreaChartProps extends BaseChartProps, ChartEventProps {
+export interface AreaChartProps
+  extends BaseChartProps,
+    RegularChartEventProps,
+    HighchartsBasedChartEventProps {
   /**
    * Configurations for how to interpret and present data passed to the chart.
    *
@@ -405,7 +534,10 @@ export interface AreaChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link BarChart} component.
  */
-export interface BarChartProps extends BaseChartProps, ChartEventProps {
+export interface BarChartProps
+  extends BaseChartProps,
+    RegularChartEventProps,
+    HighchartsBasedChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -423,7 +555,10 @@ export interface BarChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link ColumnChart} component.
  */
-export interface ColumnChartProps extends BaseChartProps, ChartEventProps {
+export interface ColumnChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -441,7 +576,10 @@ export interface ColumnChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link FunnelChart} component.
  */
-export interface FunnelChartProps extends BaseChartProps, ChartEventProps {
+export interface FunnelChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -459,7 +597,10 @@ export interface FunnelChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link LineChart} component.
  */
-export interface LineChartProps extends BaseChartProps, ChartEventProps {
+export interface LineChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
   /**
    * Configurations for how to interpret and present data passed to the chart.
    *
@@ -477,7 +618,10 @@ export interface LineChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link PieChart} component.
  */
-export interface PieChartProps extends BaseChartProps, ChartEventProps {
+export interface PieChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -495,7 +639,10 @@ export interface PieChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link PolarChart} component.
  */
-export interface PolarChartProps extends BaseChartProps, ChartEventProps {
+export interface PolarChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
   /** Configurations for how to interpret and present the data passed to the chart */
   dataOptions: CartesianChartDataOptions;
   /** Configuration that defines functional style of the various chart elements */
@@ -536,7 +683,7 @@ export interface TableProps {
    *
    * @category Data
    */
-  filters?: Filter[] | FilterRelation;
+  filters?: Filter[] | FilterRelations;
 
   /**
    * Configurations that define functional style of the various table elements
@@ -557,7 +704,10 @@ export interface TableProps {
 /**
  * Props of the {@link ScatterChart} component.
  */
-export interface ScatterChartProps extends BaseChartProps, ScatterChartEventProps {
+export interface ScatterChartProps
+  extends BaseChartProps,
+    ScatterChartEventProps,
+    HighchartsBasedChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -577,8 +727,7 @@ export interface ScatterChartProps extends BaseChartProps, ScatterChartEventProp
  *
  */
 export interface DashboardWidgetProps
-  extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'>,
-    BaseChartEventProps {
+  extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'> {
   /**
    * Identifier of the widget
    *
@@ -653,7 +802,7 @@ export interface DashboardWidgetProps
  * Props for the {@link ChartWidget} component
  *
  */
-export interface ChartWidgetProps extends BaseChartEventProps {
+export interface ChartWidgetProps extends ChartEventProps {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
@@ -668,14 +817,7 @@ export interface ChartWidgetProps extends BaseChartEventProps {
    *
    * @category Data
    */
-  filters?: Filter[];
-
-  /**
-   * Specifies the logical relationship between multiple filters (AND, OR)
-   *
-   * @category Data
-   */
-  filterRelations?: FilterRelation;
+  filters?: Filter[] | FilterRelations;
 
   /**
    * Highlight filters that will highlight results that pass filter criteria
@@ -790,7 +932,7 @@ export interface TableWidgetProps {
    *
    * @category Data
    */
-  filters?: Filter[] | FilterRelation;
+  filters?: Filter[] | FilterRelations;
 
   /**
    * Configurations for how to interpret and present the data passed to the table
@@ -902,7 +1044,10 @@ export interface ExecuteQueryByWidgetIdProps {
 /**
  * Props of the {@link TreemapChart} component.
  */
-export interface TreemapChartProps extends BaseChartProps, ChartEventProps {
+export interface TreemapChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -920,7 +1065,10 @@ export interface TreemapChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link SunburstChart} component.
  */
-export interface SunburstChartProps extends BaseChartProps, ChartEventProps {
+export interface SunburstChartProps
+  extends BaseChartProps,
+    RegularChartEventProps,
+    HighchartsBasedChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -938,7 +1086,10 @@ export interface SunburstChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link BoxplotChart} component.
  */
-export interface BoxplotChartProps extends BaseChartProps, ChartEventProps {
+export interface BoxplotChartProps
+  extends BaseChartProps,
+    BoxplotChartEventProps,
+    HighchartsBasedChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -956,7 +1107,7 @@ export interface BoxplotChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link ScattermapChart} component.
  */
-export interface ScattermapChartProps extends BaseChartProps, ChartEventProps {
+export interface ScattermapChartProps extends BaseChartProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *
@@ -974,7 +1125,7 @@ export interface ScattermapChartProps extends BaseChartProps, ChartEventProps {
 /**
  * Props of the {@link AreamapChart} component.
  */
-export interface AreamapChartProps extends BaseChartProps, ChartEventProps {
+export interface AreamapChartProps extends BaseChartProps, AreamapChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *

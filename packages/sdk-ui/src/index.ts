@@ -73,6 +73,7 @@ export {
   type GetDashboardModelsOptions,
 } from './models';
 export { boxWhiskerProcessResult } from './boxplot-utils';
+export { queryStateReducer } from './query-execution/query-state-reducer';
 
 export * from './props';
 export * from './types';

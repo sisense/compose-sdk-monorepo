@@ -153,6 +153,7 @@ export type DatetimeMask = {
 };
 
 export type PanelItem = {
+  instanceid?: string;
   format?: {
     color?: PanelColorFormat;
     mask?: DatetimeMask | NumericMask;

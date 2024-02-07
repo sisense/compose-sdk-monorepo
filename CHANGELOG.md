@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0] - 2024-02-07
+
+### Added
+- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for internal testing
+- Support filter relations (logic operators `and` and `or`) for `DashboardWidget` and `useExecuteQueryByWidgetId`
+
+### Changed
+- Show loading indicator on chart data re-fetch
+- Extend component `IndicatorChart` to support ticker mode (prop param `forceTickerView`) regardless of the display size
+- Extend component `MemberFilterTile` to add indication of inactive members
+- Support `onDataPointClick` prop for `AreamapChart`
+- Refactor to reuse `WidgetModel` in `DashboardWidget` and `useExecuteQueryByWidgetId`
+- Minor improvements for chart navigator, i18n translations, and SSO flow.
+
 ## [1.2.0] - 2024-01-24
 
 ### Added

@@ -23,10 +23,13 @@ export type ChartRenderingOptions = {
 export type IndicatorTypeOptions =
   | {
       type: Exclude<IndicatorStyleType, 'numeric'>;
+      forceTickerView: boolean;
+      tickerBarHeight?: number;
     }
   | {
       type: 'numeric';
       numericSubtype?: NumericIndicatorSubType;
+      forceTickerView: boolean;
     };
 
 export const createIndicatorLegacyChartOptions = (
@@ -67,5 +70,11 @@ export const createIndicatorLegacyChartOptions = (
       typeOptions,
     );
   }
-  return legacyChartOptions;
+  return {
+    ...legacyChartOptions,
+    forceTickerView: typeOptions.forceTickerView,
+    ...(typeOptions.type === 'gauge' && typeOptions.tickerBarHeight
+      ? { tickerBarHeight: typeOptions.tickerBarHeight }
+      : null),
+  };
 };

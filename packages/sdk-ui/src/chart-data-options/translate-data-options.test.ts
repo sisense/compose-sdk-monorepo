@@ -190,6 +190,15 @@ describe('translate data options', () => {
 
       verifyColumns(getAttributes(chartDataOptions, chartType), [col3, colCost]);
     });
+
+    it('returns correct attributes for areamap data options', () => {
+      const chartType = 'areamap';
+      const chartDataOptions = translateChartDataOptions(chartType, {
+        geo: [col3],
+        color: [colCost],
+      });
+      verifyColumns(getAttributes(chartDataOptions, chartType), [col3]);
+    });
   });
 
   describe('getMeasures', () => {
@@ -251,6 +260,15 @@ describe('translate data options', () => {
       const chartType = 'boxplot';
       const chartDataOptions = translateChartDataOptions(chartType, boxplotCustomDataOptions);
       verifyColumns(getMeasures(chartDataOptions, chartType), boxplotCustomDataOptions.value);
+    });
+
+    it('returns correct measures for areamap data options', () => {
+      const chartType = 'areamap';
+      const chartDataOptions = translateChartDataOptions(chartType, {
+        geo: [col3],
+        color: [colCost],
+      });
+      verifyColumns(getMeasures(chartDataOptions, chartType), [colCost]);
     });
   });
 

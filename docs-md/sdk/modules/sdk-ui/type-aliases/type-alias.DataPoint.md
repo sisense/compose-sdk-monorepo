@@ -6,7 +6,7 @@ title: DataPoint
 
 > **DataPoint**: `object`
 
-Data point in a chart.
+Data point in a regular chart.
 
 ## Type declaration
 

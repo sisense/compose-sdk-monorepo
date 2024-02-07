@@ -18,6 +18,14 @@ Date Configurations
 
 ***
 
+### `loadingIndicatorConfig`
+
+**loadingIndicatorConfig**?: [`LoadingIndicatorConfig`](../../sdk-ui/type-aliases/type-alias.LoadingIndicatorConfig.md)
+
+Loading Indicator Configurations
+
+***
+
 ### `locale`
 
 **locale**?: `Locale`

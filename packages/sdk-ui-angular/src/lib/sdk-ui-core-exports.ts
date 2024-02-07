@@ -12,6 +12,7 @@ export type {
   IndicatorChartType,
   BoxplotChartType,
   ScattermapChartType,
+  AreamapChartType,
   TableType,
   AreaSubtype,
   LineSubtype,
@@ -33,6 +34,7 @@ export type {
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
   ScattermapChartDataOptions,
+  AreamapChartDataOptions,
   TableDataOptions,
   WidgetDataOptions,
 
@@ -70,6 +72,7 @@ export type {
   SunburstStyleOptions,
   BoxplotStyleOptions,
   ScattermapStyleOptions,
+  AreamapStyleOptions,
   ChartWidgetStyleOptions,
   WidgetStyleOptions,
   DashboardWidgetStyleOptions,
@@ -99,7 +102,6 @@ export type {
   ScatterDataPoint,
   HighchartsOptions,
   BoxplotDataPoint,
-  DataPoints,
 
   // General (Others)
   AppConfig,

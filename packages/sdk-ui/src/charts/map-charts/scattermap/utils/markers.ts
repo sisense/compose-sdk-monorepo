@@ -1,29 +1,29 @@
 import leaflet from 'leaflet';
 import { ScattermapMarkers } from '@/types';
 
-type PrepareMarkerOptionsProps = {
+type MarkerStyle = {
   color: string;
   size: number;
   fill: Required<ScattermapMarkers>['fill'];
   blur: boolean;
 };
 
-type CreateMarkerProps = {
+export type MarkerConfig = {
   coordinates: {
     lat: number;
     lng: number;
   };
-  style: PrepareMarkerOptionsProps;
+  style: MarkerStyle;
 };
 
-function getFillStats(fill: PrepareMarkerOptionsProps['fill']) {
+function getFillStats(fill: MarkerStyle['fill']) {
   return {
     isLight: ['hollow', 'filled-light'].includes(fill),
     isFilled: ['filled', 'filled-light'].includes(fill),
   };
 }
 
-export function prepareMarkerOptions(style: PrepareMarkerOptionsProps) {
+function prepareMarkerOptions(style: MarkerStyle) {
   const { color, size, fill, blur } = style;
   const { isFilled } = getFillStats(fill);
 
@@ -54,7 +54,7 @@ export function prepareMarkerOptions(style: PrepareMarkerOptionsProps) {
   };
 }
 
-export function createMarker({ coordinates, style }: CreateMarkerProps) {
+export function createMarker({ coordinates, style }: MarkerConfig): leaflet.CircleMarker {
   const marker = new leaflet.CircleMarker(
     {
       lat: coordinates.lat,
@@ -71,7 +71,7 @@ export function createMarker({ coordinates, style }: CreateMarkerProps) {
 
 function onMouseOver(event: leaflet.LeafletMouseEvent) {
   const marker = event.target as leaflet.CircleMarker & {
-    options: { customStyle: PrepareMarkerOptionsProps };
+    options: { customStyle: MarkerStyle };
   };
   const style = marker.options.customStyle;
   const { isFilled, isLight } = getFillStats(style.fill);
@@ -95,7 +95,7 @@ function onMouseOver(event: leaflet.LeafletMouseEvent) {
 
 function onMouseOut(event: leaflet.LeafletMouseEvent) {
   const marker = event.target as leaflet.CircleMarker & {
-    options: { customStyle: PrepareMarkerOptionsProps };
+    options: { customStyle: MarkerStyle };
   };
   const style = marker.options.customStyle;
   marker.setStyle(prepareMarkerOptions(style));

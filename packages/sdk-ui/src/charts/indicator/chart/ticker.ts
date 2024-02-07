@@ -36,7 +36,9 @@ export class Ticker {
     let secTitleMinWidth = 0;
     let secValueMinWidth = 0;
     let titleWidth = 0;
+    let valueWidth = 0;
     let secTitleWidth = 0;
+    let secValueWidth = 0;
     let neededWidth;
 
     ctx.font = options.valueFont!;
@@ -52,6 +54,7 @@ export class Ticker {
     if (data.showTitle) {
       ctx.font = options.titleFont!;
 
+      valueWidth = $indicatorHelper.getStringWidth(ctx, data.value.text);
       titleWidth = $indicatorHelper.getStringWidth(ctx, data.title.text);
       titleMinWidth = titleWidth < sectionMinWidth ? titleWidth : sectionMinWidth;
       neededWidth += titleMinWidth + options.textPadding;
@@ -60,7 +63,7 @@ export class Ticker {
     if (data.showSecondary) {
       ctx.font = options.secondaryValueFont!;
 
-      const secValueWidth = $indicatorHelper.getStringWidth(ctx, data.secondary.text);
+      secValueWidth = $indicatorHelper.getStringWidth(ctx, data.secondary.text);
 
       secValueMinWidth = secValueWidth < sectionMinWidth ? secValueWidth : sectionMinWidth;
       neededWidth += secValueMinWidth;
@@ -77,11 +80,23 @@ export class Ticker {
     }
 
     if (data.type === 'gauge') {
-      const tickerBarWidth =
-        options.barWidth + options.horizontalPadding * 2 + options.dividerWidth;
+      const barAdditionalSpace = options.horizontalPadding * 2 + options.dividerWidth;
+      if (options.forceTickerView) {
+        const valuesWidth =
+          valueWidth +
+          titleWidth +
+          secTitleWidth +
+          secValueWidth +
+          options.textPadding * 4 +
+          barAdditionalSpace;
+        const responsiveBarWidth = maxWidth - barAdditionalSpace - valuesWidth;
+        options.barWidth = Math.max(responsiveBarWidth, options.barWidth);
+      }
+
+      const tickerBarWidth = options.barWidth + barAdditionalSpace;
 
       neededWidth += tickerBarWidth;
-      options.showTickerBar = neededWidth <= maxWidth;
+      options.showTickerBar = neededWidth <= maxWidth || true;
       canvasWidth += options.showTickerBar ? tickerBarWidth : 0;
     }
 

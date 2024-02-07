@@ -1,7 +1,7 @@
 import { measureFactory } from '@sisense/sdk-data';
 import { useState } from 'react';
 import { Chart } from '../../chart.js';
-import { ExecuteQuery } from '../../index.js';
+import { AreamapChart, AreamapDataPoint, ExecuteQuery } from '../../index.js';
 import * as DM from '../sample-ecommerce.js';
 
 export const AreamapChartDemo = () => {
@@ -21,14 +21,16 @@ export const AreamapChartDemo = () => {
             },
           ],
         }}
+        onDataPointClick={(dataPoint: AreamapDataPoint) => {
+          console.log("Chart 'areamap' dataPoint clicked:", dataPoint);
+        }}
         styleOptions={{
           mapType: 'world',
         }}
       />
       <h2>Areamap Chart (states) </h2>
-      <Chart
+      <AreamapChart
         dataSet={DM.DataSource}
-        chartType={'areamap'}
         dataOptions={{
           geo: [DM.Country.Country],
           color: [
@@ -42,6 +44,9 @@ export const AreamapChartDemo = () => {
           mapType: 'usa',
           width: 500,
           height: 500,
+        }}
+        onDataPointClick={(dataPoint) => {
+          console.log('AreamapChart dataPoint clicked:', dataPoint);
         }}
       />
       <h2>Areamap Chart with custom data (loaded via ExecuteQuery)</h2>

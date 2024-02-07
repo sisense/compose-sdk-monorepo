@@ -1,14 +1,21 @@
+/* eslint-disable max-lines-per-function */
 import React, { useMemo, type FunctionComponent } from 'react';
+import { type Filter } from '@sisense/sdk-data';
 import { ChartWidget } from '../widgets/chart-widget';
 import { TableWidget } from '../widgets/table-widget';
-import { extractWidgetProps } from './translate-widget';
-import { ChartWidgetProps, DashboardWidgetProps } from '../props';
+import { ChartWidgetProps, DashboardWidgetProps, TableWidgetProps } from '../props';
 import { useThemeContext } from '../theme-provider';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import { mergeFilters, mergeFiltersByStrategy } from './utils';
+import {
+  convertFilterRelationsModelToJaql,
+  getFilterRelationsFromJaql,
+  isTabularWidget,
+  mergeFilters,
+  mergeFiltersByStrategy,
+} from './utils';
 import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
 import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model';
-import { Filter } from '@sisense/sdk-data';
+import { WidgetModel } from '../models';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -39,20 +46,25 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     includeDashboard: includeDashboardFilters,
   });
 
-  if (fetchError) {
-    throw fetchError;
-  }
+  if (fetchError) throw fetchError;
 
-  const { type: widgetType, props: fetchedProps } = useMemo(() => {
+  const { widgetType, props: fetchedProps } = useMemo(() => {
     if (!fetchedWidget) {
-      return { type: null, props: null };
+      return { widgetType: null, props: null };
     }
 
-    const extractedWidgetProps = extractWidgetProps(fetchedWidget, themeSettings);
+    const widgetModel = new WidgetModel(fetchedWidget, themeSettings);
+    const extractedWidgetProps = {
+      props: isTabularWidget(widgetModel.widgetType)
+        ? widgetModel.getTableWidgetProps()
+        : widgetModel.getChartWidgetProps(),
+      widgetType: widgetModel.widgetType,
+    };
 
     if (includeDashboardFilters) {
       const { filters: dashboardFilters, highlights: dashboardHighlights } =
         extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
+
       extractedWidgetProps.props.filters = mergeFilters(
         dashboardFilters,
         extractedWidgetProps.props.filters as Filter[],
@@ -63,6 +75,8 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     return extractedWidgetProps;
   }, [fetchedWidget, fetchedDashboard, themeSettings, includeDashboardFilters]);
 
+  // if filter relations are set on dashboard widget, additionally provided filters will be ignored
+  // since there is not enough information how to merge them
   const filters = mergeFiltersByStrategy(
     fetchedProps?.filters as Filter[],
     restProps.filters,
@@ -78,11 +92,20 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
   if (!fetchedProps) {
     return null;
   }
-  return widgetType === 'table' ? (
+  const filterRelations = getFilterRelationsFromJaql(
+    filters,
+    convertFilterRelationsModelToJaql(
+      fetchedDashboard?.filterRelations?.length
+        ? fetchedDashboard?.filterRelations[0].filterRelations
+        : undefined,
+    ),
+  );
+
+  return isTabularWidget(widgetType) ? (
     <TableWidget
-      {...fetchedProps}
+      {...(fetchedProps as TableWidgetProps)}
       {...restProps}
-      filters={filters}
+      filters={filterRelations}
       styleOptions={{
         ...fetchedProps.styleOptions,
         ...props.styleOptions,
@@ -90,12 +113,12 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     />
   ) : (
     <ChartWidget
-      {...fetchedProps}
+      {...(fetchedProps as ChartWidgetProps)}
       {...restProps}
-      filters={filters}
+      filters={filterRelations}
       highlights={highlights}
       drilldownOptions={{
-        ...fetchedProps.drilldownOptions,
+        ...(fetchedProps as ChartWidgetProps).drilldownOptions,
         ...props.drilldownOptions,
       }}
       styleOptions={{

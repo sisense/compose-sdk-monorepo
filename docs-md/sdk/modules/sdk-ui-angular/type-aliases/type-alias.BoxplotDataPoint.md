@@ -6,11 +6,15 @@ title: BoxplotDataPoint
 
 > **BoxplotDataPoint**: `object`
 
+Data point in a Boxplot chart.
+
 ## Type declaration
 
 ### `boxMax`
 
 **boxMax**: `number`
+
+Value of the box maximum
 
 ***
 
@@ -18,11 +22,15 @@ title: BoxplotDataPoint
 
 **boxMedian**: `number`
 
+Value of the box median
+
 ***
 
 ### `boxMin`
 
 **boxMin**: `number`
+
+Value of the box minimum
 
 ***
 
@@ -30,11 +38,15 @@ title: BoxplotDataPoint
 
 **categoryDisplayValue**?: `string`
 
+Display value of category of the data point
+
 ***
 
 ### `categoryValue`
 
 **categoryValue**?: `string` \| `number`
+
+Value of the category for the data point
 
 ***
 
@@ -42,8 +54,12 @@ title: BoxplotDataPoint
 
 **whiskerMax**: `number`
 
+Value of the box maximal whisker
+
 ***
 
 ### `whiskerMin`
 
 **whiskerMin**: `number`
+
+Value of the box minimal whisker

@@ -47,7 +47,7 @@ the chart will use the `defaultDataSource` specified in the parent Sisense Conte
 
 #### filters
 
-> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
+> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters that will slice query results
 
@@ -84,13 +84,13 @@ Configuration that defines functional style of the various chart elements
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for Indicator Chart
+This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
 
 ***
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md), [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md), [`"point"`, `"nativeEvent"`] \> \>
 
 Click handler callback for a data point
 
@@ -98,7 +98,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md), [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointContextMenu**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md), [`"point"`, `"nativeEvent"`] \> \>
 
 Context menu handler callback for a data point
 

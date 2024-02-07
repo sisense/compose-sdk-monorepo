@@ -5,11 +5,11 @@ import {
   Cell,
   QueryResultData,
   DataSource,
-  FilterRelation,
   PivotAttribute,
   PivotMeasure,
   PivotQueryResultData,
   PivotGrandTotals,
+  FilterRelationsJaql,
 } from '@sisense/sdk-data';
 
 /**
@@ -21,7 +21,7 @@ export type QueryDescription = {
   measures: Measure[];
   filters: Filter[];
   highlights: Filter[];
-  filterRelations?: FilterRelation;
+  filterRelations?: FilterRelationsJaql;
   count?: number;
   offset?: number;
 };
@@ -37,7 +37,7 @@ export type PivotQueryDescription = {
   grandTotals: PivotGrandTotals;
   filters: Filter[];
   highlights: Filter[];
-  filterRelations?: FilterRelation;
+  filterRelations?: FilterRelationsJaql;
   count?: number;
   offset?: number;
 };
@@ -149,7 +149,7 @@ export type MetadataItemJaql = {
 };
 
 export type JaqlQueryPayload = QueryOptions & {
-  filterRelations?: FilterRelation;
+  filterRelations?: FilterRelationsJaql;
   metadata: MetadataItem[];
 };
 

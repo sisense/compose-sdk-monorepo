@@ -42,8 +42,9 @@ export function extractFilterModelFromJaql(jaql: FilterJaql) {
  * @returns - The created Filter object.
  */
 // TODO: rewrite to transform into valid dimensional element filter object
-export function createFilterFromJaql(jaql: FilterJaql): Filter {
+export function createFilterFromJaql(jaql: FilterJaql, instanceid?: string): Filter {
   return {
+    guid: instanceid,
     jaql: (nested?: boolean) => {
       if (nested) {
         return jaql;
@@ -111,6 +112,6 @@ function getEnabledFilterPanelItems(panels: Panel[]): PanelItem[] {
  */
 export function extractFilters(panels: Panel[]) {
   return getEnabledFilterPanelItems(panels).map((filterItem) =>
-    createFilterFromJaql(filterItem.jaql as FilterJaql),
+    createFilterFromJaql(filterItem.jaql as FilterJaql, filterItem.instanceid),
   );
 }

@@ -5,7 +5,7 @@ import {
   Data,
   DataSource,
   Filter,
-  FilterRelation,
+  FilterRelationsJaql,
   isDataSource,
   Measure,
 } from '@sisense/sdk-data';
@@ -21,7 +21,7 @@ type UseDataProps = {
   dataSet: Data | DataSource | undefined;
   dataOptions: TableDataOptionsInternal | null;
   filters: Filter[] | undefined;
-  filterRelations: FilterRelation | undefined;
+  filterRelations: FilterRelationsJaql | undefined;
   count: number;
   offset: number;
 };

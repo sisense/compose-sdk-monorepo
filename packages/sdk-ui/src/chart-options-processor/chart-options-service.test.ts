@@ -335,17 +335,17 @@ it('chart navigator is off if x axis count is greater than 70 and autoZoom false
   expect(chartOptions?.navigator?.enabled).toBe(false);
 });
 
-it('chart navigator is off if x axis count is less than 70 and autoZoom true', () => {
+it('chart navigator is off if x axis count is less than 50 and autoZoom true', () => {
   const chartData: CartesianChartData = {
     type: 'cartesian',
     xAxisCount: 1,
-    xValues: Array<number>(69)
+    xValues: Array<number>(49)
       .fill(0)
       .map((d, index) => ({ key: `x${index}`, xValues: [`x${index}`] })),
     series: [
       {
         name: 'series1',
-        data: Array<number>(71)
+        data: Array<number>(51)
           .fill(0)
           .map((value) => ({ value })),
       },

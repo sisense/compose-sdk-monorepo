@@ -14,12 +14,15 @@ interface IsAuthResponse {
 export class SsoAuthenticator implements Authenticator {
   readonly url: string;
 
+  private _enableSilentPreAuth: boolean;
+
   private _valid = true;
 
   private _authenticating = false;
 
-  constructor(url: string) {
+  constructor(url: string, enableSilentPreAuth = false) {
     this.url = url;
+    this._enableSilentPreAuth = enableSilentPreAuth;
   }
 
   isValid(): boolean {
@@ -38,26 +41,60 @@ export class SsoAuthenticator implements Authenticator {
     return headers;
   }
 
-  async authenticate(): Promise<boolean> {
-    this._authenticating = true;
+  private async authenticateSilent(loginUrl: string): Promise<void> {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    iframe.src = `${loginUrl}?return_to=${window.location.href}`;
+
+    await new Promise((resolve) => {
+      iframe.onload = () => {
+        resolve(true);
+      };
+    });
+
+    document.body.removeChild(iframe);
+  }
+
+  private async checkAuthentication(): Promise<{ isAuthenticated: boolean; loginUrl: string }> {
     const fetchUrl = `${this.url}${!this.url.endsWith('/') ? '/' : ''}api/auth/isauth`;
-    return fetch(fetchUrl, {
+    const response = await fetch(fetchUrl, {
       headers: { Internal: 'true' },
       credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((res: IsAuthResponse) => {
-        if (!res.isAuthenticated) {
-          // SSO is disabled on instance, do not proceed
-          if (!res.ssoEnabled) throw new TranslatableError('errors.ssoNotEnabled');
-          // redirect to login page
-          window?.location?.assign(`${res.loginUrl}?return_to=${window.location.href}`);
-          return false;
-        } else {
-          // no authentication needed, indicate success
-          this._authenticating = false;
-          return true;
-        }
-      });
+    });
+
+    const result: IsAuthResponse = await response.json();
+
+    if (!result.isAuthenticated) {
+      if (!result.ssoEnabled) {
+        throw new TranslatableError('errors.ssoNotEnabled');
+      }
+
+      if (!result.loginUrl) {
+        throw new TranslatableError('errors.ssoNoLoginUrl');
+      }
+    }
+
+    return {
+      isAuthenticated: result.isAuthenticated,
+      loginUrl: `${result.loginUrl}?return_to=${window.location.href}`,
+    };
+  }
+
+  async authenticate(silent = true): Promise<boolean> {
+    this._authenticating = true;
+    const { isAuthenticated, loginUrl } = await this.checkAuthentication();
+    if (!isAuthenticated) {
+      if (this._enableSilentPreAuth && silent) {
+        await this.authenticateSilent(loginUrl);
+        return this.authenticate(false);
+      }
+      window?.location?.assign(loginUrl);
+      return false;
+    } else {
+      // no authentication needed, indicate success
+      this._authenticating = false;
+      return true;
+    }
   }
 }

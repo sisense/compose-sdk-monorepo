@@ -12,9 +12,7 @@ title: sdk-data
 
 ## Enumerations
 
-- [DataType](enumerations/enumeration.DataType.md)
 - [Sort](enumerations/enumeration.Sort.md)
-- [SortDirection](enumerations/enumeration.SortDirection.md)
 
 ## Interfaces
 
@@ -29,7 +27,7 @@ title: sdk-data
 - [DateDimension](interfaces/interface.DateDimension.md)
 - [Dimension](interfaces/interface.Dimension.md)
 - [Filter](interfaces/interface.Filter.md)
-- [FilterRelation](interfaces/interface.FilterRelation.md)
+- [FilterRelations](interfaces/interface.FilterRelations.md)
 - [LevelAttribute](interfaces/interface.LevelAttribute.md)
 - [Measure](interfaces/interface.Measure.md)
 - [MeasureColumn](interfaces/interface.MeasureColumn.md)
@@ -41,27 +39,16 @@ title: sdk-data
 
 ## Type Aliases
 
-- [BackgroundFilter](type-aliases/type-alias.BackgroundFilter.md)
-- [BaseFilter](type-aliases/type-alias.BaseFilter.md)
-- [BaseJaql](type-aliases/type-alias.BaseJaql.md)
 - [DataSource](type-aliases/type-alias.DataSource.md)
-- [ExcludeMembersFilter](type-aliases/type-alias.ExcludeMembersFilter.md)
-- [FilterJaql](type-aliases/type-alias.FilterJaql.md)
-- [FilterRelationJaqlNode](type-aliases/type-alias.FilterRelationJaqlNode.md)
-- [FilterRelationNode](type-aliases/type-alias.FilterRelationNode.md)
+- [FilterRelationsJaqlIdNode](type-aliases/type-alias.FilterRelationsJaqlIdNode.md)
+- [FilterRelationsModelIdNode](type-aliases/type-alias.FilterRelationsModelIdNode.md)
+- [FilterRelationsNode](type-aliases/type-alias.FilterRelationsNode.md)
 - [ForecastFormulaOptions](type-aliases/type-alias.ForecastFormulaOptions.md)
-- [FormulaContext](type-aliases/type-alias.FormulaContext.md)
-- [FormulaID](type-aliases/type-alias.FormulaID.md)
-- [FormulaJaql](type-aliases/type-alias.FormulaJaql.md)
-- [IncludeAllFilter](type-aliases/type-alias.IncludeAllFilter.md)
-- [IncludeMembersFilter](type-aliases/type-alias.IncludeMembersFilter.md)
-- [Jaql](type-aliases/type-alias.Jaql.md)
 - [PivotGrandTotals](type-aliases/type-alias.PivotGrandTotals.md)
 - [PivotGrid](type-aliases/type-alias.PivotGrid.md)
 - [TotalsCalculation](type-aliases/type-alias.TotalsCalculation.md)
 - [TreeNode](type-aliases/type-alias.TreeNode.md)
 - [TrendFormulaOptions](type-aliases/type-alias.TrendFormulaOptions.md)
-- [TurnOffMembersFilter](type-aliases/type-alias.TurnOffMembersFilter.md)
 
 ## Variables
 

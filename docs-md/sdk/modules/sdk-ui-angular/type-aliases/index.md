@@ -6,6 +6,7 @@ title: Type Aliases
 
 - [AppConfig](type-alias.AppConfig.md)
 - [AreaSubtype](type-alias.AreaSubtype.md)
+- [AreamapChartType](type-alias.AreamapChartType.md)
 - [AxisLabel](type-alias.AxisLabel.md)
 - [BeforeRenderHandler](type-alias.BeforeRenderHandler.md)
 - [BoxWhiskerType](type-alias.BoxWhiskerType.md)
@@ -32,7 +33,6 @@ title: Type Aliases
 - [DataColorCondition](type-alias.DataColorCondition.md)
 - [DataColorOptions](type-alias.DataColorOptions.md)
 - [DataPoint](type-alias.DataPoint.md)
-- [DataPoints](type-alias.DataPoints.md)
 - [DateConfig](type-alias.DateConfig.md)
 - [DateLevel](type-alias.DateLevel.md)
 - [DayOfWeek](type-alias.DayOfWeek.md)

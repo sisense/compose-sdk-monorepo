@@ -23,7 +23,10 @@ export const LoadingDots = ({ color }: { color: string | undefined }) => {
     animationDelay: '-0.16s',
   };
 
-  const thirdDotStyle = dotStyle;
+  const thirdDotStyle = {
+    ...dotStyle,
+    marginRight: 'unset',
+  };
 
   const keyframes = {
     '0%, 80%, 100%': {

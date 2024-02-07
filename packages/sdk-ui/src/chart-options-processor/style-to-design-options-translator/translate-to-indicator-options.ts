@@ -22,6 +22,9 @@ export function getIndicatorChartDesignOptions(
       indicatorSpecificMixin = {
         indicatorType: 'gauge',
         skin: styleOptions.skin,
+        ...(styleOptions.tickerBarHeight
+          ? { tickerBarHeight: styleOptions.tickerBarHeight }
+          : null),
       } as GaugeSpecificDesignOptions;
       break;
   }
@@ -32,5 +35,6 @@ export function getIndicatorChartDesignOptions(
     indicatorComponents:
       styleOptions.indicatorComponents ||
       (BaseDesignOptions as IndicatorChartDesignOptions).indicatorComponents,
+    forceTickerView: Boolean(styleOptions.forceTickerView),
   };
 }

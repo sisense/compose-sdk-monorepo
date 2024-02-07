@@ -327,4 +327,5 @@ export const defaultTickerOptions: TickerOptions = {
   sectionMinWidth: 20,
   dividerWidth: 1,
   dividerHeight: 13,
+  forceTickerView: false,
 };

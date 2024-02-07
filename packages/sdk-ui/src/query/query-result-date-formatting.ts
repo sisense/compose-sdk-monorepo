@@ -81,7 +81,6 @@ export function applyDateFormats(
 
       let text = newCell.text;
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
         text = applyDateFormat(parseISO(newCell.data), dateFormatForThisColumn, locale, dateConfig);
       } catch (e: unknown) {
         console.error(e);

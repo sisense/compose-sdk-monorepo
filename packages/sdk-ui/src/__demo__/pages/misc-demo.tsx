@@ -19,7 +19,7 @@ import { PolarChart } from '../../polar-chart';
 import { ScatterChart } from '../../scatter-chart';
 import { ThemeProvider } from '../../theme-provider';
 import { Chart } from '../../chart';
-import { DataPoint, DataPoints, ScatterDataPoint } from '../../types';
+import { DataPoint, ChartDataPoints, ScatterDataPoint } from '../../types';
 
 /**
 This page is used by Tuan for testing quickly the SDK UI components for API Doc.
@@ -37,7 +37,7 @@ export const MiscDemo = () => {
     .slice(0, LONG_LIST_LEN - 1)
     .map((m) => ({ key: m, title: m }));
 
-  const onDataPointsSelected = (points: DataPoints) => console.log('Point selected', points);
+  const onDataPointsSelected = (points: ChartDataPoints) => console.log('Point selected', points);
   const onDataPointClicked = (point: DataPoint | ScatterDataPoint) =>
     console.log('Point clicked', point);
 

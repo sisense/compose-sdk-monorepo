@@ -12,11 +12,11 @@ import {
   Data,
   DataSource,
   Filter,
-  FilterRelation,
+  FilterRelations,
   isDataSource,
   Measure,
 } from '@sisense/sdk-data';
-import { useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import {
   BoxplotChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -28,7 +28,7 @@ import { filterAndAggregateChartData } from './chart-data/filter-and-aggregate-c
 import { ChartData, ScattermapChartData } from './chart-data/types';
 import { translateStyleOptionsToDesignOptions } from './chart-options-processor/style-to-design-options-translator/translate-style-to-design-options';
 import { ChartDesignOptions } from './chart-options-processor/translations/types';
-import { ChartProps } from './props';
+import { AreamapDataPointEventHandler, ChartProps } from './props';
 import { executeQuery } from './query/execute-query';
 import { applyDateFormats } from './query/query-result-date-formatting';
 import { ChartDataOptions, ChartType, ChartStyleOptions } from './types';
@@ -38,7 +38,7 @@ import {
   isIndicatorChartDataOptionsInternal,
   isIndicatorDesignOptions,
 } from './indicator-canvas';
-import { SisenseChart } from './sisense-chart';
+import { SisenseChart, SisenseChartDataPointEventHandler } from './sisense-chart';
 import { useSisenseContext } from './sisense-context/sisense-context';
 import merge from 'ts-deepmerge';
 import { useThemeContext } from './theme-provider';
@@ -67,6 +67,7 @@ import {
   isAreamapDataOptions,
   isAreamapChartDesignOptions,
 } from './charts/map-charts/areamap/areamap';
+import { LoadingOverlay } from './common/components/loading-overlay';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -181,6 +182,7 @@ export const Chart = asSisenseComponent({
     onBeforeRender,
   } = props;
 
+  const [isLoading, setIsLoading] = useState(false);
   const defaultSize = getChartDefaultSize(chartType);
   const { themeSettings } = useThemeContext();
 
@@ -197,6 +199,7 @@ export const Chart = asSisenseComponent({
     filters,
     highlights,
     refreshCounter,
+    setIsLoading,
   );
 
   const designOptions = useMemo((): ChartDesignOptions | null => {
@@ -267,13 +270,15 @@ export const Chart = asSisenseComponent({
           const ScattermapChartDesignOptions =
             designOptions as unknown as ScattermapChartDesignOptions;
           return (
-            <Scattermap
-              chartData={scattermapChartData}
-              dataOptions={scattermapChartDataOptions}
-              designOptions={ScattermapChartDesignOptions}
-              dataSource={isString(dataSet) ? dataSet : null}
-              filters={filters}
-            />
+            <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+              <Scattermap
+                chartData={scattermapChartData}
+                dataOptions={scattermapChartDataOptions}
+                designOptions={ScattermapChartDesignOptions}
+                dataSource={isString(dataSet) ? dataSet : null}
+                filters={filters}
+              />
+            </LoadingOverlay>
           );
         }
 
@@ -284,12 +289,14 @@ export const Chart = asSisenseComponent({
             isIndicatorDesignOptions(designOptions)
           ) {
             return (
-              <IndicatorCanvas
-                chartData={chartData}
-                dataOptions={chartDataOptions}
-                designOptions={designOptions}
-                themeSettings={themeSettings}
-              />
+              <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+                <IndicatorCanvas
+                  chartData={chartData}
+                  dataOptions={chartDataOptions}
+                  designOptions={designOptions}
+                  themeSettings={themeSettings}
+                />
+              </LoadingOverlay>
             );
           }
 
@@ -303,29 +310,36 @@ export const Chart = asSisenseComponent({
             isAreamapChartDesignOptions(designOptions)
           ) {
             return (
-              <Areamap
-                chartData={chartData}
-                dataOptions={chartDataOptions}
-                designOptions={designOptions}
-                themeSettings={themeSettings}
-              />
+              <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+                <Areamap
+                  chartData={chartData}
+                  dataOptions={chartDataOptions}
+                  designOptions={designOptions}
+                  themeSettings={themeSettings}
+                  onDataPointClick={onDataPointClick as AreamapDataPointEventHandler | undefined}
+                />
+              </LoadingOverlay>
             );
           }
           return null;
         }
 
         return (
-          <SisenseChart
-            chartType={chartType}
-            chartData={chartData}
-            chartDataOptions={chartDataOptions}
-            designOptions={designOptions}
-            themeSettings={themeSettings}
-            onDataPointClick={onDataPointClick}
-            onDataPointContextMenu={onDataPointContextMenu}
-            onDataPointsSelected={onDataPointsSelected}
-            onBeforeRender={onBeforeRender}
-          />
+          <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+            <SisenseChart
+              chartType={chartType}
+              chartData={chartData}
+              chartDataOptions={chartDataOptions}
+              designOptions={designOptions}
+              themeSettings={themeSettings}
+              onDataPointClick={onDataPointClick as SisenseChartDataPointEventHandler | undefined}
+              onDataPointContextMenu={
+                onDataPointContextMenu as SisenseChartDataPointEventHandler | undefined
+              }
+              onDataPointsSelected={onDataPointsSelected}
+              onBeforeRender={onBeforeRender}
+            />
+          </LoadingOverlay>
         );
       }}
     </DynamicSizeContainer>
@@ -340,9 +354,10 @@ const useSyncedData = (
   attributes: Attribute[],
   measures: Measure[],
   dataColumnNamesMapping: DataColumnNamesMapping,
-  filters?: Filter[] | FilterRelation,
+  filters?: Filter[] | FilterRelations,
   highlights?: Filter[],
   refreshCounter?: number,
+  setIsLoading?: Dispatch<SetStateAction<boolean>>,
 ) => {
   const setError = useSetError();
 
@@ -380,6 +395,13 @@ const useSyncedData = (
         );
       }
 
+      const loadingIndicatorConfig = app?.settings.loadingIndicatorConfig;
+
+      const isLoadingTimeout = setTimeout(() => {
+        if (loadingIndicatorConfig?.enabled) {
+          setIsLoading?.(true);
+        }
+      }, loadingIndicatorConfig?.delay);
       executeQueryPromise
         .then((queryResultData) => {
           const dataWithDateFormatting = applyDateFormats(
@@ -396,6 +418,12 @@ const useSyncedData = (
         .catch((asyncError: Error) => {
           // set error state to trigger rerender and throw synchronous error
           setError(asyncError);
+        })
+        .finally(() => {
+          clearTimeout(isLoadingTimeout);
+          if (loadingIndicatorConfig?.enabled) {
+            setIsLoading?.(false);
+          }
         });
     } else {
       // Issues related to queried data such as data access permission, non-existent data source,

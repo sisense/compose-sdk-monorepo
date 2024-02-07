@@ -1,6 +1,6 @@
 import * as DM from '../sample-ecommerce.js';
 import { Filter, filterFactory, analyticsFactory } from '@sisense/sdk-data';
-import { BoxplotStyleOptions } from '../../types.js';
+import { BoxplotDataPoint, BoxplotStyleOptions } from '../../types.js';
 import { ExecuteQuery } from '../../query-execution/index.js';
 import {
   BoxplotChartCustomDataOptions,
@@ -68,6 +68,9 @@ export const BoxplotChartDemo: React.FC = () => {
         filters={filters}
         dataOptions={dataOptions}
         styleOptions={styleOptions}
+        onDataPointClick={(dataPoint: BoxplotDataPoint) => {
+          console.log('onDataPointClick', dataPoint);
+        }}
       />
       <h2>Boxplot Chart with custom data (loaded via ExecuteQuery)</h2>
       <ExecuteQuery

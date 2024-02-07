@@ -8,15 +8,22 @@ import { ChartDesignOptions } from '../../../chart-options-processor/translation
 import { ThemeSettings } from '../../../types.js';
 import { AreamapMap } from './areamap-map.js';
 import { useGeoJson } from './use-geo-json.js';
+import { AreamapDataPointEventHandler } from '../../../props';
 
-export type AreamapChartProps = {
+export type AreamapProps = {
   chartData: AreamapData;
   dataOptions: AreamapChartDataOptionsInternal;
   designOptions: AreamapChartDesignOptions;
   themeSettings: ThemeSettings;
+  onDataPointClick?: AreamapDataPointEventHandler;
 };
 
-export const Areamap: React.FC<AreamapChartProps> = ({ chartData, dataOptions, designOptions }) => {
+export const Areamap: React.FC<AreamapProps> = ({
+  chartData,
+  dataOptions,
+  designOptions,
+  onDataPointClick,
+}) => {
   const { geoJson } = useGeoJson(designOptions.mapType);
   return (
     <>
@@ -26,6 +33,7 @@ export const Areamap: React.FC<AreamapChartProps> = ({ chartData, dataOptions, d
           geoData={chartData.geoData}
           dataOptions={{
             originalValueTitle: dataOptions.color.title || dataOptions.color.name,
+            onAreaClick: onDataPointClick,
           }}
           mapType={designOptions.mapType}
         />

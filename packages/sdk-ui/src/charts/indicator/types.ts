@@ -58,6 +58,7 @@ type CommonOptions = {
   };
   textKeys: string[];
   backgroundColor: string;
+  forceTickerView?: boolean;
 };
 
 export type NumericSimpleOptions = CommonOptions & {
@@ -128,6 +129,7 @@ export type GaugeOptions = CommonOptions & {
   )[];
   gaugeHeights: BaseMeasure[];
   measureKeys: string[];
+  tickerBarHeight?: number;
 };
 
 export type TickerOptions = CommonOptions & {

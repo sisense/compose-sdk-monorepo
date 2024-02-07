@@ -28,7 +28,7 @@ export function extractDashboardFiltersForWidget(dashboard: DashboardDto, widget
   );
 
   return {
-    filters: filters.map((f) => createFilterFromJaql(f.jaql)),
+    filters: filters.map((f) => createFilterFromJaql(f.jaql, f.instanceid)),
     highlights: highlights.map((f) => createFilterFromJaql(f.jaql)),
   };
 }
@@ -72,9 +72,10 @@ function getDashboardFilters(dashboard: DashboardDto, filtersIgnoringRules?: Fil
         !filtersIgnoringRules?.all && !disabled && !filtersIgnoringRules?.ids.includes(instanceid)
       );
     })
-    .map(({ jaql }) => {
+    .map(({ jaql, instanceid }) => {
       const { filter, turnOffMembersFilter } = extractFilterModelFromJaql(jaql);
       return {
+        instanceid,
         jaql: {
           ...jaql,
           filter: {

@@ -3,11 +3,16 @@ import classNames from 'classnames';
 
 type CheckboxProps = {
   label?: string;
+  isLabelInactive?: boolean;
   wrapperClassName?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export const Checkbox: FunctionComponent<CheckboxProps> = (props) => {
-  const { wrapperClassName, label, ...checkboxProps } = props;
+  const { wrapperClassName, label, isLabelInactive, ...checkboxProps } = props;
+  const labelClassnames = ['csdk-border-l', 'csdk-pl-3'];
+
+  if (isLabelInactive) labelClassnames.push('csdk-opacity-50');
+
   return (
     <label
       className={classNames(
@@ -28,7 +33,7 @@ export const Checkbox: FunctionComponent<CheckboxProps> = (props) => {
           },
         )}
       />
-      {label && <span className="csdk-border-l csdk-pl-3">{label}</span>}
+      {label && <span className={labelClassnames.join(' ')}>{label}</span>}
     </label>
   );
 };

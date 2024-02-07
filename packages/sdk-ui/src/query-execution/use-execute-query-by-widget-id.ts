@@ -4,14 +4,16 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { isEqual } from 'lodash';
 import { withTracking } from '../decorators/hook-decorators';
-import { ExecuteQueryParams } from './';
 import { queryStateReducer } from './query-state-reducer';
 import { useSisenseContext } from '../sisense-context/sisense-context';
-import { executeQuery } from '../query/execute-query';
-import { mergeFilters, mergeFiltersByStrategy } from '../dashboard-widget/utils';
+import { QueryDescription, executeQuery } from '../query/execute-query';
+import {
+  convertFilterRelationsModelToJaql,
+  mergeFilters,
+  mergeFiltersByStrategy,
+} from '../dashboard-widget/utils';
 import { isFiltersChanged } from '../utils/filters-comparator';
 import { ClientApplication } from '../app/client-application';
-import { extractQueryFromWidget } from './utils';
 import { TranslatableError } from '../translation/translatable-error';
 import { RestApi } from '../api/rest-api';
 import { usePrevious } from '../common/hooks/use-previous';
@@ -19,6 +21,7 @@ import { extractDashboardFiltersForWidget } from '../dashboard-widget/translate-
 import { fetchWidgetDtoModel } from '../dashboard-widget/use-fetch-widget-dto-model';
 import { ExecuteQueryByWidgetIdParams, QueryByWidgetIdState } from './types';
 import { Filter } from '@sisense/sdk-data';
+import { WidgetModel } from '../models';
 
 /**
  * React hook that executes a data query extracted from an existing widget in the Sisense instance.
@@ -189,7 +192,8 @@ export async function executeQueryByWidgetId({
     api,
   });
   // TODO: support filter relations extraction from widget
-  const widgetQuery = extractQueryFromWidget(fetchedWidget);
+  const widgetModel = new WidgetModel(fetchedWidget);
+  const widgetQuery = widgetModel.getExecuteQueryParams();
   const { dataSource, dimensions, measures } = widgetQuery;
   let { filters: widgetFilters, highlights: widgetHighlights } = widgetQuery;
 
@@ -211,11 +215,16 @@ export async function executeQueryByWidgetId({
     filtersMergeStrategy,
   );
 
-  const executeQueryParams: Omit<ExecuteQueryParams, 'filters'> & { filters?: Filter[] } = {
+  const filterRelations = fetchedDashboard?.filterRelations?.length
+    ? convertFilterRelationsModelToJaql(fetchedDashboard?.filterRelations[0].filterRelations)
+    : undefined;
+
+  const executeQueryParams: QueryDescription = {
     dataSource,
     dimensions,
     measures,
     filters: mergedFilters,
+    filterRelations,
     highlights: mergedHighlights,
     count,
     offset,

@@ -12,10 +12,11 @@ export function getAuthenticator(
   token: string | undefined,
   wat: string | undefined,
   ssoEnabled: boolean | undefined,
+  enableSilentPreAuth = false,
 ): Authenticator | null {
   // sso overrides all other auth methods
   if (ssoEnabled) {
-    return new SsoAuthenticator(url);
+    return new SsoAuthenticator(url, enableSilentPreAuth);
   }
 
   // username/password or tokens are chosen relative to priority

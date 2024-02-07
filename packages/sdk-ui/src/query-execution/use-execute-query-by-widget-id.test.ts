@@ -78,6 +78,7 @@ const mockWidget = {
   options: {
     dashboardFiltersMode: WidgetDashboardFilterMode.SELECT,
   },
+  style: {},
 } as unknown as WidgetDto;
 
 const mockWidgetWithMetadataItems = {

@@ -39,17 +39,10 @@ Compose SDK is a software development kit that enables a composable, code-driven
 -   **Built with developer experience in mind**
     The SDK is available via GitHub and NPM, supports TypeScript and React, and includes documentation, code samples and CLI tools that help you get things done with ease.
 
-::: warning You should know
-
--   Compose SDK currently supports development using TypeScript & React. Additional frameworks will be supported in the future
--   The [Compose SDK GitHub repository](https://github.com/sisense/compose-sdk-monorepo) is a monorepo containing all SDK packages. You can find the individual packages [here](https://www.npmjs.com/search?q=%40sisense)
-
-:::
-
 <SectionIndex />
 
-::: tip Example/Demo Application
-A demo application for Compose SDK + TypeScript + React is available in: [compose-sdk-react-demo](https://github.com/sisense/compose-sdk-react-demo).
+::: tip Demo Application
+Check out our demo applications for Compose SDK + [React](https://csdk-react.sisense.com) or [Angular](https://csdk-angular.sisense.com).
 :::
 
 ### What can I do with Compose SDK?
@@ -66,5 +59,5 @@ Compose SDK is available to all Sisense Customers.
 To use Compose SDK, you will need:
 
 -   Access to a Sisense instance with Sisense Linux version L2022.11 or later
--   An application built using React and TypeScript (additional frameworks will be supported later)
+-   An application built using [React](./quickstart.md), [Angular](./quickstart-angular.md), or [Vue](./quickstart-vue.md) and TypeScript
 -   A NodeJS package manager (`npm` or `yarn`)

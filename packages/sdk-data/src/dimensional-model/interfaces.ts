@@ -404,16 +404,6 @@ export interface CustomFormulaContext {
   [key: string]: Attribute | Measure;
 }
 
-export type FilterRelationNode = Filter | Filter[] | FilterRelation | FilterRelationJaqlNode;
-
-export interface FilterRelation {
-  left: FilterRelationNode;
-  right: FilterRelationNode;
-  operator: 'AND' | 'OR';
-}
-
-export type FilterRelationJaqlNode = { instanceid: string };
-
 /**
  * Wrapped attribute with additional options for pivot table
  */
@@ -466,3 +456,68 @@ export const DEFAULT_PIVOT_GRAND_TOTALS: PivotGrandTotals = {
   rows: false,
   columns: false,
 };
+
+/** A node or a subtree of a {@link FilterRelations} tree */
+export type FilterRelationsNode = Filter | Filter[] | FilterRelations;
+
+/**
+ * A node or a subtree of a {@link FilterRelationsModel} tree
+ *
+ * @internal
+ */
+export type FilterRelationsModelNode =
+  | FilterRelationsModelIdNode
+  | FilterRelationsModelBracketNode
+  | FilterRelationsModel;
+
+/**
+ * A node or a subtree of a {@link FilterRelationsJaql} tree
+ *
+ * @internal
+ */
+export type FilterRelationsJaqlNode = FilterRelationsJaqlIdNode | FilterRelationsJaql;
+
+/**
+ * Representation of filter logical relations (AND/OR)
+ *
+ * Unlike {@link FilterRelationsModel} or {@link FilterRelationsJaql},
+ * this interface contains filter objects, not just id nodes
+ */
+export interface FilterRelations {
+  left: FilterRelationsNode;
+  right: FilterRelationsNode;
+  operator: 'AND' | 'OR';
+}
+
+/**
+ * Incoming filter logical relations (AND/OR) when fetched from the instance
+ *
+ * @internal
+ */
+export interface FilterRelationsModel {
+  left: FilterRelationsModelNode;
+  right: FilterRelationsModelNode;
+  operator: 'AND' | 'OR';
+}
+
+/**
+ * Outgoing filter logical relations (AND/OR) when added to a query
+ *
+ * @internal
+ */
+export interface FilterRelationsJaql {
+  left: FilterRelationsJaqlNode;
+  right: FilterRelationsJaqlNode;
+  operator: 'AND' | 'OR';
+}
+
+/** A node of a {@link FilterRelationsJaql} tree that represents a filter */
+export type FilterRelationsJaqlIdNode = { instanceid: string };
+/** A node of a {@link FilterRelationsModel} tree that represents a filter */
+export type FilterRelationsModelIdNode = { instanceId: string };
+/**
+ * A node of a {@link FilterRelationsModel} tree that represents a bracket expression
+ *
+ * @internal
+ */
+export type FilterRelationsModelBracketNode = { value: FilterRelationsModelNode };

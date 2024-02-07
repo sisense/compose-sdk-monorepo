@@ -51,6 +51,7 @@ export const SisenseContextProvider: FunctionComponent<
   appConfig,
   enableTracking = true,
   showRuntimeErrors = true,
+  enableSilentPreAuth = false,
 }) => {
   const [app, setApp] = useState<ClientApplication | undefined>();
 
@@ -65,6 +66,7 @@ export const SisenseContextProvider: FunctionComponent<
       wat,
       ssoEnabled,
       appConfig,
+      enableSilentPreAuth,
     })
       .then((newApp) => {
         if (!ignore) {
@@ -78,7 +80,7 @@ export const SisenseContextProvider: FunctionComponent<
     return () => {
       ignore = true;
     };
-  }, [defaultDataSource, url, token, wat, ssoEnabled, appConfig]);
+  }, [defaultDataSource, url, token, wat, ssoEnabled, appConfig, enableSilentPreAuth]);
 
   return (
     <I18nProvider userLanguage={app?.settings.language || app?.settings.serverLanguage}>

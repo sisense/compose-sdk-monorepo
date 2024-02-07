@@ -1,6 +1,9 @@
 /* eslint-disable max-lines */
 import 'leaflet/dist/leaflet.css';
-import { Feature as GeoJsonFeature, FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
+import type {
+  Feature as GeoJsonFeature,
+  FeatureCollection as GeoJsonFeatureCollection,
+} from 'geojson';
 import Leaflet from 'leaflet';
 import 'proj4leaflet';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -15,6 +18,7 @@ export type AreamapProps = {
   geoData: GeoDataElement[];
   dataOptions: {
     originalValueTitle: string;
+    onAreaClick?: (geoDataElement: GeoDataElement, clickEvent: MouseEvent) => void;
   };
   mapType: AreamapType;
 };
@@ -60,15 +64,25 @@ export const AreamapMap: React.FC<AreamapProps> = ({ geoJson, geoData, dataOptio
               revertAreaHighlighting(layerPath, feature.id!, featureStylesDictionary);
             },
           });
+          if (dataOptions.onAreaClick) {
+            layer.on({
+              click: (e) => {
+                const geoDataElement = featureStylesDictionary[feature.id!].geoDataElement;
+                if (geoDataElement) {
+                  dataOptions.onAreaClick!(geoDataElement, e.originalEvent);
+                }
+              },
+            });
+          }
         },
       },
     );
     if (mapInstance.current) {
       mapLayerGroup.clearLayers();
-      geoJsonLayer.addTo(mapLayerGroup);
+      mapLayerGroup.addLayer(geoJsonLayer);
       mapInstance.current.fitBounds(geoJsonLayer.getBounds());
     }
-  }, [dataOptions.originalValueTitle, featureStylesDictionary, geoJson, mapLayerGroup]);
+  }, [dataOptions, featureStylesDictionary, geoJson, mapLayerGroup]);
 
   return (
     <div

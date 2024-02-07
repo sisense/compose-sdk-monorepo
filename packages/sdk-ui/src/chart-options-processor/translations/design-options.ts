@@ -133,11 +133,13 @@ export type IndicatorChartDesignOptions<
   IndicatorType extends IndicatorStyleType = IndicatorStyleType,
 > = BaseDesignOptionsType & {
   indicatorComponents: IndicatorComponents;
+  forceTickerView: boolean;
 } & (IndicatorType extends 'gauge' ? GaugeSpecificDesignOptions : NumericSpecificDesignOptions);
 
 export type GaugeSpecificDesignOptions = {
   indicatorType: 'gauge';
   skin: 1 | 2;
+  tickerBarHeight?: number;
 };
 
 export type NumericSpecificDesignOptions<

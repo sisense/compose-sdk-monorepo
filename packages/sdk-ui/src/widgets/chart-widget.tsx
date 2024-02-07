@@ -6,8 +6,14 @@
 import { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../chart';
-import { DataPoint, CartesianChartDataOptions, ScatterDataPoint, DataPoints } from '../types';
-import { ChartWidgetProps } from '../props';
+import {
+  DataPoint,
+  CartesianChartDataOptions,
+  ScatterDataPoint,
+  ChartDataPoints,
+  ChartDataPoint,
+} from '../types';
+import { ChartProps, ChartWidgetProps } from '../props';
 import { WidgetHeader } from './common/widget-header';
 import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
@@ -54,7 +60,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   }
 
   const [refreshCounter, setRefreshCounter] = useState(0);
-  const [selectedDataPoints, setSelectedDataPoints] = useState<DataPoints>([]);
+  const [selectedDataPoints, setSelectedDataPoints] = useState<ChartDataPoints>([]);
 
   const { themeSettings } = useThemeContext();
 
@@ -178,7 +184,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   );
 
   const onDataPointsSelected = useCallback(
-    (dataPoints: DataPoints, event: MouseEvent): void => {
+    (dataPoints: ChartDataPoints, event: MouseEvent): void => {
       if (isSelectionAllowed) {
         setSelectedDataPoints(dataPoints);
       }
@@ -187,12 +193,18 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     [isSelectionAllowed, originalOnDataPointsSelected],
   );
 
+  type OriginalEvent = Parameters<NonNullable<ChartProps['onDataPointClick']>>[1];
   const onDataPointClick = useCallback(
-    (dataPoint: DataPoint | ScatterDataPoint, event: PointerEvent) => {
+    (dataPoint: ChartDataPoint, event: OriginalEvent) => {
       if (isSelectionAllowed) {
-        setSelectedDataPoints([dataPoint] as DataPoints);
+        setSelectedDataPoints([dataPoint] as ChartDataPoints);
       }
-      originalOnDataPointClick?.(dataPoint, event);
+      if (originalOnDataPointClick) {
+        (originalOnDataPointClick as (dataPoint: ChartDataPoint, event: OriginalEvent) => void)(
+          dataPoint,
+          event,
+        );
+      }
     },
     [isSelectionAllowed, originalOnDataPointClick],
   );

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import merge from 'deepmerge';
@@ -8,42 +9,16 @@ import {
   HighchartsPoint,
   HighchartsSelectEventAxis,
   ScatterDataPoint,
-  DataPoints,
+  ChartDataPoints,
   BoxplotDataPoint,
 } from '../types';
+import { DataPointsEventHandler, ScatterDataPointsEventHandler } from '../props';
 import { HighchartsOptionsInternal } from '../chart-options-processor/chart-options-service';
-
-/** Click handler for when multiple data points are selected. */
-export type DataPointsEventHandler = (
-  /** Data points that were selected */
-  points: DataPoint[],
-  /** Native MouseEvent */
-  nativeEvent: MouseEvent,
-) => void;
-
-/** Click handler for when a data point is clicked. One parameter, `DataPoint`, is passed to the function. */
-export type DataPointEventHandler = (
-  /** Data point that was clicked */
-  point: DataPoint,
-  /** Native PointerEvent */
-  nativeEvent: PointerEvent,
-) => void;
-
-/** Click handler for when a scatter data point is clicked */
-export type ScatterDataPointEventHandler = (
-  /** Data point that was clicked */
-  point: ScatterDataPoint,
-  /** Native PointerEvent */
-  nativeEvent: PointerEvent,
-) => void;
-
-/** Click handler for when multiple scatter data points are selected. */
-export type ScatterDataPointsEventHandler = (
-  /** Data points that were selected */
-  points: ScatterDataPoint[],
-  /** Native MouseEvent */
-  nativeEvent: MouseEvent,
-) => void;
+import {
+  SisenseChartDataPoint,
+  SisenseChartDataPointEventHandler,
+  SisenseChartDataPointsEventHandler,
+} from '../sisense-chart/types';
 
 export type HighchartsEventOptions = {
   chart: { zoomType?: string; events: { selection?: (ev: HighchartsSelectEvent) => void } };
@@ -66,9 +41,9 @@ export const applyEventHandlersToChart = (
     onDataPointContextMenu,
     onDataPointsSelected,
   }: {
-    onDataPointClick?: DataPointEventHandler | ScatterDataPointEventHandler;
-    onDataPointContextMenu?: DataPointEventHandler | ScatterDataPointEventHandler;
-    onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
+    onDataPointClick?: SisenseChartDataPointEventHandler;
+    onDataPointContextMenu?: SisenseChartDataPointEventHandler;
+    onDataPointsSelected?: SisenseChartDataPointsEventHandler;
   } = {},
 ): HighchartsOptionsInternal => {
   const eventOptions: HighchartsEventOptions = {
@@ -79,12 +54,10 @@ export const applyEventHandlersToChart = (
   if (onDataPointsSelected) {
     eventOptions.chart.zoomType = 'x';
     onDataPointsSelected = onDataPointsSelected as DataPointsEventHandler;
-    onDataPointClick = onDataPointClick as DataPointEventHandler;
     // make selection two dimensional for scatter charts
     if (['scatter', 'bubble'].includes(chartOptions.chart?.type)) {
       eventOptions.chart.zoomType = 'xy';
       onDataPointsSelected = onDataPointsSelected as ScatterDataPointsEventHandler;
-      onDataPointClick = onDataPointClick as ScatterDataPointEventHandler;
     }
     eventOptions.chart.events.selection = (nativeEvent: HighchartsSelectEvent) => {
       nativeEvent.preventDefault();
@@ -98,7 +71,7 @@ export const applyEventHandlersToChart = (
 
   if (onDataPointClick) {
     eventOptions.plotOptions.series.point.events.click = (nativeEvent: HighchartsPointerEvent) => {
-      onDataPointClick?.(getDataPoint(nativeEvent.point), nativeEvent);
+      onDataPointClick(getDataPoint(nativeEvent.point), nativeEvent);
     };
   }
 
@@ -114,7 +87,7 @@ export const applyEventHandlersToChart = (
   return merge(chartOptions, eventOptions);
 };
 
-const getDataPoint = (point: HighchartsPoint): DataPoint | ScatterDataPoint => {
+const getDataPoint = (point: HighchartsPoint): SisenseChartDataPoint => {
   switch (point.series.initialType || point.series.type) {
     case 'bubble':
     case 'scatter':
@@ -131,18 +104,18 @@ const getDataPoint = (point: HighchartsPoint): DataPoint | ScatterDataPoint => {
 const getSelections = (
   xAxis: HighchartsSelectEventAxis,
   yAxis?: HighchartsSelectEventAxis,
-): DataPoints => {
+): ChartDataPoints => {
   const xPoints = xAxis.axis.series
     .flatMap((series) => series.points)
     .filter(({ x }) => x >= xAxis.min && x <= xAxis.max);
 
-  if (!yAxis) return xPoints.map(getDataPoint) as DataPoints;
+  if (!yAxis) return xPoints.map(getDataPoint) as ChartDataPoints;
 
   const yPoints = yAxis.axis.series
     .flatMap((series) => series.points)
     .filter(({ y }) => y >= yAxis.min && y <= yAxis.max);
 
-  return xPoints.filter((point) => yPoints.includes(point)).map(getDataPoint) as DataPoints;
+  return xPoints.filter((point) => yPoints.includes(point)).map(getDataPoint) as ChartDataPoints;
 };
 
 const getCartesianDataPoint = (point: HighchartsPoint): DataPoint => ({

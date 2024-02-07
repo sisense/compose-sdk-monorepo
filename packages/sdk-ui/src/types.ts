@@ -28,6 +28,7 @@ import {
 } from './chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
 import { LegendPosition } from './chart-options-processor/translations/legend-section';
+import { GeoDataElement, RawGeoDataElement } from './chart-data/types';
 
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
@@ -67,6 +68,8 @@ export type {
   IndicatorComponents,
   ScatterMarkerSize,
   LegendPosition,
+  GeoDataElement,
+  RawGeoDataElement,
 };
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
@@ -412,6 +415,8 @@ export interface TableStyleOptions {
  */
 export interface BaseIndicatorStyleOptions {
   indicatorComponents?: IndicatorComponents;
+  /** Boolean flag to force render indicator in ticker mode regardless of display size */
+  forceTickerView?: boolean;
 }
 
 /** Configuration options that define functional style of the various elements of Numeric Simple {@link IndicatorChart} */
@@ -431,6 +436,8 @@ export interface NumericBarIndicatorStyleOptions extends BaseIndicatorStyleOptio
 export interface GaugeIndicatorStyleOptions extends BaseIndicatorStyleOptions {
   subtype: 'indicator/gauge';
   skin: 1 | 2;
+  /** Bar height for gauge indicator in ticker mode */
+  tickerBarHeight?: number;
 }
 
 /** Configuration options that define functional style of the various elements of {@link ScatterChart} */
@@ -778,15 +785,41 @@ export type DrilldownOptions = {
 /** Selection for the drilldown */
 export type DrilldownSelection = {
   /** Points selected for drilldown */
-  points: DataPoint[];
+  points: ChartDataPoint[];
   /** Dimension to drilldown to */
   nextDimension: Attribute;
 };
 
-// only arrays of same elements
-export type DataPoints = DataPoint[] | ScatterDataPoint[];
+/**
+ * Data points in a chart. Array of data points of the same data point type.
+ */
+export type ChartDataPoints =
+  | DataPoint[]
+  | ScatterDataPoint[]
+  | BoxplotDataPoint[]
+  | AreamapDataPoint[];
 
-/** Data point in a chart. */
+/**
+ * Abstract data point in a chart - union of all types of data points.
+ */
+export type ChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint | AreamapDataPoint;
+
+/**
+ * Abstract data point in a chart that based on Highcharts.
+ * @internal
+ */
+export type HighchartsBasedChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint;
+
+/**
+ * Abstract event handler for data point click event
+ * @internal
+ */
+export type ChartDataPointEventHandler = (
+  point: ChartDataPoint,
+  nativeEvent: PointerEvent | MouseEvent,
+) => void;
+
+/** Data point in a regular chart. */
 export type DataPoint = {
   /** Value of the data point */
   value?: string | number;
@@ -798,7 +831,7 @@ export type DataPoint = {
   seriesValue?: string | number;
 };
 
-/** Data point in a chart. */
+/** Data point in a Scatter chart. */
 export type ScatterDataPoint = {
   x?: string | number;
   y?: string | number;
@@ -807,15 +840,28 @@ export type ScatterDataPoint = {
   breakByColor?: string;
 };
 
+/** Data point in a Boxplot chart. */
 export type BoxplotDataPoint = {
+  /** Value of the box minimum */
   boxMin: number;
+  /** Value of the box median */
   boxMedian: number;
+  /** Value of the box maximum */
   boxMax: number;
+  /** Value of the box minimal whisker */
   whiskerMin: number;
+  /** Value of the box maximal whisker */
   whiskerMax: number;
+  /** Value of the category for the data point */
   categoryValue?: string | number;
+  /** Display value of category of the data point */
   categoryDisplayValue?: string;
 };
+
+/**
+ * Data point in an Areamap chart.
+ */
+export type AreamapDataPoint = GeoDataElement;
 
 /**
  * This is the minimum definition of Highcharts
@@ -956,4 +1002,18 @@ export type CustomDrilldownResult = {
    * Breadcrumbs that only allow for selection slicing, clearing, & navigation
    */
   breadcrumbsComponent?: JSX.Element;
+};
+
+/**
+ * A config that defines the behavior of the loading indicator
+ */
+export type LoadingIndicatorConfig = {
+  /**
+   * Delay in milliseconds before the loading indicator is shown
+   */
+  delay?: number;
+  /**
+   * Boolean flag that defines if the loading indicator should be shown
+   */
+  enabled?: boolean;
 };

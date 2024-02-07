@@ -8,7 +8,7 @@ Props of the [PolarChart](../functions/function.PolarChart.md) component.
 
 ## Extends
 
-- `BaseChartProps`.`ChartEventProps`
+- `BaseChartProps`.`HighchartsBasedChartEventProps`.`RegularChartEventProps`
 
 ## Properties
 
@@ -43,7 +43,7 @@ BaseChartProps.dataSet
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters that will slice query results
 
@@ -72,11 +72,11 @@ BaseChartProps.highlights
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for Indicator Chart
+This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
 
 ##### Inherited from
 
-ChartEventProps.onBeforeRender
+HighchartsBasedChartEventProps.onBeforeRender
 
 ***
 
@@ -88,7 +88,7 @@ Click handler callback for a data point
 
 ##### Inherited from
 
-ChartEventProps.onDataPointClick
+RegularChartEventProps.onDataPointClick
 
 ***
 
@@ -100,7 +100,7 @@ Context menu handler callback for a data point
 
 ##### Inherited from
 
-ChartEventProps.onDataPointContextMenu
+RegularChartEventProps.onDataPointContextMenu
 
 ***
 
@@ -112,7 +112,7 @@ Handler callback for selection of multiple data points
 
 ##### Inherited from
 
-ChartEventProps.onDataPointsSelected
+RegularChartEventProps.onDataPointsSelected
 
 ### Other
 

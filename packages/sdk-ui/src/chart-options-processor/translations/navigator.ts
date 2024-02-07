@@ -27,14 +27,13 @@ export const getNavigator = (
   enabled: boolean,
   xAxisCount: number,
 ): Navigator | { enabled: boolean } => {
-  const navigatorThreshold = 70;
+  const navigatorThreshold = 50;
   if (!enabled || xAxisCount < navigatorThreshold) {
     return { enabled: false };
   }
 
   // this is a placeholder until we implement xAxis dates
   // and upgrade to sisense-charts version 2.1.3
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const tooltipFormatter = () => ({
     left: '',
     right: '',

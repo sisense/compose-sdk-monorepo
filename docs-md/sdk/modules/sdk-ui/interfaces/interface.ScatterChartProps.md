@@ -8,7 +8,7 @@ Props of the [ScatterChart](../functions/function.ScatterChart.md) component.
 
 ## Extends
 
-- `BaseChartProps`.`ScatterChartEventProps`
+- `BaseChartProps`.`ScatterChartEventProps`.`HighchartsBasedChartEventProps`
 
 ## Properties
 
@@ -43,7 +43,7 @@ BaseChartProps.dataSet
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters that will slice query results
 
@@ -88,7 +88,7 @@ Configuration that defines functional style of the various chart elements
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for Indicator Chart
+This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
 
 ##### Inherited from
 

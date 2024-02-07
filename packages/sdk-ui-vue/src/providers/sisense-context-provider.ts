@@ -1,5 +1,5 @@
-import { defineComponent, inject, provide } from 'vue';
-import type { PropType, InjectionKey } from 'vue';
+import { defineComponent, inject, provide, ref } from 'vue';
+import type { PropType, InjectionKey, Ref } from 'vue';
 import type { SisenseContextProviderProps } from '@sisense/sdk-ui-preact';
 import {
   ClientApplication,
@@ -9,27 +9,16 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { toDeepRaw } from '../setup-helper';
 
-const sisenseContextConfigKey = Symbol() as InjectionKey<SisenseContextProviderProps>;
-
-/**
- * Gets Sisense context
- */
-export const getSisenseContext = () => {
-  const sisenseContext = inject(sisenseContextConfigKey);
-
-  if (!sisenseContext) {
-    throw new Error('SisenseContextProvider: props are required');
-  }
-
-  return sisenseContext;
-};
+const sisenseContextAppKey = Symbol() as InjectionKey<{
+  app: Ref<ClientApplication>;
+}>;
 
 /**
  * Gets Sisense application
  */
-export const getApp = (): Promise<ClientApplication> => {
-  const sisenseContext = getSisenseContext();
-  return createClientApplication(sisenseContext);
+export const getApp = async () => {
+  const app = inject(sisenseContextAppKey)!.app;
+  return app.value;
 };
 
 /**
@@ -73,8 +62,15 @@ export const SisenseContextProvider = defineComponent({
 
   setup(props, { slots }) {
     const rawProps = toDeepRaw(props);
-    provide(sisenseContextConfigKey, rawProps as SisenseContextProviderProps);
+    const app = ref();
+    provide(sisenseContextAppKey, { app });
+    createClientApplication(rawProps as SisenseContextProviderProps).then((newApp) => {
+      app.value = newApp;
+    });
 
-    return () => slots.default?.();
+    return () => {
+      if (!app.value) return null;
+      return slots.default?.();
+    };
   },
 });

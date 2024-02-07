@@ -4,7 +4,7 @@ title: logic
 
 # Namespace logic <Badge type="beta" text="Beta" />
 
-Set of logic operators for filter relation construction
+Set of logic operators for filter relations construction
 
 These operators are still in beta.
 
@@ -19,7 +19,7 @@ const countryFilter = filterFactory.members(DM.Commerce.Country, ['USA', 'Canada
 const genderFilter = filterFactory.doesntContain(DM.Commerce.Gender, 'Unspecified');
 const costFilter = filterFactory.between(DM.Commerce.Cost, 1000, 2000);
 
-// create filter relation of two filters
+// create filter relations of two filters
 const orFilerRelations = filterFactory.logic.or(revenueFilter, countryFilter);
 // revenueFilter OR countryFilter
 

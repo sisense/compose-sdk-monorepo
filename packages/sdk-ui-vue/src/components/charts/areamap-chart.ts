@@ -32,10 +32,7 @@ export const AreamapChart = defineComponent({
     filters: Object as PropType<AreamapChartProps['filters']>,
     highlights: Object as PropType<AreamapChartProps['highlights']>,
     styleOptions: Object as PropType<AreamapChartProps['styleOptions']>,
-    onBeforeRender: Function as PropType<AreamapChartProps['onBeforeRender']>,
     onDataPointClick: Function as PropType<AreamapChartProps['onDataPointClick']>,
-    onDataPointContextMenu: Function as PropType<AreamapChartProps['onDataPointContextMenu']>,
-    onDataPointsSelected: Function as PropType<AreamapChartProps['onDataPointsSelected']>,
   },
   setup: (props) => setupHelper(AreamapChartPreact, props),
 });

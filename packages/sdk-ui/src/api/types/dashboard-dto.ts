@@ -1,5 +1,5 @@
 import { WidgetDto, Datasource } from '../../dashboard-widget/types';
-import { FilterJaql } from '@sisense/sdk-data';
+import { FilterJaql, FilterRelationsModel } from '@sisense/sdk-data';
 import { AnyObject } from '../../utils/utility-types';
 
 export type Filter = {
@@ -22,4 +22,7 @@ export type DashboardDto = {
   datasource: Datasource;
   widgets?: WidgetDto[];
   filters?: Array<Filter | CascadingFilter>;
+  filterRelations?: {
+    filterRelations: FilterRelationsModel;
+  }[];
 } & AnyObject;

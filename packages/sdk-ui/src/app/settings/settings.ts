@@ -29,7 +29,13 @@ type ServerSettings = {
   serverVersion: string;
 };
 
-const defaultAppConfig = { locale: getBaseDateFnsLocale(), dateConfig: defaultDateConfig };
+const defaultLoadingIndicatorConfig = { enabled: true, delay: 500 };
+
+const defaultAppConfig = {
+  locale: getBaseDateFnsLocale(),
+  dateConfig: defaultDateConfig,
+  loadingIndicatorConfig: defaultLoadingIndicatorConfig,
+};
 
 /**
  * Gets the application settings

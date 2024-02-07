@@ -7,9 +7,7 @@ title: useExecuteQueryByWidgetId
 > **useExecuteQueryByWidgetId**(`params`): `Promise`\< \{
   `data`: \{
     `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-    `query`: `Omit`\< [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md), `"filters"` \> & \{
-      `filters`: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[];
-    };
+    `query`: `QueryDescription`;
   };
  } \>
 
@@ -24,8 +22,6 @@ title: useExecuteQueryByWidgetId
 `Promise`\< \{
   `data`: \{
     `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-    `query`: `Omit`\< [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md), `"filters"` \> & \{
-      `filters`: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[];
-    };
+    `query`: `QueryDescription`;
   };
  } \>

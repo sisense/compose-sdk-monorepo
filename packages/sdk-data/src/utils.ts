@@ -1,5 +1,11 @@
 import cloneDeep from 'lodash/cloneDeep.js';
-import { Filter, FilterRelation, FilterRelationNode } from './index.js';
+import {
+  Filter,
+  FilterRelations,
+  FilterRelationsNode,
+  FilterRelationsJaql,
+  FilterRelationsJaqlNode,
+} from './index.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
@@ -39,8 +45,8 @@ export const guidFast = function (len?: number) {
  * @internal
  */
 export const getFilterListAndRelations = (
-  filterRelations: FilterRelation | Filter[] | undefined,
-): { filters: Filter[] | undefined; relations: FilterRelation | undefined } => {
+  filterRelations: FilterRelations | Filter[] | undefined,
+): { filters: Filter[] | undefined; relations: FilterRelationsJaql | undefined } => {
   if (!filterRelations) {
     return { filters: undefined, relations: undefined };
   }
@@ -49,7 +55,9 @@ export const getFilterListAndRelations = (
   }
   const filters = new Set<Filter>();
 
-  function traverse(node: FilterRelationNode): FilterRelationNode | FilterRelation {
+  function traverse(
+    node: FilterRelationsNode | FilterRelationsJaqlNode,
+  ): FilterRelationsNode | FilterRelationsJaqlNode {
     if (!node) return node;
 
     if ('guid' in node) {
@@ -68,7 +76,8 @@ export const getFilterListAndRelations = (
 
   // Create a deep copy of filterRelations to avoid mutation
   const copiedFilterRelations = cloneDeep(filterRelations);
-  const relations = traverse(copiedFilterRelations) as FilterRelation;
+
+  const relations = traverse(copiedFilterRelations) as FilterRelationsJaql;
 
   return { filters: Array.from(filters), relations };
 };

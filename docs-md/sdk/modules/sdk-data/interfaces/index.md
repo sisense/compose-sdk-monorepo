@@ -15,7 +15,7 @@ title: Interfaces
 - [DateDimension](interface.DateDimension.md)
 - [Dimension](interface.Dimension.md)
 - [Filter](interface.Filter.md)
-- [FilterRelation](interface.FilterRelation.md)
+- [FilterRelations](interface.FilterRelations.md)
 - [LevelAttribute](interface.LevelAttribute.md)
 - [Measure](interface.Measure.md)
 - [MeasureColumn](interface.MeasureColumn.md)

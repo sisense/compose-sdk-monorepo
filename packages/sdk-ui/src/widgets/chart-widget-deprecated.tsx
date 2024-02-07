@@ -6,8 +6,14 @@
 import React, { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../chart';
-import { DataPoint, CompleteThemeSettings, MenuPosition } from '../types';
-import { ChartWidgetProps } from '../props';
+import {
+  CompleteThemeSettings,
+  MenuPosition,
+  ChartDataPoint,
+  ChartDataPointEventHandler,
+  ChartDataPoints,
+} from '../types';
+import { ChartDataPointsEventHandler, ChartWidgetProps } from '../props';
 import { ContextMenu } from './common/context-menu';
 import { useWidgetDrilldown } from './common/use-widget-drilldown';
 import { WidgetHeader } from './common/widget-header';
@@ -50,8 +56,8 @@ export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSise
 
   const [refreshCounter, setRefreshCounter] = useState(0);
 
-  // drilldown is not supported for scatter charts
-  if (props.chartType !== 'scatter') {
+  // drilldown is not supported for scatter charts or filterRelations
+  if (props.chartType !== 'scatter' && Array.isArray(props.filters)) {
     props = useWidgetDrilldown(props);
   }
 
@@ -89,10 +95,11 @@ export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSise
     onDataPointContextMenu: useMemo(
       () =>
         contextMenuItems
-          ? (point: DataPoint, nativeEvent: PointerEvent) => {
-              if (onDataPointContextMenu?.(point, nativeEvent)) {
-                return;
-              }
+          ? (point: ChartDataPoint, nativeEvent: PointerEvent) => {
+              (onDataPointContextMenu as ChartDataPointEventHandler | undefined)?.(
+                point,
+                nativeEvent,
+              );
               const { clientX: left, clientY: top } = nativeEvent;
               setContextMenuPos({ left, top });
             }
@@ -102,10 +109,11 @@ export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSise
     onDataPointsSelected: useMemo(
       () =>
         contextMenuItems
-          ? (points: DataPoint[], nativeEvent: MouseEvent) => {
-              if (onDataPointsSelected?.(points, nativeEvent)) {
-                return;
-              }
+          ? (points: ChartDataPoints, nativeEvent: MouseEvent) => {
+              (onDataPointsSelected as ChartDataPointsEventHandler | undefined)?.(
+                points,
+                nativeEvent,
+              );
               const { clientX: left, clientY: top } = nativeEvent;
               setContextMenuPos({ left, top });
             }

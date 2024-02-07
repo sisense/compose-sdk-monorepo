@@ -20,6 +20,6 @@ Dimension to drilldown to
 
 ### `points`
 
-**points**: [`DataPoint`](type-alias.DataPoint.md)[]
+**points**: [`ChartDataPoint`](type-alias.ChartDataPoint.md)[]
 
 Points selected for drilldown

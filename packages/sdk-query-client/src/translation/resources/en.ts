@@ -5,11 +5,11 @@ export const translation = {
     noDimensionsOrMeasures:
       'Neither dimensions nor measures found. Query should have at least one dimension or measure.',
     invalidMeasure:
-      'Invalid measure "{{measureName}}". Hint: measures for the query can be constructed using the "measures" functions.',
+      'Invalid measure "{{measureName}}". Hint: measures for the query can be constructed using the "measureFactory" functions.',
     invalidFilter:
-      'Invalid filter "{{filterName}}". Hint: filters for the query can be constructed using the "filters" functions.',
+      'Invalid filter "{{filterName}}". Hint: filters for the query can be constructed using the "filterFactory" functions.',
     invalidHighlight:
-      'Invalid highlight "{{highlightName}}". Hint: highlights for the query can be constructed using the "filters" functions.',
+      'Invalid highlight "{{highlightName}}". Hint: highlights for the query can be constructed using the "filterFactory" functions.',
     invalidCountNegative: 'Invalid count "{{count}}". Count should be non-negative.',
     invalidCountLimit: 'Invalid count "{{count}}". Count should not exceed {{limit}}.',
     invalidOffset: 'Invalid offset "{{offset}}". Offset should be non-negative.',

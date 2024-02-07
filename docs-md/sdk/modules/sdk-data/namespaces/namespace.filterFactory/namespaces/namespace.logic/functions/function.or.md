@@ -4,26 +4,26 @@ title: or
 
 # Function or <Badge type="beta" text="Beta" />
 
-> **or**(`left`, `right`): [`FilterRelation`](../../../../../interfaces/interface.FilterRelation.md)
+> **or**(`left`, `right`): [`FilterRelations`](../../../../../interfaces/interface.FilterRelations.md)
 
-Creates an 'OR' filter relation
+Creates an 'OR' filter relations
 
 ## Parameters
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `left` | [`FilterRelationNode`](../../../../../type-aliases/type-alias.FilterRelationNode.md) | First filter or filter relation |
-| `right` | [`FilterRelationNode`](../../../../../type-aliases/type-alias.FilterRelationNode.md) | Second filter or filter relation |
+| `left` | [`FilterRelationsNode`](../../../../../type-aliases/type-alias.FilterRelationsNode.md) | First filter or filter relations |
+| `right` | [`FilterRelationsNode`](../../../../../type-aliases/type-alias.FilterRelationsNode.md) | Second filter or filter relations |
 
 ## Returns
 
-[`FilterRelation`](../../../../../interfaces/interface.FilterRelation.md)
+[`FilterRelations`](../../../../../interfaces/interface.FilterRelations.md)
 
-A filter relation
+Filter relations
 
 ## Example
 
-Create a filter relation for items that have a revenue greater than 100 or are in new condition
+Create filter relations for items that have a revenue greater than 100 or are in new condition
 in the Sample ECommerce data model.
 ```ts
 const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 100);

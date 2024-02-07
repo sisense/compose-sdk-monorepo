@@ -11,7 +11,7 @@ import {
   HighchartsOptionsInternal,
   HighchartsOptions,
 } from '../../chart-options-processor/chart-options-service';
-import { ChartWidgetProps } from '../../props';
+import { ChartWidgetProps, DataPointEventHandler } from '../../props';
 import { useDrilldown } from './drilldown';
 import { DrilldownBreadcrumbs } from './drilldown-breadcrumbs';
 import { MenuItemSection } from '../../types';
@@ -58,7 +58,9 @@ export const useWidgetDrilldown = (props: ChartWidgetProps): ChartWidgetProps =>
     () =>
       drilldownOptions
         ? (point: DataPoint, nativeEvent: PointerEvent) => {
-            if (_onDataPointContextMenu?.(point, nativeEvent)) {
+            if (
+              (_onDataPointContextMenu as DataPointEventHandler | undefined)?.(point, nativeEvent)
+            ) {
               return;
             }
             setSelectedDataPoints([point]);
@@ -80,7 +82,10 @@ export const useWidgetDrilldown = (props: ChartWidgetProps): ChartWidgetProps =>
     [drilldownOptions, _onDataPointsSelected, setSelectedDataPoints],
   );
 
-  const chartFilters = useMemo(() => filters.concat(drilldownFilters), [filters, drilldownFilters]);
+  const chartFilters = useMemo(
+    () => (filters as Filter[]).concat(drilldownFilters),
+    [filters, drilldownFilters],
+  );
 
   const applyPointSelections = useMemo(() => {
     if (!selectedDataPoints.length) {

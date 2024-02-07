@@ -2,8 +2,9 @@
 /* eslint-disable max-lines-per-function */
 import { useCallback, useMemo, useState } from 'react';
 
-import { DataPoint, StyledColumn, DrilldownSelection } from '../../types.js';
+import { StyledColumn, DrilldownSelection, DataPoint } from '../../types.js';
 import { Attribute, Column, MembersFilter, filterFactory } from '@sisense/sdk-data';
+import { getDisplayMemberNameFromDataPoint, getMemberNameFromDataPoint } from './drilldown.js';
 
 export const useCustomDrilldown = ({
   drilldownDimensions,
@@ -77,12 +78,10 @@ export const processDrilldownSelections = (
     drilldownFilters.push(
       filterFactory.members(
         currentDimension,
-        points.map((point) => `${point.categoryValue}`),
+        points.map(getMemberNameFromDataPoint),
       ) as MembersFilter,
     );
-    drilldownFiltersDisplayValues.push(
-      points.map((point) => `${point.categoryDisplayValue ?? point.categoryValue}`),
-    );
+    drilldownFiltersDisplayValues.push(points.map(getDisplayMemberNameFromDataPoint));
     currentDimension = nextDimension;
   });
 

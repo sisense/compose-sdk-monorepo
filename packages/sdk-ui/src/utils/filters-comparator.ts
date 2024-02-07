@@ -2,9 +2,11 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import {
   Filter,
-  FilterRelation,
-  FilterRelationJaqlNode,
-  FilterRelationNode,
+  FilterRelations,
+  FilterRelationsNode,
+  FilterRelationsJaql,
+  FilterRelationsJaqlIdNode,
+  FilterRelationsJaqlNode,
 } from '@sisense/sdk-data';
 import { isEqual, isEqualWith } from 'lodash';
 
@@ -88,8 +90,8 @@ function isRealCSDKFilter(filter: Filter): filter is Filter {
 export function isRelationsChanged(
   prevFilters: Filter[] | undefined,
   newFilters: Filter[] | undefined,
-  prevRelations: FilterRelation | undefined,
-  newRelations: FilterRelation | undefined,
+  prevRelations: FilterRelations | FilterRelationsJaql | undefined,
+  newRelations: FilterRelations | FilterRelationsJaql | undefined,
 ): boolean {
   // if both relations are undefined, nothing has changed
   if (prevRelations === undefined && newRelations === undefined) {
@@ -102,13 +104,13 @@ export function isRelationsChanged(
 
   // check if trees are equal
   function areRelationsEqual(
-    prevTreeNode: FilterRelationNode,
-    newTreeNode: FilterRelationNode,
+    prevTreeNode: FilterRelationsNode | FilterRelationsJaqlNode | undefined,
+    newTreeNode: FilterRelationsNode | FilterRelationsJaqlNode | undefined,
   ): boolean {
-    const prevRelationNode = prevTreeNode as FilterRelation;
-    const prevFilterNode = prevTreeNode as FilterRelationJaqlNode;
-    const newRelationNode = newTreeNode as FilterRelation;
-    const newFilterNode = newTreeNode as FilterRelationJaqlNode;
+    const prevRelationNode = prevTreeNode as FilterRelations;
+    const prevFilterNode = prevTreeNode as FilterRelationsJaqlIdNode;
+    const newRelationNode = newTreeNode as FilterRelations;
+    const newFilterNode = newTreeNode as FilterRelationsJaqlIdNode;
 
     // if both nodes are undefined - equal
     if (prevTreeNode === undefined && newTreeNode === undefined) {
@@ -120,7 +122,7 @@ export function isRelationsChanged(
       return false;
     }
 
-    // if nodes have differrent operators or one node is a filter and other is a relation - not equal
+    // if nodes have differrent operators or one node is a filter and another is a relation - not equal
     if (prevRelationNode.operator !== newRelationNode.operator) {
       return false;
     }
@@ -145,5 +147,5 @@ export function isRelationsChanged(
   }
 
   // if trees are not equal - relations changed
-  return !areRelationsEqual(prevRelations as FilterRelation, newRelations as FilterRelation);
+  return !areRelationsEqual(prevRelations, newRelations);
 }

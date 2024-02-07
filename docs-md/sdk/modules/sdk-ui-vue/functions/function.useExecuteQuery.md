@@ -4,9 +4,7 @@ title: useExecuteQuery
 
 # Function useExecuteQuery
 
-> **useExecuteQuery**(`params`): `Promise`\< \{
-  `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
- } \>
+> **useExecuteQuery**(`params`): `ToRefs`\< [`QueryState`](../../sdk-ui/type-aliases/type-alias.QueryState.md) \>
 
 A hook function that executes a data query.
 TODO Document
@@ -15,12 +13,10 @@ TODO Document
 
 | Parameter | Type |
 | :------ | :------ |
-| `params` | [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md) |
+| `params` | `MaybeWithRefs`\< [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md) \> |
 
 ## Returns
 
-`Promise`\< \{
-  `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
- } \>
+`ToRefs`\< [`QueryState`](../../sdk-ui/type-aliases/type-alias.QueryState.md) \>
 
 TODO

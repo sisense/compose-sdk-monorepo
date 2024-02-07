@@ -8,7 +8,7 @@ Props shared across [Chart](../classes/class.Chart.md) components.
 
 ## Extends
 
-- `BaseChartProps`.`BaseChartEventProps`
+- `BaseChartProps`.`ChartEventProps`
 
 ## Properties
 
@@ -43,7 +43,7 @@ BaseChartProps.dataSet
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelation`](../../sdk-data/interfaces/interface.FilterRelation.md)
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters that will slice query results
 
@@ -96,35 +96,35 @@ Style options union across chart types.
 Before render handler callback that allows adjusting
 detail chart options prior to render
 
-This callback is not yet supported for Indicator Chart
+This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
 
 ##### Inherited from
 
-BaseChartEventProps.onBeforeRender
+ChartEventProps.onBeforeRender
 
 ***
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
 
 Click handler callback for a data point
 
 ##### Inherited from
 
-BaseChartEventProps.onDataPointClick
+ChartEventProps.onDataPointClick
 
 ***
 
 #### onDataPointContextMenu
 
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md)
+> **onDataPointContextMenu**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
 
 Context menu handler callback for a data point
 
 ##### Inherited from
 
-BaseChartEventProps.onDataPointContextMenu
+ChartEventProps.onDataPointContextMenu
 
 ***
 
@@ -136,4 +136,4 @@ Handler callback for selection of multiple data points
 
 ##### Inherited from
 
-BaseChartEventProps.onDataPointsSelected
+ChartEventProps.onDataPointsSelected

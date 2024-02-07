@@ -8,8 +8,8 @@ import {
   Measure,
   Filter,
   BaseMeasure,
-  FilterRelationNode,
-  FilterRelation,
+  FilterRelationsNode,
+  FilterRelations,
 } from '../interfaces.js';
 
 import {
@@ -842,7 +842,7 @@ export function bottomRanking(attribute: Attribute, measure: Measure, count: num
   return new RankingFilter(attribute, measure, RankingOperators.Bottom, count);
 }
 
-const relate = (node: FilterRelationNode): FilterRelationNode => {
+const relate = (node: FilterRelationsNode): FilterRelationsNode => {
   if (Array.isArray(node)) {
     const [first, ...rest] = node;
     return rest.length === 0
@@ -857,7 +857,7 @@ const relate = (node: FilterRelationNode): FilterRelationNode => {
 };
 
 /**
- * Set of logic operators for filter relation construction
+ * Set of logic operators for filter relations construction
  *
  * These operators are still in beta.
  *
@@ -871,7 +871,7 @@ const relate = (node: FilterRelationNode): FilterRelationNode => {
  * const genderFilter = filterFactory.doesntContain(DM.Commerce.Gender, 'Unspecified');
  * const costFilter = filterFactory.between(DM.Commerce.Cost, 1000, 2000);
  *
- * // create filter relation of two filters
+ * // create filter relations of two filters
  * const orFilerRelations = filterFactory.logic.or(revenueFilter, countryFilter);
  * // revenueFilter OR countryFilter
  *
@@ -888,10 +888,10 @@ const relate = (node: FilterRelationNode): FilterRelationNode => {
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace logic {
   /**
-   * Creates an 'AND' filter relation
+   * Creates an 'AND' filter relations
    *
    * @example
-   * Create a filter relation for items that have a revenue greater than 100 and are in new condition
+   * Create filter relations for items that have a revenue greater than 100 and are in new condition
    * in the Sample ECommerce data model.
    * ```ts
    * const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 100);
@@ -899,21 +899,21 @@ export namespace logic {
    *
    * const andFilerRelation = filterFactory.logic.and(revenueFilter, conditionFilter);
    * ```
-   * @param left First filter or filter relation
-   * @param right Second filter or filter relation
-   * @returns A filter relation
+   * @param left First filter or filter relations
+   * @param right Second filter or filter relations
+   * @returns Filter relations
    * @beta
    */
-  export const and = (left: FilterRelationNode, right: FilterRelationNode): FilterRelation => ({
+  export const and = (left: FilterRelationsNode, right: FilterRelationsNode): FilterRelations => ({
     operator: 'AND',
     left: relate(left),
     right: relate(right),
   });
   /**
-   * Creates an 'OR' filter relation
+   * Creates an 'OR' filter relations
    *
    * @example
-   * Create a filter relation for items that have a revenue greater than 100 or are in new condition
+   * Create filter relations for items that have a revenue greater than 100 or are in new condition
    * in the Sample ECommerce data model.
    * ```ts
    * const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 100);
@@ -921,12 +921,12 @@ export namespace logic {
    *
    * const orFilerRelation = filterFactory.logic.or(revenueFilter, conditionFilter);
    * ```
-   * @param left First filter or filter relation
-   * @param right Second filter or filter relation
-   * @returns A filter relation
+   * @param left First filter or filter relations
+   * @param right Second filter or filter relations
+   * @returns Filter relations
    * @beta
    */
-  export const or = (left: FilterRelationNode, right: FilterRelationNode): FilterRelation => ({
+  export const or = (left: FilterRelationsNode, right: FilterRelationsNode): FilterRelations => ({
     operator: 'OR',
     left: relate(left),
     right: relate(right),
