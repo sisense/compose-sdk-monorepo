@@ -10,7 +10,6 @@
 * [Ivan Biletskyi](https://github.com/ivanbiletskyi)
 * [Moti Granovsky](https://github.com/motigra)
 * [Nathaniel Ho](https://github.com/nxho)
-* [Oleh Zaichenko](https://github.com/ozadev)
 * [Sam Markowitz](https://github.com/SamMarkowitz)
 * [Steve Lewis](https://github.com/stevelewis99)
 * [Steven Griffith](https://github.com/stevenwgriffith)
