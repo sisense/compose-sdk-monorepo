@@ -430,7 +430,10 @@ export type TotalsCalculation = 'sum' | 'max' | 'min' | 'avg' | 'median';
 export interface PivotMeasure {
   measure: Measure;
   totalsCalculation: TotalsCalculation;
-  // TODO add dataBars
+  /**
+   * @internal
+   */
+  dataBars?: boolean;
 }
 
 /**

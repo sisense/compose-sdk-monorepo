@@ -5,15 +5,15 @@ This is a short overview of how to work with the new AI components from Compose 
 ## Prerequisites
 
 1. Ensure an LLM provider is configured on the target Sisense instance. This should be done by a Sisense administrator.
-1. Install `v0.15.0` of `@sisense/sdk-ui`.
+1. Install `@sisense/sdk-ui`, version `0.15.0` or higher.
 
 ## Overview
 
 The following is a list of components and hooks we export, starting in `v0.15.0` of Compose SDK, under the `/ai` subpath.
 
-- `ChatApiContextProvider`
+- `AiContextProvider`
 - `Chatbot`
-- `NlgQueryResult`
+- `GetNlgQueryResult`
 - `useGetNlgQueryResult`
 - `useGetQueryRecommendations`
 
@@ -21,20 +21,20 @@ The following is a list of components and hooks we export, starting in `v0.15.0`
 
 Here are some examples of how to use each hook/component.
 
-### `ChatApiContextProvider`
+### `AiContextProvider`
 
-This wrapper component is like a `SisenseContextProvider.` Any AI Chat component or hook should be wrapped in a `ChatApiContextProvider`. Here's an example:
+This wrapper component is like a `SisenseContextProvider.` Any AI Chat component or hook should be wrapped in a `AiContextProvider`. Here's an example:
 
 ```tsx
 import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { ChatApiContextProvider, Chatbot } from '@sisense/sdk-ui/ai';
+import { AiContextProvider, Chatbot } from '@sisense/sdk-ui/ai';
 
 function App() {
   return (
     <SisenseContextProvider {...sisenseContextProps}>
-      <ChatApiContextProvider>
+      <AiContextProvider>
         <Chatbot />
-      </ChatApiContextProvider>
+      </AiContextProvider>
     </SisenseContextProvider>
   );
 }
@@ -46,14 +46,14 @@ This is the full-fledged chatbot component with data topic selection. You can op
 
 ```tsx
 import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { ChatApiContextProvider, Chatbot } from '@sisense/sdk-ui/ai';
+import { AiContextProvider, Chatbot } from '@sisense/sdk-ui/ai';
 
 function App() {
   return (
     <SisenseContextProvider {...sisenseContextProps}>
-      <ChatApiContextProvider>
+      <AiContextProvider>
         <Chatbot width={1000} height={800} />
-      </ChatApiContextProvider>
+      </AiContextProvider>
     </SisenseContextProvider>
   );
 }
@@ -67,10 +67,10 @@ Note that this hook expects `metadata` below to be in standard JAQL syntax. In t
 
 ```tsx
 import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { ChatApiContextProvider, useNlgQueryResult } from '@sisense/sdk-ui/ai';
+import { AiContextProvider, useGetNlgQueryResult } from '@sisense/sdk-ui/ai';
 
 function Page() {
-  const { data } = useNlgQueryResult({
+  const { data } = useGetNlgQueryResult({
     dataSource: 'Sample ECommerce',
     metadata: [
       {
@@ -118,25 +118,25 @@ function Page() {
 function App() {
   return (
     <SisenseContextProvider {...sisenseContextProps}>
-      <ChatApiContextProvider>
+      <AiContextProvider>
         <Page />
-      </ChatApiContextProvider>
+      </AiContextProvider>
     </SisenseContextProvider>
   );
 }
 ```
 
-### `NlgQueryResult`
+### `GetNlgQueryResult`
 
-This takes the same props as `useNlgQueryResult` and makes the same API call but presents the result in a collapsible container.
+This takes the same props as `useGetNlgQueryResult` and makes the same API call but presents the result in a collapsible container.
 
 ```tsx
 import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { ChatApiContextProvider, NlgQueryResult } from '@sisense/sdk-ui/ai';
+import { AiContextProvider, GetNlgQueryResult } from '@sisense/sdk-ui/ai';
 
 function Page() {
   return (
-    <NlgQueryResult
+    <GetNlgQueryResult
       dataSource="Sample ECommerce"
       metadata={[
         {
@@ -179,9 +179,9 @@ function Page() {
 function App() {
   return (
     <SisenseContextProvider {...sisenseContextProps}>
-      <ChatApiContextProvider>
+      <AiContextProvider>
         <Page />
-      </ChatApiContextProvider>
+      </AiContextProvider>
     </SisenseContextProvider>
   );
 }
@@ -189,15 +189,15 @@ function App() {
 
 ### `useGetQueryRecommendations`
 
-This hook includes the same code that fetches the initial suggested questions in the chatbot. You can use this to fetch suggested questions for any provided data model or perspective ID.
+This hook includes the same code that fetches the initial suggested questions in the chatbot. You can use this to fetch suggested questions and their corresponding recommended JAQL for any provided data model or perspective title.
 
 ```tsx
 import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { ChatApiContextProvider, useGetQueryRecommendations } from '@sisense/sdk-ui/ai';
+import { AiContextProvider, useGetQueryRecommendations } from '@sisense/sdk-ui/ai';
 
 function Page() {
   const { data } = useGetQueryRecommendations({
-    contextId: '82171479-9535-4a40-a002-a3357d4475d8',
+    contextTitle: 'Sample ECommerce',
   });
 
   if (!data) {
@@ -207,7 +207,7 @@ function Page() {
   return (
     <ul>
       {data.map((item, index) => (
-        <li key={index}>{item}</li>
+        <li key={index}>{item.nlqPrompt}</li>
       ))}
     </ul>
   );
@@ -216,9 +216,9 @@ function Page() {
 function App() {
   return (
     <SisenseContextProvider {...sisenseContextProps}>
-      <ChatApiContextProvider>
+      <AiContextProvider>
         <Page />
-      </ChatApiContextProvider>
+      </AiContextProvider>
     </SisenseContextProvider>
   );
 }

@@ -1,6 +1,5 @@
 import { DataTable } from '../../../chart-data-processor/table-processor';
 import { TableDataOptions, TableDataOptionsInternal } from '../../../chart-data-options/types';
-import { defaultConfig } from '../../../chart-options-processor/translations/number-format-config';
 import { formatNumbers } from './format-numbers';
 
 describe('formatNumbers', () => {
@@ -32,7 +31,7 @@ describe('formatNumbers', () => {
           name: 'revenue',
           type: 'number',
           enabled: true,
-          numberFormatConfig: { ...defaultConfig, name: 'Currency' },
+          numberFormatConfig: { name: 'Currency' },
         },
       ],
     };

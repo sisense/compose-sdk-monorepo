@@ -1,10 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Meta, StoryObj } from '@storybook/react';
 import ChartMessage from '../messages/chart-message';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../../props';
-import { ChatApiContextProvider } from '../api/chat-api-context';
 import { MetadataItemJaql } from '@sisense/sdk-query-client';
+import { AiContextProvider } from '@/index-typedoc';
 
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',
@@ -17,9 +16,9 @@ const meta: Meta<typeof ChartMessage> = {
   decorators: [
     (Story) => (
       <SisenseContextProvider {...sisenseContextProps}>
-        <ChatApiContextProvider>
+        <AiContextProvider>
           <Story />
-        </ChatApiContextProvider>
+        </AiContextProvider>
       </SisenseContextProvider>
     ),
   ],
@@ -30,7 +29,6 @@ type Story = StoryObj<typeof ChartMessage>;
 
 export const Default: Story = {
   args: {
-    dataSource: 'Sample ECommerce',
     content: {
       queryTitle: 'Total Revenue by Year',
       detailedDescription: '[Commerce.Revenue] by [Commerce.Date]',
@@ -38,12 +36,13 @@ export const Default: Story = {
       chartRecommendations: {
         axesMapping: {
           category: [{ name: 'Date', type: 'datetime' }],
-          value: [{ name: 'Revenue', type: 'numeric' }],
+          value: [{ name: 'total of Revenue', type: 'numeric' }],
         },
         chartFamily: 'cartesian',
         chartType: 'line',
       },
       jaql: {
+        datasource: { title: 'Sample ECommerce' },
         metadata: [
           {
             jaql: {

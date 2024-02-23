@@ -281,7 +281,7 @@ export const getValues = (row: Row, columns: readonly Column[]): ComparableData[
 
 export const getValuesAsString = (row: Row, columns: readonly Column[]) => {
   return getValues(row, columns)
-    .map((c) => c.displayValue)
+    .map((c) => c.rawValue || c.displayValue)
     .join(',');
 };
 

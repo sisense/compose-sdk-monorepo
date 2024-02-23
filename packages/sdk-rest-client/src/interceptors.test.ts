@@ -1,10 +1,5 @@
 import { FetchInterceptorResponse } from 'fetch-intercept';
-import {
-  handleNetworkError,
-  handleErrorResponse,
-  handleUnauthorizedResponse,
-  isNetworkError,
-} from './interceptors.js';
+import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
 import { PasswordAuthenticator } from './password-authenticator.js';
 import { BearerAuthenticator } from './bearer-authenticator.js';
 import { WatAuthenticator } from './wat-authenticator.js';
@@ -13,7 +8,7 @@ import { TranslatableError } from './translation/translatable-error.js';
 
 const fakeDeploymentUrl = 'https://10.0.0.1';
 
-describe('Auth interceptor', () => {
+describe('interceptors', () => {
   afterAll(() => {
     vi.restoreAllMocks();
   });
@@ -25,7 +20,7 @@ describe('Auth interceptor', () => {
 
     const auth = new PasswordAuthenticator(fakeDeploymentUrl, 'user', 'pass');
 
-    expect(() => handleUnauthorizedResponse(response, auth)).toThrow();
+    expect(() => getResponseInterceptor(auth)(response)).toThrow();
   });
 
   it('should notify user about failed API token authentication', () => {
@@ -34,7 +29,7 @@ describe('Auth interceptor', () => {
     } as FetchInterceptorResponse;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
-    expect(() => handleUnauthorizedResponse(response, auth)).toThrow();
+    expect(() => getResponseInterceptor(auth)(response)).toThrow();
   });
 
   it('should notify user about failed WAT authentication', () => {
@@ -44,7 +39,7 @@ describe('Auth interceptor', () => {
 
     const auth = new WatAuthenticator(fakeDeploymentUrl, 'wat');
 
-    expect(() => handleUnauthorizedResponse(response, auth)).toThrow();
+    expect(() => getResponseInterceptor(auth)(response)).toThrow();
   });
 
   it('should redirect to login page for SSO authentication', async () => {
@@ -76,16 +71,14 @@ describe('Auth interceptor', () => {
       } as Response);
     });
 
-    handleUnauthorizedResponse(response, auth);
+    getResponseInterceptor(auth)(response);
 
     // flush promises
     await new Promise((resolve) => setImmediate(resolve));
 
     expect(window.location.href).toBe(`${fakeLoginUrl}?return_to=${fakeDeploymentUrl}`);
   });
-});
 
-describe('Error interceptor', () => {
   it('should throw an error on failed response', () => {
     const response = {
       ok: false,
@@ -93,7 +86,8 @@ describe('Error interceptor', () => {
       statusText: 'Bad Request',
     } as FetchInterceptorResponse;
 
-    expect(() => handleErrorResponse(response)).toThrow(TranslatableError);
+    const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
+    expect(() => getResponseInterceptor(auth)(response)).toThrow(TranslatableError);
   });
 
   it('should pass response through on success', () => {
@@ -103,21 +97,18 @@ describe('Error interceptor', () => {
       statusText: 'OK',
     } as FetchInterceptorResponse;
 
-    const result = handleErrorResponse(response);
+    const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
+    const result = getResponseInterceptor(auth)(response);
     expect(result).toEqual(response);
   });
-});
 
-describe('Network error', () => {
-  describe('isNetworkError', () => {
-    it('should return true for Network error', () => {
-      const responseError = new TypeError('Failed to fetch');
-      expect(isNetworkError(responseError)).toBeTruthy();
-    });
+  it('should throw translated error for network error', async () => {
+    const responseError = new TypeError('Failed to fetch');
+    await expect(errorInterceptor(responseError)).rejects.toThrow(/Network error/);
   });
-  describe('handleNetworkError', () => {
-    it("should reject with an error message constains 'Network error'", () => {
-      return expect(handleNetworkError()).rejects.toThrow(/Network error/);
-    });
+
+  it('should reject with original error message for custom errors', async () => {
+    const responseError = new Error('Custom error message');
+    await expect(errorInterceptor(responseError)).rejects.toThrow(responseError);
   });
 });

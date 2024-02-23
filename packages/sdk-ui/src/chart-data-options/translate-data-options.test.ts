@@ -1,4 +1,9 @@
-import { getAttributes, getMeasures, translateChartDataOptions } from './translate-data-options';
+import {
+  getAttributes,
+  getMeasures,
+  translateChartDataOptions,
+  translatePivotTableDataOptions,
+} from './translate-data-options';
 import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
@@ -11,9 +16,12 @@ import {
   Category,
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
+  PivotTableDataOptions,
 } from './types';
 import { Attribute, Column, Measure, MeasureColumn, analyticsFactory } from '@sisense/sdk-data';
 import { ChartType } from '../types';
+import { describe } from 'vitest';
+import { translateColumnToCategory, translateColumnToValue } from './utils.js';
 
 vi.mock('@sisense/sdk-data', async () => {
   const actual: typeof import('@sisense/sdk-data') = await vi.importActual('@sisense/sdk-data');
@@ -281,5 +289,23 @@ describe('translate data options', () => {
     }
 
     expect(isErrorThrew).toBeTruthy();
+  });
+
+  describe('translatePivotTableDataOptions', () => {
+    const dataOptions1: PivotTableDataOptions = {
+      rows: [col1],
+      columns: [col2],
+      values: [meas1, meas2Styled],
+    };
+
+    it('should translate correctly to internal data options', () => {
+      const result = translatePivotTableDataOptions(dataOptions1);
+      expect(result).toEqual({
+        rows: [col1].map(translateColumnToCategory),
+        columns: [col2].map(translateColumnToCategory),
+        values: [meas1, meas2Styled].map(translateColumnToValue),
+        grandTotals: undefined,
+      });
+    });
   });
 });

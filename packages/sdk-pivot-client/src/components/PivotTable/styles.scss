@@ -1,0 +1,270 @@
+$pivot-font-size: 15px;
+$pivot-line-height: 16px;
+$pivot-border-color: black;
+
+$background-size: 12px;
+$sorting-element-size: 16px;
+$icon-top-space: 4px;
+
+@mixin inherit-borders() {
+  border-style: inherit;
+  border-color: inherit;
+  border-width: inherit;
+}
+
+.multi-grid {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.table-grid {
+  position: relative;
+  direction: ltr;
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+  user-select: text;
+  -webkit-touch-callout: text;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  &,
+  & * {
+    box-sizing: border-box;
+  }
+}
+
+.table-grid--top.table-grid--left,
+.table-grid--top.table-grid--right,
+.table-grid--bottom.table-grid--left,
+.table-grid--bottom.table-grid--right {
+  position: absolute;
+}
+
+.table-grid--top.table-grid--left,
+.table-grid--top.table-grid--right,
+.table-grid--bottom.table-grid--left {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.table-grid__table {
+  position: relative;
+  display: table;
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.table-grid__tbody {
+  @include inherit-borders();
+  display: table-row-group;
+}
+
+.table-grid__colgroup {
+  display: table-column-group;
+}
+
+.table-grid__column {
+  display: table-column;
+}
+
+.table-grid__row {
+  @include inherit-borders();
+  display: table-row;
+}
+
+.table-grid__cell {
+  position: static !important;
+  display: table-cell;
+  vertical-align: top;
+  box-sizing: border-box;
+  white-space: nowrap;
+  font-size: 0;
+  line-height: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+
+  border: solid 0 $pivot-border-color;
+  border-color: inherit;
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+
+.table-grid__cell--row-0 {
+  border-top-color: inherit;
+}
+
+.table-grid__cell--col-0 {
+  border-left-color: inherit;
+}
+
+.table-grid__cell--columns {
+  border-left-color: inherit;
+}
+
+.table-grid__cell--fixed-width {
+  white-space: normal;
+
+  .table-grid__content {
+    text-overflow: ellipsis;
+  }
+
+  .table-grid__content__inner {
+    display: inline;
+    margin-right: 0;
+  }
+}
+
+.table-grid__cell-corner {
+  @include inherit-borders();
+  position: relative;
+  top: 0;
+  left: 0;
+  border-width: 0;
+}
+
+.table-grid__content {
+  display: inline-block;
+  font-size: $pivot-font-size;
+  line-height: $pivot-line-height;
+  position: relative;
+  z-index: 1;
+}
+
+.table-grid__content__wrapper {
+  display: inline;
+  position: relative;
+  z-index: 1;
+}
+
+.table-grid__content__inner {
+  display: inline;
+  position: relative;
+  margin-right: 1px;
+  z-index: 1;
+}
+
+.table-grid__cell-corner {
+  position: relative;
+}
+
+.table-grid__cell-anchor {
+  border-width: 0;
+  line-height: 0;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.table-grid__cell-anchor-content {
+  width: 0;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  overflow: hidden;
+}
+
+.table-grid__cell--sorted {
+  .table-grid__content__inner {
+    margin-right: $sorting-element-size;
+  }
+
+  &.table-grid__cell--fixed-width {
+    .table-grid__content__inner {
+      margin-right: $sorting-element-size - 1;
+    }
+  }
+
+  .table-grid__icon--sorted,
+  .table-grid__sorting-settings-icon {
+    z-index: 2;
+    top: $icon-top-space;
+    right: 3px;
+    outline: none;
+    display: inline-block;
+    position: absolute;
+    width: $sorting-element-size;
+    height: $sorting-element-size - $icon-top-space;
+
+    &::after {
+      display: inline-block;
+      position: absolute;
+      left: 20%;
+      top: 25%;
+      font-size: $pivot-font-size;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.table-grid--data {
+  left: 0 !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+.multi-grid--no-fixed-left {
+  .table-grid--fixed.table-grid--rows,
+  .table-grid--fixed.table-grid--corner {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.multi-grid--no-rows {
+  .table-grid--fixed.table-grid--rows {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.multi-grid--no-columns {
+  .table-grid--fixed.table-grid--columns {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.multi-grid--no-corner {
+  .table-grid--fixed.table-grid--corner {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.table-grid--fixed {
+  position: absolute;
+  display: block;
+  opacity: 0;
+  transition: opacity 0s ease;
+  background: #fff;
+  overflow: hidden;
+  z-index: 10;
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+.table-grid--fixed.table-grid--rows {
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.table-grid--fixed.table-grid--columns {
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.table-grid--fixed.table-grid--corner {
+  top: 0;
+  left: 0;
+}

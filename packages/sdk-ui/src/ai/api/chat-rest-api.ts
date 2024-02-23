@@ -11,6 +11,7 @@ import type {
   Perspective,
   QueryRecommendationConfig,
   QueryRecommendationResponse,
+  SendFeedbackRequest,
 } from './types';
 
 export class ChatRestApi {
@@ -73,10 +74,15 @@ export class ChatRestApi {
     return this.httpClient.delete(`api/v2/ai/chats/${chatId}/history`);
   };
 
+  private sendFeedback = async (request: SendFeedbackRequest) => {
+    return this.httpClient.post('api/v2/ai/feedback', request);
+  };
+
   ai = {
     getNlgQueryResult: this.getNlgQueryResult,
     getQueryRecommendations: this.getQueryRecommendations,
     setLlmConfig: this.setLlmConfig,
+    sendFeedback: this.sendFeedback,
     chat: {
       getAll: this.getAllChats,
       getById: this.getChatById,

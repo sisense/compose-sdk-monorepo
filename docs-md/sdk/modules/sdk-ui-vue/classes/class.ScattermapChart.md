@@ -2,7 +2,7 @@
 title: ScattermapChart
 ---
 
-# Class ScattermapChart
+# Class ScattermapChart <Badge type="beta" text="Beta" />
 
 A Vue component that wraps the ScattermapChart Preact component for use in Vue applications.
 It maintains compatibility with Vue's reactivity system while preserving the functionality of the ScattermapChart.
@@ -12,24 +12,38 @@ It maintains compatibility with Vue's reactivity system while preserving the fun
 Here's how you can use the ScattermapChart component in a Vue application:
 ```vue
 <template>
-  <ScattermapChart :props="ScattermapChartProps" />
+     <ScattermapChart
+       :dataOptions="scattermapChartProps.dataOptions"
+       :dataSet="scattermapChartProps.dataSet"
+       :filters="scattermapChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ScattermapChart from '@sisense/sdk-ui-vue/ScattermapChart';
+import {ScattermapChart,type ScattermapChartProps} from '@sisense/sdk-ui-vue';
 
-const ScattermapChartProps = ref({
-  // Configure your ScattermapChartProps here
+const scattermapChartProps = ref<ScattermapChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   geo: [DM.DimCountries.CountryName],
+   size: { column: measureTotalRevenue, title: 'Total Revenue' },
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
 </script>
 ```
+<img src="../../../img/scattermap-chart-example-1.png" width="600px" />
+
+## Param
+
+Scattermap chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`ScattermapChartDataOptions`](../../sdk-ui/interfaces/interface.ScattermapChartDataOptions.md)
+> **dataOptions**?: [`ScattermapChartDataOptions`](../interfaces/interface.ScattermapChartDataOptions.md)
 
 ***
 
@@ -51,6 +65,12 @@ const ScattermapChartProps = ref({
 
 ***
 
+### onDataPointClick
+
+> **onDataPointClick**?: [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+
+***
+
 ### styleOptions
 
-> **styleOptions**?: [`ScattermapStyleOptions`](../../sdk-ui/interfaces/interface.ScattermapStyleOptions.md)
+> **styleOptions**?: [`ScattermapStyleOptions`](../interfaces/interface.ScattermapStyleOptions.md)

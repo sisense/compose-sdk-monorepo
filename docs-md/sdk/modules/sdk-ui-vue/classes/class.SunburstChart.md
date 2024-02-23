@@ -12,24 +12,32 @@ It maintains compatibility with Vue's reactivity system while preserving the fun
 Here's how you can use the SunburstChart component in a Vue application:
 ```vue
 <template>
-  <SunburstChart :props="sunburstChartProps" />
+   <SunburstChart
+     :dataOptions="sunburstChartProps.dataOptions"
+     :dataSet="sunburstChartProps.dataSet"
+     :filters="sunburstChartProps.filters"
+   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import SunburstChart from '@sisense/sdk-ui-vue/SunburstChart';
+import {SunburstChart,type SunburstChartProps} from '@sisense/sdk-ui-vue';
 
-const sunburstChartProps = ref({
-  // Configure your SunburstChartProps here
+const sunburstChartProps = ref<SunburstChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   category: [dimProductName],
+   value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
-</script>
 ```
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CategoricalChartDataOptions`](../../sdk-ui/interfaces/interface.CategoricalChartDataOptions.md)
+> **dataOptions**?: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
 
 ***
 
@@ -53,7 +61,7 @@ const sunburstChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +85,4 @@ const sunburstChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`SunburstStyleOptions`](../../sdk-ui/interfaces/interface.SunburstStyleOptions.md)
+> **styleOptions**?: [`SunburstStyleOptions`](../interfaces/interface.SunburstStyleOptions.md)

@@ -4,38 +4,55 @@ title: CriteriaFilterTile
 
 # Class CriteriaFilterTile
 
-A Vue component that wraps the CriteriaFilterTile Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the CriteriaFilterTile.
+UI component that allows the user to filter numeric or text attributes according to
+a number of built-in operations defined in the NumericFilter, TextFilter, or RankingFilter.
+
+The arrangement prop determines whether the filter is rendered vertically or horizontally, with the latter intended for toolbar use and omitting title, enable/disable, and collapse/expand functionality.
 
 ## Example
 
 Here's how you can use the CriteriaFilterTile component in a Vue application:
 ```vue
 <template>
-  <CriteriaFilterTile :props="criteriaFilterTileProps" />
+  <CriteriaFilterTile
+    :title="criteriaFilterTileProps.title"
+    :filter="criteriaFilterTileProps.filter"
+    :onUpdate="onUpdate"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import {CriteriaFilterTile} from '@sisense/sdk-ui-vue';
+import { filterFactory } from '@sisense/sdk-data';
 
 const criteriaFilterTileProps = ref({
-  // Configure your CriteriaFilterTileProps here
+ title: 'Revenue',
+ filter: filterFactory.greaterThanOrEqual(DM.Commerce.Revenue, 10000)
 });
+
+const onUpdate = (filter: Filter | null) => {
+ ...
+}
 </script>
 ```
+<img src="../../../img/criteria-filter-tile-example-1.png" width="300px" />
+
+## Param
+
+Criteria filter tile props
 
 ## Properties
 
 ### arrangement
 
-> **arrangement**?: [`FilterVariant`](../../sdk-ui/type-aliases/type-alias.FilterVariant.md)
+> **arrangement**?: [`FilterVariant`](../type-aliases/type-alias.FilterVariant.md)
 
 ***
 
 ### filter
 
-> **filter**?: [`CriteriaFilterType`](../../sdk-ui/type-aliases/type-alias.CriteriaFilterType.md)
+> **filter**?: [`CriteriaFilterType`](../type-aliases/type-alias.CriteriaFilterType.md)
 
 ***
 

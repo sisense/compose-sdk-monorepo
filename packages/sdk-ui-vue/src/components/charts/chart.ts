@@ -11,7 +11,7 @@ import { setupHelper } from '../../setup-helper';
  * ```tsx
  * <script setup lang="ts">
  * import { Chart } from '@sisense/sdk-ui-vue';
- * import type { ChartProps } from '@sisense/sdk-ui';
+ * import type { ChartProps } from '@sisense/sdk-ui-vue';
  * import * as DM from '../assets/sample-retail-model';
  * import { measureFactory, filterFactory } from '@sisense/sdk-data';
  * import { ref } from 'vue';
@@ -27,33 +27,22 @@ import { setupHelper } from '../../setup-helper';
  *     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
  *     breakBy: [],
  *   },
- *   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
- *   styleOptions: {
- *     width: 800,
- *     height: 500,
- *     xAxis: {
- *       title: {
- *         text: 'Product Name',
- *         enabled: true,
- *       },
- *     },
- *     yAxis: {
- *       title: {
- *         text: 'Total Revenue',
- *         enabled: true,
- *       },
- *     },
- *   },
+ *   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)]
  * });
  * </script>
  *
  * <template>
- *   <Chart :props="chartProps" />
+     <Chart
+       :chartType="chartProps.chartType"
+       :dataSet="chartProps.dataSet"
+       :dataOptions="chartProps.dataOptions"
+       :filters="chartProps.filters"
+     />
  * </template>
  * ```
  *
- * <img src="media://vue-chart-data-source-example-1.png" width="800px" />
- *
+ * <img src="media://chart-local-data-example-1.png" width="800px" />
+ * @param props - Chart properties
  * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType | chartType}
  */
 export const Chart = defineComponent({

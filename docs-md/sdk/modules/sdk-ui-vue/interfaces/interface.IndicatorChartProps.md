@@ -67,7 +67,7 @@ BaseChartProps.highlights
 
 #### dataOptions
 
-> **dataOptions**: [`IndicatorChartDataOptions`](../../sdk-ui/interfaces/interface.IndicatorChartDataOptions.md)
+> **dataOptions**: [`IndicatorChartDataOptions`](interface.IndicatorChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -75,6 +75,6 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### styleOptions
 
-> **styleOptions**?: [`IndicatorStyleOptions`](../../sdk-ui/type-aliases/type-alias.IndicatorStyleOptions.md)
+> **styleOptions**?: [`IndicatorStyleOptions`](../type-aliases/type-alias.IndicatorStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements

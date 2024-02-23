@@ -134,6 +134,15 @@ export const cartesianDefaults: HighchartsOptionsInternal = {
     enabled: true,
   },
   plotOptions: {
+    area: {
+      className: 'area-series--without-pointer-events',
+      states: {
+        inactive: {
+          enabled: true,
+          opacity: 0.3,
+        },
+      },
+    },
     series: {
       dataLabels: {
         enabled: false,

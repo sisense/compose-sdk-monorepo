@@ -4,32 +4,46 @@ title: TreemapChart
 
 # Class TreemapChart
 
-A Vue component that wraps the TreemapChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the TreemapChart.
+A Vue component displaying hierarchical data in the form of nested rectangles.
+This type of chart can be used instead of a column chart for comparing a large number of categories and sub-categories.
+See [Treemap Chart](https://docs.sisense.com/main/SisenseLinux/treemap.htm) for more information.
 
 ## Example
 
 Here's how you can use the TreemapChart component in a Vue application:
 ```vue
 <template>
-  <TreemapChart :props="treemapChartProps" />
+     <TreemapChart
+       :dataOptions="treemapChartProps.dataOptions"
+       :dataSet="treemapChartProps.dataSet"
+       :filters="treemapChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import TreemapChart from '@sisense/sdk-ui-vue/TreemapChart';
 
-const treemapChartProps = ref({
-  // Configure your TreemapChartProps here
+const treemapChartProps = ref<TreemapChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   category: [dimProductName],
+   value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
-</script>
 ```
+<img src="../../../img/treemap-chart-example-1.png" width="600px" />
+
+## Param
+
+Treemap chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CategoricalChartDataOptions`](../../sdk-ui/interfaces/interface.CategoricalChartDataOptions.md)
+> **dataOptions**?: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
 
 ***
 
@@ -53,7 +67,7 @@ const treemapChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +91,4 @@ const treemapChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`TreemapStyleOptions`](../../sdk-ui/interfaces/interface.TreemapStyleOptions.md)
+> **styleOptions**?: [`TreemapStyleOptions`](../interfaces/interface.TreemapStyleOptions.md)

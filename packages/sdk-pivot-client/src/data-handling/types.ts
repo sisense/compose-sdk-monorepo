@@ -1,22 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-types */
-// import * as React from 'react';
-// import { PluginConfig, GlobalStyles, Metadata } from './utils/plugins/types.js';
-import { Metadata } from './utils/plugins/types.js';
-// import { Defer, LoggerI, InputStyles } from '../utils/types.js';
-import { Defer, LoggerI } from '../utils/types.js';
-import { TreeNode, TreeServiceI } from '../tree-structure/types.js';
+import * as React from 'react';
+import { PluginConfig, GlobalStyles, Metadata } from './utils/plugins/types.js';
+import { Defer, LoggerI, InputStyles } from '../utils/types.js';
+import { TreeNode, TreeServiceI } from '../tree-structure';
 import { JaqlRequest, JaqlPanel } from '../data-load/types.js';
 
-// export type EmbedComponentProps = {
-//   width?: number | string;
-//   domReadyDefer?: Defer;
-//   [key: string]: any;
-// };
+export type EmbedComponentProps = {
+  width?: number | string;
+  domReadyDefer?: Defer;
+  [key: string]: any;
+};
 
 export type PivotTreeNode = TreeNode & {
   // formatted value to show or React component
-  // content?: null | string | typeof React.Component;
-  content?: null | string;
+  content?: null | string | typeof React.Component;
   contentType?: string;
   // metadata type (rows | columns | measures)
   metadataType?: string;
@@ -63,13 +60,12 @@ export type PivotDataNode = {
   // raw data
   value: any;
   // formatted value to show or React component
-  // content?: null | string | typeof React.Component;
-  content?: null | string;
+  content?: null | string | typeof React.Component;
   contentType?: string;
   // matched index for condition formatting
   cf?: number;
   // style object
-  // style?: InputStyles;
+  style?: InputStyles;
   // jaql panel field index
   jaqlIndex?: number;
   // state of cell
@@ -87,17 +83,17 @@ export type PivotDataNode = {
   };
 };
 
-// export type PivotCellEvent = {
-//   event: any;
-//   isDataCell: boolean;
-//   dataNode?: PivotTreeNode | PivotDataNode;
-//   rowTreeNode?: PivotTreeNode;
-//   columnTreeNode?: PivotTreeNode;
-//   measureTreeNode?: PivotTreeNode;
-//   pivotCell?: Record<string, any>;
-//   cellMetadata?: Metadata;
-//   cell: any;
-// };
+export type PivotCellEvent = {
+  event: any;
+  isDataCell: boolean;
+  dataNode?: PivotTreeNode | PivotDataNode;
+  rowTreeNode?: PivotTreeNode;
+  columnTreeNode?: PivotTreeNode;
+  measureTreeNode?: PivotTreeNode;
+  pivotCell?: Record<string, any>;
+  cellMetadata?: Metadata;
+  cell: any;
+};
 
 export interface InitPageData {
   rowsTreeService?: TreeServiceI;
@@ -154,6 +150,6 @@ export interface DataServiceI {
   postProcessTree(items: Array<PivotTreeNode>): void;
   cancelLoading(): void;
   destroy(): void;
-  // setPluginHandlers(plugins: Array<PluginConfig>): void;
-  // setGlobalStyles(styles: GlobalStyles): void;
+  setPluginHandlers(plugins: Array<PluginConfig>): void;
+  setGlobalStyles(styles: GlobalStyles): void;
 }

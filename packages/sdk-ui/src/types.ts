@@ -29,6 +29,7 @@ import {
 import { DataPointsEventHandler } from './props';
 import { LegendPosition } from './chart-options-processor/translations/legend-section';
 import { GeoDataElement, RawGeoDataElement } from './chart-data/types';
+import { Coordinates } from '@/charts/map-charts/scattermap/types';
 
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
@@ -408,6 +409,51 @@ export interface TableStyleOptions {
   height?: number;
 }
 
+/** Configuration options that define functional style of the various elements of {@link PivotTable} */
+export interface PivotTableStyleOptions {
+  /**
+   * Boolean flag whether to fill header cells with background color
+   */
+  headersColor?: boolean;
+  /**
+   * Boolean flag whether to apply background color to alternate rows.
+   */
+  alternatingRowsColor?: boolean;
+  /**
+   * Boolean flag whether to apply background color to alternate columns
+   */
+  alternatingColumnsColor?: boolean;
+  /**
+   * Number of rows per page
+   *
+   * Default value is 25
+   *
+   */
+  rowsPerPage?: number;
+  /**
+   * Total width of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels)
+   * 2. Width of the container wrapping this component
+   * 3. Default value of 400px
+   *
+   */
+  width?: number;
+  /**
+   * Total height of the component, which is considered in the following order of priority:
+   *
+   * 1. Value passed to this property (in pixels).
+   * 2. Height of the container wrapping this component
+   * 3. Default value of 500px (for component without header) or 525px (for component with header).
+   */
+  height?: number;
+
+  /**
+   * Boolean flag whether the height of the component should be automatically adjusted to fit the content
+   */
+  isAutoHeight?: boolean;
+}
+
 /**
  * Common part of IndicatorStyleOptions for all types of indicator
  *
@@ -590,37 +636,37 @@ export type NumberFormatConfig = {
   /**
    * Supported formats
    */
-  name: 'Numbers' | 'Currency' | 'Percent';
+  name?: 'Numbers' | 'Currency' | 'Percent';
   /**
    * The number of decimal places
    */
-  decimalScale: DecimalScale;
+  decimalScale?: DecimalScale;
   /**
    * Boolean flag whether to show an abbreviation
    * for a number greater than or equal one trillion - e.g. 1T
    */
-  trillion: boolean;
+  trillion?: boolean;
   /**
    * Boolean flag whether to show an abbreviation
    * for a number greater than or equal one billion - e.g. 1B
    */
-  billion: boolean;
+  billion?: boolean;
   /**
    * Boolean flag whether to show an abbreviation
    * for a number greater than or equal one million - e.g. 1M
    */
-  million: boolean;
+  million?: boolean;
   /**
    * Boolean flag whether to show an abbreviation
    * for a number greater than or equal one thousand - e.g. 1K
    */
-  kilo: boolean;
+  kilo?: boolean;
   /**
    * Boolean flag whether the thousand separator is shown
    *
    * If true, show the thousand separator, e.g. `1,000`. Otherwise, show `1000`
    */
-  thousandSeparator: boolean;
+  thousandSeparator?: boolean;
   /**
    * Boolean flag whether `symbol` is shown in front of or after the number
    *
@@ -628,12 +674,19 @@ export type NumberFormatConfig = {
    *
    * If false, append `symbol` after the number, e.g. show `1000¥` when `symbol` is `¥`.
    */
-  prefix: boolean;
+  prefix?: boolean;
   /**
    * Symbol to show in front of or after the number depending on the value of `prefix`.
    */
-  symbol: string;
+  symbol?: string;
 };
+
+/**
+ * {@link NumberFormatConfig} with all props required
+ *
+ * @internal
+ */
+export type CompleteNumberFormatConfig = Required<NumberFormatConfig>;
 
 /** Identifier of a theme as defined in the Sisense instance. */
 export type ThemeOid = string;
@@ -806,12 +859,14 @@ export type ChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint | A
 
 /**
  * Abstract data point in a chart that based on Highcharts.
+ *
  * @internal
  */
 export type HighchartsBasedChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint;
 
 /**
  * Abstract event handler for data point click event
+ *
  * @internal
  */
 export type ChartDataPointEventHandler = (
@@ -862,6 +917,20 @@ export type BoxplotDataPoint = {
  * Data point in an Areamap chart.
  */
 export type AreamapDataPoint = GeoDataElement;
+
+/**
+ * Data point in an Scattermap chart.
+ */
+export type ScattermapDataPoint = {
+  /** Location name displayed on marker */
+  displayName: string;
+  /** Array with categories strings used for location definition */
+  categories: string[];
+  /** Numeric measure value */
+  value: number;
+  /** Location coordinates */
+  coordinates: Coordinates;
+};
 
 /**
  * This is the minimum definition of Highcharts

@@ -61,7 +61,7 @@ export default function ChatInput({
 
   return (
     <div
-      className={`csdk-input csdk-flex ${iconPositionStyling} csdk-content-center csdk-w-full csdk-relative csdk-px-[16px] csdk-py-[16px]`}
+      className={`csdk-input csdk-flex ${iconPositionStyling} csdk-content-center csdk-w-full csdk-relative csdk-px-[16px]`}
     >
       {onClearHistoryClick && (
         <button

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions, no-shadow, @typescript-eslint/unbound-method */
-import { createTypedPanels, createTestJaql, delay } from '../__test-helpers__/testUtils';
+import { createTypedPanels, createTestJaql, delay } from '../__test-helpers__/testUtils.js';
 import {
   DataService,
   DataServiceOptions,

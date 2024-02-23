@@ -11,13 +11,13 @@ import {
   pivotTransforms,
   jaqlProcessor,
   createPivotTreeNode,
-  // PluginService,
+  PluginService,
 } from './utils/index.js';
 import { debug, cloneObject, throttle, findIndex } from '../utils/index.js';
 import { LoggerI } from '../utils/types.js';
 import { TreeServiceI, TreeNode, HeaderTreeNode } from '../tree-structure/types.js';
 import { DataLoadServiceI, JaqlRequest, JaqlPanel } from '../data-load/types.js';
-// import { GlobalStyles, PluginConfig } from './utils/plugins/types';
+import { GlobalStyles, PluginConfig } from './utils/plugins/types';
 import { DataServiceI, PivotTreeNode, PivotDataNode, InitPageData, AllDataInfo } from './types.js';
 
 export type NodesChunk = {
@@ -69,7 +69,7 @@ export const THROTTLE_TIME_MS = 0;
 type Options = {
   throttle: Function;
   throttleTime: number;
-  // PluginService: typeof PluginService;
+  PluginService: typeof PluginService;
   skipInternalColorFormatting: boolean;
   subtotalsForSingleRow: boolean;
 };
@@ -79,7 +79,7 @@ export type DataServiceOptions = Partial<Options>;
 const defaultOptions = {
   throttle,
   throttleTime: THROTTLE_TIME_MS,
-  // PluginService,
+  PluginService,
   skipInternalColorFormatting: false,
   subtotalsForSingleRow: false,
 };
@@ -275,7 +275,7 @@ export class DataService implements DataServiceI {
    *
    * service to apply customers plugins
    */
-  // pluginService?: PluginService;
+  pluginService?: PluginService;
 
   /**
    *
@@ -296,7 +296,7 @@ export class DataService implements DataServiceI {
    *
    * plugins handlers
    */
-  // callPlugins: Array<PluginConfig> = [];
+  callPlugins: Array<PluginConfig> = [];
 
   /**
    *
@@ -304,7 +304,7 @@ export class DataService implements DataServiceI {
    *
    * plugins global styles
    */
-  // globalStyles?: GlobalStyles;
+  globalStyles?: GlobalStyles;
 
   /**
    *
@@ -533,7 +533,7 @@ export class DataService implements DataServiceI {
       this.metadata = metadata || [];
       this.rawJaql = getJaqlComposition(jaql, this.metadata);
       // console.log('getJaqlComposition', jaql, this.metadata, this.rawJaql);
-      // this.initPluginService(this.rawJaql);
+      this.initPluginService(this.rawJaql);
       this.loadService
         .load(jaql)
         .then((data) => {
@@ -689,9 +689,9 @@ export class DataService implements DataServiceI {
    * @param {Array<PluginConfig>} handlers - object with target and handler
    * @returns {void}
    */
-  // setPluginHandlers(handlers: Array<PluginConfig>) {
-  //   this.callPlugins = handlers;
-  // }
+  setPluginHandlers(handlers: Array<PluginConfig>) {
+    this.callPlugins = handlers;
+  }
 
   /**
    * Set global styles for all cells
@@ -699,9 +699,9 @@ export class DataService implements DataServiceI {
    * @param {GlobalStyles} [styles] - object with target and handler
    * @returns {void}
    */
-  // setGlobalStyles(styles?: GlobalStyles): void {
-  //   this.globalStyles = styles;
-  // }
+  setGlobalStyles(styles?: GlobalStyles): void {
+    this.globalStyles = styles;
+  }
 
   /**
    * Returns current raw jaql request object
@@ -865,9 +865,9 @@ export class DataService implements DataServiceI {
    * @returns {void}
    * @private
    */
-  // initPluginService(jaql: JaqlRequest) {
-  //   this.pluginService = new this.options.PluginService(this.callPlugins, jaql, this.globalStyles);
-  // }
+  initPluginService(jaql: JaqlRequest) {
+    this.pluginService = new this.options.PluginService(this.callPlugins, jaql, this.globalStyles);
+  }
 
   /**
    * Cancel current loading process
@@ -935,10 +935,10 @@ export class DataService implements DataServiceI {
       this.postProcessData(partialTree, { onlyFormatEvents: true });
       const deepLength = this.rowsTreeService ? this.rowsTreeService.getTreeDeepsLength() : 0;
       const wrappedModifiedRows = treeNode.wrapInRootNode(partialTree);
-      // if (this.pluginService && wrappedModifiedRows && wrappedModifiedRows.children) {
-      //   this.pluginService.applyToRows(wrappedModifiedRows.children);
-      //   cellsMetadata = this.pluginService.metadataCache;
-      // }
+      if (this.pluginService && wrappedModifiedRows && wrappedModifiedRows.children) {
+        this.pluginService.applyToRows(wrappedModifiedRows.children);
+        cellsMetadata = this.pluginService.metadataCache;
+      }
       partialRowsService = new TreeService(wrappedModifiedRows, true, deepLength);
       partialRowsService.hasGrandTotals = !!this.rowsGrand;
     }
@@ -1001,10 +1001,10 @@ export class DataService implements DataServiceI {
       this.postProcessData(partialTree, { onlyFormatEvents: true });
       const deepLength = this.rowsTreeService ? this.rowsTreeService.getTreeDeepsLength() : 0;
       const wrappedModifiedRows = treeNode.wrapInRootNode(partialTree);
-      // if (this.pluginService && wrappedModifiedRows && wrappedModifiedRows.children) {
-      //   this.pluginService.applyToRows(wrappedModifiedRows.children);
-      //   cellsMetadata = this.pluginService.metadataCache;
-      // }
+      if (this.pluginService && wrappedModifiedRows && wrappedModifiedRows.children) {
+        this.pluginService.applyToRows(wrappedModifiedRows.children);
+        cellsMetadata = this.pluginService.metadataCache;
+      }
       partialRowsService = new TreeService(wrappedModifiedRows, true, deepLength);
       partialRowsService.hasGrandTotals = !!this.rowsGrand;
     }
@@ -1062,10 +1062,10 @@ export class DataService implements DataServiceI {
       }
       const deepLength = this.rowsTreeService ? this.rowsTreeService.getTreeDeepsLength() : 0;
       const wrappedModifiedRows = treeNode.wrapInRootNode(partialTree);
-      // if (this.pluginService && wrappedModifiedRows && wrappedModifiedRows.children) {
-      //   this.pluginService.applyToRows(wrappedModifiedRows.children);
-      //   cellsMetadata = this.pluginService.metadataCache;
-      // }
+      if (this.pluginService && wrappedModifiedRows && wrappedModifiedRows.children) {
+        this.pluginService.applyToRows(wrappedModifiedRows.children);
+        cellsMetadata = this.pluginService.metadataCache;
+      }
       rowsTreeService = new TreeService(wrappedModifiedRows, true, deepLength);
       rowsTreeService.hasGrandTotals = !!(lastPage && this.rowsGrand);
     }
@@ -1185,7 +1185,7 @@ export class DataService implements DataServiceI {
       {
         getJaql,
         getRawJaql,
-        // pluginService: this.pluginService,
+        pluginService: this.pluginService,
         applyIndexDivergence,
       },
       {
@@ -1207,7 +1207,7 @@ export class DataService implements DataServiceI {
       {
         getJaql,
         getRawJaql,
-        // pluginService: this.pluginService,
+        pluginService: this.pluginService,
         columnsTreeService: this.columnsTreeService,
       },
       {
@@ -1581,7 +1581,7 @@ export class DataService implements DataServiceI {
     handlers: {
       getJaql: () => JaqlRequest;
       getRawJaql?: () => JaqlRequest;
-      // pluginService?: PluginService;
+      pluginService?: PluginService;
       applyIndexDivergence?: (items: Array<PivotTreeNode>) => void;
     },
     events?: {
@@ -1626,9 +1626,9 @@ export class DataService implements DataServiceI {
           emitFn: events && events.emitHeaderCellFormatEvent,
         });
         const wrappedModifiedColumns = treeNode.wrapInRootNode(modifiedColumns);
-        // if (handlers.pluginService && wrappedModifiedColumns && wrappedModifiedColumns.children) {
-        //   handlers.pluginService.applyToColumns(wrappedModifiedColumns.children);
-        // }
+        if (handlers.pluginService && wrappedModifiedColumns && wrappedModifiedColumns.children) {
+          handlers.pluginService.applyToColumns(wrappedModifiedColumns.children);
+        }
 
         columnsTree = wrappedModifiedColumns;
         columnsTreeService = new TreeService(wrappedModifiedColumns);
@@ -1647,18 +1647,18 @@ export class DataService implements DataServiceI {
             .getChildren(valuesTree)
             .filter((item, index) => index < (originalColumnsTree.maxChilds as number));
         }
-        // if (handlers.pluginService && valuesTree.children) {
-        //   handlers.pluginService.applyToColumns(valuesTree.children);
-        // }
+        if (handlers.pluginService && valuesTree.children) {
+          handlers.pluginService.applyToColumns(valuesTree.children);
+        }
         postProcessTree(treeNode.getChildren(valuesTree), rawJaql, {
           emitFn: events && events.emitHeaderCellFormatEvent,
         });
         columnsTree = valuesTree;
         columnsTreeService = new TreeService(valuesTree);
       } else {
-        // if (handlers.pluginService) {
-        //   handlers.pluginService.resetRowStartFrom();
-        // }
+        if (handlers.pluginService) {
+          handlers.pluginService.resetRowStartFrom();
+        }
         columnsTree = undefined;
         columnsTreeService = undefined;
         columnsCount = 0;
@@ -1704,7 +1704,7 @@ export class DataService implements DataServiceI {
     handlers: {
       getJaql: () => JaqlRequest;
       getRawJaql?: () => JaqlRequest;
-      // pluginService?: PluginService;
+      pluginService?: PluginService;
       columnsTreeService?: TreeServiceI;
     },
     events?: {
@@ -1744,9 +1744,9 @@ export class DataService implements DataServiceI {
         if (handlers.columnsTreeService) {
           cornerDeep = handlers.columnsTreeService.getTreeDeepsLength();
         }
-        // if (handlers.pluginService) {
-        //   handlers.pluginService.applyToHeaders(cornerTree);
-        // }
+        if (handlers.pluginService) {
+          handlers.pluginService.applyToHeaders(cornerTree);
+        }
         cornerTreeService = new TreeService(cornerTree, false, cornerDeep);
       }
       return { cornerTree, cornerTreeService };

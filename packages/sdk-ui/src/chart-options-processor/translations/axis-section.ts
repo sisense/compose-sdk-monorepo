@@ -16,7 +16,7 @@ import {
 } from '../defaults/cartesian';
 import merge from 'deepmerge';
 import { Style } from '../chart-options-service';
-import { defaultConfig, applyFormatPlainText } from './number-format-config';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { DateLevels, isNumber } from '@sisense/sdk-data';
 import {
   ChartDataOptionsInternal,
@@ -366,7 +366,7 @@ export const getXAxisSettings = (
             return that.value;
           }
           return applyFormatPlainText(
-            x1?.numberFormatConfig ?? defaultConfig,
+            getCompleteNumberFormatConfig(x1?.numberFormatConfig),
             parseFloat(that.value),
           );
         },
@@ -409,12 +409,12 @@ export const getYAxisSettings = (
 ): [AxisSettings[], AxisClipped[]] => {
   const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
     chartDataOptions as CartesianChartDataOptionsInternal;
-  const y1NumberFormatConfig =
-    cartesianChartDataOptions.y.find((y) => !y.showOnRightAxis)?.numberFormatConfig ??
-    defaultConfig;
-  const y2NumberFormatConfig =
-    cartesianChartDataOptions.y.find((y) => y.showOnRightAxis)?.numberFormatConfig ?? defaultConfig;
-
+  const y1NumberFormatConfig = getCompleteNumberFormatConfig(
+    cartesianChartDataOptions.y.find((y) => !y.showOnRightAxis)?.numberFormatConfig,
+  );
+  const y2NumberFormatConfig = getCompleteNumberFormatConfig(
+    cartesianChartDataOptions.y.find((y) => y.showOnRightAxis)?.numberFormatConfig,
+  );
   const axisClipped = [
     { minClipped: !!(axis.enabled && axis.min), maxClipped: !!(axis.enabled && axis.max) },
   ];

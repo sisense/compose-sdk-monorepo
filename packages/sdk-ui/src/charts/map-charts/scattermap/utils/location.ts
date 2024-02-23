@@ -1,5 +1,7 @@
 import { trim } from 'lodash';
 import { ScattermapLocationLevel } from '@/chart-data-options/types';
+import { ScattermapDataPoint } from '@/types';
+import { ScattermapChartLocation } from '@/chart-data/types';
 
 export const LOCATION_DELIMITER = ',';
 
@@ -22,4 +24,20 @@ export function getLocationGeoLevel(level: ScattermapLocationLevel) {
   }
 
   return undefined;
+}
+
+export function locationToScattermapDataPoint(
+  location: ScattermapChartLocation,
+): ScattermapDataPoint {
+  const { name, rawName, coordinates, value } = location;
+
+  return {
+    categories: rawName,
+    displayName: name,
+    coordinates: {
+      lat: coordinates!.lat,
+      lng: coordinates!.lng,
+    },
+    value,
+  };
 }

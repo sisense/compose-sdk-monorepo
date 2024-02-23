@@ -123,7 +123,7 @@ export class SisenseSocket implements SocketI {
     });
 
     socket.on('connect', () => {
-      console.log('socket connect', socket.id);
+      // console.log('socket connect', socket.id);
       socket.emit('register', {});
     });
 

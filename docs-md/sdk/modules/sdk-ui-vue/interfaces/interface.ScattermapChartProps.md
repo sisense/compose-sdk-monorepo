@@ -8,7 +8,7 @@ Props of the [ScattermapChart](../classes/class.ScattermapChart.md) component.
 
 ## Extends
 
-- `BaseChartProps`
+- `BaseChartProps`.`ScattermapChartEventProps`
 
 ## Properties
 
@@ -67,7 +67,7 @@ BaseChartProps.highlights
 
 #### dataOptions
 
-> **dataOptions**: [`ScattermapChartDataOptions`](../../sdk-ui/interfaces/interface.ScattermapChartDataOptions.md)
+> **dataOptions**: [`ScattermapChartDataOptions`](interface.ScattermapChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -75,6 +75,18 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### styleOptions
 
-> **styleOptions**?: [`ScattermapStyleOptions`](../../sdk-ui/interfaces/interface.ScattermapStyleOptions.md)
+> **styleOptions**?: [`ScattermapStyleOptions`](interface.ScattermapStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
+
+### Callbacks
+
+#### onDataPointClick
+
+> **onDataPointClick**?: [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+
+Click handler callback for a data point
+
+##### Inherited from
+
+ScattermapChartEventProps.onDataPointClick

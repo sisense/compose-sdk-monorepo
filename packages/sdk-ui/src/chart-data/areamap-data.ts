@@ -2,7 +2,7 @@ import { AreamapChartDataOptionsInternal } from '../chart-data-options/types.js'
 import { DataTable, getColumnByName, getValue } from '../chart-data-processor/table-processor.js';
 import {
   applyFormatPlainText,
-  defaultConfig,
+  getCompleteNumberFormatConfig,
 } from '../chart-options-processor/translations/number-format-config.js';
 import { createValueColorOptions } from '../dashboard-widget/translate-panel-color-format.js';
 import { geoDataColoringFunction } from './data-coloring/geo-data-coloring-function.js';
@@ -25,7 +25,9 @@ export const getAreamapData = (
   }
   const rawGeoData: RawGeoDataElement[] = dataTable.rows.map((row) => {
     const originalValue = getValue(row, colorColumn) as number;
-    const numberFormatConfig = chartDataOptions.color.numberFormatConfig || defaultConfig;
+    const numberFormatConfig = getCompleteNumberFormatConfig(
+      chartDataOptions.color.numberFormatConfig,
+    );
     const formattedOriginalValue = applyFormatPlainText(numberFormatConfig, originalValue);
     return {
       geoName: getValue(row, geoColumn) as string,

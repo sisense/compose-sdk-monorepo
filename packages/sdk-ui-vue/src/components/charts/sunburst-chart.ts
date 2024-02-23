@@ -12,17 +12,25 @@ import { setupHelper } from '../../setup-helper';
  * Here's how you can use the SunburstChart component in a Vue application:
  * ```vue
  * <template>
- *   <SunburstChart :props="sunburstChartProps" />
+    <SunburstChart
+      :dataOptions="sunburstChartProps.dataOptions"
+      :dataSet="sunburstChartProps.dataSet"
+      :filters="sunburstChartProps.filters"
+    />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import SunburstChart from '@sisense/sdk-ui-vue/SunburstChart';
+ * import {SunburstChart,type SunburstChartProps} from '@sisense/sdk-ui-vue';
  *
- * const sunburstChartProps = ref({
- *   // Configure your SunburstChartProps here
- * });
- * </script>
+const sunburstChartProps = ref<SunburstChartProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [dimProductName],
+    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+});
  * ```
  */
 export const SunburstChart = defineComponent({

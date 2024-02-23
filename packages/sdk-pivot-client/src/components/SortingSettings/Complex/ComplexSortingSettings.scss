@@ -1,0 +1,51 @@
+// Design: https://www.figma.com/file/pWIv8bV9dMpSrbTBqLrFB9/Analytics---Pivot---Sorting-(Hila)-Feb-2021?node-id=826%3A202788
+
+$widgetBackgroundColor: #ffffff;
+
+@mixin modal_window_shadow {
+  box-shadow: 0 0 5px rgba(58, 67, 86, 0.2);
+  border-radius: 4px;
+}
+
+.sis-scope {
+  .complex-sorting-settings {
+    @include modal_window_shadow;
+    width: 320px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    max-height: 386px;
+    background-color: $widgetBackgroundColor;
+
+    &__body {
+      overflow: auto;
+      flex-grow: 1;
+      padding: 17px 17px 14px;
+    }
+
+    &__actions {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px 14px;
+
+      .sp-buttons {
+        margin: 0 0 0 auto;
+
+        button {
+          min-width: 74px;
+        }
+        & > button:first-child + button {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    .settings-checkboxes {
+      margin-left: -3px;
+      margin-top: 15px;
+    }
+  }
+}

@@ -46,7 +46,6 @@ import {
   AreamapChartDataOptions,
   BoxplotChartDataOptions,
   ScattermapChartDataOptions,
-  ScattermapColumn,
   TableDataOptions,
 } from '../chart-data-options/types';
 import { createFilterFromJaql } from './translate-widget-filters';
@@ -311,7 +310,7 @@ function createGeoColumnsFromPanelItems(panels: Panel[], customPaletteColors?: C
         return {
           ...column,
           level: item.geoLevel,
-        } as ScattermapColumn;
+        } as StyledColumn;
       }
 
       return column;

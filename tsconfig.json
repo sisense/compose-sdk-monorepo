@@ -28,11 +28,7 @@
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
     "types": ["vitest/globals"],
-    "baseUrl": ".",
-    "paths": {
-      // workaround for https://github.com/IanVS/vitest-fetch-mock/issues/10
-      "vitest-fetch-mock": ["node_modules/vitest-fetch-mock/types/index.d.ts"]
-    }
+    "baseUrl": "."
   },
   "include": ["**/*.ts", "**/*.tsx"]
 }

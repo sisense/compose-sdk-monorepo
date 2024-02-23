@@ -12,18 +12,30 @@ import { setupHelper } from '../../setup-helper';
  * Here's how you can use the LineChart component in a Vue application:
  * ```vue
  * <template>
- *   <LineChart :props="lineChartProps" />
+      <LineChart
+        :dataOptions="lineChartProps.dataOptions"
+        :dataSet="lineChartProps.dataSet"
+        :filters="lineChartProps.filters"
+      />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import LineChart from '@sisense/sdk-ui-vue/LineChart';
+ * import {LineChart, type LineChartProps} from '@sisense/sdk-ui-vue';
  *
- * const lineChartProps = ref({
- *   // Configure your LineChartProps here
- * });
- * </script>
+const lineChartProps = ref<LineChartProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [dimProductName],
+    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+    breakBy: [],
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+});
  * ```
+ * <img src="media://line-chart-example-1.png" width="800px" />
+ * @param props - Line chart properties
+ * @returns Line Chart component
  */
 export const LineChart = defineComponent({
   props: {

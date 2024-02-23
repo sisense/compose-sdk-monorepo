@@ -18,19 +18,8 @@ import { WidgetDashboardFilterMode, WidgetDto } from '../dashboard-widget/types.
 import { trackProductEvent } from '@sisense/sdk-tracking';
 import { ExecuteQueryByWidgetIdParams } from './types';
 
-vi.mock('../query/execute-query', () => ({
-  executeQuery: vi.fn(),
-}));
-vi.mock('../sisense-context/sisense-context', async () => {
-  const actual: typeof import('../sisense-context/sisense-context.js') = await vi.importActual(
-    '../sisense-context/sisense-context',
-  );
-
-  return {
-    ...actual,
-    useSisenseContext: vi.fn(),
-  };
-});
+vi.mock('../query/execute-query');
+vi.mock('../sisense-context/sisense-context');
 const getWidgetMock = vi.fn();
 const getDashboardMock = vi.fn();
 vi.mock('../api/rest-api', () => ({

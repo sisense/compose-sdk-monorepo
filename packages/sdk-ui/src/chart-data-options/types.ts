@@ -6,8 +6,16 @@ import type {
   SortDirection,
   ValueToColorMap,
   MultiColumnValueToColorMap,
+  LineWidth,
+  Markers,
 } from '../types';
-import { Column, MeasureColumn, CalculatedMeasureColumn } from '@sisense/sdk-data';
+import {
+  Column,
+  MeasureColumn,
+  CalculatedMeasureColumn,
+  PivotGrandTotals,
+  TotalsCalculation,
+} from '@sisense/sdk-data';
 
 /**
  * Styles for a category/column when visualized in a chart
@@ -44,6 +52,18 @@ export interface CategoryStyle {
   /** {@inheritDoc SortDirection} */
   sortType?: SortDirection;
   isColored?: boolean;
+  /**
+   * Boolean flag whether to render category/column value as HTML in the Table component.
+   */
+  isHtml?: boolean;
+  /**
+   * Boolean flag whether to include subtotals for this dimension in the pivot table.
+   */
+  includeSubTotals?: boolean;
+  /**
+   * Geographic location level for Scattermap chart.
+   */
+  geoLevel?: ScattermapLocationLevel;
 }
 
 /**
@@ -115,6 +135,38 @@ export type ValueStyle = {
   treatNullDataAsZeros?: boolean;
   /** Boolean flag whether to connect a graph line across null points or render a gap */
   connectNulls?: boolean;
+  /**
+   * Calculation for the totals of this measure in the pivot table.
+   */
+  totalsCalculation?: TotalsCalculation;
+  /**
+   * Boolean flag whether to display data bars for this measure in the pivot table.
+   */
+  dataBars?: boolean;
+};
+
+/**
+ * Specific style options to be applied to specific series in Chart.
+ *
+ * @internal
+ */
+export type SeriesStyle = {
+  /**
+   * Specific style options to be applied to specific series in Chart.
+   * Supported only for cartesian and polar charts.
+   */
+  seriesStyleOptions?: SeriesStyleOptions;
+};
+
+/**
+ * Specific style options to be applied to specific series in Chart.
+ * Supported only for cartesian and polar charts.
+ */
+export type SeriesStyleOptions = {
+  /** @inheritdoc LineStyleOptions.lineWidth */
+  lineWidth?: LineWidth;
+  /** @inheritdoc LineStyleOptions.markers */
+  markers?: Markers;
 };
 
 /**
@@ -155,7 +207,7 @@ export type ValueStyle = {
  *
  * See also {@link StyledColumn}.
  */
-export interface StyledMeasureColumn extends ValueStyle {
+export interface StyledMeasureColumn extends ValueStyle, SeriesStyle {
   /** Wrapped MeasureColumn or CalculatedMeasureColumn */
   column: MeasureColumn | CalculatedMeasureColumn;
 }
@@ -350,7 +402,41 @@ export interface TableDataOptions {
 }
 
 /**
- * Geographic location level for a Scattermap column.
+ * Configuration for how to query data and assign data to {@link PivotTable}.
+ *
+ */
+export interface PivotTableDataOptions {
+  /**
+   * Dimensions for the rows of the pivot table
+   *
+   * @category Data Options
+   */
+  rows?: (Column | StyledColumn)[];
+
+  /**
+   * Dimensions for the columns of the pivot table
+   *
+   * @category Data Options
+   */
+  columns?: (Column | StyledColumn)[];
+
+  /**
+   * Measures for the values of the pivot table
+   *
+   * @category Data Options
+   */
+  values?: (MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn)[];
+
+  /**
+   * Options for grand totals
+   *
+   * @category Data Options
+   */
+  grandTotals?: PivotGrandTotals;
+}
+
+/**
+ * Geographic location level for Scattermap chart.
  * This type can have one of the following values:
  * - 'auto': Automatically determines the appropriate location level.
  * - 'country': Represents the country level in the geographical hierarchy.
@@ -358,12 +444,6 @@ export interface TableDataOptions {
  * - 'city': Represents the city level in the geographical hierarchy.
  */
 export type ScattermapLocationLevel = 'auto' | 'country' | 'state' | 'city';
-/**
- * Scattermap column that allows to specify the geographic location level.
- */
-export interface ScattermapColumn extends StyledColumn {
-  level: ScattermapLocationLevel;
-}
 
 /**
  * Configuration for how to query aggregate data and assign data
@@ -375,7 +455,7 @@ export interface ScattermapChartDataOptions {
    * Support field(s) that contain geographic data (Country, City, State/Province, etc)
    * To visualize latitude and longitude data, you have to add one field containing latitude data, and another field containing longitude data, in this order.
    */
-  geo: (Column | StyledColumn | ScattermapColumn)[];
+  geo: (Column | StyledColumn)[];
   /**
    * Measure column (or measure) representing the size of the points on the map.
    */
@@ -486,7 +566,7 @@ export const isCategory = (arg: Category | Value): arg is Category => {
 };
 
 /** @internal */
-export interface Value extends ValueStyle {
+export interface Value extends ValueStyle, SeriesStyle {
   name: string;
   aggregation?: string;
   title: string;
@@ -530,6 +610,39 @@ export interface ScattermapChartDataOptionsInternal {
 export type TableDataOptionsInternal = {
   columns: (Category | Value)[];
 };
+
+/**
+ * @internal
+ */
+export interface PivotTableDataOptionsInternal {
+  /**
+   * Dimensions for the rows of the pivot table
+   *
+   * @category Data Options
+   */
+  rows?: Category[];
+
+  /**
+   * Dimensions for the columns of the pivot table
+   *
+   * @category Data Options
+   */
+  columns?: Category[];
+
+  /**
+   * Measures for the values of the pivot table
+   *
+   * @category Data Options
+   */
+  values?: Value[];
+
+  /**
+   * Options for grand totals
+   *
+   * @category Data Options
+   */
+  grandTotals?: PivotGrandTotals;
+}
 
 /** @internal */
 export type ChartDataOptionsInternal =

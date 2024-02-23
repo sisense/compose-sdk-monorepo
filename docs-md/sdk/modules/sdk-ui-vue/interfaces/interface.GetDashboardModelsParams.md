@@ -8,7 +8,7 @@ Parameters for [useGetDashboardModels](../functions/function.useGetDashboardMode
 
 ## Extends
 
-- [`GetDashboardModelsOptions`](../../sdk-ui/interfaces/interface.GetDashboardModelsOptions.md).`HookEnableParam`
+- [`GetDashboardModelsOptions`](interface.GetDashboardModelsOptions.md).`HookEnableParam`
 
 ## Properties
 
@@ -36,7 +36,7 @@ If not specified, the default value is `false`
 
 #### Inherited from
 
-[`GetDashboardModelsOptions`](../../sdk-ui/interfaces/interface.GetDashboardModelsOptions.md).[`includeWidgets`](../../sdk-ui/interfaces/interface.GetDashboardModelsOptions.md#includewidgets)
+[`GetDashboardModelsOptions`](interface.GetDashboardModelsOptions.md).[`includeWidgets`](interface.GetDashboardModelsOptions.md#includewidgets)
 
 ***
 
@@ -50,4 +50,4 @@ Dashboard titles are not necessarily unique, so the result may contain multiple 
 
 #### Inherited from
 
-[`GetDashboardModelsOptions`](../../sdk-ui/interfaces/interface.GetDashboardModelsOptions.md).[`searchByTitle`](../../sdk-ui/interfaces/interface.GetDashboardModelsOptions.md#searchbytitle)
+[`GetDashboardModelsOptions`](interface.GetDashboardModelsOptions.md).[`searchByTitle`](interface.GetDashboardModelsOptions.md#searchbytitle)

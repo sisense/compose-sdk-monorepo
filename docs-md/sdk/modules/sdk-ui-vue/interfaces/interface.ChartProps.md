@@ -67,7 +67,7 @@ BaseChartProps.highlights
 
 #### chartType
 
-> **chartType**: [`ChartType`](../../sdk-ui/type-aliases/type-alias.ChartType.md)
+> **chartType**: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 Default chart type of each series.
 
@@ -75,7 +75,7 @@ Default chart type of each series.
 
 #### dataOptions
 
-> **dataOptions**: [`ChartDataOptions`](../../sdk-ui/type-aliases/type-alias.ChartDataOptions.md)
+> **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 Configurations for how to interpret and present data passed to the chart.
 
@@ -83,7 +83,7 @@ Configurations for how to interpret and present data passed to the chart.
 
 #### styleOptions
 
-> **styleOptions**?: [`ChartStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartStyleOptions.md)
+> **styleOptions**?: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
 
 Style options union across chart types.
 
@@ -91,7 +91,7 @@ Style options union across chart types.
 
 #### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render
@@ -106,7 +106,7 @@ ChartEventProps.onBeforeRender
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
 

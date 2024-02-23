@@ -268,6 +268,7 @@ export class HeaderTreeService implements TreeServiceI {
         columnIndex - this.cornerOffset,
         options,
       );
+      // eslint-disable-next-line max-lines
     }
     return this.cornerTreeService
       ? this.cornerTreeService.getMetadata(rowIndex, columnIndex, options)

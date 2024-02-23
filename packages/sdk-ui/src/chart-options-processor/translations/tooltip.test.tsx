@@ -1,22 +1,19 @@
+import type { NumberFormatConfig } from '@/types';
 import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
-import { NumberFormatConfig, defaultConfig } from './number-format-config';
 import { getTooltipSettings } from './tooltip';
 import { InternalSeries } from './tooltip-utils';
 
 const format1: NumberFormatConfig = {
-  ...defaultConfig,
   name: 'Currency',
   symbol: '$',
   decimalScale: 2,
 };
 const format2: NumberFormatConfig = {
-  ...defaultConfig,
   name: 'Currency',
   symbol: '!',
   decimalScale: 3,
 };
 const format3: NumberFormatConfig = {
-  ...defaultConfig,
   name: 'Currency',
   symbol: '@',
   decimalScale: 4,

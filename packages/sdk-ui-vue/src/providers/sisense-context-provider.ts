@@ -7,28 +7,26 @@ import {
   createContextProviderRenderer,
   CustomSisenseContextProvider,
 } from '@sisense/sdk-ui-preact';
-import { toDeepRaw } from '../setup-helper';
 
-const sisenseContextAppKey = Symbol() as InjectionKey<{
-  app: Ref<ClientApplication>;
-}>;
+const sisenseContextAppKey = Symbol('sisenseContextAppKey') as InjectionKey<
+  Ref<ClientApplication | undefined>
+>;
 
 /**
  * Gets Sisense application
+ * @internal
  */
-export const getApp = async () => {
-  const app = inject(sisenseContextAppKey)!.app;
-  return app.value;
+export const getApp = () => {
+  return inject(sisenseContextAppKey, ref(undefined));
 };
 
 /**
  * Creates Sisense context connector
+ * @internal
  */
-export const createSisenseContextConnector = () => {
+export const createSisenseContextConnector = (app: ClientApplication) => {
   return {
     async prepareContext() {
-      const app = await getApp();
-
       return {
         app,
         isInitialized: true,
@@ -39,8 +37,51 @@ export const createSisenseContextConnector = () => {
 };
 
 /**
- * Sisense Context Provider
+ * Sisense Context Provider Component allowing you to connect to
+ * a Sisense instance and provide that context
+ * to all Compose SDK components in your application.
  *
+ * @example
+ * Here's how to use the `SisenseContextProvider` component to wrap your Sisense-enabled application:
+ * Add SisenseContextProvider to the main component of your app as below and then wrap
+ * other SDK components inside this component.
+ * ```vue
+ * <template>
+ *   <SisenseContextProvider
+ *     :url="sisenseUrl"
+ *     :defaultDataSource="defaultDataSource"
+ *     :ssoEnabled="true"
+ *     :token="authToken"
+ *     :wat="watToken"
+ *     :appConfig="appConfigurations"
+ *     :showRuntimeErrors="true"
+ *     :enableTracking="false"
+ *   >
+ *     <!-- Your application components here -->
+ *   </SisenseContextProvider>
+ * </template>
+ *
+ * <script>
+ * import { ref } from 'vue';
+ * import SisenseContextProvider from './SisenseContextProvider.vue';
+ *
+ * export default {
+ *   components: { SisenseContextProvider },
+ *   setup() {
+ *     const sisenseUrl = ref('https://your-sisense-instance.com');
+ *     const defaultDataSource = ref('default_datasource_id');
+ *     const authToken = ref('your_auth_token');
+ *     const watToken = ref('your_wat_token');
+ *     const appConfigurations = ref({});
+ *
+ *     return { sisenseUrl, defaultDataSource, authToken, watToken, appConfigurations };
+ *   }
+ * };
+ * </script>
+ * ```
+ *
+ * @param props - Sisense context provider props
+ * @returns A Sisense Context Provider Component
  */
 export const SisenseContextProvider = defineComponent({
   props: {
@@ -61,15 +102,14 @@ export const SisenseContextProvider = defineComponent({
   },
 
   setup(props, { slots }) {
-    const rawProps = toDeepRaw(props);
-    const app = ref();
-    provide(sisenseContextAppKey, { app });
-    createClientApplication(rawProps as SisenseContextProviderProps).then((newApp) => {
+    const app = ref<ClientApplication>();
+    createClientApplication(props as SisenseContextProviderProps).then((newApp) => {
       app.value = newApp;
     });
 
+    provide(sisenseContextAppKey, app);
+
     return () => {
-      if (!app.value) return null;
       return slots.default?.();
     };
   },

@@ -12,16 +12,21 @@ Before we do that, let’s revert our top chart to only show the sale order reve
 
 ```ts
 <Chart
-    dataSet={DM.DataSource}
-    chartType={'column'}
-    dataOptions={{
-        category: [DM.DimProducts.CategoryName],
-        value: [measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue)],
-    }}
-    styleOptions={{
-        width: 1000,
-        height: 400,
-    }}
+  dataSet={DM.DataSource}
+  chartType={'column'}
+  dataOptions={{
+    category: [DM.DimProducts.CategoryName],
+    value: [
+      measureFactory.sum(
+        DM.Fact_Sale_orders.OrderRevenue,
+        'Total Revenue'
+      )
+    ],
+  }}
+  styleOptions={{
+    width: 1000,
+    height: 400,
+  }}
 />
 ```
 
@@ -33,10 +38,13 @@ To start, we need to add a couple of variables to keep track of our filters. We 
 
 ```ts
 const [categoryFilter, setCategoryFilter] = useState<Filter | null>(null);
-const chartFilters = useMemo(() => (categoryFilter ? [categoryFilter] : []), [categoryFilter]);
+const chartFilters = useMemo(
+  () => (categoryFilter ? [categoryFilter] : []),
+  [categoryFilter]
+);
 ```
 
-This is a common pattern to use when working with filters. In our case, we’re only with one filter criteria, but this pattern can be extended to using multiple filter criteria. In that case you would add a new state variable for each additional filter criteria and build the single memoized array accordingly.
+This is a common pattern to use when working with filters. In our case, we’re using only one filter criteria, but this pattern can be extended to using multiple filter criteria. In that case you would add a new state variable for each additional filter criteria and build the single memoized array accordingly.
 
 We’ll start without any filters set, but we could just as easily use our state variable to set an initial filter when the page loads.
 
@@ -46,11 +54,11 @@ Now we can add a filter tile to let users change the chart filters. This isn’t
 
 ```ts
 <MemberFilterTile
-    title={'Category'}
-    dataSource={DM.DataSource}
-    attribute={DM.DimProducts.CategoryName}
-    filter={categoryFilter}
-    onChange={setCategoryFilter}
+  title={'Category'}
+  dataSource={DM.DataSource}
+  attribute={DM.DimProducts.CategoryName}
+  filter={categoryFilter}
+  onChange={setCategoryFilter}
 />
 ```
 
@@ -95,17 +103,22 @@ First, let’s do that only on the top chart. So, the top chart, should look lik
 
 ```ts
 <Chart
-    dataSet={data}
-    chartType={'column'}
-    dataOptions={{
-        category: [DM.DimProducts.CategoryName],
-        value: [measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue')],
-    }}
-    filters={chartFilters}
-    styleOptions={{
-        width: 1000,
-        height: 400,
-    }}
+  dataSet={data}
+  chartType={'column'}
+  dataOptions={{
+    category: [DM.DimProducts.CategoryName],
+    value: [
+      measureFactory.sum(
+        DM.Fact_Sale_orders.OrderRevenue,
+        'Total Revenue'
+      )
+    ],
+  }}
+  filters={chartFilters}
+  styleOptions={{
+    width: 1000,
+    height: 400,
+  }}
 />
 ```
 
@@ -120,7 +133,7 @@ You can also filter more than one chart using the same filter tiles.
 In our case, since all the groundwork is already set, all we need to do is add a `filters` property to the second chart that uses the same filters variable.
 
 ```ts
-filters = { chartFilters };
+filters = {chartFilters}
 ```
 
 After adding that code, when you use the filter tile to set a filter, it filters both charts at the same time.
@@ -129,23 +142,28 @@ After adding that code, when you use the filter tile to set a filter, it filters
 
 ## Highlighting
 
-Highlighting works similarly to filtering. In fact, we can use just about everything we’ve built to add filtering to our charts to add a highlighting instead. You create a highlight by applying a filter. Just keep in mind that when highlighting you can only use filters where the filter attribute matches the grouping of the chart.
+Highlighting works similarly to filtering. In fact, we can use just about everything we’ve built to add filtering to our charts to add highlighting instead. You create a highlight by applying a filter. Just keep in mind that when highlighting you can only use filters where the filter attribute matches the grouping of the chart.
 
 In our case, let’s change the filtering in the top chart to highlight instead. To do so, all we need to do is change the `filters` property to a `highlights` property. So now our top chart looks like this:
 
 ```ts
 <Chart
-    dataSet={DM.DataSource}
-    chartType={'column'}
-    dataOptions={{
-        category: [DM.DimProducts.CategoryName],
-        value: [measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue')],
-    }}
-    highlights={chartFilters}
-    styleOptions={{
-        width: 1000,
-        height: 400,
-    }}
+  dataSet={DM.DataSource}
+  chartType={'column'}
+  dataOptions={{
+    category: [DM.DimProducts.CategoryName],
+    value: [
+      measureFactory.sum(
+        DM.Fact_Sale_orders.OrderRevenue,
+        'Total Revenue'
+      )
+    ],
+  }}
+  highlights={chartFilters}
+  styleOptions={{
+    width: 1000,
+    height: 400,
+  }}
 />
 ```
 
@@ -153,9 +171,13 @@ After changing that code, when you use the filter tile to set a filter, it highl
 
 ![Charts with highlight and filter](../../img/tutorial/3-highlight-filter.png 'Charts with highlight and filter')
 
+::: tip
+The code up until this point can be found in branch [3a-filters-and-highlights](https://github.com/sisense/compose-sdk-charts-tutorial/tree/3a-filters-and-highlights).
+:::
+
 ## Custom filtering UI
 
-Now that we’ve seen how to build filtering and highlighting using filter tiles, let’s see what we can do without the pre-built components.
+Now that we’ve seen how to build filtering and highlighting using filter tiles, let’s see what we can do so without the pre-built components.
 
 Of course, filtering is not dependent on the UI of your application. You can perform filtering for all sorts of reasons without any UI at all. But for now, let’s allow our users to filter using a UI, but use a UI of our choosing.
 
@@ -169,13 +191,13 @@ Next, we’ll add a hardcoded array of all our product categories. Really, you�
 
 ```ts
 const productCategories = [
-    'Bikes',
-    'Body Armor',
-    'Build Kits',
-    'Cables & Housing',
-    'Frames',
-    'Helmets',
-    'Wheels & Wheelsets',
+  'Bikes',
+  'Body Armor',
+  'Build Kits',
+  'Cables & Housing',
+  'Frames',
+  'Helmets',
+  'Wheels & Wheelsets',
 ];
 ```
 
@@ -188,19 +210,25 @@ So, whereas before we had a state variable holding a `Filter` object, now we’l
 const [categoryFilter, setCategoryFilter] = useState<Filter | null>(null);
 
 // To this line
-const [categories, setCategories] = useState<string[]>();
+const [categories, setCategories] = useState<string[]>([]);
 ```
 
 And before where we had a memoized list of filters, now we’ll build our filter from our list of strings to filter on.
 
 ```ts
 // Change these lines
-const chartFilters = useMemo(() => (categoryFilter ? [categoryFilter] : []), [categoryFilter]);
+const chartFilters = useMemo(
+  () => (categoryFilter ? [categoryFilter] : []),
+  [categoryFilter]
+);
 
 // To these lines
 const chartFilters = useMemo(
-    () => (categories ? [filterFactory.members(DM.DimProducts.CategoryName, categories)] : []),
-    [categories]
+  () =>
+    categories
+      ? [filterFactory.members(DM.DimProducts.CategoryName, categories)]
+      : [],
+  [categories]
 );
 ```
 
@@ -208,11 +236,11 @@ We’ve done all that so we can easily work with a Material UI `<ToggleButtonGro
 
 ```ts
 <ToggleButtonGroup value={categories} onChange={handleCategoryChange}>
-    {productCategories.map((productCategory) => (
-        <ToggleButton key={productCategory} value={productCategory}>
-            {productCategory}
-        </ToggleButton>
-    ))}
+  {productCategories.map((productCategory) => (
+    <ToggleButton key={productCategory} value={productCategory}>
+      {productCategory}
+    </ToggleButton>
+  ))}
 </ToggleButtonGroup>
 ```
 
@@ -221,8 +249,11 @@ Here we’re using the toggle button group to work with our `categories` state v
 Now all we have to do is create a function to handle users toggling buttons on and off. This function simply takes the categories set using the toggle buttons and uses them to set the new value of our categories state variable.
 
 ```ts
-const handleCategoryChange = (_event: React.MouseEvent<HTMLElement>, newCategories: string[]) => {
-    setCategories(newCategories);
+const handleCategoryChange = (
+  _event: React.MouseEvent<HTMLElement>,
+  newCategories: string[]
+) => {
+  setCategories(newCategories);
 };
 ```
 
@@ -230,6 +261,10 @@ You can now go back to your charts and see that the functionality is the same, b
 
 ![Toggle button filter](../../img/tutorial/3-toggle-buttons.png 'Toggle button filter')
 
+::: tip
+The code up until this point can be found in branch [3b-filters-and-highlights](https://github.com/sisense/compose-sdk-charts-tutorial/tree/3b-filters-and-highlights).
+:::
+
 ## Up next
 
-At this point, you should know how to display the data you want in a chart and work with the way that data is displayed. In the next lesson you’ll learn how to take a bit more control of how a chart behaves. [Go to lesson 4](./lesson4.md).
+At this point, you should know how to display the data you want in a chart and work with the way that data is displayed. In the next lesson you’ll learn how to take a bit more control of how a chart behaves. [Go to Lesson 4](./lesson4.md).

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.0] - 2024-02-22
+
+### Added
+- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for public beta testing
+- Add component `PivotTable` (alpha) for React, Angular, and Vue
+
+### Changed
+- **Breaking:** Refactor `ScattermapChartDataOptions.geo` (beta) to use `StyledColumn`, instead `ScattermapColumn` (removed)
+- Support HTML content in component `Table`
+- Support theme settings for `IndicatorChart` in ticker mode
+- Extend `StyledMeasureColumn` with `seriesStypeOptions` to support different series of different chart types
+- Improvements for `Chart` (refactoring and chart labels), `AreaChart` (sticky tracking), `NumberFormatConfig` (optional props),
+  testing infrastructure (adoption of `msw` for mocks), and exports of packages (for both CommonJS and ESM imports)
+- Improvements for the AI components and hooks (private beta)
+
 ## [1.3.0] - 2024-02-07
 
 ### Added

@@ -5,12 +5,7 @@
 /// <reference lib="dom" />
 import { Authenticator } from './interfaces.js';
 import fetchIntercept from 'fetch-intercept';
-import {
-  handleNetworkError,
-  handleErrorResponse,
-  handleUnauthorizedResponse,
-  isNetworkError,
-} from './interceptors.js';
+import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
 
@@ -37,21 +32,8 @@ export class HttpClient {
     this.env = env;
 
     fetchIntercept.register({
-      response: (response) => {
-        if (response.status === 401) {
-          return handleUnauthorizedResponse(response, auth);
-        }
-        if (!response.ok) {
-          return handleErrorResponse(response);
-        }
-        return response;
-      },
-      responseError: (error: Error) => {
-        if (isNetworkError(error)) {
-          return handleNetworkError();
-        }
-        return Promise.reject(error);
-      },
+      response: getResponseInterceptor(auth),
+      responseError: errorInterceptor,
     });
   }
 

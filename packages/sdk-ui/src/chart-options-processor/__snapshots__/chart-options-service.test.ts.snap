@@ -48,6 +48,15 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
       "enabled": false,
     },
     "plotOptions": {
+      "area": {
+        "className": "area-series--without-pointer-events",
+        "states": {
+          "inactive": {
+            "enabled": true,
+            "opacity": 0.3,
+          },
+        },
+      },
       "series": {
         "connectNulls": false,
         "dataLabels": {
@@ -62,7 +71,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
             "textOutline": "none",
           },
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -79,6 +87,7 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           },
           "symbol": "circle",
         },
+        "stacking": undefined,
         "states": {
           "select": {
             "borderColor": "transparent",
@@ -239,6 +248,23 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
         "dataLabels": {
           "formatter": [Function],
         },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
+        },
         "name": "Quantity",
         "showInNavigator": true,
         "stickyTracking": false,
@@ -393,6 +419,23 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
         ],
         "dataLabels": {
           "formatter": [Function],
+        },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
         },
         "name": "Units",
         "showInNavigator": true,
@@ -695,6 +738,15 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
       "enabled": false,
     },
     "plotOptions": {
+      "area": {
+        "className": "area-series--without-pointer-events",
+        "states": {
+          "inactive": {
+            "enabled": true,
+            "opacity": 0.3,
+          },
+        },
+      },
       "series": {
         "connectNulls": false,
         "dataLabels": {
@@ -709,7 +761,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
             "textOutline": "none",
           },
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -726,6 +777,7 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           },
           "symbol": "circle",
         },
+        "stacking": undefined,
         "states": {
           "select": {
             "borderColor": "transparent",
@@ -886,6 +938,23 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
         "dataLabels": {
           "formatter": [Function],
         },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
+        },
         "name": "Quantity",
         "showInNavigator": true,
         "stickyTracking": false,
@@ -1040,6 +1109,23 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
         ],
         "dataLabels": {
           "formatter": [Function],
+        },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
         },
         "name": "Units",
         "showInNavigator": true,
@@ -1347,6 +1433,15 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
       "enabled": false,
     },
     "plotOptions": {
+      "area": {
+        "className": "area-series--without-pointer-events",
+        "states": {
+          "inactive": {
+            "enabled": true,
+            "opacity": 0.3,
+          },
+        },
+      },
       "series": {
         "connectNulls": false,
         "dataLabels": {
@@ -1361,7 +1456,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
             "textOutline": "none",
           },
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -1378,6 +1472,7 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           },
           "symbol": "circle",
         },
+        "stacking": undefined,
         "states": {
           "select": {
             "borderColor": "transparent",
@@ -1538,6 +1633,23 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
         "dataLabels": {
           "formatter": [Function],
         },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
+        },
         "name": "Quantity",
         "showInNavigator": true,
         "stickyTracking": false,
@@ -1692,6 +1804,23 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
         ],
         "dataLabels": {
           "formatter": [Function],
+        },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
         },
         "name": "Units",
         "showInNavigator": true,
@@ -1994,6 +2123,15 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
       "enabled": false,
     },
     "plotOptions": {
+      "area": {
+        "className": "area-series--without-pointer-events",
+        "states": {
+          "inactive": {
+            "enabled": true,
+            "opacity": 0.3,
+          },
+        },
+      },
       "series": {
         "connectNulls": false,
         "dataLabels": {
@@ -2008,7 +2146,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
             "textOutline": "none",
           },
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -2025,6 +2162,7 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           },
           "symbol": "circle",
         },
+        "stacking": undefined,
         "states": {
           "select": {
             "borderColor": "transparent",
@@ -2185,6 +2323,23 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
         "dataLabels": {
           "formatter": [Function],
         },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
+        },
         "name": "Quantity",
         "showInNavigator": true,
         "stickyTracking": false,
@@ -2339,6 +2494,23 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
         ],
         "dataLabels": {
           "formatter": [Function],
+        },
+        "lineWidth": 2,
+        "marker": {
+          "enabled": false,
+          "fillColor": null,
+          "fillOpacity": 0.3,
+          "lineColor": null,
+          "lineWidth": 2,
+          "radius": 4,
+          "states": {
+            "hover": {
+              "fillColor": "#FFFFFF",
+              "lineWidth": 3,
+              "radius": 6,
+            },
+          },
+          "symbol": "circle",
         },
         "name": "Units",
         "showInNavigator": true,
@@ -2644,6 +2816,15 @@ exports[`renders a categorical line chart 1`] = `
     "enabled": false,
   },
   "plotOptions": {
+    "area": {
+      "className": "area-series--without-pointer-events",
+      "states": {
+        "inactive": {
+          "enabled": true,
+          "opacity": 0.3,
+        },
+      },
+    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -2658,7 +2839,6 @@ exports[`renders a categorical line chart 1`] = `
           "textOutline": "none",
         },
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -2675,6 +2855,7 @@ exports[`renders a categorical line chart 1`] = `
         },
         "symbol": "circle",
       },
+      "stacking": undefined,
       "states": {
         "select": {
           "borderColor": "transparent",
@@ -2730,6 +2911,23 @@ exports[`renders a categorical line chart 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
       "name": "France",
       "showInNavigator": true,
       "stickyTracking": false,
@@ -2779,6 +2977,23 @@ exports[`renders a categorical line chart 1`] = `
       ],
       "dataLabels": {
         "formatter": [Function],
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
       },
       "name": "USA",
       "showInNavigator": true,
@@ -2953,7 +3168,7 @@ exports[`renders a categorical line chart with two x axes 1`] = `
     "alignTicks": false,
     "polar": false,
     "spacing": [
-      75,
+      20,
       20,
       20,
       20,
@@ -2989,7 +3204,15 @@ exports[`renders a categorical line chart with two x axes 1`] = `
     "enabled": false,
   },
   "plotOptions": {
-    "area": {},
+    "area": {
+      "className": "area-series--without-pointer-events",
+      "states": {
+        "inactive": {
+          "enabled": true,
+          "opacity": 0.3,
+        },
+      },
+    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -3004,7 +3227,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
           "textOutline": "none",
         },
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3021,6 +3243,7 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         },
         "symbol": "circle",
       },
+      "stacking": undefined,
       "states": {
         "select": {
           "borderColor": "transparent",
@@ -3113,6 +3336,23 @@ exports[`renders a categorical line chart with two x axes 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
       "name": "Revenue",
       "showInNavigator": true,
       "stickyTracking": false,
@@ -3199,6 +3439,23 @@ exports[`renders a categorical line chart with two x axes 1`] = `
       ],
       "dataLabels": {
         "formatter": [Function],
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
       },
       "name": "Expenses",
       "showInNavigator": true,
@@ -3556,6 +3813,15 @@ exports[`renders a time series chart with break by 1`] = `
     "enabled": false,
   },
   "plotOptions": {
+    "area": {
+      "className": "area-series--without-pointer-events",
+      "states": {
+        "inactive": {
+          "enabled": true,
+          "opacity": 0.3,
+        },
+      },
+    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -3570,7 +3836,6 @@ exports[`renders a time series chart with break by 1`] = `
           "textOutline": "none",
         },
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3587,6 +3852,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         "symbol": "circle",
       },
+      "stacking": undefined,
       "states": {
         "select": {
           "borderColor": "transparent",
@@ -3764,6 +4030,23 @@ exports[`renders a time series chart with break by 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
       "name": "A",
       "showInNavigator": true,
       "stickyTracking": false,
@@ -3931,6 +4214,23 @@ exports[`renders a time series chart with break by 1`] = `
       ],
       "dataLabels": {
         "formatter": [Function],
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
       },
       "name": "B",
       "showInNavigator": true,
@@ -4159,6 +4459,15 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
     "enabled": false,
   },
   "plotOptions": {
+    "area": {
+      "className": "area-series--without-pointer-events",
+      "states": {
+        "inactive": {
+          "enabled": true,
+          "opacity": 0.3,
+        },
+      },
+    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -4173,7 +4482,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
           "textOutline": "none",
         },
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -4190,6 +4498,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         "symbol": "circle",
       },
+      "stacking": undefined,
       "states": {
         "select": {
           "borderColor": "transparent",
@@ -4367,6 +4676,23 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
       "dataLabels": {
         "formatter": [Function],
       },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
       "name": "A",
       "showInNavigator": true,
       "stickyTracking": false,
@@ -4534,6 +4860,23 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
       ],
       "dataLabels": {
         "formatter": [Function],
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
       },
       "name": "B",
       "showInNavigator": true,
@@ -4762,6 +5105,15 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
     "enabled": false,
   },
   "plotOptions": {
+    "area": {
+      "className": "area-series--without-pointer-events",
+      "states": {
+        "inactive": {
+          "enabled": true,
+          "opacity": 0.3,
+        },
+      },
+    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -4776,7 +5128,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
           "textOutline": "none",
         },
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -4793,6 +5144,7 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         },
         "symbol": "circle",
       },
+      "stacking": undefined,
       "states": {
         "select": {
           "borderColor": "transparent",
@@ -4953,6 +5305,23 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
       "name": "Quantity",
       "showInNavigator": true,
       "stickyTracking": false,
@@ -5107,6 +5476,23 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
       ],
       "dataLabels": {
         "formatter": [Function],
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
       },
       "name": "Units",
       "showInNavigator": true,
@@ -5335,6 +5721,15 @@ exports[`renders a time series with granularity Month 1`] = `
     "enabled": false,
   },
   "plotOptions": {
+    "area": {
+      "className": "area-series--without-pointer-events",
+      "states": {
+        "inactive": {
+          "enabled": true,
+          "opacity": 0.3,
+        },
+      },
+    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -5349,7 +5744,6 @@ exports[`renders a time series with granularity Month 1`] = `
           "textOutline": "none",
         },
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5366,6 +5760,7 @@ exports[`renders a time series with granularity Month 1`] = `
         },
         "symbol": "circle",
       },
+      "stacking": undefined,
       "states": {
         "select": {
           "borderColor": "transparent",
@@ -5526,6 +5921,23 @@ exports[`renders a time series with granularity Month 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
       "name": "Quantity",
       "showInNavigator": true,
       "stickyTracking": false,
@@ -5680,6 +6092,23 @@ exports[`renders a time series with granularity Month 1`] = `
       ],
       "dataLabels": {
         "formatter": [Function],
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
       },
       "name": "Units",
       "showInNavigator": true,
@@ -5908,6 +6337,15 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
     "enabled": false,
   },
   "plotOptions": {
+    "area": {
+      "className": "area-series--without-pointer-events",
+      "states": {
+        "inactive": {
+          "enabled": true,
+          "opacity": 0.3,
+        },
+      },
+    },
     "series": {
       "connectNulls": false,
       "dataLabels": {
@@ -5922,7 +6360,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
           "textOutline": "none",
         },
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5939,6 +6376,7 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         },
         "symbol": "circle",
       },
+      "stacking": undefined,
       "states": {
         "select": {
           "borderColor": "transparent",
@@ -6099,6 +6537,23 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
+      },
       "name": "Quantity",
       "showInNavigator": true,
       "stickyTracking": false,
@@ -6253,6 +6708,23 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
       ],
       "dataLabels": {
         "formatter": [Function],
+      },
+      "lineWidth": 2,
+      "marker": {
+        "enabled": false,
+        "fillColor": null,
+        "fillOpacity": 0.3,
+        "lineColor": null,
+        "lineWidth": 2,
+        "radius": 4,
+        "states": {
+          "hover": {
+            "fillColor": "#FFFFFF",
+            "lineWidth": 3,
+            "radius": 6,
+          },
+        },
+        "symbol": "circle",
       },
       "name": "Units",
       "showInNavigator": true,

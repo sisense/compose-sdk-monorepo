@@ -4,12 +4,14 @@ title: Functions
 
 # Functions
 
+- [AiContextProvider](function.AiContextProvider.md) <Badge type="beta" text="Beta" />
 - [AreaChart](function.AreaChart.md)
 - [AreamapChart](function.AreamapChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](function.BarChart.md)
 - [BoxplotChart](function.BoxplotChart.md) <Badge type="beta" text="Beta" />
 - [Chart](function.Chart.md)
 - [ChartWidget](function.ChartWidget.md)
+- [Chatbot](function.Chatbot.md) <Badge type="beta" text="Beta" />
 - [ColumnChart](function.ColumnChart.md)
 - [ContextMenu](function.ContextMenu.md)
 - [CriteriaFilterTile](function.CriteriaFilterTile.md)
@@ -20,10 +22,12 @@ title: Functions
 - [ExecuteQuery](function.ExecuteQuery.md)
 - [ExecuteQueryByWidgetId](function.ExecuteQueryByWidgetId.md)
 - [FunnelChart](function.FunnelChart.md)
+- [GetNlgQueryResult](function.GetNlgQueryResult.md) <Badge type="beta" text="Beta" />
 - [IndicatorChart](function.IndicatorChart.md)
 - [LineChart](function.LineChart.md)
 - [MemberFilterTile](function.MemberFilterTile.md)
 - [PieChart](function.PieChart.md)
+- [PivotTable](function.PivotTable.md) <Badge type="alpha" text="Alpha" />
 - [PolarChart](function.PolarChart.md)
 - [RelativeDateFilterTile](function.RelativeDateFilterTile.md)
 - [ScatterChart](function.ScatterChart.md)
@@ -40,5 +44,7 @@ title: Functions
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md)
 - [useGetDashboardModel](function.useGetDashboardModel.md)
 - [useGetDashboardModels](function.useGetDashboardModels.md)
+- [useGetNlgQueryResult](function.useGetNlgQueryResult.md) <Badge type="beta" text="Beta" />
+- [useGetQueryRecommendations](function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />
 - [useGetSharedFormula](function.useGetSharedFormula.md)
 - [useGetWidgetModel](function.useGetWidgetModel.md)

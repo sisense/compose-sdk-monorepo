@@ -37,9 +37,8 @@ export const scattermapData = (
       return locationColumns.some((column) => (getValue(row, column) as string) !== DATA_VALUE_N_A);
     })
     .map((row) => {
-      const name = combineLocationNames(
-        locationColumns.map((column) => getValue(row, column) as string),
-      );
+      const rawName = locationColumns.map((column) => getValue(row, column) as string);
+      const name = combineLocationNames(rawName);
 
       let coordinates;
       if (isLatLngCase) {
@@ -52,6 +51,7 @@ export const scattermapData = (
       const blur = locationColumns[0] && isBlurred(row, locationColumns[0]);
       return {
         name,
+        rawName,
         value: sizeColumn ? (getValue(row, sizeColumn) as number) : LOCATION_DEFAULT_VALUE,
         ...(colorByColumn && { colorValue: getValue(row, colorByColumn) as number }),
         ...(detailsColumn && { details: getValue(row, detailsColumn) as number }),

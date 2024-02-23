@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { WatAuthenticator } from './wat-authenticator.js';
+import { isWatAuthenticator, WatAuthenticator } from './wat-authenticator.js';
 
 describe('WatAuthenticator', () => {
   const fakeDeploymentUrl = 'https://10.0.0.1';
@@ -82,5 +82,9 @@ describe('WatAuthenticator', () => {
 
     expect(result).toBe(false);
     expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('should run type guard correctly', () => {
+    expect(isWatAuthenticator(auth)).toBe(true);
   });
 });

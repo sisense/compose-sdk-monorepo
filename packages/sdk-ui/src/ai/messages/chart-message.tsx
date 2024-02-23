@@ -10,7 +10,12 @@ import { TableWidget } from '../../widgets/table-widget';
 import { NlqResponseData } from '../api/types';
 import CloseDialogIcon from '../icons/close-dialog-icon';
 import ChartMessageToolbar from './chart-message-toolbar';
-import { getChartOptions, getTableOptions } from './get-widget-options';
+import FeedbackWrapper from './feedback-wrapper';
+import {
+  getChartOptions,
+  getChartRecommendationsOrDefault,
+  getTableOptions,
+} from './get-widget-options';
 import { createJaqlElement } from './jaql-element';
 
 type ChartMessageProps = {
@@ -22,7 +27,9 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
   const [expanded, setExpanded] = useState(false);
 
   const { chartElement, expandedElement } = useMemo(() => {
-    const { detailedDescription, chartRecommendations, jaql } = content;
+    const { detailedDescription, jaql } = content;
+
+    const chartRecommendations = getChartRecommendationsOrDefault(content);
 
     const chartType = chartRecommendations.chartType.toLowerCase() as ChartType | TableType;
     const widgetStyleOptions: WidgetStyleOptions = {
@@ -93,7 +100,9 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
 
   return (
     <>
-      {chartElement}
+      <FeedbackWrapper sourceId={dataSource} data={content} type="chats/nlq">
+        {chartElement}
+      </FeedbackWrapper>
       <Dialog open={expanded} onClose={() => setExpanded(false)} maxWidth="xl" fullWidth>
         <div className="csdk-flex csdk-items-center csdk-justify-between csdk-py-[30px] csdk-px-[40px]">
           <div className="csdk-text-ai-lg csdk-semibold csdk-text-text-active">

@@ -1,14 +1,11 @@
 /* eslint-disable max-lines-per-function */
 import { isValue, ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
-import { ValueLabel, ValueLabelSettings } from './value-label-section';
+import { getRotationType, ValueLabelOptions, ValueLabelSettings } from './value-label-section';
 import { ScatterChartDesignOptions } from './design-options';
 import { InternalSeries } from './tooltip-utils';
 import { ScatterCustomPointOptions } from './scatter-tooltip';
-import {
-  applyFormatPlainText,
-  defaultConfig as defaultNumberFormattingConfig,
-} from './number-format-config';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 
 // TODO write API docs
 export type ScatterMarkerSize = {
@@ -36,14 +33,15 @@ export type ScatterChartInternalSeries = InternalSeries & {
 };
 
 const getScatterValueLabelSettings = (
-  valueLabel: ValueLabel,
+  valueLabel: ValueLabelOptions,
   chartDataOptions: ScatterChartDataOptionsInternal,
 ): ValueLabelSettings => {
-  if (!valueLabel) {
+  if (!valueLabel.enabled) {
     return { enabled: false };
   }
 
-  let settings: ValueLabelSettings = {
+  const rotation = valueLabel.rotation ?? 0;
+  const settings: ValueLabelSettings = {
     enabled: true,
     align: 'center',
     verticalAlign: 'middle',
@@ -52,28 +50,9 @@ const getScatterValueLabelSettings = (
       relative: true,
       totals: true,
     },
+    rotation,
+    ...(getRotationType(rotation) === 'horizontal' ? { y: -1 } : null),
   };
-
-  switch (valueLabel) {
-    case 'horizontal':
-      settings = {
-        ...settings,
-        y: -1,
-      };
-      break;
-    case 'diagonal':
-      settings = {
-        ...settings,
-        rotation: -45,
-      };
-      break;
-    case 'vertical':
-      settings = {
-        ...settings,
-        rotation: -90,
-      };
-      break;
-  }
 
   settings.formatter = function () {
     const that = this as ScatterChartInternalSeries;
@@ -99,7 +78,7 @@ const getScatterValueLabelSettings = (
     if (isNaN(parseFloat(pointValue))) {
       return pointValue;
     }
-    const numberFormatConfig = usedDataItem?.numberFormatConfig ?? defaultNumberFormattingConfig;
+    const numberFormatConfig = getCompleteNumberFormatConfig(usedDataItem?.numberFormatConfig);
     return applyFormatPlainText(numberFormatConfig, parseFloat(pointValue));
   };
 

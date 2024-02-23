@@ -1,0 +1,255 @@
+/**
+ * @copyright Sisense Inc.
+ */
+$divider-color: #e5e5e5;
+
+@mixin ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+@mixin sisense-table-title {
+  @include ellipsis;
+  flex-grow: 0;
+  flex-shrink: 0;
+  order: 1;
+
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  outline: 0;
+  cursor: text;
+  margin-right: 10px;
+  padding-left: 5px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+@media print {
+  div#root {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-preview {
+    & div.print-layout {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: none;
+    }
+
+    &.print-layout div.print-layout__page {
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none;
+      page-break-inside: avoid;
+      page-break-after: always;
+    }
+  }
+}
+
+.print-preview {
+  &.print-layout {
+    &.print-layout__with-footer {
+      .page-footer {
+        visibility: visible;
+      }
+    }
+
+    .print-layout__page {
+      display: flex;
+      flex-flow: column;
+      padding: 0;
+    }
+
+    .page-footer {
+      flex-shrink: 0;
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      visibility: hidden;
+      height: 16px;
+      clear: both;
+      box-sizing: border-box;
+      padding-top: 10px;
+      text-align: center;
+
+      & > span,
+      div {
+        flex-shrink: 0;
+        font-size: 10px;
+      }
+    }
+  }
+
+  [contenteditable]:empty:before {
+    content: attr(placeholder);
+    display: block; /* For Firefox */
+  }
+
+  .title::-ms-clear {
+    display: none;
+  }
+
+  .page-header {
+    overflow: initial;
+    height: 40px;
+    flex-shrink: 0;
+
+    &.page-header__content--show .page-header__title-container,
+    &.page-header__content--show .page-header__header-divider,
+    &.page-header__content--show .page-header__title {
+      display: block;
+    }
+
+    .page-header__content,
+    .page-header__title-container,
+    .page-header__header-divider,
+    .page-header__title {
+      display: none;
+    }
+
+    .page-header__content {
+      height: 34px;
+      display: flex;
+      flex-flow: row wrap;
+      position: relative;
+      z-index: 3;
+
+      .page-header__title {
+        @include sisense-table-title;
+      }
+
+      &.page-header__title-container--focused {
+        .page-header__rename-controls {
+          display: block;
+        }
+
+        .page-header__editors {
+          display: flex;
+          align-items: center;
+        }
+
+        .page-header__title {
+          @include sisense-table-title;
+        }
+      }
+
+      .page-header__title-container,
+      .page-header__rename-controls {
+        float: left;
+      }
+
+      .page-header__title-container {
+        @include ellipsis;
+        font-size: 16px;
+        height: 26px;
+        width: 100%;
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-start;
+      }
+
+      .page-header__rename-controls {
+        display: none;
+        flex-basis: 32px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        order: 1;
+
+        .page-header__rename-controls__action {
+          float: left;
+          cursor: pointer;
+          vertical-align: middle;
+          width: 16px;
+          height: 16px;
+        }
+
+        .page-header__rename-controls__action--ok {
+          &:after {
+            content: 'V';
+            color: greenyellow;
+          }
+          &:hover {
+            &:after {
+              content: 'V';
+              color: green;
+            }
+          }
+        }
+
+        .page-header__rename-controls__action--cancel {
+          &:after {
+            content: 'X';
+            color: orchid;
+          }
+
+          &:hover {
+            &:after {
+              content: 'X';
+              color: red;
+            }
+          }
+        }
+      }
+
+      .page-header__header-divider {
+        margin-top: 6px;
+        bottom: 5px;
+        border: 1px solid $divider-color;
+        position: relative;
+        width: 100%;
+      }
+
+      .page-header__editors {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: none;
+        position: relative;
+        width: 275px;
+        height: 34px;
+        background-color: #fff;
+        border: solid 1px $divider-color;
+
+        .page-header__vertical-line {
+          margin-left: 10px;
+          border-left: 1px solid $divider-color;
+          height: 16px;
+        }
+
+        div {
+          background: none;
+          border: none;
+          margin-left: 15px;
+        }
+
+        .page-header__editors__left-text,
+        .page-header__editors__center-text,
+        .page-header__editors__end-text {
+          width: 17px;
+          height: 16px;
+        }
+
+        .page-header__editors__left-text {
+          &:after {
+            content: 'L';
+          }
+        }
+
+        .page-header__editors__center-text {
+          &:after {
+            content: 'C';
+          }
+        }
+
+        .page-header__editors__end-text {
+          &:after {
+            content: 'R';
+          }
+        }
+      }
+    }
+  }
+}

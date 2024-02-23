@@ -37,24 +37,25 @@ export const getScatterLegendSettings = (position: LegendPosition): LegendSettin
  *
  * @param chartData - the data for the chart in an intermediate format
  * @param chartType -
- * @param chartDesignOptions -
+ * @param globalDesignOptions -
  * @param dataOptions -
  * @param themeSettings -
  */
 export const getScatterChartOptions = (
   chartData: ScatterChartData,
   chartType: ChartType,
-  chartDesignOptions: ChartDesignOptions,
+  designOptions: ChartDesignOptions,
   dataOptions: ChartDataOptionsInternal,
   themeSettings?: CompleteThemeSettings,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
-  const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
+  const globalDesignOptions = designOptions.globalDesign;
+  const sisenseChartType = determineHighchartsChartType(chartType, globalDesignOptions);
 
-  const scatterDesignOptions = chartDesignOptions as ScatterChartDesignOptions;
+  const scatterDesignOptions = globalDesignOptions as ScatterChartDesignOptions;
   const scatterDataOptions = dataOptions as ScatterChartDataOptionsInternal;
   const { scatterDataTable } = chartData;
-  const { seriesCapacity, categoriesCapacity } = chartDesignOptions.dataLimits;
+  const { seriesCapacity, categoriesCapacity } = globalDesignOptions.dataLimits;
 
   let { xCategories, yCategories } = chartData;
 

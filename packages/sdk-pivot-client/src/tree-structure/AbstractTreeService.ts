@@ -269,6 +269,7 @@ export class AbstractTreeService implements TreeServiceI {
     const item: TreeCellMapI | undefined = this.getItem(rowIndex, columnIndex);
     if (item) {
       return item.isChild();
+      // eslint-disable-next-line max-lines
     }
     if (typeof this.deep === 'number') {
       if ((this.isVertical ? columnIndex : rowIndex) < this.deep) {
@@ -445,6 +446,7 @@ export class AbstractTreeService implements TreeServiceI {
    * @param {{ to: number }} [options] - additional configuration options
    * @returns {{levels: Array<string>, siblings: Array<string>}} - meta information
    */
+  // eslint-disable-next-line max-lines-per-function,sonarjs/cognitive-complexity
   getMetadata(
     rowIndex: number,
     columnIndex: number,
@@ -592,6 +594,7 @@ export class AbstractTreeService implements TreeServiceI {
    * @param {Array<Array<TreeNode>>} cache - cache object
    * @param {{level: number }} options - internal recursive state
    * @returns {Array<Array<TreeNode>>} - cache object
+   *
    * @private
    */
   cacheLevels(
@@ -626,6 +629,7 @@ export class AbstractTreeService implements TreeServiceI {
    * @param {{parentColIndex: number, prevChildren: number}} initState - state object for
    * recursive calls
    * @returns {object} - map object
+   *
    * @private
    */
   fillMap(
@@ -695,6 +699,7 @@ export class AbstractTreeService implements TreeServiceI {
    * @param {FillMapState} initState - state object for
    * recursive calls
    * @returns {object} - map object
+   *
    * @private
    */
   fillMapVertical(
@@ -765,6 +770,7 @@ export class AbstractTreeService implements TreeServiceI {
    * @param {number} row - merged rows count
    * @param {number} col - merged columns count
    * @returns {void}
+   *
    * @private
    */
   fillChildMap(
@@ -818,6 +824,7 @@ export class AbstractTreeService implements TreeServiceI {
    * @param {TreeNode} [options.node] - TreeNode for main cell
    * @param {string} [options.parent] - parent key for child item
    * @returns {TreeCellMap} - TreeCellMap instance
+   *
    * @private
    */
   // eslint-disable-next-line class-methods-use-this
@@ -840,6 +847,7 @@ export class AbstractTreeService implements TreeServiceI {
    *
    * @param {string} key - map key string
    * @returns {TreeCellMapI|undefined} - TreeCellMapI instance or undefined
+   *
    * @private
    */
   getItemByKey(key: string): TreeCellMapI | undefined {
@@ -852,6 +860,7 @@ export class AbstractTreeService implements TreeServiceI {
    * @param {number} row - cell row index
    * @param {number} col - cell column index
    * @returns {TreeCellMapI|undefined} - TreeCellMapI instance or undefined
+   *
    * @private
    */
   getItem(row: number, col: number): TreeCellMapI | undefined {

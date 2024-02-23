@@ -3,8 +3,8 @@
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { ValueLabelSettings } from './value-label-section';
-import { defaultConfig, applyFormatPlainText } from './number-format-config';
-import { NumberFormatConfig } from '../../types';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
+import { CompleteNumberFormatConfig } from '../../types';
 import { InternalSeries } from './tooltip-utils';
 import { FunnelChartDesignOptions } from './design-options';
 import { withPercentSign, fraction, fromFraction } from '../../chart-data/utils';
@@ -99,7 +99,7 @@ const getCategory = (ctx: InternalSeries, labels: FunnelLabels): string => {
 const getValue = (
   ctx: InternalSeries,
   labels: FunnelLabels,
-  numberFormatConfig: NumberFormatConfig,
+  numberFormatConfig: CompleteNumberFormatConfig,
 ): string => {
   if (!labels.showValue) return '';
   const value = applyFormatPlainText(numberFormatConfig, ctx.y);
@@ -163,10 +163,9 @@ export const getFunnelPlotOptions = (
     dataLabels: seriesDataLabels(funnelLabels),
   };
 
-  const numberFormatConfig =
-    (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig ??
-    defaultConfig;
-
+  const numberFormatConfig = getCompleteNumberFormatConfig(
+    (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig,
+  );
   const renderTo = null;
 
   const funnelWidth = funnelWidthPercentage(renderTo);

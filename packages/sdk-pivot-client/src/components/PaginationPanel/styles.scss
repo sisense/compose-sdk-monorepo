@@ -1,0 +1,110 @@
+$pagination-panel-total-border: #d8d8d8;
+
+.sis-scope {
+  .sisense-pivot__pagination-panel .MuiTablePagination-root {
+    background-color: initial;
+    overflow: initial;
+    .MuiTablePagination-select {
+      background-color: initial;
+    }
+    .MuiTablePagination-toolbar {
+      min-height: 0;
+    }
+  }
+
+  .sisense-pivot__pagination-panel {
+    display: block;
+    transition: opacity 0.3s ease;
+  }
+
+  .sisense-pivot__pagination-panel--hidden {
+    display: none;
+  }
+
+  .sisense-pivot__pagination-panel {
+    .sisense-pivot__pagination-panel-list-wrapper,
+    .sisense-pivot__pagination-panel-total-wrapper,
+    .sisense-pivot__pagination-panel-notification {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+
+  .sisense-pivot__pagination-panel-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sisense-pivot__pagination-panel-list-wrapper {
+    flex: 1;
+  }
+
+  .sisense-pivot__pagination-panel-list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sisense-pivot__pagination-panel-notification {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .sisense-pivot__pagination-panel-notification-more {
+    outline: none;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .sisense-pivot__pagination-panel-total-wrapper {
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    justify-content: flex-end;
+  }
+
+  .sisense-pivot__pagination-panel-rows-count {
+    padding-left: 10px;
+    margin-right: 10px;
+    border-left: 1px solid $pagination-panel-total-border;
+    pointer-events: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sisense-pivot__pagination-panel--showed {
+    .sisense-pivot__pagination-panel-list-wrapper,
+    .sisense-pivot__pagination-panel-total-wrapper {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  .sisense-pivot__pagination-panel--notification-only {
+    .sisense-pivot__pagination-panel-notification {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  .sisense-pivot__pagination-panel--limits-only {
+    .sisense-pivot__pagination-panel-total-wrapper {
+      visibility: visible;
+      opacity: 1;
+    }
+    .sisense-pivot__pagination-panel-rows-count {
+      border-left: none;
+    }
+  }
+
+  .pivot-scroller,
+  .pivot-scroller__container {
+    height: 40px;
+  }
+}

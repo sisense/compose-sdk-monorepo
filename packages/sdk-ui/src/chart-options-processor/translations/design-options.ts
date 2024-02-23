@@ -1,4 +1,4 @@
-import { ValueLabel } from './value-label-section';
+import { ValueLabelOptions } from './value-label-section';
 import { Axis } from './axis-section';
 import { Marker } from './marker-section';
 import { LegendPosition } from './legend-section';
@@ -21,7 +21,7 @@ type DataLimits = {
 
 export type BaseDesignOptionsType = {
   legend: LegendPosition;
-  valueLabel: ValueLabel;
+  valueLabel: ValueLabelOptions;
   lineType: LineType;
   lineWidth: number;
   marker: Marker;

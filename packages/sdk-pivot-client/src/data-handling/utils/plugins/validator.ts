@@ -18,6 +18,7 @@ import { PluginsPanelFields } from '../../constants.js';
  * @param {DimensionOptions | MeasureOptions} options - array of fields to compare
  * @returns {boolean} validation result
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function fieldsComparator(
   target: DimensionTarget | ValueTarget,
   metadata: Array<DimensionMetadata | MeasureMetadata>,
@@ -82,6 +83,7 @@ const isValidType = (target: Array<string>, metadata: Array<string> = []) => {
 const isValidDimension = (
   target: Array<DimensionTarget>,
   dimMetadata: Array<DimensionMetadata>,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {
   // validate by indexes || dimension & member || title
 
@@ -170,6 +172,7 @@ const isValidMeasure = (target: Array<ValueTarget>, measureMetadata: Array<Measu
  * @param {Metadata} metadata - array of rows in metadata
  * @returns {boolean} validation result
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const validate = (target: Target, metadata: Metadata) => {
   let valid = true;
 

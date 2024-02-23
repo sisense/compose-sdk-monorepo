@@ -4,15 +4,21 @@ title: MemberFilterTile
 
 # Class MemberFilterTile
 
-A Vue component that wraps the MemberFilterTile Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the MemberFilterTile.
+UI component that allows the user to select members to include/exclude in a
+filter. A query is executed against the provided data source to fetch
+all members that are selectable.
 
 ## Example
 
-Here's how you can use the MemberFilterTile component in a Vue application:
+Below is an example for filtering countries in the `Country` dimension of the `Sample ECommerce` data model.
 ```vue
 <template>
-  <MemberFilterTile :props="memberFilterTileProps" />
+<MemberFilterTile
+  :title="memberFilterTileProps.title"
+  :attribute="memberFilterTileProps.attribute"
+  :filter="memberFilterTileProps.filter"
+  :onChange={setCountryFilter}
+/>
 </template>
 
 <script setup lang="ts">
@@ -20,8 +26,13 @@ import { ref } from 'vue';
 import MemberFilterTile from '@sisense/sdk-ui-vue/MemberFilterTile';
 
 const memberFilterTileProps = ref({
-  // Configure your MemberFilterTileProps here
+  title: 'Country',
+  attribute: DM.Country.Country,
+  filter: countryFilter,
 });
+
+const setCountryFilter = (filter: Filter | null) => {...}
+
 </script>
 ```
 

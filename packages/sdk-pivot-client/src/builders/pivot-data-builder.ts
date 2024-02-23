@@ -1,7 +1,7 @@
 import { DataLoadServiceI, JaqlRequest, SocketI } from '../data-load/types.js';
-import { InitPageData } from '../data-handling/types.js';
+import { InitPageData } from '../data-handling';
 import { DataService } from '../data-handling/DataService.js';
-import { TreeNode } from '../tree-structure/types.js';
+import { TreeNode } from '../tree-structure';
 import { SisenseDataLoadService } from '../data-load/index.js';
 import {
   Cell,
@@ -13,11 +13,14 @@ import {
 
 export class PivotDataBuilder {
   /**
-   * DataServiceI instance
+   * DataLoadServiceI instance
    */
   private dataLoadService?: DataLoadServiceI;
 
-  socket: SocketI;
+  /**
+   * SocketI instance
+   */
+  private readonly socket: SocketI;
 
   /**
    * @param socket - socket instance
@@ -39,7 +42,7 @@ export class PivotDataBuilder {
     return new SisenseDataLoadService(this.socket);
   }
 
-  prepareDataService(dataLoadService: DataLoadServiceI, useCache = false) {
+  prepareDataService(dataLoadService: DataLoadServiceI) {
     const dataService = new DataService(dataLoadService);
     return {
       loadData: (jaql?: JaqlRequest, pageSize?: number, isPaginated?: boolean) => {
@@ -66,7 +69,7 @@ export class PivotDataBuilder {
       // Currently, each jaql need a separate dataLoadService instance
       // In other words, each dataLoadService is associated with a jaql
       this.dataLoadService = this.prepareLoadService(jaqlInternal, useCache);
-      const { loadData } = this.prepareDataService(this.dataLoadService, useCache);
+      const { loadData } = this.prepareDataService(this.dataLoadService);
 
       const { rowsTreeService, columnsTreeService, cornerTreeService, isLastPage } = await loadData(
         useCache ? undefined : jaqlInternal,
@@ -101,14 +104,13 @@ export class PivotDataBuilder {
     } else {
       columns.push({ name: columnName, type: columnType });
     }
-    return;
   }
 
   /**
    * Transforms Pivot Grid to Columns of Table structure
    *
-   * @param columnType
-   * @param grid
+   * @param columnType - type of column
+   * @param grid - pivot grid
    * @returns An array of columns
    */
   private transformGridToColumns(
@@ -202,6 +204,7 @@ export class PivotDataBuilder {
           } else {
             value = '';
           }
+          // eslint-disable-next-line max-lines
         } else {
           value = dataNode.value?.toString() || '';
         }

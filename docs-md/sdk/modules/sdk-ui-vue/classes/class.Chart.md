@@ -13,7 +13,7 @@ plot a bar chart of the Sample Retail data source hosted in a Sisense instance:
 ```ts
 <script setup lang="ts">
 import { Chart } from '@sisense/sdk-ui-vue';
-import type { ChartProps } from '@sisense/sdk-ui';
+import type { ChartProps } from '@sisense/sdk-ui-vue';
 import * as DM from '../assets/sample-retail-model';
 import { measureFactory, filterFactory } from '@sisense/sdk-data';
 import { ref } from 'vue';
@@ -29,44 +29,37 @@ const chartProps = ref<ChartProps>({
     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
     breakBy: [],
   },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-  styleOptions: {
-    width: 800,
-    height: 500,
-    xAxis: {
-      title: {
-        text: 'Product Name',
-        enabled: true,
-      },
-    },
-    yAxis: {
-      title: {
-        text: 'Total Revenue',
-        enabled: true,
-      },
-    },
-  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)]
 });
 </script>
 
 <template>
-  <Chart :props="chartProps" />
+    <Chart
+      :chartType="chartProps.chartType"
+      :dataSet="chartProps.dataSet"
+      :dataOptions="chartProps.dataOptions"
+      :filters="chartProps.filters"
+    />
 </template>
 ```
 
-<img src="../../../img/vue-chart-data-source-example-1.png" width="800px" />
+<img src="../../../img/chart-local-data-example-1.png" width="800px" />
+
+## Param
+
+Chart properties
 
 ## Properties
 
 ### chartType
 
-> **chartType**?: [`ChartType`](../../sdk-ui/type-aliases/type-alias.ChartType.md)
+> **chartType**?: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 ***
 
 ### dataOptions
 
-> **dataOptions**?: [`ChartDataOptions`](../../sdk-ui/type-aliases/type-alias.ChartDataOptions.md)
+> **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 ***
 
@@ -90,13 +83,13 @@ const chartProps = ref<ChartProps>({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
 ### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 ***
 
@@ -120,4 +113,4 @@ const chartProps = ref<ChartProps>({
 
 ### styleOptions
 
-> **styleOptions**?: [`ChartStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartStyleOptions.md)
+> **styleOptions**?: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)

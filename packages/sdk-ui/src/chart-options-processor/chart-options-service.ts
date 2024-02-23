@@ -35,7 +35,6 @@ import {
 } from '../chart-data-options/types';
 import { ScatterBubbleOptions } from './translations/scatter-plot-options';
 import { getBoxplotChartOptions } from './boxplot-chart-options';
-import { BoxplotChartDesignOptions } from './translations/design-options';
 
 // Notes: extends type by recreating it via `Pick` in order to force IntelliSense to use it as target type.
 /**
@@ -98,7 +97,7 @@ export const highchartsOptionsService = (
     case 'boxplot': {
       return getBoxplotChartOptions(
         chartData,
-        chartDesignOptions as BoxplotChartDesignOptions,
+        chartDesignOptions,
         dataOptions as BoxplotChartDataOptionsInternal,
         translate,
       );
@@ -141,8 +140,15 @@ type ChartPlotOptions = {
   shadow?: boolean;
   marker?: MarkerSettings;
   borderWidth?: number;
+  className?: string;
   events?: {
     legendItemClick?: SeriesLegendItemClickCallbackFunction;
+  };
+  states?: {
+    inactive?: {
+      enabled?: boolean;
+      opacity?: number;
+    };
   };
 };
 

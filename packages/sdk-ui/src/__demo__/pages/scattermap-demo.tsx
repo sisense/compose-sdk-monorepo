@@ -6,7 +6,7 @@ import { ScattermapStyleOptions } from '../../types.js';
 import { ScattermapChart } from '../../scattermap-chart.js';
 
 const dataOptions: ScattermapChartDataOptions = {
-  geo: [DM.Country.Country],
+  geo: [{ column: DM.Country.Country, geoLevel: 'city' }],
   size: measureFactory.sum(DM.Commerce.Cost, 'Size by Cost'),
   colorBy: {
     column: measureFactory.sum(DM.Commerce.Revenue, 'Color by Revenue'),
@@ -29,6 +29,7 @@ export const ScattermapChartDemo: React.FC = () => {
         dataSet={DM.DataSource}
         dataOptions={dataOptions}
         styleOptions={styleOptions}
+        onDataPointClick={(point, event) => console.log({ point, event })}
       />
       <h2>Scattermap Chart with custom data (loaded via ExecuteQuery)</h2>
       <ExecuteQuery

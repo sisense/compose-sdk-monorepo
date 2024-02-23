@@ -4,7 +4,7 @@ import {
 } from '../../../chart-data-options/types.js';
 import { AreamapData, ChartData } from '../../../chart-data/types.js';
 import { AreamapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
-import { ChartDesignOptions } from '../../../chart-options-processor/translations/types.js';
+import { DesignOptions } from '../../../chart-options-processor/translations/types.js';
 import { ThemeSettings } from '../../../types.js';
 import { AreamapMap } from './areamap-map.js';
 import { useGeoJson } from './use-geo-json.js';
@@ -53,7 +53,7 @@ export const isAreamapDataOptions = (
 };
 
 export const isAreamapChartDesignOptions = (
-  designOptions: ChartDesignOptions,
+  designOptions: DesignOptions,
 ): designOptions is AreamapChartDesignOptions => {
   return 'mapType' in designOptions;
 };

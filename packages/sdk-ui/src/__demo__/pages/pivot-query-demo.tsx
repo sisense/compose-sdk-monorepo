@@ -61,6 +61,10 @@ export function PivotQueryDemo() {
     rows: [DM.Commerce.AgeRange],
     columns: [{ attribute: DM.Commerce.Gender, includeSubTotals: true }],
     values: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost')],
+    onBeforeQuery: (query) => {
+      console.log('onBeforeQuery', query);
+      return query;
+    },
   };
 
   const queryParamsMedium: ExecutePivotQueryParams = {

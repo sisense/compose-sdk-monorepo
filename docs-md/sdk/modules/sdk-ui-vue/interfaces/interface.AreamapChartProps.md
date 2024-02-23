@@ -67,7 +67,7 @@ BaseChartProps.highlights
 
 #### dataOptions
 
-> **dataOptions**: [`AreamapChartDataOptions`](../../sdk-ui/interfaces/interface.AreamapChartDataOptions.md)
+> **dataOptions**: [`AreamapChartDataOptions`](interface.AreamapChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -75,7 +75,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### styleOptions
 
-> **styleOptions**?: [`AreamapStyleOptions`](../../sdk-ui/interfaces/interface.AreamapStyleOptions.md)
+> **styleOptions**?: [`AreamapStyleOptions`](interface.AreamapStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
 

@@ -5,9 +5,7 @@ import type { TableProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * A Vue component that wraps the Table Preact component for use in Vue applications.
- * It provides a single 'props' prop to pass all the TableProps to the Table Preact component,
- * enabling the use of the table within Vue's reactivity system.
+ * Table with aggregation and pagination.
  *
  * @example
  * Here's how you can use the Table component in a Vue application:
@@ -25,6 +23,9 @@ import { setupHelper } from '../../setup-helper';
  * });
  * </script>
  * ```
+ * <img src="media://table-example-2.png" width="800px" />
+ * @param props - Table properties
+ * @returns Table component
  */
 export const Table = defineComponent({
   props: {

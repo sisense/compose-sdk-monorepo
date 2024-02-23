@@ -254,7 +254,7 @@ export class AbstractDataLoadService implements DataLoadServiceI {
       excludeEmpty: true,
     });
 
-    [...(currentFormatInfo.metadata || []), ...(newFormatInfo.metadata || [])].forEach(
+    [...(currentFormatInfo?.metadata || []), ...(newFormatInfo?.metadata || [])].forEach(
       (panelItem) => {
         if (panelItem && panelItem.panel === PanelType.SCOPE) {
           delete panelItem.field;

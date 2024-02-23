@@ -25,7 +25,7 @@ interface Props {
   chartType: ChartType;
   chartData: ChartData;
   chartDataOptions: ChartDataOptionsInternal;
-  designOptions: ChartDesignOptions;
+  chartDesignOptions: ChartDesignOptions;
   themeSettings?: CompleteThemeSettings;
   onDataPointClick?: SisenseChartDataPointEventHandler;
   onDataPointContextMenu?: SisenseChartDataPointEventHandler;
@@ -42,7 +42,7 @@ export const SisenseChart = ({
   chartType,
   chartData,
   chartDataOptions,
-  designOptions,
+  chartDesignOptions,
   themeSettings,
   onDataPointClick,
   onDataPointContextMenu,
@@ -65,12 +65,13 @@ export const SisenseChart = ({
       highchartsOptionsService(
         chartData,
         chartType,
-        designOptions,
+        chartDesignOptions,
         chartDataOptions,
         translate,
         themeSettings,
         dateFormatter,
       );
+
     alerts.push(...highchartsOptionsAlerts);
 
     const highchartsOptionsWithCommonOptions = applyCommonHighchartsOptions(highchartsOptions);
@@ -96,7 +97,7 @@ export const SisenseChart = ({
     chartType,
     chartData,
     chartDataOptions,
-    designOptions,
+    chartDesignOptions,
     themeSettings,
     onDataPointClick,
     onDataPointContextMenu,

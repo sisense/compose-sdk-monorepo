@@ -12,7 +12,7 @@ Configuration for number formatting.
 
 ### `billion`
 
-**billion**: `boolean`
+**billion**?: `boolean`
 
 Boolean flag whether to show an abbreviation
 for a number greater than or equal one billion - e.g. 1B
@@ -21,7 +21,7 @@ for a number greater than or equal one billion - e.g. 1B
 
 ### `decimalScale`
 
-**decimalScale**: [`DecimalScale`](type-alias.DecimalScale.md)
+**decimalScale**?: [`DecimalScale`](type-alias.DecimalScale.md)
 
 The number of decimal places
 
@@ -29,7 +29,7 @@ The number of decimal places
 
 ### `kilo`
 
-**kilo**: `boolean`
+**kilo**?: `boolean`
 
 Boolean flag whether to show an abbreviation
 for a number greater than or equal one thousand - e.g. 1K
@@ -38,7 +38,7 @@ for a number greater than or equal one thousand - e.g. 1K
 
 ### `million`
 
-**million**: `boolean`
+**million**?: `boolean`
 
 Boolean flag whether to show an abbreviation
 for a number greater than or equal one million - e.g. 1M
@@ -47,7 +47,7 @@ for a number greater than or equal one million - e.g. 1M
 
 ### `name`
 
-**name**: `"Numbers"` \| `"Currency"` \| `"Percent"`
+**name**?: `"Numbers"` \| `"Currency"` \| `"Percent"`
 
 Supported formats
 
@@ -55,7 +55,7 @@ Supported formats
 
 ### `prefix`
 
-**prefix**: `boolean`
+**prefix**?: `boolean`
 
 Boolean flag whether `symbol` is shown in front of or after the number
 
@@ -67,7 +67,7 @@ If false, append `symbol` after the number, e.g. show `1000¥` when `symbol` is 
 
 ### `symbol`
 
-**symbol**: `string`
+**symbol**?: `string`
 
 Symbol to show in front of or after the number depending on the value of `prefix`.
 
@@ -75,7 +75,7 @@ Symbol to show in front of or after the number depending on the value of `prefix
 
 ### `thousandSeparator`
 
-**thousandSeparator**: `boolean`
+**thousandSeparator**?: `boolean`
 
 Boolean flag whether the thousand separator is shown
 
@@ -85,7 +85,7 @@ If true, show the thousand separator, e.g. `1,000`. Otherwise, show `1000`
 
 ### `trillion`
 
-**trillion**: `boolean`
+**trillion**?: `boolean`
 
 Boolean flag whether to show an abbreviation
 for a number greater than or equal one trillion - e.g. 1T

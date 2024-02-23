@@ -10,8 +10,11 @@ import { ChartData, CartesianChartData, CategoricalXValues } from '../chart-data
 import { onlyY, onlyYAndSeries } from '../chart-data/utils';
 import { PlotBand, getCategoricalCompareValue } from './translations/axis-section';
 import { StackableChartDesignOptions } from './translations/design-options';
-import { defaultConfig, applyFormatPlainText } from './translations/number-format-config';
-import { ChartDesignOptions } from './translations/types';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from './translations/number-format-config';
+import { DesignOptions } from './translations/types';
 import { getDataOptionTitle } from '../chart-data-options/utils';
 
 type CategoryIndexMapPlotBands = {
@@ -32,8 +35,8 @@ export const applyNumberFormatToPlotBands = (
   const x1 = cartesianChartDataOptions.x[1];
   const x2 = cartesianChartDataOptions.x[0];
 
-  const x1NumberFormatConfig = x1?.numberFormatConfig ?? defaultConfig;
-  const x2NumberFormatConfig = x2?.numberFormatConfig ?? defaultConfig;
+  const x1NumberFormatConfig = getCompleteNumberFormatConfig(x1?.numberFormatConfig);
+  const x2NumberFormatConfig = getCompleteNumberFormatConfig(x2?.numberFormatConfig);
 
   // Category is x1
   let newCategories: string[] = categories;
@@ -64,7 +67,7 @@ export const applyNumberFormatToPlotBands = (
  */
 const takeCategoriesFromYColumns = (
   dataOptions: CartesianChartDataOptionsInternal,
-  designOptions: ChartDesignOptions,
+  designOptions: DesignOptions,
 ): boolean => {
   const { stackType } = designOptions as StackableChartDesignOptions;
 
@@ -110,7 +113,7 @@ const noPlotBandsSection = (
 export const getCategoriesIndexMapAndPlotBands = (
   data: ChartData,
   dataOptions: CartesianChartDataOptionsInternal,
-  designOptions: ChartDesignOptions,
+  designOptions: DesignOptions,
   continuousDatetimeXAxis: boolean,
   // eslint-disable-next-line max-params
 ): CategoryIndexMapPlotBands => {
@@ -139,7 +142,7 @@ export const getCategoriesIndexMapAndPlotBands = (
   if (takeCategoriesFromXValues(data)) {
     return noPlotBandsSection(
       xValues,
-      xValues.map((xAxisValue) => xAxisValue.key),
+      xValues.map((xAxisValue) => xAxisValue.xValues[0]),
     );
   }
 

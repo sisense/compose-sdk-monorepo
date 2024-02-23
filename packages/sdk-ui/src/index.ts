@@ -1,10 +1,6 @@
 import './translation/initialize-i18n';
 import './index.css';
 
-/**
- * @packageDocumentation
- */
-
 export { ClientApplication, createClientApplication } from './app/client-application';
 export * from './chart-data-options/types';
 export { Chart } from './chart';
@@ -35,6 +31,7 @@ export * from './polar-chart';
 export * from './scatter-chart';
 export * from './indicator-chart';
 export * from './table';
+export * from './pivot-table';
 export * from './treemap-chart';
 export * from './sunburst-chart';
 export * from './boxplot-chart';
@@ -51,6 +48,8 @@ export {
   getDashboardModels,
   useGetWidgetModel,
   getWidgetModel,
+  translateToDashboardResponse,
+  translateToDashboardsResponse,
   type DashboardModel,
   type GetDashboardModelParams,
   type GetDashboardModelsParams,
@@ -80,3 +79,5 @@ export * from './types';
 
 export * from './filters';
 export * from './formulas';
+export { trackHook } from './decorators/hook-decorators';
+export * from './common/hooks/data-load-state-reducer';

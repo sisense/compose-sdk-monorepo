@@ -73,3 +73,11 @@ Configurations for how to interpret and present the data passed to the chart
 > **styleOptions**: `undefined` \| [`ScattermapStyleOptions`](../interfaces/interface.ScattermapStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
+
+### Callbacks
+
+#### dataPointClick
+
+> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md), [`"point"`, `"nativeEvent"`] \> \>
+
+Click handler callback for a data point

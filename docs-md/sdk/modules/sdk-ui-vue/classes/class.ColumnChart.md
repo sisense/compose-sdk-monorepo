@@ -4,32 +4,47 @@ title: ColumnChart
 
 # Class ColumnChart
 
-A Vue component that wraps the ColumnChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the ColumnChart.
+A Vue component representing categorical data with vertical rectangular bars
+whose heights are proportional to the values that they represent.
+See [Column Chart](https://docs.sisense.com/main/SisenseLinux/column-chart.htm) for more information.
 
 ## Example
 
 Here's how you can use the ColumnChart component in a Vue application:
 ```vue
 <template>
-  <ColumnChart :props="ColumnChartProps" />
+     <ColumnChart
+       :dataOptions="columnChartProps.dataOptions"
+       :dataSet="columnChartProps.dataSet"
+       :filters="columnChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ColumnChart from '@sisense/sdk-ui-vue/ColumnChart';
+import {ColumnChart, type ColumnChartProps} from '@sisense/sdk-ui-vue';
 
-const columnChartProps = ref({
-  // Configure your ColumnChartProps here
+const columnChartProps = ref<ColumnChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   category: [dimProductName],
+   value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+   breakBy: [],
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
-</script>
 ```
+<img src="../../../img/column-chart-example-1.png" width="800"/>
+
+## Param
+
+Column chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CartesianChartDataOptions`](../../sdk-ui/interfaces/interface.CartesianChartDataOptions.md)
+> **dataOptions**?: [`CartesianChartDataOptions`](../interfaces/interface.CartesianChartDataOptions.md)
 
 ***
 
@@ -53,7 +68,7 @@ const columnChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +92,4 @@ const columnChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`StackableStyleOptions`](../../sdk-ui/interfaces/interface.StackableStyleOptions.md)
+> **styleOptions**?: [`StackableStyleOptions`](../interfaces/interface.StackableStyleOptions.md)

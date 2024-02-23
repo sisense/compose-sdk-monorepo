@@ -67,7 +67,7 @@ BaseChartProps.highlights
 
 #### dataOptions
 
-> **dataOptions**: [`ScatterChartDataOptions`](../../sdk-ui/interfaces/interface.ScatterChartDataOptions.md)
+> **dataOptions**: [`ScatterChartDataOptions`](interface.ScatterChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -75,7 +75,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### styleOptions
 
-> **styleOptions**?: [`ScatterStyleOptions`](../../sdk-ui/interfaces/interface.ScatterStyleOptions.md)
+> **styleOptions**?: [`ScatterStyleOptions`](interface.ScatterStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
 
@@ -83,7 +83,7 @@ Configuration that defines functional style of the various chart elements
 
 #### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render

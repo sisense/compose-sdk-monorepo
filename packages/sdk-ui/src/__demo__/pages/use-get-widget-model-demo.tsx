@@ -13,7 +13,7 @@ import {
   useExecuteQuery,
   useExecuteQueryByWidgetId,
 } from '../../query-execution/index.js';
-import { Chart } from '../../chart.js';
+import { Chart } from '../../chart';
 import { ThemeProvider } from '../../theme-provider/index.js';
 import { ChartWidget } from '../../widgets/chart-widget.js';
 import { Table, TableWidget } from '../../index.js';

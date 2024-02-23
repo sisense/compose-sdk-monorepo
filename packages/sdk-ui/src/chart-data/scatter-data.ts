@@ -13,7 +13,10 @@ import {
   Value,
 } from '../chart-data-options/types';
 import { isNumber } from '@sisense/sdk-data';
-import { applyFormatPlainText } from '../chart-options-processor/translations/number-format-config';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from '../chart-options-processor/translations/number-format-config';
 
 export const defaultScatterDataValue: ComparableData = { displayValue: '0' };
 
@@ -100,12 +103,12 @@ export const groupData = (
   const indexes = defineIndexes(chartDataOptions, dataTable);
   const pointNumFormatConfig =
     chartDataOptions?.breakByPoint && isNumber(chartDataOptions.breakByPoint.type)
-      ? chartDataOptions.breakByPoint?.numberFormatConfig
+      ? getCompleteNumberFormatConfig(chartDataOptions.breakByPoint?.numberFormatConfig)
       : undefined;
   const colorNumFormatConfig =
     chartDataOptions?.breakByColor &&
     (!isCategory(chartDataOptions.breakByColor) || isNumber(chartDataOptions.breakByColor.type))
-      ? chartDataOptions.breakByColor?.numberFormatConfig
+      ? getCompleteNumberFormatConfig(chartDataOptions.breakByColor?.numberFormatConfig)
       : undefined;
 
   return dataTable.rows.map((row) => {

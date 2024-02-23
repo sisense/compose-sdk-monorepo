@@ -58,7 +58,9 @@ describe('Scattermap Chart Data', () => {
 
     expect(scattermapData(dataOptions, dataTable)).toEqual({
       type: 'scattermap',
-      locations: [{ name: 'Afghanistan', value: 157.04485702514648, blur: false }],
+      locations: [
+        { name: 'Afghanistan', value: 157.04485702514648, blur: false, rawName: ['Afghanistan'] },
+      ],
     });
   });
 
@@ -137,7 +139,14 @@ describe('Scattermap Chart Data', () => {
 
     expect(scattermapData(dataOptions, dataTable)).toEqual({
       type: 'scattermap',
-      locations: [{ name: 'Afghanistan, Kabul', value: 157.04485702514648, blur: false }],
+      locations: [
+        {
+          name: 'Afghanistan, Kabul',
+          value: 157.04485702514648,
+          blur: false,
+          rawName: ['Afghanistan', 'Kabul'],
+        },
+      ],
     });
   });
 
@@ -223,6 +232,7 @@ describe('Scattermap Chart Data', () => {
             lat: 15.04485702514648,
             lng: 57.04485702514648,
           },
+          rawName: [15.04485702514648, 57.04485702514648],
         },
       ],
     });

@@ -2,34 +2,47 @@
 title: AreamapChart
 ---
 
-# Class AreamapChart
+# Class AreamapChart <Badge type="beta" text="Beta" />
 
-A Vue component that wraps the AreamapChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the AreamapChart.
+A Vue component for visualizing geographical data as polygons on a map.
+See [Areamap Chart](https://docs.sisense.com/main/SisenseLinux/area-map.htm) for more information.
 
 ## Example
 
 Here's how you can use the AreamapChart component in a Vue application:
 ```vue
 <template>
-  <AreamapChart :props="areamapChartProps" />
+   <AreamapChart
+     :dataOptions="areamapChartProps.dataOptions"
+     :dataSet="areamapChartProps.dataSet"
+     :filters="areamapChartProps.filters"
+   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import AreamapChart from '@sisense/sdk-ui-vue/AreamapChart';
+import {AreamapChart, type AreamapChartProps} from '@sisense/sdk-ui-vue';
 
-const areamapChartProps = ref({
-  // Configure your AreamapChartProps here
-});
+ const areamapChartProps = ref<AreamapChartProps>({
+   dataSet: DM.DataSource,
+   dataOptions: {
+     geo: [DM.DimCountries.CountryName],
+     color: [{ column: measureTotalRevenue, title: 'Total Revenue' }],
+   },
+   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+ });
 </script>
 ```
+
+## Param
+
+Areamap chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`AreamapChartDataOptions`](../../sdk-ui/interfaces/interface.AreamapChartDataOptions.md)
+> **dataOptions**?: [`AreamapChartDataOptions`](../interfaces/interface.AreamapChartDataOptions.md)
 
 ***
 
@@ -59,4 +72,4 @@ const areamapChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`AreamapStyleOptions`](../../sdk-ui/interfaces/interface.AreamapStyleOptions.md)
+> **styleOptions**?: [`AreamapStyleOptions`](../interfaces/interface.AreamapStyleOptions.md)

@@ -36,6 +36,7 @@ export type {
   ScattermapChartDataOptions,
   AreamapChartDataOptions,
   TableDataOptions,
+  PivotTableDataOptions,
   WidgetDataOptions,
 
   // Data Options related:
@@ -50,7 +51,6 @@ export type {
   MultiColumnValueToColorMap,
   SortDirection,
   BoxWhiskerType,
-  ScattermapColumn,
   ScattermapLocationLevel,
   StyledColumn,
   StyledMeasureColumn,
@@ -77,6 +77,7 @@ export type {
   WidgetStyleOptions,
   DashboardWidgetStyleOptions,
   TableStyleOptions,
+  PivotTableStyleOptions,
 
   // Style related:
   DataLimits,

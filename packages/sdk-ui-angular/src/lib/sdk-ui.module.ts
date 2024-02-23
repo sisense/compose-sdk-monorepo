@@ -26,6 +26,7 @@ import {
   BoxplotChartComponent,
   ScattermapChartComponent,
   AreamapChartComponent,
+  PivotTableComponent,
 } from './components';
 import { DecoratorsModule } from './decorators/decorators.module';
 
@@ -82,6 +83,7 @@ import { DecoratorsModule } from './decorators/decorators.module';
     BoxplotChartComponent,
     ScattermapChartComponent,
     AreamapChartComponent,
+    PivotTableComponent,
   ],
   imports: [CommonModule, DecoratorsModule],
   exports: [
@@ -110,6 +112,7 @@ import { DecoratorsModule } from './decorators/decorators.module';
     BoxplotChartComponent,
     ScattermapChartComponent,
     AreamapChartComponent,
+    PivotTableComponent,
   ],
   providers: [],
 })

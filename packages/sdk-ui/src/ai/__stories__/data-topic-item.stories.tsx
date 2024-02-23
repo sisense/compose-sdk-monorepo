@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { templateForComponent } from '../../__stories__/template';
 import { Meta } from '@storybook/react';
 import { DataTopicItem as DataTopicItemComponent } from '../data-topics';

@@ -1,9 +1,11 @@
 /**
+ * @internal
  * States of a data load.
  */
 export type DataState<Data> = DataLoadingState<Data> | DataErrorState | DataSuccessState<Data>;
 
 /**
+ * @internal
  * State of data loading.
  */
 export type DataLoadingState<Data> = {
@@ -22,6 +24,7 @@ export type DataLoadingState<Data> = {
 };
 
 /**
+ * @internal
  * State of a data load that has failed.
  */
 export type DataErrorState = {
@@ -40,6 +43,7 @@ export type DataErrorState = {
 };
 
 /**
+ * @internal
  * State of a data load that has succeeded.
  */
 export type DataSuccessState<Data> = {
@@ -57,6 +61,9 @@ export type DataSuccessState<Data> = {
   status: 'success';
 };
 
+/**
+ * @internal
+ */
 export type DataLoadAction<Data> =
   | {
       type: 'loading';
@@ -70,6 +77,9 @@ export type DataLoadAction<Data> =
       error: Error;
     };
 
+/**
+ * @internal
+ */
 export function dataLoadStateReducer<Data>(
   state: DataState<Data>,
   action: DataLoadAction<Data>,

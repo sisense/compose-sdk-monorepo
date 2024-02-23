@@ -12,6 +12,8 @@ interface IsAuthResponse {
 }
 
 export class SsoAuthenticator implements Authenticator {
+  readonly type = 'sso';
+
   readonly url: string;
 
   private _enableSilentPreAuth: boolean;
@@ -97,4 +99,16 @@ export class SsoAuthenticator implements Authenticator {
       return true;
     }
   }
+}
+
+/**
+ * Checks if the authenticator is SSO authenticator
+ *
+ * @param authenticator - authenticator to check
+ * @internal
+ */
+export function isSsoAuthenticator(
+  authenticator: Authenticator,
+): authenticator is SsoAuthenticator {
+  return authenticator.type === 'sso';
 }

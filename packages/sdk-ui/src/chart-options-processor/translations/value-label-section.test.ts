@@ -13,7 +13,10 @@ const types = {
 
 describe('getValueLabelSettings(), chart with vertical xAxis', () => {
   it('horizontal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', 'horizontal');
+    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', {
+      enabled: true,
+      rotation: 0,
+    });
     expect(valueLabelSettings).toEqual({
       align: 'left',
       enabled: true,
@@ -24,7 +27,10 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
   });
 
   it('diagonal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', 'diagonal');
+    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', {
+      enabled: true,
+      rotation: -45,
+    });
     expect(valueLabelSettings).toEqual({
       align: 'center',
       enabled: true,
@@ -35,7 +41,10 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
   });
 
   it('vertical', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', 'vertical');
+    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', {
+      enabled: true,
+      rotation: -90,
+    });
     expect(valueLabelSettings).toEqual({
       align: 'center',
       enabled: true,
@@ -48,10 +57,10 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
 
 describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
   it('horizontal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings(
-      'horizontal',
-      'horizontal',
-    );
+    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {
+      enabled: true,
+      rotation: 0,
+    });
     expect(valueLabelSettings).toEqual({
       align: 'center',
       enabled: true,
@@ -62,7 +71,10 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
     });
   });
   it('diagonal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', 'diagonal');
+    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {
+      enabled: true,
+      rotation: -45,
+    });
     expect(valueLabelSettings).toEqual({
       align: 'left',
       enabled: true,
@@ -74,7 +86,10 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
     });
   });
   it('vertical', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', 'vertical');
+    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {
+      enabled: true,
+      rotation: -90,
+    });
     expect(valueLabelSettings).toEqual({
       align: 'left',
       enabled: true,
@@ -88,7 +103,7 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
 
 describe('when valueLabel is null', () => {
   it('should return enabled= false', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', null);
+    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {});
     expect(valueLabelSettings).toEqual({
       enabled: false,
     });
@@ -104,7 +119,10 @@ describe('getPolarValueLabelSettings()', () => {
   };
 
   it('should return "horizontal" settings for "area" type polar', () => {
-    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings('horizontal', 'area');
+    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+      { enabled: true, rotation: 0 },
+      'area',
+    );
     expect(valueLabelSettings).toEqual({
       ...expectedBaseSettings,
       align: 'center',
@@ -113,7 +131,10 @@ describe('getPolarValueLabelSettings()', () => {
   });
 
   it('should return "diagonal" settings for "line" type polar', () => {
-    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings('diagonal', 'line');
+    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+      { enabled: true, rotation: -45 },
+      'line',
+    );
     expect(valueLabelSettings).toEqual({
       ...expectedBaseSettings,
       align: 'center',
@@ -123,7 +144,10 @@ describe('getPolarValueLabelSettings()', () => {
   });
 
   it('should return "vertical" settings for "column" type polar', () => {
-    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings('vertical', 'column');
+    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+      { enabled: true, rotation: -90 },
+      'column',
+    );
     expect(valueLabelSettings).toEqual({
       ...expectedBaseSettings,
       align: 'left',

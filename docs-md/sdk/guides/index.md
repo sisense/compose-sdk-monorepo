@@ -7,6 +7,9 @@ indexTopics:
     - title: Data Model
       description: Learn about Compose SDK data models
       link: ./data-model
+    - title: Generative AI
+      description: Learn how to deliver conversational analytics using large language models (Private Beta)
+      link: ./guide-ai
     - title: Migration Guide
       description: Migrate your project from 0.X.X to 1.0.0
       link: ./migration-guide-1.0.0

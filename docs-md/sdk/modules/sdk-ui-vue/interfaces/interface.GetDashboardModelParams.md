@@ -8,7 +8,7 @@ Parameters for [useGetDashboardModel](../functions/function.useGetDashboardModel
 
 ## Extends
 
-- [`GetDashboardModelOptions`](../../sdk-ui/interfaces/interface.GetDashboardModelOptions.md).`HookEnableParam`
+- [`GetDashboardModelOptions`](interface.GetDashboardModelOptions.md).`HookEnableParam`
 
 ## Properties
 
@@ -44,4 +44,4 @@ If not specified, the default value is `false`
 
 #### Inherited from
 
-[`GetDashboardModelOptions`](../../sdk-ui/interfaces/interface.GetDashboardModelOptions.md).[`includeWidgets`](../../sdk-ui/interfaces/interface.GetDashboardModelOptions.md#includewidgets)
+[`GetDashboardModelOptions`](interface.GetDashboardModelOptions.md).[`includeWidgets`](interface.GetDashboardModelOptions.md#includewidgets)

@@ -4,7 +4,7 @@ title: Functions
 
 # Functions
 
-- [createSisenseContextConnector](function.createSisenseContextConnector.md)
+- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md)
 - [createThemeContextConnector](function.createThemeContextConnector.md)
 - [useExecuteQuery](function.useExecuteQuery.md)
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md)

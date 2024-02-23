@@ -1,0 +1,44 @@
+$color-gray: #edeef1 !default;
+$widgetBackgroundColor: #ffffff;
+
+// TODO: delete copy&pasting
+@mixin modal_window_shadow {
+  box-shadow: 0 0 5px rgba(58, 67, 86, 0.2);
+  border-radius: 4px;
+}
+
+.sis-scope {
+  .simple-sorting-settings {
+    width: 200px;
+    @include modal_window_shadow;
+    display: flex;
+    flex-direction: column;
+    background-color: $widgetBackgroundColor;
+    .header-text {
+      width: 100%;
+    }
+
+    &__actions {
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      & > div {
+        width: 100%;
+        & > div {
+          width: 100%;
+          border-radius: 0;
+          padding: 5px 16px;
+          margin: 0;
+          height: auto;
+          cursor: pointer;
+
+          &:hover {
+            background: rgba(91, 99, 114, 0.1);
+          }
+        }
+      }
+    }
+  }
+}

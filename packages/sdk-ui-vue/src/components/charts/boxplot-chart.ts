@@ -5,25 +5,39 @@ import type { BoxplotChartProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * A Vue component that wraps the BoxplotChart Preact component for use in Vue applications.
- * It maintains compatibility with Vue's reactivity system while preserving the functionality of the BoxplotChart.
- *
+ * A Vue component representing data in a way that visually describes the distribution, variability,
+ * and center of a data set along an axis.
+ * See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-plot.htm) for more information.
  * @example
  * Here's how you can use the BoxplotChart component in a Vue application:
  * ```vue
  * <template>
- *   <BoxplotChart :props="boxplotChartProps" />
+    <BoxplotChart
+        :dataOptions="boxplotChartProps.dataOptions"
+        :dataSet="boxplotChartProps.dataSet"
+        :filters="boxplotChartProps.filters"
+      />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import BoxplotChart from '@sisense/sdk-ui-vue/BoxplotChart';
+ * import {BoxplotChart, type BoxplotChartProps} from '@sisense/sdk-ui-vue';
  *
- * const boxplotChartProps = ref({
- *   // Configure your BoxplotChartProps here
- * });
- * </script>
+  const boxplotChartProps = ref<BoxplotChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      category: [dimProductName],
+      value: [DM.Fact_Sale_orders.OrderRevenue],
+      boxType: 'iqr',
+      outliersEnabled: true,
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * ```
+ * <img src="media://boxplot-chart-example-1.png" width="600px" />
+ * @param props - Boxplot chart properties
+ * @returns Boxplot Chart component
+ * @beta
  */
 export const BoxplotChart = defineComponent({
   props: {

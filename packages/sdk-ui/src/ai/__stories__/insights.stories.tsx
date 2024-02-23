@@ -1,11 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { templateForComponent } from '../../__stories__/template';
 
 import { Meta } from '@storybook/react';
 import InsightsMessage from '../messages/insights-message';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../../props';
-import { ChatApiContextProvider } from '../api/chat-api-context';
+import AiContextProvider from '../ai-context-provider';
 
 const template = templateForComponent(InsightsMessage);
 
@@ -61,9 +60,9 @@ export const Default = template(
   [
     (Story) => (
       <SisenseContextProvider {...sisenseContextProps}>
-        <ChatApiContextProvider>
+        <AiContextProvider>
           <Story />
-        </ChatApiContextProvider>
+        </AiContextProvider>
       </SisenseContextProvider>
     ),
   ],

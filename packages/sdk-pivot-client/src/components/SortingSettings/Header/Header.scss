@@ -1,0 +1,54 @@
+// TODO: `@import '~@sbi/styleguide/src/sass/variables';` or move styles to PWC
+$color-gray-2: #d1d1d7 !default;
+$color-text: #5b6372 !default;
+$color-gray-4: #f4f4f8 !default;
+
+.sis-scope {
+  .sorting-settings-header {
+    flex-shrink: 0;
+    background-color: $color-gray-4;
+    width: 100%;
+    height: 42px;
+    padding: 10px 10px 10px 16px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 15px;
+  }
+
+  .header-text {
+    display: flex;
+    flex-flow: row nowrap;
+    width: calc(100% - 24px);
+
+    &__sort-by {
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    &__hierarchy-container {
+      flex-grow: 1;
+      text-overflow: ellipsis;
+      padding: 0 0.5em;
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+  }
+
+  .cross-icon {
+    position: relative;
+    top: -2px;
+    color: $color-text;
+    border-radius: 50%;
+    min-width: 24px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $color-gray-2;
+    }
+  }
+}

@@ -6,7 +6,7 @@ import { PasswordAuthenticator } from './password-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
 
-export function handleErrorResponse(response: FetchInterceptorResponse): FetchInterceptorResponse {
+function handleErrorResponse(response: FetchInterceptorResponse): FetchInterceptorResponse {
   if (!response.ok) {
     throw new TranslatableError('errors.responseError', {
       status: response.status.toString(),
@@ -17,7 +17,7 @@ export function handleErrorResponse(response: FetchInterceptorResponse): FetchIn
   return response;
 }
 
-export function handleUnauthorizedResponse(
+function handleUnauthorizedResponse(
   response: FetchInterceptorResponse,
   auth: Authenticator,
 ): FetchInterceptorResponse {
@@ -45,7 +45,7 @@ export function handleUnauthorizedResponse(
  *
  * @param responseError - The error object received from the failed response.
  */
-export function isNetworkError(responseError: Error): boolean {
+function isNetworkError(responseError: Error): boolean {
   return !!(responseError.message === 'Failed to fetch' && responseError.name === 'TypeError');
 }
 
@@ -54,6 +54,24 @@ export function isNetworkError(responseError: Error): boolean {
  *
  * @returns A promise that rejects with an error message.
  */
-export function handleNetworkError(): Promise<never> {
+function handleNetworkError(): Promise<never> {
   return Promise.reject(new TranslatableError('errors.networkError'));
 }
+
+export const getResponseInterceptor =
+  (auth: Authenticator) => (response: FetchInterceptorResponse) => {
+    if (response.status === 401) {
+      return handleUnauthorizedResponse(response, auth);
+    }
+    if (!response.ok) {
+      return handleErrorResponse(response);
+    }
+    return response;
+  };
+
+export const errorInterceptor = (error: Error) => {
+  if (isNetworkError(error)) {
+    return handleNetworkError();
+  }
+  return Promise.reject(error);
+};

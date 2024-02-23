@@ -99,7 +99,6 @@ export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
 };
 ```
 
-
 ### Single Sign On
 
 Single Sign On (SSO) allows the users of your application to authenticate with Sisense using an external identity provider.
@@ -111,6 +110,13 @@ Set up your Sisense instance to authenticate users with SSO using one of the fol
 - [JSON Web Token (JWT)](https://docs.sisense.com/main/SisenseLinux/single-sign-on-using-json-web-token.htm?tocpath=Security%7CImplementing%20Single%20Sign-On%7C_____3)
 - [Security Assertion Markup Language 2.0 (SAML)](https://docs.sisense.com/main/SisenseLinux/single-sign-on-using-security-assertion-markup-language-20.htm?tocpath=Security%7CImplementing%20Single%20Sign-On%7C_____2)
 - [OpenID Connect](https://docs.sisense.com/main/SisenseLinux/single-sign-on-using-openid-connect.htm?tocpath=Security%7CImplementing%20Single%20Sign-On%7C_____4)
+
+::: tip Note
+If you're experiencing difficulties or unexpected behavior when using SSO, the cause may be a hidden feature configuration. To resolve the issue, you can:
+
+- Contact [support](https://www.sisense.com/support/) to validate you Fusion configuration settings
+- See this [community post](https://community.sisense.com/t5/developer-forum/issue-with-sisense-compose-sdk-and-sso-authentication/m-p/18601/highlight/true#M40) to try to resolve the issue yourself
+:::
 
 #### Authenticate with SSO
 
@@ -124,6 +130,7 @@ Once you’ve set up SSO access, you can use it to authenticate within your appl
   ssoEnabled=true
 >
 ```
+
 - For Angular apps use the `ssoEnabled` property of the `SisenseContextConfig` object:
 
 ```ts
@@ -157,7 +164,7 @@ Set up CORS on your Sisense instance using one of the following:
 
 ::: tip Notes
 
--   **Do not** include the trailing slash (`/`) when adding a domain to the **CORS Allowed Origins**
--   Save your settings changes after adding your domain.
+- **Do not** include the trailing slash (`/`) when adding a domain to the **CORS Allowed Origins**
+- Save your settings changes after adding your domain.
 
 :::

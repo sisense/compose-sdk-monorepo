@@ -1,3 +1,4 @@
+/** @vitest-environment jsdom */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { SeriesPieOptions } from '@sisense/sisense-charts';
 import { TFunction } from '@sisense/sdk-common';
@@ -5,7 +6,6 @@ import { highchartsOptionsService, HighchartsOptionsInternal } from './chart-opt
 import { CartesianChartData, CategoricalChartData } from '../chart-data/types';
 import { cartesianData } from '../chart-data/cartesian-data';
 import { categoricalData } from '../chart-data/categorical-data';
-import { defaultConfig, NumberFormatConfig } from './translations/number-format-config';
 import { BaseDesignOptions } from './translations/base-design-options';
 import { createDataTableFromData } from '../chart-data-processor/table-creators';
 import { applyNumberFormatToPlotBands } from './plot-bands';
@@ -15,7 +15,7 @@ import {
   CategoricalChartDataOptionsInternal,
   Category,
 } from '../chart-data-options/types';
-import { ChartDesignOptions } from './translations/types';
+import { ChartDesignOptions, DesignOptions } from './translations/types';
 import { DateLevels } from '@sisense/sdk-data';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';
 import { getDefaultThemeSettings } from './theme-option-service';
@@ -116,16 +116,9 @@ const meas2 = {
   title: 'Units',
 };
 
-const defaultNumberFormat: NumberFormatConfig = {
-  name: 'Numbers',
-  decimalScale: 3,
-  trillion: true,
-  billion: true,
-  million: true,
-  kilo: true,
-  thousandSeparator: true,
-  prefix: true,
-  symbol: '',
+const baseChartDesignOptions: ChartDesignOptions = {
+  globalDesign: BaseDesignOptions,
+  designPerSeries: {},
 };
 
 const dateFormatter = (date: Date, format: string) => applyDateFormat(date, format);
@@ -150,7 +143,7 @@ const continuousWithGranularityMonths = () => {
   return highchartsOptionsService(
     chartData,
     'line',
-    BaseDesignOptions,
+    baseChartDesignOptions,
     dataOptions,
     translateMock,
     themeSettings,
@@ -169,7 +162,7 @@ it('renders a time series with multiple measures and no break by', () => {
   const { options: chartOptions } = highchartsOptionsService(
     chartData,
     'line',
-    BaseDesignOptions,
+    baseChartDesignOptions,
     dataOptions,
     translateMock,
     themeSettings,
@@ -190,7 +183,7 @@ it('renders a time series with connectNulls true on one measure', () => {
   const { options: chartOptions } = highchartsOptionsService(
     chartData,
     'line',
-    BaseDesignOptions,
+    baseChartDesignOptions,
     dataOptions,
     translateMock,
     themeSettings,
@@ -216,7 +209,7 @@ it('renders a time series chart with break by', () => {
   const { options: chartOptions } = highchartsOptionsService(
     chartData,
     'line',
-    BaseDesignOptions,
+    baseChartDesignOptions,
     dataOptions,
     translateMock,
     themeSettings,
@@ -237,7 +230,7 @@ it('renders a time series chart with break by with connectNulls true', () => {
   const { options: chartOptions } = highchartsOptionsService(
     chartData,
     'line',
-    BaseDesignOptions,
+    baseChartDesignOptions,
     dataOptions,
     translateMock,
     themeSettings,
@@ -253,7 +246,7 @@ it('renders a categorical line chart', () => {
   const { options: chartOptions } = highchartsOptionsService(
     chartData,
     'line',
-    BaseDesignOptions,
+    baseChartDesignOptions,
     TestChartDataOptions,
     translateMock,
   );
@@ -267,7 +260,7 @@ it('renders a categorical line chart with two x axes', () => {
   const { options: chartOptions } = highchartsOptionsService(
     chartData,
     'area',
-    BaseDesignOptions,
+    baseChartDesignOptions,
     TestChartDataOptionsMultipleXandYValues,
     translateMock,
   );
@@ -296,8 +289,11 @@ it('chart navigator is on if x axis count is greater than 70 and autoZoom true',
     chartData,
     'line',
     {
-      ...BaseDesignOptions,
-      autoZoom: true,
+      ...baseChartDesignOptions,
+      globalDesign: {
+        ...baseChartDesignOptions.globalDesign,
+        autoZoom: true,
+      },
     },
     TestChartDataOptions,
     translateMock,
@@ -326,8 +322,11 @@ it('chart navigator is off if x axis count is greater than 70 and autoZoom false
     chartData,
     'line',
     {
-      ...BaseDesignOptions,
-      autoZoom: false,
+      ...baseChartDesignOptions,
+      globalDesign: {
+        ...baseChartDesignOptions.globalDesign,
+        autoZoom: false,
+      },
     },
     TestChartDataOptions,
     translateMock,
@@ -356,8 +355,11 @@ it('chart navigator is off if x axis count is less than 50 and autoZoom true', (
     chartData,
     'line',
     {
-      ...BaseDesignOptions,
-      autoZoom: true,
+      ...baseChartDesignOptions,
+      globalDesign: {
+        ...baseChartDesignOptions.globalDesign,
+        autoZoom: true,
+      },
     },
     TestChartDataOptions,
     translateMock,
@@ -386,9 +388,12 @@ it('for cartesian data, limit series to 50 and categories to 100', () => {
     chartData,
     'line',
     {
-      ...BaseDesignOptions,
-      autoZoom: true,
-      dataLimits: { seriesCapacity: 50, categoriesCapacity: 100 },
+      ...baseChartDesignOptions,
+      globalDesign: {
+        ...baseChartDesignOptions.globalDesign,
+        autoZoom: true,
+        dataLimits: { seriesCapacity: 50, categoriesCapacity: 100 },
+      },
     },
     TestChartDataOptions,
     translateMock,
@@ -414,10 +419,13 @@ it('for categorical with multiple values (e.g. pie charts), limit series to 1000
     chartData,
     'pie',
     {
-      ...BaseDesignOptions,
-      pieType: 'classic',
-      dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
-    } as ChartDesignOptions,
+      ...baseChartDesignOptions,
+      globalDesign: {
+        ...baseChartDesignOptions.globalDesign,
+        pieType: 'classic',
+        dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
+      } as DesignOptions<'pie'>,
+    },
     TestChartDataOptions,
     translateMock,
   );
@@ -445,10 +453,13 @@ it('for categorical with value and categories (e.g. pie charts), limit series to
     chartData,
     'pie',
     {
-      ...BaseDesignOptions,
-      pieType: 'classic',
-      dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
-    } as ChartDesignOptions,
+      ...baseChartDesignOptions,
+      globalDesign: {
+        ...baseChartDesignOptions.globalDesign,
+        pieType: 'classic',
+        dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
+      } as DesignOptions<'pie'>,
+    },
     TestChartDataOptions,
     translateMock,
   );
@@ -462,7 +473,6 @@ it('applyNumberFormatToPlotBands should work for x1 and x2 if type is number', (
         name: 'revenue',
         type: 'number',
         numberFormatConfig: {
-          ...defaultConfig,
           name: 'Currency',
           prefix: true,
           symbol: '$',
@@ -471,7 +481,7 @@ it('applyNumberFormatToPlotBands should work for x1 and x2 if type is number', (
       {
         name: 'percentage',
         type: 'number',
-        numberFormatConfig: { ...defaultConfig, name: 'Percent' },
+        numberFormatConfig: { name: 'Percent' },
       },
     ],
     y: [],
@@ -525,7 +535,6 @@ it('applyNumberFormatToPlotBands should not change value when x1 and x2 are not 
         name: 'revenue',
         type: 'string',
         numberFormatConfig: {
-          ...defaultConfig,
           name: 'Currency',
           prefix: true,
           symbol: '$',
@@ -534,7 +543,7 @@ it('applyNumberFormatToPlotBands should not change value when x1 and x2 are not 
       {
         name: 'percentage',
         type: 'string',
-        numberFormatConfig: { ...defaultConfig, name: 'Percent' },
+        numberFormatConfig: { name: 'Percent' },
       },
     ],
     y: [],
@@ -647,7 +656,7 @@ describe('cartesianData', () => {
     const { options: chartOptions } = highchartsOptionsService(
       chartData,
       'line',
-      BaseDesignOptions,
+      baseChartDesignOptions,
       TestChartDataOptions,
       translateMock,
     );
@@ -657,7 +666,7 @@ describe('cartesianData', () => {
     const { options: chartOptionsWithZeros } = highchartsOptionsService(
       chartData,
       'line',
-      BaseDesignOptions,
+      baseChartDesignOptions,
       chartDataOptionsTreatNullsAsZeros,
       translateMock,
     );
@@ -705,7 +714,7 @@ describe('cartesianData', () => {
     const chartOptions = highchartsOptionsService(
       chartData,
       'line',
-      BaseDesignOptions,
+      baseChartDesignOptions,
       dataOptions,
       translateMock,
       themeSettings,
@@ -717,9 +726,12 @@ describe('cartesianData', () => {
       chartData,
       'line',
       {
-        ...BaseDesignOptions,
-        yAxis: { enabled: true, min: 1000, max: 5000 },
-        y2Axis: { enabled: true, min: 50, max: 100 },
+        ...baseChartDesignOptions,
+        globalDesign: {
+          ...baseChartDesignOptions.globalDesign,
+          yAxis: { enabled: true, min: 1000, max: 5000 },
+          y2Axis: { enabled: true, min: 50, max: 100 },
+        },
       },
       dataOptions,
       translateMock,
@@ -770,7 +782,7 @@ describe('cartesianData', () => {
     const chartOptions = highchartsOptionsService(
       chartData,
       'line',
-      BaseDesignOptions,
+      baseChartDesignOptions,
       dataOptions,
       translateMock,
       themeSettings,
@@ -782,9 +794,12 @@ describe('cartesianData', () => {
       chartData,
       'line',
       {
-        ...BaseDesignOptions,
-        yAxis: { enabled: true, min: -1000, max: -5000 },
-        y2Axis: { enabled: true, min: -50, max: -100 },
+        ...baseChartDesignOptions,
+        globalDesign: {
+          ...baseChartDesignOptions.globalDesign,
+          yAxis: { enabled: true, min: -1000, max: -5000 },
+          y2Axis: { enabled: true, min: -50, max: -100 },
+        },
       },
       dataOptions,
       translateMock,
@@ -812,7 +827,7 @@ describe('cartesianData', () => {
         {
           name: 'COGS',
           type: 'number',
-          numberFormatConfig: { ...defaultNumberFormat, decimalScale: 1 },
+          numberFormatConfig: { decimalScale: 1 },
         },
       ],
     } as CartesianChartDataOptionsInternal;
@@ -836,7 +851,7 @@ describe('cartesianData', () => {
     const { options: chartOptionsNoFormat } = highchartsOptionsService(
       dataWithNoFormat,
       'line',
-      BaseDesignOptions,
+      baseChartDesignOptions,
       dataOptionsWithNoFormat,
       translateMock,
     );
@@ -865,7 +880,7 @@ describe('cartesianData', () => {
         {
           name: 'COGS',
           type: 'number',
-          numberFormatConfig: { ...defaultNumberFormat, decimalScale: 1 },
+          numberFormatConfig: { decimalScale: 1 },
         },
       ],
       breakBy: [],
@@ -874,7 +889,7 @@ describe('cartesianData', () => {
     const { options: chartOptions } = highchartsOptionsService(
       chartData,
       'line',
-      BaseDesignOptions,
+      baseChartDesignOptions,
       dataOptions,
       translateMock,
     );
@@ -945,7 +960,7 @@ describe('cartesianData', () => {
     const { options: chartOptions } = highchartsOptionsService(
       chartData,
       'line',
-      BaseDesignOptions,
+      baseChartDesignOptions,
       TestChartDataOptions,
       translateMock,
     );
@@ -969,7 +984,13 @@ describe('cartesianData', () => {
     const { options: chartOptions } = highchartsOptionsService(
       chartData,
       'polar',
-      { ...BaseDesignOptions, polarType: 'area' } as ChartDesignOptions,
+      {
+        ...baseChartDesignOptions,
+        globalDesign: {
+          ...baseChartDesignOptions.globalDesign,
+          polarType: 'area',
+        } as DesignOptions<'polar'>,
+      },
       TestChartDataOptions,
       translateMock,
     );
@@ -986,9 +1007,12 @@ describe('cartesianData', () => {
       chartData,
       'line',
       {
-        ...BaseDesignOptions,
-        dataLimits: { seriesCapacity: 1, categoriesCapacity: 2 },
-      } as ChartDesignOptions,
+        ...baseChartDesignOptions,
+        globalDesign: {
+          ...baseChartDesignOptions.globalDesign,
+          dataLimits: { seriesCapacity: 1, categoriesCapacity: 2 },
+        },
+      },
       TestChartDataOptions,
       translateMock,
     );
@@ -1062,7 +1086,7 @@ describe('categoricalCharts', () => {
       const { options: chartOptions } = highchartsOptionsService(
         chartData,
         'pie',
-        BaseDesignOptions,
+        baseChartDesignOptions,
         pieDataOptions,
         translateMock,
       );
@@ -1103,12 +1127,15 @@ describe('categoricalCharts', () => {
     it('pie chart with convolution by percent', () => {
       const chartData = categoricalData(pieDataOptions, pieData);
 
-      const styleOptionsWithConvolution = {
-        ...BaseDesignOptions,
-        convolution: {
-          enabled: true,
-          selectedConvolutionType: 'byPercentage',
-          minimalIndependentSlicePercentage: 15,
+      const styleOptionsWithConvolution: ChartDesignOptions<'pie'> = {
+        ...baseChartDesignOptions,
+        globalDesign: {
+          ...baseChartDesignOptions.globalDesign,
+          convolution: {
+            enabled: true,
+            selectedConvolutionType: 'byPercentage',
+            minimalIndependentSlicePercentage: 15,
+          },
         },
       };
 
@@ -1165,12 +1192,15 @@ describe('categoricalCharts', () => {
     it('pie chart with convolution by slices count', () => {
       const chartData = categoricalData(pieDataOptions, pieData);
 
-      const styleOptionsWithConvolution = {
-        ...BaseDesignOptions,
-        convolution: {
-          enabled: true,
-          selectedConvolutionType: 'bySlicesCount',
-          independentSlicesCount: 2,
+      const styleOptionsWithConvolution: ChartDesignOptions<'pie'> = {
+        ...baseChartDesignOptions,
+        globalDesign: {
+          ...baseChartDesignOptions.globalDesign,
+          convolution: {
+            enabled: true,
+            selectedConvolutionType: 'bySlicesCount',
+            independentSlicesCount: 2,
+          },
         },
       };
 
@@ -1228,7 +1258,7 @@ describe('categoricalCharts', () => {
       const chartData = categoricalData(pieDataOptions, pieData);
 
       const styleOptionsWithConvolution = {
-        ...BaseDesignOptions,
+        ...baseChartDesignOptions,
         convolution: {
           enabled: false,
           selectedConvolutionType: 'bySlicesCount',
@@ -1286,7 +1316,7 @@ describe('categoricalCharts', () => {
             {
               name: 'Quantity',
               type: 'number',
-              numberFormatConfig: { ...defaultNumberFormat, decimalScale: 2 },
+              numberFormatConfig: { decimalScale: 2 },
             },
           ],
         },
@@ -1297,7 +1327,7 @@ describe('categoricalCharts', () => {
       const { options: chartOptions } = highchartsOptionsService(
         chartData,
         'pie',
-        BaseDesignOptions,
+        baseChartDesignOptions,
         pieDataOptions,
         translateMock,
       );
@@ -1326,7 +1356,7 @@ describe('categoricalCharts', () => {
       const { options: chartOptions } = highchartsOptionsService(
         chartData,
         'pie',
-        BaseDesignOptions,
+        baseChartDesignOptions,
         pieDataOptions,
         translateMock,
       );
@@ -1387,7 +1417,7 @@ describe('categoricalCharts', () => {
       const { options: chartOptions } = highchartsOptionsService(
         chartData,
         'pie',
-        BaseDesignOptions,
+        baseChartDesignOptions,
         pieDataOptions,
         translateMock,
       );
@@ -1461,7 +1491,7 @@ describe('funnelChart', () => {
       const { options: highchartsOptions } = highchartsOptionsService(
         chartData,
         'funnel',
-        BaseDesignOptions,
+        baseChartDesignOptions,
         funnelDataOptions,
         translateMock,
       );

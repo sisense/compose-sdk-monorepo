@@ -1,30 +1,22 @@
 /** @vitest-environment jsdom */
 
-// explicit import as workaround for 'Vitest' plugin in VSCode
-// https://github.com/IanVS/vitest-fetch-mock/issues/4
-import '../__test-helpers__/setup-vitest';
-
 import { render, waitFor } from '@testing-library/react';
-import {
-  mockUrl,
-  mockToken,
-  mockDashboardId,
-  mockWidgetId,
-  fetchMocks,
-} from '../__mocks__/fetch-mocks';
+import * as widgetDrilldown from '../__mocks__/data/mock-widget-drilldown.json';
+import * as jaqlDrilldown from '../__mocks__/data/mock-jaql-drilldown.json';
 import { ExecuteQueryByWidgetId } from './execute-query-by-widget-id';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
 import { QueryResultData } from '@sisense/sdk-data';
 import { ExecuteQueryParams } from './types';
+import { mockUrl, mockToken, mockDashboardId, mockWidgetId, server } from '@/__mocks__/msw';
+import { http, HttpResponse } from 'msw';
 
 describe('ExecuteQueryByWidgetId', () => {
   beforeEach(() => {
-    fetchMock.resetMocks();
-    fetchMock.mockResponses(
-      fetchMocks.globals, // get global settings
-      fetchMocks.palettes, // get color palettes
-      fetchMocks.widgetDrilldown, // get widget metadata
-      fetchMocks.jaqlDrilldown, // get jaql results
+    server.use(
+      http.get('*/api/v1/dashboards/:dashboardId/widgets/:widgetId', () =>
+        HttpResponse.json(widgetDrilldown),
+      ),
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDrilldown)),
     );
   });
 

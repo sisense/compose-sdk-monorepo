@@ -5,25 +5,38 @@ import type { BarChartProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * A Vue component that wraps the BarChart Preact component for use in Vue applications.
- * It maintains compatibility with Vue's reactivity system while preserving the functionality of the BarChart.
- *
+ * A Vue component representing categorical data with horizontal rectangular bars,
+ * whose lengths are proportional to the values that they represent.
+ * See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for more information.
  * @example
  * Here's how you can use the BarChart component in a Vue application:
  * ```vue
  * <template>
- *   <BarChart :props="barChartProps" />
+    <BarChart
+      :dataOptions="barChartProps.dataOptions"
+      :dataSet="barChartProps.dataSet"
+      :filters="barChartProps.filters"
+    />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import BarChart from '@sisense/sdk-ui-vue/BarChart';
+ * import {BarChart} from '@sisense/sdk-ui-vue';
  *
- * const barChartProps = ref({
- *   // Configure your BarChartProps here
- * });
+  const barChartProps = ref<BarChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      category: [dimProductName],
+      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+      breakBy: [],
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * </script>
  * ```
+ * <img src="media://bar-chart-example-1.png" width="800"/>
+ * @param props - Bar chart properties
+ * @returns Bar Chart component
  */
 export const BarChart = defineComponent({
   props: {

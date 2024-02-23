@@ -4,9 +4,7 @@ title: Table
 
 # Class Table
 
-A Vue component that wraps the Table Preact component for use in Vue applications.
-It provides a single 'props' prop to pass all the TableProps to the Table Preact component,
-enabling the use of the table within Vue's reactivity system.
+Table with aggregation and pagination.
 
 ## Example
 
@@ -25,12 +23,17 @@ const tableProps = ref({
 });
 </script>
 ```
+<img src="../../../img/table-example-2.png" width="800px" />
+
+## Param
+
+Table properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`TableDataOptions`](../../sdk-ui/interfaces/interface.TableDataOptions.md)
+> **dataOptions**?: [`TableDataOptions`](../interfaces/interface.TableDataOptions.md)
 
 ***
 
@@ -54,4 +57,4 @@ const tableProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`TableStyleOptions`](../../sdk-ui/interfaces/interface.TableStyleOptions.md)
+> **styleOptions**?: [`TableStyleOptions`](../interfaces/interface.TableStyleOptions.md)

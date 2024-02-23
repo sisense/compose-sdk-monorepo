@@ -1,0 +1,133 @@
+@mixin add-top-virtual-border() {
+  border-bottom-color: transparent;
+
+  .table-grid__cell-virtual-border {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    display: block;
+    width: 2000px;
+    height: 1px;
+
+    border-style: inherit;
+    border-bottom-color: inherit;
+    border-width: 0;
+  }
+}
+
+.sisense-pivot {
+  position: relative;
+  height: 100%;
+  -webkit-text-size-adjust: none;
+
+  .table-grid__content {
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  & > .scroll-elem__horizontal-track,
+  & > .scroll-elem__vertical-track {
+    z-index: 5;
+    opacity: 0;
+
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    .scroll-elem__horizontal-track,
+    .scroll-elem__vertical-track {
+      opacity: 1;
+    }
+  }
+}
+
+.sisense-pivot {
+  .scroll-elem__horizontal-track,
+  .scroll-elem__vertical-track {
+    opacity: 0;
+
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    .scroll-elem__horizontal-track,
+    .scroll-elem__vertical-track {
+      opacity: 1;
+    }
+  }
+}
+
+.sisense-pivot--merged-last-level-rows {
+  .table-grid--bottom.table-grid--left {
+    .table-grid__border-bottom {
+      display: block;
+    }
+
+    .table-grid__cell--level-last {
+      &:not(.table-grid__cell--sibling-last) {
+        &:not(.table-grid__cell--merged-columns) {
+          border-bottom-color: transparent;
+        }
+      }
+    }
+
+    .table-grid__cell--level-first {
+      &.table-grid__cell--level-last {
+        &:not(.table-grid__cell--merged-columns) {
+          &:not(.table-grid__cell--sibling-last) {
+            border-bottom-color: transparent;
+          }
+        }
+      }
+    }
+
+    .table-grid__cell--level-first {
+      &.table-grid__cell--level-last {
+        &.table-grid__cell--user-type-grandTotal {
+          @include add-top-virtual-border();
+        }
+      }
+    }
+  }
+
+  .table-grid--bottom.table-grid--right {
+    .table-grid__border-bottom {
+      display: block;
+    }
+
+    .table-grid__cell--row-level-last {
+      &:not(.table-grid__cell--row-sibling-last) {
+        &:not(.table-grid__cell--row-user-type-subTotal) {
+          &:not(.table-grid__cell--col-user-type-subTotal) {
+            &:not(.table-grid__cell--col-user-type-grandTotal) {
+              border-bottom-color: transparent;
+            }
+          }
+        }
+      }
+    }
+
+    .table-grid__cell--row-user-type-grandTotal {
+      @include add-top-virtual-border();
+    }
+  }
+}
+
+.sisense-pivot__multi-grid--resize-in-progress {
+  cursor: col-resize;
+}
+
+.sisense-pivot__overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000000;
+}
+
+/* hidden for the pivot table to render properly */
+::-webkit-scrollbar {
+  width: 6px;
+  display: none;
+}

@@ -105,6 +105,7 @@ export type ScatterChartData = {
 
 export type ScattermapChartLocation = {
   name: string;
+  rawName: string[];
   value: number;
   colorValue?: number;
   details?: number | string[];

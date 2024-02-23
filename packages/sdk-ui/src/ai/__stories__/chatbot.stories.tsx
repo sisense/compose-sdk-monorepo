@@ -1,8 +1,7 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Meta, StoryObj } from '@storybook/react';
 import { SisenseContextProviderProps } from '../../index';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
-import { ChatApiContextProvider } from '../api/chat-api-context';
+import AiContextProvider from '../ai-context-provider';
 import { Chatbot } from '../chatbot';
 
 const sisenseContextProps: SisenseContextProviderProps = {
@@ -16,9 +15,9 @@ const meta: Meta<typeof Chatbot> = {
   decorators: [
     (Story) => (
       <SisenseContextProvider {...sisenseContextProps}>
-        <ChatApiContextProvider>
+        <AiContextProvider>
           <Story />
-        </ChatApiContextProvider>
+        </AiContextProvider>
       </SisenseContextProvider>
     ),
   ],
@@ -36,5 +35,20 @@ export const CustomWidth: Story = {
 export const MinWidth: Story = {
   args: {
     width: 200,
+  },
+};
+export const WithFollowupQuestionsEnabled: Story = {
+  args: {
+    config: { enableFollowupQuestions: true },
+  },
+};
+export const WithCustomNumberOfRecommendations: Story = {
+  args: {
+    config: { numOfRecommendations: 6 },
+  },
+};
+export const WithDefaultContext: Story = {
+  args: {
+    config: { defaultContextTitle: 'Sample ECommerce' },
   },
 };

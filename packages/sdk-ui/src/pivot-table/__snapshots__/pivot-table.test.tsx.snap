@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PivotTable > should render empty pivot table 1`] = `
+<div>
+  <div
+    aria-label="pivot-table-root"
+  />
+</div>
+`;

@@ -23,3 +23,4 @@ export * from './context-menu.component';
 export * from './boxplot-chart.component';
 export * from './scattermap-chart.component';
 export * from './areamap-chart.component';
+export * from './pivot-table.component';

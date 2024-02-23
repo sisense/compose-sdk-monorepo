@@ -2,7 +2,6 @@ import { buildCategories, defaultScatterDataValue, groupData } from './scatter-d
 import { ScatterDataTable } from './types';
 import { DataTable } from '../chart-data-processor/table-processor';
 import { ScatterChartDataOptionsInternal } from '../chart-data-options/types';
-import { defaultConfig } from '../chart-options-processor/translations/number-format-config';
 
 describe('Scatter Chart Data', () => {
   const mockData: DataTable = {
@@ -132,12 +131,12 @@ describe('Scatter Chart Data', () => {
         breakByPoint: {
           name: 'col_5',
           type: 'number',
-          numberFormatConfig: { ...defaultConfig, decimalScale: 1 },
+          numberFormatConfig: { decimalScale: 1 },
         },
         breakByColor: {
           name: 'col_5',
           type: 'number',
-          numberFormatConfig: { ...defaultConfig, decimalScale: 2 },
+          numberFormatConfig: { decimalScale: 2 },
         },
       } as ScatterChartDataOptionsInternal;
 

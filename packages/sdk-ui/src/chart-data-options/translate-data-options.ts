@@ -38,6 +38,8 @@ import {
   AreamapChartDataOptions,
   AreamapChartDataOptionsInternal,
   ScattermapChartDataOptions,
+  PivotTableDataOptions,
+  PivotTableDataOptionsInternal,
 } from './types';
 import {
   translateColumnToCategory,
@@ -218,5 +220,19 @@ function getIndicatorValues(indicatorChartDataOptions: IndicatorChartDataOptions
 export function translateTableDataOptions(dataOptions: TableDataOptions): TableDataOptionsInternal {
   return {
     columns: dataOptions.columns.map(translateColumnToCategoryOrValue),
+  };
+}
+
+/**
+ * Translates pivot table data options to the internal structure.
+ */
+export function translatePivotTableDataOptions(
+  dataOptions: PivotTableDataOptions,
+): PivotTableDataOptionsInternal {
+  return {
+    rows: dataOptions.rows?.map(translateColumnToCategory),
+    columns: dataOptions.columns?.map(translateColumnToCategory),
+    values: dataOptions.values?.map(translateColumnToValue),
+    grandTotals: dataOptions.grandTotals,
   };
 }

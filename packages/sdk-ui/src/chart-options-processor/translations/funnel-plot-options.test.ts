@@ -8,7 +8,6 @@ import {
   DefaultFunnelDirection,
   DefaultFunnelLabels,
 } from './funnel-plot-options';
-import { defaultConfig } from './number-format-config';
 import { createAttribute } from '@sisense/sdk-data';
 import {
   funnelNeckHeight,
@@ -36,7 +35,6 @@ describe('getFunnelPlotOptions', () => {
       title: 'column',
       sortType: 'sortNone',
       showOnRightAxis: false,
-      numberFormatConfig: defaultConfig,
       enabled: true,
     };
     const category = createAttribute({ name: 'series' });

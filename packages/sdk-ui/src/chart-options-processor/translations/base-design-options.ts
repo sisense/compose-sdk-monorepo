@@ -1,4 +1,4 @@
-import { ChartDesignOptions } from './types';
+import { DesignOptions } from './types';
 import { DefaultPieType, DefaultPieLabels } from './pie-plot-options';
 import {
   DefaultFunnelType,
@@ -12,12 +12,12 @@ export const SERIES_CAPACITY = 50;
 export const SCATTER_CATEGORIES_CAPACITY = 500;
 export const CATEGORIES_CAPACITY = 100000;
 
-export const BaseDesignOptions: Merge<ChartDesignOptions> = {
+export const BaseDesignOptions: Merge<DesignOptions> = {
   lineType: 'straight',
   stackType: 'classic',
   legend: 'bottom',
   lineWidth: 2,
-  valueLabel: null,
+  valueLabel: {},
   marker: { enabled: false, size: 'small', fill: 'full' },
   xAxis: {
     type: 'linear',
@@ -72,7 +72,7 @@ export const BaseDesignOptions: Merge<ChartDesignOptions> = {
   },
 };
 
-export const BaseDesignOptionsMultipleAxis: ChartDesignOptions = {
+export const BaseDesignOptionsMultipleAxis: DesignOptions = {
   ...BaseDesignOptions,
   x2Axis: {
     type: 'linear',

@@ -6,7 +6,7 @@ title: ScattermapLocationLevel
 
 > **ScattermapLocationLevel**: `"auto"` \| `"country"` \| `"state"` \| `"city"`
 
-Geographic location level for a Scattermap column.
+Geographic location level for Scattermap chart.
 This type can have one of the following values:
 - 'auto': Automatically determines the appropriate location level.
 - 'country': Represents the country level in the geographical hierarchy.

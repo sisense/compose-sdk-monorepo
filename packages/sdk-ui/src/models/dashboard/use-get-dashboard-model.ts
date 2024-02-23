@@ -194,8 +194,13 @@ function isParamsChanged(
     (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
   );
 }
-
-function translateToDashboardResponse(dataState: DataState<DashboardModel>) {
+/**
+ * Translates the data state to the dashboard model state.
+ *
+ * @internal
+ * @param dataState - The data state to be translated
+ */
+export function translateToDashboardResponse(dataState: DataState<DashboardModel>) {
   const { data, ...rest } = dataState;
 
   return {

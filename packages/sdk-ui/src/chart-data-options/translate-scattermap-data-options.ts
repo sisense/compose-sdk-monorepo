@@ -1,8 +1,8 @@
 import {
   ScattermapChartDataOptions,
   ScattermapChartDataOptionsInternal,
-  ScattermapColumn,
   ScattermapLocationLevel,
+  StyledColumn,
 } from './types';
 import {
   translateColumnToCategory,
@@ -19,18 +19,15 @@ const locationLevelPriorityMap = {
 
 export function getLocationLevel(locationDataOptions: ScattermapChartDataOptions['geo']) {
   const locationLevels = locationDataOptions
-    .filter((option) => 'level' in option && option.level)
-    .map((option) => (option as ScattermapColumn).level);
+    .filter((option) => 'geoLevel' in option && option.geoLevel)
+    .map((option) => (option as StyledColumn).geoLevel as ScattermapLocationLevel);
 
-  return locationLevels.reduce(
-    (selectedLevel: ScattermapLocationLevel, level: ScattermapLocationLevel) => {
-      if (locationLevelPriorityMap[level] > locationLevelPriorityMap[selectedLevel]) {
-        return level;
-      }
-      return selectedLevel;
-    },
-    'auto',
-  );
+  return locationLevels.reduce((selectedLevel: ScattermapLocationLevel, level) => {
+    if (locationLevelPriorityMap[level] > locationLevelPriorityMap[selectedLevel]) {
+      return level;
+    }
+    return selectedLevel;
+  }, 'auto');
 }
 
 export function translateScattermapChartDataOptions(

@@ -5,25 +5,37 @@ import type { PieChartProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * A Vue component that wraps the PieChart Preact component for use in Vue applications.
- * It maintains compatibility with Vue's reactivity system while preserving the functionality of the PieChart.
+ * A Vue component representing data in a circular graph with the data shown as slices of a whole,
+ * with each slice representing a proportion of the total.
+ * See [Pie Chart](https://docs.sisense.com/main/SisenseLinux/pie-chart.htm) for more information.
  *
  * @example
  * Here's how you can use the PieChart component in a Vue application:
  * ```vue
  * <template>
- *   <PieChart :props="pieChartProps" />
+      <PieChart
+        :dataOptions="pieChartProps.dataOptions"
+        :dataSet="pieChartProps.dataSet"
+        :filters="pieChartProps.filters"
+      />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import PieChart from '@sisense/sdk-ui-vue/PieChart';
+ * import {PieChart,type PieChartProps} from '@sisense/sdk-ui-vue';
  *
- * const pieChartProps = ref({
- *   // Configure your PieChartProps here
- * });
- * </script>
+const pieChartProps = ref<PieChartProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [dimProductName],
+    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+});
  * ```
+* <img src="media://pie-chart-example-1.png" width="600px" />
+ * @param props - Pie chart properties
+ * @returns Pie Chart component
  */
 export const PieChart = defineComponent({
   props: {

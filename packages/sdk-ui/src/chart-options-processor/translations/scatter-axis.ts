@@ -11,7 +11,7 @@ import {
 import { Axis, AxisSettings } from './axis-section';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { isNumber } from '@sisense/sdk-data';
-import { applyFormatPlainText, defaultConfig } from './number-format-config';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 
 export const commonColor = '#d1d1d7';
 
@@ -36,7 +36,10 @@ export function scatterFormatter(
     return `${value}`;
   }
 
-  return applyFormatPlainText(axisAttribute?.numberFormatConfig ?? defaultConfig, numberValue);
+  return applyFormatPlainText(
+    getCompleteNumberFormatConfig(axisAttribute?.numberFormatConfig),
+    numberValue,
+  );
 }
 
 export const getScatterXAxisSettings = (

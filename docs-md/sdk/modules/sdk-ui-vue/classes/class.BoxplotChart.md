@@ -2,34 +2,50 @@
 title: BoxplotChart
 ---
 
-# Class BoxplotChart
+# Class BoxplotChart <Badge type="beta" text="Beta" />
 
-A Vue component that wraps the BoxplotChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the BoxplotChart.
+A Vue component representing data in a way that visually describes the distribution, variability,
+and center of a data set along an axis.
+See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-plot.htm) for more information.
 
 ## Example
 
 Here's how you can use the BoxplotChart component in a Vue application:
 ```vue
 <template>
-  <BoxplotChart :props="boxplotChartProps" />
+   <BoxplotChart
+       :dataOptions="boxplotChartProps.dataOptions"
+       :dataSet="boxplotChartProps.dataSet"
+       :filters="boxplotChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import BoxplotChart from '@sisense/sdk-ui-vue/BoxplotChart';
+import {BoxplotChart, type BoxplotChartProps} from '@sisense/sdk-ui-vue';
 
-const boxplotChartProps = ref({
-  // Configure your BoxplotChartProps here
-});
-</script>
+ const boxplotChartProps = ref<BoxplotChartProps>({
+   dataSet: DM.DataSource,
+   dataOptions: {
+     category: [dimProductName],
+     value: [DM.Fact_Sale_orders.OrderRevenue],
+     boxType: 'iqr',
+     outliersEnabled: true,
+   },
+   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+ });
 ```
+<img src="../../../img/boxplot-chart-example-1.png" width="600px" />
+
+## Param
+
+Boxplot chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`BoxplotChartDataOptions`](../../sdk-ui/type-aliases/type-alias.BoxplotChartDataOptions.md) \| [`BoxplotChartCustomDataOptions`](../../sdk-ui/type-aliases/type-alias.BoxplotChartCustomDataOptions.md)
+> **dataOptions**?: [`BoxplotChartDataOptions`](../type-aliases/type-alias.BoxplotChartDataOptions.md) \| [`BoxplotChartCustomDataOptions`](../type-aliases/type-alias.BoxplotChartCustomDataOptions.md)
 
 ***
 
@@ -53,7 +69,7 @@ const boxplotChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +93,4 @@ const boxplotChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`BoxplotStyleOptions`](../../sdk-ui/interfaces/interface.BoxplotStyleOptions.md)
+> **styleOptions**?: [`BoxplotStyleOptions`](../interfaces/interface.BoxplotStyleOptions.md)

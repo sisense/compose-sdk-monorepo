@@ -40,6 +40,7 @@ export class Logger implements LoggerI {
    * Creates real or fake "log" function depending on include/exclude rules
    *
    * @returns {void}
+   *
    * @private
    */
   createLogFn() {
@@ -61,6 +62,7 @@ export class Logger implements LoggerI {
    * Defines if logger is excluded from logging
    *
    * @returns {boolean} - true - excluded
+   *
    * @private
    */
   isExcludedName() {
@@ -78,6 +80,7 @@ export class Logger implements LoggerI {
    *
    * @param {Array<string>} array - included/excluded items
    * @returns {boolean} - true - contains
+   *
    * @private
    */
   hasNamePartsInList(array: Array<string>) {

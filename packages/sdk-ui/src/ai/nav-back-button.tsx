@@ -10,7 +10,11 @@ export default function NavBackButton({ onClick }: Props) {
   const interactionStyle = 'csdk-cursor-pointer';
 
   return (
-    <div className={`${sizeStyle} ${layoutStyle} ${interactionStyle}`} onClick={onClick}>
+    <div
+      aria-label="go back"
+      className={`${sizeStyle} ${layoutStyle} ${interactionStyle}`}
+      onClick={onClick}
+    >
       <ArrowLeftIcon />
     </div>
   );

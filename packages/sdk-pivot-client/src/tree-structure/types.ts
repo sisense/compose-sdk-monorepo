@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-// import { CloneFn, InputStyles } from '../utils/types.js';
-import { CloneFn } from '../utils/types.js';
+import { CloneFn, InputStyles } from '../utils/types.js';
 
 export type TreeNode = {
   // raw data
@@ -8,7 +7,7 @@ export type TreeNode = {
   // raw data
   content?: string;
   // style object
-  // style?: InputStyles;
+  style?: InputStyles;
   // matched index for condition formatting
   cf?: number;
   // children nodes list
@@ -23,10 +22,7 @@ export type TreeNode = {
   size?: number;
   // defines is node is some part of real node
   isPart?: boolean;
-  /**
-   * max number children (measures) nodes to insert
-   * @internal
-   */
+  // max number children (measures) nodes to insert
   maxChilds?: number;
   // node deep level
   level?: number;

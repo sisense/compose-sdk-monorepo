@@ -8,6 +8,8 @@ import { appendHeaders } from './helpers.js';
 import { Authenticator } from './interfaces.js';
 
 export class PasswordAuthenticator implements Authenticator {
+  readonly type = 'password';
+
   private _authheader: string | undefined;
 
   readonly user: string;
@@ -67,4 +69,16 @@ export class PasswordAuthenticator implements Authenticator {
 
     return !!this._authheader;
   }
+}
+
+/**
+ * Checks if an authenticator is a PasswordAuthenticator.
+ *
+ * @param authenticator - the authenticator to check
+ * @internal
+ */
+export function isPasswordAuthenticator(
+  authenticator: Authenticator,
+): authenticator is PasswordAuthenticator {
+  return authenticator.type === 'password';
 }

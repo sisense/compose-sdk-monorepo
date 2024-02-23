@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { PivotTreeNode } from '../types.js';
-import { TreeNode } from '../../tree-structure/types.js';
+import { TreeNode } from '../../tree-structure';
 
 /**
  * Converts TreeNode to PivotTreeNode
@@ -8,6 +8,7 @@ import { TreeNode } from '../../tree-structure/types.js';
  * @param {TreeNode} node - tree node
  * @param {string} [type] - type of node to create, columns/rows
  * @returns {PivotTreeNode} - converted node
+ *
  * @private
  */
 export const createPivotTreeNode = (node: TreeNode, type?: string): PivotTreeNode => {

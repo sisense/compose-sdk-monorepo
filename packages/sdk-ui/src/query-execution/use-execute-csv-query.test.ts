@@ -4,25 +4,14 @@ import 'blob-polyfill';
 import { renderHook, waitFor } from '@testing-library/react';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 import { useExecuteCsvQuery } from './use-execute-csv-query.js';
-import { executeCsvQuery } from '../query/execute-query.js';
+import { executeCsvQueryMock } from '../query/__mocks__/execute-query.js';
 import type { Mock } from 'vitest';
 import { ClientApplication } from '../app/client-application.js';
-import { useSisenseContext } from '../sisense-context/sisense-context.js';
+import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context.js';
 import { ExecuteQueryParams } from './types';
 
-vi.mock('../query/execute-query', () => ({
-  executeCsvQuery: vi.fn(),
-}));
-vi.mock('../sisense-context/sisense-context', async () => {
-  const actual: typeof import('../sisense-context/sisense-context.js') = await vi.importActual(
-    '../sisense-context/sisense-context',
-  );
-
-  return {
-    ...actual,
-    useSisenseContext: vi.fn(),
-  };
-});
+vi.mock('../query/execute-query');
+vi.mock('../sisense-context/sisense-context');
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
@@ -36,15 +25,6 @@ vi.mock('@sisense/sdk-tracking', async () => {
     }),
   };
 });
-
-const executeCsvQueryMock = executeCsvQuery as Mock<
-  Parameters<typeof executeCsvQuery>,
-  ReturnType<typeof executeCsvQuery>
->;
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
 
 const trackProductEventMock = trackProductEvent as Mock<
   Parameters<typeof trackProductEvent>,

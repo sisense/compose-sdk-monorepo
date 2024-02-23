@@ -24,6 +24,7 @@ import { setupHelper } from '../../setup-helper';
  * });
  * </script>
  * ```
+ * @internal
  */
 export const BasicMemberFilterTile = defineComponent({
   props: {

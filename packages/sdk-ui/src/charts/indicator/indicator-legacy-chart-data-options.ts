@@ -2,8 +2,8 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 import {
-  defaultConfig,
   applyFormatPlainText,
+  getCompleteNumberFormatConfig,
 } from '../../chart-options-processor/translations/number-format-config';
 import { IndicatorChartDataOptions } from '../../chart-data-options/types';
 import {
@@ -12,7 +12,7 @@ import {
 } from '../../chart-options-processor/translations/design-options';
 import { IndicatorChartData } from '../../chart-data/types';
 import { LegacyIndicatorChartTypes } from './types';
-import { NumberFormatConfig } from '../../types';
+import { CompleteNumberFormatConfig } from '../../types';
 import {
   AllowedIndicatorColoringTypes,
   getValueColorOptions,
@@ -50,14 +50,10 @@ export const createLegacyChartDataOptions = (
   const min = chartData.min || 0;
   const max = chartData.max || 100;
 
-  const numberConfigForValue =
-    getNumberFormatConfigForColumn(chartDataOptions, 'value') ?? defaultConfig;
-  const numberConfigForSecondary =
-    getNumberFormatConfigForColumn(chartDataOptions, 'secondary') ?? defaultConfig;
-  const numberConfigForMin =
-    getNumberFormatConfigForColumn(chartDataOptions, 'min') ?? defaultConfig;
-  const numberConfigForMax =
-    getNumberFormatConfigForColumn(chartDataOptions, 'max') ?? defaultConfig;
+  const numberConfigForValue = getNumberFormatConfigForColumn(chartDataOptions, 'value');
+  const numberConfigForSecondary = getNumberFormatConfigForColumn(chartDataOptions, 'secondary');
+  const numberConfigForMin = getNumberFormatConfigForColumn(chartDataOptions, 'min');
+  const numberConfigForMax = getNumberFormatConfigForColumn(chartDataOptions, 'max');
 
   const valueCustomBgColor = getValueCustomBackgroundColor(
     chartData,
@@ -112,12 +108,11 @@ function convertToLegacyChartType(
 function getNumberFormatConfigForColumn(
   chartDataOptions: IndicatorChartDataOptions,
   columnName: keyof IndicatorChartDataOptions,
-): NumberFormatConfig | undefined {
+): CompleteNumberFormatConfig {
   const column = chartDataOptions[columnName]?.[0];
-  if (column && 'numberFormatConfig' in column) {
-    return column.numberFormatConfig;
-  }
-  return undefined;
+  return getCompleteNumberFormatConfig(
+    column && 'numberFormatConfig' in column ? column.numberFormatConfig : {},
+  );
 }
 
 const defaultIndicatorData = {

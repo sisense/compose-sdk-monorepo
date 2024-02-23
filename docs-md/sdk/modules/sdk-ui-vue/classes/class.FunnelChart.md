@@ -12,24 +12,40 @@ It maintains compatibility with Vue's reactivity system while preserving the fun
 Here's how you can use the FunnelChart component in a Vue application:
 ```vue
 <template>
-  <FunnelChart :props="funnelChartProps" />
+   <FunnelChart
+     :dataOptions="funnelChartProps.dataOptions"
+     :dataSet="funnelChartProps.dataSet"
+     :filters="funnelChartProps.filters"
+   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import FunnelChart from '@sisense/sdk-ui-vue/FunnelChart';
+import {FunnelChart, type FunnelChartProps} from '@sisense/sdk-ui-vue';
 
-const funnelChartProps = ref({
-  // Configure your FunnelChartProps here
+const funnelChartProps = ref<FunnelChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   category: [dimProductName],
+   value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
 </script>
 ```
+<img src="../../../img/funnel-chart-example-1.png" width="800"/>
+
+Note that the chart sorts the measure, `Unique Users`, in descending order by default.
+
+## Param
+
+Funnel chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CategoricalChartDataOptions`](../../sdk-ui/interfaces/interface.CategoricalChartDataOptions.md)
+> **dataOptions**?: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
 
 ***
 
@@ -53,7 +69,7 @@ const funnelChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +93,4 @@ const funnelChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`FunnelStyleOptions`](../../sdk-ui/interfaces/interface.FunnelStyleOptions.md)
+> **styleOptions**?: [`FunnelStyleOptions`](../interfaces/interface.FunnelStyleOptions.md)

@@ -7,7 +7,7 @@ title: Quickstart Guide (Angular)
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
-This guide is for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (alpha).
+This guide is for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (beta).
 
 ## Prerequisites
 
@@ -65,11 +65,12 @@ Compose SDK for Angular contains three packages for public use:
 - [@sisense/sdk-data](https://www.npmjs.com/package/@sisense/sdk-data): Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
 - [@sisense/sdk-cli](https://www.npmjs.com/package/@sisense/sdk-cli): A command-line tool for generating a TypeScript representation of a Sisense data model.
 
-The Compose SDK packages are deployed via public NPM Registry. To install the packages:
+The Compose SDK packages are deployed via public NPM Registry. To install `@sisense/sdk-ui-angular` and `@sisense/sdk-data` for your app:
    ```sh
    npm i @sisense/sdk-ui-angular @sisense/sdk-data
-   npm i @sisense/sdk-cli --save-dev
    ```
+
+Package `@sisense/sdk-cli` is not needed to run your app. It will be installed on the fly as you execute CLI commands using [npx](https://docs.npmjs.com/cli/v10/commands/npx).
 
 ## Sisense Authentication and Security
 

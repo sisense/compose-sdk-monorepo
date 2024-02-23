@@ -12,18 +12,32 @@ import { setupHelper } from '../../setup-helper';
  * Here's how you can use the FunnelChart component in a Vue application:
  * ```vue
  * <template>
- *   <FunnelChart :props="funnelChartProps" />
+    <FunnelChart
+      :dataOptions="funnelChartProps.dataOptions"
+      :dataSet="funnelChartProps.dataSet"
+      :filters="funnelChartProps.filters"
+    />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import FunnelChart from '@sisense/sdk-ui-vue/FunnelChart';
+ * import {FunnelChart, type FunnelChartProps} from '@sisense/sdk-ui-vue';
  *
- * const funnelChartProps = ref({
- *   // Configure your FunnelChartProps here
- * });
+const funnelChartProps = ref<FunnelChartProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [dimProductName],
+    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+});
  * </script>
  * ```
+ * <img src="media://funnel-chart-example-1.png" width="800"/>
+ *
+ * Note that the chart sorts the measure, `Unique Users`, in descending order by default.
+ * @param props - Funnel chart properties
+ * @returns Funnel Chart component
  */
 export const FunnelChart = defineComponent({
   props: {

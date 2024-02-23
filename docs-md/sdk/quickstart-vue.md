@@ -3,13 +3,13 @@ title: Quickstart Guide (Vue)
 ---
 
 ::: warning Released for internal testing, may potentially demonstrate instability
-# Compose SDK with Vue  <Badge type="alpha" text="Alpha" />: Quickstart Guide
+# Compose SDK with Vue  <Badge type="beta" text="Beta" />: Quickstart Guide
 :::
 
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
-This guide is for [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (alpha). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta).
+This guide is for [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (beta). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta).
 
 ## Prerequisites
 
@@ -112,7 +112,7 @@ Compose SDK for Vue contains three packages for public use:
 - [@sisense/sdk-data](https://www.npmjs.com/package/@sisense/sdk-data): Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
 - [@sisense/sdk-cli](https://www.npmjs.com/package/@sisense/sdk-cli): A command-line tool for generating a TypeScript representation of a Sisense data model.
 
-The Compose SDK packages are deployed via public NPM Registry. To install the packages:
+The Compose SDK packages are deployed via public NPM Registry. To install `@sisense/sdk-ui-vue` and `@sisense/sdk-data` for your app:
 <div style="display: flex; margin-right: 10px;">
   <div style="flex: 1; overflow-x: auto; max-width: calc(50% - 5px);">
 
@@ -120,7 +120,6 @@ For npm:
 
 ```sh
 npm i @sisense/sdk-ui-vue @sisense/sdk-data
-npm i @sisense/sdk-cli --save-dev
 ```
   </div>
   <div style="flex: 1; margin-left: 10px; overflow-x: auto; max-width: calc(50% - 5px);">
@@ -129,10 +128,11 @@ For Yarn:
 
 ```sh
 yarn add @sisense/sdk-u-vue @sisense/sdk-data
-yarn add @sisense/sdk-cli --dev
 ```
   </div>
 </div>
+
+Package `@sisense/sdk-cli` is not needed to run your app. It will be installed on the fly as you execute CLI commands using [npx](https://docs.npmjs.com/cli/v10/commands/npx).
 
 ## Sisense Authentication and Security
 
@@ -298,7 +298,7 @@ You first Compose SDK chart with Vue should look something like this:
 
 ![Line chart rendered by the Vue component](./img/vue-quickstart-chart-example.png)
 
-See the [SisenseContextProvider](./modules/sdk-ui-vue/classes/class.SisenseContextProvider-2.md) and [Chart](./modules/sdk-ui-vue/classes/class.Chart-2.md) docs for more details on supported props.
+See the [SisenseContextProvider](./modules/sdk-ui-vue/classes/class.SisenseContextProvider.md) and [Chart](./modules/sdk-ui-vue/classes/class.Chart.md) docs for more details on supported props.
 
 ## Next Steps
 

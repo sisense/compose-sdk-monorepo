@@ -7,7 +7,7 @@ title: Quickstart Guide (React)
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
->This guide is for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart). We also have a Quickstart Guide for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (alpha).
+>This guide is for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart). We also have a Quickstart Guide for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (beta).
 ## Prerequisites
 
 Compose SDK contains a set of React components needed to interface with your Sisense instance. The following prerequisites are needed in order to use the SDK:
@@ -81,7 +81,7 @@ Compose SDK contains three packages for public use:
 - [@sisense/sdk-data](https://www.npmjs.com/package/@sisense/sdk-data): Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
 - [@sisense/sdk-cli](https://www.npmjs.com/package/@sisense/sdk-cli): A command-line tool for generating TypeScript representation of a Sisense data model.
 
-The Compose SDK packages are deployed via public NPM Registry. To install the packages:
+The Compose SDK packages are deployed via public NPM Registry. To install `@sisense/sdk-ui` and `@sisense/sdk-data` for your app:
 
 <div style="display: flex; margin-right: 10px;">
   <div style="flex: 1; overflow-x: auto; max-width: calc(50% - 5px);">
@@ -90,7 +90,6 @@ For npm:
 
 ```sh
 npm i @sisense/sdk-ui @sisense/sdk-data
-npm i @sisense/sdk-cli --save-dev
 ```
   </div>
   <div style="flex: 1; margin-left: 10px; overflow-x: auto; max-width: calc(50% - 5px);">
@@ -99,10 +98,11 @@ For Yarn:
 
 ```sh
 yarn add @sisense/sdk-ui @sisense/sdk-data
-yarn add @sisense/sdk-cli --dev
 ```
   </div>
 </div>
+
+Package `@sisense/sdk-cli` is not needed to run your app. It will be installed on the fly as you execute CLI commands using [npx](https://docs.npmjs.com/cli/v10/commands/npx).
 
 ### Change package registry from GitHub Packages to public NPM
 

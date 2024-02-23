@@ -11,10 +11,15 @@ import { runCli } from './run-cli.js';
 import * as tracking from './tracking.js';
 import { ArgumentsCamelCase } from 'yargs';
 
-import createFetchMock from 'vitest-fetch-mock';
-const fetchMocker = createFetchMock(vi);
-fetchMocker.enableMocks();
-fetchMocker.dontMock();
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+
+export const server = setupServer();
+beforeAll(() => server.listen());
+afterAll(() => server.close());
+afterEach(() => server.resetHandlers());
+
+const flushPromises = () => new Promise(setImmediate);
 
 // Reference: https://kgajera.com/blog/how-to-test-yargs-cli-with-jest/
 const COMMAND_GET_DATA_MODEL = 'get-data-model';
@@ -91,7 +96,7 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
 
       const expectedHttpClient = new HttpClient(
         fakeUrl,
@@ -124,7 +129,7 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
 
       const expectedHttpClient = new HttpClient(
         fakeUrl,
@@ -151,7 +156,7 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
 
       const expectedHttpClient = new HttpClient(
         fakeUrl,
@@ -178,7 +183,7 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
 
       const expectedHttpClient = new HttpClient(
         fakeUrl,
@@ -197,10 +202,9 @@ describe('CLI', () => {
     beforeEach(() => {
       consoleLogSpy.mockClear();
 
-      fetchMock.resetMocks();
-      fetchMock.mockResponseOnce(
-        JSON.stringify({
-          token: 'fake-token',
+      server.use(
+        http.get('*/api/v1/authentication/tokens/api', () => {
+          return HttpResponse.json({ token: 'fake-token' });
         }),
       );
     });
@@ -218,7 +222,7 @@ describe('CLI', () => {
         fakePassword,
       );
 
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
 
       expect(consoleLogSpy).toHaveBeenCalledOnce();
       expect(consoleLogSpy).toHaveBeenCalledWith({
@@ -245,7 +249,7 @@ describe('CLI', () => {
 
       runCommand('get-api-token', '--url', fakeUrl, '--username', fakeUsername);
 
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
 
       expect(consoleLogSpy).toHaveBeenCalledOnce();
       expect(consoleLogSpy).toHaveBeenCalledWith({
@@ -277,13 +281,13 @@ describe('CLI', () => {
       });
 
       runCommand('get-api-token');
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
       expect(process.exit).toHaveBeenCalledWith(1); // eslint-disable-line
 
       vi.mocked(process.exit).mockClear(); // eslint-disable-line
 
       runCommand('get-api-token', '--url', fakeUrl);
-      await new Promise(process.nextTick); // eslint-disable-line
+      await flushPromises();
       expect(process.exit).toHaveBeenCalledWith(1); // eslint-disable-line
     });
   });

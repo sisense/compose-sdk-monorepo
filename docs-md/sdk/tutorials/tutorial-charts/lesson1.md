@@ -10,14 +10,30 @@ In this lesson you’ll learn how to set up a new Compose SDK project and displa
 
 Before getting started, you’ll need:
 
--   Node.js version 16 or higher
--   npm
+- Node.js version 16 or higher
+- npm
 
 You’ll also need access to a Sisense instance with:
 
--   The Sample Retail datasource (you may need to go into the Sample Retail data model and unhide some of the columns that are hidden by default)
--   An [API Token](../../authentication-security.md#api-token) you can use to query with
--   [CORS settings](../../authentication-security.md#set-up-cors) that allow requests from `http://localhost:5173`, the URL that Vite serves your project on locally
+- The Sample Retail data source (you may need to go into the Sample Retail data model and unhide some of the columns that are hidden by default)
+- An [API Token](../../authentication-security.md#api-token) you can use to query with
+- [CORS settings](../../authentication-security.md#set-up-cors) that allow requests from `http://localhost:5173`, the URL that Vite serves your project on locally
+
+## Project Code
+
+You can follow along with this tutorial, writing the code as you go, to build the project on your own. You can also find the code for the tutorial project in a [GitHub repo](https://github.com/sisense/compose-sdk-charts-tutorial).
+
+The tutorial repo is structured with a number of branches, each branch contains the code as it should be at a number of natural stopping points along the way of building the project. We’ll point out the stopping points when we reach them. The main branch of the repository contains the code for the finished project.
+
+To work with the code from the repository:
+
+1. Fork the repo
+1. Run `npm install` to install all dependencies
+1. Rename the `env.local.example` file to `env.local`
+1. In the `env.local` file, enter the URL and API Token you’ll use to connect to your Sisense instance
+1. Run `npm start`
+
+From here on, we’ll assume that you’re writing the code on your own. But always know that you can use the code from the project if you get stuck, to skip ahead, or if you’re just too lazy to write the code yourself. Don’t worry, we won’t tell anybody.
 
 ## Create a project
 
@@ -25,13 +41,12 @@ Let’s start by creating a React project and installing dependencies. We’ll u
 
 1. Navigate to the directory where you want to create your project
 1. Run `npm create vite@latest`
-1. Name your project `compose-sdk-tutorial` when prompted
+1. Name your project `compose-sdk-charts-tutorial` when prompted
 1. Select `React` as the framework
 1. Select `TypeScript` as the variant
-1. Run `cd compose-sdk-tutorial` to navigate to your project directory
+1. Run `cd compose-sdk-charts-tutorial` to navigate to your project directory
 1. Run `npm install` to install your project and dependencies
 1. Run `npm i @sisense/sdk-ui @sisense/sdk-data` to install Sisense packages
-1. Run `npm i @sisense/sdk-cli --save-dev` to install the Compose CLI tool as a dev dependency
 
 ## Generate data model
 
@@ -56,11 +71,20 @@ Now we can start writing our first bit of code.
 
 Since most of our Compose SDK functionality needs access to a Sisense instance, the first thing we need to do is set up that access with `<SisenseContextProvider>`. There are a number of places you can choose to add it. Here, we’ll add the provider in `main.tsx`.
 
-In `main.tsx`, wrap the `<App>` component with a `<SisenseContextProvider>` like this:
+In `main.tsx`, import the `SisenseContextProvider` from the `sdk-ui` module:
 
 ```ts
-<SisenseContextProvider url={import.meta.env.VITE_APP_SISENSE_URL} token={import.meta.env.VITE_APP_SISENSE_TOKEN}>
-    <App />
+import { SisenseContextProvider } from '@sisense/sdk-ui';
+```
+
+Wrap the `<App>` component with a `<SisenseContextProvider>` like this:
+
+```ts
+<SisenseContextProvider
+  url={import.meta.env.VITE_APP_SISENSE_URL}
+  token={import.meta.env.VITE_APP_SISENSE_TOKEN}
+>
+  <App />
 </SisenseContextProvider>
 ```
 
@@ -95,18 +119,18 @@ Then, replace the contents of the `App()` function with the following code to cr
 
 ```ts
 return (
-    <Chart
-        dataSet={DM.DataSource}
-        chartType={'column'}
-        dataOptions={{
-            category: [DM.DimProducts.CategoryName],
-            value: [measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue)],
-        }}
-        styleOptions={{
-            width: 1000,
-            height: 400,
-        }}
-    />
+  <Chart
+    dataSet={DM.DataSource}
+    chartType={'column'}
+    dataOptions={{
+        category: [DM.DimProducts.CategoryName],
+        value: [measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue)],
+    }}
+    styleOptions={{
+        width: 1000,
+        height: 400,
+    }}
+  />
 );
 ```
 
@@ -169,6 +193,10 @@ Navigate to http://localhost:5173 in a browser to see your first chart. It shoul
 
 ![First chart](../../img/tutorial/1-first-chart.png 'First chart')
 
+::: tip
+The code up until this point can be found in branch [1-setup](https://github.com/sisense/compose-sdk-charts-tutorial/tree/1-setup).
+:::
+
 ## Up next
 
-Great job creating your first chart. In the next lesson you’ll learn about different ways to show data in a chart. [Go to lesson 2](./lesson2.md).
+Great job creating your first chart. In the next lesson you’ll learn about different ways to show data in a chart. [Go to Lesson 2](./lesson2.md).

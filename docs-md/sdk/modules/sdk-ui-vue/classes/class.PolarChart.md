@@ -4,32 +4,46 @@ title: PolarChart
 
 # Class PolarChart
 
-A Vue component that wraps the PolarChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the PolarChart.
+A Vue component comparing multiple categories/variables with a spacial perspective in a radial chart.
+See [Polar Chart](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm) for more information.
 
 ## Example
 
 Here's how you can use the PolarChart component in a Vue application:
 ```vue
 <template>
-  <PolarChart :props="polarChartProps" />
+     <PolarChart
+       :dataOptions="polarChartProps.dataOptions"
+       :dataSet="polarChartProps.dataSet"
+       :filters="polarChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import PolarChart from '@sisense/sdk-ui-vue/PolarChart';
+import {PolarChart,type PolarChartProps} from '@sisense/sdk-ui-vue';
 
-const polarChartProps = ref({
-  // Configure your PolarChartProps here
+const polarChartProps = ref<PolarChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   category: [dimProductName],
+   value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+   breakBy: [],
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
-</script>
 ```
+<img src="../../../img/polar-chart-example-1.png" width="600px" />
+
+## Param
+
+Polar chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CartesianChartDataOptions`](../../sdk-ui/interfaces/interface.CartesianChartDataOptions.md)
+> **dataOptions**?: [`CartesianChartDataOptions`](../interfaces/interface.CartesianChartDataOptions.md)
 
 ***
 
@@ -53,7 +67,7 @@ const polarChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +91,4 @@ const polarChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`PolarStyleOptions`](../../sdk-ui/interfaces/interface.PolarStyleOptions.md)
+> **styleOptions**?: [`PolarStyleOptions`](../interfaces/interface.PolarStyleOptions.md)

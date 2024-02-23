@@ -7,7 +7,10 @@ import { cartesianData } from './cartesian-data';
 import { DataTable } from '../chart-data-processor/table-processor';
 import { isEnabled } from './utils';
 import { CategoricalChartData } from './types';
-import { applyFormatPlainText } from '../chart-options-processor/translations/number-format-config';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from '../chart-options-processor/translations/number-format-config';
 import { isNumber } from '@sisense/sdk-data';
 
 export const validateCategoricalChartDataOptions = (
@@ -45,9 +48,9 @@ export const categoricalData = (
     const xValues = cartesianChartData.xValues.map((xValue) => {
       const formattedXValues: string[] = [];
       chartDataOptions.breakBy.forEach((breakBy, index) => {
-        const numberFormatConfig = breakBy?.numberFormatConfig;
+        const numberFormatConfig = getCompleteNumberFormatConfig(breakBy?.numberFormatConfig);
         const value = xValue.xValues[index];
-        if (isNumber(breakBy.type) && numberFormatConfig) {
+        if (isNumber(breakBy.type)) {
           formattedXValues.push(applyFormatPlainText(numberFormatConfig, parseFloat(value)));
         } else {
           formattedXValues.push(xValue.xValues[index]);

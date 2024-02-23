@@ -1,6 +1,6 @@
 import { CategoricalChartData } from '../../../chart-data/types';
 import { PointLabelObject } from '@sisense/sisense-charts';
-import { applyFormat, defaultConfig } from '../number-format-config';
+import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { tooltipSeparator } from '../scatter-tooltip';
 import { SunburstChartDesignOptions } from '../design-options';
@@ -21,7 +21,9 @@ export function prepareSunburstLevels(
       useHTML: true,
       className: '!csdk-overflow-visible',
       formatter(this: PointLabelObject) {
-        const numberFormatConfig = dataOptions.y?.[0]?.numberFormatConfig ?? defaultConfig;
+        const numberFormatConfig = getCompleteNumberFormatConfig(
+          dataOptions.y?.[0]?.numberFormatConfig,
+        );
         const { value } = this.point as unknown as { value: number };
 
         return `

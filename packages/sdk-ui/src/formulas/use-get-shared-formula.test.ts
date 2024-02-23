@@ -2,23 +2,14 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { useGetSharedFormula } from './use-get-shared-formula';
 import { translation } from '../translation/resources/en.js';
-import { useSisenseContext } from '../sisense-context/sisense-context.js';
+import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context.js';
 import { Mock } from 'vitest';
 import { ClientApplication } from '../app/client-application.js';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula.js';
 import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 
-vi.mock('../sisense-context/sisense-context', async () => {
-  const actual: typeof import('../sisense-context/sisense-context.js') = await vi.importActual(
-    '../sisense-context/sisense-context',
-  );
-
-  return {
-    ...actual,
-    useSisenseContext: vi.fn(),
-  };
-});
+vi.mock('../sisense-context/sisense-context');
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
@@ -37,11 +28,6 @@ vi.mock('./fetch-formula', () => ({
   fetchFormula: vi.fn(),
   fetchFormulaByOid: vi.fn(),
 }));
-
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
 
 const fetchFormulaMock = fetchFormula as Mock<
   Parameters<typeof fetchFormula>,

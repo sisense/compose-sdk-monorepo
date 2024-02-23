@@ -1,8 +1,8 @@
 import { ScatterChartData } from '../chart-data/types';
-import { ScatterChartDesignOptions } from './translations/design-options';
 import { getScatterChartOptions, getScatterLegendSettings } from './scatter-chart-options';
 import { SERIES_CAPACITY } from './translations/base-design-options';
 import { ScatterCustomPointOptions } from './translations/scatter-tooltip';
+import { ChartDesignOptions } from './translations/types';
 
 const customCategoriesCapacity = 2;
 
@@ -24,48 +24,51 @@ describe('getScatterChartOptions', () => {
     yCategories: ['yCategory1', 'yCategory2', 'yCategory3'],
   };
   const chartType = 'scatter';
-  const chartDesignOptions: ScatterChartDesignOptions = {
-    legend: 'bottom',
-    valueLabel: null,
-    lineType: 'straight',
-    lineWidth: 0,
-    marker: {
-      enabled: true,
-      fill: 'hollow',
-      size: 'small',
+  const chartDesignOptions: ChartDesignOptions = {
+    globalDesign: {
+      legend: 'bottom',
+      valueLabel: {},
+      lineType: 'straight',
+      lineWidth: 0,
+      marker: {
+        enabled: true,
+        fill: 'hollow',
+        size: 'small',
+      },
+      xAxis: {
+        enabled: true,
+        gridLine: true,
+        labels: true,
+        type: 'linear',
+        titleEnabled: true,
+        title: 'X Axis title',
+        min: null,
+        max: null,
+        tickInterval: null,
+      },
+      yAxis: {
+        enabled: true,
+        gridLine: true,
+        labels: true,
+        type: 'linear',
+        titleEnabled: true,
+        title: 'Y Axis title',
+        min: null,
+        max: null,
+        tickInterval: null,
+      },
+      autoZoom: true,
+      dataLimits: {
+        seriesCapacity: SERIES_CAPACITY,
+        categoriesCapacity: customCategoriesCapacity,
+      },
+      markerSize: {
+        scatterDefaultSize: 20,
+        scatterBubbleMinSize: 20,
+        scatterBubbleMaxSize: 40,
+      },
     },
-    xAxis: {
-      enabled: true,
-      gridLine: true,
-      labels: true,
-      type: 'linear',
-      titleEnabled: true,
-      title: 'X Axis title',
-      min: null,
-      max: null,
-      tickInterval: null,
-    },
-    yAxis: {
-      enabled: true,
-      gridLine: true,
-      labels: true,
-      type: 'linear',
-      titleEnabled: true,
-      title: 'Y Axis title',
-      min: null,
-      max: null,
-      tickInterval: null,
-    },
-    autoZoom: true,
-    dataLimits: {
-      seriesCapacity: SERIES_CAPACITY,
-      categoriesCapacity: customCategoriesCapacity,
-    },
-    markerSize: {
-      scatterDefaultSize: 20,
-      scatterBubbleMinSize: 20,
-      scatterBubbleMaxSize: 40,
-    },
+    designPerSeries: {},
   };
 
   const dataOptions = {};

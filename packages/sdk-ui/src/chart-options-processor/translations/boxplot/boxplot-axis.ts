@@ -3,7 +3,7 @@ import { isNumber as isNumberType } from '@sisense/sdk-data';
 import { BoxplotChartData } from '../../../chart-data/types';
 import { Axis, AxisLabelsFormatterContextObject, AxisSettings } from '../axis-section';
 import { fontStyleDefault } from '../../defaults/cartesian';
-import { applyFormatPlainText, defaultConfig } from '../number-format-config';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from '../number-format-config';
 import { isCategory, Value, type Category } from '../../../chart-data-options/types';
 
 export const commonColor = '#d1d1d7';
@@ -46,7 +46,7 @@ export const getBoxplotXAxisSettings = (
           }
 
           return applyFormatPlainText(
-            axisDataOption?.numberFormatConfig ?? defaultConfig,
+            getCompleteNumberFormatConfig(axisDataOption?.numberFormatConfig),
             numberValue,
           );
         },
@@ -89,7 +89,7 @@ export const getBoxplotYAxisSettings = (
         style: fontStyleDefault,
         formatter(this: AxisLabelsFormatterContextObject) {
           return applyFormatPlainText(
-            axisDataOption?.numberFormatConfig ?? defaultConfig,
+            getCompleteNumberFormatConfig(axisDataOption?.numberFormatConfig),
             this.value as number,
           );
         },

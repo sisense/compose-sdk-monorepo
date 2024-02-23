@@ -1,4 +1,4 @@
-import { defineComponent, inject, provide, ref, watch } from 'vue';
+import { defineComponent, inject, provide, ref, watchEffect } from 'vue';
 import type { PropType, InjectionKey, Ref } from 'vue';
 import type { CompleteThemeSettings, ThemeProviderProps } from '@sisense/sdk-ui-preact';
 import {
@@ -7,29 +7,29 @@ import {
   getDefaultThemeSettings,
   getThemeSettingsByOid,
 } from '@sisense/sdk-ui-preact';
-import { createSisenseContextConnector } from './sisense-context-provider';
+import { getApp } from './sisense-context-provider';
 import merge from 'ts-deepmerge';
 
-const themeContextConfigKey = Symbol() as InjectionKey<{
-  themeSettings: Ref<CompleteThemeSettings>;
-}>;
+const themeContextConfigKey = Symbol('themeContextConfigKey') as InjectionKey<
+  Ref<CompleteThemeSettings>
+>;
 
 /**
  * Gets Theme context
  */
 export const getThemeContext = () => {
   // TODO needs to review this logic along with that in setup()
-  const themeContext = inject(themeContextConfigKey)!;
-  return themeContext?.themeSettings?.value ?? getDefaultThemeSettings();
+  return inject(themeContextConfigKey);
 };
 
 /**
  * Creates theme context connector
  */
-export const createThemeContextConnector = () => {
+export const createThemeContextConnector = (
+  themeSettings: CompleteThemeSettings = getDefaultThemeSettings(),
+) => {
   return {
     async prepareContext() {
-      const themeSettings = getThemeContext();
       return {
         themeSettings,
         skipTracking: true,
@@ -40,7 +40,61 @@ export const createThemeContextConnector = () => {
 };
 
 /**
- * Theme Provider
+ * Theme provider, which allows you to adjust the look and feel of child components.
+ *
+ * @example
+ * Example of a theme provider, which changes the colors and font of the nested indicator chart:
+ * ```vue
+ * <template>
+ *   <ThemeProvider :theme="customTheme">
+ *     <IndicatorChart .... />
+ *   </ThemeProvider>
+ * </template>
+ *
+ * <script>
+ * import { ref } from 'vue';
+ * import ThemeProvider from './ThemeProvider.vue';
+ *
+ * export default {
+ *   components: { ThemeProvider },
+ *   setup() {
+ *     const customTheme = ref({
+         chart: {
+           backgroundColor: '#333333',
+           textColor: 'orange',
+           secondaryTextColor: 'purple',
+         },
+         typography: {
+           fontFamily: 'impact',
+         },
+ *     });
+ *
+ *     return { customTheme };
+ *   }
+ * };
+ * </script>
+ * ```
+ *
+ * Alternatively, to fetch theme settings based on a theme ID:
+ * ```vue
+ * <template>
+ *   <ThemeProvider :theme="'theme_id_string'">
+ *     <!-- Components that will use the fetched theme settings -->
+ *   </ThemeProvider>
+ * </template>
+ * ```
+ *
+ * Indicator chart with custom theme settings:
+ * <img src="media://indicator-chart-example-2.png" width="400px" />
+ *
+ *
+ * For comparison, indicator chart with default theme settings:
+ *
+ * <img src="media://indicator-chart-example-1.png" width="400px" />
+ * @see {@link ThemeSettings} and {@link IndicatorChart}
+ * @param props - Theme provider props
+ * @returns A Theme Provider component * @prop {Object | String} theme - Theme settings object for custom themes or a string identifier to fetch theme settings. When provided as an object, it merges with the default theme settings. When provided as a string, it attempts to fetch theme settings using the provided ID.
+ * @prop {Boolean} skipTracking [internal] - Specifies whether to skip tracking of theme usage. Intended for internal use and debugging purposes.
  */
 export const ThemeProvider = defineComponent({
   props: {
@@ -52,35 +106,34 @@ export const ThemeProvider = defineComponent({
   },
 
   async setup({ theme: propTheme, skipTracking = false }, { slots }) {
+    // todo: move the symbol into here so every instance of theme provider has its own symbol and therefor configurations
     const themeSettings = ref();
-    provide(themeContextConfigKey, { themeSettings: themeSettings });
-
-    watch(
-      () => propTheme,
-      async (newPropTheme) => {
-        if (newPropTheme && typeof newPropTheme === 'object') {
-          themeSettings.value = {
-            ...getDefaultThemeSettings(),
-            ...(newPropTheme as ThemeProviderProps),
-          };
-        } else if (newPropTheme && typeof newPropTheme === 'string') {
-          try {
-            const ctx = createSisenseContextConnector();
-            const { app } = await ctx.prepareContext();
-            const userThemeSettings = await getThemeSettingsByOid(newPropTheme, app.httpClient);
-            themeSettings.value = merge.withOptions(
-              { mergeArrays: false },
-              getDefaultThemeSettings(),
-              userThemeSettings,
-            ) as CompleteThemeSettings;
-          } catch (error) {
-            console.error('Vue ThemeProvider failed to fetch theme by id:', error);
-          }
+    const appCtx = getApp();
+    if (propTheme && typeof propTheme === 'object') {
+      themeSettings.value = {
+        ...getDefaultThemeSettings(),
+        ...(propTheme as ThemeProviderProps),
+      };
+    }
+    watchEffect(async () => {
+      if (propTheme && typeof propTheme === 'string' && appCtx.value) {
+        try {
+          const userThemeSettings = await getThemeSettingsByOid(propTheme, appCtx.value.httpClient);
+          themeSettings.value = merge.withOptions(
+            { mergeArrays: false },
+            getDefaultThemeSettings(),
+            userThemeSettings,
+          ) as unknown as CompleteThemeSettings;
+        } catch (error) {
+          console.error('Vue ThemeProvider failed to fetch theme by id:', error);
         }
-      },
-      { immediate: true },
-    );
+      }
+    });
 
-    return () => (themeSettings.value ? slots.default?.() : null);
+    provide(themeContextConfigKey, themeSettings);
+
+    return () => {
+      return slots.default?.();
+    };
   },
 });

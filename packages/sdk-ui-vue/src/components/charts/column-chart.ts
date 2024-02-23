@@ -1,34 +1,42 @@
-import { ref, h, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import {
-  ColumnChart as ColumnChartPreact,
-  ComponentAdapter,
-  createElement,
-} from '@sisense/sdk-ui-preact';
+import { ColumnChart as ColumnChartPreact } from '@sisense/sdk-ui-preact';
 import type { ColumnChartProps } from '@sisense/sdk-ui-preact';
-import { createSisenseContextConnector, createThemeContextConnector } from '../../providers';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * A Vue component that wraps the ColumnChart Preact component for use in Vue applications.
- * It maintains compatibility with Vue's reactivity system while preserving the functionality of the ColumnChart.
+ * A Vue component representing categorical data with vertical rectangular bars
+ * whose heights are proportional to the values that they represent.
+ * See [Column Chart](https://docs.sisense.com/main/SisenseLinux/column-chart.htm) for more information.
  *
  * @example
  * Here's how you can use the ColumnChart component in a Vue application:
  * ```vue
  * <template>
- *   <ColumnChart :props="ColumnChartProps" />
+      <ColumnChart
+        :dataOptions="columnChartProps.dataOptions"
+        :dataSet="columnChartProps.dataSet"
+        :filters="columnChartProps.filters"
+      />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import ColumnChart from '@sisense/sdk-ui-vue/ColumnChart';
+ * import {ColumnChart, type ColumnChartProps} from '@sisense/sdk-ui-vue';
  *
- * const columnChartProps = ref({
- *   // Configure your ColumnChartProps here
- * });
- * </script>
+const columnChartProps = ref<ColumnChartProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [dimProductName],
+    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+    breakBy: [],
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+});
  * ```
+ * <img src="media://column-chart-example-1.png" width="800"/>
+ * @param props - Column chart properties
+ * @returns Column Chart component
  */
 export const ColumnChart = defineComponent({
   props: {

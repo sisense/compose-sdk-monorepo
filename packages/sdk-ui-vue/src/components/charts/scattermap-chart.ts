@@ -12,18 +12,31 @@ import { setupHelper } from '../../setup-helper';
  * Here's how you can use the ScattermapChart component in a Vue application:
  * ```vue
  * <template>
- *   <ScattermapChart :props="ScattermapChartProps" />
+      <ScattermapChart
+        :dataOptions="scattermapChartProps.dataOptions"
+        :dataSet="scattermapChartProps.dataSet"
+        :filters="scattermapChartProps.filters"
+      />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import ScattermapChart from '@sisense/sdk-ui-vue/ScattermapChart';
+ * import {ScattermapChart,type ScattermapChartProps} from '@sisense/sdk-ui-vue';
  *
- * const ScattermapChartProps = ref({
- *   // Configure your ScattermapChartProps here
- * });
+const scattermapChartProps = ref<ScattermapChartProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    geo: [DM.DimCountries.CountryName],
+    size: { column: measureTotalRevenue, title: 'Total Revenue' },
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+});
  * </script>
  * ```
+ * <img src="media://scattermap-chart-example-1.png" width="600px" />
+ * @param props - Scattermap chart properties
+ * @returns Scattermap Chart component
+ * @beta
  */
 export const ScattermapChart = defineComponent({
   props: {
@@ -32,6 +45,7 @@ export const ScattermapChart = defineComponent({
     filters: Object as PropType<ScattermapChartProps['filters']>,
     highlights: Object as PropType<ScattermapChartProps['highlights']>,
     styleOptions: Object as PropType<ScattermapChartProps['styleOptions']>,
+    onDataPointClick: Object as PropType<ScattermapChartProps['onDataPointClick']>,
   },
   setup: (props) => setupHelper(ScattermapChartPreact, props),
 });

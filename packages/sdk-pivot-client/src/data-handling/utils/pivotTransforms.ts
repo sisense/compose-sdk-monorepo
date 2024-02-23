@@ -268,10 +268,10 @@ export const applyColorFormatting = (
     }
   }
 
-  // if (Object.keys(style).length > 0) {
-  //   item.style = item.style || {};
-  //   Object.assign(item.style, style);
-  // }
+  if (Object.keys(style).length > 0) {
+    item.style = item.style || {};
+    Object.assign(item.style, style);
+  }
 
   style = undefined;
 };

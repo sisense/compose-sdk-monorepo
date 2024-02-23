@@ -23,6 +23,8 @@ import { AreamapChartDemo } from './pages/areamap-demo';
 import { ScattermapChartDemo } from './pages/scattermap-demo';
 import { AiDemo } from './pages/ai-demo';
 import { PivotQueryDemo } from './pages/pivot-query-demo';
+import { ComboChartStylingDemo } from './pages/combo-chart-styling';
+import { PivotTableDemo } from './pages/pivot-table-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -52,6 +54,8 @@ const pages: ComponentType[] = [
   AreamapChartDemo,
   AiDemo,
   PivotQueryDemo,
+  ComboChartStylingDemo,
+  PivotTableDemo,
 ];
 
 const {

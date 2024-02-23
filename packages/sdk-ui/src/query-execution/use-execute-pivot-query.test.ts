@@ -2,28 +2,16 @@
 
 import { renderHook, waitFor } from '@testing-library/react';
 import { trackProductEvent } from '@sisense/sdk-tracking';
-import { executePivotQuery } from '../query/execute-query';
+import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import type { Mock } from 'vitest';
 import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
 import { ClientApplication } from '../app/client-application';
-import { useSisenseContext } from '../sisense-context/sisense-context';
+import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ExecuteQueryParams } from './types';
 import { useExecutePivotQuery } from './use-execute-pivot-query';
 
-vi.mock('../query/execute-query', () => ({
-  executePivotQuery: vi.fn(),
-}));
-vi.mock('../sisense-context/sisense-context', async () => {
-  const actual: typeof import('../sisense-context/sisense-context') = await vi.importActual(
-    '../sisense-context/sisense-context',
-  );
-
-  return {
-    ...actual,
-    useSisenseContext: vi.fn(),
-  };
-});
-
+vi.mock('../query/execute-query');
+vi.mock('../sisense-context/sisense-context');
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
     '@sisense/sdk-tracking',
@@ -36,15 +24,6 @@ vi.mock('@sisense/sdk-tracking', async () => {
     }),
   };
 });
-
-const executePivotQueryMock = executePivotQuery as Mock<
-  Parameters<typeof executePivotQuery>,
-  ReturnType<typeof executePivotQuery>
->;
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
 
 const trackProductEventMock = trackProductEvent as Mock<
   Parameters<typeof trackProductEvent>,

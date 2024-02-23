@@ -1,0 +1,99 @@
+import * as React from 'react';
+import { PaginationPanel } from './PaginationPanel';
+
+type Props = {
+    isMobile: boolean,
+    itemsCount: number,
+    totalItemsCount: number,
+    limitReached: boolean,
+    limitCount: number,
+    totalColumnsCount: number,
+    columnsCount: number,
+    pageSize: number,
+    activePage: number,
+    isAllDataLoaded: boolean,
+    holderWidth: number,
+    onTotalLabelClick: void,
+};
+
+type State = {
+    activePage: number,
+    options: Record<string, any>,
+};
+
+export class PaginationPanelDemo extends React.PureComponent<Props, State> {
+    static defaultProps = {
+        isMobile: false,
+    };
+
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            activePage: props.activePage,
+            options: { isMobile: props.isMobile },
+        };
+    }
+
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
+        let nextState: Partial<State> | null = null;
+        if (nextProps.activePage !== this.props.activePage) {
+            nextState = nextState || {};
+            nextState.activePage = nextProps.activePage;
+        }
+
+        if (
+            nextProps.isMobile !== this.props.isMobile
+        ) {
+            nextState = nextState || {};
+            nextState.options = {
+                isMobile: nextProps.isMobile,
+            };
+        }
+        if (nextState) {
+            // @ts-ignore
+            this.setState(nextState);
+        }
+    }
+
+    onPageChange = (data: { selected: number }) => {
+        const { selected } = data;
+        this.setState({
+            activePage: selected,
+        });
+    };
+
+    render() {
+        const {
+            itemsCount,
+            totalItemsCount,
+            limitReached,
+            limitCount,
+            totalColumnsCount,
+            columnsCount,
+            pageSize,
+            isAllDataLoaded,
+            holderWidth,
+        } = this.props;
+        const { activePage, options } = this.state;
+
+        return (
+            <PaginationPanel
+                itemsCount={itemsCount}
+                totalItemsCount={totalItemsCount}
+                totalColumnsCount={totalColumnsCount}
+                columnsCount={columnsCount}
+                limitReached={limitReached}
+                limitCount={limitCount}
+                itemsPerPage={pageSize}
+                activePage={activePage}
+                isAllDataLoaded={isAllDataLoaded}
+                width={holderWidth}
+                options={options}
+                onPageChange={this.onPageChange}
+            />
+        );
+    }
+}
+
+export default PaginationPanelDemo;

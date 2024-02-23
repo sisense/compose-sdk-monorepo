@@ -14,14 +14,14 @@ At this point your code should look something like this, which should cause you 
 
 ```ts
 return (
-    <>
-        <Chart
-        // Chart details here
-        />
-        <Chart
-        // Chart details here
-        />
-    </>
+  <>
+    <Chart
+      // Chart details here
+    />
+    <Chart
+      // Chart details here
+    />
+  </>
 );
 ```
 
@@ -47,7 +47,7 @@ If you take a look at your charts, you’ll see something a bit strange. The sal
 
 But if you have a keen eye, you might have noticed that the top chart’s columns are now narrower than they were before and the order quantity was added to the chart’s legend.
 
-This should tip us off as to the problem here. The quantities are showing up, but that’s because they’re being measured on the same scale as the revenue. Since sales revenue is many times greater than sales quantity, the quantity is too small to be seen.
+This should tip us off as to the problem here. The quantities are showing up, but they’re being measured on the same scale as the revenue. Since sales revenue is many times greater than sales quantity, the quantity is too small to be seen.
 
 ## Styled columns
 
@@ -73,6 +73,7 @@ That should give you something that looks like this:
 ## Labels
 
 Okay, that’s already a bit better because we can see the quantity data. But it’s still not crystal clear as to which Y-axis belongs to which set of values. And while we’re at it, we can clean up the names of the values in the legend.
+
 We can do this quite easily. First we’ll clean up the legend by adding a name when we create our measures. We’ll do this both times we call the `measureFactory.sum()` function.
 
 ```ts
@@ -105,6 +106,10 @@ styleOptions={{
 Now you should have a chart that looks like this, including clear axes labels and a cleaned up legend.
 
 ![Chart with labels](../../img/tutorial/2-labels.png 'Chart with labels')
+
+::: tip
+The code up until this point can be found in branch [2a-chart-data](https://github.com/sisense/compose-sdk-charts-tutorial/tree/2a-chart-data).
+:::
 
 ## Break by
 
@@ -154,6 +159,10 @@ Now our chart should look like this, with the colors matching:
 
 ![Chart with color map](../../img/tutorial/2-series-to-color.png 'Chart with color map')
 
+::: tip
+The code up until this point can be found in branch [2b-chart-data](https://github.com/sisense/compose-sdk-charts-tutorial/tree/2b-chart-data).
+:::
+
 ## Up next
 
-By now, you should feel pretty comfortable populating charts with data. In the next lesson you’ll learn how to filter and highlight the chart data. [Go to lesson 3](./lesson3.md).
+By now, you should feel pretty comfortable populating charts with data. In the next lesson you’ll learn how to filter and highlight the chart data. [Go to Lesson 3](./lesson3.md).

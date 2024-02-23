@@ -25,6 +25,14 @@ export type CustomSisenseContextProviderProps = {
 export const CustomSisenseContextProvider: FunctionComponent<
   PropsWithChildren<CustomSisenseContextProviderProps>
 > = ({ context, error, children }) => {
+  if (!context)
+    return (
+      <ErrorBoundary showErrorBox={false} error={error}>
+        <I18nProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </I18nProvider>
+      </ErrorBoundary>
+    );
   return (
     <I18nProvider
       userLanguage={context?.app?.settings.language || context?.app?.settings.serverLanguage}

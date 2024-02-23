@@ -2,7 +2,7 @@
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { ValueLabelSettings } from './value-label-section';
-import { defaultConfig, applyFormatPlainText } from './number-format-config';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import {
   ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
@@ -87,9 +87,9 @@ export const getPiePlotOptions = (
     pieDataLabels.showPercentLabels = pieLabels.showPercent;
     pieDataLabels.showDecimals = pieLabels.showDecimals;
 
-    const numberFormatConfig =
-      (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig ??
-      defaultConfig;
+    const numberFormatConfig = getCompleteNumberFormatConfig(
+      (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig,
+    );
     pieDataLabels.formatter = function (this: InternalSeries) {
       const name = this.point.name || this.series.name;
       const value = this.y;

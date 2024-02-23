@@ -10,11 +10,11 @@ In this tutorial, we’ll walk you through the steps of creating your first proj
 
 Along the way, you’ll learn how to:
 
--   Setup a new project to work with Compose SDK
--   Work with chart data from a Sisense instance
--   Filter and highlight the chart data
--   Use callbacks to customize the look and behavior of your charts
--   Dynamically change the contents and layout a chart
+- Setup a new project to work with Compose SDK
+- Work with chart data from a Sisense instance
+- Filter and highlight the chart data
+- Use callbacks to customize the look and behavior of your charts
+- Dynamically change the contents and layout a chart
 
 ## What you'll build
 
@@ -30,4 +30,4 @@ We’ll also add the option to change the chart type from a column chart to bar 
 
 ## Get started
 
-Let's get started by setting up a Compose SDK project. Go to [lesson 1](./lesson1.md).
+Let's get started by setting up a Compose SDK project. Go to [Lesson 1](./lesson1.md).

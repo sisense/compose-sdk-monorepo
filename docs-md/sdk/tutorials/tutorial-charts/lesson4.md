@@ -8,9 +8,9 @@ Chart callbacks are functions that run when specific events happen to a chart. Y
 
 ## Before render
 
-One of the events you can handle with a callback occurs just before a chart is ready to render. You can use this event to change the underlying chart options. Compose SDK uses the [Highcharts](https://www.highcharts.com/) charting library under the hood. You can use the `HighchartsOptions` object sent to `onBeforeRender()` callback to change the chart options.
+One of the events you can handle with a callback occurs just before a chart is ready to render. You can use this event to change the underlying chart options. Compose SDK uses the [Highcharts](https://www.highcharts.com/) charting library under the hood. You can use the `HighchartsOptions` object sent to the `onBeforeRender()` callback to change the chart options.
 
-In our project, let’s change the way our charts display tooltips when a user hovers over one of the chart’s columns. To do that, let’s start by adding this callback to the chart’s properties.
+In our project, let’s change the way our charts display tooltips when a user hovers over one of the chart’s columns. To do that, let’s start by adding this callback to the top chart’s properties.
 
 ```ts
 onBeforeRender={(options: HighchartsOptions) => {
@@ -50,17 +50,21 @@ onBeforeRender={(options: HighchartsOptions) => {
 }}
 ```
 
-This is very similar to the callback that we added to the top chart. The different here is that we’ve added the series name to the formatter function, which results in a tooltip that looks like this:
+This is very similar to the callback that we added to the top chart. The difference here is that we’ve added the series name to the formatter function, which results in a tooltip that looks like this:
 
 ![Chart with custom tooltip](../../img/tutorial/4-tooltip-break.png 'Chart with custom tooltip')
+
+::: tip
+The code up until this point can be found in branch [4a-callbacks](https://github.com/sisense/compose-sdk-charts-tutorial/tree/4a-callbacks).
+:::
 
 ## Data point click
 
 In addition to the before render callback, there are other callbacks you can use to handle user interactions with a chart. To see how to use these, we’ll build an interaction that happens when a user clicks a data point.
 
-In our project, we’ll add a handler to the top chart that handles clicks on the data columns. When a user clicks one of the columns we’ll use that to toggle the highlighting of that column in the top chart and the filtering of that group in the bottom chart. While we’re at it, we’ll have the click also toggle the corresponding toggle button on or off.
+In our project, we’ll add a handler to the top chart that handles clicks on the data columns. When a user clicks one of the columns, we’ll use a handler to toggle the highlighting of that column in the top chart and the filtering of that group in the bottom chart. While we’re at it, we’ll have the click also toggle the corresponding toggle button on or off.
 
-To do that, let’s add this callback to the chart’s properties.
+To do that, let’s add this callback to the top chart’s properties.
 
 ```ts
 onDataPointClick={(point: DataPoint) => {
@@ -75,6 +79,10 @@ onDataPointClick={(point: DataPoint) => {
 
 Here, the callback gets the current category that was clicked. It then checks if the clicked category is already in the array of categories we store in our state variable. If the clicked category is already in the array, we remove it. If the clicked category is not yet in the list, we add it. Since we’re using the same array as the toggle buttons, clicking on the categories in the charts, will also affect which toggle buttons are selected.
 
+::: tip
+The code up until this point can be found in branch [4b-callbacks](https://github.com/sisense/compose-sdk-charts-tutorial/tree/4b-callbacks).
+:::
+
 ## Up next
 
-At this point, you’ve learned the basics of working with charts and their properties. In the next lesson, you’ll learn how to dynamically change the data displayed in a chart and the layout of the chart itself. [Go to lesson 5](./lesson5.md).
+At this point, you’ve learned the basics of working with charts and their properties. In the next lesson, you’ll learn how to dynamically change the data displayed in a chart and the layout of the chart itself. [Go to Lesson 5](./lesson5.md).

@@ -1,5 +1,4 @@
-// import { Defer, Styles, InputStyles } from '../../../utils/types.js';
-import { Defer } from '../../../utils/types.js';
+import { Defer, Styles, InputStyles } from '../../../utils/types.js';
 
 export type DimensionTarget = {
   index?: Array<number | any>;
@@ -67,7 +66,7 @@ export type CellItem = {
   value: string | undefined;
   content: string;
   contentType: string;
-  // style: InputStyles | undefined;
+  style: InputStyles | undefined;
   store?: { domReadyDefer?: Defer; [key: string]: any };
   // state of cell
   state?: {
@@ -76,7 +75,7 @@ export type CellItem = {
   };
 };
 
-// export type GlobalStyles = Styles;
+export type GlobalStyles = Styles;
 
 export type PluginConfig = {
   target: Target;

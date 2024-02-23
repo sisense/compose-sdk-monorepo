@@ -18,8 +18,7 @@ import {
   NumericBarOptions,
   NumericSimpleOptions,
 } from '../types.js';
-import { defaultTickerOptions } from '../indicator-legacy-chart-options/default-options';
-import cloneDeep from 'lodash/cloneDeep.js';
+import { prepareTickerOptions } from '@/charts/indicator/indicator-legacy-chart-options/prepare-ticker-options';
 
 const $indicatorHelper = new IndicatorHelper();
 const $numericSimple = new NumericSimple();
@@ -72,18 +71,7 @@ export class Indicator {
     // render ticker indicator
     if (!baseMeasure || options.forceTickerView) {
       typeService = this.getService('ticker');
-      const tickerOptions = cloneDeep(defaultTickerOptions);
-      tickerOptions.forceTickerView = options.forceTickerView;
-
-      if ((options as GaugeOptions).tickerBarHeight) {
-        const barHeight = (options as GaugeOptions).tickerBarHeight as number;
-        tickerOptions.barHeight = barHeight;
-        tickerOptions.tickerBarHeight = barHeight + 2;
-      }
-
-      if (tickerOptions.forceTickerView) {
-        defaultTickerOptions.height = container.offsetHeight;
-      }
+      const tickerOptions = prepareTickerOptions(canvas, options);
 
       this.setTextOptions(tickerOptions);
 

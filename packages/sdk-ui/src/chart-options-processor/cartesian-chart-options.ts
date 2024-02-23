@@ -5,7 +5,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable max-lines */
 import { CategoricalSeriesValues, ChartData } from '../chart-data/types';
-import { ChartDesignOptions } from './translations/types';
+import { ChartDesignOptions, SeriesDesignOptions } from './translations/types';
 import { getLegendSettings } from './translations/legend-section';
 import {
   createValueLabelFormatter,
@@ -71,12 +71,13 @@ export const getCartesianChartOptions = (
       dataOptions.x[0].continuous &&
       isDatetime(dataOptions.x[0].type)) ||
     false;
-  const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
+  const globalDesignOptions = chartDesignOptions.globalDesign;
+  const sisenseChartType = determineHighchartsChartType(chartType, globalDesignOptions);
   if (chartData.type !== 'cartesian') {
     throw new Error('Unexpected chart type');
   }
 
-  const { seriesCapacity, categoriesCapacity } = chartDesignOptions.dataLimits;
+  const { seriesCapacity, categoriesCapacity } = globalDesignOptions.dataLimits;
 
   if (chartData.xValues.length > categoriesCapacity) {
     alerts.push(categoriesSliceWarning('x', chartData.xValues.length, categoriesCapacity));
@@ -95,7 +96,7 @@ export const getCartesianChartOptions = (
         xValues: chartData.xValues.slice(0, categoriesCapacity),
       },
       dataOptions,
-      chartDesignOptions,
+      globalDesignOptions,
       continuousDatetimeXAxis,
     ),
   );
@@ -110,14 +111,14 @@ export const getCartesianChartOptions = (
 
   const xAxisSettings = continuousDatetimeXAxis
     ? getXAxisDatetimeSettings(
-        chartDesignOptions.xAxis,
+        globalDesignOptions.xAxis,
         dataOptions.x[0],
         chartData.xValues.map(getCategoricalCompareValue),
         dateFormatter,
       )
     : getXAxisSettings(
-        chartDesignOptions.xAxis,
-        chartDesignOptions.x2Axis,
+        globalDesignOptions.xAxis,
+        globalDesignOptions.x2Axis,
         categories,
         plotBands,
         xAxisOrientation,
@@ -128,7 +129,7 @@ export const getCartesianChartOptions = (
   const yAxisMinMax = autoCalculateYAxisMinMax(
     chartType,
     chartData,
-    chartDesignOptions,
+    globalDesignOptions,
     yAxisSide,
     yTreatNullDataAsZeros,
     0,
@@ -139,7 +140,7 @@ export const getCartesianChartOptions = (
     ? autoCalculateYAxisMinMax(
         chartType,
         chartData,
-        chartDesignOptions,
+        globalDesignOptions,
         yAxisSide,
         yTreatNullDataAsZeros,
         1,
@@ -148,13 +149,13 @@ export const getCartesianChartOptions = (
 
   const { stacking, showTotal } = addStackingIfSpecified(
     chartType,
-    chartDesignOptions as StackableChartDesignOptions,
+    globalDesignOptions as StackableChartDesignOptions,
   );
 
   let polarType: PolarType | undefined = undefined;
-  let yAxis: Axis | undefined = chartDesignOptions.yAxis;
-  if ('polarType' in chartDesignOptions) {
-    polarType = chartDesignOptions.polarType;
+  let yAxis: Axis | undefined = globalDesignOptions.yAxis;
+  if ('polarType' in globalDesignOptions) {
+    polarType = globalDesignOptions.polarType;
 
     // Polar charts on the Analytics tab do not allow a y-axis title to be
     // set. Clear this value if it happens to be set.
@@ -163,7 +164,7 @@ export const getCartesianChartOptions = (
     // so it is impossible to set a title on the y-axis if the chartType is
     // "polar".
     yAxis = {
-      ...chartDesignOptions.yAxis,
+      ...globalDesignOptions.yAxis,
       titleEnabled: false,
       title: null,
     };
@@ -171,17 +172,15 @@ export const getCartesianChartOptions = (
 
   const [yAxisSettings, axisClipped] = getYAxisSettings(
     yAxis,
-    chartDesignOptions.y2Axis,
+    globalDesignOptions.y2Axis,
     yAxisMinMax,
     y2AxisMinMax,
     showTotal,
     dataOptions,
   );
 
-  // if stack100 or x2 axis increase top spacing
-  const addSpacing = stacking === 'percent' || chartData.xAxisCount > 1;
-  const topSpacing = addSpacing && xAxisOrientation === 'horizontal' ? 75 : 20;
-  const rightSpacing = addSpacing && xAxisOrientation === 'vertical' ? 90 : 20;
+  // if vertical x2 axis increase right spacing
+  const rightSpacing = chartData.xAxisCount > 1 && xAxisOrientation === 'vertical' ? 90 : 20;
 
   // change null data to 0 for area stacked charts
   const treatNullDataAsZeros = chartType === 'area' && stacking !== undefined;
@@ -197,7 +196,7 @@ export const getCartesianChartOptions = (
       title: { text: null },
       chart: {
         type: sisenseChartType,
-        spacing: [topSpacing, rightSpacing, 20, 20],
+        spacing: [20, rightSpacing, 20, 20],
         alignTicks: false,
         polar: isPolarChart,
       },
@@ -205,14 +204,18 @@ export const getCartesianChartOptions = (
       yAxis: yAxisSettings,
       // The series level animation disables all animations, the chart
       // level animation only disables initial or subsequent paints
-      legend: getLegendSettings(chartDesignOptions.legend),
+      legend: getLegendSettings(globalDesignOptions.legend),
       series: chartData.series
         .slice(0, seriesCapacity)
         .map((v: CategoricalSeriesValues, index: number) => {
           const dataOption = dataOptions.breakBy.length
             ? dataOptions.y[0]
             : dataOptions.y.find(({ name }) => name === v.name);
-
+          const seriesId = dataOption?.name;
+          const seriesSpecificDesignOptions: SeriesDesignOptions | undefined = seriesId
+            ? chartDesignOptions.designPerSeries[seriesId]
+            : undefined;
+          const seriesDesignOptions = seriesSpecificDesignOptions || globalDesignOptions;
           return {
             ...(continuousDatetimeXAxis
               ? formatSeriesContinuousXAxis(
@@ -220,7 +223,7 @@ export const getCartesianChartOptions = (
                   indexMap,
                   treatNullDataAsZeros || yTreatNullDataAsZeros[index],
                   xAxisSettings[0].tickInterval as number,
-                  chartDesignOptions.dataLimits.categoriesCapacity,
+                  globalDesignOptions.dataLimits.categoriesCapacity,
                   getDateFormatter(dataOptions.x[0], dateFormatter),
                   yAxisSettings[index],
                   axisClipped[index],
@@ -245,26 +248,30 @@ export const getCartesianChartOptions = (
             },
             ...(yAxisChartType[index] && { type: yAxisChartType[index] }),
             connectNulls: yConnectNulls[index],
+            marker: getMarkerSettings(seriesDesignOptions.marker),
+            lineWidth: seriesDesignOptions.lineWidth,
           };
         }),
       plotOptions: {
         series: {
-          lineWidth: chartDesignOptions.lineWidth,
           dataLabels: isPolarChart
-            ? getPolarValueLabelSettings(chartDesignOptions.valueLabel, polarType!)
+            ? getPolarValueLabelSettings(globalDesignOptions.valueLabel, polarType!)
             : getValueLabelSettings(
                 xAxisOrientation,
-                chartDesignOptions.valueLabel,
+                globalDesignOptions.valueLabel,
                 stacking && chartType !== 'area',
               ),
-          marker: getMarkerSettings(chartDesignOptions.marker),
+          marker: getMarkerSettings(globalDesignOptions.marker),
           ...(stacking && { stacking: stacking }),
+          // Force setup of "stacking" as undefined required for correct transition between classic and stacked modes
+          // if it missing then classic would not correct render if previously it was stacked
+          stacking: stacking || undefined,
           connectNulls: false,
         },
       },
       navigator: getNavigator(
         sisenseChartType,
-        chartDesignOptions.autoZoom,
+        globalDesignOptions.autoZoom,
         chartData.xValues.length,
       ),
       tooltip: getTooltipSettings(undefined, dataOptions),

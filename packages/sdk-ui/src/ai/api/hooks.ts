@@ -1,16 +1,19 @@
-import { useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
+/* eslint-disable max-lines */
+import { useCallback, useEffect } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { useChatApi } from './chat-api-context';
-import type { ChatContext } from './types';
+import type { Chat, ChatContext, ChatMessage, ChatResponse } from './types';
+import { useChatApi } from './chat-api-provider';
+import { useChatConfig } from '../chat-config';
+import { UNKNOWN_ERROR } from './errors';
 
 /**
  * @internal
  */
-export const useDataTopics = () => {
+export const useGetDataTopics = () => {
   const api = useChatApi();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, fetchStatus } = useQuery({
     queryKey: ['getDataTopics', api],
     queryFn: async () => {
       if (!api) {
@@ -46,16 +49,16 @@ export const useDataTopics = () => {
     enabled: !!api,
   });
 
-  return { data, isLoading };
+  return { data, isLoading, fetchStatus };
 };
 
 /**
  * @internal
  */
-export const useChats = () => {
+export const useGetAllChats = () => {
   const api = useChatApi();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getAllChats', api],
     queryFn: () => api?.ai.chat.getAll(),
     enabled: !!api,
@@ -64,122 +67,151 @@ export const useChats = () => {
   return {
     data: data ?? [],
     isLoading,
-    refetch,
   };
 };
 
 /**
  * @internal
  */
-export const useChat = (id: string | undefined) => {
+export const useMaybeCreateChat = (contextId: string | undefined, shouldCreate: boolean): void => {
+  const queryClient = useQueryClient();
   const api = useChatApi();
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ['getChatById', api, id],
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (!api || !contextId) {
+        return;
+      }
+
+      return api.ai.chat.create(contextId);
+    },
+    onSuccess: () => queryClient.invalidateQueries(['getAllChats']),
+  });
+
+  useEffect(() => {
+    if (shouldCreate && mutation.isIdle) {
+      mutation.mutate();
+    }
+  }, [shouldCreate, mutation]);
+};
+
+/**
+ * @internal
+ */
+export const useGetChatHistory = (id: string | undefined) => {
+  const api = useChatApi();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['getChatById', id, api],
     queryFn: () => (id ? api?.ai.chat.getById(id) : undefined),
+    select: (data) => data?.chatHistory,
     enabled: !!api && !!id,
   });
 
   return {
     data,
     isLoading,
-    refetch: useCallback(() => {
-      refetch();
-    }, [refetch]),
   };
 };
 
 /**
- * Parameters for {@link useQueryRecommendations} hook.
- *
  * @internal
  */
-export interface UseGetQueryRecommendationsParams {
-  /** Data model title or perspective title */
-  contextTitle: string;
-}
-
-/**
- * Fetch recommended questions for a data model or perspective.
- *
- * @param params - {@link UseQueryRecommendationsParams}
- * @returns An array of questions
- * @internal
- */
-export function useGetQueryRecommendations(params: UseGetQueryRecommendationsParams) {
-  const DEFAULT_NUM_OF_RECOMMENDATIONS = 4;
-
-  const { contextTitle } = params;
-
+export const useClearChatHistory = (chatId: string | undefined) => {
+  const queryClient = useQueryClient();
   const api = useChatApi();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['getQueryRecommendations', api, contextTitle],
-    queryFn: () =>
-      api?.ai.getQueryRecommendations(contextTitle, {
-        numOfRecommendations: DEFAULT_NUM_OF_RECOMMENDATIONS,
-      }),
-    select: (data) => data?.map((r) => r.nlqPrompt),
-    enabled: !!api,
+  return useMutation({
+    mutationFn: async () => {
+      if (!api || !chatId) {
+        return;
+      }
+
+      return api.ai.chat.clearHistory(chatId);
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        console.error('Error when clearing history:', error.message);
+      }
+    },
+    onSuccess: () => queryClient.invalidateQueries(['getChatById', chatId]),
   });
+};
 
-  return { data: data ?? [], isLoading };
-}
-
-/**
- * Parameters for {@link useNlgQueryResult} hook.
- *
- * @internal
- */
-export interface UseGetNlgQueryResultParams {
-  /** The data source that the JAQL metadata targets - e.g. `Sample ECommerce` */
-  dataSource: string;
-
-  /** The metadata that composes the JAQL to be analyzed */
-  metadata: unknown[];
-
-  /**
-   * Boolean flag to enable/disable API call by default
-   *
-   * If not specified, the default value is `true`
-   */
-  enabled?: boolean;
-}
-
-/**
- * Fetch an analysis of the provided JAQL.
- *
- * @param params - {@link UseNlgQueryResultParams}
- * @returns A response object containing a text summary
- * @internal
- */
-export const useGetNlgQueryResult = (params: UseGetNlgQueryResultParams) => {
-  const { dataSource, metadata, enabled = true } = params;
-
-  const api = useChatApi();
-
-  const { data, isError, isLoading, refetch } = useQuery({
-    queryKey: ['getNlgQueryResult', dataSource, metadata],
-    queryFn: () =>
-      api?.ai.getNlgQueryResult({
-        style: 'Large',
-        jaql: {
-          datasource: {
-            title: dataSource,
-          },
-          metadata,
-        },
-      }),
-    select: (data) => data?.data?.answer,
-    enabled: !!api && enabled,
-  });
+const mapToChatMessage = (response: ChatResponse): ChatMessage => {
+  if (response.responseType === 'Text') {
+    return {
+      content: response.data.answer,
+      role: 'assistant',
+    };
+  }
 
   return {
-    data,
-    isError,
-    isLoading,
-    refetch: useCallback(() => {
-      refetch();
-    }, [refetch]),
+    content: JSON.stringify(response.data),
+    role: 'assistant',
+    type: 'nlq',
   };
+};
+
+// eslint-disable-next-line max-lines-per-function
+export const useSendChatMessage = (chatId: string | undefined) => {
+  const queryClient = useQueryClient();
+  const appendToHistory = useCallback(
+    (messageObj: ChatMessage) => {
+      if (!chatId) {
+        return;
+      }
+      queryClient.setQueriesData(['getChatById', chatId], (old: Chat | undefined) => {
+        if (!old) {
+          return old;
+        }
+
+        return {
+          ...old,
+          chatHistory: [...old.chatHistory, messageObj],
+        };
+      });
+    },
+    [queryClient, chatId],
+  );
+
+  const { enableFollowupQuestions } = useChatConfig();
+  const api = useChatApi();
+  const { mutate, isLoading } = useMutation({
+    mutationFn: async (message: string) => {
+      if (!api || !chatId) {
+        return;
+      }
+
+      return api.ai.chat.post(chatId, {
+        text: message,
+        options: { enableFollowup: enableFollowupQuestions },
+      });
+    },
+    onMutate: (message) => {
+      appendToHistory({
+        content: message,
+        role: 'user',
+      });
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        console.error('Error when sending message:', error.message);
+        appendToHistory({
+          content: UNKNOWN_ERROR,
+          role: 'assistant',
+          type: 'Text',
+        });
+      }
+    },
+    onSuccess: (response) => {
+      if (!response) {
+        return;
+      }
+
+      appendToHistory(mapToChatMessage(response));
+    },
+  });
+
+  return { mutate, isLoading };
 };

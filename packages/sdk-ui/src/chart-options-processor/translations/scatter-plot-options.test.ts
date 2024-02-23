@@ -7,7 +7,10 @@ const chartDesignOptions = {
     scatterBubbleMinSize: 20,
     scatterBubbleMaxSize: 40,
   },
-  valueLabel: 'horizontal',
+  valueLabel: {
+    enabled: true,
+    rotation: 0,
+  },
 } as ScatterChartDesignOptions;
 
 describe('getScatterPlotOptions', () => {
@@ -41,6 +44,7 @@ describe('getScatterPlotOptions', () => {
       enabled: true,
       align: 'center',
       verticalAlign: 'middle',
+      rotation: 0,
       formatter: expect.any(Function) as () => string,
       types: {
         count: false,
@@ -61,7 +65,10 @@ describe('getScatterPlotOptions', () => {
       const options = getScatterPlotOptions(
         {
           ...chartDesignOptions,
-          valueLabel: 'diagonal',
+          valueLabel: {
+            enabled: true,
+            rotation: -45,
+          },
         },
         {},
       );
@@ -75,7 +82,10 @@ describe('getScatterPlotOptions', () => {
       const options = getScatterPlotOptions(
         {
           ...chartDesignOptions,
-          valueLabel: 'vertical',
+          valueLabel: {
+            enabled: true,
+            rotation: -90,
+          },
         },
         {},
       );
@@ -93,7 +103,10 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: 'vertical',
+            valueLabel: {
+              enabled: true,
+              rotation: -90,
+            },
           },
           {
             y: { name: 'y', aggregation: 'sum', title: 'Y' },
@@ -119,7 +132,10 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: 'vertical',
+            valueLabel: {
+              enabled: true,
+              rotation: -90,
+            },
           },
           {
             y: { name: 'y', title: 'Y' },
@@ -145,7 +161,10 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: 'vertical',
+            valueLabel: {
+              enabled: true,
+              rotation: -90,
+            },
           },
           {
             y: { name: 'y', title: 'Y' },
@@ -171,7 +190,10 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: 'vertical',
+            valueLabel: {
+              enabled: true,
+              rotation: -90,
+            },
           },
           {
             y: { name: 'y', title: 'Y' },

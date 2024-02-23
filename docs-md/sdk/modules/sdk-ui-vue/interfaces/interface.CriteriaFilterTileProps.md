@@ -10,7 +10,7 @@ Props for [CriteriaFilterTile](../classes/class.CriteriaFilterTile.md)
 
 ### arrangement
 
-> **arrangement**?: [`FilterVariant`](../../sdk-ui/type-aliases/type-alias.FilterVariant.md)
+> **arrangement**?: [`FilterVariant`](../type-aliases/type-alias.FilterVariant.md)
 
 Arrangement of the filter inputs. Use vertical for standard filter tiles and horizontal for toolbars
 
@@ -18,7 +18,7 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ### filter
 
-> **filter**: [`CriteriaFilterType`](../../sdk-ui/type-aliases/type-alias.CriteriaFilterType.md)
+> **filter**: [`CriteriaFilterType`](../type-aliases/type-alias.CriteriaFilterType.md)
 
 Text or numeric filter object to initialize filter type and default values
 

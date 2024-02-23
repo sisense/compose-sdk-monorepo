@@ -1,0 +1,3 @@
+.highcharts-series.highcharts-area-series.area-series--without-pointer-events .highcharts-area {
+  pointer-events: none;
+}

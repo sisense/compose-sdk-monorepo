@@ -1,6 +1,6 @@
 import { measureFactory } from '@sisense/sdk-data';
 import { useState } from 'react';
-import { Chart } from '../../chart.js';
+import { Chart } from '../../chart';
 import { AreamapChart, AreamapDataPoint, ExecuteQuery } from '../../index.js';
 import * as DM from '../sample-ecommerce.js';
 

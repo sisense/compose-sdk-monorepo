@@ -67,7 +67,7 @@ BaseChartProps.highlights
 
 #### dataOptions
 
-> **dataOptions**: [`BoxplotChartDataOptions`](../../sdk-ui/type-aliases/type-alias.BoxplotChartDataOptions.md) \| [`BoxplotChartCustomDataOptions`](../../sdk-ui/type-aliases/type-alias.BoxplotChartCustomDataOptions.md)
+> **dataOptions**: [`BoxplotChartDataOptions`](../type-aliases/type-alias.BoxplotChartDataOptions.md) \| [`BoxplotChartCustomDataOptions`](../type-aliases/type-alias.BoxplotChartCustomDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -75,7 +75,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### styleOptions
 
-> **styleOptions**?: [`BoxplotStyleOptions`](../../sdk-ui/interfaces/interface.BoxplotStyleOptions.md)
+> **styleOptions**?: [`BoxplotStyleOptions`](interface.BoxplotStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
 
@@ -83,7 +83,7 @@ Configuration that defines functional style of the various chart elements
 
 #### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render

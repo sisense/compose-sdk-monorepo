@@ -3,5 +3,5 @@ const baseConfig = require('../../typedoc.package.config.cjs');
 /** @type {import('typedoc').TypeDocOptionValues} */
 module.exports = {
   ...baseConfig,
-  entryPoints: ['src/lib.ts'],
+  entryPoints: ['src/index-typedoc.ts'],
 };

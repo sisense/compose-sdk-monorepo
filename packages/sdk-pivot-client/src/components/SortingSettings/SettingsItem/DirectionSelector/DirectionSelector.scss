@@ -1,0 +1,16 @@
+$widgetBackgroundColor: #ffffff;
+
+.sis-scope {
+  .direction-selector {
+    margin-top: 0.2em;
+    margin-left: 2.4em;
+    font-weight: normal;
+
+    $width: 152px;
+    min-width: $width;
+    width: $width;
+  }
+  &.direction-selector__menu {
+    background-color: $widgetBackgroundColor !important;
+  }
+}

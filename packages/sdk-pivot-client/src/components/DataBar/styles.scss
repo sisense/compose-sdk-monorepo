@@ -1,0 +1,32 @@
+.sisense-pivot__data-bar {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 50%;
+  height: 10px;
+  padding: 0 8px;
+  opacity: 0;
+}
+
+.sisense-pivot__data-bar--show {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sisense-pivot__data-bar--show-active {
+  opacity: 1;
+}
+
+.sisense-pivot__data-bar-inner {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sisense-pivot__data-bar-bar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  min-width: 8px;
+  background: green;
+}

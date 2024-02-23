@@ -20,7 +20,6 @@
   "references": [
     { "path": "../sdk-data" },
     { "path": "../sdk-rest-client" },
-    { "path": "../sdk-pivot-client" },
     { "path": "../sdk-query-client" },
     { "path": "../sdk-common" },
     { "path": "../sdk-tracking" },

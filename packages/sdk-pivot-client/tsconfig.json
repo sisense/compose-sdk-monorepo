@@ -5,8 +5,11 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "target": "es6",
-    "lib": ["es2017"]
+    "module": "es2020",
+    "moduleResolution": "node",
+    "lib": ["es2017", "dom"],
+    "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "references": [{ "path": "../sdk-rest-client" }, { "path": "../sdk-data" }]
 }

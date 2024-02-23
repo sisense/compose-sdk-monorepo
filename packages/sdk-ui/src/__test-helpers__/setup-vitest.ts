@@ -1,9 +1,8 @@
 import matchers, { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
 import { cleanup } from '@testing-library/react';
 import 'vitest-canvas-mock';
-
-import createFetchMock from 'vitest-fetch-mock';
 import { vi } from 'vitest';
+import { server } from '../__mocks__/msw';
 
 // Add types for matchers from @testing-library/jest-dom
 // https://github.com/testing-library/jest-dom/issues/439#issuecomment-1536524120
@@ -14,9 +13,20 @@ declare module 'vitest' {
 // Manually extend Vitest's expect() with methods from @testing-library/jest-dom
 expect.extend(matchers);
 
-// Clean up mounted components after each test
-// https://testing-library.com/docs/react-testing-library/api/#cleanup
+beforeAll(() =>
+  server.listen({
+    // This tells MSW to throw an error whenever it
+    // encounters a request that doesn't have a
+    // matching request handler.
+    onUnhandledRequest: 'error',
+  }),
+);
+afterAll(() => server.close());
 afterEach(() => {
+  server.resetHandlers();
+
+  // Clean up mounted components after each test
+  // https://testing-library.com/docs/react-testing-library/api/#cleanup
   cleanup();
 });
 
@@ -30,12 +40,6 @@ const ResizeObserverMock = vi.fn(() => ({
 }));
 
 vi.stubGlobal('ResizeObserver', ResizeObserverMock);
-
-// enable fetch mocking but don't mock anything by default
-// and let tests decide to mock or not
-const fetchMocker = createFetchMock(vi);
-fetchMocker.enableMocks();
-fetchMocker.dontMock();
 
 /*
   Workaround for Leaflet issue in JSDOM environment:

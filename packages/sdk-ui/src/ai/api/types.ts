@@ -8,7 +8,7 @@ export interface ChatContext {
   description: string;
 }
 
-export type ChatContextType = 'dashboard' | 'datamodel' | 'global' | 'perspective';
+export type ChatContextType = 'datamodel' | 'perspective';
 
 interface TextMessage {
   role: 'assistant';
@@ -64,9 +64,9 @@ interface TextResponse {
   responseType: 'Text';
 }
 
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-type AllPossibleChartOptionKeys = KeysOfUnion<ChartDataOptions>;
-type AxesMappingKey = Exclude<AllPossibleChartOptionKeys, 'seriesToColorMap'>;
+export type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type AllPossibleChartOptionKeys = KeysOfUnion<ChartDataOptions>;
+export type AxesMappingKey = Exclude<AllPossibleChartOptionKeys, 'seriesToColorMap'>;
 export type AxesMapping = Partial<
   Record<
     AxesMappingKey,
@@ -86,9 +86,9 @@ export interface NlqResponseData {
   detailedDescription: string;
   followupQuestions: string[];
   nlqPrompt: string;
-  chartRecommendations: ChartRecommendations;
+  chartRecommendations: ChartRecommendations | {};
   jaql: {
-    datasource?: {
+    datasource: {
       title: string;
     };
     metadata: MetadataItem[];
@@ -106,18 +106,7 @@ export interface QueryRecommendationConfig {
   numOfRecommendations: number;
 }
 
-export interface QueryRecommendation {
-  nlqPrompt: string;
-  chartRecommendations: ChartRecommendations;
-  jaql: {
-    datasource?: {
-      title: string;
-    };
-    metadata: MetadataItem[];
-  };
-  queryTitle: string;
-  detailedDescription: string;
-}
+export type QueryRecommendation = Omit<NlqResponseData, 'followupQuestions'>;
 export type QueryRecommendationResponse = QueryRecommendation[];
 
 export interface DataModel {
@@ -126,26 +115,20 @@ export interface DataModel {
 }
 
 export interface Perspective {
-  _id: string;
   oid: string;
-  datamodelOid: string;
-  description: string;
-  tables: any[]; // You can replace 'any' with a more specific type if needed
-  lastUpdated: string;
-  createdTime: string;
-  parentOid: string | null;
   name: string;
-  creator: string;
+  description: string;
   isDefault: boolean;
-  tenantId: string;
 }
 
 export interface GetNlgQueryResultRequest {
   style: 'Small' | 'Medium' | 'Large';
+
   jaql: {
-    datasource: {
-      title: string;
-    };
+    /** The data source that the JAQL metadata targets - e.g. `Sample ECommerce` */
+    datasource: { title: string };
+
+    /** The metadata that composes the JAQL to be analyzed */
     metadata: unknown[];
   };
 }
@@ -155,4 +138,11 @@ export interface GetNlgQueryResultResponse {
     answer: string;
   };
   responseType: 'Text';
+}
+
+export interface SendFeedbackRequest {
+  type: string;
+  data: object;
+  sourceId: string;
+  rating: -1 | 1;
 }

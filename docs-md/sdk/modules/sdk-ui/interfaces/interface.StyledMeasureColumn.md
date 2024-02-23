@@ -44,7 +44,7 @@ See also [StyledColumn](interface.StyledColumn.md).
 
 ## Extends
 
-- `ValueStyle`
+- `ValueStyle`.`SeriesStyle`
 
 ## Properties
 
@@ -93,6 +93,18 @@ ValueStyle.connectNulls
 
 ***
 
+### dataBars
+
+> **dataBars**?: `boolean`
+
+Boolean flag whether to display data bars for this measure in the pivot table.
+
+#### Inherited from
+
+ValueStyle.dataBars
+
+***
+
 ### numberFormatConfig
 
 > **numberFormatConfig**?: [`NumberFormatConfig`](../type-aliases/type-alias.NumberFormatConfig.md)
@@ -102,6 +114,19 @@ Configuration for number formatting.
 #### Inherited from
 
 ValueStyle.numberFormatConfig
+
+***
+
+### seriesStyleOptions
+
+> **seriesStyleOptions**?: [`SeriesStyleOptions`](../type-aliases/type-alias.SeriesStyleOptions.md)
+
+Specific style options to be applied to specific series in Chart.
+Supported only for cartesian and polar charts.
+
+#### Inherited from
+
+SeriesStyle.seriesStyleOptions
 
 ***
 
@@ -127,6 +152,18 @@ Sorting direction, either by Ascending order, Descending order, or None
 #### Inherited from
 
 ValueStyle.sortType
+
+***
+
+### totalsCalculation
+
+> **totalsCalculation**?: [`TotalsCalculation`](../../sdk-data/type-aliases/type-alias.TotalsCalculation.md)
+
+Calculation for the totals of this measure in the pivot table.
+
+#### Inherited from
+
+ValueStyle.totalsCalculation
 
 ***
 

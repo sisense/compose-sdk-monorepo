@@ -1,40 +1,14 @@
 <script lang="ts" setup>
 import { computed, ref, toRaw, toRefs } from 'vue';
-import type { Component, PropType } from 'vue';
-import { useCustomDrilldown } from '../hooks/use-custom-drilldown';
-import type {
-  ContextMenuProps,
-  DataPoint,
-  DrilldownWidgetProps,
-  MenuPosition,
-} from '@sisense/sdk-ui-preact';
+import { useCustomDrilldown } from '../composables/use-custom-drilldown';
+import type { DataPoint, MenuPosition } from '@sisense/sdk-ui-preact';
 import { ContextMenu } from './context-menu';
 import { DrilldownBreadcrumbs } from './drilldown-breadcrumbs';
 import type { Attribute } from '@sisense/sdk-data';
+import { DrilldownWidgetTs } from './drilldown-widget';
 
-type DrilldownWidgetConfig = {
-  isBreadcrumbsDetached?: boolean;
-  breadcrumbsComponent?: Component;
-  contextMenuComponent?: (props: ContextMenuProps) => Component;
-};
+const props = defineProps(DrilldownWidgetTs.props);
 
-const props = defineProps({
-  config: {
-    type: Object as PropType<DrilldownWidgetConfig>,
-    required: false,
-    default: () => ({}),
-  },
-  drilldownDimensions: {
-    type: Array as PropType<DrilldownWidgetProps['drilldownDimensions']>,
-    required: false,
-    default: () => [],
-  },
-  initialDimension: {
-    type: Object as PropType<DrilldownWidgetProps['initialDimension']>,
-    required: false,
-    default: () => ({}),
-  },
-});
 const { drilldownDimensions, initialDimension, config } = toRefs(props);
 
 const position = ref<MenuPosition | null>(null);

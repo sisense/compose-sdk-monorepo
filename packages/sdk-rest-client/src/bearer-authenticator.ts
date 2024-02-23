@@ -4,6 +4,8 @@ import { appendHeaders } from './helpers.js';
 import { Authenticator } from './interfaces.js';
 
 export class BearerAuthenticator implements Authenticator {
+  readonly type = 'bearer';
+
   readonly bearer: string;
 
   readonly url: string;
@@ -37,4 +39,16 @@ export class BearerAuthenticator implements Authenticator {
 
     return Promise.resolve(true);
   }
+}
+
+/**
+ * Checks if an authenticator is a BearerAuthenticator.
+ *
+ * @param authenticator - The authenticator to check.
+ * @internal
+ */
+export function isBearerAuthenticator(
+  authenticator: Authenticator,
+): authenticator is BearerAuthenticator {
+  return authenticator.type === 'bearer';
 }

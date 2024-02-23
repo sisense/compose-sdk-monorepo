@@ -1,4 +1,3 @@
-import { ChartDataOptionsInternal } from '../../chart-data-options/types';
 import { ChartType } from '../../types';
 import {
   LineChartDesignOptions,
@@ -71,26 +70,55 @@ export type ChartDataType =
   | 'indicator'
   | 'areamap';
 
-export type ChartDesignOptions =
-  | LineChartDesignOptions
-  | AreaChartDesignOptions
-  | BarChartDesignOptions
-  | ColumnChartDesignOptions
-  | PieChartDesignOptions
-  | FunnelChartDesignOptions
-  | PolarChartDesignOptions
-  | IndicatorChartDesignOptions
-  | ScatterChartDesignOptions
-  | TreemapChartDesignOptions
-  | BoxplotChartDesignOptions
-  | AreamapChartDesignOptions
-  | ScattermapChartDesignOptions;
+/**
+ * Design options for a specific chart type
+ */
+export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
+  SpecificChartType extends 'line'
+    ? LineChartDesignOptions
+    : SpecificChartType extends 'area'
+    ? AreaChartDesignOptions
+    : SpecificChartType extends 'bar'
+    ? BarChartDesignOptions
+    : SpecificChartType extends 'column'
+    ? ColumnChartDesignOptions
+    : SpecificChartType extends 'pie'
+    ? PieChartDesignOptions
+    : SpecificChartType extends 'funnel'
+    ? FunnelChartDesignOptions
+    : SpecificChartType extends 'polar'
+    ? PolarChartDesignOptions
+    : SpecificChartType extends 'indicator'
+    ? IndicatorChartDesignOptions
+    : SpecificChartType extends 'scatter'
+    ? ScatterChartDesignOptions
+    : SpecificChartType extends 'treemap'
+    ? TreemapChartDesignOptions
+    : SpecificChartType extends 'boxplot'
+    ? BoxplotChartDesignOptions
+    : SpecificChartType extends 'areamap'
+    ? AreamapChartDesignOptions
+    : SpecificChartType extends 'scattermap'
+    ? ScattermapChartDesignOptions
+    : never;
 
-export type ChartConfig = {
-  chartType: ChartType;
-  dataOptions: ChartDataOptionsInternal;
-  designOptions: ChartDesignOptions;
+/** A unique identifier for a series to be found in {@link ChartDataOptionsInternal} */
+type SeriesId = string;
+
+/**
+ * Design options for a chart.
+ * This includes global design options and specific design options per series.
+ */
+export type ChartDesignOptions<SpecificChartType extends ChartType = ChartType> = {
+  globalDesign: DesignOptions<SpecificChartType>;
+  designPerSeries: Record<SeriesId, SeriesDesignOptions>;
 };
+
+/**
+ * Design options, limited to the only series relevant options.
+ * @internal
+ */
+export type SeriesDesignOptions = Pick<DesignOptions, 'lineWidth' | 'marker'>;
 
 export const isCartesian = (chartType: ChartType): chartType is CartesianChartType => {
   // Use .find instead of .includes for a more flexible type signature

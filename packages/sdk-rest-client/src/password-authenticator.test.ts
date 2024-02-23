@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { PasswordAuthenticator } from './password-authenticator.js';
+import { isPasswordAuthenticator, PasswordAuthenticator } from './password-authenticator.js';
 
 describe('PasswordAuthenticator', () => {
   const fakeDeploymentUrl = 'https://10.0.0.1';
@@ -70,5 +70,9 @@ describe('PasswordAuthenticator', () => {
 
     expect(result).toBe(false);
     expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('should run type guard correctly', () => {
+    expect(isPasswordAuthenticator(auth)).toBe(true);
   });
 });

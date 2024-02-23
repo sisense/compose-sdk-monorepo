@@ -8,7 +8,7 @@ Props of the [ScattermapChart](../functions/function.ScattermapChart.md) compone
 
 ## Extends
 
-- `BaseChartProps`
+- `BaseChartProps`.`ScattermapChartEventProps`
 
 ## Properties
 
@@ -78,3 +78,15 @@ Configurations for how to interpret and present the data passed to the chart
 > **styleOptions**?: [`ScattermapStyleOptions`](interface.ScattermapStyleOptions.md)
 
 Configuration that defines functional style of the various chart elements
+
+### Callbacks
+
+#### onDataPointClick
+
+> **onDataPointClick**?: [`ScattermapDataPointEventHandler`](../type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+
+Click handler callback for a data point
+
+##### Inherited from
+
+ScattermapChartEventProps.onDataPointClick

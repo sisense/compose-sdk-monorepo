@@ -4,7 +4,7 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { applyFormat, defaultConfig } from './translations/number-format-config';
+import { applyFormat, getCompleteNumberFormatConfig } from './translations/number-format-config';
 import { TooltipOptions } from '@sisense/sisense-charts';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './translations/scatter-tooltip';
 import { colorChineseSilver, colorWhite } from '../chart-data-options/coloring/consts';
@@ -54,17 +54,15 @@ export const getTooltipSettings = (
 
       const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
         chartDataOptions as CartesianChartDataOptionsInternal;
-      let numberFormatConfig = cartesianChartDataOptions.y?.find(
+      let partialNumberFormatConfig = cartesianChartDataOptions.y?.find(
         (y) => y.name === that.series.name,
       )?.numberFormatConfig;
-      if (!numberFormatConfig && cartesianChartDataOptions.breakBy.length > 0) {
-        numberFormatConfig = cartesianChartDataOptions.y?.find(
+      if (!partialNumberFormatConfig && cartesianChartDataOptions.breakBy.length > 0) {
+        partialNumberFormatConfig = cartesianChartDataOptions.y?.find(
           (y) => y.enabled,
         )?.numberFormatConfig;
       }
-      if (!numberFormatConfig) {
-        numberFormatConfig = defaultConfig;
-      }
+      const numberFormatConfig = getCompleteNumberFormatConfig(partialNumberFormatConfig);
       const xValue = that.point?.custom?.xDisplayValue ?? that.x;
       const value =
         applyFormat(numberFormatConfig, that.y) + (percentage ? ` / ${percentage}%` : '');

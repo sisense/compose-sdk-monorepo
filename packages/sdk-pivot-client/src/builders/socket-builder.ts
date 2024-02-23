@@ -2,6 +2,9 @@ import { SocketI, SocketQueryOptions } from '../data-load/types.js';
 import {
   BearerAuthenticator,
   HttpClient,
+  isBearerAuthenticator,
+  isSsoAuthenticator,
+  isWatAuthenticator,
   SsoAuthenticator,
   WatAuthenticator,
 } from '@sisense/sdk-rest-client';
@@ -58,11 +61,17 @@ export class SocketBuilder {
       const auth = this._httpClient.auth;
       const url = this._httpClient.url;
       let query: SocketQueryOptions = {};
-      if (auth instanceof BearerAuthenticator) {
+
+      // Do not use instanceof because it checks if the constructors are the same.
+      // However, when the class is imported from @sisense/sdk-rest-client,
+      // the code gets its own copy of the constructor from the code in the library,
+      // so they are not the same instance anymore.
+      // Reference: https://stackoverflow.com/a/63937850/2425556
+      if (isBearerAuthenticator(auth)) {
         query = this.getQueryOptionsBearer(auth);
-      } else if (auth instanceof WatAuthenticator) {
+      } else if (isWatAuthenticator(auth)) {
         query = this.getQueryOptionsWat(auth);
-      } else if (auth instanceof SsoAuthenticator) {
+      } else if (isSsoAuthenticator(auth)) {
         query = this.getQueryOptionsSso(auth);
       }
 

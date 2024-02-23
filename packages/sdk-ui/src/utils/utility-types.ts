@@ -47,3 +47,16 @@ type PickTypeOf<T, K extends string | number | symbol> = K extends AllKeys<T>
  * Abstract object with any unknown values
  */
 export type AnyObject = Record<string, any>;
+
+/**
+ * Allows you to make a property of an object required.
+ * @example
+ * type T = {
+ *   a: string;
+ *   b?: number;
+ *   c?: boolean;
+ * };
+ *
+ * type TRequiredB = WithRequiredProp<T, 'b'>; // { a: string; b: number; c?: boolean; }
+ */
+export type WithRequiredProp<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;

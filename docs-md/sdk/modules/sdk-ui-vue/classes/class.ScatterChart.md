@@ -4,32 +4,52 @@ title: ScatterChart
 
 # Class ScatterChart
 
-A Vue component that wraps the ScatterChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the ScatterChart.
+A Vue component displaying the distribution of two variables on an X-Axis, Y-Axis,
+and two additional fields of data that are shown as colored circles scattered across the chart.
+
+**Point**: A field that for each of its members a scatter point is drawn. The maximum amount of data points is 500.
+
+**Size**: An optional field represented by the size of the circles.
+If omitted, all scatter points are equal in size. If used, the circle sizes are relative to their values.
+
+See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm) for more information.
 
 ## Example
 
 Here's how you can use the ScatterChart component in a Vue application:
 ```vue
 <template>
-  <ScatterChart :props="scatterChartProps" />
+     <ScatterChart
+       :dataOptions="scatterChartProps.dataOptions"
+       :dataSet="scatterChartProps.dataSet"
+       :filters="scatterChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ScatterChart from '@sisense/sdk-ui-vue/ScatterChart';
+import {ScatterChart, type ScatterChartProps} from '@sisense/sdk-ui-vue';
 
-const scatterChartProps = ref({
-  // Configure your ScatterChartProps here
+const scatterChartProps = ref<ScatterChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   x: dimProductName,
+   y: measureTotalRevenue,
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
-</script>
 ```
+<img src="../../../img/scatter-chart-example-1.png" width="800px" />
+
+## Param
+
+Scatter chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`ScatterChartDataOptions`](../../sdk-ui/interfaces/interface.ScatterChartDataOptions.md)
+> **dataOptions**?: [`ScatterChartDataOptions`](../interfaces/interface.ScatterChartDataOptions.md)
 
 ***
 
@@ -53,7 +73,7 @@ const scatterChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +97,4 @@ const scatterChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`ScatterStyleOptions`](../../sdk-ui/interfaces/interface.ScatterStyleOptions.md)
+> **styleOptions**?: [`ScatterStyleOptions`](../interfaces/interface.ScatterStyleOptions.md)

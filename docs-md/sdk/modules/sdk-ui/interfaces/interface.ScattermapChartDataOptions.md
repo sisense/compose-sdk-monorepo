@@ -27,7 +27,7 @@ Column or measure column representing the additional details for the points on t
 
 ### geo
 
-> **geo**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`ScattermapColumn`](interface.ScattermapColumn.md))[]
+> **geo**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md))[]
 
 Columns (or attributes) whose values represent locations on the map.
 Support field(s) that contain geographic data (Country, City, State/Province, etc)

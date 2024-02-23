@@ -81,6 +81,18 @@ CategoryStyle.dateFormat
 
 ***
 
+### geoLevel
+
+> **geoLevel**?: [`ScattermapLocationLevel`](../type-aliases/type-alias.ScattermapLocationLevel.md)
+
+Geographic location level for Scattermap chart.
+
+#### Inherited from
+
+CategoryStyle.geoLevel
+
+***
+
 ### granularity
 
 > **granularity**?: `string`
@@ -95,6 +107,18 @@ CategoryStyle.granularity
 
 ***
 
+### includeSubTotals
+
+> **includeSubTotals**?: `boolean`
+
+Boolean flag whether to include subtotals for this dimension in the pivot table.
+
+#### Inherited from
+
+CategoryStyle.includeSubTotals
+
+***
+
 ### isColored
 
 > **isColored**?: `boolean`
@@ -102,6 +126,18 @@ CategoryStyle.granularity
 #### Inherited from
 
 CategoryStyle.isColored
+
+***
+
+### isHtml
+
+> **isHtml**?: `boolean`
+
+Boolean flag whether to render category/column value as HTML in the Table component.
+
+#### Inherited from
+
+CategoryStyle.isHtml
 
 ***
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-// import { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 
 export interface LoggerI {
   setName(name: string): void;
@@ -22,11 +22,11 @@ export type Defer = {
   reject: Function;
 };
 
-// export type InputStyles = CSSProperties & {
-//     databarColor?: string,
-// };
-//
-// export type Styles = CSSProperties;
+export type InputStyles = CSSProperties & {
+  databarColor?: string;
+};
+
+export type Styles = CSSProperties;
 
 export type CloneFn = <T>(obj: T, skipChildren?: boolean) => T;
 

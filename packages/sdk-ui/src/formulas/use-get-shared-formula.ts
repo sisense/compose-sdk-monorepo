@@ -195,8 +195,10 @@ function isParamsChanged(
     (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
   );
 }
-
-function translateToFormulaResponse(dataState: DataState<CalculatedMeasure | null>) {
+/**
+ * @internal
+ */
+export function translateToFormulaResponse(dataState: DataState<CalculatedMeasure | null>) {
   const { data, ...rest } = dataState;
 
   return {

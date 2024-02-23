@@ -2,7 +2,6 @@
 import { PlotOptions } from '../chart-options-service';
 import { CategoricalChartDataOptionsInternal, Value } from '../../chart-data-options/types';
 import { getPiePlotOptions, DefaultPieLabels, DefaultPieType } from './pie-plot-options';
-import { defaultConfig } from './number-format-config';
 import { createAttribute } from '@sisense/sdk-data';
 
 describe('getPiePlotOptions', () => {
@@ -13,7 +12,6 @@ describe('getPiePlotOptions', () => {
       title: 'column',
       sortType: 'sortNone',
       showOnRightAxis: false,
-      numberFormatConfig: defaultConfig,
       enabled: true,
     };
     const category = createAttribute({ name: 'series' });

@@ -4,25 +4,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import { numericFormatter } from 'react-number-format';
 import round from 'lodash/round';
-
-// If decimalScale = 3, keep 3 digits after the decimal point, e.g. 1.000,
-// when decimalScale = 'auto', use decimal 2
-export type DecimalScale = number | 'auto';
-
-export type NumberFormatConfig = {
-  name: 'Numbers' | 'Currency' | 'Percent';
-  decimalScale: DecimalScale;
-  trillion: boolean; // e.g. 1T
-  billion: boolean; // 1B
-  million: boolean; // 1M
-  kilo: boolean; // 1K
-  thousandSeparator: boolean; // if true, show the thousand separator, e.g. 1,000 if false 1000
-  // symbol and prefix are used together, if prefix is true,
-  // append the symbol in front of the number, e.g. symbol is $ -> $1000
-  // if prefix is false, append the symbol after the number, e.g. symbol is ¥ -> 1000¥
-  prefix: boolean;
-  symbol: string;
-};
+import { CompleteNumberFormatConfig, NumberFormatConfig } from '@/types';
 
 const oneKilo = 1000;
 const oneMillion = oneKilo * 1000;
@@ -32,7 +14,7 @@ const localeNumericSep = (1000.1).toLocaleString().replace(/\d/g, '');
 const thousandSep = localeNumericSep[0];
 const decimalSep = localeNumericSep[1];
 
-export const defaultConfig: NumberFormatConfig = {
+const defaultConfig: CompleteNumberFormatConfig = {
   name: 'Numbers',
   decimalScale: 'auto',
   trillion: true,
@@ -44,7 +26,21 @@ export const defaultConfig: NumberFormatConfig = {
   symbol: '$',
 };
 
-export const applyFormatStaticMarkup = (config: NumberFormatConfig, value: number) => {
+/**
+ * Returns a complete NumberFormatConfig object with default values for missing properties.
+ *
+ * @param partialConfig - A partial NumberFormatConfig object with props to rewrite default ones.
+ */
+export const getCompleteNumberFormatConfig = (
+  partialConfig?: NumberFormatConfig,
+): CompleteNumberFormatConfig => {
+  return {
+    ...defaultConfig,
+    ...(partialConfig || {}),
+  };
+};
+
+export const applyFormatStaticMarkup = (config: CompleteNumberFormatConfig, value: number) => {
   return isNaN(value) ? `` : `<span>${applyFormat(config, value)}</span>`;
 };
 
@@ -74,7 +70,7 @@ const roundNumber = (value: number, decimalScale: number) => {
   return Math.sign(value) * round(Math.abs(value), decimalScale);
 };
 
-export const applyFormat = (config: NumberFormatConfig, value: number) => {
+export const applyFormat = (config: CompleteNumberFormatConfig, value: number) => {
   // This method takes a NumberFormatConfig and turns a value into a formatted React component
   // such as <span>{'$1,000.00'}</span>
 
@@ -138,7 +134,7 @@ export const applyFormat = (config: NumberFormatConfig, value: number) => {
   });
 };
 
-export const applyFormatPlainText = (config: NumberFormatConfig, value: number) => {
+export const applyFormatPlainText = (config: CompleteNumberFormatConfig, value: number) => {
   // This method returns a plain string such as '$12.5k'
   let markup = applyFormatStaticMarkup(config, value);
   markup = markup.replace('<span>', '');

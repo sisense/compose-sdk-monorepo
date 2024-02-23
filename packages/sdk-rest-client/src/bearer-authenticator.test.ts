@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { BearerAuthenticator } from './bearer-authenticator.js';
+import { BearerAuthenticator, isBearerAuthenticator } from './bearer-authenticator.js';
 
 describe('BearerAuthenticator', () => {
   const fakeDeploymentUrl = '10.0.0.1';
@@ -28,5 +28,9 @@ describe('BearerAuthenticator', () => {
 
     expect(auth.bearer).toBe(fakeToken);
     expect(result).toBe(true);
+  });
+
+  it('should run type guard correctly', () => {
+    expect(isBearerAuthenticator(auth)).toBe(true);
   });
 });

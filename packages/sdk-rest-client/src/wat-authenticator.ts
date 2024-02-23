@@ -10,6 +10,8 @@ interface WebSessionTokenResponse {
 }
 
 export class WatAuthenticator implements Authenticator {
+  readonly type = 'wat';
+
   private _initialiser: string | undefined;
 
   private _webSessionToken: string;
@@ -81,4 +83,16 @@ export class WatAuthenticator implements Authenticator {
 
     return true;
   }
+}
+
+/**
+ * Checks if an authenticator is a WatAuthenticator.
+ *
+ * @param authenticator - the authenticator to check
+ * @internal
+ */
+export function isWatAuthenticator(
+  authenticator: Authenticator,
+): authenticator is WatAuthenticator {
+  return authenticator.type === 'wat';
 }

@@ -4,24 +4,24 @@ title: DashboardWidget
 
 # Class DashboardWidget
 
-A Vue component that wraps the DashboardWidget Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the DashboardWidget.
+The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](class.ChartWidget.md) component,
+used to render a widget created in the Sisense instance.
 
 ## Example
 
 Here's how you can use the DashboardWidget component in a Vue application:
 ```vue
 <template>
-  <DashboardWidget :props="dashboardWidgetProps" />
+   <DashboardWidget
+     widgetOid="64473e07dac1920034bce77f"
+     dashboardOid="6441e728dac1920034bce737"
+   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DashboardWidget from '@sisense/sdk-ui-vue/DashboardWidget';
+import {DashboardWidget} from '@sisense/sdk-ui-vue';
 
-const dashboardWidgetProps = ref({
-  // Configure your DashboardWidgetProps here
-});
 </script>
 ```
 
@@ -35,7 +35,7 @@ const dashboardWidgetProps = ref({
 
 ### contextMenuItems
 
-> **contextMenuItems**?: [`MenuItemSection`](../../sdk-ui/type-aliases/type-alias.MenuItemSection.md)[]
+> **contextMenuItems**?: [`MenuItemSection`](../type-aliases/type-alias.MenuItemSection.md)[]
 
 ***
 
@@ -53,7 +53,7 @@ const dashboardWidgetProps = ref({
 
 ### drilldownOptions
 
-> **drilldownOptions**?: [`DrilldownOptions`](../../sdk-ui/type-aliases/type-alias.DrilldownOptions.md)
+> **drilldownOptions**?: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md)
 
 ***
 
@@ -89,7 +89,7 @@ const dashboardWidgetProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -101,7 +101,7 @@ const dashboardWidgetProps = ref({
 
 ### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 ***
 
@@ -119,7 +119,7 @@ const dashboardWidgetProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`DashboardWidgetStyleOptions`](../../sdk-ui/interfaces/interface.DashboardWidgetStyleOptions.md)
+> **styleOptions**?: [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
 
 ***
 
@@ -143,4 +143,4 @@ const dashboardWidgetProps = ref({
 
 ### widgetStyleOptions
 
-> **widgetStyleOptions**?: [`DashboardWidgetStyleOptions`](../../sdk-ui/interfaces/interface.DashboardWidgetStyleOptions.md)
+> **widgetStyleOptions**?: [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)

@@ -4,7 +4,7 @@ import { isNumber } from '@sisense/sdk-data';
 import { createCompareValue } from '../../../chart-data-processor/row-comparator';
 import {
   applyFormatPlainText,
-  defaultConfig,
+  getCompleteNumberFormatConfig,
 } from '../../../chart-options-processor/translations/number-format-config';
 
 export const formatNumbers = (
@@ -23,11 +23,13 @@ export const formatNumbers = (
     return row.map((r, index) => {
       const columnType = columns[index].type;
 
-      const numberConfig = chartDataOptions.columns[index].numberFormatConfig || defaultConfig;
-      if (isNumber(columnType) && numberConfig) {
+      const numberFormatConfig = getCompleteNumberFormatConfig(
+        chartDataOptions.columns[index].numberFormatConfig,
+      );
+      if (isNumber(columnType)) {
         const compareValue = createCompareValue(r.displayValue, columnType);
         return {
-          displayValue: applyFormatPlainText(numberConfig, compareValue.value as number),
+          displayValue: applyFormatPlainText(numberFormatConfig, compareValue.value as number),
           compareValue: compareValue,
         };
       } else {

@@ -1,33 +1,28 @@
 import { Filter, filterFactory, measureFactory } from '@sisense/sdk-data';
 import { ChartWidget } from '../../widgets/chart-widget';
 import * as DM from '../sample-ecommerce';
-import { defaultConfig } from '../../chart-options-processor/translations/number-format-config';
 import { CartesianChartDataOptions, NumberFormatConfig } from '../../types';
 import { TableWidget } from '../../widgets/table-widget';
 import { getIndicatorStyleOptions } from './ecommerce-demo';
 
-const format1: NumberFormatConfig = { ...defaultConfig, name: 'Currency', decimalScale: 2 };
+const format1: NumberFormatConfig = { name: 'Currency', decimalScale: 2 };
 const format2: NumberFormatConfig = {
-  ...defaultConfig,
   name: 'Currency',
   decimalScale: 2,
   symbol: '@',
 };
 const format3: NumberFormatConfig = {
-  ...defaultConfig,
   name: 'Currency',
   kilo: false,
   decimalScale: 2,
   symbol: '#',
 };
 const format4: NumberFormatConfig = {
-  ...defaultConfig,
   name: 'Currency',
   decimalScale: 2,
   symbol: '!',
 };
 const format5: NumberFormatConfig = {
-  ...defaultConfig,
   name: 'Currency',
   decimalScale: 2,
   symbol: '^',

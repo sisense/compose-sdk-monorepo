@@ -3,12 +3,18 @@
 /* eslint-disable max-params */
 import type { DataLabelsOptions } from '@sisense/sisense-charts';
 import { Style } from '../chart-options-service';
-import { defaultConfig, applyFormatPlainText, NumberFormatConfig } from './number-format-config';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { AxisOrientation } from './axis-section';
 import { InternalSeries } from './tooltip-utils';
 import { PolarType } from './design-options';
+import { NumberFormatConfig } from '@/types';
 
-export type ValueLabel = 'horizontal' | 'diagonal' | 'vertical' | null;
+export type ValueLabelOptions = {
+  enabled?: boolean;
+  rotation?: number;
+};
+
+export type RotationType = 'horizontal' | 'diagonal' | 'vertical';
 
 export type ValueLabelSettings = {
   enabled?: boolean;
@@ -39,37 +45,37 @@ const defaultValueLabelSettings: ValueLabelSettings = {
   },
 };
 
-export const createValueLabelFormatter = (
-  numberFormatConfig: NumberFormatConfig = defaultConfig,
-) => {
+export const createValueLabelFormatter = (numberFormatConfig?: NumberFormatConfig) => {
   return function (this: InternalSeries) {
     if (this.y === undefined || isNaN(this.y)) {
       return '';
     }
-    return applyFormatPlainText(numberFormatConfig, this.y);
+    return applyFormatPlainText(getCompleteNumberFormatConfig(numberFormatConfig), this.y);
   };
 };
 
-const getRotation = (valueLabel: ValueLabel) => {
-  switch (valueLabel) {
-    case 'horizontal':
-      return 0;
-    case 'diagonal':
-      return -45;
-    case 'vertical':
-      return -90;
-    default:
-      return 0;
+export const getRotationType = (rotation: number): RotationType => {
+  const normalizedRotation = Math.abs(rotation) % 180;
+  if (normalizedRotation < 20) {
+    return 'horizontal';
+  } else if (normalizedRotation < 60) {
+    return 'diagonal';
+  } else if (normalizedRotation < 120) {
+    return 'vertical';
+  } else if (normalizedRotation < 160) {
+    return 'diagonal';
+  } else {
+    return 'horizontal';
   }
 };
 
 /* eslint-disable-next-line max-params */
 export const getValueLabelSettings = (
   xAxisOrientation: AxisOrientation,
-  valueLabel: ValueLabel,
+  valueLabel: ValueLabelOptions,
   inside?: boolean,
 ): ValueLabelSettings => {
-  if (!valueLabel) {
+  if (!valueLabel.enabled) {
     return { enabled: false };
   }
 
@@ -77,22 +83,24 @@ export const getValueLabelSettings = (
     ...defaultValueLabelSettings,
     align: 'center',
     verticalAlign: 'middle',
-    rotation: getRotation(valueLabel),
+    rotation: valueLabel.rotation ?? 0,
   };
 
   if (inside) {
     return settings;
   }
 
+  const rotationType = getRotationType(settings.rotation!);
+
   if (xAxisOrientation === 'vertical') {
     // Bar chart's value label has different settings from other charts,
     // because it's x-axis is vertical and other charts it's horizontal
     return {
       ...settings,
-      align: valueLabel === 'horizontal' ? 'left' : 'center',
+      align: rotationType === 'horizontal' ? 'left' : 'center',
     };
   } else {
-    switch (valueLabel) {
+    switch (rotationType) {
       case 'horizontal':
         return {
           ...settings,
@@ -117,18 +125,18 @@ export const getValueLabelSettings = (
 };
 
 export const getPolarValueLabelSettings = (
-  valueLabel: ValueLabel,
+  valueLabel: ValueLabelOptions,
   polarType: PolarType,
 ): ValueLabelSettings => {
   if (!valueLabel) {
     return { enabled: false };
   }
-
+  const rotation = valueLabel.rotation ?? 0;
   return {
     ...defaultValueLabelSettings,
     verticalAlign: polarType === 'line' ? 'bottom' : 'middle',
-    rotation: getRotation(valueLabel),
-    align: valueLabel == 'vertical' ? 'left' : 'center',
+    rotation: rotation,
+    align: getRotationType(rotation) === 'vertical' ? 'left' : 'center',
     padding: 5,
   };
 };

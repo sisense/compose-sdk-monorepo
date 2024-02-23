@@ -23,7 +23,7 @@ import { legendColor } from '../../chart-data/data-coloring';
 import { PolarChartDesignOptions, StackableChartDesignOptions } from './design-options';
 import { AxisMinMax, AxisSettings } from './axis-section';
 import { Stacking } from '../chart-options-service';
-import { ChartDesignOptions, isPolar } from './types';
+import { DesignOptions, isPolar } from './types';
 
 export type LineType = 'straight' | 'smooth';
 export type StackType = 'classic' | 'stacked' | 'stack100';
@@ -69,19 +69,19 @@ export type AxisClipped = { minClipped: boolean; maxClipped: boolean };
  * Translate public-facing chart type and chart design options to internal highcharts chart type
  *
  * @param chartType - public-facing chart type
- * @param chartDesignOptions - public-facing chart design options
+ * @param designOptions - public-facing chart design options
  * @returns internal highcharts chart type
  */
 export const determineHighchartsChartType = (
   chartType: ChartType,
-  chartDesignOptions: ChartDesignOptions,
+  designOptions: DesignOptions,
 ): HighchartsType => {
-  if (chartType === 'line' && chartDesignOptions.lineType === 'smooth') {
+  if (chartType === 'line' && designOptions.lineType === 'smooth') {
     return 'spline';
-  } else if (chartType === 'area' && chartDesignOptions.lineType === 'smooth') {
+  } else if (chartType === 'area' && designOptions.lineType === 'smooth') {
     return 'areaspline';
   } else if (chartType === 'polar') {
-    return (chartDesignOptions as PolarChartDesignOptions).polarType;
+    return (designOptions as PolarChartDesignOptions).polarType;
   } else if (chartType === 'scatter') {
     // instead of scatter chart, bubble chart is used so size can be encoded to bubble size
     return 'bubble';
@@ -370,7 +370,7 @@ export const adjustMinWhenColumnBar = (chartType: ChartType, autoMinMax: AxisMin
 export const autoCalculateYAxisMinMax = (
   chartType: ChartType,
   chartData: CartesianChartData,
-  chartDesignOptions: ChartDesignOptions,
+  designOptions: DesignOptions,
   yAxisSide: number[],
   yTreatNullDataAsZeros: boolean[],
   side: number,
@@ -386,17 +386,17 @@ export const autoCalculateYAxisMinMax = (
     .filter((s, index) => yAxisSide[index] === side);
   const { stacking } = addStackingIfSpecified(
     chartType,
-    chartDesignOptions as StackableChartDesignOptions,
+    designOptions as StackableChartDesignOptions,
   );
   const yAxis =
     side === 0
-      ? (chartDesignOptions.yAxis as AxisMinMax)
-      : (chartDesignOptions.y2Axis as AxisMinMax) || {
+      ? (designOptions.yAxis as AxisMinMax)
+      : (designOptions.y2Axis as AxisMinMax) || {
           min: undefined,
           max: undefined,
         };
   const isStackingPolar =
-    isPolar(chartType) && (chartDesignOptions as PolarChartDesignOptions).polarType !== 'line';
+    isPolar(chartType) && (designOptions as PolarChartDesignOptions).polarType !== 'line';
 
   if (stacking === 'percent') {
     return { min: 0, max: 100 };
@@ -436,7 +436,7 @@ export const autoCalculateYAxisMinMax = (
     axisMinMax = adjustMinWhenColumnBar(chartType, axisMinMax);
 
     // add padding for value labels
-    if (chartDesignOptions.valueLabel) {
+    if (designOptions.valueLabel) {
       axisMinMax = addPaddingForValueLabels(
         yAxis.min || axisMinMax.min,
         yAxis.max || axisMinMax.max,

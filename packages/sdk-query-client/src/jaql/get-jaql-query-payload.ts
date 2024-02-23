@@ -181,11 +181,13 @@ function jaqlPivotAttribute(
 function jaqlPivotMeasure(m: Measure | PivotMeasure, panel: string, index: number): MetadataItem {
   return {
     ...(isPivotMeasure(m)
-      ? merge(m.measure.jaql(), { jaql: { subtotalAgg: m.totalsCalculation } })
+      ? merge(m.measure.jaql(), {
+          jaql: { subtotalAgg: m.totalsCalculation },
+          format: { databars: m.dataBars || false },
+        })
       : m.jaql()),
     panel,
     field: { index: index, id: `${panel}-${index}` },
-    format: { databars: false },
   } as MetadataItem;
 }
 

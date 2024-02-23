@@ -1,0 +1,100 @@
+@import 'variables.deprecated';
+
+// Variables
+//
+// This section describes base colors
+//
+// Styleguide 1.0
+
+// Base colors
+//
+// $color-text                  - Base text color
+// $color-text-secondary        - Secondary text color
+// $color-text-selected-hover   - Base text color selected/hover
+// $color-brand                 - Brand color
+// $color-placeholder           - Placeholder color (input placeholder text)
+// $color-error-cancel          - Error/cancel color
+// $color-apply-approve         - Aply/aprrove color
+// $color-hyperlinks            - Hyperinks color
+// <br/>
+// Add class with the same name as variable to apply color. Like &lt;div class="color-brand"&gt;Some text&lt;/div&gt;
+//
+// markup:
+// <div style="background: {$modifiers};" class="styleguide-color">{$modifiers}</div>
+// <div style="color: {$modifiers}">Text color {$modifiers}</div>
+//
+// Styleguide 1.1
+$color-text: #5b6372 !default;
+$color-text-secondary: #9ea2ab !default;
+$color-text-selected-hover: #3a4356 !default;
+$color-brand: #ffcb05 !default;
+$color-placeholder: #b3b3b3 !default;
+
+$color-error-cancel: #fa5656 !default;
+$color-apply-approve: #35d7be !default;
+$color-hyperlinks: #1faff3 !default;
+$color-hover-on-grey: #dee1e7 !default;
+
+// Gray colors
+//
+// $color-gray-1    - Gray color (Divider scroll bar labeld)
+// $color-gray-2    - Gray color (Scroll bars hover)
+// $color-gray-3    - Gray color (Divider on gray small dividers toolip shadow)
+// $color-gray-4    - Gray color (Hover state for menus / Panes)
+// $color-gray      - Base gray color
+// $color-bg        - White space
+// $color-login-icon-dark - Sisense logo color for light background
+//
+// markup:
+// <div style="background: {$modifiers};" class="styleguide-color">{$modifiers}</div>
+// <div class="{$modifiers}">{$modifiers}</div>
+//
+// Styleguide 1.2
+$color-gray-1: #edeef1 !default;
+$color-gray-2: #d1d1d7 !default;
+$color-gray-3: #cbced7 !default;
+$color-gray-4: #f4f4f8 !default;
+$color-gray: #edeef1 !default;
+$color-bg: #fff !default;
+$color-login-icon-dark: #2c3342 !default;
+
+// Common
+//
+// <b>$styleguide-anchor-class -</b>    Anchor class name for all components; <br />
+// <b>$app-icon-size-default -</b>      SVG icons default size; <br />
+// <b>$toolbar-height -</b>             Toolbar element height; <br />
+//
+// Styleguide 1.3
+$styleguide-anchor-class: sis-scope !default;
+$app-icon-size-default: 24px !default;
+$toolbar-height: 48px !default;
+
+// Text
+//
+// <b>$font-family -</b>            Default font family; <br />
+// <b>$font-size-main -</b>         Default font size; <br />
+// <b>$font-size-header -</b>       Default header font size; <br />
+// <b>$font-size-semibig -</b>      Default semi big font size; <br />
+// <b>$font-size-big -</b>          Default big font size; <br />
+// <b>$line-height-main -</b>       Default line height; <br />
+// <b>$text-color-primary -</b>     Default text color; <br />
+// <b>$text-color-secondary -</b>   Secondary text color; <br />
+//
+// Styleguide 1.4
+
+$font-family: 'Open Sans' !default;
+$font-size-main: 13px !default;
+$font-size-header: 15px !default;
+$font-size-semibig: 20px !default;
+$font-size-big: 25px !default;
+$line-height-main: normal !default;
+$text-color-primary: $color-text !default;
+$text-color-secondary: $color-text-secondary !default;
+
+// export css variables to be used in js styles
+:export {
+  loginDarkColor: $color-login-icon-dark;
+  darkBtnHoverColor: $color-gray-4;
+  greyHoverColor: $color-hover-on-grey;
+  defaultBackgroundColor: $color-bg;
+}

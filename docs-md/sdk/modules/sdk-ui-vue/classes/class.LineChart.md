@@ -12,24 +12,38 @@ It maintains compatibility with Vue's reactivity system while preserving the fun
 Here's how you can use the LineChart component in a Vue application:
 ```vue
 <template>
-  <LineChart :props="lineChartProps" />
+     <LineChart
+       :dataOptions="lineChartProps.dataOptions"
+       :dataSet="lineChartProps.dataSet"
+       :filters="lineChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import LineChart from '@sisense/sdk-ui-vue/LineChart';
+import {LineChart, type LineChartProps} from '@sisense/sdk-ui-vue';
 
-const lineChartProps = ref({
-  // Configure your LineChartProps here
+const lineChartProps = ref<LineChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   category: [dimProductName],
+   value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+   breakBy: [],
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
-</script>
 ```
+<img src="../../../img/line-chart-example-1.png" width="800px" />
+
+## Param
+
+Line chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CartesianChartDataOptions`](../../sdk-ui/interfaces/interface.CartesianChartDataOptions.md)
+> **dataOptions**?: [`CartesianChartDataOptions`](../interfaces/interface.CartesianChartDataOptions.md)
 
 ***
 
@@ -53,7 +67,7 @@ const lineChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +91,4 @@ const lineChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`LineStyleOptions`](../../sdk-ui/interfaces/interface.LineStyleOptions.md)
+> **styleOptions**?: [`LineStyleOptions`](../interfaces/interface.LineStyleOptions.md)

@@ -42,7 +42,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### chartType
 
-> **chartType**: [`ChartType`](../../sdk-ui/type-aliases/type-alias.ChartType.md)
+> **chartType**: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 Default chart type of each series
 
@@ -50,7 +50,7 @@ Default chart type of each series
 
 #### dataOptions
 
-> **dataOptions**: [`ChartDataOptions`](../../sdk-ui/type-aliases/type-alias.ChartDataOptions.md)
+> **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -66,7 +66,7 @@ Description of the widget
 
 #### drilldownOptions
 
-> **drilldownOptions**?: [`DrilldownOptions`](../../sdk-ui/type-aliases/type-alias.DrilldownOptions.md)
+> **drilldownOptions**?: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md)
 
 List of categories to allow drilldowns on
 
@@ -86,7 +86,7 @@ If not specified, the default value is `false`
 
 #### styleOptions
 
-> **styleOptions**?: [`ChartWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartWidgetStyleOptions.md)
+> **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md)
 
 Style options for both the chart and widget including the widget header
 
@@ -102,7 +102,7 @@ Title of the widget
 
 #### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 Before render handler callback that allows adjusting
 detail chart options prior to render
@@ -117,7 +117,7 @@ ChartEventProps.onBeforeRender
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
 

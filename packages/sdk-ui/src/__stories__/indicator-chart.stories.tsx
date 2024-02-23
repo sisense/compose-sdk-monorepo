@@ -296,25 +296,20 @@ export const TickerGaugeIndicatorWithColor = () => {
   );
 };
 
-export const TickerGaugeIndicatorWithForcedTicker = () => {
-  return (
-    <div style={{ height: 400 }}>
-      <IndicatorChart
-        dataSet={indicatorData}
-        dataOptions={{
-          value: [{ ...indicatorChartDataOptions.value![0], color: 'red' }],
-          min: indicatorChartDataOptions.min,
-          max: indicatorChartDataOptions.max,
-          secondary: indicatorChartDataOptions.secondary,
-        }}
-        styleOptions={{
-          ...basicStyleOptions,
-          subtype: 'indicator/gauge',
-          skin: 1,
-          forceTickerView: true,
-          tickerBarHeight: 40,
-        }}
-      />
-    </div>
-  );
-};
+export const TickerGaugeIndicatorWithForcedTicker = template({
+  chartType: 'indicator',
+  ...indicatorProps,
+  dataOptions: {
+    value: [{ ...indicatorChartDataOptions.value![0], color: 'red' }],
+    min: indicatorChartDataOptions.min,
+    max: indicatorChartDataOptions.max,
+    secondary: indicatorChartDataOptions.secondary,
+  },
+  styleOptions: {
+    ...basicStyleOptions,
+    subtype: 'indicator/gauge',
+    skin: 1,
+    forceTickerView: true,
+    tickerBarHeight: 40,
+  },
+});

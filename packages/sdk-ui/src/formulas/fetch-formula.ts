@@ -6,6 +6,7 @@ import { DimensionalCalculatedMeasure, FormulaJaql } from '@sisense/sdk-data';
 /**
  * Fetch a formula by oid from the default Sisense instance
  *
+ * @internal
  * @param oid - Formula identifier in Sisense instance
  * @param app - Client application
  */
@@ -30,6 +31,7 @@ export async function fetchFormulaByOid(
 /**
  * Fetch a shared formula by name and data source from the Sisense instance
  *
+ * @internal
  * @param name - Formula name/title in Sisense instance
  * @param dataSource - Data source in Sisense instance
  */

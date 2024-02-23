@@ -1,8 +1,10 @@
 import { useCallback, useState } from 'react';
 
-import { useGetNlgQueryResult } from '../api/hooks';
+import { useGetNlgQueryResultInternal } from '../use-get-nlg-query-result';
+import { GetNlgQueryResultRequest } from '../api/types';
 import LightBulbIcon from '../icons/light-bulb-icon';
 import LoadingDotsIcon from '../icons/loading-dots-icon';
+import FeedbackWrapper from './feedback-wrapper';
 import TextMessage from './text-message';
 
 function InsightsButton({ disabled }: { disabled?: boolean }) {
@@ -29,7 +31,6 @@ export function InsightsSummary({ summary }: { summary: string }) {
         {summary}
       </div>
       <div className="csdk-mt-3 csdk-flex csdk-justify-between">
-        <div className="csdk-text-text-disabled csdk-text-[10px]">{'Powered by AI'}</div>
         {showCollapse && (
           <div
             className="csdk-text-ai-xs csdk-text-text-link csdk-cursor-pointer"
@@ -51,11 +52,19 @@ type InsightsMessageProps = {
 export default function InsightsMessage({ dataSource, metadata }: InsightsMessageProps) {
   const [visible, setVisible] = useState(false);
 
-  const { data, isLoading, refetch } = useGetNlgQueryResult({
-    dataSource,
-    metadata,
+  const requestData: GetNlgQueryResultRequest = {
+    jaql: {
+      datasource: { title: dataSource },
+      metadata,
+    },
+    style: 'Large',
+  };
+
+  const { data, isLoading, refetch } = useGetNlgQueryResultInternal({
+    ...requestData,
     enabled: false,
   });
+
   const onInsightsClick = useCallback(() => {
     setVisible(true);
 
@@ -71,9 +80,11 @@ export default function InsightsMessage({ dataSource, metadata }: InsightsMessag
         (isLoading ? (
           <LoadingDotsIcon />
         ) : (
-          <TextMessage align="left">
-            <InsightsSummary summary={data ?? 'No insights were returned.'} />
-          </TextMessage>
+          <FeedbackWrapper sourceId={dataSource} data={requestData} type="nlg/queryResult">
+            <TextMessage align="full">
+              <InsightsSummary summary={data ?? 'No insights were returned.'} />
+            </TextMessage>
+          </FeedbackWrapper>
         ))}
     </>
   );

@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../sdk-ui-core-exports';
 import { type ScattermapChartProps } from '@sisense/sdk-ui-preact';
+import { ArgumentsAsObject } from '../types';
 
 /**
  * An Angular component that allows to visualize geographical data as data points on a map.
@@ -16,6 +17,7 @@ import { type ScattermapChartProps } from '@sisense/sdk-ui-preact';
       [filters]="filters"
       [highlights]="highlights"
       [styleOptions]="styleOptions"
+      (dataPointClick)="dataPointClick.emit($event)"
     />
   `,
 })
@@ -59,6 +61,16 @@ export class ScattermapChartComponent {
    */
   @Input()
   styleOptions: ScattermapChartProps['styleOptions'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  @Output()
+  dataPointClick = new EventEmitter<
+    ArgumentsAsObject<ScattermapChartProps['onDataPointClick'], ['point', 'nativeEvent']>
+  >();
 
   /** @internal */
   public chartType: ChartType = 'scattermap';

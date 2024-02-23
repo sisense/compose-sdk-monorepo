@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { SsoAuthenticator } from './sso-authenticator.js';
+import { isSsoAuthenticator, SsoAuthenticator } from './sso-authenticator.js';
 
 describe('SSOAuthenticator', () => {
   const fakeDeploymentUrl = 'https://random.awesome-app.com/cool-path/';
@@ -67,5 +67,9 @@ describe('SSOAuthenticator', () => {
     await expect(auth.authenticate()).rejects.toThrow(
       'SSO is not enabled on target instance, please choose another authentication method',
     );
+  });
+
+  it('should run type guard correctly', () => {
+    expect(isSsoAuthenticator(auth)).toBe(true);
   });
 });

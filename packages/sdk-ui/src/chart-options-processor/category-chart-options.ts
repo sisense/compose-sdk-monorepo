@@ -31,7 +31,7 @@ import { prepareSunburstOptions } from './translations/sunburst/sunburst-options
  *
  * @param chartData - the data for the chart in an intermediate format
  * @param chartType -
- * @param chartDesignOptions -
+ * @param globalDesignOptions -
  * @param dataOptions -
  * @param themeSettings -
  */
@@ -43,12 +43,12 @@ export const getCategoricalChartOptions = (
   themeSettings?: CompleteThemeSettings,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
-  const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
-
+  const globalDesignOptions = chartDesignOptions.globalDesign;
+  const sisenseChartType = determineHighchartsChartType(chartType, globalDesignOptions);
   const topSpacings = 20;
   switch (chartType) {
     case 'pie':
-      const pieDesignOptions = chartDesignOptions as PieChartDesignOptions;
+      const pieDesignOptions = globalDesignOptions as PieChartDesignOptions;
 
       const {
         series: categoricalSeries,
@@ -93,7 +93,7 @@ export const getCategoricalChartOptions = (
       };
       return { options: pieOptions, alerts };
     case 'funnel':
-      const funnelDesignOptions = chartDesignOptions as FunnelChartDesignOptions;
+      const funnelDesignOptions = globalDesignOptions as FunnelChartDesignOptions;
 
       const { series: funnelSeries, alerts: funnelSeriesAlerts } = formatFunnelChartData(
         chartData,
@@ -126,7 +126,7 @@ export const getCategoricalChartOptions = (
         options: prepareTreemapOptions(
           chartData,
           dataOptions as CategoricalChartDataOptionsInternal,
-          chartDesignOptions as TreemapChartDesignOptions,
+          globalDesignOptions as TreemapChartDesignOptions,
           themeSettings,
         ),
         alerts,
@@ -136,7 +136,7 @@ export const getCategoricalChartOptions = (
         options: prepareSunburstOptions(
           chartData,
           dataOptions as CategoricalChartDataOptionsInternal,
-          chartDesignOptions as TreemapChartDesignOptions,
+          globalDesignOptions as TreemapChartDesignOptions,
           themeSettings,
         ),
         alerts,

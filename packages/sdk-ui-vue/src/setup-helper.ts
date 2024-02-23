@@ -1,6 +1,17 @@
-import { h, ref, toRaw, type FunctionalComponent, isReactive, type Slots } from 'vue';
+import {
+  h,
+  ref,
+  toRaw,
+  type FunctionalComponent,
+  isReactive,
+  type Slots,
+  toRefs,
+  watchEffect,
+} from 'vue';
 import { createSisenseContextConnector, createThemeContextConnector } from './providers';
 import { ComponentAdapter, createElement, createWrapperElement } from '@sisense/sdk-ui-preact';
+import { getApp } from './providers/sisense-context-provider';
+import { getThemeContext } from './providers/theme-provider';
 
 export function isObject(value: unknown): boolean {
   return value !== null && !Array.isArray(value) && typeof value === 'object';
@@ -32,21 +43,25 @@ export function toDeepRaw<T>(data: T): T {
  */
 export const setupHelper = <P, C>(component: C, props: P) => {
   if (!props) return null;
+  const rawProps = toDeepRaw(props);
   const refElement = ref<HTMLDivElement | null>(null);
-  const rawProps = toDeepRaw<P>(props);
-  const createPreactComponent = () => {
-    return createElement(component as FunctionalComponent, rawProps as P);
-  };
-  const componentAdapter = new ComponentAdapter(createPreactComponent, [
-    createSisenseContextConnector(),
-    createThemeContextConnector(),
-  ]);
+  const ctxApp = getApp();
+  const themeSettings = getThemeContext();
 
   return () => {
     if (refElement.value) {
+      const createPreactComponent = () => {
+        return createElement(component as FunctionalComponent, rawProps as P);
+      };
+      const componentAdapter = new ComponentAdapter(createPreactComponent, [
+        createSisenseContextConnector(ctxApp.value!),
+        createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
+      ]);
+
       componentAdapter.render(refElement.value);
     }
-    return h('div', { ref: refElement });
+
+    return h('div', { ref: refElement, style: 'width: 100%; height: 100%' });
   };
 };
 
@@ -63,6 +78,8 @@ export const setupHelperWithChildren = <P, C>(
   const rawProps = toDeepRaw(props) as P;
   const contextMenuRef = ref<HTMLDivElement>();
   const contextMenuChildrenRef = ref<HTMLDivElement>();
+  const ctxApp = getApp();
+  const themeSettings = getThemeContext();
 
   return () => {
     if (contextMenuRef.value && contextMenuChildrenRef.value) {
@@ -71,13 +88,18 @@ export const setupHelperWithChildren = <P, C>(
         () => {
           return createElement(component as FunctionalComponent, rawProps, children);
         },
-        contexts ? contexts : [createSisenseContextConnector(), createThemeContextConnector()],
+        contexts
+          ? contexts
+          : [
+              createSisenseContextConnector(ctxApp.value!),
+              createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
+            ],
       );
 
       componentAdapter.render(contextMenuRef.value);
     }
     return [
-      h('div', { ref: contextMenuRef }),
+      h('div', { ref: contextMenuRef, style: 'width: 100%; height: 100%' }),
       h('div', { ref: contextMenuChildrenRef }, slots.default ? slots.default() : []),
     ];
   };

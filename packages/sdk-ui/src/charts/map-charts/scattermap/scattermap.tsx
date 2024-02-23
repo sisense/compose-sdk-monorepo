@@ -1,22 +1,29 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import 'leaflet/dist/leaflet.css';
 import leaflet from 'leaflet';
 import { useEffect, useMemo, useRef } from 'react';
 import { useLocations } from './hooks/use-locations.js';
-import { ScattermapChartData } from '../../../chart-data/types.js';
+import { ChartData, ScattermapChartData } from '../../../chart-data/types.js';
+import { ScattermapDataPointEventHandler } from '../../../props.js';
 import { getLocationsMarkerSizes } from './utils/size.js';
+import { locationToScattermapDataPoint } from './utils/location.js';
 import { useGeoSettings } from './hooks/use-settings.js';
 import { getLocationsMarkerColors } from './utils/color.js';
 import { createMarker, removeMarkers } from './utils/markers.js';
 import { addCopyright } from './utils/copyright.js';
 import { fitMapToBounds } from './utils/map.js';
-import { ScattermapChartDataOptionsInternal } from '../../../chart-data-options/types.js';
+import {
+  ChartDataOptionsInternal,
+  ScattermapChartDataOptionsInternal,
+} from '../../../chart-data-options/types.js';
 import { ScattermapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
 import { useTooltipHandler } from './hooks/use-tooltip-handler.js';
 import { DataSource, Filter, FilterRelations, getFilterListAndRelations } from '@sisense/sdk-data';
 
 import '../map-charts.scss';
 import './scattermap.scss';
+import { DesignOptions } from '@/chart-options-processor/translations/types.js';
 
 export type ScattermapProps = {
   chartData: ScattermapChartData;
@@ -24,6 +31,7 @@ export type ScattermapProps = {
   designOptions: ScattermapChartDesignOptions;
   dataSource: DataSource | null;
   filters?: Filter[] | FilterRelations;
+  onMarkerClick?: ScattermapDataPointEventHandler;
 };
 
 export const Scattermap = ({
@@ -32,6 +40,7 @@ export const Scattermap = ({
   dataSource,
   filters = [],
   designOptions,
+  onMarkerClick,
 }: ScattermapProps) => {
   const { locations } = chartData;
   const geoSettings = useGeoSettings();
@@ -109,6 +118,12 @@ export const Scattermap = ({
         markersRef.current.push(marker);
         marker.addTo(markersLayerRef.current);
 
+        if (onMarkerClick) {
+          marker.on('click', (e) => {
+            onMarkerClick(locationToScattermapDataPoint(locationWithCoordinates), e.originalEvent);
+          });
+        }
+
         marker.bindTooltip(() => {
           const { content, postponedContent } = tooltipHandler(locationWithCoordinates);
 
@@ -120,7 +135,14 @@ export const Scattermap = ({
 
       fitMapToBounds(mapInstance.current!, markersRef.current);
     }
-  }, [locationsWithCoordinates, markerColors, markerSizes, designOptions, tooltipHandler]);
+  }, [
+    locationsWithCoordinates,
+    markerColors,
+    markerSizes,
+    designOptions,
+    tooltipHandler,
+    onMarkerClick,
+  ]);
 
   useEffect(() => {
     if (!geoSettings) {
@@ -153,4 +175,18 @@ export const Scattermap = ({
       }}
     />
   );
+};
+
+export const isScattermapData = (chartData: ChartData): chartData is ScattermapChartData => {
+  return chartData.type === 'scattermap';
+};
+export const isScattermapDataOptions = (
+  dataOptions: ChartDataOptionsInternal,
+): dataOptions is ScattermapChartDataOptionsInternal => {
+  return 'locations' in dataOptions;
+};
+export const isScattermapChartDesignOptions = (
+  designOptions: DesignOptions,
+): designOptions is ScattermapChartDesignOptions => {
+  return 'markers' in designOptions;
 };

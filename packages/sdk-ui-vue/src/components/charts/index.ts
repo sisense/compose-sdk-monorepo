@@ -6,6 +6,7 @@ export { LineChart } from './line-chart';
 export { PieChart } from './pie-chart';
 export { ScatterChart } from './scatter-chart';
 export { Table } from './table';
+export { PivotTable } from './pivot-table';
 export { TreemapChart } from './treemap-chart';
 export { SunburstChart } from './sunburst-chart';
 export { PolarChart } from './polar-chart';

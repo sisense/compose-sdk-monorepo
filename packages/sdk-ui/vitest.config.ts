@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { mergeConfig, UserConfig } from 'vitest/config';
 import baseConfig from '../../vitest.config.js';
 
@@ -19,12 +20,18 @@ const config: UserConfig = {
       exclude: [
         'src/__demo__',
         'src/__exclude__',
-        'src/__stories__',
         'src/__test-helpers__',
-        'src/**/__mocks__/**',
+        'src/**/__mocks__',
+        'src/__stories__/template.tsx',
+        '**/*.stories.tsx',
         'src/@types',
         'src/widgets/common/drilldown-breadcrumbs',
       ],
+    },
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
     },
   },
 };

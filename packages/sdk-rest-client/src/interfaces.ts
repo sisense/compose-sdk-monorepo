@@ -1,4 +1,6 @@
 export interface Authenticator {
+  readonly type: 'password' | 'bearer' | 'wat' | 'sso';
+
   isValid: () => boolean;
 
   invalidate: () => void;

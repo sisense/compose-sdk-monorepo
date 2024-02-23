@@ -3,6 +3,7 @@ import baseConfig from '../../vitest.config.js';
 
 const config: UserConfig = {
   test: {
+    environment: 'jsdom',
     coverage: {
       exclude: [
         // temporarily exclude source files until

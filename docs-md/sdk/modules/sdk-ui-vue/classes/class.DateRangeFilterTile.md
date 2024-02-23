@@ -4,15 +4,18 @@ title: DateRangeFilterTile
 
 # Class DateRangeFilterTile
 
-A Vue component that wraps the DateRangeFilterTile Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the DateRangeFilterTile.
+Date Range Filter Tile component for filtering data by date range.
 
 ## Example
 
-Here's how you can use the DateRangeFilterTile component in a Vue application:
+Vue example of configuring the date min max values and handling onChange event.
 ```vue
 <template>
-  <DateRangeFilterTile :props="dateRangeFilterTileProps" />
+  <DateRangeFilterTile
+    :title="dateRangeFilterTileProps.title"
+    :attribute="dateRangeFilterTileProps.attribute"
+    :filter="dateRangeFilterTileProps.filter"
+    :onChange="onChange" />
 </template>
 
 <script setup lang="ts">
@@ -20,8 +23,14 @@ import { ref } from 'vue';
 import {CriteriaFilterTile} from '@sisense/sdk-ui-vue';
 
 const dateRangeFilterTileProps = ref({
-  // Configure your dateRangeFilterTileProps
+  title: 'Date Range',
+  attribute: DM.Commerce.Date.Years,
+  filter: filterFactory.dateRange(DM.Commerce.Date.Years),
 });
+
+const onChange = (filter: Filter) => {
+ ...
+}
 </script>
 ```
 

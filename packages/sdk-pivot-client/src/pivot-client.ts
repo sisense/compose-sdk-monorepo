@@ -1,10 +1,13 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
-import { PivotDataBuilder, SocketBuilder } from './builders/index.js';
+import { PivotBuilder, PivotDataBuilder, SocketBuilder } from './builders';
 import { JaqlRequest } from './data-load/types.js';
 import { PivotQueryResultData } from '@sisense/sdk-data';
+import { DataService } from './data-handling';
+import { SisenseDataLoadService } from './data-load';
 
 /**
- * A client helper for pivot that abstracts away from all the internal implementations (e.g., web socket, data load service, data service, etc).
+ * A client helper for pivot that abstracts away from all the internal implementations
+ * (e.g., web socket, data load service, data service, etc).
  * To some extent, it is similar to the HttpClient, but for pivot.
  * This client makes it easier to mock and test the consumers of the pivot functionalities (e.g., query client).
  *
@@ -29,5 +32,15 @@ export class PivotClient {
   ): Promise<PivotQueryResultData> {
     const pivotDataBuilder = new PivotDataBuilder(this.socketBuilder.socket);
     return pivotDataBuilder.loadInitData(jaql, isPaginated, elementsPerPage, useCache);
+  }
+
+  prepareDataService() {
+    const dataLoadService = new SisenseDataLoadService(this.socketBuilder.socket);
+    return new DataService(dataLoadService);
+  }
+
+  preparePivotBuilder(): PivotBuilder {
+    const dataService = this.prepareDataService();
+    return new PivotBuilder(dataService);
   }
 }

@@ -1,8 +1,8 @@
 import { getScatterTooltipSettings, tooltipFormatter } from './scatter-tooltip';
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { InternalSeries } from './tooltip-utils';
-import { NumberFormatConfig, defaultConfig } from './number-format-config';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
+import type { NumberFormatConfig } from '@/types';
 
 describe('Scatter tooltip', () => {
   it('should be enabled', () => {
@@ -280,19 +280,16 @@ describe('Scatter tooltip', () => {
 
 it('Format numbers when x-axis, y-axis, break by / point, color, and size', () => {
   const format1: NumberFormatConfig = {
-    ...defaultConfig,
     name: 'Currency',
     symbol: '$',
     decimalScale: 1,
   };
   const format2: NumberFormatConfig = {
-    ...defaultConfig,
     name: 'Currency',
     symbol: '!',
     decimalScale: 1,
   };
   const format3: NumberFormatConfig = {
-    ...defaultConfig,
     name: 'Currency',
     symbol: '@',
     decimalScale: 1,

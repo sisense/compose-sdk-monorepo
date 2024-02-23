@@ -22,6 +22,7 @@ title: Classes
 - [LineChartComponent](class.LineChartComponent.md)
 - [MemberFilterTileComponent](class.MemberFilterTileComponent.md)
 - [PieChartComponent](class.PieChartComponent.md)
+- [PivotTableComponent](class.PivotTableComponent.md) <Badge type="alpha" text="Alpha" />
 - [PolarChartComponent](class.PolarChartComponent.md)
 - [QueryService](class.QueryService.md)
 - [ScatterChartComponent](class.ScatterChartComponent.md)

@@ -17,7 +17,7 @@ import {
   AreamapStyleOptions,
   ScattermapStyleOptions,
 } from '../../types';
-import { ChartDesignOptions } from '../translations/types';
+import { DesignOptions } from '../translations/types';
 import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
 import { ChartDataOptionsInternal, ValueStyle } from '../../chart-data-options/types';
 import { getIndicatorChartDesignOptions } from './translate-to-indicator-options';
@@ -41,13 +41,13 @@ export const translateStyleOptionsToDesignOptions = (
   chartType: ChartType,
   styleOptions: ChartStyleOptions,
   dataOptions: ChartDataOptionsInternal,
-): ChartDesignOptions => {
+): DesignOptions => {
   const hasY2Axis =
     'y' in dataOptions && Array.isArray(dataOptions.y)
       ? dataOptions.y.some((y) => (y as ValueStyle).showOnRightAxis)
       : false;
 
-  let intermediateDesignOptions: ChartDesignOptions;
+  let intermediateDesignOptions: DesignOptions;
   switch (chartType) {
     case 'bar':
     case 'column':

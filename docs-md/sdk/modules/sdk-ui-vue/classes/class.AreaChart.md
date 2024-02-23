@@ -4,32 +4,48 @@ title: AreaChart
 
 # Class AreaChart
 
-A Vue component that wraps the AreaChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the AreaChart.
+A Vue component similar to a [LineChart](class.LineChart.md),
+but with filled in areas under each line and an option to display them as stacked.
+More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
+
+<img src="../../../img/area-chart-example-1.png" width="800"/>
 
 ## Example
 
 Here's how you can use the AreaChart component in a Vue application:
 ```vue
 <template>
-  <AreaChart :props="areaChartProps" />
+<AreaChart
+     :dataOptions="areaChartProps.dataOptions"
+     :dataSet="areaChartProps.dataSet"
+     :filters="areaChartProps.filters"
+   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import AreaChart from '@sisense/sdk-ui-vue/AreaChart';
+import {AreaChart, type AreaChartProps} from '@sisense/sdk-ui-vue';
 
-const areaChartProps = ref({
-  // Configure your AreaChartProps here
+const areaChartProps = ref<AreaChartProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [dimProductName],
+    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+    breakBy: [],
+  },
+  filters: [],
 });
-</script>
 ```
+
+## Param
+
+Area chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CartesianChartDataOptions`](../../sdk-ui/interfaces/interface.CartesianChartDataOptions.md)
+> **dataOptions**?: [`CartesianChartDataOptions`](../interfaces/interface.CartesianChartDataOptions.md)
 
 ***
 
@@ -53,7 +69,7 @@ const areaChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +93,4 @@ const areaChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`AreaStyleOptions`](../../sdk-ui/interfaces/interface.AreaStyleOptions.md)
+> **styleOptions**?: [`AreaStyleOptions`](../interfaces/interface.AreaStyleOptions.md)

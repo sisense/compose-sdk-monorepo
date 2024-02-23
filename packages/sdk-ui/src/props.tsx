@@ -42,6 +42,8 @@ import {
   AreamapDataPoint,
   BoxplotDataPoint,
   ChartDataPoints,
+  ScattermapDataPoint,
+  PivotTableStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -53,6 +55,7 @@ import {
   TableDataOptions,
   ScattermapChartDataOptions,
   AreamapChartDataOptions,
+  PivotTableDataOptions,
 } from './chart-data-options/types';
 import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams, QueryByWidgetIdState, QueryState } from './query-execution';
@@ -288,6 +291,16 @@ export type AreamapDataPointEventHandler = (
 ) => void;
 
 /**
+ * Click handler for when a data point on Scattermap is clicked.
+ */
+export type ScattermapDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: ScattermapDataPoint,
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
  * Click handler for when a data point on Boxplot is clicked.
  */
 export type BoxplotDataPointEventHandler = (
@@ -370,6 +383,19 @@ interface AreamapChartEventProps {
    * @category Callbacks
    */
   onDataPointClick?: AreamapDataPointEventHandler;
+}
+
+/**
+ * Event props for Scattermap chart which uses ScattermapDataPoint type
+ * to describe data points for events.
+ */
+interface ScattermapChartEventProps {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?: ScattermapDataPointEventHandler;
 }
 
 /**
@@ -456,7 +482,8 @@ interface ChartEventProps extends HighchartsBasedChartEventProps {
     | DataPointEventHandler
     | ScatterDataPointEventHandler
     | AreamapDataPointEventHandler
-    | BoxplotDataPointEventHandler;
+    | BoxplotDataPointEventHandler
+    | ScattermapDataPointEventHandler;
 
   /**
    * Context menu handler callback for a data point
@@ -691,6 +718,49 @@ export interface TableProps {
    * @category Representation
    */
   styleOptions?: TableStyleOptions;
+
+  /**
+   * Used to force a refresh of the table from outside the table component
+   * Since added to dependencies of useEffect, will trigger a query execution
+   *
+   * @internal
+   */
+  refreshCounter?: number;
+}
+
+/**
+ * Props of the {@link PivotTable} component.
+ */
+export interface PivotTableProps {
+  /**
+   * Data source name (as a `string`) - e.g. `Sample ECommerce`.
+   *
+   * If not specified, the component will use the `defaultDataSource` specified in the parent Sisense Context.
+   *
+   * @category Data
+   */
+  dataSet?: DataSource;
+
+  /**
+   * Configurations for how to interpret and present the data passed to the component
+   *
+   * @category Representation
+   */
+  dataOptions: PivotTableDataOptions;
+
+  /**
+   * Filters that will slice query results
+   *
+   * @category Data
+   */
+  filters?: Filter[] | FilterRelations;
+
+  /**
+   * Configurations that define functional style of the various table elements
+   *
+   * @category Representation
+   */
+  styleOptions?: PivotTableStyleOptions;
 
   /**
    * Used to force a refresh of the table from outside the table component
@@ -1107,7 +1177,7 @@ export interface BoxplotChartProps
 /**
  * Props of the {@link ScattermapChart} component.
  */
-export interface ScattermapChartProps extends BaseChartProps {
+export interface ScattermapChartProps extends BaseChartProps, ScattermapChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *

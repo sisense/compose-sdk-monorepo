@@ -1,6 +1,6 @@
 import { isNumber } from '@sisense/sdk-data';
 import { Category, Value, isValue } from '../../chart-data-options/types.js';
-import { applyFormat, defaultConfig } from './number-format-config.js';
+import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
 
 export const isXValueNumeric = (dataOptionX: Value | Category | undefined) =>
   dataOptionX ? isValue(dataOptionX) || (dataOptionX.type && isNumber(dataOptionX.type)) : false;
@@ -12,9 +12,8 @@ export const formatTooltipValue = (
 ) => {
   if (!dataOption || value === undefined || isNaN(value)) return displayValue;
 
-  return dataOption.numberFormatConfig
-    ? applyFormat(dataOption.numberFormatConfig, value)
-    : applyFormat(defaultConfig, value);
+  const numberFormatConfig = getCompleteNumberFormatConfig(dataOption.numberFormatConfig);
+  return applyFormat(numberFormatConfig, value);
 };
 
 export const formatTooltipXValue = (

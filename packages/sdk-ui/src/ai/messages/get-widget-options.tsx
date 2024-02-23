@@ -8,8 +8,22 @@ import {
   ChartType,
   ChartStyleOptions,
 } from '../../types';
-import { ChartRecommendations } from '../api/types';
+import { ChartRecommendations, NlqResponseData } from '../api/types';
 import { createJaqlElement } from './jaql-element';
+
+export const getChartRecommendationsOrDefault = (
+  response: NlqResponseData,
+): ChartRecommendations => {
+  if ('chartType' in response.chartRecommendations) {
+    return response.chartRecommendations;
+  }
+
+  return {
+    chartType: 'table',
+    chartFamily: 'table',
+    axesMapping: {},
+  };
+};
 
 export const getTableOptions = (jaql: MetadataItem[]) => {
   const columns = jaql.map(createJaqlElement);

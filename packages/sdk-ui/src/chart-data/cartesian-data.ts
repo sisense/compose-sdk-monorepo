@@ -27,7 +27,10 @@ import { SeriesValueData, CartesianChartData, CategoricalXValues } from './types
 import { CartesianChartDataOptionsInternal, Category, Value } from '../chart-data-options/types';
 import { isEnabled } from './utils';
 import { isNumber } from '@sisense/sdk-data';
-import { applyFormatPlainText } from '../chart-options-processor/translations/number-format-config';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from '../chart-options-processor/translations/number-format-config';
 import { seriesDataColoringFunction } from './data-coloring';
 import { SortDirection } from '../types';
 import { getDataOptionTitle } from '../chart-data-options/utils';
@@ -207,7 +210,7 @@ export const getOrderedXValues = (
     const displayValues = values.map((c) => c.displayValue);
     const rawValues = values.map((c) => c.rawValue ?? c.displayValue);
     const compareValues = values.map((c) => c?.compareValue?.value as number);
-    const key = displayValues.join(',');
+    const key = rawValues.join(',');
     return { key, xValues: displayValues, rawValues, compareValues: compareValues };
   });
 };
@@ -272,8 +275,8 @@ const getSeriesName = (row: Row, columns: readonly Column[], breakBy: Category[]
   // maybe format series value
   return getValues(row, columns)
     .map((data, index) => {
-      const numberFormatConfig = breakBy[index].numberFormatConfig;
-      return isNumber(columns[index].type) && numberFormatConfig
+      const numberFormatConfig = getCompleteNumberFormatConfig(breakBy[index].numberFormatConfig);
+      return isNumber(columns[index].type)
         ? applyFormatPlainText(numberFormatConfig, parseFloat(data.displayValue))
         : data.displayValue;
     })

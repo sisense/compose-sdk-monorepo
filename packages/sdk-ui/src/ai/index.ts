@@ -1,11 +1,22 @@
 import '../index.css';
 
-export { ChatApiContextProvider } from './api/chat-api-context';
+export { default as AiContextProvider, type AiContextProviderProps } from './ai-context-provider';
+export { type ChatConfig } from './chat-config';
+export { useGetNlgQueryResult, type UseGetNlgQueryResultParams } from './use-get-nlg-query-result';
 export {
-  useGetNlgQueryResult,
   useGetQueryRecommendations,
-  type UseGetNlgQueryResultParams,
   type UseGetQueryRecommendationsParams,
-} from './api/hooks';
+} from './use-get-query-recommendations';
+export type {
+  GetNlgQueryResultRequest,
+  QueryRecommendationResponse,
+  QueryRecommendation,
+  NlqResponseData,
+  ChartRecommendations,
+  AxesMapping,
+  AxesMappingKey,
+  AllPossibleChartOptionKeys,
+  KeysOfUnion,
+} from './api/types';
 export { Chatbot, type ChatbotProps } from './chatbot';
-export { default as NlgQueryResult, type NlgQueryResultProps } from './nlg-query-result';
+export { default as GetNlgQueryResult, type GetNlgQueryResultProps } from './get-nlg-query-result';

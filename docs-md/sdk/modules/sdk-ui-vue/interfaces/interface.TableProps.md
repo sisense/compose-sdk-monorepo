@@ -43,7 +43,7 @@ Filters that will slice query results
 
 #### dataOptions
 
-> **dataOptions**: [`TableDataOptions`](../../sdk-ui/interfaces/interface.TableDataOptions.md)
+> **dataOptions**: [`TableDataOptions`](interface.TableDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the component
 
@@ -51,6 +51,6 @@ Configurations for how to interpret and present the data passed to the component
 
 #### styleOptions
 
-> **styleOptions**?: [`TableStyleOptions`](../../sdk-ui/interfaces/interface.TableStyleOptions.md)
+> **styleOptions**?: [`TableStyleOptions`](interface.TableStyleOptions.md)
 
 Configurations that define functional style of the various table elements

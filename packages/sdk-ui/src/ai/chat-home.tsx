@@ -1,16 +1,18 @@
 import { useMemo } from 'react';
 
-import { useChatbotContext } from './chatbot-context';
-import { useDataTopics } from './api/hooks';
+import { useGetDataTopics } from './api/hooks';
 import { DataTopicList } from './data-topics';
 import { DataTopic } from './data-topics/data-topic-list';
-import LoadingIcon from '../common/icons/loading-icon';
 import SisenseLogo from './icons/sisense-logo';
+import LoadingPage from './loading-page';
 import Toolbar from './toolbar';
 
-export default function ChatHome() {
-  const { setSelectedContext } = useChatbotContext();
-  const { data } = useDataTopics();
+type ChatHomeProps = {
+  onDataTopicClick: (title: string) => void;
+};
+
+export default function ChatHome({ onDataTopicClick }: ChatHomeProps) {
+  const { data } = useGetDataTopics();
 
   const dataTopics = useMemo(
     () =>
@@ -18,10 +20,10 @@ export default function ChatHome() {
         (d): DataTopic => ({
           title: d.name,
           description: d.description,
-          onClick: () => setSelectedContext(d),
+          onClick: () => onDataTopicClick(d.name),
         }),
       ),
-    [data, setSelectedContext],
+    [data, onDataTopicClick],
   );
 
   return (
@@ -35,11 +37,7 @@ export default function ChatHome() {
         }
       />
       <div className="csdk-flex csdk-flex-col csdk-justify-center csdk-overflow-hidden csdk-h-full ">
-        {!dataTopics && (
-          <div className="csdk-self-center">
-            <LoadingIcon spin />
-          </div>
-        )}
+        {!dataTopics && <LoadingPage />}
         {dataTopics && <DataTopicList dataTopics={dataTopics} />}
       </div>
     </>

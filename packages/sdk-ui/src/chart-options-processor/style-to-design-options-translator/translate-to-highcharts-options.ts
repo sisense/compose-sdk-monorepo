@@ -5,7 +5,6 @@ import merge from 'ts-deepmerge';
 import {
   AxisLabel,
   Legend,
-  SeriesLabels,
   Navigator,
   LineWidth,
   Markers,
@@ -53,7 +52,6 @@ import {
   DefaultFunnelDirection,
 } from '../translations/funnel-plot-options';
 import { StackType } from '../translations/translations-to-highcharts';
-import { ValueLabel } from '../translations/value-label-section';
 import { defaultScatterMarkerSize, ScatterMarkerSize } from '../translations/scatter-plot-options';
 
 export const getLegend = (legend?: Legend): LegendPosition => {
@@ -61,24 +59,6 @@ export const getLegend = (legend?: Legend): LegendPosition => {
     return (legend.position || null) as LegendPosition;
   }
   return null;
-};
-
-const getSeriesLabels = (valueLabel: SeriesLabels): ValueLabel => {
-  if (!valueLabel.enabled) return null;
-  let rotation = null;
-  switch (valueLabel.rotation) {
-    case -45:
-      rotation = 'diagonal';
-      break;
-    case 0:
-      rotation = 'horizontal';
-      break;
-    case -90:
-      rotation = 'vertical';
-      break;
-  }
-
-  return rotation as ValueLabel;
 };
 
 const getAxisLabel = (axis: AxisLabel | undefined, defaultAxis: Axis): Axis => {
@@ -135,7 +115,6 @@ const getCartesianChartStyle = (
 ): LineChartDesignOptions => {
   const legend = getLegend(styleOptions.legend);
   const dataLimits = getDataLimits(styleOptions, 'cartesian');
-  const valueLabel = styleOptions.seriesLabels ? getSeriesLabels(styleOptions.seriesLabels) : null;
   const xAxis = getAxisLabel(styleOptions.xAxis, BaseDesignOptions.xAxis);
   let x2Axis = null;
   if (styleOptions?.xAxis?.x2Title?.enabled && styleOptions?.xAxis?.x2Title?.text) {
@@ -167,7 +146,7 @@ const getCartesianChartStyle = (
     ...BaseDesignOptions,
     legend,
     autoZoom,
-    valueLabel,
+    valueLabel: styleOptions.seriesLabels || {},
     xAxis,
     yAxis,
     ...(hasY2Axis && y2Axis && { y2Axis }),

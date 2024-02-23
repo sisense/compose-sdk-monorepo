@@ -4,32 +4,45 @@ title: IndicatorChart
 
 # Class IndicatorChart
 
-A Vue component that wraps the IndicatorChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the IndicatorChart.
+A Vue component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
+See [Indicator](https://docs.sisense.com/main/SisenseLinux/indicator.htm) for more information.
 
 ## Example
 
 Here's how you can use the IndicatorChart component in a Vue application:
 ```vue
 <template>
-  <IndicatorChart :props="indicatorChartProps" />
+     <IndicatorChart
+       :dataOptions="indicatorChartProps.dataOptions"
+       :dataSet="indicatorChartProps.dataSet"
+       :filters="indicatorChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import IndicatorChart from '@sisense/sdk-ui-vue/IndicatorChart';
+import {IndicatorChart, type IndicatorChartProps} from '@sisense/sdk-ui-vue';
 
-const indicatorChartProps = ref({
-  // Configure your IndicatorChartProps here
-});
+ const indicatorChartProps = ref<IndicatorChartProps>({
+   dataSet: DM.DataSource,
+   dataOptions: {
+     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+   },
+   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+ });
 </script>
 ```
+<img src="../../../img/indicator-chart-example-1.png" width="400px" />
+
+## Param
+
+Indicator chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`IndicatorChartDataOptions`](../../sdk-ui/interfaces/interface.IndicatorChartDataOptions.md)
+> **dataOptions**?: [`IndicatorChartDataOptions`](../interfaces/interface.IndicatorChartDataOptions.md)
 
 ***
 
@@ -53,4 +66,4 @@ const indicatorChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`IndicatorStyleOptions`](../../sdk-ui/type-aliases/type-alias.IndicatorStyleOptions.md)
+> **styleOptions**?: [`IndicatorStyleOptions`](../type-aliases/type-alias.IndicatorStyleOptions.md)

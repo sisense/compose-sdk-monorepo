@@ -7,16 +7,12 @@ import TextMessage from './text-message';
 
 type MessageResolverProps = {
   message: ChatMessage;
-  // TODO: consider removing dataSource and simply passing chart message, since datasource
-  // is included in the jaql
-  dataSource: string;
   sendMessage?: (message: string) => void;
   allowFollowupQuestions?: boolean;
 };
 
 function MessageResolver({
   message,
-  dataSource,
   allowFollowupQuestions,
   sendMessage = () => {},
 }: MessageResolverProps) {
@@ -27,7 +23,8 @@ function MessageResolver({
     console.debug(`JAQL for ${queryTitle}`, jaql);
     console.debug(`chart recommendations for ${queryTitle}`, chartRecommendations);
 
-    let chartTypeKeyword = chartRecommendations.chartType;
+    let chartTypeKeyword =
+      'chartType' in chartRecommendations ? chartRecommendations.chartType : 'table';
     if (chartTypeKeyword !== 'table') {
       chartTypeKeyword += ' chart';
     }
@@ -37,8 +34,11 @@ function MessageResolver({
         <TextMessage align="left">
           {`Here is a ${chartTypeKeyword} showing ${parsedContent.queryTitle.toLowerCase()}.`}
         </TextMessage>
-        <ChartMessage content={parsedContent} dataSource={dataSource} />
-        <InsightsMessage dataSource={dataSource} metadata={parsedContent.jaql.metadata} />
+        <ChartMessage content={parsedContent} dataSource={jaql.datasource.title} />
+        <InsightsMessage
+          dataSource={jaql.datasource.title}
+          metadata={parsedContent.jaql.metadata}
+        />
         {allowFollowupQuestions && (
           <div className="csdk-flex csdk-flex-col csdk-gap-y-2 csdk-my-[8px]">
             {parsedContent.followupQuestions.slice(0, 2).map((question, i) => (

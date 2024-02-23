@@ -1,10 +1,9 @@
 import { defineComponent, type Prop } from 'vue';
 import { TableWidget as TableWidgetPreact, type TableWidgetProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
-
+import type { Table } from './table';
 /**
- * A Vue component that wraps the TableWidget Preact component for use in Vue applications.
- * It uses a single 'props' prop to pass all TableWidgetProps to the TableWidgetPreact component.
+ * The TableWidget component extending the {@link Table} component to support widget style options.
  *
  * @example
  * Here's how you can use the TableWidget component in a Vue application:
@@ -22,6 +21,9 @@ import { setupHelper } from '../../setup-helper';
  * });
  * </script>
  * ```
+ * @param props - Table Widget properties
+ * @returns Widget component representing a table
+ * @internal
  */
 export const TableWidget = defineComponent({
   props: {

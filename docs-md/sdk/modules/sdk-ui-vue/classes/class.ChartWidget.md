@@ -4,26 +4,59 @@ title: ChartWidget
 
 # Class ChartWidget
 
-A Vue component that wraps the ChartWidget Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the ChartWidget.
+The Chart Widget component extending the [Chart](class.Chart.md) component to support widget style options.
+It can be used along with the [DrilldownWidget](class.DrilldownWidget.md) component to support advanced data drilldown.
 
 ## Example
 
 Here's how you can use the ChartWidget component in a Vue application:
 ```vue
 <template>
-  <ChartWidget :props="chartWidgetProps" />
+   <DrilldownWidget :drilldownDimensions="drilldownDimensions" :initialDimension="dimProductName">
+     <template
+       #chart="{ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }"
+     >
+       <ChartWidget
+         chart-type="bar"
+         v-bind:filters="drilldownFilters"
+         :dataOptions="{
+           ...chartProps.dataOptions,
+           category: [drilldownDimension],
+         }"
+         :highlight-selection-disabled="true"
+         :dataSet="chartProps.dataSet"
+         :style="chartProps.styleOptions"
+         :on-data-points-selected="(dataPoints:any,event:any) => {
+         onDataPointsSelected(dataPoints);
+         onContextMenu({ left: event.clientX, top: event.clientY });
+       }"
+         :on-data-point-click="(dataPoint:any,event:any) => {
+         onDataPointsSelected([dataPoint]);
+         onContextMenu({ left: event.clientX, top: event.clientY });
+       }"
+         :on-data-point-context-menu="(dataPoint:any,event:any) => {
+         onDataPointsSelected([dataPoint]);
+         onContextMenu({ left: event.clientX, top: event.clientY });
+       }"
+       />
+     </template>
+   </DrilldownWidget>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ChartWidget from '@sisense/sdk-ui-vue/ChartWidget';
+import {ChartWidget} from '@sisense/sdk-ui-vue';
 
 const chartWidgetProps = ref({
   // Configure your ChartWidgetProps here
 });
 </script>
 ```
+<img src="../../../img/chart-widget-with-drilldown-example-1.png" width="800px" />
+
+## Param
+
+ChartWidget properties
 
 ## Properties
 
@@ -35,19 +68,19 @@ const chartWidgetProps = ref({
 
 ### chartType
 
-> **chartType**?: [`ChartType`](../../sdk-ui/type-aliases/type-alias.ChartType.md)
+> **chartType**?: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 ***
 
 ### contextMenuItems
 
-> **contextMenuItems**?: [`MenuItemSection`](../../sdk-ui/type-aliases/type-alias.MenuItemSection.md)[]
+> **contextMenuItems**?: [`MenuItemSection`](../type-aliases/type-alias.MenuItemSection.md)[]
 
 ***
 
 ### dataOptions
 
-> **dataOptions**?: [`ChartDataOptions`](../../sdk-ui/type-aliases/type-alias.ChartDataOptions.md)
+> **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 ***
 
@@ -65,7 +98,7 @@ const chartWidgetProps = ref({
 
 ### drilldownOptions
 
-> **drilldownOptions**?: [`DrilldownOptions`](../../sdk-ui/type-aliases/type-alias.DrilldownOptions.md)
+> **drilldownOptions**?: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md)
 
 ***
 
@@ -89,7 +122,7 @@ const chartWidgetProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -101,7 +134,7 @@ const chartWidgetProps = ref({
 
 ### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 ***
 
@@ -119,7 +152,7 @@ const chartWidgetProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`ChartWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartWidgetStyleOptions.md)
+> **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md)
 
 ***
 
@@ -137,4 +170,4 @@ const chartWidgetProps = ref({
 
 ### widgetStyleOptions
 
-> **widgetStyleOptions**?: [`ChartWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.ChartWidgetStyleOptions.md)
+> **widgetStyleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md)

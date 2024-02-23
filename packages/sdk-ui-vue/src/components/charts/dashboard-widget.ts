@@ -3,25 +3,26 @@ import type { PropType } from 'vue';
 import { DashboardWidget as DashboardWidgetPreact } from '@sisense/sdk-ui-preact';
 import type { DashboardWidgetProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+import type { ChartWidget } from './chart-widget';
 
 /**
- * A Vue component that wraps the DashboardWidget Preact component for use in Vue applications.
- * It maintains compatibility with Vue's reactivity system while preserving the functionality of the DashboardWidget.
+ * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
+ * used to render a widget created in the Sisense instance.
  *
  * @example
  * Here's how you can use the DashboardWidget component in a Vue application:
  * ```vue
  * <template>
- *   <DashboardWidget :props="dashboardWidgetProps" />
+ *    <DashboardWidget
+ *      widgetOid="64473e07dac1920034bce77f"
+ *      dashboardOid="6441e728dac1920034bce737"
+ *    />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import DashboardWidget from '@sisense/sdk-ui-vue/DashboardWidget';
+ * import {DashboardWidget} from '@sisense/sdk-ui-vue';
  *
- * const dashboardWidgetProps = ref({
- *   // Configure your DashboardWidgetProps here
- * });
  * </script>
  * ```
  */

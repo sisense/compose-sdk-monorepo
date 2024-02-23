@@ -11,6 +11,9 @@ import {
 export const calcColumnWidths = (
   dataTable: DataTable,
   isLoading: boolean,
+  columnsOptions: {
+    isHtml: boolean;
+  }[],
   fontFamily?: string,
 ): number[] => {
   const canvas = document.createElement('canvas');
@@ -33,10 +36,14 @@ export const calcColumnWidths = (
   const rows = isLoading ? dataTable.rows.slice(0, 100) : dataTable.rows;
   const columnDataWidths = columnsWithSimpleTypes.map((column) => {
     const pixelForValue = rows.reduce((longestWidth, currentRow) => {
+      const displayValue = currentRow[column.index].displayValue;
+      const value = columnsOptions[column.index]?.isHtml
+        ? getTextFromRawHtml(displayValue)
+        : displayValue;
       const currentWidth =
         column.type === 'number'
           ? currentRow[column.index].displayValue.length * numericDigitWidth
-          : ctx.measureText(currentRow[column.index].displayValue).width;
+          : ctx.measureText(value).width;
       return Math.max(longestWidth, currentWidth);
     }, 0);
     return DATA_PADDING + pixelForValue + EXTRA_PIXELS;
@@ -48,3 +55,27 @@ export const calcColumnWidths = (
     );
   });
 };
+
+function getTextFromRawHtml(rawHtml: string) {
+  const container = document.createElement('div');
+  container.innerHTML = rawHtml;
+  return getTextFromNode(container);
+}
+
+function getTextFromNode(node: Node) {
+  let i, result, text, child;
+  result = '';
+  for (i = 0; i < node.childNodes.length; i++) {
+    child = node.childNodes[i];
+    text = null;
+    if (child.nodeType === 1) {
+      text = getTextFromNode(child);
+    } else if (child.nodeType === 3) {
+      text = child.nodeValue;
+    }
+    if (text) {
+      result += text;
+    }
+  }
+  return result;
+}

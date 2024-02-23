@@ -38,6 +38,20 @@ describe('QueryApiDispatcher', () => {
       expect(httpClient.post).toHaveBeenCalledWith(expectedUrl, expectedPayload);
       expect(result).toEqual(expectedFields);
     });
+
+    it('should throw an error on unsuccessful fetch', async () => {
+      // Arrange
+      const dataSource = 'exampleDataSource';
+      httpClient.post.mockRejectedValueOnce({ status: 400 });
+
+      // Act
+      const result = queryApi.getDataSourceFields(dataSource);
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        `Failed to get fields for data source "${dataSource}". Please make sure the data source exists and is accessible.`,
+      );
+    });
   });
 
   describe('sendJaqlRequest', () => {
@@ -157,6 +171,20 @@ describe('QueryApiDispatcher', () => {
       // Assert
       expect(httpClient.post).toHaveBeenCalledWith(expectedUrl, expectedPayload);
       expect(result).toBeUndefined();
+    });
+
+    it('should throw an error on unsuccessful fetch (not 404)', async () => {
+      // Arrange
+      const dataSource = 'exampleDataSource';
+      const guids = ['12345', '67890'];
+
+      httpClient.post.mockRejectedValueOnce({ status: 400, message: 'Bad Request' });
+
+      // Act
+      const result = queryApi.sendCancelMultipleJaqlQueriesRequest(guids, dataSource);
+
+      // Assert
+      await expect(result).rejects.toThrow('Bad Request');
     });
   });
 });

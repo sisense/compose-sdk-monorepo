@@ -1,8 +1,8 @@
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 
 export interface Props {
   title: string;
-  leftNav: JSX.Element;
+  leftNav: ReactNode;
   rightNav?: JSX.Element;
 }
 

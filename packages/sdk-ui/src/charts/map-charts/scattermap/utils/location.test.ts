@@ -1,4 +1,10 @@
-import { combineLocationNames, getLocationGeoLevel, splitLocationName } from './location';
+import {
+  combineLocationNames,
+  getLocationGeoLevel,
+  locationToScattermapDataPoint,
+  splitLocationName,
+} from './location';
+import { ScattermapChartLocation } from '../../../../chart-data/types';
 
 describe('combineLocationNames', () => {
   it('should combine location names with delimiter', () => {
@@ -35,5 +41,25 @@ describe('getLocationGeoLevel', () => {
   it('should return corresponding geo level for country', () => {
     const result = getLocationGeoLevel('country');
     expect(result).toBe('country');
+  });
+});
+
+describe('locationToScattermapDataPoint', () => {
+  it('should transform location to data point correctly', () => {
+    const location = {
+      name: 'USA, New York',
+      rawName: ['USA', 'New York'],
+      coordinates: { lat: 40.7128, lng: -74.006 },
+      value: 100,
+    } as unknown as ScattermapChartLocation;
+
+    const result = locationToScattermapDataPoint(location);
+
+    expect(result).toEqual({
+      categories: ['USA', 'New York'],
+      displayName: 'USA, New York',
+      coordinates: { lat: 40.7128, lng: -74.006 },
+      value: 100,
+    });
   });
 });

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Meta } from '@storybook/react';
 import { templateForComponent } from '../../__stories__/template';
 import ToolbarComponent from '../toolbar';

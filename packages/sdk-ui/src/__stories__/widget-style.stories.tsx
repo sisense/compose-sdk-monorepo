@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable max-lines */
 import { DataSource } from '@sisense/sdk-data';
 import { Meta } from '@storybook/react';
 import { SisenseContextProviderProps } from '../index';

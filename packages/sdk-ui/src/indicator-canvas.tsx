@@ -15,7 +15,7 @@ import {
 } from './charts/indicator/indicator-legacy-chart-data-options';
 import { createIndicatorLegacyChartOptions } from './charts/indicator/indicator-legacy-chart-options';
 import { ChartData } from './chart-data/types';
-import { ChartDesignOptions } from './chart-options-processor/translations/types';
+import { DesignOptions } from './chart-options-processor/translations/types';
 import { ThemeSettings } from './types';
 
 interface Props {
@@ -97,7 +97,7 @@ export const isIndicatorChartDataOptionsInternal = (
 };
 
 export const isIndicatorDesignOptions = (
-  designOptions: ChartDesignOptions,
+  designOptions: DesignOptions,
 ): designOptions is IndicatorChartDesignOptions => {
   return 'indicatorComponents' in designOptions;
 };

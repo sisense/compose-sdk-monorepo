@@ -1,0 +1,343 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`prepareChartDesignOptions > should return design options for areamap chart 1`] = `
+{
+  "designPerSeries": {},
+  "globalDesign": {
+    "autoZoom": true,
+    "dataLimits": {
+      "categoriesCapacity": 100000,
+      "seriesCapacity": 50,
+    },
+    "funnelDirection": "regular",
+    "funnelLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": false,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "funnelSize": "regular",
+    "funnelType": "regular",
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "",
+      },
+    },
+    "indicatorType": "numeric",
+    "legend": "bottom",
+    "lineType": "straight",
+    "lineWidth": 2,
+    "mapType": "world",
+    "marker": {
+      "enabled": false,
+      "fill": "full",
+      "size": "small",
+    },
+    "numericSubtype": "numericSimple",
+    "pieLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": false,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "pieType": "classic",
+    "skin": "vertical",
+    "stackType": "classic",
+    "valueLabel": {},
+    "xAxis": {
+      "enabled": true,
+      "gridLine": true,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "X Axis title",
+      "titleEnabled": true,
+      "type": "linear",
+    },
+    "yAxis": {
+      "enabled": true,
+      "gridLine": true,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "Y Axis title",
+      "titleEnabled": true,
+      "type": "linear",
+    },
+  },
+}
+`;
+
+exports[`prepareChartDesignOptions > should return design options for combo "line + area" chart 1`] = `
+{
+  "designPerSeries": {
+    "$measure1_Total Revenue": {
+      "lineWidth": 5,
+      "marker": {
+        "enabled": true,
+        "fill": "full",
+        "size": "large",
+      },
+    },
+  },
+  "globalDesign": {
+    "autoZoom": true,
+    "dataLimits": {
+      "categoriesCapacity": 100000,
+      "seriesCapacity": 50,
+    },
+    "funnelDirection": "regular",
+    "funnelLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": false,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "funnelSize": "regular",
+    "funnelType": "regular",
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "",
+      },
+    },
+    "indicatorType": "numeric",
+    "legend": "bottom",
+    "lineType": "straight",
+    "lineWidth": 1,
+    "marker": {
+      "enabled": true,
+      "fill": "hollow",
+      "size": "small",
+    },
+    "numericSubtype": "numericSimple",
+    "pieLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": false,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "pieType": "classic",
+    "skin": "vertical",
+    "stackType": "classic",
+    "valueLabel": {
+      "enabled": true,
+      "rotation": -90,
+    },
+    "xAxis": {
+      "enabled": true,
+      "gridLine": false,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "X Axis title",
+      "titleEnabled": false,
+      "type": "linear",
+    },
+    "yAxis": {
+      "enabled": true,
+      "gridLine": true,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "AVG COST",
+      "titleEnabled": true,
+      "type": "linear",
+    },
+  },
+}
+`;
+
+exports[`prepareChartDesignOptions > should return design options for funnel chart 1`] = `
+{
+  "designPerSeries": {},
+  "globalDesign": {
+    "autoZoom": true,
+    "dataLimits": {
+      "categoriesCapacity": 100000,
+      "seriesCapacity": 3,
+    },
+    "funnelDirection": "regular",
+    "funnelLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": true,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "funnelSize": "regular",
+    "funnelType": "regular",
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "",
+      },
+    },
+    "indicatorType": "numeric",
+    "legend": "left",
+    "lineType": "straight",
+    "lineWidth": 2,
+    "marker": {
+      "enabled": false,
+      "fill": "full",
+      "size": "small",
+    },
+    "numericSubtype": "numericSimple",
+    "pieLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": false,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "pieType": "classic",
+    "skin": "vertical",
+    "stackType": "classic",
+    "valueLabel": {},
+    "xAxis": {
+      "enabled": true,
+      "gridLine": true,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "X Axis title",
+      "titleEnabled": true,
+      "type": "linear",
+    },
+    "yAxis": {
+      "enabled": true,
+      "gridLine": true,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "Y Axis title",
+      "titleEnabled": true,
+      "type": "linear",
+    },
+  },
+}
+`;
+
+exports[`prepareChartDesignOptions > should return design options for scattermap chart 1`] = `
+{
+  "designPerSeries": {},
+  "globalDesign": {
+    "autoZoom": true,
+    "dataLimits": {
+      "categoriesCapacity": 100000,
+      "seriesCapacity": 50,
+    },
+    "funnelDirection": "regular",
+    "funnelLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": false,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "funnelSize": "regular",
+    "funnelType": "regular",
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "",
+      },
+    },
+    "indicatorType": "numeric",
+    "legend": "bottom",
+    "lineType": "straight",
+    "lineWidth": 2,
+    "marker": {
+      "enabled": false,
+      "fill": "full",
+      "size": "small",
+    },
+    "markers": {
+      "enabled": false,
+      "fill": "hollow-bold",
+      "size": "small",
+    },
+    "numericSubtype": "numericSimple",
+    "pieLabels": {
+      "enabled": true,
+      "showCategories": true,
+      "showDecimals": false,
+      "showPercent": true,
+      "showValue": true,
+    },
+    "pieType": "classic",
+    "skin": "vertical",
+    "stackType": "classic",
+    "valueLabel": {},
+    "xAxis": {
+      "enabled": true,
+      "gridLine": true,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "X Axis title",
+      "titleEnabled": true,
+      "type": "linear",
+    },
+    "yAxis": {
+      "enabled": true,
+      "gridLine": true,
+      "labels": true,
+      "max": null,
+      "min": null,
+      "tickInterval": null,
+      "title": "Y Axis title",
+      "titleEnabled": true,
+      "type": "linear",
+    },
+  },
+}
+`;

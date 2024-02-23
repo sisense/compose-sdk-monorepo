@@ -3,27 +3,60 @@ import type { PropType } from 'vue';
 import { ChartWidget as ChartWidgetPreact } from '@sisense/sdk-ui-preact';
 import type { ChartWidgetProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+import type { Chart } from './chart';
+import type DrilldownWidget from '../drilldown-widget.vue';
 
 /**
- * A Vue component that wraps the ChartWidget Preact component for use in Vue applications.
- * It maintains compatibility with Vue's reactivity system while preserving the functionality of the ChartWidget.
- *
+ * The Chart Widget component extending the {@link Chart} component to support widget style options.
+ * It can be used along with the {@link DrilldownWidget} component to support advanced data drilldown.
  * @example
  * Here's how you can use the ChartWidget component in a Vue application:
  * ```vue
  * <template>
- *   <ChartWidget :props="chartWidgetProps" />
+    <DrilldownWidget :drilldownDimensions="drilldownDimensions" :initialDimension="dimProductName">
+      <template
+        #chart="{ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }"
+      >
+        <ChartWidget
+          chart-type="bar"
+          v-bind:filters="drilldownFilters"
+          :dataOptions="{
+            ...chartProps.dataOptions,
+            category: [drilldownDimension],
+          }"
+          :highlight-selection-disabled="true"
+          :dataSet="chartProps.dataSet"
+          :style="chartProps.styleOptions"
+          :on-data-points-selected="(dataPoints:any,event:any) => {
+          onDataPointsSelected(dataPoints);
+          onContextMenu({ left: event.clientX, top: event.clientY });
+        }"
+          :on-data-point-click="(dataPoint:any,event:any) => {
+          onDataPointsSelected([dataPoint]);
+          onContextMenu({ left: event.clientX, top: event.clientY });
+        }"
+          :on-data-point-context-menu="(dataPoint:any,event:any) => {
+          onDataPointsSelected([dataPoint]);
+          onContextMenu({ left: event.clientX, top: event.clientY });
+        }"
+        />
+      </template>
+    </DrilldownWidget>
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import ChartWidget from '@sisense/sdk-ui-vue/ChartWidget';
+ * import {ChartWidget} from '@sisense/sdk-ui-vue';
  *
  * const chartWidgetProps = ref({
  *   // Configure your ChartWidgetProps here
  * });
  * </script>
  * ```
+ * <img src="media://chart-widget-with-drilldown-example-1.png" width="800px" />
+ * @param props - ChartWidget properties
+ * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType | chartType}
+
  */
 export const ChartWidget = defineComponent({
   props: {

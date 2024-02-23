@@ -5,7 +5,7 @@ import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options
 import { TreemapChartDesignOptions } from '../design-options';
 import { InternalSeriesNode, TooltipSettings } from '../../tooltip';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
-import { applyFormat, defaultConfig } from '../number-format-config';
+import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './treemap-tooltip.scss';
 
@@ -79,7 +79,9 @@ export function treemapTooltipFormatter(
   if (formatterOptions?.shouldSkip && formatterOptions.shouldSkip(context)) {
     return false;
   }
-  const numberFormatConfig = chartDataOptions.y?.[0]?.numberFormatConfig ?? defaultConfig;
+  const numberFormatConfig = getCompleteNumberFormatConfig(
+    chartDataOptions.y?.[0]?.numberFormatConfig,
+  );
   const isContributionMode = designOptions?.tooltip?.mode === 'contribution';
   const valueTitle = chartDataOptions.y?.[0]?.title ?? chartDataOptions.y?.[0]?.name;
   const color = context.color as string;

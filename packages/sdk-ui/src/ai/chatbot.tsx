@@ -1,20 +1,11 @@
 import { CSSProperties } from 'react';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import ChatBox from './chat-box';
+import { ChatConfig, ChatConfigProvider } from './chat-config';
 import ChatFrame from './chat-frame';
-import ChatHome from './chat-home';
-import { ChatbotContextProvider, useChatbotContext } from './chatbot-context';
-
-const ChatBody = () => {
-  const { selectedContext } = useChatbotContext();
-
-  return selectedContext ? <ChatBox selectedContext={selectedContext} /> : <ChatHome />;
-};
+import ChatRouter from './chat-router';
 
 /**
  * Props for {@link Chatbot} component.
- *
- * @internal
  */
 export type ChatbotProps = {
   /**
@@ -30,24 +21,48 @@ export type ChatbotProps = {
    * If not specified, a default height of 500px will be used
    */
   height?: CSSProperties['height'];
+
+  /**
+   * Various configuration options for the chatbot
+   */
+  config?: Partial<ChatConfig>;
 };
 
 /**
- * React component that renders a chatbot with data topic selection.
+ * React component that renders a chatbot with data topic selection. You can optionally provide `width` and/or `height`.
  *
+ * ::: warning Note
+ * This component is currently under private beta for selected customers and is subject to change as we make fixes and improvements.
+ * :::
+ *
+ * @example
+ * ```tsx
+ * import { SisenseContextProvider } from '@sisense/sdk-ui';
+ * import { AiContextProvider, Chatbot } from '@sisense/sdk-ui/ai';
+ *
+ * function App() {
+ *   return (
+ *     <SisenseContextProvider {...sisenseContextProps}>
+ *       <AiContextProvider>
+ *         <Chatbot width={1000} height={800} />
+ *       </AiContextProvider>
+ *     </SisenseContextProvider>
+ *   );
+ * }
+ * ```
  * @param props - {@link ChatbotProps}
- * @internal
+ * @beta
  */
 export const Chatbot = asSisenseComponent({
   componentName: 'Chatbot',
 })((props: ChatbotProps) => {
-  const { width, height = '900px' } = props;
+  const { width, height = '900px', config } = props;
 
   return (
-    <ChatbotContextProvider>
+    <ChatConfigProvider value={config ?? {}}>
       <ChatFrame width={width} height={height}>
-        <ChatBody />
+        <ChatRouter />
       </ChatFrame>
-    </ChatbotContextProvider>
+    </ChatConfigProvider>
   );
 });

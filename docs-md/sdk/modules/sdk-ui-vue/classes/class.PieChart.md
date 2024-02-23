@@ -4,32 +4,46 @@ title: PieChart
 
 # Class PieChart
 
-A Vue component that wraps the PieChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the PieChart.
+A Vue component representing data in a circular graph with the data shown as slices of a whole,
+with each slice representing a proportion of the total.
+See [Pie Chart](https://docs.sisense.com/main/SisenseLinux/pie-chart.htm) for more information.
 
 ## Example
 
 Here's how you can use the PieChart component in a Vue application:
 ```vue
 <template>
-  <PieChart :props="pieChartProps" />
+     <PieChart
+       :dataOptions="pieChartProps.dataOptions"
+       :dataSet="pieChartProps.dataSet"
+       :filters="pieChartProps.filters"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import PieChart from '@sisense/sdk-ui-vue/PieChart';
+import {PieChart,type PieChartProps} from '@sisense/sdk-ui-vue';
 
-const pieChartProps = ref({
-  // Configure your PieChartProps here
+const pieChartProps = ref<PieChartProps>({
+ dataSet: DM.DataSource,
+ dataOptions: {
+   category: [dimProductName],
+   value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+ },
+ filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
-</script>
 ```
+<img src="../../../img/pie-chart-example-1.png" width="600px" />
+
+## Param
+
+Pie chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CategoricalChartDataOptions`](../../sdk-ui/interfaces/interface.CategoricalChartDataOptions.md)
+> **dataOptions**?: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
 
 ***
 
@@ -53,7 +67,7 @@ const pieChartProps = ref({
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -77,4 +91,4 @@ const pieChartProps = ref({
 
 ### styleOptions
 
-> **styleOptions**?: [`PieStyleOptions`](../../sdk-ui/interfaces/interface.PieStyleOptions.md)
+> **styleOptions**?: [`PieStyleOptions`](../interfaces/interface.PieStyleOptions.md)

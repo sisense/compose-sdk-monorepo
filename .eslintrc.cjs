@@ -42,7 +42,7 @@ module.exports = {
             'jsdoc/check-tag-names': 0,
             'jsdoc/require-returns': 0,
             // These rules are modified because they are overly restrictive
-            'import/extensions': 'off',
+            'import/extensions': 'off', // this is disabled as it does not work with TypeScript path aliases
             '@typescript-eslint/no-floating-promises': 'off',
             'max-params': 'off',
             '@typescript-eslint/restrict-template-expressions': 'off',
@@ -57,7 +57,7 @@ module.exports = {
             complexity: 'warn',
             '@typescript-eslint/no-throw-literal': 'off',
             'no-underscore-dangle': 'off',
-            '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }]
+            '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
           },
         },
         {
@@ -66,10 +66,12 @@ module.exports = {
         },
         { files: ['*.{ts,tsx}'], excludedFiles: ['*.d.ts'], rules: { 'no-unused-vars': 'error' } },
         {
-          files: ['**/__demo__/**/*'],
+          files: ['**/__demo__/**/*', '**/*.stories.tsx'],
           rules: {
             'import/no-extraneous-dependencies': 'off', // allow importing devDependencies in demo files
             'sonarjs/no-duplicate-string': 'off', // prevent auto-generated files from throwing errors
+            'max-lines-per-function': 'off',
+            'max-lines': 'off',
           },
         },
       ],
@@ -86,6 +88,7 @@ module.exports = {
       ],
       extends: ['@sisense/eslint-config/typescript/react', 'plugin:vitest/recommended'],
       rules: {
+        'import/extensions': 'off', // this is disabled as it does not work with TypeScript path aliases
         'sonarjs/no-duplicate-string': 'off',
         'vitest/no-mocks-import': 'off',
         'no-unused-vars': 'error',

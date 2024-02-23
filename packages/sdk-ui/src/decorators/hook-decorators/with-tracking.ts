@@ -1,6 +1,7 @@
 import { TrackingDetails, trackProductEvent } from '@sisense/sdk-tracking';
 import { useEffect, useRef } from 'react';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { ClientApplication } from '../../app/client-application';
 
 export type HookDecorator<DecoratorConfig> = (
   decoratorConfig: DecoratorConfig,
@@ -13,6 +14,33 @@ interface HookEventDetails extends TrackingDetails {
 }
 
 const action = 'sdkHookInit';
+
+/**
+ * @internal
+ * @description This is a function that tracks the hook event and sends it to the server.
+ * @param hookName - The name of the hook
+ * @param packageName - The name of the package
+ * @param app - The client application
+ * @param onFinally - The function to call after the tracking is done
+ * @returns Promise<void>
+ */
+export const trackHook = async (
+  hookName: string,
+  packageName: string,
+  app: ClientApplication,
+  onFinally: () => void,
+) => {
+  if (!app) return;
+  const payload: HookEventDetails = {
+    packageName,
+    packageVersion: __PACKAGE_VERSION__,
+    hookName,
+  };
+
+  void trackProductEvent(action, payload, app.httpClient)
+    .catch((e) => console.warn('An error occurred when sending the sdkHookInit event', e))
+    .finally(onFinally);
+};
 
 function useTrackHook(hookName: string) {
   const { app, enableTracking } = useSisenseContext();

@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable max-lines */
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Table, Column, Cell } from 'fixed-data-table-2';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 import styles from './styles/data-table-wrapper.module.scss';
@@ -18,6 +19,8 @@ import {
   ROW_HEIGHT,
 } from './styles/style-constants';
 import { getCellStyles } from './helpers/get-cell-styles';
+import { Tooltip } from '@mui/material';
+import { Category } from '@/chart-data-options/types';
 
 const alignmentForColumnType = (columnType: string) => (isNumber(columnType) ? 'right' : 'left');
 
@@ -26,11 +29,13 @@ const renderDisplayValue = ({
   width,
   padding,
   ellipsizedLength,
+  isHtml,
 }: {
   displayValue: string;
   width: number;
   padding: number;
   ellipsizedLength: number;
+  isHtml?: boolean;
 }) => {
   const maybeEllipsizedLength = displayValue.length > ellipsizedLength;
   return (
@@ -40,10 +45,15 @@ const renderDisplayValue = ({
         maxWidth: `${width - padding}px`,
       }}
     >
-      {!maybeEllipsizedLength && <div>{displayValue}</div>}
-      {maybeEllipsizedLength &&
-        // TODO: wrap value with tooltip to show full text value
-        displayValue}
+      {isHtml ? (
+        <div dangerouslySetInnerHTML={{ __html: displayValue }} />
+      ) : maybeEllipsizedLength ? (
+        <Tooltip title={displayValue}>
+          <div>{displayValue}</div>
+        </Tooltip>
+      ) : (
+        <div>{displayValue}</div>
+      )}
     </div>
   );
 };
@@ -60,8 +70,16 @@ export const DataTableWrapper = ({
 }: DataTableWrapperProps) => {
   const previousIsLoadingRef = useRef<boolean>(isLoading);
 
+  const columnsOptions = useMemo(
+    () =>
+      dataOptions.columns.map((col) => ({
+        isHtml: (col as Category).isHtml ?? false,
+      })),
+    [dataOptions],
+  );
+
   const [columnWidths, setColumnWidths] = useState<number[]>(() =>
-    calcColumnWidths(dataTable, isLoading),
+    calcColumnWidths(dataTable, isLoading, columnsOptions),
   );
 
   useEffect(() => {
@@ -69,12 +87,17 @@ export const DataTableWrapper = ({
       if (!isLoading) {
         // transitioning from isLoading to done
         setColumnWidths(
-          calcColumnWidths(dataTable, isLoading, themeSettings.typography?.fontFamily),
+          calcColumnWidths(
+            dataTable,
+            isLoading,
+            columnsOptions,
+            themeSettings.typography?.fontFamily,
+          ),
         );
       }
       previousIsLoadingRef.current = isLoading;
     }
-  }, [isLoading, dataTable, themeSettings]);
+  }, [isLoading, dataTable, themeSettings, columnsOptions]);
 
   const showFieldTypeIcon =
     customStyles && customStyles.showFieldTypeIcon !== undefined
@@ -141,6 +164,7 @@ export const DataTableWrapper = ({
                     width: columnWidths[colIndex],
                     padding: DATA_PADDING,
                     ellipsizedLength: DATA_ELLIPSIZED_LENGTH,
+                    isHtml: (dataOptions.columns[colIndex] as Category).isHtml ?? false,
                   })}
                 </Cell>
               )}

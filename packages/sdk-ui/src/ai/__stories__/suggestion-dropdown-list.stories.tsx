@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable sonarjs/no-duplicate-string */
 import { templateForComponent } from '../../__stories__/template';
 import { Meta } from '@storybook/react';
 import SuggestionDropdownListComponent from '../suggestions/suggestion-dropdown-list';

@@ -12,7 +12,7 @@ export default function DataTopicItem(props: Props) {
     <div
       onClick={onClick}
       className={
-        'csdk-max-w-full csdk-shadow-ai-shadow-sm csdk-cursor-pointer csdk-rounded-[30px] csdk-w-[460px] csdk-h-[100px] csdk-flex csdk-items-center csdk-flex-row csdk-justify-between csdk-bg-[#F4F4F8] csdk-p-[30px]'
+        'csdk-max-w-full csdk-shadow-ai-shadow-sm csdk-cursor-pointer csdk-rounded-[30px] csdk-h-[100px] csdk-flex csdk-items-center csdk-flex-row csdk-justify-between csdk-bg-[#F4F4F8] csdk-p-[30px]'
       }
     >
       <div>

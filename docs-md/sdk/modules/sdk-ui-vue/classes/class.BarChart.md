@@ -4,32 +4,48 @@ title: BarChart
 
 # Class BarChart
 
-A Vue component that wraps the BarChart Preact component for use in Vue applications.
-It maintains compatibility with Vue's reactivity system while preserving the functionality of the BarChart.
+A Vue component representing categorical data with horizontal rectangular bars,
+whose lengths are proportional to the values that they represent.
+See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for more information.
 
 ## Example
 
 Here's how you can use the BarChart component in a Vue application:
 ```vue
 <template>
-  <BarChart :props="barChartProps" />
+   <BarChart
+     :dataOptions="barChartProps.dataOptions"
+     :dataSet="barChartProps.dataSet"
+     :filters="barChartProps.filters"
+   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import BarChart from '@sisense/sdk-ui-vue/BarChart';
+import {BarChart} from '@sisense/sdk-ui-vue';
 
-const barChartProps = ref({
-  // Configure your BarChartProps here
-});
+ const barChartProps = ref<BarChartProps>({
+   dataSet: DM.DataSource,
+   dataOptions: {
+     category: [dimProductName],
+     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+     breakBy: [],
+   },
+   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+ });
 </script>
 ```
+<img src="../../../img/bar-chart-example-1.png" width="800"/>
+
+## Param
+
+Bar chart properties
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**?: [`CartesianChartDataOptions`](../../sdk-ui/interfaces/interface.CartesianChartDataOptions.md)
+> **dataOptions**?: [`CartesianChartDataOptions`](../interfaces/interface.CartesianChartDataOptions.md)
 
 Bar chart properties derived from the BarChartProps interface,
 including both BaseChartProps and ChartEventProps.
@@ -56,7 +72,7 @@ including both BaseChartProps and ChartEventProps.
 
 ### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 ***
 
@@ -80,4 +96,4 @@ including both BaseChartProps and ChartEventProps.
 
 ### styleOptions
 
-> **styleOptions**?: [`StackableStyleOptions`](../../sdk-ui/interfaces/interface.StackableStyleOptions.md)
+> **styleOptions**?: [`StackableStyleOptions`](../interfaces/interface.StackableStyleOptions.md)
