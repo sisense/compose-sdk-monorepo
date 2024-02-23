@@ -151,6 +151,7 @@ function createMap(element: HTMLElement, mapType: AreamapType): Leaflet.Map {
       scrollWheelZoom: true,
       minZoom: 1,
       zoom: 1,
+      maxZoom: 5,
       center: [0, 0],
     });
   } else {
@@ -166,6 +167,7 @@ function createMap(element: HTMLElement, mapType: AreamapType): Leaflet.Map {
       ),
       center: [35.96852047262865, -96.96520768859223],
       zoom: 0.4,
+      maxZoom: 3,
       attributionControl: false,
     });
   }

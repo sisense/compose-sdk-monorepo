@@ -9,14 +9,19 @@ export const AreamapChartDemo = () => {
   return (
     <div>
       <h2>Areamap Chart (countries) </h2>
-      <Chart
+      <AreamapChart
         dataSet={DM.DataSource}
-        chartType={'areamap'}
         dataOptions={{
           geo: [DM.Country.Country],
           color: [
             {
               column: measureFactory.sum(DM.Commerce.Cost),
+              color: {
+                type: 'range',
+                steps: 20,
+                minColor: '#60a9ff',
+                maxColor: '#3a77bf',
+              },
               title: 'Total Cost',
             },
           ],
