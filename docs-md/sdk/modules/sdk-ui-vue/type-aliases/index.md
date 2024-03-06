@@ -49,6 +49,8 @@ title: Type Aliases
 - [LineSubtype](type-alias.LineSubtype.md)
 - [LineWidth](type-alias.LineWidth.md)
 - [Markers](type-alias.Markers.md)
+- [MaybeRef](type-alias.MaybeRef.md)
+- [MaybeWithRefs](type-alias.MaybeWithRefs.md)
 - [MenuItemSection](type-alias.MenuItemSection.md)
 - [MenuPosition](type-alias.MenuPosition.md)
 - [MonthOfYear](type-alias.MonthOfYear.md)

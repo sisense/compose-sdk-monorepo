@@ -16,7 +16,7 @@ Props for the [ChartWidget](../functions/function.ChartWidget.md) component
 
 #### dataSource
 
-> **dataSource**?: `string`
+> **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -104,10 +104,15 @@ Title of the widget
 
 > **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
-Before render handler callback that allows adjusting
-detail chart options prior to render
+A callback that allows you to customize the underlying chart element before it is rendered.
+Use the `highchartsOptions` object that is passed to the callback to change
+[options values](https://api.highcharts.com/highcharts/) and then return the modified options
+object. The returned options are then used when rendering the chart.
 
 This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
+
+For an example of how the `onBeforeRender` callback can be used, see the
+[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
 ##### Inherited from
 

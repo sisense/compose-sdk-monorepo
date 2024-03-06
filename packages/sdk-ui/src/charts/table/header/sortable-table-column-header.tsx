@@ -20,7 +20,7 @@ export const SortableTableColumnHeader: React.FunctionComponent<{
       }}
     >
       {showFieldTypeIcon && <FieldTypeIcon columnType={column.type} />}
-      <span className={styles.headerLabel}>{children}</span>
+      <div className={styles.headerLabel}>{children}</div>
       <div
         className={classnames(styles.sortIcon, {
           [styles.caret]: sortIcon === 'caret',

@@ -10,6 +10,7 @@ title: Interfaces
 - [BoxplotStyleOptions](interface.BoxplotStyleOptions.md)
 - [CartesianChartDataOptions](interface.CartesianChartDataOptions.md)
 - [CategoricalChartDataOptions](interface.CategoricalChartDataOptions.md)
+- [ContextMenuProps](interface.ContextMenuProps.md)
 - [DashboardWidgetStyleOptions](interface.DashboardWidgetStyleOptions.md)
 - [DataLimits](interface.DataLimits.md)
 - [ExecuteQueryByWidgetIdParams](interface.ExecuteQueryByWidgetIdParams.md)

@@ -1,4 +1,4 @@
-import { DataSource } from '@sisense/sdk-data';
+import { DataSource, getDataSourceName } from '@sisense/sdk-data';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import {
   AbortRequestFunction,
@@ -6,9 +6,11 @@ import {
   JaqlResponse,
   JaqlQueryPayload,
   QueryGuid,
+  DataSourceSchema,
 } from '../types.js';
 
 const API_DATASOURCES_BASE_PATH = 'api/datasources';
+const API_DATAMODELS_BASE_PATH = 'api/v2/datamodels';
 
 type RequestSendingResult<T> = {
   responsePromise: Promise<T>;
@@ -23,7 +25,8 @@ export class QueryApiDispatcher {
     count = 9999,
     offset = 0,
   ): Promise<DataSourceField[]> {
-    const url = `${API_DATASOURCES_BASE_PATH}/${encodeURIComponent(dataSource)}/fields/search`;
+    const dataSourceName = getDataSourceName(dataSource);
+    const url = `${API_DATASOURCES_BASE_PATH}/${encodeURIComponent(dataSourceName)}/fields/search`;
     // when error is encountered, API returns only status code 400 without informative error message
     // to remedy, catch error and throw a more informative error message
     try {
@@ -33,6 +36,14 @@ export class QueryApiDispatcher {
         `Failed to get fields for data source "${dataSource}". Please make sure the data source exists and is accessible.`,
       );
     }
+  }
+
+  /**
+   * Returns the schema of a data source by its name.
+   */
+  public async getDataSourceSchema(dataSourceName: string): Promise<DataSourceSchema> {
+    const url = `${API_DATAMODELS_BASE_PATH}/schema?title=${encodeURIComponent(dataSourceName)}`;
+    return this.httpClient.get(url);
   }
 
   public sendJaqlRequest(
@@ -111,7 +122,7 @@ export class QueryApiDispatcher {
  * @param dataSource
  */
 function getRegularCancelQueryUrl(dataSource: DataSource): string {
-  const datasourcePath = encodeURIComponent(dataSource);
+  const datasourcePath = encodeURIComponent(getDataSourceName(dataSource));
   return `${API_DATASOURCES_BASE_PATH}/localhost/${datasourcePath}/cancel_queries`;
 }
 
@@ -122,7 +133,7 @@ function getRegularCancelQueryUrl(dataSource: DataSource): string {
  * @param dataSource
  */
 function getLiveCancelQueryUrl(dataSource: DataSource): string {
-  const datasourcePath = encodeURIComponent(dataSource);
+  const datasourcePath = encodeURIComponent(getDataSourceName(dataSource));
   return `${API_DATASOURCES_BASE_PATH}/live/${datasourcePath}/cancel_queries`;
 }
 
@@ -132,7 +143,7 @@ function getLiveCancelQueryUrl(dataSource: DataSource): string {
  * @param dataSource
  */
 function getJaqlUrl(dataSource: DataSource): string {
-  const dataSourcePath = encodeURIComponent(dataSource);
+  const dataSourcePath = encodeURIComponent(getDataSourceName(dataSource));
   return `${API_DATASOURCES_BASE_PATH}/${dataSourcePath}/jaql`;
 }
 

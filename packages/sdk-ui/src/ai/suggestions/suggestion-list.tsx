@@ -9,7 +9,10 @@ type Props = {
 export default function SuggestionList(props: Props) {
   const [shouldShowMore, setShouldShowMore] = useState(false);
   return (
-    <div className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-justify-center csdk-text-center csdk-items-center">
+    <div
+      aria-label="list of suggested questions"
+      className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-justify-center csdk-text-center csdk-items-center"
+    >
       {(shouldShowMore ? props.questions : props.questions.slice(0, 4)).map((question) => (
         <SuggestedItem
           key={question}

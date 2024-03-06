@@ -45,7 +45,9 @@ describe('useExecuteQuery', () => {
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,
-      enableTracking: false,
+      tracking: {
+        enabled: false,
+      },
     });
   });
 
@@ -133,7 +135,9 @@ describe('useExecuteQuery', () => {
     useSisenseContextMock.mockReturnValue({
       app: { httpClient: {} } as ClientApplication,
       isInitialized: true,
-      enableTracking: true,
+      tracking: {
+        enabled: true,
+      },
     });
     vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
 

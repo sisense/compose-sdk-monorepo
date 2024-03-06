@@ -8,14 +8,13 @@ export const mockToken = 'fake-token';
 export const mockDashboardId = 'fake-dashboard-id';
 export const mockWidgetId = 'fake-widget-id';
 
-// Mock common calls made by SisenseContextProvider
 const handlers = [
+  // Mock common calls made by SisenseContextProvider
   http.get('*/api/globals', () => HttpResponse.json(mockGlobals)),
   http.get('*/api/palettes/*', () => HttpResponse.json(mockPalettes)),
+
+  // Mock tracking calls
+  http.post('*/api/activities', () => new HttpResponse()),
 ];
 
 export const server = setupServer(...handlers);
-
-server.events.on('request:start', ({ request }) => {
-  console.log('MSW intercepted:', request.method, request.url);
-});

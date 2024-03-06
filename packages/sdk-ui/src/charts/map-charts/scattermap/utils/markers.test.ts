@@ -1,5 +1,3 @@
-/** @vitest-environment jsdom */
-
 import { createMarker, MarkerConfig, removeMarkers } from './markers';
 import * as Leaflet from 'leaflet';
 
@@ -17,7 +15,7 @@ describe('createMarker', () => {
 
     expect(marker).toBeInstanceOf(Leaflet.CircleMarker);
     expect(marker.getLatLng()).toEqual(coordinates);
-    expect(marker.options).toContain({
+    expect(marker.options).toEqual({
       radius: 10,
       fillOpacity: 0.5,
       opacity: 0.5,
@@ -25,6 +23,7 @@ describe('createMarker', () => {
       color: 'transparent',
       stroke: false,
       weight: 0,
+      customStyle: style,
     });
   });
 });

@@ -6,11 +6,23 @@ title: UseGetNlgQueryResultParams
 
 Parameters for [useGetNlgQueryResult](../functions/function.useGetNlgQueryResult.md) hook.
 
-## Extends
-
-- [`GetNlgQueryResultRequest`](interface.GetNlgQueryResultRequest.md)
-
 ## Properties
+
+### dataSource
+
+> **dataSource**: `string`
+
+The data source that the query targets - e.g. `Sample ECommerce`
+
+***
+
+### dimensions
+
+> **dimensions**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
+
+Dimensions of the query
+
+***
 
 ### enabled
 
@@ -22,42 +34,16 @@ If not specified, the default value is `true`
 
 ***
 
-### jaql
+### filters
 
-> **jaql**: `object`
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-#### Type declaration
-
-> ##### `jaql.datasource`
->
-> **datasource**: `object`
->
-> The data source that the JAQL metadata targets - e.g. `Sample ECommerce`
->
-> > ###### `datasource.title`
-> >
-> > **title**: `string`
-> >
-> >
->
-> ##### `jaql.metadata`
->
-> **metadata**: `unknown`[]
->
-> The metadata that composes the JAQL to be analyzed
->
->
-
-#### Inherited from
-
-[`GetNlgQueryResultRequest`](interface.GetNlgQueryResultRequest.md).[`jaql`](interface.GetNlgQueryResultRequest.md#jaql)
+Filters of the query
 
 ***
 
-### style
+### measures
 
-> **style**: `"Large"` \| `"Medium"` \| `"Small"`
+> **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
-#### Inherited from
-
-[`GetNlgQueryResultRequest`](interface.GetNlgQueryResultRequest.md).[`style`](interface.GetNlgQueryResultRequest.md#style)
+Measures of the query

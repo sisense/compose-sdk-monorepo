@@ -74,7 +74,7 @@ exports[`Table > should render Table 1`] = `
                           >
                             <div
                               class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
-                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -88,18 +88,18 @@ exports[`Table > should render Table 1`] = `
                                     <div
                                       class="_headerCell_d9b667"
                                     >
-                                      <span
+                                      <div
                                         class="_headerLabel_d9b667"
                                       >
                                         <div
                                           class="_tableCellContent_4b88bf"
-                                          style="max-width: 66px;"
+                                          style="max-width: 90px;"
                                         >
                                           <div>
                                             AgeRange
                                           </div>
                                         </div>
-                                      </span>
+                                      </div>
                                       <div
                                         class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
                                       />
@@ -116,7 +116,7 @@ exports[`Table > should render Table 1`] = `
                           >
                             <div
                               class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
-                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -130,18 +130,18 @@ exports[`Table > should render Table 1`] = `
                                     <div
                                       class="_headerCell_d9b667"
                                     >
-                                      <span
+                                      <div
                                         class="_headerLabel_d9b667"
                                       >
                                         <div
                                           class="_tableCellContent_4b88bf"
-                                          style="max-width: 66px;"
+                                          style="max-width: 90px;"
                                         >
                                           <div>
                                             Cost
                                           </div>
                                         </div>
-                                      </span>
+                                      </div>
                                       <div
                                         class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
                                       />
@@ -209,7 +209,7 @@ exports[`Table > should render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -240,7 +240,7 @@ exports[`Table > should render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -319,7 +319,7 @@ exports[`Table > should render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -350,7 +350,7 @@ exports[`Table > should render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -429,7 +429,7 @@ exports[`Table > should render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -460,7 +460,7 @@ exports[`Table > should render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"

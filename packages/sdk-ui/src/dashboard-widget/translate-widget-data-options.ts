@@ -114,13 +114,30 @@ export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem[
   return attribute;
 }
 
+function getNumberFormatName(mask: NumericMask) {
+  if (mask.percent || mask.type === 'percent') {
+    return 'Percent';
+  } else if (mask.currency) {
+    return 'Currency';
+  } else {
+    return 'Numbers';
+  }
+}
+
+function getNumberFormatDecimalScale(mask: NumericMask): number | 'auto' {
+  if (mask.decimals !== undefined && mask.decimals !== 'auto') {
+    return typeof mask.decimals === 'string' ? Number.parseFloat(mask.decimals) : mask.decimals;
+  }
+  return 'auto';
+}
+
 function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
   const isNumeric = (item.jaql as BaseJaql).datatype === 'numeric' || 'context' in item.jaql;
   const numberFormat = item.format?.mask as NumericMask;
 
   if (isNumeric && numberFormat) {
     return {
-      decimalScale: numberFormat.decimals || 'auto',
+      decimalScale: getNumberFormatDecimalScale(numberFormat),
       kilo: numberFormat.abbreviations?.k,
       million: numberFormat.abbreviations?.m,
       billion: numberFormat.abbreviations?.b,
@@ -128,7 +145,7 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
       thousandSeparator: numberFormat.number?.separated,
       prefix: numberFormat.currency?.position === CurrencyPosition.PRE,
       symbol: numberFormat.currency?.symbol,
-      name: numberFormat.percent ? 'Percent' : numberFormat.currency ? 'Currency' : 'Numbers',
+      name: getNumberFormatName(numberFormat),
     } as NumberFormatConfig;
   }
 

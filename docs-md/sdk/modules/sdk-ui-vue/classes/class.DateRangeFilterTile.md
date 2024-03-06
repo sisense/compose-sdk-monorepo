@@ -44,7 +44,7 @@ const onChange = (filter: Filter) => {
 
 ### datasource
 
-> **datasource**?: `string`
+> **datasource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 ***
 

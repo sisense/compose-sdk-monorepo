@@ -2,11 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { writeJavascript, writeTypescript } from './writer.js';
-import {
-  dimensionalModelECommerce,
-  generatedModelECommerce,
-} from '../__mocks__/data-model-ecommerce.js';
+import { dimensionalModelECommerce } from '../__mocks__/data-model-ecommerce.js';
 import { Writable } from 'stream';
+import { DataSourceInfo } from '@sisense/sdk-data';
 
 // A class for mocking fs.createWriteStream.
 // It writes content to a buffer instead of to a file
@@ -42,10 +40,6 @@ vi.mock('fs', async () => {
   };
 });
 
-function withoutSpaces(str: string) {
-  return str.replace(/\s/g, '');
-}
-
 describe('writer', () => {
   beforeEach(() => {
     mockWriteStream = new WriteMemory();
@@ -53,9 +47,21 @@ describe('writer', () => {
   describe('writeTypescript', () => {
     it('should generate data model file as TypeScript file', async () => {
       await writeTypescript(dimensionalModelECommerce, { filename: 'some-model' });
-      const expectedCode = withoutSpaces(generatedModelECommerce.tsCode);
-      const actualCode = withoutSpaces(mockWriteStream.buffer);
-      expect(expectedCode).toEqual(actualCode);
+      const generatedCode = mockWriteStream.buffer;
+      expect(generatedCode).toMatchSnapshot();
+    });
+    it('should generate data model file as TypeScript file (dataSource defined as DataSourceInfo)', async () => {
+      const dataSourceInfo: DataSourceInfo = {
+        title: dimensionalModelECommerce.dataSource,
+        type: 'elasticube',
+      };
+      const model = {
+        ...dimensionalModelECommerce,
+        dataSource: dataSourceInfo,
+      };
+      await writeTypescript(model, { filename: 'some-model' });
+      const generatedCode = mockWriteStream.buffer;
+      expect(generatedCode).toMatchSnapshot();
     });
     it('should throw an error if filename is not specified', async () => {
       await expect(
@@ -67,13 +73,9 @@ describe('writer', () => {
   describe('writeJavascript', () => {
     it('should generate JS and TS definition files', async () => {
       await writeJavascript(dimensionalModelECommerce, { filename: 'some-model' });
-
-      const expectedJsCode = withoutSpaces(generatedModelECommerce.jsCode);
-      const expectedDtsCode = withoutSpaces(generatedModelECommerce.dtsCode);
-      const actualCode = withoutSpaces(mockWriteStream.buffer);
-      // as we mocked the `fs` module with single stream, both .js and .d.ts files written to the same buffer
-      expect(actualCode).toContain(expectedJsCode);
-      expect(actualCode).toContain(expectedDtsCode);
+      // both .js and .d.ts files written to the same buffer
+      const generatedCode = mockWriteStream.buffer;
+      expect(generatedCode).toMatchSnapshot();
     });
 
     it('should throw an error if filename is not specified', async () => {

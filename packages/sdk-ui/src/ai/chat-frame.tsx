@@ -9,9 +9,12 @@ type ChatFrameProps = {
 const MIN_ALLOWED_WIDTH = 500;
 const MIN_ALLOWED_HEIGHT = 500;
 
+const DEFAULT_WIDTH = 500;
+const DEFAULT_HEIGHT = 900;
+
 export default function ChatFrame({
-  width = MIN_ALLOWED_WIDTH,
-  height = MIN_ALLOWED_HEIGHT,
+  width = DEFAULT_WIDTH,
+  height = DEFAULT_HEIGHT,
   children,
 }: ChatFrameProps) {
   return (

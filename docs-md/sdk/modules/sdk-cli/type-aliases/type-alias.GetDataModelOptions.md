@@ -10,7 +10,7 @@ title: GetDataModelOptions
 
 ### `dataSource`
 
-**dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+**dataSource**: `string`
 
 ***
 

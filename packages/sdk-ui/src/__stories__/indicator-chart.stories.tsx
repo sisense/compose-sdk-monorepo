@@ -313,3 +313,12 @@ export const TickerGaugeIndicatorWithForcedTicker = template({
     tickerBarHeight: 40,
   },
 });
+
+export const NumericIndicatorWithNotAvailableValue = template({
+  chartType: 'indicator',
+  ...indicatorProps,
+  dataSet: {
+    columns: indicatorProps.dataSet.columns,
+    rows: [['N\\A', 'N\\A']],
+  },
+});

@@ -19,7 +19,10 @@ import { WidgetModel } from '../models';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
- * used to render a widget created in the Sisense instance.
+ * is used to render a widget created in a Sisense Fusion instance.
+ *
+ * To learn more about using Sisense Fusion Widgets in Compose SDK,
+ * see [Sisense Fusion Widgets](/guides/sdk/guides/charts/guide-fusion-widgets.html).
  *
  * @example
  * The example below renders a dashboard widget with the specified widget and dashboard OIDs.

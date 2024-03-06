@@ -1,7 +1,12 @@
 import { ClientApplication } from '../app/client-application.js';
 import { createDimensionalElementFromJaql } from '../dashboard-widget/translate-widget-data-options.js';
 import { TranslatableError } from '../translation/translatable-error.js';
-import { DimensionalCalculatedMeasure, FormulaJaql } from '@sisense/sdk-data';
+import {
+  DataSource,
+  DimensionalCalculatedMeasure,
+  FormulaJaql,
+  getDataSourceName,
+} from '@sisense/sdk-data';
 
 /**
  * Fetch a formula by oid from the default Sisense instance
@@ -37,12 +42,12 @@ export async function fetchFormulaByOid(
  */
 export async function fetchFormula(
   name: string,
-  dataSource: string,
+  dataSource: DataSource,
   app: ClientApplication,
 ): Promise<DimensionalCalculatedMeasure | null> {
   try {
     const formulas: FormulaJaql[] = await app.httpClient.get(
-      `api/v1/formulas?datasource=${dataSource}&flat=true`,
+      `api/v1/formulas?datasource=${getDataSourceName(dataSource)}&flat=true`,
       undefined,
       { skipTrackingParam: true },
     );

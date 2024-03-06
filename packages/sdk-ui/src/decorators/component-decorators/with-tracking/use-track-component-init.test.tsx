@@ -89,7 +89,7 @@ describe('useTrackComponentInit', () => {
   it('calls trackProductEvent with correct params when tracking is disabled in context provider', async () => {
     renderHook(() => useTrackComponentInit('TestComponent', { prop1: 'value1', prop2: 'value2' }), {
       wrapper: ({ children }) => (
-        <MockedSisenseContextProvider enableTracking={false}>
+        <MockedSisenseContextProvider tracking={{ enabled: false }}>
           {children}
         </MockedSisenseContextProvider>
       ),

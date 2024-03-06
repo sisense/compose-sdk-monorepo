@@ -58,7 +58,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -94,7 +94,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -116,7 +116,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         "rotation": 0,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
         },
@@ -240,7 +240,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
     "borderWidth": 1,
     "formatter": [Function],
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -271,7 +271,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         "overflow": "none",
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -294,7 +294,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
         "text": null,
       },
@@ -321,7 +321,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         "formatter": [Function],
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -344,7 +344,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -415,7 +415,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -451,7 +451,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -473,7 +473,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         "rotation": 0,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
         },
@@ -597,7 +597,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
     "borderWidth": 1,
     "formatter": [Function],
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -628,7 +628,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         "overflow": "none",
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -651,7 +651,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
         "text": null,
       },
@@ -678,7 +678,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         "formatter": [Function],
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -701,7 +701,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",

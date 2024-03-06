@@ -5,6 +5,8 @@ import {
   FilterRelationsNode,
   FilterRelationsJaql,
   FilterRelationsJaqlNode,
+  DataSource,
+  DataSourceInfo,
 } from './index.js';
 
 /**
@@ -81,3 +83,19 @@ export const getFilterListAndRelations = (
 
   return { filters: Array.from(filters), relations };
 };
+
+/**
+ * Gets the name of the data source
+ * @internal
+ */
+export function getDataSourceName(dataSource: DataSource): string {
+  return typeof dataSource === 'string' ? dataSource : dataSource.title;
+}
+
+/**
+ * Checks if the provided 'dataSource' is a data source info structure that contains more than just the data source name.
+ * @internal
+ */
+export function isDataSourceInfo(dataSource: DataSource): dataSource is DataSourceInfo {
+  return typeof dataSource === 'object' && 'type' in dataSource && 'title' in dataSource;
+}

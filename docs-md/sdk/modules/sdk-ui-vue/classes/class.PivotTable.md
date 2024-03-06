@@ -37,7 +37,7 @@ const tableProps = ref({
 
 ### dataSet
 
-> **dataSet**?: `string`
+> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 ***
 

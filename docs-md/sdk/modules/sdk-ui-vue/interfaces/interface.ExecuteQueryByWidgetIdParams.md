@@ -12,7 +12,9 @@ Parameters for [useExecuteQueryByWidgetId](../functions/function.useExecuteQuery
 
 > **count**?: `number`
 
-{@inheritDoc ExecuteQueryProps.count}
+Number of rows to return in the query result
+
+If not specified, the default value is `20000`
 
 ***
 
@@ -20,7 +22,7 @@ Parameters for [useExecuteQueryByWidgetId](../functions/function.useExecuteQuery
 
 > **dashboardOid**: `string`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.dashboardOid}
+Identifier of the dashboard that contains the widget
 
 ***
 
@@ -38,7 +40,9 @@ If not specified, the default value is `true`
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.filters}
+Filters that will slice query results.
+
+The provided filters will be merged with the existing widget filters based on `filtersMergeStrategy`
 
 ***
 
@@ -46,7 +50,13 @@ If not specified, the default value is `true`
 
 > **filtersMergeStrategy**?: `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy}
+Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
+
+- `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
+- `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
+- `codeOnly` - applies only the provided filters and completely ignores the widget filters.
+
+If not specified, the default strategy is `codeFirst`.
 
 ***
 
@@ -54,7 +64,7 @@ If not specified, the default value is `true`
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.highlights}
+Highlight filters that will highlight results that pass filter criteria
 
 ***
 
@@ -62,7 +72,9 @@ If not specified, the default value is `true`
 
 > **includeDashboardFilters**?: `boolean`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.includeDashboardFilters}
+Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
+
+If not specified, the default value is `false`.
 
 ***
 
@@ -70,7 +82,9 @@ If not specified, the default value is `true`
 
 > **offset**?: `number`
 
-{@inheritDoc ExecuteQueryProps.offset}
+Offset of the first row to return
+
+If not specified, the default value is `0`
 
 ***
 
@@ -78,7 +92,15 @@ If not specified, the default value is `true`
 
 > **onBeforeQuery**?: (`jaql`) => `any`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.onBeforeQuery}
+Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+
+**Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+```ts
+const onBeforeQuery = useCallback((jaql) => {
+  // modify jaql here
+  return jaql;
+}, []);
+```
 
 #### Parameters
 
@@ -96,4 +118,4 @@ If not specified, the default value is `true`
 
 > **widgetOid**: `string`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.widgetOid}
+Identifier of the widget

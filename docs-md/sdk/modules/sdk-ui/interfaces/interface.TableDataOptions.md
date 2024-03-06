@@ -4,7 +4,7 @@ title: TableDataOptions
 
 # Interface TableDataOptions
 
-Configuration for how to query data and assign data to [Table](../functions/function.Table.md).
+Configuration for how to query data and assign data to Table.
 
 ## Properties
 

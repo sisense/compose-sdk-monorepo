@@ -5,7 +5,7 @@ import { DataModel, Element } from './interfaces.js';
 import { create } from './factory.js';
 
 import { DimensionalElement } from './base.js';
-import { DataSource } from '../interfaces.js';
+import { DataSource, DataSourceInfo } from '../interfaces.js';
 import { TranslatableError } from '../translation/translatable-error.js';
 
 /**
@@ -30,7 +30,7 @@ export class DimensionalDataModel implements DataModel {
     return new DimensionalDataModel(config.name, config.dataSource, metadata);
   }
 
-  constructor(name: string, dataSource: DataSource, metadata: Element[]) {
+  constructor(name: string, dataSource: DataSourceInfo, metadata: Element[]) {
     this.name = name;
     this.dataSource = dataSource;
     this.metadata = metadata;

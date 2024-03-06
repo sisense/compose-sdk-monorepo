@@ -8,7 +8,7 @@ title: LineSubtype
 
 Property of [LineStyleOptions](../interfaces/interface.LineStyleOptions.md)
 
-Subtype of [LineChart](../functions/function.LineChart.md)
+Subtype of LineChart
 
 **Values**
 

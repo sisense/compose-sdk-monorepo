@@ -40,6 +40,7 @@ title: sdk-data
 ## Type Aliases
 
 - [DataSource](type-aliases/type-alias.DataSource.md)
+- [DataSourceInfo](type-aliases/type-alias.DataSourceInfo.md)
 - [FilterRelationsJaqlIdNode](type-aliases/type-alias.FilterRelationsJaqlIdNode.md)
 - [FilterRelationsModelIdNode](type-aliases/type-alias.FilterRelationsModelIdNode.md)
 - [FilterRelationsNode](type-aliases/type-alias.FilterRelationsNode.md)

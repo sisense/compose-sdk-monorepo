@@ -142,39 +142,32 @@ export interface SisenseContextProviderProps {
 
 /**
  * Props for {@link ExecuteQuery} component.
+ *
+ * @privateRemarks
+ * ExecuteQueryProps should inherit docs from ExecuteQueryParams,
+ * instead of the other way around because sdk-ui-angular and sdk-ui-vue
+ * can inherit docs from ExecuteQueryParams but not from ExecuteQueryProps.
  */
 export interface ExecuteQueryProps {
-  /**
-   * Data source the query is run against - e.g. `Sample ECommerce`
-   *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
-   */
+  /** {@inheritDoc ExecuteQueryParams.dataSource} */
   dataSource?: DataSource;
 
-  /** Dimensions of the query */
+  /** {@inheritDoc ExecuteQueryParams.dimensions} */
   dimensions?: Attribute[];
 
-  /** Measures of the query */
+  /** {@inheritDoc ExecuteQueryParams.measures} */
   measures?: Measure[];
 
-  /** Filters that will slice query results */
+  /** {@inheritDoc ExecuteQueryParams.filters} */
   filters?: Filter[] | FilterRelations;
 
-  /** Highlight filters that will highlight results that pass filter criteria */
+  /** {@inheritDoc ExecuteQueryParams.highlights} */
   highlights?: Filter[];
 
-  /**
-   * Number of rows to return in the query result
-   *
-   * If not specified, the default value is `20000`
-   */
+  /** {@inheritDoc ExecuteQueryParams.count} */
   count?: number;
 
-  /**
-   * Offset of the first row to return
-   *
-   * If not specified, the default value is `0`
-   */
+  /** {@inheritDoc ExecuteQueryParams.offset} */
   offset?: number;
 
   /** Function as child component that is called to render the query results */
@@ -183,17 +176,7 @@ export interface ExecuteQueryProps {
   /** Callback function that is evaluated when query results are ready */
   onDataChanged?: (data: QueryResultData) => void;
 
-  /**
-   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
-   *
-   * **Note:** wrap this function in `useCallback` hook to avoid triggering query execution on each render.
-   * ```tsx
-   * const onBeforeQuery = useCallback((jaql) => {
-   *   // modify jaql here
-   *   return jaql;
-   * }, []);
-   * ```
-   */
+  /** {@inheritDoc ExecuteQueryParams.onBeforeQuery} */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
 
@@ -227,9 +210,15 @@ export type ThemeProviderProps = PropsWithChildren<{
 }>;
 
 /**
- * Before render handler where any custom adjustments can be made to the chart options
- * of [highcharts](https://api.highcharts.com/highcharts/),
- * which is an underlying charting library used by Sisense.
+ * A handler function that allows you to customize the underlying chart element before it is
+ * rendered. Use the `highchartsOptions` object that is passed to the callback to change
+ * [options values](https://api.highcharts.com/highcharts/) and then return the modified options
+ * object. The returned options are then used when rendering the chart.
+ *
+ * This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
+ *
+ * For an example of how the `BeforeRenderHandler` function can be used, see the
+ * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
  *
  * @see {@link https://api.highcharts.com/highcharts/}
  */
@@ -256,7 +245,13 @@ export type DataPointsEventHandler = (
   nativeEvent: MouseEvent,
 ) => void;
 
-/** Click handler for when a data point is clicked. One parameter, `DataPoint`, is passed to the function. */
+/**
+ * A handler function that allows you to customize what happens when certain events occur to
+ * a data point.
+ *
+ * For an example of how the `DataPointEventHandler` function can be used, see the
+ * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
+ */
 export type DataPointEventHandler = (
   /** Data point that was clicked */
   point: DataPoint,
@@ -312,10 +307,15 @@ export type BoxplotDataPointEventHandler = (
 
 interface HighchartsBasedChartEventProps {
   /**
-   * Before render handler callback that allows adjusting
-   * detail chart options prior to render
+   * A callback that allows you to customize the underlying chart element before it is rendered.
+   * Use the `highchartsOptions` object that is passed to the callback to change
+   * [options values](https://api.highcharts.com/highcharts/) and then return the modified options
+   * object. The returned options are then used when rendering the chart.
    *
    * This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
+   *
+   * For an example of how the `onBeforeRender` callback can be used, see the
+   * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
    *
    * @category Callbacks
    */
@@ -328,19 +328,25 @@ interface HighchartsBasedChartEventProps {
  */
 interface RegularChartEventProps extends HighchartsBasedChartEventProps {
   /**
-   * Click handler callback for a data point
+   * A callback that allows you to customize what happens when a data point is clicked.
+   *
+   * To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
    *
    * @category Callbacks
    */
   onDataPointClick?: DataPointEventHandler;
   /**
-   * Context menu handler callback for a data point
+   * A callback that allows you to customize what happens when a context menu is displayed for a data point.
+   *
+   * To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
    *
    * @category Callbacks
    */
   onDataPointContextMenu?: DataPointEventHandler;
   /**
-   * Handler callback for selection of multiple data points
+   * A callback that allows you to customize what happens when data points are selected.
+   *
+   * To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
    *
    * @category Callbacks
    */
@@ -432,37 +438,94 @@ interface BoxplotChartEventProps extends HighchartsBasedChartEventProps {
  */
 export interface BaseChartProps {
   /**
-   * Data set for this component, which supports two options:
+   * Data set for a chart using one of the following options. If neither option is specified, the chart
+   * will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider}
+   * component.
    *
-   * (1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
-   * the chart will have an internal query connect to the data source
-   * and load the data as specified in {@link dataOptions}, {@link filters}, and {@link highlights}.
+   *
+   * (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
+   * retrieve the data source name from a data model you create using the `get-data-model`
+   * {@link @sisense/sdk-cli!Command | command} of the Compose SDK CLI. Under the hood, the chart
+   * connects to the data source, executes a query, and loads the data as specified in
+   * {@link dataOptions}, {@link filters}, and {@link highlights}.
+   *
+   * To learn more about using data from a Sisense data source, see the
+   * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#sisense-data).
    *
    * OR
    *
-   * (2) Explicit {@link @sisense/sdk-data!Data | Data}, which is made up of
-   * an array of {@link @sisense/sdk-data!Column | columns}
-   * and a two-dimensional array of data {@link @sisense/sdk-data!Cell | cells}.
-   * This allows the chart component to be used
-   * with user-provided data.
+   * (2) Explicit {@link @sisense/sdk-data!Data | `Data`}, which is made up of an array of
+   * {@link @sisense/sdk-data!Column | `Column` } objects and a two-dimensional array of row data. This approach
+   * allows the chart component to be used with any data you provide.
    *
-   * If neither option is specified,
-   * the chart will use the `defaultDataSource` specified in the parent Sisense Context.
+   * To learn more about using data from an external data source, see the
+   * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#explicit-data).
    *
+   * Example data in the proper format:
+   *
+   * ```ts
+   * const sampleData = {
+   *   columns: [
+   *     { name: 'Years', type: 'date' },
+   *     { name: 'Quantity', type: 'number' },
+   *     { name: 'Units', type: 'number' },
+   *   ],
+   *   rows: [
+   *     ['2019', 5500, 1500],
+   *     ['2020', 4471, 7000],
+   *     ['2021', 1812, 5000],
+   *     ['2022', 5001, 6000],
+   *     ['2023', 2045, 4000],
+   *   ],
+   * };
+   * ```
    *
    * @category Data
    */
   dataSet?: DataSource | Data;
 
   /**
-   * Filters that will slice query results
+   * Filters to apply to a chart’s data using one of the following options.
+   *
+   * (1) Array of filters returned from filter factory functions, such as
+   * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.
+   *
+   * Use this option for filters that do not require a UI to set them
+   * or for filters where you will supply your own UI using non-Sisense components.
+   *
+   * To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
+   *
+   * (2) Array of filters controlled by Sisense filter components.
+   *
+   * Use this option for filters that you want your users to set using Sisense UI components.
+   *
+   * To learn more about using filter components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
    *
    * @category Data
    */
   filters?: Filter[] | FilterRelations;
 
   /**
-   * Highlight filters that will highlight results that pass filter criteria
+   * Highlights based on filter criteria to apply to a chart using one of the following options.
+   *
+   * Note that the filter dimensions used in highlights must match those defined in the
+   * {@link dataOptions} of the chart.
+   *
+   * (1) Array of filters returned from filter factory functions, such as
+   * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.
+   *
+   * Use this option for highlights that do not require a UI to set them
+   * or for highlights where you will supply your own UI using non-Sisense components.
+   *
+   * To learn more about using filter factory functions to create highlights, see the
+   * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
+   *
+   * (2) Array of filters controlled by Sisense filter components.
+   *
+   * Use this option for highlights that you want your users to set using Sisense UI components.
+   *
+   * To learn more about using filter components to create highlights, see the
+   * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components-for-highlighting).
    *
    * @category Data
    */
@@ -515,14 +578,20 @@ export interface ChartProps extends BaseChartProps, ChartEventProps {
   chartType: ChartType;
 
   /**
-   * Configurations for how to interpret and present data passed to the chart.
+   * Configurations for how to interpret and present a chart's data.
+   *
+   * To learn more about using data options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#dataoptions).
    *
    * @category Chart
    */
   dataOptions: ChartDataOptions;
 
   /**
-   * Style options union across chart types.
+   * Configurations for how to style and present a chart's data.
+   *
+   * To learn more about using style options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#styleoptions).
    *
    * @category Chart
    */
@@ -545,13 +614,16 @@ export interface AreaChartProps
     RegularChartEventProps,
     HighchartsBasedChartEventProps {
   /**
-   * Configurations for how to interpret and present data passed to the chart.
+   * Configurations for how to interpret and present a chart's data.
+   *
+   * To learn more about using data options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#dataoptions).
    *
    * @category Chart
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that defines the functional style of the various chart elements.
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -566,13 +638,16 @@ export interface BarChartProps
     RegularChartEventProps,
     HighchartsBasedChartEventProps {
   /**
-   * Configurations for how to interpret and present the data passed to the chart
+   * Configurations for how to interpret and present a chart's data.
+   *
+   * To learn more about using data options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#dataoptions).
    *
    * @category Chart
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -587,13 +662,16 @@ export interface ColumnChartProps
     HighchartsBasedChartEventProps,
     RegularChartEventProps {
   /**
-   * Configurations for how to interpret and present the data passed to the chart
+   * Configurations for how to interpret and present a chart's data.
+   *
+   * To learn more about using data options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#dataoptions).
    *
    * @category Chart
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -614,7 +692,7 @@ export interface FunnelChartProps
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -629,13 +707,16 @@ export interface LineChartProps
     HighchartsBasedChartEventProps,
     RegularChartEventProps {
   /**
-   * Configurations for how to interpret and present data passed to the chart.
+   * Configurations for how to interpret and present a chart's data.
+   *
+   * To learn more about using data options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#dataoptions).
    *
    * @category Chart
    */
   dataOptions: CartesianChartDataOptions;
   /**
-   * Configuration that defines the functional style of the various chart elements.
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -656,7 +737,7 @@ export interface PieChartProps
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -670,9 +751,20 @@ export interface PolarChartProps
   extends BaseChartProps,
     HighchartsBasedChartEventProps,
     RegularChartEventProps {
-  /** Configurations for how to interpret and present the data passed to the chart */
+  /**
+   * Configurations for how to interpret and present a chart's data.
+   *
+   * To learn more about using data options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#dataoptions).
+   *
+   * @category Chart
+   */
   dataOptions: CartesianChartDataOptions;
-  /** Configuration that defines functional style of the various chart elements */
+  /**
+   * Configurations for how to style and present a chart's data.
+   *
+   * @category Chart
+   */
   styleOptions?: PolarStyleOptions;
 }
 
@@ -680,9 +772,17 @@ export interface PolarChartProps
  * Props of the {@link IndicatorChart} component.
  */
 export interface IndicatorChartProps extends BaseChartProps {
-  /** Configurations for how to interpret and present the data passed to the chart */
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
   dataOptions: IndicatorChartDataOptions;
-  /** Configuration that defines functional style of the various chart elements */
+  /**
+   * Configurations for how to style and present a chart's data.
+   *
+   * @category Chart
+   */
   styleOptions?: IndicatorStyleOptions;
 }
 
@@ -713,7 +813,7 @@ export interface TableProps {
   filters?: Filter[] | FilterRelations;
 
   /**
-   * Configurations that define functional style of the various table elements
+   * Configurations for how to style and present a table's data.
    *
    * @category Representation
    */
@@ -756,7 +856,7 @@ export interface PivotTableProps {
   filters?: Filter[] | FilterRelations;
 
   /**
-   * Configurations that define functional style of the various table elements
+   * Configurations for how to style and present a pivot table's data.
    *
    * @category Representation
    */
@@ -785,7 +885,7 @@ export interface ScatterChartProps
    */
   dataOptions: ScatterChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -794,7 +894,6 @@ export interface ScatterChartProps
 
 /**
  * Props for the {@link DashboardWidget} component
- *
  */
 export interface DashboardWidgetProps
   extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'> {
@@ -853,8 +952,7 @@ export interface DashboardWidgetProps
    */
   description?: string;
   /**
-   * Style options for the the widget including the widget container and the chart or table inside.
-   *
+   * Style options for the widget including the widget container and the chart or table inside.
    *
    * @category Widget
    */
@@ -1049,65 +1147,44 @@ export interface TableWidgetProps {
 
 /**
  * Props for {@link ExecuteQueryByWidgetId} component.
+ *
+ * @privateRemarks
+ * ExecuteQueryByWidgetIdProps should inherit docs from ExecuteQueryByWidgetIdParams,
+ * instead of the other way around because sdk-ui-angular and sdk-ui-vue
+ * can inherit docs from ExecuteQueryByWidgetIdParams but not from ExecuteQueryByWidgetIdProps.
  */
 export interface ExecuteQueryByWidgetIdProps {
-  /** Identifier of the widget */
+  /** {@inheritDoc ExecuteQueryByWidgetIdParams.widgetOid} */
   widgetOid: string;
 
-  /** Identifier of the dashboard that contains the widget */
+  /** {@inheritDoc ExecuteQueryByWidgetIdParams.dashboardOid} */
   dashboardOid: string;
 
-  /**
-   * Filters that will slice query results.
-   *
-   * The provided filters will be merged with the existing widget filters based on `filtersMergeStrategy`
-   */
+  /** {@inheritDoc ExecuteQueryByWidgetIdParams.filters} */
   filters?: Filter[];
 
-  /** Highlight filters that will highlight results that pass filter criteria */
+  /** {@inheritDoc ExecuteQueryByWidgetIdParams.highlights} */
   highlights?: Filter[];
 
-  /** {@inheritDoc ExecuteQueryProps.count} */
+  /** {@inheritDoc ExecuteQueryParams.count} */
   count?: number;
 
-  /** {@inheritDoc ExecuteQueryProps.offset} */
+  /** {@inheritDoc ExecuteQueryParams.offset} */
   offset?: number;
 
-  /**
-   * Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
-   *
-   * - `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
-   * - `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
-   * - `codeOnly` - applies only the provided filters and completely ignores the widget filters.
-   *
-   * If not specified, the default strategy is `codeFirst`.
-   */
+  /** {@inheritDoc ExecuteQueryByWidgetIdParams.filtersMergeStrategy} */
   filtersMergeStrategy?: FiltersMergeStrategy;
 
-  /**
-   * Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
-   *
-   * If not specified, the default value is `false`.
-   */
+  /** {@inheritDoc ExecuteQueryByWidgetIdParams.includeDashboardFilters} */
   includeDashboardFilters?: boolean;
 
-  /** Function as child component that is called to render the query results */
+  /** {@inheritDoc ExecuteQueryProps.children} */
   children?: (queryState: QueryByWidgetIdState) => ReactNode;
 
-  /** Callback function that is evaluated when query results are ready */
+  /** {@inheritDoc ExecuteQueryProps.onDataChanged} */
   onDataChanged?: (data: QueryResultData, queryParams: ExecuteQueryParams) => void;
 
-  /**
-   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
-   *
-   * **Note:** wrap this function in `useCallback` hook to avoid triggering query execution on each render.
-   * ```tsx
-   * const onBeforeQuery = useCallback((jaql) => {
-   *   // modify jaql here
-   *   return jaql;
-   * }, []);
-   * ```
-   */
+  /** {@inheritDoc ExecuteQueryParams.onBeforeQuery} */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
 
@@ -1125,7 +1202,7 @@ export interface TreemapChartProps
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -1146,7 +1223,7 @@ export interface SunburstChartProps
    */
   dataOptions: CategoricalChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -1167,7 +1244,7 @@ export interface BoxplotChartProps
    */
   dataOptions: BoxplotChartDataOptions | BoxplotChartCustomDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -1185,7 +1262,7 @@ export interface ScattermapChartProps extends BaseChartProps, ScattermapChartEve
    */
   dataOptions: ScattermapChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -1203,7 +1280,7 @@ export interface AreamapChartProps extends BaseChartProps, AreamapChartEventProp
    */
   dataOptions: AreamapChartDataOptions;
   /**
-   * Configuration that defines functional style of the various chart elements
+   * Configurations for how to style and present a chart's data.
    *
    * @category Chart
    */
@@ -1211,7 +1288,7 @@ export interface AreamapChartProps extends BaseChartProps, AreamapChartEventProp
 }
 
 /**
- * Props for {@link ContextMenu} component.
+ * Props for ContextMenu component.
  */
 export interface ContextMenuProps {
   /**

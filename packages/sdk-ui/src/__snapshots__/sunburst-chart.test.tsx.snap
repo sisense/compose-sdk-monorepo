@@ -54,7 +54,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -73,7 +73,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -85,7 +85,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -267,7 +267,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -329,7 +329,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -348,7 +348,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -360,7 +360,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -650,7 +650,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -712,7 +712,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -731,7 +731,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -743,7 +743,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -1033,7 +1033,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },

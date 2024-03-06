@@ -4,7 +4,7 @@ title: PivotTableDataOptions
 
 # Interface PivotTableDataOptions
 
-Configuration for how to query data and assign data to [PivotTable](../functions/function.PivotTable.md).
+Configuration for how to query data and assign data to PivotTable.
 
 ## Properties
 

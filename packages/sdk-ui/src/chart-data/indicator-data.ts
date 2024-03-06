@@ -28,7 +28,7 @@ export const indicatorData = (
 
   // required field
   const [value] = valueFromFirstRow(dataTable, chartDataOptions.value);
-  if (!value) {
+  if (value === undefined) {
     return emptyIndicatorData;
   }
 

@@ -1,5 +1,5 @@
 import { AbstractTaskManager, Task, Step } from '@sisense/task-manager';
-import { AbortRequestFunction, EmptyObject, JaqlQueryPayload, JaqlResponse } from '../types.js';
+import { AbortRequestFunction, JaqlQueryPayload, JaqlResponse } from '../types.js';
 import { PivotQueryTaskPassport, QueryTaskPassport } from './query-task-passport.js';
 import { QueryResultData, Element, PivotQueryResultData } from '@sisense/sdk-data';
 import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher.js';
@@ -8,6 +8,7 @@ import { getDataFromQueryResult } from '../query-result/index.js';
 import { JaqlRequest, PivotClient } from '@sisense/sdk-pivot-client';
 
 import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
+import { EmptyObject } from '../helpers/utility-types.js';
 
 type QueryTask = Task<QueryTaskPassport>;
 type PivotQueryTask = Task<PivotQueryTaskPassport>;

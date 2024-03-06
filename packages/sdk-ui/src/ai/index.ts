@@ -2,10 +2,15 @@ import '../index.css';
 
 export { default as AiContextProvider, type AiContextProviderProps } from './ai-context-provider';
 export { type ChatConfig } from './chat-config';
-export { useGetNlgQueryResult, type UseGetNlgQueryResultParams } from './use-get-nlg-query-result';
+export {
+  useGetNlgQueryResult,
+  type UseGetNlgQueryResultParams,
+  type UseGetNlgQueryResultState,
+} from './use-get-nlg-query-result';
 export {
   useGetQueryRecommendations,
   type UseGetQueryRecommendationsParams,
+  type UseGetQueryRecommendationsState,
 } from './use-get-query-recommendations';
 export type {
   GetNlgQueryResultRequest,

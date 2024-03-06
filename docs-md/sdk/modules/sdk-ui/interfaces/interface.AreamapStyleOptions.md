@@ -4,7 +4,7 @@ title: AreamapStyleOptions
 
 # Interface AreamapStyleOptions
 
-Configuration options that define functional style of the various elements of [AreamapChart](../functions/function.AreamapChart.md)
+Configuration options that define functional style of the various elements of the AreamapChart component
 
 ## Extends
 
@@ -32,7 +32,7 @@ Pick.height
 
 > **mapType**?: [`AreamapType`](../type-aliases/type-alias.AreamapType.md)
 
-Type of map to display on [AreamapChart](../functions/function.AreamapChart.md)
+Type of map to display on the AreamapChart component
 
 ***
 

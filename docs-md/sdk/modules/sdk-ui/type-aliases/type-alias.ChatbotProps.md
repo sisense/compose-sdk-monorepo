@@ -24,7 +24,7 @@ Various configuration options for the chatbot
 
 Total height of the chatbot
 
-If not specified, a default height of 500px will be used
+If not specified, a default height of `900px` will be used.
 
 ***
 
@@ -34,4 +34,4 @@ If not specified, a default height of 500px will be used
 
 Total width of the chatbot
 
-If not specified, a default width of 500px will be used
+If not specified, a default width of `500px` will be used.

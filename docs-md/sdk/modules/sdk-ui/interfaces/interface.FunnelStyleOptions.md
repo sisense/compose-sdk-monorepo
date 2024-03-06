@@ -4,7 +4,7 @@ title: FunnelStyleOptions
 
 # Interface FunnelStyleOptions
 
-Configuration options that define functional style of the various elements of [FunnelChart](../functions/function.FunnelChart.md)
+Configuration options that define functional style of the various elements of FunnelChart
 
 ## Extends
 
@@ -28,7 +28,7 @@ BaseStyleOptions.dataLimits
 
 > **funnelDirection**?: `"regular"` \| `"inverted"`
 
-Direction of [FunnelChart](../functions/function.FunnelChart.md) narrowing
+Direction of FunnelChart narrowing
 
 ***
 
@@ -44,7 +44,7 @@ Visual size of the lowest slice (degree of funnel narrowing from highest to lowe
 
 > **funnelType**?: `"regular"` \| `"pinched"`
 
-Visual type of the lowest slice of [FunnelChart](../functions/function.FunnelChart.md)
+Visual type of the lowest slice of FunnelChart
 
 ***
 
@@ -68,7 +68,7 @@ BaseStyleOptions.height
 
 > **labels**?: [`Labels`](../type-aliases/type-alias.Labels.md)
 
-Configuration that defines behavior of data labels on [FunnelChart](../functions/function.FunnelChart.md)
+Configuration that defines behavior of data labels on FunnelChart
 
 ***
 
@@ -88,7 +88,7 @@ BaseStyleOptions.legend
 
 > **subtype**?: `undefined`
 
-Subtype of [FunnelChart](../functions/function.FunnelChart.md)
+Subtype of FunnelChart
 
 ***
 

@@ -6,23 +6,21 @@ title: ExecuteQueryParams
 
 Parameters for [useExecuteQuery](../functions/function.useExecuteQuery.md) hook.
 
-## Extended By
-
-- [`ExecuteCsvQueryParams`](interface.ExecuteCsvQueryParams.md)
-
 ## Properties
 
 ### count
 
 > **count**?: `number`
 
-{@inheritDoc ExecuteQueryProps.count}
+Number of rows to return in the query result
+
+If not specified, the default value is `20000`
 
 ***
 
 ### dataSource
 
-> **dataSource**?: `string`
+> **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -76,7 +74,9 @@ Measures of the query
 
 > **offset**?: `number`
 
-{@inheritDoc ExecuteQueryProps.offset}
+Offset of the first row to return
+
+If not specified, the default value is `0`
 
 ***
 
@@ -84,7 +84,15 @@ Measures of the query
 
 > **onBeforeQuery**?: (`jaql`) => `any`
 
-{@inheritDoc ExecuteQueryProps.onBeforeQuery}
+Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+
+**Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+```ts
+const onBeforeQuery = useCallback((jaql) => {
+  // modify jaql here
+  return jaql;
+}, []);
+```
 
 #### Parameters
 

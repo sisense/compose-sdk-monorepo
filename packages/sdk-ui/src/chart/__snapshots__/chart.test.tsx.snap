@@ -63,7 +63,7 @@ exports[`Chart > add handlers to a chart 1`] = `
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -94,7 +94,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -109,7 +109,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         "enabled": false,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -284,7 +284,7 @@ exports[`Chart > add handlers to a chart 1`] = `
     "borderWidth": 1,
     "formatter": [Function],
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -322,7 +322,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         "overflow": "none",
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -348,7 +348,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -381,7 +381,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         "formatter": [Function],
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -425,7 +425,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -499,7 +499,7 @@ exports[`Chart > change theme of a chart 1`] = `
     "itemStyle": {
       "color": "red",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -530,7 +530,7 @@ exports[`Chart > change theme of a chart 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "red",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -545,7 +545,7 @@ exports[`Chart > change theme of a chart 1`] = `
         "enabled": false,
         "style": {
           "color": "red",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -717,7 +717,7 @@ exports[`Chart > change theme of a chart 1`] = `
     "borderWidth": 1,
     "formatter": [Function],
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -755,7 +755,7 @@ exports[`Chart > change theme of a chart 1`] = `
         "overflow": "none",
         "style": {
           "color": "red",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -781,7 +781,7 @@ exports[`Chart > change theme of a chart 1`] = `
         "margin": 25,
         "style": {
           "color": "red",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -814,7 +814,7 @@ exports[`Chart > change theme of a chart 1`] = `
         "formatter": [Function],
         "style": {
           "color": "red",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -858,7 +858,7 @@ exports[`Chart > change theme of a chart 1`] = `
         "margin": 25,
         "style": {
           "color": "red",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -946,7 +946,7 @@ exports[`Chart > render Table 1`] = `
                           >
                             <div
                               class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
-                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -960,18 +960,18 @@ exports[`Chart > render Table 1`] = `
                                     <div
                                       class="_headerCell_d9b667"
                                     >
-                                      <span
+                                      <div
                                         class="_headerLabel_d9b667"
                                       >
                                         <div
                                           class="_tableCellContent_4b88bf"
-                                          style="max-width: 66px;"
+                                          style="max-width: 90px;"
                                         >
                                           <div>
                                             Years
                                           </div>
                                         </div>
-                                      </span>
+                                      </div>
                                       <div
                                         class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
                                       />
@@ -988,7 +988,7 @@ exports[`Chart > render Table 1`] = `
                           >
                             <div
                               class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
-                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1002,18 +1002,18 @@ exports[`Chart > render Table 1`] = `
                                     <div
                                       class="_headerCell_d9b667"
                                     >
-                                      <span
+                                      <div
                                         class="_headerLabel_d9b667"
                                       >
                                         <div
                                           class="_tableCellContent_4b88bf"
-                                          style="max-width: 66px;"
+                                          style="max-width: 90px;"
                                         >
                                           <div>
                                             Group
                                           </div>
                                         </div>
-                                      </span>
+                                      </div>
                                       <div
                                         class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
                                       />
@@ -1081,7 +1081,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1112,7 +1112,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1191,7 +1191,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1222,7 +1222,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1301,7 +1301,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1332,7 +1332,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1411,7 +1411,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1442,7 +1442,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1521,7 +1521,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1552,7 +1552,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1631,7 +1631,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1662,7 +1662,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1741,7 +1741,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1772,7 +1772,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1851,7 +1851,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1882,7 +1882,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1961,7 +1961,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -1992,7 +1992,7 @@ exports[`Chart > render Table 1`] = `
                             >
                               <div
                                 class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: \\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif;"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
                                   class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
@@ -2105,7 +2105,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -2140,7 +2140,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -2155,7 +2155,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "enabled": false,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -2587,7 +2587,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
     "borderWidth": 1,
     "formatter": [Function],
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -2633,7 +2633,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "overflow": "none",
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -2656,7 +2656,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2679,7 +2679,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2702,7 +2702,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2725,7 +2725,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2748,7 +2748,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2771,7 +2771,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2794,7 +2794,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2817,7 +2817,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2840,7 +2840,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
             "align": "right",
             "style": {
               "color": "#000000",
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -2916,7 +2916,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -2949,7 +2949,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "formatter": [Function],
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -2993,7 +2993,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3067,7 +3067,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -3102,7 +3102,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -3117,7 +3117,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "enabled": false,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3441,7 +3441,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
     "borderWidth": 1,
     "formatter": [Function],
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -3479,7 +3479,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "overflow": "none",
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3505,7 +3505,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3538,7 +3538,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "formatter": [Function],
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3582,7 +3582,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3656,7 +3656,7 @@ exports[`Chart > render a line chart 1`] = `
     "itemStyle": {
       "color": "#000000",
       "cursor": "default",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -3687,7 +3687,7 @@ exports[`Chart > render a line chart 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -3702,7 +3702,7 @@ exports[`Chart > render a line chart 1`] = `
         "enabled": false,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3874,7 +3874,7 @@ exports[`Chart > render a line chart 1`] = `
     "borderWidth": 1,
     "formatter": [Function],
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -3912,7 +3912,7 @@ exports[`Chart > render a line chart 1`] = `
         "overflow": "none",
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3938,7 +3938,7 @@ exports[`Chart > render a line chart 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3971,7 +3971,7 @@ exports[`Chart > render a line chart 1`] = `
         "formatter": [Function],
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4015,7 +4015,7 @@ exports[`Chart > render a line chart 1`] = `
         "margin": 25,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",

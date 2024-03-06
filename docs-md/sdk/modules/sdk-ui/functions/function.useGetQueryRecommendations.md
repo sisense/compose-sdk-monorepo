@@ -4,7 +4,7 @@ title: useGetQueryRecommendations
 
 # Function useGetQueryRecommendations <Badge type="beta" text="Beta" />
 
-> **useGetQueryRecommendations**(...`args`): `object`
+> **useGetQueryRecommendations**(...`args`): [`UseGetQueryRecommendationsState`](../interfaces/interface.UseGetQueryRecommendationsState.md)
 
 React hook that fetches recommended questions for a data model or perspective.
 
@@ -22,47 +22,26 @@ This hook is currently under private beta for selected customers and is subject 
 
 ## Returns
 
+[`UseGetQueryRecommendationsState`](../interfaces/interface.UseGetQueryRecommendationsState.md)
+
 An array of objects, each containing recommended question text and its corresponding JAQL
-
-### `data`
-
-**data**: [`QueryRecommendationResponse`](../type-aliases/type-alias.QueryRecommendationResponse.md)
-
-### `isLoading`
-
-**isLoading**: `boolean`
 
 ## Example
 
 ```ts
-import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { AiContextProvider, useGetQueryRecommendations } from '@sisense/sdk-ui/ai';
+const { data, isLoading } = useGetQueryRecommendations({
+  contextTitle: 'Sample ECommerce',
+});
 
-function Page() {
-  const { data } = useGetQueryRecommendations({
-    contextTitle: 'Sample ECommerce',
-  });
-
-  if (!data) {
-    return <div>Loading recommendations</div>;
-  }
-
-  return (
-    <ul>
-      {data.map((item, index) => (
-        <li key={index}>{item.nlqPrompt}</li>
-      ))}
-    </ul>
-  );
+if (isLoading) {
+  return <div>Loading recommendations</div>;
 }
 
-function App() {
-  return (
-    <SisenseContextProvider {...sisenseContextProps}>
-      <AiContextProvider>
-        <Page />
-      </AiContextProvider>
-    </SisenseContextProvider>
-  );
-}
+return (
+  <ul>
+    {data.map((item, index) => (
+      <li key={index}>{item.nlqPrompt}</li>
+    ))}
+  </ul>
+);
 ```

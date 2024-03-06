@@ -3,6 +3,7 @@
 import {
   Attribute,
   createAttribute,
+  DataSourceInfo,
   DimensionalAttribute,
   EMPTY_PIVOT_QUERY_RESULT_DATA,
   Filter,
@@ -30,6 +31,7 @@ import {
 import { HttpClient } from '@sisense/sdk-rest-client';
 import type { Mocked } from 'vitest';
 import { PivotClient } from '@sisense/sdk-pivot-client';
+import { AnyObject } from './helpers/utility-types.js';
 
 describe('DimensionalQueryClient', () => {
   let httpClientMock: Mocked<HttpClient>;
@@ -39,6 +41,7 @@ describe('DimensionalQueryClient', () => {
   beforeEach(() => {
     httpClientMock = {
       post: vi.fn().mockResolvedValue({}),
+      get: vi.fn().mockResolvedValue({}),
     } as unknown as Mocked<HttpClient>;
     pivotClientMock = {
       queryData: vi.fn().mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA),
@@ -234,6 +237,20 @@ describe('DimensionalQueryClient', () => {
         const gotDataSourceFields = await queryClient.getDataSourceFields(testSample.datasource);
         expect(gotDataSourceFields).toEqual(testSample.fields);
       }
+    });
+  });
+
+  describe('getDataSourceInfo', () => {
+    it('should resolve the data source info', async () => {
+      const dataSourceName = 'test';
+      const fullDataSourceSchemaFromBackend: DataSourceInfo & AnyObject = {
+        title: dataSourceName,
+        type: 'live',
+        someOtherProperty: 'someOtherValue',
+      };
+      httpClientMock.get.mockResolvedValue(fullDataSourceSchemaFromBackend);
+      const gotDataSourceInfo = await queryClient.getDataSourceInfo(dataSourceName);
+      expect(gotDataSourceInfo).toEqual({ title: dataSourceName, type: 'live' });
     });
   });
 

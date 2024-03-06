@@ -4,7 +4,7 @@ title: DashboardWidgetStyleOptions
 
 # Interface DashboardWidgetStyleOptions
 
-Style settings defining the look and feel of [DashboardWidget](../functions/function.DashboardWidget.md)
+Style settings defining the look and feel of DashboardWidget
 
 ## Extends
 

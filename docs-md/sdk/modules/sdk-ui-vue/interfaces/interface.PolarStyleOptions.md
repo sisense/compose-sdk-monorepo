@@ -4,7 +4,7 @@ title: PolarStyleOptions
 
 # Interface PolarStyleOptions
 
-Configuration options that define functional style of the various elements of [PolarChart](../classes/class.PolarChart.md)
+Configuration options that define functional style of the various elements of PolarChart
 
 ## Extends
 
@@ -80,7 +80,7 @@ BaseAxisStyleOptions.navigator
 
 > **subtype**?: [`PolarSubtype`](../type-aliases/type-alias.PolarSubtype.md)
 
-Subtype of [PolarChart](../classes/class.PolarChart.md)
+Subtype of PolarChart
 
 ***
 

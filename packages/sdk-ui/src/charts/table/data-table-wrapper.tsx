@@ -15,6 +15,7 @@ import {
   HEADER_ELLIPSIZED_LENGTH,
   HEADER_HEIGHT,
   HEADER_PADDING,
+  HEADER_TYPE_ICON_SPACING,
   MAX_WIDTH,
   ROW_HEIGHT,
 } from './styles/style-constants';
@@ -69,6 +70,11 @@ export const DataTableWrapper = ({
   onSortUpdate,
 }: DataTableWrapperProps) => {
   const previousIsLoadingRef = useRef<boolean>(isLoading);
+  const showFieldTypeIcon =
+    customStyles && customStyles.showFieldTypeIcon !== undefined
+      ? customStyles.showFieldTypeIcon
+      : true;
+  const headerPadding = HEADER_PADDING + (showFieldTypeIcon ? HEADER_TYPE_ICON_SPACING : 0);
 
   const columnsOptions = useMemo(
     () =>
@@ -79,7 +85,13 @@ export const DataTableWrapper = ({
   );
 
   const [columnWidths, setColumnWidths] = useState<number[]>(() =>
-    calcColumnWidths(dataTable, isLoading, columnsOptions),
+    calcColumnWidths(
+      dataTable,
+      isLoading,
+      showFieldTypeIcon,
+      columnsOptions,
+      themeSettings.typography?.fontFamily,
+    ),
   );
 
   useEffect(() => {
@@ -90,6 +102,7 @@ export const DataTableWrapper = ({
           calcColumnWidths(
             dataTable,
             isLoading,
+            showFieldTypeIcon,
             columnsOptions,
             themeSettings.typography?.fontFamily,
           ),
@@ -97,12 +110,35 @@ export const DataTableWrapper = ({
       }
       previousIsLoadingRef.current = isLoading;
     }
-  }, [isLoading, dataTable, themeSettings, columnsOptions]);
+  }, [isLoading, dataTable, themeSettings, columnsOptions, showFieldTypeIcon]);
 
-  const showFieldTypeIcon =
-    customStyles && customStyles.showFieldTypeIcon !== undefined
-      ? customStyles.showFieldTypeIcon
-      : true;
+  const isFontLoadingObserved = useRef(false);
+  useEffect(() => {
+    if (!isFontLoadingObserved.current && document.fonts) {
+      isFontLoadingObserved.current = true;
+      document.fonts.ready
+        .then(() => {
+          setColumnWidths(
+            calcColumnWidths(
+              dataTable,
+              isLoading,
+              showFieldTypeIcon,
+              columnsOptions,
+              themeSettings.typography?.fontFamily,
+            ),
+          );
+        })
+        .catch((e) => {
+          throw e;
+        });
+    }
+  }, [
+    dataTable,
+    isLoading,
+    columnsOptions,
+    themeSettings.typography?.fontFamily,
+    showFieldTypeIcon,
+  ]);
 
   return (
     <div className={styles.tableWrapper}>
@@ -142,7 +178,7 @@ export const DataTableWrapper = ({
                       displayValue:
                         dataOptions.columns[colIndex].title ?? dataOptions.columns[colIndex].name,
                       width: columnWidths[colIndex],
-                      padding: HEADER_PADDING,
+                      padding: headerPadding,
                       ellipsizedLength: HEADER_ELLIPSIZED_LENGTH,
                     })}
                   </SortableTableColumnHeader>

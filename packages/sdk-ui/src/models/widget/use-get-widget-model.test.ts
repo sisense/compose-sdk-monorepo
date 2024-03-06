@@ -59,7 +59,10 @@ describe('useGetWidgetModel', () => {
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,
-      enableTracking: false,
+      tracking: {
+        enabled: false,
+        packageName: 'sdk-ui',
+      },
     });
   });
 
@@ -106,7 +109,10 @@ describe('useGetWidgetModel', () => {
     useSisenseContextMock.mockReturnValue({
       app: { httpClient: {} } as ClientApplication,
       isInitialized: true,
-      enableTracking: true,
+      tracking: {
+        enabled: true,
+        packageName: 'sdk-ui',
+      },
     });
     vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
 

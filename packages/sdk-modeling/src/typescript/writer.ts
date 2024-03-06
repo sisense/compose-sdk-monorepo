@@ -20,11 +20,15 @@ import { BaseMeasureWriter, MeasureTemplateWriter } from './writers/measures.js'
 
 import { DimensionWriter, DateDimensionWriter } from './writers/dimensions.js';
 
-import { BaseWriter, NEWLINE } from './writers/base.js';
+import { ElementWriter, NEWLINE } from './writers/base.js';
 import { createInMemoryDuplexStream } from './utils/create-in-memory-duplex-stream.js';
 import { compileTsCode } from './utils/compile-ts-code.js';
+import { formatCode } from './utils/format-code.js';
+import { DataSourceWriter } from './writers/datasource.js';
+import { ImportsWriter } from './writers/imports.js';
+import { Writer } from './writers/interfaces.js';
 
-function getWriter(item: Element): BaseWriter<any> {
+function getMetadataWriter(item: Element): ElementWriter<any> {
   if (MetadataTypes.isDateDimension(item.type)) {
     return new DateDimensionWriter(<DateDimension>item, false);
   } else if (MetadataTypes.isDimension(item.type)) {
@@ -50,21 +54,16 @@ function fillStreamWithTsCode(stream: NodeJS.WritableStream, json: any, config: 
   // generating a dimensional data model from the input json
   const dm = DimensionalDataModel.fromConfig(json);
 
-  const writers: BaseWriter<any>[] = [];
-  for (let i = 0; i < dm.metadata.length; i++) {
-    writers.push(getWriter(dm.metadata[i]));
+  const writers: Writer[] = [];
+  writers.push(new ImportsWriter(dm.dataSource, config.datamodule));
+  writers.push(new DataSourceWriter(dm.dataSource));
+  for (const metadataItem of dm.metadata) {
+    writers.push(getMetadataWriter(metadataItem));
   }
 
-  // writing imports
-  const datamodule = config.datamodule || '@sisense/sdk-data';
-  stream.write(`import type { Dimension, DateDimension, Attribute } from '${datamodule}';${NEWLINE}
-import { createAttribute, createDateDimension, createDimension } from '${datamodule}';${NEWLINE}${NEWLINE}`);
-
-  stream.write(`export const DataSource = '${dm.dataSource}';${NEWLINE}`);
-
-  for (let i = 0; i < writers.length; i++) {
+  for (const writer of writers) {
     stream.write(NEWLINE);
-    writers[i].write(stream, 0);
+    writer.write(stream, 0);
     stream.write(NEWLINE);
   }
   return stream;
@@ -77,9 +76,12 @@ export async function writeTypescript(json: any, config: WriteConfig) {
   const filePath = path.join(config.dir || '', `${config.filename}.ts`);
   const fileStream = createWriteStream(filePath, { encoding: 'utf-8' });
   const tsCodeStream = createInMemoryDuplexStream();
-  tsCodeStream.pipe(fileStream);
   fillStreamWithTsCode(tsCodeStream, json, config);
   tsCodeStream.end();
+  const unformattedTsCode = tsCodeStream.getStringData();
+  const tsCode = await formatCode(unformattedTsCode, 'ts');
+  fileStream.write(tsCode);
+  fileStream.end();
 
   return new Promise<void>((resolve) => {
     fileStream.on('finish', () => {
@@ -100,7 +102,11 @@ export async function writeJavascript(json: any, config: WriteConfig) {
   fillStreamWithTsCode(tsCodeStream, json, config);
   tsCodeStream.end();
   const tsCode = tsCodeStream.getStringData();
-  const { jsCode, typeDefs } = compileTsCode(tsCode);
+  const { jsCode: unformattedJsCode, typeDefs: unformattedTypeDefs } = compileTsCode(tsCode);
+  const [jsCode, typeDefs] = await Promise.all([
+    formatCode(unformattedJsCode, 'js'),
+    formatCode(unformattedTypeDefs, 'ts'),
+  ]);
   jsFileStream.write(jsCode);
   dtsFileStream.write(typeDefs);
 

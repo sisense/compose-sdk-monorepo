@@ -51,11 +51,12 @@ export type {
   ScattermapChartProps,
   SisenseContextProviderProps,
 
-  // Hooks Props:
+  // Hooks/Composables Props:
   ExecuteQueryByWidgetIdParams,
   ExecuteQueryParams,
   GetWidgetModelParams,
-  ExecuteCsvQueryParams,
+  // useExecuteCsvQuery is not ported to Vue yet
+  // ExecuteCsvQueryParams,
   GetSharedFormulaParams,
   GetDashboardModelParams,
   UseGetSharedFormulaParams,

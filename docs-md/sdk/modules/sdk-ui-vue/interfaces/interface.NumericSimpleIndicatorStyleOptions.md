@@ -4,7 +4,7 @@ title: NumericSimpleIndicatorStyleOptions
 
 # Interface NumericSimpleIndicatorStyleOptions
 
-Configuration options that define functional style of the various elements of Numeric Simple [IndicatorChart](../classes/class.IndicatorChart.md)
+Configuration options that define functional style of the various elements of Numeric Simple IndicatorChart
 
 ## Extends
 

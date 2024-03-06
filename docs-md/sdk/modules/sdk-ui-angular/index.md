@@ -45,6 +45,7 @@ title: sdk-ui-angular
 - [BoxplotStyleOptions](interfaces/interface.BoxplotStyleOptions.md)
 - [CartesianChartDataOptions](interfaces/interface.CartesianChartDataOptions.md)
 - [CategoricalChartDataOptions](interfaces/interface.CategoricalChartDataOptions.md)
+- [ContextMenuProps](interfaces/interface.ContextMenuProps.md)
 - [DashboardWidgetStyleOptions](interfaces/interface.DashboardWidgetStyleOptions.md)
 - [DataLimits](interfaces/interface.DataLimits.md)
 - [ExecuteQueryByWidgetIdParams](interfaces/interface.ExecuteQueryByWidgetIdParams.md)

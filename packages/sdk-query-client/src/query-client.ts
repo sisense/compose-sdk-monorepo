@@ -18,7 +18,7 @@ import {
 } from './query-task-manager/query-task-passport.js';
 import { ExecutionResultStatus } from '@sisense/task-manager';
 import { QueryApiDispatcher } from './query-api-dispatcher/query-api-dispatcher.js';
-import { DataSource, MetadataTypes } from '@sisense/sdk-data';
+import { DataSourceInfo, DataSource, MetadataTypes } from '@sisense/sdk-data';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { TranslatableError } from './translation/translatable-error.js';
 import { PivotClient } from '@sisense/sdk-pivot-client';
@@ -144,6 +144,17 @@ export class DimensionalQueryClient implements QueryClient {
     offset = 0,
   ): Promise<DataSourceField[]> {
     return this.queryApi.getDataSourceFields(dataSource, count, offset);
+  }
+
+  /**
+   * Get info about data source
+   */
+  public async getDataSourceInfo(datasourceName: string): Promise<DataSourceInfo> {
+    const completeDataSourceSchema = await this.queryApi.getDataSourceSchema(datasourceName);
+    return {
+      title: completeDataSourceSchema.title,
+      type: completeDataSourceSchema.type === 'extract' ? 'elasticube' : 'live',
+    };
   }
 }
 

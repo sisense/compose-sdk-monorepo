@@ -16,7 +16,7 @@ Can consist either of an oid or a name/dataSource pair
 
 ### dataSource
 
-> **dataSource**?: `string`
+> **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source - e.g. `Sample ECommerce`
 

@@ -4,7 +4,7 @@ title: PivotTableStyleOptions
 
 # Interface PivotTableStyleOptions
 
-Configuration options that define functional style of the various elements of PivotTable
+Configuration options that define functional style of the various elements of the PivotTable component
 
 ## Properties
 

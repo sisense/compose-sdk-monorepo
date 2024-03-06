@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
+import { Writer } from './interfaces.js';
+
 export const NEWLINE = '\n';
 
 export function writeIndented(stream: NodeJS.WritableStream, s: string, idnt: number) {
@@ -39,7 +41,7 @@ export function indent(ident: number) {
   return '  '.repeat(ident);
 }
 
-export abstract class BaseWriter<T> {
+export abstract class ElementWriter<T> implements Writer {
   readonly element: T;
 
   readonly name: string;

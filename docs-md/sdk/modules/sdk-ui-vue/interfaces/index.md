@@ -22,7 +22,6 @@ title: Interfaces
 - [DataLimits](interface.DataLimits.md)
 - [DateRangeFilterTileProps](interface.DateRangeFilterTileProps.md)
 - [DrilldownBreadcrumbsProps](interface.DrilldownBreadcrumbsProps.md)
-- [ExecuteCsvQueryParams](interface.ExecuteCsvQueryParams.md)
 - [ExecuteQueryByWidgetIdParams](interface.ExecuteQueryByWidgetIdParams.md)
 - [ExecuteQueryParams](interface.ExecuteQueryParams.md)
 - [FunnelChartProps](interface.FunnelChartProps.md)

@@ -16,7 +16,9 @@ Parameters for data query execution.
 
 > **count**?: `number`
 
-{@inheritDoc ExecuteQueryProps.count}
+Number of rows to return in the query result
+
+If not specified, the default value is `20000`
 
 #### Inherited from
 
@@ -26,7 +28,7 @@ Omit.count
 
 ### dataSource
 
-> **dataSource**?: `string`
+> **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -90,7 +92,9 @@ Omit.measures
 
 > **offset**?: `number`
 
-{@inheritDoc ExecuteQueryProps.offset}
+Offset of the first row to return
+
+If not specified, the default value is `0`
 
 #### Inherited from
 
@@ -102,7 +106,15 @@ Omit.offset
 
 > **onBeforeQuery**?: (`jaql`) => `any`
 
-{@inheritDoc ExecuteQueryProps.onBeforeQuery}
+Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+
+**Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+```ts
+const onBeforeQuery = useCallback((jaql) => {
+  // modify jaql here
+  return jaql;
+}, []);
+```
 
 #### Parameters
 

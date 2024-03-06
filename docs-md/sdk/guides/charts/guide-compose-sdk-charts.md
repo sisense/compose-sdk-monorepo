@@ -12,9 +12,9 @@ Compose SDK charts are currently available as React and Angular components.
 
 There are several different types of components you can use to display charts.
 
--   Specific chart components - Each chart type has a component specifically for that chart type. For example, to display a pie chart, you can use the `<PieChart />` component. These components offer the most granular customization levels since their properties are tailored to the specific type of chart you’re working with.
--   Chart - A universal `<Chart />` component that can be used to display charts of different types. You specify which type of chart you want to display using the component’s `chartType` property. This component can be used to easily switch between chart types or to show a series of charts that are all different types.
--   ChartWidget - A universal `<Chart />` wrapped in a widget container. You can use the widget wrapping to add a title, widget styling, and more.
+- Specific chart components - Each chart type has a component specifically for that chart type. For example, to display a pie chart, you can use the `<PieChart />` component. These components offer the most granular customization levels since their properties are tailored to the specific type of chart you’re working with.
+- Chart - A universal `<Chart />` component that can be used to display charts of different types. You specify which type of chart you want to display using the component’s `chartType` property. This component can be used to easily switch between chart types or to show a series of charts that are all different types.
+- ChartWidget - A universal `<Chart />` wrapped in a widget container. You can use the widget wrapping to add a title, widget styling, and more.
 
 Although there are some differences between the different chart types, their basic usage is mostly similar. Each chart has the same base properties for working with a chart’s data, chart options, and callbacks. In addition to these base properties, some charts will have additional properties specific to their chart types.
 
@@ -24,9 +24,9 @@ The examples in this guide will use the generic `<Chart />` component, but you c
 
 Charts contain the following data properties for working with the data the chart displays:
 
--   `dataSet` - Data or reference to the data the chart displays
--   `filters` - Filters to apply to the chart data
--   `highlights` - Highlights that highlight data that pass certain criteria
+- `dataSet` - Data or reference to the data the chart displays
+- `filters` - Filters to apply to the chart data
+- `highlights` - Highlights that highlight data that pass certain criteria
 
 ### dataSet
 
@@ -58,12 +58,12 @@ import * as DM from '../sample-ecommerce';
 //...
 
 <Chart
-    chartType={'column'}
-    dataSet={DM.DataSource}
-    dataOptions={{
-        category: [DM.Commerce.AgeRange],
-        value: [measureFactory.sum(DM.Commerce.Revenue)],
-    }}
+  chartType={'column'}
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  }}
 />;
 ```
 
@@ -78,12 +78,12 @@ import * as DM from '../../sample-ecommerce';
 //...
 
 chart = {
-    chartType: 'column' as const,
-    dataSet: DM.DataSource,
-    dataOptions: {
-      category: [DM.Commerce.AgeRange],
-      value: [measureFactory.sum(DM.Commerce.Revenue)],
-    },
+  chartType: 'column' as const,
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  },
 },
 ```
 
@@ -108,7 +108,7 @@ For example, the following code snippets set a chart’s dataset using static da
 
 ##### Sample data
 
-```json
+```ts
 const sampleData = {
   columns: [
     { name: 'Years', type: 'date' },
@@ -129,12 +129,12 @@ const sampleData = {
 
 ```ts
 <Chart
-    chartType={'column'}
-    dataSet={sampleData}
-    dataOptions={{
-        category: [{ name: 'Years', type: 'date' }],
-        value: [{ name: 'Quantity', type: 'number' }],
-    }}
+  chartType={'column'}
+  dataSet={sampleData}
+  dataOptions={{
+    category: [{ name: 'Years', type: 'date' }],
+    value: [{ name: 'Quantity', type: 'number' }],
+  }}
 />
 ```
 
@@ -190,13 +190,13 @@ import * as DM from '../sample-ecommerce';
 //...
 
 <Chart
-    chartType={'column'}
-    dataSet={DM.DataSource}
-    dataOptions={{
-        category: [DM.Commerce.AgeRange],
-        value: [measureFactory.sum(DM.Commerce.Revenue)],
-    }}
-    filters={[filterFactory.lessThan(DM.Commerce.Cost, 1000)]}
+  chartType={'column'}
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  }}
+  filters={[filterFactory.lessThan(DM.Commerce.Cost, 1000)]}
 />;
 ```
 
@@ -211,13 +211,13 @@ import * as DM from '../../sample-ecommerce';
 //...
 
 chart = {
-    chartType: 'column' as const,
-    dataSet: DM.DataSource,
-    dataOptions: {
-        category: [DM.Commerce.AgeRange],
-        value: [measureFactory.sum(DM.Commerce.Revenue)],
-    },
-    filters: [filterFactory.lessThan(DM.Commerce.Cost, 1000)],
+  chartType: 'column' as const,
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  },
+  filters: [filterFactory.lessThan(DM.Commerce.Cost, 1000)],
 };
 ```
 
@@ -225,10 +225,10 @@ chart = {
 <!--Component HTML template in .component.html-->
 
 <csdk-chart
-    [chartType]="chart.chartType"
-    [dataSet]="chart.dataSet"
-    [dataOptions]="chart.dataOptions"
-    [filters]="chart.filters"
+  [chartType]="chart.chartType"
+  [dataSet]="chart.dataSet"
+  [dataOptions]="chart.dataOptions"
+  [filters]="chart.filters"
 />
 ```
 
@@ -317,21 +317,21 @@ chart = {
 <!--Component HTML template in .component.html-->
 
 <csdk-chart
-    [chartType]="chart.chartType"
-    [dataSet]="chart.dataSet"
-    [dataOptions]="chart.dataOptions"
-    [filters]="[conditionFilter]"
+  [chartType]="chart.chartType"
+  [dataSet]="chart.dataSet"
+  [dataOptions]="chart.dataOptions"
+  [filters]="[conditionFilter]"
 />
 <csdk-member-filter-tile
-    title="Condition"
-    [dataSource]="DM.DataSource"
-    [attribute]="DM.Commerce.Condition"
-    [filter]="conditionFilter"
-    (filterChange)="onMembersFilterChange($event)"
+  title="Condition"
+  [dataSource]="DM.DataSource"
+  [attribute]="DM.Commerce.Condition"
+  [filter]="conditionFilter"
+  (filterChange)="onMembersFilterChange($event)"
 />
 ```
 
-### Highlights
+### highlights
 
 Highlights work in a similar fashion to filters. But, whereas filters filter the data to only show the subset of the data that matches the filter, highlights show all the data, but call attention to the data that matches the filter. Not all filters will work as highlights though. The filter dimension must match those defined in the `dataOptions` of the chart (see the [Chart Properties](#chart-properties) section below).
 
@@ -359,13 +359,13 @@ import * as DM from '../sample-ecommerce';
 //...
 
 <Chart
-    chartType={'column'}
-    dataSet={DM.DataSource}
-    dataOptions={{
-        category: [DM.Commerce.AgeRange],
-        value: [measureFactory.sum(DM.Commerce.Revenue)],
-    }}
-    highlights={[filterFactory.members(DM.Commerce.AgeRange, ['25-34', '35-44', '45-54'])]}
+  chartType={'column'}
+  dataSet={DM.DataSource}
+  dataOptions={{
+      category: [DM.Commerce.AgeRange],
+      value: [measureFactory.sum(DM.Commerce.Revenue)],
+  }}
+  highlights={[filterFactory.members(DM.Commerce.AgeRange, ['25-34', '35-44', '45-54'])]}
 />;
 ```
 
@@ -396,10 +396,10 @@ chart = {
 <!--Component HTML template in .component.html-->
 
 <csdk-chart
-    [chartType]="chart.chartType"
-    [dataSet]="chart.dataSet"
-    [dataOptions]="chart.dataOptions"
-    [highlights]="chart.highlights"
+  [chartType]="chart.chartType"
+  [dataSet]="chart.dataSet"
+  [dataOptions]="chart.dataOptions"
+  [highlights]="chart.highlights"
 />
 ```
 
@@ -484,17 +484,17 @@ chart = {
 <!--Component HTML template in .component.html-->
 
 <csdk-chart
-    [chartType]="chart.chartType"
-    [dataSet]="chart.dataSet"
-    [dataOptions]="chart.dataOptions"
-    [highlights]="[ageRangeFilter]"
+  [chartType]="chart.chartType"
+  [dataSet]="chart.dataSet"
+  [dataOptions]="chart.dataOptions"
+  [highlights]="[ageRangeFilter]"
 />
 <csdk-member-filter-tile
-    title="Age Range"
-    [dataSource]="DM.DataSource"
-    [attribute]="DM.Commerce.AgeRange"
-    [filter]="ageRangeFilter"
-    (filterChange)="onMembersFilterChange($event)"
+  title="Age Range"
+  [dataSource]="DM.DataSource"
+  [attribute]="DM.Commerce.AgeRange"
+  [filter]="ageRangeFilter"
+  (filterChange)="onMembersFilterChange($event)"
 />
 ```
 
@@ -502,8 +502,8 @@ chart = {
 
 Charts contain the following chart properties for working with the data and style options:
 
--   `dataOptions` - Configuration for querying aggregate data and assigning data to a chart
--   `styleOptions` - Configuration options that define the style of chart elements.
+- `dataOptions` - Configuration for querying aggregate data and assigning data to a chart
+- `styleOptions` - Configuration options that define the style of chart elements.
 
 ### dataOptions
 
@@ -511,20 +511,20 @@ A chart’s data options configure how the data in a chart is aggregated and how
 
 There are different configurations for different types of charts. Some types of configurations are:
 
--   Cartesian
--   Categorical
--   Scatter
--   Indicator
+- Cartesian
+- Categorical
+- Scatter
+- Indicator
 
 Let’s take a look at the data options for Cartesian charts. After understanding how those work, you should have no problem using the other types of data options as well.
 
 Cartesian charts can include multiple values on both the X and Y axes, as well as a break-down by categories.
 The cartesian data options contain the following properties:
 
--   `category`
--   `value`
--   `breakBy`
--   `seriesToColorMap`
+- `category`
+- `value`
+- `breakBy`
+- `seriesToColorMap`
 
 In the examples below, we’ll show the data options that replace the placeholder in the following chart code.
 
@@ -538,13 +538,11 @@ import { measureFactory } from '@sisense/sdk-data';
 //...
 
 <Chart
-    chartType={'bar'}
-    dataSet={DM.DataSource}
-    dataOptions={
-        {
-            /* data options go here */
-        }
-    }
+  chartType={'bar'}
+  dataSet={DM.DataSource}
+  dataOptions={{
+    /* data options go here */
+  }}
 />;
 ```
 
@@ -557,11 +555,11 @@ import { measureFactory } from '@sisense/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 chart = {
-    chartType: 'column' as const,
-    dataSet: DM.DataSource,
-    dataOptions: {
-        /* data options go here */
-    },
+  chartType: 'column' as const,
+  dataSet: DM.DataSource,
+  dataOptions: {
+      /* data options go here */
+  },
 };
 ```
 
@@ -833,24 +831,24 @@ import * as DM from '../sample-ecommerce';
 //...
 
 <Chart
-    chartType={'pie'}
-    dataSet={DM.DataSource}
-    dataOptions={{
-        category: [DM.Commerce.AgeRange],
-        value: [measureFactory.sum(DM.Commerce.Revenue)],
-    }}
-    styleOptions={{
-        convolution: {
-            enabled: true,
-            independentSlicesCount: 4,
-            selectedConvolutionType: 'bySlicesCount',
-        },
-        labels: {
-            categories: false,
-        },
-        width: 550,
-        height: 400,
-    }}
+  chartType={'pie'}
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  }}
+  styleOptions={{
+    convolution: {
+      enabled: true,
+      independentSlicesCount: 4,
+      selectedConvolutionType: 'bySlicesCount',
+    },
+    labels: {
+      categories: false,
+    },
+    width: 550,
+    height: 400,
+  }}
 />;
 ```
 
@@ -865,24 +863,24 @@ import * as DM from '../../sample-ecommerce';
 //...
 
 chart = {
-    chartType: 'pie' as const,
-    dataSet: DM.DataSource,
-    dataOptions: {
-        category: [DM.Commerce.AgeRange],
-        value: [measureFactory.sum(DM.Commerce.Revenue)],
+  chartType: 'pie' as const,
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  },
+  styleOptions: {
+    convolution: {
+      enabled: true,
+      independentSlicesCount: 4,
+      selectedConvolutionType: 'bySlicesCount',
     },
-    styleOptions: {
-        convolution: {
-            enabled: true,
-            independentSlicesCount: 4,
-            selectedConvolutionType: 'bySlicesCount',
-        },
-        labels: {
-            categories: false,
-        },
-        width: 550,
-        height: 400,
+    labels: {
+      categories: false,
     },
+    width: 550,
+    height: 400,
+  },
 };
 ```
 
@@ -890,10 +888,10 @@ chart = {
 <!--Component HTML template in .component.html-->
 
 <csdk-chart
-    [chartType]="chart.chartType"
-    [dataSet]="chart.dataSet"
-    [dataOptions]="chart.dataOptions"
-    [styleOptions]="chart.styleOptions"
+  [chartType]="chart.chartType"
+  [dataSet]="chart.dataSet"
+  [dataOptions]="chart.dataOptions"
+  [styleOptions]="chart.styleOptions"
 />
 ```
 
@@ -901,10 +899,10 @@ chart = {
 
 Charts contain callback properties for defining functions that are called when certain events occur. Most charts have the following callback properties:
 
--   `onBeforeRender`
--   `onDataPointClick`
--   `onDataPointContextMenu`
--   `onDataPointsSelected`
+- `onBeforeRender`
+- `onDataPointClick`
+- `onDataPointContextMenu`
+- `onDataPointsSelected`
 
 These callbacks allow you to perform actions to change a chart’s behavior or to react in some way to events that happen on a chart.
 
@@ -933,22 +931,22 @@ const [point, setPoint] = useState<DataPoint>();
 //...
 
 {
-    point && <div>{`Age range: ${point.categoryDisplayValue} | Value: ${formatNumber(point.value)}}`}</div>;
+  point && <div>{`Age range: ${point.categoryDisplayValue} | Value: ${formatNumber(point.value)}}`}</div>;
 }
 <Chart
-    chartType="column"
-    dataSet={DM.DataSource}
-    dataOptions={{
-        category: [DM.Commerce.AgeRange],
-        value: [measureFactory.sum(DM.Commerce.Revenue)],
-    }}
-    onBeforeRender={(options: HighchartsOptions) => {
-        if (options.tooltip) options.tooltip.enabled = false;
-        return options;
-    }}
-    onDataPointClick={(point: DataPoint) => {
-        setPoint(point);
-    }}
+  chartType="column"
+  dataSet={DM.DataSource}
+  dataOptions={{
+    category: [DM.Commerce.AgeRange],
+    value: [measureFactory.sum(DM.Commerce.Revenue)],
+  }}
+  onBeforeRender={(options: HighchartsOptions) => {
+    if (options.tooltip) options.tooltip.enabled = false;
+    return options;
+  }}
+  onDataPointClick={(point: DataPoint) => {
+    setPoint(point);
+  }}
 />;
 ```
 
@@ -997,10 +995,10 @@ onDataPointClick(...args: any[]) {
 
 <div class="pointInfo" *ngIf="pointInfo">Range: {{ pointInfo.range }} | Value {{ pointInfo.value }}</div>
 <csdk-chart
-    [chartType]="chart.chartType"
-    [dataSet]="chart.dataSet"
-    [dataOptions]="chart.dataOptions"
-    [beforeRender]="onBeforeRender"
-    (dataPointClick)="onDataPointClick($event)"
+  [chartType]="chart.chartType"
+  [dataSet]="chart.dataSet"
+  [dataOptions]="chart.dataOptions"
+  [beforeRender]="onBeforeRender"
+  (dataPointClick)="onDataPointClick($event)"
 />
 ```

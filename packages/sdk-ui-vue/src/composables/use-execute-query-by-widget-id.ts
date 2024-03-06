@@ -8,7 +8,7 @@ import {
   executeQueryByWidgetId as executeQueryByWidgetIdPreact,
   queryStateReducer,
 } from '@sisense/sdk-ui-preact';
-import { getApp } from '../providers/sisense-context-provider';
+import { getSisenseContext } from '../providers/sisense-context-provider';
 import { ref, toRefs, watch, type ToRefs } from 'vue';
 import { collectRefs, toPlainValue, toPlainValues } from '../utils';
 import { useReducer } from '../helpers/use-reducer';
@@ -66,7 +66,7 @@ export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWi
     data: undefined,
   });
 
-  const app = getApp();
+  const context = getSisenseContext();
   const { filters: filterList } = getFilterListAndRelations(toPlainValue(filters));
 
   const getQueryByWidgetId = async (application: ClientApplication) => {
@@ -86,12 +86,13 @@ export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWi
   };
 
   watch(
-    [...collectRefs(params), app],
+    [...collectRefs(params), context],
     () => {
+      const { app } = context.value;
       const enabled = toPlainValue(params.enabled);
       const isEnabled = enabled === undefined || enabled === true;
-      if (!app.value || !isEnabled) return;
-      getQueryByWidgetId(app.value);
+      if (!app || !isEnabled) return;
+      getQueryByWidgetId(app);
     },
     { immediate: true },
   );

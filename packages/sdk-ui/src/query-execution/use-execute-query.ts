@@ -80,7 +80,6 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): QueryState 
       if (isNeverExecuted) {
         setIsNeverExecuted(false);
       }
-      dispatch({ type: 'loading' });
       const {
         dataSource,
         dimensions,

@@ -86,7 +86,7 @@ ChartWidget properties
 
 ### dataSource
 
-> **dataSource**?: `string`
+> **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 ***
 

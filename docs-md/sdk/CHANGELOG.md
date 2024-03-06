@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.5.0] - 2024-03-05
+
+### Changed
+- Improve the AI components and hooks (private beta)
+- Extend CLI command `get-data-model` to
+  include additional metadata about Live data models for JAQL optimization
+
+  _Note: If you are using Live models, you need to re-run `get-data-model` to update the data model representation files._
+- Optimize the `useExecuteQuery` hook by removing unnecessary render
+- Improve loading indicator on chart re-fetch triggered by aggregation change
+- Fix number formatting in `DashboardWidget` and `useGetWidgetModel`
+- Make small fixes in components `Table` (sorting icons) and
+  `IndicatorChart` (rendering of `N/A` and `0` values)
+
+## [1.4.1] - 2024-02-23
+
+### Changed
+- Limit max zoom for `AreamapChart`
+
 ## [1.4.0] - 2024-02-22
 
 ### Added

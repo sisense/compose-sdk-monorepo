@@ -3,39 +3,17 @@ import {
   AiContextProvider,
   Chatbot,
   GetNlgQueryResult,
-  GetNlgQueryResultRequest,
   useGetNlgQueryResult,
+  UseGetNlgQueryResultParams,
   useGetQueryRecommendations,
 } from '@/ai';
+import * as DM from '../sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
 
-const nlgRequest: GetNlgQueryResultRequest = {
-  jaql: {
-    datasource: { title: 'Sample ECommerce' },
-    metadata: [
-      {
-        jaql: {
-          column: 'Date',
-          datatype: 'datetime',
-          dim: '[Commerce.Date]',
-          firstday: 'mon',
-          level: 'years',
-          table: 'Commerce',
-          title: 'Date',
-        },
-      },
-      {
-        jaql: {
-          agg: 'sum',
-          column: 'Revenue',
-          datatype: 'numeric',
-          dim: '[Commerce.Revenue]',
-          table: 'Commerce',
-          title: 'total of Revenue',
-        },
-      },
-    ],
-  },
-  style: 'Large',
+const nlgParams: UseGetNlgQueryResultParams = {
+  dataSource: 'Sample ECommerce',
+  dimensions: [DM.Commerce.Date.Months],
+  measures: [measureFactory.sum(DM.Commerce.Cost)],
 };
 
 const Page = () => {
@@ -48,13 +26,13 @@ const Page = () => {
       <div>
         <h3>GetNlgQueryResult</h3>
         <div className="csdk-border csdk-rounded csdk-p-4">
-          <GetNlgQueryResult {...nlgRequest} />
+          <GetNlgQueryResult {...nlgParams} />
         </div>
       </div>
       <div>
         <h3>useGetNlgQueryResult</h3>
-        <div className="csdk-border csdk-rounded csdk-p-4">
-          {useGetNlgQueryResult(nlgRequest).data}
+        <div className="csdk-border csdk-rounded csdk-p-4 csdk-whitespace-pre-wrap">
+          {useGetNlgQueryResult(nlgParams).data}
         </div>
       </div>
       <div>

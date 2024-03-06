@@ -4,7 +4,7 @@ title: TreemapStyleOptions
 
 # Interface TreemapStyleOptions
 
-Configuration options that define functional style of the various elements of [TreemapChart](../functions/function.TreemapChart.md)
+Configuration options that define functional style of the various elements of TreemapChart
 
 ## Extends
 

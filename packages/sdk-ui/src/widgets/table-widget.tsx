@@ -11,9 +11,10 @@ import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/
 import { Table } from '../table';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
+import { getDataSourceName } from '@sisense/sdk-data';
 
 /**
- * The TableWidget component extending the {@link Table} component to support widget style options.
+ * The TableWidget component extending the Table component to support widget style options.
  *
  * @example
  * Example of using the `Widget` component to
@@ -81,7 +82,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
               <WidgetHeader
                 title={title}
                 description={description}
-                dataSetName={props.dataSource}
+                dataSetName={props.dataSource ? getDataSourceName(props.dataSource) : undefined}
                 styleOptions={styleOptions?.header}
                 onRefresh={() => setRefreshCounter(refreshCounter + 1)}
               />

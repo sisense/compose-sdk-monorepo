@@ -43,22 +43,22 @@ export const trackHook = async (
 };
 
 function useTrackHook(hookName: string) {
-  const { app, enableTracking } = useSisenseContext();
+  const { app, tracking } = useSisenseContext();
 
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (app?.httpClient && !hasTrackedRef.current) {
       const payload: HookEventDetails = {
-        packageName: 'sdk-ui',
+        packageName: tracking.packageName,
         packageVersion: __PACKAGE_VERSION__,
         hookName,
       };
-      void trackProductEvent(action, payload, app.httpClient, !enableTracking)
+      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled)
         .catch((e) => console.warn('An error occurred when sending the sdkHookInit event', e))
         .finally(() => (hasTrackedRef.current = true));
     }
-  }, [app, enableTracking, hookName]);
+  }, [app, tracking, hookName]);
 }
 
 export const withTracking: HookDecorator<string> =

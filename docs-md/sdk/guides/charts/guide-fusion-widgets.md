@@ -38,9 +38,9 @@ import { DashboardWidget } from '@sisense/sdk-ui';
 //...
 
 <DashboardWidget
-    dashboardOid="65536353a90176002a68e5aa"
-    widgetOid="6553637ea90176002a68e5ac"
-    title="Dashboard Widget"
+  dashboardOid="65536353a90176002a68e5aa"
+  widgetOid="6553637ea90176002a68e5ac"
+  title="Dashboard Widget"
 />;
 ```
 
@@ -52,26 +52,26 @@ import { DashboardWidget, useGetDashboardModel } from '@sisense/sdk-ui';
 //...
 
 const { dashboard, isLoading, isError } = useGetDashboardModel({
-    dashboardOid: '65536353a90176002a68e5aa',
-    includeWidgets: true,
+  dashboardOid: '65536353a90176002a68e5aa',
+  includeWidgets: true,
 });
 
 //...
 
 {
-    isLoading && <div>Loading...</div>;
+  isLoading && <div>Loading...</div>;
 }
 {
-    isError && <div>Error</div>;
+  isError && <div>Error</div>;
 }
 {
-    dashboard && (
-        <div>
-            {dashboard.widgets?.map((widget) => (
-                <DashboardWidget widgetOid={widget.oid} dashboardOid={dashboard.oid} title={widget.title} />
-            ))}
-        </div>
-    );
+  dashboard && (
+    <div>
+      {dashboard.widgets?.map((widget) => (
+        <DashboardWidget widgetOid={widget.oid} dashboardOid={dashboard.oid} title={widget.title} />
+      ))}
+    </div>
+  );
 }
 ```
 
@@ -82,8 +82,8 @@ const { dashboard, isLoading, isError } = useGetDashboardModel({
 // Component behavior in .component.ts
 
 chart = {
-    dashboardOid: '65536353a90176002a68e5aa',
-    widgetOid: '6553637ea90176002a68e5ac',
+  dashboardOid: '65536353a90176002a68e5aa',
+  widgetOid: '6553637ea90176002a68e5ac',
 };
 ```
 
@@ -98,9 +98,9 @@ chart = {
 
 Since the DashboardWidget component includes the widget wrapper over a chart, it has properties for customizing the widget, including:
 
--   `title` - Widget title
--   `description` - Widget description
--   `styleOptions` - Configuration options that define the style of the widget
+- `title` - Widget title
+- `description` - Widget description
+- `styleOptions` - Configuration options that define the style of the widget
 
 #### Additional Properties
 
@@ -108,5 +108,5 @@ In addition to the standard chart properties, widget properties, and properties 
 
 These properties include:
 
--   `includeDashboardFilters` - Whether to include filters and highlights that are set in both the original widget in your Sisense instance
--   `filtersMergeStrategy` - How to reconcile filters and highlights that are set in both the original widget in your Sisense instance and filters and highlights set in code
+- `includeDashboardFilters` - Whether to include filters and highlights that are set in both the original widget in your Sisense instance
+- `filtersMergeStrategy` - How to reconcile filters and highlights that are set in both the original widget in your Sisense instance and filters and highlights set in code

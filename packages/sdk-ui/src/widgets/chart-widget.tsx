@@ -25,6 +25,7 @@ import {
 } from '../chart-options-processor/chart-options-service';
 import { isCartesian } from '../chart-options-processor/translations/types';
 import { ChartWidgetDeprecated } from './chart-widget-deprecated';
+import { getDataSourceName } from '@sisense/sdk-data';
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.
@@ -261,7 +262,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
               <WidgetHeader
                 title={title}
                 description={description}
-                dataSetName={chartProps.dataSet}
+                dataSetName={chartProps.dataSet ? getDataSourceName(chartProps.dataSet) : undefined}
                 styleOptions={styleOptions?.header}
                 onRefresh={() => setRefreshCounter(refreshCounter + 1)}
               />

@@ -8,9 +8,17 @@ const config: UserConfig = {
     setupFiles: ['./src/__test-helpers__/setup-vitest.ts'],
     // The next few lines are based off of https://github.com/wobsoriano/vitest-canvas-mock#usage.
     deps: {
-      inline: ['vitest-canvas-mock'],
+      optimizer: {
+        web: {
+          include: ['vitest-canvas-mock'],
+        },
+      },
     },
-    threads: false,
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
+    },
     environmentOptions: {
       jsdom: {
         resources: 'usable',

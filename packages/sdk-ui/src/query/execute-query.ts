@@ -1,5 +1,6 @@
 import {
   Attribute,
+  DataSource,
   Measure,
   PivotAttribute,
   PivotMeasure,
@@ -49,7 +50,7 @@ export const QUERY_DEFAULT_OFFSET = 0;
 /** @internal */
 const prepareQueryParams = (
   queryDescription: QueryDescription,
-  defaultDataSource: string,
+  defaultDataSource: DataSource,
 ): InternalQueryDescription => {
   const {
     dataSource,

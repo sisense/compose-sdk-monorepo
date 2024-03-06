@@ -4,12 +4,18 @@ import { ClientApplication } from '../app/client-application';
 export type SisenseContextPayload = {
   isInitialized: boolean;
   app?: ClientApplication;
-  enableTracking: boolean;
+  tracking: {
+    enabled: boolean;
+    packageName: string;
+  };
 };
 
 export const SisenseContext = createContext<SisenseContextPayload>({
   isInitialized: false,
-  enableTracking: true,
+  tracking: {
+    enabled: true,
+    packageName: 'sdk-ui',
+  },
 });
 
 export const useSisenseContext = () => useContext(SisenseContext);

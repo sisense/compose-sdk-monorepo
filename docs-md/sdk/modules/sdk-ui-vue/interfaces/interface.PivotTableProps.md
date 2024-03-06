@@ -12,7 +12,7 @@ Props of the [PivotTable](../classes/class.PivotTable.md) component.
 
 #### dataSet
 
-> **dataSet**?: `string`
+> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source name (as a `string`) - e.g. `Sample ECommerce`.
 
@@ -40,4 +40,4 @@ Configurations for how to interpret and present the data passed to the component
 
 > **styleOptions**?: [`PivotTableStyleOptions`](interface.PivotTableStyleOptions.md)
 
-Configurations that define functional style of the various table elements
+Configurations for how to style and present a pivot table's data.

@@ -149,7 +149,7 @@ Theme service
 >
 > | Parameter | Type |
 > | :------ | :------ |
-> | `contextMenuProps` | [`ContextMenuProps`](../../sdk-ui/interfaces/interface.ContextMenuProps.md) |
+> | `contextMenuProps` | [`ContextMenuProps`](../interfaces/interface.ContextMenuProps.md) |
 >
 >
 > ###### Returns

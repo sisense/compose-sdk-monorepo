@@ -274,7 +274,7 @@ export interface CategoricalChartDataOptions {
   category: (Column | StyledColumn)[];
   /**
    * Optional mapping of each of the series to colors.
-   * ({@link MultiColumnValueToColorMap} used only for {@link SunburstChart})
+   * ({@link MultiColumnValueToColorMap} used only for the Sunburst Chart component)
    */
   seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
 }
@@ -384,7 +384,7 @@ export function isMeasureColumn(
 }
 
 /**
- * Configuration for how to query data and assign data to {@link Table}.
+ * Configuration for how to query data and assign data to Table.
  *
  */
 export interface TableDataOptions {
@@ -402,7 +402,7 @@ export interface TableDataOptions {
 }
 
 /**
- * Configuration for how to query data and assign data to {@link PivotTable}.
+ * Configuration for how to query data and assign data to PivotTable.
  *
  */
 export interface PivotTableDataOptions {

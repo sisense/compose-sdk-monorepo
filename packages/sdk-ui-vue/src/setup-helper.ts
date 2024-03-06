@@ -10,7 +10,7 @@ import {
 } from 'vue';
 import { createSisenseContextConnector, createThemeContextConnector } from './providers';
 import { ComponentAdapter, createElement, createWrapperElement } from '@sisense/sdk-ui-preact';
-import { getApp } from './providers/sisense-context-provider';
+import { getSisenseContext } from './providers/sisense-context-provider';
 import { getThemeContext } from './providers/theme-provider';
 
 export function isObject(value: unknown): boolean {
@@ -45,7 +45,7 @@ export const setupHelper = <P, C>(component: C, props: P) => {
   if (!props) return null;
   const rawProps = toDeepRaw(props);
   const refElement = ref<HTMLDivElement | null>(null);
-  const ctxApp = getApp();
+  const context = getSisenseContext();
   const themeSettings = getThemeContext();
 
   return () => {
@@ -54,7 +54,7 @@ export const setupHelper = <P, C>(component: C, props: P) => {
         return createElement(component as FunctionalComponent, rawProps as P);
       };
       const componentAdapter = new ComponentAdapter(createPreactComponent, [
-        createSisenseContextConnector(ctxApp.value!),
+        createSisenseContextConnector(context.value),
         createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
       ]);
 
@@ -78,7 +78,7 @@ export const setupHelperWithChildren = <P, C>(
   const rawProps = toDeepRaw(props) as P;
   const contextMenuRef = ref<HTMLDivElement>();
   const contextMenuChildrenRef = ref<HTMLDivElement>();
-  const ctxApp = getApp();
+  const context = getSisenseContext();
   const themeSettings = getThemeContext();
 
   return () => {
@@ -91,7 +91,7 @@ export const setupHelperWithChildren = <P, C>(
         contexts
           ? contexts
           : [
-              createSisenseContextConnector(ctxApp.value!),
+              createSisenseContextConnector(context.value),
               createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
             ],
       );

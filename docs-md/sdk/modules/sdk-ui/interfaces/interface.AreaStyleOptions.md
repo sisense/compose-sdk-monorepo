@@ -4,7 +4,7 @@ title: AreaStyleOptions
 
 # Interface AreaStyleOptions
 
-Configuration options that define functional style of the various elements of [AreaChart](../functions/function.AreaChart.md)
+Configuration options that define functional style of the various elements of AreaChart
 
 ## Extends
 
@@ -88,7 +88,7 @@ BaseAxisStyleOptions.navigator
 
 > **subtype**?: [`AreaSubtype`](../type-aliases/type-alias.AreaSubtype.md)
 
-Subtype of [AreaChart](../functions/function.AreaChart.md)
+Subtype of AreaChart
 
 ***
 

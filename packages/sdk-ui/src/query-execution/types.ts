@@ -139,38 +139,50 @@ export type QueryAction = DataLoadAction<QueryResultData>;
  * Parameters for {@link useExecuteQueryByWidgetId} hook.
  */
 export interface ExecuteQueryByWidgetIdParams {
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.widgetOid} */
+  /** Identifier of the widget */
   widgetOid: string;
 
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.dashboardOid} */
+  /** Identifier of the dashboard that contains the widget */
   dashboardOid: string;
 
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.filters} */
+  /**
+   * Filters that will slice query results.
+   *
+   * The provided filters will be merged with the existing widget filters based on `filtersMergeStrategy`
+   */
   filters?: Filter[];
 
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.highlights} */
+  /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
 
-  /** {@inheritDoc ExecuteQueryProps.count} */
+  /** {@inheritDoc ExecuteQueryParams.count} */
   count?: number;
 
-  /** {@inheritDoc ExecuteQueryProps.offset} */
+  /** {@inheritDoc ExecuteQueryParams.offset} */
   offset?: number;
 
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy} */
+  /**
+   * Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
+   *
+   * - `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
+   * - `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
+   * - `codeOnly` - applies only the provided filters and completely ignores the widget filters.
+   *
+   * If not specified, the default strategy is `codeFirst`.
+   */
   filtersMergeStrategy?: FiltersMergeStrategy;
 
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.includeDashboardFilters} */
+  /**
+   * Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
+   *
+   * If not specified, the default value is `false`.
+   */
   includeDashboardFilters?: boolean;
 
-  /** {@inheritDoc ExecuteQueryByWidgetIdProps.onBeforeQuery} */
+  /** {@inheritDoc ExecuteQueryParams.onBeforeQuery} */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 
-  /**
-   * Boolean flag to control if query is executed
-   *
-   * If not specified, the default value is `true`
-   */
+  /** {@inheritDoc ExecuteQueryParams.enabled} */
   enabled?: boolean;
 }
 
@@ -202,10 +214,18 @@ export interface ExecuteQueryParams {
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
 
-  /** {@inheritDoc ExecuteQueryProps.count} */
+  /**
+   * Number of rows to return in the query result
+   *
+   * If not specified, the default value is `20000`
+   */
   count?: number;
 
-  /** {@inheritDoc ExecuteQueryProps.offset} */
+  /**
+   * Offset of the first row to return
+   *
+   * If not specified, the default value is `0`
+   */
   offset?: number;
 
   /**
@@ -215,7 +235,17 @@ export interface ExecuteQueryParams {
    */
   enabled?: boolean;
 
-  /** {@inheritDoc ExecuteQueryProps.onBeforeQuery} */
+  /**
+   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+   *
+   * **Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+   * ```tsx
+   * const onBeforeQuery = useCallback((jaql) => {
+   *   // modify jaql here
+   *   return jaql;
+   * }, []);
+   * ```
+   */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
 

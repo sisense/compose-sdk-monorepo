@@ -4,7 +4,7 @@ title: LineStyleOptions
 
 # Interface LineStyleOptions
 
-Configuration options that define functional style of the various elements of [LineChart](../classes/class.LineChart.md)
+Configuration options that define functional style of the various elements of LineChart
 
 ## Extends
 
@@ -88,7 +88,7 @@ BaseAxisStyleOptions.navigator
 
 > **subtype**?: [`LineSubtype`](../type-aliases/type-alias.LineSubtype.md)
 
-Subtype of [LineChart](../classes/class.LineChart.md)
+Subtype of LineChart
 
 ***
 

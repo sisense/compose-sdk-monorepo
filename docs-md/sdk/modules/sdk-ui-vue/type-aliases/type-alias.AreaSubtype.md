@@ -8,7 +8,7 @@ title: AreaSubtype
 
 Property of [AreaStyleOptions](../interfaces/interface.AreaStyleOptions.md)
 
-Subtype of [AreaChart](../classes/class.AreaChart.md)
+Subtype of AreaChart
 
 **Values**
 

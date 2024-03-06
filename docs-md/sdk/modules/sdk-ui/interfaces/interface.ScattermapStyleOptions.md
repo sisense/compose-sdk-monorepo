@@ -4,7 +4,7 @@ title: ScattermapStyleOptions
 
 # Interface ScattermapStyleOptions
 
-Configuration options that define functional style of the various elements of [ScattermapChart](../functions/function.ScattermapChart.md)
+Configuration options that define functional style of the various elements of ScattermapChart
 
 ## Extends
 

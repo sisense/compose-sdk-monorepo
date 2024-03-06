@@ -53,6 +53,10 @@ export const SisenseContextProvider: FunctionComponent<
   showRuntimeErrors = true,
   enableSilentPreAuth = false,
 }) => {
+  const tracking = {
+    enabled: enableTracking,
+    packageName: 'sdk-ui',
+  };
   const [app, setApp] = useState<ClientApplication | undefined>();
 
   const [clientApplicationError, setClientApplicationError] = useState<Error>();
@@ -85,7 +89,7 @@ export const SisenseContextProvider: FunctionComponent<
   return (
     <I18nProvider userLanguage={app?.settings.language || app?.settings.serverLanguage}>
       <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
-        <SisenseContext.Provider value={{ isInitialized: true, app, enableTracking }}>
+        <SisenseContext.Provider value={{ isInitialized: true, app, tracking }}>
           <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
             {children}
           </ThemeProvider>

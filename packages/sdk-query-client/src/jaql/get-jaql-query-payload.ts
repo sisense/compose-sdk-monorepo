@@ -8,6 +8,7 @@ import {
   QueryDescription,
   PivotQueryDescription,
   QueryOptions,
+  JaqlDataSource,
 } from '../types.js';
 import {
   Attribute,
@@ -21,6 +22,7 @@ import {
   PivotGrandTotals,
   DEFAULT_PIVOT_GRAND_TOTALS,
   FilterRelationsJaql,
+  isDataSourceInfo,
 } from '@sisense/sdk-data';
 import { applyHighlightFilters, matchHighlightsWithAttributes } from './metadata/highlights.js';
 
@@ -114,7 +116,7 @@ function prepareQueryOptions(
   offset?: number,
 ): QueryOptions {
   return {
-    datasource: dataSource,
+    datasource: getJaqlDataSource(dataSource),
     by: JAQL_BY_CSDK,
     queryGuid: uuid(),
     ...(count ? { count } : {}),
@@ -250,7 +252,7 @@ function preparePivotQueryOptions(
   offset?: number,
 ): QueryOptions {
   return {
-    datasource: dataSource,
+    datasource: getJaqlDataSource(dataSource),
     by: JAQL_BY_CSDK,
     queryGuid: uuid(),
     dashboard: JAQL_BY_CSDK,
@@ -260,4 +262,16 @@ function preparePivotQueryOptions(
     ...(offset ? { offset } : {}),
     ...{ grandTotals: { ...DEFAULT_PIVOT_GRAND_TOTALS, ...grandTotals } },
   };
+}
+
+/**
+ * Converts a DataSource to a description of data source used in JAQL.
+ */
+function getJaqlDataSource(dataSource: DataSource): JaqlDataSource {
+  return isDataSourceInfo(dataSource)
+    ? {
+        title: dataSource.title,
+        live: dataSource.type === 'live',
+      }
+    : dataSource;
 }

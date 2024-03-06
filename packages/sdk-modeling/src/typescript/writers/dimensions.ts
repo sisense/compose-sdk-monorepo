@@ -11,9 +11,9 @@ import {
   normalizeName,
 } from '@sisense/sdk-data';
 
-import { NEWLINE, rnt, writeIndented, BaseWriter } from './base.js';
+import { ElementWriter, NEWLINE, rnt, writeIndented } from './base.js';
 
-export class DimensionWriter extends BaseWriter<Dimension> {
+export class DimensionWriter extends ElementWriter<Dimension> {
   readonly isMultiAtts: boolean;
 
   readonly isCompound: boolean;
@@ -110,7 +110,7 @@ export class DimensionWriter extends BaseWriter<Dimension> {
   }
 }
 
-export class DateDimensionWriter extends BaseWriter<DateDimension> {
+export class DateDimensionWriter extends ElementWriter<DateDimension> {
   //readonly isCompound:boolean;
   readonly isNested: boolean;
 
@@ -177,7 +177,7 @@ export class DateDimensionWriter extends BaseWriter<DateDimension> {
   }
 }
 
-export class AttributeWriter extends BaseWriter<Attribute> {
+export class AttributeWriter extends ElementWriter<Attribute> {
   constructor(attribute: Attribute) {
     super(attribute, normalizeName(attribute.name));
   }
@@ -195,7 +195,7 @@ ${rnt(ident + 1)}}),`,
   }
 }
 
-export class LevelWriter extends BaseWriter<LevelAttribute> {
+export class LevelWriter extends ElementWriter<LevelAttribute> {
   constructor(level: LevelAttribute) {
     super(level, normalizeName(level.name));
   }

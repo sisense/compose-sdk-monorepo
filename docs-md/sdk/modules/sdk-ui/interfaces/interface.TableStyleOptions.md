@@ -4,7 +4,7 @@ title: TableStyleOptions
 
 # Interface TableStyleOptions
 
-Configuration options that define functional style of the various elements of [Table](../functions/function.Table.md)
+Configuration options that define functional style of the various elements of the Table Component
 
 ## Properties
 

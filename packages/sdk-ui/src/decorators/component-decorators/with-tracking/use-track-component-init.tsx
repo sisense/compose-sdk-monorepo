@@ -4,7 +4,7 @@ import { createContext, ReactNode, useContext, useEffect, useRef } from 'react';
 
 const action = 'sdkComponentInit';
 interface ComponentInitEventDetails extends TrackingDetails {
-  packageName: 'sdk-ui';
+  packageName: string;
   packageVersion: string;
   componentName: string;
   attributesUsed: string;
@@ -16,7 +16,7 @@ export const TrackingContextProvider = ({ children }: { children: ReactNode }) =
 );
 
 export const useTrackComponentInit = <P extends {}>(componentName: string, props: P) => {
-  const { app, enableTracking } = useSisenseContext();
+  const { app, tracking } = useSisenseContext();
 
   const inTrackingContext = useContext(TrackingContext);
 
@@ -25,7 +25,7 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
   useEffect(() => {
     if (app?.httpClient && !hasTrackedRef.current && !inTrackingContext) {
       const payload: ComponentInitEventDetails = {
-        packageName: 'sdk-ui',
+        packageName: tracking.packageName,
         packageVersion: __PACKAGE_VERSION__,
         componentName,
         attributesUsed: Object.entries(props)
@@ -34,9 +34,9 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
           .join(', '),
       };
 
-      void trackProductEvent(action, payload, app.httpClient, !enableTracking)
+      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled)
         .catch((e) => console.warn('An error occurred when sending the sdkComponentInit event', e))
         .finally(() => (hasTrackedRef.current = true));
     }
-  }, [componentName, props, app, enableTracking, inTrackingContext]);
+  }, [componentName, props, app, tracking, inTrackingContext]);
 };

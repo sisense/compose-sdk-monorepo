@@ -34,6 +34,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
     titleTemplate: '{kind} {name}',
     readme: './README.md',
     out: 'docs-md/sdk/modules',
+    treatWarningsAsErrors: true,
   };
 }
 

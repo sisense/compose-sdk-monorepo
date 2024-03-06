@@ -132,9 +132,17 @@ export interface CalculatedMeasureColumn {
 }
 
 /**
+ * Info of data source
+ */
+export type DataSourceInfo = {
+  title: string;
+  type: 'live' | 'elasticube';
+};
+
+/**
  * Data source for queries to run against
  */
-export type DataSource = string;
+export type DataSource = string | DataSourceInfo;
 
 /**
  * Data set, which is made up of an array of {@link Column | columns}
@@ -301,7 +309,7 @@ export const EMPTY_PIVOT_QUERY_RESULT_DATA: PivotQueryResultData = {
  * @internal
  */
 export function isDataSource(arg: DataSource | Data | undefined): arg is DataSource {
-  return arg === undefined || typeof arg === 'string';
+  return arg === undefined || typeof arg === 'string' || ('title' in arg && 'type' in arg);
 }
 
 /**

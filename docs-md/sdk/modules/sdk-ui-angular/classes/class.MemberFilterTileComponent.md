@@ -61,7 +61,7 @@ Attribute to filter on. A query will run to fetch all this attribute's members
 
 #### dataSource
 
-> **dataSource**: `undefined` \| `string`
+> **dataSource**: `undefined` \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source the query is run against - e.g. `Sample ECommerce`
 

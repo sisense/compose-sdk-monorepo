@@ -8,7 +8,7 @@ title: PieSubtype
 
 Property of [PieStyleOptions](../interfaces/interface.PieStyleOptions.md)
 
-Subtype of [PieChart](../functions/function.PieChart.md)
+Subtype of PieChart
 
 **Values**
 

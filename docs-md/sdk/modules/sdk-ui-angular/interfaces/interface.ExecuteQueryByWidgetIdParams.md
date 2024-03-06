@@ -16,7 +16,9 @@ Parameters for data query by widget id execution.
 
 > **count**?: `number`
 
-{@inheritDoc ExecuteQueryProps.count}
+Number of rows to return in the query result
+
+If not specified, the default value is `20000`
 
 #### Inherited from
 
@@ -28,7 +30,7 @@ Omit.count
 
 > **dashboardOid**: `string`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.dashboardOid}
+Identifier of the dashboard that contains the widget
 
 #### Inherited from
 
@@ -40,7 +42,9 @@ Omit.dashboardOid
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.filters}
+Filters that will slice query results.
+
+The provided filters will be merged with the existing widget filters based on `filtersMergeStrategy`
 
 #### Inherited from
 
@@ -52,7 +56,13 @@ Omit.filters
 
 > **filtersMergeStrategy**?: `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy}
+Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
+
+- `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
+- `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
+- `codeOnly` - applies only the provided filters and completely ignores the widget filters.
+
+If not specified, the default strategy is `codeFirst`.
 
 #### Inherited from
 
@@ -64,7 +74,7 @@ Omit.filtersMergeStrategy
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.highlights}
+Highlight filters that will highlight results that pass filter criteria
 
 #### Inherited from
 
@@ -76,7 +86,9 @@ Omit.highlights
 
 > **includeDashboardFilters**?: `boolean`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.includeDashboardFilters}
+Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
+
+If not specified, the default value is `false`.
 
 #### Inherited from
 
@@ -88,7 +100,9 @@ Omit.includeDashboardFilters
 
 > **offset**?: `number`
 
-{@inheritDoc ExecuteQueryProps.offset}
+Offset of the first row to return
+
+If not specified, the default value is `0`
 
 #### Inherited from
 
@@ -100,7 +114,15 @@ Omit.offset
 
 > **onBeforeQuery**?: (`jaql`) => `any`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.onBeforeQuery}
+Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+
+**Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+```ts
+const onBeforeQuery = useCallback((jaql) => {
+  // modify jaql here
+  return jaql;
+}, []);
+```
 
 #### Parameters
 
@@ -122,7 +144,7 @@ Omit.onBeforeQuery
 
 > **widgetOid**: `string`
 
-{@inheritDoc ExecuteQueryByWidgetIdProps.widgetOid}
+Identifier of the widget
 
 #### Inherited from
 

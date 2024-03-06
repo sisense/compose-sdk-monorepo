@@ -108,7 +108,7 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
           <div className="csdk-text-ai-lg csdk-semibold csdk-text-text-active">
             {content.queryTitle}
           </div>
-          <IconButton onClick={() => setExpanded(false)}>
+          <IconButton onClick={() => setExpanded(false)} aria-label="close expanded chart">
             <CloseDialogIcon />
           </IconButton>
         </div>

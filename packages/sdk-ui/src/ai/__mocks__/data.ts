@@ -1,4 +1,4 @@
-import { DataModel, Perspective } from '@/ai/api/types';
+import { Chat, DataModel, Perspective } from '../api/types';
 
 export const dataModels: DataModel[] = [
   {
@@ -35,3 +35,14 @@ export const perspectives: Perspective[] = [
     isDefault: false,
   },
 ];
+
+export const chat: Chat = {
+  chatId: 'c2',
+  chatHistory: [],
+  contextId: 'm2',
+  contextTitle: 'Model 2',
+  contextType: 'datamodel',
+  lastUpdate: '2021-01-01T00:00:00Z',
+  tenantId: 't1',
+  userId: 'u1',
+};

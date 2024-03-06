@@ -28,7 +28,11 @@ title: QueryService
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
  } \>
 
-Executes a data query.
+Executes a data query. If you want to display the query results, you can use
+them to populate Compose SDK UI elements or third party UI elements.
+
+To learn how to populate third party UI elements with query results, see the
+[External Charts Guide](/guides/sdk/guides/charts/guide-external-charts.html#query)
 
 #### Parameters
 

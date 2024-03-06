@@ -1,5 +1,10 @@
-import { Filter } from './index.js';
-import { getFilterListAndRelations, guidFast } from './utils.js';
+import { DataSourceInfo, Filter } from './index.js';
+import {
+  getDataSourceName,
+  getFilterListAndRelations,
+  guidFast,
+  isDataSourceInfo,
+} from './utils.js';
 
 const mockFilter1 = { guid: 'filter-1', name: 'Filter 1' } as Filter;
 const mockFilter2 = { guid: 'filter-2', name: 'Filter 2' } as Filter;
@@ -77,6 +82,41 @@ describe('utils', () => {
       const result = getFilterListAndRelations(mockNestedFilterRelations);
       expect(result.filters).toEqual([mockFilter1, mockFilter2]);
       expect(result.relations).toEqual(nestedFilterRelationsResult);
+    });
+  });
+
+  describe('getDataSourceName', () => {
+    test('should return the name of the data source if it is DataSourceInfo', () => {
+      const dataSourceName = 'data-source-name';
+      const dataSource: DataSourceInfo = {
+        type: 'elasticube',
+        title: dataSourceName,
+      };
+      const result = getDataSourceName(dataSource);
+      expect(result).toBe(dataSourceName);
+    });
+
+    test('should return the data source itself if it is a string', () => {
+      const dataSourceName = 'data-source-name';
+      const result = getDataSourceName(dataSourceName);
+      expect(result).toBe(dataSourceName);
+    });
+  });
+
+  describe('isDataSourceInfo', () => {
+    test('should return true if the provided dataSource is a DataSourceInfo', () => {
+      const dataSource: DataSourceInfo = {
+        type: 'elasticube',
+        title: 'data-source-name',
+      };
+      const result = isDataSourceInfo(dataSource);
+      expect(result).toBe(true);
+    });
+
+    test('should return false if the provided dataSource is a string', () => {
+      const dataSourceName = 'data-source-name';
+      const result = isDataSourceInfo(dataSourceName);
+      expect(result).toBe(false);
     });
   });
 });

@@ -8,7 +8,7 @@ title: PolarSubtype
 
 Property of [PolarStyleOptions](../interfaces/interface.PolarStyleOptions.md)
 
-Subtype of [PolarChart](../classes/class.PolarChart.md)
+Subtype of PolarChart
 
 **Values**
 

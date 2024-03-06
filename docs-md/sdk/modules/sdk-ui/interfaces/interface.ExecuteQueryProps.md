@@ -38,7 +38,7 @@ If not specified, the default value is `20000`
 
 ### dataSource
 
-> **dataSource**?: `string`
+> **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -94,7 +94,7 @@ If not specified, the default value is `0`
 
 Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
 
-**Note:** wrap this function in `useCallback` hook to avoid triggering query execution on each render.
+**Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
 ```ts
 const onBeforeQuery = useCallback((jaql) => {
   // modify jaql here

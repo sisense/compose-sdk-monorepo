@@ -9,8 +9,8 @@ module.exports = {
       rules: {
         'jira-task-id': ({ subject }) => {
           return [
-            subject && /\(SNS-\d+\)/.test(subject),
-            `Your subject should contain Jira task id (SNS-xxx)`,
+            subject && /\((SNS|ONYX)-\d+\)/.test(subject),
+            `Your subject should contain Jira task id (SNS-xxx or ONYX-xxx)`,
           ];
         },
       },

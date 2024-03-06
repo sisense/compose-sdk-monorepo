@@ -48,7 +48,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
   "legend": {
     "itemStyle": {
       "color": "#000000",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
   },
   "plotOptions": {
@@ -60,7 +60,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -72,7 +72,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -405,7 +405,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
             "formatter": [Function],
             "padding": 0,
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "useHTML": true,
@@ -426,7 +426,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "verticalAlign": "top",
@@ -445,7 +445,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
             },
             "verticalAlign": "middle",
@@ -470,7 +470,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -526,7 +526,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
   "legend": {
     "itemStyle": {
       "color": "#000000",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
   },
   "plotOptions": {
@@ -538,7 +538,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -550,7 +550,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -928,7 +928,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
             "formatter": [Function],
             "padding": 0,
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "useHTML": true,
@@ -945,7 +945,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "verticalAlign": "top",
@@ -960,7 +960,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
             },
             "verticalAlign": "middle",
@@ -985,7 +985,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -1041,7 +1041,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
   "legend": {
     "itemStyle": {
       "color": "#000000",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
   },
   "plotOptions": {
@@ -1053,7 +1053,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -1065,7 +1065,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -1185,7 +1185,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "verticalAlign": "top",
@@ -1201,7 +1201,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "verticalAlign": "top",
@@ -1216,7 +1216,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
             },
             "verticalAlign": "middle",
@@ -1241,7 +1241,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -1297,7 +1297,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
   "legend": {
     "itemStyle": {
       "color": "#000000",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
   },
   "plotOptions": {
@@ -1309,7 +1309,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -1321,7 +1321,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -1645,7 +1645,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
             "formatter": [Function],
             "padding": 0,
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "useHTML": true,
@@ -1662,7 +1662,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "verticalAlign": "top",
@@ -1677,7 +1677,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
             },
             "verticalAlign": "middle",
@@ -1702,7 +1702,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },
@@ -1758,7 +1758,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
   "legend": {
     "itemStyle": {
       "color": "#000000",
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
   },
   "plotOptions": {
@@ -1770,7 +1770,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
         "showPercentLabels": true,
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "showInLegend": true,
@@ -1782,7 +1782,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
       "dataLabels": {
         "style": {
           "color": "#000000",
-          "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
         },
       },
       "point": {
@@ -1985,7 +1985,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "formatter": [Function],
             "padding": 0,
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "useHTML": true,
@@ -2002,7 +2002,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "14px",
             },
             "verticalAlign": "top",
@@ -2017,7 +2017,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
             "enabled": true,
             "formatter": [Function],
             "style": {
-              "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+              "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
               "fontSize": "13px",
             },
             "verticalAlign": "middle",
@@ -2042,7 +2042,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
     "outside": true,
     "padding": 1,
     "style": {
-      "fontFamily": "\\"Open Sans\\",\\"Roboto\\",\\"Helvetica\\",\\"Arial\\",sans-serif",
+      "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
     },
     "useHTML": true,
   },

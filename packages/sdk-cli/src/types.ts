@@ -1,5 +1,3 @@
-import { DataSource } from '@sisense/sdk-data';
-
 const COMMANDS = ['get-data-model', 'get-api-token'] as const;
 
 /**
@@ -16,7 +14,7 @@ export type Command = (typeof COMMANDS)[number];
 
 export type GetDataModelOptions = {
   url: string;
-  dataSource: DataSource;
+  dataSource: string;
   username: string | undefined;
   password: string | undefined;
   token: string | undefined;

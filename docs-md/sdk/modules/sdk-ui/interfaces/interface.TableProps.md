@@ -12,24 +12,48 @@ Props of the [Table](../functions/function.Table.md) component.
 
 #### dataSet
 
-> **dataSet**?: `string` \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
+> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
-Data set for this component, which supports two options:
+Data set for a chart using one of the following options. If neither option is specified, the chart
+will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../functions/function.SisenseContextProvider.md)
+component.
 
-(1) Data source name (as a `string`) - e.g. `Sample ECommerce`. Under the hood,
-the chart will have an internal query connect to the data source
-and load the data as specified in [dataOptions](interface.TableProps.md#dataoptions), [filters](interface.TableProps.md#filters), and [highlights](interface.ChartProps.md#highlights).
+(1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
+retrieve the data source name from a data model you create using the `get-data-model`
+[command](../../sdk-cli/type-aliases/type-alias.Command.md) of the Compose SDK CLI. Under the hood, the chart
+connects to the data source, executes a query, and loads the data as specified in
+[dataOptions](interface.TableProps.md#dataoptions), [filters](interface.TableProps.md#filters), and [highlights](interface.ChartProps.md#highlights).
+
+To learn more about using data from a Sisense data source, see the
+[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#sisense-data).
 
 OR
 
-(2) Explicit [Data](../../sdk-data/interfaces/interface.Data.md), which is made up of
-an array of [columns](../../sdk-data/interfaces/interface.Column.md)
-and a two-dimensional array of data [cells](../../sdk-data/interfaces/interface.Cell.md).
-This allows the chart component to be used
-with user-provided data.
+(2) Explicit [`Data`](../../sdk-data/interfaces/interface.Data.md), which is made up of an array of
+[`Column`](../../sdk-data/interfaces/interface.Column.md) objects and a two-dimensional array of row data. This approach
+allows the chart component to be used with any data you provide.
 
-If neither option is specified,
-the chart will use the `defaultDataSource` specified in the parent Sisense Context.
+To learn more about using data from an external data source, see the
+[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#explicit-data).
+
+Example data in the proper format:
+
+```ts
+const sampleData = {
+  columns: [
+    { name: 'Years', type: 'date' },
+    { name: 'Quantity', type: 'number' },
+    { name: 'Units', type: 'number' },
+  ],
+  rows: [
+    ['2019', 5500, 1500],
+    ['2020', 4471, 7000],
+    ['2021', 1812, 5000],
+    ['2022', 5001, 6000],
+    ['2023', 2045, 4000],
+  ],
+};
+```
 
 ***
 
@@ -53,4 +77,4 @@ Configurations for how to interpret and present the data passed to the component
 
 > **styleOptions**?: [`TableStyleOptions`](interface.TableStyleOptions.md)
 
-Configurations that define functional style of the various table elements
+Configurations for how to style and present a table's data.

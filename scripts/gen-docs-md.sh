@@ -4,6 +4,10 @@
 # It runs typedoc with typedoc-plugin-markdown to generate the markdown files
 # and runs additional ad-hoc steps to adjust the file contents as required by sisense.dev.
 
+ORANGE=$'\e[0;33m'
+NC=$'\e[0m'
+echo "${ORANGE}** NOTE: TYPEDOC WARNINGS ARE TREATED AS ERRORS AND MUST BE FIXED FOR THE CI JOB TO PASS **${NC}"
+
 set -o errexit
 set -o xtrace
 

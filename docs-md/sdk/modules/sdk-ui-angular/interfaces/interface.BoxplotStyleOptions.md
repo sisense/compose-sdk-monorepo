@@ -4,7 +4,7 @@ title: BoxplotStyleOptions
 
 # Interface BoxplotStyleOptions
 
-Configuration options that define functional style of the various elements of BoxplotChart
+Configuration options that define functional style of the various elements of the BoxplotChart component
 
 ## Extends
 
@@ -80,7 +80,7 @@ BaseAxisStyleOptions.navigator
 
 > **subtype**?: [`BoxplotSubtype`](../type-aliases/type-alias.BoxplotSubtype.md)
 
-Subtype of BoxplotChart
+Subtype of the BoxplotChart component
 
 ***
 

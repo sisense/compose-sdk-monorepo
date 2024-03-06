@@ -10,9 +10,9 @@ In this guide we’ll use [Plotly.js](https://plotly.com/javascript/) charts, bu
 
 In order to display your Sisense data in a 3rd party chart, you need to:
 
--   Query you Sisense instance for the data you want
--   Transform the data you receive from Sisense to the format required by the charting library you’re using
--   Apply the formatted data to the 3rd party chart.
+- Query you Sisense instance for the data you want
+- Transform the data you receive from Sisense to the format required by the charting library you’re using
+- Apply the formatted data to the 3rd party chart.
 
 Let’s see how you would perform these steps to create this chart that shows the total cost and total revenue for a number of age ranges.
 
@@ -24,8 +24,8 @@ The first step you need to perform to use Sisense data in a 3rd party chart is t
 
 There are a number of ways you can do this with Compose SDK. The two main ways are:
 
--   Use `executeQuery()` (as a hook in React or as the `QueryService` method in Angular)
--   Use the `<ExecuteQuery />` component (React only)
+- Use `executeQuery()` (as a hook in React or as the `QueryService` method in Angular)
+- Use the `<ExecuteQuery />` component (React only)
 
 In this guide, we’ll take the first approach of using `executeQuery()`. So we simply call `executeQuery()` and pass it the information we want to query from our data model.
 
@@ -92,22 +92,22 @@ We need to take this data from Sisense, organized as a two-dimensional array of 
 
 ```ts
 data = [
-    [
-        { data: '0-18', text: '0-18', blur: false },
-        { data: 4319951.642637288, text: '4319951.64263729', blur: false },
-        { data: 1527753.0939548016, text: '1527753.0939548', blur: false },
-    ],
-    [
-        { data: '19-24', text: '19-24', blur: false },
-        { data: 8656480.951007009, text: '8656480.95100701', blur: false },
-        { data: 3859902.864543805, text: '3859902.8645438', blur: false },
-    ],
-    [
-        { data: '25-34', text: '25-34', blur: false },
-        { data: 21185350.45013156, text: '21185350.4501316', blur: false },
-        { data: 4877853.600113869, text: '4877853.60011387', blur: false },
-    ],
-    //...
+  [
+    { data: '0-18', text: '0-18', blur: false },
+    { data: 4319951.642637288, text: '4319951.64263729', blur: false },
+    { data: 1527753.0939548016, text: '1527753.0939548', blur: false },
+  ],
+  [
+    { data: '19-24', text: '19-24', blur: false },
+    { data: 8656480.951007009, text: '8656480.95100701', blur: false },
+    { data: 3859902.864543805, text: '3859902.8645438', blur: false },
+  ],
+  [
+    { data: '25-34', text: '25-34', blur: false },
+    { data: 21185350.45013156, text: '21185350.4501316', blur: false },
+    { data: 4877853.600113869, text: '4877853.60011387', blur: false },
+  ],
+  //...
 ];
 ```
 
@@ -116,12 +116,12 @@ And turn in into this data, organized as three arrays, one for the age ranges, o
 ```ts
 x1 = ['0-18', '19-24', '25-34', '35-44', '45-54', '55-64', '65+'];
 x2 = [
-    4319951.642637288, 8656480.951007009, 21185350.45013156,
-    //...
+  4319951.642637288, 8656480.951007009, 21185350.45013156,
+  //...
 ];
 x3 = [
-    1527753.0939548016, 3859902.864543805, 4877853.600113869,
-    //...
+  1527753.0939548016, 3859902.864543805, 4877853.600113869,
+  //...
 ];
 ```
 
@@ -133,9 +133,9 @@ const y1: number[] = [];
 const y2: number[] = [];
 
 data?.rows.forEach((row) => {
-    x1.push(row[0].data);
-    y1.push(row[1].data);
-    y2.push(row[2].data);
+  x1.push(row[0].data);
+  y1.push(row[1].data);
+  y2.push(row[2].data);
 });
 ```
 
@@ -143,17 +143,17 @@ Next, we need to take that data and create two “traces”, one for the total c
 
 ```ts
 const trace1: Plotly.Data = {
-    x: x1,
-    y: y1,
-    type: 'bar',
-    name: 'Total Cost',
+  x: x1,
+  y: y1,
+  type: 'bar',
+  name: 'Total Cost',
 };
 
 const trace2: Plotly.Data = {
-    x: x1,
-    y: y2,
-    type: 'bar',
-    name: 'Total Revenue',
+  x: x1,
+  y: y2,
+  type: 'bar',
+  name: 'Total Revenue',
 };
 ```
 
@@ -161,11 +161,11 @@ Then, we can configure the layout of the chart.
 
 ```ts
 const layout = {
-    title: 'Total Cost and Revenue by Age Ranges',
-    xaxis: { title: 'Age Range' },
-    yaxis: { title: 'Cost and Revenue ($)' },
-    width: 900,
-    height: 500,
+  title: 'Total Cost and Revenue by Age Ranges',
+  xaxis: { title: 'Age Range' },
+  yaxis: { title: 'Cost and Revenue ($)' },
+  width: 900,
+  height: 500,
 };
 ```
 
@@ -203,8 +203,8 @@ return <Plot data={plotData} layout={layout} />;
 //..
 
 this.graph = {
-    data: plotData,
-    layout: layout,
+  data: plotData,
+  layout: layout,
 };
 
 //...
@@ -229,22 +229,93 @@ import { measures } from '@sisense/sdk-data';
 import Plot from 'react-plotly.js';
 
 function MyPlotlyChart() {
-    // Query
-    const { data, isLoading, isError } = useExecuteQuery({
+  // Query
+  const { data, isLoading, isError } = useExecuteQuery({
+    dataSource: DM.DataSource,
+    dimensions: [DM.Commerce.AgeRange],
+    measures: [measures.sum(DM.Commerce.Cost, 'Total Cost'), measures.sum(DM.Commerce.Revenue, 'Total Revenue')],
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error</div>;
+  }
+
+  // Transform
+  const x1: number[] = [];
+  const y1: number[] = [];
+  const y2: number[] = [];
+
+  data?.rows.forEach((row) => {
+    x1.push(row[0].data);
+    y1.push(row[1].data);
+    y2.push(row[2].data);
+  });
+
+  const trace1: Plotly.Data = {
+    x: x1,
+    y: y1,
+    type: 'bar',
+    name: 'Total Cost',
+  };
+
+  const trace2: Plotly.Data = {
+    x: x1,
+    y: y2,
+    type: 'bar',
+    name: 'Total Revenue',
+  };
+
+  const layout = {
+    title: 'Total Cost and Revenue by Age Ranges',
+    xaxis: { title: 'Age Range' },
+    yaxis: { title: 'Cost and Revenue ($)' },
+    width: 900,
+    height: 500,
+  };
+
+  const plotData = [trace1, trace2];
+
+  // Apply
+  return <Plot data={plotData} layout={layout} />;
+}
+
+export default MyPlotlyChart;
+```
+
+##### Angular
+
+```ts
+import { Component } from '@angular/core';
+import * as DM from '../../sample-ecommerce';
+import { measures } from '@sisense/sdk-data';
+import { QueryService } from '@sisense/sdk-ui-angular';
+
+import { PlotData } from 'plotly.js-dist-min';
+
+@Component({
+  selector: 'app-analytics',
+  templateUrl: './analytics.component.html',
+  styleUrls: ['./analytics.component.css'],
+})
+export class AnalyticsComponent {
+  graph: { data: Partial<PlotData>[]; layout: {} } = { data: [], layout: {} };
+
+  constructor(private queryService: QueryService) {}
+
+  async ngOnInit(): Promise<void> {
+    const { data } = await this.queryService.executeQuery({
         dataSource: DM.DataSource,
         dimensions: [DM.Commerce.AgeRange],
-        measures: [measures.sum(DM.Commerce.Cost, 'Total Cost'), measures.sum(DM.Commerce.Revenue, 'Total Revenue')],
+        measures: [
+            measures.sum(DM.Commerce.Cost, 'Total Cost'),
+            measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
+        ],
     });
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError) {
-        return <div>Error</div>;
-    }
-
-    // Transform
     const x1: number[] = [];
     const y1: number[] = [];
     const y2: number[] = [];
@@ -279,82 +350,11 @@ function MyPlotlyChart() {
 
     const plotData = [trace1, trace2];
 
-    // Apply
-    return <Plot data={plotData} layout={layout} />;
-}
-
-export default MyPlotlyChart;
-```
-
-##### Angular
-
-```ts
-import { Component } from '@angular/core';
-import * as DM from '../../sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
-import { QueryService } from '@sisense/sdk-ui-angular';
-
-import { PlotData } from 'plotly.js-dist-min';
-
-@Component({
-    selector: 'app-analytics',
-    templateUrl: './analytics.component.html',
-    styleUrls: ['./analytics.component.css'],
-})
-export class AnalyticsComponent {
-    graph: { data: Partial<PlotData>[]; layout: {} } = { data: [], layout: {} };
-
-    constructor(private queryService: QueryService) {}
-
-    async ngOnInit(): Promise<void> {
-        const { data } = await this.queryService.executeQuery({
-            dataSource: DM.DataSource,
-            dimensions: [DM.Commerce.AgeRange],
-            measures: [
-                measures.sum(DM.Commerce.Cost, 'Total Cost'),
-                measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
-            ],
-        });
-
-        const x1: number[] = [];
-        const y1: number[] = [];
-        const y2: number[] = [];
-
-        data?.rows.forEach((row) => {
-            x1.push(row[0].data);
-            y1.push(row[1].data);
-            y2.push(row[2].data);
-        });
-
-        const trace1: Plotly.Data = {
-            x: x1,
-            y: y1,
-            type: 'bar',
-            name: 'Total Cost',
-        };
-
-        const trace2: Plotly.Data = {
-            x: x1,
-            y: y2,
-            type: 'bar',
-            name: 'Total Revenue',
-        };
-
-        const layout = {
-            title: 'Total Cost and Revenue by Age Ranges',
-            xaxis: { title: 'Age Range' },
-            yaxis: { title: 'Cost and Revenue ($)' },
-            width: 900,
-            height: 500,
-        };
-
-        const plotData = [trace1, trace2];
-
-        this.graph = {
-            data: plotData,
-            layout: layout,
-        };
-    }
+    this.graph = {
+        data: plotData,
+        layout: layout,
+    };
+  }
 }
 ```
 

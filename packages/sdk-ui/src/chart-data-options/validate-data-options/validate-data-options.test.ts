@@ -176,7 +176,7 @@ describe('validateDataOptionsAgainstData', () => {
 });
 
 describe('isDataOptionsValid', () => {
-  it('should truly validate correct categorical chart dataOptions', () => {
+  describe('should truly validate correct categorical chart dataOptions', () => {
     const validDataOptions = {
       category: [],
       value: [{ name: 'Revenue' }],
@@ -203,7 +203,7 @@ describe('isDataOptionsValid', () => {
     });
   });
 
-  it('should falsy validate incorrect categorical chart dataOptions', () => {
+  describe('should falsy validate incorrect categorical chart dataOptions', () => {
     const invalidDataOptions = {
       category: [],
       value: [],

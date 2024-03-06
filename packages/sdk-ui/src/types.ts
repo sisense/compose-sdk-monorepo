@@ -71,6 +71,7 @@ export type {
   LegendPosition,
   GeoDataElement,
   RawGeoDataElement,
+  Coordinates,
 };
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
@@ -285,19 +286,19 @@ export interface BaseAxisStyleOptions {
   y2Axis?: AxisLabel;
 }
 
-/** Configuration options that define functional style of the various elements of {@link LineChart} */
+/** Configuration options that define functional style of the various elements of LineChart */
 export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Configuration that defines line width */
   lineWidth?: LineWidth;
-  /** Subtype of {@link LineChart}*/
+  /** Subtype of LineChart */
   subtype?: LineSubtype;
 }
 
-/** Configuration options that define functional style of the various elements of {@link AreaChart} */
+/** Configuration options that define functional style of the various elements of AreaChart */
 export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Configuration that defines line width */
   lineWidth?: LineWidth;
-  /** Subtype of {@link AreaChart}*/
+  /** Subtype of AreaChart*/
   subtype?: AreaSubtype;
 }
 
@@ -324,27 +325,27 @@ export interface PieStyleOptions extends BaseStyleOptions {
   subtype?: PieSubtype;
 }
 
-/** Configuration options that define functional style of the various elements of {@link FunnelChart} */
+/** Configuration options that define functional style of the various elements of FunnelChart */
 export interface FunnelStyleOptions extends BaseStyleOptions {
   /** Visual size of the lowest slice (degree of funnel narrowing from highest to lowest slices)*/
   funnelSize?: FunnelSize;
-  /** Visual type of the lowest slice of {@link FunnelChart} */
+  /** Visual type of the lowest slice of FunnelChart */
   funnelType?: FunnelType;
-  /** Direction of {@link FunnelChart} narrowing */
+  /** Direction of FunnelChart narrowing */
   funnelDirection?: FunnelDirection;
-  /** Configuration that defines behavior of data labels on {@link FunnelChart} */
+  /** Configuration that defines behavior of data labels on FunnelChart */
   labels?: Labels;
-  /** Subtype of {@link FunnelChart}*/
+  /** Subtype of FunnelChart*/
   subtype?: never;
 }
 
-/** Configuration options that define functional style of the various elements of {@link PolarChart} */
+/** Configuration options that define functional style of the various elements of PolarChart */
 export interface PolarStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Subtype of {@link PolarChart}*/
+  /** Subtype of PolarChart*/
   subtype?: PolarSubtype;
 }
 
-/** Configuration options that define functional style of the various elements of {@link IndicatorChart} */
+/** Configuration options that define functional style of the various elements of IndicatorChart */
 export type IndicatorStyleOptions = (
   | NumericSimpleIndicatorStyleOptions
   | NumericBarIndicatorStyleOptions
@@ -369,7 +370,7 @@ export type IndicatorStyleOptions = (
   height?: number;
 };
 
-/** Configuration options that define functional style of the various elements of {@link Table} */
+/** Configuration options that define functional style of the various elements of the Table Component */
 export interface TableStyleOptions {
   /**
    * Boolean flag whether to fill header cells with background color
@@ -409,7 +410,7 @@ export interface TableStyleOptions {
   height?: number;
 }
 
-/** Configuration options that define functional style of the various elements of {@link PivotTable} */
+/** Configuration options that define functional style of the various elements of the PivotTable component */
 export interface PivotTableStyleOptions {
   /**
    * Boolean flag whether to fill header cells with background color
@@ -465,20 +466,20 @@ export interface BaseIndicatorStyleOptions {
   forceTickerView?: boolean;
 }
 
-/** Configuration options that define functional style of the various elements of Numeric Simple {@link IndicatorChart} */
+/** Configuration options that define functional style of the various elements of Numeric Simple IndicatorChart */
 export interface NumericSimpleIndicatorStyleOptions extends BaseIndicatorStyleOptions {
   subtype: 'indicator/numeric';
   numericSubtype: 'numericSimple';
   skin: 'vertical' | 'horizontal';
 }
 
-/** Configuration options that define functional style of the various elements of Numeric Bar {@link IndicatorChart} */
+/** Configuration options that define functional style of the various elements of Numeric Bar IndicatorChart */
 export interface NumericBarIndicatorStyleOptions extends BaseIndicatorStyleOptions {
   subtype: 'indicator/numeric';
   numericSubtype: 'numericBar';
 }
 
-/** Configuration options that define functional style of the various elements of Gauge {@link IndicatorChart} */
+/** Configuration options that define functional style of the various elements of Gauge IndicatorChart */
 export interface GaugeIndicatorStyleOptions extends BaseIndicatorStyleOptions {
   subtype: 'indicator/gauge';
   skin: 1 | 2;
@@ -486,14 +487,14 @@ export interface GaugeIndicatorStyleOptions extends BaseIndicatorStyleOptions {
   tickerBarHeight?: number;
 }
 
-/** Configuration options that define functional style of the various elements of {@link ScatterChart} */
+/** Configuration options that define functional style of the various elements of ScatterChart */
 export interface ScatterStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Subtype of {@link ScatterChart}*/
+  /** Subtype of ScatterChart*/
   subtype?: never;
   markerSize?: ScatterMarkerSize;
 }
 
-/** Configuration options that define functional style of the various elements of {@link TreemapChart} */
+/** Configuration options that define functional style of the various elements of TreemapChart */
 export interface TreemapStyleOptions extends BaseStyleOptions {
   /** Labels options object */
   labels?: {
@@ -510,7 +511,7 @@ export interface TreemapStyleOptions extends BaseStyleOptions {
   };
 }
 
-/** Configuration options that define functional style of the various elements of {@link SunburstChart} */
+/** Configuration options that define functional style of the various elements of the SunburstChart component */
 export interface SunburstStyleOptions extends BaseStyleOptions {
   /** Labels options object */
   labels?: {
@@ -527,22 +528,22 @@ export interface SunburstStyleOptions extends BaseStyleOptions {
   };
 }
 
-/** Configuration options that define functional style of the various elements of {@link BoxplotChart} */
+/** Configuration options that define functional style of the various elements of the BoxplotChart component */
 export interface BoxplotStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Subtype of {@link BoxplotChart}*/
+  /** Subtype of the BoxplotChart component*/
   subtype?: BoxplotSubtype;
 }
 
 /**
- * Type of map to display on {@link AreamapChart}
+ * Type of map to display on the AreamapChart component
  */
 export type AreamapType = 'world' | 'usa';
 
 /**
- * Configuration options that define functional style of the various elements of {@link AreamapChart}
+ * Configuration options that define functional style of the various elements of the AreamapChart component
  */
 export interface AreamapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
-  /** Type of map to display on {@link AreamapChart} */
+  /** Type of map to display on the AreamapChart component */
   mapType?: AreamapType;
 }
 
@@ -563,7 +564,7 @@ export type ScattermapMarkers = {
   };
 };
 
-/** Configuration options that define functional style of the various elements of {@link ScattermapChart} */
+/** Configuration options that define functional style of the various elements of ScattermapChart */
 export interface ScattermapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
   subtype?: never;
   markers?: ScattermapMarkers;
@@ -778,7 +779,7 @@ export interface WidgetStyleOptions {
   };
 }
 
-/** Style settings defining the look and feel of {@link DashboardWidget} */
+/** Style settings defining the look and feel of DashboardWidget */
 export interface DashboardWidgetStyleOptions extends WidgetStyleOptions {
   /**
    * Total width of the component, which is considered in the following order of priority:
@@ -799,7 +800,7 @@ export interface DashboardWidgetStyleOptions extends WidgetStyleOptions {
   height?: number;
 }
 
-/** Style settings defining the look and feel of {@link ChartWidget} */
+/** Style settings defining the look and feel of ChartWidget */
 export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetStyleOptions;
 
 /**
@@ -1023,7 +1024,7 @@ export type SeriesWithAlerts<T> = {
 
 /**
  * Context menu position coordinates
- * Used in {@link ContextMenu} component
+ * Used in {@link ContextMenuProps} component
  */
 export type MenuPosition = {
   /** Horizontal position */
@@ -1034,7 +1035,7 @@ export type MenuPosition = {
 
 /**
  * Context menu section
- * Used in {@link ContextMenu} component
+ * Used in {@link ContextMenuProps} component
  */
 export type MenuItemSection = {
   /** Optional section title */

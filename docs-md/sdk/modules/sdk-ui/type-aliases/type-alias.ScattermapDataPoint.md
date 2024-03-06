@@ -20,7 +20,7 @@ Array with categories strings used for location definition
 
 ### `coordinates`
 
-**coordinates**: `Coordinates`
+**coordinates**: [`Coordinates`](type-alias.Coordinates.md)
 
 Location coordinates
 

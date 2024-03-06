@@ -1,15 +1,28 @@
 import { useQuery } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { withTracking } from '@/decorators/hook-decorators';
-import { useChatApi } from './api/chat-api-provider.js';
-import type { GetNlgQueryResultRequest } from './api/types.js';
+import { useChatApi } from './api/chat-api-provider';
+import { Attribute, Filter, Measure } from '@sisense/sdk-data';
+import { GetNlgQueryResultRequest } from './api/types';
+import { GetNlgQueryResultProps } from './get-nlg-query-result';
 
 /**
  * Parameters for {@link useGetNlgQueryResult} hook.
- *
  */
-export interface UseGetNlgQueryResultParams extends GetNlgQueryResultRequest {
+export interface UseGetNlgQueryResultParams {
+  /** The data source that the query targets - e.g. `Sample ECommerce` */
+  dataSource: string;
+
+  /** Dimensions of the query */
+  dimensions?: Attribute[];
+
+  /** Measures of the query */
+  measures?: Measure[];
+
+  /** Filters of the query */
+  filters?: Filter[];
+
   /**
    * Boolean flag to enable/disable API call by default
    *
@@ -18,12 +31,48 @@ export interface UseGetNlgQueryResultParams extends GetNlgQueryResultRequest {
   enabled?: boolean;
 }
 
-export const useGetNlgQueryResultInternal = (params: UseGetNlgQueryResultParams) => {
-  const { enabled = true, ...payload } = params;
+/**
+ * State for {@link useGetNlgQueryResult} hook.
+ */
+export interface UseGetNlgQueryResultState {
+  /** Whether the data fetching is loading */
+  isLoading: boolean;
+  /** Whether the data fetching has failed */
+  isError: boolean;
+  /** Whether the data fetching has succeeded */
+  isSuccess: boolean;
+  /** The result data */
+  data: string | undefined;
+  /** The error if any occurred */
+  error: unknown;
+  /** Callback to trigger a refetch of the data */
+  refetch: () => void;
+}
+
+/**
+ * @internal
+ */
+export const useGetNlgQueryResultInternal = (
+  params: GetNlgQueryResultProps | GetNlgQueryResultRequest,
+  enabled = true,
+): UseGetNlgQueryResultState => {
+  const payload: GetNlgQueryResultRequest = useMemo(() => {
+    if ('jaql' in params) {
+      return params;
+    } else {
+      const { dataSource, dimensions = [], measures = [], filters = [] } = params;
+      return {
+        jaql: {
+          datasource: { title: dataSource },
+          metadata: [...dimensions, ...measures, ...filters].map((item) => item.jaql()),
+        },
+      };
+    }
+  }, [params]);
 
   const api = useChatApi();
 
-  const { data, isError, isLoading, isSuccess, fetchStatus, refetch } = useQuery({
+  const { data, error, isError, isLoading, isSuccess, refetch } = useQuery({
     queryKey: ['getNlgQueryResult', payload, api],
     queryFn: () => api?.ai.getNlgQueryResult(payload),
     select: (data) => data?.data?.answer,
@@ -31,15 +80,23 @@ export const useGetNlgQueryResultInternal = (params: UseGetNlgQueryResultParams)
   });
 
   return {
-    data,
-    isError,
     isLoading,
+    isError,
     isSuccess,
-    fetchStatus,
+    data,
+    error,
     refetch: useCallback(() => {
       refetch();
     }, [refetch]),
   };
+};
+
+/**
+ * @internal
+ */
+const useGetNlgQueryResultWithoutTracking = (params: UseGetNlgQueryResultParams) => {
+  const { enabled, ...restParams } = params;
+  return useGetNlgQueryResultInternal(restParams, enabled);
 };
 
 /**
@@ -53,61 +110,22 @@ export const useGetNlgQueryResultInternal = (params: UseGetNlgQueryResultParams)
  *
  * @example
  * ```tsx
- * import { SisenseContextProvider } from '@sisense/sdk-ui';
- * import { AiContextProvider, useGetNlgQueryResult } from '@sisense/sdk-ui/ai';
+ * const { data, isLoading } = useGetNlgQueryResult({
+ *   dataSource: 'Sample ECommerce',
+ *   dimensions: [DM.Commerce.Date.Years],
+ *   measures: [measureFactory.sum(DM.Commerce.Revenue)],
+ * });
  *
- * function Page() {
- *   const { data } = useGetNlgQueryResult({
- *     jaql: {
- *       datasource: { title: 'Sample ECommerce' },
- *       metadata: [
- *         {
- *           jaql: {
- *             column: 'Date',
- *             datatype: 'datetime',
- *             dim: '[Commerce.Date]',
- *             firstday: 'mon',
- *             level: 'years',
- *             table: 'Commerce',
- *             title: 'Date',
- *           },
- *         },
- *         {
- *           jaql: {
- *             agg: 'sum',
- *             column: 'Revenue',
- *             datatype: 'numeric',
- *             dim: '[Commerce.Revenue]',
- *             table: 'Commerce',
- *             title: 'total of Revenue',
- *           },
- *         },
- *       ],
- *     },
- *     style: 'Large',
- *   });
- *   return (
- *     <>
- *       <h1>Summary</h1>
- *       <p>{data}</p>
- *     </>
- *   );
+ * if (isLoading) {
+ *   return <div>Loading...</div>;
  * }
  *
- * function App() {
- *   return (
- *     <SisenseContextProvider {...sisenseContextProps}>
- *       <AiContextProvider>
- *         <Page />
- *       </AiContextProvider>
- *     </SisenseContextProvider>
- *   );
- * }
+ * return <p>{data}</p>;
  * ```
  * @param params - {@link UseGetNlgQueryResultParams}
  * @returns Response object containing a text summary
  * @beta
  */
 export const useGetNlgQueryResult = withTracking('useGetNlgQueryResult')(
-  useGetNlgQueryResultInternal,
+  useGetNlgQueryResultWithoutTracking,
 );

@@ -30,7 +30,7 @@ export class ErrorTracker extends Component<ErrorTrackerProps, { error: Error | 
   }
 
   componentDidCatch(error: Error) {
-    if (this.context.enableTracking) {
+    if (this.context.tracking.enabled) {
       if (!this.httpClient) {
         this.postponedErrors.push(error);
       } else {

@@ -9,6 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { ClientApplication } from '../app/client-application';
+import { DeepPartial } from 'ts-essentials';
 
 type UserSetupFn = (typeof userEvent)['setup'];
 interface SetupResult extends RenderResult {
@@ -48,19 +49,28 @@ export const MockedHighchartsReact = ({
   return <div>{JSON.stringify(options)}</div>;
 };
 
+type MockedSisenseContextProviderProps = PropsWithChildren<
+  DeepPartial<Omit<SisenseContextPayload, 'app'>>
+>;
+
 const mockHttpClient = new HttpClient('mock-url', {} as Authenticator, 'mock-env');
 export const MockedSisenseContextProvider = ({
   children,
-  enableTracking = true,
+  tracking = {
+    enabled: true,
+  },
   isInitialized = true,
-}: PropsWithChildren<Partial<Omit<SisenseContextPayload, 'app'>>>) => {
+}: MockedSisenseContextProviderProps) => {
   return (
     <SisenseContext.Provider
       value={{
         app: {
           httpClient: mockHttpClient,
         } as ClientApplication,
-        enableTracking,
+        tracking: {
+          enabled: tracking.enabled ?? true,
+          packageName: tracking.packageName ?? 'sdk-ui',
+        },
         isInitialized,
       }}
     >

@@ -4,7 +4,7 @@ title: useGetNlgQueryResult
 
 # Function useGetNlgQueryResult <Badge type="beta" text="Beta" />
 
-> **useGetNlgQueryResult**(...`args`): `object`
+> **useGetNlgQueryResult**(...`args`): [`UseGetNlgQueryResultState`](../interfaces/interface.UseGetNlgQueryResultState.md)
 
 React hook that fetches an analysis of the provided JAQL using natural language generation (NLG).
 
@@ -22,87 +22,22 @@ This hook is currently under private beta for selected customers and is subject 
 
 ## Returns
 
+[`UseGetNlgQueryResultState`](../interfaces/interface.UseGetNlgQueryResultState.md)
+
 Response object containing a text summary
-
-### `data`
-
-**data**: `undefined` \| `string`
-
-### `fetchStatus`
-
-**fetchStatus**: `FetchStatus`
-
-### `isError`
-
-**isError**: `boolean`
-
-### `isLoading`
-
-**isLoading**: `boolean`
-
-### `isSuccess`
-
-**isSuccess**: `boolean`
-
-### `refetch`
-
-**refetch**: () => `void`
-
-#### Returns
-
-`void`
 
 ## Example
 
 ```ts
-import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { AiContextProvider, useGetNlgQueryResult } from '@sisense/sdk-ui/ai';
+const { data, isLoading } = useGetNlgQueryResult({
+  dataSource: 'Sample ECommerce',
+  dimensions: [DM.Commerce.Date.Years],
+  measures: [measureFactory.sum(DM.Commerce.Revenue)],
+});
 
-function Page() {
-  const { data } = useGetNlgQueryResult({
-    jaql: {
-      datasource: { title: 'Sample ECommerce' },
-      metadata: [
-        {
-          jaql: {
-            column: 'Date',
-            datatype: 'datetime',
-            dim: '[Commerce.Date]',
-            firstday: 'mon',
-            level: 'years',
-            table: 'Commerce',
-            title: 'Date',
-          },
-        },
-        {
-          jaql: {
-            agg: 'sum',
-            column: 'Revenue',
-            datatype: 'numeric',
-            dim: '[Commerce.Revenue]',
-            table: 'Commerce',
-            title: 'total of Revenue',
-          },
-        },
-      ],
-    },
-    style: 'Large',
-  });
-  return (
-    <>
-      <h1>Summary</h1>
-      <p>{data}</p>
-    </>
-  );
+if (isLoading) {
+  return <div>Loading...</div>;
 }
 
-function App() {
-  return (
-    <SisenseContextProvider {...sisenseContextProps}>
-      <AiContextProvider>
-        <Page />
-      </AiContextProvider>
-    </SisenseContextProvider>
-  );
-}
+return <p>{data}</p>;
 ```

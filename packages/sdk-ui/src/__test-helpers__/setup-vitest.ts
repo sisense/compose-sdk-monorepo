@@ -1,17 +1,8 @@
-import matchers, { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
+import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import 'vitest-canvas-mock';
 import { vi } from 'vitest';
+import 'vitest-canvas-mock';
 import { server } from '../__mocks__/msw';
-
-// Add types for matchers from @testing-library/jest-dom
-// https://github.com/testing-library/jest-dom/issues/439#issuecomment-1536524120
-declare module 'vitest' {
-  interface Assertion<T = any> extends jest.Matchers<void, T>, TestingLibraryMatchers<T, void> {}
-}
-
-// Manually extend Vitest's expect() with methods from @testing-library/jest-dom
-expect.extend(matchers);
 
 beforeAll(() =>
   server.listen({

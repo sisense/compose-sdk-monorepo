@@ -6,7 +6,11 @@ title: DataPointEventHandler
 
 > **DataPointEventHandler**: (`point`, `nativeEvent`) => `void`
 
-Click handler for when a data point is clicked. One parameter, `DataPoint`, is passed to the function.
+A handler function that allows you to customize what happens when certain events occur to
+a data point.
+
+For an example of how the `DataPointEventHandler` function can be used, see the
+[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
 ## Parameters
 

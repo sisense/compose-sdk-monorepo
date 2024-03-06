@@ -11,14 +11,14 @@ export type ChatbotProps = {
   /**
    * Total width of the chatbot
    *
-   * If not specified, a default width of 500px will be used
+   * If not specified, a default width of `500px` will be used.
    */
   width?: CSSProperties['width'];
 
   /**
    * Total height of the chatbot
    *
-   * If not specified, a default height of 500px will be used
+   * If not specified, a default height of `900px` will be used.
    */
   height?: CSSProperties['height'];
 
@@ -56,7 +56,7 @@ export type ChatbotProps = {
 export const Chatbot = asSisenseComponent({
   componentName: 'Chatbot',
 })((props: ChatbotProps) => {
-  const { width, height = '900px', config } = props;
+  const { width, height, config } = props;
 
   return (
     <ChatConfigProvider value={config ?? {}}>

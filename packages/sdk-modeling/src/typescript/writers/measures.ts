@@ -5,9 +5,9 @@
 
 import { BaseMeasure, MeasureTemplate, normalizeName } from '@sisense/sdk-data';
 
-import { NEWLINE, rnt, writeIndented, BaseWriter } from './base.js';
+import { NEWLINE, rnt, writeIndented, ElementWriter } from './base.js';
 
-export abstract class MeasureWriter<T> extends BaseWriter<T> {
+export abstract class MeasureWriter<T> extends ElementWriter<T> {
   readonly isNested: boolean;
 
   constructor(measure: T, isNested: boolean) {
@@ -43,10 +43,14 @@ export class BaseMeasureWriter extends MeasureWriter<BaseMeasure> {
                 ${rnt(idnt + 1)}name: "${this.name}", \
                 ${rnt(idnt + 1)}expression: "${this.element.attribute.expression}", \
                 ${rnt(idnt + 1)}agg: "${this.element.aggregation}"${
-        this.element.getFormat() ? `,${rnt(idnt + 1)}format:"${this.element.getFormat()}"` : ''
-      }${
-        this.element.description ? `,${rnt(idnt + 1)}description:"${this.element.description}"` : ''
-      }})`,
+                  this.element.getFormat()
+                    ? `,${rnt(idnt + 1)}format:"${this.element.getFormat()}"`
+                    : ''
+                }${
+                  this.element.description
+                    ? `,${rnt(idnt + 1)}description:"${this.element.description}"`
+                    : ''
+                }})`,
       idnt,
     );
   }
@@ -81,12 +85,14 @@ export class MeasureTemplateWriter extends MeasureWriter<MeasureTemplate> {
                 ${rnt(ident + 1)}name: "${this.name}", \
                 ${rnt(ident + 1)}expression: "${this.element.attribute.expression}", \
                 ${rnt(ident + 1)}agg: "*"${
-        this.element.getFormat() ? `,${rnt(ident + 1)}format:"${this.element.getFormat()}"` : ''
-      }${
-        this.element.description
-          ? `,${rnt(ident + 1)}description:"${this.element.description}"`
-          : ''
-      }})`,
+                  this.element.getFormat()
+                    ? `,${rnt(ident + 1)}format:"${this.element.getFormat()}"`
+                    : ''
+                }${
+                  this.element.description
+                    ? `,${rnt(ident + 1)}description:"${this.element.description}"`
+                    : ''
+                }})`,
       ident,
     );
   }

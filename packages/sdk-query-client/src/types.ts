@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   Filter,
   Measure,
@@ -11,6 +12,7 @@ import {
   PivotGrandTotals,
   FilterRelationsJaql,
 } from '@sisense/sdk-data';
+import { AnyObject } from './helpers/utility-types.js';
 
 /**
  * All the properties that fully describe a query you want to send.
@@ -56,9 +58,19 @@ export type QueryExecutionConfigInternal = QueryExecutionConfig & {
   shouldSkipHighlightsWithoutAttributes: boolean;
 };
 
+/**
+ * Data source description used in JAQL.
+ */
+export type JaqlDataSource =
+  | string
+  | {
+      title: string;
+      live: boolean;
+    };
+
 export type QueryOptions = {
   // notice datasource (in lower case) is expected by JAQL API
-  datasource: string;
+  datasource: JaqlDataSource;
   by: string;
   queryGuid: string;
 
@@ -176,8 +188,11 @@ export type JaqlResponse = {
   database?: string;
 };
 
+export type DataSourceSchema = {
+  title: string;
+  type: 'extract' | 'live';
+} & AnyObject;
+
 export type AbortRequestFunction = (reason?: string) => void;
 
 export type QueryGuid = string;
-
-export type EmptyObject = Record<string, never>;

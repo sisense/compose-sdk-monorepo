@@ -43,7 +43,7 @@ const sunburstChartProps = ref<SunburstChartProps>({
 
 ### dataSet
 
-> **dataSet**?: `string` \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
+> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 ***
 

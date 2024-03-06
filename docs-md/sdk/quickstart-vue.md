@@ -2,9 +2,7 @@
 title: Quickstart Guide (Vue)
 ---
 
-::: warning Released for internal testing, may potentially demonstrate instability
 # Compose SDK with Vue  <Badge type="beta" text="Beta" />: Quickstart Guide
-:::
 
 Follow this guide to get started developing applications with Compose SDK.
 

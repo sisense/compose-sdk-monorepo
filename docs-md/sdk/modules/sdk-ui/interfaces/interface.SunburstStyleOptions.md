@@ -4,7 +4,7 @@ title: SunburstStyleOptions
 
 # Interface SunburstStyleOptions
 
-Configuration options that define functional style of the various elements of [SunburstChart](../functions/function.SunburstChart.md)
+Configuration options that define functional style of the various elements of the SunburstChart component
 
 ## Extends
 

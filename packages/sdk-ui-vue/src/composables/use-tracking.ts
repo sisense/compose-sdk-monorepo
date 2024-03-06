@@ -1,5 +1,5 @@
 import { trackHook } from '@sisense/sdk-ui-preact';
-import { getApp } from '../providers/sisense-context-provider.js';
+import { getSisenseContext } from '../providers/sisense-context-provider.js';
 import { ref, watchEffect } from 'vue';
 
 /**
@@ -40,11 +40,11 @@ import { ref, watchEffect } from 'vue';
  */
 export const useTracking = (hookName: string) => {
   const hasTrackedRef = ref(false);
-  const contextApp = getApp();
+  const contex = getSisenseContext();
 
   const track = () => {
-    if (!contextApp.value || hasTrackedRef.value) return null;
-    const app = contextApp.value;
+    const { app } = contex.value;
+    if (!app || hasTrackedRef.value) return null;
     try {
       trackHook(hookName, 'sdk-ui-vue', app, () => (hasTrackedRef.value = true));
     } catch (error) {

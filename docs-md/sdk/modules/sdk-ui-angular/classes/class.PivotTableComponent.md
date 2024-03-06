@@ -43,7 +43,7 @@ Configurations for how to interpret and present the data passed to the component
 
 #### dataSet
 
-> **dataSet**: `undefined` \| `string`
+> **dataSet**: `undefined` \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source name (as a `string`) - e.g. `Sample ECommerce`.
 
@@ -63,4 +63,4 @@ Filters that will slice query results
 
 > **styleOptions**: `undefined` \| [`PivotTableStyleOptions`](../interfaces/interface.PivotTableStyleOptions.md)
 
-Configurations that define functional style of the various table elements
+Configurations for how to style and present a pivot table's data.

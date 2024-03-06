@@ -1,3 +1,4 @@
+import { DataSource } from '../interfaces.js';
 import {
   //DateLevels,
   Sort,
@@ -8,6 +9,7 @@ import {
  */
 export interface DataModel {
   readonly name: string;
+  readonly dataSource: DataSource;
   readonly metadata: Element[];
   [propName: string]: any;
 }

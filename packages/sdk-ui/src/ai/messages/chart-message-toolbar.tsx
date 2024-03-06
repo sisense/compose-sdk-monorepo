@@ -44,7 +44,7 @@ const ThreeDotsMenu = ({ items }: ThreeDotsMenuProps) => {
 
   return (
     <>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClick} aria-label="three dots button">
         <ThreeDotsIcon />
       </IconButton>
       <Menu
@@ -116,7 +116,7 @@ export default function ChartMessageToolbar({
   );
 
   return (
-    <div className="csdk-flex csdk-py-1.5">
+    <div className="csdk-flex csdk-py-1.5" aria-label="chatbot chart toolbar">
       <InfoTooltip title={infoTooltipText ?? ''} />
       <ThreeDotsMenu items={dropdownMenuItems} />
       <ExpandButton onClick={onExpand} />

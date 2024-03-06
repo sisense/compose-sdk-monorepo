@@ -1,8 +1,10 @@
 /* eslint-disable max-lines */
 import { withTracking } from '@/decorators/hook-decorators';
 import { useQuery } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
 import { useChatApi } from './api/chat-api-provider';
+import { QueryRecommendation } from './api/types';
 import { useChatConfig } from './chat-config';
 
 /**
@@ -20,22 +22,53 @@ export interface UseGetQueryRecommendationsParams {
   count?: number;
 }
 
-export const useGetQueryRecommendationsInternal = (params: UseGetQueryRecommendationsParams) => {
+/**
+ * State for {@link useGetQueryRecommendations} hook.
+ */
+export interface UseGetQueryRecommendationsState {
+  /** Whether the data fetching is loading */
+  isLoading: boolean;
+  /** Whether the data fetching has failed */
+  isError: boolean;
+  /** Whether the data fetching has succeeded */
+  isSuccess: boolean;
+  /** The result data */
+  data: QueryRecommendation[];
+  /** The error if any occurred */
+  error: unknown;
+  /** Callback to trigger a refetch of the data */
+  refetch: () => void;
+}
+
+export const useGetQueryRecommendationsInternal = (
+  params: UseGetQueryRecommendationsParams,
+): UseGetQueryRecommendationsState => {
   const { contextTitle, count } = params;
 
   const api = useChatApi();
   const { numOfRecommendations } = useChatConfig();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['getQueryRecommendations', contextTitle, api],
+  const finalCount = count ?? numOfRecommendations;
+
+  const { isLoading, isError, isSuccess, data, error, refetch } = useQuery({
+    queryKey: ['getQueryRecommendations', contextTitle, finalCount, api],
     queryFn: () =>
       api?.ai.getQueryRecommendations(contextTitle, {
-        numOfRecommendations: count ?? numOfRecommendations,
+        numOfRecommendations: finalCount,
       }),
     enabled: !!api,
   });
 
-  return { data: data ?? [], isLoading };
+  return {
+    isLoading,
+    isError,
+    isSuccess,
+    data: data ?? [],
+    error,
+    refetch: useCallback(() => {
+      refetch();
+    }, [refetch]),
+  };
 };
 
 /**
@@ -49,36 +82,21 @@ export const useGetQueryRecommendationsInternal = (params: UseGetQueryRecommenda
  *
  * @example
  * ```tsx
- * import { SisenseContextProvider } from '@sisense/sdk-ui';
- * import { AiContextProvider, useGetQueryRecommendations } from '@sisense/sdk-ui/ai';
+ * const { data, isLoading } = useGetQueryRecommendations({
+ *   contextTitle: 'Sample ECommerce',
+ * });
  *
- * function Page() {
- *   const { data } = useGetQueryRecommendations({
- *     contextTitle: 'Sample ECommerce',
- *   });
- *
- *   if (!data) {
- *     return <div>Loading recommendations</div>;
- *   }
- *
- *   return (
- *     <ul>
- *       {data.map((item, index) => (
- *         <li key={index}>{item.nlqPrompt}</li>
- *       ))}
- *     </ul>
- *   );
+ * if (isLoading) {
+ *   return <div>Loading recommendations</div>;
  * }
  *
- * function App() {
- *   return (
- *     <SisenseContextProvider {...sisenseContextProps}>
- *       <AiContextProvider>
- *         <Page />
- *       </AiContextProvider>
- *     </SisenseContextProvider>
- *   );
- * }
+ * return (
+ *   <ul>
+ *     {data.map((item, index) => (
+ *       <li key={index}>{item.nlqPrompt}</li>
+ *     ))}
+ *   </ul>
+ * );
  * ```
  * @param params - {@link UseGetQueryRecommendationsParams}
  * @returns An array of objects, each containing recommended question text and its corresponding JAQL

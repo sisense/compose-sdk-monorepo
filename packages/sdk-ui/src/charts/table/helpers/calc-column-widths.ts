@@ -2,8 +2,8 @@ import { DataTable } from '../../../chart-data-processor/table-processor';
 import { simpleColumnType } from '@sisense/sdk-data';
 import {
   DATA_PADDING,
-  EXTRA_PIXELS,
   HEADER_PADDING,
+  HEADER_TYPE_ICON_SPACING,
   MAX_WIDTH,
   MIN_WIDTH,
 } from '../styles/style-constants';
@@ -11,6 +11,7 @@ import {
 export const calcColumnWidths = (
   dataTable: DataTable,
   isLoading: boolean,
+  isShowFieldTypeIcon: boolean,
   columnsOptions: {
     isHtml: boolean;
   }[],
@@ -25,7 +26,7 @@ export const calcColumnWidths = (
   // get pixel width of headers
   const columnNameWidths = dataTable.columns.map((column) => {
     const pixelForValue = ctx.measureText(column.name).width;
-    return pixelForValue + HEADER_PADDING + EXTRA_PIXELS;
+    return pixelForValue + HEADER_PADDING + (isShowFieldTypeIcon ? HEADER_TYPE_ICON_SPACING : 0);
   });
 
   const numericDigitWidth = ctx.measureText('0').width;
@@ -46,7 +47,7 @@ export const calcColumnWidths = (
           : ctx.measureText(value).width;
       return Math.max(longestWidth, currentWidth);
     }, 0);
-    return DATA_PADDING + pixelForValue + EXTRA_PIXELS;
+    return DATA_PADDING + pixelForValue;
   });
   // get max pixel between data or header for each column
   return columnNameWidths.map((nameWidth, index) => {

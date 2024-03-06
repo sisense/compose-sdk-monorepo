@@ -142,7 +142,10 @@ describe('useExecuteQueryByWidgetId', () => {
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,
-      enableTracking: false,
+      tracking: {
+        enabled: false,
+        packageName: 'sdk-ui',
+      },
     });
   });
 
@@ -393,7 +396,10 @@ describe('useExecuteQueryByWidgetId', () => {
   });
 
   it('should handle missing Sisense context', () => {
-    useSisenseContextMock.mockReturnValue({ isInitialized: false, enableTracking: false });
+    useSisenseContextMock.mockReturnValue({
+      isInitialized: false,
+      tracking: { enabled: false, packageName: 'sdk-ui' },
+    });
 
     const { result } = renderHook(() => useExecuteQueryByWidgetId(params));
 
@@ -433,7 +439,10 @@ describe('useExecuteQueryByWidgetId', () => {
     useSisenseContextMock.mockReturnValue({
       app: { httpClient: {} } as ClientApplication,
       isInitialized: true,
-      enableTracking: true,
+      tracking: {
+        enabled: true,
+        packageName: `sdk-ui`,
+      },
     });
     vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
 

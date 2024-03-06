@@ -2,35 +2,40 @@ import { defineComponent, inject, provide, ref } from 'vue';
 import type { PropType, InjectionKey, Ref } from 'vue';
 import type { SisenseContextProviderProps } from '@sisense/sdk-ui-preact';
 import {
-  ClientApplication,
   createClientApplication,
   createContextProviderRenderer,
   CustomSisenseContextProvider,
+  type CustomSisenseContext,
 } from '@sisense/sdk-ui-preact';
 
-const sisenseContextAppKey = Symbol('sisenseContextAppKey') as InjectionKey<
-  Ref<ClientApplication | undefined>
->;
+const defaultSisenseContext: CustomSisenseContext = {
+  isInitialized: false,
+  app: undefined,
+  showRuntimeErrors: true,
+  tracking: {
+    enabled: true,
+    packageName: 'sdk-ui-vue',
+  },
+};
+
+const sisenseContextKey = Symbol('sisenseContextKey') as InjectionKey<Ref<CustomSisenseContext>>;
 
 /**
  * Gets Sisense application
  * @internal
  */
-export const getApp = () => {
-  return inject(sisenseContextAppKey, ref(undefined));
+export const getSisenseContext = () => {
+  return inject(sisenseContextKey, ref(defaultSisenseContext)) as Ref<CustomSisenseContext>;
 };
 
 /**
  * Creates Sisense context connector
  * @internal
  */
-export const createSisenseContextConnector = (app: ClientApplication) => {
+export const createSisenseContextConnector = (context: CustomSisenseContext) => {
   return {
     async prepareContext() {
-      return {
-        app,
-        isInitialized: true,
-      };
+      return context;
     },
     renderContextProvider: createContextProviderRenderer(CustomSisenseContextProvider),
   };
@@ -94,20 +99,37 @@ export const SisenseContextProvider = defineComponent({
     /**
      * @internal
      */
-    showRuntimeErrors: Boolean as PropType<SisenseContextProviderProps['showRuntimeErrors']>,
+    showRuntimeErrors: {
+      type: Boolean as PropType<SisenseContextProviderProps['showRuntimeErrors']>,
+      default: defaultSisenseContext.showRuntimeErrors,
+    },
     /**
      * @internal
      */
-    enableTracking: Boolean as PropType<SisenseContextProviderProps['enableTracking']>,
+    enableTracking: {
+      type: Boolean as PropType<SisenseContextProviderProps['enableTracking']>,
+      default: defaultSisenseContext.tracking.enabled,
+    },
   },
 
   setup(props, { slots }) {
-    const app = ref<ClientApplication>();
+    const context = ref<CustomSisenseContext>({
+      ...defaultSisenseContext,
+      isInitialized: true,
+      showRuntimeErrors: props.showRuntimeErrors!,
+      tracking: {
+        ...defaultSisenseContext.tracking,
+        enabled: props.enableTracking!,
+      },
+    });
     createClientApplication(props as SisenseContextProviderProps).then((newApp) => {
-      app.value = newApp;
+      context.value = {
+        ...context.value,
+        app: newApp,
+      } as CustomSisenseContext;
     });
 
-    provide(sisenseContextAppKey, app);
+    provide(sisenseContextKey, context as Ref<CustomSisenseContext>);
 
     return () => {
       return slots.default?.();

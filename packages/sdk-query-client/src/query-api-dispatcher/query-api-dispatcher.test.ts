@@ -12,6 +12,7 @@ describe('QueryApiDispatcher', () => {
     // Initialize the httpClient and queryApi for each test
     httpClient = {
       post: vi.fn(),
+      get: vi.fn(),
     } as unknown as Mocked<HttpClient>;
     queryApi = new QueryApiDispatcher(httpClient);
   });
@@ -185,6 +186,23 @@ describe('QueryApiDispatcher', () => {
 
       // Assert
       await expect(result).rejects.toThrow('Bad Request');
+    });
+  });
+
+  describe('getDataSourceSchema', () => {
+    it('should call httpClient.get with the correct URL', async () => {
+      // Arrange
+      const dataSource = 'exampleDataSource';
+      const expectedUrl = 'api/v2/datamodels/schema?title=exampleDataSource';
+      const expectedResponse = { title: 'exampleDataSource', type: 'live' };
+      httpClient.get.mockResolvedValueOnce(expectedResponse);
+
+      // Act
+      const result = await queryApi.getDataSourceSchema(dataSource);
+
+      // Assert
+      expect(httpClient.get).toHaveBeenCalledWith(expectedUrl);
+      expect(result).toEqual(expectedResponse);
     });
   });
 });

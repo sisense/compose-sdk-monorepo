@@ -51,7 +51,7 @@ Application specific configurations such as locale and date formats.
 
 #### defaultDataSource
 
-> **defaultDataSource**?: `string`
+> **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Default data source explicitly set to be used by child components that are not defined with a data source.
 

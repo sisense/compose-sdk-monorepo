@@ -6,7 +6,7 @@ import { AreamapType } from '../types';
 /**
  * Property of {@link LineStyleOptions}
  *
- * Subtype of {@link LineChart}
+ * Subtype of LineChart
  *
  * **Values**
  *
@@ -19,7 +19,7 @@ export type LineSubtype = 'line/spline' | 'line/basic';
 /**
  * Property of {@link AreaStyleOptions}
  *
- * Subtype of {@link AreaChart}
+ * Subtype of AreaChart
  *
  * **Values**
  *
@@ -42,7 +42,7 @@ export type AreaSubtype =
 /**
  * Property of {@link StackableSubtype}
  *
- * Subtype of {@link BarChart}
+ * Subtype of BarChart
  *
  *  **Values**
  * - `bar/classic` - y axis values displayed vertically.
@@ -64,7 +64,7 @@ export type StackableSubtype =
 /**
  * Property of {@link PieStyleOptions}
  *
- * Subtype of {@link PieChart}
+ * Subtype of PieChart
  *
  * **Values**
  *
@@ -78,7 +78,7 @@ export type PieSubtype = 'pie/classic' | 'pie/donut' | 'pie/ring';
 /**
  * Property of {@link PolarStyleOptions}
  *
- * Subtype of {@link PolarChart}
+ * Subtype of PolarChart
  *
  * **Values**
  *
@@ -90,7 +90,7 @@ export type PolarSubtype = 'polar/column' | 'polar/area' | 'polar/line';
 
 /**
  *
- * Subtype of {@link IndicatorChart}
+ * Subtype of IndicatorChart
  *
  * **Values**
  *

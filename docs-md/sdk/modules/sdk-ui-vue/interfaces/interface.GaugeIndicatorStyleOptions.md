@@ -4,7 +4,7 @@ title: GaugeIndicatorStyleOptions
 
 # Interface GaugeIndicatorStyleOptions
 
-Configuration options that define functional style of the various elements of Gauge [IndicatorChart](../classes/class.IndicatorChart.md)
+Configuration options that define functional style of the various elements of Gauge IndicatorChart
 
 ## Extends
 

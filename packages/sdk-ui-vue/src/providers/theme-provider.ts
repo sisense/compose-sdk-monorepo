@@ -7,7 +7,7 @@ import {
   getDefaultThemeSettings,
   getThemeSettingsByOid,
 } from '@sisense/sdk-ui-preact';
-import { getApp } from './sisense-context-provider';
+import { getSisenseContext } from './sisense-context-provider';
 import merge from 'ts-deepmerge';
 
 const themeContextConfigKey = Symbol('themeContextConfigKey') as InjectionKey<
@@ -108,7 +108,7 @@ export const ThemeProvider = defineComponent({
   async setup({ theme: propTheme, skipTracking = false }, { slots }) {
     // todo: move the symbol into here so every instance of theme provider has its own symbol and therefor configurations
     const themeSettings = ref();
-    const appCtx = getApp();
+    const context = getSisenseContext();
     if (propTheme && typeof propTheme === 'object') {
       themeSettings.value = {
         ...getDefaultThemeSettings(),
@@ -116,9 +116,10 @@ export const ThemeProvider = defineComponent({
       };
     }
     watchEffect(async () => {
-      if (propTheme && typeof propTheme === 'string' && appCtx.value) {
+      const { app } = context.value;
+      if (propTheme && typeof propTheme === 'string' && app) {
         try {
-          const userThemeSettings = await getThemeSettingsByOid(propTheme, appCtx.value.httpClient);
+          const userThemeSettings = await getThemeSettingsByOid(propTheme, app.httpClient);
           themeSettings.value = merge.withOptions(
             { mergeArrays: false },
             getDefaultThemeSettings(),

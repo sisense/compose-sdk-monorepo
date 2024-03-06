@@ -4,7 +4,7 @@ title: ScatterStyleOptions
 
 # Interface ScatterStyleOptions
 
-Configuration options that define functional style of the various elements of [ScatterChart](../classes/class.ScatterChart.md)
+Configuration options that define functional style of the various elements of ScatterChart
 
 ## Extends
 
@@ -86,7 +86,7 @@ BaseAxisStyleOptions.navigator
 
 > **subtype**?: `undefined`
 
-Subtype of [ScatterChart](../classes/class.ScatterChart.md)
+Subtype of ScatterChart
 
 ***
 

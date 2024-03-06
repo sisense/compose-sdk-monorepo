@@ -1,5 +1,5 @@
 import { useReducer } from '../helpers/use-reducer';
-import { getApp } from '../providers';
+import { getSisenseContext } from '../providers';
 import { collectRefs, toPlainValue, toPlainValues } from '../utils';
 import type { ClientApplication, GetWidgetModelParams, WidgetModel } from '@sisense/sdk-ui-preact';
 import { dataLoadStateReducer, getWidgetModel } from '@sisense/sdk-ui-preact';
@@ -56,7 +56,7 @@ export const useGetWidgetModel = (params: MaybeWithRefs<GetWidgetModelParams>) =
     data: undefined,
   });
 
-  const app = getApp();
+  const context = getSisenseContext();
 
   const getWidgetModelData = async (application: ClientApplication) => {
     try {
@@ -71,12 +71,13 @@ export const useGetWidgetModel = (params: MaybeWithRefs<GetWidgetModelParams>) =
   };
 
   watch(
-    [...collectRefs(params), app],
+    [...collectRefs(params), context],
     () => {
+      const { app } = context.value;
       const enabled = toPlainValue(params.enabled);
       const isEnabled = enabled === undefined || enabled === true;
-      if (!app.value || !isEnabled) return;
-      getWidgetModelData(app.value);
+      if (!app || !isEnabled) return;
+      getWidgetModelData(app);
     },
     { immediate: true },
   );

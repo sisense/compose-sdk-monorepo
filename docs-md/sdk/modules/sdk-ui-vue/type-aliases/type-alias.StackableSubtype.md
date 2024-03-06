@@ -8,7 +8,7 @@ title: StackableSubtype
 
 Property of [StackableSubtype](type-alias.StackableSubtype.md)
 
-Subtype of [BarChart](../classes/class.BarChart.md)
+Subtype of BarChart
 
  **Values**
 - `bar/classic` - y axis values displayed vertically.

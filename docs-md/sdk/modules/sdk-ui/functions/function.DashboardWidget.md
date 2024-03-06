@@ -7,7 +7,10 @@ title: DashboardWidget
 > **DashboardWidget**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](function.ChartWidget.md) component,
-used to render a widget created in the Sisense instance.
+is used to render a widget created in a Sisense Fusion instance.
+
+To learn more about using Sisense Fusion Widgets in Compose SDK,
+see [Sisense Fusion Widgets](/guides/sdk/guides/charts/guide-fusion-widgets.html).
 
 ## Parameters
 

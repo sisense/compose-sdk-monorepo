@@ -132,7 +132,7 @@ export enum CurrencyPosition {
 export type NumericMask = {
   isdefault?: boolean;
   abbreviations?: DecimalAbbreviations;
-  decimals?: 'auto' | number;
+  decimals?: 'auto' | number | string;
   currency?: { symbol: string; position: CurrencyPosition };
   percent?: boolean;
   number?: { separated: boolean };

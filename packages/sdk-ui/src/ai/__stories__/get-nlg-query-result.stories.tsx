@@ -3,6 +3,8 @@ import GetNlgQueryResult from '../get-nlg-query-result';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../../props';
 import AiContextProvider from '../ai-context-provider';
+import * as DM from '@/__demo__/sample-ecommerce';
+import { measureFactory } from '@sisense/sdk-data';
 
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',
@@ -28,43 +30,8 @@ type Story = StoryObj<typeof GetNlgQueryResult>;
 
 export const Default: Story = {
   args: {
-    jaql: {
-      datasource: { title: 'Sample ECommerce' },
-      metadata: [
-        {
-          jaql: {
-            column: 'Date',
-            datatype: 'datetime',
-            dim: '[Commerce.Date]',
-            firstday: 'mon',
-            level: 'years',
-            table: 'Commerce',
-            title: 'Date',
-          },
-          format: {
-            mask: {
-              days: 'shortDate',
-              isdefault: true,
-              minutes: 'HH:mm',
-              months: 'MM/yyyy',
-              quarters: 'yyyy Q',
-              weeks: 'ww yyyy',
-              years: 'yyyy',
-            },
-          },
-        },
-        {
-          jaql: {
-            agg: 'sum',
-            column: 'Revenue',
-            datatype: 'numeric',
-            dim: '[Commerce.Revenue]',
-            table: 'Commerce',
-            title: 'total of Revenue',
-          },
-        },
-      ],
-    },
-    style: 'Large',
+    dataSource: 'Sample ECommerce',
+    dimensions: [DM.Commerce.Date.Years],
+    measures: [measureFactory.sum(DM.Commerce.Revenue), measureFactory.sum(DM.Commerce.Cost)],
   },
 };

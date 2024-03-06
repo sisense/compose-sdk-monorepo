@@ -6,4 +6,4 @@ title: AreamapType
 
 > **AreamapType**: `"world"` \| `"usa"`
 
-Type of map to display on [AreamapChart](../functions/function.AreamapChart.md)
+Type of map to display on the AreamapChart component

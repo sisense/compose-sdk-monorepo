@@ -7,7 +7,7 @@ title: MenuItemSection
 > **MenuItemSection**: `object`
 
 Context menu section
-Used in [ContextMenu](../functions/function.ContextMenu.md) component
+Used in [ContextMenuProps](../interfaces/interface.ContextMenuProps.md) component
 
 ## Type declaration
 

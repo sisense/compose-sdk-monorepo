@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default function DataTopicItem(props: Props) {
-  const { title, description = '', onClick = () => {} } = props;
+  const { title, description, onClick } = props;
   return (
     <div
       onClick={onClick}

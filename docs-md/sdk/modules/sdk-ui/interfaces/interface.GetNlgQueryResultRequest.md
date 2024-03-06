@@ -4,10 +4,6 @@ title: GetNlgQueryResultRequest
 
 # Interface GetNlgQueryResultRequest
 
-## Extended By
-
-- [`UseGetNlgQueryResultParams`](interface.UseGetNlgQueryResultParams.md)
-
 ## Properties
 
 ### jaql
@@ -30,14 +26,8 @@ title: GetNlgQueryResultRequest
 >
 > ##### `jaql.metadata`
 >
-> **metadata**: `unknown`[]
+> **metadata**: `object`[]
 >
 > The metadata that composes the JAQL to be analyzed
 >
 >
-
-***
-
-### style
-
-> **style**: `"Large"` \| `"Medium"` \| `"Small"`

@@ -4,7 +4,7 @@ title: NumericBarIndicatorStyleOptions
 
 # Interface NumericBarIndicatorStyleOptions
 
-Configuration options that define functional style of the various elements of Numeric Bar [IndicatorChart](../classes/class.IndicatorChart.md)
+Configuration options that define functional style of the various elements of Numeric Bar IndicatorChart
 
 ## Extends
 

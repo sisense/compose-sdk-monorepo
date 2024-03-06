@@ -122,14 +122,12 @@ export interface Perspective {
 }
 
 export interface GetNlgQueryResultRequest {
-  style: 'Small' | 'Medium' | 'Large';
-
   jaql: {
     /** The data source that the JAQL metadata targets - e.g. `Sample ECommerce` */
     datasource: { title: string };
 
     /** The metadata that composes the JAQL to be analyzed */
-    metadata: unknown[];
+    metadata: object[];
   };
 }
 

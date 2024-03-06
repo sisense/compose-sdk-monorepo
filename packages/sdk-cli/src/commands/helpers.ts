@@ -61,21 +61,26 @@ export const handleHttpClientLogin = async (httpClient: HttpClient) => {
 /**
  * Create a data model for a Sisense data source
  */
-async function createDataModel(httpClient: HttpClient, dataSource: string): Promise<DataModel> {
+async function createDataModel(
+  httpClient: HttpClient,
+  dataSourceTitle: string,
+): Promise<DataModel> {
   const queryClient = new DimensionalQueryClient(httpClient);
 
   console.log('Getting fields... ');
   try {
-    return await queryClient.getDataSourceFields(dataSource).then((fields) => {
-      console.log('OK!\r\n');
-      const dataModel = {
-        name: dataSource,
-        dataSource: dataSource,
-        metadata: fields,
-      };
+    const [fields, dataSourceInfo] = await Promise.all([
+      queryClient.getDataSourceFields(dataSourceTitle),
+      queryClient.getDataSourceInfo(dataSourceTitle),
+    ]);
+    console.log('OK!\r\n');
+    const dataModel = {
+      name: dataSourceTitle,
+      dataSource: dataSourceInfo,
+      metadata: fields,
+    };
 
-      return rewriteDataModel(dataModel);
-    });
+    return rewriteDataModel(dataModel);
   } catch (err) {
     trackCliError(
       {

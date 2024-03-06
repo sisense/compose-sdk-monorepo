@@ -12,7 +12,7 @@ import {
 } from '../../chart-options-processor/translations/design-options';
 import { IndicatorChartData } from '../../chart-data/types';
 import { LegacyIndicatorChartTypes } from './types';
-import { CompleteNumberFormatConfig } from '../../types';
+import { CompleteNumberFormatConfig, NumberFormatConfig } from '../../types';
 import {
   AllowedIndicatorColoringTypes,
   getValueColorOptions,
@@ -21,6 +21,7 @@ import {
   ColoringService,
   getColoringServiceByColorOptions,
 } from '../../chart-data-options/coloring';
+import { isNotAvailable } from '@/utils/not-available-value';
 
 export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChartDataOptions>;
 
@@ -77,13 +78,11 @@ export const createLegacyChartDataOptions = (
     max: { data: max, text: applyFormatPlainText(numberConfigForMax, max) },
     value: {
       data: chartData.value,
-      text: applyFormatPlainText(numberConfigForValue, chartData.value as number),
+      text: getValueText(chartData.value, numberConfigForValue),
     },
     secondary: {
       data: chartData.secondary,
-      text: chartData.secondary
-        ? applyFormatPlainText(numberConfigForSecondary, chartData.secondary)
-        : '',
+      text: getValueText(chartData.secondary, numberConfigForSecondary),
     },
     secondaryTitle: {
       text: chartDesignOptions.indicatorComponents?.secondaryTitle?.text ?? '',
@@ -119,3 +118,19 @@ const defaultIndicatorData = {
   color: '#00cee6',
   showSecondary: false,
 };
+
+function getValueText(
+  value: undefined | string | number,
+  formatConfig: Required<NumberFormatConfig>,
+) {
+  if (value === undefined) {
+    return '';
+  } else if (isNotAvailable(value)) {
+    return '#N/A';
+  } else {
+    return applyFormatPlainText(
+      formatConfig,
+      typeof value === 'string' ? Number.parseFloat(value) : value,
+    );
+  }
+}

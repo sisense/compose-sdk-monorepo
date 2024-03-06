@@ -16,7 +16,7 @@ and display dashboard data.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | `MaybeWithRefs`\< [`GetDashboardModelParams`](../interfaces/interface.GetDashboardModelParams.md) \> | The parameters for fetching the dashboard model, including the<br />dashboard OID and an option to include widgets within the dashboard. Supports dynamic parameter values through<br />Vue refs, allowing for reactive dashboard loading based on user interactions or other application states. |
+| `params` | [`MaybeWithRefs`](../type-aliases/type-alias.MaybeWithRefs.md)\< [`GetDashboardModelParams`](../interfaces/interface.GetDashboardModelParams.md) \> | The parameters for fetching the dashboard model, including the<br />dashboard OID and an option to include widgets within the dashboard. Supports dynamic parameter values through<br />Vue refs, allowing for reactive dashboard loading based on user interactions or other application states. |
 
 ## Returns
 

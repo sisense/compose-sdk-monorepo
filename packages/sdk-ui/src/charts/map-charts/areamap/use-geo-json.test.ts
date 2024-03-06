@@ -179,7 +179,10 @@ describe('useGeoJson', () => {
     useSisenseContextMock.mockReturnValueOnce({
       app: { settings: { serverVersion: 'newMockVersion' } } as ClientApplication,
       isInitialized: true,
-      enableTracking: false,
+      tracking: {
+        enabled: false,
+        packageName: 'sdk-ui',
+      },
     });
 
     mockApi.getCountriesGeoJson.mockResolvedValueOnce({

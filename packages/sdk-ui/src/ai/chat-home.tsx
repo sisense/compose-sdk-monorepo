@@ -4,7 +4,7 @@ import { useGetDataTopics } from './api/hooks';
 import { DataTopicList } from './data-topics';
 import { DataTopic } from './data-topics/data-topic-list';
 import SisenseLogo from './icons/sisense-logo';
-import LoadingPage from './loading-page';
+import LoadingSpinner from '../common/components/loading-spinner';
 import Toolbar from './toolbar';
 
 type ChatHomeProps = {
@@ -37,7 +37,7 @@ export default function ChatHome({ onDataTopicClick }: ChatHomeProps) {
         }
       />
       <div className="csdk-flex csdk-flex-col csdk-justify-center csdk-overflow-hidden csdk-h-full ">
-        {!dataTopics && <LoadingPage />}
+        {!dataTopics && <LoadingSpinner />}
         {dataTopics && <DataTopicList dataTopics={dataTopics} />}
       </div>
     </>

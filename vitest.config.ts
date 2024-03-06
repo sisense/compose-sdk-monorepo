@@ -2,6 +2,7 @@ import { UserConfig } from 'vitest/config';
 
 const config: UserConfig = {
   test: {
+    pool: 'forks', // https://github.com/vitest-dev/vitest/issues/3077
     globals: true,
     environment: 'node',
     coverage: {

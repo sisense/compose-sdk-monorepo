@@ -62,7 +62,7 @@ Sisense context provider props
 
 ### defaultDataSource
 
-> **defaultDataSource**?: `string`
+> **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 ***
 

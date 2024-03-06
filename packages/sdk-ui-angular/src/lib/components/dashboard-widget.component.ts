@@ -23,7 +23,11 @@ import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on {@link ChartWidgetComponent},
- * used to render a widget created in the Sisense instance.
+ * is used to render a widget created in a Sisense Fusion instance.
+ *
+ * To learn more about using Sisense Fusion Widgets in Compose SDK, see
+ * [Sisense Fusion Widgets](https://sisense.dev/guides/sdk/guides/charts/guide-fusion-widgets.html).
+ *
  */
 @Component({
   selector: 'csdk-dashboard-widget',

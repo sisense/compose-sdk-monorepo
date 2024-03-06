@@ -9,7 +9,7 @@ title: IndicatorStyleOptions
   `width`: `number`;
  }
 
-Configuration options that define functional style of the various elements of [IndicatorChart](../classes/class.IndicatorChart.md)
+Configuration options that define functional style of the various elements of IndicatorChart
 
 > ## `IndicatorStyleOptions.height`
 >

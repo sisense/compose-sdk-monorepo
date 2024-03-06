@@ -3,7 +3,7 @@ import { TableWidget as TableWidgetPreact, type TableWidgetProps } from '@sisens
 import { setupHelper } from '../../setup-helper';
 import type { Table } from './table';
 /**
- * The TableWidget component extending the {@link Table} component to support widget style options.
+ * The TableWidget component extending the Table component to support widget style options.
  *
  * @example
  * Here's how you can use the TableWidget component in a Vue application:

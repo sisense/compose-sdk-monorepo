@@ -107,6 +107,7 @@ export type {
   // General (Others)
   AppConfig,
   DateConfig,
+  ContextMenuProps,
   MenuItemSection,
   MonthOfYear,
   DayOfWeek,

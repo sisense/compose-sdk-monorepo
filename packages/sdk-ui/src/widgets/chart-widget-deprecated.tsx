@@ -21,6 +21,7 @@ import { ThemeProvider, useThemeContext } from '../theme-provider';
 import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
+import { getDataSourceName } from '@sisense/sdk-data';
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support advanced BI
@@ -158,7 +159,7 @@ export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSise
               <WidgetHeader
                 title={title}
                 description={description}
-                dataSetName={chartProps.dataSet}
+                dataSetName={chartProps.dataSet ? getDataSourceName(chartProps.dataSet) : undefined}
                 styleOptions={styleOptions?.header}
                 onRefresh={() => setRefreshCounter(refreshCounter + 1)}
               />

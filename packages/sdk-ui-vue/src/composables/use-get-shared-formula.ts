@@ -1,5 +1,5 @@
 import { useReducer } from '../helpers/use-reducer';
-import { getApp } from '../providers';
+import { getSisenseContext } from '../providers';
 import { collectRefs, toPlainValue, toPlainValues } from '../utils';
 import type { CalculatedMeasure, DimensionalCalculatedMeasure } from '@sisense/sdk-data';
 import type {
@@ -70,7 +70,7 @@ export const useGetSharedFormula = (params: MaybeWithRefs<UseGetSharedFormulaPar
     error: undefined,
     data: undefined,
   });
-  const app = getApp();
+  const context = getSisenseContext();
 
   const getSharedFormula = (application: ClientApplication) => {
     dispatch({ type: 'loading' });
@@ -91,12 +91,13 @@ export const useGetSharedFormula = (params: MaybeWithRefs<UseGetSharedFormulaPar
   };
 
   watch(
-    [...collectRefs(params), app],
+    [...collectRefs(params), context],
     () => {
+      const { app } = context.value;
       const enabled = toPlainValue(params.enabled);
       const isEnabled = enabled === undefined || enabled === true;
-      if (!app.value || !isEnabled) return;
-      getSharedFormula(app.value);
+      if (!app || !isEnabled) return;
+      getSharedFormula(app);
     },
     { immediate: true },
   );

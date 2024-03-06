@@ -18,7 +18,7 @@ This component is currently under private beta for selected customers and is sub
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `props` | [`GetNlgQueryResultRequest`](../interfaces/interface.GetNlgQueryResultRequest.md) | [GetNlgQueryResultProps](../type-aliases/type-alias.GetNlgQueryResultProps.md) |
+| `props` | [`GetNlgQueryResultProps`](../interfaces/interface.GetNlgQueryResultProps.md) | [GetNlgQueryResultProps](../interfaces/interface.GetNlgQueryResultProps.md) |
 | `context`? | `any` | - |
 
 ## Returns
@@ -30,50 +30,9 @@ Collapsible container wrapping a text summary
 ## Example
 
 ```ts
-import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { AiContextProvider, GetNlgQueryResult } from '@sisense/sdk-ui/ai';
-
-function Page() {
-  return (
-    <GetNlgQueryResult
-      jaql={{
-        datasource: { title: 'Sample ECommerce' },
-        metadata: [
-          {
-            jaql: {
-              column: 'Date',
-              datatype: 'datetime',
-              dim: '[Commerce.Date]',
-              firstday: 'mon',
-              level: 'years',
-              table: 'Commerce',
-              title: 'Date',
-            },
-          },
-          {
-            jaql: {
-              agg: 'sum',
-              column: 'Revenue',
-              datatype: 'numeric',
-              dim: '[Commerce.Revenue]',
-              table: 'Commerce',
-              title: 'total of Revenue',
-            },
-          },
-        ],
-      }}
-      style="Large"
-    />
-  );
-}
-
-function App() {
-  return (
-    <SisenseContextProvider {...sisenseContextProps}>
-      <AiContextProvider>
-        <Page />
-      </AiContextProvider>
-    </SisenseContextProvider>
-  );
-}
+<GetNlgQueryResult
+  dataSource="Sample ECommerce"
+  dimensions={[DM.Commerce.Date.Years]}
+  measures={[measureFactory.sum(DM.Commerce.Revenue)]}
+/>
 ```

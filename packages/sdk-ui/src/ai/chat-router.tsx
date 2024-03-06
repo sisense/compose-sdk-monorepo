@@ -5,7 +5,7 @@ import ChatBox from './chat-box';
 import { useChatConfig } from './chat-config';
 import ChatHome from './chat-home';
 import ErrorPage from './error-page';
-import LoadingPage from './loading-page';
+import LoadingSpinner from '../common/components/loading-spinner';
 
 export default function ChatRouter() {
   const [selectedContext, setSelectedContext] = useState<string>();
@@ -37,7 +37,7 @@ export default function ChatRouter() {
   }
 
   if (defaultContextTitle && !selectedContext) {
-    return <LoadingPage />;
+    return <LoadingSpinner />;
   }
 
   return selectedContext ? (

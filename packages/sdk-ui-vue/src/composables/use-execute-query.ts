@@ -6,7 +6,7 @@ import {
   queryStateReducer,
   type ExecuteQueryParams,
 } from '@sisense/sdk-ui-preact';
-import { getApp } from '../providers/sisense-context-provider';
+import { getSisenseContext } from '../providers/sisense-context-provider';
 import { useReducer } from '../helpers/use-reducer';
 import type { MaybeWithRefs } from '../types';
 import { collectRefs, toPlainValue } from '../utils';
@@ -64,7 +64,7 @@ export const useExecuteQuery = (params: MaybeWithRefs<ExecuteQueryParams>) => {
   });
 
   // todo: retrive app ref directly from context
-  const app = getApp();
+  const context = getSisenseContext();
   const { hasTrackedRef } = useTracking('useExecuteQuery');
 
   const runExecuteQuery = async (application: ClientApplication) => {
@@ -107,12 +107,13 @@ export const useExecuteQuery = (params: MaybeWithRefs<ExecuteQueryParams>) => {
   };
 
   watch(
-    [...collectRefs(params), app],
+    [...collectRefs(params), context],
     () => {
+      const { app } = context.value;
       const enabled = toPlainValue(params.enabled);
       const isEnabled = enabled === undefined || enabled === true;
-      if (!app.value || !isEnabled) return;
-      runExecuteQuery(app.value);
+      if (!app || !isEnabled) return;
+      runExecuteQuery(app);
     },
     { immediate: true },
   );

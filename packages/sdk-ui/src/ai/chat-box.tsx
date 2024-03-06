@@ -5,7 +5,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useClearChatHistory } from './api/hooks';
 import ChatInput from './chat-input';
 import LoadingDotsIcon from './icons/loading-dots-icon';
-import LoadingPage from './loading-page';
+import LoadingSpinner from '../common/components/loading-spinner';
 import MagicWandDropdown from './magic-wand-dropdown';
 import ClearHistoryMessage from './messages/clear-history-message';
 import ClearHistorySuccessMessage from './messages/clear-history-success-message';
@@ -87,7 +87,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
             onSelection={sendMessage}
           />
           {isSuccess && <ClearHistorySuccessMessage />}
-          {isLoading && <LoadingPage />}
+          {isLoading && <LoadingSpinner />}
           {!isLoading && <MessageListResolver sendMessage={sendMessage} messages={history} />}
           {(isAwaitingResponse || isClearingHistory) && <LoadingDotsIcon />}
           {isClearHistoryOptionsVisible && (

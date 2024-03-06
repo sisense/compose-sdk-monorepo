@@ -12,7 +12,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { useReducer } from '../helpers/use-reducer';
 import { toRefs, watch } from 'vue';
-import { getApp } from '../providers';
+import { getSisenseContext } from '../providers';
 import { collectRefs, toPlainValue } from '../utils';
 import { useTracking } from './use-tracking';
 
@@ -66,7 +66,7 @@ export const useGetDashboardModel = (params: MaybeWithRefs<GetDashboardModelPara
     data: undefined,
   });
 
-  const app = getApp();
+  const context = getSisenseContext();
 
   const getDashboardModelData = async (application: ClientApplication) => {
     try {
@@ -87,12 +87,13 @@ export const useGetDashboardModel = (params: MaybeWithRefs<GetDashboardModelPara
   };
 
   watch(
-    [...collectRefs(params), app],
+    [...collectRefs(params), context],
     () => {
+      const { app } = context.value;
       const enabled = toPlainValue(params.enabled);
       const isEnabled = enabled === undefined || enabled === true;
-      if (!app.value || !isEnabled) return;
-      getDashboardModelData(app.value);
+      if (!app || !isEnabled) return;
+      getDashboardModelData(app);
     },
     { immediate: true },
   );
