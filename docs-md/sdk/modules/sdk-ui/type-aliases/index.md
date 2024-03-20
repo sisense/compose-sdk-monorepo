@@ -4,6 +4,8 @@ title: Type Aliases
 
 # Type Aliases
 
+TypeScript type aliases for components and hooks listed above
+
 - [AiContextProviderProps](type-alias.AiContextProviderProps.md)
 - [AllPossibleChartOptionKeys](type-alias.AllPossibleChartOptionKeys.md)
 - [AppConfig](type-alias.AppConfig.md)

@@ -4,7 +4,7 @@ title: ExecutePivotQueryParams
 
 # Interface ExecutePivotQueryParams
 
-Parameters for [useExecutePivotQuery](../functions/function.useExecutePivotQuery.md) hook.
+Parameters for [useExecutePivotQuery](../queries/function.useExecutePivotQuery.md) hook.
 
 ## Properties
 

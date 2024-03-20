@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Chat, ChatContext, ChatMessage, ChatResponse } from './types';
 import { useChatApi } from './chat-api-provider';
 import { useChatConfig } from '../chat-config';
-import { UNKNOWN_ERROR } from './errors';
+import { UNEXPECTED_CHAT_RESPONSE_ERROR } from './errors';
 
 /**
  * @internal
@@ -139,18 +139,20 @@ export const useClearChatHistory = (chatId: string | undefined) => {
 };
 
 const mapToChatMessage = (response: ChatResponse): ChatMessage => {
-  if (response.responseType === 'Text') {
+  if (response.responseType === 'nlq') {
+    return {
+      content: JSON.stringify(response.data),
+      role: 'assistant',
+      type: 'nlq',
+    };
+  } else if (response.responseType === 'Text') {
     return {
       content: response.data.answer,
       role: 'assistant',
     };
   }
 
-  return {
-    content: JSON.stringify(response.data),
-    role: 'assistant',
-    type: 'nlq',
-  };
+  throw Error(`Received unknown responseType, raw response=${JSON.stringify(response)}`);
 };
 
 // eslint-disable-next-line max-lines-per-function
@@ -198,7 +200,7 @@ export const useSendChatMessage = (chatId: string | undefined) => {
       if (error instanceof Error) {
         console.error('Error when sending message:', error.message);
         appendToHistory({
-          content: UNKNOWN_ERROR,
+          content: UNEXPECTED_CHAT_RESPONSE_ERROR,
           role: 'assistant',
           type: 'Text',
         });

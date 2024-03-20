@@ -1,97 +1,83 @@
+import { screen, waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
+
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
-import { screen, waitFor } from '@testing-library/react';
-import { MockApiWrapper } from '../__mocks__';
-import { http, HttpResponse } from 'msw';
-import { GetNlgQueryResultResponse } from '../api/types';
+import { AiTestWrapper } from '../__mocks__';
 import InsightsMessage from './insights-message';
+import { GetNlgQueryResultResponse } from '../api/types';
 
-const mockNlgApi = (text: string) => {
-  server.use(
-    http.post('*/api/v2/ai/nlg/queryResult', () =>
-      HttpResponse.json<GetNlgQueryResultResponse>({
-        responseType: 'Text',
-        data: {
-          answer: text,
-        },
-      }),
-    ),
-  );
-};
-
-it('shows a text summary when the insights button is clicked', async () => {
-  const text = 'nlg response';
-  mockNlgApi(text);
-
-  const { user } = setup(
-    <MockApiWrapper>
-      <InsightsMessage
-        dataSource="Sample ECommerce"
-        metadata={[
-          {
-            jaql: {
-              agg: 'sum',
-              column: 'Revenue',
-              datatype: 'numeric',
-              dim: '[Commerce.Revenue]',
-              table: 'Commerce',
-              title: 'total of Revenue',
-            },
+describe('InsightsMessage', () => {
+  beforeEach(() => {
+    server.use(
+      http.post('*/api/v2/ai/nlg/queryResult', () =>
+        HttpResponse.json<GetNlgQueryResultResponse>({
+          responseType: 'Text',
+          data: {
+            answer: 'nlg response text',
           },
-        ]}
-      />
-    </MockApiWrapper>,
-  );
+        }),
+      ),
+    );
+  });
 
-  await waitFor(() => expect(screen.getByText('Insights')).toBeInTheDocument());
+  it('renders nothing if visible is false', async () => {
+    const { container } = setup(
+      <AiTestWrapper>
+        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} />
+      </AiTestWrapper>,
+    );
 
-  expect(screen.queryByText(text)).toBeNull();
+    await waitFor(() => expect(container.firstChild).toBeNull());
+  });
 
-  await user.click(screen.getByText('Insights'));
+  it('renders loading icon, then response text if API call returns text response', async () => {
+    setup(
+      <AiTestWrapper>
+        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} visible />
+      </AiTestWrapper>,
+    );
 
-  await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument());
-});
+    await waitFor(() =>
+      expect(screen.getByAltText('Please wait while AI responds...')).toBeInTheDocument(),
+    );
 
-it('allows for expanding and collapsing of text when over character limit', async () => {
-  const text =
-    'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget' +
-    ' dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,' +
-    ' nascetur ridiculus mus. Donec quam felis';
-  mockNlgApi(text);
+    await waitFor(() => expect(screen.getByText('nlg response text')).toBeInTheDocument());
+  });
 
-  const { user } = setup(
-    <MockApiWrapper>
-      <InsightsMessage
-        dataSource="Sample ECommerce"
-        metadata={[
-          {
-            jaql: {
-              agg: 'sum',
-              column: 'Revenue',
-              datatype: 'numeric',
-              dim: '[Commerce.Revenue]',
-              table: 'Commerce',
-              title: 'total of Revenue',
-            },
-          },
-        ]}
-      />
-    </MockApiWrapper>,
-  );
+  it('renders loading icon, then default text if API call returns empty response', async () => {
+    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.json({})));
 
-  await waitFor(() => expect(screen.getByText('Insights')).toBeInTheDocument());
+    setup(
+      <AiTestWrapper>
+        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} visible />
+      </AiTestWrapper>,
+    );
 
-  expect(screen.queryByText(text)).toBeNull();
+    await waitFor(() =>
+      expect(screen.getByAltText('Please wait while AI responds...')).toBeInTheDocument(),
+    );
 
-  await user.click(screen.getByText('Insights'));
+    await waitFor(() => expect(screen.getByText('No insights available.')).toBeInTheDocument());
+  });
 
-  await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument());
+  it('renders loading icon, then error text if API call fails', async () => {
+    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.error()));
 
-  expect(screen.getByText(text)).toHaveClass(/line-clamp-5/);
+    setup(
+      <AiTestWrapper>
+        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} visible />
+      </AiTestWrapper>,
+    );
 
-  await user.click(screen.getByText('Read more'));
+    await waitFor(() =>
+      expect(screen.getByAltText('Please wait while AI responds...')).toBeInTheDocument(),
+    );
 
-  expect(screen.getByText(text)).not.toHaveClass(/line-clamp-5/);
-
-  await user.click(screen.getByText('Collapse'));
+    await waitFor(() =>
+      expect(
+        screen.getByText('Oh snap, something went wrong. Please try again later.'),
+      ).toBeInTheDocument(),
+    );
+  });
 });

@@ -4,11 +4,85 @@ title: sdk-ui
 
 # Module sdk-ui
 
-## Classes
+## Charts
 
-- [WidgetModel](classes/class.WidgetModel.md)
+React components for charts
+
+- [AreaChart](charts/function.AreaChart.md)
+- [AreamapChart](charts/function.AreamapChart.md) <Badge type="beta" text="Beta" />
+- [BarChart](charts/function.BarChart.md)
+- [BoxplotChart](charts/function.BoxplotChart.md) <Badge type="beta" text="Beta" />
+- [Chart](charts/function.Chart.md)
+- [ColumnChart](charts/function.ColumnChart.md)
+- [FunnelChart](charts/function.FunnelChart.md)
+- [IndicatorChart](charts/function.IndicatorChart.md)
+- [LineChart](charts/function.LineChart.md)
+- [PieChart](charts/function.PieChart.md)
+- [PolarChart](charts/function.PolarChart.md)
+- [ScatterChart](charts/function.ScatterChart.md)
+- [ScattermapChart](charts/function.ScattermapChart.md) <Badge type="beta" text="Beta" />
+- [SunburstChart](charts/function.SunburstChart.md)
+- [TreemapChart](charts/function.TreemapChart.md)
+
+## Chart Utilities
+
+- [ChartWidget](chart-utilities/function.ChartWidget.md)
+- [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
+
+## Data Grids
+
+- [PivotTable](data-grids/function.PivotTable.md) <Badge type="alpha" text="Alpha" />
+- [Table](data-grids/function.Table.md)
+
+## Drilldown
+
+- [ContextMenu](drilldown/function.ContextMenu.md)
+- [DrilldownBreadcrumbs](drilldown/function.DrilldownBreadcrumbs.md)
+- [DrilldownWidget](drilldown/function.DrilldownWidget.md)
+
+## Filter Tiles
+
+- [CriteriaFilterTile](filter-tiles/function.CriteriaFilterTile.md)
+- [DateRangeFilterTile](filter-tiles/function.DateRangeFilterTile.md)
+- [MemberFilterTile](filter-tiles/function.MemberFilterTile.md)
+- [RelativeDateFilterTile](filter-tiles/function.RelativeDateFilterTile.md)
+
+## Contexts
+
+- [SisenseContextProvider](contexts/function.SisenseContextProvider.md)
+- [ThemeProvider](contexts/function.ThemeProvider.md)
+
+## Queries
+
+- [ExecuteQuery](queries/function.ExecuteQuery.md)
+- [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
+- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md) <Badge type="alpha" text="Alpha" />
+- [useExecuteQuery](queries/function.useExecuteQuery.md)
+
+## Fusion Assets
+
+Fusion Dashboards, Widgets, Queries, and Formulas
+
+- [DashboardWidget](fusion-assets/function.DashboardWidget.md)
+- [ExecuteQueryByWidgetId](fusion-assets/function.ExecuteQueryByWidgetId.md)
+- [WidgetModel](fusion-assets/class.WidgetModel.md)
+- [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md)
+- [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md)
+- [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md)
+- [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md)
+- [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md)
+
+## Generative AI
+
+- [AiContextProvider](generative-ai/function.AiContextProvider.md) <Badge type="beta" text="Beta" />
+- [Chatbot](generative-ai/function.Chatbot.md) <Badge type="beta" text="Beta" />
+- [GetNlgQueryResult](generative-ai/function.GetNlgQueryResult.md) <Badge type="beta" text="Beta" />
+- [useGetNlgQueryResult](generative-ai/function.useGetNlgQueryResult.md) <Badge type="beta" text="Beta" />
+- [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />
 
 ## Interfaces
+
+TypeScript interfaces for components and hooks listed above
 
 - [AreaChartProps](interfaces/interface.AreaChartProps.md)
 - [AreaStyleOptions](interfaces/interface.AreaStyleOptions.md)
@@ -93,6 +167,8 @@ title: sdk-ui
 - [WidgetStyleOptions](interfaces/interface.WidgetStyleOptions.md)
 
 ## Type Aliases
+
+TypeScript type aliases for components and hooks listed above
 
 - [AiContextProviderProps](type-aliases/type-alias.AiContextProviderProps.md)
 - [AllPossibleChartOptionKeys](type-aliases/type-alias.AllPossibleChartOptionKeys.md)
@@ -224,50 +300,3 @@ title: sdk-ui
 - [WidgetModelSuccessState](type-aliases/type-alias.WidgetModelSuccessState.md)
 - [WidgetType](type-aliases/type-alias.WidgetType.md)
 - [X2Title](type-aliases/type-alias.X2Title.md)
-
-## Functions
-
-- [AiContextProvider](functions/function.AiContextProvider.md) <Badge type="beta" text="Beta" />
-- [AreaChart](functions/function.AreaChart.md)
-- [AreamapChart](functions/function.AreamapChart.md) <Badge type="beta" text="Beta" />
-- [BarChart](functions/function.BarChart.md)
-- [BoxplotChart](functions/function.BoxplotChart.md) <Badge type="beta" text="Beta" />
-- [Chart](functions/function.Chart.md)
-- [ChartWidget](functions/function.ChartWidget.md)
-- [Chatbot](functions/function.Chatbot.md) <Badge type="beta" text="Beta" />
-- [ColumnChart](functions/function.ColumnChart.md)
-- [ContextMenu](functions/function.ContextMenu.md)
-- [CriteriaFilterTile](functions/function.CriteriaFilterTile.md)
-- [DashboardWidget](functions/function.DashboardWidget.md)
-- [DateRangeFilterTile](functions/function.DateRangeFilterTile.md)
-- [DrilldownBreadcrumbs](functions/function.DrilldownBreadcrumbs.md)
-- [DrilldownWidget](functions/function.DrilldownWidget.md)
-- [ExecuteQuery](functions/function.ExecuteQuery.md)
-- [ExecuteQueryByWidgetId](functions/function.ExecuteQueryByWidgetId.md)
-- [FunnelChart](functions/function.FunnelChart.md)
-- [GetNlgQueryResult](functions/function.GetNlgQueryResult.md) <Badge type="beta" text="Beta" />
-- [IndicatorChart](functions/function.IndicatorChart.md)
-- [LineChart](functions/function.LineChart.md)
-- [MemberFilterTile](functions/function.MemberFilterTile.md)
-- [PieChart](functions/function.PieChart.md)
-- [PivotTable](functions/function.PivotTable.md) <Badge type="alpha" text="Alpha" />
-- [PolarChart](functions/function.PolarChart.md)
-- [RelativeDateFilterTile](functions/function.RelativeDateFilterTile.md)
-- [ScatterChart](functions/function.ScatterChart.md)
-- [ScattermapChart](functions/function.ScattermapChart.md) <Badge type="beta" text="Beta" />
-- [SisenseContextProvider](functions/function.SisenseContextProvider.md)
-- [SunburstChart](functions/function.SunburstChart.md)
-- [Table](functions/function.Table.md)
-- [ThemeProvider](functions/function.ThemeProvider.md)
-- [TreemapChart](functions/function.TreemapChart.md)
-- [boxWhiskerProcessResult](functions/function.boxWhiskerProcessResult.md)
-- [useExecuteCsvQuery](functions/function.useExecuteCsvQuery.md)
-- [useExecutePivotQuery](functions/function.useExecutePivotQuery.md) <Badge type="alpha" text="Alpha" />
-- [useExecuteQuery](functions/function.useExecuteQuery.md)
-- [useExecuteQueryByWidgetId](functions/function.useExecuteQueryByWidgetId.md)
-- [useGetDashboardModel](functions/function.useGetDashboardModel.md)
-- [useGetDashboardModels](functions/function.useGetDashboardModels.md)
-- [useGetNlgQueryResult](functions/function.useGetNlgQueryResult.md) <Badge type="beta" text="Beta" />
-- [useGetQueryRecommendations](functions/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />
-- [useGetSharedFormula](functions/function.useGetSharedFormula.md)
-- [useGetWidgetModel](functions/function.useGetWidgetModel.md)

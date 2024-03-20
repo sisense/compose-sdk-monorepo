@@ -1,7 +1,7 @@
 import { DashboardDto } from '../../api/types/dashboard-dto';
 
 /**
- * 'Sample - Ecommerce' dashboard from Analitycs tab in Sisense.
+ * 'Sample - Ecommerce' dashboard from Analytics tab in Sisense.
  */
 export const sampleEcommerceDashboard = {
   _id: '6560ce3b6f1df500326a06af',

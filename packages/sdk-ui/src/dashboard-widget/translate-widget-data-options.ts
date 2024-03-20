@@ -180,7 +180,22 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   } as StyledColumn;
 }
 
-function createColumnsFromPanelItems(
+/** @internal */
+export const createDataOptionsFromPanels = (panels: Panel[], variantColors: Color[]) => {
+  const dataOptions: { [key: string]: any[] } = {};
+  panels.forEach((panel) => {
+    if (panel.name !== 'filters') {
+      dataOptions[panel.name.toLowerCase()] = createColumnsFromPanelItems(
+        panels,
+        panel.name,
+        variantColors,
+      );
+    }
+  });
+  return dataOptions;
+};
+
+export function createColumnsFromPanelItems(
   panels: Panel[],
   panelName: string,
   customPaletteColors?: Color[],
@@ -283,6 +298,28 @@ function extractIndicatorChartDataOptions(
 function extractTableChartDataOptions(panels: Panel[], paletteColors?: Color[]): TableDataOptions {
   return {
     columns: createColumnsFromPanelItems(panels, 'columns', paletteColors),
+  };
+}
+
+/**
+ * TEMPORARY WORKAROUND UNTIL PIVOT TABLE IS FULLY AVAILABLE
+ * Translate JAQL of rows, columns, and values of a pivot table into columns of a regular table.
+ * Essentially, columns are treated as rows.
+ *
+ * @param panels - JAQL panels
+ * @param paletteColors - palette colors
+ * @returns - table data options
+ */
+function extractPivotTableChartDataOptions(
+  panels: Panel[],
+  paletteColors?: Color[],
+): TableDataOptions {
+  return {
+    columns: [
+      ...createColumnsFromPanelItems(panels, 'rows', paletteColors),
+      ...createColumnsFromPanelItems(panels, 'values', paletteColors),
+      ...createColumnsFromPanelItems(panels, 'columns', paletteColors),
+    ],
   };
 }
 
@@ -390,8 +427,11 @@ export function extractDataOptions(
   if (widgetType === 'indicator') {
     return extractIndicatorChartDataOptions(panels, customPaletteColors);
   }
+
   if (isTabularWidget(widgetType)) {
-    return extractTableChartDataOptions(panels, customPaletteColors);
+    return widgetType === 'pivot2'
+      ? extractPivotTableChartDataOptions(panels, customPaletteColors)
+      : extractTableChartDataOptions(panels, customPaletteColors);
   }
   if (widgetType === 'chart/boxplot') {
     return extractBoxplotChartDataOptions(panels, style as BoxplotWidgetStyle, customPaletteColors);

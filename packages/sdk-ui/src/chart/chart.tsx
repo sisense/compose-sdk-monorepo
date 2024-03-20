@@ -47,7 +47,6 @@ import { prepareChartDesignOptions } from '../chart-options-processor/style-to-d
 import { LoadingOverlay } from '../common/components/loading-overlay';
 import { useSyncedData } from './helpers/use-synced-data';
 import { useTranslatedDataOptions } from './helpers/use-translated-data-options';
-import { handleNAInTable } from '@/chart-data-processor/utils';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -142,6 +141,7 @@ export const shouldSkipSisenseContextWaiting = (props: ChartProps) =>
  * <img src="media://chart-local-data-example-1.png" width="800px" />
  * @param props - Chart properties
  * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType | chartType}
+ * @group Charts
  */
 export const Chart = asSisenseComponent({
   componentName: 'Chart',
@@ -207,8 +207,6 @@ export const Chart = asSisenseComponent({
         dataColumnNamesMapping,
       );
     }
-
-    dataTable = handleNAInTable(chartType, dataTable);
 
     return chartDataService(chartType, chartDataOptions, dataTable);
   }, [data, chartType]);

@@ -4,6 +4,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { ContextMenuProps } from '../../props';
 
+/**
+ * Context menu of a Drilldown Widget
+ *
+ * @group Drilldown
+ */
 export const ContextMenu = ({
   position,
   closeContextMenu,

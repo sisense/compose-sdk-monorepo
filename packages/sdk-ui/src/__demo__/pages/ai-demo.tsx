@@ -21,7 +21,7 @@ const Page = () => {
     <>
       <div>
         <h3>Chatbot</h3>
-        <Chatbot width="700px" config={{ enableFollowupQuestions: true }} />
+        <Chatbot config={{ enableFollowupQuestions: true }} />
       </div>
       <div>
         <h3>GetNlgQueryResult</h3>

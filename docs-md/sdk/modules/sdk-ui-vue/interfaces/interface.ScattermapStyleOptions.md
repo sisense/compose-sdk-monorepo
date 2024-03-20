@@ -6,10 +6,6 @@ title: ScattermapStyleOptions
 
 Configuration options that define functional style of the various elements of ScattermapChart
 
-## Extends
-
-- `Pick`\< `BaseStyleOptions`, `"width"` \| `"height"` \>
-
 ## Properties
 
 ### height
@@ -21,10 +17,6 @@ Total height of the component, which is considered in the following order of pri
 1. Value passed to this property (in pixels).
 2. Height of the container wrapping this component
 3. Default value of 400px (for component without header) or 425px (for component with header).
-
-#### Inherited from
-
-Pick.height
 
 ***
 
@@ -49,7 +41,3 @@ Total width of the component, which is considered in the following order of prio
 1. Value passed to this property (in pixels)
 2. Width of the container wrapping this component
 3. Default value of 400px
-
-#### Inherited from
-
-Pick.width

@@ -27,6 +27,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://area-chart-example-1.png" width="800"/>
  * @param props - Area chart properties
  * @returns Area Chart component
+ * @group Charts
  */
 export const AreaChart = asSisenseComponent({
   componentName: 'AreaChart',

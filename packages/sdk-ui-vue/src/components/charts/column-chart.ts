@@ -22,8 +22,13 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {ColumnChart, type ColumnChartProps} from '@sisense/sdk-ui-vue';
  *
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+
 const columnChartProps = ref<ColumnChartProps>({
   dataSet: DM.DataSource,
   dataOptions: {
@@ -34,9 +39,10 @@ const columnChartProps = ref<ColumnChartProps>({
   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
 });
  * ```
- * <img src="media://column-chart-example-1.png" width="800"/>
+ * <img src="media://vue-column-chart-example.png" width="800"/>
  * @param props - Column chart properties
  * @returns Column Chart component
+ * @group Charts
  */
 export const ColumnChart = defineComponent({
   props: {

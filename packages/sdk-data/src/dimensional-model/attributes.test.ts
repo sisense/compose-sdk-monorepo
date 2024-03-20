@@ -97,12 +97,14 @@ describe('createAttribute', () => {
       name: 'BrandID',
       type: 'numeric-attribute',
       expression: '[Commerce.Brand ID]',
+      description: 'Fortune999 Brands',
     });
 
     expect(numericAttribute).toBeInstanceOf(DimensionalAttribute);
     expect(numericAttribute.name).toBe('BrandID');
     expect(numericAttribute.expression).toBe('[Commerce.Brand ID]');
     expect(numericAttribute.type).toBe('numeric-attribute');
+    expect(numericAttribute.description).toBe('Fortune999 Brands');
   });
 });
 

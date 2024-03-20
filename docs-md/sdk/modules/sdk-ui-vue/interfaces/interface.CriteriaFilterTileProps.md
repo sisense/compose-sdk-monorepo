@@ -4,7 +4,7 @@ title: CriteriaFilterTileProps
 
 # Interface CriteriaFilterTileProps
 
-Props for [CriteriaFilterTile](../classes/class.CriteriaFilterTile.md)
+Props for [CriteriaFilterTile](../filter-tiles/class.CriteriaFilterTile.md)
 
 ## Properties
 

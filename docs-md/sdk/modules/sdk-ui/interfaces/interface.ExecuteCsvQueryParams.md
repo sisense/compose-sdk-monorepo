@@ -4,11 +4,7 @@ title: ExecuteCsvQueryParams
 
 # Interface ExecuteCsvQueryParams
 
-Parameters for [useExecuteCsvQuery](../functions/function.useExecuteCsvQuery.md) hook.
-
-## Extends
-
-- [`ExecuteQueryParams`](interface.ExecuteQueryParams.md)
+Parameters for [useExecuteCsvQuery](../queries/function.useExecuteCsvQuery.md) hook.
 
 ## Properties
 
@@ -26,10 +22,6 @@ Number of rows to return in the query result
 
 If not specified, the default value is `20000`
 
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`count`](interface.ExecuteQueryParams.md#count)
-
 ***
 
 ### dataSource
@@ -40,10 +32,6 @@ Data source the query is run against - e.g. `Sample ECommerce`
 
 If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
 
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`dataSource`](interface.ExecuteQueryParams.md#datasource)
-
 ***
 
 ### dimensions
@@ -51,10 +39,6 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 > **dimensions**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
 
 Dimensions of the query
-
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`dimensions`](interface.ExecuteQueryParams.md#dimensions)
 
 ***
 
@@ -66,10 +50,6 @@ Boolean flag to control if query is executed
 
 If not specified, the default value is `true`
 
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`enabled`](interface.ExecuteQueryParams.md#enabled)
-
 ***
 
 ### filters
@@ -77,10 +57,6 @@ If not specified, the default value is `true`
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters that will slice query results
-
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`filters`](interface.ExecuteQueryParams.md#filters)
 
 ***
 
@@ -90,10 +66,6 @@ Filters that will slice query results
 
 Highlight filters that will highlight results that pass filter criteria
 
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`highlights`](interface.ExecuteQueryParams.md#highlights)
-
 ***
 
 ### measures
@@ -101,10 +73,6 @@ Highlight filters that will highlight results that pass filter criteria
 > **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
 Measures of the query
-
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`measures`](interface.ExecuteQueryParams.md#measures)
 
 ***
 
@@ -115,10 +83,6 @@ Measures of the query
 Offset of the first row to return
 
 If not specified, the default value is `0`
-
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`offset`](interface.ExecuteQueryParams.md#offset)
 
 ***
 
@@ -145,7 +109,3 @@ const onBeforeQuery = useCallback((jaql) => {
 #### Returns
 
 `any`
-
-#### Inherited from
-
-[`ExecuteQueryParams`](interface.ExecuteQueryParams.md).[`onBeforeQuery`](interface.ExecuteQueryParams.md#onbeforequery)

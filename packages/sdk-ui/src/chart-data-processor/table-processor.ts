@@ -11,7 +11,6 @@ import { isDatetime, isNumber } from '@sisense/sdk-data';
 import { parseISO } from 'date-fns';
 import { Distribution } from './distribution';
 import { CategoricalDistribution } from './categorical-distribution';
-import { isNotAvailable, NAType, NAValue } from '@/utils/not-available-value';
 
 export type FilterTypes = 'greater' | 'lesser' | 'equal' | 'contains' | 'not equal';
 
@@ -95,7 +94,7 @@ const _getAggregatedValues = (
 ): ComparableData[] => {
   const row: ComparableData[] = [];
   for (const aggregationColumn of aggregationColumns) {
-    let value: number | NAType;
+    let value: number;
     const col = aggregationColumn.column;
     const { aggFunc } = aggregationColumn;
 
@@ -114,15 +113,8 @@ const _getAggregatedValues = (
       value = new Distribution(data).getStat(aggFunc);
     } else if (isNumber(col.type)) {
       // maybe want to use value if it exists before parsing displayValue
-      const isSomeValueNotAvailable = dataArray.some((r) =>
-        isNotAvailable(r[col.index].displayValue),
-      );
-      if (isSomeValueNotAvailable) {
-        value = NAValue;
-      } else {
-        const data = dataArray.map((r) => parseFloat(r[col.index].displayValue));
-        value = new Distribution(data).getStat(aggFunc);
-      }
+      const data = dataArray.map((r) => parseFloat(r[col.index].displayValue));
+      value = new Distribution(data).getStat(aggFunc);
     } else {
       const categoricalData = dataArray.map((r) => r[col.index].displayValue);
       value = new CategoricalDistribution(categoricalData).getStat(aggFunc);

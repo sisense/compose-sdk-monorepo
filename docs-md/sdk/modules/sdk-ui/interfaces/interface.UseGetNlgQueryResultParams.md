@@ -4,13 +4,13 @@ title: UseGetNlgQueryResultParams
 
 # Interface UseGetNlgQueryResultParams
 
-Parameters for [useGetNlgQueryResult](../functions/function.useGetNlgQueryResult.md) hook.
+Parameters for [useGetNlgQueryResult](../generative-ai/function.useGetNlgQueryResult.md) hook.
 
 ## Properties
 
 ### dataSource
 
-> **dataSource**: `string`
+> **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 The data source that the query targets - e.g. `Sample ECommerce`
 
@@ -36,7 +36,7 @@ If not specified, the default value is `true`
 
 ### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters of the query
 

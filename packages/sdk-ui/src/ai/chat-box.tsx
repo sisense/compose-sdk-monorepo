@@ -11,10 +11,13 @@ import ClearHistoryMessage from './messages/clear-history-message';
 import ClearHistorySuccessMessage from './messages/clear-history-success-message';
 import MessageListResolver from './messages/message-list-resolver';
 import NavBackButton from './nav-back-button';
-import { SuggestionListWithIntro } from './suggestions';
+import { SuggestionsWithIntro } from './suggestions';
 import Toolbar from './toolbar';
 import { useChatSession } from './use-chat-session';
 import { useGetQueryRecommendationsInternal } from './use-get-query-recommendations';
+import { useChatConfig } from './chat-config';
+import TextMessage from './messages/text-message';
+import ChatIntroBlurb from './chat-intro-blurb';
 
 export type ChatBoxProps = {
   contextTitle: string;
@@ -31,7 +34,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
     [queryRecommendations],
   );
 
-  const { history, isAwaitingResponse, sendMessage, isLoading, chatId } =
+  const { history, lastNlqResponse, isAwaitingResponse, sendMessage, isLoading, chatId } =
     useChatSession(contextTitle);
 
   const {
@@ -73,22 +76,40 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
     />
   );
 
+  const { enableFollowupQuestions } = useChatConfig();
+
   return (
     <>
       {header}
       <div className="csdk-h-full csdk-bg-background-priority csdk-rounded-b-[30px] csdk-flex csdk-flex-col csdk-justify-between csdk-overflow-hidden csdk-pb-[16px]">
         <div
           ref={chatContainerRef}
-          className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-overflow-y-scroll csdk-p-[16px] csdk-flex-initial csdk-h-full csdk-mb-[16px]"
+          className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-overflow-y-scroll csdk-p-[16px] csdk-flex-initial csdk-h-full"
         >
-          <SuggestionListWithIntro
+          <ChatIntroBlurb title={contextTitle} />
+          <SuggestionsWithIntro
             questions={questions}
-            title={contextTitle}
+            isLoading={recommendationsLoading}
             onSelection={sendMessage}
           />
           {isSuccess && <ClearHistorySuccessMessage />}
           {isLoading && <LoadingSpinner />}
-          {!isLoading && <MessageListResolver sendMessage={sendMessage} messages={history} />}
+          {!isLoading && <MessageListResolver messages={history} />}
+          {enableFollowupQuestions && lastNlqResponse && (
+            <div className="csdk-flex csdk-flex-col csdk-gap-y-2">
+              {lastNlqResponse.followupQuestions.slice(0, 2).map((question, i) => (
+                <TextMessage
+                  key={i}
+                  align="right"
+                  onClick={() => {
+                    sendMessage(question);
+                  }}
+                >
+                  {question}
+                </TextMessage>
+              ))}
+            </div>
+          )}
           {(isAwaitingResponse || isClearingHistory) && <LoadingDotsIcon />}
           {isClearHistoryOptionsVisible && (
             <ClearHistoryMessage

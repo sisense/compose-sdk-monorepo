@@ -4,6 +4,9 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
 /**
  * A React component representing categorical data with vertical rectangular bars
  * whose heights are proportional to the values that they represent.
+ *
+ * The chart can include multiple values on both the X and Y-axis, as well as a break down by categories displayed on the Y-axis.
+ *
  * See [Column Chart](https://docs.sisense.com/main/SisenseLinux/column-chart.htm) for more information.
  *
  * @example
@@ -26,6 +29,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://column-chart-example-1.png" width="800"/>
  * @param props - Column chart properties
  * @returns Column Chart component
+ * @group Charts
  */
 export const ColumnChart = asSisenseComponent({
   componentName: 'ColumnChart',

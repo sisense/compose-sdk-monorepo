@@ -57,6 +57,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://indicator-chart-example-1.png" width="400px" />
  * @param props - Indicator chart properties
  * @returns Indicator Chart component
+ * @group Charts
  */
 export const IndicatorChart = asSisenseComponent({
   componentName: 'IndicatorChart',

@@ -1,7 +1,6 @@
 export default function ThumbsDownIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="34" height="35" viewBox="0 0 34 35" fill="none">
-      <rect x="0.5" y="1" width="33" height="33" rx="16.5" stroke="#5B6372" />
       <path
         fillRule="evenodd"
         clipRule="evenodd"

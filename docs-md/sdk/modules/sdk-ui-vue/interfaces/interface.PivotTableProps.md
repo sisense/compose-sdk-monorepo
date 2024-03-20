@@ -4,7 +4,7 @@ title: PivotTableProps
 
 # Interface PivotTableProps
 
-Props of the [PivotTable](../classes/class.PivotTable.md) component.
+Props of the [PivotTable](../data-grids/class.PivotTable.md) component.
 
 ## Properties
 

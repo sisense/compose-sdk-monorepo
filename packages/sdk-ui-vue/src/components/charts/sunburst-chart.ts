@@ -21,17 +21,26 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {SunburstChart,type SunburstChartProps} from '@sisense/sdk-ui-vue';
  *
-const sunburstChartProps = ref<SunburstChartProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    category: [dimProductName],
-    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-});
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ * const sunburstChartProps = ref<SunburstChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      category: [dimProductName],
+      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * ```
+ * <img src="media://vue-sunburst-chart-example.png" width="600px" />
+ * @param props - Sunburst Chart properties
+ * @returns Sunburst Chart component
+ * @group Charts
+ * @beta
  */
 export const SunburstChart = defineComponent({
   props: {

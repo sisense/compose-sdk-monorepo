@@ -22,20 +22,25 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import TreemapChart from '@sisense/sdk-ui-vue/TreemapChart';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
+ * import {TreemapChart, type TreemapChartProps} from '@sisense/sdk-ui-vue';
  *
-const treemapChartProps = ref<TreemapChartProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    category: [dimProductName],
-    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-});
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ * const treemapChartProps = ref<TreemapChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      category: [dimProductName],
+      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * ```
- * <img src="media://treemap-chart-example-1.png" width="600px" />
+ * <img src="media://vue-treemap-chart-example.png" width="600px" />
  * @param props - Treemap chart properties
  * @returns Treemap Chart component
+ * @group Charts
  */
 export const TreemapChart = defineComponent({
   props: {

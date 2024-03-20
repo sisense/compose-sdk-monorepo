@@ -469,6 +469,7 @@ export function extractStyleOptions<WType extends WidgetType>(
       return extractBaseStyleOptions(widgetSubtype, style);
     case 'tablewidget':
     case 'tablewidgetagg':
+    case 'pivot2':
       return extractTableChartStyleOptions(style as TableWidgetStyle);
     case 'indicator':
       return extractIndicatorChartStyleOptions(

@@ -6,7 +6,7 @@ title: DrilldownWidgetConfig
 
 > **DrilldownWidgetConfig**: `object`
 
-An object that allows users to pass advanced configuration options as a prop for the [DrilldownWidget](../functions/function.DrilldownWidget.md) component
+An object that allows users to pass advanced configuration options as a prop for the [DrilldownWidget](../drilldown/function.DrilldownWidget.md) component
 
 ## Type declaration
 
@@ -16,7 +16,7 @@ An object that allows users to pass advanced configuration options as a prop for
 
 React component to be rendered as breadcrumbs
 
-[DrilldownBreadcrumbs](../functions/function.DrilldownBreadcrumbs.md) will be used if not provided
+[DrilldownBreadcrumbs](../drilldown/function.DrilldownBreadcrumbs.md) will be used if not provided
 
 ***
 

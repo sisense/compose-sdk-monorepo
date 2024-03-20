@@ -95,6 +95,7 @@ export const boxWhiskerProcessResultInternal = (
  * @param {QueryResultData} outliersData - The data for the outliers.
  * @param {BoxplotChartCustomDataOptions} [dataOptions] - Optional data options for customizing data processing.
  * @returns {QueryResultData} The combined data with outliers included in the box whisker plot.
+ * @group Chart Utilities
  */
 export function boxWhiskerProcessResult(
   boxWhiskerData: QueryResultData,

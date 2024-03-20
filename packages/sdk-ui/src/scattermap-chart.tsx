@@ -30,6 +30,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://scattermap-chart-example-1.png" width="600px" />
  * @param props - Scattermap chart properties
  * @returns Scattermap Chart component
+ * @group Charts
  * @beta
  */
 export const ScattermapChart = asSisenseComponent({

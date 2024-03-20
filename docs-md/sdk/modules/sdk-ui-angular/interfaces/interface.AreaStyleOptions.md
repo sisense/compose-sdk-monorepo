@@ -6,10 +6,6 @@ title: AreaStyleOptions
 
 Configuration options that define functional style of the various elements of AreaChart
 
-## Extends
-
-- `BaseStyleOptions`.`BaseAxisStyleOptions`
-
 ## Properties
 
 ### dataLimits
@@ -17,10 +13,6 @@ Configuration options that define functional style of the various elements of Ar
 > **dataLimits**?: [`DataLimits`](interface.DataLimits.md)
 
 Data limit for series or categories that will be plotted
-
-#### Inherited from
-
-BaseStyleOptions.dataLimits
 
 ***
 
@@ -34,10 +26,6 @@ Total height of the component, which is considered in the following order of pri
 2. Height of the container wrapping this component
 3. Default value of 400px (for component without header) or 425px (for component with header).
 
-#### Inherited from
-
-BaseStyleOptions.height
-
 ***
 
 ### legend
@@ -45,10 +33,6 @@ BaseStyleOptions.height
 > **legend**?: [`Legend`](../type-aliases/type-alias.Legend.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
-
-#### Inherited from
-
-BaseStyleOptions.legend
 
 ***
 
@@ -66,10 +50,6 @@ Configuration that defines line width
 
 Configuration for markers - symbols or data points that highlight specific values
 
-#### Inherited from
-
-BaseAxisStyleOptions.markers
-
 ***
 
 ### navigator
@@ -77,10 +57,6 @@ BaseAxisStyleOptions.markers
 > **navigator**?: [`Navigator`](../type-aliases/type-alias.Navigator.md)
 
 Configuration for navigator - zoom/pan tool for large datasets in a chart
-
-#### Inherited from
-
-BaseAxisStyleOptions.navigator
 
 ***
 
@@ -102,10 +78,6 @@ Total width of the component, which is considered in the following order of prio
 2. Width of the container wrapping this component
 3. Default value of 400px
 
-#### Inherited from
-
-BaseStyleOptions.width
-
 ***
 
 ### xAxis
@@ -113,10 +85,6 @@ BaseStyleOptions.width
 > **xAxis**?: [`AxisLabel`](../type-aliases/type-alias.AxisLabel.md)
 
 Configuration for X axis
-
-#### Inherited from
-
-BaseAxisStyleOptions.xAxis
 
 ***
 
@@ -126,10 +94,6 @@ BaseAxisStyleOptions.xAxis
 
 Configuration for second Y axis
 
-#### Inherited from
-
-BaseAxisStyleOptions.y2Axis
-
 ***
 
 ### yAxis
@@ -137,7 +101,3 @@ BaseAxisStyleOptions.y2Axis
 > **yAxis**?: [`AxisLabel`](../type-aliases/type-alias.AxisLabel.md)
 
 Configuration for Y axis
-
-#### Inherited from
-
-BaseAxisStyleOptions.yAxis

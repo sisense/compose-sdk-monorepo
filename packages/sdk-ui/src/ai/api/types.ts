@@ -1,4 +1,4 @@
-import { MetadataItem } from '@sisense/sdk-query-client';
+import { JaqlQueryPayload, MetadataItem } from '@sisense/sdk-query-client';
 import { ChartDataOptions } from '../../types';
 
 export interface ChatContext {
@@ -72,7 +72,7 @@ export type AxesMapping = Partial<
     AxesMappingKey,
     Array<{
       name: string;
-      type: string;
+      type?: string;
     }>
   >
 >;
@@ -122,13 +122,7 @@ export interface Perspective {
 }
 
 export interface GetNlgQueryResultRequest {
-  jaql: {
-    /** The data source that the JAQL metadata targets - e.g. `Sample ECommerce` */
-    datasource: { title: string };
-
-    /** The metadata that composes the JAQL to be analyzed */
-    metadata: object[];
-  };
+  jaql: Pick<JaqlQueryPayload, 'datasource' | 'metadata' | 'filterRelations'>;
 }
 
 export interface GetNlgQueryResultResponse {
@@ -144,3 +138,11 @@ export interface SendFeedbackRequest {
   sourceId: string;
   rating: -1 | 1;
 }
+
+/**
+ * The chat mode to use for a chat session
+ *
+ * analyze: Enable business users to uncover data insights
+ * develop: Enable developers to build queries and charts for embedded analytics
+ */
+export type ChatMode = 'analyze' | 'develop';

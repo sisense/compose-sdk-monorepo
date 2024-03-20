@@ -10,6 +10,12 @@ import { map } from 'rxjs';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
 
+/**
+ * Creates theme context connector
+ *
+ * @param themeService - The theme service
+ * @internal
+ */
 export const createThemeContextConnector = (
   themeService: ThemeService,
 ): ContextConnector<CustomThemeProviderProps['context']> => {
@@ -26,6 +32,12 @@ export const createThemeContextConnector = (
   };
 };
 
+/**
+ * Creates Sisense context connector
+ *
+ * @param sisenseContextService - The Sisense context service
+ * @internal
+ */
 export const createSisenseContextConnector = (
   sisenseContextService: SisenseContextService,
 ): ContextConnector<CustomSisenseContext> => {

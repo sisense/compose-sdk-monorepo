@@ -6,10 +6,6 @@ title: TreemapStyleOptions
 
 Configuration options that define functional style of the various elements of TreemapChart
 
-## Extends
-
-- `BaseStyleOptions`
-
 ## Properties
 
 ### dataLimits
@@ -17,10 +13,6 @@ Configuration options that define functional style of the various elements of Tr
 > **dataLimits**?: [`DataLimits`](interface.DataLimits.md)
 
 Data limit for series or categories that will be plotted
-
-#### Inherited from
-
-BaseStyleOptions.dataLimits
 
 ***
 
@@ -33,10 +25,6 @@ Total height of the component, which is considered in the following order of pri
 1. Value passed to this property (in pixels).
 2. Height of the container wrapping this component
 3. Default value of 400px (for component without header) or 425px (for component with header).
-
-#### Inherited from
-
-BaseStyleOptions.height
 
 ***
 
@@ -65,10 +53,6 @@ Labels options object
 > **legend**?: [`Legend`](../type-aliases/type-alias.Legend.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
-
-#### Inherited from
-
-BaseStyleOptions.legend
 
 ***
 
@@ -99,7 +83,3 @@ Total width of the component, which is considered in the following order of prio
 1. Value passed to this property (in pixels)
 2. Width of the container wrapping this component
 3. Default value of 400px
-
-#### Inherited from
-
-BaseStyleOptions.width

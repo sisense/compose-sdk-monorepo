@@ -19,21 +19,26 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {PolarChart,type PolarChartProps} from '@sisense/sdk-ui-vue';
  *
-const polarChartProps = ref<PolarChartProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    category: [dimProductName],
-    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-    breakBy: [],
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-});
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ * const polarChartProps = ref<PolarChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      category: [dimProductName],
+      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+      breakBy: [],
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * ```
- * <img src="media://polar-chart-example-1.png" width="600px" />
+ * <img src="media://vue-polar-chart-example.png" width="600px" />
  * @param props - Polar chart properties
  * @returns Polar Chart component
+ * @group Charts
  */
 export const PolarChart = defineComponent({
   props: {

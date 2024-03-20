@@ -6,22 +6,19 @@ import { isNumber, isDatetime } from '@sisense/sdk-data';
 import { parseISO } from 'date-fns';
 import isObject from 'lodash/isObject';
 import { Row, Column, Value, ComparableData, CompareValue } from './table-processor';
-import { isNotAvailable } from '@/utils/not-available-value';
 
 export const createCompareValue = (
   displayValue: string | undefined | null,
   columnType: string,
 ): CompareValue => {
   const valueUndefined = !displayValue || displayValue === '';
-  const valueIsNA = isNotAvailable(displayValue);
   let value: Value;
   let valueIsNaN: boolean;
   let lowercaseValue: string | undefined;
 
   if (isNumber(columnType)) {
-    const parsedValue = parseFloat(displayValue as string);
-    value = valueIsNA ? (displayValue as string) : parsedValue;
-    valueIsNaN = isNaN(parsedValue);
+    value = parseFloat(displayValue as string);
+    valueIsNaN = isNaN(value);
   } else if (isDatetime(columnType)) {
     value = parseISO(displayValue as string).valueOf();
     valueIsNaN = isNaN(value);

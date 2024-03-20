@@ -4,7 +4,7 @@ title: ExecuteQueryProps
 
 # Interface ExecuteQueryProps
 
-Props for [ExecuteQuery](../functions/function.ExecuteQuery.md) component.
+Props for [ExecuteQuery](../queries/function.ExecuteQuery.md) component.
 
 ## Properties
 

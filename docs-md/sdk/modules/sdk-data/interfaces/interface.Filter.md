@@ -4,11 +4,7 @@ title: Filter
 
 # Interface Filter
 
-Base interface for filter. See [filterFactory](../namespaces/namespace.filterFactory/index.md) for how to create filters.
-
-## Extends
-
-- `Element`
+Base interface for filter. See [filterFactory](../factories/namespace.filterFactory/index.md) for how to create filters.
 
 ## Properties
 
@@ -42,10 +38,6 @@ Boolean flag whether the filter is a scope filter
 
 Element name
 
-#### Inherited from
-
-Element.name
-
 ***
 
 ### type
@@ -53,7 +45,3 @@ Element.name
 > **`readonly`** **type**: `string`
 
 Element type
-
-#### Inherited from
-
-Element.type

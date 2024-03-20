@@ -99,7 +99,7 @@ export const setupHelperWithChildren = <P, C>(
       componentAdapter.render(contextMenuRef.value);
     }
     return [
-      h('div', { ref: contextMenuRef, style: 'width: 100%; height: 100%' }),
+      h('div', { ref: contextMenuRef }),
       h('div', { ref: contextMenuChildrenRef }, slots.default ? slots.default() : []),
     ];
   };

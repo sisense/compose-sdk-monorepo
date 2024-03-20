@@ -51,6 +51,7 @@ export type ChatbotProps = {
  * }
  * ```
  * @param props - {@link ChatbotProps}
+ * @group Generative AI
  * @beta
  */
 export const Chatbot = asSisenseComponent({

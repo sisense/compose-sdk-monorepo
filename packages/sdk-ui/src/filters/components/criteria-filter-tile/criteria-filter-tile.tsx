@@ -63,6 +63,7 @@ export type CriteriaFilterType = NumericFilter | TextFilter | RankingFilter | Ex
  * <img src="media://criteria-filter-tile-example-1.png" width="300px" />
  * @param props - Criteria filter tile props
  * @returns Criteria filter tile component
+ * @group Filter Tiles
  */
 export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaFilterTile' })(
   // eslint-disable-next-line complexity, sonarjs/cognitive-complexity

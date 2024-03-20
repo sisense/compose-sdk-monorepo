@@ -24,6 +24,7 @@ export const getThemeContext = () => {
 
 /**
  * Creates theme context connector
+ * @internal
  */
 export const createThemeContextConnector = (
   themeSettings: CompleteThemeSettings = getDefaultThemeSettings(),
@@ -95,6 +96,7 @@ export const createThemeContextConnector = (
  * @param props - Theme provider props
  * @returns A Theme Provider component * @prop {Object | String} theme - Theme settings object for custom themes or a string identifier to fetch theme settings. When provided as an object, it merges with the default theme settings. When provided as a string, it attempts to fetch theme settings using the provided ID.
  * @prop {Boolean} skipTracking [internal] - Specifies whether to skip tracking of theme usage. Intended for internal use and debugging purposes.
+ * @group Contexts
  */
 export const ThemeProvider = defineComponent({
   props: {

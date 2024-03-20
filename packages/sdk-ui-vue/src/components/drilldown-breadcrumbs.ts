@@ -44,6 +44,7 @@ import { setupHelperWithChildren } from '../setup-helper';
  * @prop {Object} currentDimension - Object representing the current dimension in the drilldown path.
  * @prop {Function} sliceDrilldownSelections - Function to slice the drilldown selections up to a certain index, allowing the user to navigate back in the drilldown path.
  * @prop {Object} filtersDisplayValues - Object mapping the internal filter values to human-readable display values, enhancing the usability of the breadcrumbs.
+ * @group Drilldown
  */
 export const DrilldownBreadcrumbs = defineComponent({
   props: {

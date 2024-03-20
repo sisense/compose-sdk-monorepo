@@ -28,20 +28,25 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {ScatterChart, type ScatterChartProps} from '@sisense/sdk-ui-vue';
  *
-const scatterChartProps = ref<ScatterChartProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    x: dimProductName,
-    y: measureTotalRevenue,
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-});
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ * const scatterChartProps = ref<ScatterChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      x: dimProductName,
+      y: measureTotalRevenue,
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * ```
- * <img src="media://scatter-chart-example-1.png" width="800px" />
+ * <img src="media://vue-scatter-chart-example.png" width="800px" />
  * @param props - Scatter chart properties
  * @returns Scatter Chart component
+ * @group Charts
  */
 export const ScatterChart = defineComponent({
   props: {

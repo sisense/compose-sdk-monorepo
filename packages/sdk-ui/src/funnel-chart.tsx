@@ -44,6 +44,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * Note that the chart sorts the measure, `Unique Users`, in descending order by default.
  * @param props - Funnel chart properties
  * @returns Funnel Chart component
+ * @group Charts
  */
 export const FunnelChart = asSisenseComponent({
   componentName: 'FunnelChart',

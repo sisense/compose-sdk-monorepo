@@ -4,11 +4,7 @@ title: ExecuteQueryParams
 
 # Interface ExecuteQueryParams
 
-Parameters for [useExecuteQuery](../functions/function.useExecuteQuery.md) hook.
-
-## Extended By
-
-- [`ExecuteCsvQueryParams`](interface.ExecuteCsvQueryParams.md)
+Parameters for [useExecuteQuery](../queries/function.useExecuteQuery.md) hook.
 
 ## Properties
 

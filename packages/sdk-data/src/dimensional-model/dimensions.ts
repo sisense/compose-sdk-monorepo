@@ -456,6 +456,7 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
  *
  * @param json - JSON object representing the Dimension
  * @returns A new Dimension instance
+ * @group Data Model Utilities
  */
 export function createDimension(json: any): Dimension {
   const name = json.name || json.title;
@@ -516,6 +517,7 @@ export function createDimension(json: any): Dimension {
  *
  * @param json - JSON object representing the Date Dimension
  * @returns A new Date Dimension instance
+ * @group Data Model Utilities
  */
 export function createDateDimension(json: any): DateDimension {
   const name = json.name || json.title;

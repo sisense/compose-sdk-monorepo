@@ -21,8 +21,13 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {AreamapChart, type AreamapChartProps} from '@sisense/sdk-ui-vue';
- *
+
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+
   const areamapChartProps = ref<AreamapChartProps>({
     dataSet: DM.DataSource,
     dataOptions: {
@@ -33,8 +38,10 @@ import { setupHelper } from '../../setup-helper';
   });
  * </script>
  * ```
+ * <img src="media://vue-areamap-chart-example.png" width="600px" />
  * @param props - Areamap chart properties
  * @returns Areamap Chart component
+ * @group Charts
  * @beta
  */
 export const AreamapChart = defineComponent({

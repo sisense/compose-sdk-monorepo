@@ -105,6 +105,7 @@ export type SharedFormulaSuccessState = {
  * @param params - {@link UseGetSharedFormulaParams}
  * @param dataSource - Data source in Sisense instance
  * @returns Formula load state that contains the status of the execution, the result formula, or the error if any
+ * @group Fusion Assets
  */
 export const useGetSharedFormula = withTracking('useGetSharedFormula')(useGetSharedFormulaInternal);
 

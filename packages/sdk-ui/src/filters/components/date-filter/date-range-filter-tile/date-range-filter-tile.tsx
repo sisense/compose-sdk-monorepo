@@ -77,6 +77,7 @@ export interface DateRangeFilterTileProps {
  * <img src="media://date-filter-example-1.png" width="800px" />
  * @param props - Date Range Filter Tile Props
  * @returns Date Range Filter Tile component
+ * @group Filter Tiles
  */
 export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRangeFilterTile' })(
   (props: DateRangeFilterTileProps) => {

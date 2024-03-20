@@ -4,7 +4,7 @@ title: DrilldownWidgetProps
 
 # Interface DrilldownWidgetProps
 
-Props for the [DrilldownWidget](../functions/function.DrilldownWidget.md) component
+Props for the [DrilldownWidget](../drilldown/function.DrilldownWidget.md) component
 
 ## Properties
 
@@ -16,7 +16,7 @@ Props for the [DrilldownWidget](../functions/function.DrilldownWidget.md) compon
 
 React component to be rendered as context menu
 
-[ContextMenu](../functions/function.ContextMenu.md) will be used if not provided
+[ContextMenu](../drilldown/function.ContextMenu.md) will be used if not provided
 
 ##### Parameters
 
@@ -34,7 +34,7 @@ React component to be rendered as context menu
 
 > **config**?: [`DrilldownWidgetConfig`](../type-aliases/type-alias.DrilldownWidgetConfig.md)
 
-An object that allows users to pass advanced configuration options as a prop for the [DrilldownWidget](../functions/function.DrilldownWidget.md) component
+An object that allows users to pass advanced configuration options as a prop for the [DrilldownWidget](../drilldown/function.DrilldownWidget.md) component
 
 ***
 

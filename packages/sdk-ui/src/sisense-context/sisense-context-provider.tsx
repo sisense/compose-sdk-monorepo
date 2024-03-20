@@ -38,6 +38,7 @@ import { I18nProvider } from '../translation/i18n-provider';
  * ```
  * @param props - Sisense context provider props
  * @returns A Sisense Context Provider Component
+ * @group Contexts
  */
 export const SisenseContextProvider: FunctionComponent<
   PropsWithChildren<SisenseContextProviderProps>

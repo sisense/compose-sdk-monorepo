@@ -29,11 +29,17 @@ export { type SisenseContextConfig };
  *   bootstrap: [AppComponent],
  * })
  * ```
+ * @group Contexts
  */
 export const SISENSE_CONTEXT_CONFIG_TOKEN = new InjectionToken<SisenseContextConfig>(
   'Props for connecting to Sisense instance',
 );
 
+/**
+ * Service for working with Sisense Fusion context.
+ *
+ * @group Contexts
+ */
 @Injectable({
   providedIn: 'root',
 })

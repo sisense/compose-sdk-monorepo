@@ -4,7 +4,7 @@ title: UseGetNlgQueryResultState
 
 # Interface UseGetNlgQueryResultState
 
-State for [useGetNlgQueryResult](../functions/function.useGetNlgQueryResult.md) hook.
+State for [useGetNlgQueryResult](../generative-ai/function.useGetNlgQueryResult.md) hook.
 
 ## Properties
 

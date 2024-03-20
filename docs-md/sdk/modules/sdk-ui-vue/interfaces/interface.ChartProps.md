@@ -4,11 +4,7 @@ title: ChartProps
 
 # Interface ChartProps
 
-Props shared across [Chart](../classes/class.Chart.md) components.
-
-## Extends
-
-- `BaseChartProps`.`ChartEventProps`
+Props shared across [Chart](../charts/class.Chart.md) components.
 
 ## Properties
 
@@ -19,7 +15,7 @@ Props shared across [Chart](../classes/class.Chart.md) components.
 > **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
-will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../classes/class.SisenseContextProvider.md)
+will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/class.SisenseContextProvider.md)
 component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
@@ -59,10 +55,6 @@ const sampleData = {
 };
 ```
 
-##### Inherited from
-
-BaseChartProps.dataSet
-
 ***
 
 #### filters
@@ -72,7 +64,7 @@ BaseChartProps.dataSet
 Filters to apply to a chart’s data using one of the following options.
 
 (1) Array of filters returned from filter factory functions, such as
-[`greaterThan()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.members.md).
+[`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
 
 Use this option for filters that do not require a UI to set them
 or for filters where you will supply your own UI using non-Sisense components.
@@ -84,10 +76,6 @@ To learn more about using filter factory functions to create filters, see the [C
 Use this option for filters that you want your users to set using Sisense UI components.
 
 To learn more about using filter components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
-
-##### Inherited from
-
-BaseChartProps.filters
 
 ***
 
@@ -101,7 +89,7 @@ Note that the filter dimensions used in highlights must match those defined in t
 [dataOptions](interface.ChartProps.md#dataoptions) of the chart.
 
 (1) Array of filters returned from filter factory functions, such as
-[`greaterThan()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.members.md).
+[`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
 
 Use this option for highlights that do not require a UI to set them
 or for highlights where you will supply your own UI using non-Sisense components.
@@ -115,10 +103,6 @@ Use this option for highlights that you want your users to set using Sisense UI 
 
 To learn more about using filter components to create highlights, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components-for-highlighting).
-
-##### Inherited from
-
-BaseChartProps.highlights
 
 ### Chart
 
@@ -166,10 +150,6 @@ This callback is not supported for Indicator Chart, Areamap Chart, and Scatterma
 For an example of how the `onBeforeRender` callback can be used, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
-##### Inherited from
-
-ChartEventProps.onBeforeRender
-
 ***
 
 #### onDataPointClick
@@ -177,10 +157,6 @@ ChartEventProps.onBeforeRender
 > **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
-
-##### Inherited from
-
-ChartEventProps.onDataPointClick
 
 ***
 
@@ -190,10 +166,6 @@ ChartEventProps.onDataPointClick
 
 Context menu handler callback for a data point
 
-##### Inherited from
-
-ChartEventProps.onDataPointContextMenu
-
 ***
 
 #### onDataPointsSelected
@@ -201,7 +173,3 @@ ChartEventProps.onDataPointContextMenu
 > **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
-
-##### Inherited from
-
-ChartEventProps.onDataPointsSelected

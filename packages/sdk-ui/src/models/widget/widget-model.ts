@@ -7,7 +7,7 @@ import { extractDataOptions } from '../../dashboard-widget/translate-widget-data
 import { extractDrilldownOptions } from '../../dashboard-widget/translate-widget-drilldown-options';
 import { extractFilters } from '../../dashboard-widget/translate-widget-filters';
 import { extractStyleOptions } from '../../dashboard-widget/translate-widget-style-options';
-import { WidgetDto, WidgetSubtype, WidgetType } from '../../dashboard-widget/types';
+import { Panel, WidgetDto, WidgetSubtype, WidgetType } from '../../dashboard-widget/types';
 import { getChartType, isSupportedWidgetType, isTabularWidget } from '../../dashboard-widget/utils';
 import { ChartProps, ChartWidgetProps, TableProps, TableWidgetProps } from '../../props';
 import { ExecuteQueryParams } from '../../query-execution';
@@ -29,6 +29,8 @@ export type WidgetDataOptions = ChartDataOptions | TableDataOptions;
 
 /**
  * Model of Sisense widget defined in the abstractions of Compose SDK.
+ *
+ * @group Fusion Assets
  */
 export class WidgetModel {
   /**
@@ -55,6 +57,15 @@ export class WidgetModel {
    * Widget type.
    */
   widgetType: WidgetType;
+
+  /** @internal */
+  pluginType: string;
+
+  /** @internal */
+  pluginPanels: Panel[];
+
+  /** @internal */
+  pluginStyles: any;
 
   /**
    * Widget data options.
@@ -90,6 +101,7 @@ export class WidgetModel {
    * Creates a new widget model.
    *
    * @param widgetDto - The widget DTO to be converted to a widget model
+   * @param themeSettings - The theme settings to be used for the widget model
    * @internal
    */
   constructor(
@@ -104,25 +116,30 @@ export class WidgetModel {
 
     const widgetType = widgetDto.type;
     if (!isSupportedWidgetType(widgetType)) {
-      throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
+      // unknown types are assumped to be plugins
+      this.widgetType = 'plugin';
+      this.pluginType = widgetType;
+      this.pluginPanels = widgetDto.metadata.panels;
+      this.pluginStyles = widgetDto.style;
+    } else {
+      this.widgetType = widgetType;
+      this.dataOptions = extractDataOptions(
+        this.widgetType,
+        widgetDto.metadata.panels,
+        widgetDto.style,
+        themeSettings?.palette.variantColors,
+      );
+
+      this.styleOptions = extractStyleOptions(
+        widgetType,
+        widgetDto.subtype as WidgetSubtype,
+        widgetDto.style,
+        widgetDto.metadata.panels,
+      );
     }
 
-    this.widgetType = widgetType;
-    this.dataOptions = extractDataOptions(
-      this.widgetType,
-      widgetDto.metadata.panels,
-      widgetDto.style,
-      themeSettings?.palette.variantColors,
-    );
-
-    this.styleOptions = extractStyleOptions(
-      widgetType,
-      widgetDto.subtype as WidgetSubtype,
-      widgetDto.style,
-      widgetDto.metadata.panels,
-    );
-
-    this.drilldownOptions = extractDrilldownOptions(widgetType, widgetDto.metadata.panels);
+    // does not handle widget type plugin
+    this.drilldownOptions = extractDrilldownOptions(this.widgetType, widgetDto.metadata.panels);
     this.filters = extractFilters(widgetDto.metadata.panels);
     this.chartType = isTabularWidget(widgetType) ? undefined : getChartType(this.widgetType);
   }

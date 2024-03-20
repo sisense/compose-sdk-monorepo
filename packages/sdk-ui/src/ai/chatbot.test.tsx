@@ -2,7 +2,7 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { screen, waitFor } from '@testing-library/react';
 import { Chatbot } from './chatbot';
-import { MockApiWrapper } from './__mocks__';
+import { AiTestWrapper } from './__mocks__';
 import { http, HttpResponse } from 'msw';
 import { dataModels, perspectives } from './__mocks__/data';
 
@@ -15,9 +15,9 @@ beforeEach(() => {
 
 it('renders chatbot with the correct default dimensions', async () => {
   const { container } = setup(
-    <MockApiWrapper>
+    <AiTestWrapper>
       <Chatbot />
-    </MockApiWrapper>,
+    </AiTestWrapper>,
   );
 
   await waitFor(() => expect(screen.getByText('Data Topics')).toBeInTheDocument());
@@ -32,9 +32,9 @@ it('renders chatbot with the correct default dimensions', async () => {
 
 it('renders chatbot with the mininum allowed dimensions', async () => {
   const { container } = setup(
-    <MockApiWrapper>
+    <AiTestWrapper>
       <Chatbot width="100px" height="50px" />
-    </MockApiWrapper>,
+    </AiTestWrapper>,
   );
 
   await waitFor(() => expect(screen.getByText('Data Topics')).toBeInTheDocument());
@@ -47,9 +47,9 @@ it('renders chatbot with the mininum allowed dimensions', async () => {
 
 it('renders chatbot with custom, valid dimensions', async () => {
   const { container } = setup(
-    <MockApiWrapper>
+    <AiTestWrapper>
       <Chatbot width="700px" height="800px" />
-    </MockApiWrapper>,
+    </AiTestWrapper>,
   );
 
   await waitFor(() => expect(screen.getByText('Data Topics')).toBeInTheDocument());

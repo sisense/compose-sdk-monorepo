@@ -36,9 +36,10 @@ import type { NumericFilter, RankingFilter, TextFilter } from '@sisense/sdk-data
  * }
  * </script>
  * ```
- * <img src="media://criteria-filter-tile-example-1.png" width="300px" />
+ * <img src="media://vue-criteria-filter-tile-example.png" width="300px" />
  * @param props - Criteria filter tile props
  * @returns Criteria filter tile component
+ * @group Filter Tiles
  */
 export const CriteriaFilterTile = defineComponent({
   props: {

@@ -53,6 +53,7 @@ import { DrilldownWidgetProps } from '../props';
  * ```
  * @param props - DrilldownWidget properties
  * @returns DrilldownWidget wrapper component
+ * @group Drilldown
  */
 export const DrilldownWidget = ({
   drilldownDimensions,

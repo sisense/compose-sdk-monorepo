@@ -25,6 +25,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://pie-chart-example-1.png" width="600px" />
  * @param props - Pie chart properties
  * @returns Pie Chart component
+ * @group Charts
  */
 export const PieChart = asSisenseComponent({
   componentName: 'PieChart',

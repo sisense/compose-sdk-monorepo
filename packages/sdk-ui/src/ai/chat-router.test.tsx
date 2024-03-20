@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw';
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import ChatRouter from './chat-router';
-import { MockApiWrapper } from './__mocks__';
+import { AiTestWrapper } from './__mocks__';
 import { dataModels, perspectives } from './__mocks__/data';
 import { ChatConfigProvider } from './chat-config';
 import { Chat, DataModel } from './api/types';
@@ -49,9 +49,9 @@ describe('ChatRouter', () => {
   describe('when no default context title is present', () => {
     it('renders the data topics screen and allows navigation to and from the chat box', async () => {
       const { user } = setup(
-        <MockApiWrapper>
+        <AiTestWrapper>
           <ChatRouter />
-        </MockApiWrapper>,
+        </AiTestWrapper>,
       );
 
       await waitFor(() => expect(screen.getByText('Data Topics')).toBeInTheDocument());
@@ -78,11 +78,11 @@ describe('ChatRouter', () => {
   describe('when a default context title is set', () => {
     it('skips the data topics screen', async () => {
       setup(
-        <MockApiWrapper>
+        <AiTestWrapper>
           <ChatConfigProvider value={{ defaultContextTitle: 'Model 2' }}>
             <ChatRouter />
           </ChatConfigProvider>
-        </MockApiWrapper>,
+        </AiTestWrapper>,
       );
 
       await waitFor(() => expect(screen.getByText('Model 2')).toBeInTheDocument());
@@ -99,11 +99,11 @@ describe('ChatRouter', () => {
       };
 
       const { user } = setup(
-        <MockApiWrapper>
+        <AiTestWrapper>
           <ChatConfigProvider value={{ defaultContextTitle: newModel.title }}>
             <ChatRouter />
           </ChatConfigProvider>
-        </MockApiWrapper>,
+        </AiTestWrapper>,
       );
 
       await waitFor(() =>

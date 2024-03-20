@@ -4,8 +4,10 @@ import { LoadingDots } from './loading-dots';
 /**
  * Component that displays a loading indicator.
  *
+ * @param themeSettings - Theme settings to use for the loading indicator.
  * @param onCancel - Function to call when cancel is clicked.
  * @returns A loading indicator with optional cancel.
+ * @internal
  */
 export const LoadingIndicator = ({
   themeSettings,

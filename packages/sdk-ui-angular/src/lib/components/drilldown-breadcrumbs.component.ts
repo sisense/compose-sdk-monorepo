@@ -26,6 +26,8 @@ import { template, rootId } from '../component-wrapper-helpers/template';
 
 /**
  * Drilldown Breadcrumbs Component
+ *
+ * @group Drilldown
  */
 @Component({
   selector: 'csdk-drilldown-breadcrumbs',

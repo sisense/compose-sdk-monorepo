@@ -10,9 +10,7 @@ export interface GetDashboardModelsOptions {
    */
   searchByTitle?: string;
   /**
-   * Boolean flag whether to include widgets in the dashboard model
-   *
-   * If not specified, the default value is `false`
+   * {@inheritDoc GetDashboardModelOptions.includeWidgets}
    */
   includeWidgets?: boolean;
 }

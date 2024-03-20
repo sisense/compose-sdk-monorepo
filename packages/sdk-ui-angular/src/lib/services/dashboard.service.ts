@@ -8,6 +8,11 @@ import {
 import { SisenseContextService } from './sisense-context.service';
 import { TrackableService } from '../decorators/trackable.decorator';
 
+/**
+ * Service for working with Sisense Fusion dashboards.
+ *
+ * @group Fusion Assets
+ */
 @Injectable({
   providedIn: 'root',
 })

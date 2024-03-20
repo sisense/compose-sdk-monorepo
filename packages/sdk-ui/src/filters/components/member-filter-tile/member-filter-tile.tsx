@@ -63,6 +63,7 @@ export interface MemberFilterTileProps {
  * <img src="media://member-filter-tile-example-1.png" width="300px" />
  * @param props - Member filter tile props
  * @returns Member filter tile component
+ * @group Filter Tiles
  */
 export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSisenseComponent({
   componentName: 'MemberFilterTile',

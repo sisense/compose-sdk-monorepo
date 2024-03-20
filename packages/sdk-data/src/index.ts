@@ -2,6 +2,10 @@ import './translation/initialize-i18n.js';
 
 /**
  * @packageDocumentation
+ * @group Factories
+ * Functions for creating measures, filters, and advanced analytics elements.
+ * @group Data Model Utilities
+ * Utility functions for creating attributes and dimensions in code.
  */
 export * from './interfaces.js';
 
@@ -46,6 +50,7 @@ export * from './dimensional-model/filters/filters.js';
  *   }
  *   return null;
  * ```
+ * @group Factories
  */
 export * as filterFactory from './dimensional-model/filters/factory.js';
 
@@ -81,6 +86,7 @@ export * from './dimensional-model/measures/measures.js';
  *   }
  *   return null;
  * ```
+ * @group Factories
  */
 export * as measureFactory from './dimensional-model/measures/factory.js';
 
@@ -88,6 +94,8 @@ export * from './dimensional-model/simple-column-types.js';
 
 /**
  * Functions to create elements for advanced analytics – for example, attributes and measures for constructing a custom Boxplot chart
+ *
+ * @group Factories
  */
 export * as analyticsFactory from './dimensional-model/analytics/factory.js';
 

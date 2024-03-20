@@ -35,3 +35,17 @@ exports[`should display pie tooltip for point 1`] = `
 
   </div>"
 `;
+
+exports[`should not contain percent for unsupported column 1`] = `
+"<div style="minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px">
+
+                3.14
+              <br />
+              <span style="color:red; font-size: 15px; line-height: 18px">@42.0009</span>
+
+
+
+
+
+  </div>"
+`;

@@ -48,13 +48,18 @@ describe('WidgetModel', () => {
       });
     });
 
-    it('should throw TranslatableError for unsupported widget type', () => {
+    it('should create plugin widget when unsupported widget type', () => {
       const unsupportedWidgetDto: WidgetDto = {
         ...mockWidgetDto,
         type: 'unsupportedType' as WidgetType,
       };
 
-      expect(() => new WidgetModel(unsupportedWidgetDto)).toThrow(TranslatableError);
+      const widgetPlugin = new WidgetModel(unsupportedWidgetDto);
+
+      expect(widgetPlugin.widgetType).equals('plugin');
+      expect(widgetPlugin.pluginType).equals(unsupportedWidgetDto.type);
+      expect(widgetPlugin.pluginPanels).equals(unsupportedWidgetDto.metadata.panels);
+      expect(widgetPlugin.pluginStyles).equals(unsupportedWidgetDto.style);
     });
   });
 

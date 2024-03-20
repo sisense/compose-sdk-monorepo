@@ -65,6 +65,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://scatter-chart-example-1.png" width="800px" />
  * @param props - Scatter chart properties
  * @returns Scatter Chart component
+ * @group Charts
  */
 export const ScatterChart = asSisenseComponent({
   componentName: 'ScatterChart',

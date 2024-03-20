@@ -6,10 +6,6 @@ title: WidgetStyleOptions
 
 Style settings defining the look and feel of widget itself and widget header
 
-## Extended By
-
-- [`DashboardWidgetStyleOptions`](interface.DashboardWidgetStyleOptions.md)
-
 ## Properties
 
 ### backgroundColor

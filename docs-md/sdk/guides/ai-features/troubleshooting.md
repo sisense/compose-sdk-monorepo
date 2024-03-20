@@ -1,0 +1,19 @@
+# Troubleshooting
+
+::: warning Note
+This feature is currently under private beta for selected customers and is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
+
+To be considered for the beta program, please sign up at [www.sisense.com/get/gen-ai-partner](https://www.sisense.com/get/gen-ai-partner/).
+:::
+
+## Component Errors
+
+Here are some common errors that you may encounter when using the GenAI components.
+
+#### Blank screen with Uncaught SyntaxError: The requested module [...] does not provide an export named 'AiContextProvider'
+
+Check that you are importing from `@sisense/sdk-ui/ai` and not `@sisense/sdk-ui`.
+
+#### Error: No QueryClient set, use QueryClientProvider to set one
+
+Check that your app is wrapped in an `AiContextProvider`.

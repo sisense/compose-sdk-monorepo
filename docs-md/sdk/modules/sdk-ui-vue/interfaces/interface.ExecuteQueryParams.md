@@ -4,7 +4,7 @@ title: ExecuteQueryParams
 
 # Interface ExecuteQueryParams
 
-Parameters for [useExecuteQuery](../functions/function.useExecuteQuery.md) hook.
+Parameters for [useExecuteQuery](../queries/function.useExecuteQuery.md) hook.
 
 ## Properties
 

@@ -39,6 +39,7 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
  * ```
  * @param props - ExecuteQuery properties
  * @returns ExecuteQuery component
+ * @group Queries
  */
 export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseComponent({
   componentName: 'ExecuteQuery',

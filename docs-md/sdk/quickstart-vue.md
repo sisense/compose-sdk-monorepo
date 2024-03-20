@@ -125,7 +125,7 @@ npm i @sisense/sdk-ui-vue @sisense/sdk-data
 For Yarn:
 
 ```sh
-yarn add @sisense/sdk-u-vue @sisense/sdk-data
+yarn add @sisense/sdk-ui-vue @sisense/sdk-data
 ```
   </div>
 </div>
@@ -296,7 +296,7 @@ You first Compose SDK chart with Vue should look something like this:
 
 ![Line chart rendered by the Vue component](./img/vue-quickstart-chart-example.png)
 
-See the [SisenseContextProvider](./modules/sdk-ui-vue/classes/class.SisenseContextProvider.md) and [Chart](./modules/sdk-ui-vue/classes/class.Chart.md) docs for more details on supported props.
+See the [SisenseContextProvider](./modules/sdk-ui-vue/contexts/class.SisenseContextProvider.md) and [Chart](./modules/sdk-ui-vue/charts/class.Chart.md) docs for more details on supported props.
 
 ## Next Steps
 

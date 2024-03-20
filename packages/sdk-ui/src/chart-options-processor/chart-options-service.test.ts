@@ -809,6 +809,42 @@ describe('cartesianData', () => {
     expect(chartOptions2).toMatchSnapshot();
   });
 
+  it('timeseries with one data point', () => {
+    const singleRowData = createDataTableFromData({
+      columns: [
+        { name: 'Months', type: 'date' },
+        { name: 'Area', type: 'string' },
+        { name: 'Quantity', type: 'number' },
+        { name: 'Units', type: 'number' },
+      ],
+      rows: [['2020-01', 'A', -6781, -10]],
+    });
+
+    const months2 = {
+      name: 'Months',
+      type: 'date',
+      continuous: true,
+      dateFormat: 'Y-MM',
+    };
+    const dataOptions: CartesianChartDataOptionsInternal = {
+      x: [months2],
+      y: [{ ...meas1 }],
+      breakBy: [],
+    };
+    const chartData = cartesianData(dataOptions, singleRowData);
+
+    const chartOptions = highchartsOptionsService(
+      chartData,
+      'line',
+      baseChartDesignOptions,
+      dataOptions,
+      translateMock,
+      themeSettings,
+      dateFormatter,
+    );
+    expect(chartOptions).toMatchSnapshot();
+  });
+
   it('format break by number', () => {
     const dataOptionsWithNoFormat = {
       ...TestChartDataOptions,

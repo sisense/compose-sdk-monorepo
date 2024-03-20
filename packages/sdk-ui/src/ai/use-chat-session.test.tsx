@@ -1,13 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { Chat } from './api/types';
 import { useChatSession } from './use-chat-session';
-import { MockApiWrapper } from './__mocks__';
+import { AiTestWrapper } from './__mocks__';
 import { dataModels, perspectives } from './__mocks__/data';
 import { http, HttpResponse } from 'msw';
 import { server } from '@/__mocks__/msw';
 
 const renderHookWithWrapper = (contextTitle: string) => {
-  return renderHook(() => useChatSession(contextTitle), { wrapper: MockApiWrapper });
+  return renderHook(() => useChatSession(contextTitle), { wrapper: AiTestWrapper });
 };
 
 interface Cache {

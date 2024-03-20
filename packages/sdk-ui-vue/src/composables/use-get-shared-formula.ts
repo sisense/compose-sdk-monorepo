@@ -58,6 +58,7 @@ import type { MaybeWithRefs } from '../types';
  * - `error`: Contains the error object if an error occurred during the fetch.
  *
  * This composable provides a streamlined, reactive approach to fetching shared formulas from Sisense, facilitating their integration into Vue applications for enhanced data analytics capabilities.
+ * @group Fusion Assets
  */
 
 export const useGetSharedFormula = (params: MaybeWithRefs<UseGetSharedFormulaParams>) => {

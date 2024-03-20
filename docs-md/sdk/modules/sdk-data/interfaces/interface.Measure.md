@@ -5,35 +5,7 @@ title: Measure
 # Interface Measure
 
 Base interface for measure, which is typically numeric aggregation over [Attribute](interface.Attribute.md)(s).
-See [measureFactory](../namespaces/namespace.measureFactory/index.md) for how to create measures.
-
-## Extends
-
-- `Element`
-
-## Properties
-
-### name
-
-> **name**: `string`
-
-Element name
-
-#### Inherited from
-
-Element.name
-
-***
-
-### type
-
-> **`readonly`** **type**: `string`
-
-Element type
-
-#### Inherited from
-
-Element.type
+See [measureFactory](../factories/namespace.measureFactory/index.md) for how to create measures.
 
 ## Methods
 
@@ -100,3 +72,19 @@ Sorts the measure by the given `sort` definition.
 [`Measure`](interface.Measure.md)
 
 A sorted instance of measure
+
+## Properties
+
+### name
+
+> **name**: `string`
+
+Element name
+
+***
+
+### type
+
+> **`readonly`** **type**: `string`
+
+Element type

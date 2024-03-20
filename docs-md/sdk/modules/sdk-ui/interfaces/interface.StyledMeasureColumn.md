@@ -42,10 +42,6 @@ style options.
 
 See also [StyledColumn](interface.StyledColumn.md).
 
-## Extends
-
-- `ValueStyle`.`SeriesStyle`
-
 ## Properties
 
 ### chartType
@@ -55,10 +51,6 @@ See also [StyledColumn](interface.StyledColumn.md).
 Series chart type, which is used with [StyledMeasureColumn](interface.StyledMeasureColumn.md) to customize
 series in a mixed chart.
 
-#### Inherited from
-
-ValueStyle.chartType
-
 ***
 
 ### color
@@ -66,10 +58,6 @@ ValueStyle.chartType
 > **color**?: [`DataColorOptions`](../type-aliases/type-alias.DataColorOptions.md)
 
 All possible color options for data.
-
-#### Inherited from
-
-ValueStyle.color
 
 ***
 
@@ -87,10 +75,6 @@ Wrapped MeasureColumn or CalculatedMeasureColumn
 
 Boolean flag whether to connect a graph line across null points or render a gap
 
-#### Inherited from
-
-ValueStyle.connectNulls
-
 ***
 
 ### dataBars
@@ -99,10 +83,6 @@ ValueStyle.connectNulls
 
 Boolean flag whether to display data bars for this measure in the pivot table.
 
-#### Inherited from
-
-ValueStyle.dataBars
-
 ***
 
 ### numberFormatConfig
@@ -110,10 +90,6 @@ ValueStyle.dataBars
 > **numberFormatConfig**?: [`NumberFormatConfig`](../type-aliases/type-alias.NumberFormatConfig.md)
 
 Configuration for number formatting.
-
-#### Inherited from
-
-ValueStyle.numberFormatConfig
 
 ***
 
@@ -124,10 +100,6 @@ ValueStyle.numberFormatConfig
 Specific style options to be applied to specific series in Chart.
 Supported only for cartesian and polar charts.
 
-#### Inherited from
-
-SeriesStyle.seriesStyleOptions
-
 ***
 
 ### showOnRightAxis
@@ -137,10 +109,6 @@ SeriesStyle.seriesStyleOptions
 Boolean flag whether to show this value/measure
 on the right axis (`true`) or on the left axis (`false`).
 
-#### Inherited from
-
-ValueStyle.showOnRightAxis
-
 ***
 
 ### sortType
@@ -148,10 +116,6 @@ ValueStyle.showOnRightAxis
 > **sortType**?: [`SortDirection`](../type-aliases/type-alias.SortDirection.md)
 
 Sorting direction, either by Ascending order, Descending order, or None
-
-#### Inherited from
-
-ValueStyle.sortType
 
 ***
 
@@ -161,10 +125,6 @@ ValueStyle.sortType
 
 Calculation for the totals of this measure in the pivot table.
 
-#### Inherited from
-
-ValueStyle.totalsCalculation
-
 ***
 
 ### treatNullDataAsZeros
@@ -172,7 +132,3 @@ ValueStyle.totalsCalculation
 > **treatNullDataAsZeros**?: `boolean`
 
 Boolean flag whether null values are treated as zeros in the chart
-
-#### Inherited from
-
-ValueStyle.treatNullDataAsZeros

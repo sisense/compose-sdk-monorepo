@@ -42,6 +42,7 @@ export type AiContextProviderProps = {
  *   );
  * }
  * ```
+ * @group Generative AI
  * @beta
  */
 export default function AiContextProvider({ children, config }: AiContextProviderProps) {

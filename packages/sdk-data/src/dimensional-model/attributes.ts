@@ -346,6 +346,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
  *
  * @param json - JSON object representing the attribute
  * @returns An Attribute instance
+ * @group Data Model Utilities
  */
 export function createAttribute(json: any): Attribute {
   if (json.granularity) {
@@ -355,12 +356,15 @@ export function createAttribute(json: any): Attribute {
   return new DimensionalAttribute(
     json.name || json.title,
     json.attribute || json.expression || json.dim,
-    json.type || json.desc || json.description,
+    json.type,
+    json.desc || json.description,
   );
 }
 
 /**
- * @param json
+ * Creates a LevelAttribute instance from the given JSON object.
+ *
+ * @param json - JSON object representing the level attribute
  * @internal
  */
 export function createLevel(json: any): LevelAttribute {

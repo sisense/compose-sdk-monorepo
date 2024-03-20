@@ -82,6 +82,7 @@ import { getFilterListAndRelations } from '@sisense/sdk-data';
  ```
  * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
+ * @group Queries
  */
 export const useExecuteCsvQuery = withTracking('useExecuteCsvQuery')(useExecuteCsvQueryInternal);
 

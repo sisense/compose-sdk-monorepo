@@ -4,6 +4,8 @@ title: Interfaces
 
 # Interfaces
 
+TypeScript interfaces for components and services listed above
+
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
 - [AreamapStyleOptions](interface.AreamapStyleOptions.md)

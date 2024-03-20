@@ -318,7 +318,7 @@ You first Compose SDK chart with Angular should look something like this:
 
 ![Line chart rendered by the Angular component](./img/angular-quickstart-chart-example.png)
 
-See the [SISENSE_CONTEXT_CONFIG_TOKEN](./modules/sdk-ui-angular/variables/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md) and [ChartComponent](./modules/sdk-ui-angular/classes/class.ChartComponent.md) docs for more details on supported props.
+See the [SISENSE_CONTEXT_CONFIG_TOKEN](./modules/sdk-ui-angular/contexts/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md) and [ChartComponent](./modules/sdk-ui-angular/charts/class.ChartComponent.md) docs for more details on supported props.
 
 ## Next Steps
 

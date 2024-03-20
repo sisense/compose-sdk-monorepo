@@ -4,10 +4,6 @@ title: GetDashboardModelOptions
 
 # Interface GetDashboardModelOptions
 
-## Extended By
-
-- [`GetDashboardModelParams`](interface.GetDashboardModelParams.md)
-
 ## Properties
 
 ### includeWidgets

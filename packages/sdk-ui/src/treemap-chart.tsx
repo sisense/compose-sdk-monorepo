@@ -30,6 +30,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://treemap-chart-example-1.png" width="600px" />
  * @param props - Treemap chart properties
  * @returns Treemap Chart component
+ * @group Charts
  */
 export const TreemapChart = asSisenseComponent({
   componentName: 'TreemapChart',

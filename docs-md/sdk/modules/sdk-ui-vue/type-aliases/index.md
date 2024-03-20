@@ -4,6 +4,8 @@ title: Type Aliases
 
 # Type Aliases
 
+TypeScript type aliases for components and composables listed above
+
 - [AppConfig](type-alias.AppConfig.md)
 - [AreaSubtype](type-alias.AreaSubtype.md)
 - [AreamapChartType](type-alias.AreamapChartType.md)

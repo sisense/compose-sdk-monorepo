@@ -21,13 +21,12 @@ import {
   ColoringService,
   getColoringServiceByColorOptions,
 } from '../../chart-data-options/coloring';
-import { isNotAvailable } from '@/utils/not-available-value';
+import { isNumber } from 'lodash';
 
 export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChartDataOptions>;
 
 const getValueCustomBackgroundColor = (
   chartData: IndicatorChartData,
-  chartDesignOptions: IndicatorChartDesignOptions,
   chartDataOptions: IndicatorChartDataOptions,
 ) => {
   const colorOptions = getValueColorOptions(chartDataOptions);
@@ -37,7 +36,7 @@ const getValueCustomBackgroundColor = (
       colorOptions,
     ) as ColoringService<AllowedIndicatorColoringTypes>;
 
-    return coloringService.getColor(chartData.value);
+    return coloringService.getColor(isNumber(chartData.value) ? chartData.value : 0);
   }
 
   return null;
@@ -48,19 +47,15 @@ export const createLegacyChartDataOptions = (
   chartDesignOptions: IndicatorChartDesignOptions,
   chartDataOptions: IndicatorChartDataOptions,
 ) => {
-  const min = chartData.min || 0;
-  const max = chartData.max || 100;
+  const min = isNumber(chartData.min) ? chartData.min : 0;
+  const max = isNumber(chartData.max) ? chartData.max : 100;
 
   const numberConfigForValue = getNumberFormatConfigForColumn(chartDataOptions, 'value');
   const numberConfigForSecondary = getNumberFormatConfigForColumn(chartDataOptions, 'secondary');
   const numberConfigForMin = getNumberFormatConfigForColumn(chartDataOptions, 'min');
   const numberConfigForMax = getNumberFormatConfigForColumn(chartDataOptions, 'max');
 
-  const valueCustomBgColor = getValueCustomBackgroundColor(
-    chartData,
-    chartDesignOptions,
-    chartDataOptions,
-  );
+  const valueCustomBgColor = getValueCustomBackgroundColor(chartData, chartDataOptions);
 
   const defaultSkin = chartDesignOptions.indicatorType === 'gauge' ? 1 : 'vertical';
 
@@ -119,18 +114,12 @@ const defaultIndicatorData = {
   showSecondary: false,
 };
 
-function getValueText(
-  value: undefined | string | number,
-  formatConfig: Required<NumberFormatConfig>,
-) {
+function getValueText(value: undefined | number, formatConfig: Required<NumberFormatConfig>) {
   if (value === undefined) {
     return '';
-  } else if (isNotAvailable(value)) {
+  } else if (isNaN(value)) {
     return '#N/A';
   } else {
-    return applyFormatPlainText(
-      formatConfig,
-      typeof value === 'string' ? Number.parseFloat(value) : value,
-    );
+    return applyFormatPlainText(formatConfig, value);
   }
 }

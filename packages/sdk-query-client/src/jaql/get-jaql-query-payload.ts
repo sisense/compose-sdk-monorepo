@@ -28,6 +28,9 @@ import { applyHighlightFilters, matchHighlightsWithAttributes } from './metadata
 
 const JAQL_BY_CSDK = 'ComposeSDK';
 
+/**
+ * @internal
+ */
 export function getJaqlQueryPayload(
   queryDescription: QueryDescription,
   shouldSkipHighlightsWithoutAttributes: boolean,

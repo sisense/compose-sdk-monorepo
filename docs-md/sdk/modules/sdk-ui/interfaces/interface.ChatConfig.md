@@ -20,9 +20,9 @@ If specified, the data topic selector screen will not be shown.
 
 > **enableFollowupQuestions**: `boolean`
 
-Boolean flag to show or hide suggested questions following a chat response
-
-If not specified, the default value is `false`
+Boolean flag to show or hide suggested questions following a chat response. Currently
+follow-up questions are still under development and are not validated. Therefore, follow-up
+questions are disabled by default.
 
 ***
 

@@ -32,6 +32,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://boxplot-chart-example-1.png" width="600px" />
  * @param props - Boxplot chart properties
  * @returns Boxplot Chart component
+ * @group Charts
  * @beta
  */
 export const BoxplotChart = asSisenseComponent({

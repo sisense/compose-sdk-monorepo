@@ -21,21 +21,26 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {ScattermapChart,type ScattermapChartProps} from '@sisense/sdk-ui-vue';
  *
-const scattermapChartProps = ref<ScattermapChartProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    geo: [DM.DimCountries.CountryName],
-    size: { column: measureTotalRevenue, title: 'Total Revenue' },
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-});
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ * const scattermapChartProps = ref<ScattermapChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      geo: [DM.DimCountries.CountryName],
+      size: { column: measureTotalRevenue, title: 'Total Revenue' },
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * </script>
  * ```
- * <img src="media://scattermap-chart-example-1.png" width="600px" />
+ * <img src="media://vue-scattermap-chart-example.png" width="600px" />
  * @param props - Scattermap chart properties
  * @returns Scattermap Chart component
+ * @group Charts
  * @beta
  */
 export const ScattermapChart = defineComponent({

@@ -4,13 +4,9 @@ title: UseGetSharedFormulaParams
 
 # Interface UseGetSharedFormulaParams
 
-Params of the [useGetSharedFormula](../functions/function.useGetSharedFormula.md) hook
+Params of the [useGetSharedFormula](../fusion-assets/function.useGetSharedFormula.md) hook
 
 Can consist either of an oid or a name/dataSource pair
-
-## Extends
-
-- `HookEnableParam`
 
 ## Properties
 
@@ -29,10 +25,6 @@ Data source - e.g. `Sample ECommerce`
 Boolean flag to control if the hook is executed
 
 If not specified, the default value is `true`
-
-#### Inherited from
-
-HookEnableParam.enabled
 
 ***
 

@@ -52,6 +52,6 @@ Loading status
 
 ### `widget`
 
-**widget**: [`WidgetModel`](../classes/class.WidgetModel.md)
+**widget**: [`WidgetModel`](../fusion-assets/class.WidgetModel.md)
 
 Widget model, if the load succeeded

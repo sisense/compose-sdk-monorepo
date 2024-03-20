@@ -4,11 +4,7 @@ title: TreemapChartProps
 
 # Interface TreemapChartProps
 
-Props of the [TreemapChart](../functions/function.TreemapChart.md) component.
-
-## Extends
-
-- `BaseChartProps`.`HighchartsBasedChartEventProps`.`RegularChartEventProps`
+Props of the [TreemapChart](../charts/function.TreemapChart.md) component.
 
 ## Properties
 
@@ -19,7 +15,7 @@ Props of the [TreemapChart](../functions/function.TreemapChart.md) component.
 > **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
-will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../functions/function.SisenseContextProvider.md)
+will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/function.SisenseContextProvider.md)
 component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
@@ -59,10 +55,6 @@ const sampleData = {
 };
 ```
 
-##### Inherited from
-
-BaseChartProps.dataSet
-
 ***
 
 #### filters
@@ -72,7 +64,7 @@ BaseChartProps.dataSet
 Filters to apply to a chart’s data using one of the following options.
 
 (1) Array of filters returned from filter factory functions, such as
-[`greaterThan()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.members.md).
+[`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
 
 Use this option for filters that do not require a UI to set them
 or for filters where you will supply your own UI using non-Sisense components.
@@ -84,10 +76,6 @@ To learn more about using filter factory functions to create filters, see the [C
 Use this option for filters that you want your users to set using Sisense UI components.
 
 To learn more about using filter components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
-
-##### Inherited from
-
-BaseChartProps.filters
 
 ***
 
@@ -101,7 +89,7 @@ Note that the filter dimensions used in highlights must match those defined in t
 [dataOptions](interface.TreemapChartProps.md#dataoptions) of the chart.
 
 (1) Array of filters returned from filter factory functions, such as
-[`greaterThan()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/namespaces/namespace.filterFactory/functions/function.members.md).
+[`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
 
 Use this option for highlights that do not require a UI to set them
 or for highlights where you will supply your own UI using non-Sisense components.
@@ -115,10 +103,6 @@ Use this option for highlights that you want your users to set using Sisense UI 
 
 To learn more about using filter components to create highlights, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components-for-highlighting).
-
-##### Inherited from
-
-BaseChartProps.highlights
 
 ### Chart
 
@@ -152,10 +136,6 @@ This callback is not supported for Indicator Chart, Areamap Chart, and Scatterma
 For an example of how the `onBeforeRender` callback can be used, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
-##### Inherited from
-
-HighchartsBasedChartEventProps.onBeforeRender
-
 ***
 
 #### onDataPointClick
@@ -165,10 +145,6 @@ HighchartsBasedChartEventProps.onBeforeRender
 A callback that allows you to customize what happens when a data point is clicked.
 
 To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
-
-##### Inherited from
-
-RegularChartEventProps.onDataPointClick
 
 ***
 
@@ -180,10 +156,6 @@ A callback that allows you to customize what happens when a context menu is disp
 
 To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
-##### Inherited from
-
-RegularChartEventProps.onDataPointContextMenu
-
 ***
 
 #### onDataPointsSelected
@@ -193,7 +165,3 @@ RegularChartEventProps.onDataPointContextMenu
 A callback that allows you to customize what happens when data points are selected.
 
 To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
-
-##### Inherited from
-
-RegularChartEventProps.onDataPointsSelected

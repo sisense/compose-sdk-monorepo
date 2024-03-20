@@ -44,6 +44,7 @@ import type { MaybeWithRefs } from '../types';
  *
  * This composable streamlines the process of fetching and managing Sisense widget models within Vue applications, providing
  * developers with a reactive and efficient way to integrate Sisense data visualizations and analytics.
+ * @group Fusion Assets
  */
 export const useGetWidgetModel = (params: MaybeWithRefs<GetWidgetModelParams>) => {
   const { hasTrackedRef } = useTracking('useGetWidgetModel');

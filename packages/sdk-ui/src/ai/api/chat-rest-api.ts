@@ -13,6 +13,7 @@ import type {
   QueryRecommendationResponse,
   SendFeedbackRequest,
 } from './types';
+import { DataSourceField } from '@sisense/sdk-query-client';
 
 export class ChatRestApi {
   private httpClient: HttpClient;
@@ -78,11 +79,20 @@ export class ChatRestApi {
     return this.httpClient.post('api/v2/ai/feedback', request);
   };
 
+  // ==== misc endpoints ====
+  private getDataSourceFields = async (dataSource: string): Promise<DataSourceField[]> => {
+    return this.httpClient.post(`api/datasources/${encodeURIComponent(dataSource)}/fields/search`, {
+      offset: 0,
+      count: 9999,
+    });
+  };
+
   ai = {
     getNlgQueryResult: this.getNlgQueryResult,
     getQueryRecommendations: this.getQueryRecommendations,
     setLlmConfig: this.setLlmConfig,
     sendFeedback: this.sendFeedback,
+    getDataSourceFields: this.getDataSourceFields,
     chat: {
       getAll: this.getAllChats,
       getById: this.getChatById,

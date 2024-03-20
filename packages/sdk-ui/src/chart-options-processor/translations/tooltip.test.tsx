@@ -68,3 +68,28 @@ it('should display pie tooltip for point', () => {
   const tooltip = seriesPoint.formatter ? seriesPoint.formatter() : null;
   expect(tooltip).toMatchSnapshot();
 });
+
+it('should not contain percent for unsupported column', () => {
+  const point: InternalSeries = {
+    series: { name: '3.14', color: 'red' },
+    x: '',
+    y: 42.0009,
+    percentage: 20,
+    point: {
+      y: 42.0009,
+      name: '3.14',
+      color: 'red',
+      custom: {},
+    },
+  };
+
+  const seriesPoint = {
+    ...point,
+    ...getTooltipSettings(false, {
+      ...dataOptions,
+      y: [{ ...dataOptions.y[0], chartType: 'line' }],
+    }),
+  };
+  const tooltip = seriesPoint.formatter ? seriesPoint.formatter() : null;
+  expect(tooltip).toMatchSnapshot();
+});

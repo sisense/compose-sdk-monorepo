@@ -4,7 +4,7 @@ title: TableProps
 
 # Interface TableProps
 
-Props of the [Table](../classes/class.Table.md) component.
+Props of the [Table](../data-grids/class.Table.md) component.
 
 ## Properties
 
@@ -15,7 +15,7 @@ Props of the [Table](../classes/class.Table.md) component.
 > **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
-will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../classes/class.SisenseContextProvider.md)
+will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/class.SisenseContextProvider.md)
 component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you

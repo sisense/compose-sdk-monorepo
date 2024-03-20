@@ -4,6 +4,8 @@ title: Interfaces
 
 # Interfaces
 
+TypeScript interfaces for components and composables listed above
+
 - [AreaChartProps](interface.AreaChartProps.md)
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
@@ -18,6 +20,7 @@ title: Interfaces
 - [ChartWidgetProps](interface.ChartWidgetProps.md)
 - [ColumnChartProps](interface.ColumnChartProps.md)
 - [CriteriaFilterTileProps](interface.CriteriaFilterTileProps.md)
+- [DashboardWidgetProps](interface.DashboardWidgetProps.md)
 - [DashboardWidgetStyleOptions](interface.DashboardWidgetStyleOptions.md)
 - [DataLimits](interface.DataLimits.md)
 - [DateRangeFilterTileProps](interface.DateRangeFilterTileProps.md)

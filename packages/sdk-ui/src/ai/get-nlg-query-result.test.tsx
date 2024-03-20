@@ -1,7 +1,7 @@
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { screen, waitFor } from '@testing-library/react';
-import { MockApiWrapper } from './__mocks__';
+import { AiTestWrapper } from './__mocks__';
 import { http, HttpResponse } from 'msw';
 import GetNlgQueryResult, { GetNlgQueryResultProps } from './get-nlg-query-result';
 import { GetNlgQueryResultResponse } from './api/types';
@@ -26,10 +26,26 @@ beforeEach(() => {
 
 it('renders a text summary', async () => {
   setup(
-    <MockApiWrapper>
+    <AiTestWrapper>
       <GetNlgQueryResult {...nlgRequest} />
-    </MockApiWrapper>,
+    </AiTestWrapper>,
   );
 
   await waitFor(() => expect(screen.getByText('nlg response text')).toBeInTheDocument());
+});
+
+it('renders error messsage if API call fails', async () => {
+  server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.error()));
+
+  setup(
+    <AiTestWrapper>
+      <GetNlgQueryResult {...nlgRequest} />
+    </AiTestWrapper>,
+  );
+
+  await waitFor(() =>
+    expect(
+      screen.getByText('Oh snap, something went wrong. Please try again later.'),
+    ).toBeInTheDocument(),
+  );
 });

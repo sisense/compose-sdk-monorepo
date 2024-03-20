@@ -49,6 +49,7 @@ export interface RelativeDateFilterTileProps {
  *
  * @param props - Relative date filter tile props
  * @returns Relative date filter tile component
+ * @group Filter Tiles
  */
 export const RelativeDateFilterTile = asSisenseComponent({
   componentName: 'RelativeDateFilterTile',

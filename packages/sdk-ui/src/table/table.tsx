@@ -67,6 +67,7 @@ import { getFilterListAndRelations } from '@sisense/sdk-data';
  * <img src="media://table-example-2.png" width="800px" />
  * @param props - Table properties
  * @returns Table component
+ * @group Data Grids
  */
 
 export const Table = asSisenseComponent({

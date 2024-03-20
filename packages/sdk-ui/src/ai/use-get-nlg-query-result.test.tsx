@@ -1,7 +1,7 @@
 import { server } from '@/__mocks__/msw';
 import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { MockApiWrapper } from './__mocks__';
+import { AiTestWrapper } from './__mocks__';
 import { useGetNlgQueryResult, UseGetNlgQueryResultParams } from './use-get-nlg-query-result';
 import { GetNlgQueryResultResponse } from './api/types';
 
@@ -18,7 +18,7 @@ const mockNlgResponse: GetNlgQueryResultResponse = {
 };
 
 const renderHookWithWrapper = (params: UseGetNlgQueryResultParams) => {
-  return renderHook(() => useGetNlgQueryResult(params), { wrapper: MockApiWrapper });
+  return renderHook(() => useGetNlgQueryResult(params), { wrapper: AiTestWrapper });
 };
 
 describe('useGetNlgQueryResult', () => {
@@ -28,6 +28,17 @@ describe('useGetNlgQueryResult', () => {
 
   it('returns data when successful', async () => {
     const { result } = renderHookWithWrapper(mockNlgParams);
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data).toBe('This is a summary');
+  });
+
+  it('allows data source with type to be specified', async () => {
+    const { result } = renderHookWithWrapper({
+      ...mockNlgParams,
+      dataSource: { title: 'My Data Source', type: 'live' },
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 

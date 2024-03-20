@@ -100,6 +100,7 @@ export const useGetQueryRecommendationsInternal = (
  * ```
  * @param params - {@link UseGetQueryRecommendationsParams}
  * @returns An array of objects, each containing recommended question text and its corresponding JAQL
+ * @group Generative AI
  * @beta
  */
 export const useGetQueryRecommendations = withTracking('useGetQueryRecommendations')(

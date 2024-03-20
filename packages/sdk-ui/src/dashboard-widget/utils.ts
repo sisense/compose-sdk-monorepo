@@ -95,6 +95,7 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
     'indicator',
     'tablewidget',
     'tablewidgetagg',
+    'pivot2', // temporary support of simple pivot table widget rendered as agg table widget
     'chart/boxplot',
     'map/scatter',
     'map/area',
@@ -103,7 +104,7 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
 }
 
 export function isTabularWidget(widgetType: WidgetTypeOrString) {
-  return widgetType === 'tablewidget' || widgetType === 'tablewidgetagg';
+  return widgetType === 'tablewidget' || widgetType === 'tablewidgetagg' || widgetType === 'pivot2';
 }
 
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {

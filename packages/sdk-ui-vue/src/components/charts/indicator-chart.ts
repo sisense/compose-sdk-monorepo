@@ -21,20 +21,25 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {IndicatorChart, type IndicatorChartProps} from '@sisense/sdk-ui-vue';
- *
-  const indicatorChartProps = ref<IndicatorChartProps>({
-    dataSet: DM.DataSource,
+
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+   const indicatorChartProps = ref<IndicatorChartProps>({
+     dataSet: DM.DataSource,
     dataOptions: {
-      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-    },
-    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-  });
+       value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+     },
+     filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+   });
  * </script>
  * ```
- * <img src="media://indicator-chart-example-1.png" width="400px" />
+ * <img src="media://vue-indicator-chart-example.png" width="400px" />
  * @param props - Indicator chart properties
  * @returns Indicator Chart component
+ * @group Charts
  */
 export const IndicatorChart = defineComponent({
   props: {

@@ -4,7 +4,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import AiContextProvider from '../ai-context-provider';
 
-export const MockApiWrapper = ({ children }: { children: ReactNode }) => (
+/**
+ * A component that wraps an AI hook/component with all required providers.
+ * For use in unit tests only.
+ *
+ * @internal
+ */
+export const AiTestWrapper = ({ children }: { children: ReactNode }) => (
   <SisenseContextProvider url={mockUrl} token={mockToken}>
     <AiContextProvider>
       <QueryClientProvider

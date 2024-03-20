@@ -7,10 +7,12 @@ export function translateDashboard({
   title,
   datasource,
   widgets,
+  layout,
 }: DashboardDto): DashboardModel {
   return {
     oid,
     title,
+    layout,
     dataSource: datasource.fullname ?? datasource.title,
     ...(widgets && {
       widgets: widgets.map(translateWidget),

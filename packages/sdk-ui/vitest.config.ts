@@ -34,6 +34,8 @@ const config: UserConfig = {
         '**/*.stories.tsx',
         'src/@types',
         'src/widgets/common/drilldown-breadcrumbs',
+        'src/charts/indicator/chart/*', // legacy indicator's code, copy-pasted from PWC
+        'src/ai/translators/*', // POC implementation of Chat to Code; will add unit tests in separate MRs
       ],
     },
   },

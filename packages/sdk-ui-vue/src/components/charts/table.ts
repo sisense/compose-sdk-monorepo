@@ -11,21 +11,36 @@ import { setupHelper } from '../../setup-helper';
  * Here's how you can use the Table component in a Vue application:
  * ```vue
  * <template>
- *   <Table :props="tableProps" />
+ *  <Table :dataOptions="tableProps.dataOptions" :dataSet="tableProps.dataSet"
+      :styleOptions="tableProps.styleOptions" :filters="tableProps.filters" />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import Table from '@sisense/sdk-ui-vue/Table';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
+ * import { Table, type TableProps } from '@sisense/sdk-ui-vue';
  *
- * const tableProps = ref({
- *   // Define your TableProps configuration here
- * });
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ *
+ *  const tableProps = ref<TableProps>({
+      dataSet: DM.DataSource,
+      dataOptions: {
+        columns: [dimProductName, measureTotalRevenue],
+      },
+      styleOptions: {
+        width: 800,
+        height: 500,
+      },
+      filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+ *  });
  * </script>
  * ```
- * <img src="media://table-example-2.png" width="800px" />
+ * <img src="media://vue-table-example.png" width="800px" />
  * @param props - Table properties
  * @returns Table component
+ * @group Data Grids
  */
 export const Table = defineComponent({
   props: {

@@ -4,11 +4,7 @@ title: GetWidgetModelParams
 
 # Interface GetWidgetModelParams
 
-Parameters for [useGetWidgetModel](../functions/function.useGetWidgetModel.md) hook.
-
-## Extends
-
-- `HookEnableParam`
+Parameters for [useGetWidgetModel](../fusion-assets/function.useGetWidgetModel.md) hook.
 
 ## Properties
 
@@ -27,10 +23,6 @@ Identifier of the dashboard that contains the widget
 Boolean flag to control if the hook is executed
 
 If not specified, the default value is `true`
-
-#### Inherited from
-
-HookEnableParam.enabled
 
 ***
 

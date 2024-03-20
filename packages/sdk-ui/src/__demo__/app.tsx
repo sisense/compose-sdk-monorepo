@@ -25,6 +25,9 @@ import { AiDemo } from './pages/ai-demo';
 import { PivotQueryDemo } from './pages/pivot-query-demo';
 import { ComboChartStylingDemo } from './pages/combo-chart-styling';
 import { PivotTableDemo } from './pages/pivot-table-demo';
+import { OnyxChatToCodeDemo } from './pages/onyx-chat-to-code-demo';
+import { RenderDashboardDemo } from './pages/render-dashboard-demo';
+import { UseGetDashboardModelDemo } from '@/__demo__/pages/use-get-dashboard-model-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -48,14 +51,17 @@ const pages: ComponentType[] = [
   UseExecuteQueryDemo,
   ChartTypeSwitchingDemo,
   SelectionFilterDemo,
+  RenderDashboardDemo,
   UseGetWidgetModelDemo,
+  UseGetDashboardModelDemo,
   BoxplotChartDemo,
   ScattermapChartDemo,
   AreamapChartDemo,
   AiDemo,
   PivotQueryDemo,
-  ComboChartStylingDemo,
   PivotTableDemo,
+  ComboChartStylingDemo,
+  OnyxChatToCodeDemo,
 ];
 
 const {

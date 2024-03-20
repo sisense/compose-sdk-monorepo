@@ -4,38 +4,72 @@ title: sdk-ui-vue
 
 # Module sdk-ui-vue <Badge type="beta" text="Beta" />
 
-## Classes
+## Charts
 
-- [AreaChart](classes/class.AreaChart.md)
-- [AreamapChart](classes/class.AreamapChart.md) <Badge type="beta" text="Beta" />
-- [BarChart](classes/class.BarChart.md)
-- [BoxplotChart](classes/class.BoxplotChart.md) <Badge type="beta" text="Beta" />
-- [Chart](classes/class.Chart.md)
-- [ChartWidget](classes/class.ChartWidget.md)
-- [ColumnChart](classes/class.ColumnChart.md)
-- [ContextMenu](classes/class.ContextMenu.md)
-- [CriteriaFilterTile](classes/class.CriteriaFilterTile.md)
-- [DashboardWidget](classes/class.DashboardWidget.md)
-- [DateRangeFilterTile](classes/class.DateRangeFilterTile.md)
-- [DrilldownBreadcrumbs](classes/class.DrilldownBreadcrumbs.md)
-- [DrilldownWidget](classes/class.DrilldownWidget.md)
-- [FunnelChart](classes/class.FunnelChart.md)
-- [IndicatorChart](classes/class.IndicatorChart.md)
-- [LineChart](classes/class.LineChart.md)
-- [MemberFilterTile](classes/class.MemberFilterTile.md)
-- [PieChart](classes/class.PieChart.md)
-- [PivotTable](classes/class.PivotTable.md) <Badge type="alpha" text="Alpha" />
-- [PolarChart](classes/class.PolarChart.md)
-- [ScatterChart](classes/class.ScatterChart.md)
-- [ScattermapChart](classes/class.ScattermapChart.md) <Badge type="beta" text="Beta" />
-- [SisenseContextProvider](classes/class.SisenseContextProvider.md)
-- [SunburstChart](classes/class.SunburstChart.md)
-- [Table](classes/class.Table.md)
-- [ThemeProvider](classes/class.ThemeProvider.md)
-- [TreemapChart](classes/class.TreemapChart.md)
-- [WidgetModel](classes/class.WidgetModel.md)
+Vue components for charts
+
+- [AreaChart](charts/class.AreaChart.md)
+- [AreamapChart](charts/class.AreamapChart.md) <Badge type="beta" text="Beta" />
+- [BarChart](charts/class.BarChart.md)
+- [BoxplotChart](charts/class.BoxplotChart.md) <Badge type="beta" text="Beta" />
+- [Chart](charts/class.Chart.md)
+- [ColumnChart](charts/class.ColumnChart.md)
+- [FunnelChart](charts/class.FunnelChart.md)
+- [IndicatorChart](charts/class.IndicatorChart.md)
+- [LineChart](charts/class.LineChart.md)
+- [PieChart](charts/class.PieChart.md)
+- [PolarChart](charts/class.PolarChart.md)
+- [ScatterChart](charts/class.ScatterChart.md)
+- [ScattermapChart](charts/class.ScattermapChart.md) <Badge type="beta" text="Beta" />
+- [SunburstChart](charts/class.SunburstChart.md) <Badge type="beta" text="Beta" />
+- [TreemapChart](charts/class.TreemapChart.md)
+
+## Chart Utilities
+
+- [ChartWidget](chart-utilities/class.ChartWidget.md)
+- [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
+
+## Data Grids
+
+- [PivotTable](data-grids/class.PivotTable.md) <Badge type="alpha" text="Alpha" />
+- [Table](data-grids/class.Table.md)
+
+## Drilldown
+
+- [ContextMenu](drilldown/class.ContextMenu.md)
+- [DrilldownBreadcrumbs](drilldown/class.DrilldownBreadcrumbs.md)
+- [DrilldownWidget](drilldown/class.DrilldownWidget.md)
+
+## Filter Tiles
+
+- [CriteriaFilterTile](filter-tiles/class.CriteriaFilterTile.md)
+- [DateRangeFilterTile](filter-tiles/class.DateRangeFilterTile.md)
+- [MemberFilterTile](filter-tiles/class.MemberFilterTile.md)
+
+## Contexts
+
+- [SisenseContextProvider](contexts/class.SisenseContextProvider.md)
+- [ThemeProvider](contexts/class.ThemeProvider.md)
+
+## Queries
+
+- [useExecuteQuery](queries/function.useExecuteQuery.md)
+
+## Fusion Assets
+
+Fusion Dashboards, Widgets, Queries, and Formulas
+
+- [DashboardWidget](fusion-assets/class.DashboardWidget.md)
+- [WidgetModel](fusion-assets/class.WidgetModel.md)
+- [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md)
+- [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md)
+- [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md)
+- [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md)
+- [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md)
 
 ## Interfaces
+
+TypeScript interfaces for components and composables listed above
 
 - [AreaChartProps](interfaces/interface.AreaChartProps.md)
 - [AreaStyleOptions](interfaces/interface.AreaStyleOptions.md)
@@ -51,6 +85,7 @@ title: sdk-ui-vue
 - [ChartWidgetProps](interfaces/interface.ChartWidgetProps.md)
 - [ColumnChartProps](interfaces/interface.ColumnChartProps.md)
 - [CriteriaFilterTileProps](interfaces/interface.CriteriaFilterTileProps.md)
+- [DashboardWidgetProps](interfaces/interface.DashboardWidgetProps.md)
 - [DashboardWidgetStyleOptions](interfaces/interface.DashboardWidgetStyleOptions.md)
 - [DataLimits](interfaces/interface.DataLimits.md)
 - [DateRangeFilterTileProps](interfaces/interface.DateRangeFilterTileProps.md)
@@ -103,6 +138,8 @@ title: sdk-ui-vue
 - [WidgetStyleOptions](interfaces/interface.WidgetStyleOptions.md)
 
 ## Type Aliases
+
+TypeScript type aliases for components and composables listed above
 
 - [AppConfig](type-aliases/type-alias.AppConfig.md)
 - [AreaSubtype](type-aliases/type-alias.AreaSubtype.md)
@@ -179,14 +216,3 @@ title: sdk-ui-vue
 - [WidgetDataOptions](type-aliases/type-alias.WidgetDataOptions.md)
 - [WidgetType](type-aliases/type-alias.WidgetType.md)
 - [X2Title](type-aliases/type-alias.X2Title.md)
-
-## Functions
-
-- [boxWhiskerProcessResult](functions/function.boxWhiskerProcessResult.md)
-- [createThemeContextConnector](functions/function.createThemeContextConnector.md)
-- [useExecuteQuery](functions/function.useExecuteQuery.md)
-- [useExecuteQueryByWidgetId](functions/function.useExecuteQueryByWidgetId.md)
-- [useGetDashboardModel](functions/function.useGetDashboardModel.md)
-- [useGetDashboardModels](functions/function.useGetDashboardModels.md)
-- [useGetSharedFormula](functions/function.useGetSharedFormula.md)
-- [useGetWidgetModel](functions/function.useGetWidgetModel.md)

@@ -313,7 +313,7 @@ Your chart should look like this:
 
 ![Line chart rendered by the Chart component](./img/chart-data-source-example-2.png)
 
-See the [SisenseContextProvider](./modules/sdk-ui/functions/function.SisenseContextProvider.md) and [Chart](./modules/sdk-ui/functions/function.Chart.md) docs for more details on supported props.
+See the [SisenseContextProvider](./modules/sdk-ui/contexts/function.SisenseContextProvider.md) and [Chart](./modules/sdk-ui/charts/function.Chart.md) docs for more details on supported props.
 
 ## Next Steps
 

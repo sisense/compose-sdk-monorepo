@@ -50,6 +50,7 @@ export type {
   AreamapChartProps,
   ScattermapChartProps,
   SisenseContextProviderProps,
+  DashboardWidgetProps,
 
   // Hooks/Composables Props:
   ExecuteQueryByWidgetIdParams,

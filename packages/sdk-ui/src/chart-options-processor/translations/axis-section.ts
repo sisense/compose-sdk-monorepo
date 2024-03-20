@@ -239,7 +239,8 @@ export const getXAxisDatetimeSettings = (
   }
 
   // eslint-disable-next-line @typescript-eslint/no-throw-literal
-  if (isNaN(interval) || interval === 0) throw new Error(`invalid datetime tic interval`);
+  if (values.length > 1 && (isNaN(interval) || interval === 0))
+    throw new Error(`Unable to calculate tic interval. Try specifying datetime granularity.`);
 
   let formatter;
   const format = category?.dateFormat || getDefaultDateFormat(category?.granularity);

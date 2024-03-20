@@ -1,0 +1,103 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`indicator-legacy-chart-data-options > createLegacyChartDataOptions > should return the correct legacy chart data options 1`] = `
+{
+  "color": "#00cee6",
+  "max": {
+    "data": 125000000,
+    "text": "125M",
+  },
+  "min": {
+    "data": 0,
+    "text": "0",
+  },
+  "secondary": {
+    "data": undefined,
+    "text": "",
+  },
+  "secondaryTitle": {
+    "text": "",
+  },
+  "showLabels": true,
+  "showSecondary": false,
+  "showTicks": true,
+  "showTitle": true,
+  "skin": 1,
+  "title": {
+    "text": "Total Revenue",
+  },
+  "type": "gauge",
+  "value": {
+    "data": 14479310.424909197,
+    "text": "14.48M",
+  },
+}
+`;
+
+exports[`indicator-legacy-chart-data-options > createLegacyChartDataOptions > should return the correct legacy chart data options when value defined as StyledMeasureColumn 1`] = `
+{
+  "color": "#FF0000",
+  "max": {
+    "data": 125000000,
+    "text": "125M",
+  },
+  "min": {
+    "data": 0,
+    "text": "0",
+  },
+  "secondary": {
+    "data": undefined,
+    "text": "",
+  },
+  "secondaryTitle": {
+    "text": "",
+  },
+  "showLabels": true,
+  "showSecondary": false,
+  "showTicks": true,
+  "showTitle": true,
+  "skin": 1,
+  "title": {
+    "text": "Total Revenue",
+  },
+  "type": "gauge",
+  "value": {
+    "data": 14479310.424909197,
+    "text": "14.48M",
+  },
+}
+`;
+
+exports[`indicator-legacy-chart-data-options > createLegacyChartDataOptions > should return the correct legacy chart data options when value is "N\\A" 1`] = `
+{
+  "color": "#00cee6",
+  "max": {
+    "data": 125000000,
+    "text": "125M",
+  },
+  "min": {
+    "data": 0,
+    "text": "0",
+  },
+  "secondary": {
+    "data": undefined,
+    "text": "",
+  },
+  "secondaryTitle": {
+    "text": "",
+  },
+  "showLabels": true,
+  "showSecondary": false,
+  "showTicks": true,
+  "showTitle": true,
+  "skin": 1,
+  "title": {
+    "text": "Total Revenue",
+  },
+  "type": "gauge",
+  "value": {
+    "data": NaN,
+    "text": "#N/A",
+  },
+}
+`;

@@ -6,7 +6,7 @@ title: ChatbotProps
 
 > **ChatbotProps**: `object`
 
-Props for [Chatbot](../functions/function.Chatbot.md) component.
+Props for [Chatbot](../generative-ai/function.Chatbot.md) component.
 
 ## Type declaration
 

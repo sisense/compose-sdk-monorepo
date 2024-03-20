@@ -6,6 +6,28 @@ const baseConfig = {
   sort: ['alphabetical'],
   categorizeByGroup: true,
   categoryOrder: ['Data', 'Chart', 'Widget', 'Callbacks', '*'],
+  groupOrder: [
+    /* sdk-ui* */
+    'Charts',
+    'Chart Utilities',
+    'Data Grids',
+    'Drilldown',
+    'Filter Tiles',
+    'Contexts',
+    'Queries',
+    'Fusion Assets',
+    'Generative AI',
+    /* sdk-data */
+    'Factories',
+    'Data Model Utilities',
+    /* measureFactory */
+    'Aggregation',
+    'Arithmetic',
+    'Time-based',
+    'Statistics',
+    'Advanced Analytics',
+    '*',
+  ],
 };
 
 if (process.env.TYPEDOC_MODE === 'PUBLIC') {

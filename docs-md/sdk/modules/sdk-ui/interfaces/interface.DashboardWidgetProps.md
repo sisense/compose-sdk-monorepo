@@ -4,11 +4,7 @@ title: DashboardWidgetProps
 
 # Interface DashboardWidgetProps
 
-Props for the [DashboardWidget](../functions/function.DashboardWidget.md) component
-
-## Extends
-
-- `Omit`\< [`ChartWidgetProps`](interface.ChartWidgetProps.md), `"dataSource"` \| `"dataOptions"` \| `"chartType"` \| `"styleOptions"` \>
+Props for the [DashboardWidget](../fusion-assets/function.DashboardWidget.md) component
 
 ## Properties
 
@@ -96,10 +92,6 @@ Recommended to turn on when the Chart Widget component is enhanced with data dri
 
 If not specified, the default value is `false`
 
-##### Inherited from
-
-Omit.highlightSelectionDisabled
-
 ***
 
 #### styleOptions
@@ -146,10 +138,6 @@ This callback is not supported for Indicator Chart, Areamap Chart, and Scatterma
 For an example of how the `onBeforeRender` callback can be used, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
-##### Inherited from
-
-Omit.onBeforeRender
-
 ***
 
 #### onDataPointClick
@@ -157,10 +145,6 @@ Omit.onBeforeRender
 > **onDataPointClick**?: [`ScattermapDataPointEventHandler`](../type-aliases/type-alias.ScattermapDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md)
 
 Click handler callback for a data point
-
-##### Inherited from
-
-Omit.onDataPointClick
 
 ***
 
@@ -170,10 +154,6 @@ Omit.onDataPointClick
 
 Context menu handler callback for a data point
 
-##### Inherited from
-
-Omit.onDataPointContextMenu
-
 ***
 
 #### onDataPointsSelected
@@ -181,7 +161,3 @@ Omit.onDataPointContextMenu
 > **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
-
-##### Inherited from
-
-Omit.onDataPointsSelected

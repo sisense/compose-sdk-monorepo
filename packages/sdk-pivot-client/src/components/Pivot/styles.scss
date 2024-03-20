@@ -39,6 +39,11 @@
       opacity: 1;
     }
   }
+
+  /* hidden as pivot table has its own scrollbars */
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .sisense-pivot {
@@ -124,10 +129,4 @@
   right: 0;
   bottom: 0;
   z-index: 1000000;
-}
-
-/* hidden for the pivot table to render properly */
-::-webkit-scrollbar {
-  width: 6px;
-  display: none;
 }

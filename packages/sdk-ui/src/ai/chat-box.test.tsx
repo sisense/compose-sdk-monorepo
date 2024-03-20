@@ -4,7 +4,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { Chat, ChatResponse, QueryRecommendation } from './api/types';
 import ChatBox from './chat-box';
-import { MockApiWrapper } from './__mocks__';
+import { AiTestWrapper } from './__mocks__';
 import { chat, dataModels, perspectives } from './__mocks__/data';
 
 beforeEach(() => {
@@ -53,9 +53,9 @@ it('can render initial suggested questions', async () => {
   );
 
   setup(
-    <MockApiWrapper>
+    <AiTestWrapper>
       <ChatBox contextTitle="Model 2" />
-    </MockApiWrapper>,
+    </AiTestWrapper>,
   );
 
   await waitFor(() => expect(screen.getByText('response text from history')).toBeInTheDocument());
@@ -68,9 +68,9 @@ it('can render initial suggested questions', async () => {
 
 it('can render a text response after sending a message', async () => {
   const { user } = setup(
-    <MockApiWrapper>
+    <AiTestWrapper>
       <ChatBox contextTitle="Model 2" />
-    </MockApiWrapper>,
+    </AiTestWrapper>,
   );
 
   await waitFor(() => expect(screen.getByText('response text from history')).toBeInTheDocument());
@@ -90,9 +90,9 @@ it('can render clickable buttons for clearing history', async () => {
   server.use(http.delete('*/api/v2/ai/chats/:chatId/history', () => new HttpResponse()));
 
   const { user } = setup(
-    <MockApiWrapper>
+    <AiTestWrapper>
       <ChatBox contextTitle="Model 2" />
-    </MockApiWrapper>,
+    </AiTestWrapper>,
   );
 
   await waitFor(() => expect(screen.getByText('response text from history')).toBeInTheDocument());

@@ -4,10 +4,7 @@ import type {
   ExecuteQueryByWidgetIdParams,
   QueryByWidgetIdState,
 } from '@sisense/sdk-ui-preact';
-import {
-  executeQueryByWidgetId as executeQueryByWidgetIdPreact,
-  queryStateReducer,
-} from '@sisense/sdk-ui-preact';
+import { executeQueryByWidgetId, queryStateReducer } from '@sisense/sdk-ui-preact';
 import { getSisenseContext } from '../providers/sisense-context-provider';
 import { ref, toRefs, watch, type ToRefs } from 'vue';
 import { collectRefs, toPlainValue, toPlainValues } from '../utils';
@@ -52,6 +49,8 @@ import type { MaybeWithRefs } from '../types';
  *
  * Utilizing this composable allows for declarative and reactive handling of widget-specific queries within Vue applications,
  * facilitating easier data fetching and state management with the Sisense SDK.
+ *
+ * @group Fusion Assets
  */
 export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWidgetIdParams>) => {
   const { filters, ...rest } = params;
@@ -72,7 +71,7 @@ export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWi
   const getQueryByWidgetId = async (application: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
-      const { data, query: resQuery } = await executeQueryByWidgetIdPreact({
+      const { data, query: resQuery } = await executeQueryByWidgetId({
         ...toPlainValues(rest),
         filters: filterList,
         app: application!,

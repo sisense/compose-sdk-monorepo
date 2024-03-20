@@ -40,9 +40,10 @@ export function extractFilterModelFromJaql(jaql: FilterJaql) {
  *
  * @param jaql - The filter JAQL object.
  * @returns - The created Filter object.
+ * @internal
  */
-// TODO: rewrite to transform into valid dimensional element filter object
 export function createFilterFromJaql(jaql: FilterJaql, instanceid?: string): Filter {
+  // TODO: rewrite to transform into valid dimensional element filter object
   return {
     guid: instanceid,
     jaql: (nested?: boolean) => {

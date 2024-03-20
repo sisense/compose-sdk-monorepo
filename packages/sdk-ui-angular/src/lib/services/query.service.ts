@@ -20,6 +20,11 @@ export interface ExecuteQueryParams extends Omit<ExecuteQueryParamsPreact, 'enab
 export interface ExecuteQueryByWidgetIdParams
   extends Omit<ExecuteQueryByWidgetIdParamsPreact, 'enabled'> {}
 
+/**
+ * Service for executing data queries.
+ *
+ * @group Queries
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -35,7 +40,7 @@ export class QueryService {
    * [External Charts Guide](/guides/sdk/guides/charts/guide-external-charts.html#query)
    *
    * @param params - Query parameters
-   * return Query result
+   * @return Query result
    */
   async executeQuery(params: ExecuteQueryParams) {
     const { dataSource, dimensions, measures, filters, highlights, count, offset, onBeforeQuery } =

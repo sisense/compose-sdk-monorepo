@@ -4,11 +4,7 @@ title: ChartWidgetProps
 
 # Interface ChartWidgetProps
 
-Props for the [ChartWidget](../classes/class.ChartWidget.md) component
-
-## Extends
-
-- `ChartEventProps`
+Props for the [ChartWidget](../chart-utilities/class.ChartWidget.md) component
 
 ## Properties
 
@@ -114,10 +110,6 @@ This callback is not supported for Indicator Chart, Areamap Chart, and Scatterma
 For an example of how the `onBeforeRender` callback can be used, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
-##### Inherited from
-
-ChartEventProps.onBeforeRender
-
 ***
 
 #### onDataPointClick
@@ -125,10 +117,6 @@ ChartEventProps.onBeforeRender
 > **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
-
-##### Inherited from
-
-ChartEventProps.onDataPointClick
 
 ***
 
@@ -138,10 +126,6 @@ ChartEventProps.onDataPointClick
 
 Context menu handler callback for a data point
 
-##### Inherited from
-
-ChartEventProps.onDataPointContextMenu
-
 ***
 
 #### onDataPointsSelected
@@ -149,7 +133,3 @@ ChartEventProps.onDataPointContextMenu
 > **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
-
-##### Inherited from
-
-ChartEventProps.onDataPointsSelected

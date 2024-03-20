@@ -4,6 +4,8 @@ title: Interfaces
 
 # Interfaces
 
+TypeScript interfaces for components and hooks listed above
+
 - [AreaChartProps](interface.AreaChartProps.md)
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)

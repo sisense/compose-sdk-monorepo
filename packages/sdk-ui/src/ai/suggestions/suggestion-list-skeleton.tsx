@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function SuggestionListSkeleton() {
   return (
     <div className="csdk-animate-pulse csdk-flex csdk-flex-col csdk-gap-4">

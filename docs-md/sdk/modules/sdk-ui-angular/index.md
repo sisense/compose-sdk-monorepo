@@ -4,40 +4,70 @@ title: sdk-ui-angular
 
 # Module sdk-ui-angular <Badge type="beta" text="Beta" />
 
-## Classes
+## Charts
 
-- [AreaChartComponent](classes/class.AreaChartComponent.md)
-- [AreamapChartComponent](classes/class.AreamapChartComponent.md)
-- [BarChartComponent](classes/class.BarChartComponent.md)
-- [BoxplotChartComponent](classes/class.BoxplotChartComponent.md)
-- [ChartComponent](classes/class.ChartComponent.md)
-- [ChartWidgetComponent](classes/class.ChartWidgetComponent.md)
-- [ColumnChartComponent](classes/class.ColumnChartComponent.md)
-- [ContextMenuComponent](classes/class.ContextMenuComponent.md)
-- [DashboardService](classes/class.DashboardService.md)
-- [DashboardWidgetComponent](classes/class.DashboardWidgetComponent.md)
-- [DateRangeFilterTileComponent](classes/class.DateRangeFilterTileComponent.md)
-- [DrilldownBreadcrumbsComponent](classes/class.DrilldownBreadcrumbsComponent.md)
-- [DrilldownWidgetComponent](classes/class.DrilldownWidgetComponent.md)
-- [FunnelChartComponent](classes/class.FunnelChartComponent.md)
-- [IndicatorChartComponent](classes/class.IndicatorChartComponent.md)
-- [LineChartComponent](classes/class.LineChartComponent.md)
-- [MemberFilterTileComponent](classes/class.MemberFilterTileComponent.md)
-- [PieChartComponent](classes/class.PieChartComponent.md)
-- [PivotTableComponent](classes/class.PivotTableComponent.md) <Badge type="alpha" text="Alpha" />
-- [PolarChartComponent](classes/class.PolarChartComponent.md)
-- [QueryService](classes/class.QueryService.md)
-- [ScatterChartComponent](classes/class.ScatterChartComponent.md)
-- [ScattermapChartComponent](classes/class.ScattermapChartComponent.md)
-- [SdkUiModule](classes/class.SdkUiModule.md)
-- [SisenseContextService](classes/class.SisenseContextService.md)
-- [SunburstChartComponent](classes/class.SunburstChartComponent.md)
-- [TableComponent](classes/class.TableComponent.md)
-- [ThemeService](classes/class.ThemeService.md)
-- [TreemapChartComponent](classes/class.TreemapChartComponent.md)
-- [WidgetModel](classes/class.WidgetModel.md)
+Angular components for charts
+
+- [AreaChartComponent](charts/class.AreaChartComponent.md)
+- [AreamapChartComponent](charts/class.AreamapChartComponent.md)
+- [BarChartComponent](charts/class.BarChartComponent.md)
+- [BoxplotChartComponent](charts/class.BoxplotChartComponent.md)
+- [ChartComponent](charts/class.ChartComponent.md)
+- [ColumnChartComponent](charts/class.ColumnChartComponent.md)
+- [FunnelChartComponent](charts/class.FunnelChartComponent.md)
+- [IndicatorChartComponent](charts/class.IndicatorChartComponent.md)
+- [LineChartComponent](charts/class.LineChartComponent.md)
+- [PieChartComponent](charts/class.PieChartComponent.md)
+- [PolarChartComponent](charts/class.PolarChartComponent.md)
+- [ScatterChartComponent](charts/class.ScatterChartComponent.md)
+- [ScattermapChartComponent](charts/class.ScattermapChartComponent.md)
+- [SunburstChartComponent](charts/class.SunburstChartComponent.md)
+- [TreemapChartComponent](charts/class.TreemapChartComponent.md)
+
+## Chart Utilities
+
+- [ChartWidgetComponent](chart-utilities/class.ChartWidgetComponent.md)
+- [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
+
+## Data Grids
+
+- [PivotTableComponent](data-grids/class.PivotTableComponent.md) <Badge type="alpha" text="Alpha" />
+- [TableComponent](data-grids/class.TableComponent.md)
+
+## Drilldown
+
+- [ContextMenuComponent](drilldown/class.ContextMenuComponent.md)
+- [DrilldownBreadcrumbsComponent](drilldown/class.DrilldownBreadcrumbsComponent.md)
+- [DrilldownWidgetComponent](drilldown/class.DrilldownWidgetComponent.md)
+
+## Filter Tiles
+
+- [DateRangeFilterTileComponent](filter-tiles/class.DateRangeFilterTileComponent.md)
+- [MemberFilterTileComponent](filter-tiles/class.MemberFilterTileComponent.md)
+
+## Contexts
+
+- [SISENSE\_CONTEXT\_CONFIG\_TOKEN](contexts/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md)
+- [SdkUiModule](contexts/class.SdkUiModule.md)
+- [SisenseContextService](contexts/class.SisenseContextService.md)
+- [THEME\_CONFIG\_TOKEN](contexts/variable.THEME_CONFIG_TOKEN.md)
+- [ThemeService](contexts/class.ThemeService.md)
+
+## Queries
+
+- [QueryService](queries/class.QueryService.md)
+
+## Fusion Assets
+
+Fusion Dashboards, Widgets, Queries, and Formulas
+
+- [DashboardService](fusion-assets/class.DashboardService.md)
+- [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md)
+- [WidgetModel](fusion-assets/class.WidgetModel.md)
 
 ## Interfaces
+
+TypeScript interfaces for components and services listed above
 
 - [AreaStyleOptions](interfaces/interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interfaces/interface.AreamapChartDataOptions.md)
@@ -79,6 +109,8 @@ title: sdk-ui-angular
 - [WidgetStyleOptions](interfaces/interface.WidgetStyleOptions.md)
 
 ## Type Aliases
+
+TypeScript type aliases for components and services listed above
 
 - [AppConfig](type-aliases/type-alias.AppConfig.md)
 - [AreaSubtype](type-aliases/type-alias.AreaSubtype.md)
@@ -152,12 +184,3 @@ title: sdk-ui-angular
 - [WidgetDataOptions](type-aliases/type-alias.WidgetDataOptions.md)
 - [WidgetType](type-aliases/type-alias.WidgetType.md)
 - [X2Title](type-aliases/type-alias.X2Title.md)
-
-## Variables
-
-- [SISENSE\_CONTEXT\_CONFIG\_TOKEN](variables/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md)
-- [THEME\_CONFIG\_TOKEN](variables/variable.THEME_CONFIG_TOKEN.md)
-
-## Functions
-
-- [boxWhiskerProcessResult](functions/function.boxWhiskerProcessResult.md)

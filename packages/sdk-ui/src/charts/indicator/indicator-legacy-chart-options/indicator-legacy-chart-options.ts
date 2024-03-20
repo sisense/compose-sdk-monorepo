@@ -13,6 +13,7 @@ import { overrideWithThemeSettings } from './override-with-theme-settings';
 import { legacyOptionsToThemeSettingsDictionary } from './legacy-chart-options-to-theme-settings-dictionary';
 import { IndicatorChartData } from '../../../chart-data/types';
 import { getValueColorOptions, overrideWithValueColor } from './override-with-value-color';
+import { isNumber } from 'lodash';
 
 export type ChartRenderingOptions = {
   chartData: IndicatorChartData;
@@ -62,7 +63,7 @@ export const createIndicatorLegacyChartOptions = (
   }
 
   const customColorOptions = getValueColorOptions(dataOptions);
-  if (customColorOptions && chartData.value) {
+  if (customColorOptions && chartData.value && isNumber(chartData.value)) {
     legacyChartOptions = overrideWithValueColor(
       customColorOptions,
       chartData.value,

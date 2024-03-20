@@ -4,7 +4,7 @@ title: UseGetQueryRecommendationsParams
 
 # Interface UseGetQueryRecommendationsParams
 
-Parameters for [useGetQueryRecommendations](../functions/function.useGetQueryRecommendations.md) hook.
+Parameters for [useGetQueryRecommendations](../generative-ai/function.useGetQueryRecommendations.md) hook.
 
 ## Properties
 

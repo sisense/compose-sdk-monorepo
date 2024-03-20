@@ -1,12 +1,25 @@
 # Changelog
 
+## [1.6.0] - 2024-03-20
+
+### Added
+- Support simple pivot tables and gracefully handle unsupported widgets
+in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidgetId` and component `DashboardWidget`
+- Implement translation of AI chats to charts and code for internal testing.
+
+### Changed
+- Update CLI command `get-data-model` to support data model whose table names starting with a number
+- Remove global scrollbar CSS in `PivotTable`
+- Simplify the handling of `N/A` values in charts
+- Remove redundant info in the tooltip of combo chart
+- Improvements for the AI components and hooks (private beta)
+
 ## [1.5.0] - 2024-03-05
 
 ### Changed
 - Improve the AI components and hooks (private beta)
 - Extend CLI command `get-data-model` to
-  include additional metadata about Live data models for JAQL optimization
-
+  include additional metadata about Live data models for JAQL optimization.
   _Note: If you are using Live models, you need to re-run `get-data-model` to update the data model representation files._
 - Optimize the `useExecuteQuery` hook by removing unnecessary render
 - Improve loading indicator on chart re-fetch triggered by aggregation change
@@ -26,7 +39,8 @@
 - Add component `PivotTable` (alpha) for React, Angular, and Vue
 
 ### Changed
-- **Breaking:** Refactor `ScattermapChartDataOptions.geo` (beta) to use `StyledColumn`, instead `ScattermapColumn` (removed)
+- **Breaking:** Refactor `ScattermapChartDataOptions.geo` (beta) to use `StyledColumn`, instead `ScattermapColumn` (removed).
+  Prop `ScattermapColumn.level` has been replaced with `StyledColumn.geoLevel`
 - Support HTML content in component `Table`
 - Support theme settings for `IndicatorChart` in ticker mode
 - Extend `StyledMeasureColumn` with `seriesStypeOptions` to support different series of different chart types

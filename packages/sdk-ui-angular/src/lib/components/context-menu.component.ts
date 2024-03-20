@@ -27,6 +27,8 @@ import { rootId, rootContentId, templateWithContent } from '../component-wrapper
 
 /**
  * Context Menu Component
+ *
+ * @group Drilldown
  */
 @Component({
   selector: 'csdk-context-menu',

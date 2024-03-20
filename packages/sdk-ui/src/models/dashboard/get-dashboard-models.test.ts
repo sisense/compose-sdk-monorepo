@@ -8,9 +8,14 @@ import { DashboardDto } from '../../api/types/dashboard-dto.js';
 import { type RestApi } from '../../api/rest-api.js';
 import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
+import { samplePivotDashboard } from '../__mocks__/sample-pivot-dashboard.js';
 import { WidgetModel } from '../widget/widget-model.js';
 
-const dashboardsMock: DashboardDto[] = [sampleEcommerceDashboard, sampleHealthcareDashboard];
+const dashboardsMock: DashboardDto[] = [
+  sampleEcommerceDashboard,
+  sampleHealthcareDashboard,
+  samplePivotDashboard,
+];
 
 const getDashboardsMock = vi.fn<Parameters<RestApi['getDashboards']>>(
   ({ expand, searchByTitle } = {}) => {
@@ -76,6 +81,7 @@ describe('getDashboardModels', () => {
       dashboardsMock.map((dashboardMock) => ({
         oid: dashboardMock.oid,
         title: dashboardMock.title,
+        layout: dashboardMock.layout,
         dataSource: (expect as ExpectWithOneOfExtension).oneOf([
           dashboardMock.datasource.title,
           dashboardMock.datasource.fullname,
@@ -98,6 +104,7 @@ describe('getDashboardModels', () => {
           dashboardMock.datasource.title,
           dashboardMock.datasource.fullname,
         ]),
+        layout: dashboardMock.layout,
         widgets: expect.arrayContaining(
           Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
         ),
@@ -112,12 +119,13 @@ describe('getDashboardModels', () => {
     };
     const result = await getDashboardModels(httpClientMock, options);
 
-    console.log(result);
+    //console.log(result);
 
     expect(result.length).toBe(1);
     expect(result[0]).toEqual({
       oid: targetDashboardMock.oid,
       title: targetDashboardMock.title,
+      layout: targetDashboardMock.layout,
       dataSource: (expect as ExpectWithOneOfExtension).oneOf([
         targetDashboardMock.datasource.title,
         targetDashboardMock.datasource.fullname,

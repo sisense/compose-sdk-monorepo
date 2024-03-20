@@ -4,7 +4,7 @@ title: UseGetQueryRecommendationsState
 
 # Interface UseGetQueryRecommendationsState
 
-State for [useGetQueryRecommendations](../functions/function.useGetQueryRecommendations.md) hook.
+State for [useGetQueryRecommendations](../generative-ai/function.useGetQueryRecommendations.md) hook.
 
 ## Properties
 

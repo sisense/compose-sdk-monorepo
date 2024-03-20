@@ -52,6 +52,7 @@ import { useTracking } from './use-tracking';
  *
  * This composable facilitates integrating Sisense data fetching into Vue applications, enabling developers
  * to easily manage query states and dynamically adjust query parameters based on application needs.
+ * @group Queries
  */
 export const useExecuteQuery = (params: MaybeWithRefs<ExecuteQueryParams>) => {
   const [queryState, dispatch] = useReducer(queryStateReducer, {

@@ -16,6 +16,10 @@ This callback is not supported for Indicator Chart, Areamap Chart, and Scatterma
 For an example of how the `BeforeRenderHandler` function can be used, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
 
+## See
+
+[https://api.highcharts.com/highcharts/](https://api.highcharts.com/highcharts/)
+
 ## Parameters
 
 | Parameter | Type |
@@ -25,7 +29,3 @@ For an example of how the `BeforeRenderHandler` function can be used, see the
 ## Returns
 
 `HighchartsOptions`
-
-## See
-
-[https://api.highcharts.com/highcharts/](https://api.highcharts.com/highcharts/)

@@ -21,6 +21,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * ```
  * @param props - Areamap chart properties
  * @returns Areamap Chart component
+ * @group Charts
  * @beta
  */
 export const AreamapChart = asSisenseComponent({

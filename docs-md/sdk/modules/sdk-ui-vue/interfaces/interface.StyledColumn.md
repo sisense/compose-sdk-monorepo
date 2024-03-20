@@ -38,10 +38,6 @@ An example of using `StyledColumn` to change the date format of the months displ
 
 Also, see [StyledMeasureColumn](interface.StyledMeasureColumn.md).
 
-## Extends
-
-- `CategoryStyle`
-
 ## Properties
 
 ### column
@@ -58,10 +54,6 @@ Wrapped Column
 
 Boolean flag to toggle continuous timeline on this date column.
 
-#### Inherited from
-
-CategoryStyle.continuous
-
 ***
 
 ### dateFormat
@@ -75,10 +67,6 @@ See [ECMAScript Date Time String Format](https://tc39.es/ecma262/multipage/numbe
 Note that 'YYYY' and 'DD' have been disabled since they often get confused with 'yyyy' and 'dd'
 and can produce unexpected results.
 
-#### Inherited from
-
-CategoryStyle.dateFormat
-
 ***
 
 ### geoLevel
@@ -86,10 +74,6 @@ CategoryStyle.dateFormat
 > **geoLevel**?: [`ScattermapLocationLevel`](../type-aliases/type-alias.ScattermapLocationLevel.md)
 
 Geographic location level for Scattermap chart.
-
-#### Inherited from
-
-CategoryStyle.geoLevel
 
 ***
 
@@ -101,10 +85,6 @@ Date granularity that works with continuous timeline.
 
 Values from [@sisense/sdk-data!DateLevels](../../sdk-data/variables/variable.DateLevels.md).
 
-#### Inherited from
-
-CategoryStyle.granularity
-
 ***
 
 ### includeSubTotals
@@ -113,19 +93,11 @@ CategoryStyle.granularity
 
 Boolean flag whether to include subtotals for this dimension in the pivot table.
 
-#### Inherited from
-
-CategoryStyle.includeSubTotals
-
 ***
 
 ### isColored
 
 > **isColored**?: `boolean`
-
-#### Inherited from
-
-CategoryStyle.isColored
 
 ***
 
@@ -135,10 +107,6 @@ CategoryStyle.isColored
 
 Boolean flag whether to render category/column value as HTML in the Table component.
 
-#### Inherited from
-
-CategoryStyle.isHtml
-
 ***
 
 ### numberFormatConfig
@@ -147,10 +115,6 @@ CategoryStyle.isHtml
 
 Configuration for number formatting.
 
-#### Inherited from
-
-CategoryStyle.numberFormatConfig
-
 ***
 
 ### sortType
@@ -158,7 +122,3 @@ CategoryStyle.numberFormatConfig
 > **sortType**?: [`SortDirection`](../type-aliases/type-alias.SortDirection.md)
 
 Sorting direction, either by Ascending order, Descending order, or None
-
-#### Inherited from
-
-CategoryStyle.sortType

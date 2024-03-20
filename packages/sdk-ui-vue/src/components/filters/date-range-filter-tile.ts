@@ -11,28 +11,37 @@ import { setupHelper } from '../../setup-helper';
  * Vue example of configuring the date min max values and handling onChange event.
  * ```vue
  * <template>
- *   <DateRangeFilterTile
- *     :title="dateRangeFilterTileProps.title"
- *     :attribute="dateRangeFilterTileProps.attribute"
- *     :filter="dateRangeFilterTileProps.filter"
- *     :onChange="onChange" />
+ *         <DateRangeFilterTile
+ *           :title="dateRangeFilter.title"
+ *           :datasource="dateRangeFilter.dataSource"
+ *           :attribute="dateRangeFilter.attribute"
+ *           :filter="dateRangeFilter.filter"
+ *           :onChange="dateRangeFilter.onChange"
+ *         />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import {CriteriaFilterTile} from '@sisense/sdk-ui-vue';
+ * import {CriteriaFilterTile, type DateRangeFilterTileProps} from '@sisense/sdk-ui-vue';
+ * import { filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  *
- * const dateRangeFilterTileProps = ref({
+ * const dateRangeFilterValue = ref<Filter | null>(filterFactory.dateRange(DM.DimDate.Date.Years));
+ *
+ * const dateRangeFilter = ref<DateRangeFilterTileProps>({
  *   title: 'Date Range',
- *   attribute: DM.Commerce.Date.Years,
- *   filter: filterFactory.dateRange(DM.Commerce.Date.Years),
+ *   attribute: DM.DimDate.Date.Years,
+ *   filter: dateRangeFilterValue.value!,
+ *   onChange(filter) {
+ *     dateRangeFilterValue.value = filter;
+ *   },
  * });
- *
- * const onChange = (filter: Filter) => {
- *  ...
- * }
  * </script>
  * ```
+ * <img src="media://vue-date-range-filter-tile-example.png" width="800px" />
+ * @param props - MemberFilterTile props
+ * @returns MemberFilterTile component
+ * @group Filter Tiles
  */
 export const DateRangeFilterTile = defineComponent({
   props: {

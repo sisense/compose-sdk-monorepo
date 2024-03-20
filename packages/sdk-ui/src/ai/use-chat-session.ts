@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   useGetChatHistory,
   useGetAllChats,
@@ -5,15 +6,24 @@ import {
   useSendChatMessage,
   useMaybeCreateChat,
 } from './api/hooks';
-import type { ChatMessage } from './api/types';
+import type { ChatMessage, NlqMessage, NlqResponseData } from './api/types';
 
-interface UseChatSessionResult {
+/**
+ * Result of the useChatSession hook.
+ *
+ * @internal
+ */
+export interface UseChatSessionResult {
   chatId: string | undefined;
   history: ChatMessage[];
+  lastNlqResponse: NlqResponseData | null;
   sendMessage: (message: string) => void;
   isAwaitingResponse: boolean;
   isLoading: boolean;
 }
+
+export const isNlqMessage = (message: ChatMessage | null | undefined): message is NlqMessage =>
+  !!message && 'type' in message && message.type === 'nlq';
 
 /**
  * React hook that returns a chat session object for the given data model or
@@ -43,9 +53,21 @@ export const useChatSession = (contextTitle: string): UseChatSessionResult => {
 
   const { mutate: sendMessage, isLoading: isSendMessageLoading } = useSendChatMessage(chatId);
 
+  const lastNlqResponse: NlqResponseData | null = useMemo(() => {
+    if (chatHistory?.length) {
+      const lastNlqMessage = chatHistory[chatHistory.length - 1];
+      if (isNlqMessage(lastNlqMessage)) {
+        return JSON.parse(lastNlqMessage.content);
+      }
+    }
+
+    return null;
+  }, [chatHistory]);
+
   return {
     chatId,
     history: chatHistory ?? [],
+    lastNlqResponse,
     sendMessage,
     isAwaitingResponse: isSendMessageLoading,
     isLoading,

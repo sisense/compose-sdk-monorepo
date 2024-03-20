@@ -1,5 +1,3 @@
-import { useCallback, useState } from 'react';
-
 import { GetNlgQueryResultRequest } from '../api/types';
 import LightBulbIcon from '../icons/light-bulb-icon';
 import LoadingDotsIcon from '../icons/loading-dots-icon';
@@ -7,58 +5,67 @@ import FeedbackWrapper from './feedback-wrapper';
 import TextMessage from './text-message';
 import { useGetNlgQueryResultInternal } from '../use-get-nlg-query-result';
 import Collapsible from '../common/collapsible';
+import { MetadataItem } from '@sisense/sdk-query-client';
+import { UNEXPECTED_ERROR } from '../api/errors';
 
-function InsightsButton({ disabled }: { disabled?: boolean }) {
+export function InsightsButton({
+  onClick,
+  disabled,
+}: {
+  onClick?: () => void;
+  disabled?: boolean;
+}) {
   const disabledStyle = disabled ? 'csdk-opacity-70' : '';
 
   return (
-    <div
-      className={`csdk-my-[-5px] csdk-flex csdk-items-center csdk-gap-x-2 csdk-select-none ${disabledStyle}`}
-    >
-      <LightBulbIcon />
-      Insights
-    </div>
+    <TextMessage align="right" onClick={!disabled ? onClick : undefined}>
+      <div
+        className={`csdk-my-[-5px] csdk-flex csdk-items-center csdk-gap-x-2 csdk-select-none ${disabledStyle}`}
+      >
+        <LightBulbIcon />
+        Insights
+      </div>
+    </TextMessage>
   );
 }
 
 type InsightsMessageProps = {
   dataSource: string;
   metadata: object[];
+  visible?: boolean;
 };
 
-export default function InsightsMessage({ dataSource, metadata }: InsightsMessageProps) {
-  const [visible, setVisible] = useState(false);
-
+export default function InsightsMessage({
+  dataSource,
+  metadata,
+  visible = false,
+}: InsightsMessageProps) {
   const requestData: GetNlgQueryResultRequest = {
     jaql: {
-      datasource: { title: dataSource },
-      metadata,
+      datasource: dataSource,
+      metadata: metadata as MetadataItem[],
     },
   };
 
-  const { data, isLoading, refetch } = useGetNlgQueryResultInternal(requestData, false);
+  const { data, isLoading, isError } = useGetNlgQueryResultInternal(requestData, visible);
 
-  const onInsightsClick = useCallback(() => {
-    setVisible(true);
+  if (!visible) {
+    return null;
+  }
 
-    refetch();
-  }, [refetch]);
+  if (isLoading) {
+    return <LoadingDotsIcon />;
+  }
+
+  if (isError) {
+    return <TextMessage align="left">{UNEXPECTED_ERROR}</TextMessage>;
+  }
 
   return (
-    <>
-      <TextMessage align="right" onClick={!visible ? onInsightsClick : undefined}>
-        <InsightsButton disabled={visible} />
+    <FeedbackWrapper sourceId={dataSource} data={requestData} type="nlg/queryResult">
+      <TextMessage align="full">
+        <Collapsible text={data ?? 'No insights available.'} />
       </TextMessage>
-      {visible &&
-        (isLoading ? (
-          <LoadingDotsIcon />
-        ) : (
-          <FeedbackWrapper sourceId={dataSource} data={requestData} type="nlg/queryResult">
-            <TextMessage align="full">
-              <Collapsible text={data ?? 'No insights were returned.'} />
-            </TextMessage>
-          </FeedbackWrapper>
-        ))}
-    </>
+    </FeedbackWrapper>
   );
 }

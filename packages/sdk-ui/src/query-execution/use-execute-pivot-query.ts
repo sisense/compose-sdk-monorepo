@@ -46,6 +46,7 @@ import { getFilterListAndRelations } from '@sisense/sdk-data';
  * See also hook {@link useExecuteQuery}, which execute a generic data query.
  * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
+ * @group Queries
  * @alpha
  */
 export const useExecutePivotQuery = withTracking('useExecutePivotQuery')(

@@ -49,6 +49,7 @@ import { getDataSourceName } from '@sisense/sdk-data';
  * <img src="media://chart-widget-with-drilldown-example-1.png" width="800px" />
  * @param props - ChartWidget properties
  * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType | chartType}
+ * @group Chart Utilities
  */
 export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseComponent({
   componentName: 'ChartWidget',

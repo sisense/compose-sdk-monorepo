@@ -7,7 +7,7 @@ title: MenuItemSection
 > **MenuItemSection**: `object`
 
 Context menu section
-Used in [ContextMenuProps](type-alias.ContextMenuProps.md) component
+Used in [ContextMenuProps](type-alias.ContextMenuProps.md)
 
 ## Type declaration
 

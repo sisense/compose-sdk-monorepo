@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useContext } from 'react';
+import { ChatMode } from '@/ai/api/types';
 
 export interface ChatConfig {
   /**
-   * Boolean flag to show or hide suggested questions following a chat response
-   *
-   * If not specified, the default value is `false`
+   * Boolean flag to show or hide suggested questions following a chat response. Currently
+   * follow-up questions are still under development and are not validated. Therefore, follow-up
+   * questions are disabled by default.
    */
   enableFollowupQuestions: boolean;
 
@@ -21,6 +22,13 @@ export interface ChatConfig {
    * If specified, the data topic selector screen will not be shown.
    */
   defaultContextTitle?: string;
+
+  /**
+   * The chat mode to use for a chat session.
+   *
+   * @internal
+   */
+  chatMode?: ChatMode;
 }
 
 export const DEFAULTS = Object.freeze<ChatConfig>({

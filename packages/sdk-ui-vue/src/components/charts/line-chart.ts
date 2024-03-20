@@ -21,21 +21,26 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  * import {LineChart, type LineChartProps} from '@sisense/sdk-ui-vue';
- *
-const lineChartProps = ref<LineChartProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    category: [dimProductName],
-    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
-    breakBy: [],
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
-});
+
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ * const lineChartProps = ref<LineChartProps>({
+    dataSet: DM.DataSource,
+    dataOptions: {
+      category: [dimProductName],
+      value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+      breakBy: [],
+    },
+    filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  });
  * ```
- * <img src="media://line-chart-example-1.png" width="800px" />
+ * <img src="media://vue-line-chart-example.png" width="800px" />
  * @param props - Line chart properties
  * @returns Line Chart component
+ * @group Charts
  */
 export const LineChart = defineComponent({
   props: {

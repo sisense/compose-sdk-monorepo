@@ -6,10 +6,6 @@ title: DashboardWidgetStyleOptions
 
 Style settings defining the look and feel of DashboardWidget
 
-## Extends
-
-- [`WidgetStyleOptions`](interface.WidgetStyleOptions.md)
-
 ## Properties
 
 ### backgroundColor
@@ -20,10 +16,6 @@ Widget background color
 
 Affects chart background color as well
 
-#### Inherited from
-
-[`WidgetStyleOptions`](interface.WidgetStyleOptions.md).[`backgroundColor`](interface.WidgetStyleOptions.md#backgroundcolor)
-
 ***
 
 ### border
@@ -31,10 +23,6 @@ Affects chart background color as well
 > **border**?: `boolean`
 
 Widget container border toggle
-
-#### Inherited from
-
-[`WidgetStyleOptions`](interface.WidgetStyleOptions.md).[`border`](interface.WidgetStyleOptions.md#border)
 
 ***
 
@@ -44,10 +32,6 @@ Widget container border toggle
 
 Widget container border color
 
-#### Inherited from
-
-[`WidgetStyleOptions`](interface.WidgetStyleOptions.md).[`borderColor`](interface.WidgetStyleOptions.md#bordercolor)
-
 ***
 
 ### cornerRadius
@@ -55,10 +39,6 @@ Widget container border color
 > **cornerRadius**?: `"Large"` \| `"Medium"` \| `"Small"`
 
 Corner radius of the widget container
-
-#### Inherited from
-
-[`WidgetStyleOptions`](interface.WidgetStyleOptions.md).[`cornerRadius`](interface.WidgetStyleOptions.md#cornerradius)
 
 ***
 
@@ -108,10 +88,6 @@ Widget header styles
 >
 >
 
-#### Inherited from
-
-[`WidgetStyleOptions`](interface.WidgetStyleOptions.md).[`header`](interface.WidgetStyleOptions.md#header)
-
 ***
 
 ### height
@@ -134,10 +110,6 @@ Shadow level of the widget container
 
 Effective only when spaceAround is defined
 
-#### Inherited from
-
-[`WidgetStyleOptions`](interface.WidgetStyleOptions.md).[`shadow`](interface.WidgetStyleOptions.md#shadow)
-
 ***
 
 ### spaceAround
@@ -145,10 +117,6 @@ Effective only when spaceAround is defined
 > **spaceAround**?: `"Large"` \| `"Medium"` \| `"Small"`
 
 Space between widget container edge and the chart
-
-#### Inherited from
-
-[`WidgetStyleOptions`](interface.WidgetStyleOptions.md).[`spaceAround`](interface.WidgetStyleOptions.md#spacearound)
 
 ***
 

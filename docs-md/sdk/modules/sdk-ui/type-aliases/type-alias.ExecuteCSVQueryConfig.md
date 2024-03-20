@@ -6,7 +6,7 @@ title: ExecuteCSVQueryConfig
 
 > **ExecuteCSVQueryConfig**: `object`
 
-Configuration for [useExecuteCsvQuery](../functions/function.useExecuteCsvQuery.md) hook.
+Configuration for [useExecuteCsvQuery](../queries/function.useExecuteCsvQuery.md) hook.
 
 ## Type declaration
 

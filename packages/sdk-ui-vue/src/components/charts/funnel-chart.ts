@@ -22,8 +22,13 @@ import { setupHelper } from '../../setup-helper';
  * <script setup lang="ts">
  * import { ref } from 'vue';
  * import {FunnelChart, type FunnelChartProps} from '@sisense/sdk-ui-vue';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
  *
-const funnelChartProps = ref<FunnelChartProps>({
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+ *
+ * const funnelChartProps = ref<FunnelChartProps>({
   dataSet: DM.DataSource,
   dataOptions: {
     category: [dimProductName],
@@ -33,11 +38,12 @@ const funnelChartProps = ref<FunnelChartProps>({
 });
  * </script>
  * ```
- * <img src="media://funnel-chart-example-1.png" width="800"/>
+ * <img src="media://vue-funnel-chart-example.png" width="800"/>
  *
  * Note that the chart sorts the measure, `Unique Users`, in descending order by default.
  * @param props - Funnel chart properties
  * @returns Funnel Chart component
+ * @group Charts
  */
 export const FunnelChart = defineComponent({
   props: {

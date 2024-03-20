@@ -1,3 +1,4 @@
+/* eslint-disable vitest/expect-expect */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -23,7 +24,7 @@ import {
   TableDataOptions,
 } from '../chart-data-options/types';
 import { Panel, WidgetStyle } from './types';
-import { extractDataOptions } from './translate-widget-data-options';
+import { createDataOptionsFromPanels, extractDataOptions } from './translate-widget-data-options';
 import { jaqlMock } from './__mocks__/jaql-mock';
 
 const styleMock = {} as WidgetStyle;
@@ -396,6 +397,76 @@ describe('translate widget data options', () => {
 
       verifyColumn(category[0], panels[0].items[0]);
       verifyColumn(value[0], panels[1].items[0]);
+    });
+  });
+});
+
+describe('translate widget plugin data options from pluginPanels', () => {
+  describe('createDataOptionsFromPanels', () => {
+    it('should extract data options for table chart correctly', () => {
+      const panels = [
+        {
+          name: 'columns',
+          items: [
+            {
+              jaql: {
+                table: 'Commerce',
+                column: 'Gender',
+                dim: '[Commerce.Gender]',
+                datatype: 'text',
+                title: 'Gender',
+              },
+            },
+          ],
+        },
+      ] as Panel[];
+
+      const dataOptions: any = createDataOptionsFromPanels(panels, ['red', 'blue', 'green']);
+
+      expect(
+        (dataOptions.columns[0] as StyledColumn).column instanceof DimensionalAttribute,
+      ).toBeTruthy();
+      verifyColumn(dataOptions.columns[0], panels[0].items[0]);
+    });
+
+    it('should returns correct data options for cartesian chart', () => {
+      const {
+        // eslint-disable-next-line no-unused-vars
+        sort,
+        ...costAggregatedWithoutSort
+      } = jaqlMock.costAggregated;
+      const panels: Panel[] = [
+        {
+          name: 'categories',
+          items: [
+            {
+              jaql: jaqlMock.category,
+            },
+          ],
+        },
+        {
+          name: 'values',
+          items: [
+            {
+              jaql: costAggregatedWithoutSort,
+              categoriesSorting: SortDirection.DESC,
+            },
+          ],
+        },
+        {
+          name: 'break by',
+          items: [
+            {
+              jaql: jaqlMock.ageRange,
+            },
+          ],
+        },
+      ];
+
+      const dataOptions: any = createDataOptionsFromPanels(panels, ['red', 'blue', 'green']);
+      verifyColumn(dataOptions.categories[0], panels[0].items[0]);
+      verifyColumn(dataOptions.values[0], panels[1].items[0]);
+      verifyColumn(dataOptions['break by'][0], panels[2].items[0]);
     });
   });
 });

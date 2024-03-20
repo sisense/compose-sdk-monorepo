@@ -10,7 +10,6 @@ import { TableWidget } from '../../widgets/table-widget';
 import { NlqResponseData } from '../api/types';
 import CloseDialogIcon from '../icons/close-dialog-icon';
 import ChartMessageToolbar from './chart-message-toolbar';
-import FeedbackWrapper from './feedback-wrapper';
 import {
   getChartOptions,
   getChartRecommendationsOrDefault,
@@ -100,9 +99,7 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
 
   return (
     <>
-      <FeedbackWrapper sourceId={dataSource} data={content} type="chats/nlq">
-        {chartElement}
-      </FeedbackWrapper>
+      {chartElement}
       <Dialog open={expanded} onClose={() => setExpanded(false)} maxWidth="xl" fullWidth>
         <div className="csdk-flex csdk-items-center csdk-justify-between csdk-py-[30px] csdk-px-[40px]">
           <div className="csdk-text-ai-lg csdk-semibold csdk-text-text-active">

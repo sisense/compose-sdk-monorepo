@@ -6,10 +6,6 @@ title: ExecuteQueryByWidgetIdParams
 
 Parameters for data query by widget id execution.
 
-## Extends
-
-- `Omit`\< [`ExecuteQueryByWidgetIdParams`](../../sdk-ui/interfaces/interface.ExecuteQueryByWidgetIdParams.md), `"enabled"` \>
-
 ## Properties
 
 ### count
@@ -20,10 +16,6 @@ Number of rows to return in the query result
 
 If not specified, the default value is `20000`
 
-#### Inherited from
-
-Omit.count
-
 ***
 
 ### dashboardOid
@@ -31,10 +23,6 @@ Omit.count
 > **dashboardOid**: `string`
 
 Identifier of the dashboard that contains the widget
-
-#### Inherited from
-
-Omit.dashboardOid
 
 ***
 
@@ -45,10 +33,6 @@ Omit.dashboardOid
 Filters that will slice query results.
 
 The provided filters will be merged with the existing widget filters based on `filtersMergeStrategy`
-
-#### Inherited from
-
-Omit.filters
 
 ***
 
@@ -64,10 +48,6 @@ Strategy for merging the existing widget filters (including highlights) with the
 
 If not specified, the default strategy is `codeFirst`.
 
-#### Inherited from
-
-Omit.filtersMergeStrategy
-
 ***
 
 ### highlights
@@ -75,10 +55,6 @@ Omit.filtersMergeStrategy
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Highlight filters that will highlight results that pass filter criteria
-
-#### Inherited from
-
-Omit.highlights
 
 ***
 
@@ -90,10 +66,6 @@ Boolean flag whether to include dashboard filters in the widget's `filters` and 
 
 If not specified, the default value is `false`.
 
-#### Inherited from
-
-Omit.includeDashboardFilters
-
 ***
 
 ### offset
@@ -103,10 +75,6 @@ Omit.includeDashboardFilters
 Offset of the first row to return
 
 If not specified, the default value is `0`
-
-#### Inherited from
-
-Omit.offset
 
 ***
 
@@ -134,10 +102,6 @@ const onBeforeQuery = useCallback((jaql) => {
 
 `any`
 
-#### Inherited from
-
-Omit.onBeforeQuery
-
 ***
 
 ### widgetOid
@@ -145,7 +109,3 @@ Omit.onBeforeQuery
 > **widgetOid**: `string`
 
 Identifier of the widget
-
-#### Inherited from
-
-Omit.widgetOid

@@ -44,6 +44,7 @@ const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
  * ```
  * @param props - Pivot Table properties
  * @returns Pivot Table component
+ * @group Data Grids
  * @alpha
  */
 

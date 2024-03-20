@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "1.6.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -50,7 +50,7 @@
     "@sisense/commitlint-config": "^1.9.9",
     "@sisense/eslint-config": "1.9.12",
     "@sisense/prettier-config": "^1.9.9",
-    "@sisense/typedoc-plugin-markdown": "^4.0.0-next.45",
+    "@sisense/typedoc-plugin-markdown": "^4.0.0-next.46",
     "@vitest/coverage-istanbul": "0.34.1",
     "eslint": "^8.40.0",
     "eslint-plugin-tsdoc": "0.2.17",
@@ -60,7 +60,7 @@
     "lint-staged": "^13.2.1",
     "nyc": "^15.1.0",
     "prettier": "^2.8.8",
-    "typedoc": "0.25.3",
+    "typedoc": "0.25.12",
     "typedoc-plugin-versions": "^0.2.3",
     "typedoc-plugin-vue": "^1.1.0",
     "vitest": "^1.3.1"

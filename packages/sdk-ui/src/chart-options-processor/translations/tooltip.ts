@@ -11,6 +11,7 @@ import {
   TooltipSettings,
   formatTooltipValue,
   formatTooltipXValue,
+  isTooltipPercentValueSupported,
 } from './tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './scatter-tooltip';
 
@@ -42,6 +43,7 @@ export const getTooltipSettings = (
           ? cartesianChartDataOptions.y?.find((y) => y.enabled)
           : cartesianChartDataOptions.y?.find((y) => y.title === that.series.name);
 
+      const isPercentValueSupported = isTooltipPercentValueSupported(dataOptionY);
       const yValue = formatTooltipValue(dataOptionY, that.point.y, '');
 
       const maskedX = that.point?.custom?.xDisplayValue ?? that.x;
@@ -59,7 +61,7 @@ export const getTooltipSettings = (
         x2Value = formatTooltipXValue(cartesianChartDataOptions.x[1], maskedX1, maskedX1);
       }
 
-      const value = yValue + (percentage ? ` / ${percentage}%` : '');
+      const value = yValue + (isPercentValueSupported && percentage ? ` / ${percentage}%` : '');
       const color = that.point.color || that.series.color;
 
       return tooltipWrapper(`

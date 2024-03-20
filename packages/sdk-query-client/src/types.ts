@@ -143,6 +143,10 @@ export type MetadataItem = {
 
 export type MetadataItemJaql = {
   dim?: string;
+  agg?: string;
+  datatype?: string;
+  table?: string;
+  column?: string;
   level?: string;
   dateTimeLevel?: string;
   bucket?: string;

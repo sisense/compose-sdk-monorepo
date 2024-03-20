@@ -45,9 +45,15 @@ export { type ThemeConfig };
  *   bootstrap: [AppComponent],
  * })
  * ```
+ * @group Contexts
  */
 export const THEME_CONFIG_TOKEN = new InjectionToken<ThemeConfig>('theme configuration');
 
+/**
+ * Service for working with Sisense Fusion themes.
+ *
+ * @group Contexts
+ */
 @Injectable({
   providedIn: 'root',
 })

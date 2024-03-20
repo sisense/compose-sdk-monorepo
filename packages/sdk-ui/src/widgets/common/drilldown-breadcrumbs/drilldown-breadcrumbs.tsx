@@ -149,6 +149,11 @@ const DrillButton: React.FC<DrillButtonProps> = ({
   );
 };
 
+/**
+ * Drilldown breadcrumbs component
+ *
+ * @group Drilldown
+ */
 export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = ({
   filtersDisplayValues,
   currentDimension,

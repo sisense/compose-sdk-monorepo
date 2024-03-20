@@ -13,28 +13,37 @@ import { setupHelper } from '../../setup-helper';
  * Below is an example for filtering countries in the `Country` dimension of the `Sample ECommerce` data model.
  * ```vue
  * <template>
- * <MemberFilterTile
- *   :title="memberFilterTileProps.title"
- *   :attribute="memberFilterTileProps.attribute"
- *   :filter="memberFilterTileProps.filter"
- *   :onChange={setCountryFilter}
- * />
+ *       <MemberFilterTile
+ *         :attribute="memberFilter.attribute"
+ *         :onChange="memberFilter.onChange"
+ *         :dataSource="memberFilter.dataSource"
+ *         :title="memberFilter.title"
+ *       />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import MemberFilterTile from '@sisense/sdk-ui-vue/MemberFilterTile';
+ * import {MemberFilterTile, type MemberFilterTileProps} from '@sisense/sdk-ui-vue';
  *
- * const memberFilterTileProps = ref({
- *   title: 'Country',
- *   attribute: DM.Country.Country,
- *   filter: countryFilter,
+ * const memberFilterValue = ref<Filter | null>(null);
+ *
+ * const memberFilter = ref<MemberFilterTileProps>({
+ *   dataSource: DM.DataSource,
+ *   title: 'Member Filter',
+ *   attribute: DM.DimProducts.ProductName,
+ *   filter: memberFilterValue.value,
+ *   onChange(filter) {
+ *     memberFilterValue.value = filter;
+ *   },
  * });
  *
- * const setCountryFilter = (filter: Filter | null) => {...}
  *
  * </script>
  * ```
+ * <img src="media://vue-member-filter-tile-example.png" width="300px" />
+ * @param props - MemberFilterTile props
+ * @returns MemberFilterTile component
+ * @group Filter Tiles
  */
 
 export const MemberFilterTile = defineComponent({

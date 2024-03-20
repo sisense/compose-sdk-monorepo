@@ -81,3 +81,7 @@ export * from './filters';
 export * from './formulas';
 export { trackHook } from './decorators/hook-decorators';
 export * from './common/hooks/data-load-state-reducer';
+export { createDataOptionsFromPanels } from './dashboard-widget/translate-widget-data-options';
+export { createFilterFromJaql } from './dashboard-widget/translate-widget-filters';
+export { useThemeContext } from './theme-provider/theme-provider';
+export { LoadingIndicator } from './common/components/loading-indicator';

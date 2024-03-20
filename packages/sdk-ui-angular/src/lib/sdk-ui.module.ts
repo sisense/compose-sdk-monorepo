@@ -55,6 +55,8 @@ import { DecoratorsModule } from './decorators/decorators.module';
  *   bootstrap: [AppComponent],
  * })
  * ```
+ *
+ * @group Contexts
  */
 @NgModule({
   declarations: [

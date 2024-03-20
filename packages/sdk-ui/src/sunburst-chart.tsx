@@ -25,6 +25,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://sunburst-chart-example-1.png" width="600px" />
  * @param props - Sunburst chart properties
  * @returns Sunburst Chart component
+ * @group Charts
  */
 export const SunburstChart = asSisenseComponent({
   componentName: 'SunburstChart',

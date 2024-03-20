@@ -4,6 +4,8 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
 /**
  * A React component representing categorical data with horizontal rectangular bars,
  * whose lengths are proportional to the values that they represent.
+ * You can also break up the values by another category or groups.
+ *
  * See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for more information.
  *
  * @example
@@ -26,6 +28,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://bar-chart-example-1.png" width="800"/>
  * @param props - Bar chart properties
  * @returns Bar Chart component
+ * @group Charts
  */
 export const BarChart = asSisenseComponent({
   componentName: 'BarChart',

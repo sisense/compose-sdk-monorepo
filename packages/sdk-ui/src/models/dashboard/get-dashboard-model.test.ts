@@ -40,6 +40,7 @@ describe('getDashboardModel', () => {
     expect(result).toEqual({
       oid: dashboardMock.oid,
       title: dashboardMock.title,
+      layout: dashboardMock.layout,
       dataSource: dashboardMock.datasource.title,
     });
   });
@@ -54,6 +55,7 @@ describe('getDashboardModel', () => {
       oid: dashboardMock.oid,
       title: dashboardMock.title,
       dataSource: dashboardMock.datasource.title,
+      layout: dashboardMock.layout,
       widgets: expect.arrayContaining(
         Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
       ),

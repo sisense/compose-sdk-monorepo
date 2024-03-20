@@ -20,7 +20,7 @@ export type CategoricalWidgetType = 'chart/pie' | 'chart/funnel' | 'treemap' | '
 /**
  * The type of a widget on a dashboard that is a variant of tabular widget.
  */
-export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg';
+export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg' | 'pivot2';
 
 /**
  * The type of a widget on a dashboard.
@@ -33,7 +33,8 @@ export type WidgetType =
   | TabularWidgetType
   | 'chart/boxplot'
   | 'map/scatter'
-  | 'map/area';
+  | 'map/area'
+  | 'plugin';
 
 export type WidgetSubtype =
   | 'area/basic'
@@ -309,6 +310,9 @@ export type FunnelWidgetStyle = BaseWidgetStyle & {
     decimals: boolean;
   };
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type PluginStyle = any;
 
 export type TableWidgetStyle = {
   'colors/columns': boolean;

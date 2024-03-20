@@ -1,6 +1,7 @@
 import { isNumber } from '@sisense/sdk-data';
 import { Category, Value, isValue } from '../../chart-data-options/types.js';
 import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
+import type { SeriesChartType } from '@/types';
 
 export const isXValueNumeric = (dataOptionX: Value | Category | undefined) =>
   dataOptionX ? isValue(dataOptionX) || (dataOptionX.type && isNumber(dataOptionX.type)) : false;
@@ -27,6 +28,21 @@ export const formatTooltipXValue = (
     ? formatTooltipValue(dataOption, parseFloat(`${value}`), displayValue)
     : displayValue;
 };
+
+const percentSupportedSubChartTypes: SeriesChartType[] = [
+  'auto',
+  'column',
+  'area',
+  'areaspline',
+  'bar',
+  'scatter',
+];
+export function isTooltipPercentValueSupported(options: Value | undefined) {
+  if (options?.chartType) {
+    return percentSupportedSubChartTypes.includes(options.chartType);
+  }
+  return true;
+}
 
 export type TooltipSettings = {
   enabled?: boolean;

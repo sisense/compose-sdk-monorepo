@@ -29,7 +29,7 @@ function FeedbackRow({ visible, onSend }: { visible: boolean; onSend: (rating: -
   }
 
   return (
-    <div className={`csdk-flex csdk-gap-2 ${styles}`}>
+    <div className={`csdk-flex ${styles}`}>
       {clicked && (
         <>
           <ThumbsUpIcon />
@@ -50,10 +50,17 @@ type FeedbackWrapperProps = {
   sourceId: string;
   data: object;
   type: string;
+  rightFooter?: ReactNode;
   children: ReactNode;
 };
 
-export default function FeedbackWrapper({ sourceId, data, type, children }: FeedbackWrapperProps) {
+export default function FeedbackWrapper({
+  sourceId,
+  data,
+  type,
+  rightFooter,
+  children,
+}: FeedbackWrapperProps) {
   const api = useChatApi();
   const sendFeedback = debounce(
     useCallback(
@@ -79,8 +86,9 @@ export default function FeedbackWrapper({ sourceId, data, type, children }: Feed
   return (
     <div ref={ref}>
       {children}
-      <div className="csdk-mt-4 csdk-h-[35px]">
+      <div className="csdk-flex csdk-items-center csdk-mt-4 csdk-h-[35px]">
         <FeedbackRow onSend={sendFeedback} visible={hovering} />
+        {rightFooter}
       </div>
     </div>
   );

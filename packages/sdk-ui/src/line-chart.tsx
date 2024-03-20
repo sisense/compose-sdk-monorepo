@@ -25,6 +25,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://line-chart-example-1.png" width="800px" />
  * @param props - Line chart properties
  * @returns Line Chart component
+ * @group Charts
  */
 export const LineChart = asSisenseComponent({
   componentName: 'LineChart',

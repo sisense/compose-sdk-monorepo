@@ -7,7 +7,7 @@ title: MenuPosition
 > **MenuPosition**: `object`
 
 Context menu position coordinates
-Used in [ContextMenuProps](../interfaces/interface.ContextMenuProps.md) component
+Used in [ContextMenuProps](../interfaces/interface.ContextMenuProps.md)
 
 ## Type declaration
 

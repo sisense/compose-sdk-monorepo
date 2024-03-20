@@ -5,28 +5,41 @@ import type { PivotTableProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * TBU
- * A Vue component that wraps the PivotTable Preact component for use in Vue applications.
- * It provides a single 'props' prop to pass all the TableProps to the Table Preact component,
- * enabling the use of the table within Vue's reactivity system.
+ * A Vue component for Pivot table with pagination.
  *
  * @example
- * Here's how you can use the Table component in a Vue application:
+ * Here's how you can use the PivotTable component in a Vue application:
  * ```vue
  * <template>
- *   <Table :props="tableProps" />
+    <PivotTable :dataOptions="pivotTableProps.dataOptions" :dataSet="pivotTableProps.dataSet"
+        :styleOptions="pivotTableProps.styleOptions" :filters="pivotTableProps.filters" />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import Table from '@sisense/sdk-ui-vue/Table';
+ * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import * as DM from '../assets/sample-retail-model';
+ * import {PivotTable, type PivotTableProps} from '@sisense/sdk-ui-vue/Table';
  *
- * const tableProps = ref({
- *   // Define your TableProps configuration here
- * });
+ * const dimProductName = DM.DimProducts.ProductName;
+ * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
+const pivotTableProps = ref<PivotTableProps>({
+  dataSet: DM.DataSource,
+  dataOptions: {
+    rows: [dimProductName, dimColor],
+    columns: [dimCategoryName],
+    values: [measureTotalRevenue],
+  },
+  styleOptions: {
+    width: 1200,
+    height: 500,
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 1000)],
+});
  * </script>
  * ```
- *
+ * <img src="media://vue-pivot-table-example.png" width="800px" />
+ * @group Data Grids
  * @alpha
  */
 export const PivotTable = defineComponent({

@@ -924,13 +924,13 @@ export interface DashboardWidgetProps
    */
   highlights?: Filter[];
   /**
-   * {@inheritDoc ExecuteQueryByWidgetIdProps.filtersMergeStrategy}
+   * {@inheritDoc ExecuteQueryByWidgetIdParams.filtersMergeStrategy}
    *
    * @category Data
    */
   filtersMergeStrategy?: FiltersMergeStrategy;
   /**
-   * {@inheritDoc ExecuteQueryByWidgetIdProps.includeDashboardFilters}
+   * {@inheritDoc ExecuteQueryByWidgetIdParams.includeDashboardFilters}
    *
    * @category Data
    */

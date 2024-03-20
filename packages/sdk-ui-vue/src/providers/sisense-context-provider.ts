@@ -87,6 +87,7 @@ export const createSisenseContextConnector = (context: CustomSisenseContext) => 
  *
  * @param props - Sisense context provider props
  * @returns A Sisense Context Provider Component
+ * @group Contexts
  */
 export const SisenseContextProvider = defineComponent({
   props: {

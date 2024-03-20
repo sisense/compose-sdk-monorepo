@@ -1024,7 +1024,7 @@ export type SeriesWithAlerts<T> = {
 
 /**
  * Context menu position coordinates
- * Used in {@link ContextMenuProps} component
+ * Used in {@link ContextMenuProps}
  */
 export type MenuPosition = {
   /** Horizontal position */
@@ -1035,7 +1035,7 @@ export type MenuPosition = {
 
 /**
  * Context menu section
- * Used in {@link ContextMenuProps} component
+ * Used in {@link ContextMenuProps}
  */
 export type MenuItemSection = {
   /** Optional section title */

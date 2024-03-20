@@ -19,16 +19,30 @@ import { setupHelper } from '../../setup-helper';
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
  *
- * const chartProps = ref<ChartProps>({
- *   chartType: 'bar',
- *   dataSet: DM.DataSource,
- *   dataOptions: {
- *     category: [dimProductName],
- *     value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
- *     breakBy: [],
- *   },
- *   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)]
- * });
+const chartProps = ref<ChartProps>({
+  chartType: 'bar',
+  dataSet: DM.DataSource,
+  dataOptions: {
+    category: [dimProductName],
+    value: [{ column: measureTotalRevenue, sortType: 'sortDesc' }],
+    breakBy: [],
+  },
+  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 10)],
+  styleOptions: {
+    xAxis: {
+      title: {
+        text: 'Product Name',
+        enabled: true,
+      },
+    },
+    yAxis: {
+      title: {
+        text: 'Total Revenue',
+        enabled: true,
+      },
+    },
+  },
+});
  * </script>
  *
  * <template>
@@ -37,13 +51,15 @@ import { setupHelper } from '../../setup-helper';
        :dataSet="chartProps.dataSet"
        :dataOptions="chartProps.dataOptions"
        :filters="chartProps.filters"
+       :styleOptions="chartProps.styleOptions"
      />
  * </template>
  * ```
  *
- * <img src="media://chart-local-data-example-1.png" width="800px" />
+ * <img src="media://vue-chart-example.png" width="800px" />
  * @param props - Chart properties
  * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType | chartType}
+ * @group Charts
  */
 export const Chart = defineComponent({
   props: {

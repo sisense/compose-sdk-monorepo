@@ -1,18 +1,28 @@
+/* eslint-disable max-lines-per-function */
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
 import { withTracking } from '@/decorators/hook-decorators';
 import { useChatApi } from './api/chat-api-provider';
-import { Attribute, Filter, Measure } from '@sisense/sdk-data';
+import {
+  Attribute,
+  DataSource,
+  Filter,
+  FilterRelations,
+  getFilterListAndRelations,
+  isDataSourceInfo,
+  Measure,
+} from '@sisense/sdk-data';
 import { GetNlgQueryResultRequest } from './api/types';
 import { GetNlgQueryResultProps } from './get-nlg-query-result';
+import { getJaqlQueryPayload, JaqlDataSource } from '@sisense/sdk-query-client';
 
 /**
  * Parameters for {@link useGetNlgQueryResult} hook.
  */
 export interface UseGetNlgQueryResultParams {
   /** The data source that the query targets - e.g. `Sample ECommerce` */
-  dataSource: string;
+  dataSource: DataSource;
 
   /** Dimensions of the query */
   dimensions?: Attribute[];
@@ -21,7 +31,7 @@ export interface UseGetNlgQueryResultParams {
   measures?: Measure[];
 
   /** Filters of the query */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelations;
 
   /**
    * Boolean flag to enable/disable API call by default
@@ -60,11 +70,31 @@ export const useGetNlgQueryResultInternal = (
     if ('jaql' in params) {
       return params;
     } else {
-      const { dataSource, dimensions = [], measures = [], filters = [] } = params;
+      let datasource: JaqlDataSource;
+      if (isDataSourceInfo(params.dataSource)) {
+        datasource = { title: params.dataSource.title, live: params.dataSource.type === 'live' };
+      } else {
+        datasource = params.dataSource;
+      }
+
+      const { filters = [], relations } = getFilterListAndRelations(params.filters);
+      const { metadata, filterRelations } = getJaqlQueryPayload(
+        {
+          dataSource: params.dataSource,
+          attributes: params.dimensions ?? [],
+          measures: params.measures ?? [],
+          filters,
+          filterRelations: relations,
+          highlights: [],
+        },
+        true,
+      );
+
       return {
         jaql: {
-          datasource: { title: dataSource },
-          metadata: [...dimensions, ...measures, ...filters].map((item) => item.jaql()),
+          datasource,
+          metadata,
+          filterRelations,
         },
       };
     }
@@ -100,9 +130,8 @@ const useGetNlgQueryResultWithoutTracking = (params: UseGetNlgQueryResultParams)
 };
 
 /**
- * React hook that fetches an analysis of the provided JAQL using natural language generation (NLG).
- *
- * Note that in the example below, this hook expects `metadata` to be in standard JAQL syntax.
+ * React hook that fetches an analysis of the provided query using natural language generation (NLG).
+ * Specifying a query is similar to providing parameters to a {@link useExecuteQuery} hook, using dimensions, measures, and filters.
  *
  * ::: warning Note
  * This hook is currently under private beta for selected customers and is subject to change as we make fixes and improvements.
@@ -124,6 +153,7 @@ const useGetNlgQueryResultWithoutTracking = (params: UseGetNlgQueryResultParams)
  * ```
  * @param params - {@link UseGetNlgQueryResultParams}
  * @returns Response object containing a text summary
+ * @group Generative AI
  * @beta
  */
 export const useGetNlgQueryResult = withTracking('useGetNlgQueryResult')(

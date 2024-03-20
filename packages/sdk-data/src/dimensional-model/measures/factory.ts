@@ -196,6 +196,7 @@ function transformCustomFormulaJaql(
  * @param formula - Formula to be used for the measure
  * @param context - Formula context as a map of strings to measures or attributes
  * @returns A calculated measure instance
+ * @group Advanced Analytics
  */
 export function customFormula(
   title: string,
@@ -252,6 +253,7 @@ function arithmetic(
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function aggregate(
   attribute: Attribute,
@@ -277,6 +279,7 @@ export function aggregate(
  * ```
  * @param value - Value to be returned as a measure
  * @returns A calculated measure instance
+ * @group Arithmetic
  */
 export function constant(value: number): CalculatedMeasure {
   return new DimensionalCalculatedMeasure(`${value}`, `${value}`, {});
@@ -296,6 +299,7 @@ export function constant(value: number): CalculatedMeasure {
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function sum(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Sum, name, format);
@@ -313,6 +317,7 @@ export function sum(attribute: Attribute, name?: string, format?: string) {
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function average(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Average, name, format);
@@ -330,6 +335,7 @@ export function average(attribute: Attribute, name?: string, format?: string) {
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function min(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Min, name, format);
@@ -347,6 +353,7 @@ export function min(attribute: Attribute, name?: string, format?: string) {
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function max(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Max, name, format);
@@ -364,6 +371,7 @@ export function max(attribute: Attribute, name?: string, format?: string) {
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function median(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Median, name, format);
@@ -383,6 +391,7 @@ export function median(attribute: Attribute, name?: string, format?: string) {
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function count(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Count, name, format);
@@ -401,6 +410,7 @@ export function count(attribute: Attribute, name?: string, format?: string) {
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A measure instance
+ * @group Aggregation
  */
 export function countDistinct(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.CountDistinct, name, format);
@@ -431,6 +441,7 @@ export function countDistinct(attribute: Attribute, name?: string, format?: stri
  * @param name - Optional name for the new measure
  * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
  * @returns A calculated measure instance
+ * @group Advanced Analytics
  */
 export function measuredValue(
   measure: Measure,
@@ -472,6 +483,7 @@ export function measuredValue(
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
  * @returns A calculated measure instance
+ * @group Arithmetic
  */
 export function add(
   value1: Measure | number,
@@ -496,6 +508,7 @@ export function add(
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
  * @returns A calculated measure instance
+ * @group Arithmetic
  */
 export function subtract(
   value1: Measure | number,
@@ -520,6 +533,7 @@ export function subtract(
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
  * @returns A calculated measure instance
+ * @group Arithmetic
  */
 export function multiply(
   value1: Measure | number,
@@ -544,6 +558,7 @@ export function multiply(
  * @param name - Optional name for the new measure
  * @param withParentheses - Optional boolean flag whether to wrap the arithmetic operation with parentheses
  * @returns A calculated measure instance
+ * @group Arithmetic
  */
 export function divide(
   value1: Measure | number,
@@ -570,6 +585,7 @@ export function divide(
  * @param measure - Measure to apply the YTD Sum to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function yearToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'YTD ' + measure.name, 'YTDSum');
@@ -591,6 +607,7 @@ export function yearToDateSum(measure: Measure, name?: string): CalculatedMeasur
  * @param measure - Measure to apply the QTD Sum to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function quarterToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'QTD ' + name, 'QTDSum');
@@ -612,6 +629,7 @@ export function quarterToDateSum(measure: Measure, name?: string): CalculatedMea
  * @param measure - Measure to apply the MTD Sum to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function monthToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'MTD ' + measure.name, 'MTDSum');
@@ -633,6 +651,7 @@ export function monthToDateSum(measure: Measure, name?: string): CalculatedMeasu
  * @param measure - Measure to apply the WTD Sum to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function weekToDateSum(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? 'MTD ' + measure.name, 'WTDSum');
@@ -664,6 +683,7 @@ export function weekToDateSum(measure: Measure, name?: string): CalculatedMeasur
  * when there are two or more dimensions. The default value is false.
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function runningSum(
   measure: Measure,
@@ -698,6 +718,7 @@ export function runningSum(
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function growth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growth');
@@ -728,6 +749,7 @@ export function growth(measure: Measure, name?: string): CalculatedMeasure {
  * @param measure - Measure to apply the Growth rate
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function growthRate(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthrate');
@@ -757,6 +779,7 @@ export function growthRate(measure: Measure, name?: string): CalculatedMeasure {
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function growthPastWeek(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastweek');
@@ -786,6 +809,7 @@ export function growthPastWeek(measure: Measure, name?: string): CalculatedMeasu
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function growthPastMonth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastmonth');
@@ -815,6 +839,7 @@ export function growthPastMonth(measure: Measure, name?: string): CalculatedMeas
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function growthPastQuarter(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastquarter');
@@ -844,6 +869,7 @@ export function growthPastQuarter(measure: Measure, name?: string): CalculatedMe
  * @param measure - Measure to apply growth to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function growthPastYear(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastyear');
@@ -865,6 +891,7 @@ export function growthPastYear(measure: Measure, name?: string): CalculatedMeasu
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function difference(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastperiod');
@@ -885,6 +912,7 @@ export function difference(measure: Measure, name?: string): CalculatedMeasure {
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function diffPastWeek(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastweek');
@@ -905,6 +933,7 @@ export function diffPastWeek(measure: Measure, name?: string): CalculatedMeasure
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function diffPastMonth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastmonth');
@@ -925,6 +954,7 @@ export function diffPastMonth(measure: Measure, name?: string): CalculatedMeasur
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function diffPastQuarter(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastquarter');
@@ -945,6 +975,7 @@ export function diffPastQuarter(measure: Measure, name?: string): CalculatedMeas
  * @param measure - Measure to apply difference to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function diffPastYear(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastyear');
@@ -961,6 +992,7 @@ export function diffPastYear(measure: Measure, name?: string): CalculatedMeasure
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function pastDay(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Day', 'pastday');
@@ -980,6 +1012,7 @@ export function pastDay(measure: Measure, name?: string): CalculatedMeasure {
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function pastWeek(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Week', 'pastweek');
@@ -1000,6 +1033,7 @@ export function pastWeek(measure: Measure, name?: string): CalculatedMeasure {
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function pastMonth(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Month', 'pastmonth');
@@ -1020,6 +1054,7 @@ export function pastMonth(measure: Measure, name?: string): CalculatedMeasure {
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function pastQuarter(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Quarter', 'pastquarter');
@@ -1040,6 +1075,7 @@ export function pastQuarter(measure: Measure, name?: string): CalculatedMeasure 
  * @param measure - Measure to apply past value to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Time-based
  */
 export function pastYear(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + '  Past Year', 'pastyear');
@@ -1077,6 +1113,7 @@ export function pastYear(measure: Measure, name?: string): CalculatedMeasure {
  * @param measure - Measure to apply the Contribution logic to
  * @param name - Name for the new measure
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function contribution(measure: Measure, name?: string): CalculatedMeasure {
   return measureFunction(measure, name ?? measure.name + ' Contribution', 'contribution');
@@ -1106,6 +1143,7 @@ export function contribution(measure: Measure, name?: string): CalculatedMeasure
  * @param name - Name for the new measure
  * @param options - Trend options
  * @returns A calculated measure instance
+ * @group Advanced Analytics
  */
 export function trend(
   measure: Measure,
@@ -1157,6 +1195,7 @@ export function trend(
  * @param name - Name for the new measure
  * @param options - Forecast options
  * @returns A calculated measure instance
+ * @group Advanced Analytics
  */
 export function forecast(
   measure: Measure,
@@ -1236,6 +1275,7 @@ export function forecast(
  * @param rankType - How to handle equally ranked items. By default the type is standard competition ranking.
  * @param groupBy - Rank partition attributes
  * @returns A calculated measure instance
+ * @group Statistics
  */
 export function rank(
   measure: Measure,

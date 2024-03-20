@@ -6,10 +6,6 @@ title: ExecuteQueryParams
 
 Parameters for data query execution.
 
-## Extends
-
-- `Omit`\< [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md), `"enabled"` \>
-
 ## Properties
 
 ### count
@@ -19,10 +15,6 @@ Parameters for data query execution.
 Number of rows to return in the query result
 
 If not specified, the default value is `20000`
-
-#### Inherited from
-
-Omit.count
 
 ***
 
@@ -34,10 +26,6 @@ Data source the query is run against - e.g. `Sample ECommerce`
 
 If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
 
-#### Inherited from
-
-Omit.dataSource
-
 ***
 
 ### dimensions
@@ -45,10 +33,6 @@ Omit.dataSource
 > **dimensions**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
 
 Dimensions of the query
-
-#### Inherited from
-
-Omit.dimensions
 
 ***
 
@@ -58,10 +42,6 @@ Omit.dimensions
 
 Filters that will slice query results
 
-#### Inherited from
-
-Omit.filters
-
 ***
 
 ### highlights
@@ -70,10 +50,6 @@ Omit.filters
 
 Highlight filters that will highlight results that pass filter criteria
 
-#### Inherited from
-
-Omit.highlights
-
 ***
 
 ### measures
@@ -81,10 +57,6 @@ Omit.highlights
 > **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
 Measures of the query
-
-#### Inherited from
-
-Omit.measures
 
 ***
 
@@ -95,10 +67,6 @@ Omit.measures
 Offset of the first row to return
 
 If not specified, the default value is `0`
-
-#### Inherited from
-
-Omit.offset
 
 ***
 
@@ -125,7 +93,3 @@ const onBeforeQuery = useCallback((jaql) => {
 #### Returns
 
 `any`
-
-#### Inherited from
-
-Omit.onBeforeQuery

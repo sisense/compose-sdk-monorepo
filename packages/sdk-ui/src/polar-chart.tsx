@@ -25,6 +25,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * <img src="media://polar-chart-example-1.png" width="600px" />
  * @param props - Polar chart properties
  * @returns Polar Chart component
+ * @group Charts
  */
 export const PolarChart = asSisenseComponent({
   componentName: 'PolarChart',

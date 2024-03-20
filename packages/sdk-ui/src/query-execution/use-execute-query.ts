@@ -41,6 +41,7 @@ import { getFilterListAndRelations } from '@sisense/sdk-data';
  * of using the hook to fetch data from Sisense for third-party charts.
  * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
+ * @group Queries
  */
 export const useExecuteQuery = withTracking('useExecuteQuery')(useExecuteQueryInternal);
 

@@ -4,23 +4,15 @@ title: GetNlgQueryResultProps
 
 # Interface GetNlgQueryResultProps
 
-Props for [GetNlgQueryResult](../functions/function.GetNlgQueryResult.md) component.
-
-## Extends
-
-- `Omit`\< [`UseGetNlgQueryResultParams`](interface.UseGetNlgQueryResultParams.md), `"enabled"` \>
+Props for [GetNlgQueryResult](../generative-ai/function.GetNlgQueryResult.md) component.
 
 ## Properties
 
 ### dataSource
 
-> **dataSource**: `string`
+> **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 The data source that the query targets - e.g. `Sample ECommerce`
-
-#### Inherited from
-
-Omit.dataSource
 
 ***
 
@@ -30,21 +22,13 @@ Omit.dataSource
 
 Dimensions of the query
 
-#### Inherited from
-
-Omit.dimensions
-
 ***
 
 ### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters of the query
-
-#### Inherited from
-
-Omit.filters
 
 ***
 
@@ -53,7 +37,3 @@ Omit.filters
 > **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
 Measures of the query
-
-#### Inherited from
-
-Omit.measures

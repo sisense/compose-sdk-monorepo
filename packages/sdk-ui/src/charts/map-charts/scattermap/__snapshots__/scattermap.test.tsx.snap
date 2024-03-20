@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Scattermap Chart > render a scattermap and call tooltip 1`] = `
+"<div style="minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px">
+
+    <div style="text-align: left">
+        <div><span style="color:currentColor; font-size: 15px; line-height: 18px">55.5859012851966, -105.750595856519</span></div>
+        <div class="csdk-scattermap-tooltip-row">
+
+    <span style="padding-right: 20px">
+      <span style="color:#9EA2AB; font-size: 15px; line-height: 18px">Quantity</span>
+    </span>
+
+        <span style="color:currentColor; font-size: 15px; line-height: 18px">6.78K</span>
+        </div>
+        <div class="csdk-scattermap-tooltip-row">
+
+
+        </div>
+        <div class="csdk-scattermap-tooltip-row">
+
+
+
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+  </div>"
+`;
