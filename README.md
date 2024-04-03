@@ -2,25 +2,24 @@
 
 Compose SDK is a Software Development Kit that enables a composable, code-driven way to use Sisense platform capabilities. Build analytics and data-driven experiences into your product with code using Compose SDK, a set of client-side libraries and components for query composition, data visualization, and more.
 
-- **Create Sisense queries, charts, and filters directly from your application code**
-  No predefined dashboards or widgets required - or render existing widgets by ID. Mix and match approaches to fit your needs.
-- **Composable, modular and extensible**
-  Use our components, customize them, or bring your own. Compose SDK works equally well for building new applications or upgrading existing ones to use Sisense’s powerful analytics platform.
-- **Built with developer experience in mind**
-  The SDK is available via GitHub and NPM, supports Typescript and React, and includes documentation, code samples and CLI tools that help you get things done with ease.
+- **Create Sisense queries, charts, and filters directly from your application code.** No predefined dashboards or widgets required - or render existing widgets by ID. Mix and match approaches to fit your needs.
+- **Composable, modular and extensible.** Use our components, customize them, or bring your own. Compose SDK works equally well for building new applications or upgrading existing ones to use Sisense’s powerful analytics platform.
+- **Built with developer experience in mind.** The SDK is available via GitHub and NPM, supports Typescript and common UI frameworks (React, Angular, Vue), and includes documentation, code samples and CLI tools that help you get things done with ease.
 
 ## What you need to know
 
 - Compose SDK requires a Sisense license & access to a Sisense instance
-- Compose SDK supports Sisense version L2022.11 or newer
-- Compose SDK currently supports development using JavaScript/Typescript and React
+- Compose SDK supports Sisense version `L2022.10` or newer
+- Compose SDK currently supports development using JavaScript/Typescript and React/Angular/Vue
 - This repository is a monorepo containing all SDK packages. You can find the individual packages [here](https://www.npmjs.com/search?q=%40sisense%2Fsdk)
 
 ## Documentation
 
 You can find documentation for Compose SDK on the [Sisense Developer Portal](https://sisense.dev).
 
-A demo application for Compose SDK + Typescript + React is available at https://csdk-react.sisense.com/. The source code repo is at [compose-sdk-react-demo](https://github.com/sisense/compose-sdk-react-demo).
+Demo applications for Compose SDK + Typescript are available at https://csdk-react.sisense.com/ (React), https://csdk-angular.sisense.com/ (Angular), and
+https://csdk-vue.sisense.com/ (Vue). The source code repos are at [compose-sdk-react-demo](https://github.com/sisense/compose-sdk-react-demo),
+[compose-sdk-angular-demo](https://github.com/sisense/compose-sdk-angular-demo), and [compose-sdk-vue-demo](https://github.com/sisense/compose-sdk-vue-demo).
 
 ## Overview of Development Tools
 
@@ -57,4 +56,4 @@ yarn storybook
 
 ### Set up another app
 
-You can find more information about setting up an app using this SDK in [quickstart.md](./docs-md/sdk/quickstart.md) or [quickstart-angular.md](./docs-md/sdk/quickstart-angular.md).
+You can find more information about setting up an app using this SDK in [quickstart.md](./docs-md/sdk/quickstart.md), [quickstart-angular.md](./docs-md/sdk/quickstart-angular.md), or [quickstart-vue.md](./docs-md/sdk/quickstart-vue.md).

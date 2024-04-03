@@ -9,7 +9,7 @@ import { SortingSettingItem } from '../SortingSettingItem.js';
 import { detectElementOverflow } from '../detectElementOverflow.js';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { Button } = require('@sisense/shared-ui-components');
+import { Button } from '../../../shared-ui-components/Button';
 
 type Props = {
   titleOfPopUp: string[];
@@ -96,9 +96,8 @@ export const ComplexSortingSettingsPopup = (props: Props) => {
 
   const someSettingsSelected = initialSortingSettings.some((itemProps) => itemProps.selected);
   const clearSortingButton = someSettingsSelected ? (
-    <h1>Button TODO</h1>
-  ) : // <Button text={messages.clearSorting} gray onClick={handleClearSortingClick} />
-  null;
+    <Button text={messages.clearSorting} gray onClick={handleClearSortingClick} />
+  ) : null;
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const captionRef = useRef<HTMLSpanElement>(null);
@@ -162,8 +161,7 @@ export const ComplexSortingSettingsPopup = (props: Props) => {
         </div>
         <div className="complex-sorting-settings__actions" style={actionsDynamicStyles}>
           <div className="sp-buttons">
-            <h1>Button TODO</h1>
-            {/*<Button onClick={handleApplyButtonClick} text={messages.apply} />*/}
+            <Button onClick={handleApplyButtonClick} text={messages.apply} />
             {clearSortingButton}
           </div>
         </div>

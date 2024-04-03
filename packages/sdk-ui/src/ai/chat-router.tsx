@@ -4,7 +4,7 @@ import { useGetDataTopics } from './api/hooks';
 import ChatBox from './chat-box';
 import { useChatConfig } from './chat-config';
 import ChatHome from './chat-home';
-import ErrorPage from './error-page';
+import ErrorContainer from './common/error-container';
 import LoadingSpinner from '../common/components/loading-spinner';
 
 export default function ChatRouter() {
@@ -33,7 +33,9 @@ export default function ChatRouter() {
   }, [queryClient]);
 
   if (errorMessage) {
-    return <ErrorPage text={errorMessage} action={{ text: 'Refresh', onClick: handleRefresh }} />;
+    return (
+      <ErrorContainer text={errorMessage} action={{ text: 'Refresh', onClick: handleRefresh }} />
+    );
   }
 
   if (defaultContextTitle && !selectedContext) {

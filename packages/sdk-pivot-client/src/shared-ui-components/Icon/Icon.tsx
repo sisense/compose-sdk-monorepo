@@ -89,6 +89,13 @@ const SisenseSvgIcon = (props: IconProps) => {
           <path d="M21 20.5a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 1 0v9z"></path>
         </g>
       </symbol>
+
+      <symbol id="general-x" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M12 12.293L6.854 7.146a.5.5 0 1 0-.708.708L11.293 13l-5.147 5.146a.5.5 0 0 0 .708.708L12 13.707l5.146 5.147a.5.5 0 0 0 .708-.708L12.707 13l5.147-5.146a.5.5 0 0 0-.708-.708L12 12.293z"
+        ></path>
+      </symbol>
     </SvgIcon>
   );
 };

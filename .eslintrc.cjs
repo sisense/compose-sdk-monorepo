@@ -17,6 +17,7 @@ module.exports = {
         '**/__test-helpers__/*.{ts,tsx}',
         '**/*.test.{ts,tsx}',
         '**/*.config.{ts,js}',
+        '**/*.workspace.{ts,js}',
         '**/test-helpers/*.{ts,tsx}',
       ],
       extends: ['@sisense/eslint-config/typescript/react'],

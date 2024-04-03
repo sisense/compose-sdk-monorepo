@@ -1,12 +1,13 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
   "workspaces": [
     "packages/*",
     "examples/*",
-    "e2e/"
+    "e2e/",
+    "typedoc-plugins/typedoc-plugin-markdown/"
   ],
   "scripts": {
     "dev": "yarn workspace @sisense/sdk-ui dev",
@@ -50,7 +51,7 @@
     "@sisense/commitlint-config": "^1.9.9",
     "@sisense/eslint-config": "1.9.12",
     "@sisense/prettier-config": "^1.9.9",
-    "@sisense/typedoc-plugin-markdown": "^4.0.0-next.46",
+    "@sisense/typedoc-plugin-markdown": "0.0.0",
     "@vitest/coverage-istanbul": "0.34.1",
     "eslint": "^8.40.0",
     "eslint-plugin-tsdoc": "0.2.17",

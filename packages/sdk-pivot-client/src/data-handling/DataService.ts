@@ -247,7 +247,7 @@ export class DataService implements DataServiceI {
    *
    * throttled data handler
    */
-  onDataHandlerThrottle: (data: any) => void;
+  onDataHandlerThrottle: (data?: any) => void;
 
   /**
    *
@@ -401,7 +401,8 @@ export class DataService implements DataServiceI {
       );
       if (nextChunkIndex !== -1) {
         this.lastNotHandledChunkIndex = nextChunkIndex;
-        // setImmediate(this.onDataHandlerThrottle);
+        // Note: removed `setImmediate` as not support
+        this.onDataHandlerThrottle();
       } else {
         this.isDataHandlerThrottled = false;
       }
@@ -443,9 +444,8 @@ export class DataService implements DataServiceI {
     this.events.on(eventName, callback);
     if (this.triggeredEventsData[eventName]) {
       this.triggeredEventsData[eventName].forEach((payload: Array<any>) => {
-        setImmediate(() => {
-          this.events.emit(eventName, ...payload);
-        });
+        // Note: removed `setImmediate` as not supported
+        this.events.emit(eventName, ...payload);
       });
       delete this.triggeredEventsData[eventName];
     }

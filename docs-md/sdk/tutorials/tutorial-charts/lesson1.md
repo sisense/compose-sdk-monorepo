@@ -60,7 +60,7 @@ To generate the data model:
 1. Run the following command
 
 ```sh
-npx @sisense/sdk-cli get-data-model --token <api-token> --output src/models/sample-retail.ts --dataSource "Sample Retail" --url <your-instance-url>
+npx @sisense/sdk-cli@latest get-data-model --token <api-token> --output src/models/sample-retail.ts --dataSource "Sample Retail" --url <your-instance-url>
 ```
 
 Be sure to replace the placeholders with your API token and the URL of your Sisense instance.

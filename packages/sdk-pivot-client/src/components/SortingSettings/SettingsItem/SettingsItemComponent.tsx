@@ -3,10 +3,8 @@ import React, { useRef, useState } from 'react';
 import { DirectionSelector } from './DirectionSelector/index.js';
 import { ListOfSortingDirections, SortingDirection } from '../../../data-handling/constants.js';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { Checkbox } = require('@sisense/shared-ui-components');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { Tooltip } = require('@sisense/shared-ui-components');
+import { Checkbox } from '../../../shared-ui-components/Checkbox';
+import { Tooltip } from '../../../shared-ui-components/Tooltip';
 
 type Props = {
   title: string;
@@ -95,17 +93,16 @@ export const SettingsItemComponent = (props: Props) => {
   const [isMouseOverLabel, setMouseOverLabelState] = useState(false);
   const handleMouseEnterLabel = (): void => setMouseOverLabelState(true);
   const handleMouseLeaveLabel = (): void => setMouseOverLabelState(false);
-  const nativeCheckboxInputStyle = isMouseOverLabel ? 'wrapper-of-input-highlighted' : '';
+  // const nativeCheckboxInputStyle = isMouseOverLabel ? 'wrapper-of-input-highlighted' : '';
 
   return (
     <div className="settings-item" key={title}>
       <div className="checkbox-input">
-        <h1>CHECKBOX TODO</h1>
-        {/*<Checkbox*/}
-        {/*  checked={isCheckboxSelected}*/}
-        {/*  onChange={handleCheckboxChange}*/}
-        {/*  inputCheckboxClassName={nativeCheckboxInputStyle}*/}
-        {/*/>*/}
+        <Checkbox
+          checked={isCheckboxSelected}
+          onChange={handleCheckboxChange}
+          // inputCheckboxClassName={nativeCheckboxInputStyle}
+        />
         <div
           className="checkbox-input__label"
           tabIndex={0}
@@ -116,17 +113,16 @@ export const SettingsItemComponent = (props: Props) => {
           onMouseEnter={handleMouseEnterLabel}
           onMouseLeave={handleMouseLeaveLabel}
         >
-          <h1>TOOLTIP TODO</h1>
-          {/*<Tooltip placement="top" overlay={title} visible={tooltipVisible}>*/}
-          {/*  <div*/}
-          {/*    ref={textWrapperRef}*/}
-          {/*    className="checkbox-input__text-wrapper"*/}
-          {/*    onMouseEnter={handleMouseEnterText}*/}
-          {/*    onMouseLeave={handleMouseLeaveText}*/}
-          {/*  >*/}
-          {/*    <span ref={textRef}>{title}</span>*/}
-          {/*  </div>*/}
-          {/*</Tooltip>*/}
+          <Tooltip placement="top" title={title}>
+            <div
+              ref={textWrapperRef}
+              className="checkbox-input__text-wrapper"
+              onMouseEnter={handleMouseEnterText}
+              onMouseLeave={handleMouseLeaveText}
+            >
+              <span ref={textRef}>{title}</span>
+            </div>
+          </Tooltip>
           {subtotalsCaption}
         </div>
       </div>

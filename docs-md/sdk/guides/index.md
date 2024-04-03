@@ -7,6 +7,9 @@ indexTopics:
     - title: Data Model
       description: Learn about Compose SDK data models
       link: ./data-model
+    - title: CLI
+      description: Learn about the Compose SDK CLI
+      link: ./cli
     - title: Generative AI
       description: Learn how to deliver conversational analytics using large language models (Private Beta)
       link: ./ai-features

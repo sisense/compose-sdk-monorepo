@@ -14,7 +14,10 @@ import {
   BoxplotChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../../chart-data-options/types';
-import { executeQuery } from '../../query/execute-query';
+import {
+  executeQueryWithCache,
+  executeQuery as executeQueryWithoutCache,
+} from '../../query/execute-query';
 import { applyDateFormats } from '../../query/query-result-date-formatting';
 import { ChartType } from '../../types';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
@@ -40,29 +43,41 @@ export const useSyncedData = (
   highlights?: Filter[],
   refreshCounter?: number,
   setIsLoading?: Dispatch<SetStateAction<boolean>>,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {
   const setError = useSetError();
 
   const [data, setData] = useState<Data>();
   const { app } = useSisenseContext();
+  const executeQuery = app?.settings.queryCacheConfig?.enabled
+    ? executeQueryWithCache
+    : executeQueryWithoutCache;
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     let ignore = false;
 
     const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
     if (dataSet === undefined || isDataSource(dataSet)) {
+      if (!app) {
+        return;
+      }
+
       let executeQueryPromise;
 
       if (chartType === 'boxplot') {
-        executeQueryPromise = executeBoxplotQuery({
-          app: app!,
-          chartDataOptions: chartDataOptions as BoxplotChartDataOptionsInternal,
-          dataSource: dataSet,
-          attributes,
-          measures,
-          filters: filterList,
-          highlights,
-        });
+        executeQueryPromise = executeBoxplotQuery(
+          {
+            app,
+            chartDataOptions: chartDataOptions as BoxplotChartDataOptionsInternal,
+            dataSource: dataSet,
+            attributes,
+            measures,
+            filters: filterList,
+            highlights,
+          },
+          executeQuery,
+        );
       } else {
         executeQueryPromise = executeQuery(
           {
@@ -72,8 +87,9 @@ export const useSyncedData = (
             filters: filterList,
             filterRelations,
             highlights,
+            count: app.settings.queryLimit,
           },
-          app!,
+          app,
         );
       }
 

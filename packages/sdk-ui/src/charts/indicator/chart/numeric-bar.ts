@@ -391,10 +391,10 @@ export class NumericBar {
   ) {
     const y = options.offsetY;
 
-    ctx.fillStyle = data.color;
+    ctx.fillStyle = options.valueColor;
     ctx.fillRect(1, y, options.width - options.bracketThickness * 2, options.valueSectionHeight);
     ctx.font = options.valueFont;
-    ctx.fillStyle = options.valueColor;
+    ctx.fillStyle = 'white';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(

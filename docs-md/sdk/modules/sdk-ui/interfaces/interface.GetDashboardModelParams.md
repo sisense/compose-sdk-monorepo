@@ -4,7 +4,7 @@ title: GetDashboardModelParams
 
 # Interface GetDashboardModelParams
 
-Parameters for [useGetDashboardModel](../fusion-assets/function.useGetDashboardModel.md) hook.
+Parameters for [useGetDashboardModel](../fusion-embed/function.useGetDashboardModel.md) hook.
 
 ## Properties
 

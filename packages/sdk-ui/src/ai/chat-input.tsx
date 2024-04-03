@@ -3,6 +3,7 @@ import { KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 
 import MessageIcon from './icons/message-icon';
 import ClearChatIcon from './icons/clear-chat-icon';
+import { useChatStyle } from './chat-style-provider';
 
 export type ChatInputProps = {
   onSendMessage: (message: string) => void;
@@ -57,6 +58,8 @@ export default function ChatInput({
   const textareaBorderStyle =
     'csdk-border csdk-border-[#262E3D]/[.15] csdk-rounded-lg focus:csdk-outline-[#262E3D]/50';
 
+  const { primaryTextColor, inputBackgroundColor } = useChatStyle();
+
   return (
     <div className="csdk-flex csdk-items-end csdk-content-center csdk-w-full csdk-relative csdk-px-[16px]">
       {onClearHistoryClick && (
@@ -77,6 +80,10 @@ export default function ChatInput({
         placeholder="Ask a question"
         value={text}
         onKeyDown={onKeyDownInput}
+        style={{
+          color: primaryTextColor,
+          backgroundColor: inputBackgroundColor,
+        }}
       />
       <button
         aria-label="send chat message"

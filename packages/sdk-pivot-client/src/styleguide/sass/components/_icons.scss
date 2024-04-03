@@ -1,0 +1,327 @@
+@import '../variables';
+
+// Iconography
+//
+// This section describes all icons which available in system
+//
+// Styleguide 3.0
+
+// How to use
+//
+// To use SVG icons on your site you should first <b>include (inline) SVG</b> sprite on your page, check <b>"src\sprites\icons.svg"</b>.
+//
+// Icon template:
+// <br/>
+// &lt;span class="app-icon app-icon--<b>${icon-name}</b>"&gt;
+// <br/>
+// &nbsp;&nbsp;&nbsp;&nbsp;&lt;svg class="app-icon__svg"&gt;
+// <br/>
+// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;use xlink:href="#<b>${icon-name}</b>"&gt;&lt;/use&gt;
+// <br/>
+// &nbsp;&nbsp;&nbsp;&nbsp;&lt;/svg&gt;
+// <br/>
+// &lt;/span&gt;
+//
+// markup:
+// <span style="vertical-align: middle;">Text</span>
+// <span class="app-icon app-icon--data-location">
+//     <svg class="app-icon__svg">
+//         <use xlink:href="#data-location"></use>
+//     </svg>
+// </span>
+// <span style="width: 36px; height: 36px;" class="app-icon app-icon--data-location {$modifiers}">
+//     <svg class="app-icon__svg">
+//         <use xlink:href="#data-location"></use>
+//     </svg>
+// </span>
+// <span style="width: 48px; height: 48px;" class="app-icon app-icon--data-location {$modifiers}">
+//     <svg class="app-icon__svg">
+//         <use xlink:href="#data-location"></use>
+//     </svg>
+// </span>
+// <span style="vertical-align: middle;">Text</span>
+//
+// Styleguide 3.1
+
+// Icons
+//
+// markup:
+// <!-- Preview template -->
+// <div ng-include="'views/partials/icons.html'"></div>
+//
+// Styleguide 3.2
+
+$icons-color-default: $color-text;
+$icons-color-light-gray: $color-gray-2;
+$icons-color-error-cancel: $color-error-cancel;
+$icons-color-apply-approve: $color-apply-approve;
+$icons-size: $app-icon-size-default;
+
+.app-icon {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: $icons-size;
+  height: $icons-size;
+  box-sizing: content-box;
+
+  text-align: left;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.app-icon__svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.app-icon--build-failed,
+.app-icon--build-stopped,
+.app-icon--build-exlamation-mark-error-cancel,
+.app-icon--general-relationship-error,
+.app-icon--placeholder-mark-x {
+  .app-icon__svg {
+    fill: $icons-color-error-cancel;
+  }
+}
+
+.app-icon--placeholder-mark-info,
+.app-icon--build-vi-apply-aprrove,
+.app-icon--general-status-running {
+  .app-icon__svg {
+    fill: $color-apply-approve;
+  }
+}
+
+.app-icon--general-x-sign,
+.app-icon--general-vi-sign {
+  .app-icon__svg {
+    fill: transparent;
+  }
+}
+
+.app-icon--general-status-pending,
+.app-icon--general-status-running {
+  color: $icons-color-light-gray;
+}
+
+// Custom sizes
+.app-icon--general-relationship-tool-tip {
+  width: ceil($icons-size * 1.5);
+}
+
+.app-icon--header-pulse {
+  width: ceil($icons-size * 1.16);
+}
+
+.app-icon--general-update,
+.app-icon--popup-interval-selected,
+.app-icon--popup-week-selected,
+.app-icon--popup-disable-selected {
+  width: ceil($icons-size * 2.083);
+  height: ceil($icons-size * 2.083);
+}
+
+.app-icon--general-yellow-round-add {
+  width: ceil($icons-size * 1.125);
+  height: ceil($icons-size * 1.125);
+}
+
+.app-icon--general-sampling-sample-big,
+.app-icon--general-sampling-top-big,
+.app-icon--general-sampling-bottom-big {
+  width: ceil($icons-size * 1.458);
+  height: ceil($icons-size * 1.458);
+}
+
+.app-icon--general-drag-edit-relation,
+.app-icon--general-drag-new-relation,
+.app-icon--general-drag {
+  width: ceil($icons-size * 1.5);
+  height: ceil($icons-size * 1.5);
+}
+
+.app-icon--popup-public-selected {
+  width: ceil($icons-size * 2.041);
+  height: ceil($icons-size * 1.75);
+}
+
+.app-icon--header-git,
+.app-icon--general-git-add-branch {
+  fill: none;
+
+  .app-icon__svg {
+    fill: none;
+  }
+}
+
+.app-icon--header-git,
+.app-icon--header-alarm,
+.app-icon--header-user,
+.app-icon--header-user-filled {
+  width: ceil($icons-size * 1.25);
+  height: ceil($icons-size * 1.25);
+}
+
+.app-icon--general-git-add-branch {
+  width: ceil($icons-size * 0.75);
+  height: ceil($icons-size * 0.75);
+}
+
+.app-icon--popup-lshare-selected,
+.app-icon--popup-lock-selected,
+.app-icon--hint-question-mark,
+.app-icon--hint-x {
+  width: ceil($icons-size * 1.75);
+  height: ceil($icons-size * 1.75);
+}
+
+.app-icon--resource-guide,
+.app-icon--resource-help,
+.app-icon--resource-learn {
+  width: ceil($icons-size * 1.083);
+  height: ceil($icons-size * 1.541);
+}
+
+.app-icon--schema-arrow-close-left,
+.app-icon--schema-arrow-close-right,
+.app-icon--schema-version-history,
+.app-icon--schema-compass {
+  width: ceil($icons-size * 1.083);
+  height: ceil($icons-size * 1.083);
+}
+
+.app-icon--wizard-add-folder,
+.app-icon--wizard-connect,
+.app-icon--wizard-database,
+.app-icon--wizard-files,
+.app-icon--wizard-new-page,
+.app-icon--wizard-recent,
+.app-icon--wizard-recent-circle,
+.app-icon--wizard-rest,
+.app-icon--wizard-view,
+.app-icon--wizard-web,
+.app-icon--wizard-certified {
+  width: ceil($icons-size * 1.458);
+  height: ceil($icons-size * 1.458);
+}
+
+.app-icon--nodes-delete,
+.app-icon--nodes-rename,
+.app-icon--nodes-edit,
+.app-icon--nodes-more,
+.app-icon--nodes-preview,
+.app-icon--nodes-ignored,
+.app-icon--nodes-accumulated,
+.app-icon--nodes-accumulated-2 {
+  width: ceil($icons-size * 1.541);
+  height: ceil($icons-size * 1.541);
+}
+
+.app-icon--placeholder-database,
+.app-icon--placeholder-database-x,
+.app-icon--placeholder-connection,
+.app-icon--placeholder-git-graph,
+.app-icon--placeholder-parameters,
+.app-icon--placeholder-search-x,
+.app-icon--placeholder-search,
+.app-icon--placeholder-table,
+.app-icon--placeholder-table-x,
+.app-icon--placeholder-table-init,
+.app-icon--placeholder-tools,
+.app-icon--placeholder-preview,
+.app-icon--placeholder-database-plus-black-white,
+.app-icon--placeholder-preview-inspect-black-white,
+.app-icon--placeholder-preview-plus-black-white,
+.app-icon--placeholder-generate-token,
+.app-icon--placeholder-key,
+.app-icon--placeholder-presentation {
+  width: ceil($icons-size * 4.583);
+  height: ceil($icons-size * 4.583);
+}
+
+.app-icon--placeholder-filter {
+  width: ceil($icons-size * 4.583);
+  height: ceil($icons-size * 5.416);
+}
+
+.app-icon--placeholder-sheet {
+  width: ceil($icons-size * 3.708);
+  height: ceil($icons-size * 3.875);
+}
+
+.app-icon--placeholder-mark-info,
+.app-icon--placeholder-mark-exclamation,
+.app-icon--placeholder-mark-vi,
+.app-icon--placeholder-mark-x {
+  width: ceil($icons-size * 2.75);
+  height: ceil($icons-size * 2.75);
+}
+
+.app-icon--placeholder-place-file,
+.app-icon--placeholder-place-text-add {
+  width: ceil($icons-size * 5);
+  height: ceil($icons-size * 2.916);
+}
+
+.app-icon--illustration-build-succeeded,
+.app-icon--illustration-build-failed {
+  width: ceil($icons-size * 9.375);
+  height: ceil($icons-size * 8.75);
+}
+
+.app-icon--homepages-video,
+.app-icon--homepages-tutorials,
+.app-icon--homepages-documentation,
+.app-icon--homepages-sample {
+  width: ceil($icons-size * 2.708);
+  height: ceil($icons-size * 2.33);
+}
+
+.app-icon--homepages-play {
+  width: ceil($icons-size * 2.54);
+  height: ceil($icons-size * 2.54);
+}
+
+.app-icon--widget-area-chart,
+.app-icon--widget-area-map,
+.app-icon--widget-bar-chart,
+.app-icon--widget-box-whisker-plot,
+.app-icon--widget-calendar-heatmap,
+.app-icon--widget-column-char,
+.app-icon--widget-indicator,
+.app-icon--widget-line-chart,
+.app-icon--widget-pie-chart,
+.app-icon--widget-pivot,
+.app-icon--widget-polar-chart,
+.app-icon--widget-scatter-chart,
+.app-icon--widget-scatter-map,
+.app-icon--widget-sunburst,
+.app-icon--widget-table,
+.app-icon--widget-treemap,
+.app-icon--widget-no-sort {
+  width: ceil($icons-size * 1.083);
+  height: ceil($icons-size * 1.083);
+}
+
+.app-icon--buildpanel-replace-all,
+.app-icon--buildpanel-by-table,
+.app-icon--buildpanel-changes-only {
+  width: ceil($icons-size * 2.66);
+  height: ceil($icons-size * 2.66);
+}
+
+.app-icon--ai-group-similar-big {
+  width: ceil($icons-size * 3.66);
+  height: ceil($icons-size * 3.45);
+}

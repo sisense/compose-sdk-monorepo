@@ -36,7 +36,8 @@ import { useExecuteQueryByWidgetIdInternal } from './use-execute-query-by-widget
  * ```
  * @param props - ExecuteQueryByWidgetId properties
  * @returns ExecuteQueryByWidgetId component
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 export const ExecuteQueryByWidgetId: FunctionComponent<ExecuteQueryByWidgetIdProps> =
   asSisenseComponent({

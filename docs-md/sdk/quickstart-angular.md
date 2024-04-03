@@ -2,12 +2,12 @@
 title: Quickstart Guide (Angular)
 ---
 
-# Compose SDK with Angular <Badge type="beta" text="Beta" />: Quickstart Guide
+# Compose SDK with Angular: Quickstart Guide
 
 Follow this guide to get started developing applications with Compose SDK.
 
 >**Note**:
-This guide is for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular) (beta). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (beta).
+This guide is for [<img src="./img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular). We also have a Quickstart Guide for [<img src="./img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart) and [<img src="./img/vue-logo.png" height="14px" /> Vue](./quickstart-vue) (beta).
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ There are a number of different ways you can authenticate your application. To l
 Here, we'll use an API Token that we retrieve using the Compose SDK tool. To do so, run the `get-api-token` command:
 
 ```sh
-npx @sisense/sdk-cli get-api-token --url <your_instance_url> --username <username>
+npx @sisense/sdk-cli@latest get-api-token --url <your_instance_url> --username <username>
 ```
 
 Hold on to the API Token. You'll need it later when adding Compose SDK code to your application.
@@ -107,7 +107,7 @@ Once you have a TypeScript representation of your data model, you define measure
 Run the following command to create a `sample-healthcare.ts` file in directory `src/` of the application. The file contains a TypeScript representation of the Sample Healthcare data model.
 
 ```sh
-npx @sisense/sdk-cli get-data-model --username "<username>" --output src/sample-healthcare.ts --dataSource "Sample Healthcare" --url <your_instance_url>
+npx @sisense/sdk-cli@latest get-data-model --username "<username>" --output src/sample-healthcare.ts --dataSource "Sample Healthcare" --url <your_instance_url>
 ```
 
 Enter your password to complete the command and generate the data model representation.

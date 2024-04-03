@@ -51,7 +51,8 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  *  widgetOid: string = '60f3e3e3e4b0e3e3e4b0e3e3';
  *  dashboardOid: string = '60f3e3e3e4b0e3e3e4b0e3e3';
  * ```
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 @Component({
   selector: 'csdk-dashboard-widget',

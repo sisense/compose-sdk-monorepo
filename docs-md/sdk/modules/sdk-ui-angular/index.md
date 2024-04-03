@@ -2,7 +2,7 @@
 title: sdk-ui-angular
 ---
 
-# Module sdk-ui-angular <Badge type="beta" text="Beta" />
+# Module sdk-ui-angular
 
 ## Charts
 
@@ -57,13 +57,13 @@ Angular components for charts
 
 - [QueryService](queries/class.QueryService.md)
 
-## Fusion Assets
+## Fusion Embed
 
 Fusion Dashboards, Widgets, Queries, and Formulas
 
-- [DashboardService](fusion-assets/class.DashboardService.md)
-- [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md)
-- [WidgetModel](fusion-assets/class.WidgetModel.md)
+- [DashboardService](fusion-embed/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardWidgetComponent](fusion-embed/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Interfaces
 

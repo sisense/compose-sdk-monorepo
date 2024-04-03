@@ -143,7 +143,7 @@ There are a number of different ways you can authenticate your application. To l
 Here, we'll use an API Token that we retrieve using the Compose SDK tool. To do so, run the `get-api-token` command:
 
 ```sh
-npx @sisense/sdk-cli get-api-token --url <your_instance_url> --username <username>
+npx @sisense/sdk-cli@latest get-api-token --url <your_instance_url> --username <username>
 ```
 
 Hold on to the API Token. You'll need it later when adding Compose SDK code to your application.
@@ -167,7 +167,7 @@ Once you have a TypeScript representation of your data model, you define measure
 Run the following command to create a `sample-retail.ts` file in directory `src/` of the application. The file contains a TypeScript representation of the Sample Retail data model.
 
 ```sh
-npx @sisense/sdk-cli get-data-model --username "<username>" --output src/sample-retail.ts --dataSource "Sample Retail" --url <your_instance_url>
+npx @sisense/sdk-cli@latest get-data-model --username "<username>" --output src/sample-retail.ts --dataSource "Sample Retail" --url <your_instance_url>
 ```
 
 Enter your password to complete the command and generate the data model representation.
@@ -257,7 +257,7 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 ```
 
 > **Note:**
-> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `UnitPriceDiscount` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/namespaces/namespace.measureFactory/index.md) documentation for more information.
+> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `UnitPriceDiscount` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 

@@ -3,6 +3,7 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
 import { ChatConfig, ChatConfigProvider } from './chat-config';
 import ChatFrame from './chat-frame';
 import ChatRouter from './chat-router';
+import { ChatStyle, ChatStyleProvider } from './chat-style-provider';
 
 /**
  * Props for {@link Chatbot} component.
@@ -21,6 +22,13 @@ export type ChatbotProps = {
    * If not specified, a default height of `900px` will be used.
    */
   height?: CSSProperties['height'];
+
+  /**
+   * Style settings for the chatbot
+   *
+   * @internal
+   */
+  style?: ChatStyle;
 
   /**
    * Various configuration options for the chatbot
@@ -57,13 +65,15 @@ export type ChatbotProps = {
 export const Chatbot = asSisenseComponent({
   componentName: 'Chatbot',
 })((props: ChatbotProps) => {
-  const { width, height, config } = props;
+  const { width, height, config, style } = props;
 
   return (
-    <ChatConfigProvider value={config ?? {}}>
-      <ChatFrame width={width} height={height}>
-        <ChatRouter />
-      </ChatFrame>
-    </ChatConfigProvider>
+    <ChatStyleProvider value={style ?? {}}>
+      <ChatConfigProvider value={config ?? {}}>
+        <ChatFrame width={width} height={height}>
+          <ChatRouter />
+        </ChatFrame>
+      </ChatConfigProvider>
+    </ChatStyleProvider>
   );
 });

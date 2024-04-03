@@ -1,7 +1,5 @@
 import React, { useState, useRef, useLayoutEffect, RefObject } from 'react';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { Tooltip } = require('@sisense/shared-ui-components');
+import { Tooltip } from '../../../shared-ui-components/Tooltip';
 
 function wrapWithLeftSingleQuotationMark(str: string): string {
   return `\u2018${str}\u2019`;
@@ -39,20 +37,11 @@ export const HeaderText = (props: Props) => {
   return (
     <div className="header-text">
       <span className="header-text__sort-by">{prependedText}</span>
-      <h1>TOOLTIP TODO</h1>
-      {/*<Tooltip*/}
-      {/*    placement="top"*/}
-      {/*    overlay={initialText}*/}
-      {/*    title={text}*/}
-      {/*    arrow*/}
-      {/*>*/}
-      {/*    <span*/}
-      {/*        ref={containerRef}*/}
-      {/*        className="header-text__hierarchy-container"*/}
-      {/*    >*/}
-      {/*        <span ref={textRef}>{text}</span>*/}
-      {/*    </span>*/}
-      {/*</Tooltip>*/}
+      <Tooltip placement="top" title={text} arrow>
+        <span ref={containerRef} className="header-text__hierarchy-container">
+          <span ref={textRef}>{text}</span>
+        </span>
+      </Tooltip>
     </div>
   );
 };

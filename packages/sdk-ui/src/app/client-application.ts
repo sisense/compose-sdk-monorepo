@@ -12,6 +12,7 @@ import { AppSettings, getSettings } from './settings/settings';
 import { TranslatableError } from '../translation/translatable-error';
 import { PivotClient } from '@sisense/sdk-pivot-client';
 import { LoadingIndicatorConfig } from '../types';
+import { clearExecuteQueryCache } from '@/query/execute-query';
 
 /**
  * Application configuration
@@ -38,6 +39,26 @@ export type AppConfig = {
    * Loading Indicator Configurations
    */
   loadingIndicatorConfig?: LoadingIndicatorConfig;
+
+  /**
+   * Query Cache Configurations
+   *
+   * This feature is in alpha.
+   */
+  queryCacheConfig?: {
+    /**
+     * Whether to enable query caching
+     *
+     * If not specified, the default value is `false`
+     */
+    enabled?: boolean;
+  };
+
+  /**
+   * Query limit (max rows count that will be fetched in query)
+   * @default 20000
+   */
+  queryLimit?: number;
 };
 
 /**
@@ -72,6 +93,16 @@ export class ClientApplication {
   settings: AppSettings;
 
   /**
+   * Gets the module to control query cache
+   */
+  queryCache: {
+    /**
+     * Clears the query cache
+     */
+    clear: () => void;
+  };
+
+  /**
    * Construct new Sisense Client Application
    *
    * @param url - URL to the sisense environment
@@ -95,6 +126,10 @@ export class ClientApplication {
     );
     this.pivotClient = new PivotClient(this.httpClient);
     this.queryClient = new DimensionalQueryClient(this.httpClient, this.pivotClient);
+
+    this.queryCache = {
+      clear: clearExecuteQueryCache,
+    };
 
     if (defaultDataSource !== undefined) {
       this.defaultDataSource = defaultDataSource;

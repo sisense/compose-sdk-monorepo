@@ -15,6 +15,7 @@ export const defaultNumericSimpleOptions: NumericSimpleOptions = {
     },
   },
   value: {
+    color: 'rgb(0,206,230)',
     fontSizes: {
       big: 66,
       medium: 46,

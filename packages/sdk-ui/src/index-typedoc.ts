@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @groupDescription Charts
  * React components for charts
- * @groupDescription Fusion Assets
+ * @groupDescription Fusion Embed
  * Fusion Dashboards, Widgets, Queries, and Formulas
  * @groupDescription Interfaces
  * TypeScript interfaces for components and hooks listed above

@@ -7,6 +7,7 @@ export {
   executeQueryByWidgetId,
 } from './use-execute-query-by-widget-id';
 export { useExecutePivotQuery } from './use-execute-pivot-query';
+export { useQueryCache } from './use-query-cache';
 export type {
   QueryState,
   QueryLoadingState,
@@ -21,6 +22,7 @@ export type {
   PivotQuerySuccessState,
   PivotQueryErrorState,
   ExecuteQueryParams,
+  ExecuteQueryResult,
   ExecuteCsvQueryParams,
   ExecuteCSVQueryConfig,
   ExecuteQueryByWidgetIdParams,

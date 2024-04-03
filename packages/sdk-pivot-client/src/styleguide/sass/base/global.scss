@@ -1,0 +1,41 @@
+@import '../variables';
+
+@mixin global-main-props() {
+  font-size: $font-size-main;
+  line-height: $line-height-main;
+  cursor: default;
+  padding: 0;
+  margin: 0;
+  background: $back;
+
+  // Added manually [start]
+  font-family: 'Open Sans';
+  color: #5b6372;
+  .btn {
+    background-color: #ffcb05;
+    color: #3a4356;
+  }
+  // [end]
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+
+  ::-webkit-input-placeholder {
+    opacity: 1;
+  }
+
+  ::-moz-placeholder {
+    opacity: 1;
+  }
+
+  ::-ms-placeholder {
+    opacity: 1;
+  }
+
+  ::placeholder {
+    opacity: 1;
+  }
+}

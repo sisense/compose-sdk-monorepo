@@ -25,9 +25,14 @@ import { AiDemo } from './pages/ai-demo';
 import { PivotQueryDemo } from './pages/pivot-query-demo';
 import { ComboChartStylingDemo } from './pages/combo-chart-styling';
 import { PivotTableDemo } from './pages/pivot-table-demo';
+import { QueryCachingDemo } from './pages/query-caching-demo';
+import { sisenseContextProviderProps } from './sisense-context-provider-props';
+import { UseFetchDemo } from './pages/use-fetch-demo';
 import { OnyxChatToCodeDemo } from './pages/onyx-chat-to-code-demo';
 import { RenderDashboardDemo } from './pages/render-dashboard-demo';
-import { UseGetDashboardModelDemo } from '@/__demo__/pages/use-get-dashboard-model-demo';
+import { UseGetDashboardModelDemo } from './pages/use-get-dashboard-model-demo';
+import { withCachingSwitcher } from './pages/helper-components/with-caching-switcher';
+import { PieChartHighlightDemo } from './pages/selection-highlight/pie-chart-highlight-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -35,6 +40,7 @@ import { UseGetDashboardModelDemo } from '@/__demo__/pages/use-get-dashboard-mod
 // Suggest adding a router or at least sessionStorage var for selectedTabIndex
 // if this becomes popular
 const pages: ComponentType[] = [
+  PieChartHighlightDemo,
   PageCrossFiltering,
   SelectionFilterDemo,
   TimeseriesCharts,
@@ -51,7 +57,7 @@ const pages: ComponentType[] = [
   UseExecuteQueryDemo,
   ChartTypeSwitchingDemo,
   SelectionFilterDemo,
-  RenderDashboardDemo,
+  withCachingSwitcher(RenderDashboardDemo),
   UseGetWidgetModelDemo,
   UseGetDashboardModelDemo,
   BoxplotChartDemo,
@@ -60,36 +66,13 @@ const pages: ComponentType[] = [
   AiDemo,
   PivotQueryDemo,
   PivotTableDemo,
+  QueryCachingDemo,
   ComboChartStylingDemo,
   OnyxChatToCodeDemo,
+  UseFetchDemo,
 ];
 
-const {
-  VITE_APP_SISENSE_URL,
-  VITE_APP_SISENSE_TOKEN,
-  VITE_APP_SISENSE_WAT,
-  VITE_APP_SISENSE_SSO_ENABLED,
-} = import.meta.env;
-
-const sisenseContextProviderProps = (() => {
-  const baseOptions = {
-    url: VITE_APP_SISENSE_URL || '',
-    defaultDataSource: 'Sample ECommerce',
-  };
-  const wat = VITE_APP_SISENSE_WAT;
-  const token = VITE_APP_SISENSE_TOKEN;
-  const ssoEnabled = VITE_APP_SISENSE_SSO_ENABLED;
-
-  if (ssoEnabled && ssoEnabled?.toLowerCase() === 'true') {
-    return { ...baseOptions, ssoEnabled: true };
-  } else if (wat) {
-    return { ...baseOptions, wat };
-  } else if (token) {
-    return { ...baseOptions, token };
-  } else {
-    return baseOptions;
-  }
-})();
+const { VITE_APP_SISENSE_URL } = import.meta.env;
 
 const drawerWidth = 240;
 
@@ -117,7 +100,7 @@ function LeftNav({
         {pages.map((page, i) => (
           <ListItem key={i} disablePadding>
             <ListItemButton onClick={() => onSelectItem(i)} selected={currentItem === i}>
-              <ListItemText primary={page.name} />
+              <ListItemText primary={page.displayName || page.name} />
             </ListItemButton>
           </ListItem>
         ))}

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-type ContainerSize = {
+export type ContainerSize = {
   width: number;
   height: number;
 };
@@ -9,6 +9,8 @@ export type DynamicSizeContainerProps = {
   children: React.ReactNode | ((size: ContainerSize) => React.ReactNode);
   defaultSize: ContainerSize;
   size?: Partial<ContainerSize>;
+  rerenderOnResize?: boolean;
+  onSizeChange?: (size: ContainerSize) => void;
 };
 
 /**
@@ -47,13 +49,17 @@ export const DynamicSizeContainer = ({
   children,
   defaultSize,
   size,
+  rerenderOnResize = false,
+  onSizeChange,
 }: DynamicSizeContainerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [contentSize, setContentSize] = useState<ContainerSize | null>(null);
 
   const updateContentSize = useCallback(() => {
-    setContentSize(calculateContentSize(containerRef.current, size, defaultSize));
-  }, [containerRef, size, defaultSize]);
+    const newSize = calculateContentSize(containerRef.current, size, defaultSize);
+    setContentSize(newSize);
+    onSizeChange?.(newSize);
+  }, [containerRef, size, defaultSize, onSizeChange]);
 
   useLayoutEffect(() => {
     updateContentSize();
@@ -75,7 +81,7 @@ export const DynamicSizeContainer = ({
     height: contentSize?.height ? `${contentSize.height}px` : '100%',
   };
 
-  const contentKey = `${contentSize?.width}${contentSize?.height}`;
+  const contentKey = rerenderOnResize ? `${contentSize?.width}${contentSize?.height}` : '';
 
   return (
     <div style={containerStyle} ref={containerRef}>

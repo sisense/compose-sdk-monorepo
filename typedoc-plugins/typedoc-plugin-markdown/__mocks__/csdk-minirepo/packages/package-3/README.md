@@ -1,0 +1,5 @@
+# PACKAGE 3 README
+
+Readme content
+
+[TYPEDOC_INDEX]

@@ -28,7 +28,7 @@ The command takes the following parameters:
 For example, you can create a TypeScript representation of the Sample ECommerce data model like this:
 
 ```sh
-npx @sisense/sdk-cli get-data-model --username sample@sample.com --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url https://myinstanceurl.com
+npx @sisense/sdk-cli@latest get-data-model --username sample@sample.com --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url https://myinstanceurl.com
 ```
 
 If prompted, enter your password to authenticate and generate the data model representation.

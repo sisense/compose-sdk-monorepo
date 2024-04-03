@@ -84,7 +84,7 @@ export class DimensionalQueryClient implements QueryClient {
     queryDescription: QueryDescription,
     config?: QueryExecutionConfig,
   ): ExecutingCsvQueryResult {
-    validateQueryDescription(queryDescription, { ignoreQueryLimit: true });
+    validateQueryDescription(queryDescription);
 
     const taskPassport = new QueryTaskPassport('SEND_DOWNLOAD_CSV_QUERY', queryDescription, {
       ...(config ? config : {}),
@@ -165,21 +165,11 @@ export class DimensionalQueryClient implements QueryClient {
  * @param config - query execution configuration
  * @throws Error if query description is invalid
  */
-export function validateQueryDescription(
-  queryDescription: QueryDescription,
-  config?: { ignoreQueryLimit?: boolean },
-): void {
+export function validateQueryDescription(queryDescription: QueryDescription): void {
   const { attributes, measures, filters, highlights, count, offset } = queryDescription;
 
   if (count && count < 0) {
     throw new TranslatableError('errors.invalidCountNegative', { count: count.toString() });
-  }
-
-  if (!config?.ignoreQueryLimit && count && count > QUERY_DEFAULT_LIMIT) {
-    throw new TranslatableError('errors.invalidCountLimit', {
-      count: count.toString(),
-      limit: QUERY_DEFAULT_LIMIT.toString(),
-    });
   }
 
   if (offset && offset < 0) {
@@ -227,13 +217,6 @@ export function validatePivotQueryDescription(queryDescription: PivotQueryDescri
 
   if (count && count < 0) {
     throw new TranslatableError('errors.invalidCountNegative', { count: count.toString() });
-  }
-
-  if (count && count > QUERY_DEFAULT_LIMIT) {
-    throw new TranslatableError('errors.invalidCountLimit', {
-      count: count.toString(),
-      limit: QUERY_DEFAULT_LIMIT.toString(),
-    });
   }
 
   if (offset && offset < 0) {

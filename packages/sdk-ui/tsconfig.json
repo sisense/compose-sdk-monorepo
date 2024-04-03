@@ -23,6 +23,7 @@
     { "path": "../sdk-query-client" },
     { "path": "../sdk-common" },
     { "path": "../sdk-tracking" },
+    { "path": "../sdk-pivot-client" },
     { "path": "./tsconfig.node.json" }
   ]
 }

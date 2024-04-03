@@ -4,7 +4,7 @@ title: GetSharedFormulaParams
 
 # Interface GetSharedFormulaParams
 
-Parameters for [useGetSharedFormula](../fusion-assets/function.useGetSharedFormula.md) hook.
+Parameters for [useGetSharedFormula](../fusion-embed/function.useGetSharedFormula.md) hook.
 
 ## Properties
 

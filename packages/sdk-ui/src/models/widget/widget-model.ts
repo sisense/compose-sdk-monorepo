@@ -30,7 +30,8 @@ export type WidgetDataOptions = ChartDataOptions | TableDataOptions;
 /**
  * Model of Sisense widget defined in the abstractions of Compose SDK.
  *
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 export class WidgetModel {
   /**

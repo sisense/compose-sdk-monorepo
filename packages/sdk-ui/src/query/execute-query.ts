@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+import { CreateCacheKeyFn, createCache } from '@/utils/create-cache';
 import {
   Attribute,
   DataSource,
@@ -43,11 +45,6 @@ export type PivotQueryDescription = Partial<
 };
 
 /** @internal */
-export const QUERY_DEFAULT_LIMIT = 20000;
-/** @internal */
-export const QUERY_DEFAULT_OFFSET = 0;
-
-/** @internal */
 const prepareQueryParams = (
   queryDescription: QueryDescription,
   defaultDataSource: DataSource,
@@ -59,8 +56,8 @@ const prepareQueryParams = (
     filters = [],
     filterRelations,
     highlights = [],
-    count = QUERY_DEFAULT_LIMIT,
-    offset = QUERY_DEFAULT_OFFSET,
+    count,
+    offset,
   } = queryDescription;
 
   if (filters) {
@@ -90,15 +87,14 @@ const prepareQueryParams = (
 };
 
 /** @internal */
-export const executeQuery = (
+export function executeQuery(
   queryDescription: QueryDescription,
   app: ClientApplication,
   executionConfig?: QueryExecutionConfig,
-): Promise<QueryResultData> => {
+): Promise<QueryResultData> {
   const queryParams = prepareQueryParams(queryDescription, app?.defaultDataSource);
-
   return app.queryClient.executeQuery(queryParams, executionConfig).resultPromise;
-};
+}
 
 /** @internal */
 export const executeCsvQuery = (
@@ -126,8 +122,8 @@ export const executePivotQuery = (
     filters = [],
     filterRelations,
     highlights = [],
-    count = QUERY_DEFAULT_LIMIT,
-    offset = QUERY_DEFAULT_OFFSET,
+    count,
+    offset,
   } = queryDescription;
 
   if (filters) {
@@ -163,3 +159,18 @@ export const executePivotQuery = (
     executionConfig,
   ).resultPromise;
 };
+
+export const createExecuteQueryCacheKey: CreateCacheKeyFn<typeof executeQuery> = (
+  queryDescription,
+  app,
+) => {
+  const queryParams = prepareQueryParams(queryDescription, app?.defaultDataSource);
+  return JSON.stringify(queryParams);
+};
+
+const QUERY_RESULTS_CACHE_MAX_SIZE = 250;
+const { withCache, clearCache } = createCache(createExecuteQueryCacheKey, {
+  cacheMaxSize: QUERY_RESULTS_CACHE_MAX_SIZE,
+});
+export const executeQueryWithCache = withCache(executeQuery);
+export const clearExecuteQueryCache = clearCache;

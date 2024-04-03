@@ -14,8 +14,6 @@ export const applyCommonHighchartsOptions = (
   chartOptions: HighchartsOptionsInternal,
 ): HighchartsOptionsInternal => {
   return merge(chartOptions, {
-    // TODO - Disable accessibility for now until we review the options
-    accessibility: { enabled: false },
     chart: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_UPDATE } },
     plotOptions: {
       series: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_INIT } },

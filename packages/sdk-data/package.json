@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.6.0",
+  "version": "1.7.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
@@ -23,8 +23,8 @@
   "author": "Sisense ",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "^1.6.0",
-    "@sisense/sdk-rest-client": "^1.6.0",
+    "@sisense/sdk-common": "^1.7.0",
+    "@sisense/sdk-rest-client": "^1.7.0",
     "guid-typescript": "^1.0.9",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",

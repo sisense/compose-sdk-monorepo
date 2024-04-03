@@ -360,32 +360,31 @@ export class AbstractDataLoadService implements DataLoadServiceI {
    * @private
    */
   loadMessageFromCache(onFinish: () => void): void {
-    this.loadFromCacheTimer = setImmediate(() => {
-      this.loadFromCacheState = this.loadFromCacheState || {};
-      const state = this.loadFromCacheState;
-      let typeToSend = '';
-      let indexToSend = 0;
-      MESSAGES_ORDER.forEach((type) => {
-        if (typeToSend) {
-          return;
-        }
-        state[type] = state[type] || 0;
-        const loadedCount = state[type];
-        if (loadedCount < ((this.data || {})[type] || []).length) {
-          typeToSend = type;
-          indexToSend = state[type];
-        }
-      });
-
+    // Note: removed `setImmediate` as not supported
+    this.loadFromCacheState = this.loadFromCacheState || {};
+    const state = this.loadFromCacheState;
+    let typeToSend = '';
+    let indexToSend = 0;
+    MESSAGES_ORDER.forEach((type) => {
       if (typeToSend) {
-        const payload = ((this.data || {})[typeToSend] || [])[indexToSend];
-        this.notifyAboutDataChunk(typeToSend || '', payload, true);
-        state[typeToSend] = indexToSend + 1;
-        this.loadMessageFromCache(onFinish);
-      } else if (onFinish) {
-        onFinish();
+        return;
+      }
+      state[type] = state[type] || 0;
+      const loadedCount = state[type];
+      if (loadedCount < ((this.data || {})[type] || []).length) {
+        typeToSend = type;
+        indexToSend = state[type];
       }
     });
+
+    if (typeToSend) {
+      const payload = ((this.data || {})[typeToSend] || [])[indexToSend];
+      this.notifyAboutDataChunk(typeToSend || '', payload, true);
+      state[typeToSend] = indexToSend + 1;
+      this.loadMessageFromCache(onFinish);
+    } else if (onFinish) {
+      onFinish();
+    }
   }
 
   /**

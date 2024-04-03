@@ -628,6 +628,7 @@ export type SortingSettingsItem = {
   datatype: ListOfJaqlDataTypes;
   selected: boolean;
   direction: ListOfSortingDirections | null;
+  indexInJaql?: number;
 };
 
 function checkLastRowSortedByMeasure(
@@ -692,7 +693,7 @@ function mapWidgetJaqlToComplexSortingSettings(
 
   const dataTypesOfPanels = jaqlProcessor.getDataTypes(jaqlProcessor.getMetadataPanels(jaql));
 
-  const listOfSettingsEntries: Omit<SortingSettingsItem, 'indexInJaql'>[] = [];
+  const listOfSettingsEntries: SortingSettingsItem[] = [];
   for (let index = 0; index < listOfRows.length - 1; index += 1) {
     const row = listOfRows[index];
 
@@ -714,8 +715,7 @@ function mapWidgetJaqlToComplexSortingSettings(
       datatype,
       selected: isRowSortedBySubtotals,
       direction,
-      // TODO review this
-      // indexInJaql: row.field.index,
+      indexInJaql: row.field?.index,
     });
   }
 
@@ -736,8 +736,7 @@ function mapWidgetJaqlToComplexSortingSettings(
     datatype,
     selected: isLastRowSortedByMeasure,
     direction,
-    // TODO review this
-    // indexInJaql: metadataPanelOfCurrentMeasure.field.index,
+    indexInJaql: metadataPanelOfCurrentMeasure.field?.index,
   };
   listOfSettingsEntries.push(lastEntry);
 

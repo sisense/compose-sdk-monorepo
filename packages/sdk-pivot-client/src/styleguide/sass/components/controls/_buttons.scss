@@ -1,0 +1,779 @@
+@import '../../variables';
+@import '../../mixins/buttons';
+
+$button-font-size: $font-size-main;
+$button-line-height: $app-icon-size-default;
+$button-dark-background-color: $color-gray-4;
+
+$button-transition-time: 0.3s;
+
+// Buttons
+//
+// markup:
+// <div style="background: #f9f9f9">
+// <a class="btn {$modifiers}">
+//    <span class=btn__text>Button a</span>
+// </a>
+// <button class="btn {$modifiers}">
+//    <span class=btn__text>Button button</span>
+// </button>
+// <span class="btn {$modifiers}">
+//    <span class=btn__text>Button span</span>
+// </span>
+// <span class="btn {$modifiers}">
+//      <span class="btn__icon app-icon app-icon--general-share">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#general-share"></use>
+//          </svg>
+//     </span>
+//     <span class=btn__text>Button span</span>
+// </span>
+// <span class="btn {$modifiers}">
+//      <span class="btn__icon app-icon app-icon--general-share">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#general-share"></use>
+//          </svg>
+//     </span>
+//     <span class=btn__text>Button span</span>
+// </span>
+// </div>
+//
+// .btn - Default button
+// .btn--disabled - Default disabled button
+// .btn--warning - Warning button
+// .btn--warning.btn--disabled - Warning disabled button
+// .btn--danger - Danger button
+// .btn--danger.btn--disabled - Danger disabled button
+// .btn--gray - Gray button
+// .btn--gray.btn--disabled - Gray disabled button
+// .btn--white - White button
+// .btn--white.btn--disabled - White disabled button
+// .btn--icon - Icon button
+// .btn--icon.btn--disabled - Icon disabled button
+// .btn--transp - Transparent button
+// .btn--transp.btn--disabled - Transparent disabled button
+// .btn--icon.btn--transp - Transparent icon button
+// .btn--icon.btn--transp.btn--disabled - Transparent icon disabled button
+//
+// Styleguide 4.2
+
+// Button '.btn--smart' deprecated
+//
+// Use <b>.btn--gray</b> instead
+//
+// markup:
+// <a class="btn {$modifiers}">
+//    <span class=btn__text>Button a</span>
+// </a>
+// <button class="btn {$modifiers}">
+//    <span class=btn__text>Button button</span>
+// </button>
+// <span class="btn {$modifiers}">
+//    <span class=btn__text>Button span</span>
+// </span>
+// <span class="btn {$modifiers}">
+//      <span class="btn__icon app-icon app-icon--general-share">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#general-share"></use>
+//          </svg>
+//     </span>
+//     <span class=btn__text>Button span</span>
+// </span>
+// <span class="btn {$modifiers}">
+//      <span class="btn__icon app-icon app-icon--general-share">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#general-share"></use>
+//          </svg>
+//     </span>
+//     <span class=btn__text>Button span</span>
+// </span>
+//
+// .btn--smart - Smart suggestion button
+// .btn--smart.btn--disabled - Smart suggestion disabled button
+//
+// Styleguide 4.2.5
+
+// Buttons with icons
+//
+// markup:
+//  <button class="btn">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//  <button class="btn btn--danger">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//
+// general-plus - general-plus icon
+// general-import - general-import icon
+// general-share - general-share icon
+// general-delete - general-delete icon
+// header-alarm-add - header-alarm-add icon
+//
+// Styleguide 4.2.10
+
+// Buttons transparent
+//
+// markup:
+//  <button class="btn btn--transp">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//
+// general-plus - general-plus icon
+// general-import - general-import icon
+// general-share - general-share icon
+// general-delete - general-delete icon
+// header-alarm-add - header-alarm-add icon
+//
+// Styleguide 4.2.20
+
+// Transparent Dark Button
+//
+// markup:
+//  <button class="btn btn--dark btn--on-grey">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//  <button class="btn btn--dark btn--icon btn--on-grey">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//  </button>
+//  <button class="btn btn--dark btn--icon">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//  </button>
+//
+// general-plus - general-plus icon
+// general-import - general-import icon
+// general-share - general-share icon
+// general-delete - general-delete icon
+// header-alarm-add - header-alarm-add icon
+//
+// Styleguide 4.2.25
+
+// Buttons icons only
+//
+// markup:
+//  <button class="btn btn--icon">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//  <button class="btn btn--danger btn--icon">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//  <button class="btn btn--icon">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//  <button class="btn btn--icon btn--transp">
+//      <span class="btn__icon app-icon app-icon--{$modifiers}">
+//          <svg class="app-icon__svg">
+//              <use xlink:href="#{$modifiers}"></use>
+//          </svg>
+//      </span>
+//      <span class="btn__text">Button</span>
+//  </button>
+//
+// general-plus - general-plus icon
+// general-import - general-import icon
+// general-share - general-share icon
+// general-delete - general-delete icon
+// header-alarm-add - header-alarm-add icon
+//
+// Styleguide 4.2.30
+
+.btn {
+  @include buttons-no-text-only();
+  @include buttons-default-default-state();
+
+  font-family: inherit;
+  font-style: normal;
+  font-size: $button-font-size;
+  line-height: $button-line-height;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all $button-transition-time ease;
+  vertical-align: middle;
+  text-decoration: none;
+  border: 0;
+  border-radius: 4px;
+  outline: none;
+  white-space: nowrap;
+
+  appearance: none;
+
+  &:hover {
+    text-decoration: none;
+    @include buttons-default-hover-state();
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
+
+  &.btn--disabled,
+  &[disabled='disabled'] {
+    cursor: default;
+    @include buttons-default-disabled-state();
+  }
+}
+
+.btn__text {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  padding: 2px 20px;
+  max-width: 100%;
+}
+
+.btn__icon {
+  display: inline-block;
+  padding: 0;
+}
+
+.btn--warning {
+  @include buttons-warning-default-state();
+
+  &:hover {
+    @include buttons-warning-hover-state();
+  }
+
+  &.btn--disabled,
+  &[disabled='disabled'] {
+    @include buttons-warning-disabled-state();
+  }
+}
+
+.btn--danger {
+  @include buttons-danger-default-state();
+
+  &:hover {
+    @include buttons-danger-hover-state();
+  }
+
+  &.btn--disabled,
+  &[disabled='disabled'] {
+    @include buttons-danger-disabled-state();
+  }
+}
+
+.btn--transp {
+  @include buttons-transp-default-state();
+
+  &:hover {
+    @include buttons-transp-hover-state();
+  }
+
+  &.btn--disabled,
+  &[disabled='disabled'] {
+    @include buttons-transp-disabled-state();
+  }
+
+  .btn__icon {
+    padding-left: 0;
+  }
+
+  .btn__text,
+  .btn__icon + .btn__text {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.btn--gray,
+.btn--smart {
+  @include buttons-gray-default-state();
+
+  &:hover {
+    @include buttons-gray-hover-state();
+  }
+
+  &.btn--disabled,
+  &[disabled='disabled'] {
+    @include buttons-gray-disabled-state();
+  }
+}
+
+.btn--white {
+  @include buttons-white-default-state();
+
+  &:hover {
+    @include buttons-white-hover-state();
+  }
+
+  &.btn--disabled,
+  &[disabled='disabled'] {
+    @include buttons-white-disabled-state();
+  }
+}
+
+.btn--icon {
+  @include buttons-icon-only();
+}
+
+// Buttons limited
+//
+// markup:
+//  <div style="max-width: 150px;">
+//      <button class="btn {$modifiers}">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Toooooo long button text</span>
+//      </button>
+//      <br /><br />
+//      <button class="btn btn--gray {$modifiers}">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Toooooo long button text</span>
+//      </button>
+//      <br /><br />
+//      <button class="btn btn--transp {$modifiers}">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Toooooo long button text</span>
+//      </button>
+//      <br /><br />
+//      <button class="btn {$modifiers}">
+//          <span class="btn__text">Toooooo long button text</span>
+//      </button>
+//      <br /><br />
+//      <button class="btn btn--transp {$modifiers}">
+//          <span class="btn__text">Toooooo long button text</span>
+//      </button>
+//  </div>
+//
+// btn - default behaviour
+// btn--limited - limited behaviour
+//
+// Styleguide 4.2.35
+
+.btn--limited {
+  .btn__text {
+    white-space: normal;
+  }
+}
+
+// Buttons holder
+//
+// markup:
+//  <div class="prism-toolbar__cell btns-holder">
+//      <button class="btn">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Custom</span>
+//      </button>
+//      <button class="btn btn--transp">
+//          <span class="btn__text">Button</span>
+//      </button>
+//      <button class="btn">
+//          <span class="btn__text">Button</span>
+//      </button>
+//      <a>Link</a>
+//      <button class="btn btn--transp">
+//          <span class="btn__icon app-icon app-icon--general-share">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-share"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Share</span>
+//      </button>
+//      <button class="btn btn--transp">
+//          <span class="btn__icon app-icon app-icon--general-delete">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-delete"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Delete</span>
+//      </button>
+//      <a class="btn">
+//          <span class="btn__icon app-icon app-icon--general-delete">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-delete"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Delete</span>
+//      </a>
+//      <button class="btn btn--icon btn--transp">
+//          <span class="btn__icon app-icon app-icon--header-text-widget">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#header-text-widget"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Custom</span>
+//      </button>
+//      <button class="btn btn--icon btn--transp btn--on-grey">
+//          <span class="btn__icon app-icon app-icon--general-delete">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-delete"></use>
+//              </svg>
+//          </span>
+//          <span class="btn__text">Custom</span>
+//      </button>
+//      <button class="btn">
+//          <span class="btn__text">Button</span>
+//      </button>
+//  </div>
+//
+// Styleguide 4.2.40
+
+.btns-holder {
+  display: flex;
+  align-items: center;
+
+  // all nested childs
+  > * {
+    margin: 0 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .btn--offset-ml {
+    margin-left: 15px;
+  }
+
+  // increase space before transparent button
+  .btn {
+    &:not(.btn--transp) + .btn--transp {
+      margin-left: 15px;
+    }
+  }
+
+  // increase space after transparent button
+  .btn--transp + .btn:not(.btn--transp) {
+    margin-left: 15px;
+  }
+}
+
+// Button icon link
+//
+// markup:
+//  <button class="btn-icon-link {$modifiers}">
+//      <span class="btn-icon-link__icon btn btn--icon">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//      </span>
+//      <span class="btn-icon-link__text">Add More Data…</span>
+//  </button>
+//  &nbsp;
+//  <button class="btn-icon-link {$modifiers}">
+//      <span class="btn-icon-link__icon btn btn--warning btn--icon">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//      </span>
+//      <span class="btn-icon-link__text">Add More Data…</span>
+//  </button>
+//  &nbsp;
+//  <button class="btn-icon-link {$modifiers}">
+//      <span class="btn-icon-link__icon btn btn--danger btn--icon">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//      </span>
+//      <span class="btn-icon-link__text">Add More Data…</span>
+//  </button>
+//  &nbsp;
+//  <button class="btn-icon-link {$modifiers}">
+//      <span class="btn-icon-link__icon btn btn--gray btn--icon">
+//          <span class="btn__icon app-icon app-icon--general-plus">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#general-plus"></use>
+//              </svg>
+//          </span>
+//      </span>
+//      <span class="btn-icon-link__text">Add More Data…</span>
+//  </button>
+//
+// .btn-icon-link - Default button
+// .btn-icon-link--disabled - Default disabled button
+//
+// Styleguide 4.2.50
+
+.btn-icon-link {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  outline: none;
+
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  color: inherit;
+
+  cursor: pointer;
+
+  &:hover {
+    .btn-icon-link__icon {
+      @include buttons-hover-state();
+    }
+  }
+
+  &.btn-icon-link--disabled,
+  &[disabled='disabled'] {
+    cursor: default;
+
+    .btn-icon-link__icon {
+      cursor: default;
+      @include buttons-disabled-state();
+    }
+  }
+}
+
+.btn-icon-link__icon {
+  width: 28px;
+  margin-right: 5px;
+  border-radius: 50%;
+
+  .btn__icon {
+    vertical-align: top;
+    padding: 1px 0;
+
+    &.app-icon--general-plus {
+      padding-left: 2px;
+    }
+  }
+}
+
+.btn-icon-link__text {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+// Buttons with more
+//
+// markup:
+//  <button class="btn btn--more {$modifiers}">
+//      <span class="btn__text">Category</span>
+//      <span class="btn__icon"></span>
+//  </button>
+//  &nbsp;
+//  <button class="btn btn--more btn--gray {$modifiers}">
+//      <span class="btn__text">Category</span>
+//      <span class="btn__icon"></span>
+//  </button>
+//  &nbsp;
+//  <button class="btn btn--more btn--danger {$modifiers}">
+//      <span class="btn__text">Category</span>
+//      <span class="btn__icon"></span>
+//  </button>
+//
+// .btn--more - Default state
+// .btn--more-open - Open state
+//
+// Styleguide 4.2.60
+
+.btn--more {
+  &:hover {
+    @include buttons-more-open();
+  }
+
+  &.btn--danger {
+    &:hover {
+      .btn__icon {
+        &,
+        &:before {
+          border-color: $button-danger-color-hover;
+        }
+      }
+    }
+  }
+
+  &.btn--more-open {
+    @include buttons-more-open();
+  }
+
+  .btn__text {
+    position: relative;
+    margin-left: 0;
+    padding-right: 5px;
+
+    transition: margin-left $button-transition-time linear;
+  }
+
+  .btn__icon {
+    position: relative;
+    top: 2px;
+    width: 1px;
+    height: 9px;
+    margin: 0 10px 0 0;
+    padding: 0;
+    border: solid 1px $button-text-color-main;
+    border-width: 1px 0 1px 0;
+
+    transition: width $button-transition-time linear, border-color $button-transition-time;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 3px;
+      width: 100%;
+      height: 1px;
+      border-bottom: solid 1px $button-text-color-main;
+
+      transition: border-color $button-transition-time;
+    }
+  }
+}
+
+// Confirmation buttons
+//
+// markup:
+//  <span class="confirm-btns">
+//      <button class="confirm-btn confirm-btn--apply btn btn--transp">
+//          <span class="btn__icon app-icon app-icon--custom-vi-sign-clear">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#custom-vi-sign-clear"></use>
+//              </svg>
+//          </span>
+//      </button>
+//      <button class="confirm-btn confirm-btn--cancel btn btn--transp">
+//          <span class="btn__icon app-icon app-icon--custom-x-sign-clear">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#custom-x-sign-clear"></use>
+//              </svg>
+//          </span>
+//      </button>
+//  </span>
+//  <br />
+//  <span class="confirm-btns">
+//      <span class="confirm-btn confirm-btn--apply btn btn--transp">
+//          <span class="btn__icon app-icon app-icon--custom-vi-sign-clear">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#custom-vi-sign-clear"></use>
+//              </svg>
+//          </span>
+//      </span>
+//      <span class="confirm-btn confirm-btn--cancel btn btn--transp">
+//          <span class="btn__icon app-icon app-icon--custom-x-sign-clear">
+//              <svg class="app-icon__svg">
+//                  <use xlink:href="#custom-x-sign-clear"></use>
+//              </svg>
+//          </span>
+//      </span>
+//  </span>
+//
+// Styleguide 4.2.100
+
+.confirm-btns {
+  display: flex;
+  font-size: 0;
+
+  .confirm-btn {
+    @include buttons-confirm-default-state();
+
+    padding: 0;
+    width: 17px;
+    height: 17px;
+    margin: 0 4px;
+    font-size: 0;
+    line-height: 15px;
+    text-align: center;
+    border: solid 1px transparent;
+    border-radius: 50%;
+
+    &:hover {
+      @include buttons-confirm-hover-state();
+    }
+
+    &.btn--disabled,
+    &[disabled='disabled'] {
+      cursor: default;
+      @include buttons-confirm-disabled-state();
+    }
+
+    .btn__icon {
+      width: 9px;
+      height: 9px;
+      margin: 3px;
+      padding: 0;
+    }
+  }
+}
+
+.btn--dark {
+  @include button-dark-default-state();
+
+  &:hover {
+    @include button-dark-hover-state();
+  }
+
+  &.btn--disabled,
+  &[disabled='disabled'] {
+    cursor: default;
+    @include buttons-transp-disabled-state();
+  }
+}

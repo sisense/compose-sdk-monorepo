@@ -1,0 +1,7 @@
+{
+  "extends": ["../../typedoc.package.json"],
+  "entryPoints": ["./src/index.ts"],
+  "disableSources": true,
+  "categorizeByGroup": true,
+  "groupOrder": ["Group 1", "Group 2", "*"]
+}

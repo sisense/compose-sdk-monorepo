@@ -10,7 +10,6 @@ import {
 import { numericSimpleLegacyChartOptionsWithDarkTheme } from './__mocks__/legacy-chart-options';
 import cloneDeep from 'lodash/cloneDeep';
 import '../../../chart-data-options/coloring';
-import { IndicatorTypeOptions } from './indicator-legacy-chart-options';
 
 const getColorMock = vi.fn().mockReturnValue('red');
 const coloringServiceMock: ColoringService<AllowedIndicatorColoringTypes> = {
@@ -111,12 +110,7 @@ describe('overrideWithValueColor', () => {
       },
     };
 
-    const typeOptions = {
-      type: 'numeric',
-      numericSubtype: 'numericSimple',
-    } as IndicatorTypeOptions;
-
-    const result = overrideWithValueColor(colorOptions, 10, legacyChartOptions, typeOptions);
+    const result = overrideWithValueColor(colorOptions, 10, legacyChartOptions);
     expect(result).toEqual(expectedChartOptions);
   });
 
@@ -131,16 +125,8 @@ describe('overrideWithValueColor', () => {
     const legacyChartOptions: LegacyIndicatorChartOptions = cloneDeep(
       numericSimpleLegacyChartOptionsWithDarkTheme,
     );
-    const typeOptions = {
-      type: 'numeric',
-      numericSubtype: 'numericSimple',
-    } as IndicatorTypeOptions;
-    const result = overrideWithValueColor(
-      unallowedColorOptions,
-      10,
-      legacyChartOptions,
-      typeOptions,
-    );
+
+    const result = overrideWithValueColor(unallowedColorOptions, 10, legacyChartOptions);
     expect(result).toEqual(legacyChartOptions);
   });
 
@@ -155,12 +141,8 @@ describe('overrideWithValueColor', () => {
     const legacyChartOptions: LegacyIndicatorChartOptions = cloneDeep(
       numericSimpleLegacyChartOptionsWithDarkTheme,
     );
-    const typeOptions = {
-      type: 'numeric',
-      numericSubtype: 'numericSimple',
-    } as IndicatorTypeOptions;
 
-    const result = overrideWithValueColor(colorOptions, 10, legacyChartOptions, typeOptions);
+    const result = overrideWithValueColor(colorOptions, 10, legacyChartOptions);
     expect(result).toEqual(legacyChartOptions);
   });
 });

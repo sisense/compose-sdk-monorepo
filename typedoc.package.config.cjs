@@ -15,7 +15,7 @@ const baseConfig = {
     'Filter Tiles',
     'Contexts',
     'Queries',
-    'Fusion Assets',
+    'Fusion Embed',
     'Generative AI',
     /* sdk-data */
     'Factories',

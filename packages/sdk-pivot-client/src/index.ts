@@ -3,6 +3,7 @@ export { PivotClient } from './pivot-client.js';
 
 // export { PivotBuilder as default, PivotPrintBuilder } from './builders';
 export * from './builders/index.js';
+export { jaqlProcessor } from './data-handling/utils';
 // export * from './data-handling/index.js';
 // export * from './data-load/index.js';
 // export * from './tree-structure/index.js';
@@ -34,4 +35,11 @@ export {
 
 export { type TreeServiceI } from './tree-structure/types.js';
 export { type TreeNode } from './tree-structure/types.js';
-export { type SocketI, type JaqlRequest } from './data-load/types.js';
+export { type SocketI, type JaqlRequest, type JaqlPanel } from './data-load/types.js';
+export {
+  EVENT_DATA_CELL_FORMAT,
+  EVENT_HEADER_CELL_FORMAT,
+  type DataService,
+} from './data-handling/DataService.js';
+export { type PivotDataNode, type PivotTreeNode } from './data-handling';
+export { UserType } from './data-handling/constants';

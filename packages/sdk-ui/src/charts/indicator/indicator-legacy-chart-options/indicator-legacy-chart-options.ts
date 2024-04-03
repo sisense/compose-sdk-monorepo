@@ -68,7 +68,6 @@ export const createIndicatorLegacyChartOptions = (
       customColorOptions,
       chartData.value,
       legacyChartOptions,
-      typeOptions,
     );
   }
   return {

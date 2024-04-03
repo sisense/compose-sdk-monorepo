@@ -55,17 +55,17 @@ Vue components for charts
 
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
-## Fusion Assets
+## Fusion Embed
 
 Fusion Dashboards, Widgets, Queries, and Formulas
 
-- [DashboardWidget](fusion-assets/class.DashboardWidget.md)
-- [WidgetModel](fusion-assets/class.WidgetModel.md)
-- [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md)
-- [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md)
-- [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md)
-- [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md)
-- [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md)
+- [DashboardWidget](fusion-embed/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDashboardModel](fusion-embed/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDashboardModels](fusion-embed/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetSharedFormula](fusion-embed/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetWidgetModel](fusion-embed/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Interfaces
 

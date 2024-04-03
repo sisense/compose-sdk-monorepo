@@ -1,9 +1,7 @@
 import React from 'react';
 
 import { ListOfSortingDirections } from '../../../../data-handling/constants.js';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { Dropdown } = require('@sisense/shared-ui-components');
+import { Dropdown, type DropdownProps } from '../../../../shared-ui-components/Dropdown';
 
 type Props = {
   direction: ListOfSortingDirections;
@@ -19,14 +17,19 @@ export const DirectionSelector = (props: Props) => {
   };
 
   return (
-    <h1>DROPDOWN TODO</h1>
-    // <Dropdown
-    //     classNameDropdown="direction-selector"
-    //     classNameMenu="sis-scope direction-selector__menu"
-    //     items={items}
-    //     selectedItemId={direction}
-    //     onSelectItem={handleItemSelected}
-    //     mask={false}
-    // />
+    <Dropdown
+      classNameDropdown="direction-selector"
+      classNameMenu="sis-scope direction-selector__menu"
+      items={items}
+      selectedItemId={direction}
+      onSelectItem={handleItemSelected as DropdownProps['onSelectItem']}
+      mask={false}
+      scrollbarProps={{
+        // Custom style to remove bottom padding below the last item
+        style: {
+          marginBottom: '-8px',
+        },
+      }}
+    />
   );
 };

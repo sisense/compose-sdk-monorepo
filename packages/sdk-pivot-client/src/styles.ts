@@ -10,3 +10,4 @@ import './components/SortingSettings/SettingsItem/SettingsItem.scss';
 import './components/SortingSettings/Simple/SimpleSortingSettingsPopup.scss';
 import './components/SortingSettings/Complex/ComplexSortingSettings.scss';
 import './fusion-client-assets/styles/main.scss';
+import './styleguide/sass/base-all.scss';

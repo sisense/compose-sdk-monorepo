@@ -23,7 +23,7 @@ export const ChatApiContext = createContext<ChatRestApi | undefined>(undefined);
 export const useChatApi = () => useContext(ChatApiContext);
 
 /**
- * React component
+ * React component that initializes the necessary wrappers to enable API calls and caching.
  *
  * @internal
  */

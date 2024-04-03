@@ -85,3 +85,4 @@ export { createDataOptionsFromPanels } from './dashboard-widget/translate-widget
 export { createFilterFromJaql } from './dashboard-widget/translate-widget-filters';
 export { useThemeContext } from './theme-provider/theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
+export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';

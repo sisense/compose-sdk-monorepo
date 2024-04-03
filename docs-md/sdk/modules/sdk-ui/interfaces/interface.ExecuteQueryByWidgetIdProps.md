@@ -4,7 +4,7 @@ title: ExecuteQueryByWidgetIdProps
 
 # Interface ExecuteQueryByWidgetIdProps
 
-Props for [ExecuteQueryByWidgetId](../fusion-assets/function.ExecuteQueryByWidgetId.md) component.
+Props for [ExecuteQueryByWidgetId](../fusion-embed/function.ExecuteQueryByWidgetId.md) component.
 
 ## Properties
 

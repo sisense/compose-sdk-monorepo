@@ -1,11 +1,11 @@
-/* eslint-disable max-lines */
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { Chat, ChatContext, ChatMessage, ChatResponse } from './types';
+import type { ChatContext, ChatMessage, ChatResponse } from './types';
 import { useChatApi } from './chat-api-provider';
 import { useChatConfig } from '../chat-config';
 import { UNEXPECTED_CHAT_RESPONSE_ERROR } from './errors';
+import { CHAT_HISTORY_QUERY_KEY } from './chat-history';
 
 /**
  * @internal
@@ -73,7 +73,7 @@ export const useGetAllChats = () => {
 /**
  * @internal
  */
-export const useMaybeCreateChat = (contextId: string | undefined, shouldCreate: boolean): void => {
+export const useMaybeCreateChat = (contextId: string | undefined, shouldCreate: boolean) => {
   const queryClient = useQueryClient();
   const api = useChatApi();
 
@@ -93,66 +93,30 @@ export const useMaybeCreateChat = (contextId: string | undefined, shouldCreate: 
       mutation.mutate();
     }
   }, [shouldCreate, mutation]);
-};
 
-/**
- * @internal
- */
-export const useGetChatHistory = (id: string | undefined) => {
-  const api = useChatApi();
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['getChatById', id, api],
-    queryFn: () => (id ? api?.ai.chat.getById(id) : undefined),
-    select: (data) => data?.chatHistory,
-    enabled: !!api && !!id,
-  });
-
-  return {
-    data,
-    isLoading,
-  };
-};
-
-/**
- * @internal
- */
-export const useClearChatHistory = (chatId: string | undefined) => {
-  const queryClient = useQueryClient();
-  const api = useChatApi();
-
-  return useMutation({
-    mutationFn: async () => {
-      if (!api || !chatId) {
-        return;
-      }
-
-      return api.ai.chat.clearHistory(chatId);
-    },
-    onError: (error) => {
-      if (error instanceof Error) {
-        console.error('Error when clearing history:', error.message);
-      }
-    },
-    onSuccess: () => queryClient.invalidateQueries(['getChatById', chatId]),
-  });
+  return mutation;
 };
 
 const mapToChatMessage = (response: ChatResponse): ChatMessage => {
-  if (response.responseType === 'nlq') {
-    return {
-      content: JSON.stringify(response.data),
-      role: 'assistant',
-      type: 'nlq',
-    };
-  } else if (response.responseType === 'Text') {
-    return {
-      content: response.data.answer,
-      role: 'assistant',
-    };
-  }
+  // TODO: Remove this in the next release.
+  response.responseType = response.responseType.toLowerCase() as ChatResponse['responseType'];
 
-  throw Error(`Received unknown responseType, raw response=${JSON.stringify(response)}`);
+  switch (response.responseType) {
+    case 'nlq':
+      return {
+        content: JSON.stringify(response.data),
+        role: 'assistant',
+        type: 'nlq',
+      };
+    case 'text':
+    case 'error':
+      return {
+        content: response.data.answer,
+        role: 'assistant',
+      };
+    default:
+      throw Error(`Received unknown responseType, raw response=${JSON.stringify(response)}`);
+  }
 };
 
 // eslint-disable-next-line max-lines-per-function
@@ -163,15 +127,8 @@ export const useSendChatMessage = (chatId: string | undefined) => {
       if (!chatId) {
         return;
       }
-      queryClient.setQueriesData(['getChatById', chatId], (old: Chat | undefined) => {
-        if (!old) {
-          return old;
-        }
-
-        return {
-          ...old,
-          chatHistory: [...old.chatHistory, messageObj],
-        };
+      queryClient.setQueriesData<ChatMessage[]>([CHAT_HISTORY_QUERY_KEY, chatId], (old) => {
+        return old ? [...old, messageObj] : old;
       });
     },
     [queryClient, chatId],
@@ -202,7 +159,6 @@ export const useSendChatMessage = (chatId: string | undefined) => {
         appendToHistory({
           content: UNEXPECTED_CHAT_RESPONSE_ERROR,
           role: 'assistant',
-          type: 'Text',
         });
       }
     },

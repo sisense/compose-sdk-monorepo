@@ -6,10 +6,10 @@ import { executeCsvQuery } from '../query/execute-query.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { TranslatableError } from '../translation/translatable-error.js';
 import { withTracking } from '../decorators/hook-decorators/index.js';
-import { isQueryParamsChanged } from './use-execute-query.js';
 import { downloadCsvQueryStateReducer } from './csv-query-state-reducer.js';
 import { CsvQueryState, ExecuteCsvQueryParams } from './types.js';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { isQueryParamsChanged } from '@/query-execution/query-params-comparator.js';
 
 /**
  * React hook that executes a CSV data query.

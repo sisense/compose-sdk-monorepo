@@ -59,6 +59,13 @@ export function createFilterFromJaql(jaql: FilterJaql, instanceid?: string): Fil
       id: jaql.dim,
     },
     type: 'filter',
+
+    serializable() {
+      return { ...this, jaql: this.jaql() };
+    },
+    toJSON() {
+      return this.serializable();
+    },
   } as Filter;
 }
 

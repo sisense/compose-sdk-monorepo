@@ -9,4 +9,6 @@ export const legacyOptionsToThemeSettingsDictionary = {
   backgroundColor: 'chart.backgroundColor',
   'label.color': 'chart.textColor',
   'secondaryTitle.color': 'chart.secondaryTextColor',
+  'secondaryValue.color': 'chart.secondaryTextColor',
+  'value.color': 'palette.variantColors.0',
 };

@@ -1,0 +1,30 @@
+// @import 'base';
+// @import 'base/fonts';
+@import 'base/global';
+@import 'base/html-reset';
+
+.#{$styleguide-anchor-class} {
+  // Reset and base files
+  // --------------------
+  @include global-main-props();
+
+  // Utilities
+  // ----------
+  // @import 'utilities/all';
+
+  // Components
+  // ----------
+  @import 'components/icons';
+  // @import 'components/typography';
+  // @import 'components/links';
+  @import 'components/controls/buttons';
+  // @import 'components/controls/custom-checkbox';
+  // @import 'components/controls/custom-radiobtn';
+  // @import 'components/controls/custom-togglebtn';
+  // @import 'components/controls/custom-input';
+  // @import 'components/controls/custom-textarea';
+  // @import 'components/loader-spinner';
+  // @import 'components/loader-two-dots';
+  // @import 'components/loaders-dots';
+  // @import 'components/search-form';
+}

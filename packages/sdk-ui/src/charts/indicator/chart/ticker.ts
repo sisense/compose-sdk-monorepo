@@ -233,7 +233,7 @@ export class Ticker {
     const y = Math.round((options.height - options.barHeight) / 2);
     let markerX;
 
-    ctx.fillStyle = data.color;
+    ctx.fillStyle = options.valueColor;
 
     if (value <= min) {
       ctx.globalAlpha = options.barOpacity;

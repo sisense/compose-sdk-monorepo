@@ -11,7 +11,8 @@ import { TrackableService } from '../decorators/trackable.decorator';
 /**
  * Service for working with Sisense Fusion dashboards.
  *
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 @Injectable({
   providedIn: 'root',

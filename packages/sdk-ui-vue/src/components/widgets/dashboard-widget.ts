@@ -25,7 +25,8 @@ import type { ChartWidget } from './chart-widget';
  *
  * </script>
  * ```
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 export const DashboardWidget = defineComponent({
   props: {

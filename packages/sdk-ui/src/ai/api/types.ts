@@ -10,11 +10,6 @@ export interface ChatContext {
 
 export type ChatContextType = 'datamodel' | 'perspective';
 
-interface TextMessage {
-  role: 'assistant';
-  content: string; // stringified json
-  type: 'Text';
-}
 export interface NlqMessage {
   role: 'assistant';
   content: string; // stringified json
@@ -24,8 +19,7 @@ interface RegularMessage {
   role: 'user' | 'assistant';
   content: string;
 }
-type SystemMessage = NlqMessage | TextMessage;
-export type ChatMessage = RegularMessage | SystemMessage;
+export type ChatMessage = RegularMessage | NlqMessage;
 
 export interface Chat {
   chatId: string;
@@ -61,7 +55,16 @@ interface TextResponse {
     answer: string;
   };
   chatId: string;
-  responseType: 'Text';
+  responseType: 'text';
+}
+
+interface ErrorResponse {
+  data: {
+    message: string;
+    code: string;
+    answer: string;
+  };
+  responseType: 'error';
 }
 
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
@@ -100,7 +103,7 @@ export interface NlqResponse {
   timestamp: string;
   responseType: 'nlq';
 }
-export type ChatResponse = NlqResponse | TextResponse;
+export type ChatResponse = NlqResponse | TextResponse | ErrorResponse;
 
 export interface QueryRecommendationConfig {
   numOfRecommendations: number;

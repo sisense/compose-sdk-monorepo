@@ -26,6 +26,7 @@ import {
   BaseDesignOptions,
   CATEGORIES_CAPACITY,
   SCATTER_CATEGORIES_CAPACITY,
+  PIE_SERIES_CAPACITY,
   SERIES_CAPACITY,
 } from '../translations/base-design-options';
 import {
@@ -198,10 +199,15 @@ export const getAreaChartDesignOptions = (
 
 const getDataLimits = (
   styleOptions: BaseStyleOptions,
-  chartDataType: 'cartesian' | 'categorical' | 'scatter',
+  chartDataType: 'cartesian' | 'categorical' | 'pie' | 'scatter',
 ) => {
   const dataLimits = {
-    seriesCapacity: chartDataType === 'categorical' ? CATEGORIES_CAPACITY : SERIES_CAPACITY,
+    seriesCapacity:
+      chartDataType === 'categorical'
+        ? CATEGORIES_CAPACITY
+        : chartDataType === 'pie'
+        ? PIE_SERIES_CAPACITY
+        : SERIES_CAPACITY,
     categoriesCapacity:
       chartDataType === 'scatter' ? SCATTER_CATEGORIES_CAPACITY : CATEGORIES_CAPACITY,
   };
@@ -246,7 +252,7 @@ export const getPieChartDesignOptions = (styleOptions: PieStyleOptions): PieChar
   const pieType: PieType = DefaultPieType;
   const convolution = styleOptions?.convolution ? styleOptions.convolution : { enabled: false };
 
-  const dataLimits = getDataLimits(styleOptions, 'categorical');
+  const dataLimits = getDataLimits(styleOptions, 'pie');
 
   return {
     ...BaseDesignOptions,

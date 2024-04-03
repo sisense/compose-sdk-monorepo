@@ -58,7 +58,7 @@ export const formatCategoricalChartData = (
           .map((v, index) => {
             return {
               ...v,
-              ...(v.selected && { sliced: true }),
+              sliced: v.selected ?? false,
               name: categories[index],
               color:
                 getColorSetting(dataOptions, seriesValues[index].name) ??
@@ -95,7 +95,7 @@ export const formatCategoricalChartData = (
         ...otherSeriesOptions,
         data: data.map((v) => ({
           ...v,
-          ...(v.selected && { sliced: true }),
+          sliced: v.selected ?? false,
         })),
         boostThreshold: 0,
         turboThreshold: 0,
@@ -133,6 +133,7 @@ const addOtherToSeries = (series: SeriesType[], otherSeriesData: SeriesPointStru
     y: otherTotal,
     name: CONVOLUTION_OTHERS_NAME,
     color: CONVOLUTION_OTHERS_COLOR,
+    sliced: false,
     drilldown: CONVOLUTION_OTHERS_ID,
   });
   return series;

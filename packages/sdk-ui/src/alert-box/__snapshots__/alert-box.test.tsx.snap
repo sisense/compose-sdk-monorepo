@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AlertBox component > renders alerts correctly 1`] = `
+<div>
+  <div
+    class="_alert_box_5a370e"
+  >
+    <div
+      class="_content_5a370e"
+    >
+      <div
+        class="_alert_5a370e"
+      >
+        Alert 1
+      </div>
+      <div
+        class="_alert_5a370e"
+      >
+        Alert 2
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AlertBox component > renders no alerts when alerts array is empty 1`] = `
+<div>
+  <div
+    class="_alert_box_5a370e"
+  >
+    <div
+      class="_content_5a370e"
+    />
+  </div>
+</div>
+`;
+
+exports[`AlertBox component > renders no alerts when alerts property is not provided 1`] = `
+<div>
+  <div
+    class="_alert_box_5a370e"
+  >
+    <div
+      class="_content_5a370e"
+    />
+  </div>
+</div>
+`;

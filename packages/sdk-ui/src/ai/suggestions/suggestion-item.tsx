@@ -3,7 +3,7 @@ export interface SuggestedItemProps {
   onClick: () => void;
 }
 
-const SuggestionItem: React.FC<SuggestedItemProps> = ({ question, onClick }) => {
+export default function SuggestionItem({ question, onClick }: SuggestedItemProps) {
   const hoverStyle = 'hover:csdk-text-white hover:csdk-bg-text-content';
 
   return (
@@ -14,6 +14,4 @@ const SuggestionItem: React.FC<SuggestedItemProps> = ({ question, onClick }) => 
       {question}
     </button>
   );
-};
-
-export default SuggestionItem;
+}

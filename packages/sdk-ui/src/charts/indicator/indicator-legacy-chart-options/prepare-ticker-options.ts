@@ -8,6 +8,7 @@ export function prepareTickerOptions(container: HTMLElement, options: LegacyIndi
   tickerOptions.forceTickerView = options.forceTickerView;
   tickerOptions.fontFamily = options.fontFamily;
   tickerOptions.backgroundColor = options.backgroundColor;
+  tickerOptions.value.color = options.value.color;
   tickerOptions.title.color = options.title.color;
   tickerOptions.secondaryTitle.color = options.secondaryTitle.color;
   tickerOptions.secondaryValue.color = options.secondaryTitle.color;

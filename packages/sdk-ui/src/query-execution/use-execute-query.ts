@@ -1,15 +1,22 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
-import { isEqual } from 'lodash';
-import { useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { usePrevious } from '../common/hooks/use-previous';
-import { executeQuery } from '../query/execute-query';
-import { isFiltersChanged, isRelationsChanged } from '../utils/filters-comparator';
+import {
+  clearExecuteQueryCache,
+  createExecuteQueryCacheKey,
+  executeQueryWithCache,
+  executeQuery as executeQueryWithoutCache,
+} from '../query/execute-query';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
 import { withTracking } from '../decorators/hook-decorators';
-import { ExecuteQueryParams, QueryState } from './types';
+import { ExecuteQueryParams, ExecuteQueryResult } from './types';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { ClientApplication } from '@/app/client-application';
+import { CacheKey } from '@/utils/create-cache';
+import { isQueryParamsChanged } from '@/query-execution/query-params-comparator';
 
 /**
  * React hook that executes a data query.
@@ -50,8 +57,16 @@ export const useExecuteQuery = withTracking('useExecuteQuery')(useExecuteQueryIn
  *
  * @internal
  */
-export function useExecuteQueryInternal(params: ExecuteQueryParams): QueryState {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQueryResult {
   const prevParams = usePrevious(params);
+  const [shouldForceRefetch, setShouldForceRefetch] = useState(false);
+  const isFirstRun = useRef(true);
+  const [lastQueryCacheKey, setLastQueryCacheKey] = useState<CacheKey | undefined>();
+  const { isInitialized, app } = useSisenseContext();
+  const isCacheEnabled = app?.settings.queryCacheConfig?.enabled;
+  const executeQuery = isCacheEnabled ? executeQueryWithCache : executeQueryWithoutCache;
+
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
     isError: false,
@@ -60,9 +75,64 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): QueryState 
     error: undefined,
     data: undefined,
   });
-  const { isInitialized, app } = useSisenseContext();
 
-  const [isNeverExecuted, setIsNeverExecuted] = useState(true);
+  const refetch = useCallback(() => {
+    if (isCacheEnabled && lastQueryCacheKey) {
+      clearExecuteQueryCache(lastQueryCacheKey);
+      setLastQueryCacheKey(undefined);
+    }
+    if (!queryState.isLoading) {
+      setShouldForceRefetch(true);
+    }
+  }, [isCacheEnabled, lastQueryCacheKey, queryState.isLoading]);
+
+  const isParamsChanged = isQueryParamsChanged(prevParams, params);
+
+  const runQuery = useCallback(
+    (app: ClientApplication, params: ExecuteQueryParams) => {
+      const {
+        dataSource,
+        dimensions,
+        measures,
+        filters,
+        highlights,
+        count = app.settings.queryLimit,
+        offset,
+        onBeforeQuery,
+      } = params;
+
+      const { filters: filterList, relations: filterRelations } =
+        getFilterListAndRelations(filters);
+      const executeQueryParams: Parameters<typeof executeQuery> = [
+        {
+          dataSource,
+          dimensions,
+          measures,
+          filters: filterList,
+          filterRelations,
+          highlights,
+          count,
+          offset,
+        },
+        app,
+        { onBeforeQuery },
+      ];
+      if (isCacheEnabled) {
+        const newQueryCacheKey = createExecuteQueryCacheKey(...executeQueryParams);
+        if (lastQueryCacheKey !== newQueryCacheKey) {
+          setLastQueryCacheKey(newQueryCacheKey);
+        }
+      }
+      void executeQuery(...executeQueryParams)
+        .then((data) => {
+          dispatch({ type: 'success', data });
+        })
+        .catch((error: Error) => {
+          dispatch({ type: 'error', error });
+        });
+    },
+    [executeQuery, isCacheEnabled, lastQueryCacheKey],
+  );
 
   useEffect(() => {
     if (!isInitialized) {
@@ -77,101 +147,31 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): QueryState 
     if (params?.enabled === false) {
       return;
     }
-    if (isNeverExecuted || isQueryParamsChanged(prevParams, params)) {
-      if (isNeverExecuted) {
-        setIsNeverExecuted(false);
-      }
-      const {
-        dataSource,
-        dimensions,
-        measures,
-        filters,
-        highlights,
-        count,
-        offset,
-        onBeforeQuery,
-      } = params;
-
-      const { filters: filterList, relations: filterRelations } =
-        getFilterListAndRelations(filters);
-      void executeQuery(
-        {
-          dataSource,
-          dimensions,
-          measures,
-          filters: filterList,
-          filterRelations,
-          highlights,
-          count,
-          offset,
-        },
-        app,
-        { onBeforeQuery },
-      )
-        .then((data) => {
-          dispatch({ type: 'success', data });
-        })
-        .catch((error: Error) => {
-          dispatch({ type: 'error', error });
-        });
+    const shouldRunQuery = isParamsChanged || shouldForceRefetch || isFirstRun.current;
+    if (shouldForceRefetch) {
+      setShouldForceRefetch(false);
     }
-  }, [app, isInitialized, prevParams, params, isNeverExecuted]);
+
+    if (shouldRunQuery) {
+      runQuery(app, params);
+      isFirstRun.current = false;
+    }
+  }, [
+    app,
+    executeQuery,
+    isInitialized,
+    isParamsChanged,
+    params,
+    prevParams,
+    runQuery,
+    shouldForceRefetch,
+  ]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
   if (queryState.data && isQueryParamsChanged(prevParams, params)) {
-    return queryStateReducer(queryState, { type: 'loading' });
+    return { ...queryStateReducer(queryState, { type: 'loading' }), refetch };
   }
 
-  return queryState;
-}
-
-/** List of parameters that can be compared by deep comparison */
-const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
-  'dataSource',
-  'dimensions',
-  'measures',
-  'count',
-  'offset',
-  'onBeforeQuery',
-];
-
-/**
- * Checks if the query parameters have changed by deep comparison.
- *
- * @param prevParams - Previous query parameters
- * @param newParams - New query parameters
- */
-export function isQueryParamsChanged(
-  prevParams: ExecuteQueryParams | undefined,
-  newParams: ExecuteQueryParams,
-): boolean {
-  if (!prevParams && newParams) {
-    return true;
-  }
-  const isSimplySerializableParamsChanged = simplySerializableParamNames.some(
-    (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
-  );
-
-  const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelations(
-    prevParams?.filters,
-  );
-  const { filters: newFilterList, relations: newRelationsList } = getFilterListAndRelations(
-    newParams?.filters,
-  );
-
-  // TODO: check if relations are changed
-  // Function has to compare logical structure of relations, not just references
-  const isSliceFiltersChanged = isFiltersChanged(prevFilterList, newFilterList);
-  const isFilterRelationsChanged =
-    isSliceFiltersChanged ||
-    isRelationsChanged(prevFilterList, newFilterList, prevRelationsList, newRelationsList);
-  const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
-
-  return (
-    isSimplySerializableParamsChanged ||
-    isSliceFiltersChanged ||
-    isHighlightFiltersChanged ||
-    isFilterRelationsChanged
-  );
+  return { ...queryState, refetch };
 }

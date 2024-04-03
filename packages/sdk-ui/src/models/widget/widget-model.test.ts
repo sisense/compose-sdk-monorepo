@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/** @vitest-environment jsdom */
 import { WidgetModel } from './widget-model';
 import { WidgetDto, WidgetType } from '../../dashboard-widget/types';
 import { TranslatableError } from '../../translation/translatable-error';

@@ -631,17 +631,7 @@ export class PivotCell extends React.PureComponent<Props, State> {
       );
     }
 
-    // DEBUG - hardcode number format for alpha release
-    // return <div className={CONTENT_INNER}>{data}</div>;
-    return (
-      <div className={CONTENT_INNER}>
-        {isNaN(data)
-          ? data
-          : new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 2 }).format(
-              data,
-            )}
-      </div>
-    );
+    return <div className={CONTENT_INNER}>{data}</div>;
   }
 
   onCellClick = (event: React.MouseEvent): void => {
@@ -865,7 +855,7 @@ export class PivotCell extends React.PureComponent<Props, State> {
     if (isCellSorted) {
       sortingIcon = (
         <SortingSettingsIcon
-          // onRequestClose={() => this.setSortingPopup(null)}
+          onRequestClose={() => this.setSortingPopup(null)}
           onClick={this.handleSortingIconClick}
           onKeyPress={this.handleSortingIconClick}
           sortingPopup={this.state.sortingPopup}

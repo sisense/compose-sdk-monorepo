@@ -1,0 +1,57 @@
+@import '../styles/style_styleguide_react/fonts';
+@import '../styles/style_styleguide_react/colors';
+
+@mixin sharedButtonText {
+  padding: 5px 20px;
+}
+
+:global(.sis-scope) {
+  :global(.btn--dark) {
+    :global(.btn__text) {
+      @include sharedButtonText;
+    }
+  }
+
+  :global(.btn--gray) {
+    background: $buttonCancel;
+
+    &:disabled {
+      background: $buttonCancel;
+      opacity: 1;
+
+      &:hover {
+        background: $buttonCancelHovered;
+      }
+
+      :global(.app-icon),
+      :global(.btn__text) {
+        opacity: 0.4;
+      }
+    }
+  }
+
+  .sharedComponentsButton {
+    line-height: $lineHeightMedium;
+  }
+
+  .sharedComponentsButtonText {
+    @include sharedButtonText;
+  }
+
+  :global(.btn).btnSecondary {
+    border: 1px solid $wizardFore;
+    background-color: $buttonSecondary;
+
+    &:hover {
+      background-color: $buttonSecondaryHovered;
+    }
+
+    &:disabled {
+      background-color: $buttonSecondary;
+
+      &:hover {
+        background-color: $buttonSecondary;
+      }
+    }
+  }
+}

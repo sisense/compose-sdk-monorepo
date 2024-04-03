@@ -1,12 +1,13 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
-  useGetChatHistory,
   useGetAllChats,
   useGetDataTopics,
   useSendChatMessage,
   useMaybeCreateChat,
 } from './api/hooks';
 import type { ChatMessage, NlqMessage, NlqResponseData } from './api/types';
+import { useChatHistory } from './api/chat-history';
+import { CHAT_UNAVAILABLE_ERROR, FETCH_HISTORY_ERROR } from './api/errors';
 
 /**
  * Result of the useChatSession hook.
@@ -20,6 +21,7 @@ export interface UseChatSessionResult {
   sendMessage: (message: string) => void;
   isAwaitingResponse: boolean;
   isLoading: boolean;
+  lastError: Error | null;
 }
 
 export const isNlqMessage = (message: ChatMessage | null | undefined): message is NlqMessage =>
@@ -47,9 +49,21 @@ export const useChatSession = (contextTitle: string): UseChatSessionResult => {
   const contextExists = dataTopicsLoading || !!contextId;
   const chatExists = chatsLoading || !!chatId;
 
-  useMaybeCreateChat(contextId, contextExists && !chatExists);
+  const [lastError, setLastError] = useState<Error | null>(null);
+  const { isError: isCreateChatError } = useMaybeCreateChat(
+    contextId,
+    contextExists && !chatExists,
+  );
 
-  const { data: chatHistory, isLoading } = useGetChatHistory(chatId);
+  const { history: chatHistory, isLoading, isError: isFetchHistoryError } = useChatHistory(chatId);
+
+  useEffect(() => {
+    if (isCreateChatError) {
+      setLastError(new Error(CHAT_UNAVAILABLE_ERROR));
+    } else if (isFetchHistoryError) {
+      setLastError(new Error(FETCH_HISTORY_ERROR));
+    }
+  }, [isCreateChatError, isFetchHistoryError]);
 
   const { mutate: sendMessage, isLoading: isSendMessageLoading } = useSendChatMessage(chatId);
 
@@ -71,5 +85,6 @@ export const useChatSession = (contextTitle: string): UseChatSessionResult => {
     sendMessage,
     isAwaitingResponse: isSendMessageLoading,
     isLoading,
+    lastError,
   };
 };

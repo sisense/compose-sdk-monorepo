@@ -11,6 +11,9 @@ echo "${ORANGE}** NOTE: TYPEDOC WARNINGS ARE TREATED AS ERRORS AND MUST BE FIXED
 set -o errexit
 set -o xtrace
 
+# Build typedoc-plugin-markdown
+yarn workspace @sisense/typedoc-plugin-markdown run build
+
 # Run typedoc with typedoc-plugin-markdown to generate the markdown files
 TYPEDOC_MODE=PUBLIC TYPEDOC_FORMAT=MD typedoc --options typedoc.config.cjs
 

@@ -4,7 +4,7 @@ title: DashboardWidgetProps
 
 # Interface DashboardWidgetProps
 
-Props for the [DashboardWidget](../fusion-assets/class.DashboardWidget.md) component
+Props for the [DashboardWidget](../fusion-embed/class.DashboardWidget.md) component
 
 ## Properties
 

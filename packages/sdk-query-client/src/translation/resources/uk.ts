@@ -8,7 +8,6 @@ export const translation: TranslationDictionary = {
     invalidFilter: `Недійсний фільтр "{{filterName}}". Підказка: фільтри для запиту можна створити за допомогою функцій "filterFactory".`,
     invalidHighlight: `Недійсне виділення "{{highlightName}}". Підказка: виділення для запиту можна створити за допомогою функцій "filterFactory".`,
     invalidCountNegative: `Недійсний count "{{count}}". Count повинен бути не від'ємним.`,
-    invalidCountLimit: `Недійсний count "{{count}}". Count не повинен перевищувати {{limit}}.`,
     invalidOffset: `Недійсний offset "{{offset}}". Offset повинен бути не від'ємним.`,
     missingHttpClient: `Для запиту потрібен httpClient, щоб працювати належним чином.`,
     missingPostMethod: `httpClient повинен мати метод "post".`,

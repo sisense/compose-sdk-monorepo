@@ -4,7 +4,7 @@
  * @packageDocumentation
  * @groupDescription Charts
  * Vue components for charts
- * @groupDescription Fusion Assets
+ * @groupDescription Fusion Embed
  * Fusion Dashboards, Widgets, Queries, and Formulas
  * @groupDescription Interfaces
  * TypeScript interfaces for components and composables listed above

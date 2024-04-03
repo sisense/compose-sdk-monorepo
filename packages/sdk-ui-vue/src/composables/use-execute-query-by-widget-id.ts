@@ -50,7 +50,8 @@ import type { MaybeWithRefs } from '../types';
  * Utilizing this composable allows for declarative and reactive handling of widget-specific queries within Vue applications,
  * facilitating easier data fetching and state management with the Sisense SDK.
  *
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWidgetIdParams>) => {
   const { filters, ...rest } = params;

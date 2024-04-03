@@ -48,7 +48,16 @@ export const applyEventHandlersToChart = (
 ): HighchartsOptionsInternal => {
   const eventOptions: HighchartsEventOptions = {
     chart: { events: {} },
-    plotOptions: { series: { point: { events: {} } } },
+    plotOptions: {
+      series: {
+        point: {
+          events: {
+            // will be overwritten if onDataPointClick is provided
+            click: () => {},
+          },
+        },
+      },
+    },
   };
 
   if (onDataPointsSelected) {
@@ -88,7 +97,7 @@ export const applyEventHandlersToChart = (
 };
 
 const getDataPoint = (point: HighchartsPoint): SisenseChartDataPoint => {
-  switch (point.series.initialType || point.series.type) {
+  switch (point.series?.initialType || point.series?.type) {
     case 'bubble':
     case 'scatter':
       return getScatterDataPoint(point);
@@ -121,7 +130,7 @@ const getSelections = (
 const getCartesianDataPoint = (point: HighchartsPoint): DataPoint => ({
   value: point.custom?.rawValue,
   categoryValue: point.custom?.xValue?.[0],
-  seriesValue: point.series.options.custom?.rawValue?.[0],
+  seriesValue: point.series?.options?.custom?.rawValue?.[0],
   categoryDisplayValue: point.category,
 });
 

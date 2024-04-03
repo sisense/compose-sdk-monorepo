@@ -310,21 +310,6 @@ describe('DimensionalQueryClient', () => {
       expect(() => queryClient.executeQuery(queryDescription)).toThrow();
     });
 
-    it('should throw when count is above query limit', () => {
-      const queryDescription: QueryDescription = {
-        ...baseQueryDescription,
-        attributes: [
-          createAttribute({
-            name: 'BrandID',
-            type: 'numeric-attribute',
-            expression: '[Commerce.Brand ID]',
-          }),
-        ],
-        count: QUERY_DEFAULT_LIMIT + 1,
-      };
-      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
-    });
-
     it('should throw when invalid offset', () => {
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
@@ -379,23 +364,6 @@ describe('DimensionalQueryClient', () => {
         };
 
         expect(() => validateQueryDescription(queryDescription)).not.toThrow();
-      });
-
-      it('should not throw when count is above query limit, but it is ignored', () => {
-        const queryDescription: QueryDescription = {
-          ...baseQueryDescription,
-          attributes: [
-            createAttribute({
-              name: 'BrandID',
-              type: 'numeric-attribute',
-              expression: '[Commerce.Brand ID]',
-            }),
-          ],
-          count: QUERY_DEFAULT_LIMIT + 1,
-        };
-        expect(() =>
-          validateQueryDescription(queryDescription, { ignoreQueryLimit: true }),
-        ).not.toThrow();
       });
 
       it('should not throw when count is above query limit for CSV downloads', () => {

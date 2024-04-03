@@ -53,7 +53,8 @@ import { useTracking } from './use-tracking';
  *
  * Utilizing this composable enables developers to declaratively integrate Sisense dashboard analytics into their Vue applications,
  * managing data fetching and state with minimal boilerplate code.
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 
 export const useGetDashboardModel = (params: MaybeWithRefs<GetDashboardModelParams>) => {

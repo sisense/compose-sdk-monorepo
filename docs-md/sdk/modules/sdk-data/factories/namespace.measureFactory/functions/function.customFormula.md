@@ -17,7 +17,7 @@ Each unique dimension or measure included in the `formula` must be defined using
 You can nest custom formulas by placing one inside the `formula` parameter of another.
 
 Note: [Shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm) must be
-fetched prior to use (see [useGetSharedFormula](../../../../sdk-ui/fusion-assets/function.useGetSharedFormula.md)).
+fetched prior to use (see [useGetSharedFormula](../../../../sdk-ui/fusion-embed/function.useGetSharedFormula.md)).
 
 ## Parameters
 

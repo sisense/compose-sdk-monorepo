@@ -11,7 +11,6 @@ export const translation = {
     invalidHighlight:
       'Invalid highlight "{{highlightName}}". Hint: highlights for the query can be constructed using the "filterFactory" functions.',
     invalidCountNegative: 'Invalid count "{{count}}". Count should be non-negative.',
-    invalidCountLimit: 'Invalid count "{{count}}". Count should not exceed {{limit}}.',
     invalidOffset: 'Invalid offset "{{offset}}". Offset should be non-negative.',
     missingHttpClient: 'Query requires httpClient to work properly.',
     missingPostMethod: 'httpClient must provide "post" method.',

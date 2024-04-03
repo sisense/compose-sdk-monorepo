@@ -2,9 +2,6 @@
 
 exports[`Treemap Chart > render a treemap with coloring 1`] = `
 {
-  "accessibility": {
-    "enabled": false,
-  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -76,7 +73,9 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
         },
       },
       "point": {
-        "events": {},
+        "events": {
+          "click": [Function],
+        },
       },
     },
   },
@@ -480,9 +479,6 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
 
 exports[`Treemap Chart > render a treemap with highlights 1`] = `
 {
-  "accessibility": {
-    "enabled": false,
-  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -554,7 +550,9 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
         },
       },
       "point": {
-        "events": {},
+        "events": {
+          "click": [Function],
+        },
       },
     },
   },
@@ -995,9 +993,6 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
 
 exports[`Treemap Chart > render a treemap with single category 1`] = `
 {
-  "accessibility": {
-    "enabled": false,
-  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -1069,7 +1064,9 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
         },
       },
       "point": {
-        "events": {},
+        "events": {
+          "click": [Function],
+        },
       },
     },
   },
@@ -1251,9 +1248,6 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
 
 exports[`Treemap Chart > render a treemap with three categories 1`] = `
 {
-  "accessibility": {
-    "enabled": false,
-  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -1325,7 +1319,9 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
         },
       },
       "point": {
-        "events": {},
+        "events": {
+          "click": [Function],
+        },
       },
     },
   },
@@ -1712,9 +1708,6 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
 
 exports[`Treemap Chart > render a treemap with two categories 1`] = `
 {
-  "accessibility": {
-    "enabled": false,
-  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -1786,7 +1779,9 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
         },
       },
       "point": {
-        "events": {},
+        "events": {
+          "click": [Function],
+        },
       },
     },
   },

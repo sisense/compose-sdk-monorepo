@@ -12,6 +12,7 @@ import {
 import { getLegacyPalette } from '../../themes/theme-loader';
 import { AppConfig, ThemeSettings } from '../../types';
 import { GlobalsObject } from './types';
+import { QUERY_DEFAULT_LIMIT } from '@/const';
 
 /**
  * Application settings
@@ -31,10 +32,15 @@ type ServerSettings = {
 
 const defaultLoadingIndicatorConfig = { enabled: true, delay: 500 };
 
-const defaultAppConfig = {
+const defaultAppConfig: Required<ConfigurableAppSettings> = {
   locale: getBaseDateFnsLocale(),
   dateConfig: defaultDateConfig,
   loadingIndicatorConfig: defaultLoadingIndicatorConfig,
+  language: 'en',
+  queryCacheConfig: {
+    enabled: false,
+  },
+  queryLimit: QUERY_DEFAULT_LIMIT,
 };
 
 /**
@@ -48,7 +54,7 @@ const defaultAppConfig = {
 export async function getSettings(
   customConfig: ConfigurableAppSettings,
   httpClient: Pick<HttpClient, 'get'>,
-  useDefaultPalette: boolean,
+  useDefaultPalette?: boolean,
 ): Promise<AppSettings> {
   const serverSettings = await loadServerSettings(httpClient, useDefaultPalette);
   return merge.withOptions(

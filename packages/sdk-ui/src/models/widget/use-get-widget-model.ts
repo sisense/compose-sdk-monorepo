@@ -110,7 +110,8 @@ export type WidgetModelSuccessState = {
  ```
  * @param params - Parameters of the widget to be retrieved
  * @returns Widget load state that contains the status of the execution, the result widget model, or the error if one has occurred
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 export const useGetWidgetModel = withTracking('useGetWidgetModel')(useGetWidgetModelInternal);
 

@@ -58,9 +58,10 @@ import {
   PivotTableDataOptions,
 } from './chart-data-options/types';
 import { AppConfig } from './app/client-application';
-import { ExecuteQueryParams, QueryByWidgetIdState, QueryState } from './query-execution';
+import { ExecuteQueryParams, QueryByWidgetIdState } from './query-execution';
 import { FiltersMergeStrategy } from './dashboard-widget/types';
 import { HookEnableParam } from './common/hooks/types';
+import { ExecuteQueryResult } from './query-execution/types';
 
 export type { MenuItemSection, HighchartsOptions };
 
@@ -171,7 +172,7 @@ export interface ExecuteQueryProps {
   offset?: number;
 
   /** Function as child component that is called to render the query results */
-  children?: (queryState: QueryState) => ReactNode;
+  children?: (queryResult: ExecuteQueryResult) => ReactNode;
 
   /** Callback function that is evaluated when query results are ready */
   onDataChanged?: (data: QueryResultData) => void;

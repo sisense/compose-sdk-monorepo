@@ -128,6 +128,13 @@ export const EVENT_FIRST_PAGE_RENDERED = 'firstPageRendered';
 export const EVENT_TOTAL_WIDGET_RENDERED = 'totalWidgetRendered';
 export { EVENT_PROGRESS_ERROR } from '../data-handling/DataService.js';
 
+export type SortingSettingsChangePayload = {
+  type: 'simple' | 'complex';
+  settings: SortingSettingsItem[];
+  sortDetails: SortDetails;
+  isSingleRowTree: boolean;
+};
+
 const DEFAULT_ACTIVE_PAGE = 0;
 
 type AppearanceState = {
@@ -302,11 +309,11 @@ export class PivotBuilder {
     this.pivot = undefined;
   }
 
-  on(eventName: string, callback: (args: Array<any>) => void) {
+  on(eventName: string, callback: (...args: Array<any>) => void) {
     this.events.on(eventName, callback);
   }
 
-  off(eventName: string, callback: (args: Array<any>) => void) {
+  off(eventName: string, callback: (...args: Array<any>) => void) {
     this.events.removeListener(eventName, callback);
   }
 
@@ -417,7 +424,7 @@ export class PivotBuilder {
    * @param {JaqlRequest} jaql - JAQL request to load
    * @returns {void}
    */
-  updateJaql(jaql: JaqlRequest) {
+  updateJaql(jaql?: JaqlRequest) {
     this.totalItemsCount = 0;
     this.totalColumnsCount = 0;
     this.totalRecordsCount = 0;

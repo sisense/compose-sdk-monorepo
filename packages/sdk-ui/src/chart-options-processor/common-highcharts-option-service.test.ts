@@ -12,7 +12,6 @@ describe('applyCommonHighchartsOptions', () => {
     const result = applyCommonHighchartsOptions(chartOptions);
 
     expect(result).toEqual({
-      accessibility: { enabled: false },
       chart: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_UPDATE } },
       plotOptions: {
         series: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_INIT } },

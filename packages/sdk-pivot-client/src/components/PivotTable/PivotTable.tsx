@@ -661,7 +661,7 @@ export class PivotTable extends React.PureComponent<Props, State> {
 
   // eslint-disable-next-line sonarjs/cognitive-complexity,max-lines-per-function
   cellRenderer = (props: CellRenderProps) => {
-    const { type, clone, rowIndex, colIndex, isMobile } = props;
+    const { type, clone, rowIndex, colIndex, isMobile, colWidth: colWidthExplicit } = props;
     const { borderWidth, tableSize } = this.state;
     const { columnWidth } = tableSize;
     const addCellDomReadyPromise = this.props.addCellDomReadyPromise || this.addCellDomReadyPromise;
@@ -792,6 +792,11 @@ export class PivotTable extends React.PureComponent<Props, State> {
 
     if (fw || clone) {
       fixedWidth = true;
+    }
+
+    // Prevents rows header table flickering during sorting by setting non-NaN column width size.
+    if (fixedWidth && isNaN(colWidth) && colWidthExplicit) {
+      colWidth = colWidthExplicit;
     }
 
     if (isNull) {

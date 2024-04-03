@@ -5,9 +5,10 @@ import { SortingDirection } from '../../../data-handling/constants.js';
 import { TranslatedMessages } from '../../../builders/pivot-builder.js';
 import { makeGetCaption } from '../getCaption.js';
 import { SortingSettingItem } from '../SortingSettingItem.js';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { CheckableList } = require('@sisense/shared-ui-components');
+import {
+  CheckableList,
+  type CheckableListProps,
+} from '../../../shared-ui-components/CheckableList';
 
 type Props = {
   titleOfPopUp: string[];
@@ -46,27 +47,27 @@ export const SimpleSortingSettingsPopup = (props: Props) => {
           hierarchy={titleOfPopUp}
         />
         <div className="simple-sorting-settings__actions">
-          <h1>CheckableList TODO</h1>
-          {/*<CheckableList*/}
-          {/*  styles={{*/}
-          {/*    margin: '16px',*/}
-          {/*  }}*/}
-          {/*  onChange={handleChange}*/}
-          {/*  items={[*/}
-          {/*    {*/}
-          {/*      name: `${messages.sort} ${getCaption(datatype, SortingDirection.ASC)}`,*/}
-          {/*      value: SortingDirection.ASC,*/}
-          {/*      checked: direction === SortingDirection.ASC,*/}
-          {/*      dataTestId: 'sort-ascending',*/}
-          {/*    },*/}
-          {/*    {*/}
-          {/*      name: `${messages.sort} ${getCaption(datatype, SortingDirection.DESC)}`,*/}
-          {/*      value: SortingDirection.DESC,*/}
-          {/*      checked: direction === SortingDirection.DESC,*/}
-          {/*      dataTestId: 'sort-descending',*/}
-          {/*    },*/}
-          {/*  ]}*/}
-          {/*/>*/}
+          <CheckableList
+            // @ts-ignore
+            styles={{
+              margin: '16px',
+            }}
+            onChange={handleChange as CheckableListProps['onChange']}
+            items={[
+              {
+                name: `${messages.sort} ${getCaption(datatype, SortingDirection.ASC)}`,
+                value: SortingDirection.ASC,
+                checked: direction === SortingDirection.ASC,
+                dataTestId: 'sort-ascending',
+              },
+              {
+                name: `${messages.sort} ${getCaption(datatype, SortingDirection.DESC)}`,
+                value: SortingDirection.DESC,
+                checked: direction === SortingDirection.DESC,
+                dataTestId: 'sort-descending',
+              },
+            ]}
+          />
         </div>
       </div>
     </div>

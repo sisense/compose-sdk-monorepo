@@ -11,7 +11,6 @@ import {
   UniformDataColorOptions,
 } from '../../../types';
 import { LegacyIndicatorChartOptions } from '../types';
-import { IndicatorTypeOptions } from './indicator-legacy-chart-options';
 
 /**
  * Type that represents allowed color options for an indicator.
@@ -52,7 +51,6 @@ export function overrideWithValueColor(
   colorOptions: DataColorOptions,
   value: number,
   legacyChartOptions: LegacyIndicatorChartOptions,
-  typeOptions: IndicatorTypeOptions,
 ): LegacyIndicatorChartOptions {
   if (!isAllowedIndicatorColorOptions(colorOptions)) {
     return legacyChartOptions;
@@ -62,10 +60,8 @@ export function overrideWithValueColor(
   ) as ColoringService<AllowedIndicatorColoringTypes>;
 
   const color = coloringService.getColor(value);
-  const isColorToValueCase =
-    typeOptions.type === 'numeric' && typeOptions.numericSubtype === 'numericSimple';
 
-  if (!color || !isColorToValueCase) {
+  if (!color) {
     return legacyChartOptions;
   }
 

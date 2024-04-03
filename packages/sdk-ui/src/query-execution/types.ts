@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   Attribute,
   DataSource,
@@ -248,6 +249,14 @@ export interface ExecuteQueryParams {
    */
   onBeforeQuery?: (jaql: any) => any | Promise<any>;
 }
+
+/**
+ * Result of a query execution.
+ */
+export type ExecuteQueryResult = QueryState & {
+  /** Function to refetch the query */
+  refetch: () => void;
+};
 
 /** Configuration for {@link useExecuteCsvQuery} hook. */
 export type ExecuteCSVQueryConfig = {

@@ -222,6 +222,7 @@ export const Chart = asSisenseComponent({
         width: styleOptions?.width,
         height: styleOptions?.height,
       }}
+      rerenderOnResize={chartType === 'indicator'}
     >
       {() => {
         if (!chartData) {

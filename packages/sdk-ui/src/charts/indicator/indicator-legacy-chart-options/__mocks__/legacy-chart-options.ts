@@ -12,6 +12,7 @@ export const numericSimpleLegacyChartOptionsWithDarkTheme: NumericSimpleOptions 
     },
   },
   value: {
+    color: '#00cee6',
     fontSizes: {
       big: 66,
       medium: 46,

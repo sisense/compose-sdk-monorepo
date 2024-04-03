@@ -2,6 +2,7 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
+import { CHAT_UNAVAILABLE_ERROR, FETCH_HISTORY_ERROR } from './api/errors';
 import { Chat, ChatResponse, QueryRecommendation } from './api/types';
 import ChatBox from './chat-box';
 import { AiTestWrapper } from './__mocks__';
@@ -19,7 +20,6 @@ beforeEach(() => {
           {
             content: 'response text from history',
             role: 'assistant',
-            type: 'Text',
           },
         ],
       }),
@@ -32,7 +32,7 @@ beforeEach(() => {
         data: {
           answer: 'new response text',
         },
-        responseType: 'Text',
+        responseType: 'text',
       }),
     ),
   );
@@ -114,4 +114,37 @@ it('can render clickable buttons for clearing history', async () => {
   expect(
     screen.getByText("Let's start over. Try asking questions about your dataset."),
   ).toBeInTheDocument();
+});
+
+it('renders the correct error message when fetching history fails', async () => {
+  server.use(
+    http.get('*/api/v2/ai/chats/:chatId', () => HttpResponse.error()),
+    http.delete('*/api/v2/ai/chats/:chatId/history', () => HttpResponse.json()),
+  );
+
+  setup(
+    <AiTestWrapper>
+      <ChatBox contextTitle="Model 2" />
+    </AiTestWrapper>,
+  );
+
+  await waitFor(() => expect(screen.getByText(FETCH_HISTORY_ERROR)).toBeInTheDocument());
+});
+
+it('renders the error container when chat is unavailable', async () => {
+  server.use(
+    http.get('*/api/v2/ai/chats', () => HttpResponse.error()),
+    http.post('*/api/v2/ai/chats', () => HttpResponse.error()),
+  );
+
+  setup(
+    <AiTestWrapper>
+      <ChatBox contextTitle="Model 2" />
+    </AiTestWrapper>,
+  );
+
+  await waitFor(() => expect(screen.getByText(CHAT_UNAVAILABLE_ERROR)).toBeInTheDocument());
+
+  // input should not be available
+  expect(screen.queryByPlaceholderText('Ask a question')).toBeNull();
 });

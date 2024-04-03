@@ -1,0 +1,90 @@
+@import '_variables';
+@import 'colors';
+@import 'fonts';
+
+@mixin ellipsis($whiteSpace: nowrap) {
+  text-overflow: ellipsis;
+  white-space: $whiteSpace;
+  overflow: hidden;
+}
+
+@mixin smallBold {
+  font-size: $sizeSmall;
+  font-family: $fontFamily;
+  font-weight: bold;
+}
+
+@mixin mediumBold {
+  font-size: $sizeMedium;
+  font-family: $fontFamily;
+  font-weight: bold;
+}
+
+@mixin largeBold {
+  font-size: $sizeLarge;
+  font-family: $fontFamily;
+  font-weight: bold;
+}
+
+@mixin smallText {
+  font-size: $sizeSmall;
+  font-family: $fontFamily;
+}
+
+@mixin mediumText {
+  font-size: $sizeMedium;
+  font-family: $fontFamily;
+}
+
+@mixin largeText {
+  font-size: $sizeLarge;
+  font-family: $fontFamily;
+}
+
+@mixin smallHeader {
+  font-size: $sizeSmall;
+  font-family: $fontHeader;
+}
+
+@mixin mediumHeader {
+  font-size: $sizeMedium;
+  font-family: $fontHeader;
+}
+
+@mixin largeHeader {
+  font-size: $sizeLarge;
+  font-family: $fontHeader;
+}
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// A workaround for Safari where there is a system tooltip enable by default
+// https://stackoverflow.com/questions/20974276/prevent-safari-from-showing-tooltip-when-text-overflow-is-hidden-with-ellipsis
+@mixin disabledSafariSystemTooltip {
+  &:after {
+    content: '';
+    display: block;
+  }
+}
+
+@mixin boxShadow($opacity: 0.2) {
+  box-shadow: 0 -1px 5px 1px rgba(58, 67, 86, $opacity);
+}
+
+@mixin CSS_ANIMATE($properties, $duration: $NORMAL_ANIMATION_TIME) {
+  -webkit-transition-duration: $duration;
+  -moz-transition-duration: $duration;
+  transition-duration: $duration;
+  -webkit-transition-property: $properties;
+  -moz-transition-property: $properties;
+  transition-property: $properties;
+}
+
+@mixin disabled($color: $lineSeparator, $background: $color-gray-4) {
+  color: $color;
+  background: $background;
+}

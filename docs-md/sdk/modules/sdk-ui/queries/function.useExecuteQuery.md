@@ -4,7 +4,7 @@ title: useExecuteQuery
 
 # Function useExecuteQuery
 
-> **useExecuteQuery**(...`args`): [`QueryState`](../type-aliases/type-alias.QueryState.md)
+> **useExecuteQuery**(...`args`): [`ExecuteQueryResult`](../type-aliases/type-alias.ExecuteQueryResult.md)
 
 React hook that executes a data query.
 This approach, which offers an alternative to [ExecuteQuery](function.ExecuteQuery.md) component, is similar to React Query's `useQuery` hook.
@@ -17,7 +17,7 @@ This approach, which offers an alternative to [ExecuteQuery](function.ExecuteQue
 
 ## Returns
 
-[`QueryState`](../type-aliases/type-alias.QueryState.md)
+[`ExecuteQueryResult`](../type-aliases/type-alias.ExecuteQueryResult.md)
 
 Query state that contains the status of the query execution, the result data, or the error if any occurred
 
@@ -42,7 +42,7 @@ Query state that contains the status of the query execution, the result data, or
  return null;
 ```
 
-See also hook [useExecuteQueryByWidgetId](../fusion-assets/function.useExecuteQueryByWidgetId.md), which extracts data from an existing widget in the Sisense instance.
+See also hook [useExecuteQueryByWidgetId](../fusion-embed/function.useExecuteQueryByWidgetId.md), which extracts data from an existing widget in the Sisense instance.
 
 See [this blog post]( https://www.sisense.com/blog/take-control-of-your-data-visualizations/) for examples
 of using the hook to fetch data from Sisense for third-party charts.

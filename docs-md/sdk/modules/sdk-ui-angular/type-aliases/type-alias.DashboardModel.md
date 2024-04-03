@@ -28,4 +28,4 @@ title: DashboardModel
 
 ### `widgets`
 
-**widgets**?: [`WidgetModel`](../fusion-assets/class.WidgetModel.md)[]
+**widgets**?: [`WidgetModel`](../fusion-embed/class.WidgetModel.md)[]

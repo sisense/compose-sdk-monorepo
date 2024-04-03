@@ -1,23 +1,27 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable complexity */
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import { useClearChatHistory } from './api/hooks';
-import ChatInput from './chat-input';
-import LoadingDotsIcon from './icons/loading-dots-icon';
 import LoadingSpinner from '../common/components/loading-spinner';
+import { useClearChatHistory } from './api/chat-history';
+import { CHAT_UNAVAILABLE_ERROR } from './api/errors';
+import { useChatConfig } from './chat-config';
+import ChatInput from './chat-input';
+import ChatIntroBlurb from './chat-intro-blurb';
+import { useChatStyle } from './chat-style-provider';
+import ErrorContainer from './common/error-container';
+import LoadingDotsIcon from './icons/loading-dots-icon';
 import MagicWandDropdown from './magic-wand-dropdown';
 import ClearHistoryMessage from './messages/clear-history-message';
 import ClearHistorySuccessMessage from './messages/clear-history-success-message';
 import MessageListResolver from './messages/message-list-resolver';
+import TextMessage from './messages/text-message';
 import NavBackButton from './nav-back-button';
 import { SuggestionsWithIntro } from './suggestions';
 import Toolbar from './toolbar';
 import { useChatSession } from './use-chat-session';
 import { useGetQueryRecommendationsInternal } from './use-get-query-recommendations';
-import { useChatConfig } from './chat-config';
-import TextMessage from './messages/text-message';
-import ChatIntroBlurb from './chat-intro-blurb';
 
 export type ChatBoxProps = {
   contextTitle: string;
@@ -34,13 +38,20 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
     [queryRecommendations],
   );
 
-  const { history, lastNlqResponse, isAwaitingResponse, sendMessage, isLoading, chatId } =
-    useChatSession(contextTitle);
+  const {
+    history,
+    lastNlqResponse,
+    isAwaitingResponse,
+    sendMessage,
+    isLoading,
+    chatId,
+    lastError,
+  } = useChatSession(contextTitle);
 
   const {
     mutate: clearHistory,
     isLoading: isClearingHistory,
-    isSuccess,
+    isSuccess: isHistoryCleared,
   } = useClearChatHistory(chatId);
 
   const [isClearHistoryOptionsVisible, setIsClearHistoryOptionsVisible] = useState(false);
@@ -77,11 +88,26 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   );
 
   const { enableFollowupQuestions } = useChatConfig();
+  const { backgroundColor, secondaryTextColor } = useChatStyle();
+
+  if (lastError?.message === CHAT_UNAVAILABLE_ERROR) {
+    return (
+      <>
+        {header}
+        <ErrorContainer text={lastError.message} />
+      </>
+    );
+  }
 
   return (
     <>
       {header}
-      <div className="csdk-h-full csdk-bg-background-priority csdk-rounded-b-[30px] csdk-flex csdk-flex-col csdk-justify-between csdk-overflow-hidden csdk-pb-[16px]">
+      <div
+        className="csdk-h-full csdk-bg-background-priority csdk-rounded-b-[30px] csdk-flex csdk-flex-col csdk-justify-between csdk-overflow-hidden csdk-pb-[16px]"
+        style={{
+          backgroundColor,
+        }}
+      >
         <div
           ref={chatContainerRef}
           className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-overflow-y-scroll csdk-p-[16px] csdk-flex-initial csdk-h-full"
@@ -92,7 +118,8 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
             isLoading={recommendationsLoading}
             onSelection={sendMessage}
           />
-          {isSuccess && <ClearHistorySuccessMessage />}
+          {lastError && <TextMessage align="left">{lastError.message}</TextMessage>}
+          {isHistoryCleared && <ClearHistorySuccessMessage />}
           {isLoading && <LoadingSpinner />}
           {!isLoading && <MessageListResolver messages={history} />}
           {enableFollowupQuestions && lastNlqResponse && (
@@ -121,10 +148,15 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
 
         <ChatInput
           onSendMessage={sendMessage}
-          disabled={isAwaitingResponse}
+          disabled={isAwaitingResponse || isLoading}
           onClearHistoryClick={showClearHistoryOptions}
         />
-        <div className="csdk-w-[392px] csdk-py-2 csdk-m-auto csdk-text-center csdk-text-ai-xs csdk-text-text-secondary csdk-whitespace-pre-wrap">
+        <div
+          className="csdk-w-[392px] csdk-py-2 csdk-m-auto csdk-text-center csdk-text-ai-xs csdk-text-text-secondary csdk-whitespace-pre-wrap"
+          style={{
+            color: secondaryTextColor,
+          }}
+        >
           Content is powered by AI, so surprises and mistakes are possible.
           <br />
           Please rate responses so we can improve!

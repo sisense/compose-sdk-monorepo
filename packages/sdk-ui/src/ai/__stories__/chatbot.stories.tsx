@@ -52,3 +52,17 @@ export const WithDefaultContext: Story = {
     config: { defaultContextTitle: 'Sample ECommerce' },
   },
 };
+
+export const WithCustomStyle: Story = {
+  args: {
+    style: {
+      backgroundColor: 'rgba(23, 28, 38, 1)',
+      primaryTextColor: 'rgba(242, 247, 255, 0.9)',
+      secondaryTextColor: 'rgba(242, 247, 255, 0.4)',
+      messageBackgroundColor: 'rgba(46, 55, 77, 1)',
+      inputBackgroundColor: 'rgba(31, 37, 51, 1)',
+      border: false,
+    },
+    config: { defaultContextTitle: 'Sample ECommerce' },
+  },
+};

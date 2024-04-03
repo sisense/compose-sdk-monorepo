@@ -2,9 +2,6 @@
 
 exports[`Boxplot Chart > render boxplot with custom data options that allow to pass all values 1`] = `
 {
-  "accessibility": {
-    "enabled": false,
-  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -123,7 +120,9 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
       },
       "grouping": false,
       "point": {
-        "events": {},
+        "events": {
+          "click": [Function],
+        },
       },
       "softThreshold": false,
       "stickyTracking": false,
@@ -359,9 +358,6 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
 
 exports[`Boxplot Chart > render boxplot with single value in data options 1`] = `
 {
-  "accessibility": {
-    "enabled": false,
-  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -480,7 +476,9 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
       },
       "grouping": false,
       "point": {
-        "events": {},
+        "events": {
+          "click": [Function],
+        },
       },
       "softThreshold": false,
       "stickyTracking": false,

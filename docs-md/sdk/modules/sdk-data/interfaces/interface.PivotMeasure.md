@@ -16,4 +16,4 @@ Wrapped measure with additional options for pivot table
 
 ### totalsCalculation
 
-> **totalsCalculation**: [`TotalsCalculation`](../type-aliases/type-alias.TotalsCalculation.md)
+> **totalsCalculation**?: [`TotalsCalculation`](../type-aliases/type-alias.TotalsCalculation.md)

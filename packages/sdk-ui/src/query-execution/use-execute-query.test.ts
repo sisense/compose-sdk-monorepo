@@ -1,14 +1,17 @@
-/** @vitest-environment jsdom */
-
 import { renderHook, waitFor } from '@testing-library/react';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 import { useExecuteQuery } from './use-execute-query';
-import { executeQueryMock } from '../query/__mocks__/execute-query';
+import {
+  executeQueryMock,
+  executeQueryWithCacheMock,
+  createExecuteQueryCacheKeyMock,
+} from '../query/__mocks__/execute-query';
 import type { Mock } from 'vitest';
 import { QueryResultData } from '@sisense/sdk-data';
 import { ClientApplication } from '../app/client-application';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ExecuteQueryParams } from './types';
+import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
@@ -31,6 +34,21 @@ const trackProductEventMock = trackProductEvent as Mock<
   ReturnType<typeof trackProductEvent>
 >;
 
+const sisenseContextMock = {
+  app: {
+    httpClient: {},
+    settings: {
+      queryCacheConfig: {
+        enabled: false,
+      },
+    },
+  } as ClientApplication,
+  isInitialized: true,
+  tracking: {
+    enabled: false,
+  },
+};
+
 describe('useExecuteQuery', () => {
   const params: ExecuteQueryParams = {
     dataSource: 'Sample ECommerce',
@@ -40,15 +58,24 @@ describe('useExecuteQuery', () => {
     highlights: [],
   };
 
-  beforeEach(() => {
-    executeQueryMock.mockClear();
-    useSisenseContextMock.mockReturnValue({
-      app: {} as ClientApplication,
-      isInitialized: true,
-      tracking: {
-        enabled: false,
+  const defaultSisenseContext: SisenseContextPayload = {
+    app: {
+      httpClient: {},
+      settings: {
+        queryLimit: 20000,
+        queryCacheConfig: { enabled: false },
       },
-    });
+    } as ClientApplication,
+    isInitialized: true,
+    tracking: {
+      enabled: false,
+      packageName: 'sdk-ui',
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    useSisenseContextMock.mockReturnValue(defaultSisenseContext);
   });
 
   it('should fetch data successfully', async () => {
@@ -133,8 +160,7 @@ describe('useExecuteQuery', () => {
     const mockData: QueryResultData = { columns: [], rows: [] };
     executeQueryMock.mockResolvedValue(mockData);
     useSisenseContextMock.mockReturnValue({
-      app: { httpClient: {} } as ClientApplication,
-      isInitialized: true,
+      ...defaultSisenseContext,
       tracking: {
         enabled: true,
       },
@@ -158,5 +184,87 @@ describe('useExecuteQuery', () => {
       expect.anything(),
       expect.any(Boolean),
     );
+  });
+
+  it('should apply query limit from Sisense context settings', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+    useSisenseContextMock.mockReturnValue({
+      ...defaultSisenseContext,
+      app: {
+        ...defaultSisenseContext.app,
+        settings: {
+          queryLimit: 42,
+        },
+      },
+    });
+
+    const { result } = renderHook(() => useExecuteQuery(params));
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(executeQueryMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          count: 42,
+        }),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+  });
+
+  describe('cache enabled', () => {
+    beforeEach(() => {
+      useSisenseContextMock.mockReturnValue({
+        ...sisenseContextMock,
+        app: {
+          ...sisenseContextMock.app,
+          settings: { ...sisenseContextMock.app.settings, queryCacheConfig: { enabled: true } },
+        },
+      });
+      executeQueryWithCacheMock.mockClear();
+      createExecuteQueryCacheKeyMock.mockReturnValue('cache-key');
+    });
+    it('should call `executeQueryWithCache` function', async () => {
+      const mockData: QueryResultData = { columns: [], rows: [] };
+      executeQueryWithCacheMock.mockResolvedValue(mockData);
+
+      const { result, rerender } = renderHook((queryParams) => useExecuteQuery(queryParams), {
+        initialProps: params,
+      });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.isSuccess).toBe(true);
+        expect(result.current.data).toBe(mockData);
+      });
+
+      rerender({ ...params, dataSource: 'Some_another_datasource' });
+
+      expect(executeQueryWithCacheMock).toHaveBeenCalledTimes(2);
+    });
+
+    it('should recall `executeQueryWithCache` if `refetch` called', async () => {
+      const mockData: QueryResultData = { columns: [], rows: [] };
+      executeQueryWithCacheMock.mockResolvedValue(mockData);
+
+      const { result } = renderHook(() => useExecuteQuery(params));
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.isSuccess).toBe(true);
+        expect(result.current.data).toBe(mockData);
+      });
+
+      result.current.refetch();
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.isSuccess).toBe(true);
+        expect(result.current.data).toBe(mockData);
+      });
+
+      expect(executeQueryWithCacheMock).toHaveBeenCalledTimes(2);
+    });
   });
 });

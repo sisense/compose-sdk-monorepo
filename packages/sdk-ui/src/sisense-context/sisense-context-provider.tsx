@@ -5,6 +5,7 @@ import { ThemeProvider } from '../theme-provider';
 import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
+import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -92,7 +93,7 @@ export const SisenseContextProvider: FunctionComponent<
       <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
         <SisenseContext.Provider value={{ isInitialized: true, app, tracking }}>
           <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
-            {children}
+            <SisenseQueryClientProvider>{children}</SisenseQueryClientProvider>
           </ThemeProvider>
         </SisenseContext.Provider>
       </ErrorBoundary>

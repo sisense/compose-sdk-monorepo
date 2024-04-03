@@ -1,0 +1,7 @@
+{
+  "extends": ["../../typedoc.package.json"],
+  "entryPoints": ["./src/module1.ts", "./src/module2.ts"],
+  "readme": "none",
+  "disableSources": true,
+  "categorizeByGroup": true
+}

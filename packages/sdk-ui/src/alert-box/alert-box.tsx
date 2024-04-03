@@ -1,7 +1,7 @@
 import styles from './alert-box.module.scss';
 
 interface Props {
-  alerts: string[];
+  alerts?: string[];
 }
 
 export const AlertBox = ({ alerts = [] }: Props) => {

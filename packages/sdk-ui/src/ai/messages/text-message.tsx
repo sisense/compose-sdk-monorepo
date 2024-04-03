@@ -1,3 +1,5 @@
+import { useChatStyle } from '../chat-style-provider';
+
 type Props = {
   children: string | JSX.Element;
   align: 'left' | 'right' | 'full';
@@ -5,6 +7,7 @@ type Props = {
 };
 
 export default function TextMessage({ children, align, onClick }: Props) {
+  const { primaryTextColor, messageBackgroundColor } = useChatStyle();
   const alignStyle =
     align === 'right' ? 'csdk-ml-auto csdk-text-right' : 'csdk-mr-auto csdk-text-left';
 
@@ -17,7 +20,14 @@ export default function TextMessage({ children, align, onClick }: Props) {
     : 'csdk-bg-background-workspace';
 
   return (
-    <div className={`${alignStyle} ${messageStyle} ${clickableStyle}`} onClick={onClick}>
+    <div
+      className={`${alignStyle} ${messageStyle} ${clickableStyle}`}
+      style={{
+        backgroundColor: messageBackgroundColor,
+        color: primaryTextColor,
+      }}
+      onClick={onClick}
+    >
       {children}
     </div>
   );

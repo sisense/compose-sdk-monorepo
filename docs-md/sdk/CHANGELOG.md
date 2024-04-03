@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.7.0] - 2024-04-03
+
+### Added
+- Support caching of query execution (alpha)
+- Extend the `PivotTable` component (alpha) to support
+  UI sorting, date and number formatting, and dynamic sizing
+- Add generic `useFetch` hook to call any Sisense REST endpoint
+- Add Typedoc plugin `@sisense/typedoc-plugin-markdown` (forked from `tgreyuk/typedoc-plugin-markdown` version `4.0.0-next.20`)
+- Move the `@sisense/sdk-ui-angular` package from beta to General Availability (GA)
+
+### Changed
+- Enable accessibility support in Highcharts
+- Extend `appConfig` (in Sisense context) to support the `queryLimit` property
+- Fix the issue with Indicator chart not using theme colors
+- Fix issues with `PieChart`: highlights and convolution animation
+- Make improvements to the AI components and hooks (private beta)
+
 ## [1.6.0] - 2024-03-20
 
 ### Added
@@ -12,7 +29,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Remove global scrollbar CSS in `PivotTable`
 - Simplify the handling of `N/A` values in charts
 - Remove redundant info in the tooltip of combo chart
-- Improvements for the AI components and hooks (private beta)
+- Make improvements to the AI components and hooks (private beta)
 
 ## [1.5.0] - 2024-03-05
 
@@ -44,9 +61,9 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Support HTML content in component `Table`
 - Support theme settings for `IndicatorChart` in ticker mode
 - Extend `StyledMeasureColumn` with `seriesStypeOptions` to support different series of different chart types
-- Improvements for `Chart` (refactoring and chart labels), `AreaChart` (sticky tracking), `NumberFormatConfig` (optional props),
+- Make improvements to `Chart` (refactoring and chart labels), `AreaChart` (sticky tracking), `NumberFormatConfig` (optional props),
   testing infrastructure (adoption of `msw` for mocks), and exports of packages (for both CommonJS and ESM imports)
-- Improvements for the AI components and hooks (private beta)
+- Make improvements to the AI components and hooks (private beta)
 
 ## [1.3.0] - 2024-02-07
 
@@ -60,7 +77,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Extend component `MemberFilterTile` to add indication of inactive members
 - Support `onDataPointClick` prop for `AreamapChart`
 - Refactor to reuse `WidgetModel` in `DashboardWidget` and `useExecuteQueryByWidgetId`
-- Minor improvements for chart navigator, i18n translations, and SSO flow.
+- Make minor improvements to chart navigator, i18n translations, and SSO flow.
 
 ## [1.2.0] - 2024-01-24
 

@@ -111,7 +111,8 @@ export type DashboardModelSuccessState = {
  ```
  * @param params - Parameters of the dashboard to be retrieved
  * @returns Dashboard load state that contains the status of the execution, the result dashboard model, or the error if any
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 export const useGetDashboardModel = withTracking('useGetDashboardModel')(
   useGetDashboardModelInternal,

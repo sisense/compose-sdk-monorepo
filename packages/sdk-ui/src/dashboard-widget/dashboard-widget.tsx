@@ -32,7 +32,8 @@ import { WidgetModel } from '../models';
  *   dashboardOid={'6441e728dac1920034bce737'}
  * />
  * ```
- * @group Fusion Assets
+ * @group Fusion Embed
+ * @fusionEmbed
  */
 export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisenseComponent({
   componentName: 'DashboardWidget',

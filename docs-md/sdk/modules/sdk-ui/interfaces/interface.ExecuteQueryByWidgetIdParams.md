@@ -4,7 +4,7 @@ title: ExecuteQueryByWidgetIdParams
 
 # Interface ExecuteQueryByWidgetIdParams
 
-Parameters for [useExecuteQueryByWidgetId](../fusion-assets/function.useExecuteQueryByWidgetId.md) hook.
+Parameters for [useExecuteQueryByWidgetId](../fusion-embed/function.useExecuteQueryByWidgetId.md) hook.
 
 ## Properties
 

@@ -58,19 +58,21 @@ React components for charts
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
 - [useExecutePivotQuery](queries/function.useExecutePivotQuery.md) <Badge type="alpha" text="Alpha" />
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
+- [useQueryCache](queries/function.useQueryCache.md) <Badge type="alpha" text="Alpha" />
 
-## Fusion Assets
+## Fusion Embed
 
 Fusion Dashboards, Widgets, Queries, and Formulas
 
-- [DashboardWidget](fusion-assets/function.DashboardWidget.md)
-- [ExecuteQueryByWidgetId](fusion-assets/function.ExecuteQueryByWidgetId.md)
-- [WidgetModel](fusion-assets/class.WidgetModel.md)
-- [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md)
-- [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md)
-- [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md)
-- [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md)
-- [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md)
+- [DashboardWidget](fusion-embed/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [ExecuteQueryByWidgetId](fusion-embed/function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useFetch](fusion-embed/function.useFetch.md)
+- [useGetDashboardModel](fusion-embed/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDashboardModels](fusion-embed/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetSharedFormula](fusion-embed/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetWidgetModel](fusion-embed/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Generative AI
 
@@ -234,6 +236,7 @@ TypeScript type aliases for components and hooks listed above
 - [DrilldownSelection](type-aliases/type-alias.DrilldownSelection.md)
 - [DrilldownWidgetConfig](type-aliases/type-alias.DrilldownWidgetConfig.md)
 - [ExecuteCSVQueryConfig](type-aliases/type-alias.ExecuteCSVQueryConfig.md)
+- [ExecuteQueryResult](type-aliases/type-alias.ExecuteQueryResult.md)
 - [FilterVariant](type-aliases/type-alias.FilterVariant.md)
 - [GeoDataElement](type-aliases/type-alias.GeoDataElement.md)
 - [IndicatorChartType](type-aliases/type-alias.IndicatorChartType.md)
@@ -268,6 +271,7 @@ TypeScript type aliases for components and hooks listed above
 - [QuerySuccessState](type-aliases/type-alias.QuerySuccessState.md)
 - [RangeDataColorOptions](type-aliases/type-alias.RangeDataColorOptions.md)
 - [RawGeoDataElement](type-aliases/type-alias.RawGeoDataElement.md)
+- [RequestConfig](type-aliases/type-alias.RequestConfig.md)
 - [ScatterChartType](type-aliases/type-alias.ScatterChartType.md)
 - [ScatterDataPoint](type-aliases/type-alias.ScatterDataPoint.md)
 - [ScatterDataPointEventHandler](type-aliases/type-alias.ScatterDataPointEventHandler.md)
@@ -292,6 +296,7 @@ TypeScript type aliases for components and hooks listed above
 - [ThemeOid](type-aliases/type-alias.ThemeOid.md)
 - [ThemeProviderProps](type-aliases/type-alias.ThemeProviderProps.md)
 - [UniformDataColorOptions](type-aliases/type-alias.UniformDataColorOptions.md)
+- [UseQueryResult](type-aliases/type-alias.UseQueryResult.md)
 - [ValueToColorMap](type-aliases/type-alias.ValueToColorMap.md)
 - [WidgetDataOptions](type-aliases/type-alias.WidgetDataOptions.md)
 - [WidgetModelErrorState](type-aliases/type-alias.WidgetModelErrorState.md)

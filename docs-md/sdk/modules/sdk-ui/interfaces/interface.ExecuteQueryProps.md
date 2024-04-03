@@ -10,7 +10,7 @@ Props for [ExecuteQuery](../queries/function.ExecuteQuery.md) component.
 
 ### children
 
-> **children**?: (`queryState`) => `ReactNode`
+> **children**?: (`queryResult`) => `ReactNode`
 
 Function as child component that is called to render the query results
 
@@ -18,7 +18,7 @@ Function as child component that is called to render the query results
 
 | Parameter | Type |
 | :------ | :------ |
-| `queryState` | [`QueryState`](../type-aliases/type-alias.QueryState.md) |
+| `queryResult` | [`ExecuteQueryResult`](../type-aliases/type-alias.ExecuteQueryResult.md) |
 
 #### Returns
 

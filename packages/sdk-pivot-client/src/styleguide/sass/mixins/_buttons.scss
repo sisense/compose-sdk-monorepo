@@ -1,0 +1,572 @@
+@import '../variables';
+
+$button-opacity-main: 1;
+
+$button-text-color-main: $color-text-selected-hover;
+$button-text-color-hover: $color-text-selected-hover;
+$button-text-color-disabled: $color-text-selected-hover;
+$button-opacity-disabled: 0.4;
+
+$button-warning-color-main: $color-text-selected-hover;
+$button-warning-color-hover: $color-text-selected-hover;
+$button-warning-color-disabled: $color-text-selected-hover;
+$button-warning-opacity-disabled: 0.4;
+
+$button-danger-background-color-main: $color-gray-1;
+$button-danger-color-main: $color-text;
+$button-danger-background-color-hover: $color-error-cancel;
+$button-danger-color-hover: #fff;
+$button-danger-background-color-disabled: $color-gray-1;
+$button-danger-color-disabled: $color-text;
+$button-danger-opacity-disabled: 0.6;
+
+$button-gray-opacity-disabled: 0.6;
+
+$button-white-color-main: $color-text-selected-hover;
+$button-white-background-color-main: $color-bg;
+$button-white-color-hover: $color-text-selected-hover;
+$button-white-background-color-hover: darken(adjust-hue($color-brand, -1.6522), 3.5294);
+$button-white-color-disabled: $color-text-selected-hover;
+$button-white-background-color-disabled: $color-bg;
+$button-white-opacity-disabled: 0.6;
+
+$button-transp-color: $color-text-secondary;
+$button-transp-color-hover: $color-text-selected-hover;
+$button-transp-color-disabled: $color-text;
+$button-transp-opacity-disabled: 0.4;
+
+$button-confirm-color-apply: $color-apply-approve;
+$button-confirm-color-cancel: $color-error-cancel;
+$button-confirm-color-hover: $color-bg;
+$button-confirm-opacity-disabled: 0.4;
+
+$button-dark-color: $text-color-primary;
+$button-dark-hover-background-color: $color-gray-4;
+$button-darkest-hover-background-color: $color-hover-on-grey;
+
+// Buttons
+//
+// Styleguide 100.50
+
+// buttons-icon-only()
+//
+// Makes button with 'icon+text' to 'icon' only.
+//
+// Styleguide 100.50.1
+@mixin buttons-icon-only() {
+  .btn__text {
+    display: none;
+  }
+
+  .btn__icon {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  &.btn--transp,
+  &.btn--dark {
+    .btn__icon {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+// buttons-no-icon-only()
+//
+// Makes button with 'icon' to 'icon+text'.
+//
+// Styleguide 100.50.2
+@mixin buttons-no-icon-only() {
+  .btn__text {
+    display: inline-block;
+  }
+
+  &,
+  &.btn--transp {
+    .btn__icon {
+      padding-left: 9px;
+      padding-right: 0;
+    }
+
+    .btn__icon + .btn__text {
+      margin-left: -3px;
+    }
+  }
+}
+
+// buttons-text-only()
+//
+// Makes button with 'icon+text' to 'text' only.
+//
+// Styleguide 100.50.3
+@mixin buttons-text-only() {
+  .btn__icon {
+    display: none;
+  }
+
+  &.btn--transp {
+    .btn__text {
+      padding-right: 0;
+    }
+  }
+
+  &:not(.btn--transp, .btn--dark) {
+    .btn__text {
+      vertical-align: top;
+      padding: 3px 20px;
+    }
+  }
+}
+
+// buttons-no-text-only()
+//
+// Makes button with 'text' to 'icon+text'.
+//
+// Styleguide 100.50.4
+@mixin buttons-no-text-only() {
+  .btn__icon {
+    display: inline-block;
+    padding-left: 9px;
+  }
+
+  .btn__icon + .btn__text {
+    vertical-align: middle;
+    margin-left: -3px;
+    padding-left: 0;
+    padding-right: 13px;
+    max-width: calc(100% - 24px);
+  }
+}
+
+// buttons-default-default-state()
+//
+// Set appropriate default props
+//
+// Styleguide 100.50.50
+@mixin buttons-default-default-state() {
+  opacity: $button-opacity-main;
+}
+
+// buttons-default-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.51
+@mixin buttons-default-hover-state() {
+  opacity: $button-opacity-main;
+}
+
+// buttons-default-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.52
+@mixin buttons-default-disabled-state() {
+  opacity: $button-opacity-disabled;
+}
+
+// buttons-warning-default-state()
+//
+// Set appropriate default props
+//
+// Styleguide 100.50.60
+@mixin buttons-warning-default-state() {
+  opacity: $button-opacity-main;
+}
+
+// buttons-warning-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.61
+@mixin buttons-warning-hover-state() {
+  opacity: $button-opacity-main;
+}
+
+// buttons-warning-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.62
+@mixin buttons-warning-disabled-state() {
+  opacity: $button-warning-opacity-disabled;
+}
+
+// buttons-danger-default-state()
+//
+// Set appropriate default props
+//
+// Styleguide 100.50.70
+@mixin buttons-danger-default-state() {
+  background: $button-danger-background-color-main;
+  opacity: $button-opacity-main;
+}
+
+// buttons-danger-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.71
+@mixin buttons-danger-hover-state() {
+  color: $button-danger-color-hover;
+  background: $button-danger-background-color-hover;
+  opacity: $button-opacity-main;
+}
+
+// buttons-danger-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.72
+@mixin buttons-danger-disabled-state() {
+  color: $button-danger-color-disabled;
+  background: $button-danger-background-color-disabled;
+  opacity: $button-danger-opacity-disabled;
+}
+
+// buttons-transp-default-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.80
+@mixin buttons-transp-default-state() {
+  color: $button-transp-color;
+  background: none;
+  opacity: $button-opacity-main;
+  line-height: 1;
+}
+
+// buttons-transp-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.81
+@mixin buttons-transp-hover-state() {
+  background: none;
+  opacity: $button-opacity-main;
+}
+
+// buttons-transp-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.82
+@mixin buttons-transp-disabled-state() {
+  background: none;
+  opacity: $button-transp-opacity-disabled;
+}
+
+// buttons-gray-default-state()
+//
+// Set appropriate default props
+//
+// Styleguide 100.50.90
+@mixin buttons-gray-default-state() {
+  opacity: $button-opacity-main;
+}
+
+// buttons-gray-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.91
+@mixin buttons-gray-hover-state() {
+  opacity: $button-opacity-main;
+}
+
+// buttons-gray-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.92
+@mixin buttons-gray-disabled-state() {
+  opacity: $button-gray-opacity-disabled;
+}
+
+// buttons-smart-default-state()
+//
+// Set appropriate default props
+//
+// Styleguide 100.50.100
+@mixin buttons-smart-default-state() {
+  @include buttons-gray-default-state();
+}
+
+// buttons-smart-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.101
+@mixin buttons-smart-hover-state() {
+  @include buttons-gray-hover-state();
+}
+
+// buttons-smart-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.102
+@mixin buttons-smart-disabled-state() {
+  @include buttons-gray-disabled-state();
+}
+
+// buttons-white-default-state()
+//
+// Set appropriate default props
+//
+// Styleguide 100.50.110
+@mixin buttons-white-default-state() {
+  background: $button-white-background-color-main;
+  opacity: $button-opacity-main;
+}
+
+// buttons-white-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.111
+@mixin buttons-white-hover-state() {
+  background: $button-white-background-color-hover;
+  opacity: $button-opacity-main;
+}
+
+// buttons-white-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.112
+@mixin buttons-white-disabled-state() {
+  background: $button-white-background-color-disabled;
+  opacity: $button-white-opacity-disabled;
+}
+
+// buttons-confirm-default-state()
+//
+// Set appropriate default props
+//
+// Styleguide 100.50.130
+@mixin buttons-confirm-default-state() {
+  opacity: $button-opacity-main;
+
+  &.confirm-btn--apply {
+    color: $button-confirm-color-apply;
+    background: rgba($button-confirm-color-apply, 0);
+    border-color: $button-confirm-color-apply;
+  }
+
+  &.confirm-btn--cancel {
+    color: $button-confirm-color-cancel;
+    background: rgba($button-confirm-color-cancel, 0);
+    border-color: $button-confirm-color-cancel;
+  }
+}
+
+// buttons-confirm-hover-state()
+//
+// Set appropriate :hover props
+//
+// Styleguide 100.50.131
+@mixin buttons-confirm-hover-state() {
+  opacity: $button-opacity-main;
+
+  &.confirm-btn--apply {
+    color: $button-confirm-color-hover;
+    background: rgba($button-confirm-color-apply, 1);
+    border-color: $button-confirm-color-apply;
+  }
+
+  &.confirm-btn--cancel {
+    color: $button-confirm-color-hover;
+    background: rgba($button-confirm-color-cancel, 1);
+    border-color: $button-confirm-color-cancel;
+  }
+}
+
+// buttons-confirm-disabled-state()
+//
+// Set appropriate disabled props
+//
+// Styleguide 100.50.132
+@mixin buttons-confirm-disabled-state() {
+  opacity: $button-confirm-opacity-disabled;
+
+  &.confirm-btn--apply {
+    color: $button-confirm-color-apply;
+    background: rgba($button-confirm-color-apply, 0);
+    border-color: $button-confirm-color-apply;
+  }
+
+  &.confirm-btn--cancel {
+    color: $button-confirm-color-cancel;
+    background: rgba($button-confirm-color-cancel, 0);
+    border-color: $button-confirm-color-cancel;
+  }
+}
+
+// buttons-default-state()
+//
+// Set appropriate default styles
+//
+// Styleguide 100.50.210
+@mixin buttons-default-state() {
+  &.btn {
+    @include buttons-default-default-state();
+  }
+  &.btn--warning {
+    @include buttons-warning-default-state();
+  }
+  &.btn--danger {
+    @include buttons-danger-default-state();
+  }
+  &.btn--transp {
+    @include buttons-transp-default-state();
+  }
+  &.btn--gray,
+  &.btn--smart {
+    @include buttons-gray-default-state();
+  }
+  &.btn--white {
+    @include buttons-white-default-state();
+  }
+  &.confirm-btn {
+    @include buttons-confirm-default-state();
+  }
+}
+
+// buttons-hover-state()
+//
+// Set appropriate :hover styles
+//
+// Styleguide 100.50.220
+@mixin buttons-hover-state() {
+  &.btn {
+    @include buttons-default-hover-state();
+  }
+  &.btn--warning {
+    @include buttons-warning-hover-state();
+  }
+  &.btn--danger {
+    @include buttons-danger-hover-state();
+  }
+  &.btn--transp {
+    @include buttons-transp-hover-state();
+  }
+  &.btn--gray,
+  &.btn--smart {
+    @include buttons-gray-hover-state();
+  }
+  &.btn--white {
+    @include buttons-white-hover-state();
+  }
+  &.confirm-btn {
+    @include buttons-confirm-hover-state();
+  }
+}
+
+// buttons-disabled-state()
+//
+// Set appropriate disabled styles
+//
+// Styleguide 100.50.230
+@mixin buttons-disabled-state() {
+  &.btn {
+    @include buttons-default-disabled-state();
+  }
+  &.btn--warning {
+    @include buttons-warning-disabled-state();
+  }
+  &.btn--danger {
+    @include buttons-danger-disabled-state();
+  }
+  &.btn--transp {
+    @include buttons-transp-disabled-state();
+  }
+  &.btn--gray,
+  &.btn--smart {
+    @include buttons-gray-disabled-state();
+  }
+  &.btn--white {
+    @include buttons-white-disabled-state();
+  }
+  &.confirm-btn {
+    @include buttons-confirm-disabled-state();
+  }
+}
+
+// buttons-more-open()
+//
+// Set btn--more open state
+//
+// Styleguide 100.50.240
+@mixin buttons-more-open() {
+  .btn__text {
+    margin-left: -9px;
+  }
+
+  .btn__icon {
+    width: 10px;
+  }
+}
+
+// buttons-icon-only-optimize()
+//
+// Remove all space around icon, make button with icon size
+//
+// Styleguide 100.50.250
+@mixin buttons-icon-only-optimize() {
+  &.btn--icon {
+    font-size: 0;
+    line-height: 0;
+
+    .btn__icon {
+      padding: 0;
+    }
+  }
+}
+
+// buttons-dark-hover-default_state()
+
+// Styleguide 100.50.260
+
+@mixin button-dark-default-state() {
+  background: none;
+  color: $button-dark-color;
+  border-radius: 4px;
+  padding: 0;
+  transition: unset;
+
+  line-height: 1;
+
+  .btn__text {
+    padding: 0;
+  }
+
+  &.btn--icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    width: 28px;
+    padding: 0;
+    border-radius: 50%;
+
+    &.btn--small {
+      height: 24px;
+      width: 24px;
+    }
+  }
+}
+
+@mixin button-dark-hover-state() {
+  background-color: $button-dark-hover-background-color;
+  color: inherit;
+
+  &.btn--on-grey {
+    background-color: $button-darkest-hover-background-color;
+  }
+
+  &.btn--no-hover {
+    background: none;
+  }
+}

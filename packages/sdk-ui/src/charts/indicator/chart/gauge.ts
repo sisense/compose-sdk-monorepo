@@ -423,7 +423,7 @@ export class Gauge {
     data: IndicatorLegacyChartDataOptions,
     options: LegacyIndicatorChartOptions | any,
   ) {
-    ctx.fillStyle = data.color;
+    ctx.fillStyle = options.valueColor;
     ctx.fillRect(
       1,
       options.offsetY,
@@ -431,7 +431,7 @@ export class Gauge {
       options.valueSectionHeight,
     );
     ctx.font = options.valueFont;
-    ctx.fillStyle = options.valueColor;
+    ctx.fillStyle = 'white';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(
@@ -678,17 +678,17 @@ export class Gauge {
     const arcEndAngleRad = $indicatorHelper.degToRad(options.endAngle + 180);
 
     if (options.needleAngle > options.startAngle && options.needleAngle < options.endAngle) {
-      this.drawArc(ctx, options, arcStartAngleRad, needleAngleRad, data.color);
+      this.drawArc(ctx, options, arcStartAngleRad, needleAngleRad, options.valueColor);
 
       ctx.globalAlpha = options.gaugeOpacity;
 
-      this.drawArc(ctx, options, needleAngleRad, arcEndAngleRad, data.color);
+      this.drawArc(ctx, options, needleAngleRad, arcEndAngleRad, options.valueColor);
     } else {
       if (options.needleAngle <= options.startAngle) {
         ctx.globalAlpha = options.gaugeOpacity;
       }
 
-      this.drawArc(ctx, options, arcStartAngleRad, arcEndAngleRad, data.color);
+      this.drawArc(ctx, options, arcStartAngleRad, arcEndAngleRad, options.valueColor);
     }
 
     ctx.globalAlpha = 1;

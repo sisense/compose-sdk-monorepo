@@ -1,7 +1,7 @@
 import { Attribute, Measure, Filter, QueryResultData, DataSource } from '@sisense/sdk-data';
 import { isNull } from 'lodash';
 import { ClientApplication } from './app/client-application.js';
-import { executeQuery } from './query/execute-query.js';
+import { executeQuery as executeQueryFunction } from './query/execute-query.js';
 import {
   BoxplotChartCustomDataOptions,
   BoxplotChartDataOptionsInternal,
@@ -106,23 +106,26 @@ export function boxWhiskerProcessResult(
   return boxWhiskerProcessResultInternal(boxWhiskerData, outliersData, dataOptionsInternal);
 }
 
-export const executeBoxplotQuery = async ({
-  app,
-  chartDataOptions,
-  dataSource,
-  attributes,
-  measures,
-  filters,
-  highlights,
-}: {
-  app: ClientApplication;
-  chartDataOptions: BoxplotChartDataOptionsInternal;
-  dataSource?: DataSource;
-  attributes: Attribute[];
-  measures: Measure[];
-  filters?: Filter[];
-  highlights?: Filter[];
-}) => {
+export const executeBoxplotQuery = async (
+  {
+    app,
+    chartDataOptions,
+    dataSource,
+    attributes,
+    measures,
+    filters,
+    highlights,
+  }: {
+    app: ClientApplication;
+    chartDataOptions: BoxplotChartDataOptionsInternal;
+    dataSource?: DataSource;
+    attributes: Attribute[];
+    measures: Measure[];
+    filters?: Filter[];
+    highlights?: Filter[];
+  },
+  executeQuery: typeof executeQueryFunction,
+) => {
   const mainQuery = {
     dataSource,
     dimensions: chartDataOptions.category ? [attributes[0]] : [],

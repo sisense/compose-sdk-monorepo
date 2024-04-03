@@ -9,6 +9,7 @@ import {
 import { Merge } from '../../utils/utility-types';
 
 export const SERIES_CAPACITY = 50;
+export const PIE_SERIES_CAPACITY = 1000;
 export const SCATTER_CATEGORIES_CAPACITY = 500;
 export const CATEGORIES_CAPACITY = 100000;
 

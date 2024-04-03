@@ -29,7 +29,7 @@ You can get an API Token to use in your application in one of the following ways
 - Run the following command using the Compose SDK CLI tool:
 
 ```sh
-npx @sisense/sdk-cli get-api-token --url <your_instance_url> --username <username>
+npx @sisense/sdk-cli@latest get-api-token --url <your_instance_url> --username <username>
 ```
 
 Notes:

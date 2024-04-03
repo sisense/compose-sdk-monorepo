@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { MembersFilter, measureFactory } from '@sisense/sdk-data';
+import { Filter, MembersFilter, measureFactory } from '@sisense/sdk-data';
 import { CARTESIAN_CHART_TYPES } from '../../../chart-options-processor/translations/types';
 import { ChartWidget } from '../../../widgets/chart-widget';
 import { useCallback, useState } from 'react';
@@ -11,9 +11,11 @@ import { getMemberNameFromDataPoint } from '../../../../src/widgets/common/drill
 export const CartesianSelectableChart = ({
   onPointsSelect,
   filters,
+  highlights = [],
 }: {
   onPointsSelect: (filters: MembersFilter[]) => void;
-  filters: MembersFilter[];
+  filters: Filter[];
+  highlights?: Filter[];
 }) => {
   const [cartesianChartType, setCartesianChartType] = useState('line');
 
@@ -37,6 +39,7 @@ export const CartesianSelectableChart = ({
         <ChartWidget
           chartType={cartesianChartType as ChartType}
           filters={filters}
+          highlights={highlights}
           topSlot={
             <div className="csdk-flex csdk-justify-center">
               <ButtonGroup variant="outlined" size="small" fullWidth color="info">
