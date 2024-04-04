@@ -9,9 +9,10 @@ describe('applyCommonHighchartsOptions', () => {
   it('should apply common options', () => {
     const chartOptions = {} as HighchartsOptionsInternal;
 
-    const result = applyCommonHighchartsOptions(chartOptions);
+    const result = applyCommonHighchartsOptions(chartOptions, true);
 
     expect(result).toEqual({
+      accessibility: { enabled: true },
       chart: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_UPDATE } },
       plotOptions: {
         series: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_INIT } },

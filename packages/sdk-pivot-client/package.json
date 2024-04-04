@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.7.0",
+  "version": "1.7.1",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -39,8 +39,8 @@
   ],
   "dependencies": {
     "@mui/material": "^5.11.6",
-    "@sisense/sdk-data": "^1.7.0",
-    "@sisense/sdk-rest-client": "^1.7.0",
+    "@sisense/sdk-data": "^1.7.1",
+    "@sisense/sdk-rest-client": "^1.7.1",
     "@types/react-custom-scrollbars": "^4.0.13",
     "classnames": "2.3.2",
     "dom-css": "2.1.0",

@@ -2,6 +2,9 @@
 
 exports[`Sunburst Chart > render a sunburst with single category 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -276,6 +279,9 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
 
 exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -658,6 +664,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
 
 exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,

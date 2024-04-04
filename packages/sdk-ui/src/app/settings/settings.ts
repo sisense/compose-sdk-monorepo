@@ -41,6 +41,9 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
     enabled: false,
   },
   queryLimit: QUERY_DEFAULT_LIMIT,
+  accessibilityConfig: {
+    enabled: false,
+  },
 };
 
 /**

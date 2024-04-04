@@ -10,6 +10,26 @@ Application configuration
 
 ## Type declaration
 
+### `accessibilityConfig`
+
+**accessibilityConfig**?: `object`
+
+Accessibility configuration
+
+This feature is in alpha
+
+> #### `accessibilityConfig.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Whether to enable accessibility features
+>
+> If not specified, the default value is `false`
+>
+>
+
+***
+
 ### `dateConfig`
 
 **dateConfig**?: [`DateConfig`](type-alias.DateConfig.md)

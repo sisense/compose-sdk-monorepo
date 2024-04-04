@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.1] - 2024-04-03
+
+### Changed
+- Extend `appConfig` with boolean flag `accessibilityConfig.enabled` to toggle accessibility support in Highcharts
+
 ## [1.7.0] - 2024-04-03
 
 ### Added

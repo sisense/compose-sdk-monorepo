@@ -12,8 +12,10 @@ export const DEFAULT_ANIMATION_DURATION_MS_UPDATE = 300;
  */
 export const applyCommonHighchartsOptions = (
   chartOptions: HighchartsOptionsInternal,
+  accessibilityEnabled: boolean,
 ): HighchartsOptionsInternal => {
   return merge(chartOptions, {
+    accessibility: { enabled: accessibilityEnabled },
     chart: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_UPDATE } },
     plotOptions: {
       series: { animation: { duration: DEFAULT_ANIMATION_DURATION_MS_INIT } },

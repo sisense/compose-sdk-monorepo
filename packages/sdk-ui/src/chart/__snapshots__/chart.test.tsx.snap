@@ -2,6 +2,9 @@
 
 exports[`Chart > add handlers to a chart 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -438,6 +441,9 @@ exports[`Chart > add handlers to a chart 1`] = `
 
 exports[`Chart > change theme of a chart 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -2043,6 +2049,9 @@ exports[`Chart > render Table 1`] = `
 
 exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -3004,6 +3013,9 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
 
 exports[`Chart > render a column chart with breakBy 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,
@@ -3592,6 +3604,9 @@ exports[`Chart > render a column chart with breakBy 1`] = `
 
 exports[`Chart > render a line chart 1`] = `
 {
+  "accessibility": {
+    "enabled": false,
+  },
   "boost": {
     "useGPUTranslations": true,
     "usePreAllocated": true,

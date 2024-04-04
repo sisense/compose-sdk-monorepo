@@ -59,6 +59,20 @@ export type AppConfig = {
    * @default 20000
    */
   queryLimit?: number;
+
+  /**
+   * Accessibility configuration
+   *
+   * This feature is in alpha
+   */
+  accessibilityConfig?: {
+    /**
+     * Whether to enable accessibility features
+     *
+     * If not specified, the default value is `false`
+     */
+    enabled?: boolean;
+  };
 };
 
 /**

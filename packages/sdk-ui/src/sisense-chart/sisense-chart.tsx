@@ -74,7 +74,11 @@ export const SisenseChart = ({
 
     alerts.push(...highchartsOptionsAlerts);
 
-    const highchartsOptionsWithCommonOptions = applyCommonHighchartsOptions(highchartsOptions);
+    const accessibilityEnabled = app?.settings.accessibilityConfig?.enabled || false;
+    const highchartsOptionsWithCommonOptions = applyCommonHighchartsOptions(
+      highchartsOptions,
+      accessibilityEnabled,
+    );
 
     const highchartsOptionsWithEventHandlers = applyEventHandlersToChart(
       highchartsOptionsWithCommonOptions,
