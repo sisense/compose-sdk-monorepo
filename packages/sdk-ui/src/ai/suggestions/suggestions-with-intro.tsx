@@ -1,3 +1,4 @@
+import TextMessage from '../messages/text-message';
 import SuggestionList from './suggestion-list';
 import SuggestionListSkeleton from './suggestion-list-skeleton';
 
@@ -17,9 +18,7 @@ export default function SuggestionsWithIntro({ questions, isLoading, onSelection
   if (hasQuestions) {
     return (
       <>
-        <div className="csdk-text-center csdk-text-ai-base csdk-text-text-active">
-          Some suggestions to ask about this dataset:
-        </div>
+        <TextMessage align="left">Some things to ask about this dataset:</TextMessage>
         <SuggestionList onSelection={onSelection} questions={questions} />
       </>
     );

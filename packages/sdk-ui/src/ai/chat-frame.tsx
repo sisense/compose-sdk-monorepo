@@ -21,7 +21,7 @@ export default function ChatFrame({
   const { border } = useChatStyle();
   return (
     <div
-      className={`csdk-relative csdk-flex csdk-flex-col csdk-border csdk-border-[#c6c9ce] csdk-rounded-[30px] csdk-bg-transparent csdk-overflow-hidden`}
+      className={`csdk-relative csdk-flex csdk-flex-col csdk-border csdk-border-[#c6c9ce] csdk-rounded-[30px] csdk-bg-background-workspace csdk-overflow-hidden`}
       style={{
         minWidth: MIN_ALLOWED_WIDTH,
         minHeight: MIN_ALLOWED_HEIGHT,

@@ -29,16 +29,21 @@ export interface ChatConfig {
    * @internal
    */
   chatMode?: ChatMode;
+
+  /** The input prompt text to show in the chat input box */
+  inputPromptText: string;
 }
 
 export const DEFAULTS = Object.freeze<ChatConfig>({
   enableFollowupQuestions: false,
   numOfRecommendations: 4,
+  inputPromptText: 'Ask a question',
 });
 
 const ChatConfigContext = createContext<ChatConfig>({
   enableFollowupQuestions: DEFAULTS.enableFollowupQuestions,
   numOfRecommendations: DEFAULTS.numOfRecommendations,
+  inputPromptText: DEFAULTS.inputPromptText,
 });
 
 export type ChatConfigProviderProps = {

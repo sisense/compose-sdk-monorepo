@@ -10,6 +10,9 @@ export const translation = {
     dashboardWidgetInvalidIdentifiers:
       'Failed to retrieve widget. ' +
       'Please make sure the dashboard widget exists and is accessible.',
+    dashboardWidgetsInvalidIdentifiers:
+      'Failed to retrieve dashboard widgets. ' +
+      'Please make sure the dashboard exists and is accessible.',
     executeQueryNoSisenseContext:
       'Sisense Context for query execution not found. To fix, wrap the component inside a Sisense context provider.',
     executeQueryNoDataSource: 'No dataSource provided to execute query',

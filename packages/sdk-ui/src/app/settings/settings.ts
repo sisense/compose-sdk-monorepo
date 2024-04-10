@@ -44,6 +44,9 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   accessibilityConfig: {
     enabled: false,
   },
+  errorBoundaryConfig: {
+    alwaysShowErrorText: false,
+  },
 };
 
 /**

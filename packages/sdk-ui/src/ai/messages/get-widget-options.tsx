@@ -76,6 +76,10 @@ const mapToDataOptions = (
 
     acc[key] = value.map((v) => {
       const m = metadataItemByTitle[v.name];
+      // this will generate an error in the chart instead of failing
+      // error will contain the name of the problematic item
+      // TODO: remove when proper validation is introduced
+      if (!m) return { column: { type: '', name: v.name } };
       const column = createJaqlElement(m);
 
       if (m.panel === 'measures') {

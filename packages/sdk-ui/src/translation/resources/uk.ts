@@ -11,6 +11,8 @@ export const translation: TranslationDictionary = {
       'Контекст Sisense для віджета дашборди не знайдено. Щоб виправити, оберніть компонент у SisenseContextProvider.',
     dashboardWidgetInvalidIdentifiers:
       'Не вдалося отримати віджет. ' + 'Переконайтеся, що віджет дашборди існує і доступний.',
+    dashboardWidgetsInvalidIdentifiers:
+      'Не вдалося отримати віджети дашборди. ' + 'Переконайтеся, що дашборда існує і доступна.',
     executeQueryNoSisenseContext:
       'Контекст Sisense для виконання запиту не знайдено. Щоб виправити, оберніть компонент у SisenseContextProvider.',
     executeQueryNoDataSource: 'Не надано dataSource для виконання запиту',

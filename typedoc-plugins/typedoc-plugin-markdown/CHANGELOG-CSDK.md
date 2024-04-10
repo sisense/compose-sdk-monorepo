@@ -1,5 +1,9 @@
 # Changelog
 
+## 2024-04-08
+
+- Add `iframe` to the list of supported HTML tags – see function `escapeAngleBrackets()` in `src/support/utils.ts`
+
 ## 2024-03-17
 
 - Group reflections to directories by `@group`

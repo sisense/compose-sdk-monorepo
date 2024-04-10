@@ -1,6 +1,8 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api';
 import { translateDashboard } from './translate-dashboard';
+import { type DashboardDto } from '@/api/types/dashboard-dto';
+import { type WidgetDto } from '@/dashboard-widget/types';
 
 export interface GetDashboardModelOptions {
   /**
@@ -19,16 +21,21 @@ export async function getDashboardModel(
 ) {
   const { includeWidgets } = options;
   const api = new RestApi(http);
-  const expand: string[] = [];
-  let fields = ['oid', 'title', 'datasource'];
+  const fields = ['oid', 'title', 'datasource'];
+
+  const promises: [Promise<DashboardDto>, Promise<WidgetDto[]>?] = [
+    api.getDashboard(dashboardOid, { fields }),
+  ];
 
   if (includeWidgets) {
-    // Removes "fields" list due to it's conflict with "expand" parameter => API endpoint issue
-    fields = [];
-    expand.push('widgets');
+    promises.push(api.getDashboardWidgets(dashboardOid));
   }
 
-  const dashboard = await api.getDashboard(dashboardOid, { fields, expand });
+  const [dashboard, widgets] = await Promise.all(promises);
+
+  if (widgets) {
+    dashboard.widgets = widgets;
+  }
 
   return translateDashboard(dashboard);
 }

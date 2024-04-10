@@ -1,6 +1,7 @@
 import { setup } from '@/__test-helpers__';
 import { screen } from '@testing-library/react';
 import ChatInput from './chat-input';
+import AiContextProvider from './ai-context-provider';
 
 const onSendMessageMock = vi.fn();
 
@@ -33,6 +34,23 @@ describe('when user has typed non-empty input text', () => {
 });
 
 describe('when user has not typed any input text', () => {
+  it('input has a default placeholder', () => {
+    setup(<ChatInput onSendMessage={onSendMessageMock} />);
+
+    expect(screen.getByRole('textbox')).toHaveAttribute('placeholder', 'Ask a question');
+  });
+
+  it('input has a customized placeholder', () => {
+    const alternativePlaceholderText = 'Some other placeholder';
+    setup(
+      <AiContextProvider config={{ inputPromptText: alternativePlaceholderText }}>
+        <ChatInput onSendMessage={onSendMessageMock} />
+      </AiContextProvider>,
+    );
+
+    expect(screen.getByRole('textbox')).toHaveAttribute('placeholder', alternativePlaceholderText);
+  });
+
   it('input does not call onSendMessage', async () => {
     const { user } = setup(<ChatInput onSendMessage={onSendMessageMock} />);
 

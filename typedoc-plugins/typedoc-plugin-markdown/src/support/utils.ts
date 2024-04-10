@@ -21,8 +21,8 @@ export function escapeChars(str: string) {
 export function escapeAngleBrackets(str: string) {
   const re = /<(?=(?:[^`]*`[^`]*`)*[^`]*$)[^<]+?>/gi;
   return str.replace(re, (tags) => {
-    const htmlRe =
-      /<(?!\/?(div|span|p|a|br|img|ul|li|strike|em|strong|b)(>|\s))[^<]+?>/g;
+    // CSDK add iframe to the list of supported tags
+    const htmlRe = /<(?!\/?(div|span|p|a|br|img|ul|li|strike|em|strong|b|iframe)(>|\s))[^<]+?>/g;
     const shouldEscape = tags.match(htmlRe);
     return shouldEscape ? tags.replace(/>/g, '>` ').replace(/</g, '`<') : tags;
   });
@@ -76,7 +76,5 @@ export function slugify(str: string) {
 }
 
 export function formatContents(contents: string) {
-  return (
-    contents.replace(/[\r\n]{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '') + '\n'
-  );
+  return contents.replace(/[\r\n]{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '') + '\n';
 }

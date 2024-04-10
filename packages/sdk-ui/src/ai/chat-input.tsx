@@ -4,6 +4,7 @@ import { KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 import MessageIcon from './icons/message-icon';
 import ClearChatIcon from './icons/clear-chat-icon';
 import { useChatStyle } from './chat-style-provider';
+import { useChatConfig } from './chat-config';
 
 export type ChatInputProps = {
   onSendMessage: (message: string) => void;
@@ -19,6 +20,8 @@ export default function ChatInput({
   disabled,
 }: ChatInputProps) {
   const [text, setText] = useState('');
+
+  const { inputPromptText } = useChatConfig();
 
   const handleSendMessage = () => {
     if (disabled) return;
@@ -77,7 +80,7 @@ export default function ChatInput({
         className={`csdk-text-ai-sm csdk-text-text-content csdk-resize-none csdk-overflow-y-auto ${textareaSizeStyle} ${textareaSpacingStyle} ${textareaBorderStyle}`}
         onChange={(e) => setText(e.target.value)}
         spellCheck={'true'}
-        placeholder="Ask a question"
+        placeholder={inputPromptText}
         value={text}
         onKeyDown={onKeyDownInput}
         style={{

@@ -26,6 +26,14 @@ questions are disabled by default.
 
 ***
 
+### inputPromptText
+
+> **inputPromptText**: `string`
+
+The input prompt text to show in the chat input box
+
+***
+
 ### numOfRecommendations
 
 > **numOfRecommendations**: `number`

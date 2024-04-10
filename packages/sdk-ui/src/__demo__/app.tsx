@@ -28,7 +28,7 @@ import { PivotTableDemo } from './pages/pivot-table-demo';
 import { QueryCachingDemo } from './pages/query-caching-demo';
 import { sisenseContextProviderProps } from './sisense-context-provider-props';
 import { UseFetchDemo } from './pages/use-fetch-demo';
-import { OnyxChatToCodeDemo } from './pages/onyx-chat-to-code-demo';
+import { ChatToCodeDemo } from './pages/chat-to-code-demo';
 import { RenderDashboardDemo } from './pages/render-dashboard-demo';
 import { UseGetDashboardModelDemo } from './pages/use-get-dashboard-model-demo';
 import { withCachingSwitcher } from './pages/helper-components/with-caching-switcher';
@@ -68,7 +68,7 @@ const pages: ComponentType[] = [
   PivotTableDemo,
   QueryCachingDemo,
   ComboChartStylingDemo,
-  OnyxChatToCodeDemo,
+  ChatToCodeDemo,
   UseFetchDemo,
 ];
 

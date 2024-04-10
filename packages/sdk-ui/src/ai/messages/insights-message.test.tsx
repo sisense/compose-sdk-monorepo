@@ -38,9 +38,7 @@ describe('InsightsMessage', () => {
       </AiTestWrapper>,
     );
 
-    await waitFor(() =>
-      expect(screen.getByAltText('Please wait while AI responds...')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByLabelText('loading dots')).toBeInTheDocument());
 
     await waitFor(() => expect(screen.getByText('nlg response text')).toBeInTheDocument());
   });
@@ -54,9 +52,7 @@ describe('InsightsMessage', () => {
       </AiTestWrapper>,
     );
 
-    await waitFor(() =>
-      expect(screen.getByAltText('Please wait while AI responds...')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByLabelText('loading dots')).toBeInTheDocument());
 
     await waitFor(() => expect(screen.getByText('No insights available.')).toBeInTheDocument());
   });
@@ -70,9 +66,7 @@ describe('InsightsMessage', () => {
       </AiTestWrapper>,
     );
 
-    await waitFor(() =>
-      expect(screen.getByAltText('Please wait while AI responds...')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByLabelText('loading dots')).toBeInTheDocument());
 
     await waitFor(() =>
       expect(

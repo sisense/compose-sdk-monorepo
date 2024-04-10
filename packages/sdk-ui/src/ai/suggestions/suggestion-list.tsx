@@ -19,7 +19,7 @@ export default function SuggestionList({ questions, onSelection }: Props) {
   return (
     <div
       aria-label="list of suggested questions"
-      className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-justify-center csdk-text-center csdk-items-center"
+      className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-items-start"
     >
       {questionsToShow.map((question) => (
         <SuggestedItem key={question} question={question} onClick={() => onSelection(question)} />

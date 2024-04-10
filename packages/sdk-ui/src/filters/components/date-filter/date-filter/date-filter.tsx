@@ -9,7 +9,7 @@ import { DEFAULT_FORMAT } from '../consts';
 import { DateFilterRange } from '../types';
 import Popover from '@mui/material/Popover';
 import { DateRangeFieldButton, TriangleIndicator } from '../../common';
-import { useThemeContext } from '../../../../theme-provider/theme-provider';
+import { useThemeContext } from '../../../../theme-provider';
 
 const DATE_RANGE = 'date-range';
 

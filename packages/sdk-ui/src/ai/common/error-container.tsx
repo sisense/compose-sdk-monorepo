@@ -1,4 +1,4 @@
-import YellowExclamationMarkIcon from '@/common/icons/yellow-exclamation-mark-icon';
+import ExclamationMarkIcon from '@/common/icons/exclamation-mark-icon';
 
 type ErrorPageProps = {
   text: string;
@@ -12,7 +12,7 @@ export default function ErrorContainer({ text, action }: ErrorPageProps) {
   return (
     <div className="csdk-m-auto csdk-flex csdk-flex-col csdk-items-center csdk-gap-[21px]">
       <div className="csdk-text-ai-sm csdk-text-center csdk-font-semibold">{text}</div>
-      <YellowExclamationMarkIcon />
+      <ExclamationMarkIcon />
       {action && (
         <div
           className="csdk-text-ai-sm csdk-text-text-link csdk-cursor-pointer"

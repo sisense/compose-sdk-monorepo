@@ -8,20 +8,19 @@ import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-e
 import { type RestApi } from '../../api/rest-api';
 import { WidgetModel } from '../widget';
 
-const getDashboardMock = vi.fn<Parameters<RestApi['getDashboard']>>(
-  (_dashboardOid, { expand } = {}) => {
-    const result = { ...dashboardMock };
-
-    if (!expand || !expand?.includes('widgets')) {
-      delete result.widgets;
-    }
-
-    return result;
-  },
+const getDashboardMock = vi.fn<Parameters<RestApi['getDashboard']>>(() => {
+  // eslint-disable-next-line no-unused-vars
+  const { widgets, ...dashboardWithoutWidgets } = dashboardMock;
+  return dashboardWithoutWidgets;
+});
+const getDashboardWidgetsMock = vi.fn<Parameters<RestApi['getDashboardWidgets']>>(
+  () => dashboardMock.widgets,
 );
 vi.mock('../../api/rest-api', () => ({
   RestApi: class {
     getDashboard = getDashboardMock;
+
+    getDashboardWidgets = getDashboardWidgetsMock;
   },
 }));
 
@@ -30,12 +29,11 @@ const httpClientMock: HttpClient = {} as HttpClient;
 describe('getDashboardModel', () => {
   beforeEach(() => {
     getDashboardMock.mockClear();
+    getDashboardWidgetsMock.mockClear();
   });
 
   it('should fetch a dashboard model', async () => {
     const result = await getDashboardModel(httpClientMock, dashboardMock.oid);
-
-    console.log(result);
 
     expect(result).toEqual({
       oid: dashboardMock.oid,

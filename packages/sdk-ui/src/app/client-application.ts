@@ -73,6 +73,17 @@ export type AppConfig = {
      */
     enabled?: boolean;
   };
+  /**
+   * Configuration of the component that is rendered in case of an error
+   */
+  errorBoundaryConfig?: {
+    /**
+     * Whether to show error text without hovering over the error icon
+     *
+     * If not specified, the default value is `false`
+     */
+    alwaysShowErrorText?: boolean;
+  };
 };
 
 /**

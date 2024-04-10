@@ -38,6 +38,24 @@ Date Configurations
 
 ***
 
+### `errorBoundaryConfig`
+
+**errorBoundaryConfig**?: `object`
+
+Configuration of the component that is rendered in case of an error
+
+> #### `errorBoundaryConfig.alwaysShowErrorText`
+>
+> **alwaysShowErrorText**?: `boolean`
+>
+> Whether to show error text without hovering over the error icon
+>
+> If not specified, the default value is `false`
+>
+>
+
+***
+
 ### `loadingIndicatorConfig`
 
 **loadingIndicatorConfig**?: [`LoadingIndicatorConfig`](type-alias.LoadingIndicatorConfig.md)

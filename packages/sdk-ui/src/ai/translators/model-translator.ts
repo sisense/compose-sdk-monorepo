@@ -119,7 +119,10 @@ export class ModelTranslator {
 
       const widgetStyleOptions: WidgetStyleOptions = {
         cornerRadius: 'Small',
-        header: {},
+        header: {
+          // remove info button and render empty toolbar instead
+          renderToolbar: () => null,
+        },
       };
 
       const { metadataColumns, metadataFilters } = this.splitMetadata(metadata);
@@ -156,6 +159,7 @@ export class ModelTranslator {
 
           const tableWidgetProps: TableWidgetProps = {
             dataOptions,
+            styleOptions: widgetStyleOptions,
             dataSource,
             filters,
             title: queryTitle,

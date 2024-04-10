@@ -8,7 +8,7 @@ import { useClearChatHistory } from './api/chat-history';
 import { CHAT_UNAVAILABLE_ERROR } from './api/errors';
 import { useChatConfig } from './chat-config';
 import ChatInput from './chat-input';
-import ChatIntroBlurb from './chat-intro-blurb';
+import ChatWelcomeMessage from './messages/chat-welcome-message';
 import { useChatStyle } from './chat-style-provider';
 import ErrorContainer from './common/error-container';
 import LoadingDotsIcon from './icons/loading-dots-icon';
@@ -112,7 +112,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
           ref={chatContainerRef}
           className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-overflow-y-scroll csdk-p-[16px] csdk-flex-initial csdk-h-full"
         >
-          <ChatIntroBlurb title={contextTitle} />
+          <ChatWelcomeMessage />
           <SuggestionsWithIntro
             questions={questions}
             isLoading={recommendationsLoading}

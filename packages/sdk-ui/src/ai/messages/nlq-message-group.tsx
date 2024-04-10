@@ -53,7 +53,9 @@ export default function NlqMessageGroup({ data }: { data: NlqResponseData }) {
 
   return (
     <TextMessage align="left">
-      {`Returned a ${chartTypeKeyword} showing ${data.queryTitle.toLowerCase()}.`}
+      <FeedbackWrapper sourceId={dataSource} data={data} type="chats/nlq">
+        {`Returned a ${chartTypeKeyword} showing ${data.queryTitle.toLowerCase()}.`}
+      </FeedbackWrapper>
     </TextMessage>
   );
 }

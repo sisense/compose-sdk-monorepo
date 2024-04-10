@@ -1,21 +1,7 @@
-import { createContext, useContext } from 'react';
-import { getDefaultThemeSettings } from '../chart-options-processor/theme-option-service';
 import { ThemeProviderProps } from '../props';
-import { CompleteThemeSettings } from '../types';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { useThemeSettings } from './use-theme-settings';
-
-export const ThemeContext = createContext<{
-  themeSettings: CompleteThemeSettings;
-}>({ themeSettings: getDefaultThemeSettings() });
-
-/**
- * Hook to get the current theme settings.
- *
- * @returns The current theme settings
- * @internal
- */
-export const useThemeContext = () => useContext(ThemeContext);
+import { ThemeContext } from './theme-context';
 
 /**
  * Theme provider, which allows you to adjust the look and feel of child components.

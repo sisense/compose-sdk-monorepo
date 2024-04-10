@@ -14,7 +14,6 @@ type GetDashboardsOptions = {
 
 type GetDashboardOptions = {
   fields?: string[];
-  expand?: string[];
 };
 
 export class RestApi {
@@ -46,10 +45,10 @@ export class RestApi {
     dashboardOid: string,
     options: GetDashboardOptions = {},
   ): Promise<DashboardDto> => {
-    const { fields, expand } = options;
+    const { fields } = options;
+    // Note: do not use `expand` query parameter cause it is restricted for all non-admin users.
     const queryParams = new URLSearchParams({
       ...(fields?.length && { fields: fields?.join(',') }),
-      ...(expand?.length && { expand: expand?.join(',') }),
     }).toString();
 
     try {
@@ -58,6 +57,19 @@ export class RestApi {
       // when error is encountered, API may return only status code 422 without informative error message
       // to remedy, catch error and throw a more informative error message
       throw new TranslatableError('errors.dashboardInvalidIdentifier');
+    }
+  };
+
+  /**
+   * Get all widgets of a specific dashboard
+   */
+  public getDashboardWidgets = async (dashboardOid: string): Promise<WidgetDto[]> => {
+    try {
+      return await this.httpClient.get(`api/v1/dashboards/${dashboardOid}/widgets`);
+    } catch (error) {
+      // when error is encountered, API may return only status code 422 without informative error message
+      // to remedy, catch error and throw a more informative error message
+      throw new TranslatableError('errors.dashboardWidgetsInvalidIdentifiers');
     }
   };
 

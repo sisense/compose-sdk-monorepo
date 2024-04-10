@@ -775,7 +775,7 @@ export interface WidgetStyleOptions {
      *
      * @internal
      */
-    renderToolbar?: (onRefresh: () => void) => JSX.Element;
+    renderToolbar?: (onRefresh: () => void) => JSX.Element | null;
   };
 }
 

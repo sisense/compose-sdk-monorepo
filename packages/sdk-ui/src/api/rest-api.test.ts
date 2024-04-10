@@ -36,10 +36,9 @@ describe('Rest API', () => {
   it('should send correct request to fetch particular dashboard', async () => {
     await restApi.getDashboard('dashboardOid', {
       fields: ['field1', 'field2'],
-      expand: ['expand1', 'expand2'],
     });
     expect(httpGetMock).toHaveBeenCalledWith(
-      'api/v1/dashboards/dashboardOid?fields=field1%2Cfield2&expand=expand1%2Cexpand2',
+      'api/v1/dashboards/dashboardOid?fields=field1%2Cfield2',
     );
   });
 

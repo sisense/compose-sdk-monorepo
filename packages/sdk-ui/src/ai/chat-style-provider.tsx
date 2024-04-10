@@ -7,6 +7,13 @@ export interface ChatStyle {
   messageBackgroundColor?: string;
   inputBackgroundColor?: string;
   border?: false | string;
+  suggestions?: {
+    textColor?: string;
+    border?: string;
+    hoverBackgroundColor?: string;
+    loadingGradient?: [string, string];
+  };
+  iconColor?: string;
 }
 
 export type ChatStyleProviderProps = {

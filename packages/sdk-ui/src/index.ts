@@ -83,6 +83,6 @@ export { trackHook } from './decorators/hook-decorators';
 export * from './common/hooks/data-load-state-reducer';
 export { createDataOptionsFromPanels } from './dashboard-widget/translate-widget-data-options';
 export { createFilterFromJaql } from './dashboard-widget/translate-widget-filters';
-export { useThemeContext } from './theme-provider/theme-provider';
+export { useThemeContext } from './theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
 export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';

@@ -2,7 +2,7 @@ import { isEqual } from 'lodash';
 import merge from 'ts-deepmerge';
 import { useState, useEffect } from 'react';
 import { ThemeOid, ThemeSettings, isThemeOid, CompleteThemeSettings } from '../types';
-import { useThemeContext } from './theme-provider';
+import { useThemeContext } from './theme-context';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { getThemeSettingsByOid } from '../themes/theme-loader';
 import { getDefaultThemeSettings } from '../chart-options-processor/theme-option-service';

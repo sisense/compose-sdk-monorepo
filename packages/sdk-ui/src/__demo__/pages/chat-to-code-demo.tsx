@@ -11,6 +11,8 @@ import { ChartWidget } from '@/widgets/chart-widget';
 import { useChatSession } from '@/ai/use-chat-session';
 import { TableWidget } from '@/widgets/table-widget';
 import { UiFramework } from '@/ai/translators/types';
+import { ThemeProvider } from '@/theme-provider';
+import { getTheme } from './helpers/get-theme';
 
 const DEFAULT_EDITOR_OPTS = {
   contextmenu: false,
@@ -59,22 +61,26 @@ chart:
       - name: total of Revenue`;
 
 /**
- * A demo component that demonstrates the integration of Onyx Query Composer and CSDK.
+ * A demo component that demonstrates the integration of Forge Query Composer and CSDK.
  */
-export function OnyxChatToCodeDemo() {
+export function ChatToCodeDemo() {
+  const isDarkMode = true;
+  const theme = getTheme(isDarkMode);
   return (
     <AiContextProvider>
-      <OnyxChatToCode contextTitle={DEFAULT_CONTEXT_TITLE} defaultQueryYaml={DEFAULT_QUERY_YAML} />
+      <ThemeProvider theme={theme}>
+        <ChatToCode contextTitle={DEFAULT_CONTEXT_TITLE} defaultQueryYaml={DEFAULT_QUERY_YAML} />
+      </ThemeProvider>
     </AiContextProvider>
   );
 }
 
-interface OnyxChatToCodeProps {
+interface ChatToCodeProps {
   contextTitle: string;
   defaultQueryYaml: string;
 }
 // eslint-disable-next-line complexity
-function OnyxChatToCode({ contextTitle, defaultQueryYaml }: OnyxChatToCodeProps) {
+function ChatToCode({ contextTitle, defaultQueryYaml }: ChatToCodeProps) {
   const [queryYaml, setQueryYaml] = useState(defaultQueryYaml);
   const [selectedUiFramework, setSelectedUiFramework] = useState<UiFramework>('react');
   const queryEditorRef = useRef<Parameters<OnMount>[0] | null>(null);
@@ -146,30 +152,47 @@ function OnyxChatToCode({ contextTitle, defaultQueryYaml }: OnyxChatToCodeProps)
   });
 
   return (
-    <div className="csdk-flex csdk-w-full csdk-h-[90dvh]">
+    <div className="csdk-bg-black csdk-text-white csdk-flex csdk-w-full csdk-h-[90dvh]">
       <div className="csdk-flex csdk-flex-col csdk-flex-1 csdk-border">
-        <div className="csdk-h-1/2 csdk-border">
+        <div className="csdk-h-1/2 csdk-border csdk-flex csdk-flex-col csdk-z-1">
           <div className="csdk-flex csdk-justify-between csdk-items-center csdk-px-2">
             <h3>Query in YAML:</h3>
             <button onClick={handleRunQuery}>Run</button>
           </div>
-          <Editor
-            value={queryYaml}
-            defaultLanguage="yaml"
-            onMount={handleQueryEditorDidMount}
-            theme="vs-dark"
-            options={DEFAULT_EDITOR_OPTS}
-          />
+          <div className="csdk-h-full csdk-min-h-0">
+            <Editor
+              value={queryYaml}
+              defaultLanguage="yaml"
+              onMount={handleQueryEditorDidMount}
+              theme="vs-dark"
+              options={DEFAULT_EDITOR_OPTS}
+            />
+          </div>
         </div>
-        <div className="csdk-h-1/2 csdk-border">
+        <div className="csdk-h-1/2 csdk-border csdk-z-0 csdk-border-0 csdk-overflow-hidden csdk-min-h-[435px] csdk-flex csdk-justify-center">
           <Chatbot
-            width={700}
             height={600}
+            width={800}
             config={{
               defaultContextTitle: contextTitle,
               enableFollowupQuestions: false,
               numOfRecommendations: 0,
               chatMode: 'develop',
+            }}
+            style={{
+              backgroundColor: 'rgba(23, 28, 38, 1)',
+              primaryTextColor: 'rgba(242, 247, 255, 0.9)',
+              secondaryTextColor: 'rgba(242, 247, 255, 0.4)',
+              messageBackgroundColor: 'rgba(46, 55, 77, 1)',
+              inputBackgroundColor: 'rgba(31, 37, 51, 1)',
+              border: false,
+              suggestions: {
+                textColor: 'rgba(88, 192, 244, 1)',
+                border: '1px solid #2E374D',
+                hoverBackgroundColor: 'rgba(242, 247, 255, 0.1)',
+                loadingGradient: ['rgba(242, 247, 255, 0.1)', 'rgba(242, 247, 255, 0.3)'],
+              },
+              iconColor: 'rgba(242, 247, 255, 0.5)',
             }}
           />
         </div>
@@ -183,7 +206,7 @@ function OnyxChatToCode({ contextTitle, defaultQueryYaml }: OnyxChatToCodeProps)
             <ChartWidget {...csdkChart.getChartWidgetProps()} />
           )}
         </div>
-        <div className="csdk-h-1/2 csdk-border">
+        <div className="csdk-h-1/2 csdk-border csdk-flex csdk-flex-col">
           <div className="csdk-flex csdk-justify-between csdk-items-center csdk-px-2">
             <h3>CSDK Code:</h3>
             <div>
@@ -199,17 +222,19 @@ function OnyxChatToCode({ contextTitle, defaultQueryYaml }: OnyxChatToCodeProps)
               </select>
             </div>
           </div>
-          <Editor
-            language={codeLanguage}
-            value={csdkCode}
-            onMount={handleCodeEditorDidMount}
-            theme="vs-dark"
-            options={{
-              ...DEFAULT_EDITOR_OPTS,
-              // read-only will disable the auto-formatting
-              readOnly: false,
-            }}
-          />
+          <div className="csdk-h-full csdk-min-h-0">
+            <Editor
+              language={codeLanguage}
+              value={csdkCode}
+              onMount={handleCodeEditorDidMount}
+              theme="vs-dark"
+              options={{
+                ...DEFAULT_EDITOR_OPTS,
+                // read-only will disable the auto-formatting
+                readOnly: false,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
