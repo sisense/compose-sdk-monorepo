@@ -153,7 +153,7 @@ export class DateDimensionWriter extends ElementWriter<DateDimension> {
   writeDef(stream: NodeJS.WritableStream, ident: number) {
     writeIndented(stream, `createDateDimension({${NEWLINE}`, 0);
     writeIndented(stream, `name: '${this.element.name}',${NEWLINE}`, ident + 1);
-    writeIndented(stream, `"${this.element.expression}",`, ident + 1);
+    writeIndented(stream, `expression: "${this.element.expression}",`, ident + 1);
 
     stream.write(NEWLINE);
     writeIndented(stream, `}),`, ident);
