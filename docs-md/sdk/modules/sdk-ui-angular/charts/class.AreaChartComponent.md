@@ -6,7 +6,6 @@ title: AreaChartComponent
 
 A component similar to a [LineChartComponent](class.LineChartComponent.md),
 but with filled in areas under each line and an option to display them as stacked.
-More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
 
 ## Example
 

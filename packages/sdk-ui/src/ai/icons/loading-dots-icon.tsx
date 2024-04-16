@@ -8,15 +8,15 @@ const Dot = styled.div<{ color?: string }>`
   background-color: ${(props) => props.color};
   animation: hop 0.9s ease-out infinite;
 
-  &:nth-child(2) {
+  &:nth-of-type(2) {
     animation-delay: 0.1s;
   }
 
-  &:nth-child(3) {
+  &:nth-of-type(3) {
     animation-delay: 0.2s;
   }
 
-  &:nth-child(4) {
+  &:nth-of-type(4) {
     animation-delay: 0.3s;
   }
 

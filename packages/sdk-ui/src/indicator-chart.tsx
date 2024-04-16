@@ -3,7 +3,6 @@ import { Chart, shouldSkipSisenseContextWaiting } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
  * A React component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
- * See [Indicator](https://docs.sisense.com/main/SisenseLinux/indicator.htm) for more information.
  *
  * @example
  * An example of using the component to visualize the `Sample ECommerce` data source:

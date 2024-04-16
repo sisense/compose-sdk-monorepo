@@ -28,10 +28,6 @@ and another condition stating that a positive data value is green.
 }
 ```
 
-## See
-
-[Selecting Colors in Widgets](https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm)
-
 ## Type declaration
 
 ### `conditions`

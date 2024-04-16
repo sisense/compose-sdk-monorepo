@@ -60,6 +60,7 @@ TypeScript type aliases for components and composables listed above
 - [Navigator](type-alias.Navigator.md)
 - [NumberFormatConfig](type-alias.NumberFormatConfig.md)
 - [PieSubtype](type-alias.PieSubtype.md)
+- [PivotRowsSort](type-alias.PivotRowsSort.md)
 - [PolarSubtype](type-alias.PolarSubtype.md)
 - [RangeDataColorOptions](type-alias.RangeDataColorOptions.md)
 - [ScatterChartType](type-alias.ScatterChartType.md)

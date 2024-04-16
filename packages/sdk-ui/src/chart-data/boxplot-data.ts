@@ -1,4 +1,5 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+import { type SortDirection } from '../types';
 import {
   Column,
   DataTable,
@@ -32,7 +33,7 @@ export const boxplotData = (
     chartDataOptions.category && getColumnByName(dataTable, chartDataOptions.category.name);
 
   if (xColumn) {
-    xColumn.direction = sortDirection(chartDataOptions.category!.sortType);
+    xColumn.direction = sortDirection(chartDataOptions.category!.sortType as SortDirection);
   }
 
   const xValuesOrdered = getOrderedXValues(

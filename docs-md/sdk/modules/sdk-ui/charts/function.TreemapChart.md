@@ -7,8 +7,19 @@ title: TreemapChart
 > **TreemapChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component displaying hierarchical data in the form of nested rectangles.
+
 This type of chart can be used instead of a column chart for comparing a large number of categories and sub-categories.
-See [Treemap Chart](https://docs.sisense.com/main/SisenseLinux/treemap.htm) for more information.
+
+## Example
+
+Tree map chart displaying total revenue, categorized by condition and age range, from the Sample ECommerce data model.
+
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts%2Ftreemap-chart&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ## Parameters
 
@@ -22,27 +33,3 @@ See [Treemap Chart](https://docs.sisense.com/main/SisenseLinux/treemap.htm) for 
 `null` \| `ReactElement`\< `any`, `any` \>
 
 Treemap Chart component
-
-## Example
-
-An example of using the component to visualize the `Sample ECommerce` data source:
-```ts
-<TreemapChart
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [
-       {
-         column: DM.Commerce.Condition,
-         isColored: true,
-       },
-       DM.Commerce.Date.Years
-     ],
-    value: [measureFactory.sum(DM.Commerce.Quantity)],
-  }}
-  onDataPointClick= {(point, nativeEvent) => {
-    console.log('clicked', point, nativeEvent);
-  }}
-/>
-```
-
-<img src="../../../img/treemap-chart-example-1.png" width="600px" />

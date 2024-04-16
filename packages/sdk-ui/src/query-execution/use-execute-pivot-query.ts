@@ -15,35 +15,17 @@ import { getFilterListAndRelations } from '@sisense/sdk-data';
  * React hook that executes a data query for a pivot table.
  * This approach is similar to React Query's `useQuery` hook.
  *
- * @example
- * ```tsx
- *   const { data, isLoading, isError } = useExecutePivotQuery({
- *     dataSource: DM.DataSource,
- *     rows: [
- *       { attribute: DM.Category.Category, includeSubTotals: true },
- *       { attribute: DM.Brand.Brand, includeSubTotals: true },
- *       DM.Commerce.Condition,
- *     ],
- *     columns: [DM.Commerce.Gender],
- *     values: [
- *       { measure: measures.sum(DM.Commerce.Revenue, 'Total Revenue'), totalsCalculation: 'sum' },
- *       { measure: measures.sum(DM.Commerce.Quantity, 'Total Quantity'), totalsCalculation: 'min' },
- *     ],
- *     grandTotals: {title: 'Grand Totals', rows: true, columns: true},
- *     filters: [filters.members(DM.Commerce.Gender, ['Female', 'Male'])],
- *   });
- *   if (isLoading) {
- *     return <div>Loading...</div>;
- *   }
- *   if (isError) {
- *     return <div>Error</div>;
- *   }
- *   if (data) {
- *     return <div>[Render pivot table with returned data]</div>;
- *   }
- *   return null;
- *  ```
- * See also hook {@link useExecuteQuery}, which execute a generic data query.
+ * ## Example
+ *
+ * Execute a pivot query on the Sample ECommerce data model and display the results in a table.
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=queries%2Fuse-execute-pivot-query&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
+ * />
+ *
  * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  * @group Queries

@@ -7,7 +7,6 @@ import { setupHelper } from '../../setup-helper';
 /**
  * A Vue component similar to a {@link LineChart},
  * but with filled in areas under each line and an option to display them as stacked.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
  *
  * @example
  * Here's how you can use the AreaChart component in a Vue application:

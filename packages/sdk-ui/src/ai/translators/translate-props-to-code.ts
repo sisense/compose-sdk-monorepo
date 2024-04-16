@@ -1,8 +1,10 @@
 import { JaqlElement } from '@/ai/messages/jaql-element';
 import { MetadataItemJaql } from '@sisense/sdk-query-client';
 import { capitalizeFirstLetter } from '@/ai/translators/utils';
+import { normalizeAttributeName } from '@sisense/sdk-data';
 
 const NEW_LINE = '\n';
+const VALUE_UNKNOWN = 'UNKNOWN';
 
 export type MembersFilterJaql = {
   members: string[];
@@ -16,64 +18,49 @@ export type FilterJaql = MembersFilterJaql | FromNotEqualFilterJaql;
 
 const stringifyFormula = (jaql: MetadataItemJaql, indent: number): string => {
   let s = '';
-  s += 'createCalculatedMeasure({\n';
+  s += 'measureFactory.customFormula(\n';
   s += ' '.repeat(indent);
-  s += `  name: '${jaql.title}',\n`;
+  s += `  '${jaql.title}',\n`;
   s += ' '.repeat(indent);
-  s += `  exp: '${jaql.formula}',\n`;
+  s += `  '${jaql.formula}',\n`;
   s += ' '.repeat(indent);
-  s += `  context: {\n`;
+  s += `  {\n`;
 
   Object.entries(jaql.context!).forEach(([key, value]) => {
+    const attributeName = normalizeAttributeName(
+      value.table || VALUE_UNKNOWN,
+      value.column || VALUE_UNKNOWN,
+      undefined,
+      'DM',
+    );
     s += ' '.repeat(indent);
-    s += `    '${key}': ${value.dim?.slice(1, -1)},\n`;
+    s += `    '${key.slice(1, -1)}': ${attributeName},\n`;
   });
 
   s += ' '.repeat(indent);
   s += `  }\n`;
   s += ' '.repeat(indent);
-  s += `})`;
+  s += `)`;
   return s;
 };
 
+// eslint-disable-next-line complexity
 const stringifyDimensionOrMeasure = (jaql: MetadataItemJaql, indent: number): string => {
   const { level, table, column, agg, title } = jaql;
+  let attributeName;
 
   if (agg && table && column && title) {
-    return `${' '.repeat(indent)}measureFactory.${agg}(DM.${table}.${column}, '${title}')`;
+    attributeName = normalizeAttributeName(table, column, undefined, 'DM');
+    return `${' '.repeat(indent)}measureFactory.${agg}(${attributeName}, '${title}')`;
   }
 
   if (table && column) {
-    return `${' '.repeat(indent)}DM.${table}.${column}${
-      level ? '.' + capitalizeFirstLetter(level) : ''
-    }`;
+    const dateLevel = level ? capitalizeFirstLetter(level) : undefined;
+    attributeName = normalizeAttributeName(table, column, dateLevel, 'DM');
+    return `${' '.repeat(indent)}${attributeName}`;
   }
 
-  return 'UNKNOWN';
-};
-
-// TODO - handle all filter types
-const stringifyFilter = (jaql: MetadataItemJaql, indent: number): string => {
-  if (!jaql.filter) {
-    return '';
-  }
-  const filterJaql = jaql.filter as unknown as FilterJaql;
-
-  if ('members' in filterJaql) {
-    const members = filterJaql.members.map((m) => `'${m}'`).join(', ');
-    return `${NEW_LINE}${' '.repeat(indent)}filterFactory.members(${stringifyDimensionOrMeasure(
-      jaql,
-      0,
-    )}, [${members}])`;
-  }
-
-  if ('fromNotEqual' in filterJaql) {
-    return `${NEW_LINE}${' '.repeat(indent)}filterFactory.greaterThan(${stringifyDimensionOrMeasure(
-      jaql,
-      0,
-    )}, ${filterJaql.fromNotEqual})`;
-  }
-  return ``;
+  return VALUE_UNKNOWN;
 };
 
 const stringifyJaqlElement = (jaqlElement: JaqlElement, indent: number): string => {
@@ -81,17 +68,24 @@ const stringifyJaqlElement = (jaqlElement: JaqlElement, indent: number): string 
 
   if ('formula' in jaql) {
     return stringifyFormula(jaql, indent);
-  } else if ('filter' in jaql) {
-    return stringifyFilter(jaql, indent);
   } else {
     return NEW_LINE + stringifyDimensionOrMeasure(jaql, indent);
   }
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export const stringifyProps = (props: object, indent = 0, wrapInQuotes = false): string => {
+export const stringifyProps = (
+  props: object | string,
+  indent = 0,
+  wrapInQuotes = false,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+): string => {
   if (!props) {
     return '';
+  }
+
+  if (typeof props === 'string') {
+    return `'${props}'`;
   }
 
   if (props instanceof JaqlElement) {
@@ -112,11 +106,11 @@ export const stringifyProps = (props: object, indent = 0, wrapInQuotes = false):
       }
       s += ' '.repeat(indent + 2);
       if (Array.isArray(value)) {
-        s += `${key}: [${value.map((v) => stringifyProps(v, indent + 4))}${
+        s += `${key}: [${value.map((v) => stringifyProps(v, indent + 4, wrapInQuotes))}${
           value.length ? '\n' + ' '.repeat(indent + 2) : ''
         }]`;
       } else if (typeof value === 'object') {
-        s += `${key}: ${stringifyProps(value, indent + 2)}`;
+        s += `${key}: ${stringifyProps(value, indent + 2, wrapInQuotes)}`;
       } else if (['number', 'boolean', 'undefined', null].includes(typeof value)) {
         s += `${key}: ${value}`;
       } else {

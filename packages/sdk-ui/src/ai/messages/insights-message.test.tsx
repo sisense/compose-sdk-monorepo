@@ -5,7 +5,14 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { AiTestWrapper } from '../__mocks__';
 import InsightsMessage from './insights-message';
-import { GetNlgQueryResultResponse } from '../api/types';
+import { GetNlgQueryResultRequest, GetNlgQueryResultResponse } from '../api/types';
+
+const mockNlgRequest: GetNlgQueryResultRequest = {
+  jaql: {
+    datasource: 'Sample ECommerce',
+    metadata: [],
+  },
+};
 
 describe('InsightsMessage', () => {
   beforeEach(() => {
@@ -24,7 +31,7 @@ describe('InsightsMessage', () => {
   it('renders nothing if visible is false', async () => {
     const { container } = setup(
       <AiTestWrapper>
-        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} />
+        <InsightsMessage nlgRequest={mockNlgRequest} />
       </AiTestWrapper>,
     );
 
@@ -34,7 +41,7 @@ describe('InsightsMessage', () => {
   it('renders loading icon, then response text if API call returns text response', async () => {
     setup(
       <AiTestWrapper>
-        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} visible />
+        <InsightsMessage nlgRequest={mockNlgRequest} visible />
       </AiTestWrapper>,
     );
 
@@ -48,7 +55,7 @@ describe('InsightsMessage', () => {
 
     setup(
       <AiTestWrapper>
-        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} visible />
+        <InsightsMessage nlgRequest={mockNlgRequest} visible />
       </AiTestWrapper>,
     );
 
@@ -62,7 +69,7 @@ describe('InsightsMessage', () => {
 
     setup(
       <AiTestWrapper>
-        <InsightsMessage dataSource="Sample ECommerce" metadata={[]} visible />
+        <InsightsMessage nlgRequest={mockNlgRequest} visible />
       </AiTestWrapper>,
     );
 

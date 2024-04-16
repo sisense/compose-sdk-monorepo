@@ -6,7 +6,6 @@ title: SunburstChartComponent
 
 A component displaying hierarchical data in the form of nested slices.
 This type of chart can be used instead of a pie chart for comparing a large number of categories and sub-categories.
-See [Sunburst Chart](https://docs.sisense.com/main/SisenseLinux/sunburst-widget.htm) for more information.
 
 ## Example
 

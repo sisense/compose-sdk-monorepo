@@ -10,13 +10,13 @@ import * as DM from './data-source'; // generated with @sisense/sdk-cli
     template: \`
       <csdk-chart-widget
         chartType='bar'
-        [dataSet]='DM.DataSource'
+        [dataSource]='DM.DataSource'
         [dataOptions]='dataOptions'
         [filters]='filters'
       />
     \`
 })
-export class ExampleComponent {
+export class CodeExample {
     DM = DM;
     dataOptions = { category: [DM.Commerce.Date.Years], value: [measureFactory.sum(DM.Commerce.Revenue)] };
     filters = [filterFactory.greaterThan(DM.Commerce.Revenue, 0)];
@@ -28,7 +28,7 @@ exports[`generateCode > should generate code from template for React 1`] = `
 import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import * as DM from './data-source'; // generated with @sisense/sdk-cli
 
-export default function App() {
+export default function CodeExample() {
   return (
     <Chart
       title={'My Chart'}
@@ -57,7 +57,7 @@ exports[`generateCode > should generate code from template for Vue 1`] = `
     chartType="bar"
     :dataOptions="dataOptions"
     :filters="filters"
-    :dataSet="DM.DataSource"
+    :dataSource="DM.DataSource"
     title="My Chart" />
 </template>"
 `;

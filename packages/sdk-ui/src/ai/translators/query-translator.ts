@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+/* eslint-disable complexity */
 import {
   ExpandedQueryModel,
   EMPTY_SIMPLE_QUERY_MODEL,
@@ -10,11 +11,21 @@ import { DataSourceField, MetadataItem, MetadataItemJaql } from '@sisense/sdk-qu
 import { ChartRecommendations } from '@/ai';
 import { AggregationTypes } from '@sisense/sdk-data';
 import {
+  isAreamap,
+  isBoxplot,
   isCartesian,
   isCategorical,
+  isIndicator,
   isScatter,
+  isScattermap,
 } from '@/chart-options-processor/translations/types';
 import { ChartType } from '@/types';
+import {
+  capitalizeFirstLetter,
+  sanitizeDimensionId,
+  validateQueryModel,
+} from '@/ai/translators/utils';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * A class that translates ExpandedQueryModel (Raw JAQL+Chart Recommendations)
@@ -28,7 +39,7 @@ import { ChartType } from '@/types';
 export class QueryTranslator {
   private readonly contextTitle: string;
 
-  private indexedFields: Record<string, DataSourceField> = {};
+  private readonly indexedFields: Record<string, DataSourceField> = {};
 
   /**
    * Constructor for QueryTranslator.
@@ -38,11 +49,19 @@ export class QueryTranslator {
    */
   constructor(contextTitle: string, fields: DataSourceField[]) {
     this.contextTitle = contextTitle;
+    this.indexedFields = this.indexFields(fields);
+  }
 
-    console.log('QueryTranslator', fields);
-
-    this.indexedFields = fields.reduce((acc, field) => {
-      acc[field.id] = field;
+  private indexFields(fields: DataSourceField[]): Record<string, DataSourceField> {
+    return fields.reduce((acc, field) => {
+      const key = field.id;
+      acc[key] = field;
+      const sanitizedKey = sanitizeDimensionId(key);
+      // index also sanitizedKey (e.g., [Commerce.Date])
+      // if it is different from key (e.g., [Commerce.Date (Calendar)]),
+      if (key !== sanitizedKey) {
+        acc[sanitizedKey] = { ...field, id: sanitizedKey };
+      }
       return acc;
     }, {} as Record<string, DataSourceField>);
   }
@@ -79,7 +98,7 @@ export class QueryTranslator {
     const contextValue = context[key];
     const aggTypes = this.concatAggTypes();
     // eslint-disable-next-line security/detect-non-literal-regexp
-    const regex = new RegExp(`^(${aggTypes})\\(\\[\\w+\\]\\)$`);
+    const regex = new RegExp(`^\\s*(${aggTypes})\\(\\[\\w+\\]\\)$`);
 
     const match = formula.match(regex);
     if (match && formula.includes(key)) {
@@ -102,7 +121,8 @@ export class QueryTranslator {
    */
   simplifyMetadataItemJaql(item: MetadataItemJaql): MetadataItemJaql {
     // if item contains a simple aggregation formula, simplify it
-    let { ...simplifiedItem } = item;
+    let simplifiedItem = item;
+
     if ('formula' in item) {
       simplifiedItem = this.simplifyAggFormula(item);
     }
@@ -111,9 +131,6 @@ export class QueryTranslator {
     delete simplifiedItem.table;
     delete simplifiedItem.column;
     delete simplifiedItem.datatype;
-
-    // TODO simplify format for Date dimension
-    // If the dimension is for filtering (panel='scope'), format can be removed completely
 
     if ('context' in simplifiedItem) {
       const context = { ...simplifiedItem.context };
@@ -126,20 +143,67 @@ export class QueryTranslator {
   }
 
   /**
+   * Simplify filter
+   *
+   * @param item - the MetadataItem
+   * @return the MetadataItem with simplified filter
+   */
+  simplifyMetadataItemFilter(item: MetadataItem): MetadataItem {
+    const simplifiedItem = item;
+    if (simplifiedItem.panel !== 'scope') return simplifiedItem;
+
+    // format can be removed completely
+    delete simplifiedItem.format;
+
+    const { jaql } = simplifiedItem;
+    if (jaql.filter?.by) {
+      jaql.filter.by = this.simplifyAggFormula(jaql.filter.by);
+    }
+
+    return { ...simplifiedItem, jaql };
+  }
+
+  /**
+   * Simplify date and number format
+   *
+   * @param item - the MetadataItem
+   * @return the MetadataItem with simplified format
+   */
+  simplifyMetadataItemFormat(item: MetadataItem): MetadataItem {
+    const {
+      jaql: { level },
+      format: { mask } = {},
+    } = item;
+    if (level && mask?.[level]) {
+      return { ...item, format: { mask: { [level]: mask[level] } } };
+    }
+    return item;
+  }
+
+  /**
    * Simplifies MetadataItem.
    *
    * @param item - The MetadataItem to simplify
    * @returns The simplified MetadataItem
    */
   simplifyMetadataItem(item: MetadataItem): MetadataItem {
-    const { ...simplifiedItem } = item;
-    if (simplifiedItem.panel === 'measures' || simplifiedItem.panel === 'columns') {
+    let simplifiedItem = item;
+    // simplify prop panel
+    if (simplifiedItem.panel && ['rows', 'columns', 'measures'].includes(simplifiedItem.panel)) {
       delete simplifiedItem.panel;
     }
-    const { jaql, measure } = simplifiedItem;
+
+    // simplify filter
+    simplifiedItem = this.simplifyMetadataItemFilter(simplifiedItem);
+
+    // simplify format
+    simplifiedItem = this.simplifyMetadataItemFormat(simplifiedItem);
+
+    const { jaql, measure, by } = simplifiedItem;
     return {
       ...simplifiedItem,
       jaql: this.simplifyMetadataItemJaql(jaql),
+      by: by ? this.simplifyMetadataItemJaql(by) : undefined,
       measure: measure ? this.simplifyMetadataItemJaql(measure) : undefined,
     };
   }
@@ -196,7 +260,9 @@ export class QueryTranslator {
    */
   translateToSimple(expandedQueryModel: ExpandedQueryModel): SimpleQueryModel {
     try {
-      const { jaql, chartRecommendations, queryTitle } = expandedQueryModel;
+      // work with a deep copy of the query model to avoid mutation
+      const { jaql, chartRecommendations, queryTitle } = cloneDeep(expandedQueryModel);
+
       return {
         model: jaql.datasource.title,
         metadata: jaql.metadata.map((item) => this.simplifyMetadataItem(item)),
@@ -219,7 +285,7 @@ export class QueryTranslator {
   stringifySimple(simpleQueryModel: SimpleQueryModel): string {
     const { queryTitle, ...queryBody } = simpleQueryModel;
     const doc = new YAML.Document(queryBody);
-    doc.commentBefore = ` ${queryTitle}`;
+    doc.commentBefore = ` ${capitalizeFirstLetter(queryTitle)}`;
     return String(doc);
   }
 
@@ -233,7 +299,7 @@ export class QueryTranslator {
     try {
       const doc = YAML.parseDocument(simpleQueryYaml);
       const { commentBefore } = doc;
-      const queryModel = doc.toJS() as SimpleQueryModel;
+      const queryModel = validateQueryModel(doc.toJS());
       queryModel.queryTitle = commentBefore?.trim() || '';
       return queryModel;
     } catch (e) {
@@ -259,6 +325,18 @@ export class QueryTranslator {
     }
     if (isScatter(chartType as ChartType)) {
       return 'scatter';
+    }
+    if (isScattermap(chartType as ChartType)) {
+      return 'scattermap';
+    }
+    if (isIndicator(chartType as ChartType)) {
+      return 'indicator';
+    }
+    if (isAreamap(chartType as ChartType)) {
+      return 'areamap';
+    }
+    if (isBoxplot(chartType as ChartType)) {
+      return 'boxplot';
     }
 
     return 'table';
@@ -292,11 +370,27 @@ export class QueryTranslator {
    * @returns The expanded MetadataItemJaql
    */
   expandMetadataItemJaql(item: MetadataItemJaql): MetadataItemJaql {
-    const { dim = '', agg } = item;
+    const { dim = '', agg, context } = item;
+
+    // expand context if exists
+    if (context) {
+      Object.keys(context).forEach((key) => {
+        context[key] = this.expandMetadataItemJaql(context[key]);
+      });
+      item.context = context;
+    }
+
     const field = this.indexedFields[dim];
     if (!field) {
       return item;
     }
+
+    let { filter } = item;
+    if (filter?.by) {
+      filter = { ...filter, by: this.expandMetadataItemJaql(filter.by) };
+      item.filter = filter;
+    }
+
     return {
       table: field.table,
       column: field.column,
@@ -336,7 +430,8 @@ export class QueryTranslator {
    * @returns The Expanded Query Model
    */
   translateToExpanded(simpleQueryModel: SimpleQueryModel): ExpandedQueryModel {
-    const { model, metadata, chart, queryTitle } = simpleQueryModel;
+    // work with a deep copy of the query model to avoid mutation
+    const { model, metadata, chart, queryTitle } = cloneDeep(simpleQueryModel);
     const jaql = {
       datasource: { title: model },
       metadata: metadata.map((item) => this.expandMetadataItem(item)),

@@ -6,11 +6,15 @@ import { useExecutePivotQueryInternal } from '../query-execution/use-execute-piv
 import { Category, PivotTableDataOptionsInternal, Value } from '../chart-data-options/types';
 import { translatePivotTableDataOptions } from '../chart-data-options/translate-data-options';
 import { translateCategoryToAttribute, translateValueToMeasure } from '../chart-data-options/utils';
+import { isString } from 'lodash';
 
 const getPivotAttribute = (category: Category) => {
   return {
     attribute: translateCategoryToAttribute(category),
     includeSubTotals: category.includeSubTotals || false,
+    ...(category.sortType && {
+      sort: isString(category.sortType) ? { direction: category.sortType } : category.sortType,
+    }),
   };
 };
 

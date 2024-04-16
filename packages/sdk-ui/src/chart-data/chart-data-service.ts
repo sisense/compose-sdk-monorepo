@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 // Given generic data options and source data, translate into an intermediate
 // data format that is suitable for translation into renderable options via highcharts
-
 import {
   ChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
@@ -22,7 +21,7 @@ import {
   isScattermap,
 } from '../chart-options-processor/translations/types';
 import { DataTable } from '../chart-data-processor/table-processor';
-import { ChartType, NumberFormatConfig, SeriesChartType } from '../types';
+import type { ChartType, NumberFormatConfig, SeriesChartType, SortDirection } from '../types';
 import { cartesianData } from './cartesian-data';
 import { categoricalData } from './categorical-data';
 import { scatterData } from './scatter-data';
@@ -73,5 +72,3 @@ export type ValueColumn = {
   color?: string;
   legacyInstanceId?: string;
 };
-
-export type SortDirection = 'sortAsc' | 'sortDesc' | 'sortNone';

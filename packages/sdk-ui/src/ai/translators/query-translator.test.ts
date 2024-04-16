@@ -1,73 +1,28 @@
 import { QueryTranslator } from '@/ai';
+import {
+  MOCK_DATA_SOURCE_FIELDS,
+  MOCK_EXPANDED_QUERY_MODEL,
+  MOCK_RE_EXPANDED_QUERY_MODEL,
+  MOCK_SIMPLE_QUERY_MODEL,
+} from '@/ai/translators/__mocks__/models';
 
 describe('QueryTranslator', () => {
   let queryTranslator: QueryTranslator;
-  const metadataItem1 = {
-    jaql: {
-      dim: '[Commerce.Condition]',
-      table: 'Commerce',
-      column: 'Condition',
-      datatype: 'text',
-      title: 'Condition',
-    },
-    panel: 'columns',
-  };
-
-  const metadataItem2 = {
-    jaql: {
-      type: 'measure',
-      context: {
-        '[d6fb]': {
-          dim: '[Commerce.Revenue]',
-          table: 'Commerce',
-          column: 'Revenue',
-        },
-      },
-      formula: 'sum([d6fb])',
-      title: 'total of Revenue',
-    },
-    panel: 'measures',
-  };
-
   beforeEach(() => {
-    queryTranslator = new QueryTranslator('Sample ECommerce', []);
+    queryTranslator = new QueryTranslator('Sample ECommerce', MOCK_DATA_SOURCE_FIELDS);
   });
 
-  it('should simplifyMetadataItemJaql by removing "table", "column", and "datatype"', () => {
-    const simplifiedItem = queryTranslator.simplifyMetadataItemJaql(metadataItem1.jaql);
-    const expectedItem = {
-      dim: '[Commerce.Condition]',
-      title: 'Condition',
-    };
-
-    expect(simplifiedItem).toEqual(expectedItem);
+  describe('translateToSimple', () => {
+    it('should translate ExpandedQueryModel to SimpleQueryModel', () => {
+      const simpleQueryModel = queryTranslator.translateToSimple(MOCK_EXPANDED_QUERY_MODEL);
+      expect(simpleQueryModel).toEqual(MOCK_SIMPLE_QUERY_MODEL);
+    });
   });
 
-  // skipped for now
-  it.skip('should simplifyMetadataItemJaql by removing "table" and "column" out of context', () => {
-    const simplifiedItem = queryTranslator.simplifyMetadataItemJaql(metadataItem2.jaql);
-
-    console.log(simplifiedItem);
-
-    const expectedItem = {
-      type: 'measure',
-      context: { '[d6fb]': { dim: '[Commerce.Revenue]' } },
-      formula: 'sum([d6fb])',
-      title: 'total of Revenue',
-    };
-
-    expect(simplifiedItem).toEqual(expectedItem);
-  });
-
-  it('should simplifyAggFormula by extracting the aggregation function from the match', () => {
-    const simplifiedAggFormula = queryTranslator.simplifyAggFormula(metadataItem2.jaql);
-
-    const expectedAggFormula = {
-      dim: '[Commerce.Revenue]',
-      agg: 'sum',
-      title: 'total of Revenue',
-    };
-
-    expect(simplifiedAggFormula).toEqual(expectedAggFormula);
+  describe('translateToExpanded', () => {
+    it('should translate SimpleQueryModel back to ExpandedQueryModel', () => {
+      const expandedQueryModel = queryTranslator.translateToExpanded(MOCK_SIMPLE_QUERY_MODEL);
+      expect(expandedQueryModel).toEqual(MOCK_RE_EXPANDED_QUERY_MODEL);
+    });
   });
 });

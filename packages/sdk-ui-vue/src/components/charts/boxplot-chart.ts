@@ -7,7 +7,7 @@ import { setupHelper } from '../../setup-helper';
 /**
  * A Vue component representing data in a way that visually describes the distribution, variability,
  * and center of a data set along an axis.
- * See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-plot.htm) for more information.
+ *
  * @example
  * Here's how you can use the BoxplotChart component in a Vue application:
  * ```vue

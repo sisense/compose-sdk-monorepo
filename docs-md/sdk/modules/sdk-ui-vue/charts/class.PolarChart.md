@@ -5,7 +5,6 @@ title: PolarChart
 # Class PolarChart
 
 A Vue component comparing multiple categories/variables with a spacial perspective in a radial chart.
-See [Polar Chart](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm) for more information.
 
 ## Example
 

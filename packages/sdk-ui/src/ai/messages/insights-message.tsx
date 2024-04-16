@@ -1,53 +1,32 @@
 import { GetNlgQueryResultRequest } from '../api/types';
 import LightBulbIcon from '../icons/light-bulb-icon';
 import LoadingDotsIcon from '../icons/loading-dots-icon';
-import FeedbackWrapper from './feedback-wrapper';
 import TextMessage from './text-message';
 import { useGetNlgQueryResultInternal } from '../use-get-nlg-query-result';
 import Collapsible from '../common/collapsible';
-import { MetadataItem } from '@sisense/sdk-query-client';
 import { UNEXPECTED_ERROR } from '../api/errors';
+import ClickableMessage from './clickable-message';
 
-export function InsightsButton({
-  onClick,
-  disabled,
-}: {
-  onClick?: () => void;
-  disabled?: boolean;
-}) {
-  const disabledStyle = disabled ? 'csdk-opacity-70' : '';
-
+export function InsightsButton({ onClick, disabled }: { onClick: () => void; disabled?: boolean }) {
   return (
-    <TextMessage align="right" onClick={!disabled ? onClick : undefined}>
+    <ClickableMessage align="left" onClick={onClick} disabled={disabled}>
       <div
-        className={`csdk-my-[-5px] csdk-flex csdk-items-center csdk-gap-x-2 csdk-select-none ${disabledStyle}`}
+        className={`csdk-py-[5px] csdk-px-2 csdk-flex csdk-items-center csdk-gap-x-2 csdk-select-none`}
       >
         <LightBulbIcon />
         Insights
       </div>
-    </TextMessage>
+    </ClickableMessage>
   );
 }
 
 type InsightsMessageProps = {
-  dataSource: string;
-  metadata: object[];
+  nlgRequest: GetNlgQueryResultRequest;
   visible?: boolean;
 };
 
-export default function InsightsMessage({
-  dataSource,
-  metadata,
-  visible = false,
-}: InsightsMessageProps) {
-  const requestData: GetNlgQueryResultRequest = {
-    jaql: {
-      datasource: dataSource,
-      metadata: metadata as MetadataItem[],
-    },
-  };
-
-  const { data, isLoading, isError } = useGetNlgQueryResultInternal(requestData, visible);
+export default function InsightsMessage({ nlgRequest, visible = false }: InsightsMessageProps) {
+  const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlgRequest, visible);
 
   if (!visible) {
     return null;
@@ -62,10 +41,8 @@ export default function InsightsMessage({
   }
 
   return (
-    <FeedbackWrapper sourceId={dataSource} data={requestData} type="nlg/queryResult">
-      <TextMessage align="full">
-        <Collapsible text={data ?? 'No insights available.'} />
-      </TextMessage>
-    </FeedbackWrapper>
+    <TextMessage align="full">
+      <Collapsible text={data ?? 'No insights available.'} />
+    </TextMessage>
   );
 }

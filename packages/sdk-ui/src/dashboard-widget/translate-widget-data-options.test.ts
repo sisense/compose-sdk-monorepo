@@ -6,7 +6,7 @@ import {
   DimensionalAttribute,
   DimensionalBaseMeasure,
   DimensionalCalculatedMeasure,
-  SortDirection,
+  JaqlSortDirection,
   FilterJaql,
   BaseJaql,
 } from '@sisense/sdk-data';
@@ -41,9 +41,9 @@ function convertToDimensionalModel(
 function getSortTypeFromPanelItem(panelItem: PanelItem) {
   const panelSort = panelItem.jaql.sort ?? panelItem.categoriesSorting;
 
-  if (panelSort === SortDirection.ASC) {
+  if (panelSort === JaqlSortDirection.ASC) {
     return 'sortAsc';
-  } else if (panelSort === SortDirection.DESC) {
+  } else if (panelSort === JaqlSortDirection.DESC) {
     return 'sortDesc';
   } else {
     return 'sortNone';
@@ -142,7 +142,7 @@ describe('translate widget data options', () => {
           items: [
             {
               jaql: costAggregatedWithoutSort,
-              categoriesSorting: SortDirection.DESC,
+              categoriesSorting: JaqlSortDirection.DESC,
             },
           ],
         },
@@ -449,7 +449,7 @@ describe('translate widget plugin data options from pluginPanels', () => {
           items: [
             {
               jaql: costAggregatedWithoutSort,
-              categoriesSorting: SortDirection.DESC,
+              categoriesSorting: JaqlSortDirection.DESC,
             },
           ],
         },

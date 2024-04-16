@@ -53,6 +53,25 @@ export const WithDefaultContext: Story = {
   },
 };
 
+export const WithDisabledWelcomeText: Story = {
+  args: {
+    config: {
+      defaultContextTitle: 'Sample ECommerce',
+      welcomeText: false,
+    },
+  },
+};
+
+export const WithCustomWelcomeText: Story = {
+  args: {
+    config: {
+      defaultContextTitle: 'Sample ECommerce',
+      welcomeText:
+        'Hey there! I assist in creating Compose SDK Queries and Charts.\nTell me what to code!',
+    },
+  },
+};
+
 export const WithCustomStyle: Story = {
   args: {
     style: {

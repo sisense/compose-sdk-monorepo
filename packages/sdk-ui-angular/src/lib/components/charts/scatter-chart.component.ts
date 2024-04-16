@@ -12,8 +12,6 @@ import { type ArgumentsAsObject } from '../../types/utility-types';
  * **Size**: An optional field represented by the size of the circles.
  * If omitted, all scatter points are equal in size. If used, the circle sizes are relative to their values.
  *
- * See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm) for more information.
- *
  * @example
  * ```html
  *    <csdk-scatter-chart

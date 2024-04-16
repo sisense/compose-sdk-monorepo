@@ -1,10 +1,13 @@
-import { DataSourceInfo, Filter } from './index.js';
+import { createFilterFromJaql, DataSourceInfo, DataType, Filter } from './index.js';
 import {
   getDataSourceName,
   getFilterListAndRelations,
   guidFast,
   isDataSourceInfo,
 } from './utils.js';
+import { describe } from 'vitest';
+import * as filterFactory from './dimensional-model/filters/factory.js';
+import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/filter-jaql-util.js';
 
 const mockFilter1 = { guid: 'filter-1', name: 'Filter 1' } as Filter;
 const mockFilter2 = { guid: 'filter-2', name: 'Filter 2' } as Filter;
@@ -117,6 +120,32 @@ describe('utils', () => {
       const dataSourceName = 'data-source-name';
       const result = isDataSourceInfo(dataSourceName);
       expect(result).toBe(false);
+    });
+  });
+
+  describe('createFilterFromJaql', () => {
+    const instanceid = 'instanceid';
+
+    // just one simple test to cover the function.
+    // See more tests in src/dimensional-model/filters/utils/filter-jaql-util.test.ts
+    test('MembersFilter members()', () => {
+      const jaql = {
+        table: 'Category',
+        column: 'Category',
+        dim: '[Category.Category]',
+        datatype: 'text' as DataType,
+        filter: {
+          explicit: true,
+          multiSelection: true,
+          members: ['Cell Phones', 'GPS Devices'],
+        },
+        title: 'Category',
+      };
+
+      const filter = createFilterFromJaql(jaql, instanceid);
+      const attribute = createAttributeFromFilterJaql(jaql);
+      const expectedFilter = filterFactory.members(attribute, jaql.filter.members);
+      expect(filter.jaql()).toEqual(expectedFilter.jaql());
     });
   });
 });

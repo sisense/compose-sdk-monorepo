@@ -4,7 +4,6 @@ import { setupHelper } from '../../setup-helper';
 
 /**
  * A Vue component comparing multiple categories/variables with a spacial perspective in a radial chart.
- * See [Polar Chart](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm) for more information.
  *
  * @example
  * Here's how you can use the PolarChart component in a Vue application:

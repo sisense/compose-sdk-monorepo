@@ -19,10 +19,6 @@ An example of specifying red as a uniform color for all data values.
 }
 ```
 
-## See
-
-[Selecting Colors in Widgets](https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm)
-
 ## Type declaration
 
 ### `color`

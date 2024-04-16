@@ -44,6 +44,7 @@ export const translation: TranslationDictionary = {
         'Метод {{methodName}} підтримуються тільки для табличних віджетів',
     },
     unknownFilterInFilterRelations: 'Логічні відношення фільтрів містять невідомий фільтр',
+    filterRelationsNotSupported: 'Відносини фільтрів ще не підтримуються',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',

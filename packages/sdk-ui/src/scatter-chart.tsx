@@ -10,59 +10,21 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * **Size**: An optional field represented by the size of the circles.
  * If omitted, all scatter points are equal in size. If used, the circle sizes are relative to their values.
  *
- * See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm) for more information.
+ * ## Example
  *
- * @example
- * An example of using the component to visualize the `Sample ECommerce` data source.
+ * Scatter chart displaying total revenue per category, broken down by gender, from the Sample ECommerce data model.
  *
- * The chart shows top Categories by Total Revenue on the x-axis, and Total Quantity on the y-axis in logarithmic scale
- * with Gender breakdown by color and Total Cost encoded by the size of the bubbles.
- * ```tsx
- * <ScatterChart
- *   dataSet={DM.DataSource}
- *   filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 10)]}
- *   dataOptions={{
- *     x: measureFactory.sum(DM.Commerce.Revenue),
- *     y: measureFactory.sum(DM.Commerce.Quantity),
- *     breakByPoint: DM.Category.Category,
- *     breakByColor: DM.Commerce.Gender,
- *     size: measureFactory.sum(DM.Commerce.Cost),
- *   }}
- *   styleOptions={{
- *     xAxis: {
- *       enabled: true,
- *       gridLines: true,
- *       isIntervalEnabled: false,
- *       labels: {
- *         enabled: true,
- *       },
- *       logarithmic: true,
- *       title: {
- *         enabled: true,
- *         text: 'Total Revenue',
- *       },
- *     },
- *     yAxis: {
- *       enabled: true,
- *       gridLines: true,
- *       isIntervalEnabled: false,
- *       labels: {
- *         enabled: true,
- *       },
- *       logarithmic: true,
- *       title: {
- *         enabled: true,
- *         text: 'Total Quantity',
- *       },
- *     },
- *   }}
- *   onDataPointClick={(point, nativeEvent) => {
- *     console.log('clicked', point, nativeEvent);
- *   }}
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=charts%2Fscatter-chart&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
  * />
- * ```
  *
- * <img src="media://scatter-chart-example-1.png" width="800px" />
+ * Additional Scatter Chart examples:
+ *
+ * - [Bubble Scatter Chart](https://csdk-playground.sisense.com/?example=charts/scatter-chart-bubble)
+ *
  * @param props - Scatter chart properties
  * @returns Scatter Chart component
  * @group Charts

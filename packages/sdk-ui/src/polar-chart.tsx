@@ -3,26 +3,23 @@ import { Chart, shouldSkipSisenseContextWaiting } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
  * A React component comparing multiple categories/variables with a spacial perspective in a radial chart.
- * See [Polar Chart](https://docs.sisense.com/main/SisenseLinux/polar-chart.htm) for more information.
  *
- * @example
- * An example of using the component to visualize the `Sample ECommerce` data source:
- * ```tsx
- * <PolarChart
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     category: [DM.Commerce.AgeRange],
- *     value: [measureFactory.sum(DM.Commerce.Revenue)],
- *     breakBy: [DM.Commerce.Gender],
- *   }}
- *   filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
- *   onDataPointClick= {(point, nativeEvent) => {
- *     console.log('clicked', point, nativeEvent);
- *   }}
+ * ## Example
+ *
+ * Polar chart displaying total revenue per age range from the Sample ECommerce data model.
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
  * />
- * ```
  *
- * <img src="media://polar-chart-example-1.png" width="600px" />
+ * Additional Polar Chart examples:
+ *
+ * - [Area Polar Chart](https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart-area)
+ * - [Line Polar Chart](https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart-line)
+ *
  * @param props - Polar chart properties
  * @returns Polar Chart component
  * @group Charts

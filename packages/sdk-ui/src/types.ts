@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { Attribute, MembersFilter } from '@sisense/sdk-data';
+import type { Attribute, MembersFilter } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 import {
   AreaSubtype,
@@ -31,6 +31,7 @@ import { LegendPosition } from './chart-options-processor/translations/legend-se
 import { GeoDataElement, RawGeoDataElement } from './chart-data/types';
 import { Coordinates } from '@/charts/map-charts/scattermap/types';
 
+export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
 
@@ -626,9 +627,6 @@ export type SeriesChartType =
 
 /** The number of decimal places */
 export type DecimalScale = number | 'auto';
-
-/** Sorting direction, either by Ascending order, Descending order, or None */
-export type SortDirection = 'sortAsc' | 'sortDesc' | 'sortNone';
 
 /**
  * Configuration for number formatting.

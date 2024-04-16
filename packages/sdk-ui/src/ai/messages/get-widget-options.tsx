@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+/* eslint-disable max-lines */
 import { MetadataItem } from '@sisense/sdk-query-client';
 import merge from 'ts-deepmerge';
 import { ChartSubtype } from '../../chart-options-processor/subtype-to-design-options';
@@ -7,7 +9,9 @@ import {
   ChartDataOptions,
   ChartType,
   ChartStyleOptions,
+  ScatterChartDataOptions,
 } from '../../types';
+import { ScattermapChartDataOptions } from '../../chart-data-options/types';
 import { ChartRecommendations, NlqResponseData } from '../api/types';
 import { createJaqlElement } from './jaql-element';
 
@@ -74,47 +78,62 @@ const mapToDataOptions = (
   const intermediateOptions = Object.entries(axesMapping).reduce((acc, item) => {
     const [key, value] = item;
 
-    acc[key] = value.map((v) => {
-      const m = metadataItemByTitle[v.name];
-      // this will generate an error in the chart instead of failing
-      // error will contain the name of the problematic item
-      // TODO: remove when proper validation is introduced
-      if (!m) return { column: { type: '', name: v.name } };
-      const column = createJaqlElement(m);
+    acc[`${key}`] = Array.isArray(value)
+      ? value.map((v) => {
+          const m = metadataItemByTitle[v.name];
+          // this will generate an error in the chart instead of failing
+          // error will contain the name of the problematic item
+          // TODO: remove when proper validation is introduced
+          if (!m) return { column: { type: '', name: v.name } };
+          const column = createJaqlElement(m);
 
-      if (m.panel === 'measures') {
-        return {
-          column,
-          sortType: 'sortNone',
-        };
-      }
+          if (m.panel === 'measures') {
+            return {
+              column,
+              sortType: 'sortNone',
+            };
+          }
 
-      return column;
-    });
+          return column;
+        })
+      : value;
 
     return acc;
   }, {});
 
-  if (chartFamily === 'cartesian') {
-    return {
-      category: [],
-      value: [],
-      breakBy: [],
-      ...intermediateOptions,
-    } as CartesianChartDataOptions;
-  } else if (chartFamily === 'categorical') {
-    return {
-      category: [],
-      value: [],
-      ...intermediateOptions,
-    } as CategoricalChartDataOptions;
-  } else if (chartFamily === 'scatter') {
-    Object.keys(intermediateOptions).forEach((key) => {
-      intermediateOptions[key] = intermediateOptions[key][0];
-    });
+  switch (chartFamily) {
+    case 'cartesian':
+      return {
+        category: [],
+        value: [],
+        breakBy: [],
+        ...intermediateOptions,
+      } as CartesianChartDataOptions;
+    case 'categorical':
+      return {
+        category: [],
+        value: [],
+        ...intermediateOptions,
+      } as CategoricalChartDataOptions;
+    case 'scatter':
+      Object.keys(intermediateOptions).forEach((key) => {
+        intermediateOptions[`${key}`] = intermediateOptions[`${key}`][0];
+      });
+      return intermediateOptions as ScatterChartDataOptions;
+    case 'scattermap':
+      Object.keys(intermediateOptions).forEach((key) => {
+        if (key !== 'geo') {
+          intermediateOptions[`${key}`] = intermediateOptions[`${key}`][0];
+        }
+      });
+      return intermediateOptions as ScattermapChartDataOptions;
+    case 'boxplot':
+    case 'areamap':
+    case 'indicator':
+    case 'table':
+    default:
+      return intermediateOptions;
   }
-
-  return intermediateOptions;
 };
 
 const getAxisTitle = (chartRecommendations: ChartRecommendations, axis: 'x' | 'y') => {

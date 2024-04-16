@@ -20,32 +20,25 @@ import { isQueryParamsChanged } from '@/query-execution/query-params-comparator'
 
 /**
  * React hook that executes a data query.
- * This approach, which offers an alternative to {@link ExecuteQuery} component, is similar to React Query's `useQuery` hook.
  *
- * @example
- ```tsx
-  const { data, isLoading, isError } = useExecuteQuery({
-    dataSource: DM.DataSource,
-    dimensions: [DM.Commerce.AgeRange],
-    measures: [measureFactory.sum(DM.Commerce.Revenue)],
-    filters: [filterFactory.greaterThan(DM.Commerce.Revenue, 1000)],
-  });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error</div>;
-  }
-  if (data) {
-    return <div>{`Total Rows: ${data.rows.length}`}</div>;
-  }
-  return null;
- ```
-
- * See also hook {@link useExecuteQueryByWidgetId}, which extracts data from an existing widget in the Sisense instance.
+ * This approach, which offers an alternative to the {@link ExecuteQuery} component, is similar to React Query's `useQuery` hook.
  *
- * See [this blog post]( https://www.sisense.com/blog/take-control-of-your-data-visualizations/) for examples
- * of using the hook to fetch data from Sisense for third-party charts.
+ * ## Example
+ *
+ * Execute a query to retrieve revenue per country per year from the Sample ECommerce data model. Then display the data in a table and column chart.
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=queries%2Fuse-execute-query-sorting&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
+ * />
+ *
+ * Additional `useExecuteQuery()` examples:
+ *
+ * - [Query with Sorting](https://csdk-playground.sisense.com/?example=queries%2Fuse-execute-query-sorting)
+ * - [Take Control of Your Data Visualizations]( https://www.sisense.com/blog/take-control-of-your-data-visualizations/) blog post with examples of using the hook to fetch data to display in third-party charts.
+ *
  * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  * @group Queries

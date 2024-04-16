@@ -7,7 +7,6 @@ import { setupHelper } from '../../setup-helper';
 /**
  * A Vue component representing data in a circular graph with the data shown as slices of a whole,
  * with each slice representing a proportion of the total.
- * See [Pie Chart](https://docs.sisense.com/main/SisenseLinux/pie-chart.htm) for more information.
  *
  * @example
  * Here's how you can use the PieChart component in a Vue application:

@@ -100,9 +100,9 @@ This section describes how to add Compose SDK to your application to render char
 
 ### Generating a Data Model Representation
 
-To visualize data in your application using Compose SDK, first make sure you have a [data model](https://docs.sisense.com/main/SisenseLinux/introduction-to-data-models.htm?Highlight=create%20a%20data%20model%20within%20Sisense) in your Sisense instance. Then, create a TypeScript representation of it in your project. This is done using the CLI command which automatically generates it, or you can create it manually using the same syntax.
+To visualize data in your application using Compose SDK, first make sure you have a data model in your Sisense instance. Then, create a TypeScript representation of it in your project. This is done using the CLI command which automatically generates it, or you can create it manually using the same syntax.
 
-Once you have a TypeScript representation of your data model, you define measures, dimensions and filters and easily create sophisticated queries. There is no need to specify complex `JOINS` relationships or `GROUP BYS` that you do when using SQL and other query languages because the Sisense semantic [query engine](https://docs.sisense.com/main/SisenseLinux/analytical-engine-overview.htm) will do that for you.
+Once you have a TypeScript representation of your data model, you define measures, dimensions and filters and easily create sophisticated queries. There is no need to specify complex `JOINS` relationships or `GROUP BYS` that you do when using SQL and other query languages because the Sisense semantic query engine will do that for you.
 
 Run the following command to create a `sample-healthcare.ts` file in directory `src/` of the application. The file contains a TypeScript representation of the Sample Healthcare data model.
 
@@ -261,7 +261,7 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 ```
 
 > **Note:**
-> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `TimeofStay` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/namespaces/namespace.measureFactory/index.md) documentation for more information.
+> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `TimeofStay` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 

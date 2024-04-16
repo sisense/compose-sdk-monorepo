@@ -5,7 +5,6 @@ title: IndicatorChart
 # Class IndicatorChart
 
 A Vue component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
-See [Indicator](https://docs.sisense.com/main/SisenseLinux/indicator.htm) for more information.
 
 ## Example
 

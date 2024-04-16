@@ -12,6 +12,17 @@ is used to render a widget created in a Sisense Fusion instance.
 To learn more about using Sisense Fusion Widgets in Compose SDK,
 see [Sisense Fusion Widgets](/guides/sdk/guides/charts/guide-fusion-widgets.html).
 
+## Example
+
+Display two dashboard widgets from a Fusion Embed instance.
+
+<iframe
+ src='https://csdk-playground.sisense.com/?example=fusion-assets%2Ffusion-widgets&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
+
 ## Parameters
 
 | Parameter | Type |
@@ -22,13 +33,3 @@ see [Sisense Fusion Widgets](/guides/sdk/guides/charts/guide-fusion-widgets.html
 ## Returns
 
 `null` \| `ReactElement`\< `any`, `any` \>
-
-## Example
-
-The example below renders a dashboard widget with the specified widget and dashboard OIDs.
-```ts
-<DashboardWidget
-  widgetOid={'64473e07dac1920034bce77f'}
-  dashboardOid={'6441e728dac1920034bce737'}
-/>
-```

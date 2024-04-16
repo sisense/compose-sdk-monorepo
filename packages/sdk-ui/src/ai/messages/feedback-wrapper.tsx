@@ -1,5 +1,5 @@
 import { debounce } from 'lodash';
-import { ReactNode, useCallback, useState } from 'react';
+import { Children, ReactNode, useCallback, useState } from 'react';
 
 import { useChatApi } from '@/ai/api/chat-api-provider';
 import ThumbsDownButton from '@/ai/buttons/thumbs-down-button';
@@ -50,7 +50,7 @@ type FeedbackWrapperProps = {
   sourceId: string;
   data: object;
   type: string;
-  rightFooter?: ReactNode;
+  visible?: boolean;
   children: ReactNode;
 };
 
@@ -58,7 +58,7 @@ export default function FeedbackWrapper({
   sourceId,
   data,
   type,
-  rightFooter,
+  visible = true,
   children,
 }: FeedbackWrapperProps) {
   const api = useChatApi();
@@ -84,12 +84,18 @@ export default function FeedbackWrapper({
   const [ref, hovering] = useHover<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {children}
-      <div className="csdk-flex csdk-items-center csdk-mt-4 csdk-h-[35px]">
-        <FeedbackRow onSend={sendFeedback} visible={hovering} />
-        {rightFooter}
-      </div>
+    <div className="csdk-flex csdk-flex-col csdk-gap-y-4" ref={ref}>
+      {Children.map(children, (child, index) => {
+        if (index === 0) {
+          return (
+            <div className="csdk-flex csdk-items-center csdk-gap-x-2.5">
+              {child}
+              <FeedbackRow onSend={sendFeedback} visible={hovering && visible} />
+            </div>
+          );
+        }
+        return child;
+      })}
     </div>
   );
 }

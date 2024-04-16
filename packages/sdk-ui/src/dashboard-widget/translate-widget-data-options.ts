@@ -13,6 +13,7 @@ import {
   Sort,
   Jaql,
   BaseJaql,
+  createFilterFromJaql,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -48,7 +49,6 @@ import {
   ScattermapChartDataOptions,
   TableDataOptions,
 } from '../chart-data-options/types';
-import { createFilterFromJaql } from './translate-widget-filters';
 import { WidgetDataOptions } from '../models';
 import { TranslatableError } from '../translation/translatable-error';
 import { findKey } from 'lodash';
@@ -195,14 +195,14 @@ export const createDataOptionsFromPanels = (panels: Panel[], variantColors: Colo
   return dataOptions;
 };
 
-export function createColumnsFromPanelItems(
+export function createColumnsFromPanelItems<ColumnType = StyledColumn | StyledMeasureColumn>(
   panels: Panel[],
   panelName: string,
   customPaletteColors?: Color[],
 ) {
   return getEnabledPanelItems(panels, panelName)
     .map(getRootPanelItem)
-    .map((item) => createDataColumn(item, customPaletteColors));
+    .map((item) => createDataColumn(item, customPaletteColors) as ColumnType);
 }
 
 function extractCartesianChartDataOptions(
@@ -212,16 +212,20 @@ function extractCartesianChartDataOptions(
 ): CartesianChartDataOptions {
   const widgetTypesWithXAxis: WidgetType[] = ['chart/line', 'chart/area'];
   const categoriesPanelName = widgetTypesWithXAxis.includes(widgetType) ? 'x-axis' : 'categories';
-  const category = createColumnsFromPanelItems(panels, categoriesPanelName, paletteColors);
-  const value = createColumnsFromPanelItems(panels, 'values', paletteColors);
-  const breakBy = createColumnsFromPanelItems(panels, 'break by', paletteColors);
+  const category = createColumnsFromPanelItems<StyledColumn>(
+    panels,
+    categoriesPanelName,
+    paletteColors,
+  );
+  const value = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'values', paletteColors);
+  const breakBy = createColumnsFromPanelItems<StyledColumn>(panels, 'break by', paletteColors);
   const membersFormat = getEnabledPanelItems(panels, 'break by')[0]?.format?.members;
   const seriesToColorMap = membersFormat && createValueToColorMap(membersFormat);
 
   return {
-    category: category as StyledColumn[],
-    value: value,
-    breakBy: breakBy as StyledColumn[],
+    category,
+    value,
+    breakBy,
     ...(seriesToColorMap && { seriesToColorMap }),
   };
 }
@@ -231,9 +235,21 @@ function extractCategoricalChartDataOptions(
   panels: Panel[],
   customPaletteColors?: Color[],
 ): CategoricalChartDataOptions {
-  const category = createColumnsFromPanelItems(panels, 'categories', customPaletteColors);
-  const value = createColumnsFromPanelItems(panels, 'values', customPaletteColors);
-  const size = createColumnsFromPanelItems(panels, 'size', customPaletteColors);
+  const category = createColumnsFromPanelItems<StyledColumn>(
+    panels,
+    'categories',
+    customPaletteColors,
+  );
+  const value = createColumnsFromPanelItems<StyledMeasureColumn>(
+    panels,
+    'values',
+    customPaletteColors,
+  );
+  const size = createColumnsFromPanelItems<StyledMeasureColumn>(
+    panels,
+    'size',
+    customPaletteColors,
+  );
   let membersFormat, seriesToColorMap;
   if (widgetType === 'sunburst') {
     seriesToColorMap = createValueToColorMultiColumnsMap(
@@ -250,7 +266,7 @@ function extractCategoricalChartDataOptions(
   }
 
   return {
-    category: category as StyledColumn[],
+    category,
     value: [...value, ...size],
     ...(seriesToColorMap && { seriesToColorMap }),
   };
@@ -262,16 +278,16 @@ function extractScatterChartDataOptions(
 ): ScatterChartDataOptions {
   const [x] = createColumnsFromPanelItems(panels, 'x-axis', paletteColors);
   const [y] = createColumnsFromPanelItems(panels, 'y-axis', paletteColors);
-  const [breakByPoint] = createColumnsFromPanelItems(panels, 'point', paletteColors);
+  const [breakByPoint] = createColumnsFromPanelItems<StyledColumn>(panels, 'point', paletteColors);
   const [breakByColor] = createColumnsFromPanelItems(panels, 'Break By / Color', paletteColors);
-  const [size] = createColumnsFromPanelItems(panels, 'size', paletteColors);
+  const [size] = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'size', paletteColors);
   const membersFormat = getEnabledPanelItems(panels, 'Break By / Color')[0]?.format?.members;
   const seriesToColorMap = membersFormat && createValueToColorMap(membersFormat);
 
   return {
     x,
     y,
-    breakByPoint: breakByPoint as StyledColumn,
+    breakByPoint,
     breakByColor,
     size,
     ...(seriesToColorMap && { seriesToColorMap }),
@@ -282,10 +298,14 @@ function extractIndicatorChartDataOptions(
   panels: Panel[],
   paletteColors?: Color[],
 ): IndicatorChartDataOptions {
-  const value = createColumnsFromPanelItems(panels, 'value', paletteColors);
-  const secondary = createColumnsFromPanelItems(panels, 'secondary', paletteColors);
-  const min = createColumnsFromPanelItems(panels, 'min', paletteColors);
-  const max = createColumnsFromPanelItems(panels, 'max', paletteColors);
+  const value = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'value', paletteColors);
+  const secondary = createColumnsFromPanelItems<StyledMeasureColumn>(
+    panels,
+    'secondary',
+    paletteColors,
+  );
+  const min = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'min', paletteColors);
+  const max = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'max', paletteColors);
 
   return {
     value,
@@ -397,10 +417,10 @@ function extractAreamapChartDataOptions(
   paletteColors?: Color[],
 ): AreamapChartDataOptions {
   const geo: [StyledColumn] = [
-    createColumnsFromPanelItems(panels, 'geo', paletteColors)[0] as StyledColumn,
+    createColumnsFromPanelItems<StyledColumn>(panels, 'geo', paletteColors)[0],
   ];
-  const color: [StyledColumn] = [
-    createColumnsFromPanelItems(panels, 'color', paletteColors)[0] as StyledColumn,
+  const color: [StyledMeasureColumn] = [
+    createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'color', paletteColors)[0],
   ];
 
   return {

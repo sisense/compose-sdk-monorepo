@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.8.0] - 2024-04-15
+
+### Added
+- Add pivot sorting interface for component `PivotTable` and hook `useExecutePivotQuery`
+
+### Changed
+- Fix boxplot outliers factory functions to prevent loading of redundant data points
+- Make improvements to the AI components and hooks (private beta)
+- Improve translation of AI chats to charts and code for internal testing.
+
+## [1.7.2] - 2024-04-09
+
+### Changed
+- Fix `includeWidgets` option in `useGetDashboardModel` for non-admin users
+- Support theme settings in `ErrorBoundary` UI component
+- Make improvements to the AI components and hooks (private beta)
+
 ## [1.7.1] - 2024-04-03
 
 ### Changed

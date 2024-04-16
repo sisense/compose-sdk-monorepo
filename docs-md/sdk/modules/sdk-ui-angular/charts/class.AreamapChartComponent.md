@@ -5,7 +5,6 @@ title: AreamapChartComponent
 # Class AreamapChartComponent
 
 An Angular component that allows to visualize geographical data as polygons on a map.
-See [Areamap Chart](https://docs.sisense.com/main/SisenseLinux/area-map.htm) for more information.
 
 ## Example
 

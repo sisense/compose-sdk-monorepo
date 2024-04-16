@@ -6,9 +6,6 @@ title: DateDimension
 
 Date Dimension extending [Dimension](interface.Dimension.md).
 
-See [here](https://docs.sisense.com/main/SisenseLinux/date-and-time-fields.htm)
-for more details on Date and Time Resolution for ElastiCubes and for Live Models.
-
 ## Methods
 
 ### getSort

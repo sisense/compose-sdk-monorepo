@@ -15,7 +15,7 @@ export const CODE_TEMPLATES: CodeTemplates = {
 {{extraImportsString}}
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
 
-export default function App() {
+export default function CodeExample() {
   return (
     <{{componentString}}
       title={'{{titleString}}'}
@@ -53,13 +53,13 @@ import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
     template: \`
       <csdk-chart-widget
         chartType='{{chartTypeString}}'
-        [dataSet]='DM.DataSource'
+        [dataSource]='DM.DataSource'
         [dataOptions]='dataOptions'
         [filters]='filters'
       />
     \`
 })
-export class ExampleComponent {
+export class CodeExample {
     DM = DM;
     dataOptions = {{dataOptionsString}};
     filters = {{filtersString}};
@@ -74,13 +74,13 @@ import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
     selector: 'app-example',
     template: \`
       <csdk-table-widget
-        [dataSet]='DM.DataSource'
+        [dataSource]='DM.DataSource'
         [dataOptions]='dataOptions'
         [filters]='filters'
       />
     \`
 })
-export class ExampleComponent {
+export class CodeExample {
     DM = DM;
     dataOptions = {{dataOptionsString}}
     filters = {{filtersString}};
@@ -102,7 +102,7 @@ export class ExampleComponent {
     chartType="{{chartTypeString}}"
     :dataOptions="dataOptions"
     :filters="filters"
-    :dataSet="DM.DataSource"
+    :dataSource="DM.DataSource"
     title="{{titleString}}" />
 </template>`,
     chartTmpl: `{{baseChartTmpl}}`,
@@ -121,7 +121,7 @@ export class ExampleComponent {
   <{{componentString}}
     :dataOptions="dataOptions"
     :filters="filters"
-    :dataSet="DM.DataSource"
+    :dataSource="DM.DataSource"
     title="{{titleString}}" />
 </template>`,
   },

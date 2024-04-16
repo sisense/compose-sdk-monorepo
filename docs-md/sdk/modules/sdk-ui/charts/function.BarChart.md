@@ -8,9 +8,22 @@ title: BarChart
 
 A React component representing categorical data with horizontal rectangular bars,
 whose lengths are proportional to the values that they represent.
-You can also break up the values by another category or groups.
 
-See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for more information.
+## Example
+
+Bar chart displaying total revenue per year from the Sample ECommerce data model.
+
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts%2Fbar-chart&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
+
+Additional Bar Chart examples:
+
+- [Stacked Bar Chart](https://csdk-playground.sisense.com/?example=charts%2Fbar-chart-stacked)
+- [Stacked Percentage Bar Chart](https://csdk-playground.sisense.com/?example=charts%2Fbar-chart-stacked100)
 
 ## Parameters
 
@@ -24,23 +37,3 @@ See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for mo
 `null` \| `ReactElement`\< `any`, `any` \>
 
 Bar Chart component
-
-## Example
-
-An example of using the component to visualize the `Sample ECommerce` data source:
-```ts
-<BarChart
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-    breakBy: [DM.Commerce.Gender],
-  }}
-  filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
-  onDataPointClick={(point, nativeEvent) => {
-    console.log('clicked', point, nativeEvent);
-  }}
-/>
-```
-
-<img src="../../../img/bar-chart-example-1.png" width="800"/>

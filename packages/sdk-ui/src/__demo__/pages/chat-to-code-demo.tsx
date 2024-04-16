@@ -22,17 +22,17 @@ const DEFAULT_EDITOR_OPTS = {
 
 const DEFAULT_CONTEXT_TITLE = 'Sample ECommerce';
 
-const DEFAULT_QUERY_YAML = `# bar chart of total of revenue by condition
+const DEFAULT_QUERY_YAML = `# Bar chart of top 10 brands by revenue in Cambodia and USA in 2013
 
 model: Sample ECommerce
 metadata:
   - jaql:
-      dim: "[Commerce.Condition]"
-      title: Condition
+      dim: "[Brand.Brand]"
+      title: Brand
   - jaql:
       dim: "[Commerce.Revenue]"
       agg: sum
-      title: total of Revenue
+      title: Total Revenue
   - jaql:
       dim: "[Country.Country]"
       filter:
@@ -41,7 +41,7 @@ metadata:
           - United States
     panel: scope
   - jaql:
-      dim: "[Commerce.Date (Calendar)]"
+      dim: "[Commerce.Date]"
       level: years
       filter:
         members:
@@ -52,13 +52,22 @@ metadata:
       filter:
         fromNotEqual: 1000
     panel: scope
+  - jaql:
+      dim: "[Brand.Brand]"
+      filter:
+        top: "10"
+        by:
+          dim: '[Commerce.Revenue]'
+          agg: 'sum'
+      title: Top 10 Brand by Total Revenue
+    panel: scope
 chart:
   chartType: bar
   dataOptions:
     category:
-      - name: Condition
+      - name: Brand
     value:
-      - name: total of Revenue`;
+      - name: Total Revenue`;
 
 /**
  * A demo component that demonstrates the integration of Forge Query Composer and CSDK.
@@ -171,7 +180,7 @@ function ChatToCode({ contextTitle, defaultQueryYaml }: ChatToCodeProps) {
         </div>
         <div className="csdk-h-1/2 csdk-border csdk-z-0 csdk-border-0 csdk-overflow-hidden csdk-min-h-[435px] csdk-flex csdk-justify-center">
           <Chatbot
-            height={600}
+            height={300}
             width={800}
             config={{
               defaultContextTitle: contextTitle,

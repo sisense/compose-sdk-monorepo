@@ -1,4 +1,4 @@
-import TextMessage from './text-message';
+import ClickableMessage from './clickable-message';
 
 export type ClearHistoryMessageProps = {
   onConfirm: () => void;
@@ -8,12 +8,12 @@ export type ClearHistoryMessageProps = {
 export default function ClearHistoryMessage({ onCancel, onConfirm }: ClearHistoryMessageProps) {
   return (
     <div className="csdk-flex csdk-flex-col csdk-gap-y-2">
-      <TextMessage align="right" onClick={onConfirm}>
-        {'Yes, clear chat'}
-      </TextMessage>
-      <TextMessage align="right" onClick={onCancel}>
-        {'No, continue analysis'}
-      </TextMessage>
+      <ClickableMessage align="right" onClick={onConfirm}>
+        <div className="csdk-py-[7px] csdk-px-2">{'Yes, clear chat'}</div>
+      </ClickableMessage>
+      <ClickableMessage align="right" onClick={onCancel}>
+        <div className="csdk-py-[7px] csdk-px-2">{'No, continue analysis'}</div>
+      </ClickableMessage>
     </div>
   );
 }

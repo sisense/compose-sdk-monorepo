@@ -430,15 +430,11 @@ export function MuiDataGridWithDrilldownOnDates() {
 
 export function MuiDataGridDemo() {
   return (
-    <div className="csdk-h-fit">
+    <div className="csdk-flex csdk-flex-col csdk-gap-20">
       <MuiDataGridWithDrilldownOnCategory />
-      <div style={{ height: '100px' }} />
       <MuiDataGridWithDrilldownOnDates />
-      <div style={{ height: '100px' }} />
       <MuiDataGridWithServerPagination />
-      <div style={{ height: '100px' }} />
       <MuiDataGridWithInfiniteLoading />
-      <div style={{ height: '100px' }} />
     </div>
   );
 }

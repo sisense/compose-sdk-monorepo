@@ -3,7 +3,7 @@
 import {
   DimensionalLevelAttribute,
   type Filter,
-  SortDirection as JaqlSortDirection,
+  JaqlSortDirection,
   FilterRelations,
   FilterRelationsNode,
   FilterRelationsModelNode,
@@ -12,7 +12,7 @@ import {
   FilterRelationsJaqlNode,
 } from '@sisense/sdk-data';
 import { ChartSubtype } from '../chart-options-processor/subtype-to-design-options';
-import { ChartType, SortDirection } from '../types';
+import { ChartType, type SortDirection } from '../types';
 import {
   FiltersMergeStrategy,
   FiltersMergeStrategyEnum,

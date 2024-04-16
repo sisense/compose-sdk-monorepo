@@ -11,8 +11,19 @@ export function PivotTableDemo() {
           dataSet={DM.DataSource}
           dataOptions={{
             rows: [
-              { column: DM.Category.Category, includeSubTotals: true },
-              { column: DM.Commerce.AgeRange, includeSubTotals: true },
+              {
+                column: DM.Category.Category,
+                includeSubTotals: true,
+                sortType: {
+                  direction: 'sortDesc',
+                  by: { valuesIndex: 0, columnsMembersPath: ['Female'] },
+                },
+              },
+              {
+                column: DM.Commerce.AgeRange,
+                includeSubTotals: true,
+                sortType: { direction: 'sortAsc' },
+              },
               DM.Commerce.Condition,
             ],
             columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],
@@ -48,21 +59,21 @@ export function PivotTableDemo() {
       {/*  dataSet={DM.DataSource}*/}
       {/*  dataOptions={{*/}
       {/*    rows: [*/}
-      {/*      { attribute: DM.Category.Category, includeSubTotals: true },*/}
-      {/*      { attribute: DM.Brand.Brand, includeSubTotals: true },*/}
+      {/*      { column: DM.Category.Category, includeSubTotals: true },*/}
+      {/*      { column: DM.Brand.Brand, includeSubTotals: true },*/}
       {/*      DM.Commerce.Condition,*/}
       {/*    ],*/}
       {/*    columns: [*/}
-      {/*      { attribute: DM.Commerce.Gender, includeSubTotals: true },*/}
-      {/*      { attribute: DM.Commerce.AgeRange, includeSubTotals: true },*/}
+      {/*      { column: DM.Commerce.Gender, includeSubTotals: true },*/}
+      {/*      { column: DM.Commerce.AgeRange, includeSubTotals: true },*/}
       {/*    ],*/}
       {/*    values: [*/}
       {/*      {*/}
-      {/*        measure: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),*/}
+      {/*        column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),*/}
       {/*        totalsCalculation: 'sum',*/}
       {/*      },*/}
       {/*      {*/}
-      {/*        measure: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),*/}
+      {/*        column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),*/}
       {/*        totalsCalculation: 'min',*/}
       {/*      },*/}
       {/*    ],*/}

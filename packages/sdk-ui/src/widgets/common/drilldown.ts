@@ -97,7 +97,7 @@ const processDrilldownSelections = (
     dataOptionsWithDrilldown: {
       ...dataOptions,
       category: [currentDimension, ...otherCategories],
-    },
+    } as ChartDataOptions,
   };
 };
 

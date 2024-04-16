@@ -4,7 +4,6 @@ import { type IndicatorChartProps } from '@sisense/sdk-ui-preact';
 
 /**
  * A component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
- * See [Indicator](https://docs.sisense.com/main/SisenseLinux/indicator.htm) for more information.
  *
  * @example
  * ```html

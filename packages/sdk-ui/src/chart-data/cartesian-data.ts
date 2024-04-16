@@ -6,6 +6,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable sonarjs/no-ignored-return */
 /* eslint-disable max-lines */
+import { type SortDirection } from '../types';
 import {
   getColumnsByName,
   separateBy,
@@ -32,7 +33,6 @@ import {
   getCompleteNumberFormatConfig,
 } from '../chart-options-processor/translations/number-format-config';
 import { seriesDataColoringFunction } from './data-coloring';
-import { SortDirection } from '../types';
 import { getDataOptionTitle } from '../chart-data-options/utils';
 
 export const validateCartesianChartDataOptions = (
@@ -72,7 +72,7 @@ export const cartesianData = (
   // add direction of sorting
   xColumns = xColumns.map((c, index) => ({
     ...c,
-    direction: sortDirection(options.x[index].sortType),
+    direction: sortDirection(options.x[index].sortType as SortDirection),
   }));
   const seriesColumns: Column[] = getColumnsByName(
     dataTable,

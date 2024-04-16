@@ -115,7 +115,7 @@ export const boxWhiskerIqrOutliers = (target: Attribute): Attribute => {
 
   outliersAttrWithInnerFilter.jaql = () => {
     return {
-      ...target.jaql(),
+      ...target.jaql(true),
       filter: {
         or: [
           {
@@ -157,7 +157,7 @@ export const boxWhiskerStdDevOutliers = (target: Attribute): Attribute => {
 
   outliersAttrWithInnerFilter.jaql = () => {
     return {
-      ...target.jaql(),
+      ...target.jaql(true),
       filter: {
         or: [
           {

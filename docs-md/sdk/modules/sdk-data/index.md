@@ -53,6 +53,8 @@ title: sdk-data
 - [ForecastFormulaOptions](type-aliases/type-alias.ForecastFormulaOptions.md)
 - [PivotGrandTotals](type-aliases/type-alias.PivotGrandTotals.md)
 - [PivotGrid](type-aliases/type-alias.PivotGrid.md)
+- [PivotRowsSort](type-aliases/type-alias.PivotRowsSort.md)
+- [SortDirection](type-aliases/type-alias.SortDirection.md)
 - [TotalsCalculation](type-aliases/type-alias.TotalsCalculation.md)
 - [TreeNode](type-aliases/type-alias.TreeNode.md)
 - [TrendFormulaOptions](type-aliases/type-alias.TrendFormulaOptions.md)

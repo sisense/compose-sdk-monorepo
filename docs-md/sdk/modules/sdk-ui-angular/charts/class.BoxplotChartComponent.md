@@ -4,9 +4,8 @@ title: BoxplotChartComponent
 
 # Class BoxplotChartComponent
 
-An Angular component representing data in a way that visually describes the distribution, variability,
-and center of a data set along an axis.
-See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-plot.htm) for more information.
+An Angular component representing data in a way that visually describes the distribution
+variability, and center of a data set along an axis.
 
 ## Example
 

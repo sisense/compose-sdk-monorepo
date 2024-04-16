@@ -7,26 +7,23 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *
  * The chart can include multiple values on both the X and Y-axis, as well as a break down by categories displayed on the Y-axis.
  *
- * See [Column Chart](https://docs.sisense.com/main/SisenseLinux/column-chart.htm) for more information.
+ * ## Example
  *
- * @example
- * An example of using the component to visualize the `Sample ECommerce` data source:
- * ```tsx
- * <ColumnChart
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     category: [DM.Commerce.AgeRange],
- *     value: [measureFactory.sum(DM.Commerce.Revenue)],
- *     breakBy: [DM.Commerce.Gender],
- *   }}
- *   filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
- *   onDataPointClick={(point, nativeEvent) => {
- *     console.log('clicked', point, nativeEvent);
- *   }}
+ * Column chart displaying total revenue per year, broken down by condition, from the Sample ECommerce data model.
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=charts%2Fcolumn-chart&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
  * />
- * ```
  *
- * <img src="media://column-chart-example-1.png" width="800"/>
+ *
+ * Additional Column Chart examples:
+ *
+ * - [Stacked Column Chart](https://csdk-playground.sisense.com/?example=charts%2Fcolumn-chart-stacked)
+ * - [Stacked Percentage Column Chart](https://csdk-playground.sisense.com/?example=charts%2Fcolumn-chart-stacked100)
+ *
  * @param props - Column chart properties
  * @returns Column Chart component
  * @group Charts

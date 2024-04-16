@@ -6,7 +6,6 @@ import { type ArgumentsAsObject } from '../../types/utility-types';
 /**
  * A component representing categorical data with horizontal rectangular bars,
  * whose lengths are proportional to the values that they represent.
- * See [Bar Chart](https://docs.sisense.com/main/SisenseLinux/bar-chart.htm) for more information.
  *
  * @example
  * ```html

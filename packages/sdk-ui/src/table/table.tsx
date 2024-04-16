@@ -24,47 +24,17 @@ import { getFilterListAndRelations } from '@sisense/sdk-data';
 /**
  * Table with aggregation and pagination.
  *
- * @example
- * (1) Example of Table of raw data from the `Sample ECommerce` data model:
+ * ## Example
  *
- * ```tsx
- * <Table
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     columns: [
- *       DM.Commerce.AgeRange,
- *       DM.Commerce.Revenue,
- *       DM.Commerce.Cost,
- *       DM.Commerce.Quantity,
- *     ],
- *   }}
- *   styleOptions={{ width: 600, height: 750 }}
+ * Table displaying year, condition, and total revenue from the Sample ECommerce data model.
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=tables%2Faggregated-table&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
  * />
- * ```
  *
- * <img src="media://table-example-1.png" width="800px" />
- *
- * (2) Example of Table of aggregated data from the same data model:
- *
- * ```tsx
- * <Table
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     columns: [
- *       DM.Commerce.AgeRange,
- *       measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
- *       measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
- *     ],
- *   }}
- *   styleOptions={{
- *     headersColor: true,
- *     alternatingColumnsColor: false,
- *     alternatingRowsColor: true,
- *   }}
- * />
- * ```
- *
- * <img src="media://table-example-2.png" width="800px" />
  * @param props - Table properties
  * @returns Table component
  * @group Data Grids

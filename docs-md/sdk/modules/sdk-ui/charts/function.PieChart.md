@@ -8,7 +8,22 @@ title: PieChart
 
 A React component representing data in a circular graph with the data shown as slices of a whole,
 with each slice representing a proportion of the total.
-See [Pie Chart](https://docs.sisense.com/main/SisenseLinux/pie-chart.htm) for more information.
+
+## Example
+
+Pie chart displaying total revenue per age range from the Sample ECommerce data model.
+
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts%2Fpie-chart&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
+
+Additional Pie Chart examples:
+
+- [Donut Pie Chart](https://csdk-playground.sisense.com/?example=charts%2Fpie-chart-donut)
+- [Ring Pie Chart](https://csdk-playground.sisense.com/?example=charts%2Fpie-chart-ring)
 
 ## Parameters
 
@@ -22,22 +37,3 @@ See [Pie Chart](https://docs.sisense.com/main/SisenseLinux/pie-chart.htm) for mo
 `null` \| `ReactElement`\< `any`, `any` \>
 
 Pie Chart component
-
-## Example
-
-An example of using the component to visualize the `Sample ECommerce` data source:
-```ts
-<PieChart
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-  filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
-  onDataPointClick= {(point, nativeEvent) => {
-    console.log('clicked', point, nativeEvent);
-  }}
-/>
-```
-
-<img src="../../../img/pie-chart-example-1.png" width="600px" />

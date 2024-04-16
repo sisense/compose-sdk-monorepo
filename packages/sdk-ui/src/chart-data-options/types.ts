@@ -3,11 +3,12 @@ import type { DataColorOptions } from '../chart-data/data-coloring';
 import type {
   NumberFormatConfig,
   SeriesChartType,
-  SortDirection,
   ValueToColorMap,
   MultiColumnValueToColorMap,
   LineWidth,
   Markers,
+  SortDirection,
+  PivotRowsSort,
 } from '../types';
 import {
   Column,
@@ -49,8 +50,10 @@ export interface CategoryStyle {
    * @internal
    */
   enabled?: boolean;
-  /** {@inheritDoc SortDirection} */
-  sortType?: SortDirection;
+  /**
+   * Sorting configuration that represents either {@link SortDirection} or {@link PivotRowsSort} for the pivot table
+   */
+  sortType?: SortDirection | PivotRowsSort;
   isColored?: boolean;
   /**
    * Boolean flag whether to render category/column value as HTML in the Table component.

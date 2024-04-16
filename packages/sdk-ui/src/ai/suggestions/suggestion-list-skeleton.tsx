@@ -1,8 +1,13 @@
 import styled from '@emotion/styled';
 import { useChatStyle } from '../chat-style-provider';
 
-const Row = styled.div`
-  background: ${(props) => props.style?.background};
+const Row = styled.div<{ gradientColors: [string, string] }>`
+  background: ${({ gradientColors: [first, second] }) => `linear-gradient(
+    to right,
+    ${first} 0%,
+    ${second} 50%,
+    ${first} 100%
+  )`};
   background-size: 200% auto;
   animation: gradient 2s linear infinite;
 
@@ -18,13 +23,6 @@ const Row = styled.div`
 
 const DEFAULT_GRADIENT: [string, string] = ['rgba(194, 196, 203, 1)', 'rgba(236, 236, 239, 1)'];
 
-const getBackground = (colors: [string, string]) => `linear-gradient(
-  to right,
-  ${colors[0]} 0%,
-  ${colors[1]} 50%,
-  ${colors[0]} 100%
-);`;
-
 export default function SuggestionListSkeleton() {
   const style = useChatStyle();
 
@@ -34,9 +32,7 @@ export default function SuggestionListSkeleton() {
         <Row
           key={i}
           className="csdk-w-[283px] csdk-h-[32px] csdk-rounded-[10px]"
-          style={{
-            background: getBackground(style.suggestions?.loadingGradient ?? DEFAULT_GRADIENT),
-          }}
+          gradientColors={style.suggestions?.loadingGradient ?? DEFAULT_GRADIENT}
         />
       ))}
     </div>

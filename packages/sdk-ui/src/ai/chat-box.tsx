@@ -22,6 +22,8 @@ import { SuggestionsWithIntro } from './suggestions';
 import Toolbar from './toolbar';
 import { useChatSession } from './use-chat-session';
 import { useGetQueryRecommendationsInternal } from './use-get-query-recommendations';
+import AiDisclaimer from './ai-disclaimer';
+import ClickableMessage from './messages/clickable-message';
 
 export type ChatBoxProps = {
   contextTitle: string;
@@ -88,7 +90,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   );
 
   const { enableFollowupQuestions } = useChatConfig();
-  const { backgroundColor, secondaryTextColor } = useChatStyle();
+  const { backgroundColor } = useChatStyle();
 
   if (lastError?.message === CHAT_UNAVAILABLE_ERROR) {
     return (
@@ -125,15 +127,15 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
           {enableFollowupQuestions && lastNlqResponse && (
             <div className="csdk-flex csdk-flex-col csdk-gap-y-2">
               {lastNlqResponse.followupQuestions.slice(0, 2).map((question, i) => (
-                <TextMessage
+                <ClickableMessage
                   key={i}
                   align="right"
                   onClick={() => {
                     sendMessage(question);
                   }}
                 >
-                  {question}
-                </TextMessage>
+                  <div className="csdk-py-[7px] csdk-px-2">{question}</div>
+                </ClickableMessage>
               ))}
             </div>
           )}
@@ -151,16 +153,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
           disabled={isAwaitingResponse || isLoading}
           onClearHistoryClick={showClearHistoryOptions}
         />
-        <div
-          className="csdk-w-[392px] csdk-py-2 csdk-m-auto csdk-text-center csdk-text-ai-xs csdk-text-text-secondary csdk-whitespace-pre-wrap"
-          style={{
-            color: secondaryTextColor,
-          }}
-        >
-          Content is powered by AI, so surprises and mistakes are possible.
-          <br />
-          Please rate responses so we can improve!
-        </div>
+        <AiDisclaimer />
       </div>
     </>
   );

@@ -1,3 +1,281 @@
+import { ExpandedQueryModel, SimpleQueryModel } from '@/ai';
+
+export const MOCK_EXPANDED_QUERY_MODEL = {
+  jaql: {
+    datasource: { title: 'Sample ECommerce' },
+    metadata: [
+      // should remove "table", "column", and "datatype"
+      {
+        jaql: {
+          dim: '[Commerce.Condition]',
+          table: 'Commerce',
+          column: 'Condition',
+          datatype: 'text',
+          title: 'Condition',
+        },
+        panel: 'columns',
+      },
+      // should simplify simple formula to an agg measure
+      {
+        jaql: {
+          type: 'measure',
+          context: {
+            '[d6fb]': {
+              dim: '[Commerce.Revenue]',
+              table: 'Commerce',
+              column: 'Revenue',
+            },
+          },
+          formula: 'sum([d6fb])',
+          title: 'Total Revenue',
+        },
+        panel: 'measures',
+      },
+      // should simplify format by keeping only the date format specified
+      {
+        jaql: {
+          dim: '[Commerce.Date]',
+          level: 'months',
+          title: 'Months in Date',
+        },
+        format: {
+          mask: {
+            days: 'shortDate',
+            isdefault: true,
+            minutes: 'HH:mm',
+            months: 'M-yy',
+            quarters: 'yyyy Q',
+            weeks: 'ww yyyy',
+            years: 'yyyy',
+          },
+        },
+        panel: 'measures',
+      },
+      // should remove format from filter
+      {
+        jaql: {
+          dim: '[Commerce.Date]',
+          level: 'years',
+          filter: {
+            from: '2012-01-01T00:00:00',
+            to: '2013-12-31T00:00:00',
+          },
+          title: 'Date from 2012 to 2013',
+        },
+        format: {
+          mask: {
+            days: 'shortDate',
+            isdefault: true,
+            minutes: 'HH:mm',
+            months: 'M-yy',
+            quarters: 'yyyy Q',
+            weeks: 'ww yyyy',
+            years: 'yyyy',
+          },
+        },
+        panel: 'scope',
+      },
+      // should simplify simple formula in filter.by
+      {
+        jaql: {
+          table: 'Brand',
+          column: 'Brand',
+          datatype: 'text',
+          title: 'Top 10 Brand by Total Revenue',
+          dim: '[Brand.Brand]',
+          filter: {
+            top: '10',
+            by: {
+              type: 'measure',
+              context: {
+                '[d6fb]': {
+                  dim: '[Commerce.Revenue]',
+                  table: 'Commerce',
+                  column: 'Revenue',
+                },
+              },
+              formula: ' sum([d6fb])',
+            },
+          },
+        },
+        panel: 'scope',
+      },
+    ],
+  },
+  queryTitle: 'Expanded Query Title',
+  chartRecommendations: {
+    chartFamily: 'table',
+    chartType: 'table',
+    axesMapping: { columns: [{ name: 'Condition' }, { name: 'Total Revenue' }] },
+  },
+} as ExpandedQueryModel;
+
+export const MOCK_SIMPLE_QUERY_MODEL = {
+  model: 'Sample ECommerce',
+  metadata: [
+    {
+      jaql: {
+        dim: '[Commerce.Condition]',
+        title: 'Condition',
+      },
+    },
+    {
+      jaql: {
+        dim: '[Commerce.Revenue]',
+        agg: 'sum',
+        title: 'Total Revenue',
+      },
+    },
+    {
+      jaql: {
+        dim: '[Commerce.Date]',
+        level: 'months',
+        title: 'Months in Date',
+      },
+      format: {
+        mask: {
+          months: 'M-yy',
+        },
+      },
+    },
+    {
+      jaql: {
+        dim: '[Commerce.Date]',
+        level: 'years',
+        filter: {
+          from: '2012-01-01T00:00:00',
+          to: '2013-12-31T00:00:00',
+        },
+        title: 'Date from 2012 to 2013',
+      },
+      panel: 'scope',
+    },
+    {
+      jaql: {
+        title: 'Top 10 Brand by Total Revenue',
+        dim: '[Brand.Brand]',
+        filter: {
+          top: '10',
+          by: {
+            dim: '[Commerce.Revenue]',
+            agg: 'sum',
+          },
+        },
+      },
+      panel: 'scope',
+    },
+  ],
+  chart: {
+    chartType: 'table',
+    dataOptions: {
+      columns: [
+        {
+          name: 'Condition',
+        },
+        {
+          name: 'Total Revenue',
+        },
+      ],
+    },
+  },
+  queryTitle: 'table showing expanded query title',
+} as SimpleQueryModel;
+
+export const MOCK_RE_EXPANDED_QUERY_MODEL = {
+  jaql: {
+    datasource: {
+      title: 'Sample ECommerce',
+    },
+    metadata: [
+      {
+        jaql: {
+          table: 'Commerce',
+          column: 'Condition',
+          datatype: 'text',
+          title: 'Condition',
+          dim: '[Commerce.Condition]',
+        },
+      },
+      {
+        jaql: {
+          table: 'Commerce',
+          column: 'Revenue',
+          datatype: 'numeric',
+          title: 'Total Revenue',
+          dim: '[Commerce.Revenue]',
+          agg: 'sum',
+        },
+      },
+      {
+        jaql: {
+          table: 'Commerce',
+          column: 'Date',
+          datatype: 'datetime',
+          title: 'Months in Date',
+          dim: '[Commerce.Date]',
+          level: 'months',
+        },
+        format: {
+          mask: {
+            months: 'M-yy',
+          },
+        },
+      },
+      {
+        jaql: {
+          table: 'Commerce',
+          column: 'Date',
+          datatype: 'datetime',
+          title: 'Date from 2012 to 2013',
+          dim: '[Commerce.Date]',
+          level: 'years',
+          filter: {
+            from: '2012-01-01T00:00:00',
+            to: '2013-12-31T00:00:00',
+          },
+        },
+        panel: 'scope',
+      },
+      {
+        jaql: {
+          table: 'Brand',
+          column: 'Brand',
+          datatype: 'text',
+          title: 'Top 10 Brand by Total Revenue',
+          dim: '[Brand.Brand]',
+          filter: {
+            top: '10',
+            by: {
+              table: 'Commerce',
+              column: 'Revenue',
+              datatype: 'numeric',
+              title: 'sum Revenue',
+              dim: '[Commerce.Revenue]',
+              agg: 'sum',
+            },
+          },
+        },
+        panel: 'scope',
+      },
+    ],
+  },
+  chartRecommendations: {
+    chartFamily: 'table',
+    chartType: 'table',
+    axesMapping: {
+      columns: [
+        {
+          name: 'Condition',
+        },
+        {
+          name: 'Total Revenue',
+        },
+      ],
+    },
+  },
+  queryTitle: 'table showing expanded query title',
+} as ExpandedQueryModel;
+
 export const MOCK_QUERY_YAML = `# bar chart of total of revenue by condition
 
 model: Sample ECommerce
@@ -19,7 +297,7 @@ metadata:
     panel: scope
   - jaql:
       title: Years
-      dim: "[Commerce.Date (Calendar)]"
+      dim: "[Commerce.Date]"
       level: years
       filter:
         members:
@@ -46,7 +324,7 @@ export const MOCK_CODE_REACT = `import { ChartWidget } from '@sisense/sdk-ui';
 import { measureFactory, filterFactory } from '@sisense/sdk-data';
 import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
 
-export default function App() {
+export default function CodeExample() {
   return (
     <ChartWidget
       title={'bar chart of total of revenue by condition'}

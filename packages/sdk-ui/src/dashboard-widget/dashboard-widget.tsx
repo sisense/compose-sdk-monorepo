@@ -24,14 +24,17 @@ import { WidgetModel } from '../models';
  * To learn more about using Sisense Fusion Widgets in Compose SDK,
  * see [Sisense Fusion Widgets](/guides/sdk/guides/charts/guide-fusion-widgets.html).
  *
- * @example
- * The example below renders a dashboard widget with the specified widget and dashboard OIDs.
- * ```tsx
- * <DashboardWidget
- *   widgetOid={'64473e07dac1920034bce77f'}
- *   dashboardOid={'6441e728dac1920034bce737'}
+ * ## Example
+ *
+ * Display two dashboard widgets from a Fusion Embed instance.
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=fusion-assets%2Ffusion-widgets&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
  * />
- * ```
+ *
  * @group Fusion Embed
  * @fusionEmbed
  */

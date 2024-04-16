@@ -7,7 +7,22 @@ title: LineChart
 > **LineChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component displaying data as a series of points connected by a line. Used to show trends or changes over time.
-See [Line Chart](https://docs.sisense.com/main/SisenseLinux/line-chart.htm) for more information.
+
+## Example
+
+Line chart displaying total revenue per quarter from the Sample ECommerce data model.
+
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts%2Fline-chart&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
+
+Additional Line Chart examples:
+
+- [Curved Line Chart](https://csdk-playground.sisense.com/?example=charts%2Fline-chart-spline)
+- [Styled Line Chart](https://csdk-playground.sisense.com/?example=charts%2Fline-chart-styled)
 
 ## Parameters
 
@@ -21,23 +36,3 @@ See [Line Chart](https://docs.sisense.com/main/SisenseLinux/line-chart.htm) for 
 `null` \| `ReactElement`\< `any`, `any` \>
 
 Line Chart component
-
-## Example
-
-An example of using the component to visualize the `Sample ECommerce` data source:
-```ts
-<LineChart
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.Date.Years],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-    breakBy: [DM.Commerce.Gender],
-  }}
-  filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
-  onDataPointClick= {(point, nativeEvent) => {
-    console.log('clicked', point, nativeEvent);
-  }}
-/>
-```
-
-<img src="../../../img/line-chart-example-1.png" width="800px" />

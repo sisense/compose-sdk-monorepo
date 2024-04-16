@@ -15,8 +15,7 @@ export interface DataModel {
 }
 
 /**
- * Common interface for elements of
- * [dimensional modeling](https://docs.sisense.com/main/SisenseLinux/data-model-building-practices.htm?tocpath=Modeling%20Data%7C_____4).
+ * Common interface for elements of a dimensional model.
  *
  * @internal
  */
@@ -73,6 +72,13 @@ export interface Element {
    * @internal
    */
   skipValidation?: boolean;
+
+  /**
+   * Optional CSDK code to initialize this element
+   *
+   * @internal
+   */
+  composeCode?: string;
 }
 
 /**
@@ -244,9 +250,6 @@ export interface Dimension extends Element, Attribute {
 
 /**
  * Date Dimension extending {@link Dimension}.
- *
- * See [here](https://docs.sisense.com/main/SisenseLinux/date-and-time-fields.htm)
- * for more details on Date and Time Resolution for ElastiCubes and for Live Models.
  */
 export interface DateDimension extends Dimension {
   /**
@@ -311,9 +314,9 @@ export interface DateDimension extends Dimension {
 }
 
 /**
- * Common interface of an Attribute as defined in
- * [Dimensional Modeling](https://docs.sisense.com/main/SisenseLinux/data-model-building-practices.htm?tocpath=Modeling%20Data%7C_____4).
- * It is an extension of a {@link Column} in a generic {@link Data | Data Set}.
+ * Common interface of an attribute as in a dimensional model.
+ *
+ * An attribute is an extension of a {@link Column} in a generic {@link Data | data set}.
  */
 export interface Attribute extends Element {
   /**
@@ -412,6 +415,7 @@ export interface CustomFormulaContext {
 export interface PivotAttribute {
   attribute: Attribute;
   includeSubTotals?: boolean;
+  sort?: PivotRowsSort;
 }
 
 /**
@@ -526,3 +530,52 @@ export type FilterRelationsModelIdNode = { instanceId: string };
  * @internal
  */
 export type FilterRelationsModelBracketNode = { value: FilterRelationsModelNode };
+
+/** Sorting direction, either in Ascending order, Descending order, or None */
+export type SortDirection = 'sortAsc' | 'sortDesc' | 'sortNone';
+
+/**
+ * Sorting configuration for pivot "rows".
+ *
+ * This configuration allows sorting pivot "rows" either by their data or by data in a specific "values" column.
+ *
+ * @example
+ * Examples of sorting configurations for various scenarios:
+ *
+ * (1) Row sorted in ascending order by its data:
+ * ```ts
+ * { direction: 'sortAsc' }
+ * ```
+ *
+ * (2) Row sorted in descending order by data in the first "values" column (index 0):
+ * ```ts
+ * {
+ *    direction: 'sortDesc',
+ *    by: {
+ *      valuesIndex: 0,
+ *    }
+ * }
+ * ```
+ *
+ * (3) Row sorted in ascending order by data in the second "values" column (index 1) under the "columns" values of "Female" (for Gender) and "0-18" (for AgeRange):
+ * ```ts
+ * {
+ *    direction: 'sortAsc',
+ *    by: {
+ *      valuesIndex: 1,
+ *      columnsMembersPath: ['Female', '0-18']
+ *    }
+ * }
+ * ```
+ */
+export type PivotRowsSort = {
+  /** {@inheritDoc SortDirection} */
+  direction: SortDirection;
+  /** Sorting target configuration, allowing sorting "rows" by the data in a specific "values" column */
+  by?: {
+    /** Index of the target "values" item (measure) */
+    valuesIndex?: number;
+    /** Path to the target column if selected "columns" items (dimensions) are involved */
+    columnsMembersPath?: (string | number)[];
+  };
+};

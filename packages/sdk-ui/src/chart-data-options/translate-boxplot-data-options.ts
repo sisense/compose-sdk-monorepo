@@ -9,7 +9,6 @@ import {
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
   BoxplotChartDataOptionsInternal,
-  AnyColumn,
   StyledColumn,
   BoxWhiskerType,
   StyledMeasureColumn,
@@ -89,12 +88,16 @@ export const translateBoxplotDataOptions = (
   boxplotDataOptions: BoxplotChartDataOptions | BoxplotChartCustomDataOptions,
 ): BoxplotChartDataOptionsInternal => {
   const { category } = boxplotDataOptions;
-  let values: AnyColumn[];
+  let values: (MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn)[];
   let outliers: Column | StyledColumn | undefined;
   let valueTitle: string;
 
   if (isBoxplotCustomDataOptions(boxplotDataOptions)) {
-    values = boxplotDataOptions.value;
+    values = boxplotDataOptions.value as (
+      | MeasureColumn
+      | CalculatedMeasureColumn
+      | StyledMeasureColumn
+    )[];
     valueTitle = boxplotDataOptions.valueTitle;
     outliers = boxplotDataOptions.outliers?.[0];
   } else {

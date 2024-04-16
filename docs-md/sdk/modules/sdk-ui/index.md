@@ -261,6 +261,7 @@ TypeScript type aliases for components and hooks listed above
 - [PivotQueryLoadingState](type-aliases/type-alias.PivotQueryLoadingState.md)
 - [PivotQueryState](type-aliases/type-alias.PivotQueryState.md)
 - [PivotQuerySuccessState](type-aliases/type-alias.PivotQuerySuccessState.md)
+- [PivotRowsSort](type-aliases/type-alias.PivotRowsSort.md)
 - [PolarSubtype](type-aliases/type-alias.PolarSubtype.md)
 - [QueryByWidgetIdState](type-aliases/type-alias.QueryByWidgetIdState.md)
 - [QueryErrorState](type-aliases/type-alias.QueryErrorState.md)

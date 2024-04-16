@@ -166,8 +166,8 @@ function transformCustomFormulaJaql(
  *
  * You can nest custom formulas by placing one inside the `formula` parameter of another.
  *
- * Note: [Shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm) must be
- * fetched prior to use (see {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}).
+ * Note: To use [shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm)
+ * from a Fusion Embed instance, you must fetch them first using {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}.
  *
  * @example
  * An example of constructing a custom formulas using dimensions, measures, and nested custom formulas

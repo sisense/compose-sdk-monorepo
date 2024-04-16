@@ -6,9 +6,19 @@ title: BoxplotChart
 
 > **BoxplotChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
-A React component representing data in a way that visually describes the distribution, variability,
-and center of a data set along an axis.
-See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-plot.htm) for more information.
+A React component representing data in a way that visually describes the distribution,
+variability, and center of a data set along an axis.
+
+## Example
+
+Boxplot chart displaying data from the Sample ECommerce data model.
+
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts%2Fboxplot-chart&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ## Parameters
 
@@ -22,29 +32,3 @@ See [Boxplot Chart](https://docs.sisense.com/main/SisenseLinux/box-and-whisker-p
 `null` \| `ReactElement`\< `any`, `any` \>
 
 Boxplot Chart component
-
-## Example
-
-An example of using the component to visualize the `Sample ECommerce` data source:
-```ts
-<BoxplotChart
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Category.Category],
-    value: [DM.Commerce.Cost],
-    boxType: 'iqr',
-    outliersEnabled: true,
-  }}
-  filters={[
-    filterFactory.members(DM.Category.Category, ['Calculators', 'DVD Players', 'Routers']),
-    filterFactory.members(DM.Commerce.AgeRange, ['19-24']),
-  ]}
-  styleOptions={{
-    seriesLabels: {
-      enabled: true,
-    }
-  }}
-/>
-```
-
-<img src="../../../img/boxplot-chart-example-1.png" width="600px" />

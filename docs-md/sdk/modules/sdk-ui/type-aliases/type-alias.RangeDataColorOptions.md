@@ -30,10 +30,6 @@ with 2 more colors in between for a total of 4 colors:
 }
 ```
 
-## See
-
-[Selecting Colors in Widgets](https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm)
-
 ## Type declaration
 
 ### `maxColor`

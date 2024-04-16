@@ -4,9 +4,9 @@ title: Attribute
 
 # Interface Attribute
 
-Common interface of an Attribute as defined in
-[Dimensional Modeling](https://docs.sisense.com/main/SisenseLinux/data-model-building-practices.htm?tocpath=Modeling%20Data%7C_____4).
-It is an extension of a [Column](interface.Column.md) in a generic [Set](interface.Data.md).
+Common interface of an attribute as in a dimensional model.
+
+An attribute is an extension of a [Column](interface.Column.md) in a generic [data set](interface.Data.md).
 
 ## Methods
 

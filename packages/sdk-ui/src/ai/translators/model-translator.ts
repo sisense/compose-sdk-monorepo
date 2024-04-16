@@ -1,8 +1,13 @@
 /* eslint-disable max-lines */
-import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import {
+  createFilterFromJaql,
+  DataSource,
+  Filter,
+  FilterJaql,
+  FilterRelations,
+} from '@sisense/sdk-data';
 import { ChartRecommendations } from '@/ai';
 import { getChartOptions, getTableOptions } from '@/ai/messages/get-widget-options';
-import { createJaqlElement } from '@/ai/messages/jaql-element';
 import { ChartWidgetProps, TableWidgetProps } from '@/props';
 import { TranslatableError } from '@/translation/translatable-error';
 import {
@@ -13,10 +18,11 @@ import {
 } from '@/ai/translators/types';
 import { MetadataItem } from '@sisense/sdk-query-client';
 import { ChartDataOptions, ChartType, WidgetStyleOptions } from '@/types';
-import { toKebabCase } from '@/ai/translators/utils';
+import { isEmptyQueryModel, toKebabCase } from '@/ai/translators/utils';
 import { generateCode } from '@/ai/translators/generate-code';
 import { stringifyProps } from '@/ai/translators/translate-props-to-code';
 import { TableDataOptions } from '@/chart-data-options/types';
+import { stringifyFilterList } from '@/ai/translators/translate-filters-to-code';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;
@@ -66,9 +72,10 @@ export class ModelTranslator {
    * Gets filters from metadata.
    *
    * @param metadata - metadata items
+   * @return array of Filter objects
    */
   private getFilters = (metadata: MetadataItem[]): Filter[] => {
-    return metadata.map(createJaqlElement) as unknown as Filter[];
+    return metadata.map((item) => createFilterFromJaql(item.jaql as FilterJaql));
   };
 
   /**
@@ -99,7 +106,7 @@ export class ModelTranslator {
    */
   // eslint-disable-next-line max-lines-per-function
   toChart(): ChartWidgetModel | undefined {
-    if (!this.queryModel) {
+    if (isEmptyQueryModel(this.queryModel)) {
       return;
     }
 
@@ -199,7 +206,11 @@ export class ModelTranslator {
     if (!filters) {
       return '';
     }
-    return stringifyProps(filters, 2);
+    if (Array.isArray(filters)) {
+      return stringifyFilterList(filters, 2);
+    }
+
+    throw new TranslatableError('errors.filterRelationsNotSupported');
   };
 
   private stringifyDataOptions = (dataOptions: ChartDataOptions | TableDataOptions): string => {
@@ -207,14 +218,14 @@ export class ModelTranslator {
   };
 
   private stringifyExtraImports = (props: ChartWidgetProps | TableWidgetProps): string => {
-    let extraImportsString = '';
-    const filters = props.filters;
-    if (filters && Array.isArray(filters) && filters.length > 0) {
-      extraImportsString = `import { measureFactory, filterFactory } from '@sisense/sdk-data';`;
-    } else {
-      extraImportsString = `import { measureFactory } from '@sisense/sdk-data';`;
+    const importNames = ['measureFactory'];
+
+    const { filters } = props;
+    if (Array.isArray(filters) && filters.length > 0) {
+      importNames.push('filterFactory');
     }
-    return extraImportsString;
+
+    return `import { ${importNames.join(', ')} } from '@sisense/sdk-data';`;
   };
 
   private getChartWidgetCode = (props: ChartWidgetProps, uiFramework: UiFramework): string => {

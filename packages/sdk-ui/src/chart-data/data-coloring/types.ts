@@ -1,7 +1,5 @@
 /**
  * All possible color options for data.
- *
- * @see {@link https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm | Selecting Colors in Widgets}
  */
 export type DataColorOptions =
   | string
@@ -21,7 +19,6 @@ export type DataColorOptions =
  *   color: 'red',
  * }
  * ```
- * @see {@link https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm | Selecting Colors in Widgets}
  */
 export type UniformDataColorOptions = {
   /**
@@ -57,7 +54,6 @@ export type UniformDataColorOptions = {
  *   maxColor: 'blue',
  * }
  * ```
- * @see {@link https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm | Selecting Colors in Widgets}
  */
 export type RangeDataColorOptions = {
   /**
@@ -111,7 +107,6 @@ export type RangeDataColorOptions = {
  *   defaultColor: 'red',
  * }
  * ```
- * @see {@link https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm | Selecting Colors in Widgets}
  */
 export type ConditionalDataColorOptions = {
   /**
@@ -131,9 +126,8 @@ export type ConditionalDataColorOptions = {
 /**
  * Color condition for {@link ConditionalDataColorOptions} represented as a logical expression.
  *
- * See {@link ConditionalDataColorOptions} for examples.
+ * See {@link ConditionalDataColorOptions} for usage examples.
  *
- * @see {@link https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm | Selecting Colors in Widgets}
  */
 export type DataColorCondition = {
   /**

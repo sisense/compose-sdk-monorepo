@@ -25,6 +25,12 @@ import {
   isDataSourceInfo,
 } from '@sisense/sdk-data';
 import { applyHighlightFilters, matchHighlightsWithAttributes } from './metadata/highlights.js';
+import {
+  getPivotMetadataStats,
+  normalizeLastRowSorting,
+  PivotMetadataStats,
+  preparePivotRowJaqlSortOptions,
+} from './pivot/pivot-query-utils.js';
 
 const JAQL_BY_CSDK = 'ComposeSDK';
 
@@ -174,9 +180,17 @@ function jaqlPivotAttribute(
   a: Attribute | PivotAttribute,
   panel: string,
   index: number,
+  metadataStats: PivotMetadataStats,
 ): MetadataItem {
+  const jaql = {
+    ...(isPivotAttribute(a) ? a.attribute.jaql(true) : a.jaql(true)),
+    ...(panel === 'rows' &&
+      isPivotAttribute(a) &&
+      a.sort &&
+      preparePivotRowJaqlSortOptions(a.sort, index, metadataStats)),
+  };
   return {
-    ...(isPivotAttribute(a) ? a.attribute.jaql() : a.jaql()),
+    jaql,
     ...(isPivotAttribute(a) && a.includeSubTotals ? { format: { subtotal: true } } : {}),
     panel,
     field: { index: index, id: `${panel}-${index}` },
@@ -209,14 +223,15 @@ function preparePivotQueryMetadata(
 ): MetadataItem[] {
   const { rowsAttributes, columnsAttributes, measures, filters, filterRelations, highlights } =
     pivotMetadataDescription;
+  const metadataStats = getPivotMetadataStats(rowsAttributes, columnsAttributes, measures);
   let fieldIndex = 0; // used as a global counter to build field.index in Jaql MetadataItem
   const rowsAttributesMetadata: MetadataItem[] = rowsAttributes.map((a, index) =>
-    jaqlPivotAttribute(a, 'rows', index + fieldIndex),
+    jaqlPivotAttribute(a, 'rows', index + fieldIndex, metadataStats),
   );
   fieldIndex = fieldIndex + rowsAttributes.length;
 
   const columnsAttributesMetadata: MetadataItem[] = columnsAttributes.map((a, index) =>
-    jaqlPivotAttribute(a, 'columns', index + fieldIndex),
+    jaqlPivotAttribute(a, 'columns', index + fieldIndex, metadataStats),
   );
   fieldIndex = fieldIndex + columnsAttributes.length;
 
@@ -237,7 +252,11 @@ function preparePivotQueryMetadata(
     shouldSkipHighlightsWithoutAttributes,
   );
 
-  return [...attributesMetadata, ...measuresMetadata, ...filtersMetadata];
+  const metadata = [...attributesMetadata, ...measuresMetadata, ...filtersMetadata];
+
+  normalizeLastRowSorting(metadata, metadataStats);
+
+  return metadata;
 }
 
 /**

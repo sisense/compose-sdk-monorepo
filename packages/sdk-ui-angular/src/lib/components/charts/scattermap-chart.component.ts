@@ -5,7 +5,6 @@ import { ArgumentsAsObject } from '../../types';
 
 /**
  * An Angular component that allows to visualize geographical data as data points on a map.
- * See [Scattermap Chart](https://docs.sisense.com/main/SisenseLinux/scatter-map.htm) for more information.
  *
  * @example
  * ```html

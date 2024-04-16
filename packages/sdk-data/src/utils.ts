@@ -7,7 +7,10 @@ import {
   FilterRelationsJaqlNode,
   DataSource,
   DataSourceInfo,
+  FilterJaql,
 } from './index.js';
+import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-jaql-util.js';
+import { FilterJaqlInternal } from './dimensional-model/filters/utils/modern-analytics-filters/types.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
@@ -86,6 +89,7 @@ export const getFilterListAndRelations = (
 
 /**
  * Gets the name of the data source
+ *
  * @internal
  */
 export function getDataSourceName(dataSource: DataSource): string {
@@ -94,8 +98,24 @@ export function getDataSourceName(dataSource: DataSource): string {
 
 /**
  * Checks if the provided 'dataSource' is a data source info structure that contains more than just the data source name.
+ *
  * @internal
  */
 export function isDataSourceInfo(dataSource: DataSource): dataSource is DataSourceInfo {
   return typeof dataSource === 'object' && 'type' in dataSource && 'title' in dataSource;
 }
+
+/**
+ * Creates a filter from a JAQL object.
+ *
+ * @param jaql - The filter JAQL object.
+ * @param instanceid - The instance ID.
+ * @returns - The created Filter object.
+ * @internal
+ */
+export const createFilterFromJaql = (jaql: FilterJaql, instanceid?: string): Filter => {
+  // translation logic is based on FilterJaqlInternal type (from internal modern-analytics-filters)
+  // TODO reconcile FilterJaql and FilterJaqlInternal
+  const jaqlInternal = jaql as FilterJaqlInternal;
+  return createFilterFromJaqlInternal(jaqlInternal, instanceid);
+};

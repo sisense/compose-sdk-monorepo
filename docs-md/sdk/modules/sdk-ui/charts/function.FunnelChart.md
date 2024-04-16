@@ -7,7 +7,17 @@ title: FunnelChart
 > **FunnelChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component representing data progressively decreasing in size or quantity through a funnel shape.
-See [Funnel Chart](https://docs.sisense.com/main/SisenseLinux/funnel-chart.htm) for more information.
+
+## Example
+
+Funnel chart displaying data from the Sample ECommerce data model.
+
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts%2Ffunnel-chart&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ## Parameters
 
@@ -21,42 +31,3 @@ See [Funnel Chart](https://docs.sisense.com/main/SisenseLinux/funnel-chart.htm) 
 `null` \| `ReactElement`\< `any`, `any` \>
 
 Funnel Chart component
-
-## Example
-
-An example of visualizing sales funnel data:
-```ts
-<FunnelChart
-  dataSet={{
-    columns: [
-      { name: 'Stage', type: 'string' },
-      { name: 'Unique Users', type: 'number' },
-    ],
-    rows: [
-      ['Website visits', 15654],
-      ['Downloads', 4064],
-      ['Requested price list', 1987],
-      ['Invoice sent', 976],
-      ['Finalized', 846],
-    ],
-  }}
-  dataOptions={{
-    category: [
-      {
-        name: 'Stage',
-        type: 'string',
-      },
-    ],
-    value: [
-      {
-        name: 'Unique Users',
-        aggregation: 'sum',
-      },
-    ],
-  }}
-/>
-```
-
-<img src="../../../img/funnel-chart-example-1.png" width="800"/>
-
-Note that the chart sorts the measure, `Unique Users`, in descending order by default.

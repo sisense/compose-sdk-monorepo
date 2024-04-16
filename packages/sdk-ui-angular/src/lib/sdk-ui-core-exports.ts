@@ -54,6 +54,7 @@ export type {
   ScattermapLocationLevel,
   StyledColumn,
   StyledMeasureColumn,
+  PivotRowsSort,
 
   // Style Options:
   ChartStyleOptions,

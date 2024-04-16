@@ -42,6 +42,7 @@ export const translation = {
       onlyTabularWidgetsSupported: 'Only tabular widgets are supported for method {{methodName}}',
     },
     unknownFilterInFilterRelations: 'Filter relations contain unknown filter',
+    filterRelationsNotSupported: 'Filter relations not supported yet',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',

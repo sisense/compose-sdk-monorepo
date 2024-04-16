@@ -10,7 +10,7 @@ const config: UserConfig = {
       },
     },
     coverage: {
-      exclude: [],
+      exclude: ['src/lib/components', 'src/lib/sdk-ui.module.ts'],
     },
   },
 };

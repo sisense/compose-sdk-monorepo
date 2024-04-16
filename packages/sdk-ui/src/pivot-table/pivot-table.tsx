@@ -21,9 +21,7 @@ const DEFAULT_PIVOT_TABLE_SIZE = {
 };
 
 /**
- * Pivot Table with pagination.
- *
- * See [Pivot Tables](https://docs.sisense.com/main/SisenseLinux/pivot.htm) for more information.
+ * Pivot table with pagination.
  *
  * @example
  * (1) Example of PivotTable from the `Sample ECommerce` data model:
@@ -55,6 +53,48 @@ const DEFAULT_PIVOT_TABLE_SIZE = {
  *   styleOptions={{ width: 1000, height: 600, rowsPerPage: 50 }}
  * />
  * ```
+ *
+ * (2) Example of PivotTable with the predefined sorting configuration:
+ * - Sort "Condition" row by its values in Ascending order. This is equivalent to users clicking on the "Condition" row heading and hit Sort Ascending (A-Z)
+ * - Sort "Category" row by "Total Cost" values under the "columns" values of "Female" (for Gender) and "0-18" (for AgeRange) in Descending order.
+ * This is equivalent to users clicking on the "Total Cost" value heading under "Female" (for Gender) and "0-18" (for AgeRange) and sort "Category (Subtotals)" in Descending (9-1)
+ *
+ * ```tsx
+ * <PivotTable
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     rows: [
+ *       {
+ *         column: DM.Category.Category,
+ *         includeSubTotals: true,
+ *         sortType: {
+ *           direction: 'sortDesc',
+ *           by: {
+ *             valuesIndex: 0,
+ *             columnsMembersPath: ['Female', '0-18']
+ *           }
+ *         }
+ *       },
+ *       {
+ *         column: DM.Commerce.Condition,
+ *         sortType: {
+ *           direction: 'sortAsc'
+ *         }
+ *       },
+ *     ],
+ *     columns: [
+ *       DM.Commerce.Gender,
+ *       DM.Commerce.AgeRange
+ *     ],
+ *     values: [
+ *       measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+ *       measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
+ *     ],
+ *   }}
+ * />
+ * ```
+ *
+ * <img src="media://pivot-sorting-example-1.png" width="800px" />
  * @param props - Pivot Table properties
  * @returns Pivot Table component
  * @group Data Grids
@@ -163,7 +203,7 @@ export const PivotTable = asSisenseComponent({
       }}
       onSizeChange={updateSize}
     >
-      <div ref={nodeRef} aria-label="pivot-table-root" />;
+      <div ref={nodeRef} aria-label="pivot-table-root" />
     </DynamicSizeContainer>
   );
 });

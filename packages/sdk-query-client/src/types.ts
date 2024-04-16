@@ -101,6 +101,41 @@ export type ExecutingPivotQueryResult = {
   cancel: (reason?: string) => Promise<void>;
 };
 
+interface DecimalAbbreviations {
+  k: boolean;
+  m: boolean;
+  b: boolean;
+  t: boolean;
+}
+
+export enum CurrencyPosition {
+  PRE = 'pre',
+  POST = 'post',
+}
+
+export type NumericMask = {
+  isdefault?: boolean;
+  abbreviations?: DecimalAbbreviations;
+  decimals?: 'auto' | number | string;
+  currency?: { symbol: string; position: CurrencyPosition };
+  percent?: boolean;
+  number?: { separated: boolean };
+  separated?: boolean;
+  type?: string;
+};
+
+export type DatetimeMask = {
+  isdefault?: boolean;
+  years: string;
+  quarters: string;
+  months: string;
+  weeks: string;
+  minutes: string;
+  days: string;
+  type: string;
+  dateAndTime?: string;
+};
+
 export type MetadataItem = {
   instanceid?: string;
   measure?: MetadataItemJaql;
@@ -108,9 +143,7 @@ export type MetadataItem = {
   panel?: string;
   isScope?: boolean;
   format?: {
-    mask?: {
-      [level: string]: string | undefined;
-    };
+    mask?: Partial<DatetimeMask> | Partial<NumericMask>;
     number?: string;
     /* PIVOT OPTIONS START */
     subtotal?: boolean;
@@ -157,11 +190,19 @@ export type MetadataItemJaql = {
     };
   };
   title?: string;
+  type?: string;
   formula?: string;
   context?: {
     [itemId: string]: MetadataItemJaql;
   };
   filter?: MetadataItem;
+  sortDetails?: {
+    dir: string;
+    field?: number;
+    measurePath?: Record<number, string | number>;
+    sortingLastDimension?: boolean;
+    initialized?: boolean;
+  };
 };
 
 export type JaqlQueryPayload = QueryOptions & {

@@ -12,10 +12,9 @@ Configurations for Theme.
 
 Two options are supported:
 
-(1) `ThemeOid` -- Theme identifier as defined in the Sisense application (`Admin page` > `Look and Feel`).
-See [Sisense documentation](https://docs.sisense.com/main/SisenseLinux/customizing-the-sisense-user-interface.htm)
-for more details.
+(1) `ThemeSettings` -- Custom theme settings that override the default theme settings.
 
 OR
 
-(2) `ThemeSettings` -- Custom theme settings that override the default theme settings.
+(2) `ThemeOid` -- Theme identifier as defined in a Fusion Embed instance (**Admin > App Configuration > Look and Feel**).
+See [Customizing the Sisense User Interface](https://docs.sisense.com/main/SisenseLinux/customizing-the-sisense-user-interface.htm) for more details.

@@ -41,3 +41,13 @@ The input prompt text to show in the chat input box
 Number of recommended queries that should be shown in a chat session
 
 If not specified, the default value is `4`
+
+***
+
+### welcomeText
+
+> **welcomeText**?: `string` \| `false`
+
+The welcome text to show at the top of a chat session.
+
+A value of `false` will hide the welcome text.

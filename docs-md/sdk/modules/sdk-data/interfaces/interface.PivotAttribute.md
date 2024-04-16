@@ -17,3 +17,9 @@ Wrapped attribute with additional options for pivot table
 ### includeSubTotals
 
 > **includeSubTotals**?: `boolean`
+
+***
+
+### sort
+
+> **sort**?: [`PivotRowsSort`](../type-aliases/type-alias.PivotRowsSort.md)

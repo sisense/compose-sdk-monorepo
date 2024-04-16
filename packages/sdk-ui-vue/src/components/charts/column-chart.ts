@@ -7,7 +7,6 @@ import { setupHelper } from '../../setup-helper';
 /**
  * A Vue component representing categorical data with vertical rectangular bars
  * whose heights are proportional to the values that they represent.
- * See [Column Chart](https://docs.sisense.com/main/SisenseLinux/column-chart.htm) for more information.
  *
  * @example
  * Here's how you can use the ColumnChart component in a Vue application:

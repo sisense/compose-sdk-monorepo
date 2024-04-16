@@ -350,7 +350,7 @@ export enum DataType {
 }
 
 /** @internal */
-export enum SortDirection {
+export enum JaqlSortDirection {
   ASC = 'asc',
   DESC = 'desc',
 }
@@ -367,7 +367,7 @@ export type BaseJaql = {
   column: string;
   title: string;
   level?: 'years' | 'quarters' | 'months' | 'weeks' | 'minutes' | 'days';
-  sort?: SortDirection;
+  sort?: JaqlSortDirection;
 };
 
 /** @internal */
@@ -379,14 +379,20 @@ export type FormulaContext = BaseJaql | FormulaJaql | FilterJaql;
 /** @internal */
 export type FormulaJaql = {
   type?: 'measure';
-  sort?: SortDirection;
+  sort?: JaqlSortDirection;
   title: string;
   formula: string;
   context?: Record<FormulaID, FormulaContext>;
 };
 
 /** @internal */
-export type BaseFilter = IncludeAllFilter | IncludeMembersFilter | ExcludeMembersFilter;
+export type BaseFilter =
+  | IncludeAllFilter
+  | IncludeMembersFilter
+  | ExcludeMembersFilter
+  | JaqlNumericFilter
+  | AndFilter<JaqlNumericFilter>
+  | OrFilter<JaqlNumericFilter>;
 
 /** @internal */
 export type BackgroundFilter = BaseFilter & {
@@ -420,4 +426,30 @@ export type FilterJaql = BaseJaql & {
   filter: BaseFilter & {
     filter?: BackgroundFilter | TurnOffMembersFilter;
   };
+};
+
+type NumericFilterValue = number | FormulaJaql;
+
+/** @internal */
+export type JaqlNumericFilter = {
+  equals?: NumericFilterValue;
+  doesntEqual?: NumericFilterValue;
+  toNotEqual?: NumericFilterValue;
+  to?: NumericFilterValue;
+  fromNotEqual?: NumericFilterValue;
+  from?: NumericFilterValue;
+  '='?: NumericFilterValue;
+  '<'?: NumericFilterValue;
+  '>'?: NumericFilterValue;
+  '>='?: NumericFilterValue;
+  '<='?: NumericFilterValue;
+};
+
+type AndFilter<FilterItem> = {
+  and: FilterItem[];
+};
+
+/** @internal */
+export type OrFilter<FilterItem> = {
+  or: FilterItem[];
 };

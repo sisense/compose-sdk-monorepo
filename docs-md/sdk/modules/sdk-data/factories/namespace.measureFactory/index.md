@@ -7,8 +7,6 @@ title: measureFactory
 Functions to create measures that aggregate, summarize, and accumulate data,
 plus show changes in data over time.
 
-They are similar to [Formulas](https://docs.sisense.com/main/SisenseLinux/build-formulas.htm) in Sisense.
-
 Measures created with these functions can be used in the data options of UI components such as
 [Chart](../../../sdk-ui/interfaces/interface.ChartProps.md), [ChartWidget](../../../sdk-ui/interfaces/interface.ChartWidgetProps.md),
 and [ExecuteQuery](../../../sdk-ui/interfaces/interface.ExecuteQueryProps.md).

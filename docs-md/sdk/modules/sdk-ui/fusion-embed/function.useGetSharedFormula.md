@@ -6,11 +6,11 @@ title: useGetSharedFormula
 
 > **useGetSharedFormula**(...`args`): [`SharedFormulaState`](../type-aliases/type-alias.SharedFormulaState.md)
 
-Fetch a [shared formula](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm) from the Sisense instance
+Fetch a [shared formula](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm) from the a Fusion Embed instance.
 
-Formula can be identified either by `oid` or by name and data source pair
+The formula can be identified either by `oid` or by name and data source pair.
 
-When the retrieval is successful but the shared formula is not found, the result is altered from being `undefined` to `null`
+When the retrieval is successful but the shared formula is not found, the resulting `formula` is `null`. When the retrieval is not successful the resulting `formula` is `undefined`.
 
 ## Parameters
 

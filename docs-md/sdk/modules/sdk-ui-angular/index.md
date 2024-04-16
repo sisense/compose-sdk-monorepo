@@ -163,6 +163,7 @@ TypeScript type aliases for components and services listed above
 - [Navigator](type-aliases/type-alias.Navigator.md)
 - [NumberFormatConfig](type-aliases/type-alias.NumberFormatConfig.md)
 - [PieSubtype](type-aliases/type-alias.PieSubtype.md)
+- [PivotRowsSort](type-aliases/type-alias.PivotRowsSort.md)
 - [PolarSubtype](type-aliases/type-alias.PolarSubtype.md)
 - [RangeDataColorOptions](type-aliases/type-alias.RangeDataColorOptions.md)
 - [ScatterChartType](type-aliases/type-alias.ScatterChartType.md)

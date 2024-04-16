@@ -8,11 +8,7 @@ title: DataColorCondition
 
 Color condition for [ConditionalDataColorOptions](type-alias.ConditionalDataColorOptions.md) represented as a logical expression.
 
-See [ConditionalDataColorOptions](type-alias.ConditionalDataColorOptions.md) for examples.
-
-## See
-
-[Selecting Colors in Widgets](https://docs.sisense.com/main/SisenseLinux/selecting-colors-in-widgets.htm)
+See [ConditionalDataColorOptions](type-alias.ConditionalDataColorOptions.md) for usage examples.
 
 ## Type declaration
 

@@ -86,28 +86,23 @@ export type WidgetModelSuccessState = {
 };
 
 /**
- * React hook that retrieves an existing widget model from the Sisense instance.
+ * React hook that retrieves an existing widget model from a Fusion Embed instance.
  *
- * @example
- * An example of retrieving an existing widget model from the Sisense instance:
- ```tsx
-  const { widget, isLoading, isError } = useGetWidgetModel({
-    dashboardOid: '6448665edac1920034bce7a8',
-    widgetOid: '6448665edac1920034bce7a8',
-  });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error</div>;
-  }
-  if (widget) {
-    return (
-      <Chart {...widget.getChartProps()} />
-    );
-  }
-  return null;
- ```
+ * ## Example
+ *
+ * Retrieve a widget model and use it to populate a `Chart` component
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=fusion-assets%2Fuse-get-widget-model&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
+ * />
+ *
+ * Additional `useGetWidgetModel` examples:
+ *
+ * - [Modify Chart Type](https://csdk-playground.sisense.com/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
+ *
  * @param params - Parameters of the widget to be retrieved
  * @returns Widget load state that contains the status of the execution, the result widget model, or the error if one has occurred
  * @group Fusion Embed

@@ -28,6 +28,8 @@ import {
   DateRangeFilter,
   RelativeDateFilter,
 } from './filters.js';
+import { FilterJaql } from '../types.js';
+import { createGenericFilter } from './utils/filter-jaql-util.js';
 
 // LOGICAL FILTERS
 
@@ -931,4 +933,18 @@ export namespace logic {
     left: relate(left),
     right: relate(right),
   });
+}
+
+// CUSTOM FILTER
+
+/**
+ * Creates a filter from JAQL
+ *
+ * @param jaql - Filter Jaql
+ * @param instanceid - Filter instance id
+ * @returns A filter instance
+ * @internal
+ */
+export function customFilter(jaql: any, instanceid?: string): Filter {
+  return createGenericFilter(jaql as FilterJaql, instanceid);
 }

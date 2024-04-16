@@ -5,8 +5,8 @@ title: TreemapChart
 # Class TreemapChart
 
 A Vue component displaying hierarchical data in the form of nested rectangles.
+
 This type of chart can be used instead of a column chart for comparing a large number of categories and sub-categories.
-See [Treemap Chart](https://docs.sisense.com/main/SisenseLinux/treemap.htm) for more information.
 
 ## Example
 

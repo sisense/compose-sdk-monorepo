@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.7.2",
+  "version": "1.8.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -20,7 +20,7 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "^1.7.2",
+    "@sisense/sdk-common": "^1.8.0",
     "fetch-intercept": "^2.4.0"
   },
   "scripts": {

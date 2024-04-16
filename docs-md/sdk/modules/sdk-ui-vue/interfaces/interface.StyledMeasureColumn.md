@@ -115,7 +115,7 @@ on the right axis (`true`) or on the left axis (`false`).
 
 > **sortType**?: [`SortDirection`](../type-aliases/type-alias.SortDirection.md)
 
-Sorting direction, either by Ascending order, Descending order, or None
+Sorting direction, either in Ascending order, Descending order, or None
 
 ***
 

@@ -85,3 +85,28 @@ export function normalizeName(name: string): string {
 
   return normalizedName;
 }
+
+/**
+ * Normalize attribute name
+ *
+ * @param tableName - Table name (e.g., Commerce Sales)
+ * @param columnName - Column name (e.g., Order Date)
+ * @param dateLevel - Date level (e.g., Years)
+ * @param modelName - module name (e.g., DM)
+ * @return full normalized attribute name (e.g., DM.CommerceSales.OrderDate.Years)
+ * @internal
+ */
+export function normalizeAttributeName(
+  tableName: string,
+  columnName: string,
+  dateLevel?: string,
+  modelName?: string,
+): string {
+  return (
+    (modelName && modelName.length > 0 ? modelName + '.' : '') +
+    normalizeName(tableName) +
+    '.' +
+    normalizeName(columnName) +
+    (dateLevel && dateLevel.length > 0 ? '.' + dateLevel : '')
+  );
+}

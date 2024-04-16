@@ -6,7 +6,6 @@ title: AreaChart
 
 A Vue component similar to a [LineChart](class.LineChart.md),
 but with filled in areas under each line and an option to display them as stacked.
-More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
 
 ## Example
 

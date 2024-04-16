@@ -13,8 +13,6 @@ import { setupHelper } from '../../setup-helper';
  * **Size**: An optional field represented by the size of the circles.
  * If omitted, all scatter points are equal in size. If used, the circle sizes are relative to their values.
  *
- * See [Scatter Chart](https://docs.sisense.com/main/SisenseLinux/scatter-chart.htm) for more information.
- *
  * @example
  * Here's how you can use the ScatterChart component in a Vue application:
  * ```vue

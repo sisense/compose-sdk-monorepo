@@ -5,7 +5,6 @@ title: LineChartComponent
 # Class LineChartComponent
 
 A component displaying data as a series of points connected by a line. Used to show trends or changes over time.
-See [Line Chart](https://docs.sisense.com/main/SisenseLinux/line-chart.htm) for more information.
 
 ## Example
 

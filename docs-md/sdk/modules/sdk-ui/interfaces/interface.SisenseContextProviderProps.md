@@ -4,7 +4,13 @@ title: SisenseContextProviderProps
 
 # Interface SisenseContextProviderProps
 
-Configurations for Sisense Context
+Configurations and authentication for Sisense Context.
+
+Use one of the following to authenticate:
+
+- [ssoEnabled](interface.SisenseContextProviderProps.md#ssoenabled)
+- [token](interface.SisenseContextProviderProps.md#token)
+- [wat](interface.SisenseContextProviderProps.md#wat)
 
 ## Properties
 
@@ -14,10 +20,9 @@ Configurations for Sisense Context
 
 > **ssoEnabled**?: `boolean`
 
-[Single Sign-On](https://docs.sisense.com/main/SisenseLinux/using-single-sign-on-to-access-sisense.htm) toggle
+[Single Sign-On](https://docs.sisense.com/main/SisenseLinux/using-single-sign-on-to-access-sisense.htm) toggle.
 
-This is used when user wants to use sso authentication. Default is false.
-If set to true, this will override any other authentication method.
+Set to `true` to use SSO authentication. When `true`, this overrides any other authentication methods. Defaults to `false`.
 
 ***
 
@@ -27,8 +32,6 @@ If set to true, this will override any other authentication method.
 
 Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
 
-This is used only when basic username/password authentication is not specified.
-
 ***
 
 #### wat
@@ -36,8 +39,6 @@ This is used only when basic username/password authentication is not specified.
 > **wat**?: `string`
 
 [Web Access Token](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
-
-This is used only when neither username, password, and token is specified.
 
 ### Other
 

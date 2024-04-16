@@ -1,4 +1,4 @@
-import { Jaql, SortDirection } from '@sisense/sdk-data';
+import { Jaql, JaqlSortDirection } from '@sisense/sdk-data';
 
 /* eslint-disable max-lines */
 
@@ -166,7 +166,7 @@ export type PanelItem = {
   parent?: PanelItem;
   through?: PanelItem;
   singleSeriesType?: SeriesType;
-  categoriesSorting?: SortDirection;
+  categoriesSorting?: JaqlSortDirection;
   isColored?: boolean;
   geoLevel?: 'country' | 'state' | 'city';
 };

@@ -5,7 +5,6 @@ title: AreamapChart
 # Class AreamapChart <Badge type="beta" text="Beta" />
 
 A Vue component for visualizing geographical data as polygons on a map.
-See [Areamap Chart](https://docs.sisense.com/main/SisenseLinux/area-map.htm) for more information.
 
 ## Example
 

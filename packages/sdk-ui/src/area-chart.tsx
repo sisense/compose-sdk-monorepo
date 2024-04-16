@@ -4,27 +4,23 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
 /**
  * A React component similar to a {@link LineChart},
  * but with filled in areas under each line and an option to display them as stacked.
- * More info on [Sisense Documentation page](https://docs.sisense.com/main/SisenseLinux/area-chart.htm).
  *
- * @example
- * An example of using the component to visualize the `Sample ECommerce` data source:
- * ```tsx
- * <AreaChart
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     category: [DM.Commerce.Date.Years],
- *     value: [measureFactory.sum(DM.Commerce.Revenue)],
- *     breakBy: [DM.Commerce.Gender],
- *   }}
- *   styleOptions={{ subtype: 'area/stacked' }}
- *   filters={[filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])]}
- *   onDataPointClick={(point, nativeEvent) => {
- *     console.log('clicked', point, nativeEvent);
- *   }}
+ * ## Example
+ *
+ * Area chart displaying total revenue per quarter from the Sample ECommerce data model.
+ *
+ * <iframe
+ *  src='https://dhoavm6pu1cvg.cloudfront.net/?example=charts%2Farea-chart&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
  * />
- * ```
  *
- * <img src="media://area-chart-example-1.png" width="800"/>
+ * Additional Area Chart examples:
+ *
+ * - [Stacked Area Chart](https://csdk-playground.sisense.com/?example=charts%2Farea-chart-stacked)
+ * - [Stacked Percentage Area Chart](https://csdk-playground.sisense.com/?example=charts%2Farea-chart-stacked100)
+ *
  * @param props - Area chart properties
  * @returns Area Chart component
  * @group Charts

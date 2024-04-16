@@ -2,23 +2,21 @@ import { AreamapChartProps } from './props';
 import { Chart, shouldSkipSisenseContextWaiting } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 /**
- * A React component for visualizing geographical data as polygons on a map.
- * See [Areamap Chart](https://docs.sisense.com/main/SisenseLinux/area-map.htm) for more information.
+ * A React component for visualizing geographical data as colored polygons on a map.
  *
- * @example
- * An example of using the component to visualize the `Sample ECommerce` data source:
- * ```tsx
- * <AreamapChart
- *   dataSet={DM.DataSource}
- *   dataOptions={{
- *     geo: [DM.Country.Country],
- *     color: measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
- *   }}
- *   styleOptions={{
- *     mapType: 'world',
- *   }}
+ * For another way do display data on a map, see {@link ScattermapChart}.
+ *
+ * ## Example
+ *
+ * Areamap chart displaying total revenue per country from the Sample ECommerce data model. The total revenue amount is indicated by the colors on the map.
+ *
+ * <iframe
+ *  src='https://csdk-playground.sisense.com/?example=charts%2Fmap-area&mode=docs'
+ *  width=800
+ *  height=870
+ *  style='border:none;'
  * />
- * ```
+ *
  * @param props - Areamap chart properties
  * @returns Areamap Chart component
  * @group Charts

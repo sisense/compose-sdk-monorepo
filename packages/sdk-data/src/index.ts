@@ -59,8 +59,6 @@ export * from './dimensional-model/measures/measures.js';
  * Functions to create measures that aggregate, summarize, and accumulate data,
  * plus show changes in data over time.
  *
- * They are similar to [Formulas](https://docs.sisense.com/main/SisenseLinux/build-formulas.htm) in Sisense.
- *
  * Measures created with these functions can be used in the data options of UI components such as
  * {@link @sisense/sdk-ui!ChartProps | Chart}, {@link @sisense/sdk-ui!ChartWidgetProps | ChartWidget},
  * and {@link @sisense/sdk-ui!ExecuteQueryProps | ExecuteQuery}.

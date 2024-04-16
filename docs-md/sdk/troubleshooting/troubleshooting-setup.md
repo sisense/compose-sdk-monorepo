@@ -21,9 +21,9 @@ I can't access my Sisense instance.
 
 First check that you can access your Sisense instance directly. If this works, then check your authentication methods to see if they are configured correctly. You can use the following authentication methods:
 
-* [SSO](https://docs.sisense.com/main/SisenseLinux/using-single-sign-on-to-access-sisense.htm)
-* [Web access tokens](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm)
-* [Sisense API token](https://sisense.dev/guides/restApi/using-rest-api.html#authentication)
+* [SSO](../authentication-security.md#single-sign-on)
+* [Web access tokens](../authentication-security.md#web-access-token)
+* [Sisense API token](../authentication-security.md#api-token)
 
 ## Browser Security
 

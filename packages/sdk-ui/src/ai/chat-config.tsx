@@ -32,6 +32,13 @@ export interface ChatConfig {
 
   /** The input prompt text to show in the chat input box */
   inputPromptText: string;
+
+  /**
+   * The welcome text to show at the top of a chat session.
+   *
+   * A value of `false` will hide the welcome text.
+   */
+  welcomeText?: string | false;
 }
 
 export const DEFAULTS = Object.freeze<ChatConfig>({
