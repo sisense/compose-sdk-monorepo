@@ -153,7 +153,7 @@ export class DateDimensionWriter extends ElementWriter<DateDimension> {
   writeDef(stream: NodeJS.WritableStream, ident: number) {
     writeIndented(stream, `createDateDimension({${NEWLINE}`, 0);
     writeIndented(stream, `name: '${this.element.name}',${NEWLINE}`, ident + 1);
-    writeIndented(stream, `expression: '${this.element.expression}',`, ident + 1);
+    writeIndented(stream, `expression: "${this.element.expression}",`, ident + 1);
 
     stream.write(NEWLINE);
     writeIndented(stream, `}),`, ident);
@@ -188,7 +188,7 @@ export class AttributeWriter extends ElementWriter<Attribute> {
       `createAttribute({\
 ${rnt(ident + 2)}name: '${this.element.name}',\
 ${rnt(ident + 2)}type: '${this.element.type}',\
-${rnt(ident + 2)}expression: '${this.element.expression}',\
+${rnt(ident + 2)}expression: "${this.element.expression}",\
 ${rnt(ident + 1)}}),`,
       ident,
     );
@@ -203,7 +203,7 @@ export class LevelWriter extends ElementWriter<LevelAttribute> {
   write(stream: NodeJS.WritableStream, ident: number): any {
     writeIndented(
       stream,
-      `createAttribute({name: '${this.name}', expression: '${this.element.expression}', granularity: '${this.element.granularity}'}),`,
+      `createAttribute({name: '${this.name}', expression: "${this.element.expression}", granularity: '${this.element.granularity}'}),`,
       ident,
     );
   }
