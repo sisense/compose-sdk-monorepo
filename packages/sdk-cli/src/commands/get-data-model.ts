@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 import { Arguments, Argv, CommandModule } from 'yargs';
 import {

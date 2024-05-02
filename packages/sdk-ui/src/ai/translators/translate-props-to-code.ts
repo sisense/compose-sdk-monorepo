@@ -1,7 +1,11 @@
 import { JaqlElement } from '@/ai/messages/jaql-element';
 import { MetadataItemJaql } from '@sisense/sdk-query-client';
-import { capitalizeFirstLetter } from '@/ai/translators/utils';
-import { normalizeAttributeName } from '@sisense/sdk-data';
+import {
+  DimensionalBaseMeasure,
+  JaqlSortDirection,
+  normalizeAttributeName,
+} from '@sisense/sdk-data';
+import { getSortType } from '@/dashboard-widget/utils';
 
 const NEW_LINE = '\n';
 const VALUE_UNKNOWN = 'UNKNOWN';
@@ -46,18 +50,29 @@ const stringifyFormula = (jaql: MetadataItemJaql, indent: number): string => {
 
 // eslint-disable-next-line complexity
 const stringifyDimensionOrMeasure = (jaql: MetadataItemJaql, indent: number): string => {
-  const { level, table, column, agg, title } = jaql;
-  let attributeName;
+  const { level, table, column, agg, sort, title } = jaql;
+  let elementDef;
 
-  if (agg && table && column && title) {
-    attributeName = normalizeAttributeName(table, column, undefined, 'DM');
-    return `${' '.repeat(indent)}measureFactory.${agg}(${attributeName}, '${title}')`;
+  // create dimension attribute
+  if (table && column) {
+    elementDef = normalizeAttributeName(table, column, level, 'DM');
   }
 
-  if (table && column) {
-    const dateLevel = level ? capitalizeFirstLetter(level) : undefined;
-    attributeName = normalizeAttributeName(table, column, dateLevel, 'DM');
-    return `${' '.repeat(indent)}${attributeName}`;
+  // if agg exists, create measure on the attribute
+  if (agg && table && column && title) {
+    elementDef = `measureFactory.${DimensionalBaseMeasure.aggregationFromJAQL(
+      agg,
+    )}(${elementDef}, '${title}')`;
+  }
+
+  // add sorting
+  if (sort) {
+    elementDef = `{column: ${elementDef}, sortType: '${getSortType(sort as JaqlSortDirection)}'}`;
+  }
+
+  // add indentation
+  if (elementDef) {
+    return `${' '.repeat(indent)}${elementDef}`;
   }
 
   return VALUE_UNKNOWN;
@@ -96,7 +111,7 @@ export const stringifyProps = (
 
   if (Array.isArray(props)) {
     s += `[${props.map((v) => stringifyProps(v, indent + 2))}${
-      props.length ? '\n' + ' '.repeat(indent + 2) : ''
+      props.length ? NEW_LINE + ' '.repeat(indent + 2) : ''
     }]`;
   } else {
     s += `{${NEW_LINE}`;
@@ -107,7 +122,7 @@ export const stringifyProps = (
       s += ' '.repeat(indent + 2);
       if (Array.isArray(value)) {
         s += `${key}: [${value.map((v) => stringifyProps(v, indent + 4, wrapInQuotes))}${
-          value.length ? '\n' + ' '.repeat(indent + 2) : ''
+          value.length ? NEW_LINE + ' '.repeat(indent + 2) : ''
         }]`;
       } else if (typeof value === 'object') {
         s += `${key}: ${stringifyProps(value, indent + 2, wrapInQuotes)}`;

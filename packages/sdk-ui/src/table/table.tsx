@@ -1,7 +1,6 @@
-/* eslint-disable max-lines-per-function */
 import React, { useEffect, useRef, useState } from 'react';
-import { Pagination } from '@mui/material';
-import { isDataSource } from '@sisense/sdk-data';
+import Pagination from '@mui/material/Pagination';
+import { Data, isDataSource } from '@sisense/sdk-data';
 import { TableProps } from '../props';
 import { useThemeContext } from '../theme-provider';
 import { translateTableDataOptions } from '../chart-data-options/translate-data-options';
@@ -16,10 +15,14 @@ import { isValue, TableDataOptionsInternal } from '../chart-data-options/types';
 import { isDataTableEmpty } from '../chart-data-processor/table-creators';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import { shouldSkipSisenseContextWaiting } from '../chart';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
+
+/** Function to check if we should wait for sisense context for rendering the table */
+function shouldSkipSisenseContextWaiting(props: TableProps) {
+  return isCompleteDataSet(props.dataSet);
+}
 
 /**
  * Table with aggregation and pagination.
@@ -160,3 +163,7 @@ export const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
 
 /** How many pages of data will be loaded in one query */
 export const PAGES_BATCH_SIZE = 10;
+
+function isCompleteDataSet(dataSet: TableProps['dataSet']): dataSet is Data {
+  return !!dataSet && typeof dataSet !== 'string' && 'rows' in dataSet && 'columns' in dataSet;
+}

@@ -1,6 +1,5 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines-per-function */
 import { SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';
 import { SeriesType } from '../chart-options-service';
 import {

@@ -1,5 +1,5 @@
+import { useThemeContext } from '@/theme-provider/theme-context';
 import styled from '@emotion/styled';
-import { useChatStyle } from '../chat-style-provider';
 
 const Dot = styled.div<{ color?: string }>`
   width: 5px;
@@ -32,8 +32,8 @@ const Dot = styled.div<{ color?: string }>`
 `;
 
 export default function LoadingDotsIcon() {
-  const style = useChatStyle();
-  const color = style.iconColor ?? '#505050';
+  const { themeSettings } = useThemeContext();
+  const color = themeSettings.aiChat.icons.color;
 
   return (
     <div

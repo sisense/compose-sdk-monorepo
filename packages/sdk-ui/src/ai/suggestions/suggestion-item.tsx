@@ -1,10 +1,55 @@
-import { useChatStyle } from '../chat-style-provider';
 import styled from '@emotion/styled';
+import { Themable } from '@/theme-provider/types';
+import { useThemeContext } from '@/theme-provider';
+import { css } from '@emotion/react';
 
-const Button = styled.button<{ style?: { hoverBackgroundColor?: string } }>`
+const Button = styled.button<Themable>`
+  font-size: inherit;
+  line-height: inherit;
+  box-sizing: border-box;
+  border-width: 1px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  color: ${({ theme }) => theme.aiChat.suggestions.textColor};
+  background-color: ${({ theme }) => theme.aiChat.suggestions.backgroundColor};
+  border: ${({ theme }) => theme.aiChat.suggestions.border};
+  border-radius: ${({ theme }) => theme.aiChat.suggestions.borderRadius};
   &:hover {
-    background-color: ${(props) => props.style?.hoverBackgroundColor};
+    background-color: ${({ theme }) => theme.aiChat.suggestions.hover.backgroundColor};
+    color: ${({ theme }) => theme.aiChat.suggestions.hover.textColor};
   }
+
+  ${({ theme }) => {
+    const { borderGradient, borderRadius } = theme.aiChat.suggestions;
+    if (borderGradient) {
+      const [firstColor, secondColor] = borderGradient;
+      return css`
+        border: none;
+        position: relative;
+        border-radius: ${borderRadius};
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border-radius: ${borderRadius};
+          border: 1px solid transparent;
+          background: linear-gradient(30deg, ${firstColor}, ${secondColor}) border-box;
+          -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+        }
+      `;
+    }
+    return '';
+  }}
 `;
 
 export interface SuggestedItemProps {
@@ -13,20 +58,9 @@ export interface SuggestedItemProps {
 }
 
 export default function SuggestionItem({ question, onClick }: SuggestedItemProps) {
-  const hoverStyle = 'hover:csdk-text-white hover:csdk-bg-text-content';
-
-  const style = useChatStyle();
-
+  const { themeSettings } = useThemeContext();
   return (
-    <Button
-      className={`csdk-rounded-[16px] csdk-text-ai-sm csdk-text-text-active csdk-border csdk-border-text-content csdk-px-4 csdk-py-2 csdk-bg-transparent csdk-cursor-pointer ${hoverStyle}`}
-      onClick={onClick}
-      style={{
-        color: style.suggestions?.textColor,
-        border: style.suggestions?.border,
-        hoverBackgroundColor: style.suggestions?.hoverBackgroundColor,
-      }}
-    >
+    <Button onClick={onClick} theme={themeSettings}>
       {question}
     </Button>
   );

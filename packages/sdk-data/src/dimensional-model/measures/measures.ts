@@ -2,11 +2,8 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import * as m from './factory.js';
 import {
@@ -544,7 +541,7 @@ export function createMeasure(json: any): Measure | BaseMeasure {
   // legacy
   const exp = json.dim || json.expression;
   if (exp) {
-    att = new DimensionalAttribute(exp, exp);
+    att = new DimensionalAttribute(exp, exp, undefined, desc);
   }
 
   // official SDK

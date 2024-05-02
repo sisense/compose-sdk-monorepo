@@ -34,6 +34,16 @@ The input prompt text to show in the chat input box
 
 ***
 
+### numOfRecentPrompts
+
+> **numOfRecentPrompts**: `number`
+
+Number of recent prompts that should be shown in a chat session
+
+If not specified, the default value is `5`
+
+***
+
 ### numOfRecommendations
 
 > **numOfRecommendations**: `number`

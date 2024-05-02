@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Chart } from '../chart';
 import { PieChartProps } from '../props';
 import { NumberFormatConfig, PieStyleOptions } from '../types';

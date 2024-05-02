@@ -12,6 +12,7 @@ import { PivotTreeNode, PivotCellEvent } from '../../data-handling';
 import { SortDetails } from '../../data-load/types.js';
 import { TreeServiceI } from '../../tree-structure';
 import { Metadata } from '../../data-handling/utils/plugins/types.js';
+import { PivotStylingWrapper, PivotFillOptionsProps } from './PivotStylingWrapper';
 
 type Props = {
   // global
@@ -25,6 +26,12 @@ type Props = {
   // PivotTable
   borderWidth?: number;
   borderColor?: string;
+  fontFamily?: string;
+  textColor?: string;
+  backgroundColor?: string;
+  fillColor?: string;
+  additionalFillColor?: string;
+  fillOptions?: PivotFillOptionsProps;
   scrollBarsMargin?: number;
   isAutoHeight: boolean;
   isFullWidth: boolean;
@@ -51,6 +58,8 @@ type Props = {
   onCellLeave?: (cellData: PivotCellEvent) => void;
 
   // PaginationPanel
+  navigationPrimaryColor?: string;
+  navigationSecondaryColor?: string;
   itemsCount: number;
   totalItemsCount: number;
   totalRecordsCount: number;
@@ -376,6 +385,14 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
   render(): React.ReactElement {
     const {
       className,
+      fontFamily,
+      textColor,
+      backgroundColor,
+      fillColor,
+      additionalFillColor,
+      fillOptions,
+      navigationPrimaryColor,
+      navigationSecondaryColor,
       isPaginated,
       overlay,
       itemsCount,
@@ -400,45 +417,56 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
     const { pivotHeight } = this.state;
 
     return (
-      <div className={cn(PIVOT, `${PIVOT}--new`, className)} ref={this.setPivotContainerRef}>
-        {this.pivotContainer && (
-          <PivotTable
-            {...rest}
-            className={PIVOT_MULTIGRID}
-            rowHeight={rowHeight}
-            imageColumns={imageColumns}
-            fallbackImageUrl={fallbackImageUrl}
-            addCellDomReadyPromise={addCellDomReadyPromise}
-            removeCellDomReadyPromise={removeCellDomReadyPromise}
-            onSortingMetadataUpdate={this.onSortingMetadataUpdate}
-            onSortingSettingsChanged={this.props.onSortingSettingsChanged}
-            ref={this.pivotTableRef}
-            height={pivotHeight}
-            onTotalSizeChange={this.onTableTotalSizeChange}
-            scrollBarsMargin={scrollBarsMargin}
-            dataBars={dataBars}
-            rangeMinMax={rangeMinMax}
-            isMobile={isMobile}
-            onDomReady={this.onPivotDomReady}
-          />
-        )}
-        {isPaginated ? (
-          <PaginationPanel
-            {...rest}
-            ref={this.paginationPanelRef}
-            itemsCount={itemsCount}
-            itemsPerPage={itemsPerPage}
-            options={paginationOptions}
-            totalItemsCount={totalItemsCount}
-            limitReached={limitReached}
-            limitCount={totalRecordsCount}
-            totalColumnsCount={totalColumnsCount}
-            columnsCount={columnsCount}
-            onHeightChange={this.onPaginationHeightChange}
-          />
-        ) : null}
-        {overlay ? <div className={PIVOT_OVERLAY} /> : null}
-      </div>
+      <PivotStylingWrapper
+        fontFamily={fontFamily}
+        textColor={textColor}
+        backgroundColor={backgroundColor}
+        fillColor={fillColor}
+        additionalFillColor={additionalFillColor}
+        fillOptions={fillOptions}
+        navigationPrimaryColor={navigationPrimaryColor}
+        navigationSecondaryColor={navigationSecondaryColor}
+      >
+        <div className={cn(PIVOT, `${PIVOT}--new`, className)} ref={this.setPivotContainerRef}>
+          {this.pivotContainer && (
+            <PivotTable
+              {...rest}
+              className={PIVOT_MULTIGRID}
+              rowHeight={rowHeight}
+              imageColumns={imageColumns}
+              fallbackImageUrl={fallbackImageUrl}
+              addCellDomReadyPromise={addCellDomReadyPromise}
+              removeCellDomReadyPromise={removeCellDomReadyPromise}
+              onSortingMetadataUpdate={this.onSortingMetadataUpdate}
+              onSortingSettingsChanged={this.props.onSortingSettingsChanged}
+              ref={this.pivotTableRef}
+              height={pivotHeight}
+              onTotalSizeChange={this.onTableTotalSizeChange}
+              scrollBarsMargin={scrollBarsMargin}
+              dataBars={dataBars}
+              rangeMinMax={rangeMinMax}
+              isMobile={isMobile}
+              onDomReady={this.onPivotDomReady}
+            />
+          )}
+          {isPaginated ? (
+            <PaginationPanel
+              {...rest}
+              ref={this.paginationPanelRef}
+              itemsCount={itemsCount}
+              itemsPerPage={itemsPerPage}
+              options={paginationOptions}
+              totalItemsCount={totalItemsCount}
+              limitReached={limitReached}
+              limitCount={totalRecordsCount}
+              totalColumnsCount={totalColumnsCount}
+              columnsCount={columnsCount}
+              onHeightChange={this.onPaginationHeightChange}
+            />
+          ) : null}
+          {overlay ? <div className={PIVOT_OVERLAY} /> : null}
+        </div>
+      </PivotStylingWrapper>
     );
   }
 }

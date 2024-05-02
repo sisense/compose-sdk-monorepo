@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-
 /**
  * List of alternative country names (synonyms) that can be used to match country names from data.
  * For example, 'United States', 'USA' and 'United States of America' should be understood as the same country.

@@ -14,7 +14,7 @@ export interface SomePropInterface {
  * ```
  *
  * <iframe
- * src='https://dhoavm6pu1cvg.cloudfront.net/?example=charts%2Farea-chart&mode=docs'
+ * src='https://csdk-playground.sisense.com/?example=charts%2Farea-chart&mode=docs'
  * width=800
  * height=870
  * style='border:none;'

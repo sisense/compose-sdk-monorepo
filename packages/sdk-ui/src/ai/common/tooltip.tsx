@@ -1,4 +1,4 @@
-import { Tooltip as MuiTooltip, type TooltipProps as MuiTooltipProps } from '@mui/material';
+import MuiTooltip, { type TooltipProps as MuiTooltipProps } from '@mui/material/Tooltip';
 
 import { colors } from '@/themes/colors';
 

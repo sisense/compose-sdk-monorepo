@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines */
 
 import {
   Dimension,
@@ -12,6 +11,7 @@ import {
 } from '@sisense/sdk-data';
 
 import { ElementWriter, NEWLINE, rnt, writeIndented } from './base.js';
+import { prepareDescription } from '../utils/prepare-description.js';
 
 export class DimensionWriter extends ElementWriter<Dimension> {
   readonly isMultiAtts: boolean;
@@ -154,6 +154,13 @@ export class DateDimensionWriter extends ElementWriter<DateDimension> {
     writeIndented(stream, `createDateDimension({${NEWLINE}`, 0);
     writeIndented(stream, `name: '${this.element.name}',${NEWLINE}`, ident + 1);
     writeIndented(stream, `expression: '${this.element.expression}',`, ident + 1);
+    if (this.element.description) {
+      writeIndented(
+        stream,
+        `description: ${prepareDescription(this.element.description)},`,
+        ident + 1,
+      );
+    }
 
     stream.write(NEWLINE);
     writeIndented(stream, `}),`, ident);
@@ -189,6 +196,7 @@ export class AttributeWriter extends ElementWriter<Attribute> {
 ${rnt(ident + 2)}name: '${this.element.name}',\
 ${rnt(ident + 2)}type: '${this.element.type}',\
 ${rnt(ident + 2)}expression: '${this.element.expression}',\
+${this.element.description ? `${rnt(ident + 2)}description: ${prepareDescription(this.element.description)},` : ''}\
 ${rnt(ident + 1)}}),`,
       ident,
     );

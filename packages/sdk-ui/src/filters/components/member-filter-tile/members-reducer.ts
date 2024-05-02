@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { produce } from 'immer';
 
 export interface Member {

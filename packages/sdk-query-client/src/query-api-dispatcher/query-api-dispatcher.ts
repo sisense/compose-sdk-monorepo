@@ -7,7 +7,9 @@ import {
   JaqlQueryPayload,
   QueryGuid,
   DataSourceSchema,
+  DataSourceMetadata,
 } from '../types.js';
+import { TranslatableError } from '../translation/translatable-error.js';
 
 const API_DATASOURCES_BASE_PATH = 'api/datasources';
 const API_DATAMODELS_BASE_PATH = 'api/v2/datamodels';
@@ -39,6 +41,15 @@ export class QueryApiDispatcher {
   }
 
   /**
+   * Returns a list of data sources.
+   * This method works with user of viewer role or above.
+   */
+  public async getDataSourceList(): Promise<DataSourceMetadata[]> {
+    const url = `${API_DATASOURCES_BASE_PATH}/?sharedWith=r,w`;
+    return this.httpClient.get(url);
+  }
+
+  /**
    * Returns the schema of a data source by its name.
    */
   public async getDataSourceSchema(dataSourceName: string): Promise<DataSourceSchema> {
@@ -53,7 +64,17 @@ export class QueryApiDispatcher {
     const url = getJaqlUrl(dataSource);
     const abortController = new AbortController();
     return {
-      responsePromise: this.httpClient.post(url, jaqlPayload, undefined, abortController.signal),
+      responsePromise: this.httpClient
+        .post(url, jaqlPayload, undefined, abortController.signal)
+        .then((response) => {
+          if (Array.isArray(response)) {
+            return {
+              values: [],
+              metadata: [],
+            } as JaqlResponse;
+          }
+          return response as JaqlResponse;
+        }),
       abortHttpRequest: (reason?: string) => abortController.abort(reason),
     };
   }
@@ -105,7 +126,7 @@ export class QueryApiDispatcher {
     try {
       await this.httpClient.post(regularUrl, payload);
     } catch (error) {
-      if ((error as { status: number }).status === 404) {
+      if ((error as TranslatableError).status === '404') {
         // probably this datasource is live and requires a different URL for canceling queries
         const liveUrl = getLiveCancelQueryUrl(dataSource);
         await this.httpClient.post(liveUrl, payload);

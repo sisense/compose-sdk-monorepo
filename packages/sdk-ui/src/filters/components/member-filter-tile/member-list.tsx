@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { FunctionComponent, useMemo, useState } from 'react';
 import { Checkbox } from '../common';
 import { Member, SelectedMember } from './members-reducer';

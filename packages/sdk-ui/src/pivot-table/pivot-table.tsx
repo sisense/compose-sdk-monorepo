@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   EVENT_SORTING_SETTINGS_CHANGED,
-  type JaqlRequest,
   type SortingSettingsChangePayload,
 } from '@sisense/sdk-pivot-client';
 import { PivotTableProps } from '../props';
@@ -9,16 +8,15 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
 import { shouldSkipSisenseContextWaiting } from '../chart';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { useGetPivotTableQuery } from './use-get-pivot-table-query';
-import { normalizeJaqlSorting, prepareSortedJaql } from './sorting-utils';
-import { DynamicSizeContainer } from '@/dynamic-size-container';
+import { preparePivotRowsSortCriteriaList } from './sorting-utils';
+import { DEFAULT_PIVOT_TABLE_SIZE, DynamicSizeContainer } from '@/dynamic-size-container';
 import { type ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
+import { preparePivotStylingProps } from '@/pivot-table/helpers/prepare-pivot-styling-props';
+import { useThemeContext } from '@/theme-provider';
+import { usePivotTableDataOptionsInternal } from './use-pivot-table-data-options-internal';
 
 const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
-const DEFAULT_PIVOT_TABLE_SIZE = {
-  width: 400,
-  height: 500,
-};
 
 /**
  * Pivot table with pagination.
@@ -108,24 +106,22 @@ export const PivotTable = asSisenseComponent({
 })((pivotTableProps: PivotTableProps) => {
   const { styleOptions = {}, dataSet, dataOptions, filters, refreshCounter = 0 } = pivotTableProps;
   const nodeRef = useRef<HTMLDivElement>(null);
-  const [jaql, setJaql] = useState<JaqlRequest | null>(null);
   const [size, setSize] = useState<ContainerSize | null>(null);
   // retrieve and validate the pivot client
   const { app } = useSisenseContext();
+  const { themeSettings } = useThemeContext();
   const pivotClient = app?.pivotClient;
 
   if (!pivotClient) {
     throw new Error('Pivot client not initialized');
   }
 
+  const { dataOptionsInternal, updateSort } = usePivotTableDataOptionsInternal({ dataOptions });
+
   // get the initial jaql from the pivot table props
-  const {
-    isError,
-    error,
-    jaql: baseJaql,
-  } = useGetPivotTableQuery({
+  const { isError, error, jaql } = useGetPivotTableQuery({
     dataSet,
-    dataOptions,
+    dataOptionsInternal,
     filters,
     refreshCounter,
   });
@@ -140,20 +136,14 @@ export const PivotTable = asSisenseComponent({
   useApplyPivotTableFormatting({ dataService, dataOptions });
 
   useEffect(() => {
-    if (baseJaql) {
-      setJaql(normalizeJaqlSorting(baseJaql));
-    }
-  }, [baseJaql]);
-
-  useEffect(() => {
     if (nodeRef.current && jaql && size) {
-      const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE, isAutoHeight = false } = styleOptions;
+      const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE } = styleOptions;
       const props = {
         width: size.width,
         height: size.height,
-        isAutoHeight,
         isPaginated: true,
         itemsPerPage: rowsPerPage,
+        ...preparePivotStylingProps(styleOptions, themeSettings),
       };
       const isPivotRendered = nodeRef.current.children.length;
 
@@ -168,14 +158,16 @@ export const PivotTable = asSisenseComponent({
       /* eslint-disable-next-line promise/catch-or-return */
       dataService.loadData(jaql).then(() => pivotBuilder.updateJaql());
     }
-  }, [jaql, dataService, pivotBuilder, pivotClient, styleOptions, size]);
+  }, [jaql, dataService, pivotBuilder, pivotClient, styleOptions, size, themeSettings]);
 
   const onSort = useCallback(
     (payload: SortingSettingsChangePayload) => {
-      const sortedJaql = prepareSortedJaql(jaql!, payload);
-      setJaql(sortedJaql);
+      const rowsSortCriteriaList = preparePivotRowsSortCriteriaList(payload, dataOptionsInternal);
+      updateSort({
+        rows: rowsSortCriteriaList,
+      });
     },
-    [jaql],
+    [dataOptionsInternal, updateSort],
   );
 
   useEffect(() => {
@@ -201,6 +193,7 @@ export const PivotTable = asSisenseComponent({
         width: styleOptions?.width,
         height: styleOptions?.height,
       }}
+      useContentSize={{ height: styleOptions?.isAutoHeight }}
       onSizeChange={updateSize}
     >
       <div ref={nodeRef} aria-label="pivot-table-root" />

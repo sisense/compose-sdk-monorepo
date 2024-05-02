@@ -1,7 +1,9 @@
 import { SisenseContextProvider, SisenseContextProviderProps } from '@/index';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { sisenseContextProviderProps } from '@/__demo__/sisense-context-provider-props';
-import { FormControlLabel, Paper, Switch } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Paper from '@mui/material/Paper';
+import Switch from '@mui/material/Switch';
 import React from 'react';
 
 export function withCachingSwitcher<T extends React.ComponentType<any>>(Component: T): T {

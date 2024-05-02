@@ -426,6 +426,14 @@ export interface PivotTableStyleOptions {
    */
   alternatingColumnsColor?: boolean;
   /**
+   * Boolean flag whether to fill row members cells with background color
+   */
+  membersColor?: boolean;
+  /**
+   * Boolean flag whether to fill totals and subtotals cells with background color
+   */
+  totalsColor?: boolean;
+  /**
    * Number of rows per page
    *
    * Default value is 25
@@ -454,6 +462,10 @@ export interface PivotTableStyleOptions {
    * Boolean flag whether the height of the component should be automatically adjusted to fit the content
    */
   isAutoHeight?: boolean;
+  /**
+   * Manual height of each row (default is 25px)
+   */
+  rowHeight?: number;
 }
 
 /**
@@ -703,15 +715,20 @@ export interface ThemeSettings {
     /** Toolbar Background color, can be used as a secondary background color */
     panelBackgroundColor?: string;
   };
+
   /** Collection of colors used to color various elements */
   palette?: ColorPaletteTheme;
+
   /** Text theme settings */
   typography?: {
     /** Font family name to style component text */
     fontFamily?: string;
+    /** Primary text color */
     primaryTextColor?: string;
+    /** Secondary text color */
     secondaryTextColor?: string;
   };
+
   /** General theme settings */
   general?: {
     /** Main color used for various elements like primary buttons, switches, etc. */
@@ -722,6 +739,167 @@ export interface ThemeSettings {
     primaryButtonTextColor?: string;
     /** Hover color for primary buttons */
     primaryButtonHoverColor?: string;
+  };
+
+  /**
+   * Theme settings specific to the AI Chatbot component
+   *
+   * @internal
+   */
+  aiChat?: {
+    /** Background color of the chatbot */
+    backgroundColor?: string;
+    /** Text color of the chatbot */
+    primaryTextColor?: string;
+    /** Secondary text color of the chatbot */
+    secondaryTextColor?: string;
+    /** Primary font size for text in the chatbot */
+    primaryFontSize?: [fontSize: string, lineHeight: string];
+    /** Border of the chatbot */
+    border?: false | string;
+    /** Border radius of the chatbot */
+    borderRadius?: false | string;
+
+    /** Settings for the main chat body */
+    body?: {
+      /** Left padding of the chat body */
+      paddingLeft?: string;
+      /** Right padding of the chat body */
+      paddingRight?: string;
+      /** Top padding of the chat body */
+      paddingTop?: string;
+      /** Bottom padding of the chat body */
+      paddingBottom?: string;
+      /** Gap size between each message in the chat body */
+      gapBetweenMessages?: string;
+    };
+
+    /** Settings for the chat footer */
+    footer?: {
+      /** Left padding of the chat footer */
+      paddingLeft?: string;
+      /** Right padding of the chat footer */
+      paddingRight?: string;
+      /** Top padding of the chat footer */
+      paddingTop?: string;
+      /** Bottom padding of the chat footer */
+      paddingBottom?: string;
+    };
+
+    /** Settings for user chat messages */
+    userMessages?: {
+      /** Background color of user chat messages */
+      backgroundColor?: string;
+    };
+
+    /** Settings for system chat messages */
+    systemMessages?: {
+      /** Background color of system chat messages */
+      backgroundColor?: string;
+    };
+
+    /** Settings for the chatbot input */
+    input?: {
+      /** Background color of the input */
+      backgroundColor?: string;
+      /** Settings to be applied on input focus */
+      focus?: {
+        /** Outline color of the input */
+        outlineColor?: string;
+      };
+    };
+
+    /** Settings for the chatbot header */
+    header?: {
+      /** Background color of the chatbot header */
+      backgroundColor?: string;
+      /** Text color of the chatbot header */
+      textColor?: string;
+      /** Settings to be applied on hover of the header */
+    };
+
+    /** Settings for chatbot dropup */
+    dropup?: {
+      /** Background color of the dropup */
+      backgroundColor?: string;
+      /** Box shadow of the dropup */
+      boxShadow?: string;
+      /** Border radius of the dropup */
+      borderRadius?: string;
+      /** Settings for the section headers of the dropup */
+      headers?: {
+        /** Text color of headers */
+        textColor?: string;
+        /** Settings to be applied on hover of the headers */
+        hover?: {
+          /** Background color of headers on hover */
+          backgroundColor?: string;
+        };
+      };
+      /** Settings for the dropup items */
+      items?: {
+        /** Text color of the dropup items */
+        textColor?: string;
+        /** Settings to be applied on hover of dropup items */
+        hover?: {
+          /** Background color of dropup items on hover */
+          backgroundColor?: string;
+        };
+      };
+    };
+
+    /** Settings for the chatbot suggestions */
+    suggestions?: {
+      /** Text color of the chatbot suggestions */
+      textColor?: string;
+      /** Background color of the chatbot suggestions */
+      backgroundColor?: string;
+      /** Border of the chatbot suggestions */
+      border?: string;
+      /** 2-color gradient to be applied on the border */
+      borderGradient?: [string, string] | null;
+      /** Border radius of the chatbot suggestions */
+      borderRadius?: string;
+      /** Setting to be applied on hover */
+      hover?: {
+        /** Background color of the chatbot suggestions on hover */
+        backgroundColor?: string;
+        /** Text color of the chatbot suggestions on hover */
+        textColor?: string;
+      };
+      /** 2-color gradient to be applied on suggestions loading animation */
+      loadingGradient?: [string, string];
+      /** Gap size between each suggestion item */
+      gap?: string;
+    };
+
+    /** Settings for the chatbot clickable messages */
+    clickableMessages?: {
+      /** Background color of the chatbot clickable messages */
+      backgroundColor?: string;
+      /** Text color of the chatbot clickable messages */
+      textColor?: string;
+      /** Border of the chatbot clickable messages */
+      border?: false | string;
+      /** Setting to be applied on hover */
+      hover?: {
+        /** Text color of the chatbot clickable messages on hover */
+        textColor?: string;
+        /** Background color of the chatbot clickable messages on hover */
+        backgroundColor?: string;
+      };
+    };
+
+    /** Settings for the chatbot icons */
+    icons?: {
+      /** Color of the chatbot icons */
+      color?: string;
+      /** Setting to be applied on hover */
+      hover?: {
+        /** Color of the chatbot icons on hover */
+        color?: string;
+      };
+    };
   };
 }
 
@@ -802,11 +980,18 @@ export interface DashboardWidgetStyleOptions extends WidgetStyleOptions {
 export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetStyleOptions;
 
 /**
- * Style settings defining the look and feel of TableWidget}
+ * Style settings defining the look and feel of TableWidget
  *
  * @internal
  */
 export type TableWidgetStyleOptions = TableStyleOptions & WidgetStyleOptions;
+
+/**
+ * Style settings defining the look and feel of TableWidget
+ *
+ * @internal
+ */
+export type PivotTableWidgetStyleOptions = PivotTableStyleOptions & WidgetStyleOptions;
 
 /**
  * Runs type guard check for ThemeOid.

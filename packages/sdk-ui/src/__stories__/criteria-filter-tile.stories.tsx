@@ -1,5 +1,4 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable max-lines */
 import { templateForComponent } from './template.js';
 import { CriteriaFilterTile } from '../filters/components/criteria-filter-tile/criteria-filter-tile.js';
 import {

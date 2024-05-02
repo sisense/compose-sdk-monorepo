@@ -7,7 +7,7 @@ import {
 } from './utils.js';
 import { describe } from 'vitest';
 import * as filterFactory from './dimensional-model/filters/factory.js';
-import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/filter-jaql-util.js';
+import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
 
 const mockFilter1 = { guid: 'filter-1', name: 'Filter 1' } as Filter;
 const mockFilter2 = { guid: 'filter-2', name: 'Filter 2' } as Filter;

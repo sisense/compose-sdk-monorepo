@@ -1,5 +1,5 @@
 import { validateCategoricalChartDataOptions } from './validate-categorical-data-options';
-import * as DM from '../../__demo__/sample-ecommerce';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
 
 describe('validateCategoricalChartDataOptions', () => {

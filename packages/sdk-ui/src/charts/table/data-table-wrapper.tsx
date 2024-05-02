@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Table, Column, Cell } from 'fixed-data-table-2';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
@@ -20,7 +18,7 @@ import {
   ROW_HEIGHT,
 } from './styles/style-constants';
 import { getCellStyles } from './helpers/get-cell-styles';
-import { Tooltip } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import { Category } from '@/chart-data-options/types';
 
 const alignmentForColumnType = (columnType: string) => (isNumber(columnType) ? 'right' : 'left');

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines-per-function */
 import { useCallback, useMemo, useState } from 'react';
 
 import { StyledColumn, DrilldownSelection, DataPoint } from '../../types.js';

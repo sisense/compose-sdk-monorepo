@@ -28,7 +28,7 @@ Count aggregation type
 
 ### `CountDistinct`
 
-**CountDistinct**: `string` = `'countdistinct'`
+**CountDistinct**: `string` = `'countDistinct'`
 
 Count distinct aggregation type
 

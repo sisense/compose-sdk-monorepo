@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import {
   Filter,
   Measure,
@@ -237,6 +236,11 @@ export type DataSourceSchema = {
   title: string;
   type: 'extract' | 'live';
 } & AnyObject;
+
+export type DataSourceMetadata = {
+  title: string;
+  live: boolean;
+};
 
 export type AbortRequestFunction = (reason?: string) => void;
 

@@ -1,12 +1,8 @@
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
 /* eslint-disable max-depth */
 import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options';
 import { LegacyIndicatorChartOptions, TickerOptions } from '../types';

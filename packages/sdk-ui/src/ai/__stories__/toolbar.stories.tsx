@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react';
 import { templateForComponent } from '../../__stories__/template';
-import ToolbarComponent from '../toolbar';
+import ToolbarComponent from '../common/toolbar';
 
 const ToolbarComponentTemplate = templateForComponent(ToolbarComponent);
 
@@ -13,4 +13,8 @@ export default meta;
 export const Toolbar = ToolbarComponentTemplate({
   title: 'Sisense Analytics',
   leftNav: <p>left-icon</p>,
+  style: {
+    textColor: '#262E3D',
+    backgroundColor: '#FFFFFF',
+  },
 });

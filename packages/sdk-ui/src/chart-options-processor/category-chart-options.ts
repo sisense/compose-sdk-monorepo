@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 /* eslint-disable no-case-declarations */
 import type { SeriesPieOptions } from '@sisense/sisense-charts';

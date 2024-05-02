@@ -1,5 +1,10 @@
-import { Alert, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { Box } from '@mui/system';
+import Alert from '@mui/material/Alert';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Box from '@mui/system/Box';
 import { ComponentType, Suspense, useEffect, useState } from 'react';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
 import { ChartsFromExampleApp } from './pages/charts-from-example-app';
@@ -33,6 +38,7 @@ import { RenderDashboardDemo } from './pages/render-dashboard-demo';
 import { UseGetDashboardModelDemo } from './pages/use-get-dashboard-model-demo';
 import { withCachingSwitcher } from './pages/helper-components/with-caching-switcher';
 import { PieChartHighlightDemo } from './pages/selection-highlight/pie-chart-highlight-demo';
+import { DashboardEditAndPluginDemo } from './pages/plugin-demo';
 
 // This page is meant to enable faster iterations during development than
 // using react-ts-demo or other demo apps that require a built sdk-ui
@@ -40,6 +46,8 @@ import { PieChartHighlightDemo } from './pages/selection-highlight/pie-chart-hig
 // Suggest adding a router or at least sessionStorage var for selectedTabIndex
 // if this becomes popular
 const pages: ComponentType[] = [
+  withCachingSwitcher(RenderDashboardDemo),
+  withCachingSwitcher(DashboardEditAndPluginDemo),
   PieChartHighlightDemo,
   PageCrossFiltering,
   SelectionFilterDemo,
@@ -57,7 +65,6 @@ const pages: ComponentType[] = [
   UseExecuteQueryDemo,
   ChartTypeSwitchingDemo,
   SelectionFilterDemo,
-  withCachingSwitcher(RenderDashboardDemo),
   UseGetWidgetModelDemo,
   UseGetDashboardModelDemo,
   BoxplotChartDemo,
@@ -131,7 +138,7 @@ export function App() {
         </Alert>
       )}
       <SisenseContextProvider {...sisenseContextProviderProps}>
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', background: '#EEEEEE' }}>
           <LeftNav currentItem={selectedPageIndex} onSelectItem={setSelectedPageIndex} />
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             {pages.map((Page, i) => (

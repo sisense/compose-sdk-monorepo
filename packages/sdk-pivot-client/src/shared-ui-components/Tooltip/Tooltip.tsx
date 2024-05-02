@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
-import { Tooltip as MuiTooltip, type TooltipProps as MuiTooltipProps } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+import MuiTooltip, { type TooltipProps as MuiTooltipProps } from '@mui/material/Tooltip';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import classnames from 'classnames';
 
 import { tooltipTheme, type TooltipTheme } from './themes';

@@ -78,6 +78,7 @@ export const IndicatorCanvas: FunctionComponent<Props> = ({
         width: '100%',
         height: '100%',
         alignItems: 'center',
+        backgroundColor: themeSettings?.chart?.backgroundColor,
       }}
       aria-label="indicator-root"
     >

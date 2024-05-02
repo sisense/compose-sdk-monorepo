@@ -40,8 +40,9 @@ export const translation: TranslationDictionary = {
     },
     widgetModel: {
       tabularWidgetNotSupported: 'Метод {{methodName}} не підтримується для табличних віджетів',
-      onlyTabularWidgetsSupported:
-        'Метод {{methodName}} підтримуються тільки для табличних віджетів',
+      pivotWidgetNotSupported: 'Метод {{methodName}} не підтримується для півот віджету',
+      onlyTableWidgetSupported: 'Метод {{methodName}} підтримуються тільки для табличним віджетом',
+      onlyPivotWidgetSupported: 'Метод {{methodName}} підтримуються тільки для півот віджетом',
     },
     unknownFilterInFilterRelations: 'Логічні відношення фільтрів містять невідомий фільтр',
     filterRelationsNotSupported: 'Відносини фільтрів ще не підтримуються',

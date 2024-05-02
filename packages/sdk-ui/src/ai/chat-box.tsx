@@ -1,7 +1,5 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import styled from '@emotion/styled';
 
 import LoadingSpinner from '../common/components/loading-spinner';
 import { useClearChatHistory } from './api/chat-history';
@@ -9,19 +7,19 @@ import { CHAT_UNAVAILABLE_ERROR } from './api/errors';
 import { useChatConfig } from './chat-config';
 import ChatInput from './chat-input';
 import ChatWelcomeMessage from './messages/chat-welcome-message';
-import { useChatStyle } from './chat-style-provider';
 import ErrorContainer from './common/error-container';
 import LoadingDotsIcon from './icons/loading-dots-icon';
-import MagicWandDropdown from './magic-wand-dropdown';
 import ClearHistoryMessage from './messages/clear-history-message';
 import ClearHistorySuccessMessage from './messages/clear-history-success-message';
 import MessageListResolver from './messages/message-list-resolver';
 import TextMessage from './messages/text-message';
 import NavBackButton from './nav-back-button';
 import { SuggestionsWithIntro } from './suggestions';
-import Toolbar from './toolbar';
+import Toolbar from './common/toolbar';
 import { useChatSession } from './use-chat-session';
 import { useGetQueryRecommendationsInternal } from './use-get-query-recommendations';
+import { useThemeContext } from '..';
+import { Themable } from '@/theme-provider/types';
 import AiDisclaimer from './ai-disclaimer';
 import ClickableMessage from './messages/clickable-message';
 
@@ -29,6 +27,47 @@ export type ChatBoxProps = {
   contextTitle: string;
   onGoBack?: () => void;
 };
+
+const ChatBoxBody = styled.div<Themable>`
+  height: 100%;
+  border-bottom-left-radius: ${({ theme }) => theme.aiChat.borderRadius};
+  border-bottom-right-radius: ${({ theme }) => theme.aiChat.borderRadius};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+
+  background-color: ${({ theme }) => theme.aiChat.backgroundColor};
+`;
+
+const ChatContainer = styled.div<Themable>`
+  display: flex;
+  flex-direction: column;
+  row-gap: ${({ theme }) => theme.aiChat.body.gapBetweenMessages};
+  overflow-y: scroll;
+  padding-left: ${({ theme }) => theme.aiChat.body.paddingLeft};
+  padding-right: ${({ theme }) => theme.aiChat.body.paddingRight};
+  padding-top: ${({ theme }) => theme.aiChat.body.paddingTop};
+  padding-bottom: ${({ theme }) => theme.aiChat.body.paddingBottom};
+  flex: initial;
+  height: 100%;
+`;
+
+const ChatFooter = styled.div<Themable>`
+  padding-left: ${({ theme }) => theme.aiChat.footer.paddingLeft};
+  padding-right: ${({ theme }) => theme.aiChat.footer.paddingRight};
+  padding-top: ${({ theme }) => theme.aiChat.footer.paddingTop};
+  padding-bottom: ${({ theme }) => theme.aiChat.footer.paddingBottom};
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+`;
+
+const FollowupQuestionsContainer = styled.div<Themable>`
+  display: flex;
+  flex-direction: column;
+  row-gap: ${({ theme }) => theme.aiChat.suggestions.gap};
+`;
 
 export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   const { data: queryRecommendations, isLoading: recommendationsLoading } =
@@ -73,29 +112,40 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const header = (
+  const { enableFollowupQuestions, enableHeader, numOfRecentPrompts } = useChatConfig();
+  const { themeSettings } = useThemeContext();
+
+  const header = enableHeader ? (
     <Toolbar
       ref={ref}
       title={contextTitle}
-      leftNav={onGoBack && <NavBackButton onClick={onGoBack} />}
-      rightNav={
-        <MagicWandDropdown
-          questions={questions}
-          isLoading={recommendationsLoading}
-          onSelection={sendMessage}
-          anchorEl={ref.current}
-        />
+      leftNav={
+        onGoBack && (
+          <NavBackButton onClick={onGoBack} color={themeSettings.aiChat.header.textColor} />
+        )
       }
+      style={themeSettings.aiChat.header}
     />
-  );
+  ) : null;
 
-  const { enableFollowupQuestions } = useChatConfig();
-  const { backgroundColor } = useChatStyle();
+  const uniqueRecentPrompts = useMemo(
+    () =>
+      [
+        ...new Set(
+          history
+            .filter((m) => m.role === 'user')
+            .filter((m) => !questions.includes(m.content))
+            .map((m) => m.content)
+            .reverse(),
+        ),
+      ].slice(0, numOfRecentPrompts),
+    [history, numOfRecentPrompts, questions],
+  );
 
   if (lastError?.message === CHAT_UNAVAILABLE_ERROR) {
     return (
       <>
-        {header}
+        {enableHeader && header}
         <ErrorContainer text={lastError.message} />
       </>
     );
@@ -104,16 +154,8 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   return (
     <>
       {header}
-      <div
-        className="csdk-h-full csdk-bg-background-priority csdk-rounded-b-[30px] csdk-flex csdk-flex-col csdk-justify-between csdk-overflow-hidden csdk-pb-[16px]"
-        style={{
-          backgroundColor,
-        }}
-      >
-        <div
-          ref={chatContainerRef}
-          className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-overflow-y-scroll csdk-p-[16px] csdk-flex-initial csdk-h-full"
-        >
+      <ChatBoxBody theme={themeSettings}>
+        <ChatContainer ref={chatContainerRef} theme={themeSettings}>
           <ChatWelcomeMessage />
           <SuggestionsWithIntro
             questions={questions}
@@ -125,11 +167,11 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
           {isLoading && <LoadingSpinner />}
           {!isLoading && <MessageListResolver messages={history} />}
           {enableFollowupQuestions && lastNlqResponse && (
-            <div className="csdk-flex csdk-flex-col csdk-gap-y-2">
+            <FollowupQuestionsContainer theme={themeSettings}>
               {lastNlqResponse.followupQuestions.slice(0, 2).map((question, i) => (
                 <ClickableMessage
                   key={i}
-                  align="right"
+                  align="left"
                   onClick={() => {
                     sendMessage(question);
                   }}
@@ -137,7 +179,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
                   <div className="csdk-py-[7px] csdk-px-2">{question}</div>
                 </ClickableMessage>
               ))}
-            </div>
+            </FollowupQuestionsContainer>
           )}
           {(isAwaitingResponse || isClearingHistory) && <LoadingDotsIcon />}
           {isClearHistoryOptionsVisible && (
@@ -146,15 +188,20 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
               onConfirm={onClearHistoryConfirm}
             />
           )}
-        </div>
+        </ChatContainer>
 
-        <ChatInput
-          onSendMessage={sendMessage}
-          disabled={isAwaitingResponse || isLoading}
-          onClearHistoryClick={showClearHistoryOptions}
-        />
-        <AiDisclaimer />
-      </div>
+        <ChatFooter theme={themeSettings}>
+          <ChatInput
+            onSendMessage={sendMessage}
+            disabled={isAwaitingResponse || isLoading}
+            onClearHistoryClick={showClearHistoryOptions}
+            suggestions={questions}
+            recentPrompts={uniqueRecentPrompts}
+            isLoading={recommendationsLoading || isLoading}
+          />
+          <AiDisclaimer theme={themeSettings} />
+        </ChatFooter>
+      </ChatBoxBody>
     </>
   );
 }

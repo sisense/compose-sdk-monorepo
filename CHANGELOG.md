@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.9.0] - 2024-05-02
+
+### Added
+- Add pivot table support to `DashboardWidget` and `WidgetModel`
+- Extend `PivotTable` to support additional style options
+- Add internal `ContentPanel` component for rendering a layout of widgets
+- Add extra factory functions for measure filters: `measureEquals`, `measureGreaterThan`, and `measureLessThan`
+
+### Changed
+- Reduce the bundle size of `@sisense/sdk-ui`
+- Extend CLI command `get-data-model` to include field descriptions in the generated data model file.
+  _Note: User account of role 'Data Designer' and above is required to include field descriptions_
+- Upgrade `sisense-charts` to prevent jQuery patching by Highcharts
+- Fix pivot types to prevent build errors in Angular 17
+- Fix missing values in drilldown breadcrumbs of categorical charts
+- Improve the translation of filter JAQL to `Filter` objects
+- Make improvements to the AI components and hooks (private beta): theme settings, style customizations, insight customization, chatbot header, and dropup for recent queries/suggestions
+
 ## [1.8.0] - 2024-04-15
 
 ### Added

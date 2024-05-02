@@ -1,7 +1,4 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
-import { Divider } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import classNames from 'classnames';
 import { useThemeContext } from '../../theme-provider';
 import { WidgetStyleOptions } from '../../types';

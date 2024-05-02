@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { useEffect, useReducer, useState } from 'react';
 import { usePrevious } from '../../common/hooks/use-previous';
 import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer';

@@ -18,8 +18,8 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *
  * Additional Pie Chart examples:
  *
- * - [Donut Pie Chart](https://csdk-playground.sisense.com/?example=charts%2Fpie-chart-donut)
- * - [Ring Pie Chart](https://csdk-playground.sisense.com/?example=charts%2Fpie-chart-ring)
+ * - [Donut Pie Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpie-chart-donut)
+ * - [Ring Pie Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpie-chart-ring)
  *
  * @param props - Pie chart properties
  * @returns Pie Chart component

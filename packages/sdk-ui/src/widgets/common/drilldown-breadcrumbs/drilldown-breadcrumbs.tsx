@@ -1,6 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 import { useState } from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';

@@ -40,6 +40,7 @@ Factory function `measureFactory.sum()` is used to create a measure that sums th
 
 - [aggregate](functions/function.aggregate.md)
 - [average](functions/function.average.md)
+- [avg](functions/function.avg.md)
 - [count](functions/function.count.md)
 - [countDistinct](functions/function.countDistinct.md)
 - [max](functions/function.max.md)

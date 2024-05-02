@@ -18,8 +18,8 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *
  * Additional Bar Chart examples:
  *
- * - [Stacked Bar Chart](https://csdk-playground.sisense.com/?example=charts%2Fbar-chart-stacked)
- * - [Stacked Percentage Bar Chart](https://csdk-playground.sisense.com/?example=charts%2Fbar-chart-stacked100)
+ * - [Stacked Bar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fbar-chart-stacked)
+ * - [Stacked Percentage Bar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fbar-chart-stacked100)
  *
  * @param props - Bar chart properties
  * @returns Bar Chart component

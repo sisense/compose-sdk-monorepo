@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { test, expect } from '@playwright/experimental-ct-react';
 import {

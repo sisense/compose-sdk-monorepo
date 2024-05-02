@@ -1,6 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
 import mapValues from 'lodash/mapValues';
 import {
   MetadataTypes,
@@ -14,6 +11,8 @@ import {
   Jaql,
   BaseJaql,
   createFilterFromJaql,
+  PivotJaql,
+  Attribute,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -36,22 +35,30 @@ import {
   DatetimeMask,
   WidgetStyle,
   BoxplotWidgetStyle,
+  PivotWidgetStyle,
 } from './types';
 import {
   createValueToColorMap,
   createValueColorOptions,
   createValueToColorMultiColumnsMap,
 } from './translate-panel-color-format';
-import { getEnabledPanelItems, getSortType, getRootPanelItem, isTabularWidget } from './utils';
+import {
+  getEnabledPanelItems,
+  getSortType,
+  getRootPanelItem,
+  isTableWidget,
+  isPivotWidget,
+} from './utils';
 import {
   AreamapChartDataOptions,
   BoxplotChartDataOptions,
+  PivotTableDataOptions,
   ScattermapChartDataOptions,
   TableDataOptions,
 } from '../chart-data-options/types';
 import { WidgetDataOptions } from '../models';
 import { TranslatableError } from '../translation/translatable-error';
-import { findKey } from 'lodash';
+import findKey from 'lodash/findKey';
 
 export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem['format']) {
   const isFormulaJaql = 'formula' in jaql;
@@ -156,11 +163,14 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   const element = createDimensionalElementFromJaql(item.jaql, item.format);
   const sortType = getSortType(item.jaql.sort ?? item.categoriesSorting);
   const numberFormatConfig = extractNumberFormat(item);
+  const subtotal = item.format?.subtotal;
 
   if (MetadataTypes.isMeasure(element)) {
     const color = createValueColorOptions(item.format?.color, customPaletteColors);
     const showOnRightAxis = item.y2;
     const chartType = item.singleSeriesType;
+    const totalsCalculation = 'subtotalAgg' in item.jaql && item.jaql.subtotalAgg;
+    const dataBars = item.format?.databars;
 
     return {
       column: element,
@@ -169,6 +179,8 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
       ...(sortType && { sortType }),
       ...(chartType && { chartType }),
       ...(numberFormatConfig && { numberFormatConfig }),
+      ...(totalsCalculation && { totalsCalculation }),
+      ...(dataBars && { dataBars }),
     } as StyledMeasureColumn;
   }
 
@@ -177,6 +189,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     isColored: item.isColored ?? false,
     ...(sortType && { sortType }),
     ...(numberFormatConfig && { numberFormatConfig }),
+    ...(subtotal && { includeSubTotals: subtotal }),
   } as StyledColumn;
 }
 
@@ -195,14 +208,30 @@ export const createDataOptionsFromPanels = (panels: Panel[], variantColors: Colo
   return dataOptions;
 };
 
+type PanelItemCallback<ProcessResult> = (
+  item: PanelItem,
+  index: number,
+  items: PanelItem[],
+) => ProcessResult;
+
+function processPanelItems<ProcessResult>(
+  panels: Panel[],
+  panelName: string,
+  callback: PanelItemCallback<ProcessResult>,
+) {
+  return getEnabledPanelItems(panels, panelName).map(getRootPanelItem).map(callback);
+}
+
 export function createColumnsFromPanelItems<ColumnType = StyledColumn | StyledMeasureColumn>(
   panels: Panel[],
   panelName: string,
   customPaletteColors?: Color[],
 ) {
-  return getEnabledPanelItems(panels, panelName)
-    .map(getRootPanelItem)
-    .map((item) => createDataColumn(item, customPaletteColors) as ColumnType);
+  return processPanelItems(
+    panels,
+    panelName,
+    (item) => createDataColumn(item, customPaletteColors) as ColumnType,
+  );
 }
 
 function extractCartesianChartDataOptions(
@@ -330,17 +359,75 @@ function extractTableChartDataOptions(panels: Panel[], paletteColors?: Color[]):
  * @param paletteColors - palette colors
  * @returns - table data options
  */
+
 function extractPivotTableChartDataOptions(
   panels: Panel[],
+  style: PivotWidgetStyle,
   paletteColors?: Color[],
-): TableDataOptions {
+): PivotTableDataOptions {
+  let valuesSortDetails: PivotJaql['sortDetails'];
+  const valuesFieldIndexesMapping: Record<number, number> = {};
+
+  // process columns
+  const columns = createColumnsFromPanelItems(panels, 'columns', paletteColors);
+
+  // process values
+  const values = processPanelItems(panels, 'values', (item, index) => {
+    const { field, jaql } = item;
+    const { sortDetails } = jaql as PivotJaql;
+
+    if (sortDetails) {
+      // save measure sorting for later translation into sorting for the last row
+      valuesSortDetails = sortDetails;
+    }
+
+    if (field) {
+      // collect mapping of existing "field.index" to new index in "values" array
+      valuesFieldIndexesMapping[field.index] = index;
+    }
+
+    return createDataColumn(item, paletteColors);
+  });
+
+  // process rows
+  const rows = processPanelItems(panels, 'rows', (item, index, items) => {
+    const isLastRow = index === items.length - 1;
+    let { sortDetails } = item?.jaql as PivotJaql;
+
+    const row = createDataColumn(item, paletteColors);
+    // remove attribute inner sorting
+    row.column = (row.column as Attribute).sort(Sort.None);
+
+    if (isLastRow && valuesSortDetails) {
+      sortDetails = valuesSortDetails;
+    }
+
+    const isSortedByMeasure = sortDetails?.field !== item.field?.index;
+
+    if (sortDetails) {
+      row.sortType = {
+        direction: getSortType(sortDetails.dir),
+        ...(isSortedByMeasure && {
+          by: {
+            valuesIndex: valuesFieldIndexesMapping[sortDetails.field],
+            columnsMembersPath: Object.values(sortDetails.measurePath || {}),
+          },
+        }),
+      };
+    }
+
+    return row;
+  });
+
   return {
-    columns: [
-      ...createColumnsFromPanelItems(panels, 'rows', paletteColors),
-      ...createColumnsFromPanelItems(panels, 'values', paletteColors),
-      ...createColumnsFromPanelItems(panels, 'columns', paletteColors),
-    ],
-  };
+    rows,
+    columns,
+    values,
+    grandTotals: {
+      rows: style.rowsGrandTotal,
+      columns: style.columnsGrandTotal,
+    },
+  } as PivotTableDataOptions;
 }
 
 export function extractBoxplotBoxType(style: BoxplotWidgetStyle) {
@@ -447,11 +534,15 @@ export function extractDataOptions(
   if (widgetType === 'indicator') {
     return extractIndicatorChartDataOptions(panels, customPaletteColors);
   }
-
-  if (isTabularWidget(widgetType)) {
-    return widgetType === 'pivot2'
-      ? extractPivotTableChartDataOptions(panels, customPaletteColors)
-      : extractTableChartDataOptions(panels, customPaletteColors);
+  if (isTableWidget(widgetType)) {
+    return extractTableChartDataOptions(panels, customPaletteColors);
+  }
+  if (isPivotWidget(widgetType)) {
+    return extractPivotTableChartDataOptions(
+      panels,
+      style as PivotWidgetStyle,
+      customPaletteColors,
+    );
   }
   if (widgetType === 'chart/boxplot') {
     return extractBoxplotChartDataOptions(panels, style as BoxplotWidgetStyle, customPaletteColors);

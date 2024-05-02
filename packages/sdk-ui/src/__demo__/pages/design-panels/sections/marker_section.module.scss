@@ -1,0 +1,113 @@
+@import '@/charts/table/styles/color.scss';
+@import './constants.scss';
+@import '@/charts/table/styles/icons.scss';
+
+.title {
+  padding-top: 15px;
+  margin-left: 20px;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: $OXFORD_BLUE;
+}
+
+.component {
+  display: flex;
+}
+
+.table1 {
+  margin-left: 13px;
+}
+
+.markerTable {
+  width: 105px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  background: white;
+  font-size: 13px;
+  line-height: normal;
+  margin-right: 8px;
+  color: $SHUTTLE_GRAY_DARK;
+  td {
+    border-right: 1px solid $ATHENS_GRAY_DARK2;
+  }
+  tr {
+    border-bottom: 1px solid $ATHENS_GRAY_DARK2;
+  }
+  .iconTr {
+    height: 53px;
+    cursor: pointer;
+  }
+  .hoverEffect {
+    &:hover {
+      background-color: $PALE_CANERY;
+      .fullIcon {
+        background-color: $CHARADE;
+      }
+      .hollowIcon {
+        border-color: $CHARADE;
+      }
+      .smallIcon {
+        color: $CHARADE;
+      }
+      .largeIcon {
+        color: $CHARADE;
+      }
+    }
+  }
+  .textTr {
+    height: 25px;
+  }
+  .fullIcon {
+    background-color: $MERCURY;
+    &.selected {
+      background-color: $CHARADE;
+    }
+    &.large {
+      width: 28px;
+      height: 28px;
+      border-radius: 28px;
+    }
+    &.small {
+      width: 16px;
+      height: 16px;
+      border-radius: 16px;
+    }
+  }
+  .hollowIcon {
+    border: 2px solid $MERCURY;
+    &.selected {
+      border-color: $CHARADE;
+    }
+    &.large {
+      width: 28px;
+      height: 28px;
+      border-radius: 28px;
+    }
+    &.small {
+      width: 16px;
+      height: 16px;
+      border-radius: 16px;
+    }
+  }
+  .smallIcon {
+    font-size: 28px;
+    color: $MERCURY;
+    &.selected {
+      color: $CHARADE;
+    }
+  }
+  .largeIcon {
+    font-size: 28px;
+    color: $MERCURY;
+    &.selected {
+      color: $CHARADE;
+    }
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

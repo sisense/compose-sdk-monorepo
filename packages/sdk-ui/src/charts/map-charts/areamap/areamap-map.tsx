@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import 'leaflet/dist/leaflet.css';
 import type {
   Feature as GeoJsonFeature,

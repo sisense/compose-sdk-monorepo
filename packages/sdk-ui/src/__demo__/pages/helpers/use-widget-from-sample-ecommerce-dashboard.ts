@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useState } from 'react';
 import { useSisenseContext } from '../../../sisense-context/sisense-context.js';
 import { TranslatableError } from '../../../translation/translatable-error.js';

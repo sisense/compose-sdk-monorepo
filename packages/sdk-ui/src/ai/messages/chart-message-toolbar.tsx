@@ -1,29 +1,28 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-import { IconButton as MuiIconButton, Menu, MenuItem, styled } from '@mui/material';
+import { useThemeContext } from '@/theme-provider';
+import styled from '@emotion/styled';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { useMemo, useState } from 'react';
 
 import { colors } from '../../themes/colors';
+import IconButton from '../common/icon-button';
 import Tooltip from '../common/tooltip';
 import ExpandIcon from '../icons/expand-icon';
 import InfoIcon from '../icons/info-icon';
 import RefreshIcon from '../icons/refresh-icon';
 import ThreeDotsIcon from '../icons/three-dots-icon';
 
-const IconButton = styled(MuiIconButton)(() => ({
-  padding: 2,
-  '&.MuiIconButton-root:hover': {
-    backgroundColor: colors.interaction.defaultHover,
-  },
-}));
+const InfoTooltip = ({ title }: { title: string }) => {
+  const { themeSettings } = useThemeContext();
 
-const InfoTooltip = ({ title }: { title: string }) => (
-  <Tooltip title={title}>
-    <IconButton disableTouchRipple>
-      <InfoIcon />
-    </IconButton>
-  </Tooltip>
-);
+  return (
+    <Tooltip title={title}>
+      <IconButton disableTouchRipple $themeSettings={themeSettings}>
+        <InfoIcon fill={themeSettings.chart.textColor} />
+      </IconButton>
+    </Tooltip>
+  );
+};
 
 type ThreeDotsMenuProps = {
   items: {
@@ -42,10 +41,16 @@ const ThreeDotsMenu = ({ items }: ThreeDotsMenuProps) => {
     setAnchorEl(null);
   };
 
+  const { themeSettings } = useThemeContext();
+
   return (
     <>
-      <IconButton onClick={handleClick} aria-label="three dots button">
-        <ThreeDotsIcon />
+      <IconButton
+        onClick={handleClick}
+        $themeSettings={themeSettings}
+        aria-label="three dots button"
+      >
+        <ThreeDotsIcon fill={themeSettings.chart.textColor} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -69,7 +74,7 @@ const ThreeDotsMenu = ({ items }: ThreeDotsMenuProps) => {
             }}
             sx={{
               fontSize: '13px',
-              fontFamily: 'Open Sans',
+              fontFamily: themeSettings.typography.fontFamily,
               color: colors.text.content,
             }}
             disableRipple
@@ -84,14 +89,22 @@ const ThreeDotsMenu = ({ items }: ThreeDotsMenuProps) => {
 };
 
 const ExpandButton = ({ onClick }: { onClick: () => void }) => {
+  const { themeSettings } = useThemeContext();
+
   return (
     <Tooltip title="Preview">
-      <IconButton onClick={onClick}>
-        <ExpandIcon />
+      <IconButton onClick={onClick} $themeSettings={themeSettings}>
+        <ExpandIcon fill={themeSettings.chart.textColor} />
       </IconButton>
     </Tooltip>
   );
 };
+
+const ToolbarContainer = styled.div`
+  display: flex;
+  padding-top: 6px;
+  padding-bottom: 6px;
+`;
 
 type ChartMessageToolbarProps = {
   infoTooltipText?: string;
@@ -116,10 +129,10 @@ export default function ChartMessageToolbar({
   );
 
   return (
-    <div className="csdk-flex csdk-py-1.5" aria-label="chatbot chart toolbar">
+    <ToolbarContainer aria-label="chatbot chart toolbar">
       <InfoTooltip title={infoTooltipText ?? ''} />
       <ThreeDotsMenu items={dropdownMenuItems} />
       <ExpandButton onClick={onExpand} />
-    </div>
+    </ToolbarContainer>
   );
 }

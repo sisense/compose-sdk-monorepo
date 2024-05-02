@@ -46,6 +46,9 @@ export default defineConfig(({ mode }) => ({
       formats: ['es'],
     },
     rollupOptions: {
+      treeshake: {
+        preset: 'smallest',
+      },
       external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },

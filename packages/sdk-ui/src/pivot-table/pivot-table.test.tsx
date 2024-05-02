@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /** @vitest-environment jsdom */
 import { fireEvent, render } from '@testing-library/react';
 import { PivotTable } from './pivot-table';
@@ -17,7 +20,7 @@ describe('PivotTable', () => {
     const url = 'mock-url';
     useSisenseContextMock.mockReturnValue({
       app: {
-        pivotClient: new PivotClient(new HttpClient(url, new SsoAuthenticator(url), 'test')),
+        pivotClient: new PivotClient(new HttpClient(url, new SsoAuthenticator(url), 'test'), true),
       } as ClientApplication,
       isInitialized: true,
       enableTracking: false,

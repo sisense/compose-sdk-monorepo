@@ -1,9 +1,8 @@
 import React, { ForwardedRef } from 'react';
-import {
-  TablePagination as MuiTablePagination,
+import MuiTablePagination, {
   type TablePaginationProps as MuiTablePaginationProps,
-} from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+} from '@mui/material/TablePagination';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { useMeasure } from 'react-use';
 import { UsePaginationProps } from '@mui/material/usePagination/usePagination';
 
@@ -122,10 +121,7 @@ export const TablePagination = React.forwardRef(
                 ),
               }}
               labelRowsPerPage={
-                <Typography
-                  variant={'bodyParagraph'}
-                  sx={{ color: siColors.StTextColors.secondary }}
-                >
+                <Typography variant={'bodyParagraph'}>
                   {breakpointIsLessThanLg ? labelRowsPerPageShort : labelRowsPerPage}
                 </Typography>
               }

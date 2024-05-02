@@ -1,6 +1,6 @@
 import { isFiltersChanged, isRelationsChanged } from '@/utils/filters-comparator';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { ExecuteQueryParams } from '../index.js';
 
 /** List of parameters that can be compared by deep comparison */

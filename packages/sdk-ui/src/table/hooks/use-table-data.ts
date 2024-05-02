@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable complexity */
 import {
   Attribute,
   Data,

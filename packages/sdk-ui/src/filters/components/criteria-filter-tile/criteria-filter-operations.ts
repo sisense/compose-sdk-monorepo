@@ -1,5 +1,4 @@
 /* eslint-disable no-case-declarations */
-/* eslint-disable max-lines */
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable @typescript-eslint/ban-types */
 import {

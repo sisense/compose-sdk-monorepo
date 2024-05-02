@@ -1,37 +1,95 @@
-import { useChatStyle } from '../chat-style-provider.js';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 type Props = {
   children: string | JSX.Element;
   align: 'left' | 'right';
-  onClick: () => void;
+  onClick?: () => void;
+  disabled?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+};
+
+type Alignable = {
+  align: 'left' | 'right' | 'full';
+};
+
+type Disableable = {
   disabled?: boolean;
 };
 
-export default function ClickableMessage({ children, align, onClick, disabled }: Props) {
-  const { primaryTextColor, messageBackgroundColor } = useChatStyle();
+const FlexContainer = styled.div<Alignable>`
+  display: flex;
 
-  const baseStyle =
-    'csdk-text-ai-sm csdk-text-text-content csdk-bg-background-priority csdk-rounded-[20px] csdk-border csdk-border-text-content csdk-p-0 csdk-select-none';
+  ${({ align }) =>
+    align === 'right'
+      ? css`
+          justify-content: flex-end;
+        `
+      : css`
+          justify-content: flex-start;
+        `}
+`;
 
-  const enabledStyle =
-    'enabled:csdk-cursor-pointer enabled:hover:csdk-text-white enabled:hover:csdk-bg-text-content';
+const MessageButton = styled.div<Themable & Alignable & Disableable>`
+  font-size: inherit;
+  line-height: inherit;
+  border: ${({ theme }) => theme.aiChat.clickableMessages.border};
+  padding: 0px;
+  user-select: none;
+  cursor: pointer;
 
-  const disabledStyle = 'disabled:csdk-opacity-70';
+  opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
 
-  const alignStyle =
-    align === 'right' ? 'csdk-ml-auto csdk-text-right' : 'only:csdk-mr-auto csdk-text-left';
+  color: ${({ theme }) => theme.aiChat.clickableMessages.textColor};
+  background-color: ${({ theme }) => theme.aiChat.clickableMessages.backgroundColor};
+  &:hover {
+    color: ${({ theme }) => theme.aiChat.clickableMessages.hover.textColor};
+    background-color: ${({ theme }) => theme.aiChat.clickableMessages.hover.backgroundColor};
+  }
+  border-radius: 20px;
+
+  ${({ align }) =>
+    align === 'right'
+      ? css`
+          text-align: right;
+        `
+      : css`
+          text-align: left;
+        `}
+
+  ${({ align }) =>
+    align !== 'full'
+      ? css`
+          max-width: 382px;
+        `
+      : ''}
+`;
+
+export default function ClickableMessage({
+  children,
+  align,
+  onClick,
+  disabled,
+  onMouseEnter,
+  onMouseLeave,
+}: Props) {
+  const { themeSettings } = useThemeContext();
 
   return (
-    <button
-      className={`${baseStyle} ${enabledStyle} ${disabledStyle} ${alignStyle} `}
-      style={{
-        backgroundColor: messageBackgroundColor,
-        color: primaryTextColor,
-      }}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
+    <FlexContainer align={align}>
+      <MessageButton
+        theme={themeSettings}
+        onClick={onClick}
+        disabled={disabled}
+        align={align}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        {children}
+      </MessageButton>
+    </FlexContainer>
   );
 }

@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines */
 import { AxisSettings } from '../translations/axis-section';
 import { DeepPick } from 'ts-essentials';
 import { Style, HighchartsOptionsInternal, Stacking } from '../chart-options-service';

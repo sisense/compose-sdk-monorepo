@@ -1,5 +1,5 @@
 import { useThemeContext } from '../../../theme-provider';
-import { darken } from '@mui/material';
+import { darken } from '@mui/system/colorManipulator';
 
 export const useThemeForBreadcrumbs = () => {
   const {

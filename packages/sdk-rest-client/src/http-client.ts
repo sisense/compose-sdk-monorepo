@@ -1,7 +1,5 @@
 /* eslint-disable promise/param-names */
 /* eslint-disable @typescript-eslint/no-throw-literal */
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
 /// <reference lib="dom" />
 import { Authenticator } from './interfaces.js';
 import fetchIntercept from 'fetch-intercept';

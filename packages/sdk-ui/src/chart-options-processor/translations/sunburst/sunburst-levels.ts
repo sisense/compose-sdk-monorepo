@@ -15,7 +15,7 @@ export function prepareSunburstLevels(
 ) {
   const rootLevelOptions = {
     level: 1,
-    color: 'white',
+    color: themeSettings?.chart?.backgroundColor ?? 'white',
     dataLabels: {
       enabled: true,
       useHTML: true,
@@ -28,12 +28,14 @@ export function prepareSunburstLevels(
 
         return `
         <div style="text-align: center; transform: translateY(calc(-50% + 15px))">
-          <div style="color: #9EA2AB">${this.point.name}</div>
+          <div style="color: ${themeSettings?.chart?.secondaryTextColor ?? '#9EA2AB'}">${
+          this.point.name
+        }</div>
           ${tooltipSeparator()}
           <div style="
             font-weight: 600;
             font-size: 18px;
-            color: ${themeSettings?.typography?.primaryTextColor ?? '#5B6372'}
+            color: ${themeSettings?.chart?.textColor ?? '#5B6372'}
             "
             >${applyFormat(numberFormatConfig, value)}</div>
         </div>

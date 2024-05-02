@@ -1,4 +1,4 @@
-import { ThemeSettings } from '../../types.js';
+import { CompleteThemeSettings } from '../../types.js';
 import { LegacyDesignSettings, LegacyPalette } from '../legacy-design-settings.js';
 
 export const redLegacyDesignSettings: LegacyDesignSettings = {
@@ -55,7 +55,7 @@ export const redLegacyDesignSettings: LegacyDesignSettings = {
   created: '2023-07-04T11:56:16.000Z',
 };
 
-export const redThemeSettings: ThemeSettings = {
+export const redThemeSettings: CompleteThemeSettings = {
   chart: {
     textColor: '#FFFFFF',
     backgroundColor: '#ec4646',
@@ -75,6 +75,88 @@ export const redThemeSettings: ThemeSettings = {
     primaryButtonTextColor: '#3A4356',
     primaryButtonHoverColor: '#F2B900',
     backgroundColor: '#16161C',
+  },
+  aiChat: {
+    backgroundColor: 'rgba(244, 244, 248, 1)',
+    primaryTextColor: 'rgba(38, 46, 61, 0.8)',
+    secondaryTextColor: 'rgba(38, 46, 61, 0.55)',
+    primaryFontSize: ['13px', '18px'],
+    body: {
+      paddingLeft: '16px',
+      paddingRight: '16px',
+      paddingTop: '16px',
+      paddingBottom: '0px',
+      gapBetweenMessages: '16px',
+    },
+    footer: {
+      paddingLeft: '16px',
+      paddingRight: '16px',
+      paddingTop: '12px',
+      paddingBottom: '16px',
+    },
+    userMessages: {
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+    },
+    systemMessages: {
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+    },
+    input: {
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+      focus: {
+        outlineColor: 'rgba(38, 46, 61, 0.5)',
+      },
+    },
+    header: {
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+      textColor: 'rgba(38, 46, 61, 0.8)',
+    },
+    dropup: {
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+      boxShadow: '0px 1px 2px rgba(9, 9, 10, 0.1), 0px 2px 4px rgba(9, 9, 10, 0.1)',
+      borderRadius: '4px',
+      headers: {
+        textColor: 'rgba(38, 46, 61, 0.8)',
+        hover: {
+          backgroundColor: 'rgba(244, 244, 248, 1)',
+        },
+      },
+      items: {
+        textColor: 'rgba(38, 46, 61, 0.8)',
+        hover: {
+          backgroundColor: 'rgba(244, 244, 248, 1)',
+        },
+      },
+    },
+    border: '1px solid #c6c9ce',
+    borderRadius: '30px',
+    suggestions: {
+      backgroundColor: 'rgba(244, 244, 248, 1)',
+      textColor: 'rgba(38, 46, 61, 1)',
+      border: '1px solid',
+      borderRadius: '16px',
+      borderGradient: ['rgba(75, 153, 233, 1)', 'rgba(102, 57, 191, 1)'],
+      hover: {
+        backgroundColor: 'rgba(38, 46, 61, 0.8)',
+        textColor: 'rgba(255, 255, 255, 1)',
+      },
+      loadingGradient: ['rgba(194, 196, 203, 1)', 'rgba(236, 236, 239, 1)'],
+      gap: '8px',
+    },
+    clickableMessages: {
+      backgroundColor: 'rgba(244, 244, 248, 1)',
+      textColor: 'rgba(38, 46, 61, 1)',
+      border: '1px solid #5B6372',
+      hover: {
+        textColor: 'rgba(244, 244, 248, 1)',
+        backgroundColor: 'rgba(38, 46, 61, 0.8)',
+      },
+    },
+    icons: {
+      color: 'rgba(38, 46, 61, 0.67)',
+      hover: {
+        color: 'rgba(255, 255, 255, 1)',
+      },
+    },
   },
 };
 

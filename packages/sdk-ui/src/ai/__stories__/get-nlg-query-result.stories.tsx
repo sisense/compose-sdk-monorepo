@@ -3,7 +3,7 @@ import GetNlgQueryResult from '../get-nlg-query-result';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../../props';
 import AiContextProvider from '../ai-context-provider';
-import * as DM from '@/__demo__/sample-ecommerce';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
 
 const sisenseContextProps: SisenseContextProviderProps = {

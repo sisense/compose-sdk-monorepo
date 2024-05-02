@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Chart } from '../chart';
 import { templateForComponent } from './template';
 import { BoxplotStyleOptions } from '../types';

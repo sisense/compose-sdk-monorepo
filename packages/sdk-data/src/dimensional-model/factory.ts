@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { MetadataTypes } from './types.js';
 import { Element } from './interfaces.js';

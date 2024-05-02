@@ -87,7 +87,7 @@ describe('WidgetModel', () => {
       });
     });
 
-    it('returns execute query parameters for tabular widget', () => {
+    it('returns execute query parameters for table widget', () => {
       const tableWidgetModel = new WidgetModel(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
       );
@@ -104,6 +104,50 @@ describe('WidgetModel', () => {
           expect.objectContaining({
             name: 'AVG COST',
             type: 'basemeasure',
+          }),
+        ]),
+        filters: [
+          {
+            attribute: {
+              id: '[Diagnosis.Description]',
+            },
+            type: 'filter',
+          },
+        ],
+      });
+    });
+  });
+
+  describe('getExecutePivotQueryParams', () => {
+    it('returns execute query parameters for pivot widget', () => {
+      const pivotWidgetModel = new WidgetModel(
+        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
+      );
+      const executePivotQueryParams = pivotWidgetModel.getExecutePivotQueryParams();
+
+      console.log(executePivotQueryParams);
+
+      expect(executePivotQueryParams).toMatchObject({
+        dataSource: 'Sample Healthcare',
+        rows: [{ attribute: expect.objectContaining({ name: 'DIAGNOSIS' }) }],
+        values: expect.arrayContaining([
+          expect.objectContaining({
+            measure: expect.objectContaining({
+              name: '# PATIENTS',
+              type: 'basemeasure',
+            }),
+          }),
+          expect.objectContaining({
+            measure: expect.objectContaining({
+              name: 'AVG COST',
+              type: 'basemeasure',
+            }),
+          }),
+          expect.objectContaining({
+            measure: expect.objectContaining({
+              name: 'AVG DAYS ADMITTED',
+              type: 'calculatedmeasure',
+            }),
           }),
         ]),
         filters: [
@@ -163,11 +207,11 @@ describe('WidgetModel', () => {
   });
 
   describe('getTableProps', () => {
-    it('should throw an error for non-tabular widgets', () => {
-      const nonTabularWidgetModel = new WidgetModel(mockWidgetDto);
-      expect(() => nonTabularWidgetModel.getTableProps()).toThrow(TranslatableError);
+    it('should throw an error for non-table widgets', () => {
+      const nonTableWidgetModel = new WidgetModel(mockWidgetDto);
+      expect(() => nonTableWidgetModel.getTableProps()).toThrow(TranslatableError);
     });
-    it('should return TableProps for tabular widgets', () => {
+    it('should return TableProps for table widgets', () => {
       const tableWidgetModel = new WidgetModel(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
       );
@@ -189,6 +233,58 @@ describe('WidgetModel', () => {
             expect.objectContaining({
               column: expect.objectContaining({
                 name: 'AVG COST',
+              }),
+            }),
+          ]),
+        }),
+        styleOptions: expect.objectContaining({
+          alternatingColumnsColor: expect.any(Boolean),
+          alternatingRowsColor: expect.any(Boolean),
+          headersColor: expect.any(Boolean),
+        }),
+        dataSet: 'Sample Healthcare',
+        filters: [
+          {
+            attribute: {
+              id: '[Diagnosis.Description]',
+            },
+            type: 'filter',
+          },
+        ],
+      });
+    });
+  });
+
+  describe('getPivotTableProps', () => {
+    it('should throw an error for non-pivot widgets', () => {
+      const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
+      expect(() => nonPivotWidgetModel.getPivotTableProps()).toThrow(TranslatableError);
+    });
+    it('should return PivotTableProps for pivot widgets', () => {
+      const pivotWidgetModel = new WidgetModel(
+        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
+      );
+      const pivotProps = pivotWidgetModel.getPivotTableProps();
+
+      expect(pivotProps).toMatchObject({
+        dataOptions: expect.objectContaining({
+          rows: [
+            expect.objectContaining({ column: expect.objectContaining({ name: 'DIAGNOSIS' }) }),
+          ],
+          values: expect.arrayContaining([
+            expect.objectContaining({
+              column: expect.objectContaining({
+                name: '# PATIENTS',
+              }),
+            }),
+            expect.objectContaining({
+              column: expect.objectContaining({
+                name: 'AVG COST',
+              }),
+            }),
+            expect.objectContaining({
+              column: expect.objectContaining({
+                name: 'AVG DAYS ADMITTED',
               }),
             }),
           ]),
@@ -272,7 +368,7 @@ describe('WidgetModel', () => {
   });
 
   describe('getTableWidgetProps', () => {
-    it('should return table widget props correctly for tabular widget', () => {
+    it('should return table widget props correctly for table widget', () => {
       const tableWidgetModel = new WidgetModel(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
       );
@@ -312,13 +408,67 @@ describe('WidgetModel', () => {
             type: 'filter',
           },
         ],
-        title: 'TOP 10 DIAGNOSIS',
+        title: 'TOP 10 DIAGNOSIS (table widget)',
         description: '',
       });
     });
-    it('should throw an error for non-tabular widgets', () => {
-      const nonTabularWidgetModel = new WidgetModel(mockWidgetDto);
-      expect(() => nonTabularWidgetModel.getTableWidgetProps()).toThrow(TranslatableError);
+    it('should throw an error for non-table widgets', () => {
+      const nonTableWidgetModel = new WidgetModel(mockWidgetDto);
+      expect(() => nonTableWidgetModel.getTableWidgetProps()).toThrow(TranslatableError);
+    });
+  });
+
+  describe('getPivotTableWidgetProps', () => {
+    it('should throw an error for non-pivot widgets', () => {
+      const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
+      expect(() => nonPivotWidgetModel.getPivotTableWidgetProps()).toThrow(TranslatableError);
+    });
+    it('should return PivotTableWidgetProps for pivot widgets', () => {
+      const pivotWidgetModel = new WidgetModel(
+        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
+      );
+      const pivotProps = pivotWidgetModel.getPivotTableWidgetProps();
+
+      expect(pivotProps).toMatchObject({
+        dataOptions: expect.objectContaining({
+          rows: [
+            expect.objectContaining({ column: expect.objectContaining({ name: 'DIAGNOSIS' }) }),
+          ],
+          values: expect.arrayContaining([
+            expect.objectContaining({
+              column: expect.objectContaining({
+                name: '# PATIENTS',
+              }),
+            }),
+            expect.objectContaining({
+              column: expect.objectContaining({
+                name: 'AVG COST',
+              }),
+            }),
+            expect.objectContaining({
+              column: expect.objectContaining({
+                name: 'AVG DAYS ADMITTED',
+              }),
+            }),
+          ]),
+        }),
+        styleOptions: expect.objectContaining({
+          alternatingColumnsColor: expect.any(Boolean),
+          alternatingRowsColor: expect.any(Boolean),
+          headersColor: expect.any(Boolean),
+        }),
+        dataSource: 'Sample Healthcare',
+        filters: [
+          {
+            attribute: {
+              id: '[Diagnosis.Description]',
+            },
+            type: 'filter',
+          },
+        ],
+        title: 'TOP 10 DIAGNOSIS',
+        description: '',
+      });
     });
   });
 });

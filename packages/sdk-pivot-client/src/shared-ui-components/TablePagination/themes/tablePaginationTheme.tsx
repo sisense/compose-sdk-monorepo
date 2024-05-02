@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import createTheme from '@mui/material/styles/createTheme';
 
 // import { injectStylesWithWrapper, themeService } from '@sbi/styleguide';
 
@@ -54,7 +54,7 @@ export const tablePaginationTheme = createTheme({
         },
         select: {
           '&.MuiTablePagination-select': {
-            background: siColors.StBackgroundColors.workspace,
+            background: 'transparent',
           },
         },
         selectIcon: { top: '8%' },

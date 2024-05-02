@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { BearerAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { PivotClient } from '../pivot-client';
 import { PivotBuilderDemo } from './pivot-builder-demo';
-import { defaultQuery as defaultQuery1, defaultQuery2 } from '../components/Demo/examples';
+import { defaultQuery as defaultQuery1, defaultQuery2 } from './examples';
 import { JaqlRequest } from '../data-load/types';
 
 export function App() {

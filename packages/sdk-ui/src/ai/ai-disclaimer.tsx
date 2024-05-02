@@ -1,17 +1,27 @@
-import { useChatStyle } from './chat-style-provider';
+import { Themable } from '@/theme-provider/types';
+import styled from '@emotion/styled';
+import { CompleteThemeSettings } from '..';
 
-export default function AiDisclaimer() {
-  const { secondaryTextColor } = useChatStyle();
+const AiDisclaimerContainer = styled.div<Themable>`
+  text-align: center;
+  font-size: 11px;
+  line-height: 18px;
+  white-space: pre-wrap;
 
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  color: ${({ theme }) => theme.aiChat.secondaryTextColor};
+`;
+
+export default function AiDisclaimer({ theme }: { theme: CompleteThemeSettings }) {
   return (
-    <div
-      className="csdk-pt-1.5 csdk-px-4 csdk-text-center csdk-text-ai-xs csdk-text-text-secondary csdk-whitespace-pre-wrap csdk-w-full csdk-flex csdk-flex-wrap csdk-items-center csdk-justify-center"
-      style={{
-        color: secondaryTextColor,
-      }}
-    >
+    <AiDisclaimerContainer theme={theme}>
       <div>Content is powered by AI, so surprises and mistakes are possible.</div>
       <div> Please rate responses so we can improve!</div>
-    </div>
+    </AiDisclaimerContainer>
   );
 }

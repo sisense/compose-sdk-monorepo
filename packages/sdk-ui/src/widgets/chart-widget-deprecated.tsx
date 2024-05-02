@@ -1,8 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable max-lines */
 import React, { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../chart';

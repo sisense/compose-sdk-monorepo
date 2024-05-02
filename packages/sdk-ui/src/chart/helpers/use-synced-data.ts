@@ -1,5 +1,4 @@
 /* eslint-disable promise/catch-or-return */
-/* eslint-disable max-lines-per-function */
 import {
   Attribute,
   Data,

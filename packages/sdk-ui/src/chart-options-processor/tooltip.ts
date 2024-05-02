@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 /* eslint-disable sonarjs/no-nested-template-literals */
 import {
   CartesianChartDataOptionsInternal,

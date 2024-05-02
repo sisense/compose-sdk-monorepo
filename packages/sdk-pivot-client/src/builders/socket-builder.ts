@@ -9,6 +9,7 @@ import {
   WatAuthenticator,
 } from '@sisense/sdk-rest-client';
 import { SisenseSocket } from '../data-load/index.js';
+import TestSocket from '../data-load/sockets/TestSocket.js';
 
 /**
  * Builder to create a web socket client on demand to communicate with a Sisense web socket server.
@@ -21,8 +22,16 @@ export class SocketBuilder {
 
   private readonly _httpClient: HttpClient;
 
-  constructor(httpClient: HttpClient) {
+  /**
+   * Boolean flag to indicate if the socket should be mocked or not (for testing).
+   *
+   * @internal
+   */
+  private readonly _mockSocket: boolean;
+
+  constructor(httpClient: HttpClient, mockSocket = false) {
     this._httpClient = httpClient;
+    this._mockSocket = mockSocket;
   }
 
   private getQueryOptionsSso(auth: SsoAuthenticator): SocketQueryOptions {
@@ -58,6 +67,12 @@ export class SocketBuilder {
   get socket(): SocketI {
     // initialize socket only when needed
     if (!this._socket) {
+      if (this._mockSocket) {
+        // use a mock socket for testing
+        this._socket = new TestSocket();
+        return this._socket;
+      }
+
       const auth = this._httpClient.auth;
       const url = this._httpClient.url;
       let query: SocketQueryOptions = {};

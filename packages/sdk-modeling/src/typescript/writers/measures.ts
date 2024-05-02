@@ -6,6 +6,7 @@
 import { BaseMeasure, MeasureTemplate, normalizeName } from '@sisense/sdk-data';
 
 import { NEWLINE, rnt, writeIndented, ElementWriter } from './base.js';
+import { prepareDescription } from '../utils/prepare-description.js';
 
 export abstract class MeasureWriter<T> extends ElementWriter<T> {
   readonly isNested: boolean;
@@ -48,7 +49,7 @@ export class BaseMeasureWriter extends MeasureWriter<BaseMeasure> {
                     : ''
                 }${
                   this.element.description
-                    ? `,${rnt(idnt + 1)}description:"${this.element.description}"`
+                    ? `,${rnt(idnt + 1)}description: ${prepareDescription(this.element.description)}`
                     : ''
                 }})`,
       idnt,
@@ -90,7 +91,7 @@ export class MeasureTemplateWriter extends MeasureWriter<MeasureTemplate> {
                     : ''
                 }${
                   this.element.description
-                    ? `,${rnt(ident + 1)}description:"${this.element.description}"`
+                    ? `,${rnt(ident + 1)}description: ${prepareDescription(this.element.description)}`
                     : ''
                 }})`,
       ident,

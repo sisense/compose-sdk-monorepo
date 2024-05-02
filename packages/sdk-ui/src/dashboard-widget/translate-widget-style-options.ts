@@ -1,7 +1,4 @@
 /* eslint-disable max-params */
-/* eslint-disable max-lines */
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
 import { TranslatableError } from '../translation/translatable-error';
 import {
   ChartStyleOptions,
@@ -24,6 +21,7 @@ import {
   ScattermapStyleOptions,
   AreamapStyleOptions,
   AreamapType,
+  PivotTableStyleOptions,
 } from '../types';
 import {
   Panel,
@@ -41,6 +39,7 @@ import {
   SunburstWidgetStyle,
   BoxplotWidgetStyle,
   ScattermapWidgetStyle,
+  PivotWidgetStyle,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
 
@@ -438,6 +437,21 @@ function extractAreamapChartStyleOptions(widgetSubtype: WidgetSubtype): AreamapS
   };
 }
 
+export function extractPivotTableStyleOptions(
+  widgetStyle: PivotWidgetStyle,
+): PivotTableStyleOptions {
+  return {
+    rowsPerPage: parseInt(`${widgetStyle.pageSize}`),
+    isAutoHeight: widgetStyle.automaticHeight,
+    rowHeight: widgetStyle.rowHeight,
+    alternatingRowsColor: widgetStyle.colors?.rows,
+    alternatingColumnsColor: widgetStyle.colors?.columns,
+    headersColor: widgetStyle.colors?.headers,
+    membersColor: widgetStyle.colors?.members,
+    totalsColor: widgetStyle.colors?.totals,
+  };
+}
+
 export function extractStyleOptions<WType extends WidgetType>(
   widgetType: WType,
   widgetSubtype: WidgetSubtype,
@@ -469,8 +483,10 @@ export function extractStyleOptions<WType extends WidgetType>(
       return extractBaseStyleOptions(widgetSubtype, style);
     case 'tablewidget':
     case 'tablewidgetagg':
-    case 'pivot2':
       return extractTableChartStyleOptions(style as TableWidgetStyle);
+    case 'pivot':
+    case 'pivot2':
+      return extractPivotTableStyleOptions(style as PivotWidgetStyle);
     case 'indicator':
       return extractIndicatorChartStyleOptions(
         widgetSubtype,

@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import dayjs from 'dayjs';
 import { SecondaryButton } from '../../common/index.js';
 import {

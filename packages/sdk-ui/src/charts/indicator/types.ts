@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 export type LegacyIndicatorChartTypes = 'numericSimple' | 'numericBar' | 'gauge' | 'ticker';
 
 export type BaseMeasure = {

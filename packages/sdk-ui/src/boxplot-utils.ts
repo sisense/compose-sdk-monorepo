@@ -1,5 +1,5 @@
 import { Attribute, Measure, Filter, QueryResultData, DataSource } from '@sisense/sdk-data';
-import { isNull } from 'lodash';
+import isNull from 'lodash/isNull';
 import { ClientApplication } from './app/client-application.js';
 import { executeQuery as executeQueryFunction } from './query/execute-query.js';
 import {

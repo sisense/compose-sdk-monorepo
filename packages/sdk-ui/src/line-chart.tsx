@@ -17,8 +17,8 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *
  * Additional Line Chart examples:
  *
- * - [Curved Line Chart](https://csdk-playground.sisense.com/?example=charts%2Fline-chart-spline)
- * - [Styled Line Chart](https://csdk-playground.sisense.com/?example=charts%2Fline-chart-styled)
+ * - [Curved Line Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fline-chart-spline)
+ * - [Styled Line Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fline-chart-styled)
  *
  * @param props - Line chart properties
  * @returns Line Chart component

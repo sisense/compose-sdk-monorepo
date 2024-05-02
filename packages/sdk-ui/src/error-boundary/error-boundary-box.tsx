@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { useState } from 'react';
 import styles from './error-boundary-box.module.scss';
 import { useTranslation } from 'react-i18next';

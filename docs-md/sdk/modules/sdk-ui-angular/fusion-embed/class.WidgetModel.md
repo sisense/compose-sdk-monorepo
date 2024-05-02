@@ -26,6 +26,7 @@ Returns the props to be used for rendering a chart.
 
 Note: this method is not supported for tabular widgets.
 Use [getTableProps](class.WidgetModel.md#gettableprops) instead for getting props for the `<Table>`  component.
+Use [getPivotTableProps](class.WidgetModel.md#getpivottableprops) instead for getting props for the `<PivotTable>`  component.
 
 ***
 
@@ -49,6 +50,27 @@ Note: this method is not supported for tabular widgets.
 
 ***
 
+### getExecutePivotQueryParams
+
+> **getExecutePivotQueryParams**(): [`ExecutePivotQueryParams`](../../sdk-ui/interfaces/interface.ExecutePivotQueryParams.md)
+
+Returns the parameters to be used for executing a query for the pivot widget.
+
+#### Returns
+
+[`ExecutePivotQueryParams`](../../sdk-ui/interfaces/interface.ExecutePivotQueryParams.md)
+
+#### Example
+
+```ts
+const {data, isLoading, isError} = useExecutePivotQuery(widget.getExecutePivotQueryParams());
+```
+
+Note: this method is supported only for getting pivot query.
+Use [getExecuteQueryParams](class.WidgetModel.md#getexecutequeryparams) instead for getting query parameters for non-pivot widgets.
+
+***
+
 ### getExecuteQueryParams
 
 > **getExecuteQueryParams**(): [`ExecuteQueryParams`](../../sdk-ui/interfaces/interface.ExecuteQueryParams.md)
@@ -64,6 +86,31 @@ Returns the parameters to be used for executing a query for the widget.
 ```ts
 const {data, isLoading, isError} = useExecuteQuery(widget.getExecuteQueryParams());
 ```
+
+Note: this method is not supported for getting pivot query.
+Use [getExecutePivotQueryParams](class.WidgetModel.md#getexecutepivotqueryparams) instead for getting query parameters for the pivot widget.
+
+***
+
+### getPivotTableProps
+
+> **getPivotTableProps**(): [`PivotTableProps`](../../sdk-ui/interfaces/interface.PivotTableProps.md)
+
+Returns the props to be used for rendering a pivot table.
+
+#### Returns
+
+[`PivotTableProps`](../../sdk-ui/interfaces/interface.PivotTableProps.md)
+
+#### Example
+
+```ts
+<PivotTable {...widget.getPivotTableProps()} />
+```
+
+Note: this method is not supported for chart or table widgets.
+Use [getChartProps](class.WidgetModel.md#getchartprops) instead for getting props for the `<Chart>`  component.
+Use [getTableProps](class.WidgetModel.md#gettableprops) instead for getting props for the `<Table>`  component.
 
 ***
 
@@ -83,8 +130,9 @@ Returns the props to be used for rendering a table.
 <Table {...widget.getTableProps()} />
 ```
 
-Note: this method is not supported for chart widgets.
+Note: this method is not supported for chart and pivot widgets.
 Use [getChartProps](class.WidgetModel.md#getchartprops) instead for getting props for the `<Chart>`  component.
+Use [getPivotTableProps](class.WidgetModel.md#getpivottableprops) instead for getting props for the `<PivotTable>`  component.
 
 ## Properties
 

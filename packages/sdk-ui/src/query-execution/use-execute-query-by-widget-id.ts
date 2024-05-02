@@ -1,8 +1,5 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { withTracking } from '../decorators/hook-decorators';
 import { queryStateReducer } from './query-state-reducer';
 import { useSisenseContext } from '../sisense-context/sisense-context';

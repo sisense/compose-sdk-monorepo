@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
 import { CompleteThemeSettings } from '../../../types';

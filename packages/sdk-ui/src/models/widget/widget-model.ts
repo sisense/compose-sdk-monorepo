@@ -1,16 +1,36 @@
-/* eslint-disable max-lines */
+import { getPivotQueryOptions } from '@/pivot-table/use-get-pivot-table-query';
 import { Attribute, Filter, Measure } from '@sisense/sdk-data';
 import { getTranslatedDataOptions } from '../../chart-data-options/get-translated-data-options';
-import { translateTableDataOptions } from '../../chart-data-options/translate-data-options';
-import { ChartDataOptions, TableDataOptions } from '../../chart-data-options/types';
+import {
+  translatePivotTableDataOptions,
+  translateTableDataOptions,
+} from '../../chart-data-options/translate-data-options';
+import {
+  ChartDataOptions,
+  PivotTableDataOptions,
+  TableDataOptions,
+} from '../../chart-data-options/types';
 import { extractDataOptions } from '../../dashboard-widget/translate-widget-data-options';
 import { extractDrilldownOptions } from '../../dashboard-widget/translate-widget-drilldown-options';
 import { extractFilters } from '../../dashboard-widget/translate-widget-filters';
 import { extractStyleOptions } from '../../dashboard-widget/translate-widget-style-options';
 import { Panel, WidgetDto, WidgetSubtype, WidgetType } from '../../dashboard-widget/types';
-import { getChartType, isSupportedWidgetType, isTabularWidget } from '../../dashboard-widget/utils';
-import { ChartProps, ChartWidgetProps, TableProps, TableWidgetProps } from '../../props';
-import { ExecuteQueryParams } from '../../query-execution';
+import {
+  getChartType,
+  isPivotWidget,
+  isSupportedWidgetType,
+  isTableWidget,
+  isTabularWidget,
+} from '../../dashboard-widget/utils';
+import {
+  ChartProps,
+  ChartWidgetProps,
+  PivotTableProps,
+  TableProps,
+  TableWidgetProps,
+  PivotTableWidgetProps,
+} from '../../props';
+import { ExecutePivotQueryParams, ExecuteQueryParams } from '../../query-execution';
 import { getTableAttributesAndMeasures } from '../../table/hooks/use-table-data';
 import { DEFAULT_TABLE_ROWS_PER_PAGE, PAGES_BATCH_SIZE } from '../../table/table';
 import { TranslatableError } from '../../translation/translatable-error';
@@ -20,12 +40,13 @@ import {
   ChartStyleOptions,
   TableStyleOptions,
   CompleteThemeSettings,
+  PivotTableWidgetStyleOptions,
 } from '../../types';
 
 /**
  * Widget data options.
  */
-export type WidgetDataOptions = ChartDataOptions | TableDataOptions;
+export type WidgetDataOptions = ChartDataOptions | TableDataOptions | PivotTableDataOptions;
 
 /**
  * Model of Sisense widget defined in the abstractions of Compose SDK.
@@ -152,12 +173,20 @@ export class WidgetModel {
    * ```tsx
    * const {data, isLoading, isError} = useExecuteQuery(widget.getExecuteQueryParams());
    * ```
+   *
+   * Note: this method is not supported for getting pivot query.
+   * Use {@link getExecutePivotQueryParams} instead for getting query parameters for the pivot widget.
    */
   getExecuteQueryParams(): ExecuteQueryParams {
+    if (isPivotWidget(this.widgetType)) {
+      throw new TranslatableError('errors.widgetModel.pivotWidgetNotSupported', {
+        methodName: 'getExecuteQueryParams',
+      });
+    }
     let dimensions: Attribute[];
     let measures: Measure[];
     let count: number | undefined = undefined;
-    if (isTabularWidget(this.widgetType)) {
+    if (isTableWidget(this.widgetType)) {
       const { attributes: tableAttributes, measures: tableMeasures } =
         getTableAttributesAndMeasures(
           translateTableDataOptions(this.dataOptions as TableDataOptions),
@@ -184,8 +213,41 @@ export class WidgetModel {
   }
 
   /**
-   * Returns the props to be used for rendering a chart.
+   * Returns the parameters to be used for executing a query for the pivot widget.
+   *
+   * @example
+   * ```tsx
+   * const {data, isLoading, isError} = useExecutePivotQuery(widget.getExecutePivotQueryParams());
+   * ```
+   *
+   * Note: this method is supported only for getting pivot query.
+   * Use {@link getExecuteQueryParams} instead for getting query parameters for non-pivot widgets.
+   */
+  getExecutePivotQueryParams(): ExecutePivotQueryParams {
+    if (!isPivotWidget(this.widgetType)) {
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      throw new TranslatableError('errors.widgetModel.onlyPivotWidgetSupported', {
+        methodName: 'getExecutePivotQueryParams',
+      });
+    }
 
+    const { rows, columns, values, grandTotals } = getPivotQueryOptions(
+      translatePivotTableDataOptions(this.dataOptions as PivotTableDataOptions),
+    );
+
+    return {
+      dataSource: this.dataSource,
+      rows,
+      columns,
+      values,
+      grandTotals,
+      filters: this.filters,
+    };
+  }
+
+  /**
+   * Returns the props to be used for rendering a chart.
+   *
    * @example
    * ```tsx
    * <Chart {...widget.getChartProps()} />
@@ -193,6 +255,7 @@ export class WidgetModel {
    *
    * Note: this method is not supported for tabular widgets.
    * Use {@link getTableProps} instead for getting props for the <Table> component.
+   * Use {@link getPivotTableProps} instead for getting props for the <PivotTable> component.
    */
   getChartProps(): ChartProps {
     if (isTabularWidget(this.widgetType)) {
@@ -218,18 +281,45 @@ export class WidgetModel {
    * <Table {...widget.getTableProps()} />
    * ```
    *
-   * Note: this method is not supported for chart widgets.
+   * Note: this method is not supported for chart and pivot widgets.
    * Use {@link getChartProps} instead for getting props for the <Chart> component.
+   * Use {@link getPivotTableProps} instead for getting props for the <PivotTable> component.
    */
   getTableProps(): TableProps {
-    if (!isTabularWidget(this.widgetType)) {
-      throw new TranslatableError('errors.widgetModel.onlyTabularWidgetsSupported', {
+    if (!isTableWidget(this.widgetType)) {
+      throw new TranslatableError('errors.widgetModel.onlyTableWidgetSupported', {
         methodName: 'getTableProps',
       });
     }
     return {
       dataOptions: this.dataOptions as TableDataOptions,
       styleOptions: this.styleOptions as TableStyleOptions,
+      dataSet: this.dataSource,
+      filters: this.filters,
+    };
+  }
+
+  /**
+   * Returns the props to be used for rendering a pivot table.
+   *
+   * @example
+   * ```tsx
+   * <PivotTable {...widget.getPivotTableProps()} />
+   * ```
+   *
+   * Note: this method is not supported for chart or table widgets.
+   * Use {@link getChartProps} instead for getting props for the <Chart> component.
+   * Use {@link getTableProps} instead for getting props for the <Table> component.
+   */
+  getPivotTableProps(): PivotTableProps {
+    if (!isPivotWidget(this.widgetType)) {
+      throw new TranslatableError('errors.widgetModel.onlyPivotWidgetSupported', {
+        methodName: 'getPivotTableProps',
+      });
+    }
+    return {
+      dataOptions: this.dataOptions as PivotTableDataOptions,
+      styleOptions: this.styleOptions,
       dataSet: this.dataSource,
       filters: this.filters,
     };
@@ -246,8 +336,10 @@ export class WidgetModel {
    * Note: this method is not supported for tabular widgets.
    */
   getChartWidgetProps(): ChartWidgetProps {
-    if (isTabularWidget(this.widgetType)) {
-      throw new TranslatableError('Tabular widgets are not supported for this method');
+    if (isTableWidget(this.widgetType) || isPivotWidget(this.widgetType)) {
+      throw new TranslatableError('errors.widgetModel.tabularWidgetNotSupported', {
+        methodName: 'getChartWidgetProps',
+      });
     }
     return {
       chartType: this.chartType!,
@@ -275,14 +367,43 @@ export class WidgetModel {
    * @internal
    */
   getTableWidgetProps(): TableWidgetProps {
-    if (!isTabularWidget(this.widgetType)) {
-      throw new TranslatableError('errors.widgetModel.onlyTabularWidgetsSupported', {
+    if (!isTableWidget(this.widgetType)) {
+      throw new TranslatableError('errors.widgetModel.onlyTableWidgetSupported', {
         methodName: 'getTableWidgetProps',
       });
     }
     return {
       dataOptions: this.dataOptions as TableDataOptions,
       styleOptions: this.styleOptions as TableStyleOptions,
+      dataSource: this.dataSource,
+      filters: this.filters,
+      title: this.title,
+      description: this.description || '',
+    };
+  }
+
+  /**
+   * Returns the props to be used for rendering a pivot table widget.
+   *
+   * @example
+   * ```tsx
+   * <PivotTableWidget {...widget.getPivotTableWidgetProps()} />
+   * ```
+
+   * Note: this method is not supported for chart or table widgets.
+   * Use {@link getChartWidgetProps} instead for getting props for the <ChartWidget> component.
+   * Use {@link getTableWidgetProps} instead for getting props for the <TableWidget> component.
+   * @internal
+   */
+  getPivotTableWidgetProps(): PivotTableWidgetProps {
+    if (!isPivotWidget(this.widgetType)) {
+      throw new TranslatableError('errors.widgetModel.onlyPivotWidgetSupported', {
+        methodName: 'getPivotTableWidgetProps',
+      });
+    }
+    return {
+      dataOptions: this.dataOptions as PivotTableDataOptions,
+      styleOptions: this.styleOptions as PivotTableWidgetStyleOptions,
       dataSource: this.dataSource,
       filters: this.filters,
       title: this.title,

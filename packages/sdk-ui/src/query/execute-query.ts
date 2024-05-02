@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { CreateCacheKeyFn, createCache } from '@/utils/create-cache';
 import {
   Attribute,

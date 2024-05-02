@@ -36,7 +36,6 @@ const config: UserConfig = {
         'src/widgets/common/drilldown-breadcrumbs',
         'src/charts/indicator/chart/*', // legacy indicator's code, copy-pasted from PWC
         'src/ai/translators/*', // POC implementation of Chat to Code; will add unit tests in separate MRs
-        'src/pivot-table/sorting-utils.ts', // Temporal pivot sorting implementation ported from PWC. Will be refactored soon
       ],
     },
   },

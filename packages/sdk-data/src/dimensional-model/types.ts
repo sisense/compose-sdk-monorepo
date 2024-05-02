@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable max-lines */
 /*
  * Types
  */
@@ -27,7 +25,7 @@ export const AggregationTypes = {
   Count: 'count',
 
   /** Count distinct aggregation type */
-  CountDistinct: 'countdistinct',
+  CountDistinct: 'countDistinct',
 
   /** Median aggregation type */
   Median: 'median',
@@ -356,7 +354,17 @@ export enum JaqlSortDirection {
 }
 
 /** @internal */
-export type Jaql = BaseJaql | FormulaJaql | FilterJaql;
+export type Jaql = BaseJaql | FormulaJaql | FilterJaql | PivotJaql;
+
+/** @internal */
+export type PivotJaql = (BaseJaql | FormulaJaql) & {
+  sortDetails?: {
+    dir: JaqlSortDirection;
+    field: number;
+    measurePath?: Record<string, string> | null;
+  };
+  subtotalAgg?: 'sum' | 'min' | 'max' | 'avg' | 'median';
+};
 
 /** @internal */
 export type BaseJaql = {

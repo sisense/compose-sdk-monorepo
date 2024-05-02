@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
@@ -21,7 +19,7 @@ import {
   ColoringService,
   getColoringServiceByColorOptions,
 } from '../../chart-data-options/coloring';
-import { isNumber } from 'lodash';
+import isNumber from 'lodash/isNumber';
 
 export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChartDataOptions>;
 

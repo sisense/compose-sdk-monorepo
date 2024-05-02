@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -16,9 +14,16 @@ import {
 import { DataModel, MetadataTypes } from '@sisense/sdk-data';
 import { writeTypescript, writeJavascript } from '@sisense/sdk-modeling';
 import path from 'path';
-import { DimensionalQueryClient } from '@sisense/sdk-query-client';
+import levenshtein from 'js-levenshtein';
+import {
+  DataSourceField,
+  DataSourceMetadata,
+  DimensionalQueryClient,
+  QueryClient,
+} from '@sisense/sdk-query-client';
 import { PKG_VERSION } from '../package-version.js';
 import { trackCliError } from '@sisense/sdk-tracking';
+import { DataSourceSchemaDataset } from '../types.js';
 
 function getHttpClient(
   url: string,
@@ -58,6 +63,86 @@ export const handleHttpClientLogin = async (httpClient: HttpClient) => {
   return Promise.resolve();
 };
 
+async function retrieveDataSource(
+  queryClient: QueryClient,
+  dataSourceTitle: string,
+): Promise<DataSourceMetadata> {
+  console.log('Getting data source... ');
+  const dataSourceList = await queryClient.getDataSourceList();
+
+  let minDistance = Number.MAX_SAFE_INTEGER;
+  let minDistanceDataSource: DataSourceMetadata = { title: dataSourceTitle, live: false };
+
+  dataSourceList.forEach((dataSource) => {
+    const title = dataSource.title;
+
+    if (title === dataSourceTitle) {
+      minDistanceDataSource = dataSource;
+      minDistance = 0;
+    } else {
+      // get the most matching data source by comparing levenshtein distance on the title
+      const distance = levenshtein(dataSourceTitle, title);
+      if (distance < minDistance) {
+        minDistance = distance;
+        minDistanceDataSource = dataSource;
+      }
+    }
+  });
+
+  if (minDistance === 0) {
+    console.log('OK!\r\n');
+    return minDistanceDataSource;
+  }
+
+  throw new Error(
+    `Data source '${dataSourceTitle}' not found. ${
+      minDistance <= 3 ? `Did you mean '${minDistanceDataSource.title}'?` : ''
+    }`,
+  );
+}
+
+async function retrieveDataFields(
+  queryClient: QueryClient,
+  dataSourceTitle: string,
+): Promise<DataSourceField[]> {
+  console.log('Getting fields... ');
+
+  const fields = await queryClient.getDataSourceFields(dataSourceTitle);
+
+  try {
+    // get the schema of the data source to add descriptions to the fields
+    const dataSourceSchema = await queryClient.getDataSourceSchema(dataSourceTitle);
+    return addDescriptionToFields(fields, dataSourceSchema.datasets as DataSourceSchemaDataset[]);
+  } catch (error) {
+    if ((error as { status: string }).status === '403') {
+      // the caller may not have permission to access this data source
+      console.log(
+        `Note: Field descriptions are omitted from the data model due to restricted role of your account`,
+      );
+    } else {
+      throw error;
+    }
+  } finally {
+    console.log('OK!\r\n');
+  }
+
+  return fields;
+}
+
+function combineDataSourceAndDataFields(
+  dataSource: DataSourceMetadata,
+  dataFields: DataSourceField[],
+) {
+  return {
+    name: dataSource.title,
+    dataSource: {
+      title: dataSource.title,
+      type: dataSource.live ? 'live' : 'elasticube',
+    },
+    metadata: dataFields,
+  };
+}
+
 /**
  * Create a data model for a Sisense data source
  */
@@ -67,20 +152,14 @@ async function createDataModel(
 ): Promise<DataModel> {
   const queryClient = new DimensionalQueryClient(httpClient);
 
-  console.log('Getting fields... ');
   try {
-    const [fields, dataSourceInfo] = await Promise.all([
-      queryClient.getDataSourceFields(dataSourceTitle),
-      queryClient.getDataSourceInfo(dataSourceTitle),
-    ]);
-    console.log('OK!\r\n');
-    const dataModel = {
-      name: dataSourceTitle,
-      dataSource: dataSourceInfo,
-      metadata: fields,
-    };
+    const dataSource = await retrieveDataSource(queryClient, dataSourceTitle);
 
-    return rewriteDataModel(dataModel);
+    const dataFields = await retrieveDataFields(queryClient, dataSourceTitle);
+
+    const rawDataModel = combineDataSourceAndDataFields(dataSource, dataFields);
+
+    return rewriteDataModel(rawDataModel);
   } catch (err) {
     trackCliError(
       {
@@ -105,6 +184,7 @@ function rewriteDataModel(dataModel: any): DataModel {
         expression: item.id,
         type: MetadataTypes.Dimension,
         group: undefined,
+        description: item.description,
       };
 
       result.group = item.table;
@@ -222,6 +302,29 @@ function isSupportedOutputFile(
   filePathInfo: FilePathInfo,
 ): filePathInfo is SupportedOutputFilePathInfo {
   return ['.ts', '.js'].includes(filePathInfo.extension);
+}
+
+/**
+ * Add 'description' property from datasource schema columns to datasource fields
+ */
+export function addDescriptionToFields(
+  fields: DataSourceField[],
+  datasets: DataSourceSchemaDataset[],
+): DataSourceField[] {
+  const schemaDataDescriptionsMap = datasets.reduce((map, dataset) => {
+    dataset.schema.tables.forEach((table) => {
+      map[table.name] = {};
+      table.columns.forEach((column) => {
+        map[table.name][column.name] = column.description;
+      });
+    });
+    return map;
+  }, {});
+
+  return fields.map((field) => ({
+    ...field,
+    description: schemaDataDescriptionsMap[field.table]?.[field.column] || '',
+  }));
 }
 
 export {

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import ThumbsDownHoveredIcon from '@/ai/icons/thumbs-down-hovered-icon';
 import ThumbsDownIcon from '@/ai/icons/thumbs-down-icon';
 import Tooltip from '@/ai/common/tooltip';
+import { useThemeContext } from '@/theme-provider/theme-context';
 
 type ThumbsDownButtonProps = {
   onClick?: () => void;
@@ -10,6 +11,8 @@ type ThumbsDownButtonProps = {
 
 export default function ThumbsDownButton({ onClick }: ThumbsDownButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { themeSettings } = useThemeContext();
+
   return (
     <Tooltip title="Incorrect response">
       <span
@@ -19,8 +22,8 @@ export default function ThumbsDownButton({ onClick }: ThumbsDownButtonProps) {
         onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}
       >
-        {!isHovered && <ThumbsDownIcon />}
-        {isHovered && <ThumbsDownHoveredIcon />}
+        {!isHovered && <ThumbsDownIcon theme={themeSettings} />}
+        {isHovered && <ThumbsDownHoveredIcon theme={themeSettings} />}
       </span>
     </Tooltip>
   );

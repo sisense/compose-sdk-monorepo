@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable complexity */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable sonarjs/no-ignored-return */
 import { ChartType, ValueToColorMap } from '../../types';

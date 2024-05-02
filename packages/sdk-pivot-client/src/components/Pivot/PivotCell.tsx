@@ -160,7 +160,7 @@ export class PivotCell extends React.PureComponent<Props, State> {
 
   virtualBorderStyle?: Styles;
 
-  cellStyle?: Styles | boolean;
+  cellStyle?: Styles;
 
   cellContentStyle?: Styles;
 
@@ -492,10 +492,10 @@ export class PivotCell extends React.PureComponent<Props, State> {
   /**
    * Calculates new cell style object or use cached one
    *
-   * @returns {object | boolean} - style object
+   * @returns {object | undefined} - style object
    * @private
    */
-  getCellStyle(): Styles | boolean | undefined {
+  getCellStyle(): Styles | undefined {
     if (this.cellStyle === undefined) {
       const {
         treeNode,

@@ -20,8 +20,8 @@ export class PivotClient {
    */
   public socketBuilder: SocketBuilder;
 
-  constructor(httpClient: HttpClient) {
-    this.socketBuilder = new SocketBuilder(httpClient);
+  constructor(httpClient: HttpClient, mockSocket = false) {
+    this.socketBuilder = new SocketBuilder(httpClient, mockSocket);
   }
 
   async queryData(

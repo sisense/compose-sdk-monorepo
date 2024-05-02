@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 type Feature<Name extends string, Mixin extends Record<string, unknown> = {}> = {
   key: Name;
   active: boolean;

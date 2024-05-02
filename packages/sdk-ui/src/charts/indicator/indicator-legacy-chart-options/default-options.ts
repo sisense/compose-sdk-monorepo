@@ -1,6 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines */
 import { NumericSimpleOptions, NumericBarOptions, GaugeOptions, TickerOptions } from '../types';
 
 export const defaultNumericSimpleOptions: NumericSimpleOptions = {

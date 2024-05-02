@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable max-lines */
 import EventEmitter from 'events';
 import { MessageType } from '../data-load/constants.js';
 import { PanelType, UserType } from './constants.js';

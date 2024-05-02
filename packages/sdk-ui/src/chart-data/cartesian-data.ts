@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
 /* eslint-disable max-params */
-/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable sonarjs/no-ignored-return */
-/* eslint-disable max-lines */
 import { type SortDirection } from '../types';
 import {
   getColumnsByName,

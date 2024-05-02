@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
@@ -7,7 +5,7 @@ import { useMembers } from './use-members';
 import { FilterTile } from '../filter-tile';
 import { Member, SelectedMember } from './members-reducer';
 import { useValidatedMembers } from './use-validate-members';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 /**
  * Props for {@link BasicMemberFilterTile}

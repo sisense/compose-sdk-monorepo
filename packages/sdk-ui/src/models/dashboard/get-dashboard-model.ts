@@ -23,6 +23,10 @@ export async function getDashboardModel(
   const api = new RestApi(http);
   const fields = ['oid', 'title', 'datasource'];
 
+  if (includeWidgets) {
+    fields.push('layout');
+  }
+
   const promises: [Promise<DashboardDto>, Promise<WidgetDto[]>?] = [
     api.getDashboard(dashboardOid, { fields }),
   ];

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import ThumbsUpHoveredIcon from '@/ai/icons/thumbs-up-hovered-icon';
 import ThumbsUpIcon from '@/ai/icons/thumbs-up-icon';
 import Tooltip from '@/ai/common/tooltip';
+import { useThemeContext } from '@/theme-provider/theme-context';
 
 type ThumbsUpButtonProps = {
   onClick?: () => void;
@@ -10,6 +11,7 @@ type ThumbsUpButtonProps = {
 
 export default function ThumbsUpButton({ onClick }: ThumbsUpButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { themeSettings } = useThemeContext();
   return (
     <Tooltip title="Correct response">
       <span
@@ -19,8 +21,8 @@ export default function ThumbsUpButton({ onClick }: ThumbsUpButtonProps) {
         onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}
       >
-        {!isHovered && <ThumbsUpIcon />}
-        {isHovered && <ThumbsUpHoveredIcon />}
+        {!isHovered && <ThumbsUpIcon theme={themeSettings} />}
+        {isHovered && <ThumbsUpHoveredIcon theme={themeSettings} />}
       </span>
     </Tooltip>
   );

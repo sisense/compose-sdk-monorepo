@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-
 import { useState, useCallback, useMemo } from 'react';
 import { Attribute } from '@sisense/sdk-data';
 import { DataPoint, MenuPosition, MenuItemSection } from '../types';
@@ -37,7 +35,7 @@ import { DrilldownWidgetProps } from '../props';
  *
  * Additional drilldown examples:
  *
- * - [Detached Breadcrumbs](https://csdk-playground.sisense.com/?example=use-cases%2Fdrilldown-detached-breadcrumbs)
+ * - [Detached Breadcrumbs](https://www.sisense.com/platform/compose-sdk/playground/?example=use-cases%2Fdrilldown-detached-breadcrumbs)
  *
  * @param props - DrilldownWidget properties
  * @returns DrilldownWidget wrapper component

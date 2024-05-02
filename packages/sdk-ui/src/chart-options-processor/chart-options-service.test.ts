@@ -18,7 +18,7 @@ import {
 import { ChartDesignOptions, DesignOptions } from './translations/types';
 import { DateLevels } from '@sisense/sdk-data';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';
-import { getDefaultThemeSettings } from './theme-option-service';
+import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
 
 const translateMock = ((key: string) => key) as TFunction;
 

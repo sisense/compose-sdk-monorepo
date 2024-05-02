@@ -61,9 +61,13 @@ export type AppConfig = {
   queryLimit?: number;
 
   /**
-   * Accessibility configuration
+   * Accessibility configuration. Set the `accessibilityConfig.enabled` property to `true` to enable accessibility features for charts built with Highcharts.
    *
-   * This feature is in alpha
+   * Once the accessibility configuration in enabled, you can use the default descriptions or choose to create custom configurations for the descriptions of a chart, its axes, its series, and values description formatting. To create custom configurations, use the `highchartsOptions` object that is passed to the {@link BeforeRenderHandler} of the chart's `onBeforeRender` callback. Modify the object using the accessibility options as described in the [Accessibility module documentation](https://www.highcharts.com/docs/accessibility/accessibility-module).
+   *
+   * Note that enabling accessibility also causes markers to appear in charts even if they are disabled using the chart's `styleOptions`.
+   *
+   * This feature is in alpha.
    */
   accessibilityConfig?: {
     /**

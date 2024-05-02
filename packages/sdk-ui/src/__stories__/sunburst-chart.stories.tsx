@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Chart } from '../chart';
 import { SunburstChartProps } from '../props';
 import { SunburstStyleOptions } from '../types';

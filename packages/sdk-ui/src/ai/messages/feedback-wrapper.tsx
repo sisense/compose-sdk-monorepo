@@ -1,5 +1,5 @@
-import { debounce } from 'lodash';
-import { Children, ReactNode, useCallback, useState } from 'react';
+import debounce from 'lodash/debounce';
+import { Children, ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useChatApi } from '@/ai/api/chat-api-provider';
 import ThumbsDownButton from '@/ai/buttons/thumbs-down-button';
@@ -7,9 +7,19 @@ import ThumbsUpButton from '@/ai/buttons/thumbs-up-button';
 import { useHover } from '@/common/hooks/use-hover';
 import ThumbsUpIcon from '../icons/thumbs-up-icon';
 import ThumbsDownIcon from '../icons/thumbs-down-icon';
+import { useThemeContext } from '@/theme-provider/theme-context';
+import styled from '@emotion/styled';
+import { Themable } from '@/theme-provider/types';
+
+const Container = styled.div<Themable>`
+  display: flex;
+  flex-direction: column;
+  row-gap: ${({ theme }) => theme.aiChat.body.gapBetweenMessages};
+`;
 
 function FeedbackRow({ visible, onSend }: { visible: boolean; onSend: (rating: -1 | 1) => void }) {
   const [clicked, setClicked] = useState(false);
+  const { themeSettings } = useThemeContext();
 
   const onClick = useCallback(
     (type: 'up' | 'down') => {
@@ -32,8 +42,8 @@ function FeedbackRow({ visible, onSend }: { visible: boolean; onSend: (rating: -
     <div className={`csdk-flex ${styles}`}>
       {clicked && (
         <>
-          <ThumbsUpIcon />
-          <ThumbsDownIcon />
+          <ThumbsUpIcon theme={themeSettings} />
+          <ThumbsDownIcon theme={themeSettings} />
         </>
       )}
       {!clicked && (
@@ -50,7 +60,7 @@ type FeedbackWrapperProps = {
   sourceId: string;
   data: object;
   type: string;
-  visible?: boolean;
+  buttonVisibility?: 'onHover' | 'always' | 'never';
   children: ReactNode;
 };
 
@@ -58,7 +68,7 @@ export default function FeedbackWrapper({
   sourceId,
   data,
   type,
-  visible = true,
+  buttonVisibility = 'onHover',
   children,
 }: FeedbackWrapperProps) {
   const api = useChatApi();
@@ -83,19 +93,31 @@ export default function FeedbackWrapper({
 
   const [ref, hovering] = useHover<HTMLDivElement>();
 
+  const areButtonsVisible = useMemo(() => {
+    if (buttonVisibility === 'onHover') {
+      return hovering;
+    } else if (buttonVisibility === 'never') {
+      return false;
+    }
+
+    return true;
+  }, [hovering, buttonVisibility]);
+
+  const { themeSettings } = useThemeContext();
+
   return (
-    <div className="csdk-flex csdk-flex-col csdk-gap-y-4" ref={ref}>
+    <Container ref={ref} theme={themeSettings}>
       {Children.map(children, (child, index) => {
         if (index === 0) {
           return (
             <div className="csdk-flex csdk-items-center csdk-gap-x-2.5">
               {child}
-              <FeedbackRow onSend={sendFeedback} visible={hovering && visible} />
+              <FeedbackRow onSend={sendFeedback} visible={areButtonsVisible} />
             </div>
           );
         }
         return child;
       })}
-    </div>
+    </Container>
   );
 }

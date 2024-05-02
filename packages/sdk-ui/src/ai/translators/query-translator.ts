@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable complexity */
 import {
   ExpandedQueryModel,
   EMPTY_SIMPLE_QUERY_MODEL,
@@ -9,7 +7,7 @@ import {
 import YAML from 'yaml';
 import { DataSourceField, MetadataItem, MetadataItemJaql } from '@sisense/sdk-query-client';
 import { ChartRecommendations } from '@/ai';
-import { AggregationTypes } from '@sisense/sdk-data';
+import { AggregationTypes, DimensionalBaseMeasure } from '@sisense/sdk-data';
 import {
   isAreamap,
   isBoxplot,
@@ -71,7 +69,7 @@ export class QueryTranslator {
    */
   private concatAggTypes(): string {
     const values = Object.values(AggregationTypes);
-    return values.join('|');
+    return values.map((value) => DimensionalBaseMeasure.aggregationToJAQL(value)).join('|');
   }
 
   /**

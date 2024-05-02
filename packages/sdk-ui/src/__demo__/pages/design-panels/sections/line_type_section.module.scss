@@ -1,0 +1,80 @@
+@import '@/charts/table/styles/color.scss';
+@import './constants.scss';
+@import '@/charts/table/styles/icons.scss';
+
+.title {
+  padding-top: 15px;
+  margin-left: 20px;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: $OXFORD_BLUE;
+}
+
+.lineTypeTable {
+  margin-left: 13px;
+  width: 226px;
+  height: 70px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  background: white;
+  td {
+    border-right: 1px solid $ATHENS_GRAY_DARK2;
+    cursor: pointer;
+    &.hoverEffect {
+      &:hover {
+        background-color: $PALE_CANERY;
+        .straightLine {
+          opacity: 1;
+        }
+        .smoothLine {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.straightLine {
+  width: 44px;
+  height: 7px;
+  background-image: $STRAIGHT_LINE;
+  margin-top: 10px;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.straightText {
+  margin-top: 15px;
+  font-family: 'Open Sans';
+  font-size: 13px;
+  line-height: normal;
+  color: rgb(91, 99, 114);
+}
+
+.smoothLine {
+  width: 43px;
+  height: 18px;
+  background-image: $SMOOTH_LINE;
+  margin-top: 4px;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.smoothText {
+  margin-top: 8px;
+  font-family: 'Open Sans';
+  font-size: 13px;
+  line-height: normal;
+  color: rgb(91, 99, 114);
+}

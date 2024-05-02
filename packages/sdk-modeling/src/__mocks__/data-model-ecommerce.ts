@@ -8,11 +8,13 @@ export const dimensionalModelECommerce = {
           expression: '[Brand.Brand]',
           name: 'Brand',
           type: 'text-attribute',
+          description: 'Brand name',
         },
         {
           expression: '[Brand.Brand ID]',
           name: 'Brand ID',
           type: 'numeric-attribute',
+          description: 'Brand ID',
         },
       ],
       dimensions: [],

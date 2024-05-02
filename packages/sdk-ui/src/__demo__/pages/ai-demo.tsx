@@ -1,4 +1,4 @@
-import { Alert } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import {
   AiContextProvider,
   Chatbot,
@@ -11,6 +11,8 @@ import * as DM from '../sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
 import { ChangeEvent, useState } from 'react';
 import { ChatMode } from '@/ai/api/types';
+import { ThemeProvider } from '@/theme-provider';
+import { getDefaultThemeSettings } from '@/index';
 
 const nlgParams: UseGetNlgQueryResultParams = {
   dataSource: 'Sample ECommerce',
@@ -25,11 +27,15 @@ const Page = () => {
     setChatMode(newChatMode);
   };
 
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [enableHeader, setEnableHeader] = useState(true);
+  const [enableInsights, setEnableInsights] = useState(true);
+  const theme = getDefaultThemeSettings(isDarkMode);
   return (
-    <>
-      <div>
+    <ThemeProvider theme={theme}>
+      <div className="csdk-flex csdk-flex-col">
         <h3>Chatbot</h3>
-        <div className="csdk-pb-5">
+        <div>
           Chat Mode:
           <select
             id="chatModeSelect"
@@ -41,7 +47,34 @@ const Page = () => {
             <option value="develop">Develop (Chat-to-Code)</option>
           </select>
         </div>
-        <Chatbot config={{ enableFollowupQuestions: true, chatMode: chatMode }} />
+        <label>
+          - Dark Mode:
+          <input type="checkbox" checked={isDarkMode} onChange={() => setIsDarkMode(!isDarkMode)} />
+        </label>
+        <label>
+          - Enable Header:
+          <input
+            type="checkbox"
+            checked={enableHeader}
+            onChange={() => setEnableHeader(!enableHeader)}
+          />
+        </label>
+        <label>
+          - Enable Insights:
+          <input
+            type="checkbox"
+            checked={enableInsights}
+            onChange={() => setEnableInsights(!enableInsights)}
+          />
+        </label>
+        <Chatbot
+          config={{
+            enableFollowupQuestions: true,
+            chatMode: chatMode,
+            enableHeader,
+            enableInsights,
+          }}
+        />
       </div>
       <div>
         <h3>GetNlgQueryResult</h3>
@@ -65,7 +98,7 @@ const Page = () => {
           )}
         </div>
       </div>
-    </>
+    </ThemeProvider>
   );
 };
 

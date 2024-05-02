@@ -1,6 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,

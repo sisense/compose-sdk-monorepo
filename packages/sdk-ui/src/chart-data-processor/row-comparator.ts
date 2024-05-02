@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable complexity */
 import { isNumber, isDatetime } from '@sisense/sdk-data';
 import { parseISO } from 'date-fns';
 import isObject from 'lodash/isObject';

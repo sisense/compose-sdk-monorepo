@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Chart } from '../chart';
 import { TreemapChartProps } from '../props';
 import { TreemapStyleOptions } from '../types';

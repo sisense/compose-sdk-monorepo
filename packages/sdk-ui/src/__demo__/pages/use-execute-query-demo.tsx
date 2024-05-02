@@ -1,10 +1,11 @@
-/* eslint-disable max-lines */
 import { measureFactory, filterFactory, QueryResultData } from '@sisense/sdk-data';
 import * as DM from '../sample-ecommerce';
 import { useCallback, useRef, useState } from 'react';
 import { useExecuteQuery, useExecuteQueryByWidgetId } from '../../query-execution';
 import { Chart } from '../../chart';
-import { Card, CardContent, CardHeader } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import styled from '@emotion/styled';
 import { useWidgetFromSampleEcommerceDashboard } from './helpers/use-widget-from-sample-ecommerce-dashboard';
 import { ChartDataOptions, ChartType } from '../../types';

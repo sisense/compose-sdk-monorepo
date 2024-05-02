@@ -1,6 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/ban-types */

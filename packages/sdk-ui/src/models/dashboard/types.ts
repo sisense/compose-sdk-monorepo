@@ -2,14 +2,18 @@ import { type DataSource } from '@sisense/sdk-data';
 import { WidgetModel } from '../widget/widget-model';
 
 /** @internal */
-export type Layout = {
+export interface Layout {
   columns: {
-    width: number;
+    widthPercentage: number;
     cells: {
-      subcells: { width: number; elements: { height: number | string; widgetId: string }[] }[];
+      subcells: {
+        widthPercentage: number;
+        height: number | string;
+        widgetId: string;
+      }[];
     }[];
   }[];
-};
+}
 
 export type DashboardModel = {
   oid: string;

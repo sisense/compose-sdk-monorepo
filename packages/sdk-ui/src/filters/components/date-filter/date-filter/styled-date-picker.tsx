@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import styled from '@emotion/styled';
 import { CompleteThemeSettings } from '../../../../types.js';
 import DatePicker, { type ReactDatePickerProps } from 'react-datepicker';

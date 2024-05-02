@@ -2,11 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable max-lines */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import hash from 'object-hash';
 import { LevelAttribute, Attribute, Measure, Filter } from '../interfaces.js';

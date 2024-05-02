@@ -1,8 +1,9 @@
 import React, { ForwardedRef, useContext } from 'react';
-import { Pagination, PaginationItem, type PaginationRenderItemParams } from '@mui/material';
+import Pagination, { type PaginationRenderItemParams } from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
 import { TablePaginationActionsProps } from '@mui/material/TablePagination/TablePaginationActions';
 
-import { ThemeProvider } from '@mui/material/styles';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
 import { Icon } from '../../Icon';
 import { paginationActionsComponentTheme } from './themes';

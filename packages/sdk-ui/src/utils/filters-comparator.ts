@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
 import {
   Filter,
   FilterRelations,
@@ -8,7 +6,8 @@ import {
   FilterRelationsJaqlIdNode,
   FilterRelationsJaqlNode,
 } from '@sisense/sdk-data';
-import { isEqual, isEqualWith } from 'lodash';
+import isEqual from 'lodash/isEqual';
+import isEqualWith from 'lodash/isEqualWith';
 
 /**
  * Checks if the filters have changed by deep comparison.

@@ -1,0 +1,45 @@
+@import '@/charts/table/styles/color.scss';
+@import './constants.scss';
+@import '@/charts/table/styles/icons.scss';
+
+.title {
+  padding-top: 15px;
+  margin-left: 20px;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: $OXFORD_BLUE;
+}
+
+.lineWidthTable {
+  margin-left: 13px;
+  width: 226px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  background: white;
+  font-size: 13px;
+  color: $SHUTTLE_GRAY_DARK;
+  tr {
+    height: 36px;
+    border-bottom: 1px solid $ATHENS_GRAY_DARK2;
+    cursor: pointer;
+    &.hoverEffect {
+      &:hover {
+        background-color: $PALE_CANERY;
+        .line {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  td {
+    padding-left: 12px;
+  }
+  .line {
+    border-bottom: 1px solid $OXFORD_BLUE;
+    width: 147px;
+    opacity: 0.3;
+    &.selected {
+      opacity: 1;
+    }
+  }
+}

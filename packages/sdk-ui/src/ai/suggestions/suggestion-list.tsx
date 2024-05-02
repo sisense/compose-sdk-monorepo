@@ -1,5 +1,15 @@
 import { useMemo, useState } from 'react';
 import SuggestedItem from './suggestion-item';
+import styled from '@emotion/styled';
+import { Themable } from '@/theme-provider/types';
+import { useThemeContext } from '@/theme-provider';
+
+const ListContainer = styled.div<Themable>`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: ${({ theme }) => theme.aiChat.suggestions.gap};
+`;
 
 type Props = {
   questions: string[];
@@ -16,17 +26,16 @@ export default function SuggestionList({ questions, onSelection }: Props) {
     return questions;
   }, [questions, showLess]);
 
+  const { themeSettings } = useThemeContext();
+
   return (
-    <div
-      aria-label="list of suggested questions"
-      className="csdk-flex csdk-flex-col csdk-gap-y-4 csdk-items-start"
-    >
+    <ListContainer aria-label="list of suggested questions" theme={themeSettings}>
       {questionsToShow.map((question) => (
         <SuggestedItem key={question} question={question} onClick={() => onSelection(question)} />
       ))}
       {questionsToShow.length < questions.length && (
         <SuggestedItem question="See more" onClick={() => setShowLess(false)} />
       )}
-    </div>
+    </ListContainer>
   );
 }

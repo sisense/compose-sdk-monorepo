@@ -1,13 +1,20 @@
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 import styled from '@emotion/styled';
-import { useChatStyle } from '../chat-style-provider';
 
-const Row = styled.div<{ gradientColors: [string, string] }>`
-  background: ${({ gradientColors: [first, second] }) => `linear-gradient(
-    to right,
-    ${first} 0%,
-    ${second} 50%,
-    ${first} 100%
-  )`};
+const Row = styled.div<Themable>`
+  width: 283px;
+  height: 32px;
+  border-radius: 10px;
+  background: ${({ theme }) => {
+    const [firstColor, secondColor] = theme.aiChat.suggestions.loadingGradient;
+    return `linear-gradient(
+      to right,
+      ${firstColor} 0%,
+      ${secondColor} 50%,
+      ${firstColor} 100%
+    )`;
+  }};
   background-size: 200% auto;
   animation: gradient 2s linear infinite;
 
@@ -21,20 +28,19 @@ const Row = styled.div<{ gradientColors: [string, string] }>`
   }
 `;
 
-const DEFAULT_GRADIENT: [string, string] = ['rgba(194, 196, 203, 1)', 'rgba(236, 236, 239, 1)'];
+const SkeletonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+`;
 
 export default function SuggestionListSkeleton() {
-  const style = useChatStyle();
-
+  const { themeSettings } = useThemeContext();
   return (
-    <div className="csdk-flex csdk-flex-col csdk-gap-y-4">
+    <SkeletonContainer>
       {Array.from({ length: 3 }, (_, i) => (
-        <Row
-          key={i}
-          className="csdk-w-[283px] csdk-h-[32px] csdk-rounded-[10px]"
-          gradientColors={style.suggestions?.loadingGradient ?? DEFAULT_GRADIENT}
-        />
+        <Row key={i} theme={themeSettings} />
       ))}
-    </div>
+    </SkeletonContainer>
   );
 }

@@ -1,6 +1,7 @@
 import { useTrackComponentInit, TrackingContextProvider } from './use-track-component-init';
 import { ComponentDecorator } from '../as-sisense-component';
-import { isBoolean, isFunction } from 'lodash';
+import isBoolean from 'lodash/isBoolean';
+import isFunction from 'lodash/isFunction';
 import { ErrorTracker } from './error-tracker';
 
 type TrackingDecoratorConfig = {

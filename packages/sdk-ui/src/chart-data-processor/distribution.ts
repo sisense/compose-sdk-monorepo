@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
 export type Stat =
   | 'sum'
   | 'max'

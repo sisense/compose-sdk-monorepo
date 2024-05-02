@@ -23,7 +23,7 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *
  * Additional Scatter Chart examples:
  *
- * - [Bubble Scatter Chart](https://csdk-playground.sisense.com/?example=charts/scatter-chart-bubble)
+ * - [Bubble Scatter Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts/scatter-chart-bubble)
  *
  * @param props - Scatter chart properties
  * @returns Scatter Chart component

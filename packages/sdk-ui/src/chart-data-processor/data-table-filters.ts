@@ -1,7 +1,4 @@
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
 import { DataTable } from './table-processor';
 import { simpleColumnType } from '@sisense/sdk-data';
 import {

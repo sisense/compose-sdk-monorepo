@@ -1,0 +1,32 @@
+@import '@/charts/table/styles/color.scss';
+@import './constants.scss';
+@import '@/charts/table/styles/icons.scss';
+
+.togglerSection {
+  position: relative;
+  width: 226px;
+  box-sizing: border-box;
+  margin-top: 15px;
+  font-size: 13px;
+  color: $SHUTTLE_GRAY_DARK;
+  margin-bottom: 7px;
+  height: 24px;
+  padding-top: 3px;
+  padding-left: 6px;
+  margin-left: 13px;
+  &.withBackground {
+    background: $MERCURY;
+    border-radius: 4px;
+  }
+  &.withCheckedBackground {
+    background: $WHITE;
+    border-radius: 4px;
+    border: 1px solid $ATHENS_GRAY_DARK2;
+  }
+  .toggler {
+    position: absolute;
+    top: 1px;
+    right: 7px;
+    cursor: pointer;
+  }
+}

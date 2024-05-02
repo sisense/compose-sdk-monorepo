@@ -20,9 +20,9 @@ export function prepareTreemapDataItems(
       name: item.xDisplayValue?.slice(-1).toString(),
       parent: item.xValue?.slice(0, -1).join('_'),
       custom: {
+        ...item,
         level: chartData.xAxisCount,
         levelsCount: chartData.xAxisCount,
-        blur: item.blur,
       },
     };
   });

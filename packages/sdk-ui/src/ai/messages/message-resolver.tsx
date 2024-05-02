@@ -7,13 +7,14 @@ import TextMessage from './text-message';
 
 type MessageResolverProps = {
   message: ChatMessage;
+  isLastMessage?: boolean;
 };
 
-function MessageResolver({ message }: MessageResolverProps) {
+function MessageResolver({ message, isLastMessage }: MessageResolverProps) {
   if (isNlqMessage(message)) {
     const nlqResponse = JSON.parse(message.content) as NlqResponseData;
 
-    return <NlqMessageGroup data={nlqResponse} />;
+    return <NlqMessageGroup data={nlqResponse} alwaysShowFeedback={isLastMessage} />;
   }
 
   return (

@@ -1,5 +1,4 @@
 /* eslint-disable no-case-declarations */
-/* eslint-disable complexity */
 import { DEFAULT_COLOR } from '../chart-data-options/coloring/consts';
 import { getUniformColorOptionsFromString } from '../chart-data-options/coloring/uniform-coloring';
 import {

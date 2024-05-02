@@ -21,7 +21,7 @@ Retrieve a widget model and use it to populate a `Chart` component
 
 Additional `useGetWidgetModel` examples:
 
-- [Modify Chart Type](https://csdk-playground.sisense.com/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
+- [Modify Chart Type](https://www.sisense.com/platform/compose-sdk/playground/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
 
 ## Parameters
 

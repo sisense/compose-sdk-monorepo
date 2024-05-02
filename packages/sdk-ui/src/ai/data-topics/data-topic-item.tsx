@@ -20,7 +20,7 @@ export default function DataTopicItem(props: Props) {
         <div className="csdk-text-ai-sm csdk-text-[#8E8E8E]">{description}</div>
       </div>
       <div className="csdk-flex csdk-items-center csdk-h-[16px] csdk-w-[16px] csdk-rotate-180">
-        <ArrowLeftIcon />
+        <ArrowLeftIcon color="#262E3D" />
       </div>
     </div>
   );

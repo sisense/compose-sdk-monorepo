@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
 import dayjs from 'dayjs';
 import { StyledDatePicker } from './styled-date-picker.js';
 import { useThemeContext } from '../../../../theme-provider/index.js';

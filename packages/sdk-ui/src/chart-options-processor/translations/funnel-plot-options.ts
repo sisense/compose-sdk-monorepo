@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines */
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { ValueLabelSettings } from './value-label-section';

@@ -1,7 +1,4 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 import { useCallback, useState, useMemo } from 'react';
 
 import { DataPoint } from '../../types';

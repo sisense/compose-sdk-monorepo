@@ -1,7 +1,5 @@
 import { Jaql, JaqlSortDirection } from '@sisense/sdk-data';
 
-/* eslint-disable max-lines */
-
 /**
  * The type of a widget on a dashboard that is a variant of Cartesian widget.
  */
@@ -20,7 +18,7 @@ export type CategoricalWidgetType = 'chart/pie' | 'chart/funnel' | 'treemap' | '
 /**
  * The type of a widget on a dashboard that is a variant of tabular widget.
  */
-export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg' | 'pivot2';
+export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg' | 'pivot' | 'pivot2';
 
 /**
  * The type of a widget on a dashboard.
@@ -159,6 +157,8 @@ export type PanelItem = {
     color?: PanelColorFormat;
     mask?: DatetimeMask | NumericMask;
     members?: PanelMembersFormat;
+    subtotal?: boolean;
+    databars?: boolean;
   };
   jaql: Jaql;
   disabled?: boolean;
@@ -169,6 +169,10 @@ export type PanelItem = {
   categoriesSorting?: JaqlSortDirection;
   isColored?: boolean;
   geoLevel?: 'country' | 'state' | 'city';
+  field?: {
+    id: string;
+    index: number;
+  };
 };
 
 export type PanelColorFormat =
@@ -437,7 +441,8 @@ export type WidgetStyle =
   | SunburstWidgetStyle
   | BoxplotWidgetStyle
   | ScattermapWidgetStyle
-  | AreamapWidgetStyle;
+  | AreamapWidgetStyle
+  | PivotWidgetStyle;
 
 export enum FiltersMergeStrategyEnum {
   WIDGET_FIRST = 'widgetFirst',
@@ -446,3 +451,18 @@ export enum FiltersMergeStrategyEnum {
 }
 
 export type FiltersMergeStrategy = `${FiltersMergeStrategyEnum}`;
+
+export type PivotWidgetStyle = {
+  rowsGrandTotal?: boolean;
+  columnsGrandTotal?: boolean;
+  colors?: {
+    rows?: boolean;
+    columns?: boolean;
+    headers?: boolean;
+    members?: boolean;
+    totals?: boolean;
+  };
+  pageSize?: number | string;
+  rowHeight?: number;
+  automaticHeight?: boolean;
+};

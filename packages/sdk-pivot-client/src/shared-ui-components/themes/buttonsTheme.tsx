@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import createTheme from '@mui/material/styles/createTheme';
 // import { injectStylesWithWrapper } from '@sbi/styleguide';
 
 import { siColors, sfColors } from './colors';

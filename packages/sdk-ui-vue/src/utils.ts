@@ -1,5 +1,5 @@
 import { isRef, toRaw, toValue } from 'vue';
-import { values } from 'lodash';
+import values from 'lodash/values';
 import type { MaybeRef, MaybeWithRefs } from './types';
 
 export function toPlainValue<T>(value: MaybeRef<T>): T {

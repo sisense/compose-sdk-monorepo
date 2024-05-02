@@ -1,8 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable max-lines */
 import { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../chart';
@@ -14,9 +10,6 @@ import {
   ChartDataPoint,
 } from '../types';
 import { ChartProps, ChartWidgetProps } from '../props';
-import { WidgetHeader } from './common/widget-header';
-import { ThemeProvider, useThemeContext } from '../theme-provider';
-import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 import {
@@ -26,6 +19,8 @@ import {
 import { isCartesian } from '../chart-options-processor/translations/types';
 import { ChartWidgetDeprecated } from './chart-widget-deprecated';
 import { getDataSourceName } from '@sisense/sdk-data';
+import { WidgetContainer } from './common/widget-container';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.
@@ -64,7 +59,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [selectedDataPoints, setSelectedDataPoints] = useState<ChartDataPoints>([]);
 
-  const { themeSettings } = useThemeContext();
+  const { app } = useSisenseContext();
 
   const isCartesianChart = useMemo(() => isCartesian(chartType), [chartType]);
   const isScatterChart = useMemo(() => chartType === 'scatter', [chartType]);
@@ -87,11 +82,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   );
 
   const {
-    dataSource,
-    topSlot,
-    bottomSlot,
-    title,
-    description,
+    dataSource = app?.defaultDataSource,
     styleOptions,
     dataOptions,
     onDataPointsSelected: originalOnDataPointsSelected,
@@ -239,62 +230,13 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
         height,
       }}
     >
-      <div className={'csdk-w-full csdk-h-full csdk-overflow-hidden'}>
-        <div
-          className={'csdk-h-full'}
-          style={{
-            padding: WidgetSpaceAround[styleOptions?.spaceAround || 'None'],
-          }}
-        >
-          <div
-            className={'csdk-h-full csdk-overflow-hidden'}
-            style={{
-              borderWidth: styleOptions?.border ? '1px' : 0,
-              borderColor: styleOptions?.borderColor || themeSettings.chart.textColor,
-              borderRadius: styleOptions?.cornerRadius
-                ? WidgetCornerRadius[styleOptions.cornerRadius]
-                : 0,
-              boxShadow: getShadowValue(styleOptions),
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            {!styleOptions?.header?.hidden && (
-              <WidgetHeader
-                title={title}
-                description={description}
-                dataSetName={chartProps.dataSet ? getDataSourceName(chartProps.dataSet) : undefined}
-                styleOptions={styleOptions?.header}
-                onRefresh={() => setRefreshCounter(refreshCounter + 1)}
-              />
-            )}
-            {topSlot}
-            <ThemeProvider
-              theme={{
-                chart: {
-                  backgroundColor:
-                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-                },
-              }}
-            >
-              <div
-                style={{
-                  flexGrow: 1,
-                  // prevents 'auto' behavior of using content size as minimal size for container
-                  minWidth: 0,
-                  minHeight: 0,
-                  backgroundColor:
-                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-                }}
-              >
-                <Chart {...chartProps} refreshCounter={refreshCounter} />
-              </div>
-            </ThemeProvider>
-
-            {bottomSlot}
-          </div>
-        </div>
-      </div>
+      <WidgetContainer
+        {...props}
+        dataSetName={dataSource && getDataSourceName(dataSource)}
+        onRefresh={() => setRefreshCounter(refreshCounter + 1)}
+      >
+        <Chart {...chartProps} refreshCounter={refreshCounter} />
+      </WidgetContainer>
     </DynamicSizeContainer>
   );
 });

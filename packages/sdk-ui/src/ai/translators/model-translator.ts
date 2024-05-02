@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import {
   createFilterFromJaql,
   DataSource,
@@ -23,6 +22,7 @@ import { generateCode } from '@/ai/translators/generate-code';
 import { stringifyProps } from '@/ai/translators/translate-props-to-code';
 import { TableDataOptions } from '@/chart-data-options/types';
 import { stringifyFilterList } from '@/ai/translators/translate-filters-to-code';
+import cloneDeep from 'lodash/cloneDeep';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;
@@ -88,11 +88,17 @@ export class ModelTranslator {
   ): { metadataColumns: MetadataItem[]; metadataFilters: MetadataItem[] } => {
     return metadata.reduce(
       (acc, item) => {
-        if (item.panel === 'scope') {
-          acc.metadataFilters.push(item);
-        } else {
-          acc.metadataColumns.push(item);
+        // filter items may come from panel scope or from columns with inline filter conditions
+        if (item.panel === 'scope' || item.jaql.filter) {
+          acc.metadataFilters.push(cloneDeep(item));
         }
+
+        if (item.panel !== 'scope') {
+          const columnItem = cloneDeep(item);
+          delete columnItem.jaql.filter;
+          acc.metadataColumns.push(columnItem);
+        }
+
         return acc;
       },
       { metadataColumns: [] as MetadataItem[], metadataFilters: [] as MetadataItem[] },

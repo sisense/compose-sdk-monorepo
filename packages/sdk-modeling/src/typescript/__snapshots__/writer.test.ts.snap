@@ -9,11 +9,13 @@ export var Brand = createDimension({
         name: 'Brand',
         type: 'text-attribute',
         expression: '[Brand.Brand]',
+        description: 'Brand name',
     }),
     BrandID: createAttribute({
         name: 'BrandID',
         type: 'numeric-attribute',
         expression: '[Brand.Brand ID]',
+        description: 'Brand ID',
     }),
 });
 export var Category = createDimension({
@@ -157,11 +159,13 @@ export const Brand = createDimension({
         name: 'Brand',
         type: 'text-attribute',
         expression: '[Brand.Brand]',
+        description: \`Brand name\`,
     }),
     BrandID: createAttribute({
         name: 'BrandID',
         type: 'numeric-attribute',
         expression: '[Brand.Brand ID]',
+        description: \`Brand ID\`,
     }),
 }) as BrandDimension;
 
@@ -297,11 +301,13 @@ export const Brand = createDimension({
         name: 'Brand',
         type: 'text-attribute',
         expression: '[Brand.Brand]',
+        description: \`Brand name\`,
     }),
     BrandID: createAttribute({
         name: 'BrandID',
         type: 'numeric-attribute',
         expression: '[Brand.Brand ID]',
+        description: \`Brand ID\`,
     }),
 }) as BrandDimension;
 

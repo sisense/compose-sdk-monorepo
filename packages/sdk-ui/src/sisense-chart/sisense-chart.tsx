@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable max-lines-per-function */
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChartDataOptionsInternal } from '../chart-data-options/types';

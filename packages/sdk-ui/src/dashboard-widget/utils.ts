@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable sonarjs/cognitive-complexity */
 import {
   DimensionalLevelAttribute,
   type Filter,
@@ -21,7 +19,7 @@ import {
   WidgetSubtype,
   WidgetType,
 } from './types';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { TranslatableError } from '../translation/translatable-error';
 
 export function getChartType(widgetType: WidgetType) {
@@ -95,7 +93,8 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
     'indicator',
     'tablewidget',
     'tablewidgetagg',
-    'pivot2', // temporary support of simple pivot table widget rendered as agg table widget
+    'pivot',
+    'pivot2',
     'chart/boxplot',
     'map/scatter',
     'map/area',
@@ -103,8 +102,16 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
   return supportedWidgetTypes.includes(widgetType as WidgetType);
 }
 
+export function isTableWidget(widgetType: WidgetTypeOrString) {
+  return widgetType === 'tablewidget' || widgetType === 'tablewidgetagg';
+}
+
+export function isPivotWidget(widgetType: WidgetTypeOrString) {
+  return widgetType === 'pivot' || widgetType === 'pivot2';
+}
+
 export function isTabularWidget(widgetType: WidgetTypeOrString) {
-  return widgetType === 'tablewidget' || widgetType === 'tablewidgetagg' || widgetType === 'pivot2';
+  return isTableWidget(widgetType) || isPivotWidget(widgetType);
 }
 
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {

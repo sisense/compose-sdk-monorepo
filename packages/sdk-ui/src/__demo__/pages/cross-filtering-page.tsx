@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable max-lines-per-function */
 import { useCallback, useMemo, useState } from 'react';
 import { CartesianChartDataOptions, Chart, DataPoint, MemberFilterTile } from '../../index';
 import * as DM from '../sample-ecommerce';

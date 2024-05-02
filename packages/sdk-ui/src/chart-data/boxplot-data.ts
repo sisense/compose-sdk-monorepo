@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 import { type SortDirection } from '../types';
 import {
   Column,

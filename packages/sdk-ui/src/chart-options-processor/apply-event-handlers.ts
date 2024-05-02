@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import merge from 'deepmerge';
@@ -131,7 +130,7 @@ const getCartesianDataPoint = (point: HighchartsPoint): DataPoint => ({
   value: point.custom?.rawValue,
   categoryValue: point.custom?.xValue?.[0],
   seriesValue: point.series?.options?.custom?.rawValue?.[0],
-  categoryDisplayValue: point.category,
+  categoryDisplayValue: point.name ?? point.category,
 });
 
 const getScatterDataPoint = (point: HighchartsPoint): ScatterDataPoint => ({

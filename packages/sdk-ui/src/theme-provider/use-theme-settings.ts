@@ -1,11 +1,11 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import merge from 'ts-deepmerge';
 import { useState, useEffect } from 'react';
 import { ThemeOid, ThemeSettings, isThemeOid, CompleteThemeSettings } from '../types';
 import { useThemeContext } from './theme-context';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { getThemeSettingsByOid } from '../themes/theme-loader';
-import { getDefaultThemeSettings } from '../chart-options-processor/theme-option-service';
+import { getDefaultThemeSettings } from './default-theme-settings';
 
 /**
  * Returns the theme settings for the given theme OID or theme settings and error if it happened.

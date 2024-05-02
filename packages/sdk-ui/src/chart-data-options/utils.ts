@@ -7,7 +7,7 @@ import {
   MeasureColumn,
   isDatetime,
 } from '@sisense/sdk-data';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import {
   Category,
   Value,
@@ -32,6 +32,24 @@ type AnyObject = Record<string, any>;
  */
 const safeMerge = (sourceToInherit: AnyObject, sourceToAbsorb: AnyObject): AnyObject => {
   return Object.assign(Object.create(sourceToInherit), sourceToAbsorb) as AnyObject;
+};
+
+/**
+ * Combines two objects into a single one with saving prototype inheritance of "sourceWithInheritance" argument
+ *
+ * @param sourceWithInheritance - The object that has own and inherited properties.
+ * @param sourceToAbsorb - The object whose properties will be copied as own properties.
+ * @returns - A new object that combines the properties of the two input objects.
+ */
+export const safeCombine = <T extends AnyObject>(
+  sourceWithInheritance: T,
+  sourceToAbsorb: AnyObject,
+): T => {
+  return Object.assign(
+    Object.create(Object.getPrototypeOf(sourceWithInheritance)),
+    sourceWithInheritance,
+    sourceToAbsorb,
+  ) as T;
 };
 
 export const splitColumn = (c: StyledColumn | Column) => {

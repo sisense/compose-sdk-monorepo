@@ -5,9 +5,16 @@ import { ClientApplication } from '../app/client-application';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import { mockPivotTableProps } from './__mocks__/mocks';
+import { translatePivotTableDataOptions } from '@/chart-data-options/translate-data-options';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
+
+const useGetPivotTableQueryPropsMock = {
+  dataSet: mockPivotTableProps.dataSet,
+  dataOptionsInternal: translatePivotTableDataOptions(mockPivotTableProps.dataOptions),
+  filters: mockPivotTableProps.filters,
+};
 
 describe('useGetPivotTableQuery', () => {
   beforeEach(() => {
@@ -22,7 +29,7 @@ describe('useGetPivotTableQuery', () => {
   it('should run the hook', async () => {
     executePivotQueryMock.mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA);
 
-    const { result } = renderHook(() => useGetPivotTableQuery(mockPivotTableProps));
+    const { result } = renderHook(() => useGetPivotTableQuery(useGetPivotTableQueryPropsMock));
 
     expect(result.current.isLoading).toBe(true);
 
@@ -37,7 +44,7 @@ describe('useGetPivotTableQuery', () => {
     const mockError = new Error('Test error');
     executePivotQueryMock.mockRejectedValue(mockError);
 
-    const { result } = renderHook(() => useGetPivotTableQuery(mockPivotTableProps));
+    const { result } = renderHook(() => useGetPivotTableQuery(useGetPivotTableQueryPropsMock));
 
     expect(result.current.isLoading).toBe(true);
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 export type RoleManifest = {
   folders: {
     create: boolean;

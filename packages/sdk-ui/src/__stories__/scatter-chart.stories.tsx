@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { filterFactory, createAttribute } from '@sisense/sdk-data';
 import { Chart } from '../chart';
 import { ChartStyleOptions } from '../types';

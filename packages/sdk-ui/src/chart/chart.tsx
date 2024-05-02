@@ -1,7 +1,4 @@
-/* eslint-disable max-lines */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable max-lines-per-function */
 import { Data, isDataSource } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
 import { createDataTableFromData } from '../chart-data-processor/table-creators';
@@ -27,7 +24,7 @@ import {
   isScattermapDataOptions,
   Scattermap,
 } from '../charts/map-charts/scattermap/scattermap';
-import { isString } from 'lodash';
+import isString from 'lodash/isString';
 import { SisenseChart, SisenseChartDataPointEventHandler } from '../sisense-chart';
 import { useThemeContext } from '../theme-provider';
 import { translateAttributeToCategory, translateMeasureToValue } from '../chart-data-options/utils';

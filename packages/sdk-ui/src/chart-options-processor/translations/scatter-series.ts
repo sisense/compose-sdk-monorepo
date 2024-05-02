@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { isNumber } from '@sisense/sdk-data';

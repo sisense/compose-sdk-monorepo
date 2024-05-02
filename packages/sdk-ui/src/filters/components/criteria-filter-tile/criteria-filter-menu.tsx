@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 /* eslint-disable security/detect-object-injection */
 import { FunctionComponent } from 'react';
 import { BasicInput, RadioGroup } from '../common';

@@ -22,8 +22,8 @@ const DEFAULT_EDITOR_OPTS = {
 
 const DEFAULT_CONTEXT_TITLE = 'Sample ECommerce';
 
-const DEFAULT_QUERY_YAML = `# Bar chart of top 10 brands by revenue in Cambodia and USA in 2013
-
+const DEFAULT_QUERY_YAML = `# Bar chart of fancy brands
+---
 model: Sample ECommerce
 metadata:
   - jaql:
@@ -31,8 +31,17 @@ metadata:
       title: Brand
   - jaql:
       dim: "[Commerce.Revenue]"
-      agg: sum
-      title: Total Revenue
+      agg: avg
+      sort: desc
+      title: Average Revenue
+  - jaql:
+      type: measure
+      formula: QUARTILE([042C4-365], 2)
+      context:
+        "[042C4-365]":
+          dim: "[Commerce.Revenue]"
+          title: Revenue
+      title: Median Revenue
   - jaql:
       dim: "[Country.Country]"
       filter:
@@ -53,13 +62,33 @@ metadata:
         fromNotEqual: 1000
     panel: scope
   - jaql:
+      dim: "[Commerce.Cost]"
+      filter:
+        and:
+          - fromNotEqual: 10
+          - to: 20000
+    panel: scope
+  - jaql:
       dim: "[Brand.Brand]"
       filter:
-        top: "10"
+        top: 10
         by:
           dim: '[Commerce.Revenue]'
           agg: 'sum'
       title: Top 10 Brand by Total Revenue
+    panel: scope
+  - jaql:
+      dim: "[Brand.Brand]"
+      filter:
+        or:
+          - startsWith: A
+          - endsWith: s
+    panel: scope
+  - jaql:
+      dim: "[Commerce.Revenue]"
+      agg: sum
+      filter:
+        fromNotEqual: 2000
     panel: scope
 chart:
   chartType: bar
@@ -67,7 +96,8 @@ chart:
     category:
       - name: Brand
     value:
-      - name: Total Revenue`;
+      - name: Median Revenue
+      - name: Average Revenue`;
 
 /**
  * A demo component that demonstrates the integration of Forge Query Composer and CSDK.
@@ -179,31 +209,40 @@ function ChatToCode({ contextTitle, defaultQueryYaml }: ChatToCodeProps) {
           </div>
         </div>
         <div className="csdk-h-1/2 csdk-border csdk-z-0 csdk-border-0 csdk-overflow-hidden csdk-min-h-[435px] csdk-flex csdk-justify-center">
-          <Chatbot
-            height={300}
-            width={800}
-            config={{
-              defaultContextTitle: contextTitle,
-              enableFollowupQuestions: false,
-              numOfRecommendations: 0,
-              chatMode: 'develop',
-            }}
-            style={{
-              backgroundColor: 'rgba(23, 28, 38, 1)',
-              primaryTextColor: 'rgba(242, 247, 255, 0.9)',
-              secondaryTextColor: 'rgba(242, 247, 255, 0.4)',
-              messageBackgroundColor: 'rgba(46, 55, 77, 1)',
-              inputBackgroundColor: 'rgba(31, 37, 51, 1)',
-              border: false,
-              suggestions: {
-                textColor: 'rgba(88, 192, 244, 1)',
-                border: '1px solid #2E374D',
-                hoverBackgroundColor: 'rgba(242, 247, 255, 0.1)',
-                loadingGradient: ['rgba(242, 247, 255, 0.1)', 'rgba(242, 247, 255, 0.3)'],
+          <ThemeProvider
+            theme={{
+              aiChat: {
+                borderRadius: false,
+                primaryFontSize: ['14px', '20px'],
+                body: {
+                  paddingLeft: '40px',
+                  paddingRight: '40px',
+                  gapBetweenMessages: '8px',
+                },
+                footer: {
+                  paddingLeft: '40px',
+                  paddingRight: '40px',
+                  paddingTop: '16px',
+                },
+                suggestions: {
+                  gap: '4px',
+                },
               },
-              iconColor: 'rgba(242, 247, 255, 0.5)',
             }}
-          />
+          >
+            <Chatbot
+              height="100%"
+              width="100%"
+              config={{
+                defaultContextTitle: contextTitle,
+                enableFollowupQuestions: false,
+                numOfRecommendations: 0,
+                chatMode: 'develop',
+                enableHeader: false,
+                enableInsights: false,
+              }}
+            />
+          </ThemeProvider>
         </div>
       </div>
       <div className="csdk-flex csdk-flex-1 csdk-flex-col">

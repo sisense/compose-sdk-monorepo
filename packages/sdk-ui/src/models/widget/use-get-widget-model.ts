@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { useEffect, useReducer, useState } from 'react';
 import { usePrevious } from '../../common/hooks/use-previous';
 import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer';
@@ -101,7 +101,7 @@ export type WidgetModelSuccessState = {
  *
  * Additional `useGetWidgetModel` examples:
  *
- * - [Modify Chart Type](https://csdk-playground.sisense.com/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
+ * - [Modify Chart Type](https://www.sisense.com/platform/compose-sdk/playground/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
  *
  * @param params - Parameters of the widget to be retrieved
  * @returns Widget load state that contains the status of the execution, the result widget model, or the error if one has occurred

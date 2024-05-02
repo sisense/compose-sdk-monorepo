@@ -21,8 +21,8 @@ Polar chart displaying total revenue per age range from the Sample ECommerce dat
 
 Additional Polar Chart examples:
 
-- [Area Polar Chart](https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart-area)
-- [Line Polar Chart](https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart-line)
+- [Area Polar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpolar-chart-area)
+- [Line Polar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpolar-chart-line)
 
 ## Parameters
 

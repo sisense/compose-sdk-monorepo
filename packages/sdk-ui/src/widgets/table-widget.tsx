@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
 import React, { useState, type FunctionComponent } from 'react';
 
 import { TableWidgetProps } from '../props';
-import { WidgetHeader } from './common/widget-header';
-import { ThemeProvider, useThemeContext } from '../theme-provider';
-import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/widget-style-utils';
 import { Table } from '../table';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 import { getDataSourceName } from '@sisense/sdk-data';
+import { WidgetContainer } from './common/widget-container';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 /**
  * The TableWidget component extending the Table component to support widget style options.
@@ -36,17 +32,16 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
   componentName: 'TableWidget',
 })((props) => {
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const { app } = useSisenseContext();
 
-  const { topSlot, bottomSlot, title, description, styleOptions } = props;
-
-  const { themeSettings } = useThemeContext();
+  const { styleOptions, dataSource = app?.defaultDataSource, dataOptions } = props;
 
   const defaultSize = getWidgetDefaultSize('table', {
     hasHeader: !styleOptions?.header?.hidden,
   });
   const { width, height, ...styleOptionsWithoutSizing } = props.styleOptions || {};
 
-  if (!props.dataOptions) {
+  if (!dataOptions) {
     return null;
   }
 
@@ -58,66 +53,19 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = asSisenseCompone
         height: height,
       }}
     >
-      <div className={'csdk-w-full csdk-h-full csdk-overflow-hidden'}>
-        <div
-          className={'csdk-h-full'}
-          style={{
-            padding: WidgetSpaceAround[styleOptions?.spaceAround || 'None'],
-          }}
-        >
-          <div
-            className="csdk-h-full csdk-overflow-hidden"
-            style={{
-              borderWidth: styleOptions?.border ? '1px' : 0,
-              borderColor: styleOptions?.borderColor || themeSettings.chart.textColor,
-              borderRadius: styleOptions?.cornerRadius
-                ? WidgetCornerRadius[styleOptions.cornerRadius]
-                : 0,
-              boxShadow: getShadowValue(styleOptions),
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            {!styleOptions?.header?.hidden && (
-              <WidgetHeader
-                title={title}
-                description={description}
-                dataSetName={props.dataSource ? getDataSourceName(props.dataSource) : undefined}
-                styleOptions={styleOptions?.header}
-                onRefresh={() => setRefreshCounter(refreshCounter + 1)}
-              />
-            )}
-            {topSlot}
-
-            <ThemeProvider
-              theme={{
-                chart: {
-                  backgroundColor:
-                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-                },
-              }}
-            >
-              <div
-                style={{
-                  flexGrow: 1,
-                  backgroundColor:
-                    styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-                }}
-              >
-                <Table
-                  dataSet={props.dataSource}
-                  dataOptions={props.dataOptions}
-                  styleOptions={styleOptionsWithoutSizing}
-                  filters={props.filters}
-                  refreshCounter={refreshCounter}
-                />
-              </div>
-            </ThemeProvider>
-
-            {bottomSlot}
-          </div>
-        </div>
-      </div>
+      <WidgetContainer
+        {...props}
+        dataSetName={dataSource && getDataSourceName(dataSource)}
+        onRefresh={() => setRefreshCounter(refreshCounter + 1)}
+      >
+        <Table
+          dataSet={props.dataSource}
+          dataOptions={props.dataOptions}
+          styleOptions={styleOptionsWithoutSizing}
+          filters={props.filters}
+          refreshCounter={refreshCounter}
+        />
+      </WidgetContainer>
     </DynamicSizeContainer>
   );
 });

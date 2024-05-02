@@ -1,5 +1,5 @@
+import { getDefaultThemeSettings } from '@/index';
 import { ThemeProviderProps } from '@/props';
-import { getDefaultThemeSettings } from '@/chart-options-processor/theme-option-service';
 
 /**
  * Get theme from environment variable

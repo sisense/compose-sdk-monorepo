@@ -1,0 +1,82 @@
+$ZINDEX_ACE: 4;
+$ZINDEX_TABLE_SCROLLBAR: 99; // unused, but documented for posterity. Defined in fixed-data-table-2@^1.1.0
+$ZINDEX_TEXTBOX_TOOLBAR: 100; // unused, but documented for posterity.
+$ZINDEX_BUSY_COMPONENT: 1001; // Defined in @sisense/sisense-styleguide-react@0.9.0-alpha.0
+$ZINDEX_MODAL: $ZINDEX_BUSY_COMPONENT + 1;
+
+$NORMAL_ANIMATION_TIME: 500ms; //Should match value in app_frame controller
+$FAST_ANIMATION_TIME: 250ms;
+$FLUID_FAST_DRAG_ANIMATION_TIME: 100ms;
+
+@mixin CSS_ANIMATE($properties, $duration: $NORMAL_ANIMATION_TIME) {
+  -webkit-transition-duration: $duration;
+  -moz-transition-duration: $duration;
+  transition-duration: $duration;
+  -webkit-transition-property: $properties;
+  -moz-transition-property: $properties;
+  transition-property: $properties;
+}
+
+@mixin CSS_ROTATE($duration: $NORMAL_ANIMATION_TIME) {
+  -webkit-animation: rotate $duration linear 0s infinite normal;
+  -moz-animation: rotate $duration linear 0s infinite normal;
+  -o-animation: rotate $duration linear 0s infinite normal;
+  -ms-animation: rotate $duration linear 0s infinite normal;
+  animation: rotate $duration linear 0s infinite normal;
+}
+
+@mixin CSS_ANIMATE_LINEAR($properties, $duration: $NORMAL_ANIMATION_TIME) {
+  transition-timing-function: linear;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-timing-function: linear;
+  @include CSS_ANIMATE($properties, $duration);
+}
+
+@mixin CSS_ANIMATE_WITH_TIMING_FUNCTION($properties, $duration, $timing-function) {
+  transition-timing-function: $timing-function;
+  -webkit-transition-timing-function: $timing-function;
+  -moz-transition-timing-function: $timing-function;
+  @include CSS_ANIMATE($properties, $duration);
+}
+@mixin NO_SHADOW {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+}
+
+@mixin CSS_SHADOW($x, $y, $spread, $color) {
+  box-shadow: $x $y $spread $color;
+  -webkit-box-shadow: $x $y $spread $color;
+  -moz-box-shadow: $x $y $spread $color;
+}
+
+@mixin INSET_CSS_SHADOW($x, $y, $blur, $spread, $color) {
+  box-shadow: inset $x $y $blur $spread $color;
+  -webkit-box-shadow: inset $x $y $blur $spread $color;
+  -moz-box-shadow: inset $x $y $blur $spread $color;
+}
+
+@mixin CSS_BLUR_SHADOW($x, $y, $blur, $spread, $color) {
+  box-shadow: $x $y $blur $spread $color;
+  -webkit-box-shadow: $x $y $blur $spread $color;
+  -moz-box-shadow: $x $y $blur $spread $color;
+}
+
+@-moz-keyframes rotate {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+$DEFAULT_FONT: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;

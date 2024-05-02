@@ -118,6 +118,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 8103,
+            "xCompareValue": [
+              1230768000000,
+            ],
+            "xDisplayValue": [
+              "2009",
+            ],
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2009",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -129,6 +140,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 6814,
+            "xCompareValue": [
+              1262304000000,
+            ],
+            "xDisplayValue": [
+              "2010",
+            ],
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2010",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -140,6 +162,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 3056,
+            "xCompareValue": [
+              1293840000000,
+            ],
+            "xDisplayValue": [
+              "2011",
+            ],
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2011",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -151,6 +184,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 8423,
+            "xCompareValue": [
+              1325376000000,
+            ],
+            "xDisplayValue": [
+              "2012",
+            ],
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2012",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -162,6 +206,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 2045,
+            "xCompareValue": [
+              1356998400000,
+            ],
+            "xDisplayValue": [
+              "2013",
+            ],
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2013",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -173,6 +228,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 3010,
+            "xCompareValue": [
+              1388534400000,
+            ],
+            "xDisplayValue": [
+              "2014",
+            ],
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2014",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -184,6 +250,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 5447,
+            "xCompareValue": [
+              1420070400000,
+            ],
+            "xDisplayValue": [
+              "2015",
+            ],
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2015",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -195,6 +272,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 4242,
+            "xCompareValue": [
+              1451606400000,
+            ],
+            "xDisplayValue": [
+              "2016",
+            ],
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2016",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -206,6 +294,17 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": false,
             "level": 1,
             "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 936,
+            "xCompareValue": [
+              1514764800000,
+            ],
+            "xDisplayValue": [
+              "2018",
+            ],
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+            ],
           },
           "name": "2018",
           "parent": "SUNBURST_ROOT_PARENT_ID",
@@ -219,7 +318,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
       },
       "levels": [
         {
-          "color": "white",
+          "color": "#FFFFFF",
           "dataLabels": {
             "className": "!csdk-overflow-visible",
             "enabled": true,
@@ -485,6 +584,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 8103,
+            "xCompareValue": [
+              1230768000000,
+              "A",
+            ],
+            "xDisplayValue": [
+              "2009",
+              "A",
+            ],
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2009-01-01T00:00:00.000Z",
@@ -496,6 +609,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 6814,
+            "xCompareValue": [
+              1262304000000,
+              "A",
+            ],
+            "xDisplayValue": [
+              "2010",
+              "A",
+            ],
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2010-01-01T00:00:00.000Z",
@@ -507,6 +634,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 3056,
+            "xCompareValue": [
+              1293840000000,
+              "B",
+            ],
+            "xDisplayValue": [
+              "2011",
+              "B",
+            ],
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2011-01-01T00:00:00.000Z",
@@ -518,6 +659,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 8423,
+            "xCompareValue": [
+              1325376000000,
+              "B",
+            ],
+            "xDisplayValue": [
+              "2012",
+              "B",
+            ],
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2012-01-01T00:00:00.000Z",
@@ -529,6 +684,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 2045,
+            "xCompareValue": [
+              1356998400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2013",
+              "A",
+            ],
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2013-01-01T00:00:00.000Z",
@@ -540,6 +709,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 3010,
+            "xCompareValue": [
+              1388534400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2014",
+              "B",
+            ],
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2014-01-01T00:00:00.000Z",
@@ -551,6 +734,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 5447,
+            "xCompareValue": [
+              1420070400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2015",
+              "A",
+            ],
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2015-01-01T00:00:00.000Z",
@@ -562,6 +759,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 4242,
+            "xCompareValue": [
+              1451606400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2016",
+              "B",
+            ],
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2016-01-01T00:00:00.000Z",
@@ -573,6 +784,20 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 936,
+            "xCompareValue": [
+              1514764800000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2018",
+              "B",
+            ],
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2018-01-01T00:00:00.000Z",
@@ -586,7 +811,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
       },
       "levels": [
         {
-          "color": "white",
+          "color": "#FFFFFF",
           "dataLabels": {
             "className": "!csdk-overflow-visible",
             "enabled": true,
@@ -870,6 +1095,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 8103,
+            "xCompareValue": [
+              1230768000000,
+              "A",
+            ],
+            "xDisplayValue": [
+              "2009",
+              "A",
+            ],
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2009-01-01T00:00:00.000Z",
@@ -881,6 +1120,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 6814,
+            "xCompareValue": [
+              1262304000000,
+              "A",
+            ],
+            "xDisplayValue": [
+              "2010",
+              "A",
+            ],
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2010-01-01T00:00:00.000Z",
@@ -892,6 +1145,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 3056,
+            "xCompareValue": [
+              1293840000000,
+              "B",
+            ],
+            "xDisplayValue": [
+              "2011",
+              "B",
+            ],
+            "xValue": [
+              "2011-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2011-01-01T00:00:00.000Z",
@@ -903,6 +1170,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 8423,
+            "xCompareValue": [
+              1325376000000,
+              "B",
+            ],
+            "xDisplayValue": [
+              "2012",
+              "B",
+            ],
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2012-01-01T00:00:00.000Z",
@@ -914,6 +1195,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 2045,
+            "xCompareValue": [
+              1356998400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2013",
+              "A",
+            ],
+            "xValue": [
+              "2013-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2013-01-01T00:00:00.000Z",
@@ -925,6 +1220,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 3010,
+            "xCompareValue": [
+              1388534400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2014",
+              "B",
+            ],
+            "xValue": [
+              "2014-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2014-01-01T00:00:00.000Z",
@@ -936,6 +1245,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 5447,
+            "xCompareValue": [
+              1420070400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2015",
+              "A",
+            ],
+            "xValue": [
+              "2015-01-01T00:00:00.000Z",
+              "A",
+            ],
           },
           "name": "A",
           "parent": "2015-01-01T00:00:00.000Z",
@@ -947,6 +1270,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 4242,
+            "xCompareValue": [
+              1451606400000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2016",
+              "B",
+            ],
+            "xValue": [
+              "2016-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2016-01-01T00:00:00.000Z",
@@ -958,6 +1295,20 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": false,
             "level": 2,
             "levelsCount": 2,
+            "rawValue": undefined,
+            "value": 936,
+            "xCompareValue": [
+              1514764800000,
+              undefined,
+            ],
+            "xDisplayValue": [
+              "2018",
+              "B",
+            ],
+            "xValue": [
+              "2018-01-01T00:00:00.000Z",
+              "B",
+            ],
           },
           "name": "B",
           "parent": "2018-01-01T00:00:00.000Z",
@@ -971,7 +1322,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
       },
       "levels": [
         {
-          "color": "white",
+          "color": "#FFFFFF",
           "dataLabels": {
             "className": "!csdk-overflow-visible",
             "enabled": true,

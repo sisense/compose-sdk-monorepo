@@ -9,6 +9,7 @@ import {
   JaqlSortDirection,
   FilterJaql,
   BaseJaql,
+  PivotJaql,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -20,12 +21,14 @@ import { PanelItem } from './types';
 import {
   AnyColumn,
   BoxplotChartDataOptions,
+  PivotTableDataOptions,
   StyledColumn,
   TableDataOptions,
 } from '../chart-data-options/types';
 import { Panel, WidgetStyle } from './types';
 import { createDataOptionsFromPanels, extractDataOptions } from './translate-widget-data-options';
 import { jaqlMock } from './__mocks__/jaql-mock';
+import { isObject } from 'lodash';
 
 const styleMock = {} as WidgetStyle;
 
@@ -38,16 +41,27 @@ function convertToDimensionalModel(
     | DimensionalCalculatedMeasure;
 }
 
-function getSortTypeFromPanelItem(panelItem: PanelItem) {
-  const panelSort = panelItem.jaql.sort ?? panelItem.categoriesSorting;
-
-  if (panelSort === JaqlSortDirection.ASC) {
+function getSortTypeFromJaqlSort(jaqlSort?: JaqlSortDirection) {
+  if (jaqlSort === JaqlSortDirection.ASC) {
     return 'sortAsc';
-  } else if (panelSort === JaqlSortDirection.DESC) {
+  } else if (jaqlSort === JaqlSortDirection.DESC) {
     return 'sortDesc';
   } else {
     return 'sortNone';
   }
+}
+
+function getSortTypeFromPanelItem(panelItem: PanelItem) {
+  const panelSort = panelItem.jaql.sort ?? panelItem.categoriesSorting;
+  const pivotSort = (panelItem.jaql as PivotJaql).sortDetails;
+
+  if (isObject(pivotSort)) {
+    return {
+      direction: getSortTypeFromJaqlSort(pivotSort?.dir),
+    };
+  }
+
+  return getSortTypeFromJaqlSort(panelSort);
 }
 
 function compareBaseJaqls(sourceJaql: BaseJaql | FilterJaql, targetJaql: BaseJaql | FilterJaql) {
@@ -397,6 +411,58 @@ describe('translate widget data options', () => {
 
       verifyColumn(category[0], panels[0].items[0]);
       verifyColumn(value[0], panels[1].items[0]);
+    });
+
+    it('should returns correct data options for pivot table', () => {
+      const panels: Panel[] = [
+        {
+          name: 'rows',
+          items: [
+            {
+              jaql: {
+                ...jaqlMock.date,
+                sort: undefined,
+                sortDetails: {
+                  dir: 'asc',
+                } as PivotJaql['sortDetails'],
+              },
+            },
+          ],
+        },
+        {
+          name: 'columns',
+          items: [
+            {
+              jaql: {
+                ...jaqlMock.date,
+                sort: undefined,
+              },
+            },
+          ],
+        },
+        {
+          name: 'values',
+          items: [
+            {
+              jaql: {
+                ...jaqlMock.cost,
+                sort: undefined,
+              },
+            },
+          ],
+        },
+      ];
+      const style = {
+        rowsGrandTotal: true,
+        columnsGrandTotal: true,
+      };
+
+      const dataOptions = extractDataOptions('pivot2', panels, style);
+      const { rows, columns, values } = dataOptions as PivotTableDataOptions;
+
+      verifyColumn(rows![0], panels[0].items[0]);
+      verifyColumn(columns![0], panels[1].items[0]);
+      verifyColumn(values![0], panels[2].items[0]);
     });
   });
 });

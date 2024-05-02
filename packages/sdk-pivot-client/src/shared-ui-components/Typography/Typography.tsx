@@ -1,9 +1,8 @@
 import React, { ForwardedRef } from 'react';
-import {
-  Typography as MuiTypography,
+import MuiTypography, {
   type TypographyProps as MuiTypographyProps,
-} from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+} from '@mui/material/Typography';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
 import { typographyTheme, type TypographyTheme } from './themes';
 

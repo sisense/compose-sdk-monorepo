@@ -4051,7 +4051,7 @@ exports[`Chart > render indicator chart 1`] = `
       >
         <div
           aria-label="indicator-root"
-          style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center;"
+          style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center; background-color: rgb(255, 255, 255);"
         >
           <canvas
             height="35"
@@ -4079,7 +4079,7 @@ exports[`Chart > render indicator gauge chart 1`] = `
       >
         <div
           aria-label="indicator-root"
-          style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center;"
+          style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center; background-color: rgb(255, 255, 255);"
         >
           <canvas
             height="35"
@@ -4107,7 +4107,7 @@ exports[`Chart > render indicator numericBar chart 1`] = `
       >
         <div
           aria-label="indicator-root"
-          style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center;"
+          style="display: flex; justify-content: center; width: 100%; height: 100%; align-items: center; background-color: rgb(255, 255, 255);"
         >
           <canvas
             height="35"

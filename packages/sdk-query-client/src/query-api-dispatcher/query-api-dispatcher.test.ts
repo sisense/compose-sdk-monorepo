@@ -83,6 +83,28 @@ describe('QueryApiDispatcher', () => {
       const response = await result.responsePromise;
       expect(response).toEqual(expectedResponse);
     });
+
+    it('should return empty result in case of empty array jaql endpoint response', async () => {
+      // Arrange
+      const dataSource = 'exampleDataSource';
+      const jaqlPayload: JaqlQueryPayload = {
+        metadata: [],
+        datasource: dataSource,
+        by: 'ComposeSDK',
+        queryGuid: '12312',
+      };
+      httpClient.post.mockResolvedValue([]);
+
+      // Act
+      const result = queryApi.sendJaqlRequest(dataSource, jaqlPayload);
+
+      // Assert
+      const response = await result.responsePromise;
+      expect(response).toEqual({
+        metadata: [],
+        values: [],
+      });
+    });
   });
 
   describe('sendDownloadCsvRequest', () => {
@@ -163,7 +185,7 @@ describe('QueryApiDispatcher', () => {
       const expectedUrl = `api/datasources/live/${encodeURIComponent(dataSource)}/cancel_queries`;
       const expectedPayload = { queries: '12345;67890' };
 
-      httpClient.post.mockRejectedValueOnce({ status: 404 });
+      httpClient.post.mockRejectedValueOnce({ status: '404' });
       httpClient.post.mockResolvedValue(undefined);
 
       // Act
@@ -199,6 +221,39 @@ describe('QueryApiDispatcher', () => {
 
       // Act
       const result = await queryApi.getDataSourceSchema(dataSource);
+
+      // Assert
+      expect(httpClient.get).toHaveBeenCalledWith(expectedUrl);
+      expect(result).toEqual(expectedResponse);
+    });
+  });
+
+  describe('getDataSourceList', () => {
+    it('should call httpClient.get with the correct URL', async () => {
+      // Arrange
+      const expectedUrl = 'api/datasources/?sharedWith=r,w';
+      const expectedResponse = [
+        {
+          fullname: 'localhost/Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          address: 'LocalHost',
+          database: 'aSampleIAAaECommerce',
+          live: false,
+          title: 'Sample ECommerce',
+        },
+        {
+          fullname: 'localhost/Sample Healthcare',
+          id: 'localhost_aSampleIAAaHealthcare',
+          address: 'LocalHost',
+          database: 'aSampleIAAaHealthcare',
+          live: false,
+          title: 'Sample Healthcare',
+        },
+      ];
+      httpClient.get.mockResolvedValueOnce(expectedResponse);
+
+      // Act
+      const result = await queryApi.getDataSourceList();
 
       // Assert
       expect(httpClient.get).toHaveBeenCalledWith(expectedUrl);

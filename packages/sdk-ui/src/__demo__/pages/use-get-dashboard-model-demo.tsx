@@ -6,7 +6,7 @@ import { DashboardWidget } from '@/dashboard-widget/dashboard-widget';
 export function UseGetDashboardModelSingleDemo() {
   const dashboards = getWidgets();
 
-  const dashboardOid = dashboards[0].dashboardOid || '';
+  const dashboardOid = dashboards[0]?.dashboardOid || '';
 
   const { dashboard, isLoading, isError, error } = useGetDashboardModel({
     dashboardOid,

@@ -22,8 +22,8 @@ Bar chart displaying total revenue per year from the Sample ECommerce data model
 
 Additional Bar Chart examples:
 
-- [Stacked Bar Chart](https://csdk-playground.sisense.com/?example=charts%2Fbar-chart-stacked)
-- [Stacked Percentage Bar Chart](https://csdk-playground.sisense.com/?example=charts%2Fbar-chart-stacked100)
+- [Stacked Bar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fbar-chart-stacked)
+- [Stacked Percentage Bar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fbar-chart-stacked100)
 
 ## Parameters
 

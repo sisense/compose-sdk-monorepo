@@ -17,8 +17,8 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  *
  * Additional Polar Chart examples:
  *
- * - [Area Polar Chart](https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart-area)
- * - [Line Polar Chart](https://csdk-playground.sisense.com/?example=charts%2Fpolar-chart-line)
+ * - [Area Polar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpolar-chart-area)
+ * - [Line Polar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpolar-chart-line)
  *
  * @param props - Polar chart properties
  * @returns Polar Chart component

@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 import { useMemo, useState } from 'react';
 import {
   LineStyleOptions,

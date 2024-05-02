@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 

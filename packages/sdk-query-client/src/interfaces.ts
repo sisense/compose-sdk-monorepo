@@ -1,5 +1,7 @@
 import {
   DataSourceField,
+  DataSourceMetadata,
+  DataSourceSchema,
   ExecutingCsvQueryResult,
   ExecutingPivotQueryResult,
   ExecutingQueryResult,
@@ -17,4 +19,6 @@ export interface QueryClient {
     config?: QueryExecutionConfig,
   ): ExecutingPivotQueryResult;
   getDataSourceFields(dataSource: DataSource): Promise<DataSourceField[]>;
+  getDataSourceSchema(datasourceName: string): Promise<DataSourceSchema>;
+  getDataSourceList(): Promise<DataSourceMetadata[]>;
 }

@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { usePrevious } from '../common/hooks/use-previous';
 import {
@@ -36,7 +34,7 @@ import { isQueryParamsChanged } from '@/query-execution/query-params-comparator'
  *
  * Additional `useExecuteQuery()` examples:
  *
- * - [Query with Sorting](https://csdk-playground.sisense.com/?example=queries%2Fuse-execute-query-sorting)
+ * - [Query with Sorting](https://www.sisense.com/platform/compose-sdk/playground/?example=queries%2Fuse-execute-query-sorting)
  * - [Take Control of Your Data Visualizations]( https://www.sisense.com/blog/take-control-of-your-data-visualizations/) blog post with examples of using the hook to fetch data to display in third-party charts.
  *
  * @param params - Parameters of the query

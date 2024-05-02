@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
 import { MetadataItem } from '@sisense/sdk-query-client';
 import merge from 'ts-deepmerge';
 import { ChartSubtype } from '../../chart-options-processor/subtype-to-design-options';

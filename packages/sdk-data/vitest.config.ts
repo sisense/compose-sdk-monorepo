@@ -7,7 +7,7 @@ const config: UserConfig = {
     coverage: {
       exclude: [
         // from modern-analytics-filters
-        'src/dimensional-model/filters/utils/modern-analytics-filters/**',
+        'src/dimensional-model/filters/utils/filter-types-util.ts',
       ],
     },
   },

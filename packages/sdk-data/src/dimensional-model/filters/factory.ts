@@ -1,6 +1,6 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable max-lines */
 import {
   DateDimension,
   LevelAttribute,
@@ -29,7 +29,7 @@ import {
   RelativeDateFilter,
 } from './filters.js';
 import { FilterJaql } from '../types.js';
-import { createGenericFilter } from './utils/filter-jaql-util.js';
+import { createGenericFilter } from './utils/filter-from-jaql-util.js';
 
 // LOGICAL FILTERS
 
@@ -699,6 +699,45 @@ export function measureBase(
 }
 
 /**
+ * Creates a filter to isolate a measure value equal to a given number.
+ *
+ * @example
+ * Filter for categories that have an average revenue equal 50 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureEquals(
+ *   measures.average(DM.Commerce.Revenue),
+ *   50
+ * )
+ * ```
+ * @param measure - Measure to filter by
+ * @param value - Value
+ * @returns A filter instance
+ */
+export function measureEquals(measure: BaseMeasure, value: number): Filter {
+  return measureBase(measure.attribute, measure, NumericOperators.Equals, value);
+}
+
+/**
+ * Creates a filter to isolate a measure value greater than to a given number.
+ *
+ * @example
+ * Filter for categories that have an average revenue greater than
+ * to 50 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureGreaterThan(
+ *   measures.average(DM.Commerce.Revenue),
+ *   50
+ * )
+ * ```
+ * @param measure - Measure to filter by
+ * @param value - Min value
+ * @returns A filter instance
+ */
+export function measureGreaterThan(measure: BaseMeasure, value: number): Filter {
+  return measureBase(measure.attribute, measure, NumericOperators.FromNotEqual, value);
+}
+
+/**
  * Creates a filter to isolate a measure value greater than or equal to a given number.
  *
  * @example
@@ -736,6 +775,25 @@ export function measureGreaterThanOrEqual(measure: BaseMeasure, value: number): 
  */
 export function measureLessThanOrEqual(measure: BaseMeasure, value: number): Filter {
   return measureBase(measure.attribute, measure, NumericOperators.To, value);
+}
+
+/**
+ * Creates a filter to isolate a measure value less than a given number.
+ *
+ * @example
+ * Filter for categories that have an average revenue less than 100 in the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.measureLessThan(
+ *   measures.average(DM.Commerce.Revenue),
+ *   100
+ * )
+ * ```
+ * @param measure - Measure to filter by
+ * @param value - Value
+ * @returns A filter instance
+ */
+export function measureLessThan(measure: BaseMeasure, value: number): Filter {
+  return measureBase(measure.attribute, measure, NumericOperators.ToNotEqual, value);
 }
 
 /**

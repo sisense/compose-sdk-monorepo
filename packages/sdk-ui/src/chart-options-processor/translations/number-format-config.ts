@@ -1,7 +1,4 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
 import { numericFormatter } from 'react-number-format';
 import round from 'lodash/round';
 import { CompleteNumberFormatConfig, NumberFormatConfig } from '@/types';

@@ -1,4 +1,4 @@
-import * as DM from '../../__demo__/sample-ecommerce';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import { PivotTableProps } from '../../props';
 
@@ -6,8 +6,22 @@ export const mockPivotTableProps: PivotTableProps = {
   dataSet: DM.DataSource,
   dataOptions: {
     rows: [
-      { column: DM.Category.Category, includeSubTotals: true },
-      { column: DM.Commerce.AgeRange, includeSubTotals: true },
+      {
+        column: DM.Category.Category,
+        includeSubTotals: true,
+        sortType: 'sortAsc',
+      },
+      {
+        column: DM.Commerce.AgeRange,
+        includeSubTotals: true,
+        sortType: {
+          direction: 'sortDesc',
+          by: {
+            valuesIndex: 0,
+            columnsMembersPath: ['Male'],
+          },
+        },
+      },
       DM.Commerce.Condition,
     ],
     columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],

@@ -1,9 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
 /* eslint-disable max-params */
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable max-lines */
 import { CategoricalSeriesValues, ChartData } from '../chart-data/types';
 import { ChartDesignOptions, SeriesDesignOptions } from './translations/types';
 import { getLegendSettings } from './translations/legend-section';

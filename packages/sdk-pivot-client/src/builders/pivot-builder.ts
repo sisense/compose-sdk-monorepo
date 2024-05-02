@@ -1,7 +1,4 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable max-lines */
-/* eslint-disable sonarjs/cognitive-complexity */
 import EventEmitter from 'events';
 import * as React from 'react';
 import ReactDOM from 'react-dom';

@@ -1,3 +1,5 @@
+import merge from 'ts-deepmerge';
+import { getDefaultThemeSettings } from '../theme-provider/default-theme-settings';
 import { ThemeOid, CompleteThemeSettings } from '../types.js';
 
 /**
@@ -88,7 +90,7 @@ export function convertToThemeSettings(
   legacyDesignSettings: LegacyDesignSettings,
   legacyPalette: LegacyPalette,
 ): CompleteThemeSettings {
-  const themeSettings: CompleteThemeSettings = {
+  const themeSettings: Omit<CompleteThemeSettings, 'aiChat'> = {
     chart: {
       textColor: legacyDesignSettings.dashboards.widgetTextColor,
       backgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
@@ -110,7 +112,7 @@ export function convertToThemeSettings(
       primaryButtonHoverColor: legacyDesignSettings.general.primaryButtonHoverColor,
     },
   };
-  return themeSettings;
+  return merge.withOptions({ mergeArrays: false }, getDefaultThemeSettings(), themeSettings);
 }
 
 export function getPaletteName(legacyDesignSettings: LegacyDesignSettings): string {

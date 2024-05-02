@@ -1,6 +1,5 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-import { Dialog, IconButton } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
 import { Filter } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
 import { ChartWidgetProps, TableWidgetProps } from '../../props';

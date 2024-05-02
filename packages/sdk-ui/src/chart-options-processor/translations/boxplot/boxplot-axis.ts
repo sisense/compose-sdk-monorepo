@@ -1,4 +1,4 @@
-import { isNumber } from 'lodash';
+import isNumber from 'lodash/isNumber';
 import { isNumber as isNumberType } from '@sisense/sdk-data';
 import { BoxplotChartData } from '../../../chart-data/types';
 import { Axis, AxisLabelsFormatterContextObject, AxisSettings } from '../axis-section';

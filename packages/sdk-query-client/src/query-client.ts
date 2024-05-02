@@ -1,8 +1,7 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
-/* eslint-disable sonarjs/cognitive-complexity */
 import {
   DataSourceField,
+  DataSourceMetadata,
+  DataSourceSchema,
   ExecutingCsvQueryResult,
   ExecutingPivotQueryResult,
   ExecutingQueryResult,
@@ -18,7 +17,7 @@ import {
 } from './query-task-manager/query-task-passport.js';
 import { ExecutionResultStatus } from '@sisense/task-manager';
 import { QueryApiDispatcher } from './query-api-dispatcher/query-api-dispatcher.js';
-import { DataSourceInfo, DataSource, MetadataTypes } from '@sisense/sdk-data';
+import { DataSource, MetadataTypes } from '@sisense/sdk-data';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { TranslatableError } from './translation/translatable-error.js';
 import { PivotClient } from '@sisense/sdk-pivot-client';
@@ -147,14 +146,17 @@ export class DimensionalQueryClient implements QueryClient {
   }
 
   /**
-   * Get info about data source
+   * Returns the schema of a data source by its name.
    */
-  public async getDataSourceInfo(datasourceName: string): Promise<DataSourceInfo> {
-    const completeDataSourceSchema = await this.queryApi.getDataSourceSchema(datasourceName);
-    return {
-      title: completeDataSourceSchema.title,
-      type: completeDataSourceSchema.type === 'extract' ? 'elasticube' : 'live',
-    };
+  public async getDataSourceSchema(datasourceName: string): Promise<DataSourceSchema> {
+    return this.queryApi.getDataSourceSchema(datasourceName);
+  }
+
+  /**
+   * Returns a list of data sources
+   */
+  public async getDataSourceList(): Promise<DataSourceMetadata[]> {
+    return this.queryApi.getDataSourceList();
   }
 }
 

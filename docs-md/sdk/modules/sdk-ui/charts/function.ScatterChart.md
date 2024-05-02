@@ -27,7 +27,7 @@ Scatter chart displaying total revenue per category, broken down by gender, from
 
 Additional Scatter Chart examples:
 
-- [Bubble Scatter Chart](https://csdk-playground.sisense.com/?example=charts/scatter-chart-bubble)
+- [Bubble Scatter Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts/scatter-chart-bubble)
 
 ## Parameters
 

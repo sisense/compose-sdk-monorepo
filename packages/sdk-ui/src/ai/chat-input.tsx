@@ -1,15 +1,21 @@
-/* eslint-disable max-lines-per-function */
-import { KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 import MessageIcon from './icons/message-icon';
 import ClearChatIcon from './icons/clear-chat-icon';
-import { useChatStyle } from './chat-style-provider';
 import { useChatConfig } from './chat-config';
+import styled from '@emotion/styled';
+import { Themable } from '@/theme-provider/types';
+import { useThemeContext } from '@/theme-provider';
+import { css } from '@emotion/react';
+import ChatDropup, { isCommand } from './chat-dropup';
 
 export type ChatInputProps = {
   onSendMessage: (message: string) => void;
   onClearHistoryClick?: () => void;
   disabled?: boolean;
+  recentPrompts: string[];
+  suggestions: string[];
+  isLoading: boolean;
 };
 
 const MIN_TEXTAREA_HEIGHT = 34;
@@ -18,86 +24,168 @@ export default function ChatInput({
   onSendMessage,
   onClearHistoryClick,
   disabled,
+  recentPrompts,
+  suggestions,
+  isLoading,
 }: ChatInputProps) {
   const [text, setText] = useState('');
 
   const { inputPromptText } = useChatConfig();
 
-  const handleSendMessage = () => {
+  const handleSendMessage = useCallback(() => {
     if (disabled) return;
+
+    if (isCommand(text)) {
+      setText('');
+      return;
+    }
+
     const finalText = text.trim();
     if (finalText.length === 0) return;
     onSendMessage(finalText);
     setText('');
-  };
+  }, [disabled, onSendMessage, text]);
 
-  const onKeyDownInput = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
+  const handleDropupSelect = useCallback(
+    (selection: string) => {
+      onSendMessage(selection);
+      setText('');
+    },
+    [onSendMessage],
+  );
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const onKeyDownInput = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSendMessage();
+      } else if (e.key === 'Escape' && isCommand(text)) {
+        setText('');
+      }
+    },
+    [handleSendMessage, text],
+  );
+
+  const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+  }, []);
+
+  const ref = useRef<HTMLTextAreaElement>(null);
 
   useLayoutEffect(() => {
-    if (textareaRef.current) {
+    if (ref.current) {
       // Reset height - important to shrink on delete
-      textareaRef.current.style.height = 'inherit';
+      ref.current.style.height = 'inherit';
       // Set height
-      textareaRef.current.style.height = `${Math.max(
-        textareaRef.current.scrollHeight + 2, // account for 1px top/bottom border
+      ref.current.style.height = `${Math.max(
+        ref.current.scrollHeight + 2, // account for 1px top/bottom border
         MIN_TEXTAREA_HEIGHT,
       )}px`;
     }
   }, [text]);
 
-  const disabledSendStyling =
-    text.length === 0 || disabled
-      ? 'csdk-opacity-30 csdk-cursor-not-allowed '
-      : 'csdk-opacity-100 csdk-cursor-pointer';
-  const textareaSizeStyle = 'csdk-max-h-[88px] csdk-w-full';
-  const textareaSpacingStyle = 'csdk-py-[7px] csdk-px-[16px] csdk-mx-[10px]';
-  const textareaBorderStyle =
-    'csdk-border csdk-border-[#262E3D]/[.15] csdk-rounded-lg focus:csdk-outline-[#262E3D]/50';
-
-  const { primaryTextColor, inputBackgroundColor } = useChatStyle();
+  const { themeSettings } = useThemeContext();
 
   return (
-    <div className="csdk-flex csdk-items-end csdk-content-center csdk-w-full csdk-relative csdk-px-[16px]">
+    <ChatInputContainer theme={themeSettings}>
+      <ChatDropup
+        recentPrompts={recentPrompts}
+        suggestions={suggestions}
+        isLoading={isLoading}
+        onSelection={handleDropupSelect}
+        anchorEl={ref.current}
+        text={text}
+      />
       {onClearHistoryClick && (
-        <button
-          aria-label="clear history"
-          className="csdk-h-[34px] csdk-bg-inherit csdk-cursor-pointer"
-          onClick={onClearHistoryClick}
-        >
-          <ClearChatIcon />
-        </button>
+        <ClearHistoryButton aria-label="clear history" onClick={onClearHistoryClick}>
+          <ClearChatIcon theme={themeSettings} />
+        </ClearHistoryButton>
       )}
-      <textarea
-        ref={textareaRef}
+      <TextInput
+        ref={ref}
         rows={1}
-        className={`csdk-text-ai-sm csdk-text-text-content csdk-resize-none csdk-overflow-y-auto ${textareaSizeStyle} ${textareaSpacingStyle} ${textareaBorderStyle}`}
-        onChange={(e) => setText(e.target.value)}
+        onChange={handleChange}
         spellCheck={'true'}
         placeholder={inputPromptText}
         value={text}
         onKeyDown={onKeyDownInput}
-        style={{
-          color: primaryTextColor,
-          backgroundColor: inputBackgroundColor,
-        }}
+        theme={themeSettings}
       />
-      <button
+      <SendMessageButton
         aria-label="send chat message"
-        disabled={disabled}
-        className={`csdk-h-[34px] csdk-bg-inherit ${disabledSendStyling}`}
+        disabled={disabled || text.length === 0}
         onClick={handleSendMessage}
+        theme={themeSettings}
       >
         <span data-state="closed">
-          <MessageIcon />
+          <MessageIcon theme={themeSettings} />
         </span>
-      </button>
-    </div>
+      </SendMessageButton>
+    </ChatInputContainer>
   );
 }
+
+const ChatInputContainer = styled.div<Themable>`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  background-color: ${({ theme }) => theme.aiChat.backgroundColor};
+`;
+
+const ClearHistoryButton = styled.button`
+  height: 34px;
+  background-color: inherit;
+  cursor: pointer;
+  border: none;
+`;
+
+const TextInput = styled.textarea<Themable>`
+  font-size: inherit;
+  line-height: inherit;
+  resize: none;
+  overflow-y: auto;
+  box-sizing: border-box;
+  // size style
+  max-height: 88px;
+  width: 100%;
+  // spacing style
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: 10px;
+  margin-right: 10px;
+  // border style
+  border-width: 1px;
+  border-color: rgb(38 46 61 / 0.15);
+  border-radius: 0.5rem;
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.aiChat.input.focus.outlineColor};
+  }
+  font-family: inherit;
+
+  color: ${({ theme }) => theme.aiChat.primaryTextColor};
+
+  background-color: ${({ theme }) => theme.aiChat.input.backgroundColor};
+`;
+
+const SendMessageButton = styled.button<Themable & { disabled: boolean }>`
+  height: 34px;
+  background-color: inherit;
+  border-style: none;
+
+  color: ${({ theme }) => theme.aiChat.primaryTextColor};
+
+  ${({ disabled }) =>
+    disabled
+      ? css`
+          opacity: 0.3;
+          cursor: not-allowed;
+        `
+      : css`
+          opacity: 1;
+          cursor: pointer;
+        `}
+`;

@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable sonarjs/cognitive-complexity */
 import { useEffect, useReducer, useState } from 'react';
 import { usePrevious } from '../common/hooks/use-previous.js';
 import { executeCsvQuery } from '../query/execute-query.js';

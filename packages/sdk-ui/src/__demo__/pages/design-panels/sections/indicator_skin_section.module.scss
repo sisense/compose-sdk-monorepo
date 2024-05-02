@@ -1,0 +1,101 @@
+@import '@/charts/table/styles/color.scss';
+@import './constants.scss';
+@import '@/charts/table/styles/icons.scss';
+
+.title {
+  padding-top: 15px;
+  margin-left: 20px;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: $OXFORD_BLUE;
+}
+
+.table {
+  margin-left: 13px;
+  width: 226px;
+  height: 70px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  background: white;
+  td {
+    width: 50%;
+    border-right: 1px solid $ATHENS_GRAY_DARK2;
+    cursor: pointer;
+    &.hoverEffect {
+      &:hover {
+        background-color: $PALE_CANERY;
+        .verticalIcon {
+          opacity: 1;
+        }
+        .horizontalIcon {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.skin1 {
+  width: 24px;
+  height: 24px;
+  background-image: $INDICATOR;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.verticalIcon {
+  margin-top: 5px;
+  font-size: 16px;
+  border-top: 2px solid black;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.skin1Text {
+  margin-top: 5px;
+}
+
+.skin2 {
+  width: 43px;
+  height: 18px;
+  background-image: $SMOOTH_LINE;
+  margin-top: 4px;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.horizontalIcon {
+  margin-top: 5px;
+  display: flex;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.horizontal {
+  font-size: 16px;
+}
+
+.horizontalSpan {
+  width: 15px;
+  border-top: 2px solid black;
+}
+
+.skin2Text {
+  margin-top: 5px;
+}

@@ -286,6 +286,7 @@ metadata:
   - jaql:
       dim: "[Commerce.Revenue]"
       agg: sum
+      sort: desc
       title: total of Revenue
   - jaql:
       title: Country
@@ -335,7 +336,7 @@ export default function CodeExample() {
       DM.Commerce.Condition
     ],
     value: [
-      measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue')
+      {column: measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue'), sortType: 'sortDesc'}
     ],
     breakBy: [],
   } }

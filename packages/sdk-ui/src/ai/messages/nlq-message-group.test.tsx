@@ -68,7 +68,14 @@ it('renders expandable cartesian chart with expected toolbar buttons', async () 
 
   const threeDotsButton = screen.getByLabelText('three dots button');
   await user.click(threeDotsButton);
-  expect(screen.getByRole('menuitem')).toHaveTextContent('Refresh');
+
+  expect(screen.getByRole('menu')).toBeInTheDocument();
+
+  const menuItems = screen.getAllByRole('menuitem');
+  expect(menuItems[0]).toHaveTextContent('Refresh');
+
+  await user.click(menuItems[0]);
+  expect(screen.queryByRole('menu')).toBeNull();
 
   const expandTooltipText = 'Preview';
   const expandButton = screen.getByLabelText(expandTooltipText);

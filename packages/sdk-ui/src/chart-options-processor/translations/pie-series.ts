@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Convolution, SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';

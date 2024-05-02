@@ -1,6 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable max-lines */
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
 import { InternalSeriesNode, TooltipSettings } from '../../tooltip';

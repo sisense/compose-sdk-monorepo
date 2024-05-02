@@ -1,15 +1,10 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
-import {
-  Card,
-  CardContent,
-  Divider,
-  IconButton,
-  Popover,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Popover from '@mui/material/Popover';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useThemeContext } from '../../theme-provider';
 import { WidgetStyleOptions } from '../../types';
@@ -81,7 +76,7 @@ export default function WidgetHeaderInfoButton({
               'csdk-flex csdk-flex-row csdk-justify-between csdk-items-center csdk-py-[5px] csdk-px-[12px]'
             }
             style={{
-              backgroundColor: '#f9f9f9',
+              backgroundColor: themeSettings.chart?.panelBackgroundColor,
             }}
           >
             <Typography
@@ -103,6 +98,7 @@ export default function WidgetHeaderInfoButton({
               </svg>
             </IconButton>
           </div>
+          <Divider sx={{ borderColor: themeSettings.chart?.secondaryTextColor, opacity: 0.3 }} />
           <CardContent
             style={{
               backgroundColor: themeSettings.chart?.backgroundColor,
@@ -124,7 +120,9 @@ export default function WidgetHeaderInfoButton({
 
             {!!description && (
               <>
-                <Divider sx={{ my: 1 }} style={{ backgroundColor: '#e4e4e4' }} />
+                <Divider
+                  sx={{ my: 1, borderColor: themeSettings.chart?.secondaryTextColor, opacity: 0.3 }}
+                />
                 <Typography
                   variant="body2"
                   style={{

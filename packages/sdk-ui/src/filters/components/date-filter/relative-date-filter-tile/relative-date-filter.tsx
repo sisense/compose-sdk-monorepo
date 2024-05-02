@@ -1,6 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -18,7 +15,7 @@ import { FunctionComponent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isVertical } from '../../common/filter-utils.js';
 import { DEFAULT_FORMAT } from '../consts.js';
-import { Popover } from '@mui/material';
+import Popover from '@mui/material/Popover';
 import { CalendarDateSelector } from '../date-filter/calendar-date-selector.js';
 import dayjs from 'dayjs';
 import { useThemeContext } from '../../../../theme-provider/index.js';

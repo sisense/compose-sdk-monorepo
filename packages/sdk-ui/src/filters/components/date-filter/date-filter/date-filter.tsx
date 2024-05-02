@@ -1,6 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import { SelectorMode } from './calendar-date-selector';

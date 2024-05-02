@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.8.0",
+  "version": "1.9.0",
   "type": "module",
   "exports": {
     ".": {
@@ -25,7 +25,7 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-ui": "^1.8.0",
+    "@sisense/sdk-ui": "^1.9.0",
     "preact": "^10.13.2"
   },
   "scripts": {

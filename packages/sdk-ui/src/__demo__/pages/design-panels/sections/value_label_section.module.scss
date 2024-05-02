@@ -1,0 +1,93 @@
+@import '@/charts/table/styles/color.scss';
+@import './constants.scss';
+@import '@/charts/table/styles/icons.scss';
+
+.valueLabelsTable {
+  margin-left: 13px;
+  width: 226px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  border-radius: 4px;
+  border-collapse: separate;
+  background: white;
+  font-size: 13px;
+  color: $SHUTTLE_GRAY_DARK;
+  overflow: hidden;
+  td {
+    border-right: 1px solid $ATHENS_GRAY_DARK2;
+  }
+  td:last-child {
+    border: none;
+  }
+  .iconTr {
+    height: 74px;
+    cursor: pointer;
+  }
+  .hoverEffect {
+    &:hover {
+      background-color: $PALE_CANERY;
+      .horizontal {
+        opacity: 1;
+      }
+      .diagonal {
+        opacity: 1;
+      }
+      .vertical {
+        opacity: 1;
+      }
+    }
+  }
+  .textTr {
+    height: 25px;
+    td {
+      border-top: 1px solid $ATHENS_GRAY_DARK2;
+    }
+  }
+  .horizontal {
+    border-bottom: 1px solid $SHUTTLE_GRAY_DARK;
+    text-align: center;
+    box-sizing: border-box;
+    width: 40px;
+    opacity: 0.3;
+    &.selected {
+      opacity: 1;
+    }
+  }
+  .diagonal {
+    border-bottom: 1px solid $SHUTTLE_GRAY_DARK;
+    text-align: center;
+    box-sizing: border-box;
+    transform: rotate(-45deg);
+    width: 40px;
+    opacity: 0.3;
+    &.selected {
+      opacity: 1;
+    }
+  }
+  .vertical {
+    border-bottom: 1px solid $SHUTTLE_GRAY_DARK;
+    text-align: center;
+    box-sizing: border-box;
+    transform: rotate(-90deg);
+    width: 40px;
+    opacity: 0.3;
+    &.selected {
+      opacity: 1;
+    }
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tdSelected {
+  background-color: transparent;
+}
+
+.valueLabelSection {
+  border: none;
+}

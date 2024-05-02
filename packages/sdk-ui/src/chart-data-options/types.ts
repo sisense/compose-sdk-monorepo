@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import type { DataColorOptions } from '../chart-data/data-coloring';
 import type {
   NumberFormatConfig,
@@ -560,7 +559,7 @@ export interface Category extends CategoryStyle {
 
 /** @internal */
 export const isValue = (arg: Category | Value): arg is Value => {
-  return 'aggregation' in arg || 'context' in arg;
+  return 'aggregation' in arg || 'context' in arg || 'formula' in arg;
 };
 
 /** @internal */

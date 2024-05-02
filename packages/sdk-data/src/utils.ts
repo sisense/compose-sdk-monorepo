@@ -9,8 +9,8 @@ import {
   DataSourceInfo,
   FilterJaql,
 } from './index.js';
-import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-jaql-util.js';
-import { FilterJaqlInternal } from './dimensional-model/filters/utils/modern-analytics-filters/types.js';
+import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
+import { FilterJaqlInternal } from './dimensional-model/filters/utils/types.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()

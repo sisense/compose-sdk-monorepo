@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
 /* eslint-disable max-params */
 import type { DataLabelsOptions } from '@sisense/sisense-charts';
 import { Style } from '../chart-options-service';

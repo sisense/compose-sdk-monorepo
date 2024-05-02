@@ -1,7 +1,6 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import merge from 'ts-deepmerge';
 import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period.js';
-import { getDefaultThemeSettings } from '../../chart-options-processor/theme-option-service.js';
 
 import { defaultDateConfig } from '../../query/date-formats';
 import {
@@ -13,6 +12,7 @@ import { getLegacyPalette } from '../../themes/theme-loader';
 import { AppConfig, ThemeSettings } from '../../types';
 import { GlobalsObject } from './types';
 import { QUERY_DEFAULT_LIMIT } from '@/const';
+import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings.js';
 
 /**
  * Application settings

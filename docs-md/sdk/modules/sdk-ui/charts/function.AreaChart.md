@@ -14,7 +14,7 @@ but with filled in areas under each line and an option to display them as stacke
 Area chart displaying total revenue per quarter from the Sample ECommerce data model.
 
 <iframe
- src='https://dhoavm6pu1cvg.cloudfront.net/?example=charts%2Farea-chart&mode=docs'
+ src='https://csdk-playground.sisense.com/?example=charts%2Farea-chart&mode=docs'
  width=800
  height=870
  style='border:none;'
@@ -22,8 +22,8 @@ Area chart displaying total revenue per quarter from the Sample ECommerce data m
 
 Additional Area Chart examples:
 
-- [Stacked Area Chart](https://csdk-playground.sisense.com/?example=charts%2Farea-chart-stacked)
-- [Stacked Percentage Area Chart](https://csdk-playground.sisense.com/?example=charts%2Farea-chart-stacked100)
+- [Stacked Area Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Farea-chart-stacked)
+- [Stacked Percentage Area Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Farea-chart-stacked100)
 
 ## Parameters
 

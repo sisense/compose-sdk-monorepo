@@ -1,9 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/default-param-last */
 /* eslint-disable max-params */
-/* eslint-disable max-lines */
 import {
   addDays,
   addMonths,

@@ -71,24 +71,3 @@ export const WithCustomWelcomeText: Story = {
     },
   },
 };
-
-export const WithCustomStyle: Story = {
-  args: {
-    style: {
-      backgroundColor: 'rgba(23, 28, 38, 1)',
-      primaryTextColor: 'rgba(242, 247, 255, 0.9)',
-      secondaryTextColor: 'rgba(242, 247, 255, 0.4)',
-      messageBackgroundColor: 'rgba(46, 55, 77, 1)',
-      inputBackgroundColor: 'rgba(31, 37, 51, 1)',
-      border: false,
-      suggestions: {
-        textColor: 'rgba(88, 192, 244, 1)',
-        border: '1px solid #2E374D',
-        hoverBackgroundColor: 'rgba(242, 247, 255, 0.1)',
-        loadingGradient: ['rgba(242, 247, 255, 0.1)', 'rgba(242, 247, 255, 0.3)'],
-      },
-      iconColor: 'rgba(242, 247, 255, 0.5)',
-    },
-    config: { defaultContextTitle: 'Sample ECommerce' },
-  },
-};

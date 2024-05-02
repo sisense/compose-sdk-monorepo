@@ -1,4 +1,5 @@
 import {
+  addDescriptionToFields,
   createDataModel,
   FilePathInfo,
   getFilePathInfo,
@@ -7,11 +8,19 @@ import {
   rewriteDataModel,
   writeFile,
 } from './helpers.js';
-import { fieldsECommerce, dimensionalModelECommerce } from '../__mocks__/data-model-ecommerce.js';
+import {
+  fieldsECommerce,
+  dataSourceSchemaECommerce,
+  dimensionalModelECommerce,
+  dimensionalModelECommerceWithFieldDescriptions,
+} from '../__mocks__/data-model-ecommerce.js';
 import { fieldsOrdersDB, dimensionalModelOrdersDB } from '../__mocks__/data-model-orders-db.js';
+import { dataSources } from '../__mocks__/data-sources.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { DataModel } from '@sisense/sdk-data';
 import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
+import { DataSourceField } from '@sisense/sdk-query-client';
+import { Mocked } from 'vitest';
 
 vi.mock('@sisense/sdk-modeling', () => ({
   writeTypescript: vi.fn(),
@@ -20,9 +29,46 @@ vi.mock('@sisense/sdk-modeling', () => ({
 
 describe('helpers', () => {
   describe('createDataModel', () => {
+    let httpClient: Mocked<HttpClient>;
+    const consoleLogSpy = vi.spyOn(console, 'log');
+
+    beforeEach(() => {
+      // Initialize the httpClient and queryApi for each test
+      httpClient = {
+        post: vi.fn(),
+        get: vi.fn(),
+      } as unknown as Mocked<HttpClient>;
+
+      consoleLogSpy.mockClear();
+    });
+
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('createDataModel helper is a function', () => {
       expect(createDataModel).toBeDefined();
       expect(typeof createDataModel === 'function').toBe(true);
+    });
+
+    it('should create data model', async () => {
+      httpClient.get
+        .mockResolvedValueOnce(dataSources)
+        .mockResolvedValueOnce(dataSourceSchemaECommerce);
+      httpClient.post.mockResolvedValue(fieldsECommerce.metadata);
+      const dataModel = await createDataModel(httpClient, 'Sample ECommerce');
+      expect(dataModel).toEqual(dimensionalModelECommerceWithFieldDescriptions);
+    });
+
+    it('should throw error and suggestion for similar data source title', async () => {
+      httpClient.get.mockResolvedValue(dataSources);
+      const dataModel = createDataModel(httpClient, 'Sample ECommerc');
+
+      // Assert
+      await expect(dataModel).rejects.toBeUndefined();
+      expect(consoleLogSpy).toHaveBeenLastCalledWith(
+        `Error fetching metadata. Reason: Error: Data source 'Sample ECommerc' not found. Did you mean 'Sample ECommerce'?\r\n`,
+      );
     });
   });
 
@@ -152,6 +198,39 @@ describe('helpers', () => {
       const result = isSupportedOutputFile(filePathInfo);
 
       expect(result).toBe(false);
+    });
+  });
+
+  describe('addDescriptionToFields', () => {
+    it('should add descriptions to fields based on schema data', () => {
+      const fields = [
+        { table: 'Table1', column: 'Column1' },
+        { table: 'Table2', column: 'Column2' },
+      ] as DataSourceField[];
+
+      const datasets = [
+        {
+          schema: {
+            tables: [
+              {
+                name: 'Table1',
+                columns: [{ name: 'Column1', description: 'Description1' }],
+              },
+              {
+                name: 'Table2',
+                columns: [{ name: 'Column2', description: 'Description2' }],
+              },
+            ],
+          },
+        },
+      ];
+
+      const expectedResult = [
+        { table: 'Table1', column: 'Column1', description: 'Description1' },
+        { table: 'Table2', column: 'Column2', description: 'Description2' },
+      ];
+
+      expect(addDescriptionToFields(fields, datasets)).toEqual(expectedResult);
     });
   });
 });

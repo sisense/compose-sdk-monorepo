@@ -39,7 +39,9 @@ export const translation = {
     },
     widgetModel: {
       tabularWidgetNotSupported: 'Tabular widgets are not supported for method {{methodName}}',
-      onlyTabularWidgetsSupported: 'Only tabular widgets are supported for method {{methodName}}',
+      pivotWidgetNotSupported: 'Pivot widget is not supported for method {{methodName}}',
+      onlyTableWidgetSupported: 'Only table widget is supported for method {{methodName}}',
+      onlyPivotWidgetSupported: 'Only pivot widget is supported for method {{methodName}}',
     },
     unknownFilterInFilterRelations: 'Filter relations contain unknown filter',
     filterRelationsNotSupported: 'Filter relations not supported yet',

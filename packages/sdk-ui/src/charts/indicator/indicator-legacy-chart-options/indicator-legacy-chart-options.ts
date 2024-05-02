@@ -13,7 +13,7 @@ import { overrideWithThemeSettings } from './override-with-theme-settings';
 import { legacyOptionsToThemeSettingsDictionary } from './legacy-chart-options-to-theme-settings-dictionary';
 import { IndicatorChartData } from '../../../chart-data/types';
 import { getValueColorOptions, overrideWithValueColor } from './override-with-value-color';
-import { isNumber } from 'lodash';
+import isNumber from 'lodash/isNumber';
 
 export type ChartRenderingOptions = {
   chartData: IndicatorChartData;

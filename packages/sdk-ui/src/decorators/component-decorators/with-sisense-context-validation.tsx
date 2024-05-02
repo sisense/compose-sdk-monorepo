@@ -1,4 +1,5 @@
-import { isFunction, isBoolean } from 'lodash';
+import isBoolean from 'lodash/isBoolean';
+import isFunction from 'lodash/isFunction';
 import { ComponentDecorator, SisenseComponentConfig } from './as-sisense-component';
 import { TranslatableError } from '../../translation/translatable-error';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
@@ -44,6 +45,6 @@ function canRenderWithoutSisenseContextWaiting(
 }
 
 function LoadingIndicator() {
-  // TODO: add a nice loading indicator (SNS-94466)
+  // TODO: add a nice loading indicator
   return null;
 }

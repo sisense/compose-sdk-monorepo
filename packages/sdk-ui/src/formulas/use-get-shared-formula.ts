@@ -1,6 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable sonarjs/cognitive-complexity */
 import { useEffect, useReducer, useState } from 'react';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula.js';
@@ -11,7 +8,7 @@ import { HookEnableParam } from '../common/hooks/types.js';
 import { withTracking } from '../decorators/hook-decorators/with-tracking.js';
 import { usePrevious } from '../common/hooks/use-previous.js';
 import { DataState, dataLoadStateReducer } from '../common/hooks/data-load-state-reducer.js';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 /**
  * Parameters for {@link useGetSharedFormula} hook.

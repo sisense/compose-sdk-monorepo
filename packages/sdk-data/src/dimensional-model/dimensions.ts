@@ -3,12 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable complexity */
-/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Attribute, LevelAttribute, Dimension, DateDimension } from './interfaces.js';
 
@@ -466,7 +462,7 @@ export function createDimension(json: any): Dimension {
 
   // date dimension
   if (type == MetadataTypes.DateDimension) {
-    return new DimensionalDateDimension(name, expression);
+    return new DimensionalDateDimension(name, expression, description);
   }
 
   // attributes
@@ -479,13 +475,13 @@ export function createDimension(json: any): Dimension {
       for (let i = 0; i < json.attributes.length; i++) {
         att = json.attributes[i];
 
-        atts.push(new DimensionalAttribute(att.name, att.expression, att.type));
+        atts.push(new DimensionalAttribute(att.name, att.expression, att.type, att.description));
       }
     }
 
     // default attribute
     else if (expression) {
-      atts.push(new DimensionalAttribute(name, expression));
+      atts.push(new DimensionalAttribute(name, expression, type, description));
     }
   }
 
@@ -522,5 +518,6 @@ export function createDimension(json: any): Dimension {
 export function createDateDimension(json: any): DateDimension {
   const name = json.name || json.title;
   const expression = json.expression || json.dim;
-  return new DimensionalDateDimension(name, expression);
+  const description = json.desc || json.description;
+  return new DimensionalDateDimension(name, expression, description);
 }

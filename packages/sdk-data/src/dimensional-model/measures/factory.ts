@@ -1,8 +1,7 @@
-/* eslint-disable complexity */
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import {
   Attribute,
@@ -308,6 +307,8 @@ export function sum(attribute: Attribute, name?: string, format?: string) {
 /**
  * Creates an average aggregation measure over the given attribute.
  *
+ * Both `average()` and `avg()` can be used interchangeably.
+ *
  * @example
  * Calculate the average cost across all items in a category from the Sample Ecommerce data model.
  * ```ts
@@ -321,6 +322,20 @@ export function sum(attribute: Attribute, name?: string, format?: string) {
  */
 export function average(attribute: Attribute, name?: string, format?: string) {
   return aggregate(attribute, AggregationTypes.Average, name, format);
+}
+
+/**
+ * {@inheritDoc average}
+ *
+ * @example
+ * Calculate the average cost across all items in a category from the Sample Ecommerce data model.
+ * ```ts
+ * measureFactory.avg(DM.Commerce.Cost)
+ * ```
+ * @group Aggregation
+ */
+export function avg(attribute: Attribute, name?: string, format?: string) {
+  return average(attribute, name, format);
 }
 
 /**

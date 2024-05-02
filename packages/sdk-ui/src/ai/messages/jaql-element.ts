@@ -1,5 +1,13 @@
-import { DimensionalElement, MetadataTypes, BaseJaql, DataType } from '@sisense/sdk-data';
+import {
+  DimensionalElement,
+  MetadataTypes,
+  BaseJaql,
+  DataType,
+  SortDirection,
+  JaqlSortDirection,
+} from '@sisense/sdk-data';
 import { MetadataItem } from '@sisense/sdk-query-client';
+import { getSortType } from '@/dashboard-widget/utils';
 
 /**
  * This implementation wraps metadata for a JAQL query. The metadata could be
@@ -16,16 +24,44 @@ import { MetadataItem } from '@sisense/sdk-query-client';
  * @internal
  */
 export class JaqlElement extends DimensionalElement {
-  private metadataItem: MetadataItem;
+  private readonly metadataItem: MetadataItem;
 
   expression: string;
 
   skipValidation: boolean;
 
+  // aggregation or formula is needed to differentiate between internal Category and Value
+  // see isCategory() and isValue()
+  // TODO refactor to create Attribute or Measure from MetadataItem
+  aggregation?: string;
+
+  formula?: string;
+
+  sortType?: SortDirection;
+
   constructor(item: MetadataItem, type: string) {
     super(item.jaql.title ?? '', type);
     this.expression = (item.jaql.dim || item.jaql.formula) as string;
     this.metadataItem = item;
+
+    if (item.jaql.agg) {
+      this.aggregation = item.jaql.agg;
+    } else {
+      delete this.aggregation;
+    }
+
+    if (item.jaql.formula) {
+      this.formula = item.jaql.formula;
+    } else {
+      delete this.formula;
+    }
+
+    if (item.jaql.sort) {
+      this.sortType = getSortType(item.jaql.sort as JaqlSortDirection);
+    } else {
+      delete this.sortType;
+    }
+
     this.skipValidation = true;
   }
 

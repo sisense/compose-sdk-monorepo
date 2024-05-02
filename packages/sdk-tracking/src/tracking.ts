@@ -19,7 +19,7 @@ export const trackProductEvent = async (
     ...details,
   };
   if (isDebugMode) {
-    console.log('DEBUG: event payload to send', payload);
+    console.debug('DEBUG: event payload to send', payload);
     return;
   }
 

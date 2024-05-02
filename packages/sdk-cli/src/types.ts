@@ -27,3 +27,27 @@ export type GetApiTokenOptions = {
   username: string;
   password: string | undefined;
 };
+
+/**
+ * Data source schema table
+ *
+ * @internal
+ */
+export type DataSourceSchemaTable = {
+  name: string;
+  columns: {
+    name: string;
+    description: string | null;
+  }[];
+};
+
+/**
+ * Data source schema table
+ *
+ * @internal
+ */
+export type DataSourceSchemaDataset = {
+  schema: {
+    tables: DataSourceSchemaTable[];
+  };
+};

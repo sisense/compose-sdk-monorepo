@@ -64,7 +64,7 @@ export class DataLoadService extends AbstractDataLoadService implements DataLoad
       this.onMessageCancel();
       this.onMessageCancel = undefined;
     }
-    // removed because of duplication of cancel-query request SNS-37819
+    // removed because of duplication of cancel-query request
     // this.cancelQuery();
     this.socket.off('error', this.onSocketError);
     this.socket.off('disconnect', this.onSocketDisconnect);

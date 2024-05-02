@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import createTheme from '@mui/material/styles/createTheme';
 
 // import { injectStylesWithWrapper, themeService } from '@sbi/styleguide';
 

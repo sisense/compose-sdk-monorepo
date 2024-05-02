@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import React, { useMemo, type FunctionComponent } from 'react';
 import { type Filter } from '@sisense/sdk-data';
 import { ChartWidget } from '../widgets/chart-widget';
@@ -9,13 +8,34 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
 import {
   convertFilterRelationsModelToJaql,
   getFilterRelationsFromJaql,
-  isTabularWidget,
+  isPivotWidget,
+  isTableWidget,
   mergeFilters,
   mergeFiltersByStrategy,
 } from './utils';
 import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
 import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model';
 import { WidgetModel } from '../models';
+import { PivotTableWidgetProps } from '..';
+import { PivotTableWidget } from '@/widgets/pivot-table-widget';
+
+function getWidgetProps(widgetModel: WidgetModel) {
+  const { widgetType } = widgetModel;
+  let props;
+
+  if (isTableWidget(widgetType)) {
+    props = widgetModel.getTableWidgetProps();
+  } else if (isPivotWidget(widgetType)) {
+    props = widgetModel.getPivotTableWidgetProps();
+  } else {
+    props = widgetModel.getChartWidgetProps();
+  }
+
+  return {
+    props,
+    widgetType,
+  };
+}
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -62,13 +82,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     }
 
     const widgetModel = new WidgetModel(fetchedWidget, themeSettings);
-    const extractedWidgetProps = {
-      props: isTabularWidget(widgetModel.widgetType)
-        ? widgetModel.getTableWidgetProps()
-        : widgetModel.getChartWidgetProps(),
-      widgetType: widgetModel.widgetType,
-    };
-
+    const extractedWidgetProps = getWidgetProps(widgetModel);
     if (includeDashboardFilters) {
       const { filters: dashboardFilters, highlights: dashboardHighlights } =
         extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
@@ -109,17 +123,35 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     ),
   );
 
-  return isTabularWidget(widgetType) ? (
-    <TableWidget
-      {...(fetchedProps as TableWidgetProps)}
-      {...restProps}
-      filters={filterRelations}
-      styleOptions={{
-        ...fetchedProps.styleOptions,
-        ...props.styleOptions,
-      }}
-    />
-  ) : (
+  if (isTableWidget(widgetType)) {
+    return (
+      <TableWidget
+        {...(fetchedProps as TableWidgetProps)}
+        {...restProps}
+        filters={filterRelations}
+        styleOptions={{
+          ...fetchedProps.styleOptions,
+          ...props.styleOptions,
+        }}
+      />
+    );
+  }
+
+  if (isPivotWidget(widgetType)) {
+    return (
+      <PivotTableWidget
+        {...(fetchedProps as PivotTableWidgetProps)}
+        {...restProps}
+        filters={filterRelations}
+        styleOptions={{
+          ...fetchedProps.styleOptions,
+          ...props.styleOptions,
+        }}
+      />
+    );
+  }
+
+  return (
     <ChartWidget
       {...(fetchedProps as ChartWidgetProps)}
       {...restProps}

@@ -2,8 +2,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable sonarjs/no-nested-switch */
 import { Attribute, LevelAttribute } from './interfaces.js';
@@ -285,7 +283,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
 
   static translateJaqlToGranularity(json: any) {
     const returnUnsupported = (lvl: string) => {
-      console.warn('Unsupported granularity');
+      console.warn('Unsupported granularity', lvl);
       return lvl;
     };
 
@@ -374,5 +372,32 @@ export function createLevel(json: any): LevelAttribute {
     json.granularity,
     json.format,
     json.desc || json.description,
+  );
+}
+
+/**
+ * Normalize attribute name
+ *
+ * @param tableName - Table name (e.g., Commerce Sales)
+ * @param columnName - Column name (e.g., Order Date)
+ * @param dateLevel - Date level (e.g., Years)
+ * @param modelName - module name (e.g., DM)
+ * @return full normalized attribute name (e.g., DM.CommerceSales.OrderDate.Years)
+ * @internal
+ */
+export function normalizeAttributeName(
+  tableName: string,
+  columnName: string,
+  dateLevel?: string,
+  modelName?: string,
+): string {
+  return (
+    (modelName && modelName.length > 0 ? modelName + '.' : '') +
+    normalizeName(tableName) +
+    '.' +
+    normalizeName(columnName) +
+    (dateLevel && dateLevel.length > 0
+      ? '.' + DimensionalLevelAttribute.translateJaqlToGranularity({ level: dateLevel })
+      : '')
   );
 }

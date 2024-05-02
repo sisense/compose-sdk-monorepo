@@ -8,7 +8,7 @@ import {
   formatTooltipXValue,
 } from '../tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import './boxplot-tooltip.scss';
 
 // eslint-disable-next-line max-lines-per-function

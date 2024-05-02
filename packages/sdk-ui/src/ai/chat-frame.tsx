@@ -1,11 +1,7 @@
-import { CSSProperties, ReactNode } from 'react';
-import { useChatStyle } from './chat-style-provider';
-
-type ChatFrameProps = {
-  width?: CSSProperties['width'];
-  height?: CSSProperties['height'];
-  children: ReactNode;
-};
+import { Themable } from '@/theme-provider/types';
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+import { CSSProperties } from 'react';
 
 const MIN_ALLOWED_WIDTH = 500;
 const MIN_ALLOWED_HEIGHT = 500;
@@ -13,24 +9,33 @@ const MIN_ALLOWED_HEIGHT = 500;
 const DEFAULT_WIDTH = 500;
 const DEFAULT_HEIGHT = 900;
 
-export default function ChatFrame({
-  width = DEFAULT_WIDTH,
-  height = DEFAULT_HEIGHT,
-  children,
-}: ChatFrameProps) {
-  const { border } = useChatStyle();
-  return (
-    <div
-      className={`csdk-relative csdk-flex csdk-flex-col csdk-border csdk-border-[#c6c9ce] csdk-rounded-[30px] csdk-bg-background-workspace csdk-overflow-hidden`}
-      style={{
-        minWidth: MIN_ALLOWED_WIDTH,
-        minHeight: MIN_ALLOWED_HEIGHT,
-        width,
-        height,
-        border: border === false ? 'none' : border,
-      }}
-    >
-      {children}
-    </div>
-  );
+type Sizable = {
+  width?: CSSProperties['width'];
+  height?: CSSProperties['height'];
+};
+
+export const ChatFrame = styled.div<Themable & Sizable>`
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #c6c9ce;
+  border-radius: ${({ theme }) => theme.aiChat.borderRadius};
+  background-color: rgba(255, 255, 255, 1);
+  overflow: hidden;
+
+  min-width: ${MIN_ALLOWED_WIDTH}px;
+  min-height: ${MIN_ALLOWED_HEIGHT}px;
+  width: ${({ width }) => (width ? getCssProp(width) : `${DEFAULT_WIDTH}px`)};
+  height: ${({ height }) => (height ? getCssProp(height) : `${DEFAULT_HEIGHT}px`)};
+
+  ${({ theme }) => css`
+    font-size: ${theme.aiChat.primaryFontSize[0]};
+    line-height: ${theme.aiChat.primaryFontSize[1]};
+  `}
+  border: ${({ theme }) => (theme.aiChat.border === false ? 'none' : theme.aiChat.border)};
+`;
+
+function getCssProp(widthOrHeight: number | string) {
+  return typeof widthOrHeight === 'number' ? `${widthOrHeight}px` : widthOrHeight;
 }

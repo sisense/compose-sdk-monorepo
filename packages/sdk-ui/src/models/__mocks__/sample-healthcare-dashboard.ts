@@ -3,7 +3,7 @@ import { DashboardDto } from '../../api/types/dashboard-dto';
 /**
  * 'Sample - Healthcare' dashboard from Analitycs tab in Sisense.
  *
- * Pivot widget replaced with table one.
+ * Added additional table widget as a converted copy of pivot widget
  */
 export const sampleHealthcareDashboard = {
   _id: '6560d4326f1df500326a06c8',
@@ -2247,8 +2247,327 @@ export const sampleHealthcareDashboard = {
       },
     },
     {
-      _id: '6560d4326f1df500326a06cf',
+      _id: '662a3017752fd0002a5da08b',
       title: 'TOP 10 DIAGNOSIS',
+      type: 'pivot',
+      subtype: 'pivot',
+      oid: '662a3017752fd0002a5da07c',
+      desc: null,
+      source: null,
+      owner: '661850118cc131001cd741e6',
+      userId: '661850118cc131001cd741e6',
+      created: '2024-04-25T10:27:35.267Z',
+      lastUpdated: '2024-04-25T10:27:35.267Z',
+      instanceType: 'owner',
+      datasource: {
+        address: 'localHost',
+        title: 'Sample Healthcare',
+        id: 'localhost_aSampleIAAaHealthcare',
+        database: 'aSampleIAAaHealthcare',
+        fullname: 'LocalHost/Sample Healthcare',
+      },
+      selection: null,
+      metadata: {
+        ignore: {
+          dimensions: [],
+          ids: [],
+          all: false,
+        },
+        panels: [
+          {
+            name: 'rows',
+            items: [
+              {
+                jaql: {
+                  table: 'Diagnosis',
+                  column: 'Description',
+                  dim: '[Diagnosis.Description]',
+                  datatype: 'text',
+                  merged: true,
+                  title: 'DIAGNOSIS',
+                },
+                field: {
+                  id: '[Diagnosis.Description]',
+                  index: 0,
+                },
+              },
+            ],
+          },
+          {
+            name: 'values',
+            items: [
+              {
+                jaql: {
+                  table: 'Admissions',
+                  column: 'Patient_ID',
+                  dim: '[Admissions.Patient_ID]',
+                  datatype: 'numeric',
+                  merged: true,
+                  agg: 'count',
+                  title: '# PATIENTS',
+                },
+                format: {
+                  mask: {
+                    type: 'number',
+                    t: true,
+                    b: true,
+                    separated: true,
+                    decimals: 'auto',
+                    isdefault: true,
+                  },
+                  color: {
+                    type: 'color',
+                  },
+                  width: 134,
+                },
+                field: {
+                  id: '[Admissions.Patient_ID]_count',
+                  index: 1,
+                },
+              },
+              {
+                jaql: {
+                  table: 'Admissions',
+                  column: 'Cost_of_admission',
+                  dim: '[Admissions.Cost_of_admission]',
+                  datatype: 'numeric',
+                  agg: 'avg',
+                  title: 'AVG COST',
+                },
+                format: {
+                  mask: {
+                    abbreviations: {
+                      t: false,
+                      b: false,
+                      m: false,
+                      k: false,
+                    },
+                    decimals: '0',
+                    currency: {
+                      symbol: '$',
+                      position: 'pre',
+                    },
+                  },
+                  color: {
+                    type: 'color',
+                  },
+                  width: 182,
+                },
+                field: {
+                  id: '[Admissions.Cost_of_admission]_avg',
+                  index: 2,
+                },
+              },
+              {
+                jaql: {
+                  type: 'measure',
+                  formula: 'Avg(DDiff([DC7C1-251],[74C2F-ADD]))',
+                  context: {
+                    '[74C2F-ADD]': {
+                      column: 'Admission_Time',
+                      dim: '[Admissions.Admission_Time (Calendar)]',
+                      datatype: 'datetime',
+                      level: 'days',
+                      title: 'Days in Admission  Time',
+                    },
+                    '[DC7C1-251]': {
+                      column: 'Discharge_Time',
+                      dim: '[Admissions.Discharge_Time (Calendar)]',
+                      datatype: 'datetime',
+                      level: 'days',
+                      title: 'Days in Discharge  Time',
+                    },
+                  },
+                  title: 'AVG DAYS ADMITTED',
+                },
+                format: {
+                  mask: {
+                    type: 'number',
+                    t: true,
+                    b: true,
+                    separated: true,
+                    decimals: 'auto',
+                    isdefault: true,
+                  },
+                  color: {
+                    type: 'color',
+                  },
+                  databars: true,
+                },
+                field: {
+                  id: 'Avg(DDiff([DC7C1-251],[74C2F-ADD]))',
+                  index: 3,
+                  min: 6.811224489795919,
+                  max: 10.027932960893855,
+                },
+              },
+            ],
+          },
+          {
+            name: 'columns',
+            items: [],
+          },
+          {
+            name: 'filters',
+            items: [
+              {
+                jaql: {
+                  datasource: {
+                    title: 'Sample Healthcare',
+                    fullname: 'LocalHost/Sample Healthcare',
+                    id: 'localhost_aSampleIAAaHealthcare',
+                    address: 'localHost',
+                    database: 'aSampleIAAaHealthcare',
+                  },
+                  column: 'Description',
+                  dim: '[Diagnosis.Description]',
+                  datatype: 'text',
+                  title: 'DESCRIPTION',
+                  filter: {
+                    top: 10,
+                    by: {
+                      column: 'Patient_ID',
+                      dim: '[Admissions.Patient_ID]',
+                      datatype: 'numeric',
+                      agg: 'count',
+                      title: '# PATIENTS',
+                    },
+                  },
+                  collapsed: false,
+                },
+                format: {
+                  mask: {
+                    isdefault: true,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      dashboardid: '662a3017752fd0002a5da075',
+      options: {
+        dashboardFiltersMode: 'select',
+        selector: false,
+        triggersDomready: true,
+      },
+      style: {
+        alternateStyle: 'rows',
+        pageSize: 25,
+        automaticHeight: true,
+        columnsGrandTotal: false,
+        rowsGrandTotal: true,
+        colors: {
+          headers: true,
+          members: false,
+          totals: true,
+          rows: true,
+          columns: false,
+        },
+        totals: {
+          grandRows: false,
+          grandColumns: false,
+        },
+        oldPageSize: 25,
+      },
+      _dataSourcePermission: 'owner',
+      userAuth: {
+        dashboards: {
+          create: true,
+          delete: true,
+          move: true,
+          rename: true,
+          duplicate: true,
+          change_owner: true,
+          toggle_edit_mode: true,
+          edit_layout: true,
+          edit_script: true,
+          export_dash: true,
+          export_jpeg: true,
+          export_image: true,
+          export_pdf: true,
+          share: true,
+          restore: true,
+          copy_to_server: true,
+          import: true,
+          select_palette: true,
+          replace_datasource: true,
+          undo_import_dash: true,
+          toggleDataExploration: true,
+          filters: {
+            create: true,
+            delete: true,
+            save: true,
+            on_off: true,
+            toggle_expansion: true,
+            modify: true,
+            reorder: true,
+            modify_type: true,
+            toggle_auto_update: true,
+            set_defaults: true,
+            advanced: true,
+            use_starred: true,
+            modify_filter_relationship: true,
+          },
+        },
+        widgets: {
+          create: true,
+          delete: true,
+          rename: true,
+          duplicate: true,
+          copy_to_dashboard: true,
+          edit: true,
+          edit_script: true,
+          change_type: true,
+          export_csv: true,
+          export_png: true,
+          export_svg: true,
+          export_pdf: true,
+          modify_selection_attrs: true,
+          modify_selection_mode: true,
+          drill_to_anywhere: true,
+          add_to_pulse: true,
+          items: {
+            create: true,
+            delete: true,
+            rename: true,
+            modify: true,
+            reorder: true,
+            modify_type: true,
+            modify_format: true,
+            on_off: true,
+            select_hierarchies: true,
+          },
+          filters: {
+            create: true,
+            delete: true,
+            save: true,
+            on_off: true,
+            toggle_expansion: true,
+            modify: true,
+            modify_layout: true,
+            modify_type: true,
+            modify_dashboard_filters: true,
+            use_starred: true,
+          },
+          widgetViewOnly: false,
+        },
+        base: {
+          isConsumer: false,
+          isContributor: false,
+          isAdmin: false,
+          isSuper: true,
+        },
+      },
+      _toDisableOptionsList: {
+        widgets: {
+          duplicate: false,
+        },
+      },
+    },
+    {
+      _id: '6560d4326f1df500326a06cf',
+      title: 'TOP 10 DIAGNOSIS (table widget)',
       type: 'tablewidget',
       subtype: 'tablewidget',
       oid: '6560d4326f1df500326a06c0',

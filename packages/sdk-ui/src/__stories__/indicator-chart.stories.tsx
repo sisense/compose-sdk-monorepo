@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Data } from '@sisense/sdk-data';
 import { IndicatorChartDataOptions } from '../chart-data-options/types';

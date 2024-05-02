@@ -1,10 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable max-params */
-/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { RowComparator, createCompareValue } from './row-comparator';
 import { isDatetime, isNumber } from '@sisense/sdk-data';

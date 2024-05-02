@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { styled } from '@mui/material';
+import styled from '@emotion/styled';
 import type { FunctionComponent, InputHTMLAttributes } from 'react';
 
 type RadioProps = { label?: string } & InputHTMLAttributes<HTMLInputElement>;

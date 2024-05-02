@@ -10,6 +10,10 @@ export type DynamicSizeContainerProps = {
   defaultSize: ContainerSize;
   size?: Partial<ContainerSize>;
   rerenderOnResize?: boolean;
+  useContentSize?: {
+    width?: boolean;
+    height?: boolean;
+  };
   onSizeChange?: (size: ContainerSize) => void;
 };
 
@@ -39,8 +43,13 @@ const calculateContentSize = (
  * A container component that adjusts its content size according to provided sizes
  * or dynamically based on inherited size from the parent/containing element.
  *
- * Priorities: If a "size" is provided, it takes the highest priority.
- * If not, the container's size is used, otherwise the "defaultSize" is used.
+ * Priorities:
+ * (1) If "useContentSize" is specified, it takes the highest priority.
+ * (2) Then if a "size" is provided, it takes the priority.
+ * (3) Then the container's size is used.
+ * (4) Otherwise the "defaultSize" is used.
+ *
+ *
  *
  * @param {DynamicSizeContainerProps} props - DynamicSizeContainer properties.
  * @returns {JSX.Element} The DynamicSizeContainer component.
@@ -50,6 +59,7 @@ export const DynamicSizeContainer = ({
   defaultSize,
   size,
   rerenderOnResize = false,
+  useContentSize,
   onSizeChange,
 }: DynamicSizeContainerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -72,13 +82,13 @@ export const DynamicSizeContainer = ({
   }, [updateContentSize]);
 
   const containerStyle: React.CSSProperties = {
-    width: size?.width ? `${size.width}px` : '100%',
-    height: size?.height ? `${size.height}px` : '100%',
+    width: size?.width && !useContentSize?.width ? `${size.width}px` : '100%',
+    height: size?.height && !useContentSize?.height ? `${size.height}px` : '100%',
   };
 
   const contentStyle: React.CSSProperties = {
-    width: contentSize?.width ? `${contentSize.width}px` : '100%',
-    height: contentSize?.height ? `${contentSize.height}px` : '100%',
+    width: contentSize?.width && !useContentSize?.width ? `${contentSize.width}px` : '100%',
+    height: contentSize?.height && !useContentSize?.height ? `${contentSize.height}px` : '100%',
   };
 
   const contentKey = rerenderOnResize ? `${contentSize?.width}${contentSize?.height}` : '';

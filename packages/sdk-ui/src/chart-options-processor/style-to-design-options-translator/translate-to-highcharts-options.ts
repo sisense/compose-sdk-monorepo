@@ -1,6 +1,4 @@
-/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-lines */
 import merge from 'ts-deepmerge';
 import {
   AxisLabel,

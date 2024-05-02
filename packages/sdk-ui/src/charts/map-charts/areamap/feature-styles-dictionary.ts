@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { Feature as GeoJsonFeature } from 'geojson';
 import { PathOptions } from 'leaflet';
 import { GeoDataElement } from '../../../chart-data/types.js';

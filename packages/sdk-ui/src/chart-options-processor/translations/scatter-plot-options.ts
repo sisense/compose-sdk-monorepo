@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { isValue, ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
 import { getRotationType, ValueLabelOptions, ValueLabelSettings } from './value-label-section';

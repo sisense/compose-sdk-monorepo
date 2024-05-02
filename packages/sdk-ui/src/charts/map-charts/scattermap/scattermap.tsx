@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 import 'leaflet/dist/leaflet.css';
 import leaflet from 'leaflet';
 import { useEffect, useMemo, useRef } from 'react';

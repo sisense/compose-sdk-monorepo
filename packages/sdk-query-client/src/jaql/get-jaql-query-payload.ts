@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-/* eslint-disable max-lines */
 import { v4 as uuid } from 'uuid';
 import merge from 'ts-deepmerge';
 import {
@@ -182,12 +180,11 @@ function jaqlPivotAttribute(
   index: number,
   metadataStats: PivotMetadataStats,
 ): MetadataItem {
+  const isSortedRowAttribute =
+    panel === 'rows' && isPivotAttribute(a) && a.sort && a.sort.direction !== 'sortNone';
   const jaql = {
     ...(isPivotAttribute(a) ? a.attribute.jaql(true) : a.jaql(true)),
-    ...(panel === 'rows' &&
-      isPivotAttribute(a) &&
-      a.sort &&
-      preparePivotRowJaqlSortOptions(a.sort, index, metadataStats)),
+    ...(isSortedRowAttribute && preparePivotRowJaqlSortOptions(a.sort!, index, metadataStats)),
   };
   return {
     jaql,

@@ -52,6 +52,22 @@ Boolean flag whether the height of the component should be automatically adjuste
 
 ***
 
+### membersColor
+
+> **membersColor**?: `boolean`
+
+Boolean flag whether to fill row members cells with background color
+
+***
+
+### rowHeight
+
+> **rowHeight**?: `number`
+
+Manual height of each row (default is 25px)
+
+***
+
 ### rowsPerPage
 
 > **rowsPerPage**?: `number`
@@ -59,6 +75,14 @@ Boolean flag whether the height of the component should be automatically adjuste
 Number of rows per page
 
 Default value is 25
+
+***
+
+### totalsColor
+
+> **totalsColor**?: `boolean`
+
+Boolean flag whether to fill totals and subtotals cells with background color
 
 ***
 

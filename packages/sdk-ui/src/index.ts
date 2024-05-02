@@ -40,7 +40,7 @@ export * from './areamap-chart';
 export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
 export { getThemeSettingsByOid } from './themes/theme-loader';
-export { getDefaultThemeSettings } from './chart-options-processor/theme-option-service';
+export { getDefaultThemeSettings } from './theme-provider/default-theme-settings';
 export {
   useGetDashboardModel,
   useGetDashboardModels,

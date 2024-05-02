@@ -2,6 +2,22 @@ import { WidgetDto, Datasource } from '../../dashboard-widget/types';
 import { FilterJaql, FilterRelationsModel } from '@sisense/sdk-data';
 import { AnyObject } from '../../utils/utility-types';
 
+/** @internal */
+export type Layout = {
+  columns: {
+    width: number;
+    cells: {
+      subcells: {
+        width: number;
+        elements: {
+          height: number | string;
+          widgetid: string;
+        }[];
+      }[];
+    }[];
+  }[];
+};
+
 export type Filter = {
   isCascading?: false;
   jaql: FilterJaql & AnyObject;
@@ -25,4 +41,5 @@ export type DashboardDto = {
   filterRelations?: {
     filterRelations: FilterRelationsModel;
   }[];
+  layout?: Layout;
 } & AnyObject;

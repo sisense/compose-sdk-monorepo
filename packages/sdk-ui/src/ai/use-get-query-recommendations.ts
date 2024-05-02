@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { withTracking } from '@/decorators/hook-decorators';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';

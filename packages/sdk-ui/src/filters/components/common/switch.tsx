@@ -1,6 +1,6 @@
-import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import { useThemeContext } from '../../../theme-provider';
+import styled from '@emotion/styled';
 
 export const SisenseSwitchButton = styled(Switch)(() => {
   const { themeSettings } = useThemeContext();

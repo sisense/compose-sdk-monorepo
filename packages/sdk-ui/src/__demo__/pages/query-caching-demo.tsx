@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { Grid, Button as Button, Paper, Card } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Card from '@mui/material/Card';
 import * as DM from '../sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
 import {

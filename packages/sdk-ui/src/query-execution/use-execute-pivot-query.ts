@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { useEffect, useReducer, useState } from 'react';
 import { usePrevious } from '../common/hooks/use-previous';
 import { executePivotQuery } from '../query/execute-query';

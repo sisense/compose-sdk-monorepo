@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
 
@@ -6,8 +5,8 @@ import { SisenseSwitchButton, TriangleIndicator } from './common';
 import { ArrowDownIcon } from './icons';
 import { useThemeContext } from '../../theme-provider';
 import { getSlightlyDifferentColor } from '../../utils/color';
-import { styled } from '@mui/material/styles';
 import { FilterVariant, isVertical } from './common/filter-utils';
+import styled from '@emotion/styled';
 
 interface Props {
   title: string;

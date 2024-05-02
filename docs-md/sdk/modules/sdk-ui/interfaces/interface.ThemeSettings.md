@@ -106,8 +106,12 @@ Text theme settings
 >
 > **primaryTextColor**?: `string`
 >
+> Primary text color
+>
 > ##### `typography.secondaryTextColor`
 >
 > **secondaryTextColor**?: `string`
+>
+> Secondary text color
 >
 >

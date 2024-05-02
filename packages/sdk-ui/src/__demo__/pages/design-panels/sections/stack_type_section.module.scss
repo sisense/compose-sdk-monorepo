@@ -1,0 +1,121 @@
+@import '@/charts/table/styles/color.scss';
+@import './constants.scss';
+@import '@/charts/table/styles/icons.scss';
+
+.title {
+  padding-top: 15px;
+  margin-left: 20px;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: $OXFORD_BLUE;
+}
+
+.stackTypeTable {
+  margin-left: 13px;
+  width: 226px;
+  height: 75px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  border-radius: 4px;
+  background: white;
+  border-collapse: separate;
+  overflow: hidden;
+  td {
+    border-right: 1px solid $ATHENS_GRAY_DARK2;
+    width: 33%;
+    &.enabled {
+      cursor: pointer;
+    }
+    &.hoverEffect {
+      &:hover {
+        background-color: $PALE_CANERY;
+        .icon {
+          opacity: 1;
+        }
+      }
+    }
+    &.selected {
+      .icon {
+        opacity: 1;
+      }
+    }
+  }
+  td:last-child {
+    border: none;
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  opacity: 0.3;
+}
+
+/* Area chart icons */
+.area {
+  &.straight {
+    &.classic {
+      background-image: $AREA_CLASSIC_STRAIGHT;
+    }
+
+    &.stacked {
+      background-image: $AREA_STACKED_STRAIGHT;
+    }
+
+    &.stack100 {
+      background-image: $AREA_STACK100_STRAIGHT;
+    }
+  }
+  &.smooth {
+    &.classic {
+      background-image: $AREA_CLASSIC_SMOOTH;
+    }
+
+    &.stacked {
+      background-image: $AREA_STACKED_SMOOTH;
+    }
+
+    &.stack100 {
+      background-image: $AREA_STACK100_SMOOTH;
+    }
+  }
+}
+
+/* Bar chart icons */
+.bar {
+  &.classic {
+    background-image: $BAR_CLASSIC;
+  }
+
+  &.stacked {
+    background-image: $BAR_STACKED;
+  }
+
+  &.stack100 {
+    background-image: $BAR_STACK100;
+  }
+}
+
+/* Column chart icons */
+.column {
+  &.classic {
+    background-image: $COLUMN_CLASSIC;
+  }
+
+  &.stacked {
+    background-image: $COLUMN_STACKED;
+  }
+
+  &.stack100 {
+    background-image: $COLUMN_STACK100;
+  }
+}

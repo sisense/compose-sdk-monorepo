@@ -1,5 +1,4 @@
 /* eslint-disable max-params */
-/* eslint-disable max-lines-per-function */
 import { ChartDesignOptions } from './translations/types';
 import { determineHighchartsChartType } from './translations/translations-to-highcharts';
 import { ChartType, OptionsWithAlerts, CompleteThemeSettings } from '../types';

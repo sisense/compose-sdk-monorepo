@@ -13,4 +13,8 @@ export class TranslatableError extends AbstractTranslatableError<typeof PACKAGE_
       i18nextInstance.t,
     );
   }
+
+  get status(): string {
+    return this.interpolationOptions.status;
+  }
 }

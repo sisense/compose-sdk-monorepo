@@ -44,6 +44,7 @@ import {
   ChartDataPoints,
   ScattermapDataPoint,
   PivotTableStyleOptions,
+  PivotTableWidgetStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -1128,6 +1129,73 @@ export interface TableWidgetProps {
    * React nodes to be rendered at the bottom of component, after the table
    *
    * @category Widget
+   */
+  bottomSlot?: ReactNode;
+
+  /**
+   * Title of the widget
+   *
+   * @category Widget
+   */
+  title?: string;
+
+  /**
+   *  Description of the widget
+   *
+   * @category Widget
+   */
+  description?: string;
+}
+
+/**
+ * Props for the {@link PivotTableWidget} component
+ *
+ * @internal
+ */
+export interface PivotTableWidgetProps {
+  /**
+   * Data source the query is run against - e.g. `Sample ECommerce`
+   *
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
+   *
+   * @category Data
+   */
+  dataSource?: DataSource;
+
+  /**
+   * Filters that will slice query results
+   *
+   * @category Data
+   */
+  filters?: Filter[] | FilterRelations;
+
+  /**
+   * Configurations for how to interpret and present the data passed to the table
+   *
+   * @category Chart
+   */
+  dataOptions: PivotTableDataOptions;
+
+  /**
+   * Style options for both the table and widget including the widget header
+   *
+   * @category Widget
+   */
+  styleOptions?: PivotTableWidgetStyleOptions;
+
+  /**
+   * React nodes to be rendered at the top of component, before the table
+   *
+   * @category Widget
+   * @internal
+   */
+  topSlot?: ReactNode;
+
+  /**
+   * React nodes to be rendered at the bottom of component, after the table
+   *
+   * @category Widget
+   * @internal
    */
   bottomSlot?: ReactNode;
 
