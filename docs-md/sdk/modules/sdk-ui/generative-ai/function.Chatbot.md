@@ -4,7 +4,7 @@ title: Chatbot
 
 # Function Chatbot <Badge type="beta" text="Beta" />
 
-> **Chatbot**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **Chatbot**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 React component that renders a chatbot with data topic selection. You can optionally provide `width` and/or `height`.
 
@@ -17,7 +17,7 @@ This component is currently under private beta for selected customers and is sub
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ChatbotProps`](../type-aliases/type-alias.ChatbotProps.md) | [ChatbotProps](../type-aliases/type-alias.ChatbotProps.md) |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

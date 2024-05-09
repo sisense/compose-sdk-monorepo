@@ -4,7 +4,7 @@ title: PieChart
 
 # Function PieChart
 
-> **PieChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **PieChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component representing data in a circular graph with the data shown as slices of a whole,
 with each slice representing a proportion of the total.
@@ -30,7 +30,7 @@ Additional Pie Chart examples:
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`PieChartProps`](../interfaces/interface.PieChartProps.md) | Pie chart properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

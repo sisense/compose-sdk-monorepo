@@ -20,11 +20,11 @@ import AlertBox from '../alert-box/alert-box';
 import { HighchartsReactMemoized } from '../highcharts-memorized';
 import { SisenseChartDataPointEventHandler, SisenseChartDataPointsEventHandler } from './types';
 
-interface Props {
+export interface SisenseChartProps {
   chartType: ChartType;
   chartData: ChartData;
-  chartDataOptions: ChartDataOptionsInternal;
-  chartDesignOptions: ChartDesignOptions;
+  dataOptions: ChartDataOptionsInternal;
+  designOptions: ChartDesignOptions;
   themeSettings?: CompleteThemeSettings;
   onDataPointClick?: SisenseChartDataPointEventHandler;
   onDataPointContextMenu?: SisenseChartDataPointEventHandler;
@@ -40,14 +40,14 @@ const defaultOnBeforeRender = (options: HighchartsOptions) => options;
 export const SisenseChart = ({
   chartType,
   chartData,
-  chartDataOptions,
-  chartDesignOptions,
+  dataOptions,
+  designOptions,
   themeSettings,
   onDataPointClick,
   onDataPointContextMenu,
   onDataPointsSelected,
   onBeforeRender = defaultOnBeforeRender,
-}: Props) => {
+}: SisenseChartProps) => {
   const { app } = useSisenseContext();
   const { t: translate } = useTranslation();
 
@@ -64,8 +64,8 @@ export const SisenseChart = ({
       highchartsOptionsService(
         chartData,
         chartType,
-        chartDesignOptions,
-        chartDataOptions,
+        designOptions,
+        dataOptions,
         translate,
         themeSettings,
         dateFormatter,
@@ -99,8 +99,8 @@ export const SisenseChart = ({
   }, [
     chartType,
     chartData,
-    chartDataOptions,
-    chartDesignOptions,
+    dataOptions,
+    designOptions,
     themeSettings,
     onDataPointClick,
     onDataPointContextMenu,

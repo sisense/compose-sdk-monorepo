@@ -51,18 +51,22 @@ export const translateStyleOptionsToDesignOptions = (
     case 'column':
       intermediateDesignOptions = getStackableChartDesignOptions(
         styleOptions as StackableStyleOptions,
+        dataOptions,
         hasY2Axis,
+        chartType,
       );
       break;
     case 'area':
       intermediateDesignOptions = getAreaChartDesignOptions(
         styleOptions as AreaStyleOptions,
+        dataOptions,
         hasY2Axis,
       );
       break;
     case 'line':
       intermediateDesignOptions = getLineChartDesignOptions(
         styleOptions as LineStyleOptions,
+        dataOptions,
         hasY2Axis,
       );
       break;
@@ -81,7 +85,10 @@ export const translateStyleOptionsToDesignOptions = (
       );
       break;
     case 'polar':
-      intermediateDesignOptions = getPolarChartDesignOptions(styleOptions as PolarStyleOptions);
+      intermediateDesignOptions = getPolarChartDesignOptions(
+        styleOptions as PolarStyleOptions,
+        dataOptions,
+      );
       break;
     case 'indicator':
       intermediateDesignOptions = getIndicatorChartDesignOptions(

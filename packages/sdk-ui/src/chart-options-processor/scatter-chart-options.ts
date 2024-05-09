@@ -9,7 +9,6 @@ import {
   ScatterChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import { getLegendSettings, LegendPosition, LegendSettings } from './translations/legend-section';
-import { ScatterChartDesignOptions } from './translations/design-options';
 import { getScatterPlotOptions } from './translations/scatter-plot-options';
 import { getScatterXAxisSettings, getScatterYAxisSettings } from './translations/scatter-axis';
 import { buildScatterSeries } from './translations/scatter-series';
@@ -48,13 +47,11 @@ export const getScatterChartOptions = (
   themeSettings?: CompleteThemeSettings,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
-  const globalDesignOptions = designOptions.globalDesign;
-  const sisenseChartType = determineHighchartsChartType(chartType, globalDesignOptions);
+  const sisenseChartType = determineHighchartsChartType(chartType, designOptions);
 
-  const scatterDesignOptions = globalDesignOptions as ScatterChartDesignOptions;
   const scatterDataOptions = dataOptions as ScatterChartDataOptionsInternal;
   const { scatterDataTable } = chartData;
-  const { seriesCapacity, categoriesCapacity } = globalDesignOptions.dataLimits;
+  const { seriesCapacity, categoriesCapacity } = designOptions.dataLimits;
 
   let { xCategories, yCategories } = chartData;
 
@@ -88,18 +85,18 @@ export const getScatterChartOptions = (
       polar: false,
     },
     xAxis: getScatterXAxisSettings(
-      scatterDesignOptions.xAxis,
+      designOptions.xAxis,
       xCategories?.slice(0, categoriesCapacity),
       scatterDataOptions,
     ),
     yAxis: getScatterYAxisSettings(
-      scatterDesignOptions.yAxis,
+      designOptions.yAxis,
       yCategories?.slice(0, categoriesCapacity),
       scatterDataOptions,
     ),
-    legend: getScatterLegendSettings(scatterDesignOptions.legend),
+    legend: getScatterLegendSettings(designOptions.legend),
     series,
-    plotOptions: getScatterPlotOptions(scatterDesignOptions, scatterDataOptions),
+    plotOptions: getScatterPlotOptions(designOptions, scatterDataOptions),
     tooltip: getScatterTooltipSettings(scatterDataOptions),
   };
 

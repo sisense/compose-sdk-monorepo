@@ -75,11 +75,7 @@ export const DEFAULTS = Object.freeze<ChatConfig>({
 });
 
 const ChatConfigContext = createContext<ChatConfig>({
-  enableFollowupQuestions: DEFAULTS.enableFollowupQuestions,
-  numOfRecommendations: DEFAULTS.numOfRecommendations,
-  numOfRecentPrompts: DEFAULTS.numOfRecentPrompts,
-  inputPromptText: DEFAULTS.inputPromptText,
-  enableHeader: DEFAULTS.enableHeader,
+  ...DEFAULTS,
 });
 
 export type ChatConfigProviderProps = {

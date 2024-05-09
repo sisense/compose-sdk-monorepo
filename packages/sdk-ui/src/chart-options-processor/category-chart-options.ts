@@ -42,12 +42,11 @@ export const getCategoricalChartOptions = (
   themeSettings?: CompleteThemeSettings,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
-  const globalDesignOptions = chartDesignOptions.globalDesign;
-  const sisenseChartType = determineHighchartsChartType(chartType, globalDesignOptions);
+  const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
   const topSpacings = 20;
   switch (chartType) {
     case 'pie':
-      const pieDesignOptions = globalDesignOptions as PieChartDesignOptions;
+      const pieDesignOptions = chartDesignOptions as PieChartDesignOptions;
 
       const {
         series: categoricalSeries,
@@ -92,7 +91,7 @@ export const getCategoricalChartOptions = (
       };
       return { options: pieOptions, alerts };
     case 'funnel':
-      const funnelDesignOptions = globalDesignOptions as FunnelChartDesignOptions;
+      const funnelDesignOptions = chartDesignOptions as FunnelChartDesignOptions;
 
       const { series: funnelSeries, alerts: funnelSeriesAlerts } = formatFunnelChartData(
         chartData,
@@ -125,7 +124,7 @@ export const getCategoricalChartOptions = (
         options: prepareTreemapOptions(
           chartData,
           dataOptions as CategoricalChartDataOptionsInternal,
-          globalDesignOptions as TreemapChartDesignOptions,
+          chartDesignOptions as TreemapChartDesignOptions,
           themeSettings,
         ),
         alerts,
@@ -135,7 +134,7 @@ export const getCategoricalChartOptions = (
         options: prepareSunburstOptions(
           chartData,
           dataOptions as CategoricalChartDataOptionsInternal,
-          globalDesignOptions as TreemapChartDesignOptions,
+          chartDesignOptions as TreemapChartDesignOptions,
           themeSettings,
         ),
         alerts,

@@ -267,7 +267,7 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 ```
 
 > **Note:**
-> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `UnitPriceDiscount` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
+> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `UnitPriceDiscount` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](../modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 
@@ -305,7 +305,7 @@ Your first Compose SDK chart with Vue should look something like this:
 
 ![Line chart rendered by the Vue component](../img/vue-quickstart-chart-example.png)
 
-See the [SisenseContextProvider](./modules/sdk-ui-vue/contexts/class.SisenseContextProvider.md) and [Chart](./modules/sdk-ui-vue/charts/class.Chart.md) docs for more details on supported props.
+See the [SisenseContextProvider](../modules/sdk-ui-vue/contexts/class.SisenseContextProvider.md) and [Chart](../modules/sdk-ui-vue/charts/class.Chart.md) docs for more details on supported props.
 
 ## Next Steps
 

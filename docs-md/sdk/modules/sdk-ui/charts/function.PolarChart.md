@@ -4,7 +4,7 @@ title: PolarChart
 
 # Function PolarChart
 
-> **PolarChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **PolarChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component comparing multiple categories/variables with a spacial perspective in a radial chart.
 
@@ -29,7 +29,7 @@ Additional Polar Chart examples:
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`PolarChartProps`](../interfaces/interface.PolarChartProps.md) | Polar chart properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

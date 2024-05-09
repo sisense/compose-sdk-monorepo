@@ -1,6 +1,5 @@
 import { ReactNode, useEffect } from 'react';
 
-import { ChatConfig, ChatConfigProvider } from './chat-config';
 import { ChatApiProvider } from './api/chat-api-provider';
 
 const WARNING_MESSAGE =
@@ -15,9 +14,6 @@ const WARNING_MESSAGE =
 
 export type AiContextProviderProps = {
   children: ReactNode;
-
-  /** @internal */
-  config?: Partial<ChatConfig>;
 };
 
 /**
@@ -45,14 +41,10 @@ export type AiContextProviderProps = {
  * @group Generative AI
  * @beta
  */
-export default function AiContextProvider({ children, config }: AiContextProviderProps) {
+export default function AiContextProvider({ children }: AiContextProviderProps) {
   useEffect(() => {
     console.warn(WARNING_MESSAGE);
   }, []);
 
-  return (
-    <ChatConfigProvider value={config ?? {}}>
-      <ChatApiProvider>{children}</ChatApiProvider>
-    </ChatConfigProvider>
-  );
+  return <ChatApiProvider>{children}</ChatApiProvider>;
 }

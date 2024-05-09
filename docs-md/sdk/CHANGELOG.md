@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.10.0] - 2024-05-09
+
+### Added
+- Implement `WidgetService.getWidgetModel()` in `@sisense/sdk-angular`
+
+### Changed
+- Adjust `@mui` and `@emotion` packages in `@sisense/sdk-ui` to work with React 17
+- Refactor `Chart` to simplify steps of adding new chart types
+- Upgrade `@sisense/sisense-charts` to 5.1.1
+- Make improvements to the AI components and hooks (private beta): toggleable insights
+
 ## [1.9.0] - 2024-05-02
 
 ### Added

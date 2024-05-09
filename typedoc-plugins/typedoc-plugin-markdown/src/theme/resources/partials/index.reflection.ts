@@ -22,6 +22,7 @@ export function reflectionIndex(
     const group = { title: 'Members', children: reflection.children };
     md.push(getGroup(context, group as ReflectionGroup) + '\n');
   } else {
+    const groupCount = reflection.groups?.length || 0;
     reflection.groups?.forEach((reflectionGroup) => {
       if (reflectionGroup.categories) {
         md.push(heading(subHeadingLevel, reflectionGroup.title) + '\n');
@@ -30,6 +31,19 @@ export function reflectionIndex(
           md.push(getGroup(context, categoryGroup) + '\n');
         });
       } else {
+        /** CSDK START */
+        // If there is more than one group, exclude built-in groups in the index
+        // as user-defined groups are more relevant to users
+        if (
+          groupCount > 1 &&
+          ['Classes', 'Interfaces', 'Enumerations', 'Type Aliases', 'Variables'].includes(
+            reflectionGroup.title,
+          )
+        ) {
+          return;
+        }
+        /** CSDK END */
+
         md.push(heading(subHeadingLevel, reflectionGroup.title) + '\n');
 
         /** CSDK START */
@@ -46,19 +60,22 @@ export function reflectionIndex(
   return md.join('\n');
 }
 
-function getGroup(context: MarkdownThemeRenderContext, group: ReflectionGroup | ReflectionCategory) {
+function getGroup(
+  context: MarkdownThemeRenderContext,
+  group: ReflectionGroup | ReflectionCategory,
+) {
   if (context.options.getValue('tocFormat') === 'table') {
     return getTable(context, group);
   }
   return getList(context, group);
 }
 
-function getTable(context: MarkdownThemeRenderContext, group: ReflectionGroup | ReflectionCategory) {
+function getTable(
+  context: MarkdownThemeRenderContext,
+  group: ReflectionGroup | ReflectionCategory,
+) {
   const reflectionKind = group.children[0].kind;
-  const headers = [
-    ReflectionKind.singularString(reflectionKind),
-    'Description',
-  ];
+  const headers = [ReflectionKind.singularString(reflectionKind), 'Description'];
   const rows: string[][] = [];
 
   group.children.forEach((child) => {
@@ -67,11 +84,7 @@ function getTable(context: MarkdownThemeRenderContext, group: ReflectionGroup | 
     row.push(link(escapeChars(child.name), context.relativeURL(child.url)));
 
     if (child.comment?.summary) {
-      row.push(
-        tableComments(context.commentParts(child.comment.summary)).split(
-          '\n',
-        )[0],
-      );
+      row.push(tableComments(context.commentParts(child.comment.summary)).split('\n')[0]);
     } else {
       row.push('-');
     }
@@ -84,7 +97,9 @@ function getList(context: MarkdownThemeRenderContext, group: ReflectionGroup | R
   const children = group.children.map(
     (child) =>
       // CSDK: add member badge
-      `- [${escapeChars(child.name)}](${context.relativeURL(child.url)})${context.memberBadge(child)}`,
+      `- [${escapeChars(child.name)}](${context.relativeURL(child.url)})${context.memberBadge(
+        child,
+      )}`,
   );
   return children.join('\n');
 }

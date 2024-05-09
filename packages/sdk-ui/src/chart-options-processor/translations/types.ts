@@ -13,6 +13,7 @@ import {
   BoxplotChartDesignOptions,
   AreamapChartDesignOptions,
   ScattermapChartDesignOptions,
+  BaseDesignOptionsType,
 } from './design-options';
 
 export const POLAR_CHART_TYPES = ['polar'] as const;
@@ -109,16 +110,16 @@ type SeriesId = string;
  * Design options for a chart.
  * This includes global design options and specific design options per series.
  */
-export type ChartDesignOptions<SpecificChartType extends ChartType = ChartType> = {
-  globalDesign: DesignOptions<SpecificChartType>;
-  designPerSeries: Record<SeriesId, SeriesDesignOptions>;
-};
+export type ChartDesignOptions<SpecificChartType extends ChartType = ChartType> =
+  DesignOptions<SpecificChartType>;
 
 /**
  * Design options, limited to the only series relevant options.
+ *
  * @internal
  */
-export type SeriesDesignOptions = Pick<DesignOptions, 'lineWidth' | 'marker'>;
+export type SeriesDesignOptions = Pick<BaseDesignOptionsType, 'lineWidth' | 'marker'>;
+export type DesignPerSeries = { designPerSeries: Record<SeriesId, SeriesDesignOptions> };
 
 export const isCartesian = (chartType: ChartType): chartType is CartesianChartType => {
   // Use .find instead of .includes for a more flexible type signature

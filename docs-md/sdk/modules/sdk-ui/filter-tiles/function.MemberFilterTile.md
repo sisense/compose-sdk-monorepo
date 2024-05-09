@@ -4,7 +4,7 @@ title: MemberFilterTile
 
 # Function MemberFilterTile
 
-> **MemberFilterTile**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **MemberFilterTile**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 UI component that allows the user to select members to include/exclude in a
 filter. A query is executed against the provided data source to fetch
@@ -15,7 +15,7 @@ all members that are selectable.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`MemberFilterTileProps`](../interfaces/interface.MemberFilterTileProps.md) | Member filter tile props |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

@@ -42,18 +42,23 @@ export const Areamap: React.FC<AreamapProps> = ({
   );
 };
 
-export const isAreamapData = (chartData: ChartData): chartData is AreamapData => {
+const isAreamapData = (chartData: ChartData): chartData is AreamapData => {
   return chartData.type === 'areamap';
 };
 
-export const isAreamapDataOptions = (
+const isAreamapDataOptions = (
   dataOptions: ChartDataOptionsInternal,
 ): dataOptions is AreamapChartDataOptionsInternal => {
   return 'geo' in dataOptions && 'color' in dataOptions;
 };
 
-export const isAreamapChartDesignOptions = (
+const isAreamapChartDesignOptions = (
   designOptions: DesignOptions,
 ): designOptions is AreamapChartDesignOptions => {
   return 'mapType' in designOptions;
 };
+
+export const isAreamapProps = (props: AreamapProps) =>
+  isAreamapData(props.chartData) &&
+  isAreamapDataOptions(props.dataOptions) &&
+  isAreamapChartDesignOptions(props.designOptions);

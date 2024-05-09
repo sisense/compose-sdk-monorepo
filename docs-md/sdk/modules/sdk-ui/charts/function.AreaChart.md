@@ -4,7 +4,7 @@ title: AreaChart
 
 # Function AreaChart
 
-> **AreaChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **AreaChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component similar to a [LineChart](function.LineChart.md),
 but with filled in areas under each line and an option to display them as stacked.
@@ -30,7 +30,7 @@ Additional Area Chart examples:
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`AreaChartProps`](../interfaces/interface.AreaChartProps.md) | Area chart properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

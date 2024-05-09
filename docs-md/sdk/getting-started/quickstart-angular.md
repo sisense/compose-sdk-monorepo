@@ -272,7 +272,7 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 ```
 
 > **Note:**
-> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `TimeofStay` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
+> Use `measureFactory.average()` from the example above to specify the `average` type aggregation on the `TimeofStay` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](../modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 
@@ -330,7 +330,7 @@ Your first Compose SDK chart with Angular should look something like this:
 
 ![Line chart rendered by the Angular component](../img/angular-quickstart-chart-example.png)
 
-See the [SISENSE_CONTEXT_CONFIG_TOKEN](./modules/sdk-ui-angular/contexts/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md) and [ChartComponent](./modules/sdk-ui-angular/charts/class.ChartComponent.md) docs for more details on supported props.
+See the [SISENSE_CONTEXT_CONFIG_TOKEN](../modules/sdk-ui-angular/contexts/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md) and [ChartComponent](../modules/sdk-ui-angular/charts/class.ChartComponent.md) docs for more details on supported props.
 
 ## Next Steps
 

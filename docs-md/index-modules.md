@@ -13,9 +13,6 @@ indexTopics:
   - title: SDK-DATA
     description: Composable queries
     link: ./sdk-data
-  - title: SDK-CLI
-    description: Command-line tools
-    link: ./sdk-cli
 ---
 
 # Compose SDK Modules

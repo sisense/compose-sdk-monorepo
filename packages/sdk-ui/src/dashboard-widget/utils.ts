@@ -124,6 +124,13 @@ export function getRootPanelItem(item: PanelItem): PanelItem {
   return item.parent ? getRootPanelItem(item.parent) : item;
 }
 
+/**
+ * Gets the sort type based on the jaql sort direction.
+ *
+ * @param jaqlSort - The jaql sort direction.
+ * @returns  The sort direction.
+ * @internal
+ */
 export function getSortType(jaqlSort: JaqlSortDirection | undefined): SortDirection {
   switch (jaqlSort) {
     case JaqlSortDirection.ASC:

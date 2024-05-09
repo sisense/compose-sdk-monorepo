@@ -4,7 +4,7 @@ title: DashboardWidget
 
 # Function DashboardWidget <Badge type="fusionEmbed" text="Fusion Embed" />
 
-> **DashboardWidget**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **DashboardWidget**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../chart-utilities/function.ChartWidget.md) component,
 is used to render a widget created in a Sisense Fusion instance.
@@ -25,10 +25,10 @@ Display two dashboard widgets from a Fusion Embed instance.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `props` | [`DashboardWidgetProps`](../interfaces/interface.DashboardWidgetProps.md) |
-| `context`? | `any` |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `props` | [`DashboardWidgetProps`](../interfaces/interface.DashboardWidgetProps.md) | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

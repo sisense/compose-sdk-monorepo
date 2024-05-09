@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable max-params */
 import { CategoricalSeriesValues, ChartData } from '../chart-data/types';
-import { ChartDesignOptions, SeriesDesignOptions } from './translations/types';
+import { ChartDesignOptions } from './translations/types';
 import { getLegendSettings } from './translations/legend-section';
 import {
   createValueLabelFormatter,
@@ -17,7 +17,11 @@ import {
   getCategoricalCompareValue,
   getDateFormatter,
 } from './translations/axis-section';
-import { StackableChartDesignOptions, PolarType } from './translations/design-options';
+import {
+  StackableChartDesignOptions,
+  PolarType,
+  CartesianChartDesignOptions,
+} from './translations/design-options';
 import {
   determineHighchartsChartType,
   addStackingIfSpecified,
@@ -67,13 +71,12 @@ export const getCartesianChartOptions = (
       dataOptions.x[0].continuous &&
       isDatetime(dataOptions.x[0].type)) ||
     false;
-  const globalDesignOptions = chartDesignOptions.globalDesign;
-  const sisenseChartType = determineHighchartsChartType(chartType, globalDesignOptions);
+  const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
   if (chartData.type !== 'cartesian') {
     throw new Error('Unexpected chart type');
   }
 
-  const { seriesCapacity, categoriesCapacity } = globalDesignOptions.dataLimits;
+  const { seriesCapacity, categoriesCapacity } = chartDesignOptions.dataLimits;
 
   if (chartData.xValues.length > categoriesCapacity) {
     alerts.push(categoriesSliceWarning('x', chartData.xValues.length, categoriesCapacity));
@@ -92,7 +95,7 @@ export const getCartesianChartOptions = (
         xValues: chartData.xValues.slice(0, categoriesCapacity),
       },
       dataOptions,
-      globalDesignOptions,
+      chartDesignOptions,
       continuousDatetimeXAxis,
     ),
   );
@@ -107,14 +110,14 @@ export const getCartesianChartOptions = (
 
   const xAxisSettings = continuousDatetimeXAxis
     ? getXAxisDatetimeSettings(
-        globalDesignOptions.xAxis,
+        chartDesignOptions.xAxis,
         dataOptions.x[0],
         chartData.xValues.map(getCategoricalCompareValue),
         dateFormatter,
       )
     : getXAxisSettings(
-        globalDesignOptions.xAxis,
-        globalDesignOptions.x2Axis,
+        chartDesignOptions.xAxis,
+        chartDesignOptions.x2Axis,
         categories,
         plotBands,
         xAxisOrientation,
@@ -125,7 +128,7 @@ export const getCartesianChartOptions = (
   const yAxisMinMax = autoCalculateYAxisMinMax(
     chartType,
     chartData,
-    globalDesignOptions,
+    chartDesignOptions,
     yAxisSide,
     yTreatNullDataAsZeros,
     0,
@@ -136,7 +139,7 @@ export const getCartesianChartOptions = (
     ? autoCalculateYAxisMinMax(
         chartType,
         chartData,
-        globalDesignOptions,
+        chartDesignOptions,
         yAxisSide,
         yTreatNullDataAsZeros,
         1,
@@ -145,13 +148,13 @@ export const getCartesianChartOptions = (
 
   const { stacking, showTotal } = addStackingIfSpecified(
     chartType,
-    globalDesignOptions as StackableChartDesignOptions,
+    chartDesignOptions as StackableChartDesignOptions,
   );
 
   let polarType: PolarType | undefined = undefined;
-  let yAxis: Axis | undefined = globalDesignOptions.yAxis;
-  if ('polarType' in globalDesignOptions) {
-    polarType = globalDesignOptions.polarType;
+  let yAxis: Axis | undefined = chartDesignOptions.yAxis;
+  if ('polarType' in chartDesignOptions) {
+    polarType = chartDesignOptions.polarType;
 
     // Polar charts on the Analytics tab do not allow a y-axis title to be
     // set. Clear this value if it happens to be set.
@@ -160,7 +163,7 @@ export const getCartesianChartOptions = (
     // so it is impossible to set a title on the y-axis if the chartType is
     // "polar".
     yAxis = {
-      ...globalDesignOptions.yAxis,
+      ...chartDesignOptions.yAxis,
       titleEnabled: false,
       title: null,
     };
@@ -168,7 +171,7 @@ export const getCartesianChartOptions = (
 
   const [yAxisSettings, axisClipped] = getYAxisSettings(
     yAxis,
-    globalDesignOptions.y2Axis,
+    chartDesignOptions.y2Axis,
     yAxisMinMax,
     y2AxisMinMax,
     showTotal,
@@ -200,7 +203,7 @@ export const getCartesianChartOptions = (
       yAxis: yAxisSettings,
       // The series level animation disables all animations, the chart
       // level animation only disables initial or subsequent paints
-      legend: getLegendSettings(globalDesignOptions.legend),
+      legend: getLegendSettings(chartDesignOptions.legend),
       series: chartData.series
         .slice(0, seriesCapacity)
         .map((v: CategoricalSeriesValues, index: number) => {
@@ -208,10 +211,11 @@ export const getCartesianChartOptions = (
             ? dataOptions.y[0]
             : dataOptions.y.find(({ name }) => name === v.name);
           const seriesId = dataOption?.name;
-          const seriesSpecificDesignOptions: SeriesDesignOptions | undefined = seriesId
-            ? chartDesignOptions.designPerSeries[seriesId]
+          const cartesianChartDesignOptions = chartDesignOptions as CartesianChartDesignOptions;
+          const seriesSpecificDesignOptions = seriesId
+            ? cartesianChartDesignOptions.designPerSeries[seriesId]
             : undefined;
-          const seriesDesignOptions = seriesSpecificDesignOptions || globalDesignOptions;
+          const seriesDesignOptions = seriesSpecificDesignOptions || chartDesignOptions;
           return {
             ...(continuousDatetimeXAxis
               ? formatSeriesContinuousXAxis(
@@ -219,7 +223,7 @@ export const getCartesianChartOptions = (
                   indexMap,
                   treatNullDataAsZeros || yTreatNullDataAsZeros[index],
                   xAxisSettings[0].tickInterval as number,
-                  globalDesignOptions.dataLimits.categoriesCapacity,
+                  chartDesignOptions.dataLimits.categoriesCapacity,
                   getDateFormatter(dataOptions.x[0], dateFormatter),
                   yAxisSettings[index],
                   axisClipped[index],
@@ -251,13 +255,13 @@ export const getCartesianChartOptions = (
       plotOptions: {
         series: {
           dataLabels: isPolarChart
-            ? getPolarValueLabelSettings(globalDesignOptions.valueLabel, polarType!)
+            ? getPolarValueLabelSettings(chartDesignOptions.valueLabel, polarType!)
             : getValueLabelSettings(
                 xAxisOrientation,
-                globalDesignOptions.valueLabel,
+                chartDesignOptions.valueLabel,
                 stacking && chartType !== 'area',
               ),
-          marker: getMarkerSettings(globalDesignOptions.marker),
+          marker: getMarkerSettings(chartDesignOptions.marker),
           ...(stacking && { stacking: stacking }),
           // Force setup of "stacking" as undefined required for correct transition between classic and stacked modes
           // if it missing then classic would not correct render if previously it was stacked
@@ -267,7 +271,7 @@ export const getCartesianChartOptions = (
       },
       navigator: getNavigator(
         sisenseChartType,
-        globalDesignOptions.autoZoom,
+        chartDesignOptions.autoZoom,
         chartData.xValues.length,
       ),
       tooltip: getTooltipSettings(undefined, dataOptions),

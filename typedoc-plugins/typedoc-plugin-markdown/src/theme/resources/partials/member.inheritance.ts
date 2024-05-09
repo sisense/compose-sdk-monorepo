@@ -1,9 +1,4 @@
-import {
-  ArrayType,
-  DeclarationReflection,
-  ReferenceType,
-  SignatureReflection,
-} from 'typedoc';
+import { ArrayType, DeclarationReflection, ReferenceType, SignatureReflection } from 'typedoc';
 import { MarkdownThemeRenderContext } from '../..';
 import { backTicks, heading, link } from '../../../support/elements';
 import { escapeChars } from '../../../support/utils';
@@ -23,31 +18,27 @@ export function inheritance(
   }
 
   /* CSDK START */
-  // Disable inheritance
+  // Disable inheritance and Overrides
   // if (reflection.inheritedFrom) {
   //   if (headingLevel !== -1) {
   //     md.push(heading(headingLevel, 'Inherited from'));
   //   }
   //   md.push(typeAndParent(context, reflection.inheritedFrom));
   // }
-  /* CSDK END */
 
-  if (reflection.overwrites) {
-    if (headingLevel !== -1) {
-      md.push(heading(headingLevel, 'Overrides'));
-    }
-    md.push(typeAndParent(context, reflection.overwrites));
-  }
+  // if (reflection.overwrites) {
+  //   if (headingLevel !== -1) {
+  //     md.push(heading(headingLevel, 'Overrides'));
+  //   }
+  //   md.push(typeAndParent(context, reflection.overwrites));
+  // }
+  /* CSDK END */
 
   return md.join('\n\n');
 }
 
-const typeAndParent = (
-  context: MarkdownThemeRenderContext,
-  props: ArrayType | ReferenceType,
-) => {
-  const getLink = (name: string, url: string) =>
-    link(backTicks(name), context.relativeURL(url));
+const typeAndParent = (context: MarkdownThemeRenderContext, props: ArrayType | ReferenceType) => {
+  const getLink = (name: string, url: string) => link(backTicks(name), context.relativeURL(url));
 
   if (props) {
     if ('elementType' in props) {
@@ -58,29 +49,16 @@ const typeAndParent = (
         if (props.reflection instanceof SignatureReflection) {
           if (props.reflection.parent?.parent?.url) {
             md.push(
-              getLink(
-                props.reflection.parent.parent.name,
-                props.reflection.parent.parent.url,
-              ),
+              getLink(props.reflection.parent.parent.name, props.reflection.parent.parent.url),
             );
             if (props.reflection.parent?.url) {
-              md.push(
-                getLink(
-                  props.reflection.parent.name,
-                  props.reflection.parent.url,
-                ),
-              );
+              md.push(getLink(props.reflection.parent.name, props.reflection.parent.url));
             }
           }
         } else {
           if (props.reflection.parent) {
             if (props.reflection.parent.url) {
-              md.push(
-                getLink(
-                  props.reflection.parent.name,
-                  props.reflection.parent.url,
-                ),
-              );
+              md.push(getLink(props.reflection.parent.name, props.reflection.parent.url));
             } else {
               md.push(backTicks(props.reflection.parent.name));
             }

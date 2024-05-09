@@ -4,7 +4,7 @@ title: ColumnChart
 
 # Function ColumnChart
 
-> **ColumnChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **ColumnChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component representing categorical data with vertical rectangular bars
 whose heights are proportional to the values that they represent.
@@ -32,7 +32,7 @@ Additional Column Chart examples:
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ColumnChartProps`](../interfaces/interface.ColumnChartProps.md) | Column chart properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

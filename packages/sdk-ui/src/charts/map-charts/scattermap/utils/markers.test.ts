@@ -30,9 +30,9 @@ describe('createMarker', () => {
 
 describe('removeMarkers', () => {
   it('should call remove method for each marker', () => {
-    const marker1 = new Leaflet.CircleMarker({ lat: 1, lng: 1 });
-    const marker2 = new Leaflet.CircleMarker({ lat: 1, lng: 1 });
-    const marker3 = new Leaflet.CircleMarker({ lat: 1, lng: 1 });
+    const marker1 = new Leaflet.CircleMarker({ lat: 1, lng: 1 }, { radius: 10 });
+    const marker2 = new Leaflet.CircleMarker({ lat: 1, lng: 1 }, { radius: 10 });
+    const marker3 = new Leaflet.CircleMarker({ lat: 1, lng: 1 }, { radius: 10 });
 
     const markers = [marker1, marker2, marker3];
 

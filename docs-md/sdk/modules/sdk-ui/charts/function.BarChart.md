@@ -4,7 +4,7 @@ title: BarChart
 
 # Function BarChart
 
-> **BarChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **BarChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component representing categorical data with horizontal rectangular bars,
 whose lengths are proportional to the values that they represent.
@@ -30,7 +30,7 @@ Additional Bar Chart examples:
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`BarChartProps`](../interfaces/interface.BarChartProps.md) | Bar chart properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

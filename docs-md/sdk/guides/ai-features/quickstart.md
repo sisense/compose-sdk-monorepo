@@ -14,7 +14,7 @@ To be considered for the beta program, please sign up at [www.sisense.com/get/ge
 
 ## Prerequisites
 
-Here, we assume you already have a working project with the following. If you don't already have a working project, see the [React Quickstart](../../quickstart.md) to create one.
+Here, we assume you already have a working project with the following. If you don't already have a working project, see the [Compose SDK Quickstart](../../getting-started) to create one.
 
 - `@sisense/sdk-ui` version `1.6.0` or higher
 - A Sisense Fusion instance:

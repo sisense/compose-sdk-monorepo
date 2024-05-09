@@ -4,7 +4,7 @@ title: DateRangeFilterTile
 
 # Function DateRangeFilterTile
 
-> **DateRangeFilterTile**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **DateRangeFilterTile**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 Date Range Filter Tile component for filtering data by date range.
 
@@ -13,7 +13,7 @@ Date Range Filter Tile component for filtering data by date range.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`DateRangeFilterTileProps`](../interfaces/interface.DateRangeFilterTileProps.md) | Date Range Filter Tile Props |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

@@ -18,7 +18,7 @@ import { ChartData } from './chart-data/types';
 import { DesignOptions } from './chart-options-processor/translations/types';
 import { ThemeSettings } from './types';
 
-interface Props {
+export interface IndicatorCanvasProps {
   chartData: IndicatorChartData;
   dataOptions: IndicatorChartDataOptionsInternal;
   designOptions: IndicatorChartDesignOptions;
@@ -28,7 +28,7 @@ interface Props {
 /**
  * @internal
  */
-export const IndicatorCanvas: FunctionComponent<Props> = ({
+export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
   chartData,
   dataOptions,
   designOptions,
@@ -87,18 +87,23 @@ export const IndicatorCanvas: FunctionComponent<Props> = ({
   );
 };
 
-export const isIndicatorChartData = (chartData: ChartData): chartData is IndicatorChartData => {
+const isIndicatorChartData = (chartData: ChartData): chartData is IndicatorChartData => {
   return chartData.type === 'indicator';
 };
 
-export const isIndicatorChartDataOptionsInternal = (
+const isIndicatorChartDataOptionsInternal = (
   dataOptions: ChartDataOptionsInternal,
 ): dataOptions is IndicatorChartDataOptionsInternal => {
   return 'min' in dataOptions;
 };
 
-export const isIndicatorDesignOptions = (
+const isIndicatorDesignOptions = (
   designOptions: DesignOptions,
 ): designOptions is IndicatorChartDesignOptions => {
   return 'indicatorComponents' in designOptions;
 };
+
+export const isIndicatorCanvasProps = (chartData: IndicatorCanvasProps) =>
+  isIndicatorChartData(chartData.chartData) &&
+  isIndicatorChartDataOptionsInternal(chartData.dataOptions) &&
+  isIndicatorDesignOptions(chartData.designOptions);

@@ -23,17 +23,20 @@ git diff ${last_published_tag} ${1:-'origin/master'} --binary | git apply --whit
 
 # Remove sensitive or irrelevant information
 rm -f CONTRIBUTING.md
-rm -f quickstart.md
-rm -f quickstart-angular.md
 
 # Remove internal scripts
 rm -f ./scripts/get-mrs.cjs
 
+# Remove internal examples, internal packages, and test helpers
 rm -rf ./examples
+rm -rf ./packages/internal
 rm -rf ./packages/sdk-query-client/src/__test-helpers__
 
 # Remove code for features that are under development.
 rm -rf packages/sdk-ui/src/__exclude__
+
+# Remove demo app with POC code.
+rm -rf packages/sdk-ui/src/__demo__
 
 # need to regenerate the yarn.lock file after all the changes
 yarn install
