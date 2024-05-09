@@ -104,6 +104,7 @@ export const FilterTile: FunctionComponent<Props> = ({
               size="small"
               onChange={() => onToggleDisabled?.()}
               inputProps={{ role: 'switch', name: 'tile-switch' }}
+              theme={themeSettings}
             />
           </footer>
         )}

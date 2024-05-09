@@ -6,6 +6,7 @@ export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
 export { DashboardWidget } from './dashboard-widget/dashboard-widget';
+export { getSortType } from './dashboard-widget/utils';
 export {
   type WidgetType,
   type CartesianWidgetType,

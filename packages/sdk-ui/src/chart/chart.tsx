@@ -1,31 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Data, isDataSource } from '@sisense/sdk-data';
+import { isDataSource } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
 import { createDataTableFromData } from '../chart-data-processor/table-creators';
 import { chartDataService } from '../chart-data/chart-data-service';
 import { filterAndAggregateChartData } from '../chart-data/filter-and-aggregate-chart-data';
 import { ChartData } from '../chart-data/types';
-import { ChartDesignOptions } from '../chart-options-processor/translations/types';
-import {
-  AreamapDataPointEventHandler,
-  ChartProps,
-  ScattermapDataPointEventHandler,
-} from '../props';
-import {
-  IndicatorCanvas,
-  isIndicatorChartData,
-  isIndicatorChartDataOptionsInternal,
-  isIndicatorDesignOptions,
-} from '../indicator-canvas';
+import { ChartDesignOptions, DesignOptions } from '../chart-options-processor/translations/types';
+import { ChartProps } from '../props';
+import { IndicatorCanvas, IndicatorCanvasProps, isIndicatorCanvasProps } from '../indicator-canvas';
 
 import {
-  isScattermapChartDesignOptions,
-  isScattermapData,
-  isScattermapDataOptions,
+  isScattermapProps,
   Scattermap,
+  ScattermapProps,
 } from '../charts/map-charts/scattermap/scattermap';
-import isString from 'lodash/isString';
-import { SisenseChart, SisenseChartDataPointEventHandler } from '../sisense-chart';
+import { SisenseChart, SisenseChartProps } from '../sisense-chart';
 import { useThemeContext } from '../theme-provider';
 import { translateAttributeToCategory, translateMeasureToValue } from '../chart-data-options/utils';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
@@ -34,16 +23,12 @@ import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-conta
 import { LoadingIndicator } from '../common/components/loading-indicator';
 import './chart.css';
 
-import {
-  Areamap,
-  isAreamapData,
-  isAreamapDataOptions,
-  isAreamapChartDesignOptions,
-} from '../charts/map-charts/areamap/areamap';
+import { Areamap, AreamapProps, isAreamapProps } from '../charts/map-charts/areamap/areamap';
 import { prepareChartDesignOptions } from '../chart-options-processor/style-to-design-options-translator';
 import { LoadingOverlay } from '../common/components/loading-overlay';
 import { useSyncedData } from './helpers/use-synced-data';
 import { useTranslatedDataOptions } from './helpers/use-translated-data-options';
+import { ChartType } from '@/types';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -61,8 +46,28 @@ Roughly speaking, there are 10 steps to transform chart props to highcharts opti
 */
 
 /** Function to check if we should wait for sisense context for rendering the chart */
-export const shouldSkipSisenseContextWaiting = (props: ChartProps) =>
-  isCompleteDataSet(props.dataSet);
+export const shouldSkipSisenseContextWaiting = (props: ChartProps) => {
+  const { dataSet } = props;
+  // check if complete dataset
+  return !!dataSet && typeof dataSet !== 'string' && 'rows' in dataSet && 'columns' in dataSet;
+};
+
+/** Function to check if chart type is rerendered on resize */
+const shouldRerenderOnResize = (chartType: ChartType) => {
+  return chartType === 'indicator';
+};
+
+/** Functoin to check if chart type has results */
+const hasNoResults = (chartType: ChartType, chartData: ChartData) => {
+  if (
+    chartType === 'scattermap' &&
+    'scatterDataTable' in chartData &&
+    chartData.scatterDataTable.length === 0
+  ) {
+    return true;
+  }
+  return 'series' in chartData && chartData.series.length === 0;
+};
 
 /**
  * A React component used for easily switching chart types or rendering multiple series of different chart types.
@@ -90,7 +95,7 @@ export const Chart = asSisenseComponent({
   const {
     chartType,
     dataSet,
-    dataOptions,
+    dataOptions: chartDataOptions,
     filters,
     highlights,
     styleOptions,
@@ -105,12 +110,14 @@ export const Chart = asSisenseComponent({
   const defaultSize = getChartDefaultSize(chartType);
   const { themeSettings } = useThemeContext();
 
-  const { chartDataOptions, attributes, measures, dataColumnNamesMapping } =
-    useTranslatedDataOptions(dataOptions, chartType);
+  const { dataOptions, attributes, measures, dataColumnNamesMapping } = useTranslatedDataOptions(
+    chartDataOptions,
+    chartType,
+  );
 
   const data = useSyncedData(
     dataSet,
-    chartDataOptions,
+    dataOptions,
     chartType,
     attributes,
     measures,
@@ -121,12 +128,12 @@ export const Chart = asSisenseComponent({
     setIsLoading,
   );
 
-  const chartDesignOptions = useMemo((): ChartDesignOptions | null => {
+  const designOptions = useMemo((): ChartDesignOptions | DesignOptions | null => {
     if (!chartDataOptions) {
       return null;
     }
 
-    return prepareChartDesignOptions(chartType, chartDataOptions, styleOptions);
+    return prepareChartDesignOptions(chartType, dataOptions, styleOptions);
     // chartType is omitted from the dependency array because chartDataOptions
     // will always update when a new chartType is selected.
   }, [styleOptions, chartDataOptions]);
@@ -147,10 +154,37 @@ export const Chart = asSisenseComponent({
       );
     }
 
-    return chartDataService(chartType, chartDataOptions, dataTable);
+    return chartDataService(chartType, dataOptions, dataTable);
   }, [data, chartType]);
 
-  if (!chartDataOptions || !chartDesignOptions) {
+  const chartProps = useMemo(
+    () => ({
+      dataSource: isDataSource(dataSet) ? dataSet : null,
+      chartType,
+      chartData,
+      dataOptions,
+      designOptions,
+      themeSettings,
+      onDataPointClick,
+      onDataPointContextMenu,
+      onDataPointsSelected,
+      onBeforeRender,
+      filters,
+    }),
+    [
+      chartType,
+      chartData,
+      dataOptions,
+      designOptions,
+      themeSettings,
+      onDataPointClick,
+      onDataPointContextMenu,
+      onDataPointsSelected,
+      onBeforeRender,
+    ],
+  );
+
+  if (!dataOptions || !designOptions) {
     return null;
   }
 
@@ -161,55 +195,31 @@ export const Chart = asSisenseComponent({
         width: styleOptions?.width,
         height: styleOptions?.height,
       }}
-      rerenderOnResize={chartType === 'indicator'}
+      rerenderOnResize={shouldRerenderOnResize(chartType)}
     >
       {() => {
         if (!chartData) {
           return <LoadingIndicator themeSettings={themeSettings} />;
         }
-        const hasNoResults =
-          ('series' in chartData && chartData.series.length === 0) ||
-          ('scatterDataTable' in chartData && chartData.scatterDataTable.length === 0);
-        if (hasNoResults) {
+        if (hasNoResults(chartType, chartData)) {
           return <NoResultsOverlay iconType={chartType} />;
         }
 
         if (chartType === 'scattermap') {
-          if (
-            isScattermapData(chartData) &&
-            isScattermapDataOptions(chartDataOptions) &&
-            isScattermapChartDesignOptions(chartDesignOptions.globalDesign)
-          ) {
-            return (
-              <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-                <Scattermap
-                  chartData={chartData}
-                  dataOptions={chartDataOptions}
-                  designOptions={chartDesignOptions.globalDesign}
-                  dataSource={isString(dataSet) ? dataSet : null}
-                  filters={filters}
-                  onMarkerClick={onDataPointClick as ScattermapDataPointEventHandler}
-                />
-              </LoadingOverlay>
-            );
-          }
-          return null;
+          if (!isScattermapProps(chartProps as ScattermapProps)) return null;
+
+          return (
+            <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+              <Scattermap {...(chartProps as ScattermapProps)} />
+            </LoadingOverlay>
+          );
         }
 
         if (chartType === 'indicator') {
-          if (
-            isIndicatorChartData(chartData) &&
-            isIndicatorChartDataOptionsInternal(chartDataOptions) &&
-            isIndicatorDesignOptions(chartDesignOptions.globalDesign)
-          ) {
+          if (isIndicatorCanvasProps(chartProps as IndicatorCanvasProps)) {
             return (
               <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-                <IndicatorCanvas
-                  chartData={chartData}
-                  dataOptions={chartDataOptions}
-                  designOptions={chartDesignOptions.globalDesign}
-                  themeSettings={themeSettings}
-                />
+                <IndicatorCanvas {...(chartProps as IndicatorCanvasProps)} />
               </LoadingOverlay>
             );
           }
@@ -218,20 +228,10 @@ export const Chart = asSisenseComponent({
         }
 
         if (chartType === 'areamap') {
-          if (
-            isAreamapData(chartData) &&
-            isAreamapDataOptions(chartDataOptions) &&
-            isAreamapChartDesignOptions(chartDesignOptions.globalDesign)
-          ) {
+          if (isAreamapProps(chartProps as AreamapProps)) {
             return (
               <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-                <Areamap
-                  chartData={chartData}
-                  dataOptions={chartDataOptions}
-                  designOptions={chartDesignOptions.globalDesign}
-                  themeSettings={themeSettings}
-                  onDataPointClick={onDataPointClick as AreamapDataPointEventHandler | undefined}
-                />
+                <Areamap {...(chartProps as AreamapProps)} />
               </LoadingOverlay>
             );
           }
@@ -240,26 +240,10 @@ export const Chart = asSisenseComponent({
 
         return (
           <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-            <SisenseChart
-              chartType={chartType}
-              chartData={chartData}
-              chartDataOptions={chartDataOptions}
-              chartDesignOptions={chartDesignOptions}
-              themeSettings={themeSettings}
-              onDataPointClick={onDataPointClick as SisenseChartDataPointEventHandler | undefined}
-              onDataPointContextMenu={
-                onDataPointContextMenu as SisenseChartDataPointEventHandler | undefined
-              }
-              onDataPointsSelected={onDataPointsSelected}
-              onBeforeRender={onBeforeRender}
-            />
+            <SisenseChart {...(chartProps as SisenseChartProps)} />
           </LoadingOverlay>
         );
       }}
     </DynamicSizeContainer>
   );
 });
-
-function isCompleteDataSet(dataSet: ChartProps['dataSet']): dataSet is Data {
-  return !!dataSet && typeof dataSet !== 'string' && 'rows' in dataSet && 'columns' in dataSet;
-}

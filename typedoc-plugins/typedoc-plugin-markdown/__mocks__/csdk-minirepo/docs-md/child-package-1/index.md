@@ -25,13 +25,3 @@ Group 2 description more and more
 
 - [someFunction](group-2/function.someFunction.md)
 - [someFunction2](group-2/function.someFunction2.md)
-
-## Interfaces
-
-- [Animal](interfaces/interface.Animal.md)
-- [CallableInterface](interfaces/interface.CallableInterface.md)
-- [Dog](interfaces/interface.Dog.md) <Badge type="beta" text="Beta" />
-- [IndexableInterface](interfaces/interface.IndexableInterface.md)
-- [SomeConfig](interfaces/interface.SomeConfig.md)
-- [SomePropInterface](interfaces/interface.SomePropInterface.md)
-- [SomeProps](interfaces/interface.SomeProps.md)

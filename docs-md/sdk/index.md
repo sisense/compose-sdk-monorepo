@@ -3,7 +3,7 @@ title: Compose SDK
 indexTopics:
     - title: Quickstart Guide
       description: Get started with Compose SDK
-      link: ./quickstart
+      link: ./getting-started
     - title: API Reference
       description: Explore Compose SDK packages
       link: ./modules
@@ -58,5 +58,5 @@ Compose SDK is available to all Sisense Customers.
 To use Compose SDK, you will need:
 
 -   Access to a Sisense instance with Sisense Linux version `L2022.10` or later
--   An application built using [React](./quickstart.md), [Angular](./quickstart-angular.md), or [Vue](./quickstart-vue.md) and TypeScript
+-   An application built using [React](./getting-started/quickstart.md), [Angular](./getting-started/quickstart-angular.md), or [Vue](./getting-started/quickstart-vue.md) and TypeScript
 -   A NodeJS package manager (`npm` or `yarn`)

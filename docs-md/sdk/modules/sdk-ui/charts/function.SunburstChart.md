@@ -4,7 +4,7 @@ title: SunburstChart
 
 # Function SunburstChart
 
-> **SunburstChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **SunburstChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component displaying hierarchical data in the form of nested circle slices.
 
@@ -26,7 +26,7 @@ Sunburst chart displaying total revenue, categorized by condition and age range,
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`SunburstChartProps`](../interfaces/interface.SunburstChartProps.md) | Sunburst chart properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

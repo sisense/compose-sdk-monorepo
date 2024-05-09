@@ -447,7 +447,7 @@ export interface BaseChartProps {
    *
    * (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
    * retrieve the data source name from a data model you create using the `get-data-model`
-   * {@link @sisense/sdk-cli!Command | command} of the Compose SDK CLI. Under the hood, the chart
+   * {@link https://sisense.dev/guides/sdk/guides/cli.html | command} of the Compose SDK CLI. Under the hood, the chart
    * connects to the data source, executes a query, and loads the data as specified in
    * {@link dataOptions}, {@link filters}, and {@link highlights}.
    *

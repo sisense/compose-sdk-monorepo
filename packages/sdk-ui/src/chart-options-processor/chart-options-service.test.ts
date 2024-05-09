@@ -116,10 +116,10 @@ const meas2 = {
   title: 'Units',
 };
 
-const baseChartDesignOptions: ChartDesignOptions = {
-  globalDesign: BaseDesignOptions,
+const baseChartDesignOptions = {
+  ...BaseDesignOptions,
   designPerSeries: {},
-};
+} as ChartDesignOptions;
 
 const dateFormatter = (date: Date, format: string) => applyDateFormat(date, format);
 
@@ -290,10 +290,7 @@ it('chart navigator is on if x axis count is greater than 70 and autoZoom true',
     'line',
     {
       ...baseChartDesignOptions,
-      globalDesign: {
-        ...baseChartDesignOptions.globalDesign,
-        autoZoom: true,
-      },
+      autoZoom: true,
     },
     TestChartDataOptions,
     translateMock,
@@ -323,10 +320,7 @@ it('chart navigator is off if x axis count is greater than 70 and autoZoom false
     'line',
     {
       ...baseChartDesignOptions,
-      globalDesign: {
-        ...baseChartDesignOptions.globalDesign,
-        autoZoom: false,
-      },
+      autoZoom: false,
     },
     TestChartDataOptions,
     translateMock,
@@ -356,10 +350,7 @@ it('chart navigator is off if x axis count is less than 50 and autoZoom true', (
     'line',
     {
       ...baseChartDesignOptions,
-      globalDesign: {
-        ...baseChartDesignOptions.globalDesign,
-        autoZoom: true,
-      },
+      autoZoom: true,
     },
     TestChartDataOptions,
     translateMock,
@@ -389,11 +380,8 @@ it('for cartesian data, limit series to 50 and categories to 100', () => {
     'line',
     {
       ...baseChartDesignOptions,
-      globalDesign: {
-        ...baseChartDesignOptions.globalDesign,
-        autoZoom: true,
-        dataLimits: { seriesCapacity: 50, categoriesCapacity: 100 },
-      },
+      autoZoom: true,
+      dataLimits: { seriesCapacity: 50, categoriesCapacity: 100 },
     },
     TestChartDataOptions,
     translateMock,
@@ -420,12 +408,9 @@ it('for categorical with multiple values (e.g. pie charts), limit series to 1000
     'pie',
     {
       ...baseChartDesignOptions,
-      globalDesign: {
-        ...baseChartDesignOptions.globalDesign,
-        pieType: 'classic',
-        dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
-      } as DesignOptions<'pie'>,
-    },
+      pieType: 'classic',
+      dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
+    } as DesignOptions<'pie'>,
     TestChartDataOptions,
     translateMock,
   );
@@ -454,12 +439,9 @@ it('for categorical with value and categories (e.g. pie charts), limit series to
     'pie',
     {
       ...baseChartDesignOptions,
-      globalDesign: {
-        ...baseChartDesignOptions.globalDesign,
-        pieType: 'classic',
-        dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
-      } as DesignOptions<'pie'>,
-    },
+      pieType: 'classic',
+      dataLimits: { seriesCapacity: 100, categoriesCapacity: 100 },
+    } as DesignOptions<'pie'>,
     TestChartDataOptions,
     translateMock,
   );
@@ -727,11 +709,8 @@ describe('cartesianData', () => {
       'line',
       {
         ...baseChartDesignOptions,
-        globalDesign: {
-          ...baseChartDesignOptions.globalDesign,
-          yAxis: { enabled: true, min: 1000, max: 5000 },
-          y2Axis: { enabled: true, min: 50, max: 100 },
-        },
+        yAxis: { enabled: true, min: 1000, max: 5000 },
+        y2Axis: { enabled: true, min: 50, max: 100 },
       },
       dataOptions,
       translateMock,
@@ -795,11 +774,8 @@ describe('cartesianData', () => {
       'line',
       {
         ...baseChartDesignOptions,
-        globalDesign: {
-          ...baseChartDesignOptions.globalDesign,
-          yAxis: { enabled: true, min: -1000, max: -5000 },
-          y2Axis: { enabled: true, min: -50, max: -100 },
-        },
+        yAxis: { enabled: true, min: -1000, max: -5000 },
+        y2Axis: { enabled: true, min: -50, max: -100 },
       },
       dataOptions,
       translateMock,
@@ -1022,11 +998,8 @@ describe('cartesianData', () => {
       'polar',
       {
         ...baseChartDesignOptions,
-        globalDesign: {
-          ...baseChartDesignOptions.globalDesign,
-          polarType: 'area',
-        } as DesignOptions<'polar'>,
-      },
+        polarType: 'area',
+      } as DesignOptions<'polar'>,
       TestChartDataOptions,
       translateMock,
     );
@@ -1044,10 +1017,7 @@ describe('cartesianData', () => {
       'line',
       {
         ...baseChartDesignOptions,
-        globalDesign: {
-          ...baseChartDesignOptions.globalDesign,
-          dataLimits: { seriesCapacity: 1, categoriesCapacity: 2 },
-        },
+        dataLimits: { seriesCapacity: 1, categoriesCapacity: 2 },
       },
       TestChartDataOptions,
       translateMock,
@@ -1170,13 +1140,10 @@ describe('categoricalCharts', () => {
 
       const styleOptionsWithConvolution: ChartDesignOptions<'pie'> = {
         ...baseChartDesignOptions,
-        globalDesign: {
-          ...baseChartDesignOptions.globalDesign,
-          convolution: {
-            enabled: true,
-            selectedConvolutionType: 'byPercentage',
-            minimalIndependentSlicePercentage: 15,
-          },
+        convolution: {
+          enabled: true,
+          selectedConvolutionType: 'byPercentage',
+          minimalIndependentSlicePercentage: 15,
         },
       };
 
@@ -1241,13 +1208,10 @@ describe('categoricalCharts', () => {
 
       const styleOptionsWithConvolution: ChartDesignOptions<'pie'> = {
         ...baseChartDesignOptions,
-        globalDesign: {
-          ...baseChartDesignOptions.globalDesign,
-          convolution: {
-            enabled: true,
-            selectedConvolutionType: 'bySlicesCount',
-            independentSlicesCount: 2,
-          },
+        convolution: {
+          enabled: true,
+          selectedConvolutionType: 'bySlicesCount',
+          independentSlicesCount: 2,
         },
       };
 

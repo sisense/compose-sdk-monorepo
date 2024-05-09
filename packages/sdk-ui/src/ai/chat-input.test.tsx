@@ -1,7 +1,7 @@
 import { setup } from '@/__test-helpers__';
 import { screen } from '@testing-library/react';
 import ChatInput, { ChatInputProps } from './chat-input';
-import AiContextProvider from './ai-context-provider';
+import { ChatConfigProvider } from './chat-config';
 
 const onSendMessageMock = vi.fn();
 
@@ -50,9 +50,9 @@ describe('when user has not typed any input text', () => {
   it('input has a customized placeholder', () => {
     const alternativePlaceholderText = 'Some other placeholder';
     setup(
-      <AiContextProvider config={{ inputPromptText: alternativePlaceholderText }}>
+      <ChatConfigProvider value={{ inputPromptText: alternativePlaceholderText }}>
         <ChatInput {...chatInputProps} />
-      </AiContextProvider>,
+      </ChatConfigProvider>,
     );
 
     expect(screen.getByRole('textbox')).toHaveAttribute('placeholder', alternativePlaceholderText);

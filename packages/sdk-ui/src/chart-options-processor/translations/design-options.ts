@@ -13,6 +13,7 @@ import {
   TreemapStyleOptions,
 } from '../../types';
 import { ScatterMarkerSize } from './scatter-plot-options';
+import { DesignPerSeries } from './types';
 
 type DataLimits = {
   seriesCapacity: number;
@@ -33,18 +34,24 @@ export type BaseDesignOptionsType = {
   dataLimits: DataLimits;
 };
 
-export type LineChartDesignOptions = BaseDesignOptionsType;
-
-export type StackableChartDesignOptions = BaseDesignOptionsType & {
+export type CartesianChartDesignOptions = BaseDesignOptionsType & DesignPerSeries;
+export type StackableChartDesignOptions = CartesianChartDesignOptions & {
   stackType: StackType;
   showTotal?: boolean;
-};
+} & DesignPerSeries;
+
+export type LineChartDesignOptions = CartesianChartDesignOptions;
 
 export type AreaChartDesignOptions = StackableChartDesignOptions;
 
 export type BarChartDesignOptions = StackableChartDesignOptions;
 
 export type ColumnChartDesignOptions = StackableChartDesignOptions;
+
+export type PolarType = 'line' | 'area' | 'column';
+export type PolarChartDesignOptions = CartesianChartDesignOptions & {
+  polarType: PolarType;
+};
 
 export type PieChartDesignOptions = BaseDesignOptionsType & {
   pieType?: PieType;
@@ -148,11 +155,6 @@ export type NumericSpecificDesignOptions<
   indicatorType: 'numeric';
   numericSubtype: NumericSubtype;
   skin: NumericSubtype extends 'numericSimple' ? 'vertical' | 'horizontal' : never;
-};
-
-export type PolarType = 'line' | 'area' | 'column';
-export type PolarChartDesignOptions = BaseDesignOptionsType & {
-  polarType: PolarType;
 };
 
 export type BoxplotType = 'full' | 'hollow';

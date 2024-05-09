@@ -4,7 +4,7 @@ title: ChartWidget
 
 # Function ChartWidget
 
-> **ChartWidget**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **ChartWidget**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 The Chart Widget component extending the [Chart](../charts/function.Chart.md) component to support widget style options.
 It can be used along with the [DrilldownWidget](../drilldown/function.DrilldownWidget.md) component to support advanced data drilldown.
@@ -14,7 +14,7 @@ It can be used along with the [DrilldownWidget](../drilldown/function.DrilldownW
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ChartWidgetProps`](../interfaces/interface.ChartWidgetProps.md) | ChartWidget properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

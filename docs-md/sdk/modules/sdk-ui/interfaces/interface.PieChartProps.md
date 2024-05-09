@@ -12,7 +12,7 @@ Props of the [PieChart](../charts/function.PieChart.md) component.
 
 #### dataSet
 
-> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
+> **dataSet**?: [`Data`](../../sdk-data/interfaces/interface.Data.md) \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
 will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/function.SisenseContextProvider.md)
@@ -20,7 +20,7 @@ component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
-[command](../../sdk-cli/type-aliases/type-alias.Command.md) of the Compose SDK CLI. Under the hood, the chart
+[command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
 connects to the data source, executes a query, and loads the data as specified in
 [dataOptions](interface.PieChartProps.md#dataoptions), [filters](interface.PieChartProps.md#filters), and [highlights](interface.PieChartProps.md#highlights).
 

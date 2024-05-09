@@ -26,9 +26,11 @@ export const getBoxplotChartOptions = (
   dataOptions: BoxplotChartDataOptionsInternal,
   translate: TFunction,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
-  const globalDesignOptions = chartDesignOptions.globalDesign as BoxplotChartDesignOptions;
-  const sisenseChartType = determineHighchartsChartType('boxplot', globalDesignOptions);
-  const { series, alerts } = buildBoxplotSeries(chartData, globalDesignOptions);
+  const sisenseChartType = determineHighchartsChartType('boxplot', chartDesignOptions);
+  const { series, alerts } = buildBoxplotSeries(
+    chartData,
+    chartDesignOptions as BoxplotChartDesignOptions,
+  );
   const categories = chartData.xValues.map((xAxisValue) => xAxisValue.key);
 
   const boxplotOptions: HighchartsOptionsInternal = {
@@ -47,16 +49,16 @@ export const getBoxplotChartOptions = (
         },
       },
     },
-    legend: getLegendSettings(globalDesignOptions.legend),
-    xAxis: getBoxplotXAxisSettings(globalDesignOptions.xAxis, categories, dataOptions.category),
+    legend: getLegendSettings(chartDesignOptions.legend),
+    xAxis: getBoxplotXAxisSettings(chartDesignOptions.xAxis, categories, dataOptions.category),
     // Note: as we have multiple data options that describe the yAxis,
     // we are just using one of them to get formatting configuration
-    yAxis: getBoxplotYAxisSettings(globalDesignOptions.yAxis, chartData, dataOptions.whiskerMax),
+    yAxis: getBoxplotYAxisSettings(chartDesignOptions.yAxis, chartData, dataOptions.whiskerMax),
     series,
-    plotOptions: getBoxplotPlotOptions(globalDesignOptions.valueLabel),
+    plotOptions: getBoxplotPlotOptions(chartDesignOptions.valueLabel),
     navigator: getNavigator(
       sisenseChartType,
-      globalDesignOptions.autoZoom,
+      chartDesignOptions.autoZoom,
       chartData.xValues.length,
     ),
     tooltip: getBoxplotTooltipSettings(dataOptions, translate),

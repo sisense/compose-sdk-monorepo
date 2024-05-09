@@ -4,7 +4,7 @@ title: ThemeProvider
 
 # Function ThemeProvider
 
-> **ThemeProvider**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **ThemeProvider**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 Theme provider, which allows you to adjust the look and feel of child components.
 
@@ -13,7 +13,7 @@ Theme provider, which allows you to adjust the look and feel of child components
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ThemeProviderProps`](../type-aliases/type-alias.ThemeProviderProps.md) | Theme provider props |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

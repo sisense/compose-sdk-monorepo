@@ -20,7 +20,7 @@ component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
-[command](../../sdk-cli/type-aliases/type-alias.Command.md) of the Compose SDK CLI. Under the hood, the chart
+[command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
 connects to the data source, executes a query, and loads the data as specified in
 [dataOptions](interface.PolarChartProps.md#dataoptions), [filters](interface.PolarChartProps.md#filters), and [highlights](interface.PolarChartProps.md#highlights).
 

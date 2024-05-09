@@ -29,7 +29,7 @@ export type ScattermapProps = {
   designOptions: ScattermapChartDesignOptions;
   dataSource: DataSource | null;
   filters?: Filter[] | FilterRelations;
-  onMarkerClick?: ScattermapDataPointEventHandler;
+  onDataPointClick?: ScattermapDataPointEventHandler;
 };
 
 export const Scattermap = ({
@@ -38,7 +38,7 @@ export const Scattermap = ({
   dataSource,
   filters = [],
   designOptions,
-  onMarkerClick,
+  onDataPointClick,
 }: ScattermapProps) => {
   const { locations } = chartData;
   const geoSettings = useGeoSettings();
@@ -116,9 +116,12 @@ export const Scattermap = ({
         markersRef.current.push(marker);
         marker.addTo(markersLayerRef.current);
 
-        if (onMarkerClick) {
+        if (onDataPointClick) {
           marker.on('click', (e) => {
-            onMarkerClick(locationToScattermapDataPoint(locationWithCoordinates), e.originalEvent);
+            onDataPointClick(
+              locationToScattermapDataPoint(locationWithCoordinates),
+              e.originalEvent,
+            );
           });
         }
 
@@ -139,7 +142,7 @@ export const Scattermap = ({
     markerSizes,
     designOptions,
     tooltipHandler,
-    onMarkerClick,
+    onDataPointClick,
   ]);
 
   useEffect(() => {
@@ -175,16 +178,21 @@ export const Scattermap = ({
   );
 };
 
-export const isScattermapData = (chartData: ChartData): chartData is ScattermapChartData => {
+const isScattermapData = (chartData: ChartData): chartData is ScattermapChartData => {
   return chartData.type === 'scattermap';
 };
-export const isScattermapDataOptions = (
+const isScattermapDataOptions = (
   dataOptions: ChartDataOptionsInternal,
 ): dataOptions is ScattermapChartDataOptionsInternal => {
   return 'locations' in dataOptions;
 };
-export const isScattermapChartDesignOptions = (
+const isScattermapChartDesignOptions = (
   designOptions: DesignOptions,
 ): designOptions is ScattermapChartDesignOptions => {
   return 'markers' in designOptions;
 };
+
+export const isScattermapProps = (props: ScattermapProps) =>
+  isScattermapData(props.chartData) &&
+  isScattermapDataOptions(props.dataOptions) &&
+  isScattermapChartDesignOptions(props.designOptions);

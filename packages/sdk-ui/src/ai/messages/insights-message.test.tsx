@@ -28,20 +28,10 @@ describe('InsightsMessage', () => {
     );
   });
 
-  it('renders nothing if visible is false', async () => {
-    const { container } = setup(
-      <AiTestWrapper>
-        <InsightsMessage nlgRequest={mockNlgRequest} />
-      </AiTestWrapper>,
-    );
-
-    await waitFor(() => expect(container.firstChild).toBeNull());
-  });
-
   it('renders loading icon, then response text if API call returns text response', async () => {
     setup(
       <AiTestWrapper>
-        <InsightsMessage nlgRequest={mockNlgRequest} visible />
+        <InsightsMessage nlgRequest={mockNlgRequest} />
       </AiTestWrapper>,
     );
 
@@ -55,7 +45,7 @@ describe('InsightsMessage', () => {
 
     setup(
       <AiTestWrapper>
-        <InsightsMessage nlgRequest={mockNlgRequest} visible />
+        <InsightsMessage nlgRequest={mockNlgRequest} />
       </AiTestWrapper>,
     );
 
@@ -69,7 +59,7 @@ describe('InsightsMessage', () => {
 
     setup(
       <AiTestWrapper>
-        <InsightsMessage nlgRequest={mockNlgRequest} visible />
+        <InsightsMessage nlgRequest={mockNlgRequest} />
       </AiTestWrapper>,
     );
 

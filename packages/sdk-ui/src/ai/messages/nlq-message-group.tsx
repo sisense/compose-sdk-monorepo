@@ -4,7 +4,8 @@ import { GetNlgQueryResultRequest, NlqResponseData } from '../api/types';
 import { useChatConfig } from '../chat-config';
 import ChartMessage from './chart-message';
 import FeedbackWrapper from './feedback-wrapper';
-import InsightsMessage, { InsightsButton } from './insights-message';
+import InsightsMessage from './insights-message';
+import InsightsButton from '../buttons/insights-button';
 import TextMessage from './text-message';
 
 const startsWithVowel = (s: string | null | undefined): boolean => !!s && 'aeiou'.includes(s[0]);
@@ -42,7 +43,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
   const [showInsights, setShowInsights] = useState(false);
 
   const onInsightsButtonClick = useCallback(() => {
-    setShowInsights(true);
+    setShowInsights((prev) => !prev);
   }, []);
 
   const nlgRequest: GetNlgQueryResultRequest = {
@@ -76,8 +77,8 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
           type="nlg/queryResult"
           buttonVisibility={showInsights ? 'onHover' : 'never'}
         >
-          <InsightsButton onClick={onInsightsButtonClick} disabled={showInsights} />
-          <InsightsMessage nlgRequest={nlgRequest} visible={showInsights} />
+          <InsightsButton onClick={onInsightsButtonClick} />
+          {showInsights && <InsightsMessage nlgRequest={nlgRequest} />}
         </FeedbackWrapper>
       )}
     </>

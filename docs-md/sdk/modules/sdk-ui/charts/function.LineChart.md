@@ -4,7 +4,7 @@ title: LineChart
 
 # Function LineChart
 
-> **LineChart**(`props`, `context`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **LineChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component displaying data as a series of points connected by a line. Used to show trends or changes over time.
 
@@ -29,7 +29,7 @@ Additional Line Chart examples:
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`LineChartProps`](../interfaces/interface.LineChartProps.md) | Line chart properties |
-| `context`? | `any` | - |
+| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

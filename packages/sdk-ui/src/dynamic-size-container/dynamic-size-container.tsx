@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 export type ContainerSize = {

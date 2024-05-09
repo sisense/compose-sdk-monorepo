@@ -130,4 +130,8 @@ it('shows a text summary when the insights button is clicked', async () => {
   await user.click(screen.getByText('Insights'));
 
   await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument());
+
+  // hide insights
+  await user.click(screen.getByText('Insights'));
+  expect(screen.queryByText(text)).toBeNull();
 });

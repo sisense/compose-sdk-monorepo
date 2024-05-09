@@ -9,31 +9,27 @@ import { WithRequiredProp } from '@/utils/utility-types';
 import pick from 'lodash/pick';
 import merge from 'ts-deepmerge';
 import { getDefaultStyleOptions } from '../chart-options-service';
-import { ChartDesignOptions, isCartesian, SeriesDesignOptions } from '../translations/types';
+import { DesignOptions, isCartesian, SeriesDesignOptions } from '../translations/types';
 import { translateStyleOptionsToDesignOptions } from './translate-style-to-design-options';
+import { getSeriesChartDesignOptions } from './translate-to-highcharts-options';
 
 export function prepareChartDesignOptions(
   chartType: ChartType,
   dataOptionsInternal: ChartDataOptionsInternal,
   styleOptions?: ChartStyleOptions,
-): ChartDesignOptions {
-  const globalStyleOptions = extendStyleOptionsWithDefaults(
+): DesignOptions {
+  const styleOptionsWithDefaults = extendStyleOptionsWithDefaults(
     styleOptions ?? {},
     getDefaultStyleOptions(),
   );
-  const globalDesign = translateStyleOptionsToDesignOptions(
+  return translateStyleOptionsToDesignOptions(
     chartType,
-    globalStyleOptions,
+    styleOptionsWithDefaults,
     dataOptionsInternal,
   );
-
-  return {
-    globalDesign,
-    designPerSeries: getDesignOptionsPerSeries(dataOptionsInternal, chartType, globalStyleOptions),
-  };
 }
 
-function extendStyleOptionsWithDefaults(
+export function extendStyleOptionsWithDefaults(
   styleOptions: ChartStyleOptions,
   defaults: ChartStyleOptions,
 ): ChartStyleOptions {
@@ -46,19 +42,18 @@ function extendStyleOptionsWithDefaults(
   ) as ChartStyleOptions;
 }
 
-function getDesignOptionsPerSeries(
+export function getDesignOptionsPerSeries(
   dataOptionsInternal: ChartDataOptionsInternal,
   chartType: ChartType,
-  globalStyleOptions: ChartStyleOptions,
+  styleOptions: ChartStyleOptions,
 ): Record<string, SeriesDesignOptions> {
   const seriesDesignOptions = getAllSeriesStyleOptions(dataOptionsInternal, chartType).map(
     (styleOptionsForSpecificSeries) => {
       const seriesId = styleOptionsForSpecificSeries.seriesId;
       const seriesStyleOptions = styleOptionsForSpecificSeries.seriesStyleOptions;
-      const completeDesignOptions = translateStyleOptionsToDesignOptions(
+      const completeDesignOptions = getSeriesChartDesignOptions(
         chartType,
-        extendStyleOptionsWithDefaults(seriesStyleOptions, globalStyleOptions),
-        dataOptionsInternal,
+        extendStyleOptionsWithDefaults(seriesStyleOptions, styleOptions),
       );
       return {
         seriesId,

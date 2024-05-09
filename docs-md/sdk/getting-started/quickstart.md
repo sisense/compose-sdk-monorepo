@@ -240,7 +240,7 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 ```
 
 > **Note**
-> Use `measureFactory.sum()` from the example above to specify the `sum` type aggregation on the `Revenue` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](./modules/sdk-data/namespaces/namespace.measureFactory/index.md) documentation for more information.
+> Use `measureFactory.sum()` from the example above to specify the `sum` type aggregation on the `Revenue` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](../modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 
@@ -288,7 +288,7 @@ Your chart should look like this:
 
 ![Line chart rendered by the Chart component](../img/chart-data-source-example-2.png)
 
-See the [SisenseContextProvider](./modules/sdk-ui/contexts/function.SisenseContextProvider.md) and [Chart](./modules/sdk-ui/charts/function.Chart.md) docs for more details on supported props.
+See the [SisenseContextProvider](../modules/sdk-ui/contexts/function.SisenseContextProvider.md) and [Chart](../modules/sdk-ui/charts/function.Chart.md) docs for more details on supported props.
 
 ## Next Steps
 
@@ -298,4 +298,4 @@ For some ideas and examples, check out:
 
 -   [Compose SDK Playground](https://www.sisense.com/platform/compose-sdk/playground/)
 -   [Demo application for Compose SDK with React](https://csdk-react.sisense.com)
--   [Chart Tutorial](./tutorials/tutorial-charts/index.md)
+-   [Chart Tutorial](../tutorials/tutorial-charts/index.md)

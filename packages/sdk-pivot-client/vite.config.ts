@@ -43,7 +43,15 @@ export default defineConfig(({ mode }) => ({
       treeshake: {
         preset: 'smallest',
       },
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@emotion/react',
+        '@emotion/styled',
+        // '@mui/material' with all submodules
+        /^@mui\/material(?:\/\w+)*$/,
+      ],
     },
     commonjsOptions: {
       // true: wrap all CommonJS files in functions which are executed when they are required for the first time, preserving NodeJS semantics.

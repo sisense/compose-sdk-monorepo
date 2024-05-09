@@ -2,9 +2,9 @@ import { ChartDataOptions, ChartType } from '../types';
 import { getAttributes, getMeasures, translateChartDataOptions } from './translate-data-options';
 import { applyDefaultChartDataOptions, validateDataOptions } from './validate-data-options';
 
-export function getTranslatedDataOptions(dataOptions: ChartDataOptions, chartType: ChartType) {
+export function getTranslatedDataOptions(chartDataOptions: ChartDataOptions, chartType: ChartType) {
   {
-    const validatedDataOptions = validateDataOptions(chartType, dataOptions);
+    const validatedDataOptions = validateDataOptions(chartType, chartDataOptions);
     // translate to internal options
     const chartDataOptionsWithoutDefaults = translateChartDataOptions(
       chartType,
@@ -12,16 +12,13 @@ export function getTranslatedDataOptions(dataOptions: ChartDataOptions, chartTyp
     );
 
     // apply default options
-    const chartDataOptions = applyDefaultChartDataOptions(
-      chartDataOptionsWithoutDefaults,
-      chartType,
-    );
+    const dataOptions = applyDefaultChartDataOptions(chartDataOptionsWithoutDefaults, chartType);
 
-    const attributes = getAttributes(chartDataOptions, chartType);
-    const measures = getMeasures(chartDataOptions, chartType);
+    const attributes = getAttributes(dataOptions, chartType);
+    const measures = getMeasures(dataOptions, chartType);
 
     return {
-      chartDataOptions,
+      dataOptions,
       attributes,
       measures,
     };

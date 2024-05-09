@@ -16,10 +16,6 @@ type Alignable = {
   align: 'left' | 'right' | 'full';
 };
 
-type Disableable = {
-  disabled?: boolean;
-};
-
 const FlexContainer = styled.div<Alignable>`
   display: flex;
 
@@ -33,15 +29,13 @@ const FlexContainer = styled.div<Alignable>`
         `}
 `;
 
-const MessageButton = styled.div<Themable & Alignable & Disableable>`
+const MessageButton = styled.div<Themable & Alignable>`
   font-size: inherit;
   line-height: inherit;
   border: ${({ theme }) => theme.aiChat.clickableMessages.border};
   padding: 0px;
   user-select: none;
   cursor: pointer;
-
-  opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
 
   color: ${({ theme }) => theme.aiChat.clickableMessages.textColor};
   background-color: ${({ theme }) => theme.aiChat.clickableMessages.backgroundColor};
@@ -72,7 +66,6 @@ export default function ClickableMessage({
   children,
   align,
   onClick,
-  disabled,
   onMouseEnter,
   onMouseLeave,
 }: Props) {
@@ -83,7 +76,6 @@ export default function ClickableMessage({
       <MessageButton
         theme={themeSettings}
         onClick={onClick}
-        disabled={disabled}
         align={align}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

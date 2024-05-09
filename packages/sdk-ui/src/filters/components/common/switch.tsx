@@ -1,10 +1,8 @@
 import Switch from '@mui/material/Switch';
-import { useThemeContext } from '../../../theme-provider';
 import styled from '@emotion/styled';
+import { Themable } from '@/theme-provider/types';
 
-export const SisenseSwitchButton = styled(Switch)(() => {
-  const { themeSettings } = useThemeContext();
-
+export const SisenseSwitchButton = styled(Switch)<Themable>(({ theme }) => {
   return {
     height: '23px',
     width: '33px',
@@ -17,7 +15,7 @@ export const SisenseSwitchButton = styled(Switch)(() => {
         transform: 'translateX(13px)',
         '& + .MuiSwitch-track': {
           opacity: 1,
-          backgroundColor: themeSettings.general.brandColor ?? '#FFC805',
+          backgroundColor: theme.general.brandColor ?? '#FFC805',
         },
         '&:hover': {
           background: 'transparent',

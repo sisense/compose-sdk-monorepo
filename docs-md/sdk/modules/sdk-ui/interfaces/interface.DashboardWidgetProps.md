@@ -18,10 +18,6 @@ Filters that will slice query results
 
 Provided filters will be merged with the existing filters from the widget configuration.
 
-##### Overrides
-
-Omit.filters
-
 ***
 
 #### filtersMergeStrategy
@@ -43,10 +39,6 @@ If not specified, the default strategy is `codeFirst`.
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Highlight filters that will highlight results that pass filter criteria
-
-##### Overrides
-
-Omit.highlights
 
 ***
 
@@ -75,10 +67,6 @@ Identifier of the dashboard that contains the widget
 Description of the widget
 
 If not specified, it takes the existing value from the widget configuration.
-
-##### Overrides
-
-Omit.description
 
 ***
 
@@ -109,10 +97,6 @@ Style options for the widget including the widget container and the chart or tab
 Title of the widget
 
 If not specified, it takes the existing value from the widget configuration.
-
-##### Overrides
-
-Omit.title
 
 ***
 

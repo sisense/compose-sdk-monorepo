@@ -13,6 +13,7 @@ export {
   type UseGetQueryRecommendationsState,
 } from './use-get-query-recommendations';
 export { useChatSession, type UseChatSessionResult } from './use-chat-session';
+export { useGetDataSourceFields } from './use-get-data-source-fields';
 export type {
   GetNlgQueryResultRequest,
   QueryRecommendationResponse,
@@ -26,5 +27,5 @@ export type {
 } from './api/types';
 export { Chatbot, type ChatbotProps } from './chatbot';
 export { default as GetNlgQueryResult, type GetNlgQueryResultProps } from './get-nlg-query-result';
-
-export * from './translators';
+export { getChartOptions, getTableOptions, deriveChartFamily } from './messages/get-widget-options';
+export { JaqlElement } from './messages/jaql-element';

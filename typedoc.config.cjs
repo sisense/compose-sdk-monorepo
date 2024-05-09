@@ -45,7 +45,6 @@ if (process.env.TYPEDOC_MODE === 'PUBLIC') {
     ...baseConfig,
     name: 'Compose SDK',
     entryPoints: [
-      'packages/sdk-cli',
       'packages/sdk-data',
       'packages/sdk-ui',
       'packages/sdk-ui-preact',
@@ -65,6 +64,9 @@ if (process.env.TYPEDOC_MODE === 'PUBLIC') {
       'packages/sdk-modeling',
       'packages/sdk-query-client',
       'packages/sdk-ui',
+      'packages/sdk-ui-preact',
+      'packages/sdk-ui-angular',
+      'packages/sdk-ui-vue',
     ],
     hideGenerator: false,
     out: 'docs-internal',

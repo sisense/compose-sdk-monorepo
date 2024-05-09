@@ -4,20 +4,23 @@ import { translateMeasureToValue } from '@/chart-data-options/utils';
 import { generateUniqueDataColumnsNames } from '@/chart-data-options/validate-data-options';
 import { ChartDataOptions, ChartType } from '@/types';
 
-export const useTranslatedDataOptions = (dataOptions: ChartDataOptions, chartType: ChartType) => {
+export const useTranslatedDataOptions = (
+  chartDataOptions: ChartDataOptions,
+  chartType: ChartType,
+) => {
   return useMemo(() => {
-    const { chartDataOptions, attributes, measures } = getTranslatedDataOptions(
-      dataOptions,
+    const { dataOptions, attributes, measures } = getTranslatedDataOptions(
+      chartDataOptions,
       chartType,
     );
     const dataColumnNamesMapping = generateUniqueDataColumnsNames(
       measures.map(translateMeasureToValue),
     );
     return {
-      chartDataOptions,
+      dataOptions,
       attributes,
       measures,
       dataColumnNamesMapping,
     };
-  }, [dataOptions, chartType]);
+  }, [chartDataOptions, chartType]);
 };

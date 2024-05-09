@@ -12,6 +12,15 @@ import {
 import { ScattermapChartDataOptions } from '../../chart-data-options/types';
 import { ChartRecommendations, NlqResponseData } from '../api/types';
 import { createJaqlElement } from './jaql-element';
+import {
+  isCartesian,
+  isCategorical,
+  isScatter,
+  isScattermap,
+  isIndicator,
+  isAreamap,
+  isBoxplot,
+} from '@/chart-options-processor/translations/types';
 
 export const getChartRecommendationsOrDefault = (
   response: NlqResponseData,
@@ -27,6 +36,9 @@ export const getChartRecommendationsOrDefault = (
   };
 };
 
+/**
+ * @internal
+ */
 export const getTableOptions = (jaql: MetadataItem[]) => {
   const columns = jaql.map(createJaqlElement);
 
@@ -146,6 +158,9 @@ const getAxisTitle = (chartRecommendations: ChartRecommendations, axis: 'x' | 'y
     .join(', ');
 };
 
+/**
+ * @internal
+ */
 export const getChartOptions = (
   jaql: MetadataItem[],
   chartRecommendations: ChartRecommendations,
@@ -179,4 +194,37 @@ export const getChartOptions = (
     chartStyleOptions,
     expandedChartStyleOptions,
   };
+};
+
+/**
+ * Derives chart family from chart type.
+ *
+ * @param chartType - chart type
+ * @returns chart family
+ * @internal
+ */
+export const deriveChartFamily = (chartType: string): string => {
+  if (isCartesian(chartType as ChartType)) {
+    return 'cartesian';
+  }
+  if (isCategorical(chartType as ChartType)) {
+    return 'categorical';
+  }
+  if (isScatter(chartType as ChartType)) {
+    return 'scatter';
+  }
+  if (isScattermap(chartType as ChartType)) {
+    return 'scattermap';
+  }
+  if (isIndicator(chartType as ChartType)) {
+    return 'indicator';
+  }
+  if (isAreamap(chartType as ChartType)) {
+    return 'areamap';
+  }
+  if (isBoxplot(chartType as ChartType)) {
+    return 'boxplot';
+  }
+
+  return 'table';
 };
