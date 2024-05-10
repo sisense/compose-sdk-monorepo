@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import checker from 'vite-plugin-checker';
+import replace from 'rollup-plugin-re';
 import { OutputChunk } from 'rollup';
 
 // https://vitejs.dev/config/
@@ -49,8 +50,31 @@ export default defineConfig(({ mode }) => ({
         'react/jsx-runtime',
         '@emotion/react',
         '@emotion/styled',
+        // TODO: uncomment to externalize all MUI packages after spliting
+        // to client and server packages
+        //
         // '@mui/material' with all submodules
-        /^@mui\/material(?:\/\w+)*$/,
+        // /^@mui\/material(?:\/\w+)*$/,
+      ],
+      plugins: [
+        replace({
+          patterns: [
+            {
+              // TODO: remove after externalizing all MUI packages
+              transform(code: string) {
+                // Workaround in MUI for webpack to support React18 API
+                // https://github.com/webpack/webpack/issues/14814
+                // https://github.com/mui/material-ui/issues/41190
+                const muiUseIdWorkaround = "React['useId'.toString()]";
+                // more stable workaround to make sure the code can't be simplified by bundler
+                const betterUseIdWorkaround = 'React[`useId${Math.random()}`.slice(0, 5)]';
+                if (code.includes(muiUseIdWorkaround)) {
+                  return code.replace(toGlobalRegExp(muiUseIdWorkaround), betterUseIdWorkaround);
+                }
+              },
+            },
+          ],
+        }),
       ],
     },
     commonjsOptions: {
@@ -60,3 +84,11 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+
+/**
+ * Convert a string to a global RegExp
+ */
+function toGlobalRegExp(str: string): RegExp {
+  const escapedStr = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(escapedStr, 'g');
+}

@@ -1,4 +1,4 @@
-import * as DM from '../../__demo__/sample-ecommerce';
+import * as DM from '../../__test-helpers__/sample-ecommerce';
 import { PivotTableWidgetProps } from '../../props';
 import { mockPivotTableProps } from '../../pivot-table/__mocks__/mocks';
 
