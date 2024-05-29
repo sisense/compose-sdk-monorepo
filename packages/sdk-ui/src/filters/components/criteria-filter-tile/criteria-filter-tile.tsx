@@ -78,9 +78,10 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
     const defaultValues: CriteriaFilterValueType[] = filterToDefaultValues(
       filter ?? lastFilter.current,
     );
-    const [disabled, setDisabled] = useState(false);
+    let disabled = lastFilter.current.disabled;
     const [values, setValues] = useState<CriteriaFilterValueType[]>(defaultValues);
 
+    // callback to update filter values and disabled value
     const onUpdateValues = (newValues: CriteriaFilterValueType[]) => {
       setValues(newValues);
       // make new filters, then call onUpdate
@@ -91,11 +92,11 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
       } else {
         newFilter = filterInfo.fn(lastFilter.current.attribute, ...newValues) ?? null;
       }
-      onUpdate(newFilter);
       if (newFilter) {
+        newFilter.disabled = disabled;
         lastFilter.current = newFilter as CriteriaFilterType;
       }
-      if (disabled) setDisabled(false);
+      onUpdate(newFilter);
     };
 
     return (
@@ -121,12 +122,8 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         arrangement={arrangement}
         disabled={disabled}
         onToggleDisabled={() => {
-          if (!disabled) {
-            onUpdate(null);
-          } else {
-            onUpdate(lastFilter.current);
-          }
-          setDisabled((v) => !v);
+          disabled = !disabled;
+          onUpdateValues(values);
         }}
       />
     );

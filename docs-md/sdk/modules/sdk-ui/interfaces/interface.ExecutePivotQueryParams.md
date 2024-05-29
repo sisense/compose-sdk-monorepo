@@ -74,7 +74,7 @@ Filters that will slice query results
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-Highlight filters that will highlight results that pass filter criteria
+Filters that will highlight query results
 
 ### Other
 

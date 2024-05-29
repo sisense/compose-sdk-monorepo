@@ -4,7 +4,7 @@ title: ExecuteQuery
 
 # Function ExecuteQuery
 
-> **ExecuteQuery**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **ExecuteQuery**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 Executes a query and renders a function as child component. The child
 component is passed the state of the query as defined in [QueryState](../type-aliases/type-alias.QueryState.md).
@@ -17,7 +17,6 @@ offers an alternative approach to the [useExecuteQuery](function.useExecuteQuery
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ExecuteQueryProps`](../interfaces/interface.ExecuteQueryProps.md) | ExecuteQuery properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

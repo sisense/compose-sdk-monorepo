@@ -1,6 +1,7 @@
 import { PieChartProps } from './props';
-import { Chart, shouldSkipSisenseContextWaiting } from './chart';
+import { Chart } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
 /**
  * A React component representing data in a circular graph with the data shown as slices of a whole,
  * with each slice representing a proportion of the total.

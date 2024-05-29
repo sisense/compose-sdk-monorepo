@@ -5,6 +5,8 @@
  * Types
  */
 
+import { type ConditionFilterJaql } from './filters/utils/types.js';
+
 /**
  * Different aggregation types
  */
@@ -369,13 +371,18 @@ export type PivotJaql = (BaseJaql | FormulaJaql) & {
 /** @internal */
 export type BaseJaql = {
   agg?: string;
-  datatype: DataType;
+  datatype: `${DataType}`;
   dim: string;
   table: string;
   column: string;
   title: string;
   level?: 'years' | 'quarters' | 'months' | 'weeks' | 'minutes' | 'days';
-  sort?: JaqlSortDirection;
+  sort?: `${JaqlSortDirection}`;
+  in?: {
+    selected?: {
+      jaql: FilterJaql;
+    };
+  };
 };
 
 /** @internal */
@@ -399,8 +406,9 @@ export type BaseFilter =
   | IncludeMembersFilter
   | ExcludeMembersFilter
   | JaqlNumericFilter
-  | AndFilter<JaqlNumericFilter>
-  | OrFilter<JaqlNumericFilter>;
+  | ConditionFilterJaql
+  | AndFilter<JaqlNumericFilter | ConditionFilterJaql>
+  | OrFilter<JaqlNumericFilter | ConditionFilterJaql>;
 
 /** @internal */
 export type BackgroundFilter = BaseFilter & {

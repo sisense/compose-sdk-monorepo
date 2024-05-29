@@ -13,8 +13,12 @@ export type SisenseComponentConfig = {
   componentName: string;
   /** If set to true (or function returns true), the component will not wait for the Sisense context to be initialized */
   shouldSkipSisenseContextWaiting?: boolean | ((props: any) => boolean);
-  /** If set to true (or function returns true), the component will not be tracked */
-  shouldSkipTracking?: boolean | ((props: any) => boolean);
+  trackingConfig?: {
+    /** If set to true (or function returns true), the component will not be tracked */
+    skip?: boolean | ((props: any) => boolean);
+    /** If set to true, children will be tracked too */
+    transparent?: boolean;
+  };
   /** If set, the error message for wrong SisenseContext will be overridden with the provided key */
   customContextErrorMessageKey?: string;
 };
@@ -35,7 +39,7 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
   const {
     componentName,
     shouldSkipSisenseContextWaiting,
-    shouldSkipTracking,
+    trackingConfig,
     customContextErrorMessageKey,
   } = componentConfig;
   return (Component) =>
@@ -44,7 +48,7 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
         shouldSkipSisenseContextWaiting,
         customContextErrorMessageKey: customContextErrorMessageKey,
       }),
-      withTracking({ componentName, shouldSkipTracking }),
+      withTracking({ componentName, config: trackingConfig || {} }),
       withErrorBoundary(),
       withDefaultTranslations(),
     )(Component);

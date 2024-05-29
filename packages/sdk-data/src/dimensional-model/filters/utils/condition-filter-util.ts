@@ -48,9 +48,7 @@ export const getSelectedConditionOption = (filter: ConditionFilterJaql): Conditi
   if (isExcludeCondition(filter)) return ConditionFilterType.IS_NOT;
   if (isWithinCondition(filter)) return ConditionFilterType.IS_WITHIN;
   if (isGreaterThanCondition(filter)) return ConditionFilterType.GREATER_THAN;
-  if (isGreaterThanOrEqualCondition(filter)) return ConditionFilterType.GREATER_THAN_OR_EQUAL;
   if (isLessThanCondition(filter)) return ConditionFilterType.LESS_THAN;
-  if (isLessThanOrEqualCondition(filter)) return ConditionFilterType.LESS_THAN_OR_EQUAL;
   if (isEqualsCondition(filter)) return ConditionFilterType.EQUALS;
   if (isNotEqualCondition(filter)) return ConditionFilterType.DOESNT_EQUAL;
   if (isEmptyCondition(filter)) return ConditionFilterType.IS_EMPTY;
@@ -61,10 +59,13 @@ export const getSelectedConditionOption = (filter: ConditionFilterJaql): Conditi
   if (isDoesntStartsWithCondition(filter)) return ConditionFilterType.DOESNT_START_WITH;
   if (isEndsWithCondition(filter)) return ConditionFilterType.ENDS_WITH;
   if (isStartsWithCondition(filter)) return ConditionFilterType.STARTS_WITH;
-  if (isBetweenCondition(filter)) return ConditionFilterType.BETWEEN;
   if (isNotBetweenCondition(filter)) return ConditionFilterType.IS_NOT_BETWEEN;
   if (isMembersCondition(filter)) return ConditionFilterType.IS;
   if (isMultipleCondition(filter)) return ConditionFilterType.MULTIPLE_CONDITION;
+  // Need to verify BETWEEN case before the GREATER_THAN_OR_EQUAL and LESS_THAN_OR_EQUAL due to missing `filter.isBetween` property in some cases
+  if (isBetweenCondition(filter)) return ConditionFilterType.BETWEEN;
+  if (isGreaterThanOrEqualCondition(filter)) return ConditionFilterType.GREATER_THAN_OR_EQUAL;
+  if (isLessThanOrEqualCondition(filter)) return ConditionFilterType.LESS_THAN_OR_EQUAL;
 
   return ConditionFilterType.NONE;
 };

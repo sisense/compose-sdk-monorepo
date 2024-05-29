@@ -36,6 +36,7 @@ const percentSupportedSubChartTypes: SeriesChartType[] = [
   'areaspline',
   'bar',
   'scatter',
+  'arearange',
 ];
 export function isTooltipPercentValueSupported(options: Value | undefined) {
   if (options?.chartType) {
@@ -52,6 +53,8 @@ export type TooltipSettings = {
   borderRadius?: number;
   borderWidth?: number;
   useHTML?: boolean;
+  crosshairs?: boolean;
+  shared?: boolean;
   formatter?: () => string;
   style?: {
     fontFamily?: string;
@@ -65,6 +68,7 @@ export type InternalSeries = {
   point: {
     x?: number | string;
     y?: number;
+    yBottom?: number;
     z?: number;
     high?: number;
     low?: number;

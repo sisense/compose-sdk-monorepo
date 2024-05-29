@@ -4,7 +4,7 @@ title: Table
 
 # Function Table
 
-> **Table**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **Table**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 Table with aggregation and pagination.
 
@@ -24,7 +24,6 @@ Table displaying year, condition, and total revenue from the Sample ECommerce da
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`TableProps`](../interfaces/interface.TableProps.md) | Table properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

@@ -21,7 +21,10 @@ export type CustomThemeProviderProps = {
  */
 export const CustomThemeProvider = asSisenseComponent({
   componentName: 'CustomThemeProvider',
-  shouldSkipTracking: (props: CustomThemeProviderProps) => !!props.context?.skipTracking,
+  trackingConfig: {
+    skip: (props: CustomThemeProviderProps) => !!props.context?.skipTracking,
+    transparent: true,
+  },
   shouldSkipSisenseContextWaiting: true,
 })((props: PropsWithChildren<CustomThemeProviderProps>) => {
   const {

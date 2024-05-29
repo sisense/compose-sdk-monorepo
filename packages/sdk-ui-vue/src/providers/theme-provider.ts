@@ -107,7 +107,7 @@ export const ThemeProvider = defineComponent({
     skipTracking: Boolean as PropType<ThemeProviderProps['skipTracking']>,
   },
 
-  async setup({ theme: propTheme, skipTracking = false }, { slots }) {
+  setup({ theme: propTheme, skipTracking = false }, { slots }) {
     // todo: move the symbol into here so every instance of theme provider has its own symbol and therefor configurations
     const themeSettings = ref();
     const context = getSisenseContext();

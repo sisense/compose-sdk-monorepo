@@ -4,7 +4,7 @@ title: CriteriaFilterTile
 
 # Function CriteriaFilterTile
 
-> **CriteriaFilterTile**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **CriteriaFilterTile**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 UI component that allows the user to filter numeric or text attributes according to
 a number of built-in operations defined in the NumericFilter, TextFilter, or RankingFilter.
@@ -16,7 +16,6 @@ The arrangement prop determines whether the filter is rendered vertically or hor
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`CriteriaFilterTileProps`](../interfaces/interface.CriteriaFilterTileProps.md) | Criteria filter tile props |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

@@ -17,20 +17,24 @@ export const getCellStyles = ({
   customStyles?: TableCustomStyles;
   isHeaderCell?: boolean;
 }) => {
-  const color = themeSettings.chart.textColor;
+  let color = themeSettings.chart.textColor;
   const fontFamily = themeSettings.typography.fontFamily;
   let backgroundColor = themeSettings.chart.backgroundColor;
+  const fillBGColor = getSlightlyDifferentColor(backgroundColor);
 
   if (isHeaderCell) {
-    if (customStyles?.headersColor) {
-      backgroundColor = getSlightlyDifferentColor(backgroundColor);
+    if (customStyles?.header?.color?.enabled) {
+      backgroundColor = customStyles?.header?.color?.backgroundColor || fillBGColor;
+      color = customStyles?.header?.color?.textColor || color;
     }
   } else {
-    if (customStyles?.alternatingColumnsColor && oddIndex(colIndex)) {
-      backgroundColor = getSlightlyDifferentColor(backgroundColor);
+    if (customStyles?.columns?.alternatingColor?.enabled && oddIndex(colIndex)) {
+      backgroundColor = customStyles?.columns?.alternatingColor?.backgroundColor || fillBGColor;
+      color = customStyles?.columns?.alternatingColor?.textColor || color;
     }
-    if (customStyles?.alternatingRowsColor && oddIndex(rowIndex)) {
-      backgroundColor = getSlightlyDifferentColor(backgroundColor);
+    if (customStyles?.rows?.alternatingColor?.enabled && oddIndex(rowIndex)) {
+      backgroundColor = customStyles?.rows?.alternatingColor?.backgroundColor || fillBGColor;
+      color = customStyles?.rows?.alternatingColor?.textColor || color;
     }
   }
 

@@ -36,6 +36,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
     out: 'docs-md/sdk/modules',
     treatWarningsAsErrors: true,
     logLevel: 'Info',
+    hiddenFunctionParameters: ['deprecatedLegacyContext'],
   };
 }
 

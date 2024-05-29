@@ -38,6 +38,8 @@ export function getChartType(widgetType: WidgetType) {
     'chart/boxplot': 'boxplot',
     'map/scatter': 'scattermap',
     'map/area': 'areamap',
+    tablewidget: 'table',
+    tablewidgetagg: 'table',
   };
 
   return widgetTypeToChartType[widgetType];
@@ -110,8 +112,8 @@ export function isPivotWidget(widgetType: WidgetTypeOrString) {
   return widgetType === 'pivot' || widgetType === 'pivot2';
 }
 
-export function isTabularWidget(widgetType: WidgetTypeOrString) {
-  return isTableWidget(widgetType) || isPivotWidget(widgetType);
+export function isChartWidget(widgetType: WidgetTypeOrString) {
+  return !isPivotWidget(widgetType);
 }
 
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {
@@ -131,7 +133,7 @@ export function getRootPanelItem(item: PanelItem): PanelItem {
  * @returns  The sort direction.
  * @internal
  */
-export function getSortType(jaqlSort: JaqlSortDirection | undefined): SortDirection {
+export function getSortType(jaqlSort: `${JaqlSortDirection}` | undefined): SortDirection {
   switch (jaqlSort) {
     case JaqlSortDirection.ASC:
       return 'sortAsc';

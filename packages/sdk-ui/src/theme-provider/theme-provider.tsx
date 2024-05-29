@@ -41,7 +41,10 @@ import { ThemeContext } from './theme-context';
  */
 export const ThemeProvider = asSisenseComponent({
   componentName: 'ThemeProvider',
-  shouldSkipTracking: (props: ThemeProviderProps) => !!props.skipTracking,
+  trackingConfig: {
+    skip: (props: ThemeProviderProps) => !!props.skipTracking,
+    transparent: true,
+  },
   shouldSkipSisenseContextWaiting: true,
 })((props: ThemeProviderProps) => {
   const { theme, children } = props;

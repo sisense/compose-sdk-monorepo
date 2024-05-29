@@ -62,6 +62,7 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
           dataOptions={props.dataOptions}
           styleOptions={styleOptionsWithoutSizing}
           filters={props.filters}
+          highlights={props.highlights}
           refreshCounter={refreshCounter}
         />
       </WidgetContainer>

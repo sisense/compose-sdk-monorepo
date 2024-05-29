@@ -42,7 +42,6 @@ import { setupHelper } from '../../setup-helper';
  * @param props - Boxplot chart properties
  * @returns Boxplot Chart component
  * @group Charts
- * @beta
  */
 export const BoxplotChart = defineComponent({
   props: {

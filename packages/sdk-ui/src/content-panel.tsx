@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
-import { isPivotWidget, isTableWidget } from './dashboard-widget/utils';
+import { isPivotWidget } from './dashboard-widget/utils';
 import { Layout, WidgetModel } from './models';
-import { ChartWidgetProps, PivotTableWidgetProps, TableWidgetProps } from './props';
+import { ChartWidgetProps, PivotTableWidgetProps } from './props';
 import { ChartWidget } from './widgets/chart-widget';
 import { PivotTableWidget } from './widgets/pivot-table-widget';
-import { TableWidget } from './widgets/table-widget';
 
 const DIVIDER_STYLE = '1px solid rgba(38, 46, 61, 0.1)';
 
@@ -33,9 +32,7 @@ const Subcell = styled.div<{ height: string | number }>`
 
 function getWidgetProps(widgetModel: WidgetModel) {
   const { widgetType } = widgetModel;
-  if (isTableWidget(widgetType)) {
-    return widgetModel.getTableWidgetProps();
-  } else if (isPivotWidget(widgetType)) {
+  if (isPivotWidget(widgetType)) {
     return widgetModel.getPivotTableWidgetProps();
   } else {
     return widgetModel.getChartWidgetProps();
@@ -49,9 +46,7 @@ const renderWidgetModel = (w: WidgetModel | undefined) => {
 
   const chartProps = getWidgetProps(w);
 
-  if (isTableWidget(w.widgetType)) {
-    return <TableWidget {...(chartProps as TableWidgetProps)} />;
-  } else if (isPivotWidget(w.widgetType)) {
+  if (isPivotWidget(w.widgetType)) {
     return <PivotTableWidget {...(chartProps as PivotTableWidgetProps)} />;
   } else {
     return <ChartWidget {...(chartProps as ChartWidgetProps)} />;

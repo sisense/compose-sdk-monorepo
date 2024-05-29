@@ -15,30 +15,31 @@ export function parametersTable(
     const shouldFlatten =
       current.type?.declaration?.kind === ReflectionKind.TypeLiteral &&
       current.type?.declaration?.children;
-    return shouldFlatten
-      ? [...acc, current, ...flattenParams(current)]
-      : [...acc, current];
+    return shouldFlatten ? [...acc, current, ...flattenParams(current)] : [...acc, current];
   };
 
   const flattenParams = (current: any) => {
-    return current.type?.declaration?.children?.reduce(
-      (acc: any, child: any) => {
-        const childObj = {
-          ...child,
-          name: `${current.name}.${child.name}`,
-        };
-        return parseParams(childObj, acc);
-      },
-      [],
-    );
+    return current.type?.declaration?.children?.reduce((acc: any, child: any) => {
+      const childObj = {
+        ...child,
+        name: `${current.name}.${child.name}`,
+      };
+      return parseParams(childObj, acc);
+    }, []);
   };
 
   const showDefaults = hasDefaultValues(parameters);
 
-  const parsedParams = parameters.reduce(
-    (acc: any, current: any) => parseParams(current, acc),
-    [],
-  );
+  const parsedParams = parameters
+    .reduce((acc: any, current: any) => parseParams(current, acc), [])
+    /** CSDK START */
+    // hide function parameters based on configuration
+    .filter((param: any) => {
+      const hiddenFunctionParameters =
+        (context.options.getValue('hiddenFunctionParameters') as string[]) || [];
+      return !hiddenFunctionParameters.includes(param.name);
+    });
+  /** CSDK END */
 
   const hasComments = parsedParams.some((param) => Boolean(param.comment));
 
@@ -52,9 +53,7 @@ export function parametersTable(
     headers.push('Description');
   }
 
-  const firstOptionalParamIndex = parameters.findIndex(
-    (parameter) => parameter.flags.isOptional,
-  );
+  const firstOptionalParamIndex = parameters.findIndex((parameter) => parameter.flags.isOptional);
 
   const rows: string[][] = [];
 
@@ -62,8 +61,7 @@ export function parametersTable(
     const row: string[] = [];
 
     const isOptional =
-      parameter.flags.isOptional ||
-      (firstOptionalParamIndex !== -1 && i > firstOptionalParamIndex);
+      parameter.flags.isOptional || (firstOptionalParamIndex !== -1 && i > firstOptionalParamIndex);
 
     const rest = parameter.flags.isRest ? '...' : '';
 
@@ -81,9 +79,7 @@ export function parametersTable(
 
     if (hasComments) {
       if (parameter.comment) {
-        row.push(
-          stripLineBreaks(tableComments(context.comment(parameter.comment))),
-        );
+        row.push(stripLineBreaks(tableComments(context.comment(parameter.comment))));
       } else {
         row.push('-');
       }
@@ -102,10 +98,7 @@ function getDefaultValue(parameter: ParameterReflection) {
 
 function hasDefaultValues(parameters: ParameterReflection[]) {
   const defaultValues = (parameters as ParameterReflection[]).map(
-    (param) =>
-      param.defaultValue !== '{}' &&
-      param.defaultValue !== '...' &&
-      !!param.defaultValue,
+    (param) => param.defaultValue !== '{}' && param.defaultValue !== '...' && !!param.defaultValue,
   );
 
   return !defaultValues.every((value) => !value);

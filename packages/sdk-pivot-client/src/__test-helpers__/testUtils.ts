@@ -70,10 +70,10 @@ export const createTypedPanel = (
   const title = `${type}-${jaqlIndex}`;
   const jaql: Jaql = {
     title,
-    datatype: 'datatype',
+    datatype: 'numeric',
     dim: `[${title}]`,
     ...additionalJaqlProps,
-  };
+  } as Jaql;
   return {
     panel: type,
     field: { index: jaqlIndex, id: title },
@@ -93,10 +93,10 @@ export const createTypedPanels = (
     const title = `${type}-${jaqlIndex}`;
     const jaql: Jaql = {
       title,
-      datatype: 'datatype',
+      datatype: 'numeric',
       dim: `[${title}]`,
       ...additionalJaqlProps,
-    };
+    } as Jaql;
     return {
       panel: type,
       field: { index: jaqlIndex, id: title },

@@ -332,6 +332,38 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
         return returnUnsupported(json.level);
     }
   }
+
+  static getDefaultFormatForGranularity(granularity: string): string {
+    switch (granularity) {
+      case DateLevels.Years:
+        return 'yyyy';
+      case DateLevels.Quarters:
+        return 'Q yyyy';
+      case DateLevels.Months:
+        return 'yyyy-MM';
+      case DateLevels.Weeks:
+        return 'ww yyyy';
+      case DateLevels.Days:
+        return 'yyyy-MM-dd';
+      case DateLevels.Hours:
+        // eslint-disable-next-line sonarjs/no-duplicate-string
+        return 'yyyy-MM-dd HH:mm';
+      case DateLevels.MinutesRoundTo30:
+        return 'yyyy-MM-dd HH:mm';
+      case DateLevels.MinutesRoundTo15:
+        return 'yyyy-MM-dd HH:mm';
+      case DateLevels.AggHours:
+        return 'HH:mm';
+      case DateLevels.AggMinutesRoundTo30:
+        return 'HH:mm';
+      case DateLevels.AggMinutesRoundTo15:
+        return 'HH:mm';
+      case DateLevels.AggMinutesRoundTo1:
+        return 'HH:mm';
+      default:
+        return '';
+    }
+  }
 }
 
 /**

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { CascadingFilter, DashboardDto, Filter as FilterDto } from '../api/types/dashboard-dto';
+import { CascadingFilterDto, DashboardDto, FilterDto } from '../api/types/dashboard-dto';
 import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
 import { WidgetDashboardFilterMode, WidgetDto } from './types';
 
@@ -188,7 +188,7 @@ describe('extractDashboardFiltersForWidget', () => {
               },
             },
           ],
-        } as CascadingFilter,
+        } as CascadingFilterDto,
       ];
     });
 
@@ -198,16 +198,16 @@ describe('extractDashboardFiltersForWidget', () => {
       expect(filters).toHaveLength(0);
       expect(highlights).toHaveLength(2);
       expect(highlights[0].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].dim,
       );
       expect(highlights[0].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].filter,
       );
       expect(highlights[1].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].dim,
       );
       expect(highlights[1].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].filter,
       );
     });
 
@@ -220,16 +220,16 @@ describe('extractDashboardFiltersForWidget', () => {
       expect(filters).toHaveLength(2);
       expect(highlights).toHaveLength(0);
       expect(filters[0].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].dim,
       );
       expect(filters[0].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].filter,
       );
       expect(filters[1].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].dim,
       );
       expect(filters[1].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].filter,
       );
     });
 
@@ -242,16 +242,16 @@ describe('extractDashboardFiltersForWidget', () => {
       expect(filters).toHaveLength(2);
       expect(highlights).toHaveLength(0);
       expect(filters[0].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].dim,
       );
       expect(filters[0].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].filter,
       );
       expect(filters[1].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].dim,
       );
       expect(filters[1].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].filter,
       );
     });
 
@@ -264,16 +264,16 @@ describe('extractDashboardFiltersForWidget', () => {
       expect(filters).toHaveLength(1);
       expect(highlights).toHaveLength(1);
       expect(highlights[0].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].dim,
       );
       expect(highlights[0].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[0].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[0].filter,
       );
       expect(filters[0].jaql().jaql.dim).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].dim,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].dim,
       );
       expect(filters[0].jaql().jaql.filter).toEqual(
-        (dummyDashboard.filters![0] as CascadingFilter).levels[1].filter,
+        (dummyDashboard.filters![0] as CascadingFilterDto).levels[1].filter,
       );
     });
 

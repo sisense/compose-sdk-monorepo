@@ -26,6 +26,14 @@ If not specified, the component will use the `defaultDataSource` specified in th
 
 Filters that will slice query results
 
+***
+
+#### highlights
+
+> **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+Filters that will highlight query results
+
 ### Representation
 
 #### dataOptions

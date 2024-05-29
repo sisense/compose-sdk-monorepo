@@ -1,4 +1,9 @@
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import type {
+  JaqlPanel,
+  JaqlRequest,
+  PivotDataNode,
+  PivotTreeNode,
+} from '@sisense/sdk-pivot-client';
 
 export type DataCellFormatter = (
   cell: PivotDataNode,
@@ -7,6 +12,10 @@ export type DataCellFormatter = (
   jaqlPanelItem: JaqlPanel,
 ) => void;
 
-export type HeaderCellFormatter = (cell: PivotTreeNode, jaqlPanelItem: JaqlPanel) => void;
+export type HeaderCellFormatter = (
+  cell: PivotTreeNode,
+  jaqlPanelItem: JaqlPanel,
+  jaql: JaqlRequest,
+) => void;
 
 export type DateFormatter = (date: Date, format: string) => string;

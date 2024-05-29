@@ -9,8 +9,13 @@ exports[`PivotTable > should render empty pivot table 1`] = `
       style="width: 400px; height: 500px;"
     >
       <div
-        aria-label="pivot-table-root"
-      />
+        class="csdk-relative csdk-h-full"
+        id="overlay"
+      >
+        <div
+          aria-label="pivot-table-root"
+        />
+      </div>
     </div>
   </div>
 </div>

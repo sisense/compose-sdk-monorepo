@@ -4,7 +4,7 @@ title: SisenseContextProvider
 
 # Function SisenseContextProvider
 
-> **SisenseContextProvider**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **SisenseContextProvider**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 Sisense Context Provider Component allowing you to connect to
 a Sisense instance and provide that context
@@ -15,7 +15,6 @@ to all Compose SDK components in your application.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | `PropsWithChildren`\< [`SisenseContextProviderProps`](../interfaces/interface.SisenseContextProviderProps.md) \> | Sisense context provider props |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

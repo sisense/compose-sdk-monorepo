@@ -28,6 +28,7 @@ export const translation = {
     themeNotFound: 'Theme with oid {{themeOid}} not found in the Sisense instance',
     paletteNotFound: "Palette '{{paletteName}}' not found in the Sisense instance",
     chartTypeNotSupported: 'Chart type {{chartType}} is not supported',
+    chartInvalidProps: 'Invalid chart props',
     unsupportedWidgetType: "Can't extract props for unsupported widget type - {{widgetType}}",
     sisenseContextNotFound: 'Sisense Context not found. Please ensure it is provided.',
     dashboardInvalidIdentifier:
@@ -38,7 +39,6 @@ export const translation = {
       failedToFetch: 'Failed to fetch shared formula',
     },
     widgetModel: {
-      tabularWidgetNotSupported: 'Tabular widgets are not supported for method {{methodName}}',
       pivotWidgetNotSupported: 'Pivot widget is not supported for method {{methodName}}',
       onlyTableWidgetSupported: 'Only table widget is supported for method {{methodName}}',
       onlyPivotWidgetSupported: 'Only pivot widget is supported for method {{methodName}}',
@@ -94,6 +94,16 @@ export const translation = {
       median: 'Median',
       max: 'Max',
     },
+  },
+  arearange: {
+    tooltip: {
+      min: 'Min',
+      max: 'Max',
+    },
+  },
+  unsupportedFilter: {
+    title: 'Unsupported Filter',
+    message: 'Applied to the data query',
   },
 };
 

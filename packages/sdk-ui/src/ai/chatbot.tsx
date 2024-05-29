@@ -33,7 +33,7 @@ export type ChatbotProps = {
  * React component that renders a chatbot with data topic selection. You can optionally provide `width` and/or `height`.
  *
  * ::: warning Note
- * This component is currently under private beta for selected customers and is subject to change as we make fixes and improvements.
+ * This component is currently under beta release for selected customers and is subject to change as we make fixes and improvements.
  * :::
  *
  * @example

@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { RelativeDateFilterDisplay } from './relative-date-filter-display.js';
 import isToday from 'dayjs/plugin/isToday';
 import { RelativeDateFilter } from './relative-date-filter.js';
+import cloneDeep from 'lodash/cloneDeep.js';
 dayjs.extend(isToday);
 
 /**
@@ -52,8 +53,8 @@ export const RelativeDateFilterTile = asSisenseComponent({
   componentName: 'RelativeDateFilterTile',
 })((props: RelativeDateFilterTileProps) => {
   const { title, filter, arrangement = 'horizontal', onUpdate, limit } = props;
-  const [disabled, setDisabled] = useState(false);
   const [lastFilter, setLastFilter] = useState(filter);
+  let disabled = lastFilter.disabled;
 
   const onUpdateValues = (newFilter: Filter | null) => {
     if (newFilter) {
@@ -79,12 +80,10 @@ export const RelativeDateFilterTile = asSisenseComponent({
         );
       }}
       onToggleDisabled={() => {
-        if (!disabled) {
-          onUpdate(null);
-        } else {
-          onUpdate(lastFilter);
-        }
-        setDisabled((v) => !v);
+        disabled = !disabled;
+        const newFilter = cloneDeep(lastFilter);
+        newFilter.disabled = disabled;
+        onUpdateValues(newFilter);
       }}
       disabled={disabled}
       arrangement={arrangement}

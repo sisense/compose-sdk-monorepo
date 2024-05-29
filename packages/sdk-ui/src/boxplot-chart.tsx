@@ -1,6 +1,7 @@
 import { BoxplotChartProps } from './props';
-import { Chart, shouldSkipSisenseContextWaiting } from './chart';
+import { Chart } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
 /**
  * A React component representing data in a way that visually describes the distribution,
  * variability, and center of a data set along an axis.
@@ -19,7 +20,6 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * @param props - Boxplot chart properties
  * @returns Boxplot Chart component
  * @group Charts
- * @beta
  */
 export const BoxplotChart = asSisenseComponent({
   componentName: 'BoxplotChart',

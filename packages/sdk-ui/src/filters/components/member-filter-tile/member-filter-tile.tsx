@@ -12,8 +12,9 @@ import { useExecuteQueryInternal } from '../../../query-execution/use-execute-qu
 class MembersFilterInternal extends MembersFilterClass {
   internal = true;
 
-  constructor(attribute: Attribute, members: string[]) {
+  constructor(attribute: Attribute, members: string[], disabled?: boolean) {
     super(attribute, members);
+    this.disabled = disabled ?? false;
     this.internal = true;
   }
 }
@@ -70,6 +71,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
 })((props) => {
   const { title, attribute, filter, dataSource, onChange, parentFilters } = props;
   const initialFilter = useRef(filter);
+  const disabled = filter?.disabled ?? false;
 
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
   // "dimensions" does not change on every render, causing infinite rerenders.
@@ -120,10 +122,11 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       shouldUpdateSelectedMembers={
         initialFilter.current !== filter && !(filter as MembersFilterInternal)?.internal
       }
-      onUpdateSelectedMembers={(members) => {
-        onChange(new MembersFilterInternal(attribute, members));
+      onUpdateSelectedMembers={(members, disabled) => {
+        onChange(new MembersFilterInternal(attribute, members, disabled));
       }}
       isDependent={parentFilters && parentFilters.length > 0}
+      disabled={disabled}
     />
   );
 });

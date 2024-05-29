@@ -22,6 +22,7 @@ import { DataSource, Filter, FilterRelations, getFilterListAndRelations } from '
 import '../map-charts.scss';
 import './scattermap.scss';
 import { DesignOptions } from '@/chart-options-processor/translations/types.js';
+import { ChartRendererProps } from '@/chart/types.js';
 
 export type ScattermapProps = {
   chartData: ScattermapChartData;
@@ -192,7 +193,8 @@ const isScattermapChartDesignOptions = (
   return 'markers' in designOptions;
 };
 
-export const isScattermapProps = (props: ScattermapProps) =>
+export const isScattermapProps = (props: ChartRendererProps): props is ScattermapProps =>
+  !!props.chartData &&
   isScattermapData(props.chartData) &&
   isScattermapDataOptions(props.dataOptions) &&
   isScattermapChartDesignOptions(props.designOptions);

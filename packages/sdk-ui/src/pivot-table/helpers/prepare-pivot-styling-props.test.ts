@@ -38,6 +38,7 @@ describe('preparePivotStylingProps', () => {
       },
       rowHeight: 40,
       isAutoHeight: true,
+      selectionColor: '#ffff9c',
     });
   });
 
@@ -59,6 +60,7 @@ describe('preparePivotStylingProps', () => {
       },
       rowHeight: undefined,
       isAutoHeight: false,
+      selectionColor: '#ffff9c',
     });
   });
 });

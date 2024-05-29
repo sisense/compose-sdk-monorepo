@@ -5,8 +5,10 @@
 // Functions in the `date-fns` library also do not mutate Date instances
 // and always return a new Date instance.
 
-import { addYears, subYears, setMonth } from 'date-fns';
-import { formatInTimeZone } from 'date-fns-tz';
+import addYears from 'date-fns/addYears';
+import setMonth from 'date-fns/setMonth';
+import subYears from 'date-fns/subYears';
+import formatInTimeZone from 'date-fns-tz/formatInTimeZone';
 import type { DateFormat, DateLevel, MonthOfYear } from './apply-date-format';
 import { JAN, YEARS, QUARTERS, MONTHS, WEEKS, DAYS } from './apply-date-format';
 import { newDateFormat } from './new-date-format';

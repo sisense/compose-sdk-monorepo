@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { isNumber, isDatetime } from '@sisense/sdk-data';
-import { parseISO } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
 import isObject from 'lodash/isObject';
 import { Row, Column, Value, ComparableData, CompareValue } from './table-processor';
 

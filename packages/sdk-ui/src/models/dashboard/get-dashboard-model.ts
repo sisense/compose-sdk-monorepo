@@ -11,6 +11,15 @@ export interface GetDashboardModelOptions {
    * If not specified, the default value is `false`
    */
   includeWidgets?: boolean;
+
+  /**
+   * Boolean flag whether to include filters in the dashboard model
+   *
+   * If not specified, the default value is `false`
+   *
+   * @internal
+   */
+  includeFilters?: boolean;
 }
 
 /** @internal */
@@ -19,12 +28,16 @@ export async function getDashboardModel(
   dashboardOid: string,
   options: GetDashboardModelOptions = {},
 ) {
-  const { includeWidgets } = options;
+  const { includeWidgets, includeFilters } = options;
   const api = new RestApi(http);
   const fields = ['oid', 'title', 'datasource'];
 
   if (includeWidgets) {
     fields.push('layout');
+  }
+
+  if (includeFilters) {
+    fields.push('filters');
   }
 
   const promises: [Promise<DashboardDto>, Promise<WidgetDto[]>?] = [

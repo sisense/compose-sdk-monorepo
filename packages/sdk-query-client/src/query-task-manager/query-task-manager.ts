@@ -182,7 +182,11 @@ export class QueryTaskManager extends AbstractTaskManager {
 
 export function validateJaqlResponse(jaqlResponse: JaqlResponse): boolean {
   if (jaqlResponse.error) {
-    throw new Error(`${jaqlResponse.details} ${jaqlResponse.database ?? ''}`);
+    throw new Error(
+      `${jaqlResponse.details} ${jaqlResponse.database ?? ''} ${
+        jaqlResponse.extraDetails ? JSON.stringify(jaqlResponse.extraDetails) : ''
+      }`,
+    );
   }
   return true;
 }

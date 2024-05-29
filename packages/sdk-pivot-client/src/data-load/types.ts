@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { type BaseJaql } from '@sisense/sdk-data';
 import { LoggerI } from '../utils/types.js';
 import { MeasurePath } from '../data-handling/utils/jaqlProcessor.js';
 
@@ -11,15 +12,10 @@ export type SortDetails = {
   isLastApplied?: boolean;
 };
 
-export type Jaql = {
-  title: string;
-  dim: string;
-  datatype: string;
-  sort?: string | null;
+export type Jaql = Omit<BaseJaql, 'sort'> & {
   sortDetails?: SortDetails;
   type?: string;
-  table?: string;
-  column?: string;
+  sort?: BaseJaql['sort'] | null;
 };
 
 export type JaqlPanel = {

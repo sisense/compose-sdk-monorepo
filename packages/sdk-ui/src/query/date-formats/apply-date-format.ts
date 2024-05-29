@@ -3,9 +3,8 @@
 //  A new Date instance is created if a different Date is needed. Functions in the
 //  `date-fns` library also do not mutate Date instances and always return a new Date instance.
 
-import { setYear } from 'date-fns';
-import { format as formatLocalTimezone } from 'date-fns-tz';
-import type { Locale } from 'date-fns';
+import setYear from 'date-fns/setYear';
+import formatLocalTimezone from 'date-fns-tz/format';
 import { newDateFormatWithExpandedAngularTextFormats } from './angular-text-date-format-replacers';
 import {
   newDateFormatWithUnicodeMillisecondsMasks,

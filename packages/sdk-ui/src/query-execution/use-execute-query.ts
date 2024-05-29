@@ -89,6 +89,7 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
         highlights,
         count = app.settings.queryLimit,
         offset,
+        ungroup,
         onBeforeQuery,
       } = params;
 
@@ -104,6 +105,7 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
           highlights,
           count,
           offset,
+          ungroup,
         },
         app,
         { onBeforeQuery },

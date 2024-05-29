@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import * as RcTooltip from 'rc-tooltip';
+import type { TooltipProps } from 'rc-tooltip/lib/Tooltip';
 
 import { DEPRECATED_Tooltip } from '../DEPRECATED_Tooltip';
 
@@ -14,15 +14,8 @@ import styles from './Popover.module.scss';
 const DEFAULT_Z_INDEX = 1069;
 
 export type PopoverProps = Pick<
-  RcTooltip.RCTooltip.Props,
-  | 'children'
-  | 'onVisibleChange'
-  | 'overlay'
-  | 'placement'
-  | 'trigger'
-  | 'visible'
-  | 'getTooltipContainer'
-  | 'overlayStyle'
+  TooltipProps,
+  'children' | 'onVisibleChange' | 'overlay' | 'placement' | 'trigger' | 'visible' | 'overlayStyle'
 > & {
   align?: PositioningConfig;
   level?: number;
@@ -31,9 +24,10 @@ export type PopoverProps = Pick<
   maskClassName?: string;
   onRequestClose?: (ev: Event) => void;
   zIndex?: number;
+  getTooltipContainer?: () => HTMLElement;
 };
 
-export const Popover = forwardRef<HTMLDivElement, PopoverProps>((props, ref): JSX.Element => {
+export const Popover = (props: PopoverProps): JSX.Element => {
   const {
     bubbleMouseEvents = false,
     level = 0,
@@ -49,7 +43,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>((props, ref): JS
     let container = document.body;
 
     if (getTooltipContainer) {
-      container = getTooltipContainer() as HTMLElement;
+      container = getTooltipContainer();
     }
 
     return container;
@@ -76,16 +70,16 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>((props, ref): JS
         </PortalFunctionalComponentWrapper>
       )}
       <DEPRECATED_Tooltip
-        ref={ref}
         {...props}
         overlayClassName={styles.popover}
         hideArrow
         onClick={onClick}
         zIndex={zIndex + level + 1}
+        align={props.align}
       />
     </>
   );
-});
+};
 
 const PortalFunctionalComponentWrapper = (props: {
   children: React.ReactNode;

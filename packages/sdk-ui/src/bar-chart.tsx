@@ -1,6 +1,7 @@
 import { BarChartProps } from './props';
-import { Chart, shouldSkipSisenseContextWaiting } from './chart';
+import { Chart } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
 /**
  * A React component representing categorical data with horizontal rectangular bars,
  * whose lengths are proportional to the values that they represent.

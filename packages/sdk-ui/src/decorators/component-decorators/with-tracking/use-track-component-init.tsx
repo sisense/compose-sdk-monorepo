@@ -11,9 +11,13 @@ interface ComponentInitEventDetails extends TrackingDetails {
 }
 
 const TrackingContext = createContext(false);
-export const TrackingContextProvider = ({ children }: { children: ReactNode }) => (
-  <TrackingContext.Provider value={true}>{children}</TrackingContext.Provider>
-);
+export const TrackingContextProvider = ({
+  skipNested = true,
+  children,
+}: {
+  children: ReactNode;
+  skipNested?: boolean;
+}) => <TrackingContext.Provider value={skipNested}>{children}</TrackingContext.Provider>;
 
 export const useTrackComponentInit = <P extends {}>(componentName: string, props: P) => {
   const { app, tracking } = useSisenseContext();
@@ -23,7 +27,9 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (app?.httpClient && !hasTrackedRef.current && !inTrackingContext) {
+    if (!app?.httpClient) return;
+    const hasBeenTracked = hasTrackedRef.current;
+    if (!hasBeenTracked && !inTrackingContext) {
       const payload: ComponentInitEventDetails = {
         packageName: tracking.packageName,
         packageVersion: __PACKAGE_VERSION__,

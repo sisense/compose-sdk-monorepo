@@ -189,3 +189,43 @@ describe('translateJaqlToGranularity', () => {
     );
   });
 });
+
+describe('getDefaultFormatForGranularity', () => {
+  it('should return default format', () => {
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.Years)).toBe('yyyy');
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.Quarters)).toBe(
+      'Q yyyy',
+    );
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.Months)).toBe(
+      'yyyy-MM',
+    );
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.Weeks)).toBe(
+      'ww yyyy',
+    );
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.Days)).toBe(
+      'yyyy-MM-dd',
+    );
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.Hours)).toBe(
+      'yyyy-MM-dd HH:mm',
+    );
+    expect(
+      DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.MinutesRoundTo30),
+    ).toBe('yyyy-MM-dd HH:mm');
+    expect(
+      DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.MinutesRoundTo15),
+    ).toBe('yyyy-MM-dd HH:mm');
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.AggHours)).toBe(
+      'HH:mm',
+    );
+    expect(
+      DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.AggMinutesRoundTo30),
+    ).toBe('HH:mm');
+    expect(
+      DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.AggMinutesRoundTo15),
+    ).toBe('HH:mm');
+    expect(
+      DimensionalLevelAttribute.getDefaultFormatForGranularity(DateLevels.AggMinutesRoundTo1),
+    ).toBe('HH:mm');
+    expect(DimensionalLevelAttribute.getDefaultFormatForGranularity('unrecognized-level')).toBe('');
+  });
+});

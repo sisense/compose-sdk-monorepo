@@ -387,12 +387,10 @@ export function isMeasureColumn(
 
 /**
  * Configuration for how to query data and assign data to Table.
- *
  */
 export interface TableDataOptions {
   /**
    * Columns (or attributes) whose values represent data columns in table
-   *
    */
   columns: (
     | Column
@@ -402,6 +400,11 @@ export interface TableDataOptions {
     | StyledMeasureColumn
   )[];
 }
+
+/**
+ * Configuration for how to query data and assign data to tabular charts.
+ */
+export type TabularChartDataOptions = TableDataOptions;
 
 /**
  * Configuration for how to query data and assign data to PivotTable.
@@ -529,6 +532,45 @@ export type BoxplotChartCustomDataOptions = {
   valueTitle: string;
 };
 
+export interface AreaRangeMeasureColumn extends ValueStyle, SeriesStyle {
+  title: string;
+  chartType?: 'arearange';
+  lowerBound: MeasureColumn | CalculatedMeasureColumn;
+  upperBound: MeasureColumn | CalculatedMeasureColumn;
+}
+
+/**
+ * Configuration for how to query aggregate data and assign data
+ * to axes of a Range chart.
+ */
+export interface RangeChartDataOptions {
+  /**
+   * Columns (or attributes) whose values are placed on the X-axis.
+   *
+   * Typically, the X-axis represents descriptive data.
+   */
+  category: (Column | StyledColumn)[];
+  /**
+   * An array of measure columns used to represent the target numeric values for computing the metrics
+   * in an area range chart.
+   *
+   * Each measure column defines the range of values by specifying a lower and an upper bound,
+   * providing the necessary data to visualize the area range on the chart.
+   */
+  value: AreaRangeMeasureColumn[];
+  /**
+   * Columns (or attributes) by which to break (group) the data represented in the chart.
+   *
+   * Each group is represented by a different visual encoding - for example, color of bars in a bar chart,
+   * and is automatically added to the chart's legend.
+   */
+  breakBy: (Column | StyledColumn)[];
+  /**
+   * Optional mapping of each of the series to colors.
+   */
+  seriesToColorMap?: ValueToColorMap;
+}
+
 /**
  * Configuration for querying aggregate data and assigning data to chart encodings.
  *
@@ -536,11 +578,17 @@ export type BoxplotChartCustomDataOptions = {
  * {@link CategoricalChartDataOptions | Categorical},
  * {@link ScatterChartDataOptions | Scatter},
  * {@link IndicatorChartDataOptions | Indicator},
+ * {@link TableDataOptions | Table},
  * {@link BoxplotChartDataOptions | Boxplot},
  * {@link AreamapChartDataOptions | Areamap}, and
  * {@link ScattermapChartDataOptions | Scattermap} charts.
  */
-export type ChartDataOptions =
+export type ChartDataOptions = RegularChartDataOptions | TabularChartDataOptions;
+
+/**
+ * Configuration for how to query aggregate data and assigning data to chart encodings of regular charts.
+ */
+export type RegularChartDataOptions =
   | CartesianChartDataOptions
   | CategoricalChartDataOptions
   | ScatterChartDataOptions
@@ -548,7 +596,8 @@ export type ChartDataOptions =
   | BoxplotChartDataOptions
   | BoxplotChartCustomDataOptions
   | AreamapChartDataOptions
-  | ScattermapChartDataOptions;
+  | ScattermapChartDataOptions
+  | RangeChartDataOptions;
 
 /** @internal */
 export interface Category extends CategoryStyle {
@@ -609,6 +658,15 @@ export interface ScattermapChartDataOptionsInternal {
 }
 
 /** @internal */
+export type RangeChartDataOptionsInternal = {
+  x: Category[];
+  rangeValues: Value[][];
+  breakBy: Category[];
+  y: Value[];
+  seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
+};
+
+/** @internal */
 export type TableDataOptionsInternal = {
   columns: (Category | Value)[];
 };
@@ -654,7 +712,8 @@ export type ChartDataOptionsInternal =
   | IndicatorChartDataOptionsInternal
   | BoxplotChartDataOptionsInternal
   | AreamapChartDataOptionsInternal
-  | ScattermapChartDataOptionsInternal;
+  | ScattermapChartDataOptionsInternal
+  | RangeChartDataOptionsInternal;
 
 /** @internal */
 export type IndicatorChartDataOptionsInternal = {

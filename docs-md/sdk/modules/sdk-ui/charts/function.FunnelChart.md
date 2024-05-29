@@ -4,7 +4,7 @@ title: FunnelChart
 
 # Function FunnelChart
 
-> **FunnelChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **FunnelChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component representing data progressively decreasing in size or quantity through a funnel shape.
 
@@ -24,7 +24,6 @@ Funnel chart displaying data from the Sample ECommerce data model.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`FunnelChartProps`](../interfaces/interface.FunnelChartProps.md) | Funnel chart properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

@@ -41,7 +41,6 @@ import { setupHelper } from '../../setup-helper';
  * @param props - Areamap chart properties
  * @returns Areamap Chart component
  * @group Charts
- * @beta
  */
 export const AreamapChart = defineComponent({
   props: {

@@ -1,6 +1,7 @@
 import * as DM from '../../__test-helpers__/sample-ecommerce';
-import { PivotTableWidgetProps } from '../../props';
+import { ChartWidgetProps, PivotTableWidgetProps } from '../../props';
 import { mockPivotTableProps } from '../../pivot-table/__mocks__/mocks';
+import { QueryResultData } from '@sisense/sdk-data';
 
 export const mockPivotTableWidgetProps: PivotTableWidgetProps = {
   ...mockPivotTableProps,
@@ -15,3 +16,52 @@ export const mockPivotTableWidgetProps: PivotTableWidgetProps = {
     borderColor: 'lightgrey',
   },
 } as PivotTableWidgetProps;
+
+export const mockChartWidgetPropsForTable: ChartWidgetProps = {
+  chartType: 'table',
+  dataSource: DM.DataSource,
+  title: 'Chart widget title',
+  description: 'Chart widget desription',
+  dataOptions: {
+    columns: [DM.Commerce.AgeRange, DM.Commerce.Revenue],
+  },
+};
+
+export const mockResolvedTableQuery: QueryResultData = {
+  columns: [
+    {
+      name: 'AgeRange',
+      type: 'text',
+    },
+    {
+      name: 'Revenue',
+      type: 'number',
+    },
+  ],
+  rows: [
+    [
+      {
+        data: '19-24',
+        text: '19-24',
+        blur: false,
+      },
+      {
+        data: 43.98411178588867,
+        text: '43.9841117858887',
+        blur: false,
+      },
+    ],
+    [
+      {
+        data: '65+',
+        text: '65+',
+        blur: false,
+      },
+      {
+        data: 62.803104400634766,
+        text: '62.8031044006348',
+        blur: false,
+      },
+    ],
+  ],
+};

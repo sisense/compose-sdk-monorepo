@@ -29,8 +29,9 @@ const getInnerPeriodFilter = (
 const isPeriodFilter = (filter: AnyTypeFilterJaql): boolean =>
   getInnerPeriodFilter(filter as PeriodFilterJaql)?.offset < 2;
 
-const isSpecificItemsFilter = (filter: AnyTypeFilterJaql): boolean =>
-  (filter as SpecificItemsFilterJaql)?.members?.length > 0;
+export const isSpecificItemsFilter = (
+  filter: AnyTypeFilterJaql,
+): filter is SpecificItemsFilterJaql => (filter as SpecificItemsFilterJaql)?.members?.length > 0;
 
 const isFromOrToDefined = (fromRange?: string | number, toRange?: string | number) =>
   (fromRange && typeof fromRange === 'string') || (toRange && typeof toRange === 'string');
@@ -53,7 +54,7 @@ export const isNumericRangeFilter = (filter: AnyTypeFilterJaql): boolean => {
   return !!(from !== undefined && to !== undefined && !filter.isBetween);
 };
 
-const isConditionFilter = (filter: AnyTypeFilterJaql): boolean =>
+export const isConditionFilter = (filter: AnyTypeFilterJaql): filter is ConditionFilterJaql =>
   getSelectedConditionOption(filter as ConditionFilterJaql) !== ConditionFilterType.NONE;
 
 const isAdvancedFilter = (filter: AnyTypeFilterJaql): boolean =>

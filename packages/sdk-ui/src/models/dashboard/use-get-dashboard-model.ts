@@ -155,9 +155,10 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
       }
       dispatch({ type: 'loading' });
 
-      const { dashboardOid, includeWidgets } = params;
+      const { dashboardOid, includeWidgets, includeFilters } = params;
       void getDashboardModel(app.httpClient, dashboardOid, {
         includeWidgets,
+        includeFilters,
       })
         .then((data) => {
           dispatch({ type: 'success', data });

@@ -1,8 +1,9 @@
 import { StyledColumn, type PivotTableDataOptions } from '../../../chart-data-options/types.js';
 import { createHeaderCellValueFormatter } from './header-cell-value-formatter.js';
-import { PivotTreeNode, UserType, type JaqlPanel } from '@sisense/sdk-pivot-client';
+import { JaqlRequest, PivotTreeNode, UserType, type JaqlPanel } from '@sisense/sdk-pivot-client';
 
 const dateFormatterMock = vi.fn<[Date, string]>().mockReturnValue('formatted date');
+const jaqlMock = {} as JaqlRequest;
 
 describe('createHeaderCellValueFormatter', () => {
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe('createHeaderCellValueFormatter', () => {
     } as JaqlPanel;
     const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock);
 
-    formatter(cell, jaqlPanelItem);
+    formatter(cell, jaqlPanelItem, jaqlMock);
 
     expect(cell.content).toBe('12,346%');
   });
@@ -64,7 +65,7 @@ describe('createHeaderCellValueFormatter', () => {
     } as JaqlPanel;
     const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock);
 
-    formatter(cell, jaqlPanelItem);
+    formatter(cell, jaqlPanelItem, jaqlMock);
 
     expect(cell.content).toBe('formatted date');
 
@@ -92,7 +93,7 @@ describe('createHeaderCellValueFormatter', () => {
     } as JaqlPanel;
     const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock);
 
-    formatter(cell, jaqlPanelItem);
+    formatter(cell, jaqlPanelItem, jaqlMock);
 
     expect(cell.content).toBe(cell.value);
   });
@@ -116,7 +117,7 @@ describe('createHeaderCellValueFormatter', () => {
     } as JaqlPanel;
     const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock);
 
-    formatter(cell, jaqlPanelItem);
+    formatter(cell, jaqlPanelItem, jaqlMock);
 
     expect(cell.content).toBe(cell.value);
   });
@@ -139,7 +140,7 @@ describe('createHeaderCellValueFormatter', () => {
     } as JaqlPanel;
     const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock);
 
-    formatter(cell, jaqlPanelItem);
+    formatter(cell, jaqlPanelItem, jaqlMock);
 
     expect(cell.content).toBe('N\\A');
   });

@@ -41,7 +41,7 @@ function convertToDimensionalModel(
     | DimensionalCalculatedMeasure;
 }
 
-function getSortTypeFromJaqlSort(jaqlSort?: JaqlSortDirection) {
+function getSortTypeFromJaqlSort(jaqlSort?: `${JaqlSortDirection}`) {
   if (jaqlSort === JaqlSortDirection.ASC) {
     return 'sortAsc';
   } else if (jaqlSort === JaqlSortDirection.DESC) {

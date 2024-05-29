@@ -10,7 +10,7 @@ React hook that fetches an analysis of the provided query using natural language
 Specifying a query is similar to providing parameters to a [useExecuteQuery](../queries/function.useExecuteQuery.md) hook, using dimensions, measures, and filters.
 
 ::: warning Note
-This hook is currently under private beta for selected customers and is subject to change as we make fixes and improvements.
+This hook is currently under beta release for selected customers and is subject to change as we make fixes and improvements.
 :::
 
 ## Parameters

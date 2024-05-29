@@ -69,18 +69,60 @@ describe('filter-from-jaql-util', () => {
       });
 
       test('should handle members datetime', () => {
+        [
+          {
+            title: 'Years',
+            table: 'Commerce',
+            column: 'Date',
+            dim: '[Commerce.Date (Calendar)]',
+            datatype: 'datetime',
+            level: 'years' as DatetimeLevel,
+            filter: {
+              explicit: true,
+              multiSelection: true,
+              members: ['2013-01-01T00:00:00', '2011-01-01T00:00:00'],
+            },
+          },
+          {
+            datasource: {
+              title: 'Sample ECommerce',
+              fullname: 'LocalHost/Sample ECommerce',
+              id: 'localhost_aSampleIAAaECommerce',
+              address: 'LocalHost',
+              database: 'aSampleIAAaECommerce',
+            },
+            column: 'Date',
+            dim: '[Commerce.Date (Calendar)]',
+            datatype: 'datetime',
+            level: 'years' as DatetimeLevel,
+            title: 'YEARS',
+            collapsed: true,
+            isDashboardFilter: true,
+            filter: {
+              explicit: true,
+              multiSelection: true,
+              members: ['2013-01-01T00:00:00'],
+            },
+          },
+        ].forEach((jaql) => {
+          const filter = createFilterFromJaqlInternal(jaql, instanceid);
+          const attribute = createAttributeFromFilterJaql(jaql);
+          const expectedFilter = filterFactory.members(attribute, jaql.filter.members);
+          expectEqualFilters(filter, expectedFilter);
+        });
+      });
+
+      test('should handle JAQL without table name', () => {
         const jaql = {
-          title: 'Years',
-          table: 'Commerce',
-          column: 'Date',
-          dim: '[Commerce.Date (Calendar)]',
-          datatype: 'datetime',
-          level: 'years' as DatetimeLevel,
+          column: 'Category',
+          dim: '[Category.Category]',
+          datatype: 'text',
           filter: {
             explicit: true,
             multiSelection: true,
-            members: ['2013-01-01T00:00:00', '2011-01-01T00:00:00'],
+            members: ['Cell Phones', 'GPS Devices'],
           },
+          title: 'Category',
         };
 
         const filter = createFilterFromJaqlInternal(jaql, instanceid);

@@ -60,6 +60,7 @@ type Props = {
   // PaginationPanel
   navigationPrimaryColor?: string;
   navigationSecondaryColor?: string;
+  selectionColor?: string;
   itemsCount: number;
   totalItemsCount: number;
   totalRecordsCount: number;
@@ -109,7 +110,7 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
 
   childrenReadyState = this.childrenReadyStateInitial;
 
-  domReadyEvent = debounce(() => this.onDomReadyEvent(), 500);
+  private domReadyEvent = debounce(() => this.onDomReadyEvent(), 500);
 
   static defaultProps = {
     isAutoHeight: false,
@@ -393,6 +394,7 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
       fillOptions,
       navigationPrimaryColor,
       navigationSecondaryColor,
+      selectionColor,
       isPaginated,
       overlay,
       itemsCount,
@@ -426,6 +428,7 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
         fillOptions={fillOptions}
         navigationPrimaryColor={navigationPrimaryColor}
         navigationSecondaryColor={navigationSecondaryColor}
+        selectionColor={selectionColor}
       >
         <div className={cn(PIVOT, `${PIVOT}--new`, className)} ref={this.setPivotContainerRef}>
           {this.pivotContainer && (

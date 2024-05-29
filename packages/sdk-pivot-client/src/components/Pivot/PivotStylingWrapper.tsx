@@ -22,6 +22,7 @@ export const PivotStylingWrapper = styled.div<{
   fillOptions?: PivotFillOptionsProps;
   navigationPrimaryColor?: string;
   navigationSecondaryColor?: string;
+  selectionColor?: string;
 }>`
   &,
   .table-grid {
@@ -213,5 +214,8 @@ export const PivotStylingWrapper = styled.div<{
     .MuiSvgIcon-root {
       color: ${(props) => props.navigationSecondaryColor};
     }
+  }
+  .table-grid__cell--selected {
+    background-color: ${(props) => props.selectionColor};
   }
 `;

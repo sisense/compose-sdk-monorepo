@@ -16,13 +16,13 @@ import {
 import { createIndicatorLegacyChartOptions } from './charts/indicator/indicator-legacy-chart-options';
 import { ChartData } from './chart-data/types';
 import { DesignOptions } from './chart-options-processor/translations/types';
-import { ThemeSettings } from './types';
+import { ChartRendererProps } from './chart/types';
+import { useThemeContext } from './theme-provider';
 
 export interface IndicatorCanvasProps {
   chartData: IndicatorChartData;
   dataOptions: IndicatorChartDataOptionsInternal;
   designOptions: IndicatorChartDesignOptions;
-  themeSettings?: ThemeSettings;
 }
 
 /**
@@ -32,10 +32,11 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
   chartData,
   dataOptions,
   designOptions,
-  themeSettings,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const { themeSettings } = useThemeContext();
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) {
@@ -103,7 +104,8 @@ const isIndicatorDesignOptions = (
   return 'indicatorComponents' in designOptions;
 };
 
-export const isIndicatorCanvasProps = (chartData: IndicatorCanvasProps) =>
-  isIndicatorChartData(chartData.chartData) &&
-  isIndicatorChartDataOptionsInternal(chartData.dataOptions) &&
-  isIndicatorDesignOptions(chartData.designOptions);
+export const isIndicatorCanvasProps = (props: ChartRendererProps): props is IndicatorCanvasProps =>
+  !!props.chartData &&
+  isIndicatorChartData(props.chartData) &&
+  isIndicatorChartDataOptionsInternal(props.dataOptions) &&
+  isIndicatorDesignOptions(props.designOptions);

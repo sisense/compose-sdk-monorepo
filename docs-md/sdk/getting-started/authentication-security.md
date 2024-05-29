@@ -64,7 +64,7 @@ export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
 Sisense Web Access Tokens (WATs) impersonate specific Sisense users. Typically, in a production environment you create a Sisense user specifically for using Compose SDK. You grant that user the permissions you want to expose in your application and use a WAT that impersonates that user.
 
 ::: tip Note
-Compose SDK only supports Opaque Tokens (By Reference).
+When using a Structured Token (By Value) you can enforce row level security using an `acl` claim. All other claims are not supported.
 :::
 
 #### Create a WAT

@@ -5,16 +5,15 @@ import {
 import { AreamapData, ChartData } from '../../../chart-data/types.js';
 import { AreamapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
 import { DesignOptions } from '../../../chart-options-processor/translations/types.js';
-import { ThemeSettings } from '../../../types.js';
 import { AreamapMap } from './areamap-map.js';
 import { useGeoJson } from './use-geo-json.js';
 import { AreamapDataPointEventHandler } from '../../../props';
+import { ChartRendererProps } from '@/chart/types.js';
 
 export type AreamapProps = {
   chartData: AreamapData;
   dataOptions: AreamapChartDataOptionsInternal;
   designOptions: AreamapChartDesignOptions;
-  themeSettings: ThemeSettings;
   onDataPointClick?: AreamapDataPointEventHandler;
 };
 
@@ -58,7 +57,8 @@ const isAreamapChartDesignOptions = (
   return 'mapType' in designOptions;
 };
 
-export const isAreamapProps = (props: AreamapProps) =>
+export const isAreamapProps = (props: ChartRendererProps): props is AreamapProps =>
+  !!props.chartData &&
   isAreamapData(props.chartData) &&
   isAreamapDataOptions(props.dataOptions) &&
   isAreamapChartDesignOptions(props.designOptions);

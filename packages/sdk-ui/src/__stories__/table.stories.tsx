@@ -32,13 +32,55 @@ const dataOptions = {
 };
 
 const styleOptions: TableStyleOptions = {
-  headersColor: true,
-  alternatingRowsColor: true,
-  alternatingColumnsColor: false,
+  header: { color: { enabled: true } },
+  rows: { alternatingColor: { enabled: true } },
+  columns: { alternatingColor: { enabled: false } },
 };
 
 export const Default = () => (
   <Table dataSet={dataSet} dataOptions={dataOptions} styleOptions={styleOptions} />
+);
+
+export const WithCustomColoring = () => (
+  <Table
+    dataSet={dataSet}
+    dataOptions={dataOptions}
+    styleOptions={{
+      header: {
+        color: {
+          enabled: true,
+          textColor: 'red',
+          backgroundColor: 'blue',
+        },
+      },
+      rows: {
+        alternatingColor: {
+          enabled: true,
+          textColor: 'green',
+          backgroundColor: 'yellow',
+        },
+      },
+      columns: {
+        alternatingColor: {
+          enabled: true,
+          textColor: 'purple',
+          backgroundColor: 'orange',
+        },
+      },
+    }}
+  />
+);
+
+export const WithAutoWidth = () => (
+  <Table
+    dataSet={dataSet}
+    dataOptions={dataOptions}
+    styleOptions={{
+      columns: {
+        width: 'auto',
+      },
+    }}
+  />
 );
 
 export const WithEmptyRows = () => (

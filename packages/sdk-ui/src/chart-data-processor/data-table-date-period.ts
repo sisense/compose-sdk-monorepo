@@ -2,32 +2,31 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/default-param-last */
 /* eslint-disable max-params */
-import {
-  addDays,
-  addMonths,
-  addQuarters,
-  addWeeks,
-  addYears,
-  format,
-  getDay,
-  getHours,
-  getMonth,
-  getQuarter,
-  getTime,
-  parseISO,
-  startOfDay,
-  startOfMonth,
-  startOfQuarter,
-  startOfWeek,
-  startOfYear,
-  subDays,
-  subMonths,
-  subQuarters,
-  subWeeks,
-  subYears,
-} from 'date-fns';
-import type { Locale } from 'date-fns';
+import addMonths from 'date-fns/addMonths';
+import subMonths from 'date-fns/subMonths';
+import startOfWeek from 'date-fns/startOfWeek';
+
+import addDays from 'date-fns/addDays';
+import addQuarters from 'date-fns/addQuarters';
+import addWeeks from 'date-fns/addWeeks';
+import format from 'date-fns/format';
+import getDay from 'date-fns/getDay';
+import getHours from 'date-fns/getHours';
+import getMonth from 'date-fns/getMonth';
+import addYears from 'date-fns/addYears';
+import getQuarter from 'date-fns/getQuarter';
+import getTime from 'date-fns/getTime';
+import parseISO from 'date-fns/parseISO';
+import startOfDay from 'date-fns/startOfDay';
+import startOfMonth from 'date-fns/startOfMonth';
+import startOfQuarter from 'date-fns/startOfQuarter';
+import startOfYear from 'date-fns/startOfYear';
+import subDays from 'date-fns/subDays';
+import subQuarters from 'date-fns/subQuarters';
+import subWeeks from 'date-fns/subWeeks';
+import subYears from 'date-fns/subYears';
 import { enUS, de, fr, es, it, ja, ko, nl, pt, ru, tr, zhCN } from 'date-fns/locale';
+
 import range from 'lodash/range';
 
 export type SystemSettings = { language: string };

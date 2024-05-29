@@ -1,15 +1,13 @@
-import React, { useMemo, type FunctionComponent } from 'react';
+import { useMemo, type FunctionComponent } from 'react';
 import { type Filter } from '@sisense/sdk-data';
 import { ChartWidget } from '../widgets/chart-widget';
-import { TableWidget } from '../widgets/table-widget';
-import { ChartWidgetProps, DashboardWidgetProps, TableWidgetProps } from '../props';
+import { ChartWidgetProps, DashboardWidgetProps } from '../props';
 import { useThemeContext } from '../theme-provider';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import {
   convertFilterRelationsModelToJaql,
   getFilterRelationsFromJaql,
   isPivotWidget,
-  isTableWidget,
   mergeFilters,
   mergeFiltersByStrategy,
 } from './utils';
@@ -23,9 +21,7 @@ function getWidgetProps(widgetModel: WidgetModel) {
   const { widgetType } = widgetModel;
   let props;
 
-  if (isTableWidget(widgetType)) {
-    props = widgetModel.getTableWidgetProps();
-  } else if (isPivotWidget(widgetType)) {
+  if (isPivotWidget(widgetType)) {
     props = widgetModel.getPivotTableWidgetProps();
   } else {
     props = widgetModel.getChartWidgetProps();
@@ -123,26 +119,13 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     ),
   );
 
-  if (isTableWidget(widgetType)) {
-    return (
-      <TableWidget
-        {...(fetchedProps as TableWidgetProps)}
-        {...restProps}
-        filters={filterRelations}
-        styleOptions={{
-          ...fetchedProps.styleOptions,
-          ...props.styleOptions,
-        }}
-      />
-    );
-  }
-
   if (isPivotWidget(widgetType)) {
     return (
       <PivotTableWidget
         {...(fetchedProps as PivotTableWidgetProps)}
         {...restProps}
         filters={filterRelations}
+        highlights={highlights}
         styleOptions={{
           ...fetchedProps.styleOptions,
           ...props.styleOptions,

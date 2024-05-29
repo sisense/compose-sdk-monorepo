@@ -29,7 +29,7 @@ export const dimensionalModelECommerce = {
           type: 'text-attribute',
         },
         {
-          expression: '[Category.Category ID]',
+          expression: "[Category.'Category ID']",
           name: 'Category ID',
           type: 'numeric-attribute',
         },
@@ -51,7 +51,7 @@ export const dimensionalModelECommerce = {
           type: 'numeric-attribute',
         },
         {
-          expression: '[Commerce.Category ID]',
+          expression: "[Commerce.'Category ID']",
           name: 'Category ID',
           type: 'numeric-attribute',
         },

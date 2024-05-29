@@ -2,6 +2,33 @@ import debounce from 'lodash/debounce';
 import { FunctionComponent, useMemo, useState } from 'react';
 import { Checkbox } from '../common';
 import { Member, SelectedMember } from './members-reducer';
+import styled from '@emotion/styled';
+
+const SearchInput = styled.input`
+  font-size: 13px;
+  padding-left: 0.75rem;
+  background-color: transparent;
+  color: inherit;
+  outline: none;
+  border: none;
+  appearance: none;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  &::placeholder {
+    color: inherit;
+    opacity: 0.75;
+  }
+`;
 
 const SEARCH_DELAY_MS = 300;
 const SearchBox: FunctionComponent<{
@@ -12,8 +39,7 @@ const SearchBox: FunctionComponent<{
   const debouncedOnChange = debounce((v: string) => onChange(v), delayMs);
 
   return (
-    <input
-      className="csdk-text-[13px] focus:csdk-outline-none csdk-pl-3"
+    <SearchInput
       placeholder="Start typing to search..."
       disabled={disabled}
       onChange={(e) => {

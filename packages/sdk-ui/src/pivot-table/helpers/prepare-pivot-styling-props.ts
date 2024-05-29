@@ -2,6 +2,8 @@ import { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
 import { getDarkFactor, getSlightlyDifferentColor, toColor } from '@/utils/color';
 
 const PIVOT_DEFAULT_BORDER_COLOR = '#cbced7';
+const PIVOT_DEFAULT_HIGHLIGHT_COLOR = '#ffff9c';
+
 export function preparePivotStylingProps(
   styleOptions?: PivotTableStyleOptions,
   themeSettings?: CompleteThemeSettings,
@@ -36,5 +38,6 @@ export function preparePivotStylingProps(
     isAutoHeight: styleOptions?.isAutoHeight ?? false,
     navigationPrimaryColor: themeSettings?.typography?.primaryTextColor,
     navigationSecondaryColor: themeSettings?.typography?.secondaryTextColor,
+    selectionColor: styleOptions?.highlightColor ?? PIVOT_DEFAULT_HIGHLIGHT_COLOR,
   };
 }

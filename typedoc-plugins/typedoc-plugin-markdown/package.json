@@ -41,6 +41,7 @@
     "typedoc": ">=0.25.12"
   },
   "devDependencies": {
+    "prettier": "^3.0.2",
     "typescript": "^5.2.2"
   }
 }

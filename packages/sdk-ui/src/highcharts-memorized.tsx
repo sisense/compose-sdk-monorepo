@@ -8,6 +8,7 @@ import { HighchartsEventOptions } from './chart-options-processor/apply-event-ha
 import {
   HighchartsOptionsInternal,
   HighchartsOptions,
+  SeriesType,
 } from './chart-options-processor/chart-options-service';
 import { usePrevious } from './common/hooks/use-previous';
 
@@ -35,6 +36,9 @@ export const HighchartsReactMemoized = memo(
       [options],
     );
 
+    const hasMarkers = (series: SeriesType[] | undefined) =>
+      series?.some(({ data }) => data.some((dataPoint) => !!dataPoint.marker));
+
     // changing axis type requires a chart re-initialization
     const isAxisTypeChanged =
       prevOptions?.xAxis &&
@@ -45,10 +49,13 @@ export const HighchartsReactMemoized = memo(
     const isNavigatorStateChanged =
       !!prevOptions && prevOptions?.navigator?.enabled !== options?.navigator?.enabled;
 
+    const isDeselectAllHighlights = hasMarkers(prevOptions?.series) && !hasMarkers(options?.series);
+
     // changing chart type requires a chart re-initialization
     const isChartTypeChanged = !!prevOptions && prevOptions?.chart?.type !== options?.chart?.type;
 
-    const immutable = isAxisTypeChanged || isNavigatorStateChanged || isChartTypeChanged;
+    const immutable =
+      isAxisTypeChanged || isNavigatorStateChanged || isChartTypeChanged || isDeselectAllHighlights;
 
     return (
       <HighchartsReact

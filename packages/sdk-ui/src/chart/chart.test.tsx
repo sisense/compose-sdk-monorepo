@@ -6,6 +6,7 @@ import { IndicatorStyleOptions } from '../types';
 import { Table } from '../table';
 import { ThemeProvider } from '../theme-provider';
 import { DataPointEventHandler, DataPointsEventHandler } from '../props';
+import { Data } from '@sisense/sdk-data';
 
 const dataSet = {
   columns: [
@@ -24,6 +25,29 @@ const dataSet = {
     ['2015', 'A', 5447, 80],
     ['2016', 'B', 4242, 70],
     ['2018', 'B', 936, 20],
+  ],
+};
+
+const rangeDataSet: Data = {
+  columns: [
+    { name: 'Years', type: 'date' },
+    { name: 'Group', type: 'string' },
+    { name: 'Cost Upper', type: 'number' },
+    { name: 'Cost Lower', type: 'number' },
+    { name: 'Qty Upper', type: 'number' },
+    { name: 'Qty Lower', type: 'number' },
+  ],
+  rows: [
+    ['2009', 'A', 9000, 15, 20000, 12000],
+    ['2010', 'A', 8500, 65, 19000, 12000],
+    ['2011', 'C', 1500, 55, 18000, 13000],
+    ['2012', 'C', 5300, 70, 22000, 13000],
+    ['2013', 'A', 2200, 45, 23000, 11000],
+    ['2014', 'A', 3200, 95, 24000, 11000],
+    ['2015', 'C', 5800, 85, 20000, 15000],
+    ['2016', 'C', 4400, 75, 19000, 10000],
+    ['2017', 'A', 2900, 50, 22000, 15000],
+    ['2018', 'C', 1100, 25, 24000, 14000],
   ],
 };
 
@@ -46,6 +70,23 @@ const meas2 = {
   column: { name: 'Units', aggregation: 'sum' },
   showOnRightAxis: false,
 };
+
+const rangeMeas1Upper = {
+  column: { name: 'Cost Upper', aggregation: 'sum' },
+};
+
+const rangeMeas1Lower = {
+  column: { name: 'Cost Lower', aggregation: 'sum' },
+};
+
+const rangeMeas2Upper = {
+  column: { name: 'Qty Upper', aggregation: 'sum' },
+};
+
+const rangeMeas2Lower = {
+  column: { name: 'Qty Lower', aggregation: 'sum' },
+};
+
 describe('Chart', () => {
   it('change theme of a chart', async () => {
     const { findByLabelText } = render(
@@ -166,25 +207,43 @@ describe('Chart', () => {
   });
 
   /**
-   * Test is skipped because of the 'jsdom' doesn't support SVGTextElement which is used in
+   * we prevent actual render because SVGTextElement is used in
    * `@sisense/sisense-charts` for pie chart rendering.
    * https://github.com/jsdom/jsdom/issues/3310
    * It is currently impossible to render pie-chart in the test environment.
    */
-  it.skip('render pie chart', async () => {
-    const { findByLabelText } = render(
-      <Chart
-        dataSet={dataSet}
-        chartType={'pie'}
-        dataOptions={{ category: [cat1], value: [meas1] }}
-        onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
-          return options;
-        }}
-      />,
-    );
-    const chart = await findByLabelText('chart-root');
-    expect(chart).toBeTruthy();
+  describe('pie chart', () => {
+    it('render pie chart with cat and value', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'pie'}
+          dataOptions={{ category: [cat1], value: [meas1] }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return {};
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
+
+    it('render pie chart with two values', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'pie'}
+          dataOptions={{ category: [], value: [meas1, meas2] }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return {};
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
   });
 
   it('render indicator chart', async () => {
@@ -301,5 +360,65 @@ describe('Chart', () => {
     );
     const overlayTitle = await container.findByText('No Results');
     expect(overlayTitle).toBeTruthy();
+  });
+
+  describe('range charts', () => {
+    it('render a area range chart two y and two x', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={rangeDataSet}
+          chartType={'arearange'}
+          dataOptions={{
+            category: [cat1, cat2],
+            value: [
+              {
+                title: 'Revenue',
+                upperBound: rangeMeas1Upper.column,
+                lowerBound: rangeMeas1Lower.column,
+              },
+              {
+                title: 'Cost',
+                upperBound: rangeMeas2Upper.column,
+                lowerBound: rangeMeas2Lower.column,
+                showOnRightAxis: true,
+              },
+            ],
+            breakBy: [],
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return options;
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
+    it('render a area range chart with break by', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={rangeDataSet}
+          chartType={'arearange'}
+          dataOptions={{
+            category: [cat1],
+            value: [
+              {
+                title: 'Revenue',
+                upperBound: rangeMeas1Upper.column,
+                lowerBound: rangeMeas1Lower.column,
+              },
+            ],
+            breakBy: [cat2],
+            seriesToColorMap: { A: 'red', B: 'blue', C: 'green' },
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return options;
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
   });
 });

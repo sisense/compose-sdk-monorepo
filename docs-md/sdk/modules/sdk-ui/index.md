@@ -9,9 +9,10 @@ title: sdk-ui
 React components for charts
 
 - [AreaChart](charts/function.AreaChart.md)
-- [AreamapChart](charts/function.AreamapChart.md) <Badge type="beta" text="Beta" />
+- [AreaRangeChart](charts/function.AreaRangeChart.md) <Badge type="beta" text="Beta" />
+- [AreamapChart](charts/function.AreamapChart.md)
 - [BarChart](charts/function.BarChart.md)
-- [BoxplotChart](charts/function.BoxplotChart.md) <Badge type="beta" text="Beta" />
+- [BoxplotChart](charts/function.BoxplotChart.md)
 - [Chart](charts/function.Chart.md)
 - [ColumnChart](charts/function.ColumnChart.md)
 - [FunnelChart](charts/function.FunnelChart.md)
@@ -20,7 +21,7 @@ React components for charts
 - [PieChart](charts/function.PieChart.md)
 - [PolarChart](charts/function.PolarChart.md)
 - [ScatterChart](charts/function.ScatterChart.md)
-- [ScattermapChart](charts/function.ScattermapChart.md) <Badge type="beta" text="Beta" />
+- [ScattermapChart](charts/function.ScattermapChart.md)
 - [SunburstChart](charts/function.SunburstChart.md)
 - [TreemapChart](charts/function.TreemapChart.md)
 
@@ -31,7 +32,7 @@ React components for charts
 
 ## Data Grids
 
-- [PivotTable](data-grids/function.PivotTable.md) <Badge type="alpha" text="Alpha" />
+- [PivotTable](data-grids/function.PivotTable.md) <Badge type="beta" text="Beta" />
 - [Table](data-grids/function.Table.md)
 
 ## Drilldown
@@ -56,7 +57,7 @@ React components for charts
 
 - [ExecuteQuery](queries/function.ExecuteQuery.md)
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
-- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md) <Badge type="alpha" text="Alpha" />
+- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md) <Badge type="beta" text="Beta" />
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 - [useQueryCache](queries/function.useQueryCache.md) <Badge type="alpha" text="Alpha" />
 

@@ -284,3 +284,34 @@ describe('Filters jaql preparations', () => {
     expect(jaql).toStrictEqual(result);
   });
 });
+
+describe('Disabled Filter', () => {
+  it('must prepare empty jaql for attribute filter', () => {
+    const filter = new MembersFilter(
+      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+      ['Female'],
+    );
+
+    expect(filter.disabled).toBe(false);
+
+    filter.disabled = true;
+    expect(filter.jaql(true)).toStrictEqual({ filter: {} });
+    expect(filter.jaql()).toStrictEqual({ jaql: { filter: {} } });
+  });
+
+  it('must prepare empty jaql for measure filter', () => {
+    const filter = new MeasureFilter(
+      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+      new DimensionalBaseMeasure(
+        'Cost',
+        new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+        'sum',
+      ),
+    );
+    expect(filter.disabled).toBe(false);
+
+    filter.disabled = true;
+    expect(filter.jaql(true)).toStrictEqual({ filter: {} });
+    expect(filter.jaql()).toStrictEqual({ jaql: { filter: {} } });
+  });
+});

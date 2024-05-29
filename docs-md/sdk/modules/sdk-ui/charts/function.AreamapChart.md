@@ -2,9 +2,9 @@
 title: AreamapChart
 ---
 
-# Function AreamapChart <Badge type="beta" text="Beta" />
+# Function AreamapChart
 
-> **AreamapChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **AreamapChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component for visualizing geographical data as colored polygons on a map.
 
@@ -26,7 +26,6 @@ Areamap chart displaying total revenue per country from the Sample ECommerce dat
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`AreamapChartProps`](../interfaces/interface.AreamapChartProps.md) | Areamap chart properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

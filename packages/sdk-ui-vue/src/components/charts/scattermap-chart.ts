@@ -41,7 +41,6 @@ import { setupHelper } from '../../setup-helper';
  * @param props - Scattermap chart properties
  * @returns Scattermap Chart component
  * @group Charts
- * @beta
  */
 export const ScattermapChart = defineComponent({
   props: {

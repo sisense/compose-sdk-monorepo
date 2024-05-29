@@ -20,7 +20,7 @@ export type AiContextProviderProps = {
  * React component that wraps all generative AI components and hooks.
  *
  * ::: warning Note
- * This component is currently under private beta for selected customers and is subject to change as we make fixes and improvements.
+ * This component is currently under beta release for selected customers and is subject to change as we make fixes and improvements.
  * :::
  *
  * @example

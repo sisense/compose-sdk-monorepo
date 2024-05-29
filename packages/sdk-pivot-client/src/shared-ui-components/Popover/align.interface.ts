@@ -10,9 +10,11 @@ export enum AlignPoints {
   bottomRight = 'br',
 }
 
+type OffsetType = number | `${number}%`;
+
 export interface PositioningConfig {
   points?: AlignPoints[];
-  offset?: number[];
-  targetOffset?: string[]; // ['30%', '40%'] - the offset targetNode by 30% of targetNode width in x and 40% of targetNode height in y
+  offset?: OffsetType[];
+  targetOffset?: OffsetType[]; // ['30%', '40%'] - the offset targetNode by 30% of targetNode width in x and 40% of targetNode height in y
   overflow?: { adjustX?: boolean; adjustY?: boolean };
 }

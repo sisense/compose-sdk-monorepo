@@ -19,7 +19,7 @@ import {
   limitRows,
 } from './table-processor';
 import { createSortableTable, TableData } from './table-creators';
-import { parseISO } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
 import cloneDeep from 'lodash/cloneDeep';
 
 const tableData: TableData = {

@@ -5,7 +5,7 @@ import { Member, membersReducer } from './members-reducer';
 interface Props {
   initialMembers: Member[];
   initialSelectedMembers: Member[];
-  onUpdateSelectedMembers?: (members: string[]) => void;
+  onUpdateSelectedMembers?: (members: string[], disabled?: boolean) => void;
   disabled: boolean;
 }
 
@@ -29,7 +29,7 @@ export const useMembers = ({
   useEffect(() => {
     if (disabled !== prevDisabledRef.current) {
       prevDisabledRef.current = disabled;
-      onUpdateSelectedMembers?.(disabled ? [] : activeSelectedMembers);
+      onUpdateSelectedMembers?.(disabled ? [] : activeSelectedMembers, disabled);
     }
   }, [disabled, activeSelectedMembers, onUpdateSelectedMembers]);
 
@@ -37,9 +37,9 @@ export const useMembers = ({
   useEffect(() => {
     if (!isEqual(selectedMembers, prevSelectedMembersRef.current)) {
       prevSelectedMembersRef.current = selectedMembers;
-      onUpdateSelectedMembers?.(activeSelectedMembers);
+      onUpdateSelectedMembers?.(activeSelectedMembers, disabled);
     }
-  }, [selectedMembers, activeSelectedMembers, onUpdateSelectedMembers]);
+  }, [selectedMembers, activeSelectedMembers, onUpdateSelectedMembers, disabled]);
 
   return {
     members,

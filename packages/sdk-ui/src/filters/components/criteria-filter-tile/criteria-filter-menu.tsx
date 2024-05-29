@@ -54,7 +54,6 @@ const CriteriaFilterMenuSingle: FunctionComponent<CriteriaFilterMenuProps> = (pr
         onUpdate?.([newVal]);
       }}
       required={true}
-      variant={'white'}
       disabled={disabled}
     />
   );
@@ -76,7 +75,6 @@ const CriteriaFilterMenuDouble: FunctionComponent<CriteriaFilterMenuProps> = (pr
           onUpdate?.([newVal, defaultValues?.[1]]);
         }}
         required={true}
-        variant={'white'}
         disabled={disabled}
       />
       <BasicInput
@@ -87,7 +85,6 @@ const CriteriaFilterMenuDouble: FunctionComponent<CriteriaFilterMenuProps> = (pr
           onUpdate?.([defaultValues?.[0], newVal]);
         }}
         required={true}
-        variant={'white'}
         disabled={disabled}
       />
     </>
@@ -175,7 +172,6 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
           if (newVal) onUpdate?.([Number(newVal), defaultValues?.[1]]);
         }}
         required={true}
-        variant={'white'}
         disabled={disabled}
       />
       {measures && measures.length > 0

@@ -4,10 +4,7 @@ title: betaFunction
 
 # Function betaFunction <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 
-> **betaFunction**(
-  `paramZ`,
-  `paramG`,
-  `paramA`): `number`
+> **betaFunction**(`paramZ`): `number`
 
 This is a function with multiple arguments and a return value.
 
@@ -18,8 +15,6 @@ Testing new tag for fusion embed
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `paramZ` | `string` | This is a string parameter. |
-| `paramG` | \{<br />  `prop`: `string`;<br /> } & \{<br />  `prop`: `number`;<br /> } | This is a parameter with intersection type literal. |
-| `paramA` | [`SomePropInterface`](../interfaces/interface.SomePropInterface.md) | This is a **parameter** pointing to an interface. |
 
 ## Returns
 

@@ -75,6 +75,8 @@ export const useTableData = ({
           filterRelations,
           count: count + 1,
           offset,
+          // ungroup is needed so query without aggregation returns correct result
+          ungroup: true,
         },
         app,
       )

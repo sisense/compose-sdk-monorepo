@@ -40,6 +40,7 @@ const dashboardMock = {
   oid: 'dashboard-123',
   title: 'Test Dashboard',
   dataSource: 'Test Datasource',
+  filters: [],
 };
 
 const getDashboardModelMock = getDashboardModel as Mock<

@@ -28,7 +28,7 @@ export var Category = createDimension({
     CategoryID: createAttribute({
         name: 'CategoryID',
         type: 'numeric-attribute',
-        expression: '[Category.Category ID]',
+        expression: "[Category.'Category ID']",
     }),
 });
 export var Commerce = createDimension({
@@ -46,7 +46,7 @@ export var Commerce = createDimension({
     CategoryID: createAttribute({
         name: 'CategoryID',
         type: 'numeric-attribute',
-        expression: '[Commerce.Category ID]',
+        expression: "[Commerce.'Category ID']",
     }),
     Condition: createAttribute({
         name: 'Condition',
@@ -183,7 +183,7 @@ export const Category = createDimension({
     CategoryID: createAttribute({
         name: 'CategoryID',
         type: 'numeric-attribute',
-        expression: '[Category.Category ID]',
+        expression: "[Category.'Category ID']",
     }),
 }) as CategoryDimension;
 
@@ -216,7 +216,7 @@ export const Commerce = createDimension({
     CategoryID: createAttribute({
         name: 'CategoryID',
         type: 'numeric-attribute',
-        expression: '[Commerce.Category ID]',
+        expression: "[Commerce.'Category ID']",
     }),
     Condition: createAttribute({
         name: 'Condition',
@@ -325,7 +325,7 @@ export const Category = createDimension({
     CategoryID: createAttribute({
         name: 'CategoryID',
         type: 'numeric-attribute',
-        expression: '[Category.Category ID]',
+        expression: "[Category.'Category ID']",
     }),
 }) as CategoryDimension;
 
@@ -358,7 +358,7 @@ export const Commerce = createDimension({
     CategoryID: createAttribute({
         name: 'CategoryID',
         type: 'numeric-attribute',
-        expression: '[Commerce.Category ID]',
+        expression: "[Commerce.'Category ID']",
     }),
     Condition: createAttribute({
         name: 'Condition',

@@ -1,6 +1,7 @@
 import { ScattermapChartProps } from './props';
-import { Chart, shouldSkipSisenseContextWaiting } from './chart';
+import { Chart } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
 /**
  * A React component that allows to visualize geographical data as data points on a map.
  *
@@ -18,7 +19,6 @@ import { asSisenseComponent } from './decorators/component-decorators/as-sisense
  * @param props - Scattermap chart properties
  * @returns Scattermap Chart component
  * @group Charts
- * @beta
  */
 export const ScattermapChart = asSisenseComponent({
   componentName: 'ScattermapChart',

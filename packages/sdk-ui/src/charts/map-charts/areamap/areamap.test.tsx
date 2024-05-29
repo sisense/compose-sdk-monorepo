@@ -39,7 +39,6 @@ describe('Areamap', () => {
             mapType: 'world',
           } as AreamapChartDesignOptions
         }
-        themeSettings={{}}
       />,
     );
 

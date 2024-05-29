@@ -40,13 +40,14 @@ const pivotTableProps = ref<PivotTableProps>({
  * ```
  * <img src="media://vue-pivot-table-example.png" width="800px" />
  * @group Data Grids
- * @alpha
+ * @beta
  */
 export const PivotTable = defineComponent({
   props: {
     dataOptions: Object as PropType<PivotTableProps['dataOptions']>,
     dataSet: Object as PropType<PivotTableProps['dataSet']>,
     filters: Array as PropType<PivotTableProps['filters']>,
+    highlights: Array as PropType<PivotTableProps['highlights']>,
     refreshCounter: Number as PropType<PivotTableProps['refreshCounter']>,
     styleOptions: Object as PropType<PivotTableProps['styleOptions']>,
   },

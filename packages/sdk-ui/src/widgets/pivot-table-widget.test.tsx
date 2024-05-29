@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /** @vitest-environment jsdom */
 import { render } from '@testing-library/react';
 import { mockPivotTableWidgetProps } from './__mocks__/mocks';

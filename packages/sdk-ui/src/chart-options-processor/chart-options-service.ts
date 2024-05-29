@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable max-params */
 import cloneDeep from 'lodash/cloneDeep';
 import type {
   Options,
@@ -28,12 +26,14 @@ import { getCartesianChartOptions } from './cartesian-chart-options';
 import { getCategoricalChartOptions } from './category-chart-options';
 import { getScatterChartOptions } from './scatter-chart-options';
 import {
+  RangeChartDataOptionsInternal,
   BoxplotChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import { ScatterBubbleOptions } from './translations/scatter-plot-options';
 import { getBoxplotChartOptions } from './boxplot-chart-options';
+import { getRangeChartOptions } from './range-chart-options';
 
 // Notes: extends type by recreating it via `Pick` in order to force IntelliSense to use it as target type.
 /**
@@ -65,6 +65,17 @@ export const highchartsOptionsService = (
   dateFormatter?: (date: Date, format: string) => string,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   switch (chartData.type) {
+    case 'range': {
+      return getRangeChartOptions(
+        chartData,
+        chartType,
+        chartDesignOptions,
+        dataOptions as RangeChartDataOptionsInternal,
+        translate,
+        themeSettings,
+        dateFormatter,
+      );
+    }
     case 'cartesian': {
       return getCartesianChartOptions(
         chartData,
@@ -208,6 +219,11 @@ export type HighchartsOptionsInternal = {
     marginTop?: number;
     alignTicks?: boolean;
     polar: boolean;
+    zoomType?: 'x' | 'y';
+    scrollablePlotArea?: {
+      minWidth?: number;
+      scrollPositionX?: number;
+    };
     animation?: {
       duration?: number;
     };

@@ -82,25 +82,73 @@ export type AreamapChartDesignOptions = BaseDesignOptionsType & {
 };
 
 /**
+ * Configuration for Table color options
+ */
+export type TableColorOptions = {
+  /**
+   * Boolean flag whether to fill with color
+   */
+  enabled: boolean;
+  /**
+   * Color used for background fill
+   */
+  backgroundColor?: string;
+  /**
+   * Color used for text
+   */
+  textColor?: string;
+};
+
+/**
  * Configuration for Table design options
  *
  */
 export type TableDesignOptions = {
   /**
-   * Boolean flag responsible for header cells background color fill
+   * Vertical padding around whole table
+   * Default value is 20
    *
    */
-  headersColor?: boolean;
+  paddingVertical?: number;
   /**
-   * Boolean flag responsible for alternating rows background color fill
+   * Horizontal padding around whole table
+   * Default value is 20
    *
    */
-  alternatingRowsColor?: boolean;
+  paddingHorizontal?: number;
   /**
-   * Boolean flag responsible for alternating columns background color fill
-   *
+   * Header options
    */
-  alternatingColumnsColor?: boolean;
+  header?: {
+    /**
+     * Color of header
+     */
+    color?: TableColorOptions;
+  };
+  /**
+   * Columns options
+   */
+  columns?: {
+    /**
+     * Alternating color for columns
+     */
+    alternatingColor?: TableColorOptions;
+    /**
+     * Modes of columns width
+     * 'auto' - all columns will have the same width and fit the table width (no horizontal scroll)
+     * 'content' - columns width will be based on content (default option)
+     */
+    width?: 'auto' | 'content';
+  };
+  /**
+   * Rows options
+   */
+  rows?: {
+    /**
+     * Alternating color for rows
+     */
+    alternatingColor?: TableColorOptions;
+  };
 };
 
 export type IndicatorStyleType = 'numeric' | 'gauge';
@@ -166,3 +214,5 @@ export type BoxplotChartDesignOptions = BaseDesignOptionsType & {
 export type ScattermapChartDesignOptions = BaseDesignOptionsType & {
   markers: Required<ScattermapMarkers>;
 };
+
+export type AreaRangeChartDesignOptions = BaseDesignOptionsType;

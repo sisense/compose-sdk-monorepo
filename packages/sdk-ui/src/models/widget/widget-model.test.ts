@@ -116,6 +116,14 @@ describe('WidgetModel', () => {
         ],
       });
     });
+
+    it('should throw an error for pivot widget', () => {
+      const pivotWidgetModel = new WidgetModel(
+        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
+      );
+
+      expect(() => pivotWidgetModel.getExecuteQueryParams()).toThrow(TranslatableError);
+    });
   });
 
   describe('getExecutePivotQueryParams', () => {
@@ -160,210 +168,226 @@ describe('WidgetModel', () => {
         ],
       });
     });
-  });
 
-  describe('getChartProps', () => {
-    it('should throw an error for tabular widgets', () => {
-      const tableWidgetModel = new WidgetModel(
-        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
-      );
-
-      expect(() => tableWidgetModel.getChartProps()).toThrow(TranslatableError);
+    it('should throw an error for non-pivot widget', () => {
+      const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
+      expect(() => nonPivotWidgetModel.getExecutePivotQueryParams()).toThrow(TranslatableError);
     });
-    it('should return chart props for non-tabular widgets', () => {
-      const widget = new WidgetModel(mockWidgetDto);
-      const chartProps = widget.getChartProps();
 
-      expect(chartProps).toMatchObject({
-        chartType: 'indicator',
-        dataOptions: expect.objectContaining({
-          max: expect.arrayContaining([expect.objectContaining({ column: expect.any(Object) })]),
-          min: expect.arrayContaining([expect.objectContaining({ column: expect.any(Object) })]),
-          value: expect.arrayContaining([expect.objectContaining({ column: expect.any(Object) })]),
-        }),
-        styleOptions: expect.objectContaining({
-          skin: 1,
-          subtype: 'indicator/gauge',
-          indicatorComponents: expect.objectContaining({
-            labels: expect.objectContaining({
-              shouldBeShown: true,
-            }),
-            ticks: expect.objectContaining({
-              shouldBeShown: true,
-            }),
-            title: expect.objectContaining({
-              shouldBeShown: false,
-              text: expect.any(String),
-            }),
-            secondaryTitle: expect.objectContaining({
-              text: '',
+    describe('getChartProps', () => {
+      it('should throw an error for pivot widget', () => {
+        const pivotWidgetModel = new WidgetModel(
+          sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
+        );
+
+        expect(() => pivotWidgetModel.getChartProps()).toThrow(TranslatableError);
+      });
+      it('should return chart props for chart widgets', () => {
+        const widget = new WidgetModel(mockWidgetDto);
+        const chartProps = widget.getChartProps();
+
+        expect(chartProps).toMatchObject({
+          chartType: 'indicator',
+          dataOptions: expect.objectContaining({
+            max: expect.arrayContaining([expect.objectContaining({ column: expect.any(Object) })]),
+            min: expect.arrayContaining([expect.objectContaining({ column: expect.any(Object) })]),
+            value: expect.arrayContaining([
+              expect.objectContaining({ column: expect.any(Object) }),
+            ]),
+          }),
+          styleOptions: expect.objectContaining({
+            skin: 1,
+            subtype: 'indicator/gauge',
+            indicatorComponents: expect.objectContaining({
+              labels: expect.objectContaining({
+                shouldBeShown: true,
+              }),
+              ticks: expect.objectContaining({
+                shouldBeShown: true,
+              }),
+              title: expect.objectContaining({
+                shouldBeShown: false,
+                text: expect.any(String),
+              }),
+              secondaryTitle: expect.objectContaining({
+                text: '',
+              }),
             }),
           }),
-        }),
-        dataSet: 'Sample ECommerce',
-        filters: [],
+          dataSet: 'Sample ECommerce',
+          filters: [],
+        });
+      });
+
+      it('should return chart props for table widget', () => {
+        const tableWidgetDto = sampleHealthcareDashboard.widgets!.find(
+          (widget) => widget.type === 'tablewidget',
+        )!;
+        const tableWidget = new WidgetModel(tableWidgetDto);
+        const chartProps = tableWidget.getChartProps();
+
+        expect(chartProps).toMatchSnapshot();
       });
     });
-  });
 
-  describe('getTableProps', () => {
-    it('should throw an error for non-table widgets', () => {
-      const nonTableWidgetModel = new WidgetModel(mockWidgetDto);
-      expect(() => nonTableWidgetModel.getTableProps()).toThrow(TranslatableError);
-    });
-    it('should return TableProps for table widgets', () => {
-      const tableWidgetModel = new WidgetModel(
-        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
-      );
-      const tableProps = tableWidgetModel.getTableProps();
+    describe('getTableProps', () => {
+      it('should throw an error for non-table widgets', () => {
+        const nonTableWidgetModel = new WidgetModel(mockWidgetDto);
+        expect(() => nonTableWidgetModel.getTableProps()).toThrow(TranslatableError);
+      });
+      it('should return TableProps for table widgets', () => {
+        const tableWidgetModel = new WidgetModel(
+          sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
+        );
+        const tableProps = tableWidgetModel.getTableProps();
 
-      expect(tableProps).toMatchObject({
-        dataOptions: expect.objectContaining({
-          columns: expect.arrayContaining([
-            expect.objectContaining({
-              column: expect.objectContaining({
-                name: 'DIAGNOSIS',
+        expect(tableProps).toMatchObject({
+          dataOptions: expect.objectContaining({
+            columns: expect.arrayContaining([
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  name: 'DIAGNOSIS',
+                }),
               }),
-            }),
-            expect.objectContaining({
-              column: expect.objectContaining({
-                name: '# PATIENTS',
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  name: '# PATIENTS',
+                }),
               }),
-            }),
-            expect.objectContaining({
-              column: expect.objectContaining({
-                name: 'AVG COST',
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  name: 'AVG COST',
+                }),
               }),
-            }),
-          ]),
-        }),
-        styleOptions: expect.objectContaining({
-          alternatingColumnsColor: expect.any(Boolean),
-          alternatingRowsColor: expect.any(Boolean),
-          headersColor: expect.any(Boolean),
-        }),
-        dataSet: 'Sample Healthcare',
-        filters: [
-          {
-            attribute: {
-              id: '[Diagnosis.Description]',
+            ]),
+          }),
+          styleOptions: expect.objectContaining({
+            columns: { alternatingColor: { enabled: expect.any(Boolean) } },
+            rows: { alternatingColor: { enabled: expect.any(Boolean) } },
+            header: { color: { enabled: expect.any(Boolean) } },
+          }),
+          dataSet: 'Sample Healthcare',
+          filters: [
+            {
+              attribute: {
+                id: '[Diagnosis.Description]',
+              },
             },
-            type: 'filter',
-          },
-        ],
-      });
-    });
-  });
-
-  describe('getPivotTableProps', () => {
-    it('should throw an error for non-pivot widgets', () => {
-      const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
-      expect(() => nonPivotWidgetModel.getPivotTableProps()).toThrow(TranslatableError);
-    });
-    it('should return PivotTableProps for pivot widgets', () => {
-      const pivotWidgetModel = new WidgetModel(
-        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
-      );
-      const pivotProps = pivotWidgetModel.getPivotTableProps();
-
-      expect(pivotProps).toMatchObject({
-        dataOptions: expect.objectContaining({
-          rows: [
-            expect.objectContaining({ column: expect.objectContaining({ name: 'DIAGNOSIS' }) }),
           ],
-          values: expect.arrayContaining([
-            expect.objectContaining({
-              column: expect.objectContaining({
-                name: '# PATIENTS',
+        });
+      });
+    });
+
+    describe('getPivotTableProps', () => {
+      it('should throw an error for non-pivot widgets', () => {
+        const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
+        expect(() => nonPivotWidgetModel.getPivotTableProps()).toThrow(TranslatableError);
+      });
+      it('should return PivotTableProps for pivot widgets', () => {
+        const pivotWidgetModel = new WidgetModel(
+          sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
+        );
+        const pivotProps = pivotWidgetModel.getPivotTableProps();
+
+        expect(pivotProps).toMatchObject({
+          dataOptions: expect.objectContaining({
+            rows: [
+              expect.objectContaining({ column: expect.objectContaining({ name: 'DIAGNOSIS' }) }),
+            ],
+            values: expect.arrayContaining([
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  name: '# PATIENTS',
+                }),
               }),
-            }),
-            expect.objectContaining({
-              column: expect.objectContaining({
-                name: 'AVG COST',
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  name: 'AVG COST',
+                }),
               }),
-            }),
-            expect.objectContaining({
-              column: expect.objectContaining({
-                name: 'AVG DAYS ADMITTED',
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  name: 'AVG DAYS ADMITTED',
+                }),
               }),
-            }),
-          ]),
-        }),
-        styleOptions: expect.objectContaining({
-          alternatingColumnsColor: expect.any(Boolean),
-          alternatingRowsColor: expect.any(Boolean),
-          headersColor: expect.any(Boolean),
-        }),
-        dataSet: 'Sample Healthcare',
-        filters: [
-          {
-            attribute: {
-              id: '[Diagnosis.Description]',
+            ]),
+          }),
+          styleOptions: expect.objectContaining({
+            alternatingColumnsColor: expect.any(Boolean),
+            alternatingRowsColor: expect.any(Boolean),
+            headersColor: expect.any(Boolean),
+          }),
+          dataSet: 'Sample Healthcare',
+          filters: [
+            {
+              attribute: {
+                id: '[Diagnosis.Description]',
+              },
+              type: 'filter',
             },
-            type: 'filter',
+          ],
+        });
+      });
+    });
+
+    describe('getChartWidgetProps', () => {
+      it('should return chart widget props correctly', () => {
+        const widget = new WidgetModel(mockWidgetDto);
+        const chartWidgetProps = widget.getChartWidgetProps();
+
+        expect(chartWidgetProps).toMatchObject({
+          // validate matching only basic shape of the object
+          chartType: 'indicator',
+          dataOptions: expect.objectContaining({
+            value: expect.arrayContaining([
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  name: '# of unique Brand ID',
+                  type: 'basemeasure',
+                }),
+              }),
+            ]),
+            secondary: [],
+            min: expect.arrayContaining([
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  type: 'calculatedmeasure',
+                }),
+              }),
+            ]),
+            max: expect.arrayContaining([
+              expect.objectContaining({
+                column: expect.objectContaining({
+                  type: 'calculatedmeasure',
+                }),
+              }),
+            ]),
+          }),
+          styleOptions: expect.objectContaining({
+            subtype: 'indicator/gauge',
+            skin: 1,
+            indicatorComponents: expect.any(Object),
+          }),
+          dataSource: 'Sample ECommerce',
+          filters: [],
+          title: 'TOTAL BRANDS',
+          description: '',
+          drilldownOptions: {
+            drilldownDimensions: [],
+            drilldownSelections: [],
           },
-        ],
+        });
       });
-    });
-  });
 
-  describe('getChartWidgetProps', () => {
-    it('should return chart widget props correctly', () => {
-      const widget = new WidgetModel(mockWidgetDto);
-      const chartWidgetProps = widget.getChartWidgetProps();
+      it('should throw an error for non-chart widgets', () => {
+        const tableWidgetModel = new WidgetModel(
+          sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
+        );
 
-      expect(chartWidgetProps).toMatchObject({
-        // validate matching only basic shape of the object
-        chartType: 'indicator',
-        dataOptions: expect.objectContaining({
-          value: expect.arrayContaining([
-            expect.objectContaining({
-              column: expect.objectContaining({
-                name: '# of unique Brand ID',
-                type: 'basemeasure',
-              }),
-            }),
-          ]),
-          secondary: [],
-          min: expect.arrayContaining([
-            expect.objectContaining({
-              column: expect.objectContaining({
-                type: 'calculatedmeasure',
-              }),
-            }),
-          ]),
-          max: expect.arrayContaining([
-            expect.objectContaining({
-              column: expect.objectContaining({
-                type: 'calculatedmeasure',
-              }),
-            }),
-          ]),
-        }),
-        styleOptions: expect.objectContaining({
-          subtype: 'indicator/gauge',
-          skin: 1,
-          indicatorComponents: expect.any(Object),
-        }),
-        dataSource: 'Sample ECommerce',
-        filters: [],
-        title: 'TOTAL BRANDS',
-        description: '',
-        drilldownOptions: {
-          drilldownDimensions: [],
-          drilldownSelections: [],
-        },
+        expect(() => {
+          tableWidgetModel.getChartWidgetProps();
+        }).toThrow(TranslatableError);
       });
-    });
-
-    it('should throw an error for non-chart widgets', () => {
-      const tableWidgetModel = new WidgetModel(
-        sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
-      );
-
-      expect(() => {
-        tableWidgetModel.getChartWidgetProps();
-      }).toThrow(TranslatableError);
     });
   });
 
@@ -395,9 +419,9 @@ describe('WidgetModel', () => {
           ]),
         }),
         styleOptions: expect.objectContaining({
-          alternatingColumnsColor: expect.any(Boolean),
-          alternatingRowsColor: expect.any(Boolean),
-          headersColor: expect.any(Boolean),
+          columns: { alternatingColor: { enabled: expect.any(Boolean) } },
+          rows: { alternatingColor: { enabled: expect.any(Boolean) } },
+          header: { color: { enabled: expect.any(Boolean) } },
         }),
         dataSource: 'Sample Healthcare',
         filters: [

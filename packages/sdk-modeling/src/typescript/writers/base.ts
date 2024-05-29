@@ -13,6 +13,10 @@ export function writeIndented(stream: NodeJS.WritableStream, s: string, idnt: nu
   stream.write(s);
 }
 
+export function escapeSpecialChars(expression: string) {
+  return expression.replace(/'/g, "\\'");
+}
+
 // export function ident(stream:WriteStream, ident:number) {
 
 //     if (ident > 0) {

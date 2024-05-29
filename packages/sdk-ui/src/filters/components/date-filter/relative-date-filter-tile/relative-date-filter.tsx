@@ -129,7 +129,6 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
             }
           }}
           required={true}
-          variant={'white'}
           disabled={disabled}
         />
         <div className="csdk-h-6">

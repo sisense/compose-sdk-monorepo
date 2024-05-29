@@ -2,9 +2,9 @@
 title: PivotTable
 ---
 
-# Function PivotTable <Badge type="alpha" text="Alpha" />
+# Function PivotTable <Badge type="beta" text="Beta" />
 
-> **PivotTable**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **PivotTable**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 Pivot table with pagination.
 
@@ -13,7 +13,6 @@ Pivot table with pagination.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`PivotTableProps`](../interfaces/interface.PivotTableProps.md) | Pivot Table properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

@@ -12,20 +12,32 @@ import {
 } from '../chart-options-processor/chart-options-service';
 import { applyThemeToChart } from '../chart-options-processor/theme-option-service';
 import { applyCommonHighchartsOptions } from '../chart-options-processor/common-highcharts-option-service';
-import { ChartDesignOptions } from '../chart-options-processor/translations/types';
-import { ChartType, CompleteThemeSettings } from '../types';
+import {
+  BoxplotChartType,
+  BOXPLOT_CHART_TYPES,
+  CartesianChartType,
+  CARTESIAN_CHART_TYPES,
+  CategoricalChartType,
+  CATEGORICAL_CHART_TYPES,
+  ChartDesignOptions,
+  ScatterChartType,
+  SCATTER_CHART_TYPES,
+  RANGE_CHART_TYPES,
+} from '../chart-options-processor/translations/types';
+import { ChartType } from '../types';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { applyDateFormat } from '../query/date-formats';
 import AlertBox from '../alert-box/alert-box';
 import { HighchartsReactMemoized } from '../highcharts-memorized';
 import { SisenseChartDataPointEventHandler, SisenseChartDataPointsEventHandler } from './types';
+import { ChartRendererProps } from '@/chart/types';
+import { useThemeContext } from '..';
 
 export interface SisenseChartProps {
-  chartType: ChartType;
+  chartType: SisenseChartType;
   chartData: ChartData;
   dataOptions: ChartDataOptionsInternal;
   designOptions: ChartDesignOptions;
-  themeSettings?: CompleteThemeSettings;
   onDataPointClick?: SisenseChartDataPointEventHandler;
   onDataPointContextMenu?: SisenseChartDataPointEventHandler;
   onDataPointsSelected?: SisenseChartDataPointsEventHandler;
@@ -42,7 +54,6 @@ export const SisenseChart = ({
   chartData,
   dataOptions,
   designOptions,
-  themeSettings,
   onDataPointClick,
   onDataPointContextMenu,
   onDataPointsSelected,
@@ -58,6 +69,8 @@ export const SisenseChart = ({
       applyDateFormat(date, format, app?.settings.locale, app?.settings.dateConfig),
     [],
   );
+
+  const { themeSettings } = useThemeContext();
 
   const options = useMemo((): HighchartsOptionsInternal | null => {
     const { options: highchartsOptions, alerts: highchartsOptionsAlerts } =
@@ -124,4 +137,26 @@ export const SisenseChart = ({
       </div>
     )
   );
+};
+
+const ALL_CHARTS_RENDERED_BY_SISENSE_CHART: ChartType[] = [
+  ...CARTESIAN_CHART_TYPES,
+  ...CATEGORICAL_CHART_TYPES,
+  ...SCATTER_CHART_TYPES,
+  ...BOXPLOT_CHART_TYPES,
+  ...RANGE_CHART_TYPES,
+];
+
+export const isSisenseChartType = (chartType: ChartType): chartType is SisenseChartType => {
+  return ALL_CHARTS_RENDERED_BY_SISENSE_CHART.includes(chartType);
+};
+
+export type SisenseChartType =
+  | CartesianChartType
+  | CategoricalChartType
+  | ScatterChartType
+  | BoxplotChartType;
+
+export const isSisenseChartProps = (props: ChartRendererProps): props is SisenseChartProps => {
+  return !!props.chartType && isSisenseChartType(props.chartType) && !!props.chartData;
 };

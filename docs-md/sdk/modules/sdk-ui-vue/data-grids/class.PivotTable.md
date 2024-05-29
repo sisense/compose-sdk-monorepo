@@ -2,7 +2,7 @@
 title: PivotTable
 ---
 
-# Class PivotTable <Badge type="alpha" text="Alpha" />
+# Class PivotTable <Badge type="beta" text="Beta" />
 
 A Vue component for Pivot table with pagination.
 
@@ -57,6 +57,12 @@ const pivotTableProps = ref<PivotTableProps>({
 ### filters
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
+
+***
+
+### highlights
+
+> **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 ***
 

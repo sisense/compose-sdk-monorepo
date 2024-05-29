@@ -289,9 +289,21 @@ function extractScatterChartDataOptions(
 
 export function extractTableChartStyleOptions(widgetStyle: TableWidgetStyle): TableStyleOptions {
   return {
-    alternatingColumnsColor: widgetStyle['colors/columns'],
-    alternatingRowsColor: widgetStyle['colors/rows'],
-    headersColor: widgetStyle['colors/headers'],
+    header: {
+      color: {
+        enabled: widgetStyle['colors/headers'],
+      },
+    },
+    rows: {
+      alternatingColor: {
+        enabled: widgetStyle['colors/rows'],
+      },
+    },
+    columns: {
+      alternatingColor: {
+        enabled: widgetStyle['colors/columns'],
+      },
+    },
   };
 }
 

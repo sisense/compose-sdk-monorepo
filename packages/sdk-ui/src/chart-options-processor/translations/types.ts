@@ -13,6 +13,7 @@ import {
   BoxplotChartDesignOptions,
   AreamapChartDesignOptions,
   ScattermapChartDesignOptions,
+  AreaRangeChartDesignOptions,
   BaseDesignOptionsType,
 } from './design-options';
 
@@ -39,17 +40,20 @@ export type ScatterChartType = (typeof SCATTER_CHART_TYPES)[number];
 
 export const TABLE_TYPES = ['table'] as const;
 /** Table chart types @expandType */
-export type TableType = (typeof TABLE_TYPES)[number];
+export type TableChartType = (typeof TABLE_TYPES)[number];
+
+/** Table chart types @expandType */
+export type TableType = TableChartType;
 
 const INDICATOR_CHART_TYPES = ['indicator'] as const;
 /** Indicator chart types @expandType */
 export type IndicatorChartType = (typeof INDICATOR_CHART_TYPES)[number];
 
-const BOXPLOT_CHART_TYPES = ['boxplot'] as const;
+export const BOXPLOT_CHART_TYPES = ['boxplot'] as const;
 /** Boxplot chart types  @expandType */
 export type BoxplotChartType = (typeof BOXPLOT_CHART_TYPES)[number];
 
-const AREAMAP_CHART_TYPES = ['areamap'] as const;
+export const AREAMAP_CHART_TYPES = ['areamap'] as const;
 /** Areamap chart types @expandType */
 export type AreamapChartType = (typeof AREAMAP_CHART_TYPES)[number];
 
@@ -60,6 +64,10 @@ export const SCATTERMAP_CHART_TYPES = ['scattermap'] as const;
 /** Scattermap chart types  @expandType */
 export type ScattermapChartType = (typeof SCATTERMAP_CHART_TYPES)[number];
 
+export const RANGE_CHART_TYPES = ['arearange'] as const;
+/** AreaRange chart types  @expandType */
+export type RangeChartType = (typeof RANGE_CHART_TYPES)[number];
+
 // ChartDataType is the category of data structure for a group of charts,
 // e.g. the ChartDataType of both "line" and "bar" charts is "cartesian",
 // but a bubble/scatter chart would be a different data type.
@@ -69,7 +77,8 @@ export type ChartDataType =
   | 'scatter'
   | 'table'
   | 'indicator'
-  | 'areamap';
+  | 'areamap'
+  | 'arearange';
 
 /**
  * Design options for a specific chart type
@@ -101,6 +110,8 @@ export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
     ? AreamapChartDesignOptions
     : SpecificChartType extends 'scattermap'
     ? ScattermapChartDesignOptions
+    : SpecificChartType extends 'arearange'
+    ? AreaRangeChartDesignOptions
     : never;
 
 /** A unique identifier for a series to be found in {@link ChartDataOptionsInternal} */
@@ -159,6 +170,10 @@ export const isBoxplot = (chartType: ChartType): chartType is BoxplotChartType =
 
 export const isAreamap = (chartType: ChartType): chartType is AreamapChartType => {
   return AREAMAP_CHART_TYPES.find((value) => value === chartType) !== undefined;
+};
+
+export const isRange = (chartType: ChartType): chartType is RangeChartType => {
+  return RANGE_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
 
 /*

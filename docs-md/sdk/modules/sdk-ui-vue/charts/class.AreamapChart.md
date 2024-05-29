@@ -2,7 +2,7 @@
 title: AreamapChart
 ---
 
-# Class AreamapChart <Badge type="beta" text="Beta" />
+# Class AreamapChart
 
 A Vue component for visualizing geographical data as polygons on a map.
 

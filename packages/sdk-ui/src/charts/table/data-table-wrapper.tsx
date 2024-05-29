@@ -10,6 +10,7 @@ import { calcColumnWidths } from './helpers/calc-column-widths';
 import {
   DATA_ELLIPSIZED_LENGTH,
   DATA_PADDING,
+  DEFAULT_PADDING,
   HEADER_ELLIPSIZED_LENGTH,
   HEADER_HEIGHT,
   HEADER_PADDING,
@@ -73,13 +74,23 @@ export const DataTableWrapper = ({
       ? customStyles.showFieldTypeIcon
       : true;
   const headerPadding = HEADER_PADDING + (showFieldTypeIcon ? HEADER_TYPE_ICON_SPACING : 0);
+  const verticalPadding = customStyles?.paddingVertical || DEFAULT_PADDING;
+  const horizontalPadding = customStyles?.paddingHorizontal || DEFAULT_PADDING;
 
   const columnsOptions = useMemo(
     () =>
       dataOptions.columns.map((col) => ({
         isHtml: (col as Category).isHtml ?? false,
+        ...(customStyles?.columns?.width === 'auto'
+          ? // minus 1px need to avoid crop of right border
+            {
+              width:
+                (width - horizontalPadding * 2) / dataOptions.columns.length -
+                1 / dataOptions.columns.length,
+            }
+          : null),
       })),
-    [dataOptions],
+    [dataOptions, width, customStyles?.columns?.width, horizontalPadding],
   );
 
   const [columnWidths, setColumnWidths] = useState<number[]>(() =>
@@ -139,13 +150,18 @@ export const DataTableWrapper = ({
   ]);
 
   return (
-    <div className={styles.tableWrapper}>
+    <div
+      className={styles.tableWrapper}
+      style={{
+        padding: `${verticalPadding}px ${horizontalPadding}px`,
+      }}
+    >
       <Table
         className={styles.table}
         rowHeight={customStyles?.rowHeight || ROW_HEIGHT}
         rowsCount={dataTable.rows.length}
-        width={width}
-        height={height}
+        width={width - horizontalPadding * 2}
+        height={height - verticalPadding * 2}
         headerHeight={customStyles?.headerHeight || HEADER_HEIGHT}
       >
         {dataTable.columns.map((column, colIndex) => {

@@ -14,7 +14,7 @@ describe('validateJaqlResponse', () => {
       database: 'Sample ECommerce',
     };
     expect(() => validateJaqlResponse(jaqlResponse)).toThrow(
-      new Error(`${jaqlResponse.details} ${jaqlResponse.database ?? ''}`),
+      `${jaqlResponse.details} ${jaqlResponse.database}`,
     );
   });
 

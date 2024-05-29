@@ -2,7 +2,7 @@
 title: PivotTableComponent
 ---
 
-# Class PivotTableComponent <Badge type="alpha" text="Alpha" />
+# Class PivotTableComponent <Badge type="beta" text="Beta" />
 
 Pivot Table with and pagination.
 
@@ -108,6 +108,14 @@ If not specified, the component will use the `defaultDataSource` specified in th
 > **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
 Filters that will slice query results
+
+***
+
+#### highlights
+
+> **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+Filters that will highlight query results
 
 ### Representation
 

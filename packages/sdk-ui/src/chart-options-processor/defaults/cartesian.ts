@@ -113,6 +113,8 @@ export const chartOptionsDefaults = (
         cartesianDefaults,
         polarDefaults(polarType) as Partial<HighchartsOptionsInternal>,
       );
+    case 'arearange':
+      return merge(cartesianDefaults, areaDefaults(stacking));
     default:
       return cartesianDefaults;
   }

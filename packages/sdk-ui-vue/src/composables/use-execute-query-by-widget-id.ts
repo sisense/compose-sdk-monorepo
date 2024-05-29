@@ -54,7 +54,8 @@ import type { MaybeWithRefs } from '../types';
  * @fusionEmbed
  */
 export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWidgetIdParams>) => {
-  const { filters, ...rest } = params;
+  const { filters, ...untypedRest } = params;
+  const rest: MaybeWithRefs<Omit<ExecuteQueryByWidgetIdParams, 'filters'>> = untypedRest;
   const query = ref<QueryByWidgetIdState['query']>(undefined);
   const { hasTrackedRef } = useTracking('useExecuteQueryByWidgetId');
   const [queryState, dispatch] = useReducer(queryStateReducer, {

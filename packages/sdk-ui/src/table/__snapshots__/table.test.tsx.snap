@@ -17,35 +17,36 @@ exports[`Table > should render Table 1`] = `
         >
           <div
             class="_tableWrapper_4b88bf"
+            style="padding: 20px 20px;"
           >
             <div
               aria-rowcount="4"
               class="_table_4b88bf fixedDataTableLayout_main public_fixedDataTable_main"
               role="grid"
-              style="height: 500px; width: 400px;"
+              style="height: 460px; width: 360px;"
             >
               <div
                 class="fixedDataTableLayout_rowsContainer"
-                style="height: 498px; width: 400px;"
+                style="height: 458px; width: 360px;"
               >
                 <div
                   class="fixedDataTableColumnResizerLineLayout_main fixedDataTableColumnResizerLineLayout_hiddenElem public_fixedDataTableColumnResizerLine_main"
-                  style="width: 0px; height: 500px; left: 0px;"
+                  style="width: 0px; height: 460px; left: 0px;"
                 >
                   <div
                     class="fixedDataTableColumnResizerLineLayout_mouseArea"
-                    style="height: 500px;"
+                    style="height: 460px;"
                   />
                 </div>
                 <div
                   class="fixedDataTableRowLayout_rowWrapper"
-                  style="width: 400px; height: 26px; z-index: 1; visibility: visible; transform: translate3d(0px,0px,0);"
+                  style="width: 360px; height: 26px; z-index: 1; visibility: visible; transform: translate3d(0px,0px,0);"
                 >
                   <div
                     aria-rowindex="1"
                     class="fixedDataTableRowLayout_main public_fixedDataTableRow_main fixedDataTableLayout_header public_fixedDataTable_header"
                     role="row"
-                    style="width: 400px; height: 26px;"
+                    style="width: 360px; height: 26px;"
                   >
                     <div
                       class="fixedDataTableRowLayout_body"
@@ -61,7 +62,7 @@ exports[`Table > should render Table 1`] = `
                       </div>
                       <div
                         class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                        style="height: 26px; width: 400px; left: 0px;"
+                        style="height: 26px; width: 360px; left: 0px;"
                       >
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroup"
@@ -159,7 +160,7 @@ exports[`Table > should render Table 1`] = `
                       />
                       <div
                         class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                        style="height: 26px; width: 0px; left: 400px;"
+                        style="height: 26px; width: 0px; left: 360px;"
                       >
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroup"
@@ -174,13 +175,13 @@ exports[`Table > should render Table 1`] = `
                 >
                   <div
                     class="fixedDataTableRowLayout_rowWrapper"
-                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,0px,0);"
+                    style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,0px,0);"
                   >
                     <div
                       aria-rowindex="2"
                       class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow"
                       role="row"
-                      style="width: 400px; height: 26px;"
+                      style="width: 360px; height: 26px;"
                     >
                       <div
                         class="fixedDataTableRowLayout_body"
@@ -196,7 +197,7 @@ exports[`Table > should render Table 1`] = `
                         </div>
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 400px; left: 0px;"
+                          style="height: 26px; width: 360px; left: 0px;"
                         >
                           <div
                             class="fixedDataTableCellGroupLayout_cellGroup"
@@ -272,7 +273,7 @@ exports[`Table > should render Table 1`] = `
                         />
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 400px;"
+                          style="height: 26px; width: 0px; left: 360px;"
                         >
                           <div
                             class="fixedDataTableCellGroupLayout_cellGroup"
@@ -284,13 +285,13 @@ exports[`Table > should render Table 1`] = `
                   </div>
                   <div
                     class="fixedDataTableRowLayout_rowWrapper"
-                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,26px,0);"
+                    style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,26px,0);"
                   >
                     <div
                       aria-rowindex="3"
                       class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_highlighted public_fixedDataTableRow_odd public_fixedDataTable_bodyRow"
                       role="row"
-                      style="width: 400px; height: 26px;"
+                      style="width: 360px; height: 26px;"
                     >
                       <div
                         class="fixedDataTableRowLayout_body"
@@ -306,7 +307,7 @@ exports[`Table > should render Table 1`] = `
                         </div>
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 400px; left: 0px;"
+                          style="height: 26px; width: 360px; left: 0px;"
                         >
                           <div
                             class="fixedDataTableCellGroupLayout_cellGroup"
@@ -382,7 +383,7 @@ exports[`Table > should render Table 1`] = `
                         />
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 400px;"
+                          style="height: 26px; width: 0px; left: 360px;"
                         >
                           <div
                             class="fixedDataTableCellGroupLayout_cellGroup"
@@ -394,13 +395,13 @@ exports[`Table > should render Table 1`] = `
                   </div>
                   <div
                     class="fixedDataTableRowLayout_rowWrapper"
-                    style="width: 400px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,52px,0);"
+                    style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,52px,0);"
                   >
                     <div
                       aria-rowindex="4"
                       class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow fixedDataTableLayout_hasBottomBorder public_fixedDataTable_hasBottomBorder"
                       role="row"
-                      style="width: 400px; height: 26px;"
+                      style="width: 360px; height: 26px;"
                     >
                       <div
                         class="fixedDataTableRowLayout_body"
@@ -416,7 +417,7 @@ exports[`Table > should render Table 1`] = `
                         </div>
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 400px; left: 0px;"
+                          style="height: 26px; width: 360px; left: 0px;"
                         >
                           <div
                             class="fixedDataTableCellGroupLayout_cellGroup"
@@ -492,7 +493,7 @@ exports[`Table > should render Table 1`] = `
                         />
                         <div
                           class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 400px;"
+                          style="height: 26px; width: 0px; left: 360px;"
                         >
                           <div
                             class="fixedDataTableCellGroupLayout_cellGroup"

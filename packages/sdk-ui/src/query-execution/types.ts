@@ -236,6 +236,17 @@ export interface ExecuteQueryParams {
   enabled?: boolean;
 
   /**
+   * Boolean flag whether to include `ungroup: true` in non-aggregated JAQL queries.
+   *
+   * This improves computation and performance of querying huge tables when no aggregation is needed
+   *
+   * If not specified, the default value is `false`
+   *
+   * @internal
+   */
+  ungroup?: boolean;
+
+  /**
    * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
    *
    * **Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
@@ -385,7 +396,7 @@ export interface ExecutePivotQueryParams {
   filters?: Filter[] | FilterRelations;
 
   /**
-   * Highlight filters that will highlight results that pass filter criteria
+   * Filters that will highlight query results
    *
    * @category Filtering
    */

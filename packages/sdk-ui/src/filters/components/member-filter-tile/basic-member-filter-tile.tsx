@@ -20,13 +20,15 @@ export interface BasicMemberFilterTileProps {
   /** Initial list of selected members. Defaults to empty list */
   initialSelectedMembers?: SelectedMember[];
   /** Callback that executes whenever the final list of active and selected members is updated */
-  onUpdateSelectedMembers?: (members: string[]) => void;
+  onUpdateSelectedMembers?: (members: string[], disabled?: boolean) => void;
   /** Configurable limit on size of allowedMembers */
   maxAllowedMembers?: number;
   /** Whether this is a dependent filter */
   isDependent?: boolean;
   /** Flag to update selected members when caused by an external change */
   shouldUpdateSelectedMembers?: boolean;
+  /** Whether the filter tile is disabled initially */
+  disabled?: boolean;
 }
 
 /**
@@ -67,8 +69,9 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
   maxAllowedMembers = 2000,
   isDependent,
   shouldUpdateSelectedMembers,
+  disabled: initialDisabled,
 }) => {
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(initialDisabled ?? false);
 
   const initialMembers = useValidatedMembers({
     allMembers,

@@ -4,7 +4,7 @@ title: PivotTableStyleOptions
 
 # Interface PivotTableStyleOptions
 
-Configuration options that define functional style of the various elements of the PivotTable component
+Configuration options that define functional style of the various elements of the PivotTable component.
 
 ## Properties
 
@@ -41,6 +41,14 @@ Total height of the component, which is considered in the following order of pri
 1. Value passed to this property (in pixels).
 2. Height of the container wrapping this component
 3. Default value of 500px (for component without header) or 525px (for component with header).
+
+***
+
+### highlightColor
+
+> **highlightColor**?: `string`
+
+Color of highlighted cells. If not specified, default value is light yellow (`#ffff9c`).
 
 ***
 

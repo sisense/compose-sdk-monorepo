@@ -2,9 +2,9 @@
 title: ScattermapChart
 ---
 
-# Function ScattermapChart <Badge type="beta" text="Beta" />
+# Function ScattermapChart
 
-> **ScattermapChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **ScattermapChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component that allows to visualize geographical data as data points on a map.
 
@@ -24,7 +24,6 @@ Scatter map chart displaying cost and revenue rank from the Sample ECommerce dat
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ScattermapChartProps`](../interfaces/interface.ScattermapChartProps.md) | Scattermap chart properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

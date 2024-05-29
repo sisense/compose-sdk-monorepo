@@ -1,21 +1,9 @@
-import {
-  h,
-  ref,
-  toRaw,
-  type FunctionalComponent,
-  isReactive,
-  type Slots,
-  toRefs,
-  watchEffect,
-} from 'vue';
+import { h, ref, toRaw, type FunctionalComponent, isReactive, type Slots } from 'vue';
 import { createSisenseContextConnector, createThemeContextConnector } from './providers';
 import { ComponentAdapter, createElement, createWrapperElement } from '@sisense/sdk-ui-preact';
 import { getSisenseContext } from './providers/sisense-context-provider';
 import { getThemeContext } from './providers/theme-provider';
-
-export function isObject(value: unknown): boolean {
-  return value !== null && !Array.isArray(value) && typeof value === 'object';
-}
+import { isObject } from './utils';
 
 export function getRawData<T>(data: T): T {
   return isReactive(data) ? toRaw(data) : data;

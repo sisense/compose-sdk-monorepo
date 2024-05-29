@@ -10,7 +10,7 @@ import {
   normalizeName,
 } from '@sisense/sdk-data';
 
-import { ElementWriter, NEWLINE, rnt, writeIndented } from './base.js';
+import { ElementWriter, NEWLINE, escapeSpecialChars, rnt, writeIndented } from './base.js';
 import { prepareDescription } from '../utils/prepare-description.js';
 
 export class DimensionWriter extends ElementWriter<Dimension> {
@@ -153,7 +153,11 @@ export class DateDimensionWriter extends ElementWriter<DateDimension> {
   writeDef(stream: NodeJS.WritableStream, ident: number) {
     writeIndented(stream, `createDateDimension({${NEWLINE}`, 0);
     writeIndented(stream, `name: '${this.element.name}',${NEWLINE}`, ident + 1);
-    writeIndented(stream, `expression: '${this.element.expression}',`, ident + 1);
+    writeIndented(
+      stream,
+      `expression: '${escapeSpecialChars(this.element.expression)}',`,
+      ident + 1,
+    );
     if (this.element.description) {
       writeIndented(
         stream,
@@ -195,7 +199,7 @@ export class AttributeWriter extends ElementWriter<Attribute> {
       `createAttribute({\
 ${rnt(ident + 2)}name: '${this.element.name}',\
 ${rnt(ident + 2)}type: '${this.element.type}',\
-${rnt(ident + 2)}expression: '${this.element.expression}',\
+${rnt(ident + 2)}expression: '${escapeSpecialChars(this.element.expression)}',\
 ${this.element.description ? `${rnt(ident + 2)}description: ${prepareDescription(this.element.description)},` : ''}\
 ${rnt(ident + 1)}}),`,
       ident,
@@ -211,7 +215,7 @@ export class LevelWriter extends ElementWriter<LevelAttribute> {
   write(stream: NodeJS.WritableStream, ident: number): any {
     writeIndented(
       stream,
-      `createAttribute({name: '${this.name}', expression: '${this.element.expression}', granularity: '${this.element.granularity}'}),`,
+      `createAttribute({name: '${this.name}', expression: '${escapeSpecialChars(this.element.expression)}', granularity: '${this.element.granularity}'}),`,
       ident,
     );
   }

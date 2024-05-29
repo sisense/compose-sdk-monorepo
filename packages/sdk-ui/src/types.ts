@@ -9,7 +9,10 @@ import {
   PolarSubtype,
   StackableSubtype,
 } from './chart-options-processor/subtype-to-design-options';
-import { IndicatorComponents } from './chart-options-processor/translations/design-options';
+import {
+  IndicatorComponents,
+  TableColorOptions,
+} from './chart-options-processor/translations/design-options';
 import {
   FunnelDirection,
   FunnelSize,
@@ -25,6 +28,8 @@ import {
   AreamapChartType,
   BoxplotChartType,
   ScattermapChartType,
+  RangeChartType,
+  TableChartType,
 } from './chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
 import { LegendPosition } from './chart-options-processor/translations/legend-section';
@@ -61,6 +66,7 @@ export type {
   ScattermapChartType,
   AreamapChartType,
   TableType,
+  TableChartType,
   AreaSubtype,
   LineSubtype,
   PieSubtype,
@@ -73,6 +79,8 @@ export type {
   GeoDataElement,
   RawGeoDataElement,
   Coordinates,
+  RangeChartType,
+  TableColorOptions,
 };
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
@@ -295,6 +303,11 @@ export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
   subtype?: LineSubtype;
 }
 
+/** Configuration options that define functional style of the various elements of AreaRangeChart */
+export interface AreaRangeStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+  lineWidth?: LineWidth;
+}
+
 /** Configuration options that define functional style of the various elements of AreaChart */
 export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Configuration that defines line width */
@@ -375,16 +388,34 @@ export type IndicatorStyleOptions = (
 export interface TableStyleOptions {
   /**
    * Boolean flag whether to fill header cells with background color
+   *
+   * @deprecated Use {@link TableStyleOptions#header | TableStyleOptions.header.color} instead.
    */
   headersColor?: boolean;
   /**
    * Boolean flag whether to apply background color to alternate rows.
+   *
+   * @deprecated Use {@link TableStyleOptions#rows | TableStyleOptions.rows.alternatingColor} instead.
    */
   alternatingRowsColor?: boolean;
   /**
    * Boolean flag whether to apply background color to alternate columns
+   *
+   * @deprecated Use {@link TableStyleOptions#columns | TableStyleOptions.columns.alternatingColor} instead.
    */
   alternatingColumnsColor?: boolean;
+  /**
+   * Vertical padding around whole table
+   * Default value is 20px
+   *
+   */
+  paddingVertical?: number;
+  /**
+   * Horizontal padding around whole table
+   * Default value is 20px
+   *
+   */
+  paddingHorizontal?: number;
   /**
    * Number of rows per page
    *
@@ -409,9 +440,45 @@ export interface TableStyleOptions {
    * 3. Default value of 500px (for component without header) or 525px (for component with header).
    */
   height?: number;
+  /**
+   * Header options
+   */
+  header?: {
+    /**
+     * Color of header
+     */
+    color?: TableColorOptions;
+  };
+  /**
+   * Columns options
+   */
+  columns?: {
+    /**
+     * Alternating color for columns
+     */
+    alternatingColor?: TableColorOptions;
+    /**
+     * Modes of columns width
+     * 'auto' - all columns will have the same width and fit the table width (no horizontal scroll)
+     * 'content' - columns width will be based on content (default option)
+     */
+    width?: 'auto' | 'content';
+  };
+  /**
+   * Rows options
+   */
+  rows?: {
+    /**
+     * Alternating color for rows
+     */
+    alternatingColor?: TableColorOptions;
+  };
 }
 
-/** Configuration options that define functional style of the various elements of the PivotTable component */
+/** Configuration options that define functional style of the various elements of the tabular charts. */
+export type TabularChartStyleOptions = TableStyleOptions;
+
+/** Configuration options that define functional style of the various elements of the PivotTable component. */
 export interface PivotTableStyleOptions {
   /**
    * Boolean flag whether to fill header cells with background color
@@ -466,6 +533,10 @@ export interface PivotTableStyleOptions {
    * Manual height of each row (default is 25px)
    */
   rowHeight?: number;
+  /**
+   * Color of highlighted cells. If not specified, default value is light yellow (`#ffff9c`).
+   */
+  highlightColor?: string;
 }
 
 /**
@@ -586,7 +657,10 @@ export interface ScattermapStyleOptions extends Pick<BaseStyleOptions, 'width' |
 /**
  * Configuration options that define functional style of the various elements of chart.
  */
-export type ChartStyleOptions =
+export type ChartStyleOptions = RegularChartStyleOptions | TabularChartStyleOptions;
+
+/** Style options for regular chart types */
+export type RegularChartStyleOptions =
   | LineStyleOptions
   | AreaStyleOptions
   | StackableStyleOptions
@@ -599,7 +673,8 @@ export type ChartStyleOptions =
   | SunburstStyleOptions
   | BoxplotStyleOptions
   | AreamapStyleOptions
-  | ScattermapStyleOptions;
+  | ScattermapStyleOptions
+  | AreaRangeStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = {
@@ -621,7 +696,12 @@ export type ChartType =
   | IndicatorChartType
   | AreamapChartType
   | BoxplotChartType
-  | ScattermapChartType;
+  | ScattermapChartType
+  | RangeChartType
+  | TableChartType;
+
+/** Chart type of the regular charts */
+export type RegularChartType = Exclude<ChartType, TableChartType>;
 
 /**
  * Series chart type, which is used with {@link StyledMeasureColumn} to customize
@@ -635,7 +715,8 @@ export type SeriesChartType =
   | 'bar'
   | 'area'
   | 'column'
-  | 'scatter';
+  | 'scatter'
+  | 'arearange';
 
 /** The number of decimal places */
 export type DecimalScale = number | 'auto';

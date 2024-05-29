@@ -10,6 +10,7 @@ import { type PivotTableDataOptions } from '@/chart-data-options/types';
 import { applyDateFormat } from '@/query/date-formats';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { createDataCellValueFormatter, createHeaderCellValueFormatter } from './formatters';
+import { createHeaderCellHighlightFormatter } from './formatters/header-cell-formatters/header-cell-highlight-formatter';
 
 /**
  * A hook that applies formatting over pivot table cells.
@@ -36,7 +37,10 @@ export const useApplyPivotTableFormatting = ({
   );
 
   const onHeaderCellFormat = useCallback(
-    over([createHeaderCellValueFormatter(dataOptions, dateFormatter)]),
+    over([
+      createHeaderCellValueFormatter(dataOptions, dateFormatter),
+      createHeaderCellHighlightFormatter(),
+    ]),
     [dataOptions],
   );
 

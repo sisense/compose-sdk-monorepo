@@ -12,14 +12,7 @@ module.exports = {
      */
     {
       files: ['*.{ts,js,tsx,jsx}'],
-      excludedFiles: [
-        '**/__mocks__/*.{ts,tsx}',
-        '**/__test-helpers__/*.{ts,tsx}',
-        '**/*.test.{ts,tsx}',
-        '**/*.config.{ts,js}',
-        '**/*.workspace.{ts,js}',
-        '**/test-helpers/*.{ts,tsx}',
-      ],
+      excludedFiles: ['**/*.config.{ts,js}', '**/*.workspace.{ts,js}'],
       extends: ['@sisense/eslint-config/typescript/react'],
       overrides: [
         {
@@ -70,60 +63,53 @@ module.exports = {
         },
         { files: ['*.{ts,tsx}'], excludedFiles: ['*.d.ts'], rules: { 'no-unused-vars': 'error' } },
         {
-          files: ['**/__demo__/**/*', '**/*.stories.tsx'],
+          // Disable additional rules for all non-production files
+          files: [
+            '**/__demo__/**/*',
+            '**/*.stories.tsx',
+            '**/__mocks__/*.{ts,tsx}',
+            '**/__test-helpers__/*.{ts,tsx}',
+            '**/test-helpers/*.{ts,tsx}',
+            '**/*.test.{ts,tsx}',
+          ],
           rules: {
-            'import/no-extraneous-dependencies': 'off', // allow importing devDependencies in demo files
-            'sonarjs/no-duplicate-string': 'off', // prevent auto-generated files from throwing errors
+            'sonarjs/no-duplicate-string': 'off',
+            'vitest/no-mocks-import': 'off',
+
+            // These are the same rules applied in Sisense's config for Jest tests.
+            'import/no-extraneous-dependencies': 'off',
+            'node/no-unpublished-require': 'off',
+            'no-console': 'off',
+            'no-unused-expressions': 'off',
+            'max-classes-per-file': 'off',
+            'func-names': ['warn', 'as-needed'],
+            'security/detect-object-injection': 'off',
+            'jsdoc/require-returns-description': 'off',
+            'no-process-exit': 'off',
+            'security/detect-child-process': 'off',
             'max-lines-per-function': 'off',
             'max-lines': 'off',
+            'no-global-assign': ['error', { exceptions: ['window', 'document'] }],
+          },
+        },
+        {
+          // Configuration for linting unit tests
+          files: ['**/*.test.{ts,tsx}'],
+          extends: ['plugin:vitest/recommended'],
+          rules: {
+            // These rules from eslint-plugin-vitest are enabled to closely match
+            // the rules enabled in the plugin:jest/recommended config.
+            'vitest/expect-expect': 'warn',
+            'vitest/no-alias-methods': 'error',
+            'vitest/no-conditional-expect': 'error',
+            'vitest/no-done-callback': 'error',
+            'vitest/no-focused-tests': 'error',
+            'vitest/no-interpolation-in-snapshots': 'error',
+            'vitest/no-standalone-expect': 'error',
+            'vitest/no-test-prefixes': 'error',
           },
         },
       ],
-    },
-    /**
-     * Configuration for linting unit tests and test utilities
-     */
-    {
-      files: [
-        '**/__mocks__/*.{ts,tsx}',
-        '**/__test-helpers__/*.{ts,tsx}',
-        '**/*.test.{ts,tsx}',
-        '**/test-helpers/*.{ts,tsx}',
-      ],
-      extends: ['@sisense/eslint-config/typescript/react', 'plugin:vitest/recommended'],
-      rules: {
-        'import/extensions': 'off', // this is disabled as it does not work with TypeScript path aliases
-        'sonarjs/no-duplicate-string': 'off',
-        'vitest/no-mocks-import': 'off',
-        'no-unused-vars': 'error',
-
-        // These are copied over so we continue to extend Sisense's react
-        // config, but omit the jest-specific configs.
-        'import/no-extraneous-dependencies': 'off',
-        'node/no-unpublished-require': 'off',
-        'no-console': 'off',
-        'no-unused-expressions': 'off',
-        'max-classes-per-file': 'off',
-        'func-names': ['warn', 'as-needed'],
-        'security/detect-object-injection': 'off',
-        'jsdoc/require-returns-description': 'off',
-        'no-process-exit': 'off',
-        'security/detect-child-process': 'off',
-        'max-lines-per-function': 'off',
-        'max-lines': 'off',
-        'no-global-assign': ['error', { exceptions: ['window', 'document'] }], // need to mutate 'document', 'window' during tests
-
-        // These rules from eslint-plugin-vitest are enabled to closely match
-        // the rules enabled in the plugin:jest/recommended config.
-        'vitest/expect-expect': 'warn',
-        'vitest/no-alias-methods': 'error',
-        'vitest/no-conditional-expect': 'error',
-        'vitest/no-done-callback': 'error',
-        'vitest/no-focused-tests': 'error',
-        'vitest/no-interpolation-in-snapshots': 'error',
-        'vitest/no-standalone-expect': 'error',
-        'vitest/no-test-prefixes': 'error',
-      },
     },
   ],
 };

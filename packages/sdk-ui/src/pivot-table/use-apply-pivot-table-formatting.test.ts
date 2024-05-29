@@ -53,12 +53,13 @@ describe('useApplyPivotTableFormatting', () => {
   });
 
   it('should run header cell value formatter', () => {
+    const cell = {};
     renderHook(() => useApplyPivotTableFormatting({ dataService, dataOptions }));
 
     const [event, handler] = DataServiceMock.on.mock.calls[1];
     expect(event).toBe(EVENT_HEADER_CELL_FORMAT);
 
-    handler();
+    handler(cell);
 
     expect(headerCellFormatterMock).toHaveBeenCalledTimes(1);
   });

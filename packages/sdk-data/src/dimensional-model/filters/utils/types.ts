@@ -164,7 +164,7 @@ export type FilterJaqlInternal = {
   fiscal?: string;
   firstday?: string;
   merged?: boolean;
-  table: string;
+  table?: string;
   filter?: AnyTypeFilterJaql;
   level?: DatetimeLevel;
   locale?: string;

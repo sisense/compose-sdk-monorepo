@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { RowComparator, createCompareValue } from './row-comparator';
 import { isDatetime, isNumber } from '@sisense/sdk-data';
-import { parseISO } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
 import { Distribution } from './distribution';
 import { CategoricalDistribution } from './categorical-distribution';
 

@@ -10,6 +10,7 @@ import {
   BoxplotChartDataOptionsInternal,
   AreamapChartDataOptionsInternal,
   ScattermapChartDataOptionsInternal,
+  RangeChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import {
   isCartesian,
@@ -19,6 +20,7 @@ import {
   isBoxplot,
   isAreamap,
   isScattermap,
+  isRange,
 } from '../chart-options-processor/translations/types';
 import { DataTable } from '../chart-data-processor/table-processor';
 import type { ChartType, NumberFormatConfig, SeriesChartType, SortDirection } from '../types';
@@ -31,6 +33,7 @@ import { ChartData } from './types';
 import { boxplotData } from './boxplot-data';
 import { getAreamapData } from './areamap-data';
 import { scattermapData } from './scattermap-data';
+import { rangeData as getRangeData } from './range-data';
 
 export const chartDataService = (
   chartType: ChartType,
@@ -57,6 +60,8 @@ export const chartDataService = (
       chartDataOptions as unknown as AreamapChartDataOptionsInternal,
       dataTable,
     );
+  } else if (isRange(chartType)) {
+    return getRangeData(chartDataOptions as RangeChartDataOptionsInternal, dataTable);
   } else throw new Error(`Unexpected chart type: ${chartType}`);
 };
 

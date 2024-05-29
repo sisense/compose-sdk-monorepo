@@ -23,16 +23,25 @@ const DATA_MODEL_MODULE_NAME = 'DM';
  */
 export const createAttributeHelper = (
   dim: string,
-  table: string,
+  table: string | undefined,
   column: string,
   level: string | undefined,
   dataType: string,
 ): Attribute | LevelAttribute => {
+  // if table is undefined, extract it from dim
+  const dimTable = table ?? dim.slice(1, -1).split('.')[0];
+
   if (level) {
     const dateLevel = DimensionalLevelAttribute.translateJaqlToGranularity({ level });
-    const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(column, dim, dateLevel);
+    const format = DimensionalLevelAttribute.getDefaultFormatForGranularity(dateLevel);
+    const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
+      column,
+      dim,
+      dateLevel,
+      format,
+    );
     levelAttribute.composeCode = normalizeAttributeName(
-      table,
+      dimTable,
       column,
       level,
       DATA_MODEL_MODULE_NAME,
@@ -43,7 +52,12 @@ export const createAttributeHelper = (
     ? MetadataTypes.NumericAttribute
     : MetadataTypes.TextAttribute;
   const attribute: Attribute = new DimensionalAttribute(column, dim, attributeType);
-  attribute.composeCode = normalizeAttributeName(table, column, undefined, DATA_MODEL_MODULE_NAME);
+  attribute.composeCode = normalizeAttributeName(
+    dimTable,
+    column,
+    undefined,
+    DATA_MODEL_MODULE_NAME,
+  );
 
   return attribute;
 };
@@ -73,7 +87,7 @@ export const createAttributeFromFilterJaql = (
  */
 export const createMeasureHelper = (
   dim: string,
-  table: string,
+  table: string | undefined,
   column: string,
   level: string | undefined,
   dataType: string,

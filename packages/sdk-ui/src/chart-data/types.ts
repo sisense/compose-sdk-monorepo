@@ -118,6 +118,21 @@ export type ScattermapChartData = {
   locations: ScattermapChartLocation[];
 };
 
+type AreaRangeSeriesValue = [number, number, number];
+export type AreaRangeSeriesValues = {
+  name: string;
+  title?: string;
+  data: AreaRangeSeriesValue[];
+};
+
+export type RangeChartData = {
+  type: 'range';
+  xValues: CategoricalXValues[];
+  xAxisCount: number;
+  series: CategoricalSeriesValues[];
+  seriesOther: CartesianChartData;
+};
+
 /**
  * Fact final data that will be passed to chart-component to render
  *
@@ -184,4 +199,5 @@ export type ChartData =
   | IndicatorChartData
   | BoxplotChartData
   | AreamapData
-  | ScattermapChartData;
+  | ScattermapChartData
+  | RangeChartData;

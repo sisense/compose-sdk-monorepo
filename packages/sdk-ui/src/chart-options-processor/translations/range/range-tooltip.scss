@@ -1,0 +1,10 @@
+.csdk-range-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  & > * {
+    margin-right: 10px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

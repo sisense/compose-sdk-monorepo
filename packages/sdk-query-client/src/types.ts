@@ -25,6 +25,7 @@ export type QueryDescription = {
   filterRelations?: FilterRelationsJaql;
   count?: number;
   offset?: number;
+  ungroup?: boolean;
 };
 
 /**
@@ -72,6 +73,10 @@ export type QueryOptions = {
   datasource: JaqlDataSource;
   by: string;
   queryGuid: string;
+  count?: number;
+  offset?: number;
+  // ungroup may be needed for queries with no aggregation
+  ungroup?: boolean;
 
   /* PIVOT OPTIONS START */
   dashboard?: string;
@@ -226,6 +231,7 @@ export type JaqlResponse = {
   values?: Cell[][] | Cell[];
   error?: boolean;
   details?: string;
+  extraDetails?: string;
   type?: string;
   errorSource?: string;
   httpStatusCode?: number;

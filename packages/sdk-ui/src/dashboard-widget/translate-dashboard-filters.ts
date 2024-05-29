@@ -1,4 +1,4 @@
-import { DashboardDto, Filter, CascadingFilter } from '../api/types/dashboard-dto';
+import { DashboardDto, FilterDto, CascadingFilterDto } from '../api/types/dashboard-dto';
 import { extractFilterModelFromJaql } from './translate-widget-filters';
 import {
   FiltersIgnoringRules,
@@ -41,18 +41,18 @@ export function extractDashboardFiltersForWidget(dashboard: DashboardDto, widget
 /**
  * Splits cascading dashboard filters into individual filters.
  *
- * @param {Array<Filter | CascadingFilter>} dashboardFilters - The array of dashboard filters.
- * @returns {Filter[]} An array of individual filters.
+ * @param {Array<FilterDto | CascadingFilterDto>} dashboardFilters - The array of dashboard filters.
+ * @returns {FilterDto[]} An array of individual filters.
  */
-function splitCascadingDashboardFilters(dashboardFilters: Array<Filter | CascadingFilter>) {
-  const splitDashboardFilters: Filter[] = [];
+function splitCascadingDashboardFilters(dashboardFilters: Array<FilterDto | CascadingFilterDto>) {
+  const splitDashboardFilters: FilterDto[] = [];
 
   for (const filter of dashboardFilters) {
     if (filter.isCascading) {
       const cascadingFilter = filter;
       const { disabled } = cascadingFilter;
       const splittedFilters = cascadingFilter.levels.map(
-        (level) => ({ jaql: level, disabled } as Filter),
+        (level) => ({ jaql: level, disabled } as FilterDto),
       );
       splitDashboardFilters.push(...splittedFilters);
     } else {
@@ -99,7 +99,7 @@ function getDashboardFilters(dashboard: DashboardDto, filtersIgnoringRules?: Fil
  * @returns An array of background filters from the dashboard.
  */
 function getDashboardBackgroundFilters(dashboard: DashboardDto) {
-  const dashboardBackgroundFilters: Filter[] = [];
+  const dashboardBackgroundFilters: FilterDto[] = [];
 
   splitCascadingDashboardFilters(dashboard.filters || []).forEach(({ jaql }) => {
     const { backgroundFilter } = extractFilterModelFromJaql(jaql);
@@ -112,7 +112,7 @@ function getDashboardBackgroundFilters(dashboard: DashboardDto) {
             level: (backgroundFilter as BackgroundFilter).level,
           }),
         },
-      } as Filter);
+      } as FilterDto);
     }
   });
 
@@ -122,19 +122,19 @@ function getDashboardBackgroundFilters(dashboard: DashboardDto) {
 /**
  * Groups dashboard filters into filters and highlights based on widget configuration.
  *
- * @param {Filter[]} dashboardFilters - The array of dashboard filters.
+ * @param {FilterDto[]} dashboardFilters - The array of dashboard filters.
  * @param {WidgetDto} widget - The widget that filters are applied to.
  * @returns {object} An object containing an array of filters and an array of highlights.
  */
 function groupDashboardFilters(
-  dashboardFilters: Filter[],
-  dashboardBackgroundFilters: Filter[],
+  dashboardFilters: FilterDto[],
+  dashboardBackgroundFilters: FilterDto[],
   widget: WidgetDto,
 ) {
   const isWidgetAllowHighlightFilters =
     widget.options?.dashboardFiltersMode === WidgetDashboardFilterMode.SELECT;
-  let filters: Filter[] = [];
-  const highlights: Filter[] = [];
+  let filters: FilterDto[] = [];
+  const highlights: FilterDto[] = [];
 
   dashboardFilters.forEach((dashboardFilter) => {
     if (
@@ -155,11 +155,11 @@ function groupDashboardFilters(
 /**
  * Checks if a highlight filter is applicable to a widget.
  *
- * @param {Filter} filter - The filter to be checked.
+ * @param {FilterDto} filter - The filter to be checked.
  * @param {WidgetDto} widget - The widget that filters are applied to.
  * @returns {boolean} `true` if the filter is applicable; otherwise, `false`.
  */
-function isHighlightFilterApplicableToWidget(filter: Filter, widget: WidgetDto) {
+function isHighlightFilterApplicableToWidget(filter: FilterDto, widget: WidgetDto) {
   const allowedAttributes = getAllowedWidgetHighlightAttributes(widget);
   return (
     allowedAttributes.includes(filter.jaql.dim) && !(filter.jaql.filter as IncludeAllFilter).all
@@ -208,6 +208,8 @@ function getHighlightsAllowedPanelNames(widgetType: WidgetType) {
       return ['category'];
     case 'map/scatter':
       return ['geo'];
+    case 'pivot2':
+      return ['rows', 'columns'];
     default:
       // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator
       return [];

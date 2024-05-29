@@ -25,4 +25,5 @@ module.exports = {
   hideInPageTOC: true,
   titleTemplate: '{kind} {name}',
   propertiesFormat: 'list',
+  hiddenFunctionParameters: ['paramG', 'paramA'],
 };

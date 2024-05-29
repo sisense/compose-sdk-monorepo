@@ -7,6 +7,9 @@ title: Interfaces
 TypeScript interfaces for components and hooks listed above
 
 - [AreaChartProps](interface.AreaChartProps.md)
+- [AreaRangeChartProps](interface.AreaRangeChartProps.md)
+- [AreaRangeMeasureColumn](interface.AreaRangeMeasureColumn.md)
+- [AreaRangeStyleOptions](interface.AreaRangeStyleOptions.md)
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
 - [AreamapChartProps](interface.AreamapChartProps.md)
@@ -62,6 +65,7 @@ TypeScript interfaces for components and hooks listed above
 - [PivotTableStyleOptions](interface.PivotTableStyleOptions.md)
 - [PolarChartProps](interface.PolarChartProps.md)
 - [PolarStyleOptions](interface.PolarStyleOptions.md)
+- [RangeChartDataOptions](interface.RangeChartDataOptions.md)
 - [RelativeDateFilterTileProps](interface.RelativeDateFilterTileProps.md)
 - [ScatterChartDataOptions](interface.ScatterChartDataOptions.md)
 - [ScatterChartProps](interface.ScatterChartProps.md)

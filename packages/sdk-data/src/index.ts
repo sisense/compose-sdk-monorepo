@@ -19,6 +19,8 @@ export * from './dimensional-model/factory.js';
 
 export * from './dimensional-model/filters/filters.js';
 
+export { createFilterMatcher } from './dimensional-model/filters/utils/filter-matcher-utils.js';
+
 /**
  * Functions to create date, text, or numeric filters on specified data.
  *

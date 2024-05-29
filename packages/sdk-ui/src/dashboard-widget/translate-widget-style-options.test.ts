@@ -311,9 +311,9 @@ describe('translate widget style options', () => {
       };
 
       const expectedOptions = {
-        alternatingColumnsColor: true,
-        alternatingRowsColor: false,
-        headersColor: true,
+        columns: { alternatingColor: { enabled: true } },
+        rows: { alternatingColor: { enabled: false } },
+        header: { color: { enabled: true } },
       };
 
       expect(extractStyleOptions('tablewidget', '' as WidgetSubtype, widgetStyle, [])).toEqual(

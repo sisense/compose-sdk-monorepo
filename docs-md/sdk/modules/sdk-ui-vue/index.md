@@ -9,9 +9,9 @@ title: sdk-ui-vue
 Vue components for charts
 
 - [AreaChart](charts/class.AreaChart.md)
-- [AreamapChart](charts/class.AreamapChart.md) <Badge type="beta" text="Beta" />
+- [AreamapChart](charts/class.AreamapChart.md)
 - [BarChart](charts/class.BarChart.md)
-- [BoxplotChart](charts/class.BoxplotChart.md) <Badge type="beta" text="Beta" />
+- [BoxplotChart](charts/class.BoxplotChart.md)
 - [Chart](charts/class.Chart.md)
 - [ColumnChart](charts/class.ColumnChart.md)
 - [FunnelChart](charts/class.FunnelChart.md)
@@ -20,8 +20,8 @@ Vue components for charts
 - [PieChart](charts/class.PieChart.md)
 - [PolarChart](charts/class.PolarChart.md)
 - [ScatterChart](charts/class.ScatterChart.md)
-- [ScattermapChart](charts/class.ScattermapChart.md) <Badge type="beta" text="Beta" />
-- [SunburstChart](charts/class.SunburstChart.md) <Badge type="beta" text="Beta" />
+- [ScattermapChart](charts/class.ScattermapChart.md)
+- [SunburstChart](charts/class.SunburstChart.md)
 - [TreemapChart](charts/class.TreemapChart.md)
 
 ## Chart Utilities
@@ -31,7 +31,7 @@ Vue components for charts
 
 ## Data Grids
 
-- [PivotTable](data-grids/class.PivotTable.md) <Badge type="alpha" text="Alpha" />
+- [PivotTable](data-grids/class.PivotTable.md) <Badge type="beta" text="Beta" />
 - [Table](data-grids/class.Table.md)
 
 ## Drilldown
@@ -62,6 +62,7 @@ Fusion Dashboards, Widgets, Queries, and Formulas
 - [DashboardWidget](fusion-embed/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useFetch](fusion-embed/function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModel](fusion-embed/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModels](fusion-embed/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](fusion-embed/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />

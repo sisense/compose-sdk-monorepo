@@ -28,6 +28,7 @@ export const translation: TranslationDictionary = {
     themeNotFound: 'Тему з oid {{themeOid}} не знайдено на Sisense-сервері',
     paletteNotFound: 'Палітру "{{paletteName}}" не знайдено на Sisense-сервері',
     chartTypeNotSupported: 'Тип діаграми {{chartType}} не підтримується',
+    chartInvalidProps: 'Недійсні параметри діаграми',
     unsupportedWidgetType:
       'Неможливо отримати властивості для непідтримуваного типу віджета - {{widgetType}}',
     sisenseContextNotFound: 'Контекст Sisense не знайдено. Переконайтеся, що він наданий.',
@@ -39,7 +40,6 @@ export const translation: TranslationDictionary = {
       failedToFetch: 'Не вдалося отримати спільну формулу',
     },
     widgetModel: {
-      tabularWidgetNotSupported: 'Метод {{methodName}} не підтримується для табличних віджетів',
       pivotWidgetNotSupported: 'Метод {{methodName}} не підтримується для півот віджету',
       onlyTableWidgetSupported: 'Метод {{methodName}} підтримуються тільки для табличним віджетом',
       onlyPivotWidgetSupported: 'Метод {{methodName}} підтримуються тільки для півот віджетом',
@@ -95,5 +95,15 @@ export const translation: TranslationDictionary = {
       median: 'Медіана',
       max: 'Максимум',
     },
+  },
+  arearange: {
+    tooltip: {
+      min: 'Мінімум',
+      max: 'Максимум',
+    },
+  },
+  unsupportedFilter: {
+    title: 'Непідтримуваний Фільтр',
+    message: 'Застосовано до запиту даних',
   },
 };

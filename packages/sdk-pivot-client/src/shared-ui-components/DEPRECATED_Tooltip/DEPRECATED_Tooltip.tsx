@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import React from 'react';
 import classnames from 'classnames';
-import * as RcTooltip from 'rc-tooltip';
+import RcTooltip from 'rc-tooltip';
+import type { TooltipProps } from 'rc-tooltip/lib/Tooltip';
+
 import styles from './DEPRECATED_Tooltip.module.scss';
 import { styleguideConstants } from '../constants/styleguideConstants';
 
@@ -12,7 +15,7 @@ export type DEPRECATED_TooltipProps = {
   zIndex?: number;
   imgOverlay?: boolean;
   semanticText?: boolean;
-} & RcTooltip.RCTooltip.Props;
+} & TooltipProps;
 
 export const DEPRECATED_Tooltip = (
   props: React.PropsWithChildren<DEPRECATED_TooltipProps>,
@@ -52,7 +55,7 @@ export const DEPRECATED_Tooltip = (
   };
 
   return (
-    <RcTooltip.default
+    <RcTooltip
       destroyTooltipOnHide
       overlay={getOverlay()}
       {...otherProps}

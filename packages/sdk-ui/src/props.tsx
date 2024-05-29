@@ -24,7 +24,6 @@ import {
   ChartType,
   IndicatorStyleOptions,
   DrilldownOptions,
-  TableStyleOptions,
   ThemeOid,
   TreemapStyleOptions,
   CustomDrilldownResult,
@@ -45,6 +44,11 @@ import {
   ScattermapDataPoint,
   PivotTableStyleOptions,
   PivotTableWidgetStyleOptions,
+  RegularChartType,
+  RegularChartStyleOptions,
+  TabularChartStyleOptions,
+  TableStyleOptions,
+  AreaRangeStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -57,6 +61,9 @@ import {
   ScattermapChartDataOptions,
   AreamapChartDataOptions,
   PivotTableDataOptions,
+  RegularChartDataOptions,
+  TabularChartDataOptions,
+  RangeChartDataOptions,
 } from './chart-data-options/types';
 import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams, QueryByWidgetIdState } from './query-execution';
@@ -172,6 +179,13 @@ export interface ExecuteQueryProps {
 
   /** {@inheritDoc ExecuteQueryParams.offset} */
   offset?: number;
+
+  /**
+   * {@inheritDoc ExecuteQueryParams.ungroup}
+   *
+   * @internal
+   */
+  ungroup?: boolean;
 
   /** Function as child component that is called to render the query results */
   children?: (queryResult: ExecuteQueryResult) => ReactNode;
@@ -609,6 +623,28 @@ export interface ChartProps extends BaseChartProps, ChartEventProps {
 }
 
 /**
+ * Props of the {@link RegularChart} component.
+ *
+ * @internal
+ */
+export interface RegularChartProps extends ChartProps {
+  chartType: RegularChartType;
+  dataOptions: RegularChartDataOptions;
+  styleOptions?: RegularChartStyleOptions;
+}
+
+/**
+ * Props of the tabular charts ({@link TableComponent}).
+ *
+ * @internal
+ */
+export interface TabularChartProps extends ChartProps {
+  chartType: 'table';
+  dataOptions: TabularChartDataOptions;
+  styleOptions?: TabularChartStyleOptions;
+}
+
+/**
  * Props of the {@link AreaChart} component.
  */
 export interface AreaChartProps
@@ -856,6 +892,13 @@ export interface PivotTableProps {
    * @category Data
    */
   filters?: Filter[] | FilterRelations;
+
+  /**
+   * Filters that will highlight query results
+   *
+   * @category Data
+   */
+  highlights?: Filter[];
 
   /**
    * Configurations for how to style and present a pivot table's data.
@@ -1170,6 +1213,13 @@ export interface PivotTableWidgetProps {
   filters?: Filter[] | FilterRelations;
 
   /**
+   * Filters that will highlight query results
+   *
+   * @category Data
+   */
+  highlights?: Filter[];
+
+  /**
    * Configurations for how to interpret and present the data passed to the table
    *
    * @category Chart
@@ -1354,6 +1404,27 @@ export interface AreamapChartProps extends BaseChartProps, AreamapChartEventProp
    * @category Chart
    */
   styleOptions?: AreamapStyleOptions;
+}
+
+/**
+ * Props of the {@link AreaRangeChart} component.
+ */
+export interface AreaRangeChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: RangeChartDataOptions;
+  /**
+   * Configurations for how to style and present a chart's data.
+   *
+   * @category Chart
+   */
+  styleOptions?: AreaRangeStyleOptions;
 }
 
 /**

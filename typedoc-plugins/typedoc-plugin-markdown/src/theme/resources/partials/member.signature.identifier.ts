@@ -21,11 +21,7 @@ export function signatureMemberIdentifier(
   }
 
   if (signature.parent && signature.parent.flags?.length > 0) {
-    md.push(
-      signature.parent.flags
-        .map((flag) => `\`${flag.toLowerCase()}\``)
-        .join(' ') + ' ',
-    );
+    md.push(signature.parent.flags.map((flag) => `\`${flag.toLowerCase()}\``).join(' ') + ' ');
   }
 
   if (!['__call', '__type'].includes(signature.name)) {
@@ -41,9 +37,7 @@ export function signatureMemberIdentifier(
   }
 
   const getParameters = (parameters: ParameterReflection[] = []) => {
-    const firstOptionalParamIndex = parameters.findIndex(
-      (parameter) => parameter.flags.isOptional,
-    );
+    const firstOptionalParamIndex = parameters.findIndex((parameter) => parameter.flags.isOptional);
     return parameters
       .map((param, i) => {
         const paramsmd: string[] = [parameters.length > 2 ? '\n  ' : ''];
@@ -51,8 +45,7 @@ export function signatureMemberIdentifier(
           paramsmd.push('...');
         }
         const paramItem = `${backTicks(param.name)}${
-          param.flags.isOptional ||
-          (firstOptionalParamIndex !== -1 && i > firstOptionalParamIndex)
+          param.flags.isOptional || (firstOptionalParamIndex !== -1 && i > firstOptionalParamIndex)
             ? '?'
             : ''
         }`;
@@ -65,11 +58,18 @@ export function signatureMemberIdentifier(
       .join(`,${parameters.length > 2 ? '' : ' '}`);
   };
 
-  md.push(
-    signature.parameters && signature.parameters?.length > 0
-      ? `(${getParameters(signature.parameters)})`
-      : '()',
-  );
+  /** CSDK START */
+  // hide function parameters based on configuration
+  const shownParameters = signature.parameters
+    ? signature.parameters.filter((param: any) => {
+        const hiddenFunctionParameters =
+          (context.options.getValue('hiddenFunctionParameters') as string[]) || [];
+        return !hiddenFunctionParameters.includes(param.name);
+      })
+    : [];
+
+  md.push(shownParameters.length > 0 ? `(${getParameters(shownParameters)})` : '()');
+  /** CSDK END */
 
   if (signature.type) {
     md.push(`: ${context.someType(signature.type, true)}`);

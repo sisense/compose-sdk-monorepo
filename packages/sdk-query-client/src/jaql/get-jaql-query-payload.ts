@@ -39,14 +39,28 @@ export function getJaqlQueryPayload(
   queryDescription: QueryDescription,
   shouldSkipHighlightsWithoutAttributes: boolean,
 ): JaqlQueryPayload {
-  const { attributes, measures, filters, filterRelations, highlights, dataSource, count, offset } =
-    queryDescription;
+  const {
+    attributes,
+    measures,
+    filters,
+    filterRelations,
+    highlights,
+    dataSource,
+    count,
+    offset,
+    ungroup,
+  } = queryDescription;
+  // "ungroup: true" will be set in JAQL when two conditions are met:
+  // (1) ungroup is set to true
+  // AND
+  // (2) the query has no measures (unaggregated query)
+  const includeUngroup = ungroup && measures.length === 0;
   const queryPayload = {
     metadata: prepareQueryMetadata(
       { attributes, measures, filters, filterRelations, highlights },
       shouldSkipHighlightsWithoutAttributes,
     ),
-    ...prepareQueryOptions(dataSource, count, offset),
+    ...prepareQueryOptions(dataSource, count, offset, includeUngroup),
   };
 
   if (filterRelations) {
@@ -117,15 +131,17 @@ function prepareQueryMetadata(
   return [...attributesMetadata, ...measuresMetadata, ...filtersMetadata];
 }
 
-function prepareQueryOptions(
+export function prepareQueryOptions(
   dataSource: DataSource,
   count?: number,
   offset?: number,
+  includeUngroup?: boolean,
 ): QueryOptions {
   return {
     datasource: getJaqlDataSource(dataSource),
     by: JAQL_BY_CSDK,
     queryGuid: uuid(),
+    ...(includeUngroup ? { ungroup: true } : {}),
     ...(count ? { count } : {}),
     ...(offset ? { offset } : {}),
   };

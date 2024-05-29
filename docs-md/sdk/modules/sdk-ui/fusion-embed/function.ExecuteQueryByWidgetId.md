@@ -4,7 +4,7 @@ title: ExecuteQueryByWidgetId
 
 # Function ExecuteQueryByWidgetId <Badge type="fusionEmbed" text="Fusion Embed" />
 
-> **ExecuteQueryByWidgetId**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **ExecuteQueryByWidgetId**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 Executes a query over the existing widget and renders a function as child component.
 The child component is passed the state of the query as defined in [QueryByWidgetIdState](../type-aliases/type-alias.QueryByWidgetIdState.md).
@@ -17,7 +17,6 @@ offers an alternative approach to the [useExecuteQueryByWidgetId](function.useEx
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ExecuteQueryByWidgetIdProps`](../interfaces/interface.ExecuteQueryByWidgetIdProps.md) | ExecuteQueryByWidgetId properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

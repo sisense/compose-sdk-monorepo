@@ -2,7 +2,7 @@
 title: BoxplotChart
 ---
 
-# Class BoxplotChart <Badge type="beta" text="Beta" />
+# Class BoxplotChart
 
 A Vue component representing data in a way that visually describes the distribution, variability,
 and center of a data set along an axis.

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import { TableSize, EVENT_NOTIFY_SIZE } from '../../sizing/index.js';
 
 type Props = {
@@ -20,6 +19,8 @@ export class AnchorCell extends React.PureComponent<Props, State> {
   width = 0;
 
   content?: HTMLDivElement;
+
+  tdElement?: HTMLTableCellElement;
 
   cellStyle: React.CSSProperties;
 
@@ -83,10 +84,18 @@ export class AnchorCell extends React.PureComponent<Props, State> {
     }
   };
 
+  tdRef = (ref: HTMLTableCellElement | null) => {
+    if (ref) {
+      this.tdElement = ref;
+    }
+  };
+
   onGetSize = () => {
     const { type, rowIndex, colIndex } = this.props;
-    // eslint-disable-next-line react/no-find-dom-node
-    const node = findDOMNode(this) as HTMLElement;
+    const node = this.tdElement;
+    if (!node) {
+      return;
+    }
     let width;
     let height;
     if (type === AnchorCell.type.COL) {
@@ -117,7 +126,7 @@ export class AnchorCell extends React.PureComponent<Props, State> {
         `.trim();
 
     return (
-      <td className={className} key={`${type}-${index}`} style={this.cellStyle}>
+      <td className={className} key={`${type}-${index}`} style={this.cellStyle} ref={this.tdRef}>
         <div
           ref={this.contentRef}
           className="table-grid__cell-anchor-content"

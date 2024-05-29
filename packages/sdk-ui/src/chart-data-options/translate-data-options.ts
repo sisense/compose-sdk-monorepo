@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
+import { isRange } from './../chart-options-processor/translations/types';
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -39,6 +40,7 @@ import {
   ScattermapChartDataOptions,
   PivotTableDataOptions,
   PivotTableDataOptionsInternal,
+  RangeChartDataOptions,
 } from './types';
 import {
   translateColumnToCategory,
@@ -48,6 +50,7 @@ import {
   translateValueToMeasure,
 } from './utils';
 import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
+import { translateRangeChartDataOptions } from './translate-range-data-options';
 
 export function translateChartDataOptions(
   chartType: ChartType,
@@ -69,6 +72,8 @@ export function translateChartDataOptions(
     return translateAreamapDataOptions(dataOptions as AreamapChartDataOptions);
   } else if (isScattermap(chartType)) {
     return translateScattermapChartDataOptions(dataOptions as ScattermapChartDataOptions);
+  } else if (isRange(chartType)) {
+    return translateRangeChartDataOptions(dataOptions as RangeChartDataOptions);
   } else throw new Error(`Unexpected chart type: ${chartType}`);
 }
 
@@ -156,7 +161,7 @@ export function getAttributes(
     categories = ['x', 'y', 'breakByPoint', 'breakByColor'].flatMap((key) => {
       return dataOptions[key] && isCategory(dataOptions[key]) ? [dataOptions[key]] : [];
     });
-  } else if (isCartesian(chartType) || isCategorical(chartType)) {
+  } else if (isCartesian(chartType) || isCategorical(chartType) || isRange(chartType)) {
     categories = ['x', 'breakBy'].flatMap((key) => {
       return dataOptions[key] ?? [];
     });
@@ -202,8 +207,9 @@ export function getMeasures(
     values = ['size', 'colorBy', 'details'].flatMap((key) => {
       return dataOptions[key] && isValue(dataOptions[key]) ? [dataOptions[key]] : [];
     });
+  } else if (isRange(chartType)) {
+    values = (dataOptions as CartesianChartDataOptionsInternal).y;
   }
-
   return values.map(translateValueToMeasure);
 }
 

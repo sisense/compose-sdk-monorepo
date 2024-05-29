@@ -4,7 +4,7 @@ title: Chart
 
 # Function Chart
 
-> **Chart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **Chart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component used for easily switching chart types or rendering multiple series of different chart types.
 
@@ -24,7 +24,6 @@ A chart component displaying total revenue per quarter from the Sample ECommerce
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`ChartProps`](../interfaces/interface.ChartProps.md) | Chart properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

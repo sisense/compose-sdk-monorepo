@@ -47,7 +47,7 @@ import { getDataSourceName } from '@sisense/sdk-data';
  * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType}
  */
 export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSisenseComponent({
-  componentName: 'ChartWidget',
+  componentName: 'ChartWidgetDeprecated',
 })((props) => {
   const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
 
@@ -176,6 +176,7 @@ export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSise
                   },
                 } as CompleteThemeSettings
               }
+              skipTracking={true}
             >
               <div
                 style={{

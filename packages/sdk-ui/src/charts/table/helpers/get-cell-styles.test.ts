@@ -34,7 +34,11 @@ describe('getCellThemeAndDesignBasedStyles', () => {
       rowIndex: 0,
       themeSettings,
       customStyles: {
-        headersColor: true,
+        header: {
+          color: {
+            enabled: true,
+          },
+        },
       },
       isHeaderCell: true,
     });
@@ -52,7 +56,11 @@ describe('getCellThemeAndDesignBasedStyles', () => {
       rowIndex: 0,
       themeSettings,
       customStyles: {
-        alternatingColumnsColor: true,
+        columns: {
+          alternatingColor: {
+            enabled: true,
+          },
+        },
       },
       isHeaderCell: false,
     });
@@ -70,7 +78,11 @@ describe('getCellThemeAndDesignBasedStyles', () => {
       rowIndex: 1,
       themeSettings,
       customStyles: {
-        alternatingRowsColor: true,
+        rows: {
+          alternatingColor: {
+            enabled: true,
+          },
+        },
       },
       isHeaderCell: false,
     });

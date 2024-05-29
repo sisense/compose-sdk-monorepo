@@ -18,14 +18,14 @@ export type Layout = {
   }[];
 };
 
-export type Filter = {
+export type FilterDto = {
   isCascading?: false;
   jaql: FilterJaql & AnyObject;
   instanceid?: string;
   disabled?: boolean;
 };
 
-export type CascadingFilter = {
+export type CascadingFilterDto = {
   isCascading: true;
   levels: FilterJaql[];
   instanceid?: string;
@@ -37,7 +37,7 @@ export type DashboardDto = {
   title: string;
   datasource: Datasource;
   widgets?: WidgetDto[];
-  filters?: Array<Filter | CascadingFilter>;
+  filters?: Array<FilterDto | CascadingFilterDto>;
   filterRelations?: {
     filterRelations: FilterRelationsModel;
   }[];

@@ -76,7 +76,7 @@ export const useGetQueryRecommendationsInternal = (
  * This hook includes the same code that fetches the initial suggested questions in the chatbot.
  *
  * ::: warning Note
- * This hook is currently under private beta for selected customers and is subject to change as we make fixes and improvements.
+ * This hook is currently under beta release for selected customers and is subject to change as we make fixes and improvements.
  * :::
  *
  * @example

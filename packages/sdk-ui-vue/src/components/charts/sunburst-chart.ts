@@ -40,7 +40,6 @@ import { setupHelper } from '../../setup-helper';
  * @param props - Sunburst Chart properties
  * @returns Sunburst Chart component
  * @group Charts
- * @beta
  */
 export const SunburstChart = defineComponent({
   props: {

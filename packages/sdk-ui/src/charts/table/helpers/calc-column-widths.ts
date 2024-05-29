@@ -14,6 +14,7 @@ export const calcColumnWidths = (
   isShowFieldTypeIcon: boolean,
   columnsOptions: {
     isHtml: boolean;
+    width?: number;
   }[],
   fontFamily?: string,
 ): number[] => {
@@ -51,9 +52,11 @@ export const calcColumnWidths = (
   });
   // get max pixel between data or header for each column
   return columnNameWidths.map((nameWidth, index) => {
-    return Math.ceil(
-      Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, Math.max(nameWidth, columnDataWidths[index]))),
-    );
+    return columnsOptions[index]?.width
+      ? (columnsOptions[index].width as number)
+      : Math.ceil(
+          Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, Math.max(nameWidth, columnDataWidths[index]))),
+        );
   });
 };
 

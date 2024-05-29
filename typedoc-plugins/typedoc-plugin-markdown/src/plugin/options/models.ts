@@ -23,6 +23,7 @@ declare module 'typedoc' {
     preserveAnchorCasing: boolean;
     anchorPrefix: string;
     namedAnchors: boolean;
+    hiddenFunctionParameters: any[];
   }
 }
 
@@ -48,4 +49,5 @@ export interface PluginOptions {
   preserveAnchorCasing: boolean;
   anchorPrefix: string;
   namedAnchors: boolean;
+  hiddenFunctionParameters: any[];
 }

@@ -46,7 +46,7 @@ Returns the props to be used for rendering a chart widget.
 <ChartWidget {...widget.getChartWidgetProps()} />
 ```
 
-Note: this method is not supported for tabular widgets.
+Note: this method is not supported for pivot widgets.
 
 ***
 
@@ -202,7 +202,7 @@ Unique identifier of the widget.
 
 ### styleOptions
 
-> **styleOptions**: [`TableStyleOptions`](../interfaces/interface.TableStyleOptions.md) \| [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
+> **styleOptions**: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
 
 Widget style options.
 

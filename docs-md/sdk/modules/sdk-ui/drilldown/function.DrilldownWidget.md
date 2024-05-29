@@ -4,7 +4,7 @@ title: DrilldownWidget
 
 # Function DrilldownWidget
 
-> **DrilldownWidget**(`props`): `Element`
+> **DrilldownWidget**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 React component designed to add drilldown functionality to any type of chart.
 
@@ -44,6 +44,6 @@ Additional drilldown examples:
 
 ## Returns
 
-`Element`
+`null` \| `ReactElement`\< `any`, `any` \>
 
 DrilldownWidget wrapper component

@@ -12,7 +12,7 @@ Props of the [Table](../data-grids/function.Table.md) component.
 
 #### dataSet
 
-> **dataSet**?: [`Data`](../../sdk-data/interfaces/interface.Data.md) \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
 will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/function.SisenseContextProvider.md)

@@ -1,1 +1,1 @@
-export * from './areamap-map.js';
+export * from './areamap.js';

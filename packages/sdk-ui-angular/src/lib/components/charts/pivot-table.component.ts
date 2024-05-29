@@ -75,7 +75,7 @@ export class AnalyticsComponent {
  * ```
  * <img src="media://angular-pivot-table-example.png" width="800px" />
  * @group Data Grids
- * @alpha
+ * @beta
  */
 @Component({
   selector: 'csdk-pivot-table',
@@ -109,6 +109,14 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
    */
   @Input()
   filters: PivotTableProps['filters'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.highlights}
+   *
+   * @category Data
+   */
+  @Input()
+  highlights: PivotTableProps['highlights'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PivotTableProps.styleOptions}
@@ -150,6 +158,7 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
       dataSet: this.dataSet,
       dataOptions: this.dataOptions,
       filters: this.filters,
+      highlights: this.highlights,
       styleOptions: this.styleOptions,
     };
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2024-05-21
+
+- Add config `hiddenFunctionParameters` to hide function parameters – e.g., `deprecatedLegacyContext`
+
 ## 2024-04-08
 
 - Add `iframe` to the list of supported HTML tags – see function `escapeAngleBrackets()` in `src/support/utils.ts`

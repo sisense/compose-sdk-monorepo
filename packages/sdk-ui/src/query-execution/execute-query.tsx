@@ -52,6 +52,7 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
     highlights,
     count,
     offset,
+    ungroup,
     children,
     onDataChanged,
     onBeforeQuery,
@@ -64,6 +65,7 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
       highlights,
       count,
       offset,
+      ungroup,
       onBeforeQuery,
     });
 

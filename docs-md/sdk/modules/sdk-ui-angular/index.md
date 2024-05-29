@@ -31,7 +31,7 @@ Angular components for charts
 
 ## Data Grids
 
-- [PivotTableComponent](data-grids/class.PivotTableComponent.md) <Badge type="alpha" text="Alpha" />
+- [PivotTableComponent](data-grids/class.PivotTableComponent.md) <Badge type="beta" text="Beta" />
 - [TableComponent](data-grids/class.TableComponent.md)
 
 ## Drilldown

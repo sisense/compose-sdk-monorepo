@@ -51,11 +51,13 @@ export const useGetPivotTableQuery = ({
   dataSet,
   dataOptionsInternal,
   filters,
+  highlights,
   refreshCounter,
 }: {
   dataSet?: DataSource;
   dataOptionsInternal: PivotTableDataOptionsInternal;
   filters?: Filter[] | FilterRelations;
+  highlights?: Filter[];
   refreshCounter?: number;
 }) => {
   const jaqlRef = useRef<JaqlRequest | null>(null);
@@ -78,6 +80,7 @@ export const useGetPivotTableQuery = ({
     values,
     grandTotals,
     filters,
+    highlights,
     onBeforeQuery,
   };
   const { isLoading, isSuccess, isError, error } = useExecutePivotQueryInternal(queryParams);

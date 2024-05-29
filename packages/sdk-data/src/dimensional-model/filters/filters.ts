@@ -30,7 +30,7 @@ export const TextOperators = {
   DoesntEqual: 'doesntEqual',
   DoesntStartWith: 'doesntStartWith',
   DoesntContain: 'doesntContain',
-  DoesntEndWith: 'doesntEndWidth',
+  DoesntEndWith: 'doesntEndWith',
   Like: 'like',
 };
 
@@ -120,6 +120,13 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    */
   readonly guid: string;
 
+  /**
+   * Boolean flag whether the filter is disabled
+   *
+   * @internal
+   */
+  disabled: boolean;
+
   constructor(att: Attribute, filterType: string) {
     super('filter', MetadataTypes.Filter);
     this.filterType = filterType;
@@ -128,6 +135,7 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
     this.attribute = att;
 
     this.guid = guidFast(13);
+    this.disabled = false;
   }
 
   get name(): string {
@@ -167,6 +175,11 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    * @param nested - defines whether the JAQL is nested within parent JAQL statement or a root JAQL element
    */
   jaql(nested?: boolean): any {
+    // if the filter is disabled, return empty filter JAQL
+    if (this.disabled) {
+      return nested ? { filter: {} } : { jaql: { filter: {} } };
+    }
+
     const result = this.attribute.jaql(false);
 
     const level = this.attribute as LevelAttribute;
@@ -494,6 +507,11 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
   }
 
   jaql(nested?: boolean | undefined) {
+    // if the filter is disabled, return empty filter JAQL
+    if (this.disabled) {
+      return nested ? { filter: {} } : { jaql: { filter: {} } };
+    }
+
     const result = super.jaql(nested);
 
     if (this.measure instanceof DimensionalBaseMeasure) {

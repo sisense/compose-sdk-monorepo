@@ -6,7 +6,7 @@
  * fiscal year adjustments, see ./fiscal-date-format-replacers.ts
  */
 
-import { formatInTimeZone } from 'date-fns-tz';
+import formatInTimeZone from 'date-fns-tz/formatInTimeZone';
 import type { DateFormat } from './apply-date-format';
 import { newDateFormat } from './new-date-format';
 

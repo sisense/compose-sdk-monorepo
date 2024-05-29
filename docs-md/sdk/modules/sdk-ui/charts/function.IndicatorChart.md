@@ -4,7 +4,7 @@ title: IndicatorChart
 
 # Function IndicatorChart
 
-> **IndicatorChart**(`props`, `deprecatedLegacyContext`?): `null` \| `ReactElement`\< `any`, `any` \>
+> **IndicatorChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 
 A React component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
 
@@ -13,7 +13,6 @@ A React component that provides various options for displaying one or two numeri
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `props` | [`IndicatorChartProps`](../interfaces/interface.IndicatorChartProps.md) | Indicator chart properties |
-| `deprecatedLegacyContext`? | `any` | ::: warning Deprecated<br /><br />:::<br /><br />**See**<br /><br />[React Docs](https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods) |
 
 ## Returns
 

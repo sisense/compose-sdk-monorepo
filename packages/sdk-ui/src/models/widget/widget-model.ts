@@ -17,10 +17,10 @@ import { extractStyleOptions } from '../../dashboard-widget/translate-widget-sty
 import { Panel, WidgetDto, WidgetSubtype, WidgetType } from '../../dashboard-widget/types';
 import {
   getChartType,
+  isChartWidget,
   isPivotWidget,
   isSupportedWidgetType,
   isTableWidget,
-  isTabularWidget,
 } from '../../dashboard-widget/utils';
 import {
   ChartProps,
@@ -46,7 +46,7 @@ import {
 /**
  * Widget data options.
  */
-export type WidgetDataOptions = ChartDataOptions | TableDataOptions | PivotTableDataOptions;
+export type WidgetDataOptions = ChartDataOptions | PivotTableDataOptions;
 
 /**
  * Model of Sisense widget defined in the abstractions of Compose SDK.
@@ -163,7 +163,7 @@ export class WidgetModel {
     // does not handle widget type plugin
     this.drilldownOptions = extractDrilldownOptions(this.widgetType, widgetDto.metadata.panels);
     this.filters = extractFilters(widgetDto.metadata.panels);
-    this.chartType = isTabularWidget(widgetType) ? undefined : getChartType(this.widgetType);
+    this.chartType = isChartWidget(widgetType) ? getChartType(this.widgetType) : undefined;
   }
 
   /**
@@ -179,13 +179,12 @@ export class WidgetModel {
    */
   getExecuteQueryParams(): ExecuteQueryParams {
     if (isPivotWidget(this.widgetType)) {
-      throw new TranslatableError('errors.widgetModel.pivotWidgetNotSupported', {
-        methodName: 'getExecuteQueryParams',
-      });
+      throw new PivotNotSupportedMethodError('getExecuteQueryParams');
     }
     let dimensions: Attribute[];
     let measures: Measure[];
     let count: number | undefined = undefined;
+    let ungroup: boolean | undefined = undefined;
     if (isTableWidget(this.widgetType)) {
       const { attributes: tableAttributes, measures: tableMeasures } =
         getTableAttributesAndMeasures(
@@ -194,6 +193,8 @@ export class WidgetModel {
       dimensions = tableAttributes;
       measures = tableMeasures;
       count = DEFAULT_TABLE_ROWS_PER_PAGE * PAGES_BATCH_SIZE + 1;
+      // ungroup is needed so query without aggregation returns correct result
+      ungroup = true;
     } else {
       const { attributes: chartAttributes, measures: chartMeasures } = getTranslatedDataOptions(
         this.dataOptions as ChartDataOptions,
@@ -209,6 +210,7 @@ export class WidgetModel {
       filters: this.filters,
       highlights: this.highlights,
       count,
+      ungroup,
     };
   }
 
@@ -242,6 +244,7 @@ export class WidgetModel {
       values,
       grandTotals,
       filters: this.filters,
+      highlights: this.highlights,
     };
   }
 
@@ -258,15 +261,19 @@ export class WidgetModel {
    * Use {@link getPivotTableProps} instead for getting props for the <PivotTable> component.
    */
   getChartProps(): ChartProps {
-    if (isTabularWidget(this.widgetType)) {
-      throw new TranslatableError('errors.widgetModel.tabularWidgetNotSupported', {
-        methodName: 'getChartProps',
-      });
+    if (isPivotWidget(this.widgetType)) {
+      throw new PivotNotSupportedMethodError('getChartProps');
+    }
+    if (isTableWidget(this.widgetType)) {
+      return {
+        chartType: this.chartType!,
+        ...this.getTableProps(),
+      };
     }
     return {
       chartType: this.chartType!,
       dataOptions: this.dataOptions as ChartDataOptions,
-      styleOptions: this.styleOptions as ChartStyleOptions,
+      styleOptions: this.styleOptions,
       dataSet: this.dataSource,
       filters: this.filters,
       highlights: this.highlights,
@@ -322,6 +329,7 @@ export class WidgetModel {
       styleOptions: this.styleOptions,
       dataSet: this.dataSource,
       filters: this.filters,
+      highlights: this.highlights,
     };
   }
 
@@ -333,18 +341,16 @@ export class WidgetModel {
    * <ChartWidget {...widget.getChartWidgetProps()} />
    * ```
    *
-   * Note: this method is not supported for tabular widgets.
+   * Note: this method is not supported for pivot widgets.
    */
   getChartWidgetProps(): ChartWidgetProps {
-    if (isTableWidget(this.widgetType) || isPivotWidget(this.widgetType)) {
-      throw new TranslatableError('errors.widgetModel.tabularWidgetNotSupported', {
-        methodName: 'getChartWidgetProps',
-      });
+    if (isPivotWidget(this.widgetType)) {
+      throw new PivotNotSupportedMethodError('getChartWidgetProps');
     }
     return {
       chartType: this.chartType!,
       dataOptions: this.dataOptions as ChartDataOptions,
-      styleOptions: this.styleOptions as ChartStyleOptions,
+      styleOptions: this.styleOptions,
       dataSource: this.dataSource,
       filters: this.filters,
       highlights: this.highlights,
@@ -406,8 +412,15 @@ export class WidgetModel {
       styleOptions: this.styleOptions as PivotTableWidgetStyleOptions,
       dataSource: this.dataSource,
       filters: this.filters,
+      highlights: this.highlights,
       title: this.title,
       description: this.description || '',
     };
+  }
+}
+
+class PivotNotSupportedMethodError extends TranslatableError {
+  constructor(methodName: string) {
+    super('errors.widgetModel.pivotWidgetNotSupported', { methodName });
   }
 }

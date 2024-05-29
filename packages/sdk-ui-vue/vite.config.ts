@@ -6,6 +6,7 @@ import { resolve } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   build: {
+    sourcemap: mode === 'production' ? false : true,
     lib: {
       name: 'sdk-ui-vue',
       entry: './src/lib.ts',

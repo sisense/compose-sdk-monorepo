@@ -30,6 +30,8 @@ It is used as a local package in the Compose SDK repository. Its version is fixe
 
 ## Development
 
+### Update the plugin code
+
 There are two approaches to updating the plugin:
 
 (1) Make changes in the `src` directory and run `yarn docs:gen:md` from the root directory of the repo to (re)build the plugin and
@@ -40,6 +42,11 @@ it regenerates the entire Compose SDK documentation. Still, this approach is a s
 This approach is much faster as it only rebuilds the plugin and regenerates the markdown files for _mock_ compose sdk sources files defined in `typedoc-plugins/typedoc-plugin-markdown/__mocks__/csdk-minirepo`.
 
 Both approaches support debugging in IDEs.
+
+### Add config options
+
+1. Add new options to `typedoc-plugins/typedoc-plugin-markdown/src/plugin/options/config.ts` – see `hiddenFunctionParameters` as an example
+2. Run `ts-node scripts/code/options` from `typedoc-plugins/typedoc-plugin-markdown/`
 
 ## Testing
 

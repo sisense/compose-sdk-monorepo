@@ -2,8 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { parseISO } from 'date-fns';
-import type { Locale } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
 import { Data, isDatetime } from '@sisense/sdk-data';
 import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
 import { applyDateFormat, defaultDateConfig } from './date-formats';

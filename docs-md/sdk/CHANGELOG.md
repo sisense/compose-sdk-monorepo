@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.11.0] - 2024-05-28
+
+### Added
+- Add React component `AreaRangeChart` (beta)
+- Extend component `Chart` and `ChartWidget` to support chart type `table`
+- Add highlight filters support for the `PivotTable` and `DashboardWidget` components, as well as for the useGetWidgetModel hook.
+- Add React component `FiltersPanel` for internal testing
+- Add generic `useFetch` Vue composable to call any Sisense REST endpoint
+
+### Changed
+- Mark `headersColor`, `alternatingColumnsColor`, and `alternatingRowsColor` as `@deprecated` in `TableStyleOptions` – use `header.color`, `columns.alternatingColor`, and `rows.alternatingColor` instead
+- Support pie chart of multiple values and no category
+- Support boolean flag `ungroup` for JAQL queries with no aggregation
+- Make UI improvements: error messages for unsupported functionality in `BoxplotChart` and chart redraw on highlights deselect
+- Make improvements to AI chat to code (internal)
+- Move the `@sisense/sdk-ui-vue` package from beta to General Availability (GA)
+- Move components `AreamapChart`, `ScattermapChart`, and `BoxplotChart` from beta to General Availability (GA)
+- Move component `PivotTable` and hook `useExecutePivotQuery` from alpha to beta
+- Move AI components and hooks from private beta to beta
+
+## [1.10.1] - 2024-05-10
+
+### Changed
+- Fix an issue with CLI command `get-data-model` caused by React upgrade
+
 ## [1.10.0] - 2024-05-09
 
 ### Added
@@ -57,9 +82,8 @@
 - Support caching of query execution (alpha)
 - Extend the `PivotTable` component (alpha) to support
   UI sorting, date and number formatting, and dynamic sizing
-- Add generic `useFetch` hook to call any Sisense REST endpoint
+- Add generic `useFetch` React hook to call any Sisense REST endpoint
 - Add Typedoc plugin `@sisense/typedoc-plugin-markdown` (forked from `tgreyuk/typedoc-plugin-markdown` version `4.0.0-next.20`)
-- Move the `@sisense/sdk-ui-angular` package from beta to General Availability (GA)
 
 ### Changed
 - Enable accessibility support in Highcharts
@@ -67,6 +91,7 @@
 - Fix the issue with Indicator chart not using theme colors
 - Fix issues with `PieChart`: highlights and convolution animation
 - Make improvements to the AI components and hooks (private beta)
+- Move the `@sisense/sdk-ui-angular` package from beta to General Availability (GA)
 
 ## [1.6.0] - 2024-03-20
 

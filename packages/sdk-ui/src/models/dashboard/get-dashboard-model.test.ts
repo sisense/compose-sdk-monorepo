@@ -39,6 +39,7 @@ describe('getDashboardModel', () => {
       oid: dashboardMock.oid,
       title: dashboardMock.title,
       layout: expect.anything(),
+      filters: expect.anything(),
       dataSource: dashboardMock.datasource.title,
     });
   });
@@ -54,8 +55,26 @@ describe('getDashboardModel', () => {
       title: dashboardMock.title,
       dataSource: dashboardMock.datasource.title,
       layout: expect.anything(),
+      filters: expect.anything(),
       widgets: expect.arrayContaining(
         Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
+      ),
+    });
+  });
+
+  it('should include filters when includeFilters is true', async () => {
+    const options: GetDashboardModelOptions = {
+      includeFilters: true,
+    };
+    const result = await getDashboardModel(httpClientMock, dashboardMock.oid, options);
+
+    expect(result).toEqual({
+      oid: dashboardMock.oid,
+      title: dashboardMock.title,
+      dataSource: dashboardMock.datasource.title,
+      layout: expect.anything(),
+      filters: expect.arrayContaining(
+        Array(dashboardMock.filters?.length).map(() => expect.anything()),
       ),
     });
   });

@@ -22,6 +22,7 @@ import { useThemeContext } from '..';
 import { Themable } from '@/theme-provider/types';
 import AiDisclaimer from './ai-disclaimer';
 import ClickableMessage from './messages/clickable-message';
+import { BetaLabel } from './common/beta-label';
 
 export type ChatBoxProps = {
   contextTitle: string;
@@ -124,6 +125,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
           <NavBackButton onClick={onGoBack} color={themeSettings.aiChat.header.textColor} />
         )
       }
+      rightNav={<BetaLabel />}
       style={themeSettings.aiChat.header}
     />
   ) : null;

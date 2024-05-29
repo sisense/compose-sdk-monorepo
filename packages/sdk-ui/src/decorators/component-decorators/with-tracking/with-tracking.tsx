@@ -6,7 +6,10 @@ import { ErrorTracker } from './error-tracker';
 
 type TrackingDecoratorConfig = {
   componentName: string;
-  shouldSkipTracking?: boolean | ((props: any) => boolean);
+  config: {
+    skip?: boolean | ((props: any) => boolean);
+    transparent?: boolean;
+  };
 };
 
 /**
@@ -14,19 +17,18 @@ type TrackingDecoratorConfig = {
  */
 export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
   componentName,
-  shouldSkipTracking,
+  config,
 }) => {
+  const { skip, transparent } = config || {};
   return (Component) => {
     return (props) => {
-      if (
-        (isBoolean(shouldSkipTracking) && shouldSkipTracking) ||
-        (isFunction(shouldSkipTracking) && shouldSkipTracking(props))
-      ) {
+      if ((isBoolean(skip) && skip) || (isFunction(skip) && skip(props))) {
         return <Component {...props} />;
       }
       useTrackComponentInit(componentName, props);
       return (
-        <TrackingContextProvider>
+        // If component is transperent for tracking, nested components will be tracked
+        <TrackingContextProvider skipNested={!transparent}>
           <ErrorTracker componentName={componentName}>
             <Component {...props} />
           </ErrorTracker>

@@ -78,6 +78,7 @@ TypeScript type aliases for components and composables listed above
 - [ThemeOid](type-alias.ThemeOid.md)
 - [ThemeProviderProps](type-alias.ThemeProviderProps.md)
 - [UniformDataColorOptions](type-alias.UniformDataColorOptions.md)
+- [UseFetchOptions](type-alias.UseFetchOptions.md)
 - [ValueToColorMap](type-alias.ValueToColorMap.md)
 - [WidgetDataOptions](type-alias.WidgetDataOptions.md)
 - [WidgetType](type-alias.WidgetType.md)

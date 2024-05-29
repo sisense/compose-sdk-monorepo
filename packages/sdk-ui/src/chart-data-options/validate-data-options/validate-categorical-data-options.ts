@@ -26,7 +26,7 @@ type MaxCategoricalDataOptionsLengthsMap = {
  */
 const maxCategoricalDataOptionsLengthsMap: MaxCategoricalDataOptionsLengthsMap = {
   pie: {
-    category: 1,
+    category: 3,
     value: 1,
   },
   funnel: {
@@ -62,12 +62,15 @@ function filterCategoricalDataOptionsByAllowedLength(
   }
   const filteredCategory = dataOptions.category.slice(0, maxLengths.category);
 
-  if (dataOptions.value.length > maxLengths.value) {
-    console.warn(
-      `Maximum 'value' length is limited to ${maxLengths.value} for '${chartType}' chart. Taken first ${maxLengths.value} values`,
-    );
+  let filteredValue = dataOptions.value;
+  if (chartType !== 'pie' || dataOptions.category.length > 0) {
+    if (dataOptions.value.length > maxLengths.value) {
+      console.warn(
+        `Maximum 'value' length is limited to ${maxLengths.value} for '${chartType}' chart. Taken first ${maxLengths.value} values`,
+      );
+    }
+    filteredValue = dataOptions.value.slice(0, maxLengths.value);
   }
-  const filteredValue = dataOptions.value.slice(0, maxLengths.value);
   return {
     ...dataOptions,
     category: filteredCategory,

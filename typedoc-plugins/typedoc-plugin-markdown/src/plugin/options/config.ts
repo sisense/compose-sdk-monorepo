@@ -296,3 +296,16 @@ export const namedAnchors: DeclarationOption = {
   type: ParameterType.Boolean,
   defaultValue: false,
 };
+
+/**
+ * Add config `hiddenFunctionParameters` to hide function parameters – e.g., `deprecatedLegacyContext`
+ * Needed for CSDK
+ *
+ * @category ui
+ */
+export const hiddenFunctionParameters: DeclarationOption = {
+  name: 'hiddenFunctionParameters',
+  help: 'Specify array of function parameters to be hidden.',
+  type: ParameterType.Array,
+  defaultValue: [],
+};

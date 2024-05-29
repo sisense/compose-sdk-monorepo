@@ -398,6 +398,13 @@ export interface Filter extends Element {
   isScope: boolean;
 
   /**
+   * Boolean flag whether the filter is disabled
+   *
+   * @internal
+   */
+  disabled: boolean;
+
+  /**
    * Gets JAQL representing this Filter instance
    *
    * @internal

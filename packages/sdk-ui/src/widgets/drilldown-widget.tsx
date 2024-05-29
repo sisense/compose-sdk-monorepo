@@ -5,6 +5,7 @@ import { ContextMenu } from './common/context-menu';
 import { DrilldownBreadcrumbs } from './common/drilldown-breadcrumbs';
 import { useCustomDrilldown } from './common/custom-drilldown';
 import { DrilldownWidgetProps } from '../props';
+import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 
 /**
  * React component designed to add drilldown functionality to any type of chart.
@@ -41,12 +42,10 @@ import { DrilldownWidgetProps } from '../props';
  * @returns DrilldownWidget wrapper component
  * @group Drilldown
  */
-export const DrilldownWidget = ({
-  drilldownDimensions,
-  initialDimension,
-  config,
-  children,
-}: DrilldownWidgetProps) => {
+export const DrilldownWidget = asSisenseComponent({
+  componentName: 'DrilldownWidget',
+  trackingConfig: { transparent: true },
+})(({ drilldownDimensions, initialDimension, config, children }: DrilldownWidgetProps) => {
   const [selectedDataPoints, setSelectedDataPoints] = useState<DataPoint[]>([]);
   const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
 
@@ -148,4 +147,4 @@ export const DrilldownWidget = ({
       </div>
     </div>
   );
-};
+});

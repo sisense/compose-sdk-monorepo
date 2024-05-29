@@ -5,7 +5,6 @@ import {
 } from '@sisense/sdk-pivot-client';
 import { PivotTableProps } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import { shouldSkipSisenseContextWaiting } from '../chart';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { useGetPivotTableQuery } from './use-get-pivot-table-query';
 import { preparePivotRowsSortCriteriaList } from './sorting-utils';
@@ -15,6 +14,7 @@ import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting
 import { preparePivotStylingProps } from '@/pivot-table/helpers/prepare-pivot-styling-props';
 import { useThemeContext } from '@/theme-provider';
 import { usePivotTableDataOptionsInternal } from './use-pivot-table-data-options-internal';
+import { LoadingOverlay } from '@/common/components/loading-overlay';
 
 const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
 
@@ -96,15 +96,22 @@ const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
  * @param props - Pivot Table properties
  * @returns Pivot Table component
  * @group Data Grids
- * @alpha
+ * @beta
  */
 
 export const PivotTable = asSisenseComponent({
   componentName: 'PivotTable',
-  shouldSkipSisenseContextWaiting,
   // eslint-disable-next-line max-lines-per-function
 })((pivotTableProps: PivotTableProps) => {
-  const { styleOptions = {}, dataSet, dataOptions, filters, refreshCounter = 0 } = pivotTableProps;
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    styleOptions = {},
+    dataSet,
+    dataOptions,
+    filters,
+    highlights,
+    refreshCounter = 0,
+  } = pivotTableProps;
   const nodeRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<ContainerSize | null>(null);
   // retrieve and validate the pivot client
@@ -123,6 +130,7 @@ export const PivotTable = asSisenseComponent({
     dataSet,
     dataOptionsInternal,
     filters,
+    highlights,
     refreshCounter,
   });
 
@@ -143,6 +151,7 @@ export const PivotTable = asSisenseComponent({
         height: size.height,
         isPaginated: true,
         itemsPerPage: rowsPerPage,
+        isSelectedMode: true,
         ...preparePivotStylingProps(styleOptions, themeSettings),
       };
       const isPivotRendered = nodeRef.current.children.length;
@@ -155,8 +164,17 @@ export const PivotTable = asSisenseComponent({
 
       // sends pivot query by redefining the dataService
       pivotBuilder.updateDataService(dataService);
-      /* eslint-disable-next-line promise/catch-or-return */
-      dataService.loadData(jaql).then(() => pivotBuilder.updateJaql());
+      setIsLoading(true);
+      dataService
+        .loadData(jaql)
+        .then(() => {
+          pivotBuilder.updateJaql();
+          setIsLoading(false);
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          throw e;
+        });
     }
   }, [jaql, dataService, pivotBuilder, pivotClient, styleOptions, size, themeSettings]);
 
@@ -196,7 +214,9 @@ export const PivotTable = asSisenseComponent({
       useContentSize={{ height: styleOptions?.isAutoHeight }}
       onSizeChange={updateSize}
     >
-      <div ref={nodeRef} aria-label="pivot-table-root" />
+      <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+        <div ref={nodeRef} aria-label="pivot-table-root" />
+      </LoadingOverlay>
     </DynamicSizeContainer>
   );
 });

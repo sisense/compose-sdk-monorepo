@@ -5,6 +5,7 @@
 .tableWrapper {
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
   @extend %fixed-data-table-custom;
   user-select: text;
 }
@@ -22,6 +23,7 @@
   border: none;
   width: 100%;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .tableCell {
@@ -32,6 +34,7 @@
   border-bottom: 1px solid $ATHENS_GRAY_DARK;
   overflow: hidden;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .tableCellContent {

@@ -1,0 +1,131 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WidgetModel > getExecutePivotQueryParams > getChartProps > should return chart props for table widget 1`] = `
+{
+  "chartType": "table",
+  "dataOptions": {
+    "columns": [
+      {
+        "column": {
+          "__serializable": "DimensionalElement",
+          "desc": "",
+          "expression": "[Diagnosis.Description]",
+          "name": "DIAGNOSIS",
+          "type": "text-attribute",
+        },
+        "isColored": false,
+        "sortType": "sortNone",
+      },
+      {
+        "column": {
+          "__serializable": "DimensionalElement",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalElement",
+            "desc": "",
+            "expression": "[Admissions.Patient_ID]",
+            "name": "PATIENTS",
+            "type": "numeric-attribute",
+          },
+          "desc": "",
+          "name": "# PATIENTS",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": false,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": false,
+          "name": "Numbers",
+          "prefix": false,
+          "symbol": undefined,
+          "thousandSeparator": undefined,
+          "trillion": false,
+        },
+        "sortType": "sortNone",
+      },
+      {
+        "column": {
+          "__serializable": "DimensionalElement",
+          "aggregation": "avg",
+          "attribute": {
+            "__serializable": "DimensionalElement",
+            "desc": "",
+            "expression": "[Admissions.Cost_of_admission]",
+            "name": "AVGCOST",
+            "type": "numeric-attribute",
+          },
+          "desc": "",
+          "name": "AVG COST",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": false,
+          "decimalScale": 0,
+          "kilo": false,
+          "million": false,
+          "name": "Currency",
+          "prefix": true,
+          "symbol": "$",
+          "thousandSeparator": undefined,
+          "trillion": false,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSet": "Sample Healthcare",
+  "filters": [
+    {
+      "__serializable": "DimensionalElement",
+      "attribute": {
+        "__serializable": "DimensionalElement",
+        "desc": "",
+        "expression": "[Diagnosis.Description]",
+        "name": "Description",
+        "type": "text-attribute",
+      },
+      "count": 10,
+      "desc": "",
+      "filterType": "ranking",
+      "measure": {
+        "__serializable": "DimensionalElement",
+        "aggregation": "count",
+        "attribute": {
+          "__serializable": "DimensionalElement",
+          "desc": "",
+          "expression": "[Admissions.Patient_ID]",
+          "name": "Patient_ID",
+          "type": "numeric-attribute",
+        },
+        "desc": "",
+        "name": "count Patient_ID",
+        "sort": 0,
+        "type": "basemeasure",
+      },
+      "name": "c4385b7c5e5cd228df086d36ae458779e1a7a768",
+      "operator": "top",
+      "type": "filter",
+    },
+  ],
+  "styleOptions": {
+    "columns": {
+      "alternatingColor": {
+        "enabled": false,
+      },
+    },
+    "header": {
+      "color": {
+        "enabled": true,
+      },
+    },
+    "rows": {
+      "alternatingColor": {
+        "enabled": true,
+      },
+    },
+  },
+}
+`;

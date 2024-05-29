@@ -21,6 +21,7 @@ import {
   isAreamap,
   isBoxplot,
 } from '@/chart-options-processor/translations/types';
+import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
 
 export const getChartRecommendationsOrDefault = (
   response: NlqResponseData,
@@ -159,35 +160,48 @@ const getAxisTitle = (chartRecommendations: ChartRecommendations, axis: 'x' | 'y
 };
 
 /**
+ * Get chart options for the chart widget.
+ *
+ * @param jaql - metadata items
+ * @param chartRecommendations - chart recommendations
+ * @param useCustomizedStyleOptions - whether to use customized style. Charts as inline response messages use customized style. Charts for Query Composer use default style.
  * @internal
  */
 export const getChartOptions = (
   jaql: MetadataItem[],
   chartRecommendations: ChartRecommendations,
+  useCustomizedStyleOptions = true,
 ) => {
   const dataOptions = mapToDataOptions(jaql, chartRecommendations);
 
-  const chartStyleOptions = merge(DEFAULT_STYLE_OPTIONS, {
-    subtype: DEFAULT_SUBTYPE_FOR[chartRecommendations.chartType],
-  }) as ChartStyleOptions;
-  const expandedChartStyleOptions = merge(chartStyleOptions, {
-    legend: {
-      enabled: true,
-      position: 'right',
-    },
-    yAxis: {
-      title: {
+  let chartStyleOptions, expandedChartStyleOptions;
+
+  if (useCustomizedStyleOptions) {
+    chartStyleOptions = merge(DEFAULT_STYLE_OPTIONS, {
+      subtype: DEFAULT_SUBTYPE_FOR[chartRecommendations.chartType],
+    }) as ChartStyleOptions;
+    expandedChartStyleOptions = merge(chartStyleOptions, {
+      legend: {
         enabled: true,
-        text: getAxisTitle(chartRecommendations, 'y'),
+        position: 'right',
       },
-    },
-    xAxis: {
-      title: {
-        enabled: true,
-        text: getAxisTitle(chartRecommendations, 'x'),
+      yAxis: {
+        title: {
+          enabled: true,
+          text: getAxisTitle(chartRecommendations, 'y'),
+        },
       },
-    },
-  }) as ChartStyleOptions;
+      xAxis: {
+        title: {
+          enabled: true,
+          text: getAxisTitle(chartRecommendations, 'x'),
+        },
+      },
+    }) as ChartStyleOptions;
+  } else {
+    chartStyleOptions = getDefaultStyleOptions();
+    expandedChartStyleOptions = chartStyleOptions;
+  }
 
   return {
     dataOptions,

@@ -1,5 +1,8 @@
 import { Column, DataTable } from '../../chart-data-processor/table-processor';
-import { TableDesignOptions } from '../../chart-options-processor/translations/design-options';
+import {
+  TableColorOptions,
+  TableDesignOptions,
+} from '../../chart-options-processor/translations/design-options';
 import { CompleteThemeSettings } from '../../types';
 import { TableDataOptionsInternal } from '../../chart-data-options/types';
 
@@ -59,9 +62,18 @@ export type TableCustomStyles = {
   sortIcon?: 'caret' | 'standard';
   headerHeight?: number;
   rowHeight?: number;
-  headersColor?: boolean;
-  alternatingRowsColor?: boolean;
-  alternatingColumnsColor?: boolean;
+  paddingVertical?: number;
+  paddingHorizontal?: number;
+  header?: {
+    color?: TableColorOptions;
+  };
+  columns?: {
+    alternatingColor?: TableColorOptions;
+    width?: 'auto' | 'content';
+  };
+  rows?: {
+    alternatingColor?: TableColorOptions;
+  };
 };
 
 export type TableReducerState = {

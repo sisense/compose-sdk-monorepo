@@ -2,7 +2,7 @@
 title: SunburstChart
 ---
 
-# Class SunburstChart <Badge type="beta" text="Beta" />
+# Class SunburstChart
 
 A Vue component that wraps the SunburstChart Preact component for use in Vue applications.
 It maintains compatibility with Vue's reactivity system while preserving the functionality of the SunburstChart.

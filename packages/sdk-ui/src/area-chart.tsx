@@ -1,6 +1,7 @@
 import { AreaChartProps } from './props';
-import { Chart, shouldSkipSisenseContextWaiting } from './chart';
+import { Chart } from './chart';
 import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
 /**
  * A React component similar to a {@link LineChart},
  * but with filled in areas under each line and an option to display them as stacked.

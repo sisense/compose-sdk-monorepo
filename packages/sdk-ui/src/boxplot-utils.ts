@@ -149,13 +149,20 @@ export const executeBoxplotQuery = async (
       filters,
       highlights,
     };
-
-    const outliersQueryResultData = await executeQuery(outliersQuery, app);
-    queryResultData = boxWhiskerProcessResultInternal(
-      mainQueryResultData,
-      outliersQueryResultData,
-      chartDataOptions,
-    );
+    try {
+      const outliersQueryResultData = await executeQuery(outliersQuery, app);
+      queryResultData = boxWhiskerProcessResultInternal(
+        mainQueryResultData,
+        outliersQueryResultData,
+        chartDataOptions,
+      );
+    } catch (error) {
+      if ((error as Error)?.message?.includes('UnsupportedFunctionalityException')) {
+        console.warn('Functionality not supported by platform: Boxplot outliers');
+      } else {
+        throw error;
+      }
+    }
   }
 
   return queryResultData;

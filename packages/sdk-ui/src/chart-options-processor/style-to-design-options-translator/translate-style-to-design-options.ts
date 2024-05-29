@@ -63,6 +63,7 @@ export const translateStyleOptionsToDesignOptions = (
         hasY2Axis,
       );
       break;
+    case 'arearange':
     case 'line':
       intermediateDesignOptions = getLineChartDesignOptions(
         styleOptions as LineStyleOptions,

@@ -2,7 +2,7 @@
 title: useExecutePivotQuery
 ---
 
-# Function useExecutePivotQuery <Badge type="alpha" text="Alpha" />
+# Function useExecutePivotQuery <Badge type="beta" text="Beta" />
 
 > **useExecutePivotQuery**(...`args`): [`PivotQueryState`](../type-aliases/type-alias.PivotQueryState.md)
 

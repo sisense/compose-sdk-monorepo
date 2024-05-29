@@ -2,7 +2,7 @@
 title: ScattermapChart
 ---
 
-# Class ScattermapChart <Badge type="beta" text="Beta" />
+# Class ScattermapChart
 
 A Vue component that wraps the ScattermapChart Preact component for use in Vue applications.
 It maintains compatibility with Vue's reactivity system while preserving the functionality of the ScattermapChart.

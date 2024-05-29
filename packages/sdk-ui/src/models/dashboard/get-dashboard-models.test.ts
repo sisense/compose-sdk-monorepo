@@ -36,8 +36,9 @@ const getDashboardsMock = vi.fn<Parameters<RestApi['getDashboards']>>(
 /**
  * Custom 'expect' extension to check if a value is in an array
  *
- * @param received
- * @param expected
+ * @param received - received value
+ * @param expected - expected value
+ * @returns - object with pass and message
  */
 const oneOfExpectExtension = (received: unknown, expected: unknown[]) => {
   const pass = expected.includes(received);
@@ -82,6 +83,7 @@ describe('getDashboardModels', () => {
         oid: dashboardMock.oid,
         title: dashboardMock.title,
         layout: expect.anything(),
+        filters: expect.anything(),
         dataSource: (expect as ExpectWithOneOfExtension).oneOf([
           dashboardMock.datasource.title,
           dashboardMock.datasource.fullname,
@@ -105,6 +107,7 @@ describe('getDashboardModels', () => {
           dashboardMock.datasource.fullname,
         ]),
         layout: expect.anything(),
+        filters: expect.anything(),
         widgets: expect.arrayContaining(
           Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
         ),
@@ -126,6 +129,7 @@ describe('getDashboardModels', () => {
       oid: targetDashboardMock.oid,
       title: targetDashboardMock.title,
       layout: expect.anything(),
+      filters: expect.anything(),
       dataSource: (expect as ExpectWithOneOfExtension).oneOf([
         targetDashboardMock.datasource.title,
         targetDashboardMock.datasource.fullname,

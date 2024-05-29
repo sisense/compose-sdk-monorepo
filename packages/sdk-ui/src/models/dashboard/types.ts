@@ -1,4 +1,4 @@
-import { type DataSource } from '@sisense/sdk-data';
+import { type DataSource, Filter } from '@sisense/sdk-data';
 import { WidgetModel } from '../widget/widget-model';
 
 /** @internal */
@@ -22,4 +22,6 @@ export type DashboardModel = {
   widgets?: WidgetModel[];
   /** @internal */
   layout?: Layout;
+  /** @internal */
+  filters?: Filter[];
 };

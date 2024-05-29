@@ -57,6 +57,7 @@ const prepareQueryParams = (
     highlights = [],
     count,
     offset,
+    ungroup,
   } = queryDescription;
 
   if (filters) {
@@ -82,6 +83,7 @@ const prepareQueryParams = (
     highlights,
     count,
     offset,
+    ungroup,
   };
 };
 
