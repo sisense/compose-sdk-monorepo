@@ -15,7 +15,7 @@ making it easier to integrate Sisense analytics within Vue applications.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`MaybeWithRefs`](../type-aliases/type-alias.MaybeWithRefs.md)\< [`GetDashboardModelsParams`](../interfaces/interface.GetDashboardModelsParams.md) \> | Parameters for fetching the dashboard models, which can include filters,<br />sorting options, and pagination settings to customize the fetch operation. The parameters allow for precise control<br />over which dashboards are retrieved and in what order. |
+| `params` | [`MaybeRefOrWithRefs`](../type-aliases/type-alias.MaybeRefOrWithRefs.md)\< [`GetDashboardModelsParams`](../interfaces/interface.GetDashboardModelsParams.md) \> | Parameters for fetching the dashboard models, which can include filters,<br />sorting options, and pagination settings to customize the fetch operation. The parameters allow for precise control<br />over which dashboards are retrieved and in what order. |
 
 ## Returns
 

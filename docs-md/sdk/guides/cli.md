@@ -5,7 +5,7 @@ Use the Compose SDK CLI to work with your Compose SDK project.
 The CLI has the following commands:
 
 - [`get-data-model`](#get-data-model): Creates a [TypeScript representation of a data model](./data-model.md)
-- [`get-api-token`](#get-api-token): Gets an [API token for authentication](../authentication-security.md#api-token)
+- [`get-api-token`](#get-api-token): Gets an [API token for authentication](../getting-started/authentication-security.md#api-token)
 
 ## get-data-model
 
@@ -31,7 +31,7 @@ npx @sisense/sdk-cli@latest get-data-model --dataSource "Sample ECommerce" --url
 
 ## get-api-token
 
-The `get-api-token` command gets an [API token for authentication](../authentication-security.md#api-token). Use a username/password to authenticate when running this command.
+The `get-api-token` command gets an [API token for authentication](../getting-started/authentication-security.md#api-token). Use a username/password to authenticate when running this command.
 
 ### Options
 

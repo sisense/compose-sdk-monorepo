@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { CompleteThemeSettings } from '../../../types';
-import { type FunctionComponent, type ButtonHTMLAttributes, LabelHTMLAttributes } from 'react';
+import { type FunctionComponent, type ButtonHTMLAttributes } from 'react';
 import { DateIcon } from '../icons';
 import { getSlightlyDifferentColor } from '../../../utils/color';
+import { Themable } from '@/theme-provider/types';
 
-type Variant = 'white' | 'grey';
+export type Variant = 'white' | 'grey';
 
 type InputProps = {
   variant?: Variant;
@@ -14,10 +14,7 @@ type InputProps = {
 
 const isWhite = (variant: Variant | undefined) => variant === 'white';
 
-type ThemeMixin = {
-  theme: CompleteThemeSettings;
-};
-export type DateRangeFieldButtonProps = InputProps & ThemeMixin;
+export type DateRangeFieldButtonProps = InputProps & Themable;
 
 const disabledBg = 'rgb(240, 240, 240)';
 const disabledColor = 'rgba(0, 0, 0, 0.26)';
@@ -45,9 +42,13 @@ const CalendarButton = styled.button<DateRangeFieldButtonProps>`
   transition: color 250ms;
 `;
 
-type CalendarLabelProps = LabelHTMLAttributes<HTMLLabelElement> & ThemeMixin;
-const CalendarLabel = styled.label<CalendarLabelProps>`
-  color: ${({ theme }) => theme.general.primaryButtonTextColor};
+type Variantable = {
+  variant: Variant;
+};
+
+const CalendarLabel = styled.label<Themable & Variantable>`
+  color: ${({ theme, variant }) =>
+    isWhite(variant) ? theme.typography.primaryTextColor : theme.general.primaryButtonTextColor};
 `;
 
 export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> = (props) => {
@@ -66,10 +67,9 @@ export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> 
       {label && (
         <CalendarLabel
           htmlFor={props.id}
-          className={
-            'csdk-text-text-content csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px]'
-          }
+          className={'csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px]'}
           theme={theme}
+          variant={variant}
         >
           {label}
         </CalendarLabel>

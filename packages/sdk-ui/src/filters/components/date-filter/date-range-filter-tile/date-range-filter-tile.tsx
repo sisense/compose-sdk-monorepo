@@ -1,13 +1,19 @@
-import { DateFilter } from '..';
 import {
   LevelAttribute,
   DataSource,
   Filter,
   DateRangeFilter,
-  filterFactory,
+  FilterTypes,
 } from '@sisense/sdk-data';
-import { useDateLimits } from './use-date-limits';
+import cloneDeep from 'lodash/cloneDeep';
+import { useState } from 'react';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
+import { FilterTile } from '../../filter-tile';
+import { EditableDateRangeFilter } from './editable-date-range-filter';
+import { DateRangeFilterDisplay } from './date-range-filter-display';
+import { TranslatableError } from '@/translation/translatable-error';
+import { AnyObject } from '@/utils/utility-types';
+import { useDateLimits } from './use-date-limits';
 
 export interface DateRangeFilterTileProps {
   /**
@@ -50,6 +56,13 @@ export interface DateRangeFilterTileProps {
    * List of filters this filter is dependent on.
    */
   parentFilters?: Filter[];
+
+  /**
+   * Whether to display the filter as a tiled version.
+   * @default false
+   * @internal
+   */
+  tiled?: boolean;
 }
 
 /**
@@ -81,17 +94,30 @@ export interface DateRangeFilterTileProps {
  */
 export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRangeFilterTile' })(
   (props: DateRangeFilterTileProps) => {
-    const dateRangeFilter = props.filter as DateRangeFilter;
     const {
-      attribute,
-      dataSource,
+      filter,
       onChange,
+      title,
       earliestDate,
       lastDate,
-      parentFilters: rawParentFilters,
+      attribute,
+      dataSource,
+      parentFilters,
+      tiled = false,
     } = props;
-    const parentFilters =
-      rawParentFilters && rawParentFilters?.filter((filter) => filter && filter !== null);
+    if (!isDateRangeFilter(filter)) {
+      throw new TranslatableError('errors.invalidFilterType');
+    }
+    const [lastFilter, setLastFilter] = useState(filter);
+    let disabled = lastFilter.disabled;
+
+    const onUpdateValues = (newFilter: DateRangeFilter) => {
+      if (newFilter) {
+        setLastFilter(newFilter);
+      }
+      onChange(newFilter);
+    };
+
     const dateLimits = useDateLimits(
       {
         minDate: earliestDate,
@@ -102,30 +128,49 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
       parentFilters,
     );
 
-    if (!dateLimits) {
-      return null;
+    if (!tiled) {
+      if (!dateLimits) {
+        return null;
+      }
+      return (
+        <EditableDateRangeFilter
+          {...props}
+          filter={filter}
+          dateLimits={dateLimits}
+          isOldDateRangeFilterTile
+        />
+      );
     }
 
-    const fromDate = dateRangeFilter.from || dateLimits?.minDate;
-    const toDate = dateRangeFilter.to || dateLimits?.maxDate;
-
     return (
-      <DateFilter
-        onChange={(dateFilter) => {
-          const newFilter = filterFactory.dateRange(
-            attribute,
-            dateFilter.filter.from,
-            dateFilter.filter.to,
+      <FilterTile
+        title={title}
+        renderContent={(collapsed) => {
+          return collapsed || !dateLimits ? (
+            <DateRangeFilterDisplay filter={filter} />
+          ) : (
+            <div className="csdk-mt-2 csdk-ml-2 csdk-mb-1">
+              <EditableDateRangeFilter
+                {...props}
+                filter={filter}
+                dateLimits={dateLimits}
+                disabled={disabled}
+              />
+            </div>
           );
-          onChange(newFilter);
         }}
-        value={{
-          from: fromDate,
-          to: toDate,
+        onToggleDisabled={() => {
+          disabled = !disabled;
+          const newFilter = cloneDeep(lastFilter);
+          newFilter.disabled = disabled;
+          onUpdateValues(newFilter);
         }}
-        limit={dateLimits}
-        isDependent={parentFilters && parentFilters.length > 0}
+        disabled={disabled}
       />
     );
   },
 );
+
+function isDateRangeFilter(filter: Filter & AnyObject): filter is DateRangeFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.date;
+}

@@ -15,7 +15,7 @@ success, and error states, offering a reactive way to integrate Sisense formulas
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`MaybeWithRefs`](../type-aliases/type-alias.MaybeWithRefs.md)\< [`UseGetSharedFormulaParams`](../interfaces/interface.UseGetSharedFormulaParams.md) \> | Parameters for fetching the shared formula, including the formula's OID,<br />or its name and the data source. This allows for precise specification of the formula to be fetched, supporting dynamic<br />values through Vue refs for reactive fetching based on user interactions or other application states. |
+| `params` | [`MaybeRefOrWithRefs`](../type-aliases/type-alias.MaybeRefOrWithRefs.md)\< [`UseGetSharedFormulaParams`](../interfaces/interface.UseGetSharedFormulaParams.md) \> | Parameters for fetching the shared formula, including the formula's OID,<br />or its name and the data source. This allows for precise specification of the formula to be fetched, supporting dynamic<br />values through Vue refs for reactive fetching based on user interactions or other application states. |
 
 ## Returns
 

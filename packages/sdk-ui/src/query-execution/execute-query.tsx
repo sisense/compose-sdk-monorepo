@@ -1,6 +1,7 @@
 import { useExecuteQueryInternal } from './use-execute-query';
-import { useState, type FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { ExecuteQueryProps } from '../props';
+import { usePrevious } from '../common/hooks/use-previous';
 
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 
@@ -70,12 +71,9 @@ export const ExecuteQuery: FunctionComponent<ExecuteQueryProps> = asSisenseCompo
     });
 
     const queryStateData = queryState.data;
-    const [prevData, setPrevData] = useState(queryStateData);
-    if (prevData !== queryStateData) {
-      setPrevData(queryStateData);
-      if (queryStateData) {
-        onDataChanged?.(queryStateData);
-      }
+    const prevData = usePrevious(queryStateData);
+    if (queryStateData && prevData !== queryStateData) {
+      onDataChanged?.(queryStateData);
     }
 
     return <>{queryState && children?.(queryState)}</>;

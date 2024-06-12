@@ -1,0 +1,76 @@
+import { DashboardModel } from '@/models';
+import { WidgetStyle } from '@/dashboard-widget/types';
+import { DataType } from '@sisense/sdk-data';
+
+describe('DashboardModel', () => {
+  it('should create a new dashboard model with minimum of arguments', async () => {
+    expect(
+      new DashboardModel({ oid: 'test', title: 'test', datasource: { title: 'test', id: 'test' } }),
+    ).toMatchSnapshot();
+  });
+
+  it('should create a new dashboard model with all arguments', () => {
+    expect(
+      new DashboardModel({
+        oid: 'test',
+        title: 'test',
+        datasource: { title: 'test', id: 'test' },
+        widgets: [
+          {
+            oid: 'widget-1',
+            type: 'chart/pie',
+            subtype: 'pie/donut',
+            datasource: {
+              title: 'test',
+              id: 'test',
+            },
+            metadata: {
+              panels: [],
+            },
+            style: {} as WidgetStyle,
+            title: 'test',
+            desc: null,
+          },
+        ],
+        layout: {
+          columns: [
+            {
+              width: 1000,
+              cells: [
+                {
+                  subcells: [
+                    {
+                      width: 2000,
+                      elements: [
+                        {
+                          height: 3000,
+                          widgetid: 'widget-1',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        filters: [
+          {
+            jaql: {
+              datatype: DataType.TEXT,
+              dim: 'dim',
+              table: '[table]',
+              column: '[column]',
+              title: 'title',
+              filter: {
+                members: ['member'],
+              },
+            },
+            instanceid: 'test-id',
+            disabled: false,
+          },
+        ],
+      }),
+    ).toMatchSnapshot();
+  });
+});

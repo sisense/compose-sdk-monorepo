@@ -88,16 +88,22 @@ function prepareFilterMetadata(
   );
   attributesMetadata.forEach((d) => applyHighlightFilters(d, highlightsWithAttributes));
 
-  const getFilterJaql = (f: Filter) => {
+  const getFilterJaql = (f: Filter): MetadataItem | MetadataItem[] => {
+    const jaql = f.jaql();
     if (filterRelations) {
-      return { ...f.jaql(), instanceid: f.guid };
+      // instanceid is needed for filter relations only
+      if (Array.isArray(jaql)) {
+        return jaql.map((j) => ({ ...j, instanceid: f.guid }));
+      } else {
+        return { ...jaql, instanceid: f.guid };
+      }
     }
-    return f.jaql();
+    return jaql;
   };
   const filtersMetadata = (
     shouldSkipHighlightsWithoutAttributes
-      ? filters.map((d) => getFilterJaql(d) as MetadataItem)
-      : [...filters, ...highlightsWithoutAttributes].map((d) => getFilterJaql(d) as MetadataItem)
+      ? filters.flatMap((d) => getFilterJaql(d))
+      : [...filters, ...highlightsWithoutAttributes].flatMap((d) => getFilterJaql(d))
   ).filter((f) => {
     return Object.keys(f.jaql.filter || {}).length !== 0;
   });

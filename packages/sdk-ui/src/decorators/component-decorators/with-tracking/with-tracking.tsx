@@ -21,10 +21,11 @@ export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
 }) => {
   const { skip, transparent } = config || {};
   return (Component) => {
-    return (props) => {
+    return function Tracking(props) {
       if ((isBoolean(skip) && skip) || (isFunction(skip) && skip(props))) {
         return <Component {...props} />;
       }
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       useTrackComponentInit(componentName, props);
       return (
         // If component is transperent for tracking, nested components will be tracked

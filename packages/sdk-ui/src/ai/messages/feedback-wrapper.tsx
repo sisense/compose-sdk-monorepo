@@ -1,12 +1,10 @@
 import debounce from 'lodash/debounce';
-import { Children, ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useChatApi } from '@/ai/api/chat-api-provider';
 import ThumbsDownButton from '@/ai/buttons/thumbs-down-button';
 import ThumbsUpButton from '@/ai/buttons/thumbs-up-button';
 import { useHover } from '@/common/hooks/use-hover';
-import ThumbsUpIcon from '../icons/thumbs-up-icon';
-import ThumbsDownIcon from '../icons/thumbs-down-icon';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
@@ -19,7 +17,6 @@ const Container = styled.div<Themable>`
 
 function FeedbackRow({ visible, onSend }: { visible: boolean; onSend: (rating: -1 | 1) => void }) {
   const [clicked, setClicked] = useState(false);
-  const { themeSettings } = useThemeContext();
 
   const onClick = useCallback(
     (type: 'up' | 'down') => {
@@ -39,19 +36,9 @@ function FeedbackRow({ visible, onSend }: { visible: boolean; onSend: (rating: -
   }
 
   return (
-    <div className={`csdk-flex ${styles}`}>
-      {clicked && (
-        <>
-          <ThumbsUpIcon theme={themeSettings} />
-          <ThumbsDownIcon theme={themeSettings} />
-        </>
-      )}
-      {!clicked && (
-        <>
-          <ThumbsUpButton onClick={() => onClick('up')} />
-          <ThumbsDownButton onClick={() => onClick('down')} />
-        </>
-      )}
+    <div className={`csdk-flex csdk-items-center ${styles}`}>
+      <ThumbsUpButton onClick={() => onClick('up')} disabled={clicked} />
+      <ThumbsDownButton onClick={() => onClick('down')} disabled={clicked} />
     </div>
   );
 }
@@ -61,7 +48,7 @@ type FeedbackWrapperProps = {
   data: object;
   type: string;
   buttonVisibility?: 'onHover' | 'always' | 'never';
-  children: ReactNode;
+  renderContent: (buttonRow: JSX.Element) => ReactNode;
 };
 
 export default function FeedbackWrapper({
@@ -69,7 +56,7 @@ export default function FeedbackWrapper({
   data,
   type,
   buttonVisibility = 'onHover',
-  children,
+  renderContent,
 }: FeedbackWrapperProps) {
   const api = useChatApi();
   const sendFeedback = debounce(
@@ -107,17 +94,7 @@ export default function FeedbackWrapper({
 
   return (
     <Container ref={ref} theme={themeSettings}>
-      {Children.map(children, (child, index) => {
-        if (index === 0) {
-          return (
-            <div className="csdk-flex csdk-items-center csdk-gap-x-2.5">
-              {child}
-              <FeedbackRow onSend={sendFeedback} visible={areButtonsVisible} />
-            </div>
-          );
-        }
-        return child;
-      })}
+      {renderContent(<FeedbackRow onSend={sendFeedback} visible={areButtonsVisible} />)}
     </Container>
   );
 }

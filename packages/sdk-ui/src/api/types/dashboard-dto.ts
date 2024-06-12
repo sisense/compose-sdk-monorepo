@@ -6,7 +6,7 @@ import { AnyObject } from '../../utils/utility-types';
 export type Layout = {
   columns: {
     width: number;
-    cells: {
+    cells?: {
       subcells: {
         width: number;
         elements: {
@@ -30,6 +30,12 @@ export type CascadingFilterDto = {
   levels: FilterJaql[];
   instanceid?: string;
   disabled?: boolean;
+};
+
+export const isCascadingFilterDto = (
+  filter: FilterDto | CascadingFilterDto,
+): filter is CascadingFilterDto => {
+  return 'levels' in filter && filter.isCascading === true;
 };
 
 export type DashboardDto = {

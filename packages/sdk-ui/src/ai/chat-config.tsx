@@ -45,8 +45,19 @@ export interface ChatConfig {
    * The welcome text to show at the top of a chat session.
    *
    * A value of `false` will hide the welcome text.
+   *
+   * If not specified, a default message will be displayed.
    */
   welcomeText?: string | false;
+
+  /**
+   * The message text to show above the initial suggested questions in a chat session.
+   *
+   * A value of `false` will hide the text.
+   *
+   * If not specified, a default message will be displayed.
+   */
+  suggestionsWelcomeText?: string | false;
 
   /**
    * Boolean flag to show or hide the header in a chat session.
@@ -71,7 +82,10 @@ export const DEFAULTS = Object.freeze<ChatConfig>({
   enableInsights: true,
   numOfRecommendations: 4,
   numOfRecentPrompts: 5,
-  inputPromptText: 'Ask a question',
+  inputPromptText: 'Ask a question or type "/" for ideas',
+  welcomeText:
+    'Welcome to the Analytics Assistant! I can help you explore and gain insights from your data.',
+  suggestionsWelcomeText: 'Some questions you may have:',
 });
 
 const ChatConfigContext = createContext<ChatConfig>({

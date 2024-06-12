@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
       name: 'sdk-ui-vue',
       entry: './src/lib.ts',
       fileName: 'index',
-      formats: ['es'],
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       external: ['vue'],

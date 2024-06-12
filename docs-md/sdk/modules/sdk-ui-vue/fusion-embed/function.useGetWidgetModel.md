@@ -15,7 +15,7 @@ require detailed information about a Sisense widget for data visualization or an
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`MaybeWithRefs`](../type-aliases/type-alias.MaybeWithRefs.md)\< [`GetWidgetModelParams`](../interfaces/interface.GetWidgetModelParams.md) \> | The parameters for fetching the widget model, including the `dashboardOid`<br />(the OID of the dashboard containing the widget) and the `widgetOid` (the OID of the widget to fetch). This allows for<br />precise and dynamic fetching of widget models based on application needs. |
+| `params` | [`MaybeRefOrWithRefs`](../type-aliases/type-alias.MaybeRefOrWithRefs.md)\< [`GetWidgetModelParams`](../interfaces/interface.GetWidgetModelParams.md) \> | The parameters for fetching the widget model, including the `dashboardOid`<br />(the OID of the dashboard containing the widget) and the `widgetOid` (the OID of the widget to fetch). This allows for<br />precise and dynamic fetching of widget models based on application needs. |
 
 ## Returns
 

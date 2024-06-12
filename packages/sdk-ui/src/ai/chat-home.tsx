@@ -10,6 +10,22 @@ import { useThemeContext } from '@/theme-provider';
 import { useChatConfig } from './chat-config';
 import { getDarkFactor, toColor } from '@/utils/color';
 import { BetaLabel } from './common/beta-label';
+import styled from '@emotion/styled';
+
+const LogoContainer = styled.div`
+  margin-left: 14px;
+`;
+
+const DataTopicsContainer = styled.div<Themable>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  height: 100%;
+
+  background-color: ${({ theme }) => theme.aiChat.dataTopics.backgroundColor};
+`;
+import { Themable } from '@/theme-provider/types';
 
 type ChatHomeProps = {
   onDataTopicClick: (title: string) => void;
@@ -40,18 +56,18 @@ export default function ChatHome({ onDataTopicClick }: ChatHomeProps) {
         <Toolbar
           title="Analytics Chatbot"
           leftNav={
-            <div className="csdk-ml-[14px]">
+            <LogoContainer>
               <SisenseLogo colorSchema={isDarkBackground ? 'yellow-white' : 'yellow-black'} />
-            </div>
+            </LogoContainer>
           }
           rightNav={<BetaLabel />}
           style={themeSettings.aiChat.header}
         />
       ) : null}
-      <div className="csdk-flex csdk-flex-col csdk-justify-center csdk-overflow-hidden csdk-h-full ">
+      <DataTopicsContainer theme={themeSettings}>
         {!dataTopics && <LoadingSpinner />}
         {dataTopics && <DataTopicList dataTopics={dataTopics} />}
-      </div>
+      </DataTopicsContainer>
     </>
   );
 }

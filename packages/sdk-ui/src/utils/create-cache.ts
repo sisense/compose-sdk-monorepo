@@ -51,7 +51,6 @@ type CacheOptions = {
  * @returns - object with two methods: withCache and clearCache.
  * "withCache" is a function that wraps the async function you want to cache.
  * "clearCache" is a function to clear the cache.
- *
  * @example
  * const myAsyncFn = async (a: number, b: number) => a + b;
  *
@@ -105,6 +104,7 @@ export const createCache: CreateCacheFn = <AsyncFnToCache extends AsyncFn>(
 
 /**
  * Function to clear the oldest cache value
+ *
  * @param cache - cache map
  */
 function clearOldestCacheValue(cache: CacheMap<any>) {

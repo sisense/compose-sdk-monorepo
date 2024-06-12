@@ -15,7 +15,7 @@ to perform queries and handle their results within Vue components.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`MaybeWithRefs`](../type-aliases/type-alias.MaybeWithRefs.md)\< [`ExecuteQueryByWidgetIdParams`](../interfaces/interface.ExecuteQueryByWidgetIdParams.md) \> | Parameters for executing the query, including widget ID, filters,<br />and other relevant query options. The `filters` parameter allows for specifying dynamic filters for the query. |
+| `params` | [`MaybeRefOrWithRefs`](../type-aliases/type-alias.MaybeRefOrWithRefs.md)\< [`ExecuteQueryByWidgetIdParams`](../interfaces/interface.ExecuteQueryByWidgetIdParams.md) \> | Parameters for executing the query, including widget ID, filters,<br />and other relevant query options. The `filters` parameter allows for specifying dynamic filters for the query. |
 
 ## Returns
 

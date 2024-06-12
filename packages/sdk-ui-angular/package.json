@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.11.0",
+  "version": "1.12.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "dist",
@@ -40,9 +40,9 @@
     "sync-version": "node ./scripts/sync-version.cjs"
   },
   "peerDependencies": {
-    "@angular/common": "^15.0.0 || ^16.0.0 || ^17.0.0",
-    "@angular/compiler": "^15.0.0 || ^16.0.0 || ^17.0.0",
-    "@angular/core": "^15.0.0 || ^16.0.0 || ^17.0.0"
+    "@angular/common": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
+    "@angular/compiler": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
+    "@angular/core": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
     "@sisense/sdk-data": "workspace:^",

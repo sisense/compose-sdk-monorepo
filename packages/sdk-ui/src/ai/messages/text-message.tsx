@@ -21,7 +21,7 @@ const FlexContainer = styled.div<Alignable>`
         `}
 `;
 
-const MessageContainer = styled.div<Themable & Alignable>`
+export const MessageContainer = styled.div<Themable & Alignable>`
   font-size: inherit;
   line-height: inherit;
   padding-top: 8.5px;
@@ -46,7 +46,7 @@ const MessageContainer = styled.div<Themable & Alignable>`
   ${({ align }) =>
     align !== 'full'
       ? css`
-          max-width: 382px;
+          max-width: 85%;
         `
       : ''}
 

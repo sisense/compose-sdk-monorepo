@@ -1,6 +1,7 @@
 /** @vitest-environment jsdom */
 
 import { renderHook, waitFor } from '@testing-library/react';
+import cloneDeep from 'lodash/cloneDeep';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import type { Mock } from 'vitest';
@@ -8,7 +9,7 @@ import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sd
 import { ClientApplication } from '../app/client-application';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ExecuteQueryParams } from './types';
-import { useExecutePivotQuery } from './use-execute-pivot-query';
+import { useExecutePivotQuery, usePivotQueryParamsChanged } from './use-execute-pivot-query';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
@@ -155,5 +156,29 @@ describe('useExecutePivotQuery', () => {
       expect.anything(),
       expect.any(Boolean),
     );
+  });
+});
+
+describe('usePivotQueryParamsChanged', () => {
+  const initialProps: ExecuteQueryParams = {
+    dataSource: 'Sample ECommerce',
+    dimensions: [],
+    measures: [],
+    filters: [],
+    highlights: [],
+  };
+
+  it('should handle same params', () => {
+    const { result, rerender } = renderHook(usePivotQueryParamsChanged, { initialProps });
+    expect(result.current).toBe(true);
+    rerender(cloneDeep(initialProps));
+    expect(result.current).toBe(false);
+  });
+
+  it('should handle different params: `dataSource`', () => {
+    const { result, rerender } = renderHook(usePivotQueryParamsChanged, { initialProps });
+    expect(result.current).toBe(true);
+    rerender({ ...cloneDeep(initialProps), dataSource: 'Different Sample ECommerce' });
+    expect(result.current).toBe(true);
   });
 });

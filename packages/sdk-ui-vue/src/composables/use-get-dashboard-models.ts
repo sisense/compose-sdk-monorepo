@@ -12,9 +12,9 @@ import {
 import { useReducer } from '../helpers/use-reducer';
 import { toRefs, watch } from 'vue';
 import { getSisenseContext } from '../providers';
-import { collectRefs, toPlainValue, toPlainValues } from '../utils';
+import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
-import type { MaybeWithRefs } from '../types';
+import type { MaybeRefOrWithRefs } from '../types';
 
 /**
  * A Vue composable function `useGetDashboardModels` for fetching multiple Sisense dashboard models.
@@ -54,7 +54,7 @@ import type { MaybeWithRefs } from '../types';
  * @fusionEmbed
  */
 
-export const useGetDashboardModels = (params: MaybeWithRefs<GetDashboardModelsParams>) => {
+export const useGetDashboardModels = (params: MaybeRefOrWithRefs<GetDashboardModelsParams>) => {
   const { hasTrackedRef } = useTracking('useGetDashboardModels');
   const [queryState, dispatch] = useReducer(dataLoadStateReducer<DashboardModel[]>, {
     isLoading: true,
@@ -67,10 +67,10 @@ export const useGetDashboardModels = (params: MaybeWithRefs<GetDashboardModelsPa
 
   const context = getSisenseContext();
 
-  const getDashboardModelsData = async (application: ClientApplication) => {
+  const runGetDashboardModels = async (application: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
-      const plainParams = toPlainValues(params);
+      const plainParams = toPlainObject(params);
       const data = await getDashboardModels(application.httpClient, plainParams);
 
       dispatch({ type: 'success', data });
@@ -83,10 +83,10 @@ export const useGetDashboardModels = (params: MaybeWithRefs<GetDashboardModelsPa
     [...collectRefs(params), context],
     () => {
       const { app } = context.value;
-      const enabled = toPlainValue(params.enabled);
+      const { enabled } = toPlainObject(params);
       const isEnabled = enabled === undefined || enabled === true;
       if (!app || !isEnabled) return;
-      getDashboardModelsData(app);
+      runGetDashboardModels(app);
     },
     { immediate: true },
   );

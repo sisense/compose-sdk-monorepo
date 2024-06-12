@@ -78,6 +78,7 @@ export const getCategoricalChartOptions = (
           pieDesignOptions.pieType,
           pieDesignOptions.pieLabels,
           dataOptions,
+          themeSettings,
         ),
         tooltip: getTooltipSettings(pieDesignOptions.pieLabels?.showDecimals, dataOptions),
         drilldown: {
@@ -115,7 +116,7 @@ export const getCategoricalChartOptions = (
         // level animation only disables initial or subsequent paints
         legend: getLegendSettings(funnelDesignOptions.legend),
         series: funnelSeries,
-        plotOptions: getFunnelPlotOptions(funnelDesignOptions, dataOptions),
+        plotOptions: getFunnelPlotOptions(funnelDesignOptions, dataOptions, themeSettings),
         tooltip: getTooltipSettings(funnelDesignOptions.funnelLabels?.showDecimals, dataOptions),
       };
       return { options: funnelOptions, alerts };

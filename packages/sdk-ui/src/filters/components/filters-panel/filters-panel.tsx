@@ -9,7 +9,6 @@ const PanelWrapper = styled.div<Themable>`
   border: 1px solid #dadada;
   width: fit-content;
   min-width: 240px;
-  height: 100%;
 `;
 
 const PanelBody = styled.div`
@@ -24,6 +23,7 @@ const PanelHeader = styled.div<Themable>`
   margin: 0 9px;
   height: 48px;
   border-bottom: 1px solid #dadada;
+  box-sizing: border-box;
 `;
 const PanelTitle = styled.div`
   font-size: 13px;
@@ -67,9 +67,9 @@ export const FiltersPanel = ({ filters, onFiltersChange }: FiltersPanelProps) =>
       </PanelHeader>
       <PanelBody>
         {filters?.map((filter, index) => (
-          <div className="csdk-mt-[6px]">
+          <div className="csdk-mt-[6px]" key={filter.guid}>
             <FiltersPanelTile
-              key={index}
+              key={filter.guid}
               filter={filter}
               onChange={(newFilter) => handleFilterChange(newFilter, index)}
             />

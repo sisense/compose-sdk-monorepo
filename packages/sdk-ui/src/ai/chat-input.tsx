@@ -8,122 +8,7 @@ import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
 import { css } from '@emotion/react';
 import ChatDropup, { isCommand } from './chat-dropup';
-
-export type ChatInputProps = {
-  onSendMessage: (message: string) => void;
-  onClearHistoryClick?: () => void;
-  disabled?: boolean;
-  recentPrompts: string[];
-  suggestions: string[];
-  isLoading: boolean;
-};
-
-const MIN_TEXTAREA_HEIGHT = 34;
-
-export default function ChatInput({
-  onSendMessage,
-  onClearHistoryClick,
-  disabled,
-  recentPrompts,
-  suggestions,
-  isLoading,
-}: ChatInputProps) {
-  const [text, setText] = useState('');
-
-  const { inputPromptText } = useChatConfig();
-
-  const handleSendMessage = useCallback(() => {
-    if (disabled) return;
-
-    if (isCommand(text)) {
-      setText('');
-      return;
-    }
-
-    const finalText = text.trim();
-    if (finalText.length === 0) return;
-    onSendMessage(finalText);
-    setText('');
-  }, [disabled, onSendMessage, text]);
-
-  const handleDropupSelect = useCallback(
-    (selection: string) => {
-      onSendMessage(selection);
-      setText('');
-    },
-    [onSendMessage],
-  );
-
-  const onKeyDownInput = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleSendMessage();
-      } else if (e.key === 'Escape' && isCommand(text)) {
-        setText('');
-      }
-    },
-    [handleSendMessage, text],
-  );
-
-  const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-  }, []);
-
-  const ref = useRef<HTMLTextAreaElement>(null);
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      // Reset height - important to shrink on delete
-      ref.current.style.height = 'inherit';
-      // Set height
-      ref.current.style.height = `${Math.max(
-        ref.current.scrollHeight + 2, // account for 1px top/bottom border
-        MIN_TEXTAREA_HEIGHT,
-      )}px`;
-    }
-  }, [text]);
-
-  const { themeSettings } = useThemeContext();
-
-  return (
-    <ChatInputContainer theme={themeSettings}>
-      <ChatDropup
-        recentPrompts={recentPrompts}
-        suggestions={suggestions}
-        isLoading={isLoading}
-        onSelection={handleDropupSelect}
-        anchorEl={ref.current}
-        text={text}
-      />
-      {onClearHistoryClick && (
-        <ClearHistoryButton aria-label="clear history" onClick={onClearHistoryClick}>
-          <ClearChatIcon theme={themeSettings} />
-        </ClearHistoryButton>
-      )}
-      <TextInput
-        ref={ref}
-        rows={1}
-        onChange={handleChange}
-        spellCheck={'true'}
-        placeholder={inputPromptText}
-        value={text}
-        onKeyDown={onKeyDownInput}
-        theme={themeSettings}
-      />
-      <SendMessageButton
-        aria-label="send chat message"
-        disabled={disabled || text.length === 0}
-        onClick={handleSendMessage}
-        theme={themeSettings}
-      >
-        <span data-state="closed">
-          <MessageIcon theme={themeSettings} />
-        </span>
-      </SendMessageButton>
-    </ChatInputContainer>
-  );
-}
+import Tooltip from './common/tooltip';
 
 const ChatInputContainer = styled.div<Themable>`
   display: flex;
@@ -189,3 +74,131 @@ const SendMessageButton = styled.button<Themable & { disabled: boolean }>`
           cursor: pointer;
         `}
 `;
+
+export type ChatInputProps = {
+  onSendMessage: (message: string) => void;
+  onClearHistoryClick?: () => void;
+  disabled?: boolean;
+  recentPrompts: string[];
+  suggestions: string[];
+  isLoading: boolean;
+  recommendationsError: boolean;
+  onChange?: (text: string) => void;
+};
+
+const MIN_TEXTAREA_HEIGHT = 34;
+
+export default function ChatInput({
+  onSendMessage,
+  onClearHistoryClick,
+  disabled,
+  recentPrompts,
+  suggestions,
+  isLoading,
+  recommendationsError,
+  onChange,
+}: ChatInputProps) {
+  const [text, setText] = useState('');
+
+  const { inputPromptText } = useChatConfig();
+
+  const handleSendMessage = useCallback(() => {
+    if (disabled) return;
+
+    if (isCommand(text)) {
+      setText('');
+      return;
+    }
+
+    const finalText = text.trim();
+    if (finalText.length === 0) return;
+    onSendMessage(finalText);
+    setText('');
+  }, [disabled, onSendMessage, text]);
+
+  const handleDropupSelect = useCallback(
+    (selection: string) => {
+      onSendMessage(selection);
+      setText('');
+    },
+    [onSendMessage],
+  );
+
+  const onKeyDownInput = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSendMessage();
+      } else if (e.key === 'Escape' && isCommand(text)) {
+        setText('');
+      }
+    },
+    [handleSendMessage, text],
+  );
+
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      onChange?.(e.target.value);
+      setText(e.target.value);
+    },
+    [onChange],
+  );
+
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      // Reset height - important to shrink on delete
+      ref.current.style.height = 'inherit';
+      // Set height
+      ref.current.style.height = `${Math.max(
+        ref.current.scrollHeight + 2, // account for 1px top/bottom border
+        MIN_TEXTAREA_HEIGHT,
+      )}px`;
+    }
+  }, [text]);
+
+  const { themeSettings } = useThemeContext();
+
+  return (
+    <ChatInputContainer theme={themeSettings}>
+      <ChatDropup
+        recentPrompts={recentPrompts}
+        suggestions={suggestions}
+        isLoading={isLoading}
+        onSelection={handleDropupSelect}
+        anchorEl={ref.current}
+        text={text}
+        recommendationsError={recommendationsError}
+      />
+      {onClearHistoryClick && (
+        <Tooltip title="Clear chat">
+          <ClearHistoryButton aria-label="clear history" onClick={onClearHistoryClick}>
+            <ClearChatIcon theme={themeSettings} />
+          </ClearHistoryButton>
+        </Tooltip>
+      )}
+      <TextInput
+        aria-label="chat input"
+        ref={ref}
+        rows={1}
+        onChange={handleChange}
+        spellCheck={'true'}
+        placeholder={inputPromptText}
+        value={text}
+        onKeyDown={onKeyDownInput}
+        theme={themeSettings}
+      />
+      <SendMessageButton
+        aria-label="send chat message"
+        disabled={disabled || text.length === 0}
+        onClick={handleSendMessage}
+        theme={themeSettings}
+      >
+        <span data-state="closed">
+          <MessageIcon theme={themeSettings} />
+        </span>
+      </SendMessageButton>
+    </ChatInputContainer>
+  );
+}

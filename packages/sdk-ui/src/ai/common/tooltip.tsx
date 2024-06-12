@@ -1,10 +1,10 @@
 import MuiTooltip, { type TooltipProps as MuiTooltipProps } from '@mui/material/Tooltip';
-
-import { colors } from '@/themes/colors';
+import { useThemeContext } from '@/theme-provider';
 
 type TooltipProps = Pick<MuiTooltipProps, 'title' | 'children'>;
 
 export default function Tooltip({ title, children }: TooltipProps) {
+  const { themeSettings } = useThemeContext();
   return (
     <MuiTooltip
       title={title}
@@ -12,21 +12,20 @@ export default function Tooltip({ title, children }: TooltipProps) {
       componentsProps={{
         tooltip: {
           sx: {
-            bgcolor: colors.background.workspace,
-            color: colors.text.content,
+            bgcolor: themeSettings.aiChat.tooltips.backgroundColor,
+            color: themeSettings.aiChat.tooltips.textColor,
             paddingX: '16px',
             paddingY: '12px',
             fontSize: '13px',
-            fontFamily: 'Open Sans',
+            fontFamily: themeSettings.typography.fontFamily,
             fontWeight: 400,
             borderRadius: '4px',
-            boxShadow:
-              '0px 4px 12px 0px rgba(9, 9, 10, 0.20), 0px 1px 4px 0px rgba(9, 9, 10, 0.10);',
+            boxShadow: themeSettings.aiChat.tooltips.boxShadow,
           },
         },
         arrow: {
           sx: {
-            color: colors.background.workspace,
+            color: themeSettings.aiChat.tooltips.backgroundColor,
           },
         },
       }}

@@ -95,6 +95,7 @@ export const FilterTypes = {
   numeric: 'numeric',
   date: 'date',
   relativeDate: 'relativeDate',
+  cascading: 'cascading',
 };
 
 // CLASSES
@@ -127,14 +128,14 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    */
   disabled: boolean;
 
-  constructor(att: Attribute, filterType: string) {
+  constructor(att: Attribute, filterType: string, guid?: string) {
     super('filter', MetadataTypes.Filter);
     this.filterType = filterType;
 
     AbstractFilter.checkAttributeSupport(att);
     this.attribute = att;
 
-    this.guid = guidFast(13);
+    this.guid = guid || guidFast(13);
     this.disabled = false;
   }
 
@@ -175,9 +176,8 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    * @param nested - defines whether the JAQL is nested within parent JAQL statement or a root JAQL element
    */
   jaql(nested?: boolean): any {
-    // if the filter is disabled, return empty filter JAQL
     if (this.disabled) {
-      return nested ? { filter: {} } : { jaql: { filter: {} } };
+      return AbstractFilter.disabledJaql(nested);
     }
 
     const result = this.attribute.jaql(false);
@@ -211,6 +211,10 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
       throw new TranslatableError('errors.filter.unsupportedDatetimeLevel');
     }
   }
+
+  static disabledJaql(nested?: boolean): any {
+    return nested ? { filter: {} } : { jaql: { filter: {} } };
+  }
 }
 
 /**
@@ -221,8 +225,8 @@ export class LogicalAttributeFilter extends AbstractFilter {
 
   readonly operator: string;
 
-  constructor(filters: Filter[], operator: string) {
-    super(filters[0].attribute, FilterTypes.logicalAttribute);
+  constructor(filters: Filter[], operator: string, guid?: string) {
+    super(filters[0].attribute, FilterTypes.logicalAttribute, guid);
 
     this.operator = operator;
     this.filters = filters;
@@ -264,8 +268,8 @@ export class LogicalAttributeFilter extends AbstractFilter {
 export class MembersFilter extends AbstractFilter {
   readonly members: any[];
 
-  constructor(attribute: Attribute, members?: any[]) {
-    super(attribute, FilterTypes.members);
+  constructor(attribute: Attribute, members?: any[], guid?: string) {
+    super(attribute, FilterTypes.members, guid);
 
     this.members = members ?? [];
 
@@ -307,13 +311,62 @@ export class MembersFilter extends AbstractFilter {
 /**
  * @internal
  */
+export class CascadingFilter extends AbstractFilter {
+  // level filters
+  readonly filters: Filter[];
+
+  constructor(filters: Filter[], guid?: string) {
+    super(filters[0].attribute, FilterTypes.cascading, guid);
+    this.filters = filters;
+  }
+
+  /**
+   * gets the element's ID
+   */
+  get id(): string {
+    return `${this.filterType}_${this.filters.map((f) => f.id).join()}`;
+  }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serializable(): any {
+    const result = super.serializable();
+    result.filters = this.filters.map((f) => f.serializable());
+    return result;
+  }
+
+  /**
+   * Gets JAQL representing this Filter instance
+   */
+  filterJaql(): any {
+    // return empty object as jaql is handled by jaql() method
+    return {};
+  }
+
+  jaql(nested?: boolean): any {
+    if (this.disabled) {
+      return AbstractFilter.disabledJaql(nested);
+    }
+
+    // return jaql of all level filters treated as scope filters
+    return this.filters.map((f) => {
+      f.isScope = true;
+      return f.jaql(nested);
+    });
+  }
+}
+
+/**
+ * @internal
+ */
 export class ExcludeFilter extends AbstractFilter {
   readonly filter: Filter;
 
   readonly input?: Filter;
 
-  constructor(filter: Filter, input?: Filter) {
-    super(filter.attribute, FilterTypes.exclude);
+  constructor(filter: Filter, input?: Filter, guid?: string) {
+    super(filter.attribute, FilterTypes.exclude, guid);
 
     this.input = input;
     this.filter = filter;
@@ -385,8 +438,9 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
     valueA?: Type,
     operatorB?: string,
     valueB?: Type,
+    guid?: string,
   ) {
-    super(att, filterType);
+    super(att, filterType, guid);
 
     if (operatorA && valueA !== undefined) {
       this.valueA = valueA;
@@ -472,8 +526,9 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
     valueA?: number,
     operatorB?: string,
     valueB?: number,
+    guid?: string,
   ) {
-    super(att, FilterTypes.measure, operatorA, valueA, operatorB, valueB);
+    super(att, FilterTypes.measure, operatorA, valueA, operatorB, valueB, guid);
 
     this.measure = measure;
   }
@@ -507,9 +562,8 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
   }
 
   jaql(nested?: boolean | undefined) {
-    // if the filter is disabled, return empty filter JAQL
     if (this.disabled) {
-      return nested ? { filter: {} } : { jaql: { filter: {} } };
+      return AbstractFilter.disabledJaql(nested);
     }
 
     const result = super.jaql(nested);
@@ -534,8 +588,8 @@ export class RankingFilter extends AbstractFilter {
 
   measure: Measure;
 
-  constructor(att: Attribute, measure: Measure, operator: string, count: number) {
-    super(att, FilterTypes.ranking);
+  constructor(att: Attribute, measure: Measure, operator: string, count: number, guid?: string) {
+    super(att, FilterTypes.ranking, guid);
 
     this.count = count;
     this.operator = operator;
@@ -585,8 +639,9 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
     valueA?: number,
     operatorB?: string,
     valueB?: number,
+    guid?: string,
   ) {
-    super(att, FilterTypes.numeric, operatorA, valueA, operatorB, valueB);
+    super(att, FilterTypes.numeric, operatorA, valueA, operatorB, valueB, guid);
   }
 }
 
@@ -594,8 +649,8 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
  * @internal
  */
 export class TextFilter extends DoubleOperatorFilter<string> {
-  constructor(att: Attribute, operator: string, value: string) {
-    super(att, FilterTypes.text, operator, value);
+  constructor(att: Attribute, operator: string, value: string, guid?: string) {
+    super(att, FilterTypes.text, operator, value, undefined, undefined, guid);
   }
 }
 
@@ -603,8 +658,13 @@ export class TextFilter extends DoubleOperatorFilter<string> {
  * @internal
  */
 export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
-  constructor(l: LevelAttribute, valueFrom?: Date | string, valueTo?: Date | string) {
-    super(l, FilterTypes.date, DateOperators.From, valueFrom, DateOperators.To, valueTo);
+  constructor(
+    l: LevelAttribute,
+    valueFrom?: Date | string,
+    valueTo?: Date | string,
+    guid?: string,
+  ) {
+    super(l, FilterTypes.date, DateOperators.From, valueFrom, DateOperators.To, valueTo, guid);
 
     if (typeof valueFrom === 'object') {
       this.valueA = valueFrom.toISOString();
@@ -653,8 +713,9 @@ export class RelativeDateFilter extends AbstractFilter {
     count: number,
     operator?: string,
     anchor?: Date | string,
+    guid?: string,
   ) {
-    super(l, FilterTypes.relativeDate);
+    super(l, FilterTypes.relativeDate, guid);
 
     if (!operator) {
       operator = DateOperators.Next;
@@ -729,7 +790,7 @@ export class RelativeDateFilter extends AbstractFilter {
 }
 
 /**
- * @param json
+ * @param json - Filter JSON representation
  * @internal
  */
 export function createFilter(json: any): Filter {

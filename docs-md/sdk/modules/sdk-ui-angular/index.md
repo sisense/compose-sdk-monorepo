@@ -61,6 +61,7 @@ Angular components for charts
 
 Fusion Dashboards, Widgets, Queries, and Formulas
 
+- [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](fusion-embed/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](fusion-embed/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

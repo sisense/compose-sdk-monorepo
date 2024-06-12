@@ -198,11 +198,11 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
 export const DATE_OPS_MAP = {
   [DateOperators.Last]: 'dateFilter.last',
   [DateOperators.Next]: 'dateFilter.next',
-};
+} as const;
 export const DATE_LEVELS_MAP = {
   [DateLevels.Days]: 'dateFilter.days',
   [DateLevels.Weeks]: 'dateFilter.weeks',
   [DateLevels.Months]: 'dateFilter.months',
   [DateLevels.Quarters]: 'dateFilter.quarters',
   [DateLevels.Years]: 'dateFilter.years',
-};
+} as const;

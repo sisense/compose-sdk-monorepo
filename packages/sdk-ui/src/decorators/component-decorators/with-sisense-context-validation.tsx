@@ -17,10 +17,11 @@ export const withSisenseContextValidation: ComponentDecorator<SisenseContextVali
   customContextErrorMessageKey,
 }) => {
   return (Component) => {
-    return (props) => {
+    return function SisenseContextValidation(props) {
       if (canRenderWithoutSisenseContextWaiting(shouldSkipSisenseContextWaiting, props)) {
         return <Component {...props} />;
       }
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { app, isInitialized } = useSisenseContext();
       if (!isInitialized) {
         const errorMessageKey = customContextErrorMessageKey || 'errors.noSisenseContext';

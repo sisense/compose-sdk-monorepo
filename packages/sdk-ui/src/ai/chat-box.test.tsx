@@ -75,7 +75,7 @@ it('can render a text response after sending a message', async () => {
 
   await waitFor(() => expect(screen.getByText('response text from history')).toBeInTheDocument());
 
-  const input = screen.getByPlaceholderText('Ask a question');
+  const input = screen.getByLabelText('chat input');
   await user.type(input, 'question text');
 
   expect(input).toHaveValue('question text');
@@ -98,22 +98,20 @@ it('can render clickable buttons for clearing history', async () => {
   await waitFor(() => expect(screen.getByText('response text from history')).toBeInTheDocument());
 
   await user.click(screen.getByLabelText('clear history'));
-  expect(screen.getByText('Yes, clear chat')).toBeInTheDocument();
-  expect(screen.getByText('No, continue analysis')).toBeInTheDocument();
+  expect(screen.getByLabelText('confirm clear chat')).toBeInTheDocument();
+  expect(screen.getByLabelText('cancel clear chat')).toBeInTheDocument();
 
-  await user.click(screen.getByText('No, continue analysis'));
-  expect(screen.queryByText('Yes, clear chat')).toBeNull();
-  expect(screen.queryByText('No, continue analysis')).toBeNull();
+  await user.click(screen.getByLabelText('cancel clear chat'));
+  expect(screen.queryByLabelText('confirm clear chat')).toBeNull();
+  expect(screen.queryByLabelText('cancel clear chat')).toBeNull();
 
   await user.click(screen.getByLabelText('clear history'));
-  await user.click(screen.getByText('Yes, clear chat'));
+  await user.click(screen.getByLabelText('confirm clear chat'));
 
-  expect(screen.queryByText('Yes, clear chat')).toBeNull();
-  expect(screen.queryByText('No, continue analysis')).toBeNull();
+  expect(screen.queryByLabelText('confirm clear chat')).toBeNull();
+  expect(screen.queryByLabelText('cancel clear chat')).toBeNull();
 
-  expect(
-    screen.getByText("Let's start over. Try asking questions about your dataset."),
-  ).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('response text from history')).toBeNull());
 });
 
 it('renders the correct error message when fetching history fails', async () => {
@@ -146,5 +144,5 @@ it('renders the error container when chat is unavailable', async () => {
   await waitFor(() => expect(screen.getByText(CHAT_UNAVAILABLE_ERROR)).toBeInTheDocument());
 
   // input should not be available
-  expect(screen.queryByPlaceholderText('Ask a question')).toBeNull();
+  expect(screen.queryByLabelText('chat input')).toBeNull();
 });

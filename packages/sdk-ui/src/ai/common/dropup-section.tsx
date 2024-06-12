@@ -22,8 +22,8 @@ const SectionHeader = styled.div<Themable>`
 `;
 
 const DropupItem = styled.div<Themable>`
-  font-size: inherit;
-  line-height: inherit;
+  font-size: ${({ theme }) => theme.aiChat.primaryFontSize[0]};
+  line-height: ${({ theme }) => theme.aiChat.primaryFontSize[1]};
   color: ${({ theme }) => theme.aiChat.dropup.items.textColor};
   cursor: pointer;
   padding: 4px 12px;

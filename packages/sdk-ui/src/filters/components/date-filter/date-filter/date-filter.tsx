@@ -38,6 +38,23 @@ export type DateRangeFilterProps = {
    * Whether this is a dependent filter.
    */
   isDependent?: boolean;
+
+  /**
+   * The variant of the date range field button.
+   * To be compatible with the old DateRangeFilterTile.
+   *
+   * TODO: Remove this prop when the old DateRangeFilterTile is deprecated.
+   * @internal
+   * @default 'grey'
+   */
+  variant?: 'white' | 'grey';
+
+  /**
+   * Whether the filter is disabled.
+   *
+   * @internal
+   */
+  disabled?: boolean;
 };
 
 /**
@@ -97,6 +114,7 @@ export function DateFilter(props: DateRangeFilterProps) {
   };
 
   const { themeSettings } = useThemeContext();
+  const buttonsVariant = props.variant || 'grey';
 
   return (
     <div>
@@ -116,6 +134,8 @@ export function DateFilter(props: DateRangeFilterProps) {
           onClick={() => openDateRangeSelector('fromSelector')}
           isActive={isDateRangeSelectorOpen && activeSelectorMode === 'fromSelector'}
           theme={themeSettings}
+          variant={buttonsVariant}
+          disabled={props.disabled}
         />
         <DateRangeFieldButton
           onClick={() => openDateRangeSelector('toSelector')}
@@ -123,6 +143,8 @@ export function DateFilter(props: DateRangeFilterProps) {
           label="To"
           isActive={isDateRangeSelectorOpen && activeSelectorMode === 'toSelector'}
           theme={themeSettings}
+          variant={buttonsVariant}
+          disabled={props.disabled}
         />
         <Popover
           id={id}

@@ -77,18 +77,10 @@ export class JaqlElement extends DimensionalElement {
 const toMetadataType: Record<DataType, string> = {
   text: MetadataTypes.TextAttribute,
   numeric: MetadataTypes.NumericAttribute,
-  datetime: MetadataTypes.DateDimension,
+  datetime: MetadataTypes.DateLevel,
 } as const;
 
 export function createJaqlElement(item: MetadataItem): JaqlElement {
-  // TODO: I think we can remove this now. seems that format is being returned in the right location.
-  if ('format' in item.jaql) {
-    // eslint-disable-next-line
-    item.format = (item.jaql as any).format;
-    // eslint-disable-next-line
-    delete (item.jaql as any).format;
-  }
-
   // TODO: measures with a "formula" may not have a datatype. force this to be numeric because aggregations
   // will always be of type number. check if there is a more correct way to do this
   return new JaqlElement(item, toMetadataType[(item.jaql as BaseJaql).datatype] ?? 'numeric');

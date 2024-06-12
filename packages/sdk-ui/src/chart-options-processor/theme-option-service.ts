@@ -11,20 +11,6 @@ export const applyThemeToChart = (
     return chartOptions;
   }
 
-  const pie = {
-    allowPointSelect: false,
-    showInLegend: true,
-    dataLabels: {
-      style: {
-        color: themeSettings.chart.textColor,
-        fontFamily: themeSettings.typography.fontFamily,
-      },
-      showPercentLabels: true,
-      showDecimals: false,
-      pieMinimumFontSizeToTextLabel: 8,
-    },
-  };
-
   const chart = {
     backgroundColor: themeSettings.chart.backgroundColor,
   };
@@ -53,7 +39,6 @@ export const applyThemeToChart = (
     series: {
       dataLabels: seriesDataLabelsStyle,
     },
-    pie,
   };
 
   const drilldown = {

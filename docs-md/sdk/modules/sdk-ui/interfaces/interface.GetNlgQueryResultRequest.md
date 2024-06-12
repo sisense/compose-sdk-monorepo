@@ -8,4 +8,4 @@ title: GetNlgQueryResultRequest
 
 ### jaql
 
-> **jaql**: `Pick`\< `JaqlQueryPayload`, `"filterRelations"` \| `"metadata"` \| `"datasource"` \>
+> **jaql**: `Pick`\< `JaqlQueryPayload`, `"filterRelations"` \| `"datasource"` \| `"metadata"` \>

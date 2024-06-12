@@ -8,6 +8,7 @@ import {
   CategoricalChartDataOptionsInternal,
 } from '../../chart-data-options/types';
 import { InternalSeries } from './tooltip-utils';
+import { CompleteThemeSettings } from '@/types';
 
 export const DefaultPieLabels: PieLabels = {
   enabled: true,
@@ -73,11 +74,19 @@ export const getPiePlotOptions = (
   pieType: PieType = DefaultPieType,
   pieLabels: PieLabels = DefaultPieLabels,
   chartDataOptions: ChartDataOptionsInternal,
+  themeSettings?: CompleteThemeSettings,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 ): PlotOptions => {
   const pieOptions = defaultPieOptions();
   const seriesOptions = defaultSeriesOptions();
   pieOptions.innerSize = pieTypeToInnerSize[pieType];
+
+  if (themeSettings) {
+    pieOptions.dataLabels.style = {
+      color: themeSettings.chart.textColor,
+      fontFamily: themeSettings.typography.fontFamily,
+    };
+  }
 
   if (pieLabels.enabled) {
     const dataLabelsEnabled = pieLabels.showCategories || pieLabels.showValue;

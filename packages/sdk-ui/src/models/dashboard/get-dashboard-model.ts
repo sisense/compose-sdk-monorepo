@@ -1,8 +1,8 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api';
-import { translateDashboard } from './translate-dashboard';
 import { type DashboardDto } from '@/api/types/dashboard-dto';
 import { type WidgetDto } from '@/dashboard-widget/types';
+import { DashboardModel } from '@/models/dashboard/dashboard-model';
 
 export interface GetDashboardModelOptions {
   /**
@@ -54,5 +54,5 @@ export async function getDashboardModel(
     dashboard.widgets = widgets;
   }
 
-  return translateDashboard(dashboard);
+  return new DashboardModel(dashboard);
 }

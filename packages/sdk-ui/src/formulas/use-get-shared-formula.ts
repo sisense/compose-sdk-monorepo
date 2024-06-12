@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula.js';
 import { CalculatedMeasure, DimensionalCalculatedMeasure } from '@sisense/sdk-data';
@@ -6,9 +6,9 @@ import { TranslatableError } from '../translation/translatable-error.js';
 import { UseGetSharedFormulaParams } from '../props.js';
 import { HookEnableParam } from '../common/hooks/types.js';
 import { withTracking } from '../decorators/hook-decorators/with-tracking.js';
-import { usePrevious } from '../common/hooks/use-previous.js';
+import { useHasChanged } from '../common/hooks/use-has-changed.js';
 import { DataState, dataLoadStateReducer } from '../common/hooks/data-load-state-reducer.js';
-import isEqual from 'lodash/isEqual';
+import { useShouldLoad } from '../common/hooks/use-should-load.js';
 
 /**
  * Parameters for {@link useGetSharedFormula} hook.
@@ -118,7 +118,8 @@ export function useGetSharedFormulaInternal(params: UseGetSharedFormulaParams) {
   if (!(oid || (name && dataSource)))
     throw new TranslatableError('errors.sharedFormula.identifierExpected');
 
-  const prevParams = usePrevious(params);
+  const isParamsChanged = useHasChanged(params, ['oid', 'name', 'dataSource']);
+  const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<CalculatedMeasure | null>, {
     isLoading: true,
     isError: false,
@@ -128,7 +129,6 @@ export function useGetSharedFormulaInternal(params: UseGetSharedFormulaParams) {
     data: undefined,
   });
   const { isInitialized, app } = useSisenseContext();
-  const [isNeverExecuted, setIsNeverExecuted] = useState(true);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -137,17 +137,7 @@ export function useGetSharedFormulaInternal(params: UseGetSharedFormulaParams) {
         error: new TranslatableError('errors.sisenseContextNotFound'),
       });
     }
-    if (!app) {
-      return;
-    }
-    if (params?.enabled === false) {
-      return;
-    }
-
-    if (isNeverExecuted || isParamsChanged(prevParams, params)) {
-      if (isNeverExecuted) {
-        setIsNeverExecuted(false);
-      }
+    if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
       let fetchPromise = Promise.resolve(<DimensionalCalculatedMeasure | null>null);
@@ -164,36 +154,17 @@ export function useGetSharedFormulaInternal(params: UseGetSharedFormulaParams) {
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, prevParams, name, dataSource, oid, params, isNeverExecuted]);
+  }, [app, isInitialized, name, dataSource, oid, shouldLoad]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
-  if (dataState.data && isParamsChanged(prevParams, params)) {
+  if (dataState.data && isParamsChanged) {
     return translateToFormulaResponse(dataLoadStateReducer(dataState, { type: 'loading' }));
   }
 
   return translateToFormulaResponse(dataState);
 }
 
-/**
- * Checks if the parameters have changed by deep comparison.
- *
- * @param prevParams - Previous query parameters
- * @param newParams - New query parameters
- */
-function isParamsChanged(
-  prevParams: UseGetSharedFormulaParams | undefined,
-  newParams: UseGetSharedFormulaParams,
-): boolean {
-  if (!prevParams && newParams) {
-    return true;
-  }
-
-  const simplySerializableParamNames = ['oid', 'name', 'dataSource'];
-  return simplySerializableParamNames.some(
-    (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
-  );
-}
 /**
  * @internal
  */

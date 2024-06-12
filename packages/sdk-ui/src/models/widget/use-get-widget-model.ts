@@ -1,6 +1,5 @@
-import isEqual from 'lodash/isEqual';
-import { useEffect, useReducer, useState } from 'react';
-import { usePrevious } from '../../common/hooks/use-previous';
+import { useEffect, useReducer } from 'react';
+import { useHasChanged } from '../../common/hooks/use-has-changed';
 import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 import { HookEnableParam } from '../../common/hooks/types';
@@ -8,6 +7,7 @@ import { TranslatableError } from '../../translation/translatable-error';
 import { withTracking } from '../../decorators/hook-decorators';
 import { WidgetModel } from './widget-model';
 import { getWidgetModel } from './get-widget-model';
+import { useShouldLoad } from '../../common/hooks/use-should-load';
 
 /**
  * Parameters for {@link useGetWidgetModel} hook.
@@ -116,7 +116,8 @@ export const useGetWidgetModel = withTracking('useGetWidgetModel')(useGetWidgetM
  * @internal
  */
 export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetModelState {
-  const prevParams = usePrevious(params);
+  const isParamsChanged = useHasChanged(params, ['dashboardOid', 'widgetOid']);
+  const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<WidgetModel>, {
     isLoading: true,
     isError: false,
@@ -126,7 +127,6 @@ export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetM
     data: undefined,
   });
   const { isInitialized, app } = useSisenseContext();
-  const [isNeverExecuted, setIsNeverExecuted] = useState(true);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -135,16 +135,7 @@ export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetM
         error: new TranslatableError('errors.sisenseContextNotFound'),
       });
     }
-    if (!app) {
-      return;
-    }
-    if (params?.enabled === false) {
-      return;
-    }
-    if (isNeverExecuted || isParamsChanged(prevParams, params)) {
-      if (isNeverExecuted) {
-        setIsNeverExecuted(false);
-      }
+    if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
       const { dashboardOid, widgetOid } = params;
@@ -156,38 +147,15 @@ export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetM
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, prevParams, params, isNeverExecuted]);
+  }, [app, isInitialized, params, shouldLoad]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
-  if (dataState.data && isParamsChanged(prevParams, params)) {
+  if (dataState.data && isParamsChanged) {
     return translateToWidgetResponse(dataLoadStateReducer(dataState, { type: 'loading' }));
   }
 
   return translateToWidgetResponse(dataState);
-}
-
-/**
- * Checks if the parameters have changed by deep comparison.
- *
- * @param prevParams - Previous query parameters
- * @param newParams - New query parameters
- */
-function isParamsChanged(
-  prevParams: GetWidgetModelParams | undefined,
-  newParams: GetWidgetModelParams,
-): boolean {
-  if (!prevParams && newParams) {
-    return true;
-  }
-
-  const simplySerializableParamNames: (keyof GetWidgetModelParams)[] = [
-    'dashboardOid',
-    'widgetOid',
-  ];
-  return simplySerializableParamNames.some(
-    (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
-  );
 }
 
 /**

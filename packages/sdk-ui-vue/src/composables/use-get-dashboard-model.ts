@@ -1,4 +1,4 @@
-import type { MaybeWithRefs } from '../types';
+import type { MaybeRefOrWithRefs } from '../types';
 import type {
   ClientApplication,
   DashboardModel,
@@ -13,7 +13,7 @@ import {
 import { useReducer } from '../helpers/use-reducer';
 import { toRefs, watch } from 'vue';
 import { getSisenseContext } from '../providers';
-import { collectRefs, toPlainValue } from '../utils';
+import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
 
 /**
@@ -57,7 +57,7 @@ import { useTracking } from './use-tracking';
  * @fusionEmbed
  */
 
-export const useGetDashboardModel = (params: MaybeWithRefs<GetDashboardModelParams>) => {
+export const useGetDashboardModel = (params: MaybeRefOrWithRefs<GetDashboardModelParams>) => {
   const { hasTrackedRef } = useTracking('useGetDashboardModel');
   const [queryState, dispatch] = useReducer(dataLoadStateReducer<DashboardModel>, {
     isLoading: true,
@@ -70,17 +70,14 @@ export const useGetDashboardModel = (params: MaybeWithRefs<GetDashboardModelPara
 
   const context = getSisenseContext();
 
-  const getDashboardModelData = async (application: ClientApplication) => {
+  const runGetDashboardModel = async (application: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
+      const { dashboardOid, includeWidgets } = toPlainObject(params);
 
-      const data = await getDashboardModel(
-        application.httpClient,
-        toPlainValue(params.dashboardOid),
-        {
-          includeWidgets: toPlainValue(params.includeWidgets),
-        },
-      );
+      const data = await getDashboardModel(application.httpClient, dashboardOid, {
+        includeWidgets,
+      });
 
       dispatch({ type: 'success', data });
     } catch (error) {
@@ -92,10 +89,10 @@ export const useGetDashboardModel = (params: MaybeWithRefs<GetDashboardModelPara
     [...collectRefs(params), context],
     () => {
       const { app } = context.value;
-      const enabled = toPlainValue(params.enabled);
+      const { enabled } = toPlainObject(params);
       const isEnabled = enabled === undefined || enabled === true;
       if (!app || !isEnabled) return;
-      getDashboardModelData(app);
+      runGetDashboardModel(app);
     },
     { immediate: true },
   );

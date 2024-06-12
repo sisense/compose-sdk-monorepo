@@ -1,12 +1,9 @@
-import { type DataSource, Filter } from '@sisense/sdk-data';
-import { WidgetModel } from '../widget/widget-model';
-
 /** @internal */
 export interface Layout {
   columns: {
     widthPercentage: number;
-    cells: {
-      subcells: {
+    rows: {
+      cells: {
         widthPercentage: number;
         height: number | string;
         widgetId: string;
@@ -14,14 +11,3 @@ export interface Layout {
     }[];
   }[];
 }
-
-export type DashboardModel = {
-  oid: string;
-  title: string;
-  dataSource: DataSource;
-  widgets?: WidgetModel[];
-  /** @internal */
-  layout?: Layout;
-  /** @internal */
-  filters?: Filter[];
-};

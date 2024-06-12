@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     cssInjectedByJsPlugin({
       topExecutionPriority: false,
       jsAssetsFilterFunction: function customJsAssetsfilterFunction(outputChunk) {
-        return ['index.js', 'ai.js'].includes(outputChunk.fileName);
+        return ['index.js', 'ai.js', 'ai.cjs', 'index.cjs'].includes(outputChunk.fileName);
       },
     }),
     dts({
@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => ({
         index: resolve(__dirname, 'src/index.ts'),
         ai: resolve(__dirname, 'src/ai/index.ts'),
       },
-      formats: ['es'],
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       treeshake: {

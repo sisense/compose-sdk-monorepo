@@ -17,10 +17,9 @@ type Styleable = {
 };
 
 const ToolbarContainer = styled.div<Styleable>`
+  flex: 0 0 80px;
   padding-left: 14px;
   padding-right: 14px;
-  padding-top: 29px;
-  padding-bottom: 29px;
   display: flex;
   align-items: center;
   position: relative;

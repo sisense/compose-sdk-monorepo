@@ -15,15 +15,12 @@ import { DateRangeFilter, ExcludeFilter } from '../filters.js';
 
 describe('filter-from-jaql-util', () => {
   describe('createFilterFromJaqlInternal', () => {
-    const instanceid = 'instanceid';
+    const guid = 'instanceid';
 
     const expectEqualFilters = (actual: Filter, expected: Filter) => {
-      // delete code
+      // delete compose code
       delete actual.composeCode;
-      // match guid first before comparison
-      expect({ ...actual, guid: instanceid }).toEqual({ ...expected, guid: instanceid });
-
-      expect(actual.id).toEqual(expected.id);
+      expect({ ...actual }).toEqual({ ...expected });
       expect(actual.serializable()).toBeDefined();
     };
 
@@ -42,9 +39,9 @@ describe('filter-from-jaql-util', () => {
           title: 'Category',
         };
 
-        const filter = createFilterFromJaqlInternal(jaql, instanceid);
+        const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, []);
+        const expectedFilter = filterFactory.members(attribute, [], guid);
         expectEqualFilters(filter, expectedFilter);
       });
 
@@ -62,9 +59,9 @@ describe('filter-from-jaql-util', () => {
           title: 'Category',
         };
 
-        const filter = createFilterFromJaqlInternal(jaql, instanceid);
+        const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, jaql.filter.members);
+        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, guid);
         expectEqualFilters(filter, expectedFilter);
       });
 
@@ -105,9 +102,9 @@ describe('filter-from-jaql-util', () => {
             },
           },
         ].forEach((jaql) => {
-          const filter = createFilterFromJaqlInternal(jaql, instanceid);
+          const filter = createFilterFromJaqlInternal(jaql, guid);
           const attribute = createAttributeFromFilterJaql(jaql);
-          const expectedFilter = filterFactory.members(attribute, jaql.filter.members);
+          const expectedFilter = filterFactory.members(attribute, jaql.filter.members, guid);
           expectEqualFilters(filter, expectedFilter);
         });
       });
@@ -125,15 +122,15 @@ describe('filter-from-jaql-util', () => {
           title: 'Category',
         };
 
-        const filter = createFilterFromJaqlInternal(jaql, instanceid);
+        const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, jaql.filter.members);
+        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, guid);
         expectEqualFilters(filter, expectedFilter);
       });
     });
 
     describe('NumericFilter', () => {
-      test('should handle unary operator', () => {
+      test('should handle unary operator for number', () => {
         [
           { operator: ConditionFilterType.GREATER_THAN, factoryFunc: filterFactory.greaterThan },
           {
@@ -158,9 +155,52 @@ describe('filter-from-jaql-util', () => {
             },
           };
 
-          const filter = createFilterFromJaqlInternal(jaql, instanceid);
+          const filter = createFilterFromJaqlInternal(jaql, guid);
           const attribute = createAttributeFromFilterJaql(jaql);
-          const expectedFilter = test.factoryFunc(attribute, jaql.filter[test.operator]);
+          const expectedFilter = test.factoryFunc(attribute, jaql.filter[test.operator], guid);
+          expectEqualFilters(filter, expectedFilter);
+        });
+      });
+
+      test('should handle unary operator for string', () => {
+        [
+          { operator: ConditionFilterType.EQUALS, factoryFunc: filterFactory.equals },
+          { operator: ConditionFilterType.STARTS_WITH, factoryFunc: filterFactory.startsWith },
+          {
+            operator: ConditionFilterType.DOESNT_START_WITH,
+            factoryFunc: filterFactory.doesntStartWith,
+          },
+          {
+            operator: ConditionFilterType.ENDS_WITH,
+            factoryFunc: filterFactory.endsWith,
+          },
+          {
+            operator: ConditionFilterType.DOESNT_END_WITH,
+            factoryFunc: filterFactory.doesntEndWith,
+          },
+          {
+            operator: ConditionFilterType.CONTAINS,
+            factoryFunc: filterFactory.contains,
+          },
+          {
+            operator: ConditionFilterType.DOESNT_CONTAIN,
+            factoryFunc: filterFactory.doesntContain,
+          },
+        ].forEach((test) => {
+          const jaql = {
+            table: 'Country',
+            column: 'Country',
+            datatype: 'text',
+            dim: '[Country.Country]',
+            title: 'Country',
+            filter: {
+              [test.operator]: 'ABC',
+            },
+          };
+
+          const filter = createFilterFromJaqlInternal(jaql, guid);
+          const attribute = createAttributeFromFilterJaql(jaql);
+          const expectedFilter = test.factoryFunc(attribute, jaql.filter[test.operator], guid);
           expectEqualFilters(filter, expectedFilter);
         });
       });
@@ -180,9 +220,14 @@ describe('filter-from-jaql-util', () => {
               },
             };
 
-            const filter = createFilterFromJaqlInternal(jaql, instanceid);
+            const filter = createFilterFromJaqlInternal(jaql, guid);
             const attribute = createAttributeFromFilterJaql(jaql);
-            const expectedFilter = test.factoryFunc(attribute, jaql.filter.from, jaql.filter.to);
+            const expectedFilter = test.factoryFunc(
+              attribute,
+              jaql.filter.from,
+              jaql.filter.to,
+              guid,
+            );
             expectEqualFilters(filter, expectedFilter);
           },
         );
@@ -203,10 +248,12 @@ describe('filter-from-jaql-util', () => {
           },
         };
 
-        const filter = createFilterFromJaqlInternal(jaql, instanceid);
+        const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
         const expectedFilter = filterFactory.exclude(
-          filterFactory.between(attribute, jaql.filter.exclude.from, jaql.filter.exclude.to),
+          filterFactory.between(attribute, jaql.filter.exclude.from, jaql.filter.exclude.to, guid),
+          undefined,
+          guid,
         );
         expectEqualFilters(
           (filter as ExcludeFilter).filter,
@@ -239,17 +286,18 @@ describe('filter-from-jaql-util', () => {
             factoryFunc: filterFactory.dateRelativeFrom,
           },
         ].forEach(({ jaql, factoryFunc }) => {
-          const filter = createFilterFromJaqlInternal(jaql, instanceid);
+          const filter = createFilterFromJaqlInternal(jaql, guid);
           const attribute = createAttributeFromFilterJaql(jaql);
           const expectedFilter = factoryFunc(
             attribute as LevelAttribute,
             jaql.filter.next.offset,
             jaql.filter.next.count,
             jaql.filter.next.anchor,
+            guid,
           );
           expectEqualFilters(filter, expectedFilter);
           expect(filter.serializable()).toBeDefined();
-          expect(filter.jaql()).toEqual(expectedFilter.jaql());
+          expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
         });
       });
 
@@ -274,13 +322,14 @@ describe('filter-from-jaql-util', () => {
             factoryFunc: filterFactory.dateRelativeTo,
           },
         ].forEach(({ jaql, factoryFunc }) => {
-          const filter = createFilterFromJaqlInternal(jaql, instanceid);
+          const filter = createFilterFromJaqlInternal(jaql, guid);
           const attribute = createAttributeFromFilterJaql(jaql);
           const expectedFilter = factoryFunc(
             attribute as LevelAttribute,
             jaql.filter.last.offset,
             jaql.filter.last.count,
             jaql.filter.last.anchor,
+            guid,
           );
           expectEqualFilters(filter, expectedFilter);
         });
@@ -302,9 +351,9 @@ describe('filter-from-jaql-util', () => {
           },
         };
 
-        const filter = createFilterFromJaqlInternal(jaql, instanceid);
+        const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql) as LevelAttribute;
-        const expectedFilter = filterFactory.dateRange(attribute, '2010-01-01', '2012-01-01');
+        const expectedFilter = filterFactory.dateRange(attribute, '2010-01-01', '2012-01-01', guid);
         expectEqualFilters(filter, expectedFilter);
         expect((filter as DateRangeFilter).from).toBeDefined();
         expect((filter as DateRangeFilter).to).toBeDefined();
@@ -333,16 +382,48 @@ describe('filter-from-jaql-util', () => {
           },
         };
 
-        const filter = createFilterFromJaqlInternal(jaql, instanceid);
+        const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
         const measure = createMeasureFromRankingFilterJaql(jaql.filter.by);
-        const expectedFilter = filterFactory.topRanking(attribute, measure, jaql.filter.top);
+        const expectedFilter = filterFactory.topRanking(attribute, measure, jaql.filter.top, guid);
+        expectEqualFilters(filter, expectedFilter);
+      });
+
+      it('should handle bottom', () => {
+        const jaql = {
+          table: 'Brand',
+          column: 'Brand',
+          datatype: 'text',
+          title: 'Bottom 10 Brand by Total Revenue',
+          dim: '[Brand.Brand]',
+          filter: {
+            bottom: 10,
+            by: {
+              table: 'Commerce',
+              column: 'Revenue',
+              datatype: 'numeric',
+              title: 'sum Revenue',
+              dim: '[Commerce.Revenue]',
+              agg: 'sum',
+            },
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql);
+        const measure = createMeasureFromRankingFilterJaql(jaql.filter.by);
+        const expectedFilter = filterFactory.bottomRanking(
+          attribute,
+          measure,
+          jaql.filter.bottom,
+          guid,
+        );
         expectEqualFilters(filter, expectedFilter);
       });
     });
 
     describe('LogicalAttributeFilter', () => {
-      it('should handle and/or', () => {
+      it('should handle or', () => {
         const jaql = {
           table: 'Brand',
           column: 'Brand',
@@ -361,11 +442,47 @@ describe('filter-from-jaql-util', () => {
           },
         };
 
-        const filter = createFilterFromJaqlInternal(jaql, instanceid);
+        const filter = createFilterFromJaqlInternal(jaql, guid);
 
         const attribute = createAttributeFromFilterJaql(jaql);
         const expectedFilter = filterFactory.union(
-          jaql.filter.or.map((c) => createAttributeFilterFromConditionFilterJaql(attribute, c)),
+          jaql.filter.or.map((c) =>
+            createAttributeFilterFromConditionFilterJaql(attribute, c, guid),
+          ),
+          guid,
+        );
+        expect(filter.type).toEqual(expectedFilter.type);
+        expect(filter.id).toEqual(expectedFilter.id);
+        expect(filter.serializable()).toBeDefined();
+      });
+
+      it('should handle and', () => {
+        const jaql = {
+          table: 'Brand',
+          column: 'Brand',
+          datatype: 'text',
+          title: 'Brand',
+          dim: '[Brand.Brand]',
+          filter: {
+            and: [
+              {
+                startsWith: 'A',
+              },
+              {
+                endsWith: 's',
+              },
+            ],
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+
+        const attribute = createAttributeFromFilterJaql(jaql);
+        const expectedFilter = filterFactory.intersection(
+          jaql.filter.and.map((c) =>
+            createAttributeFilterFromConditionFilterJaql(attribute, c, guid),
+          ),
+          guid,
         );
         expect(filter.type).toEqual(expectedFilter.type);
         expect(filter.id).toEqual(expectedFilter.id);
@@ -403,11 +520,11 @@ describe('filter-from-jaql-util', () => {
             },
           };
 
-          const filter = createFilterFromJaqlInternal(jaql, instanceid);
+          const filter = createFilterFromJaqlInternal(jaql, guid);
           const measure = createMeasureFromFilterJaql(jaql);
           expect(measure).toBeDefined();
           if (!measure) return;
-          const expectedFilter = test.factoryFunc(measure, jaql.filter[test.operator]);
+          const expectedFilter = test.factoryFunc(measure, jaql.filter[test.operator], guid);
           expectEqualFilters(filter, expectedFilter);
         });
       });
@@ -484,8 +601,8 @@ describe('filter-from-jaql-util', () => {
         ].forEach((item) => {
           const jaql = item as unknown as FilterJaqlInternal;
 
-          const filter = createFilterFromJaqlInternal(jaql, instanceid);
-          const expectedFilter = filterFactory.customFilter(jaql, instanceid);
+          const filter = createFilterFromJaqlInternal(jaql, guid);
+          const expectedFilter = filterFactory.customFilter(jaql, guid);
           expect(filter.jaql()).toEqual(expectedFilter.jaql());
           expect(filter.jaql(true)).toEqual(expectedFilter.jaql(true));
           expect(filter.serializable()).toBeDefined();

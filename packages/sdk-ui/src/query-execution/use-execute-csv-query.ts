@@ -1,5 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
-import { usePrevious } from '../common/hooks/use-previous.js';
+import { useEffect, useReducer } from 'react';
 import { executeCsvQuery } from '../query/execute-query.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { TranslatableError } from '../translation/translatable-error.js';
@@ -7,7 +6,8 @@ import { withTracking } from '../decorators/hook-decorators/index.js';
 import { downloadCsvQueryStateReducer } from './csv-query-state-reducer.js';
 import { CsvQueryState, ExecuteCsvQueryParams } from './types.js';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
-import { isQueryParamsChanged } from '@/query-execution/query-params-comparator.js';
+import { useQueryParamsChanged } from '@/query-execution/query-params-comparator.js';
+import { useShouldLoad } from '../common/hooks/use-should-load.js';
 
 /**
  * React hook that executes a CSV data query.
@@ -90,7 +90,8 @@ export const useExecuteCsvQuery = withTracking('useExecuteCsvQuery')(useExecuteC
  * @internal
  */
 export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQueryState {
-  const prevParams = usePrevious(params);
+  const isQueryParamsChanged = useQueryParamsChanged(params);
+  const shouldLoad = useShouldLoad(params, isQueryParamsChanged);
   const [queryState, dispatch] = useReducer(downloadCsvQueryStateReducer, {
     isLoading: true,
     isError: false,
@@ -101,8 +102,6 @@ export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQu
   });
   const { isInitialized, app } = useSisenseContext();
 
-  const [isNeverExecuted, setIsNeverExecuted] = useState(true);
-
   useEffect(() => {
     if (!isInitialized) {
       dispatch({
@@ -110,16 +109,7 @@ export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQu
         error: new TranslatableError('errors.executeQueryNoSisenseContext'),
       });
     }
-    if (!app) {
-      return;
-    }
-    if (params?.enabled === false) {
-      return;
-    }
-    if (isNeverExecuted || isQueryParamsChanged(prevParams, params)) {
-      if (isNeverExecuted) {
-        setIsNeverExecuted(false);
-      }
+    if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
       const {
         dataSource,
@@ -160,11 +150,11 @@ export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQu
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, prevParams, params, isNeverExecuted]);
+  }, [app, isInitialized, params, shouldLoad]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
-  if (queryState.data && isQueryParamsChanged(prevParams, params)) {
+  if (queryState.data && isQueryParamsChanged) {
     return downloadCsvQueryStateReducer(queryState, { type: 'loading' });
   }
 

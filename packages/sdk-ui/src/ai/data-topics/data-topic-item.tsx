@@ -1,4 +1,44 @@
+import { useThemeContext } from '@/theme-provider';
 import ArrowLeftIcon from '../icons/arrow-left-icon';
+import styled from '@emotion/styled';
+import { Themable } from '@/theme-provider/types';
+import { getSlightlyDifferentColor } from '@/utils/color';
+
+const Container = styled.button<Themable>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  padding: 30px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  border-radius: 30px;
+  box-shadow: 0px 1px 2px rgba(9, 9, 10, 0.1), 0px 2px 4px rgba(9, 9, 10, 0.1);
+  cursor: pointer;
+
+  background-color: ${({ theme }) => theme.aiChat.dataTopics.items.backgroundColor};
+`;
+
+const Title = styled.div<Themable>`
+  font-size: 20px;
+  line-height: 28px;
+
+  color: ${({ theme }) => theme.aiChat.dataTopics.items.textColor};
+`;
+
+const Description = styled.div<Themable>`
+  font-size: ${({ theme }) => theme.aiChat.primaryFontSize[0]};
+  line-height: ${({ theme }) => theme.aiChat.primaryFontSize[1]};
+
+  color: ${({ theme }) =>
+    getSlightlyDifferentColor(theme.aiChat.dataTopics.items.textColor, 0, 0.5)};
+`;
+
+const IconContainer = styled.div`
+  width: 16px;
+  height: 16px;
+  transform: rotate(180deg);
+`;
 
 type Props = {
   title: string;
@@ -8,20 +48,18 @@ type Props = {
 
 export default function DataTopicItem(props: Props) {
   const { title, description, onClick } = props;
+
+  const { themeSettings } = useThemeContext();
+
   return (
-    <div
-      onClick={onClick}
-      className={
-        'csdk-max-w-full csdk-shadow-ai-shadow-sm csdk-cursor-pointer csdk-rounded-[30px] csdk-h-[100px] csdk-flex csdk-items-center csdk-flex-row csdk-justify-between csdk-bg-[#F4F4F8] csdk-p-[30px]'
-      }
-    >
+    <Container onClick={onClick} theme={themeSettings}>
       <div>
-        <div className="csdk-text-xl csdk-text-text-active">{title}</div>
-        <div className="csdk-text-ai-sm csdk-text-[#8E8E8E]">{description}</div>
+        <Title theme={themeSettings}>{title}</Title>
+        <Description theme={themeSettings}>{description}</Description>
       </div>
-      <div className="csdk-flex csdk-items-center csdk-h-[16px] csdk-w-[16px] csdk-rotate-180">
-        <ArrowLeftIcon color="#262E3D" />
-      </div>
-    </div>
+      <IconContainer>
+        <ArrowLeftIcon color={themeSettings.aiChat.icons.color} />
+      </IconContainer>
+    </Container>
   );
 }

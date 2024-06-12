@@ -48,7 +48,6 @@ TypeScript type aliases for components and hooks listed above
 - [CsvQueryState](type-alias.CsvQueryState.md)
 - [CsvQuerySuccessState](type-alias.CsvQuerySuccessState.md)
 - [CustomDrilldownResult](type-alias.CustomDrilldownResult.md)
-- [DashboardModel](type-alias.DashboardModel.md)
 - [DashboardModelErrorState](type-alias.DashboardModelErrorState.md)
 - [DashboardModelLoadingState](type-alias.DashboardModelLoadingState.md)
 - [DashboardModelState](type-alias.DashboardModelState.md)

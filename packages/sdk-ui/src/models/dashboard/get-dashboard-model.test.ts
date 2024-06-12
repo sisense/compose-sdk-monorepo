@@ -40,7 +40,11 @@ describe('getDashboardModel', () => {
       title: dashboardMock.title,
       layout: expect.anything(),
       filters: expect.anything(),
-      dataSource: dashboardMock.datasource.title,
+      widgets: expect.anything(),
+      dataSource: {
+        title: dashboardMock.datasource.title,
+        type: 'elasticube',
+      },
     });
   });
 
@@ -53,7 +57,10 @@ describe('getDashboardModel', () => {
     expect(result).toEqual({
       oid: dashboardMock.oid,
       title: dashboardMock.title,
-      dataSource: dashboardMock.datasource.title,
+      dataSource: {
+        title: dashboardMock.datasource.title,
+        type: 'elasticube',
+      },
       layout: expect.anything(),
       filters: expect.anything(),
       widgets: expect.arrayContaining(
@@ -71,11 +78,15 @@ describe('getDashboardModel', () => {
     expect(result).toEqual({
       oid: dashboardMock.oid,
       title: dashboardMock.title,
-      dataSource: dashboardMock.datasource.title,
+      dataSource: {
+        title: dashboardMock.datasource.title,
+        type: 'elasticube',
+      },
       layout: expect.anything(),
       filters: expect.arrayContaining(
         Array(dashboardMock.filters?.length).map(() => expect.anything()),
       ),
+      widgets: expect.anything(),
     });
   });
 });

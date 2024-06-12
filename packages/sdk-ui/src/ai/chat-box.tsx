@@ -10,7 +10,6 @@ import ChatWelcomeMessage from './messages/chat-welcome-message';
 import ErrorContainer from './common/error-container';
 import LoadingDotsIcon from './icons/loading-dots-icon';
 import ClearHistoryMessage from './messages/clear-history-message';
-import ClearHistorySuccessMessage from './messages/clear-history-success-message';
 import MessageListResolver from './messages/message-list-resolver';
 import TextMessage from './messages/text-message';
 import NavBackButton from './nav-back-button';
@@ -29,19 +28,7 @@ export type ChatBoxProps = {
   onGoBack?: () => void;
 };
 
-const ChatBoxBody = styled.div<Themable>`
-  height: 100%;
-  border-bottom-left-radius: ${({ theme }) => theme.aiChat.borderRadius};
-  border-bottom-right-radius: ${({ theme }) => theme.aiChat.borderRadius};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-
-  background-color: ${({ theme }) => theme.aiChat.backgroundColor};
-`;
-
-const ChatContainer = styled.div<Themable>`
+const ChatBody = styled.div<Themable>`
   display: flex;
   flex-direction: column;
   row-gap: ${({ theme }) => theme.aiChat.body.gapBetweenMessages};
@@ -71,10 +58,13 @@ const FollowupQuestionsContainer = styled.div<Themable>`
 `;
 
 export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
-  const { data: queryRecommendations, isLoading: recommendationsLoading } =
-    useGetQueryRecommendationsInternal({
-      contextTitle,
-    });
+  const {
+    data: queryRecommendations,
+    isLoading: recommendationsLoading,
+    isError: recommendationsError,
+  } = useGetQueryRecommendationsInternal({
+    contextTitle,
+  });
   const questions = useMemo(
     () => queryRecommendations.map((q) => q.nlqPrompt),
     [queryRecommendations],
@@ -90,11 +80,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
     lastError,
   } = useChatSession(contextTitle);
 
-  const {
-    mutate: clearHistory,
-    isLoading: isClearingHistory,
-    isSuccess: isHistoryCleared,
-  } = useClearChatHistory(chatId);
+  const { mutate: clearHistory, isLoading: isClearingHistory } = useClearChatHistory(chatId);
 
   const [isClearHistoryOptionsVisible, setIsClearHistoryOptionsVisible] = useState(false);
   const showClearHistoryOptions = () => setIsClearHistoryOptionsVisible(true);
@@ -156,54 +142,52 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   return (
     <>
       {header}
-      <ChatBoxBody theme={themeSettings}>
-        <ChatContainer ref={chatContainerRef} theme={themeSettings}>
-          <ChatWelcomeMessage />
-          <SuggestionsWithIntro
-            questions={questions}
-            isLoading={recommendationsLoading}
-            onSelection={sendMessage}
+      <ChatBody ref={chatContainerRef} theme={themeSettings}>
+        <ChatWelcomeMessage />
+        <SuggestionsWithIntro
+          questions={questions}
+          isLoading={recommendationsLoading}
+          onSelection={sendMessage}
+        />
+        {lastError && <TextMessage align="left">{lastError.message}</TextMessage>}
+        {isLoading ? <LoadingSpinner /> : <MessageListResolver messages={history} />}
+        {enableFollowupQuestions && lastNlqResponse && (
+          <FollowupQuestionsContainer theme={themeSettings}>
+            {lastNlqResponse.followupQuestions.slice(0, 2).map((question, i) => (
+              <ClickableMessage
+                key={i}
+                align="left"
+                onClick={() => {
+                  sendMessage(question);
+                }}
+              >
+                <div className="csdk-py-[7px] csdk-px-4">{question}</div>
+              </ClickableMessage>
+            ))}
+          </FollowupQuestionsContainer>
+        )}
+        {(isAwaitingResponse || isClearingHistory) && <LoadingDotsIcon />}
+        {isClearHistoryOptionsVisible && (
+          <ClearHistoryMessage
+            onCancel={hideClearHistoryOptions}
+            onConfirm={onClearHistoryConfirm}
           />
-          {lastError && <TextMessage align="left">{lastError.message}</TextMessage>}
-          {isHistoryCleared && <ClearHistorySuccessMessage />}
-          {isLoading && <LoadingSpinner />}
-          {!isLoading && <MessageListResolver messages={history} />}
-          {enableFollowupQuestions && lastNlqResponse && (
-            <FollowupQuestionsContainer theme={themeSettings}>
-              {lastNlqResponse.followupQuestions.slice(0, 2).map((question, i) => (
-                <ClickableMessage
-                  key={i}
-                  align="left"
-                  onClick={() => {
-                    sendMessage(question);
-                  }}
-                >
-                  <div className="csdk-py-[7px] csdk-px-2">{question}</div>
-                </ClickableMessage>
-              ))}
-            </FollowupQuestionsContainer>
-          )}
-          {(isAwaitingResponse || isClearingHistory) && <LoadingDotsIcon />}
-          {isClearHistoryOptionsVisible && (
-            <ClearHistoryMessage
-              onCancel={hideClearHistoryOptions}
-              onConfirm={onClearHistoryConfirm}
-            />
-          )}
-        </ChatContainer>
+        )}
+      </ChatBody>
 
-        <ChatFooter theme={themeSettings}>
-          <ChatInput
-            onSendMessage={sendMessage}
-            disabled={isAwaitingResponse || isLoading}
-            onClearHistoryClick={showClearHistoryOptions}
-            suggestions={questions}
-            recentPrompts={uniqueRecentPrompts}
-            isLoading={recommendationsLoading || isLoading}
-          />
-          <AiDisclaimer theme={themeSettings} />
-        </ChatFooter>
-      </ChatBoxBody>
+      <ChatFooter theme={themeSettings}>
+        <ChatInput
+          onSendMessage={sendMessage}
+          disabled={isAwaitingResponse || isLoading}
+          onClearHistoryClick={showClearHistoryOptions}
+          suggestions={questions}
+          recentPrompts={uniqueRecentPrompts}
+          isLoading={recommendationsLoading || isLoading}
+          recommendationsError={recommendationsError}
+          onChange={hideClearHistoryOptions}
+        />
+        <AiDisclaimer theme={themeSettings} />
+      </ChatFooter>
     </>
   );
 }

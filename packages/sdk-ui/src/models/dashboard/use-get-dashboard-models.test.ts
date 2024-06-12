@@ -8,12 +8,11 @@ import { useSisenseContext } from '../../sisense-context/sisense-context.js';
 import { type ClientApplication } from '../../app/client-application.js';
 import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
-import { DashboardModel } from './types.js';
-import { translateDashboard } from './translate-dashboard.js';
+import { DashboardModel } from '@/models';
 const dashboardModelsMock: DashboardModel[] = [
   sampleEcommerceDashboard,
   sampleHealthcareDashboard,
-].map(translateDashboard);
+].map((dashboard) => new DashboardModel(dashboard));
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(

@@ -145,7 +145,7 @@ describe('utils', () => {
       const filter = createFilterFromJaql(jaql, instanceid);
       const attribute = createAttributeFromFilterJaql(jaql);
       const expectedFilter = filterFactory.members(attribute, jaql.filter.members);
-      expect(filter.jaql()).toEqual(expectedFilter.jaql());
+      expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
     });
   });
 });

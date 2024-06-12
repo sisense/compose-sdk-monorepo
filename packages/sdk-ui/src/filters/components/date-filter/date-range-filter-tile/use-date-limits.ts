@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { executeQuery } from '../../../../query/execute-query';
 import { useSetError } from '../../../../error-boundary/use-set-error';
 
-type DateLimits = {
+export type DateLimits = {
   minDate?: string;
   maxDate?: string;
 };

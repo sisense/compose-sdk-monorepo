@@ -1,11 +1,11 @@
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers';
-import { collectRefs, toPlainValue, toPlainValues } from '../utils';
+import { collectRefs, toPlainValue, toPlainObject } from '../utils';
 import type { DataState, RequestConfig } from '@sisense/sdk-ui-preact';
 import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
 import { toRefs, watch, type ToRefs } from 'vue';
 import { useTracking } from './use-tracking';
-import type { MaybeRef, MaybeWithRefs } from '../types';
+import type { MaybeRef, MaybeRefOrWithRefs } from '../types';
 import type { HttpClient } from '@sisense/sdk-rest-client';
 
 /**
@@ -56,8 +56,8 @@ export type UseFetchOptions = {
  */
 export const useFetch = <TData = unknown>(
   path: MaybeRef<string>,
-  init?: MaybeRef<RequestInit> | MaybeWithRefs<RequestInit>,
-  options?: MaybeRef<UseFetchOptions> | MaybeWithRefs<UseFetchOptions>,
+  init?: MaybeRefOrWithRefs<RequestInit>,
+  options?: MaybeRefOrWithRefs<UseFetchOptions>,
 ): ToRefs<DataState<TData>> => {
   const { hasTrackedRef } = useTracking('useFetch');
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<TData>, {
@@ -75,10 +75,10 @@ export const useFetch = <TData = unknown>(
     try {
       dispatch({ type: 'loading' });
       const plainPath = toPlainValue(path);
-      const plainInit = init ? toPlainValues(init) : {};
-      const plainOptions = options ? toPlainValues(options) : {};
+      const plainInit = init ? toPlainObject(init) : {};
+      const plainOptions = options ? toPlainObject(options) : {};
       const httpClientOptions = {
-        requestConfig: plainOptions.requestConfig ? toPlainValues(plainOptions.requestConfig) : {},
+        requestConfig: plainOptions.requestConfig ? toPlainObject(plainOptions.requestConfig) : {},
         skipTrackingParam: true,
       };
 
@@ -98,7 +98,7 @@ export const useFetch = <TData = unknown>(
     [...collectRefs(path, init, options), context],
     () => {
       const { app } = context.value;
-      const enabled = toPlainValues(options || {}).enabled;
+      const enabled = toPlainObject(options || {}).enabled;
       const isEnabled = enabled === undefined || enabled === true;
       if (!app || !isEnabled) return;
       sendHttpRequest(app.httpClient);

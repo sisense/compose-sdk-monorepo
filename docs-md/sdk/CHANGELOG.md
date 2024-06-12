@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.12.0] - 2024-06-11
+
+### Added
+- Add `DashboardModel` class and implement `getDashboardProps` hook for internal testing
+- Add `Dashboard` and `DashboardById` components for internal testing
+- Extend `DashboardModel` to support cascading filters
+- Export `useLastNlqResponse` hook for extracting NLQ (Natural Language Query) response
+- Add tiled version of `DateRangeFilterTile`
+- Add support for Common JS in `sdk-data` and `sdk-ui` packages
+
+### Changed
+- Make Chatbot tooltip style and data topics customizable
+- Minor tweaks and UI improvements for `Chatbot` component
+- Enable Angular v18 support for `sdk-ui-angular` package
+
 ## [1.11.0] - 2024-05-28
 
 ### Added

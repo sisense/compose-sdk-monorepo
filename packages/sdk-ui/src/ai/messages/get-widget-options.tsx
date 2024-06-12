@@ -1,4 +1,4 @@
-import { MetadataItem } from '@sisense/sdk-query-client';
+import { DatetimeMask, MetadataItem } from '@sisense/sdk-query-client';
 import merge from 'ts-deepmerge';
 import { ChartSubtype } from '../../chart-options-processor/subtype-to-design-options';
 import {
@@ -22,6 +22,7 @@ import {
   isBoxplot,
 } from '@/chart-options-processor/translations/types';
 import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
+import { isDatetime } from '@sisense/sdk-data';
 
 export const getChartRecommendationsOrDefault = (
   response: NlqResponseData,
@@ -102,6 +103,13 @@ const mapToDataOptions = (
             return {
               column,
               sortType: 'sortNone',
+            };
+          }
+
+          if (isDatetime(column.type)) {
+            return {
+              column,
+              dateFormat: (m.format?.mask as DatetimeMask)?.[m.jaql.level!],
             };
           }
 

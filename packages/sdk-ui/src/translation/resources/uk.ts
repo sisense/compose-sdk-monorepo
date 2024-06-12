@@ -46,6 +46,7 @@ export const translation: TranslationDictionary = {
     },
     unknownFilterInFilterRelations: 'Логічні відношення фільтрів містять невідомий фільтр',
     filterRelationsNotSupported: 'Відносини фільтрів ще не підтримуються',
+    invalidFilterType: 'Недійсний тип фільтра',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',

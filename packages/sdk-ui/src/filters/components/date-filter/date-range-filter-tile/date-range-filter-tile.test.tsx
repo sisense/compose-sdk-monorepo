@@ -70,4 +70,31 @@ describe('DateRangeFilterTile', () => {
 
     expect(errorBoxText).toBeTruthy();
   });
+
+  it('should render a tiled version of DateRangeFilterTile', async () => {
+    expect.assertions(2);
+
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+
+    render(
+      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+        <DateRangeFilterTile
+          title="Date Range"
+          dataSource={DM.DataSource}
+          attribute={DM.Commerce.Date.Years}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          tiled
+        />
+      </SisenseContextProvider>,
+    );
+
+    expect(await screen.findByText('From 2009-01-01')).toBeInTheDocument();
+
+    const expandFilterButton = screen.getByLabelText('arrow-down');
+    fireEvent.click(expandFilterButton);
+    expect(await screen.findByLabelText('date range filter')).toBeInTheDocument();
+  });
 });

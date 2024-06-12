@@ -1,5 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from 'react';
-import isEqual from 'lodash/isEqual';
+import { useEffect, useReducer, useRef } from 'react';
 import { withTracking } from '../decorators/hook-decorators';
 import { queryStateReducer } from './query-state-reducer';
 import { useSisenseContext } from '../sisense-context/sisense-context';
@@ -13,12 +12,13 @@ import { isFiltersChanged } from '../utils/filters-comparator';
 import { ClientApplication } from '../app/client-application';
 import { TranslatableError } from '../translation/translatable-error';
 import { RestApi } from '../api/rest-api';
-import { usePrevious } from '../common/hooks/use-previous';
+import { useHasChanged } from '../common/hooks/use-has-changed';
 import { extractDashboardFiltersForWidget } from '../dashboard-widget/translate-dashboard-filters';
 import { fetchWidgetDtoModel } from '../dashboard-widget/use-fetch-widget-dto-model';
 import { ExecuteQueryByWidgetIdParams, QueryByWidgetIdState } from './types';
 import { Filter } from '@sisense/sdk-data';
 import { WidgetModel } from '../models';
+import { useShouldLoad } from '../common/hooks/use-should-load';
 
 /**
  * React hook that executes a data query extracted from an existing widget in the Sisense instance.
@@ -60,9 +60,9 @@ export const useExecuteQueryByWidgetId = withTracking('useExecuteQueryByWidgetId
  * @internal
  */
 export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetIdParams) {
-  const prevParams = usePrevious(params);
+  const isParamsChanged = useParamsChanged(params);
+  const shouldLoad = useShouldLoad(params, isParamsChanged);
   const { isInitialized, app } = useSisenseContext();
-  const [isNeverExecuted, setIsNeverExecuted] = useState(true);
   const query = useRef<QueryByWidgetIdState['query']>(undefined);
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
@@ -81,15 +81,7 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
       });
     }
 
-    if (!app) {
-      return;
-    }
-
-    if (params?.enabled === false) {
-      return;
-    }
-
-    if (isNeverExecuted || isParamsChanged(prevParams, params)) {
+    if (shouldLoad(app)) {
       const {
         widgetOid,
         dashboardOid,
@@ -101,10 +93,6 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
         includeDashboardFilters,
         onBeforeQuery,
       } = params;
-
-      if (isNeverExecuted) {
-        setIsNeverExecuted(false);
-      }
 
       dispatch({ type: 'loading' });
 
@@ -128,7 +116,7 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
           dispatch({ type: 'error', error });
         });
     }
-  }, [params, prevParams, isNeverExecuted, app, isInitialized]);
+  }, [params, app, isInitialized, shouldLoad]);
 
   return { ...queryState, query: query.current } as QueryByWidgetIdState;
 }
@@ -145,29 +133,16 @@ const simplySerializableParamNames: (keyof ExecuteQueryByWidgetIdParams)[] = [
 ];
 
 /**
- * Checks if the parameters have changed by deep comparison.
+ * Checks if the query parameters have changed by deep comparison.
  *
- * @param prevParams - Previous query parameters
- * @param newParams - New query parameters
+ * @param params - New query parameters
  */
-export function isParamsChanged(
-  prevParams: ExecuteQueryByWidgetIdParams | undefined,
-  newParams: ExecuteQueryByWidgetIdParams,
-) {
-  if (!prevParams && newParams) {
-    return true;
-  }
-
-  const isRegularFiltersChanged = isFiltersChanged(prevParams!.filters, newParams.filters);
-  const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
-
-  return (
-    simplySerializableParamNames.some(
-      (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
-    ) ||
-    isRegularFiltersChanged ||
-    isHighlightFiltersChanged
-  );
+export function useParamsChanged(params: ExecuteQueryByWidgetIdParams) {
+  return useHasChanged(params, simplySerializableParamNames, (params, prev) => {
+    const isRegularFiltersChanged = isFiltersChanged(prev.filters, params.filters);
+    const isHighlightFiltersChanged = isFiltersChanged(prev.highlights, params.highlights);
+    return isRegularFiltersChanged || isHighlightFiltersChanged;
+  });
 }
 
 /** @internal */

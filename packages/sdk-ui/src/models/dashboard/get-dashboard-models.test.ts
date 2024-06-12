@@ -84,10 +84,11 @@ describe('getDashboardModels', () => {
         title: dashboardMock.title,
         layout: expect.anything(),
         filters: expect.anything(),
-        dataSource: (expect as ExpectWithOneOfExtension).oneOf([
-          dashboardMock.datasource.title,
-          dashboardMock.datasource.fullname,
-        ]),
+        dataSource: {
+          title: dashboardMock.datasource.title,
+          type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
+        },
+        widgets: expect.anything(),
       })),
     );
   });
@@ -102,10 +103,10 @@ describe('getDashboardModels', () => {
       dashboardsMock.map((dashboardMock) => ({
         oid: dashboardMock.oid,
         title: dashboardMock.title,
-        dataSource: (expect as ExpectWithOneOfExtension).oneOf([
-          dashboardMock.datasource.title,
-          dashboardMock.datasource.fullname,
-        ]),
+        dataSource: {
+          title: dashboardMock.datasource.title,
+          type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
+        },
         layout: expect.anything(),
         filters: expect.anything(),
         widgets: expect.arrayContaining(
@@ -122,18 +123,17 @@ describe('getDashboardModels', () => {
     };
     const result = await getDashboardModels(httpClientMock, options);
 
-    //console.log(result);
-
     expect(result.length).toBe(1);
     expect(result[0]).toEqual({
       oid: targetDashboardMock.oid,
       title: targetDashboardMock.title,
       layout: expect.anything(),
       filters: expect.anything(),
-      dataSource: (expect as ExpectWithOneOfExtension).oneOf([
-        targetDashboardMock.datasource.title,
-        targetDashboardMock.datasource.fullname,
-      ]),
+      dataSource: {
+        title: targetDashboardMock.datasource.title,
+        type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
+      },
+      widgets: expect.anything(),
     });
   });
 });

@@ -13,6 +13,8 @@ const Button = styled.button<Themable>`
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   cursor: pointer;
+  text-align: left;
+  max-width: 85%;
 
   font-family: ${({ theme }) => theme.typography.fontFamily};
   color: ${({ theme }) => theme.aiChat.suggestions.textColor};

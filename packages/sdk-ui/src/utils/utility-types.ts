@@ -50,6 +50,7 @@ export type AnyObject = Record<string, any>;
 
 /**
  * Allows you to make a property of an object required.
+ *
  * @example
  * type T = {
  *   a: string;

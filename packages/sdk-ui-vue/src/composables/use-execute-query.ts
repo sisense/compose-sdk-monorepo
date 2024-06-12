@@ -8,8 +8,8 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { getSisenseContext } from '../providers/sisense-context-provider';
 import { useReducer } from '../helpers/use-reducer';
-import type { MaybeWithRefs } from '../types';
-import { collectRefs, toPlainValue } from '../utils';
+import type { MaybeRefOrWithRefs } from '../types';
+import { collectRefs, toPlainObject, toPlainValue } from '../utils';
 import { useTracking } from './use-tracking';
 
 /**
@@ -18,7 +18,7 @@ import { useTracking } from './use-tracking';
  * through reactive parameters. This composable is particularly useful for applications requiring data from Sisense
  * analytics, offering a reactive and declarative approach to data fetching and state management.
  *
- * @param {MaybeWithRefs<ExecuteQueryParams>} params - The parameters for the query, supporting reactive Vue refs.
+ * @param {MaybeRefOrWithRefs<ExecuteQueryParams>} params - The parameters for the query, supporting reactive Vue refs.
  * Includes details such as `dataSource`, `dimensions`, `measures`, `filters`, and more, allowing for comprehensive
  * query configuration. The `filters` parameter supports dynamic filtering based on user interaction or other application
  * state changes.
@@ -54,7 +54,7 @@ import { useTracking } from './use-tracking';
  * to easily manage query states and dynamically adjust query parameters based on application needs.
  * @group Queries
  */
-export const useExecuteQuery = (params: MaybeWithRefs<ExecuteQueryParams>) => {
+export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) => {
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
     isError: false,
@@ -79,23 +79,22 @@ export const useExecuteQuery = (params: MaybeWithRefs<ExecuteQueryParams>) => {
         count,
         offset,
         onBeforeQuery,
-      } = params;
-      const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(
-        toPlainValue(filters),
-      );
+      } = toPlainObject(params);
+      const { filters: filterList, relations: filterRelations } =
+        getFilterListAndRelations(filters);
 
       dispatch({ type: 'loading' });
 
       const data = await executeQuery(
         {
-          dataSource: toPlainValue(dataSource),
-          dimensions: toPlainValue(dimensions),
-          measures: toPlainValue(measures),
+          dataSource,
+          dimensions,
+          measures,
           filters: filterList,
           filterRelations,
-          highlights: toPlainValue(highlights),
-          count: toPlainValue(count),
-          offset: toPlainValue(offset),
+          highlights,
+          count,
+          offset,
         },
         application,
         { onBeforeQuery: toPlainValue(onBeforeQuery) },
@@ -111,7 +110,7 @@ export const useExecuteQuery = (params: MaybeWithRefs<ExecuteQueryParams>) => {
     [...collectRefs(params), context],
     () => {
       const { app } = context.value;
-      const enabled = toPlainValue(params.enabled);
+      const { enabled } = toPlainObject(params);
       const isEnabled = enabled === undefined || enabled === true;
       if (!app || !isEnabled) return;
       runExecuteQuery(app);

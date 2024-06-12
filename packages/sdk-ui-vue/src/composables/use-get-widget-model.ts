@@ -1,11 +1,11 @@
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers';
-import { collectRefs, toPlainValue, toPlainValues } from '../utils';
+import { collectRefs, toPlainObject } from '../utils';
 import type { ClientApplication, GetWidgetModelParams, WidgetModel } from '@sisense/sdk-ui-preact';
 import { dataLoadStateReducer, getWidgetModel } from '@sisense/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
 import { useTracking } from './use-tracking';
-import type { MaybeWithRefs } from '../types';
+import type { MaybeRefOrWithRefs } from '../types';
 
 /**
  * A Vue composable function `useGetWidgetModel` for retrieving widget models from a Sisense dashboard.
@@ -47,7 +47,7 @@ import type { MaybeWithRefs } from '../types';
  * @group Fusion Embed
  * @fusionEmbed
  */
-export const useGetWidgetModel = (params: MaybeWithRefs<GetWidgetModelParams>) => {
+export const useGetWidgetModel = (params: MaybeRefOrWithRefs<GetWidgetModelParams>) => {
   const { hasTrackedRef } = useTracking('useGetWidgetModel');
   const [widgetState, dispatch] = useReducer(dataLoadStateReducer<WidgetModel>, {
     isLoading: true,
@@ -60,10 +60,10 @@ export const useGetWidgetModel = (params: MaybeWithRefs<GetWidgetModelParams>) =
 
   const context = getSisenseContext();
 
-  const getWidgetModelData = async (application: ClientApplication) => {
+  const runGetWidgetModel = async (application: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
-      const { dashboardOid, widgetOid } = toPlainValues(params);
+      const { dashboardOid, widgetOid } = toPlainObject(params);
       const data = await getWidgetModel(application.httpClient, dashboardOid, widgetOid);
 
       dispatch({ type: 'success', data });
@@ -76,10 +76,10 @@ export const useGetWidgetModel = (params: MaybeWithRefs<GetWidgetModelParams>) =
     [...collectRefs(params), context],
     () => {
       const { app } = context.value;
-      const enabled = toPlainValue(params.enabled);
+      const { enabled } = toPlainObject(params);
       const isEnabled = enabled === undefined || enabled === true;
       if (!app || !isEnabled) return;
-      getWidgetModelData(app);
+      runGetWidgetModel(app);
     },
     { immediate: true },
   );

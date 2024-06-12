@@ -1,0 +1,87 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DashboardModel > should create a new dashboard model with all arguments 1`] = `
+DashboardModel {
+  "dataSource": {
+    "title": "test",
+    "type": "elasticube",
+  },
+  "filters": [
+    {
+      "__serializable": "DimensionalElement",
+      "attribute": {
+        "__serializable": "DimensionalElement",
+        "desc": "",
+        "expression": "dim",
+        "name": "column",
+        "type": "text-attribute",
+      },
+      "desc": "",
+      "filterType": "members",
+      "members": [
+        "member",
+      ],
+      "name": "aa97e8bdf02f3f25dda80a630616a17230ecb913",
+      "type": "filter",
+    },
+  ],
+  "layout": {
+    "columns": [
+      {
+        "rows": [
+          {
+            "cells": [
+              {
+                "height": 3000,
+                "widgetId": "widget-1",
+                "widthPercentage": 2000,
+              },
+            ],
+          },
+        ],
+        "widthPercentage": 1000,
+      },
+    ],
+  },
+  "oid": "test",
+  "title": "test",
+  "widgets": [
+    WidgetModel {
+      "chartType": "pie",
+      "dataOptions": {
+        "category": [],
+        "value": [],
+      },
+      "dataSource": "test",
+      "description": "",
+      "drilldownOptions": {
+        "drilldownDimensions": [],
+        "drilldownSelections": [],
+      },
+      "filters": [],
+      "oid": "widget-1",
+      "styleOptions": {
+        "subtype": "pie/donut",
+      },
+      "title": "test",
+      "widgetType": "chart/pie",
+    },
+  ],
+}
+`;
+
+exports[`DashboardModel > should create a new dashboard model with minimum of arguments 1`] = `
+DashboardModel {
+  "dataSource": {
+    "title": "test",
+    "type": "elasticube",
+  },
+  "filters": [],
+  "layout": {
+    "columns": [],
+  },
+  "oid": "test",
+  "title": "test",
+  "widgets": [],
+}
+`;

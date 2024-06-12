@@ -28,7 +28,6 @@ import {
   DateRangeFilter,
   RelativeDateFilter,
 } from './filters.js';
-import { FilterJaql } from '../types.js';
 import { createGenericFilter } from './utils/filter-from-jaql-util.js';
 
 // LOGICAL FILTERS
@@ -49,10 +48,11 @@ import { createGenericFilter } from './utils/filter-from-jaql-util.js';
  * ])
  * ```
  * @param filters - Filters to union. The filters must all be on the same attribute.
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function union(filters: Filter[]): Filter {
-  return new LogicalAttributeFilter(filters, LogicalOperators.Union);
+export function union(filters: Filter[], guid?: string): Filter {
+  return new LogicalAttributeFilter(filters, LogicalOperators.Union, guid);
 }
 
 /**
@@ -71,10 +71,11 @@ export function union(filters: Filter[]): Filter {
  * ])
  * ```
  * @param filters - Filters to intersect. The filters must all be on the same attribute.
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function intersection(filters: Filter[]): Filter {
-  return new LogicalAttributeFilter(filters, LogicalOperators.Intersection);
+export function intersection(filters: Filter[], guid?: string): Filter {
+  return new LogicalAttributeFilter(filters, LogicalOperators.Intersection, guid);
 }
 
 /**
@@ -99,11 +100,12 @@ export function intersection(filters: Filter[]): Filter {
  * ```
  * @param filter - Filter to exclude
  * @param input - Input filter to exclude from, on the same attribute. If not provided, the filter excludes from all items.
+ * @param guid - Optional GUID for the filter
  * @returns A filter representing an exclusion of the given filter
  * from all attribute members or from the optional input filter
  */
-export function exclude(filter: Filter, input?: Filter): Filter {
-  return new ExcludeFilter(filter, input);
+export function exclude(filter: Filter, input?: Filter, guid?: string): Filter {
+  return new ExcludeFilter(filter, input, guid);
 }
 
 // TEXT / NUMERIC FILTERS
@@ -124,10 +126,11 @@ export function exclude(filter: Filter, input?: Filter): Filter {
  * ```
  * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function doesntContain(attribute: Attribute, value: string): Filter {
-  return new TextFilter(attribute, TextOperators.DoesntContain, value);
+export function doesntContain(attribute: Attribute, value: string, guid?: string): Filter {
+  return new TextFilter(attribute, TextOperators.DoesntContain, value, guid);
 }
 
 /**
@@ -146,10 +149,11 @@ export function doesntContain(attribute: Attribute, value: string): Filter {
  * ```
  * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function doesntEndWith(attribute: Attribute, value: string): Filter {
-  return new TextFilter(attribute, TextOperators.DoesntEndWith, value);
+export function doesntEndWith(attribute: Attribute, value: string, guid?: string): Filter {
+  return new TextFilter(attribute, TextOperators.DoesntEndWith, value, guid);
 }
 
 /**
@@ -168,10 +172,11 @@ export function doesntEndWith(attribute: Attribute, value: string): Filter {
  * ```
  * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function doesntStartWith(attribute: Attribute, value: string): Filter {
-  return new TextFilter(attribute, TextOperators.DoesntStartWith, value);
+export function doesntStartWith(attribute: Attribute, value: string, guid?: string): Filter {
+  return new TextFilter(attribute, TextOperators.DoesntStartWith, value, guid);
 }
 
 /**
@@ -190,10 +195,11 @@ export function doesntStartWith(attribute: Attribute, value: string): Filter {
  * ```
  * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function contains(attribute: Attribute, value: string): Filter {
-  return new TextFilter(attribute, TextOperators.Contains, value);
+export function contains(attribute: Attribute, value: string, guid?: string): Filter {
+  return new TextFilter(attribute, TextOperators.Contains, value, guid);
 }
 
 /**
@@ -212,10 +218,11 @@ export function contains(attribute: Attribute, value: string): Filter {
  * ```
  * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function endsWith(attribute: Attribute, value: string): Filter {
-  return new TextFilter(attribute, TextOperators.EndsWith, value);
+export function endsWith(attribute: Attribute, value: string, guid?: string): Filter {
+  return new TextFilter(attribute, TextOperators.EndsWith, value, guid);
 }
 
 /**
@@ -234,10 +241,11 @@ export function endsWith(attribute: Attribute, value: string): Filter {
  * ```
  * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function startsWith(attribute: Attribute, value: string): Filter {
-  return new TextFilter(attribute, TextOperators.StartsWith, value);
+export function startsWith(attribute: Attribute, value: string, guid?: string): Filter {
+  return new TextFilter(attribute, TextOperators.StartsWith, value, guid);
 }
 
 /**
@@ -261,10 +269,11 @@ export function startsWith(attribute: Attribute, value: string): Filter {
  * ```
  * @param attribute - Text attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function like(attribute: Attribute, value: string): Filter {
-  return new TextFilter(attribute, TextOperators.Like, value);
+export function like(attribute: Attribute, value: string, guid?: string): Filter {
+  return new TextFilter(attribute, TextOperators.Like, value, guid);
 }
 
 /**
@@ -285,11 +294,11 @@ export function like(attribute: Attribute, value: string): Filter {
  * @param value - Value to filter by
  * @returns A filter instance
  */
-export function doesntEqual(attribute: Attribute, value: string | number): Filter {
+export function doesntEqual(attribute: Attribute, value: string | number, guid?: string): Filter {
   if (typeof value === 'string') {
-    return new TextFilter(attribute, TextOperators.DoesntEqual, value);
+    return new TextFilter(attribute, TextOperators.DoesntEqual, value, guid);
   } else {
-    return numeric(attribute, NumericOperators.DoesntEqual, value);
+    return numeric(attribute, NumericOperators.DoesntEqual, value, undefined, undefined, guid);
   }
 }
 
@@ -309,13 +318,14 @@ export function doesntEqual(attribute: Attribute, value: string | number): Filte
  * ```
  * @param attribute - Text or numeric attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function equals(attribute: Attribute, value: string | number): Filter {
+export function equals(attribute: Attribute, value: string | number, guid?: string): Filter {
   if (typeof value === 'string') {
-    return new TextFilter(attribute, TextOperators.Equals, value);
+    return new TextFilter(attribute, TextOperators.Equals, value, guid);
   } else {
-    return numeric(attribute, NumericOperators.Equals, value);
+    return numeric(attribute, NumericOperators.Equals, value, undefined, undefined, guid);
   }
 }
 
@@ -329,10 +339,11 @@ export function equals(attribute: Attribute, value: string | number): Filter {
  * ```
  * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function greaterThan(attribute: Attribute, value: number): Filter {
-  return numeric(attribute, NumericOperators.FromNotEqual, value);
+export function greaterThan(attribute: Attribute, value: number, guid?: string): Filter {
+  return numeric(attribute, NumericOperators.FromNotEqual, value, undefined, undefined, guid);
 }
 
 /**
@@ -345,10 +356,11 @@ export function greaterThan(attribute: Attribute, value: number): Filter {
  * ```
  * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function greaterThanOrEqual(attribute: Attribute, value: number): Filter {
-  return numeric(attribute, NumericOperators.From, value);
+export function greaterThanOrEqual(attribute: Attribute, value: number, guid?: string): Filter {
+  return numeric(attribute, NumericOperators.From, value, undefined, undefined, guid);
 }
 
 /**
@@ -361,10 +373,11 @@ export function greaterThanOrEqual(attribute: Attribute, value: number): Filter 
  * ```
  * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function lessThan(attribute: Attribute, value: number): Filter {
-  return numeric(attribute, NumericOperators.ToNotEqual, value);
+export function lessThan(attribute: Attribute, value: number, guid?: string): Filter {
+  return numeric(attribute, NumericOperators.ToNotEqual, value, undefined, undefined, guid);
 }
 
 /**
@@ -377,10 +390,11 @@ export function lessThan(attribute: Attribute, value: number): Filter {
  * ```
  * @param attribute - Numeric attribute to filter on
  * @param value - Value to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function lessThanOrEqual(attribute: Attribute, value: number): Filter {
-  return numeric(attribute, NumericOperators.To, value);
+export function lessThanOrEqual(attribute: Attribute, value: number, guid?: string): Filter {
+  return numeric(attribute, NumericOperators.To, value, undefined, undefined, guid);
 }
 
 /**
@@ -394,10 +408,16 @@ export function lessThanOrEqual(attribute: Attribute, value: number): Filter {
  * @param attribute - Numeric attribute to filter on
  * @param valueA - Value to filter from
  * @param valueB - Value to filter to
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function between(attribute: Attribute, valueA: number, valueB: number): Filter {
-  return numeric(attribute, NumericOperators.From, valueA, NumericOperators.To, valueB);
+export function between(
+  attribute: Attribute,
+  valueA: number,
+  valueB: number,
+  guid?: string,
+): Filter {
+  return numeric(attribute, NumericOperators.From, valueA, NumericOperators.To, valueB, guid);
 }
 
 /**
@@ -411,15 +431,22 @@ export function between(attribute: Attribute, valueA: number, valueB: number): F
  * @param attribute - Numeric attribute to filter on
  * @param valueA - Value to filter from
  * @param valueB - Value to filter to
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function betweenNotEqual(attribute: Attribute, valueA: number, valueB: number): Filter {
+export function betweenNotEqual(
+  attribute: Attribute,
+  valueA: number,
+  valueB: number,
+  guid?: string,
+): Filter {
   return numeric(
     attribute,
     NumericOperators.FromNotEqual,
     valueA,
     NumericOperators.ToNotEqual,
     valueB,
+    guid,
   );
 }
 
@@ -443,6 +470,7 @@ export function betweenNotEqual(attribute: Attribute, valueA: number, valueB: nu
  * @param valueA - First value
  * @param operatorB - Second operator
  * @param valueB - Second value
+ * @param guid - Optional GUID for the filter
  * @returns A custom numeric filter of the given attribute
  */
 export function numeric(
@@ -451,8 +479,9 @@ export function numeric(
   valueA?: number,
   operatorB?: string,
   valueB?: number,
+  guid?: string,
 ): Filter {
-  return new NumericFilter(attribute, operatorA, valueA, operatorB, valueB);
+  return new NumericFilter(attribute, operatorA, valueA, operatorB, valueB, guid);
 }
 
 /**
@@ -468,10 +497,11 @@ export function numeric(
  * ```
  * @param attribute - Attribute to filter on
  * @param members - Array of member values to filter by
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function members(attribute: Attribute, members: string[]): Filter {
-  return new MembersFilter(attribute, members);
+export function members(attribute: Attribute, members: string[], guid?: string): Filter {
+  return new MembersFilter(attribute, members, guid);
 }
 
 // DATE FILTERS
@@ -488,8 +518,8 @@ export function members(attribute: Attribute, members: string[]): Filter {
  * @param from - Date or string representing the value to filter from
  * @returns A filter instance
  */
-export function dateFrom(level: LevelAttribute, from: Date | string): Filter {
-  return dateRange(level, from, undefined);
+export function dateFrom(level: LevelAttribute, from: Date | string, guid?: string): Filter {
+  return dateRange(level, from, undefined, guid);
 }
 
 /**
@@ -502,10 +532,11 @@ export function dateFrom(level: LevelAttribute, from: Date | string): Filter {
  * ```
  * @param level - Date {@link LevelAttribute} to filter on
  * @param to - Date or string representing the last member to filter to
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function dateTo(level: LevelAttribute, to: Date | string): Filter {
-  return dateRange(level, undefined, to);
+export function dateTo(level: LevelAttribute, to: Date | string, guid?: string): Filter {
+  return dateRange(level, undefined, to, guid);
 }
 
 /**
@@ -519,10 +550,16 @@ export function dateTo(level: LevelAttribute, to: Date | string): Filter {
  * @param level - Date {@link LevelAttribute} to filter on
  * @param from - Date or string representing the start member to filter from
  * @param to - Date or string representing the end member to filter to
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function dateRange(level: LevelAttribute, from?: Date | string, to?: Date | string): Filter {
-  return new DateRangeFilter(level, from, to);
+export function dateRange(
+  level: LevelAttribute,
+  from?: Date | string,
+  to?: Date | string,
+  guid?: string,
+): Filter {
+  return new DateRangeFilter(level, from, to, guid);
 }
 
 /**
@@ -554,6 +591,7 @@ export function dateRange(level: LevelAttribute, from?: Date | string, to?: Date
  * Positive numbers skip forwards and negative numbers skip backwards (e.g. `-6` is 6 months backwards when `level` is a months level attribute)
  * @param count - Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute)
  * @param anchor - Date to filter from, defaults to the current day
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
 export function dateRelative(
@@ -561,8 +599,9 @@ export function dateRelative(
   offset: number,
   count: number,
   anchor?: Date | string,
+  guid?: string,
 ): Filter {
-  return new RelativeDateFilter(level, offset, count, undefined, anchor);
+  return new RelativeDateFilter(level, offset, count, undefined, anchor, guid);
 }
 
 /**
@@ -578,6 +617,7 @@ export function dateRelative(
  * @param offset - Number of levels to skip from the given `anchor` or the default of the current day (e.g. `6` is 6 months when `level` is a months level attribute)
  * @param count - Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute)
  * @param anchor - Date to filter from, defaults to the current day
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
 export function dateRelativeFrom(
@@ -585,8 +625,9 @@ export function dateRelativeFrom(
   offset: number,
   count: number,
   anchor?: Date | string,
+  guid?: string,
 ): Filter {
-  return new RelativeDateFilter(level, offset, count, DateOperators.Next, anchor);
+  return new RelativeDateFilter(level, offset, count, DateOperators.Next, anchor, guid);
 }
 
 /**
@@ -602,6 +643,7 @@ export function dateRelativeFrom(
  * @param offset - Number of levels to skip from the given `anchor` or the default of the current day (e.g. `6` is 6 months when `level` is a months level attribute)
  * @param count - Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute)
  * @param anchor - Date to filter to, defaults to the current day
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
 export function dateRelativeTo(
@@ -609,8 +651,9 @@ export function dateRelativeTo(
   offset: number,
   count: number,
   anchor?: Date | string,
+  guid?: string,
 ): Filter {
-  return new RelativeDateFilter(level, offset, count, DateOperators.Last, anchor);
+  return new RelativeDateFilter(level, offset, count, DateOperators.Last, anchor, guid);
 }
 
 /**
@@ -622,10 +665,11 @@ export function dateRelativeTo(
  * filterFactory.thisYear(DM.Commerce.Date)
  * ```
  * @param dimension - Date dimension to filter
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function thisYear(dimension: DateDimension): Filter {
-  return dateRelativeTo(dimension.Years, 0, 1);
+export function thisYear(dimension: DateDimension, guid?: string): Filter {
+  return dateRelativeTo(dimension.Years, 0, 1, undefined, guid);
 }
 
 /**
@@ -637,10 +681,11 @@ export function thisYear(dimension: DateDimension): Filter {
  * filterFactory.thisMonth(DM.Commerce.Date)
  * ```
  * @param dimension - Date dimension to filter
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function thisMonth(dimension: DateDimension): Filter {
-  return dateRelativeTo(dimension.Months, 0, 1);
+export function thisMonth(dimension: DateDimension, guid?: string): Filter {
+  return dateRelativeTo(dimension.Months, 0, 1, undefined, guid);
 }
 
 /**
@@ -652,10 +697,11 @@ export function thisMonth(dimension: DateDimension): Filter {
  * filterFactory.thisQuarter(DM.Commerce.Date)
  * ```
  * @param dimension - Date dimension to filter
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function thisQuarter(dimension: DateDimension): Filter {
-  return dateRelativeTo(dimension.Quarters, 0, 1);
+export function thisQuarter(dimension: DateDimension, guid?: string): Filter {
+  return dateRelativeTo(dimension.Quarters, 0, 1, undefined, guid);
 }
 
 /**
@@ -667,10 +713,11 @@ export function thisQuarter(dimension: DateDimension): Filter {
  * filterFactory.today(DM.Commerce.Date)
  * ```
  * @param dimension - date dimension to filter
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function today(dimension: DateDimension): Filter {
-  return dateRelativeTo(dimension.Days, 0, 1);
+export function today(dimension: DateDimension, guid?: string): Filter {
+  return dateRelativeTo(dimension.Days, 0, 1, undefined, guid);
 }
 
 // MEASURE-RELATED FILTERS
@@ -684,6 +731,7 @@ export function today(dimension: DateDimension): Filter {
  * @param valueA - First value
  * @param operatorB - Operator to apply on `valueB` ({@link NumericOperators})
  * @param valueB - Second value
+ * @param guid - Optional GUID for the filter
  * @returns A filter representing the provided logic
  * @internal
  */
@@ -694,8 +742,9 @@ export function measureBase(
   valueA?: number,
   operatorB?: string,
   valueB?: number,
+  guid?: string,
 ): Filter {
-  return new MeasureFilter(attribute, measure, operatorA, valueA, operatorB, valueB);
+  return new MeasureFilter(attribute, measure, operatorA, valueA, operatorB, valueB, guid);
 }
 
 /**
@@ -711,10 +760,19 @@ export function measureBase(
  * ```
  * @param measure - Measure to filter by
  * @param value - Value
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function measureEquals(measure: BaseMeasure, value: number): Filter {
-  return measureBase(measure.attribute, measure, NumericOperators.Equals, value);
+export function measureEquals(measure: BaseMeasure, value: number, guid?: string): Filter {
+  return measureBase(
+    measure.attribute,
+    measure,
+    NumericOperators.Equals,
+    value,
+    undefined,
+    undefined,
+    guid,
+  );
 }
 
 /**
@@ -731,10 +789,19 @@ export function measureEquals(measure: BaseMeasure, value: number): Filter {
  * ```
  * @param measure - Measure to filter by
  * @param value - Min value
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function measureGreaterThan(measure: BaseMeasure, value: number): Filter {
-  return measureBase(measure.attribute, measure, NumericOperators.FromNotEqual, value);
+export function measureGreaterThan(measure: BaseMeasure, value: number, guid?: string): Filter {
+  return measureBase(
+    measure.attribute,
+    measure,
+    NumericOperators.FromNotEqual,
+    value,
+    undefined,
+    undefined,
+    guid,
+  );
 }
 
 /**
@@ -751,10 +818,23 @@ export function measureGreaterThan(measure: BaseMeasure, value: number): Filter 
  * ```
  * @param measure - Measure to filter by
  * @param value - Min value
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function measureGreaterThanOrEqual(measure: BaseMeasure, value: number): Filter {
-  return measureBase(measure.attribute, measure, NumericOperators.From, value);
+export function measureGreaterThanOrEqual(
+  measure: BaseMeasure,
+  value: number,
+  guid?: string,
+): Filter {
+  return measureBase(
+    measure.attribute,
+    measure,
+    NumericOperators.From,
+    value,
+    undefined,
+    undefined,
+    guid,
+  );
 }
 
 /**
@@ -771,10 +851,19 @@ export function measureGreaterThanOrEqual(measure: BaseMeasure, value: number): 
  * ```
  * @param measure - Measure to filter by
  * @param value - Max value
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function measureLessThanOrEqual(measure: BaseMeasure, value: number): Filter {
-  return measureBase(measure.attribute, measure, NumericOperators.To, value);
+export function measureLessThanOrEqual(measure: BaseMeasure, value: number, guid?: string): Filter {
+  return measureBase(
+    measure.attribute,
+    measure,
+    NumericOperators.To,
+    value,
+    undefined,
+    undefined,
+    guid,
+  );
 }
 
 /**
@@ -790,10 +879,19 @@ export function measureLessThanOrEqual(measure: BaseMeasure, value: number): Fil
  * ```
  * @param measure - Measure to filter by
  * @param value - Value
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function measureLessThan(measure: BaseMeasure, value: number): Filter {
-  return measureBase(measure.attribute, measure, NumericOperators.ToNotEqual, value);
+export function measureLessThan(measure: BaseMeasure, value: number, guid?: string): Filter {
+  return measureBase(
+    measure.attribute,
+    measure,
+    NumericOperators.ToNotEqual,
+    value,
+    undefined,
+    undefined,
+    guid,
+  );
 }
 
 /**
@@ -812,9 +910,15 @@ export function measureLessThan(measure: BaseMeasure, value: number): Filter {
  * @param measure - Measure to filter by
  * @param valueA - Min value
  * @param valueB - Max value
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function measureBetween(measure: BaseMeasure, valueA: number, valueB: number): Filter {
+export function measureBetween(
+  measure: BaseMeasure,
+  valueA: number,
+  valueB: number,
+  guid?: string,
+): Filter {
   return measureBase(
     measure.attribute,
     measure,
@@ -822,6 +926,7 @@ export function measureBetween(measure: BaseMeasure, valueA: number, valueB: num
     valueA,
     NumericOperators.To,
     valueB,
+    guid,
   );
 }
 
@@ -841,12 +946,14 @@ export function measureBetween(measure: BaseMeasure, valueA: number, valueB: num
  * @param measure - Measure to filter by
  * @param valueA - Min value
  * @param valueB - Max value
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
 export function measureBetweenNotEqual(
   measure: BaseMeasure,
   valueA: number,
   valueB: number,
+  guid?: string,
 ): Filter {
   return measureBase(
     measure.attribute,
@@ -855,6 +962,7 @@ export function measureBetweenNotEqual(
     valueA,
     NumericOperators.ToNotEqual,
     valueB,
+    guid,
   );
 }
 
@@ -875,10 +983,16 @@ export function measureBetweenNotEqual(
  * @param attribute - Attribute to filter
  * @param measure - Measure to filter by
  * @param count - Number of members to return
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function topRanking(attribute: Attribute, measure: Measure, count: number): Filter {
-  return new RankingFilter(attribute, measure, RankingOperators.Top, count);
+export function topRanking(
+  attribute: Attribute,
+  measure: Measure,
+  count: number,
+  guid?: string,
+): Filter {
+  return new RankingFilter(attribute, measure, RankingOperators.Top, count, guid);
 }
 
 /**
@@ -896,10 +1010,16 @@ export function topRanking(attribute: Attribute, measure: Measure, count: number
  * @param attribute - Attribute to filter
  * @param measure - Measure to filter by
  * @param count - Number of members to return
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function bottomRanking(attribute: Attribute, measure: Measure, count: number): Filter {
-  return new RankingFilter(attribute, measure, RankingOperators.Bottom, count);
+export function bottomRanking(
+  attribute: Attribute,
+  measure: Measure,
+  count: number,
+  guid?: string,
+): Filter {
+  return new RankingFilter(attribute, measure, RankingOperators.Bottom, count, guid);
 }
 
 const relate = (node: FilterRelationsNode): FilterRelationsNode => {
@@ -999,10 +1119,10 @@ export namespace logic {
  * Creates a filter from JAQL
  *
  * @param jaql - Filter Jaql
- * @param instanceid - Filter instance id
+ * @param guid - Optional GUID for the filter
  * @returns A filter instance
  * @internal
  */
-export function customFilter(jaql: any, instanceid?: string): Filter {
-  return createGenericFilter(jaql as FilterJaql, instanceid);
+export function customFilter(jaql: any, guid?: string): Filter {
+  return createGenericFilter(jaql, guid);
 }

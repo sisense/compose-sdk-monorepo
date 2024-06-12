@@ -5,6 +5,7 @@ export { ClientApplication, createClientApplication } from './app/client-applica
 export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
+export { DashboardById } from './dashboard/dashboard-by-id';
 export { DashboardWidget } from './dashboard-widget/dashboard-widget';
 export { getSortType } from './dashboard-widget/utils';
 export {

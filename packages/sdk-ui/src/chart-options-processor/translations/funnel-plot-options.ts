@@ -3,7 +3,7 @@ import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { ValueLabelSettings } from './value-label-section';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
-import { CompleteNumberFormatConfig } from '../../types';
+import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../types';
 import { InternalSeries } from './tooltip-utils';
 import { FunnelChartDesignOptions } from './design-options';
 import { withPercentSign, fraction, fromFraction } from '../../chart-data/utils';
@@ -149,6 +149,7 @@ export const funnelNeckHeight = (type: FunnelType): number => (type === 'pinched
 export const getFunnelPlotOptions = (
   funnelDesignOptions: FunnelChartDesignOptions,
   chartDataOptions: ChartDataOptionsInternal,
+  themeSettings?: CompleteThemeSettings,
 ): PlotOptions => {
   const {
     funnelType = DefaultFunnelType,
@@ -173,7 +174,17 @@ export const getFunnelPlotOptions = (
     ...defaultFunnelOptions(),
     dataLabels: {
       ...defaultFunnelOptions().dataLabels,
-      enabled: funnelLabels.enabled && (funnelLabels.showCategories || funnelLabels.showValue),
+      ...(themeSettings
+        ? {
+            color: themeSettings.chart.textColor,
+            style: {
+              fontFamily: themeSettings.typography.fontFamily,
+            },
+          }
+        : null),
+      enabled:
+        funnelLabels.enabled &&
+        (funnelLabels.showCategories || funnelLabels.showValue || funnelLabels.showPercent),
       formatter: function (this: InternalSeries) {
         const category = getCategory(this, funnelLabels);
         const value = getValue(this, funnelLabels, numberFormatConfig);

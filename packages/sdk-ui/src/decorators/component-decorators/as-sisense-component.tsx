@@ -30,6 +30,17 @@ export type ComponentDecorator<DecoratorConfig> = (
 ) => FunctionComponent<ComponentProps>;
 
 /**
+ * Adds display name to component
+ *
+ * @param componentName - the display name
+ * @returns component with display name
+ */
+const withComponentName: ComponentDecorator<string> = (componentName) => (Component) => {
+  Component.displayName = componentName;
+  return Component;
+};
+
+/**
  * Decorator that adds sisense-specific functionality to a component
  *
  * @param componentConfig - component configuration
@@ -39,16 +50,17 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
   const {
     componentName,
     shouldSkipSisenseContextWaiting,
-    trackingConfig,
+    trackingConfig = {},
     customContextErrorMessageKey,
   } = componentConfig;
   return (Component) =>
     flow(
+      withComponentName(componentName),
       withSisenseContextValidation({
         shouldSkipSisenseContextWaiting,
         customContextErrorMessageKey: customContextErrorMessageKey,
       }),
-      withTracking({ componentName, config: trackingConfig || {} }),
+      withTracking({ componentName, config: trackingConfig }),
       withErrorBoundary(),
       withDefaultTranslations(),
     )(Component);

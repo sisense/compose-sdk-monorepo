@@ -7,10 +7,10 @@ import type {
 import { executeQueryByWidgetId, queryStateReducer } from '@sisense/sdk-ui-preact';
 import { getSisenseContext } from '../providers/sisense-context-provider';
 import { ref, toRefs, watch, type ToRefs } from 'vue';
-import { collectRefs, toPlainValue, toPlainValues } from '../utils';
+import { collectRefs, toPlainValue, toPlainObject } from '../utils';
 import { useReducer } from '../helpers/use-reducer';
 import { useTracking } from './use-tracking';
-import type { MaybeWithRefs } from '../types';
+import type { MaybeRefOrWithRefs } from '../types';
 
 /**
  * A Vue composable function `useExecuteQueryByWidgetId` for executing queries by widget ID using the Sisense SDK.
@@ -53,9 +53,9 @@ import type { MaybeWithRefs } from '../types';
  * @group Fusion Embed
  * @fusionEmbed
  */
-export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWidgetIdParams>) => {
-  const { filters, ...untypedRest } = params;
-  const rest: MaybeWithRefs<Omit<ExecuteQueryByWidgetIdParams, 'filters'>> = untypedRest;
+export const useExecuteQueryByWidgetId = (
+  params: MaybeRefOrWithRefs<ExecuteQueryByWidgetIdParams>,
+) => {
   const query = ref<QueryByWidgetIdState['query']>(undefined);
   const { hasTrackedRef } = useTracking('useExecuteQueryByWidgetId');
   const [queryState, dispatch] = useReducer(queryStateReducer, {
@@ -66,15 +66,15 @@ export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWi
     error: undefined,
     data: undefined,
   });
-
   const context = getSisenseContext();
-  const { filters: filterList } = getFilterListAndRelations(toPlainValue(filters));
 
-  const getQueryByWidgetId = async (application: ClientApplication) => {
+  const runExecuteQueryByWidgetId = async (application: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
+      const { filters, ...rest } = toPlainObject(params);
+      const { filters: filterList } = getFilterListAndRelations(toPlainValue(filters));
       const { data, query: resQuery } = await executeQueryByWidgetId({
-        ...toPlainValues(rest),
+        ...rest,
         filters: filterList,
         app: application!,
       });
@@ -90,10 +90,10 @@ export const useExecuteQueryByWidgetId = (params: MaybeWithRefs<ExecuteQueryByWi
     [...collectRefs(params), context],
     () => {
       const { app } = context.value;
-      const enabled = toPlainValue(params.enabled);
+      const { enabled } = toPlainObject(params);
       const isEnabled = enabled === undefined || enabled === true;
       if (!app || !isEnabled) return;
-      getQueryByWidgetId(app);
+      runExecuteQueryByWidgetId(app);
     },
     { immediate: true },
   );

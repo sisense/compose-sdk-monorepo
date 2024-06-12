@@ -22,6 +22,7 @@ type UnpreparedInternalChartProps = {
 
 /**
  * Prepares the props for the chart renderer.
+ *
  * @param internalProps - unprepared internal chart props.
  * @returns Chart renderer props or null if the chart props is not ready yet
  * @internal

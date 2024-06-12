@@ -824,8 +824,6 @@ export interface ThemeSettings {
 
   /**
    * Theme settings specific to the AI Chatbot component
-   *
-   * @internal
    */
   aiChat?: {
     /** Background color of the chatbot */
@@ -943,10 +941,10 @@ export interface ThemeSettings {
       borderRadius?: string;
       /** Setting to be applied on hover */
       hover?: {
-        /** Background color of the chatbot suggestions on hover */
-        backgroundColor?: string;
         /** Text color of the chatbot suggestions on hover */
         textColor?: string;
+        /** Background color of the chatbot suggestions on hover */
+        backgroundColor?: string;
       };
       /** 2-color gradient to be applied on suggestions loading animation */
       loadingGradient?: [string, string];
@@ -956,12 +954,14 @@ export interface ThemeSettings {
 
     /** Settings for the chatbot clickable messages */
     clickableMessages?: {
-      /** Background color of the chatbot clickable messages */
-      backgroundColor?: string;
       /** Text color of the chatbot clickable messages */
       textColor?: string;
+      /** Background color of the chatbot clickable messages */
+      backgroundColor?: string;
       /** Border of the chatbot clickable messages */
       border?: false | string;
+      /** 2-color gradient to be applied on the border */
+      borderGradient?: [string, string] | null;
       /** Setting to be applied on hover */
       hover?: {
         /** Text color of the chatbot clickable messages on hover */
@@ -971,15 +971,38 @@ export interface ThemeSettings {
       };
     };
 
+    /** Settings for the data topics screen */
+    dataTopics?: {
+      /** Background color of the data topics screen */
+      backgroundColor?: string;
+      /** Settings for the individual data topic items */
+      items?: {
+        /** Text color of the data topic items */
+        textColor?: string;
+        /** Background color of the data topic items */
+        backgroundColor?: string;
+      };
+    };
+
     /** Settings for the chatbot icons */
     icons?: {
       /** Color of the chatbot icons */
       color?: string;
-      /** Setting to be applied on hover */
-      hover?: {
-        /** Color of the chatbot icons on hover */
-        color?: string;
+      /** Settings for feedback icons */
+      feedbackIcons?: {
+        /** Background color of the feedback icons on hover */
+        hoverColor?: string;
       };
+    };
+
+    /** Settings for the chatbot tooltips */
+    tooltips?: {
+      /** Background color of the tooltips */
+      backgroundColor?: string;
+      /** Text color of the tooltips */
+      textColor?: string;
+      /** Box shadow of the tooltips */
+      boxShadow?: string;
     };
   };
 }

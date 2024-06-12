@@ -26,7 +26,7 @@ Service for working with Sisense Fusion dashboards.
 
 ### getDashboardModel
 
-> **getDashboardModel**(`dashboardOid`, `options`?): `Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md) \>
+> **getDashboardModel**(`dashboardOid`, `options`?): `Promise`\< [`DashboardModel`](class.DashboardModel.md) \>
 
 Retrieves an existing dashboard model from the Sisense instance.
 
@@ -39,7 +39,7 @@ Retrieves an existing dashboard model from the Sisense instance.
 
 #### Returns
 
-`Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md) \>
+`Promise`\< [`DashboardModel`](class.DashboardModel.md) \>
 
 Dashboard model
 
@@ -47,7 +47,7 @@ Dashboard model
 
 ### getDashboardModels
 
-> **getDashboardModels**(`options`?): `Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md)[] \>
+> **getDashboardModels**(`options`?): `Promise`\< [`DashboardModel`](class.DashboardModel.md)[] \>
 
 Retrieves existing dashboard models from the Sisense instance.
 
@@ -59,6 +59,6 @@ Retrieves existing dashboard models from the Sisense instance.
 
 #### Returns
 
-`Promise`\< [`DashboardModel`](../type-aliases/type-alias.DashboardModel.md)[] \>
+`Promise`\< [`DashboardModel`](class.DashboardModel.md)[] \>
 
 Dashboard models array

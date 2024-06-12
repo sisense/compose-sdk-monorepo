@@ -58,20 +58,19 @@ describe('ChatRouter', () => {
       expect(screen.getByText('Model 1')).toBeInTheDocument();
       expect(screen.getByText('Model 2')).toBeInTheDocument();
       expect(screen.getByText('Model 3')).toBeInTheDocument();
-
-      expect(screen.queryByPlaceholderText('Ask a question')).toBeNull();
+      expect(screen.queryByLabelText('chat input')).toBeNull();
 
       // Click on a data topic
       await user.click(screen.getByText('Model 2'));
 
       // Verify that input is shown
-      expect(screen.getByPlaceholderText('Ask a question')).toBeInTheDocument();
+      expect(screen.getByLabelText('chat input')).toBeInTheDocument();
 
       // Click to navigate back to the data topics screen
       await user.click(screen.getByLabelText('go back'));
 
       expect(screen.getByText('Data Topics')).toBeInTheDocument();
-      expect(screen.queryByPlaceholderText('Ask a question')).toBeNull();
+      expect(screen.queryByLabelText('chat input')).toBeNull();
     });
   });
 
@@ -86,7 +85,7 @@ describe('ChatRouter', () => {
       );
 
       await waitFor(() => expect(screen.getByText('Model 2')).toBeInTheDocument());
-      expect(screen.getByPlaceholderText('Ask a question')).toBeInTheDocument();
+      expect(screen.getByLabelText('chat input')).toBeInTheDocument();
       expect(screen.queryByLabelText('go back')).toBeNull();
     });
   });
@@ -112,7 +111,7 @@ describe('ChatRouter', () => {
         ).toBeInTheDocument(),
       );
 
-      expect(screen.queryByPlaceholderText('Ask a question')).toBeNull();
+      expect(screen.queryByLabelText('chat input')).toBeNull();
 
       // Override APIs to return the new model
       setupMockDataTopicsApi([newModel]);
@@ -123,7 +122,7 @@ describe('ChatRouter', () => {
 
       expect(screen.queryByText(/Data model or perspective ".*" not found/)).toBeNull();
       expect(screen.getByText(newModel.title)).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Ask a question')).toBeInTheDocument();
+      expect(screen.getByLabelText('chat input')).toBeInTheDocument();
       expect(screen.queryByLabelText('go back')).toBeNull();
     });
   });

@@ -21,7 +21,7 @@ export const ChatFrame = styled.div<Themable & Sizable>`
   flex-direction: column;
   border: 1px solid #c6c9ce;
   border-radius: ${({ theme }) => theme.aiChat.borderRadius};
-  background-color: rgba(255, 255, 255, 1);
+  background-color: ${({ theme }) => theme.aiChat.backgroundColor};
   overflow: hidden;
 
   min-width: ${MIN_ALLOWED_WIDTH}px;

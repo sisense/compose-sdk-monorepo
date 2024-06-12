@@ -1,6 +1,7 @@
 /** @vitest-environment jsdom */
 import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   QueryResultData,
   filterFactory,
@@ -10,7 +11,7 @@ import {
   IncludeMembersFilter,
   Filter,
 } from '@sisense/sdk-data';
-import { useExecuteQueryByWidgetId, isParamsChanged } from './use-execute-query-by-widget-id';
+import { useExecuteQueryByWidgetId, useParamsChanged } from './use-execute-query-by-widget-id';
 import { executeQuery } from '../query/execute-query.js';
 import { ClientApplication } from '../app/client-application.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
@@ -594,20 +595,20 @@ describe('useExecuteQueryByWidgetId', () => {
   });
 });
 
-describe('isParamsChanged', () => {
-  it('should take "count" and "offset" into account', () => {
-    expect(
-      isParamsChanged(
-        { dashboardOid: 'd-oid', widgetOid: 'w-oid', count: 100, offset: 0 },
-        { dashboardOid: 'd-oid', widgetOid: 'w-oid', count: 100, offset: 50 },
-      ),
-    ).toBe(true);
+describe('useParamsChanged', () => {
+  const initialProps = { dashboardOid: 'd-oid', widgetOid: 'w-oid', count: 100, offset: 0 };
 
-    expect(
-      isParamsChanged(
-        { dashboardOid: 'd-oid', widgetOid: 'w-oid', count: 100, offset: 0 },
-        { dashboardOid: 'd-oid', widgetOid: 'w-oid', count: 100, offset: 0 },
-      ),
-    ).toBe(false);
+  it('should handle same params', () => {
+    const { result, rerender } = renderHook(useParamsChanged, { initialProps });
+    expect(result.current).toBe(true);
+    rerender(cloneDeep(initialProps));
+    expect(result.current).toBe(false);
+  });
+
+  it('should handle different params: `offset`', () => {
+    const { result, rerender } = renderHook(useParamsChanged, { initialProps });
+    expect(result.current).toBe(true);
+    rerender({ ...cloneDeep(initialProps), offset: 50 });
+    expect(result.current).toBe(true);
   });
 });

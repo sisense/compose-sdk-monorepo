@@ -6,6 +6,9 @@ import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider/theme-context';
 
 const PopupContent = styled.div<Themable>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.aiChat.primaryFontSize[0]};
+  line-height: ${({ theme }) => theme.aiChat.primaryFontSize[1]};
   background-color: ${({ theme }) => theme.aiChat.dropup.backgroundColor};
   border-radius: ${({ theme }) => theme.aiChat.dropup.borderRadius};
   box-shadow: ${({ theme }) => theme.aiChat.dropup.boxShadow};
@@ -14,6 +17,13 @@ const PopupContent = styled.div<Themable>`
   display: flex;
   flex-direction: column;
   row-gap: 4px;
+`;
+
+const ErrorMessage = styled.div<Themable>`
+  font-size: ${({ theme }) => theme.aiChat.primaryFontSize[0]};
+  line-height: ${({ theme }) => theme.aiChat.primaryFontSize[1]};
+  color: ${({ theme }) => theme.aiChat.dropup.items.textColor};
+  padding: 4px 12px;
 `;
 
 export const isCommand = (text: string) => text.startsWith('/');
@@ -25,6 +35,7 @@ interface ChatDropupProps {
   onSelection: (q: string) => void;
   anchorEl: HTMLElement | null;
   text: string;
+  recommendationsError: boolean;
 }
 
 export default function ChatDropup({
@@ -34,15 +45,16 @@ export default function ChatDropup({
   onSelection,
   anchorEl,
   text,
+  recommendationsError,
 }: ChatDropupProps) {
   const sections: DropupSectionProps[] = [
     {
-      title: '/recent',
+      title: '/recent searches',
       items: recentPrompts,
       onSelect: onSelection,
     },
     {
-      title: '/ai suggestions',
+      title: '/ai recommendations',
       items: suggestions,
       onSelect: onSelection,
     },
@@ -69,13 +81,20 @@ export default function ChatDropup({
           },
         },
       ]}
+      sx={{ zIndex: 2 }}
     >
       <PopupContent style={{ width: anchorEl?.offsetWidth }} theme={themeSettings}>
         {isLoading && <LoadingSpinner />}
         {!isLoading &&
+          !recommendationsError &&
           filteredSections.map((props) => (
             <DropupSection key={props.title} {...props} alwaysExpanded={alwaysExpanded} />
           ))}
+        {recommendationsError && (
+          <ErrorMessage theme={themeSettings}>
+            Recommendations aren't available right now. Try again in a few minutes.
+          </ErrorMessage>
+        )}
       </PopupContent>
     </Popper>
   );

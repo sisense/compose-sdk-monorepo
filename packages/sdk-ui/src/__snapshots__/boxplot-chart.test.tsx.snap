@@ -86,19 +86,6 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         },
       },
     },
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "scatter": {
       "dataLabels": {
         "enabled": false,
@@ -444,19 +431,6 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
           "fontWeight": "normal",
         },
       },
-    },
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
     },
     "scatter": {
       "dataLabels": {

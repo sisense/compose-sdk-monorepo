@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
+  CascadingFilter,
   DateOperators,
   DateRangeFilter,
   ExcludeFilter,
@@ -19,6 +20,7 @@ import {
 import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
 import { DateLevels } from '../types.js';
+import { Filter } from '../interfaces.js';
 
 describe('Filters jaql preparations', () => {
   it('must prepare members filter jaql', () => {
@@ -281,6 +283,48 @@ describe('Filters jaql preparations', () => {
 
     const jaql = filter.jaql();
 
+    expect(jaql).toStrictEqual(result);
+  });
+
+  it('must prepare cascading filter jaql', () => {
+    const result = [
+      {
+        jaql: {
+          title: 'CategoryCategory',
+          dim: '[Category.Category]',
+          datatype: 'text',
+          filter: {
+            members: ['Apple Mac Desktops', 'Apple Mac Laptops', 'Calculators'],
+          },
+        },
+        panel: 'scope',
+      },
+      {
+        jaql: {
+          title: 'CommerceGender',
+          dim: '[Commerce.Gender]',
+          datatype: 'text',
+          filter: {
+            members: ['Female'],
+          },
+        },
+        panel: 'scope',
+      },
+    ];
+
+    const levelFilter1: Filter = new MembersFilter(
+      new DimensionalAttribute('[Category.Category]', '[Category.Category]'),
+      ['Apple Mac Desktops', 'Apple Mac Laptops', 'Calculators'],
+    );
+
+    const levelFilter2: Filter = new MembersFilter(
+      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+      ['Female'],
+    );
+
+    const filter = new CascadingFilter([levelFilter1, levelFilter2]);
+
+    const jaql = filter.jaql();
     expect(jaql).toStrictEqual(result);
   });
 });

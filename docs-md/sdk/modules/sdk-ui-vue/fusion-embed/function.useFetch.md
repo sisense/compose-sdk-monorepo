@@ -22,8 +22,8 @@ A Vue composable function `useFetch` that allows to make authorized fetch reques
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `path` | [`MaybeRef`](../type-aliases/type-alias.MaybeRef.md)\< `string` \> | The endpoint path to fetch data from. This should be a relative path like '/api/v1/endpoint' |
-| `init`? | [`MaybeRef`](../type-aliases/type-alias.MaybeRef.md)\< `RequestInit` \> \| [`MaybeWithRefs`](../type-aliases/type-alias.MaybeWithRefs.md)\< `RequestInit` \> | The request init object |
-| `options`? | [`MaybeRef`](../type-aliases/type-alias.MaybeRef.md)\< [`UseFetchOptions`](../type-aliases/type-alias.UseFetchOptions.md) \> \| [`MaybeWithRefs`](../type-aliases/type-alias.MaybeWithRefs.md)\< [`UseFetchOptions`](../type-aliases/type-alias.UseFetchOptions.md) \> | The additional request options |
+| `init`? | [`MaybeRefOrWithRefs`](../type-aliases/type-alias.MaybeRefOrWithRefs.md)\< `RequestInit` \> | The request init object |
+| `options`? | [`MaybeRefOrWithRefs`](../type-aliases/type-alias.MaybeRefOrWithRefs.md)\< [`UseFetchOptions`](../type-aliases/type-alias.UseFetchOptions.md) \> | The additional request options |
 
 ## Returns
 

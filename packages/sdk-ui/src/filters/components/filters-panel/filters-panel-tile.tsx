@@ -50,7 +50,12 @@ export const FiltersPanelTile = ({ filter, onChange }: FiltersPanelTileProps) =>
 
   if (filter instanceof DateRangeFilter) {
     return (
-      <DateRangeFilterTile {...props} filter={filter} attribute={attribute as LevelAttribute} />
+      <DateRangeFilterTile
+        {...props}
+        filter={filter}
+        attribute={attribute as LevelAttribute}
+        tiled
+      />
     );
   }
 

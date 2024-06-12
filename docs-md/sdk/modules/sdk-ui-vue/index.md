@@ -59,6 +59,7 @@ Vue components for charts
 
 Fusion Dashboards, Widgets, Queries, and Formulas
 
+- [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />

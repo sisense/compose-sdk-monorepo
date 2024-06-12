@@ -3,8 +3,8 @@ import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 import { CompleteThemeSettings } from '../../../../types.js';
 import { useThemeContext } from '../../../../theme-provider/index.js';
-import { ArrowRightIcon } from '../../icons/arrow-right-icon';
-import { DoubleArrowRightIcon } from '../../icons/double-arrow-right-icon';
+import { ArrowIcon } from '../../icons/arrow-icon';
+import { DoubleArrowIcon } from '../../icons/double-arrow-icon';
 
 type HeaderProps = {
   date: Date;
@@ -55,10 +55,11 @@ export const CalendarHeader = (props: HeaderProps) => {
         theme={theme}
         disabled={props.prevMonthButtonDisabled}
       >
-        <DoubleArrowRightIcon
-          className={`csdk-scale-x-[-1] csdk-transition ${
-            props.prevMonthButtonDisabled ? 'csdk-opacity-0' : ''
-          }`}
+        <DoubleArrowIcon
+          direction="left"
+          disabled={props.prevMonthButtonDisabled}
+          className={'csdk-transition'}
+          theme={theme}
         />
       </MonthSelectionButton>
       <MonthSelectionButton
@@ -66,10 +67,11 @@ export const CalendarHeader = (props: HeaderProps) => {
         onClick={props.decreaseMonth}
         disabled={props.prevMonthButtonDisabled}
       >
-        <ArrowRightIcon
-          className={`csdk-scale-x-[-1] csdk-transition ${
-            props.prevMonthButtonDisabled ? 'csdk-opacity-0' : ''
-          }`}
+        <ArrowIcon
+          direction="left"
+          disabled={props.prevMonthButtonDisabled}
+          className={'csdk-transition'}
+          theme={theme}
         />
       </MonthSelectionButton>
       <MonthTitle theme={theme}>{dayjs(props.date).format('MMM YYYY')}</MonthTitle>
@@ -78,8 +80,11 @@ export const CalendarHeader = (props: HeaderProps) => {
         onClick={props.increaseMonth}
         disabled={props.nextMonthButtonDisabled}
       >
-        <ArrowRightIcon
-          className={`csdk-transition ${props.nextMonthButtonDisabled ? 'csdk-opacity-0' : ''}`}
+        <ArrowIcon
+          direction="right"
+          disabled={props.nextMonthButtonDisabled}
+          className={'csdk-transition'}
+          theme={theme}
         />
       </MonthSelectionButton>
       <MonthSelectionButton
@@ -89,8 +94,11 @@ export const CalendarHeader = (props: HeaderProps) => {
         }}
         disabled={props.nextMonthButtonDisabled}
       >
-        <DoubleArrowRightIcon
-          className={`csdk-transition ${props.nextMonthButtonDisabled ? 'csdk-opacity-0' : ''}`}
+        <DoubleArrowIcon
+          direction="right"
+          disabled={props.nextMonthButtonDisabled}
+          className={'csdk-transition'}
+          theme={theme}
         />
       </MonthSelectionButton>
     </HeaderBlock>

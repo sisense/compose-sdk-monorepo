@@ -11,20 +11,29 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.11.0",
+  "version": "1.12.0",
   "type": "module",
-  "exports": {
-    ".": "./dist/index.js",
-    "./dist/dimensional-model/filters/filters": "./dist/dimensional-model/filters/filters.js"
-  },
-  "main": "./dist/index.js",
+  "main": "./dist/cjs/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./dist/dimensional-model/filters/filters": {
+      "default": "./dist/dimensional-model/filters/filters.js",
+      "import": "./dist/dimensional-model/filters/filters.js",
+      "require": "./dist/cjs/dimensional-model/filters/filters.js"
+    }
+  },
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "^1.11.0",
-    "@sisense/sdk-rest-client": "^1.11.0",
+    "@sisense/sdk-common": "^1.12.0",
+    "@sisense/sdk-rest-client": "^1.12.0",
     "guid-typescript": "^1.0.9",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",
@@ -33,7 +42,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build": "tsc --build tsconfig.build.json",
-    "build:prod": "tsc --project tsconfig.prod.json",
+    "build:prod": "tsc --project tsconfig.prod.json && tsc --project tsconfig.cjs.json",
     "build.watch": "tsc --build --watch",
     "clean": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
     "lint": "eslint . --fix",

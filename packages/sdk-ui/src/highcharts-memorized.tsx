@@ -20,7 +20,7 @@ type HighchartsReactMemoizedProps = {
 };
 
 export const HighchartsReactMemoized = memo(
-  ({ options }: HighchartsReactMemoizedProps) => {
+  function HighchartsReactWrapper({ options }: HighchartsReactMemoizedProps) {
     const prevOptions = usePrevious(options);
     const onChartCreated = useCallback(
       (chart: Highcharts.Chart) => {

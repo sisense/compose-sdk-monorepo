@@ -45,6 +45,7 @@ export const translation = {
     },
     unknownFilterInFilterRelations: 'Filter relations contain unknown filter',
     filterRelationsNotSupported: 'Filter relations not supported yet',
+    invalidFilterType: 'Invalid filter type',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',

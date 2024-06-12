@@ -19,6 +19,7 @@ export default function ChatRouter() {
     if (defaultContextTitle && data && fetchStatus === 'idle') {
       const target = data.find((c) => c.name === defaultContextTitle);
       if (target) {
+        setErrorMessage(undefined);
         setSelectedContext(target.name);
       } else {
         setErrorMessage(`Data model or perspective "${defaultContextTitle}" not found`);

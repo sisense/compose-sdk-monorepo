@@ -12,7 +12,7 @@ exports[`DateRangeFilterTile > should render DateRangeFilterTile 1`] = `
         class="csdk-relative csdk-flex csdk-mr-[5px] csdk-cursor-pointer"
       >
         <label
-          class="csdk-text-text-content csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px] css-1ny4au0"
+          class="csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px] css-1ny4au0"
         >
           From
         </label>
@@ -54,7 +54,7 @@ exports[`DateRangeFilterTile > should render DateRangeFilterTile 1`] = `
         class="csdk-relative csdk-flex csdk-mr-[5px] csdk-cursor-pointer"
       >
         <label
-          class="csdk-text-text-content csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px] css-1ny4au0"
+          class="csdk-my-[5px] csdk-mr-[7px] csdk-text-[13px] csdk-leading-[18px] css-1ny4au0"
         >
           To
         </label>

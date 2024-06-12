@@ -6,6 +6,7 @@ title: Fusion Embed
 
 Fusion Dashboards, Widgets, Queries, and Formulas
 
+- [DashboardModel](class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />

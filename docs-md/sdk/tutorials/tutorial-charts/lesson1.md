@@ -16,8 +16,8 @@ Before getting started, you’ll need:
 You’ll also need access to a Sisense instance with:
 
 - The Sample Retail data source (you may need to go into the Sample Retail data model and unhide some of the columns that are hidden by default)
-- An [API Token](../../authentication-security.md#api-token) you can use to query with
-- [CORS settings](../../authentication-security.md#set-up-cors) that allow requests from `http://localhost:5173`, the URL that Vite serves your project on locally
+- An [API Token](../../getting-started/authentication-security.md#api-token) you can use to query with
+- [CORS settings](../../getting-started/authentication-security.md#set-up-cors) that allow requests from `http://localhost:5173`, the URL that Vite serves your project on locally
 
 ## Project Code
 

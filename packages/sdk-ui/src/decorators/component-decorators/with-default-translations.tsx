@@ -9,7 +9,7 @@ import { ComponentDecorator } from './as-sisense-component';
  */
 export const withDefaultTranslations: ComponentDecorator<void> = () => {
   return (Component) => {
-    return (props) => {
+    return function DefaultTranslations(props) {
       const { isInitialized } = useSisenseContext();
       if (!isInitialized) {
         return (

@@ -65,6 +65,7 @@ React components for charts
 
 Fusion Dashboards, Widgets, Queries, and Formulas
 
+- [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [ExecuteQueryByWidgetId](fusion-embed/function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

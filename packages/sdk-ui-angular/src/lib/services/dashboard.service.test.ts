@@ -45,12 +45,19 @@ describe('DashboardService', () => {
   describe('getDashboardModel', () => {
     it('should retrieve an existing dashboard model', async () => {
       const dashboardOid = 'dashboard-oid';
-      const expectedDashboardModel: DashboardModel = {
+      const expectedDashboardProps = {
         oid: dashboardOid,
         title: 'test-dashboard',
         dataSource: 'test-data-source',
         widgets: [],
+        layout: { columns: [] },
+        filters: [],
       };
+
+      const expectedDashboardModel = {
+        ...expectedDashboardProps,
+        getDashboardProps: () => expectedDashboardProps,
+      } as DashboardModel;
 
       sisenseContextService.getApp.mockResolvedValue({ httpClient: {} } as ClientApplication);
       getDashboardModelMock.mockResolvedValue(expectedDashboardModel);
@@ -66,14 +73,20 @@ describe('DashboardService', () => {
 
   describe('getDashboardModels', () => {
     it('should retrieve existing dashboard models', async () => {
-      const expectedDashboardModels: DashboardModel[] = [
-        {
-          oid: 'test-dashboard-oid',
-          title: 'test-dashboard',
-          dataSource: 'test-data-source',
-          widgets: [],
-        },
-      ];
+      const expectedDashboardProps = {
+        oid: 'test-dashboard-oid',
+        title: 'test-dashboard',
+        dataSource: 'test-data-source',
+        widgets: [],
+        layout: { columns: [] },
+        filters: [],
+      };
+
+      const expectedDashboardModel = {
+        ...expectedDashboardProps,
+        getDashboardProps: () => expectedDashboardProps,
+      } as DashboardModel;
+      const expectedDashboardModels: DashboardModel[] = [expectedDashboardModel];
 
       sisenseContextService.getApp.mockResolvedValue({ httpClient: {} } as ClientApplication);
       getDashboardModelsMock.mockResolvedValue(expectedDashboardModels);
@@ -81,7 +94,7 @@ describe('DashboardService', () => {
       const dashboardService = new DashboardService(sisenseContextService);
       const result = await dashboardService.getDashboardModels();
 
-      expect(result).toEqual(expectedDashboardModels);
+      expect(result).toEqual([expectedDashboardModel]);
       expect(sisenseContextService.getApp).toHaveBeenCalled();
       expect(getDashboardModelsMock).toHaveBeenCalledWith({}, undefined);
     });

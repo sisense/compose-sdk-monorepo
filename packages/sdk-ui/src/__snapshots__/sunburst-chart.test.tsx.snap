@@ -65,19 +65,6 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
     "verticalAlign": "bottom",
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,
@@ -441,19 +428,6 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
     "verticalAlign": "bottom",
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,
@@ -952,19 +926,6 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
     "verticalAlign": "bottom",
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,

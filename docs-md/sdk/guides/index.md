@@ -10,8 +10,11 @@ indexTopics:
     - title: CLI
       description: Learn about the Compose SDK CLI
       link: ./cli
+    - title: Drilldown
+      description: Learn how to create drilldown experiences
+      link: ./drilldown
     - title: Generative AI
-      description: Learn how to deliver conversational analytics using large language models (Beta)
+      description: Learn how to deliver conversational analytics using large language models (Private Beta)
       link: ./ai-features
     - title: Migration Guide
       description: Migrate your project from 0.X.X to 1.0.0

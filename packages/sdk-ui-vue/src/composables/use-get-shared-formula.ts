@@ -1,6 +1,6 @@
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers';
-import { collectRefs, toPlainValue, toPlainValues } from '../utils';
+import { collectRefs, toPlainObject } from '../utils';
 import type { CalculatedMeasure, DimensionalCalculatedMeasure } from '@sisense/sdk-data';
 import type {
   ClientApplication,
@@ -15,7 +15,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
 import { useTracking } from './use-tracking';
-import type { MaybeWithRefs } from '../types';
+import type { MaybeRefOrWithRefs } from '../types';
 
 /**
  * A Vue composable function `useGetSharedFormula` for retrieving shared formulas from Sisense.
@@ -62,7 +62,7 @@ import type { MaybeWithRefs } from '../types';
  * @fusionEmbed
  */
 
-export const useGetSharedFormula = (params: MaybeWithRefs<UseGetSharedFormulaParams>) => {
+export const useGetSharedFormula = (params: MaybeRefOrWithRefs<UseGetSharedFormulaParams>) => {
   const { hasTrackedRef } = useTracking('useGetSharedFormula');
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<CalculatedMeasure | null>, {
     isLoading: true,
@@ -76,7 +76,7 @@ export const useGetSharedFormula = (params: MaybeWithRefs<UseGetSharedFormulaPar
 
   const getSharedFormula = (application: ClientApplication) => {
     dispatch({ type: 'loading' });
-    const { dataSource, name, oid } = toPlainValues(params);
+    const { dataSource, name, oid } = toPlainObject(params);
     let fetchPromise = Promise.resolve(<DimensionalCalculatedMeasure | null>null);
     if (oid) {
       fetchPromise = fetchFormulaByOid(oid, application);
@@ -96,7 +96,7 @@ export const useGetSharedFormula = (params: MaybeWithRefs<UseGetSharedFormulaPar
     [...collectRefs(params), context],
     () => {
       const { app } = context.value;
-      const enabled = toPlainValue(params.enabled);
+      const { enabled } = toPlainObject(params);
       const isEnabled = enabled === undefined || enabled === true;
       if (!app || !isEnabled) return;
       getSharedFormula(app);

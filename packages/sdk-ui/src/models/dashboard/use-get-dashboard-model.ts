@@ -1,9 +1,9 @@
-import isEqual from 'lodash/isEqual';
-import { useEffect, useReducer, useState } from 'react';
-import { usePrevious } from '../../common/hooks/use-previous';
+import { useEffect, useReducer } from 'react';
+import { useHasChanged } from '../../common/hooks/use-has-changed';
+import { useShouldLoad } from '../../common/hooks/use-should-load';
 import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
-import { type DashboardModel } from './types';
+import { DashboardModel } from './dashboard-model';
 import { getDashboardModel, GetDashboardModelOptions } from './get-dashboard-model';
 import { HookEnableParam } from '../../common/hooks/types';
 import { TranslatableError } from '../../translation/translatable-error';
@@ -124,7 +124,8 @@ export const useGetDashboardModel = withTracking('useGetDashboardModel')(
  * @internal
  */
 export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
-  const prevParams = usePrevious(params);
+  const isParamsChanged = useHasChanged(params, ['dashboardOid']);
+  const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<DashboardModel>, {
     isLoading: true,
     isError: false,
@@ -134,7 +135,6 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
     data: undefined,
   });
   const { isInitialized, app } = useSisenseContext();
-  const [isNeverExecuted, setIsNeverExecuted] = useState(true);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -143,16 +143,7 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
         error: new TranslatableError('errors.sisenseContextNotFound'),
       });
     }
-    if (!app) {
-      return;
-    }
-    if (params?.enabled === false) {
-      return;
-    }
-    if (isNeverExecuted || isParamsChanged(prevParams, params)) {
-      if (isNeverExecuted) {
-        setIsNeverExecuted(false);
-      }
+    if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
       const { dashboardOid, includeWidgets, includeFilters } = params;
@@ -167,36 +158,17 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, prevParams, params, isNeverExecuted]);
+  }, [app, isInitialized, params, shouldLoad]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
-  if (dataState.data && isParamsChanged(prevParams, params)) {
+  if (dataState.data && isParamsChanged) {
     return translateToDashboardResponse(dataLoadStateReducer(dataState, { type: 'loading' }));
   }
 
   return translateToDashboardResponse(dataState);
 }
 
-/**
- * Checks if the parameters have changed by deep comparison.
- *
- * @param prevParams - Previous query parameters
- * @param newParams - New query parameters
- */
-function isParamsChanged(
-  prevParams: GetDashboardModelParams | undefined,
-  newParams: GetDashboardModelParams,
-): boolean {
-  if (!prevParams && newParams) {
-    return true;
-  }
-
-  const simplySerializableParamNames = ['dashboardOid'];
-  return simplySerializableParamNames.some(
-    (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
-  );
-}
 /**
  * Translates the data state to the dashboard model state.
  *

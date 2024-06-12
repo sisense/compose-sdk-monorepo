@@ -32,9 +32,15 @@ const setupFeedbackWrapper = () => {
 
   const utils = setup(
     <ChatApiContext.Provider value={api}>
-      <FeedbackWrapper {...partialFeedbackPayload}>
-        <div style={{ width: 200, height: 200 }}>inner div</div>
-      </FeedbackWrapper>
+      <FeedbackWrapper
+        {...partialFeedbackPayload}
+        renderContent={(buttonRow) => (
+          <div>
+            <div style={{ width: 200, height: 200 }}>inner div</div>
+            {buttonRow}
+          </div>
+        )}
+      />
     </ChatApiContext.Provider>,
     true,
   );
@@ -91,8 +97,8 @@ describe('FeedbackWrapper', () => {
 
       await user.hover(innerDiv);
 
-      await waitFor(() => expect(screen.queryByLabelText('thumbs-up')).toBeNull());
-      await waitFor(() => expect(screen.queryByLabelText('thumbs-down')).toBeNull());
+      await waitFor(() => expect(screen.queryByLabelText('thumbs-up')).toBeDisabled());
+      await waitFor(() => expect(screen.queryByLabelText('thumbs-down')).toBeDisabled());
     });
   });
 
@@ -119,8 +125,8 @@ describe('FeedbackWrapper', () => {
 
       await user.hover(innerDiv);
 
-      await waitFor(() => expect(screen.queryByLabelText('thumbs-up')).toBeNull());
-      await waitFor(() => expect(screen.queryByLabelText('thumbs-down')).toBeNull());
+      await waitFor(() => expect(screen.queryByLabelText('thumbs-up')).toBeDisabled());
+      await waitFor(() => expect(screen.queryByLabelText('thumbs-down')).toBeDisabled());
     });
   });
 });

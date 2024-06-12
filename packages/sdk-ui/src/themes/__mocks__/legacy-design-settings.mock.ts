@@ -85,7 +85,7 @@ export const redThemeSettings: CompleteThemeSettings = {
       paddingLeft: '16px',
       paddingRight: '16px',
       paddingTop: '16px',
-      paddingBottom: '0px',
+      paddingBottom: '1px',
       gapBetweenMessages: '16px',
     },
     footer: {
@@ -107,8 +107,8 @@ export const redThemeSettings: CompleteThemeSettings = {
       },
     },
     header: {
-      backgroundColor: 'rgba(255, 255, 255, 1)',
       textColor: 'rgba(38, 46, 61, 0.8)',
+      backgroundColor: 'rgba(255, 255, 255, 1)',
     },
     dropup: {
       backgroundColor: 'rgba(255, 255, 255, 1)',
@@ -130,32 +130,45 @@ export const redThemeSettings: CompleteThemeSettings = {
     border: '1px solid #c6c9ce',
     borderRadius: '30px',
     suggestions: {
-      backgroundColor: 'rgba(244, 244, 248, 1)',
       textColor: 'rgba(38, 46, 61, 1)',
+      backgroundColor: 'rgba(244, 244, 248, 1)',
       border: '1px solid',
       borderRadius: '16px',
       borderGradient: ['rgba(75, 153, 233, 1)', 'rgba(102, 57, 191, 1)'],
       hover: {
-        backgroundColor: 'rgba(38, 46, 61, 0.8)',
-        textColor: 'rgba(255, 255, 255, 1)',
+        textColor: 'rgba(38, 46, 61, 1)',
+        backgroundColor: 'rgba(12, 14, 18, 0.07)',
       },
       loadingGradient: ['rgba(194, 196, 203, 1)', 'rgba(236, 236, 239, 1)'],
       gap: '8px',
     },
     clickableMessages: {
-      backgroundColor: 'rgba(244, 244, 248, 1)',
       textColor: 'rgba(38, 46, 61, 1)',
-      border: '1px solid #5B6372',
+      backgroundColor: 'rgba(244, 244, 248, 1)',
+      border: '1px solid',
+      borderGradient: ['rgba(75, 153, 233, 1)', 'rgba(102, 57, 191, 1)'],
       hover: {
-        textColor: 'rgba(244, 244, 248, 1)',
-        backgroundColor: 'rgba(38, 46, 61, 0.8)',
+        textColor: 'rgba(38, 46, 61, 1)',
+        backgroundColor: 'rgba(12, 14, 18, 0.07)',
+      },
+    },
+    dataTopics: {
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+      items: {
+        textColor: 'rgba(38, 46, 61, 1)',
+        backgroundColor: 'rgba(244, 244, 248, 1)',
       },
     },
     icons: {
       color: 'rgba(38, 46, 61, 0.67)',
-      hover: {
-        color: 'rgba(255, 255, 255, 1)',
+      feedbackIcons: {
+        hoverColor: 'rgba(12, 14, 18, 0.07)',
       },
+    },
+    tooltips: {
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+      textColor: 'rgba(38, 46, 61, 0.8)',
+      boxShadow: '0px 4px 12px 0px rgba(9, 9, 10, 0.20), 0px 1px 4px 0px rgba(9, 9, 10, 0.10)',
     },
   },
 };

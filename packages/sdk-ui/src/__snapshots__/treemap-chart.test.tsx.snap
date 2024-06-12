@@ -52,19 +52,6 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
     },
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,
@@ -753,19 +740,6 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
     },
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,
@@ -1491,19 +1465,6 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
     },
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,
@@ -1848,19 +1809,6 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
     },
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,
@@ -2532,19 +2480,6 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
     },
   },
   "plotOptions": {
-    "pie": {
-      "allowPointSelect": false,
-      "dataLabels": {
-        "pieMinimumFontSizeToTextLabel": 8,
-        "showDecimals": false,
-        "showPercentLabels": true,
-        "style": {
-          "color": "#000000",
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
-        },
-      },
-      "showInLegend": true,
-    },
     "series": {
       "animation": {
         "duration": 600,

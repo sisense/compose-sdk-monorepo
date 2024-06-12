@@ -6,7 +6,7 @@ import { ComponentDecorator } from './as-sisense-component';
  */
 export const withErrorBoundary: ComponentDecorator<void> = () => {
   return (Component) => {
-    return (props) => {
+    return function ErrorBoundaryContainer(props) {
       return (
         <ErrorBoundary resetKeys={Object.values(props)}>
           <Component {...props} />

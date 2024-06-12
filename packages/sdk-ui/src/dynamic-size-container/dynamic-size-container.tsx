@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import isEqual from 'lodash/isEqual';
 
 export type ContainerSize = {
   width: number;
@@ -27,16 +28,13 @@ export type DynamicSizeContainerProps = {
  * @returns The calculated content size.
  */
 const calculateContentSize = (
-  container: HTMLDivElement | null,
+  containerSize: Partial<ContainerSize> | undefined,
   size: Partial<ContainerSize> | undefined,
   defaultSize: ContainerSize,
 ) => {
-  const inheritedWidth = container?.offsetWidth;
-  const inheritedHeight = container?.offsetHeight;
-
   return {
-    width: size?.width || inheritedWidth || defaultSize.width,
-    height: size?.height || inheritedHeight || defaultSize.height,
+    width: size?.width || containerSize?.width || defaultSize.width,
+    height: size?.height || containerSize?.height || defaultSize.height,
   };
 };
 
@@ -50,7 +48,15 @@ const calculateContentSize = (
  * (3) Then the container's size is used.
  * (4) Otherwise the "defaultSize" is used.
  *
+ * Component Structure:
+ * The component layout consists of multiple layers to address different requirements:
+ * - Container layer: The top `div` that handles inheriting the parent size.
+ * - Content layer: The middle `div` that represents the actual content size.
+ * - Detached content layer: The bottom `div` that detaches the internal content (using "absolute" positioning) from the layout to prevent the parent layout from being constrained by its content size.
  *
+ * Limitations:
+ * - It is not possible to determine if a parent element has no size to inherit or if its size has been explicitly set to "0px".
+ *   Therefore, the default size will be applied when the parent element's size is set to "0px".
  *
  * @param {DynamicSizeContainerProps} props - DynamicSizeContainer properties.
  * @returns {JSX.Element} The DynamicSizeContainer component.
@@ -64,40 +70,80 @@ export const DynamicSizeContainer = ({
   onSizeChange,
 }: DynamicSizeContainerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [contentSize, setContentSize] = useState<ContainerSize | null>(null);
+  const [containerSize, setContainerSize] = useState<Partial<ContainerSize> | undefined>();
 
-  const updateContentSize = useCallback(() => {
-    const newSize = calculateContentSize(containerRef.current, size, defaultSize);
-    setContentSize(newSize);
-    onSizeChange?.(newSize);
-  }, [containerRef, size, defaultSize, onSizeChange]);
+  const updateContainerSize = useCallback(() => {
+    const containerElementSize = {
+      width: containerRef.current?.offsetWidth,
+      height: containerRef.current?.offsetHeight,
+    };
+
+    setContainerSize((prevSize) => {
+      const isDefaultWidthApplied =
+        prevSize?.width === 0 && containerElementSize.width === defaultSize.width;
+      const isDefaultHeightApplied =
+        prevSize?.height === 0 && containerElementSize.height === defaultSize.height;
+      // Prevents "containerSize" from being set to "defaultSize". If the parent container size cannot be inherited, "containerSize" will remain "0".
+      const newContainerSize = {
+        width: isDefaultWidthApplied ? prevSize.width : containerElementSize.width,
+        height: isDefaultHeightApplied ? prevSize.height : containerElementSize.height,
+      };
+
+      if (!isEqual(prevSize, newContainerSize)) {
+        onSizeChange?.(calculateContentSize(newContainerSize, size, defaultSize));
+        return newContainerSize;
+      }
+      return prevSize;
+    });
+  }, [containerRef, size, defaultSize, onSizeChange, setContainerSize]);
 
   useLayoutEffect(() => {
-    updateContentSize();
-  }, [updateContentSize]);
+    updateContainerSize();
+  }, [updateContainerSize]);
 
   useEffect(() => {
     // Attach a resize event listener to update content size on window resize.
-    window.addEventListener('resize', updateContentSize);
-    return () => window.removeEventListener('resize', updateContentSize);
-  }, [updateContentSize]);
+    window.addEventListener('resize', updateContainerSize);
+    return () => window.removeEventListener('resize', updateContainerSize);
+  }, [updateContainerSize]);
 
   const containerStyle: React.CSSProperties = {
     width: size?.width && !useContentSize?.width ? `${size.width}px` : '100%',
     height: size?.height && !useContentSize?.height ? `${size.height}px` : '100%',
   };
 
+  const contentSize = calculateContentSize(containerSize, size, defaultSize);
+  const shouldFitContainerWidth = containerSize?.width || containerSize?.width === undefined;
+  const shouldFitContainerHeight = containerSize?.height || containerSize?.width === undefined;
   const contentStyle: React.CSSProperties = {
-    width: contentSize?.width && !useContentSize?.width ? `${contentSize.width}px` : '100%',
-    height: contentSize?.height && !useContentSize?.height ? `${contentSize.height}px` : '100%',
+    width: shouldFitContainerWidth || useContentSize?.width ? '100%' : `${contentSize.width}px`,
+    height: shouldFitContainerHeight || useContentSize?.height ? '100%' : `${contentSize.height}px`,
+    position: 'relative',
   };
+
+  const detachedContentStyle: React.CSSProperties =
+    useContentSize?.width || useContentSize?.height
+      ? {
+          position: 'static',
+          width: '100%',
+          height: '100%',
+        }
+      : {
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+        };
 
   const contentKey = rerenderOnResize ? `${contentSize?.width}${contentSize?.height}` : '';
 
   return (
     <div style={containerStyle} ref={containerRef}>
       <div style={contentStyle} key={contentKey}>
-        {contentSize && (typeof children === 'function' ? children(contentSize) : children)}
+        <div style={detachedContentStyle}>
+          {contentSize && (typeof children === 'function' ? children(contentSize) : children)}
+        </div>
       </div>
     </div>
   );

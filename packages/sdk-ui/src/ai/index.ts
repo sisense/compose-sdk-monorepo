@@ -13,6 +13,7 @@ export {
   type UseGetQueryRecommendationsState,
 } from './use-get-query-recommendations';
 export { useChatSession, type UseChatSessionResult } from './use-chat-session';
+export { useLastNlqResponse } from './use-last-nlq-response';
 export { useGetDataSourceFields } from './use-get-data-source-fields';
 export type {
   GetNlgQueryResultRequest,

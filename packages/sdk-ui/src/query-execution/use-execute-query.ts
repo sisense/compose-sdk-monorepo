@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import { usePrevious } from '../common/hooks/use-previous';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   clearExecuteQueryCache,
   createExecuteQueryCacheKey,
@@ -14,7 +13,8 @@ import { ExecuteQueryParams, ExecuteQueryResult } from './types';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
 import { ClientApplication } from '@/app/client-application';
 import { CacheKey } from '@/utils/create-cache';
-import { isQueryParamsChanged } from '@/query-execution/query-params-comparator';
+import { useQueryParamsChanged } from '@/query-execution/query-params-comparator';
+import { useShouldLoad } from '../common/hooks/use-should-load';
 
 /**
  * React hook that executes a data query.
@@ -50,9 +50,9 @@ export const useExecuteQuery = withTracking('useExecuteQuery')(useExecuteQueryIn
  */
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQueryResult {
-  const prevParams = usePrevious(params);
+  const isParamsChanged = useQueryParamsChanged(params);
+  const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [shouldForceRefetch, setShouldForceRefetch] = useState(false);
-  const isFirstRun = useRef(true);
   const [lastQueryCacheKey, setLastQueryCacheKey] = useState<CacheKey | undefined>();
   const { isInitialized, app } = useSisenseContext();
   const isCacheEnabled = app?.settings.queryCacheConfig?.enabled;
@@ -76,8 +76,6 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
       setShouldForceRefetch(true);
     }
   }, [isCacheEnabled, lastQueryCacheKey, queryState.isLoading]);
-
-  const isParamsChanged = isQueryParamsChanged(prevParams, params);
 
   const runQuery = useCallback(
     (app: ClientApplication, params: ExecuteQueryParams) => {
@@ -134,35 +132,17 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
         error: new TranslatableError('errors.executeQueryNoSisenseContext'),
       });
     }
-    if (!app) {
-      return;
-    }
-    if (params?.enabled === false) {
-      return;
-    }
-    const shouldRunQuery = isParamsChanged || shouldForceRefetch || isFirstRun.current;
     if (shouldForceRefetch) {
       setShouldForceRefetch(false);
     }
-
-    if (shouldRunQuery) {
+    if (shouldLoad(app, shouldForceRefetch)) {
       runQuery(app, params);
-      isFirstRun.current = false;
     }
-  }, [
-    app,
-    executeQuery,
-    isInitialized,
-    isParamsChanged,
-    params,
-    prevParams,
-    runQuery,
-    shouldForceRefetch,
-  ]);
+  }, [app, executeQuery, isInitialized, params, runQuery, shouldLoad, shouldForceRefetch]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
-  if (queryState.data && isQueryParamsChanged(prevParams, params)) {
+  if (queryState.data && isParamsChanged) {
     return { ...queryStateReducer(queryState, { type: 'loading' }), refetch };
   }
 

@@ -1,4 +1,7 @@
 import ExclamationMarkIcon from '@/common/icons/exclamation-mark-icon';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import styled from '@emotion/styled';
 
 type ErrorPageProps = {
   text: string;
@@ -8,19 +11,33 @@ type ErrorPageProps = {
   };
 };
 
+const Container = styled.div`
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 21px;
+`;
+
+const Title = styled.div<Themable>`
+  color: ${({ theme }) => theme.aiChat.primaryTextColor};
+  text-align: center;
+  font-weight: 600;
+`;
+
+const ActionButton = styled.div`
+  color: rgba(54, 163, 217, 1);
+  cursor: pointer;
+`;
+
 export default function ErrorContainer({ text, action }: ErrorPageProps) {
+  const { themeSettings } = useThemeContext();
+
   return (
-    <div className="csdk-m-auto csdk-flex csdk-flex-col csdk-items-center csdk-gap-[21px]">
-      <div className="csdk-text-ai-sm csdk-text-center csdk-font-semibold">{text}</div>
+    <Container>
+      <Title theme={themeSettings}>{text}</Title>
       <ExclamationMarkIcon />
-      {action && (
-        <div
-          className="csdk-text-ai-sm csdk-text-text-link csdk-cursor-pointer"
-          onClick={action.onClick}
-        >
-          {action.text}
-        </div>
-      )}
-    </div>
+      {action && <ActionButton onClick={action.onClick}>{action.text}</ActionButton>}
+    </Container>
   );
 }

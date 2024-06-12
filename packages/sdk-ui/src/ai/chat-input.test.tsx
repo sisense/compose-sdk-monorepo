@@ -9,6 +9,7 @@ const chatInputProps: ChatInputProps = {
   recentPrompts: ['first recent', 'second recent'],
   suggestions: ['first suggestion', 'second suggestion'],
   isLoading: false,
+  recommendationsError: false,
   onSendMessage: onSendMessageMock,
 };
 
@@ -44,7 +45,10 @@ describe('when user has not typed any input text', () => {
   it('input has a default placeholder', () => {
     setup(<ChatInput {...chatInputProps} />);
 
-    expect(screen.getByRole('textbox')).toHaveAttribute('placeholder', 'Ask a question');
+    expect(screen.getByRole('textbox')).toHaveAttribute(
+      'placeholder',
+      'Ask a question or type "/" for ideas',
+    );
   });
 
   it('input has a customized placeholder', () => {
@@ -95,13 +99,13 @@ describe('when user types text starting with /', () => {
     await user.type(screen.getByRole('textbox'), '/');
 
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    expect(screen.getByText('/RECENT')).toBeInTheDocument();
-    expect(screen.getByText('/AI SUGGESTIONS')).toBeInTheDocument();
+    expect(screen.getByText('/RECENT SEARCHES')).toBeInTheDocument();
+    expect(screen.getByText('/AI RECOMMENDATIONS')).toBeInTheDocument();
 
-    await user.click(screen.getByText('/RECENT'));
+    await user.click(screen.getByText('/RECENT SEARCHES'));
     expect(screen.getByText('first recent')).toBeInTheDocument();
 
-    await user.click(screen.getByText('/AI SUGGESTIONS'));
+    await user.click(screen.getByText('/AI RECOMMENDATIONS'));
     expect(screen.getByText('first suggestion')).toBeInTheDocument();
   });
 
@@ -111,19 +115,19 @@ describe('when user types text starting with /', () => {
     await user.type(screen.getByRole('textbox'), '/r');
 
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    expect(screen.getByText('/RECENT')).toBeInTheDocument();
-    expect(screen.queryByText('/AI SUGGESTIONS')).toBeNull();
+    expect(screen.getByText('/RECENT SEARCHES')).toBeInTheDocument();
+    expect(screen.queryByText('/AI RECOMMENDATIONS')).toBeNull();
     expect(screen.getByText('first recent')).toBeInTheDocument();
   });
 
-  it('can filter on ai suggestions and expands section by default', async () => {
+  it('can filter on ai RECOMMENDATIONS and expands section by default', async () => {
     const { user } = setup(<ChatInput {...chatInputProps} />);
 
     await user.type(screen.getByRole('textbox'), '/a');
 
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    expect(screen.queryByText('/RECENT')).toBeNull();
-    expect(screen.getByText('/AI SUGGESTIONS')).toBeInTheDocument();
+    expect(screen.queryByText('/RECENT SEARCHES')).toBeNull();
+    expect(screen.getByText('/AI RECOMMENDATIONS')).toBeInTheDocument();
     expect(screen.getByText('first suggestion')).toBeInTheDocument();
   });
 
@@ -131,7 +135,7 @@ describe('when user types text starting with /', () => {
     const { user } = setup(<ChatInput {...chatInputProps} />);
 
     await user.type(screen.getByRole('textbox'), '/ai');
-    await user.click(screen.getByText('/AI SUGGESTIONS'));
+    await user.click(screen.getByText('/AI RECOMMENDATIONS'));
     await user.click(screen.getByText('first suggestion'));
 
     expect(onSendMessageMock).toHaveBeenCalledOnce();
@@ -143,7 +147,17 @@ describe('when user types text starting with /', () => {
     await user.type(screen.getByRole('textbox'), '/notasection');
 
     expect(screen.queryByRole('tooltip')).toBeNull();
-    expect(screen.queryByText('/RECENT')).toBeNull();
-    expect(screen.queryByText('/AI SUGGESTIONS')).toBeNull();
+    expect(screen.queryByText('/RECENT SEARCHES')).toBeNull();
+    expect(screen.queryByText('/AI RECOMMENDATIONS')).toBeNull();
+  });
+
+  it('shows error message if recommendations API call failed', async () => {
+    const { user } = setup(<ChatInput {...chatInputProps} recommendationsError={true} />);
+
+    await user.type(screen.getByRole('textbox'), '/ai');
+
+    expect(
+      screen.getByText("Recommendations aren't available right now. Try again in a few minutes."),
+    ).toBeInTheDocument();
   });
 });

@@ -56,6 +56,7 @@ export type AppConfig = {
 
   /**
    * Query limit (max rows count that will be fetched in query)
+   *
    * @default 20000
    */
   queryLimit?: number;

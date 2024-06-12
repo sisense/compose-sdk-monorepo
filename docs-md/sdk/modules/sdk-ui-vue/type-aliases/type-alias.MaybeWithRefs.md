@@ -4,10 +4,10 @@ title: MaybeWithRefs
 
 # Type alias MaybeWithRefs`<T>`
 
-> **MaybeWithRefs**: <`T`> \{ [Property in keyof T]: Ref\<T[Property]\> \| T[Property] }
+> **MaybeWithRefs**: <`T`> `{ [Property in keyof T]: MaybeRef<T[Property]> }`
 
 ## Type parameters
 
 | Parameter |
 | :------ |
-| `T` |
+| `T` *extends* `object` |

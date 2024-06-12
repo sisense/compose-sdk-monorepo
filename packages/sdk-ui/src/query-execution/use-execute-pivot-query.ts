@@ -1,7 +1,6 @@
 /* eslint-disable max-lines-per-function */
-import isEqual from 'lodash/isEqual';
-import { useEffect, useReducer, useState } from 'react';
-import { usePrevious } from '../common/hooks/use-previous';
+import { useEffect, useReducer } from 'react';
+import { useHasChanged } from '../common/hooks/use-has-changed';
 import { executePivotQuery } from '../query/execute-query';
 import { isFiltersChanged } from '../utils/filters-comparator';
 import { useSisenseContext } from '../sisense-context/sisense-context';
@@ -10,6 +9,7 @@ import { withTracking } from '../decorators/hook-decorators';
 import { ExecutePivotQueryParams, PivotQueryState } from './types';
 import { pivotQueryStateReducer } from './pivot-query-state-reducer';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { useShouldLoad } from '../common/hooks/use-should-load';
 
 /**
  * React hook that executes a data query for a pivot table.
@@ -41,7 +41,8 @@ export const useExecutePivotQuery = withTracking('useExecutePivotQuery')(
  * @internal
  */
 export function useExecutePivotQueryInternal(params: ExecutePivotQueryParams): PivotQueryState {
-  const prevParams = usePrevious(params);
+  const isPivotQueryParamsChanged = usePivotQueryParamsChanged(params);
+  const shouldLoad = useShouldLoad(params, isPivotQueryParamsChanged);
   const [queryState, dispatch] = useReducer(pivotQueryStateReducer, {
     isLoading: true,
     isError: false,
@@ -52,8 +53,6 @@ export function useExecutePivotQueryInternal(params: ExecutePivotQueryParams): P
   });
   const { isInitialized, app } = useSisenseContext();
 
-  const [isNeverExecuted, setIsNeverExecuted] = useState(true);
-
   useEffect(() => {
     if (!isInitialized) {
       dispatch({
@@ -61,17 +60,7 @@ export function useExecutePivotQueryInternal(params: ExecutePivotQueryParams): P
         error: new TranslatableError('errors.executeQueryNoSisenseContext'),
       });
     }
-    if (!app) {
-      return;
-    }
-    if (params?.enabled === false) {
-      return;
-    }
-
-    if (isNeverExecuted || isPivotQueryParamsChanged(prevParams, params)) {
-      if (isNeverExecuted) {
-        setIsNeverExecuted(false);
-      }
+    if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
       const {
         dataSource,
@@ -112,11 +101,11 @@ export function useExecutePivotQueryInternal(params: ExecutePivotQueryParams): P
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, prevParams, params, isNeverExecuted]);
+  }, [app, isInitialized, params, shouldLoad]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
-  if (queryState.data && isPivotQueryParamsChanged(prevParams, params)) {
+  if (queryState.data && isPivotQueryParamsChanged) {
     return pivotQueryStateReducer(queryState, { type: 'loading' });
   }
 
@@ -138,34 +127,16 @@ const simplySerializableParamNames: (keyof ExecutePivotQueryParams)[] = [
 /**
  * Checks if the query parameters have changed by deep comparison.
  *
- * TODO refactor to reuse isQueryParamsChanged
- *
- * @param prevParams - Previous query parameters
- * @param newParams - New query parameters
+ * @param params - New query parameters
  */
-export function isPivotQueryParamsChanged(
-  prevParams: ExecutePivotQueryParams | undefined,
-  newParams: ExecutePivotQueryParams,
-): boolean {
-  if (!prevParams && newParams) {
-    return true;
-  }
-  const isSimplySerializableParamsChanged = simplySerializableParamNames.some(
-    (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
-  );
-
-  const { filters: prevFilterList } = getFilterListAndRelations(prevParams?.filters);
-  const { filters: newFilterList } = getFilterListAndRelations(newParams?.filters);
-
-  // Function has to compare logical structure of relations, not just references
-  const isRelationsChanged = false;
-  const isSliceFiltersChanged = isFiltersChanged(prevFilterList, newFilterList);
-  const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
-
-  return (
-    isSimplySerializableParamsChanged ||
-    isSliceFiltersChanged ||
-    isHighlightFiltersChanged ||
-    isRelationsChanged
-  );
+export function usePivotQueryParamsChanged(params: ExecutePivotQueryParams) {
+  return useHasChanged(params, simplySerializableParamNames, (params, prev) => {
+    // Function has to compare logical structure of relations, not just references
+    const { filters: prevFilterList } = getFilterListAndRelations(prev.filters);
+    const { filters: newFilterList } = getFilterListAndRelations(params.filters);
+    return (
+      isFiltersChanged(prevFilterList, newFilterList) ||
+      isFiltersChanged(prev.highlights, params.highlights)
+    );
+  });
 }

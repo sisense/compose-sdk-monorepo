@@ -19,8 +19,8 @@ export type RequestConfig = {
 /**
  * The result of the `useFetch` hook.
  * Return value of the `useQuery` hook from `@tanstack/react-query`.
- * @link https://tanstack.com/query/v4/docs/framework/react/reference/useQuery
  *
+ * @link https://tanstack.com/query/v4/docs/framework/react/reference/useQuery
  * @template TData - The type of the data returned by the fetch request
  * @template TError - The type of the error returned by the fetch request
  */

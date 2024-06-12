@@ -6,368 +6,372 @@ exports[`Table > should render Table 1`] = `
     style="width: 100%; height: 100%;"
   >
     <div
-      style="width: 400px; height: 500px;"
+      style="width: 400px; height: 500px; position: relative;"
     >
       <div
-        aria-label="table-root"
-        style="display: flex; flex-direction: column; align-items: center; background-color: rgb(255, 255, 255);"
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"
       >
         <div
-          class="_component_2a48df"
+          aria-label="table-root"
+          style="display: flex; flex-direction: column; align-items: center; background-color: rgb(255, 255, 255);"
         >
           <div
-            class="_tableWrapper_4b88bf"
-            style="padding: 20px 20px;"
+            class="_component_2a48df"
           >
             <div
-              aria-rowcount="4"
-              class="_table_4b88bf fixedDataTableLayout_main public_fixedDataTable_main"
-              role="grid"
-              style="height: 460px; width: 360px;"
+              class="_tableWrapper_4b88bf"
+              style="padding: 20px 20px;"
             >
               <div
-                class="fixedDataTableLayout_rowsContainer"
-                style="height: 458px; width: 360px;"
+                aria-rowcount="4"
+                class="_table_4b88bf fixedDataTableLayout_main public_fixedDataTable_main"
+                role="grid"
+                style="height: 460px; width: 360px;"
               >
                 <div
-                  class="fixedDataTableColumnResizerLineLayout_main fixedDataTableColumnResizerLineLayout_hiddenElem public_fixedDataTableColumnResizerLine_main"
-                  style="width: 0px; height: 460px; left: 0px;"
+                  class="fixedDataTableLayout_rowsContainer"
+                  style="height: 458px; width: 360px;"
                 >
                   <div
-                    class="fixedDataTableColumnResizerLineLayout_mouseArea"
-                    style="height: 460px;"
-                  />
-                </div>
-                <div
-                  class="fixedDataTableRowLayout_rowWrapper"
-                  style="width: 360px; height: 26px; z-index: 1; visibility: visible; transform: translate3d(0px,0px,0);"
-                >
-                  <div
-                    aria-rowindex="1"
-                    class="fixedDataTableRowLayout_main public_fixedDataTableRow_main fixedDataTableLayout_header public_fixedDataTable_header"
-                    role="row"
-                    style="width: 360px; height: 26px;"
+                    class="fixedDataTableColumnResizerLineLayout_main fixedDataTableColumnResizerLineLayout_hiddenElem public_fixedDataTableColumnResizerLine_main"
+                    style="width: 0px; height: 460px; left: 0px;"
                   >
                     <div
-                      class="fixedDataTableRowLayout_body"
+                      class="fixedDataTableColumnResizerLineLayout_mouseArea"
+                      style="height: 460px;"
+                    />
+                  </div>
+                  <div
+                    class="fixedDataTableRowLayout_rowWrapper"
+                    style="width: 360px; height: 26px; z-index: 1; visibility: visible; transform: translate3d(0px,0px,0);"
+                  >
+                    <div
+                      aria-rowindex="1"
+                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main fixedDataTableLayout_header public_fixedDataTable_header"
+                      role="row"
+                      style="width: 360px; height: 26px;"
                     >
                       <div
-                        class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                        style="height: 26px; width: 0px; left: 0px;"
+                        class="fixedDataTableRowLayout_body"
                       >
                         <div
-                          class="fixedDataTableCellGroupLayout_cellGroup"
-                          style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
-                        />
-                      </div>
-                      <div
-                        class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                        style="height: 26px; width: 360px; left: 0px;"
-                      >
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroup"
-                          style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 0px;"
                         >
                           <div
-                            class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
-                            role="columnheader"
-                            style="height: 26px; width: 126px; left: 0px;"
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 360px; left: 0px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
                           >
                             <div
-                              class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
-                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                              role="columnheader"
+                              style="height: 26px; width: 126px; left: 0px;"
                             >
                               <div
-                                class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                               >
                                 <div
-                                  class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
                                 >
                                   <div
-                                    class="public_fixedDataTableCell_cellContent"
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
                                   >
                                     <div
-                                      class="_headerCell_d9b667"
+                                      class="public_fixedDataTableCell_cellContent"
                                     >
                                       <div
-                                        class="_headerLabel_d9b667"
+                                        class="_headerCell_d9b667"
+                                      >
+                                        <div
+                                          class="_headerLabel_d9b667"
+                                        >
+                                          <div
+                                            class="_tableCellContent_4b88bf"
+                                            style="max-width: 90px;"
+                                          >
+                                            <div>
+                                              AgeRange
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
+                              role="columnheader"
+                              style="height: 26px; width: 126px; left: 126px;"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
+                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  >
+                                    <div
+                                      class="public_fixedDataTableCell_cellContent"
+                                    >
+                                      <div
+                                        class="_headerCell_d9b667"
+                                      >
+                                        <div
+                                          class="_headerLabel_d9b667"
+                                        >
+                                          <div
+                                            class="_tableCellContent_4b88bf"
+                                            style="max-width: 90px;"
+                                          >
+                                            <div>
+                                              Cost
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class=""
+                          style="left: 0px; height: 26px;"
+                        />
+                        <div
+                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                          style="height: 26px; width: 0px; left: 360px;"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroup"
+                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style="transform: translate3d(0px,26px,0);"
+                  >
+                    <div
+                      class="fixedDataTableRowLayout_rowWrapper"
+                      style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,0px,0);"
+                    >
+                      <div
+                        aria-rowindex="2"
+                        class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow"
+                        role="row"
+                        style="width: 360px; height: 26px;"
+                      >
+                        <div
+                          class="fixedDataTableRowLayout_body"
+                        >
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 0px; left: 0px;"
+                          >
+                            <div
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            />
+                          </div>
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 360px; left: 0px;"
+                          >
+                            <div
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                            >
+                              <div
+                                class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                                role="gridcell"
+                                style="height: 26px; width: 126px; left: 0px;"
+                              >
+                                <div
+                                  class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                  style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                                >
+                                  <div
+                                    class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                  >
+                                    <div
+                                      class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                    >
+                                      <div
+                                        class="public_fixedDataTableCell_cellContent"
                                       >
                                         <div
                                           class="_tableCellContent_4b88bf"
-                                          style="max-width: 90px;"
+                                          style="max-width: 102px;"
                                         >
                                           <div>
-                                            AgeRange
+                                            0-18
                                           </div>
                                         </div>
                                       </div>
-                                      <div
-                                        class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
-                                      />
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                          <div
-                            class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
-                            role="columnheader"
-                            style="height: 26px; width: 126px; left: 126px;"
-                          >
-                            <div
-                              class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableHeader_4b88bf"
-                              style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
-                            >
                               <div
-                                class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
+                                role="gridcell"
+                                style="height: 26px; width: 126px; left: 126px;"
                               >
                                 <div
-                                  class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                  class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                  style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                                 >
                                   <div
-                                    class="public_fixedDataTableCell_cellContent"
+                                    class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
                                   >
                                     <div
-                                      class="_headerCell_d9b667"
+                                      class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
                                     >
                                       <div
-                                        class="_headerLabel_d9b667"
+                                        class="public_fixedDataTableCell_cellContent"
                                       >
                                         <div
                                           class="_tableCellContent_4b88bf"
-                                          style="max-width: 90px;"
+                                          style="max-width: 102px;"
                                         >
                                           <div>
-                                            Cost
+                                            1K
                                           </div>
                                         </div>
                                       </div>
-                                      <div
-                                        class="_sortIcon_d9b667 _caret_d9b667 _noSort_d9b667"
-                                      />
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <div
-                        class=""
-                        style="left: 0px; height: 26px;"
-                      />
-                      <div
-                        class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                        style="height: 26px; width: 0px; left: 360px;"
-                      >
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroup"
-                          style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style="transform: translate3d(0px,26px,0);"
-                >
-                  <div
-                    class="fixedDataTableRowLayout_rowWrapper"
-                    style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,0px,0);"
-                  >
-                    <div
-                      aria-rowindex="2"
-                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow"
-                      role="row"
-                      style="width: 360px; height: 26px;"
-                    >
-                      <div
-                        class="fixedDataTableRowLayout_body"
-                      >
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 0px;"
-                        >
                           <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            class=""
+                            style="left: 0px; height: 26px;"
                           />
-                        </div>
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 360px; left: 0px;"
-                        >
                           <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 0px; left: 360px;"
                           >
                             <div
-                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
-                              role="gridcell"
-                              style="height: 26px; width: 126px; left: 0px;"
-                            >
-                              <div
-                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
-                              >
-                                <div
-                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
-                                >
-                                  <div
-                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
-                                  >
-                                    <div
-                                      class="public_fixedDataTableCell_cellContent"
-                                    >
-                                      <div
-                                        class="_tableCellContent_4b88bf"
-                                        style="max-width: 102px;"
-                                      >
-                                        <div>
-                                          0-18
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
-                              role="gridcell"
-                              style="height: 26px; width: 126px; left: 126px;"
-                            >
-                              <div
-                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
-                              >
-                                <div
-                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
-                                >
-                                  <div
-                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
-                                  >
-                                    <div
-                                      class="public_fixedDataTableCell_cellContent"
-                                    >
-                                      <div
-                                        class="_tableCellContent_4b88bf"
-                                        style="max-width: 102px;"
-                                      >
-                                        <div>
-                                          1K
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            />
                           </div>
-                        </div>
-                        <div
-                          class=""
-                          style="left: 0px; height: 26px;"
-                        />
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 360px;"
-                        >
-                          <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
-                          />
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    class="fixedDataTableRowLayout_rowWrapper"
-                    style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,26px,0);"
-                  >
                     <div
-                      aria-rowindex="3"
-                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_highlighted public_fixedDataTableRow_odd public_fixedDataTable_bodyRow"
-                      role="row"
-                      style="width: 360px; height: 26px;"
+                      class="fixedDataTableRowLayout_rowWrapper"
+                      style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,26px,0);"
                     >
                       <div
-                        class="fixedDataTableRowLayout_body"
+                        aria-rowindex="3"
+                        class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_highlighted public_fixedDataTableRow_odd public_fixedDataTable_bodyRow"
+                        role="row"
+                        style="width: 360px; height: 26px;"
                       >
                         <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 0px;"
+                          class="fixedDataTableRowLayout_body"
                         >
                           <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
-                          />
-                        </div>
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 360px; left: 0px;"
-                        >
-                          <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 0px; left: 0px;"
                           >
                             <div
-                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
-                              role="gridcell"
-                              style="height: 26px; width: 126px; left: 0px;"
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            />
+                          </div>
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 360px; left: 0px;"
+                          >
+                            <div
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
                             >
                               <div
-                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                                class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                                role="gridcell"
+                                style="height: 26px; width: 126px; left: 0px;"
                               >
                                 <div
-                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                  class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                  style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                                 >
                                   <div
-                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                    class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
                                   >
                                     <div
-                                      class="public_fixedDataTableCell_cellContent"
+                                      class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
                                     >
                                       <div
-                                        class="_tableCellContent_4b88bf"
-                                        style="max-width: 102px;"
+                                        class="public_fixedDataTableCell_cellContent"
                                       >
-                                        <div>
-                                          19-28
+                                        <div
+                                          class="_tableCellContent_4b88bf"
+                                          style="max-width: 102px;"
+                                        >
+                                          <div>
+                                            19-28
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div
-                              class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
-                              role="gridcell"
-                              style="height: 26px; width: 126px; left: 126px;"
-                            >
                               <div
-                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                                class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
+                                role="gridcell"
+                                style="height: 26px; width: 126px; left: 126px;"
                               >
                                 <div
-                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                  class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                  style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                                 >
                                   <div
-                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                    class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
                                   >
                                     <div
-                                      class="public_fixedDataTableCell_cellContent"
+                                      class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
                                     >
                                       <div
-                                        class="_tableCellContent_4b88bf"
-                                        style="max-width: 102px;"
+                                        class="public_fixedDataTableCell_cellContent"
                                       >
-                                        <div>
-                                          19.12
+                                        <div
+                                          class="_tableCellContent_4b88bf"
+                                          style="max-width: 102px;"
+                                        >
+                                          <div>
+                                            19.12
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -376,108 +380,108 @@ exports[`Table > should render Table 1`] = `
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div
-                          class=""
-                          style="left: 0px; height: 26px;"
-                        />
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 360px;"
-                        >
                           <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            class=""
+                            style="left: 0px; height: 26px;"
                           />
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 0px; left: 360px;"
+                          >
+                            <div
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    class="fixedDataTableRowLayout_rowWrapper"
-                    style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,52px,0);"
-                  >
                     <div
-                      aria-rowindex="4"
-                      class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow fixedDataTableLayout_hasBottomBorder public_fixedDataTable_hasBottomBorder"
-                      role="row"
-                      style="width: 360px; height: 26px;"
+                      class="fixedDataTableRowLayout_rowWrapper"
+                      style="width: 360px; height: 26px; z-index: 0; visibility: visible; transform: translate3d(0px,52px,0);"
                     >
                       <div
-                        class="fixedDataTableRowLayout_body"
+                        aria-rowindex="4"
+                        class="fixedDataTableRowLayout_main public_fixedDataTableRow_main public_fixedDataTableRow_even public_fixedDataTable_bodyRow fixedDataTableLayout_hasBottomBorder public_fixedDataTable_hasBottomBorder"
+                        role="row"
+                        style="width: 360px; height: 26px;"
                       >
                         <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 0px;"
+                          class="fixedDataTableRowLayout_body"
                         >
                           <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
-                          />
-                        </div>
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 360px; left: 0px;"
-                        >
-                          <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 0px; left: 0px;"
                           >
                             <div
-                              class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
-                              role="gridcell"
-                              style="height: 26px; width: 126px; left: 0px;"
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            />
+                          </div>
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 360px; left: 0px;"
+                          >
+                            <div
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 252px; z-index: 0; transform: translate3d(0px,0px,0);"
                             >
                               <div
-                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                                class="fixedDataTableCellLayout_main public_fixedDataTableCell_main"
+                                role="gridcell"
+                                style="height: 26px; width: 126px; left: 0px;"
                               >
                                 <div
-                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                  class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                  style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                                 >
                                   <div
-                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                    class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
                                   >
                                     <div
-                                      class="public_fixedDataTableCell_cellContent"
+                                      class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
                                     >
                                       <div
-                                        class="_tableCellContent_4b88bf"
-                                        style="max-width: 102px;"
+                                        class="public_fixedDataTableCell_cellContent"
                                       >
-                                        <div>
-                                          29-35
+                                        <div
+                                          class="_tableCellContent_4b88bf"
+                                          style="max-width: 102px;"
+                                        >
+                                          <div>
+                                            29-35
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div
-                              class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
-                              role="gridcell"
-                              style="height: 26px; width: 126px; left: 126px;"
-                            >
                               <div
-                                class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
-                                style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                                class="fixedDataTableCellLayout_main fixedDataTableCellLayout_alignRight public_fixedDataTableCell_alignRight public_fixedDataTableCell_main"
+                                role="gridcell"
+                                style="height: 26px; width: 126px; left: 126px;"
                               >
                                 <div
-                                  class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
+                                  class="fixedDataTableCellLayout_wrap1 public_fixedDataTableCell_wrap1 _tableCell_4b88bf"
+                                  style="height: 26px; width: 126px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                                 >
                                   <div
-                                    class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
+                                    class="fixedDataTableCellLayout_wrap2 public_fixedDataTableCell_wrap2"
                                   >
                                     <div
-                                      class="public_fixedDataTableCell_cellContent"
+                                      class="fixedDataTableCellLayout_wrap3 public_fixedDataTableCell_wrap3"
                                     >
                                       <div
-                                        class="_tableCellContent_4b88bf"
-                                        style="max-width: 102px;"
+                                        class="public_fixedDataTableCell_cellContent"
                                       >
-                                        <div>
-                                          125
+                                        <div
+                                          class="_tableCellContent_4b88bf"
+                                          style="max-width: 102px;"
+                                        >
+                                          <div>
+                                            125
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -486,19 +490,19 @@ exports[`Table > should render Table 1`] = `
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div
-                          class=""
-                          style="left: 0px; height: 26px;"
-                        />
-                        <div
-                          class="fixedDataTableCellGroupLayout_cellGroupWrapper"
-                          style="height: 26px; width: 0px; left: 360px;"
-                        >
                           <div
-                            class="fixedDataTableCellGroupLayout_cellGroup"
-                            style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            class=""
+                            style="left: 0px; height: 26px;"
                           />
+                          <div
+                            class="fixedDataTableCellGroupLayout_cellGroupWrapper"
+                            style="height: 26px; width: 0px; left: 360px;"
+                          >
+                            <div
+                              class="fixedDataTableCellGroupLayout_cellGroup"
+                              style="height: 26px; position: absolute; width: 0px; z-index: 2; transform: translate3d(0px,0px,0);"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>

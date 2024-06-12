@@ -11,13 +11,18 @@ import ExpandIcon from '../icons/expand-icon';
 import InfoIcon from '../icons/info-icon';
 import RefreshIcon from '../icons/refresh-icon';
 import ThreeDotsIcon from '../icons/three-dots-icon';
+import { getSlightlyDifferentColor } from '@/utils/color';
+import { CompleteThemeSettings } from '@/index';
+
+const getHoverColor = (themeSettings: CompleteThemeSettings) =>
+  getSlightlyDifferentColor(themeSettings.chart.backgroundColor);
 
 const InfoTooltip = ({ title }: { title: string }) => {
   const { themeSettings } = useThemeContext();
 
   return (
     <Tooltip title={title}>
-      <IconButton disableTouchRipple $themeSettings={themeSettings}>
+      <IconButton disableTouchRipple $hoverColor={getHoverColor(themeSettings)}>
         <InfoIcon fill={themeSettings.chart.textColor} />
       </IconButton>
     </Tooltip>
@@ -47,7 +52,7 @@ const ThreeDotsMenu = ({ items }: ThreeDotsMenuProps) => {
     <>
       <IconButton
         onClick={handleClick}
-        $themeSettings={themeSettings}
+        $hoverColor={getHoverColor(themeSettings)}
         aria-label="three dots button"
       >
         <ThreeDotsIcon fill={themeSettings.chart.textColor} />
@@ -93,7 +98,7 @@ const ExpandButton = ({ onClick }: { onClick: () => void }) => {
 
   return (
     <Tooltip title="Preview">
-      <IconButton onClick={onClick} $themeSettings={themeSettings}>
+      <IconButton onClick={onClick} $hoverColor={getHoverColor(themeSettings)}>
         <ExpandIcon fill={themeSettings.chart.textColor} />
       </IconButton>
     </Tooltip>

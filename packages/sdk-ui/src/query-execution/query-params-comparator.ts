@@ -1,7 +1,7 @@
 import { isFiltersChanged, isRelationsChanged } from '@/utils/filters-comparator';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
-import isEqual from 'lodash/isEqual';
 import { ExecuteQueryParams } from '../index.js';
+import { useHasChanged } from '../common/hooks/use-has-changed';
 
 /** List of parameters that can be compared by deep comparison */
 const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
@@ -13,42 +13,21 @@ const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
   'onBeforeQuery',
 ];
 
-/**
- * Checks if the query parameters have changed by deep comparison.
- *
- * @param prevParams - Previous query parameters
- * @param newParams - New query parameters
- */
-export function isQueryParamsChanged(
-  prevParams: ExecuteQueryParams | undefined,
-  newParams: ExecuteQueryParams,
-): boolean {
-  if (!prevParams && newParams) {
-    return true;
-  }
-  const isSimplySerializableParamsChanged = simplySerializableParamNames.some(
-    (paramName) => !isEqual(prevParams?.[paramName], newParams[paramName]),
-  );
+export function useQueryParamsChanged(params: ExecuteQueryParams) {
+  return useHasChanged(params, simplySerializableParamNames, (params, prev) => {
+    const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelations(
+      prev.filters,
+    );
+    const { filters: newFilterList, relations: newRelationsList } = getFilterListAndRelations(
+      params.filters,
+    );
 
-  const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelations(
-    prevParams?.filters,
-  );
-  const { filters: newFilterList, relations: newRelationsList } = getFilterListAndRelations(
-    newParams?.filters,
-  );
-
-  // TODO: check if relations are changed
-  // Function has to compare logical structure of relations, not just references
-  const isSliceFiltersChanged = isFiltersChanged(prevFilterList, newFilterList);
-  const isFilterRelationsChanged =
-    isSliceFiltersChanged ||
-    isRelationsChanged(prevFilterList, newFilterList, prevRelationsList, newRelationsList);
-  const isHighlightFiltersChanged = isFiltersChanged(prevParams!.highlights, newParams.highlights);
-
-  return (
-    isSimplySerializableParamsChanged ||
-    isSliceFiltersChanged ||
-    isHighlightFiltersChanged ||
-    isFilterRelationsChanged
-  );
+    // TODO: check if relations are changed
+    // Function has to compare logical structure of relations, not just references
+    return (
+      isFiltersChanged(prevFilterList, newFilterList) ||
+      isRelationsChanged(prevFilterList, newFilterList, prevRelationsList, newRelationsList) ||
+      isFiltersChanged(prev.highlights, params.highlights)
+    );
+  });
 }

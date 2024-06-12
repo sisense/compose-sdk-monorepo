@@ -31,7 +31,6 @@ TypeScript type aliases for components and services listed above
 - [Convolution](type-alias.Convolution.md)
 - [CriteriaFilterType](type-alias.CriteriaFilterType.md)
 - [CustomDrilldownResult](type-alias.CustomDrilldownResult.md)
-- [DashboardModel](type-alias.DashboardModel.md)
 - [DataColorCondition](type-alias.DataColorCondition.md)
 - [DataColorOptions](type-alias.DataColorOptions.md)
 - [DataPoint](type-alias.DataPoint.md)
