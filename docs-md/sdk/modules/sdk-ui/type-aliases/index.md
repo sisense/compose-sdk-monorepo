@@ -9,6 +9,7 @@ TypeScript type aliases for components and hooks listed above
 - [AiContextProviderProps](type-alias.AiContextProviderProps.md)
 - [AllPossibleChartOptionKeys](type-alias.AllPossibleChartOptionKeys.md)
 - [AppConfig](type-alias.AppConfig.md)
+- [AreaRangeSubtype](type-alias.AreaRangeSubtype.md)
 - [AreaSubtype](type-alias.AreaSubtype.md)
 - [AreamapChartType](type-alias.AreamapChartType.md)
 - [AreamapDataPoint](type-alias.AreamapDataPoint.md)

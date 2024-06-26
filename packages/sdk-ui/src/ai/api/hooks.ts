@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { ChatContext, ChatMessage, ChatResponse } from './types';
+import type { ChatMessage, ChatResponse } from './types';
 import { useChatApi } from './chat-api-provider';
 import { useChatConfig } from '../chat-config';
 import { UNEXPECTED_CHAT_RESPONSE_ERROR } from './errors';
@@ -20,31 +20,7 @@ export const useGetDataTopics = () => {
         return;
       }
 
-      const models = (await api.getDataModels()).map(
-        (model): ChatContext => ({
-          id: model.oid,
-          name: model.title,
-          type: 'datamodel',
-          description: '',
-        }),
-      );
-
-      // The "/api/v2/perspectives" API returns both perspectives and data
-      // models. Filter out the data models based on the "isDefault" property.
-      const perspectivesWithParents = await api.getPerspectives();
-      const perspectivesWithoutParent = perspectivesWithParents.filter(
-        (perspective) => !perspective.isDefault,
-      );
-      const perspectives = perspectivesWithoutParent.map(
-        (perspective): ChatContext => ({
-          id: perspective.oid,
-          name: perspective.name,
-          type: 'perspective',
-          description: perspective.description,
-        }),
-      );
-
-      return [...models, ...perspectives];
+      return api.getChatContexts();
     },
     enabled: !!api,
   });

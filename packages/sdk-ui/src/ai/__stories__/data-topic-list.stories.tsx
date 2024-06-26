@@ -14,15 +14,12 @@ export const DataTopicList = template({
   dataTopics: [
     {
       title: 'Sample E-Commerce',
-      description: 'Data Topic Description 1',
     },
     {
       title: 'Sample Retail',
-      description: 'Data Topic Description 2',
     },
     {
       title: 'Sample Healthcare',
-      description: 'Data Topic Description 3',
     },
   ],
 });

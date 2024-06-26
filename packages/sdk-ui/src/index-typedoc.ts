@@ -2,8 +2,22 @@
  * @packageDocumentation
  * @groupDescription Charts
  * React components for charts
+ * @groupDescription Chart Utilities
+ * Utilities to be used with charts
+ * @groupDescription Data Grids
+ * React components for data grids
+ * @groupDescription Drilldown
+ * React components for creating drilldown experiences
+ * @groupDescription Filter Tiles
+ * React filter tile components
+ * @groupDescription Contexts
+ * React context components
+ * @groupDescription Queries
+ * React components and hooks for working with queries
  * @groupDescription Fusion Embed
- * Fusion Dashboards, Widgets, Queries, and Formulas
+ * React components and hooks for working with Fusion Embed dashboards, widgets, queries, and formulas
+ * @groupDescription Generative AI
+ * React components and hooks for creating experiences using generative AI
  * @groupDescription Interfaces
  * TypeScript interfaces for components and hooks listed above
  * @groupDescription Type Aliases

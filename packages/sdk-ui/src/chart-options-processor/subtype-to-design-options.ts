@@ -40,6 +40,19 @@ export type AreaSubtype =
   | 'area/stackedspline100';
 
 /**
+ * Property of {@link AreaRangeStyleOptions}
+ *
+ * Subtype of AreaRangeChart
+ *
+ * **Values**
+ *
+ * - `arearange/spline` - curved line from point to point.
+ * - `arearange/basic` - straight line from point to point.
+ *
+ */
+export type AreaRangeSubtype = 'arearange/spline' | 'arearange/basic';
+
+/**
  * Property of {@link StackableSubtype}
  *
  * Subtype of BarChart
@@ -128,7 +141,8 @@ export type ChartSubtype =
   | SunburstSubtype
   | BoxplotSubtype
   | ScattermapSubtype
-  | AreamapSubtype;
+  | AreamapSubtype
+  | AreaRangeSubtype;
 
 export const chartSubtypeToDesignOptions = Object.freeze<
   Record<
@@ -150,6 +164,8 @@ export const chartSubtypeToDesignOptions = Object.freeze<
   'area/spline': { lineType: 'smooth', stackType: 'classic' },
   'area/stackedspline': { lineType: 'smooth', stackType: 'stacked' },
   'area/stackedspline100': { lineType: 'smooth', stackType: 'stack100' },
+  'arearange/basic': { lineType: 'straight', stackType: 'classic' },
+  'arearange/spline': { lineType: 'smooth', stackType: 'classic' },
   'bar/classic': { stackType: 'classic' },
   'bar/stacked': { stackType: 'stacked' },
   'bar/stacked100': { stackType: 'stack100' },

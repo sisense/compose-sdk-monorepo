@@ -17,10 +17,10 @@ export default function ChatRouter() {
 
   useEffect(() => {
     if (defaultContextTitle && data && fetchStatus === 'idle') {
-      const target = data.find((c) => c.name === defaultContextTitle);
+      const target = data.find((c) => c.title === defaultContextTitle);
       if (target) {
         setErrorMessage(undefined);
-        setSelectedContext(target.name);
+        setSelectedContext(target.title);
       } else {
         setErrorMessage(`Data model or perspective "${defaultContextTitle}" not found`);
       }

@@ -1,9 +1,9 @@
 import { DashboardProps } from '@/dashboard/types';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
 import { useEffect, useMemo, useState } from 'react';
-import { Filter } from '@sisense/sdk-data';
-import { isSupportedWidgetTypeByDashboard, addFiltersToWidget } from '@/dashboard/utils';
+import { isSupportedWidgetTypeByDashboard } from '@/dashboard/utils';
 import { WidgetModel } from '@/models';
+import { useCommonFilters } from '@/common-filters/use-common-filters';
 
 /**
  * React component that renders a dashboard
@@ -11,19 +11,30 @@ import { WidgetModel } from '@/models';
  *
  * @internal
  */
-export const Dashboard = ({ title, layout, widgets, filters }: DashboardProps) => {
-  const [innerFilters, setInnerFilters] = useState<Filter[]>(filters);
+export const Dashboard = ({
+  title,
+  layout,
+  widgets,
+  filters,
+  defaultDataSource,
+  widgetFilterOptions,
+}: DashboardProps) => {
+  const {
+    filters: commonFilters,
+    setFilters,
+    connectToWidgetModel,
+  } = useCommonFilters({ initialFilters: filters });
   const [innerWidgets, setInnerWidgets] = useState<WidgetModel[]>(widgets);
 
   const widgetsWithCommonFilters = useMemo(() => {
     return innerWidgets
       .filter((widget) => isSupportedWidgetTypeByDashboard(widget.widgetType))
-      .map((widget) => addFiltersToWidget(widget, innerFilters));
-  }, [innerWidgets, innerFilters]);
+      .map((widget) => connectToWidgetModel(widget, widgetFilterOptions?.[widget.oid]));
+  }, [innerWidgets, widgetFilterOptions, connectToWidgetModel]);
 
   useEffect(() => {
-    setInnerFilters(filters);
-  }, [filters]);
+    setFilters(filters);
+  }, [filters, setFilters]);
 
   useEffect(() => {
     setInnerWidgets(widgets);
@@ -34,8 +45,9 @@ export const Dashboard = ({ title, layout, widgets, filters }: DashboardProps) =
       title={title}
       layout={layout}
       widgets={widgetsWithCommonFilters}
-      filters={innerFilters}
-      onFiltersChange={setInnerFilters}
+      defaultDataSource={defaultDataSource}
+      filters={commonFilters}
+      onFiltersChange={setFilters}
     />
   );
 };

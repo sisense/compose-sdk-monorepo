@@ -74,6 +74,15 @@ export interface ChatConfig {
    * @internal
    */
   enableInsights?: boolean;
+
+  /**
+   * Boolean flag to start a clean chat on every load.
+   *
+   * Note: When the flag is `true`, chat history will be preserved and stored for the session but will not be fetched or displayed. Changing this setting back to `false` will make the entire history visible again, even if it was previously hidden. Use the "Clear History" button to completely erase the history.
+   *
+   * @default false
+   */
+  hideHistory?: boolean;
 }
 
 export const DEFAULTS = Object.freeze<ChatConfig>({

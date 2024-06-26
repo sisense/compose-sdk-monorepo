@@ -308,7 +308,7 @@ const translateNumbersToSeriesPointStructure = (
         isIsolatedPoint: shouldShowIsolatedPoint,
       };
       return {
-        y: value,
+        y: isNaN(+value) ? value : +value,
         selected: blur,
         ...(hasMarker && { marker }),
         ...(color && { color }),

@@ -82,6 +82,10 @@ export type FilterMultiSelectJaql = {
   multiSelection: boolean;
   members: string[];
   isCondition?: boolean;
+  filter?: {
+    turnedOff?: boolean;
+    exclude?: { members?: string[] };
+  };
 };
 
 export type FilterMultipleConditionJaql = { or: ConditionFilterJaql[]; and: ConditionFilterJaql[] };

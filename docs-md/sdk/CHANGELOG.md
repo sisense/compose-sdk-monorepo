@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.13.0] - 2024-06-26
+
+### Added
+- Implement additional components and hooks for dashboard rendering (internal testing): component `CustomFilterTile`, component `CascadingFilterTile`, hook `useCommonFilters`
+- Make component `LoadingOverlay` available for internal usage
+- Implement component `AreaRangeChart` (beta) for Angular and Vue
+
+### Changed
+- Extend `AreaRangeChart` to support smooth line
+- Change query cache key to work for all jaql elements
+- Make improvements to charts: fixing broken charts when switching chart type, clearing point state on selection, parsing of ISO date strings with or without timezone offsets, fixing numeric values as string (highcharts error), tooltip of measure name for range charts
+- Improve the translation of filter JAQL to `Filter` objects: exclude member filter, top/bottom ranking on measure, translation of deactivated members for `MembersFilter`
+- Make improvements to components for dashboard rendering: numeric members in `MemberFilterTile`, dynamic resizing of `FiltersPanel`, theming for `DashboardById`
+- Make improvements for `Chatbot` component: viewer role, scroll to bottom, input box autofocus, input length limit, hide history config
+
 ## [1.12.0] - 2024-06-11
 
 ### Added
@@ -12,7 +27,7 @@
 
 ### Changed
 - Make Chatbot tooltip style and data topics customizable
-- Minor tweaks and UI improvements for `Chatbot` component
+- Make minor tweaks and UI improvements for `Chatbot` component
 - Enable Angular v18 support for `sdk-ui-angular` package
 
 ## [1.11.0] - 2024-05-28

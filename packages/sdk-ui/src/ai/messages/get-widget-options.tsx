@@ -107,10 +107,15 @@ const mapToDataOptions = (
           }
 
           if (isDatetime(column.type)) {
-            return {
-              column,
-              dateFormat: (m.format?.mask as DatetimeMask)?.[m.jaql.level!],
-            };
+            const dateFormat: string | undefined = (m.format?.mask as DatetimeMask)?.[
+              m.jaql.level!
+            ];
+            if (dateFormat) {
+              return {
+                column,
+                dateFormat,
+              };
+            }
           }
 
           return column;
@@ -146,10 +151,14 @@ const mapToDataOptions = (
         }
       });
       return intermediateOptions as ScattermapChartDataOptions;
+    case 'table':
+      if (Object.keys(intermediateOptions).length === 0) {
+        return getTableOptions(metadataItems).dataOptions;
+      }
+      return intermediateOptions;
     case 'boxplot':
     case 'areamap':
     case 'indicator':
-    case 'table':
     default:
       return intermediateOptions;
   }

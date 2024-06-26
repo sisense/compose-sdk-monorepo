@@ -8,6 +8,7 @@ import {
   getNumberFormatConfig,
   getPivotDataOptionByJaqlIndex,
 } from '../utils.js';
+import { parseISOWithDefaultUTCOffset } from '@/query/query-result-date-formatting.js';
 
 const PIVOT_TABLE_NULL_VALUE = 'N\\A';
 
@@ -34,7 +35,7 @@ export const createHeaderCellValueFormatter = (
         break;
       case 'datetime':
         cell.content = dateFormatter(
-          new Date(cell.value!),
+          parseISOWithDefaultUTCOffset(cell.value!),
           getDateFormatConfig(dataOption as Column | StyledColumn),
         );
         break;

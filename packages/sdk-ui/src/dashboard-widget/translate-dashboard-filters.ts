@@ -27,8 +27,8 @@ export function extractDashboardFiltersForWidget(dashboard: DashboardDto, widget
   const filtersIgnoringRules = widget.metadata.ignore;
 
   const { filters, highlights } = groupDashboardFilters(
-    getDashboardFilters(dashboard, filtersIgnoringRules),
-    getDashboardBackgroundFilters(dashboard),
+    getDashboardFilters(dashboard.filters || [], filtersIgnoringRules),
+    getDashboardBackgroundFilters(dashboard.filters || []),
     widget,
   );
 
@@ -66,12 +66,15 @@ function splitCascadingDashboardFilters(dashboardFilters: Array<FilterDto | Casc
 /**
  * Retrieves the dashboard filters with optional exclusion rules.
  *
- * @param dashboard - The dashboard to retrieve filters from.
+ * @param dashboardFilters - The array of dashboard filters
  * @param filtersIgnoringRules - Optional rules for excluding filters.
  * @returns An array of filtered dashboard filters.
  */
-function getDashboardFilters(dashboard: DashboardDto, filtersIgnoringRules?: FiltersIgnoringRules) {
-  return splitCascadingDashboardFilters(dashboard.filters || [])
+export function getDashboardFilters(
+  dashboardFilters: Array<FilterDto | CascadingFilterDto>,
+  filtersIgnoringRules?: FiltersIgnoringRules,
+) {
+  return splitCascadingDashboardFilters(dashboardFilters)
     .filter(({ instanceid = '', disabled }) => {
       return (
         !filtersIgnoringRules?.all && !disabled && !filtersIgnoringRules?.ids.includes(instanceid)
@@ -95,13 +98,15 @@ function getDashboardFilters(dashboard: DashboardDto, filtersIgnoringRules?: Fil
 /**
  * Retrieves the dashboard background filters.
  *
- * @param dashboard - The dashboard to retrieve background filters from.
+ * @param dashboardFilters - The array of dashboard filters
  * @returns An array of background filters from the dashboard.
  */
-function getDashboardBackgroundFilters(dashboard: DashboardDto) {
+export function getDashboardBackgroundFilters(
+  dashboardFilters: Array<FilterDto | CascadingFilterDto>,
+) {
   const dashboardBackgroundFilters: FilterDto[] = [];
 
-  splitCascadingDashboardFilters(dashboard.filters || []).forEach(({ jaql }) => {
+  splitCascadingDashboardFilters(dashboardFilters).forEach(({ jaql }) => {
     const { backgroundFilter } = extractFilterModelFromJaql(jaql);
     if (backgroundFilter) {
       dashboardBackgroundFilters.push({

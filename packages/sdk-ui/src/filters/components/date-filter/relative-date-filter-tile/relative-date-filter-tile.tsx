@@ -1,18 +1,14 @@
-/* eslint-disable security/detect-object-injection */
-/* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { Filter, RelativeDateFilter as RelativeDateFilterType } from '@sisense/sdk-data';
 import { FilterVariant } from '../../common/index.js';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component.js';
-import { useState } from 'react';
-import { FilterTile } from '../../filter-tile.js';
+import { FilterTile, FilterTileDesignOptions } from '../../filter-tile.js';
 import { isVertical } from '../../common/filter-utils.js';
 import dayjs from 'dayjs';
 import { RelativeDateFilterDisplay } from './relative-date-filter-display.js';
 import isToday from 'dayjs/plugin/isToday';
 import { RelativeDateFilter } from './relative-date-filter.js';
-import cloneDeep from 'lodash/cloneDeep.js';
+import { cloneFilterAndToggleDisabled } from '@/filters/utils.js';
+import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
 dayjs.extend(isToday);
 
 /**
@@ -28,9 +24,9 @@ export interface RelativeDateFilterTileProps {
   /**
    * Callback function that is called when the relative date filter object should be updated.
    *
-   * @param filter - Relative date filter, or null for failure/disabled
+   * @param filter - Relative date filter
    */
-  onUpdate: (filter: Filter | null) => void;
+  onUpdate: (filter: Filter) => void;
   /**
    * Limit of the date range that can be selected.
    */
@@ -38,6 +34,11 @@ export interface RelativeDateFilterTileProps {
     maxDate: string;
     minDate: string;
   };
+  /**
+   * Design options for the filter tile component
+   * @internal
+   */
+  tileDesignOptions?: FilterTileDesignOptions;
 }
 
 /**
@@ -52,41 +53,44 @@ export interface RelativeDateFilterTileProps {
 export const RelativeDateFilterTile = asSisenseComponent({
   componentName: 'RelativeDateFilterTile',
 })((props: RelativeDateFilterTileProps) => {
-  const { title, filter, arrangement = 'horizontal', onUpdate, limit } = props;
-  const [lastFilter, setLastFilter] = useState(filter);
-  let disabled = lastFilter.disabled;
+  const {
+    title,
+    filter: filterFromProps,
+    arrangement = 'horizontal',
+    onUpdate: updateFilterFromProps,
+    limit,
+    tileDesignOptions,
+  } = props;
 
-  const onUpdateValues = (newFilter: Filter | null) => {
-    if (newFilter) {
-      setLastFilter(newFilter as RelativeDateFilterType);
-    }
-    onUpdate(newFilter);
-  };
+  const { filter, updateFilter } = useSynchronizedFilter<RelativeDateFilterType>(
+    filterFromProps as RelativeDateFilterType,
+    updateFilterFromProps,
+  );
+  const disabled = filter.disabled;
 
   return (
     <FilterTile
       title={title}
       renderContent={(collapsed) => {
         return collapsed && isVertical(arrangement) ? (
-          <RelativeDateFilterDisplay filter={lastFilter as RelativeDateFilterType} />
+          <RelativeDateFilterDisplay filter={filter} />
         ) : (
           <RelativeDateFilter
-            filter={lastFilter as RelativeDateFilterType}
+            filter={filter}
             arrangement={arrangement}
-            onUpdate={onUpdateValues}
+            onUpdate={updateFilter}
             disabled={disabled}
             limit={limit}
           />
         );
       }}
       onToggleDisabled={() => {
-        disabled = !disabled;
-        const newFilter = cloneDeep(lastFilter);
-        newFilter.disabled = disabled;
-        onUpdateValues(newFilter);
+        const newFilter = cloneFilterAndToggleDisabled(filter);
+        updateFilter(newFilter);
       }}
       disabled={disabled}
       arrangement={arrangement}
+      design={tileDesignOptions}
     />
   );
 });

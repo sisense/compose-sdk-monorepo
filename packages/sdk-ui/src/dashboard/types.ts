@@ -1,5 +1,5 @@
-import { Layout, WidgetModel } from '@/models';
-import { Filter } from '@sisense/sdk-data';
+import { Layout, WidgetFilterOptions, WidgetModel } from '@/models';
+import { DataSource, Filter } from '@sisense/sdk-data';
 
 /**
  * Props for the DashboardById component
@@ -21,6 +21,7 @@ export interface DashboardLayoutProps {
   widgets: WidgetModel[];
   filters: Filter[];
   onFiltersChange: (filters: Filter[]) => void;
+  defaultDataSource?: DataSource;
 }
 
 /**
@@ -33,6 +34,8 @@ export interface DashboardProps {
   layout: Layout;
   widgets: WidgetModel[];
   filters: Filter[];
+  defaultDataSource?: DataSource;
+  widgetFilterOptions?: WidgetFilterOptions;
 }
 
 /**

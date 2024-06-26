@@ -58,6 +58,7 @@ TypeScript type aliases for components and services listed above
 - [PieSubtype](type-alias.PieSubtype.md)
 - [PivotRowsSort](type-alias.PivotRowsSort.md)
 - [PolarSubtype](type-alias.PolarSubtype.md)
+- [RangeChartType](type-alias.RangeChartType.md)
 - [RangeDataColorOptions](type-alias.RangeDataColorOptions.md)
 - [ScatterChartType](type-alias.ScatterChartType.md)
 - [ScatterDataPoint](type-alias.ScatterDataPoint.md)

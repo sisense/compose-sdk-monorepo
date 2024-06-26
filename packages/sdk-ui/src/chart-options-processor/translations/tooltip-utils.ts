@@ -83,6 +83,8 @@ export type InternalSeries = {
       xDisplayValue?: string;
       xValue?: (number | string)[];
     };
+    upperPointName?: string;
+    lowerPointName?: string;
   };
   percentage?: number;
 };

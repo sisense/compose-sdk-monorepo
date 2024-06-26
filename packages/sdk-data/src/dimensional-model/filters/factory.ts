@@ -27,8 +27,8 @@ import {
   TextFilter,
   DateRangeFilter,
   RelativeDateFilter,
+  CustomFilter,
 } from './filters.js';
-import { createGenericFilter } from './utils/filter-from-jaql-util.js';
 
 // LOGICAL FILTERS
 
@@ -497,11 +497,17 @@ export function numeric(
  * ```
  * @param attribute - Attribute to filter on
  * @param members - Array of member values to filter by
+ * @param _deactivatedMembers - [internal] Array of deactivated member values
  * @param guid - Optional GUID for the filter
  * @returns A filter instance
  */
-export function members(attribute: Attribute, members: string[], guid?: string): Filter {
-  return new MembersFilter(attribute, members, guid);
+export function members(
+  attribute: Attribute,
+  members: string[],
+  _deactivatedMembers?: string[],
+  guid?: string,
+): Filter {
+  return new MembersFilter(attribute, members, _deactivatedMembers, guid);
 }
 
 // DATE FILTERS
@@ -1123,6 +1129,6 @@ export namespace logic {
  * @returns A filter instance
  * @internal
  */
-export function customFilter(jaql: any, guid?: string): Filter {
-  return createGenericFilter(jaql, guid);
+export function customFilter(attribute: Attribute, jaql: any, guid?: string): Filter {
+  return new CustomFilter(attribute, jaql, guid);
 }

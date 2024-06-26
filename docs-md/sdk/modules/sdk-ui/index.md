@@ -27,21 +27,29 @@ React components for charts
 
 ## Chart Utilities
 
+Utilities to be used with charts
+
 - [ChartWidget](chart-utilities/function.ChartWidget.md)
 - [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
 
 ## Data Grids
+
+React components for data grids
 
 - [PivotTable](data-grids/function.PivotTable.md) <Badge type="beta" text="Beta" />
 - [Table](data-grids/function.Table.md)
 
 ## Drilldown
 
+React components for creating drilldown experiences
+
 - [ContextMenu](drilldown/function.ContextMenu.md)
 - [DrilldownBreadcrumbs](drilldown/function.DrilldownBreadcrumbs.md)
 - [DrilldownWidget](drilldown/function.DrilldownWidget.md)
 
 ## Filter Tiles
+
+React filter tile components
 
 - [CriteriaFilterTile](filter-tiles/function.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/function.DateRangeFilterTile.md)
@@ -50,10 +58,14 @@ React components for charts
 
 ## Contexts
 
+React context components
+
 - [SisenseContextProvider](contexts/function.SisenseContextProvider.md)
 - [ThemeProvider](contexts/function.ThemeProvider.md)
 
 ## Queries
+
+React components and hooks for working with queries
 
 - [ExecuteQuery](queries/function.ExecuteQuery.md)
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
@@ -63,7 +75,7 @@ React components for charts
 
 ## Fusion Embed
 
-Fusion Dashboards, Widgets, Queries, and Formulas
+React components and hooks for working with Fusion Embed dashboards, widgets, queries, and formulas
 
 - [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
@@ -77,6 +89,8 @@ Fusion Dashboards, Widgets, Queries, and Formulas
 - [useGetWidgetModel](fusion-embed/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Generative AI
+
+React components and hooks for creating experiences using generative AI
 
 - [AiContextProvider](generative-ai/function.AiContextProvider.md) <Badge type="beta" text="Beta" />
 - [Chatbot](generative-ai/function.Chatbot.md) <Badge type="beta" text="Beta" />

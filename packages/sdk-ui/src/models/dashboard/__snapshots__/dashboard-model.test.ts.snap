@@ -45,6 +45,16 @@ DashboardModel {
   },
   "oid": "test",
   "title": "test",
+  "widgetFilterOptions": {
+    "widget-1": {
+      "applyMode": "highlight",
+      "ignoreFilters": {
+        "all": undefined,
+        "ids": undefined,
+      },
+      "shouldAffectFilters": undefined,
+    },
+  },
   "widgets": [
     WidgetModel {
       "chartType": "pie",
@@ -82,6 +92,7 @@ DashboardModel {
   },
   "oid": "test",
   "title": "test",
+  "widgetFilterOptions": {},
   "widgets": [],
 }
 `;

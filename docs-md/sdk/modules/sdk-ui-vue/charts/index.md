@@ -7,6 +7,7 @@ title: Charts
 Vue components for charts
 
 - [AreaChart](class.AreaChart.md)
+- [AreaRangeChart](class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [AreamapChart](class.AreamapChart.md)
 - [BarChart](class.BarChart.md)
 - [BoxplotChart](class.BoxplotChart.md)

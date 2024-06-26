@@ -1,4 +1,5 @@
 import {
+  BaseFilterJaql,
   ConditionFilterJaql,
   FILTER_TYPES,
   FilterJaqlInternal,
@@ -66,7 +67,7 @@ export const createGenericFilter = (
  * @returns The created Filter object.
  */
 export const createFilterIncludeAll = (attribute: Attribute, guid?: string): Filter => {
-  return withComposeCode(filterFactory.members)(attribute, [], guid);
+  return withComposeCode(filterFactory.members)(attribute, [], [], guid);
 };
 
 /**
@@ -82,8 +83,26 @@ export const createFilterFromSpecificItemsFilterJaql = (
   specificItemsFilterJaql: SpecificItemsFilterJaql,
   guid?: string,
 ): Filter => {
-  return withComposeCode(filterFactory.members)(attribute, specificItemsFilterJaql.members, guid);
+  const deactivatedMembers = getDeactivatedMembersFromFilterJaql(specificItemsFilterJaql);
+  const activeMembers = getActiveMembersFromFilterJaql(specificItemsFilterJaql, deactivatedMembers);
+  return withComposeCode(filterFactory.members)(attribute, activeMembers, deactivatedMembers, guid);
 };
+
+function getDeactivatedMembersFromFilterJaql(
+  filterJaql: SpecificItemsFilterJaql,
+): string[] | undefined {
+  return filterJaql.filter?.turnedOff ? filterJaql.filter?.exclude?.members : undefined;
+}
+
+function getActiveMembersFromFilterJaql(
+  filterJaql: SpecificItemsFilterJaql,
+  deactivatedMembers: string[] | undefined,
+): string[] {
+  const allMembers = filterJaql.members;
+  return deactivatedMembers
+    ? allMembers.filter((member) => !deactivatedMembers.includes(member))
+    : allMembers;
+}
 
 /**
  * Creates a filter from a date range filter JAQL object.
@@ -182,6 +201,22 @@ export const createFilterFromConditionFilterJaql = (
 };
 
 /**
+ * Creates a filter from a custom filter JAQL object.
+ *
+ * @param attribute - attribute
+ * @param customFilterJaql - Custom Filter Jaql
+ * @param guid - Optional GUID for the filter
+ * @returns Filter object
+ */
+export const createFilterFromCustomFilterJaql = (
+  attribute: Attribute,
+  customFilterJaql: BaseFilterJaql,
+  guid?: string,
+): Filter => {
+  return withComposeCode(filterFactory.customFilter)(attribute, customFilterJaql, guid);
+};
+
+/**
  * Creates a filter from a filter JAQL object.
  *
  * @param jaql - The filter JAQL object.
@@ -239,6 +274,7 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid?: st
           guid,
         );
       case FILTER_TYPES.ADVANCED:
+        return createFilterFromCustomFilterJaql(attribute, filterJaqlWithType, guid);
       case FILTER_TYPES.INVALID:
         return createGenericFilter(jaql, guid);
     }
@@ -246,6 +282,5 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid?: st
     // if a filter type is untranslatable, fall back to the generic pass-through JAQL filter
     // console.error(e);
   }
-
   return createGenericFilter(jaql, guid);
 };

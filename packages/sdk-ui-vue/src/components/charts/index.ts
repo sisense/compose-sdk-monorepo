@@ -15,3 +15,4 @@ export { Chart } from './chart';
 export { BoxplotChart } from './boxplot-chart';
 export { AreamapChart } from './areamap-chart';
 export { ScattermapChart } from './scattermap-chart';
+export { AreaRangeChart } from './area-range-chart';

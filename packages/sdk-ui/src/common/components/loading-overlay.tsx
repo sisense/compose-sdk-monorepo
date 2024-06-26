@@ -8,6 +8,7 @@ import { LoadingDots } from './loading-dots';
  *
  * @param isVisible - visibility of the overlay.
  * @returns Child component wrapped in dynamic overlay.
+ * @internal
  */
 export const LoadingOverlay = ({
   isVisible,

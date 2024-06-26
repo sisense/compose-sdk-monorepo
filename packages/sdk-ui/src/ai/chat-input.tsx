@@ -9,6 +9,7 @@ import { useThemeContext } from '@/theme-provider';
 import { css } from '@emotion/react';
 import ChatDropup, { isCommand } from './chat-dropup';
 import Tooltip from './common/tooltip';
+import { CHAT_INPUT_MAX_LENGTH } from './common/constants';
 
 const ChatInputContainer = styled.div<Themable>`
   display: flex;
@@ -158,6 +159,12 @@ export default function ChatInput({
     }
   }, [text]);
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.focus({ preventScroll: true });
+    }
+  }, []);
+
   const { themeSettings } = useThemeContext();
 
   return (
@@ -172,7 +179,7 @@ export default function ChatInput({
         recommendationsError={recommendationsError}
       />
       {onClearHistoryClick && (
-        <Tooltip title="Clear chat">
+        <Tooltip title="Clear chat" placement="bottom-start">
           <ClearHistoryButton aria-label="clear history" onClick={onClearHistoryClick}>
             <ClearChatIcon theme={themeSettings} />
           </ClearHistoryButton>
@@ -180,6 +187,12 @@ export default function ChatInput({
       )}
       <TextInput
         aria-label="chat input"
+        onBlur={(e) => {
+          if (document.getElementById('csdk-chatbot-frame')?.contains(e.relatedTarget)) {
+            e.target.focus({ preventScroll: true });
+          }
+        }}
+        maxLength={CHAT_INPUT_MAX_LENGTH}
         ref={ref}
         rows={1}
         onChange={handleChange}

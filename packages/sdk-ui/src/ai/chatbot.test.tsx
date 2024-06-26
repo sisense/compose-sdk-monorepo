@@ -4,13 +4,10 @@ import { screen, waitFor } from '@testing-library/react';
 import { Chatbot } from './chatbot';
 import { AiTestWrapper } from './__mocks__';
 import { http, HttpResponse } from 'msw';
-import { dataModels, perspectives } from './__mocks__/data';
+import { contexts } from './__mocks__/data';
 
 beforeEach(() => {
-  server.use(
-    http.get('*/api/v2/datamodels/schema', () => HttpResponse.json(dataModels)),
-    http.get('*/api/v2/perspectives', () => HttpResponse.json(perspectives)),
-  );
+  server.use(http.get('*/api/datasources', () => HttpResponse.json(contexts)));
 });
 
 it('renders chatbot with the correct default dimensions', async () => {

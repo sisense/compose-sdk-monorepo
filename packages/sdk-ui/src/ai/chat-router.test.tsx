@@ -5,15 +5,12 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import ChatRouter from './chat-router';
 import { AiTestWrapper } from './__mocks__';
-import { dataModels, perspectives } from './__mocks__/data';
+import { contexts } from './__mocks__/data';
 import { ChatConfigProvider } from './chat-config';
-import { Chat, DataModel } from './api/types';
+import { Chat, ChatContext } from './api/types';
 
-const setupMockDataTopicsApi = (models: DataModel[]) => {
-  server.use(
-    http.get('*/api/v2/datamodels/schema', () => HttpResponse.json(models)),
-    http.get('*/api/v2/perspectives', () => HttpResponse.json(perspectives)),
-  );
+const setupMockDataTopicsApi = (contexts: ChatContext[]) => {
+  server.use(http.get('*/api/datasources', () => HttpResponse.json(contexts)));
 };
 
 const setupMockChatsApi = (chatResponse: Chat) => {
@@ -34,14 +31,13 @@ describe('ChatRouter', () => {
     chatHistory: [],
     contextId: 'm2',
     contextTitle: 'Model 2',
-    contextType: 'datamodel',
     lastUpdate: '2021-01-01T00:00:00Z',
     tenantId: 't1',
     userId: 'u1',
   };
 
   beforeEach(() => {
-    setupMockDataTopicsApi(dataModels);
+    setupMockDataTopicsApi(contexts);
     setupMockChatsApi(mockChat);
     setupMockQueryRecsApi();
   });
@@ -92,9 +88,9 @@ describe('ChatRouter', () => {
 
   describe('when no context is found for the context title', () => {
     it('renders the error screen and allows for refresh', async () => {
-      const newModel: DataModel = {
-        oid: 'new-model',
+      const newModel: ChatContext = {
         title: 'New Model',
+        live: false,
       };
 
       const { user } = setup(
@@ -115,7 +111,7 @@ describe('ChatRouter', () => {
 
       // Override APIs to return the new model
       setupMockDataTopicsApi([newModel]);
-      setupMockChatsApi({ ...mockChat, contextId: newModel.oid, contextTitle: newModel.title });
+      setupMockChatsApi({ ...mockChat, contextId: newModel.title, contextTitle: newModel.title });
 
       // Click refresh
       await user.click(screen.getByText('Refresh'));

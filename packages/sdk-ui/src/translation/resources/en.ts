@@ -106,6 +106,10 @@ export const translation = {
     title: 'Unsupported Filter',
     message: 'Applied to the data query',
   },
+  commonFilter: {
+    clearSelectionButton: 'Clear Selection',
+  },
+  customFilterTileMessage: 'filtered with custom filter',
 };
 
 export type TranslationDictionary = typeof translation;

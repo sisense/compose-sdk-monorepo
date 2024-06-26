@@ -32,6 +32,7 @@ export const DashboardContainer = ({
   widgets,
   filters,
   onFiltersChange,
+  defaultDataSource,
 }: DashboardLayoutProps) => {
   const { themeSettings } = useThemeContext();
   return (
@@ -43,7 +44,13 @@ export const DashboardContainer = ({
         <DashboardHeader title={title} />
         <ContentPanel layout={layout} widgets={widgets} />
       </ContentColumn>
-      <FiltersPanel filters={filters} onFiltersChange={onFiltersChange} />
+      <div className="csdk-w-[240px] csdk-flex">
+        <FiltersPanel
+          filters={filters}
+          onFiltersChange={onFiltersChange}
+          defaultDataSource={defaultDataSource}
+        />
+      </div>
     </DashboardWrapper>
   );
 };

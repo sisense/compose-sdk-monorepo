@@ -28,3 +28,30 @@ import Highcharts from '@sisense/sisense-charts';
     },
   );
 })(Highcharts);
+
+// todo: move the Highcharts improvement, which prevents handlers memoization, into "sisense-charts" package
+(function (H: any) {
+  H.Point.prototype.importEvents = function () {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const point = this;
+
+    if (this.importedEvents) {
+      this.importedEvents.forEach(function (unbinder: any) {
+        unbinder();
+      });
+    }
+
+    this.importedEvents = [];
+
+    const options = H.merge(point.series.options.point, point.options),
+      events = options.events;
+
+    point.events = events;
+
+    H.objectEach(events, function (event: any, eventType: any) {
+      if (H.isFunction(event)) {
+        point.importedEvents.push(H.addEvent(point, eventType, event));
+      }
+    });
+  };
+})(Highcharts);

@@ -60,13 +60,6 @@ npm start
 
 ## Installing the SDK Packages
 
-First, you should make some configurations to enable proper typing with TypeScript.
-You can achieve this by adding the `allowSyntheticDefaultImports` flag to the `compilerOptions` section in your `tsconfig.json` file.
-
-> **Note:** This flag does not affect the JavaScript emitted by TypeScript, it’s only for the type checking. This option brings the behavior of TypeScript in-line with Babel, where extra code is emitted to make using a default export of a module more ergonomic.
-
-<img src="../img/angular-allow-synthetic-default-imports.png" height="100px"/>
-
 Compose SDK for Angular contains three packages for public use:
 
 -   [@sisense/sdk-ui-angular](https://www.npmjs.com/package/@sisense/sdk-ui-angular): Angular components and services for rendering charts and executing queries against a Sisense instance.
@@ -173,37 +166,26 @@ In this section, you will add a new component and modify the main app module to 
 
 Add a Sisense provider that contains all relevant information about the Sisense instance and ensures it is available to all Compose SDK components. The authentication method used to access your Sisense instance is defined in this provider.
 
-The following examples shows how to add a provider to `src/app/app.module.ts`.
-
-::: tip
-Full file code is available in [Adding a component and routing section](#adding-a-component-and-routing)
-:::
-Add the following:
-
--   TypeScript imports:
+The following examples shows how to add a provider to `src/app/app.config.ts`.
 
 ```typescript
-import { SISENSE_CONTEXT_CONFIG_TOKEN, SdkUiModule, SisenseContextConfig } from '@sisense/sdk-ui-angular';
-```
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { SISENSE_CONTEXT_CONFIG_TOKEN, SisenseContextConfig } from '@sisense/sdk-ui-angular';
 
--   Authentication config:
+import { routes } from './app.routes';
 
-```typescript
 export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
     url: '<instance url>', // replace with the URL of your Sisense instance
     token: '<api token>', // replace with the API token of your user account
 };
-```
 
--   Module import and provider:
-
-```typescript
-@NgModule({
-  imports: [SdkUiModule],
+export const appConfig: ApplicationConfig = {
   providers: [
     { provide: SISENSE_CONTEXT_CONFIG_TOKEN, useValue: SISENSE_CONTEXT_CONFIG },
-  ]
-...
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes)]
+};
 ```
 
 > **Note:**
@@ -227,29 +209,15 @@ This should result in a new folder with three files inside:
 
 Next, configure the routing and point the main page to the `Analytics` component.
 
-The `app.module.ts` file should look like this now:
+The `app.routes.ts` file should look like this now:
 
 ```typescript
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { SISENSE_CONTEXT_CONFIG_TOKEN, SdkUiModule, SisenseContextConfig } from '@sisense/sdk-ui-angular';
-
-import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { Routes } from '@angular/router';
 
-export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
-    url: '<instance url>', // replace with the URL of your Sisense instance
-    token: '<api token>', // replace with the API token of your user account
-};
-
-@NgModule({
-    imports: [BrowserModule, SdkUiModule, RouterModule.forRoot([{ path: '', component: AnalyticsComponent }])],
-    declarations: [AppComponent, AnalyticsComponent],
-    providers: [{ provide: SISENSE_CONTEXT_CONFIG_TOKEN, useValue: SISENSE_CONTEXT_CONFIG }],
-    bootstrap: [AppComponent],
-})
-export class AppModule {}
+export const routes: Routes = [
+    {path: '', component: AnalyticsComponent}
+];
 ```
 
 Replace the contents of the `app.component.html` file with:
@@ -282,32 +250,35 @@ The following is a complete example of a rendered chart in an application.
 import { Component } from '@angular/core';
 import { measureFactory } from '@sisense/sdk-data';
 import * as DM from '../../sample-healthcare';
+import { SdkUiModule } from '@sisense/sdk-ui-angular';
 
 @Component({
-    selector: 'app-analytics',
-    templateUrl: './analytics.component.html',
-    styleUrls: ['./analytics.component.css'],
+  selector: 'app-analytics',
+  standalone: true,
+  imports: [SdkUiModule],
+  templateUrl: './analytics.component.html',
+  styleUrl: './analytics.component.scss'
 })
 export class AnalyticsComponent {
-    chart = {
-        chartType: 'line' as const,
-        dataSet: DM.DataSource,
-        dataOptions: {
-            category: [DM.Doctors.Specialty],
-            value: [measureFactory.average(DM.Admissions.TimeofStay, 'Average time of stay')],
-            breakBy: [],
-        },
-        styleOptions: {
-            legend: {
-                enabled: true,
-                position: 'bottom',
-            },
-        },
-    };
+  chart = {
+    chartType: 'line' as const,
+    dataSet: DM.DataSource,
+    dataOptions: {
+      category: [DM.Doctors.Specialty],
+      value: [measureFactory.average(DM.Admissions.TimeofStay, 'Average time of stay')],
+      breakBy: [],
+    },
+    styleOptions: {
+      legend: {
+        enabled: true,
+        position: 'bottom',
+      },
+    },
+  };
 
-    logArguments(...args: any[]) {
-        console.log(args);
-    }
+  logArguments(...args: any[]) {
+    console.log(args);
+  }
 }
 ```
 

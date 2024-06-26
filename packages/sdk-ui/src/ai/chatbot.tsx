@@ -62,7 +62,13 @@ export const Chatbot = asSisenseComponent({
   const { themeSettings } = useThemeContext();
   return (
     <ChatConfigProvider value={config ?? {}}>
-      <ChatFrame width={width} height={height} theme={themeSettings}>
+      <ChatFrame
+        id="csdk-chatbot-frame"
+        width={width}
+        height={height}
+        theme={themeSettings}
+        tabIndex={0}
+      >
         <ChatRouter />
       </ChatFrame>
     </ChatConfigProvider>

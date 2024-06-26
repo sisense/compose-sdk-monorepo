@@ -50,7 +50,11 @@ export function stringifyHelper(arg: any): string {
  */
 export function withComposeCode(func: (...args: any[]) => any): (...args: any[]) => any {
   return function (...args: any[]): any {
-    const argValues = args.map(stringifyHelper).join(', ').replace(/, $/, '');
+    const argValues = args
+      .map(stringifyHelper)
+      .join(', ')
+      // remove any number of trailing commas
+      .replace(/(,\s*)+$/, '');
     const signature = `filterFactory.${func.name}(${argValues})`;
     const filter: Filter = func(...args);
     filter.composeCode = signature;

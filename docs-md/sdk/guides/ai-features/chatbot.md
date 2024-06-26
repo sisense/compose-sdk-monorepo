@@ -3,7 +3,7 @@
 The AI chatbot allows your users to explore your data and generate queries through natural language questions powered by GenAI. The chatbot can suggest sample insights, provide narrative explanations in context, and produce data visualizations.
 
 ::: warning Note
-This feature is currently under beta release for selected customers and is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
+This feature is currently under beta release for our managed cloud customers on version L2024.1 SU1 or above. It is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
 
 To be considered for the beta program, please sign up at [www.sisense.com/get/gen-ai-partner](https://www.sisense.com/get/gen-ai-partner/).
 :::
@@ -41,7 +41,7 @@ The following filters are supported:
 
 - MemberFilter: Get specific values from a column
 - FromToFilter: Get values from a range
-- ValueFilter: For numeric columns, using: `fromNotEqual`, `from`, `toNotEqual`, `to`, `equals`
+- ValueFilter: For numeric columns, using: `fromNotEqual`, `from`, `toNotEqual`, `to`, `equals`, `doesntEqual`, `top`, `bottom`
 - ExcludeFilter: Get all values from a column except specific ones
 - LastFilter: For datetime columns, filter dates from now to specific history (last mont/last year)
 - NextFilter: For datetime columns, filter dates from now to specific future (next month/next year)

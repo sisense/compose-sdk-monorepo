@@ -43,8 +43,8 @@ export const useChatSession = (contextTitle: string): UseChatSessionResult => {
   const { data: dataTopics, isLoading: dataTopicsLoading } = useGetDataTopics();
   const { data: chats, isLoading: chatsLoading } = useGetAllChats();
 
-  const contextId = dataTopics?.find((d) => d.name === contextTitle)?.id;
-  const chatId = chats.find((c) => c.contextId === contextId)?.chatId;
+  const contextId = dataTopics?.find((d) => d.title === contextTitle)?.title;
+  const chatId = chats.find((c) => c.contextTitle === contextId)?.chatId;
 
   const contextExists = dataTopicsLoading || !!contextId;
   const chatExists = chatsLoading || !!chatId;

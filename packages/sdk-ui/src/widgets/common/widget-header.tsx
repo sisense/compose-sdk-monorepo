@@ -21,6 +21,25 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
 }: WidgetHeaderProps) => {
   const { themeSettings } = useThemeContext();
 
+  const renderToolbar = () => {
+    const toolbar = (
+      <>
+        <WidgetHeaderInfoButton
+          title={dataSetName}
+          description={description}
+          styleOptions={styleOptions}
+          onRefresh={onRefresh}
+        />
+      </>
+    );
+
+    if (styleOptions?.renderToolbar) {
+      return styleOptions?.renderToolbar?.(onRefresh, toolbar);
+    }
+
+    return toolbar;
+  };
+
   return (
     <>
       <div
@@ -42,18 +61,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
         >
           {title || ''}
         </div>
-        <div className={'csdk-ml-auto csdk-flex csdk-items-center'}>
-          {styleOptions?.renderToolbar ? (
-            styleOptions?.renderToolbar?.(onRefresh)
-          ) : (
-            <WidgetHeaderInfoButton
-              title={dataSetName}
-              description={description}
-              styleOptions={styleOptions}
-              onRefresh={onRefresh}
-            />
-          )}
-        </div>
+        <div className={'csdk-ml-auto csdk-flex csdk-items-center'}>{renderToolbar()}</div>
       </div>
       {styleOptions?.dividerLine && (
         <Divider

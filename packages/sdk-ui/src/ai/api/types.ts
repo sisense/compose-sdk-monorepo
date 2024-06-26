@@ -2,13 +2,9 @@ import { JaqlQueryPayload, MetadataItem } from '@sisense/sdk-query-client';
 import { ChartDataOptions } from '../../types';
 
 export interface ChatContext {
-  id: string;
-  name: string;
-  type: ChatContextType;
-  description: string;
+  title: string;
+  live: boolean;
 }
-
-export type ChatContextType = 'datamodel' | 'perspective';
 
 export interface NlqMessage {
   role: 'assistant';
@@ -24,7 +20,6 @@ export type ChatMessage = RegularMessage | NlqMessage;
 export interface Chat {
   chatId: string;
   contextId: string;
-  contextType: ChatContextType;
   contextTitle: string;
   lastUpdate: string;
   tenantId: string;
@@ -111,18 +106,6 @@ export interface QueryRecommendationConfig {
 
 export type QueryRecommendation = Omit<NlqResponseData, 'followupQuestions'>;
 export type QueryRecommendationResponse = QueryRecommendation[];
-
-export interface DataModel {
-  oid: string;
-  title: string;
-}
-
-export interface Perspective {
-  oid: string;
-  name: string;
-  description: string;
-  isDefault: boolean;
-}
 
 export interface GetNlgQueryResultRequest {
   jaql: Pick<JaqlQueryPayload, 'datasource' | 'metadata' | 'filterRelations'>;

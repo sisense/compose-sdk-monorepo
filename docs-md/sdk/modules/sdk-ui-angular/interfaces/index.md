@@ -6,6 +6,7 @@ title: Interfaces
 
 TypeScript interfaces for components and services listed above
 
+- [AreaRangeStyleOptions](interface.AreaRangeStyleOptions.md)
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
 - [AreamapStyleOptions](interface.AreamapStyleOptions.md)
@@ -30,6 +31,7 @@ TypeScript interfaces for components and services listed above
 - [PivotTableDataOptions](interface.PivotTableDataOptions.md)
 - [PivotTableStyleOptions](interface.PivotTableStyleOptions.md)
 - [PolarStyleOptions](interface.PolarStyleOptions.md)
+- [RangeChartDataOptions](interface.RangeChartDataOptions.md)
 - [ScatterChartDataOptions](interface.ScatterChartDataOptions.md)
 - [ScatterStyleOptions](interface.ScatterStyleOptions.md)
 - [ScattermapChartDataOptions](interface.ScattermapChartDataOptions.md)

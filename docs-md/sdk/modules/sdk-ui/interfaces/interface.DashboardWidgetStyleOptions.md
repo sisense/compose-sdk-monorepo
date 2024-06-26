@@ -36,7 +36,7 @@ Widget container border color
 
 ### cornerRadius
 
-> **cornerRadius**?: `"Medium"` \| `"Large"` \| `"Small"`
+> **cornerRadius**?: `"Large"` \| `"Medium"` \| `"Small"`
 
 Corner radius of the widget container
 
@@ -104,7 +104,7 @@ Total height of the component, which is considered in the following order of pri
 
 ### shadow
 
-> **shadow**?: `"Light"` \| `"Medium"` \| `"Dark"`
+> **shadow**?: `"Medium"` \| `"Light"` \| `"Dark"`
 
 Shadow level of the widget container
 
@@ -114,7 +114,7 @@ Effective only when spaceAround is defined
 
 ### spaceAround
 
-> **spaceAround**?: `"Medium"` \| `"Large"` \| `"Small"`
+> **spaceAround**?: `"Large"` \| `"Medium"` \| `"Small"`
 
 Space between widget container edge and the chart
 

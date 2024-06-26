@@ -4,7 +4,7 @@ title: Fusion Embed
 
 # Fusion Embed
 
-Fusion Dashboards, Widgets, Queries, and Formulas
+Vue components and functions for working with Fusion Embed dashboards, widgets, queries, and formulas
 
 - [DashboardModel](class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />

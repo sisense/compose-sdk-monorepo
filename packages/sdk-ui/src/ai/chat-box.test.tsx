@@ -6,12 +6,11 @@ import { CHAT_UNAVAILABLE_ERROR, FETCH_HISTORY_ERROR } from './api/errors';
 import { Chat, ChatResponse, QueryRecommendation } from './api/types';
 import ChatBox from './chat-box';
 import { AiTestWrapper } from './__mocks__';
-import { chat, dataModels, perspectives } from './__mocks__/data';
+import { chat, contexts } from './__mocks__/data';
 
 beforeEach(() => {
   server.use(
-    http.get('*/api/v2/datamodels/schema', () => HttpResponse.json(dataModels)),
-    http.get('*/api/v2/perspectives', () => HttpResponse.json(perspectives)),
+    http.get('*/api/datasources', () => HttpResponse.json(contexts)),
     http.get('*/api/v2/ai/chats', () => HttpResponse.json([chat])),
     http.get('*/api/v2/ai/chats/:chatId', () =>
       HttpResponse.json<Chat>({

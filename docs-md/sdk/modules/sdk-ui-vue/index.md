@@ -9,6 +9,7 @@ title: sdk-ui-vue
 Vue components for charts
 
 - [AreaChart](charts/class.AreaChart.md)
+- [AreaRangeChart](charts/class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [AreamapChart](charts/class.AreamapChart.md)
 - [BarChart](charts/class.BarChart.md)
 - [BoxplotChart](charts/class.BoxplotChart.md)
@@ -26,15 +27,21 @@ Vue components for charts
 
 ## Chart Utilities
 
+Utilities to be used with charts
+
 - [ChartWidget](chart-utilities/class.ChartWidget.md)
 - [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
 
 ## Data Grids
 
+Vue components for data grids
+
 - [PivotTable](data-grids/class.PivotTable.md) <Badge type="beta" text="Beta" />
 - [Table](data-grids/class.Table.md)
 
 ## Drilldown
+
+Vue components for creating drilldown experiences
 
 - [ContextMenu](drilldown/class.ContextMenu.md)
 - [DrilldownBreadcrumbs](drilldown/class.DrilldownBreadcrumbs.md)
@@ -42,22 +49,28 @@ Vue components for charts
 
 ## Filter Tiles
 
+Vue filter tile components
+
 - [CriteriaFilterTile](filter-tiles/class.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/class.DateRangeFilterTile.md)
 - [MemberFilterTile](filter-tiles/class.MemberFilterTile.md)
 
 ## Contexts
 
+Vue context modules, services, and variables
+
 - [SisenseContextProvider](contexts/class.SisenseContextProvider.md)
 - [ThemeProvider](contexts/class.ThemeProvider.md)
 
 ## Queries
 
+Vue query service
+
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
 ## Fusion Embed
 
-Fusion Dashboards, Widgets, Queries, and Formulas
+Vue components and functions for working with Fusion Embed dashboards, widgets, queries, and formulas
 
 - [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />

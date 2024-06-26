@@ -52,9 +52,12 @@ export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSise
   const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
 
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const hasDrilldownOptions =
+    props.drilldownOptions?.drilldownDimensions?.length ||
+    props.drilldownOptions?.drilldownSelections?.length;
 
-  // drilldown is not supported for scatter charts or filterRelations
-  if (props.chartType !== 'scatter' && Array.isArray(props.filters)) {
+  // drilldown is not supported for scatter charts or filterRelations or when not drilldown configuration was set
+  if (hasDrilldownOptions && props.chartType !== 'scatter' && Array.isArray(props.filters)) {
     props = useWidgetDrilldown(props);
   }
 

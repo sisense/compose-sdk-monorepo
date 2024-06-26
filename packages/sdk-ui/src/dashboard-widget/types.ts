@@ -100,6 +100,7 @@ export interface WidgetDto {
   desc: string | null;
   options?: {
     dashboardFiltersMode: `${WidgetDashboardFilterMode}`;
+    selector: boolean;
   };
 }
 

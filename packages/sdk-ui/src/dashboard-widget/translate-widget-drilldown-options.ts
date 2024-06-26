@@ -4,6 +4,7 @@ import { DatetimeMask, Panel, PanelItem, WidgetType } from './types';
 import { getEnabledPanelItems } from './utils';
 import { DataPoint, DrilldownOptions } from '../types';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';
+import { parseISOWithDefaultUTCOffset } from '../query/query-result-date-formatting';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent
@@ -24,7 +25,10 @@ const getDrilldownSelections = (
         dateFormat
           ? (member) => ({
               categoryValue: member,
-              categoryDisplayValue: applyDateFormat(new Date(member), dateFormat),
+              categoryDisplayValue: applyDateFormat(
+                parseISOWithDefaultUTCOffset(member),
+                dateFormat,
+              ),
             })
           : (member) => ({ categoryValue: member }),
       ) ?? [];

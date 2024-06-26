@@ -1,8 +1,8 @@
 ---
 title: Guides
 indexTopics:
-    - title: Charts
-      description: Learn how to use charts with Compose SDK
+    - title: Chart Types
+      description: Learn how to use various chart types with Compose SDK
       link: ./charts
     - title: Data Model
       description: Learn about Compose SDK data models
@@ -11,10 +11,13 @@ indexTopics:
       description: Learn about the Compose SDK CLI
       link: ./cli
     - title: Drilldown
-      description: Learn how to create drilldown experiences
+      description: Learn how to create drilldown experiences with Compose SDK charts
       link: ./drilldown
+    - title: Formatting
+      description: Learn how to format numbers and dates in Compose SDK charts
+      link: ./formatting
     - title: Generative AI
-      description: Learn how to deliver conversational analytics using large language models (Private Beta)
+      description: Learn how to deliver conversational analytics using large language models (Beta)
       link: ./ai-features
     - title: Migration Guide
       description: Migrate your project from 0.X.X to 1.0.0

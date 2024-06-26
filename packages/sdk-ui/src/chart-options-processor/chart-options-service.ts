@@ -201,6 +201,7 @@ export type PlotOptions = {
   sunburst?: ChartPlotOptions;
   boxplot?: ChartPlotOptions;
   scatter?: ChartPlotOptions;
+  arearange?: ChartPlotOptions;
 };
 
 /**
@@ -242,7 +243,7 @@ export type HighchartsOptionsInternal = {
   yAxis?: AxisSettings[];
   legend?: LegendSettings;
   plotOptions?: PlotOptions;
-  navigator?: Navigator | { enabled: boolean };
+  navigator?: Navigator | { enabled: boolean; series?: { type: ChartType } };
   tooltip?: TooltipSettings;
   boost?: { useGPUTranslations: boolean; usePreAllocated: boolean };
   credits?: { enabled: boolean };

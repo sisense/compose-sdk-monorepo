@@ -107,4 +107,8 @@ export const translation: TranslationDictionary = {
     title: 'Непідтримуваний Фільтр',
     message: 'Застосовано до запиту даних',
   },
+  commonFilter: {
+    clearSelectionButton: 'Очистити виділення',
+  },
+  customFilterTileMessage: 'застосовано користувацький фільтр',
 };

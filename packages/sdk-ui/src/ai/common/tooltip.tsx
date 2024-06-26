@@ -1,14 +1,15 @@
 import MuiTooltip, { type TooltipProps as MuiTooltipProps } from '@mui/material/Tooltip';
 import { useThemeContext } from '@/theme-provider';
 
-type TooltipProps = Pick<MuiTooltipProps, 'title' | 'children'>;
+type TooltipProps = Pick<MuiTooltipProps, 'title' | 'placement' | 'children'>;
 
-export default function Tooltip({ title, children }: TooltipProps) {
+export default function Tooltip({ title, placement = 'top', children }: TooltipProps) {
   const { themeSettings } = useThemeContext();
   return (
     <MuiTooltip
       title={title}
-      placement="top"
+      placement={placement}
+      disableInteractive={true}
       componentsProps={{
         tooltip: {
           sx: {

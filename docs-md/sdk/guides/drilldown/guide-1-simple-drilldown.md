@@ -129,7 +129,7 @@ As you drill down, the breadcrumbs keep track of the actions you've performed. Y
 
 In this section you learned how to create a drilldown experience using Compose SDK components. In the next section, you'll see how to customize the look and feel of a drilldown chart by providing custom context menu.
 
-Go to the [next lesson](./guide-custom-breadcrumbs.md).
+Go to the [next lesson](./guide-2-custom-context-menu.md).
 
 ## Full Code
 

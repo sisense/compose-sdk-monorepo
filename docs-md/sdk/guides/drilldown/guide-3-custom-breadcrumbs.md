@@ -161,7 +161,7 @@ At this point, your breadcrumbs component is ready for action. When you drill do
 
 In this section you learned how to create a breadcrumbs component. In the next section, you'll see how to create a drilldown experience on a third party chart.
 
-Go to the [next lesson](./guide-third-party-chart.md).
+Go to the [next lesson](./guide-4-third-party-chart.md).
 
 ## Full Code
 

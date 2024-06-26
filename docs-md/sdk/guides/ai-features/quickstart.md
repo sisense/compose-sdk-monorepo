@@ -7,7 +7,7 @@ In this guide we present some examples of how to get started using:
 - [Query recommendations](#query-recommendations)
 
 ::: warning Note
-This feature is currently under beta release for selected customers and is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
+This feature is currently under beta release for our managed cloud customers on version L2024.1 SU1 or above. It is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
 
 To be considered for the beta program, please sign up at [www.sisense.com/get/gen-ai-partner](https://www.sisense.com/get/gen-ai-partner/).
 :::
@@ -16,48 +16,12 @@ To be considered for the beta program, please sign up at [www.sisense.com/get/ge
 
 Here, we assume you already have a working project with the following. If you don't already have a working project, see the [Compose SDK Quickstart](../../getting-started) to create one.
 
-- `@sisense/sdk-ui` version `1.6.0` or higher
-- A Sisense Fusion instance:
-  - Version L2023.11 Service Update 1 or higher
-  - Properly licensed, configured, and connected to an LLM
+- `@sisense/sdk-ui` version `1.13.0` or higher
+- Sisense Fusion instance: Version L2024.1 Service Update 1 or higher.
+- Your own LLM API key for GPT-3.5.
+- AI (LLM) settings should be enabled and configured in the Sisense application under the `Admin` section. Please follow the steps in [Enabling GenAI](https://docs.sisense.com/main/SisenseLinux/genai.htm#EnablingGenAI).
 
-### LLM Setup
-
-To set up an LLM, call the `/api/v2/settings/ai/llmProvider` endpoint and provide the following information:
-
-- `model`: Model deployment name you chose during the deployment process on your LLM platform.
-- `baseUrl`: Endpoint URL of your LLM instance.
-- `apiKey`: API key for authenticating and authorizing your requests to the model's API.
-- `version`: API version to use. This specifies the version of the API for your LLM provider, ensuring compatibility with your model's deployment.
-- `provider`: Provider where your GPT-3.5 model is hosted. Currently, we support models hosted on OpenAI or Azure.
-
-Here are some sample configurations:
-
-#### Azure
-
-```json
-{
-    "model": "gpt-35-turbo-16k",
-    "baseUrl": "https://MyLLM.openai.azure.com/",
-    "apiKey": "bppQbQ2HDZFlUQ0za8tAT3BlbkFJB9logjzJc8J00W6enN",
-    "provider": "azure",
-    "version": "2024-02-15-preview"
-}
-```
-
-#### OpenAI
-
-```json
-{
-    "model": "gpt-3.5-turbo",
-    "baseUrl": null,
-    "apiKey": "xreQbQ2HDZFlUQ0za4tAT323bkFJB9logjzJc8J00W6eGF",
-    "provider": null,
-    "version": null
-}
-```
-
-## Setup
+## Project Setup
 
 To use AI features, import `AiContextProvider` and any other components or hooks you are using from `@sisense/sdk-ui/ai` and wrap your code in an `AiContextProvider`:
 
@@ -108,40 +72,40 @@ To change the chatbot's dimensions, provide values for the `width` and `height` 
 />
 ```
 
-#### Enable Follow-up Questions
+#### Change Behavior
 
-You can enable suggested follow-up questions to appear after the chatbot answers a question using the `enableFollowupQuestions` configuration option. Currently, follow-up questions are still under development and are not validated. Therefore, follow-up questions are disabled by default.
+To change the chatbot's default behavior or text content, provide an object to the `config` property.
 
 ```ts
 <Chatbot
   config={{
     enableFollowupQuestions: true,
-  }}
-/>
-```
-
-#### Number of Suggested Questions
-
-You can set the number of suggested questions to appear at the beginning of a conversation using the `numOfRecommendations` configuration option. By default, 4 suggested questions appear.
-
-```ts
-<Chatbot
-  config={{
-    numOfRecommendations: 6,
-  }}
-/>
-```
-
-#### Default context
-
-You can skip the context selection that occurs before a conversation starts by providing a data model or perspective title to use.
-
-```ts
-<Chatbot
-  config={{
+    numOfRecommendations: 4,
     defaultContextTitle: 'Sample ECommerce',
+    inputPromptText: 'Ask me anything',
+    welcomeText: 'Welcome to Sisense AI',
+    enableHeader: false,
+    enableInsights: true,
   }}
 />
+```
+
+#### Change Look and Feel
+
+To change the look and feel of the chatbot, wrap the component in a `ThemeProvider` and specify properties under the `aiChat` field.
+
+```ts
+<ThemeProvider
+  theme={{
+    aiChat: {
+      backgroundColor: '#222222',
+      primaryTextColor: 'rgba(255, 255, 255, 0.7)',
+      secondaryTextColor: 'rgba(255, 255, 255, 0.7)',
+      primaryFontSize: ['14px', '16px'],
+  }}
+>
+  <Chatbot />
+</ThemeProvider>
 ```
 
 ## Query Results Natural Language Generation (NLG)

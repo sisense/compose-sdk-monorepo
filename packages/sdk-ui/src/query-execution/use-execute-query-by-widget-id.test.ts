@@ -507,7 +507,7 @@ describe('useExecuteQueryByWidgetId', () => {
       expect(result.current.query?.highlights?.length).toBe(2);
       expect(
         (
-          (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
+          (result.current.query?.highlights?.[1].jaql(true) as FilterJaql)
             .filter as IncludeMembersFilter
         ).members,
       ).toStrictEqual(
@@ -515,7 +515,7 @@ describe('useExecuteQueryByWidgetId', () => {
       );
       expect(
         (
-          (result.current.query?.highlights?.[1].jaql(true) as FilterJaql)
+          (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
             .filter as IncludeMembersFilter
         ).members,
       ).toStrictEqual((mockDashboard.filters[0].jaql.filter as IncludeMembersFilter).members);

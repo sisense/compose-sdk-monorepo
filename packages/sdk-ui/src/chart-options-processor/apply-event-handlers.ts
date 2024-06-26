@@ -70,8 +70,12 @@ export const applyEventHandlersToChart = (
     eventOptions.chart.events.selection = (nativeEvent: HighchartsSelectEvent) => {
       nativeEvent.preventDefault();
       const { xAxis, yAxis, originalEvent } = nativeEvent;
+      const selectedPoints = getSelectedPoints(xAxis[0], yAxis[0]);
+      selectedPoints.forEach((point) => {
+        point.state = '';
+      });
       (onDataPointsSelected as DataPointsEventHandler | ScatterDataPointsEventHandler)(
-        getSelections(xAxis[0], yAxis[0]),
+        selectedPoints.map(getDataPoint) as ChartDataPoints,
         originalEvent,
       );
     };
@@ -79,6 +83,7 @@ export const applyEventHandlersToChart = (
 
   if (onDataPointClick) {
     eventOptions.plotOptions.series.point.events.click = (nativeEvent: HighchartsPointerEvent) => {
+      nativeEvent.point.state = 'hover';
       onDataPointClick(getDataPoint(nativeEvent.point), nativeEvent);
     };
   }
@@ -109,21 +114,21 @@ const getDataPoint = (point: HighchartsPoint): SisenseChartDataPoint => {
   }
 };
 
-const getSelections = (
+const getSelectedPoints = (
   xAxis: HighchartsSelectEventAxis,
   yAxis?: HighchartsSelectEventAxis,
-): ChartDataPoints => {
+): HighchartsPoint[] => {
   const xPoints = xAxis.axis.series
     .flatMap((series) => series.points)
     .filter(({ x }) => x >= xAxis.min && x <= xAxis.max);
 
-  if (!yAxis) return xPoints.map(getDataPoint) as ChartDataPoints;
+  if (!yAxis) return xPoints;
 
   const yPoints = yAxis.axis.series
     .flatMap((series) => series.points)
     .filter(({ y }) => y >= yAxis.min && y <= yAxis.max);
 
-  return xPoints.filter((point) => yPoints.includes(point)).map(getDataPoint) as ChartDataPoints;
+  return xPoints.filter((point) => yPoints.includes(point));
 };
 
 const getCartesianDataPoint = (point: HighchartsPoint): DataPoint => ({

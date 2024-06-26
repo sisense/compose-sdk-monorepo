@@ -3,6 +3,7 @@ import { RestApi } from '../../api/rest-api';
 import { type DashboardDto } from '@/api/types/dashboard-dto';
 import { type WidgetDto } from '@/dashboard-widget/types';
 import { DashboardModel } from '@/models/dashboard/dashboard-model';
+import { CompleteThemeSettings } from '../../types';
 
 export interface GetDashboardModelOptions {
   /**
@@ -27,6 +28,7 @@ export async function getDashboardModel(
   http: HttpClient,
   dashboardOid: string,
   options: GetDashboardModelOptions = {},
+  themeSettings?: CompleteThemeSettings,
 ) {
   const { includeWidgets, includeFilters } = options;
   const api = new RestApi(http);
@@ -54,5 +56,5 @@ export async function getDashboardModel(
     dashboard.widgets = widgets;
   }
 
-  return new DashboardModel(dashboard);
+  return new DashboardModel(dashboard, themeSettings);
 }

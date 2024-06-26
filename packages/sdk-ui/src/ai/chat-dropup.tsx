@@ -81,7 +81,7 @@ export default function ChatDropup({
           },
         },
       ]}
-      sx={{ zIndex: 2 }}
+      sx={{ zIndex: 3 }}
     >
       <PopupContent style={{ width: anchorEl?.offsetWidth }} theme={themeSettings}>
         {isLoading && <LoadingSpinner />}

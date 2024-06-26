@@ -10,6 +10,7 @@ import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboar
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
 import { samplePivotDashboard } from '../__mocks__/sample-pivot-dashboard.js';
 import { WidgetModel } from '../widget/widget-model.js';
+import zipObject from 'lodash/zipObject';
 
 const dashboardsMock: DashboardDto[] = [
   sampleEcommerceDashboard,
@@ -89,6 +90,7 @@ describe('getDashboardModels', () => {
           type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
         },
         widgets: expect.anything(),
+        widgetFilterOptions: expect.anything(),
       })),
     );
   });
@@ -112,6 +114,12 @@ describe('getDashboardModels', () => {
         widgets: expect.arrayContaining(
           Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
         ),
+        widgetFilterOptions: expect.objectContaining(
+          zipObject(
+            dashboardMock.widgets!.map(({ oid }) => oid),
+            dashboardMock.widgets!.map(() => expect.anything()),
+          ),
+        ),
       })),
     );
   });
@@ -134,6 +142,7 @@ describe('getDashboardModels', () => {
         type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
       },
       widgets: expect.anything(),
+      widgetFilterOptions: expect.anything(),
     });
   });
 });

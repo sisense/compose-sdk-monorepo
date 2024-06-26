@@ -39,8 +39,8 @@ import { setupHelper } from '../../setup-helper';
  * </script>
  * ```
  * <img src="media://vue-date-range-filter-tile-example.png" width="800px" />
- * @param props - MemberFilterTile props
- * @returns MemberFilterTile component
+ * @param props - DateRangeFilterTile props
+ * @returns DateRangeFilterTile component
  * @group Filter Tiles
  */
 export const DateRangeFilterTile = defineComponent({
@@ -53,6 +53,8 @@ export const DateRangeFilterTile = defineComponent({
     onChange: Function as PropType<DateRangeFilterTileProps['onChange']>,
     parentFilters: Object as PropType<DateRangeFilterTileProps['parentFilters']>,
     title: Object as PropType<DateRangeFilterTileProps['title']>,
+    /** @internal */
+    tiled: Boolean as PropType<DateRangeFilterTileProps['tiled']>,
   },
   setup: (props) => setupHelper(DateRangeFilterTilePreact, props),
 });

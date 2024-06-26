@@ -188,7 +188,7 @@ describe('filterFactory', () => {
     expect(f).toHaveProperty('operatorA', NumericOperators.Equals);
     expect(f).toHaveProperty('valueA', 5);
   });
-  test('filterFactory.member()', () => {
+  test('filterFactory.members()', () => {
     const f = filterFactory.members(TextDim, ['mem1', 'mem2']);
     expect(f).toBeInstanceOf(MembersFilter);
     expect(f).toHaveProperty('attribute', TextDim);

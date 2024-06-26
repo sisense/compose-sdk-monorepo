@@ -7,6 +7,8 @@ title: Interfaces
 TypeScript interfaces for components and composables listed above
 
 - [AreaChartProps](interface.AreaChartProps.md)
+- [AreaRangeChartProps](interface.AreaRangeChartProps.md)
+- [AreaRangeStyleOptions](interface.AreaRangeStyleOptions.md)
 - [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
 - [AreamapChartProps](interface.AreamapChartProps.md)

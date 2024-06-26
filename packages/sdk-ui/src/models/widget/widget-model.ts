@@ -1,5 +1,6 @@
 import { getPivotQueryOptions } from '@/pivot-table/use-get-pivot-table-query';
 import { Attribute, Filter, Measure } from '@sisense/sdk-data';
+import { over } from 'lodash';
 import { getTranslatedDataOptions } from '../../chart-data-options/get-translated-data-options';
 import {
   translatePivotTableDataOptions,
@@ -41,6 +42,8 @@ import {
   TableStyleOptions,
   CompleteThemeSettings,
   PivotTableWidgetStyleOptions,
+  RenderToolbarHandler,
+  WidgetStyleOptions,
 } from '../../types';
 
 /**
@@ -118,6 +121,20 @@ export class WidgetModel {
    * Widget drilldown options.
    */
   drilldownOptions: DrilldownOptions;
+
+  /**
+   * "onDataPointClick" handler for the constructed component
+   *
+   * @internal
+   */
+  componentDataPointClickHandler?: ChartProps['onDataPointClick'];
+
+  /**
+   * "onDataPointsSelected" handler for the constructed component
+   *
+   * @internal
+   */
+  componentDataPointsSelectedHandler?: ChartProps['onDataPointsSelected'];
 
   /**
    * Creates a new widget model.
@@ -357,6 +374,8 @@ export class WidgetModel {
       title: this.title,
       description: this.description || '',
       drilldownOptions: this.drilldownOptions,
+      onDataPointClick: this.componentDataPointClickHandler,
+      onDataPointsSelected: this.componentDataPointsSelectedHandler,
     };
   }
 
@@ -416,6 +435,54 @@ export class WidgetModel {
       title: this.title,
       description: this.description || '',
     };
+  }
+
+  /**
+   * Registers new "onDataPointClick" handler for the constructed component
+   *
+   * @internal
+   */
+  registerComponentDataPointClickHandler?(
+    handler: NonNullable<ChartProps['onDataPointClick']>,
+  ): void {
+    const handlers = this.componentDataPointClickHandler
+      ? [this.componentDataPointClickHandler, handler]
+      : [handler];
+    this.componentDataPointClickHandler = over(handlers);
+  }
+
+  /**
+   * Registers new "onDataPointsSelected" handler for the constructed component
+   *
+   * @internal
+   */
+  registerComponentDataPointsSelectedHandler?(
+    handler: NonNullable<ChartProps['onDataPointsSelected']>,
+  ): void {
+    const handlers = this.componentDataPointsSelectedHandler
+      ? [this.componentDataPointsSelectedHandler, handler]
+      : [handler];
+    this.componentDataPointsSelectedHandler = over(handlers);
+  }
+
+  /**
+   * Registers new "renderToolbar" handler for the constructed component
+   *
+   * @internal
+   */
+  registerComponentRenderToolbarHandler?(handler: RenderToolbarHandler): void {
+    const widgetStyleOptions = this.styleOptions as WidgetStyleOptions;
+    const handlers = widgetStyleOptions?.header?.renderToolbar
+      ? [widgetStyleOptions.header.renderToolbar, handler]
+      : [handler];
+
+    this.styleOptions = {
+      ...widgetStyleOptions,
+      header: {
+        ...widgetStyleOptions.header,
+        renderToolbar: over(handlers),
+      },
+    } as ChartStyleOptions;
   }
 }
 

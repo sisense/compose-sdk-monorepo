@@ -40,9 +40,8 @@ export default function ChatHome({ onDataTopicClick }: ChatHomeProps) {
     () =>
       data?.map(
         (d): DataTopic => ({
-          title: d.name,
-          description: d.description,
-          onClick: () => onDataTopicClick(d.name),
+          title: d.title,
+          onClick: () => onDataTopicClick(d.title),
         }),
       ),
     [data, onDataTopicClick],

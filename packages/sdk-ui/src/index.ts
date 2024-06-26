@@ -87,4 +87,5 @@ export * from './common/hooks/data-load-state-reducer';
 export { createDataOptionsFromPanels } from './dashboard-widget/translate-widget-data-options';
 export { useThemeContext } from './theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
+export { LoadingOverlay } from './common/components/loading-overlay';
 export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';

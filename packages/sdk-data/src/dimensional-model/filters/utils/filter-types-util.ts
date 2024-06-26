@@ -78,16 +78,16 @@ export const getFilterType = (
 ): FilterType => {
   if (timeData && isTimeLevelNotSupported(timeData)) return FILTER_TYPES.ADVANCED;
 
+  if (isAdvancedFilter(filter)) return FILTER_TYPES.ADVANCED;
   if (isIncludeAllFilter(filter)) return FILTER_TYPES.INCLUDE_ALL;
   if (isPeriodFilter(filter)) return FILTER_TYPES.PERIOD;
   if (isSpecificItemsFilter(filter)) return FILTER_TYPES.SPECIFIC_ITEMS;
   if (isDateRangeFilter(filter, dataType)) return FILTER_TYPES.DATE_RANGE;
   if (isNumericRangeFilter(filter)) return FILTER_TYPES.NUMERIC_RANGE;
   if (isConditionFilter(filter)) return FILTER_TYPES.CONDITION;
-  if (isAdvancedFilter(filter)) return FILTER_TYPES.ADVANCED;
   if (isInvalidFilter(filter)) return FILTER_TYPES.INVALID;
 
-  return FILTER_TYPES.ADVANCED;
+  return FILTER_TYPES.INVALID;
 };
 
 /**

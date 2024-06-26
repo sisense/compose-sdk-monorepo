@@ -113,8 +113,8 @@ export const boxWhiskerIqrOutliers = (target: Attribute): Attribute => {
 
   outliersAttrWithInnerFilter.name = `${outliersAttrWithInnerFilter.name} (Outliers)`;
 
-  outliersAttrWithInnerFilter.jaql = () => {
-    return {
+  outliersAttrWithInnerFilter.jaql = (nested?: boolean) => {
+    const jaql = {
       ...target.jaql(true),
       filter: {
         or: [
@@ -127,6 +127,8 @@ export const boxWhiskerIqrOutliers = (target: Attribute): Attribute => {
         ],
       },
     };
+
+    return nested ? jaql : { jaql };
   };
 
   return outliersAttrWithInnerFilter;
@@ -155,8 +157,8 @@ export const boxWhiskerStdDevOutliers = (target: Attribute): Attribute => {
     },
   ) as Measure;
 
-  outliersAttrWithInnerFilter.jaql = () => {
-    return {
+  outliersAttrWithInnerFilter.jaql = (nested?: boolean) => {
+    const jaql = {
       ...target.jaql(true),
       filter: {
         or: [
@@ -169,6 +171,8 @@ export const boxWhiskerStdDevOutliers = (target: Attribute): Attribute => {
         ],
       },
     };
+
+    return nested ? jaql : { jaql };
   };
 
   return outliersAttrWithInnerFilter;

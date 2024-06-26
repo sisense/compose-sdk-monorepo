@@ -166,21 +166,26 @@ function getFilterCompareId(filter: Filter): string {
 
 /**
  * Merges two arrays of filter objects, prioritizing 'targetFilters' over 'sourceFilters',
- * and removes duplicates based on filter compare id
+ * and removes duplicates based on filter compare id.
+ *
+ * Saves the 'sourceFilters' filters order, while adds new filters to the end of the array.
  *
  * @param {Filter[]} [sourceFilters=[]] - The source array of filter objects.
  * @param {Filter[]} [targetFilters=[]] - The target array of filter objects.
  * @returns {Filter[]} - The merged array of filter objects.
  */
 export function mergeFilters(sourceFilters: Filter[] = [], targetFilters: Filter[] = []) {
-  const filters = [...targetFilters];
+  const filters = [...sourceFilters];
 
-  sourceFilters.forEach((filter) => {
-    const isFilterAlreadyExist = targetFilters.some(
+  targetFilters.forEach((filter) => {
+    const existingFilterIndex = filters.findIndex(
       (existingFilter) => getFilterCompareId(filter) === getFilterCompareId(existingFilter),
     );
+    const isFilterAlreadyExist = existingFilterIndex !== -1;
 
-    if (!isFilterAlreadyExist) {
+    if (isFilterAlreadyExist) {
+      filters[existingFilterIndex] = filter;
+    } else {
       filters.push(filter);
     }
   });

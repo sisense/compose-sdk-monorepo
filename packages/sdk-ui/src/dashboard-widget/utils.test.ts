@@ -65,7 +65,7 @@ describe('mergeFilters', () => {
   it('should merge filters in correct order', () => {
     const filters1 = [mockFilter1, mockFilter2];
     const filters2 = [mockFilter3, mockFilter4];
-    expect(mergeFilters(filters2, filters1)).toEqual([
+    expect(mergeFilters(filters1, filters2)).toEqual([
       mockFilter1,
       mockFilter2,
       mockFilter3,
@@ -76,7 +76,7 @@ describe('mergeFilters', () => {
   it('should skip duplicate filters', () => {
     const filters1 = [mockFilter1, mockFilter2];
     const filters2 = [mockFilter2, mockFilter1, mockFilter3];
-    expect(mergeFilters(filters2, filters1)).toEqual([mockFilter1, mockFilter2, mockFilter3]);
+    expect(mergeFilters(filters2, filters1)).toEqual([mockFilter2, mockFilter1, mockFilter3]);
   });
 });
 

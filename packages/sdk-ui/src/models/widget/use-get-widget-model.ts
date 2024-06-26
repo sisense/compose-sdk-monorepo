@@ -8,6 +8,7 @@ import { withTracking } from '../../decorators/hook-decorators';
 import { WidgetModel } from './widget-model';
 import { getWidgetModel } from './get-widget-model';
 import { useShouldLoad } from '../../common/hooks/use-should-load';
+import { useThemeContext } from '../../theme-provider';
 
 /**
  * Parameters for {@link useGetWidgetModel} hook.
@@ -118,6 +119,7 @@ export const useGetWidgetModel = withTracking('useGetWidgetModel')(useGetWidgetM
 export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetModelState {
   const isParamsChanged = useHasChanged(params, ['dashboardOid', 'widgetOid']);
   const shouldLoad = useShouldLoad(params, isParamsChanged);
+  const { themeSettings } = useThemeContext();
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<WidgetModel>, {
     isLoading: true,
     isError: false,
@@ -139,7 +141,7 @@ export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetM
       dispatch({ type: 'loading' });
 
       const { dashboardOid, widgetOid } = params;
-      void getWidgetModel(app.httpClient, dashboardOid, widgetOid)
+      void getWidgetModel(app.httpClient, dashboardOid, widgetOid, themeSettings)
         .then((data) => {
           dispatch({ type: 'success', data });
         })
@@ -147,7 +149,7 @@ export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetM
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, params, shouldLoad]);
+  }, [app, isInitialized, params, shouldLoad, themeSettings]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().

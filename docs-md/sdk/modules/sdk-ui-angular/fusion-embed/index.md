@@ -4,7 +4,7 @@ title: Fusion Embed
 
 # Fusion Embed
 
-Fusion Dashboards, Widgets, Queries, and Formulas
+Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
 
 - [DashboardModel](class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />

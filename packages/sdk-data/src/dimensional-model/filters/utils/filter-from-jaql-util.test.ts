@@ -12,6 +12,8 @@ import {
 } from './attribute-measure-util.js';
 import { createAttributeFilterFromConditionFilterJaql } from './condition-filter-util.js';
 import { DateRangeFilter, ExcludeFilter } from '../filters.js';
+import { createGenericFilter } from './filter-from-jaql-util.js';
+import { withComposeCode } from './filter-code-util.js';
 
 describe('filter-from-jaql-util', () => {
   describe('createFilterFromJaqlInternal', () => {
@@ -41,7 +43,7 @@ describe('filter-from-jaql-util', () => {
 
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, [], guid);
+        const expectedFilter = filterFactory.members(attribute, [], [], guid);
         expectEqualFilters(filter, expectedFilter);
       });
 
@@ -61,7 +63,7 @@ describe('filter-from-jaql-util', () => {
 
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, guid);
+        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, [], guid);
         expectEqualFilters(filter, expectedFilter);
       });
 
@@ -104,7 +106,7 @@ describe('filter-from-jaql-util', () => {
         ].forEach((jaql) => {
           const filter = createFilterFromJaqlInternal(jaql, guid);
           const attribute = createAttributeFromFilterJaql(jaql);
-          const expectedFilter = filterFactory.members(attribute, jaql.filter.members, guid);
+          const expectedFilter = filterFactory.members(attribute, jaql.filter.members, [], guid);
           expectEqualFilters(filter, expectedFilter);
         });
       });
@@ -124,7 +126,46 @@ describe('filter-from-jaql-util', () => {
 
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, guid);
+        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, [], guid);
+        expectEqualFilters(filter, expectedFilter);
+      });
+
+      it('should handle deactivated members', () => {
+        const jaql = {
+          datasource: {
+            title: 'Sample ECommerce',
+            fullname: 'LocalHost/Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            address: 'LocalHost',
+            database: 'aSampleIAAaECommerce',
+          },
+          column: 'Country',
+          dim: '[country.Country]',
+          datatype: 'text',
+          title: 'COUNTRY',
+          collapsed: true,
+          isDashboardFilter: true,
+          filter: {
+            explicit: true,
+            multiSelection: true,
+            members: ['Albania', 'Algeria', 'Angola'],
+            filter: {
+              turnedOff: true,
+              exclude: {
+                members: ['Angola'],
+              },
+            },
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql);
+        const expectedFilter = filterFactory.members(
+          attribute,
+          ['Albania', 'Algeria'],
+          ['Angola'],
+          guid,
+        );
         expectEqualFilters(filter, expectedFilter);
       });
     });
@@ -530,19 +571,62 @@ describe('filter-from-jaql-util', () => {
       });
     });
 
+    describe('ExcludeFilter', () => {
+      it('should handle exclude members', () => {
+        const jaql = {
+          table: 'Country',
+          column: 'Country',
+          datatype: 'text',
+          title: 'exclude Turkey from Country',
+          dim: '[Country.Country]',
+          filter: {
+            exclude: {
+              members: ['Turkey'],
+            },
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql);
+        const expectedFilter = filterFactory.exclude(
+          withComposeCode(filterFactory.members)(
+            attribute,
+            jaql.filter.exclude.members,
+            undefined,
+            guid,
+          ),
+          undefined,
+          guid,
+        );
+        expectEqualFilters(filter, expectedFilter);
+      });
+    });
+
+    describe('Advanced filter (pass-through JAQL)', () => {
+      test('should handle', () => {
+        const jaql = {
+          table: 'Commerce',
+          column: 'Revenue',
+          datatype: 'numeric',
+          title: 'sum Revenue',
+          filter: {
+            custom: true,
+            isAdvanced: true,
+          },
+        } as unknown as FilterJaqlInternal;
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql);
+        const expectedFilter = filterFactory.customFilter(attribute, jaql.filter, guid);
+        expect(filter.jaql()).toEqual(expectedFilter.jaql());
+        expect(filter.jaql(true)).toEqual(expectedFilter.jaql(true));
+        expect(filter.serializable()).toBeDefined();
+        expect(filter.toJSON()).toBeDefined();
+      });
+    });
+
     describe('Generic filter (pass-through JAQL)', () => {
       test('should fall back to generic filter (pass-through JAQL)', () => {
         [
-          // ADVANCED FILTER TYPE
-          {
-            table: 'Commerce',
-            column: 'Revenue',
-            datatype: 'numeric',
-            title: 'sum Revenue',
-            filter: {
-              isAdvanced: true,
-            },
-          },
           // SIMULATE INVALID FILTER TYPE
           {
             table: 'Commerce',
@@ -602,7 +686,7 @@ describe('filter-from-jaql-util', () => {
           const jaql = item as unknown as FilterJaqlInternal;
 
           const filter = createFilterFromJaqlInternal(jaql, guid);
-          const expectedFilter = filterFactory.customFilter(jaql, guid);
+          const expectedFilter = createGenericFilter(jaql, guid);
           expect(filter.jaql()).toEqual(expectedFilter.jaql());
           expect(filter.jaql(true)).toEqual(expectedFilter.jaql(true));
           expect(filter.serializable()).toBeDefined();

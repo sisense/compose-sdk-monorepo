@@ -4,7 +4,7 @@ title: Fusion Embed
 
 # Fusion Embed
 
-Fusion Dashboards, Widgets, Queries, and Formulas
+React components and hooks for working with Fusion Embed dashboards, widgets, queries, and formulas
 
 - [DashboardModel](class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />

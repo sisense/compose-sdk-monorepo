@@ -5,7 +5,7 @@ import { MetadataItem } from '../../types.js';
 export function applyHighlightFilters(metadataItem: MetadataItem, highlights: Filter[]) {
   const filter = highlights?.find((f) => getMetadataItemId(metadataItem) === f.attribute.id);
 
-  if (filter) {
+  if (filter && !filter.disabled) {
     if (filter.isScope) {
       filter.isScope = false;
     }

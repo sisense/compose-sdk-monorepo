@@ -5,8 +5,20 @@
  * @packageDocumentation
  * @groupDescription Charts
  * Angular components for charts
+ * @groupDescription Chart Utilities
+ * Utilities to be used with charts
+ * @groupDescription Data Grids
+ * Angular components for data grids
+ * @groupDescription Drilldown
+ * Angular components for creating drilldown experiences
+ * @groupDescription Filter Tiles
+ * Angular filter tile components
+ * @groupDescription Contexts
+ * Angular context modules, services, and variables
+ * @groupDescription Queries
+ * Angular query service
  * @groupDescription Fusion Embed
- * Fusion Dashboards, Widgets, Queries, and Formulas
+ * Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
  * @groupDescription Interfaces
  * TypeScript interfaces for components and services listed above
  * @groupDescription Type Aliases

@@ -7,6 +7,7 @@ import { type HttpClient } from '@sisense/sdk-rest-client';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { type RestApi } from '../../api/rest-api';
 import { WidgetModel } from '../widget';
+import zipObject from 'lodash/zipObject';
 
 const getDashboardMock = vi.fn<Parameters<RestApi['getDashboard']>>(() => {
   // eslint-disable-next-line no-unused-vars
@@ -41,6 +42,7 @@ describe('getDashboardModel', () => {
       layout: expect.anything(),
       filters: expect.anything(),
       widgets: expect.anything(),
+      widgetFilterOptions: expect.anything(),
       dataSource: {
         title: dashboardMock.datasource.title,
         type: 'elasticube',
@@ -66,6 +68,12 @@ describe('getDashboardModel', () => {
       widgets: expect.arrayContaining(
         Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
       ),
+      widgetFilterOptions: expect.objectContaining(
+        zipObject(
+          dashboardMock.widgets!.map(({ oid }) => oid),
+          dashboardMock.widgets!.map(() => expect.anything()),
+        ),
+      ),
     });
   });
 
@@ -87,6 +95,7 @@ describe('getDashboardModel', () => {
         Array(dashboardMock.filters?.length).map(() => expect.anything()),
       ),
       widgets: expect.anything(),
+      widgetFilterOptions: expect.anything(),
     });
   });
 });

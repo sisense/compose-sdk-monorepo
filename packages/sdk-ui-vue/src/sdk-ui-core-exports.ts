@@ -38,7 +38,9 @@ export type {
   TreemapChartProps,
   SunburstChartProps,
   IndicatorChartProps,
+  AreaRangeChartProps,
   MemberFilterTileProps,
+  BasicMemberFilterTileProps,
   CriteriaFilterTileProps,
   DateRangeFilterTileProps,
   ChartWidgetProps,
@@ -117,6 +119,7 @@ export type {
   DashboardWidgetStyleOptions,
   TableStyleOptions,
   PivotTableStyleOptions,
+  AreaRangeStyleOptions,
 
   // Style related:
   DataLimits,

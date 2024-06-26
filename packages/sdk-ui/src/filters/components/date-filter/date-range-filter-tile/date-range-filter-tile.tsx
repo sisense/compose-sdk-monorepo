@@ -5,15 +5,15 @@ import {
   DateRangeFilter,
   FilterTypes,
 } from '@sisense/sdk-data';
-import cloneDeep from 'lodash/cloneDeep';
-import { useState } from 'react';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
-import { FilterTile } from '../../filter-tile';
+import { FilterTile, FilterTileDesignOptions } from '../../filter-tile';
 import { EditableDateRangeFilter } from './editable-date-range-filter';
 import { DateRangeFilterDisplay } from './date-range-filter-display';
 import { TranslatableError } from '@/translation/translatable-error';
 import { AnyObject } from '@/utils/utility-types';
 import { useDateLimits } from './use-date-limits';
+import { cloneFilterAndToggleDisabled } from '@/filters/utils';
+import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 
 export interface DateRangeFilterTileProps {
   /**
@@ -63,6 +63,12 @@ export interface DateRangeFilterTileProps {
    * @internal
    */
   tiled?: boolean;
+
+  /**
+   * Design options for the filter tile component
+   * @internal
+   */
+  tileDesignOptions?: FilterTileDesignOptions;
 }
 
 /**
@@ -93,30 +99,23 @@ export interface DateRangeFilterTileProps {
  * @group Filter Tiles
  */
 export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRangeFilterTile' })(
-  (props: DateRangeFilterTileProps) => {
-    const {
-      filter,
-      onChange,
-      title,
-      earliestDate,
-      lastDate,
-      attribute,
-      dataSource,
-      parentFilters,
-      tiled = false,
-    } = props;
+  ({
+    filter: filterFromProps,
+    onChange: updateFilterFromProps,
+    title,
+    earliestDate,
+    lastDate,
+    attribute,
+    dataSource,
+    parentFilters,
+    tiled = false,
+    tileDesignOptions,
+  }: DateRangeFilterTileProps) => {
+    const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
+
     if (!isDateRangeFilter(filter)) {
       throw new TranslatableError('errors.invalidFilterType');
     }
-    const [lastFilter, setLastFilter] = useState(filter);
-    let disabled = lastFilter.disabled;
-
-    const onUpdateValues = (newFilter: DateRangeFilter) => {
-      if (newFilter) {
-        setLastFilter(newFilter);
-      }
-      onChange(newFilter);
-    };
 
     const dateLimits = useDateLimits(
       {
@@ -134,10 +133,12 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
       }
       return (
         <EditableDateRangeFilter
-          {...props}
           filter={filter}
           dateLimits={dateLimits}
           isOldDateRangeFilterTile
+          onChange={updateFilter}
+          title={title}
+          attribute={attribute}
         />
       );
     }
@@ -151,21 +152,22 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
           ) : (
             <div className="csdk-mt-2 csdk-ml-2 csdk-mb-1">
               <EditableDateRangeFilter
-                {...props}
                 filter={filter}
                 dateLimits={dateLimits}
-                disabled={disabled}
+                disabled={filter.disabled}
+                onChange={updateFilter}
+                title={title}
+                attribute={attribute}
               />
             </div>
           );
         }}
         onToggleDisabled={() => {
-          disabled = !disabled;
-          const newFilter = cloneDeep(lastFilter);
-          newFilter.disabled = disabled;
-          onUpdateValues(newFilter);
+          const newFilter = cloneFilterAndToggleDisabled(filter);
+          updateFilter(newFilter);
         }}
-        disabled={disabled}
+        disabled={filter.disabled}
+        design={tileDesignOptions}
       />
     );
   },

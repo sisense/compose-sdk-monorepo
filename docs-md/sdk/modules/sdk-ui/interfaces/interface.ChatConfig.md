@@ -26,6 +26,22 @@ questions are disabled by default.
 
 ***
 
+### hideHistory
+
+> **hideHistory**?: `boolean`
+
+Boolean flag to start a clean chat on every load.
+
+Note: When the flag is `true`, chat history will be preserved and stored for the session but will not be fetched or displayed. Changing this setting back to `false` will make the entire history visible again, even if it was previously hidden. Use the "Clear History" button to completely erase the history.
+
+#### Default
+
+```ts
+false
+```
+
+***
+
 ### inputPromptText
 
 > **inputPromptText**: `string`

@@ -6,7 +6,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for NumericFilter 1`] = `
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start"
+      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
       style="background-color: rgb(255, 255, 255);"
     >
       <header
@@ -83,7 +83,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for RankingFilter 1`] = `
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start"
+      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
       style="background-color: rgb(255, 255, 255);"
     >
       <header
@@ -160,7 +160,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for TextFilter 1`] = `
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start"
+      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
       style="background-color: rgb(255, 255, 255);"
     >
       <header
@@ -231,34 +231,81 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for TextFilter 1`] = `
 </div>
 `;
 
-exports[`FiltersPanelTile > renders FilterTile for unsupported filter type 1`] = `
+exports[`FiltersPanelTile > renders CustomFilterTile for advnced filter type 1`] = `
 <div>
   <div
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start"
+      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
       style="background-color: rgb(255, 255, 255);"
     >
       <header
         class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
         style="color: rgb(91, 99, 114);"
       >
-        <svg
-          aria-label="arrow-down"
-          class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
-          fill="#5B6372"
-          height="16"
-          viewBox="0 0 24 24"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+        <span
+          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+          style="color: rgb(91, 99, 114);"
         >
-          <path
-            d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
-            fill="#5B6372"
-            fill-rule="nonzero"
+          TestRevenue
+        </span>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114);"
+      >
+        <p
+          class="csdk-text-center csdk-text-[13px]"
+        >
+          customFilterTileMessage
+        </p>
+      </main>
+      <footer
+        class="csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]"
+      >
+        <span
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
+        >
+          <span
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+          >
+            <input
+              checked=""
+              class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+              name="tile-switch"
+              role="switch"
+              type="checkbox"
+            />
+            <span
+              class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </span>
+          <span
+            class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
           />
-        </svg>
+        </span>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FiltersPanelTile > renders FilterTile for unsupported filter type 1`] = `
+<div>
+  <div
+    class="css-xhbwdz"
+  >
+    <div
+      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
+      style="background-color: rgb(255, 255, 255);"
+    >
+      <header
+        class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
+        style="color: rgb(91, 99, 114);"
+      >
         <span
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
@@ -314,7 +361,7 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min csdk-border csdk-border-solid csdk-border-[#dadada] csdk-text-text-content csdk-self-start"
+      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
       style="background-color: rgb(255, 255, 255);"
     >
       <header

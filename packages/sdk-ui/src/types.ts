@@ -8,6 +8,7 @@ import {
   PieSubtype,
   PolarSubtype,
   StackableSubtype,
+  AreaRangeSubtype,
 } from './chart-options-processor/subtype-to-design-options';
 import {
   IndicatorComponents,
@@ -68,6 +69,7 @@ export type {
   TableType,
   TableChartType,
   AreaSubtype,
+  AreaRangeSubtype,
   LineSubtype,
   PieSubtype,
   PolarSubtype,
@@ -305,7 +307,10 @@ export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
 
 /** Configuration options that define functional style of the various elements of AreaRangeChart */
 export interface AreaRangeStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+  /** Configuration that defines line width */
   lineWidth?: LineWidth;
+  /** Subtype of AreaRangeChart */
+  subtype?: AreaRangeSubtype;
 }
 
 /** Configuration options that define functional style of the various elements of AreaChart */
@@ -1055,9 +1060,15 @@ export interface WidgetStyleOptions {
      *
      * @internal
      */
-    renderToolbar?: (onRefresh: () => void) => JSX.Element | null;
+    renderToolbar?: RenderToolbarHandler;
   };
 }
+
+/** @internal */
+export type RenderToolbarHandler = (
+  onRefresh: () => void,
+  defaultToolbar: JSX.Element,
+) => JSX.Element | null;
 
 /** Style settings defining the look and feel of DashboardWidget */
 export interface DashboardWidgetStyleOptions extends WidgetStyleOptions {
@@ -1261,6 +1272,7 @@ export type Series = {
 export type HighchartsPoint = {
   category: string;
   name?: string;
+  state?: string;
   options: {
     name: string;
     custom: {

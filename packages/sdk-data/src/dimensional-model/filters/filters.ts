@@ -96,6 +96,7 @@ export const FilterTypes = {
   date: 'date',
   relativeDate: 'relativeDate',
   cascading: 'cascading',
+  advanced: 'advanced',
 };
 
 // CLASSES
@@ -121,12 +122,20 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    */
   readonly guid: string;
 
+  private _disabled: boolean;
+
   /**
    * Boolean flag whether the filter is disabled
    *
    * @internal
    */
-  disabled: boolean;
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = value;
+  }
 
   constructor(att: Attribute, filterType: string, guid?: string) {
     super('filter', MetadataTypes.Filter);
@@ -268,10 +277,14 @@ export class LogicalAttributeFilter extends AbstractFilter {
 export class MembersFilter extends AbstractFilter {
   readonly members: any[];
 
-  constructor(attribute: Attribute, members?: any[], guid?: string) {
+  /** @internal */
+  _deactivatedMembers: any[];
+
+  constructor(attribute: Attribute, members?: any[], _deactivatedMembers?: any[], guid?: string) {
     super(attribute, FilterTypes.members, guid);
 
     this.members = members ?? [];
+    this._deactivatedMembers = _deactivatedMembers ?? [];
 
     if (this.members.filter((m) => m === null || m === undefined).length > 0) {
       throw new TranslatableError('errors.filter.membersFilterNullMember', {
@@ -325,6 +338,19 @@ export class CascadingFilter extends AbstractFilter {
    */
   get id(): string {
     return `${this.filterType}_${this.filters.map((f) => f.id).join()}`;
+  }
+
+  get disabled(): boolean {
+    return super.disabled;
+  }
+
+  set disabled(value: boolean) {
+    super.disabled = value;
+    if (this.filters) {
+      this.filters.forEach((filter) => {
+        filter.disabled = value;
+      });
+    }
   }
 
   /**
@@ -786,6 +812,35 @@ export class RelativeDateFilter extends AbstractFilter {
     }
 
     return result;
+  }
+}
+
+/**
+ * @internal
+ */
+export class CustomFilter extends AbstractFilter {
+  readonly jaqlExpression: any;
+
+  constructor(att: Attribute, jaql: any, guid?: string) {
+    super(att, FilterTypes.advanced, guid);
+    // remove filterType from jaql as it is not needed
+    delete jaql.filterType;
+    this.jaqlExpression = jaql;
+  }
+
+  /**
+   * gets the element's ID
+   */
+  get id(): string {
+    return `custom_${this.attribute.id}_${this.guid}`;
+  }
+
+  /**
+   * Gets JAQL representing this Filter instance
+   *
+   */
+  filterJaql(): any {
+    return this.jaqlExpression;
   }
 }
 

@@ -54,7 +54,7 @@ Callback function that is called when the relative date filter object should be 
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `filter` | `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md) | Relative date filter, or null for failure/disabled |
+| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) | Relative date filter |
 
 #### Returns
 

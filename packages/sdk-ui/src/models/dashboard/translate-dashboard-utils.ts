@@ -4,8 +4,10 @@ import {
   type CascadingFilterDto,
   isCascadingFilterDto,
 } from '../../api/types/dashboard-dto';
-import type { Layout } from './types';
+import type { Layout, WidgetFilterOptions } from './types';
 import { CascadingFilter, Filter, createFilterFromJaql } from '@sisense/sdk-data';
+import { WidgetDto } from '@/dashboard-widget/types';
+import { CommonFiltersApplyMode } from '@/common-filters/types';
 
 export const translateLayout = (layout: SisenseLayout): Layout => ({
   columns: layout.columns.map((c) => ({
@@ -25,12 +27,14 @@ export const translateLayout = (layout: SisenseLayout): Layout => ({
 });
 
 const createFilterFromFilterDto = (filterDto: FilterDto): Filter => {
-  const filter: Filter = createFilterFromJaql(filterDto.jaql);
+  const filter: Filter = createFilterFromJaql(filterDto.jaql, filterDto.instanceid);
   filter.disabled = filterDto.disabled ?? false;
   return filter;
 };
 
-const createFilterFromCascadingFilterDto = (cascadingFilterDto: CascadingFilterDto): Filter => {
+const createFilterFromCascadingFilterDto = (
+  cascadingFilterDto: CascadingFilterDto,
+): CascadingFilter => {
   const innerFilters = cascadingFilterDto.levels.map((level) => createFilterFromJaql(level));
   const filter = new CascadingFilter(innerFilters);
   filter.disabled = cascadingFilterDto.disabled ?? false;
@@ -43,4 +47,24 @@ export function extractDashboardFilters(
   return dashboardFilters.map((f) =>
     isCascadingFilterDto(f) ? createFilterFromCascadingFilterDto(f) : createFilterFromFilterDto(f),
   );
+}
+
+export function translateWidgetFilterOptions(widgets: WidgetDto[] = []): WidgetFilterOptions {
+  const widgetFilterOptionsMap: WidgetFilterOptions = {};
+
+  widgets.forEach((widget: WidgetDto) => {
+    widgetFilterOptionsMap[widget.oid] = {
+      applyMode:
+        widget.options?.dashboardFiltersMode === 'filter'
+          ? CommonFiltersApplyMode.FILTER
+          : CommonFiltersApplyMode.HIGHLIGHT,
+      shouldAffectFilters: widget.options?.selector,
+      ignoreFilters: {
+        all: widget.metadata.ignore?.all,
+        ids: widget.metadata.ignore?.ids,
+      },
+    };
+  });
+
+  return widgetFilterOptionsMap;
 }

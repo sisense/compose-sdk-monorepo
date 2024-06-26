@@ -53,8 +53,8 @@ module.exports = {
             '@typescript-eslint/no-throw-literal': 'off',
             'no-underscore-dangle': 'off',
             '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
-            'max-lines-per-function': ["warn", 400],
-            'max-lines': ["warn", 1000],
+            'max-lines-per-function': ['warn', 400],
+            'max-lines': ['warn', 1000],
           },
         },
         {
@@ -107,6 +107,15 @@ module.exports = {
             'vitest/no-interpolation-in-snapshots': 'error',
             'vitest/no-standalone-expect': 'error',
             'vitest/no-test-prefixes': 'error',
+          },
+        },
+        {
+          // Enforce extensions for relative imports in sdk-analytics-composer
+          // This ensures that module resolution will work when this package is
+          // imported in a Node environment.
+          files: ['packages/internal/sdk-analytics-composer/**/*.{ts,tsx}'],
+          rules: {
+            'import/extensions': ['error', 'ignorePackages'],
           },
         },
       ],

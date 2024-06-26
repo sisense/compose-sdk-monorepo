@@ -1,5 +1,4 @@
-/* eslint-disable security/detect-object-injection */
-import { useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   FilterInfo,
   CRITERIA_FILTER_MAP,
@@ -8,7 +7,7 @@ import {
   filterToDefaultValues,
   valuesToDisplayValues,
 } from './criteria-filter-operations.js';
-import { FilterTile } from '../filter-tile.js';
+import { FilterTile, FilterTileDesignOptions } from '../filter-tile.js';
 import { CriteriaFilterMenu } from './criteria-filter-menu.js';
 import {
   ExcludeFilter,
@@ -21,6 +20,7 @@ import {
 import { CriteriaFilterDisplay } from './criteria-filter-display.js';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { FilterVariant, isVertical } from '../common/filter-utils.js';
+import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
 
 /**
  * Props for {@link CriteriaFilterTile}
@@ -36,6 +36,11 @@ export interface CriteriaFilterTileProps {
   onUpdate: (filter: Filter | null) => void;
   /** List of available measures to rank by. Required only for ranking filters. */
   measures?: Measure[];
+  /**
+   * Design options for the filter tile component
+   * @internal
+   */
+  tileDesignOptions?: FilterTileDesignOptions;
 }
 
 export type CriteriaFilterType = NumericFilter | TextFilter | RankingFilter | ExcludeFilter;
@@ -66,38 +71,51 @@ export type CriteriaFilterType = NumericFilter | TextFilter | RankingFilter | Ex
  * @group Filter Tiles
  */
 export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaFilterTile' })(
-  // eslint-disable-next-line complexity, sonarjs/cognitive-complexity
   (props: CriteriaFilterTileProps) => {
-    const { title, filter, arrangement = 'vertical', onUpdate, measures } = props;
-    // It's possible the user could pass in null as a filter as they edit inputs, so we need to account for that by remembering the last VALID (i.e. non-null) filter
-    const lastFilter = useRef(filter);
-    const filterOption = filterToOption(lastFilter.current);
+    const {
+      title,
+      filter: filterFromProps,
+      arrangement = 'vertical',
+      onUpdate: updateFilterFromProps,
+      measures,
+      tileDesignOptions,
+    } = props;
+
+    const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
+
+    const disabled = filter.disabled;
+
+    const filterOption = filterToOption(filter as CriteriaFilterType);
     const filterInfo: FilterInfo = CRITERIA_FILTER_MAP[filterOption];
 
     // These variables will change throughout filter editing
     const defaultValues: CriteriaFilterValueType[] = filterToDefaultValues(
-      filter ?? lastFilter.current,
+      filter as CriteriaFilterType,
     );
-    let disabled = lastFilter.current.disabled;
+
     const [values, setValues] = useState<CriteriaFilterValueType[]>(defaultValues);
 
-    // callback to update filter values and disabled value
-    const onUpdateValues = (newValues: CriteriaFilterValueType[]) => {
+    // callback to update filter values
+    const updateValues = (newValues: CriteriaFilterValueType[]) => {
       setValues(newValues);
-      // make new filters, then call onUpdate
-      let newFilter: Filter | null = null;
-      if (filterInfo.ranked) {
-        // for ranked functions, Measure must come before count.
-        newFilter = filterInfo.fn(lastFilter.current.attribute, newValues?.[1], newValues?.[0]);
-      } else {
-        newFilter = filterInfo.fn(lastFilter.current.attribute, ...newValues) ?? null;
-      }
-      if (newFilter) {
-        newFilter.disabled = disabled;
-        lastFilter.current = newFilter as CriteriaFilterType;
-      }
-      onUpdate(newFilter);
+      const newFilter = createFilter(newValues, disabled);
+      updateFilter(newFilter);
     };
+
+    const createFilter = useCallback(
+      (newValues: CriteriaFilterValueType[], newDisabled: boolean): Filter => {
+        let newFilter: Filter | null = null;
+        if (filterInfo.ranked) {
+          // for ranked functions, Measure must come before count.
+          newFilter = filterInfo.fn(filter.attribute, newValues?.[1], newValues?.[0]);
+        } else {
+          newFilter = filterInfo.fn(filter.attribute, ...newValues);
+        }
+        newFilter.disabled = newDisabled;
+        return newFilter;
+      },
+      [filter.attribute, filterInfo],
+    );
 
     return (
       <FilterTile
@@ -113,7 +131,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
               filterType={filterOption}
               arrangement={arrangement}
               defaultValues={values}
-              onUpdate={onUpdateValues}
+              onUpdate={updateValues}
               disabled={disabled}
               measures={measures}
             />
@@ -122,9 +140,11 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         arrangement={arrangement}
         disabled={disabled}
         onToggleDisabled={() => {
-          disabled = !disabled;
-          onUpdateValues(values);
+          const newDisabled = !disabled;
+          const newFilter = createFilter(values, newDisabled);
+          updateFilter(newFilter);
         }}
+        design={tileDesignOptions}
       />
     );
   },

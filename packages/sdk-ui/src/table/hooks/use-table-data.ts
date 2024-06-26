@@ -10,7 +10,10 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 
-import { executeQuery } from '../../query/execute-query';
+import {
+  executeQueryWithCache,
+  executeQuery as executeQueryWithoutCache,
+} from '../../query/execute-query';
 import { isMeasureColumn, TableDataOptionsInternal } from '../../chart-data-options/types';
 import { useSetError } from '../../error-boundary/use-set-error';
 import { TranslatableError } from '../../translation/translatable-error';
@@ -65,6 +68,10 @@ export const useTableData = ({
       }
 
       if (!app || (!isMoreDataAvailable.current && offset > 0)) return;
+
+      const executeQuery = app?.settings.queryCacheConfig?.enabled
+        ? executeQueryWithCache
+        : executeQueryWithoutCache;
 
       executeQuery(
         {

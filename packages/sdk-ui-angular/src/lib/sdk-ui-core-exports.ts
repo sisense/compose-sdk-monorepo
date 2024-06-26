@@ -13,6 +13,7 @@ export type {
   BoxplotChartType,
   ScattermapChartType,
   AreamapChartType,
+  RangeChartType,
   TableType,
   AreaSubtype,
   LineSubtype,
@@ -38,6 +39,7 @@ export type {
   TableDataOptions,
   PivotTableDataOptions,
   WidgetDataOptions,
+  RangeChartDataOptions,
 
   // Data Options related:
   NumberFormatConfig,
@@ -79,6 +81,7 @@ export type {
   DashboardWidgetStyleOptions,
   TableStyleOptions,
   PivotTableStyleOptions,
+  AreaRangeStyleOptions,
 
   // Style related:
   DataLimits,

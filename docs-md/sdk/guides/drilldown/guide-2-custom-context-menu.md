@@ -160,7 +160,7 @@ At this point, your custom context menu is ready for action. When you select a d
 
 In this section you learned how to create a custom context menu. In the next section, you'll continue to customize the drilldown experience by creating a custom breadcrumbs component.
 
-Go to the [next lesson](./guide-custom-context-menu.md).
+Go to the [next lesson](./guide-3-custom-breadcrumbs.md).
 
 ## Full Code
 

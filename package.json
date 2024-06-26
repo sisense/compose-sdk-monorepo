@@ -1,5 +1,5 @@
 {
-  "version": "1.12.0",
+  "version": "1.13.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -13,6 +13,8 @@
   "scripts": {
     "dev": "yarn workspace @sisense/sdk-ui dev",
     "demo": "yarn workspace react-ts-demo dev",
+    "demo:vue": "yarn workspace vue-ts-demo dev",
+    "demo:angular": "yarn workspace angular-demo start",
     "build": "yarn workspaces foreach --no-private --verbose --topological run build",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
     "build:prod": "yarn workspaces foreach --no-private --verbose --topological run build:prod",

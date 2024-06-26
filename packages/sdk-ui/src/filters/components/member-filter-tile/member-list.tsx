@@ -53,7 +53,7 @@ const SearchBox: FunctionComponent<{
 const MemberRow: FunctionComponent<{
   label: string;
   checked: boolean;
-  onCheck: () => void;
+  onCheck: (isChecked: boolean) => void;
   inactive: boolean;
   disabled: boolean;
 }> = ({ label, checked, onCheck, disabled, inactive }) => {
@@ -64,7 +64,7 @@ const MemberRow: FunctionComponent<{
       isLabelInactive={inactive}
       checked={checked}
       readOnly
-      onChange={onCheck}
+      onChange={(e) => onCheck(e.target.checked)}
       disabled={disabled}
     />
   );
@@ -73,7 +73,7 @@ const MemberRow: FunctionComponent<{
 export interface MemberListProps {
   members: Member[];
   selectedMembers: SelectedMember[];
-  onSelectMember: (member: Member) => void;
+  onSelectMember: (member: Member, isSelected: boolean) => void;
   selectAllMembers: () => void;
   clearAllMembers: () => void;
   disabled: boolean;
@@ -117,14 +117,16 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
         <SearchBox onChange={(s) => setSearchString(s)} disabled={disabled} />
       </div>
       <div className="csdk-max-h-[150px] csdk-overflow-auto">
-        {filteredMembers.map((m) => (
+        {filteredMembers.map((member) => (
           <MemberRow
-            key={m.key}
-            label={m.title}
-            checked={!!selectedMembers.find((sm) => m.key === sm.key)}
-            onCheck={() => onSelectMember(m)}
+            key={member.key}
+            label={member.title}
+            checked={selectedMembers.some((selectedMember) => member.key === selectedMember.key)}
+            onCheck={(isChecked) => onSelectMember(member, isChecked)}
             disabled={disabled}
-            inactive={selectedMembers.find((sm) => m.key === sm.key)?.inactive ?? false}
+            inactive={selectedMembers.some(
+              (selectedMember) => member.key === selectedMember.key && selectedMember.inactive,
+            )}
           />
         ))}
       </div>

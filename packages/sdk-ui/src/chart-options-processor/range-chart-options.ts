@@ -1,4 +1,4 @@
-import { RangeChartData, CartesianChartData } from '../chart-data/types';
+import { RangeChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
 import { ChartType, CompleteThemeSettings } from '../types';
 import {
@@ -10,6 +10,7 @@ import { getRangeTooltipSettings } from './translations/range/tooltip-range';
 import { TFunction } from '@sisense/sdk-common';
 import { getCartesianChartOptions } from './cartesian-chart-options';
 import { SeriesPointStructure } from './translations/translations-to-highcharts';
+import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -33,6 +34,8 @@ export const getRangeChartOptions = (
 ) => {
   const lowerValues: Value[] = [];
   const upperValues: Value[] = [];
+  const upperIndex = 0;
+  const lowerIndex = 1;
 
   dataOptions.rangeValues.forEach(([upper, lower]) => {
     upperValues.push(upper);
@@ -47,7 +50,7 @@ export const getRangeChartOptions = (
 
   const baseChartOptionsUpper = getCartesianChartOptions(
     {
-      ...(chartData as unknown as CartesianChartData),
+      ...chartData,
       type: 'cartesian',
     },
     chartType,
@@ -65,7 +68,7 @@ export const getRangeChartOptions = (
 
   const baseChartOptionsLower = getCartesianChartOptions(
     {
-      ...(chartData.seriesOther as unknown as CartesianChartData),
+      ...chartData.seriesOther,
       type: 'cartesian',
     },
     chartType,
@@ -82,15 +85,41 @@ export const getRangeChartOptions = (
     lowerSeriesDataLookup[s.name.replace('Lower', 'Upper')] = [...s.data];
   });
 
-  baseChartOptionsUpper.options.series.forEach((s) => {
+  baseChartOptionsUpper.options.series.forEach((s, sIndex) => {
     const lowerSeries = lowerSeriesDataLookup[s.name];
+    type RangeColumn = { column: DimensionalCalculatedMeasure };
+    let upperPointName: string;
+    let lowerPointName: string;
+    let dataOptionsForSeries: RangeColumn[];
+    try {
+      if (dataOptions.rangeValues.length === 1) {
+        dataOptionsForSeries = dataOptions.rangeValues[0] as RangeColumn[] & Value[];
+      } else {
+        dataOptionsForSeries = dataOptions.rangeValues[sIndex] as unknown as RangeColumn[];
+      }
+      upperPointName = dataOptionsForSeries[upperIndex].column.name;
+      lowerPointName = dataOptionsForSeries[lowerIndex].column.name;
+    } catch (error) {
+      // Edge case range chart with breakby and multiple range values
+    }
+
     s.data = s.data.map((d, index) => ({
       ...d,
       low: lowerSeries[index].y,
       high: d.y,
       y: undefined,
+      upperPointName,
+      lowerPointName,
     }));
   });
+
+  if (chartType === 'arearange' && chartDesignOptions.lineType === 'smooth') {
+    const areaSplineRangeType = 'areasplinerange' as ChartType;
+    baseChartOptionsUpper.options.chart.type = areaSplineRangeType;
+    if (baseChartOptionsUpper.options.navigator?.series) {
+      baseChartOptionsUpper.options.navigator.series.type = areaSplineRangeType;
+    }
+  }
 
   baseChartOptionsUpper.options.tooltip = getRangeTooltipSettings(
     undefined,

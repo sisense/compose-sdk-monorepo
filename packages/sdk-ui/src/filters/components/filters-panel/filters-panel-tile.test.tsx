@@ -120,6 +120,18 @@ describe('FiltersPanelTile', () => {
     expect(container).toMatchSnapshot();
   });
 
+  it('renders CustomFilterTile for advnced filter type', async () => {
+    const mockFilter = filterFactory.customFilter(mockAttribute, {});
+    const { container } = render(
+      <MockedSisenseContextProvider>
+        <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
+      </MockedSisenseContextProvider>,
+    );
+    const tile = await findByText(container, mockAttribute.name);
+    expect(tile).toBeTruthy();
+    expect(container).toMatchSnapshot();
+  });
+
   it('renders FilterTile for unsupported filter type', async () => {
     const mockFilter = { attribute: { name: 'Unsupported Filter' } } as Filter;
     const { container } = render(

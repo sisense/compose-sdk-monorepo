@@ -61,7 +61,7 @@ export type FilterOptionType = keyof typeof FilterOption;
  * @internal
  */
 export type FilterInfo = {
-  fn: Function;
+  fn: (...args: any[]) => Filter;
   inputCount: number;
   symbols: string[];
   message: string;

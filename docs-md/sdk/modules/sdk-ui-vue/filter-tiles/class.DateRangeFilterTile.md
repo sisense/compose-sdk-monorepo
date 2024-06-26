@@ -42,7 +42,7 @@ const dateRangeFilter = ref<DateRangeFilterTileProps>({
 
 ## Param
 
-MemberFilterTile props
+DateRangeFilterTile props
 
 ## Properties
 

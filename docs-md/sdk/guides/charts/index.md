@@ -1,5 +1,5 @@
 ---
-title: Charts
+title: Chart Types
 indexTopics:
     - title: Compose SDK Charts
       description: Learn how to use Compose SDK charts
@@ -12,7 +12,7 @@ indexTopics:
       link: ./guide-external-charts
 ---
 
-# Charts
+# Chart Types
 
 When working with Compose SDK, there are several different ways you can visualize data using charts:
 

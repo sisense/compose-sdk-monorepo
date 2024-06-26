@@ -15,3 +15,4 @@ export * from './boxplot-chart.component';
 export * from './scattermap-chart.component';
 export * from './areamap-chart.component';
 export * from './pivot-table.component';
+export * from './area-range-chart.component';

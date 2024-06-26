@@ -7,6 +7,7 @@ title: Charts
 Angular components for charts
 
 - [AreaChartComponent](class.AreaChartComponent.md)
+- [AreaRangeChartComponent](class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
 - [AreamapChartComponent](class.AreamapChartComponent.md)
 - [BarChartComponent](class.BarChartComponent.md)
 - [BoxplotChartComponent](class.BoxplotChartComponent.md)

@@ -2,7 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { Chat } from './api/types';
 import { useChatSession } from './use-chat-session';
 import { AiTestWrapper } from './__mocks__';
-import { dataModels, perspectives } from './__mocks__/data';
+import { contexts } from './__mocks__/data';
 import { http, HttpResponse } from 'msw';
 import { server } from '@/__mocks__/msw';
 
@@ -26,17 +26,14 @@ const partialMockChat: Omit<Chat, 'chatId' | 'contextId' | 'contextTitle' | 'con
 };
 
 const setupMockDataTopicsApi = () => {
-  server.use(
-    http.get('*/api/v2/datamodels/schema', () => HttpResponse.json(dataModels)),
-    http.get('*/api/v2/perspectives', () => HttpResponse.json(perspectives)),
-  );
+  server.use(http.get('*/api/datasources', () => HttpResponse.json(contexts)));
 };
 
 const setupMockChatApi = () => {
   server.use(
-    http.post<object, { contextId: string }, Chat, string>('*/api/v2/ai/chats', async (req) => {
-      const { contextId } = await req.request.json();
-      const model = [...dataModels, ...perspectives].find((d) => contextId === d.oid);
+    http.post<object, { sourceId: string }, Chat, string>('*/api/v2/ai/chats', async (req) => {
+      const { sourceId } = await req.request.json();
+      const model = [...contexts].find((d) => sourceId === d.title);
       if (!model) {
         throw Error('Data model or perspective not found');
       }
@@ -44,9 +41,8 @@ const setupMockChatApi = () => {
       const newChat: Chat = {
         chatId: 'new-chat',
         chatHistory: [],
-        contextId,
-        contextTitle: 'title' in model ? model.title : model.name,
-        contextType: 'title' in model ? 'datamodel' : 'perspective',
+        contextId: sourceId,
+        contextTitle: model.title,
         lastUpdate: '2021-01-01T00:00:00Z',
         tenantId: 't1',
         userId: 'u1',
@@ -86,7 +82,6 @@ describe('useChatSession', () => {
           chatId: 'existing-chat',
           contextId: 'm2',
           contextTitle: 'Model 2',
-          contextType: 'datamodel',
         },
       ];
 

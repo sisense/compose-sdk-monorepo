@@ -1,6 +1,7 @@
 import type { SisenseContextProviderProps } from '@/index';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
+import * as jaqlCategoryId from '@/__mocks__/data/mock-jaql-category-id.json';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { filterFactory, type MembersFilter } from '@sisense/sdk-data';
@@ -32,6 +33,37 @@ describe('MemberFilterTile', () => {
           title={filterTitle}
           dataSource={'Some datasource'}
           attribute={DM.Commerce.AgeRange}
+          filter={filter}
+          onChange={() => {}}
+        />
+      </SisenseContextProvider>,
+    );
+
+    expect(await screen.findByText(filterTitle)).toBeInTheDocument();
+
+    await Promise.all(
+      filter.members.map(async (member: string) =>
+        expect(await screen.findByText(member)).toBeInTheDocument(),
+      ),
+    );
+  });
+
+  it('should render a MemberFilterTile component with numeric attribute', async () => {
+    expect.assertions(3);
+
+    // Rendering a MemberFilterTile requires 3 fetches
+    server.use(
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlCategoryId)),
+    );
+
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(DM.Commerce.CategoryID, ['1', '2']) as MembersFilter;
+    render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={DM.Commerce.CategoryID}
           filter={filter}
           onChange={() => {}}
         />

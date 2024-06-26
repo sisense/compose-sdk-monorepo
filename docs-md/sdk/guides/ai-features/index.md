@@ -7,9 +7,6 @@ indexTopics:
     - title: Chatbot
       description: Learn what your users can do with the AI chatbot
       link: ./chatbot
-    - title: Troubleshooting
-      description: Find solutions to common issues
-      link: ./troubleshooting
 ---
 
 # Conversational Analytics with Generative AI  <Badge type="beta" text="Beta" />
@@ -17,7 +14,7 @@ indexTopics:
 Compose SDK contains generative AI (GenAI) React components and hooks for creating conversational analytics experiences.
 
 ::: warning Note
-This feature is currently under beta release for selected customers and is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
+This feature is currently under beta release for our managed cloud customers on version L2024.1 SU1 or above. It is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
 
 To be considered for the beta program, please sign up at [www.sisense.com/get/gen-ai-partner](https://www.sisense.com/get/gen-ai-partner/).
 :::

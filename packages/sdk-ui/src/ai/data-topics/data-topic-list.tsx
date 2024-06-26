@@ -5,7 +5,6 @@ import { useThemeContext } from '@/theme-provider';
 
 export interface DataTopic {
   title: string;
-  description: string;
   onClick?: () => void;
 }
 

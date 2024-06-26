@@ -17,7 +17,7 @@ describe('applyDateFormats', () => {
         ],
         [
           { data: 3, text: '3' },
-          { data: '2010-01-01T00:00:00', text: '2010' },
+          { data: '2010-01-01T00:00:00Z', text: '2010' },
         ],
       ],
     };

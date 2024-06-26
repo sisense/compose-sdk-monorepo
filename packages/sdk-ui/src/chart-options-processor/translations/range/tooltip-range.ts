@@ -60,15 +60,15 @@ export const getRangeTooltipSettings = (
         bottomYValue + (isPercentValueSupported && percentage ? ` / ${percentage}%` : '');
 
       const color = that.point.color || that.series.color;
-
+      const { upperPointName, lowerPointName } = that.point;
       return tooltipWrapper(`
       <div>${dataOptionY!.title}</div>
       <div class="csdk-range-tooltip-row">
-        <span>${translate('arearange.tooltip.max')}</span>
+        <span>${upperPointName || translate('arearange.tooltip.max')}</span>
         ${spanSegment(topValue, color)}
       </div>
       <div class="csdk-range-tooltip-row">
-        <span>${translate('arearange.tooltip.min')}</span>
+        <span>${lowerPointName || translate('arearange.tooltip.min')}</span>
         ${spanSegment(bottomValue, color)}
       </div>
       ${tooltipSeparator()}

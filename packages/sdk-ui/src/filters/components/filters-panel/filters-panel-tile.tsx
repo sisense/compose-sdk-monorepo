@@ -1,4 +1,7 @@
 import {
+  DataSource,
+  CascadingFilter,
+  CustomFilter,
   DateRangeFilter,
   Filter,
   LevelAttribute,
@@ -14,6 +17,8 @@ import { CriteriaFilterTile } from '../criteria-filter-tile';
 import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter';
 import { FilterTile } from '../filter-tile';
 import { useTranslation } from 'react-i18next';
+import { CascadingFilterTile } from '../cascading-filter-tile';
+import { CustomFilterTile } from '../custom-filter-tile';
 
 /**
  * Props of the {@link FiltersPanelTile} component
@@ -25,6 +30,8 @@ export type FiltersPanelTileProps = {
   filter: Filter;
   /** Callback to handle filter change */
   onChange: (filter: Filter | null) => void;
+  /** Default data source used for filter tiles */
+  defaultDataSource?: DataSource;
 };
 
 /**
@@ -32,7 +39,11 @@ export type FiltersPanelTileProps = {
  *
  * @internal
  */
-export const FiltersPanelTile = ({ filter, onChange }: FiltersPanelTileProps) => {
+export const FiltersPanelTile = ({
+  filter,
+  onChange,
+  defaultDataSource,
+}: FiltersPanelTileProps) => {
   const { t } = useTranslation();
 
   const attribute = filter.attribute;
@@ -42,7 +53,12 @@ export const FiltersPanelTile = ({ filter, onChange }: FiltersPanelTileProps) =>
     title,
     onChange,
     onUpdate: onChange,
+    ...(defaultDataSource ? { dataSource: defaultDataSource } : null),
   };
+  // checking for custom filters first to prevent conversion attempts
+  if (filter instanceof CustomFilter) {
+    return <CustomFilterTile {...props} filter={filter} />;
+  }
 
   if (filter instanceof MembersFilter) {
     return <MemberFilterTile {...props} filter={filter} />;
@@ -72,12 +88,17 @@ export const FiltersPanelTile = ({ filter, onChange }: FiltersPanelTileProps) =>
     return <CriteriaFilterTile {...props} filter={filter} />;
   }
 
+  if (filter instanceof CascadingFilter) {
+    return <CascadingFilterTile filter={filter} onChange={onChange} />;
+  }
+
   return (
     <FilterTile
       title={t('unsupportedFilter.title')}
       renderContent={() => (
         <p className="csdk-text-center csdk-text-[13px]">{t('unsupportedFilter.message')}</p>
       )}
+      design={{ header: { isCollapsible: false } }}
     />
   );
 };

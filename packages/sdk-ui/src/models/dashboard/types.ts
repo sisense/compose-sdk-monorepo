@@ -1,3 +1,5 @@
+import { CommonFiltersOptions } from '@/common-filters/types';
+
 /** @internal */
 export interface Layout {
   columns: {
@@ -11,3 +13,6 @@ export interface Layout {
     }[];
   }[];
 }
+
+/** @internal */
+export type WidgetFilterOptions = Record<string, CommonFiltersOptions>;

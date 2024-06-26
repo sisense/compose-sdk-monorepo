@@ -82,14 +82,16 @@ export const RegularChart = (props: RegularChartProps) => {
   const defaultSize = getChartDefaultSize(chartType);
   const { themeSettings } = useThemeContext();
 
-  const { dataOptions, attributes, measures, dataColumnNamesMapping } = useTranslatedDataOptions(
-    chartDataOptions,
-    chartType,
-  );
+  const {
+    dataOptions: syncDataOptions,
+    attributes,
+    measures,
+    dataColumnNamesMapping,
+  } = useTranslatedDataOptions(chartDataOptions, chartType);
 
-  const data = useSyncedData(
+  const [data, dataOptions] = useSyncedData(
     dataSet,
-    dataOptions,
+    syncDataOptions,
     chartType,
     attributes,
     measures,
@@ -106,9 +108,7 @@ export const RegularChart = (props: RegularChartProps) => {
     }
 
     return prepareChartDesignOptions(chartType, dataOptions, styleOptions);
-    // chartType is omitted from the dependency array because chartDataOptions
-    // will always update when a new chartType is selected.
-  }, [styleOptions, chartDataOptions]);
+  }, [chartDataOptions, chartType, dataOptions, styleOptions]);
 
   const chartData = useMemo((): ChartData | null => {
     if (!data || !chartDataOptions) {

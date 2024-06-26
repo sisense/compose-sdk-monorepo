@@ -9,6 +9,7 @@ title: sdk-ui-angular
 Angular components for charts
 
 - [AreaChartComponent](charts/class.AreaChartComponent.md)
+- [AreaRangeChartComponent](charts/class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
 - [AreamapChartComponent](charts/class.AreamapChartComponent.md)
 - [BarChartComponent](charts/class.BarChartComponent.md)
 - [BoxplotChartComponent](charts/class.BoxplotChartComponent.md)
@@ -26,15 +27,21 @@ Angular components for charts
 
 ## Chart Utilities
 
+Utilities to be used with charts
+
 - [ChartWidgetComponent](chart-utilities/class.ChartWidgetComponent.md)
 - [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
 
 ## Data Grids
 
+Angular components for data grids
+
 - [PivotTableComponent](data-grids/class.PivotTableComponent.md) <Badge type="beta" text="Beta" />
 - [TableComponent](data-grids/class.TableComponent.md)
 
 ## Drilldown
+
+Angular components for creating drilldown experiences
 
 - [ContextMenuComponent](drilldown/class.ContextMenuComponent.md)
 - [DrilldownBreadcrumbsComponent](drilldown/class.DrilldownBreadcrumbsComponent.md)
@@ -42,10 +49,14 @@ Angular components for charts
 
 ## Filter Tiles
 
+Angular filter tile components
+
 - [DateRangeFilterTileComponent](filter-tiles/class.DateRangeFilterTileComponent.md)
 - [MemberFilterTileComponent](filter-tiles/class.MemberFilterTileComponent.md)
 
 ## Contexts
+
+Angular context modules, services, and variables
 
 - [SISENSE\_CONTEXT\_CONFIG\_TOKEN](contexts/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md)
 - [SdkUiModule](contexts/class.SdkUiModule.md)
@@ -55,11 +66,13 @@ Angular components for charts
 
 ## Queries
 
+Angular query service
+
 - [QueryService](queries/class.QueryService.md)
 
 ## Fusion Embed
 
-Fusion Dashboards, Widgets, Queries, and Formulas
+Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
 
 - [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](fusion-embed/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />

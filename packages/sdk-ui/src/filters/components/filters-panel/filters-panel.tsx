@@ -1,5 +1,5 @@
 import { FiltersPanelTile } from './filters-panel-tile';
-import { Filter } from '@sisense/sdk-data';
+import { DataSource, Filter } from '@sisense/sdk-data';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
@@ -44,6 +44,8 @@ export type FiltersPanelProps = {
   filters: Filter[];
   /** Callback to handle changes in filters */
   onFiltersChange: (filters: Filter[]) => void;
+  /** Default data source used for filter tiles */
+  defaultDataSource?: DataSource;
 };
 
 /**
@@ -51,7 +53,11 @@ export type FiltersPanelProps = {
  *
  * @internal
  */
-export const FiltersPanel = ({ filters, onFiltersChange }: FiltersPanelProps) => {
+export const FiltersPanel = ({
+  filters,
+  onFiltersChange,
+  defaultDataSource,
+}: FiltersPanelProps) => {
   const { themeSettings } = useThemeContext();
   const filterList = [...filters] as (Filter | null)[];
   const handleFilterChange = (filter: Filter | null, index: number) => {
@@ -72,6 +78,7 @@ export const FiltersPanel = ({ filters, onFiltersChange }: FiltersPanelProps) =>
               key={filter.guid}
               filter={filter}
               onChange={(newFilter) => handleFilterChange(newFilter, index)}
+              defaultDataSource={defaultDataSource}
             />
           </div>
         ))}

@@ -186,6 +186,8 @@ export const createAttributeFilterFromConditionFilterJaql = (
           conditionFilterJaql.exclude?.to as number,
           guid,
         ),
+        undefined,
+        guid,
       );
     case ConditionFilterType.MULTIPLE_CONDITION:
       if (conditionFilterJaql.and) {
@@ -205,6 +207,17 @@ export const createAttributeFilterFromConditionFilterJaql = (
         );
       }
       break;
+    case ConditionFilterType.IS_NOT:
+      return withComposeCode(filterFactory.exclude)(
+        withComposeCode(filterFactory.members)(
+          attribute,
+          conditionFilterJaql.exclude?.members || [],
+          undefined,
+          guid,
+        ),
+        undefined,
+        guid,
+      );
     case ConditionFilterType.AFTER:
     case ConditionFilterType.BEFORE:
     case ConditionFilterType.IS_EMPTY:

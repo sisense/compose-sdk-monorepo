@@ -22,6 +22,7 @@ import { Themable } from '@/theme-provider/types';
 import AiDisclaimer from './ai-disclaimer';
 import ClickableMessage from './messages/clickable-message';
 import { BetaLabel } from './common/beta-label';
+import { ScrollToBottom } from './scroll-to-bottom';
 
 export type ChatBoxProps = {
   contextTitle: string;
@@ -83,6 +84,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   const { mutate: clearHistory, isLoading: isClearingHistory } = useClearChatHistory(chatId);
 
   const [isClearHistoryOptionsVisible, setIsClearHistoryOptionsVisible] = useState(false);
+  const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(false);
   const showClearHistoryOptions = () => setIsClearHistoryOptionsVisible(true);
   const hideClearHistoryOptions = () => setIsClearHistoryOptionsVisible(false);
   const onClearHistoryConfirm = () => {
@@ -91,6 +93,21 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   };
 
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
+  const chatFooterRef = useRef<HTMLDivElement | null>(null);
+
+  const handleScroll = () => {
+    if (!chatContainerRef?.current) return;
+    const { scrollTop, clientHeight, scrollHeight } = chatContainerRef.current;
+    if (scrollTop === undefined || clientHeight === undefined || scrollHeight === undefined) return;
+
+    const scrollFromBottom = scrollHeight - scrollTop - clientHeight;
+    // show the scroll to bottom button when the user scrolls up more than half of the chat window
+    const isVisible = scrollFromBottom > clientHeight / 2;
+    if (isScrollToBottomVisible !== isVisible) {
+      setIsScrollToBottomVisible(isVisible);
+    }
+  };
+
   useLayoutEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -142,7 +159,17 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   return (
     <>
       {header}
-      <ChatBody ref={chatContainerRef} theme={themeSettings}>
+      <ChatBody ref={chatContainerRef} theme={themeSettings} onScroll={handleScroll}>
+        <ScrollToBottom
+          isVisible={isScrollToBottomVisible}
+          anchorElement={chatFooterRef.current}
+          onClick={() => {
+            chatContainerRef.current?.scroll({
+              top: chatContainerRef.current?.scrollHeight,
+              behavior: 'smooth',
+            });
+          }}
+        />
         <ChatWelcomeMessage />
         <SuggestionsWithIntro
           questions={questions}
@@ -175,7 +202,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
         )}
       </ChatBody>
 
-      <ChatFooter theme={themeSettings}>
+      <ChatFooter ref={chatFooterRef} theme={themeSettings}>
         <ChatInput
           onSendMessage={sendMessage}
           disabled={isAwaitingResponse || isLoading}

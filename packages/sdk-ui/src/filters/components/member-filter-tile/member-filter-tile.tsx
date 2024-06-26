@@ -1,23 +1,13 @@
-import type { Attribute, DataSource, Filter, MembersFilter } from '@sisense/sdk-data';
-import { MembersFilter as MembersFilterClass } from '@sisense/sdk-data';
-import { FunctionComponent, useMemo, useRef } from 'react';
-import { BasicMemberFilterTile } from './basic-member-filter-tile';
-import { Member } from './members-reducer';
+import { Attribute, DataSource, Filter, isNumber, MembersFilter } from '@sisense/sdk-data';
+import { FunctionComponent, useMemo } from 'react';
+import { Member, SelectedMember } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { useExecuteQueryInternal } from '../../../query-execution/use-execute-query';
-
-/**
- * @internal
- */
-class MembersFilterInternal extends MembersFilterClass {
-  internal = true;
-
-  constructor(attribute: Attribute, members: string[], disabled?: boolean) {
-    super(attribute, members);
-    this.disabled = disabled ?? false;
-    this.internal = true;
-  }
-}
+import { FilterTile, FilterTileDesignOptions } from '../filter-tile';
+import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
+import { PillSection } from './pill-section';
+import { MemberList } from './member-list';
+import { cloneFilterAndToggleDisabled } from '@/filters/utils';
 
 /**
  * Props for {@link MemberFilterTile}
@@ -39,6 +29,8 @@ export interface MemberFilterTileProps {
   onChange: (filter: Filter | null) => void;
   /** List of filters this filter is dependent on */
   parentFilters?: Filter[];
+  /** Design options for the tile @internal */
+  tileDesignOptions?: FilterTileDesignOptions;
 }
 
 /**
@@ -69,9 +61,21 @@ export interface MemberFilterTileProps {
 export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSisenseComponent({
   componentName: 'MemberFilterTile',
 })((props) => {
-  const { title, attribute, filter, dataSource, onChange, parentFilters } = props;
-  const initialFilter = useRef(filter);
-  const disabled = filter?.disabled ?? false;
+  const {
+    title,
+    attribute,
+    filter: filterFromProps,
+    dataSource,
+    onChange: updateFilterFromProps,
+    parentFilters,
+    tileDesignOptions,
+  } = props;
+
+  const { filter, updateFilter } = useSynchronizedFilter<MembersFilter>(
+    filterFromProps as MembersFilter | null,
+    updateFilterFromProps,
+    () => new MembersFilter(attribute, []),
+  );
 
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
   // "dimensions" does not change on every render, causing infinite rerenders.
@@ -83,50 +87,171 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     filters: parentFilters,
   });
 
-  const memberFilter = filter as MembersFilter;
-  const queryMembers = useMemo(() => (!data ? [] : data.rows.map((r) => r[0])), [data]);
+  const queriedMembers = useMemo(() => (!data ? [] : data.rows.map((r) => r[0])), [data]);
 
-  const selectedMembers: Member[] = useMemo(
-    () =>
-      queryMembers
-        .filter((qM) => (memberFilter?.members || []).includes(qM.data))
-        .map((qM) => ({
-          key: qM.data as string,
-          title: qM.text ?? (qM.data as string),
-        })),
-    [memberFilter?.members, queryMembers],
-  );
+  const selectedMembers: SelectedMember[] = useMemo(() => {
+    const members = alignMembersType(filter.members, attribute.type);
+    const deactivatedMembers = alignMembersType(filter._deactivatedMembers, attribute.type);
+    return queriedMembers
+      .filter(
+        (queriedMember) =>
+          members.includes(queriedMember.data) || deactivatedMembers.includes(queriedMember.data),
+      )
+      .map((queriedMember) => ({
+        key: queriedMember.data.toString(),
+        title: queriedMember.text ?? queriedMember.data.toString(),
+        inactive: deactivatedMembers.includes(queriedMember.data),
+      }));
+  }, [filter._deactivatedMembers, filter.members, queriedMembers, attribute.type]);
 
   const allMembers: Member[] = useMemo(
     () =>
-      queryMembers.map((t) => ({
-        key: t.data as string,
-        title: t.text ?? (t.data as string),
+      queriedMembers.map((queriedMember) => ({
+        key: queriedMember.data.toString(),
+        title: queriedMember.text ?? queriedMember.data.toString(),
       })),
-    [queryMembers],
+    [queriedMembers],
   );
 
   if (error) {
     throw error;
   }
-
   if (!data) {
     return null;
   }
 
   return (
-    <BasicMemberFilterTile
+    <FilterTile
       title={title}
-      allMembers={allMembers}
-      initialSelectedMembers={selectedMembers}
-      shouldUpdateSelectedMembers={
-        initialFilter.current !== filter && !(filter as MembersFilterInternal)?.internal
-      }
-      onUpdateSelectedMembers={(members, disabled) => {
-        onChange(new MembersFilterInternal(attribute, members, disabled));
+      renderContent={(collapsed, tileDisabled) => {
+        if (collapsed) {
+          return (
+            <PillSection
+              selectedMembers={selectedMembers}
+              onToggleSelectedMember={(memberKey) => {
+                const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
+                  selectedMembers,
+                  memberKey,
+                );
+                updateFilter(withSelectedMembers(filter, newSelectedMembers));
+              }}
+              disabled={tileDisabled}
+            />
+          );
+        }
+        return (
+          <MemberList
+            members={allMembers}
+            selectedMembers={selectedMembers}
+            onSelectMember={(member, isSelected) => {
+              const newSelectedMembers = isSelected
+                ? addSelectedMember(selectedMembers, member)
+                : removeSelectedMember(selectedMembers, member);
+              updateFilter(withSelectedMembers(filter, newSelectedMembers));
+            }}
+            selectAllMembers={() => updateFilter(withSelectedMembers(filter, allMembers))}
+            clearAllMembers={() => updateFilter(withSelectedMembers(filter, []))}
+            disabled={tileDisabled}
+          />
+        );
+      }}
+      disabled={filter.disabled}
+      onToggleDisabled={() => {
+        const newFilter = cloneFilterAndToggleDisabled(filter);
+        updateFilter(newFilter);
       }}
       isDependent={parentFilters && parentFilters.length > 0}
-      disabled={disabled}
+      design={tileDesignOptions}
     />
   );
 });
+
+/**
+ * Creates new MembersFilter with new selected members list
+ */
+function withSelectedMembers(
+  filter: MembersFilter,
+  selectedMembers: SelectedMember[],
+): MembersFilter {
+  const { activeFilterMembers, inactiveFilterMembers } =
+    splitToActiveAndInactiveFilterMembers(selectedMembers);
+
+  return new MembersFilter(
+    filter.attribute,
+    activeFilterMembers,
+    inactiveFilterMembers,
+    filter.guid,
+  );
+}
+
+/**
+ * Splits all selected members into active and inactive filter members.
+ * @param selectedMembers - all selected members, both active and inactive
+ */
+function splitToActiveAndInactiveFilterMembers(selectedMembers: SelectedMember[]): {
+  activeFilterMembers: string[];
+  inactiveFilterMembers: string[];
+} {
+  const splittedFilterMembers: {
+    activeFilterMembers: string[];
+    inactiveFilterMembers: string[];
+  } = {
+    activeFilterMembers: [],
+    inactiveFilterMembers: [],
+  };
+  selectedMembers.forEach((selectedMember) => {
+    if (selectedMember.inactive) {
+      splittedFilterMembers.inactiveFilterMembers.push(selectedMember.key);
+    } else {
+      splittedFilterMembers.activeFilterMembers.push(selectedMember.key);
+    }
+  });
+  return splittedFilterMembers;
+}
+
+/**
+ * Returns new `selectedMembers` array with added `selectedMemberToAdd`.
+ * Won't add this member if it's already present in `selectedMembers`.
+ */
+function addSelectedMember(
+  selectedMembers: SelectedMember[],
+  selectedMemberToAdd: SelectedMember,
+): SelectedMember[] {
+  if (!selectedMembers.some((selectedMember) => selectedMember.key === selectedMemberToAdd.key)) {
+    return [...selectedMembers, selectedMemberToAdd];
+  }
+  return selectedMembers;
+}
+
+/**
+ * Returns new `selectedMembers` array without `selectedMemberToRemove`.
+ */
+function removeSelectedMember(
+  selectedMembers: SelectedMember[],
+  selectedMemberToRemove: SelectedMember,
+): SelectedMember[] {
+  return selectedMembers.filter(
+    (selectedMember) => selectedMember.key !== selectedMemberToRemove.key,
+  );
+}
+
+/**
+ * Returns new `selectedMembers` array with toggled activation of one member.
+ */
+function toggleActivationInSelectedMemberByMemberKey(
+  selectedMembers: SelectedMember[],
+  selectedMemberKeyToToggleActivation: string,
+): SelectedMember[] {
+  return selectedMembers.map((selectedMember) =>
+    selectedMember.key === selectedMemberKeyToToggleActivation
+      ? { ...selectedMember, inactive: !selectedMember.inactive }
+      : selectedMember,
+  );
+}
+
+/**
+ * Returns new `members` array with members transformed to required type.
+ */
+function alignMembersType(members: any[], type: string) {
+  return members.map((member) => (isNumber(type) ? Number(member) : member.toString()));
+}

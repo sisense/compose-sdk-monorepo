@@ -4,11 +4,10 @@ import type {
   ChatRequest,
   ChatResponse,
   ChatWithoutHistory,
-  DataModel,
+  ChatContext,
   GetNlgQueryResultRequest,
   GetNlgQueryResultResponse,
   LlmConfig,
-  Perspective,
   QueryRecommendationConfig,
   QueryRecommendationResponse,
   SendFeedbackRequest,
@@ -23,13 +22,8 @@ export class ChatRestApi {
     this.httpClient = httpClient;
   }
 
-  public getDataModels = async (): Promise<DataModel[]> => {
-    const data: DataModel[] = await this.httpClient.get(`api/v2/datamodels/schema`);
-    return data.filter((d) => d);
-  };
-
-  public getPerspectives = async (): Promise<Perspective[]> => {
-    return this.httpClient.get(`api/v2/perspectives`);
+  public getChatContexts = (): Promise<ChatContext[]> => {
+    return this.httpClient.get(`api/datasources?sharedWith=r,w`);
   };
 
   // ==== /v2/ai endpoints ====
@@ -63,8 +57,8 @@ export class ChatRestApi {
     return this.httpClient.get(`api/v2/ai/chats/${chatId}`);
   };
 
-  private createChat = async (contextId: string): Promise<Chat> => {
-    return this.httpClient.post('api/v2/ai/chats', { contextId });
+  private createChat = async (sourceId: string): Promise<Chat> => {
+    return this.httpClient.post('api/v2/ai/chats', { sourceId });
   };
 
   private postChat = async (chatId: string, request: ChatRequest): Promise<ChatResponse> => {

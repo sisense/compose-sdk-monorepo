@@ -4,7 +4,11 @@ import type { DashboardDto } from '@/api/types/dashboard-dto';
 import {
   extractDashboardFilters,
   translateLayout,
+  translateWidgetFilterOptions,
 } from '@/models/dashboard/translate-dashboard-utils';
+import { DashboardProps } from '@/dashboard/types';
+import { type WidgetFilterOptions } from './types';
+import { CompleteThemeSettings } from '../../types';
 
 /**
  * Model of Sisense dashboard defined in the abstractions of Compose SDK.
@@ -48,12 +52,20 @@ export class DashboardModel {
   filters: Filter[];
 
   /**
+   * Dashboard filters options per each widget.
+   *
+   * @internal
+   */
+  widgetFilterOptions: WidgetFilterOptions;
+
+  /**
    * Creates a new dashboard model.
    *
    * @param dashboardDto - The widget DTO to be converted to a widget model
+   * @param themeSettings - Optional theme settings
    * @internal
    */
-  constructor(dashboardDto: DashboardDto) {
+  constructor(dashboardDto: DashboardDto, themeSettings?: CompleteThemeSettings) {
     const { oid, title, datasource, widgets, layout, filters } = dashboardDto;
 
     this.oid = oid;
@@ -62,9 +74,10 @@ export class DashboardModel {
       title: datasource.title,
       type: datasource.live ? 'live' : 'elasticube',
     };
-    this.widgets = widgets?.map(translateWidget) || [];
+    this.widgets = widgets?.map((widget) => translateWidget(widget, themeSettings)) || [];
     this.layout = layout ? translateLayout(layout) : { columns: [] };
     this.filters = extractDashboardFilters(filters || []);
+    this.widgetFilterOptions = translateWidgetFilterOptions(widgets);
   }
 
   /**
@@ -77,13 +90,14 @@ export class DashboardModel {
    * @internal
    */
 
-  getDashboardProps() {
+  getDashboardProps(): DashboardProps {
     return {
       title: this.title,
-      dataSource: this.dataSource,
+      defaultDataSource: this.dataSource,
       widgets: this.widgets,
       layout: this.layout,
       filters: this.filters,
+      widgetFilterOptions: this.widgetFilterOptions,
     };
   }
 }

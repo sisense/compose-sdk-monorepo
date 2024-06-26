@@ -8,7 +8,7 @@ import {
   isDataSource,
   Measure,
 } from '@sisense/sdk-data';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import {
   BoxplotChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -28,8 +28,15 @@ import { useSetError } from '../../error-boundary/use-set-error';
 import '../chart.css';
 import { executeBoxplotQuery } from '../../boxplot-utils';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { deriveChartFamily } from '@/ai/messages/get-widget-options';
 
 type DataSet = DataSource | Data | undefined;
+
+const chartDataOptionsFamily = (chartType: ChartType): string => {
+  // funnel sorting makes it a special case of categorical
+  if (chartType === 'funnel') return chartType;
+  return deriveChartFamily(chartType);
+};
 
 export const useSyncedData = (
   dataSet: DataSet,
@@ -46,7 +53,11 @@ export const useSyncedData = (
 ) => {
   const setError = useSetError();
 
-  const [data, setData] = useState<Data>();
+  const chartFamily = useMemo(() => chartDataOptionsFamily(chartType), [chartType]);
+  const undefinedSynchedData = useMemo(() => [undefined, chartDataOptions], [chartDataOptions]);
+  const [synchedData, setSynchedData] = useState<{
+    [key: string]: [Data, ChartDataOptionsInternal];
+  }>({});
   const { app } = useSisenseContext();
   const executeQuery = app?.settings.queryCacheConfig?.enabled
     ? executeQueryWithCache
@@ -109,7 +120,7 @@ export const useSyncedData = (
           );
 
           if (!ignore) {
-            setData(dataWithDateFormatting);
+            setSynchedData({ [chartFamily]: [dataWithDateFormatting, chartDataOptions] });
           }
         })
         .catch((asyncError: Error) => {
@@ -142,7 +153,7 @@ export const useSyncedData = (
         app?.settings.dateConfig,
       );
 
-      setData(dataWithDateFormatting);
+      setSynchedData({ [chartFamily]: [dataWithDateFormatting, chartDataOptions] });
     }
 
     // Set up cleanup function to ignore async fetch results of previous render
@@ -154,5 +165,5 @@ export const useSyncedData = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartType, chartDataOptions, dataSet, filters, highlights, app, refreshCounter]);
 
-  return data;
+  return synchedData[chartFamily] || undefinedSynchedData;
 };

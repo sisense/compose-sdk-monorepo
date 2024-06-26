@@ -15,6 +15,7 @@ import type {
 } from '@sisense/sdk-query-client';
 import { ClientApplication } from '../app/client-application';
 import { TranslatableError } from '../translation/translatable-error';
+import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 
 /**
  * All the properties that fully describe a query you want to send.
@@ -161,12 +162,19 @@ export const executePivotQuery = (
   ).resultPromise;
 };
 
+const stringifyQueryPayload = (params: InternalQueryDescription) => {
+  return JSON.stringify({
+    ...getJaqlQueryPayload(params, false),
+    queryGuid: '',
+  });
+};
+
 export const createExecuteQueryCacheKey: CreateCacheKeyFn<typeof executeQuery> = (
   queryDescription,
   app,
 ) => {
   const queryParams = prepareQueryParams(queryDescription, app?.defaultDataSource);
-  return JSON.stringify(queryParams);
+  return stringifyQueryPayload(queryParams);
 };
 
 const QUERY_RESULTS_CACHE_MAX_SIZE = 250;

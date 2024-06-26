@@ -6,7 +6,6 @@ import {
   DateLevels,
   DateOperators,
   DimensionalLevelAttribute,
-  Filter,
   RelativeDateFilter as RelativeDateFilterType,
   filterFactory,
 } from '@sisense/sdk-data';
@@ -28,7 +27,7 @@ dayjs.extend(isToday);
 export interface RelativeDateFilterProps {
   filter: RelativeDateFilterType;
   arrangement?: FilterVariant;
-  onUpdate: (filter: Filter | null) => void;
+  onUpdate: (filter: RelativeDateFilterType) => void;
   disabled: boolean;
   limit?: {
     maxDate: string;
@@ -70,7 +69,7 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
     }
     const newAnchor = maybeAnchor ?? anchor;
     const newLevelAttr = new DimensionalLevelAttribute(newLevel, levelAttr.expression, newLevel);
-    let newFilter: Filter | null = null;
+    let newFilter: RelativeDateFilterType;
     switch (newOperator) {
       case DateOperators.Last:
         newFilter = filterFactory.dateRelativeTo(
@@ -78,7 +77,7 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
           0,
           newCount,
           newAnchor.isToday() ? undefined : newAnchor.toDate(),
-        );
+        ) as RelativeDateFilterType;
         break;
       case DateOperators.Next:
         newFilter = filterFactory.dateRelativeFrom(
@@ -86,8 +85,10 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
           0,
           newCount,
           newAnchor.isToday() ? undefined : newAnchor.toDate(),
-        );
+        ) as RelativeDateFilterType;
         break;
+      default:
+        throw new Error(`Incorrect operator: ${newOperator}`);
     }
     onUpdate(newFilter);
   };

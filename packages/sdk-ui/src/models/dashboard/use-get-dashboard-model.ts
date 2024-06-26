@@ -8,6 +8,7 @@ import { getDashboardModel, GetDashboardModelOptions } from './get-dashboard-mod
 import { HookEnableParam } from '../../common/hooks/types';
 import { TranslatableError } from '../../translation/translatable-error';
 import { withTracking } from '../../decorators/hook-decorators';
+import { useThemeContext } from '../../theme-provider';
 
 /**
  * Parameters for {@link useGetDashboardModel} hook.
@@ -135,6 +136,7 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
     data: undefined,
   });
   const { isInitialized, app } = useSisenseContext();
+  const { themeSettings } = useThemeContext();
 
   useEffect(() => {
     if (!isInitialized) {
@@ -147,10 +149,15 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
       dispatch({ type: 'loading' });
 
       const { dashboardOid, includeWidgets, includeFilters } = params;
-      void getDashboardModel(app.httpClient, dashboardOid, {
-        includeWidgets,
-        includeFilters,
-      })
+      void getDashboardModel(
+        app.httpClient,
+        dashboardOid,
+        {
+          includeWidgets,
+          includeFilters,
+        },
+        themeSettings,
+      )
         .then((data) => {
           dispatch({ type: 'success', data });
         })
@@ -158,7 +165,7 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, params, shouldLoad]);
+  }, [app, isInitialized, params, shouldLoad, themeSettings]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().

@@ -40,6 +40,8 @@ Configuration for legend - a key that provides information about the data series
 
 > **lineWidth**?: [`LineWidth`](../type-aliases/type-alias.LineWidth.md)
 
+Configuration that defines line width
+
 ***
 
 ### markers
@@ -55,6 +57,14 @@ Configuration for markers - symbols or data points that highlight specific value
 > **navigator**?: [`Navigator`](../type-aliases/type-alias.Navigator.md)
 
 Configuration for navigator - zoom/pan tool for large datasets in a chart
+
+***
+
+### subtype
+
+> **subtype**?: [`AreaRangeSubtype`](../type-aliases/type-alias.AreaRangeSubtype.md)
+
+Subtype of AreaRangeChart
 
 ***
 
