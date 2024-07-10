@@ -8,6 +8,7 @@ import {
   DataSource,
   DataSourceInfo,
   FilterJaql,
+  MembersFilter,
 } from './index.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
 import { FilterJaqlInternal } from './dimensional-model/filters/utils/types.js';
@@ -116,6 +117,18 @@ export function isDataSourceInfo(dataSource: DataSource): dataSource is DataSour
 export const createFilterFromJaql = (jaql: FilterJaql, instanceid?: string): Filter => {
   // translation logic is based on FilterJaqlInternal type (from internal modern-analytics-filters)
   // TODO reconcile FilterJaql and FilterJaqlInternal
-  const jaqlInternal = jaql as FilterJaqlInternal;
-  return createFilterFromJaqlInternal(jaqlInternal, instanceid);
+  const hasBackgroundFilter = jaql.filter.filter && !('turnedOff' in jaql.filter.filter);
+  const filter = createFilterFromJaqlInternal(jaql as FilterJaqlInternal, instanceid);
+
+  if (hasBackgroundFilter) {
+    (filter as MembersFilter).backgroundFilter = createFilterFromJaqlInternal(
+      {
+        ...jaql,
+        filter: jaql.filter.filter,
+      } as FilterJaqlInternal,
+      `${instanceid}-bg`,
+    );
+  }
+
+  return filter;
 };

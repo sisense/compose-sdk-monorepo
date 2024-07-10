@@ -280,6 +280,18 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
       DateLevels.MinutesRoundTo15,
       'yyyy-MM-dd HH:mm',
     );
+    this.Minutes = new DimensionalLevelAttribute(
+      DateLevels.Minutes,
+      expression,
+      DateLevels.Minutes,
+      'yyyy-MM-dd HH:mm',
+    );
+    this.Seconds = new DimensionalLevelAttribute(
+      DateLevels.Seconds,
+      expression,
+      DateLevels.Seconds,
+      'yyyy-MM-dd HH:mm:ss',
+    );
 
     this.AggHours = new DimensionalLevelAttribute(
       DateLevels.AggHours,
@@ -315,6 +327,8 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
       this.Hours,
       this.MinutesRoundTo30,
       this.MinutesRoundTo15,
+      this.Minutes,
+      this.Seconds,
       this.AggHours,
       this.AggMinutesRoundTo30,
       this.AggMinutesRoundTo15,
@@ -361,6 +375,16 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
    * Minutes (round to 15) level
    */
   readonly MinutesRoundTo15: LevelAttribute;
+
+  /**
+   * Minutes level (for Live Models)
+   */
+  readonly Minutes: LevelAttribute;
+
+  /**
+   * Seconds level (for Live Models)
+   */
+  readonly Seconds: LevelAttribute;
 
   /**
    * Aggregated Hours  level

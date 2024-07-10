@@ -45,31 +45,34 @@ export const getTableAttributesAndMeasures = (dataOptions: TableDataOptionsInter
 // eslint-disable-next-line max-lines-per-function
 export const useTableData = ({
   dataSet,
-  dataOptions,
+  dataOptions: originalDataOptions,
   filters,
   filterRelations,
   count,
   offset,
-}: UseDataProps): Data | null => {
+}: UseDataProps): [Data | null, TableDataOptionsInternal | null] => {
   const setError = useSetError();
-  const [data, setData] = useState<Data | null>(null);
+  const [data, setData] = useState(isDataSource(dataSet) ? null : dataSet);
   const isMoreDataAvailable = useRef(true);
   const { isInitialized, app } = useSisenseContext();
+  const [dataOptions, setDataOptions] = useState<TableDataOptionsInternal | null>(null);
 
   useEffect(() => {
     let ignore = false;
 
-    if (!dataOptions) return;
-    const { attributes, measures } = getTableAttributesAndMeasures(dataOptions);
+    if (!originalDataOptions) return;
+    const { attributes, measures } = getTableAttributesAndMeasures(originalDataOptions);
 
-    if (dataSet === undefined || isDataSource(dataSet)) {
+    if (isDataSource(dataSet)) {
       if (!isInitialized) {
         setError(new TranslatableError('errors.chartNoSisenseContext'));
       }
 
       if (!app || (!isMoreDataAvailable.current && offset > 0)) return;
 
-      const executeQuery = app?.settings.queryCacheConfig?.enabled
+      setData(null);
+
+      const executeQuery = app.settings.queryCacheConfig?.enabled
         ? executeQueryWithCache
         : executeQueryWithoutCache;
 
@@ -91,22 +94,27 @@ export const useTableData = ({
           if (ignore) return;
 
           isMoreDataAvailable.current = queryResult.rows.length > count;
+          const rows = isMoreDataAvailable.current
+            ? queryResult.rows.slice(0, count)
+            : queryResult.rows;
 
           if (offset > 0) {
             setData((d) => ({
               columns: queryResult.columns,
-              rows: [...(d ? d.rows : []), ...queryResult.rows.slice(0, count)],
+              rows: d ? [...d.rows, ...rows] : rows,
             }));
           } else {
             setData({
               columns: queryResult.columns,
-              rows: queryResult.rows.slice(0, count),
+              rows,
             });
           }
+          setDataOptions(originalDataOptions);
         })
         .catch((e: Error) => setError(e));
     } else {
       setData(dataSet);
+      setDataOptions(originalDataOptions);
     }
 
     // Set up cleanup function to ignore async fetch results of previous render
@@ -115,7 +123,17 @@ export const useTableData = ({
     return () => {
       ignore = true;
     };
-  }, [app, dataSet, dataOptions, filters, filterRelations, offset, count, isInitialized, setError]);
+  }, [
+    app,
+    dataSet,
+    originalDataOptions,
+    filters,
+    filterRelations,
+    offset,
+    count,
+    isInitialized,
+    setError,
+  ]);
 
-  return data;
+  return [data, dataOptions];
 };

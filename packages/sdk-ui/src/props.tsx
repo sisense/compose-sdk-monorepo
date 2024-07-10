@@ -501,21 +501,21 @@ export interface BaseChartProps {
   dataSet?: DataSource | Data;
 
   /**
-   * Filters to apply to a chart’s data using one of the following options.
+   * Filters to limit (or slice) a chart’s data using one of the following options.
    *
-   * (1) Array of filters returned from filter factory functions, such as
+   * (1) Array of {@link Filter} or {@link FilterRelations} returned from filter factory functions, such as
    * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.
    *
    * Use this option for filters that do not require a UI to set them
-   * or for filters where you will supply your own UI using non-Sisense components.
+   * or for filters where you will supply your own UI components or use pre-built UI components. This is the most common option.
    *
    * To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
    *
-   * (2) Array of filters controlled by Sisense filter components.
+   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link MemberFilterTile}.
    *
-   * Use this option for filters that you want your users to set using Sisense UI components.
+   * Use this option for filters that you want your users to set using pre-built UI components.
    *
-   * To learn more about using filter components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
+   * To learn more about using filter UI components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
    *
    * @category Data
    */
@@ -524,21 +524,21 @@ export interface BaseChartProps {
   /**
    * Highlights based on filter criteria to apply to a chart using one of the following options.
    *
-   * Note that the filter dimensions used in highlights must match those defined in the
-   * {@link dataOptions} of the chart.
+   * NOTE that the filter dimensions used in highlights must match those defined in the
+   * {@link dataOptions} of the chart. Otherwise, the filters will be applied as regular slice filters.
    *
-   * (1) Array of filters returned from filter factory functions, such as
+   * (1) Array of {@link Filter} returned from filter factory functions, such as
    * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.
    *
    * Use this option for highlights that do not require a UI to set them
-   * or for highlights where you will supply your own UI using non-Sisense components.
+   * or for highlights where you will supply your own UI components or use pre-built UI components. This is the most common option.
    *
    * To learn more about using filter factory functions to create highlights, see the
    * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
    *
-   * (2) Array of filters controlled by Sisense filter components.
+   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link MemberFilterTile}.
    *
-   * Use this option for highlights that you want your users to set using Sisense UI components.
+   * Use this option for highlights that you want your users to set using pre-built UI components.
    *
    * To learn more about using filter components to create highlights, see the
    * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components-for-highlighting).

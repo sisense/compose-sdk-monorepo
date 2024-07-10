@@ -1,7 +1,5 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api';
-import { type DashboardDto } from '@/api/types/dashboard-dto';
-import { type WidgetDto } from '@/dashboard-widget/types';
 import { DashboardModel } from '@/models/dashboard/dashboard-model';
 import { CompleteThemeSettings } from '../../types';
 
@@ -42,16 +40,15 @@ export async function getDashboardModel(
     fields.push('filters');
   }
 
-  const promises: [Promise<DashboardDto>, Promise<WidgetDto[]>?] = [
+  const promises = [
     api.getDashboard(dashboardOid, { fields }),
-  ];
-
-  if (includeWidgets) {
-    promises.push(api.getDashboardWidgets(dashboardOid));
-  }
+    includeWidgets ? api.getDashboardWidgets(dashboardOid) : undefined,
+  ] as const;
 
   const [dashboard, widgets] = await Promise.all(promises);
-
+  if (!dashboard) {
+    throw new Error(`Dashboard with oid ${dashboardOid} not found`);
+  }
   if (widgets) {
     dashboard.widgets = widgets;
   }

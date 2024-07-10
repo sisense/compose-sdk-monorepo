@@ -40,7 +40,7 @@ export const useLocations = (
 
     const encodedWordsMap = {};
     const geoLevel = getLocationGeoLevel(locationLevel);
-    const locationsResponse: Location[] = await app.httpClient.post('api/v1/geo/locations', {
+    const locationsResponse = await app.httpClient.post<Location[]>('api/v1/geo/locations', {
       locations: locations.map((location) => ({
         name: encodeNotSupportedLocationName(location.name, encodedWordsMap),
       })),

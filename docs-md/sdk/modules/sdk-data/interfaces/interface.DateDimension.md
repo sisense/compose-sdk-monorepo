@@ -90,6 +90,14 @@ Hours level (for Live Models)
 
 ***
 
+### Minutes
+
+> **`readonly`** **Minutes**: [`LevelAttribute`](interface.LevelAttribute.md)
+
+Minutes level (for Live Models)
+
+***
+
 ### MinutesRoundTo15
 
 > **`readonly`** **MinutesRoundTo15**: [`LevelAttribute`](interface.LevelAttribute.md)
@@ -119,6 +127,14 @@ Months level
 > **`readonly`** **Quarters**: [`LevelAttribute`](interface.LevelAttribute.md)
 
 Quarters level
+
+***
+
+### Seconds
+
+> **`readonly`** **Seconds**: [`LevelAttribute`](interface.LevelAttribute.md)
+
+Seconds level (for Live Models)
 
 ***
 

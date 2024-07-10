@@ -8,7 +8,7 @@ import {
   getNumberFormatConfig,
   getPivotDataOptionByJaqlIndex,
 } from '../utils.js';
-import { parseISOWithDefaultUTCOffset } from '@/query/query-result-date-formatting.js';
+import parseISO from 'date-fns/parseISO';
 
 const PIVOT_TABLE_NULL_VALUE = 'N\\A';
 
@@ -26,6 +26,8 @@ export const createHeaderCellValueFormatter = (
       return;
     }
 
+    const dateFormat = getDateFormatConfig(dataOption as Column | StyledColumn);
+
     switch (jaqlPanelItem?.jaql?.datatype) {
       case 'numeric':
         cell.content = applyFormatPlainText(
@@ -34,10 +36,7 @@ export const createHeaderCellValueFormatter = (
         );
         break;
       case 'datetime':
-        cell.content = dateFormatter(
-          parseISOWithDefaultUTCOffset(cell.value!),
-          getDateFormatConfig(dataOption as Column | StyledColumn),
-        );
+        cell.content = dateFormat ? dateFormatter(parseISO(cell.value!), dateFormat) : cell.value;
         break;
       default:
         cell.content = cell.value;

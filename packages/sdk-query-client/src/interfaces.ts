@@ -19,6 +19,6 @@ export interface QueryClient {
     config?: QueryExecutionConfig,
   ): ExecutingPivotQueryResult;
   getDataSourceFields(dataSource: DataSource): Promise<DataSourceField[]>;
-  getDataSourceSchema(datasourceName: string): Promise<DataSourceSchema>;
+  getDataSourceSchema(datasourceName: string): Promise<DataSourceSchema | undefined>;
   getDataSourceList(): Promise<DataSourceMetadata[]>;
 }

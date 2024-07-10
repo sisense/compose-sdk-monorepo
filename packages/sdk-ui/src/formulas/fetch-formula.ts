@@ -20,12 +20,14 @@ export async function fetchFormulaByOid(
   app: ClientApplication,
 ): Promise<DimensionalCalculatedMeasure | null> {
   try {
-    const formula: FormulaJaql = await app.httpClient.get(
+    const formula = await app.httpClient.get<FormulaJaql>(
       `api/v1/formulas/${oid}?flat=true`,
       undefined,
       { skipTrackingParam: true },
     );
-    if (!formula) return null;
+    if (!formula) {
+      return null;
+    }
     // For formula jaql this function will create DimensionalCalculatedMeasure
     return createDimensionalElementFromJaql(formula) as DimensionalCalculatedMeasure;
   } catch (err) {
@@ -46,13 +48,15 @@ export async function fetchFormula(
   app: ClientApplication,
 ): Promise<DimensionalCalculatedMeasure | null> {
   try {
-    const formulas: FormulaJaql[] = await app.httpClient.get(
+    const formulas = await app.httpClient.get<FormulaJaql[]>(
       `api/v1/formulas?datasource=${getDataSourceName(dataSource)}&flat=true`,
       undefined,
       { skipTrackingParam: true },
     );
-    const formula = formulas.find((f: FormulaJaql) => f.title === name);
-    if (!formula) return null;
+    const formula = formulas?.find((f: FormulaJaql) => f.title === name);
+    if (!formula) {
+      return null;
+    }
     // For formula jaql this function will create DimensionalCalculatedMeasure
     return createDimensionalElementFromJaql(formula) as DimensionalCalculatedMeasure;
   } catch (err) {

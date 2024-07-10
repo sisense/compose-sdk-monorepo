@@ -27,7 +27,10 @@ export const LoadingOverlay = ({
     <div id="overlay" className="csdk-relative csdk-h-full">
       {isVisible && (
         // z-index is set to 401, which is higher than max z-index of 400 on areamap
-        <div className="csdk-absolute csdk-h-full csdk-w-full csdk-z-[401] csdk-opacity-80">
+        <div
+          className="csdk-absolute csdk-h-full csdk-w-full csdk-z-[401] csdk-opacity-80"
+          area-label="csdk-loading-overlay"
+        >
           <div className={`csdk-h-full csdk-bg-transparent`}>
             <div
               className={`csdk-h-full csdk-flex csdk-flex-col csdk-gap-y-4 csdk-items-center csdk-justify-center csdk-bg-transparent`}

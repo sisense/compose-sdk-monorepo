@@ -6,6 +6,7 @@ title: Interfaces
 
 TypeScript interfaces for components and hooks listed above
 
+- [AiChatThemeSettings](interface.AiChatThemeSettings.md)
 - [AreaChartProps](interface.AreaChartProps.md)
 - [AreaRangeChartProps](interface.AreaRangeChartProps.md)
 - [AreaRangeMeasureColumn](interface.AreaRangeMeasureColumn.md)
@@ -21,6 +22,7 @@ TypeScript interfaces for components and hooks listed above
 - [CategoricalChartDataOptions](interface.CategoricalChartDataOptions.md)
 - [ChartProps](interface.ChartProps.md)
 - [ChartRecommendations](interface.ChartRecommendations.md)
+- [ChartThemeSettings](interface.ChartThemeSettings.md)
 - [ChartWidgetProps](interface.ChartWidgetProps.md)
 - [ChatConfig](interface.ChatConfig.md)
 - [ColumnChartProps](interface.ColumnChartProps.md)
@@ -41,6 +43,7 @@ TypeScript interfaces for components and hooks listed above
 - [FunnelChartProps](interface.FunnelChartProps.md)
 - [FunnelStyleOptions](interface.FunnelStyleOptions.md)
 - [GaugeIndicatorStyleOptions](interface.GaugeIndicatorStyleOptions.md)
+- [GeneralThemeSettings](interface.GeneralThemeSettings.md)
 - [GetDashboardModelOptions](interface.GetDashboardModelOptions.md)
 - [GetDashboardModelParams](interface.GetDashboardModelParams.md)
 - [GetDashboardModelsOptions](interface.GetDashboardModelsOptions.md)
@@ -85,6 +88,7 @@ TypeScript interfaces for components and hooks listed above
 - [ThemeSettings](interface.ThemeSettings.md)
 - [TreemapChartProps](interface.TreemapChartProps.md)
 - [TreemapStyleOptions](interface.TreemapStyleOptions.md)
+- [TypographyThemeSettings](interface.TypographyThemeSettings.md)
 - [UseGetNlgQueryResultParams](interface.UseGetNlgQueryResultParams.md)
 - [UseGetNlgQueryResultState](interface.UseGetNlgQueryResultState.md)
 - [UseGetQueryRecommendationsParams](interface.UseGetQueryRecommendationsParams.md)

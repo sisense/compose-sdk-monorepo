@@ -6,6 +6,8 @@ title: ThemeService
 
 Service for working with Sisense Fusion themes.
 
+If no theme service is used, the current Fusion theme is applied by default.
+
 ## Constructors
 
 ### constructor

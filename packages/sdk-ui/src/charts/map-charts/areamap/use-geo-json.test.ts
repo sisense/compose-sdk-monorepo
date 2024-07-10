@@ -42,26 +42,26 @@ vi.mock('../../../api/rest-api.js', () => ({
 }));
 
 // Mock the LocalStorage
-const localStorageMock = (function () {
-  return {
-    getItem: function (key: string): any {
-      return this[key] || null;
-    },
-    setItem: function (key: string, value: string) {
-      this[key] = value.toString();
-    },
-    removeItem: function (key: string) {
-      delete this[key];
-    },
-    clear: function () {
-      Object.keys(this).forEach((key) => {
-        if (['getItem', 'setItem', 'removeItem', 'clear'].includes(key)) return;
-        delete this[key];
-      });
-    },
-  };
-})();
+class LocalStorageMock {
+  getItem(key: string) {
+    return this[key] ?? null;
+  }
 
+  setItem(key: string, value: string) {
+    this[key] = value;
+  }
+
+  removeItem(key: string) {
+    delete this[key];
+  }
+
+  clear() {
+    for (const key of Object.keys(this)) {
+      delete this[key];
+    }
+  }
+}
+const localStorageMock = new LocalStorageMock();
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
 describe('useGeoJson', () => {
@@ -94,6 +94,20 @@ describe('useGeoJson', () => {
           features: [{ type: 'Feature', properties: {}, geometry: {} }],
         }),
       );
+    });
+  });
+
+  it('should handle empty result gracefully when fetching geoJson from the server', async () => {
+    const mapType: AreamapType = 'world';
+
+    // Mock an error in the getCountriesGeoJson function from the api module
+    mockApi.getCountriesGeoJson.mockResolvedValueOnce(undefined);
+
+    const { result } = renderHook(() => useGeoJson(mapType));
+
+    await waitFor(() => {
+      expect(result.current.geoJson).toBeUndefined();
+      expect(result.current.error).toEqual(new Error('Failed loading map'));
     });
   });
 

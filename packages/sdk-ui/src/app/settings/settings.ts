@@ -78,11 +78,11 @@ export async function getSettings(
  * @param isWat - Whether the application is running with WAT authentication
  * @returns - Server settings
  */
-async function loadServerSettings(
-  httpClient: Pick<HttpClient, 'get'>,
-  useDefaultPalette = false,
-): Promise<ServerSettings> {
+async function loadServerSettings(httpClient: Pick<HttpClient, 'get'>, useDefaultPalette = false) {
   const globals = await httpClient.get<GlobalsObject>('api/globals');
+  if (!globals) {
+    throw new Error('Failed to load server settings');
+  }
   const palette = useDefaultPalette
     ? ({ colors: getDefaultThemeSettings().palette.variantColors } as LegacyPalette)
     : await getLegacyPalette(getPaletteName(globals.designSettings), httpClient);

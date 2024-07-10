@@ -2,16 +2,59 @@ import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
 
 import { SisenseSwitchButton, TriangleIndicator } from './common';
-import { ArrowDownIcon } from './icons';
+import { ArrowDownIcon, LockIcon } from './icons';
 import { useThemeContext } from '../../theme-provider';
 import { getSlightlyDifferentColor } from '../../utils/color';
 import { FilterVariant, isVertical } from './common/filter-utils';
 import styled from '@emotion/styled';
 import merge from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
+import { BackgroundFilterIcon } from '@/filters/components/icons/background-filter-icon';
+import { css } from '@emotion/react';
+
+const BORDER_STYLE = '1px solid #dadada';
+const FILTER_TILE_MIN_WIDTH = 216;
+
+const Container = styled.div<{
+  shouldShowBorder: boolean;
+}>`
+  width: min-content;
+  max-width: 100%;
+  align-self: flex-start;
+  box-sizing: border-box;
+
+  ${({ shouldShowBorder }) =>
+    shouldShowBorder &&
+    css`
+      border: ${BORDER_STYLE};
+    `}
+`;
+
+const Header = styled.header<{
+  shouldShowBorder: boolean;
+}>`
+  display: flex;
+  align-items: center;
+
+  ${({ shouldShowBorder }) =>
+    shouldShowBorder &&
+    css`
+      border-bottom: ${BORDER_STYLE};
+    `}
+`;
+
+const Footer = styled.footer`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 26px;
+
+  border-top: ${BORDER_STYLE};
+`;
 
 /**
  * Design options for the filter tile component.
+ *
  * @internal
  */
 export interface FilterTileDesignOptions {
@@ -19,6 +62,7 @@ export interface FilterTileDesignOptions {
     shouldBeShown?: boolean;
     isCollapsible?: boolean;
     hasBorder?: boolean;
+    hasBackgroundFilterIcon?: boolean;
   };
   border?: {
     shouldBeShown?: boolean;
@@ -38,6 +82,7 @@ interface Props {
   isDependent?: boolean;
   design?: FilterTileDesignOptions;
   onToggleDisabled?: () => void;
+  locked?: boolean;
 }
 
 const defaultDesign: CompleteFilterTileDesignOptions = {
@@ -45,6 +90,7 @@ const defaultDesign: CompleteFilterTileDesignOptions = {
     shouldBeShown: true,
     hasBorder: true,
     isCollapsible: true,
+    hasBackgroundFilterIcon: false,
   },
   border: {
     shouldBeShown: true,
@@ -79,6 +125,7 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
     disabled,
     onToggleDisabled,
     isDependent,
+    locked = false,
   } = props;
   const design = merge.withOptions(
     { mergeArrays: false },
@@ -92,32 +139,22 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
   const { backgroundColor: bgColor } = themeSettings.general;
   const { primaryTextColor: textColor } = themeSettings.typography;
   const disabledBgColor = getSlightlyDifferentColor(bgColor, 0.1);
+  const minWidth = isDependent ? FILTER_TILE_MIN_WIDTH - 2 : FILTER_TILE_MIN_WIDTH;
 
   return (
     <GroupHoverWrapper>
-      <div
-        className={`${isVertical(arrangement) ? 'csdk-min-w-[216px]' : ''} ${
-          isDependent ? '' : 'csdk-p-px'
-        } csdk-w-min  csdk-text-text-content csdk-self-start ${
-          design.border?.shouldBeShown ? 'csdk-border csdk-border-solid csdk-border-[#dadada]' : ''
-        }`}
+      <Container
+        shouldShowBorder={design.border?.shouldBeShown}
         style={{
+          minWidth: isVertical(arrangement) ? minWidth : 'auto',
           backgroundColor: disabled ? disabledBgColor : bgColor,
         }}
       >
         {isVertical(arrangement) && design.header.shouldBeShown && (
           <>
             {isDependent && <TriangleIndicator />}
-            <header
-              className={
-                'csdk-flex csdk-items-center ' +
-                (design.header.hasBorder
-                  ? 'csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]'
-                  : '')
-              }
-              style={{ color: textColor }}
-            >
-              {design.header.isCollapsible && (
+            <Header shouldShowBorder={design.header.hasBorder} style={{ color: textColor }}>
+              {!locked && design.header.isCollapsible && (
                 <ArrowDownIcon
                   aria-label="arrow-down"
                   width="16"
@@ -129,6 +166,8 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
                   onClick={() => setCollapsed((value) => !value)}
                 />
               )}
+              {design.header.hasBackgroundFilterIcon && <BackgroundFilterIcon />}
+              {locked && !isDependent && <LockIcon />}
               <span
                 className={
                   'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
@@ -137,28 +176,40 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
               >
                 {title}
               </span>
-            </header>
+            </Header>
           </>
         )}
 
-        <main style={{ color: textColor }}>{renderContent(collapsed, disabled ?? false)}</main>
-
-        {isVertical(arrangement) && design.footer.shouldBeShown && (
-          <footer
-            className={
-              'csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]'
-            }
-          >
-            <SisenseSwitchButton
-              checked={!disabled}
-              size="small"
-              onChange={() => onToggleDisabled?.()}
-              inputProps={{ role: 'switch', name: 'tile-switch' }}
-              theme={themeSettings}
+        <main style={{ color: textColor, position: 'relative' }}>
+          {renderContent(collapsed, disabled ?? false)}
+          {locked && design.header.shouldBeShown && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '4px',
+                left: '4px',
+                right: '4px',
+                bottom: '4px',
+                backgroundColor: 'white',
+                opacity: 0.5,
+              }}
             />
-          </footer>
+          )}
+        </main>
+        {isVertical(arrangement) && design.footer.shouldBeShown && (
+          <Footer>
+            {!locked && (
+              <SisenseSwitchButton
+                checked={!disabled}
+                size="small"
+                inputProps={{ role: 'switch', name: 'tile-switch' }}
+                onChange={() => onToggleDisabled?.()}
+                theme={themeSettings}
+              />
+            )}
+          </Footer>
         )}
-      </div>
+      </Container>
     </GroupHoverWrapper>
   );
 };

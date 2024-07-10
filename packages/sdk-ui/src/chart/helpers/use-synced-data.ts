@@ -68,7 +68,7 @@ export const useSyncedData = (
     let ignore = false;
 
     const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
-    if (dataSet === undefined || isDataSource(dataSet)) {
+    if (isDataSource(dataSet)) {
       if (!app) {
         return;
       }

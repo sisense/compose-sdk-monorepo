@@ -203,7 +203,7 @@ export const getSeriesChartDesignOptions = (
   ) as SeriesDesignOptions;
   if (chartType === 'line') {
     const lineStyleOptions = styleOptions as LineStyleOptions;
-    seriesDesignOptions.lineWidth = getLineWidth(lineStyleOptions.lineWidth || { width: 'thin' });
+    seriesDesignOptions.lineWidth = getLineWidth(lineStyleOptions.lineWidth || { width: 'bold' });
     seriesDesignOptions.marker = getMarkers(
       lineStyleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' },
     );
@@ -217,7 +217,7 @@ export const getLineChartDesignOptions = (
   hasY2Axis: boolean,
 ): LineChartDesignOptions => {
   const style = getCartesianChartStyle(styleOptions, hasY2Axis);
-  style.lineWidth = getLineWidth(styleOptions.lineWidth || { width: 'thin' });
+  style.lineWidth = getLineWidth(styleOptions.lineWidth || { width: 'bold' });
   style.marker = getMarkers(
     styleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' },
   );

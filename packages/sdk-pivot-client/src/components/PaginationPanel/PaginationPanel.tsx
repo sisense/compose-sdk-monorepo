@@ -400,45 +400,47 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
     const scrollStyle = { width: '100%', height: '' };
 
     return (
-      <div className={panelClass} data-html2canvas-ignore="true" ref={this.panelRef}>
-        <CustomScroll style={scrollStyle} autoHeight={true}>
-          <div className={PANEL_WRAPPER}>
-            {notificationStr ? (
-              <div className={NOTIFICATION_WRAPPER} title={notificationStr}>
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={this.onNotificationMoreClick}
-                  onKeyPress={this.onNotificationMoreClick}
-                  dangerouslySetInnerHTML={{
-                    __html: alertIcon,
+      <div className="sis-scope">
+        <div className={panelClass} data-html2canvas-ignore="true" ref={this.panelRef}>
+          <CustomScroll style={scrollStyle} autoHeight={true}>
+            <div className={PANEL_WRAPPER}>
+              {notificationStr ? (
+                <div className={NOTIFICATION_WRAPPER} title={notificationStr}>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={this.onNotificationMoreClick}
+                    onKeyPress={this.onNotificationMoreClick}
+                    dangerouslySetInnerHTML={{
+                      __html: alertIcon,
+                    }}
+                    aria-label="alert"
+                  />
+                </div>
+              ) : (
+                notificationFallback
+              )}
+
+              <div className={LIST_WRAPPER}>
+                <TablePagination
+                  count={itemsCount}
+                  page={activePage + 1}
+                  rowsPerPage={itemsPerPage}
+                  displayedLabelRows={{
+                    conjunction: conjunctionLabel,
+                    result: resultLabel,
                   }}
-                  aria-label="alert"
+                  rowsPerPageOptions={[10, 25, 50, 75]}
+                  labelRowsPerPage={rowsPerPageLabel}
+                  labelRowsPerPageShort={rowsPerPageLabelShort}
+                  dataTestId="TablePagination"
+                  onPageChange={this.handlePageSelected}
+                  onRowsPerPageChange={this.onRowsPerPageChange}
                 />
               </div>
-            ) : (
-              notificationFallback
-            )}
-
-            <div className={LIST_WRAPPER}>
-              <TablePagination
-                count={itemsCount}
-                page={activePage + 1}
-                rowsPerPage={itemsPerPage}
-                displayedLabelRows={{
-                  conjunction: conjunctionLabel,
-                  result: resultLabel,
-                }}
-                rowsPerPageOptions={[10, 25, 50, 75]}
-                labelRowsPerPage={rowsPerPageLabel}
-                labelRowsPerPageShort={rowsPerPageLabelShort}
-                dataTestId="TablePagination"
-                onPageChange={this.handlePageSelected}
-                onRowsPerPageChange={this.onRowsPerPageChange}
-              />
             </div>
-          </div>
-        </CustomScroll>
+          </CustomScroll>
+        </div>
       </div>
     );
   }

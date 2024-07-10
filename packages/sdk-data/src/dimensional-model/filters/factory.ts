@@ -506,8 +506,9 @@ export function members(
   members: string[],
   _deactivatedMembers?: string[],
   guid?: string,
+  backgroundFilter?: Filter,
 ): Filter {
-  return new MembersFilter(attribute, members, _deactivatedMembers, guid);
+  return new MembersFilter(attribute, members, _deactivatedMembers, guid, backgroundFilter);
 }
 
 // DATE FILTERS

@@ -236,6 +236,42 @@ describe('DimensionalQueryClient', () => {
         expect(gotDataSourceFields).toEqual(testSample.fields);
       }
     });
+
+    it('should handle empty response', async () => {
+      httpClientMock.post.mockResolvedValue(undefined);
+      const gotDataSourceFields = await queryClient.getDataSourceFields(testDataset[0].datasource);
+      expect(gotDataSourceFields.length).toBe(0);
+    });
+  });
+
+  describe('getDataSourceSchema', () => {
+    it('should resolve the data source schema', async () => {
+      const testValue = {};
+      httpClientMock.get.mockResolvedValueOnce(testValue);
+      const gotDataSourceSchema = await queryClient.getDataSourceSchema('test');
+      expect(gotDataSourceSchema).toBe(testValue);
+    });
+
+    it('should handle empty response', async () => {
+      httpClientMock.get.mockResolvedValue(undefined);
+      const gotDataSourceSchema = await queryClient.getDataSourceSchema('test');
+      expect(gotDataSourceSchema).toBeUndefined();
+    });
+  });
+
+  describe('getDataSourceList', () => {
+    it('should resolve the data source list', async () => {
+      const testValue = {};
+      httpClientMock.get.mockResolvedValueOnce(testValue);
+      const gotDataSourceSchema = await queryClient.getDataSourceList();
+      expect(gotDataSourceSchema).toBe(testValue);
+    });
+
+    it('should handle empty response', async () => {
+      httpClientMock.get.mockResolvedValue(undefined);
+      const gotDataSourceFields = await queryClient.getDataSourceList();
+      expect(gotDataSourceFields.length).toBe(0);
+    });
   });
 
   describe('validateQueryDescription', () => {

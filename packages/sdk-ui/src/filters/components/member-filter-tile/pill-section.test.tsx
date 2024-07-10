@@ -27,8 +27,8 @@ it('renders selected members as active and inactive pills', () => {
 
   const { brandColor } = defaultThemeSettings.general;
 
-  expect(rgbToHex(pill2013.style.backgroundColor)).toBe(brandColor);
-  expect(rgbToHex(pill2015.style.backgroundColor)).not.toBe(brandColor);
+  expect(rgbToHex(getComputedStyle(pill2013).backgroundColor)).toBe(brandColor);
+  expect(rgbToHex(getComputedStyle(pill2015).backgroundColor)).not.toBe(brandColor);
 });
 
 it('executes correct callback when pill is clicked', async () => {

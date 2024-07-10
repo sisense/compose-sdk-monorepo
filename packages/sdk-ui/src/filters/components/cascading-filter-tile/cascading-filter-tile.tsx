@@ -1,5 +1,5 @@
 import { FilterTile } from '../filter-tile.js';
-import { CascadingFilter, Filter } from '@sisense/sdk-data';
+import { CascadingFilter, DataSource, Filter } from '@sisense/sdk-data';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component.js';
 import { FilterVariant } from '../common/filter-utils.js';
 import { CascadingLevelFilterTile } from './cascading-level-filter.js';
@@ -14,6 +14,12 @@ import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.j
 export interface CascadingFilterTileProps {
   /** Cascading filter object to initialize filter type and default values */
   filter: CascadingFilter;
+  /**
+   * Data source the query is run against - e.g. `Sample ECommerce`
+   *
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
+   */
+  dataSource?: DataSource;
   /** Arrangement of the filter inputs. Use vertical for standard filter tiles and horizontal for toolbars */
   arrangement?: FilterVariant;
   /** Callback returning filter object, or null for failure */
@@ -30,7 +36,12 @@ export interface CascadingFilterTileProps {
  */
 export const CascadingFilterTile = asSisenseComponent({ componentName: 'CascadingFilterTile' })(
   (props: CascadingFilterTileProps) => {
-    const { filter: filterFromProps, arrangement, onChange: updateFilterFromProps } = props;
+    const {
+      filter: filterFromProps,
+      arrangement,
+      onChange: updateFilterFromProps,
+      dataSource,
+    } = props;
 
     const { filter, updateFilter } = useSynchronizedFilter<CascadingFilter>(
       filterFromProps,
@@ -55,6 +66,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
               <CascadingLevelFilterTile
                 key={index}
                 filter={levelFilter}
+                dataSource={dataSource}
                 parentFilters={currentParentFilters}
                 onChange={(newFilter) => {
                   return newFilter ? handleLevelFilterChange(newFilter, index) : null;
@@ -75,6 +87,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
             shouldBeShown: false,
           },
         }}
+        locked={filter.locked}
       />
     );
   },

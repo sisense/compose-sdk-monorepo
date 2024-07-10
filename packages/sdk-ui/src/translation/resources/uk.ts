@@ -47,6 +47,8 @@ export const translation: TranslationDictionary = {
     unknownFilterInFilterRelations: 'Логічні відношення фільтрів містять невідомий фільтр',
     filterRelationsNotSupported: 'Відносини фільтрів ще не підтримуються',
     invalidFilterType: 'Недійсний тип фільтра',
+    secondsDateTimeLevelSupportedOnlyForLive:
+      "Рівень часу в секундах підтримується лише для 'live' джерела даних",
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',

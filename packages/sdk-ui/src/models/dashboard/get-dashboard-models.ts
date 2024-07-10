@@ -33,5 +33,5 @@ export async function getDashboardModels(
 
   const dashboards = await api.getDashboards({ fields, expand, searchByTitle });
 
-  return dashboards.map((dashboard) => new DashboardModel(dashboard));
+  return dashboards?.map((dashboard) => new DashboardModel(dashboard)) || [];
 }

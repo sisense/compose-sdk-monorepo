@@ -145,4 +145,38 @@ describe('getDashboardModels', () => {
       widgetFilterOptions: expect.anything(),
     });
   });
+
+  it("should throw an error if the dashboard doesn't exist", async () => {
+    getDashboardsMock.mockReturnValueOnce(undefined);
+
+    const targetDashboardMock = dashboardsMock[1];
+    const options: GetDashboardModelsOptions = {
+      searchByTitle: targetDashboardMock.title,
+    };
+
+    const result = await getDashboardModels(httpClientMock, options);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result.length).toBe(0);
+  });
+
+  it('should handle network error', async () => {
+    getDashboardsMock.mockRejectedValueOnce(new Error('Network error'));
+
+    const targetDashboardMock = dashboardsMock[1];
+    const options: GetDashboardModelsOptions = {
+      searchByTitle: targetDashboardMock.title,
+    };
+
+    let result;
+    let error;
+    try {
+      result = await getDashboardModels(httpClientMock, options);
+    } catch (e) {
+      error = e;
+    }
+
+    expect(result).toBeUndefined();
+    expect(error).toEqual(new Error('Network error'));
+  });
 });

@@ -66,6 +66,9 @@ export const useFetchWidgetDtoModel = ({
   useEffect(() => {
     fetchWidgetDtoModel({ widgetOid, dashboardOid, includeDashboard, api })
       .then(({ widget, dashboard }) => {
+        if (!widget) {
+          throw new Error(`Widget with oid ${widgetOid} empty response`);
+        }
         setFetchedDtoModelsWidget({
           widget,
           dashboard,

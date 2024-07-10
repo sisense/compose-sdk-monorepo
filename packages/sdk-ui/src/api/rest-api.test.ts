@@ -10,6 +10,9 @@ const restApi = new RestApi(httpClientMock);
 
 describe('Rest API', () => {
   beforeEach(() => {
+    httpGetMock.mockResolvedValue(undefined); // httpClient.get returns a promise
+  });
+  afterEach(() => {
     vi.clearAllMocks();
   });
 

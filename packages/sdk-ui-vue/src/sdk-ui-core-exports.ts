@@ -53,6 +53,8 @@ export type {
   ScattermapChartProps,
   SisenseContextProviderProps,
   DashboardWidgetProps,
+  DashboardByIdProps,
+  DashboardProps,
 
   // Hooks/Composables Props:
   ExecuteQueryByWidgetIdParams,
@@ -145,6 +147,10 @@ export type {
   ScatterDataPoint,
   HighchartsOptions,
   BoxplotDataPoint,
+
+  // Dashboard:
+  Layout,
+  WidgetFilterOptions,
 
   // General (Others)
   AppConfig,

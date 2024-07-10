@@ -73,10 +73,11 @@ export const useGetDashboardModel = (params: MaybeRefOrWithRefs<GetDashboardMode
   const runGetDashboardModel = async (application: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
-      const { dashboardOid, includeWidgets } = toPlainObject(params);
+      const { dashboardOid, includeWidgets, includeFilters } = toPlainObject(params);
 
       const data = await getDashboardModel(application.httpClient, dashboardOid, {
         includeWidgets,
+        includeFilters,
       });
 
       dispatch({ type: 'success', data });

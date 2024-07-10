@@ -59,6 +59,7 @@ export interface DateRangeFilterTileProps {
 
   /**
    * Whether to display the filter as a tiled version.
+   *
    * @default false
    * @internal
    */
@@ -66,6 +67,7 @@ export interface DateRangeFilterTileProps {
 
   /**
    * Design options for the filter tile component
+   *
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
@@ -168,6 +170,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
         }}
         disabled={filter.disabled}
         design={tileDesignOptions}
+        locked={filter.locked}
       />
     );
   },

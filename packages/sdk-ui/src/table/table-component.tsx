@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { isDataSource } from '@sisense/sdk-data';
 import { TableProps } from '../props';
@@ -19,6 +19,11 @@ import { LoadingIndicator } from '../common/components/loading-indicator';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
 import { translateTableStyleOptionsToDesignOptions } from './translations/design-options';
 
+export const DEFAULT_TABLE_ROWS_PER_PAGE = 25;
+
+/** How many pages of data will be loaded in one query */
+export const PAGES_BATCH_SIZE = 10;
+
 /**
  * Component that renders a table with aggregation and pagination.
  */
@@ -27,60 +32,75 @@ export const TableComponent = ({
   dataOptions,
   styleOptions = {},
   filters,
-  refreshCounter,
 }: TableProps) => {
   const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE, width, height } = styleOptions;
   const { themeSettings } = useThemeContext();
-  const [innerDataOptions, setInnerDataOptions] = useState<TableDataOptionsInternal | null>(null);
-  const [dataColumnNamesMapping, setDataColumnNamesMapping] = useState({});
   const [offset, setOffset] = useState(0);
   const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
-  const data = useTableData({
-    dataSet,
+  const [currentPage, setCurrentPage] = useState(1);
+  const paginationEl = useRef(null);
+
+  const translatedDataOptions = useMemo(
+    () => translateTableDataOptions(dataOptions),
+    [dataOptions],
+  );
+  const dataColumnNamesMapping = useMemo(
+    () => generateUniqueDataColumnsNames(translatedDataOptions.columns.filter(isValue)),
+    [translatedDataOptions],
+  );
+
+  const [innerDataOptions, setInnerDataOptions] =
+    useState<TableDataOptionsInternal>(translatedDataOptions);
+
+  const [usedDataSet, setUsedDataset] = useState(dataSet);
+  const [data, updatedDataOptions] = useTableData({
+    dataSet: usedDataSet,
     dataOptions: innerDataOptions,
     filters: filterList,
     filterRelations,
     count: rowsPerPage * PAGES_BATCH_SIZE,
     offset,
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const paginationEl = useRef(null);
 
   const dataTable = useTableDataTable({
     data,
-    innerDataOptions,
+    innerDataOptions: updatedDataOptions,
     dataColumnNamesMapping,
-    needToAggregate: dataSet !== undefined && !isDataSource(dataSet),
+    needToAggregate: !isDataSource(usedDataSet),
   });
 
   useEffect(() => {
-    const translatedDataOptions = translateTableDataOptions(dataOptions);
-    setDataColumnNamesMapping(
-      generateUniqueDataColumnsNames(translatedDataOptions.columns.filter(isValue)),
-    );
     setInnerDataOptions(translatedDataOptions);
+    setUsedDataset(dataSet);
 
-    setOffset(0);
-  }, [dataOptions, refreshCounter]);
-
-  const onPageChange = (page: number) => {
-    if (!data) return;
-    const lastPage = Math.floor(data.rows.length / rowsPerPage) === page;
-    if (lastPage) {
-      setOffset(data.rows.length);
-    }
-    setCurrentPage(page);
-  };
-
-  const onSortUpdate = (column: DataTableColumn) => {
     setCurrentPage(1);
     setOffset(0);
-    if (innerDataOptions) {
-      setInnerDataOptions(updateInnerDataOptionsSort(innerDataOptions, column));
-    }
-  };
+  }, [dataSet, translatedDataOptions]);
 
-  if (!innerDataOptions) return null;
+  const onPageChange = useCallback(
+    (page: number) => {
+      if (!data) return;
+      const lastPage = Math.floor(data.rows.length / rowsPerPage) === page;
+      if (lastPage) {
+        setOffset(data.rows.length);
+      }
+      setCurrentPage(page);
+    },
+    [data, rowsPerPage],
+  );
+
+  const onSortUpdate = useCallback(
+    (column: DataTableColumn) => {
+      setCurrentPage(1);
+      setOffset(0);
+      if (innerDataOptions) {
+        setInnerDataOptions(updateInnerDataOptionsSort(innerDataOptions, column));
+      }
+    },
+    [innerDataOptions],
+  );
+
+  if (!updatedDataOptions) return null;
 
   return (
     <DynamicSizeContainer
@@ -118,7 +138,7 @@ export const TableComponent = ({
           >
             <PureTable
               dataTable={paginatedTable}
-              dataOptions={innerDataOptions}
+              dataOptions={updatedDataOptions}
               designOptions={translateTableStyleOptionsToDesignOptions(styleOptions)}
               themeSettings={themeSettings}
               width={size.width}
@@ -140,8 +160,3 @@ export const TableComponent = ({
     </DynamicSizeContainer>
   );
 };
-
-export const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
-
-/** How many pages of data will be loaded in one query */
-export const PAGES_BATCH_SIZE = 10;

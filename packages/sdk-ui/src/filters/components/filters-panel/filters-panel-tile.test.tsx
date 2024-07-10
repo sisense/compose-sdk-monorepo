@@ -66,6 +66,19 @@ describe('FiltersPanelTile', () => {
     expect(container).toMatchSnapshot();
   });
 
+  it('renders locked RelativeDateFilter component', async () => {
+    const mockFilter = new RelativeDateFilter(mockAttribute as LevelAttribute, 0, 1) as Filter;
+    mockFilter.locked = true;
+    const { container } = render(
+      <MockedSisenseContextProvider>
+        <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
+      </MockedSisenseContextProvider>,
+    );
+    const tile = await findByText(container, mockAttribute.name);
+    expect(tile).toBeTruthy();
+    expect(container).toMatchSnapshot();
+  });
+
   // throws 'Cannot convert object to primitive value'
   // TODO: investigate the error and fix the test
   it.skip('renders CriteriaFilterTile for MeasureFilter', async () => {
@@ -82,6 +95,19 @@ describe('FiltersPanelTile', () => {
 
   it('renders CriteriaFilterTile for NumericFilter', async () => {
     const mockFilter = filterFactory.greaterThan(mockAttribute, 100);
+    const { container } = render(
+      <MockedSisenseContextProvider>
+        <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
+      </MockedSisenseContextProvider>,
+    );
+    const tile = await findByText(container, mockAttribute.name);
+    expect(tile).toBeTruthy();
+    expect(container).toMatchSnapshot();
+  });
+
+  it('renders locked CriteriaFilterTile', async () => {
+    const mockFilter = filterFactory.greaterThan(mockAttribute, 100);
+    mockFilter.locked = true;
     const { container } = render(
       <MockedSisenseContextProvider>
         <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />

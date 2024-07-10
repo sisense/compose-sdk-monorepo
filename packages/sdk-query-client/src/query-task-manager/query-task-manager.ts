@@ -43,10 +43,7 @@ export class QueryTaskManager extends AbstractTaskManager {
     return jaqlPayload;
   }
 
-  private async sendJaqlQuery(
-    task: QueryTask,
-    jaqlPayload: JaqlQueryPayload,
-  ): Promise<QueryResultData> {
+  private async sendJaqlQuery(task: QueryTask, jaqlPayload: JaqlQueryPayload) {
     const { queryDescription, taskId } = task.passport;
     const { responsePromise, abortHttpRequest } = this.queryApi.sendJaqlRequest(
       task.passport.queryDescription.dataSource,
@@ -180,7 +177,12 @@ export class QueryTaskManager extends AbstractTaskManager {
   ]);
 }
 
-export function validateJaqlResponse(jaqlResponse: JaqlResponse): boolean {
+export function validateJaqlResponse(
+  jaqlResponse: JaqlResponse | undefined,
+): asserts jaqlResponse is JaqlResponse {
+  if (!jaqlResponse) {
+    throw new Error('No jaql response received from the server');
+  }
   if (jaqlResponse.error) {
     throw new Error(
       `${jaqlResponse.details} ${jaqlResponse.database ?? ''} ${
@@ -188,5 +190,4 @@ export function validateJaqlResponse(jaqlResponse: JaqlResponse): boolean {
       }`,
     );
   }
-  return true;
 }

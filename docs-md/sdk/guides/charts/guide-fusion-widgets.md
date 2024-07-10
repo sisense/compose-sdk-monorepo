@@ -24,56 +24,25 @@ You can get the `dashboardOid` and `widgetOid` from the widget’s embed code in
 
 For example, the following code snippets get a chart or charts from a Sisense dashboard:
 
-##### Chart
-
-![Widget chart](../../img/chart-guides/dashboard-widget.png 'Widget chart')
-
 ##### React
 
-```ts
-// Hardcoded dashboard and widget IDs
+Hardcoded dashboard and widget IDs
 
-import { DashboardWidget } from '@sisense/sdk-ui';
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/widget-component&mode=docs'
+ width=800
+ height=900
+ style='border:none;'
+/>
 
-//...
+Retrieve widget IDs using hook
 
-<DashboardWidget
-  dashboardOid="65536353a90176002a68e5aa"
-  widgetOid="6553637ea90176002a68e5ac"
-  title="Dashboard Widget"
-/>;
-```
-
-```ts
-// Retrieve dashboard and widget IDs using hook
-
-import { DashboardWidget, useGetDashboardModel } from '@sisense/sdk-ui';
-
-//...
-
-const { dashboard, isLoading, isError } = useGetDashboardModel({
-  dashboardOid: '65536353a90176002a68e5aa',
-  includeWidgets: true,
-});
-
-//...
-
-{
-  isLoading && <div>Loading...</div>;
-}
-{
-  isError && <div>Error</div>;
-}
-{
-  dashboard && (
-    <div>
-      {dashboard.widgets?.map((widget) => (
-        <DashboardWidget widgetOid={widget.oid} dashboardOid={dashboard.oid} title={widget.title} />
-      ))}
-    </div>
-  );
-}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/widget-hook&mode=docs'
+ width=800
+ height=975
+ style='border:none;'
+/>
 
 ##### Angular
 

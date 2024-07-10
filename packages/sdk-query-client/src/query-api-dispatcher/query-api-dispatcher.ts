@@ -1,7 +1,6 @@
 import { DataSource, getDataSourceName } from '@sisense/sdk-data';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import {
-  AbortRequestFunction,
   DataSourceField,
   JaqlResponse,
   JaqlQueryPayload,
@@ -14,81 +13,64 @@ import { TranslatableError } from '../translation/translatable-error.js';
 const API_DATASOURCES_BASE_PATH = 'api/datasources';
 const API_DATAMODELS_BASE_PATH = 'api/v2/datamodels';
 
-type RequestSendingResult<T> = {
-  responsePromise: Promise<T>;
-  abortHttpRequest: AbortRequestFunction;
-};
-
 export class QueryApiDispatcher {
   constructor(private httpClient: HttpClient) {}
 
-  public async getDataSourceFields(
-    dataSource: DataSource,
-    count = 9999,
-    offset = 0,
-  ): Promise<DataSourceField[]> {
+  public getDataSourceFields(dataSource: DataSource, count = 9999, offset = 0) {
     const dataSourceName = getDataSourceName(dataSource);
     const url = `${API_DATASOURCES_BASE_PATH}/${encodeURIComponent(dataSourceName)}/fields/search`;
     // when error is encountered, API returns only status code 400 without informative error message
     // to remedy, catch error and throw a more informative error message
-    try {
-      return await this.httpClient.post(url, { offset, count });
-    } catch (error) {
+    return this.httpClient.post<DataSourceField[]>(url, { offset, count }).catch(() => {
       throw new Error(
         `Failed to get fields for data source "${dataSource}". Please make sure the data source exists and is accessible.`,
       );
-    }
+    });
   }
 
   /**
    * Returns a list of data sources.
    * This method works with user of viewer role or above.
    */
-  public async getDataSourceList(): Promise<DataSourceMetadata[]> {
+  public getDataSourceList() {
     const url = `${API_DATASOURCES_BASE_PATH}/?sharedWith=r,w`;
-    return this.httpClient.get(url);
+    return this.httpClient.get<DataSourceMetadata[]>(url);
   }
 
   /**
    * Returns the schema of a data source by its name.
    */
-  public async getDataSourceSchema(dataSourceName: string): Promise<DataSourceSchema> {
+  public getDataSourceSchema(dataSourceName: string) {
     const url = `${API_DATAMODELS_BASE_PATH}/schema?title=${encodeURIComponent(dataSourceName)}`;
-    return this.httpClient.get(url);
+    return this.httpClient.get<DataSourceSchema>(url);
   }
 
-  public sendJaqlRequest(
-    dataSource: DataSource,
-    jaqlPayload: JaqlQueryPayload,
-  ): RequestSendingResult<JaqlResponse> {
+  public sendJaqlRequest(dataSource: DataSource, jaqlPayload: JaqlQueryPayload) {
     const url = getJaqlUrl(dataSource);
     const abortController = new AbortController();
     return {
       responsePromise: this.httpClient
-        .post(url, jaqlPayload, undefined, abortController.signal)
+        .post<JaqlResponse>(url, jaqlPayload, undefined, abortController.signal)
         .then((response) => {
           if (Array.isArray(response)) {
             return {
               values: [],
               metadata: [],
-            } as JaqlResponse;
+            };
           }
-          return response as JaqlResponse;
+          return response;
         }),
       abortHttpRequest: (reason?: string) => abortController.abort(reason),
     };
   }
 
-  public sendDownloadCsvRequest(
-    dataSource: DataSource,
-    jaqlPayload: JaqlQueryPayload,
-  ): RequestSendingResult<ReadableStream> {
+  public sendDownloadCsvRequest(dataSource: DataSource, jaqlPayload: JaqlQueryPayload) {
     const url = getDownloadCsvUrl(dataSource);
     const abortController = new AbortController();
     const params = new URLSearchParams();
     params.append('data', encodeURIComponent(JSON.stringify(jaqlPayload)));
     return {
-      responsePromise: this.httpClient.post(
+      responsePromise: this.httpClient.post<ReadableStream>(
         url,
         params,
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
@@ -140,7 +122,7 @@ export class QueryApiDispatcher {
 /**
  * Returns the URL for canceling queries for a regular (non-live) datasource.
  *
- * @param dataSource
+ * @param dataSource - The data source of the query.
  */
 function getRegularCancelQueryUrl(dataSource: DataSource): string {
   const datasourcePath = encodeURIComponent(getDataSourceName(dataSource));
@@ -151,7 +133,7 @@ function getRegularCancelQueryUrl(dataSource: DataSource): string {
  * Returns the URL for canceling queries for a live datasource.
  * Live datasources require a different URL for canceling queries.
  *
- * @param dataSource
+ * @param dataSource - The data source of the query.
  */
 function getLiveCancelQueryUrl(dataSource: DataSource): string {
   const datasourcePath = encodeURIComponent(getDataSourceName(dataSource));
@@ -161,7 +143,7 @@ function getLiveCancelQueryUrl(dataSource: DataSource): string {
 /**
  * Returns the URL for sending a JAQL request.
  *
- * @param dataSource
+ * @param dataSource - The data source of the query.
  */
 function getJaqlUrl(dataSource: DataSource): string {
   const dataSourcePath = encodeURIComponent(getDataSourceName(dataSource));

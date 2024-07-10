@@ -9,7 +9,7 @@ title: AiContextProvider
 React component that wraps all generative AI components and hooks.
 
 ::: warning Note
-This component is currently under beta release for selected customers and is subject to change as we make fixes and improvements.
+This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
 :::
 
 ## Parameters

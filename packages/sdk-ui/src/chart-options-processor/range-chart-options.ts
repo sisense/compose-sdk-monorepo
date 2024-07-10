@@ -34,10 +34,10 @@ export const getRangeChartOptions = (
 ) => {
   const lowerValues: Value[] = [];
   const upperValues: Value[] = [];
-  const upperIndex = 0;
-  const lowerIndex = 1;
+  const upperIndex = 1;
+  const lowerIndex = 0;
 
-  dataOptions.rangeValues.forEach(([upper, lower]) => {
+  dataOptions.rangeValues.forEach(([lower, upper]) => {
     upperValues.push(upper);
     lowerValues.push(lower);
   });
@@ -82,8 +82,12 @@ export const getRangeChartOptions = (
     [x: string]: SeriesPointStructure[];
   } = {};
   baseChartOptionsLower.options.series.forEach((s) => {
-    lowerSeriesDataLookup[s.name.replace('Lower', 'Upper')] = [...s.data];
+    lowerSeriesDataLookup[s.name] = [...s.data];
   });
+
+  // Calculate the combined min and max values for the yAxis
+  let minVal = Infinity;
+  let maxVal = -Infinity;
 
   baseChartOptionsUpper.options.series.forEach((s, sIndex) => {
     const lowerSeries = lowerSeriesDataLookup[s.name];
@@ -91,6 +95,7 @@ export const getRangeChartOptions = (
     let upperPointName: string;
     let lowerPointName: string;
     let dataOptionsForSeries: RangeColumn[];
+    s.yAxis = 0; // Assign to the single combined yAxis
     try {
       if (dataOptions.rangeValues.length === 1) {
         dataOptionsForSeries = dataOptions.rangeValues[0] as RangeColumn[] & Value[];
@@ -101,16 +106,24 @@ export const getRangeChartOptions = (
       lowerPointName = dataOptionsForSeries[lowerIndex].column.name;
     } catch (error) {
       // Edge case range chart with breakby and multiple range values
+      // measure names on tooltip will be min and max
     }
 
-    s.data = s.data.map((d, index) => ({
-      ...d,
-      low: lowerSeries[index].y,
-      high: d.y,
-      y: undefined,
-      upperPointName,
-      lowerPointName,
-    }));
+    s.data = s.data.map((d, index) => {
+      const point = {
+        ...d,
+        low: lowerSeries[index].y,
+        high: d.y,
+        y: undefined,
+        upperPointName,
+        lowerPointName,
+      };
+      // Combine data from both upper and lower series
+      if (point.low && point.low < minVal) minVal = point.low;
+      if (point.high && point.high > maxVal) maxVal = point.high;
+
+      return point;
+    });
   });
 
   if (chartType === 'arearange' && chartDesignOptions.lineType === 'smooth') {
@@ -127,45 +140,15 @@ export const getRangeChartOptions = (
     translate,
   );
 
-  // merge the yAxis min and max values
-  const y1Index = 0;
-  const yAxis = baseChartOptionsUpper.options.yAxis ?? [];
-  const y1Axis = yAxis[y1Index];
-  const y1AxisLower = yAxis[y1Index];
+  const [baseYAxisOptions] = baseChartOptionsUpper.options.yAxis ?? [];
+  const yAxis = {
+    ...baseYAxisOptions,
+    min: minVal,
+    max: maxVal,
+  };
 
-  if (
-    y1Axis.min !== null &&
-    y1Axis.min !== undefined &&
-    y1AxisLower.min !== null &&
-    y1AxisLower.min !== undefined
-  )
-    y1Axis.min = Math.min(y1Axis.min, y1AxisLower.min);
-  if (
-    y1Axis.max !== null &&
-    y1Axis.max !== undefined &&
-    y1AxisLower.max !== null &&
-    y1AxisLower.max !== undefined
-  )
-    y1Axis.max = Math.max(y1Axis.max, y1AxisLower.max);
+  // Assign the combined yAxis to both series
+  baseChartOptionsUpper.options.yAxis = [yAxis];
 
-  if (yAxis.length > 1) {
-    const y2Index = 1;
-    const y2Axis = yAxis[y2Index];
-    const y2AxisLower = yAxis[y2Index];
-    if (
-      y2Axis.min !== null &&
-      y2Axis.min !== undefined &&
-      y2AxisLower.min !== null &&
-      y2AxisLower.min !== undefined
-    )
-      y2Axis.min = Math.min(y2Axis.min, y2AxisLower.min);
-    if (
-      y2Axis.max !== null &&
-      y2Axis.max !== undefined &&
-      y2AxisLower.max !== null &&
-      y2AxisLower.max !== undefined
-    )
-      y2Axis.max = Math.max(y2Axis.max, y2AxisLower.max);
-  }
   return baseChartOptionsUpper;
 };

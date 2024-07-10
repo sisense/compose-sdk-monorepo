@@ -8,6 +8,7 @@ const expectedOptions = {
   cache: 'no-store',
   redirect: 'error',
   referrerPolicy: 'same-origin',
+  priority: 'low',
 };
 
 describe('tracking', () => {
@@ -32,6 +33,19 @@ describe('tracking', () => {
 
     await trackProductEvent(fakeAction, {}, httpClient);
     expect(postMock).toHaveBeenCalledWith('api/activities/', [expectedPayload], expectedOptions);
+  });
+
+  it('trackProductEvent should handle failure', async () => {
+    const fakeError = new Error('fakeError');
+    postMock.mockRejectedValueOnce(fakeError);
+
+    const consoleErrorSpy = vi.spyOn(console, 'error');
+
+    await expect(trackProductEvent(fakeAction, {}, httpClient)).resolves.toBeUndefined();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      `unable to log action=${fakeAction}, category=composesdk`,
+      fakeError,
+    );
   });
 
   describe('trackError', () => {

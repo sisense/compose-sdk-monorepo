@@ -8,6 +8,8 @@ title: ThemeProvider
 
 Theme provider, which allows you to adjust the look and feel of child components.
 
+Components not wrapped in a theme provider use the current theme from the connected Fusion instance by default.
+
 ## Parameters
 
 | Parameter | Type | Description |

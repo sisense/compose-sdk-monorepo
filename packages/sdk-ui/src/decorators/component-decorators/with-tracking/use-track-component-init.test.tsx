@@ -11,7 +11,7 @@ vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
 describe('useTrackComponentInit', () => {
   beforeEach(() => {
     vi.mocked(trackProductEvent).mockReset();
-    vi.mocked(trackProductEvent).mockResolvedValue(true);
+    vi.mocked(trackProductEvent).mockResolvedValue(undefined);
   });
 
   it('tracks the sdkComponentInit event once and only once', async () => {
@@ -37,46 +37,6 @@ describe('useTrackComponentInit', () => {
       },
       expect.anything(),
       false,
-    );
-
-    vi.mocked(trackProductEvent).mockClear();
-
-    rerender();
-
-    expect(trackProductEvent).not.toHaveBeenCalled();
-  });
-
-  it('handles errors and does not track again', async () => {
-    vi.mocked(trackProductEvent).mockRejectedValue('Failed');
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
-
-    const { rerender } = renderHook(
-      () => useTrackComponentInit('TestComponent', { prop1: 'value1', prop2: 'value2' }),
-      {
-        wrapper: MockedSisenseContextProvider,
-      },
-    );
-
-    // Flush promises so hasTrackedRef.current is set after trackProductEvent() resolves
-    // https://rickschubert.net/blog/posts/flushing-promises/#:~:text=How%20does%20flushing%20promises%20work
-    await new Promise(setImmediate);
-
-    expect(trackProductEvent).toHaveBeenCalledOnce();
-    expect(trackProductEvent).toHaveBeenCalledWith(
-      'sdkComponentInit',
-      {
-        packageName: 'sdk-ui',
-        packageVersion: 'unit-test-version',
-        componentName: 'TestComponent',
-        attributesUsed: 'prop1, prop2',
-      },
-      expect.anything(),
-      false,
-    );
-    expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      'An error occurred when sending the sdkComponentInit event',
-      'Failed',
     );
 
     vi.mocked(trackProductEvent).mockClear();

@@ -23,7 +23,7 @@ export const translation: TranslationDictionary = {
     filter: {
       unsupportedType: 'Непідтримуваний тип фільтра: {{filterType}}',
       unsupportedDatetimeLevel:
-        'Фільтри не підтримують наступні рівні "datetime": Hours, MinutesRoundTo30, MinutesRoundTo15',
+        'Фільтри не підтримують наступні рівні "datetime": Hours, MinutesRoundTo30, MinutesRoundTo15, Minutes, Seconds',
       membersFilterNullMember: 'MembersFilter у {{attributeId}} - member не може бути нульовим',
     },
     unsupportedDimensionalElement: 'Непідтримуваний тип елемента',

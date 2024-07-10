@@ -97,7 +97,8 @@ export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem[
         jaql.title,
         jaql.dim,
         DimensionalLevelAttribute.translateJaqlToGranularity(jaql),
-        (format?.mask as DatetimeMask)?.[jaql.level!],
+        (format?.mask as DatetimeMask)?.[jaql.level!] ??
+          (format?.mask as DatetimeMask)?.dateAndTime,
         undefined,
         sort,
       )

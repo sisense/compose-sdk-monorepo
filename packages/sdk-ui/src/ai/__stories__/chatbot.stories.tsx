@@ -47,16 +47,23 @@ export const WithCustomNumberOfRecommendations: Story = {
     config: { numOfRecommendations: 6 },
   },
 };
-export const WithDefaultContext: Story = {
+
+export const WithSingleDaatTopic: Story = {
   args: {
-    config: { defaultContextTitle: 'Sample ECommerce' },
+    config: { dataTopicsList: ['Sample ECommerce'] },
+  },
+};
+
+export const WithMultipleDataTopics: Story = {
+  args: {
+    config: { dataTopicsList: ['Sample ECommerce', 'Sample Healthcare'] },
   },
 };
 
 export const WithDisabledWelcomeText: Story = {
   args: {
     config: {
-      defaultContextTitle: 'Sample ECommerce',
+      dataTopicsList: ['Sample ECommerce'],
       welcomeText: false,
     },
   },
@@ -65,7 +72,7 @@ export const WithDisabledWelcomeText: Story = {
 export const WithCustomWelcomeText: Story = {
   args: {
     config: {
-      defaultContextTitle: 'Sample ECommerce',
+      dataTopicsList: ['Sample ECommerce'],
       welcomeText:
         'Hey there! I assist in creating Compose SDK Queries and Charts.\nTell me what to code!',
     },

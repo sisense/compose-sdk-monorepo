@@ -62,6 +62,7 @@ describe('helpers', () => {
 
     it('should throw error and suggestion for similar data source title', async () => {
       httpClient.get.mockResolvedValue(dataSources);
+      httpClient.post.mockResolvedValue(undefined); // required for error reporting
       const dataModel = createDataModel(httpClient, 'Sample ECommerc');
 
       // Assert
@@ -69,6 +70,13 @@ describe('helpers', () => {
       expect(consoleLogSpy).toHaveBeenLastCalledWith(
         `Error fetching metadata. Reason: Error: Data source 'Sample ECommerc' not found. Did you mean 'Sample ECommerce'?\r\n`,
       );
+    });
+
+    it('should handle empty schema', async () => {
+      httpClient.get.mockResolvedValueOnce(dataSources).mockResolvedValueOnce(undefined);
+      httpClient.post.mockResolvedValue(fieldsECommerce.metadata);
+      const dataModel = await createDataModel(httpClient, 'Sample ECommerce');
+      expect(dataModel.name).toEqual(fieldsECommerce.name);
     });
   });
 

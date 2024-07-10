@@ -7,7 +7,7 @@ import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
 const mockSuccessResponse = {
   ok: true,
   status: 200,
-  json: () => ({ data: 'response data' }),
+  json: () => Promise.resolve({ data: 'response data' }),
 };
 
 const mockResponseInterceptor = vi.fn();

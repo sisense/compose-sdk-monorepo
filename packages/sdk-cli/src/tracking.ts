@@ -25,7 +25,5 @@ export const trackExecution = <T extends {}>(
 
   const action = TrackingActions.Execution;
 
-  void trackProductEvent(action, payload, httpClient).catch((e) =>
-    console.log(`An error occurred when sending the ${action} event`, e),
-  );
+  trackProductEvent(action, payload, httpClient);
 };

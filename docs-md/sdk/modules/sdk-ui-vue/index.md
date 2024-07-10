@@ -2,7 +2,7 @@
 title: sdk-ui-vue
 ---
 
-# Module sdk-ui-vue <Badge type="beta" text="Beta" />
+# Module sdk-ui-vue
 
 ## Charts
 

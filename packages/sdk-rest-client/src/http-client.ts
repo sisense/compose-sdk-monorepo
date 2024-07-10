@@ -7,6 +7,8 @@ import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
 
+const AUTH_WAIT_MS = 10;
+
 export interface HttpClientRequestConfig {
   skipTrackingParam?: boolean;
   nonJSONBody?: boolean;
@@ -39,17 +41,17 @@ export class HttpClient {
     return this.auth.authenticate();
   }
 
-  async call<T = unknown>(
+  async call<T>(
     url: string,
     config: RequestInit,
     requestConfig?: HttpClientRequestConfig,
-  ): Promise<T> {
+  ): Promise<T | undefined> {
     if (this.auth.isAuthenticating()) {
       return new Promise((res) => {
         const retry = () => {
           // wait if still authenticating
           if (this.auth.isAuthenticating()) {
-            setTimeout(retry, 10);
+            setTimeout(retry, AUTH_WAIT_MS);
             return;
           }
 
@@ -69,39 +71,40 @@ export class HttpClient {
 
     this.auth.applyHeader(config.headers);
 
-    // used for API usage tracking
-    const trackedUrl = addQueryParamsToUrl(url, {
-      trc: this.env,
-    });
+    const fetchUrl = requestConfig?.skipTrackingParam
+      ? url
+      : addQueryParamsToUrl(url, {
+          trc: this.env,
+        });
 
-    const response = await fetch(requestConfig?.skipTrackingParam ? url : trackedUrl, config);
+    const response = await fetch(fetchUrl, config);
     if (
       response.status === 204 || // No content
       response.status === 304 // Not modified
     ) {
-      return undefined as T;
+      return;
     }
-    try {
-      return (requestConfig?.returnBlob ? await response.blob() : await response.json()) as T;
-    } catch (e) {
-      // some of APIs in Sisense returns 200 with empty body - so it's not possible
-      // to understand definitely is it empty or not until you will try to parse it
-      if (e instanceof Error && e.message.includes('Unexpected end of JSON input')) {
-        return undefined as T;
-      } else {
-        throw e;
-      }
-    }
+    return (
+      requestConfig?.returnBlob
+        ? response.blob()
+        : response.json().catch((e) => {
+            // some of APIs in Sisense returns 200 with empty body - so it's not possible
+            // to understand definitely is it empty or not until you will try to parse it
+            if (!e?.message?.includes?.('Unexpected end of JSON input')) {
+              throw e;
+            }
+          })
+    ) as T;
   }
 
   // eslint-disable-next-line max-params
-  async post<T = unknown>(
+  post<T = unknown>(
     endpoint: string,
     data: unknown,
     options: RequestInit = {},
     abortSignal?: AbortSignal,
     config?: HttpClientRequestConfig,
-  ): Promise<T> {
+  ): Promise<T | undefined> {
     const request = {
       method: 'POST',
       body: (config?.nonJSONBody ? data : JSON.stringify(data)) as BodyInit,
@@ -116,23 +119,19 @@ export class HttpClient {
     return this.call<T>(this.url + endpoint, request, config);
   }
 
-  async get<T = unknown>(
+  get<T = unknown>(
     endpoint: string,
     request: RequestInit = {},
     config?: HttpClientRequestConfig,
-  ): Promise<T> {
-    request.method = 'GET';
-
-    return this.call<T>(this.url + endpoint, request, config);
+  ): Promise<T | undefined> {
+    return this.call<T>(this.url + endpoint, { ...request, method: 'GET' }, config);
   }
 
-  async delete<T = void>(
+  delete<T = void>(
     endpoint: string,
     request: RequestInit = {},
     config?: HttpClientRequestConfig,
-  ): Promise<T> {
-    request.method = 'DELETE';
-
-    return this.call<T>(this.url + endpoint, request, config);
+  ): Promise<T | undefined> {
+    return this.call<T>(this.url + endpoint, { ...request, method: 'DELETE' }, config);
   }
 }

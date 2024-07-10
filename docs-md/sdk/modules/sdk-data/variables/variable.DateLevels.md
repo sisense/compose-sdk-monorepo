@@ -46,6 +46,12 @@ Levels for [DateDimension](../interfaces/interface.DateDimension.md)
 
 ***
 
+### `Minutes`
+
+**Minutes**: `string` = `'Minutes'`
+
+***
+
 ### `MinutesRoundTo15`
 
 **MinutesRoundTo15**: `string` = `'MinutesRoundTo15'`
@@ -67,6 +73,12 @@ Levels for [DateDimension](../interfaces/interface.DateDimension.md)
 ### `Quarters`
 
 **Quarters**: `string` = `'Quarters'`
+
+***
+
+### `Seconds`
+
+**Seconds**: `string` = `'Seconds'`
 
 ***
 

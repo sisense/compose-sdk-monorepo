@@ -51,9 +51,7 @@ async function track(action: string, methodName: string) {
         methodName,
       };
 
-      void trackProductEvent(action, payload, app.httpClient, !enableTracking).catch((e) =>
-        console.warn(`An error occurred when sending the ${action} event`, e),
-      );
+      void trackProductEvent(action, payload, app.httpClient, !enableTracking);
     }
   } catch (e) {
     console.warn('tracking error', e);

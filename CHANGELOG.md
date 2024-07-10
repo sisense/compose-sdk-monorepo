@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.14.0] - 2024-07-09
+
+### Added
+- Implement additional components and hooks for dashboard rendering (internal testing): background filters, locked filters
+- Implement components `DashboardById` and `Dashboard` in Angular and Vue for internal testing
+- Add visual regression testing infrastructure and basic tests
+
+### Changed
+- Support additional datetime levels for Live models: 'seconds' and 'minutes'
+- Make improvements to charts and pivot table: tooltips of `AreaRangeChart`, default line thickness to bold for `LineChart`, hidden pagination panel for single page result of `PivotTable`, handling of data options update for `TableChart`
+- Make improvements to dashboard rendering: supporting `CustomFilter` in `CascadingFilterTile`, fixing UI issues of `DateRangeFilter`
+- Make improvements for `Chatbot` component: list of data topics
+- Improve performance by lowering priority of tracking API calls
+- Handle properly empty returns of network calls
+
 ## [1.13.0] - 2024-06-26
 
 ### Added
@@ -12,7 +27,7 @@
 - Change query cache key to work for all jaql elements
 - Make improvements to charts: fixing broken charts when switching chart type, clearing point state on selection, parsing of ISO date strings with or without timezone offsets, fixing numeric values as string (highcharts error), tooltip of measure name for range charts
 - Improve the translation of filter JAQL to `Filter` objects: exclude member filter, top/bottom ranking on measure, translation of deactivated members for `MembersFilter`
-- Make improvements to components for dashboard rendering: numeric members in `MemberFilterTile`, dynamic resizing of `FiltersPanel`, theming for `DashboardById`
+- Make improvements to dashboard rendering: numeric members in `MemberFilterTile`, dynamic resizing of `FiltersPanel`, theming for `DashboardById`
 - Make improvements for `Chatbot` component: viewer role, scroll to bottom, input box autofocus, input length limit, hide history config
 
 ## [1.12.0] - 2024-06-11

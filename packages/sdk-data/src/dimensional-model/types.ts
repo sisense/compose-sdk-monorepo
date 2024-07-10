@@ -317,6 +317,8 @@ export const DateLevels = {
   Hours: 'Hours',
   MinutesRoundTo30: 'MinutesRoundTo30',
   MinutesRoundTo15: 'MinutesRoundTo15',
+  Minutes: 'Minutes',
+  Seconds: 'Seconds',
 
   AggHours: 'AggHours',
   AggMinutesRoundTo30: 'AggMinutesRoundTo30',
@@ -334,6 +336,8 @@ export const DateLevels = {
       DateLevels.Hours,
       DateLevels.MinutesRoundTo30,
       DateLevels.MinutesRoundTo15,
+      DateLevels.Minutes,
+      DateLevels.Seconds,
       DateLevels.AggHours,
       DateLevels.AggMinutesRoundTo30,
       DateLevels.AggMinutesRoundTo15,

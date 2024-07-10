@@ -33,30 +33,12 @@ In this snippet, we’re querying the Sample ECommerce model to get total cost a
 
 ##### React
 
-```ts
-import { useExecuteQuery } from '@sisense/sdk-ui';
-import * as DM from '../sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
-
-//...
-
-const { data, isLoading, isError } = useExecuteQuery({
-  dataSource: DM.DataSource
-  dimensions: [DM.Commerce.AgeRange],
-  measures: [
-    measures.sum(DM.Commerce.Cost, 'Total Cost'),
-    measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
-  ],
-});
-
-if (isLoading) {
-  return <div>Loading...</div>;
-}
-
-if (isError) {
-  return <div>Error</div>;
-}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/external-chart&mode=docs'
+ width=800
+ height=875
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -308,12 +290,12 @@ export class AnalyticsComponent {
 
   async ngOnInit(): Promise<void> {
     const { data } = await this.queryService.executeQuery({
-        dataSource: DM.DataSource,
-        dimensions: [DM.Commerce.AgeRange],
-        measures: [
-            measures.sum(DM.Commerce.Cost, 'Total Cost'),
-            measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
-        ],
+      dataSource: DM.DataSource,
+      dimensions: [DM.Commerce.AgeRange],
+      measures: [
+        measures.sum(DM.Commerce.Cost, 'Total Cost'),
+        measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
+      ],
     });
 
     const x1: number[] = [];
@@ -321,38 +303,38 @@ export class AnalyticsComponent {
     const y2: number[] = [];
 
     data?.rows.forEach((row) => {
-        x1.push(row[0].data);
-        y1.push(row[1].data);
-        y2.push(row[2].data);
+      x1.push(row[0].data);
+      y1.push(row[1].data);
+      y2.push(row[2].data);
     });
 
     const trace1: Plotly.Data = {
-        x: x1,
-        y: y1,
-        type: 'bar',
-        name: 'Total Cost',
+      x: x1,
+      y: y1,
+      type: 'bar',
+      name: 'Total Cost',
     };
 
     const trace2: Plotly.Data = {
-        x: x1,
-        y: y2,
-        type: 'bar',
-        name: 'Total Revenue',
+      x: x1,
+      y: y2,
+      type: 'bar',
+      name: 'Total Revenue',
     };
 
     const layout = {
-        title: 'Total Cost and Revenue by Age Ranges',
-        xaxis: { title: 'Age Range' },
-        yaxis: { title: 'Cost and Revenue ($)' },
-        width: 900,
-        height: 500,
+      title: 'Total Cost and Revenue by Age Ranges',
+      xaxis: { title: 'Age Range' },
+      yaxis: { title: 'Cost and Revenue ($)' },
+      width: 900,
+      height: 500,
     };
 
     const plotData = [trace1, trace2];
 
     this.graph = {
-        data: plotData,
-        layout: layout,
+      data: plotData,
+      layout: layout,
     };
   }
 }

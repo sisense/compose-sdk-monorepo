@@ -1,5 +1,7 @@
 import Color from 'colorjs.io';
 
+export const TRIANGLE_COLOR_ADJUSTMENT = 0.15;
+
 export type ColorArg = string | Color;
 
 export const toColor = (color: ColorArg): Color =>

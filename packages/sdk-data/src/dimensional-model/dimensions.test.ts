@@ -78,6 +78,42 @@ describe('Dimension jaql preparations', () => {
     expect(jaql).toStrictEqual(result);
   });
 
+  it('must prepare jaql for date dimension with "seconds" level', () => {
+    const result = {
+      jaql: {
+        title: 'Seconds',
+        dim: '[Commerce.Date (Calendar)]',
+        bucket: '0',
+        dateTimeLevel: 'seconds',
+        datatype: 'datetime',
+      },
+      format: { mask: { seconds: 'yyyy-MM-dd HH:mm:ss' } },
+    };
+
+    const dimension = new DimensionalDateDimension('Date', '[Commerce.Date (Calendar)]');
+
+    const jaql = dimension.Seconds.jaql();
+    expect(jaql).toStrictEqual(result);
+  });
+
+  it('must prepare jaql for date dimension with "minutes" level', () => {
+    const result = {
+      jaql: {
+        title: 'Minutes',
+        dim: '[Commerce.Date (Calendar)]',
+        bucket: '1',
+        dateTimeLevel: 'minutes',
+        datatype: 'datetime',
+      },
+      format: { mask: { minutes: 'yyyy-MM-dd HH:mm' } },
+    };
+
+    const dimension = new DimensionalDateDimension('Date', '[Commerce.Date (Calendar)]');
+
+    const jaql = dimension.Minutes.jaql();
+    expect(jaql).toStrictEqual(result);
+  });
+
   it('must handle sort', () => {
     const dimensionAscSort = new DimensionalDimension(
       'Brand',

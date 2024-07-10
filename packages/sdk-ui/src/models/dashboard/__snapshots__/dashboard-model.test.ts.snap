@@ -48,6 +48,7 @@ DashboardModel {
   "widgetFilterOptions": {
     "widget-1": {
       "applyMode": "highlight",
+      "forceApplyBackgroundFilters": true,
       "ignoreFilters": {
         "all": undefined,
         "ids": undefined,

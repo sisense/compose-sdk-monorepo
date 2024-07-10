@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 
-import { useGetDataTopics } from './api/hooks';
 import { DataTopicList } from './data-topics';
-import { DataTopic } from './data-topics/data-topic-list';
 import SisenseLogo from './icons/sisense-logo';
 import LoadingSpinner from '../common/components/loading-spinner';
 import Toolbar from './common/toolbar';
@@ -19,7 +17,7 @@ const LogoContainer = styled.div`
 const DataTopicsContainer = styled.div<Themable>`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
   overflow: hidden;
   height: 100%;
 
@@ -28,30 +26,26 @@ const DataTopicsContainer = styled.div<Themable>`
 import { Themable } from '@/theme-provider/types';
 
 type ChatHomeProps = {
+  dataTopicsList: string[];
   onDataTopicClick: (title: string) => void;
 };
 
-export default function ChatHome({ onDataTopicClick }: ChatHomeProps) {
-  const { data } = useGetDataTopics();
-  const config = useChatConfig();
+export default function ChatHome({ dataTopicsList, onDataTopicClick }: ChatHomeProps) {
+  const { enableHeader } = useChatConfig();
   const { themeSettings } = useThemeContext();
 
-  const dataTopics = useMemo(
-    () =>
-      data?.map(
-        (d): DataTopic => ({
-          title: d.title,
-          onClick: () => onDataTopicClick(d.title),
-        }),
-      ),
-    [data, onDataTopicClick],
-  );
+  const dataTopics = useMemo(() => {
+    return dataTopicsList?.map((title) => ({
+      title,
+      onClick: () => onDataTopicClick(title),
+    }));
+  }, [dataTopicsList, onDataTopicClick]);
 
   const isDarkBackground =
     getDarkFactor(toColor(themeSettings.aiChat.header.backgroundColor)) > 0.5;
   return (
     <>
-      {config.enableHeader ? (
+      {enableHeader ? (
         <Toolbar
           title="Analytics Chatbot"
           leftNav={

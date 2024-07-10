@@ -45,7 +45,7 @@ const handler = async (options: Arguments<GetApiTokenOptions>) => {
   try {
     await handleHttpClientLogin(httpClient);
     trackExecution(httpClient, command, options);
-    const response: { token: string } = await httpClient.get('/api/v1/authentication/tokens/api');
+    const response = await httpClient.get<{ token: string }>('/api/v1/authentication/tokens/api');
     console.log(response);
   } catch (err) {
     if (err) console.log(err);

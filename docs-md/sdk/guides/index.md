@@ -16,6 +16,9 @@ indexTopics:
     - title: Formatting
       description: Learn how to format numbers and dates in Compose SDK charts
       link: ./formatting
+    - title: Styling
+      description: Learn how to customize the styling of Compose SDK charts
+      link: ./styling
     - title: Generative AI
       description: Learn how to deliver conversational analytics using large language models (Beta)
       link: ./ai-features

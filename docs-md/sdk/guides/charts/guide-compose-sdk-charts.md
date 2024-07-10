@@ -44,28 +44,14 @@ Under the hood, a chart executes a query to connect to the data source and load 
 
 For example, the following code snippets set a chart’s dataset using data from the Sample ECommerce data model:
 
-##### Chart
-
-![Chart with data from a Sisense instance](../../img/chart-guides/dataset-sisense.png 'Chart with data from a Sisense instance')
-
 ##### React
 
-```ts
-import { Chart } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from '../sample-ecommerce';
-
-//...
-
-<Chart
-  chartType={'column'}
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-/>;
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Fsimple-chart&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -102,10 +88,6 @@ Once you have your data formatted properly, you can use that data by setting the
 
 For example, the following code snippets set a chart’s dataset using static data:
 
-##### Chart
-
-![Chart with static data](../../img/chart-guides/dataset-static.png 'Chart with static data')
-
 ##### Sample data
 
 ```ts
@@ -127,16 +109,12 @@ const sampleData = {
 
 ##### React
 
-```ts
-<Chart
-  chartType={'column'}
-  dataSet={sampleData}
-  dataOptions={{
-    category: [{ name: 'Years', type: 'date' }],
-    value: [{ name: 'Quantity', type: 'number' }],
-  }}
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Fexplicit-data&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
 />
-```
 
 ##### Angular
 
@@ -174,31 +152,14 @@ Use this filtering option when you know what you want to filter on when writing 
 
 For example, the following code snippets filter a chart’s dataset to only include data where the cost is greater than 1000.
 
-##### Chart
-
-The top chart represents the unfiltered data and the bottom chart represents the filtered data.
-
-![Filtered chart](../../img/chart-guides/filter-functions.png 'Filtered chart')
-
 ##### React
 
-```ts
-import { Chart } from '@sisense/sdk-ui';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
-import * as DM from '../sample-ecommerce';
-
-//...
-
-<Chart
-  chartType={'column'}
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-  filters={[filterFactory.lessThan(DM.Commerce.Cost, 1000)]}
-/>;
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Ffilter-function&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -242,46 +203,14 @@ Use this filtering option when you want to use pre-built components to allow you
 
 For example, the following code snippets filter a chart’s dataset based on the condition dimension.
 
-##### Chart
-
-The top chart represents the unfiltered data and the bottom chart represents the filtered data.React
-
-![Filtered chart](../../img/chart-guides/filter-components.png 'Filtered chart')
-
 ##### React
 
-```ts
-import { Chart } from '@sisense/sdk-ui';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
-import * as DM from '../sample-ecommerce';
-
-//...
-
-const [conditionFilter, setConditionFilter] = useState<Filter | null>(null);
-const filters = useMemo(
-  () => (conditionFilter ? [conditionFilter] : []),
-  [conditionFilter]
-);
-
-//...
-
-<Chart
-  chartType={'column'}
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-  filters={filters}
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Ffilter-component&mode=docs'
+ width=800
+ height=985
+ style='border:none;'
 />
-<MemberFilterTile
-  title={'Condition'}
-  dataSource={DM.DataSource}
-  attribute={DM.Commerce.Condition}
-  filter={conditionFilter}
-  onChange={setConditionFilter}
-/>
-```
 
 ##### Angular
 
@@ -345,29 +274,14 @@ See above to learn about filtering functions. Use the filters returned by those 
 
 For example, the following code snippets highlight certain age ranges in a chart.
 
-##### Chart
-
-![Chart with highlights](../../img/chart-guides/highlight-functions.png 'Chart with highlights')
-
 ##### React
 
-```ts
-import { Chart } from '@sisense/sdk-ui';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
-import * as DM from '../sample-ecommerce';
-
-//...
-
-<Chart
-  chartType={'column'}
-  dataSet={DM.DataSource}
-  dataOptions={{
-      category: [DM.Commerce.AgeRange],
-      value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-  highlights={[filterFactory.members(DM.Commerce.AgeRange, ['25-34', '35-44', '45-54'])]}
-/>;
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Fhighlight-function&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -409,46 +323,14 @@ See above to learn about filter components. Use the filters created by those com
 
 For example, the following code snippets highlight a chart’s data based on age range, with some default highlighting already set when the chart is loaded.
 
-##### Chart
-
-![Chart with highlights](../../img/chart-guides/highlight-components.png 'Chart with highlights')
-
 ##### React
 
-```ts
-import { Chart } from '@sisense/sdk-ui';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
-import * as DM from '../sample-ecommerce';
-
-//...
-
-const [ageRangeFilter, setAgeRangeFilter] = useState<Filter>(
-  filterFactory.members(DM.Commerce.AgeRange, ['25-34', '35-44', '45-54'])
-);
-const activeFilters = useMemo(
-  () => (ageRangeFilter ? [ageRangeFilter] : []),
-  [ageRangeFilter]
-);
-
-//...
-
-<Chart
-  chartType={'column'}
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-  highlights={activeFilters}
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Fhighlight-component&mode=docs'
+ width=800
+ height=985
+ style='border:none;'
 />
-<MemberFilterTile
-  title={'Age Range'}
-  dataSource={DM.DataSource}
-  attribute={DM.Commerce.AgeRange}
-  filter={ageRangeFilter}
-  onChange={setAgeRangeFilter}
-/>
-```
 
 ##### Angular
 
@@ -555,11 +437,11 @@ import { measureFactory } from '@sisense/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 chart = {
-  chartType: 'column' as const,
-  dataSet: DM.DataSource,
-  dataOptions: {
-      /* data options go here */
-  },
+    chartType: 'column' as const,
+    dataSet: DM.DataSource,
+    dataOptions: {
+        /* data options go here */
+    },
 };
 ```
 
@@ -581,18 +463,14 @@ Let’s take a look at some examples of charts using the `category` and `value` 
 
 This is the simplest example where we have a single `category` and a single `value`. This chart shows the sum of revenue for a number of age ranges.
 
-##### Chart
-
-![Chart with one category and one value](../../img/chart-guides/cartesian-1category-1value.png 'Chart with one category and one value')
-
 ##### React
 
-```ts
-dataOptions={{
-  category: [DM.Commerce.AgeRange],
-  value: [measureFactory.sum(DM.Commerce.Revenue, 'Sum of Revenue')],
-}}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Fone-category-one-value&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -607,21 +485,14 @@ dataOptions: {
 
 This example adds an additional `value` to the chart . This chart shows the sum of cost alongside the sum of revenue for a number of age ranges.
 
-##### Chart
-
-![Chart with one category and two values](../../img/chart-guides/cartesian-1category-2value.png 'Chart with one category and two values')
-
 ##### React
 
-```ts
-dataOptions={{
-  category: [DM.Commerce.AgeRange],
-  value: [
-    measureFactory.sum(DM.Commerce.Revenue, 'Sum of Revenue'),
-    measureFactory.sum(DM.Commerce.Cost, 'Sum of Cost'),
-  ],
-}}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide%2Fone-category-two-values&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -639,25 +510,14 @@ dataOptions: {
 
 This example is similar to the one above in that it uses two `value` measures, but it changes the type of chart used in the second `value` and adds a right-side axis. This chart shows the sum of revenue and quantity for a number of age ranges.
 
-##### Chart
-
-![Chart with one category and two values with styling](../../img/chart-guides/cartesian-1category-2value-styled.png 'Chart with one category and two values with styling')
-
 ##### React
 
-```ts
-dataOptions={{
-  category: [DM.Commerce.AgeRange],
-  value: [
-    measureFactory.sum(DM.Commerce.Revenue, 'Sum of Revenue'),
-    {
-      column: measureFactory.sum(DM.Commerce.Quantity, 'Sum of Quantity'),
-      chartType: 'line',
-      showOnRightAxis: true,
-    },
-  ],
-}}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/one-category-two-values&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ###### Angular
 
@@ -679,18 +539,14 @@ dataOptions: {
 
 This example adds an additional `category` to a chart instead of an additional `value`. Notice how there are now labels across both the bottom and top of the Y-axis. This chart shows the sum of revenue for a number of condition types and age ranges. In this case it is probably preferable to use a `breakBy` instead of adding a second category, as explained below.
 
-##### Chart
-
-![Chart with two categories and one value](../../img/chart-guides/cartesian-2category-1value.png 'Chart with two categories and one value')
-
 ##### React
 
-```ts
-dataOptions={{
-  category: [DM.Commerce.AgeRange, DM.Commerce.Condition],
-  value: [measureFactory.sum(DM.Commerce.Revenue, 'Sum of Revenue')],
-}}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/two-categories-one-value&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -705,21 +561,14 @@ dataOptions: {
 
 This example has two `category` attributes and two `value` measures. This chart shows the sum of revenue alongside the sum of cost for a number of condition types and age ranges.
 
-##### Chart
-
-![Chart with two categories and two values](../../img/chart-guides/cartesian-2category-2value.png 'Chart with two categories and two values')
-
 ##### React
 
-```ts
-dataOptions={{
-  category: [DM.Commerce.AgeRange, DM.Commerce.Condition],
-  value: [
-    measureFactory.sum(DM.Commerce.Revenue, 'Sum of Revenue'),
-    measureFactory.sum(DM.Commerce.Cost, 'Sum of Cost'),
-  ],
-}}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/two-categories-one-value&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -741,19 +590,14 @@ Let’s take a look at some examples of charts using the `breakBy` and `seriesTo
 
 This example has a single `category` and a single `value`, but the categories are broken down by an additional attribute. This chart shows the sum of revenue for a number of condition types and age ranges.
 
-##### Chart
-
-![Chart with break by](../../img/chart-guides/cartesian-breakby.png 'Chart with break by')
-
 ##### React
 
-```ts
-dataOptions={{
-  category: [DM.Commerce.AgeRange],
-  value: [measureFactory.sum(DM.Commerce.Revenue, 'Sum of Revenue')],
-  breakBy: [DM.Commerce.Condition],
-}}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/break-by&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -769,25 +613,14 @@ dataOptions: {
 
 This example shows the same data as the previous example, but the subcategories are colored using the colors defined in the series color map.
 
-##### Chart
-
-![Chart with color map](../../img/chart-guides/cartesian-series-to-color-map.png 'Chart with color map')
-
 ##### React
 
-```ts
-dataOptions={{
-  category: [DM.Commerce.AgeRange],
-  value: [measureFactory.sum(DM.Commerce.Revenue, 'Sum of Revenue')],
-  breakBy: [DM.Commerce.Condition],
-  seriesToColorMap: {
-    New: '#7CB518',
-    Refurbished: '#F3DE2C',
-    Used: '#FB6107',
-    Unspecified: '#FBB02D',
-  },
-}}
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/series-to-color-map&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -815,42 +648,14 @@ Note that you can achieve additional styling of your charts using the `<ThemePro
 
 For example, the following code snippets limit the number of slices in the pie chart and remove some of the labeling using style options.
 
-##### Chart
-
-The chart on the left is the unstyled pie chart and the chart on the right has style options set.
-
-![Styled pie chart](../../img/chart-guides/styled-pie.png 'Styled pie chart')
-
 ##### React
 
-```ts
-import { Chart } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from '../sample-ecommerce';
-
-//...
-
-<Chart
-  chartType={'pie'}
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-  styleOptions={{
-    convolution: {
-      enabled: true,
-      independentSlicesCount: 4,
-      selectedConvolutionType: 'bySlicesCount',
-    },
-    labels: {
-      categories: false,
-    },
-    width: 550,
-    height: 400,
-  }}
-/>;
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/style-options&mode=docs'
+ width=800
+ height=1275
+ style='border:none;'
+/>
 
 ##### Angular
 
@@ -912,43 +717,14 @@ The `onData*` callbacks allow you to react to user interactions with your chart.
 
 For example, the following code snippets remove the tooltip that shows by default when you hover over data points in the chart and replace it with an element that shows the data point information when the data point is clicked.
 
-##### Chart
-
-![Click callback](../../img/chart-guides/callbacks-click.png 'Click callback')
-
 ##### React
 
-```ts
-import { Chart, DataPoint } from '@sisense/sdk-ui';
-import * as DM from '../sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
-import { useState } from 'react';
-
-//...
-
-const [point, setPoint] = useState<DataPoint>();
-
-//...
-
-{
-  point && <div>{`Age range: ${point.categoryDisplayValue} | Value: ${formatNumber(point.value)}}`}</div>;
-}
-<Chart
-  chartType="column"
-  dataSet={DM.DataSource}
-  dataOptions={{
-    category: [DM.Commerce.AgeRange],
-    value: [measureFactory.sum(DM.Commerce.Revenue)],
-  }}
-  onBeforeRender={(options: HighchartsOptions) => {
-    if (options.tooltip) options.tooltip.enabled = false;
-    return options;
-  }}
-  onDataPointClick={(point: DataPoint) => {
-    setPoint(point);
-  }}
-/>;
-```
+<iframe
+ src='https://csdk-playground.sisense.com/?example=charts-guide/callbacks&mode=docs'
+ width=800
+ height=870
+ style='border:none;'
+/>
 
 ##### Angular
 

@@ -95,7 +95,17 @@ export function executeQuery(
   executionConfig?: QueryExecutionConfig,
 ): Promise<QueryResultData> {
   const queryParams = prepareQueryParams(queryDescription, app?.defaultDataSource);
-  return app.queryClient.executeQuery(queryParams, executionConfig).resultPromise;
+  return app.queryClient
+    .executeQuery(queryParams, executionConfig)
+    .resultPromise.catch((error: Error) => {
+      const isSecondsTimeLevelUnsuppored = error.message.includes(
+        'SecondsLevelIsNotSupportedException',
+      );
+      if (isSecondsTimeLevelUnsuppored) {
+        throw new TranslatableError('errors.secondsDateTimeLevelSupportedOnlyForLive');
+      }
+      throw error;
+    });
 }
 
 /** @internal */

@@ -27,7 +27,10 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!app?.httpClient) return;
+    if (!app?.httpClient) {
+      return;
+    }
+
     const hasBeenTracked = hasTrackedRef.current;
     if (!hasBeenTracked && !inTrackingContext) {
       const payload: ComponentInitEventDetails = {
@@ -40,9 +43,9 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
           .join(', '),
       };
 
-      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled)
-        .catch((e) => console.warn('An error occurred when sending the sdkComponentInit event', e))
-        .finally(() => (hasTrackedRef.current = true));
+      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled).finally(
+        () => (hasTrackedRef.current = true),
+      );
     }
   }, [componentName, props, app, tracking, inTrackingContext]);
 };

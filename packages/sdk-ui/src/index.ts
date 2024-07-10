@@ -5,7 +5,12 @@ export { ClientApplication, createClientApplication } from './app/client-applica
 export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
-export { DashboardById } from './dashboard/dashboard-by-id';
+export {
+  DashboardById,
+  Dashboard,
+  type DashboardByIdProps,
+  type DashboardProps,
+} from './dashboard';
 export { DashboardWidget } from './dashboard-widget/dashboard-widget';
 export { getSortType } from './dashboard-widget/utils';
 export {
@@ -73,6 +78,8 @@ export {
   type GetWidgetModelParams,
   type GetDashboardModelOptions,
   type GetDashboardModelsOptions,
+  type Layout,
+  type WidgetFilterOptions,
 } from './models';
 export { boxWhiskerProcessResult } from './boxplot-utils';
 export { queryStateReducer } from './query-execution/query-state-reducer';

@@ -112,7 +112,9 @@ async function retrieveDataFields(
   try {
     // get the schema of the data source to add descriptions to the fields
     const dataSourceSchema = await queryClient.getDataSourceSchema(dataSourceTitle);
-    return addDescriptionToFields(fields, dataSourceSchema.datasets as DataSourceSchemaDataset[]);
+    return dataSourceSchema?.datasets
+      ? addDescriptionToFields(fields, dataSourceSchema.datasets as DataSourceSchemaDataset[])
+      : fields;
   } catch (error) {
     if ((error as { status: string }).status === '403') {
       // the caller may not have permission to access this data source

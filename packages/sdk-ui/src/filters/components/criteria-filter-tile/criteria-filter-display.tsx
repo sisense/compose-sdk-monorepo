@@ -56,7 +56,7 @@ export const CriteriaFilterDisplay: FunctionComponent<CriteriaFilterDisplayProps
 
   return (
     <div
-      className={`csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center`}
+      className={`csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center`}
     >
       {t(text)}
     </div>

@@ -57,6 +57,9 @@ export type SeriesPointStructure = {
   id?: string;
   drilldown?: string;
   parent?: string;
+  // range charts specific
+  low?: number | null;
+  high?: number | null;
 };
 
 export type AxisClipped = { minClipped: boolean; maxClipped: boolean };

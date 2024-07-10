@@ -124,6 +124,8 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
 
   private _disabled: boolean;
 
+  private _locked: boolean;
+
   /**
    * Boolean flag whether the filter is disabled
    *
@@ -137,6 +139,19 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
     this._disabled = value;
   }
 
+  /**
+   * Boolean flag whether the filter is locked
+   *
+   * @internal
+   */
+  get locked(): boolean {
+    return this._locked;
+  }
+
+  set locked(value: boolean) {
+    this._locked = value;
+  }
+
   constructor(att: Attribute, filterType: string, guid?: string) {
     super('filter', MetadataTypes.Filter);
     this.filterType = filterType;
@@ -146,6 +161,7 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
 
     this.guid = guid || guidFast(13);
     this.disabled = false;
+    this.locked = false;
   }
 
   get name(): string {
@@ -215,7 +231,9 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
     if (
       granularity === DateLevels.Hours ||
       granularity === DateLevels.MinutesRoundTo30 ||
-      granularity === DateLevels.MinutesRoundTo15
+      granularity === DateLevels.MinutesRoundTo15 ||
+      granularity === DateLevels.Minutes ||
+      granularity === DateLevels.Seconds
     ) {
       throw new TranslatableError('errors.filter.unsupportedDatetimeLevel');
     }
@@ -280,11 +298,21 @@ export class MembersFilter extends AbstractFilter {
   /** @internal */
   _deactivatedMembers: any[];
 
-  constructor(attribute: Attribute, members?: any[], _deactivatedMembers?: any[], guid?: string) {
+  /** @internal */
+  backgroundFilter?: Filter;
+
+  constructor(
+    attribute: Attribute,
+    members?: any[],
+    _deactivatedMembers?: any[],
+    guid?: string,
+    backgroundFilter?: Filter,
+  ) {
     super(attribute, FilterTypes.members, guid);
 
     this.members = members ?? [];
     this._deactivatedMembers = _deactivatedMembers ?? [];
+    this.backgroundFilter = backgroundFilter;
 
     if (this.members.filter((m) => m === null || m === undefined).length > 0) {
       throw new TranslatableError('errors.filter.membersFilterNullMember', {
@@ -307,6 +335,9 @@ export class MembersFilter extends AbstractFilter {
     const result = super.serializable();
 
     result.members = this.members;
+    if (this.backgroundFilter) {
+      result.backgroundFilter = this.backgroundFilter.serializable();
+    }
 
     return result;
   }
@@ -315,9 +346,17 @@ export class MembersFilter extends AbstractFilter {
    * Gets JAQL representing this Filter instance
    */
   filterJaql(): any {
-    return {
+    const filterJaql = {
       members: this.members.map((m) => m.toString()),
     };
+
+    if (this.backgroundFilter) {
+      return {
+        and: [filterJaql, this.backgroundFilter.filterJaql()],
+      };
+    }
+
+    return filterJaql;
   }
 }
 
@@ -349,6 +388,19 @@ export class CascadingFilter extends AbstractFilter {
     if (this.filters) {
       this.filters.forEach((filter) => {
         filter.disabled = value;
+      });
+    }
+  }
+
+  get locked(): boolean {
+    return super.locked;
+  }
+
+  set locked(value: boolean) {
+    super.locked = value;
+    if (this.filters) {
+      this.filters.forEach((filter) => {
+        filter.locked = value;
       });
     }
   }

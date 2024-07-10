@@ -73,3 +73,42 @@ test('should render chart correctly and show tooltip', async ({ mount, page }) =
   );
 });
 ```
+
+## Visual Regression Tests
+
+Visual regression testing is essential for ensuring that changes in code do not unintentionally alter the visual appearance of ComposeSDK components. It allows to compare the "actual" appearance with the "expected" one by analyzing screenshots. This section outlines how to run visual regression tests both locally and within Docker to maintain consistent testing environments.
+
+The following scripts are available:
+
+- `yarn run test:visual` - Runs end-to-end (e2e) visual difference tests against the expected screenshots.
+- `yarn run test:visual:update` - Updates the expected screenshots (stored in the nested **screenshots** folders).
+- `yarn run test:visual:ui` - Runs the UI mode to explore tests with advanced debugging tools.
+
+To avoid issues related to environment differences, it is recommended to conduct visual testing using a specific Docker image. This approach ensures consistent behavior across local and external environments, including continuous integration (CI) systems.
+
+- `yarn run start-docker` - Runs the unified Docker environment for visual regression testing.\
+  Notes: it mounts the monorepo root as base folder. As it is a different environment, so improtant to reinstall the dependencies and rebuild the project.
+- `yarn run test:visual:ui-docker` - Runs the UI mode under the docker container with forwarded port.\
+  Notes: visit http://localhost:5400 locally to open UI testing app
+
+The following applications are used as target apps for visual regression testing:
+
+- `react-demo` - React demo app from `/examples/react-demo`
+- `angular-demo` - Angular demo app from `/examples/angular-demo`
+- `vue-demo` - Vue demo app from `/examples/vue-demo`
+- `react-local-demo` - React demo app from `packages/sdk-ui`
+- `react-storybook` - Storybook app from `packages/sdk-ui`
+
+See `./visual-tests/appsConfig.ts` for details of taget apps configuration.
+
+Testing helpers (see `./visual-tests/__test-helpers__/makeScreenshot.ts`):
+
+- `makeScreenshotsOverPage(page: Page)` - performs automatic screenshots verification over the page elements marked by `data-visual-testid` attribute. The value of this attribute will be used as part of the target screenshot name.
+- `makeScreenshots(page: Page, locators: Locator[], name?: string)` - performs screenshots verification over the array of locators
+- `makeScreenshot(page: Page, locator: Locator, name?: string)` - performs screeshot verification over the target locator
+
+### Known issues:
+
+- Slow 'loading' of UI testing app, due to starting multiple target apps on background.
+- Possibility to catch a flacky test due to a temporal network communication slowness of connected Fusion Embed app.\
+  Note: the testing strategy with 2 retries for failed test should eliminate this problem.

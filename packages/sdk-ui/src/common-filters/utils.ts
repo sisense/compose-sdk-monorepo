@@ -42,6 +42,7 @@ export function createCommonFilter(
     members.map((v) => `${v}`),
     undefined,
     existingFilter?.guid,
+    (existingFilter as MembersFilter | undefined)?.backgroundFilter,
   );
 }
 
@@ -58,10 +59,11 @@ export function isIncludeAllFilter(filter: Filter) {
   return 'members' in filter && (filter as MembersFilter).members.length === 0;
 }
 
-function createIncludeAllFilter(attribute: Attribute, guid: string) {
-  return filterFactory.members(attribute, [], undefined, guid);
+function createIncludeAllFilter(attribute: Attribute, backgroundFilter?: Filter, guid?: string) {
+  return filterFactory.members(attribute, [], undefined, guid, backgroundFilter);
 }
 
-export function clearCommonFilter({ attribute, guid }: Filter) {
-  return createIncludeAllFilter(attribute, guid);
+export function clearCommonFilter(filter: Filter) {
+  const { attribute, guid, backgroundFilter } = filter as MembersFilter;
+  return createIncludeAllFilter(attribute, backgroundFilter, guid);
 }

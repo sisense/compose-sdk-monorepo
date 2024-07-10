@@ -4,6 +4,12 @@
 import { validateJaqlResponse } from './query-task-manager.js';
 
 describe('validateJaqlResponse', () => {
+  it('should throw error for empty', () => {
+    expect(() => validateJaqlResponse(undefined)).toThrow(
+      'No jaql response received from the server',
+    );
+  });
+
   it('should throw error', () => {
     const jaqlResponse = {
       error: true,
@@ -22,6 +28,6 @@ describe('validateJaqlResponse', () => {
     const jaqlResponse = {
       metadata: [],
     };
-    expect(validateJaqlResponse(jaqlResponse)).toBeTruthy();
+    expect(validateJaqlResponse(jaqlResponse)).toBeUndefined();
   });
 });

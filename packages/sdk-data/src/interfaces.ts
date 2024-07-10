@@ -308,7 +308,7 @@ export const EMPTY_PIVOT_QUERY_RESULT_DATA: PivotQueryResultData = {
  * @param arg
  * @internal
  */
-export function isDataSource(arg: DataSource | Data | undefined): arg is DataSource {
+export function isDataSource(arg: DataSource | Data | undefined): arg is DataSource | undefined {
   return arg === undefined || typeof arg === 'string' || ('title' in arg && 'type' in arg);
 }
 

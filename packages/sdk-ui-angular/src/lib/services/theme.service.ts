@@ -52,6 +52,8 @@ export const THEME_CONFIG_TOKEN = new InjectionToken<ThemeConfig>('theme configu
 /**
  * Service for working with Sisense Fusion themes.
  *
+ * If no theme service is used, the current Fusion theme is applied by default.
+ *
  * @group Contexts
  */
 @Injectable({

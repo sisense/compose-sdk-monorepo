@@ -18,67 +18,65 @@ export class ChatRestApi {
   private httpClient: HttpClient;
 
   constructor(httpClient: HttpClient) {
-    if (!httpClient) throw new Error('HttpClient is required.');
     this.httpClient = httpClient;
   }
 
-  public getChatContexts = (): Promise<ChatContext[]> => {
-    return this.httpClient.get(`api/datasources?sharedWith=r,w`);
+  public getChatContexts = async () => {
+    const result = await this.httpClient.get<ChatContext[]>(`api/datasources?sharedWith=r,w`);
+    return result || [];
   };
 
   // ==== /v2/ai endpoints ====
-  private getNlgQueryResult = async (
-    request: GetNlgQueryResultRequest,
-  ): Promise<GetNlgQueryResultResponse> => {
-    return this.httpClient.post('api/v2/ai/nlg/queryResult', request);
+  private getNlgQueryResult = (request: GetNlgQueryResultRequest) => {
+    return this.httpClient.post<GetNlgQueryResultResponse>('api/v2/ai/nlg/queryResult', request);
   };
 
-  private getQueryRecommendations = async (
-    contextTitle: string,
-    config: QueryRecommendationConfig,
-  ): Promise<QueryRecommendationResponse> => {
-    return this.httpClient.get(
+  private getQueryRecommendations = (contextTitle: string, config: QueryRecommendationConfig) => {
+    return this.httpClient.get<QueryRecommendationResponse>(
       `api/v2/ai/recommendations/query/${contextTitle}/${config.numOfRecommendations}`,
     );
   };
 
-  private setLlmConfig = async (config: LlmConfig) => {
-    return this.httpClient.post(`api/v2/settings/ai/llmProvider`, config).catch((e) => {
+  private setLlmConfig = (config: LlmConfig) => {
+    return this.httpClient.post('api/v2/settings/ai/llmProvider', config).catch((e) => {
       console.error('Unable to set llm config', e);
     });
   };
 
   // ==== /v2/ai/chats endpoints ====
-  private getAllChats = async (): Promise<ChatWithoutHistory[]> => {
-    return this.httpClient.get(`api/v2/ai/chats`);
+  private getAllChats = () => {
+    return this.httpClient.get<ChatWithoutHistory[]>('api/v2/ai/chats');
   };
 
-  private getChatById = async (chatId: string): Promise<Chat> => {
-    return this.httpClient.get(`api/v2/ai/chats/${chatId}`);
+  private getChatById = (chatId: string) => {
+    return this.httpClient.get<Chat>(`api/v2/ai/chats/${chatId}`);
   };
 
-  private createChat = async (sourceId: string): Promise<Chat> => {
-    return this.httpClient.post('api/v2/ai/chats', { sourceId });
+  private createChat = (sourceId: string) => {
+    return this.httpClient.post<Chat>('api/v2/ai/chats', { sourceId });
   };
 
-  private postChat = async (chatId: string, request: ChatRequest): Promise<ChatResponse> => {
-    return this.httpClient.post(`api/v2/ai/chats/${chatId}`, request);
+  private postChat = (chatId: string, request: ChatRequest) => {
+    return this.httpClient.post<ChatResponse>(`api/v2/ai/chats/${chatId}`, request);
   };
 
-  private deleteChatHistory = async (chatId: string) => {
+  private deleteChatHistory = (chatId: string) => {
     return this.httpClient.delete(`api/v2/ai/chats/${chatId}/history`);
   };
 
-  private sendFeedback = async (request: SendFeedbackRequest) => {
+  private sendFeedback = (request: SendFeedbackRequest) => {
     return this.httpClient.post('api/v2/ai/feedback', request);
   };
 
   // ==== misc endpoints ====
-  private getDataSourceFields = async (dataSource: string): Promise<DataSourceField[]> => {
-    return this.httpClient.post(`api/datasources/${encodeURIComponent(dataSource)}/fields/search`, {
-      offset: 0,
-      count: 9999,
-    });
+  private getDataSourceFields = (dataSource: string) => {
+    return this.httpClient.post<DataSourceField[]>(
+      `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
+      {
+        offset: 0,
+        count: 9999,
+      },
+    );
   };
 
   ai = {

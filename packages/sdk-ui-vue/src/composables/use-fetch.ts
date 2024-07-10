@@ -59,7 +59,6 @@ export const useFetch = <TData = unknown>(
   init?: MaybeRefOrWithRefs<RequestInit>,
   options?: MaybeRefOrWithRefs<UseFetchOptions>,
 ): ToRefs<DataState<TData>> => {
-  const { hasTrackedRef } = useTracking('useFetch');
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<TData>, {
     isLoading: true,
     isError: false,
@@ -88,7 +87,7 @@ export const useFetch = <TData = unknown>(
         httpClientOptions,
       );
 
-      dispatch({ type: 'success', data });
+      dispatch({ type: 'success', data: data as TData });
     } catch (error) {
       dispatch({ type: 'error', error: error as Error });
     }

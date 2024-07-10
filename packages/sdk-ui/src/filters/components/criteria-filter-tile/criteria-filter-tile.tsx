@@ -38,6 +38,7 @@ export interface CriteriaFilterTileProps {
   measures?: Measure[];
   /**
    * Design options for the filter tile component
+   *
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
@@ -145,6 +146,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
           updateFilter(newFilter);
         }}
         design={tileDesignOptions}
+        locked={filter.locked}
       />
     );
   },

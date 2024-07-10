@@ -233,6 +233,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
    */
   translateGranularityToJaql() {
     const MINUTES_LEVEL = 'minutes';
+    const SECONDS_LEVEL = 'seconds';
     switch (this.granularity) {
       case DateLevels.Years:
       case DateLevels.Quarters:
@@ -254,6 +255,16 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
         return {
           dateTimeLevel: MINUTES_LEVEL,
           bucket: '15',
+        };
+      case DateLevels.Minutes:
+        return {
+          dateTimeLevel: MINUTES_LEVEL,
+          bucket: '1',
+        };
+      case DateLevels.Seconds:
+        return {
+          dateTimeLevel: SECONDS_LEVEL,
+          bucket: '0',
         };
       case DateLevels.AggHours:
         return {
@@ -288,7 +299,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     };
 
     if (json.dateTimeLevel) {
-      if (json.dateTimeLevel !== 'minutes') {
+      if (json.dateTimeLevel !== 'minutes' && json.dateTimeLevel !== 'seconds') {
         return returnUnsupported(json.dateTimeLevel);
       }
 
@@ -299,6 +310,10 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
           return DateLevels.MinutesRoundTo30;
         case '15':
           return DateLevels.MinutesRoundTo15;
+        case '1':
+          return DateLevels.Minutes;
+        case '0':
+          return DateLevels.Seconds;
         default:
           return returnUnsupported(json.dateTimeLevel);
       }
@@ -352,6 +367,10 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
         return 'yyyy-MM-dd HH:mm';
       case DateLevels.MinutesRoundTo15:
         return 'yyyy-MM-dd HH:mm';
+      case DateLevels.Minutes:
+        return 'yyyy-MM-dd HH:mm';
+      case DateLevels.Seconds:
+        return 'yyyy-MM-dd HH:mm:ss';
       case DateLevels.AggHours:
         return 'HH:mm';
       case DateLevels.AggMinutesRoundTo30:

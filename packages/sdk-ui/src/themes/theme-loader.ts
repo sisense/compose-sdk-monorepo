@@ -23,6 +23,10 @@ export async function getThemeSettingsByOid(
 ): Promise<CompleteThemeSettings> {
   const legacyDesignSettings = await getLegacyDesignSettings(themeOid, httpClient);
 
+  if (!legacyDesignSettings) {
+    throw new TranslatableError('errors.themeNotFound', { themeOid });
+  }
+
   const paletteName = getPaletteName(legacyDesignSettings);
   const legacyPalette = await getLegacyPalette(paletteName, httpClient);
   return convertToThemeSettings(legacyDesignSettings, legacyPalette);
@@ -38,7 +42,7 @@ export async function getLegacyPalette(paletteName: string, httpClient: Pick<Htt
   const legacyPalette = await httpClient.get<LegacyPalette | LegacyPaletteError>(
     `api/palettes/${paletteName}`,
   );
-  if ('status' in legacyPalette && legacyPalette.status === 'error') {
+  if (legacyPalette && 'status' in legacyPalette && legacyPalette.status === 'error') {
     throw new TranslatableError('errors.paletteNotFound', { paletteName });
   }
   return legacyPalette as LegacyPalette;

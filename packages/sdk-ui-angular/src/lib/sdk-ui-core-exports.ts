@@ -108,7 +108,11 @@ export type {
   HighchartsOptions,
   BoxplotDataPoint,
 
-  // General (Others)
+  // Dashboard:
+  Layout,
+  WidgetFilterOptions,
+
+  // General (Others):
   AppConfig,
   DateConfig,
   ContextMenuProps,

@@ -95,14 +95,16 @@ export function dataLoadStateReducer<Data>(
 }
 
 function startLoading<Data>(state: DataState<Data>): DataLoadingState<Data> {
-  return {
-    ...state,
-    isLoading: true,
-    isError: false,
-    isSuccess: false,
-    status: 'loading',
-    error: undefined,
-  };
+  return state.status === 'loading'
+    ? state
+    : {
+        ...state,
+        isLoading: true,
+        isError: false,
+        isSuccess: false,
+        status: 'loading',
+        error: undefined,
+      };
 }
 
 function applySuccessData<Data>(data: Data): DataSuccessState<Data> {

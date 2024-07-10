@@ -6,6 +6,7 @@ import {
   type AnyColumn,
 } from '@/chart-data-options/types';
 import { getCompleteNumberFormatConfig } from '@/chart-options-processor/translations/number-format-config';
+import { getDefaultDateFormat } from '@/chart-options-processor/translations/axis-section';
 
 export const getPivotDataOptionByJaqlIndex = (
   dataOptions: PivotTableDataOptions,
@@ -28,5 +29,6 @@ export const getNumberFormatConfig = (dataOption?: AnyColumn) => {
 
 export const getDateFormatConfig = (dataOption: Column | StyledColumn) => {
   // Note: need to convert column into category in order to get `dateFormat` with default value
-  return translateColumnToCategory(dataOption).dateFormat!;
+  const category = translateColumnToCategory(dataOption);
+  return category?.dateFormat || getDefaultDateFormat(category?.granularity);
 };

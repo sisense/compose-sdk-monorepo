@@ -788,228 +788,244 @@ export type CompleteNumberFormatConfig = Required<NumberFormatConfig>;
 /** Identifier of a theme as defined in the Sisense instance. */
 export type ThemeOid = string;
 
+/**
+ * Chart theme settings
+ */
+export interface ChartThemeSettings {
+  /** Text color */
+  textColor?: string;
+  /** Secondary text color - e.g., for the indicator chart's secondary value title */
+  secondaryTextColor?: string;
+  /** Background color */
+  backgroundColor?: string;
+  /** Toolbar Background color, can be used as a secondary background color */
+  panelBackgroundColor?: string;
+}
+
+/**
+ * Theme settings specific to the AI Chatbot component
+ */
+export interface AiChatThemeSettings {
+  /** Background color of the chatbot */
+  backgroundColor?: string;
+  /** Text color of the chatbot */
+  primaryTextColor?: string;
+  /** Secondary text color of the chatbot */
+  secondaryTextColor?: string;
+  /** Primary font size for text in the chatbot */
+  primaryFontSize?: [fontSize: string, lineHeight: string];
+  /** Border of the chatbot */
+  border?: false | string;
+  /** Border radius of the chatbot */
+  borderRadius?: false | string;
+
+  /** Settings for the main chat body */
+  body?: {
+    /** Left padding of the chat body */
+    paddingLeft?: string;
+    /** Right padding of the chat body */
+    paddingRight?: string;
+    /** Top padding of the chat body */
+    paddingTop?: string;
+    /** Bottom padding of the chat body */
+    paddingBottom?: string;
+    /** Gap size between each message in the chat body */
+    gapBetweenMessages?: string;
+  };
+
+  /** Settings for the chat footer */
+  footer?: {
+    /** Left padding of the chat footer */
+    paddingLeft?: string;
+    /** Right padding of the chat footer */
+    paddingRight?: string;
+    /** Top padding of the chat footer */
+    paddingTop?: string;
+    /** Bottom padding of the chat footer */
+    paddingBottom?: string;
+  };
+
+  /** Settings for user chat messages */
+  userMessages?: {
+    /** Background color of user chat messages */
+    backgroundColor?: string;
+  };
+
+  /** Settings for system chat messages */
+  systemMessages?: {
+    /** Background color of system chat messages */
+    backgroundColor?: string;
+  };
+
+  /** Settings for the chatbot input */
+  input?: {
+    /** Background color of the input */
+    backgroundColor?: string;
+    /** Settings to be applied on input focus */
+    focus?: {
+      /** Outline color of the input */
+      outlineColor?: string;
+    };
+  };
+
+  /** Settings for the chatbot header */
+  header?: {
+    /** Background color of the chatbot header */
+    backgroundColor?: string;
+    /** Text color of the chatbot header */
+    textColor?: string;
+    /** Settings to be applied on hover of the header */
+  };
+
+  /** Settings for chatbot dropup */
+  dropup?: {
+    /** Background color of the dropup */
+    backgroundColor?: string;
+    /** Box shadow of the dropup */
+    boxShadow?: string;
+    /** Border radius of the dropup */
+    borderRadius?: string;
+    /** Settings for the section headers of the dropup */
+    headers?: {
+      /** Text color of headers */
+      textColor?: string;
+      /** Settings to be applied on hover of the headers */
+      hover?: {
+        /** Background color of headers on hover */
+        backgroundColor?: string;
+      };
+    };
+    /** Settings for the dropup items */
+    items?: {
+      /** Text color of the dropup items */
+      textColor?: string;
+      /** Settings to be applied on hover of dropup items */
+      hover?: {
+        /** Background color of dropup items on hover */
+        backgroundColor?: string;
+      };
+    };
+  };
+
+  /** Settings for the chatbot suggestions */
+  suggestions?: {
+    /** Text color of the chatbot suggestions */
+    textColor?: string;
+    /** Background color of the chatbot suggestions */
+    backgroundColor?: string;
+    /** Border of the chatbot suggestions */
+    border?: string;
+    /** 2-color gradient to be applied on the border */
+    borderGradient?: [string, string] | null;
+    /** Border radius of the chatbot suggestions */
+    borderRadius?: string;
+    /** Setting to be applied on hover */
+    hover?: {
+      /** Text color of the chatbot suggestions on hover */
+      textColor?: string;
+      /** Background color of the chatbot suggestions on hover */
+      backgroundColor?: string;
+    };
+    /** 2-color gradient to be applied on suggestions loading animation */
+    loadingGradient?: [string, string];
+    /** Gap size between each suggestion item */
+    gap?: string;
+  };
+
+  /** Settings for the chatbot clickable messages */
+  clickableMessages?: {
+    /** Text color of the chatbot clickable messages */
+    textColor?: string;
+    /** Background color of the chatbot clickable messages */
+    backgroundColor?: string;
+    /** Border of the chatbot clickable messages */
+    border?: false | string;
+    /** 2-color gradient to be applied on the border */
+    borderGradient?: [string, string] | null;
+    /** Setting to be applied on hover */
+    hover?: {
+      /** Text color of the chatbot clickable messages on hover */
+      textColor?: string;
+      /** Background color of the chatbot clickable messages on hover */
+      backgroundColor?: string;
+    };
+  };
+
+  /** Settings for the data topics screen */
+  dataTopics?: {
+    /** Background color of the data topics screen */
+    backgroundColor?: string;
+    /** Settings for the individual data topic items */
+    items?: {
+      /** Text color of the data topic items */
+      textColor?: string;
+      /** Background color of the data topic items */
+      backgroundColor?: string;
+    };
+  };
+
+  /** Settings for the chatbot icons */
+  icons?: {
+    /** Color of the chatbot icons */
+    color?: string;
+    /** Settings for feedback icons */
+    feedbackIcons?: {
+      /** Background color of the feedback icons on hover */
+      hoverColor?: string;
+    };
+  };
+
+  /** Settings for the chatbot tooltips */
+  tooltips?: {
+    /** Background color of the tooltips */
+    backgroundColor?: string;
+    /** Text color of the tooltips */
+    textColor?: string;
+    /** Box shadow of the tooltips */
+    boxShadow?: string;
+  };
+}
+
+/** Text theme settings */
+export interface TypographyThemeSettings {
+  /** Font family name to style component text */
+  fontFamily?: string;
+  /** Primary text color */
+  primaryTextColor?: string;
+  /** Secondary text color */
+  secondaryTextColor?: string;
+}
+
+/** General theme settings */
+export interface GeneralThemeSettings {
+  /** Main color used for various elements like primary buttons, switches, etc. */
+  brandColor?: string;
+  /** Background color used for elements like tiles, etc. */
+  backgroundColor?: string;
+  /** Text color for primary buttons */
+  primaryButtonTextColor?: string;
+  /** Hover color for primary buttons */
+  primaryButtonHoverColor?: string;
+}
+
 /** Theme settings defining the look and feel of components. */
 export interface ThemeSettings {
   /** Chart theme settings */
-  chart?: {
-    /** Text color */
-    textColor?: string;
-    /** Secondary text color - e.g., for the indicator chart's secondary value title */
-    secondaryTextColor?: string;
-    /** Background color */
-    backgroundColor?: string;
-    /** Toolbar Background color, can be used as a secondary background color */
-    panelBackgroundColor?: string;
-  };
+  chart?: ChartThemeSettings;
 
   /** Collection of colors used to color various elements */
   palette?: ColorPaletteTheme;
 
   /** Text theme settings */
-  typography?: {
-    /** Font family name to style component text */
-    fontFamily?: string;
-    /** Primary text color */
-    primaryTextColor?: string;
-    /** Secondary text color */
-    secondaryTextColor?: string;
-  };
+  typography?: TypographyThemeSettings;
 
   /** General theme settings */
-  general?: {
-    /** Main color used for various elements like primary buttons, switches, etc. */
-    brandColor?: string;
-    /** Background color used for elements like tiles, etc. */
-    backgroundColor?: string;
-    /** Text color for primary buttons */
-    primaryButtonTextColor?: string;
-    /** Hover color for primary buttons */
-    primaryButtonHoverColor?: string;
-  };
+  general?: GeneralThemeSettings;
 
   /**
    * Theme settings specific to the AI Chatbot component
    */
-  aiChat?: {
-    /** Background color of the chatbot */
-    backgroundColor?: string;
-    /** Text color of the chatbot */
-    primaryTextColor?: string;
-    /** Secondary text color of the chatbot */
-    secondaryTextColor?: string;
-    /** Primary font size for text in the chatbot */
-    primaryFontSize?: [fontSize: string, lineHeight: string];
-    /** Border of the chatbot */
-    border?: false | string;
-    /** Border radius of the chatbot */
-    borderRadius?: false | string;
-
-    /** Settings for the main chat body */
-    body?: {
-      /** Left padding of the chat body */
-      paddingLeft?: string;
-      /** Right padding of the chat body */
-      paddingRight?: string;
-      /** Top padding of the chat body */
-      paddingTop?: string;
-      /** Bottom padding of the chat body */
-      paddingBottom?: string;
-      /** Gap size between each message in the chat body */
-      gapBetweenMessages?: string;
-    };
-
-    /** Settings for the chat footer */
-    footer?: {
-      /** Left padding of the chat footer */
-      paddingLeft?: string;
-      /** Right padding of the chat footer */
-      paddingRight?: string;
-      /** Top padding of the chat footer */
-      paddingTop?: string;
-      /** Bottom padding of the chat footer */
-      paddingBottom?: string;
-    };
-
-    /** Settings for user chat messages */
-    userMessages?: {
-      /** Background color of user chat messages */
-      backgroundColor?: string;
-    };
-
-    /** Settings for system chat messages */
-    systemMessages?: {
-      /** Background color of system chat messages */
-      backgroundColor?: string;
-    };
-
-    /** Settings for the chatbot input */
-    input?: {
-      /** Background color of the input */
-      backgroundColor?: string;
-      /** Settings to be applied on input focus */
-      focus?: {
-        /** Outline color of the input */
-        outlineColor?: string;
-      };
-    };
-
-    /** Settings for the chatbot header */
-    header?: {
-      /** Background color of the chatbot header */
-      backgroundColor?: string;
-      /** Text color of the chatbot header */
-      textColor?: string;
-      /** Settings to be applied on hover of the header */
-    };
-
-    /** Settings for chatbot dropup */
-    dropup?: {
-      /** Background color of the dropup */
-      backgroundColor?: string;
-      /** Box shadow of the dropup */
-      boxShadow?: string;
-      /** Border radius of the dropup */
-      borderRadius?: string;
-      /** Settings for the section headers of the dropup */
-      headers?: {
-        /** Text color of headers */
-        textColor?: string;
-        /** Settings to be applied on hover of the headers */
-        hover?: {
-          /** Background color of headers on hover */
-          backgroundColor?: string;
-        };
-      };
-      /** Settings for the dropup items */
-      items?: {
-        /** Text color of the dropup items */
-        textColor?: string;
-        /** Settings to be applied on hover of dropup items */
-        hover?: {
-          /** Background color of dropup items on hover */
-          backgroundColor?: string;
-        };
-      };
-    };
-
-    /** Settings for the chatbot suggestions */
-    suggestions?: {
-      /** Text color of the chatbot suggestions */
-      textColor?: string;
-      /** Background color of the chatbot suggestions */
-      backgroundColor?: string;
-      /** Border of the chatbot suggestions */
-      border?: string;
-      /** 2-color gradient to be applied on the border */
-      borderGradient?: [string, string] | null;
-      /** Border radius of the chatbot suggestions */
-      borderRadius?: string;
-      /** Setting to be applied on hover */
-      hover?: {
-        /** Text color of the chatbot suggestions on hover */
-        textColor?: string;
-        /** Background color of the chatbot suggestions on hover */
-        backgroundColor?: string;
-      };
-      /** 2-color gradient to be applied on suggestions loading animation */
-      loadingGradient?: [string, string];
-      /** Gap size between each suggestion item */
-      gap?: string;
-    };
-
-    /** Settings for the chatbot clickable messages */
-    clickableMessages?: {
-      /** Text color of the chatbot clickable messages */
-      textColor?: string;
-      /** Background color of the chatbot clickable messages */
-      backgroundColor?: string;
-      /** Border of the chatbot clickable messages */
-      border?: false | string;
-      /** 2-color gradient to be applied on the border */
-      borderGradient?: [string, string] | null;
-      /** Setting to be applied on hover */
-      hover?: {
-        /** Text color of the chatbot clickable messages on hover */
-        textColor?: string;
-        /** Background color of the chatbot clickable messages on hover */
-        backgroundColor?: string;
-      };
-    };
-
-    /** Settings for the data topics screen */
-    dataTopics?: {
-      /** Background color of the data topics screen */
-      backgroundColor?: string;
-      /** Settings for the individual data topic items */
-      items?: {
-        /** Text color of the data topic items */
-        textColor?: string;
-        /** Background color of the data topic items */
-        backgroundColor?: string;
-      };
-    };
-
-    /** Settings for the chatbot icons */
-    icons?: {
-      /** Color of the chatbot icons */
-      color?: string;
-      /** Settings for feedback icons */
-      feedbackIcons?: {
-        /** Background color of the feedback icons on hover */
-        hoverColor?: string;
-      };
-    };
-
-    /** Settings for the chatbot tooltips */
-    tooltips?: {
-      /** Background color of the tooltips */
-      backgroundColor?: string;
-      /** Text color of the tooltips */
-      textColor?: string;
-      /** Box shadow of the tooltips */
-      boxShadow?: string;
-    };
-  };
+  aiChat?: AiChatThemeSettings;
 }
 
 /**

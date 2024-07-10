@@ -19,27 +19,26 @@ export const rangeData = (
   chartDataOptions: RangeChartDataOptionsInternal,
   dataTable: DataTable,
 ): RangeChartData => {
-  const cartesianChartDataOptionsUpper = {
-    ...chartDataOptions,
-    y: [],
-  } as CartesianChartDataOptionsInternal;
+  const getInitialCartesianDataOptions = () =>
+    ({
+      ...chartDataOptions,
+      y: [],
+    } as CartesianChartDataOptionsInternal);
+  const cartesianChartDataOptionsUpper = getInitialCartesianDataOptions();
+  const cartesianChartDataOptionsLower = getInitialCartesianDataOptions();
 
-  const upperValueIndex = 0;
-  const lowerValueIndex = 1;
+  const upperValueIndex = 1;
+  const lowerValueIndex = 0;
 
   // assumes no sorting by Y for range chart - open issue
   chartDataOptions.rangeValues.forEach((value) => {
-    cartesianChartDataOptionsUpper.y.push(value[upperValueIndex]);
+    const upperValue = value[upperValueIndex];
+    const lowerValue = value[lowerValueIndex];
+
+    cartesianChartDataOptionsUpper.y.push(upperValue);
+    cartesianChartDataOptionsLower.y.push(lowerValue);
   });
   const cartesianChartDataUpper = getCartesianData(cartesianChartDataOptionsUpper, dataTable);
-
-  const cartesianChartDataOptionsLower = {
-    ...chartDataOptions,
-    y: [],
-  } as CartesianChartDataOptionsInternal;
-  chartDataOptions.rangeValues.forEach((value) => {
-    cartesianChartDataOptionsLower.y.push(value[lowerValueIndex]);
-  });
   const cartesianChartDataLower = getCartesianData(cartesianChartDataOptionsLower, dataTable);
 
   return {

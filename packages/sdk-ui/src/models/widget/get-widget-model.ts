@@ -17,5 +17,8 @@ export async function getWidgetModel(
     dashboardOid,
     api,
   });
+  if (!fetchedWidget) {
+    throw new Error(`Widget with oid ${widgetOid} not found`);
+  }
   return new WidgetModel(fetchedWidget, themeSettings);
 }

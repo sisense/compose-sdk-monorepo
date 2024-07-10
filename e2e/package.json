@@ -3,13 +3,20 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@playwright/experimental-ct-react": "1.36.2",
-    "@playwright/experimental-ct-vue": "1.36.2"
+    "@playwright/experimental-ct-react": "1.44.1",
+    "@playwright/experimental-ct-vue": "1.44.1",
+    "@playwright/test": "^1.44.1"
   },
   "scripts": {
-    "test-ct": "playwright test -c playwright-ct.config.ts",
-    "test:ui": "playwright test -c playwright-ct.config.ts --ui",
-    "test:debug": "playwright test -c playwright-ct.config.ts --project=chromium --debug"
+    "start-docker": "docker run -p 5400:5400 --rm -it -v $PWD/../:/monorepo -w /monorepo mcr.microsoft.com/playwright:v1.44.1-jammy /bin/bash",
+    "test:ct": "playwright test -c playwright-ct.config.ts",
+    "test:ct:ui": "playwright test -c playwright-ct.config.ts --ui",
+    "test:ct:debug": "playwright test -c playwright-ct.config.ts --project=chromium --debug",
+    "test:visual": "playwright test -c playwright-visual-tests.config.ts --project chromium",
+    "test:visual:ui": "yarn run test:visual --ui --ui-port=5400",
+    "test:visual:ui-docker": "yarn run test:visual --ui --ui-port=5400 --ui-host=0.0.0.0",
+    "test:visual:update": "yarn test:visual:clean && yarn run test:visual --update-snapshots",
+    "test:visual:clean": "find . -type d -name '__screenshots__' -print0 | xargs -0r rm -r"
   },
   "dependencies": {
     "@sisense/sdk-data": "workspace:^",

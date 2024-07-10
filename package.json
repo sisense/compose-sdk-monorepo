@@ -1,5 +1,5 @@
 {
-  "version": "1.13.0",
+  "version": "1.14.0",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -29,7 +29,8 @@
     "test:coverage:collect": "mkdir -p .nyc_output && node ./ci/collect-coverage-files.cjs collectFiles --pattern='packages/**/coverage-final.json' --target='.nyc_output'",
     "test:coverage:report": "nyc report --reporter lcov --reporter text-summary --reporter cobertura",
     "test:coverage:combine": "yarn test:coverage && yarn test:coverage:collect && yarn test:coverage:report",
-    "test:ct": "yarn workspaces foreach --verbose run test-ct",
+    "test:ct": "yarn workspaces foreach --verbose run test:ct",
+    "test:visual": "yarn workspaces foreach --verbose run test:visual",
     "g:cli": "yarn workspace @sisense/sdk-cli run cli",
     "version-and-publish": "./ci/version-and-publish.sh",
     "version:current": "node ./scripts/current-version.cjs",

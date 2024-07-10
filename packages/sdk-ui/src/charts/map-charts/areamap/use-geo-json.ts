@@ -39,6 +39,9 @@ export const useGeoJson = (
               throw new Error(`Unsupported map type: ${mapType}`);
           }
           const geoJsonFromServer = await getGeoJsonFromServer();
+          if (!geoJsonFromServer) {
+            throw new Error('Failed loading map');
+          }
           const fixedGeoJsonFromServer =
             mapType === 'world'
               ? fixFeatureIdsForUnrecognizedStates(geoJsonFromServer)
@@ -59,18 +62,18 @@ export const useGeoJson = (
 };
 
 /** Function to get data from LocalStorage */
-function getGeoJsonFromLocalStorage(cacheKey: string): GeoJsonFeatureCollection | undefined {
+function getGeoJsonFromLocalStorage(cacheKey: string) {
   const cachedData = localStorage.getItem(cacheKey);
-  if (cachedData) {
-    return JSON.parse(cachedData) as GeoJsonFeatureCollection;
+  if (!cachedData) {
+    return;
   }
-  return undefined;
+  return JSON.parse(cachedData) as GeoJsonFeatureCollection;
 }
 
 /** Function to set data to LocalStorage */
-const setGeoJsonToLocalStorage = (data: GeoJsonFeatureCollection, cacheKey: string): void => {
+function setGeoJsonToLocalStorage(data: GeoJsonFeatureCollection, cacheKey: string) {
   localStorage.setItem(cacheKey, JSON.stringify(data));
-};
+}
 
 /**
  * Fixes feature ids for unrecognized states in geoJson.
@@ -84,7 +87,7 @@ function fixFeatureIdsForUnrecognizedStates(
 
   fixedGeoJson.features.forEach((feature) => {
     if (feature.id === '-99') {
-      feature.id = feature.properties!.name as string;
+      feature.id = feature.properties?.name;
     }
   });
 

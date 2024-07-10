@@ -22,7 +22,6 @@
  * TypeScript interfaces for components and composables listed above
  * @groupDescription Type Aliases
  * TypeScript type aliases for components and composables listed above
- * @beta
  */
 export * from './lib';
 

@@ -1,5 +1,6 @@
 import merge from 'ts-deepmerge';
-import { type Filter } from '@sisense/sdk-data';
+import partition from 'lodash/partition';
+import { MembersFilter, type Filter } from '@sisense/sdk-data';
 import { mergeFilters } from '@/dashboard-widget/utils';
 import { WidgetHeaderClearSelectionButton } from './widget-header-clear-selection-button';
 import {
@@ -15,7 +16,11 @@ import {
   isIncludeAllFilter,
   isSameAttribute,
 } from './utils.js';
-import { CommonFiltersApplyMode, CommonFiltersOptions } from './types.js';
+import {
+  CommonFiltersApplyMode,
+  CommonFiltersOptions,
+  CompleteCommonFiltersOptions,
+} from './types.js';
 import {
   createCommonFiltersOverSelections,
   getSelectableWidgetAttributes,
@@ -30,27 +35,28 @@ type CommonFiltersToWidgetConnectProps = Pick<
   renderToolbar: RenderToolbarHandler;
 };
 
-const defaultCommonFiltersOptions: CommonFiltersOptions = {
+const defaultCommonFiltersOptions: CompleteCommonFiltersOptions = {
   applyMode: CommonFiltersApplyMode.HIGHLIGHT,
   shouldAffectFilters: true,
   ignoreFilters: {
     all: false,
     ids: [],
   },
+  forceApplyBackgroundFilters: true,
 };
 
 function normalizeCommonFiltersOptions(
   widgetType: WidgetTypeInternal,
   options: CommonFiltersOptions,
-) {
+): CompleteCommonFiltersOptions {
   if (widgetType === 'table') {
     return {
       applyMode: CommonFiltersApplyMode.FILTER,
       shouldAffectFilters: false,
-      ignoreFilters: merge(defaultCommonFiltersOptions.ignoreFilters!, options.ignoreFilters || {}),
-    };
+      ignoreFilters: merge(defaultCommonFiltersOptions.ignoreFilters, options.ignoreFilters || {}),
+    } as CompleteCommonFiltersOptions;
   }
-  return merge(defaultCommonFiltersOptions, options);
+  return merge(defaultCommonFiltersOptions, options) as CompleteCommonFiltersOptions;
 }
 
 export function prepareCommonFiltersToWidgetConnectProps(
@@ -66,10 +72,27 @@ export function prepareCommonFiltersToWidgetConnectProps(
   const allowedFilters = getAllowedFilters(enabledFilters, normalizedOptions.ignoreFilters);
   const selectableAttributes = getSelectableWidgetAttributes(widgetType, dataOptions);
 
-  if (normalizedOptions?.applyMode === 'highlight') {
-    props.highlights = allowedFilters;
+  if (normalizedOptions.applyMode === 'highlight') {
+    const [highlights, restFilters] = partition(allowedFilters, (filter) =>
+      selectableAttributes.some((attribute) => isSameAttribute(attribute, filter.attribute)),
+    );
+    props.highlights = highlights;
+    props.filters = restFilters;
   } else {
     props.filters = allowedFilters;
+  }
+
+  // aplies all background filters as regular filters ignoring "disabled" state and "ignoreFilters" rules
+  if (normalizedOptions.forceApplyBackgroundFilters) {
+    const backgroundFilters = filters.reduce((backgroundFilters: Filter[], filter: Filter) => {
+      const { backgroundFilter } = filter as MembersFilter;
+      if (backgroundFilter) {
+        backgroundFilters.push(backgroundFilter);
+      }
+      return backgroundFilters;
+    }, []);
+
+    props.filters = mergeFilters(backgroundFilters, props.filters);
   }
 
   if (normalizedOptions.shouldAffectFilters && selectableAttributes.length) {

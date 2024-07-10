@@ -91,6 +91,8 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
         onBeforeQuery,
       } = params;
 
+      dispatch({ type: 'loading' });
+
       const { filters: filterList, relations: filterRelations } =
         getFilterListAndRelations(filters);
       const executeQueryParams: Parameters<typeof executeQuery> = [

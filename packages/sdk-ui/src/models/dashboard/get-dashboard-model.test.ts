@@ -98,4 +98,34 @@ describe('getDashboardModel', () => {
       widgetFilterOptions: expect.anything(),
     });
   });
+
+  it("should throw an error if the dashboard doesn't exist", async () => {
+    getDashboardMock.mockReturnValueOnce(undefined);
+
+    let result;
+    let error;
+    try {
+      result = await getDashboardModel(httpClientMock, dashboardMock.oid);
+    } catch (e) {
+      error = e;
+    }
+
+    expect(result).toBeUndefined();
+    expect(error).toEqual(new Error(`Dashboard with oid ${dashboardMock.oid} not found`));
+  });
+
+  it('should handle network error', async () => {
+    getDashboardMock.mockRejectedValueOnce(new Error('Network error'));
+
+    let result;
+    let error;
+    try {
+      result = await getDashboardModel(httpClientMock, dashboardMock.oid);
+    } catch (e) {
+      error = e;
+    }
+
+    expect(result).toBeUndefined();
+    expect(error).toEqual(new Error('Network error'));
+  });
 });

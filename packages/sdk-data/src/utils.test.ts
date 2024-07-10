@@ -1,4 +1,4 @@
-import { createFilterFromJaql, DataSourceInfo, DataType, Filter } from './index.js';
+import { createFilterFromJaql, DataSourceInfo, DataType, Filter, MembersFilter } from './index.js';
 import {
   getDataSourceName,
   getFilterListAndRelations,
@@ -146,6 +146,40 @@ describe('utils', () => {
       const attribute = createAttributeFromFilterJaql(jaql);
       const expectedFilter = filterFactory.members(attribute, jaql.filter.members);
       expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
+    });
+
+    test('should creact MembersFilter with inner background filter', () => {
+      const jaql = {
+        table: 'Category',
+        column: 'Category',
+        dim: '[Category.Category]',
+        datatype: 'text' as DataType,
+        filter: {
+          explicit: true,
+          multiSelection: true,
+          members: ['Cell Phones'],
+          filter: {
+            members: ['Cell Phones', 'GPS Devices'],
+          },
+        },
+        title: 'Category',
+      };
+
+      const filter = createFilterFromJaql(jaql, instanceid);
+
+      const attribute = createAttributeFromFilterJaql(jaql);
+      const backgroundFilter = filterFactory.members(attribute, jaql.filter.filter.members);
+      const expectedFilter = filterFactory.members(
+        attribute,
+        jaql.filter.members,
+        undefined,
+        undefined,
+        backgroundFilter,
+      );
+
+      expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
+      expect((filter as MembersFilter).backgroundFilter).toBeDefined();
+      expect((expectedFilter as MembersFilter).backgroundFilter).toBeDefined();
     });
   });
 });

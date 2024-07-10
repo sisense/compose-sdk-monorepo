@@ -29,6 +29,7 @@ export const translateLayout = (layout: SisenseLayout): Layout => ({
 const createFilterFromFilterDto = (filterDto: FilterDto): Filter => {
   const filter: Filter = createFilterFromJaql(filterDto.jaql, filterDto.instanceid);
   filter.disabled = filterDto.disabled ?? false;
+  filter.locked = filterDto.locked ?? false;
   return filter;
 };
 
@@ -38,6 +39,7 @@ const createFilterFromCascadingFilterDto = (
   const innerFilters = cascadingFilterDto.levels.map((level) => createFilterFromJaql(level));
   const filter = new CascadingFilter(innerFilters);
   filter.disabled = cascadingFilterDto.disabled ?? false;
+  filter.locked = cascadingFilterDto.locked ?? false;
   return filter;
 };
 
@@ -63,6 +65,7 @@ export function translateWidgetFilterOptions(widgets: WidgetDto[] = []): WidgetF
         all: widget.metadata.ignore?.all,
         ids: widget.metadata.ignore?.ids,
       },
+      forceApplyBackgroundFilters: true,
     };
   });
 

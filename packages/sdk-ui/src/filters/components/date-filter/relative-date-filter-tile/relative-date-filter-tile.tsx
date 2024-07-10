@@ -36,6 +36,7 @@ export interface RelativeDateFilterTileProps {
   };
   /**
    * Design options for the filter tile component
+   *
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
@@ -91,6 +92,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
       disabled={disabled}
       arrangement={arrangement}
       design={tileDesignOptions}
+      locked={filter.locked}
     />
   );
 });

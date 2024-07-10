@@ -8,3 +8,4 @@ export * from './types';
 export { default as DrilldownWidget } from './components/drilldown-widget.vue';
 export * from './sdk-ui-core-exports';
 export * from './components/widgets';
+export * from './components/dashboard';

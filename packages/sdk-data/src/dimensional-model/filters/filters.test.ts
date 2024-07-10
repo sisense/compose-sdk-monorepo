@@ -327,6 +327,26 @@ describe('Filters jaql preparations', () => {
     const jaql = filter.jaql();
     expect(jaql).toStrictEqual(result);
   });
+
+  it('must prepare members filter jaql with inner background filter', () => {
+    const result = {
+      jaql: {
+        title: 'CommerceGender',
+        dim: '[Commerce.Gender]',
+        datatype: 'text',
+        filter: { and: [{ members: ['Female'] }, { members: ['Female', 'Male'] }] },
+      },
+    };
+    const attribute = new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]');
+    const backgroundFilter = new MembersFilter(attribute, ['Female', 'Male']);
+    const filter = new MembersFilter(attribute, ['Female'], undefined, undefined, backgroundFilter);
+
+    expect(filter.backgroundFilter).toBe(backgroundFilter);
+
+    const jaql = filter.jaql();
+
+    expect(jaql).toStrictEqual(result);
+  });
 });
 
 describe('Disabled Filter', () => {

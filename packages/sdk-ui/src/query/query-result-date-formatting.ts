@@ -12,23 +12,6 @@ import type { Column, Cell, QueryResultData } from '@sisense/sdk-data';
 import { isCell } from '../chart-data-processor/table-creators';
 import { createCompareValue } from '../chart-data-processor/row-comparator';
 
-export function parseISOWithDefaultUTCOffset(dateString: string): Date {
-  if (dateString.endsWith('Z') || /[+-]\d{2}:\d{2}$/.test(dateString)) {
-    // String already contains timezone offset
-    return parseISO(dateString);
-  } else if (dateString.startsWith('1111-11-11')) {
-    // Do not append 'Z' if the dateString starts with '1111-11-11'
-    // because this prefix is for time levels (instead of date levels) and
-    // timezone conversion is inaccurate for date pre 1582
-    return parseISO(dateString);
-  } else {
-    // Otherwise, append 'Z' to treat as UTC
-    // This is needed because parseISO treats date strings without timezone offset as local time
-    // set by the browser
-    return parseISO(`${dateString}Z`);
-  }
-}
-
 //TODO: refactor this function
 // eslint-disable-next-line max-lines-per-function, sonarjs/cognitive-complexity
 export function applyDateFormats(
@@ -97,12 +80,7 @@ export function applyDateFormats(
 
       let text = newCell.text;
       try {
-        text = applyDateFormat(
-          parseISOWithDefaultUTCOffset(newCell.data),
-          dateFormatForThisColumn,
-          locale,
-          dateConfig,
-        );
+        text = applyDateFormat(parseISO(newCell.data), dateFormatForThisColumn, locale, dateConfig);
       } catch (e: unknown) {
         console.error(e);
       }

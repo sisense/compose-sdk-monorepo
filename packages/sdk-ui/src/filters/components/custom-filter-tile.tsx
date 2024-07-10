@@ -1,5 +1,5 @@
 import { Filter } from '@sisense/sdk-data';
-import { FilterTile } from './filter-tile';
+import { FilterTile, FilterTileDesignOptions } from './filter-tile';
 import cloneDeep from 'lodash/cloneDeep';
 import { useTranslation } from 'react-i18next';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
@@ -18,6 +18,8 @@ export interface CustomFilterTileProps {
    * @param filter - Custom filter
    */
   onUpdate: (filter: Filter | null) => void;
+  /** Design options for the tile @internal */
+  tileDesignOptions?: FilterTileDesignOptions;
 }
 
 /**
@@ -50,7 +52,7 @@ export const CustomFilterTile = asSisenseComponent({
 })((props: CustomFilterTileProps) => {
   const { t } = useTranslation();
 
-  const { filter, onUpdate } = props;
+  const { filter, onUpdate, tileDesignOptions } = props;
   const filterJaql = filter.jaql().jaql.filter;
   // Remove internal properties from the filter jaql
   delete filterJaql.custom;
@@ -78,7 +80,8 @@ export const CustomFilterTile = asSisenseComponent({
       }}
       disabled={filter.disabled}
       onToggleDisabled={() => onUpdate(getFilterWithToggledDisabled(filter))}
-      design={{ header: { isCollapsible: false } }}
+      design={tileDesignOptions || { header: { isCollapsible: false } }}
+      locked={filter.locked}
     />
   );
 });

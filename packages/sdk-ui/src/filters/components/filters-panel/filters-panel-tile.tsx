@@ -89,16 +89,19 @@ export const FiltersPanelTile = ({
   }
 
   if (filter instanceof CascadingFilter) {
-    return <CascadingFilterTile filter={filter} onChange={onChange} />;
+    return <CascadingFilterTile {...props} filter={filter} onChange={onChange} />;
   }
 
   return (
     <FilterTile
       title={t('unsupportedFilter.title')}
       renderContent={() => (
-        <p className="csdk-text-center csdk-text-[13px]">{t('unsupportedFilter.message')}</p>
+        <div className="csdk-p-[8px] csdk-text-center csdk-text-[13px]">
+          <span>{t('unsupportedFilter.message')}</span>
+        </div>
       )}
       design={{ header: { isCollapsible: false } }}
+      locked={filter.locked}
     />
   );
 };

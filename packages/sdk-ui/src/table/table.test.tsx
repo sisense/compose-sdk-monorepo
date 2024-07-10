@@ -82,4 +82,32 @@ describe('Table', () => {
     const overlayTitle = await findByText('No Results');
     expect(overlayTitle).toBeTruthy();
   });
+
+  it('should correctly react on data options change', async () => {
+    const { findByText, rerender } = render(
+      <Table
+        dataSet={{
+          ...dataSet,
+          columns: [col1],
+        }}
+        dataOptions={{ columns: [col1] }}
+      />,
+    );
+
+    const headerFromFirstRender = await findByText('AgeRange');
+    expect(headerFromFirstRender).toBeTruthy();
+
+    rerender(
+      <Table
+        dataSet={{
+          ...dataSet,
+          columns: [col2],
+        }}
+        dataOptions={{ columns: [col2] }}
+      />,
+    );
+
+    const headerFromSecondRender = await findByText('Cost');
+    expect(headerFromSecondRender).toBeTruthy();
+  });
 });

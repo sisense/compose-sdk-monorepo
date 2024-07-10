@@ -117,7 +117,7 @@ export const RegularChart = (props: RegularChartProps) => {
 
     let dataTable = createDataTableFromData(data);
 
-    if (dataSet && !isDataSource(dataSet)) {
+    if (!isDataSource(dataSet)) {
       dataTable = filterAndAggregateChartData(
         dataTable,
         attributes.map(translateAttributeToCategory),

@@ -21,7 +21,7 @@ const useFetchChatHistory = (id: string | undefined) => {
         return [];
       }
       const chatObj = await api.ai.chat.getById(id);
-      return chatObj.chatHistory;
+      return chatObj?.chatHistory;
     },
     enabled: !!api && !!id,
   });

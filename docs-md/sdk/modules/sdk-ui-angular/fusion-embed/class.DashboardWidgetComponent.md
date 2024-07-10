@@ -66,21 +66,21 @@ export class WidgetsComponent {
 
 > **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-Filters to apply to a chart’s data using one of the following options.
+Filters to limit (or slice) a chart’s data using one of the following options.
 
-(1) Array of filters returned from filter factory functions, such as
+(1) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) or [FilterRelations](../../sdk-data/interfaces/interface.FilterRelations.md) returned from filter factory functions, such as
 [`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
 
 Use this option for filters that do not require a UI to set them
-or for filters where you will supply your own UI using non-Sisense components.
+or for filters where you will supply your own UI components or use pre-built UI components. This is the most common option.
 
 To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
 
-(2) Array of filters controlled by Sisense filter components.
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
-Use this option for filters that you want your users to set using Sisense UI components.
+Use this option for filters that you want your users to set using pre-built UI components.
 
-To learn more about using filter components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
+To learn more about using filter UI components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
 
 ### Widget
 

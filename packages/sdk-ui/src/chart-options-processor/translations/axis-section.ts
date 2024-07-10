@@ -159,7 +159,7 @@ const getInterval = (granularity: string) => {
   return 0;
 };
 
-const getDefaultDateFormat = (granularity?: string) => {
+export const getDefaultDateFormat = (granularity?: string) => {
   if (granularity === undefined) return undefined;
 
   switch (granularity) {
@@ -187,6 +187,10 @@ const getDefaultDateFormat = (granularity?: string) => {
       return 'HH:mm';
     case DateLevels.AggMinutesRoundTo1:
       return 'HH:mm';
+    case DateLevels.Minutes:
+      return 'HH:mm';
+    case DateLevels.Seconds:
+      return 'HH:mm:ss';
   }
   console.warn('Unsupported level');
   return 'M/d/yy HH';

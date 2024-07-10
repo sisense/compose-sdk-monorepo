@@ -46,6 +46,33 @@ describe('CascadingFilterTile', () => {
     );
   });
 
+  it('should render a locked CascadingFilterTile component', async () => {
+    server.use(
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
+    );
+
+    const topFilter = filterFactory.members(DM.Commerce.Gender, ['Unspecified']) as MembersFilter;
+    const bottomFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18']) as MembersFilter;
+
+    topFilter.locked = true;
+    bottomFilter.locked = true;
+    const lockedCascadingFilter = new CascadingFilter([topFilter, bottomFilter]);
+    lockedCascadingFilter.locked = true;
+
+    const { container } = render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <CascadingFilterTile filter={lockedCascadingFilter} onChange={() => {}} />
+      </SisenseContextProvider>,
+    );
+
+    await Promise.all(
+      cascadingFilter.filters.map(async (filter) =>
+        expect(await screen.findByText(filter.attribute.name)).toBeInTheDocument(),
+      ),
+    );
+    expect(container).toMatchSnapshot();
+  });
+
   it('should be able to disable whole cascading filter', async () => {
     let updatedFilter: CascadingFilter | undefined;
     render(

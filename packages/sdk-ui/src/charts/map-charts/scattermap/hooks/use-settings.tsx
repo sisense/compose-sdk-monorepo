@@ -12,7 +12,7 @@ export const useGeoSettings = () => {
 
   const getSettings = useCallback(async () => {
     if (!app) return;
-    const settingsResponse: { geo: GeoSettings } = await app.httpClient.get(
+    const settingsResponse = await app.httpClient.get<{ geo: GeoSettings }>(
       'api/v1/settings/system',
     );
     if (!settingsResponse) return;

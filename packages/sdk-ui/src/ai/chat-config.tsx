@@ -25,11 +25,12 @@ export interface ChatConfig {
   numOfRecentPrompts: number;
 
   /**
-   * The default context (data model or perspective) title to use for a chat session
+   * List of titles representing allowed contexts (data models or perspectives) for a chat session.
    *
-   * If specified, the data topic selector screen will not be shown.
+   * Each context will be validated and checked for availability.
+   * If only one context is specified, the data topic selector screen will not be shown.
    */
-  defaultContextTitle?: string;
+  dataTopicsList?: string[];
 
   /**
    * The chat mode to use for a chat session.

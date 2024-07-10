@@ -22,9 +22,8 @@ const action = 'sdkHookInit';
  * @param packageName - The name of the package
  * @param app - The client application
  * @param onFinally - The function to call after the tracking is done
- * @returns Promise<void>
  */
-export const trackHook = async (
+export const trackHook = (
   hookName: string,
   packageName: string,
   app: ClientApplication,
@@ -37,9 +36,7 @@ export const trackHook = async (
     hookName,
   };
 
-  void trackProductEvent(action, payload, app.httpClient)
-    .catch((e) => console.warn('An error occurred when sending the sdkHookInit event', e))
-    .finally(onFinally);
+  void trackProductEvent(action, payload, app.httpClient).finally(onFinally);
 };
 
 function useTrackHook(hookName: string) {
@@ -54,9 +51,9 @@ function useTrackHook(hookName: string) {
         packageVersion: __PACKAGE_VERSION__,
         hookName,
       };
-      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled)
-        .catch((e) => console.warn('An error occurred when sending the sdkHookInit event', e))
-        .finally(() => (hasTrackedRef.current = true));
+      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled).finally(
+        () => (hasTrackedRef.current = true),
+      );
     }
   }, [app, tracking, hookName]);
 }

@@ -18,6 +18,9 @@ describe('createHeaderCellValueFormatter', () => {
             name: 'Percent',
             decimalScale: 0,
           },
+          column: {
+            type: 'numeric',
+          },
         },
       ],
     } as PivotTableDataOptions;
@@ -76,7 +79,7 @@ describe('createHeaderCellValueFormatter', () => {
 
   it("shouldn't format measures header cell value", () => {
     const dataOptions = {
-      rows: [{}],
+      rows: [{ type: 'numeric' }],
     } as PivotTableDataOptions;
     const cell = {
       value: 123.456,
@@ -100,7 +103,7 @@ describe('createHeaderCellValueFormatter', () => {
 
   it("shouldn't format corner header cell value", () => {
     const dataOptions = {
-      rows: [{}],
+      rows: [{ type: 'numeric' }],
     } as PivotTableDataOptions;
     const cell = {
       value: 123.456,
@@ -124,7 +127,7 @@ describe('createHeaderCellValueFormatter', () => {
 
   it('should format empty header cell value as N\\A', () => {
     const dataOptions = {
-      rows: [{}],
+      rows: [{ type: 'text' }],
     } as PivotTableDataOptions;
     const cell = {
       value: '',

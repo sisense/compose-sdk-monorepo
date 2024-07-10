@@ -165,15 +165,20 @@ export async function executeQueryByWidgetId({
     includeDashboard: includeDashboardFilters,
     api,
   });
+
+  if (!fetchedWidget) {
+    throw new Error(`Widget with oid ${widgetOid} not found`);
+  }
+
   // TODO: support filter relations extraction from widget
   const widgetModel = new WidgetModel(fetchedWidget);
   const widgetQuery = widgetModel.getExecuteQueryParams();
   const { dataSource, dimensions, measures } = widgetQuery;
   let { filters: widgetFilters, highlights: widgetHighlights } = widgetQuery;
 
-  if (includeDashboardFilters) {
+  if (includeDashboardFilters && fetchedDashboard) {
     const { filters: dashboardFilters, highlights: dashboardHighlight } =
-      extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
+      extractDashboardFiltersForWidget(fetchedDashboard, fetchedWidget);
     widgetFilters = mergeFilters(dashboardFilters, widgetFilters as Filter[]);
     widgetHighlights = mergeFilters(dashboardHighlight, widgetHighlights);
   }

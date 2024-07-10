@@ -16,7 +16,7 @@ export interface GetNlgQueryResultProps extends Omit<UseGetNlgQueryResultParams,
  * Specifying a query is similar to providing parameters to a {@link useExecuteQuery} hook, using dimensions, measures, and filters.
  *
  * ::: warning Note
- * This component is currently under beta release for selected customers and is subject to change as we make fixes and improvements.
+ * This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
  * :::
  *
  * @example

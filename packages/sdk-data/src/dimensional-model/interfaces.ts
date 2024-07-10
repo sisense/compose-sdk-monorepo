@@ -293,6 +293,16 @@ export interface DateDimension extends Dimension {
   readonly MinutesRoundTo15: LevelAttribute;
 
   /**
+   * Minutes level (for Live Models)
+   */
+  readonly Minutes: LevelAttribute;
+
+  /**
+   * Seconds level (for Live Models)
+   */
+  readonly Seconds: LevelAttribute;
+
+  /**
    * Aggregated Hours level (for Live Models)
    */
   readonly AggHours: LevelAttribute;
@@ -403,6 +413,13 @@ export interface Filter extends Element {
    * @internal
    */
   disabled: boolean;
+
+  /**
+   * Boolean flag whether the filter is locked
+   *
+   * @internal
+   */
+  locked: boolean;
 
   /**
    * Gets JAQL representing this Filter instance

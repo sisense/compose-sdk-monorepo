@@ -8,24 +8,29 @@ import ErrorContainer from './common/error-container';
 import LoadingSpinner from '../common/components/loading-spinner';
 
 export default function ChatRouter() {
+  const [validDataTopicsList, setValidDataTopicsList] = useState<string[]>([]);
   const [selectedContext, setSelectedContext] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const { data, fetchStatus } = useGetDataTopics();
 
-  const { defaultContextTitle } = useChatConfig();
+  const { dataTopicsList = [] } = useChatConfig();
 
   useEffect(() => {
-    if (defaultContextTitle && data && fetchStatus === 'idle') {
-      const target = data.find((c) => c.title === defaultContextTitle);
-      if (target) {
+    if (data && fetchStatus === 'idle') {
+      let allowedContexts = data;
+      if (dataTopicsList && dataTopicsList.length) {
+        allowedContexts = data?.filter((dataTopic) => dataTopicsList?.includes(dataTopic.title));
+      }
+      setValidDataTopicsList(allowedContexts.map((dataTopic) => dataTopic.title));
+      if (!allowedContexts.length) {
+        setErrorMessage(`None of the provided data models or perspectives are available`);
+      } else if (allowedContexts.length === 1) {
         setErrorMessage(undefined);
-        setSelectedContext(target.title);
-      } else {
-        setErrorMessage(`Data model or perspective "${defaultContextTitle}" not found`);
+        setSelectedContext(allowedContexts[0].title);
       }
     }
-  }, [data, defaultContextTitle, fetchStatus]);
+  }, [data, dataTopicsList, fetchStatus]);
 
   const queryClient = useQueryClient();
   const handleRefresh = useCallback(() => {
@@ -39,16 +44,23 @@ export default function ChatRouter() {
     );
   }
 
-  if (defaultContextTitle && !selectedContext) {
+  if (validDataTopicsList.length === 1 && !selectedContext) {
     return <LoadingSpinner />;
   }
 
   return selectedContext ? (
-    <ChatBox
-      contextTitle={selectedContext}
-      onGoBack={defaultContextTitle ? undefined : () => setSelectedContext(undefined)}
-    />
+    <>
+      <ChatBox
+        contextTitle={selectedContext}
+        onGoBack={
+          validDataTopicsList.length === 1 ? undefined : () => setSelectedContext(undefined)
+        }
+      />
+    </>
   ) : (
-    <ChatHome onDataTopicClick={(title) => setSelectedContext(title)} />
+    <ChatHome
+      dataTopicsList={validDataTopicsList}
+      onDataTopicClick={(title) => setSelectedContext(title)}
+    />
   );
 }

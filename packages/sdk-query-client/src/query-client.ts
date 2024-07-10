@@ -1,7 +1,4 @@
 import {
-  DataSourceField,
-  DataSourceMetadata,
-  DataSourceSchema,
   ExecutingCsvQueryResult,
   ExecutingPivotQueryResult,
   ExecutingQueryResult,
@@ -137,26 +134,24 @@ export class DimensionalQueryClient implements QueryClient {
     };
   }
 
-  public async getDataSourceFields(
-    dataSource: DataSource,
-    count = 9999,
-    offset = 0,
-  ): Promise<DataSourceField[]> {
-    return this.queryApi.getDataSourceFields(dataSource, count, offset);
+  public async getDataSourceFields(dataSource: DataSource, count = 9999, offset = 0) {
+    const dataSourceFields = await this.queryApi.getDataSourceFields(dataSource, count, offset);
+    return dataSourceFields || [];
   }
 
   /**
    * Returns the schema of a data source by its name.
    */
-  public async getDataSourceSchema(datasourceName: string): Promise<DataSourceSchema> {
+  public getDataSourceSchema(datasourceName: string) {
     return this.queryApi.getDataSourceSchema(datasourceName);
   }
 
   /**
    * Returns a list of data sources
    */
-  public async getDataSourceList(): Promise<DataSourceMetadata[]> {
-    return this.queryApi.getDataSourceList();
+  public async getDataSourceList() {
+    const dataSourceList = await this.queryApi.getDataSourceList();
+    return dataSourceList || [];
   }
 }
 

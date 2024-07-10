@@ -43,6 +43,8 @@ export const createThemeContextConnector = (
 /**
  * Theme provider, which allows you to adjust the look and feel of child components.
  *
+ * Components not wrapped in a theme provider use the current theme from the connected Fusion instance by default.
+ *
  * @example
  * Example of a theme provider, which changes the colors and font of the nested indicator chart:
  * ```vue

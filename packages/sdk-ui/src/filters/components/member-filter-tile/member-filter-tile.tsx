@@ -8,6 +8,7 @@ import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
 import { cloneFilterAndToggleDisabled } from '@/filters/utils';
+import merge from 'lodash/merge';
 
 /**
  * Props for {@link MemberFilterTile}
@@ -67,9 +68,10 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     filter: filterFromProps,
     dataSource,
     onChange: updateFilterFromProps,
-    parentFilters,
+    parentFilters = [],
     tileDesignOptions,
   } = props;
+  const { backgroundFilter } = (filterFromProps as MembersFilter) ?? {};
 
   const { filter, updateFilter } = useSynchronizedFilter<MembersFilter>(
     filterFromProps as MembersFilter | null,
@@ -80,11 +82,16 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
   // "dimensions" does not change on every render, causing infinite rerenders.
   const dimensions = useMemo(() => [attribute], [attribute]);
+  const queryFilters = [...parentFilters];
+
+  if (backgroundFilter) {
+    queryFilters.push(backgroundFilter);
+  }
 
   const { data, error } = useExecuteQueryInternal({
     dataSource,
     dimensions,
-    filters: parentFilters,
+    filters: queryFilters,
   });
 
   const queriedMembers = useMemo(() => (!data ? [] : data.rows.map((r) => r[0])), [data]);
@@ -112,6 +119,8 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       })),
     [queriedMembers],
   );
+
+  const hasBackgroundFilterIcon = !!backgroundFilter && parentFilters.length === 0;
 
   if (error) {
     throw error;
@@ -161,7 +170,10 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         updateFilter(newFilter);
       }}
       isDependent={parentFilters && parentFilters.length > 0}
-      design={tileDesignOptions}
+      design={merge(tileDesignOptions, {
+        header: { hasBackgroundFilterIcon },
+      })}
+      locked={filter.locked}
     />
   );
 });
@@ -181,11 +193,13 @@ function withSelectedMembers(
     activeFilterMembers,
     inactiveFilterMembers,
     filter.guid,
+    filter.backgroundFilter,
   );
 }
 
 /**
  * Splits all selected members into active and inactive filter members.
+ *
  * @param selectedMembers - all selected members, both active and inactive
  */
 function splitToActiveAndInactiveFilterMembers(selectedMembers: SelectedMember[]): {

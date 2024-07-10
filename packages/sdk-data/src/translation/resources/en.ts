@@ -21,7 +21,7 @@ export const translation = {
     filter: {
       unsupportedType: 'Unsupported filter type: {{filterType}}',
       unsupportedDatetimeLevel:
-        'Filters do not support the next "datetime" levels: Hours, MinutesRoundTo30, MinutesRoundTo15',
+        'Filters do not support the next "datetime" levels: Hours, MinutesRoundTo30, MinutesRoundTo15, Minutes, Seconds',
       membersFilterNullMember: 'MembersFilter of {{attributeId}} - member cannot be null',
     },
     unsupportedDimensionalElement: 'Unsupported dimensional element type',

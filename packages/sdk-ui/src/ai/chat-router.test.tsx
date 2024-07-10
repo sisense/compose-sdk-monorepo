@@ -50,7 +50,7 @@ describe('ChatRouter', () => {
         </AiTestWrapper>,
       );
 
-      await waitFor(() => expect(screen.getByText('Data Topics')).toBeInTheDocument());
+      await waitFor(() => expect(screen.getByText('Model 1')).toBeInTheDocument());
       expect(screen.getByText('Model 1')).toBeInTheDocument();
       expect(screen.getByText('Model 2')).toBeInTheDocument();
       expect(screen.getByText('Model 3')).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe('ChatRouter', () => {
     it('skips the data topics screen', async () => {
       setup(
         <AiTestWrapper>
-          <ChatConfigProvider value={{ defaultContextTitle: 'Model 2' }}>
+          <ChatConfigProvider value={{ dataTopicsList: ['Model 2'] }}>
             <ChatRouter />
           </ChatConfigProvider>
         </AiTestWrapper>,
@@ -95,7 +95,7 @@ describe('ChatRouter', () => {
 
       const { user } = setup(
         <AiTestWrapper>
-          <ChatConfigProvider value={{ defaultContextTitle: newModel.title }}>
+          <ChatConfigProvider value={{ dataTopicsList: [newModel.title] }}>
             <ChatRouter />
           </ChatConfigProvider>
         </AiTestWrapper>,
@@ -103,7 +103,7 @@ describe('ChatRouter', () => {
 
       await waitFor(() =>
         expect(
-          screen.getByText(`Data model or perspective "${newModel.title}" not found`),
+          screen.getByText(`None of the provided data models or perspectives are available`),
         ).toBeInTheDocument(),
       );
 

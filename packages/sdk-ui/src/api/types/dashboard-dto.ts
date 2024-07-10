@@ -23,6 +23,7 @@ export type FilterDto = {
   jaql: FilterJaql & AnyObject;
   instanceid?: string;
   disabled?: boolean;
+  locked?: boolean;
 };
 
 export type CascadingFilterDto = {
@@ -30,6 +31,7 @@ export type CascadingFilterDto = {
   levels: FilterJaql[];
   instanceid?: string;
   disabled?: boolean;
+  locked?: boolean;
 };
 
 export const isCascadingFilterDto = (

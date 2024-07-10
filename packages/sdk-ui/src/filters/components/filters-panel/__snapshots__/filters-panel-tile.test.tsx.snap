@@ -6,11 +6,11 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for NumericFilter 1`] = `
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
-      style="background-color: rgb(255, 255, 255);"
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
     >
       <header
-        class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
+        class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
         <svg
@@ -36,16 +36,16 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         </span>
       </header>
       <main
-        style="color: rgb(91, 99, 114);"
+        style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
         >
           criteriaFilter.greaterThan
         </div>
       </main>
       <footer
-        class="csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]"
+        class="css-1wpi5bx"
       >
         <span
           class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
@@ -83,11 +83,11 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for RankingFilter 1`] = `
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
-      style="background-color: rgb(255, 255, 255);"
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
     >
       <header
-        class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
+        class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
         <svg
@@ -113,16 +113,16 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         </span>
       </header>
       <main
-        style="color: rgb(91, 99, 114);"
+        style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
         >
           criteriaFilter.top
         </div>
       </main>
       <footer
-        class="csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]"
+        class="css-1wpi5bx"
       >
         <span
           class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
@@ -160,11 +160,11 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for TextFilter 1`] = `
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
-      style="background-color: rgb(255, 255, 255);"
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
     >
       <header
-        class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
+        class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
         <svg
@@ -190,16 +190,16 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for TextFilter 1`] = `
         </span>
       </header>
       <main
-        style="color: rgb(91, 99, 114);"
+        style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
         >
           criteriaFilter.notStartsWith
         </div>
       </main>
       <footer
-        class="csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]"
+        class="css-1wpi5bx"
       >
         <span
           class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
@@ -237,11 +237,11 @@ exports[`FiltersPanelTile > renders CustomFilterTile for advnced filter type 1`]
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
-      style="background-color: rgb(255, 255, 255);"
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
     >
       <header
-        class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
+        class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
         <span
@@ -252,7 +252,7 @@ exports[`FiltersPanelTile > renders CustomFilterTile for advnced filter type 1`]
         </span>
       </header>
       <main
-        style="color: rgb(91, 99, 114);"
+        style="color: rgb(91, 99, 114); position: relative;"
       >
         <p
           class="csdk-text-center csdk-text-[13px]"
@@ -261,7 +261,7 @@ exports[`FiltersPanelTile > renders CustomFilterTile for advnced filter type 1`]
         </p>
       </main>
       <footer
-        class="csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]"
+        class="css-1wpi5bx"
       >
         <span
           class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
@@ -299,11 +299,11 @@ exports[`FiltersPanelTile > renders FilterTile for unsupported filter type 1`] =
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
-      style="background-color: rgb(255, 255, 255);"
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
     >
       <header
-        class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
+        class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
         <span
@@ -314,16 +314,18 @@ exports[`FiltersPanelTile > renders FilterTile for unsupported filter type 1`] =
         </span>
       </header>
       <main
-        style="color: rgb(91, 99, 114);"
+        style="color: rgb(91, 99, 114); position: relative;"
       >
-        <p
-          class="csdk-text-center csdk-text-[13px]"
+        <div
+          class="csdk-p-[8px] csdk-text-center csdk-text-[13px]"
         >
-          unsupportedFilter.message
-        </p>
+          <span>
+            unsupportedFilter.message
+          </span>
+        </div>
       </main>
       <footer
-        class="csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]"
+        class="css-1wpi5bx"
       >
         <span
           class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
@@ -361,11 +363,11 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
     class="css-xhbwdz"
   >
     <div
-      class="csdk-min-w-[216px] csdk-p-px csdk-w-min  csdk-text-text-content csdk-self-start csdk-border csdk-border-solid csdk-border-[#dadada]"
-      style="background-color: rgb(255, 255, 255);"
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
     >
       <header
-        class="csdk-flex csdk-items-center csdk-border-0 csdk-border-b csdk-border-solid csdk-border-b-[#dadada]"
+        class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
         <svg
@@ -391,7 +393,7 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
         </span>
       </header>
       <main
-        style="color: rgb(91, 99, 114);"
+        style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
           class="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
@@ -400,7 +402,7 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
         </div>
       </main>
       <footer
-        class="csdk-flex csdk-justify-end csdk-items-center csdk-min-h-[26px] csdk-border-0 csdk-border-t csdk-border-solid csdk-border-t-[#dadada]"
+        class="css-1wpi5bx"
       >
         <span
           class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
@@ -427,6 +429,130 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
           />
         </span>
       </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FiltersPanelTile > renders locked CriteriaFilterTile 1`] = `
+<div>
+  <div
+    class="css-xhbwdz"
+  >
+    <div
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
+    >
+      <header
+        class="css-3aw1ep"
+        style="color: rgb(91, 99, 114);"
+      >
+        <svg
+          fill="#b4b4b4"
+          height="22"
+          viewBox="0 0 22 22"
+          width="22"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            transform="translate(5.000000,5.000000) scale(.70, 0.6)"
+          >
+            <path
+              d="m3,9v11h14V9M4,9V6c0-3.3 2.7-6 6-6c3.3,0 6,2.7 6,6v3H14V6c0-2.2-1.8-4-4-4-2.2,0-4,1.8-4,4v3"
+            />
+            <rect
+              fill="#dcdcdc"
+              height="9"
+              width="12"
+              x="4"
+              y="10"
+            />
+          </g>
+        </svg>
+        <span
+          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+          style="color: rgb(91, 99, 114);"
+        >
+          TestRevenue
+        </span>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+        >
+          criteriaFilter.greaterThan
+        </div>
+        <div
+          style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+        />
+      </main>
+      <footer
+        class="css-1wpi5bx"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FiltersPanelTile > renders locked RelativeDateFilter component 1`] = `
+<div>
+  <div
+    class="css-xhbwdz"
+  >
+    <div
+      class="css-l4aa93"
+      style="min-width: 216px; background-color: rgb(255, 255, 255);"
+    >
+      <header
+        class="css-3aw1ep"
+        style="color: rgb(91, 99, 114);"
+      >
+        <svg
+          fill="#b4b4b4"
+          height="22"
+          viewBox="0 0 22 22"
+          width="22"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            transform="translate(5.000000,5.000000) scale(.70, 0.6)"
+          >
+            <path
+              d="m3,9v11h14V9M4,9V6c0-3.3 2.7-6 6-6c3.3,0 6,2.7 6,6v3H14V6c0-2.2-1.8-4-4-4-2.2,0-4,1.8-4,4v3"
+            />
+            <rect
+              fill="#dcdcdc"
+              height="9"
+              width="12"
+              x="4"
+              y="10"
+            />
+          </g>
+        </svg>
+        <span
+          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+          style="color: rgb(91, 99, 114);"
+        >
+          TestRevenue
+        </span>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+        >
+          dateFilter.next 1 undefined dateFilter.from dateFilter.today
+        </div>
+        <div
+          style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+        />
+      </main>
+      <footer
+        class="css-1wpi5bx"
+      />
     </div>
   </div>
 </div>

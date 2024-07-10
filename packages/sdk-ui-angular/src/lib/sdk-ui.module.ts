@@ -28,6 +28,8 @@ import {
   ScattermapChartComponent,
   AreamapChartComponent,
   PivotTableComponent,
+  DashboardByIdComponent,
+  DashboardComponent,
 } from './components';
 import { DecoratorsModule } from './decorators/decorators.module';
 
@@ -88,6 +90,8 @@ import { DecoratorsModule } from './decorators/decorators.module';
     ScattermapChartComponent,
     AreamapChartComponent,
     PivotTableComponent,
+    DashboardByIdComponent,
+    DashboardComponent,
   ],
   imports: [CommonModule, DecoratorsModule],
   exports: [
@@ -118,6 +122,8 @@ import { DecoratorsModule } from './decorators/decorators.module';
     ScattermapChartComponent,
     AreamapChartComponent,
     PivotTableComponent,
+    DashboardByIdComponent,
+    DashboardComponent,
   ],
   providers: [],
 })

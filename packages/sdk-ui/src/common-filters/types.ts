@@ -1,3 +1,5 @@
+import { DeepRequired } from 'ts-essentials';
+
 /** @internal */
 export enum CommonFiltersApplyMode {
   HIGHLIGHT = 'highlight',
@@ -12,4 +14,8 @@ export type CommonFiltersOptions = {
     all?: boolean;
     ids?: string[];
   };
+  forceApplyBackgroundFilters?: boolean;
 };
+
+/** @internal */
+export type CompleteCommonFiltersOptions = DeepRequired<CommonFiltersOptions>;
