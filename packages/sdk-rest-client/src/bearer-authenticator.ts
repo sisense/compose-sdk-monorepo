@@ -1,32 +1,14 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { appendHeaders } from './helpers.js';
 import { Authenticator } from './interfaces.js';
+import { BaseAuthenticator } from './base-authenticator.js';
+import { appendHeaders } from './helpers.js';
 
-export class BearerAuthenticator implements Authenticator {
-  readonly type = 'bearer';
-
+export class BearerAuthenticator extends BaseAuthenticator {
   readonly bearer: string;
 
-  readonly url: string;
-
-  private _valid = true;
-
   constructor(url: string, bearer: string) {
+    super('bearer');
     this.bearer = bearer;
-    this.url = url;
-  }
-
-  isValid(): boolean {
-    return this._valid;
-  }
-
-  invalidate() {
-    this._valid = false;
-  }
-
-  isAuthenticating(): boolean {
-    return false;
+    this._resolve(true);
   }
 
   applyHeader(headers: HeadersInit) {
@@ -34,10 +16,14 @@ export class BearerAuthenticator implements Authenticator {
     appendHeaders(headers, { Authorization: authHeader });
   }
 
-  async authenticate(): Promise<boolean> {
+  authenticate() {
     // TODO: implement authentication test
 
-    return Promise.resolve(true);
+    return this._result;
+  }
+
+  authenticated() {
+    return this._result;
   }
 }
 

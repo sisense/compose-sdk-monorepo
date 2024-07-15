@@ -1,15 +1,8 @@
-/* eslint-disable max-params */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   HttpClient,
   getAuthenticator,
-  WatAuthenticator,
-  BearerAuthenticator,
+  isBearerAuthenticator,
+  isWatAuthenticator,
 } from '@sisense/sdk-rest-client';
 import { DataModel, MetadataTypes } from '@sisense/sdk-data';
 import { writeTypescript, writeJavascript } from '@sisense/sdk-modeling';
@@ -25,14 +18,16 @@ import { PKG_VERSION } from '../package-version.js';
 import { trackCliError } from '@sisense/sdk-tracking';
 import { DataSourceSchemaDataset } from '../types.js';
 
-function getHttpClient(
-  url: string,
-  username?: string,
-  password?: string,
-  token?: string,
-  wat?: string,
-): HttpClient {
-  const auth = getAuthenticator(url, username, password, token, wat, false);
+type HttpClientConfig = {
+  url: string;
+  username?: string;
+  password?: string;
+  token?: string;
+  wat?: string;
+};
+
+function getHttpClient({ url, username, password, token, wat }: HttpClientConfig) {
+  const auth = getAuthenticator({ url, username, password, token, wat });
   if (!auth) {
     throw new Error('Invalid authentication method');
   }
@@ -47,8 +42,7 @@ export const handleHttpClientLogin = async (httpClient: HttpClient) => {
     if (!isLoggedIn) {
       console.log(
         `Failed. ${
-          httpClient.auth instanceof WatAuthenticator ||
-          httpClient.auth instanceof BearerAuthenticator
+          isWatAuthenticator(httpClient.auth) || isBearerAuthenticator(httpClient.auth)
             ? 'Double-check your token'
             : 'Wrong credentials'
         }.\r\n`,
@@ -57,10 +51,8 @@ export const handleHttpClientLogin = async (httpClient: HttpClient) => {
     console.log('OK!\r\n');
   } catch (err) {
     console.log(`Error connecting to ${httpClient.url}. \r\n${err}\r\n`);
-    return Promise.reject();
+    throw err;
   }
-
-  return Promise.resolve();
 };
 
 async function retrieveDataSource(

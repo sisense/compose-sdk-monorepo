@@ -165,10 +165,12 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
         if (collapsed) {
           return (
             <PillSection
+              members={allMembers}
               selectedMembers={selectedMembers}
               onToggleSelectedMember={(memberKey) => {
                 dispatchMembersAction({ type: 'toggleSelectedMember', memberKey });
               }}
+              excludeMembers={false}
               disabled={tileDisabled}
             />
           );
@@ -178,8 +180,9 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
             members={members}
             selectedMembers={selectedMembers}
             onSelectMember={onChangeSelectedMembers}
-            selectAllMembers={() => dispatchMembersAction({ type: 'selectAllMembers' })}
-            clearAllMembers={() => dispatchMembersAction({ type: 'clearAllMembers' })}
+            checkAllMembers={() => dispatchMembersAction({ type: 'selectAllMembers' })}
+            uncheckAllMembers={() => dispatchMembersAction({ type: 'clearAllMembers' })}
+            excludeMembers={false}
             disabled={tileDisabled}
           />
         );

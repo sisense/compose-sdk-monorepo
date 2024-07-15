@@ -157,7 +157,7 @@ function getFilterCompareId(filter: Filter): string {
   const expression = filterAttribute.expression || filterJaql.dim;
   const granularity =
     (filterAttribute as DimensionalLevelAttribute).granularity ||
-    (filterJaql.datatype === 'datetime'
+    (filterJaql?.datatype === 'datetime'
       ? DimensionalLevelAttribute.translateJaqlToGranularity(filterJaql)
       : '');
 

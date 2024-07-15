@@ -5,15 +5,25 @@ import { BearerAuthenticator } from './bearer-authenticator.js';
 import { WatAuthenticator } from './wat-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 
-export function getAuthenticator(
-  url: string,
-  username: string | undefined,
-  password: string | undefined,
-  token: string | undefined,
-  wat: string | undefined,
-  ssoEnabled: boolean | undefined,
+type AuthenticatorConfig = {
+  url: string;
+  username?: string;
+  password?: string;
+  token?: string;
+  wat?: string;
+  ssoEnabled?: boolean;
+  enableSilentPreAuth?: boolean;
+};
+
+export function getAuthenticator({
+  url,
+  username,
+  password,
+  token,
+  wat,
+  ssoEnabled = false,
   enableSilentPreAuth = false,
-): Authenticator | null {
+}: AuthenticatorConfig): Authenticator | null {
   // sso overrides all other auth methods
   if (ssoEnabled) {
     return new SsoAuthenticator(url, enableSilentPreAuth);

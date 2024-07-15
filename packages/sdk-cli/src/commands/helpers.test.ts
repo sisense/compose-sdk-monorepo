@@ -86,19 +86,17 @@ describe('helpers', () => {
     const fakeDeploymentUrl = '10.0.0.1';
 
     it('should return HttpClient', () => {
-      const httpClient = getHttpClient(
-        fakeDeploymentUrl,
-        fakeUsername,
-        fakePassword,
-        undefined,
-        undefined,
-      );
+      const httpClient = getHttpClient({
+        url: fakeDeploymentUrl,
+        username: fakeUsername,
+        password: fakePassword,
+      });
       expect(httpClient).toBeInstanceOf(HttpClient);
     });
 
     it('should throw error', () => {
       expect(() => {
-        getHttpClient(fakeDeploymentUrl, undefined, undefined, undefined, undefined);
+        getHttpClient({ url: fakeDeploymentUrl });
       }).toThrow();
     });
   });

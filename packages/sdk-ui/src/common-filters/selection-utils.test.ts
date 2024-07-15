@@ -9,8 +9,8 @@ import { DataPoint, ScatterDataPoint } from '..';
 
 describe('createCommonFiltersOverSelections()', () => {
   const filters: MembersFilter[] = [
-    filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123') as MembersFilter,
-    filterFactory.members(DM.Commerce.Gender, ['Male'], [], '234') as MembersFilter,
+    filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []) as MembersFilter,
+    filterFactory.members(DM.Commerce.Gender, ['Male'], false, '234', []) as MembersFilter,
   ];
 
   it('should create new filters by selections', () => {

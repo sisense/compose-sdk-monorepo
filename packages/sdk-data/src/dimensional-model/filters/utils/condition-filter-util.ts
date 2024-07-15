@@ -208,14 +208,11 @@ export const createAttributeFilterFromConditionFilterJaql = (
       }
       break;
     case ConditionFilterType.IS_NOT:
-      return withComposeCode(filterFactory.exclude)(
-        withComposeCode(filterFactory.members)(
-          attribute,
-          conditionFilterJaql.exclude?.members || [],
-          undefined,
-          guid,
-        ),
-        undefined,
+      // use members filter with exclude instead of exclude filter
+      return withComposeCode(filterFactory.members)(
+        attribute,
+        conditionFilterJaql.exclude?.members || [],
+        true,
         guid,
       );
     case ConditionFilterType.AFTER:

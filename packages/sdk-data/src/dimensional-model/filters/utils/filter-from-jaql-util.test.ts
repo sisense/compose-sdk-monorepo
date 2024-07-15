@@ -13,7 +13,6 @@ import {
 import { createAttributeFilterFromConditionFilterJaql } from './condition-filter-util.js';
 import { DateRangeFilter, ExcludeFilter } from '../filters.js';
 import { createGenericFilter } from './filter-from-jaql-util.js';
-import { withComposeCode } from './filter-code-util.js';
 
 describe('filter-from-jaql-util', () => {
   describe('createFilterFromJaqlInternal', () => {
@@ -43,7 +42,8 @@ describe('filter-from-jaql-util', () => {
 
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, [], [], guid);
+        // including all members is equivalent to excluding none
+        const expectedFilter = filterFactory.members(attribute, [], true, guid);
         expectEqualFilters(filter, expectedFilter);
       });
 
@@ -63,7 +63,7 @@ describe('filter-from-jaql-util', () => {
 
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, [], guid);
+        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, false, guid);
         expectEqualFilters(filter, expectedFilter);
       });
 
@@ -106,7 +106,7 @@ describe('filter-from-jaql-util', () => {
         ].forEach((jaql) => {
           const filter = createFilterFromJaqlInternal(jaql, guid);
           const attribute = createAttributeFromFilterJaql(jaql);
-          const expectedFilter = filterFactory.members(attribute, jaql.filter.members, [], guid);
+          const expectedFilter = filterFactory.members(attribute, jaql.filter.members, false, guid);
           expectEqualFilters(filter, expectedFilter);
         });
       });
@@ -126,7 +126,13 @@ describe('filter-from-jaql-util', () => {
 
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.members(attribute, jaql.filter.members, [], guid);
+        const expectedFilter = filterFactory.members(
+          attribute,
+          jaql.filter.members,
+          false,
+          guid,
+          [],
+        );
         expectEqualFilters(filter, expectedFilter);
       });
 
@@ -163,7 +169,66 @@ describe('filter-from-jaql-util', () => {
         const expectedFilter = filterFactory.members(
           attribute,
           ['Albania', 'Algeria'],
+          false,
+          guid,
           ['Angola'],
+        );
+        expectEqualFilters(filter, expectedFilter);
+      });
+
+      it('should handle empty members', () => {
+        const jaql = {
+          table: 'Commerce',
+          column: 'Age Range',
+          dim: '[Commerce.Age Range]',
+          datatype: 'text',
+          merged: true,
+          datasource: {
+            address: 'LocalHost',
+            title: 'Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            database: 'aSampleIAAaECommerce',
+            fullname: 'localhost/Sample ECommerce',
+            live: false,
+          },
+          firstday: 'mon',
+          locale: 'en-us',
+          title: 'Age Range',
+          collapsed: false,
+          isDashboardFilter: true,
+          filter: {
+            explicit: true,
+            multiSelection: true,
+            members: [],
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql);
+        const expectedFilter = filterFactory.members(attribute, [], false, guid);
+        expectEqualFilters(filter, expectedFilter);
+      });
+
+      it('should handle exclude members', () => {
+        const jaql = {
+          table: 'Country',
+          column: 'Country',
+          datatype: 'text',
+          title: 'exclude Turkey from Country',
+          dim: '[Country.Country]',
+          filter: {
+            exclude: {
+              members: ['Turkey'],
+            },
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const attribute = createAttributeFromFilterJaql(jaql);
+        const expectedFilter = filterFactory.members(
+          attribute,
+          jaql.filter.exclude.members,
+          true,
           guid,
         );
         expectEqualFilters(filter, expectedFilter);
@@ -568,37 +633,6 @@ describe('filter-from-jaql-util', () => {
           const expectedFilter = test.factoryFunc(measure, jaql.filter[test.operator], guid);
           expectEqualFilters(filter, expectedFilter);
         });
-      });
-    });
-
-    describe('ExcludeFilter', () => {
-      it('should handle exclude members', () => {
-        const jaql = {
-          table: 'Country',
-          column: 'Country',
-          datatype: 'text',
-          title: 'exclude Turkey from Country',
-          dim: '[Country.Country]',
-          filter: {
-            exclude: {
-              members: ['Turkey'],
-            },
-          },
-        };
-
-        const filter = createFilterFromJaqlInternal(jaql, guid);
-        const attribute = createAttributeFromFilterJaql(jaql);
-        const expectedFilter = filterFactory.exclude(
-          withComposeCode(filterFactory.members)(
-            attribute,
-            jaql.filter.exclude.members,
-            undefined,
-            guid,
-          ),
-          undefined,
-          guid,
-        );
-        expectEqualFilters(filter, expectedFilter);
       });
     });
 

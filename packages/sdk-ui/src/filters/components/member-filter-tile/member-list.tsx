@@ -74,8 +74,9 @@ export interface MemberListProps {
   members: Member[];
   selectedMembers: SelectedMember[];
   onSelectMember: (member: Member, isSelected: boolean) => void;
-  selectAllMembers: () => void;
-  clearAllMembers: () => void;
+  checkAllMembers: () => void;
+  uncheckAllMembers: () => void;
+  excludeMembers: boolean;
   disabled: boolean;
 }
 
@@ -83,8 +84,9 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
   members,
   selectedMembers,
   onSelectMember,
-  selectAllMembers,
-  clearAllMembers,
+  checkAllMembers,
+  uncheckAllMembers,
+  excludeMembers,
   disabled,
 }) => {
   const [searchString, setSearchString] = useState('');
@@ -96,22 +98,27 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
     return members;
   }, [members, searchString]);
 
-  const allSelected = selectedMembers.length === members.length;
+  const allChecked = excludeMembers
+    ? selectedMembers.length === 0
+    : selectedMembers.length === members.length;
 
   return (
     <div className={'csdk-p-3'}>
       <div className="csdk-flex csdk-mb-[3px]">
         <Checkbox
           aria-label="change-all"
-          checked={allSelected}
+          checked={allChecked}
           onChange={(e) => {
             if (e.target.checked) {
-              selectAllMembers();
+              checkAllMembers();
             } else {
-              clearAllMembers();
+              uncheckAllMembers();
             }
           }}
           readOnly
+          indeterminate={
+            excludeMembers && selectedMembers.length > 0 && selectedMembers.length < members.length
+          }
           disabled={disabled}
         />
         <SearchBox onChange={(s) => setSearchString(s)} disabled={disabled} />
@@ -121,8 +128,16 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
           <MemberRow
             key={member.key}
             label={member.title}
-            checked={selectedMembers.some((selectedMember) => member.key === selectedMember.key)}
-            onCheck={(isChecked) => onSelectMember(member, isChecked)}
+            checked={
+              // when excludeMembers is true, checking (ticking) a member means deselecting it.
+              // In other words, selected member is unchecked
+              selectedMembers.some((selectedMember) => member.key === selectedMember.key) ===
+              !excludeMembers
+            }
+            onCheck={(isChecked) =>
+              // when excludeMembers is true, unchecking (unticking) a member means selecting it
+              onSelectMember(member, excludeMembers ? !isChecked : isChecked)
+            }
             disabled={disabled}
             inactive={selectedMembers.some(
               (selectedMember) => member.key === selectedMember.key && selectedMember.inactive,

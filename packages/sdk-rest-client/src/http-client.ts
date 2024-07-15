@@ -1,13 +1,9 @@
-/* eslint-disable promise/param-names */
-/* eslint-disable @typescript-eslint/no-throw-literal */
 /// <reference lib="dom" />
 import { Authenticator } from './interfaces.js';
 import fetchIntercept from 'fetch-intercept';
 import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
-import { SsoAuthenticator } from './sso-authenticator.js';
+import { isSsoAuthenticator } from './sso-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
-
-const AUTH_WAIT_MS = 10;
 
 export interface HttpClientRequestConfig {
   skipTrackingParam?: boolean;
@@ -37,7 +33,7 @@ export class HttpClient {
     });
   }
 
-  async login(): Promise<boolean> {
+  login() {
     return this.auth.authenticate();
   }
 
@@ -47,24 +43,12 @@ export class HttpClient {
     requestConfig?: HttpClientRequestConfig,
   ): Promise<T | undefined> {
     if (this.auth.isAuthenticating()) {
-      return new Promise((res) => {
-        const retry = () => {
-          // wait if still authenticating
-          if (this.auth.isAuthenticating()) {
-            setTimeout(retry, AUTH_WAIT_MS);
-            return;
-          }
-
-          void this.call(url, config, requestConfig).then((r) => res(r as T));
-        };
-
-        retry();
-      });
+      await this.auth.authenticated();
     }
 
     config.headers = config.headers || {};
 
-    if (this.auth instanceof SsoAuthenticator) {
+    if (isSsoAuthenticator(this.auth)) {
       // allows cookies to be sent
       config.credentials = 'include';
     }

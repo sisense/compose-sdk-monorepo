@@ -14,9 +14,10 @@ const props: MemberListProps = {
     { key: '2015-01-01T00:00:00', title: '2015', inactive: true },
   ],
   disabled: false,
+  excludeMembers: false,
   onSelectMember: vi.fn(),
-  selectAllMembers: vi.fn(),
-  clearAllMembers: vi.fn(),
+  checkAllMembers: vi.fn(),
+  uncheckAllMembers: vi.fn(),
 };
 
 beforeEach(() => {
@@ -31,7 +32,7 @@ describe('"change all" checkbox', () => {
     expect(changeAllCheckbox).not.toBeChecked();
 
     await user.click(changeAllCheckbox);
-    expect(props.selectAllMembers).toHaveBeenCalledTimes(1);
+    expect(props.checkAllMembers).toHaveBeenCalledTimes(1);
   });
 
   it('renders checked and executes the correct callback when clicked', async () => {
@@ -45,7 +46,7 @@ describe('"change all" checkbox', () => {
     expect(changeAllCheckbox).toBeChecked();
 
     await user.click(changeAllCheckbox);
-    expect(props.clearAllMembers).toHaveBeenCalledTimes(1);
+    expect(props.uncheckAllMembers).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -55,6 +56,14 @@ it('renders unchecked and checked member rows', () => {
   expect(screen.getByLabelText('2013', { selector: 'input' })).toBeChecked();
   expect(screen.getByLabelText('2014', { selector: 'input' })).not.toBeChecked();
   expect(screen.getByLabelText('2015', { selector: 'input' })).toBeChecked();
+});
+
+it('renders unchecked and checked member rows when excluding members', () => {
+  setup(<MemberList {...props} excludeMembers={true} />);
+
+  expect(screen.getByLabelText('2013', { selector: 'input' })).not.toBeChecked();
+  expect(screen.getByLabelText('2014', { selector: 'input' })).toBeChecked();
+  expect(screen.getByLabelText('2015', { selector: 'input' })).not.toBeChecked();
 });
 
 describe('when disabled', () => {

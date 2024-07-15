@@ -48,6 +48,41 @@ describe('MemberFilterTile', () => {
     );
   });
 
+  it('should render a MemberFilterTile component with excluded members', async () => {
+    expect.assertions(3);
+
+    // Rendering a MemberFilterTile requires 3 fetches
+    server.use(
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
+    );
+
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(
+      DM.Commerce.AgeRange,
+      ['0-18', '65+'],
+      true,
+    ) as MembersFilter;
+    render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={DM.Commerce.AgeRange}
+          filter={filter}
+          onChange={() => {}}
+        />
+      </SisenseContextProvider>,
+    );
+
+    expect(await screen.findByText(filterTitle)).toBeInTheDocument();
+
+    await Promise.all(
+      filter.members.map(async (member: string) =>
+        expect(await screen.findByText(member)).toBeInTheDocument(),
+      ),
+    );
+  });
+
   it('should render a MemberFilterTile component with numeric attribute', async () => {
     expect.assertions(3);
 

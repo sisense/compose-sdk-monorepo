@@ -1,7 +1,6 @@
 import fetchIntercept from 'fetch-intercept';
 import { getAuthenticator } from './authenticator.js';
 import { HttpClient } from './http-client.js';
-import { Authenticator } from './interfaces.js';
 import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
 
 const mockSuccessResponse = {
@@ -21,15 +20,13 @@ describe('HttpClient', () => {
 
   beforeEach(() => {
     // You can use a mock Authenticator for testing purposes
-    const auth: Authenticator = getAuthenticator(
-      'https://example.com/',
-      undefined,
-      undefined,
-      'test-token',
-      undefined,
-      false,
-    )!;
-    httpClient = new HttpClient('https://example.com/', auth, 'test');
+    const auth = getAuthenticator({
+      url: 'https://example.com/',
+      token: 'test-token',
+    });
+    if (auth) {
+      httpClient = new HttpClient('https://example.com/', auth, 'test');
+    }
   });
 
   afterEach(() => {
@@ -103,19 +100,16 @@ describe('HttpClient', () => {
     });
 
     it('should include credetials to request for sso authentication', async () => {
-      const ssoAuth = getAuthenticator(
-        'https://example.com/',
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        true,
-      );
-      const ssoHttpClient = new HttpClient(
-        'https://example.com/',
-        ssoAuth as Authenticator,
-        'test',
-      );
+      const ssoAuth = getAuthenticator({
+        url: 'https://example.com/',
+        ssoEnabled: true,
+      });
+      expect(ssoAuth).not.toBeNull();
+      if (!ssoAuth) {
+        return;
+      }
+
+      const ssoHttpClient = new HttpClient('https://example.com/', ssoAuth, 'test');
 
       global.fetch = vi.fn().mockResolvedValue(mockSuccessResponse);
 

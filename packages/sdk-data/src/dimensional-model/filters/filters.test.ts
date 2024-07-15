@@ -339,7 +339,14 @@ describe('Filters jaql preparations', () => {
     };
     const attribute = new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]');
     const backgroundFilter = new MembersFilter(attribute, ['Female', 'Male']);
-    const filter = new MembersFilter(attribute, ['Female'], undefined, undefined, backgroundFilter);
+    const filter = new MembersFilter(
+      attribute,
+      ['Female'],
+      false,
+      undefined,
+      undefined,
+      backgroundFilter,
+    );
 
     expect(filter.backgroundFilter).toBe(backgroundFilter);
 

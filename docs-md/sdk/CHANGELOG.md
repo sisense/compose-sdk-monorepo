@@ -1,6 +1,15 @@
 # Changelog
 
-## [1.14.0] - 2024-07-09
+## [1.15.0] - 2024-07-15
+
+### Added
+- Extend component `MemberFilterTile` to support excluded members
+
+### Changed
+- Make improvements to dashboard rendering: fixing UI issues of `DateRangeFilter`, improve fallback jaql filter
+- Improve support for Common JS in `sdk-data` package
+
+## [1.14.0] - 2024-07-10
 
 ### Added
 - Implement additional components and hooks for dashboard rendering (internal testing): background filters, locked filters
@@ -10,7 +19,7 @@
 ### Changed
 - Support additional datetime levels for Live models: 'seconds' and 'minutes'
 - Make improvements to charts and pivot table: tooltips of `AreaRangeChart`, default line thickness to bold for `LineChart`, hidden pagination panel for single page result of `PivotTable`, handling of data options update for `TableChart`
-- Make improvements to dashboard rendering: supporting `CustomFilter` in `CascadingFilterTile`, fixing UI issues of `DateRangeFilter`
+- Make improvements to dashboard rendering: supporting `CustomFilter` in `CascadingFilterTile`
 - Make improvements for `Chatbot` component: list of data topics
 - Improve performance by lowering priority of tracking API calls
 - Handle properly empty returns of network calls

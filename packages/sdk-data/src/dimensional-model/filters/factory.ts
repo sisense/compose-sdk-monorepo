@@ -497,18 +497,28 @@ export function numeric(
  * ```
  * @param attribute - Attribute to filter on
  * @param members - Array of member values to filter by
- * @param _deactivatedMembers - [internal] Array of deactivated member values
+ * @param excludeMembers - Whether selected members are for exclusion
  * @param guid - Optional GUID for the filter
+ * @param deactivatedMembers - Array of deactivated member values
+ * @param backgroundFilter - Optional background filter
  * @returns A filter instance
  */
 export function members(
   attribute: Attribute,
   members: string[],
-  _deactivatedMembers?: string[],
+  excludeMembers?: boolean,
   guid?: string,
+  deactivatedMembers?: string[],
   backgroundFilter?: Filter,
 ): Filter {
-  return new MembersFilter(attribute, members, _deactivatedMembers, guid, backgroundFilter);
+  return new MembersFilter(
+    attribute,
+    members,
+    excludeMembers,
+    guid,
+    deactivatedMembers,
+    backgroundFilter,
+  );
 }
 
 // DATE FILTERS

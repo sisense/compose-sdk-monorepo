@@ -172,6 +172,7 @@ describe('utils', () => {
       const expectedFilter = filterFactory.members(
         attribute,
         jaql.filter.members,
+        false,
         undefined,
         undefined,
         backgroundFilter,

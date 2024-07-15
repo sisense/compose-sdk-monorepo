@@ -1,11 +1,7 @@
-import {
-  BearerAuthenticator,
-  HttpClient,
-  PasswordAuthenticator,
-  WatAuthenticator,
-} from '@sisense/sdk-rest-client';
+import { HttpClient, Authenticator } from '@sisense/sdk-rest-client';
 import * as prompts from './commands/prompts.js';
 import * as helpers from './commands/helpers.js';
+import * as auth from '@sisense/sdk-rest-client';
 import { PKG_VERSION } from './package-version.js';
 import { runCli } from './run-cli.js';
 import * as tracking from './tracking.js';
@@ -58,6 +54,7 @@ describe('CLI', () => {
   const createDataModelSpy = vi.spyOn(helpers, 'createDataModel');
   const handleHttpClientLoginSpy = vi.spyOn(helpers, 'handleHttpClientLogin');
   const trackExecutionSpy = vi.spyOn(tracking, 'trackExecution');
+  const getAuthenticatorSpy = vi.spyOn(auth, 'getAuthenticator');
 
   beforeEach(() => {
     // Each test overwrites process arguments so store the original arguments
@@ -74,13 +71,26 @@ describe('CLI', () => {
   afterEach(() => {
     // Set process arguments back to the original value
     process.argv = originalArgv;
-
-    vi.resetAllMocks();
+    trackExecutionSpy.mockReset();
+    createDataModelSpy.mockReset();
+    getAuthenticatorSpy.mockClear();
   });
+
+  async function testHttpClient(type: string) {
+    await flushPromises();
+
+    const a: Authenticator = getAuthenticatorSpy.mock.results[0].value;
+    expect(a.type).toBe(type);
+
+    const expectedHttpClient = new HttpClient(fakeUrl, a, HTTP_CLIENT_ENV);
+
+    expect(trackExecutionSpy).toHaveBeenCalled();
+    expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+  }
 
   describe('get-data-model command', () => {
     it('should run with --username and --password', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       runCommand(
         COMMAND_GET_DATA_MODEL,
@@ -96,20 +106,11 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await flushPromises();
-
-      const expectedHttpClient = new HttpClient(
-        fakeUrl,
-        new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
-        HTTP_CLIENT_ENV,
-      );
-
-      expect(trackExecutionSpy).toHaveBeenCalled();
-      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+      await testHttpClient('password');
     });
 
     it('should run with --username and without --password value', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       // mock promptPasswordInteractive function
       vi.spyOn(prompts, 'promptPasswordInteractive').mockResolvedValue({
@@ -129,20 +130,11 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await flushPromises();
-
-      const expectedHttpClient = new HttpClient(
-        fakeUrl,
-        new PasswordAuthenticator(fakeUrl, fakeUsername, fakePassword),
-        HTTP_CLIENT_ENV,
-      );
-
-      expect(trackExecutionSpy).toHaveBeenCalled();
-      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+      await testHttpClient('password');
     });
 
     it('should run with --token', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       runCommand(
         COMMAND_GET_DATA_MODEL,
@@ -156,20 +148,11 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await flushPromises();
-
-      const expectedHttpClient = new HttpClient(
-        fakeUrl,
-        new BearerAuthenticator(fakeUrl, fakeToken),
-        HTTP_CLIENT_ENV,
-      );
-
-      expect(trackExecutionSpy).toHaveBeenCalled();
-      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+      await testHttpClient('bearer');
     });
 
     it('should run with --wat', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       runCommand(
         COMMAND_GET_DATA_MODEL,
@@ -183,16 +166,7 @@ describe('CLI', () => {
         fakeOutput,
       );
 
-      await flushPromises();
-
-      const expectedHttpClient = new HttpClient(
-        fakeUrl,
-        new WatAuthenticator(fakeUrl, fakeWat),
-        HTTP_CLIENT_ENV,
-      );
-
-      expect(trackExecutionSpy).toHaveBeenCalled();
-      expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
+      await testHttpClient('wat');
     });
   });
 

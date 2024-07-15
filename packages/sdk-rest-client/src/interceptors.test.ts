@@ -52,7 +52,7 @@ describe('interceptors', () => {
     global.window = {
       location: {
         href: fakeDeploymentUrl,
-        assign: (url) => {
+        replace: (url) => {
           global.window.location.href = url.toString();
         },
       } as Location,

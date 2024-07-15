@@ -5,11 +5,17 @@ import { setup } from '../../../__test-helpers__';
 import { PillSection, PillSectionProps } from './pill-section';
 
 const props: PillSectionProps = {
+  members: [
+    { key: '2013-01-01T00:00:00', title: '2013' },
+    { key: '2014-01-01T00:00:00', title: '2014' },
+    { key: '2015-01-01T00:00:00', title: '2015' },
+  ],
   selectedMembers: [
     { key: '2013-01-01T00:00:00', title: '2013' },
     { key: '2015-01-01T00:00:00', title: '2015', inactive: true },
   ],
   onToggleSelectedMember: vi.fn(),
+  excludeMembers: false,
   disabled: false,
 };
 

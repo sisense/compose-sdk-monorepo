@@ -3,11 +3,12 @@ export const appendHeaders = (
   additionalHeaders: { [key: string]: string },
 ): void => {
   for (const [headerName, headerValue] of Object.entries(additionalHeaders)) {
-    if (existingHeaders instanceof Headers) {
-      existingHeaders.set(headerName, headerValue);
-    } else if (Array.isArray(existingHeaders)) {
+    if (Array.isArray(existingHeaders)) {
       existingHeaders.push([headerName, headerValue]);
+    } else if (typeof existingHeaders.set === 'function') {
+      existingHeaders.set(headerName, headerValue);
     } else {
+      // eslint-disable-next-line security/detect-object-injection
       existingHeaders[headerName] = headerValue;
     }
   }

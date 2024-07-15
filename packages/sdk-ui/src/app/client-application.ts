@@ -3,7 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
-import { HttpClient, Authenticator, getAuthenticator } from '@sisense/sdk-rest-client';
+import {
+  HttpClient,
+  Authenticator,
+  getAuthenticator,
+  isWatAuthenticator,
+} from '@sisense/sdk-rest-client';
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import { DataSource } from '@sisense/sdk-data';
 import { SisenseContextProviderProps } from '../props';
@@ -178,15 +183,13 @@ export const createClientApplication = async ({
   enableSilentPreAuth,
 }: SisenseContextProviderProps): Promise<ClientApplication> => {
   if (url !== undefined) {
-    const auth = getAuthenticator(
+    const auth = getAuthenticator({
       url,
-      undefined,
-      undefined,
       token,
       wat,
       ssoEnabled,
       enableSilentPreAuth,
-    );
+    });
 
     if (auth) {
       const app = new ClientApplication(url, auth, defaultDataSource);
@@ -194,7 +197,7 @@ export const createClientApplication = async ({
       // do not fetch palette settings from server if login failed
       // SSO redirect is considered failed login as there will be another login attempt
       // TODO: Remove WAT check once the server will be able to return the palette under the WAT
-      const useDefaultPalette = 'wat' in auth || !loginSuccess;
+      const useDefaultPalette = isWatAuthenticator(auth) || !loginSuccess;
       app.settings = await getSettings(appConfig || {}, app.httpClient, useDefaultPalette);
       return app;
     }

@@ -1,18 +1,15 @@
 import styled from '@emotion/styled';
 import type { FunctionComponent } from 'react';
 import { useThemeContext } from '../../../theme-provider';
-import { SelectedMember } from './members-reducer';
+import { Member, SelectedMember } from './members-reducer';
 
 const StyledPillButton = styled.button<{
   backgroundColor: string;
   textColor: string;
-  active: boolean;
-  disabled: boolean;
 }>`
   font-family: inherit;
-  background-color: ${({ backgroundColor, active, disabled }) =>
-    active && !disabled ? backgroundColor : '#cbced7'};
-  color: ${({ textColor, active, disabled }) => (active && !disabled ? textColor : '#ffffff')};
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  color: ${({ textColor }) => textColor};
   border: none;
   white-space: nowrap;
   overflow: hidden;
@@ -31,41 +28,54 @@ const StyledPillButton = styled.button<{
 interface PillProps {
   name: string;
   active: boolean;
+  excludeMembers: boolean;
   disabled: boolean;
   onClick?: () => void;
 }
-const Pill = ({ name, active, disabled, onClick }: PillProps) => {
+const Pill = ({ name, active, excludeMembers, disabled, onClick }: PillProps) => {
   const { themeSettings } = useThemeContext();
 
+  const shouldShowPrimaryColor = active && !disabled;
+  const backgroundColor = shouldShowPrimaryColor
+    ? excludeMembers
+      ? '#fc7570'
+      : themeSettings.general.brandColor
+    : '#cbced7';
+  const textColor = shouldShowPrimaryColor
+    ? excludeMembers
+      ? '#ffffff'
+      : themeSettings.general.primaryButtonTextColor
+    : '#ffffff';
+
   return (
-    <StyledPillButton
-      backgroundColor={themeSettings.general.brandColor}
-      textColor={themeSettings.general.primaryButtonTextColor}
-      active={active}
-      onClick={onClick}
-      disabled={disabled}
-    >
+    <StyledPillButton backgroundColor={backgroundColor} textColor={textColor} onClick={onClick}>
       {name}
     </StyledPillButton>
   );
 };
 
 const IncludeAllPill = ({ disabled }: { disabled: boolean }) => (
-  <Pill name="Include all" disabled={disabled} active />
+  <Pill name="Include all" disabled={disabled} excludeMembers={false} active />
 );
 
 export interface PillSectionProps {
+  members: Member[];
   selectedMembers: SelectedMember[];
   onToggleSelectedMember: (key: string) => void;
+  excludeMembers: boolean;
   disabled: boolean;
 }
 
 export const PillSection: FunctionComponent<PillSectionProps> = ({
+  members,
   selectedMembers,
   onToggleSelectedMember,
+  excludeMembers,
   disabled,
 }) => {
-  const showIncludeAll = selectedMembers.length === 0;
+  const showIncludeAll =
+    (selectedMembers.length === 0 || selectedMembers.length === members.length) &&
+    selectedMembers.every((m) => !m.inactive);
   return (
     <div className={'csdk-flex csdk-flex-wrap csdk-p-3 csdk-gap-[5px]'}>
       {showIncludeAll && <IncludeAllPill disabled={disabled} />}
@@ -77,6 +87,7 @@ export const PillSection: FunctionComponent<PillSectionProps> = ({
               name={m.title}
               active={!m.inactive}
               onClick={() => onToggleSelectedMember(m.key)}
+              excludeMembers={excludeMembers}
               disabled={disabled}
             />
           );

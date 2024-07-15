@@ -4063,10 +4063,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/react-dom@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@floating-ui/react-dom@npm:2.1.1"
+  dependencies:
+    "@floating-ui/dom": ^1.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 6d1a023e6b0a3f298117223d8cdb0a4767f24469d193181da7002f692b756ccafb1e9756c242fa0c072f8ab8a5710ea7cf5cf2a6e92278d1fcd6f0fc0586c27c
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react@npm:^0.26.2":
+  version: 0.26.19
+  resolution: "@floating-ui/react@npm:0.26.19"
+  dependencies:
+    "@floating-ui/react-dom": ^2.1.1
+    "@floating-ui/utils": ^0.2.4
+    tabbable: ^6.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: b112d08f614a7827dd99098a9131d93ea5b79c39a2eb1267cdc28e2e7f45d08bb86ec837df78b3d632306922f3534f82736260965e289a9e83b265da423d9b68
+  languageName: node
+  linkType: hard
+
 "@floating-ui/utils@npm:^0.2.0":
   version: 0.2.2
   resolution: "@floating-ui/utils@npm:0.2.2"
   checksum: 3d8d46fd1b071c98e10d374e2dcf54d1eb9de0aa75ed2b994c9132ebf6f783f896f979053be71450bdb6d60021120cfc24d25a5c84ebb3db0994080e13d9762f
+  languageName: node
+  linkType: hard
+
+"@floating-ui/utils@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@floating-ui/utils@npm:0.2.4"
+  checksum: af44cdb3f394fbee6abc933fc3c25bf22f3f0bac58150eee8cc1dcc7e9be56a19b13e438820160614a90712e5a43f84b091afa6689318a10504042930ae9cf44
   languageName: node
   linkType: hard
 
@@ -5049,7 +5082,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.11.8, @popperjs/core@npm:^2.9.2":
+"@popperjs/core@npm:^2.11.8":
   version: 2.11.8
   resolution: "@popperjs/core@npm:2.11.8"
   checksum: e5c69fdebf52a4012f6a1f14817ca8e9599cb1be73dd1387e1785e2ed5e5f0862ff817f420a87c7fc532add1f88a12e25aeb010ffcbdc98eace3d55ce2139cf0
@@ -5513,12 +5546,12 @@ __metadata:
   resolution: "@sisense/sdk-cli@workspace:packages/sdk-cli"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^1.14.0
-    "@sisense/sdk-data": ^1.14.0
-    "@sisense/sdk-modeling": ^1.14.0
-    "@sisense/sdk-query-client": ^1.14.0
-    "@sisense/sdk-rest-client": ^1.14.0
-    "@sisense/sdk-tracking": ^1.14.0
+    "@sisense/sdk-common": ^1.15.0
+    "@sisense/sdk-data": ^1.15.0
+    "@sisense/sdk-modeling": ^1.15.0
+    "@sisense/sdk-query-client": ^1.15.0
+    "@sisense/sdk-rest-client": ^1.15.0
+    "@sisense/sdk-tracking": ^1.15.0
     "@types/inquirer": 8.2.6
     "@types/js-levenshtein": ^1.1.3
     "@types/yargs": ^17.0.22
@@ -5536,7 +5569,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-common@^1.14.0, @sisense/sdk-common@workspace:packages/sdk-common":
+"@sisense/sdk-common@^1.15.0, @sisense/sdk-common@workspace:packages/sdk-common":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-common@workspace:packages/sdk-common"
   dependencies:
@@ -5546,13 +5579,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-data@^1.14.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
+"@sisense/sdk-data@^1.15.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-data@workspace:packages/sdk-data"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^1.14.0
-    "@sisense/sdk-rest-client": ^1.14.0
+    "@sisense/sdk-common": ^1.15.0
+    "@sisense/sdk-rest-client": ^1.15.0
     "@types/lodash": ^4.14.201
     "@types/numeral": 2.0.2
     "@types/object-hash": ^3.0.5
@@ -5566,19 +5599,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-modeling@^1.14.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
+"@sisense/sdk-modeling@^1.15.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-modeling@workspace:packages/sdk-modeling"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-data": ^1.14.0
+    "@sisense/sdk-data": ^1.15.0
     eslint: ^8.40.0
     prettier: ^3.2.5
     typescript: 4.8.4
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-pivot-client@^1.14.0, @sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client":
+"@sisense/sdk-pivot-client@^1.15.0, @sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client"
   dependencies:
@@ -5586,8 +5619,8 @@ __metadata:
     "@emotion/react": ^11.11.4
     "@emotion/styled": ^11.11.5
     "@mui/material": ^5.11.6
-    "@sisense/sdk-data": ^1.14.0
-    "@sisense/sdk-rest-client": ^1.14.0
+    "@sisense/sdk-data": ^1.15.0
+    "@sisense/sdk-rest-client": ^1.15.0
     "@types/lodash": ^4.14.200
     "@types/react": ^18.3.1
     "@types/react-custom-scrollbars": ^4.0.13
@@ -5622,14 +5655,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-query-client@^1.14.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
+"@sisense/sdk-query-client@^1.15.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-query-client@workspace:packages/sdk-query-client"
   dependencies:
-    "@sisense/sdk-common": ^1.14.0
-    "@sisense/sdk-data": ^1.14.0
-    "@sisense/sdk-pivot-client": ^1.14.0
-    "@sisense/sdk-rest-client": ^1.14.0
+    "@sisense/sdk-common": ^1.15.0
+    "@sisense/sdk-data": ^1.15.0
+    "@sisense/sdk-pivot-client": ^1.15.0
+    "@sisense/sdk-rest-client": ^1.15.0
     "@sisense/task-manager": ^0.1.0
     "@types/tar": ^6.1.4
     "@types/uuid": ^9.0.0
@@ -5646,12 +5679,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-rest-client@^1.14.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
+"@sisense/sdk-rest-client@^1.15.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-rest-client@workspace:packages/sdk-rest-client"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^1.14.0
+    "@sisense/sdk-common": ^1.15.0
     eslint: ^8.40.0
     fetch-intercept: ^2.4.0
     prettier: 2.8.4
@@ -5659,7 +5692,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-tracking@^1.14.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
+"@sisense/sdk-tracking@^1.15.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-tracking@workspace:packages/sdk-tracking"
   dependencies:
@@ -5704,7 +5737,7 @@ __metadata:
   dependencies:
     "@preact/preset-vite": 2.5.0
     "@sisense/sdk-data": "workspace:^"
-    "@sisense/sdk-ui": ^1.14.0
+    "@sisense/sdk-ui": ^1.15.0
     "@types/node": ^18.16.0
     eslint: ^8.40.0
     preact: ^10.13.2
@@ -5742,7 +5775,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-ui@^1.14.0, @sisense/sdk-ui@workspace:^, @sisense/sdk-ui@workspace:packages/sdk-ui":
+"@sisense/sdk-ui@^1.15.0, @sisense/sdk-ui@workspace:^, @sisense/sdk-ui@workspace:packages/sdk-ui":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-ui@workspace:packages/sdk-ui"
   dependencies:
@@ -5754,12 +5787,12 @@ __metadata:
     "@mui/system": ^5.15.15
     "@mui/x-data-grid": ^6.16.0
     "@mui/x-data-grid-pro": ^6.16.0
-    "@sisense/sdk-common": ^1.14.0
-    "@sisense/sdk-data": ^1.14.0
-    "@sisense/sdk-pivot-client": ^1.14.0
-    "@sisense/sdk-query-client": ^1.14.0
-    "@sisense/sdk-rest-client": ^1.14.0
-    "@sisense/sdk-tracking": ^1.14.0
+    "@sisense/sdk-common": ^1.15.0
+    "@sisense/sdk-data": ^1.15.0
+    "@sisense/sdk-pivot-client": ^1.15.0
+    "@sisense/sdk-query-client": ^1.15.0
+    "@sisense/sdk-rest-client": ^1.15.0
+    "@sisense/sdk-tracking": ^1.15.0
     "@sisense/sisense-charts": 5.1.1
     "@storybook/addon-actions": 7.0.24
     "@storybook/addon-docs": 7.0.24
@@ -5779,7 +5812,6 @@ __metadata:
     "@types/lodash": ^4.14.194
     "@types/proj4leaflet": ^1.0.10
     "@types/react": 18.3.1
-    "@types/react-datepicker": ^4.11.2
     "@types/react-dom": 18.3.0
     "@types/react-grid-layout": ^1.3.5
     "@types/react-plotly.js": ^2.6.0
@@ -5808,7 +5840,7 @@ __metadata:
     prettier: 2.8.4
     proj4leaflet: ^1.0.2
     react: 18.3.1
-    react-datepicker: ^4.16.0
+    react-datepicker: ^7.3.0
     react-dom: 18.3.1
     react-error-boundary: ^4.0.11
     react-grid-layout: ^1.4.4
@@ -7765,18 +7797,6 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 8a92c385108cab2b4155337c66e6321fddec10542d21fc03acd2f714e7d5e9e3a859ba1024939eeb553076e946d5b700f251dff73b9c77995db3d8747f38778f
-  languageName: node
-  linkType: hard
-
-"@types/react-datepicker@npm:^4.11.2":
-  version: 4.19.6
-  resolution: "@types/react-datepicker@npm:4.19.6"
-  dependencies:
-    "@popperjs/core": ^2.9.2
-    "@types/react": "*"
-    date-fns: ^2.0.1
-    react-popper: ^2.2.5
-  checksum: ee9f21bd7012c03abbcc3e6cda72aec69f4a96955d80938a8c8b23b1867bb515588ea17121d99835a9bd444774dd467f8e29e3ae36591d45e26c8ec536ba103a
   languageName: node
   linkType: hard
 
@@ -10300,7 +10320,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.1, classnames@npm:^2.2.6, classnames@npm:^2.3.1, classnames@npm:^2.3.2":
+"classnames@npm:^2.2.1, classnames@npm:^2.3.1, classnames@npm:^2.3.2":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: da424a8a6f3a96a2e87d01a432ba19315503294ac7e025f9fece656db6b6a0f7b5003bb1fbb51cbb0d9624d964f1b9bb35a51c73af9b2434c7b292c42231c1e5
@@ -11458,12 +11478,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.0.1, date-fns@npm:^2.29.3, date-fns@npm:^2.30.0":
+"date-fns@npm:^2.29.3":
   version: 2.30.0
   resolution: "date-fns@npm:2.30.0"
   dependencies:
     "@babel/runtime": ^7.21.0
   checksum: f7be01523282e9bb06c0cd2693d34f245247a29098527d4420628966a2d9aad154bd0e90a6b1cf66d37adcb769cd108cf8a7bd49d76db0fb119af5cdd13644f4
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^3.3.1":
+  version: 3.6.0
+  resolution: "date-fns@npm:3.6.0"
+  checksum: 0daa1e9a436cf99f9f2ae9232b55e11f3dd46132bee10987164f3eebd29f245b2e066d7d7db40782627411ecf18551d8f4c9fcdf2226e48bb66545407d448ab7
   languageName: node
   linkType: hard
 
@@ -20539,20 +20566,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^4.16.0":
-  version: 4.25.0
-  resolution: "react-datepicker@npm:4.25.0"
+"react-datepicker@npm:^7.3.0":
+  version: 7.3.0
+  resolution: "react-datepicker@npm:7.3.0"
   dependencies:
-    "@popperjs/core": ^2.11.8
-    classnames: ^2.2.6
-    date-fns: ^2.30.0
+    "@floating-ui/react": ^0.26.2
+    clsx: ^2.1.0
+    date-fns: ^3.3.1
     prop-types: ^15.7.2
     react-onclickoutside: ^6.13.0
-    react-popper: ^2.3.0
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18
     react-dom: ^16.9.0 || ^17 || ^18
-  checksum: c619dc2ed1325e455a24cfd0428edf9da3b921853e27f28141bcda705962820912dd0e7221a1d00e984a468ba70475664a5bd6cb732776a5d32eb318a710ae0c
+  checksum: 036d94e2963ee15014fb6bf7bd5d2abad226177a6d02844fe7e55e6e7c650d33517aa2f9b673b6a0b96cbcf6a4ab10cd3363a58e69e5fdeb77ac603c8ca39802
   languageName: node
   linkType: hard
 
@@ -20632,13 +20658,6 @@ __metadata:
   peerDependencies:
     react: ">=16.13.1"
   checksum: 50398d080015d51d22c6f94c56f4ea336d10232d72345b36ee6f15b6b643666d20b072829b02f091a80e5af68fe67f68a62ef0d2b649dbd759ead929304449af
-  languageName: node
-  linkType: hard
-
-"react-fast-compare@npm:^3.0.1":
-  version: 3.2.2
-  resolution: "react-fast-compare@npm:3.2.2"
-  checksum: 2071415b4f76a3e6b55c84611c4d24dcb12ffc85811a2840b5a3f1ff2d1a99be1020d9437ee7c6e024c9f4cbb84ceb35e48cf84f28fcb00265ad2dfdd3947704
   languageName: node
   linkType: hard
 
@@ -20767,20 +20786,6 @@ __metadata:
     plotly.js: ">1.34.0"
     react: ">0.13.0"
   checksum: e826a3c94ec831c9d8fd92fa73aeece35d8ac04e0828d8362b28139d5b2923b83530356fb39c690debce20c47ba5d0a809f458a8c741d94edf88211e4ea4439f
-  languageName: node
-  linkType: hard
-
-"react-popper@npm:^2.2.5, react-popper@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "react-popper@npm:2.3.0"
-  dependencies:
-    react-fast-compare: ^3.0.1
-    warning: ^4.0.2
-  peerDependencies:
-    "@popperjs/core": ^2.0.0
-    react: ^16.8.0 || ^17 || ^18
-    react-dom: ^16.8.0 || ^17 || ^18
-  checksum: 837111c98738011c69b3069a464ea5bdcbf487105b6148e8faf90cb7337e134edb1b98b8824322941c378756cca30a15c18c25f558e53b85ed5762fa0dc8e6b2
   languageName: node
   linkType: hard
 
@@ -23097,6 +23102,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tabbable@npm:^6.0.0":
+  version: 6.2.0
+  resolution: "tabbable@npm:6.2.0"
+  checksum: f8440277d223949272c74bb627a3371be21735ca9ad34c2570f7e1752bd646ccfc23a9d8b1ee65d6561243f4134f5fbbf1ad6b39ac3c4b586554accaff4a1300
+  languageName: node
+  linkType: hard
+
 "tailwindcss@npm:^3.3.1":
   version: 3.4.3
   resolution: "tailwindcss@npm:3.4.3"
@@ -24967,15 +24979,6 @@ __metadata:
   dependencies:
     makeerror: 1.0.12
   checksum: ad7a257ea1e662e57ef2e018f97b3c02a7240ad5093c392186ce0bcf1f1a60bbadd520d073b9beb921ed99f64f065efb63dfc8eec689a80e569f93c1c5d5e16c
-  languageName: node
-  linkType: hard
-
-"warning@npm:^4.0.2":
-  version: 4.0.3
-  resolution: "warning@npm:4.0.3"
-  dependencies:
-    loose-envify: ^1.0.0
-  checksum: 4f2cb6a9575e4faf71ddad9ad1ae7a00d0a75d24521c193fa464f30e6b04027bd97aa5d9546b0e13d3a150ab402eda216d59c1d0f2d6ca60124d96cd40dfa35c
   languageName: node
   linkType: hard
 

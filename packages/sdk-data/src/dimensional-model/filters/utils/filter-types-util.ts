@@ -31,7 +31,7 @@ const isPeriodFilter = (filter: AnyTypeFilterJaql): boolean =>
 
 export const isSpecificItemsFilter = (
   filter: AnyTypeFilterJaql,
-): filter is SpecificItemsFilterJaql => (filter as SpecificItemsFilterJaql)?.members?.length > 0;
+): filter is SpecificItemsFilterJaql => (filter as SpecificItemsFilterJaql)?.members?.length >= 0;
 
 const isFromOrToDefined = (fromRange?: string | number, toRange?: string | number) =>
   (fromRange && typeof fromRange === 'string') || (toRange && typeof toRange === 'string');

@@ -1,73 +1,56 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /// <reference lib="dom" />
-import { appendHeaders } from './helpers.js';
 import { Authenticator } from './interfaces.js';
+import { BaseAuthenticator } from './base-authenticator.js';
+import { appendHeaders } from './helpers.js';
 
-export class PasswordAuthenticator implements Authenticator {
-  readonly type = 'password';
+export class PasswordAuthenticator extends BaseAuthenticator {
+  private readonly url: string;
 
-  private _authheader: string | undefined;
+  private readonly body: string;
 
-  readonly user: string;
-
-  readonly pass: string;
-
-  readonly url: string;
-
-  private _authenticating = false;
-
-  private _valid = true;
+  private _authheader = '';
 
   constructor(url: string, user: string, pass: string) {
-    this._authheader = undefined;
-    this.url = url;
-    this.user = user;
-    this.pass = pass;
+    super('password');
+    this.url = `${url}${!url.endsWith('/') ? '/' : ''}api/v1/authentication/login`;
+    const username = encodeURIComponent(user);
+    const password = encodeURIComponent(pass);
+    this.body = `username=${username}&password=${password}`;
   }
 
-  isValid(): boolean {
-    return this._valid;
-  }
+  async authenticate() {
+    if (this._tried) {
+      return this._result;
+    }
+    this._tried = true;
 
-  invalidate() {
-    this._valid = false;
-  }
+    try {
+      this._authenticating = true;
 
-  isAuthenticating(): boolean {
-    return this._authenticating;
+      const response = await fetch(this.url, {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: this.body,
+      });
+
+      if (response.ok) {
+        const json = await response.json();
+        this._authheader = json.access_token;
+      }
+    } finally {
+      this._resolve(!!this._authheader);
+      this._authenticating = false;
+    }
+
+    return this._result;
   }
 
   applyHeader(headers: HeadersInit) {
     const authHeader = 'Bearer ' + this._authheader;
     appendHeaders(headers, { Authorization: authHeader });
-  }
-
-  async authenticate(): Promise<boolean> {
-    this._authenticating = true;
-
-    const url = `${this.url}${!this.url.endsWith('/') ? '/' : ''}api/v1/authentication/login`;
-    const username = encodeURIComponent(this.user);
-    const password = encodeURIComponent(this.pass);
-
-    await fetch(url, {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `username=${username}&password=${password}`,
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this._authheader = responseJson.access_token;
-        this._authenticating = false;
-      });
-
-    return !!this._authheader;
   }
 }
 

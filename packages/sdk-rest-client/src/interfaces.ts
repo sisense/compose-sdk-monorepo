@@ -1,5 +1,5 @@
 export interface Authenticator {
-  readonly type: 'password' | 'bearer' | 'wat' | 'sso';
+  readonly type: 'password' | 'bearer' | 'wat' | 'sso' | 'base';
 
   isValid: () => boolean;
 
@@ -8,6 +8,8 @@ export interface Authenticator {
   authenticate: () => Promise<boolean>;
 
   isAuthenticating: () => boolean;
+
+  authenticated: () => Promise<boolean>;
 
   applyHeader: (headers: HeadersInit) => void;
 }

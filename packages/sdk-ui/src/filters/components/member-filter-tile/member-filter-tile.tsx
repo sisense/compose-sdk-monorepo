@@ -79,6 +79,8 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     () => new MembersFilter(attribute, []),
   );
 
+  const excludeMembers = filter.excludeMembers;
+
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
   // "dimensions" does not change on every render, causing infinite rerenders.
   const dimensions = useMemo(() => [attribute], [attribute]);
@@ -98,7 +100,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
 
   const selectedMembers: SelectedMember[] = useMemo(() => {
     const members = alignMembersType(filter.members, attribute.type);
-    const deactivatedMembers = alignMembersType(filter._deactivatedMembers, attribute.type);
+    const deactivatedMembers = alignMembersType(filter.deactivatedMembers, attribute.type);
     return queriedMembers
       .filter(
         (queriedMember) =>
@@ -109,7 +111,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         title: queriedMember.text ?? queriedMember.data.toString(),
         inactive: deactivatedMembers.includes(queriedMember.data),
       }));
-  }, [filter._deactivatedMembers, filter.members, queriedMembers, attribute.type]);
+  }, [filter.deactivatedMembers, filter.members, queriedMembers, attribute.type]);
 
   const allMembers: Member[] = useMemo(
     () =>
@@ -136,14 +138,16 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         if (collapsed) {
           return (
             <PillSection
+              members={allMembers}
               selectedMembers={selectedMembers}
               onToggleSelectedMember={(memberKey) => {
                 const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
                   selectedMembers,
                   memberKey,
                 );
-                updateFilter(withSelectedMembers(filter, newSelectedMembers));
+                updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
               }}
+              excludeMembers={excludeMembers}
               disabled={tileDisabled}
             />
           );
@@ -156,10 +160,17 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
               const newSelectedMembers = isSelected
                 ? addSelectedMember(selectedMembers, member)
                 : removeSelectedMember(selectedMembers, member);
-              updateFilter(withSelectedMembers(filter, newSelectedMembers));
+
+              updateFilter(
+                // if all members are excluded, we should reset the filter to exclude none to match the behavior in Fusion
+                newSelectedMembers.length === allMembers.length && excludeMembers
+                  ? withSelectedMembers(filter, [], false)
+                  : withSelectedMembers(filter, newSelectedMembers, excludeMembers),
+              );
             }}
-            selectAllMembers={() => updateFilter(withSelectedMembers(filter, allMembers))}
-            clearAllMembers={() => updateFilter(withSelectedMembers(filter, []))}
+            checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
+            uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
+            excludeMembers={excludeMembers}
             disabled={tileDisabled}
           />
         );
@@ -184,6 +195,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
 function withSelectedMembers(
   filter: MembersFilter,
   selectedMembers: SelectedMember[],
+  excludeMembers: boolean,
 ): MembersFilter {
   const { activeFilterMembers, inactiveFilterMembers } =
     splitToActiveAndInactiveFilterMembers(selectedMembers);
@@ -191,8 +203,9 @@ function withSelectedMembers(
   return new MembersFilter(
     filter.attribute,
     activeFilterMembers,
-    inactiveFilterMembers,
+    excludeMembers,
     filter.guid,
+    inactiveFilterMembers,
     filter.backgroundFilter,
   );
 }

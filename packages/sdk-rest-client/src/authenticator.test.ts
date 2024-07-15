@@ -1,10 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { getAuthenticator } from './authenticator.js';
-import { PasswordAuthenticator } from './password-authenticator.js';
-import { BearerAuthenticator } from './bearer-authenticator.js';
-import { WatAuthenticator } from './wat-authenticator.js';
-import { SsoAuthenticator } from './sso-authenticator.js';
 describe('getAuthenticator', () => {
   const fakeUsername = 'username';
   const fakePassword = 'password';
@@ -13,62 +7,42 @@ describe('getAuthenticator', () => {
   const fakeWat = 'wat';
 
   it('should return PasswordAuthenticator', () => {
-    const authenticator = getAuthenticator(
-      fakeDeploymentUrl,
-      fakeUsername,
-      fakePassword,
-      undefined,
-      undefined,
-      undefined,
-    );
-    expect(authenticator).toBeInstanceOf(PasswordAuthenticator);
+    const authenticator = getAuthenticator({
+      url: fakeDeploymentUrl,
+      username: fakeUsername,
+      password: fakePassword,
+    });
+    expect(authenticator?.type).toBe('password');
   });
 
   it('should return BearerAuthenticator', () => {
-    const authenticator = getAuthenticator(
-      fakeDeploymentUrl,
-      undefined,
-      undefined,
-      fakeToken,
-      undefined,
-      undefined,
-    );
-    expect(authenticator).toBeInstanceOf(BearerAuthenticator);
+    const authenticator = getAuthenticator({
+      url: fakeDeploymentUrl,
+      token: fakeToken,
+    });
+    expect(authenticator?.type).toBe('bearer');
   });
 
   it('should return WatAuthenticator', () => {
-    const authenticator = getAuthenticator(
-      fakeDeploymentUrl,
-      undefined,
-      undefined,
-      undefined,
-      fakeWat,
-      undefined,
-    );
-    expect(authenticator).toBeInstanceOf(WatAuthenticator);
+    const authenticator = getAuthenticator({
+      url: fakeDeploymentUrl,
+      wat: fakeWat,
+    });
+    expect(authenticator?.type).toBe('wat');
   });
 
   it('should return SsoAuthenticator', () => {
-    const authenticator = getAuthenticator(
-      fakeDeploymentUrl,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      true,
-    );
-    expect(authenticator).toBeInstanceOf(SsoAuthenticator);
+    const authenticator = getAuthenticator({
+      url: fakeDeploymentUrl,
+      ssoEnabled: true,
+    });
+    expect(authenticator?.type).toBe('sso');
   });
 
   it('should return null', () => {
-    const authenticator = getAuthenticator(
-      fakeDeploymentUrl,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-    );
+    const authenticator = getAuthenticator({
+      url: fakeDeploymentUrl,
+    });
     expect(authenticator).toBeNull();
   });
 });

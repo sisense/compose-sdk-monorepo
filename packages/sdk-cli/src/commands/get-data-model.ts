@@ -101,7 +101,7 @@ export const getDataModel = async (
     ({ maskedPassword: password } = await promptPasswordInteractive(username));
   }
 
-  const httpClient = getHttpClient(url, username, password, token, wat);
+  const httpClient = getHttpClient({ url, username, password, token, wat });
 
   try {
     await handleHttpClientLogin(httpClient);

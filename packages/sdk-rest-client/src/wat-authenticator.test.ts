@@ -12,8 +12,15 @@ describe('WatAuthenticator', () => {
 
   let auth: WatAuthenticator;
 
+  const fetchSpy = vi.fn();
+  global.fetch = fetchSpy;
+
   beforeEach(() => {
     auth = new WatAuthenticator(fakeDeploymentUrl, fakeWat);
+  });
+
+  afterEach(() => {
+    fetchSpy.mockClear();
   });
 
   afterAll(() => {
@@ -27,10 +34,7 @@ describe('WatAuthenticator', () => {
         .fn()
         .mockResolvedValue({ webSessionToken: fakeSessionToken, initialiser: fakeInitialiser }),
     };
-
-    global.fetch = vi.fn().mockImplementation(() => {
-      return Promise.resolve(response);
-    });
+    fetchSpy.mockResolvedValueOnce(response as unknown as Response);
 
     return auth.authenticate();
   };
@@ -73,10 +77,7 @@ describe('WatAuthenticator', () => {
       status: 401,
       statusText: 'Unauthorized',
     };
-
-    global.fetch = vi.fn().mockImplementation(() => {
-      return Promise.resolve(response);
-    });
+    fetchSpy.mockResolvedValueOnce(response as unknown as Response);
 
     const result = await auth.authenticate();
 

@@ -67,7 +67,9 @@ export const createGenericFilter = (
  * @returns The created Filter object.
  */
 export const createFilterIncludeAll = (attribute: Attribute, guid?: string): Filter => {
-  return withComposeCode(filterFactory.members)(attribute, [], [], guid);
+  // including all members is equivalent to excluding none
+  // so we can simply create a filter with no members and excludeMembers set to true
+  return withComposeCode(filterFactory.members)(attribute, [], true, guid);
 };
 
 /**
@@ -85,7 +87,13 @@ export const createFilterFromSpecificItemsFilterJaql = (
 ): Filter => {
   const deactivatedMembers = getDeactivatedMembersFromFilterJaql(specificItemsFilterJaql);
   const activeMembers = getActiveMembersFromFilterJaql(specificItemsFilterJaql, deactivatedMembers);
-  return withComposeCode(filterFactory.members)(attribute, activeMembers, deactivatedMembers, guid);
+  return withComposeCode(filterFactory.members)(
+    attribute,
+    activeMembers,
+    undefined, // use undefined instead of false to avoid including the property in composeCode
+    guid,
+    deactivatedMembers,
+  );
 };
 
 function getDeactivatedMembersFromFilterJaql(

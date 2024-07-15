@@ -1,45 +1,61 @@
 /// <reference lib="dom" />
 
-/* eslint-disable no-underscore-dangle */
-import { appendHeaders } from './helpers.js';
 import { Authenticator } from './interfaces.js';
+import { BaseAuthenticator } from './base-authenticator.js';
+import { appendHeaders } from './helpers.js';
 
 interface WebSessionTokenResponse {
   webSessionToken: string;
   initialiser: string;
 }
 
-export class WatAuthenticator implements Authenticator {
-  readonly type = 'wat';
-
+export class WatAuthenticator extends BaseAuthenticator {
   private _initialiser: string | undefined;
 
   private _webSessionToken: string;
 
-  readonly wat: string;
+  private readonly url: string;
 
-  readonly url: string;
-
-  private _authenticating = false;
-
-  private _valid = true;
+  private readonly body: string;
 
   constructor(url: string, wat: string) {
-    this._initialiser = undefined;
-    this.url = url;
-    this.wat = wat;
+    super('wat');
+    this.url = `${url}${!url.endsWith('/') ? '/' : ''}api/v1/wat/sessionToken`;
+    this.body = `{"webAccessToken": "${wat}"}`;
   }
 
-  isValid(): boolean {
-    return this._valid;
-  }
+  async authenticate() {
+    if (this._tried) {
+      return this._result;
+    }
+    this._tried = true;
 
-  invalidate() {
-    this._valid = false;
-  }
+    try {
+      this._authenticating = true;
 
-  isAuthenticating(): boolean {
-    return this._authenticating;
+      const response = await fetch(this.url, {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: this.body,
+      });
+
+      if (response.ok) {
+        const responseJson: WebSessionTokenResponse = await response.json();
+        this._initialiser = responseJson.initialiser;
+        this._webSessionToken = responseJson.webSessionToken;
+        this._resolve(true);
+      }
+    } catch (e: unknown) {
+      // empty catch block
+    } finally {
+      this._resolve(false);
+      this._authenticating = false;
+    }
+
+    return this._result;
   }
 
   applyHeader(headers: HeadersInit) {
@@ -48,40 +64,6 @@ export class WatAuthenticator implements Authenticator {
       const initialiserHeader = this._initialiser;
       appendHeaders(headers, { Authorization: authHeader, Initialiser: initialiserHeader });
     }
-  }
-
-  async authenticate(): Promise<boolean> {
-    this._authenticating = true;
-
-    // call API to generate web session token
-    const url = `${this.url}${!this.url.endsWith('/') ? '/' : ''}api/v1/wat/sessionToken`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: `{"webAccessToken": "${this.wat}"}`,
-      });
-
-      if (response.ok) {
-        const responseJson = (await response.json()) as WebSessionTokenResponse;
-
-        this._initialiser = responseJson.initialiser;
-        this._webSessionToken = responseJson.webSessionToken;
-        this._authenticating = false;
-      } else {
-        return false;
-      }
-    } catch (e: unknown) {
-      this._initialiser = undefined;
-      this._authenticating = false;
-      return false;
-    }
-
-    return true;
   }
 }
 

@@ -296,7 +296,10 @@ export class MembersFilter extends AbstractFilter {
   readonly members: any[];
 
   /** @internal */
-  _deactivatedMembers: any[];
+  excludeMembers: boolean;
+
+  /** @internal */
+  deactivatedMembers: any[];
 
   /** @internal */
   backgroundFilter?: Filter;
@@ -304,14 +307,16 @@ export class MembersFilter extends AbstractFilter {
   constructor(
     attribute: Attribute,
     members?: any[],
-    _deactivatedMembers?: any[],
+    excludeMembers?: boolean,
     guid?: string,
+    deactivatedMembers?: any[],
     backgroundFilter?: Filter,
   ) {
     super(attribute, FilterTypes.members, guid);
 
     this.members = members ?? [];
-    this._deactivatedMembers = _deactivatedMembers ?? [];
+    this.excludeMembers = excludeMembers ?? false;
+    this.deactivatedMembers = deactivatedMembers ?? [];
     this.backgroundFilter = backgroundFilter;
 
     if (this.members.filter((m) => m === null || m === undefined).length > 0) {
@@ -346,9 +351,11 @@ export class MembersFilter extends AbstractFilter {
    * Gets JAQL representing this Filter instance
    */
   filterJaql(): any {
-    const filterJaql = {
+    const membersFilterJaql = {
       members: this.members.map((m) => m.toString()),
     };
+
+    const filterJaql = this.excludeMembers ? { exclude: membersFilterJaql } : membersFilterJaql;
 
     if (this.backgroundFilter) {
       return {

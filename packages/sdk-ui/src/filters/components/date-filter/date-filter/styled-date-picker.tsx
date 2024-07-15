@@ -1,21 +1,19 @@
 import styled from '@emotion/styled';
-import { CompleteThemeSettings } from '../../../../types.js';
-import DatePicker, { type ReactDatePickerProps } from 'react-datepicker';
+import DatePicker, { type DatePickerProps } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { applyOpacity, getSlightlyDifferentColor } from '../../../../utils/color/index.js';
+import { Themable } from '@/theme-provider/types.js';
 
-type DatePickerProps = ReactDatePickerProps & {
-  theme: CompleteThemeSettings;
-};
+type ThemableDatePickerProps = DatePickerProps & Themable;
 
 const DatePickerWithCustomCalendar = ({
   className: calendarClassName,
   ...rest
-}: DatePickerProps) => {
+}: ThemableDatePickerProps) => {
   return <DatePicker {...rest} calendarClassName={calendarClassName} />;
 };
 
-export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerProps>`
+export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
   border: none;
   background-color: ${({ theme }) => theme.general.backgroundColor};
   display: flex;
@@ -61,9 +59,8 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
       color: ${({ theme }) => theme.typography.primaryTextColor};
       transition: 0.1s;
     }
-  }
 
-  .react-datepicker__day {
+    // before - background highlight
     &:before {
       content: '';
       position: absolute;
@@ -77,13 +74,14 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     }
 
     // rounds ends of the week rows
-    &:first-child:before {
+    &:first-of-type:before {
       border-radius: 100% 0 0 100%;
     }
-    &:last-child:before {
+    &:last-of-type:before {
       border-radius: 0 100% 100% 0;
     }
 
+    // after - "bright circle" highlight
     &:after {
       content: '';
       position: absolute;
@@ -137,7 +135,23 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
         visibility: visible;
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
       }
+      &.react-datepicker__day--selecting-range-start:before {
+        border-radius: 100% 0 0 100%;
+      }
+      &.react-datepicker__day--selecting-range-end:before {
+        border-radius: 0 100% 100% 0;
+      }
       color: ${({ theme }) => theme.typography.secondaryTextColor};
+    }
+  }
+
+  // Hide background highlighting if range-start and range-end is the same day (when selecting range)
+  .react-datepicker__month--selecting-range
+    .react-datepicker__day:not(.react-datepicker__day--in-selecting-range) {
+    &.react-datepicker__day--range-start.react-datepicker__day--range-end {
+      &:before {
+        visibility: hidden;
+      }
     }
   }
 
@@ -155,13 +169,13 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
       background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.5)};
     }
 
-    &.react-datepicker__day--range-start {
+    &.react-datepicker__day--range-start:not(.react-datepicker__day--range-end) {
       &:before {
         border-radius: 100% 0 0 100%;
       }
     }
 
-    &.react-datepicker__day--range-end {
+    &.react-datepicker__day--range-end:not(.react-datepicker__day--range-start) {
       &:before {
         border-radius: 0 100% 100% 0;
       }
@@ -176,22 +190,58 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
     }
   }
 
-  // Fix for a bug in react-datepicker with rangeeact-datepicker__day--selecting-range-start-start day in each month highlighted as a data-range-start
-  .react-datepicker__month:not(.react-datepicker__month--selecting-range) {
-    & .react-datepicker__day--selecting-range-start:not(.react-datepicker__day--range-start),
-    & .react-datepicker__day--selecting-range-end:not(.react-datepicker__day--range-end) {
-      &.react-datepicker__day--in-range {
-        &:not(.react-datepicker__day--range-start, .react-datepicker__day--range-end) {
-          &:after {
-            visibility: hidden;
-          }
-          &:before {
-            visibility: visible;
-          }
+  // ----------------- Fixing react-datepicker internal bugs with wrong classes applied ------------------------------
+
+  // Fix react-datepicker bug with 'react-datepicker__day--selecting-range-start' class duplicated in each month
+  .react-datepicker__month:not(.react-datepicker__month--selecting-range)
+    .react-datepicker__day--selecting-range-start:not(.react-datepicker__day--range-start) {
+    &:not(:first-of-type):not(:last-of-type) {
+      &:before {
+        border-radius: 0;
+      }
+      &.react-datepicker__day--range-end {
+        &:before {
+          border-radius: 0 100% 100% 0;
         }
       }
     }
+    &:first-of-type {
+      &:before {
+        border-radius: 100% 0 0 100%;
+      }
+    }
+    &:last-of-type {
+      &:before {
+        border-radius: 0 100% 100% 0;
+      }
+    }
   }
+
+  // Fix react-datepicker bug with 'react-datepicker__day--selecting-range-end' class duplicated in each month
+  .react-datepicker__month:not(.react-datepicker__month--selecting-range)
+    .react-datepicker__day--selecting-range-end:not(.react-datepicker__day--range-end) {
+    &:not(:first-of-type):not(:last-of-type) {
+      &:before {
+        border-radius: 0;
+      }
+      &.react-datepicker__day--range-start {
+        &:before {
+          border-radius: 100% 0 0 100%;
+        }
+      }
+    }
+    &:first-of-type {
+      &:before {
+        border-radius: 100% 0 0 100%;
+      }
+    }
+    &:last-of-type {
+      &:before {
+        border-radius: 0 100% 100% 0;
+      }
+    }
+  }
+
   // ------------------------------------------------------
 
   // Fix cases when selected the same day for start and end:
@@ -234,4 +284,50 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)<DatePickerP
       visibility: visible;
     }
   }
+
+  // ---------- Smooth background transition during selection new range ends ---------------
+
+  .react-datepicker__month--selecting-range {
+    .react-datepicker__day--selecting-range-start,
+    .react-datepicker__day--range-start.react-datepicker__day--in-selecting-range:not(
+        .react-datepicker__day--selecting-range-start
+      ) {
+      &.react-datepicker__day--in-range:not(
+          .react-datepicker__day--range-start.react-datepicker__day--selecting-range-start,
+          .react-datepicker__day--range-end.react-datepicker__day--selecting-range-end
+        ) {
+        &:before {
+          border-radius: 0;
+          background: linear-gradient(
+            to right,
+            ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)} 50%,
+            ${({ theme }) => applyOpacity(theme.general.brandColor, 0.5)} 50%
+          );
+        }
+      }
+    }
+  }
+
+  .react-datepicker__month--selecting-range {
+    .react-datepicker__day--selecting-range-end,
+    .react-datepicker__day--range-end.react-datepicker__day--in-selecting-range:not(
+        .react-datepicker__day--selecting-range-end
+      ) {
+      &.react-datepicker__day--in-range:not(
+          .react-datepicker__day--range-start.react-datepicker__day--selecting-range-start,
+          .react-datepicker__day--range-end.react-datepicker__day--selecting-range-end
+        ) {
+        &:before {
+          border-radius: 0;
+          background: linear-gradient(
+            to right,
+            ${({ theme }) => applyOpacity(theme.general.brandColor, 0.5)} 50%,
+            ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)} 50%
+          );
+        }
+      }
+    }
+  }
+
+  // ------------------------------------------------------
 `;

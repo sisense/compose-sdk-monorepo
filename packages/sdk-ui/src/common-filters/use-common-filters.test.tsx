@@ -112,7 +112,9 @@ describe('useCommonFilters', () => {
     });
 
     it('should ingore connected filter by id', () => {
-      const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123')];
+      const initialFilters = [
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
+      ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
       const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
         ignoreFilters: { ids: ['123'] },
@@ -123,7 +125,9 @@ describe('useCommonFilters', () => {
     });
 
     it('should ignore all connected filters', () => {
-      const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123')];
+      const initialFilters = [
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
+      ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
       const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
         ignoreFilters: { all: true },
@@ -134,7 +138,9 @@ describe('useCommonFilters', () => {
     });
 
     it('should select new filter via connected onDataPointClick handler', () => {
-      const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123')];
+      const initialFilters = [
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
+      ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
       let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
         shouldAffectFilters: true,
@@ -160,7 +166,9 @@ describe('useCommonFilters', () => {
     });
 
     it('should select new filter via connected onDataPointsSelected handler', () => {
-      const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123')];
+      const initialFilters = [
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
+      ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
       let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
         shouldAffectFilters: true,
@@ -191,7 +199,9 @@ describe('useCommonFilters', () => {
     });
 
     it('should clear selected filters via connected onRenderTooltip handler', async () => {
-      const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123')];
+      const initialFilters = [
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
+      ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
       let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
         shouldAffectFilters: true,
@@ -225,7 +235,7 @@ describe('useCommonFilters', () => {
         '25-34',
       ]);
       const initialFilters = [
-        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123', backgroundFilter),
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', [], backgroundFilter),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
       const connectedWidget = result.current.connectToWidgetModel(widgetModelMock);
@@ -241,7 +251,7 @@ describe('useCommonFilters', () => {
         '25-34',
       ]);
       const initialFilters = [
-        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], [], '123', backgroundFilter),
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', [], backgroundFilter),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
       const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
@@ -261,8 +271,9 @@ describe('useCommonFilters', () => {
       const filter = filterFactory.members(
         DM.Commerce.AgeRange,
         ['0-18'],
-        [],
+        false,
         '123',
+        [],
         backgroundFilter,
       );
       filter.disabled = true;
@@ -283,8 +294,9 @@ describe('useCommonFilters', () => {
       const filter = filterFactory.members(
         DM.Commerce.AgeRange,
         ['0-18'],
-        [],
+        false,
         '123',
+        [],
         backgroundFilter,
       );
       const initialFilters = [filter];
@@ -306,8 +318,9 @@ describe('useCommonFilters', () => {
       const filter = filterFactory.members(
         DM.Commerce.AgeRange,
         ['0-18'],
-        [],
+        false,
         '123',
+        [],
         backgroundFilter,
       );
       const initialFilters = [filter];
@@ -344,8 +357,9 @@ describe('useCommonFilters', () => {
       const filter = filterFactory.members(
         DM.Commerce.AgeRange,
         ['0-18'],
-        [],
+        false,
         '123',
+        [],
         backgroundFilter,
       );
       const initialFilters = [filter];

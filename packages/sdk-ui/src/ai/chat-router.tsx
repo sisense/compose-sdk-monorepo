@@ -14,7 +14,7 @@ export default function ChatRouter() {
 
   const { data, fetchStatus } = useGetDataTopics();
 
-  const { dataTopicsList = [] } = useChatConfig();
+  const { dataTopicsList } = useChatConfig();
 
   useEffect(() => {
     if (data && fetchStatus === 'idle') {

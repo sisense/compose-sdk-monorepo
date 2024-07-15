@@ -1,9 +1,9 @@
 import { FetchInterceptorResponse } from 'fetch-intercept';
-import { BearerAuthenticator } from './bearer-authenticator.js';
-import { WatAuthenticator } from './wat-authenticator.js';
 import { Authenticator } from './interfaces.js';
-import { PasswordAuthenticator } from './password-authenticator.js';
-import { SsoAuthenticator } from './sso-authenticator.js';
+import { isBearerAuthenticator } from './bearer-authenticator.js';
+import { isWatAuthenticator } from './wat-authenticator.js';
+import { isPasswordAuthenticator } from './password-authenticator.js';
+import { isSsoAuthenticator } from './sso-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
 
 function handleErrorResponse(response: FetchInterceptorResponse): FetchInterceptorResponse {
@@ -23,14 +23,14 @@ function handleUnauthorizedResponse(
 ): FetchInterceptorResponse {
   auth.invalidate();
   // skip login redirect for token auth
-  if (auth instanceof PasswordAuthenticator) {
+  if (isPasswordAuthenticator(auth)) {
     throw new TranslatableError('errors.passwordAuthFailed');
   }
-  if (auth instanceof BearerAuthenticator || auth instanceof WatAuthenticator) {
+  if (isBearerAuthenticator(auth) || isWatAuthenticator(auth)) {
     throw new TranslatableError('errors.tokenAuthFailed');
   }
 
-  if (auth instanceof SsoAuthenticator && !auth.isAuthenticating()) {
+  if (isSsoAuthenticator(auth) && !auth.isAuthenticating()) {
     // try to reauthenticate
     void auth.authenticate();
   }

@@ -40,7 +40,7 @@ const handler = async (options: Arguments<GetApiTokenOptions>) => {
     ({ maskedPassword: password } = await promptPasswordInteractive(username));
   }
 
-  const httpClient = getHttpClient(url, username, password);
+  const httpClient = getHttpClient({ url, username, password });
 
   try {
     await handleHttpClientLogin(httpClient);
