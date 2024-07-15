@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.15.1] - 2024-07-15
+
+### Changed
+- Fix an issue with `Include All` members filter
+
 ## [1.15.0] - 2024-07-15
 
 ### Added

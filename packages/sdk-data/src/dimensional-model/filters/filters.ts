@@ -355,7 +355,11 @@ export class MembersFilter extends AbstractFilter {
       members: this.members.map((m) => m.toString()),
     };
 
-    const filterJaql = this.excludeMembers ? { exclude: membersFilterJaql } : membersFilterJaql;
+    // if there's no members to exclude, do not add the exclude property
+    const filterJaql =
+      this.excludeMembers && this.members.length
+        ? { exclude: membersFilterJaql }
+        : membersFilterJaql;
 
     if (this.backgroundFilter) {
       return {
