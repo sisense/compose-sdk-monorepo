@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useState } from 'react';
 import { type JaqlRequest } from '@sisense/sdk-pivot-client';
 import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { ExecutePivotQueryParams } from '../query-execution';
@@ -6,6 +6,7 @@ import { useExecutePivotQueryInternal } from '../query-execution/use-execute-piv
 import { Category, PivotTableDataOptionsInternal, Value } from '../chart-data-options/types';
 import { translateCategoryToAttribute, translateValueToMeasure } from '../chart-data-options/utils';
 import { normalizePivotSort } from './sorting-utils';
+import isEqual from 'lodash/isEqual';
 
 const getPivotAttribute = (category: Category) => {
   return {
@@ -47,30 +48,28 @@ export const getPivotQueryOptions = (
  *
  * @internal
  */
-export const useGetPivotTableQuery = ({
+export const usePivotTableQuery = ({
   dataSet,
   dataOptionsInternal,
   filters,
   highlights,
-  refreshCounter,
 }: {
   dataSet?: DataSource;
   dataOptionsInternal: PivotTableDataOptionsInternal;
   filters?: Filter[] | FilterRelations;
   highlights?: Filter[];
-  refreshCounter?: number;
 }) => {
-  const jaqlRef = useRef<JaqlRequest | null>(null);
+  const [jaql, setJaql] = useState<JaqlRequest | undefined>();
   const { rows, columns, values, grandTotals } = getPivotQueryOptions(dataOptionsInternal);
 
   // retrieve the Jaql query without executing it
   const onBeforeQuery = useCallback(
     (query: JaqlRequest) => {
-      jaqlRef.current = query;
+      setJaql((prevJaql) => {
+        return isEqual(prevJaql, query) ? prevJaql : query;
+      });
     },
-    // forces 'onBeforeQuery' callback to be recreated on 'refreshCounter' change in order to refresh the jaql
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [refreshCounter],
+    [setJaql],
   );
 
   const queryParams: ExecutePivotQueryParams = {
@@ -83,7 +82,7 @@ export const useGetPivotTableQuery = ({
     highlights,
     onBeforeQuery,
   };
-  const { isLoading, isSuccess, isError, error } = useExecutePivotQueryInternal(queryParams);
+  const { error } = useExecutePivotQueryInternal(queryParams);
 
-  return { isLoading, isSuccess, isError, error, jaql: jaqlRef.current };
+  return { jaql, error };
 };

@@ -45,6 +45,10 @@ describe('getScatterPlotOptions', () => {
       align: 'center',
       verticalAlign: 'middle',
       rotation: 0,
+      style: {
+        fontWeight: '',
+        textOutline: '',
+      },
       formatter: expect.any(Function) as () => string,
       types: {
         count: false,

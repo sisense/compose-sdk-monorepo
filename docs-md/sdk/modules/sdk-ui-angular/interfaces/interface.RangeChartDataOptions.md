@@ -40,7 +40,7 @@ Optional mapping of each of the series to colors.
 
 ### value
 
-> **value**: [`AreaRangeMeasureColumn`](../../sdk-ui/interfaces/interface.AreaRangeMeasureColumn.md)[]
+> **value**: ([`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md) \| [`AreaRangeMeasureColumn`](../../sdk-ui/interfaces/interface.AreaRangeMeasureColumn.md))[]
 
 An array of measure columns used to represent the target numeric values for computing the metrics
 in an area range chart.

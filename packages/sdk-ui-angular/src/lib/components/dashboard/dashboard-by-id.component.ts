@@ -24,6 +24,8 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
  *
+ * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @example
  * ```html
  * <csdk-dashboard-by-id

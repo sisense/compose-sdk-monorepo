@@ -44,11 +44,41 @@ import { setupHelper } from '../../setup-helper';
  */
 export const AreamapChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<AreamapChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<AreamapChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<AreamapChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<AreamapChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<AreamapChartProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<AreamapChartProps['onDataPointClick']>,
   },
   setup: (props) => setupHelper(AreamapChartPreact, props),

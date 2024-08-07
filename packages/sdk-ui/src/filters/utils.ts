@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * Clones a filter with a toggled 'disabled' state.
+ *
  * @param filter - Filter to clone
  */
 export const cloneFilterAndToggleDisabled = <TFilter extends Filter>(filter: TFilter): TFilter => {

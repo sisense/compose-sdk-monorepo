@@ -1,12 +1,13 @@
 import { type ReactNode } from 'react';
 import { ThemeProvider, useThemeContext } from '../../theme-provider';
-import { WidgetStyleOptions } from '../../types';
+import { WidgetContainerStyleOptions } from '../../types';
 import { getShadowValue, WidgetCornerRadius, WidgetSpaceAround } from './widget-style-utils';
 import { WidgetHeader } from './widget-header';
+import get from 'lodash/get';
 
 interface WidgetContainerProps {
   dataSetName?: string;
-  styleOptions?: WidgetStyleOptions;
+  styleOptions?: WidgetContainerStyleOptions;
   title?: string;
   description?: string;
   topSlot?: ReactNode;
@@ -33,18 +34,21 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
       <div
         className="csdk-h-full"
         style={{
-          padding: WidgetSpaceAround[styleOptions?.spaceAround || 'None'],
+          padding:
+            WidgetSpaceAround[get(styleOptions, 'spaceAround', themeSettings.widget.spaceAround)] ||
+            '0px',
         }}
       >
         <div
           className="csdk-h-full csdk-overflow-hidden"
           style={{
-            borderWidth: styleOptions?.border ? '1px' : 0,
-            borderColor: styleOptions?.borderColor || themeSettings.chart.textColor,
-            borderRadius: styleOptions?.cornerRadius
-              ? WidgetCornerRadius[styleOptions.cornerRadius]
-              : 0,
-            boxShadow: getShadowValue(styleOptions),
+            backgroundColor: styleOptions?.backgroundColor || 'unset',
+            borderWidth: get(styleOptions, 'border', themeSettings.widget.border) ? '1px' : 0,
+            borderColor: styleOptions?.borderColor || themeSettings.widget.borderColor,
+            borderRadius:
+              WidgetCornerRadius[styleOptions?.cornerRadius || themeSettings.widget.cornerRadius] ||
+              0,
+            boxShadow: getShadowValue(styleOptions, themeSettings),
             display: 'flex',
             flexDirection: 'column',
           }}

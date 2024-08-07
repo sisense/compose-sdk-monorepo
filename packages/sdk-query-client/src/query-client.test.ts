@@ -283,11 +283,11 @@ describe('DimensionalQueryClient', () => {
       highlights: [],
     };
 
-    it('should throw when no attribute and measure', () => {
-      expect(() => queryClient.executeQuery(baseQueryDescription)).toThrow();
+    it('should throw when no attribute and measure', async () => {
+      await expect(queryClient.executeQuery(baseQueryDescription).resultPromise).rejects.toThrow();
     });
 
-    it('should throw when invalid attributes', () => {
+    it('should throw when invalid attributes', async () => {
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
         attributes: [
@@ -297,10 +297,10 @@ describe('DimensionalQueryClient', () => {
           } as Attribute,
         ],
       };
-      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+      await expect(queryClient.executeQuery(queryDescription).resultPromise).rejects.toThrow();
     });
 
-    it('should throw when invalid measures', () => {
+    it('should throw when invalid measures', async () => {
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
         measures: [
@@ -312,10 +312,10 @@ describe('DimensionalQueryClient', () => {
           } as unknown as Measure,
         ],
       };
-      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+      await expect(queryClient.executeQuery(queryDescription).resultPromise).rejects.toThrow();
     });
 
-    it('should throw when invalid count', () => {
+    it('should throw when invalid count', async () => {
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
         attributes: [
@@ -327,10 +327,10 @@ describe('DimensionalQueryClient', () => {
         ],
         count: -100,
       };
-      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+      await expect(queryClient.executeQuery(queryDescription).resultPromise).rejects.toThrow();
     });
 
-    it('should throw when invalid offset', () => {
+    it('should throw when invalid offset', async () => {
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
         attributes: [
@@ -342,7 +342,7 @@ describe('DimensionalQueryClient', () => {
         ],
         offset: -100,
       };
-      expect(() => queryClient.executeQuery(queryDescription)).toThrow();
+      await expect(queryClient.executeQuery(queryDescription).resultPromise).rejects.toThrow();
     });
 
     describe('skipping validation', () => {

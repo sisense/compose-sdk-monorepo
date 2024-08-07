@@ -12,27 +12,29 @@ export enum AppsNames {
   ANGULAR_DEMO = 'angularDemo',
 }
 
+const host = process.env.USE_EXTERNAL_HOST ? 'host.docker.internal' : 'localhost';
+
 const appsConfig: AppsConfig = {
   [AppsNames.REACT_DEMO]: {
     command: 'yarn workspace react-ts-demo dev --port 5300',
-    url: 'http://localhost:5300',
+    url: `http://${host}:5300`,
   },
   [AppsNames.REACT_LOCAL_DEMO]: {
     command: 'yarn workspace @sisense/sdk-ui dev --port 5301',
-    url: 'http://localhost:5301',
+    url: `http://${host}:5301`,
   },
   [AppsNames.REACT_STORYBOOK]: {
     command: 'yarn workspace @sisense/sdk-ui storybook --port 5302',
-    url: 'http://localhost:5302',
+    url: `http://${host}:5302`,
   },
   [AppsNames.VUE_DEMO]: {
     command: 'yarn workspace vue-ts-demo dev --port 5303',
-    url: 'http://localhost:5303',
+    url: `http://${host}:5303`,
   },
   [AppsNames.ANGULAR_DEMO]: {
     command:
       'node ./scripts/configure-angular-demo-env.cjs && yarn workspace angular-demo start --port 5304',
-    url: 'http://localhost:5304',
+    url: `http://${host}:5304`,
   },
 };
 

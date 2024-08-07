@@ -85,10 +85,16 @@ export type { MenuItemSection, HighchartsOptions };
 export interface SisenseContextProviderProps {
   /**
    * Default data source explicitly set to be used by child components that are not defined with a data source.
+   *
+   * @category Sisense App
    */
   defaultDataSource?: DataSource;
 
-  /** URL of the Sisense environment the app connects to */
+  /**
+   * URL of the Sisense environment the app connects to
+   *
+   * @category Sisense App
+   */
   url: string;
 
   /**
@@ -96,26 +102,28 @@ export interface SisenseContextProviderProps {
    *
    * Set to `true` to use SSO authentication. When `true`, this overrides any other authentication methods. Defaults to `false`.
    *
-   * @category Authentication
+   * @category Sisense Authentication
    */
   ssoEnabled?: boolean;
 
   /**
    * Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
    *
-   * @category Authentication
+   * @category Sisense Authentication
    */
   token?: string;
 
   /**
    * [Web Access Token](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
    *
-   * @category Authentication
+   * @category Sisense Authentication
    */
   wat?: string;
 
   /**
    * Application specific configurations such as locale and date formats.
+   *
+   * @category Sisense App
    */
   appConfig?: AppConfig;
 
@@ -1527,7 +1535,7 @@ export interface DrilldownWidgetProps {
    */
   initialDimension: Attribute;
   /**
-   * An object that allows users to pass advanced configuration options as a prop for the {@link DrilldownWidget} component
+   * An object that allows users to pass advanced configuration options as a prop for the `DrilldownWidget` component
    *
    * @category Widget
    */

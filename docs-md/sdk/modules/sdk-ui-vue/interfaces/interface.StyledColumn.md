@@ -119,6 +119,6 @@ Configuration for number formatting.
 
 ### sortType
 
-> **sortType**?: [`SortDirection`](../type-aliases/type-alias.SortDirection.md) \| [`PivotRowsSort`](../type-aliases/type-alias.PivotRowsSort.md)
+> **sortType**?: [`PivotRowsSort`](../type-aliases/type-alias.PivotRowsSort.md) \| [`SortDirection`](../type-aliases/type-alias.SortDirection.md)
 
 Sorting configuration that represents either [SortDirection](../type-aliases/type-alias.SortDirection.md) or [PivotRowsSort](../type-aliases/type-alias.PivotRowsSort.md) for the pivot table

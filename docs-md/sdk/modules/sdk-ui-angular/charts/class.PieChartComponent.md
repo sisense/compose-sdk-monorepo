@@ -75,26 +75,7 @@ export class AnalyticsComponent {
 
 > **dataOptions**: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
 
-Highlights based on filter criteria to apply to a chart using one of the following options.
-
-NOTE that the filter dimensions used in highlights must match those defined in the
-[dataOptions](class.PieChartComponent.md#dataoptions) of the chart. Otherwise, the filters will be applied as regular slice filters.
-
-(1) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) returned from filter factory functions, such as
-[`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
-
-Use this option for highlights that do not require a UI to set them
-or for highlights where you will supply your own UI components or use pre-built UI components. This is the most common option.
-
-To learn more about using filter factory functions to create highlights, see the
-[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
-
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
-
-Use this option for highlights that you want your users to set using pre-built UI components.
-
-To learn more about using filter components to create highlights, see the
-[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components-for-highlighting).
+Configurations for how to interpret and present the data passed to the chart
 
 ***
 

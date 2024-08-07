@@ -44,10 +44,31 @@ import { setupHelper } from '../../setup-helper';
  */
 export const Table = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TableProps.dataOptions}
+     *
+     * @category Data
+     */
     dataOptions: Object as PropType<TableProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TableProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<TableProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TableProps.filters}
+     *
+     * @category Data
+     */
     filters: Array as PropType<TableProps['filters']>,
+    /** @internal */
     refreshCounter: Number as PropType<TableProps['refreshCounter']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TableProps.styleOptions}
+     *
+     * @category Representation
+     */
     styleOptions: Object as PropType<TableProps['styleOptions']>,
   },
   setup: (props) => setupHelper(TablePreact, props),

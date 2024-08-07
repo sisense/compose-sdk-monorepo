@@ -98,18 +98,26 @@ DrilldownWidget properties
 
 ## Properties
 
-### config
+### Widget
+
+#### config
 
 > **`readonly`** **config**: [`DrilldownWidgetConfig`](../type-aliases/type-alias.DrilldownWidgetConfig.md)
 
+An object that allows users to pass advanced configuration options as a prop for the `DrilldownWidget` component
+
 ***
 
-### drilldownDimensions
+#### drilldownDimensions
 
 > **`readonly`** **drilldownDimensions**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
 
+List of dimensions to allow drilldowns on
+
 ***
 
-### initialDimension
+#### initialDimension
 
 > **`readonly`** **initialDimension**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
+
+Initial dimension to apply first set of filters to

@@ -64,7 +64,7 @@ describe('useCommonFilters', () => {
       widgetModelMock = {
         widgetType: 'chart/column',
         dataOptions: {
-          category: [DM.Commerce.AgeRange],
+          category: [DM.Commerce.AgeRange, DM.Commerce.Gender],
           value: [],
           breakBy: [],
         } as CartesianChartDataOptions,
@@ -83,6 +83,25 @@ describe('useCommonFilters', () => {
 
       expect(connectedWidget.highlights).toEqual(initialFilters);
       expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
+    });
+
+    it("should ignore 'Include all' filters as highlights", () => {
+      const widgetModelWithTwoCategories = {
+        ...widgetModelMock,
+        dataOptions: {
+          ...widgetModelMock.dataOptions,
+          category: [DM.Commerce.AgeRange, DM.Commerce.Gender],
+        },
+      } as unknown as WidgetModel;
+      const emptyIncludeAllFilter = filterFactory.members(DM.Commerce.Gender, []);
+      const meaningfulFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18']);
+      const { result } = renderHook(() =>
+        useCommonFilters({ initialFilters: [emptyIncludeAllFilter, meaningfulFilter] }),
+      );
+      const connectedWidget = result.current.connectToWidgetModel(widgetModelWithTwoCategories);
+
+      expect(connectedWidget.highlights).toEqual([meaningfulFilter]);
+      expect(connectedWidget.filters).toEqual([]);
     });
 
     it('should connect common filters as filters to table widget model by default', () => {
@@ -223,8 +242,7 @@ describe('useCommonFilters', () => {
         shouldAffectFilters: true,
       });
 
-      expect((connectedWidget.highlights[0] as MembersFilter).members).toEqual([]);
-      expect((connectedWidget.highlights[0] as MembersFilter).guid).toEqual(initialFilters[0].guid);
+      expect(connectedWidget.highlights).toEqual([]);
       expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
     });
 
@@ -384,8 +402,7 @@ describe('useCommonFilters', () => {
         shouldAffectFilters: true,
       });
 
-      expect((connectedWidget.highlights[0] as MembersFilter).members).toEqual([]);
-      expect((connectedWidget.highlights[0] as MembersFilter).guid).toEqual(initialFilters[0].guid);
+      expect(connectedWidget.highlights).toEqual([]);
       expect(connectedWidget.filters).toEqual([backgroundFilter]);
     });
   });

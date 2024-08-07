@@ -113,7 +113,7 @@ module.exports = {
           // Enforce extensions for relative imports in sdk-analytics-composer
           // This ensures that module resolution will work when this package is
           // imported in a Node environment.
-          files: ['packages/internal/sdk-analytics-composer/**/*.{ts,tsx}'],
+          files: ['packages/sdk-ui/analytics-composer/**/*.{ts,tsx}'],
           rules: {
             'import/extensions': ['error', 'ignorePackages'],
           },

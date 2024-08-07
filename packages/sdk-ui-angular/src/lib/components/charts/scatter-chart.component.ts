@@ -87,7 +87,7 @@ export class ScatterChartComponent {
   dataSet: ScatterChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.highlights}
+   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.dataOptions}
    *
    * @category Data
    */

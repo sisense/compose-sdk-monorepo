@@ -7,6 +7,7 @@ import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { CascadingFilterTile } from './cascading-filter-tile';
+import { setTimeout } from 'timers/promises';
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,
@@ -38,6 +39,8 @@ describe('CascadingFilterTile', () => {
         <CascadingFilterTile filter={cascadingFilter} onChange={() => {}} />
       </SisenseContextProvider>,
     );
+
+    await setTimeout(250);
 
     await Promise.all(
       cascadingFilter.filters.map(async (filter) =>

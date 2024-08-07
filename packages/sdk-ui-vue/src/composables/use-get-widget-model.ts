@@ -13,6 +13,8 @@ import type { MaybeRefOrWithRefs } from '../types';
  * success, and error states of the fetch operation. This composable is particularly useful for Vue applications that
  * require detailed information about a Sisense widget for data visualization or analytics purposes.
  *
+ * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @param {GetWidgetModelParams} params - The parameters for fetching the widget model, including the `dashboardOid`
  * (the OID of the dashboard containing the widget) and the `widgetOid` (the OID of the widget to fetch). This allows for
  * precise and dynamic fetching of widget models based on application needs.

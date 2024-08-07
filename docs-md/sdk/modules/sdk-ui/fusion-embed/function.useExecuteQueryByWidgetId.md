@@ -10,6 +10,8 @@ React hook that executes a data query extracted from an existing widget in the S
 
 This approach, which offers an alternative to [ExecuteQueryByWidgetId](function.ExecuteQueryByWidgetId.md) component, is similar to React Query's `useQuery` hook.
 
+**Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Parameters
 
 | Parameter | Type |

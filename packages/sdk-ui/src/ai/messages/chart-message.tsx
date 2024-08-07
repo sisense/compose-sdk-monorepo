@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import { Filter } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
 import { ChartWidgetProps, TableWidgetProps } from '../../props';
-import { ChartType, TableType, WidgetStyleOptions } from '../../types';
+import { ChartType, TableType, WidgetContainerStyleOptions } from '../../types';
 import { ChartWidget } from '../../widgets/chart-widget';
 import { TableWidget } from '../../widgets/table-widget';
 import { NlqResponseData } from '../api/types';
@@ -30,7 +30,7 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
     const chartRecommendations = getChartRecommendationsOrDefault(content);
 
     const chartType = chartRecommendations.chartType.toLowerCase() as ChartType | TableType;
-    const widgetStyleOptions: WidgetStyleOptions = {
+    const widgetStyleOptions: WidgetContainerStyleOptions = {
       cornerRadius: 'Small',
       header: {
         renderToolbar: (onRefresh) => (

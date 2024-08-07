@@ -56,8 +56,7 @@ Query result
 
 > **executeQueryByWidgetId**(`params`): `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-  `query`: `QueryDescription`;
- } \>
+ } & [`QueryByWidgetIdQueryParams`](../../sdk-ui/type-aliases/type-alias.QueryByWidgetIdQueryParams.md) \>
 
 Executes a data query extracted from an existing widget in the Sisense instance.
 
@@ -71,7 +70,6 @@ Executes a data query extracted from an existing widget in the Sisense instance.
 
 `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
-  `query`: `QueryDescription`;
- } \>
+ } & [`QueryByWidgetIdQueryParams`](../../sdk-ui/type-aliases/type-alias.QueryByWidgetIdQueryParams.md) \>
 
 Query result

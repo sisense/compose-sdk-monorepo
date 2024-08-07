@@ -44,6 +44,7 @@ export type DateRangeFilterProps = {
    * To be compatible with the old DateRangeFilterTile.
    *
    * TODO: Remove this prop when the old DateRangeFilterTile is deprecated.
+   *
    * @internal
    * @default 'grey'
    */

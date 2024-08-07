@@ -45,14 +45,59 @@ const columnChartProps = ref<ColumnChartProps>({
  */
 export const ColumnChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<ColumnChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<ColumnChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<ColumnChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<ColumnChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<ColumnChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<ColumnChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<ColumnChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<ColumnChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<ColumnChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(ColumnChartPreact, props),

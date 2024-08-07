@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/ban-types */
 import EventEmitter from 'events';
 import * as React from 'react';
@@ -17,7 +18,7 @@ import { LoadingCanceledError } from '../errors/index.js';
 import { throttle, getChangedProps } from '../utils/index.js';
 import { PivotI } from '../components/Pivot/types.js';
 import { JaqlRequest, SortDetails } from '../data-load/types.js';
-import { AllDataInfo, DataServiceI, PivotTreeNode } from '../data-handling';
+import type { AllDataInfo, DataServiceI, InitPageData, PivotTreeNode } from '../data-handling';
 import { TreeServiceI, ColumnsCount, TreeNodeMetadata } from '../tree-structure/types.js';
 import { createPivotTreeNode, jaqlProcessor } from '../data-handling/utils/index.js';
 import { getDefaultSortDirection } from '../data-load/utils';
@@ -531,7 +532,7 @@ export class PivotBuilder {
       .loadData(jaql, { pageSize, isPaginated })
       .then(
         ({ rowsTreeService, columnsTreeService, cornerTreeService, isLastPage, cellsMetadata }) => {
-          this.events.emit(EVENT_QUERY_END);
+          this.events.emit(EVENT_QUERY_END, { cellsMetadata });
           if (this.loadedItemsCount !== null) {
             this.updateProps({
               itemsCount: this.loadedItemsCount,
@@ -607,22 +608,27 @@ export class PivotBuilder {
     // eslint-disable-next-line promise/catch-or-return
     dataService
       .getSelectedPageData(page, this.props.itemsPerPage)
-      .then(
-        ({ rowsTreeService, columnsTreeService, cornerTreeService, isLastPage, cellsMetadata }) => {
-          this.events.emit(EVENT_QUERY_END);
-          this.isLoadPageInProgress = false;
-          if (this.pivot) {
-            this.pivot.initialize(rowsTreeService, columnsTreeService, cornerTreeService, {
-              isLastPage,
-              cellsMetadata,
-            });
-            this.currentRowsTreeService = rowsTreeService;
-          }
-          this.updateProps({
-            activePage: page,
+      .then((initPageData: InitPageData) => {
+        const {
+          rowsTreeService,
+          columnsTreeService,
+          cornerTreeService,
+          isLastPage,
+          cellsMetadata,
+        } = initPageData;
+        this.events.emit(EVENT_QUERY_END, initPageData);
+        this.isLoadPageInProgress = false;
+        if (this.pivot) {
+          this.pivot.initialize(rowsTreeService, columnsTreeService, cornerTreeService, {
+            isLastPage,
+            cellsMetadata,
           });
-        },
-      );
+          this.currentRowsTreeService = rowsTreeService;
+        }
+        this.updateProps({
+          activePage: page,
+        });
+      });
   }
 
   /**

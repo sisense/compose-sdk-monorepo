@@ -7,6 +7,9 @@ import { RegularChart } from './regular-chart';
 import { TableComponent } from '@/table/table-component';
 import { TranslatableError } from '@/translation/translatable-error';
 import { shouldSkipSisenseContextWaiting } from './helpers/should-skip-sisense-context-waiting';
+import { isCartesian } from '@/chart-options-processor/translations/types';
+import { CartesianChartDataOptions, StyledMeasureColumn } from '..';
+import { AdvancedChart } from './advanced-chart';
 
 /**
  * A React component used for easily switching chart types or rendering multiple series of different chart types.
@@ -34,6 +37,9 @@ export const Chart = asSisenseComponent({
   if (isTabularChartProps(props)) {
     return <TableComponent {...props} />;
   }
+  if (isAdvancedChart(props)) {
+    return <AdvancedChart {...props} />;
+  }
   if (isRegularChartProps(props)) {
     return <RegularChart {...props} />;
   }
@@ -46,4 +52,15 @@ function isTabularChartProps(props: ChartProps): props is TabularChartProps {
 
 function isRegularChartProps(props: ChartProps): props is RegularChartProps {
   return props.chartType !== 'table';
+}
+
+function isAdvancedChart(props: ChartProps): props is RegularChartProps {
+  if (!isRegularChartProps(props) || !isCartesian(props.chartType)) return false;
+  const cartesianDataOptions = props.dataOptions as CartesianChartDataOptions;
+  // check if any advanced funtions exit
+  return cartesianDataOptions.value.some(
+    (v) =>
+      (v as StyledMeasureColumn)?.forecast !== undefined ||
+      (v as StyledMeasureColumn)?.trend !== undefined,
+  );
 }

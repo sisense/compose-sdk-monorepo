@@ -11,6 +11,8 @@ It is designed to fetch a specific widget model based on the provided dashboard 
 success, and error states of the fetch operation. This composable is particularly useful for Vue applications that
 require detailed information about a Sisense widget for data visualization or analytics purposes.
 
+**Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

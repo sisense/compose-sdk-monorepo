@@ -1,0 +1,953 @@
+{
+  "headers": ["Months", "$measure0_Cost", "$measure1_$trend_Cost"],
+  "metadata": [
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": "MONTHS",
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": "[Commerce.Date (Calendar)]",
+        "sort": null,
+        "title": "Months",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": "datetime",
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": null,
+        "formula": null,
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": {},
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": "[Commerce.Cost]",
+        "sort": null,
+        "title": "$measure0_Cost",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": "numeric",
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": null,
+        "formula": null,
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure1_$trend_Cost",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[Cost]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Cost]",
+            "sort": null,
+            "title": "Cost",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "trend([Cost], \"modelType=smooth\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    }
+  ],
+  "datasource": {
+    "revisionId": "TBD",
+    "fullname": "LocalHost/Sample ECommerce"
+  },
+  "processingInfo": {
+    "cacheType": "none",
+    "cacheTime": "2024-07-24T20:57:53.060Z"
+  },
+  "translationInfo": {
+    "translationServiceProvider": "NewTranslationService",
+    "isTranslationFallback": false,
+    "isQueryFallback": false,
+    "translationDuration": 0,
+    "sqlFromCache": null
+  },
+  "values": [
+    [
+      {
+        "data": "2009-11-01",
+        "text": "2009-11-01"
+      },
+      {
+        "data": 189976.80757868662,
+        "text": "189976.807578687"
+      },
+      {
+        "data": 399877.66021296044,
+        "text": "399877.66021296"
+      }
+    ],
+    [
+      {
+        "data": "2009-12-01",
+        "text": "2009-12-01"
+      },
+      {
+        "data": 1107490.0728950314,
+        "text": "1107490.07289503"
+      },
+      {
+        "data": 760254.7486363016,
+        "text": "760254.748636302"
+      }
+    ],
+    [
+      {
+        "data": "2010-01-01",
+        "text": "2010-01-01"
+      },
+      {
+        "data": 845205.6287006252,
+        "text": "845205.628700625"
+      },
+      {
+        "data": 892589.3891729144,
+        "text": "892589.389172914"
+      }
+    ],
+    [
+      {
+        "data": "2010-02-01",
+        "text": "2010-02-01"
+      },
+      {
+        "data": 787917.8207888827,
+        "text": "787917.820788883"
+      },
+      {
+        "data": 904228.5180767283,
+        "text": "904228.518076728"
+      }
+    ],
+    [
+      {
+        "data": "2010-03-01",
+        "text": "2010-03-01"
+      },
+      {
+        "data": 946810.4692947622,
+        "text": "946810.469294762"
+      },
+      {
+        "data": 912866.4678721044,
+        "text": "912866.467872104"
+      }
+    ],
+    [
+      {
+        "data": "2010-04-01",
+        "text": "2010-04-01"
+      },
+      {
+        "data": 900508.5092079439,
+        "text": "900508.509207944"
+      },
+      {
+        "data": 916526.9340331501,
+        "text": "916526.93403315"
+      }
+    ],
+    [
+      {
+        "data": "2010-05-01",
+        "text": "2010-05-01"
+      },
+      {
+        "data": 946238.5815005917,
+        "text": "946238.581500592"
+      },
+      {
+        "data": 914095.3329283679,
+        "text": "914095.332928368"
+      }
+    ],
+    [
+      {
+        "data": "2010-06-01",
+        "text": "2010-06-01"
+      },
+      {
+        "data": 886700.2053317726,
+        "text": "886700.205331773"
+      },
+      {
+        "data": 904960.4685997746,
+        "text": "904960.468599775"
+      }
+    ],
+    [
+      {
+        "data": "2010-07-01",
+        "text": "2010-07-01"
+      },
+      {
+        "data": 900954.317531623,
+        "text": "900954.317531623"
+      },
+      {
+        "data": 912084.7216383086,
+        "text": "912084.721638309"
+      }
+    ],
+    [
+      {
+        "data": "2010-08-01",
+        "text": "2010-08-01"
+      },
+      {
+        "data": 984546.9012292922,
+        "text": "984546.901229292"
+      },
+      {
+        "data": 945423.4204832909,
+        "text": "945423.420483291"
+      }
+    ],
+    [
+      {
+        "data": "2010-09-01",
+        "text": "2010-09-01"
+      },
+      {
+        "data": 947657.5594753642,
+        "text": "947657.559475364"
+      },
+      {
+        "data": 1009017.2938368567,
+        "text": "1009017.29383686"
+      }
+    ],
+    [
+      {
+        "data": "2010-10-01",
+        "text": "2010-10-01"
+      },
+      {
+        "data": 1067067.8516010046,
+        "text": "1067067.851601"
+      },
+      {
+        "data": 1127908.0165300977,
+        "text": "1127908.0165301"
+      }
+    ],
+    [
+      {
+        "data": "2010-11-01",
+        "text": "2010-11-01"
+      },
+      {
+        "data": 1313277.0609966572,
+        "text": "1313277.06099666"
+      },
+      {
+        "data": 1260348.35798684,
+        "text": "1260348.35798684"
+      }
+    ],
+    [
+      {
+        "data": "2010-12-01",
+        "text": "2010-12-01"
+      },
+      {
+        "data": 1467710.2702174708,
+        "text": "1467710.27021747"
+      },
+      {
+        "data": 1301643.164863898,
+        "text": "1301643.1648639"
+      }
+    ],
+    [
+      {
+        "data": "2011-01-01",
+        "text": "2011-01-01"
+      },
+      {
+        "data": 1175238.5499559864,
+        "text": "1175238.54995599"
+      },
+      {
+        "data": 1226332.721934023,
+        "text": "1226332.72193402"
+      }
+    ],
+    [
+      {
+        "data": "2011-02-01",
+        "text": "2011-02-01"
+      },
+      {
+        "data": 1092969.080261767,
+        "text": "1092969.08026177"
+      },
+      {
+        "data": 1175483.052081485,
+        "text": "1175483.05208149"
+      }
+    ],
+    [
+      {
+        "data": "2011-03-01",
+        "text": "2011-03-01"
+      },
+      {
+        "data": 1188733.9370134315,
+        "text": "1188733.93701343"
+      },
+      {
+        "data": 1259954.2895959807,
+        "text": "1259954.28959598"
+      }
+    ],
+    [
+      {
+        "data": "2011-04-01",
+        "text": "2011-04-01"
+      },
+      {
+        "data": 1468171.674996743,
+        "text": "1468171.67499674"
+      },
+      {
+        "data": 1477513.9658073424,
+        "text": "1477513.96580734"
+      }
+    ],
+    [
+      {
+        "data": "2011-05-01",
+        "text": "2011-05-01"
+      },
+      {
+        "data": 1809045.4618380964,
+        "text": "1809045.4618381"
+      },
+      {
+        "data": 1731745.1938052739,
+        "text": "1731745.19380527"
+      }
+    ],
+    [
+      {
+        "data": "2011-06-01",
+        "text": "2011-06-01"
+      },
+      {
+        "data": 1963988.3454919308,
+        "text": "1963988.34549193"
+      },
+      {
+        "data": 1918408.774731447,
+        "text": "1918408.77473145"
+      }
+    ],
+    [
+      {
+        "data": "2011-07-01",
+        "text": "2011-07-01"
+      },
+      {
+        "data": 2011346.4261528384,
+        "text": "2011346.42615284"
+      },
+      {
+        "data": 2019625.0977478286,
+        "text": "2019625.09774783"
+      }
+    ],
+    [
+      {
+        "data": "2011-08-01",
+        "text": "2011-08-01"
+      },
+      {
+        "data": 2128043.9337140303,
+        "text": "2128043.93371403"
+      },
+      {
+        "data": 2080349.5218863264,
+        "text": "2080349.52188633"
+      }
+    ],
+    [
+      {
+        "data": "2011-09-01",
+        "text": "2011-09-01"
+      },
+      {
+        "data": 2017077.2452351712,
+        "text": "2017077.24523517"
+      },
+      {
+        "data": 2160577.230230905,
+        "text": "2160577.23023091"
+      }
+    ],
+    [
+      {
+        "data": "2011-10-01",
+        "text": "2011-10-01"
+      },
+      {
+        "data": 2283585.5977138802,
+        "text": "2283585.59771388"
+      },
+      {
+        "data": 2330053.153545553,
+        "text": "2330053.15354555"
+      }
+    ],
+    [
+      {
+        "data": "2011-11-01",
+        "text": "2011-11-01"
+      },
+      {
+        "data": 2558169.054697007,
+        "text": "2558169.05469701"
+      },
+      {
+        "data": 2515328.951597531,
+        "text": "2515328.95159753"
+      }
+    ],
+    [
+      {
+        "data": "2011-12-01",
+        "text": "2011-12-01"
+      },
+      {
+        "data": 2855504.8063853886,
+        "text": "2855504.80638539"
+      },
+      {
+        "data": 2571323.757848365,
+        "text": "2571323.75784837"
+      }
+    ],
+    [
+      {
+        "data": "2012-01-01",
+        "text": "2012-01-01"
+      },
+      {
+        "data": 2267886.0520572066,
+        "text": "2267886.05205721"
+      },
+      {
+        "data": 2455225.182035394,
+        "text": "2455225.18203539"
+      }
+    ],
+    [
+      {
+        "data": "2012-02-01",
+        "text": "2012-02-01"
+      },
+      {
+        "data": 2289422.9980101623,
+        "text": "2289422.99801016"
+      },
+      {
+        "data": 2372277.1257133014,
+        "text": "2372277.1257133"
+      }
+    ],
+    [
+      {
+        "data": "2012-03-01",
+        "text": "2012-03-01"
+      },
+      {
+        "data": 2413584.21836257,
+        "text": "2413584.21836257"
+      },
+      {
+        "data": 2390716.0906670545,
+        "text": "2390716.09066705"
+      }
+    ],
+    [
+      {
+        "data": "2012-04-01",
+        "text": "2012-04-01"
+      },
+      {
+        "data": 2450628.8393439148,
+        "text": "2450628.83934391"
+      },
+      {
+        "data": 2454806.7004078142,
+        "text": "2454806.70040781"
+      }
+    ],
+    [
+      {
+        "data": "2012-05-01",
+        "text": "2012-05-01"
+      },
+      {
+        "data": 2616360.1553670047,
+        "text": "2616360.155367"
+      },
+      {
+        "data": 2509923.7089504977,
+        "text": "2509923.7089505"
+      }
+    ],
+    [
+      {
+        "data": "2012-06-01",
+        "text": "2012-06-01"
+      },
+      {
+        "data": 2482130.5598226488,
+        "text": "2482130.55982265"
+      },
+      {
+        "data": 2529590.1527741267,
+        "text": "2529590.15277413"
+      }
+    ],
+    [
+      {
+        "data": "2012-07-01",
+        "text": "2012-07-01"
+      },
+      {
+        "data": 2594841.3182018436,
+        "text": "2594841.31820184"
+      },
+      {
+        "data": 2580856.1512703863,
+        "text": "2580856.15127039"
+      }
+    ],
+    [
+      {
+        "data": "2012-08-01",
+        "text": "2012-08-01"
+      },
+      {
+        "data": 2673938.1166581884,
+        "text": "2673938.11665819"
+      },
+      {
+        "data": 2713417.6342164744,
+        "text": "2713417.63421647"
+      }
+    ],
+    [
+      {
+        "data": "2012-09-01",
+        "text": "2012-09-01"
+      },
+      {
+        "data": 2867416.29551314,
+        "text": "2867416.29551314"
+      },
+      {
+        "data": 2969220.9206936043,
+        "text": "2969220.9206936"
+      }
+    ],
+    [
+      {
+        "data": "2012-10-01",
+        "text": "2012-10-01"
+      },
+      {
+        "data": 3168871.066950053,
+        "text": "3168871.06695005"
+      },
+      {
+        "data": 3328777.947662453,
+        "text": "3328777.94766245"
+      }
+    ],
+    [
+      {
+        "data": "2012-11-01",
+        "text": "2012-11-01"
+      },
+      {
+        "data": 3888213.687782809,
+        "text": "3888213.68778281"
+      },
+      {
+        "data": 3620949.4273355627,
+        "text": "3620949.42733556"
+      }
+    ],
+    [
+      {
+        "data": "2012-12-01",
+        "text": "2012-12-01"
+      },
+      {
+        "data": 3992612.938552344,
+        "text": "3992612.93855234"
+      },
+      {
+        "data": 3556054.100029769,
+        "text": "3556054.10002977"
+      }
+    ],
+    [
+      {
+        "data": "2013-01-01",
+        "text": "2013-01-01"
+      },
+      {
+        "data": 2759434.9833942996,
+        "text": "2759434.9833943"
+      },
+      {
+        "data": 3180837.955961699,
+        "text": "3180837.9559617"
+      }
+    ],
+    [
+      {
+        "data": "2013-02-01",
+        "text": "2013-02-01"
+      },
+      {
+        "data": 2788158.3545121085,
+        "text": "2788158.35451211"
+      },
+      {
+        "data": 2940071.145840517,
+        "text": "2940071.14584052"
+      }
+    ],
+    [
+      {
+        "data": "2013-03-01",
+        "text": "2013-03-01"
+      },
+      {
+        "data": 3046625.3691154122,
+        "text": "3046625.36911541"
+      },
+      {
+        "data": 2928282.3596065277,
+        "text": "2928282.35960653"
+      }
+    ],
+    [
+      {
+        "data": "2013-04-01",
+        "text": "2013-04-01"
+      },
+      {
+        "data": 2961134.7611477133,
+        "text": "2961134.76114771"
+      },
+      {
+        "data": 3012322.5051070023,
+        "text": "3012322.505107"
+      }
+    ],
+    [
+      {
+        "data": "2013-05-01",
+        "text": "2013-05-01"
+      },
+      {
+        "data": 3242762.429729399,
+        "text": "3242762.4297294"
+      },
+      {
+        "data": 3126610.365876169,
+        "text": "3126610.36587617"
+      }
+    ],
+    [
+      {
+        "data": "2013-06-01",
+        "text": "2013-06-01"
+      },
+      {
+        "data": 3204714.5343812816,
+        "text": "3204714.53438128"
+      },
+      {
+        "data": 3213000.749829498,
+        "text": "3213000.7498295"
+      }
+    ],
+    [
+      {
+        "data": "2013-07-01",
+        "text": "2013-07-01"
+      },
+      {
+        "data": 3349081.2784886193,
+        "text": "3349081.27848862"
+      },
+      {
+        "data": 3314632.0388838113,
+        "text": "3314632.03888381"
+      }
+    ],
+    [
+      {
+        "data": "2013-08-01",
+        "text": "2013-08-01"
+      },
+      {
+        "data": 3238694.8539762036,
+        "text": "3238694.8539762"
+      },
+      {
+        "data": 3504006.725372224,
+        "text": "3504006.72537222"
+      }
+    ],
+    [
+      {
+        "data": "2013-09-01",
+        "text": "2013-09-01"
+      },
+      {
+        "data": 3581952.4929154813,
+        "text": "3581952.49291548"
+      },
+      {
+        "data": 3819677.0195216006,
+        "text": "3819677.0195216"
+      }
+    ],
+    [
+      {
+        "data": "2013-10-01",
+        "text": "2013-10-01"
+      },
+      {
+        "data": 3935084.4678387493,
+        "text": "3935084.46783875"
+      },
+      {
+        "data": 3984064.438412456,
+        "text": "3984064.43841246"
+      }
+    ],
+    [
+      {
+        "data": "2013-11-01",
+        "text": "2013-11-01"
+      },
+      {
+        "data": 4844611.66696444,
+        "text": "4844611.66696444"
+      },
+      {
+        "data": 3403293.012026755,
+        "text": "3403293.01202676"
+      }
+    ],
+    [
+      {
+        "data": "2013-12-01",
+        "text": "2013-12-01"
+      },
+      {
+        "data": 770441.3868424296,
+        "text": "770441.38684243"
+      },
+      {
+        "data": 1735405.3318556482,
+        "text": "1735405.33185565"
+      }
+    ]
+  ],
+  "extras": [
+    {
+      "$measure1_$trend_Cost_trend": [
+        {
+          "modelStats": {
+            "r-squared": "N/A",
+            "mean": 2145450.77991468,
+            "median": 2275735.8248855434,
+            "max": 4844611.66696444,
+            "min": 189976.80757868662,
+            "numberOfObservations": 50
+          },
+          "modelInfo": {
+            "equation": "N/A"
+          }
+        }
+      ]
+    }
+  ]
+}

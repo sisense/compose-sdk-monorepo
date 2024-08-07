@@ -5,7 +5,9 @@ import type { DashboardByIdProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * A DashboardById component used for easily rendering a dashboard by its ID in a Sisense Fusion instance.
+ * A component used for easily rendering a dashboard by its ID in a Sisense Fusion instance.
+ *
+ * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
  *
  * @example
  * Here's how you can use the DashboardById component in a Vue application:
@@ -28,6 +30,9 @@ import { setupHelper } from '../../setup-helper';
  */
 export const DashboardById = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.dashboardOid}
+     */
     dashboardOid: String as PropType<DashboardByIdProps['dashboardOid']>,
   },
   setup: (props) => setupHelper(DashboardByIdPreact, props),

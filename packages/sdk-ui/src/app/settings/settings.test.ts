@@ -47,6 +47,11 @@ describe('getSettings function', () => {
       'mockColor2',
     ]);
 
+    // check if all features are present
+    expect(Object.keys(settings.serverFeatures)).toStrictEqual(
+      mockGlobals.features.map((f) => f.key),
+    );
+
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/globals');
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/palettes/Vivid');
   });

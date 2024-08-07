@@ -57,7 +57,10 @@ export const tablePaginationTheme = createTheme({
             background: 'transparent',
           },
         },
-        selectIcon: { top: '8%' },
+        selectIcon: {
+          position: 'absolute',
+          top: '8%',
+        },
         menuItem: {
           paddingLeft: '10px',
           '&.MuiTablePagination-menuItem.Mui-selected': {
@@ -81,7 +84,7 @@ export const tablePaginationTheme = createTheme({
             },
           },
           '&.MuiTablePagination-menuItem': {
-            fontFamily: 'Open Sans',
+            fontFamily: 'inherit',
             fontWeight: '400',
             fontSize: '13px',
             lineHeight: '18px',

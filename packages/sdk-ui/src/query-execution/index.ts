@@ -27,5 +27,6 @@ export type {
   ExecuteCSVQueryConfig,
   ExecuteQueryByWidgetIdParams,
   QueryByWidgetIdState,
+  QueryByWidgetIdQueryParams,
   ExecutePivotQueryParams,
 } from './types';

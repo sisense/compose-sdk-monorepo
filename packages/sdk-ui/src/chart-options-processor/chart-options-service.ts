@@ -5,7 +5,7 @@ import type {
   SeriesLegendItemClickCallbackFunction,
 } from '@sisense/sisense-charts';
 import { TFunction } from '@sisense/sdk-common';
-import { ChartData } from '../chart-data/types';
+import { ChartData, RangeChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
 import { LegendSettings } from './translations/legend-section';
 import { ValueLabelSettings } from './translations/value-label-section';
@@ -34,6 +34,8 @@ import {
 import { ScatterBubbleOptions } from './translations/scatter-plot-options';
 import { getBoxplotChartOptions } from './boxplot-chart-options';
 import { getRangeChartOptions } from './range-chart-options';
+import { createForecastDataOptions, isForecastChart } from '@/chart-data/advanced-analytics-data';
+import { formatAdvancedAnalyticsSeries } from './advanced-chart-options';
 
 // Notes: extends type by recreating it via `Pick` in order to force IntelliSense to use it as target type.
 /**
@@ -77,14 +79,28 @@ export const highchartsOptionsService = (
       );
     }
     case 'cartesian': {
-      return getCartesianChartOptions(
-        chartData,
-        chartType,
-        chartDesignOptions,
-        dataOptions as CartesianChartDataOptionsInternal,
-        themeSettings,
-        dateFormatter,
-      );
+      const cartesianChartDataOptions = dataOptions as CartesianChartDataOptionsInternal;
+      const optionsWithAlerts = isForecastChart(cartesianChartDataOptions)
+        ? getRangeChartOptions(
+            { ...chartData, type: 'range' } as RangeChartData,
+            chartType,
+            chartDesignOptions,
+            createForecastDataOptions(cartesianChartDataOptions) as RangeChartDataOptionsInternal,
+            translate,
+            themeSettings,
+            dateFormatter,
+          )
+        : getCartesianChartOptions(
+            chartData,
+            chartType,
+            chartDesignOptions,
+            cartesianChartDataOptions,
+            translate,
+            themeSettings,
+            dateFormatter,
+          );
+      formatAdvancedAnalyticsSeries(optionsWithAlerts.options.series, translate);
+      return optionsWithAlerts;
     }
     case 'categorical': {
       return getCategoricalChartOptions(
@@ -138,7 +154,11 @@ export type SeriesType = HighchartsSeriesValues & {
   whiskerLength?: number | string;
   fillOpacity?: number;
   strokeOpacity?: number;
+  enableMouseTracking?: boolean;
   legendIndex?: number;
+  dashStyle?: string;
+  lineWidth?: number;
+  zIndex?: number;
 };
 
 type ChartPlotOptions = {
@@ -160,6 +180,7 @@ type ChartPlotOptions = {
       opacity?: number;
     };
   };
+  tooltip?: TooltipSettings;
 };
 
 export type Stacking = 'normal' | 'percent';

@@ -7,7 +7,7 @@ export { jaqlProcessor } from './data-handling/utils';
 // export * from './data-handling/index.js';
 // export * from './data-load/index.js';
 // export * from './tree-structure/index.js';
-// export type { InitPageData } from './data-handling/index.js';
+export type { InitPageData } from './data-handling/index.js';
 
 // export { LoadingCanceledError } from './errors';
 // export { PageConfigurationService } from './printing';

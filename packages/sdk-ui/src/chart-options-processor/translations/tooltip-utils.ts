@@ -74,6 +74,7 @@ export type InternalSeries = {
     low?: number;
     q1?: number;
     q3?: number;
+    index?: number;
     median?: number;
     name: string;
     color: string;

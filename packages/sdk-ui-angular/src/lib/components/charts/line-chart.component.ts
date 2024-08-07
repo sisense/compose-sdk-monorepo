@@ -83,7 +83,7 @@ export class LineChartComponent {
   dataSet: LineChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.highlights}
+   * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataOptions}
    *
    * @category Data
    */

@@ -12,6 +12,8 @@ The child component is passed the state of the query as defined in [QueryByWidge
 This component takes the Children Prop Pattern and
 offers an alternative approach to the [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md) hook.
 
+**Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

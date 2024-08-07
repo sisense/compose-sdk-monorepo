@@ -202,7 +202,7 @@ Unique identifier of the widget.
 
 ### styleOptions
 
-> **styleOptions**: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
+> **styleOptions**: [`WidgetStyleOptions`](../type-aliases/type-alias.WidgetStyleOptions.md)
 
 Widget style options.
 

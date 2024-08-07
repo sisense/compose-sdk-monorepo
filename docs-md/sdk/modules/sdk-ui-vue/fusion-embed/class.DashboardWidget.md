@@ -7,6 +7,8 @@ title: DashboardWidget
 The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../chart-utilities/class.ChartWidget.md) component,
 used to render a widget created in the Sisense instance.
 
+**Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Example
 
 Here's how you can use the DashboardWidget component in a Vue application:
@@ -27,43 +29,19 @@ import {DashboardWidget} from '@sisense/sdk-ui-vue';
 
 ## Properties
 
-### bottomSlot
+### Data
 
-> **bottomSlot**?: `ReactNode`
-
-***
-
-### contextMenuItems
-
-> **contextMenuItems**?: [`MenuItemSection`](../type-aliases/type-alias.MenuItemSection.md)[]
-
-***
-
-### dashboardOid
-
-> **dashboardOid**?: `string`
-
-***
-
-### description
-
-> **description**?: `string`
-
-***
-
-### drilldownOptions
-
-> **drilldownOptions**?: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md)
-
-***
-
-### filters
+#### filters
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
+Filters that will slice query results
+
+Provided filters will be merged with the existing filters from the widget configuration.
+
 ***
 
-### filtersMergeStrategy
+#### filtersMergeStrategy
 
 > **filtersMergeStrategy**?: `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
 
@@ -77,19 +55,15 @@ If not specified, the default strategy is `codeFirst`.
 
 ***
 
-### highlightSelectionDisabled
-
-> **highlightSelectionDisabled**?: `boolean`
-
-***
-
-### highlights
+#### highlights
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
+Highlight filters that will highlight results that pass filter criteria
+
 ***
 
-### includeDashboardFilters
+#### includeDashboardFilters
 
 > **includeDashboardFilters**?: `boolean`
 
@@ -97,66 +71,98 @@ Boolean flag whether to include dashboard filters in the widget's `filters` and 
 
 If not specified, the default value is `false`.
 
-***
+### Widget
 
-### onBeforeRender
+#### dashboardOid
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+> **dashboardOid**?: `string`
 
-***
-
-### onContextMenuClose
-
-> **onContextMenuClose**?: () => `void`
-
-#### Returns
-
-`void`
+Identifier of the dashboard that contains the widget
 
 ***
 
-### onDataPointClick
+#### description
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+> **description**?: `string`
 
-***
+Description of the widget
 
-### onDataPointContextMenu
-
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+If not specified, it takes the existing value from the widget configuration.
 
 ***
 
-### onDataPointsSelected
+#### highlightSelectionDisabled
 
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
+> **highlightSelectionDisabled**?: `boolean`
+
+Boolean flag whether selecting data points triggers highlight filter of the selected data
+
+Recommended to turn on when the Chart Widget component is enhanced with data drilldown by the Drilldown Widget component
+
+If not specified, the default value is `false`
 
 ***
 
-### styleOptions
+#### styleOptions
 
 > **styleOptions**?: [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
 
+Style options for the widget including the widget container and the chart or table inside.
+
 ***
 
-### title
+#### title
 
 > **title**?: `string`
 
-***
+Title of the widget
 
-### topSlot
-
-> **topSlot**?: `ReactNode`
+If not specified, it takes the existing value from the widget configuration.
 
 ***
 
-### widgetOid
+#### widgetOid
 
 > **widgetOid**?: `string`
 
+Identifier of the widget
+
+### Callbacks
+
+#### onBeforeRender
+
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+
+A callback that allows you to customize the underlying chart element before it is rendered.
+Use the `highchartsOptions` object that is passed to the callback to change
+[options values](https://api.highcharts.com/highcharts/) and then return the modified options
+object. The returned options are then used when rendering the chart.
+
+This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
+
+For an example of how the `onBeforeRender` callback can be used, see the
+[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
+
 ***
 
-### widgetStyleOptions
+#### onDataPointClick
 
-> **widgetStyleOptions**?: [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
+> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+
+Click handler callback for a data point
+
+***
+
+#### onDataPointContextMenu
+
+> **onDataPointContextMenu**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+
+Context menu handler callback for a data point
+
+***
+
+#### onDataPointsSelected
+
+> **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
+
+Handler callback for selection of multiple data points

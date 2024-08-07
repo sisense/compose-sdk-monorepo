@@ -48,14 +48,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const ScatterChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.dataOptions}
+     *
+     * @category Data
+     */
     dataOptions: Object as PropType<ScatterChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<ScatterChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<ScatterChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<ScatterChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<ScatterChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<ScatterChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<ScatterChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<ScatterChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<ScatterChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(ScatterChartPreact, props),

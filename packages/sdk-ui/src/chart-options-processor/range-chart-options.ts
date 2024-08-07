@@ -1,16 +1,26 @@
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable no-unused-vars */
 import { RangeChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
 import { ChartType, CompleteThemeSettings } from '../types';
 import {
   CartesianChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
+  StyledMeasureColumn,
   Value,
 } from '../chart-data-options/types';
-import { getRangeTooltipSettings } from './translations/range/tooltip-range';
 import { TFunction } from '@sisense/sdk-common';
 import { getCartesianChartOptions } from './cartesian-chart-options';
-import { SeriesPointStructure } from './translations/translations-to-highcharts';
-import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
+import { AxisPlotBand } from './translations/axis-section';
+import { SeriesType } from './chart-options-service';
+import {
+  formatForecastAdjustRangeStart,
+  formatForecastPlotBands,
+  formatForecastRangeSeries,
+  formatForecastSeries,
+  isForecastSeries,
+} from './advanced-chart-options';
+import { getRangeTooltipSettings } from './translations/range/tooltip-range';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -34,20 +44,25 @@ export const getRangeChartOptions = (
 ) => {
   const lowerValues: Value[] = [];
   const upperValues: Value[] = [];
+
   const upperIndex = 1;
   const lowerIndex = 0;
 
+  dataOptions.seriesValues.forEach((v) => {
+    upperValues.push(v);
+    lowerValues.push(v);
+  });
   dataOptions.rangeValues.forEach(([lower, upper]) => {
     upperValues.push(upper);
     lowerValues.push(lower);
   });
 
+  // contains upper of rangeValues and all series values
   const upperDataOptions = {
     ...dataOptions,
     y: upperValues,
     seriesToColorMap: dataOptions.seriesToColorMap,
   };
-
   const baseChartOptionsUpper = getCartesianChartOptions(
     {
       ...chartData,
@@ -56,16 +71,23 @@ export const getRangeChartOptions = (
     chartType,
     chartDesignOptions,
     upperDataOptions as CartesianChartDataOptionsInternal,
+    translate,
     themeSettings,
     dateFormatter,
   );
+  const upperSeriesDataLookup: {
+    [x: string]: SeriesType;
+  } = {};
+  baseChartOptionsUpper.options.series.forEach((s) => {
+    upperSeriesDataLookup[s.name] = s;
+  });
 
+  // contains lower of rangeValues and all series values
   const lowerDataOptions = {
     ...dataOptions,
     y: lowerValues,
     seriesToColorMap: dataOptions.seriesToColorMap,
   };
-
   const baseChartOptionsLower = getCartesianChartOptions(
     {
       ...chartData.seriesOther,
@@ -74,57 +96,85 @@ export const getRangeChartOptions = (
     chartType,
     chartDesignOptions,
     lowerDataOptions as CartesianChartDataOptionsInternal,
+    translate,
     themeSettings,
     dateFormatter,
   );
-
   const lowerSeriesDataLookup: {
-    [x: string]: SeriesPointStructure[];
+    [x: string]: SeriesType;
   } = {};
   baseChartOptionsLower.options.series.forEach((s) => {
-    lowerSeriesDataLookup[s.name] = [...s.data];
+    lowerSeriesDataLookup[s.name] = s;
   });
 
   // Calculate the combined min and max values for the yAxis
   let minVal = Infinity;
   let maxVal = -Infinity;
 
+  // if forecast chart, find index of forecast start
+  let forecastStartIndex = -1;
+  let lastTickIndex = 0;
+
   baseChartOptionsUpper.options.series.forEach((s, sIndex) => {
-    const lowerSeries = lowerSeriesDataLookup[s.name];
-    type RangeColumn = { column: DimensionalCalculatedMeasure };
-    let upperPointName: string;
-    let lowerPointName: string;
-    let dataOptionsForSeries: RangeColumn[];
-    s.yAxis = 0; // Assign to the single combined yAxis
-    try {
-      if (dataOptions.rangeValues.length === 1) {
-        dataOptionsForSeries = dataOptions.rangeValues[0] as RangeColumn[] & Value[];
-      } else {
-        dataOptionsForSeries = dataOptions.rangeValues[sIndex] as unknown as RangeColumn[];
+    if (dataOptions.breakBy.length === 0 && sIndex < dataOptions.seriesValues.length) {
+      // for combo and forecast charts (no break by allowed), process regular series
+      if (isForecastSeries(s.name)) {
+        forecastStartIndex = formatForecastSeries(s, lowerSeriesDataLookup, upperSeriesDataLookup);
       }
-      upperPointName = dataOptionsForSeries[upperIndex].column.name;
-      lowerPointName = dataOptionsForSeries[lowerIndex].column.name;
-    } catch (error) {
-      // Edge case range chart with breakby and multiple range values
-      // measure names on tooltip will be min and max
+      s.zIndex = 1;
+      s.data.forEach((d) => {
+        // Combine data from both upper and lower series
+        if (d.y && d.y < minVal) minVal = d.y;
+        if (d.y && d.y > maxVal) maxVal = d.y;
+      });
+    } else {
+      const lowerSeriesData = lowerSeriesDataLookup[s.name].data;
+      s.yAxis = 0; // Assign to the single combined yAxis
+      let rangeIndex = 0;
+      if (dataOptions.breakBy.length === 0) {
+        rangeIndex = sIndex - dataOptions.seriesValues.length;
+      }
+      const rangeValue = dataOptions.rangeValues[rangeIndex];
+      // skip past $measure prefix
+      const nameStartIndex = rangeValue[0].name.indexOf('_') + 1;
+      const upperPointName = rangeValue[upperIndex].name.substring(nameStartIndex);
+      const lowerPointName = rangeValue[lowerIndex].name.substring(nameStartIndex);
+
+      s.type = 'arearange';
+      if (isForecastSeries(s.name)) {
+        formatForecastRangeSeries(s, lowerSeriesDataLookup);
+      }
+
+      lastTickIndex = Math.max(s.data.length, lastTickIndex);
+      s.data = s.data.map((d, index) => {
+        const point = {
+          ...d,
+          low: lowerSeriesData[index].y,
+          high: d.y,
+          y: undefined,
+          upperPointName,
+          lowerPointName,
+        };
+
+        // Combine data from both upper and lower series
+        if (point.low && point.low < minVal) minVal = point.low;
+        if (point.high && point.high > maxVal) maxVal = point.high;
+        return point;
+      });
+
+      if (isForecastSeries(s.name)) {
+        formatForecastAdjustRangeStart(s, lowerSeriesDataLookup);
+      }
     }
-
-    s.data = s.data.map((d, index) => {
-      const point = {
-        ...d,
-        low: lowerSeries[index].y,
-        high: d.y,
-        y: undefined,
-        upperPointName,
-        lowerPointName,
-      };
-      // Combine data from both upper and lower series
-      if (point.low && point.low < minVal) minVal = point.low;
-      if (point.high && point.high > maxVal) maxVal = point.high;
-
-      return point;
-    });
   });
+
+  if (!baseChartOptionsUpper.options.xAxis) {
+    baseChartOptionsUpper.options.xAxis = [];
+  }
+
+  if (forecastStartIndex > 0) {
+    formatForecastPlotBands(baseChartOptionsUpper.options.xAxis, forecastStartIndex, lastTickIndex);
+  }
 
   if (chartType === 'arearange' && chartDesignOptions.lineType === 'smooth') {
     const areaSplineRangeType = 'areasplinerange' as ChartType;
@@ -134,11 +184,9 @@ export const getRangeChartOptions = (
     }
   }
 
-  baseChartOptionsUpper.options.tooltip = getRangeTooltipSettings(
-    undefined,
-    dataOptions,
-    translate,
-  );
+  if (chartType === 'arearange') {
+    baseChartOptionsUpper.options.tooltip = getRangeTooltipSettings(false, dataOptions, translate);
+  }
 
   const [baseYAxisOptions] = baseChartOptionsUpper.options.yAxis ?? [];
   const yAxis = {

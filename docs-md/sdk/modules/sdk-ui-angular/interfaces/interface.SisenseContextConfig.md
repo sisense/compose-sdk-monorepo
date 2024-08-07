@@ -14,7 +14,31 @@ Use one of the following to authenticate:
 
 ## Properties
 
-### Authentication
+### Sisense App
+
+#### appConfig
+
+> **appConfig**?: [`AppConfig`](../type-aliases/type-alias.AppConfig.md)
+
+Application specific configurations such as locale and date formats.
+
+***
+
+#### defaultDataSource
+
+> **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+
+Default data source explicitly set to be used by child components that are not defined with a data source.
+
+***
+
+#### url
+
+> **url**: `string`
+
+URL of the Sisense environment the app connects to
+
+### Sisense Authentication
 
 #### ssoEnabled
 
@@ -39,27 +63,3 @@ Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-
 > **wat**?: `string`
 
 [Web Access Token](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
-
-### Other
-
-#### appConfig
-
-> **appConfig**?: [`AppConfig`](../type-aliases/type-alias.AppConfig.md)
-
-Application specific configurations such as locale and date formats.
-
-***
-
-#### defaultDataSource
-
-> **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
-
-Default data source explicitly set to be used by child components that are not defined with a data source.
-
-***
-
-#### url
-
-> **url**: `string`
-
-URL of the Sisense environment the app connects to

@@ -1,6 +1,8 @@
 export {
   PivotBuilder,
   EVENT_SORTING_SETTINGS_CHANGED,
+  EVENT_QUERY_START,
+  EVENT_QUERY_END,
   type SortingSettingsChangePayload,
 } from './pivot-builder.js';
 // export { PivotPrintBuilder } from './pivot-print-builder.js';

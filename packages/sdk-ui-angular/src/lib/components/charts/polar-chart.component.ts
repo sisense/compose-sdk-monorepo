@@ -84,7 +84,7 @@ export class PolarChartComponent {
   dataSet: PolarChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.highlights}
+   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataOptions}
    *
    * @category Data
    */

@@ -45,6 +45,7 @@ import { isDatetime } from '@sisense/sdk-data';
 import { categoriesSliceWarning, seriesSliceWarning } from '../utils/data-limit-warning';
 import { OptionsWithAlerts } from './../types';
 import { getPaletteColor } from '../chart-data-options/coloring/utils';
+import { TFunction } from '@sisense/sdk-common';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -62,6 +63,7 @@ export const getCartesianChartOptions = (
   chartType: ChartType,
   chartDesignOptions: ChartDesignOptions,
   dataOptions: CartesianChartDataOptionsInternal,
+  translate: TFunction,
   themeSettings?: CompleteThemeSettings,
   dateFormatter?: (date: Date, format: string) => string,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
@@ -274,7 +276,7 @@ export const getCartesianChartOptions = (
         chartDesignOptions.autoZoom,
         chartData.xValues.length,
       ),
-      tooltip: getTooltipSettings(undefined, dataOptions),
+      tooltip: getTooltipSettings(undefined, dataOptions, translate),
     },
   );
 

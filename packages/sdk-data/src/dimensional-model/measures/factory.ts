@@ -158,7 +158,7 @@ function transformCustomFormulaJaql(
 }
 
 /**
- * Creates a calculated measure for a valid custom formula built from [base functions](https://docs.sisense.com/main/SisenseLinux/dashboard-functions-reference.htm).
+ * Creates a calculated measure for a valid custom formula built from [base functions](/guides/sdk/reference/functions.html#measured-value-functions).
  *
  * Use square brackets (`[]`) within the `formula` property to include dimensions or measures.
  * Each unique dimension or measure included in the `formula` must be defined using a property:value pair in the `context` parameter.

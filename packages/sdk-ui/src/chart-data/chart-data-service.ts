@@ -34,6 +34,7 @@ import { boxplotData } from './boxplot-data';
 import { getAreamapData } from './areamap-data';
 import { scattermapData } from './scattermap-data';
 import { rangeData as getRangeData } from './range-data';
+import { advancedAnalyticsData, isForecastChart } from './advanced-analytics-data';
 
 export const chartDataService = (
   chartType: ChartType,
@@ -41,6 +42,12 @@ export const chartDataService = (
   dataTable: DataTable,
 ): ChartData => {
   if (isCartesian(chartType)) {
+    if (isForecastChart(chartDataOptions as CartesianChartDataOptionsInternal)) {
+      return advancedAnalyticsData(
+        chartDataOptions as CartesianChartDataOptionsInternal,
+        dataTable,
+      );
+    }
     return cartesianData(chartDataOptions as CartesianChartDataOptionsInternal, dataTable);
   } else if (isCategorical(chartType)) {
     return categoricalData(chartDataOptions as CategoricalChartDataOptionsInternal, dataTable);

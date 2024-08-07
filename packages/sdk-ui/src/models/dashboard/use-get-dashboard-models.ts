@@ -79,6 +79,8 @@ export type DashboardModelsSuccessState = {
 /**
  * React hook that retrieves existing dashboards that the user can access to from the Sisense instance.
  *
+ * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @example
  ```tsx
   const { dashboards, isLoading, isError } = useGetDashboardModels();

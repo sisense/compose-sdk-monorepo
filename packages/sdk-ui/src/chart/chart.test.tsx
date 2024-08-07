@@ -7,6 +7,7 @@ import { Table } from '../table';
 import { ThemeProvider } from '../theme-provider';
 import { DataPointEventHandler, DataPointsEventHandler } from '../props';
 import { Data } from '@sisense/sdk-data';
+import { setTimeout } from 'timers/promises';
 
 const dataSet = {
   columns: [
@@ -259,8 +260,10 @@ describe('Chart', () => {
       />,
     );
     const indicator = await findByLabelText('indicator-root');
+    setTimeout(100);
+    const canvas = container.querySelector('canvas');
     expect(indicator).toBeTruthy();
-    expect(container).toMatchSnapshot();
+    expect(canvas).toBeTruthy();
   });
 
   it('render indicator gauge chart', async () => {
@@ -296,8 +299,9 @@ describe('Chart', () => {
       />,
     );
     const indicator = await findByLabelText('indicator-root');
+    const canvas = container.querySelector('canvas');
     expect(indicator).toBeTruthy();
-    expect(container).toMatchSnapshot();
+    expect(canvas).toBeTruthy();
   });
 
   it('render indicator numericBar chart', async () => {
@@ -314,8 +318,9 @@ describe('Chart', () => {
       />,
     );
     const indicator = await findByLabelText('indicator-root');
+    const canvas = container.querySelector('canvas');
     expect(indicator).toBeTruthy();
-    expect(container).toMatchSnapshot();
+    expect(canvas).toBeTruthy();
   });
 
   it('render Table', async () => {

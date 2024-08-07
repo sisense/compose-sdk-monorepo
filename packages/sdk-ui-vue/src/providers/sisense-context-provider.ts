@@ -91,11 +91,41 @@ export const createSisenseContextConnector = (context: CustomSisenseContext) => 
  */
 export const SisenseContextProvider = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.defaultDataSource}
+     *
+     * @category Sisense App
+     */
     defaultDataSource: String as PropType<SisenseContextProviderProps['defaultDataSource']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.url}
+     *
+     * @category Sisense App
+     */
     url: String as PropType<SisenseContextProviderProps['url']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.ssoEnabled}
+     *
+     * @category Sisense Authentication
+     */
     ssoEnabled: Boolean as PropType<SisenseContextProviderProps['ssoEnabled']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.token}
+     *
+     * @category Sisense Authentication
+     */
     token: String as PropType<SisenseContextProviderProps['token']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.wat}
+     *
+     * @category Sisense Authentication
+     */
     wat: String as PropType<SisenseContextProviderProps['wat']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.appConfig}
+     *
+     * @category Sisense App
+     */
     appConfig: Object as PropType<SisenseContextProviderProps['appConfig']>,
     /**
      * @internal

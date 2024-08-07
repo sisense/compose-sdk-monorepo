@@ -1,4 +1,4 @@
-import { useGetPivotTableQuery } from './use-get-pivot-table-query';
+import { usePivotTableQuery } from './use-get-pivot-table-query';
 import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
 import { renderHook, waitFor } from '@testing-library/react';
 import { ClientApplication } from '../app/client-application';
@@ -6,17 +6,18 @@ import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-cont
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import { mockPivotTableProps } from './__mocks__/mocks';
 import { translatePivotTableDataOptions } from '@/chart-data-options/translate-data-options';
+import { type JaqlQueryPayload, type QueryExecutionConfig } from '@sisense/sdk-query-client';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
 
-const useGetPivotTableQueryPropsMock = {
+const usePivotTableQueryPropsMock = {
   dataSet: mockPivotTableProps.dataSet,
   dataOptionsInternal: translatePivotTableDataOptions(mockPivotTableProps.dataOptions),
   filters: mockPivotTableProps.filters,
 };
 
-describe('useGetPivotTableQuery', () => {
+describe('usePivotTableQuery', () => {
   beforeEach(() => {
     executePivotQueryMock.mockClear();
     useSisenseContextMock.mockReturnValue({
@@ -27,16 +28,21 @@ describe('useGetPivotTableQuery', () => {
   });
 
   it('should run the hook', async () => {
-    executePivotQueryMock.mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA);
+    const jaqlMock = { someProp: 'some pivot query prop value' } as unknown as JaqlQueryPayload;
 
-    const { result } = renderHook(() => useGetPivotTableQuery(useGetPivotTableQueryPropsMock));
+    executePivotQueryMock.mockImplementation(async (...args: any) => {
+      const onBeforeQuery: QueryExecutionConfig['onBeforeQuery'] = args[2]?.onBeforeQuery;
+      if (onBeforeQuery) {
+        onBeforeQuery(jaqlMock);
+      }
+      return EMPTY_PIVOT_QUERY_RESULT_DATA;
+    });
 
-    expect(result.current.isLoading).toBe(true);
+    const { result } = renderHook(() => usePivotTableQuery(usePivotTableQueryPropsMock));
 
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-      expect(result.current.isSuccess).toBe(true);
-      expect(result.current.jaql).toBeNull();
+      expect(result.current.jaql).toBe(jaqlMock);
+      expect(result.current.error).toBeUndefined();
     });
   });
 
@@ -44,14 +50,11 @@ describe('useGetPivotTableQuery', () => {
     const mockError = new Error('Test error');
     executePivotQueryMock.mockRejectedValue(mockError);
 
-    const { result } = renderHook(() => useGetPivotTableQuery(useGetPivotTableQueryPropsMock));
-
-    expect(result.current.isLoading).toBe(true);
+    const { result } = renderHook(() => usePivotTableQuery(usePivotTableQueryPropsMock));
 
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-      expect(result.current.isError).toBe(true);
-      expect(result.current.isSuccess).toBe(false);
+      expect(result.current.error).toBeDefined();
+      expect(result.current.jaql).toBeUndefined();
     });
   });
 });

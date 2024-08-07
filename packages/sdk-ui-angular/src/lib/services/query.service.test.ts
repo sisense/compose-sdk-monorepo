@@ -84,6 +84,7 @@ describe('QueryService', () => {
       executeQueryByWidgetIdMock.mockResolvedValue({
         data: { columns: [], rows: [] },
         query: { dimensions: [], measures: [], filters: [], highlights: [] },
+        pivotQuery: undefined,
       });
 
       const params: ExecuteQueryByWidgetIdParams = {
@@ -102,6 +103,7 @@ describe('QueryService', () => {
       expect(result).toEqual({
         data: { columns: [], rows: [] },
         query: { dimensions: [], measures: [], filters: [], highlights: [] },
+        pivotQuery: undefined,
       });
     });
   });

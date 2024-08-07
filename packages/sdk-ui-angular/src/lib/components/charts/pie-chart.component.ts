@@ -85,7 +85,7 @@ export class PieChartComponent {
   dataSet: PieChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.highlights}
+   * {@inheritDoc @sisense/sdk-ui!PieChartProps.dataOptions}
    *
    * @category Data
    */

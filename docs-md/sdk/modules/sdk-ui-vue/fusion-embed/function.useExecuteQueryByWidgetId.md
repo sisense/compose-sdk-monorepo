@@ -11,6 +11,8 @@ It simplifies the process of fetching data related to a specific widget based on
 the query's loading, success, and error states. This composable integrates with the Sisense application context
 to perform queries and handle their results within Vue components.
 
+**Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Parameters
 
 | Parameter | Type | Description |
@@ -46,7 +48,8 @@ This composable returns an object containing reactive state management propertie
 - `isError`: A boolean indicating if an error occurred during the query execution.
 - `isSuccess`: A boolean indicating if the query executed successfully.
 - `error`: An Error object containing the error details if an error occurred.
-- `query`: The query object returned by the SDK, useful for debugging or advanced handling.
+- `query`: The query object returned for chart widget, useful for debugging or advanced handling.
+- `pivotQuery`: The pivot query object returned for pivot widget, useful for debugging or advanced handling.
 
 Utilizing this composable allows for declarative and reactive handling of widget-specific queries within Vue applications,
 facilitating easier data fetching and state management with the Sisense SDK.

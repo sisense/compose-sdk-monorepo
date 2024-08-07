@@ -42,36 +42,44 @@ const pivotTableProps = ref<PivotTableProps>({
 
 ## Properties
 
-### dataOptions
+### Data
+
+#### dataOptions
 
 > **dataOptions**?: [`PivotTableDataOptions`](../interfaces/interface.PivotTableDataOptions.md)
 
+Configurations for how to interpret and present the data passed to the component
+
 ***
 
-### dataSet
+#### dataSet
 
 > **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
+Data source name (as a `string`) - e.g. `Sample ECommerce`.
+
+If not specified, the component will use the `defaultDataSource` specified in the parent Sisense Context.
+
 ***
 
-### filters
+#### filters
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
 
+Filters that will slice query results
+
 ***
 
-### highlights
+#### highlights
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-***
+Filters that will highlight query results
 
-### refreshCounter
+### Representation
 
-> **refreshCounter**?: `number`
-
-***
-
-### styleOptions
+#### styleOptions
 
 > **styleOptions**?: [`PivotTableStyleOptions`](../interfaces/interface.PivotTableStyleOptions.md)
+
+Configurations for how to style and present a pivot table's data.

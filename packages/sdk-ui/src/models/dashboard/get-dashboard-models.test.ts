@@ -91,6 +91,13 @@ describe('getDashboardModels', () => {
         },
         widgets: expect.anything(),
         widgetFilterOptions: expect.anything(),
+        styleOptions: {
+          ...(dashboardMock.style?.palette?.colors && {
+            palette: {
+              variantColors: dashboardMock.style.palette.colors,
+            },
+          }),
+        },
       })),
     );
   });
@@ -120,6 +127,13 @@ describe('getDashboardModels', () => {
             dashboardMock.widgets!.map(() => expect.anything()),
           ),
         ),
+        styleOptions: {
+          ...(dashboardMock.style?.palette?.colors && {
+            palette: {
+              variantColors: dashboardMock.style.palette.colors,
+            },
+          }),
+        },
       })),
     );
   });
@@ -143,6 +157,15 @@ describe('getDashboardModels', () => {
       },
       widgets: expect.anything(),
       widgetFilterOptions: expect.anything(),
+      styleOptions: {
+        ...(targetDashboardMock.style?.palette?.colors
+          ? {
+              palette: {
+                variantColors: targetDashboardMock.style.palette.colors,
+              },
+            }
+          : null),
+      },
     });
   });
 

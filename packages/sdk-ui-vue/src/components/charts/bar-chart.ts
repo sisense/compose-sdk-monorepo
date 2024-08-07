@@ -46,17 +46,58 @@ import { setupHelper } from '../../setup-helper';
 export const BarChart = defineComponent({
   props: {
     /**
-     * Bar chart properties derived from the BarChartProps interface,
-     * including both BaseChartProps and ChartEventProps.
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataOptions}
+     *
+     * @category Chart
      */
     dataOptions: Object as PropType<BarChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<BarChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<BarChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<BarChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<BarChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<BarChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<BarChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<BarChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<BarChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(BarChartPreact, props),

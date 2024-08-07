@@ -187,3 +187,9 @@ export type Features = (
   | CloudCDNFeature
   | OnboardingFeature
 )[];
+
+export type FeatureByKey<K extends string> = Extract<Features[number], { key: K }>;
+
+export type FeatureMap = {
+  [K in Features[number]['key']]: FeatureByKey<K>;
+};

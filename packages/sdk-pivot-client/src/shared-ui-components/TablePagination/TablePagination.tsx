@@ -53,6 +53,7 @@ export const TablePagination = React.forwardRef(
       rowsPerPageOptions = [10, 25, 50, 75],
       theme = tablePaginationTheme,
       dataTestId,
+      style,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
       ...rest
     }: TablePaginationProps,
@@ -109,16 +110,25 @@ export const TablePagination = React.forwardRef(
               rowsPerPage={rowsPerPage}
               rowsPerPageOptions={rowsPerPageOptions}
               labelDisplayedRows={handleLabelDisplayedRows}
-              SelectProps={{
-                SelectDisplayProps: {
-                  'data-testid': 'TablePaginationSelect',
-                } as MuiSelectDisplayProps,
-                IconComponent: (props: IconProps) => (
-                  <Icon {...props} name="general-arrow-big-down" />
-                ),
-                renderValue: (value: unknown) => (
-                  <Typography variant={'bodyParagraph'}>{String(value)}</Typography>
-                ),
+              slotProps={{
+                select: {
+                  SelectDisplayProps: {
+                    'data-testid': 'TablePaginationSelect',
+                  } as MuiSelectDisplayProps,
+                  IconComponent: (props: IconProps) => (
+                    <Icon {...props} name="general-arrow-big-down" />
+                  ),
+                  renderValue: (value: unknown) => (
+                    <Typography variant={'bodyParagraph'}>{String(value)}</Typography>
+                  ),
+                  MenuProps: {
+                    sx: {
+                      '.MuiPaper-root': {
+                        fontFamily: style?.fontFamily,
+                      },
+                    },
+                  },
+                },
               }}
               labelRowsPerPage={
                 <Typography variant={'bodyParagraph'}>

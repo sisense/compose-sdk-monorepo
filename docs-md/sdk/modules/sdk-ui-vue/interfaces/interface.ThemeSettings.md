@@ -45,3 +45,11 @@ Collection of colors used to color various elements
 > **typography**?: [`TypographyThemeSettings`](../../sdk-ui/interfaces/interface.TypographyThemeSettings.md)
 
 Text theme settings
+
+***
+
+### widget
+
+> **widget**?: [`WidgetThemeSettings`](../../sdk-ui/type-aliases/type-alias.WidgetThemeSettings.md)
+
+Widget theme settings

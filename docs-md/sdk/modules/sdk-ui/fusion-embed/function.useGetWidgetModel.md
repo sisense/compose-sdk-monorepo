@@ -8,6 +8,8 @@ title: useGetWidgetModel
 
 React hook that retrieves an existing widget model from a Fusion Embed instance.
 
+**Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Example
 
 Retrieve a widget model and use it to populate a `Chart` component

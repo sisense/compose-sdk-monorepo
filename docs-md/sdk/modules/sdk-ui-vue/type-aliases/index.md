@@ -81,5 +81,6 @@ TypeScript type aliases for components and composables listed above
 - [UseFetchOptions](type-alias.UseFetchOptions.md)
 - [ValueToColorMap](type-alias.ValueToColorMap.md)
 - [WidgetDataOptions](type-alias.WidgetDataOptions.md)
+- [WidgetStyleOptions](type-alias.WidgetStyleOptions.md)
 - [WidgetType](type-alias.WidgetType.md)
 - [X2Title](type-alias.X2Title.md)

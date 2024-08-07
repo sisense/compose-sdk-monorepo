@@ -1008,6 +1008,46 @@ export interface GeneralThemeSettings {
   primaryButtonHoverColor?: string;
 }
 
+/** Possible sizes for spacing. */
+export type SpaceSizes = 'None' | 'Large' | 'Medium' | 'Small';
+/** Possible sizes for border radius. */
+export type RadiusSizes = 'None' | 'Large' | 'Medium' | 'Small';
+/** Possible types of shadows. */
+export type ShadowsTypes = 'None' | 'Light' | 'Medium' | 'Dark';
+/** Possible types of text alignment. */
+export type AlignmentTypes = 'Left' | 'Center' | 'Right';
+
+/** Widget theme settings */
+export type WidgetThemeSettings = {
+  /** Space between widget container edge and the chart */
+  spaceAround?: SpaceSizes;
+  /** Corner radius of the widget container */
+  cornerRadius?: RadiusSizes;
+  /**
+   * Shadow level of the widget container
+   *
+   * Effective only when spaceAround is defined
+   */
+  shadow?: ShadowsTypes;
+  /** Widget container border toggle */
+  border?: boolean;
+  /** Widget container border color */
+  borderColor?: string;
+  /** Widget header styles */
+  header?: {
+    /** Header title text color */
+    titleTextColor?: string;
+    /** Header title alignment */
+    titleAlignment?: AlignmentTypes;
+    /** Toggle of the divider line between widget header and chart */
+    dividerLine?: boolean;
+    /** Divider line color */
+    dividerLineColor?: string;
+    /** Header background color */
+    backgroundColor?: string;
+  };
+};
+
 /** Theme settings defining the look and feel of components. */
 export interface ThemeSettings {
   /** Chart theme settings */
@@ -1022,6 +1062,9 @@ export interface ThemeSettings {
   /** General theme settings */
   general?: GeneralThemeSettings;
 
+  /** Widget theme settings */
+  widget?: WidgetThemeSettings;
+
   /**
    * Theme settings specific to the AI Chatbot component
    */
@@ -1035,18 +1078,22 @@ export interface ThemeSettings {
  */
 export type CompleteThemeSettings = DeepRequired<ThemeSettings>;
 
+/** Complete set of configuration options that define functional style of the various elements of the charts as well as the look and feel of widget itself and widget header. */
+export type WidgetStyleOptions = (ChartStyleOptions | TableStyleOptions) &
+  WidgetContainerStyleOptions;
+
 /** Style settings defining the look and feel of widget itself and widget header */
-export interface WidgetStyleOptions {
+export interface WidgetContainerStyleOptions {
   /** Space between widget container edge and the chart */
-  spaceAround?: 'Large' | 'Medium' | 'Small';
+  spaceAround?: SpaceSizes;
   /** Corner radius of the widget container */
-  cornerRadius?: 'Large' | 'Medium' | 'Small';
+  cornerRadius?: RadiusSizes;
   /**
    * Shadow level of the widget container
    *
    * Effective only when spaceAround is defined
    */
-  shadow?: 'Light' | 'Medium' | 'Dark';
+  shadow?: ShadowsTypes;
   /** Widget container border toggle */
   border?: boolean;
   /** Widget container border color */
@@ -1064,7 +1111,7 @@ export interface WidgetStyleOptions {
     /** Header title text color */
     titleTextColor?: string;
     /** Header title alignment */
-    titleAlignment?: 'Left' | 'Center' | undefined;
+    titleAlignment?: AlignmentTypes;
     /** Toggle of the divider line between widget header and chart */
     dividerLine?: boolean;
     /** Divider line color */
@@ -1087,7 +1134,7 @@ export type RenderToolbarHandler = (
 ) => JSX.Element | null;
 
 /** Style settings defining the look and feel of DashboardWidget */
-export interface DashboardWidgetStyleOptions extends WidgetStyleOptions {
+export interface DashboardWidgetStyleOptions extends WidgetContainerStyleOptions {
   /**
    * Total width of the component, which is considered in the following order of priority:
    *
@@ -1108,21 +1155,21 @@ export interface DashboardWidgetStyleOptions extends WidgetStyleOptions {
 }
 
 /** Style settings defining the look and feel of ChartWidget */
-export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetStyleOptions;
+export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetContainerStyleOptions;
 
 /**
  * Style settings defining the look and feel of TableWidget
  *
  * @internal
  */
-export type TableWidgetStyleOptions = TableStyleOptions & WidgetStyleOptions;
+export type TableWidgetStyleOptions = TableStyleOptions & WidgetContainerStyleOptions;
 
 /**
  * Style settings defining the look and feel of TableWidget
  *
  * @internal
  */
-export type PivotTableWidgetStyleOptions = PivotTableStyleOptions & WidgetStyleOptions;
+export type PivotTableWidgetStyleOptions = PivotTableStyleOptions & WidgetContainerStyleOptions;
 
 /**
  * Runs type guard check for ThemeOid.

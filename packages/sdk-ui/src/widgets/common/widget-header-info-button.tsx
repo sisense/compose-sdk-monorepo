@@ -7,7 +7,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useThemeContext } from '../../theme-provider';
-import { WidgetStyleOptions } from '../../types';
+import { WidgetContainerStyleOptions } from '../../types';
 
 export default function WidgetHeaderInfoButton({
   title,
@@ -17,7 +17,7 @@ export default function WidgetHeaderInfoButton({
 }: {
   title?: string;
   description?: string;
-  styleOptions?: WidgetStyleOptions['header'];
+  styleOptions?: WidgetContainerStyleOptions['header'];
   onRefresh: () => void;
 }) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -37,21 +37,14 @@ export default function WidgetHeaderInfoButton({
       <Tooltip
         title="Click to view full details"
         style={{
-          backgroundColor: themeSettings.chart?.backgroundColor,
           color: themeSettings.chart?.textColor,
           fontFamily: themeSettings.typography?.fontFamily,
         }}
       >
-        <IconButton
-          onClick={handleInfoButtonClick}
-          sx={{ p: 0 }}
-          style={{
-            backgroundColor: styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-          }}
-        >
+        <IconButton onClick={handleInfoButtonClick} sx={{ p: 0 }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
             <path
-              fill={themeSettings.chart?.textColor}
+              fill={styleOptions?.titleTextColor || themeSettings.widget.header.titleTextColor}
               d="M11.5 20a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm0-1a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zm-.5-8h1v5h-1v-5zm0-1v-.998h1V10h-1z"
             />
           </svg>

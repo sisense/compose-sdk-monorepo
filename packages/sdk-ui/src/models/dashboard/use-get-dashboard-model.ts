@@ -85,6 +85,8 @@ export type DashboardModelSuccessState = {
 /**
  * React hook that retrieves an existing dashboard model from the Sisense instance.
  *
+ * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @example
  * An example of retrieving an existing dashboard model from the Sisense instance and render its widgets with component `DashboardWidget`:
  ```tsx
@@ -157,6 +159,7 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
           includeFilters,
         },
         themeSettings,
+        app.settings,
       )
         .then((data) => {
           dispatch({ type: 'success', data });

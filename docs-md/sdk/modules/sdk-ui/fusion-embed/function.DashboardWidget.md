@@ -12,6 +12,8 @@ is used to render a widget created in a Sisense Fusion instance.
 To learn more about using Sisense Fusion Widgets in Compose SDK,
 see [Sisense Fusion Widgets](/guides/sdk/guides/charts/guide-fusion-widgets.html).
 
+**Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Example
 
 Display two dashboard widgets from a Fusion Embed instance.

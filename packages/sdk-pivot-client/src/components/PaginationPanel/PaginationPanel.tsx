@@ -48,6 +48,9 @@ export type PaginationOptions = {
         },
       ) => void)
     | null;
+  style?: {
+    fontFamily?: string;
+  };
 };
 
 const defaultOptions: PaginationOptions = {
@@ -82,6 +85,9 @@ type Props = {
   onHeightChange?: (height: number) => void;
   onPageChange?: (options: { selected: number }) => void;
   onItemsPerPageChange?: (itemsPerPage: number) => void;
+  style?: {
+    fontFamily?: string;
+  };
 };
 
 type State = {
@@ -126,11 +132,11 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { itemsCount, itemsPerPage, options } = this.props;
+    const { itemsCount, itemsPerPage, options, style } = this.props;
     this.logger = debug.create('PaginationPanel');
 
     const pagesCount = Math.ceil(itemsCount / itemsPerPage) || 0;
-    const finalOptions: PaginationOptions = { ...defaultOptions, ...options };
+    const finalOptions: PaginationOptions = { ...defaultOptions, ...options, style };
 
     this.state = {
       pagesCount,
@@ -436,6 +442,7 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
                   dataTestId="TablePagination"
                   onPageChange={this.handlePageSelected}
                   onRowsPerPageChange={this.onRowsPerPageChange}
+                  style={this.props.style}
                 />
               </div>
             </div>

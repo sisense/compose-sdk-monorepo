@@ -13,6 +13,7 @@ import { AppConfig, ThemeSettings } from '../../types';
 import { GlobalsObject } from './types';
 import { QUERY_DEFAULT_LIMIT } from '@/const';
 import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings.js';
+import { Features, FeatureMap } from './types/features.js';
 
 /**
  * Application settings
@@ -24,10 +25,14 @@ export type AppSettings = Required<ConfigurableAppSettings> & ServerSettings;
  */
 type ConfigurableAppSettings = AppConfig;
 
+/**
+ * Fusion platform settings
+ */
 type ServerSettings = {
   serverThemeSettings: ThemeSettings;
   serverLanguage: string;
   serverVersion: string;
+  serverFeatures: FeatureMap;
 };
 
 const defaultLoadingIndicatorConfig = { enabled: true, delay: 500 };
@@ -72,6 +77,21 @@ export async function getSettings(
 }
 
 /**
+ * Translate Features to FeatureMap
+ * @param features - Features to be mapped
+ * @returns FeatureMap
+ */
+function mapFeatures(features: Features): FeatureMap {
+  const map = {};
+
+  features.forEach((feature) => {
+    map[feature.key] = feature;
+  });
+
+  return map as FeatureMap;
+}
+
+/**
  * Loads the server settings
  *
  * @param httpClient - Sisense REST API client
@@ -90,6 +110,7 @@ async function loadServerSettings(httpClient: Pick<HttpClient, 'get'>, useDefaul
     serverThemeSettings: convertToThemeSettings(globals.designSettings, palette),
     serverLanguage: globals.language,
     serverVersion: globals.version,
+    serverFeatures: mapFeatures(globals.features),
   };
   return serverSettings;
 }

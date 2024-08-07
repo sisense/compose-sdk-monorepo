@@ -102,6 +102,7 @@ To change the look and feel of the chatbot, wrap the component in a `ThemeProvid
       primaryTextColor: 'rgba(255, 255, 255, 0.7)',
       secondaryTextColor: 'rgba(255, 255, 255, 0.7)',
       primaryFontSize: ['14px', '16px'],
+    }
   }}
 >
   <Chatbot />

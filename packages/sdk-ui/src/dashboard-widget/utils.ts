@@ -21,6 +21,7 @@ import {
 } from './types';
 import cloneDeep from 'lodash/cloneDeep';
 import { TranslatableError } from '../translation/translatable-error';
+import { isCascadingFilter } from '@/utils/filters';
 
 export function getChartType(widgetType: WidgetType) {
   const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
@@ -149,8 +150,12 @@ export function getSortType(jaqlSort: `${JaqlSortDirection}` | undefined): SortD
  *
  * @param {Filter} filter - The filter object to generate the unique identifier for.
  * @returns {string} - The unique identifier for the filter.
+ * @internal
  */
-function getFilterCompareId(filter: Filter): string {
+export function getFilterCompareId(filter: Filter): string {
+  if (isCascadingFilter(filter)) {
+    return filter.filters.map(getFilterCompareId).join('-');
+  }
   // TODO: remove fallback on 'filter.jaql()' after removing temporal 'jaql()' workaround from filter translation layer
   const { attribute: filterAttribute } = filter;
   const filterJaql = filter.jaql().jaql;

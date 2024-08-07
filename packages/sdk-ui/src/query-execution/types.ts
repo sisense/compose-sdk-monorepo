@@ -186,10 +186,21 @@ export interface ExecuteQueryByWidgetIdParams {
   enabled?: boolean;
 }
 
-export type QueryByWidgetIdState = QueryState & {
-  /** Query parameters constructed over the widget */
+/**
+ * Query parameters constructed over either a chart widget or pivot table widget. This is returned as part of the query state {@link QueryByWidgetIdState}.
+ */
+export type QueryByWidgetIdQueryParams = {
+  /** Query parameters constructed over the chart widget */
   query: ExecuteQueryParams | undefined;
+
+  /** Query parameters constructed over the pivot table widget */
+  pivotQuery: ExecutePivotQueryParams | undefined;
 };
+
+/**
+ * State of a query execution retrieving data of Fusion widget.
+ */
+export type QueryByWidgetIdState = QueryState & QueryByWidgetIdQueryParams;
 
 /**
  * Parameters for {@link useExecuteQuery} hook.

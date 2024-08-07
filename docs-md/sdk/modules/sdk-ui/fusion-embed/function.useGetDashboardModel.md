@@ -8,6 +8,8 @@ title: useGetDashboardModel
 
 React hook that retrieves an existing dashboard model from the Sisense instance.
 
+**Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Parameters
 
 | Parameter | Type |

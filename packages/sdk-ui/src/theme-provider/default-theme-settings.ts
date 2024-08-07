@@ -23,6 +23,20 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     primaryButtonTextColor: '#3a4356',
     primaryButtonHoverColor: '#f2b900',
   },
+  widget: {
+    spaceAround: 'None',
+    cornerRadius: 'None',
+    shadow: 'None',
+    border: false,
+    borderColor: '#9EA2AB',
+    header: {
+      titleTextColor: '#5B6372',
+      titleAlignment: 'Left',
+      dividerLine: false,
+      dividerLineColor: '#5B6372',
+      backgroundColor: '#FFFFFF',
+    },
+  },
   aiChat: {
     backgroundColor: 'rgba(244, 244, 248, 1)',
     primaryTextColor: 'rgba(38, 46, 61, 0.8)',
@@ -140,6 +154,20 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     brandColor: '#FFCB05',
     primaryButtonTextColor: '#3A4356',
     primaryButtonHoverColor: '#F2B900',
+  },
+  widget: {
+    spaceAround: 'None',
+    cornerRadius: 'None',
+    shadow: 'None',
+    border: false,
+    borderColor: '#C5C8CF',
+    header: {
+      titleTextColor: '#FFFFFF',
+      titleAlignment: 'Left',
+      dividerLine: false,
+      dividerLineColor: '#FFFFFF',
+      backgroundColor: '#313138',
+    },
   },
   aiChat: {
     backgroundColor: 'rgba(23, 28, 38, 1)',

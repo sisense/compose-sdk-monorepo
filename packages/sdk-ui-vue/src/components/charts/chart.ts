@@ -63,16 +63,69 @@ const chartProps = ref<ChartProps>({
  */
 export const Chart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.chartType}
+     *
+     * @category Chart
+     */
     chartType: String as PropType<ChartProps['chartType']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<ChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<ChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Array as PropType<ChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Array as PropType<ChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<ChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<ChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<ChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<ChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<ChartProps['styleOptions']>,
+    /**
+     * @internal
+     */
     refreshCounter: Number as PropType<ChartProps['refreshCounter']>,
   },
   setup: (props) => setupHelper(ChartPreact, props),

@@ -43,6 +43,7 @@ export default defineConfig(({ mode }) => ({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         ai: resolve(__dirname, 'src/ai/index.ts'),
+        'analytics-composer': resolve(__dirname, 'src/analytics-composer/index.ts'),
       },
       formats: ['es', 'cjs'],
     },

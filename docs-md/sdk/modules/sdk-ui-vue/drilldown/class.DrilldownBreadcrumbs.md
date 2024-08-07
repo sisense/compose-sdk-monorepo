@@ -42,46 +42,48 @@ export default {
 
 ## Properties
 
-### clearDrilldownSelections
+### Widget
+
+#### clearDrilldownSelections
 
 > **clearDrilldownSelections**?: () => `void`
 
-Function to clear all drilldown selections made by the user.
+Callback function that is evaluated when the close (X) button is clicked
 
-#### Returns
+##### Returns
 
 `void`
 
 ***
 
-### currentDimension
+#### currentDimension
 
 > **currentDimension**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
 
-Object representing the current dimension in the drilldown path.
+Currently selected drilldown dimension
 
 ***
 
-### filtersDisplayValues
+#### filtersDisplayValues
 
 > **filtersDisplayValues**?: `string`[][]
 
-Object mapping the internal filter values to human-readable display values, enhancing the usability of the breadcrumbs.
+List of drilldown filters formatted to be displayed as breadcrumbs
 
 ***
 
-### sliceDrilldownSelections
+#### sliceDrilldownSelections
 
 > **sliceDrilldownSelections**?: (`i`) => `void`
 
-Function to slice the drilldown selections up to a certain index, allowing the user to navigate back in the drilldown path.
+Callback function that is evaluated when a breadcrumb is clicked
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type |
 | :------ | :------ |
 | `i` | `number` |
 
-#### Returns
+##### Returns
 
 `void`

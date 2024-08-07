@@ -98,6 +98,15 @@ export const translation = {
       max: 'Max',
     },
   },
+  advanced: {
+    tooltip: {
+      min: 'Lower Bound',
+      max: 'Upper Bound',
+      forecastValue: 'Forecast Value',
+      forecast: 'Forecast',
+      trend: 'Trend',
+    },
+  },
   arearange: {
     tooltip: {
       min: 'Min',

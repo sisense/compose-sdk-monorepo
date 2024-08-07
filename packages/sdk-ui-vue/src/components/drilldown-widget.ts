@@ -100,16 +100,32 @@ export type DrilldownWidgetConfig = {
  */
 export const DrilldownWidgetTs = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.config}
+     *
+     * @category Widget
+     */
     config: {
       type: Object as PropType<DrilldownWidgetConfig>,
       required: false,
       default: () => ({}),
     },
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownDimensions}
+     *
+     * @category Widget
+     *
+     */
     drilldownDimensions: {
       type: Array as PropType<DrilldownWidgetProps['drilldownDimensions']>,
       required: false,
       default: () => [],
     },
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.initialDimension}
+     *
+     * @category Widget
+     */
     initialDimension: {
       type: Object as PropType<DrilldownWidgetProps['initialDimension']>,
       required: false,

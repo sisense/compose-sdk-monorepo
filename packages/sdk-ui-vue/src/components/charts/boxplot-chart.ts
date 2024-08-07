@@ -45,14 +45,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const BoxplotChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<BoxplotChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<BoxplotChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<BoxplotChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<BoxplotChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<BoxplotChartProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<BoxplotChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<BoxplotChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<BoxplotChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<BoxplotChartProps['onDataPointsSelected']>,
   },
   setup: (props) => setupHelper(BoxplotChartPreact, props),

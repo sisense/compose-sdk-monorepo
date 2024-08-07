@@ -41,14 +41,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const PolarChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataOptions}
+     *
+     * @category Data
+     */
     dataOptions: Object as PropType<PolarChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<PolarChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<PolarChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<PolarChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<PolarChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<PolarChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<PolarChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<PolarChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<PolarChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(PolarChartPreact, props),

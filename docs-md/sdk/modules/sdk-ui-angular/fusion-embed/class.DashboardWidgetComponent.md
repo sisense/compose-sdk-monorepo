@@ -66,41 +66,9 @@ export class WidgetsComponent {
 
 > **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-Filters to limit (or slice) a chart’s data using one of the following options.
+Filters that will slice query results
 
-(1) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) or [FilterRelations](../../sdk-data/interfaces/interface.FilterRelations.md) returned from filter factory functions, such as
-[`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
-
-Use this option for filters that do not require a UI to set them
-or for filters where you will supply your own UI components or use pre-built UI components. This is the most common option.
-
-To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
-
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
-
-Use this option for filters that you want your users to set using pre-built UI components.
-
-To learn more about using filter UI components to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-components).
-
-### Widget
-
-#### styleOptions
-
-> **styleOptions**: `undefined` \| [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
-
-Style options for the widget including the widget container and the chart or table inside.
-
-### Other
-
-#### dashboardOid
-
-> **dashboardOid**: `string`
-
-***
-
-#### description
-
-> **description**: `undefined` \| `string`
+Provided filters will be merged with the existing filters from the widget configuration.
 
 ***
 
@@ -108,11 +76,13 @@ Style options for the widget including the widget container and the chart or tab
 
 > **filtersMergeStrategy**: `undefined` \| `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
 
-***
+Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
 
-#### highlightSelectionDisabled
+- `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
+- `codeFirst` - prioritizes the provided filters over the widget filters in case of filter conflicts by certain attributes.
+- `codeOnly` - applies only the provided filters and completely ignores the widget filters.
 
-> **highlightSelectionDisabled**: `undefined` \| `boolean`
+If not specified, the default strategy is `codeFirst`.
 
 ***
 
@@ -120,11 +90,55 @@ Style options for the widget including the widget container and the chart or tab
 
 > **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
+Highlight filters that will highlight results that pass filter criteria
+
 ***
 
 #### includeDashboardFilters
 
 > **includeDashboardFilters**: `undefined` \| `boolean`
+
+Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
+
+If not specified, the default value is `false`.
+
+### Widget
+
+#### dashboardOid
+
+> **dashboardOid**: `string`
+
+Identifier of the dashboard that contains the widget
+
+***
+
+#### description
+
+> **description**: `undefined` \| `string`
+
+Description of the widget
+
+If not specified, it takes the existing value from the widget configuration.
+
+***
+
+#### highlightSelectionDisabled
+
+> **highlightSelectionDisabled**: `undefined` \| `boolean`
+
+Boolean flag whether selecting data points triggers highlight filter of the selected data
+
+Recommended to turn on when the Chart Widget component is enhanced with data drilldown by the Drilldown Widget component
+
+If not specified, the default value is `false`
+
+***
+
+#### styleOptions
+
+> **styleOptions**: `undefined` \| [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
+
+Style options for the widget including the widget container and the chart or table inside.
 
 ***
 
@@ -132,8 +146,14 @@ Style options for the widget including the widget container and the chart or tab
 
 > **title**: `undefined` \| `string`
 
+Title of the widget
+
+If not specified, it takes the existing value from the widget configuration.
+
 ***
 
 #### widgetOid
 
 > **widgetOid**: `string`
+
+Identifier of the widget

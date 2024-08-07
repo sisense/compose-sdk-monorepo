@@ -14,6 +14,7 @@ export function PivotBuilderDemo(pivotBuilderDemoProps: PivotBuilderDemoProps) {
     return {
       width: 900,
       height: 650,
+      fontFamily: 'Comic Sans MS',
       isPaginated: true,
       itemsPerPage: 25,
       isAutoHeight: false,

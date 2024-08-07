@@ -1,6 +1,13 @@
 import merge from 'ts-deepmerge';
 import { getDefaultThemeSettings } from '../theme-provider/default-theme-settings';
-import { ThemeOid, CompleteThemeSettings } from '../types.js';
+import {
+  ThemeOid,
+  CompleteThemeSettings,
+  SpaceSizes,
+  RadiusSizes,
+  ShadowsTypes,
+  AlignmentTypes,
+} from '../types.js';
 
 /**
  * Legacy analog of CompleteThemeSettings used in Sisense UI.
@@ -80,6 +87,23 @@ export type LegacyPaletteError = {
 };
 
 /**
+ * Mapping of legacy design properties types to theme setting types
+ */
+export const LEGACY_DESIGN_TYPES = {
+  none: 'None',
+  small: 'Small',
+  medium: 'Medium',
+  large: 'Large',
+
+  left: 'Left',
+  center: 'Center',
+  right: 'Right',
+
+  light: 'Light',
+  dark: 'Dark',
+};
+
+/**
  * Converts legacy (used in Sisense UI) design settings and it's palette object to CompleteThemeSettings.
  *
  * @param legacyDesignSettings - legacy design settings.
@@ -110,6 +134,24 @@ export function convertToThemeSettings(
       backgroundColor: legacyDesignSettings.general.backgroundColor,
       primaryButtonTextColor: legacyDesignSettings.general.primaryButtonTextColor,
       primaryButtonHoverColor: legacyDesignSettings.general.primaryButtonHoverColor,
+    },
+    widget: {
+      spaceAround: LEGACY_DESIGN_TYPES[legacyDesignSettings.dashboards.widgetSpacing] as SpaceSizes,
+      cornerRadius: LEGACY_DESIGN_TYPES[
+        legacyDesignSettings.dashboards.widgetCornerRadius
+      ] as RadiusSizes,
+      shadow: LEGACY_DESIGN_TYPES[legacyDesignSettings.dashboards.widgetShadow] as ShadowsTypes,
+      border: legacyDesignSettings.dashboards.widgetBorderEnabled,
+      borderColor: legacyDesignSettings.dashboards.widgetBorderColor,
+      header: {
+        titleTextColor: legacyDesignSettings.dashboards.widgetTitleColor,
+        titleAlignment: LEGACY_DESIGN_TYPES[
+          legacyDesignSettings.dashboards.widgetTitleAlignment
+        ] as AlignmentTypes,
+        dividerLine: legacyDesignSettings.dashboards.widgetTitleDividerEnabled,
+        dividerLineColor: legacyDesignSettings.dashboards.widgetTitleDividerColor,
+        backgroundColor: legacyDesignSettings.dashboards.widgetTitleBackgroundColor,
+      },
     },
   };
   return merge.withOptions({ mergeArrays: false }, getDefaultThemeSettings(), themeSettings);

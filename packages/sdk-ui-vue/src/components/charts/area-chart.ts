@@ -44,15 +44,60 @@ import { setupHelper } from '../../setup-helper';
  */
 export const AreaChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<AreaChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<AreaChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<AreaChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<AreaChartProps['highlights']>,
-    onBeforeRender: Function as PropType<AreaChartProps['onBeforeRender']>,
-    onDataPointClick: Function as PropType<AreaChartProps['onDataPointClick']>,
-    onDataPointContextMenu: Function as PropType<AreaChartProps['onDataPointContextMenu']>,
-    onDataPointsSelected: Function as PropType<AreaChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<AreaChartProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
+    onBeforeRender: Function as PropType<AreaChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
+    onDataPointClick: Function as PropType<AreaChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
+    onDataPointContextMenu: Function as PropType<AreaChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
+    onDataPointsSelected: Function as PropType<AreaChartProps['onDataPointsSelected']>,
   },
   setup: (props) => setupHelper(AreaChartPreact, props),
 });

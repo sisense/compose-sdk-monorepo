@@ -2,9 +2,10 @@ import { useEffect, useReducer, useRef } from 'react';
 import { withTracking } from '../decorators/hook-decorators';
 import { queryStateReducer } from './query-state-reducer';
 import { useSisenseContext } from '../sisense-context/sisense-context';
-import { QueryDescription, executeQuery } from '../query/execute-query';
+import { executePivotQuery, executeQuery } from '../query/execute-query';
 import {
   convertFilterRelationsModelToJaql,
+  isPivotWidget,
   mergeFilters,
   mergeFiltersByStrategy,
 } from '../dashboard-widget/utils';
@@ -15,8 +16,14 @@ import { RestApi } from '../api/rest-api';
 import { useHasChanged } from '../common/hooks/use-has-changed';
 import { extractDashboardFiltersForWidget } from '../dashboard-widget/translate-dashboard-filters';
 import { fetchWidgetDtoModel } from '../dashboard-widget/use-fetch-widget-dto-model';
-import { ExecuteQueryByWidgetIdParams, QueryByWidgetIdState } from './types';
-import { Filter } from '@sisense/sdk-data';
+import {
+  ExecutePivotQueryParams,
+  ExecuteQueryByWidgetIdParams,
+  ExecuteQueryParams,
+  QueryByWidgetIdState,
+  QueryByWidgetIdQueryParams,
+} from './types';
+import { Filter, QueryResultData } from '@sisense/sdk-data';
 import { WidgetModel } from '../models';
 import { useShouldLoad } from '../common/hooks/use-should-load';
 
@@ -25,6 +32,7 @@ import { useShouldLoad } from '../common/hooks/use-should-load';
  *
  * This approach, which offers an alternative to {@link ExecuteQueryByWidgetId} component, is similar to React Query's `useQuery` hook.
  *
+ * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
  *
  * @example
  * The example below executes a query over the existing dashboard widget with the specified widget and dashboard OIDs.
@@ -64,6 +72,7 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
   const shouldLoad = useShouldLoad(params, isParamsChanged);
   const { isInitialized, app } = useSisenseContext();
   const query = useRef<QueryByWidgetIdState['query']>(undefined);
+  const pivotQuery = useRef<QueryByWidgetIdState['pivotQuery']>(undefined);
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
     isError: false,
@@ -108,8 +117,9 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
         includeDashboardFilters,
         onBeforeQuery,
       })
-        .then(({ data, query: executedQuery }) => {
+        .then(({ data, query: executedQuery, pivotQuery: executedPivotQuery }) => {
           query.current = executedQuery;
+          pivotQuery.current = executedPivotQuery;
           dispatch({ type: 'success', data });
         })
         .catch((error: Error) => {
@@ -118,7 +128,11 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
     }
   }, [params, app, isInitialized, shouldLoad]);
 
-  return { ...queryState, query: query.current } as QueryByWidgetIdState;
+  return {
+    ...queryState,
+    query: query.current,
+    pivotQuery: pivotQuery.current,
+  } as QueryByWidgetIdState;
 }
 
 /** List of parameters that can be compared by deep comparison */
@@ -157,7 +171,9 @@ export async function executeQueryByWidgetId({
   includeDashboardFilters,
   app,
   onBeforeQuery,
-}: ExecuteQueryByWidgetIdParams & { app: ClientApplication }) {
+}: ExecuteQueryByWidgetIdParams & { app: ClientApplication }): Promise<
+  { data: QueryResultData } & QueryByWidgetIdQueryParams
+> {
   const api = new RestApi(app.httpClient);
   const { widget: fetchedWidget, dashboard: fetchedDashboard } = await fetchWidgetDtoModel({
     widgetOid,
@@ -170,48 +186,84 @@ export async function executeQueryByWidgetId({
     throw new Error(`Widget with oid ${widgetOid} not found`);
   }
 
-  // TODO: support filter relations extraction from widget
   const widgetModel = new WidgetModel(fetchedWidget);
-  const widgetQuery = widgetModel.getExecuteQueryParams();
-  const { dataSource, dimensions, measures } = widgetQuery;
-  let { filters: widgetFilters, highlights: widgetHighlights } = widgetQuery;
 
-  if (includeDashboardFilters && fetchedDashboard) {
-    const { filters: dashboardFilters, highlights: dashboardHighlight } =
-      extractDashboardFiltersForWidget(fetchedDashboard, fetchedWidget);
-    widgetFilters = mergeFilters(dashboardFilters, widgetFilters as Filter[]);
-    widgetHighlights = mergeFilters(dashboardHighlight, widgetHighlights);
+  const prepareExecuteQueryParams = (
+    query: ExecuteQueryParams | ExecutePivotQueryParams,
+    isPivot: boolean,
+  ) => {
+    const { dataSource, filters: widgetFilters, highlights: widgetHighlights } = query;
+
+    let mergedFilters = widgetFilters;
+    let mergedHighlights = widgetHighlights;
+
+    if (includeDashboardFilters && fetchedDashboard) {
+      const { filters: dashboardFilters, highlights: dashboardHighlight } =
+        extractDashboardFiltersForWidget(fetchedDashboard, fetchedWidget);
+      mergedFilters = mergeFilters(dashboardFilters, widgetFilters as Filter[]);
+      mergedHighlights = mergeFilters(dashboardHighlight, widgetHighlights);
+    }
+
+    mergedFilters = mergeFiltersByStrategy(
+      mergedFilters as Filter[],
+      filters,
+      filtersMergeStrategy,
+    );
+    mergedHighlights = mergeFiltersByStrategy(mergedHighlights, highlights, filtersMergeStrategy);
+
+    const filterRelations = fetchedDashboard?.filterRelations?.length
+      ? convertFilterRelationsModelToJaql(fetchedDashboard.filterRelations[0].filterRelations)
+      : undefined;
+
+    const baseParams = {
+      dataSource,
+      filters: mergedFilters,
+      filterRelations,
+      highlights: mergedHighlights,
+      count,
+      offset,
+    };
+
+    if (isPivot) {
+      const { rows, columns, values, grandTotals } = query as ExecutePivotQueryParams;
+      return {
+        ...baseParams,
+        rows,
+        columns,
+        values,
+        grandTotals,
+      };
+    } else {
+      const { dimensions, measures } = query as ExecuteQueryParams;
+      return {
+        ...baseParams,
+        dimensions,
+        measures,
+      };
+    }
+  };
+
+  if (isPivotWidget(widgetModel.widgetType)) {
+    const widgetQuery = widgetModel.getExecutePivotQueryParams();
+    const executeQueryParams = prepareExecuteQueryParams(widgetQuery, true);
+    const pivotData = await executePivotQuery(executeQueryParams, app, { onBeforeQuery });
+
+    return {
+      // return flat table structure only
+      data: pivotData.table,
+      query: undefined,
+      // return pivotQuery instead of query
+      pivotQuery: executeQueryParams as ExecutePivotQueryParams,
+    };
+  } else {
+    const widgetQuery = widgetModel.getExecuteQueryParams();
+    const executeQueryParams = prepareExecuteQueryParams(widgetQuery, false);
+    const data = await executeQuery(executeQueryParams, app, { onBeforeQuery });
+
+    return {
+      data,
+      query: executeQueryParams as ExecuteQueryParams,
+      pivotQuery: undefined,
+    };
   }
-
-  const mergedFilters = mergeFiltersByStrategy(
-    widgetFilters as Filter[],
-    filters,
-    filtersMergeStrategy,
-  );
-  const mergedHighlights = mergeFiltersByStrategy(
-    widgetHighlights,
-    highlights,
-    filtersMergeStrategy,
-  );
-
-  const filterRelations = fetchedDashboard?.filterRelations?.length
-    ? convertFilterRelationsModelToJaql(fetchedDashboard?.filterRelations[0].filterRelations)
-    : undefined;
-
-  const executeQueryParams: QueryDescription = {
-    dataSource,
-    dimensions,
-    measures,
-    filters: mergedFilters,
-    filterRelations,
-    highlights: mergedHighlights,
-    count,
-    offset,
-  };
-  const data = await executeQuery(executeQueryParams, app, { onBeforeQuery });
-
-  return {
-    data,
-    query: executeQueryParams,
-  };
 }

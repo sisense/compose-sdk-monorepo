@@ -1,5 +1,5 @@
 import { DataSource, Filter } from '@sisense/sdk-data';
-import { Layout, translateWidget, WidgetModel } from '@/models';
+import { DashboardStyleOptions, Layout, translateWidget, WidgetModel } from '@/models';
 import type { DashboardDto } from '@/api/types/dashboard-dto';
 import {
   extractDashboardFilters,
@@ -9,6 +9,7 @@ import {
 import { DashboardProps } from '@/dashboard/types';
 import { type WidgetFilterOptions } from './types';
 import { CompleteThemeSettings } from '../../types';
+import { AppSettings } from '@/app/settings/settings';
 
 /**
  * Model of Sisense dashboard defined in the abstractions of Compose SDK.
@@ -45,6 +46,13 @@ export class DashboardModel {
   layout: Layout;
 
   /**
+   * Dashboard style options.
+   *
+   * @internal
+   */
+  styleOptions: DashboardStyleOptions;
+
+  /**
    * Dashboard filters.
    *
    * @internal
@@ -63,10 +71,15 @@ export class DashboardModel {
    *
    * @param dashboardDto - The widget DTO to be converted to a widget model
    * @param themeSettings - Optional theme settings
+   * @param appSettings - Optional application settings
    * @internal
    */
-  constructor(dashboardDto: DashboardDto, themeSettings?: CompleteThemeSettings) {
-    const { oid, title, datasource, widgets, layout, filters } = dashboardDto;
+  constructor(
+    dashboardDto: DashboardDto,
+    themeSettings?: CompleteThemeSettings,
+    appSettings?: AppSettings,
+  ) {
+    const { oid, title, datasource, widgets, layout, filters, style } = dashboardDto;
 
     this.oid = oid;
     this.title = title;
@@ -74,7 +87,18 @@ export class DashboardModel {
       title: datasource.title,
       type: datasource.live ? 'live' : 'elasticube',
     };
-    this.widgets = widgets?.map((widget) => translateWidget(widget, themeSettings)) || [];
+    this.styleOptions = {
+      ...(style?.palette ? { palette: { variantColors: style?.palette.colors } } : null),
+    };
+
+    const mergedThemeSettings = themeSettings
+      ? {
+          ...themeSettings,
+          ...(this.styleOptions.palette ? { palette: this.styleOptions.palette } : null),
+        }
+      : themeSettings;
+    this.widgets =
+      widgets?.map((widget) => translateWidget(widget, mergedThemeSettings, appSettings)) || [];
     this.layout = layout ? translateLayout(layout) : { columns: [] };
     this.filters = extractDashboardFilters(filters || []);
     this.widgetFilterOptions = translateWidgetFilterOptions(widgets);
@@ -98,6 +122,7 @@ export class DashboardModel {
       layout: this.layout,
       filters: this.filters,
       widgetFilterOptions: this.widgetFilterOptions,
+      styleOptions: this.styleOptions,
     };
   }
 }

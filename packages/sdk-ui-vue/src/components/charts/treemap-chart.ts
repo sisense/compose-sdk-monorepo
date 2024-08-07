@@ -44,14 +44,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const TreemapChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<TreemapChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<TreemapChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<TreemapChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<TreemapChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<TreemapChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<TreemapChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<TreemapChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<TreemapChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<TreemapChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(TreemapChartPreact, props),

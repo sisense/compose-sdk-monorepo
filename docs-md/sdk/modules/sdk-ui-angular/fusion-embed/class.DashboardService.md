@@ -6,6 +6,8 @@ title: DashboardService
 
 Service for working with Sisense Fusion dashboards.
 
+**Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Constructors
 
 ### constructor

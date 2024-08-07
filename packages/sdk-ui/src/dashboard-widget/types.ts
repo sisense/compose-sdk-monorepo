@@ -1,3 +1,5 @@
+import { WidgetContainerStyleOptions } from '../types';
+import { LEGACY_DESIGN_TYPES } from './../themes/legacy-design-settings';
 import { Jaql, JaqlSortDirection } from '@sisense/sdk-data';
 
 /**
@@ -104,6 +106,20 @@ export interface WidgetDto {
   };
 }
 
+export type WidgetDesign = {
+  widgetBackgroundColor: string;
+  widgetSpacing: keyof typeof LEGACY_DESIGN_TYPES;
+  widgetCornerRadius: keyof typeof LEGACY_DESIGN_TYPES;
+  widgetShadow: keyof typeof LEGACY_DESIGN_TYPES;
+  widgetBorderEnabled: boolean;
+  widgetBorderColor: string;
+  widgetTitleColor: string;
+  widgetTitleAlignment: keyof typeof LEGACY_DESIGN_TYPES;
+  widgetTitleDividerEnabled: boolean;
+  widgetTitleDividerColor: string;
+  widgetTitleBackgroundColor: string;
+};
+
 export type FiltersIgnoringRules = {
   dimensions?: string[];
   ids: string[];
@@ -160,6 +176,7 @@ export type PanelItem = {
     members?: PanelMembersFormat;
     subtotal?: boolean;
     databars?: boolean;
+    width?: number;
   };
   jaql: Jaql;
   disabled?: boolean;
@@ -269,27 +286,29 @@ type BaseWidgetStyle = {
   };
 };
 
-export type CartesianWidgetStyle = BaseWidgetStyle & {
-  seriesLabels: LabelsStyle;
-  xAxis: AxisStyle & {
-    x2Title?: AxisTitleStyle;
+export type CartesianWidgetStyle = BaseWidgetStyle &
+  WidgetContainerStyleOptions & {
+    seriesLabels: LabelsStyle;
+    xAxis: AxisStyle & {
+      x2Title?: AxisTitleStyle;
+    };
+    yAxis: AxisStyle;
+    y2Axis?: AxisStyle;
+    lineWidth?: {
+      width: string;
+    };
+    markers?: {
+      enabled: boolean;
+      size: number;
+      fill: string;
+    };
   };
-  yAxis: AxisStyle;
-  y2Axis?: AxisStyle;
-  lineWidth?: {
-    width: string;
-  };
-  markers?: {
-    enabled: boolean;
-    size: number;
-    fill: string;
-  };
-};
 
-export type PolarWidgetStyle = BaseWidgetStyle & {
-  categories?: AxisStyle;
-  axis?: AxisStyle;
-};
+export type PolarWidgetStyle = BaseWidgetStyle &
+  WidgetContainerStyleOptions & {
+    categories?: AxisStyle;
+    axis?: AxisStyle;
+  };
 
 type ScatterMarkerSize = {
   defaultSize: number;
@@ -297,24 +316,26 @@ type ScatterMarkerSize = {
   max: number;
 };
 
-export type ScatterWidgetStyle = BaseWidgetStyle & {
-  xAxis: AxisStyle;
-  yAxis: AxisStyle;
-  markerSize?: ScatterMarkerSize;
-};
-
-export type FunnelWidgetStyle = BaseWidgetStyle & {
-  size: string;
-  type: string;
-  direction: string;
-  labels: {
-    enabled: boolean;
-    categories: boolean;
-    percent: boolean;
-    value: boolean;
-    decimals: boolean;
+export type ScatterWidgetStyle = BaseWidgetStyle &
+  WidgetContainerStyleOptions & {
+    xAxis: AxisStyle;
+    yAxis: AxisStyle;
+    markerSize?: ScatterMarkerSize;
   };
-};
+
+export type FunnelWidgetStyle = BaseWidgetStyle &
+  WidgetContainerStyleOptions & {
+    size: string;
+    type: string;
+    direction: string;
+    labels: {
+      enabled: boolean;
+      categories: boolean;
+      percent: boolean;
+      value: boolean;
+      decimals: boolean;
+    };
+  };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PluginStyle = any;
@@ -325,7 +346,7 @@ export type TableWidgetStyle = {
   'colors/rows': boolean;
 };
 
-export type IndicatorWidgetStyle = {
+export type IndicatorWidgetStyle = WidgetContainerStyleOptions & {
   'indicator/gauge': {
     subtype: string;
     skin: string;
@@ -404,7 +425,7 @@ export type SunburstWidgetStyle = {
   'tooltip/value': boolean;
 };
 
-export type BoxplotWidgetStyle = {
+export type BoxplotWidgetStyle = WidgetContainerStyleOptions & {
   xAxis: AxisStyle;
   yAxis: AxisStyle;
   whisker: {
@@ -417,7 +438,7 @@ export type BoxplotWidgetStyle = {
   };
 };
 
-export type ScattermapWidgetStyle = {
+export type ScattermapWidgetStyle = WidgetContainerStyleOptions & {
   markers: {
     fill: 'filled' | 'filled-light' | 'hollow' | 'hollow-bold';
     size: {
@@ -431,7 +452,7 @@ export type ScattermapWidgetStyle = {
 /** Currently, WidgetStyle for areamap is an empty object */
 export type AreamapWidgetStyle = {};
 
-export type WidgetStyle =
+export type WidgetStyle = { widgetDesign?: WidgetDesign } & (
   | CartesianWidgetStyle
   | PolarWidgetStyle
   | FunnelWidgetStyle
@@ -443,7 +464,8 @@ export type WidgetStyle =
   | BoxplotWidgetStyle
   | ScattermapWidgetStyle
   | AreamapWidgetStyle
-  | PivotWidgetStyle;
+  | PivotWidgetStyle
+);
 
 export enum FiltersMergeStrategyEnum {
   WIDGET_FIRST = 'widgetFirst',

@@ -55,14 +55,13 @@ export class DimensionalQueryClient implements QueryClient {
     queryDescription: QueryDescription,
     config?: QueryExecutionConfig,
   ): ExecutingQueryResult {
-    validateQueryDescription(queryDescription);
-
     const taskPassport = new QueryTaskPassport('SEND_JAQL_QUERY', queryDescription, {
       ...(config ? config : {}),
       shouldSkipHighlightsWithoutAttributes: this.shouldSkipHighlightsWithoutAttributes || false,
     });
     return {
       resultPromise: new Promise((resolve, reject) => {
+        validateQueryDescription(queryDescription);
         void this.taskManager.executeQuerySending(taskPassport).then((executionResult) => {
           if (executionResult.status === ExecutionResultStatus.SUCCESS) {
             resolve(executionResult.result!);
@@ -80,14 +79,13 @@ export class DimensionalQueryClient implements QueryClient {
     queryDescription: QueryDescription,
     config?: QueryExecutionConfig,
   ): ExecutingCsvQueryResult {
-    validateQueryDescription(queryDescription);
-
     const taskPassport = new QueryTaskPassport('SEND_DOWNLOAD_CSV_QUERY', queryDescription, {
       ...(config ? config : {}),
       shouldSkipHighlightsWithoutAttributes: this.shouldSkipHighlightsWithoutAttributes || false,
     });
     return {
       resultPromise: new Promise((resolve, reject) => {
+        validateQueryDescription(queryDescription);
         void this.taskManager.executeDownloadCsvSending(taskPassport).then((executionResult) => {
           if (executionResult.status === ExecutionResultStatus.SUCCESS) {
             resolve(executionResult.result!);
@@ -113,14 +111,13 @@ export class DimensionalQueryClient implements QueryClient {
     pivotQueryDescription: PivotQueryDescription,
     config?: QueryExecutionConfig,
   ): ExecutingPivotQueryResult {
-    validatePivotQueryDescription(pivotQueryDescription);
-
     const taskPassport = new PivotQueryTaskPassport('SEND_JAQL_QUERY', pivotQueryDescription, {
       ...(config ? config : {}),
       shouldSkipHighlightsWithoutAttributes: this.shouldSkipHighlightsWithoutAttributes || false,
     });
     return {
       resultPromise: new Promise((resolve, reject) => {
+        validatePivotQueryDescription(pivotQueryDescription);
         void this.taskManager.executePivotQuerySending(taskPassport).then((executionResult) => {
           if (executionResult.status === ExecutionResultStatus.SUCCESS) {
             resolve(executionResult.result!);

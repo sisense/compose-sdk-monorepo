@@ -1,3 +1,4 @@
+import { LEGACY_DESIGN_TYPES } from './../themes/legacy-design-settings';
 /* eslint-disable max-params */
 import { TranslatableError } from '../translation/translatable-error';
 import {
@@ -22,6 +23,11 @@ import {
   AreamapStyleOptions,
   AreamapType,
   PivotTableStyleOptions,
+  SpaceSizes,
+  RadiusSizes,
+  ShadowsTypes,
+  AlignmentTypes,
+  WidgetStyleOptions,
 } from '../types';
 import {
   Panel,
@@ -40,6 +46,7 @@ import {
   BoxplotWidgetStyle,
   ScattermapWidgetStyle,
   PivotWidgetStyle,
+  WidgetDesign,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
 
@@ -514,4 +521,40 @@ export function extractStyleOptions<WType extends WidgetType>(
     default:
       throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }
+}
+/**
+ * Merges the widget style with the widget design
+ *
+ * @param widgetStyle - The widget style
+ * @param widgetDesign - The widget design
+ * @param isWidgetDesignStyleEnabled - The flag to enable the widget design style
+ * @returns The merged widget style
+ */
+export function getStyleWithWigetDesign(
+  widgetStyle: ChartStyleOptions | TableStyleOptions,
+  widgetDesign?: WidgetDesign,
+  isWidgetDesignStyleEnabled?: boolean,
+): WidgetStyleOptions {
+  if (!widgetDesign || !isWidgetDesignStyleEnabled) return widgetStyle;
+
+  const flattenedWidgetDesign = {
+    backgroundColor: widgetDesign.widgetBackgroundColor,
+    spaceAround: LEGACY_DESIGN_TYPES[widgetDesign.widgetSpacing] as SpaceSizes,
+    cornerRadius: LEGACY_DESIGN_TYPES[widgetDesign.widgetCornerRadius] as RadiusSizes,
+    shadow: LEGACY_DESIGN_TYPES[widgetDesign.widgetShadow] as ShadowsTypes,
+    border: widgetDesign.widgetBorderEnabled,
+    borderColor: widgetDesign.widgetBorderColor,
+    header: {
+      titleTextColor: widgetDesign.widgetTitleColor,
+      titleAlignment: LEGACY_DESIGN_TYPES[widgetDesign.widgetTitleAlignment] as AlignmentTypes,
+      dividerLine: widgetDesign.widgetTitleDividerEnabled,
+      dividerLineColor: widgetDesign.widgetTitleDividerColor,
+      backgroundColor: widgetDesign.widgetTitleBackgroundColor,
+    },
+  };
+
+  return {
+    ...widgetStyle,
+    ...flattenedWidgetDesign,
+  };
 }

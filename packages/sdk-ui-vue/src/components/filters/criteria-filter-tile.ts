@@ -43,10 +43,25 @@ import type { NumericFilter, RankingFilter, TextFilter } from '@sisense/sdk-data
  */
 export const CriteriaFilterTile = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.arrangement}
+     */
     arrangement: Object as PropType<CriteriaFilterTileProps['arrangement']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.filter}
+     */
     filter: Object as PropType<CriteriaFilterTileProps['filter']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.measures}
+     */
     measures: Object as PropType<CriteriaFilterTileProps['measures']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onUpdate}
+     */
     onUpdate: Function as PropType<CriteriaFilterTileProps['onUpdate']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.title}
+     */
     title: Object as PropType<CriteriaFilterTileProps['title']>,
   },
 

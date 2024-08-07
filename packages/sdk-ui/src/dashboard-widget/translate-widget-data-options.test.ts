@@ -17,7 +17,7 @@ import {
   IndicatorChartDataOptions,
   ScatterChartDataOptions,
 } from '../types';
-import { PanelItem } from './types';
+import { BoxplotWidgetStyle, PanelItem } from './types';
 import {
   AnyColumn,
   BoxplotChartDataOptions,
@@ -365,7 +365,7 @@ describe('translate widget data options', () => {
         outliers: {
           enabled: true,
         },
-      };
+      } as BoxplotWidgetStyle;
 
       const dataOptions = extractDataOptions('chart/boxplot', panels, style);
       const { category, value } = dataOptions as BoxplotChartDataOptions;

@@ -113,10 +113,10 @@ export type AxisPlotLine = {
 };
 
 export type AxisPlotBand = {
-  isPlotBand: boolean;
   from: number;
   to: number;
-  label: {
+  color?: string;
+  label?: {
     text: string;
     y: number;
     style?: Style;
@@ -362,7 +362,7 @@ export const getXAxisSettings = (
         style: fontStyleDefault,
         ...(isPolarChart && { rotation: 0 }),
         formatter: function () {
-          const that: { value: string } = this as { value: string };
+          const that: { value: string } = this as unknown as { value: string };
           if (!x1 || !isNumber(x1?.type) || isNaN(parseFloat(that.value))) {
             return that.value;
           }

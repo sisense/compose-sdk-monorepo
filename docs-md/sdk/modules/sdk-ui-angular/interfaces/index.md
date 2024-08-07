@@ -45,4 +45,3 @@ TypeScript interfaces for components and services listed above
 - [TableStyleOptions](interface.TableStyleOptions.md)
 - [ThemeSettings](interface.ThemeSettings.md)
 - [TreemapStyleOptions](interface.TreemapStyleOptions.md)
-- [WidgetStyleOptions](interface.WidgetStyleOptions.md)

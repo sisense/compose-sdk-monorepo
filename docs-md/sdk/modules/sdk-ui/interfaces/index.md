@@ -94,4 +94,4 @@ TypeScript interfaces for components and hooks listed above
 - [UseGetQueryRecommendationsParams](interface.UseGetQueryRecommendationsParams.md)
 - [UseGetQueryRecommendationsState](interface.UseGetQueryRecommendationsState.md)
 - [UseGetSharedFormulaParams](interface.UseGetSharedFormulaParams.md)
-- [WidgetStyleOptions](interface.WidgetStyleOptions.md)
+- [WidgetContainerStyleOptions](interface.WidgetContainerStyleOptions.md)

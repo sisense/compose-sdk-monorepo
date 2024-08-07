@@ -44,6 +44,7 @@ exports[`WidgetModel > getExecutePivotQueryParams > getChartProps > should retur
           "trillion": false,
         },
         "sortType": "sortNone",
+        "width": 134,
       },
       {
         "column": {
@@ -73,6 +74,7 @@ exports[`WidgetModel > getExecutePivotQueryParams > getChartProps > should retur
           "trillion": false,
         },
         "sortType": "sortNone",
+        "width": 182,
       },
     ],
   },

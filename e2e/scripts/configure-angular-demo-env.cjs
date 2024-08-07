@@ -3,7 +3,7 @@ const path = require('path');
 
 // Check if the environment variables are set
 if (!process.env.E2E_SISENSE_URL || !process.env.E2E_SISENSE_TOKEN) {
-  console.error('Error: APP_SISENSE_URL and APP_SISENSE_TOKEN environment variables are required.');
+  console.error('Error: E2E_SISENSE_URL and E2E_SISENSE_TOKEN environment variables are required.');
   process.exit(1);
 }
 
@@ -27,3 +27,5 @@ if (!fs.existsSync(targetDir)) {
 fs.writeFileSync(path.join(targetDir, fileName), envContent, 'utf8');
 
 console.log(`Environment file created at ${path.join(targetDir, fileName)}`);
+
+process.exit(0);

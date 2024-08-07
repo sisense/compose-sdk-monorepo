@@ -5,6 +5,7 @@ import { useSisenseContext } from '../sisense-context/sisense-context';
 import { WidgetDto } from '../dashboard-widget/types';
 import type { DashboardDto } from './types/dashboard-dto';
 import { TranslatableError } from '../translation/translatable-error';
+import { PaletteDto } from '@/api/types/palette-dto';
 
 type GetDashboardsOptions = {
   searchByTitle?: string;
@@ -95,6 +96,13 @@ export class RestApi {
    */
   public getUsaStatesGeoJson = () => {
     return this.httpClient.get<GeoJsonFeatureCollection>(`api/v1/geo/geojson/usa`);
+  };
+
+  /**
+   * Get all palettes
+   */
+  public getPalettes = () => {
+    return this.httpClient.get<PaletteDto[]>(`api/palettes`);
   };
 }
 

@@ -89,6 +89,8 @@ export type WidgetModelSuccessState = {
 /**
  * React hook that retrieves an existing widget model from a Fusion Embed instance.
  *
+ * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * ## Example
  *
  * Retrieve a widget model and use it to populate a `Chart` component
@@ -141,7 +143,7 @@ export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetM
       dispatch({ type: 'loading' });
 
       const { dashboardOid, widgetOid } = params;
-      void getWidgetModel(app.httpClient, dashboardOid, widgetOid, themeSettings)
+      void getWidgetModel(app.httpClient, dashboardOid, widgetOid, themeSettings, app.settings)
         .then((data) => {
           dispatch({ type: 'success', data });
         })

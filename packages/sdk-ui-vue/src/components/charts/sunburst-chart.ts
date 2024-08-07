@@ -43,14 +43,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const SunburstChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<SunburstChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<SunburstChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<SunburstChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<SunburstChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<SunburstChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<SunburstChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<SunburstChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<SunburstChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<SunburstChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(SunburstChartPreact, props),

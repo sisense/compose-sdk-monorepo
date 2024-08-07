@@ -40,21 +40,37 @@ import { setupHelperWithChildren } from '../setup-helper';
  * </script>
  * ```
  *
- * @prop {Function} clearDrilldownSelections - Function to clear all drilldown selections made by the user.
- * @prop {Object} currentDimension - Object representing the current dimension in the drilldown path.
- * @prop {Function} sliceDrilldownSelections - Function to slice the drilldown selections up to a certain index, allowing the user to navigate back in the drilldown path.
- * @prop {Object} filtersDisplayValues - Object mapping the internal filter values to human-readable display values, enhancing the usability of the breadcrumbs.
  * @group Drilldown
  */
 export const DrilldownBreadcrumbs = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.clearDrilldownSelections}
+     *
+     * @category Widget
+     */
     clearDrilldownSelections: Function as PropType<
       DrilldownBreadcrumbsProps['clearDrilldownSelections']
     >,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.currentDimension}
+     *
+     * @category Widget
+     */
     currentDimension: Object as PropType<DrilldownBreadcrumbsProps['currentDimension']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.sliceDrilldownSelections}
+     *
+     * @category Widget
+     */
     sliceDrilldownSelections: Function as PropType<
       DrilldownBreadcrumbsProps['sliceDrilldownSelections']
     >,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.filtersDisplayValues}
+     *
+     * @category Widget
+     */
     filtersDisplayValues: Object as PropType<DrilldownBreadcrumbsProps['filtersDisplayValues']>,
   },
   setup: (props, { slots }) => {

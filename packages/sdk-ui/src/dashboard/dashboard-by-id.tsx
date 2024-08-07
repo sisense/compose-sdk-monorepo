@@ -7,6 +7,8 @@ import { useThemeContext } from '@/theme-provider';
 /**
  * React component that renders a dashboard created in Sisense Fusion Embed
  *
+ * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @internal
  */
 export const DashboardById = ({ dashboardOid }: DashboardByIdProps) => {

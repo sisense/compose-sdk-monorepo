@@ -36,8 +36,10 @@ const createFilterFromFilterDto = (filterDto: FilterDto): Filter => {
 const createFilterFromCascadingFilterDto = (
   cascadingFilterDto: CascadingFilterDto,
 ): CascadingFilter => {
-  const innerFilters = cascadingFilterDto.levels.map((level) => createFilterFromJaql(level));
-  const filter = new CascadingFilter(innerFilters);
+  const innerFilters = cascadingFilterDto.levels.map((level) =>
+    createFilterFromJaql(level, cascadingFilterDto.instanceid),
+  );
+  const filter = new CascadingFilter(innerFilters, cascadingFilterDto.instanceid);
   filter.disabled = cascadingFilterDto.disabled ?? false;
   filter.locked = cascadingFilterDto.locked ?? false;
   return filter;

@@ -29,18 +29,33 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html'], ['junit', { outputFile: 'results.xml' }]],
+  reporter: [
+    ['html', { port: 5400, host: '0.0.0.0', open: 'never' }],
+    ['junit', { outputFile: 'results.xml' }],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Use `data-visual-testid` as test id attribute */
     testIdAttribute: 'data-visual-testid',
   },
-  webServer: getAppsConfig(),
+  webServer: process.env.USE_EXTERNAL_HOST ? null : getAppsConfig(),
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: [
+            '--font-render-hinting=none',
+            '--disable-skia-runtime-opts',
+            '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-system-font-check',
+            '--disable-remote-fonts',
+          ],
+        },
+      },
     },
   ],
 });

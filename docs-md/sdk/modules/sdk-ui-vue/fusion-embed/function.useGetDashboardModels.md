@@ -11,6 +11,8 @@ This function abstracts the complexities of managing API calls and state managem
 dashboard models from Sisense. It provides a reactive interface to handle loading, success, and error states,
 making it easier to integrate Sisense analytics within Vue applications.
 
+**Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+
 ## Parameters
 
 | Parameter | Type | Description |

@@ -189,404 +189,230 @@ export function mergeData(
 
 export const defaultQuery = {
   queryGuid: 'CSDK-DEMO-1',
-  datasource: {
-    fullname: 'localhost/Sample ECommerce',
-    id: 'localhost_aSampleIAAaECommerce',
-    address: 'LocalHost',
-    database: 'aSampleIAAaECommerce',
-    live: false,
-    title: 'Sample ECommerce',
-    lastBuildTime: '2023-11-05T23:11:58.774Z',
-  },
+  metadata: [
+    {
+      jaql: {
+        title: 'Category',
+        dim: '[Category.Category]',
+        datatype: 'text',
+        sort: 'desc',
+        sortDetails: {
+          dir: 'desc',
+          initialized: true,
+          field: 4,
+          measurePath: {
+            '3': 'Female',
+          },
+        },
+      },
+      format: {
+        subtotal: true,
+      },
+      panel: 'rows',
+      field: {
+        index: 0,
+        id: 'rows-0',
+      },
+    },
+    {
+      jaql: {
+        title: 'AgeRange',
+        dim: '[Commerce.Age Range]',
+        datatype: 'text',
+        sort: 'asc',
+        sortDetails: {
+          dir: 'asc',
+          initialized: true,
+          field: 1,
+        },
+        in: {
+          selected: {
+            jaql: {
+              title: 'AgeRange',
+              dim: '[Commerce.Age Range]',
+              datatype: 'text',
+              filter: {
+                members: ['0-18', '25-34'],
+              },
+            },
+          },
+        },
+      },
+      format: {
+        subtotal: true,
+      },
+      panel: 'rows',
+      field: {
+        index: 1,
+        id: 'rows-1',
+      },
+    },
+    {
+      jaql: {
+        title: 'Condition',
+        dim: '[Commerce.Condition]',
+        datatype: 'text',
+      },
+      panel: 'rows',
+      field: {
+        index: 2,
+        id: 'rows-2',
+      },
+    },
+    {
+      jaql: {
+        title: 'Gender',
+        dim: '[Commerce.Gender]',
+        datatype: 'text',
+        in: {
+          selected: {
+            jaql: {
+              title: 'Gender',
+              dim: '[Commerce.Gender]',
+              datatype: 'text',
+              filter: {
+                contains: 'Fe',
+              },
+            },
+          },
+        },
+      },
+      format: {
+        subtotal: true,
+      },
+      panel: 'columns',
+      field: {
+        index: 3,
+        id: 'columns-3',
+      },
+    },
+    {
+      jaql: {
+        title: 'Total Cost',
+        dim: '[Commerce.Cost]',
+        datatype: 'numeric',
+        agg: 'sum',
+        subtotalAgg: 'sum',
+      },
+      format: {
+        databars: true,
+      },
+      panel: 'measures',
+      field: {
+        index: 4,
+        id: 'measures-4',
+      },
+    },
+    {
+      jaql: {
+        title: 'Total Revenue',
+        dim: '[Commerce.Revenue]',
+        datatype: 'numeric',
+        agg: 'sum',
+        subtotalAgg: 'sum',
+      },
+      format: {
+        databars: false,
+      },
+      panel: 'measures',
+      field: {
+        index: 5,
+        id: 'measures-5',
+      },
+    },
+    {
+      jaql: {
+        title: 'Gender',
+        dim: '[Commerce.Gender]',
+        datatype: 'text',
+        filter: {
+          members: ['Female', 'Male'],
+        },
+      },
+      panel: 'scope',
+    },
+  ],
+  datasource: 'Sample ECommerce',
+  by: 'ComposeSDK',
+  dashboard: 'ComposeSDK',
+  widget: 'ComposeSDK',
   format: 'pivot',
   grandTotals: {
     title: 'Grand Total',
     rows: true,
     columns: true,
   },
-  metadata: [
-    {
-      jaql: {
-        table: 'Category',
-        column: 'Category',
-        dim: '[Category.Category]',
-        datatype: 'text',
-        merged: true,
-        title: 'Category',
-        sort: 'desc',
-        sortDetails: {
-          field: 4,
-          dir: 'desc',
-          sortingLastDimension: false,
-          measurePath: {
-            '3': 'Male',
-          },
-          isLastApplied: true,
-          initialized: true,
-        },
-      },
-      instanceid: '04E14-67D6-C5',
-      panel: 'rows',
-      field: {
-        id: '[Category.Category]',
-        index: 0,
-      },
-      format: {
-        subtotal: true,
-      },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Age Range',
-        dim: '[Commerce.Age Range]',
-        datatype: 'text',
-        merged: true,
-        title: 'Age Range',
-        sort: 'desc',
-        sortDetails: {
-          field: 5,
-          dir: 'desc',
-          sortingLastDimension: false,
-          measurePath: {
-            '3': 'Female',
-          },
-          initialized: true,
-        },
-      },
-      instanceid: '3FC24-E702-EB',
-      panel: 'rows',
-      field: {
-        id: '[Commerce.Age Range]',
-        index: 1,
-      },
-      format: {
-        subtotal: true,
-      },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Condition',
-        dim: '[Commerce.Condition]',
-        datatype: 'text',
-        merged: true,
-        title: 'Condition',
-      },
-      instanceid: 'FCFBE-2009-AA',
-      panel: 'rows',
-      field: {
-        id: '[Commerce.Condition]',
-        index: 2,
-      },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Gender',
-        dim: '[Commerce.Gender]',
-        datatype: 'text',
-        merged: true,
-        title: 'Gender',
-      },
-      instanceid: '4FA39-8FBF-E1',
-      panel: 'columns',
-      field: {
-        id: '[Commerce.Gender]',
-        index: 3,
-      },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Cost',
-        dim: '[Commerce.Cost]',
-        datatype: 'numeric',
-        agg: 'sum',
-        title: 'Total Cost',
-      },
-      instanceid: '880A3-6243-DC',
-      panel: 'measures',
-      field: {
-        id: '[Commerce.Cost]_sum',
-        index: 4,
-      },
-      format: {
-        mask: {
-          abbreviations: {
-            t: false,
-            b: false,
-            m: false,
-            k: true,
-          },
-          decimals: 3,
-          number: {
-            separated: true,
-          },
-        },
-        color: {
-          type: 'color',
-          color: '#ffcd84',
-          isHandPickedColor: true,
-        },
-        databars: true,
-        colorSecond: {
-          color: '#00cee6',
-          colorIndex: 0,
-          type: 'color',
-        },
-      },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Revenue',
-        dim: '[Commerce.Revenue]',
-        datatype: 'numeric',
-        agg: 'sum',
-        title: 'Total Revenue',
-      },
-      instanceid: 'C5CA3-32A1-4D',
-      panel: 'measures',
-      field: {
-        id: '[Commerce.Revenue]_sum',
-        index: 5,
-      },
-      format: {
-        mask: {
-          abbreviations: {
-            t: false,
-            b: false,
-            m: false,
-            k: true,
-          },
-          decimals: 1,
-          number: {
-            separated: false,
-          },
-        },
-        color: {
-          type: 'color',
-          color: '#c9c9ff',
-          isHandPickedColor: true,
-        },
-        databars: true,
-        colorSecond: {
-          color: '#9b9bd7',
-          colorIndex: 1,
-          type: 'color',
-        },
-      },
-    },
-    {
-      jaql: {
-        dimension: '[Commerce.Condition]',
-        table: 'Commerce',
-        column: 'Gender',
-        dim: '[Commerce.Gender]',
-        datatype: 'text',
-        merged: true,
-        datasource: {
-          fullname: 'localhost/Sample ECommerce',
-          id: 'localhost_aSampleIAAaECommerce',
-          address: 'LocalHost',
-          database: 'aSampleIAAaECommerce',
-          live: false,
-          title: 'Sample ECommerce',
-        },
-        firstday: 'mon',
-        locale: 'en-us',
-        filter: {
-          explicit: true,
-          multiSelection: true,
-          members: ['Female', 'Male'],
-        },
-        title: 'Gender',
-        collapsed: true,
-      },
-      instanceid: '47CC8-9209-F6',
-      panel: 'scope',
-    },
-  ],
-  m2mThresholdFlag: 0,
-  isMaskedResult: true,
-  widgetType: 'pivot2',
-  by: 'widget',
-  dashboard: '65b55cc549f6500032665891;Simple Pivot',
-  widget: '65b55cea49f6500032665893;',
-  xTenantId: '63742d045f74f4001a9dab95',
-  offset: 0,
-  count: -1,
 };
 
 export const defaultQuery2 = {
   queryGuid: 'CSDK-DEMO-2',
-  datasource: {
-    fullname: 'localhost/Sample ECommerce',
-    id: 'localhost_aSampleIAAaECommerce',
-    address: 'LocalHost',
-    database: 'aSampleIAAaECommerce',
-    live: false,
-    title: 'Sample ECommerce',
-    lastBuildTime: '2023-11-05T23:11:58.774Z',
-  },
-  format: 'pivot',
-  grandTotals: {
-    title: 'Grand Total',
-    rows: true,
-    columns: true,
-  },
   metadata: [
     {
       jaql: {
-        table: 'Category',
-        column: 'Category',
-        dim: '[Category.Category]',
+        title: 'AgeRange',
+        dim: '[Commerce.Age Range]',
         datatype: 'text',
-        merged: true,
-        title: 'Category',
+        in: {
+          selected: {
+            jaql: {
+              title: 'AgeRange',
+              dim: '[Commerce.Age Range]',
+              datatype: 'text',
+              filter: {
+                members: ['0-18', '25-34'],
+              },
+            },
+          },
+        },
       },
-      instanceid: 'DBA1B-CB46-81',
       panel: 'rows',
       field: {
-        id: '[Category.Category]',
         index: 0,
+        id: 'rows-0',
+      },
+    },
+    {
+      jaql: {
+        title: 'Gender',
+        dim: '[Commerce.Gender]',
+        datatype: 'text',
       },
       format: {
         subtotal: true,
       },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Condition',
-        dim: '[Commerce.Condition]',
-        datatype: 'text',
-        merged: true,
-        title: 'Condition',
-      },
-      instanceid: 'A0B83-D8AF-02',
-      panel: 'rows',
-      field: {
-        id: '[Commerce.Condition]',
-        index: 2,
-      },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Gender',
-        dim: '[Commerce.Gender]',
-        datatype: 'text',
-        merged: true,
-        title: 'Gender',
-      },
-      instanceid: 'AA192-EB6E-B8',
       panel: 'columns',
       field: {
-        id: '[Commerce.Gender]',
-        index: 3,
+        index: 1,
+        id: 'columns-1',
       },
     },
     {
       jaql: {
-        table: 'Commerce',
-        column: 'Revenue',
-        dim: '[Commerce.Revenue]',
-        datatype: 'numeric',
-        agg: 'sum',
-        title: 'Total Revenue',
-      },
-      instanceid: 'BAB50-052D-ED',
-      panel: 'measures',
-      field: {
-        id: '[Commerce.Revenue]_sum',
-        index: 4,
-      },
-      format: {
-        mask: {
-          type: 'number',
-          t: true,
-          b: true,
-          separated: true,
-          decimals: 'auto',
-          isdefault: true,
-        },
-        color: {
-          type: 'color',
-          color: 'transparent',
-        },
-      },
-    },
-    {
-      jaql: {
-        table: 'Commerce',
-        column: 'Cost',
+        title: 'Total Cost',
         dim: '[Commerce.Cost]',
         datatype: 'numeric',
         agg: 'sum',
-        title: 'Total Cost',
-      },
-      instanceid: 'C4886-C7BE-2C',
-      panel: 'measures',
-      field: {
-        id: '[Commerce.Cost]_sum',
-        index: 5,
       },
       format: {
-        mask: {
-          type: 'number',
-          t: true,
-          b: true,
-          separated: true,
-          decimals: 'auto',
-          isdefault: true,
-        },
-        color: {
-          type: 'color',
-          color: 'transparent',
-        },
+        databars: false,
       },
-    },
-    {
-      jaql: {
-        dimension: '[Brand.Brand]',
-        table: 'Commerce',
-        column: 'Gender',
-        dim: '[Commerce.Gender]',
-        datatype: 'text',
-        merged: true,
-        datasource: {
-          fullname: 'localhost/Sample ECommerce',
-          id: 'localhost_aSampleIAAaECommerce',
-          address: 'LocalHost',
-          database: 'aSampleIAAaECommerce',
-          live: false,
-          title: 'Sample ECommerce',
-        },
-        firstday: 'mon',
-        locale: 'en-us',
-        filter: {
-          explicit: true,
-          multiSelection: true,
-          members: ['Female', 'Male'],
-        },
-        title: 'Gender',
-        collapsed: true,
+      panel: 'measures',
+      field: {
+        index: 2,
+        id: 'measures-2',
       },
-      instanceid: 'BB8B0-F98F-F6',
-      panel: 'scope',
     },
   ],
-  m2mThresholdFlag: 0,
-  isMaskedResult: true,
-  widgetType: 'pivot2',
-  by: 'widget',
-  dashboard: '65352678d70aac00335b99b5;Pivot',
-  widget: '65482937d70aac00335b99bf;COMPLEX PIVOT TABLE',
-  xTenantId: '63742d045f74f4001a9dab95',
-  offset: 0,
-  count: -1,
+  datasource: 'Sample ECommerce',
+  by: 'ComposeSDK',
+  dashboard: 'ComposeSDK',
+  widget: 'ComposeSDK',
+  format: 'pivot',
+  grandTotals: {
+    title: 'Grand Total',
+    rows: false,
+    columns: false,
+  },
 };
 
 // console.log(defaultQuery);

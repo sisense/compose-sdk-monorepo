@@ -44,14 +44,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const LineChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataOptions}
+     *
+     * @category Data
+     */
     dataOptions: Object as PropType<LineChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<LineChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<LineChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<LineChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<LineChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<LineChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<LineChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<LineChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<LineChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(LineChartPreact, props),

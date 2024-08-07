@@ -42,10 +42,35 @@ import { setupHelper } from '../../setup-helper';
  */
 export const IndicatorChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<IndicatorChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<IndicatorChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<IndicatorChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<IndicatorChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<IndicatorChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(IndicatorChartPreact, props),

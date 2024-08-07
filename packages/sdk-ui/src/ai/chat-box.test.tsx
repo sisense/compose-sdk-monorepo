@@ -7,6 +7,7 @@ import { Chat, ChatResponse, QueryRecommendation } from './api/types';
 import ChatBox from './chat-box';
 import { AiTestWrapper } from './__mocks__';
 import { chat, contexts } from './__mocks__/data';
+import { setTimeout } from 'timers/promises';
 
 beforeEach(() => {
   server.use(
@@ -56,6 +57,7 @@ it('can render initial suggested questions', async () => {
       <ChatBox contextTitle="Model 2" />
     </AiTestWrapper>,
   );
+  await setTimeout(250);
 
   await waitFor(() => expect(screen.getByText('response text from history')).toBeInTheDocument());
 

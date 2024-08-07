@@ -99,6 +99,15 @@ export const translation: TranslationDictionary = {
       max: 'Максимум',
     },
   },
+  advanced: {
+    tooltip: {
+      min: 'Lower Bound',
+      max: 'Upper Bound',
+      forecastValue: 'Forecast Value',
+      forecast: 'Forecast',
+      trend: 'Trend',
+    },
+  },
   arearange: {
     tooltip: {
       min: 'Мінімум',

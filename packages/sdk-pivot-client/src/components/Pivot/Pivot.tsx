@@ -465,6 +465,9 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
               totalColumnsCount={totalColumnsCount}
               columnsCount={columnsCount}
               onHeightChange={this.onPaginationHeightChange}
+              style={{
+                fontFamily,
+              }}
             />
           ) : null}
           {overlay ? <div className={PIVOT_OVERLAY} /> : null}

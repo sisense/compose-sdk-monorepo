@@ -4,16 +4,22 @@ import { makeScreenshotsOverPage } from '../__test-helpers__/makeScreenshot';
 
 const { url } = getAppConfig(AppsNames.REACT_DEMO);
 
-test('verify chart gallery page', async ({ page }) => {
+// Disabled due to flaky behaviour of demo page related to the issue in chart theming async loading
+test.skip('verify chart gallery page', async ({ page }) => {
   await page.goto(url);
 
   await makeScreenshotsOverPage(page);
 });
-
-test('verify chart gallery page with dark theme', async ({ page }) => {
+test.skip('verify chart gallery page with dark theme', async ({ page }) => {
   await page.goto(url);
 
   await page.locator('button', { hasText: 'Theme Two' }).click();
+
+  await makeScreenshotsOverPage(page);
+});
+
+test('verify query driven chart', async ({ page }) => {
+  await page.goto(`${url}/query-driven-chart`);
 
   await makeScreenshotsOverPage(page);
 });

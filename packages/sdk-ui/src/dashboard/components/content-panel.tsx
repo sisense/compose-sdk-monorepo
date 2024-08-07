@@ -62,6 +62,7 @@ const renderWidgetModel = (w: WidgetModel | undefined, theme: CompleteThemeSetti
           title={w.title}
           description={w.description}
           dataSetName={w.dataSource}
+          styleOptions={w.styleOptions}
           onRefresh={() => console.log('DEBUG refresh')}
         >
           <plugin.Plugin {...pluginChartProps} />

@@ -53,6 +53,7 @@ export const useTableData = ({
 }: UseDataProps): [Data | null, TableDataOptionsInternal | null] => {
   const setError = useSetError();
   const [data, setData] = useState(isDataSource(dataSet) ? null : dataSet);
+  const [isLoading, setIsLoading] = useState(false);
   const isMoreDataAvailable = useRef(true);
   const { isInitialized, app } = useSisenseContext();
   const [dataOptions, setDataOptions] = useState<TableDataOptionsInternal | null>(null);
@@ -66,11 +67,11 @@ export const useTableData = ({
     if (isDataSource(dataSet)) {
       if (!isInitialized) {
         setError(new TranslatableError('errors.chartNoSisenseContext'));
+        return;
       }
 
       if (!app || (!isMoreDataAvailable.current && offset > 0)) return;
-
-      setData(null);
+      setIsLoading(true);
 
       const executeQuery = app.settings.queryCacheConfig?.enabled
         ? executeQueryWithCache
@@ -99,10 +100,14 @@ export const useTableData = ({
             : queryResult.rows;
 
           if (offset > 0) {
-            setData((d) => ({
-              columns: queryResult.columns,
-              rows: d ? [...d.rows, ...rows] : rows,
-            }));
+            setData((d) => {
+              const length = d?.rows.length;
+              const prev = !length ? null : length > offset ? d.rows.slice(0, offset) : d.rows;
+              return {
+                columns: queryResult.columns,
+                rows: !prev ? rows : [...prev, ...rows],
+              };
+            });
           } else {
             setData({
               columns: queryResult.columns,
@@ -111,7 +116,14 @@ export const useTableData = ({
           }
           setDataOptions(originalDataOptions);
         })
-        .catch((e: Error) => setError(e));
+        .finally(() => {
+          setIsLoading(false);
+        })
+        .catch((e: Error) => {
+          if (!ignore) {
+            setError(e);
+          }
+        });
     } else {
       setData(dataSet);
       setDataOptions(originalDataOptions);
@@ -135,5 +147,5 @@ export const useTableData = ({
     setError,
   ]);
 
-  return [data, dataOptions];
+  return [isLoading ? null : data, dataOptions];
 };

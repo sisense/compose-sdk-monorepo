@@ -16,6 +16,7 @@ import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model';
 import { WidgetModel } from '../models';
 import { PivotTableWidgetProps } from '..';
 import { PivotTableWidget } from '@/widgets/pivot-table-widget';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 function getWidgetProps(widgetModel: WidgetModel) {
   const { widgetType } = widgetModel;
@@ -40,6 +41,8 @@ function getWidgetProps(widgetModel: WidgetModel) {
  * To learn more about using Sisense Fusion Widgets in Compose SDK,
  * see [Sisense Fusion Widgets](/guides/sdk/guides/charts/guide-fusion-widgets.html).
  *
+ * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * ## Example
  *
  * Display two dashboard widgets from a Fusion Embed instance.
@@ -60,6 +63,8 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
 })((props) => {
   const { widgetOid, dashboardOid, includeDashboardFilters, ...restProps } = props;
   const { themeSettings } = useThemeContext();
+  const { app } = useSisenseContext();
+
   const {
     widget: fetchedWidget,
     dashboard: fetchedDashboard,
@@ -77,7 +82,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
       return { widgetType: null, props: null };
     }
 
-    const widgetModel = new WidgetModel(fetchedWidget, themeSettings);
+    const widgetModel = new WidgetModel(fetchedWidget, themeSettings, app?.settings);
     const extractedWidgetProps = getWidgetProps(widgetModel);
     if (includeDashboardFilters) {
       const { filters: dashboardFilters, highlights: dashboardHighlights } =
@@ -91,7 +96,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     }
 
     return extractedWidgetProps;
-  }, [fetchedWidget, fetchedDashboard, themeSettings, includeDashboardFilters]);
+  }, [fetchedWidget, fetchedDashboard, themeSettings, includeDashboardFilters, app?.settings]);
 
   // if filter relations are set on dashboard widget, additionally provided filters will be ignored
   // since there is not enough information how to merge them

@@ -206,6 +206,7 @@ export const PivotStylingWrapper = styled.div<{
   .MuiTablePagination-root {
     .MuiTypography-root,
     .MuiPaginationItem-root {
+      font-family: ${(props) => props.fontFamily};
       color: ${(props) => props.navigationPrimaryColor};
     }
     .Mui-selected {

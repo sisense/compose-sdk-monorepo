@@ -48,11 +48,29 @@ import { setupHelper } from '../../setup-helper';
 
 export const MemberFilterTile = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.attribute}
+     */
     attribute: Object as PropType<MemberFilterTileProps['attribute']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.dataSource}
+     */
     dataSource: Object as PropType<MemberFilterTileProps['dataSource']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.filter}
+     */
     filter: Object as PropType<MemberFilterTileProps['filter']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onChange}
+     */
     onChange: Function as PropType<MemberFilterTileProps['onChange']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.parentFilters}
+     */
     parentFilters: Object as PropType<MemberFilterTileProps['parentFilters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.title}
+     */
     title: Object as PropType<MemberFilterTileProps['title']>,
   },
   setup: (props) => setupHelper(MemberFilterTilePreact, props),

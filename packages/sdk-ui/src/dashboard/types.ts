@@ -1,4 +1,4 @@
-import { Layout, WidgetFilterOptions, WidgetModel } from '@/models';
+import { DashboardStyleOptions, Layout, WidgetFilterOptions, WidgetModel } from '@/models';
 import { DataSource, Filter } from '@sisense/sdk-data';
 
 /**
@@ -36,6 +36,7 @@ export interface DashboardProps {
   filters: Filter[];
   defaultDataSource?: DataSource;
   widgetFilterOptions?: WidgetFilterOptions;
+  styleOptions: DashboardStyleOptions;
 }
 
 /**

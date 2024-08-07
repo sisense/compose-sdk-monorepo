@@ -14,7 +14,10 @@ import {
 import { extractDataOptions } from '../../dashboard-widget/translate-widget-data-options';
 import { extractDrilldownOptions } from '../../dashboard-widget/translate-widget-drilldown-options';
 import { extractFilters } from '../../dashboard-widget/translate-widget-filters';
-import { extractStyleOptions } from '../../dashboard-widget/translate-widget-style-options';
+import {
+  extractStyleOptions,
+  getStyleWithWigetDesign,
+} from '../../dashboard-widget/translate-widget-style-options';
 import { Panel, WidgetDto, WidgetSubtype, WidgetType } from '../../dashboard-widget/types';
 import {
   getChartType,
@@ -43,8 +46,10 @@ import {
   CompleteThemeSettings,
   PivotTableWidgetStyleOptions,
   RenderToolbarHandler,
+  WidgetContainerStyleOptions,
   WidgetStyleOptions,
 } from '../../types';
+import { AppSettings } from '@/app/settings/settings';
 
 /**
  * Widget data options.
@@ -100,7 +105,7 @@ export class WidgetModel {
   /**
    * Widget style options.
    */
-  styleOptions: ChartStyleOptions | TableStyleOptions;
+  styleOptions: WidgetStyleOptions;
 
   /**
    * Widget filters.
@@ -141,12 +146,14 @@ export class WidgetModel {
    *
    * @param widgetDto - The widget DTO to be converted to a widget model
    * @param themeSettings - The theme settings to be used for the widget model
+   * @param appSettings - The application settings to be used for the widget model
    * @internal
    */
   constructor(
     widgetDto: WidgetDto,
     // todo: remove after making palette-dependant colors calculation inside the chart component
     themeSettings?: CompleteThemeSettings,
+    appSettings?: AppSettings,
   ) {
     this.oid = widgetDto.oid;
     this.title = widgetDto.title;
@@ -169,11 +176,21 @@ export class WidgetModel {
         themeSettings?.palette.variantColors,
       );
 
-      this.styleOptions = extractStyleOptions(
+      const styleOptions = extractStyleOptions(
         widgetType,
         widgetDto.subtype as WidgetSubtype,
         widgetDto.style,
         widgetDto.metadata.panels,
+      );
+
+      // take into account widget design style feature flag
+      const isWidgetDesignStyleEnabled =
+        appSettings?.serverFeatures?.widgetDesignStyle?.active ?? true;
+
+      this.styleOptions = getStyleWithWigetDesign(
+        styleOptions,
+        widgetDto.style.widgetDesign,
+        isWidgetDesignStyleEnabled,
       );
     }
 
@@ -471,7 +488,7 @@ export class WidgetModel {
    * @internal
    */
   registerComponentRenderToolbarHandler?(handler: RenderToolbarHandler): void {
-    const widgetStyleOptions = this.styleOptions as WidgetStyleOptions;
+    const widgetStyleOptions = this.styleOptions as WidgetContainerStyleOptions;
     const handlers = widgetStyleOptions?.header?.renderToolbar
       ? [widgetStyleOptions.header.renderToolbar, handler]
       : [handler];

@@ -4,14 +4,6 @@ title: QueryByWidgetIdState
 
 # Type alias QueryByWidgetIdState
 
-> **QueryByWidgetIdState**: [`QueryState`](type-alias.QueryState.md) & \{
-  `query`: [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md) \| `undefined`;
- }
+> **QueryByWidgetIdState**: [`QueryState`](type-alias.QueryState.md) & [`QueryByWidgetIdQueryParams`](type-alias.QueryByWidgetIdQueryParams.md)
 
-> ## `QueryByWidgetIdState.query`
->
-> **query**: [`ExecuteQueryParams`](../interfaces/interface.ExecuteQueryParams.md) \| `undefined`
->
-> Query parameters constructed over the widget
->
->
+State of a query execution retrieving data of Fusion widget.

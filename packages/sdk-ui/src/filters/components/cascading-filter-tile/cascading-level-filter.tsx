@@ -45,7 +45,7 @@ export type CascadingLevelFilterTileProps = {
 const cascadingLevelTileDesign: CompleteFilterTileDesignOptions = {
   header: {
     shouldBeShown: true,
-    isCollapsible: false,
+    isCollapsible: true,
     hasBorder: false,
     hasBackgroundFilterIcon: false,
   },

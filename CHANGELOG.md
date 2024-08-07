@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.16.0] - 2024-08-06
+
+### Added
+- Extend cartesian charts to support trends and forecast for internal testing
+- Extend `ThemeSettings` to support widget theme settings
+- Support widget design styling on fetched dashboards
+- Support dashboard color palette
+- Extend `useExecuteQueryByWidgetId` hook to support pivot tables
+- Add embed code logic in `@sisense/sdk-ui/analytics-composer` namespace for internal testing
+
+### Changed
+- Improve query validation logic for query hooks and components
+- Improve dashboard rendering: conversion of cascading filters between dashboard level and widget level, supporting collapsibility of `CascadingFilter` levels, fixing filter tile borders, fixing "Include All" highlights causing interference with filters
+- Improve charts: styling of scatter charts including data labels and legends, fixing lazy loading of table's page count,
+- Fix issues of pivot table: endless rendering due to updated style options, the theme of pagination panel, "No Results" overlay, pivot sorting and redundant pivot queries
+- Improve testing: visual-regression tests infra and stability, adding tests of different `Indicator` use cases, tests for `useTableData`
+
 ## [1.15.1] - 2024-07-15
 
 ### Changed

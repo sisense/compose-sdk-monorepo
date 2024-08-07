@@ -9,6 +9,7 @@ import {
 } from '../tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
 import { TFunction } from '@sisense/sdk-common';
+import { cartesianDataFormatter } from '../tooltip';
 
 export const getRangeTooltipSettings = (
   showDecimals: boolean | undefined,
@@ -25,6 +26,10 @@ export const getRangeTooltipSettings = (
     useHTML: true,
     formatter: function () {
       const that: InternalSeries = this as InternalSeries;
+
+      if (!that.point.low || !that.point.high) {
+        return cartesianDataFormatter(that, showDecimals, chartDataOptions, translate);
+      }
 
       // Applicable only to pie and funnel charts
       let percentage: string | undefined;
@@ -62,7 +67,7 @@ export const getRangeTooltipSettings = (
       const color = that.point.color || that.series.color;
       const { upperPointName, lowerPointName } = that.point;
       return tooltipWrapper(`
-      <div>${dataOptionY!.title}</div>
+      <div>${that.series.name}</div>
       <div class="csdk-range-tooltip-row">
         <span>${upperPointName || translate('arearange.tooltip.max')}</span>
         ${spanSegment(topValue, color)}

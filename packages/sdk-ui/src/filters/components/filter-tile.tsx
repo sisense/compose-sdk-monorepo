@@ -13,7 +13,7 @@ import { BackgroundFilterIcon } from '@/filters/components/icons/background-filt
 import { css } from '@emotion/react';
 
 const BORDER_STYLE = '1px solid #dadada';
-const FILTER_TILE_MIN_WIDTH = 216;
+const FILTER_TILE_MIN_WIDTH = 215;
 
 const Container = styled.div<{
   shouldShowBorder: boolean;

@@ -39,8 +39,17 @@ import { setupHelperWithChildren } from '../setup-helper';
  */
 export const ContextMenu = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.closeContextMenu}
+     */
     closeContextMenu: Function as PropType<ContextMenuProps['closeContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.itemSections}
+     */
     itemSections: Array as PropType<ContextMenuProps['itemSections']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.position}
+     */
     position: Object as PropType<ContextMenuProps['position']>,
   },
   setup: (props, { slots }) => setupHelperWithChildren(ContextMenuPreact, props, slots, []),

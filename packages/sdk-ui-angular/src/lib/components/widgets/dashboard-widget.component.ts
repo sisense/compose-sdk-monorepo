@@ -63,32 +63,67 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   @ViewChild(rootId)
   preactRef!: ElementRef<HTMLDivElement>;
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.widgetOid}
+   *
+   * @category Widget
+   */
   @Input()
   widgetOid!: DashboardWidgetProps['widgetOid'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.dashboardOid}
+   *
+   * @category Widget
+   */
   @Input()
   dashboardOid!: DashboardWidgetProps['dashboardOid'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.filters}
    *
    * @category Data
    */
   @Input()
   filters: DashboardWidgetProps['filters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.highlights}
+   *
+   * @category Data
+   */
   @Input()
   highlights: DashboardWidgetProps['highlights'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.filtersMergeStrategy}
+   *
+   * @category Data
+   */
   @Input()
   filtersMergeStrategy: DashboardWidgetProps['filtersMergeStrategy'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.includeDashboardFilters}
+   *
+   * @category Data
+   */
   @Input()
   includeDashboardFilters: DashboardWidgetProps['includeDashboardFilters'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.title}
+   *
+   * @category Widget
+   */
   @Input()
   title: DashboardWidgetProps['title'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.description}
+   *
+   * @category Widget
+   */
   @Input()
   description: DashboardWidgetProps['description'];
 
@@ -100,6 +135,11 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   @Input()
   styleOptions: DashboardWidgetProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardWidgetProps.highlightSelectionDisabled}
+   *
+   * @category Widget
+   */
   @Input()
   highlightSelectionDisabled: DashboardWidgetProps['highlightSelectionDisabled'];
 

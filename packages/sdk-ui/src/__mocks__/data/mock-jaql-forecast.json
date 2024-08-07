@@ -1,0 +1,3320 @@
+{
+  "headers": [
+    "Months",
+    "$measure0_Total Revenue",
+    "$measure1_Total Cost",
+    "$measure2_$trend_Total Cost",
+    "$measure3_$forecast_Total Revenue",
+    "$measure4_$forecast_Total Cost",
+    "$measure3_$forecast_Total Revenue_upper",
+    "$measure3_$forecast_Total Revenue_lower",
+    "$measure4_$forecast_Total Cost_upper",
+    "$measure4_$forecast_Total Cost_lower"
+  ],
+  "metadata": [
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": "MONTHS",
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": "[Commerce.Date (Calendar)]",
+        "sort": null,
+        "title": "Months",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": "datetime",
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": null,
+        "formula": null,
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": {},
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": "[Commerce.Revenue]",
+        "sort": null,
+        "title": "$measure0_Total Revenue",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": "numeric",
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": null,
+        "formula": null,
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": "[Commerce.Cost]",
+        "sort": null,
+        "title": "$measure1_Total Cost",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": "numeric",
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": null,
+        "formula": null,
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure2_$trend_Total Cost",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[TotalCost]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Cost]",
+            "sort": null,
+            "title": "Total Cost",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "trend([TotalCost], \"modelType=smooth\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure3_$forecast_Total Revenue",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[TotalRevenue]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Revenue]",
+            "sort": null,
+            "title": "Total Revenue",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "forecast([TotalRevenue], \"forecastHorizon=6\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure4_$forecast_Total Cost",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[TotalCost]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Cost]",
+            "sort": null,
+            "title": "Total Cost",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "forecast([TotalCost], \"forecastHorizon=6\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure3_$forecast_Total Revenue_upper",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[TotalRevenue]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Revenue]",
+            "sort": null,
+            "title": "Total Revenue",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "forecast([TotalRevenue], \"forecastHorizon=6\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure3_$forecast_Total Revenue_lower",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[TotalRevenue]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Revenue]",
+            "sort": null,
+            "title": "Total Revenue",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "forecast([TotalRevenue], \"forecastHorizon=6\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure4_$forecast_Total Cost_upper",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[TotalCost]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Cost]",
+            "sort": null,
+            "title": "Total Cost",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "forecast([TotalCost], \"forecastHorizon=6\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    },
+    {
+      "agg": null,
+      "through": null,
+      "dateTimeLevel": null,
+      "parent": null,
+      "highlevel": null,
+      "wpanel": null,
+      "dim": null,
+      "source": null,
+      "title": null,
+      "type": null,
+      "transformationFormula": null,
+      "datatype": null,
+      "firstday": null,
+      "context": null,
+      "panel": null,
+      "table": null,
+      "isDashboardFilter": false,
+      "jaql": {
+        "agg": null,
+        "dateTimeLevel": null,
+        "isDashboardFilter": false,
+        "level": null,
+        "in": null,
+        "column": null,
+        "merged": null,
+        "dim": null,
+        "sort": null,
+        "title": "$measure4_$forecast_Total Cost_lower",
+        "type": null,
+        "transformationFormula": null,
+        "bucket": null,
+        "filter": null,
+        "instanceid": null,
+        "datatype": null,
+        "fiscal": null,
+        "firstday": null,
+        "datasource": null,
+        "dateTimePart": null,
+        "context": {
+          "[TotalCost]": {
+            "agg": ["com.sisense.common.jaql.jaqlelement.operators.Aggregation", "sum"],
+            "dateTimeLevel": null,
+            "isDashboardFilter": false,
+            "level": null,
+            "in": null,
+            "column": null,
+            "merged": null,
+            "dim": "[Commerce.Cost]",
+            "sort": null,
+            "title": "Total Cost",
+            "type": null,
+            "transformationFormula": null,
+            "bucket": null,
+            "filter": null,
+            "instanceid": null,
+            "datatype": "numeric",
+            "fiscal": null,
+            "firstday": null,
+            "datasource": null,
+            "dateTimePart": null,
+            "context": null,
+            "formula": null,
+            "table": null
+          }
+        },
+        "formula": "forecast([TotalCost], \"forecastHorizon=6\")",
+        "table": null
+      },
+      "level": null,
+      "in": null,
+      "hierarchies": null,
+      "column": null,
+      "merged": null,
+      "format": null,
+      "sort": null,
+      "distinctTotals": null,
+      "bucket": null,
+      "filter": null,
+      "instanceid": null,
+      "field": null,
+      "fiscal": null,
+      "datasource": null,
+      "dateTimePart": null,
+      "formula": null,
+      "isBackground": null,
+      "forceScope": null
+    }
+  ],
+  "datasource": {
+    "revisionId": "TBD",
+    "fullname": "LocalHost/Sample ECommerce"
+  },
+  "processingInfo": {
+    "cacheType": "none",
+    "cacheTime": "2024-07-24T20:57:58.472Z"
+  },
+  "translationInfo": {
+    "translationServiceProvider": "NewTranslationService",
+    "isTranslationFallback": false,
+    "isQueryFallback": false,
+    "translationDuration": 0,
+    "sqlFromCache": null
+  },
+  "values": [
+    [
+      {
+        "data": "2009-11-01",
+        "text": "2009-11-01"
+      },
+      {
+        "data": 66781.63189208508,
+        "text": "66781.6318920851"
+      },
+      {
+        "data": 189976.80757868662,
+        "text": "189976.807578687"
+      },
+      {
+        "data": 399877.66021296044,
+        "text": "399877.66021296"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2009-12-01",
+        "text": "2009-12-01"
+      },
+      {
+        "data": 359971.00955861807,
+        "text": "359971.009558618"
+      },
+      {
+        "data": 1107490.0728950314,
+        "text": "1107490.07289503"
+      },
+      {
+        "data": 760254.7486363016,
+        "text": "760254.748636302"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-01-01",
+        "text": "2010-01-01"
+      },
+      {
+        "data": 290398.9091284871,
+        "text": "290398.909128487"
+      },
+      {
+        "data": 845205.6287006252,
+        "text": "845205.628700625"
+      },
+      {
+        "data": 892589.3891729144,
+        "text": "892589.389172914"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-02-01",
+        "text": "2010-02-01"
+      },
+      {
+        "data": 170889.8894996643,
+        "text": "170889.889499664"
+      },
+      {
+        "data": 787917.8207888827,
+        "text": "787917.820788883"
+      },
+      {
+        "data": 904228.5180767283,
+        "text": "904228.518076728"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-03-01",
+        "text": "2010-03-01"
+      },
+      {
+        "data": 309543.24207001925,
+        "text": "309543.242070019"
+      },
+      {
+        "data": 946810.4692947622,
+        "text": "946810.469294762"
+      },
+      {
+        "data": 912866.4678721044,
+        "text": "912866.467872104"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-04-01",
+        "text": "2010-04-01"
+      },
+      {
+        "data": 371724.55312902667,
+        "text": "371724.553129027"
+      },
+      {
+        "data": 900508.5092079439,
+        "text": "900508.509207944"
+      },
+      {
+        "data": 916526.9340331501,
+        "text": "916526.93403315"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-05-01",
+        "text": "2010-05-01"
+      },
+      {
+        "data": 335743.71691042185,
+        "text": "335743.716910422"
+      },
+      {
+        "data": 946238.5815005917,
+        "text": "946238.581500592"
+      },
+      {
+        "data": 914095.3329283679,
+        "text": "914095.332928368"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-06-01",
+        "text": "2010-06-01"
+      },
+      {
+        "data": 205558.42935597897,
+        "text": "205558.429355979"
+      },
+      {
+        "data": 886700.2053317726,
+        "text": "886700.205331773"
+      },
+      {
+        "data": 904960.4685997746,
+        "text": "904960.468599775"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-07-01",
+        "text": "2010-07-01"
+      },
+      {
+        "data": 157792.30764091015,
+        "text": "157792.30764091"
+      },
+      {
+        "data": 900954.317531623,
+        "text": "900954.317531623"
+      },
+      {
+        "data": 912084.7216383086,
+        "text": "912084.721638309"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-08-01",
+        "text": "2010-08-01"
+      },
+      {
+        "data": 324757.70880162716,
+        "text": "324757.708801627"
+      },
+      {
+        "data": 984546.9012292922,
+        "text": "984546.901229292"
+      },
+      {
+        "data": 945423.4204832909,
+        "text": "945423.420483291"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-09-01",
+        "text": "2010-09-01"
+      },
+      {
+        "data": 202324.06454509497,
+        "text": "202324.064545095"
+      },
+      {
+        "data": 947657.5594753642,
+        "text": "947657.559475364"
+      },
+      {
+        "data": 1009017.2938368567,
+        "text": "1009017.29383686"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-10-01",
+        "text": "2010-10-01"
+      },
+      {
+        "data": 235094.33303177357,
+        "text": "235094.333031774"
+      },
+      {
+        "data": 1067067.8516010046,
+        "text": "1067067.851601"
+      },
+      {
+        "data": 1127908.0165300977,
+        "text": "1127908.0165301"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-11-01",
+        "text": "2010-11-01"
+      },
+      {
+        "data": 956515.9698420167,
+        "text": "956515.969842017"
+      },
+      {
+        "data": 1313277.0609966572,
+        "text": "1313277.06099666"
+      },
+      {
+        "data": 1260348.35798684,
+        "text": "1260348.35798684"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2010-12-01",
+        "text": "2010-12-01"
+      },
+      {
+        "data": 1125384.2649897337,
+        "text": "1125384.26498973"
+      },
+      {
+        "data": 1467710.2702174708,
+        "text": "1467710.27021747"
+      },
+      {
+        "data": 1301643.164863898,
+        "text": "1301643.1648639"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-01-01",
+        "text": "2011-01-01"
+      },
+      {
+        "data": 463382.532077305,
+        "text": "463382.532077305"
+      },
+      {
+        "data": 1175238.5499559864,
+        "text": "1175238.54995599"
+      },
+      {
+        "data": 1226332.721934023,
+        "text": "1226332.72193402"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-02-01",
+        "text": "2011-02-01"
+      },
+      {
+        "data": 245568.28763371706,
+        "text": "245568.287633717"
+      },
+      {
+        "data": 1092969.080261767,
+        "text": "1092969.08026177"
+      },
+      {
+        "data": 1175483.052081485,
+        "text": "1175483.05208149"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-03-01",
+        "text": "2011-03-01"
+      },
+      {
+        "data": 260606.05075496435,
+        "text": "260606.050754964"
+      },
+      {
+        "data": 1188733.9370134315,
+        "text": "1188733.93701343"
+      },
+      {
+        "data": 1259954.2895959807,
+        "text": "1259954.28959598"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-04-01",
+        "text": "2011-04-01"
+      },
+      {
+        "data": 268872.20260578394,
+        "text": "268872.202605784"
+      },
+      {
+        "data": 1468171.674996743,
+        "text": "1468171.67499674"
+      },
+      {
+        "data": 1477513.9658073424,
+        "text": "1477513.96580734"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-05-01",
+        "text": "2011-05-01"
+      },
+      {
+        "data": 340273.4022771716,
+        "text": "340273.402277172"
+      },
+      {
+        "data": 1809045.4618380964,
+        "text": "1809045.4618381"
+      },
+      {
+        "data": 1731745.1938052739,
+        "text": "1731745.19380527"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-06-01",
+        "text": "2011-06-01"
+      },
+      {
+        "data": 393066.62418581545,
+        "text": "393066.624185815"
+      },
+      {
+        "data": 1963988.3454919308,
+        "text": "1963988.34549193"
+      },
+      {
+        "data": 1918408.774731447,
+        "text": "1918408.77473145"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-07-01",
+        "text": "2011-07-01"
+      },
+      {
+        "data": 456280.5512932539,
+        "text": "456280.551293254"
+      },
+      {
+        "data": 2011346.4261528384,
+        "text": "2011346.42615284"
+      },
+      {
+        "data": 2019625.0977478286,
+        "text": "2019625.09774783"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-08-01",
+        "text": "2011-08-01"
+      },
+      {
+        "data": 425414.88275170326,
+        "text": "425414.882751703"
+      },
+      {
+        "data": 2128043.9337140303,
+        "text": "2128043.93371403"
+      },
+      {
+        "data": 2080349.5218863264,
+        "text": "2080349.52188633"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-09-01",
+        "text": "2011-09-01"
+      },
+      {
+        "data": 479749.6705650091,
+        "text": "479749.670565009"
+      },
+      {
+        "data": 2017077.2452351712,
+        "text": "2017077.24523517"
+      },
+      {
+        "data": 2160577.230230905,
+        "text": "2160577.23023091"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-10-01",
+        "text": "2011-10-01"
+      },
+      {
+        "data": 579453.2531992197,
+        "text": "579453.25319922"
+      },
+      {
+        "data": 2283585.5977138802,
+        "text": "2283585.59771388"
+      },
+      {
+        "data": 2330053.153545553,
+        "text": "2330053.15354555"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-11-01",
+        "text": "2011-11-01"
+      },
+      {
+        "data": 839236.7714686394,
+        "text": "839236.771468639"
+      },
+      {
+        "data": 2558169.054697007,
+        "text": "2558169.05469701"
+      },
+      {
+        "data": 2515328.951597531,
+        "text": "2515328.95159753"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2011-12-01",
+        "text": "2011-12-01"
+      },
+      {
+        "data": 885736.7923775315,
+        "text": "885736.792377532"
+      },
+      {
+        "data": 2855504.8063853886,
+        "text": "2855504.80638539"
+      },
+      {
+        "data": 2571323.757848365,
+        "text": "2571323.75784837"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-01-01",
+        "text": "2012-01-01"
+      },
+      {
+        "data": 473612.27137738466,
+        "text": "473612.271377385"
+      },
+      {
+        "data": 2267886.0520572066,
+        "text": "2267886.05205721"
+      },
+      {
+        "data": 2455225.182035394,
+        "text": "2455225.18203539"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-02-01",
+        "text": "2012-02-01"
+      },
+      {
+        "data": 551207.5465496182,
+        "text": "551207.546549618"
+      },
+      {
+        "data": 2289422.9980101623,
+        "text": "2289422.99801016"
+      },
+      {
+        "data": 2372277.1257133014,
+        "text": "2372277.1257133"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-03-01",
+        "text": "2012-03-01"
+      },
+      {
+        "data": 486378.02141964436,
+        "text": "486378.021419644"
+      },
+      {
+        "data": 2413584.21836257,
+        "text": "2413584.21836257"
+      },
+      {
+        "data": 2390716.0906670545,
+        "text": "2390716.09066705"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-04-01",
+        "text": "2012-04-01"
+      },
+      {
+        "data": 844005.6761152148,
+        "text": "844005.676115215"
+      },
+      {
+        "data": 2450628.8393439148,
+        "text": "2450628.83934391"
+      },
+      {
+        "data": 2454806.7004078142,
+        "text": "2454806.70040781"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-05-01",
+        "text": "2012-05-01"
+      },
+      {
+        "data": 528642.743718408,
+        "text": "528642.743718408"
+      },
+      {
+        "data": 2616360.1553670047,
+        "text": "2616360.155367"
+      },
+      {
+        "data": 2509923.7089504977,
+        "text": "2509923.7089505"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-06-01",
+        "text": "2012-06-01"
+      },
+      {
+        "data": 500458.08090537786,
+        "text": "500458.080905378"
+      },
+      {
+        "data": 2482130.5598226488,
+        "text": "2482130.55982265"
+      },
+      {
+        "data": 2529590.1527741267,
+        "text": "2529590.15277413"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-07-01",
+        "text": "2012-07-01"
+      },
+      {
+        "data": 613358.3858718723,
+        "text": "613358.385871872"
+      },
+      {
+        "data": 2594841.3182018436,
+        "text": "2594841.31820184"
+      },
+      {
+        "data": 2580856.1512703863,
+        "text": "2580856.15127039"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-08-01",
+        "text": "2012-08-01"
+      },
+      {
+        "data": 640640.1058340669,
+        "text": "640640.105834067"
+      },
+      {
+        "data": 2673938.1166581884,
+        "text": "2673938.11665819"
+      },
+      {
+        "data": 2713417.6342164744,
+        "text": "2713417.63421647"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-09-01",
+        "text": "2012-09-01"
+      },
+      {
+        "data": 6468195.891011775,
+        "text": "6468195.89101177"
+      },
+      {
+        "data": 2867416.29551314,
+        "text": "2867416.29551314"
+      },
+      {
+        "data": 2969220.9206936043,
+        "text": "2969220.9206936"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-10-01",
+        "text": "2012-10-01"
+      },
+      {
+        "data": 1077545.8103399873,
+        "text": "1077545.81033999"
+      },
+      {
+        "data": 3168871.066950053,
+        "text": "3168871.06695005"
+      },
+      {
+        "data": 3328777.947662453,
+        "text": "3328777.94766245"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-11-01",
+        "text": "2012-11-01"
+      },
+      {
+        "data": 1139118.50432086,
+        "text": "1139118.50432086"
+      },
+      {
+        "data": 3888213.687782809,
+        "text": "3888213.68778281"
+      },
+      {
+        "data": 3620949.4273355627,
+        "text": "3620949.42733556"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2012-12-01",
+        "text": "2012-12-01"
+      },
+      {
+        "data": 1207031.0010682344,
+        "text": "1207031.00106823"
+      },
+      {
+        "data": 3992612.938552344,
+        "text": "3992612.93855234"
+      },
+      {
+        "data": 3556054.100029769,
+        "text": "3556054.10002977"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-01-01",
+        "text": "2013-01-01"
+      },
+      {
+        "data": 672788.0245242715,
+        "text": "672788.024524271"
+      },
+      {
+        "data": 2759434.9833942996,
+        "text": "2759434.9833943"
+      },
+      {
+        "data": 3180837.955961699,
+        "text": "3180837.9559617"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-02-01",
+        "text": "2013-02-01"
+      },
+      {
+        "data": 664365.3652909398,
+        "text": "664365.36529094"
+      },
+      {
+        "data": 2788158.3545121085,
+        "text": "2788158.35451211"
+      },
+      {
+        "data": 2940071.145840517,
+        "text": "2940071.14584052"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-03-01",
+        "text": "2013-03-01"
+      },
+      {
+        "data": 618802.1503348947,
+        "text": "618802.150334895"
+      },
+      {
+        "data": 3046625.3691154122,
+        "text": "3046625.36911541"
+      },
+      {
+        "data": 2928282.3596065277,
+        "text": "2928282.35960653"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-04-01",
+        "text": "2013-04-01"
+      },
+      {
+        "data": 866949.1155990958,
+        "text": "866949.115599096"
+      },
+      {
+        "data": 2961134.7611477133,
+        "text": "2961134.76114771"
+      },
+      {
+        "data": 3012322.5051070023,
+        "text": "3012322.505107"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-05-01",
+        "text": "2013-05-01"
+      },
+      {
+        "data": 618889.3449394181,
+        "text": "618889.344939418"
+      },
+      {
+        "data": 3242762.429729399,
+        "text": "3242762.4297294"
+      },
+      {
+        "data": 3126610.365876169,
+        "text": "3126610.36587617"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-06-01",
+        "text": "2013-06-01"
+      },
+      {
+        "data": 683584.009878993,
+        "text": "683584.009878993"
+      },
+      {
+        "data": 3204714.5343812816,
+        "text": "3204714.53438128"
+      },
+      {
+        "data": 3213000.749829498,
+        "text": "3213000.7498295"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-07-01",
+        "text": "2013-07-01"
+      },
+      {
+        "data": 798123.2515560985,
+        "text": "798123.251556098"
+      },
+      {
+        "data": 3349081.2784886193,
+        "text": "3349081.27848862"
+      },
+      {
+        "data": 3314632.0388838113,
+        "text": "3314632.03888381"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-08-01",
+        "text": "2013-08-01"
+      },
+      {
+        "data": 650025.2262863517,
+        "text": "650025.226286352"
+      },
+      {
+        "data": 3238694.8539762036,
+        "text": "3238694.8539762"
+      },
+      {
+        "data": 3504006.725372224,
+        "text": "3504006.72537222"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-09-01",
+        "text": "2013-09-01"
+      },
+      {
+        "data": 5916789.096129909,
+        "text": "5916789.09612991"
+      },
+      {
+        "data": 3581952.4929154813,
+        "text": "3581952.49291548"
+      },
+      {
+        "data": 3819677.0195216006,
+        "text": "3819677.0195216"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-10-01",
+        "text": "2013-10-01"
+      },
+      {
+        "data": 1025246.3933910131,
+        "text": "1025246.39339101"
+      },
+      {
+        "data": 3935084.4678387493,
+        "text": "3935084.46783875"
+      },
+      {
+        "data": 3984064.438412456,
+        "text": "3984064.43841246"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-11-01",
+        "text": "2013-11-01"
+      },
+      {
+        "data": 1793304.247486055,
+        "text": "1793304.24748605"
+      },
+      {
+        "data": 4844611.66696444,
+        "text": "4844611.66696444"
+      },
+      {
+        "data": 3403293.012026755,
+        "text": "3403293.01202676"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2013-12-01",
+        "text": "2013-12-01"
+      },
+      {
+        "data": 170444.1994921565,
+        "text": "170444.199492157"
+      },
+      {
+        "data": 770441.3868424296,
+        "text": "770441.38684243"
+      },
+      {
+        "data": 1735405.3318556482,
+        "text": "1735405.33185565"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      }
+    ],
+    [
+      {
+        "data": "2014-01-01",
+        "text": "2014-01-01"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": 894228.9346309917,
+        "text": "894228.934630992"
+      },
+      {
+        "data": 3432902.395304515,
+        "text": "3432902.39530452"
+      },
+      {
+        "data": 2502270.7452848963,
+        "text": "2502270.7452849"
+      },
+      {
+        "data": -267349.629913955,
+        "text": "-267349.629913955"
+      },
+      {
+        "data": 4215621.114209566,
+        "text": "4215621.11420957"
+      },
+      {
+        "data": 2749857.8158302745,
+        "text": "2749857.81583027"
+      }
+    ],
+    [
+      {
+        "data": "2014-02-01",
+        "text": "2014-02-01"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": 1089836.547888303,
+        "text": "1089836.5478883"
+      },
+      {
+        "data": 3455861.1150580775,
+        "text": "3455861.11505808"
+      },
+      {
+        "data": 2774896.364626469,
+        "text": "2774896.36462647"
+      },
+      {
+        "data": -216031.2869008225,
+        "text": "-216031.286900823"
+      },
+      {
+        "data": 4257156.218797659,
+        "text": "4257156.21879766"
+      },
+      {
+        "data": 2739222.412611501,
+        "text": "2739222.4126115"
+      }
+    ],
+    [
+      {
+        "data": "2014-03-01",
+        "text": "2014-03-01"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": 1021374.1984700696,
+        "text": "1021374.19847007"
+      },
+      {
+        "data": 3491353.7095914274,
+        "text": "3491353.70959143"
+      },
+      {
+        "data": 2529612.5733055985,
+        "text": "2529612.5733056"
+      },
+      {
+        "data": -306281.90247843356,
+        "text": "-306281.902478434"
+      },
+      {
+        "data": 4254548.220516098,
+        "text": "4254548.2205161"
+      },
+      {
+        "data": 2768469.4185458464,
+        "text": "2768469.41854585"
+      }
+    ],
+    [
+      {
+        "data": "2014-04-01",
+        "text": "2014-04-01"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": 1128726.544473912,
+        "text": "1128726.54447391"
+      },
+      {
+        "data": 3601096.993465676,
+        "text": "3601096.99346568"
+      },
+      {
+        "data": 2586368.303115316,
+        "text": "2586368.30311532"
+      },
+      {
+        "data": -598197.3911145851,
+        "text": "-598197.391114585"
+      },
+      {
+        "data": 4354370.65910466,
+        "text": "4354370.65910466"
+      },
+      {
+        "data": 2787704.494487667,
+        "text": "2787704.49448767"
+      }
+    ],
+    [
+      {
+        "data": "2014-05-01",
+        "text": "2014-05-01"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": 1128726.544473912,
+        "text": "1128726.54447391"
+      },
+      {
+        "data": 3512644.745014943,
+        "text": "3512644.74501494"
+      },
+      {
+        "data": 2506222.5577449454,
+        "text": "2506222.55774495"
+      },
+      {
+        "data": 280299.5523669169,
+        "text": "280299.552366917"
+      },
+      {
+        "data": 4249394.877735277,
+        "text": "4249394.87773528"
+      },
+      {
+        "data": 2894009.6375730764,
+        "text": "2894009.63757308"
+      }
+    ],
+    [
+      {
+        "data": "2014-06-01",
+        "text": "2014-06-01"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": "N\\A",
+        "text": "N\\A"
+      },
+      {
+        "data": 1128726.5444739123,
+        "text": "1128726.54447391"
+      },
+      {
+        "data": 3570184.1638095835,
+        "text": "3570184.16380958"
+      },
+      {
+        "data": 2555594.430841752,
+        "text": "2555594.43084175"
+      },
+      {
+        "data": -298656.8438444736,
+        "text": "-298656.843844474"
+      },
+      {
+        "data": 4319327.450568654,
+        "text": "4319327.45056865"
+      },
+      {
+        "data": 2820929.6467809775,
+        "text": "2820929.64678098"
+      }
+    ]
+  ],
+  "extras": [
+    {
+      "$measure2_$trend_Total Cost_trend": [
+        {
+          "modelStats": {
+            "r-squared": "N/A",
+            "mean": 2145450.77991468,
+            "median": 2275735.8248855434,
+            "max": 4844611.66696444,
+            "min": 189976.80757868662,
+            "numberOfObservations": 50
+          },
+          "modelInfo": {
+            "equation": "N/A"
+          }
+        }
+      ]
+    },
+    {
+      "$measure3_$forecast_Total Revenue_forecast": [
+        {
+          "modelStats": {
+            "MAPE": {
+              "auto": 0.4625,
+              "trees": 0.4625,
+              "autoArima": 0.419,
+              "holtWinters": 0.2995,
+              "prophet": 1.5476
+            },
+            "modelParameters": {
+              "trees": {
+                "Weight": 1
+              },
+              "autoArima": {
+                "Weight": 0,
+                "Coefs": {
+                  "ar1": 0,
+                  "ar2": 0,
+                  "ar3": 0
+                },
+                "Order": {
+                  "p": 0,
+                  "d": 1,
+                  "q": 0
+                }
+              },
+              "holtWinters": {
+                "Weight": 0,
+                "Params": {
+                  "alpha": 0.03500968031683717,
+                  "beta": 0.03500617934880548,
+                  "gamma": 0.00009649903196831629
+                }
+              },
+              "prophet": {
+                "Weight": 0,
+                "Params": {
+                  "k": 0.227429,
+                  "m": 0.00929393,
+                  "delta": [
+                    -8.82773e-12, -2.13068e-11, 6.6687e-11, -7.57221e-11, -2.10027e-11, 5.55253e-11,
+                    -1.56167e-11, 6.27217e-11, 8.04863e-11, -6.52779e-11, 1.03198e-10, -1.74438e-11,
+                    4.67098e-11, -5.80671e-11, 5.35968e-11, 8.90997e-11, 2.5508e-13, 3.70485e-11,
+                    -8.33832e-11, 3.86329e-11, -4.97472e-13, -2.57332e-11, -1.65252e-11,
+                    8.03697e-11, 6.89343e-11
+                  ],
+                  "sigma_obs": 0.164814,
+                  "beta": [2.81769e-16]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "$measure4_$forecast_Total Cost_forecast": [
+        {
+          "modelStats": {
+            "MAPE": {
+              "auto": 0.3331,
+              "trees": 0.5169,
+              "autoArima": 0.1497,
+              "holtWinters": 0.3371,
+              "prophet": 0.3785
+            },
+            "modelParameters": {
+              "trees": {
+                "Weight": 0.11999999999999988
+              },
+              "autoArima": {
+                "Weight": 0,
+                "Coefs": {
+                  "ar1": 55604905288.45664,
+                  "ar2": 0,
+                  "ar3": 0
+                },
+                "Order": {
+                  "p": 0,
+                  "d": 1,
+                  "q": 0
+                }
+              },
+              "holtWinters": {
+                "Weight": 0.56,
+                "Params": {
+                  "alpha": 0.08081424287756334,
+                  "beta": 0.000008081424287756334,
+                  "gamma": 0.00009191857571224368
+                }
+              },
+              "prophet": {
+                "Weight": 0.32,
+                "Params": {
+                  "k": 0.635876,
+                  "m": 0.124967,
+                  "delta": [
+                    3.65397e-10, -3.53617e-10, -8.00663e-11, -2.17108e-10, -1.93665e-10,
+                    3.23653e-10, -2.68996e-10, -1.55815e-10, 5.31536e-11, -9.2189e-12, 2.10218e-10,
+                    -3.7423e-10, 4.79822e-11, 1.26356e-10, -3.09235e-10, -9.46009e-10, 1.28006e-10,
+                    -4.00938e-10, -3.68509e-10, -8.52938e-10, -2.5007e-10, 7.99487e-11, 1.15511e-10,
+                    -0.000306, -2.47041e-10
+                  ],
+                  "sigma_obs": 0.111651,
+                  "beta": [-3.08716e-15]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

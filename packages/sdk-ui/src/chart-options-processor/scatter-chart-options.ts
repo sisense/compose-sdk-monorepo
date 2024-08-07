@@ -27,6 +27,8 @@ export const getScatterLegendSettings = (position: LegendPosition): LegendSettin
   ...getLegendSettings(position),
   symbolHeight: 12,
   symbolWidth: 12,
+  itemMarginBottom: 0,
+  itemMarginTop: 0,
 });
 
 /**

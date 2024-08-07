@@ -76,6 +76,20 @@ export const redThemeSettings: CompleteThemeSettings = {
     primaryButtonHoverColor: '#F2B900',
     backgroundColor: '#16161C',
   },
+  widget: {
+    border: false,
+    borderColor: '#C5C8CF',
+    cornerRadius: 'None',
+    header: {
+      backgroundColor: '#4f2727',
+      dividerLine: false,
+      dividerLineColor: '#FFFFFF',
+      titleAlignment: 'Left',
+      titleTextColor: '#fe0000',
+    },
+    shadow: 'None',
+    spaceAround: 'None',
+  },
   aiChat: {
     backgroundColor: 'rgba(244, 244, 248, 1)',
     primaryTextColor: 'rgba(38, 46, 61, 0.8)',

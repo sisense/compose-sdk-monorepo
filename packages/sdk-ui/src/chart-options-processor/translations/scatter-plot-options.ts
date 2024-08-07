@@ -81,6 +81,11 @@ const getScatterValueLabelSettings = (
     return applyFormatPlainText(numberFormatConfig, parseFloat(pointValue));
   };
 
+  settings.style = {
+    ...settings.style,
+    fontWeight: '',
+    textOutline: '',
+  };
   return settings;
 };
 

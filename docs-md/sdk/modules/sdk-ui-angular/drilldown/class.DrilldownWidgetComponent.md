@@ -98,23 +98,7 @@ Constructor for the `DrilldownWidgetComponent`.
 
 ## Properties
 
-### Constructor
-
-#### sisenseContextService
-
-> **sisenseContextService**: [`SisenseContextService`](../contexts/class.SisenseContextService.md)
-
-Sisense context service
-
-***
-
-#### themeService
-
-> **themeService**: [`ThemeService`](../contexts/class.ThemeService.md)
-
-Theme service
-
-### Other
+### Widget
 
 #### config
 
@@ -122,6 +106,8 @@ Theme service
   `breadcrumbsComponent`: (`drilldownBreadcrumbsProps`) => `HTMLDivElement`;
   `contextMenuComponent`: (`contextMenuProps`) => `HTMLDivElement`;
  }
+
+An object that allows users to pass advanced configuration options as a prop for the `DrilldownWidget` component
 
 > ##### `config.breadcrumbsComponent`
 >
@@ -171,14 +157,32 @@ List of dimensions to allow drilldowns on
 
 ***
 
-#### drilldownResultChange
-
-> **drilldownResultChange**: `EventEmitter`\< [`CustomDrilldownResult`](../type-aliases/type-alias.CustomDrilldownResult.md) \>
-
-***
-
 #### initialDimension
 
 > **initialDimension**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
 
 Initial dimension to apply first set of filters to
+
+### Callbacks
+
+#### drilldownResultChange
+
+> **drilldownResultChange**: `EventEmitter`\< [`CustomDrilldownResult`](../type-aliases/type-alias.CustomDrilldownResult.md) \>
+
+Drilldown result change handler callback
+
+### Constructor
+
+#### sisenseContextService
+
+> **sisenseContextService**: [`SisenseContextService`](../contexts/class.SisenseContextService.md)
+
+Sisense context service
+
+***
+
+#### themeService
+
+> **themeService**: [`ThemeService`](../contexts/class.ThemeService.md)
+
+Theme service

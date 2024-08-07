@@ -18,6 +18,7 @@ import { WidgetCornerRadius, WidgetSpaceAround, getShadowValue } from './common/
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 import { getDataSourceName } from '@sisense/sdk-data';
+import get from 'lodash/get';
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support advanced BI
@@ -138,18 +139,22 @@ export const ChartWidgetDeprecated: FunctionComponent<ChartWidgetProps> = asSise
         <div
           className={'csdk-h-full'}
           style={{
-            padding: WidgetSpaceAround[styleOptions?.spaceAround || 'None'],
+            padding:
+              WidgetSpaceAround[
+                get(styleOptions, 'spaceAround', themeSettings.widget.spaceAround) || 'None'
+              ] || '0px',
           }}
         >
           <div
             className={'csdk-h-full csdk-overflow-hidden'}
             style={{
-              borderWidth: styleOptions?.border ? '1px' : 0,
-              borderColor: styleOptions?.borderColor || themeSettings.chart.textColor,
-              borderRadius: styleOptions?.cornerRadius
-                ? WidgetCornerRadius[styleOptions.cornerRadius]
-                : 0,
-              boxShadow: getShadowValue(styleOptions),
+              borderWidth: get(styleOptions, 'border', themeSettings.widget.border) ? '1px' : 0,
+              borderColor: styleOptions?.borderColor || themeSettings.widget.borderColor,
+              borderRadius:
+                WidgetCornerRadius[
+                  styleOptions?.cornerRadius || themeSettings.widget.cornerRadius
+                ] || 0,
+              boxShadow: getShadowValue(styleOptions, themeSettings),
               display: 'flex',
               flexDirection: 'column',
             }}

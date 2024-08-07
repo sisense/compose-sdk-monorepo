@@ -7,6 +7,7 @@ import { AiTestWrapper } from '../__mocks__/index.js';
 import MOCK_JAQL_RESPONSE from '../__mocks__/jaql-response.js';
 import MOCK_NLQ_RESPONSE from '../__mocks__/nlq-response.js';
 import NlqMessageGroup from './nlq-message-group.js';
+import { setTimeout } from 'timers/promises';
 
 vi.mock(
   'highcharts-react-official',
@@ -57,6 +58,7 @@ it('renders expandable cartesian chart with expected toolbar buttons', async () 
       <NlqMessageGroup data={MOCK_NLQ_RESPONSE} />
     </AiTestWrapper>,
   );
+  await setTimeout(250);
 
   await waitFor(() => expect(screen.getByTestId('highcharts-react')).toBeInTheDocument());
   const originalChart = screen.getByTestId('highcharts-react');

@@ -15,6 +15,8 @@ import {
   CalculatedMeasureColumn,
   PivotGrandTotals,
   TotalsCalculation,
+  ForecastFormulaOptions,
+  TrendFormulaOptions,
 } from '@sisense/sdk-data';
 
 /**
@@ -66,6 +68,12 @@ export interface CategoryStyle {
    * Geographic location level for Scattermap chart.
    */
   geoLevel?: ScattermapLocationLevel;
+  /**
+   * Column width. Used in Pivot table.
+   *
+   * @internal
+   */
+  width?: number;
 }
 
 /**
@@ -145,6 +153,24 @@ export type ValueStyle = {
    * Boolean flag whether to display data bars for this measure in the pivot table.
    */
   dataBars?: boolean;
+  /**
+   * Options to add forecast to this measure
+   *
+   * @internal
+   */
+  forecast?: ForecastFormulaOptions;
+  /**
+   * Options to add trend to this measure
+   *
+   * @internal
+   */
+  trend?: TrendFormulaOptions;
+  /**
+   * Column width. Used in Pivot table.
+   *
+   * @internal
+   */
+  width?: number;
 };
 
 /**
@@ -165,9 +191,13 @@ export type SeriesStyle = {
  * Supported only for cartesian and polar charts.
  */
 export type SeriesStyleOptions = {
-  /** @inheritdoc LineStyleOptions.lineWidth */
+  /**
+   * @inheritdoc LineStyleOptions.lineWidth
+   */
   lineWidth?: LineWidth;
-  /** @inheritdoc LineStyleOptions.markers */
+  /**
+   * @inheritdoc LineStyleOptions.markers
+   */
   markers?: Markers;
 };
 
@@ -557,7 +587,7 @@ export interface RangeChartDataOptions {
    * Each measure column defines the range of values by specifying a lower and an upper bound,
    * providing the necessary data to visualize the area range on the chart.
    */
-  value: AreaRangeMeasureColumn[];
+  value: (CalculatedMeasureColumn | StyledMeasureColumn | AreaRangeMeasureColumn)[];
   /**
    * Columns (or attributes) by which to break (group) the data represented in the chart.
    *
@@ -661,6 +691,7 @@ export interface ScattermapChartDataOptionsInternal {
 export type RangeChartDataOptionsInternal = {
   x: Category[];
   rangeValues: Value[][];
+  seriesValues: Value[];
   breakBy: Category[];
   y: Value[];
   seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;

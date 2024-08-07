@@ -64,24 +64,125 @@ import type DrilldownWidget from '../drilldown-widget.vue';
  */
 export const ChartWidget = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.bottomSlot}
+     *
+     * @category Widget
+     * @internal
+     */
     bottomSlot: Object as PropType<ChartWidgetProps['bottomSlot']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.chartType}
+     *
+     * @category Chart
+     */
     chartType: String as PropType<ChartWidgetProps['chartType']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.contextMenuItems}
+     *
+     * @category Widget
+     * @internal
+     */
     contextMenuItems: Array as PropType<ChartWidgetProps['contextMenuItems']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<ChartWidgetProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
+     *
+     * @category Data
+     */
     dataSource: Object as PropType<ChartWidgetProps['dataSource']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.description}
+     *
+     * @category Widget
+     */
     description: String as PropType<ChartWidgetProps['description']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
+     *
+     * @category Widget
+     * @internal
+     */
     drilldownOptions: Object as PropType<ChartWidgetProps['drilldownOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.filters}
+     *
+     * @category Data
+     */
     filters: Array as PropType<ChartWidgetProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
+     *
+     * @category Widget
+     */
     highlightSelectionDisabled: Boolean as PropType<ChartWidgetProps['highlightSelectionDisabled']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Array as PropType<ChartWidgetProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<ChartWidgetProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenuClose}
+     *
+     * @category Callbacks
+     * @internal
+     */
     onContextMenuClose: Function as PropType<ChartWidgetProps['onContextMenuClose']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<ChartWidgetProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<ChartWidgetProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<ChartWidgetProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
+     *
+     * @category Widget
+     */
     styleOptions: Object as PropType<ChartWidgetProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
+     *
+     * @category Widget
+     */
     title: String as PropType<ChartWidgetProps['title']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.topSlot}
+     *
+     * @category Widget
+     * @internal
+     */
     topSlot: Object as PropType<ChartWidgetProps['topSlot']>,
+    // TODO Remove this prop as part of https://sisense.dev/guides/sdk/guides/migration-guide-1.0.0.html#removed
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
+     * @category Widget
+     * @internal
+     */
     widgetStyleOptions: Object as PropType<ChartWidgetProps['styleOptions']>,
   },
   setup: (props) => setupHelper(ChartWidgetPreact, props),

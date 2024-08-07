@@ -18,6 +18,8 @@ import type { MaybeRefOrWithRefs } from '../types';
  * the query's loading, success, and error states. This composable integrates with the Sisense application context
  * to perform queries and handle their results within Vue components.
  *
+ * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @param {ExecuteQueryByWidgetIdParams} params - Parameters for executing the query, including widget ID, filters,
  * and other relevant query options. The `filters` parameter allows for specifying dynamic filters for the query.
  *
@@ -45,7 +47,8 @@ import type { MaybeRefOrWithRefs } from '../types';
  * - `isError`: A boolean indicating if an error occurred during the query execution.
  * - `isSuccess`: A boolean indicating if the query executed successfully.
  * - `error`: An Error object containing the error details if an error occurred.
- * - `query`: The query object returned by the SDK, useful for debugging or advanced handling.
+ * - `query`: The query object returned for chart widget, useful for debugging or advanced handling.
+ * - `pivotQuery`: The pivot query object returned for pivot widget, useful for debugging or advanced handling.
  *
  * Utilizing this composable allows for declarative and reactive handling of widget-specific queries within Vue applications,
  * facilitating easier data fetching and state management with the Sisense SDK.
@@ -57,6 +60,7 @@ export const useExecuteQueryByWidgetId = (
   params: MaybeRefOrWithRefs<ExecuteQueryByWidgetIdParams>,
 ) => {
   const query = ref<QueryByWidgetIdState['query']>(undefined);
+  const pivotQuery = ref<QueryByWidgetIdState['pivotQuery']>(undefined);
   const { hasTrackedRef } = useTracking('useExecuteQueryByWidgetId');
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
@@ -73,7 +77,11 @@ export const useExecuteQueryByWidgetId = (
       dispatch({ type: 'loading' });
       const { filters, ...rest } = toPlainObject(params);
       const { filters: filterList } = getFilterListAndRelations(toPlainValue(filters));
-      const { data, query: resQuery } = await executeQueryByWidgetId({
+      const {
+        data,
+        query: resQuery,
+        pivotQuery: resPivotQuery,
+      } = await executeQueryByWidgetId({
         ...rest,
         filters: filterList,
         app: application!,
@@ -81,6 +89,7 @@ export const useExecuteQueryByWidgetId = (
 
       dispatch({ type: 'success', data });
       query.value = resQuery;
+      pivotQuery.value = resPivotQuery;
     } catch (error) {
       dispatch({ type: 'error', error: error as Error });
     }
@@ -101,5 +110,6 @@ export const useExecuteQueryByWidgetId = (
   return {
     ...toRefs(queryState.value),
     query: query,
+    pivotQuery: pivotQuery,
   } as ToRefs<QueryByWidgetIdState>;
 };

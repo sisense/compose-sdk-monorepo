@@ -45,15 +45,42 @@ import { setupHelper } from '../../setup-helper';
  */
 export const DateRangeFilterTile = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.attribute}
+     */
     attribute: Object as PropType<DateRangeFilterTileProps['attribute']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.dataSource}
+     */
     datasource: Object as PropType<DateRangeFilterTileProps['dataSource']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.earliestDate}
+     */
     earliestDate: Object as PropType<DateRangeFilterTileProps['earliestDate']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.filter}
+     */
     filter: Object as PropType<DateRangeFilterTileProps['filter']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.lastDate}
+     */
     lastDate: Object as PropType<DateRangeFilterTileProps['lastDate']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onChange}
+     */
     onChange: Function as PropType<DateRangeFilterTileProps['onChange']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.parentFilters}
+     */
     parentFilters: Object as PropType<DateRangeFilterTileProps['parentFilters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.title}
+     */
     title: Object as PropType<DateRangeFilterTileProps['title']>,
-    /** @internal */
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.tiled}
+     * @internal
+     */
     tiled: Boolean as PropType<DateRangeFilterTileProps['tiled']>,
   },
   setup: (props) => setupHelper(DateRangeFilterTilePreact, props),

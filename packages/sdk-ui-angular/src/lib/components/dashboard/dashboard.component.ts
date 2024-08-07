@@ -24,6 +24,8 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
 /**
  * An Angular component used for easily rendering a dashboard.
  *
+ * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @example
  * ```html
  * <csdk-dashboard
@@ -106,6 +108,12 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   widgetFilterOptions: DashboardProps['widgetFilterOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.styleOptions}
+   */
+  @Input()
+  styleOptions: DashboardProps['styleOptions'];
+
   private componentAdapter: ComponentAdapter;
 
   /**
@@ -161,6 +169,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
       filters: this.filters,
       defaultDataSource: this.defaultDataSource,
       widgetFilterOptions: this.widgetFilterOptions,
+      styleOptions: this.styleOptions,
     };
 
     return createElement(Dashboard, props);

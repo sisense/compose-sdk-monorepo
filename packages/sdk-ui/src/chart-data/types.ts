@@ -69,6 +69,7 @@ export type CartesianChartData = {
   xAxisCount: number;
   xValues: CategoricalXValues[];
   series: CategoricalSeriesValues[];
+  seriesOther?: CartesianChartData;
 };
 
 export type CategoricalChartData = {

@@ -47,14 +47,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const FunnelChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<FunnelChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<FunnelChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<FunnelChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<FunnelChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<FunnelChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<FunnelChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<FunnelChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<FunnelChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<FunnelChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(FunnelChartPreact, props),

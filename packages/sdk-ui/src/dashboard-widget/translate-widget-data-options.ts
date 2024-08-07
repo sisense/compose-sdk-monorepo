@@ -165,6 +165,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   const sortType = getSortType(item.jaql.sort ?? item.categoriesSorting);
   const numberFormatConfig = extractNumberFormat(item);
   const subtotal = item.format?.subtotal;
+  const width = item.format?.width;
 
   if (MetadataTypes.isMeasure(element)) {
     const color = createValueColorOptions(item.format?.color, customPaletteColors);
@@ -182,6 +183,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
       ...(numberFormatConfig && { numberFormatConfig }),
       ...(totalsCalculation && { totalsCalculation }),
       ...(dataBars && { dataBars }),
+      ...(width && { width }),
     } as StyledMeasureColumn;
   }
 
@@ -191,6 +193,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     ...(sortType && { sortType }),
     ...(numberFormatConfig && { numberFormatConfig }),
     ...(subtotal && { includeSubTotals: subtotal }),
+    ...(width && { width }),
   } as StyledColumn;
 }
 
@@ -352,7 +355,6 @@ function extractTableChartDataOptions(panels: Panel[], paletteColors?: Color[]):
 }
 
 /**
- * TEMPORARY WORKAROUND UNTIL PIVOT TABLE IS FULLY AVAILABLE
  * Translate JAQL of rows, columns, and values of a pivot table into columns of a regular table.
  * Essentially, columns are treated as rows.
  *

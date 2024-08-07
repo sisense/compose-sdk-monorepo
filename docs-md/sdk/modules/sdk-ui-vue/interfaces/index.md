@@ -72,4 +72,3 @@ TypeScript interfaces for components and composables listed above
 - [TreemapChartProps](interface.TreemapChartProps.md)
 - [TreemapStyleOptions](interface.TreemapStyleOptions.md)
 - [UseGetSharedFormulaParams](interface.UseGetSharedFormulaParams.md)
-- [WidgetStyleOptions](interface.WidgetStyleOptions.md)

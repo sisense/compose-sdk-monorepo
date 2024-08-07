@@ -47,6 +47,11 @@ describe('getDashboardModel', () => {
         title: dashboardMock.datasource.title,
         type: 'elasticube',
       },
+      styleOptions: {
+        palette: {
+          variantColors: dashboardMock.style!.palette!.colors,
+        },
+      },
     });
   });
 
@@ -74,6 +79,11 @@ describe('getDashboardModel', () => {
           dashboardMock.widgets!.map(() => expect.anything()),
         ),
       ),
+      styleOptions: {
+        palette: {
+          variantColors: dashboardMock.style!.palette!.colors,
+        },
+      },
     });
   });
 
@@ -96,6 +106,11 @@ describe('getDashboardModel', () => {
       ),
       widgets: expect.anything(),
       widgetFilterOptions: expect.anything(),
+      styleOptions: {
+        palette: {
+          variantColors: dashboardMock.style!.palette!.colors,
+        },
+      },
     });
   });
 

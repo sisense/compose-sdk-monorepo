@@ -34,6 +34,14 @@ export type CascadingFilterDto = {
   locked?: boolean;
 };
 
+export type DashboardStyleDto = {
+  palette?: {
+    name: string;
+    colors: string[];
+  };
+  paletteId?: string;
+};
+
 export const isCascadingFilterDto = (
   filter: FilterDto | CascadingFilterDto,
 ): filter is CascadingFilterDto => {
@@ -50,4 +58,5 @@ export type DashboardDto = {
     filterRelations: FilterRelationsModel;
   }[];
   layout?: Layout;
+  style?: DashboardStyleDto;
 } & AnyObject;

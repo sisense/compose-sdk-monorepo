@@ -6,17 +6,19 @@ import {
   MembersFilter,
 } from '@sisense/sdk-data';
 import isEqual from 'lodash/isEqual';
-import { CommonFiltersOptions } from './types.js';
+import { FiltersIgnoringRules, PureFilter } from './types.js';
 
 export function getAllowedFilters(
-  filters: Filter[],
-  ignoreFiltersOptions: CommonFiltersOptions['ignoreFilters'] = {},
+  filters: PureFilter[],
+  ignoreFiltersOptions: FiltersIgnoringRules,
 ) {
   if (ignoreFiltersOptions.all) {
     return [];
   }
 
-  return filters.filter(({ guid }) => !ignoreFiltersOptions.ids?.includes(guid));
+  return filters.filter((pureFilter) => {
+    return !ignoreFiltersOptions.ids?.includes(pureFilter.guid);
+  });
 }
 
 export function isSameAttribute(attributeA: Attribute, attributeB: Attribute) {
@@ -47,9 +49,13 @@ export function createCommonFilter(
   );
 }
 
+export function haveSameAttribute(filterA: Filter, filterB: Filter) {
+  return isSameAttribute(filterA.attribute, filterB.attribute);
+}
+
 export function isEqualMembersFilters(filterA: Filter, filterB: Filter) {
   return (
-    isSameAttribute(filterA.attribute, filterB.attribute) &&
+    haveSameAttribute(filterA, filterB) &&
     'members' in filterA &&
     'members' in filterB &&
     isEqual((filterA as MembersFilter).members, (filterB as MembersFilter).members)

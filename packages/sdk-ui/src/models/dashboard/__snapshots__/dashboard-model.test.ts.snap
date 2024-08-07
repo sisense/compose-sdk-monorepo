@@ -44,6 +44,7 @@ DashboardModel {
     ],
   },
   "oid": "test",
+  "styleOptions": {},
   "title": "test",
   "widgetFilterOptions": {
     "widget-1": {
@@ -92,6 +93,7 @@ DashboardModel {
     "columns": [],
   },
   "oid": "test",
+  "styleOptions": {},
   "title": "test",
   "widgetFilterOptions": {},
   "widgets": [],

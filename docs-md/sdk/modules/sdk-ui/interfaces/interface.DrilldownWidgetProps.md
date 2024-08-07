@@ -34,7 +34,7 @@ React component to be rendered as context menu
 
 > **config**?: [`DrilldownWidgetConfig`](../type-aliases/type-alias.DrilldownWidgetConfig.md)
 
-An object that allows users to pass advanced configuration options as a prop for the [DrilldownWidget](../drilldown/function.DrilldownWidget.md) component
+An object that allows users to pass advanced configuration options as a prop for the `DrilldownWidget` component
 
 ***
 

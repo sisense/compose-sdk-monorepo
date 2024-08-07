@@ -44,11 +44,37 @@ const pivotTableProps = ref<PivotTableProps>({
  */
 export const PivotTable = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.dataOptions}
+     *
+     * @category Data
+     */
     dataOptions: Object as PropType<PivotTableProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<PivotTableProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.filters}
+     *
+     * @category Data
+     */
     filters: Array as PropType<PivotTableProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Array as PropType<PivotTableProps['highlights']>,
+    /** @internal */
     refreshCounter: Number as PropType<PivotTableProps['refreshCounter']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.styleOptions}
+     *
+     * @category Representation
+     */
     styleOptions: Object as PropType<PivotTableProps['styleOptions']>,
   },
   setup: (props) => setupHelper(PivotTablePreact, props),

@@ -2,6 +2,7 @@ import merge from 'ts-deepmerge';
 import { CompleteThemeSettings } from '../types';
 import { HighchartsOptionsInternal } from './chart-options-service';
 import { LegendSettings } from './translations/legend-section';
+import { AxisPlotBand } from './translations/axis-section';
 
 export const applyThemeToChart = (
   chartOptions: HighchartsOptionsInternal,
@@ -98,7 +99,10 @@ export const applyThemeToChart = (
 
   mergedOptions.xAxis = mergedOptions.xAxis?.map((axis) => {
     axis.plotBands = axis.plotBands?.map((plotBand) => {
-      return merge(plotBand, plotBandOptions);
+      return merge(plotBand, {
+        ...plotBandOptions,
+        color: plotBand.color || themeSettings?.chart.backgroundColor,
+      } as AxisPlotBand);
     });
     return merge(axis, axisOptions);
   });
@@ -106,7 +110,10 @@ export const applyThemeToChart = (
   if (mergedOptions.yAxis) {
     mergedOptions.yAxis = mergedOptions.yAxis.map((axis) => {
       axis.plotBands = axis.plotBands?.map((plotBand) => {
-        return merge(plotBand, plotBandOptions);
+        return merge(plotBand, {
+          ...plotBandOptions,
+          color: plotBand.color || themeSettings?.chart.backgroundColor,
+        }) as AxisPlotBand;
       });
       return merge(axis, axisOptions);
     });

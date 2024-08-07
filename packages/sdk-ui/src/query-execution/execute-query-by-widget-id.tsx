@@ -10,6 +10,8 @@ import { useExecuteQueryByWidgetIdInternal } from './use-execute-query-by-widget
  * This component takes the Children Prop Pattern and
  * offers an alternative approach to the {@link useExecuteQueryByWidgetId} hook.
  *
+ * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
+ *
  * @example
  * The example below executes a query over the existing dashboard widget with the specified widget and dashboard OIDs.
  * ```tsx

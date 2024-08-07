@@ -55,14 +55,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const AreaRangeChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.dataOptions}
+     *
+     * @category Chart
+     */
     dataOptions: Object as PropType<AreaRangeChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<AreaRangeChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<AreaRangeChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<AreaRangeChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<AreaRangeChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<AreaRangeChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<AreaRangeChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<AreaRangeChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<AreaRangeChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(AreaRangeChartPreact, props),

@@ -5,7 +5,7 @@ import type { DashboardProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
 /**
- * A Dashboard component used for easily rendering a dashboard.
+ * A component used for easily rendering a dashboard.
  *
  * @example
  * Here's how you can use the Dashboard component in a Vue application:
@@ -19,6 +19,7 @@ import { setupHelper } from '../../setup-helper';
  *    :filters="dashboard.filters"
  *    :defaultDataSource="dashboard.dataSource"
  *    :widgetFilterOptions="dashboard.widgetFilterOptions"
+ *    :styleOptions="dashboard.styleOptions"
  *  />
  * </template>
  *
@@ -38,12 +39,34 @@ import { setupHelper } from '../../setup-helper';
  */
 export const Dashboard = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.title}
+     */
     title: String as PropType<DashboardProps['title']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.layout}
+     */
     layout: Object as PropType<DashboardProps['layout']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
+     */
     widgets: Object as PropType<DashboardProps['widgets']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.filters}
+     */
     filters: Object as PropType<DashboardProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.defaultDataSource}
+     */
     defaultDataSource: Object as PropType<DashboardProps['defaultDataSource']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetFilterOptions}
+     */
     widgetFilterOptions: Object as PropType<DashboardProps['widgetFilterOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.styleOptions}
+     */
+    styleOptions: Object as PropType<DashboardProps['styleOptions']>,
   },
   setup: (props) => setupHelper(DashboardPreact, props),
 });

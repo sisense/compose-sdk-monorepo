@@ -1,4 +1,5 @@
 import { CommonFiltersOptions } from '@/common-filters/types';
+import { ColorPaletteTheme } from '@/types';
 
 /** @internal */
 export interface Layout {
@@ -16,3 +17,8 @@ export interface Layout {
 
 /** @internal */
 export type WidgetFilterOptions = Record<string, CommonFiltersOptions>;
+
+/** @internal */
+export type DashboardStyleOptions = {
+  palette?: ColorPaletteTheme;
+};

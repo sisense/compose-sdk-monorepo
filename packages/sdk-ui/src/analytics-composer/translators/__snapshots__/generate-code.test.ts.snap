@@ -1,0 +1,63 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateCode > should generate code from template for Angular 1`] = `
+"import { Component } from '@angular/core';
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import * as DM from './data-source'; // generated with @sisense/sdk-cli
+
+@Component({
+    selector: 'code-example',
+    template: \`
+      <csdk-chart-widget
+        chartType='bar'
+        [dataSource]='DM.DataSource'
+        [dataOptions]='dataOptions'
+        [filters]='filters'
+      />
+    \`
+})
+export class CodeExample {
+    DM = DM;
+    dataOptions = { category: [DM.Commerce.Date.Years], value: [measureFactory.sum(DM.Commerce.Revenue)] };
+    filters = [filterFactory.greaterThan(DM.Commerce.Revenue, 0)];
+}"
+`;
+
+exports[`generateCode > should generate code from template for React 1`] = `
+"import { Chart } from '@sisense/sdk-ui';
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import * as DM from './data-source'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  return (
+    <Chart
+      title={'My Chart'}
+      dataSource={DM.DataSource}
+      chartType={'bar'}
+      dataOptions={ { category: [DM.Commerce.Date.Years], value: [measureFactory.sum(DM.Commerce.Revenue)] } }
+      filters={ [filterFactory.greaterThan(DM.Commerce.Revenue, 0)] }
+    />
+  );
+}"
+`;
+
+exports[`generateCode > should generate code from template for Vue 1`] = `
+"<script setup lang="ts">
+  import { ref } from 'vue';
+  import { Chart } from '@sisense/sdk-ui-vue';
+  import { filterFactory, measureFactory } from '@sisense/sdk-data';
+  import * as DM from './data-source'; // generated with @sisense/sdk-cli
+
+  const dataOptions = ref({ category: [DM.Commerce.Date.Years], value: [measureFactory.sum(DM.Commerce.Revenue)] });
+  const filters = ref([filterFactory.greaterThan(DM.Commerce.Revenue, 0)]);
+</script>
+
+<template>
+  <Chart
+    chartType="bar"
+    :dataOptions="dataOptions"
+    :filters="filters"
+    :dataSource="DM.DataSource"
+    title="My Chart" />
+</template>"
+`;

@@ -20,15 +20,15 @@ exports[`ChartWidget > should render ChartWidget for table widget 1`] = `
           >
             <div
               class="csdk-h-full csdk-overflow-hidden"
-              style="border-width: 0px; border-color: #000000; border-radius: 0; box-shadow: none; display: flex; flex-direction: column;"
+              style="border-width: 0px; border-color: #9ea2ab; border-radius: 0; box-shadow: none; display: flex; flex-direction: column;"
             >
               <div
                 class="csdk-flex csdk-flex-row csdk-items-center csdk-px-2 csdk-min-h-[32px]"
                 style="background-color: rgb(255, 255, 255);"
               >
                 <div
-                  class="csdk-text-left csdk-w-full csdk-whitespace-nowrap csdk-overflow-hidden"
-                  style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif; font-size: 15px;"
+                  class="csdk-w-full csdk-whitespace-nowrap csdk-overflow-hidden"
+                  style="text-align: left; color: rgb(91, 99, 114); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif; font-size: 15px;"
                 >
                   Chart widget title
                 </div>
@@ -39,7 +39,7 @@ exports[`ChartWidget > should render ChartWidget for table widget 1`] = `
                     aria-label="Click to view full details"
                     class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-av538e-MuiButtonBase-root-MuiIconButton-root"
                     data-mui-internal-clone-element="true"
-                    style="background-color: rgb(255, 255, 255);"
+                    style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                     tabindex="0"
                     type="button"
                   >
@@ -51,7 +51,7 @@ exports[`ChartWidget > should render ChartWidget for table widget 1`] = `
                     >
                       <path
                         d="M11.5 20a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm0-1a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zm-.5-8h1v5h-1v-5zm0-1v-.998h1V10h-1z"
-                        fill="#000000"
+                        fill="#5B6372"
                       />
                     </svg>
                     <span

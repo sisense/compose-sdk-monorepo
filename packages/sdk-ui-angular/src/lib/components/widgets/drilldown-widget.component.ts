@@ -129,22 +129,37 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownDimensions}
+   *
+   * @category Widget
+   *
    */
   @Input()
   drilldownDimensions!: DrilldownWidgetProps['drilldownDimensions'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.initialDimension}
+   *
+   * @category Widget
    */
   @Input()
   initialDimension!: DrilldownWidgetProps['initialDimension'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.config}
+   *
+   * @category Widget
+   */
   @Input()
   config?: Omit<DrilldownWidgetProps['config'], 'breadcrumbsComponent | contextMenuComponent'> & {
     breadcrumbsComponent?: (drilldownBreadcrumbsProps: DrilldownBreadcrumbsProps) => HTMLDivElement;
     contextMenuComponent?: (contextMenuProps: ContextMenuProps) => HTMLDivElement;
   };
 
+  /**
+   * Drilldown result change handler callback
+   *
+   * @category Callbacks
+   */
   @Output()
   drilldownResultChange = new EventEmitter<CustomDrilldownResult>();
 

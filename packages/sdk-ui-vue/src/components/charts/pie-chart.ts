@@ -43,14 +43,59 @@ import { setupHelper } from '../../setup-helper';
  */
 export const PieChart = defineComponent({
   props: {
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.dataOptions}
+     *
+     * @category Data
+     */
     dataOptions: Object as PropType<PieChartProps['dataOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.dataSet}
+     *
+     * @category Data
+     */
     dataSet: Object as PropType<PieChartProps['dataSet']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.filters}
+     *
+     * @category Data
+     */
     filters: Object as PropType<PieChartProps['filters']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.highlights}
+     *
+     * @category Data
+     */
     highlights: Object as PropType<PieChartProps['highlights']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
     onBeforeRender: Function as PropType<PieChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
     onDataPointClick: Function as PropType<PieChartProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
     onDataPointContextMenu: Function as PropType<PieChartProps['onDataPointContextMenu']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointsSelected}
+     *
+     * @category Callbacks
+     */
     onDataPointsSelected: Function as PropType<PieChartProps['onDataPointsSelected']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.styleOptions}
+     *
+     * @category Chart
+     */
     styleOptions: Object as PropType<PieChartProps['styleOptions']>,
   },
   setup: (props) => setupHelper(PieChartPreact, props),

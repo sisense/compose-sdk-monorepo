@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.15.1",
+  "version": "1.16.0",
   "type": "module",
   "exports": {
     ".": {
@@ -25,6 +25,12 @@
       "require": "./dist/ai.cjs",
       "import": "./dist/ai.js",
       "default": "./dist/ai.js"
+    },
+    "./analytics-composer": {
+      "types": "./dist/analytics-composer.d.ts",
+      "require": "./dist/analytics-composer.cjs",
+      "import": "./dist/analytics-composer.js",
+      "default": "./dist/analytics-composer.js"
     }
   },
   "main": "./dist/index.cjs",
@@ -34,6 +40,9 @@
     "*": {
       "ai": [
         "./dist/ai.d.ts"
+      ],
+      "analytics-composer": [
+        "./dist/analytics-composer.d.ts"
       ]
     }
   },
@@ -44,12 +53,12 @@
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.15.16",
     "@mui/system": "^5.15.15",
-    "@sisense/sdk-common": "^1.15.1",
-    "@sisense/sdk-data": "^1.15.1",
-    "@sisense/sdk-pivot-client": "^1.15.1",
-    "@sisense/sdk-query-client": "^1.15.1",
-    "@sisense/sdk-rest-client": "^1.15.1",
-    "@sisense/sdk-tracking": "^1.15.1",
+    "@sisense/sdk-common": "^1.16.0",
+    "@sisense/sdk-data": "^1.16.0",
+    "@sisense/sdk-pivot-client": "^1.16.0",
+    "@sisense/sdk-query-client": "^1.16.0",
+    "@sisense/sdk-rest-client": "^1.16.0",
+    "@sisense/sdk-tracking": "^1.16.0",
     "@sisense/sisense-charts": "5.1.1",
     "@tanstack/react-query": "4.36.1",
     "classnames": "^2.3.2",
@@ -72,7 +81,8 @@
     "react-number-format": "^5.1.0",
     "ts-deepmerge": "6.0.2",
     "ts-essentials": "^9.3.0",
-    "whatwg-fetch": "^3.6.2"
+    "whatwg-fetch": "^3.6.2",
+    "yaml": "^2.4.5"
   },
   "scripts": {
     "dev": "vite",
