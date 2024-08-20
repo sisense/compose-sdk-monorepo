@@ -37,10 +37,10 @@ export const DashboardContainer = ({
   const { themeSettings } = useThemeContext();
   return (
     <DashboardWrapper
-      background={themeSettings.general.backgroundColor}
+      background={themeSettings.dashboard.backgroundColor}
       color={themeSettings.typography.primaryTextColor}
     >
-      <ContentColumn background={themeSettings.chart.backgroundColor}>
+      <ContentColumn background={themeSettings.dashboard.backgroundColor}>
         <DashboardHeader title={title} />
         <ContentPanel layout={layout} widgets={widgets} />
       </ContentColumn>

@@ -27,7 +27,7 @@ export const mockChartWidgetPropsForTable: ChartWidgetProps = {
   },
 };
 
-export const mockResolvedTableQuery: QueryResultData = {
+export const mockResolvedQuery: QueryResultData = {
   columns: [
     {
       name: 'AgeRange',

@@ -2,7 +2,7 @@
 import { CategoricalChartData } from '../../../chart-data/types';
 import { HighchartsOptionsInternal } from '../../chart-options-service';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { CompleteThemeSettings } from '../../../types';
+import { CompleteThemeSettings, UniformDataColorOptions } from '../../../types';
 import { SunburstChartDesignOptions } from '../design-options';
 import { getTreemapTooltipSettings } from '../treemap/treemap-tooltip';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
@@ -62,11 +62,14 @@ export function prepareSunburstOptions(
         data: prepareSunburstDataItems(chartData, dataOptions, themeSettings),
         levels: prepareSunburstLevels(chartData, dataOptions, designOptions, themeSettings),
         showInLegend: false,
+        turboThreshold: 2000,
       },
       ...dataOptions.breakBy.map((column, index) => ({
         name: column.title || column.name,
         showInLegend: true,
-        color: getPaletteColor(themeSettings?.palette.variantColors, index),
+        color:
+          (column?.color as UniformDataColorOptions)?.color ||
+          getPaletteColor(themeSettings?.palette.variantColors, index),
         data: [],
         states: {
           hover: {

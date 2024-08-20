@@ -1,4 +1,4 @@
-import { getPivotQueryOptions } from '@/pivot-table/use-get-pivot-table-query';
+import { getPivotQueryOptions } from '@/pivot-table/hooks/use-get-pivot-table-query';
 import { Attribute, Filter, Measure } from '@sisense/sdk-data';
 import { over } from 'lodash';
 import { getTranslatedDataOptions } from '../../chart-data-options/get-translated-data-options';

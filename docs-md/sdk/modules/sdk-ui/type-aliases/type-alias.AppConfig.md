@@ -107,3 +107,33 @@ Query limit (max rows count that will be fetched in query)
 ```ts
 20000
 ```
+
+***
+
+### `trackingConfig`
+
+**trackingConfig**?: `object`
+
+Tracking configuration
+
+> #### `trackingConfig.onTrackingEvent`
+>
+> **onTrackingEvent**?: (`payload`) => `void`
+>
+> Callback to be invoked when tracking event occurs
+>
+> ##### Parameters
+>
+>
+> | Parameter | Type |
+> | :------ | :------ |
+> | `payload` | `TrackingEventDetails` |
+>
+>
+> ##### Returns
+>
+> `void`
+>
+>
+>
+>

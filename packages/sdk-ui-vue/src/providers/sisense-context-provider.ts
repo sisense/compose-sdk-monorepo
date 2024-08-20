@@ -59,8 +59,6 @@ export const createSisenseContextConnector = (context: CustomSisenseContext) => 
  *     :token="authToken"
  *     :wat="watToken"
  *     :appConfig="appConfigurations"
- *     :showRuntimeErrors="true"
- *     :enableTracking="false"
  *   >
  *     <!-- Your application components here -->
  *   </SisenseContextProvider>
@@ -150,7 +148,9 @@ export const SisenseContextProvider = defineComponent({
       showRuntimeErrors: props.showRuntimeErrors!,
       tracking: {
         ...defaultSisenseContext.tracking,
-        enabled: props.enableTracking!,
+        enabled:
+          props.enableTracking! &&
+          (props.appConfig?.trackingConfig?.enabled ?? props.enableTracking),
       },
     });
     createClientApplication(props as SisenseContextProviderProps).then((newApp) => {

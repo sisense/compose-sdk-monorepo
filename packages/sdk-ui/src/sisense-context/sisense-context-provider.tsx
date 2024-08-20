@@ -6,6 +6,7 @@ import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
+import { isAuthTokenPending } from '@sisense/sdk-rest-client';
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -54,9 +55,16 @@ export const SisenseContextProvider: FunctionComponent<
   enableTracking = true,
   showRuntimeErrors = true,
   enableSilentPreAuth = false,
+  onError,
 }) => {
   const tracking = {
-    enabled: enableTracking,
+    // if tracking is configured in appConfig, use it, otherwise use enableTracking
+    // if none is set, default to true
+    enabled:
+      appConfig?.trackingConfig?.enabled !== undefined
+        ? appConfig.trackingConfig.enabled
+        : enableTracking ?? true,
+    onTrackingEvent: appConfig?.trackingConfig?.onTrackingEvent,
     packageName: 'sdk-ui',
   };
   const [app, setApp] = useState<ClientApplication | undefined>();
@@ -65,6 +73,14 @@ export const SisenseContextProvider: FunctionComponent<
 
   useEffect(() => {
     let ignore = false;
+
+    // if the token is pending (not ready), wait for it to be set
+    // instead of trying to create the client application and throw an error
+    if (isAuthTokenPending(token, wat)) {
+      console.debug('Waiting for the auth token to be set');
+      return;
+    }
+
     void createClientApplication({
       defaultDataSource,
       url,
@@ -80,13 +96,15 @@ export const SisenseContextProvider: FunctionComponent<
         }
       })
       .catch((asyncError: Error) => {
+        onError?.(asyncError);
+        console.error(asyncError);
         // set error state to trigger rerender and throw synchronous error
         setClientApplicationError(asyncError);
       });
     return () => {
       ignore = true;
     };
-  }, [defaultDataSource, url, token, wat, ssoEnabled, appConfig, enableSilentPreAuth]);
+  }, [defaultDataSource, url, token, wat, ssoEnabled, appConfig, enableSilentPreAuth, onError]);
 
   return (
     <I18nProvider userLanguage={app?.settings.language || app?.settings.serverLanguage}>

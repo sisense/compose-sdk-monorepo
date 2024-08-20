@@ -18,9 +18,13 @@ describe('PivotTableWidget', () => {
     useSisenseContextMock.mockReturnValue({
       app: {
         pivotClient: new PivotClient(new HttpClient(url, new SsoAuthenticator(url), 'test'), true),
+        settings: {
+          trackingConfig: {
+            enabled: false,
+          },
+        },
       } as ClientApplication,
       isInitialized: true,
-      enableTracking: false,
     });
   });
   it('should render empty pivot table widget', async () => {

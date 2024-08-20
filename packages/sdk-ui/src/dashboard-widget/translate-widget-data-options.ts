@@ -166,9 +166,21 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   const numberFormatConfig = extractNumberFormat(item);
   const subtotal = item.format?.subtotal;
   const width = item.format?.width;
+  let color = createValueColorOptions(item.format?.color, customPaletteColors);
+
+  // Hande specific case in Fusion dashboard model
+  // Sunburst palette index stores that way
+  if (!color && !item.format?.color && item.format && 'colorIndex' in item.format) {
+    color = createValueColorOptions(
+      {
+        type: 'color',
+        colorIndex: item.format.colorIndex,
+      },
+      customPaletteColors,
+    );
+  }
 
   if (MetadataTypes.isMeasure(element)) {
-    const color = createValueColorOptions(item.format?.color, customPaletteColors);
     const showOnRightAxis = item.y2;
     const chartType = item.singleSeriesType;
     const totalsCalculation = 'subtotalAgg' in item.jaql && item.jaql.subtotalAgg;
@@ -194,6 +206,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     ...(numberFormatConfig && { numberFormatConfig }),
     ...(subtotal && { includeSubTotals: subtotal }),
     ...(width && { width }),
+    ...(color && { color }),
   } as StyledColumn;
 }
 

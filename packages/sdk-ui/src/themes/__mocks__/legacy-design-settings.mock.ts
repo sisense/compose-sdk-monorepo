@@ -61,6 +61,14 @@ export const redThemeSettings: CompleteThemeSettings = {
     backgroundColor: '#ec4646',
     secondaryTextColor: '#C5C8CF',
     panelBackgroundColor: '#313138',
+    animation: {
+      init: {
+        duration: 'auto',
+      },
+      redraw: {
+        duration: 'auto',
+      },
+    },
   },
   typography: {
     fontFamily: 'Open Sans',
@@ -89,6 +97,11 @@ export const redThemeSettings: CompleteThemeSettings = {
     },
     shadow: 'None',
     spaceAround: 'None',
+  },
+  dashboard: {
+    backgroundColor: '#313138',
+    dividerLineColor: '#F2F2F2',
+    dividerLineWidth: 4,
   },
   aiChat: {
     backgroundColor: 'rgba(244, 244, 248, 1)',

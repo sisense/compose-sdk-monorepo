@@ -10,7 +10,6 @@ import {
 
 export const calcColumnWidths = (
   dataTable: DataTable,
-  isLoading: boolean,
   isShowFieldTypeIcon: boolean,
   columnsOptions: {
     isHtml: boolean;
@@ -35,7 +34,7 @@ export const calcColumnWidths = (
     return { type: simpleColumnType(column.type), index: column.index };
   });
   // get pixel width of longest data for each column
-  const rows = isLoading ? dataTable.rows.slice(0, 100) : dataTable.rows;
+  const { rows } = dataTable;
   const columnDataWidths = columnsWithSimpleTypes.map((column) => {
     const pixelForValue = rows.reduce((longestWidth, currentRow) => {
       const displayValue = currentRow[column.index].displayValue;

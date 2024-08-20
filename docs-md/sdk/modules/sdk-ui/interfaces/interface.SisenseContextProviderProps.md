@@ -38,6 +38,40 @@ Default data source explicitly set to be used by child components that are not d
 
 URL of the Sisense environment the app connects to
 
+### Sisense App Error Handling
+
+#### onError
+
+> **onError**?: (`error`) => `void`
+
+Callback function that is triggered when an error occurs within the Sisense context.
+
+This callback is useful for handling errors that happen during the initialization or runtime of the Sisense context,
+such as incorrect configuration, invalid authentication, or network-related issues.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `error` | `Error` | The error object containing details about the issue. |
+
+##### Returns
+
+`void`
+
+***
+
+#### showRuntimeErrors
+
+> **showRuntimeErrors**?: `boolean`
+
+Boolean flag to show or hide run-time errors that involve Sisense context in the UI.
+Example errors include incorrect Sisense URL or invalid authentication.
+Note that this flag does not hide run-time errors in the console.
+If disabled - it's recommended to specify an [onError](interface.SisenseContextProviderProps.md#onerror) callback to handle errors.
+
+If not specified, the default value is `true`.
+
 ### Sisense Authentication
 
 #### ssoEnabled
@@ -52,14 +86,18 @@ Set to `true` to use SSO authentication. When `true`, this overrides any other a
 
 #### token
 
-> **token**?: `string`
+> **token**?: `null` \| `string`
 
 Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
+
+To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.
 
 ***
 
 #### wat
 
-> **wat**?: `string`
+> **wat**?: `null` \| `string`
 
 [Web Access Token](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
+
+To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.

@@ -4,6 +4,7 @@ interface ImportMetaEnv {
   VITE_APP_SISENSE_URL?: string;
   VITE_APP_SISENSE_TOKEN?: string;
   VITE_APP_DEMO_DYNAMIC_IMPORTS?: string;
+  VITE_APP_ANIMATION_DURATION: string;
 }
 
 interface ImportMeta {

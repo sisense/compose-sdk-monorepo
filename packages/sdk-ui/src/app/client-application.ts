@@ -11,13 +11,14 @@ import {
 } from '@sisense/sdk-rest-client';
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import { DataSource } from '@sisense/sdk-data';
-import { SisenseContextProviderProps } from '../props';
 import { DateConfig } from '../query/date-formats';
 import { AppSettings, getSettings } from './settings/settings';
 import { TranslatableError } from '../translation/translatable-error';
 import { PivotClient } from '@sisense/sdk-pivot-client';
 import { LoadingIndicatorConfig } from '../types';
 import { clearExecuteQueryCache } from '@/query/execute-query';
+import { TrackingEventDetails } from '@sisense/sdk-tracking';
+import { SisenseContextProviderProps } from '@/props';
 
 /**
  * Application configuration
@@ -93,6 +94,24 @@ export type AppConfig = {
      * If not specified, the default value is `false`
      */
     alwaysShowErrorText?: boolean;
+  };
+
+  /**
+   * Tracking configuration
+   */
+  trackingConfig?: {
+    /**
+     * Whether to enable tracking
+     *
+     * If not specified, the default value is `true`
+     *
+     * @internal
+     */
+    enabled?: boolean;
+    /**
+     * Callback to be invoked when tracking event occurs
+     */
+    onTrackingEvent?: (payload: TrackingEventDetails) => void;
   };
 };
 
@@ -172,6 +191,11 @@ export class ClientApplication {
   }
 }
 
+type ClientApplicationParams = Pick<
+  SisenseContextProviderProps,
+  'appConfig' | 'defaultDataSource' | 'url' | 'token' | 'wat' | 'ssoEnabled' | 'enableSilentPreAuth'
+>;
+
 /** @internal */
 export const createClientApplication = async ({
   defaultDataSource,
@@ -181,7 +205,7 @@ export const createClientApplication = async ({
   ssoEnabled,
   appConfig,
   enableSilentPreAuth,
-}: SisenseContextProviderProps): Promise<ClientApplication> => {
+}: ClientApplicationParams): Promise<ClientApplication> => {
   if (url !== undefined) {
     const auth = getAuthenticator({
       url,

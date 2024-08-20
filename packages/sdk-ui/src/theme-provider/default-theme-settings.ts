@@ -2,12 +2,23 @@
 import { CompleteThemeSettings } from '@/types';
 import cloneDeep from 'lodash/cloneDeep';
 
+export const DEFAULT_DIVIDER_COLOR = '#F2F2F2';
+export const DEFAULT_DIVIDER_WIDTH = 4;
+
 const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
   chart: {
     backgroundColor: '#FFFFFF',
     textColor: '#000000',
     secondaryTextColor: '#E4E4E4',
     panelBackgroundColor: '#F6F6F6',
+    animation: {
+      init: {
+        duration: 'auto',
+      },
+      redraw: {
+        duration: 'auto',
+      },
+    },
   },
   typography: {
     fontFamily: '"Open Sans","Roboto","Helvetica","Arial",sans-serif',
@@ -36,6 +47,11 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
       dividerLineColor: '#5B6372',
       backgroundColor: '#FFFFFF',
     },
+  },
+  dashboard: {
+    backgroundColor: '#FFFFFF',
+    dividerLineWidth: DEFAULT_DIVIDER_WIDTH,
+    dividerLineColor: DEFAULT_DIVIDER_COLOR,
   },
   aiChat: {
     backgroundColor: 'rgba(244, 244, 248, 1)',
@@ -140,6 +156,14 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     textColor: '#FFFFFF',
     secondaryTextColor: '#C5C8CF',
     panelBackgroundColor: '#313138',
+    animation: {
+      init: {
+        duration: 'auto',
+      },
+      redraw: {
+        duration: 'auto',
+      },
+    },
   },
   typography: {
     fontFamily: '"Open Sans","Roboto","Helvetica","Arial",sans-serif',
@@ -168,6 +192,11 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
       dividerLineColor: '#FFFFFF',
       backgroundColor: '#313138',
     },
+  },
+  dashboard: {
+    backgroundColor: '#313138',
+    dividerLineWidth: DEFAULT_DIVIDER_WIDTH,
+    dividerLineColor: DEFAULT_DIVIDER_COLOR,
   },
   aiChat: {
     backgroundColor: 'rgba(23, 28, 38, 1)',

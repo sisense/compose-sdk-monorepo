@@ -78,7 +78,936 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                       >
                         <div
                           aria-label="pivot-table-root"
-                        />
+                        >
+                          <div
+                            class="css-qvmm34"
+                            font-family=""Open Sans","Roboto","Helvetica","Arial",sans-serif"
+                          >
+                            <div
+                              class="sisense-pivot sisense-pivot--new"
+                            >
+                              <div
+                                class="multi-grid multi-grid--new  multi-grid--no-rows multi-grid--no-columns multi-grid--no-corner sisense-pivot__multi-grid"
+                              >
+                                <div
+                                  class="pivot-scroller"
+                                  style="position: relative; overflow: hidden; width: 400px; height: 525px;"
+                                >
+                                  <div
+                                    class="pivot-scroller__container"
+                                    style="position: relative; overflow: hidden; width: 400px; height: 516px;"
+                                  >
+                                    <div
+                                      class="pivot-scroller__view"
+                                      style="position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; overflow: scroll; margin-right: 0px; margin-bottom: 0px; scrollbar-width: none;"
+                                    >
+                                      <div
+                                        class="table-grid table-grid--data table-grid--bottom table-grid--right"
+                                      >
+                                        <table
+                                          class="table-grid__table table-grid--table-native undefined"
+                                          style="border-color: #cbced7;"
+                                        >
+                                          <colgroup
+                                            class="table-grid__colgroup"
+                                          >
+                                            <col
+                                              class="table-grid__column table-grid__column-0"
+                                            />
+                                          </colgroup>
+                                          <tbody
+                                            class="table-grid__tbody"
+                                          >
+                                            <tr
+                                              class="table-grid__row"
+                                              style="height: 0px;"
+                                            >
+                                              <td
+                                                class="table-grid__cell-anchor
+            table-grid__cell-anchor--col
+            table-grid__cell-anchor--col-0"
+                                              >
+                                                <div
+                                                  class="table-grid__cell-anchor-content"
+                                                />
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="scroll-elem__horizontal-track"
+                                    style="position: absolute; height: 6px; right: 2px; bottom: 2px; left: 2px; border-radius: 3px;"
+                                  >
+                                    <div
+                                      style="position: relative; display: block; height: 100%; cursor: pointer; border-radius: inherit; background-color: rgba(0, 0, 0, 0.2);"
+                                    />
+                                  </div>
+                                  <div
+                                    class="scroll-elem__vertical-track"
+                                    style="position: absolute; width: 6px; right: 2px; bottom: 2px; top: 2px; border-radius: 3px;"
+                                  >
+                                    <div
+                                      style="position: relative; display: block; width: 100%; cursor: pointer; border-radius: inherit; background-color: rgba(0, 0, 0, 0.2);"
+                                    />
+                                  </div>
+                                </div>
+                                <div
+                                  class="table-grid table-grid--fixed table-grid--rows table-grid--bottom table-grid--left"
+                                  style="width: 0px; height: 516px;"
+                                >
+                                  <table
+                                    class="table-grid__table table-grid--table-native undefined"
+                                    style="border-color: #cbced7;"
+                                  >
+                                    <colgroup
+                                      class="table-grid__colgroup"
+                                    >
+                                      <col
+                                        class="table-grid__column table-grid__column-0"
+                                      />
+                                    </colgroup>
+                                    <tbody
+                                      class="table-grid__tbody"
+                                    />
+                                  </table>
+                                </div>
+                                <div
+                                  class="table-grid table-grid--fixed table-grid--columns table-grid--top table-grid--right"
+                                  style="height: 0px; width: 391px;"
+                                >
+                                  <table
+                                    class="table-grid__table table-grid--table-native undefined"
+                                    style="border-color: #cbced7;"
+                                  >
+                                    <colgroup
+                                      class="table-grid__colgroup"
+                                    >
+                                      <col
+                                        class="table-grid__column table-grid__column-0"
+                                      />
+                                    </colgroup>
+                                    <tbody
+                                      class="table-grid__tbody"
+                                    />
+                                  </table>
+                                </div>
+                                <div
+                                  class="table-grid table-grid--fixed table-grid--corner table-grid--top table-grid--left"
+                                  style="width: 0px; height: 0px;"
+                                >
+                                  <table
+                                    class="table-grid__table table-grid--table-native undefined"
+                                    style="border-color: #cbced7;"
+                                  >
+                                    <colgroup
+                                      class="table-grid__colgroup"
+                                    >
+                                      <col
+                                        class="table-grid__column table-grid__column-0"
+                                      />
+                                    </colgroup>
+                                    <tbody
+                                      class="table-grid__tbody"
+                                    />
+                                  </table>
+                                </div>
+                              </div>
+                              <div
+                                class="sis-scope"
+                              >
+                                <div
+                                  class="sisense-pivot__pagination-panel sisense-pivot__pagination-panel--hidden sisense-pivot__pagination-panel--desktop"
+                                  data-html2canvas-ignore="true"
+                                >
+                                  <div
+                                    class="pivot-scroller"
+                                    style="position: relative; overflow: hidden; width: 100%; min-height: 0; max-height: 200px;"
+                                  >
+                                    <div
+                                      class="pivot-scroller__container"
+                                      style="position: relative; overflow: hidden; width: 100%; min-height: 0; max-height: 200px;"
+                                    >
+                                      <div
+                                        class="pivot-scroller__view"
+                                        style="position: relative; overflow: scroll; margin-right: 0px; margin-bottom: 0px; min-height: 0; max-height: 200px; scrollbar-width: none;"
+                                      >
+                                        <div
+                                          class="sisense-pivot__pagination-panel-wrapper"
+                                        >
+                                          <div
+                                            class="sisense-pivot__pagination-panel-list-wrapper"
+                                          >
+                                            <div
+                                              class="responsive-table-pagination xs"
+                                            >
+                                              <div
+                                                class="MuiTablePagination-root css-1tpa2y9-MuiTablePagination-root"
+                                                data-testid="TablePagination"
+                                              >
+                                                <div
+                                                  class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-x2tutx-MuiToolbar-root-MuiTablePagination-toolbar"
+                                                >
+                                                  <div
+                                                    class="MuiTablePagination-spacer css-gbqq2u-MuiTablePagination-spacer"
+                                                  />
+                                                  <p
+                                                    class="MuiTablePagination-selectLabel css-jwrofo-MuiTablePagination-selectLabel"
+                                                    id=":r2:"
+                                                  >
+                                                    <span
+                                                      class="MuiTypography-root MuiTypography-bodyParagraph css-13gjm91-MuiTypography-root"
+                                                    >
+                                                      Rows
+                                                    </span>
+                                                  </p>
+                                                  <div
+                                                    class="MuiInputBase-root MuiInputBase-colorPrimary MuiTablePagination-input css-1jxoux2-MuiInputBase-root-MuiTablePagination-select"
+                                                  >
+                                                    <div
+                                                      aria-controls=":r3:"
+                                                      aria-expanded="false"
+                                                      aria-haspopup="listbox"
+                                                      aria-labelledby=":r2: :r1:"
+                                                      class="MuiSelect-select MuiTablePagination-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
+                                                      data-testid="TablePaginationSelect"
+                                                      id=":r1:"
+                                                      role="combobox"
+                                                      tabindex="0"
+                                                    >
+                                                      <span
+                                                        class="MuiTypography-root MuiTypography-bodyParagraph css-13gjm91-MuiTypography-root"
+                                                      >
+                                                        25
+                                                      </span>
+                                                    </div>
+                                                    <input
+                                                      aria-hidden="true"
+                                                      aria-invalid="false"
+                                                      class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                                                      tabindex="-1"
+                                                      value="25"
+                                                    />
+                                                    <span
+                                                      class="app-icon app-icon--general-arrow-big-down MuiSelect-icon MuiTablePagination-selectIcon MuiSelect-iconStandard css-19xtc65-MuiSelect-icon"
+                                                      name="general-arrow-big-down"
+                                                    >
+                                                      <svg
+                                                        aria-hidden="true"
+                                                        class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                                        focusable="false"
+                                                      >
+                                                        <use
+                                                          xlink:href="#general-arrow-big-down"
+                                                        />
+                                                        <symbol
+                                                          id="general-arrow-big-down"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-arrow-left"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M13.878 9.325a.5.5 0 1 0-.76-.65l-2.998 3.5a.5.5 0 0 0 0 .65l2.999 3.5a.5.5 0 1 0 .76-.65l-2.72-3.175 2.72-3.175z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-arrow-long-right"
+                                                          viewBox="0 0 29 8"
+                                                        >
+                                                          <path
+                                                            d="M28.354 4.354a.5.5 0 0 0 0-.708L25.172.464a.5.5 0 1 0-.707.708L27.293 4l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182zM0 4.5h28v-1H0v1z"
+                                                            fill="#3A4356"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-arrow-right"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M13.34 12.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-arrow-up"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M12 10.16l-3.174 2.719a.5.5 0 0 1-.65-.76l3.5-2.998a.5.5 0 0 1 .65 0l3.5 2.998a.5.5 0 1 1-.65.76L12 10.159z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-arrow-up-down"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M15.646 14.646a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L12 18.293l3.646-3.647zm0-5.292L12 5.707 8.354 9.354a.5.5 0 1 1-.708-.708l4-4a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1-.708.708z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-double-arrow-back"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M9.658 12.5l2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.999-3.5a.5.5 0 1 1 .76.65L9.658 12.5zm5.719-3.175l-2.72 3.175 2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.998-3.5a.5.5 0 1 1 .76.65z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-double-arrow-front"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M11.34 12.5L8.62 9.325a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175zm.279-3.175a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.999 3.5a.5.5 0 1 1-.76-.65l2.72-3.175-2.72-3.175z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-double-big-arrow-back"
+                                                          viewBox="0 0 31 31"
+                                                        >
+                                                          <g
+                                                            fill="currentColor"
+                                                          >
+                                                            <path
+                                                              d="M16 11.825l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65zm5 0l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65z"
+                                                            />
+                                                            <path
+                                                              d="M10 11.5a.5.5 0 0 1 1 0v9a.5.5 0 0 1-1 0v-9z"
+                                                            />
+                                                          </g>
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-double-big-arrow-front"
+                                                          viewBox="0 0 31 31"
+                                                        >
+                                                          <g
+                                                            fill="currentColor"
+                                                          >
+                                                            <path
+                                                              d="M15 20.175l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65zm-5 0l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65z"
+                                                            />
+                                                            <path
+                                                              d="M21 20.5a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 1 0v9z"
+                                                            />
+                                                          </g>
+                                                        </symbol>
+                                                        <symbol
+                                                          id="general-x"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                          <path
+                                                            d="M12 12.293L6.854 7.146a.5.5 0 1 0-.708.708L11.293 13l-5.147 5.146a.5.5 0 0 0 .708.708L12 13.707l5.146 5.147a.5.5 0 0 0 .708-.708L12.707 13l5.147-5.146a.5.5 0 0 0-.708-.708L12 12.293z"
+                                                            fill="currentColor"
+                                                          />
+                                                        </symbol>
+                                                      </svg>
+                                                    </span>
+                                                  </div>
+                                                  <p
+                                                    class="MuiTablePagination-displayedRows css-1qtlrlj-MuiTablePagination-displayedRows"
+                                                  >
+                                                    <span
+                                                      class="MuiTypography-root MuiTypography-bodyParagraph css-tqgkz1-MuiTypography-root"
+                                                    >
+                                                      0-0 / 0
+                                                    </span>
+                                                  </p>
+                                                  <nav
+                                                    aria-label="pagination navigation"
+                                                    class="MuiPagination-root MuiPagination-text css-qy3wnj-MuiPagination-root"
+                                                    data-testid="PaginationActionsComponent"
+                                                  >
+                                                    <ul
+                                                      class="MuiPagination-ul css-wjh20t-MuiPagination-ul"
+                                                    >
+                                                      <li>
+                                                        <button
+                                                          aria-label="Go to first page"
+                                                          class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-firstLast css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                                          disabled=""
+                                                          tabindex="-1"
+                                                          type="button"
+                                                        >
+                                                          <span
+                                                            class="app-icon app-icon--general-double-arrow-back"
+                                                            name="general-double-arrow-back"
+                                                            sx="[object Object]"
+                                                          >
+                                                            <svg
+                                                              aria-hidden="true"
+                                                              class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                              focusable="false"
+                                                            >
+                                                              <use
+                                                                xlink:href="#general-double-arrow-back"
+                                                              />
+                                                              <symbol
+                                                                id="general-arrow-big-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-left"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.878 9.325a.5.5 0 1 0-.76-.65l-2.998 3.5a.5.5 0 0 0 0 .65l2.999 3.5a.5.5 0 1 0 .76-.65l-2.72-3.175 2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-long-right"
+                                                                viewBox="0 0 29 8"
+                                                              >
+                                                                <path
+                                                                  d="M28.354 4.354a.5.5 0 0 0 0-.708L25.172.464a.5.5 0 1 0-.707.708L27.293 4l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182zM0 4.5h28v-1H0v1z"
+                                                                  fill="#3A4356"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-right"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.34 12.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 10.16l-3.174 2.719a.5.5 0 0 1-.65-.76l3.5-2.998a.5.5 0 0 1 .65 0l3.5 2.998a.5.5 0 1 1-.65.76L12 10.159z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M15.646 14.646a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L12 18.293l3.646-3.647zm0-5.292L12 5.707 8.354 9.354a.5.5 0 1 1-.708-.708l4-4a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1-.708.708z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-back"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M9.658 12.5l2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.999-3.5a.5.5 0 1 1 .76.65L9.658 12.5zm5.719-3.175l-2.72 3.175 2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.998-3.5a.5.5 0 1 1 .76.65z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-front"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M11.34 12.5L8.62 9.325a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175zm.279-3.175a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.999 3.5a.5.5 0 1 1-.76-.65l2.72-3.175-2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-back"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M16 11.825l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65zm5 0l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M10 11.5a.5.5 0 0 1 1 0v9a.5.5 0 0 1-1 0v-9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-front"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M15 20.175l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65zm-5 0l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M21 20.5a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 1 0v9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-x"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 12.293L6.854 7.146a.5.5 0 1 0-.708.708L11.293 13l-5.147 5.146a.5.5 0 0 0 .708.708L12 13.707l5.146 5.147a.5.5 0 0 0 .708-.708L12.707 13l5.147-5.146a.5.5 0 0 0-.708-.708L12 12.293z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                            </svg>
+                                                          </span>
+                                                        </button>
+                                                      </li>
+                                                      <li>
+                                                        <button
+                                                          aria-label="Go to previous page"
+                                                          class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-previousNext css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                                          disabled=""
+                                                          tabindex="-1"
+                                                          type="button"
+                                                        >
+                                                          <span
+                                                            class="app-icon app-icon--general-arrow-left"
+                                                            name="general-arrow-left"
+                                                            sx="[object Object]"
+                                                          >
+                                                            <svg
+                                                              aria-hidden="true"
+                                                              class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                              focusable="false"
+                                                            >
+                                                              <use
+                                                                xlink:href="#general-arrow-left"
+                                                              />
+                                                              <symbol
+                                                                id="general-arrow-big-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-left"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.878 9.325a.5.5 0 1 0-.76-.65l-2.998 3.5a.5.5 0 0 0 0 .65l2.999 3.5a.5.5 0 1 0 .76-.65l-2.72-3.175 2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-long-right"
+                                                                viewBox="0 0 29 8"
+                                                              >
+                                                                <path
+                                                                  d="M28.354 4.354a.5.5 0 0 0 0-.708L25.172.464a.5.5 0 1 0-.707.708L27.293 4l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182zM0 4.5h28v-1H0v1z"
+                                                                  fill="#3A4356"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-right"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.34 12.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 10.16l-3.174 2.719a.5.5 0 0 1-.65-.76l3.5-2.998a.5.5 0 0 1 .65 0l3.5 2.998a.5.5 0 1 1-.65.76L12 10.159z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M15.646 14.646a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L12 18.293l3.646-3.647zm0-5.292L12 5.707 8.354 9.354a.5.5 0 1 1-.708-.708l4-4a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1-.708.708z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-back"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M9.658 12.5l2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.999-3.5a.5.5 0 1 1 .76.65L9.658 12.5zm5.719-3.175l-2.72 3.175 2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.998-3.5a.5.5 0 1 1 .76.65z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-front"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M11.34 12.5L8.62 9.325a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175zm.279-3.175a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.999 3.5a.5.5 0 1 1-.76-.65l2.72-3.175-2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-back"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M16 11.825l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65zm5 0l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M10 11.5a.5.5 0 0 1 1 0v9a.5.5 0 0 1-1 0v-9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-front"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M15 20.175l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65zm-5 0l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M21 20.5a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 1 0v9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-x"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 12.293L6.854 7.146a.5.5 0 1 0-.708.708L11.293 13l-5.147 5.146a.5.5 0 0 0 .708.708L12 13.707l5.146 5.147a.5.5 0 0 0 .708-.708L12.707 13l5.147-5.146a.5.5 0 0 0-.708-.708L12 12.293z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                            </svg>
+                                                          </span>
+                                                        </button>
+                                                      </li>
+                                                      <li>
+                                                        <button
+                                                          aria-label="Go to next page"
+                                                          class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-previousNext css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                                          disabled=""
+                                                          tabindex="-1"
+                                                          type="button"
+                                                        >
+                                                          <span
+                                                            class="app-icon app-icon--general-arrow-right"
+                                                            name="general-arrow-right"
+                                                            sx="[object Object]"
+                                                          >
+                                                            <svg
+                                                              aria-hidden="true"
+                                                              class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                              focusable="false"
+                                                            >
+                                                              <use
+                                                                xlink:href="#general-arrow-right"
+                                                              />
+                                                              <symbol
+                                                                id="general-arrow-big-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-left"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.878 9.325a.5.5 0 1 0-.76-.65l-2.998 3.5a.5.5 0 0 0 0 .65l2.999 3.5a.5.5 0 1 0 .76-.65l-2.72-3.175 2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-long-right"
+                                                                viewBox="0 0 29 8"
+                                                              >
+                                                                <path
+                                                                  d="M28.354 4.354a.5.5 0 0 0 0-.708L25.172.464a.5.5 0 1 0-.707.708L27.293 4l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182zM0 4.5h28v-1H0v1z"
+                                                                  fill="#3A4356"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-right"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.34 12.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 10.16l-3.174 2.719a.5.5 0 0 1-.65-.76l3.5-2.998a.5.5 0 0 1 .65 0l3.5 2.998a.5.5 0 1 1-.65.76L12 10.159z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M15.646 14.646a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L12 18.293l3.646-3.647zm0-5.292L12 5.707 8.354 9.354a.5.5 0 1 1-.708-.708l4-4a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1-.708.708z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-back"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M9.658 12.5l2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.999-3.5a.5.5 0 1 1 .76.65L9.658 12.5zm5.719-3.175l-2.72 3.175 2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.998-3.5a.5.5 0 1 1 .76.65z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-front"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M11.34 12.5L8.62 9.325a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175zm.279-3.175a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.999 3.5a.5.5 0 1 1-.76-.65l2.72-3.175-2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-back"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M16 11.825l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65zm5 0l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M10 11.5a.5.5 0 0 1 1 0v9a.5.5 0 0 1-1 0v-9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-front"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M15 20.175l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65zm-5 0l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M21 20.5a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 1 0v9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-x"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 12.293L6.854 7.146a.5.5 0 1 0-.708.708L11.293 13l-5.147 5.146a.5.5 0 0 0 .708.708L12 13.707l5.146 5.147a.5.5 0 0 0 .708-.708L12.707 13l5.147-5.146a.5.5 0 0 0-.708-.708L12 12.293z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                            </svg>
+                                                          </span>
+                                                        </button>
+                                                      </li>
+                                                      <li>
+                                                        <button
+                                                          aria-label="Go to last page"
+                                                          class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-firstLast css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                                          disabled=""
+                                                          tabindex="-1"
+                                                          type="button"
+                                                        >
+                                                          <span
+                                                            class="app-icon app-icon--general-double-arrow-front"
+                                                            name="general-double-arrow-front"
+                                                            sx="[object Object]"
+                                                          >
+                                                            <svg
+                                                              aria-hidden="true"
+                                                              class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                              focusable="false"
+                                                            >
+                                                              <use
+                                                                xlink:href="#general-double-arrow-front"
+                                                              />
+                                                              <symbol
+                                                                id="general-arrow-big-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-left"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.878 9.325a.5.5 0 1 0-.76-.65l-2.998 3.5a.5.5 0 0 0 0 .65l2.999 3.5a.5.5 0 1 0 .76-.65l-2.72-3.175 2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-long-right"
+                                                                viewBox="0 0 29 8"
+                                                              >
+                                                                <path
+                                                                  d="M28.354 4.354a.5.5 0 0 0 0-.708L25.172.464a.5.5 0 1 0-.707.708L27.293 4l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182zM0 4.5h28v-1H0v1z"
+                                                                  fill="#3A4356"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-right"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M13.34 12.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 10.16l-3.174 2.719a.5.5 0 0 1-.65-.76l3.5-2.998a.5.5 0 0 1 .65 0l3.5 2.998a.5.5 0 1 1-.65.76L12 10.159z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-arrow-up-down"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M15.646 14.646a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L12 18.293l3.646-3.647zm0-5.292L12 5.707 8.354 9.354a.5.5 0 1 1-.708-.708l4-4a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1-.708.708z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-back"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M9.658 12.5l2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.999-3.5a.5.5 0 1 1 .76.65L9.658 12.5zm5.719-3.175l-2.72 3.175 2.72 3.175a.5.5 0 1 1-.76.65l-2.998-3.5a.5.5 0 0 1 0-.65l2.998-3.5a.5.5 0 1 1 .76.65z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-arrow-front"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M11.34 12.5L8.62 9.325a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175zm.279-3.175a.5.5 0 0 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.999 3.5a.5.5 0 1 1-.76-.65l2.72-3.175-2.72-3.175z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-back"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M16 11.825l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65zm5 0l-3.842 4.297 3.662 4.087a.5.5 0 1 1-.76.65l-3.94-4.412a.5.5 0 0 1 0-.65l4.12-4.622a.5.5 0 1 1 .76.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M10 11.5a.5.5 0 0 1 1 0v9a.5.5 0 0 1-1 0v-9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-double-big-arrow-front"
+                                                                viewBox="0 0 31 31"
+                                                              >
+                                                                <g
+                                                                  fill="currentColor"
+                                                                >
+                                                                  <path
+                                                                    d="M15 20.175l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65zm-5 0l3.842-4.297-3.662-4.087a.5.5 0 1 1 .76-.65l3.94 4.412a.5.5 0 0 1 0 .65l-4.12 4.622a.5.5 0 1 1-.76-.65z"
+                                                                  />
+                                                                  <path
+                                                                    d="M21 20.5a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 1 0v9z"
+                                                                  />
+                                                                </g>
+                                                              </symbol>
+                                                              <symbol
+                                                                id="general-x"
+                                                                viewBox="0 0 24 24"
+                                                              >
+                                                                <path
+                                                                  d="M12 12.293L6.854 7.146a.5.5 0 1 0-.708.708L11.293 13l-5.147 5.146a.5.5 0 0 0 .708.708L12 13.707l5.146 5.147a.5.5 0 0 0 .708-.708L12.707 13l5.147-5.146a.5.5 0 0 0-.708-.708L12 12.293z"
+                                                                  fill="currentColor"
+                                                                />
+                                                              </symbol>
+                                                            </svg>
+                                                          </span>
+                                                        </button>
+                                                      </li>
+                                                    </ul>
+                                                  </nav>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div
+                                      class="scroll-elem__horizontal-track"
+                                      style="position: absolute; height: 6px; right: 2px; bottom: 2px; left: 2px; border-radius: 3px;"
+                                    >
+                                      <div
+                                        style="position: relative; display: block; height: 100%; cursor: pointer; border-radius: inherit; background-color: rgba(0, 0, 0, 0.2);"
+                                      />
+                                    </div>
+                                    <div
+                                      class="scroll-elem__vertical-track"
+                                      style="position: absolute; width: 6px; right: 2px; bottom: 2px; top: 2px; border-radius: 3px;"
+                                    >
+                                      <div
+                                        style="position: relative; display: block; width: 100%; cursor: pointer; border-radius: inherit; background-color: rgba(0, 0, 0, 0.2);"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

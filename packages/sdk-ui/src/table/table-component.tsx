@@ -49,6 +49,11 @@ export const TableComponent = ({
     [translatedDataOptions],
   );
 
+  const designOptions = useMemo(
+    () => translateTableStyleOptionsToDesignOptions(styleOptions),
+    [styleOptions],
+  );
+
   const [innerDataOptions, setInnerDataOptions] =
     useState<TableDataOptionsInternal>(translatedDataOptions);
 
@@ -100,6 +105,17 @@ export const TableComponent = ({
     [innerDataOptions],
   );
 
+  const paginatedTable = useMemo(
+    () =>
+      dataTable
+        ? {
+            columns: dataTable.columns,
+            rows: dataTable.rows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage),
+          }
+        : undefined,
+    [dataTable, currentPage, rowsPerPage],
+  );
+
   if (!updatedDataOptions) return null;
 
   return (
@@ -111,7 +127,7 @@ export const TableComponent = ({
       }}
     >
       {(size) => {
-        if (!dataTable) {
+        if (!dataTable || !paginatedTable) {
           return <LoadingIndicator themeSettings={themeSettings} />;
         }
 
@@ -119,10 +135,6 @@ export const TableComponent = ({
           return <NoResultsOverlay iconType={'table'} />;
         }
 
-        const paginatedTable = {
-          columns: dataTable.columns,
-          rows: dataTable.rows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage),
-        };
         const pagesCount = Math.ceil(dataTable.rows.length / rowsPerPage);
         const paginationHeight = pagesCount > 1 ? 32 : 0;
 
@@ -139,7 +151,7 @@ export const TableComponent = ({
             <PureTable
               dataTable={paginatedTable}
               dataOptions={updatedDataOptions}
-              designOptions={translateTableStyleOptionsToDesignOptions(styleOptions)}
+              designOptions={designOptions}
               themeSettings={themeSettings}
               width={size.width}
               height={size.height - paginationHeight}

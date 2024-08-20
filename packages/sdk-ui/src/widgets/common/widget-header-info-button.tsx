@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useThemeContext } from '../../theme-provider';
 import { WidgetContainerStyleOptions } from '../../types';
+import { getSlightlyDifferentColor } from '@/utils/color';
 
 export default function WidgetHeaderInfoButton({
   title,
@@ -62,6 +63,16 @@ export default function WidgetHeaderInfoButton({
           vertical: 'top',
           horizontal: 'center',
         }}
+        slotProps={{
+          root: {
+            sx: {
+              '.MuiPaper-root': {
+                boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.25)',
+                borderRadius: 0,
+              },
+            },
+          },
+        }}
       >
         <Card raised={true} className={'csdk-max-w-xs csdk-w-[300px]'}>
           <div
@@ -69,15 +80,15 @@ export default function WidgetHeaderInfoButton({
               'csdk-flex csdk-flex-row csdk-justify-between csdk-items-center csdk-py-[5px] csdk-px-[12px]'
             }
             style={{
-              backgroundColor: themeSettings.chart?.panelBackgroundColor,
+              backgroundColor: getSlightlyDifferentColor(themeSettings.general.backgroundColor),
             }}
           >
             <Typography
               variant="subtitle2"
               sx={{ fontWeight: 'bold' }}
               style={{
-                color: themeSettings.chart?.textColor,
-                fontFamily: themeSettings.typography?.fontFamily,
+                color: themeSettings.typography.primaryTextColor,
+                fontFamily: themeSettings.typography.fontFamily,
               }}
             >
               Widget Details
@@ -91,10 +102,12 @@ export default function WidgetHeaderInfoButton({
               </svg>
             </IconButton>
           </div>
-          <Divider sx={{ borderColor: themeSettings.chart?.secondaryTextColor, opacity: 0.3 }} />
+          <Divider
+            sx={{ borderColor: themeSettings.typography.secondaryTextColor, opacity: 0.3 }}
+          />
           <CardContent
             style={{
-              backgroundColor: themeSettings.chart?.backgroundColor,
+              backgroundColor: themeSettings.general.backgroundColor,
               padding: 12,
             }}
           >
@@ -102,8 +115,8 @@ export default function WidgetHeaderInfoButton({
               <Typography
                 variant="body2"
                 style={{
-                  color: themeSettings.chart?.textColor,
-                  fontFamily: themeSettings.typography?.fontFamily,
+                  color: themeSettings.typography.primaryTextColor,
+                  fontFamily: themeSettings.typography.fontFamily,
                   fontSize: 13,
                 }}
               >
@@ -114,13 +127,17 @@ export default function WidgetHeaderInfoButton({
             {!!description && (
               <>
                 <Divider
-                  sx={{ my: 1, borderColor: themeSettings.chart?.secondaryTextColor, opacity: 0.3 }}
+                  sx={{
+                    my: 1,
+                    borderColor: themeSettings.typography.secondaryTextColor,
+                    opacity: 0.3,
+                  }}
                 />
                 <Typography
                   variant="body2"
                   style={{
-                    color: themeSettings.chart?.textColor,
-                    fontFamily: themeSettings.typography?.fontFamily,
+                    color: themeSettings.typography.primaryTextColor,
+                    fontFamily: themeSettings.typography.fontFamily,
                     fontSize: 13,
                   }}
                 >

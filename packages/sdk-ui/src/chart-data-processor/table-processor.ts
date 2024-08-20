@@ -265,8 +265,8 @@ export const getValue = (row: Row, column: Column) => {
   return data.compareValue.value;
 };
 
-export const isBlurred = (row: Row, column: Column): boolean => {
-  return !!row[column.index]?.blur;
+export const isBlurred = (row: Row, column: Column): boolean | undefined => {
+  return row[column.index]?.blur;
 };
 
 export const getValues = (row: Row, columns: readonly Column[]): ComparableData[] => {

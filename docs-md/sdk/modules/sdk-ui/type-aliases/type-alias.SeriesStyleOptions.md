@@ -15,7 +15,7 @@ Supported only for cartesian and polar charts.
 
 **lineWidth**?: [`LineWidth`](type-alias.LineWidth.md)
 
-Configuration that defines line width
+#### Inherit Doc
 
 ***
 
@@ -23,4 +23,4 @@ Configuration that defines line width
 
 **markers**?: [`Markers`](type-alias.Markers.md)
 
-Configuration for markers - symbols or data points that highlight specific values
+#### Inherit Doc

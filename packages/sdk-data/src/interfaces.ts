@@ -9,7 +9,12 @@ export interface Cell {
   data: any;
   /** Display text */
   text?: string;
-  /** Boolean flag whether the data value should be blurred when visualized in a chart */
+  /**
+   * Boolean flag representing three states that can be visualized in a chart:
+   * - `true`: the data value is in blur state
+   * - `false`: the data value is in highlight state
+   * - if not specified, the data value is neither in highlight nor blur state
+   */
   blur?: boolean;
   /** Color associated with the data value when visualized in a chart */
   color?: string;
@@ -36,9 +41,10 @@ export interface DataCell {
    *
    * Means different things depending on if it is specified in the returned dataset.
    *
-   * The absence of `selected` across all cells means that all data is highlighted.
+   * The absence of `selected` across all cells means that all data are neutral (neither highlighted nor blurred).
    * The presence of `selected` in at least one cell means that some cells are highlighted
    * and some are blurred.
+   * The presence of `selected` in all cells means that all data are highlighted.
    */
   selected?: boolean;
 }

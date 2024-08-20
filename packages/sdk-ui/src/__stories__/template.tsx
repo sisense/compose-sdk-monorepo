@@ -1,14 +1,28 @@
 import React from 'react';
 import type { StoryFn, StoryObj, StoryContext } from '@storybook/react';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
+import { ThemeProvider, type ThemeSettings } from '..';
 
 const url = import.meta.env.VITE_APP_SISENSE_URL ?? '';
 const token = import.meta.env.VITE_APP_SISENSE_TOKEN;
+const themeSettings = {
+  chart: {
+    animation: {
+      ...(import.meta.env.VITE_APP_DISABLE_ANIMATION === 'true' && {
+        init: { duration: 0 },
+        redraw: { duration: 0 },
+      }),
+    },
+  },
+} as ThemeSettings;
+
 const contextDecorator = {
   decorators: [
     (Story: StoryFn) => (
       <SisenseContextProvider url={url} token={token}>
-        <Story />
+        <ThemeProvider theme={themeSettings}>
+          <Story />
+        </ThemeProvider>
       </SisenseContextProvider>
     ),
   ],

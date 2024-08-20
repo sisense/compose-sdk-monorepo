@@ -3,6 +3,7 @@ import { ComponentDecorator } from '../as-sisense-component';
 import isBoolean from 'lodash/isBoolean';
 import isFunction from 'lodash/isFunction';
 import { ErrorTracker } from './error-tracker';
+import { useTracking } from '@/common/hooks/use-tracking';
 
 type TrackingDecoratorConfig = {
   componentName: string;
@@ -22,6 +23,8 @@ export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
   const { skip, transparent } = config || {};
   return (Component) => {
     return function Tracking(props) {
+      const { trackError } = useTracking();
+
       if ((isBoolean(skip) && skip) || (isFunction(skip) && skip(props))) {
         return <Component {...props} />;
       }
@@ -30,7 +33,7 @@ export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
       return (
         // If component is transperent for tracking, nested components will be tracked
         <TrackingContextProvider skipNested={!transparent}>
-          <ErrorTracker componentName={componentName}>
+          <ErrorTracker componentName={componentName} handler={trackError}>
             <Component {...props} />
           </ErrorTracker>
         </TrackingContextProvider>

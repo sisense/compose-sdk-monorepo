@@ -9,8 +9,8 @@ type AuthenticatorConfig = {
   url: string;
   username?: string;
   password?: string;
-  token?: string;
-  wat?: string;
+  token?: string | null;
+  wat?: string | null;
   ssoEnabled?: boolean;
   enableSilentPreAuth?: boolean;
 };

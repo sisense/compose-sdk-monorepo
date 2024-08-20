@@ -1,6 +1,7 @@
 import { DecoratorsModule } from './decorators.module';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 import packageVersion from '../../version';
+import { TrackingEventType } from '@sisense/sdk-tracking/src/registry';
 
 export function Trackable(target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
@@ -39,10 +40,13 @@ export function TrackableService<T>(trackableMethods: MethodsArray<T>) {
   };
 }
 
-async function track(action: string, methodName: string) {
+async function track(action: TrackingEventType, methodName: string) {
   try {
     const { enableTracking } = DecoratorsModule.sisenseContextService.getConfig();
     const app = await DecoratorsModule.sisenseContextService.getApp();
+
+    const trackingEnabled =
+      enableTracking && (app.settings?.trackingConfig?.enabled ?? enableTracking);
 
     if (app?.httpClient) {
       const payload = {
@@ -51,7 +55,7 @@ async function track(action: string, methodName: string) {
         methodName,
       };
 
-      void trackProductEvent(action, payload, app.httpClient, !enableTracking);
+      void trackProductEvent(action, payload, app.httpClient, !trackingEnabled);
     }
   } catch (e) {
     console.warn('tracking error', e);

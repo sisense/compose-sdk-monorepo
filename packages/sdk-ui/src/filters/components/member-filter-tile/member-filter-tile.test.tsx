@@ -12,8 +12,10 @@ import { MemberFilterTile } from './member-filter-tile';
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,
   token: mockToken,
-  enableTracking: false,
-  appConfig: { queryCacheConfig: { enabled: false } },
+  appConfig: {
+    queryCacheConfig: { enabled: false },
+    trackingConfig: { enabled: false },
+  },
 };
 
 describe('MemberFilterTile', () => {

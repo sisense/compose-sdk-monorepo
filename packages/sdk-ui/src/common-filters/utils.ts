@@ -1,10 +1,5 @@
-import {
-  Filter,
-  Attribute,
-  DimensionalLevelAttribute,
-  filterFactory,
-  MembersFilter,
-} from '@sisense/sdk-data';
+import { isSameAttribute, haveSameAttribute } from '@/utils/filters.js';
+import { Filter, Attribute, filterFactory, MembersFilter } from '@sisense/sdk-data';
 import isEqual from 'lodash/isEqual';
 import { FiltersIgnoringRules, PureFilter } from './types.js';
 
@@ -19,14 +14,6 @@ export function getAllowedFilters(
   return filters.filter((pureFilter) => {
     return !ignoreFiltersOptions.ids?.includes(pureFilter.guid);
   });
-}
-
-export function isSameAttribute(attributeA: Attribute, attributeB: Attribute) {
-  return (
-    attributeA.expression === attributeB?.expression &&
-    (attributeA as DimensionalLevelAttribute).granularity ===
-      (attributeB as DimensionalLevelAttribute).granularity
-  );
 }
 
 export function getFilterByAttribute(filters: Filter[], attribute: Attribute) {
@@ -49,10 +36,6 @@ export function createCommonFilter(
   );
 }
 
-export function haveSameAttribute(filterA: Filter, filterB: Filter) {
-  return isSameAttribute(filterA.attribute, filterB.attribute);
-}
-
 export function isEqualMembersFilters(filterA: Filter, filterB: Filter) {
   return (
     haveSameAttribute(filterA, filterB) &&
@@ -60,17 +43,4 @@ export function isEqualMembersFilters(filterA: Filter, filterB: Filter) {
     'members' in filterB &&
     isEqual((filterA as MembersFilter).members, (filterB as MembersFilter).members)
   );
-}
-
-export function isIncludeAllFilter(filter: Filter) {
-  return 'members' in filter && (filter as MembersFilter).members.length === 0;
-}
-
-function createIncludeAllFilter(attribute: Attribute, backgroundFilter?: Filter, guid?: string) {
-  return filterFactory.members(attribute, [], false, guid, undefined, backgroundFilter);
-}
-
-export function clearCommonFilter(filter: Filter) {
-  const { attribute, guid, backgroundFilter } = filter as MembersFilter;
-  return createIncludeAllFilter(attribute, backgroundFilter, guid);
 }

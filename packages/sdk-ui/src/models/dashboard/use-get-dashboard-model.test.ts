@@ -62,6 +62,7 @@ const trackProductEventMock = trackProductEvent as Mock<
 describe('useGetDashboardModel', () => {
   beforeEach(() => {
     getDashboardModelMock.mockClear();
+    trackProductEventMock.mockClear();
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,

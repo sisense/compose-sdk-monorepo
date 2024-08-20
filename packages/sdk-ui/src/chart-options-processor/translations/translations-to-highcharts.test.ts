@@ -57,14 +57,17 @@ describe('formatSeries', () => {
         {
           y: 10,
           custom: { rawValue: 10, xValue: ['xAxis 1'] },
+          selected: false,
         },
         {
           y: 20,
           custom: { rawValue: 20, xValue: ['xAxis 2'] },
+          selected: false,
         },
         {
           y: 30,
           custom: { rawValue: 30, xValue: ['xAxis 3'] },
+          selected: false,
         },
       ],
     });
@@ -89,16 +92,19 @@ describe('formatSeries', () => {
           y: 10,
           custom: { rawValue: 10, xValue: ['xAxis 1'] },
           color: 'red',
+          selected: false,
         },
         {
           y: 20,
           custom: { rawValue: 20, xValue: ['xAxis 2'] },
           color: 'blue',
+          selected: false,
         },
         {
           y: 30,
           custom: { rawValue: 30, xValue: ['xAxis 3'] },
           color: 'green',
+          selected: false,
         },
       ],
     });
@@ -167,6 +173,7 @@ describe('formatSeries', () => {
         {
           y: NaN,
           custom: { rawValue: 'value1', xValue: ['xAxis 1'] },
+          selected: false,
         },
         {
           y: 20,
@@ -175,10 +182,12 @@ describe('formatSeries', () => {
             enabled: true,
             isIsolatedPoint: true,
           },
+          selected: false,
         },
         {
           y: NaN,
           custom: { rawValue: 'value3', xValue: ['xAxis 3'] },
+          selected: false,
         },
       ],
     });

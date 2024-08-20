@@ -52,6 +52,9 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   errorBoundaryConfig: {
     alwaysShowErrorText: false,
   },
+  trackingConfig: {
+    enabled: true,
+  },
 };
 
 /**
@@ -78,6 +81,7 @@ export async function getSettings(
 
 /**
  * Translate Features to FeatureMap
+ *
  * @param features - Features to be mapped
  * @returns FeatureMap
  */

@@ -10,12 +10,7 @@ import {
   PivotTableDataOptions,
   RenderToolbarHandler,
 } from '../index.js';
-import {
-  clearCommonFilter,
-  getAllowedFilters,
-  isIncludeAllFilter,
-  isSameAttribute,
-} from './utils.js';
+import { getAllowedFilters } from './utils.js';
 import {
   CommonFiltersApplyMode,
   CommonFiltersOptions,
@@ -29,6 +24,7 @@ import {
 } from './selection-utils';
 import { WidgetTypeInternal } from '@/models/widget/types';
 import { withCascadingFiltersConversion } from './cascading-utils';
+import { isSameAttribute, isIncludeAllFilter, clearMembersFilter } from '@/utils/filters';
 
 type CommonFiltersToWidgetConnectProps = Pick<
   ChartWidgetProps,
@@ -121,11 +117,13 @@ export function prepareCommonFiltersToWidgetConnectProps(
 
     // registers "renderToolbar" handler
     const selectedFilters = enabledFilters.filter((f) =>
-      selectableAttributes?.some((a) => isSameAttribute(f.attribute, a) && !isIncludeAllFilter(f)),
+      selectableAttributes?.some(
+        (a) => isSameAttribute(f.attribute, a) && !isIncludeAllFilter(f) && !f.locked,
+      ),
     );
     const hasSelection = !!selectedFilters.length;
     const clearSelection = () => {
-      const deselectedFilters = selectedFilters.map(clearCommonFilter);
+      const deselectedFilters = selectedFilters.map(clearMembersFilter);
       updateFilters(mergeFilters(pureFilters, deselectedFilters));
     };
 

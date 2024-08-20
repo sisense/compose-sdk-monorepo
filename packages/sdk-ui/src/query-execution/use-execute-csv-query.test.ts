@@ -45,6 +45,7 @@ describe('useExecuteCsvQuery', () => {
 
   beforeEach(() => {
     executeCsvQueryMock.mockClear();
+    trackProductEventMock.mockClear();
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,
@@ -114,7 +115,10 @@ describe('useExecuteCsvQuery', () => {
   });
 
   it('should handle missing Sisense context', () => {
-    useSisenseContextMock.mockReturnValue({ isInitialized: false, enableTracking: false });
+    useSisenseContextMock.mockReturnValue({
+      isInitialized: false,
+      app: { settings: { trackingConfig: { enabled: false } } },
+    });
 
     const { result } = renderHook(() => useExecuteCsvQuery(params));
 

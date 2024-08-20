@@ -22,8 +22,6 @@ other SDK components inside this component.
     :token="authToken"
     :wat="watToken"
     :appConfig="appConfigurations"
-    :showRuntimeErrors="true"
-    :enableTracking="false"
   >
     <!-- Your application components here -->
   </SisenseContextProvider>
@@ -92,14 +90,18 @@ Set to `true` to use SSO authentication. When `true`, this overrides any other a
 
 #### token
 
-> **token**?: `string`
+> **token**?: `null` \| `string`
 
 Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
+
+To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.
 
 ***
 
 #### wat
 
-> **wat**?: `string`
+> **wat**?: `null` \| `string`
 
 [Web Access Token](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
+
+To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.

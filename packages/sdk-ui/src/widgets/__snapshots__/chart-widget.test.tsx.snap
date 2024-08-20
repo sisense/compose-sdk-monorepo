@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ChartWidget > should render ChartWidget for table widget 1`] = `
+exports[`ChartWidget > should render table widget 1`] = `
 <div>
   <div
     style="width: 100%; height: 100%;"

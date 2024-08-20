@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.17.0] - 2024-08-20
+
+### Added
+- Move components `DashboardById` and `Dashboard` to internal alpha for React, Angular, and Vue
+- Support external usage tracking in `AppConfig.trackingConfig.onTrackingEvent`
+- Refactor `ChartWidget` to reuse `DrilldownWidget` internally
+- Support drill down for scatter chart widgets
+
+### Changed
+- Mark internal property `enableTracking?` as `@deprecated` in `SisenseContextProviderProps` – use `AppConfig.trackingConfig.enabled` instead
+- Extend `ThemeSettings` to support animation-related config
+- Improve dashboard rendering: locked filters in cross filtering, resetting levels of `CascadingFilterTile`, highlight of all categories in cartesian charts, dashboard theme setting, matching theme for widget header info panel
+- Refactor component `Table` to reduce computations and re-renders
+- Fix issues of charts: legend position of funnel chart, number formatting for indicator's secondary value
+- Improve `SisenseContextProvider` in React: support of pending `token` or `wat` for delayed authentication and custom error handling
+- Improve testing: disabling animation for e2e tests
+
 ## [1.16.0] - 2024-08-06
 
 ### Added

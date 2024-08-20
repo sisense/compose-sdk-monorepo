@@ -1,8 +1,8 @@
 import { getFilterCompareId } from '@/dashboard-widget/utils';
-import { isCascadingFilter } from '@/utils/filters';
+import { clearMembersFilter, haveSameAttribute, isCascadingFilter } from '@/utils/filters';
 import { CascadingFilter, Filter } from '@sisense/sdk-data';
 import { FiltersIgnoringRules, PureFilter } from './types';
-import { clearCommonFilter, haveSameAttribute, isEqualMembersFilters } from './utils';
+import { isEqualMembersFilters } from './utils';
 
 /**
  * Flattens cascading filters into a single array of filters.
@@ -206,7 +206,7 @@ function resetFiltersDeeperThanModified(
   // Reset filters deeper than the deepest modified filter
   return newLevelFilters.map((newFilter, index) => {
     if (index > deepestModifiedNewFilterIndex) {
-      return clearCommonFilter(newFilter);
+      return clearMembersFilter(newFilter);
     }
     return newFilter;
   });

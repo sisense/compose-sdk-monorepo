@@ -24,13 +24,13 @@ export interface GetDashboardModelOptions {
 
 /**
  * Retrieves a dashboard model by its OID.
+ *
  * @param http - The HTTP client
  * @param dashboardOid - The OID of the dashboard
  * @param options - The options to include widgets and filters in the dashboard model
  * @param themeSettings - Optional theme settings
  * @param appSettings - Optional application settings
  * @returns The dashboard model
- *
  * @internal
  */
 export async function getDashboardModel(

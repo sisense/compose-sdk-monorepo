@@ -205,6 +205,7 @@ describe('useExecuteQueryByWidgetId', () => {
     executePivotQueryMock.mockClear();
     getWidgetMock.mockClear();
     getDashboardMock.mockClear();
+    trackProductEventMock.mockClear();
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,

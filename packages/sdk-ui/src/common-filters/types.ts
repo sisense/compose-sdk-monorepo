@@ -1,13 +1,17 @@
 import { CascadingFilter, Filter } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 
-/** @internal */
+/**
+ * Common filters apply mode.
+ */
 export enum CommonFiltersApplyMode {
   HIGHLIGHT = 'highlight',
   FILTER = 'filter',
 }
 
-/** @internal */
+/**
+ * Options for common filters defined at the dashboard level to be applied to certain widgets.
+ */
 export type CommonFiltersOptions = {
   applyMode?: `${CommonFiltersApplyMode}`;
   shouldAffectFilters?: boolean;
@@ -15,7 +19,9 @@ export type CommonFiltersOptions = {
   forceApplyBackgroundFilters?: boolean;
 };
 
-/** @internal */
+/**
+ * Filters ignoring rules.
+ */
 export type FiltersIgnoringRules = {
   all?: boolean;
   ids?: string[];

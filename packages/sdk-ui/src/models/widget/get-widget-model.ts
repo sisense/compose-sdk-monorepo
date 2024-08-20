@@ -7,13 +7,13 @@ import { AppSettings } from '@/app/settings/settings';
 
 /**
  * Retrieves a widget model by its OID.
+ *
  * @param httpClient - The HTTP client
  * @param dashboardOid - The OID of the dashboard
  * @param widgetOid - The OID of the widget
  * @param themeSettings - Optional theme settings
  * @param appSettings - Optional application settings
  * @returns The widget model
- *
  * @internal
  */
 export async function getWidgetModel(

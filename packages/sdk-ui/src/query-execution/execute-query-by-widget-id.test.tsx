@@ -22,7 +22,11 @@ describe('ExecuteQueryByWidgetId', () => {
 
   it('should generate and execute query for the existing widget', async () => {
     const { getByText } = render(
-      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
         <ExecuteQueryByWidgetId widgetOid={mockWidgetId} dashboardOid={mockDashboardId}>
           {({ data, query }) => {
             if (!data || !query) {
@@ -49,7 +53,11 @@ describe('ExecuteQueryByWidgetId', () => {
     const onDataChangedMock = vi.fn<[QueryResultData, ExecuteQueryParams]>();
 
     const { getByText } = render(
-      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
         <ExecuteQueryByWidgetId
           widgetOid={mockWidgetId}
           dashboardOid={mockDashboardId}
@@ -78,7 +86,11 @@ describe('ExecuteQueryByWidgetId', () => {
     const TEXT_TO_DISPLAY = 'Query result ready';
 
     const { getByText } = render(
-      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
         <ExecuteQueryByWidgetId
           widgetOid={mockWidgetId}
           dashboardOid={mockDashboardId}

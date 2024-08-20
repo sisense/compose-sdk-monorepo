@@ -9,6 +9,7 @@ import {
   getRgbValuesFromColor,
   getDarkFactor,
   getSlightlyDifferentColor,
+  getExplicitColorSteps,
 } from './color-interpolation';
 import Color from 'colorjs.io';
 
@@ -173,5 +174,19 @@ describe('getSlightlyDifferentColor', () => {
   it('should calculate the correct correct slightly different color for dark color', () => {
     const color = 'rgb(15,30,45)';
     expect(getSlightlyDifferentColor(color)).toBe('rgba(0, 8, 23, 1)');
+  });
+});
+
+describe('getExplicitColorSteps', () => {
+  it('should calculate the correct color range', () => {
+    const color1 = '#1ae7ff';
+    const color2 = '#0090a1';
+    expect(getExplicitColorSteps(color1, color2, 5)).toStrictEqual([
+      'rgb(10.196% 90.588% 100%)',
+      'rgb(7.5634% 81.786% 90.495%)',
+      'rgb(4.797% 73.157% 81.175%)',
+      'rgb(2.0254% 64.715% 72.051%)',
+      'rgb(0% 56.471% 63.137%)',
+    ]);
   });
 });

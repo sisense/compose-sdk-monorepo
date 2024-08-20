@@ -800,6 +800,25 @@ export interface ChartThemeSettings {
   backgroundColor?: string;
   /** Toolbar Background color, can be used as a secondary background color */
   panelBackgroundColor?: string;
+  /** Animation options */
+  animation?: {
+    /** Chart initialization animation options */
+    init?: {
+      /**
+       * Animation duration in milliseconds.
+       * If not specified, the default value, `auto`, will be used with a different default value applied per chart type.
+       */
+      duration?: number | 'auto';
+    };
+    /** Chart redraw animation options */
+    redraw?: {
+      /**
+       * Animation duration in milliseconds.
+       * If not specified, the default value, `auto`, will be used with a different default value applied per chart type.
+       */
+      duration?: number | 'auto';
+    };
+  };
 }
 
 /**
@@ -1048,6 +1067,20 @@ export type WidgetThemeSettings = {
   };
 };
 
+/**
+ * Dashboard theme settings
+ *
+ * @internal
+ */
+export type DashboardThemeSettings = {
+  /** Background color */
+  backgroundColor?: string;
+  /** Width of the divider line between widgets */
+  dividerLineWidth?: number;
+  /** Divider line color */
+  dividerLineColor?: string;
+};
+
 /** Theme settings defining the look and feel of components. */
 export interface ThemeSettings {
   /** Chart theme settings */
@@ -1064,6 +1097,13 @@ export interface ThemeSettings {
 
   /** Widget theme settings */
   widget?: WidgetThemeSettings;
+
+  /**
+   * Dashboard theme settings
+   *
+   * @internal
+   */
+  dashboard?: DashboardThemeSettings;
 
   /**
    * Theme settings specific to the AI Chatbot component

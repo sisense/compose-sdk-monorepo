@@ -7,4 +7,6 @@ export { BearerAuthenticator, isBearerAuthenticator } from './bearer-authenticat
 export { WatAuthenticator, isWatAuthenticator } from './wat-authenticator.js';
 export { getAuthenticator } from './authenticator.js';
 
+export { isAuthTokenPending } from './helpers.js';
+
 export { HttpClient } from './http-client.js';

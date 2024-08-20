@@ -24,7 +24,9 @@ React component to be rendered as breadcrumbs
 
 **contextMenuComponent**?: (`contextMenuProps`) => `JSX.Element`
 
-Boolean to override default breadcrumbs location and instead only return them as a property of the 'children' function
+React component to be rendered as context menu
+
+[ContextMenu](../drilldown/function.ContextMenu.md) will be used if not provided
 
 #### Parameters
 

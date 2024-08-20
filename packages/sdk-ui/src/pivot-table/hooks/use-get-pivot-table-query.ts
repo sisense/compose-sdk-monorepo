@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react';
 import { type JaqlRequest } from '@sisense/sdk-pivot-client';
 import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
-import { ExecutePivotQueryParams } from '../query-execution';
-import { useExecutePivotQueryInternal } from '../query-execution/use-execute-pivot-query';
-import { Category, PivotTableDataOptionsInternal, Value } from '../chart-data-options/types';
-import { translateCategoryToAttribute, translateValueToMeasure } from '../chart-data-options/utils';
-import { normalizePivotSort } from './sorting-utils';
+
+import { normalizePivotSort } from '../sorting-utils';
 import isEqual from 'lodash/isEqual';
+import { ExecutePivotQueryParams } from '@/query-execution';
+import { translateCategoryToAttribute, translateValueToMeasure } from '@/chart-data-options/utils';
+import { Category, PivotTableDataOptionsInternal, Value } from '@/chart-data-options/types';
+import { useExecutePivotQueryInternal } from '@/query-execution/use-execute-pivot-query';
 
 const getPivotAttribute = (category: Category) => {
   return {

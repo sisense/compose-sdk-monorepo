@@ -114,10 +114,11 @@ export const ThemeProvider = defineComponent({
     const themeSettings = ref();
     const context = getSisenseContext();
     if (propTheme && typeof propTheme === 'object') {
-      themeSettings.value = {
-        ...getDefaultThemeSettings(),
-        ...(propTheme as ThemeProviderProps),
-      };
+      themeSettings.value = merge.withOptions(
+        { mergeArrays: false },
+        getDefaultThemeSettings(),
+        propTheme,
+      ) as CompleteThemeSettings;
     }
     watchEffect(async () => {
       const { app } = context.value;

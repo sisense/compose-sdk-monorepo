@@ -4,20 +4,21 @@ import {
   EVENT_HEADER_CELL_FORMAT,
   type DataService,
 } from '@sisense/sdk-pivot-client';
-import { ClientApplication } from '../app/client-application';
-import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
-import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
-import { type PivotTableDataOptions } from '..';
 
-vi.mock('../sisense-context/sisense-context');
+import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
+import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context';
+import type { PivotTableDataOptions } from '@/chart-data-options/types';
+import type { ClientApplication } from '@/app/client-application';
+
+vi.mock('@/sisense-context/sisense-context');
 
 const dataCellFormatterMock = vi.fn();
-vi.mock('./formatters/data-cell-formatters', () => ({
+vi.mock('../formatters/data-cell-formatters', () => ({
   createDataCellValueFormatter: vi.fn(() => dataCellFormatterMock),
 }));
 
 const headerCellFormatterMock = vi.fn();
-vi.mock('./formatters/header-cell-formatters', () => ({
+vi.mock('../formatters/header-cell-formatters', () => ({
   createHeaderCellValueFormatter: vi.fn(() => headerCellFormatterMock),
 }));
 
@@ -32,9 +33,8 @@ describe('useApplyPivotTableFormatting', () => {
 
   beforeEach(() => {
     useSisenseContextMock.mockReturnValue({
-      app: {} as ClientApplication,
+      app: { settings: { trackingConfig: { enabled: false } } } as ClientApplication,
       isInitialized: true,
-      enableTracking: false,
     });
     DataServiceMock.on.mockClear();
     dataCellFormatterMock.mockClear();
@@ -42,17 +42,24 @@ describe('useApplyPivotTableFormatting', () => {
   });
 
   it('should run data cell value formatter', () => {
+    expect(dataCellFormatterMock).toHaveBeenCalledTimes(0);
+    expect(headerCellFormatterMock).toHaveBeenCalledTimes(0);
+
     renderHook(() => useApplyPivotTableFormatting({ dataService, dataOptions }));
+    const cell = {};
 
     const [event, handler] = DataServiceMock.on.mock.calls[0];
     expect(event).toBe(EVENT_DATA_CELL_FORMAT);
 
-    handler();
+    handler(cell);
 
     expect(dataCellFormatterMock).toHaveBeenCalledTimes(1);
   });
 
   it('should run header cell value formatter', () => {
+    expect(dataCellFormatterMock).toHaveBeenCalledTimes(0);
+    expect(headerCellFormatterMock).toHaveBeenCalledTimes(0);
+
     const cell = {};
     renderHook(() => useApplyPivotTableFormatting({ dataService, dataOptions }));
 

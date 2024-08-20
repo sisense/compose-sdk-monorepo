@@ -3,7 +3,7 @@ import { Attribute } from '@sisense/sdk-data';
 import { DataPoint, MenuPosition, MenuItemSection } from '../types';
 import { ContextMenu } from './common/context-menu';
 import { DrilldownBreadcrumbs } from './common/drilldown-breadcrumbs';
-import { useCustomDrilldown } from './common/custom-drilldown';
+import { useDrilldown } from './common/use-drilldown';
 import { DrilldownWidgetProps } from '../props';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 
@@ -45,7 +45,8 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
 export const DrilldownWidget = asSisenseComponent({
   componentName: 'DrilldownWidget',
   trackingConfig: { transparent: true },
-})(({ drilldownDimensions, initialDimension, config, children }: DrilldownWidgetProps) => {
+})((props: DrilldownWidgetProps) => {
+  const { drilldownDimensions, initialDimension, drilldownSelections, config, children } = props;
   const [selectedDataPoints, setSelectedDataPoints] = useState<DataPoint[]>([]);
   const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
 
@@ -60,9 +61,10 @@ export const DrilldownWidget = asSisenseComponent({
     drilldownFilters,
     drilldownFiltersDisplayValues,
     drilldownDimension,
-  } = useCustomDrilldown({
+  } = useDrilldown({
     drilldownDimensions,
     initialDimension,
+    drilldownSelections,
   });
 
   const breadcrumbs = useMemo(() => {

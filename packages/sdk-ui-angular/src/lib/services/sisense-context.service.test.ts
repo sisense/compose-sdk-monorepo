@@ -51,7 +51,6 @@ describe('SisenseContextService', () => {
 
     expect(config).toEqual({
       ...sisenseConfigMock,
-      enableTracking: true,
       showRuntimeErrors: true,
     });
   });

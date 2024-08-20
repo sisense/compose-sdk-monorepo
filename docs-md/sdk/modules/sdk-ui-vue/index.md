@@ -72,6 +72,8 @@ Vue query service
 
 Vue components and functions for working with Fusion Embed dashboards, widgets, queries, and formulas
 
+- [Dashboard](fusion-embed/class.Dashboard.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+- [DashboardById](fusion-embed/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
 - [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

@@ -5,7 +5,7 @@ type MarkerStyle = {
   color: string;
   size: number;
   fill: Required<ScattermapMarkers>['fill'];
-  blur: boolean;
+  blur?: boolean;
 };
 
 export type MarkerConfig = {

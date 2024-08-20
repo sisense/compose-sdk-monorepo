@@ -3,6 +3,7 @@ import { DataSource, Filter } from '@sisense/sdk-data';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
+import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.chart.backgroundColor};
@@ -53,11 +54,9 @@ export type FiltersPanelProps = {
  *
  * @internal
  */
-export const FiltersPanel = ({
-  filters,
-  onFiltersChange,
-  defaultDataSource,
-}: FiltersPanelProps) => {
+export const FiltersPanel = asSisenseComponent({
+  componentName: 'FiltersPanel',
+})(({ filters, onFiltersChange, defaultDataSource }: FiltersPanelProps) => {
   const { themeSettings } = useThemeContext();
   const filterList = [...filters] as (Filter | null)[];
   const handleFilterChange = (filter: Filter | null, index: number) => {
@@ -85,4 +84,4 @@ export const FiltersPanel = ({
       </PanelBody>
     </PanelWrapper>
   );
-};
+});

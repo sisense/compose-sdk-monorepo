@@ -4,10 +4,31 @@ import { getDarkFactor, getSlightlyDifferentColor, toColor } from '@/utils/color
 const PIVOT_DEFAULT_BORDER_COLOR = '#cbced7';
 const PIVOT_DEFAULT_HIGHLIGHT_COLOR = '#ffff9c';
 
+export type PivotStylingProps = {
+  fontFamily?: string;
+  textColor?: string;
+  backgroundColor?: string;
+  borderColor?: string;
+  fillColor?: string;
+  additionalFillColor?: string;
+  fillOptions: {
+    alternatingRows?: boolean;
+    alternatingColumns?: boolean;
+    columnsHeaders?: boolean;
+    rowMembers?: boolean;
+    totals?: boolean;
+  };
+  rowHeight?: number;
+  isAutoHeight: boolean;
+  navigationPrimaryColor?: string;
+  navigationSecondaryColor?: string;
+  selectionColor: string;
+};
+
 export function preparePivotStylingProps(
   styleOptions?: PivotTableStyleOptions,
   themeSettings?: CompleteThemeSettings,
-) {
+): PivotStylingProps {
   let fillColor;
   let additionalFillColor;
   if (themeSettings?.chart?.backgroundColor) {

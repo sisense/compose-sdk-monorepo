@@ -26,8 +26,12 @@ const createContextProviderRendererMock = createContextProviderRenderer as Mock<
 
 describe('createSisenseContextConnector', () => {
   const sisenseContextConfigMock = {
-    enableTracking: true,
     showRuntimeErrors: false,
+    appConfig: {
+      trackingConfig: {
+        enabled: true,
+      },
+    },
   };
   const appMock = {};
   let sisenseContextService: Mocked<SisenseContextService>;
@@ -57,7 +61,7 @@ describe('createSisenseContextConnector', () => {
       isInitialized: true,
       showRuntimeErrors: sisenseContextConfigMock.showRuntimeErrors,
       tracking: {
-        enabled: sisenseContextConfigMock.enableTracking,
+        enabled: true,
         packageName: 'sdk-ui-angular',
       },
     });

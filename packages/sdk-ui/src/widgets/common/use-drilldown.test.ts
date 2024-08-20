@@ -1,5 +1,5 @@
 import { Column, createAttribute } from '@sisense/sdk-data';
-import { processDrilldownSelections, useCustomDrilldown } from './custom-drilldown.js';
+import { processDrilldownSelections, useDrilldown } from './use-drilldown.js';
 import { act, renderHook } from '@testing-library/react';
 
 const ageRange = createAttribute({
@@ -20,11 +20,11 @@ const category = createAttribute({
   expression: '[Commerce.Category]',
 });
 
-describe('Custom Drilldown', () => {
-  describe('useCustomDrilldown', () => {
+describe('Drilldown', () => {
+  describe('useDrilldown', () => {
     it('should notify initial dimension is required', () => {
       expect(() =>
-        useCustomDrilldown({
+        useDrilldown({
           drilldownDimensions: [],
           initialDimension: null as unknown as Column,
         }),
@@ -33,7 +33,7 @@ describe('Custom Drilldown', () => {
 
     it('should return correct initial drilldown props', () => {
       const { result } = renderHook(() =>
-        useCustomDrilldown({ drilldownDimensions: [ageRange], initialDimension: gender }),
+        useDrilldown({ drilldownDimensions: [ageRange], initialDimension: gender }),
       );
 
       const {
@@ -51,7 +51,7 @@ describe('Custom Drilldown', () => {
     });
 
     it('should update drilldown selections correctly', () => {
-      const { result } = renderHook(useCustomDrilldown, {
+      const { result } = renderHook(useDrilldown, {
         initialProps: { drilldownDimensions: [ageRange], initialDimension: gender },
       });
 
@@ -64,7 +64,7 @@ describe('Custom Drilldown', () => {
     });
 
     it('should slice drilldown selections correctly', () => {
-      const { result } = renderHook(useCustomDrilldown, {
+      const { result } = renderHook(useDrilldown, {
         initialProps: { drilldownDimensions: [ageRange, category], initialDimension: gender },
       });
 
@@ -91,7 +91,7 @@ describe('Custom Drilldown', () => {
     });
 
     it('should clear drilldown selections correctly', () => {
-      const { result } = renderHook(useCustomDrilldown, {
+      const { result } = renderHook(useDrilldown, {
         initialProps: { drilldownDimensions: [ageRange], initialDimension: gender },
       });
 

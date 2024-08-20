@@ -59,7 +59,7 @@ export const boxplotData = (
     // since we aggregated we know it is single number
     // expect one row or none
     const row = rows ? rows[0] : [];
-    const blur = xColumn && isBlurred(row, xColumn);
+    const blur = xColumn && !!isBlurred(row, xColumn);
 
     seriesValues.push({
       q1: boxMinColumn ? (getValue(row, boxMinColumn) as number) : 0,

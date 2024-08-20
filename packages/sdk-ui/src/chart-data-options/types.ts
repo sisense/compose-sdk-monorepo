@@ -74,6 +74,8 @@ export interface CategoryStyle {
    * @internal
    */
   width?: number;
+  /** {@inheritDoc DataColorOptions} */
+  color?: DataColorOptions;
 }
 
 /**
@@ -192,11 +194,11 @@ export type SeriesStyle = {
  */
 export type SeriesStyleOptions = {
   /**
-   * @inheritdoc LineStyleOptions.lineWidth
+   * @inheritdoc
    */
   lineWidth?: LineWidth;
   /**
-   * @inheritdoc LineStyleOptions.markers
+   * @inheritdoc
    */
   markers?: Markers;
 };

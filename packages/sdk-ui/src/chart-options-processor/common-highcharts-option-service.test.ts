@@ -1,3 +1,4 @@
+import { CompleteThemeSettings } from '..';
 import { HighchartsOptionsInternal } from './chart-options-service';
 import {
   applyCommonHighchartsOptions,
@@ -8,8 +9,16 @@ import {
 describe('applyCommonHighchartsOptions', () => {
   it('should apply common options', () => {
     const chartOptions = {} as HighchartsOptionsInternal;
+    const themeSettings = {
+      chart: {
+        animation: {
+          init: { duration: 'auto' },
+          redraw: { duration: 'auto' },
+        },
+      },
+    } as CompleteThemeSettings;
 
-    const result = applyCommonHighchartsOptions(chartOptions, true);
+    const result = applyCommonHighchartsOptions(chartOptions, themeSettings, true);
 
     expect(result).toEqual({
       accessibility: { enabled: true },

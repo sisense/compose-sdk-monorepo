@@ -43,6 +43,14 @@ export const getLegendSettings = (position: LegendPosition): LegendSettings => {
     itemStyle: legendItemStyleDefault,
   };
 
+  if (!position) {
+    return {
+      enabled: false,
+      align: 'center',
+      verticalAlign: 'bottom',
+      layout: 'horizontal',
+    };
+  }
   switch (position) {
     case 'bottom':
       return {
@@ -76,12 +84,15 @@ export const getLegendSettings = (position: LegendPosition): LegendSettings => {
         layout: 'horizontal',
         ...additionalSettings,
       };
+    // edge case when position is something like bottomright or not selected in fusion.
+    // eslint-disable-next-line sonarjs/no-duplicated-branches
     default:
       return {
-        enabled: false,
+        enabled: true,
         align: 'center',
         verticalAlign: 'bottom',
         layout: 'horizontal',
+        ...additionalSettings,
       };
   }
 };

@@ -12,7 +12,7 @@ import { DateRangeFilterDisplay } from './date-range-filter-display';
 import { TranslatableError } from '@/translation/translatable-error';
 import { AnyObject } from '@/utils/utility-types';
 import { useDateLimits } from './use-date-limits';
-import { cloneFilterAndToggleDisabled } from '@/filters/utils';
+import { cloneFilterAndToggleDisabled } from '@/utils/filters';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 
 export interface DateRangeFilterTileProps {

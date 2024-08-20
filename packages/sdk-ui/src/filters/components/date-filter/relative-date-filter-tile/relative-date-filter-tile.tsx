@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { RelativeDateFilterDisplay } from './relative-date-filter-display.js';
 import isToday from 'dayjs/plugin/isToday';
 import { RelativeDateFilter } from './relative-date-filter.js';
-import { cloneFilterAndToggleDisabled } from '@/filters/utils.js';
+import { cloneFilterAndToggleDisabled } from '@/utils/filters.js';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
 dayjs.extend(isToday);
 

@@ -11,6 +11,7 @@ if (!process.env.E2E_SISENSE_URL || !process.env.E2E_SISENSE_TOKEN) {
 const envContent = `export const environment = {
   APP_SISENSE_URL: '${process.env.E2E_SISENSE_URL}',
   APP_SISENSE_TOKEN: '${process.env.E2E_SISENSE_TOKEN}',
+  APP_DISABLE_ANIMATION: true
 };
 `;
 

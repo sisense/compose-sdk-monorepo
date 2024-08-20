@@ -5,12 +5,7 @@ export { ClientApplication, createClientApplication } from './app/client-applica
 export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
-export {
-  DashboardById,
-  Dashboard,
-  type DashboardByIdProps,
-  type DashboardProps,
-} from './dashboard';
+export * from './dashboard';
 export { DashboardWidget } from './dashboard-widget/dashboard-widget';
 export { getSortType } from './dashboard-widget/utils';
 export {
@@ -23,7 +18,7 @@ export * from './query-execution';
 export { executeQuery } from './query/execute-query';
 export { SisenseContextProvider } from './sisense-context/sisense-context-provider';
 export { DrilldownWidget } from './widgets/drilldown-widget';
-export { processDrilldownSelections } from './widgets/common/custom-drilldown';
+export { processDrilldownSelections } from './widgets/common/use-drilldown';
 export { ChartWidget } from './widgets/chart-widget';
 export { TableWidget } from './widgets/table-widget';
 export { ContextMenu } from './widgets/common/context-menu';
@@ -80,6 +75,9 @@ export {
   type GetDashboardModelsOptions,
   type Layout,
   type WidgetFilterOptions,
+  type CommonFiltersOptions,
+  type CommonFiltersApplyMode,
+  type FiltersIgnoringRules,
 } from './models';
 export { boxWhiskerProcessResult } from './boxplot-utils';
 export { queryStateReducer } from './query-execution/query-state-reducer';

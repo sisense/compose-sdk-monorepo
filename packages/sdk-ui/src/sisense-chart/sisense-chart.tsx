@@ -89,6 +89,7 @@ export const SisenseChart = ({
     const accessibilityEnabled = app?.settings.accessibilityConfig?.enabled || false;
     const highchartsOptionsWithCommonOptions = applyCommonHighchartsOptions(
       highchartsOptions,
+      themeSettings,
       accessibilityEnabled,
     );
 

@@ -1,4 +1,4 @@
-import { addQueryParamsToUrl, appendHeaders } from './helpers.js';
+import { addQueryParamsToUrl, appendHeaders, isAuthTokenPending } from './helpers.js';
 
 describe('appendHeaders', () => {
   it('should append headers to an existing Headers object', () => {
@@ -131,6 +131,31 @@ describe('appendHeaders', () => {
       const resultUrl = addQueryParamsToUrl(url, queryParams);
 
       expect(resultUrl).toBe(url);
+    });
+  });
+
+  describe('isAuthTokenPending', () => {
+    it('should return true when auth token is pending', () => {
+      let token = null;
+      let wat = undefined;
+
+      expect(isAuthTokenPending(token, wat)).toBe(true);
+
+      token = undefined;
+      wat = null;
+
+      expect(isAuthTokenPending(token, wat)).toBe(true);
+    });
+
+    it('should return false when auth token is set', () => {
+      let token: string | undefined = 'TOKEN_VALUE';
+      let wat = undefined;
+
+      expect(isAuthTokenPending(token, wat)).toBe(false);
+
+      token = undefined;
+      wat = 'WAT_VALUE';
+      expect(isAuthTokenPending(token, wat)).toBe(false);
     });
   });
 });

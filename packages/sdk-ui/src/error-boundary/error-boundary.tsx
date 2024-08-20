@@ -50,8 +50,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   render() {
     const error = this.state.error || this.props.error;
-    if (error) {
-      return this.showErrorBox ? <ErrorBoundaryBox error={error} /> : <div />;
+    if (error && this.showErrorBox) {
+      return <ErrorBoundaryBox error={error} />;
     }
 
     return this.props.children;

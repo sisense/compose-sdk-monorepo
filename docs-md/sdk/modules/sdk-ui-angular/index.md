@@ -74,6 +74,8 @@ Angular query service
 
 Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
 
+- [DashboardByIdComponent](fusion-embed/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+- [DashboardComponent](fusion-embed/class.DashboardComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
 - [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](fusion-embed/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](fusion-embed/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />

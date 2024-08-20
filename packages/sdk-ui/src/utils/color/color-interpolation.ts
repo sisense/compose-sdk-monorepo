@@ -134,3 +134,17 @@ export const applyOpacity = (color: string, opacity: number) => {
   colorObj.alpha = opacity;
   return toString(colorObj);
 };
+
+/**
+ * Give an array of color steps in provided range
+ *
+ * @param minColor - start range color
+ * @param maxColor - end range color
+ * @param steps - count of color steps
+ * @returns - array with color steps
+ */
+export const getExplicitColorSteps = (minColor: string, maxColor: string, steps: number) => {
+  return Color.steps(new Color(minColor), new Color(maxColor), { steps }).map((color) =>
+    new Color(color).to('srgb').toString(),
+  );
+};

@@ -40,6 +40,14 @@ Also, see [StyledMeasureColumn](interface.StyledMeasureColumn.md).
 
 ## Properties
 
+### color
+
+> **color**?: [`DataColorOptions`](../type-aliases/type-alias.DataColorOptions.md)
+
+All possible color options for data.
+
+***
+
 ### column
 
 > **column**: [`Column`](../../sdk-data/interfaces/interface.Column.md)

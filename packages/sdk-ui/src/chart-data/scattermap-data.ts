@@ -48,7 +48,7 @@ export const scattermapData = (
         };
       }
 
-      const blur = locationColumns[0] && isBlurred(row, locationColumns[0]);
+      const blur = locationColumns[0] && !!isBlurred(row, locationColumns[0]);
       return {
         name,
         rawName,

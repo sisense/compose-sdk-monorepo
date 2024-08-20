@@ -49,6 +49,7 @@ import {
   TabularChartStyleOptions,
   TableStyleOptions,
   AreaRangeStyleOptions,
+  DrilldownSelection,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -109,16 +110,20 @@ export interface SisenseContextProviderProps {
   /**
    * Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
    *
+   * To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.
+   *
    * @category Sisense Authentication
    */
-  token?: string;
+  token?: string | null;
 
   /**
    * [Web Access Token](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm).
    *
+   * To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.
+   *
    * @category Sisense Authentication
    */
-  wat?: string;
+  wat?: string | null;
 
   /**
    * Application specific configurations such as locale and date formats.
@@ -131,18 +136,34 @@ export interface SisenseContextProviderProps {
    * Boolean flag to show or hide run-time errors that involve Sisense context in the UI.
    * Example errors include incorrect Sisense URL or invalid authentication.
    * Note that this flag does not hide run-time errors in the console.
+   * If disabled - it's recommended to specify an {@link onError} callback to handle errors.
    *
    * If not specified, the default value is `true`.
    *
-   * @internal
+   * @category Sisense App Error Handling
    */
   showRuntimeErrors?: boolean;
+
+  /**
+   * Callback function that is triggered when an error occurs within the Sisense context.
+   *
+   * This callback is useful for handling errors that happen during the initialization or runtime of the Sisense context,
+   * such as incorrect configuration, invalid authentication, or network-related issues.
+   *
+   * @param error - The error object containing details about the issue.
+   *
+   * @category Sisense App Error Handling
+   */
+  onError?: (error: Error) => void;
 
   /**
    * Boolean flag to enable sending tracking events to the Sisense instance.
    *
    * If not specified, the default value is `true`.
    *
+   * Deprecated: Use {@link AppConfig.trackingConfig | trackingConfig.enabled }
+   *
+   * @deprecated Use {@link AppConfig.trackingConfig | trackingConfig.enabled }
    * @internal
    */
   enableTracking?: boolean;
@@ -1511,7 +1532,9 @@ export type DrilldownWidgetConfig = {
    */
   breadcrumbsComponent?: ComponentType<DrilldownBreadcrumbsProps>;
   /**
-   * Boolean to override default breadcrumbs location and instead only return them as a property of the 'children' function
+   * React component to be rendered as context menu
+   *
+   * {@link ContextMenu} will be used if not provided
    *
    * @category Widget
    */
@@ -1534,6 +1557,13 @@ export interface DrilldownWidgetProps {
    * @category Widget
    */
   initialDimension: Attribute;
+
+  /**
+   * Initial drilldown selections
+   *
+   * @internal
+   */
+  drilldownSelections?: DrilldownSelection[];
   /**
    * An object that allows users to pass advanced configuration options as a prop for the `DrilldownWidget` component
    *

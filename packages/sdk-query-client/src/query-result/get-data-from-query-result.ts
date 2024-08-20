@@ -32,23 +32,37 @@ export function prepareResultAsColsAndRows(
  * @returns A new 2D array of cells with the `blur` property set.
  */
 export function setCellsBlur(rows: DataCell[][]): Cell[][] {
-  // An array indicating whether `blur` is enabled per each column.
-  const blurEnabledPerColumn = rows[0]?.map((_value, index) => {
-    return rows.some((r) => 'selected' in r[index]);
+  // A boolean flag indicating whether highlight is enabled on some column.
+  let isHighlightEnabledSomeColumn = false;
+  // An array indicating whether highlight is enabled per each column.
+  const highlightEnabledPerColumn = rows[0]?.map((_value, index) => {
+    const isHighlightEnabled = rows.some((r) => 'selected' in r[index]);
+    if (isHighlightEnabled) {
+      isHighlightEnabledSomeColumn = true;
+    }
+    return isHighlightEnabled;
   });
 
   return rows.map((r) => {
     // calculates a single `blur` value for a whole row based on each column (cell) configuration.
-    const blur = blurEnabledPerColumn.some((isBlurEnabled, columnIndex) => {
-      return isBlurEnabled && !r[columnIndex].selected;
-    });
+    // true: the data value is blurred
+    // false: the data value is highlighted
+    // undefined: the data value is neutral (neither highlighted nor blurred)
+    const blur = !isHighlightEnabledSomeColumn
+      ? undefined
+      : highlightEnabledPerColumn.some(
+          (isHighlightEnabled, columnIndex) => isHighlightEnabled && !r[columnIndex].selected,
+        );
 
     return r.map(
-      (d): Cell => ({
-        data: d.data,
-        text: d.text,
-        blur,
-      }),
+      (d): Cell =>
+        blur !== undefined
+          ? {
+              data: d.data,
+              text: d.text,
+              blur,
+            }
+          : { data: d.data, text: d.text },
     );
   });
 }

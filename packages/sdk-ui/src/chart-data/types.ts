@@ -110,7 +110,7 @@ export type ScattermapChartLocation = {
   value: number;
   colorValue?: number;
   details?: number | string[];
-  blur: boolean;
+  blur?: boolean;
   coordinates?: Coordinates;
 };
 

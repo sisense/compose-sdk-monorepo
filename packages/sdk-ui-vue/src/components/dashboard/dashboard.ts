@@ -35,7 +35,7 @@ import { setupHelper } from '../../setup-helper';
  * ```
  * @group Fusion Embed
  * @fusionEmbed
- * @internal
+ * @alpha
  */
 export const Dashboard = defineComponent({
   props: {

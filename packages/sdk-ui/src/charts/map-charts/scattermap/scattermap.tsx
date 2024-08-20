@@ -10,7 +10,7 @@ import { useGeoSettings } from './hooks/use-settings.js';
 import { getLocationsMarkerColors } from './utils/color.js';
 import { createMarker, removeMarkers } from './utils/markers.js';
 import { addCopyright } from './utils/copyright.js';
-import { fitMapToBounds } from './utils/map.js';
+import { fitMapToBounds, prepareFitBoundsAnimationOptions } from './utils/map.js';
 import {
   ChartDataOptionsInternal,
   ScattermapChartDataOptionsInternal,
@@ -23,6 +23,7 @@ import '../map-charts.scss';
 import './scattermap.scss';
 import { DesignOptions } from '@/chart-options-processor/translations/types.js';
 import { ChartRendererProps } from '@/chart/types.js';
+import { useThemeContext } from '@/theme-provider';
 
 export type ScattermapProps = {
   chartData: ScattermapChartData;
@@ -43,6 +44,7 @@ export const Scattermap = ({
 }: ScattermapProps) => {
   const { locations } = chartData;
   const geoSettings = useGeoSettings();
+  const { themeSettings } = useThemeContext();
 
   const locationsWithCoordinates = useLocations(locations, dataOptions.locationLevel);
 
@@ -110,7 +112,7 @@ export const Scattermap = ({
             color: markerColors[index],
             size: markerSizes[index],
             fill: designOptions.markers.fill,
-            blur: locationWithCoordinates.blur,
+            blur: !!locationWithCoordinates.blur,
           },
         });
 
@@ -135,13 +137,18 @@ export const Scattermap = ({
         });
       });
 
-      fitMapToBounds(mapInstance.current!, markersRef.current);
+      fitMapToBounds(
+        mapInstance.current!,
+        markersRef.current,
+        prepareFitBoundsAnimationOptions(themeSettings),
+      );
     }
   }, [
     locationsWithCoordinates,
     markerColors,
     markerSizes,
     designOptions,
+    themeSettings,
     tooltipHandler,
     onDataPointClick,
   ]);

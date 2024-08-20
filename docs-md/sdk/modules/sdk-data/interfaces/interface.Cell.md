@@ -13,7 +13,10 @@ or [query result data set](interface.QueryResultData.md).
 
 > **blur**?: `boolean`
 
-Boolean flag whether the data value should be blurred when visualized in a chart
+Boolean flag representing three states that can be visualized in a chart:
+- `true`: the data value is in blur state
+- `false`: the data value is in highlight state
+- if not specified, the data value is neither in highlight nor blur state
 
 ***
 

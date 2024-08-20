@@ -53,8 +53,8 @@ describe('translate widget drilldown options', () => {
       const drilldownOptions = extractDrilldownOptions('chart/column', panels);
 
       verifyColumn(dataOptions.category[0], panels[0].items[0].parent!.parent!);
-      verifyColumn(drilldownOptions?.drilldownDimensions![1]!, panels[0].items[0]);
-      verifyColumn(drilldownOptions?.drilldownDimensions![0]!, panels[0].items[0].parent!);
+      verifyColumn(drilldownOptions?.drilldownDimensions![1], panels[0].items[0]);
+      verifyColumn(drilldownOptions?.drilldownDimensions![0], panels[0].items[0].parent!);
 
       verifyColumn(drilldownOptions?.drilldownSelections![1].nextDimension, panels[0].items[0]);
       verifyColumn(

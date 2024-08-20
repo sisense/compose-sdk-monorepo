@@ -49,7 +49,6 @@ export type TableProps = {
 export type DataTableWrapperProps = {
   dataTable: DataTable;
   dataOptions: TableDataOptionsInternal;
-  isLoading: boolean;
   height: number;
   width: number;
   customStyles?: TableCustomStyles;

@@ -191,7 +191,7 @@ const translateNumbersContinuousXAxis = (
     return {
       x,
       y: value,
-      selected: blur,
+      selected: !!blur,
       ...(hasMarker && { marker }),
       ...(color && { color }),
       custom: { rawValue, xValue, xDisplayValue: xDisplayValue || xValue },
@@ -287,7 +287,7 @@ const translateNumbersToSeriesPointStructure = (
   categories?: string[],
   categoryColors?: string[],
 ): SeriesPointStructure[] => {
-  const hasBlurred = input.some((v) => v.blur);
+  const hasHighlighted = input.some((v) => v.blur !== undefined);
 
   return indexMap.map((index: number, indexOfIndex: number): SeriesPointStructure => {
     if (index < 0) {
@@ -300,19 +300,19 @@ const translateNumbersToSeriesPointStructure = (
         name: categories[index],
         y: value,
         color: color ?? categoryColors?.[index],
-        ...(hasBlurred && !blur && { selected: true }),
+        ...(hasHighlighted && !blur && { selected: true }),
         custom: { rawValue, xValue },
       };
     } else {
       const shouldShowIsolatedPoint = isIsolatedPoint(input, indexMap, index, indexOfIndex);
-      const hasMarker = shouldShowIsolatedPoint || hasBlurred;
+      const hasMarker = shouldShowIsolatedPoint || hasHighlighted;
       const marker = {
         enabled: !blur,
         isIsolatedPoint: shouldShowIsolatedPoint,
       };
       return {
         y: isNaN(+value) ? value : +value,
-        selected: blur,
+        selected: !!blur,
         ...(hasMarker && { marker }),
         ...(color && { color }),
         custom: { rawValue, xValue },

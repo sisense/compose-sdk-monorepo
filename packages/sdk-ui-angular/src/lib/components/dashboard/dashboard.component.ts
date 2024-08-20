@@ -22,7 +22,7 @@ import {
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
 /**
- * An Angular component used for easily rendering a dashboard.
+ * An Angular component used for easily rendering a dashboard created in Sisense Fusion.
  *
  * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
  *
@@ -59,7 +59,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * ```
  * @group Fusion Embed
  * @fusionEmbed
- * @internal
+ * @alpha
  */
 @Component({
   selector: 'csdk-dashboard',

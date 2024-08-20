@@ -12,9 +12,11 @@ import { setTimeout } from 'timers/promises';
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,
   token: mockToken,
-  enableTracking: false,
   defaultDataSource: 'Sample ECommerce',
-  appConfig: { queryCacheConfig: { enabled: false } },
+  appConfig: {
+    queryCacheConfig: { enabled: false },
+    trackingConfig: { enabled: false },
+  },
 };
 
 describe('CascadingFilterTile', () => {

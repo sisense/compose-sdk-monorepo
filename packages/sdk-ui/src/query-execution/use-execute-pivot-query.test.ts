@@ -42,6 +42,7 @@ describe('useExecutePivotQuery', () => {
 
   beforeEach(() => {
     executePivotQueryMock.mockClear();
+    trackProductEventMock.mockClear();
     useSisenseContextMock.mockReturnValue({
       app: {} as ClientApplication,
       isInitialized: true,
@@ -96,7 +97,10 @@ describe('useExecutePivotQuery', () => {
   });
 
   it('should handle missing Sisense context', () => {
-    useSisenseContextMock.mockReturnValue({ isInitialized: false, enableTracking: false });
+    useSisenseContextMock.mockReturnValue({
+      isInitialized: false,
+      app: { settings: { trackingConfig: { enabled: false } } },
+    });
 
     const { result } = renderHook(() => useExecutePivotQuery(params));
 

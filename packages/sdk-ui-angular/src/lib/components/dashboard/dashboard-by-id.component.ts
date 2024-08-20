@@ -46,7 +46,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * ```
  * @group Fusion Embed
  * @fusionEmbed
- * @internal
+ * @alpha
  */
 @Component({
   selector: 'csdk-dashboard-by-id',

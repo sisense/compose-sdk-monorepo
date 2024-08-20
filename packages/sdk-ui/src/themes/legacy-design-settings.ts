@@ -1,5 +1,9 @@
 import merge from 'ts-deepmerge';
-import { getDefaultThemeSettings } from '../theme-provider/default-theme-settings';
+import {
+  DEFAULT_DIVIDER_COLOR,
+  DEFAULT_DIVIDER_WIDTH,
+  getDefaultThemeSettings,
+} from '../theme-provider/default-theme-settings';
 import {
   ThemeOid,
   CompleteThemeSettings,
@@ -120,6 +124,14 @@ export function convertToThemeSettings(
       backgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
       secondaryTextColor: legacyDesignSettings.dashboards.widgetSecondaryTextColor,
       panelBackgroundColor: legacyDesignSettings.dashboards.panelBackgroundColor,
+      animation: {
+        init: {
+          duration: 'auto',
+        },
+        redraw: {
+          duration: 'auto',
+        },
+      },
     },
     typography: {
       fontFamily: legacyDesignSettings.typography.fontFamily,
@@ -152,6 +164,11 @@ export function convertToThemeSettings(
         dividerLineColor: legacyDesignSettings.dashboards.widgetTitleDividerColor,
         backgroundColor: legacyDesignSettings.dashboards.widgetTitleBackgroundColor,
       },
+    },
+    dashboard: {
+      backgroundColor: legacyDesignSettings.dashboards.layoutBackgroundColor,
+      dividerLineWidth: DEFAULT_DIVIDER_WIDTH,
+      dividerLineColor: DEFAULT_DIVIDER_COLOR,
     },
   };
   return merge.withOptions({ mergeArrays: false }, getDefaultThemeSettings(), themeSettings);

@@ -95,7 +95,7 @@ describe('useTableData', () => {
 
     const [data, dataOptions] = result.current;
     expect(data).toBeNull();
-    expect(dataOptions).toBeNull();
+    expect(dataOptions).toBe(fetchProps.dataOptions);
 
     await waitFor(() => {
       const [data2, dataOptions2] = result.current;
@@ -118,7 +118,7 @@ describe('useTableData', () => {
 
     const [data, dataOptions] = result.current;
     expect(data).toBeNull();
-    expect(dataOptions).toBeNull();
+    expect(dataOptions).toBe(fetchProps.dataOptions);
 
     setTimeout(() => {
       rerender(fetchMoreProps);
@@ -153,7 +153,7 @@ describe('useTableData', () => {
 
     const [data, dataOptions] = result.current;
     expect(data).toBeNull();
-    expect(dataOptions).toBeNull();
+    expect(dataOptions).toBe(fetchAllProps.dataOptions);
 
     setTimeout(() => {
       rerender(fetchMoreProps);
@@ -186,7 +186,7 @@ describe('useTableData', () => {
 
     const [data, dataOptions] = result.current;
     expect(data).toBeNull();
-    expect(dataOptions).toBeNull();
+    expect(dataOptions).toBe(fetchProps.dataOptions);
 
     await waitFor(() => {
       expect(mockSetError).toHaveBeenCalled();
@@ -194,7 +194,7 @@ describe('useTableData', () => {
 
       const [data2, dataOptions2] = result.current;
       expect(data2).toBeNull();
-      expect(dataOptions2).toBeNull();
+      expect(dataOptions2).toBe(fetchProps.dataOptions);
     });
   });
 });

@@ -1,9 +1,10 @@
-import { TrackingDetails, trackProductEvent } from '@sisense/sdk-tracking';
+import { TrackingEventDetails } from '@sisense/sdk-tracking';
 import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { createContext, ReactNode, useContext, useEffect, useRef } from 'react';
+import { useTracking } from '@/common/hooks/use-tracking';
 
 const action = 'sdkComponentInit';
-interface ComponentInitEventDetails extends TrackingDetails {
+interface ComponentInitEventDetails extends TrackingEventDetails {
   packageName: string;
   packageVersion: string;
   componentName: string;
@@ -20,17 +21,15 @@ export const TrackingContextProvider = ({
 }) => <TrackingContext.Provider value={skipNested}>{children}</TrackingContext.Provider>;
 
 export const useTrackComponentInit = <P extends {}>(componentName: string, props: P) => {
-  const { app, tracking } = useSisenseContext();
+  const { tracking } = useSisenseContext();
+  const { trackEvent } = useTracking();
 
   const inTrackingContext = useContext(TrackingContext);
 
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!app?.httpClient) {
-      return;
-    }
-
+    if (!tracking) return;
     const hasBeenTracked = hasTrackedRef.current;
     if (!hasBeenTracked && !inTrackingContext) {
       const payload: ComponentInitEventDetails = {
@@ -43,9 +42,9 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
           .join(', '),
       };
 
-      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled).finally(
+      void trackEvent(action, payload, !tracking.enabled).finally(
         () => (hasTrackedRef.current = true),
       );
     }
-  }, [componentName, props, app, tracking, inTrackingContext]);
+  }, [componentName, props, tracking, inTrackingContext, trackEvent]);
 };

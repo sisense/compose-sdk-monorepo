@@ -3,15 +3,20 @@ import { Dashboard } from './dashboard';
 import { DashboardByIdProps } from './types';
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { useThemeContext } from '@/theme-provider';
+import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 
 /**
- * React component that renders a dashboard created in Sisense Fusion Embed
+ * React component that renders a dashboard created in Sisense Fusion by its ID.
  *
  * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
  *
- * @internal
+ * @group Fusion Embed
+ * @fusionEmbed
+ * @alpha
  */
-export const DashboardById = ({ dashboardOid }: DashboardByIdProps) => {
+export const DashboardById = asSisenseComponent({
+  componentName: 'DashboardById',
+})(({ dashboardOid }: DashboardByIdProps) => {
   const { themeSettings } = useThemeContext();
   const { dashboard, isLoading, isError } = useGetDashboardModel({
     dashboardOid,
@@ -26,4 +31,4 @@ export const DashboardById = ({ dashboardOid }: DashboardByIdProps) => {
       {dashboard && <Dashboard {...dashboard.getDashboardProps()} />}
     </LoadingOverlay>
   );
-};
+});

@@ -10,7 +10,9 @@ import { GeoDataElement } from '../../../chart-data/types.js';
 import { scaleBrightness } from '../../../utils/color/index.js';
 import { AreamapType } from '../../../types.js';
 import { createFeatureStylesDictionary, FeaturesDictionary } from './feature-styles-dictionary.js';
+import { useThemeContext } from '@/theme-provider';
 import '../map-charts.scss';
+import { prepareFitBoundsAnimationOptions } from '../scattermap/utils/map.js';
 
 export type AreamapProps = {
   geoJson: GeoJsonFeatureCollection;
@@ -26,6 +28,7 @@ export type AreamapProps = {
  * Component that renders a map with areas (countries or states) for using in Areamap chart
  */
 export const AreamapMap: React.FC<AreamapProps> = ({ geoJson, geoData, dataOptions, mapType }) => {
+  const { themeSettings } = useThemeContext();
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<Leaflet.Map | null>(null);
   const [mapLayerGroup] = useState<Leaflet.LayerGroup>(Leaflet.layerGroup());
@@ -79,9 +82,12 @@ export const AreamapMap: React.FC<AreamapProps> = ({ geoJson, geoData, dataOptio
     if (mapInstance.current) {
       mapLayerGroup.clearLayers();
       mapLayerGroup.addLayer(geoJsonLayer);
-      mapInstance.current.fitBounds(geoJsonLayer.getBounds());
+      mapInstance.current.fitBounds(
+        geoJsonLayer.getBounds(),
+        prepareFitBoundsAnimationOptions(themeSettings),
+      );
     }
-  }, [dataOptions, featureStylesDictionary, geoJson, mapLayerGroup]);
+  }, [dataOptions, featureStylesDictionary, geoJson, mapLayerGroup, themeSettings]);
 
   return (
     <div

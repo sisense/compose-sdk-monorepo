@@ -5,6 +5,7 @@ import {
   isBoxplot,
   isCartesian,
   isCategorical,
+  isRange,
   isScatter,
   isScattermap,
 } from '@/chart-options-processor/translations/types';
@@ -28,13 +29,9 @@ import {
   StyledColumn,
 } from '../index.js';
 import { ScatterCustomPointOptions } from '@/chart-options-processor/translations/scatter-tooltip.js';
-import {
-  clearCommonFilter,
-  createCommonFilter,
-  getFilterByAttribute,
-  isEqualMembersFilters,
-} from './utils.js';
+import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 import { WidgetTypeInternal } from '@/models/widget/types.js';
+import { clearMembersFilter, haveSameAttribute } from '@/utils/filters.js';
 
 type WidgetSelection = {
   attribute: Attribute;
@@ -259,7 +256,12 @@ export function getSelectableWidgetAttributes(
       ...((dataOptions as PivotTableDataOptions).rows || []),
       ...((dataOptions as PivotTableDataOptions).columns || []),
     ];
-  } else if (isCartesian(widgetType) || isCategorical(widgetType) || isBoxplot(widgetType)) {
+  } else if (
+    isCartesian(widgetType) ||
+    isCategorical(widgetType) ||
+    isBoxplot(widgetType) ||
+    isRange(widgetType)
+  ) {
     targetDataOptions = [...(dataOptions as CartesianChartDataOptions).category];
   } else if (isScatter(widgetType)) {
     targetDataOptions = [
@@ -277,21 +279,41 @@ export function getSelectableWidgetAttributes(
 
 export function createCommonFiltersOverSelections(
   selections: WidgetSelection[],
-  filters: Filter[],
+  existingCommonFilters: Filter[],
 ) {
-  let selectedFilters = selections.map(({ attribute, values }) =>
-    createCommonFilter(attribute, values, filters),
+  const commonFiltersFromSelections = selections.map(({ attribute, values }) =>
+    createCommonFilter(attribute, values, existingCommonFilters),
   );
 
-  const enabledFilters = filters.filter((f) => !f.disabled);
-  const isAlreadySelectedFilters = selectedFilters.every((filter) => {
+  const newSelectedFilters = removeLockedFilters(
+    existingCommonFilters,
+    commonFiltersFromSelections,
+  );
+
+  const enabledFilters = existingCommonFilters.filter((f) => !f.disabled);
+  const isAlreadySelectedFilters = newSelectedFilters.every((filter) => {
     const existingFilter = getFilterByAttribute(enabledFilters, filter.attribute);
     return existingFilter && isEqualMembersFilters(filter, existingFilter);
   });
 
   if (isAlreadySelectedFilters) {
-    selectedFilters = selectedFilters.map(clearCommonFilter);
+    return newSelectedFilters.map(clearMembersFilter);
   }
 
-  return selectedFilters;
+  return newSelectedFilters;
+}
+
+/**
+ * Removes filters, that are present in `existingFilters` and are locked, from `filtersToRemoveFrom`
+ */
+function removeLockedFilters(existingFilters: Filter[], filtersToRemoveFrom: Filter[]) {
+  const lockedExistingFilters = existingFilters.filter((filter) => filter.locked);
+
+  if (!lockedExistingFilters.length) {
+    return filtersToRemoveFrom;
+  }
+  return filtersToRemoveFrom.filter(
+    (filter) =>
+      !lockedExistingFilters.some((lockedFilter) => haveSameAttribute(lockedFilter, filter)),
+  );
 }

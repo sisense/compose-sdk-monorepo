@@ -7,6 +7,7 @@ import { AppSettings } from '@/app/settings/settings';
 
 /**
  * Translates a widget DTO to a widget model.
+ *
  * @param widget - The widget DTO to be converted to a widget model
  * @param themeSettings - Optional theme settings
  * @param appSettings - Optional application settings

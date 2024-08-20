@@ -104,7 +104,7 @@ export const createDataTableFromData = (data: Data): DataTable => {
           rawValue: rowValue.data,
           displayValue: rowValue.text ?? convertableValue,
           compareValue: createCompareValue(convertableValue, column.type),
-          ...(rowValue.blur ? { blur: rowValue.blur } : {}),
+          ...(rowValue.blur !== undefined ? { blur: rowValue.blur } : {}),
           ...(rowValue.color ? { color: rowValue.color } : {}),
         };
       }

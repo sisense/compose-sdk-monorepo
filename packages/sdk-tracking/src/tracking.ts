@@ -1,13 +1,14 @@
 /* eslint-disable max-params */
 import { HttpClient } from '@sisense/sdk-rest-client';
+import { TrackingEventType } from './registry.js';
 
 const TRACKING_CATEGORY = 'composesdk';
 
-export type TrackingDetails = Record<string, number | string | boolean | undefined>;
+export type TrackingEventDetails = Record<string, number | string | boolean | undefined>;
 
 export const trackProductEvent = (
-  action: string,
-  details: TrackingDetails,
+  action: TrackingEventType,
+  details: TrackingEventDetails,
   httpClient: HttpClient,
   isDebugMode = false,
 ) => {

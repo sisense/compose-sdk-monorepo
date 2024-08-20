@@ -23,6 +23,7 @@ TypeScript interfaces for components and services listed above
 - [GetDashboardModelOptions](interface.GetDashboardModelOptions.md)
 - [GetDashboardModelsOptions](interface.GetDashboardModelsOptions.md)
 - [IndicatorChartDataOptions](interface.IndicatorChartDataOptions.md)
+- [Layout](interface.Layout.md)
 - [LineStyleOptions](interface.LineStyleOptions.md)
 - [Member](interface.Member.md)
 - [NumericBarIndicatorStyleOptions](interface.NumericBarIndicatorStyleOptions.md)

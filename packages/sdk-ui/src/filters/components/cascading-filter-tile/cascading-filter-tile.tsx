@@ -3,8 +3,8 @@ import { CascadingFilter, DataSource, Filter } from '@sisense/sdk-data';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component.js';
 import { FilterVariant } from '../common/filter-utils.js';
 import { CascadingLevelFilterTile } from './cascading-level-filter.js';
-import { cloneFilterAndToggleDisabled } from '@/filters/utils.js';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
+import { clearMembersFilter, cloneFilterAndToggleDisabled } from '@/utils/filters.js';
 
 /**
  * Props for {@link CascadingFilterTile}
@@ -50,9 +50,24 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
 
     const levelFilters = filter.filters;
 
-    const handleLevelFilterChange = (levelFilter: Filter, index: number) => {
-      levelFilters[`${index}`] = levelFilter;
-      updateFilter(filter);
+    const handleLevelFilterChange = (
+      changedLevelFilter: Filter,
+      changedLevelFilterIndex: number,
+    ) => {
+      const newLevelFilters = filter.filters.map((levelFilter, index) => {
+        if (index === changedLevelFilterIndex) {
+          return changedLevelFilter;
+        }
+        if (index > changedLevelFilterIndex) {
+          return clearMembersFilter(levelFilter);
+        }
+        return levelFilter;
+      });
+
+      const newCascadingFilter = new CascadingFilter(newLevelFilters, filter.guid);
+      newCascadingFilter.disabled = filter.disabled;
+
+      updateFilter(newCascadingFilter);
     };
 
     return (

@@ -77,6 +77,8 @@ React components and hooks for working with queries
 
 React components and hooks for working with Fusion Embed dashboards, widgets, queries, and formulas
 
+- [Dashboard](fusion-embed/function.Dashboard.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+- [DashboardById](fusion-embed/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
 - [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [ExecuteQueryByWidgetId](fusion-embed/function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />

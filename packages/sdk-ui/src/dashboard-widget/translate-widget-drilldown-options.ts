@@ -5,6 +5,7 @@ import { getEnabledPanelItems } from './utils';
 import { DataPoint, DrilldownOptions } from '../types';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';
 import parseISO from 'date-fns/parseISO';
+import uniqBy from 'lodash/uniqBy';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent
@@ -36,33 +37,48 @@ const getDrilldownSelections = (
 };
 
 /**
- * Gets the panel name allowed for drilling based on the widget type.
+ * Gets the panel names allowed for drilling based on the widget type.
  *
  * @param {WidgetType} widgetType - The type of the widget.
  * @returns {string[]} An array of panel names allowed for drilling.
  */
-function getDrilldownAllowedPanelName(widgetType: WidgetType) {
+function getDrilldownAllowedPanelNames(widgetType: WidgetType) {
   switch (widgetType) {
     case 'chart/line':
     case 'chart/area':
-      return 'x-axis';
+      return ['x-axis'];
     case 'chart/boxplot':
-      return 'category';
+      return ['category'];
+    case 'chart/scatter':
+      return ['x-axis', 'y-axis', 'point', 'Break By / Color'];
     default:
-      return 'categories';
+      return ['categories'];
   }
 }
 
 export const extractDrilldownOptions = (
   widgetType: WidgetType,
   panels: Panel[],
+  drillHistory: PanelItem[] = [],
+  enableDrillToAnywhere?: boolean,
 ): DrilldownOptions => {
-  const categoriesPanelName = getDrilldownAllowedPanelName(widgetType);
-  const item = getEnabledPanelItems(panels, categoriesPanelName)[0];
-  const drilldownSelections = getDrilldownSelections(item);
-  const drilldownDimensions = getAvailableDrilldowns(item);
+  const panelNames = getDrilldownAllowedPanelNames(widgetType);
+  const drilledItem = panelNames
+    .map((name) => getEnabledPanelItems(panels, name))
+    .flat()
+    .find((item) => !!item.parent);
+
+  const drilldownSelections = getDrilldownSelections(drilledItem);
+  const targetDrilldownDimensions = uniqBy(
+    [
+      ...(drilledItem ? getAvailableDrilldowns(drilledItem) : []),
+      ...(enableDrillToAnywhere ? drillHistory.map(getAvailableDrilldowns).flat() : []),
+    ],
+    ({ expression }) => expression,
+  );
+
   return {
-    drilldownDimensions,
+    drilldownDimensions: targetDrilldownDimensions,
     drilldownSelections,
   };
 };

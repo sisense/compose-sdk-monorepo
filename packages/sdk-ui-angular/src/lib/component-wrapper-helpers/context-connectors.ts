@@ -43,15 +43,19 @@ export const createSisenseContextConnector = (
 ): ContextConnector<CustomSisenseContext> => {
   return {
     async prepareContext() {
-      const { enableTracking, showRuntimeErrors } = sisenseContextService.getConfig();
+      const { enableTracking, showRuntimeErrors, appConfig } = sisenseContextService.getConfig();
       const app = await sisenseContextService.getApp();
-
       return {
         app,
         isInitialized: true,
         showRuntimeErrors,
         tracking: {
-          enabled: enableTracking,
+          // if tracking is configured in appConfig, use it, otherwise use enableTracking
+          // if none is set, default to true
+          enabled:
+            appConfig?.trackingConfig?.enabled !== undefined
+              ? appConfig.trackingConfig.enabled
+              : enableTracking ?? true,
           packageName: 'sdk-ui-angular',
         },
       } as CustomSisenseContext;

@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useMemo } from 'react';
+import { useRef, useLayoutEffect, useMemo } from 'react';
 import { DataTableWrapper } from './data-table-wrapper';
 import styles from './styles/table-chart.module.scss';
 import { TableProps } from './types';
@@ -38,22 +38,24 @@ export const PureTable = ({
     loadedTable.current = dataTable;
   }, [dataTable]);
 
-  const isLoading = dataTable !== loadedTable.current;
+  const customStyles = useMemo(
+    () => ({
+      sortIcon: 'caret' as const,
+      showFieldTypeIcon: false,
+      ...designOptions,
+    }),
+    [designOptions],
+  );
 
   return (
     <div className={styles.component} ref={listRef}>
       <DataTableWrapper
         dataTable={sortedAndFormattedTable}
         dataOptions={dataOptions}
-        isLoading={isLoading}
         onSortUpdate={onSortUpdate}
         height={height}
         width={width}
-        customStyles={{
-          sortIcon: 'caret',
-          showFieldTypeIcon: false,
-          ...designOptions,
-        }}
+        customStyles={customStyles}
         themeSettings={themeSettings}
       />
     </div>

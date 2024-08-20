@@ -3,6 +3,7 @@ import isFunction from 'lodash/isFunction';
 import { ComponentDecorator, SisenseComponentConfig } from './as-sisense-component';
 import { TranslatableError } from '../../translation/translatable-error';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { LoadingIndicator } from '@/common/components/loading-indicator';
 
 type SisenseContextValidationConfig = Pick<
   SisenseComponentConfig,
@@ -43,9 +44,4 @@ function canRenderWithoutSisenseContextWaiting(
     (isBoolean(shouldSkipSisenseContextWaiting) && shouldSkipSisenseContextWaiting) ||
     (isFunction(shouldSkipSisenseContextWaiting) && shouldSkipSisenseContextWaiting(props))
   );
-}
-
-function LoadingIndicator() {
-  // TODO: add a nice loading indicator
-  return null;
 }

@@ -24,3 +24,13 @@ export const addQueryParamsToUrl = (url: string, params: { [key: string]: string
   // replace the trailing slash if there is one
   return urlObject.toString().replace(/\/([?&])/, '$1');
 };
+
+/**
+ * Checks if API token or WAT token is pending (e.g., being generated)
+ * @param token - API token
+ * @param wat - WAT token
+ * @returns true if the token is pending
+ */
+export const isAuthTokenPending = (token?: string | null, wat?: string | null): boolean => {
+  return token === null || wat === null;
+};

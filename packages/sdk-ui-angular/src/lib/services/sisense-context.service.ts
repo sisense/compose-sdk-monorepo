@@ -51,10 +51,9 @@ export class SisenseContextService {
   constructor(@Inject(SISENSE_CONTEXT_CONFIG_TOKEN) sisenseContextConfig: SisenseContextConfig) {
     this.appPromise = createClientApplication(sisenseContextConfig);
 
-    const { enableTracking, showRuntimeErrors } = sisenseContextConfig;
+    const { showRuntimeErrors } = sisenseContextConfig;
     this.config = {
       ...sisenseContextConfig,
-      enableTracking: enableTracking ?? true,
       showRuntimeErrors: showRuntimeErrors ?? true,
     };
   }

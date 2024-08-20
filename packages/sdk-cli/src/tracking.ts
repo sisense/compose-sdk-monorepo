@@ -1,9 +1,8 @@
-import { TrackingDetails, trackProductEvent } from '@sisense/sdk-tracking';
+import { TrackingEventDetails, trackProductEvent } from '@sisense/sdk-tracking';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { PKG_VERSION } from './package-version.js';
-import { TrackingActions } from './constants.js';
 
-interface ExecutionEventDetails extends TrackingDetails {
+interface ExecutionEventDetails extends TrackingEventDetails {
   packageVersion: string;
   commandName: string;
   argumentsPassed: string;
@@ -23,7 +22,5 @@ export const trackExecution = <T extends {}>(
       .join(', '),
   };
 
-  const action = TrackingActions.Execution;
-
-  trackProductEvent(action, payload, httpClient);
+  trackProductEvent('sdkCliExec', payload, httpClient);
 };

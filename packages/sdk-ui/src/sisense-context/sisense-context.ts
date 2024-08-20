@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 import { ClientApplication } from '../app/client-application';
+import { TrackingEventDetails } from '@sisense/sdk-tracking';
 
 export type SisenseContextPayload = {
   isInitialized: boolean;
@@ -7,6 +8,7 @@ export type SisenseContextPayload = {
   tracking: {
     enabled: boolean;
     packageName: string;
+    onTrackingEvent?: (payload: TrackingEventDetails) => void;
   };
 };
 

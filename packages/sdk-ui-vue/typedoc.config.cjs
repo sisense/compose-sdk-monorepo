@@ -4,4 +4,5 @@ const baseConfig = require('../../typedoc.package.config.cjs');
 module.exports = {
   ...baseConfig,
   entryPoints: ['src/index-typedoc.ts'],
+  excludeCategories: ['Sisense App Error Handling'], // feature not supported yet in Vue
 };

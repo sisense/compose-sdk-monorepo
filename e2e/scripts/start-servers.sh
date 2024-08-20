@@ -18,8 +18,9 @@ while IFS='=' read -r key value; do
 done < "$ENV_FILE"
 
 # Set the environment variables for all child process
-export VITE_APP_SISENSE_URL="$E2E_SISENSE_URL"
-export VITE_APP_SISENSE_TOKEN="$E2E_SISENSE_TOKEN"
+export VITE_APP_SISENSE_URL=$E2E_SISENSE_URL
+export VITE_APP_SISENSE_TOKEN=$E2E_SISENSE_TOKEN
+export VITE_APP_DISABLE_ANIMATION="true"
 
 # Preparation scripts
 configura_angular_env="node ./scripts/configure-angular-demo-env.cjs";

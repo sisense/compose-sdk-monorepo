@@ -124,7 +124,10 @@ describe('useExecuteQuery', () => {
   });
 
   it('should handle missing Sisense context', () => {
-    useSisenseContextMock.mockReturnValue({ isInitialized: false, enableTracking: false });
+    useSisenseContextMock.mockReturnValue({
+      isInitialized: false,
+      appConfig: { trackingConfig: { enabled: false } },
+    });
 
     const { result } = renderHook(() => useExecuteQuery(params));
 
@@ -223,6 +226,7 @@ describe('useExecuteQuery', () => {
         },
       });
       executeQueryWithCacheMock.mockClear();
+      trackProductEventMock.mockClear();
       createExecuteQueryCacheKeyMock.mockReturnValue('cache-key');
     });
     it('should call `executeQueryWithCache` function', async () => {

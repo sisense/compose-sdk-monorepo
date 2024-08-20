@@ -1,10 +1,11 @@
-import { trackUiError } from '@sisense/sdk-tracking';
+import { ErrorEventOptions } from '@sisense/sdk-tracking';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { Component, ReactNode } from 'react';
 import { SisenseContext, SisenseContextPayload } from '../../../sisense-context/sisense-context';
 
 type ErrorTrackerProps = {
   children: ReactNode;
+  handler: (options: ErrorEventOptions) => Promise<void>;
   componentName: string;
 };
 export class ErrorTracker extends Component<ErrorTrackerProps, { error: Error | string | null }> {
@@ -12,12 +13,15 @@ export class ErrorTracker extends Component<ErrorTrackerProps, { error: Error | 
 
   context: SisenseContextPayload;
 
+  handler: (options: ErrorEventOptions) => Promise<void>;
+
   httpClient?: HttpClient;
 
   postponedErrors: Error[] = [];
 
   constructor(props: ErrorTrackerProps) {
     super(props);
+    this.handler = props.handler;
     this.componentName = props.componentName;
   }
 
@@ -34,28 +38,28 @@ export class ErrorTracker extends Component<ErrorTrackerProps, { error: Error | 
       if (!this.httpClient) {
         this.postponedErrors.push(error);
       } else {
-        this.sendErrorTracking(error, this.httpClient);
+        this.sendErrorTracking(error);
       }
     }
     throw error;
   }
 
-  private sendErrorTracking(error: Error, httpClient: HttpClient) {
-    trackUiError(
-      {
+  private sendErrorTracking(error: Error) {
+    try {
+      this.handler({
+        packageName: 'sdk-ui',
         packageVersion: __PACKAGE_VERSION__,
         component: this.componentName,
         error,
-      },
-      httpClient,
-    ).catch((trackingSendingError) =>
-      console.log('Failed to send tracking error event: ', trackingSendingError),
-    );
+      });
+    } catch (trackingSendingError) {
+      console.log('Failed to send tracking error event: ', trackingSendingError);
+    }
   }
 
   render(): ReactNode {
     if (this.httpClient && this.postponedErrors.length > 0) {
-      this.postponedErrors.forEach((error) => this.sendErrorTracking(error, this.httpClient!));
+      this.postponedErrors.forEach((error) => this.sendErrorTracking(error));
     }
     this.postponedErrors = [];
     return this.props.children;

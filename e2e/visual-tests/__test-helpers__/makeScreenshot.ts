@@ -3,8 +3,8 @@ import { expect, type Locator, type Page } from '@playwright/test';
 const SCREENSHOT_FILE_EXTENSION = '.png';
 const SCREENSHOT_DEFAILT_NAME = 'asset';
 const TEST_ID_ATTRIBUTE = 'data-visual-testid';
-const ANIMATION_DELAY = 1000;
-const LOADERS_CHECK_DURATION = 2 * 1000;
+const READINESS_DELAY = 0.2 * 1000;
+const LOADERS_CHECK_DURATION = 1.8 * 1000;
 const LOADERS_CHECK_INTERVAL = 100;
 const LOADERS_CHECK_TIMEOUT = 10 * 1000;
 
@@ -51,7 +51,7 @@ export async function makeScreenshotsOverPage(page: Page) {
 
   await waitForLoadersToDisappear(page);
 
-  await page.waitForTimeout(ANIMATION_DELAY);
+  await page.waitForTimeout(READINESS_DELAY);
 
   const locators = await page.locator(`[${TEST_ID_ATTRIBUTE}]`).all();
   await makeScreenshots(page, locators);

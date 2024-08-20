@@ -21,7 +21,11 @@ describe('DateRangeFilterTile', () => {
     const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years);
 
     const { container } = render(
-      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
         <DateRangeFilterTile
           title="Date Range"
           dataSource={DM.DataSource}
@@ -53,7 +57,11 @@ describe('DateRangeFilterTile', () => {
     const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years);
 
     const { findByLabelText, findByText } = render(
-      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
         <DateRangeFilterTile
           title="Date Range"
           dataSource={DM.DataSource}
@@ -79,7 +87,11 @@ describe('DateRangeFilterTile', () => {
     const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
 
     render(
-      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
         <DateRangeFilterTile
           title="Date Range"
           dataSource={DM.DataSource}

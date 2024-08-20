@@ -19,9 +19,15 @@ vi.mock('../../../sisense-context/sisense-context', async () => {
     ...actual,
     useSisenseContext: vi.fn(() => {
       return {
-        app: { settings: { serverVersion: 'mockVersion' } },
+        app: {
+          settings: {
+            serverVersion: 'mockVersion',
+            trackingConfig: {
+              enabled: false,
+            },
+          },
+        },
         isInitialized: true,
-        enableTracking: false,
       };
     }),
   };

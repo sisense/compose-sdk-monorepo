@@ -1,24 +1,40 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { StyledColumn, DrilldownSelection, DataPoint } from '../../types.js';
+import { StyledColumn, DrilldownSelection, DataPoint, ChartDataPoint } from '../../types.js';
 import { Attribute, Column, MembersFilter, filterFactory } from '@sisense/sdk-data';
-import { getDisplayMemberNameFromDataPoint, getMemberNameFromDataPoint } from './drilldown.js';
+import { useHasChanged } from '@/common/hooks/use-has-changed.js';
 
-export const useCustomDrilldown = ({
-  drilldownDimensions,
-  initialDimension,
-}: {
+type UseDrilldownParams = {
   drilldownDimensions: Attribute[];
   initialDimension: Column | StyledColumn;
-}) => {
+  drilldownSelections?: DrilldownSelection[];
+};
+
+export const useDrilldown = (params: UseDrilldownParams) => {
+  const {
+    drilldownDimensions,
+    initialDimension,
+    drilldownSelections: initialDrilldownSelections = [],
+  } = params;
+
   if (!initialDimension) {
     throw new Error(
       'Initial dimension has to be specified to use drilldown with custom components',
     );
   }
 
-  const [drilldownSelections, setDrilldownSelections] = useState([] as DrilldownSelection[]);
+  const [drilldownSelections, setDrilldownSelections] = useState<DrilldownSelection[]>(
+    initialDrilldownSelections,
+  );
+  const isInitialSelectionsChanged = useHasChanged(params, ['drilldownSelections']);
+
+  useEffect(() => {
+    // Apply new selections only if they have changed to prevent losing the selection due to rerendering.
+    if (isInitialSelectionsChanged) {
+      setDrilldownSelections(initialDrilldownSelections);
+    }
+  }, [initialDrilldownSelections, setDrilldownSelections, isInitialSelectionsChanged]);
 
   const availableDrilldowns = useMemo(
     () =>
@@ -90,3 +106,23 @@ export const processDrilldownSelections = (
     drilldownDimension: currentDimension,
   };
 };
+
+function getDisplayMemberNameFromDataPoint(point: ChartDataPoint) {
+  // only DataPoint is currently supported for drilldown
+  if ('categoryDisplayValue' in point) {
+    return `${point.categoryDisplayValue}`;
+  } else if ('categoryValue' in point) {
+    return `${point.categoryValue}`;
+  } else {
+    return '';
+  }
+}
+
+export function getMemberNameFromDataPoint(point: ChartDataPoint) {
+  // only DataPoint is currently supported for drilldown
+  if ('categoryValue' in point) {
+    return `${point.categoryValue}`;
+  } else {
+    return '';
+  }
+}

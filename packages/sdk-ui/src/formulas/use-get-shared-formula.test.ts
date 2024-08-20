@@ -63,6 +63,7 @@ describe('useGetSharedFormula', () => {
     });
     fetchFormulaMock.mockImplementation(() => Promise.resolve(calculatedMeasureMock));
     fetchFormulaByOidMock.mockImplementation(() => Promise.resolve(calculatedMeasureMock));
+    trackProductEventMock.mockClear();
   });
   it('should trow an error if no identifier provided', () => {
     try {

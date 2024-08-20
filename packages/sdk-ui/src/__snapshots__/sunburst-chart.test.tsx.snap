@@ -100,97 +100,31 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
           "name": "Quantity",
         },
         {
-          "color": "#00cee6",
+          "color": "rgb(10.196% 90.588% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 1,
             "levelsCount": 1,
             "rawValue": undefined,
-            "value": 8103,
+            "value": 936,
             "xCompareValue": [
-              1230768000000,
+              1514764800000,
             ],
             "xDisplayValue": [
-              "2009",
+              "2018",
             ],
             "xValue": [
-              "2009-01-01T00:00:00.000Z",
+              "2018-01-01T00:00:00.000Z",
             ],
           },
-          "name": "2009",
+          "name": "2018",
           "parent": "SUNBURST_ROOT_PARENT_ID",
-          "value": 8103,
+          "value": 936,
         },
         {
-          "color": "#00b9cf",
+          "color": "rgb(8.8898% 86.166% 95.225%)",
           "custom": {
-            "blur": false,
-            "level": 1,
-            "levelsCount": 1,
-            "rawValue": undefined,
-            "value": 6814,
-            "xCompareValue": [
-              1262304000000,
-            ],
-            "xDisplayValue": [
-              "2010",
-            ],
-            "xValue": [
-              "2010-01-01T00:00:00.000Z",
-            ],
-          },
-          "name": "2010",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-          "value": 6814,
-        },
-        {
-          "color": "#00a5b8",
-          "custom": {
-            "blur": false,
-            "level": 1,
-            "levelsCount": 1,
-            "rawValue": undefined,
-            "value": 3056,
-            "xCompareValue": [
-              1293840000000,
-            ],
-            "xDisplayValue": [
-              "2011",
-            ],
-            "xValue": [
-              "2011-01-01T00:00:00.000Z",
-            ],
-          },
-          "name": "2011",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-          "value": 3056,
-        },
-        {
-          "color": "#0090a1",
-          "custom": {
-            "blur": false,
-            "level": 1,
-            "levelsCount": 1,
-            "rawValue": undefined,
-            "value": 8423,
-            "xCompareValue": [
-              1325376000000,
-            ],
-            "xDisplayValue": [
-              "2012",
-            ],
-            "xValue": [
-              "2012-01-01T00:00:00.000Z",
-            ],
-          },
-          "name": "2012",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-          "value": 8423,
-        },
-        {
-          "color": "#007c8a",
-          "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 1,
             "levelsCount": 1,
             "rawValue": undefined,
@@ -210,9 +144,9 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
           "value": 2045,
         },
         {
-          "color": "#006773",
+          "color": "rgb(7.5634% 81.786% 90.495%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 1,
             "levelsCount": 1,
             "rawValue": undefined,
@@ -232,31 +166,31 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
           "value": 3010,
         },
         {
-          "color": "#00525c",
+          "color": "rgb(6.2054% 77.449% 85.811%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 1,
             "levelsCount": 1,
             "rawValue": undefined,
-            "value": 5447,
+            "value": 3056,
             "xCompareValue": [
-              1420070400000,
+              1293840000000,
             ],
             "xDisplayValue": [
-              "2015",
+              "2011",
             ],
             "xValue": [
-              "2015-01-01T00:00:00.000Z",
+              "2011-01-01T00:00:00.000Z",
             ],
           },
-          "name": "2015",
+          "name": "2011",
           "parent": "SUNBURST_ROOT_PARENT_ID",
-          "value": 5447,
+          "value": 3056,
         },
         {
-          "color": "#003e45",
+          "color": "rgb(4.797% 73.157% 81.175%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 1,
             "levelsCount": 1,
             "rawValue": undefined,
@@ -276,26 +210,92 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
           "value": 4242,
         },
         {
-          "color": "#00292e",
+          "color": "rgb(3.3319% 68.912% 76.588%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 1,
             "levelsCount": 1,
             "rawValue": undefined,
-            "value": 936,
+            "value": 5447,
             "xCompareValue": [
-              1514764800000,
+              1420070400000,
             ],
             "xDisplayValue": [
-              "2018",
+              "2015",
             ],
             "xValue": [
-              "2018-01-01T00:00:00.000Z",
+              "2015-01-01T00:00:00.000Z",
             ],
           },
-          "name": "2018",
+          "name": "2015",
           "parent": "SUNBURST_ROOT_PARENT_ID",
-          "value": 936,
+          "value": 5447,
+        },
+        {
+          "color": "rgb(2.0254% 64.715% 72.051%)",
+          "custom": {
+            "blur": undefined,
+            "level": 1,
+            "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 6814,
+            "xCompareValue": [
+              1262304000000,
+            ],
+            "xDisplayValue": [
+              "2010",
+            ],
+            "xValue": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2010",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 6814,
+        },
+        {
+          "color": "rgb(0.9193% 60.567% 67.567%)",
+          "custom": {
+            "blur": undefined,
+            "level": 1,
+            "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 8103,
+            "xCompareValue": [
+              1230768000000,
+            ],
+            "xDisplayValue": [
+              "2009",
+            ],
+            "xValue": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2009",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 8103,
+        },
+        {
+          "color": "rgb(0% 56.471% 63.137%)",
+          "custom": {
+            "blur": undefined,
+            "level": 1,
+            "levelsCount": 1,
+            "rawValue": undefined,
+            "value": 8423,
+            "xCompareValue": [
+              1325376000000,
+            ],
+            "xDisplayValue": [
+              "2012",
+            ],
+            "xValue": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+          },
+          "name": "2012",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+          "value": 8423,
         },
       ],
       "dataLabels": {
@@ -314,8 +314,8 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
           },
           "level": 1,
           "levelSize": {
-            "unit": "pixels",
-            "value": 60,
+            "unit": "percentage",
+            "value": 80,
           },
         },
         {
@@ -328,6 +328,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
       ],
       "name": "Root",
       "showInLegend": false,
+      "turboThreshold": 2000,
       "type": "sunburst",
     },
     {
@@ -463,99 +464,108 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "name": "Quantity",
         },
         {
-          "color": "#00cee6",
+          "color": "rgb(10.196% 90.588% 100%)",
           "custom": {
             "level": 1,
             "levelsCount": 2,
-          },
-          "id": "2009-01-01T00:00:00.000Z",
-          "name": "2009",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00b9cf",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2010-01-01T00:00:00.000Z",
-          "name": "2010",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00a5b8",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2011-01-01T00:00:00.000Z",
-          "name": "2011",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#0090a1",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2012-01-01T00:00:00.000Z",
-          "name": "2012",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#007c8a",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2013-01-01T00:00:00.000Z",
-          "name": "2013",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#006773",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2014-01-01T00:00:00.000Z",
-          "name": "2014",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00525c",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2015-01-01T00:00:00.000Z",
-          "name": "2015",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#003e45",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2016-01-01T00:00:00.000Z",
-          "name": "2016",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00292e",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
+            "subtotalValue": 936,
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",
           "parent": "SUNBURST_ROOT_PARENT_ID",
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(8.8898% 86.166% 95.225%)",
           "custom": {
-            "blur": false,
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 2045,
+          },
+          "id": "2013-01-01T00:00:00.000Z",
+          "name": "2013",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(7.5634% 81.786% 90.495%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 3010,
+          },
+          "id": "2014-01-01T00:00:00.000Z",
+          "name": "2014",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(6.2054% 77.449% 85.811%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 3056,
+          },
+          "id": "2011-01-01T00:00:00.000Z",
+          "name": "2011",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(4.797% 73.157% 81.175%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 4242,
+          },
+          "id": "2016-01-01T00:00:00.000Z",
+          "name": "2016",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(3.3319% 68.912% 76.588%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 5447,
+          },
+          "id": "2015-01-01T00:00:00.000Z",
+          "name": "2015",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(2.0254% 64.715% 72.051%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 6814,
+          },
+          "id": "2010-01-01T00:00:00.000Z",
+          "name": "2010",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(0.9193% 60.567% 67.567%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 8103,
+          },
+          "id": "2009-01-01T00:00:00.000Z",
+          "name": "2009",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(0% 56.471% 63.137%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 8423,
+          },
+          "id": "2012-01-01T00:00:00.000Z",
+          "name": "2012",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(42.353% 42.353% 59.216%)",
+          "custom": {
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -578,9 +588,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 8103,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(42.353% 42.353% 59.216%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -603,9 +613,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 6814,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -628,9 +638,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 3056,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -653,9 +663,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 8423,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(42.353% 42.353% 59.216%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -678,9 +688,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 2045,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -703,9 +713,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 3010,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(42.353% 42.353% 59.216%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -728,9 +738,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 5447,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -753,9 +763,9 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "value": 4242,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -794,8 +804,8 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           },
           "level": 1,
           "levelSize": {
-            "unit": "pixels",
-            "value": 60,
+            "unit": "percentage",
+            "value": 70,
           },
         },
         {
@@ -815,6 +825,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
       ],
       "name": "Root",
       "showInLegend": false,
+      "turboThreshold": 2000,
       "type": "sunburst",
     },
     {
@@ -961,99 +972,108 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "name": "Quantity",
         },
         {
-          "color": "#00cee6",
+          "color": "rgb(10.196% 90.588% 100%)",
           "custom": {
             "level": 1,
             "levelsCount": 2,
-          },
-          "id": "2009-01-01T00:00:00.000Z",
-          "name": "2009",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00b9cf",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2010-01-01T00:00:00.000Z",
-          "name": "2010",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00a5b8",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2011-01-01T00:00:00.000Z",
-          "name": "2011",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#0090a1",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2012-01-01T00:00:00.000Z",
-          "name": "2012",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#007c8a",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2013-01-01T00:00:00.000Z",
-          "name": "2013",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#006773",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2014-01-01T00:00:00.000Z",
-          "name": "2014",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00525c",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2015-01-01T00:00:00.000Z",
-          "name": "2015",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#003e45",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
-          },
-          "id": "2016-01-01T00:00:00.000Z",
-          "name": "2016",
-          "parent": "SUNBURST_ROOT_PARENT_ID",
-        },
-        {
-          "color": "#00292e",
-          "custom": {
-            "level": 1,
-            "levelsCount": 2,
+            "subtotalValue": 936,
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",
           "parent": "SUNBURST_ROOT_PARENT_ID",
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(8.8898% 86.166% 95.225%)",
           "custom": {
-            "blur": false,
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 2045,
+          },
+          "id": "2013-01-01T00:00:00.000Z",
+          "name": "2013",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(7.5634% 81.786% 90.495%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 3010,
+          },
+          "id": "2014-01-01T00:00:00.000Z",
+          "name": "2014",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(6.2054% 77.449% 85.811%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 3056,
+          },
+          "id": "2011-01-01T00:00:00.000Z",
+          "name": "2011",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(4.797% 73.157% 81.175%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 4242,
+          },
+          "id": "2016-01-01T00:00:00.000Z",
+          "name": "2016",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(3.3319% 68.912% 76.588%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 5447,
+          },
+          "id": "2015-01-01T00:00:00.000Z",
+          "name": "2015",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(2.0254% 64.715% 72.051%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 6814,
+          },
+          "id": "2010-01-01T00:00:00.000Z",
+          "name": "2010",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(0.9193% 60.567% 67.567%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 8103,
+          },
+          "id": "2009-01-01T00:00:00.000Z",
+          "name": "2009",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(0% 56.471% 63.137%)",
+          "custom": {
+            "level": 1,
+            "levelsCount": 2,
+            "subtotalValue": 8423,
+          },
+          "id": "2012-01-01T00:00:00.000Z",
+          "name": "2012",
+          "parent": "SUNBURST_ROOT_PARENT_ID",
+        },
+        {
+          "color": "rgb(42.353% 42.353% 59.216%)",
+          "custom": {
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1076,9 +1096,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 8103,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(42.353% 42.353% 59.216%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1101,9 +1121,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 6814,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1126,9 +1146,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 3056,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1151,9 +1171,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 8423,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(42.353% 42.353% 59.216%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1176,9 +1196,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 2045,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1201,9 +1221,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 3010,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(42.353% 42.353% 59.216%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1226,9 +1246,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 5447,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1251,9 +1271,9 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "value": 4242,
         },
         {
-          "color": "#9b9bd7",
+          "color": "rgb(77.647% 77.647% 100%)",
           "custom": {
-            "blur": false,
+            "blur": undefined,
             "level": 2,
             "levelsCount": 2,
             "rawValue": undefined,
@@ -1292,8 +1312,8 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           },
           "level": 1,
           "levelSize": {
-            "unit": "pixels",
-            "value": 60,
+            "unit": "percentage",
+            "value": 70,
           },
         },
         {
@@ -1313,6 +1333,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
       ],
       "name": "Root",
       "showInLegend": false,
+      "turboThreshold": 2000,
       "type": "sunburst",
     },
     {

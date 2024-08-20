@@ -21,7 +21,11 @@ describe('DashboardWidget', () => {
     expect.assertions(1);
 
     const { getByText } = render(
-      <SisenseContextProvider url={mockUrl} token={mockToken} enableTracking={false}>
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
         <DashboardWidget widgetOid={mockWidgetId} dashboardOid={mockDashboardId} />
       </SisenseContextProvider>,
     );

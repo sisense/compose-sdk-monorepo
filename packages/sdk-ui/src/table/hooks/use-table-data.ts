@@ -56,7 +56,7 @@ export const useTableData = ({
   const [isLoading, setIsLoading] = useState(false);
   const isMoreDataAvailable = useRef(true);
   const { isInitialized, app } = useSisenseContext();
-  const [dataOptions, setDataOptions] = useState<TableDataOptionsInternal | null>(null);
+  const [dataOptions, setDataOptions] = useState(originalDataOptions);
 
   useEffect(() => {
     let ignore = false;

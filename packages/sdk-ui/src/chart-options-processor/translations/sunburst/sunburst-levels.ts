@@ -7,6 +7,13 @@ import { SunburstChartDesignOptions } from '../design-options';
 import { getDarkFactor, toColor } from '../../../utils/color';
 import { CompleteThemeSettings } from '../../../types';
 
+const ROOT_LEVEL_SIZE_PER_CATEGORIES = Object.freeze({
+  1: 80,
+  2: 70,
+  3: 60,
+  4: 50,
+});
+
 export function prepareSunburstLevels(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
@@ -28,7 +35,9 @@ export function prepareSunburstLevels(
 
         return `
         <div style="text-align: center; transform: translateY(calc(-50% + 15px))">
-          <div style="color: ${themeSettings?.chart?.secondaryTextColor ?? '#9EA2AB'}">${
+          <div style="color: ${
+            themeSettings?.chart?.secondaryTextColor ?? '#9EA2AB'
+          }; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 18px">${
           this.point.name
         }</div>
           ${tooltipSeparator()}
@@ -43,8 +52,8 @@ export function prepareSunburstLevels(
       },
     },
     levelSize: {
-      unit: 'pixels',
-      value: 60,
+      unit: 'percentage',
+      value: ROOT_LEVEL_SIZE_PER_CATEGORIES[dataOptions.breakBy.length] || 50,
     },
   };
 

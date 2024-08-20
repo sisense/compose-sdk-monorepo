@@ -1,7 +1,8 @@
-import { TrackingDetails, trackProductEvent } from '@sisense/sdk-tracking';
+import { TrackingEventDetails, trackProductEvent } from '@sisense/sdk-tracking';
 import { useEffect, useRef } from 'react';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 import { ClientApplication } from '../../app/client-application';
+import { useTracking } from '@/common/hooks/use-tracking';
 
 export type HookDecorator<DecoratorConfig> = (
   decoratorConfig: DecoratorConfig,
@@ -9,7 +10,7 @@ export type HookDecorator<DecoratorConfig> = (
   hook: (...args: HookArgs) => HookResult,
 ) => (...args: HookArgs) => HookResult;
 
-interface HookEventDetails extends TrackingDetails {
+interface HookEventDetails extends TrackingEventDetails {
   hookName: string;
 }
 
@@ -40,22 +41,24 @@ export const trackHook = (
 };
 
 function useTrackHook(hookName: string) {
-  const { app, tracking } = useSisenseContext();
+  const { tracking } = useSisenseContext();
+  const { trackEvent } = useTracking();
 
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (app?.httpClient && !hasTrackedRef.current) {
+    if (!tracking) return;
+    if (!hasTrackedRef.current) {
       const payload: HookEventDetails = {
-        packageName: tracking.packageName,
+        packageName: tracking.packageName || 'sdk-ui',
         packageVersion: __PACKAGE_VERSION__,
         hookName,
       };
-      void trackProductEvent(action, payload, app.httpClient, !tracking.enabled).finally(
+      void trackEvent(action, payload, !tracking.enabled).finally(
         () => (hasTrackedRef.current = true),
       );
     }
-  }, [app, tracking, hookName]);
+  }, [tracking, hookName, trackEvent]);
 }
 
 export const withTracking: HookDecorator<string> =

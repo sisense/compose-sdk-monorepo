@@ -6,6 +6,8 @@ title: Fusion Embed
 
 Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
 
+- [DashboardByIdComponent](class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+- [DashboardComponent](class.DashboardComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
 - [DashboardModel](class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />

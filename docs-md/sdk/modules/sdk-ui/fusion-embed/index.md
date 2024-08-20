@@ -6,6 +6,8 @@ title: Fusion Embed
 
 React components and hooks for working with Fusion Embed dashboards, widgets, queries, and formulas
 
+- [Dashboard](function.Dashboard.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+- [DashboardById](function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
 - [DashboardModel](class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [ExecuteQueryByWidgetId](function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />

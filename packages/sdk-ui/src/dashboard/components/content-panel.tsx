@@ -11,24 +11,28 @@ import { TableWidget } from '@/widgets/table-widget';
 import styled from '@emotion/styled';
 import { PluginService } from './plugin-service';
 
-const DIVIDER_COLOR = '#f2f2f2';
-const DIVIDER_WIDTH = 4;
-
 const Row = styled.div<{ widths: number[] }>`
   display: grid;
   grid-template-columns: ${({ widths }) => widths.map((w) => `${w}%`).join(' ')};
 `;
 
-const Column = styled.div`
+const Column = styled.div<{
+  dividerWidth: number;
+  dividerColor: string;
+}>`
   &:not(:first-of-type) {
-    border-left: ${getDividerStyle(DIVIDER_COLOR, DIVIDER_WIDTH)};
+    border-left: ${({ dividerWidth, dividerColor }) => getDividerStyle(dividerColor, dividerWidth)};
   }
 `;
 
-const Subcell = styled.div<{ height: string | number }>`
-  border-bottom: ${getDividerStyle(DIVIDER_COLOR, DIVIDER_WIDTH)};
+const Subcell = styled.div<{
+  height: string | number;
+  dividerWidth: number;
+  dividerColor: string;
+}>`
+  border-bottom: ${({ dividerWidth, dividerColor }) => getDividerStyle(dividerColor, dividerWidth)};
   &:not(:first-of-type) {
-    border-left: ${getDividerStyle(DIVIDER_COLOR, DIVIDER_WIDTH)};
+    border-left: ${({ dividerWidth, dividerColor }) => getDividerStyle(dividerColor, dividerWidth)};
   }
   height: ${({ height }) => `calc(${height} + 32px)`};
 `;
@@ -78,7 +82,7 @@ const renderWidgetModel = (w: WidgetModel | undefined, theme: CompleteThemeSetti
   } else if (isPivotWidget(w.widgetType)) {
     return <PivotTableWidget {...(chartProps as PivotTableWidgetProps)} />;
   } else {
-    return <ChartWidget {...(chartProps as ChartWidgetProps)} />;
+    return <ChartWidget {...(chartProps as ChartWidgetProps)} highlightSelectionDisabled={true} />;
   }
 };
 
@@ -128,7 +132,11 @@ export const ContentPanel = ({ layout, widgets }: ContentPanelProps) => {
   return (
     <Row widths={layout.columns.map((c) => c.widthPercentage)}>
       {layout.columns.map((column, columnIndex) => (
-        <Column key={columnIndex}>
+        <Column
+          key={columnIndex}
+          dividerWidth={themeSettings.dashboard.dividerLineWidth}
+          dividerColor={themeSettings.dashboard.dividerLineColor}
+        >
           {column.rows?.map((row, cellIndex) => (
             <Row
               key={`${columnIndex},${cellIndex}`}
@@ -138,6 +146,8 @@ export const ContentPanel = ({ layout, widgets }: ContentPanelProps) => {
                 <Subcell
                   key={`${subcell.widgetId},${subcell.widthPercentage}`}
                   height={subcell.height}
+                  dividerWidth={themeSettings.dashboard.dividerLineWidth}
+                  dividerColor={themeSettings.dashboard.dividerLineColor}
                 >
                   {renderWidgetModel(
                     widgets.find((w) => w.oid === subcell.widgetId),

@@ -96,6 +96,7 @@ export interface WidgetDto {
   metadata: {
     ignore?: FiltersIgnoringRules;
     panels: Panel[];
+    drillHistory?: PanelItem[];
   };
   style: WidgetStyle;
   title: string;
@@ -103,6 +104,7 @@ export interface WidgetDto {
   options?: {
     dashboardFiltersMode: `${WidgetDashboardFilterMode}`;
     selector: boolean;
+    drillToAnywhere?: boolean;
   };
 }
 
@@ -177,6 +179,7 @@ export type PanelItem = {
     subtotal?: boolean;
     databars?: boolean;
     width?: number;
+    colorIndex?: number;
   };
   jaql: Jaql;
   disabled?: boolean;

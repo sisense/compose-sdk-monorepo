@@ -11,18 +11,26 @@ import { usePrevious } from './use-previous';
  */
 export function useHasChanged<T>(
   value: T,
-  propNames: Array<keyof T>,
+  propNames?: Array<keyof T>,
   compare?: (value: T, prev: T) => boolean,
 ) {
   const prev = usePrevious(value);
-  if (!prev) {
+  // compare primitive values and functions directly
+  if (!(typeof value === 'object') && value === prev) {
+    return false;
+  }
+
+  if (prev === null || prev === undefined) {
     return true;
   }
 
-  const changed = propNames.some(
-    // eslint-disable-next-line security/detect-object-injection
-    (paramName) => !isEqual(prev[paramName], value[paramName]),
-  );
+  const changed = propNames
+    ? propNames.some(
+        // eslint-disable-next-line security/detect-object-injection
+        (paramName) => !isEqual(prev[paramName], value[paramName]),
+      )
+    : !isEqual(prev, value);
+
   if (changed) {
     return true;
   }
