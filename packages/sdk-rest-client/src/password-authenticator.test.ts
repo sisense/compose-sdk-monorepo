@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { isPasswordAuthenticator, PasswordAuthenticator } from './password-authenticator.js';
 
 describe('PasswordAuthenticator', () => {
@@ -55,7 +52,10 @@ describe('PasswordAuthenticator', () => {
     expect(auth.isAuthenticating()).toBe(false);
   });
 
-  it('should throw an error and return false when authentication fails', async () => {
+  // while this test exists, it will never happen when PasswordAuthenticator
+  // is used in HttpClient because the interceptor will intercept and throw an error,
+  // rather than allowing the 401 response to go through.
+  it('should return false when authentication fails', async () => {
     const response = {
       ok: false,
       status: 401,
@@ -70,6 +70,13 @@ describe('PasswordAuthenticator', () => {
 
     expect(result).toBe(false);
     expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  // this test is more realistic because when authentication fails,
+  // the interceptor will throw an error
+  it('should throw an error when authentication call throws an error', async () => {
+    global.fetch = vi.fn().mockRejectedValue(new Error('Error returned by interceptor'));
+    await expect(auth.authenticate()).rejects.toThrowError(Error);
   });
 
   it('should run type guard correctly', () => {

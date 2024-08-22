@@ -3,6 +3,7 @@
 import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
+import { TranslatableError } from './translation/translatable-error.js';
 
 interface WebSessionTokenResponse {
   webSessionToken: string;
@@ -49,7 +50,9 @@ export class WatAuthenticator extends BaseAuthenticator {
         this._resolve(true);
       }
     } catch (e: unknown) {
-      // empty catch block
+      // rather than returning empty catch block
+      // throw an error to be caught by Sisense context provider
+      throw new TranslatableError('errors.tokenAuthFailed');
     } finally {
       this._resolve(false);
       this._authenticating = false;

@@ -18,6 +18,7 @@ import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-conta
 import { LoadingIndicator } from '../common/components/loading-indicator';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
 import { translateTableStyleOptionsToDesignOptions } from './translations/design-options';
+import { orderBy } from '../chart-data-processor/table-processor';
 
 export const DEFAULT_TABLE_ROWS_PER_PAGE = 25;
 
@@ -105,15 +106,32 @@ export const TableComponent = ({
     [innerDataOptions],
   );
 
+  const sortedTable = useMemo(() => {
+    if (!dataTable) {
+      return dataTable;
+    }
+    if (isDataSource(usedDataSet)) {
+      return dataTable;
+    }
+    const columnWithSorting = dataTable.columns.find((c) => c.direction !== 0);
+    if (!columnWithSorting) {
+      return dataTable;
+    }
+    return orderBy(dataTable, [columnWithSorting]);
+  }, [dataTable, usedDataSet]);
+
   const paginatedTable = useMemo(
     () =>
-      dataTable
+      sortedTable
         ? {
-            columns: dataTable.columns,
-            rows: dataTable.rows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage),
+            columns: sortedTable.columns,
+            rows: sortedTable.rows.slice(
+              (currentPage - 1) * rowsPerPage,
+              currentPage * rowsPerPage,
+            ),
           }
         : undefined,
-    [dataTable, currentPage, rowsPerPage],
+    [sortedTable, currentPage, rowsPerPage],
   );
 
   if (!updatedDataOptions) return null;

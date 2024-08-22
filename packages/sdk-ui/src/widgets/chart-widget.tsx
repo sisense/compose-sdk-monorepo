@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ReactNode, useMemo, useState, type FunctionComponent } from 'react';
+import { ReactNode, useCallback, useMemo, useState, type FunctionComponent } from 'react';
 
 import { Chart } from '../chart';
-import { ChartProps, ChartWidgetProps } from '../props';
+import { ChartProps, ChartWidgetProps, HighchartsOptions } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 import { getDataSourceName } from '@sisense/sdk-data';
@@ -54,6 +54,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     drilldownOptions,
     highlightSelectionDisabled = false,
     highlights,
+    description,
   } = props;
   const { width, height, ...styleOptionsWithoutSizing } = styleOptions || {};
   const defaultSize = getWidgetDefaultSize(chartType, {
@@ -80,6 +81,25 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     enabled: !highlightSelectionDisabled && !isDrilldownEnabled && !highlights?.length,
   });
 
+  const isAccessibilityEnabled = app?.settings.accessibilityConfig?.enabled;
+  const applyWidgetDescriptionAsAccessibilityDescription: (
+    options: HighchartsOptions,
+  ) => HighchartsOptions = useCallback(
+    (options) => {
+      if (!isAccessibilityEnabled) {
+        return options;
+      }
+      return {
+        ...options,
+        accessibility: {
+          ...options.accessibility,
+          description: description ?? options.accessibility?.description,
+        },
+      };
+    },
+    [description, isAccessibilityEnabled],
+  );
+
   if (!chartType || !dataOptions) {
     return null;
   }
@@ -98,7 +118,11 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
       props.onDataPointsSelected,
     ]),
     onBeforeRender: combineHandlers(
-      [highlightSelection.onBeforeRender, props.onBeforeRender],
+      [
+        applyWidgetDescriptionAsAccessibilityDescription,
+        highlightSelection.onBeforeRender,
+        props.onBeforeRender,
+      ],
       true,
     ),
   };
