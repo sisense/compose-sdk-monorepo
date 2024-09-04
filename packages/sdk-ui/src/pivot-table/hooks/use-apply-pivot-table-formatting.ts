@@ -5,7 +5,7 @@ import {
   EVENT_DATA_CELL_FORMAT,
   EVENT_HEADER_CELL_FORMAT,
 } from '@sisense/sdk-pivot-client';
-import over from 'lodash/over';
+import over from 'lodash-es/over';
 import { type PivotTableDataOptions } from '@/chart-data-options/types';
 import { applyDateFormat } from '@/query/date-formats';
 import { useSisenseContext } from '@/sisense-context/sisense-context';

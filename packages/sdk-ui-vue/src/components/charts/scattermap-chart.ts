@@ -23,7 +23,7 @@ import { setupHelper } from '../../setup-helper';
  * import { ref } from 'vue';
  * import { measureFactory, filterFactory } from '@sisense/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import {ScattermapChart,type ScattermapChartProps} from '@sisense/sdk-ui-vue';
+ * import { ScattermapChart,type ScattermapChartProps } from '@sisense/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');

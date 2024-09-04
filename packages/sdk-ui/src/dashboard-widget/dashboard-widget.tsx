@@ -117,6 +117,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
   }
   const filterRelations = getFilterRelationsFromJaql(
     filters,
+    highlights,
     convertFilterRelationsModelToJaql(
       fetchedDashboard?.filterRelations?.length
         ? fetchedDashboard?.filterRelations[0].filterRelations
@@ -138,7 +139,6 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
       />
     );
   }
-
   return (
     <ChartWidget
       {...(fetchedProps as ChartWidgetProps)}

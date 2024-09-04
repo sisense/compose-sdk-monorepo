@@ -1,15 +1,39 @@
 # Changelog
 
+## [1.18.0] - 2024-09-03
+
+### Added
+
+- Add auto zoom feature to `DashboardWidget`
+- Support forecast and trend in Fusion widgets
+
+### Changed
+
+- Improve `SisenseContextProvider`: support of Fusion authentication
+- Extend `measureFactory.customFormula` to support filters
+- Improve `PivotTable`: proper handling of web socket readiness
+- Fix `DashboardWidget` with filter relations and highlights
+- Improve tooltips for forecast and trend
+- Improve charts: palette colors of `BoxplotChart`, refactoring `ThemeSettings.chart.panelBackgroundColor`, making `color` column optional in `AreamapChart`, support of thousands separator from old `numberFormat` config, axis labels for stacked percent charts
+- Improve infrastructure: visual tests of dashboard assets of diffent widget types, replacement of CommonJS dependencies (e.g., lodash)
+
+## [1.17.1] - 2024-08-22
+
+### Changed
+- Improve error handling of WAT authentication
+- Fix an issue in `Table` so user-provided data are sorted in their entirety, instead of per page
+- Apply widget description as `accessibility.description` for `ChartWidget`
+
 ## [1.17.0] - 2024-08-20
 
 ### Added
 - Move components `DashboardById` and `Dashboard` to internal alpha for React, Angular, and Vue
-- Support external usage tracking in `AppConfig.trackingConfig.onTrackingEvent`
+- Support external usage tracking callback configured through `trackingConfig.onTrackingEvent` of the `AppConfig`
 - Refactor `ChartWidget` to reuse `DrilldownWidget` internally
 - Support drill down for scatter chart widgets
 
 ### Changed
-- Mark internal property `enableTracking?` as `@deprecated` in `SisenseContextProviderProps` – use `AppConfig.trackingConfig.enabled` instead
+- Deprecate internal `enableTracking` property in `SisenseContextProviderProps` – use `trackingConfig.enabled` of the `AppConfig` instead
 - Extend `ThemeSettings` to support animation-related config
 - Improve dashboard rendering: locked filters in cross filtering, resetting levels of `CascadingFilterTile`, highlight of all categories in cartesian charts, dashboard theme setting, matching theme for widget header info panel
 - Refactor component `Table` to reduce computations and re-renders

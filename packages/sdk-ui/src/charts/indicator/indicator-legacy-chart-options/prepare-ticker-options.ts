@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { defaultTickerOptions } from '@/charts/indicator/indicator-legacy-chart-options/default-options';
 import { GaugeOptions, LegacyIndicatorChartOptions } from '@/charts/indicator/types';
 

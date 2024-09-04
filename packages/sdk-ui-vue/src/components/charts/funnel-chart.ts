@@ -21,7 +21,7 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import {FunnelChart, type FunnelChartProps} from '@sisense/sdk-ui-vue';
+ * import { FunnelChart, type FunnelChartProps } from '@sisense/sdk-ui-vue';
  * import { measureFactory, filterFactory } from '@sisense/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
  *

@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { AppsNames, getAppConfig } from '../appsConfig';
-import { makeScreenshotsOverPage } from '../__test-helpers__/makeScreenshot';
+import { makeScreenshotsOverPage } from '../__test-helpers__/make-screenshot';
 
 const { url } = getAppConfig(AppsNames.REACT_DEMO);
 

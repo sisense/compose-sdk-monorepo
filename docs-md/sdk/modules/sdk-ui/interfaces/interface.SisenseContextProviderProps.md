@@ -94,6 +94,16 @@ To signify that the token is pending (e.g., being generated), set the value to `
 
 ***
 
+#### useFusionAuth
+
+> **useFusionAuth**?: `boolean`
+
+Flag to delegate authentication to Fusion.
+
+Defaults to `false`.
+
+***
+
 #### wat
 
 > **wat**?: `null` \| `string`

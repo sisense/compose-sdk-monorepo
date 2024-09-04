@@ -40,12 +40,13 @@ import { ChartType, CompleteThemeSettings } from '../types';
 import { CartesianChartDataOptionsInternal } from '../chart-data-options/types';
 import { applyNumberFormatToPlotBands, getCategoriesIndexMapAndPlotBands } from './plot-bands';
 import { HighchartsOptionsInternal } from './chart-options-service';
-import { getNavigator } from './translations/navigator';
+import { getNavigator, setInitialScrollerPosition } from './translations/navigator';
 import { isDatetime } from '@sisense/sdk-data';
 import { categoriesSliceWarning, seriesSliceWarning } from '../utils/data-limit-warning';
 import { OptionsWithAlerts } from './../types';
 import { getPaletteColor } from '../chart-data-options/coloring/utils';
 import { TFunction } from '@sisense/sdk-common';
+import { NavigatorOptions } from '@sisense/sisense-charts';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -178,6 +179,7 @@ export const getCartesianChartOptions = (
     y2AxisMinMax,
     showTotal,
     dataOptions,
+    stacking,
   );
 
   // if vertical x2 axis increase right spacing
@@ -200,6 +202,28 @@ export const getCartesianChartOptions = (
         spacing: [20, rightSpacing, 20, 20],
         alignTicks: false,
         polar: isPolarChart,
+        events: {
+          load: function () {
+            if (dataOptions.x.length === 2) return;
+            const chart = this as Highcharts.Chart;
+
+            if (chartDesignOptions.autoZoom && chartDesignOptions.autoZoom.scrollerLocation) {
+              const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
+              setInitialScrollerPosition(chart, min, max);
+            }
+            const chartWidth = chart.chartWidth;
+            const chartHeight = chart.chartHeight;
+
+            const navigator = getNavigator(
+              sisenseChartType,
+              chartDesignOptions.autoZoom.enabled,
+              chartData.xValues.length,
+              chartType === 'bar' ? chartHeight : chartWidth,
+              chartType === 'bar',
+            ) as NavigatorOptions;
+            chart.update({ navigator }, true);
+          },
+        },
       },
       xAxis: xAxisSettings,
       yAxis: yAxisSettings,
@@ -271,11 +295,6 @@ export const getCartesianChartOptions = (
           connectNulls: false,
         },
       },
-      navigator: getNavigator(
-        sisenseChartType,
-        chartDesignOptions.autoZoom,
-        chartData.xValues.length,
-      ),
       tooltip: getTooltipSettings(undefined, dataOptions, translate),
     },
   );

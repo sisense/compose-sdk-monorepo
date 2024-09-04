@@ -1,3 +1,4 @@
+import { AutoZoomNavigatorScrollerLocation } from './dashboard-widget/types';
 /* eslint-disable max-lines */
 import type { Attribute, MembersFilter } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
@@ -100,6 +101,7 @@ export type Components = {
 export type Navigator = {
   /** Boolean flag that defines if navigator should be shown on the chart */
   enabled: boolean;
+  scrollerLocation?: AutoZoomNavigatorScrollerLocation;
 };
 
 /** Configuration that defines line width */
@@ -798,7 +800,11 @@ export interface ChartThemeSettings {
   secondaryTextColor?: string;
   /** Background color */
   backgroundColor?: string;
-  /** Toolbar Background color, can be used as a secondary background color */
+  /**
+   * Toolbar Background color, can be used as a secondary background color
+   *
+   * @deprecated
+   * */
   panelBackgroundColor?: string;
   /** Animation options */
   animation?: {
@@ -1081,6 +1087,18 @@ export type DashboardThemeSettings = {
   dividerLineColor?: string;
 };
 
+/**
+ * Filter theme settings
+ */
+export type FilterThemeSettings = {
+  panel: {
+    /** Title color */
+    titleColor?: string;
+    /** Background color */
+    backgroundColor?: string;
+  };
+};
+
 /** Theme settings defining the look and feel of components. */
 export interface ThemeSettings {
   /** Chart theme settings */
@@ -1104,6 +1122,9 @@ export interface ThemeSettings {
    * @internal
    */
   dashboard?: DashboardThemeSettings;
+
+  /** Filter theme settings */
+  filter?: FilterThemeSettings;
 
   /**
    * Theme settings specific to the AI Chatbot component

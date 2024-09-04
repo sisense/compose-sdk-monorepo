@@ -3,7 +3,7 @@ import { ThemeProvider, useThemeContext } from '../../theme-provider';
 import { WidgetContainerStyleOptions } from '../../types';
 import { getShadowValue, WidgetCornerRadius, WidgetSpaceAround } from './widget-style-utils';
 import { WidgetHeader } from './widget-header';
-import get from 'lodash/get';
+import get from 'lodash-es/get';
 
 interface WidgetContainerProps {
   dataSetName?: string;

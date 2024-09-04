@@ -193,7 +193,14 @@ export class ClientApplication {
 
 type ClientApplicationParams = Pick<
   SisenseContextProviderProps,
-  'appConfig' | 'defaultDataSource' | 'url' | 'token' | 'wat' | 'ssoEnabled' | 'enableSilentPreAuth'
+  | 'appConfig'
+  | 'defaultDataSource'
+  | 'url'
+  | 'token'
+  | 'wat'
+  | 'ssoEnabled'
+  | 'enableSilentPreAuth'
+  | 'useFusionAuth'
 >;
 
 /** @internal */
@@ -205,6 +212,7 @@ export const createClientApplication = async ({
   ssoEnabled,
   appConfig,
   enableSilentPreAuth,
+  useFusionAuth,
 }: ClientApplicationParams): Promise<ClientApplication> => {
   if (url !== undefined) {
     const auth = getAuthenticator({
@@ -213,6 +221,7 @@ export const createClientApplication = async ({
       wat,
       ssoEnabled,
       enableSilentPreAuth,
+      useFusionAuth,
     });
 
     if (auth) {

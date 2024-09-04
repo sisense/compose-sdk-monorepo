@@ -28,7 +28,7 @@ import {
 import { Panel, WidgetStyle } from './types';
 import { createDataOptionsFromPanels, extractDataOptions } from './translate-widget-data-options';
 import { jaqlMock } from './__mocks__/jaql-mock';
-import { isObject } from 'lodash';
+import isObject from 'lodash-es/isObject';
 
 const styleMock = {} as WidgetStyle;
 
@@ -532,7 +532,7 @@ describe('translate widget plugin data options from pluginPanels', () => {
       const dataOptions: any = createDataOptionsFromPanels(panels, ['red', 'blue', 'green']);
       verifyColumn(dataOptions.categories[0], panels[0].items[0]);
       verifyColumn(dataOptions.values[0], panels[1].items[0]);
-      verifyColumn(dataOptions['break by'][0], panels[2].items[0]);
+      verifyColumn(dataOptions.breakBy[0], panels[2].items[0]);
     });
   });
 });

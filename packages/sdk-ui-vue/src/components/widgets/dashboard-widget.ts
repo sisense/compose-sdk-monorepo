@@ -23,7 +23,7 @@ import type { ChartWidget } from './chart-widget';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import {DashboardWidget} from '@sisense/sdk-ui-vue';
+ * import { DashboardWidget } from '@sisense/sdk-ui-vue';
  *
  * </script>
  * ```

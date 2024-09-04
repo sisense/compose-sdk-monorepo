@@ -1,7 +1,7 @@
 import { isCascadingFilter } from '@/utils/filters';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { filterFactory, CascadingFilter, Filter } from '@sisense/sdk-data';
-import omit from 'lodash/omit';
+import omit from 'lodash-es/omit';
 import {
   flattenCascadingFilters,
   reassembleCascadingFilters,

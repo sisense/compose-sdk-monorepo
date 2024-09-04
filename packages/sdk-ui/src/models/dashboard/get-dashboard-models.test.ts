@@ -10,7 +10,7 @@ import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboar
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
 import { samplePivotDashboard } from '../__mocks__/sample-pivot-dashboard.js';
 import { WidgetModel } from '../widget/widget-model.js';
-import zipObject from 'lodash/zipObject';
+import zipObject from 'lodash-es/zipObject';
 
 const dashboardsMock: DashboardDto[] = [
   sampleEcommerceDashboard,

@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
-import isEqualWith from 'lodash/isEqualWith';
-import isFunction from 'lodash/isFunction';
-import cloneDeep from 'lodash/cloneDeep';
+import isEqualWith from 'lodash-es/isEqualWith';
+import isFunction from 'lodash-es/isFunction';
+import cloneDeep from 'lodash-es/cloneDeep';
 import Highcharts from '@sisense/sisense-charts';
 import HighchartsReact from 'highcharts-react-official';
 import { HighchartsEventOptions } from './chart-options-processor/apply-event-handlers';

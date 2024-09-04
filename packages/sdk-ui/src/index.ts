@@ -79,6 +79,7 @@ export {
   type CommonFiltersApplyMode,
   type FiltersIgnoringRules,
 } from './models';
+export type { AutoZoomNavigatorScrollerLocation } from './dashboard-widget/types';
 export { boxWhiskerProcessResult } from './boxplot-utils';
 export { queryStateReducer } from './query-execution/query-state-reducer';
 
@@ -90,6 +91,9 @@ export * from './formulas';
 export { trackHook } from './decorators/hook-decorators';
 export * from './common/hooks/data-load-state-reducer';
 export { createDataOptionsFromPanels } from './dashboard-widget/translate-widget-data-options';
+export { type DashboardDto } from './api/types/dashboard-dto';
+export { type WidgetDto } from './dashboard-widget/types';
+export { extractCombinedFilters } from './dashboard-widget/translate-dashboard-filters';
 export { useThemeContext } from './theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
 export { LoadingOverlay } from './common/components/loading-overlay';

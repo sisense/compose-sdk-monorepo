@@ -10,8 +10,8 @@ import {
   isScattermap,
 } from '@/chart-options-processor/translations/types';
 import { Column, Attribute, Filter } from '@sisense/sdk-data';
-import uniq from 'lodash/uniq';
-import isUndefined from 'lodash/isUndefined';
+import uniq from 'lodash-es/uniq';
+import isUndefined from 'lodash-es/isUndefined';
 import {
   AreamapChartDataOptions,
   AreamapDataPoint,

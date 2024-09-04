@@ -1,4 +1,4 @@
-import trim from 'lodash/trim';
+import trim from 'lodash-es/trim';
 import { ScattermapLocationLevel } from '@/chart-data-options/types';
 import { ScattermapDataPoint } from '@/types';
 import { ScattermapChartLocation } from '@/chart-data/types';

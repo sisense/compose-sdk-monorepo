@@ -19,14 +19,15 @@ export const LoadingIndicator = ({
   const backgroundColor = themeSettings?.chart.backgroundColor
     ? { backgroundColor: themeSettings.chart.backgroundColor }
     : undefined;
-  const panelBackgroundColor = themeSettings?.chart.panelBackgroundColor
-    ? { backgroundColor: themeSettings.chart.panelBackgroundColor }
-    : undefined;
 
   return (
-    <div style={backgroundColor} className="csdk-h-full csdk-bg-white csdk-p-[20px]">
+    <div
+      style={backgroundColor}
+      className="csdk-h-full csdk-bg-white csdk-p-[20px]"
+      aria-label="csdk-loading-indicator"
+    >
       <div
-        style={panelBackgroundColor}
+        style={backgroundColor}
         className="csdk-h-full csdk-bg-background-priority csdk-flex csdk-flex-col csdk-gap-y-4 csdk-items-center csdk-justify-center"
       >
         <LoadingDots color={themeSettings?.chart.textColor} />

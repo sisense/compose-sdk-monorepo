@@ -15,6 +15,7 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
     },
     "backgroundColor": "#FFFFFF",
     "events": {
+      "load": [Function],
       "selection": [Function],
     },
     "polar": false,
@@ -67,9 +68,6 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "boxplot": {
@@ -361,6 +359,7 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
     },
     "backgroundColor": "#FFFFFF",
     "events": {
+      "load": [Function],
       "selection": [Function],
     },
     "polar": false,
@@ -413,9 +412,6 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "boxplot": {

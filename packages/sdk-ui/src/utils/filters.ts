@@ -6,7 +6,7 @@ import {
   filterFactory,
   MembersFilter,
 } from '@sisense/sdk-data';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 
 export function isCascadingFilter(filter: Filter): filter is CascadingFilter {
   return filter instanceof CascadingFilter;

@@ -7,7 +7,7 @@ import {
   MeasureColumn,
   isDatetime,
 } from '@sisense/sdk-data';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash-es/isEmpty';
 import {
   Category,
   Value,

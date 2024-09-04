@@ -6,14 +6,11 @@ export const useThemeForBreadcrumbs = () => {
     themeSettings: {
       typography: { primaryTextColor, secondaryTextColor, fontFamily },
       general: { backgroundColor, brandColor, primaryButtonTextColor },
-      chart: { backgroundColor: chartBackgroundColor, panelBackgroundColor },
+      chart: { backgroundColor: chartBackgroundColor },
     },
   } = useThemeContext();
-  const activeDrillBackgroundColor: string =
-    panelBackgroundColor != chartBackgroundColor
-      ? panelBackgroundColor
-      : darken(panelBackgroundColor, 0.3);
-  const activeDrillHoverBackgroundColor = darken(activeDrillBackgroundColor, 0.1);
+  const activeDrillBackgroundColor: string = darken(chartBackgroundColor, 0.02);
+  const activeDrillHoverBackgroundColor = darken(activeDrillBackgroundColor, 0.05);
   return {
     primaryTextColor,
     secondaryTextColor,

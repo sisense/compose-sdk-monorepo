@@ -63,7 +63,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  *   };
  * }
  * ```
- * <img src="media://angular-date-range-filter-tile-example.png" width="800px" />
+ * <img src="media://angular-date-range-filter-tile-example.png" width="600px" />
  *
  * @group Filter Tiles
  */

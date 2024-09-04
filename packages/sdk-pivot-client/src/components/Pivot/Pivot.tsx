@@ -1,6 +1,6 @@
 import * as React from 'react';
 import cn from 'classnames';
-import debounce from 'lodash/debounce.js';
+import debounce from 'lodash-es/debounce.js';
 import { PivotTable, DimensionsProps } from '../PivotTable/PivotTable.js';
 import { PaginationOptions, PaginationPanel } from '../PaginationPanel';
 import { debug, createCallbackMemoizer, getChangedProps } from '../../utils/index.js';

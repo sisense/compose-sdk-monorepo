@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import flow from 'lodash/flow';
+import flow from 'lodash-es/flow';
 import { withTracking } from './with-tracking';
 import { withErrorBoundary } from './with-error-boundary';
 import { withSisenseContextValidation } from './with-sisense-context-validation';

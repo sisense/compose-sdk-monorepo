@@ -18,7 +18,9 @@ whose lengths are proportional to the values that they represent.
      (dataPointClick)="logArguments($event)"
      (dataPointContextMenu)="logArguments($event)"
      (dataPointsSelect)="logArguments($event)"
-   /> * ```
+   />
+```
+
 ```ts
 import { Component } from '@angular/core';
 import { measureFactory, filterFactory } from '@sisense/sdk-data';

@@ -33,7 +33,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useGetDashboardModels } from './composables/useGetDashboardModels';
+ * import { useGetDashboardModels } from '@sisense/sdk-ui-vue';
  *
  * const params = ref({
  *   // Define your parameters here, such as pagination settings, filters, etc.

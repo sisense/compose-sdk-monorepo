@@ -6,8 +6,8 @@ import {
   FilterRelationsJaqlIdNode,
   FilterRelationsJaqlNode,
 } from '@sisense/sdk-data';
-import isEqual from 'lodash/isEqual';
-import isEqualWith from 'lodash/isEqualWith';
+import isEqual from 'lodash-es/isEqual';
+import isEqualWith from 'lodash-es/isEqualWith';
 
 /**
  * Checks if the filters have changed by deep comparison.

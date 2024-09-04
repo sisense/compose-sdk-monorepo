@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { type Filter } from '@sisense/sdk-data';
 import { mergeFilters } from '@/dashboard-widget/utils';
 import { ChartDataOptions, WidgetModel } from '../index.js';

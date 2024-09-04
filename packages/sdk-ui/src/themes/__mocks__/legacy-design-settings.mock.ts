@@ -60,7 +60,7 @@ export const redThemeSettings: CompleteThemeSettings = {
     textColor: '#FFFFFF',
     backgroundColor: '#ec4646',
     secondaryTextColor: '#C5C8CF',
-    panelBackgroundColor: '#313138',
+    panelBackgroundColor: '#ec4646',
     animation: {
       init: {
         duration: 'auto',
@@ -102,6 +102,12 @@ export const redThemeSettings: CompleteThemeSettings = {
     backgroundColor: '#313138',
     dividerLineColor: '#F2F2F2',
     dividerLineWidth: 4,
+  },
+  filter: {
+    panel: {
+      backgroundColor: '#313138',
+      titleColor: '#FFFFFF',
+    },
   },
   aiChat: {
     backgroundColor: 'rgba(244, 244, 248, 1)',

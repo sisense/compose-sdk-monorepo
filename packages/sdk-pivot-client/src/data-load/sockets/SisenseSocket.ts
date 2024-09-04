@@ -7,6 +7,10 @@ export class SisenseSocket implements SocketI {
     @private */
   socket: SocketIOClient.Socket;
 
+  private isRegistered = false;
+
+  private isListening = false;
+
   /**
     @private */
   onMessageCallback?: (type: string, data: any) => void;
@@ -14,9 +18,23 @@ export class SisenseSocket implements SocketI {
   constructor(data: string | SocketIOClient.Socket, query: SocketQueryOptions) {
     if (typeof data === 'string') {
       this.socket = SisenseSocket.createNewSocket(data, query);
+      this.subcribeOnSocketReadiness();
     } else {
       this.socket = data;
     }
+  }
+
+  /**
+   * Subscribes on socket readiness events
+   */
+  subcribeOnSocketReadiness() {
+    this.socket.on('register', () => {
+      this.isRegistered = true;
+    });
+
+    this.socket.on('listen', () => {
+      this.isListening = true;
+    });
   }
 
   /**
@@ -26,7 +44,7 @@ export class SisenseSocket implements SocketI {
    */
   isReady(): boolean {
     // return this.socket.registeredInSisense;
-    return this.socket.connected;
+    return this.isRegistered && this.isListening;
   }
 
   /**
@@ -130,8 +148,6 @@ export class SisenseSocket implements SocketI {
     socket.on('register', () => {
       socket.emit('{"eventName": "_registerEvent", "data": "pivot2"}');
       // socket.registeredInSisense = true;
-
-      socket.connected = true;
     });
 
     socket.on('error', (err: Error) => {

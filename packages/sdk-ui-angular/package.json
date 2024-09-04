@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.17.1",
+  "version": "1.18.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "dist",

@@ -10,7 +10,7 @@ import { ChartRecommendations, deriveChartFamily } from '../../ai';
 import { AggregationTypes, DimensionalBaseMeasure } from '@sisense/sdk-data';
 import { capitalizeFirstLetter, sanitizeDimensionId, validateQueryModel } from './utils';
 // .js is required for lodash import
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { QUERY_TEMPLATE } from './query-templates';
 import { populatePlaceholders } from './generate-code';
 

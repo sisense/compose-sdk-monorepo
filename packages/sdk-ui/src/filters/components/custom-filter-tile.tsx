@@ -1,6 +1,6 @@
 import { Filter } from '@sisense/sdk-data';
 import { FilterTile, FilterTileDesignOptions } from './filter-tile';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { useTranslation } from 'react-i18next';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 

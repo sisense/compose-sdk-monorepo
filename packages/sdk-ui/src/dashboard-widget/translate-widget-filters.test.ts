@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { MetadataTypes } from '@sisense/sdk-data';
-import { extractFilters } from './translate-widget-filters';
+import { extractWidgetFilters } from './translate-widget-filters';
 import { Panel } from './types';
 
 describe('extractFilters', () => {
@@ -26,7 +26,7 @@ describe('extractFilters', () => {
       },
     ] as Panel[];
 
-    const filters = extractFilters(panels);
+    const filters = extractWidgetFilters(panels);
 
     expect(filters).toHaveLength(1);
     expect(filters[0].jaql().jaql).toEqual(panels[0].items[0].jaql);
@@ -57,7 +57,7 @@ describe('extractFilters', () => {
       },
     ] as Panel[];
 
-    const filters = extractFilters(panels);
+    const filters = extractWidgetFilters(panels);
 
     // verifies filter
     expect(filters[0].jaql().jaql).toEqual({
@@ -95,7 +95,7 @@ describe('extractFilters', () => {
       },
     ] as Panel[];
 
-    const filters = extractFilters(panels);
+    const filters = extractWidgetFilters(panels);
 
     expect(filters[0].jaql().jaql).toEqual(panels[0].items[0].jaql);
   });

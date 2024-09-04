@@ -27,7 +27,7 @@ How to use `useGetSharedFormula` within a Vue component to fetch a shared formul
 ```vue
 <script setup>
 import { ref } from 'vue';
-import { useGetSharedFormula } from './composables/useGetSharedFormula';
+import { useGetSharedFormula } from '@sisense/sdk-ui-vue';
 
 // To fetch by OID
 const paramsByOid = ref({

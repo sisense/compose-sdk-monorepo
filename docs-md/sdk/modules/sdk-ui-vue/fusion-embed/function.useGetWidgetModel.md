@@ -25,20 +25,19 @@ require detailed information about a Sisense widget for data visualization or an
 
 ## Example
 
-How to use `useGetWidgetModel` within a Vue component to fetch and display widget information:
+Retrieve a widget model and use it to populate a `Chart` component:
+
 ```vue
-<script setup>
-import { ref } from 'vue';
-import { useGetWidgetModel } from './composables/useGetWidgetModel';
-
-const dashboardOid = ref('your_dashboard_oid');
-const widgetOid = ref('your_widget_oid');
-
-const { data: widgetModel, isLoading, isError, error } = useGetWidgetModel({
-  dashboardOid,
-  widgetOid,
+<script setup lang="ts">
+import { Chart, useGetWidgetModel } from '@sisense/sdk-ui-vue';
+const { data: widget } = useGetWidgetModel({
+  dashboardOid: 'your_dashboard_oid',
+  widgetOid: 'your_widget_oid',
 });
 </script>
+<template>
+  <Chart v-if="widget" v-bind="widget.getChartProps()" />
+</template>
 ```
 
 The composable returns an object with reactive properties that represent the state of the widget model fetch operation:

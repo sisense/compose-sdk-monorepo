@@ -16,6 +16,11 @@ import * as filterFactory from '../filters/factory.js';
 import * as measureFactory from './factory.js';
 
 const sampleAttribute = new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute');
+const sampleAttribute2 = new DimensionalAttribute(
+  'Category',
+  '[Category.Category]',
+  'text-attribute',
+);
 const sampleMeasureName = 'measure name';
 const sampleMeasureFormat = '00.00';
 const sampleMeasure1 = new DimensionalBaseMeasure(
@@ -468,6 +473,39 @@ describe('measureFactory', () => {
           },
           formula: 'SUM([Attribute]) - [Average Measure]',
           title: 'Total Attribute',
+        },
+      });
+    });
+
+    test('with measure and filter', () => {
+      const m = measureFactory.customFormula(
+        'Total Cost with Filter',
+        '(SUM([cost]), [categoryFilter])',
+        {
+          cost: sampleAttribute,
+          categoryFilter: filterFactory.members(sampleAttribute2, ['Apple Mac Desktops']),
+        },
+      );
+
+      expect(m.jaql()).toStrictEqual({
+        jaql: {
+          title: 'Total Cost with Filter',
+          formula: '(SUM([cost]), [categoryFilter])',
+          context: {
+            '[cost]': {
+              title: 'Cost',
+              dim: '[Commerce.Cost]',
+              datatype: 'numeric',
+            },
+            '[categoryFilter]': {
+              title: 'Category',
+              dim: '[Category.Category]',
+              datatype: 'text',
+              filter: {
+                members: ['Apple Mac Desktops'],
+              },
+            },
+          },
         },
       });
     });

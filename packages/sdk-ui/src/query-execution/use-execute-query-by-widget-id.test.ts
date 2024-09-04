@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import {
   QueryResultData,
   filterFactory,

@@ -19,7 +19,7 @@ import {
   ColoringService,
   getColoringServiceByColorOptions,
 } from '../../chart-data-options/coloring';
-import isNumber from 'lodash/isNumber';
+import isNumber from 'lodash-es/isNumber';
 
 export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChartDataOptions>;
 

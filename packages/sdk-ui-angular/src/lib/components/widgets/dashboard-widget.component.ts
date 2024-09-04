@@ -44,12 +44,13 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  *
  * @Component({
  *  selector: 'app-widgets',
- * templateUrl: './widgets.component.html',
- * styleUrls: ['./widgets.component.scss'],
+ *  templateUrl: './widgets.component.html',
+ *  styleUrls: ['./widgets.component.scss'],
  * })
  * export class WidgetsComponent {
  *  widgetOid: string = '60f3e3e3e4b0e3e3e4b0e3e3';
  *  dashboardOid: string = '60f3e3e3e4b0e3e3e4b0e3e3';
+ * }
  * ```
  * @group Fusion Embed
  * @fusionEmbed

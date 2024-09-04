@@ -59,7 +59,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  *   };
  * }
  * ```
- * <img src="media://angular-member-filter-tile-example.png" width="800px" />
+ * <img src="media://angular-member-filter-tile-example.png" width="400px" />
  *
  * @group Filter Tiles
  */

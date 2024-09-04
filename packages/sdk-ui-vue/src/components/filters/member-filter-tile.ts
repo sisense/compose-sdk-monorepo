@@ -23,7 +23,7 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import {MemberFilterTile, type MemberFilterTileProps} from '@sisense/sdk-ui-vue';
+ * import { MemberFilterTile, type MemberFilterTileProps } from '@sisense/sdk-ui-vue';
  *
  * const memberFilterValue = ref<Filter | null>(null);
  *
@@ -40,7 +40,7 @@ import { setupHelper } from '../../setup-helper';
  *
  * </script>
  * ```
- * <img src="media://vue-member-filter-tile-example.png" width="300px" />
+ * <img src="media://vue-member-filter-tile-example.png" width="600px" />
  * @param props - MemberFilterTile props
  * @returns MemberFilterTile component
  * @group Filter Tiles

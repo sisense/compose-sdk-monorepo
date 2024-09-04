@@ -30,7 +30,7 @@ Boolean flag to force render indicator in ticker mode regardless of display size
 
 ### skin
 
-> **skin**: `"horizontal"` \| `"vertical"`
+> **skin**: `"vertical"` \| `"horizontal"`
 
 ***
 

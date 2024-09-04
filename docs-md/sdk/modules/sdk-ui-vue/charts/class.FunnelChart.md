@@ -21,7 +21,7 @@ Here's how you can use the FunnelChart component in a Vue application:
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import {FunnelChart, type FunnelChartProps} from '@sisense/sdk-ui-vue';
+import { FunnelChart, type FunnelChartProps } from '@sisense/sdk-ui-vue';
 import { measureFactory, filterFactory } from '@sisense/sdk-data';
 import * as DM from '../assets/sample-retail-model';
 

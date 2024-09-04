@@ -110,19 +110,27 @@ describe('getFilterRelationsFromJaql', () => {
 
   it('should return filters if relations are undefined', () => {
     const filters = [mockFilter1, mockFilter2];
-    expect(getFilterRelationsFromJaql(filters, undefined)).toEqual(filters);
+    expect(getFilterRelationsFromJaql(filters, [], undefined)).toEqual(filters);
   });
 
   it('should replace filter relations nodes with filters', () => {
     const filters = [mockFilter1, mockFilter2, mockFilter3, mockFilter4];
-    expect(getFilterRelationsFromJaql(filters, incomingFilterRelationsJaql)).toEqual(
+    expect(getFilterRelationsFromJaql(filters, [], incomingFilterRelationsJaql)).toEqual(
       expectedFilterRelations,
     );
   });
 
   it('should throw an error if filter relations contain unknown filter', () => {
     const filters = [mockFilter1, mockFilter2];
-    expect(() => getFilterRelationsFromJaql(filters, incomingFilterRelationsJaql)).toThrow();
+    expect(() => getFilterRelationsFromJaql(filters, [], incomingFilterRelationsJaql)).toThrow();
+  });
+
+  it('should return filters if filter relations and highlights exist', () => {
+    const filters = [mockFilter1, mockFilter2];
+    const highlights = [mockFilter3, mockFilter4];
+    expect(getFilterRelationsFromJaql(filters, highlights, incomingFilterRelationsJaql)).toEqual(
+      filters,
+    );
   });
 });
 

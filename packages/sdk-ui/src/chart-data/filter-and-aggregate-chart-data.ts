@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import union from 'lodash/union';
+import union from 'lodash-es/union';
 import { Category, Value } from '../chart-data-options/types';
 import { DataColumnNamesMapping } from '../chart-data-options/validate-data-options';
 import { rownumColumnName } from '../chart-data-processor/table-creators';

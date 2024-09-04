@@ -60,6 +60,12 @@ export type SeriesPointStructure = {
   // range charts specific
   low?: number | null;
   high?: number | null;
+  trend?: {
+    min: number;
+    max: number;
+    median: number;
+    average: number;
+  };
 };
 
 export type AxisClipped = { minClipped: boolean; maxClipped: boolean };

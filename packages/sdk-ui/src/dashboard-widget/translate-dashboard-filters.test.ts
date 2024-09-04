@@ -1,67 +1,107 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { FilterJaql } from '@sisense/sdk-data';
 import { CascadingFilterDto, DashboardDto, FilterDto } from '../api/types/dashboard-dto';
-import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
-import { WidgetDashboardFilterMode, WidgetDto } from './types';
+import {
+  extractCombinedFilters,
+  extractDashboardFiltersForWidget,
+} from './translate-dashboard-filters';
+import { PanelItem, WidgetDashboardFilterMode, WidgetDto } from './types';
 
-describe('extractDashboardFiltersForWidget', () => {
-  let dummyDashboard: DashboardDto;
-  let dummyWidget: WidgetDto;
+let dummyDashboard: DashboardDto;
+let dummyWidget: WidgetDto;
 
-  beforeEach(() => {
-    dummyDashboard = {
-      filters: [
-        {
-          jaql: {
-            dim: '[Commerce.Age Range]',
-            filter: {
-              members: ['0-18', '19-24', '65+'],
-            },
+beforeEach(() => {
+  dummyDashboard = {
+    filters: [
+      {
+        jaql: {
+          dim: '[Commerce.Age Range]',
+          filter: {
+            members: ['0-18', '19-24', '65+'],
           },
-          instanceid: 'filter-1',
         },
-        {
-          jaql: {
-            dim: '[Commerce.Gender]',
-            filter: {
-              members: ['Male', 'Female'],
-            },
+        instanceid: 'filter-1',
+      },
+      {
+        jaql: {
+          dim: '[Commerce.Gender]',
+          filter: {
+            members: ['Male', 'Female'],
           },
-          instanceid: 'filter-2',
+        },
+        instanceid: 'filter-2',
+      },
+    ],
+  } as DashboardDto;
+
+  dummyWidget = {
+    type: 'chart/column',
+    metadata: {
+      ignore: {
+        all: false,
+        ids: ['not existed filter id'],
+      },
+      panels: [
+        {
+          name: 'categories',
+          items: [
+            {
+              jaql: {
+                dim: '[Commerce.Age Range]',
+              },
+            },
+            {
+              jaql: {
+                dim: '[Commerce.Gender]',
+              },
+            },
+          ],
         },
       ],
-    } as DashboardDto;
+    },
+    options: {
+      dashboardFiltersMode: WidgetDashboardFilterMode.SELECT,
+    },
+  } as WidgetDto;
+});
 
-    dummyWidget = {
-      type: 'chart/column',
-      metadata: {
-        ignore: {
-          all: false,
-          ids: ['not existed filter id'],
-        },
-        panels: [
-          {
-            name: 'categories',
-            items: [
-              {
-                jaql: {
-                  dim: '[Commerce.Age Range]',
-                },
-              },
-              {
-                jaql: {
-                  dim: '[Commerce.Gender]',
-                },
-              },
-            ],
-          },
-        ],
+describe('extractCombinedFilters', () => {
+  it('should extract and merge dashboard and widget filters', () => {
+    const widgetFilterJaql = {
+      dim: '[Commerce.Brand]',
+      filter: {
+        members: ['ABC'],
       },
-      options: {
-        dashboardFiltersMode: WidgetDashboardFilterMode.SELECT,
-      },
-    } as WidgetDto;
+    } as FilterJaql;
+
+    dummyWidget.metadata.panels.push({
+      name: 'filters',
+      items: [
+        {
+          jaql: widgetFilterJaql,
+        } as PanelItem,
+      ],
+    });
+
+    const { filters, highlights } = extractCombinedFilters(dummyDashboard, dummyWidget);
+    expect(filters).toHaveLength(1);
+    expect(highlights).toHaveLength(2);
+    expect(filters[0].jaql().jaql).toMatchObject({
+      dim: widgetFilterJaql.dim,
+      filter: widgetFilterJaql.filter,
+    });
+    expect(highlights[0].jaql().jaql).toMatchObject({
+      dim: (dummyDashboard.filters![0] as FilterDto).jaql.dim,
+      filter: (dummyDashboard.filters![0] as FilterDto).jaql.filter,
+    });
+    expect(highlights[1].jaql().jaql).toMatchObject({
+      dim: (dummyDashboard.filters![1] as FilterDto).jaql.dim,
+      filter: (dummyDashboard.filters![1] as FilterDto).jaql.filter,
+    });
   });
+});
 
+describe('extractDashboardFiltersForWidget', () => {
   it('should extract all "highlight" filters', () => {
     const { filters, highlights } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
 

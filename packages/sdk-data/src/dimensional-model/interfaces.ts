@@ -429,8 +429,11 @@ export interface Filter extends Element {
   filterJaql(): any;
 }
 
+/**
+ * Context for a custom formula, as defined by `measureFactory.customFormula()`
+ */
 export interface CustomFormulaContext {
-  [key: string]: Attribute | Measure;
+  [key: string]: Attribute | Measure | Filter;
 }
 
 /**

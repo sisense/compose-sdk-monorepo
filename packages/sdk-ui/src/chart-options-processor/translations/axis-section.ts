@@ -11,7 +11,7 @@ import {
   lineColorDefault,
 } from '../defaults/cartesian';
 import merge from 'deepmerge';
-import { Style } from '../chart-options-service';
+import { Stacking, Style } from '../chart-options-service';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { DateLevels, isNumber } from '@sisense/sdk-data';
 import {
@@ -19,7 +19,7 @@ import {
   CartesianChartDataOptionsInternal,
   Category,
 } from '../../chart-data-options/types';
-import { ChartType } from '../../types';
+import { ChartType, CompleteNumberFormatConfig } from '../../types';
 import { isPolar } from './types';
 import { CategoricalXValues } from '../../chart-data/types';
 import { AxisClipped } from './translations-to-highcharts';
@@ -407,6 +407,7 @@ export const getYAxisSettings = (
   axis2MinMax: AxisMinMax | undefined,
   showTotal: boolean,
   chartDataOptions: ChartDataOptionsInternal,
+  stacking: Stacking | undefined,
 ): [AxisSettings[], AxisClipped[]] => {
   const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
     chartDataOptions as CartesianChartDataOptionsInternal;
@@ -419,6 +420,13 @@ export const getYAxisSettings = (
   const axisClipped = [
     { minClipped: !!(axis.enabled && axis.min), maxClipped: !!(axis.enabled && axis.max) },
   ];
+
+  function getLabelsFormatter(numberFormatConfig: CompleteNumberFormatConfig, stacking?: Stacking) {
+    return function (this: { value: number }) {
+      const formattedValue = applyFormatPlainText(numberFormatConfig, this.value);
+      return stacking === 'percent' ? `${formattedValue}%` : formattedValue;
+    };
+  }
 
   const array: AxisSettings[] = [
     merge(yAxisDefaults, {
@@ -433,9 +441,7 @@ export const getYAxisSettings = (
       labels: {
         enabled: axis.enabled && axis.labels,
         style: fontStyleDefault,
-        formatter: function () {
-          return applyFormatPlainText(y1NumberFormatConfig, (this as any).value);
-        },
+        formatter: getLabelsFormatter(y1NumberFormatConfig, stacking),
       },
       startOnTick: axis.enabled && axis.min ? false : true,
       ...(axis.min && { minPadding: 0 }),
@@ -470,9 +476,7 @@ export const getYAxisSettings = (
           labels: {
             enabled: axis2.enabled && axis2.labels,
             style: fontStyleDefault,
-            formatter: function () {
-              return applyFormatPlainText(y2NumberFormatConfig, (this as any).value);
-            },
+            formatter: getLabelsFormatter(y2NumberFormatConfig, stacking),
           },
           tickInterval: axis2.enabled ? axis2.tickInterval : null,
           stackLabels: { enabled: showTotal },

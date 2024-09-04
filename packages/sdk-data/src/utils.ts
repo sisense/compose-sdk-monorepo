@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep.js';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 import {
   Filter,
   FilterRelations,
@@ -9,6 +9,7 @@ import {
   DataSourceInfo,
   FilterJaql,
   MembersFilter,
+  Sort,
 } from './index.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
 import { FilterJaqlInternal } from './dimensional-model/filters/utils/types.js';
@@ -104,6 +105,21 @@ export function getDataSourceName(dataSource: DataSource): string {
  */
 export function isDataSourceInfo(dataSource: DataSource): dataSource is DataSourceInfo {
   return typeof dataSource === 'object' && 'type' in dataSource && 'title' in dataSource;
+}
+
+/**
+ * Converts a string to a Sort enum
+ * @param sort - The string to convert
+ * @returns The converted Sort enum
+ *
+ * @internal
+ */
+export function convertSort(sort?: string) {
+  if (sort) {
+    return sort === 'asc' ? Sort.Ascending : Sort.Descending;
+  } else {
+    return Sort.None;
+  }
 }
 
 /**

@@ -28,7 +28,7 @@ import { useTracking } from './use-tracking';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useExecuteQuery } from './composables/useExecuteQuery';
+ * import { useExecuteQuery } from '@sisense/sdk-ui-vue';
  *
  * const dataSource = ref('your_data_source_id');
  * // Set up other query parameters as needed (dimensions, measures, filters, etc.)

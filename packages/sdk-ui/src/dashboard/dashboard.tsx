@@ -12,6 +12,40 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
  *
  * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
  *
+ * @example
+ *
+ * ```ts
+ * import { Dashboard, useGetDashboardModel } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+  const { dashboard } = useGetDashboardModel({
+    dashboardOid: '65a82171719e7f004018691c',
+    includeFilters: true,
+    includeWidgets: true,
+  });
+
+  return (
+    <>
+      {dashboard && (
+        <Dashboard
+        defaultDataSource={dashboard.dataSource}
+        title={dashboard.title}
+        layout={dashboard.layout}
+        styleOptions={dashboard.styleOptions}
+        widgets={dashboard.widgets}
+        filters={dashboard.filters}
+        widgetFilterOptions={
+          dashboard.widgetFilterOptions
+        }
+        />
+      )}
+    </>
+  );
+};
+
+export default CodeExample;
+ * ```
+ *
  * @group Fusion Embed
  * @fusionEmbed
  * @alpha

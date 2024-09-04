@@ -7,7 +7,7 @@ import { FilterTile, FilterTileDesignOptions } from '../filter-tile';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
-import merge from 'lodash/merge';
+import merge from 'lodash-es/merge';
 import { cloneFilterAndToggleDisabled } from '@/utils/filters';
 
 /**

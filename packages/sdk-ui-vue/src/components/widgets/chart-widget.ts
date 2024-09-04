@@ -48,7 +48,7 @@ import type DrilldownWidget from '../drilldown-widget.vue';
  * import { ref } from 'vue';
  * import { measureFactory, filterFactory } from '@sisense/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import {ChartWidget} from '@sisense/sdk-ui-vue';
+ * import { ChartWidget } from '@sisense/sdk-ui-vue';
 
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');

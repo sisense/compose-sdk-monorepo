@@ -43,7 +43,9 @@ export const chartDesignOptions: IndicatorChartDesignOptions = {
     max: null,
     tickInterval: null,
   },
-  autoZoom: true,
+  autoZoom: {
+    enabled: true,
+  },
 
   indicatorType: 'gauge',
   skin: 1,

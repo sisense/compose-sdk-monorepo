@@ -1,5 +1,5 @@
 export interface Authenticator {
-  readonly type: 'password' | 'bearer' | 'wat' | 'sso' | 'base';
+  readonly type: 'password' | 'bearer' | 'wat' | 'sso' | 'base' | 'fusion';
 
   isValid: () => boolean;
 

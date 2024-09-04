@@ -24,38 +24,38 @@ This allows for complete control over the chart's dimensions to be handed over t
 Here's how to use the `DrilldownWidget` component:
 ```vue
 <template>
-       <DrilldownWidget
-         :drilldownDimensions="drilldownDimensions"
-         :initialDimension="dimProductName"
-       >
-         <template
-           #chart="{ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }"
-         >
-           <ChartWidget
-             chart-type="bar"
-             v-bind:filters="drilldownFilters"
-             :dataOptions="{
-               ...chartProps.dataOptions,
-               category: [drilldownDimension],
-             }"
-             :highlight-selection-disabled="true"
-             :dataSet="chartProps.dataSet"
-             :style="chartProps.styleOptions"
-             :on-data-points-selected="(dataPoints: any, event: any) => {
-               onDataPointsSelected(dataPoints);
-               onContextMenu({ left: event.clientX, top: event.clientY });
-             }"
-             :on-data-point-click="(dataPoint: any, event: any) => {
-               onDataPointsSelected([dataPoint]);
-               onContextMenu({ left: event.clientX, top: event.clientY });
-             }"
-                           :on-data-point-context-menu="(dataPoint: any, event: any) => {
-               onDataPointsSelected([dataPoint]);
-               onContextMenu({ left: event.clientX, top: event.clientY });
-             }"
-           />
-         </template>
-       </DrilldownWidget>
+   <DrilldownWidget
+     :drilldownDimensions="drilldownDimensions"
+     :initialDimension="dimProductName"
+   >
+     <template
+       #chart="{ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }"
+     >
+       <ChartWidget
+         chart-type="bar"
+         v-bind:filters="drilldownFilters"
+         :dataOptions="{
+           ...chartProps.dataOptions,
+           category: [drilldownDimension],
+         }"
+         :highlight-selection-disabled="true"
+         :dataSet="chartProps.dataSet"
+         :style="chartProps.styleOptions"
+         :on-data-points-selected="(dataPoints: any, event: any) => {
+           onDataPointsSelected(dataPoints);
+           onContextMenu({ left: event.clientX, top: event.clientY });
+         }"
+         :on-data-point-click="(dataPoint: any, event: any) => {
+           onDataPointsSelected([dataPoint]);
+           onContextMenu({ left: event.clientX, top: event.clientY });
+         }"
+                       :on-data-point-context-menu="(dataPoint: any, event: any) => {
+           onDataPointsSelected([dataPoint]);
+           onContextMenu({ left: event.clientX, top: event.clientY });
+         }"
+       />
+     </template>
+   </DrilldownWidget>
 </template>
 
 <script>

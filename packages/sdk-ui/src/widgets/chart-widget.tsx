@@ -60,7 +60,6 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   const defaultSize = getWidgetDefaultSize(chartType, {
     hasHeader: !styleOptions?.header?.hidden,
   });
-
   const [refreshCounter, setRefreshCounter] = useState(0);
 
   const isDrilldownEnabled = useMemo(() => {

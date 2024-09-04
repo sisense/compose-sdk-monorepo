@@ -83,13 +83,14 @@ function getEnabledFilterPanelItems(panels: Panel[]): PanelItem[] {
 
   return filterItems;
 }
+
 /**
  * Extracts filters from the widget panel.
  *
  * @param panels - The array of panels.
  * @returns The extracted filters.
  */
-export function extractFilters(panels: Panel[]) {
+export function extractWidgetFilters(panels: Panel[]) {
   return getEnabledFilterPanelItems(panels).map((filterItem) =>
     createFilterFromJaql(filterItem.jaql as FilterJaql, filterItem.instanceid),
   );

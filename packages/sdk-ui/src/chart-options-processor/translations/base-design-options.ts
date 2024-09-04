@@ -42,7 +42,9 @@ export const BaseDesignOptions: Merge<DesignOptions> = {
     max: null,
     tickInterval: null,
   },
-  autoZoom: true,
+  autoZoom: {
+    enabled: true,
+  },
   pieType: DefaultPieType,
   pieLabels: DefaultPieLabels,
   funnelType: DefaultFunnelType,

@@ -52,6 +52,7 @@ Alternatively, to fetch theme settings based on a theme ID:
 ```
 
 Indicator chart with custom theme settings:
+
 <img src="../../../img/indicator-chart-example-2.png" width="400px" />
 
 For comparison, indicator chart with default theme settings:

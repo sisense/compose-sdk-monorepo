@@ -13,6 +13,9 @@ import {
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './scatter-tooltip';
 import { TFunction } from '@sisense/sdk-common';
 import { isForecastSeries, isTrendSeries } from '../advanced-chart-options';
+import { renderTrendTooltipString } from '../advanced-analytics/tooltips/trend-tooltip';
+import { renderForecastTooltipString } from '../advanced-analytics/tooltips/forecast-tooltip';
+import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
 
 export const cartesianDataFormatter = function (
   that: InternalSeries,
@@ -58,22 +61,72 @@ export const cartesianDataFormatter = function (
   const isTrend = isTrendSeries(that.point.name || that.series.name);
   const yName =
     translate && isForecast
-      ? `${translate('advanced.tooltip.forecast')} ${that.series.name.substring(10)}`
+      ? `${that.series.name.substring(10)}`
       : translate && isTrend
-      ? `${translate('advanced.tooltip.trend')} ${that.series.name.substring(7)}`
+      ? `${that.series.name.substring(7)}`
       : that.series.name;
-  const low = that.point?.low ? formatTooltipValue(dataOptionY, that.point?.low, '') : undefined;
-  const high = that.point?.high ? formatTooltipValue(dataOptionY, that.point?.high, '') : undefined;
+  const low = that.point?.low ? formatTooltipValue(dataOptionY, that.point?.low, '') : '';
+  const high = that.point?.high ? formatTooltipValue(dataOptionY, that.point?.high, '') : '';
 
   const displayValue = (value: string | undefined, labelPrefix: string, color: string) => {
-    if (!value) return '';
-    if (!translate || !isForecast || !labelPrefix) return `<br /${spanSegment(value, color)}`;
+    if (!value || value === '') return '';
+    if (!translate || (!isForecast && !isTrend) || !labelPrefix)
+      return `<br /${spanSegment(value, color)}`;
     return `<br /><span>${translate(labelPrefix)} </span>${spanSegment(value, color)}`;
   };
 
   const extra = translate ? `(+${translate('advanced.tooltip.trend')})` : '';
   const labelPrefix = isForecast ? 'advanced.tooltip.forecastValue' : '';
 
+  if (isTrend) {
+    const modelTypeFromExpressionRegex = /modelType=([^"]+)/;
+    const match = (dataOptionY as unknown as DimensionalCalculatedMeasure)?.expression.match(
+      modelTypeFromExpressionRegex,
+    );
+    const modelTypeValue = match ? match[1] : null;
+
+    const { min, max, median, average } = that.point.trend!;
+    const formattedMin = formatTooltipValue(dataOptionY, min, '');
+    const formattedMax = formatTooltipValue(dataOptionY, max, '');
+    const formattedMedian = formatTooltipValue(dataOptionY, median, '');
+    const formattedAverage = formatTooltipValue(dataOptionY, average, '');
+    const modelType = modelTypeValue!;
+
+    return renderTrendTooltipString({
+      title: yName,
+      modelType,
+      trendData: {
+        min: formattedMin,
+        max: formattedMax,
+        median: formattedMedian,
+        average: formattedAverage,
+      },
+      localValue: value,
+      x1Value,
+      x2Value,
+      translate,
+    });
+  }
+
+  if (isForecast) {
+    const confidenceIntervalFromExpressionRegex = /confidenceInterval=([^"]+)/;
+    const match = (dataOptionY as unknown as DimensionalCalculatedMeasure)?.expression.match(
+      confidenceIntervalFromExpressionRegex,
+    );
+    const confidenceValue = match ? match[1] : '0.8';
+    const confidencePercentage = (parseFloat(confidenceValue) * 100).toFixed(0) + '%';
+
+    return renderForecastTooltipString({
+      title: yName,
+      confidenceValue: confidencePercentage,
+      forecastValue: value,
+      x1Value,
+      x2Value,
+      translate,
+      upperValue: high,
+      lowerValue: low,
+    });
+  }
   return tooltipWrapper(`
     ${yName.replace(extra, '')}
     ${displayValue(value, labelPrefix, color)}

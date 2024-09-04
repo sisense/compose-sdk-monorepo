@@ -400,7 +400,7 @@ export interface AreamapChartDataOptions {
   /** Column or attribute representing the countries (or states) on the map. */
   geo: [Column | StyledColumn];
   /** Measure column (or measure) encoded by the color of the countries (or states) on the map. */
-  color: [MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn];
+  color?: [MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn];
 }
 
 /**
@@ -772,5 +772,5 @@ export interface BoxplotChartDataOptionsInternal {
 /** @internal */
 export type AreamapChartDataOptionsInternal = {
   geo: Category;
-  color: Value;
+  color?: Value;
 };

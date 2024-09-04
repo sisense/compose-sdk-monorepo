@@ -7,7 +7,7 @@ import { type HttpClient } from '@sisense/sdk-rest-client';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { type RestApi } from '../../api/rest-api';
 import { WidgetModel } from '../widget';
-import zipObject from 'lodash/zipObject';
+import zipObject from 'lodash-es/zipObject';
 
 const getDashboardMock = vi.fn<Parameters<RestApi['getDashboard']>>(() => {
   // eslint-disable-next-line no-unused-vars

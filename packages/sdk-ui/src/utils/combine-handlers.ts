@@ -1,6 +1,6 @@
-import isFunction from 'lodash/isFunction';
-import flow from 'lodash/flow';
-import over from 'lodash/over';
+import isFunction from 'lodash-es/isFunction';
+import flow from 'lodash-es/flow';
+import over from 'lodash-es/over';
 
 type AnyFunction = (...args: any[]) => any;
 

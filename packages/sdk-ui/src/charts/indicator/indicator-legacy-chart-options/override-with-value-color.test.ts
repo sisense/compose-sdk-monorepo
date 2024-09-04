@@ -8,7 +8,7 @@ import {
   AllowedIndicatorColoringTypes,
 } from './override-with-value-color';
 import { numericSimpleLegacyChartOptionsWithDarkTheme } from './__mocks__/legacy-chart-options';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import '../../../chart-data-options/coloring';
 
 const getColorMock = vi.fn().mockReturnValue('red');

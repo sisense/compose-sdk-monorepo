@@ -106,6 +106,16 @@ export const translation: TranslationDictionary = {
       forecastValue: 'Forecast Value',
       forecast: 'Forecast',
       trend: 'Trend',
+      trendLocalValue: 'Local Value',
+      confidenceInterval: 'Confidence Interval',
+      trendType: 'Type',
+      trendDataKey: 'Trend Data',
+      trendData: {
+        min: 'Min',
+        max: 'Max',
+        median: 'Median',
+        average: 'Average',
+      },
     },
   },
   arearange: {

@@ -1,5 +1,5 @@
 import merge from 'ts-deepmerge';
-import partition from 'lodash/partition';
+import partition from 'lodash-es/partition';
 import { Attribute, MembersFilter, type Filter } from '@sisense/sdk-data';
 import { mergeFilters } from '@/dashboard-widget/utils';
 import { WidgetHeaderClearSelectionButton } from './widget-header-clear-selection-button';

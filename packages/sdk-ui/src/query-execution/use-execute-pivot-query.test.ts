@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 
 import { renderHook, waitFor } from '@testing-library/react';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import type { Mock } from 'vitest';

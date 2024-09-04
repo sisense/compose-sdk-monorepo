@@ -17,7 +17,9 @@ import { type ArgumentsAsObject } from '../../types/utility-types';
  *      (dataPointClick)="logArguments($event)"
  *      (dataPointContextMenu)="logArguments($event)"
  *      (dataPointsSelect)="logArguments($event)"
- *    /> * ```
+ *    />
+ * ```
+ *
  * ```ts
 import { Component } from '@angular/core';
 import { measureFactory, filterFactory } from '@sisense/sdk-data';

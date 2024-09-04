@@ -19,7 +19,7 @@ import {
   WidgetSubtype,
   WidgetType,
 } from './types';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { TranslatableError } from '../translation/translatable-error';
 import { isCascadingFilter } from '@/utils/filters';
 
@@ -228,15 +228,23 @@ export function mergeFiltersByStrategy(
  * Replaces nodes of filter reations tree with fetched filters by instance id.
  *
  * @param filters - The filters from the dashboard.
+ * @param highlights - The highlights from the dashboard
  * @param filterRelations - Fetched filter relations.
  * @returns {FilterRelations} Filter relations with filters in nodes.
  */
 /* eslint-disable-next-line sonarjs/cognitive-complexity */
 export function getFilterRelationsFromJaql(
   filters: Filter[],
+  highlights: Filter[],
   filterRelations: FilterRelationsJaql | undefined,
 ): FilterRelations | Filter[] {
   if (!filterRelations) {
+    return filters;
+  }
+
+  // If highlights are present, nodes in filter relations reference both filters and highlights
+  // and thus cannot be replaced with filters. Return filters in this case.
+  if (highlights.length) {
     return filters;
   }
 

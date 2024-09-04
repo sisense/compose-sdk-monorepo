@@ -18,7 +18,7 @@ import { getSelectableWidgetAttributes } from '@/common-filters/selection-utils'
 import { ChartProps, CustomDrilldownResult, ScatterDataPoint, isMeasureColumn } from '../..';
 import { PointClickEventObject } from '@sisense/sisense-charts';
 import { ScatterCustomPointOptions } from '@/chart-options-processor/translations/scatter-tooltip';
-import camelCase from 'lodash/camelCase';
+import camelCase from 'lodash-es/camelCase';
 
 export function getDrilldownInitialDimension(chartType: ChartType, dataOptions: ChartDataOptions) {
   return getSelectableWidgetAttributes(chartType, dataOptions)[0];

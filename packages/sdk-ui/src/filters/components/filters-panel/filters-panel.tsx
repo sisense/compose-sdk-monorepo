@@ -6,7 +6,7 @@ import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 
 const PanelWrapper = styled.div<Themable>`
-  background-color: ${({ theme }) => theme.chart.backgroundColor};
+  background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
   border: 1px solid #dadada;
   width: fit-content;
   min-width: 240px;
@@ -20,7 +20,7 @@ const PanelBody = styled.div`
 
 const PanelHeader = styled.div<Themable>`
   background-color: transparent;
-  color: ${({ theme }) => theme.typography.primaryTextColor};
+  color: ${({ theme }) => theme.filter.panel.titleColor};
   margin: 0 9px;
   height: 48px;
   border-bottom: 1px solid #dadada;

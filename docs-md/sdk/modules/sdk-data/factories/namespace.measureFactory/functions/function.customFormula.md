@@ -7,17 +7,17 @@ title: customFormula
 > **customFormula**(
   `title`,
   `formula`,
-  `context`): [`Attribute`](../../../interfaces/interface.Attribute.md) \| [`Measure`](../../../interfaces/interface.Measure.md)
+  `context`): [`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md)
 
 Creates a calculated measure for a valid custom formula built from [base functions](/guides/sdk/reference/functions.html#measured-value-functions).
 
-Use square brackets (`[]`) within the `formula` property to include dimensions or measures.
-Each unique dimension or measure included in the `formula` must be defined using a property:value pair in the `context` parameter.
+Use square brackets (`[]`) within the `formula` property to include dimensions, measures, or filters.
+Each unique dimension, measure, or filter included in the `formula` must be defined using a property:value pair in the `context` parameter.
 
 You can nest custom formulas by placing one inside the `formula` parameter of another.
 
 Note: To use [shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm)
-from a Fusion Embed instance, you must fetch them first using [useGetSharedFormula](../../../../sdk-ui/fusion-embed/function.useGetSharedFormula.md).
+from a Fusion instance, you must fetch them first using [useGetSharedFormula](../../../../sdk-ui/fusion-embed/function.useGetSharedFormula.md).
 
 ## Parameters
 
@@ -25,11 +25,11 @@ from a Fusion Embed instance, you must fetch them first using [useGetSharedFormu
 | :------ | :------ | :------ |
 | `title` | `string` | Title of the measure to be displayed in legend |
 | `formula` | `string` | Formula to be used for the measure |
-| `context` | [`CustomFormulaContext`](../../../interfaces/interface.CustomFormulaContext.md) | Formula context as a map of strings to measures or attributes |
+| `context` | [`CustomFormulaContext`](../../../interfaces/interface.CustomFormulaContext.md) | Formula context as a map of strings to attributes, measures, or filters |
 
 ## Returns
 
-[`Attribute`](../../../interfaces/interface.Attribute.md) \| [`Measure`](../../../interfaces/interface.Measure.md)
+[`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md)
 
 A calculated measure instance
 
@@ -54,6 +54,18 @@ const profitabilityRatioRank = measureFactory.customFormula(
   'RANK([profRatio], "ASC", "1224")',
   {
     profRatio: profitabilityRatio,
+  },
+);
+```
+
+Another example of constructing a custom formula using measures and filters
+```ts
+const totalCostWithFilter = measureFactory.customFormula(
+  'Total Cost with Filter',
+  '(SUM([cost]), [categoryFilter])',
+  {
+    cost: DM.Commerce.Cost,
+    categoryFilter: filterFactory.members(DM.Category.Category, ['Apple Mac Desktops']),
   },
 );
 ```

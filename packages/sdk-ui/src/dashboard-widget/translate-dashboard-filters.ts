@@ -1,5 +1,5 @@
 import { DashboardDto, FilterDto, CascadingFilterDto } from '../api/types/dashboard-dto';
-import { extractFilterModelFromJaql } from './translate-widget-filters';
+import { extractFilterModelFromJaql, extractWidgetFilters } from './translate-widget-filters';
 import {
   FiltersIgnoringRules,
   PanelItem,
@@ -7,7 +7,7 @@ import {
   WidgetDto,
   WidgetType,
 } from './types';
-import { getEnabledPanelItems } from './utils';
+import { getEnabledPanelItems, mergeFilters } from './utils';
 
 import {
   BackgroundFilter,
@@ -15,6 +15,28 @@ import {
   createFilterFromJaql,
   IncludeAllFilter,
 } from '@sisense/sdk-data';
+
+/**
+ * Extracts and merges dashboard and widget filters. This consolidates all
+ * filters applicable for a widget.
+ *
+ * @param dashboard - The dashboard containing the filters.
+ * @param widget - The widget containing the filters.
+ * @returns An object containing an array of filters and an array of highlights.
+ * @internal
+ */
+export function extractCombinedFilters(dashboard: DashboardDto, widget: WidgetDto) {
+  const { filters: dashboardFilters, highlights } = extractDashboardFiltersForWidget(
+    dashboard,
+    widget,
+  );
+  const widgetFilters = extractWidgetFilters(widget.metadata.panels);
+  const filters = mergeFilters(dashboardFilters, widgetFilters);
+  return {
+    filters,
+    highlights,
+  };
+}
 
 /**
  * Extracts dashboard filters applicable to a widget.

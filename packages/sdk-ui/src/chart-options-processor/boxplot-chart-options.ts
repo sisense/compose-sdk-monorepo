@@ -3,7 +3,7 @@ import { BoxplotChartData } from '../chart-data/types';
 import { determineHighchartsChartType } from './translations/translations-to-highcharts';
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types';
 import { HighchartsOptionsInternal } from './chart-options-service';
-import { HighchartsSelectEvent, OptionsWithAlerts } from '../types';
+import { CompleteThemeSettings, HighchartsSelectEvent, OptionsWithAlerts } from '../types';
 import { buildBoxplotSeries } from './translations/boxplot/boxplot-series';
 import {
   getBoxplotXAxisSettings,
@@ -12,9 +12,10 @@ import {
 import { getBoxplotPlotOptions } from './translations/boxplot/boxplot-plot-options';
 import { BoxplotChartDesignOptions } from './translations/design-options';
 import { getLegendSettings } from './translations/legend-section';
-import { getNavigator } from './translations/navigator';
+import { getNavigator, setInitialScrollerPosition } from './translations/navigator';
 import { getBoxplotTooltipSettings } from './translations/boxplot/boxplot-tooltip';
 import { ChartDesignOptions } from './translations/types';
+import { NavigatorOptions } from '@sisense/sisense-charts';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -25,11 +26,13 @@ export const getBoxplotChartOptions = (
   chartDesignOptions: ChartDesignOptions,
   dataOptions: BoxplotChartDataOptionsInternal,
   translate: TFunction,
+  themeSettings?: CompleteThemeSettings,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const sisenseChartType = determineHighchartsChartType('boxplot', chartDesignOptions);
   const { series, alerts } = buildBoxplotSeries(
     chartData,
     chartDesignOptions as BoxplotChartDesignOptions,
+    themeSettings?.palette.variantColors,
   );
   const categories = chartData.xValues.map((xAxisValue) => xAxisValue.key);
 
@@ -43,6 +46,23 @@ export const getBoxplotChartOptions = (
         type: 'x',
       },
       events: {
+        load: function () {
+          const chart = this as Highcharts.Chart;
+
+          if (chartDesignOptions.autoZoom && chartDesignOptions.autoZoom.scrollerLocation) {
+            const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
+            setInitialScrollerPosition(chart, min, max);
+          }
+          const chartWidth = chart.chartWidth;
+
+          const navigator = getNavigator(
+            sisenseChartType,
+            chartDesignOptions.autoZoom.enabled,
+            chartData.xValues.length,
+            chartWidth,
+          ) as NavigatorOptions;
+          chart.update({ navigator }, true);
+        },
         // disables default zooming
         selection: (nativeEvent: HighchartsSelectEvent) => {
           nativeEvent.preventDefault();
@@ -56,11 +76,6 @@ export const getBoxplotChartOptions = (
     yAxis: getBoxplotYAxisSettings(chartDesignOptions.yAxis, chartData, dataOptions.whiskerMax),
     series,
     plotOptions: getBoxplotPlotOptions(chartDesignOptions.valueLabel),
-    navigator: getNavigator(
-      sisenseChartType,
-      chartDesignOptions.autoZoom,
-      chartData.xValues.length,
-    ),
     tooltip: getBoxplotTooltipSettings(dataOptions, translate),
   };
   return { options: boxplotOptions, alerts };

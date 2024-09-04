@@ -1,8 +1,8 @@
 import { getSortType } from '@/dashboard-widget/utils';
 import { JaqlSortDirection } from '@sisense/sdk-data';
 import { type SortingSettingsChangePayload } from '@sisense/sdk-pivot-client';
-import isEqual from 'lodash/isEqual';
-import isString from 'lodash/isString';
+import isEqual from 'lodash-es/isEqual';
+import isString from 'lodash-es/isString';
 import { PivotTableDataOptionsInternal } from '..';
 import type { SortDirection, PivotRowsSort } from '../types';
 

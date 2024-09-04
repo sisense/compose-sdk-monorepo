@@ -1,5 +1,5 @@
 import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { useGetApi } from '../../../api/rest-api';

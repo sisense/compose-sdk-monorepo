@@ -30,7 +30,13 @@ export type BaseDesignOptionsType = {
   yAxis: Axis;
   x2Axis?: Axis;
   y2Axis?: Axis;
-  autoZoom: boolean;
+  autoZoom: {
+    enabled: boolean;
+    scrollerLocation?: {
+      min: number;
+      max: number;
+    };
+  };
   dataLimits: DataLimits;
 };
 

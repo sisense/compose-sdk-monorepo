@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { render } from '@testing-library/react';
 import { measureFactory } from '@sisense/sdk-data';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { mockChartWidgetPropsForTable, mockResolvedQuery } from './__mocks__/mocks';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ClientApplication } from '../app/client-application';

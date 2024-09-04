@@ -5,6 +5,7 @@ node_modules/
 
 # Ignore artifacts:
 dist/
+**/dist/
 coverage/
 
 # Ignore auto-generated files:

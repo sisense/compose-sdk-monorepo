@@ -4,7 +4,7 @@ import EventEmitter from 'events';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMClient from 'react-dom/client';
-import isEqual from 'lodash/isEqual.js';
+import isEqual from 'lodash-es/isEqual.js';
 import {
   EVENT_DATA_CHUNK_LOADED,
   EVENT_GRAND_CHUNK_LOADED,

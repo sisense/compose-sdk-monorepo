@@ -4,6 +4,7 @@ import { PasswordAuthenticator } from './password-authenticator.js';
 import { BearerAuthenticator } from './bearer-authenticator.js';
 import { WatAuthenticator } from './wat-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
+import { FusionAuthenticator } from './fusion-authenticator.js';
 
 type AuthenticatorConfig = {
   url: string;
@@ -13,6 +14,7 @@ type AuthenticatorConfig = {
   wat?: string | null;
   ssoEnabled?: boolean;
   enableSilentPreAuth?: boolean;
+  useFusionAuth?: boolean;
 };
 
 export function getAuthenticator({
@@ -23,6 +25,7 @@ export function getAuthenticator({
   wat,
   ssoEnabled = false,
   enableSilentPreAuth = false,
+  useFusionAuth = false,
 }: AuthenticatorConfig): Authenticator | null {
   // sso overrides all other auth methods
   if (ssoEnabled) {
@@ -40,6 +43,10 @@ export function getAuthenticator({
 
   if (wat) {
     return new WatAuthenticator(url, wat);
+  }
+
+  if (useFusionAuth) {
+    return new FusionAuthenticator();
   }
 
   return null;

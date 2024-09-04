@@ -5,7 +5,7 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import hash from 'object-hash';
+import hash from 'hash-it';
 import { LevelAttribute, Attribute, Measure, Filter } from '../interfaces.js';
 
 import { DimensionalElement } from '../base.js';
@@ -165,7 +165,8 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
   }
 
   get name(): string {
-    return hash(this.jaql());
+    // to hexadecimal string
+    return hash(this.jaql()).toString(16);
   }
 
   /**

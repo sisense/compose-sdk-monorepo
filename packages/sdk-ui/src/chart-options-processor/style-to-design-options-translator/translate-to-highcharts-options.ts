@@ -88,8 +88,11 @@ const getAxisLabel = (axis: AxisLabel | undefined, defaultAxis: Axis): Axis => {
   };
 };
 
-const getNavigator = (navigator: Navigator | undefined): boolean => {
-  return navigator?.enabled || false;
+const getNavigator = (navigator: Navigator | undefined): Navigator => {
+  return {
+    enabled: navigator?.enabled || false,
+    scrollerLocation: navigator?.scrollerLocation,
+  };
 };
 
 const getY2AxisLabel = (axisLabel: AxisLabel): Axis => {

@@ -15,7 +15,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -69,35 +71,6 @@ exports[`Advanced Charts > should render trend chart 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": true,
-    "handles": {
-      "backgroundColor": "#CCCCCC",
-      "borderColor": "#FFFFFF",
-      "symbols": [
-        "navigator-handle",
-        "navigator-handle",
-      ],
-    },
-    "height": 40,
-    "margin": 30,
-    "maskFill": "rgba(91,99,114, 0.15)",
-    "maskInside": true,
-    "outlineColor": "#CCCCCC",
-    "outlineWidth": 1,
-    "series": {
-      "dataGrouping": {
-        "enabled": false,
-      },
-      "type": "line",
-    },
-    "tooltipFormatter": [Function],
-    "xAxis": {
-      "labels": {
-        "enabled": false,
-      },
-    },
   },
   "plotOptions": {
     "area": {
@@ -685,7 +658,7 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         },
         "symbol": "circle",
       },
-      "name": "Cost (+Trend)",
+      "name": "Cost",
       "showInNavigator": true,
       "stickyTracking": false,
       "turboThreshold": 0,
@@ -705,6 +678,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 399877.66021296044,
         },
         {
@@ -715,6 +694,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 760254.7486363016,
         },
         {
@@ -725,6 +710,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 892589.3891729144,
         },
         {
@@ -735,6 +726,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 904228.5180767283,
         },
         {
@@ -745,6 +742,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 912866.4678721044,
         },
         {
@@ -755,6 +758,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 916526.9340331501,
         },
         {
@@ -765,6 +774,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 914095.3329283679,
         },
         {
@@ -775,6 +790,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 904960.4685997746,
         },
         {
@@ -785,6 +806,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 912084.7216383086,
         },
         {
@@ -795,6 +822,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 945423.4204832909,
         },
         {
@@ -805,6 +838,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1009017.2938368567,
         },
         {
@@ -815,6 +854,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1127908.0165300977,
         },
         {
@@ -825,6 +870,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1260348.35798684,
         },
         {
@@ -835,6 +886,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1301643.164863898,
         },
         {
@@ -845,6 +902,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1226332.721934023,
         },
         {
@@ -855,6 +918,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1175483.052081485,
         },
         {
@@ -865,6 +934,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1259954.2895959807,
         },
         {
@@ -875,6 +950,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1477513.9658073424,
         },
         {
@@ -885,6 +966,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1731745.1938052739,
         },
         {
@@ -895,6 +982,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1918408.774731447,
         },
         {
@@ -905,6 +998,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2019625.0977478286,
         },
         {
@@ -915,6 +1014,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2080349.5218863264,
         },
         {
@@ -925,6 +1030,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2160577.230230905,
         },
         {
@@ -935,6 +1046,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2330053.153545553,
         },
         {
@@ -945,6 +1062,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2515328.951597531,
         },
         {
@@ -955,6 +1078,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2571323.757848365,
         },
         {
@@ -965,6 +1094,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2455225.182035394,
         },
         {
@@ -975,6 +1110,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2372277.1257133014,
         },
         {
@@ -985,6 +1126,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2390716.0906670545,
         },
         {
@@ -995,6 +1142,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2454806.7004078142,
         },
         {
@@ -1005,6 +1158,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2509923.7089504977,
         },
         {
@@ -1015,6 +1174,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2529590.1527741267,
         },
         {
@@ -1025,6 +1190,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2580856.1512703863,
         },
         {
@@ -1035,6 +1206,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2713417.6342164744,
         },
         {
@@ -1045,6 +1222,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2969220.9206936043,
         },
         {
@@ -1055,6 +1238,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3328777.947662453,
         },
         {
@@ -1065,6 +1254,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3620949.4273355627,
         },
         {
@@ -1075,6 +1270,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3556054.100029769,
         },
         {
@@ -1085,6 +1286,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3180837.955961699,
         },
         {
@@ -1095,6 +1302,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2940071.145840517,
         },
         {
@@ -1105,6 +1318,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 2928282.3596065277,
         },
         {
@@ -1115,6 +1334,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3012322.5051070023,
         },
         {
@@ -1125,6 +1350,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3126610.365876169,
         },
         {
@@ -1135,6 +1366,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3213000.749829498,
         },
         {
@@ -1145,6 +1382,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3314632.0388838113,
         },
         {
@@ -1155,6 +1398,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3504006.725372224,
         },
         {
@@ -1165,6 +1414,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3819677.0195216006,
         },
         {
@@ -1175,6 +1430,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3984064.438412456,
         },
         {
@@ -1185,6 +1446,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 3403293.012026755,
         },
         {
@@ -1195,6 +1462,12 @@ exports[`Advanced Charts > should render trend chart 1`] = `
             ],
           },
           "selected": false,
+          "trend": {
+            "average": 2145450.77991468,
+            "max": 4844611.66696444,
+            "median": 2275735.8248855434,
+            "min": 189976.80757868662,
+          },
           "y": 1735405.3318556482,
         },
       ],

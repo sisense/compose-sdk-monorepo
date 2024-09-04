@@ -19,3 +19,37 @@ React component that renders a dashboard whose elements are customizable. It inc
 ## Returns
 
 `null` \| `ReactElement`\< `any`, `any` \>
+
+## Example
+
+```ts
+import { Dashboard, useGetDashboardModel } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+ const { dashboard } = useGetDashboardModel({
+   dashboardOid: '65a82171719e7f004018691c',
+   includeFilters: true,
+   includeWidgets: true,
+ });
+
+ return (
+   <>
+     {dashboard && (
+       <Dashboard
+       defaultDataSource={dashboard.dataSource}
+       title={dashboard.title}
+       layout={dashboard.layout}
+       styleOptions={dashboard.styleOptions}
+       widgets={dashboard.widgets}
+       filters={dashboard.filters}
+       widgetFilterOptions={
+         dashboard.widgetFilterOptions
+       }
+       />
+     )}
+   </>
+ );
+};
+
+export default CodeExample;
+```

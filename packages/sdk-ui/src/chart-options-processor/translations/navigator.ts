@@ -26,9 +26,19 @@ export const getNavigator = (
   type: HighchartsType,
   enabled: boolean,
   xAxisCount: number,
+  dimension: number, //chart width or height depending on isVertical
+  isVertical = false,
 ): Navigator | { enabled: boolean } => {
-  const navigatorThreshold = 50;
-  if (!enabled || xAxisCount < navigatorThreshold) {
+  const verticalMinDimensionToDisplayNavigator = 200;
+  const horizontalMinDimensionToDisplayNavigator = 400;
+  const minDimensionToDisplayNavigator = isVertical
+    ? verticalMinDimensionToDisplayNavigator
+    : horizontalMinDimensionToDisplayNavigator;
+  const isBelowThreshold = dimension < minDimensionToDisplayNavigator;
+  const pxPerXAxis = 20;
+  const threshold = xAxisCount * pxPerXAxis;
+  const isAboveThreshold = dimension > threshold;
+  if (!enabled || isBelowThreshold || isAboveThreshold) {
     return { enabled: false };
   }
 
@@ -65,3 +75,13 @@ export const getNavigator = (
     outlineWidth: 1,
   };
 };
+
+export function setInitialScrollerPosition(
+  chart: Highcharts.Chart,
+  scrollerStart: number,
+  scrollerEnd: number,
+) {
+  const xAxis = chart.xAxis[0];
+  // Directly set the extremes using the provided absolute values
+  xAxis.setExtremes(scrollerStart, scrollerEnd, false);
+}

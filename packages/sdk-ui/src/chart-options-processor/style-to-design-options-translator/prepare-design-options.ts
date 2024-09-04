@@ -6,7 +6,7 @@ import {
 } from '@/chart-data-options/types';
 import { ChartStyleOptions, ChartType } from '@/types';
 import { WithRequiredProp } from '@/utils/utility-types';
-import pick from 'lodash/pick';
+import pick from 'lodash-es/pick';
 import merge from 'ts-deepmerge';
 import { getDefaultStyleOptions } from '../chart-options-service';
 import { DesignOptions, isCartesian, SeriesDesignOptions } from '../translations/types';

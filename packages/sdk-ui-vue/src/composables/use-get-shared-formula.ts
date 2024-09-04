@@ -32,7 +32,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useGetSharedFormula } from './composables/useGetSharedFormula';
+ * import { useGetSharedFormula } from '@sisense/sdk-ui-vue';
  *
  * // To fetch by OID
  * const paramsByOid = ref({

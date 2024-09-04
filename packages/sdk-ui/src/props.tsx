@@ -126,6 +126,15 @@ export interface SisenseContextProviderProps {
   wat?: string | null;
 
   /**
+   * Flag to delegate authentication to Fusion.
+   *
+   * Defaults to `false`.
+   *
+   * @category Sisense Authentication
+   */
+  useFusionAuth?: boolean;
+
+  /**
    * Application specific configurations such as locale and date formats.
    *
    * @category Sisense App
@@ -151,7 +160,6 @@ export interface SisenseContextProviderProps {
    * such as incorrect configuration, invalid authentication, or network-related issues.
    *
    * @param error - The error object containing details about the issue.
-   *
    * @category Sisense App Error Handling
    */
   onError?: (error: Error) => void;

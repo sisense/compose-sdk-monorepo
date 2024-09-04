@@ -4,7 +4,7 @@
 import { PropsWithChildren, ReactElement } from 'react';
 import { render, RenderResult } from '@testing-library/react';
 import type { Cell, Data } from '@sisense/sdk-data';
-import isObject from 'lodash/isObject';
+import isObject from 'lodash-es/isObject';
 import userEvent from '@testing-library/user-event';
 import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';

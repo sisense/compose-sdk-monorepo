@@ -12,7 +12,9 @@ import { ArgumentsAsObject } from '../../types/utility-types';
  *      [dataOptions]="areamapChart.dataOptions"
  *      [styleOptions]="areamapChart.styleOptions"
  *      (dataPointClick)="logArguments($event)"
- *    /> * ```
+ *    />
+ * ```
+ *
  * ```ts
 import { Component } from '@angular/core';
 import { measureFactory } from '@sisense/sdk-data';

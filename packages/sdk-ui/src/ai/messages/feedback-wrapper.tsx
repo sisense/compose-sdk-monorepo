@@ -1,4 +1,4 @@
-import debounce from 'lodash/debounce';
+import debounce from 'lodash-es/debounce';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useChatApi } from '@/ai/api/chat-api-provider';

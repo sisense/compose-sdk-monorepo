@@ -14,7 +14,7 @@ import { generateCode } from './generate-code';
 import { stringifyProps } from './translate-props-to-code';
 import { stringifyFilterList } from './translate-filters-to-code';
 // .js is required for lodash import
-import cloneDeep from 'lodash/cloneDeep.js';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;

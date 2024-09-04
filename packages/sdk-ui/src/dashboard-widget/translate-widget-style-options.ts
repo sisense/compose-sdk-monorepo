@@ -47,6 +47,7 @@ import {
   ScattermapWidgetStyle,
   PivotWidgetStyle,
   WidgetDesign,
+  WidgetDto,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
 
@@ -251,7 +252,13 @@ function prepareBoxplotChartAxisOptions(
   return axisOptions;
 }
 
-type CartesianChartStyleOptions = LineStyleOptions | AreaStyleOptions | StackableStyleOptions;
+/**
+ * @internal
+ */
+export type CartesianChartStyleOptions =
+  | LineStyleOptions
+  | AreaStyleOptions
+  | StackableStyleOptions;
 
 function extractCartesianChartStyleOptions(
   widgetType: WidgetType,
@@ -473,21 +480,29 @@ export function extractPivotTableStyleOptions(
 
 export function extractStyleOptions<WType extends WidgetType>(
   widgetType: WType,
-  widgetSubtype: WidgetSubtype,
-  style: WidgetStyle,
-  panels: Panel[],
+  widget: WidgetDto,
 ): ChartStyleOptions | TableStyleOptions {
+  const {
+    subtype: widgetSubtype,
+    style,
+    metadata: { panels },
+  } = widget as WidgetDto & { subtype: WidgetSubtype };
   switch (widgetType) {
     case 'chart/line':
     case 'chart/area':
     case 'chart/bar':
-    case 'chart/column':
-      return extractCartesianChartStyleOptions(
+    case 'chart/column': {
+      const styleOptions = extractCartesianChartStyleOptions(
         widgetType,
         widgetSubtype,
         style as CartesianWidgetStyle,
         panels,
       );
+      if (styleOptions.navigator) {
+        styleOptions.navigator.scrollerLocation = widget.options?.previousScrollerLocation;
+      }
+      return styleOptions;
+    }
     case 'chart/polar':
       return extractPolarChartStyleOptions(widgetSubtype, style as PolarWidgetStyle, panels);
     case 'chart/scatter':
@@ -512,8 +527,17 @@ export function extractStyleOptions<WType extends WidgetType>(
         style as IndicatorWidgetStyle,
         panels,
       );
-    case 'chart/boxplot':
-      return extractBoxplotChartStyleOptions(widgetSubtype, style as BoxplotWidgetStyle, panels);
+    case 'chart/boxplot': {
+      const boxplotStyleOptions = extractBoxplotChartStyleOptions(
+        widgetSubtype,
+        style as BoxplotWidgetStyle,
+        panels,
+      );
+      if (boxplotStyleOptions.navigator) {
+        boxplotStyleOptions.navigator.scrollerLocation = widget.options?.previousScrollerLocation;
+      }
+      return boxplotStyleOptions;
+    }
     case 'map/scatter':
       return extractScattermapChartStyleOptions(widgetSubtype, style as ScattermapWidgetStyle);
     case 'map/area':

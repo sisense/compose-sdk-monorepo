@@ -25,6 +25,18 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * @example
  * An example of using the `Chart` component to
  * plot a column chart of the Sample Healthcare data source hosted in a Sisense instance:
+ *
+ * ```html
+ * <!--Component HTML template in .component.html-->
+ * <csdk-chart
+ *   [chartType]="chart.chartType"
+ *   [dataSet]="chart.dataSet"
+ *   [dataOptions]="chart.dataOptions"
+ *   [filters]="chart.filters"
+ *   [styleOptions]="chart.styleOptions"
+ * />
+ * ```
+ *
  * ```ts
  * // Component behavior in .component.ts
  * chart = {
@@ -53,16 +65,6 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  *     },
  *   },
  * };
- * ```
- * ```html
- * <!--Component HTML template in .component.html-->
- * <csdk-chart
- *   [chartType]="chart.chartType"
- *   [dataSet]="chart.dataSet"
- *   [dataOptions]="chart.dataOptions"
- *   [filters]="chart.filters"
- *   [styleOptions]="chart.styleOptions"
- * />
  * ```
  *
  * <img src="media://angular-chart-example.png" width="800px" />

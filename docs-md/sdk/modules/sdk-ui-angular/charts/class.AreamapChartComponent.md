@@ -14,7 +14,9 @@ An Angular component that allows to visualize geographical data as polygons on a
      [dataOptions]="areamapChart.dataOptions"
      [styleOptions]="areamapChart.styleOptions"
      (dataPointClick)="logArguments($event)"
-   /> * ```
+   />
+```
+
 ```ts
 import { Component } from '@angular/core';
 import { measureFactory } from '@sisense/sdk-data';

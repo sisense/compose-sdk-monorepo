@@ -19,3 +19,21 @@ React component that renders a dashboard created in Sisense Fusion by its ID.
 ## Returns
 
 `null` \| `ReactElement`\< `any`, `any` \>
+
+## Example
+
+```ts
+import { DashboardById } from '@sisense/sdk-ui';
+
+ const CodeExample = () => {
+   return (
+     <>
+       <DashboardById
+         dashboardOid="65a82171719e7f004018691c"
+       />
+     </>
+   );
+ };
+
+ export default CodeExample;
+```

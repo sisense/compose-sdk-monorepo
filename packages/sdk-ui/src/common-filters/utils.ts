@@ -1,6 +1,6 @@
 import { isSameAttribute, haveSameAttribute } from '@/utils/filters.js';
 import { Filter, Attribute, filterFactory, MembersFilter } from '@sisense/sdk-data';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual';
 import { FiltersIgnoringRules, PureFilter } from './types.js';
 
 export function getAllowedFilters(

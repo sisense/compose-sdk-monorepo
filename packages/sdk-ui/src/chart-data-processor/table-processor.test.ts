@@ -20,7 +20,7 @@ import {
 } from './table-processor';
 import { createSortableTable, TableData } from './table-creators';
 import parseISO from 'date-fns/parseISO';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 
 const tableData: TableData = {
   columns: [

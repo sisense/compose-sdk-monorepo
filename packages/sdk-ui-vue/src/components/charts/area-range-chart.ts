@@ -24,7 +24,7 @@ import { setupHelper } from '../../setup-helper';
  * import { ref } from 'vue';
  * import { measureFactory } from '@sisense/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import {AreaRangeChart, type AreaRangeChartProps} from '@sisense/sdk-ui-vue';
+ * import { AreaRangeChart, type AreaRangeChartProps } from '@sisense/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const areaRangeChartProps = ref<AreaRangeChartProps>({

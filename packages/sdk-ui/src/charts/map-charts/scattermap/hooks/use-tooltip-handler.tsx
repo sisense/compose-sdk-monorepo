@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import delay from 'lodash/delay';
+import delay from 'lodash-es/delay';
 import { ScattermapChartLocation } from '../../../../chart-data/types';
 import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
 import {

@@ -1,5 +1,5 @@
 import { isRef, toRaw, toValue, type Ref } from 'vue';
-import values from 'lodash/values';
+import values from 'lodash-es/values';
 import type { MaybeRef, MaybeRefOrWithRefs, MaybeWithRefs } from './types';
 
 export function isObject(value: unknown): boolean {

@@ -19,7 +19,7 @@ import { setupHelper } from '../../setup-helper';
  * import { ref } from 'vue';
  * import { measureFactory, filterFactory } from '@sisense/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import {PivotTable, type PivotTableProps} from '@sisense/sdk-ui-vue/Table';
+ * import { PivotTable, type PivotTableProps } from '@sisense/sdk-ui-vue/Table';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');

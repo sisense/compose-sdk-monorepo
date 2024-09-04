@@ -1,5 +1,5 @@
-import merge from 'lodash/merge';
-import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash-es/merge';
+import cloneDeep from 'lodash-es/cloneDeep';
 import {
   extractStyleOptions,
   getIndicatorTypeSpecificOptions,
@@ -13,6 +13,7 @@ import {
   PolarWidgetStyle,
   ScatterWidgetStyle,
   TreemapWidgetStyle,
+  WidgetDto,
   WidgetSubtype,
 } from './types';
 import { jaqlMock } from './__mocks__/jaql-mock';
@@ -36,6 +37,16 @@ function generateWidgetAxisOptions(options = {}) {
 
   return merge(cloneDeep(defaultOptions), options);
 }
+
+const mockWidgetDto = (subtype: WidgetSubtype | string, style: any, panels: any): WidgetDto => {
+  return {
+    subtype,
+    style,
+    metadata: {
+      panels,
+    },
+  } as WidgetDto;
+};
 
 describe('translate widget style options', () => {
   describe('axes style options for cartesian chart', () => {
@@ -91,9 +102,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/column',
-        '' as WidgetSubtype,
-        widgetStyle,
-        widgetPanels,
+        mockWidgetDto('', widgetStyle, widgetPanels),
       ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis).toEqual({
@@ -114,9 +123,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/column',
-        '' as WidgetSubtype,
-        widgetStyle,
-        widgetPanels,
+        mockWidgetDto('', widgetStyle, widgetPanels),
       ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis?.title?.text).toEqual(widgetPanels[0].items[1].jaql.title);
@@ -132,9 +139,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/area',
-        '' as WidgetSubtype,
-        widgetStyle,
-        [],
+        mockWidgetDto('', widgetStyle, []),
       ) as AreaStyleOptions;
 
       expect(styleOptions.markers).toEqual(widgetStyle.markers);
@@ -147,9 +152,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/area',
-        '' as WidgetSubtype,
-        widgetStyle,
-        [],
+        mockWidgetDto('', widgetStyle, []),
       ) as AreaStyleOptions;
 
       expect(styleOptions.lineWidth).toEqual(widgetStyle.lineWidth);
@@ -180,9 +183,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/polar',
-        '' as WidgetSubtype,
-        widgetStyle,
-        widgetPanels,
+        mockWidgetDto('', widgetStyle, widgetPanels),
       ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis).toEqual(widgetStyle.categories);
@@ -203,9 +204,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/polar',
-        '' as WidgetSubtype,
-        widgetStyle,
-        widgetPanels,
+        mockWidgetDto('', widgetStyle, widgetPanels),
       ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis?.title?.text).toEqual(widgetPanels[0].items[0].jaql.title);
@@ -240,9 +239,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/scatter',
-        '' as WidgetSubtype,
-        widgetStyle,
-        widgetPanels,
+        mockWidgetDto('', widgetStyle, widgetPanels),
       ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis).toEqual(widgetStyle.xAxis);
@@ -257,9 +254,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/scatter',
-        '' as WidgetSubtype,
-        widgetStyle,
-        widgetPanels,
+        mockWidgetDto('', widgetStyle, widgetPanels),
       ) as BaseStyleOptionsWithAxes;
 
       expect(styleOptions.xAxis?.title?.text).toEqual(widgetPanels[0].items[0].jaql.title);
@@ -288,9 +283,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'chart/funnel',
-        '' as WidgetSubtype,
-        widgetStyle,
-        [],
+        mockWidgetDto('', widgetStyle, []),
       ) as BaseStyleOptions;
 
       expect(styleOptions).toEqual({
@@ -316,10 +309,10 @@ describe('translate widget style options', () => {
         header: { color: { enabled: true } },
       };
 
-      expect(extractStyleOptions('tablewidget', '' as WidgetSubtype, widgetStyle, [])).toEqual(
+      expect(extractStyleOptions('tablewidget', mockWidgetDto('', widgetStyle, []))).toEqual(
         expectedOptions,
       );
-      expect(extractStyleOptions('tablewidgetagg', '' as WidgetSubtype, widgetStyle, [])).toEqual(
+      expect(extractStyleOptions('tablewidgetagg', mockWidgetDto('', widgetStyle, []))).toEqual(
         expectedOptions,
       );
     });
@@ -344,9 +337,7 @@ describe('translate widget style options', () => {
 
       const styleOptions = extractStyleOptions(
         'indicator',
-        'indicator/numeric' as WidgetSubtype,
-        widgetStyle,
-        [
+        mockWidgetDto('indicator/numeric', widgetStyle, [
           {
             name: 'value',
             items: [
@@ -367,7 +358,7 @@ describe('translate widget style options', () => {
               } as PanelItem,
             ],
           },
-        ],
+        ]),
       ) as BaseStyleOptions;
 
       expect(styleOptions).toStrictEqual({
@@ -460,7 +451,7 @@ describe('translate widget style options', () => {
           mode: 'value',
         },
       };
-      const result = extractStyleOptions('treemap', 'treemap', widgetStyle, []);
+      const result = extractStyleOptions('treemap', mockWidgetDto('treemap', widgetStyle, []));
 
       expect(result).toEqual(expected);
     });
@@ -481,7 +472,7 @@ describe('translate widget style options', () => {
           mode: 'contribution',
         },
       };
-      const result = extractStyleOptions('treemap', 'treemap', widgetStyle, []);
+      const result = extractStyleOptions('treemap', mockWidgetDto('treemap', widgetStyle, []));
 
       expect(result).toEqual(expected);
     });
@@ -497,7 +488,7 @@ describe('translate widget style options', () => {
           mode: 'value',
         },
       };
-      const result = extractStyleOptions('treemap', 'treemap', widgetStyle, []);
+      const result = extractStyleOptions('treemap', mockWidgetDto('treemap', widgetStyle, []));
 
       expect(result).toEqual(expected);
     });

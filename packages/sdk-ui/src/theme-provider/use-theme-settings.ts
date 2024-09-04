@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual';
 import merge from 'ts-deepmerge';
 import { useState, useEffect } from 'react';
 import { ThemeOid, ThemeSettings, isThemeOid, CompleteThemeSettings } from '../types';

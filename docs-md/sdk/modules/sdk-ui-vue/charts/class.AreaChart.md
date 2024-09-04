@@ -23,7 +23,7 @@ Here's how you can use the AreaChart component in a Vue application:
 import { ref } from 'vue';
 import { measureFactory, filterFactory } from '@sisense/sdk-data';
 import * as DM from '../assets/sample-retail-model';
-import {AreaChart, type AreaChartProps} from '@sisense/sdk-ui-vue';
+import { AreaChart, type AreaChartProps } from '@sisense/sdk-ui-vue';
 
 const dimProductName = DM.DimProducts.ProductName;
 const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');

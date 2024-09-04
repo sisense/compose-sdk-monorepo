@@ -27,7 +27,7 @@ import subWeeks from 'date-fns/subWeeks';
 import subYears from 'date-fns/subYears';
 import { enUS, de, fr, es, it, ja, ko, nl, pt, ru, tr, zhCN } from 'date-fns/locale';
 
-import range from 'lodash/range';
+import range from 'lodash-es/range';
 
 export type SystemSettings = { language: string };
 

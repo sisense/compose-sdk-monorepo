@@ -123,7 +123,7 @@ export function convertToThemeSettings(
       textColor: legacyDesignSettings.dashboards.widgetTextColor,
       backgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
       secondaryTextColor: legacyDesignSettings.dashboards.widgetSecondaryTextColor,
-      panelBackgroundColor: legacyDesignSettings.dashboards.panelBackgroundColor,
+      panelBackgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
       animation: {
         init: {
           duration: 'auto',
@@ -169,6 +169,12 @@ export function convertToThemeSettings(
       backgroundColor: legacyDesignSettings.dashboards.layoutBackgroundColor,
       dividerLineWidth: DEFAULT_DIVIDER_WIDTH,
       dividerLineColor: DEFAULT_DIVIDER_COLOR,
+    },
+    filter: {
+      panel: {
+        titleColor: legacyDesignSettings.dashboards.panelTitleTextColor,
+        backgroundColor: legacyDesignSettings.dashboards.panelBackgroundColor,
+      },
     },
   };
   return merge.withOptions({ mergeArrays: false }, getDefaultThemeSettings(), themeSettings);

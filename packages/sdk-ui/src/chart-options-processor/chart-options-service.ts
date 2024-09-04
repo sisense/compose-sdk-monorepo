@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import type {
   Options,
   DrilldownOptions,
@@ -99,7 +99,7 @@ export const highchartsOptionsService = (
             themeSettings,
             dateFormatter,
           );
-      formatAdvancedAnalyticsSeries(optionsWithAlerts.options.series, translate);
+      formatAdvancedAnalyticsSeries(optionsWithAlerts.options.series);
       return optionsWithAlerts;
     }
     case 'categorical': {
@@ -126,6 +126,7 @@ export const highchartsOptionsService = (
         chartDesignOptions,
         dataOptions as BoxplotChartDataOptionsInternal,
         translate,
+        themeSettings,
       );
     }
     default:

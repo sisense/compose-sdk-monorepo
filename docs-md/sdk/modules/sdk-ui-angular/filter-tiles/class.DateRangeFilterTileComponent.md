@@ -43,7 +43,7 @@ export class FiltersComponent {
   };
 }
 ```
-<img src="../../../img/angular-date-range-filter-tile-example.png" width="800px" />
+<img src="../../../img/angular-date-range-filter-tile-example.png" width="600px" />
 
 ## Implements
 

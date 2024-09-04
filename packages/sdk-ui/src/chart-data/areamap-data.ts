@@ -19,14 +19,17 @@ export const getAreamapData = (
   dataTable: DataTable,
 ): AreamapData => {
   const geoColumn = getColumnByName(dataTable, chartDataOptions.geo.name);
-  const colorColumn = getColumnByName(dataTable, chartDataOptions.color.name);
+  const colorColumn = getColumnByName(
+    dataTable,
+    chartDataOptions.color?.name ?? chartDataOptions.geo.name,
+  );
   if (!geoColumn || !colorColumn) {
     throw new Error('Missing required column');
   }
   const rawGeoData: RawGeoDataElement[] = dataTable.rows.map((row) => {
     const originalValue = getValue(row, colorColumn) as number;
     const numberFormatConfig = getCompleteNumberFormatConfig(
-      chartDataOptions.color.numberFormatConfig,
+      chartDataOptions.color?.numberFormatConfig,
     );
     const formattedOriginalValue = applyFormatPlainText(numberFormatConfig, originalValue);
     return {
@@ -36,13 +39,16 @@ export const getAreamapData = (
     };
   });
 
-  const coloredGeoData = geoDataColoringFunction(
-    rawGeoData,
-    chartDataOptions.color.color || defaultAreamapColorOptions,
-  );
+  let coloredGeoData;
+  if (chartDataOptions.color) {
+    coloredGeoData = geoDataColoringFunction(
+      rawGeoData,
+      chartDataOptions.color?.color || defaultAreamapColorOptions,
+    );
+  }
 
   return {
     type: 'areamap',
-    geoData: coloredGeoData,
+    geoData: coloredGeoData || rawGeoData,
   };
 };

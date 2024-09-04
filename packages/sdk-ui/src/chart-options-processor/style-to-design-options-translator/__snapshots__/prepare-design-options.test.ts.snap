@@ -2,7 +2,9 @@
 
 exports[`prepareChartDesignOptions > should return design options for areamap chart 1`] = `
 {
-  "autoZoom": true,
+  "autoZoom": {
+    "enabled": true,
+  },
   "dataLimits": {
     "categoriesCapacity": 100000,
     "seriesCapacity": 50,
@@ -81,7 +83,10 @@ exports[`prepareChartDesignOptions > should return design options for areamap ch
 
 exports[`prepareChartDesignOptions > should return design options for combo "line + area" chart 1`] = `
 {
-  "autoZoom": true,
+  "autoZoom": {
+    "enabled": true,
+    "scrollerLocation": undefined,
+  },
   "dataLimits": {
     "categoriesCapacity": 100000,
     "seriesCapacity": 50,
@@ -172,7 +177,9 @@ exports[`prepareChartDesignOptions > should return design options for combo "lin
 
 exports[`prepareChartDesignOptions > should return design options for funnel chart 1`] = `
 {
-  "autoZoom": true,
+  "autoZoom": {
+    "enabled": true,
+  },
   "dataLimits": {
     "categoriesCapacity": 100000,
     "seriesCapacity": 3,
@@ -250,7 +257,9 @@ exports[`prepareChartDesignOptions > should return design options for funnel cha
 
 exports[`prepareChartDesignOptions > should return design options for scattermap chart 1`] = `
 {
-  "autoZoom": true,
+  "autoZoom": {
+    "enabled": true,
+  },
   "dataLimits": {
     "categoriesCapacity": 100000,
     "seriesCapacity": 50,

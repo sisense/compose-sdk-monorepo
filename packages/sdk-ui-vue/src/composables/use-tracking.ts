@@ -3,7 +3,6 @@ import { getSisenseContext } from '../providers/sisense-context-provider.js';
 import { ref, watchEffect } from 'vue';
 
 /**
- * @internal
  * A Vue composable function `useTracking` designed to track the usage of hooks within Vue applications
  * using the Sisense SDK. It sends tracking information to the server whenever a specified hook is used,
  * helping in the analysis and optimization of application performance and usage patterns. This composable
@@ -15,7 +14,7 @@ import { ref, watchEffect } from 'vue';
  * @example
  * How to use `useTracking` to track the usage of a custom hook:
  * ```javascript
- * import { useTracking } from './composables/useTracking';
+ * import { useTracking } from '@sisense/sdk-ui-vue';
  *
  * // Example hook that utilizes useTracking for monitoring its usage
  * export const useCustomHook = () => {
@@ -37,6 +36,8 @@ import { ref, watchEffect } from 'vue';
  * This internal utility composable is essential for maintaining insights into the usage of custom hooks
  * within applications leveraging the Sisense SDK, enabling developers and analysts to understand and optimize
  * hook interactions and performance.
+ *
+ * @internal
  */
 export const useTracking = (hookName: string) => {
   const hasTrackedRef = ref(false);

@@ -1,4 +1,4 @@
-import mapValues from 'lodash/mapValues';
+import mapValues from 'lodash-es/mapValues';
 import {
   MetadataTypes,
   DimensionalBaseMeasure,
@@ -13,6 +13,8 @@ import {
   createFilterFromJaql,
   PivotJaql,
   Attribute,
+  ForecastFormulaOptions,
+  TrendFormulaOptions,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -58,7 +60,8 @@ import {
 } from '../chart-data-options/types';
 import { WidgetDataOptions } from '../models';
 import { TranslatableError } from '../translation/translatable-error';
-import findKey from 'lodash/findKey';
+import findKey from 'lodash-es/findKey';
+import camelCase from 'lodash-es/camelCase';
 
 export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem['format']) {
   const isFormulaJaql = 'formula' in jaql;
@@ -150,7 +153,7 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
       million: numberFormat.abbreviations?.m,
       billion: numberFormat.abbreviations?.b,
       trillion: numberFormat.abbreviations?.t,
-      thousandSeparator: numberFormat.number?.separated,
+      thousandSeparator: numberFormat.number?.separated ?? numberFormat.separated,
       prefix: numberFormat.currency?.position === CurrencyPosition.PRE,
       symbol: numberFormat.currency?.symbol,
       name: getNumberFormatName(numberFormat),
@@ -158,6 +161,51 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
   }
 
   return null;
+}
+
+/** @internal */
+export function applyStatisticalModels(
+  dataOption: StyledMeasureColumn,
+  statisticalModels?: {
+    forecast?: {
+      isEnabled: boolean;
+      isViewerDisabled: boolean;
+      confidence: number;
+      forecastPeriod: number;
+    };
+    trend?: {
+      isEnabled: boolean;
+      isViewerDisabled: boolean;
+      trendType: string;
+    };
+  },
+): StyledMeasureColumn {
+  if (!statisticalModels) return dataOption;
+
+  const { forecast, trend } = statisticalModels;
+  let newDataOption = { ...dataOption }; // Create a shallow copy to avoid mutation
+
+  if (forecast && !forecast.isViewerDisabled && forecast.isEnabled) {
+    newDataOption = {
+      ...newDataOption,
+      forecast: {
+        confidenceInterval: forecast.confidence / 100,
+        forecastHorizon: forecast.forecastPeriod,
+        modelType: 'auto',
+      } as ForecastFormulaOptions,
+    };
+  }
+
+  if (trend && !trend.isViewerDisabled && trend.isEnabled) {
+    newDataOption = {
+      ...newDataOption,
+      trend: {
+        modelType: trend.trendType as TrendFormulaOptions['modelType'],
+      },
+    };
+  }
+
+  return newDataOption;
 }
 
 export function createDataColumn(item: PanelItem, customPaletteColors?: Color[]) {
@@ -186,7 +234,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     const totalsCalculation = 'subtotalAgg' in item.jaql && item.jaql.subtotalAgg;
     const dataBars = item.format?.databars;
 
-    return {
+    const dataOption = {
       column: element,
       ...(color && { color }),
       ...(showOnRightAxis && { showOnRightAxis }),
@@ -197,6 +245,8 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
       ...(dataBars && { dataBars }),
       ...(width && { width }),
     } as StyledMeasureColumn;
+
+    return applyStatisticalModels(dataOption, item.statisticalModels);
   }
 
   return {
@@ -215,7 +265,7 @@ export const createDataOptionsFromPanels = (panels: Panel[], variantColors: Colo
   const dataOptions: { [key: string]: any[] } = {};
   panels.forEach((panel) => {
     if (panel.name !== 'filters') {
-      dataOptions[panel.name.toLowerCase()] = createColumnsFromPanelItems(
+      dataOptions[camelCase(panel.name)] = createColumnsFromPanelItems(
         panels,
         panel.name,
         variantColors,
@@ -522,13 +572,11 @@ function extractAreamapChartDataOptions(
   const geo: [StyledColumn] = [
     createColumnsFromPanelItems<StyledColumn>(panels, 'geo', paletteColors)[0],
   ];
-  const color: [StyledMeasureColumn] = [
-    createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'color', paletteColors)[0],
-  ];
+  const color = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'color', paletteColors)[0];
 
   return {
     geo,
-    color,
+    ...(color && { color: [color] }),
   };
 }
 

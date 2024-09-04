@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { numericFormatter } from 'react-number-format';
-import round from 'lodash/round';
+import round from 'lodash-es/round';
 import { CompleteNumberFormatConfig, NumberFormatConfig } from '@/types';
 
 const oneKilo = 1000;

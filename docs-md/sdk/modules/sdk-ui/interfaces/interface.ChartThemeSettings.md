@@ -64,6 +64,10 @@ Background color
 
 Toolbar Background color, can be used as a secondary background color
 
+::: warning Deprecated
+
+:::
+
 ***
 
 ### secondaryTextColor

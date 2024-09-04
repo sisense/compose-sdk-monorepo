@@ -87,6 +87,8 @@ export type Datasource = {
  *
  * This is the (not-comprehensive) structure of the response from the
  * `/api/v1/dashboards/${dashboardOid}/widgets/${widgetOid}` endpoint.
+ *
+ * @internal
  */
 export interface WidgetDto {
   oid: string;
@@ -105,8 +107,16 @@ export interface WidgetDto {
     dashboardFiltersMode: `${WidgetDashboardFilterMode}`;
     selector: boolean;
     drillToAnywhere?: boolean;
+    previousScrollerLocation?: AutoZoomNavigatorScrollerLocation;
   };
 }
+/**
+ * @description the scroll location of the navigator scroller / auto zoom feature
+ */
+export type AutoZoomNavigatorScrollerLocation = {
+  min: number;
+  max: number;
+};
 
 export type WidgetDesign = {
   widgetBackgroundColor: string;
@@ -170,6 +180,47 @@ export type DatetimeMask = {
   dateAndTime?: string;
 };
 
+export type StatisticalModels = {
+  forecast?: {
+    isEnabled: boolean;
+    isViewerDisabled: boolean;
+    explainVariable: null;
+    evaluation: {
+      type: string;
+      numLastPointsForEvaluation: number;
+      ignoreLast: number;
+    };
+    forecastPeriod: number;
+    confidence: number;
+    modelType: string;
+    boundaries: {
+      upper: {
+        isEnabled: boolean;
+        value: null;
+      };
+      lower: {
+        isEnabled: boolean;
+        value: null;
+      };
+      isInt: {
+        isEnabled: boolean;
+      };
+    };
+  };
+  trend?: {
+    isEnabled: boolean;
+    isViewerDisabled: boolean;
+    trendType: string;
+    ignoreAnomalies: boolean;
+    trendOnForecast: boolean;
+    compare: {
+      isEnabled: boolean;
+      period: string;
+    };
+    isAccessible: boolean;
+  };
+};
+
 export type PanelItem = {
   instanceid?: string;
   format?: {
@@ -190,6 +241,7 @@ export type PanelItem = {
   categoriesSorting?: JaqlSortDirection;
   isColored?: boolean;
   geoLevel?: 'country' | 'state' | 'city';
+  statisticalModels?: StatisticalModels;
   field?: {
     id: string;
     index: number;

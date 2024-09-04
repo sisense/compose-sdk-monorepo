@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { isNumber, isDatetime } from '@sisense/sdk-data';
 import parseISO from 'date-fns/parseISO';
-import isObject from 'lodash/isObject';
+import isObject from 'lodash-es/isObject';
 import { Row, Column, Value, ComparableData, CompareValue } from './table-processor';
 
 export const createCompareValue = (

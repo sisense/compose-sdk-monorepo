@@ -32,16 +32,26 @@ import { useTracking } from './use-tracking';
  * @example
  * How to use `useGetDashboardModel` within a Vue component to fetch and display a Sisense dashboard:
  * ```vue
- * <script setup>
- * import { ref } from 'vue';
- * import { useGetDashboardModel } from './composables/useGetDashboardModel';
+ * <template>
+ *  <Dashboard
+ *    v-if="dashboard"
+ *    :title="dashboard.title"
+ *    :layout="dashboard.layout"
+ *    :widgets="dashboard.widgets"
+ *    :filters="dashboard.filters"
+ *    :defaultDataSource="dashboard.dataSource"
+ *    :widgetFilterOptions="dashboard.widgetFilterOptions"
+ *    :styleOptions="dashboard.styleOptions"
+ *  />
+ * </template>
  *
- * const dashboardOid = ref('your_dashboard_oid');
- * const includeWidgets = ref(true); // Decide whether to include widgets in the dashboard model
+ * <script setup lang="ts">
+ * import { DashboardById, useGetDashboardModel } from '@sisense/sdk-ui-vue';
  *
- * const { data: dashboardModel, isLoading, isError, error } = useGetDashboardModel({
- *   dashboardOid,
- *   includeWidgets,
+ * const { dashboard } = useGetDashboardModel({
+ *  dashboardOid: '6441e728dac1920034bce737',
+ *  includeWidgets: true,
+ *  includeFilters: true,
  * });
  * </script>
  * ```

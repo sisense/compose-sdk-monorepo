@@ -56,7 +56,9 @@ describe('getScatterChartOptions', () => {
       max: null,
       tickInterval: null,
     },
-    autoZoom: true,
+    autoZoom: {
+      enabled: true,
+    },
     dataLimits: {
       seriesCapacity: SERIES_CAPACITY,
       categoriesCapacity: customCategoriesCapacity,

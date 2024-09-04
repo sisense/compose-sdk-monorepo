@@ -86,6 +86,12 @@ export type InternalSeries = {
     };
     upperPointName?: string;
     lowerPointName?: string;
+    trend?: {
+      min: number;
+      max: number;
+      median: number;
+      average: number;
+    };
   };
   percentage?: number;
 };

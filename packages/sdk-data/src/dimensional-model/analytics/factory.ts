@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep.js';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 import type { Attribute, Measure } from '../interfaces.js';
 import { customFormula } from '../measures/factory.js';
 

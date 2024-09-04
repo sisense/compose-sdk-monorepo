@@ -10,6 +10,9 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
     },
     "chart": {
       "alignTicks": false,
+      "events": {
+        "load": [Function],
+      },
       "polar": false,
       "spacing": [
         20,
@@ -43,9 +46,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
       "layout": "horizontal",
       "symbolRadius": 0,
       "verticalAlign": "bottom",
-    },
-    "navigator": {
-      "enabled": false,
     },
     "plotOptions": {
       "area": {
@@ -700,6 +700,9 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
     },
     "chart": {
       "alignTicks": false,
+      "events": {
+        "load": [Function],
+      },
       "polar": false,
       "spacing": [
         20,
@@ -733,9 +736,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
       "layout": "horizontal",
       "symbolRadius": 0,
       "verticalAlign": "bottom",
-    },
-    "navigator": {
-      "enabled": false,
     },
     "plotOptions": {
       "area": {
@@ -1395,6 +1395,9 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
     },
     "chart": {
       "alignTicks": false,
+      "events": {
+        "load": [Function],
+      },
       "polar": false,
       "spacing": [
         20,
@@ -1428,9 +1431,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
       "layout": "horizontal",
       "symbolRadius": 0,
       "verticalAlign": "bottom",
-    },
-    "navigator": {
-      "enabled": false,
     },
     "plotOptions": {
       "area": {
@@ -2085,6 +2085,9 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
     },
     "chart": {
       "alignTicks": false,
+      "events": {
+        "load": [Function],
+      },
       "polar": false,
       "spacing": [
         20,
@@ -2118,9 +2121,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
       "layout": "horizontal",
       "symbolRadius": 0,
       "verticalAlign": "bottom",
-    },
-    "navigator": {
-      "enabled": false,
     },
     "plotOptions": {
       "area": {
@@ -2780,6 +2780,9 @@ exports[`cartesianData > timeseries with one data point 1`] = `
     },
     "chart": {
       "alignTicks": false,
+      "events": {
+        "load": [Function],
+      },
       "polar": false,
       "spacing": [
         20,
@@ -2813,9 +2816,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
       "layout": "horizontal",
       "symbolRadius": 0,
       "verticalAlign": "bottom",
-    },
-    "navigator": {
-      "enabled": false,
     },
     "plotOptions": {
       "area": {
@@ -3103,6 +3103,9 @@ exports[`renders a categorical line chart 1`] = `
   },
   "chart": {
     "alignTicks": false,
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -3136,9 +3139,6 @@ exports[`renders a categorical line chart 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -3491,6 +3491,9 @@ exports[`renders a categorical line chart with two x axes 1`] = `
   },
   "chart": {
     "alignTicks": false,
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -3524,9 +3527,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -4100,6 +4100,9 @@ exports[`renders a time series chart with break by 1`] = `
   },
   "chart": {
     "alignTicks": false,
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -4133,9 +4136,6 @@ exports[`renders a time series chart with break by 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -4746,6 +4746,9 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
   },
   "chart": {
     "alignTicks": false,
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -4779,9 +4782,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -5392,6 +5392,9 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
   },
   "chart": {
     "alignTicks": false,
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -5425,9 +5428,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -6008,6 +6008,9 @@ exports[`renders a time series with granularity Month 1`] = `
   },
   "chart": {
     "alignTicks": false,
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -6041,9 +6044,6 @@ exports[`renders a time series with granularity Month 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -6624,6 +6624,9 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
   },
   "chart": {
     "alignTicks": false,
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -6657,9 +6660,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {

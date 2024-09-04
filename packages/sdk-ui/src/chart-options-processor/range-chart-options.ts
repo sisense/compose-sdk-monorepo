@@ -6,12 +6,10 @@ import { ChartType, CompleteThemeSettings } from '../types';
 import {
   CartesianChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
-  StyledMeasureColumn,
   Value,
 } from '../chart-data-options/types';
 import { TFunction } from '@sisense/sdk-common';
 import { getCartesianChartOptions } from './cartesian-chart-options';
-import { AxisPlotBand } from './translations/axis-section';
 import { SeriesType } from './chart-options-service';
 import {
   formatForecastAdjustRangeStart,

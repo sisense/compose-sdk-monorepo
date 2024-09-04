@@ -138,12 +138,13 @@ function getTooltipContent(
   originalValueTitle: string,
 ): string {
   const featureInfo = featureStylesDictionary[feature.id!];
+  const { formattedOriginalValue } = featureInfo.geoDataElement || {};
   return `
   <div>
     <span>${featureInfo.displayName}<span>
     ${
-      featureInfo.geoDataElement
-        ? `<br/>${originalValueTitle}: <span>${featureInfo.geoDataElement.formattedOriginalValue}<span>`
+      featureInfo.geoDataElement && formattedOriginalValue !== undefined
+        ? `<br/>${originalValueTitle}: <span>${formattedOriginalValue}<span>`
         : ''
     }
   </div>`;

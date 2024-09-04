@@ -1,6 +1,6 @@
 import { getPivotQueryOptions } from '@/pivot-table/hooks/use-get-pivot-table-query';
 import { Attribute, Filter, Measure } from '@sisense/sdk-data';
-import { over } from 'lodash';
+import over from 'lodash-es/over';
 import { getTranslatedDataOptions } from '../../chart-data-options/get-translated-data-options';
 import {
   translatePivotTableDataOptions,
@@ -13,12 +13,12 @@ import {
 } from '../../chart-data-options/types';
 import { extractDataOptions } from '../../dashboard-widget/translate-widget-data-options';
 import { extractDrilldownOptions } from '../../dashboard-widget/translate-widget-drilldown-options';
-import { extractFilters } from '../../dashboard-widget/translate-widget-filters';
+import { extractWidgetFilters } from '../../dashboard-widget/translate-widget-filters';
 import {
   extractStyleOptions,
   getStyleWithWigetDesign,
 } from '../../dashboard-widget/translate-widget-style-options';
-import { Panel, WidgetDto, WidgetSubtype, WidgetType } from '../../dashboard-widget/types';
+import { Panel, WidgetDto, WidgetType } from '../../dashboard-widget/types';
 import {
   getChartType,
   isChartWidget,
@@ -176,12 +176,7 @@ export class WidgetModel {
         themeSettings?.palette.variantColors,
       );
 
-      const styleOptions = extractStyleOptions(
-        widgetType,
-        widgetDto.subtype as WidgetSubtype,
-        widgetDto.style,
-        widgetDto.metadata.panels,
-      );
+      const styleOptions = extractStyleOptions(widgetType, widgetDto);
 
       // take into account widget design style feature flag
       const isWidgetDesignStyleEnabled =
@@ -196,7 +191,7 @@ export class WidgetModel {
 
     // does not handle widget type plugin
     this.drilldownOptions = extractDrilldownOptions(this.widgetType, widgetDto.metadata.panels);
-    this.filters = extractFilters(widgetDto.metadata.panels);
+    this.filters = extractWidgetFilters(widgetDto.metadata.panels);
     this.chartType = isChartWidget(widgetType) ? getChartType(this.widgetType) : undefined;
   }
 

@@ -3,7 +3,7 @@ import { type JaqlRequest } from '@sisense/sdk-pivot-client';
 import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
 import { normalizePivotSort } from '../sorting-utils';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual';
 import { ExecutePivotQueryParams } from '@/query-execution';
 import { translateCategoryToAttribute, translateValueToMeasure } from '@/chart-data-options/utils';
 import { Category, PivotTableDataOptionsInternal, Value } from '@/chart-data-options/types';

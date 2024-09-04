@@ -109,6 +109,14 @@ Testing helpers (see `./visual-tests/__test-helpers__/makeScreenshot.ts`):
 - `makeScreenshots(page: Page, locators: Locator[], name?: string)` - performs screenshots verification over the array of locators
 - `makeScreenshot(page: Page, locator: Locator, name?: string)` - performs screeshot verification over the target locator
 
+### Test Suites with Predefined Dashboards
+
+The visual regression tests are designed to automatically verify test suites that utilize predefined dashboards, each representing a distinct test case.
+
+These tests automatically validate each dashboard listed on the `TestSuiteDashboards` page within the `react-local-demo` application. Dashboard assets are stored in the `packages/sdk-ui/__demo__/assets/test-suite-dashboards/` directory.
+
+To add a new dashboard asset, simply place a `*.dash` file exported from "Sisense Analytics" into the aforementioned directory. This addition will be automatically verified by the `react-local-demo/test-suites.spec.ts` test suite.
+
 ### Known issues:
 
 - The default system font is used in all screenshots to prevent flaky test results caused by differences in rendered text when custom fonts are used.

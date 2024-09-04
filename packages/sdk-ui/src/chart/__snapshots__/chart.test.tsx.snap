@@ -16,6 +16,7 @@ exports[`Chart > add handlers to a chart 1`] = `
     },
     "backgroundColor": "#FFFFFF",
     "events": {
+      "load": [Function],
       "selection": [Function],
     },
     "polar": false,
@@ -72,9 +73,6 @@ exports[`Chart > add handlers to a chart 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -441,7 +439,9 @@ exports[`Chart > change theme of a chart 1`] = `
       "duration": 300,
     },
     "backgroundColor": "blue",
-    "events": {},
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -495,9 +495,6 @@ exports[`Chart > change theme of a chart 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -1257,7 +1254,9 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -1311,9 +1310,6 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -2396,7 +2392,9 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -2450,9 +2448,6 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -4244,7 +4239,9 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -4298,9 +4295,6 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -5195,7 +5189,9 @@ exports[`Chart > render a column chart with breakBy 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -5249,9 +5245,6 @@ exports[`Chart > render a column chart with breakBy 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {
@@ -5773,7 +5766,9 @@ exports[`Chart > render a line chart 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "load": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -5827,9 +5822,6 @@ exports[`Chart > render a line chart 1`] = `
     "layout": "horizontal",
     "symbolRadius": 0,
     "verticalAlign": "bottom",
-  },
-  "navigator": {
-    "enabled": false,
   },
   "plotOptions": {
     "area": {

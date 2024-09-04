@@ -22,7 +22,7 @@ Here's how you can use the DashboardWidget component in a Vue application:
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import {DashboardWidget} from '@sisense/sdk-ui-vue';
+import { DashboardWidget } from '@sisense/sdk-ui-vue';
 
 </script>
 ```

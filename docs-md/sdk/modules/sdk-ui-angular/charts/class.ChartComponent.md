@@ -10,6 +10,18 @@ An Angular component used for easily switching chart types or rendering multiple
 
 An example of using the `Chart` component to
 plot a column chart of the Sample Healthcare data source hosted in a Sisense instance:
+
+```html
+<!--Component HTML template in .component.html-->
+<csdk-chart
+  [chartType]="chart.chartType"
+  [dataSet]="chart.dataSet"
+  [dataOptions]="chart.dataOptions"
+  [filters]="chart.filters"
+  [styleOptions]="chart.styleOptions"
+/>
+```
+
 ```ts
 // Component behavior in .component.ts
 chart = {
@@ -38,16 +50,6 @@ chart = {
     },
   },
 };
-```
-```html
-<!--Component HTML template in .component.html-->
-<csdk-chart
-  [chartType]="chart.chartType"
-  [dataSet]="chart.dataSet"
-  [dataOptions]="chart.dataOptions"
-  [filters]="chart.filters"
-  [styleOptions]="chart.styleOptions"
-/>
 ```
 
 <img src="../../../img/angular-chart-example.png" width="800px" />

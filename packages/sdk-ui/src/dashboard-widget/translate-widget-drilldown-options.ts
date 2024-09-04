@@ -5,7 +5,7 @@ import { getEnabledPanelItems } from './utils';
 import { DataPoint, DrilldownOptions } from '../types';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';
 import parseISO from 'date-fns/parseISO';
-import uniqBy from 'lodash/uniqBy';
+import uniqBy from 'lodash-es/uniqBy';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent

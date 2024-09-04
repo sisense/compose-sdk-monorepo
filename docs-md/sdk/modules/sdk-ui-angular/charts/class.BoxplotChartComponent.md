@@ -18,7 +18,9 @@ variability, and center of a data set along an axis.
      (dataPointClick)="logArguments($event)"
      (dataPointContextMenu)="logArguments($event)"
      (dataPointsSelect)="logArguments($event)"
-   /> * ```
+   />
+```
+
 ```ts
 import { Component } from '@angular/core';
 import { filterFactory } from '@sisense/sdk-data';

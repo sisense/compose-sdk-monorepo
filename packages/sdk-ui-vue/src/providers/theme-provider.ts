@@ -88,12 +88,14 @@ export const createThemeContextConnector = (
  * ```
  *
  * Indicator chart with custom theme settings:
+ *
  * <img src="media://indicator-chart-example-2.png" width="400px" />
  *
  *
  * For comparison, indicator chart with default theme settings:
  *
  * <img src="media://indicator-chart-example-1.png" width="400px" />
+ *
  * @see {@link ThemeSettings} and {@link IndicatorChart}
  * @param props - Theme provider props
  * @returns A Theme Provider component * @prop {Object | String} theme - Theme settings object for custom themes or a string identifier to fetch theme settings. When provided as an object, it merges with the default theme settings. When provided as a string, it attempts to fetch theme settings using the provided ID.

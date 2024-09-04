@@ -202,7 +202,8 @@ export function getMeasures(
       },
     );
   } else if (isAreamap(chartType)) {
-    values = [(dataOptions as AreamapChartDataOptionsInternal).color];
+    const color = (dataOptions as AreamapChartDataOptionsInternal).color;
+    values = color ? [color] : [];
   } else if (isScattermap(chartType)) {
     values = ['size', 'colorBy', 'details'].flatMap((key) => {
       return dataOptions[key] && isValue(dataOptions[key]) ? [dataOptions[key]] : [];

@@ -23,7 +23,7 @@ Below is an example for filtering countries in the `Country` dimension of the `S
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import {MemberFilterTile, type MemberFilterTileProps} from '@sisense/sdk-ui-vue';
+import { MemberFilterTile, type MemberFilterTileProps } from '@sisense/sdk-ui-vue';
 
 const memberFilterValue = ref<Filter | null>(null);
 
@@ -39,7 +39,7 @@ const memberFilter = ref<MemberFilterTileProps>({
 
 </script>
 ```
-<img src="../../../img/vue-member-filter-tile-example.png" width="300px" />
+<img src="../../../img/vue-member-filter-tile-example.png" width="600px" />
 
 ## Param
 

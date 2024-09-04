@@ -15,12 +15,13 @@ import {
 } from '../interfaces.js';
 import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
 
-import { AggregationTypes, FormulaContext, FormulaJaql, MetadataTypes, Sort } from '../types.js';
+import { AggregationTypes, FormulaContext, FormulaJaql, MetadataTypes } from '../types.js';
 import { normalizeName } from '../base.js';
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
-import mapValues from 'lodash/mapValues.js';
+import mapValues from 'lodash-es/mapValues.js';
 import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
 import { isDatetime, isNumber } from './../simple-column-types.js';
+import { convertSort, createFilterFromJaql } from '../../utils.js';
 
 /**
  * Defines the different numeric operators that can be used with numeric filters
@@ -102,31 +103,18 @@ function measureFunction(
   return new DimensionalCalculatedMeasure(name, builder.join(''), context);
 }
 
-function transformCustomFormulaJaql(
-  jaql: (FormulaJaql & { context?: FormulaJaql | FormulaContext }) | FormulaContext,
-) {
+type CustomFormulaJaql =
+  | (FormulaJaql & { context?: FormulaJaql | FormulaContext })
+  | FormulaContext;
+
+function transformFormulaJaqlHelper(jaql: CustomFormulaJaql) {
   const isFormulaJaql = 'formula' in jaql;
 
-  let sort;
-  if (jaql.sort) {
-    sort = jaql.sort === 'asc' ? Sort.Ascending : Sort.Descending;
-  }
-
   if (isFormulaJaql) {
-    const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) =>
-      jaqlContextValue ? transformCustomFormulaJaql(jaqlContextValue) : {},
-    );
-
-    return new DimensionalCalculatedMeasure(
-      jaql.title,
-      jaql.formula,
-      context,
-      undefined,
-      undefined,
-      sort,
-    );
+    return transformCustomFormulaJaql(jaql);
   }
 
+  const sort = convertSort(jaql.sort);
   const hasAggregation = !!jaql.agg;
   const isDatatypeDatetime = isDatetime(jaql.datatype);
   const attributeType = isNumber(jaql.datatype)
@@ -154,19 +142,53 @@ function transformCustomFormulaJaql(
     );
   }
 
+  if ('filter' in jaql) {
+    return createFilterFromJaql(jaql);
+  }
+
   return attribute;
+}
+
+/**
+ * Transforms a custom formula jaql into a calculated measure instance.
+ *
+ * As custom formulas can be nested, the function performs a recursive transformation via a helper function.
+ *
+ * @param jaql - Custom formula jaql
+ * @returns Calculated measure instance
+ */
+function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedMeasure {
+  const isFormulaJaql = 'formula' in jaql;
+
+  if (!isFormulaJaql) {
+    throw new Error('Jaql is not a formula');
+  }
+
+  const sort = convertSort(jaql.sort);
+  const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) =>
+    jaqlContextValue ? transformFormulaJaqlHelper(jaqlContextValue) : {},
+  );
+
+  return new DimensionalCalculatedMeasure(
+    jaql.title,
+    jaql.formula,
+    context,
+    undefined,
+    undefined,
+    sort,
+  );
 }
 
 /**
  * Creates a calculated measure for a valid custom formula built from [base functions](/guides/sdk/reference/functions.html#measured-value-functions).
  *
- * Use square brackets (`[]`) within the `formula` property to include dimensions or measures.
- * Each unique dimension or measure included in the `formula` must be defined using a property:value pair in the `context` parameter.
+ * Use square brackets (`[]`) within the `formula` property to include dimensions, measures, or filters.
+ * Each unique dimension, measure, or filter included in the `formula` must be defined using a property:value pair in the `context` parameter.
  *
  * You can nest custom formulas by placing one inside the `formula` parameter of another.
  *
  * Note: To use [shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm)
- * from a Fusion Embed instance, you must fetch them first using {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}.
+ * from a Fusion instance, you must fetch them first using {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}.
  *
  * @example
  * An example of constructing a custom formulas using dimensions, measures, and nested custom formulas
@@ -191,9 +213,22 @@ function transformCustomFormulaJaql(
  *   },
  * );
  * ```
+ *
+ * Another example of constructing a custom formula using measures and filters
+ * ```ts
+ * const totalCostWithFilter = measureFactory.customFormula(
+ *   'Total Cost with Filter',
+ *   '(SUM([cost]), [categoryFilter])',
+ *   {
+ *     cost: DM.Commerce.Cost,
+ *     categoryFilter: filterFactory.members(DM.Category.Category, ['Apple Mac Desktops']),
+ *   },
+ * );
+ * ```
+ *
  * @param title - Title of the measure to be displayed in legend
  * @param formula - Formula to be used for the measure
- * @param context - Formula context as a map of strings to measures or attributes
+ * @param context - Formula context as a map of strings to attributes, measures, or filters
  * @returns A calculated measure instance
  * @group Advanced Analytics
  */
@@ -201,7 +236,7 @@ export function customFormula(
   title: string,
   formula: string,
   context: CustomFormulaContext,
-): Attribute | Measure {
+): CalculatedMeasure {
   const newContext = Object.entries(context).reduce((acc, [key, val]) => {
     acc[`[${key}]`] = val.jaql().jaql;
     return acc;

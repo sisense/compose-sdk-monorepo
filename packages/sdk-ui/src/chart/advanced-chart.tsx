@@ -4,7 +4,7 @@ import { RegularChartProps } from '../props.js';
 import './chart.css';
 import { RegularChart } from './regular-chart.js';
 import { isDataSource, Measure, measureFactory } from '@sisense/sdk-data';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { FORECAST_PREFIX, TREND_PREFIX } from '@/chart-options-processor/advanced-chart-options.js';
 
 /**

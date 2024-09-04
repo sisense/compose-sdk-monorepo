@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { applyDateFormats } from './query-result-date-formatting';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash-es/cloneDeep';
 import type { Cell, QueryResultData } from '@sisense/sdk-data';
 
 describe('applyDateFormats', () => {

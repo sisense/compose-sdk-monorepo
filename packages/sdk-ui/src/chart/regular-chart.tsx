@@ -190,7 +190,12 @@ export const RegularChart = (props: RegularChartProps) => {
         if (isSisenseChartType(chartType) && isSisenseChartProps(chartRendererProps)) {
           return (
             <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-              <SisenseChart {...chartRendererProps} />
+              <SisenseChart
+                {...chartRendererProps}
+                designOptions={{
+                  ...chartRendererProps.designOptions,
+                }}
+              />
             </LoadingOverlay>
           );
         }

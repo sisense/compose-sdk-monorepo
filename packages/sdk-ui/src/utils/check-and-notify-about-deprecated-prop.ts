@@ -1,4 +1,4 @@
-import has from 'lodash/has';
+import has from 'lodash-es/has';
 
 export function checkAndNotifyAboutDeprecatedProp(props: any, deprecatedProps: string[]): void {
   for (const deprecatedProp of deprecatedProps) {

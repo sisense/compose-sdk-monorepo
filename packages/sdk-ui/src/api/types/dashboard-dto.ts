@@ -48,6 +48,9 @@ export const isCascadingFilterDto = (
   return 'levels' in filter && filter.isCascading === true;
 };
 
+/**
+ * @internal
+ */
 export type DashboardDto = {
   oid: string;
   title: string;

@@ -24,6 +24,14 @@ Chart theme settings
 
 ***
 
+### filter
+
+> **filter**?: [`FilterThemeSettings`](../../sdk-ui/type-aliases/type-alias.FilterThemeSettings.md)
+
+Filter theme settings
+
+***
+
 ### general
 
 > **general**?: [`GeneralThemeSettings`](../../sdk-ui/interfaces/interface.GeneralThemeSettings.md)

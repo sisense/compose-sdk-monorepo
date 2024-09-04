@@ -29,7 +29,7 @@ Here's how to use `useExecuteQueryByWidgetId` within a Vue component:
 ```vue
 <script setup>
 import { ref } from 'vue';
-import { useExecuteQueryByWidgetId } from './composables/useExecuteQueryByWidgetId';
+import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui-vue';
 
 const widgetId = ref('your_widget_id_here');
 const filters = ref([...]); // Define filters if necessary

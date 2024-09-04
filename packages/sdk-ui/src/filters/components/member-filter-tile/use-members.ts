@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useReducer, useRef } from 'react';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual';
 import { Member, membersReducer } from './members-reducer';
 
 interface Props {

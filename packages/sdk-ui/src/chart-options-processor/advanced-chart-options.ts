@@ -1,4 +1,3 @@
-import { TFunction } from '@sisense/sdk-common';
 import { SeriesType } from './chart-options-service';
 import { AxisPlotBand, AxisSettings } from './translations/axis-section';
 
@@ -82,21 +81,63 @@ export const formatForecastPlotBands = (
 };
 
 export const formatTrendSeries = (
-  s: SeriesType,
+  series: SeriesType,
   seriesHash: {
     [x: string]: SeriesType;
   },
-  translate: TFunction,
 ) => {
-  const measureName = s.name.substring(TREND_PREFIX.length + 1);
+  const measureName = series.name.substring(TREND_PREFIX.length + 1);
   const measure = seriesHash[measureName];
-  s.showInLegend = false;
-  s.dashStyle = 'ShortDot';
-  s.color = measure.color;
-  measure.name = `${measure.name} (+${translate('advanced.tooltip.trend')})`;
+  series.showInLegend = false;
+  series.dashStyle = 'ShortDot';
+  series.color = measure.color;
+
+  let highestValue = 0;
+  let lowestValue = Number.MAX_VALUE;
+
+  const trendDataValues: number[] = measure.data
+    .filter((dataPoint) => dataPoint.y)
+    .map((dataPoint) => {
+      highestValue = Math.max(highestValue, dataPoint.y || 0);
+      lowestValue = Math.min(lowestValue, dataPoint.y || 0);
+      return dataPoint.y!;
+    });
+
+  // if (trendDataValues.length === 0) {
+  //   console.warn('No valid data points available to calculate trend data.');
+  //   return;
+  // }
+
+  // Calculate the min, max, average, and median
+  const min = lowestValue; // lowest value of the series
+  const max = highestValue; // highest value of the series
+  const average = trendDataValues.reduce((acc, val) => acc + val, 0) / trendDataValues.length; // average value of the series
+
+  const sortedData = [...trendDataValues].sort((a, b) => a - b);
+  const middle = Math.floor(sortedData.length / 2);
+  const median =
+    sortedData.length % 2 !== 0
+      ? sortedData[middle]
+      : (sortedData[middle - 1] + sortedData[middle]) / 2;
+
+  const trendData = {
+    min,
+    max,
+    median,
+    average,
+  };
+
+  // Apply trend data to each data point
+  series.data.forEach((dataPoint) => {
+    dataPoint.trend = trendData;
+  });
+
+  // this line is causing issues in tooltip as tooltip finds dataOption through name and name is changed here
+  // this line mainly makes the legend name to include the addition trend information
+  // measure.name = `${measure.name} (+${translate('advanced.tooltip.trend')})`;
 };
 
-export const formatAdvancedAnalyticsSeries = (series: SeriesType[], translate: TFunction) => {
+export const formatAdvancedAnalyticsSeries = (series: SeriesType[]) => {
   // post process advanced analytics
   const seriesDataLookup: {
     [x: string]: SeriesType;
@@ -107,7 +148,7 @@ export const formatAdvancedAnalyticsSeries = (series: SeriesType[], translate: T
 
   series.forEach((s) => {
     if (isTrendSeries(s.name)) {
-      formatTrendSeries(s, seriesDataLookup, translate);
+      formatTrendSeries(s, seriesDataLookup);
     }
   });
 };
