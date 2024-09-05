@@ -9,6 +9,8 @@ import { measureFactory } from '@sisense/sdk-data';
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',
   token: import.meta.env.VITE_APP_SISENSE_TOKEN,
+  showRuntimeErrors: true,
+  appConfig: { errorBoundaryConfig: { alwaysShowErrorText: true } },
 };
 
 const meta: Meta<typeof GetNlgQueryResult> = {

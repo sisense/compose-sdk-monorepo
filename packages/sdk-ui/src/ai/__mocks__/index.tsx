@@ -11,7 +11,12 @@ import AiContextProvider from '../ai-context-provider';
  * @internal
  */
 export const AiTestWrapper = ({ children }: { children: ReactNode }) => (
-  <SisenseContextProvider url={mockUrl} token={mockToken}>
+  <SisenseContextProvider
+    url={mockUrl}
+    token={mockToken}
+    showRuntimeErrors={true}
+    appConfig={{ errorBoundaryConfig: { alwaysShowErrorText: true } }}
+  >
     <AiContextProvider>
       <QueryClientProvider
         client={

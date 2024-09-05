@@ -163,6 +163,13 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
   return null;
 }
 
+/**
+ * Temporary internal flag to enable/disable statistical models in the data options.
+ *
+ * @internal
+ */
+const ENABLE_STATISTICAL_MODELS = false;
+
 /** @internal */
 export function applyStatisticalModels(
   dataOption: StyledMeasureColumn,
@@ -180,7 +187,7 @@ export function applyStatisticalModels(
     };
   },
 ): StyledMeasureColumn {
-  if (!statisticalModels) return dataOption;
+  if (!statisticalModels || !ENABLE_STATISTICAL_MODELS) return dataOption;
 
   const { forecast, trend } = statisticalModels;
   let newDataOption = { ...dataOption }; // Create a shallow copy to avoid mutation

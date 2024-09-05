@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.18.1] - 2024-09-04
+
+### Added
+
+- Disable forecast and trend in Fusion widgets temporarily to troubleshoot authorization-related issues
+
 ## [1.18.0] - 2024-09-03
 
 ### Added

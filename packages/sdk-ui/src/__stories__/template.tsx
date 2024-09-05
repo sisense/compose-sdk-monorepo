@@ -19,7 +19,12 @@ const themeSettings = {
 const contextDecorator = {
   decorators: [
     (Story: StoryFn) => (
-      <SisenseContextProvider url={url} token={token}>
+      <SisenseContextProvider
+        url={url}
+        token={token}
+        showRuntimeErrors={true}
+        appConfig={{ errorBoundaryConfig: { alwaysShowErrorText: true } }}
+      >
         <ThemeProvider theme={themeSettings}>
           <Story />
         </ThemeProvider>
