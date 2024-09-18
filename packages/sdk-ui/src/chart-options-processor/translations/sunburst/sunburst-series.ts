@@ -15,7 +15,7 @@ export function prepareSunburstDataItems(
 ) {
   const rootDataItem = {
     id: SUNBURST_ROOT_PARENT_ID,
-    name: dataOptions.y[0].title ?? dataOptions.y[0].name,
+    name: dataOptions.y[0]?.title ?? dataOptions.y[0]?.name,
     custom: { level: 0, levelsCount: chartData.xAxisCount },
   };
 

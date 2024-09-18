@@ -67,7 +67,7 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
  */
 export async function getSettings(
   customConfig: ConfigurableAppSettings,
-  httpClient: Pick<HttpClient, 'get'>,
+  httpClient: Pick<HttpClient, 'get' | 'url'>,
   useDefaultPalette?: boolean,
 ): Promise<AppSettings> {
   const serverSettings = await loadServerSettings(httpClient, useDefaultPalette);
@@ -102,7 +102,10 @@ function mapFeatures(features: Features): FeatureMap {
  * @param isWat - Whether the application is running with WAT authentication
  * @returns - Server settings
  */
-async function loadServerSettings(httpClient: Pick<HttpClient, 'get'>, useDefaultPalette = false) {
+async function loadServerSettings(
+  httpClient: Pick<HttpClient, 'get' | 'url'>,
+  useDefaultPalette = false,
+) {
   const globals = await httpClient.get<GlobalsObject>('api/globals');
   if (!globals) {
     throw new Error('Failed to load server settings');
@@ -111,7 +114,7 @@ async function loadServerSettings(httpClient: Pick<HttpClient, 'get'>, useDefaul
     ? ({ colors: getDefaultThemeSettings().palette.variantColors } as LegacyPalette)
     : await getLegacyPalette(getPaletteName(globals.designSettings), httpClient);
   const serverSettings: ServerSettings = {
-    serverThemeSettings: convertToThemeSettings(globals.designSettings, palette),
+    serverThemeSettings: convertToThemeSettings(globals.designSettings, palette, httpClient.url),
     serverLanguage: globals.language,
     serverVersion: globals.version,
     serverFeatures: mapFeatures(globals.features),

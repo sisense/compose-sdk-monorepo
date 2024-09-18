@@ -95,6 +95,7 @@ export const SisenseChart = ({
 
     const highchartsOptionsWithEventHandlers = applyEventHandlersToChart(
       highchartsOptionsWithCommonOptions,
+      dataOptions,
       {
         onDataPointClick,
         onDataPointContextMenu,

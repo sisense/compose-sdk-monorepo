@@ -11,14 +11,14 @@ describe('validateCategoricalChartDataOptions', () => {
   const VALUE_2 = measureFactory.sum(DM.Commerce.Cost);
   const VALUE_3 = measureFactory.sum(DM.Commerce.Quantity);
 
-  it('should throw an error when dataOptions.value is empty', () => {
+  it('should not throw an error when dataOptions.value is empty', () => {
     const chartType = 'pie';
     const dataOptions = {
       category: [CATEGORY_1],
       value: [],
     };
 
-    expect(() => validateCategoricalChartDataOptions(chartType, dataOptions)).toThrow();
+    expect(() => validateCategoricalChartDataOptions(chartType, dataOptions)).not.toThrow();
   });
 
   it('should not throw an error when dataOptions.value is not empty', () => {

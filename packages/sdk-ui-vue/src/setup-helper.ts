@@ -1,9 +1,14 @@
 import { h, ref, toRaw, type FunctionalComponent, isReactive, type Slots } from 'vue';
-import { createSisenseContextConnector, createThemeContextConnector } from './providers';
+import {
+  createPluginsContextConnector,
+  createSisenseContextConnector,
+  createThemeContextConnector,
+} from './providers';
 import { ComponentAdapter, createElement, createWrapperElement } from '@sisense/sdk-ui-preact';
 import { getSisenseContext } from './providers/sisense-context-provider';
 import { getThemeContext } from './providers/theme-provider';
 import { isObject } from './utils';
+import { getPluginsContext } from './providers/plugins-provider';
 
 export function getRawData<T>(data: T): T {
   return isReactive(data) ? toRaw(data) : data;
@@ -35,6 +40,7 @@ export const setupHelper = <P, C>(component: C, props: P) => {
   const refElement = ref<HTMLDivElement | null>(null);
   const context = getSisenseContext();
   const themeSettings = getThemeContext();
+  const pluginsContext = getPluginsContext();
 
   return () => {
     if (refElement.value) {
@@ -44,6 +50,7 @@ export const setupHelper = <P, C>(component: C, props: P) => {
       const componentAdapter = new ComponentAdapter(createPreactComponent, [
         createSisenseContextConnector(context.value),
         createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
+        createPluginsContextConnector(pluginsContext.value),
       ]);
 
       componentAdapter.render(refElement.value);
@@ -68,6 +75,7 @@ export const setupHelperWithChildren = <P, C>(
   const contextMenuChildrenRef = ref<HTMLDivElement>();
   const context = getSisenseContext();
   const themeSettings = getThemeContext();
+  const pluginsContext = getPluginsContext();
 
   return () => {
     if (contextMenuRef.value && contextMenuChildrenRef.value) {
@@ -81,6 +89,7 @@ export const setupHelperWithChildren = <P, C>(
           : [
               createSisenseContextConnector(context.value),
               createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
+              createPluginsContextConnector(pluginsContext.value),
             ],
       );
 

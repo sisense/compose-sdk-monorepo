@@ -72,16 +72,17 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
   }
 
   private getAttachedName(name: string, expression: string): string {
-    let result = normalizeName(name);
+    let result = name;
 
     // if exists fallback to expression
+    const normalizedName = normalizeName(name);
     if (
-      result === 'id' ||
-      result === 'name' ||
-      Object.getOwnPropertyDescriptor(this, result) !== undefined ||
-      this[result] !== undefined
+      normalizedName === 'id' ||
+      normalizedName === 'name' ||
+      Object.getOwnPropertyDescriptor(this, normalizedName) !== undefined ||
+      this[normalizedName] !== undefined
     ) {
-      result = normalizeName(expression.replace('.', '_').replace('[', '').replace(']', ''));
+      result = expression;
     }
 
     return result;
@@ -93,7 +94,7 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
     for (let i = 0; i < dimensions.length; i++) {
       const n = this.getAttachedName(dimensions[i].name, dimensions[i].attributes[0].expression);
 
-      this[n] = dimensions[i];
+      this[normalizeName(n)] = dimensions[i];
 
       if (n != dimensions[i].name) {
         dimensions[i].name = n;
@@ -107,7 +108,7 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
     for (let i = 0; i < attributes.length; i++) {
       const n = this.getAttachedName(attributes[i].name, attributes[i].expression);
 
-      this[n] = attributes[i];
+      this[normalizeName(n)] = attributes[i];
 
       if (attributes[i].name != n) {
         attributes[i].name = n;

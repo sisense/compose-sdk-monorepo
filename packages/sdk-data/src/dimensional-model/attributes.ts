@@ -26,7 +26,7 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
   protected _sort: Sort = Sort.None;
 
   constructor(name: string, expression: string, type?: string, desc?: string, sort?: Sort) {
-    super(normalizeName(name), type || MetadataTypes.Attribute, desc);
+    super(name, type || MetadataTypes.Attribute, desc);
 
     this.expression = expression;
     this._sort = sort || Sort.None;

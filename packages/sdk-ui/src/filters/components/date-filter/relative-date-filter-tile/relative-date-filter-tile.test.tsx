@@ -7,7 +7,7 @@ import {
   DateLevels,
   DimensionalLevelAttribute,
   RelativeDateFilter,
-  filterFactory as filters,
+  filterFactory,
 } from '@sisense/sdk-data';
 import { RelativeDateFilterTile } from './relative-date-filter-tile.js';
 import { MockedSisenseContextProvider, setup } from '../../../../__test-helpers__/index.js';
@@ -30,7 +30,7 @@ describe('RelativeDateFilterTile tests', () => {
   it('should render collapsed display text by default when vertical', () => {
     const props = {
       title: 'Test Title',
-      filter: filters.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
       arrangement: 'vertical' as FilterVariant,
       onUpdate: vi.fn(),
     };
@@ -46,7 +46,7 @@ describe('RelativeDateFilterTile tests', () => {
   it('should render input fields when vertical and expanded', async () => {
     const props = {
       title: 'Test Title',
-      filter: filters.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
       arrangement: 'vertical' as FilterVariant,
       onUpdate: vi.fn(),
     };
@@ -67,7 +67,7 @@ describe('RelativeDateFilterTile tests', () => {
   it('should render input fields when horizontal', async () => {
     const props = {
       title: 'Test Title',
-      filter: filters.dateRelativeFrom(mockAttributeYears, 0, 1) as RelativeDateFilter,
+      filter: filterFactory.dateRelativeFrom(mockAttributeYears, 0, 1) as RelativeDateFilter,
       onUpdate: vi.fn(),
     };
     const { user } = setup(

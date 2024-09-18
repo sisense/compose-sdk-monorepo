@@ -151,6 +151,38 @@ describe('Chart', () => {
     expect(chart).toBeTruthy();
   });
 
+  it('render a line chart with only category (x-axis)', async () => {
+    const { findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'line'}
+        dataOptions={{ category: [cat1], value: [], breakBy: [] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
+
+  it('render a line chart with only category (x-axis) and breakBy', async () => {
+    const { findByLabelText } = render(
+      <Chart
+        dataSet={dataSet}
+        chartType={'line'}
+        dataOptions={{ category: [cat1], value: [], breakBy: [cat2] }}
+        onBeforeRender={(options: HighchartsOptions) => {
+          expect(options).toMatchSnapshot();
+          return options;
+        }}
+      />,
+    );
+    const chart = await findByLabelText('chart-root');
+    expect(chart).toBeTruthy();
+  });
+
   it('render a column chart with breakBy', async () => {
     const { findByLabelText } = render(
       <Chart
@@ -230,11 +262,77 @@ describe('Chart', () => {
       expect(chart).toBeTruthy();
     });
 
+    it('render pie chart with cat and no value', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'pie'}
+          dataOptions={{ category: [cat1], value: [] }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return {};
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
+
     it('render pie chart with two values', async () => {
       const { findByLabelText } = render(
         <Chart
           dataSet={dataSet}
           chartType={'pie'}
+          dataOptions={{ category: [], value: [meas1, meas2] }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return {};
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
+  });
+
+  describe('funnel chart', () => {
+    it('render funnel chart with cat and value', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'funnel'}
+          dataOptions={{ category: [cat1], value: [meas1] }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return {};
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
+
+    it('render funnel chart with cat and no value', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'funnel'}
+          dataOptions={{ category: [cat1], value: [] }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options).toMatchSnapshot();
+            return {};
+          }}
+        />,
+      );
+      const chart = await findByLabelText('chart-root');
+      expect(chart).toBeTruthy();
+    });
+
+    it('render funnel chart with two values', async () => {
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'funnel'}
           dataOptions={{ category: [], value: [meas1, meas2] }}
           onBeforeRender={(options: HighchartsOptions) => {
             expect(options).toMatchSnapshot();

@@ -19,6 +19,7 @@ const DATA_MODEL_MODULE_NAME = 'DM';
  * @param column - Column name
  * @param level - Date level
  * @param dataType - Data type
+ * @param title - Attribute title
  * @returns attribute or level attribute
  */
 export const createAttributeHelper = (
@@ -27,6 +28,7 @@ export const createAttributeHelper = (
   column: string,
   level: string | undefined,
   dataType: string,
+  title?: string,
 ): Attribute | LevelAttribute => {
   // if table is undefined, extract it from dim
   const dimTable = table ?? dim.slice(1, -1).split('.')[0];
@@ -35,7 +37,7 @@ export const createAttributeHelper = (
     const dateLevel = DimensionalLevelAttribute.translateJaqlToGranularity({ level });
     const format = DimensionalLevelAttribute.getDefaultFormatForGranularity(dateLevel);
     const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
-      column,
+      title ?? column,
       dim,
       dateLevel,
       format,
@@ -51,7 +53,7 @@ export const createAttributeHelper = (
   const attributeType = isNumber(dataType)
     ? MetadataTypes.NumericAttribute
     : MetadataTypes.TextAttribute;
-  const attribute: Attribute = new DimensionalAttribute(column, dim, attributeType);
+  const attribute: Attribute = new DimensionalAttribute(title ?? column, dim, attributeType);
   attribute.composeCode = normalizeAttributeName(
     dimTable,
     column,
@@ -71,7 +73,14 @@ export const createAttributeHelper = (
 export const createAttributeFromFilterJaql = (
   jaql: FilterJaql | FilterJaqlInternal,
 ): Attribute | LevelAttribute => {
-  return createAttributeHelper(jaql.dim, jaql.table, jaql.column, jaql.level, jaql.datatype);
+  return createAttributeHelper(
+    jaql.dim,
+    jaql.table,
+    jaql.column,
+    jaql.level,
+    jaql.datatype,
+    jaql.title,
+  );
 };
 
 /**
@@ -92,8 +101,9 @@ export const createMeasureHelper = (
   level: string | undefined,
   dataType: string,
   agg: string,
+  title?: string,
 ): BaseMeasure => {
-  const attribute = createAttributeHelper(dim, table, column, level, dataType);
+  const attribute = createAttributeHelper(dim, table, column, level, dataType, title);
   const measure = measureFactory.aggregate(attribute, agg);
   measure.composeCode = `measureFactory.${agg}(${attribute.composeCode})`;
   return measure;
@@ -106,9 +116,9 @@ export const createMeasureHelper = (
  * @returns Measure
  */
 export const createMeasureFromFilterJaql = (jaql: FilterJaqlInternal): BaseMeasure | undefined => {
-  const { dim, table, column, level, datatype: dataType, agg } = jaql;
+  const { dim, table, column, title, level, datatype: dataType, agg } = jaql;
   if (!agg) return undefined;
-  return createMeasureHelper(dim, table, column, level, dataType, agg);
+  return createMeasureHelper(dim, table, column, level, dataType, agg, title);
 };
 
 /**

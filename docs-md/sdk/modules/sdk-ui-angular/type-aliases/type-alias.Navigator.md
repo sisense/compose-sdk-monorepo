@@ -20,4 +20,16 @@ Boolean flag that defines if navigator should be shown on the chart
 
 ### `scrollerLocation`
 
-**scrollerLocation**?: [`AutoZoomNavigatorScrollerLocation`](../../sdk-ui/type-aliases/type-alias.AutoZoomNavigatorScrollerLocation.md)
+**scrollerLocation**?: `object`
+
+The scroll location of the navigator scroller / auto zoom feature
+
+> #### `scrollerLocation.max`
+>
+> **max**: `number`
+>
+> #### `scrollerLocation.min`
+>
+> **min**: `number`
+>
+>

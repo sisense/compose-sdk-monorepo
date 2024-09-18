@@ -1,4 +1,3 @@
-import { TranslatableError } from '../../translation/translatable-error';
 import { CategoricalChartType } from '../../types';
 import { CategoricalChartDataOptions } from '../types';
 
@@ -6,9 +5,6 @@ export function validateCategoricalChartDataOptions(
   chartType: CategoricalChartType,
   dataOptions: CategoricalChartDataOptions,
 ): CategoricalChartDataOptions {
-  if (!dataOptions.value || dataOptions.value.length === 0) {
-    throw new TranslatableError('errors.dataOptions.emptyValueArray');
-  }
   return filterCategoricalDataOptionsByAllowedLength(chartType, dataOptions);
 }
 

@@ -15,7 +15,13 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 1,
       "levelsCount": 3,
+      "rawValues": [
+        "Refurbished",
+      ],
       "subtotalValue": 1765420.5938019156,
+      "xValues": [
+        "Refurbished",
+      ],
     },
     "id": "Refurbished",
     "name": "Refurbished",
@@ -26,7 +32,13 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 1,
       "levelsCount": 3,
+      "rawValues": [
+        "Unspecified",
+      ],
       "subtotalValue": 2706285.6384671647,
+      "xValues": [
+        "Unspecified",
+      ],
     },
     "id": "Unspecified",
     "name": "Unspecified",
@@ -37,7 +49,13 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 1,
       "levelsCount": 3,
+      "rawValues": [
+        "New",
+      ],
       "subtotalValue": 11850787.423742265,
+      "xValues": [
+        "New",
+      ],
     },
     "id": "New",
     "name": "New",
@@ -48,7 +66,13 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 1,
       "levelsCount": 3,
+      "rawValues": [
+        "Used",
+      ],
       "subtotalValue": 23437131.859015867,
+      "xValues": [
+        "Used",
+      ],
     },
     "id": "Used",
     "name": "Used",
@@ -59,7 +83,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "New",
+        "Female",
+      ],
       "subtotalValue": 419689.739569366,
+      "xValues": [
+        "New",
+        "Female",
+      ],
     },
     "id": "New_Female",
     "name": "Female",
@@ -70,7 +102,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "New",
+        "Male",
+      ],
       "subtotalValue": 3145290.8236471266,
+      "xValues": [
+        "New",
+        "Male",
+      ],
     },
     "id": "New_Male",
     "name": "Male",
@@ -81,7 +121,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "New",
+        "Unspecified",
+      ],
       "subtotalValue": 8285806.860525772,
+      "xValues": [
+        "New",
+        "Unspecified",
+      ],
     },
     "id": "New_Unspecified",
     "name": "Unspecified",
@@ -92,7 +140,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Refurbished",
+        "Female",
+      ],
       "subtotalValue": 43991.970816612244,
+      "xValues": [
+        "Refurbished",
+        "Female",
+      ],
     },
     "id": "Refurbished_Female",
     "name": "Female",
@@ -103,7 +159,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Refurbished",
+        "Male",
+      ],
       "subtotalValue": 750247.1492648125,
+      "xValues": [
+        "Refurbished",
+        "Male",
+      ],
     },
     "id": "Refurbished_Male",
     "name": "Male",
@@ -114,7 +178,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Refurbished",
+        "Unspecified",
+      ],
       "subtotalValue": 971181.4737204909,
+      "xValues": [
+        "Refurbished",
+        "Unspecified",
+      ],
     },
     "id": "Refurbished_Unspecified",
     "name": "Unspecified",
@@ -125,7 +197,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Unspecified",
+        "Female",
+      ],
       "subtotalValue": 107972.20067983866,
+      "xValues": [
+        "Unspecified",
+        "Female",
+      ],
     },
     "id": "Unspecified_Female",
     "name": "Female",
@@ -136,7 +216,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Unspecified",
+        "Male",
+      ],
       "subtotalValue": 521698.6592757795,
+      "xValues": [
+        "Unspecified",
+        "Male",
+      ],
     },
     "id": "Unspecified_Male",
     "name": "Male",
@@ -147,7 +235,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Unspecified",
+        "Unspecified",
+      ],
       "subtotalValue": 2076614.7785115466,
+      "xValues": [
+        "Unspecified",
+        "Unspecified",
+      ],
     },
     "id": "Unspecified_Unspecified",
     "name": "Unspecified",
@@ -158,7 +254,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Used",
+        "Female",
+      ],
       "subtotalValue": 358606.70924161375,
+      "xValues": [
+        "Used",
+        "Female",
+      ],
     },
     "id": "Used_Female",
     "name": "Female",
@@ -169,7 +273,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Used",
+        "Male",
+      ],
       "subtotalValue": 1741417.177718103,
+      "xValues": [
+        "Used",
+        "Male",
+      ],
     },
     "id": "Used_Male",
     "name": "Male",
@@ -180,7 +292,15 @@ exports[`prepareSunburstDataItems > should prepare data items with sorting and c
     "custom": {
       "level": 2,
       "levelsCount": 3,
+      "rawValues": [
+        "Used",
+        "Unspecified",
+      ],
       "subtotalValue": 21337107.97205615,
+      "xValues": [
+        "Used",
+        "Unspecified",
+      ],
     },
     "id": "Used_Unspecified",
     "name": "Unspecified",

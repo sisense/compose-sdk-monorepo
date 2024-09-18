@@ -17,7 +17,6 @@ export const translation = {
       'Sisense Context for query execution not found. To fix, wrap the component inside a Sisense context provider.',
     executeQueryNoDataSource: 'No dataSource provided to execute query',
     dataOptions: {
-      emptyValueArray: 'Invalid dataOptions – Array "value" is empty',
       noDimensionsAndMeasures:
         'Neither dimensions nor measures found. Data options should have at least one dimension or measure.',
       attributeNotFound: 'Attribute "{{attributeName}}" not found in the data',
@@ -40,8 +39,10 @@ export const translation = {
     },
     widgetModel: {
       pivotWidgetNotSupported: 'Pivot widget is not supported for method {{methodName}}',
+      textWidgetNotSupported: 'Text widget is not supported for method {{methodName}}',
       onlyTableWidgetSupported: 'Only table widget is supported for method {{methodName}}',
       onlyPivotWidgetSupported: 'Only pivot widget is supported for method {{methodName}}',
+      onlyTextWidgetSupported: 'Only text widget is supported for method {{methodName}}',
     },
     unknownFilterInFilterRelations: 'Filter relations contain unknown filter',
     filterRelationsNotSupported: 'Filter relations not supported yet',

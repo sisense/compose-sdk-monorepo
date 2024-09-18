@@ -147,4 +147,34 @@ describe('createHeaderCellValueFormatter', () => {
 
     expect(cell.content).toBe('N\\A');
   });
+
+  it('should format datetime cell with invalid date as original value', () => {
+    const dataOptions = {
+      rows: [
+        {
+          dateFormat: 'YYYY',
+          column: {
+            type: 'datetime',
+          },
+        },
+      ],
+    } as PivotTableDataOptions;
+    const cell = {
+      value: 'Some non-date string',
+      content: null,
+    } as unknown as PivotTreeNode;
+    const jaqlPanelItem = {
+      jaql: {
+        datatype: 'datetime',
+      },
+      field: {
+        index: 0,
+      },
+    } as JaqlPanel;
+    const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock);
+
+    formatter(cell, jaqlPanelItem, jaqlMock);
+
+    expect(cell.content).toBe('Some non-date string');
+  });
 });

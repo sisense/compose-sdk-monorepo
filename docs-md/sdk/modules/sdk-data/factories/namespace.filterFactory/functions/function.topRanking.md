@@ -31,7 +31,7 @@ Filter for age ranges with the top 3 highest total revenue in the Sample ECommer
 ```ts
 filterFactory.topRanking(
   DM.Commerce.AgeRange,
-  measures.sum(DM.Commerce.Revenue),
+  measureFactory.sum(DM.Commerce.Revenue),
   3
 )
 ```

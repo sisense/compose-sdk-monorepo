@@ -4,8 +4,11 @@ import {
   getFilterRelationsFromJaql,
   mergeFilters,
   applyWidgetFiltersToRelations,
+  isTextWidgetDtoStyle,
 } from './utils';
 import { PanelItem } from './types';
+import { lineChartWidgetDTO } from './__mocks__/line-chart-widget-dto';
+import { textWidgetDTO } from './__mocks__/text-widget-dto';
 
 const mockFilter1 = {
   guid: 'mockFilter1',
@@ -203,5 +206,15 @@ describe('applyWidgetFiltersToRelations', () => {
       filterRelationsJaql,
     );
     expect(updatedFilterRelations).toStrictEqual(filterRelationsJaql);
+  });
+});
+
+describe('isTextWidgetDtoStyle', () => {
+  it('should return true if widget is a TextWidget style', () => {
+    expect(isTextWidgetDtoStyle(textWidgetDTO.style)).toBe(true);
+  });
+
+  it('should return false if widget type is not a TextWidget style', () => {
+    expect(isTextWidgetDtoStyle(lineChartWidgetDTO.style)).toBe(false);
   });
 });

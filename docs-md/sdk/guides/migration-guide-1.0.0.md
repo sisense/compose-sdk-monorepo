@@ -207,8 +207,8 @@ AFTER
 <ExecuteQuery
   dataSource={DM.DataSource}
   dimensions={[DM.Commerce.AgeRange]}
-  measures={[measures.sum(DM.Commerce.Revenue)]}
-  filters={[filters.greaterThan(DM.Commerce.Revenue, 1000)]}
+  measures={[measureFactory.sum(DM.Commerce.Revenue)]}
+  filters={[filterFactory.greaterThan(DM.Commerce.Revenue, 1000)]}
 >
   {
     ( { data, isLoading, isError } ) => {

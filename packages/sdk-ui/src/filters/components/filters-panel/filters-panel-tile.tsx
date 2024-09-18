@@ -1,16 +1,16 @@
 import {
   DataSource,
-  CascadingFilter,
-  CustomFilter,
-  DateRangeFilter,
   Filter,
   LevelAttribute,
-  MeasureFilter,
-  MembersFilter,
-  NumericFilter,
-  RankingFilter,
-  RelativeDateFilter,
-  TextFilter,
+  isCustomFilter,
+  isMembersFilter,
+  isMeasureFilter,
+  isTextFilter,
+  isRankingFilter,
+  isRelativeDateFilter,
+  isCascadingFilter,
+  isDateRangeFilter,
+  isNumericFilter,
 } from '@sisense/sdk-data';
 import { MemberFilterTile } from '../member-filter-tile';
 import { CriteriaFilterTile } from '../criteria-filter-tile';
@@ -56,15 +56,15 @@ export const FiltersPanelTile = ({
     ...(defaultDataSource ? { dataSource: defaultDataSource } : null),
   };
   // checking for custom filters first to prevent conversion attempts
-  if (filter instanceof CustomFilter) {
+  if (isCustomFilter(filter)) {
     return <CustomFilterTile {...props} filter={filter} />;
   }
 
-  if (filter instanceof MembersFilter) {
+  if (isMembersFilter(filter)) {
     return <MemberFilterTile {...props} filter={filter} />;
   }
 
-  if (filter instanceof DateRangeFilter) {
+  if (isDateRangeFilter(filter)) {
     return (
       <DateRangeFilterTile
         {...props}
@@ -75,20 +75,20 @@ export const FiltersPanelTile = ({
     );
   }
 
-  if (filter instanceof RelativeDateFilter) {
+  if (isRelativeDateFilter(filter)) {
     return <RelativeDateFilterTile {...props} filter={filter} arrangement="vertical" />;
   }
 
   if (
-    filter instanceof MeasureFilter ||
-    filter instanceof NumericFilter ||
-    filter instanceof TextFilter ||
-    filter instanceof RankingFilter
+    isMeasureFilter(filter) ||
+    isNumericFilter(filter) ||
+    isTextFilter(filter) ||
+    isRankingFilter(filter)
   ) {
     return <CriteriaFilterTile {...props} filter={filter} />;
   }
 
-  if (filter instanceof CascadingFilter) {
+  if (isCascadingFilter(filter)) {
     return <CascadingFilterTile {...props} filter={filter} onChange={onChange} />;
   }
 

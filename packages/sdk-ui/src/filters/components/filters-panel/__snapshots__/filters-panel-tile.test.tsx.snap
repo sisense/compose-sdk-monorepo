@@ -32,7 +32,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for NumericFilter 1`] = `
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          TestRevenue
+          Test Revenue
         </span>
       </header>
       <main
@@ -109,7 +109,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for RankingFilter 1`] = `
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          TestRevenue
+          Test Revenue
         </span>
       </header>
       <main
@@ -186,7 +186,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for TextFilter 1`] = `
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          TestRevenue
+          Test Revenue
         </span>
       </header>
       <main
@@ -248,7 +248,7 @@ exports[`FiltersPanelTile > renders CustomFilterTile for advnced filter type 1`]
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          TestRevenue
+          Test Revenue
         </span>
       </header>
       <main
@@ -389,7 +389,7 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          TestRevenue
+          Test Revenue
         </span>
       </header>
       <main
@@ -473,7 +473,7 @@ exports[`FiltersPanelTile > renders locked CriteriaFilterTile 1`] = `
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          TestRevenue
+          Test Revenue
         </span>
       </header>
       <main
@@ -535,7 +535,7 @@ exports[`FiltersPanelTile > renders locked RelativeDateFilter component 1`] = `
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          TestRevenue
+          Test Revenue
         </span>
       </header>
       <main

@@ -1,6 +1,12 @@
-import { AutoZoomNavigatorScrollerLocation } from './dashboard-widget/types';
 /* eslint-disable max-lines */
-import type { Attribute, MembersFilter } from '@sisense/sdk-data';
+import type {
+  Attribute,
+  CalculatedMeasureColumn,
+  Column,
+  Measure,
+  MeasureColumn,
+  MembersFilter,
+} from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 import {
   AreaSubtype,
@@ -37,6 +43,8 @@ import { DataPointsEventHandler } from './props';
 import { LegendPosition } from './chart-options-processor/translations/legend-section';
 import { GeoDataElement, RawGeoDataElement } from './chart-data/types';
 import { Coordinates } from '@/charts/map-charts/scattermap/types';
+import { StyledColumn, StyledMeasureColumn } from '.';
+import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
@@ -101,7 +109,8 @@ export type Components = {
 export type Navigator = {
   /** Boolean flag that defines if navigator should be shown on the chart */
   enabled: boolean;
-  scrollerLocation?: AutoZoomNavigatorScrollerLocation;
+  /** The scroll location of the navigator scroller / auto zoom feature */
+  scrollerLocation?: { min: number; max: number };
 };
 
 /** Configuration that defines line width */
@@ -1011,6 +1020,32 @@ export interface AiChatThemeSettings {
   };
 }
 
+export type ThemeSettingsFontSource =
+  | {
+      local: string;
+    }
+  | {
+      url: string;
+    }
+  | {
+      format: string;
+      url: string;
+    };
+
+/** Loading font details */
+export interface ThemeSettingsFont {
+  fontFamily: string;
+  fontWeight: string | number;
+  fontStyle: string;
+  src: ThemeSettingsFontSource[];
+}
+
+/** Settings for fonts loading */
+export interface FontsLoaderSettings {
+  /** List of fonts */
+  fonts: ThemeSettingsFont[];
+}
+
 /** Text theme settings */
 export interface TypographyThemeSettings {
   /** Font family name to style component text */
@@ -1019,6 +1054,8 @@ export interface TypographyThemeSettings {
   primaryTextColor?: string;
   /** Secondary text color */
   secondaryTextColor?: string;
+  /** Settings for font loading */
+  fontsLoader?: FontsLoaderSettings;
 }
 
 /** General theme settings */
@@ -1137,11 +1174,15 @@ export interface ThemeSettings {
  *
  * @internal
  */
-export type CompleteThemeSettings = DeepRequired<ThemeSettings>;
+export type CompleteThemeSettings = DeepRequired<Omit<ThemeSettings, 'typography'>> & {
+  typography: DeepRequired<Omit<TypographyThemeSettings, 'fontsLoader'>> & {
+    fontsLoader?: FontsLoaderSettings;
+  };
+};
 
 /** Complete set of configuration options that define functional style of the various elements of the charts as well as the look and feel of widget itself and widget header. */
-export type WidgetStyleOptions = (ChartStyleOptions | TableStyleOptions) &
-  WidgetContainerStyleOptions;
+export type WidgetStyleOptions =
+  | (ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions) & WidgetContainerStyleOptions;
 
 /** Style settings defining the look and feel of widget itself and widget header */
 export interface WidgetContainerStyleOptions {
@@ -1233,6 +1274,15 @@ export type TableWidgetStyleOptions = TableStyleOptions & WidgetContainerStyleOp
 export type PivotTableWidgetStyleOptions = PivotTableStyleOptions & WidgetContainerStyleOptions;
 
 /**
+ * Style settings defining the look and feel of TextWidget
+ */
+export type TextWidgetStyleOptions = {
+  html: string;
+  vAlign: `valign-${'middle' | 'top' | 'bottom'}`;
+  bgColor: string;
+};
+
+/**
  * Runs type guard check for ThemeOid.
  *
  * @internal
@@ -1273,12 +1323,18 @@ export type ChartDataPoints =
   | DataPoint[]
   | ScatterDataPoint[]
   | BoxplotDataPoint[]
-  | AreamapDataPoint[];
+  | AreamapDataPoint[]
+  | ScattermapDataPoint[];
 
 /**
  * Abstract data point in a chart - union of all types of data points.
  */
-export type ChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint | AreamapDataPoint;
+export type ChartDataPoint =
+  | DataPoint
+  | ScatterDataPoint
+  | BoxplotDataPoint
+  | AreamapDataPoint
+  | ScattermapDataPoint;
 
 /**
  * Abstract data point in a chart that based on Highcharts.
@@ -1307,6 +1363,39 @@ export type DataPoint = {
   categoryDisplayValue?: string;
   /** Series associated with the data point */
   seriesValue?: string | number;
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries?: {
+    category: DataPointEntry[];
+    value: DataPointEntry[];
+    breakBy?: DataPointEntry[];
+  };
+};
+
+/**
+ * A data point entry that represents a single dimension within a multi-dimensional data point.
+ *
+ * @internal
+ */
+export type DataPointEntry = {
+  /**
+   * The unique identifier of the data point entry.
+   * It represents the path within the `dataOptions` object that identifies the related option.
+   */
+  readonly id: string;
+  /** The data option associated with this entry */
+  dataOption: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  /** The attribute associated with this data point entry */
+  attribute?: Attribute;
+  /** The measure associated with this data point entry */
+  measure?: Measure;
+  /** The raw value of the data point */
+  value: string | number;
+  /** The formated value of the data point */
+  displayValue?: string;
 };
 
 /** Data point in a Scatter chart. */
@@ -1316,30 +1405,64 @@ export type ScatterDataPoint = {
   size?: number;
   breakByPoint?: string;
   breakByColor?: string;
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries?: {
+    x?: DataPointEntry;
+    y?: DataPointEntry;
+    size?: DataPointEntry;
+    breakByPoint?: DataPointEntry;
+    breakByColor?: DataPointEntry;
+  };
 };
 
 /** Data point in a Boxplot chart. */
 export type BoxplotDataPoint = {
   /** Value of the box minimum */
-  boxMin: number;
+  boxMin?: number;
   /** Value of the box median */
-  boxMedian: number;
+  boxMedian?: number;
   /** Value of the box maximum */
-  boxMax: number;
+  boxMax?: number;
   /** Value of the box minimal whisker */
-  whiskerMin: number;
+  whiskerMin?: number;
   /** Value of the box maximal whisker */
-  whiskerMax: number;
+  whiskerMax?: number;
   /** Value of the category for the data point */
   categoryValue?: string | number;
   /** Display value of category of the data point */
   categoryDisplayValue?: string;
+  /** Value of the outlier */
+  outlier?: number;
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries?: {
+    category: DataPointEntry[];
+    value: DataPointEntry[];
+    outliers: DataPointEntry[];
+  };
 };
 
 /**
  * Data point in an Areamap chart.
  */
-export type AreamapDataPoint = GeoDataElement;
+export type AreamapDataPoint = GeoDataElement & {
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries?: {
+    geo: DataPointEntry[];
+    color: DataPointEntry[];
+  };
+};
 
 /**
  * Data point in an Scattermap chart.
@@ -1353,6 +1476,17 @@ export type ScattermapDataPoint = {
   value: number;
   /** Location coordinates */
   coordinates: Coordinates;
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries?: {
+    geo: DataPointEntry[];
+    size?: DataPointEntry;
+    colorBy?: DataPointEntry;
+    details?: DataPointEntry;
+  };
 };
 
 /**
@@ -1401,18 +1535,27 @@ export type HighchartsPoint = {
     name: string;
     custom: {
       number1?: number;
+      level?: number;
+      levelsCount?: number;
     };
     q1?: number;
     median?: number;
     q3?: number;
     low?: number;
     high?: number;
+    y?: number;
   };
   custom: {
+    maskedX?: string;
+    maskedY?: string;
     maskedBreakByPoint?: string;
     maskedBreakByColor?: string;
+    maskedSize?: string;
     rawValue?: string | number;
     xValue?: (string | number)[];
+    xDisplayValue?: string[];
+    rawValues?: (string | number)[];
+    xValues?: string[];
   };
   series: {
     initialType: string;
@@ -1420,6 +1563,11 @@ export type HighchartsPoint = {
     options: {
       custom?: { rawValue?: string | number[] };
     };
+    index: number;
+    chart: {
+      options: HighchartsOptionsInternal;
+    };
+    name: string;
   };
   graphic?: {
     on: (eventType: string, callback: (event: PointerEvent) => void) => HighchartsPoint['graphic'];
@@ -1427,6 +1575,8 @@ export type HighchartsPoint = {
   x: number;
   y: number;
   z: number;
+  index: number;
+  value?: number;
 };
 
 /**

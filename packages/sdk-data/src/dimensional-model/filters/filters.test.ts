@@ -26,16 +26,15 @@ describe('Filters jaql preparations', () => {
   it('must prepare members filter jaql', () => {
     const result = {
       jaql: {
-        title: 'CommerceGender',
+        title: 'Gender',
         dim: '[Commerce.Gender]',
         datatype: 'text',
         filter: { members: ['Female'] },
       },
     };
-    const filter = new MembersFilter(
-      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
-      ['Female'],
-    );
+    const filter = new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), [
+      'Female',
+    ]);
 
     const jaql = filter.jaql();
 
@@ -45,16 +44,14 @@ describe('Filters jaql preparations', () => {
   it('must prepare exclude filter jaql', () => {
     const result = {
       jaql: {
-        title: 'CommerceGender',
+        title: 'Gender',
         dim: '[Commerce.Gender]',
         datatype: 'text',
         filter: { exclude: { members: ['Female'] } },
       },
     };
     const filter = new ExcludeFilter(
-      new MembersFilter(new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'), [
-        'Female',
-      ]),
+      new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Female']),
     );
 
     const jaql = filter.jaql();
@@ -110,7 +107,7 @@ describe('Filters jaql preparations', () => {
   it('must prepare logical attribute filter jaql', () => {
     const result = {
       jaql: {
-        title: 'CommerceGender',
+        title: 'Gender',
         dim: '[Commerce.Gender]',
         datatype: 'text',
         filter: {
@@ -120,13 +117,9 @@ describe('Filters jaql preparations', () => {
     };
     const filter = new LogicalAttributeFilter(
       [
-        new MembersFilter(new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'), [
-          'Female',
-        ]),
+        new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Female']),
         new ExcludeFilter(
-          new MembersFilter(new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'), [
-            'Male',
-          ]),
+          new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Male']),
         ),
       ],
       'or',
@@ -148,10 +141,10 @@ describe('Filters jaql preparations', () => {
       },
     };
     const filter = new MeasureFilter(
-      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+      new DimensionalAttribute('Gender', '[Commerce.Gender]'),
       new DimensionalBaseMeasure(
         'Cost',
-        new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+        new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
         'sum',
       ),
     );
@@ -219,14 +212,14 @@ describe('Filters jaql preparations', () => {
   it('must prepare text filter jaql', () => {
     const result = {
       jaql: {
-        title: 'CommerceGender',
+        title: 'Gender',
         dim: '[Commerce.Gender]',
         datatype: 'text',
         filter: { contains: 'Male' },
       },
     };
     const filter = new TextFilter(
-      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+      new DimensionalAttribute('Gender', '[Commerce.Gender]'),
       TextOperators.Contains,
       'Male',
     );
@@ -239,14 +232,14 @@ describe('Filters jaql preparations', () => {
   it('must prepare numeric filter jaql', () => {
     const result = {
       jaql: {
-        title: 'CommerceCost',
+        title: 'Cost',
         dim: '[Commerce.Cost]',
         datatype: 'numeric',
         filter: { from: 1, to: 3 },
       },
     };
     const filter = new NumericFilter(
-      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+      new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
       NumericOperators.From,
       1,
       NumericOperators.To,
@@ -261,7 +254,7 @@ describe('Filters jaql preparations', () => {
   it('must prepare ranking filter jaql', () => {
     const result = {
       jaql: {
-        title: 'CommerceCost',
+        title: 'Cost',
         dim: '[Commerce.Cost]',
         datatype: 'numeric',
         filter: {
@@ -271,10 +264,10 @@ describe('Filters jaql preparations', () => {
       },
     };
     const filter = new RankingFilter(
-      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+      new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
       new DimensionalBaseMeasure(
         'Cost',
-        new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+        new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
         'sum',
       ),
       RankingOperators.Top,
@@ -290,7 +283,7 @@ describe('Filters jaql preparations', () => {
     const result = [
       {
         jaql: {
-          title: 'CategoryCategory',
+          title: 'Category',
           dim: '[Category.Category]',
           datatype: 'text',
           filter: {
@@ -301,7 +294,7 @@ describe('Filters jaql preparations', () => {
       },
       {
         jaql: {
-          title: 'CommerceGender',
+          title: 'Gender',
           dim: '[Commerce.Gender]',
           datatype: 'text',
           filter: {
@@ -313,12 +306,12 @@ describe('Filters jaql preparations', () => {
     ];
 
     const levelFilter1: Filter = new MembersFilter(
-      new DimensionalAttribute('[Category.Category]', '[Category.Category]'),
+      new DimensionalAttribute('Category', '[Category.Category]'),
       ['Apple Mac Desktops', 'Apple Mac Laptops', 'Calculators'],
     );
 
     const levelFilter2: Filter = new MembersFilter(
-      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+      new DimensionalAttribute('Gender', '[Commerce.Gender]'),
       ['Female'],
     );
 
@@ -331,13 +324,13 @@ describe('Filters jaql preparations', () => {
   it('must prepare members filter jaql with inner background filter', () => {
     const result = {
       jaql: {
-        title: 'CommerceGender',
+        title: 'Gender',
         dim: '[Commerce.Gender]',
         datatype: 'text',
         filter: { and: [{ members: ['Female'] }, { members: ['Female', 'Male'] }] },
       },
     };
-    const attribute = new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]');
+    const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]');
     const backgroundFilter = new MembersFilter(attribute, ['Female', 'Male']);
     const filter = new MembersFilter(
       attribute,

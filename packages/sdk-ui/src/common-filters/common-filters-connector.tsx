@@ -103,14 +103,14 @@ export function prepareCommonFiltersToWidgetConnectProps(
 
   if (normalizedOptions.shouldAffectFilters && selectableAttributes.length) {
     // registers "onDataPointClick" handler
-    props.onDataPointClick = (point: DataPoint, nativeEvent: PointerEvent) => {
-      const selections = getWidgetSelections(widgetType, dataOptions, [point], nativeEvent);
+    props.onDataPointClick = (point: DataPoint) => {
+      const selections = getWidgetSelections(widgetType, dataOptions, [point]);
       const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
       updateFilters(mergeFilters(pureFilters, selectedFilters));
     };
     // registers "onDataPointsSelected" handler
-    props.onDataPointsSelected = (points: DataPoint[], nativeEvent: MouseEvent | PointerEvent) => {
-      const selections = getWidgetSelections(widgetType, dataOptions, points, nativeEvent);
+    props.onDataPointsSelected = (points: DataPoint[]) => {
+      const selections = getWidgetSelections(widgetType, dataOptions, points);
       const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
       updateFilters(mergeFilters(pureFilters, selectedFilters));
     };

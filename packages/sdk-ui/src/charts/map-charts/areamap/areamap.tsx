@@ -2,7 +2,7 @@ import {
   AreamapChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../../../chart-data-options/types.js';
-import { AreamapData, ChartData } from '../../../chart-data/types.js';
+import { AreamapData, ChartData, GeoDataElement } from '../../../chart-data/types.js';
 import { AreamapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
 import { DesignOptions } from '../../../chart-options-processor/translations/types.js';
 import { AreamapMap } from './areamap-map.js';
@@ -12,6 +12,8 @@ import { ChartRendererProps } from '@/chart/types.js';
 import { useThemeContext } from '@/theme-provider';
 import { useMemo } from 'react';
 import { getPaletteColor } from '@/chart-data-options/coloring/utils';
+import { useCallback } from 'react';
+import { getAreamapDataPoint } from './areamap-utils.js';
 
 export type AreamapProps = {
   chartData: AreamapData;
@@ -39,6 +41,17 @@ export const Areamap: React.FC<AreamapProps> = ({
     return chartData.geoData;
   }, [chartData.geoData, dataOptions, themeSettings]);
 
+  const onAreaClickHandler = useCallback(
+    (geoDataElement: GeoDataElement, event: MouseEvent) => {
+      if (!onDataPointClick) {
+        return;
+      }
+      const areamapDataPoint = getAreamapDataPoint(geoDataElement, dataOptions);
+      onDataPointClick(areamapDataPoint, event);
+    },
+    [dataOptions, onDataPointClick],
+  );
+
   return (
     <>
       {geoJson && (
@@ -47,7 +60,7 @@ export const Areamap: React.FC<AreamapProps> = ({
           geoData={geoData}
           dataOptions={{
             originalValueTitle: dataOptions.color?.title || dataOptions.color?.name || '',
-            onAreaClick: onDataPointClick,
+            onAreaClick: onAreaClickHandler,
           }}
           mapType={designOptions.mapType}
         />

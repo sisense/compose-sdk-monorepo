@@ -5,6 +5,7 @@ import { useCommonFilters } from './use-common-filters';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import {
   CartesianChartDataOptions,
+  DataPoint,
   DataPointEventHandler,
   DataPointsEventHandler,
   RenderToolbarHandler,
@@ -172,7 +173,20 @@ describe('useCommonFilters', () => {
       expect(onDataPointClickHandler).toBeDefined();
 
       act(() => {
-        onDataPointClickHandler?.({ value: 111, categoryValue: '65+' }, {} as PointerEvent);
+        onDataPointClickHandler?.(
+          {
+            entries: {
+              category: [
+                {
+                  id: 'category.0',
+                  attribute: DM.Commerce.AgeRange,
+                  value: '65+',
+                },
+              ],
+            },
+          } as DataPoint,
+          {} as PointerEvent,
+        );
       });
       // need to reconnect widget to get the latest changes
       connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
@@ -202,9 +216,29 @@ describe('useCommonFilters', () => {
       act(() => {
         onDataPointsSelectedHandler?.(
           [
-            { value: 111, categoryValue: '19-24' },
-            { value: 112, categoryValue: '65+' },
-          ],
+            {
+              entries: {
+                category: [
+                  {
+                    id: 'category.0',
+                    attribute: DM.Commerce.AgeRange,
+                    value: '19-24',
+                  },
+                ],
+              },
+            },
+            {
+              entries: {
+                category: [
+                  {
+                    id: 'category.0',
+                    attribute: DM.Commerce.AgeRange,
+                    value: '65+',
+                  },
+                ],
+              },
+            },
+          ] as DataPoint[],
           {} as PointerEvent,
         );
       });
@@ -354,7 +388,20 @@ describe('useCommonFilters', () => {
       expect(onDataPointClickHandler).toBeDefined();
 
       act(() => {
-        onDataPointClickHandler?.({ value: 111, categoryValue: '19-24' }, {} as PointerEvent);
+        onDataPointClickHandler?.(
+          {
+            entries: {
+              category: [
+                {
+                  id: 'category.0',
+                  attribute: DM.Commerce.AgeRange,
+                  value: '19-24',
+                },
+              ],
+            },
+          } as DataPoint,
+          {} as PointerEvent,
+        );
       });
       // need to reconnect widget to get the latest changes
       connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {

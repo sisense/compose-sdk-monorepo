@@ -16,6 +16,14 @@ Font family name to style component text
 
 ***
 
+### fontsLoader
+
+> **fontsLoader**?: [`FontsLoaderSettings`](interface.FontsLoaderSettings.md)
+
+Settings for font loading
+
+***
+
 ### primaryTextColor
 
 > **primaryTextColor**?: `string`

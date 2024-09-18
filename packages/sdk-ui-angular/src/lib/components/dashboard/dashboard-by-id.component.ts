@@ -16,10 +16,12 @@ import {
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import {
+  createPluginsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+import { PluginsService } from '../../services/plugins.service';
 
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
@@ -86,12 +88,20 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
      * @category Constructor
      */
     public themeService: ThemeService,
+    /**
+     * Plugin service
+     *
+     * @internal
+     * @category Constructor
+     */
+    public pluginService: PluginsService,
   ) {
     this.componentAdapter = new ComponentAdapter(
       () => this.createPreactComponent(),
       [
         createSisenseContextConnector(this.sisenseContextService),
         createThemeContextConnector(this.themeService),
+        createPluginsContextConnector(this.pluginService),
       ],
     );
   }

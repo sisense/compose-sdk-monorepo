@@ -5,10 +5,13 @@ import {
   CustomSisenseContextProvider,
   CustomThemeProvider,
   CustomThemeProviderProps,
+  CustomPluginsProvider,
+  CustomPluginsProviderProps,
 } from '@sisense/sdk-ui-preact';
 import { map } from 'rxjs';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
+import { PluginsService } from '../services/plugins.service';
 
 /**
  * Creates theme context connector
@@ -61,5 +64,26 @@ export const createSisenseContextConnector = (
       } as CustomSisenseContext;
     },
     renderContextProvider: createContextProviderRenderer(CustomSisenseContextProvider),
+  };
+};
+
+/**
+ * Creates plugins context connector
+ *
+ * @param pluginsService - The plugin service
+ * @internal
+ */
+export const createPluginsContextConnector = (
+  pluginsService: PluginsService,
+): ContextConnector<CustomPluginsProviderProps['context']> => {
+  return {
+    prepareContext() {
+      return {
+        pluginMap: pluginsService.getPlugins().value,
+        registerPlugin: pluginsService.registerPlugin.bind(pluginsService),
+        getPlugin: pluginsService.getPlugin.bind(pluginsService),
+      };
+    },
+    renderContextProvider: createContextProviderRenderer(CustomPluginsProvider),
   };
 };

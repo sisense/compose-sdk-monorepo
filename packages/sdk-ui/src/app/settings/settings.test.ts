@@ -15,8 +15,9 @@ const mockGet = vi.fn().mockImplementation((url) => {
   }
 });
 
-const mockHttpClient: Pick<HttpClient, 'get'> = {
+const mockHttpClient: Pick<HttpClient, 'get' | 'url'> = {
   get: mockGet,
+  url: 'http://test.com/',
 };
 
 describe('getSettings function', () => {

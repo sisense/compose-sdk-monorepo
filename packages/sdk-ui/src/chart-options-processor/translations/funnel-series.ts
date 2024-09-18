@@ -96,7 +96,7 @@ const computeFunnelPercents = (seriesValues: HighchartsSeriesValues): Highcharts
   const data = seriesValues.data.map((value: SeriesPointStructure, index: number) => {
     const y = value.y as number;
     if (index === 0) baseY = y;
-    value.custom = { number1: fromFraction(baseY, y) };
+    value.custom = { ...value.custom, number1: fromFraction(baseY, y) };
     return value;
   });
 

@@ -1,15 +1,23 @@
-import { isPivotWidget, isTableWidget } from '@/dashboard-widget/utils';
+import { isPivotWidget, isTableWidget, isTextWidget } from '@/dashboard-widget/utils';
 import { getDividerStyle } from '@/dashboard/utils';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '@/dynamic-size-container';
 import { CompleteThemeSettings, useThemeContext } from '@/index';
 import { Layout, WidgetModel } from '@/models';
-import { ChartWidgetProps, PivotTableWidgetProps, TableWidgetProps } from '@/props';
+import {
+  ChartWidgetProps,
+  PivotTableWidgetProps,
+  TableWidgetProps,
+  TextWidgetProps,
+} from '@/props';
 import { ChartWidget } from '@/widgets/chart-widget';
 import { WidgetContainer } from '@/widgets/common/widget-container';
 import { PivotTableWidget } from '@/widgets/pivot-table-widget';
 import { TableWidget } from '@/widgets/table-widget';
+import { TextWidget } from '@/widgets/text-widget';
 import styled from '@emotion/styled';
-import { PluginService } from './plugin-service';
+import { usePlugins } from '@/plugins-provider';
+import { WidgetPlugin } from '@/plugins-provider/types';
+import ErrorBoundaryBox from '@/error-boundary/error-boundary-box';
 
 const Row = styled.div<{ widths: number[] }>`
   display: grid;
@@ -43,23 +51,34 @@ function getWidgetProps(widgetModel: WidgetModel) {
     return widgetModel.getTableWidgetProps();
   } else if (isPivotWidget(widgetType)) {
     return widgetModel.getPivotTableWidgetProps();
+  } else if (isTextWidget(widgetType)) {
+    return widgetModel.getTextWidgetProps();
   } else {
     return widgetModel.getChartWidgetProps();
   }
 }
 
-const renderWidgetModel = (w: WidgetModel | undefined, theme: CompleteThemeSettings) => {
+const renderWidgetModel = (
+  w: WidgetModel | undefined,
+  theme: CompleteThemeSettings,
+  plugins: Map<string, WidgetPlugin>,
+) => {
   if (!w) {
     return null;
   }
 
   if (w.widgetType === 'plugin') {
-    const plugin = PluginService.get(w.pluginType);
+    const plugin = plugins.get(w.pluginType);
     if (!plugin) {
-      console.error(`Unknown plugin type: ${w.pluginType}`);
-      return;
+      return (
+        <ErrorBoundaryBox
+          error={`Unknown plugin type: ${w.pluginType}. Please register this plugin so it can be rendered.`}
+        />
+      );
     }
+    const { component: PluginComponent } = plugin;
     const pluginChartProps = plugin.createChartProps(w, theme);
+
     return (
       <DynamicSizeContainer defaultSize={getWidgetDefaultSize('line', { hasHeader: true })}>
         <WidgetContainer
@@ -69,7 +88,7 @@ const renderWidgetModel = (w: WidgetModel | undefined, theme: CompleteThemeSetti
           styleOptions={w.styleOptions}
           onRefresh={() => console.log('DEBUG refresh')}
         >
-          <plugin.Plugin {...pluginChartProps} />
+          <PluginComponent key={`plugin-${w.oid}`} {...pluginChartProps} />
         </WidgetContainer>
       </DynamicSizeContainer>
     );
@@ -81,6 +100,8 @@ const renderWidgetModel = (w: WidgetModel | undefined, theme: CompleteThemeSetti
     return <TableWidget {...(chartProps as TableWidgetProps)} />;
   } else if (isPivotWidget(w.widgetType)) {
     return <PivotTableWidget {...(chartProps as PivotTableWidgetProps)} />;
+  } else if (isTextWidget(w.widgetType)) {
+    return <TextWidget {...(chartProps as TextWidgetProps)} />;
   } else {
     return <ChartWidget {...(chartProps as ChartWidgetProps)} highlightSelectionDisabled={true} />;
   }
@@ -129,6 +150,7 @@ export interface ContentPanelProps {
  */
 export const ContentPanel = ({ layout, widgets }: ContentPanelProps) => {
   const { themeSettings } = useThemeContext();
+  const { plugins } = usePlugins();
   return (
     <Row widths={layout.columns.map((c) => c.widthPercentage)}>
       {layout.columns.map((column, columnIndex) => (
@@ -152,6 +174,7 @@ export const ContentPanel = ({ layout, widgets }: ContentPanelProps) => {
                   {renderWidgetModel(
                     widgets.find((w) => w.oid === subcell.widgetId),
                     themeSettings,
+                    plugins,
                   )}
                 </Subcell>
               ))}

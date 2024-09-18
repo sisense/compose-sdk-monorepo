@@ -16,7 +16,7 @@ import { extractDrilldownOptions } from '../../dashboard-widget/translate-widget
 import { extractWidgetFilters } from '../../dashboard-widget/translate-widget-filters';
 import {
   extractStyleOptions,
-  getStyleWithWigetDesign,
+  getStyleWithWidgetDesign,
 } from '../../dashboard-widget/translate-widget-style-options';
 import { Panel, WidgetDto, WidgetType } from '../../dashboard-widget/types';
 import {
@@ -25,6 +25,7 @@ import {
   isPivotWidget,
   isSupportedWidgetType,
   isTableWidget,
+  isTextWidget,
 } from '../../dashboard-widget/utils';
 import {
   ChartProps,
@@ -33,6 +34,7 @@ import {
   TableProps,
   TableWidgetProps,
   PivotTableWidgetProps,
+  TextWidgetProps,
 } from '../../props';
 import { ExecutePivotQueryParams, ExecuteQueryParams } from '../../query-execution';
 import { getTableAttributesAndMeasures } from '../../table/hooks/use-table-data';
@@ -48,13 +50,15 @@ import {
   RenderToolbarHandler,
   WidgetContainerStyleOptions,
   WidgetStyleOptions,
+  TextWidgetStyleOptions,
 } from '../../types';
 import { AppSettings } from '@/app/settings/settings';
+import { EmptyObject } from '@/utils/utility-types';
 
 /**
  * Widget data options.
  */
-export type WidgetDataOptions = ChartDataOptions | PivotTableDataOptions;
+export type WidgetDataOptions = ChartDataOptions | PivotTableDataOptions | EmptyObject;
 
 /**
  * Model of Sisense widget defined in the abstractions of Compose SDK.
@@ -178,15 +182,15 @@ export class WidgetModel {
 
       const styleOptions = extractStyleOptions(widgetType, widgetDto);
 
-      // take into account widget design style feature flag
       const isWidgetDesignStyleEnabled =
         appSettings?.serverFeatures?.widgetDesignStyle?.active ?? true;
 
-      this.styleOptions = getStyleWithWigetDesign(
+      this.styleOptions = getStyleWithWidgetDesign(
         styleOptions,
         widgetDto.style.widgetDesign,
         isWidgetDesignStyleEnabled,
       );
+      // }
     }
 
     // does not handle widget type plugin
@@ -293,6 +297,9 @@ export class WidgetModel {
     if (isPivotWidget(this.widgetType)) {
       throw new PivotNotSupportedMethodError('getChartProps');
     }
+    if (isTextWidget(this.widgetType)) {
+      throw new TextWidgetNotSupportedMethodError('getChartProps');
+    }
     if (isTableWidget(this.widgetType)) {
       return {
         chartType: this.chartType!,
@@ -302,7 +309,7 @@ export class WidgetModel {
     return {
       chartType: this.chartType!,
       dataOptions: this.dataOptions as ChartDataOptions,
-      styleOptions: this.styleOptions,
+      styleOptions: this.styleOptions as ChartStyleOptions,
       dataSet: this.dataSource,
       filters: this.filters,
       highlights: this.highlights,
@@ -355,7 +362,7 @@ export class WidgetModel {
     }
     return {
       dataOptions: this.dataOptions as PivotTableDataOptions,
-      styleOptions: this.styleOptions,
+      styleOptions: this.styleOptions as PivotTableWidgetStyleOptions,
       dataSet: this.dataSource,
       filters: this.filters,
       highlights: this.highlights,
@@ -376,10 +383,13 @@ export class WidgetModel {
     if (isPivotWidget(this.widgetType)) {
       throw new PivotNotSupportedMethodError('getChartWidgetProps');
     }
+    if (isTextWidget(this.widgetType)) {
+      throw new TextWidgetNotSupportedMethodError('getChartWidgetProps');
+    }
     return {
       chartType: this.chartType!,
       dataOptions: this.dataOptions as ChartDataOptions,
-      styleOptions: this.styleOptions,
+      styleOptions: this.styleOptions as ChartStyleOptions,
       dataSource: this.dataSource,
       filters: this.filters,
       highlights: this.highlights,
@@ -450,6 +460,29 @@ export class WidgetModel {
   }
 
   /**
+   * Returns the props to be used for rendering a text widget.
+   *
+   * @example
+   * ```tsx
+   * <TextWidget {...widget.getTextWidgetProps()} />
+   * ```
+   *
+   * Note: this method is not supported for chart, table, or pivot widgets.
+   * Use {@link getChartWidgetProps} instead for getting props for the <ChartWidget> component.
+   * Use {@link getTableWidgetProps} instead for getting props for the <TableWidget> component.
+   * Use {@link getPivotTableWidgetProps} instead for getting props for the <PivotTableWidget> component.
+   *
+   */
+  getTextWidgetProps(): TextWidgetProps {
+    if (!isTextWidget(this.widgetType)) {
+      throw new TranslatableError('errors.widgetModel.onlyTextWidgetSupported', {
+        methodName: 'getTextWidgetProps',
+      });
+    }
+    return { styleOptions: this.styleOptions as TextWidgetStyleOptions };
+  }
+
+  /**
    * Registers new "onDataPointClick" handler for the constructed component
    *
    * @internal
@@ -501,5 +534,11 @@ export class WidgetModel {
 class PivotNotSupportedMethodError extends TranslatableError {
   constructor(methodName: string) {
     super('errors.widgetModel.pivotWidgetNotSupported', { methodName });
+  }
+}
+
+class TextWidgetNotSupportedMethodError extends TranslatableError {
+  constructor(methodName: string) {
+    super('errors.widgetModel.textWidgetNotSupported', { methodName });
   }
 }

@@ -1,10 +1,11 @@
 import {
   combineLocationNames,
   getLocationGeoLevel,
-  locationToScattermapDataPoint,
+  getScattermapDataPoint,
   splitLocationName,
 } from './location';
 import { ScattermapChartLocation } from '../../../../chart-data/types';
+import { ScattermapChartDataOptionsInternal } from '@/index';
 
 describe('combineLocationNames', () => {
   it('should combine location names with delimiter', () => {
@@ -44,7 +45,7 @@ describe('getLocationGeoLevel', () => {
   });
 });
 
-describe('locationToScattermapDataPoint', () => {
+describe('getScattermapDataPoint', () => {
   it('should transform location to data point correctly', () => {
     const location = {
       name: 'USA, New York',
@@ -53,13 +54,37 @@ describe('locationToScattermapDataPoint', () => {
       value: 100,
     } as unknown as ScattermapChartLocation;
 
-    const result = locationToScattermapDataPoint(location);
+    const result = getScattermapDataPoint(location, {
+      locations: [{ name: 'Country' }, { name: 'City' }],
+      size: {
+        name: 'Revenue',
+      },
+    } as ScattermapChartDataOptionsInternal);
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       categories: ['USA', 'New York'],
       displayName: 'USA, New York',
       coordinates: { lat: 40.7128, lng: -74.006 },
       value: 100,
+      entries: {
+        geo: [
+          {
+            id: 'geo.0',
+            dataOption: { name: 'Country' },
+            value: 'USA',
+          },
+          {
+            id: 'geo.1',
+            dataOption: { name: 'City' },
+            value: 'New York',
+          },
+        ],
+        size: {
+          id: 'size',
+          dataOption: { name: 'Revenue' },
+          value: 100,
+        },
+      },
     });
   });
 });

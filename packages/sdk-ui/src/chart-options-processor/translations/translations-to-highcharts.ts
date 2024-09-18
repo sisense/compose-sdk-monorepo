@@ -20,6 +20,7 @@ import { PolarChartDesignOptions, StackableChartDesignOptions } from './design-o
 import { AxisMinMax, AxisSettings } from './axis-section';
 import { Stacking } from '../chart-options-service';
 import { DesignOptions, isPolar } from './types';
+import { colorChineseSilver } from '@/chart-data-options/coloring/consts';
 
 export type LineType = 'straight' | 'smooth';
 export type StackType = 'classic' | 'stacked' | 'stack100';
@@ -486,6 +487,11 @@ export const determineYAxisOptions = (
   let yTreatNullDataAsZeros = cartesianDataOptions.y.map((y) => !!y.treatNullDataAsZeros);
   let yConnectNulls = cartesianDataOptions.y.map((y) => !!y.connectNulls);
   if (cartesianDataOptions.breakBy.length === 0) {
+    // handle a special case when there is no break by and no y values
+    if (cartesianDataOptions.y.length === 0) {
+      return [[0], [undefined], [false], [false]];
+    }
+
     // Each Y value has individual axis setting, 0 is on left axis, 1 is on right axis
     yAxisSide = cartesianDataOptions.y.map((y) => (y.showOnRightAxis ? 1 : 0));
     // SeriesChartType is only respected if multiple Y values enabled.
@@ -525,6 +531,10 @@ export const getColorSetting = (
   key: string,
 ) => {
   if (dataOptions.breakBy.length === 0) {
+    // handle a special case when there is no break by and no y values
+    if (dataOptions.y.length === 0) {
+      return colorChineseSilver;
+    }
     const colorOpts = dataOptions.y.find((v) => v.name === key)?.color;
     return legendColor(colorOpts);
   } else {

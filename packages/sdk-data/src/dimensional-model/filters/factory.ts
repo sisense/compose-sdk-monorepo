@@ -771,7 +771,7 @@ export function measureBase(
  * Filter for categories that have an average revenue equal 50 in the Sample ECommerce data model.
  * ```ts
  * filterFactory.measureEquals(
- *   measures.average(DM.Commerce.Revenue),
+ *   measureFactory.average(DM.Commerce.Revenue),
  *   50
  * )
  * ```
@@ -800,7 +800,7 @@ export function measureEquals(measure: BaseMeasure, value: number, guid?: string
  * to 50 in the Sample ECommerce data model.
  * ```ts
  * filterFactory.measureGreaterThan(
- *   measures.average(DM.Commerce.Revenue),
+ *   measureFactory.average(DM.Commerce.Revenue),
  *   50
  * )
  * ```
@@ -829,7 +829,7 @@ export function measureGreaterThan(measure: BaseMeasure, value: number, guid?: s
  * or equal to 50 in the Sample ECommerce data model.
  * ```ts
  * filterFactory.measureGreaterThanOrEqual(
- *   measures.average(DM.Commerce.Revenue),
+ *   measureFactory.average(DM.Commerce.Revenue),
  *   50
  * )
  * ```
@@ -862,7 +862,7 @@ export function measureGreaterThanOrEqual(
  * or equal to 100 in the Sample ECommerce data model.
  * ```ts
  * filterFactory.measureLessThanOrEqual(
- *   measures.average(DM.Commerce.Revenue),
+ *   measureFactory.average(DM.Commerce.Revenue),
  *   100
  * )
  * ```
@@ -890,7 +890,7 @@ export function measureLessThanOrEqual(measure: BaseMeasure, value: number, guid
  * Filter for categories that have an average revenue less than 100 in the Sample ECommerce data model.
  * ```ts
  * filterFactory.measureLessThan(
- *   measures.average(DM.Commerce.Revenue),
+ *   measureFactory.average(DM.Commerce.Revenue),
  *   100
  * )
  * ```
@@ -919,7 +919,7 @@ export function measureLessThan(measure: BaseMeasure, value: number, guid?: stri
  * or equal to 100 in the Sample ECommerce data model.
  * ```ts
  * filterFactory.measureBetween(
- *   measures.average(DM.Commerce.Revenue),
+ *   measureFactory.average(DM.Commerce.Revenue),
  *   50,
  *   100
  * )
@@ -955,7 +955,7 @@ export function measureBetween(
  * 100 in the Sample ECommerce data model.
  * ```ts
  * filterFactory.measureBetweenNotEqual(
- *   measures.average(DM.Commerce.Revenue),
+ *   measureFactory.average(DM.Commerce.Revenue),
  *   50,
  *   100
  * )
@@ -993,7 +993,7 @@ export function measureBetweenNotEqual(
  * ```ts
  * filterFactory.topRanking(
  *   DM.Commerce.AgeRange,
- *   measures.sum(DM.Commerce.Revenue),
+ *   measureFactory.sum(DM.Commerce.Revenue),
  *   3
  * )
  * ```
@@ -1020,7 +1020,7 @@ export function topRanking(
  * ```ts
  * filterFactory.bottomRanking(
  *   DM.Commerce.AgeRange,
- *   measures.sum(DM.Commerce.Revenue),
+ *   measureFactory.sum(DM.Commerce.Revenue),
  *   3
  * )
  * ```

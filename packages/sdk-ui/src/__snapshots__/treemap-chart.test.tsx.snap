@@ -78,6 +78,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2009",
+            ],
           },
           "id": "2009-01-01T00:00:00.000Z",
           "name": "2009",
@@ -88,6 +94,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2009-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2009",
+              "A",
+            ],
           },
           "id": "2009-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -97,6 +111,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2010",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z",
           "name": "2010",
@@ -107,6 +127,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2010",
+              "A",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -116,6 +144,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2011",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z",
           "name": "2011",
@@ -126,6 +160,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2011",
+              "B",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -135,6 +177,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2012",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z",
           "name": "2012",
@@ -145,6 +193,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2012",
+              "B",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -154,6 +210,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2013",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z",
           "name": "2013",
@@ -164,6 +226,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2013",
+              "A",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -173,6 +243,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2014",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z",
           "name": "2014",
@@ -183,6 +259,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2014",
+              "B",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -192,6 +276,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2015",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z",
           "name": "2015",
@@ -202,6 +292,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2015",
+              "A",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -211,6 +309,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2016",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z",
           "name": "2016",
@@ -221,6 +325,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2016",
+              "B",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -230,6 +342,12 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2018",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",
@@ -240,6 +358,14 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2018",
+              "B",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -766,6 +892,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2009",
+            ],
+            "xValues": [
+              "2009",
+            ],
           },
           "id": "2009",
           "name": "2009",
@@ -775,6 +907,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2010",
+            ],
+            "xValues": [
+              "2010",
+            ],
           },
           "id": "2010",
           "name": "2010",
@@ -784,6 +922,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2011",
+            ],
+            "xValues": [
+              "2011",
+            ],
           },
           "id": "2011",
           "name": "2011",
@@ -793,6 +937,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2012",
+            ],
+            "xValues": [
+              "2012",
+            ],
           },
           "id": "2012",
           "name": "2012",
@@ -802,6 +952,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2009",
+              "A",
+            ],
+            "xValues": [
+              "2009",
+              "A",
+            ],
           },
           "id": "2009_A",
           "name": "A",
@@ -811,6 +969,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2010",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z",
           "name": "2010",
@@ -820,6 +984,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2010",
+              "A",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -829,6 +1001,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2010",
+              "A",
+            ],
+            "xValues": [
+              "2010",
+              "A",
+            ],
           },
           "id": "2010_A",
           "name": "A",
@@ -838,6 +1018,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2011",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z",
           "name": "2011",
@@ -847,6 +1033,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2011",
+              "B",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -856,6 +1050,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2011",
+              "B",
+            ],
+            "xValues": [
+              "2011",
+              "B",
+            ],
           },
           "id": "2011_B",
           "name": "B",
@@ -865,6 +1067,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2012",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z",
           "name": "2012",
@@ -874,6 +1082,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2012",
+              "B",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -883,6 +1099,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2012",
+              "B",
+            ],
+            "xValues": [
+              "2012",
+              "B",
+            ],
           },
           "id": "2012_B",
           "name": "B",
@@ -892,6 +1116,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2013",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z",
           "name": "2013",
@@ -901,6 +1131,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2013",
+              "A",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -910,6 +1148,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2014",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z",
           "name": "2014",
@@ -919,6 +1163,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2014",
+              "B",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -928,6 +1180,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2015",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z",
           "name": "2015",
@@ -937,6 +1195,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2015",
+              "A",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -946,6 +1212,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2016",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z",
           "name": "2016",
@@ -955,6 +1227,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2016",
+              "B",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -964,6 +1244,12 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2018",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",
@@ -973,6 +1259,14 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2018",
+              "B",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -1835,6 +2129,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2009",
+            ],
           },
           "id": "2009-01-01T00:00:00.000Z",
           "name": "2009",
@@ -1844,6 +2144,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2009-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2009",
+              "A",
+            ],
           },
           "id": "2009-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -1853,6 +2161,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2010",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z",
           "name": "2010",
@@ -1862,6 +2176,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2010",
+              "A",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -1871,6 +2193,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2011",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z",
           "name": "2011",
@@ -1880,6 +2208,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2011",
+              "B",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -1889,6 +2225,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2012",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z",
           "name": "2012",
@@ -1898,6 +2240,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2012",
+              "B",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -1907,6 +2257,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2013",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z",
           "name": "2013",
@@ -1916,6 +2272,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2013",
+              "A",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -1925,6 +2289,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2014",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z",
           "name": "2014",
@@ -1934,6 +2304,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2014",
+              "B",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -1943,6 +2321,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2015",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z",
           "name": "2015",
@@ -1952,6 +2336,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+              "A",
+            ],
+            "xValues": [
+              "2015",
+              "A",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z_A",
           "name": "A",
@@ -1961,6 +2353,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2016",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z",
           "name": "2016",
@@ -1970,6 +2368,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2016",
+              "B",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -1979,6 +2385,12 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 3,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2018",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",
@@ -1988,6 +2400,14 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
           "custom": {
             "level": 2,
             "levelsCount": 3,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+              "B",
+            ],
+            "xValues": [
+              "2018",
+              "B",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z_B",
           "name": "B",
@@ -2506,6 +2926,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2009-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2009",
+            ],
           },
           "id": "2009-01-01T00:00:00.000Z",
           "name": "2009",
@@ -2515,6 +2941,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2010",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z",
           "name": "2010",
@@ -2524,6 +2956,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2011",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z",
           "name": "2011",
@@ -2533,6 +2971,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2012",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z",
           "name": "2012",
@@ -2542,6 +2986,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2013",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z",
           "name": "2013",
@@ -2551,6 +3001,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2014",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z",
           "name": "2014",
@@ -2560,6 +3016,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2015",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z",
           "name": "2015",
@@ -2569,6 +3031,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2016",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z",
           "name": "2016",
@@ -2578,6 +3046,12 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+            ],
+            "xValues": [
+              "2018",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",

@@ -50,6 +50,7 @@ import {
   TableStyleOptions,
   AreaRangeStyleOptions,
   DrilldownSelection,
+  TextWidgetStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -1607,3 +1608,13 @@ export interface UseGetSharedFormulaParams extends HookEnableParam {
    */
   dataSource?: DataSource;
 }
+
+/**
+ * Props for the TextWidget component.
+ */
+export type TextWidgetProps = {
+  /**
+   * Style options for the text widget.
+   */
+  styleOptions: TextWidgetStyleOptions;
+};

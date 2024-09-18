@@ -74,6 +74,73 @@ export const redThemeSettings: CompleteThemeSettings = {
     fontFamily: 'Open Sans',
     primaryTextColor: '#ff0000',
     secondaryTextColor: '#f9a8a8',
+    fontsLoader: {
+      fonts: [
+        {
+          fontFamily: 'Open Sans',
+          fontStyle: 'normal',
+          fontWeight: 'normal',
+          src: [
+            {
+              url: 'http://test.com/resources/base/fonts/Open Sans-Regular.eot',
+            },
+            {
+              local: 'Open Sans-Regular',
+            },
+            {
+              format: 'embedded-opentype',
+              url: 'http://test.com/resources/base/fonts/Open Sans-Regular.eot?#iefix',
+            },
+            {
+              format: 'truetype',
+              url: 'http://test.com/resources/base/fonts/Open Sans-Regular.ttf',
+            },
+          ],
+        },
+        {
+          fontFamily: 'Open Sans',
+          fontStyle: 'normal',
+          fontWeight: 600,
+          src: [
+            {
+              url: 'http://test.com/resources/base/fonts/Open Sans-SemiBold.eot',
+            },
+            {
+              local: 'Open Sans-SemiBold',
+            },
+            {
+              format: 'embedded-opentype',
+              url: 'http://test.com/resources/base/fonts/Open Sans-SemiBold.eot?#iefix',
+            },
+            {
+              format: 'truetype',
+              url: 'http://test.com/resources/base/fonts/Open Sans-SemiBold.ttf',
+            },
+          ],
+        },
+        {
+          fontFamily: 'Open Sans',
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          src: [
+            {
+              url: 'http://test.com/resources/base/fonts/Open Sans-Bold.eot',
+            },
+            {
+              local: 'Open Sans-Bold',
+            },
+            {
+              format: 'embedded-opentype',
+              url: 'http://test.com/resources/base/fonts/Open Sans-Bold.eot?#iefix',
+            },
+            {
+              format: 'truetype',
+              url: 'http://test.com/resources/base/fonts/Open Sans-Bold.ttf',
+            },
+          ],
+        },
+      ],
+    },
   },
   palette: {
     variantColors: ['#779fa8', '#bf1e1d', '#787070'],

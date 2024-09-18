@@ -12,7 +12,7 @@ Data point in a Boxplot chart.
 
 ### `boxMax`
 
-**boxMax**: `number`
+**boxMax**?: `number`
 
 Value of the box maximum
 
@@ -20,7 +20,7 @@ Value of the box maximum
 
 ### `boxMedian`
 
-**boxMedian**: `number`
+**boxMedian**?: `number`
 
 Value of the box median
 
@@ -28,7 +28,7 @@ Value of the box median
 
 ### `boxMin`
 
-**boxMin**: `number`
+**boxMin**?: `number`
 
 Value of the box minimum
 
@@ -50,9 +50,17 @@ Value of the category for the data point
 
 ***
 
+### `outlier`
+
+**outlier**?: `number`
+
+Value of the outlier
+
+***
+
 ### `whiskerMax`
 
-**whiskerMax**: `number`
+**whiskerMax**?: `number`
 
 Value of the box maximal whisker
 
@@ -60,6 +68,6 @@ Value of the box maximal whisker
 
 ### `whiskerMin`
 
-**whiskerMin**: `number`
+**whiskerMin**?: `number`
 
 Value of the box minimal whisker

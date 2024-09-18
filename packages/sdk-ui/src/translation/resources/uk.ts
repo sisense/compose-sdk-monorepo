@@ -17,7 +17,6 @@ export const translation: TranslationDictionary = {
       'Контекст Sisense для виконання запиту не знайдено. Щоб виправити, оберніть компонент у SisenseContextProvider.',
     executeQueryNoDataSource: 'Не надано dataSource для виконання запиту',
     dataOptions: {
-      emptyValueArray: 'Недійсні dataOptions - Масив "value" порожній',
       noDimensionsAndMeasures:
         'Не знайдено ні dimension-ів, ні measure-ів. Параметри даних повинні мати щонайменше один dimension або measure.',
       attributeNotFound: 'Атрибут "{{attributeName}}" не знайдено в даних',
@@ -41,8 +40,10 @@ export const translation: TranslationDictionary = {
     },
     widgetModel: {
       pivotWidgetNotSupported: 'Метод {{methodName}} не підтримується для півот віджету',
-      onlyTableWidgetSupported: 'Метод {{methodName}} підтримуються тільки для табличним віджетом',
-      onlyPivotWidgetSupported: 'Метод {{methodName}} підтримуються тільки для півот віджетом',
+      textWidgetNotSupported: 'Метод {{methodName}} не підтримується для текстового віджету',
+      onlyTableWidgetSupported: 'Метод {{methodName}} підтримується тільки для табличних віджетів',
+      onlyPivotWidgetSupported: 'Метод {{methodName}} підтримується тільки для півот віджетів',
+      onlyTextWidgetSupported: 'Метод {{methodName}} підтримується тільки для текстових віджетів',
     },
     unknownFilterInFilterRelations: 'Логічні відношення фільтрів містять невідомий фільтр',
     filterRelationsNotSupported: 'Відносини фільтрів ще не підтримуються',

@@ -4,6 +4,7 @@ import { WidgetDto, WidgetType } from '../../dashboard-widget/types';
 import { TranslatableError } from '../../translation/translatable-error';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard';
+import { dashboardWithTextWidget } from '../__mocks__/dashboard-with-text-widget';
 
 describe('WidgetModel', () => {
   let mockWidgetDto: WidgetDto;
@@ -179,8 +180,13 @@ describe('WidgetModel', () => {
         const pivotWidgetModel = new WidgetModel(
           sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
         );
-
         expect(() => pivotWidgetModel.getChartProps()).toThrow(TranslatableError);
+      });
+      it('should throw an error for text widget', () => {
+        const textWidgetModel = new WidgetModel(
+          dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
+        );
+        expect(() => textWidgetModel.getChartProps()).toThrow(TranslatableError);
       });
       it('should return chart props for chart widgets', () => {
         const widget = new WidgetModel(mockWidgetDto);
@@ -387,6 +393,14 @@ describe('WidgetModel', () => {
         expect(() => {
           tableWidgetModel.getChartWidgetProps();
         }).toThrow(TranslatableError);
+
+        const textWidgetModel = new WidgetModel(
+          dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
+        );
+
+        expect(() => {
+          textWidgetModel.getChartWidgetProps();
+        }).toThrow(TranslatableError);
       });
     });
   });
@@ -439,6 +453,11 @@ describe('WidgetModel', () => {
     it('should throw an error for non-table widgets', () => {
       const nonTableWidgetModel = new WidgetModel(mockWidgetDto);
       expect(() => nonTableWidgetModel.getTableWidgetProps()).toThrow(TranslatableError);
+
+      const textWidgetModel = new WidgetModel(
+        dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
+      );
+      expect(() => textWidgetModel.getTableWidgetProps()).toThrow(TranslatableError);
     });
   });
 
@@ -446,6 +465,11 @@ describe('WidgetModel', () => {
     it('should throw an error for non-pivot widgets', () => {
       const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
       expect(() => nonPivotWidgetModel.getPivotTableWidgetProps()).toThrow(TranslatableError);
+
+      const textWidgetModel = new WidgetModel(
+        dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
+      );
+      expect(() => textWidgetModel.getPivotTableWidgetProps()).toThrow(TranslatableError);
     });
     it('should return PivotTableWidgetProps for pivot widgets', () => {
       const pivotWidgetModel = new WidgetModel(
@@ -493,6 +517,28 @@ describe('WidgetModel', () => {
         title: 'TOP 10 DIAGNOSIS',
         description: '',
       });
+    });
+  });
+
+  describe('getTextWidgetProps', () => {
+    it('should return text widget props correctly for text widget', () => {
+      const textWidgetModel = new WidgetModel(
+        dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
+      );
+      const textWidgetProps = textWidgetModel.getTextWidgetProps();
+
+      expect(textWidgetProps).toMatchObject({
+        styleOptions: {
+          bgColor: '#FFFFFF',
+          html: '<font color="#008c9c" size="5"><u style="">fancy text</u></font>',
+          textAlign: 'center',
+          vAlign: 'valign-middle',
+        },
+      });
+    });
+    it('should throw an error for non-text widgets', () => {
+      const nonTextWidgetModel = new WidgetModel(mockWidgetDto);
+      expect(() => nonTextWidgetModel.getTextWidgetProps()).toThrow(TranslatableError);
     });
   });
 });

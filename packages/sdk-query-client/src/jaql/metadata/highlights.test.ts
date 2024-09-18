@@ -22,7 +22,7 @@ describe('Highlight filters applying', () => {
         in: {
           selected: {
             jaql: {
-              title: 'CommerceGender',
+              title: 'Gender',
               dim: '[Commerce.Gender]',
               datatype: 'text',
               filter: { members: ['Female'] },
@@ -32,10 +32,9 @@ describe('Highlight filters applying', () => {
       },
     };
     const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]', 'text-attribute');
-    const filter = new MembersFilter(
-      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
-      ['Female'],
-    );
+    const filter = new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), [
+      'Female',
+    ]);
 
     const metadata = applyHighlightFilters(attribute.jaql(), [filter]);
 

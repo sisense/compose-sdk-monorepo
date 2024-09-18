@@ -4,6 +4,7 @@ title: Type Aliases
 
 # Type Aliases
 
+- [AnyObject](type-alias.AnyObject.md)
 - [DataSource](type-alias.DataSource.md)
 - [DataSourceInfo](type-alias.DataSourceInfo.md)
 - [FilterRelationsJaqlIdNode](type-alias.FilterRelationsJaqlIdNode.md)

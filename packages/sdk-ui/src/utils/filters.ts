@@ -1,16 +1,12 @@
 import {
   Attribute,
-  CascadingFilter,
   DimensionalLevelAttribute,
   Filter,
   filterFactory,
+  isMembersFilter,
   MembersFilter,
 } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep.js';
-
-export function isCascadingFilter(filter: Filter): filter is CascadingFilter {
-  return filter instanceof CascadingFilter;
-}
 
 /**
  * Clones a filter with a toggled 'disabled' state.
@@ -39,10 +35,6 @@ export function clearMembersFilter(filter: Filter) {
   }
   const { attribute, guid, backgroundFilter } = filter;
   return createIncludeAllFilter(attribute, backgroundFilter, guid);
-}
-
-export function isMembersFilter(filter: Filter): filter is MembersFilter {
-  return filter instanceof MembersFilter;
 }
 
 export function isIncludeAllFilter(filter: Filter) {

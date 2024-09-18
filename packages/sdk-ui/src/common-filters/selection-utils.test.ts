@@ -5,7 +5,13 @@ import {
   getSelectableWidgetAttributes,
   getWidgetSelections,
 } from './selection-utils';
-import { DataPoint, ScatterDataPoint } from '..';
+import {
+  AreamapDataPoint,
+  BoxplotDataPoint,
+  DataPoint,
+  ScatterDataPoint,
+  ScattermapDataPoint,
+} from '..';
 
 describe('createCommonFiltersOverSelections()', () => {
   const filters: MembersFilter[] = [
@@ -125,12 +131,12 @@ describe('getSelectableWidgetAttributes()', () => {
 
 describe('getWidgetSelections()', () => {
   it('should return no selections for "plugin" widget', () => {
-    const selections = getWidgetSelections('plugin', {}, [], {} as PointerEvent);
+    const selections = getWidgetSelections('plugin', {}, []);
     expect(selections).toEqual([]);
   });
 
   it('should return no selections for "pivot" widget', () => {
-    const selections = getWidgetSelections('pivot', {}, [], {} as PointerEvent);
+    const selections = getWidgetSelections('pivot', {}, []);
     expect(selections).toEqual([]);
   });
 
@@ -141,11 +147,18 @@ describe('getWidgetSelections()', () => {
     };
     const points = [
       {
-        value: 123,
-        categoryValue: '65+',
+        entries: {
+          category: [
+            {
+              id: 'category.0',
+              attribute: DM.Commerce.AgeRange,
+              value: '65+',
+            },
+          ],
+        },
       },
-    ];
-    const selections = getWidgetSelections('column', dataOptions, points, {} as PointerEvent);
+    ] as DataPoint[];
+    const selections = getWidgetSelections('column', dataOptions, points);
     expect(selections[0].attribute.expression).toEqual(DM.Commerce.AgeRange.expression);
     expect(selections[0].values).toEqual(['65+']);
   });
@@ -155,18 +168,20 @@ describe('getWidgetSelections()', () => {
       category: [DM.Commerce.AgeRange],
       value: [],
     };
-    const points: DataPoint[] = [];
-    const event = {
-      point: {
-        options: {
-          custom: {
-            level: 1,
-          },
+    const points = [
+      {
+        entries: {
+          category: [
+            {
+              id: 'category.0',
+              attribute: DM.Commerce.AgeRange,
+              value: '65+',
+            },
+          ],
         },
-        name: '65+',
       },
-    } as unknown as PointerEvent;
-    const selections = getWidgetSelections('treemap', dataOptions, points, event);
+    ] as DataPoint[];
+    const selections = getWidgetSelections('treemap', dataOptions, points);
     expect(selections[0].attribute.expression).toEqual(DM.Commerce.AgeRange.expression);
     expect(selections[0].values).toEqual(['65+']);
   });
@@ -178,24 +193,29 @@ describe('getWidgetSelections()', () => {
     };
     const points = [
       {
-        value: 123,
-        categoryValue: '65+',
-      },
-      {
-        value: 124,
-        x: 0,
-      },
-    ];
-    const event = {
-      point: {
-        series: {
-          xAxis: {
-            categories: ['0-18'],
-          },
+        entries: {
+          category: [
+            {
+              id: 'category.0',
+              attribute: DM.Commerce.AgeRange,
+              value: '65+',
+            },
+          ],
         },
       },
-    } as unknown as PointerEvent;
-    const selections = getWidgetSelections('boxplot', dataOptions, points, event);
+      {
+        entries: {
+          category: [
+            {
+              id: 'category.0',
+              attribute: DM.Commerce.AgeRange,
+              value: '0-18',
+            },
+          ],
+        },
+      },
+    ] as BoxplotDataPoint[];
+    const selections = getWidgetSelections('boxplot', dataOptions, points);
     expect(selections[0].attribute.expression).toEqual(DM.Commerce.AgeRange.expression);
     expect(selections[0].values).toEqual(['65+', '0-18']);
   });
@@ -207,20 +227,33 @@ describe('getWidgetSelections()', () => {
       breakByColor: DM.Commerce.Condition,
       breakByPoint: DM.Commerce.CategoryID,
     };
-    const points: ScatterDataPoint[] = [];
-    const event = {
-      point: {
-        options: {
-          custom: {
-            maskedX: '0-18',
-            maskedY: 'Male',
-            maskedBreakByColor: 'New',
-            maskedBreakByPoint: '1',
+    const points = [
+      {
+        entries: {
+          x: {
+            id: 'x',
+            attribute: DM.Commerce.AgeRange,
+            value: '0-18',
+          },
+          y: {
+            id: 'y',
+            attribute: DM.Commerce.Gender,
+            value: 'Male',
+          },
+          breakByColor: {
+            id: 'breakByColor',
+            attribute: DM.Commerce.Condition,
+            value: 'New',
+          },
+          breakByPoint: {
+            id: 'breakByPoint',
+            attribute: DM.Commerce.CategoryID,
+            value: '1',
           },
         },
       },
-    } as unknown as PointerEvent;
-    const selections = getWidgetSelections('scatter', dataOptions, points, event);
+    ] as ScatterDataPoint[];
+    const selections = getWidgetSelections('scatter', dataOptions, points);
     expect(selections[0].attribute.expression).toEqual(DM.Commerce.AgeRange.expression);
     expect(selections[0].values).toEqual(['0-18']);
     expect(selections[1].attribute.expression).toEqual(DM.Commerce.Gender.expression);
@@ -238,11 +271,18 @@ describe('getWidgetSelections()', () => {
     };
     const points = [
       {
-        value: 123,
-        categories: ['Ukraine'],
+        entries: {
+          geo: [
+            {
+              id: 'geo.0',
+              attribute: DM.Country.Country,
+              value: 'Ukraine',
+            },
+          ],
+        },
       },
-    ];
-    const selections = getWidgetSelections('scattermap', dataOptions, points, {} as PointerEvent);
+    ] as ScattermapDataPoint[];
+    const selections = getWidgetSelections('scattermap', dataOptions, points);
     expect(selections[0].attribute.expression).toEqual(DM.Country.Country.expression);
     expect(selections[0].values).toEqual(['Ukraine']);
   });
@@ -254,11 +294,18 @@ describe('getWidgetSelections()', () => {
     };
     const points = [
       {
-        value: 123,
-        geoName: 'USA',
+        entries: {
+          geo: [
+            {
+              id: 'geo.0',
+              attribute: DM.Country.Country,
+              value: 'USA',
+            },
+          ],
+        },
       },
-    ];
-    const selections = getWidgetSelections('areamap', dataOptions, points, {} as PointerEvent);
+    ] as AreamapDataPoint[];
+    const selections = getWidgetSelections('areamap', dataOptions, points);
     expect(selections[0].attribute.expression).toEqual(DM.Country.Country.expression);
     expect(selections[0].values).toEqual(['USA']);
   });

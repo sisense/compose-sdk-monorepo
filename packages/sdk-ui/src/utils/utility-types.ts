@@ -49,6 +49,11 @@ type PickTypeOf<T, K extends string | number | symbol> = K extends AllKeys<T>
 export type AnyObject = Record<string, any>;
 
 /**
+ * Empty object with no properties
+ */
+export type EmptyObject = Record<string, never>;
+
+/**
  * Allows you to make a property of an object required.
  *
  * @example

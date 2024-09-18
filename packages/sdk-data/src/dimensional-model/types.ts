@@ -387,6 +387,7 @@ export type BaseJaql = {
       jaql: FilterJaql;
     };
   };
+  merged?: boolean;
 };
 
 /** @internal */
@@ -473,3 +474,8 @@ type AndFilter<FilterItem> = {
 export type OrFilter<FilterItem> = {
   or: FilterItem[];
 };
+
+/**
+ * Abstract object with any unknown values
+ */
+export type AnyObject = Record<string, any>;

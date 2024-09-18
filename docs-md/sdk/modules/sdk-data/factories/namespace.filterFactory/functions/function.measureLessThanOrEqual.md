@@ -27,7 +27,7 @@ Filter for categories that have an average revenue less than
 or equal to 100 in the Sample ECommerce data model.
 ```ts
 filterFactory.measureLessThanOrEqual(
-  measures.average(DM.Commerce.Revenue),
+  measureFactory.average(DM.Commerce.Revenue),
   100
 )
 ```

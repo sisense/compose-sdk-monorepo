@@ -1,7 +1,6 @@
 import { DashboardProps } from '@/dashboard/types';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
 import { useEffect, useMemo, useState } from 'react';
-import { isSupportedWidgetTypeByDashboard } from '@/dashboard/utils';
 import { WidgetModel } from '@/models';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
 import { ThemeProvider, useThemeContext } from '@/theme-provider';
@@ -72,9 +71,9 @@ export const Dashboard = asSisenseComponent({
     const { palette, ...restDashboardStyles } = styleOptions;
 
     const widgetsWithCommonFilters = useMemo(() => {
-      return innerWidgets
-        .filter((widget) => isSupportedWidgetTypeByDashboard(widget.widgetType))
-        .map((widget) => connectToWidgetModel(widget, widgetFilterOptions?.[widget.oid]));
+      return innerWidgets.map((widget) =>
+        connectToWidgetModel(widget, widgetFilterOptions?.[widget.oid]),
+      );
     }, [innerWidgets, widgetFilterOptions, connectToWidgetModel]);
 
     useEffect(() => {

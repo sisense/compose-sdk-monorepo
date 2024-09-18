@@ -203,30 +203,30 @@ describe('isDataOptionsValid', () => {
     });
   });
 
-  describe('should falsy validate incorrect categorical chart dataOptions', () => {
-    const invalidDataOptions = {
+  describe('should truly validate empty categorical chart dataOptions', () => {
+    const emptyDataOptions = {
       category: [],
       value: [],
     } as ChartDataOptions;
 
-    it('should falsy validate incorrect pie chart dataOptions', () => {
+    it('should truly validate empty pie chart dataOptions', () => {
       let errorThrownForPie = false;
       try {
-        validateDataOptions('pie', invalidDataOptions);
+        validateDataOptions('pie', emptyDataOptions);
       } catch (e) {
         errorThrownForPie = true;
       }
-      expect(errorThrownForPie).toBeTruthy();
+      expect(errorThrownForPie).toBeFalsy();
     });
 
-    it('should falsy validate incorrect funnel chart dataOptions', () => {
+    it('should truly validate empty funnel chart dataOptions', () => {
       let errorThrownForPie = false;
       try {
-        validateDataOptions('funnel', invalidDataOptions);
+        validateDataOptions('funnel', emptyDataOptions);
       } catch (e) {
         errorThrownForPie = true;
       }
-      expect(errorThrownForPie).toBeTruthy();
+      expect(errorThrownForPie).toBeFalsy();
     });
   });
 });

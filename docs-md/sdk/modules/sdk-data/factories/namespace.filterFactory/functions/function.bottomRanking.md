@@ -31,7 +31,7 @@ Filter for age ranges with the bottom 3 lowest total revenue in the Sample EComm
 ```ts
 filterFactory.bottomRanking(
   DM.Commerce.AgeRange,
-  measures.sum(DM.Commerce.Revenue),
+  measureFactory.sum(DM.Commerce.Revenue),
   3
 )
 ```

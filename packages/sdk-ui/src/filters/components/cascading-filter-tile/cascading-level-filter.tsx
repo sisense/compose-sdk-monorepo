@@ -1,15 +1,14 @@
 import {
   DataSource,
-  CustomFilter,
-  DateRangeFilter,
   Filter,
   LevelAttribute,
-  MeasureFilter,
-  MembersFilter,
-  NumericFilter,
-  RankingFilter,
-  RelativeDateFilter,
-  TextFilter,
+  isMembersFilter,
+  isDateRangeFilter,
+  isRelativeDateFilter,
+  isMeasureFilter,
+  isTextFilter,
+  isRankingFilter,
+  isCustomFilter,
 } from '@sisense/sdk-data';
 import { MemberFilterTile } from '../member-filter-tile/index.js';
 import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
@@ -85,35 +84,29 @@ export const CascadingLevelFilterTile = ({
     tileDesignOptions: cascadingLevelTileDesign,
   };
 
-  const filterTile =
-    filter instanceof MembersFilter ? (
-      <MemberFilterTile {...props} filter={filter} parentFilters={parentFilters} />
-    ) : filter instanceof DateRangeFilter ? (
-      <DateRangeFilterTile
-        {...props}
-        filter={filter}
-        attribute={attribute as LevelAttribute}
-        tiled
-      />
-    ) : filter instanceof RelativeDateFilter ? (
-      <RelativeDateFilterTile {...props} filter={filter} arrangement="vertical" />
-    ) : filter instanceof MeasureFilter ||
-      filter instanceof NumericFilter ||
-      filter instanceof TextFilter ||
-      filter instanceof RankingFilter ? (
-      <CriteriaFilterTile {...props} filter={filter} />
-    ) : filter instanceof CustomFilter ? (
-      <CustomFilterTile {...props} filter={filter} />
-    ) : (
-      <FilterTile
-        title={t('unsupportedFilter.title')}
-        renderContent={() => (
-          <p className="csdk-text-center csdk-text-[13px]">{t('unsupportedFilter.message')}</p>
-        )}
-        design={cascadingLevelTileDesign}
-        locked={filter.locked}
-      />
-    );
+  const filterTile = isMembersFilter(filter) ? (
+    <MemberFilterTile {...props} filter={filter} parentFilters={parentFilters} />
+  ) : isDateRangeFilter(filter) ? (
+    <DateRangeFilterTile {...props} filter={filter} attribute={attribute as LevelAttribute} tiled />
+  ) : isRelativeDateFilter(filter) ? (
+    <RelativeDateFilterTile {...props} filter={filter} arrangement="vertical" />
+  ) : isMeasureFilter(filter) ||
+    isMembersFilter(filter) ||
+    isTextFilter(filter) ||
+    isRankingFilter(filter) ? (
+    <CriteriaFilterTile {...props} filter={filter} />
+  ) : isCustomFilter(filter) ? (
+    <CustomFilterTile {...props} filter={filter} />
+  ) : (
+    <FilterTile
+      title={t('unsupportedFilter.title')}
+      renderContent={() => (
+        <p className="csdk-text-center csdk-text-[13px]">{t('unsupportedFilter.message')}</p>
+      )}
+      design={cascadingLevelTileDesign}
+      locked={filter.locked}
+    />
+  );
 
   return (
     <div

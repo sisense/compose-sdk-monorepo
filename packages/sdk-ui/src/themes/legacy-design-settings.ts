@@ -11,6 +11,7 @@ import {
   RadiusSizes,
   ShadowsTypes,
   AlignmentTypes,
+  ThemeSettingsFont,
 } from '../types.js';
 
 /**
@@ -117,6 +118,7 @@ export const LEGACY_DESIGN_TYPES = {
 export function convertToThemeSettings(
   legacyDesignSettings: LegacyDesignSettings,
   legacyPalette: LegacyPalette,
+  domainUrl: string,
 ): CompleteThemeSettings {
   const themeSettings: Omit<CompleteThemeSettings, 'aiChat'> = {
     chart: {
@@ -137,6 +139,13 @@ export function convertToThemeSettings(
       fontFamily: legacyDesignSettings.typography.fontFamily,
       primaryTextColor: legacyDesignSettings.typography.primaryTextColor,
       secondaryTextColor: legacyDesignSettings.typography.secondaryTextColor,
+      fontsLoader: {
+        fonts: prepareLegacyThemeSettingsFonts(
+          legacyDesignSettings.typography.fontFamily,
+          domainUrl,
+          legacyDesignSettings.typography.customFontSelected,
+        ),
+      },
     },
     palette: {
       variantColors: legacyPalette.colors,
@@ -182,4 +191,81 @@ export function convertToThemeSettings(
 
 export function getPaletteName(legacyDesignSettings: LegacyDesignSettings): string {
   return legacyDesignSettings.dashboards.colorPaletteName;
+}
+
+function prepareLegacyThemeSettingsFonts(
+  fontFamily: string,
+  domainUrl: string,
+  isCustomFont: boolean,
+): ThemeSettingsFont[] {
+  const BASE_FONTS_PATH = 'resources/base/fonts/';
+  const CUSTOM_FONTS_PATH = 'fonts/';
+  const path = isCustomFont ? CUSTOM_FONTS_PATH : BASE_FONTS_PATH;
+
+  return [
+    {
+      fontFamily: fontFamily,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      src: [
+        {
+          url: `${domainUrl}${path}${fontFamily}-Regular.eot`,
+        },
+        {
+          local: `${fontFamily}-Regular`,
+        },
+        {
+          url: `${domainUrl}${path}${fontFamily}-Regular.eot?#iefix`,
+          // eslint-disable-next-line sonarjs/no-duplicate-string
+          format: 'embedded-opentype',
+        },
+        {
+          url: `${domainUrl}${path}${fontFamily}-Regular.ttf`,
+          format: 'truetype',
+        },
+      ],
+    },
+    {
+      fontFamily: fontFamily,
+      fontWeight: 600,
+      fontStyle: 'normal',
+      src: [
+        {
+          url: `${domainUrl}${path}${fontFamily}-SemiBold.eot`,
+        },
+        {
+          local: `${fontFamily}-SemiBold`,
+        },
+        {
+          url: `${domainUrl}${path}${fontFamily}-SemiBold.eot?#iefix`,
+          format: 'embedded-opentype',
+        },
+        {
+          url: `${domainUrl}${path}${fontFamily}-SemiBold.ttf`,
+          format: 'truetype',
+        },
+      ],
+    },
+    {
+      fontFamily: fontFamily,
+      fontWeight: 'bold',
+      fontStyle: 'normal',
+      src: [
+        {
+          url: `${domainUrl}${path}${fontFamily}-Bold.eot`,
+        },
+        {
+          local: `${fontFamily}-Bold`,
+        },
+        {
+          url: `${domainUrl}${path}${fontFamily}-Bold.eot?#iefix`,
+          format: 'embedded-opentype',
+        },
+        {
+          url: `${domainUrl}${path}${fontFamily}-Bold.ttf`,
+          format: 'truetype',
+        },
+      ],
+    },
+  ];
 }

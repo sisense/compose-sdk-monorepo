@@ -1,4 +1,3 @@
-import { PointClickEventObject } from '@sisense/sisense-charts';
 import { translateColumnToAttribure } from '@/chart-data-options/utils';
 import {
   isAreamap,
@@ -11,15 +10,15 @@ import {
 } from '@/chart-options-processor/translations/types';
 import { Column, Attribute, Filter } from '@sisense/sdk-data';
 import uniq from 'lodash-es/uniq';
-import isUndefined from 'lodash-es/isUndefined';
+import groupBy from 'lodash-es/groupBy';
 import {
-  AreamapChartDataOptions,
   AreamapDataPoint,
+  BoxplotDataPoint,
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ChartDataOptions,
-  ChartDataPoint,
   DataPoint,
+  DataPointEntry,
   isMeasureColumn,
   PivotTableDataOptions,
   ScatterChartDataOptions,
@@ -28,176 +27,97 @@ import {
   ScattermapDataPoint,
   StyledColumn,
 } from '../index.js';
-import { ScatterCustomPointOptions } from '@/chart-options-processor/translations/scatter-tooltip.js';
 import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 import { WidgetTypeInternal } from '@/models/widget/types.js';
 import { clearMembersFilter, haveSameAttribute } from '@/utils/filters.js';
 
-type WidgetSelection = {
+type DataSelection = {
   attribute: Attribute;
   values: (string | number)[];
 };
 
-type AnyDataPoint = ChartDataPoint | ScattermapDataPoint;
+type AbstractDataPointWithEntries = {
+  entries?: Record<string, DataPointEntry | DataPointEntry[]>;
+};
 
-function prepareSelectionValues<P extends AnyDataPoint>(
-  points: P[],
-  convertPointToValueFn: (point: P, index: number) => string | number,
+function getSelectionsFromPoints(
+  points: AbstractDataPointWithEntries[],
+  selectablePaths: string[],
 ) {
-  const validPoints = points.filter((point) => {
-    const isValidDataPoint = 'value' in point && !isUndefined(point.value);
-    const isValidScatterDataPoint =
-      ('x' in point && !isUndefined(point.x)) || ('y' in point && !isUndefined(point.y));
-    const isValiedBoxplotDataPoint = 'boxMedian' in point && !isUndefined(point.boxMedian);
-    const isValidGeoDataPoint = 'geoName' in point && !isUndefined(point.geoName);
+  const selectableEntriesArray = points.flatMap(({ entries = {} }) =>
+    selectablePaths.flatMap((selectablePath) => {
+      const entriesByPath = entries[selectablePath];
 
-    return (
-      isValidDataPoint || isValidScatterDataPoint || isValiedBoxplotDataPoint || isValidGeoDataPoint
-    );
-  });
+      if (!entriesByPath) {
+        return [];
+      }
 
-  const values = validPoints.map(convertPointToValueFn);
+      const entriesArray = Array.isArray(entriesByPath) ? entriesByPath : [entriesByPath];
+      return entriesArray.filter(({ attribute }) => !!attribute);
+    }),
+  );
 
-  return uniq(values);
-}
+  const groupedEntries = groupBy(selectableEntriesArray, ({ id }) => id);
 
-function getCartesianChartSelections(
-  dataOptions: CartesianChartDataOptions,
-  points: DataPoint[],
-): WidgetSelection[] {
-  const attributes = dataOptions.category.map(translateColumnToAttribure);
-  return attributes.map((attribute, index) => {
+  return Object.values(groupedEntries).map((entries) => {
     return {
-      attribute,
-      values: prepareSelectionValues(points, (point) =>
-        index === 0 ? point.categoryValue! : point.categoryDisplayValue!,
-      ),
-    };
+      attribute: entries[0].attribute,
+      values: uniq(entries.map(({ value }) => value)),
+    } as DataSelection;
   });
 }
 
-function getBoxplotChartSelections(
-  dataOptions: CartesianChartDataOptions,
-  points: Array<DataPoint | ScatterDataPoint>,
-  nativeEvent: MouseEvent | PointerEvent,
-): WidgetSelection[] {
-  const attribute = dataOptions.category.map(translateColumnToAttribure)[0];
-  // todo: replace usage of 'nativeEvent' after 'point' will be improved
-  const event = nativeEvent as PointClickEventObject;
-
-  if (attribute) {
-    return [
-      {
-        attribute,
-        values: prepareSelectionValues(points, (point) => {
-          const isScatterDataPoint = 'x' in point;
-          return isScatterDataPoint
-            ? event.point.series.xAxis.categories[point.x!]
-            : (point as DataPoint).categoryValue;
-        }),
-      },
-    ];
-  }
-
-  return [];
+function getCartesianChartSelections(points: DataPoint[]): DataSelection[] {
+  return getSelectionsFromPoints(points, ['category']);
 }
 
+function getBoxplotChartSelections(points: Array<DataPoint | ScatterDataPoint>): DataSelection[] {
+  return getSelectionsFromPoints(points, ['category']);
+}
+
+/**
+ * Note: treemap selection works differently to other widgets,
+ * it selects only the currently clicked level while deselects all other levels
+ */
 function getTreemapChartSelections(
-  dataOptions: CategoricalChartDataOptions,
   points: DataPoint[],
-  nativeEvent: MouseEvent | PointerEvent,
-): WidgetSelection[] {
-  // todo: replace usage of 'nativeEvent' after 'points' will be improved
-  const event = nativeEvent as PointClickEventObject;
-  const { level: pointLevel } = event.point.options.custom as { level: number };
-  const pointLevelIndex = pointLevel - 1;
-  const attributes = dataOptions.category.map(translateColumnToAttribure);
-  return attributes.map((attribute, index) => ({
-    attribute: attribute,
-    // select only current level and deselect all other levels
-    values: pointLevelIndex === index ? [event.point.name] : [],
-  }));
-}
+  dataOptions: CategoricalChartDataOptions,
+): DataSelection[] {
+  const selections = getSelectionsFromPoints(points, ['category']);
+  const pointLevelIndex = selections.length - 1;
 
-function getScatterChartSelections(
-  dataOptions: ScatterChartDataOptions,
-  points: ScatterDataPoint[],
-  nativeEvent: MouseEvent | PointerEvent,
-): WidgetSelection[] {
-  const selections: WidgetSelection[] = [];
-  // todo: replace usage of 'nativeEvent' after extending 'points'
-  const event = nativeEvent as PointClickEventObject;
-  const isMultiSelectionEvent = event.type === 'mouseup';
+  return dataOptions.category.map((dataOption, index) => {
+    const isPointLevel = pointLevelIndex === index;
 
-  // todo: add multi-selection support after extending 'points'
-  if (isMultiSelectionEvent) {
-    console.warn('No cross-filtering support for multi-selection in scatter chart');
-    return selections;
-  }
+    // select only current level
+    if (isPointLevel) {
+      return selections[index];
+    }
 
-  if (dataOptions.x && !isMeasureColumn(dataOptions.x)) {
-    selections.push({
-      attribute: translateColumnToAttribure(dataOptions.x),
-      values: [(event.point.options.custom as ScatterCustomPointOptions).maskedX],
-    });
-  }
-
-  if (dataOptions.y && !isMeasureColumn(dataOptions.y)) {
-    selections.push({
-      attribute: translateColumnToAttribure(dataOptions.y),
-      values: [(event.point.options.custom as ScatterCustomPointOptions).maskedY],
-    });
-  }
-
-  if (dataOptions.breakByColor && !isMeasureColumn(dataOptions.breakByColor)) {
-    selections.push({
-      attribute: translateColumnToAttribure(dataOptions.breakByColor),
-      values: [(event.point.options.custom as ScatterCustomPointOptions).maskedBreakByColor!],
-    });
-  }
-
-  if (dataOptions.breakByPoint) {
-    selections.push({
-      attribute: translateColumnToAttribure(dataOptions.breakByPoint),
-      values: [(event.point.options.custom as ScatterCustomPointOptions).maskedBreakByPoint!],
-    });
-  }
-
-  return selections;
-}
-
-function getScattermapChartSelections(
-  dataOptions: ScattermapChartDataOptions,
-  points: ScattermapDataPoint[],
-): WidgetSelection[] {
-  const attributes = dataOptions.geo.map(translateColumnToAttribure);
-  return attributes.map((attribute, index) => {
+    // deselect all other levels
     return {
-      attribute,
-      values: prepareSelectionValues(points, (point) => point.categories[index]),
+      attribute: translateColumnToAttribure(dataOption),
+      values: [],
     };
   });
 }
 
-function getAreamapChartSelections(
-  dataOptions: AreamapChartDataOptions,
-  points: AreamapDataPoint[],
-): WidgetSelection[] {
-  const attributes = dataOptions.geo.map(translateColumnToAttribure);
+function getScatterChartSelections(points: ScatterDataPoint[]): DataSelection[] {
+  return getSelectionsFromPoints(points, ['x', 'y', 'breakByColor', 'breakByPoint']);
+}
 
-  return attributes.map((attribute) => {
-    return {
-      attribute,
-      values: prepareSelectionValues(points, (point) => point.geoName),
-    };
-  });
+function getScattermapChartSelections(points: ScattermapDataPoint[]): DataSelection[] {
+  return getSelectionsFromPoints(points, ['geo']);
+}
+
+function getAreamapChartSelections(points: AreamapDataPoint[]): DataSelection[] {
+  return getSelectionsFromPoints(points, ['geo']);
 }
 
 export function getWidgetSelections(
   widgetType: WidgetTypeInternal,
   dataOptions: ChartDataOptions | PivotTableDataOptions,
   points: Array<DataPoint | ScatterDataPoint | ScattermapDataPoint | AreamapDataPoint>,
-  nativeEvent: MouseEvent | PointerEvent,
 ) {
   if (widgetType === 'plugin') {
     // no plugins support
@@ -207,37 +127,19 @@ export function getWidgetSelections(
     return [];
   } else if (widgetType === 'treemap' || widgetType === 'sunburst') {
     return getTreemapChartSelections(
-      dataOptions as CategoricalChartDataOptions,
       points as DataPoint[],
-      nativeEvent,
+      dataOptions as CategoricalChartDataOptions,
     );
   } else if (isCartesian(widgetType) || widgetType === 'pie' || widgetType === 'funnel') {
-    return getCartesianChartSelections(
-      dataOptions as CartesianChartDataOptions,
-      points as DataPoint[],
-    );
+    return getCartesianChartSelections(points as DataPoint[]);
   } else if (isBoxplot(widgetType)) {
-    return getBoxplotChartSelections(
-      dataOptions as CartesianChartDataOptions,
-      points as Array<DataPoint | ScatterDataPoint>,
-      nativeEvent,
-    );
+    return getBoxplotChartSelections(points as BoxplotDataPoint[]);
   } else if (isScatter(widgetType)) {
-    return getScatterChartSelections(
-      dataOptions as ScatterChartDataOptions,
-      points as ScatterDataPoint[],
-      nativeEvent,
-    );
+    return getScatterChartSelections(points as ScatterDataPoint[]);
   } else if (isScattermap(widgetType)) {
-    return getScattermapChartSelections(
-      dataOptions as ScattermapChartDataOptions,
-      points as ScattermapDataPoint[],
-    );
+    return getScattermapChartSelections(points as ScattermapDataPoint[]);
   } else if (isAreamap(widgetType)) {
-    return getAreamapChartSelections(
-      dataOptions as AreamapChartDataOptions,
-      points as AreamapDataPoint[],
-    );
+    return getAreamapChartSelections(points as AreamapDataPoint[]);
   }
 
   return [];
@@ -278,7 +180,7 @@ export function getSelectableWidgetAttributes(
 }
 
 export function createCommonFiltersOverSelections(
-  selections: WidgetSelection[],
+  selections: DataSelection[],
   existingCommonFilters: Filter[],
 ) {
   const commonFiltersFromSelections = selections.map(({ attribute, values }) =>

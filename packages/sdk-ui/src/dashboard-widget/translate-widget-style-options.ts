@@ -28,6 +28,7 @@ import {
   ShadowsTypes,
   AlignmentTypes,
   WidgetStyleOptions,
+  TextWidgetStyleOptions,
 } from '../types';
 import {
   Panel,
@@ -48,6 +49,8 @@ import {
   PivotWidgetStyle,
   WidgetDesign,
   WidgetDto,
+  TextWidgetDtoStyle,
+  isValidScrollerLocation,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
 
@@ -481,7 +484,7 @@ export function extractPivotTableStyleOptions(
 export function extractStyleOptions<WType extends WidgetType>(
   widgetType: WType,
   widget: WidgetDto,
-): ChartStyleOptions | TableStyleOptions {
+): ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions {
   const {
     subtype: widgetSubtype,
     style,
@@ -499,7 +502,10 @@ export function extractStyleOptions<WType extends WidgetType>(
         panels,
       );
       if (styleOptions.navigator) {
-        styleOptions.navigator.scrollerLocation = widget.options?.previousScrollerLocation;
+        const scrollerLocation = widget.options?.previousScrollerLocation;
+        styleOptions.navigator.scrollerLocation = isValidScrollerLocation(scrollerLocation)
+          ? scrollerLocation
+          : undefined;
       }
       return styleOptions;
     }
@@ -534,7 +540,11 @@ export function extractStyleOptions<WType extends WidgetType>(
         panels,
       );
       if (boxplotStyleOptions.navigator) {
-        boxplotStyleOptions.navigator.scrollerLocation = widget.options?.previousScrollerLocation;
+        boxplotStyleOptions.navigator.scrollerLocation = isValidScrollerLocation(
+          widget.options?.previousScrollerLocation,
+        )
+          ? widget.options?.previousScrollerLocation
+          : undefined;
       }
       return boxplotStyleOptions;
     }
@@ -542,6 +552,8 @@ export function extractStyleOptions<WType extends WidgetType>(
       return extractScattermapChartStyleOptions(widgetSubtype, style as ScattermapWidgetStyle);
     case 'map/area':
       return extractAreamapChartStyleOptions(widgetSubtype);
+    case 'richtexteditor':
+      return (style as TextWidgetDtoStyle).content;
     default:
       throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }
@@ -554,8 +566,8 @@ export function extractStyleOptions<WType extends WidgetType>(
  * @param isWidgetDesignStyleEnabled - The flag to enable the widget design style
  * @returns The merged widget style
  */
-export function getStyleWithWigetDesign(
-  widgetStyle: ChartStyleOptions | TableStyleOptions,
+export function getStyleWithWidgetDesign(
+  widgetStyle: ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions,
   widgetDesign?: WidgetDesign,
   isWidgetDesignStyleEnabled?: boolean,
 ): WidgetStyleOptions {

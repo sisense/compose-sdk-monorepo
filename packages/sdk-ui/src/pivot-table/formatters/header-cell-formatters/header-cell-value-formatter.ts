@@ -36,7 +36,7 @@ export const createHeaderCellValueFormatter = (
         );
         break;
       case 'datetime':
-        cell.content = dateFormat ? dateFormatter(parseISO(cell.value!), dateFormat) : cell.value;
+        cell.content = formatDateTimeString(cell.value!, dateFormatter, dateFormat);
         break;
       default:
         cell.content = cell.value;
@@ -47,3 +47,29 @@ export const createHeaderCellValueFormatter = (
     }
   };
 };
+
+/**
+ * Formats the date time string.
+ * If the date is invalid, it returns the original value.
+ */
+function formatDateTimeString(
+  value: string,
+  dateFormatter: DateFormatter,
+  dateFormat?: string,
+): string {
+  if (!dateFormat) {
+    return value;
+  }
+  const date = parseISO(value);
+  if (isInvalidDate(date)) {
+    return value;
+  }
+  return dateFormatter(date, dateFormat);
+}
+
+/**
+ * Checks if the date is invalid.
+ */
+function isInvalidDate(date: Date): boolean {
+  return date.toString() === 'Invalid Date';
+}

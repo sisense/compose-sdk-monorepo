@@ -468,7 +468,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 936,
+            "xValues": [
+              "2018",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",
@@ -479,7 +485,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 2045,
+            "xValues": [
+              "2013",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z",
           "name": "2013",
@@ -490,7 +502,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 3010,
+            "xValues": [
+              "2014",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z",
           "name": "2014",
@@ -501,7 +519,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 3056,
+            "xValues": [
+              "2011",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z",
           "name": "2011",
@@ -512,7 +536,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 4242,
+            "xValues": [
+              "2016",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z",
           "name": "2016",
@@ -523,7 +553,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 5447,
+            "xValues": [
+              "2015",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z",
           "name": "2015",
@@ -534,7 +570,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 6814,
+            "xValues": [
+              "2010",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z",
           "name": "2010",
@@ -545,7 +587,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2009-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 8103,
+            "xValues": [
+              "2009",
+            ],
           },
           "id": "2009-01-01T00:00:00.000Z",
           "name": "2009",
@@ -556,7 +604,13 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 8423,
+            "xValues": [
+              "2012",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z",
           "name": "2012",
@@ -976,7 +1030,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2018-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 936,
+            "xValues": [
+              "2018",
+            ],
           },
           "id": "2018-01-01T00:00:00.000Z",
           "name": "2018",
@@ -987,7 +1047,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2013-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 2045,
+            "xValues": [
+              "2013",
+            ],
           },
           "id": "2013-01-01T00:00:00.000Z",
           "name": "2013",
@@ -998,7 +1064,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2014-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 3010,
+            "xValues": [
+              "2014",
+            ],
           },
           "id": "2014-01-01T00:00:00.000Z",
           "name": "2014",
@@ -1009,7 +1081,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2011-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 3056,
+            "xValues": [
+              "2011",
+            ],
           },
           "id": "2011-01-01T00:00:00.000Z",
           "name": "2011",
@@ -1020,7 +1098,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2016-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 4242,
+            "xValues": [
+              "2016",
+            ],
           },
           "id": "2016-01-01T00:00:00.000Z",
           "name": "2016",
@@ -1031,7 +1115,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2015-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 5447,
+            "xValues": [
+              "2015",
+            ],
           },
           "id": "2015-01-01T00:00:00.000Z",
           "name": "2015",
@@ -1042,7 +1132,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2010-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 6814,
+            "xValues": [
+              "2010",
+            ],
           },
           "id": "2010-01-01T00:00:00.000Z",
           "name": "2010",
@@ -1053,7 +1149,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2009-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 8103,
+            "xValues": [
+              "2009",
+            ],
           },
           "id": "2009-01-01T00:00:00.000Z",
           "name": "2009",
@@ -1064,7 +1166,13 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "custom": {
             "level": 1,
             "levelsCount": 2,
+            "rawValues": [
+              "2012-01-01T00:00:00.000Z",
+            ],
             "subtotalValue": 8423,
+            "xValues": [
+              "2012",
+            ],
           },
           "id": "2012-01-01T00:00:00.000Z",
           "name": "2012",

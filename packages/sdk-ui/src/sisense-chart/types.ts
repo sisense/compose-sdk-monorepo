@@ -1,9 +1,9 @@
-import { DataPointsEventHandler, ScatterDataPointsEventHandler } from '../props.js';
 import { BoxplotDataPoint, DataPoint, ScatterDataPoint } from '../types.js';
 
-export type SisenseChartDataPointsEventHandler =
-  | DataPointsEventHandler
-  | ScatterDataPointsEventHandler;
+export type SisenseChartDataPointsEventHandler = (
+  points: SisenseChartDataPoint[],
+  nativeEvent: MouseEvent,
+) => void;
 
 export type SisenseChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint;
 

@@ -624,6 +624,9 @@ export function extractDataOptions(
   if (widgetType === 'map/area') {
     return extractAreamapChartDataOptions(panels, customPaletteColors);
   }
+  if (widgetType === 'richtexteditor') {
+    return {};
+  }
   throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
 }
 

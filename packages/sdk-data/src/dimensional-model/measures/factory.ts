@@ -482,7 +482,7 @@ export function countDistinct(attribute: Attribute, name?: string, format?: stri
  * ```ts
  * measureFactory.measuredValue(
  *   measureFactory.sum(DM.Commerce.Cost),
- *   [filters.greaterThan(DM.Commerce.Cost, 100)],
+ *   [filterFactory.greaterThan(DM.Commerce.Cost, 100)],
  *   'Cost Greater Than 100'
  * ),
  * ```

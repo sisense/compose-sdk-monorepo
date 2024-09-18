@@ -44,7 +44,7 @@ In this snippet, we’re querying the Sample ECommerce model to get total cost a
 
 ```ts
 import * as DM from '../../sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 import { QueryService } from '@sisense/sdk-ui-angular';
 
 //...
@@ -56,8 +56,8 @@ async ngOnInit(): Promise<void> {
     dataSource: DM.DataSource,
     dimensions: [DM.Commerce.AgeRange],
     measures: [
-      measures.sum(DM.Commerce.Cost, 'Total Cost'),
-      measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
+      measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+      measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
     ],
   });
   //..
@@ -206,7 +206,7 @@ When we put the steps together, the code for populating our 3rd party chart with
 ```ts
 import { useExecuteQuery } from '@sisense/sdk-ui';
 import * as DM from '../sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 
 import Plot from 'react-plotly.js';
 
@@ -215,7 +215,7 @@ function MyPlotlyChart() {
   const { data, isLoading, isError } = useExecuteQuery({
     dataSource: DM.DataSource,
     dimensions: [DM.Commerce.AgeRange],
-    measures: [measures.sum(DM.Commerce.Cost, 'Total Cost'), measures.sum(DM.Commerce.Revenue, 'Total Revenue')],
+    measures: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost'), measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')],
   });
 
   if (isLoading) {
@@ -273,7 +273,7 @@ export default MyPlotlyChart;
 ```ts
 import { Component } from '@angular/core';
 import * as DM from '../../sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 import { QueryService } from '@sisense/sdk-ui-angular';
 
 import { PlotData } from 'plotly.js-dist-min';
@@ -293,8 +293,8 @@ export class AnalyticsComponent {
       dataSource: DM.DataSource,
       dimensions: [DM.Commerce.AgeRange],
       measures: [
-        measures.sum(DM.Commerce.Cost, 'Total Cost'),
-        measures.sum(DM.Commerce.Revenue, 'Total Revenue'),
+        measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+        measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
       ],
     });
 

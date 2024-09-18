@@ -16,6 +16,14 @@ Attribute this filter instance is filtering
 
 ***
 
+### filterType
+
+> **`readonly`** **filterType**: `string`
+
+Filter type
+
+***
+
 ### guid
 
 > **`readonly`** **guid**: `string`

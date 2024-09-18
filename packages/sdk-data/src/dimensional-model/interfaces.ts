@@ -403,6 +403,11 @@ export interface Filter extends Element {
   readonly attribute: Attribute;
 
   /**
+   * Filter type
+   */
+  readonly filterType: string;
+
+  /**
    * Boolean flag whether the filter is a scope filter
    */
   isScope: boolean;

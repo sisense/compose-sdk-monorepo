@@ -37,13 +37,15 @@ export function prepareTreemapDataItems(
 function createTreemapParents(chartData: CategoricalChartData): SeriesPointStructure[] {
   const map: { [key: string]: SeriesPointStructure } = {};
   chartData.xValues.forEach((value) => {
-    value.rawValues!.slice(0, -1).forEach((_, index) => {
+    value.rawValues!.slice(0, -1).forEach((_, index: number) => {
       const id = value.rawValues!.slice(0, index + 1).join('_');
       map[id] = {
         id,
         name: value.xValues[index],
         parent: value.rawValues!.slice(0, index).join('_'),
         custom: {
+          xValues: value.xValues.slice(0, index + 1),
+          rawValues: value.rawValues?.slice(0, index + 1),
           level: index + 1,
           levelsCount: chartData.xAxisCount,
         },

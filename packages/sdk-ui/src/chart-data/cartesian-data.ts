@@ -48,8 +48,12 @@ export const validateCartesianChartDataOptions = (
   };
 };
 
-// Given table of data and options, create cartesian data for
-// chart like line/area/bar and others
+/**
+ * Creates cartesian data for chart like line/area/bar and others given table of data and options
+ * @param chartDataOptions - Internal cartesian chart data options
+ * @param dataTable - Data table
+ * @returns Cartesian chart data
+ */
 export const cartesianData = (
   chartDataOptions: CartesianChartDataOptionsInternal,
   dataTable: DataTable,
@@ -211,6 +215,40 @@ export const getOrderedXValues = (
   });
 };
 
+/**
+ * Get single series value for a row
+ * taking into account whether the y-axis column is specified
+ */
+const getSingleSeriesValue = (
+  row: Row,
+  xValue: CategoricalXValues,
+  yAggColumn: Column | undefined,
+) => {
+  // use a small value instead of 0 so pie chart can render
+  const value = yAggColumn ? (getValue(row, yAggColumn) as number) : 0.00001;
+  const { color, rawValue } = row[yAggColumn?.index ?? 0] ?? {};
+
+  return {
+    rawValue,
+    xValue: xValue.rawValues,
+    xDisplayValue: xValue.xValues,
+    xCompareValue: xValue.compareValues,
+    value: value === undefined ? NaN : value,
+    blur: yAggColumn ? isBlurred(row, yAggColumn) : undefined,
+    ...(color && { color }),
+  };
+};
+
+/**
+ * Builds series data for multiple measures without break by.
+ * If there is no measure specified, returns series of 0 values.
+ *
+ * @param dataTable - Data table
+ * @param xValuesOrdered - Ordered x-axis values
+ * @param xColumns - x-axis columns
+ * @param yColumnNames - y-axis column names
+ * @returns series data
+ */
 const withMultipleValues = (
   dataTable: DataTable,
   xValuesOrdered: CategoricalXValues[],
@@ -218,16 +256,12 @@ const withMultipleValues = (
   yColumnNames: string[],
   yDataOptions: Value[],
 ) => {
-  const yAggColumns = getColumnsByName(dataTable, yColumnNames);
+  const yAggColumns =
+    yColumnNames.length > 0 ? getColumnsByName(dataTable, yColumnNames) : [undefined];
   const optionsByColumn = yDataOptions.reduce<Record<string, Value>>((acc, opts) => {
     acc[opts.name] = opts;
     return acc;
   }, {});
-
-  // require at least one measure
-  if (yAggColumns.length === 0) {
-    return { type: 'cartesian', series: [], xValues: [] };
-  }
 
   // separate rows by series
   const rowsByXColumns = getIndexedRows(dataTable.rows, xColumns);
@@ -239,27 +273,20 @@ const withMultipleValues = (
       // since we aggregated we know it is single number
       // expect one row or none
       const row = rows ? rows[0] : [];
-      const value = getValue(row, yAggColumn) as number;
-      const { color, rawValue } = row[yAggColumn.index] ?? {};
-      return {
-        rawValue,
-        xValue: xValue.rawValues,
-        xDisplayValue: xValue.xValues,
-        xCompareValue: xValue.compareValues,
-        value: value === undefined ? NaN : value,
-        blur: isBlurred(row, yAggColumn),
-        ...(color && { color }),
-      };
+      return getSingleSeriesValue(row, xValue, yAggColumn);
     });
 
-    const colorOpts = optionsByColumn[yAggColumn.name].color;
+    const yAggColumnName = yAggColumn?.name ?? '';
+    const seriesTitle = yAggColumnName ? getDataOptionTitle(optionsByColumn[yAggColumnName]) : '';
+
+    const colorOpts = optionsByColumn[yAggColumnName]?.color;
     if (colorOpts) {
       seriesYValues = seriesDataColoringFunction(seriesYValues, colorOpts);
     }
 
     return {
-      name: yAggColumn.name,
-      title: getDataOptionTitle(optionsByColumn[yAggColumn.name]),
+      name: yAggColumnName,
+      title: seriesTitle,
       data: seriesYValues,
     };
   });
@@ -283,6 +310,18 @@ const getSeriesValues = (row: Row, columns: readonly Column[]) => {
   return getValues(row, columns).map(({ rawValue }) => rawValue);
 };
 
+/**
+ * Builds series data for a single measure taking into break by.
+ * If there is no measure specified, returns series of 0 values.
+ *
+ * @param dataTable - Data table
+ * @param xValuesOrdered - Ordered x-axis values
+ * @param xColumns - x-axis columns
+ * @param yColumnName - y-axis column name
+ * @param seriesColumns - series columns
+ * @param breakBy - break by category
+ * @returns series data
+ */
 const withBreakBy = (
   dataTable: DataTable,
   xValuesOrdered: CategoricalXValues[],
@@ -292,11 +331,6 @@ const withBreakBy = (
   breakBy: Category[],
 ) => {
   const yAggColumn = getColumnByName(dataTable, yColumnName);
-
-  // require a measure
-  if (!yAggColumn) {
-    return { type: 'cartesian', series: [], xValues: [] };
-  }
 
   // separate rows by series
   const rowsBySeries = separateBy(dataTable.rows, seriesColumns);
@@ -320,19 +354,10 @@ const withBreakBy = (
   const seriesValues = seriesRowsIndexByXValues.map((seriesRowsIndexed) => {
     const seriesYValues = xValuesOrdered.map((xValue): SeriesValueData => {
       const rows = seriesRowsIndexed.rowsByXColumns[xValue.key];
+      // since we aggregated we know it is single number
+      // expect one row or none
       const row = rows ? rows[0] : [];
-      // since we aggregated, expect one row or none
-      const value = getValue(row, yAggColumn) as number;
-      const { color, rawValue } = row[yAggColumn.index] ?? {};
-      return {
-        rawValue,
-        value: value === undefined ? NaN : value,
-        xValue: xValue.rawValues,
-        xDisplayValue: xValue.xValues,
-        xCompareValue: xValue.compareValues,
-        blur: isBlurred(row, yAggColumn),
-        ...(color && { color }),
-      };
+      return getSingleSeriesValue(row, xValue, yAggColumn);
     });
     return {
       name: seriesRowsIndexed.seriesName,

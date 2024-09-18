@@ -1,29 +1,36 @@
 import { useMemo, type FunctionComponent } from 'react';
 import { type Filter } from '@sisense/sdk-data';
 import { ChartWidget } from '../widgets/chart-widget';
-import { ChartWidgetProps, DashboardWidgetProps } from '../props';
+import { ChartWidgetProps, DashboardWidgetProps, TextWidgetProps } from '../props';
 import { useThemeContext } from '../theme-provider';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import {
   convertFilterRelationsModelToJaql,
   getFilterRelationsFromJaql,
   isPivotWidget,
+  isTextWidget,
   mergeFilters,
   mergeFiltersByStrategy,
 } from './utils';
 import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
 import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model';
 import { WidgetModel } from '../models';
-import { PivotTableWidgetProps } from '..';
+import { PivotTableWidgetProps, WidgetType } from '..';
 import { PivotTableWidget } from '@/widgets/pivot-table-widget';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { isTextWidgetProps, TextWidget } from '@/widgets/text-widget';
 
-function getWidgetProps(widgetModel: WidgetModel) {
+function getWidgetProps(widgetModel: WidgetModel): {
+  props: TextWidgetProps | ChartWidgetProps | PivotTableWidgetProps;
+  widgetType: WidgetType;
+} {
   const { widgetType } = widgetModel;
   let props;
 
   if (isPivotWidget(widgetType)) {
     props = widgetModel.getPivotTableWidgetProps();
+  } else if (isTextWidget(widgetType)) {
+    props = widgetModel.getTextWidgetProps();
   } else {
     props = widgetModel.getChartWidgetProps();
   }
@@ -84,6 +91,9 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
 
     const widgetModel = new WidgetModel(fetchedWidget, themeSettings, app?.settings);
     const extractedWidgetProps = getWidgetProps(widgetModel);
+    if (isTextWidgetProps(extractedWidgetProps.props)) {
+      return { widgetType: 'richtexteditor', props: extractedWidgetProps.props };
+    }
     if (includeDashboardFilters) {
       const { filters: dashboardFilters, highlights: dashboardHighlights } =
         extractDashboardFiltersForWidget(fetchedDashboard!, fetchedWidget);
@@ -98,23 +108,28 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     return extractedWidgetProps;
   }, [fetchedWidget, fetchedDashboard, themeSettings, includeDashboardFilters, app?.settings]);
 
-  // if filter relations are set on dashboard widget, additionally provided filters will be ignored
-  // since there is not enough information how to merge them
-  const filters = mergeFiltersByStrategy(
-    fetchedProps?.filters as Filter[],
-    restProps.filters,
-    restProps.filtersMergeStrategy,
-  );
-
-  const highlights = mergeFiltersByStrategy(
-    (fetchedProps as ChartWidgetProps)?.highlights,
-    restProps.highlights,
-    restProps.filtersMergeStrategy,
-  );
-
   if (!fetchedProps) {
     return null;
   }
+
+  // if filter relations are set on dashboard widget, additionally provided filters will be ignored
+  // since there is not enough information how to merge them
+  const filters = isTextWidgetProps(fetchedProps)
+    ? []
+    : mergeFiltersByStrategy(
+        fetchedProps?.filters as Filter[],
+        restProps.filters,
+        restProps.filtersMergeStrategy,
+      );
+
+  const highlights = isTextWidgetProps(fetchedProps)
+    ? []
+    : mergeFiltersByStrategy(
+        (fetchedProps as ChartWidgetProps)?.highlights,
+        restProps.highlights,
+        restProps.filtersMergeStrategy,
+      );
+
   const filterRelations = getFilterRelationsFromJaql(
     filters,
     highlights,
@@ -125,6 +140,9 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
     ),
   );
 
+  if (isTextWidgetProps(fetchedProps)) {
+    return <TextWidget {...fetchedProps} />;
+  }
   if (isPivotWidget(widgetType)) {
     return (
       <PivotTableWidget
@@ -139,6 +157,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
       />
     );
   }
+
   return (
     <ChartWidget
       {...(fetchedProps as ChartWidgetProps)}

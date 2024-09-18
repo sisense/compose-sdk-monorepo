@@ -19,7 +19,7 @@ import {
  */
 export async function getThemeSettingsByOid(
   themeOid: ThemeOid,
-  httpClient: Pick<HttpClient, 'get'>,
+  httpClient: Pick<HttpClient, 'get' | 'url'>,
 ): Promise<CompleteThemeSettings> {
   const legacyDesignSettings = await getLegacyDesignSettings(themeOid, httpClient);
 
@@ -29,7 +29,7 @@ export async function getThemeSettingsByOid(
 
   const paletteName = getPaletteName(legacyDesignSettings);
   const legacyPalette = await getLegacyPalette(paletteName, httpClient);
-  return convertToThemeSettings(legacyDesignSettings, legacyPalette);
+  return convertToThemeSettings(legacyDesignSettings, legacyPalette, httpClient.url);
 }
 
 async function getLegacyDesignSettings(themeOid: ThemeOid, httpClient: Pick<HttpClient, 'get'>) {

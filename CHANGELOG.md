@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.19.0] - 2024-09-17
+
+### Added
+- Support loading of fonts from Fusion
+- Support dashboard rendering of text widgets and chart plugins
+
+### Changed
+- Fix missing spaces in headings for `MemberFilterTile`, `Table`, and `PivotTable`
+- Extend `DataPoint` types with metadata
+- Fix rendering of charts without values to match Fusion
+- Fix pivot table error due to invalid datetime formatting
+- Improve type guards for narrowing filter types
+
 ## [1.18.1] - 2024-09-04
 
 ### Added
@@ -11,7 +24,6 @@
 ### Added
 
 - Add auto zoom feature to `DashboardWidget`
-- Support forecast and trend in Fusion widgets
 
 ### Changed
 

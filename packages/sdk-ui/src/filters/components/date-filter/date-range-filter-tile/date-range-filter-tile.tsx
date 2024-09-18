@@ -1,16 +1,9 @@
-import {
-  LevelAttribute,
-  DataSource,
-  Filter,
-  DateRangeFilter,
-  FilterTypes,
-} from '@sisense/sdk-data';
+import { LevelAttribute, DataSource, Filter, isDateRangeFilter } from '@sisense/sdk-data';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
 import { FilterTile, FilterTileDesignOptions } from '../../filter-tile';
 import { EditableDateRangeFilter } from './editable-date-range-filter';
 import { DateRangeFilterDisplay } from './date-range-filter-display';
 import { TranslatableError } from '@/translation/translatable-error';
-import { AnyObject } from '@/utils/utility-types';
 import { useDateLimits } from './use-date-limits';
 import { cloneFilterAndToggleDisabled } from '@/utils/filters';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
@@ -175,7 +168,3 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     );
   },
 );
-
-function isDateRangeFilter(filter: Filter & AnyObject): filter is DateRangeFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.date;
-}

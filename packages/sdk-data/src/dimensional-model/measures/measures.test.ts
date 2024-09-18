@@ -75,11 +75,11 @@ describe('Measures jaql preparations', () => {
 
   it('must prepare template measure jaql', () => {
     const result = {
-      jaql: { title: 'sum CommerceCost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
+      jaql: { title: 'sum Cost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
     };
     const measure = new DimensionalMeasureTemplate(
       'Count',
-      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+      new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
     );
 
     const jaql = measure.jaql();

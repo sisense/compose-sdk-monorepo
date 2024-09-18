@@ -8,7 +8,11 @@ import { convertToThemeSettings, getPaletteName } from './legacy-design-settings
 describe('legacy-design-settings', () => {
   describe('convertToThemeSettings', () => {
     it('should convert LegacyDesignSettings and LegacyPalette to ThemeSettings', () => {
-      const themeSettings = convertToThemeSettings(redLegacyDesignSettings, corporatePalette);
+      const themeSettings = convertToThemeSettings(
+        redLegacyDesignSettings,
+        corporatePalette,
+        'http://test.com/',
+      );
       expect(themeSettings).toEqual(redThemeSettings);
     });
   });

@@ -41,7 +41,7 @@ where the cost is greater than 100. Additional filtering on the cost will not af
 ```ts
 measureFactory.measuredValue(
   measureFactory.sum(DM.Commerce.Cost),
-  [filters.greaterThan(DM.Commerce.Cost, 100)],
+  [filterFactory.greaterThan(DM.Commerce.Cost, 100)],
   'Cost Greater Than 100'
 ),
 ```

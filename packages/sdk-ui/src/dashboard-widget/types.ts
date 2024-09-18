@@ -23,6 +23,11 @@ export type CategoricalWidgetType = 'chart/pie' | 'chart/funnel' | 'treemap' | '
 export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg' | 'pivot' | 'pivot2';
 
 /**
+ * The type of a widget on a dashboard that is a variant of text widget.
+ */
+export type TextWidgetType = 'richtexteditor';
+
+/**
  * The type of a widget on a dashboard.
  */
 export type WidgetType =
@@ -34,6 +39,7 @@ export type WidgetType =
   | 'chart/boxplot'
   | 'map/scatter'
   | 'map/area'
+  | TextWidgetType
   | 'plugin';
 
 export type WidgetSubtype =
@@ -66,7 +72,8 @@ export type WidgetSubtype =
   | 'boxplot/hollow'
   | 'map/scatter'
   | 'areamap/world'
-  | 'areamap/usa';
+  | 'areamap/usa'
+  | 'richtexteditor';
 
 export enum WidgetDashboardFilterMode {
   FILTER = 'filter',
@@ -99,6 +106,7 @@ export interface WidgetDto {
     ignore?: FiltersIgnoringRules;
     panels: Panel[];
     drillHistory?: PanelItem[];
+    usedFormulasMapping?: any;
   };
   style: WidgetStyle;
   title: string;
@@ -107,8 +115,34 @@ export interface WidgetDto {
     dashboardFiltersMode: `${WidgetDashboardFilterMode}`;
     selector: boolean;
     drillToAnywhere?: boolean;
-    previousScrollerLocation?: AutoZoomNavigatorScrollerLocation;
+    previousScrollerLocation?:
+      | AutoZoomNavigatorScrollerLocation
+      | EmptyAutoZoomNavigatorScrollerLocation;
+    triggersDomready?: boolean;
+    autoUpdateOnEveryChange?: boolean;
+    hideFromWidgetList?: boolean;
+    disableExportToCSV?: boolean;
+    disableExportToImage?: boolean;
+    toolbarButton?: any;
+    disallowSelector?: boolean;
+    disallowWidgetTitle?: boolean;
+    supportsHierarchies?: boolean;
   };
+  source?: any;
+  owner?: string;
+  userId?: string;
+  created?: string;
+  lastUpdated?: string;
+  instanceType?: string;
+  selection?: any;
+  tags?: any;
+  instanceid?: string;
+  realTimeRefreshing?: boolean;
+  dashboardid?: string;
+  _dataSourcePermission?: string;
+  userAuth?: any;
+  _toDisableOptionsList?: any;
+  _id?: string;
 }
 /**
  * @description the scroll location of the navigator scroller / auto zoom feature
@@ -117,6 +151,18 @@ export type AutoZoomNavigatorScrollerLocation = {
   min: number;
   max: number;
 };
+
+/** @internal sometimes Fusion widgets contain dumb scroller location with both locations empty */
+type EmptyAutoZoomNavigatorScrollerLocation = {
+  min: null;
+  max: null;
+};
+
+export function isValidScrollerLocation(
+  scrollerLocation?: AutoZoomNavigatorScrollerLocation | EmptyAutoZoomNavigatorScrollerLocation,
+): scrollerLocation is AutoZoomNavigatorScrollerLocation {
+  return !!scrollerLocation && scrollerLocation.min !== null && scrollerLocation.max !== null;
+}
 
 export type WidgetDesign = {
   widgetBackgroundColor: string;
@@ -166,6 +212,7 @@ export type NumericMask = {
   number?: { separated: boolean };
   separated?: boolean;
   type?: string;
+  abbreviateAll?: boolean;
 };
 
 export type DatetimeMask = {
@@ -175,6 +222,7 @@ export type DatetimeMask = {
   months: string;
   weeks: string;
   minutes: string;
+  seconds: string;
   days: string;
   type: string;
   dateAndTime?: string;
@@ -246,6 +294,8 @@ export type PanelItem = {
     id: string;
     index: number;
   };
+  panel?: string;
+  hierarchies?: any;
 };
 
 export type PanelColorFormat =
@@ -320,6 +370,7 @@ type AxisTitleStyle = {
 };
 
 export type AxisStyle = {
+  inactive?: boolean;
   enabled: boolean;
   ticks: boolean;
   labels: LabelsStyle;
@@ -354,9 +405,10 @@ export type CartesianWidgetStyle = BaseWidgetStyle &
     };
     markers?: {
       enabled: boolean;
-      size: number;
+      size: number | string;
       fill: string;
     };
+    dataLimits?: any;
   };
 
 export type PolarWidgetStyle = BaseWidgetStyle &
@@ -507,7 +559,7 @@ export type ScattermapWidgetStyle = WidgetContainerStyleOptions & {
 /** Currently, WidgetStyle for areamap is an empty object */
 export type AreamapWidgetStyle = {};
 
-export type WidgetStyle = { widgetDesign?: WidgetDesign } & (
+export type WidgetStyle = { widgetDesign?: WidgetDesign; narration?: any } & (
   | CartesianWidgetStyle
   | PolarWidgetStyle
   | FunnelWidgetStyle
@@ -520,6 +572,7 @@ export type WidgetStyle = { widgetDesign?: WidgetDesign } & (
   | ScattermapWidgetStyle
   | AreamapWidgetStyle
   | PivotWidgetStyle
+  | TextWidgetDtoStyle
 );
 
 export enum FiltersMergeStrategyEnum {
@@ -543,4 +596,13 @@ export type PivotWidgetStyle = {
   pageSize?: number | string;
   rowHeight?: number;
   automaticHeight?: boolean;
+};
+
+export type TextWidgetDtoStyle = {
+  content: {
+    html: string;
+    vAlign: `valign-${'middle' | 'top' | 'bottom'}`;
+    bgColor: string;
+    textAlign: 'center';
+  };
 };

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -10,7 +11,7 @@ import { LevelAttribute, Attribute, Measure, Filter } from '../interfaces.js';
 
 import { DimensionalElement } from '../base.js';
 
-import { DateLevels, MetadataTypes } from '../types.js';
+import { AnyObject, DateLevels, MetadataTypes } from '../types.js';
 
 import { create } from '../factory.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
@@ -93,7 +94,7 @@ export const FilterTypes = {
   ranking: 'ranking',
   text: 'text',
   numeric: 'numeric',
-  date: 'date',
+  dateRange: 'dateRange',
   relativeDate: 'relativeDate',
   cascading: 'cascading',
   advanced: 'advanced',
@@ -754,7 +755,7 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
     valueTo?: Date | string,
     guid?: string,
   ) {
-    super(l, FilterTypes.date, DateOperators.From, valueFrom, DateOperators.To, valueTo, guid);
+    super(l, FilterTypes.dateRange, DateOperators.From, valueFrom, DateOperators.To, valueTo, guid);
 
     if (typeof valueFrom === 'object') {
       this.valueA = valueFrom.toISOString();
@@ -909,6 +910,123 @@ export class CustomFilter extends AbstractFilter {
 }
 
 /**
+ * Checks if a filter is a CustomFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+export function isCustomFilter(filter: Filter & AnyObject): filter is CustomFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.advanced;
+}
+
+/**
+ * Checks if a filter is a MembersFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+export function isMembersFilter(filter: Filter & AnyObject): filter is MembersFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.members;
+}
+
+/**
+ * Checks if a filter is a NumericFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+export function isNumericFilter(filter: Filter & AnyObject): filter is NumericFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.numeric;
+}
+
+/**
+ * Checks if a filter is a TextFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+export function isRankingFilter(filter: Filter & AnyObject): filter is RankingFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.ranking;
+}
+
+/**
+ * Checks if a filter is a MeasureFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+export function isMeasureFilter(filter: Filter & AnyObject): filter is MeasureFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.measure;
+}
+
+/**
+ * Checks if a filter is a ExcludeFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+
+export function isExcludeFilter(filter: Filter & AnyObject): filter is ExcludeFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.exclude;
+}
+
+/**
+ * Checks if a filter is a LogicalAttributeFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+
+export function isLogicalAttributeFilter(
+  filter: Filter & AnyObject,
+): filter is LogicalAttributeFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.logicalAttribute;
+}
+
+/**
+ * Checks if a filter is a CascadingFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+
+export function isCascadingFilter(filter: Filter & AnyObject): filter is CascadingFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.cascading;
+}
+
+/**
+ * Checks if a filter is a RelativeDateFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+
+export function isRelativeDateFilter(filter: Filter & AnyObject): filter is RelativeDateFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.relativeDate;
+}
+
+/**
+ * Checks if a filter is a TextFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+
+export function isTextFilter(filter: Filter & AnyObject): filter is TextFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.text;
+}
+
+/**
+ * Checks if a filter is a DateRangeFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+export function isDateRangeFilter(filter: Filter & AnyObject): filter is DateRangeFilter {
+  return 'filterType' in filter && filter.filterType === FilterTypes.dateRange;
+}
+
+/**
  * @param json - Filter JSON representation
  * @internal
  */
@@ -973,7 +1091,7 @@ export function createFilter(json: any): Filter {
       );
       break;
 
-    case FilterTypes.date:
+    case FilterTypes.dateRange:
       return new DateRangeFilter(
         create(json.attribute) as LevelAttribute,
         json.valueA,

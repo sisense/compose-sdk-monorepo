@@ -27,7 +27,7 @@ Filter for categories that have an average revenue greater than
 or equal to 50 in the Sample ECommerce data model.
 ```ts
 filterFactory.measureGreaterThanOrEqual(
-  measures.average(DM.Commerce.Revenue),
+  measureFactory.average(DM.Commerce.Revenue),
   50
 )
 ```

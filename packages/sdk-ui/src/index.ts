@@ -13,6 +13,7 @@ export {
   type CartesianWidgetType,
   type CategoricalWidgetType,
   type TabularWidgetType,
+  type TextWidgetType,
 } from './dashboard-widget/types';
 export * from './query-execution';
 export { executeQuery } from './query/execute-query';
@@ -42,6 +43,8 @@ export * from './areamap-chart';
 export * from './area-range-chart';
 export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
+export * from './plugins-provider/custom-plugins-provider';
+export * from './plugins-provider/types';
 export { getThemeSettingsByOid } from './themes/theme-loader';
 export { getDefaultThemeSettings } from './theme-provider/default-theme-settings';
 export {
@@ -98,3 +101,4 @@ export { useThemeContext } from './theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
 export { LoadingOverlay } from './common/components/loading-overlay';
 export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';
+export type { EmptyObject } from './utils/utility-types';

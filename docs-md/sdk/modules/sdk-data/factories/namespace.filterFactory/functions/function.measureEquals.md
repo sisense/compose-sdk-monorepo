@@ -26,7 +26,7 @@ A filter instance
 Filter for categories that have an average revenue equal 50 in the Sample ECommerce data model.
 ```ts
 filterFactory.measureEquals(
-  measures.average(DM.Commerce.Revenue),
+  measureFactory.average(DM.Commerce.Revenue),
   50
 )
 ```

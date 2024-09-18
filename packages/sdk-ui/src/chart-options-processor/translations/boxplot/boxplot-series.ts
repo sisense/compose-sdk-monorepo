@@ -28,12 +28,15 @@ export const buildBoxplotSeries = (
   const series: SeriesType[] = [
     {
       ...boxSerie,
-      data: boxSerie.data.map((item) => ({
+      data: boxSerie.data.map((item, index) => ({
         ...item,
         color: lineColor,
         fillColor: boxplotType === 'hollow' ? 'transparent' : upperQuartileColor,
         innerBoxColor: boxplotType === 'hollow' ? 'transparent' : lowerQuartileColor,
         selected: item.blur ?? false,
+        custom: {
+          xValue: data.xValues[index].rawValues,
+        },
       })),
       medianWidth: 1,
       maxPointWidth: 42,
@@ -56,6 +59,9 @@ export const buildBoxplotSeries = (
         ...item,
         marker: {
           lineColor: item.blur ? blurredLineColor : lineColor,
+        },
+        custom: {
+          xValue: data.xValues[item.x].rawValues,
         },
       })),
       type: 'scatter',

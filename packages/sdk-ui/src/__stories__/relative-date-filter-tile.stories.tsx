@@ -6,7 +6,7 @@ import {
   DimensionalLevelAttribute,
   Filter,
   RelativeDateFilter,
-  filterFactory as filters,
+  filterFactory,
 } from '@sisense/sdk-data';
 
 const template = templateForComponent(RelativeDateFilterTile);
@@ -33,7 +33,9 @@ const onUpdate = (filter: Filter | null) => {
 
 export const Vertical = template({
   title: 'Relative Date: Vertical',
-  filter: (filters.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter).serializable(),
+  filter: (
+    filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter
+  ).serializable(),
   arrangement: 'vertical',
   onUpdate,
   limit: {
@@ -44,7 +46,9 @@ export const Vertical = template({
 
 export const Horizontal = template({
   title: 'Relative Date: Horizontal',
-  filter: (filters.dateRelativeFrom(mockAttributeYears, 0, 1) as RelativeDateFilter).serializable(),
+  filter: (
+    filterFactory.dateRelativeFrom(mockAttributeYears, 0, 1) as RelativeDateFilter
+  ).serializable(),
   arrangement: 'horizontal',
   onUpdate,
 });

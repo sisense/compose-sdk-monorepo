@@ -124,6 +124,11 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         {
           "blur": false,
           "color": "#0090a1",
+          "custom": {
+            "xValue": [
+              "Apple Mac Desktops",
+            ],
+          },
           "fillColor": "#00cee6",
           "high": 1192.295066833496,
           "innerBoxColor": "#00afc4",
@@ -136,6 +141,11 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         {
           "blur": false,
           "color": "#0090a1",
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "fillColor": "#00cee6",
           "high": 1167.9941291809082,
           "innerBoxColor": "#00afc4",
@@ -164,6 +174,11 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
       "data": [
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Desktops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -172,6 +187,11 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Desktops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -180,6 +200,11 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -188,6 +213,11 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -196,6 +226,11 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -468,6 +503,11 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         {
           "blur": false,
           "color": "#0090a1",
+          "custom": {
+            "xValue": [
+              "Apple Mac Desktops",
+            ],
+          },
           "fillColor": "#00cee6",
           "high": 1192.295066833496,
           "innerBoxColor": "#00afc4",
@@ -480,6 +520,11 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         {
           "blur": false,
           "color": "#0090a1",
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "fillColor": "#00cee6",
           "high": 1167.9941291809082,
           "innerBoxColor": "#00afc4",
@@ -508,6 +553,11 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
       "data": [
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Desktops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -516,6 +566,11 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Desktops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -524,6 +579,11 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -532,6 +592,11 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },
@@ -540,6 +605,11 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         },
         {
           "blur": false,
+          "custom": {
+            "xValue": [
+              "Apple Mac Laptops",
+            ],
+          },
           "marker": {
             "lineColor": "#0090a1",
           },

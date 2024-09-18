@@ -7,6 +7,7 @@ import { SisenseContext } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
+import { PluginsProvider } from '@/plugins-provider';
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -123,7 +124,9 @@ export const SisenseContextProvider: FunctionComponent<
       <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
         <SisenseContext.Provider value={{ isInitialized: true, app, tracking }}>
           <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
-            <SisenseQueryClientProvider>{children}</SisenseQueryClientProvider>
+            <SisenseQueryClientProvider>
+              <PluginsProvider>{children}</PluginsProvider>
+            </SisenseQueryClientProvider>
           </ThemeProvider>
         </SisenseContext.Provider>
       </ErrorBoundary>

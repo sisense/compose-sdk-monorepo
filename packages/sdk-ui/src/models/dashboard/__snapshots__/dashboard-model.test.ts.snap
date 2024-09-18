@@ -13,7 +13,7 @@ DashboardModel {
         "__serializable": "DimensionalElement",
         "desc": "",
         "expression": "dim",
-        "name": "column",
+        "name": "title",
         "type": "text-attribute",
       },
       "desc": "",
@@ -21,7 +21,7 @@ DashboardModel {
       "members": [
         "member",
       ],
-      "name": "e8e9681675b",
+      "name": "8cbfe2c92d",
       "type": "filter",
     },
   ],

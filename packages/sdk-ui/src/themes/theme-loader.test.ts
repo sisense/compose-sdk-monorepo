@@ -10,8 +10,9 @@ import { ThemeOid, ThemeSettings } from '../types';
 import { Mocked } from 'vitest';
 
 describe('getThemeSettingsByOid', () => {
-  const httpClientMock: Mocked<Pick<HttpClient, 'get'>> = {
+  const httpClientMock: Mocked<Pick<HttpClient, 'get' | 'url'>> = {
     get: vi.fn().mockImplementation(() => {}),
+    url: 'http://test.com/',
   };
 
   afterEach(() => {

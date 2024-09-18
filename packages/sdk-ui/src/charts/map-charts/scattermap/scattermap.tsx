@@ -5,7 +5,7 @@ import { useLocations } from './hooks/use-locations.js';
 import { ChartData, ScattermapChartData } from '../../../chart-data/types.js';
 import { ScattermapDataPointEventHandler } from '../../../props.js';
 import { getLocationsMarkerSizes } from './utils/size.js';
-import { locationToScattermapDataPoint } from './utils/location.js';
+import { getScattermapDataPoint } from './utils/location.js';
 import { useGeoSettings } from './hooks/use-settings.js';
 import { getLocationsMarkerColors } from './utils/color.js';
 import { createMarker, removeMarkers } from './utils/markers.js';
@@ -122,7 +122,7 @@ export const Scattermap = ({
         if (onDataPointClick) {
           marker.on('click', (e) => {
             onDataPointClick(
-              locationToScattermapDataPoint(locationWithCoordinates),
+              getScattermapDataPoint(locationWithCoordinates, dataOptions),
               e.originalEvent,
             );
           });
@@ -149,6 +149,7 @@ export const Scattermap = ({
     markerSizes,
     designOptions,
     themeSettings,
+    dataOptions,
     tooltipHandler,
     onDataPointClick,
   ]);

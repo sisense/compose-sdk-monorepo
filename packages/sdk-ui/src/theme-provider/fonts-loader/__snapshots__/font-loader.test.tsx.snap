@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FontLoader > should avoid duplication on multiple instance 1`] = `
+<head>
+  <style>
+    @font-face {
+          font-family: "FontTest1";
+          font-weight: bold;
+          font-style: normal;
+          src: url('FontTest1-Bold.eot');
+src: local('FontTest1-Bold');
+src: url('FontTest1-Bold.eot?#iefix') format('embedded-opentype');
+src: url('FontTest1-Bold.ttf') format('truetype');
+      }
+  </style>
+</head>
+`;
+
+exports[`FontLoader > should load different fonts on multiple instance 1`] = `
+<head>
+  <style>
+    @font-face {
+          font-family: "FontTest1";
+          font-weight: bold;
+          font-style: normal;
+          src: url('FontTest1-Bold.eot');
+src: local('FontTest1-Bold');
+src: url('FontTest1-Bold.eot?#iefix') format('embedded-opentype');
+src: url('FontTest1-Bold.ttf') format('truetype');
+      }
+  </style>
+  <style>
+    @font-face {
+          font-family: "AnotherFont";
+          font-weight: bold;
+          font-style: normal;
+          src: url('FontTest1-Bold.eot');
+src: local('FontTest1-Bold');
+src: url('FontTest1-Bold.eot?#iefix') format('embedded-opentype');
+src: url('FontTest1-Bold.ttf') format('truetype');
+      }
+  </style>
+</head>
+`;
+
+exports[`FontLoader > should load font correctly 1`] = `
+<head>
+  <style>
+    @font-face {
+          font-family: "FontTest1";
+          font-weight: bold;
+          font-style: normal;
+          src: url('FontTest1-Bold.eot');
+src: local('FontTest1-Bold');
+src: url('FontTest1-Bold.eot?#iefix') format('embedded-opentype');
+src: url('FontTest1-Bold.ttf') format('truetype');
+      }
+  </style>
+</head>
+`;

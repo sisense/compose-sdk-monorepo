@@ -8,6 +8,7 @@ import {
   FilterRelationsModel,
   FilterRelationsJaql,
   FilterRelationsJaqlNode,
+  isCascadingFilter,
 } from '@sisense/sdk-data';
 import { ChartSubtype } from '../chart-options-processor/subtype-to-design-options';
 import { ChartType, type SortDirection } from '../types';
@@ -16,12 +17,13 @@ import {
   FiltersMergeStrategyEnum,
   Panel,
   PanelItem,
+  TextWidgetDtoStyle,
+  WidgetStyle,
   WidgetSubtype,
   WidgetType,
 } from './types';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { TranslatableError } from '../translation/translatable-error';
-import { isCascadingFilter } from '@/utils/filters';
 
 export function getChartType(widgetType: WidgetType) {
   const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
@@ -101,6 +103,7 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
     'chart/boxplot',
     'map/scatter',
     'map/area',
+    'richtexteditor',
   ];
   return supportedWidgetTypes.includes(widgetType as WidgetType);
 }
@@ -113,8 +116,16 @@ export function isPivotWidget(widgetType: WidgetTypeOrString) {
   return widgetType === 'pivot' || widgetType === 'pivot2';
 }
 
+export function isTextWidget(widgetType: WidgetTypeOrString) {
+  return widgetType === 'richtexteditor';
+}
+
+export function isTextWidgetDtoStyle(widgetStyle: WidgetStyle): widgetStyle is TextWidgetDtoStyle {
+  return 'content' in widgetStyle && 'html' in widgetStyle.content;
+}
+
 export function isChartWidget(widgetType: WidgetTypeOrString) {
-  return !isPivotWidget(widgetType);
+  return !isPivotWidget(widgetType) && !isTextWidget(widgetType);
 }
 
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {

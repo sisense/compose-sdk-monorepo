@@ -34,6 +34,13 @@ const safeMerge = (sourceToInherit: AnyObject, sourceToAbsorb: AnyObject): AnyOb
   return Object.assign(Object.create(sourceToInherit), sourceToAbsorb) as AnyObject;
 };
 
+const safeUnmerge = (sourceWithInheritance: AnyObject) => {
+  return {
+    child: { ...sourceWithInheritance },
+    parent: Object.getPrototypeOf(sourceWithInheritance),
+  };
+};
+
 /**
  * Combines two objects into a single one with saving prototype inheritance of "sourceWithInheritance" argument
  *
@@ -121,4 +128,33 @@ export const translateColumnToMeasure = (
   c: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn,
 ) => {
   return translateValueToMeasure(translateColumnToValue(c));
+};
+
+export const translateCategoryOrValueToColumn = <
+  Source extends Category | Value,
+  Target extends AnyColumn,
+>(
+  option: Source,
+) => {
+  const { child: style, parent: column } = safeUnmerge(option);
+
+  if (isEmpty(style)) {
+    return column as Target;
+  }
+
+  return {
+    ...style,
+    column,
+  } as Target;
+};
+
+export const translateCategoryToColumn = (option: Category) => {
+  return translateCategoryOrValueToColumn<Category, Column | StyledColumn>(option);
+};
+
+export const translateValueToColumn = (option: Value) => {
+  return translateCategoryOrValueToColumn<
+    Value,
+    MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn
+  >(option);
 };
