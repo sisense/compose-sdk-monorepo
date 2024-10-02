@@ -8,6 +8,7 @@ import { I18nProvider } from '../translation/i18n-provider';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
 import { PluginsProvider } from '@/plugins-provider';
+import { MenuProvider } from '@/common/components/menu/menu-provider';
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -125,7 +126,9 @@ export const SisenseContextProvider: FunctionComponent<
         <SisenseContext.Provider value={{ isInitialized: true, app, tracking }}>
           <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
             <SisenseQueryClientProvider>
-              <PluginsProvider>{children}</PluginsProvider>
+              <PluginsProvider>
+                <MenuProvider>{children}</MenuProvider>
+              </PluginsProvider>
             </SisenseQueryClientProvider>
           </ThemeProvider>
         </SisenseContext.Provider>

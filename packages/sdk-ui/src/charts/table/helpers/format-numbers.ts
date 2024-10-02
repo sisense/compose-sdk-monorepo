@@ -1,11 +1,12 @@
-import { DataTable } from '../../../chart-data-processor/table-processor';
-import { TableDataOptionsInternal } from '../../../chart-data-options/types';
 import { isNumber } from '@sisense/sdk-data';
-import { createCompareValue } from '../../../chart-data-processor/row-comparator';
+
+import { TableDataOptionsInternal } from '@/chart-data-options/types';
+import { createCompareValue } from '@/chart-data-processor/row-comparator';
+import { DataTable } from '@/chart-data-processor/table-processor';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
-} from '../../../chart-options-processor/translations/number-format-config';
+} from '@/chart-options-processor/translations/number-format-config';
 
 export const formatNumbers = (
   table: DataTable,

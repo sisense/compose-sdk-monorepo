@@ -7,4 +7,4 @@ import { ChartType } from '@/index';
  *
  * @internal
  */
-export type WidgetTypeInternal = ChartType | 'pivot' | 'plugin';
+export type WidgetTypeInternal = ChartType | 'pivot' | 'plugin' | 'text';

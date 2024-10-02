@@ -31,16 +31,17 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * <csdk-dashboard
  *  *ngIf="dashboard"
  *  [title]="dashboard!.title"
- *  [layout]="dashboard!.layout"
+ *  [layoutOptions]="dashboard!.layoutOptions"
  *  [widgets]="dashboard!.widgets"
  *  [filters]="dashboard!.filters"
  *  [defaultDataSource]="dashboard!.dataSource"
- *  [widgetFilterOptions]="dashboard!.widgetFilterOptions"
+ *  [widgetsOptions]="dashboard!.widgetsOptions"
  * />
  * ```
+ *
  * ```ts
  * import { Component } from '@angular/core';
- * import { type DashboardModel, DashboardService } from '@sisense/sdk-ui-angular';
+ * import { type DashboardProps, DashboardService } from '@sisense/sdk-ui-angular';
  *
  * @Component({
  *  selector: 'app-dashboard',
@@ -49,17 +50,17 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * })
  * export class DashboardComponent {
  *
- *  dashboard: DashboardModel | null = null;
+ *  dashboard: DashboardProps | null = null;
  *
  *  constructor(private dashboardService: DashboardService) {}
  *
  *  async ngOnInit(): Promise<void> {
- *    this.dashboard = await this.dashboardService.getDashboardModel('60f3e3e3e4b0e3e3e4b0e3e3', { includeWidgets: true, includeFilters: true });
+ *    const dashboardModel = await this.dashboardService.getDashboardModel('60f3e3e3e4b0e3e3e4b0e3e3', { includeWidgets: true, includeFilters: true });
+ *    this.dashboardProps = dashboardModelTranslator.toDashboardProps(dashboardModel);
  *  }
  * ```
- * @group Fusion Embed
- * @fusionEmbed
- * @alpha
+ * @group Dashboarding
+ * @beta
  */
 @Component({
   selector: 'csdk-dashboard',
@@ -76,13 +77,21 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.title}
    */
   @Input()
-  title!: DashboardProps['title'];
+  title: DashboardProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.layout}
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.layoutOptions}
    */
   @Input()
-  layout!: DashboardProps['layout'];
+  layoutOptions: DashboardProps['layoutOptions'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+   *
+   * @internal
+   */
+  @Input()
+  config: DashboardProps['config'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
@@ -94,7 +103,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.filters}
    */
   @Input()
-  filters!: DashboardProps['filters'];
+  filters: DashboardProps['filters'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.defaultDataSource}
@@ -103,10 +112,10 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   defaultDataSource: DashboardProps['defaultDataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetFilterOptions}
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetsOptions}
    */
   @Input()
-  widgetFilterOptions: DashboardProps['widgetFilterOptions'];
+  widgetsOptions: DashboardProps['widgetsOptions'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.styleOptions}
@@ -164,11 +173,12 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   private createPreactComponent() {
     const props = {
       title: this.title,
-      layout: this.layout,
+      layoutOptions: this.layoutOptions,
+      config: this.config,
       widgets: this.widgets,
       filters: this.filters,
       defaultDataSource: this.defaultDataSource,
-      widgetFilterOptions: this.widgetFilterOptions,
+      widgetsOptions: this.widgetsOptions,
       styleOptions: this.styleOptions,
     };
 

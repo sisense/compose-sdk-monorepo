@@ -6,7 +6,7 @@ title: ContextMenu
 
 > **ContextMenu**(`__namedParameters`): `Element`
 
-Context menu of a Drilldown Widget
+Context menu
 
 ## Parameters
 

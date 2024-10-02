@@ -9,7 +9,7 @@ import { GetNlgQueryResultRequest, GetNlgQueryResultResponse } from '../api/type
 
 const mockNlgRequest: GetNlgQueryResultRequest = {
   jaql: {
-    datasource: 'Sample ECommerce',
+    datasource: { title: 'Sample ECommerce' },
     metadata: [],
   },
 };

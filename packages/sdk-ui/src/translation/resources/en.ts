@@ -43,16 +43,21 @@ export const translation = {
       onlyTableWidgetSupported: 'Only table widget is supported for method {{methodName}}',
       onlyPivotWidgetSupported: 'Only pivot widget is supported for method {{methodName}}',
       onlyTextWidgetSupported: 'Only text widget is supported for method {{methodName}}',
+      onlyPluginWidgetSupported: 'Only plugin widget is supported for method {{methodName}}',
     },
     unknownFilterInFilterRelations: 'Filter relations contain unknown filter',
     filterRelationsNotSupported: 'Filter relations not supported yet',
     invalidFilterType: 'Invalid filter type',
     secondsDateTimeLevelSupportedOnlyForLive:
       "Seconds datetime level is supported only for the 'live' datasource",
+    missingMenuRoot: 'Missing initialized menu root',
+    missingDataSource:
+      "The 'dataSource' value is missing. It must be provided explicitly, or a 'defaultDataSource' should be specified in the Sisense context provider.",
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
   criteriaFilter: {
+    displayModePrefix: 'All items',
     equals: 'Equals {{val}}',
     notEquals: 'Does not equal {{val}}',
     lessThan: 'Less than {{val}}',
@@ -130,8 +135,14 @@ export const translation = {
   },
   commonFilter: {
     clearSelectionButton: 'Clear Selection',
+    selectMenuItem: 'Select',
+    unselectMenuItem: 'Un-Select',
   },
   customFilterTileMessage: 'filtered with custom filter',
+  drilldown: {
+    drillMenuItem: 'Drill',
+    breadcrumbsAllSuffix: 'All',
+  },
 };
 
 export type TranslationDictionary = typeof translation;

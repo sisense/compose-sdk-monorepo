@@ -11,9 +11,10 @@ import {
   SeriesType,
 } from './chart-options-processor/chart-options-service';
 import { usePrevious } from './common/hooks/use-previous';
+import { applyHighchartOverrides } from './highcharts-overrides';
 
-// TODO: move this import once we decide where to do all our highcharts customizations
-import './highcharts-overrides';
+// TODO: move this function call once we decide where to do all our highcharts customizations
+applyHighchartOverrides();
 
 type HighchartsReactMemoizedProps = {
   options: HighchartsOptionsInternal;

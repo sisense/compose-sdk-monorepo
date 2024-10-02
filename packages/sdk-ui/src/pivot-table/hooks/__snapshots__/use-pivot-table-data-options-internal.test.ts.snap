@@ -5,6 +5,7 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
   "columns": [
     {
       "__serializable": "DimensionalElement",
+      "dataSource": undefined,
       "desc": "",
       "expression": "[Commerce.Gender]",
       "name": "Gender",
@@ -19,6 +20,7 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
   "rows": [
     {
       "__serializable": "DimensionalElement",
+      "dataSource": undefined,
       "desc": "",
       "expression": "[Category.Category]",
       "name": "Category",
@@ -26,13 +28,15 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     },
     {
       "__serializable": "DimensionalElement",
+      "dataSource": undefined,
       "desc": "",
       "expression": "[Commerce.Age Range]",
-      "name": "AgeRange",
+      "name": "Age Range",
       "type": "text-attribute",
     },
     {
       "__serializable": "DimensionalElement",
+      "dataSource": undefined,
       "desc": "",
       "expression": "[Commerce.Condition]",
       "name": "Condition",
@@ -45,11 +49,13 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
       "aggregation": "sum",
       "attribute": {
         "__serializable": "DimensionalElement",
+        "dataSource": undefined,
         "desc": "",
         "expression": "[Commerce.Cost]",
         "name": "Cost",
         "type": "numeric-attribute",
       },
+      "dataSource": undefined,
       "desc": "",
       "name": "Total Cost",
       "sort": 0,
@@ -60,11 +66,13 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
       "aggregation": "sum",
       "attribute": {
         "__serializable": "DimensionalElement",
+        "dataSource": undefined,
         "desc": "",
         "expression": "[Commerce.Revenue]",
         "name": "Revenue",
         "type": "numeric-attribute",
       },
+      "dataSource": undefined,
       "desc": "",
       "name": "Total Revenue",
       "sort": 0,

@@ -1,7 +1,7 @@
 import type { DateFormat } from './apply-date-format';
 import { newDateFormat } from './new-date-format';
 
-const angularTextDates = [
+const angularDateFormats = [
   'shortDate',
   'shortTime',
   'short', // Purposely ordered so that this is after other values that contain `short`
@@ -11,11 +11,10 @@ const angularTextDates = [
   'longDate',
   'fullDate',
 ] as const;
-export type AngularTextDate = (typeof angularTextDates)[number];
 
-type AngularTextDatesForLocale = Record<AngularTextDate, DateFormat>;
+type AngularDateFormat = (typeof angularDateFormats)[number];
 
-const enUSTextDates: AngularTextDatesForLocale = Object.freeze({
+const defaultAngularDateFormats = Object.freeze({
   fullDate: 'EEEE, MMMM d, y',
   longDate: 'MMMM d, y',
   medium: 'MMM d, y h:mm:ss a',
@@ -26,11 +25,43 @@ const enUSTextDates: AngularTextDatesForLocale = Object.freeze({
   shortTime: 'h:mm a',
 });
 
-type LocaleCode = string;
+/*
+ * Transform Fusion date format to corresponding mask in provided locale.
+ */
+function transformAngularFormatToLocaleFormat(
+  angularFormat: AngularDateFormat,
+  locale: Locale,
+): DateFormat {
+  if (!locale.formatLong) {
+    console.warn('Locale does not have formatLong property. Using default date formats.');
+    return defaultAngularDateFormats[angularFormat];
+  }
 
-const textDates: Record<LocaleCode, AngularTextDatesForLocale> = Object.freeze({
-  'en-US': enUSTextDates,
-});
+  switch (angularFormat) {
+    case 'fullDate':
+      return locale.formatLong.date({ width: 'full' });
+    case 'longDate':
+      return locale.formatLong.date({ width: 'long' });
+    case 'mediumDate':
+      return locale.formatLong.date({ width: 'medium' });
+    case 'shortDate':
+      return locale.formatLong.date({ width: 'short' });
+    case 'mediumTime':
+      return locale.formatLong.time({ width: 'medium' });
+    case 'shortTime':
+      return locale.formatLong.time({ width: 'short' });
+    case 'medium':
+      return locale.formatLong
+        .dateTime({ width: 'medium' })
+        .replace('{{date}}', locale.formatLong.date({ width: 'medium' }))
+        .replace('{{time}}', locale.formatLong.time({ width: 'medium' }));
+    case 'short':
+      return locale.formatLong
+        .dateTime({ width: 'short' })
+        .replace('{{date}}', locale.formatLong.date({ width: 'short' }))
+        .replace('{{time}}', locale.formatLong.time({ width: 'short' }));
+  }
+}
 
 /*
  * Replaces 'shortDate', 'shortTime', 'short', 'mediumDate', 'mediumTime',
@@ -55,15 +86,9 @@ export function newDateFormatWithExpandedAngularTextFormats(
   }
 
   let newFormat: DateFormat = oldFormat;
-  let localeTextDates: AngularTextDatesForLocale = textDates[locale.code ?? ''];
 
-  // Fallback to the formats of en-US for now.
-  if (!localeTextDates) {
-    localeTextDates = textDates['en-US'];
-  }
-
-  angularTextDates.forEach((textDate: AngularTextDate) => {
-    const textDateFormat: DateFormat = localeTextDates[textDate];
+  angularDateFormats.forEach((textDate: AngularDateFormat) => {
+    const textDateFormat: DateFormat = transformAngularFormatToLocaleFormat(textDate, locale);
     newFormat = newDateFormat(newFormat, textDate, function () {
       return textDateFormat;
     });

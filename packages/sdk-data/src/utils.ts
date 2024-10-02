@@ -10,9 +10,10 @@ import {
   FilterJaql,
   MembersFilter,
   Sort,
+  Attribute,
 } from './index.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
-import { FilterJaqlInternal } from './dimensional-model/filters/utils/types.js';
+import { FilterJaqlInternal, JaqlDataSource } from './dimensional-model/filters/utils/types.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
@@ -108,10 +109,39 @@ export function isDataSourceInfo(dataSource: DataSource): dataSource is DataSour
 }
 
 /**
+ * Converts a JaqlDataSource to DataSource.
+ *
+ * @internal
+ */
+export function convertDataSource(jaqlDataSource: JaqlDataSource): DataSource {
+  return {
+    title: jaqlDataSource.title,
+    type: jaqlDataSource.live ? 'live' : 'elasticube',
+  };
+}
+
+/**
+ * Converts a DataSource to a description of data source used in JAQL.
+ *
+ * @internal
+ */
+export function convertJaqlDataSource(dataSource: DataSource): JaqlDataSource {
+  return isDataSourceInfo(dataSource)
+    ? {
+        title: dataSource.title,
+        live: dataSource.type === 'live',
+      }
+    : {
+        title: dataSource,
+        live: false,
+      };
+}
+
+/**
  * Converts a string to a Sort enum
+ *
  * @param sort - The string to convert
  * @returns The converted Sort enum
- *
  * @internal
  */
 export function convertSort(sort?: string) {
@@ -148,3 +178,34 @@ export const createFilterFromJaql = (jaql: FilterJaql, instanceid?: string): Fil
 
   return filter;
 };
+
+/**
+ * Extracts the table and column names from the given expression string.
+ *
+ * @internal
+ */
+function parseExpression(expression: string) {
+  const [table, column] = expression.slice(1, -1).split('.');
+  return {
+    table,
+    column,
+  };
+}
+
+/**
+ * Retrieves the table value from the attribute.
+ *
+ * @internal
+ */
+export function getTableNameFromAttribute(attribute: Attribute) {
+  return parseExpression(attribute.expression).table;
+}
+
+/**
+ * Retrieves the column value from the attribute.
+ *
+ * @internal
+ */
+export function getColumnNameFromAttribute(attribute: Attribute) {
+  return parseExpression(attribute.expression).column;
+}

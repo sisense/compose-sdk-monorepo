@@ -161,7 +161,7 @@ exports[`ChartWidget > should render table widget 1`] = `
                                                           style="max-width: 90px;"
                                                         >
                                                           <div>
-                                                            AgeRange
+                                                            Age Range
                                                           </div>
                                                         </div>
                                                       </div>

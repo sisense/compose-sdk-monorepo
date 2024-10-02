@@ -75,7 +75,7 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsBetween} />
       </MockedSisenseContextProvider>,
     );
-    const element = screen.getByText('criteriaFilter.between');
+    const element = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.between');
     expect(element).toBeInTheDocument();
   });
 
@@ -85,7 +85,7 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsBetween} />
       </MockedSisenseContextProvider>,
     );
-    const textElt = screen.getByText('criteriaFilter.between');
+    const textElt = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.between');
     expect(textElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
     expect(textElt).not.toBeInTheDocument();
@@ -104,7 +104,7 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsNotContain} />
       </MockedSisenseContextProvider>,
     );
-    const textElt = screen.getByText('criteriaFilter.notContains');
+    const textElt = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.notContains');
     expect(textElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
     expect(textElt).not.toBeInTheDocument();
@@ -123,7 +123,7 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsTopRank} />
       </MockedSisenseContextProvider>,
     );
-    const textElt = screen.getByText('criteriaFilter.top');
+    const textElt = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.top');
     expect(textElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
     expect(textElt).not.toBeInTheDocument();

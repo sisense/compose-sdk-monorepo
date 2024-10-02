@@ -9,6 +9,7 @@ import styled from '@emotion/styled';
 
 import { DrilldownBreadcrumbsNavigation } from './drilldown-breadcrumbs-navigation';
 import { DrilldownBreadcrumbsProps } from '../../../props';
+import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 
 interface DrillButtonProps {
   isActive: boolean;
@@ -151,74 +152,82 @@ const DrillButton: React.FC<DrillButtonProps> = ({
  *
  * @group Drilldown
  */
-export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = ({
-  filtersDisplayValues,
-  currentDimension,
-  clearDrilldownSelections,
-  sliceDrilldownSelections,
-}) => {
-  const [popperParams, setPopoverParams] = useState<{
-    filterDisplayValues: string[];
-    anchorEl: HTMLElement;
-  } | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const themeProps = useThemeForBreadcrumbs();
-  const { CancelButton, CurrentDrillButton } = useButtons({
-    clearDrilldownSelections,
+export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = asSisenseComponent({
+  componentName: 'DrilldownBreadcrumbs',
+  shouldSkipSisenseContextWaiting: true,
+})(
+  ({
+    filtersDisplayValues,
     currentDimension,
-    isHovered,
-    setIsHovered,
-    themeProps,
-  });
-  const handleMouseEnter =
-    (filterDisplayValue: string[]) => (event: React.MouseEvent<HTMLElement>) => {
-      setIsHovered(true);
-      setPopoverParams({ filterDisplayValues: filterDisplayValue, anchorEl: event.currentTarget });
+    clearDrilldownSelections,
+    sliceDrilldownSelections,
+  }) => {
+    const [popperParams, setPopoverParams] = useState<{
+      filterDisplayValues: string[];
+      anchorEl: HTMLElement;
+    } | null>(null);
+    const [isHovered, setIsHovered] = useState(false);
+    const themeProps = useThemeForBreadcrumbs();
+    const { CancelButton, CurrentDrillButton } = useButtons({
+      clearDrilldownSelections,
+      currentDimension,
+      isHovered,
+      setIsHovered,
+      themeProps,
+    });
+    const handleMouseEnter =
+      (filterDisplayValue: string[]) => (event: React.MouseEvent<HTMLElement>) => {
+        setIsHovered(true);
+        setPopoverParams({
+          filterDisplayValues: filterDisplayValue,
+          anchorEl: event.currentTarget,
+        });
+      };
+
+    const handleMouseLeave = () => {
+      setIsHovered(false);
+      setPopoverParams(null);
     };
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setPopoverParams(null);
-  };
+    const isActiveDrill = (i: number) => i < filtersDisplayValues.length - 1;
+    const isLastActiveDrill = (i: number) => i === filtersDisplayValues.length - 2;
 
-  const isActiveDrill = (i: number) => i < filtersDisplayValues.length - 1;
-  const isLastActiveDrill = (i: number) => i === filtersDisplayValues.length - 2;
+    if (!filtersDisplayValues.length) return null;
 
-  if (!filtersDisplayValues.length) return null;
-
-  return (
-    <DrilldownBreadcrumbsNavigation currentDimension={currentDimension}>
-      <StyledBreadcrumbs
-        separator={null}
-        sx={{ backgroundColor: themeProps.chartBackgroundColor, padding: '4px' }}
-      >
-        <CancelButton />
-        {filtersDisplayValues.map((filterDisplayValue, i) => {
-          const isActive = isActiveDrill(i);
-          const isLastActive = isLastActiveDrill(i);
-          return (
-            <div key={i}>
-              <DrillButton
-                isActive={isActive}
-                isLastActive={isLastActive}
-                filterDisplayValue={filterDisplayValue}
-                handleMouseEnter={handleMouseEnter(filterDisplayValue)}
-                handleMouseLeave={handleMouseLeave}
-                handleClick={() => sliceDrilldownSelections(i + 1)}
-                themeProps={themeProps}
-                popperParams={popperParams}
-                index={i}
-              />
-            </div>
-          );
-        })}
-        <CurrentDrillButton />
-        <DrillPopper
-          popperParams={popperParams}
-          currentDimension={currentDimension}
-          themeProps={themeProps}
-        />
-      </StyledBreadcrumbs>
-    </DrilldownBreadcrumbsNavigation>
-  );
-};
+    return (
+      <DrilldownBreadcrumbsNavigation currentDimension={currentDimension}>
+        <StyledBreadcrumbs
+          separator={null}
+          sx={{ backgroundColor: themeProps.chartBackgroundColor, padding: '4px' }}
+        >
+          <CancelButton />
+          {filtersDisplayValues.map((filterDisplayValue, i) => {
+            const isActive = isActiveDrill(i);
+            const isLastActive = isLastActiveDrill(i);
+            return (
+              <div key={i}>
+                <DrillButton
+                  isActive={isActive}
+                  isLastActive={isLastActive}
+                  filterDisplayValue={filterDisplayValue}
+                  handleMouseEnter={handleMouseEnter(filterDisplayValue)}
+                  handleMouseLeave={handleMouseLeave}
+                  handleClick={() => sliceDrilldownSelections(i + 1)}
+                  themeProps={themeProps}
+                  popperParams={popperParams}
+                  index={i}
+                />
+              </div>
+            );
+          })}
+          <CurrentDrillButton />
+          <DrillPopper
+            popperParams={popperParams}
+            currentDimension={currentDimension}
+            themeProps={themeProps}
+          />
+        </StyledBreadcrumbs>
+      </DrilldownBreadcrumbsNavigation>
+    );
+  },
+);

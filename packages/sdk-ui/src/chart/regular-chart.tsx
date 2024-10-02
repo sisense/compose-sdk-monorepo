@@ -9,7 +9,11 @@ import { ChartDesignOptions, DesignOptions } from '../chart-options-processor/tr
 import { RegularChartProps } from '../props';
 import { IndicatorCanvas, isIndicatorCanvasProps } from '../indicator-canvas';
 
-import { isScattermapProps, Scattermap } from '../charts/map-charts/scattermap/scattermap';
+import {
+  isScattermapData,
+  isScattermapProps,
+  Scattermap,
+} from '../charts/map-charts/scattermap/scattermap';
 import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
 import { useThemeContext } from '../theme-provider';
 import { translateAttributeToCategory, translateMeasureToValue } from '../chart-data-options/utils';
@@ -18,13 +22,14 @@ import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-conta
 import { LoadingIndicator } from '../common/components/loading-indicator';
 import './chart.css';
 
-import { Areamap, isAreamapProps } from '../charts/map-charts/areamap/areamap';
+import { Areamap, isAreamapData, isAreamapProps } from '../charts/map-charts/areamap/areamap';
 import { prepareChartDesignOptions } from '../chart-options-processor/style-to-design-options-translator';
 import { LoadingOverlay } from '../common/components/loading-overlay';
 import { useSyncedData } from './helpers/use-synced-data';
 import { useTranslatedDataOptions } from './helpers/use-translated-data-options';
 import { ChartType } from '@/types';
 import { useChartRendererProps } from './helpers/use-chart-renderer-props';
+import { isBoxplotChartData } from '@/chart-data/boxplot-data';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -48,12 +53,17 @@ const shouldRerenderOnResize = (chartType: ChartType) => {
 
 /** Functoin to check if chart type has results */
 const hasNoResults = (chartType: ChartType, chartData: ChartData) => {
-  if (
-    chartType === 'scattermap' &&
-    'scatterDataTable' in chartData &&
-    chartData.scatterDataTable.length === 0
-  ) {
-    return true;
+  if (chartType === 'scatter' && 'scatterDataTable' in chartData) {
+    return chartData.scatterDataTable.length === 0;
+  }
+  if (chartType === 'areamap' && isAreamapData(chartData)) {
+    return chartData.geoData.length === 0;
+  }
+  if (chartType === 'scattermap' && isScattermapData(chartData)) {
+    return chartData.locations.length === 0;
+  }
+  if (chartType === 'boxplot' && isBoxplotChartData(chartData)) {
+    return chartData.xValues.length === 0;
   }
   return 'series' in chartData && chartData.series.length === 0;
 };

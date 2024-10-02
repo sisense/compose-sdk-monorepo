@@ -1,0 +1,16 @@
+.csdk-drilldown-hierarchy-nested-menu-item {
+  .csdk-menu-item-content {
+    position: relative;
+    padding-left: 13px;
+    &:before {
+      top: 2px;
+      left: 0;
+      position: absolute;
+      content: '';
+      display: block;
+      height: 14px;
+      width: 1px;
+      background: #c3c3c3;
+    }
+  }
+}

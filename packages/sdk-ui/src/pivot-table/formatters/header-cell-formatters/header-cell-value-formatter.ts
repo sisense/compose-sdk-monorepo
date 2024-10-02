@@ -52,7 +52,7 @@ export const createHeaderCellValueFormatter = (
  * Formats the date time string.
  * If the date is invalid, it returns the original value.
  */
-function formatDateTimeString(
+export function formatDateTimeString(
   value: string,
   dateFormatter: DateFormatter,
   dateFormat?: string,

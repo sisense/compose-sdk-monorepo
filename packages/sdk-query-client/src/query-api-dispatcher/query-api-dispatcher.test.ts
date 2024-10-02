@@ -27,7 +27,7 @@ describe('QueryApiDispatcher', () => {
       const dataSource = 'exampleDataSource';
       const count = 10;
       const offset = 0;
-      const expectedUrl = `api/datasources/${encodeURIComponent(dataSource)}/fields/search`;
+      const expectedUrl = `api/datasources/${encodeURI(dataSource)}/fields/search`;
       const expectedPayload = { offset, count };
       const expectedFields = [{ name: 'field1' }, { name: 'field2' }];
       httpClient.post.mockResolvedValue(expectedFields);

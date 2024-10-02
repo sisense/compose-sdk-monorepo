@@ -1,10 +1,10 @@
 import { createContext } from 'react';
-import { WidgetPlugin } from './types';
+import { PluginComponent } from './types';
 
 type PluginsContextType = {
-  plugins: Map<string, WidgetPlugin>;
-  registerPlugin: (pluginType: string, plugin: WidgetPlugin) => void;
-  getPlugin: (pluginType: string) => WidgetPlugin | undefined;
+  plugins: Map<string, PluginComponent>;
+  registerPlugin: (pluginType: string, plugin: PluginComponent) => void;
+  getPlugin: (pluginType: string) => PluginComponent | undefined;
 };
 
 const map = new Map();

@@ -379,3 +379,85 @@ describe('Disabled Filter', () => {
     expect(filter.jaql()).toStrictEqual({ jaql: { filter: {} } });
   });
 });
+
+describe('Multiple Data Sources', () => {
+  it('must prepare jaql for attribute filter', () => {
+    const filter = new MembersFilter(
+      new DimensionalAttribute(
+        'Gender',
+        '[Commerce.Gender]',
+        'text-attribute',
+        undefined,
+        undefined,
+        {
+          address: 'LocalHost',
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          database: 'aSampleIAAaECommerce',
+        },
+      ),
+      ['Female'],
+    );
+
+    const result = {
+      jaql: {
+        title: 'Gender',
+        dim: '[Commerce.Gender]',
+        datatype: 'text',
+        filter: { members: ['Female'] },
+        datasource: {
+          address: 'LocalHost',
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          database: 'aSampleIAAaECommerce',
+        },
+      },
+    };
+
+    const jaql = filter.jaql();
+
+    expect(jaql).toStrictEqual(result);
+  });
+
+  it('must prepare jaql for measure filter', () => {
+    const result = {
+      jaql: {
+        title: 'Cost',
+        dim: '[Commerce.Cost]',
+        datatype: 'numeric',
+        agg: 'sum',
+        filter: {},
+        datasource: {
+          address: 'LocalHost',
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          database: 'aSampleIAAaECommerce',
+        },
+      },
+    };
+    const filter = new MeasureFilter(
+      new DimensionalAttribute(
+        'Gender',
+        '[Commerce.Gender]',
+        'text-attribute',
+        undefined,
+        undefined,
+        {
+          address: 'LocalHost',
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          database: 'aSampleIAAaECommerce',
+        },
+      ),
+      new DimensionalBaseMeasure(
+        'Cost',
+        new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
+        'sum',
+      ),
+    );
+
+    const jaql = filter.jaql();
+
+    expect(jaql).toStrictEqual(result);
+  });
+});

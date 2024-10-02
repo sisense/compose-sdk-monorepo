@@ -50,6 +50,7 @@ export const validateCartesianChartDataOptions = (
 
 /**
  * Creates cartesian data for chart like line/area/bar and others given table of data and options
+ *
  * @param chartDataOptions - Internal cartesian chart data options
  * @param dataTable - Data table
  * @returns Cartesian chart data

@@ -4,7 +4,7 @@ title: DashboardWidgetComponent
 
 # Class DashboardWidgetComponent <Badge type="fusionEmbed" text="Fusion Embed" />
 
-The Dashboard Widget component, which is a thin wrapper on [ChartWidgetComponent](../chart-utilities/class.ChartWidgetComponent.md),
+The Dashboard Widget component, which is a thin wrapper on [ChartWidgetComponent](../dashboarding/class.ChartWidgetComponent.md),
 is used to render a widget created in a Sisense Fusion instance.
 
 To learn more about using Sisense Fusion Widgets in Compose SDK, see

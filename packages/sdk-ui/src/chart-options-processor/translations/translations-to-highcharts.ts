@@ -16,7 +16,11 @@ import {
   CartesianChartData,
 } from '../../chart-data/types';
 import { legendColor } from '../../chart-data/data-coloring';
-import { PolarChartDesignOptions, StackableChartDesignOptions } from './design-options';
+import {
+  isPolarChartDesignOptions,
+  PolarChartDesignOptions,
+  StackableChartDesignOptions,
+} from './design-options';
 import { AxisMinMax, AxisSettings } from './axis-section';
 import { Stacking } from '../chart-options-service';
 import { DesignOptions, isPolar } from './types';
@@ -98,10 +102,32 @@ export const determineHighchartsChartType = (
 
 export const addStackingIfSpecified = (
   chartType: ChartType,
-  designOptions: StackableChartDesignOptions,
+  designOptions: StackableChartDesignOptions | PolarChartDesignOptions,
 ): { stacking?: Stacking; showTotal: boolean } => {
-  if (chartType !== 'area' && chartType !== 'bar' && chartType !== 'column') {
+  if (
+    chartType !== 'area' &&
+    chartType !== 'bar' &&
+    chartType !== 'column' &&
+    chartType !== 'polar'
+  ) {
     return { showTotal: false };
+  }
+
+  if (chartType === 'polar') {
+    if (isPolarChartDesignOptions(designOptions)) {
+      return {
+        stacking:
+          designOptions.polarType === 'column' || designOptions.polarType === 'area'
+            ? 'normal'
+            : undefined,
+        showTotal: false,
+      };
+    }
+    throw new Error('Polar chart design options expected for polar chart');
+  }
+
+  if (isPolarChartDesignOptions(designOptions)) {
+    throw new Error('Polar chart design options not expected for non-polar chart');
   }
 
   const showTotal = designOptions.valueLabel ? designOptions.showTotal || false : false;

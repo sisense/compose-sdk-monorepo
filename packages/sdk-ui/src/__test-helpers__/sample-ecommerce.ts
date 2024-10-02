@@ -21,7 +21,7 @@ export const Brand = createDimension({
     expression: '[Brand.Brand]',
   }),
   BrandID: createAttribute({
-    name: 'BrandID',
+    name: 'Brand ID',
     type: 'numeric-attribute',
     expression: '[Brand.Brand ID]',
   }),
@@ -39,7 +39,7 @@ export const Category = createDimension({
     expression: '[Category.Category]',
   }),
   CategoryID: createAttribute({
-    name: 'CategoryID',
+    name: 'Category ID',
     type: 'numeric-attribute',
     expression: '[Category.Category ID]',
   }),
@@ -62,17 +62,17 @@ interface CommerceDimension extends Dimension {
 export const Commerce = createDimension({
   name: 'Commerce',
   AgeRange: createAttribute({
-    name: 'AgeRange',
+    name: 'Age Range',
     type: 'text-attribute',
     expression: '[Commerce.Age Range]',
   }),
   BrandID: createAttribute({
-    name: 'BrandID',
+    name: 'Brand ID',
     type: 'numeric-attribute',
     expression: '[Commerce.Brand ID]',
   }),
   CategoryID: createAttribute({
-    name: 'CategoryID',
+    name: 'Category ID',
     type: 'numeric-attribute',
     expression: '[Commerce.Category ID]',
   }),
@@ -87,7 +87,7 @@ export const Commerce = createDimension({
     expression: '[Commerce.Cost]',
   }),
   CountryID: createAttribute({
-    name: 'CountryID',
+    name: 'Country ID',
     type: 'numeric-attribute',
     expression: '[Commerce.Country ID]',
   }),
@@ -112,7 +112,7 @@ export const Commerce = createDimension({
     expression: '[Commerce.Revenue]',
   }),
   VisitID: createAttribute({
-    name: 'VisitID',
+    name: 'Visit ID',
     type: 'numeric-attribute',
     expression: '[Commerce.Visit ID]',
   }),
@@ -134,7 +134,7 @@ export const Country = createDimension({
     expression: '[Country.Country]',
   }),
   CountryID: createAttribute({
-    name: 'CountryID',
+    name: 'Country ID',
     type: 'numeric-attribute',
     expression: '[Country.Country ID]',
   }),

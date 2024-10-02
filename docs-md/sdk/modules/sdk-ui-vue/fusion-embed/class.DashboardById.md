@@ -2,7 +2,7 @@
 title: DashboardById
 ---
 
-# Class DashboardById <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+# Class DashboardById <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 
 A component used for easily rendering a dashboard by its ID in a Sisense Fusion instance.
 

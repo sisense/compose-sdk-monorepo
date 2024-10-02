@@ -1,23 +1,21 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { ReactNode, useCallback, useMemo, useState, type FunctionComponent } from 'react';
-
 import { Chart } from '../chart';
-import { ChartProps, ChartWidgetProps, HighchartsOptions } from '../props';
+import { ChartProps, ChartWidgetProps, DrilldownWidgetProps, HighchartsOptions } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 import { getDataSourceName } from '@sisense/sdk-data';
 import { WidgetContainer } from './common/widget-container';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { DrilldownWidget } from './drilldown-widget';
-import { useHighlightSelection } from './use-highlight-selection';
+import { useHighlightSelection } from './hooks/use-highlight-selection';
 import { combineHandlers } from '../utils/combine-handlers';
 import {
   createDrilldownToChartConnector,
   getDrilldownInitialDimension,
-  isSupportedChartForDrilldown,
-  isValidChartConfigurationForDrilldown,
+  isDrilldownApplicableToChart,
 } from './common/drilldown-connector';
-
+import { useSyncedDrilldownPaths } from './hooks/use-synced-hierarchies';
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.
  * It can be used along with the {@link DrilldownWidget} component to support advanced data drilldown.
@@ -40,7 +38,7 @@ import {
  * <img src="media://chart-widget-with-drilldown-example-1.png" width="800px" />
  * @param props - ChartWidget properties
  * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType | chartType}
- * @group Chart Utilities
+ * @group Dashboarding
  */
 export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseComponent({
   componentName: 'ChartWidget',
@@ -55,24 +53,32 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     highlightSelectionDisabled = false,
     highlights,
     description,
+    onChange,
   } = props;
   const { width, height, ...styleOptionsWithoutSizing } = styleOptions || {};
   const defaultSize = getWidgetDefaultSize(chartType, {
     hasHeader: !styleOptions?.header?.hidden,
   });
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const isDrilldownApplicable = useMemo(
+    () => isDrilldownApplicableToChart(chartType, dataOptions),
+    [chartType, dataOptions],
+  );
+  const drilldownPaths = useSyncedDrilldownPaths({
+    attribute: getDrilldownInitialDimension(chartType, dataOptions),
+    dataSource: dataSource,
+    drilldownPaths: drilldownOptions?.drilldownPaths,
+    enabled: isDrilldownApplicable,
+  });
 
   const isDrilldownEnabled = useMemo(() => {
     const hasDrilldownConfig =
       drilldownOptions?.drilldownSelections?.length ||
-      drilldownOptions?.drilldownDimensions?.length;
+      drilldownOptions?.drilldownDimensions?.length ||
+      drilldownPaths?.length;
 
-    return (
-      hasDrilldownConfig &&
-      isSupportedChartForDrilldown(chartType) &&
-      isValidChartConfigurationForDrilldown(chartType, dataOptions)
-    );
-  }, [drilldownOptions, chartType, dataOptions]);
+    return hasDrilldownConfig && isDrilldownApplicable;
+  }, [drilldownOptions, isDrilldownApplicable, drilldownPaths]);
 
   const highlightSelection = useHighlightSelection({
     chartType,
@@ -97,6 +103,19 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
       };
     },
     [description, isAccessibilityEnabled],
+  );
+
+  const onDrilldownWidgetChange = useCallback(
+    ({ drilldownSelections }: Partial<DrilldownWidgetProps>) => {
+      if (drilldownSelections) {
+        onChange?.({
+          drilldownOptions: {
+            drilldownSelections,
+          },
+        });
+      }
+    },
+    [onChange],
   );
 
   if (!chartType || !dataOptions) {
@@ -154,12 +173,14 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     >
       {isDrilldownEnabled ? (
         <DrilldownWidget
-          drilldownDimensions={drilldownOptions?.drilldownDimensions || []}
+          drilldownDimensions={drilldownOptions?.drilldownDimensions}
+          drilldownPaths={drilldownPaths}
           initialDimension={getDrilldownInitialDimension(chartType, dataOptions)}
           drilldownSelections={drilldownOptions?.drilldownSelections || []}
           config={{
             isBreadcrumbsDetached: true,
           }}
+          onChange={onDrilldownWidgetChange}
         >
           {(drilldownConnectProps) => {
             const { breadcrumbsComponent } = drilldownConnectProps;

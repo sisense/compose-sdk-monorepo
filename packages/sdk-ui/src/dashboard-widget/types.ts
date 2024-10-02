@@ -1,6 +1,7 @@
 import { WidgetContainerStyleOptions } from '../types';
 import { LEGACY_DESIGN_TYPES } from './../themes/legacy-design-settings';
-import { Jaql, JaqlSortDirection } from '@sisense/sdk-data';
+import { BaseJaql, Jaql, JaqlDataSource, JaqlSortDirection } from '@sisense/sdk-data';
+import { HierarchyId } from '@/models/hierarchy';
 
 /**
  * The type of a widget on a dashboard that is a variant of Cartesian widget.
@@ -80,15 +81,6 @@ export enum WidgetDashboardFilterMode {
   SELECT = 'select',
 }
 
-export type Datasource = {
-  title: string;
-  id: string;
-  fullname?: string;
-  live?: boolean;
-  address?: string;
-  database?: string;
-};
-
 /**
  * The data transfer object (DTO) containing info of a widget on a dashboard.
  *
@@ -101,7 +93,7 @@ export interface WidgetDto {
   oid: string;
   type: WidgetType | string;
   subtype: WidgetSubtype | string;
-  datasource: Datasource;
+  datasource: JaqlDataSource;
   metadata: {
     ignore?: FiltersIgnoringRules;
     panels: Panel[];
@@ -144,6 +136,23 @@ export interface WidgetDto {
   _toDisableOptionsList?: any;
   _id?: string;
 }
+
+/**
+ * The data transfer object (DTO) containing info of a hierarchy.
+ *
+ * This is the (not-comprehensive) structure of the response from the
+ * `/api/elasticubes/hierarchies` endpoint.
+ *
+ * @internal
+ */
+export interface HierarchyDto {
+  _id: string;
+  cubeId: string;
+  title: string;
+  // Note: using jaql type as it has the same structure as datasource column model
+  levels: BaseJaql[];
+}
+
 /**
  * @description the scroll location of the navigator scroller / auto zoom feature
  */
@@ -152,7 +161,9 @@ export type AutoZoomNavigatorScrollerLocation = {
   max: number;
 };
 
-/** @internal sometimes Fusion widgets contain dumb scroller location with both locations empty */
+/**
+ * @internal
+ */
 type EmptyAutoZoomNavigatorScrollerLocation = {
   min: null;
   max: null;
@@ -295,7 +306,7 @@ export type PanelItem = {
     index: number;
   };
   panel?: string;
-  hierarchies?: any;
+  hierarchies?: HierarchyId[];
 };
 
 export type PanelColorFormat =

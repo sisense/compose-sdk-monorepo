@@ -4,7 +4,7 @@ title: useGetWidgetModel
 
 # Function useGetWidgetModel <Badge type="fusionEmbed" text="Fusion Embed" />
 
-> **useGetWidgetModel**(`params`): `ToRefs`\< `DataState`\< [`WidgetModel`](class.WidgetModel.md) \> \>
+> **useGetWidgetModel**(`params`): `ToRefs`\< `DataState`\< [`WidgetModel`](interface.WidgetModel.md) \> \>
 
 A Vue composable function `useGetWidgetModel` for retrieving widget models from a Sisense dashboard.
 It is designed to fetch a specific widget model based on the provided dashboard and widget OIDs, handling the loading,
@@ -21,7 +21,7 @@ require detailed information about a Sisense widget for data visualization or an
 
 ## Returns
 
-`ToRefs`\< `DataState`\< [`WidgetModel`](class.WidgetModel.md) \> \>
+`ToRefs`\< `DataState`\< [`WidgetModel`](interface.WidgetModel.md) \> \>
 
 ## Example
 
@@ -29,14 +29,14 @@ Retrieve a widget model and use it to populate a `Chart` component:
 
 ```vue
 <script setup lang="ts">
-import { Chart, useGetWidgetModel } from '@sisense/sdk-ui-vue';
+import { Chart, useGetWidgetModel, widgetModelTranslator } from '@sisense/sdk-ui-vue';
 const { data: widget } = useGetWidgetModel({
   dashboardOid: 'your_dashboard_oid',
   widgetOid: 'your_widget_oid',
 });
 </script>
 <template>
-  <Chart v-if="widget" v-bind="widget.getChartProps()" />
+  <Chart v-if="widget" v-bind="widgetModelTranslator.toChartProps(widget)" />
 </template>
 ```
 

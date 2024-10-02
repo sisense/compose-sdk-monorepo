@@ -6,7 +6,7 @@
 /* eslint-disable sonarjs/no-nested-switch */
 import { Attribute, LevelAttribute } from './interfaces.js';
 
-import { Sort, MetadataTypes, DateLevels } from './types.js';
+import { Sort, MetadataTypes, DateLevels, JaqlDataSource } from './types.js';
 
 import { DimensionalElement, normalizeName } from './base.js';
 import { simpleColumnType } from './simple-column-types.js';
@@ -25,8 +25,15 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
 
   protected _sort: Sort = Sort.None;
 
-  constructor(name: string, expression: string, type?: string, desc?: string, sort?: Sort) {
-    super(name, type || MetadataTypes.Attribute, desc);
+  constructor(
+    name: string,
+    expression: string,
+    type?: string,
+    desc?: string,
+    sort?: Sort,
+    dataSource?: JaqlDataSource,
+  ) {
+    super(name, type || MetadataTypes.Attribute, desc, dataSource);
 
     this.expression = expression;
     this._sort = sort || Sort.None;
@@ -110,8 +117,9 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     format?: string,
     desc?: string,
     sort?: Sort,
+    dataSource?: JaqlDataSource,
   ) {
-    super(l, expression, MetadataTypes.DateLevel, desc, sort);
+    super(l, expression, MetadataTypes.DateLevel, desc, sort, dataSource);
 
     this._format = format;
     this.granularity = granularity;

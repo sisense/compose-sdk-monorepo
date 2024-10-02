@@ -1,18 +1,32 @@
 import { useCallback, useState } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
+import last from 'lodash-es/last';
 import { type Filter } from '@sisense/sdk-data';
-import { mergeFilters } from '@/dashboard-widget/utils';
-import { ChartDataOptions, WidgetModel } from '../index.js';
+import {
+  isTextWidgetProps,
+  mergeFilters,
+  registerDataPointClickHandler,
+  registerDataPointContextMenuHandler,
+  registerDataPointsSelectedHandler,
+  registerRenderToolbarHandler,
+  translateWidgetTypeInternal,
+} from '@/dashboard-widget/utils';
 import { CommonFiltersOptions } from './types.js';
 import { prepareCommonFiltersToWidgetConnectProps } from './common-filters-connector.js';
-import { translateWidgetType } from '@/models/index.js';
+import { WidgetProps } from '@/props.js';
+import { OpenMenuFn } from '@/common/components/menu/types.js';
+import { useTranslation } from 'react-i18next';
+import { applyDrilldownDimension } from '@/widgets/common/drilldown-connector.js';
 
 /** @internal */
 export const useCommonFilters = ({
   initialFilters = [],
+  openMenu,
 }: {
   initialFilters?: Filter[];
+  openMenu?: OpenMenuFn;
 } = {}) => {
+  const { t: translate } = useTranslation();
   const [filters, setFilters] = useState<Filter[]>(initialFilters);
 
   const addFilter = useCallback(
@@ -22,37 +36,63 @@ export const useCommonFilters = ({
     [setFilters, filters],
   );
 
-  const connectToWidgetModel = useCallback(
-    (widget: WidgetModel, options: CommonFiltersOptions = {}): WidgetModel => {
+  const connectToWidgetProps = useCallback(
+    (widget: WidgetProps, options: CommonFiltersOptions = {}): WidgetProps => {
+      // Text widgets do not support filters, highlights, and data options
+      if (isTextWidgetProps(widget)) {
+        return widget;
+      }
+
+      const widgetType = translateWidgetTypeInternal(widget);
+
       const connectedWidget = cloneDeep(widget);
+      const hasDrilldownSelection =
+        'drilldownOptions' in widget && widget.drilldownOptions?.drilldownSelections?.length;
+      const dataOptions = hasDrilldownSelection
+        ? applyDrilldownDimension(
+            widget.chartType,
+            widget.dataOptions,
+            last(widget.drilldownOptions!.drilldownSelections)!.nextDimension,
+          )
+        : widget.dataOptions;
+
       const props = prepareCommonFiltersToWidgetConnectProps(
         filters,
         setFilters,
-        translateWidgetType(widget.widgetType),
-        widget.dataOptions as ChartDataOptions,
+        widgetType,
+        dataOptions,
         options,
+        translate,
+        openMenu,
       );
 
       connectedWidget.highlights = mergeFilters(props.highlights, connectedWidget.highlights);
-      connectedWidget.filters = mergeFilters(props.filters as Filter[], connectedWidget.filters);
+
+      connectedWidget.filters = mergeFilters(
+        props.filters as Filter[],
+        connectedWidget.filters as Filter[],
+      );
       if (props.onDataPointClick) {
-        connectedWidget.registerComponentDataPointClickHandler?.(props.onDataPointClick);
+        registerDataPointClickHandler(connectedWidget, props.onDataPointClick);
       }
       if (props.onDataPointsSelected) {
-        connectedWidget.registerComponentDataPointsSelectedHandler?.(props.onDataPointsSelected);
+        registerDataPointsSelectedHandler(connectedWidget, props.onDataPointsSelected);
+      }
+      if (props.onDataPointContextMenu) {
+        registerDataPointContextMenuHandler(connectedWidget, props.onDataPointContextMenu);
       }
       if (props.renderToolbar) {
-        connectedWidget.registerComponentRenderToolbarHandler?.(props.renderToolbar);
+        registerRenderToolbarHandler(connectedWidget, props.renderToolbar);
       }
       return connectedWidget;
     },
-    [setFilters, filters],
+    [setFilters, filters, openMenu, translate],
   );
 
   return {
     filters,
     setFilters,
     addFilter,
-    connectToWidgetModel,
+    connectToWidgetProps,
   };
 };

@@ -134,7 +134,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
    *
    */
   @Input()
-  drilldownDimensions!: DrilldownWidgetProps['drilldownDimensions'];
+  drilldownDimensions!: NonNullable<DrilldownWidgetProps['drilldownDimensions']>;
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.initialDimension}

@@ -15,7 +15,7 @@ Used in [ContextMenuProps](../interfaces/interface.ContextMenuProps.md)
 
 **items**?: \{
   `caption`: `string`;
-  `key`: `string`;
+  `key`: `string` \| `number`;
   `onClick`: () => `void`;
  }[]
 

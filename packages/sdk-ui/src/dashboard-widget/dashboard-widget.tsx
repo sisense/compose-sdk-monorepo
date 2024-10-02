@@ -7,7 +7,7 @@ import { asSisenseComponent } from '../decorators/component-decorators/as-sisens
 import {
   convertFilterRelationsModelToJaql,
   getFilterRelationsFromJaql,
-  isPivotWidget,
+  isPivotTableWidget,
   isTextWidget,
   mergeFilters,
   mergeFiltersByStrategy,
@@ -15,7 +15,7 @@ import {
 import { extractDashboardFiltersForWidget } from './translate-dashboard-filters';
 import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model';
 import { WidgetModel } from '../models';
-import { PivotTableWidgetProps, WidgetType } from '..';
+import { PivotTableWidgetProps, WidgetType, widgetModelTranslator } from '..';
 import { PivotTableWidget } from '@/widgets/pivot-table-widget';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { isTextWidgetProps, TextWidget } from '@/widgets/text-widget';
@@ -27,7 +27,7 @@ function getWidgetProps(widgetModel: WidgetModel): {
   const { widgetType } = widgetModel;
   let props;
 
-  if (isPivotWidget(widgetType)) {
+  if (isPivotTableWidget(widgetType)) {
     props = widgetModel.getPivotTableWidgetProps();
   } else if (isTextWidget(widgetType)) {
     props = widgetModel.getTextWidgetProps();
@@ -89,7 +89,11 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
       return { widgetType: null, props: null };
     }
 
-    const widgetModel = new WidgetModel(fetchedWidget, themeSettings, app?.settings);
+    const widgetModel = widgetModelTranslator.fromWidgetDto(
+      fetchedWidget,
+      themeSettings,
+      app?.settings,
+    );
     const extractedWidgetProps = getWidgetProps(widgetModel);
     if (isTextWidgetProps(extractedWidgetProps.props)) {
       return { widgetType: 'richtexteditor', props: extractedWidgetProps.props };
@@ -143,7 +147,7 @@ export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisens
   if (isTextWidgetProps(fetchedProps)) {
     return <TextWidget {...fetchedProps} />;
   }
-  if (isPivotWidget(widgetType)) {
+  if (isPivotTableWidget(widgetType)) {
     return (
       <PivotTableWidget
         {...(fetchedProps as PivotTableWidgetProps)}

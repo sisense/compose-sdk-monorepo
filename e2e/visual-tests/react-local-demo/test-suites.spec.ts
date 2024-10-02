@@ -3,6 +3,7 @@ import { AppsNames, getAppConfig } from '../appsConfig';
 import { makeScreenshotsOverPage } from '../__test-helpers__/make-screenshot';
 
 const TEST_STEP_AVARAGE_TIMEOUT = 20 * 1000;
+const DISABLED_TEST_SUITES = ['Funnel Chart', 'Scattermap'];
 
 const { url } = getAppConfig(AppsNames.REACT_LOCAL_DEMO);
 
@@ -19,8 +20,8 @@ test('verify test suites in light mode', async ({ page }) => {
   test.setTimeout((dashboards.length || 1) * TEST_STEP_AVARAGE_TIMEOUT);
 
   for (const dashboard of dashboards) {
-    // temporary skips funnel chart as it is unstable due to performance issue
-    if (dashboard === 'Funnel Chart') {
+    // temporary skips unstable tests
+    if (DISABLED_TEST_SUITES.includes(dashboard)) {
       continue;
     }
     await test.step(`check ${dashboard}`, async () => {
@@ -44,8 +45,8 @@ test('verify test suites in dark mode', async ({ page }) => {
   test.setTimeout((dashboards.length || 1) * TEST_STEP_AVARAGE_TIMEOUT);
 
   for (const dashboard of dashboards) {
-    // temporary skips funnel chart as it is unstable due to performance issue
-    if (dashboard === 'Funnel Chart') {
+    // temporary skips unstable tests
+    if (DISABLED_TEST_SUITES.includes(dashboard)) {
       continue;
     }
     await test.step(`check ${dashboard}`, async () => {

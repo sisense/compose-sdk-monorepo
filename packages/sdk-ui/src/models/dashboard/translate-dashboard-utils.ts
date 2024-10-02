@@ -1,15 +1,15 @@
 import {
-  type Layout as SisenseLayout,
+  type LayoutDto,
   type FilterDto,
   type CascadingFilterDto,
   isCascadingFilterDto,
 } from '../../api/types/dashboard-dto';
-import type { Layout, WidgetFilterOptions } from './types';
+import type { WidgetsPanelColumnLayout, WidgetsOptions } from './types';
 import { CascadingFilter, Filter, createFilterFromJaql } from '@sisense/sdk-data';
 import { WidgetDto } from '@/dashboard-widget/types';
 import { CommonFiltersApplyMode } from '@/common-filters/types';
 
-export const translateLayout = (layout: SisenseLayout): Layout => ({
+export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
   columns: layout.columns.map((c) => ({
     widthPercentage: c.width,
     rows: (c.cells || []).map((cell) => {
@@ -53,23 +53,25 @@ export function extractDashboardFilters(
   );
 }
 
-export function translateWidgetFilterOptions(widgets: WidgetDto[] = []): WidgetFilterOptions {
-  const widgetFilterOptionsMap: WidgetFilterOptions = {};
+export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptions {
+  const widgetsOptionsMap: WidgetsOptions = {};
 
   widgets.forEach((widget: WidgetDto) => {
-    widgetFilterOptionsMap[widget.oid] = {
-      applyMode:
-        widget.options?.dashboardFiltersMode === 'filter'
-          ? CommonFiltersApplyMode.FILTER
-          : CommonFiltersApplyMode.HIGHLIGHT,
-      shouldAffectFilters: widget.options?.selector,
-      ignoreFilters: {
-        all: widget.metadata.ignore?.all,
-        ids: widget.metadata.ignore?.ids,
+    widgetsOptionsMap[widget.oid] = {
+      filtersOptions: {
+        applyMode:
+          widget.options?.dashboardFiltersMode === 'filter'
+            ? CommonFiltersApplyMode.FILTER
+            : CommonFiltersApplyMode.HIGHLIGHT,
+        shouldAffectFilters: widget.options?.selector,
+        ignoreFilters: {
+          all: widget.metadata.ignore?.all,
+          ids: widget.metadata.ignore?.ids,
+        },
+        forceApplyBackgroundFilters: true,
       },
-      forceApplyBackgroundFilters: true,
     };
   });
 
-  return widgetFilterOptionsMap;
+  return widgetsOptionsMap;
 }

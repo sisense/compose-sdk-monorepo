@@ -288,7 +288,10 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid?: st
     }
   } catch (e) {
     // if a filter type is untranslatable, fall back to the generic pass-through JAQL filter
-    // console.error(e);
+    console.debug(
+      'Fall back to generic pass-through JAQL filter due to filter translation error:',
+      e,
+    );
   }
   return createGenericFilter(jaql, guid);
 };

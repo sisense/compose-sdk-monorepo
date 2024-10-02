@@ -86,7 +86,7 @@ export const createAttributeFilterFromConditionFilterJaql = (
   const conditionType = getSelectedConditionOption(conditionFilterJaql);
   switch (conditionType) {
     case ConditionFilterType.BOTTOM:
-      if (conditionFilterJaql.by && 'agg' in conditionFilterJaql.by) {
+      if (conditionFilterJaql.by) {
         return withComposeCode(filterFactory.bottomRanking)(
           attribute,
           createMeasureFromRankingFilterJaql(conditionFilterJaql.by),
@@ -99,6 +99,12 @@ export const createAttributeFilterFromConditionFilterJaql = (
       return withComposeCode(filterFactory.equals)(
         attribute,
         conditionFilterJaql[ConditionFilterType.EQUALS],
+        guid,
+      );
+    case ConditionFilterType.DOESNT_EQUAL:
+      return withComposeCode(filterFactory.doesntEqual)(
+        attribute,
+        conditionFilterJaql[ConditionFilterType.DOESNT_EQUAL],
         guid,
       );
     case ConditionFilterType.GREATER_THAN:

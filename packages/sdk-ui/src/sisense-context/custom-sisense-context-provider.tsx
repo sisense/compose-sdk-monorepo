@@ -3,6 +3,7 @@ import { ThemeProvider } from '../theme-provider';
 import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext, SisenseContextPayload } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
+import { MenuProvider } from '@/common/components/menu/menu-provider';
 
 /** @internal */
 export type CustomSisenseContext = SisenseContextPayload & {
@@ -41,7 +42,7 @@ export const CustomSisenseContextProvider: FunctionComponent<
         {context && (
           <SisenseContext.Provider value={context}>
             <ThemeProvider skipTracking theme={context.app?.settings.serverThemeSettings}>
-              {children}
+              <MenuProvider>{children}</MenuProvider>
             </ThemeProvider>
           </SisenseContext.Provider>
         )}

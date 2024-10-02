@@ -11,7 +11,7 @@ describe('prepareQueryOptions', () => {
 
     expect(queryOptions).toEqual({
       by: 'ComposeSDK',
-      datasource: dataSource,
+      datasource: { title: dataSource, live: false },
       queryGuid: expect.any(String),
     });
   });
@@ -25,7 +25,7 @@ describe('prepareQueryOptions', () => {
 
     expect(queryOptions).toEqual({
       by: 'ComposeSDK',
-      datasource: dataSource,
+      datasource: { title: dataSource, live: false },
       queryGuid: expect.any(String),
       count,
       offset,

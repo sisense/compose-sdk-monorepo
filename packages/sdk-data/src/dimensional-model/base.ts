@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable no-useless-escape */
 import { Element } from './interfaces.js';
+import { JaqlDataSource } from './types.js';
 
 /**
  * @internal
@@ -10,6 +11,11 @@ export abstract class DimensionalElement implements Element {
    * @internal
    */
   private _name: string;
+
+  /**
+   * @internal
+   */
+  private readonly _dataSource: JaqlDataSource;
 
   /**
    * Defines the element's name
@@ -22,10 +28,21 @@ export abstract class DimensionalElement implements Element {
     this._name = value;
   }
 
-  constructor(name: string, type: string, desc?: string) {
+  /**
+   * Defines the element's data source
+   */
+  get dataSource(): JaqlDataSource {
+    return this._dataSource;
+  }
+
+  constructor(name: string, type: string, desc?: string, dataSource?: JaqlDataSource) {
     this._name = name;
     this.type = type;
     this.description = desc || '';
+
+    if (dataSource) {
+      this._dataSource = dataSource;
+    }
   }
 
   /**
@@ -51,6 +68,7 @@ export abstract class DimensionalElement implements Element {
       name: this.name,
       type: this.type,
       desc: this.description,
+      dataSource: this.dataSource,
       __serializable: 'DimensionalElement',
     };
   }

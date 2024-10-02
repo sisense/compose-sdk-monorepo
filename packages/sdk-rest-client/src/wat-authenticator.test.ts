@@ -89,7 +89,7 @@ describe('WatAuthenticator', () => {
   // the interceptor will throw an error
   it('should throw an error when authentication call throws an error', async () => {
     fetchSpy.mockRejectedValueOnce(new Error('Error returned by interceptor'));
-    await expect(auth.authenticate()).rejects.toThrowError(TranslatableError);
+    await expect(auth.authenticate()).rejects.toThrow(TranslatableError);
   });
 
   it('should run type guard correctly', () => {

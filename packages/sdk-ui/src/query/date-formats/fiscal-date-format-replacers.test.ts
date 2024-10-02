@@ -4,24 +4,29 @@ import {
 } from './fiscal-date-format-replacers';
 
 describe('newDateFormatWithExpandedYearsMasks', () => {
-  it('should substitute "yyyy" masks with numeric text', () => {
-    const oldFormat = 'yyyy';
-    const date = new Date('Thu Jan 01 2009 00:00:00 GMT+0700');
-    const timeZone = 'UTC';
-    const selectedDateLevel = 'days';
-    const isFiscalOn = false;
-    const fiscalMonth = 0;
+  it('should substitute "*yyyy" masks with numeric text', () => {
+    [
+      { oldFormat: 'yyyy', newFormat: '2009' },
+      { oldFormat: 'MM/yyyy', newFormat: 'MM/2009' },
+      { oldFormat: 'MM/dd/yyyy HH:mm', newFormat: 'MM/dd/2009 HH:mm' },
+    ].forEach(({ oldFormat, newFormat }) => {
+      const date = new Date('Thu Jan 01 2009 00:00:00 GMT+0700');
+      const timeZone = 'UTC';
+      const selectedDateLevel = 'days';
+      const isFiscalOn = false;
+      const fiscalMonth = 0;
 
-    const newFormat = newDateFormatWithExpandedYearsMasks(
-      oldFormat,
-      date,
-      timeZone,
-      selectedDateLevel,
-      isFiscalOn,
-      fiscalMonth,
-    );
+      const result = newDateFormatWithExpandedYearsMasks(
+        oldFormat,
+        date,
+        timeZone,
+        selectedDateLevel,
+        isFiscalOn,
+        fiscalMonth,
+      );
 
-    expect(newFormat).toBe('2009');
+      expect(result).toBe(newFormat);
+    });
   });
 
   it('should substitute "MM/dd/yyyy HH:mm" masks with numeric text', () => {

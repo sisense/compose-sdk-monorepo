@@ -44,16 +44,21 @@ export const translation: TranslationDictionary = {
       onlyTableWidgetSupported: 'Метод {{methodName}} підтримується тільки для табличних віджетів',
       onlyPivotWidgetSupported: 'Метод {{methodName}} підтримується тільки для півот віджетів',
       onlyTextWidgetSupported: 'Метод {{methodName}} підтримується тільки для текстових віджетів',
+      onlyPluginWidgetSupported: 'Метод {{methodName}} підтримується тільки для плагінних віджетів',
     },
     unknownFilterInFilterRelations: 'Логічні відношення фільтрів містять невідомий фільтр',
     filterRelationsNotSupported: 'Відносини фільтрів ще не підтримуються',
     invalidFilterType: 'Недійсний тип фільтра',
     secondsDateTimeLevelSupportedOnlyForLive:
       "Рівень часу в секундах підтримується лише для 'live' джерела даних",
+    missingMenuRoot: 'Відсутній ініціалізований корінь меню',
+    missingDataSource:
+      "Значення 'dataSource' відсутнє. Воно має бути передано явно, або 'defaultDataSource' має бути вказано в SisenseContextProvider.",
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',
   criteriaFilter: {
+    displayModePrefix: 'Всі елементи',
     equals: 'Дорівнює {{val}}',
     notEquals: 'Не дорівнює {{val}}',
     lessThan: 'Менше ніж {{val}}',
@@ -131,6 +136,12 @@ export const translation: TranslationDictionary = {
   },
   commonFilter: {
     clearSelectionButton: 'Очистити виділення',
+    selectMenuItem: 'Вибрати',
+    unselectMenuItem: 'Cкасувати вибір',
   },
   customFilterTileMessage: 'застосовано користувацький фільтр',
+  drilldown: {
+    drillMenuItem: 'Деталізація',
+    breadcrumbsAllSuffix: 'Все',
+  },
 };

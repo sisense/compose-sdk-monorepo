@@ -158,3 +158,23 @@ export const translateValueToColumn = (option: Value) => {
     MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn
   >(option);
 };
+
+/**
+ * Checks if category is a StyledColumns.
+ *
+ * @param category - The category to check.
+ * @internal
+ */
+export function isStyledColumn(category: Column | StyledColumn): category is StyledColumn {
+  return 'column' in category && category.column !== undefined;
+}
+
+/**
+ * Checks if an category is a StyledCategory.
+ *
+ * @param category - The category to check.
+ * @internal
+ */
+export function isCategoryStyle(category: Column | CategoryStyle): category is CategoryStyle {
+  return !('column' in category);
+}

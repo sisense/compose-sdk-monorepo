@@ -1,6 +1,6 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api.js';
-import { DashboardModel } from '@/models/dashboard/dashboard-model';
+import { dashboardModelTranslator } from '@/models';
 
 export interface GetDashboardModelsOptions {
   /**
@@ -33,5 +33,5 @@ export async function getDashboardModels(
 
   const dashboards = await api.getDashboards({ fields, expand, searchByTitle });
 
-  return dashboards?.map((dashboard) => new DashboardModel(dashboard)) || [];
+  return dashboards?.map((dashboard) => dashboardModelTranslator.fromDashboardDto(dashboard)) || [];
 }

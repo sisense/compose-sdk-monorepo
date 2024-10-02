@@ -5,16 +5,17 @@ import { withTracking } from '@/decorators/hook-decorators';
 import { useChatApi } from './api/chat-api-provider';
 import {
   Attribute,
+  convertJaqlDataSource,
   DataSource,
   Filter,
   FilterRelations,
   getFilterListAndRelations,
-  isDataSourceInfo,
+  JaqlDataSource,
   Measure,
 } from '@sisense/sdk-data';
 import { GetNlgQueryResultRequest } from './api/types';
 import { GetNlgQueryResultProps } from './get-nlg-query-result';
-import { getJaqlQueryPayload, JaqlDataSource } from '@sisense/sdk-query-client';
+import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 
 /**
  * Parameters for {@link useGetNlgQueryResult} hook.
@@ -69,12 +70,7 @@ export const useGetNlgQueryResultInternal = (
     if ('jaql' in params) {
       return params;
     } else {
-      let datasource: JaqlDataSource;
-      if (isDataSourceInfo(params.dataSource)) {
-        datasource = { title: params.dataSource.title, live: params.dataSource.type === 'live' };
-      } else {
-        datasource = params.dataSource;
-      }
+      const dataSource: JaqlDataSource = convertJaqlDataSource(params.dataSource);
 
       const { filters = [], relations } = getFilterListAndRelations(params.filters);
       const { metadata, filterRelations } = getJaqlQueryPayload(
@@ -91,7 +87,7 @@ export const useGetNlgQueryResultInternal = (
 
       return {
         jaql: {
-          datasource,
+          datasource: dataSource,
           metadata,
           filterRelations,
         },

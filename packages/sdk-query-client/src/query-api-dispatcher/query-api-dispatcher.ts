@@ -18,7 +18,7 @@ export class QueryApiDispatcher {
 
   public getDataSourceFields(dataSource: DataSource, count = 9999, offset = 0) {
     const dataSourceName = getDataSourceName(dataSource);
-    const url = `${API_DATASOURCES_BASE_PATH}/${encodeURIComponent(dataSourceName)}/fields/search`;
+    const url = `${API_DATASOURCES_BASE_PATH}/${encodeURI(dataSourceName)}/fields/search`;
     // when error is encountered, API returns only status code 400 without informative error message
     // to remedy, catch error and throw a more informative error message
     return this.httpClient.post<DataSourceField[]>(url, { offset, count }).catch(() => {

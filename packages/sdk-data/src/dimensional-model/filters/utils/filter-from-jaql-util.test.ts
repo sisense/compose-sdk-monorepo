@@ -624,6 +624,12 @@ describe('filter-from-jaql-util', () => {
             filter: {
               [test.operator]: 2000,
             },
+            datasource: {
+              address: 'LocalHost',
+              title: 'Sample ECommerce',
+              id: 'localhost_aSampleIAAaECommerce',
+              database: 'aSampleIAAaECommerce',
+            },
           };
 
           const filter = createFilterFromJaqlInternal(jaql, guid);
@@ -670,6 +676,12 @@ describe('filter-from-jaql-util', () => {
             filter: {
               filterType: 'INVALID',
             },
+            datasource: {
+              address: 'LocalHost',
+              title: 'Sample ECommerce',
+              id: 'localhost_aSampleIAAaECommerce',
+              database: 'aSampleIAAaECommerce',
+            },
           },
           {
             type: 'measure',
@@ -688,32 +700,11 @@ describe('filter-from-jaql-util', () => {
             filter: {
               fromNotEqual: '500',
             },
-          },
-          {
-            table: 'Brand',
-            column: 'Brand',
-            dim: '[Brand.Brand]',
-            datatype: 'text',
-            merged: true,
-            title: 'Brand',
-            filter: {
-              top: 10,
-              by: {
-                type: 'measure',
-                formula: 'QUARTILE([042C4-365], 2)',
-                context: {
-                  '[042C4-365]': {
-                    table: 'Commerce',
-                    column: 'Revenue',
-                    dim: '[Commerce.Revenue]',
-                    datatype: 'numeric',
-                    title: 'Revenue',
-                  },
-                },
-                title: 'QUARTILE([Revenue], 2)',
-                datatype: 'numeric',
-              },
-              rankingMessage: 'QUARTILE([Revenue], 2)',
+            datasource: {
+              address: 'LocalHost',
+              title: 'Sample ECommerce',
+              id: 'localhost_aSampleIAAaECommerce',
+              database: 'aSampleIAAaECommerce',
             },
           },
         ].forEach((item) => {

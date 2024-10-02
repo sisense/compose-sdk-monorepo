@@ -60,7 +60,7 @@ import type DrilldownWidget from '../drilldown-widget.vue';
  * <img src="media://chart-widget-with-drilldown-example-1.png" width="800px" />
  * @param props - ChartWidget properties
  * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType | chartType}
- * @group Chart Utilities
+ * @group Dashboarding
  */
 export const ChartWidget = defineComponent({
   props: {

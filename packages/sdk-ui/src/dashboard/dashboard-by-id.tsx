@@ -4,6 +4,7 @@ import { DashboardByIdProps } from './types';
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
 
 /**
  * React component that renders a dashboard created in Sisense Fusion by its ID.
@@ -27,10 +28,9 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
 
   export default CodeExample;
  * ```
- *
  * @group Fusion Embed
  * @fusionEmbed
- * @alpha
+ * @beta
  */
 export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',
@@ -46,7 +46,7 @@ export const DashboardById = asSisenseComponent({
 
   return (
     <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-      {dashboard && <Dashboard {...dashboard.getDashboardProps()} />}
+      {dashboard && <Dashboard {...dashboardModelTranslator.toDashboardProps(dashboard)} />}
     </LoadingOverlay>
   );
 });

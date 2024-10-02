@@ -6,11 +6,10 @@ title: Fusion Embed
 
 Vue components and functions for working with Fusion Embed dashboards, widgets, queries, and formulas
 
-- [Dashboard](class.Dashboard.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
-- [DashboardById](class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
-- [DashboardModel](class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardById](class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardModel](interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useFetch](function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModel](function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

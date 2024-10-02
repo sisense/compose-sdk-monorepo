@@ -51,6 +51,7 @@ import {
   AreaRangeStyleOptions,
   DrilldownSelection,
   TextWidgetStyleOptions,
+  GenericDataOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -72,6 +73,7 @@ import { ExecuteQueryParams, QueryByWidgetIdState } from './query-execution';
 import { FiltersMergeStrategy } from './dashboard-widget/types';
 import { HookEnableParam } from './common/hooks/types';
 import { ExecuteQueryResult } from './query-execution/types';
+import { Hierarchy } from './models';
 
 export type { MenuItemSection, HighchartsOptions };
 
@@ -1161,6 +1163,9 @@ export interface ChartWidgetProps extends ChartEventProps {
    * @category Widget
    */
   highlightSelectionDisabled?: boolean;
+
+  /** @internal */
+  onChange?: (props: Partial<ChartWidgetProps>) => void;
 }
 
 /**
@@ -1230,8 +1235,6 @@ export interface TableWidgetProps {
 
 /**
  * Props for the {@link PivotTableWidget} component
- *
- * @internal
  */
 export interface PivotTableWidgetProps {
   /**
@@ -1301,6 +1304,111 @@ export interface PivotTableWidgetProps {
    */
   description?: string;
 }
+
+/**
+ * Props for the `TextWidget` component.
+ */
+export interface TextWidgetProps {
+  /**
+   * Style options for the text widget.
+   *
+   * @category Widget
+   */
+  styleOptions: TextWidgetStyleOptions;
+}
+
+/**
+ * Props for the Plugin Widget component
+ */
+export interface PluginWidgetProps {
+  /**
+   * Plugin type. This is typically the name/ID of the plugin.
+   *
+   * @category Widget
+   */
+  pluginType: string;
+
+  /**
+   * Data source the query is run against - e.g. `Sample ECommerce`
+   *
+   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
+   *
+   * @category Data
+   */
+  dataSource?: DataSource;
+
+  /**
+   * Filters that will slice query results
+   *
+   * @category Data
+   */
+  filters?: Filter[];
+
+  /**
+   * Filters that will highlight query results
+   *
+   * @category Data
+   */
+  highlights?: Filter[];
+
+  /**
+   * Configurations for how to interpret and present the data passed to the table
+   *
+   * @category Chart
+   */
+  dataOptions: GenericDataOptions;
+
+  /**
+   * Style options for the plugin widget.
+   *
+   * @category Widget
+   */
+  styleOptions?: unknown;
+
+  /**
+   * Title of the widget
+   *
+   * @category Widget
+   */
+  title: string;
+
+  /**
+   *  Description of the widget
+   *
+   * @category Widget
+   */
+  description?: string;
+}
+
+/**
+ * A utility type that combines widget-specific properties (`W`) with a corresponding widget type (`T`).
+ *
+ * This is used to extend the props of a widget with its respective widget type.
+ */
+export type WithWidgetType<
+  W extends ChartWidgetProps | PivotTableWidgetProps | TextWidgetProps | PluginWidgetProps,
+  T extends 'chart' | 'pivot' | 'text' | 'plugin',
+> = W & { widgetType: T };
+
+/**
+ * Props for the facade widget component.
+ */
+export type CommonWidgetProps =
+  | WithWidgetType<ChartWidgetProps, 'chart'>
+  | WithWidgetType<PivotTableWidgetProps, 'pivot'>
+  | WithWidgetType<TextWidgetProps, 'text'>
+  | WithWidgetType<PluginWidgetProps, 'plugin'>;
+
+/**
+ * Props for the widget component within a container component like dashboard.
+ */
+export type WidgetProps = CommonWidgetProps & {
+  /**
+   * Unique identifier of the widget within the container component (dashboard)
+   *
+   */
+  readonly id: string;
+};
 
 /**
  * Props for {@link ExecuteQueryByWidgetId} component.
@@ -1558,15 +1666,21 @@ export interface DrilldownWidgetProps {
    * List of dimensions to allow drilldowns on
    *
    * @category Widget
+   * @deprecated Use {@link DrilldownWidgetProps.drilldownPaths} instead
    */
-  drilldownDimensions: Attribute[];
+  drilldownDimensions?: Attribute[];
+  /**
+   * Dimensions and hierarchies available for drilldown on.
+   *
+   * @category Widget
+   */
+  drilldownPaths?: (Attribute | Hierarchy)[];
   /**
    * Initial dimension to apply first set of filters to
    *
    * @category Widget
    */
   initialDimension: Attribute;
-
   /**
    * Initial drilldown selections
    *
@@ -1579,6 +1693,8 @@ export interface DrilldownWidgetProps {
    * @category Widget
    */
   config?: DrilldownWidgetConfig;
+  /** @internal */
+  onChange?: (props: Partial<DrilldownWidgetProps>) => void;
   /**
    * React component to be rendered as context menu
    *
@@ -1608,13 +1724,3 @@ export interface UseGetSharedFormulaParams extends HookEnableParam {
    */
   dataSource?: DataSource;
 }
-
-/**
- * Props for the TextWidget component.
- */
-export type TextWidgetProps = {
-  /**
-   * Style options for the text widget.
-   */
-  styleOptions: TextWidgetStyleOptions;
-};

@@ -26,7 +26,7 @@ import { setupHelper } from '../../setup-helper';
  * ```
  * @group Fusion Embed
  * @fusionEmbed
- * @alpha
+ * @beta
  */
 export const DashboardById = defineComponent({
   props: {

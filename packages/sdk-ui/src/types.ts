@@ -43,8 +43,9 @@ import { DataPointsEventHandler } from './props';
 import { LegendPosition } from './chart-options-processor/translations/legend-section';
 import { GeoDataElement, RawGeoDataElement } from './chart-data/types';
 import { Coordinates } from '@/charts/map-charts/scattermap/types';
-import { StyledColumn, StyledMeasureColumn } from '.';
+import { StyledColumn, StyledMeasureColumn, Hierarchy, HierarchyId } from '.';
 import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
+import { CSSProperties } from 'react';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
@@ -813,7 +814,7 @@ export interface ChartThemeSettings {
    * Toolbar Background color, can be used as a secondary background color
    *
    * @deprecated
-   * */
+   */
   panelBackgroundColor?: string;
   /** Animation options */
   animation?: {
@@ -1267,9 +1268,8 @@ export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetContainerStyleOp
 export type TableWidgetStyleOptions = TableStyleOptions & WidgetContainerStyleOptions;
 
 /**
- * Style settings defining the look and feel of TableWidget
+ * Style settings defining the look and feel of PivotTableWidget
  *
- * @internal
  */
 export type PivotTableWidgetStyleOptions = PivotTableStyleOptions & WidgetContainerStyleOptions;
 
@@ -1302,8 +1302,16 @@ export declare type ColorPaletteTheme = {
 
 /** Configuration for the drilldown */
 export type DrilldownOptions = {
-  /** Dimensions that can be used for drilldown */
+  /**
+   * Dimensions that can be used for drilldown
+   *
+   * @deprecated Use {@link DrilldownOptions.drilldownPaths} instead
+   */
   drilldownDimensions?: Attribute[];
+  /**
+   * Dimensions and hierarchies available for drilldown on.
+   */
+  drilldownPaths?: (Attribute | Hierarchy | HierarchyId)[];
   /** Current selections for multiple drilldowns */
   drilldownSelections?: DrilldownSelection[];
 };
@@ -1611,10 +1619,24 @@ export type MenuPosition = {
  * Used in {@link ContextMenuProps}
  */
 export type MenuItemSection = {
+  /** @internal */
+  readonly id?: string;
   /** Optional section title */
   sectionTitle?: string;
   /** Optional list of menu items */
-  items?: { key?: string; onClick?: () => void; caption: string }[];
+  items?: {
+    key?: string | number;
+    onClick?: () => void;
+    caption: string;
+    /** @internal */
+    class?: string;
+    /** @internal */
+    style?: CSSProperties;
+    /** @internal */
+    disabled?: boolean;
+    /** @internal */
+    subItems?: MenuItemSection[];
+  }[];
 };
 
 /**
@@ -1660,3 +1682,8 @@ export type LoadingIndicatorConfig = {
    */
   enabled?: boolean;
 };
+
+/**
+ * Data options with arbitrary keys. This is typically used in the context of a plugin widget.
+ */
+export type GenericDataOptions = Record<string, Array<StyledColumn | StyledMeasureColumn>>;

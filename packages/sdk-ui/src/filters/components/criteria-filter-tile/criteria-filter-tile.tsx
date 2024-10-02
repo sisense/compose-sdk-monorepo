@@ -108,14 +108,19 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         let newFilter: Filter | null = null;
         if (filterInfo.ranked) {
           // for ranked functions, Measure must come before count.
-          newFilter = filterInfo.fn(filter.attribute, newValues?.[1], newValues?.[0]);
+          newFilter = filterInfo.fn(
+            filter.attribute,
+            newValues?.[1],
+            newValues?.[0],
+            filterFromProps.guid,
+          );
         } else {
-          newFilter = filterInfo.fn(filter.attribute, ...newValues);
+          newFilter = filterInfo.fn(filter.attribute, ...newValues, filterFromProps.guid);
         }
         newFilter.disabled = newDisabled;
         return newFilter;
       },
-      [filter.attribute, filterInfo],
+      [filterFromProps.guid, filter.attribute, filterInfo],
     );
 
     return (

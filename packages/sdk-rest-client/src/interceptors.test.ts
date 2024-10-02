@@ -1,4 +1,3 @@
-import { FetchInterceptorResponse } from 'fetch-intercept';
 import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
 import { PasswordAuthenticator } from './password-authenticator.js';
 import { BearerAuthenticator } from './bearer-authenticator.js';
@@ -16,7 +15,7 @@ describe('interceptors', () => {
   it('should notify user about failed password authentication', () => {
     const response = {
       status: 401,
-    } as FetchInterceptorResponse;
+    } as Response;
 
     const auth = new PasswordAuthenticator(fakeDeploymentUrl, 'user', 'pass');
 
@@ -26,7 +25,7 @@ describe('interceptors', () => {
   it('should notify user about failed API token authentication', () => {
     const response = {
       status: 401,
-    } as FetchInterceptorResponse;
+    } as Response;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
     expect(() => getResponseInterceptor(auth)(response)).toThrow();
@@ -35,7 +34,7 @@ describe('interceptors', () => {
   it('should notify user about failed WAT authentication', () => {
     const response = {
       status: 401,
-    } as FetchInterceptorResponse;
+    } as Response;
 
     const auth = new WatAuthenticator(fakeDeploymentUrl, 'wat');
 
@@ -45,7 +44,7 @@ describe('interceptors', () => {
   it('should redirect to login page for SSO authentication', async () => {
     const response = {
       status: 401,
-    } as FetchInterceptorResponse;
+    } as Response;
 
     const fakeLoginUrl = 'http://login.url';
 
@@ -84,7 +83,7 @@ describe('interceptors', () => {
       ok: false,
       status: 400,
       statusText: 'Bad Request',
-    } as FetchInterceptorResponse;
+    } as Response;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
     expect(() => getResponseInterceptor(auth)(response)).toThrow(TranslatableError);
@@ -95,7 +94,7 @@ describe('interceptors', () => {
       ok: true,
       status: 200,
       statusText: 'OK',
-    } as FetchInterceptorResponse;
+    } as Response;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
     const result = getResponseInterceptor(auth)(response);

@@ -47,7 +47,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
     chartTypeSegment += ' chart';
   }
 
-  const dataSource = jaql.datasource.title;
+  const dataSourceTitle = jaql.datasource.title;
 
   const [showInsights, setShowInsights] = useState(false);
 
@@ -57,7 +57,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
 
   const nlgRequest: GetNlgQueryResultRequest = {
     jaql: {
-      datasource: dataSource,
+      datasource: jaql.datasource,
       metadata: jaql.metadata,
     },
   };
@@ -67,7 +67,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
   return (
     <>
       <FeedbackWrapper
-        sourceId={dataSource}
+        sourceId={dataSourceTitle}
         data={data}
         type="chats/nlq"
         buttonVisibility={alwaysShowFeedback ? 'always' : 'onHover'}
@@ -79,13 +79,13 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
               </MessageContainer>
               {buttonRow}
             </FlexRow>
-            {isAnalyzeMode && <ChartMessage content={data} dataSource={dataSource} />}
+            {isAnalyzeMode && <ChartMessage content={data} dataSource={dataSourceTitle} />}
           </>
         )}
       />
       {enableInsights && (
         <FeedbackWrapper
-          sourceId={dataSource}
+          sourceId={dataSourceTitle}
           data={nlgRequest}
           type="nlg/queryResult"
           buttonVisibility={showInsights ? 'onHover' : 'never'}

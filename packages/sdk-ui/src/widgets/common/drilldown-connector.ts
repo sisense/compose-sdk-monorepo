@@ -24,7 +24,7 @@ export function getDrilldownInitialDimension(chartType: ChartType, dataOptions: 
   return getSelectableWidgetAttributes(chartType, dataOptions)[0];
 }
 
-export function isSupportedChartForDrilldown(chartType: ChartType) {
+function isSupportedChartForDrilldown(chartType: ChartType) {
   return (
     [
       ...CARTESIAN_CHART_TYPES,
@@ -36,7 +36,7 @@ export function isSupportedChartForDrilldown(chartType: ChartType) {
   ).includes(chartType);
 }
 
-export function isValidChartConfigurationForDrilldown(
+function isValidChartConfigurationForDrilldown(
   chartType: ChartType,
   dataOptions: ChartDataOptions,
 ) {
@@ -44,7 +44,14 @@ export function isValidChartConfigurationForDrilldown(
   return getSelectableWidgetAttributes(chartType, dataOptions).length === 1;
 }
 
-function applyDrilldownDimension(
+export function isDrilldownApplicableToChart(chartType: ChartType, dataOptions: ChartDataOptions) {
+  return (
+    isValidChartConfigurationForDrilldown(chartType, dataOptions) &&
+    isSupportedChartForDrilldown(chartType)
+  );
+}
+
+export function applyDrilldownDimension(
   chartType: ChartType,
   dataOptions: ChartDataOptions,
   drilldownDimension: Attribute,

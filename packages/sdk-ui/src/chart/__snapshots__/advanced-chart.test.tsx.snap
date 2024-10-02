@@ -1496,6 +1496,7 @@ exports[`Advanced Charts > should render trend chart 1`] = `
       "showInNavigator": true,
       "stickyTracking": false,
       "turboThreshold": 0,
+      "type": "line",
       "yAxis": 0,
     },
   ],

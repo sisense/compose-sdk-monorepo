@@ -48,7 +48,7 @@ import { PluginsService } from '../../services/plugins.service';
  * ```
  * @group Fusion Embed
  * @fusionEmbed
- * @alpha
+ * @beta
  */
 @Component({
   selector: 'csdk-dashboard-by-id',

@@ -2,7 +2,7 @@
 title: DashboardById
 ---
 
-# Function DashboardById <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+# Function DashboardById <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 
 > **DashboardById**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
 

@@ -1,5 +1,8 @@
+import { Measure, measureFactory } from '@sisense/sdk-data';
 import { SeriesType } from './chart-options-service';
 import { AxisPlotBand, AxisSettings } from './translations/axis-section';
+import { CartesianChartDataOptions, StyledMeasureColumn } from '..';
+import { isCategoryStyle, isStyledColumn } from '@/chart-data-options/utils';
 
 export const FORECAST_PREFIX = '$forecast';
 export const TREND_PREFIX = '$trend';
@@ -23,6 +26,7 @@ export const formatForecastSeries = (
   const measureName = s.name.substring(FORECAST_PREFIX.length + 1);
   const measure = lowerSeriesHash[measureName];
   const startIndex = s.data.findIndex((d) => !isNaN(d?.y || NaN));
+  s.type = 'line';
   s.showInLegend = false;
   s.data[startIndex - 1].y = measure.data[startIndex - 1].y;
   s.dashStyle = 'ShortDash';
@@ -86,6 +90,7 @@ export const formatTrendSeries = (
     [x: string]: SeriesType;
   },
 ) => {
+  series.type = 'line';
   const measureName = series.name.substring(TREND_PREFIX.length + 1);
   const measure = seriesHash[measureName];
   series.showInLegend = false;
@@ -151,4 +156,85 @@ export const formatAdvancedAnalyticsSeries = (series: SeriesType[]) => {
       formatTrendSeries(s, seriesDataLookup);
     }
   });
+};
+
+/**
+ * Validates if the data options are suitable for advanced analytics (trend or forecast).
+ *
+ * @param dataOptions - The Cartesian chart data options.
+ * @returns True if valid, false otherwise.
+ */
+const isValidForAdvancedAnalytics = (dataOptions: CartesianChartDataOptions): boolean => {
+  const { breakBy } = dataOptions;
+  if (breakBy.length > 0) {
+    return false;
+  }
+
+  const enabledCategories = dataOptions.category.filter((c) => !('enabled' in c) || c.enabled);
+
+  if (enabledCategories.length !== 1) {
+    return false;
+  }
+
+  const [category] = enabledCategories;
+  let isCategoryDateLevel = false;
+  if (isStyledColumn(category)) {
+    isCategoryDateLevel = category.column.type === 'datelevel';
+  } else if (isCategoryStyle(category)) {
+    isCategoryDateLevel = category.type === 'datelevel';
+  }
+
+  return isCategoryDateLevel;
+};
+
+/**
+ * Extracts trend measures from data options if applicable.
+ *
+ * @param dataOptions - The Cartesian chart data options.
+ * @returns An array of trend measures.
+ * @internal
+ */
+export const extractTrendMeasures = (dataOptions: CartesianChartDataOptions): Measure[] => {
+  if (!isValidForAdvancedAnalytics(dataOptions)) {
+    return [];
+  }
+
+  return dataOptions.value
+    .filter(
+      (measure): measure is StyledMeasureColumn =>
+        (measure as StyledMeasureColumn)?.trend !== undefined,
+    )
+    .map((measure) =>
+      measureFactory.trend(
+        measure.column as Measure,
+        `${TREND_PREFIX}_${measure.column.name}`,
+        measure.trend,
+      ),
+    );
+};
+
+/**
+ * Extracts forecast measures from data options if applicable.
+ *
+ * @param dataOptions - The Cartesian chart data options.
+ * @returns An array of forecast measures.
+ * @internal
+ */
+export const extractForecastMeasures = (dataOptions: CartesianChartDataOptions): Measure[] => {
+  if (!isValidForAdvancedAnalytics(dataOptions)) {
+    return [];
+  }
+
+  return dataOptions.value
+    .filter(
+      (measure): measure is StyledMeasureColumn =>
+        (measure as StyledMeasureColumn)?.forecast !== undefined,
+    )
+    .map((measure) =>
+      measureFactory.forecast(
+        measure.column as Measure,
+        `${FORECAST_PREFIX}_${measure.column.name}`,
+        measure.forecast,
+      ),
+    );
 };

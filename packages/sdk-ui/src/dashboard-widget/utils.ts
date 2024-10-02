@@ -24,6 +24,21 @@ import {
 } from './types';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { TranslatableError } from '../translation/translatable-error';
+import {
+  ChartProps,
+  ChartStyleOptions,
+  ChartWidgetProps,
+  PivotTableWidgetProps,
+  PluginWidgetProps,
+  RenderToolbarHandler,
+  TextWidgetProps,
+  WidgetContainerStyleOptions,
+  CommonWidgetProps,
+  WithWidgetType,
+  WidgetProps,
+} from '..';
+import { combineHandlers } from '@/utils/combine-handlers';
+import { WidgetTypeInternal } from '@/models/widget/types';
 
 export function getChartType(widgetType: WidgetType) {
   const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
@@ -112,7 +127,7 @@ export function isTableWidget(widgetType: WidgetTypeOrString) {
   return widgetType === 'tablewidget' || widgetType === 'tablewidgetagg';
 }
 
-export function isPivotWidget(widgetType: WidgetTypeOrString) {
+export function isPivotTableWidget(widgetType: WidgetTypeOrString) {
   return widgetType === 'pivot' || widgetType === 'pivot2';
 }
 
@@ -124,8 +139,137 @@ export function isTextWidgetDtoStyle(widgetStyle: WidgetStyle): widgetStyle is T
   return 'content' in widgetStyle && 'html' in widgetStyle.content;
 }
 
+export function isPluginWidget(widgetType: WidgetTypeOrString) {
+  return widgetType === 'plugin';
+}
+
 export function isChartWidget(widgetType: WidgetTypeOrString) {
-  return !isPivotWidget(widgetType) && !isTextWidget(widgetType);
+  return !isPivotTableWidget(widgetType) && !isTextWidget(widgetType);
+}
+
+/**
+ * Type guard for checking if the widget props is for a text widget.
+ *
+ * @param widgetProps - The widget props to check.
+ * @returns whether the widget props is for a text widget
+ */
+export function isTextWidgetProps(
+  widgetProps: CommonWidgetProps,
+): widgetProps is WithWidgetType<TextWidgetProps, 'text'> {
+  return widgetProps.widgetType === 'text';
+}
+
+/**
+ * Type guard for checking if the widget props is for a pivot table widget.
+ *
+ * @param widgetProps - The widget props to check.
+ * @returns whether the widget props is for a pivot table widget
+ */
+export function isPivotTableWidgetProps(
+  widgetProps: CommonWidgetProps,
+): widgetProps is WithWidgetType<PivotTableWidgetProps, 'pivot'> {
+  return widgetProps.widgetType === 'pivot';
+}
+
+/**
+ * Type guard for checking if the widget props is for a plugin widget
+ *
+ * @param widgetProps - The widget props to check.
+ * @returns whether the widget props is for a plugin widget
+ */
+export function isPluginWidgetProps(
+  widgetProps: CommonWidgetProps,
+): widgetProps is WithWidgetType<PluginWidgetProps, 'plugin'> {
+  return widgetProps.widgetType === 'plugin';
+}
+
+/**
+ * Type guard for checking if the widget props is for a chart widget
+ *
+ * @param widgetProps - The widget props to check.
+ * @returns whether the widget props is for a chart widget
+ */
+export function isChartWidgetProps(
+  widgetProps: CommonWidgetProps,
+): widgetProps is WithWidgetType<ChartWidgetProps, 'chart'> {
+  return widgetProps.widgetType === 'chart';
+}
+
+export function translateWidgetTypeInternal(widgetProps: CommonWidgetProps): WidgetTypeInternal {
+  if (isPivotTableWidgetProps(widgetProps)) {
+    return 'pivot';
+  } else if (isPluginWidgetProps(widgetProps)) {
+    return 'plugin';
+  } else if (isTextWidgetProps(widgetProps)) {
+    return 'text';
+  }
+
+  return widgetProps.chartType;
+}
+
+/**
+ * Registers new "onDataPointClick" handler for the Widget component
+ *
+ * @internal
+ */
+export function registerDataPointClickHandler(
+  widgetProps: WidgetProps,
+  handler: NonNullable<ChartProps['onDataPointClick']>,
+): void {
+  if (!isChartWidgetProps(widgetProps)) return;
+
+  widgetProps.onDataPointClick = combineHandlers([widgetProps.onDataPointClick, handler]);
+}
+
+/**
+ * Registers new "onDataPointContextMenu" handler for the Widget component
+ *
+ * @internal
+ */
+export function registerDataPointContextMenuHandler(
+  widgetProps: WidgetProps,
+  handler: NonNullable<ChartProps['onDataPointContextMenu']>,
+): void {
+  if (!isChartWidgetProps(widgetProps)) return;
+
+  widgetProps.onDataPointContextMenu = combineHandlers([
+    widgetProps.onDataPointContextMenu,
+    handler,
+  ]);
+}
+
+/**
+ * Registers new "onDataPointsSelected" handler for the Widget component
+ *
+ * @internal
+ */
+export function registerDataPointsSelectedHandler(
+  widgetProps: WidgetProps,
+  handler: NonNullable<ChartProps['onDataPointsSelected']>,
+): void {
+  if (!isChartWidgetProps(widgetProps)) return;
+
+  widgetProps.onDataPointsSelected = combineHandlers([widgetProps.onDataPointsSelected, handler]);
+}
+
+/**
+ * Registers new "renderToolbar" handler for the constructed component
+ *
+ * @internal
+ */
+export function registerRenderToolbarHandler(
+  widgetProps: WidgetProps,
+  handler: RenderToolbarHandler,
+): void {
+  const widgetStyleOptions = widgetProps.styleOptions as WidgetContainerStyleOptions;
+
+  widgetProps.styleOptions = {
+    ...widgetStyleOptions,
+    header: {
+      ...widgetStyleOptions?.header,
+      renderToolbar: combineHandlers([widgetStyleOptions?.header?.renderToolbar, handler]),
+    },
+  } as ChartStyleOptions;
 }
 
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {

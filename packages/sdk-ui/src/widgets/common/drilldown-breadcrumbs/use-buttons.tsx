@@ -4,6 +4,7 @@ import { Attribute } from '@sisense/sdk-data';
 import { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import { BREADCRUMBS_BORDER_COLOR } from './drilldown-breadcrumbs';
+import { useTranslation } from 'react-i18next';
 
 interface ButtonsProps {
   clearDrilldownSelections: () => void;
@@ -38,7 +39,8 @@ const useButtons = ({
   setIsHovered,
   themeProps,
 }: ButtonsProps): Buttons => {
-  const currentColumn = currentDimension.expression.match(/\[(.*?)]/)?.[1]?.split('.')[1] || '';
+  const { t: translate } = useTranslation();
+  const currentColumn = currentDimension.name;
 
   const StyledCancelButton = styled(Button)<StyledButton>`
     && {
@@ -118,7 +120,7 @@ const useButtons = ({
   const CurrentDrillButton: React.FC = () => {
     return (
       <StyledCurrentDrillButton theme={themeProps}>
-        {currentColumn} (All)
+        {currentColumn} ({translate('drilldown.breadcrumbsAllSuffix')})
         <span className="flex items-center justify-between">
           <span
             className="csdk-absolute csdk-right-[0px] csdk-top-[3px] csdk-h-[18px] csdk-w-[18px] csdk-transform csdk-translate-x-1/2 csdk-rotate-45"

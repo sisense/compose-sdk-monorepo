@@ -4,6 +4,7 @@ import { fetchWidgetDtoModel } from '../../dashboard-widget/use-fetch-widget-dto
 import { WidgetModel } from './widget-model';
 import { CompleteThemeSettings } from '../../types';
 import { AppSettings } from '@/app/settings/settings';
+import { widgetModelTranslator } from '@/models/widget/';
 
 /**
  * Retrieves a widget model by its OID.
@@ -32,5 +33,5 @@ export async function getWidgetModel(
   if (!fetchedWidget) {
     throw new Error(`Widget with oid ${widgetOid} not found`);
   }
-  return new WidgetModel(fetchedWidget, themeSettings, appSettings);
+  return widgetModelTranslator.fromWidgetDto(fetchedWidget, themeSettings, appSettings);
 }

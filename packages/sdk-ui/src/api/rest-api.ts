@@ -1,11 +1,20 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { useMemo } from 'react';
 import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
+import isUndefined from 'lodash-es/isUndefined';
+import {
+  DimensionalLevelAttribute,
+  getColumnNameFromAttribute,
+  getDataSourceName,
+  getTableNameFromAttribute,
+  type DataSource,
+} from '@sisense/sdk-data';
 import { useSisenseContext } from '../sisense-context/sisense-context';
-import { WidgetDto } from '../dashboard-widget/types';
+import { HierarchyDto, WidgetDto } from '../dashboard-widget/types';
 import type { DashboardDto } from './types/dashboard-dto';
 import { TranslatableError } from '../translation/translatable-error';
 import { PaletteDto } from '@/api/types/palette-dto';
+import { GetHierarchiesOptions } from '@/models/hierarchy/types';
 
 type GetDashboardsOptions = {
   searchByTitle?: string;
@@ -20,9 +29,12 @@ type GetDashboardOptions = {
 export class RestApi {
   private httpClient: HttpClient;
 
-  constructor(httpClient: HttpClient | undefined) {
+  private defaultDataSource?: DataSource;
+
+  constructor(httpClient: HttpClient | undefined, defaultDataSource?: DataSource) {
     if (!httpClient) throw new Error('HttpClient not found.');
     this.httpClient = httpClient;
+    this.defaultDataSource = defaultDataSource;
   }
 
   /**
@@ -104,9 +116,55 @@ export class RestApi {
   public getPalettes = () => {
     return this.httpClient.get<PaletteDto[]>(`api/palettes`);
   };
+
+  /**
+   * Get hierarchies
+   */
+  public getHierarchies = ({
+    dataSource = this.defaultDataSource,
+    dimension,
+    ids,
+    alwaysIncluded,
+  }: GetHierarchiesOptions) => {
+    const isDateDimension = 'granularity' in dimension;
+    let dateLevel = '';
+
+    if (!dataSource) {
+      throw new TranslatableError('errors.missingDataSource');
+    }
+
+    if (isDateDimension) {
+      const { level, dateTimeLevel } = (
+        dimension as DimensionalLevelAttribute
+      ).translateGranularityToJaql();
+      dateLevel = level ?? dateTimeLevel;
+    }
+
+    const queryParams = new URLSearchParams({
+      elasticube: getDataSourceName(dataSource),
+      table: getTableNameFromAttribute(dimension),
+      column: getColumnNameFromAttribute(dimension),
+      ...(dateLevel && { dateLevel }),
+      ...(alwaysIncluded && { alwaysIncluded: `${alwaysIncluded}` }),
+      ...(ids?.length && { ids: ids.join(',') }),
+    }).toString();
+
+    return this.httpClient
+      .get<HierarchyDto[]>(`/api/elasticubes/hierarchies?${queryParams}`)
+      .then((rawHierarchies = []) => {
+        /**
+         * Note: fixes an API issue where the 'ids' parameter does not work correctly
+         * when the 'alwaysIncluded' parameter is not provided.
+         */
+        const isFiltedOnlyByIds = isUndefined(alwaysIncluded) && ids?.length;
+        return isFiltedOnlyByIds
+          ? rawHierarchies.filter(({ _id }) => ids.includes(_id))
+          : rawHierarchies;
+      });
+  };
 }
 
 export const useGetApi = () => {
   const { app } = useSisenseContext();
-  return useMemo(() => new RestApi(app?.httpClient), [app]);
+  return useMemo(() => new RestApi(app?.httpClient, app?.defaultDataSource), [app]);
 };

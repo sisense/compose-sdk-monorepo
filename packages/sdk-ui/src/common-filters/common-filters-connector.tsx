@@ -1,6 +1,6 @@
 import merge from 'ts-deepmerge';
 import partition from 'lodash-es/partition';
-import { Attribute, MembersFilter, type Filter } from '@sisense/sdk-data';
+import { Attribute, isMembersFilter, MembersFilter, type Filter } from '@sisense/sdk-data';
 import { mergeFilters } from '@/dashboard-widget/utils';
 import { WidgetHeaderClearSelectionButton } from './widget-header-clear-selection-button';
 import {
@@ -20,15 +20,19 @@ import {
 import {
   createCommonFiltersOverSelections,
   getSelectableWidgetAttributes,
+  getSelectMenuItem,
   getWidgetSelections,
+  getWidgetSelectionsTitleMenuItem,
 } from './selection-utils';
 import { WidgetTypeInternal } from '@/models/widget/types';
 import { withCascadingFiltersConversion } from './cascading-utils';
 import { isSameAttribute, isIncludeAllFilter, clearMembersFilter } from '@/utils/filters';
+import { OpenMenuFn } from '@/common/components/menu/types';
+import { TFunction } from '@sisense/sdk-common';
 
 type CommonFiltersToWidgetConnectProps = Pick<
   ChartWidgetProps,
-  'filters' | 'highlights' | 'onDataPointClick' | 'onDataPointsSelected'
+  'filters' | 'highlights' | 'onDataPointClick' | 'onDataPointsSelected' | 'onDataPointContextMenu'
 > & {
   renderToolbar: RenderToolbarHandler;
 };
@@ -69,6 +73,8 @@ export function prepareCommonFiltersToWidgetConnectProps(
   widgetType: WidgetTypeInternal,
   dataOptions: ChartDataOptions | PivotTableDataOptions,
   options: CommonFiltersOptions,
+  translate: TFunction,
+  openMenu?: OpenMenuFn,
 ): CommonFiltersToWidgetConnectProps {
   const props = {} as CommonFiltersToWidgetConnectProps;
   const normalizedOptions = normalizeCommonFiltersOptions(widgetType, options);
@@ -86,6 +92,8 @@ export function prepareCommonFiltersToWidgetConnectProps(
   const allowedFilters = getAllowedFilters(enabledFilters, pureFiltersIgnoringRules);
 
   const selectableAttributes = getSelectableWidgetAttributes(widgetType, dataOptions);
+  const shouldWidgetAffectFilters =
+    normalizedOptions.shouldAffectFilters && selectableAttributes.length;
 
   const [sliceFilters, highlightFilters] = splitToSliceAndHighlightFilters(
     allowedFilters,
@@ -101,16 +109,84 @@ export function prepareCommonFiltersToWidgetConnectProps(
   props.filters = sliceFiltersWithAppliedBackgrounds;
   props.highlights = highlightFilters;
 
-  if (normalizedOptions.shouldAffectFilters && selectableAttributes.length) {
+  // registers "onDataPointsSelected" handler
+  props.onDataPointsSelected = (points: DataPoint[], nativeEvent: MouseEvent) => {
+    const itemSections = [];
+    const widgetSelectionsTitleMenuItem = getWidgetSelectionsTitleMenuItem(
+      widgetType,
+      dataOptions,
+      points,
+    );
+
+    if (widgetSelectionsTitleMenuItem) {
+      itemSections.push(widgetSelectionsTitleMenuItem);
+    }
+
+    if (shouldWidgetAffectFilters) {
+      const selections = getWidgetSelections(widgetType, dataOptions, points);
+      const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
+      const isUnselection = selectedFilters.every((f) => isIncludeAllFilter(f));
+      const selectMenuTitle = isUnselection
+        ? translate('commonFilter.unselectMenuItem')
+        : translate('commonFilter.selectMenuItem');
+      const selectMenuItem = getSelectMenuItem(selectMenuTitle, () => {
+        updateFilters(mergeFilters(pureFilters, selectedFilters));
+      });
+      itemSections.push(selectMenuItem);
+    }
+
+    if (itemSections.length) {
+      openMenu?.({
+        position: {
+          left: nativeEvent.clientX,
+          top: nativeEvent.clientY,
+        },
+        itemSections,
+      });
+    }
+  };
+
+  // registers "onDataPointContextMenu" handler
+  props.onDataPointContextMenu = (point: DataPoint, nativeEvent: PointerEvent) => {
+    const itemSections = [];
+    const widgetSelectionsTitleMenuItem = getWidgetSelectionsTitleMenuItem(
+      widgetType,
+      dataOptions,
+      [point],
+    );
+
+    if (widgetSelectionsTitleMenuItem) {
+      itemSections.push(widgetSelectionsTitleMenuItem);
+    }
+
+    if (shouldWidgetAffectFilters) {
+      const selections = getWidgetSelections(widgetType, dataOptions, [point]);
+      const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
+      const isUnselection = selectedFilters.every((f) => isIncludeAllFilter(f));
+      const selectMenuTitle = isUnselection
+        ? translate('commonFilter.unselectMenuItem')
+        : translate('commonFilter.selectMenuItem');
+      const selectMenuItem = getSelectMenuItem(selectMenuTitle, () => {
+        updateFilters(mergeFilters(pureFilters, selectedFilters));
+      });
+      itemSections.push(selectMenuItem);
+    }
+
+    if (itemSections.length) {
+      openMenu?.({
+        position: {
+          left: nativeEvent.clientX,
+          top: nativeEvent.clientY,
+        },
+        itemSections,
+      });
+    }
+  };
+
+  if (shouldWidgetAffectFilters) {
     // registers "onDataPointClick" handler
     props.onDataPointClick = (point: DataPoint) => {
       const selections = getWidgetSelections(widgetType, dataOptions, [point]);
-      const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
-      updateFilters(mergeFilters(pureFilters, selectedFilters));
-    };
-    // registers "onDataPointsSelected" handler
-    props.onDataPointsSelected = (points: DataPoint[]) => {
-      const selections = getWidgetSelections(widgetType, dataOptions, points);
       const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
       updateFilters(mergeFilters(pureFilters, selectedFilters));
     };
@@ -118,7 +194,11 @@ export function prepareCommonFiltersToWidgetConnectProps(
     // registers "renderToolbar" handler
     const selectedFilters = enabledFilters.filter((f) =>
       selectableAttributes?.some(
-        (a) => isSameAttribute(f.attribute, a) && !isIncludeAllFilter(f) && !f.locked,
+        (a) =>
+          isMembersFilter(f) &&
+          isSameAttribute(f.attribute, a) &&
+          !isIncludeAllFilter(f) &&
+          !f.locked,
       ),
     );
     const hasSelection = !!selectedFilters.length;

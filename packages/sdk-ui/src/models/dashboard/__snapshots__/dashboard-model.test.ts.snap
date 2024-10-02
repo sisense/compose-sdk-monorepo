@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`DashboardModel > should create a new dashboard model with all arguments 1`] = `
-DashboardModel {
+{
   "dataSource": {
     "title": "test",
     "type": "elasticube",
@@ -11,11 +11,13 @@ DashboardModel {
       "__serializable": "DimensionalElement",
       "attribute": {
         "__serializable": "DimensionalElement",
+        "dataSource": undefined,
         "desc": "",
         "expression": "dim",
         "name": "title",
         "type": "text-attribute",
       },
+      "dataSource": undefined,
       "desc": "",
       "filterType": "members",
       "members": [
@@ -25,53 +27,58 @@ DashboardModel {
       "type": "filter",
     },
   ],
-  "layout": {
-    "columns": [
-      {
-        "rows": [
-          {
-            "cells": [
-              {
-                "height": 3000,
-                "widgetId": "widget-1",
-                "widthPercentage": 2000,
-              },
-            ],
-          },
-        ],
-        "widthPercentage": 1000,
-      },
-    ],
+  "layoutOptions": {
+    "widgetsPanel": {
+      "columns": [
+        {
+          "rows": [
+            {
+              "cells": [
+                {
+                  "height": 3000,
+                  "widgetId": "widget-1",
+                  "widthPercentage": 2000,
+                },
+              ],
+            },
+          ],
+          "widthPercentage": 1000,
+        },
+      ],
+    },
   },
   "oid": "test",
   "styleOptions": {},
   "title": "test",
-  "widgetFilterOptions": {
-    "widget-1": {
-      "applyMode": "highlight",
-      "forceApplyBackgroundFilters": true,
-      "ignoreFilters": {
-        "all": undefined,
-        "ids": undefined,
-      },
-      "shouldAffectFilters": undefined,
-    },
-  },
   "widgets": [
-    WidgetModel {
+    {
       "chartType": "pie",
       "dataOptions": {
         "category": [],
         "value": [],
       },
-      "dataSource": "test",
+      "dataSource": {
+        "title": "test",
+        "type": "elasticube",
+      },
       "description": "",
       "drilldownOptions": {
-        "drilldownDimensions": [],
+        "drilldownPaths": [],
         "drilldownSelections": [],
       },
       "filters": [],
+      "getChartProps": [Function],
+      "getChartWidgetProps": [Function],
+      "getExecutePivotQueryParams": [Function],
+      "getExecuteQueryParams": [Function],
+      "getPivotTableProps": [Function],
+      "getPivotTableWidgetProps": [Function],
+      "getTableProps": [Function],
+      "getTableWidgetProps": [Function],
+      "getTextWidgetProps": [Function],
+      "highlights": [],
       "oid": "widget-1",
+      "pluginType": "",
       "styleOptions": {
         "subtype": "pie/donut",
       },
@@ -79,23 +86,38 @@ DashboardModel {
       "widgetType": "chart/pie",
     },
   ],
+  "widgetsOptions": {
+    "widget-1": {
+      "filtersOptions": {
+        "applyMode": "highlight",
+        "forceApplyBackgroundFilters": true,
+        "ignoreFilters": {
+          "all": undefined,
+          "ids": undefined,
+        },
+        "shouldAffectFilters": undefined,
+      },
+    },
+  },
 }
 `;
 
 exports[`DashboardModel > should create a new dashboard model with minimum of arguments 1`] = `
-DashboardModel {
+{
   "dataSource": {
     "title": "test",
     "type": "elasticube",
   },
   "filters": [],
-  "layout": {
-    "columns": [],
+  "layoutOptions": {
+    "widgetsPanel": {
+      "columns": [],
+    },
   },
   "oid": "test",
   "styleOptions": {},
   "title": "test",
-  "widgetFilterOptions": {},
   "widgets": [],
+  "widgetsOptions": {},
 }
 `;

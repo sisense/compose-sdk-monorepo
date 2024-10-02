@@ -1,9 +1,9 @@
-import { WidgetDto, Datasource } from '../../dashboard-widget/types';
-import { FilterJaql, FilterRelationsModel } from '@sisense/sdk-data';
+import { WidgetDto } from '../../dashboard-widget/types';
+import { FilterJaql, FilterRelationsModel, JaqlDataSource } from '@sisense/sdk-data';
 import { AnyObject } from '../../utils/utility-types';
 
 /** @internal */
-export type Layout = {
+export type LayoutDto = {
   columns: {
     width: number;
     cells?: {
@@ -54,12 +54,12 @@ export const isCascadingFilterDto = (
 export type DashboardDto = {
   oid: string;
   title: string;
-  datasource: Datasource;
+  datasource: JaqlDataSource;
   widgets?: WidgetDto[];
   filters?: Array<FilterDto | CascadingFilterDto>;
   filterRelations?: {
     filterRelations: FilterRelationsModel;
   }[];
-  layout?: Layout;
+  layout?: LayoutDto;
   style?: DashboardStyleDto;
 } & AnyObject;

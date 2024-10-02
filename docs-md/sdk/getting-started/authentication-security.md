@@ -199,3 +199,17 @@ Set up CORS on your Sisense instance using one of the following:
 - Save your settings changes after adding your domain.
 
 :::
+
+## Third-Party Cookies
+
+Most modern browsers block third-party cookies. This affects cookie-based authentications such as SSO.
+
+Therefore, the best practice is either to:
+
+- Use the same domain for the different apps and put it behind a specific path. This prevents Sisense cookies from being third-party cookies. For example: `companyA.com/analytics`.
+- Leverage the Web Access Tokens (WAT) feature for authentication. Note that WAT requires special licensing.
+- Allow third-party cookies via your browser settings. See this [doc](https://docs.sisense.com/main/SisenseLinux/3rd-party-cookies.htm) for detailed instructions.
+
+:::warning
+The Cookies Having Independent Partitioned State ([CHIPS](https://developers.google.com/privacy-sandbox/cookies/chips)) solution is not compatible with Compose SDK.
+:::

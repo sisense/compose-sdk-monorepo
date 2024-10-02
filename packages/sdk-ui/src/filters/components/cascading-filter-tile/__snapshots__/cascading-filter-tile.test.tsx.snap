@@ -102,7 +102,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                   class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
                   style="color: rgb(91, 99, 114);"
                 >
-                  AgeRange
+                  Age Range
                 </span>
               </header>
               <main

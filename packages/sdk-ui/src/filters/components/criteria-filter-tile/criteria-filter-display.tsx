@@ -54,11 +54,15 @@ export const CriteriaFilterDisplay: FunctionComponent<CriteriaFilterDisplayProps
       }
   }
 
+  const displayText = `${t('criteriaFilter.displayModePrefix')} ${
+    text[0].toLowerCase() + text.slice(1)
+  }`;
+
   return (
     <div
-      className={`csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center`}
+      className={`csdk-p-[12px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-flex csdk-flex-wrap csdk-gap-x-1`}
     >
-      {t(text)}
+      {displayText}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { withTracking } from './with-tracking';
 import { withErrorBoundary } from './with-error-boundary';
 import { withSisenseContextValidation } from './with-sisense-context-validation';
 import { withDefaultTranslations } from './with-default-translations';
+import { withMenu } from './with-menu';
 
 /**
  * Configuration for the {@link asSisenseComponent} decorator
@@ -21,6 +22,8 @@ export type SisenseComponentConfig = {
   };
   /** If set, the error message for wrong SisenseContext will be overridden with the provided key */
   customContextErrorMessageKey?: string;
+  /** If set, the component will have a standalone menu root, allowing the menu to be opened even when the component is used outside of the SisenseContextProvider */
+  shouldHaveOwnMenuRoot?: boolean;
 };
 
 export type ComponentDecorator<DecoratorConfig> = (
@@ -52,6 +55,7 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
     shouldSkipSisenseContextWaiting,
     trackingConfig = {},
     customContextErrorMessageKey,
+    shouldHaveOwnMenuRoot,
   } = componentConfig;
   return (Component) =>
     flow(
@@ -63,5 +67,6 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
       withTracking({ componentName, config: trackingConfig }),
       withErrorBoundary(),
       withDefaultTranslations(),
+      withMenu({ shouldHaveOwnMenuRoot }),
     )(Component);
 };

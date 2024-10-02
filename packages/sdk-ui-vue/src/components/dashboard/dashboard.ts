@@ -12,30 +12,33 @@ import { setupHelper } from '../../setup-helper';
  * ```vue
  * <template>
  *  <Dashboard
- *    v-if="dashboard"
- *    :title="dashboard.title"
- *    :layout="dashboard.layout"
- *    :widgets="dashboard.widgets"
- *    :filters="dashboard.filters"
- *    :defaultDataSource="dashboard.dataSource"
- *    :widgetFilterOptions="dashboard.widgetFilterOptions"
- *    :styleOptions="dashboard.styleOptions"
+ *    v-if="dashboardProps"
+ *    :title="dashboardProps.title"
+ *    :layoutOptions="dashboardProps.layoutOptions"
+ *    :widgets="dashboardProps.widgets"
+ *    :filters="dashboardProps.filters"
+ *    :defaultDataSource="dashboardProps.dataSource"
+ *    :widgetsOptions="dashboardProps.widgetsOptions"
+ *    :styleOptions="dashboardProps.styleOptions"
  *  />
  * </template>
  *
  * <script setup lang="ts">
- * import { DashboardById, useGetDashboardModel } from '@sisense/sdk-ui-vue';
+ * import { dashboardModelTranslator, useGetDashboardModel } from '@sisense/sdk-ui-vue';
  *
  * const { dashboard } = useGetDashboardModel({
  *  dashboardOid: '6441e728dac1920034bce737',
  *  includeWidgets: true,
  *  includeFilters: true,
  * });
+ *
+ * const dashboardProps = computed(() =>
+ *   dashboard.value ? dashboardModelTranslator.toDashboardProps(dashboard.value) : null,
+ * );
  * </script>
  * ```
- * @group Fusion Embed
- * @fusionEmbed
- * @alpha
+ * @group Dashboarding
+ * @beta
  */
 export const Dashboard = defineComponent({
   props: {
@@ -44,9 +47,15 @@ export const Dashboard = defineComponent({
      */
     title: String as PropType<DashboardProps['title']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.layout}
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.layoutOptions}
      */
-    layout: Object as PropType<DashboardProps['layout']>,
+    layoutOptions: Object as PropType<DashboardProps['layoutOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+     *
+     * @internal
+     */
+    config: Object as PropType<DashboardProps['config']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
      */
@@ -60,9 +69,9 @@ export const Dashboard = defineComponent({
      */
     defaultDataSource: Object as PropType<DashboardProps['defaultDataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetFilterOptions}
+     * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetsOptions}
      */
-    widgetFilterOptions: Object as PropType<DashboardProps['widgetFilterOptions']>,
+    widgetsOptions: Object as PropType<DashboardProps['widgetsOptions']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.styleOptions}
      */

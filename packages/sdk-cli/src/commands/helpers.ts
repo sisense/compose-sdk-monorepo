@@ -63,12 +63,17 @@ async function retrieveDataSource(
   const dataSourceList = await queryClient.getDataSourceList();
 
   let minDistance = Number.MAX_SAFE_INTEGER;
-  let minDistanceDataSource: DataSourceMetadata = { title: dataSourceTitle, live: false };
+  let minDistanceDataSource: DataSourceMetadata = {
+    title: dataSourceTitle,
+    live: false,
+    fullname: '',
+  };
 
   dataSourceList.forEach((dataSource) => {
     const title = dataSource.title;
+    const fullName = dataSource.fullname;
 
-    if (title === dataSourceTitle) {
+    if (title === dataSourceTitle || dataSourceTitle === fullName) {
       minDistanceDataSource = dataSource;
       minDistance = 0;
     } else {
@@ -108,6 +113,9 @@ async function retrieveDataFields(
       ? addDescriptionToFields(fields, dataSourceSchema.datasets as DataSourceSchemaDataset[])
       : fields;
   } catch (error) {
+    if ((error as { status: string }).status === '404' && fields.length) {
+      return fields;
+    }
     if ((error as { status: string }).status === '403') {
       // the caller may not have permission to access this data source
       console.log(
@@ -149,7 +157,7 @@ async function createDataModel(
   try {
     const dataSource = await retrieveDataSource(queryClient, dataSourceTitle);
 
-    const dataFields = await retrieveDataFields(queryClient, dataSourceTitle);
+    const dataFields = await retrieveDataFields(queryClient, dataSource.fullname);
 
     const rawDataModel = combineDataSourceAndDataFields(dataSource, dataFields);
 

@@ -1,6 +1,6 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api';
-import { DashboardModel } from '@/models/dashboard/dashboard-model';
+import { dashboardModelTranslator } from '@/models/dashboard';
 import { CompleteThemeSettings } from '../../types';
 import { AppSettings } from '@/app/settings/settings';
 
@@ -79,5 +79,5 @@ export async function getDashboardModel(
     }
   }
 
-  return new DashboardModel(dashboard, themeSettings, appSettings);
+  return dashboardModelTranslator.fromDashboardDto(dashboard, themeSettings, appSettings);
 }

@@ -50,9 +50,9 @@ describe('DashboardService', () => {
         title: 'test-dashboard',
         dataSource: 'test-data-source',
         widgets: [],
-        layout: { columns: [] },
+        layoutOptions: { widgetsPanel: { columns: [] } },
         filters: [],
-        widgetFilterOptions: {},
+        widgetsOptions: {},
         styleOptions: {},
       };
 
@@ -80,9 +80,9 @@ describe('DashboardService', () => {
         title: 'test-dashboard',
         dataSource: 'test-data-source',
         widgets: [],
-        layout: { columns: [] },
+        layoutOptions: { widgetsPanel: { columns: [] } },
         filters: [],
-        widgetFilterOptions: {},
+        widgetsOptions: {},
         styleOptions: {},
       };
 

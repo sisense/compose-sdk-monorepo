@@ -15,13 +15,14 @@ import {
 } from '../interfaces.js';
 import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
 
-import { AggregationTypes, FormulaContext, FormulaJaql, MetadataTypes } from '../types.js';
+import { AggregationTypes, MetadataTypes } from '../types.js';
 import { normalizeName } from '../base.js';
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
 import mapValues from 'lodash-es/mapValues.js';
 import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
 import { isDatetime, isNumber } from './../simple-column-types.js';
 import { convertSort, createFilterFromJaql } from '../../utils.js';
+import { CustomFormulaJaql } from '../filters/utils/types.js';
 
 /**
  * Defines the different numeric operators that can be used with numeric filters
@@ -103,10 +104,6 @@ function measureFunction(
   return new DimensionalCalculatedMeasure(name, builder.join(''), context);
 }
 
-type CustomFormulaJaql =
-  | (FormulaJaql & { context?: FormulaJaql | FormulaContext })
-  | FormulaContext;
-
 function transformFormulaJaqlHelper(jaql: CustomFormulaJaql) {
   const isFormulaJaql = 'formula' in jaql;
 
@@ -156,8 +153,9 @@ function transformFormulaJaqlHelper(jaql: CustomFormulaJaql) {
  *
  * @param jaql - Custom formula jaql
  * @returns Calculated measure instance
+ * @internal
  */
-function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedMeasure {
+export function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedMeasure {
   const isFormulaJaql = 'formula' in jaql;
 
   if (!isFormulaJaql) {
@@ -225,7 +223,6 @@ function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedMeasure 
  *   },
  * );
  * ```
- *
  * @param title - Title of the measure to be displayed in legend
  * @param formula - Formula to be used for the measure
  * @param context - Formula context as a map of strings to attributes, measures, or filters

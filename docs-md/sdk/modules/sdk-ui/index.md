@@ -29,7 +29,6 @@ React components for charts
 
 Utilities to be used with charts
 
-- [ChartWidget](chart-utilities/function.ChartWidget.md)
 - [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
 
 ## Data Grids
@@ -73,22 +72,34 @@ React components and hooks for working with queries
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 - [useQueryCache](queries/function.useQueryCache.md) <Badge type="alpha" text="Alpha" />
 
+## Dashboarding
+
+React components, hooks, and utilities for composing dashboards
+
+- [ChartWidget](dashboarding/function.ChartWidget.md)
+- [Dashboard](dashboarding/function.Dashboard.md) <Badge type="beta" text="Beta" />
+- [PivotTableWidget](dashboarding/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
+- [extractDimensionsAndMeasures](dashboarding/function.extractDimensionsAndMeasures.md) <Badge type="alpha" text="Alpha" />
+- [useExecutePluginQuery](dashboarding/function.useExecutePluginQuery.md) <Badge type="alpha" text="Alpha" />
+
 ## Fusion Embed
 
-React components and hooks for working with Fusion Embed dashboards, widgets, queries, and formulas
+React components, hooks, and utilities for working with Fusion Embed dashboards, widgets, queries, and formulas
 
-- [Dashboard](fusion-embed/function.Dashboard.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
-- [DashboardById](fusion-embed/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
-- [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardById](fusion-embed/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardModel](fusion-embed/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [ExecuteQueryByWidgetId](fusion-embed/function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-embed/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [dashboardModelTranslator](fusion-embed/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useFetch](fusion-embed/function.useFetch.md)
 - [useGetDashboardModel](fusion-embed/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModels](fusion-embed/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetHierarchyModels](fusion-embed/function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](fusion-embed/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](fusion-embed/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [widgetModelTranslator](fusion-embed/namespace.widgetModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Generative AI
 

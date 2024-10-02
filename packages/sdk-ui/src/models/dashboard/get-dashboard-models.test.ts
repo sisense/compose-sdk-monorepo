@@ -9,8 +9,8 @@ import { type RestApi } from '../../api/rest-api.js';
 import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
 import { samplePivotDashboard } from '../__mocks__/sample-pivot-dashboard.js';
-import { WidgetModel } from '../widget/widget-model.js';
 import zipObject from 'lodash-es/zipObject';
+import { isWidgetModel } from '../widget/widget-model.js';
 
 const dashboardsMock: DashboardDto[] = [
   sampleEcommerceDashboard,
@@ -83,14 +83,14 @@ describe('getDashboardModels', () => {
       dashboardsMock.map((dashboardMock) => ({
         oid: dashboardMock.oid,
         title: dashboardMock.title,
-        layout: expect.anything(),
+        layoutOptions: expect.anything(),
         filters: expect.anything(),
         dataSource: {
           title: dashboardMock.datasource.title,
           type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
         },
         widgets: expect.anything(),
-        widgetFilterOptions: expect.anything(),
+        widgetsOptions: expect.anything(),
         styleOptions: {
           ...(dashboardMock.style?.palette?.colors && {
             palette: {
@@ -116,12 +116,14 @@ describe('getDashboardModels', () => {
           title: dashboardMock.datasource.title,
           type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
         },
-        layout: expect.anything(),
+        layoutOptions: expect.anything(),
         filters: expect.anything(),
         widgets: expect.arrayContaining(
-          Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
+          Array(dashboardMock.widgets?.length).map((widget) =>
+            expect(isWidgetModel(widget)).toBe(true),
+          ),
         ),
-        widgetFilterOptions: expect.objectContaining(
+        widgetsOptions: expect.objectContaining(
           zipObject(
             dashboardMock.widgets!.map(({ oid }) => oid),
             dashboardMock.widgets!.map(() => expect.anything()),
@@ -149,14 +151,14 @@ describe('getDashboardModels', () => {
     expect(result[0]).toEqual({
       oid: targetDashboardMock.oid,
       title: targetDashboardMock.title,
-      layout: expect.anything(),
+      layoutOptions: expect.anything(),
       filters: expect.anything(),
       dataSource: {
         title: targetDashboardMock.datasource.title,
         type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
       },
       widgets: expect.anything(),
-      widgetFilterOptions: expect.anything(),
+      widgetsOptions: expect.anything(),
       styleOptions: {
         ...(targetDashboardMock.style?.palette?.colors
           ? {

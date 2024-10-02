@@ -26,7 +26,7 @@ export const Default = template(
   {
     nlgRequest: {
       jaql: {
-        datasource: 'Sample ECommerce',
+        datasource: { title: 'Sample ECommerce' },
         metadata: [
           {
             jaql: {

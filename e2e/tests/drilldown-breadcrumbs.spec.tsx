@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { DrilldownBreadcrumbs } from '@sisense/sdk-ui';
-import { createAttribute } from '@sisense/sdk-data';
+import { Attribute } from '@sisense/sdk-data';
 
 test.describe('DrilldownBreadcrumbs Component', () => {
   const filtersDisplayValues = [['Apple Macbooks'], ['Category'], ['Gender']];
-  const currentDimension = createAttribute({
-    name: 'AgeRange',
+  const currentDimension = {
+    name: 'Age Range',
     type: 'text-attribute',
     expression: '[Commerce.Age Range]',
-  });
+  } as Attribute;
 
   const clearDrilldownSelections = () => filtersDisplayValues.slice(0, 2);
   const sliceDrilldownSelections = (i: any) =>
@@ -69,7 +69,7 @@ test.describe('DrilldownBreadcrumbs Component', () => {
   });
 
   test('should display the current category with "(All)" being added ', async ({ mount }) => {
-    const currentDrillText = currentDimension.expression.split('.')[1].slice(0, -1);
+    const currentDrillText = currentDimension.name;
     const component = await mount(
       <DrilldownBreadcrumbs
         filtersDisplayValues={filtersDisplayValues}

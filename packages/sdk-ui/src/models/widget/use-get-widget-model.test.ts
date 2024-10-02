@@ -7,7 +7,7 @@ import { getWidgetModel } from './get-widget-model';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 import { type ClientApplication } from '../../app/client-application';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
-import { WidgetModel } from '../widget';
+import { isWidgetModel, widgetModelTranslator } from '.';
 
 const widgetDtoMock = dashboardMock.widgets![0];
 
@@ -67,7 +67,7 @@ describe('useGetWidgetModel', () => {
   });
 
   it('should fetch a widget model', async () => {
-    getWidgetModelMock.mockResolvedValue(new WidgetModel(widgetDtoMock));
+    getWidgetModelMock.mockResolvedValue(widgetModelTranslator.fromWidgetDto(widgetDtoMock));
     const { result } = renderHook(() =>
       useGetWidgetModel({
         widgetOid: widgetDtoMock.oid,
@@ -79,7 +79,7 @@ describe('useGetWidgetModel', () => {
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
       expect(result.current.isSuccess).toBe(true);
-      expect(result.current.widget).toBeInstanceOf(WidgetModel);
+      expect(isWidgetModel(result.current.widget)).toBe(true);
       expect(result.current.widget?.oid).toBe(widgetDtoMock.oid);
     });
   });
@@ -104,7 +104,7 @@ describe('useGetWidgetModel', () => {
   });
 
   it('should send tracking for the first execution', async () => {
-    const widgetModel = new WidgetModel(widgetDtoMock);
+    const widgetModel = widgetModelTranslator.fromWidgetDto(widgetDtoMock);
     getWidgetModelMock.mockResolvedValue(widgetModel);
     useSisenseContextMock.mockReturnValue({
       app: { httpClient: {} } as ClientApplication,

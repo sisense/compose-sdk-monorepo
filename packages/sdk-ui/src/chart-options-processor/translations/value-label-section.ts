@@ -130,10 +130,12 @@ export const getPolarValueLabelSettings = (
     return { enabled: false };
   }
   const rotation = valueLabel.rotation ?? 0;
+  const enabled = valueLabel.enabled ?? defaultValueLabelSettings.enabled;
   return {
     ...defaultValueLabelSettings,
     verticalAlign: polarType === 'line' ? 'bottom' : 'middle',
     rotation: rotation,
+    enabled: enabled,
     align: getRotationType(rotation) === 'vertical' ? 'left' : 'center',
     padding: 5,
   };

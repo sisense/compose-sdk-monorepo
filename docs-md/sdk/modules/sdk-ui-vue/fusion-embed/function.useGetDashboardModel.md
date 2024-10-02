@@ -30,25 +30,29 @@ How to use `useGetDashboardModel` within a Vue component to fetch and display a 
 ```vue
 <template>
  <Dashboard
-   v-if="dashboard"
-   :title="dashboard.title"
-   :layout="dashboard.layout"
-   :widgets="dashboard.widgets"
-   :filters="dashboard.filters"
-   :defaultDataSource="dashboard.dataSource"
-   :widgetFilterOptions="dashboard.widgetFilterOptions"
-   :styleOptions="dashboard.styleOptions"
+   v-if="dashboardProps"
+   :title="dashboardProps.title"
+   :layoutOptions="dashboardProps.layoutOptions"
+   :widgets="dashboardProps.widgets"
+   :filters="dashboardProps.filters"
+   :defaultDataSource="dashboardProps.dataSource"
+   :widgetsOptions="dashboardProps.widgetsOptions"
+   :styleOptions="dashboardProps.styleOptions"
  />
 </template>
 
 <script setup lang="ts">
-import { DashboardById, useGetDashboardModel } from '@sisense/sdk-ui-vue';
+import { dashboardModelTranslator, useGetDashboardModel } from '@sisense/sdk-ui-vue';
 
 const { dashboard } = useGetDashboardModel({
  dashboardOid: '6441e728dac1920034bce737',
  includeWidgets: true,
  includeFilters: true,
 });
+
+const dashboardProps = computed(() =>
+  dashboard.value ? dashboardModelTranslator.toDashboardProps(dashboard.value) : null,
+);
 </script>
 ```
 

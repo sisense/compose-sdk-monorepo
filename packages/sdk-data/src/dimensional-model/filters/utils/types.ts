@@ -1,3 +1,5 @@
+import { FormulaContext, FormulaJaql } from '../../types.js';
+
 type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
   {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
@@ -7,13 +9,18 @@ export type JaqlContext = Record<string, Partial<FilterJaqlInternal>>;
 
 export type Id = string;
 
-export type Datasource = {
-  address: Id;
-  database: string;
-  id: string;
+/**
+ * Data source as specified in the jaql
+ *
+ * @internal
+ */
+export type JaqlDataSource = {
+  address?: Id;
+  database?: string;
+  id?: string;
   title: string;
   live?: boolean;
-  fullname: string;
+  fullname?: string;
   lastBuildTime?: string;
   revisionId?: string;
 };
@@ -66,6 +73,10 @@ export interface RangeFilterJaql extends BaseFilterJaql {
   to?: string | number;
   multiSelection?: boolean;
 }
+
+export type CustomFormulaJaql =
+  | (FormulaJaql & { context?: FormulaJaql | FormulaContext })
+  | FormulaContext;
 
 export type RankingFilterJaql = {
   agg: string;
@@ -161,7 +172,7 @@ export enum DatetimeLevel {
 export type FilterJaqlInternal = {
   title: string;
   column: string;
-  datasource?: Datasource;
+  datasource?: JaqlDataSource;
   datatype: string;
   dim: string;
   dimension?: string;

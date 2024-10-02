@@ -3,11 +3,17 @@ import {
   DimensionalLevelAttribute,
   normalizeAttributeName,
 } from '../../attributes.js';
-import { Attribute, BaseMeasure, LevelAttribute } from '../../interfaces.js';
+import { Attribute, BaseMeasure, CalculatedMeasure, LevelAttribute } from '../../interfaces.js';
 import { isNumber } from '../../simple-column-types.js';
 import { FilterJaql, MetadataTypes } from '../../types.js';
-import { FilterJaqlInternal, RankingFilterJaql } from './types.js';
+import {
+  CustomFormulaJaql,
+  FilterJaqlInternal,
+  JaqlDataSource,
+  RankingFilterJaql,
+} from './types.js';
 import * as measureFactory from '../../measures/factory.js';
+import { transformCustomFormulaJaql } from '../../measures/factory.js';
 
 const DATA_MODEL_MODULE_NAME = 'DM';
 
@@ -20,6 +26,7 @@ const DATA_MODEL_MODULE_NAME = 'DM';
  * @param level - Date level
  * @param dataType - Data type
  * @param title - Attribute title
+ * @param dataSource - Jaql data source
  * @returns attribute or level attribute
  */
 export const createAttributeHelper = (
@@ -29,6 +36,7 @@ export const createAttributeHelper = (
   level: string | undefined,
   dataType: string,
   title?: string,
+  dataSource?: JaqlDataSource,
 ): Attribute | LevelAttribute => {
   // if table is undefined, extract it from dim
   const dimTable = table ?? dim.slice(1, -1).split('.')[0];
@@ -41,6 +49,9 @@ export const createAttributeHelper = (
       dim,
       dateLevel,
       format,
+      undefined,
+      undefined,
+      dataSource,
     );
     levelAttribute.composeCode = normalizeAttributeName(
       dimTable,
@@ -53,7 +64,14 @@ export const createAttributeHelper = (
   const attributeType = isNumber(dataType)
     ? MetadataTypes.NumericAttribute
     : MetadataTypes.TextAttribute;
-  const attribute: Attribute = new DimensionalAttribute(title ?? column, dim, attributeType);
+  const attribute: Attribute = new DimensionalAttribute(
+    title ?? column,
+    dim,
+    attributeType,
+    undefined,
+    undefined,
+    dataSource,
+  );
   attribute.composeCode = normalizeAttributeName(
     dimTable,
     column,
@@ -73,14 +91,9 @@ export const createAttributeHelper = (
 export const createAttributeFromFilterJaql = (
   jaql: FilterJaql | FilterJaqlInternal,
 ): Attribute | LevelAttribute => {
-  return createAttributeHelper(
-    jaql.dim,
-    jaql.table,
-    jaql.column,
-    jaql.level,
-    jaql.datatype,
-    jaql.title,
-  );
+  const { dim, table, column, level, datatype, title, datasource: dataSource } = jaql;
+
+  return createAttributeHelper(dim, table, column, level, datatype, title, dataSource);
 };
 
 /**
@@ -92,6 +105,8 @@ export const createAttributeFromFilterJaql = (
  * @param level - Date level
  * @param dataType - Data type
  * @param agg - Aggregation function
+ * @param title - Measure title
+ * @param dataSource - data source provided in JAQL
  * @returns measure
  */
 export const createMeasureHelper = (
@@ -102,10 +117,25 @@ export const createMeasureHelper = (
   dataType: string,
   agg: string,
   title?: string,
+  dataSource?: JaqlDataSource,
 ): BaseMeasure => {
-  const attribute = createAttributeHelper(dim, table, column, level, dataType, title);
+  const attribute = createAttributeHelper(dim, table, column, level, dataType, title, dataSource);
   const measure = measureFactory.aggregate(attribute, agg);
   measure.composeCode = `measureFactory.${agg}(${attribute.composeCode})`;
+  return measure;
+};
+
+/**
+ * Creates a calculated measure from the provided filter JAQL object
+ *
+ * @param jaql - custom formula jaql
+ * @returns calculated measure
+ */
+export const createCalculatedMeasureFromJaql = (jaql: CustomFormulaJaql): CalculatedMeasure => {
+  const measure = transformCustomFormulaJaql(jaql);
+  // TBD (SNS-108945)
+  // Handle preparation of 'composeCode' for formula
+  measure.composeCode = `'Formula code to be implemented'`;
   return measure;
 };
 
@@ -116,9 +146,18 @@ export const createMeasureHelper = (
  * @returns Measure
  */
 export const createMeasureFromFilterJaql = (jaql: FilterJaqlInternal): BaseMeasure | undefined => {
-  const { dim, table, column, title, level, datatype: dataType, agg } = jaql;
+  const {
+    dim,
+    table,
+    column,
+    title,
+    level,
+    datatype: dataType,
+    agg,
+    datasource: dataSource,
+  } = jaql;
   if (!agg) return undefined;
-  return createMeasureHelper(dim, table, column, level, dataType, agg, title);
+  return createMeasureHelper(dim, table, column, level, dataType, agg, title, dataSource);
 };
 
 /**
@@ -127,7 +166,10 @@ export const createMeasureFromFilterJaql = (jaql: FilterJaqlInternal): BaseMeasu
  * @param jaql - Ranking filter Jaql object
  * @returns Measure
  */
-export const createMeasureFromRankingFilterJaql = (jaql: RankingFilterJaql): BaseMeasure => {
-  const { dim, table, column, level, datatype: dataType, agg } = jaql;
+export const createMeasureFromRankingFilterJaql = (
+  jaql: RankingFilterJaql | CustomFormulaJaql,
+): BaseMeasure | CalculatedMeasure => {
+  if ('formula' in jaql) return createCalculatedMeasureFromJaql(jaql);
+  const { dim, table, column, level, datatype: dataType, agg } = jaql as RankingFilterJaql;
   return createMeasureHelper(dim, table, column, level, dataType, agg);
 };

@@ -187,8 +187,8 @@ export const Scattermap = ({
   );
 };
 
-const isScattermapData = (chartData: ChartData): chartData is ScattermapChartData => {
-  return chartData.type === 'scattermap';
+export const isScattermapData = (chartData: ChartData): chartData is ScattermapChartData => {
+  return chartData.type === 'scattermap' && 'locations' in chartData;
 };
 const isScattermapDataOptions = (
   dataOptions: ChartDataOptionsInternal,

@@ -1,4 +1,3 @@
-import { FetchInterceptorResponse } from 'fetch-intercept';
 import { Authenticator } from './interfaces.js';
 import { isBearerAuthenticator } from './bearer-authenticator.js';
 import { isWatAuthenticator } from './wat-authenticator.js';
@@ -6,7 +5,7 @@ import { isPasswordAuthenticator } from './password-authenticator.js';
 import { isSsoAuthenticator } from './sso-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
 
-function handleErrorResponse(response: FetchInterceptorResponse): FetchInterceptorResponse {
+function handleErrorResponse(response: Response): Response {
   if (!response.ok) {
     throw new TranslatableError('errors.responseError', {
       status: response.status.toString(),
@@ -17,10 +16,7 @@ function handleErrorResponse(response: FetchInterceptorResponse): FetchIntercept
   return response;
 }
 
-function handleUnauthorizedResponse(
-  response: FetchInterceptorResponse,
-  auth: Authenticator,
-): FetchInterceptorResponse {
+function handleUnauthorizedResponse(response: Response, auth: Authenticator): Response {
   auth.invalidate();
   // skip login redirect for token auth
   if (isPasswordAuthenticator(auth)) {
@@ -58,16 +54,15 @@ function handleNetworkError(): Promise<never> {
   return Promise.reject(new TranslatableError('errors.networkError'));
 }
 
-export const getResponseInterceptor =
-  (auth: Authenticator) => (response: FetchInterceptorResponse) => {
-    if (response.status === 401) {
-      return handleUnauthorizedResponse(response, auth);
-    }
-    if (!response.ok) {
-      return handleErrorResponse(response);
-    }
-    return response;
-  };
+export const getResponseInterceptor = (auth: Authenticator) => (response: Response) => {
+  if (response.status === 401) {
+    return handleUnauthorizedResponse(response, auth);
+  }
+  if (!response.ok) {
+    return handleErrorResponse(response);
+  }
+  return response;
+};
 
 export const errorInterceptor = (error: Error) => {
   if (isNetworkError(error)) {

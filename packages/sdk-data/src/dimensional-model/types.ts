@@ -5,7 +5,13 @@
  * Types
  */
 
-import { type ConditionFilterJaql } from './filters/utils/types.js';
+import { JaqlDataSource, type ConditionFilterJaql } from './filters/utils/types.js';
+import { Attribute } from './interfaces.js';
+
+/**
+ * @internal
+ */
+export type { JaqlDataSource };
 
 /**
  * Different aggregation types
@@ -264,7 +270,7 @@ export const MetadataTypes = {
    * @param o - object to check
    * @returns true if the object or type is an attribute - of any type
    */
-  isAttribute(o: any): boolean {
+  isAttribute(o: any): o is Attribute {
     if (typeof o === 'string') {
       const type = o;
       return (
@@ -379,6 +385,7 @@ export type BaseJaql = {
   dim: string;
   table: string;
   column: string;
+  datasource?: JaqlDataSource;
   title: string;
   level?: 'years' | 'quarters' | 'months' | 'weeks' | 'minutes' | 'days';
   sort?: `${JaqlSortDirection}`;

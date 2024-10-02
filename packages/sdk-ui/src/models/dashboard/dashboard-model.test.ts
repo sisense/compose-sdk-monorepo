@@ -1,17 +1,21 @@
-import { DashboardModel } from '@/models';
+import { dashboardModelTranslator } from '@/models';
 import { WidgetStyle } from '@/dashboard-widget/types';
 import { DataType } from '@sisense/sdk-data';
 
 describe('DashboardModel', () => {
   it('should create a new dashboard model with minimum of arguments', async () => {
     expect(
-      new DashboardModel({ oid: 'test', title: 'test', datasource: { title: 'test', id: 'test' } }),
+      dashboardModelTranslator.fromDashboardDto({
+        oid: 'test',
+        title: 'test',
+        datasource: { title: 'test', id: 'test' },
+      }),
     ).toMatchSnapshot();
   });
 
   it('should create a new dashboard model with all arguments', () => {
     expect(
-      new DashboardModel({
+      dashboardModelTranslator.fromDashboardDto({
         oid: 'test',
         title: 'test',
         datasource: { title: 'test', id: 'test' },

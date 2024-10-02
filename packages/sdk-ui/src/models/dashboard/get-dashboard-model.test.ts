@@ -6,8 +6,8 @@ import { getDashboardModel, type GetDashboardModelOptions } from './get-dashboar
 import { type HttpClient } from '@sisense/sdk-rest-client';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { type RestApi } from '../../api/rest-api';
-import { WidgetModel } from '../widget';
 import zipObject from 'lodash-es/zipObject';
+import { isWidgetModel } from '../widget';
 
 const getDashboardMock = vi.fn<Parameters<RestApi['getDashboard']>>(() => {
   // eslint-disable-next-line no-unused-vars
@@ -39,10 +39,10 @@ describe('getDashboardModel', () => {
     expect(result).toEqual({
       oid: dashboardMock.oid,
       title: dashboardMock.title,
-      layout: expect.anything(),
+      layoutOptions: expect.anything(),
       filters: expect.anything(),
       widgets: expect.anything(),
-      widgetFilterOptions: expect.anything(),
+      widgetsOptions: expect.anything(),
       dataSource: {
         title: dashboardMock.datasource.title,
         type: 'elasticube',
@@ -68,12 +68,14 @@ describe('getDashboardModel', () => {
         title: dashboardMock.datasource.title,
         type: 'elasticube',
       },
-      layout: expect.anything(),
+      layoutOptions: expect.anything(),
       filters: expect.anything(),
       widgets: expect.arrayContaining(
-        Array(dashboardMock.widgets?.length).map(() => expect.any(WidgetModel)),
+        Array(dashboardMock.widgets?.length).map((widget) =>
+          expect(isWidgetModel(widget)).toBe(true),
+        ),
       ),
-      widgetFilterOptions: expect.objectContaining(
+      widgetsOptions: expect.objectContaining(
         zipObject(
           dashboardMock.widgets!.map(({ oid }) => oid),
           dashboardMock.widgets!.map(() => expect.anything()),
@@ -100,12 +102,12 @@ describe('getDashboardModel', () => {
         title: dashboardMock.datasource.title,
         type: 'elasticube',
       },
-      layout: expect.anything(),
+      layoutOptions: expect.anything(),
       filters: expect.arrayContaining(
         Array(dashboardMock.filters?.length).map(() => expect.anything()),
       ),
       widgets: expect.anything(),
-      widgetFilterOptions: expect.anything(),
+      widgetsOptions: expect.anything(),
       styleOptions: {
         palette: {
           variantColors: dashboardMock.style!.palette!.colors,

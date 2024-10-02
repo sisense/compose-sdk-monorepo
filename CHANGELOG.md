@@ -1,10 +1,37 @@
 # Changelog
 
+## [1.20.0] - 2024-10-01
+
+### Added
+- Add `widgetModelTranslator` for translating between a widget model and related component props
+- Add `dashboardModelTranslator` for translating between a dashboard model and related component props
+- Add hook `useExecutePluginQuery` (alpha) for use in plugin components
+- Implement custom context menu and sub-menu for dashboard cross-filtering and drilldown
+- Add internal change detection props and hook to coordinate cross filtering and drilldown
+- Support drilldown hierarchies (including predefined date hierarchies) for `ChartWidget`, `DrilldownWidget` for internal testing
+- Add hook `useGetHierarchyModels` that retrieves existing hierarchy models from Fusion
+- Add plugin `highcharts-rounded-corners` for Highcharts (internal charting library)
+
+
+### Changed
+- **Breaking:** Restructure `DashboardProps` for beta release: `widgets` to using `WidgetProps[]`, instead of `WidgetModel[]`, `layout`  to `layoutOptions`, `widgetFilterOptions` to `widgetOptions`
+- Deprecate `get*Props()` on `WidgetModel` – use utility functions of `widgetModelTranslator` instead
+- Move components `DashboardById` and `Dashboard` to beta for React, Angular, and Vue
+- Support dashboards of multiple data sources
+- Handle Fusion date formats from locale
+- Extend data point entries with `displayValue`
+- Consolidate interface for custom chart plugins
+- Improve fitlers: translation of `doesn't equal` filter, update of `CriteriaFilterTile`, formula in ranked filter
+- Replace `fetch-intercept` with an isolated in-house implementation
+- Extend CLI `get-data-model` to support perspectives
+- Improve charts: "No Results" overlay added to all charts, data options validation for trend or forecast, polar chart stacking and value labels disabling
+- Improve pivot tables: container size, additional visual tests
+
 ## [1.19.0] - 2024-09-17
 
 ### Added
 - Support loading of fonts from Fusion
-- Support dashboard rendering of text widgets and chart plugins
+- Support dashboard rendering of text widgets and chart plugins for internal testing
 
 ### Changed
 - Fix missing spaces in headings for `MemberFilterTile`, `Table`, and `PivotTable`
@@ -267,7 +294,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Add component `PivotTable` (alpha) for React, Angular, and Vue
 
 ### Changed
-- **Breaking:** Refactor `ScattermapChartDataOptions.geo` (beta) to use `StyledColumn`, instead `ScattermapColumn` (removed).
+- **Breaking:** Refactor `ScattermapChartDataOptions.geo` (beta) to use `StyledColumn`, instead of `ScattermapColumn` (removed).
   Prop `ScattermapColumn.level` has been replaced with `StyledColumn.geoLevel`
 - Support HTML content in component `Table`
 - Support theme settings for `IndicatorChart` in ticker mode

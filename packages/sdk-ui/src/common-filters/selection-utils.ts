@@ -17,6 +17,7 @@ import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ChartDataOptions,
+  ChartDataPoint,
   DataPoint,
   DataPointEntry,
   isMeasureColumn,
@@ -26,14 +27,19 @@ import {
   ScattermapChartDataOptions,
   ScattermapDataPoint,
   StyledColumn,
+  MenuItemSection,
 } from '../index.js';
 import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 import { WidgetTypeInternal } from '@/models/widget/types.js';
 import { clearMembersFilter, haveSameAttribute } from '@/utils/filters.js';
+import { MenuIds } from '@/common/components/menu/menu-ids.js';
+
+export const SELECTION_TITLE_MAXIMUM_ITEMS = 2;
 
 type DataSelection = {
   attribute: Attribute;
   values: (string | number)[];
+  displayValues: string[];
 };
 
 type AbstractDataPointWithEntries = {
@@ -63,6 +69,7 @@ function getSelectionsFromPoints(
     return {
       attribute: entries[0].attribute,
       values: uniq(entries.map(({ value }) => value)),
+      displayValues: uniq(entries.map(({ displayValue }) => displayValue)),
     } as DataSelection;
   });
 }
@@ -98,12 +105,13 @@ function getTreemapChartSelections(
     return {
       attribute: translateColumnToAttribure(dataOption),
       values: [],
+      displayValues: [],
     };
   });
 }
 
 function getScatterChartSelections(points: ScatterDataPoint[]): DataSelection[] {
-  return getSelectionsFromPoints(points, ['x', 'y', 'breakByColor', 'breakByPoint']);
+  return getSelectionsFromPoints(points, ['x', 'y', 'breakByPoint', 'breakByColor']);
 }
 
 function getScattermapChartSelections(points: ScattermapDataPoint[]): DataSelection[] {
@@ -117,10 +125,13 @@ function getAreamapChartSelections(points: AreamapDataPoint[]): DataSelection[] 
 export function getWidgetSelections(
   widgetType: WidgetTypeInternal,
   dataOptions: ChartDataOptions | PivotTableDataOptions,
-  points: Array<DataPoint | ScatterDataPoint | ScattermapDataPoint | AreamapDataPoint>,
+  points: Array<ChartDataPoint>,
 ) {
   if (widgetType === 'plugin') {
     // no plugins support
+    return [];
+  } else if (widgetType === 'text') {
+    // no text support
     return [];
   } else if (widgetType === 'pivot') {
     // todo: add pivot support after extending pivot with click/select handlers
@@ -152,6 +163,8 @@ export function getSelectableWidgetAttributes(
   let targetDataOptions: (Column | StyledColumn)[] = [];
 
   if (widgetType === 'plugin') {
+    targetDataOptions = [];
+  } else if (widgetType === 'text') {
     targetDataOptions = [];
   } else if (widgetType === 'pivot') {
     targetDataOptions = [
@@ -218,4 +231,57 @@ function removeLockedFilters(existingFilters: Filter[], filtersToRemoveFrom: Fil
     (filter) =>
       !lockedExistingFilters.some((lockedFilter) => haveSameAttribute(lockedFilter, filter)),
   );
+}
+
+function getWidgetSelectionsTitle(
+  widgetType: WidgetTypeInternal,
+  dataOptions: ChartDataOptions | PivotTableDataOptions,
+  points: Array<ChartDataPoint>,
+) {
+  const selections = getWidgetSelections(widgetType, dataOptions, points)
+    // Note: leave selections that only contain values to display
+    .filter(({ displayValues }) => displayValues.length);
+
+  if (selections.length === 0) return '';
+
+  const [selection] = selections;
+  const isSinglePoint = points.length === 1;
+  const hasExcessValues = selection.displayValues.length > SELECTION_TITLE_MAXIMUM_ITEMS;
+
+  // For multiple selections
+  if (selections.length > 1) {
+    if (isSinglePoint) {
+      return selections.map((s) => s.displayValues[0]).join(', ');
+    }
+    return hasExcessValues ? '' : selection.displayValues.join(', ');
+  }
+
+  // For single selection
+  return hasExcessValues ? selection.attribute.name : selection.displayValues.join(', ');
+}
+
+export function getWidgetSelectionsTitleMenuItem(
+  widgetType: WidgetTypeInternal,
+  dataOptions: ChartDataOptions | PivotTableDataOptions,
+  points: Array<ChartDataPoint>,
+): MenuItemSection | null {
+  const sectionTitle = getWidgetSelectionsTitle(widgetType, dataOptions, points);
+  if (!sectionTitle) {
+    return null;
+  }
+  return {
+    id: MenuIds.CROSSFILTERING_CHART_POINTS_SELECTION,
+    sectionTitle,
+  };
+}
+
+export function getSelectMenuItem(title: string, selectHandler: () => void): MenuItemSection {
+  return {
+    items: [
+      {
+        caption: title,
+        onClick: selectHandler,
+      },
+    ],
+  };
 }

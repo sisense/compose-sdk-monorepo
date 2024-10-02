@@ -17,6 +17,8 @@
  * Angular context modules, services, and variables
  * @groupDescription Queries
  * Angular query service
+ * @groupDescription Dashboarding
+ * Angular modules, services, and components for composing dashboards
  * @groupDescription Fusion Embed
  * Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
  * @groupDescription Interfaces

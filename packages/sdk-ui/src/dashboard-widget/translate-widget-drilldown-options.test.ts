@@ -6,10 +6,12 @@ import { extractDataOptions } from './translate-widget-data-options';
 import { jaqlMock } from './__mocks__/jaql-mock';
 import { extractDrilldownOptions } from './translate-widget-drilldown-options';
 import { verifyColumn } from './translate-widget-data-options.test';
+import { Attribute } from '@sisense/sdk-data';
+import { Hierarchy } from '@/models';
 
 describe('translate widget drilldown options', () => {
   describe('extractDrilldownOptions', () => {
-    it('should returns correct data options for cartesian chart with drilldown', () => {
+    it('should return correct data options for cartesian chart with drilldown', () => {
       const panels: Panel[] = [
         {
           name: 'categories',
@@ -21,6 +23,7 @@ describe('translate widget drilldown options', () => {
                 parent: {
                   format: { mask: { years: 'yyyy' } as DatetimeMask },
                   jaql: jaqlMock.date,
+                  hierarchies: ['calendar', 'calendar - weeks', '12345'],
                 },
                 through: {
                   jaql: { ...jaqlMock.date, filter: { members: ['2010-01-01T00:00:00'] } },
@@ -53,8 +56,8 @@ describe('translate widget drilldown options', () => {
       const drilldownOptions = extractDrilldownOptions('chart/column', panels);
 
       verifyColumn(dataOptions.category[0], panels[0].items[0].parent!.parent!);
-      verifyColumn(drilldownOptions?.drilldownDimensions![1], panels[0].items[0]);
-      verifyColumn(drilldownOptions?.drilldownDimensions![0], panels[0].items[0].parent!);
+      verifyColumn(drilldownOptions?.drilldownPaths![1] as Attribute, panels[0].items[0]);
+      verifyColumn(drilldownOptions?.drilldownPaths![0] as Attribute, panels[0].items[0].parent!);
 
       verifyColumn(drilldownOptions?.drilldownSelections![1].nextDimension, panels[0].items[0]);
       verifyColumn(
@@ -68,6 +71,8 @@ describe('translate widget drilldown options', () => {
       expect(drilldownOptions?.drilldownSelections![0].points).toEqual([
         { categoryValue: '2010-01-01T00:00:00', categoryDisplayValue: '2010' },
       ]);
+      expect((drilldownOptions?.drilldownPaths?.[2] as Hierarchy).title).toBe('Calendar Hierarchy');
+      expect(drilldownOptions?.drilldownPaths?.[3]).toBe('12345');
     });
   });
 });

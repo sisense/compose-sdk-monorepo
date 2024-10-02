@@ -1,5 +1,5 @@
 import { ContentPanel } from '@/dashboard/components/content-panel';
-import { DashboardLayoutProps } from '@/dashboard/types';
+import { DashboardContainerProps } from '@/dashboard/types';
 import { DashboardHeader } from '@/dashboard/components/dashboard-header';
 import { useThemeContext } from '@/theme-provider';
 import styled from '@emotion/styled';
@@ -28,29 +28,37 @@ const ContentColumn = styled.div<{
 
 export const DashboardContainer = ({
   title,
-  layout,
+  layoutOptions,
+  config,
   widgets,
   filters,
   onFiltersChange,
   defaultDataSource,
-}: DashboardLayoutProps) => {
+}: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
+
+  const isToolbarVisible = config?.toolbar?.isVisible !== false;
+  const isFiltersPanelVisible = config?.filtersPanel?.isVisible !== false;
+
   return (
     <DashboardWrapper
       background={themeSettings.dashboard.backgroundColor}
       color={themeSettings.typography.primaryTextColor}
     >
       <ContentColumn background={themeSettings.dashboard.backgroundColor}>
-        <DashboardHeader title={title} />
-        <ContentPanel layout={layout} widgets={widgets} />
+        {isToolbarVisible && <DashboardHeader title={title} />}
+        <ContentPanel layout={layoutOptions?.widgetsPanel} widgets={widgets} />
       </ContentColumn>
-      <div className="csdk-w-[240px] csdk-flex">
-        <FiltersPanel
-          filters={filters}
-          onFiltersChange={onFiltersChange}
-          defaultDataSource={defaultDataSource}
-        />
-      </div>
+
+      {isFiltersPanelVisible && (
+        <div className="csdk-w-[240px] csdk-flex">
+          <FiltersPanel
+            filters={filters}
+            onFiltersChange={onFiltersChange}
+            defaultDataSource={defaultDataSource}
+          />
+        </div>
+      )}
     </DashboardWrapper>
   );
 };

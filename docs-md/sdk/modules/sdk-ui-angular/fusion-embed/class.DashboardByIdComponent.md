@@ -2,7 +2,7 @@
 title: DashboardByIdComponent
 ---
 
-# Class DashboardByIdComponent <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
+# Class DashboardByIdComponent <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 
 An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
 

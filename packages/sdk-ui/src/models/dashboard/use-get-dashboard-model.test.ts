@@ -7,7 +7,7 @@ import { useGetDashboardModel } from './use-get-dashboard-model';
 import { getDashboardModel } from './get-dashboard-model';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 import { type ClientApplication } from '../../app/client-application';
-import { DashboardModel } from '@/models';
+import { dashboardModelTranslator } from '@/models';
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
@@ -37,7 +37,7 @@ vi.mock('./get-dashboard-model', () => ({
   getDashboardModel: vi.fn(),
 }));
 
-const dashboardMock = new DashboardModel({
+const dashboardMock = dashboardModelTranslator.fromDashboardDto({
   oid: 'dashboard-123',
   title: 'Test Dashboard',
   datasource: {

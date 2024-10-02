@@ -4,6 +4,7 @@ import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
 import { TranslatableError } from './translation/translatable-error.js';
+import { errorInterceptor } from './interceptors.js';
 
 interface WebSessionTokenResponse {
   webSessionToken: string;
@@ -41,7 +42,7 @@ export class WatAuthenticator extends BaseAuthenticator {
           'Content-Type': 'application/json',
         },
         body: this.body,
-      });
+      }).catch(errorInterceptor);
 
       if (response.ok) {
         const responseJson: WebSessionTokenResponse = await response.json();

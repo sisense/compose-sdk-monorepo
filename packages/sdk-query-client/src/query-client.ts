@@ -176,7 +176,8 @@ export function validateQueryDescription(queryDescription: QueryDescription): vo
 
   attributes.forEach((attribute) => {
     if (!attribute.skipValidation && !MetadataTypes.isAttribute(attribute)) {
-      throw new TranslatableError('errors.invalidAttribute', { attributeName: attribute.name });
+      const { name: attributeName } = attribute;
+      throw new TranslatableError('errors.invalidAttribute', { attributeName });
     }
   });
 

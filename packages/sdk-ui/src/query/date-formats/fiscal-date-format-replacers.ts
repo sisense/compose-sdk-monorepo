@@ -107,8 +107,8 @@ export function newDateFormatWithExpandedYearsMasks(
   // 2009-01-01T00:00:0+07:00 (Indochina Timezone)
   // or UTC value of 2008-12-31T17:00:00Z
   // compensate for this potential shift by converting the date to the earliest timezone
-  // for years format
-  if (['yyyy', 'yy', 'y', 'yp', 'yyyp'].includes(oldFormat)) {
+  // for any format that includes year masks
+  if (['yyyy', 'yy', 'y', 'yp', 'yyyp'].some((format) => oldFormat.includes(format))) {
     timeZone = 'Etc/GMT-14';
   }
   if (oldFormat.includes('yp')) {

@@ -16,6 +16,8 @@
  * Vue context modules, services, and variables
  * @groupDescription Queries
  * Vue query service
+ * @groupDescription Dashboarding
+ * Vue components and functions for composing dashboards
  * @groupDescription Fusion Embed
  * Vue components and functions for working with Fusion Embed dashboards, widgets, queries, and formulas
  * @groupDescription Interfaces

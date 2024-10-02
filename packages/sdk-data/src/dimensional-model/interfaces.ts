@@ -1,5 +1,6 @@
 import { DataSource } from '../interfaces.js';
 import {
+  JaqlDataSource,
   //DateLevels,
   Sort,
 } from './types.js';
@@ -43,6 +44,13 @@ export interface Element {
    * @internal
    */
   readonly id: string;
+
+  /**
+   * Data Source
+   *
+   * @internal
+   */
+  readonly dataSource?: JaqlDataSource;
 
   /**
    * Gets a serializable representation of the element.

@@ -69,8 +69,8 @@ export const Areamap: React.FC<AreamapProps> = ({
   );
 };
 
-const isAreamapData = (chartData: ChartData): chartData is AreamapData => {
-  return chartData.type === 'areamap';
+export const isAreamapData = (chartData: ChartData): chartData is AreamapData => {
+  return chartData.type === 'areamap' && 'geoData' in chartData;
 };
 
 const isAreamapDataOptions = (

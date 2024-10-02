@@ -32,15 +32,15 @@ export const FilterOption = {
   BOTTOM: `${FilterTypes.ranking}${RankingOperators.Bottom}`,
   // numeric
   BETWEEN: `${FilterTypes.numeric}${NumericOperators.From}${NumericOperators.To}`,
-  EQUALS: `${FilterTypes.numeric}${NumericOperators.Equals}`,
-  NOT_EQUALS: `${FilterTypes.numeric}${NumericOperators.DoesntEqual}`,
+  EQUALS_NUMERIC: `${FilterTypes.numeric}${NumericOperators.Equals}`,
+  NOT_EQUALS_NUMERIC: `${FilterTypes.numeric}${NumericOperators.DoesntEqual}`,
   LESS_THAN: `${FilterTypes.numeric}${NumericOperators.ToNotEqual}`,
   LESS_THAN_OR_EQUAL: `${FilterTypes.numeric}${NumericOperators.To}`,
   GREATER_THAN: `${FilterTypes.numeric}${NumericOperators.FromNotEqual}`,
   GREATER_THAN_OR_EQUAL: `${FilterTypes.numeric}${NumericOperators.From}`,
   // text
-  IS: `${FilterTypes.text}${TextOperators.Equals}`,
-  IS_NOT: `${FilterTypes.text}${TextOperators.DoesntEqual}`,
+  EQUALS_TEXT: `${FilterTypes.text}${TextOperators.Equals}`,
+  NOT_EQUALS_TEXT: `${FilterTypes.text}${TextOperators.DoesntEqual}`,
   CONTAINS: `${FilterTypes.text}${TextOperators.Contains}`,
   NOT_CONTAIN: `${FilterTypes.text}${TextOperators.DoesntContain}`,
   STARTS_WITH: `${FilterTypes.text}${TextOperators.StartsWith}`,
@@ -76,7 +76,7 @@ export type FilterInfo = {
  * @internal
  */
 export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
-  [FilterOption.EQUALS]: {
+  [FilterOption.EQUALS_NUMERIC]: {
     fn: filterFactory.equals,
     inputCount: 1,
     symbols: ['='],
@@ -84,7 +84,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     ranked: false,
     type: FilterTypes.numeric,
   },
-  [FilterOption.NOT_EQUALS]: {
+  [FilterOption.NOT_EQUALS_NUMERIC]: {
     fn: filterFactory.doesntEqual,
     inputCount: 1,
     symbols: ['≠'],
@@ -133,8 +133,12 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.NOT_BETWEEN]: {
-    fn: (attribute: Attribute, valueA: number, valueB: number): Filter => {
-      return filterFactory.exclude(filterFactory.between(attribute, valueA, valueB));
+    fn: (attribute: Attribute, valueA: number, valueB: number, guid?: string): Filter => {
+      return filterFactory.exclude(
+        filterFactory.between(attribute, valueA, valueB),
+        undefined,
+        guid,
+      );
     },
     inputCount: 2,
     symbols: ['≤', '≥'],
@@ -158,19 +162,19 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     ranked: true,
     type: FilterTypes.ranking,
   },
-  [FilterOption.IS]: {
+  [FilterOption.EQUALS_TEXT]: {
     fn: filterFactory.equals,
     inputCount: 1,
     symbols: [],
-    message: 'criteriaFilter.is',
+    message: 'criteriaFilter.equals',
     ranked: false,
     type: FilterTypes.text,
   },
-  [FilterOption.IS_NOT]: {
+  [FilterOption.NOT_EQUALS_TEXT]: {
     fn: filterFactory.doesntEqual,
     inputCount: 1,
     symbols: [],
-    message: 'criteriaFilter.isNot',
+    message: 'criteriaFilter.notEquals',
     ranked: false,
     type: FilterTypes.text,
   },

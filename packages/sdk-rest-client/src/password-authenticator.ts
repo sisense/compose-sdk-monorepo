@@ -2,6 +2,7 @@
 import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
+import { errorInterceptor } from './interceptors.js';
 
 export class PasswordAuthenticator extends BaseAuthenticator {
   private readonly url: string;
@@ -34,7 +35,7 @@ export class PasswordAuthenticator extends BaseAuthenticator {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: this.body,
-      });
+      }).catch(errorInterceptor);
 
       if (response.ok) {
         const json = await response.json();

@@ -67,7 +67,7 @@ describe('DimensionalQueryClient', () => {
           const expectedJaqlRequestBody: JaqlQueryPayload = {
             ...testSample.testJaqlData?.requestBody,
             queryGuid: expect.any(String) as string,
-            datasource: queryDescription.dataSource,
+            datasource: { title: queryDescription.dataSource, live: false },
             by: 'ComposeSDK',
           } as JaqlQueryPayload;
           const expectedQueryResultData: QueryResultData =
@@ -180,7 +180,7 @@ describe('DimensionalQueryClient', () => {
           const expectedJaqlRequestBody: JaqlQueryPayload = {
             ...testSample.testPivotJaqlData?.requestBody,
             queryGuid: expect.any(String) as string,
-            datasource: queryDescription.dataSource,
+            datasource: { title: queryDescription.dataSource, live: false },
             by: 'ComposeSDK',
           } as JaqlQueryPayload;
           const queryResultData = await queryClient.executePivotQuery(queryDescription)

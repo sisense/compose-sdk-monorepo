@@ -26,7 +26,7 @@ Service for working with Sisense Fusion widgets.
 
 ### getWidgetModel
 
-> **getWidgetModel**(`params`): `Promise`\< [`WidgetModel`](class.WidgetModel.md) \>
+> **getWidgetModel**(`params`): `Promise`\< [`WidgetModel`](interface.WidgetModel.md) \>
 
 Retrieves an existing widget model from the Sisense instance.
 
@@ -38,6 +38,6 @@ Retrieves an existing widget model from the Sisense instance.
 
 #### Returns
 
-`Promise`\< [`WidgetModel`](class.WidgetModel.md) \>
+`Promise`\< [`WidgetModel`](interface.WidgetModel.md) \>
 
 Widget model

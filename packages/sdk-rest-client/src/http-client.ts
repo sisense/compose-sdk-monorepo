@@ -1,6 +1,5 @@
 /// <reference lib="dom" />
 import { Authenticator } from './interfaces.js';
-import fetchIntercept from 'fetch-intercept';
 import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
 import { isSsoAuthenticator } from './sso-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';
@@ -26,11 +25,6 @@ export class HttpClient {
     this.url = url;
     this.auth = auth;
     this.env = env;
-
-    fetchIntercept.register({
-      response: getResponseInterceptor(auth),
-      responseError: errorInterceptor,
-    });
   }
 
   login() {
@@ -61,13 +55,16 @@ export class HttpClient {
           trc: this.env,
         });
 
-    const response = await fetch(fetchUrl, config);
+    const response = await fetch(fetchUrl, config)
+      .then(getResponseInterceptor(this.auth))
+      .catch(errorInterceptor);
     if (
       response.status === 204 || // No content
       response.status === 304 // Not modified
     ) {
       return;
     }
+
     return (
       requestConfig?.returnBlob
         ? response.blob()

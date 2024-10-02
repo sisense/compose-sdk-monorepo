@@ -55,6 +55,9 @@ module.exports = {
             '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
             'max-lines-per-function': ['warn', 400],
             'max-lines': ['warn', 1000],
+            'no-global-assign': 'error',
+            'no-extend-native': 'error',
+            'no-implicit-globals': 'error',
           },
         },
         {

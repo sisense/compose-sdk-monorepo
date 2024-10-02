@@ -41,6 +41,11 @@ const InnerHtml = styled.div`
   width: 100%;
 `;
 
+/**
+ * A widget that displays HTML content.
+ *
+ * @internal
+ */
 export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent({
   componentName: 'TextWidget',
 })((props) => {

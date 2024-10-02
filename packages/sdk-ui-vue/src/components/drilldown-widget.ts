@@ -117,7 +117,7 @@ export const DrilldownWidgetTs = defineComponent({
      *
      */
     drilldownDimensions: {
-      type: Array as PropType<DrilldownWidgetProps['drilldownDimensions']>,
+      type: Array as PropType<NonNullable<DrilldownWidgetProps['drilldownDimensions']>>,
       required: false,
       default: () => [],
     },

@@ -1,4 +1,11 @@
-import { Attribute, DataSource, Filter, isNumber, MembersFilter } from '@sisense/sdk-data';
+import {
+  Attribute,
+  convertDataSource,
+  DataSource,
+  Filter,
+  isNumber,
+  MembersFilter,
+} from '@sisense/sdk-data';
 import { FunctionComponent, useMemo } from 'react';
 import { Member, SelectedMember } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
@@ -91,7 +98,8 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   }
 
   const { data, error } = useExecuteQueryInternal({
-    dataSource,
+    // prioritize attribute dataSource for the use case of multi-source dashboard
+    dataSource: attribute.dataSource ? convertDataSource(attribute.dataSource) : dataSource,
     dimensions,
     filters: queryFilters,
   });

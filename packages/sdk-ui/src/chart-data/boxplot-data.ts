@@ -11,6 +11,7 @@ import {
   BoxplotChartData,
   BoxplotOutliersSeriesValueData,
   BoxplotSeriesValueData,
+  ChartData,
 } from './types.js';
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types.js';
 import { getOrderedXValues, sortDirection } from './cartesian-data.js';
@@ -107,3 +108,7 @@ export const boxplotData = (
     series,
   };
 };
+
+export function isBoxplotChartData(chartData: ChartData): chartData is BoxplotChartData {
+  return chartData.type === 'boxplot';
+}

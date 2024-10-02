@@ -1,5 +1,5 @@
 /* eslint-disable security/detect-object-injection */
-import { FunctionComponent } from 'react';
+import { CSSProperties, FunctionComponent } from 'react';
 import { BasicInput, RadioGroup } from '../common';
 import {
   FilterOptionType,
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { FilterTypes, Measure } from '@sisense/sdk-data';
 import { Dropdown } from '../common/dropdown';
 import { FilterVariant, isVertical } from '../common/filter-utils';
+import styled from '@emotion/styled';
 
 /**
  * Props for {@link CriteriaFilterMenu}
@@ -34,6 +35,8 @@ export interface CriteriaFilterMenuProps {
   measures?: Measure[];
 }
 
+const isValidNumericValue = (val: string) => !(isNaN(Number(val)) || val === '');
+
 /**
  * @internal
  */
@@ -41,6 +44,21 @@ const CriteriaFilterMenuSingle: FunctionComponent<CriteriaFilterMenuProps> = (pr
   const { filterType, defaultValues = [], onUpdate, disabled } = props;
   const filterInfo = CRITERIA_FILTER_MAP[filterType];
   const { t } = useTranslation();
+
+  const styleProps =
+    filterInfo.type === FilterTypes.text
+      ? {
+          containerStyle: {
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+          } as CSSProperties,
+          labelStyle: {
+            margin: '0 0 8px 10px',
+          } as CSSProperties,
+        }
+      : {};
+  const value = defaultValues?.[0]?.toString() ?? '';
+
   return (
     <BasicInput
       type={filterTypeToInputType(filterInfo.type)}
@@ -49,12 +67,19 @@ const CriteriaFilterMenuSingle: FunctionComponent<CriteriaFilterMenuProps> = (pr
           ? filterInfo.symbols[0]
           : `${translatedMsgNoVal(filterInfo.message, t)}`
       }
-      value={defaultValues?.[0]?.toString() ?? ''}
+      value={value}
       callback={(newVal: string) => {
-        onUpdate?.([newVal]);
+        onUpdate?.([
+          filterInfo.type === FilterTypes.numeric
+            ? isValidNumericValue(newVal)
+              ? Number(newVal)
+              : Number(value)
+            : newVal,
+        ]);
       }}
-      required={true}
+      required={filterInfo.type === FilterTypes.numeric}
       disabled={disabled}
+      {...styleProps}
     />
   );
 };
@@ -72,7 +97,14 @@ const CriteriaFilterMenuDouble: FunctionComponent<CriteriaFilterMenuProps> = (pr
         label={filterInfo.symbols[0]}
         value={(defaultValues?.[0] as string | number) ?? ''}
         callback={(newVal: string) => {
-          onUpdate?.([newVal, defaultValues?.[1]]);
+          onUpdate?.([
+            filterInfo.type === FilterTypes.numeric
+              ? isValidNumericValue(newVal)
+                ? Number(newVal)
+                : Number(defaultValues?.[0])
+              : newVal,
+            defaultValues?.[1],
+          ]);
         }}
         required={true}
         disabled={disabled}
@@ -82,7 +114,14 @@ const CriteriaFilterMenuDouble: FunctionComponent<CriteriaFilterMenuProps> = (pr
         label={filterInfo.symbols[1]}
         value={defaultValues?.[1]?.toString() ?? ''}
         callback={(newVal: string) => {
-          onUpdate?.([defaultValues?.[0], newVal]);
+          onUpdate?.([
+            defaultValues?.[0],
+            filterInfo.type === FilterTypes.numeric
+              ? isValidNumericValue(newVal)
+                ? Number(newVal)
+                : Number(defaultValues?.[1])
+              : newVal,
+          ]);
         }}
         required={true}
         disabled={disabled}
@@ -90,6 +129,30 @@ const CriteriaFilterMenuDouble: FunctionComponent<CriteriaFilterMenuProps> = (pr
     </>
   );
 };
+
+const RankedName = styled.div<{ backgroundColor: string }>`
+  padding: 7px;
+  border: 1px solid #e6e6e6;
+  position: relative;
+  margin-top: 15px;
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  z-index: 1;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-top: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+    border-radius: 0 5px 0 0;
+    background-color: ${({ backgroundColor }) => backgroundColor};
+    transform: rotate(-45deg);
+    top: -9px;
+    left: 12px;
+    z-index: 2;
+  }
+`;
 
 /**
  * @internal
@@ -106,6 +169,7 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
   const filterInfo = CRITERIA_FILTER_MAP[filterType];
   const selectedMeasure = defaultValues?.[1] as Measure;
   const { t } = useTranslation();
+  const { themeSettings } = useThemeContext();
 
   const radioGroup = () => {
     return (
@@ -156,24 +220,38 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
 
   const displayName = () => {
     return (
-      <div className={isVertical(arrangement) ? '' : 'csdk-self-center'}>{`${t(
-        'criteriaFilter.by',
-      )} ${selectedMeasure.name}`}</div>
+      <RankedName
+        backgroundColor={themeSettings.general.backgroundColor}
+        className={isVertical(arrangement) ? '' : 'csdk-self-center'}
+      >
+        {selectedMeasure.name}
+      </RankedName>
     );
   };
 
   return (
     <>
-      <BasicInput
-        type={filterTypeToInputType(filterInfo.type)}
-        label={filterInfo.symbols[0]}
-        value={defaultValues?.[0]?.toString() ?? ''}
-        callback={(newVal: string) => {
-          if (newVal) onUpdate?.([Number(newVal), defaultValues?.[1]]);
-        }}
-        required={true}
-        disabled={disabled}
-      />
+      <div className={'csdk-flex csdk-items-center'}>
+        <div className={'csdk-grow'}>
+          <BasicInput
+            type={filterTypeToInputType(filterInfo.type)}
+            label={filterInfo.symbols[0]}
+            value={defaultValues?.[0]?.toString() ?? ''}
+            callback={(newVal: string) => {
+              if (newVal) onUpdate?.([Number(newVal), defaultValues?.[1]]);
+            }}
+            required={true}
+            disabled={disabled}
+            containerStyle={{
+              justifyContent: 'space-between',
+            }}
+            inputStyle={{
+              width: 40,
+            }}
+          />
+        </div>
+        <div className={'csdk-ml-[10px]'}>{t('criteriaFilter.by')}:</div>
+      </div>
       {measures && measures.length > 0
         ? isVertical(arrangement)
           ? radioGroup()
@@ -200,7 +278,7 @@ export const CriteriaFilterMenu: FunctionComponent<CriteriaFilterMenuProps> = ({
   const filterInfo = CRITERIA_FILTER_MAP[filterType];
   return (
     <div
-      className={`csdk-w-max csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-flex csdk-gap-x-2 csdk-gap-y-0.5 ${
+      className={`csdk-w-100 csdk-p-[12px] csdk-text-[13px] csdk-flex csdk-gap-x-2 csdk-gap-y-0.5 ${
         isVertical(arrangement) ? 'csdk-flex-col' : 'csdk-flex-row'
       }`}
       style={{ color: `${themeSettings.typography.primaryTextColor}!important` }}

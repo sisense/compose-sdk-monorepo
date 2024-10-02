@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useContext, useMemo, useRef } from 'react';
 import { PluginsContext } from './plugins-context';
-import { WidgetPlugin } from './types';
+import { PluginComponent } from './types';
 
 /**
  * Plugin Provider component that allows registering and accessing plugins.
@@ -8,9 +8,9 @@ import { WidgetPlugin } from './types';
  * @internal
  */
 export const PluginsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const pluginMapRef = useRef(new Map<string, WidgetPlugin>());
+  const pluginMapRef = useRef(new Map<string, PluginComponent>());
 
-  const registerPlugin = useCallback((pluginType: string, plugin: WidgetPlugin) => {
+  const registerPlugin = useCallback((pluginType: string, plugin: PluginComponent) => {
     if (!pluginMapRef.current.has(pluginType)) {
       pluginMapRef.current.set(pluginType, plugin);
     }
@@ -29,4 +29,7 @@ export const PluginsProvider: React.FC<{ children: ReactNode }> = ({ children })
   );
 };
 
+/**
+ * @internal
+ */
 export const usePlugins = () => useContext(PluginsContext);

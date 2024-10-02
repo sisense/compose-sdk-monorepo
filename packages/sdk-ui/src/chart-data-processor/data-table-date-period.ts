@@ -25,14 +25,15 @@ import subDays from 'date-fns/subDays';
 import subQuarters from 'date-fns/subQuarters';
 import subWeeks from 'date-fns/subWeeks';
 import subYears from 'date-fns/subYears';
-import { enUS, de, fr, es, it, ja, ko, nl, pt, ru, tr, zhCN } from 'date-fns/locale';
+import { enUS, enGB, de, fr, es, it, ja, ko, nl, pt, ru, tr, zhCN, uk } from 'date-fns/locale';
 
 import range from 'lodash-es/range';
 
 export type SystemSettings = { language: string };
 
 export const getBaseDateFnsLocale = (systemSettings?: SystemSettings): Locale => {
-  switch (systemSettings?.language?.split('-')[0]) {
+  const [localePrimary, localeSecondary] = systemSettings?.language?.split('-') ?? [];
+  switch (localePrimary) {
     case 'de':
       return de;
     case 'fr':
@@ -55,6 +56,11 @@ export const getBaseDateFnsLocale = (systemSettings?: SystemSettings): Locale =>
       return tr;
     case 'zh':
       return zhCN;
+    case 'uk':
+      return uk;
+    case 'en':
+      if (localeSecondary.toLowerCase() === 'gb') return enGB;
+      return enUS;
     default:
       return enUS;
   }

@@ -1,10 +1,36 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { DashboardProps } from '@/dashboard/types';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
-import { useEffect, useMemo, useState } from 'react';
-import { WidgetModel } from '@/models';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
 import { ThemeProvider, useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import { WidgetProps } from '@/props';
+import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { MenuOptions } from '@/common/components/menu/types';
+import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
+import { MenuIds } from '@/common/components/menu/menu-ids';
+import { defaultMerger, useWithChangeDetection } from '@/common/hooks/use-with-change-detection';
+
+function combineCommonFiltersAndWidgetMenus(
+  commonFiltersMenuOptions: MenuOptions,
+  drilldownMenuOptions: MenuOptions,
+): MenuOptions {
+  const drilldownMenuItemsWithoutSelectionSection = drilldownMenuOptions.itemSections.filter(
+    ({ id }) => id !== MenuIds.DRILLDOWN_CHART_POINTS_SELECTION,
+  );
+  return {
+    ...commonFiltersMenuOptions,
+    itemSections: [
+      ...commonFiltersMenuOptions.itemSections,
+      ...drilldownMenuItemsWithoutSelectionSection,
+    ],
+  };
+}
+
+function isDrilldownMenu(options: MenuOptions): boolean {
+  return options.itemSections.some(({ id }) => id === MenuIds.DRILLDOWN_CHART_POINTS_SELECTION);
+}
 
 /**
  * React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
@@ -13,8 +39,10 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
  *
  * @example
  *
+ * Example of rendering a Fusion dashboard using the `useGetDashboardModel hook and the `Dashboard` component.
+ *
  * ```ts
- * import { Dashboard, useGetDashboardModel } from '@sisense/sdk-ui';
+ * import { Dashboard, useGetDashboardModel, dashboardModelTranslator } from '@sisense/sdk-ui';
 
 const CodeExample = () => {
   const { dashboard } = useGetDashboardModel({
@@ -26,17 +54,7 @@ const CodeExample = () => {
   return (
     <>
       {dashboard && (
-        <Dashboard
-        defaultDataSource={dashboard.dataSource}
-        title={dashboard.title}
-        layout={dashboard.layout}
-        styleOptions={dashboard.styleOptions}
-        widgets={dashboard.widgets}
-        filters={dashboard.filters}
-        widgetFilterOptions={
-          dashboard.widgetFilterOptions
-        }
-        />
+        <Dashboard {...dashboardModelTranslator.toDashboardProps(dashboard)} />
       )}
     </>
   );
@@ -44,45 +62,61 @@ const CodeExample = () => {
 
 export default CodeExample;
  * ```
- *
- * @group Fusion Embed
- * @fusionEmbed
- * @alpha
+ * @group Dashboarding
+ * @beta
  */
 export const Dashboard = asSisenseComponent({
   componentName: 'Dashboard',
 })(
   ({
-    title,
-    layout,
+    title = '',
+    layoutOptions,
+    config,
     widgets,
     filters,
     defaultDataSource,
-    widgetFilterOptions,
+    widgetsOptions,
     styleOptions,
   }: DashboardProps) => {
+    const { palette, ...restDashboardStyles } = styleOptions ?? {};
+
+    const [innerWidgets, setInnerWidgets] = useState<WidgetProps[]>(widgets);
+    const { themeSettings } = useThemeContext();
+    const { openMenu, onBeforeMenuOpen } = useCombinedMenu({
+      isTargetMenu: isDrilldownMenu,
+      combineMenus: combineCommonFiltersAndWidgetMenus,
+    });
     const {
       filters: commonFilters,
       setFilters,
-      connectToWidgetModel,
-    } = useCommonFilters({ initialFilters: filters });
-    const [innerWidgets, setInnerWidgets] = useState<WidgetModel[]>(widgets);
-    const { themeSettings } = useThemeContext();
-    const { palette, ...restDashboardStyles } = styleOptions;
+      connectToWidgetProps,
+    } = useCommonFilters({ initialFilters: filters, openMenu });
+
+    const widgetsWithChangeDetection = useWithChangeDetection({
+      target: innerWidgets,
+      onChange: useCallback((delta: Partial<WidgetProps>, index?: number) => {
+        setInnerWidgets((existingInnerWidgets) => {
+          const newInnerWidgets = cloneDeep(existingInnerWidgets);
+          newInnerWidgets[index!] = defaultMerger(existingInnerWidgets[index!], delta);
+          return newInnerWidgets;
+        });
+      }, []),
+    }) as WidgetProps[];
 
     const widgetsWithCommonFilters = useMemo(() => {
-      return innerWidgets.map((widget) =>
-        connectToWidgetModel(widget, widgetFilterOptions?.[widget.oid]),
+      return widgetsWithChangeDetection.map((widget) =>
+        connectToWidgetProps(widget, widgetsOptions?.[widget.id]?.filtersOptions),
       );
-    }, [innerWidgets, widgetFilterOptions, connectToWidgetModel]);
+    }, [widgetsWithChangeDetection, widgetsOptions, connectToWidgetProps]);
 
     useEffect(() => {
-      setFilters(filters);
+      if (filters) setFilters(filters);
     }, [filters, setFilters]);
 
     useEffect(() => {
       setInnerWidgets(widgets);
     }, [widgets]);
+
     return (
       <ThemeProvider
         theme={{
@@ -93,14 +127,17 @@ export const Dashboard = asSisenseComponent({
           },
         }}
       >
-        <DashboardContainer
-          title={title}
-          layout={layout}
-          widgets={widgetsWithCommonFilters}
-          defaultDataSource={defaultDataSource}
-          filters={commonFilters}
-          onFiltersChange={setFilters}
-        />
+        <MenuProvider onBeforeMenuOpen={onBeforeMenuOpen}>
+          <DashboardContainer
+            title={title}
+            layoutOptions={layoutOptions}
+            config={config}
+            widgets={widgetsWithCommonFilters}
+            defaultDataSource={defaultDataSource}
+            filters={commonFilters}
+            onFiltersChange={setFilters}
+          />
+        </MenuProvider>
       </ThemeProvider>
     );
   },

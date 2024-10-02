@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { WidgetModel } from './widget-model';
+import { widgetModelTranslator } from '.';
 import { WidgetDto, WidgetType } from '../../dashboard-widget/types';
 import { TranslatableError } from '../../translation/translatable-error';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
@@ -16,15 +16,15 @@ describe('WidgetModel', () => {
 
   describe('constructor', () => {
     it('should create a WidgetModel instance with valid input', () => {
-      const widget = new WidgetModel(mockWidgetDto);
+      const widget = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
 
-      expect(widget).toBeInstanceOf(WidgetModel);
       expect(widget.oid).toBe(mockWidgetDto.oid);
       expect(widget.title).toBe(mockWidgetDto.title);
       expect(widget.description).toBe(mockWidgetDto.desc || '');
-      expect(widget.dataSource).toBe(
-        mockWidgetDto.datasource.fullname || mockWidgetDto.datasource.title,
-      );
+      expect(widget.dataSource).toStrictEqual({
+        title: mockWidgetDto.datasource.fullname || mockWidgetDto.datasource.title,
+        type: 'elasticube',
+      });
       expect(widget.widgetType).toBe(mockWidgetDto.type);
       expect(widget.dataOptions).toMatchObject({
         max: expect.arrayContaining([expect.objectContaining({ column: expect.any(Object) })]),
@@ -43,7 +43,7 @@ describe('WidgetModel', () => {
       });
       expect(widget.filters).toHaveLength(0);
       expect(widget.drilldownOptions).toMatchObject({
-        drilldownDimensions: expect.arrayContaining([]),
+        drilldownPaths: expect.arrayContaining([]),
         drilldownSelections: expect.arrayContaining([]),
       });
     });
@@ -54,22 +54,22 @@ describe('WidgetModel', () => {
         type: 'unsupportedType' as WidgetType,
       };
 
-      const widgetPlugin = new WidgetModel(unsupportedWidgetDto);
+      const widgetPlugin = widgetModelTranslator.fromWidgetDto(unsupportedWidgetDto);
 
       expect(widgetPlugin.widgetType).equals('plugin');
       expect(widgetPlugin.pluginType).equals(unsupportedWidgetDto.type);
-      expect(widgetPlugin.pluginPanels).equals(unsupportedWidgetDto.metadata.panels);
-      expect(widgetPlugin.pluginStyles).equals(unsupportedWidgetDto.style);
+      expect(widgetPlugin.dataOptions).toBeDefined();
+      expect(widgetPlugin.styleOptions).equals(unsupportedWidgetDto.style);
     });
   });
 
   describe('getExecuteQueryParams', () => {
     it('returns execute query parameters for chart widget', () => {
-      const widget = new WidgetModel(mockWidgetDto);
+      const widget = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
       const executeQueryParams = widget.getExecuteQueryParams();
 
       expect(executeQueryParams).toMatchObject({
-        dataSource: 'Sample ECommerce',
+        dataSource: { title: 'Sample ECommerce', type: 'elasticube' },
         dimensions: [],
         measures: expect.arrayContaining([
           expect.objectContaining({
@@ -89,13 +89,13 @@ describe('WidgetModel', () => {
     });
 
     it('returns execute query parameters for table widget', () => {
-      const tableWidgetModel = new WidgetModel(
+      const tableWidgetModel = widgetModelTranslator.fromWidgetDto(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
       );
       const executeQueryParams = tableWidgetModel.getExecuteQueryParams();
 
       expect(executeQueryParams).toMatchObject({
-        dataSource: 'Sample Healthcare',
+        dataSource: { title: 'Sample Healthcare', type: 'elasticube' },
         dimensions: [expect.objectContaining({ name: 'DIAGNOSIS' })],
         measures: expect.arrayContaining([
           expect.objectContaining({
@@ -119,7 +119,7 @@ describe('WidgetModel', () => {
     });
 
     it('should throw an error for pivot widget', () => {
-      const pivotWidgetModel = new WidgetModel(
+      const pivotWidgetModel = widgetModelTranslator.fromWidgetDto(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
       );
 
@@ -129,15 +129,13 @@ describe('WidgetModel', () => {
 
   describe('getExecutePivotQueryParams', () => {
     it('returns execute query parameters for pivot widget', () => {
-      const pivotWidgetModel = new WidgetModel(
+      const pivotWidgetModel = widgetModelTranslator.fromWidgetDto(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
       );
       const executePivotQueryParams = pivotWidgetModel.getExecutePivotQueryParams();
 
-      console.log(executePivotQueryParams);
-
       expect(executePivotQueryParams).toMatchObject({
-        dataSource: 'Sample Healthcare',
+        dataSource: { title: 'Sample Healthcare', type: 'elasticube' },
         rows: [{ attribute: expect.objectContaining({ name: 'DIAGNOSIS' }) }],
         values: expect.arrayContaining([
           expect.objectContaining({
@@ -171,25 +169,25 @@ describe('WidgetModel', () => {
     });
 
     it('should throw an error for non-pivot widget', () => {
-      const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
+      const nonPivotWidgetModel = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
       expect(() => nonPivotWidgetModel.getExecutePivotQueryParams()).toThrow(TranslatableError);
     });
 
     describe('getChartProps', () => {
       it('should throw an error for pivot widget', () => {
-        const pivotWidgetModel = new WidgetModel(
+        const pivotWidgetModel = widgetModelTranslator.fromWidgetDto(
           sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
         );
         expect(() => pivotWidgetModel.getChartProps()).toThrow(TranslatableError);
       });
       it('should throw an error for text widget', () => {
-        const textWidgetModel = new WidgetModel(
+        const textWidgetModel = widgetModelTranslator.fromWidgetDto(
           dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
         );
         expect(() => textWidgetModel.getChartProps()).toThrow(TranslatableError);
       });
       it('should return chart props for chart widgets', () => {
-        const widget = new WidgetModel(mockWidgetDto);
+        const widget = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
         const chartProps = widget.getChartProps();
 
         expect(chartProps).toMatchObject({
@@ -220,7 +218,7 @@ describe('WidgetModel', () => {
               }),
             }),
           }),
-          dataSet: 'Sample ECommerce',
+          dataSet: { title: 'Sample ECommerce', type: 'elasticube' },
           filters: [],
         });
       });
@@ -229,7 +227,7 @@ describe('WidgetModel', () => {
         const tableWidgetDto = sampleHealthcareDashboard.widgets!.find(
           (widget) => widget.type === 'tablewidget',
         )!;
-        const tableWidget = new WidgetModel(tableWidgetDto);
+        const tableWidget = widgetModelTranslator.fromWidgetDto(tableWidgetDto);
         const chartProps = tableWidget.getChartProps();
 
         expect(chartProps).toMatchSnapshot();
@@ -238,11 +236,11 @@ describe('WidgetModel', () => {
 
     describe('getTableProps', () => {
       it('should throw an error for non-table widgets', () => {
-        const nonTableWidgetModel = new WidgetModel(mockWidgetDto);
+        const nonTableWidgetModel = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
         expect(() => nonTableWidgetModel.getTableProps()).toThrow(TranslatableError);
       });
       it('should return TableProps for table widgets', () => {
-        const tableWidgetModel = new WidgetModel(
+        const tableWidgetModel = widgetModelTranslator.fromWidgetDto(
           sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
         );
         const tableProps = tableWidgetModel.getTableProps();
@@ -272,7 +270,7 @@ describe('WidgetModel', () => {
             rows: { alternatingColor: { enabled: expect.any(Boolean) } },
             header: { color: { enabled: expect.any(Boolean) } },
           }),
-          dataSet: 'Sample Healthcare',
+          dataSet: { title: 'Sample Healthcare', type: 'elasticube' },
           filters: [
             {
               attribute: {
@@ -286,11 +284,11 @@ describe('WidgetModel', () => {
 
     describe('getPivotTableProps', () => {
       it('should throw an error for non-pivot widgets', () => {
-        const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
+        const nonPivotWidgetModel = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
         expect(() => nonPivotWidgetModel.getPivotTableProps()).toThrow(TranslatableError);
       });
       it('should return PivotTableProps for pivot widgets', () => {
-        const pivotWidgetModel = new WidgetModel(
+        const pivotWidgetModel = widgetModelTranslator.fromWidgetDto(
           sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
         );
         const pivotProps = pivotWidgetModel.getPivotTableProps();
@@ -323,7 +321,7 @@ describe('WidgetModel', () => {
             alternatingRowsColor: expect.any(Boolean),
             headersColor: expect.any(Boolean),
           }),
-          dataSet: 'Sample Healthcare',
+          dataSet: { title: 'Sample Healthcare', type: 'elasticube' },
           filters: [
             {
               attribute: {
@@ -338,7 +336,7 @@ describe('WidgetModel', () => {
 
     describe('getChartWidgetProps', () => {
       it('should return chart widget props correctly', () => {
-        const widget = new WidgetModel(mockWidgetDto);
+        const widget = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
         const chartWidgetProps = widget.getChartWidgetProps();
 
         expect(chartWidgetProps).toMatchObject({
@@ -374,19 +372,19 @@ describe('WidgetModel', () => {
             skin: 1,
             indicatorComponents: expect.any(Object),
           }),
-          dataSource: 'Sample ECommerce',
+          dataSource: { title: 'Sample ECommerce', type: 'elasticube' },
           filters: [],
           title: 'TOTAL BRANDS',
           description: '',
           drilldownOptions: {
-            drilldownDimensions: [],
+            drilldownPaths: [],
             drilldownSelections: [],
           },
         });
       });
 
       it('should throw an error for non-chart widgets', () => {
-        const tableWidgetModel = new WidgetModel(
+        const tableWidgetModel = widgetModelTranslator.fromWidgetDto(
           sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
         );
 
@@ -394,7 +392,7 @@ describe('WidgetModel', () => {
           tableWidgetModel.getChartWidgetProps();
         }).toThrow(TranslatableError);
 
-        const textWidgetModel = new WidgetModel(
+        const textWidgetModel = widgetModelTranslator.fromWidgetDto(
           dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
         );
 
@@ -407,7 +405,7 @@ describe('WidgetModel', () => {
 
   describe('getTableWidgetProps', () => {
     it('should return table widget props correctly for table widget', () => {
-      const tableWidgetModel = new WidgetModel(
+      const tableWidgetModel = widgetModelTranslator.fromWidgetDto(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'tablewidget')!,
       );
       const tableWidgetProps = tableWidgetModel.getTableWidgetProps();
@@ -437,7 +435,7 @@ describe('WidgetModel', () => {
           rows: { alternatingColor: { enabled: expect.any(Boolean) } },
           header: { color: { enabled: expect.any(Boolean) } },
         }),
-        dataSource: 'Sample Healthcare',
+        dataSource: { title: 'Sample Healthcare', type: 'elasticube' },
         filters: [
           {
             attribute: {
@@ -451,10 +449,10 @@ describe('WidgetModel', () => {
       });
     });
     it('should throw an error for non-table widgets', () => {
-      const nonTableWidgetModel = new WidgetModel(mockWidgetDto);
+      const nonTableWidgetModel = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
       expect(() => nonTableWidgetModel.getTableWidgetProps()).toThrow(TranslatableError);
 
-      const textWidgetModel = new WidgetModel(
+      const textWidgetModel = widgetModelTranslator.fromWidgetDto(
         dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
       );
       expect(() => textWidgetModel.getTableWidgetProps()).toThrow(TranslatableError);
@@ -463,16 +461,16 @@ describe('WidgetModel', () => {
 
   describe('getPivotTableWidgetProps', () => {
     it('should throw an error for non-pivot widgets', () => {
-      const nonPivotWidgetModel = new WidgetModel(mockWidgetDto);
+      const nonPivotWidgetModel = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
       expect(() => nonPivotWidgetModel.getPivotTableWidgetProps()).toThrow(TranslatableError);
 
-      const textWidgetModel = new WidgetModel(
+      const textWidgetModel = widgetModelTranslator.fromWidgetDto(
         dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
       );
       expect(() => textWidgetModel.getPivotTableWidgetProps()).toThrow(TranslatableError);
     });
     it('should return PivotTableWidgetProps for pivot widgets', () => {
-      const pivotWidgetModel = new WidgetModel(
+      const pivotWidgetModel = widgetModelTranslator.fromWidgetDto(
         sampleHealthcareDashboard.widgets!.find((widget) => widget.type === 'pivot')!,
       );
       const pivotProps = pivotWidgetModel.getPivotTableWidgetProps();
@@ -505,7 +503,7 @@ describe('WidgetModel', () => {
           alternatingRowsColor: expect.any(Boolean),
           headersColor: expect.any(Boolean),
         }),
-        dataSource: 'Sample Healthcare',
+        dataSource: { title: 'Sample Healthcare', type: 'elasticube' },
         filters: [
           {
             attribute: {
@@ -522,7 +520,7 @@ describe('WidgetModel', () => {
 
   describe('getTextWidgetProps', () => {
     it('should return text widget props correctly for text widget', () => {
-      const textWidgetModel = new WidgetModel(
+      const textWidgetModel = widgetModelTranslator.fromWidgetDto(
         dashboardWithTextWidget.widgets!.find((widget) => widget.type === 'richtexteditor')!,
       );
       const textWidgetProps = textWidgetModel.getTextWidgetProps();
@@ -537,7 +535,7 @@ describe('WidgetModel', () => {
       });
     });
     it('should throw an error for non-text widgets', () => {
-      const nonTextWidgetModel = new WidgetModel(mockWidgetDto);
+      const nonTextWidgetModel = widgetModelTranslator.fromWidgetDto(mockWidgetDto);
       expect(() => nonTextWidgetModel.getTextWidgetProps()).toThrow(TranslatableError);
     });
   });

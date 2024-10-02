@@ -8,15 +8,21 @@ export type {
 } from '@/common-filters/types';
 
 /**
- * Layout of a dashboard.
+ * Column layout of dashboard widgets
  */
-export interface Layout {
+export interface WidgetsPanelColumnLayout {
   columns: {
     widthPercentage: number;
     rows: {
       cells: {
         widthPercentage: number;
-        height: number | string;
+        /**
+         * @privateRemarks
+         * This value appears to be overwritten by the widget's height property.
+         * Marking as optional and internal for now.
+         * @internal
+         */
+        height?: number | string;
         widgetId: string;
       }[];
     }[];
@@ -24,9 +30,17 @@ export interface Layout {
 }
 
 /**
- * Options for how common filters defined at the dashboard level should be applied to widgets.
+ * Layout of dashboard widgets panel, which is a union of different layout algorithms
  */
-export type WidgetFilterOptions = Record<string, CommonFiltersOptions>;
+export type WidgetsPanelLayout = WidgetsPanelColumnLayout;
+
+export type WidgetId = string;
+/**
+ * Options for widgets in a dashboard
+ *
+ * For example, how common filters defined at the dashboard level should be applied to widgets.
+ */
+export type WidgetsOptions = Record<WidgetId, { filtersOptions?: CommonFiltersOptions }>;
 
 /**
  * Style options for the dashboard.

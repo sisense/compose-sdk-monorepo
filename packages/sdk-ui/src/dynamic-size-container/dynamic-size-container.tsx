@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import isEqual from 'lodash-es/isEqual';
 
 export type ContainerSize = {
@@ -83,6 +83,7 @@ export const DynamicSizeContainer = ({
         prevSize?.width === 0 && containerElementSize.width === defaultSize.width;
       const isDefaultHeightApplied =
         prevSize?.height === 0 && containerElementSize.height === defaultSize.height;
+
       // Prevents "containerSize" from being set to "defaultSize". If the parent container size cannot be inherited, "containerSize" will remain "0".
       const newContainerSize = {
         width: isDefaultWidthApplied ? prevSize.width : containerElementSize.width,
@@ -90,12 +91,11 @@ export const DynamicSizeContainer = ({
       };
 
       if (!isEqual(prevSize, newContainerSize)) {
-        onSizeChange?.(calculateContentSize(newContainerSize, size, defaultSize));
         return newContainerSize;
       }
       return prevSize;
     });
-  }, [containerRef, size, defaultSize, onSizeChange, setContainerSize]);
+  }, [containerRef, defaultSize]);
 
   useLayoutEffect(() => {
     updateContainerSize();
@@ -107,12 +107,24 @@ export const DynamicSizeContainer = ({
     return () => window.removeEventListener('resize', updateContainerSize);
   }, [updateContainerSize]);
 
+  const contentSize = useMemo(
+    () => calculateContentSize(containerSize, size, defaultSize),
+    [containerSize, defaultSize, size],
+  );
+
+  // call `onSizeChange` callback after rendering this component
+  const isContainerSizeDefined = !!containerSize;
+  useEffect(() => {
+    if (isContainerSizeDefined && onSizeChange) {
+      onSizeChange(contentSize);
+    }
+  }, [contentSize, isContainerSizeDefined, onSizeChange]);
+
   const containerStyle: React.CSSProperties = {
     width: size?.width && !useContentSize?.width ? `${size.width}px` : '100%',
     height: size?.height && !useContentSize?.height ? `${size.height}px` : '100%',
   };
 
-  const contentSize = calculateContentSize(containerSize, size, defaultSize);
   const shouldFitContainerWidth = containerSize?.width || containerSize?.width === undefined;
   const shouldFitContainerHeight = containerSize?.height || containerSize?.width === undefined;
   const contentStyle: React.CSSProperties = {

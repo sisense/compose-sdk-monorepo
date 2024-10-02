@@ -4,7 +4,7 @@ title: DashboardWidget
 
 # Class DashboardWidget <Badge type="fusionEmbed" text="Fusion Embed" />
 
-The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../chart-utilities/class.ChartWidget.md) component,
+The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../dashboarding/class.ChartWidget.md) component,
 used to render a widget created in the Sisense instance.
 
 **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.

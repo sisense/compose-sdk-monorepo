@@ -22,7 +22,9 @@ export { DrilldownWidget } from './widgets/drilldown-widget';
 export { processDrilldownSelections } from './widgets/common/use-drilldown';
 export { ChartWidget } from './widgets/chart-widget';
 export { TableWidget } from './widgets/table-widget';
-export { ContextMenu } from './widgets/common/context-menu';
+export { PivotTableWidget } from './widgets/pivot-table-widget';
+export { TextWidget } from './widgets/text-widget';
+export { ContextMenu } from './common/components/menu/context-menu/context-menu';
 export { DrilldownBreadcrumbs } from './widgets/common/drilldown-breadcrumbs';
 export * from './line-chart';
 export * from './column-chart';
@@ -45,6 +47,11 @@ export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
 export * from './plugins-provider/custom-plugins-provider';
 export * from './plugins-provider/types';
+export { usePlugins } from './plugins-provider/plugins-provider';
+export {
+  extractDimensionsAndMeasures,
+  useExecutePluginQuery,
+} from './plugins-provider/use-execute-plugin-query';
 export { getThemeSettingsByOid } from './themes/theme-loader';
 export { getDefaultThemeSettings } from './theme-provider/default-theme-settings';
 export {
@@ -56,6 +63,8 @@ export {
   getWidgetModel,
   translateToDashboardResponse,
   translateToDashboardsResponse,
+  useGetHierarchyModels,
+  getHierarchyModels,
   type DashboardModel,
   type GetDashboardModelParams,
   type GetDashboardModelsParams,
@@ -76,12 +85,38 @@ export {
   type GetWidgetModelParams,
   type GetDashboardModelOptions,
   type GetDashboardModelsOptions,
-  type Layout,
-  type WidgetFilterOptions,
+  type WidgetsPanelColumnLayout as WidgetsPanelColumnLayout,
+  type WidgetsPanelLayout as WidgetsPanelLayout,
+  type WidgetId,
+  type WidgetsOptions,
   type CommonFiltersOptions,
   type CommonFiltersApplyMode,
   type FiltersIgnoringRules,
+  type HierarchyModel,
+  type Hierarchy,
+  type HierarchyId,
+  type GetHierarchiesParams,
+  type HierarchyModelsState,
+  type HierarchyModelsLoadingState,
+  type HierarchyModelsErrorState,
+  type HierarchyModelsSuccessState,
 } from './models';
+
+/**
+ * Utility functions to translate between widget abstractions of models and UI props.
+ *
+ * @group Fusion Embed
+ * @fusionEmbed
+ */
+export * as widgetModelTranslator from './models/widget/widget-model-translator';
+/**
+ * Utility functions to translate between dashboard abstractions of models and UI props.
+ *
+ * @group Fusion Embed
+ * @fusionEmbed
+ */
+export * as dashboardModelTranslator from './models/dashboard/dashboard-model-translator';
+
 export type { AutoZoomNavigatorScrollerLocation } from './dashboard-widget/types';
 export { boxWhiskerProcessResult } from './boxplot-utils';
 export { queryStateReducer } from './query-execution/query-state-reducer';

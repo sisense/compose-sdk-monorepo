@@ -39,9 +39,9 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+          class="csdk-p-[12px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-flex csdk-flex-wrap csdk-gap-x-1"
         >
-          criteriaFilter.greaterThan
+          criteriaFilter.displayModePrefix criteriaFilter.greaterThan
         </div>
       </main>
       <footer
@@ -116,9 +116,9 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+          class="csdk-p-[12px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-flex csdk-flex-wrap csdk-gap-x-1"
         >
-          criteriaFilter.top
+          criteriaFilter.displayModePrefix criteriaFilter.top
         </div>
       </main>
       <footer
@@ -193,9 +193,9 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for TextFilter 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+          class="csdk-p-[12px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-flex csdk-flex-wrap csdk-gap-x-1"
         >
-          criteriaFilter.notStartsWith
+          criteriaFilter.displayModePrefix criteriaFilter.notStartsWith
         </div>
       </main>
       <footer
@@ -480,9 +480,9 @@ exports[`FiltersPanelTile > renders locked CriteriaFilterTile 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-p-[4px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
+          class="csdk-p-[12px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-flex csdk-flex-wrap csdk-gap-x-1"
         >
-          criteriaFilter.greaterThan
+          criteriaFilter.displayModePrefix criteriaFilter.greaterThan
         </div>
         <div
           style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"

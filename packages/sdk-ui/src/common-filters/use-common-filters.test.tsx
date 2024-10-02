@@ -9,11 +9,11 @@ import {
   DataPointEventHandler,
   DataPointsEventHandler,
   RenderToolbarHandler,
-  WidgetModel,
+  ChartWidgetProps,
+  WidgetProps,
 } from '..';
-import { Mock } from 'vitest';
-
-type MockedFn = Mock<any, any>;
+import { isChartWidgetProps, isTextWidgetProps } from '@/dashboard-widget/utils';
+import { MenuOptions } from '@/common/components/menu/types';
 
 describe('useCommonFilters', () => {
   it('should initialize with initial filters', () => {
@@ -59,11 +59,37 @@ describe('useCommonFilters', () => {
     });
   });
 
-  describe('connectToWidgetModel()', () => {
-    let widgetModelMock: WidgetModel;
+  /**
+   * Helper function to get property from widget props
+   */
+  const getProperty = (widget: WidgetProps, key: keyof WidgetProps | keyof ChartWidgetProps) => {
+    return isTextWidgetProps(widget) ? (key === 'dataOptions' ? {} : []) : widget[key];
+  };
+
+  /**
+   * Helper function to get data point related callback from chart widget props
+   */
+  const getChartDataPointHandler = (
+    widget: WidgetProps,
+    key: 'onDataPointClick' | 'onDataPointsSelected' | 'onRenderToolbar',
+  ) => {
+    return isChartWidgetProps(widget) ? widget[key] : undefined;
+  };
+
+  /**
+   * Helper function to render toolbar callback from chart widget props
+   */
+  const getRenderToolbarHandler = (widget: WidgetProps) => {
+    return isChartWidgetProps(widget) ? widget.styleOptions?.header?.renderToolbar : undefined;
+  };
+
+  describe('connectToWidgetProps()', () => {
+    let widgetPropsMock: WidgetProps;
     beforeEach(() => {
-      widgetModelMock = {
-        widgetType: 'chart/column',
+      widgetPropsMock = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
         dataOptions: {
           category: [DM.Commerce.AgeRange, DM.Commerce.Gender],
           value: [],
@@ -71,77 +97,85 @@ describe('useCommonFilters', () => {
         } as CartesianChartDataOptions,
         filters: [],
         highlights: [],
-        registerComponentDataPointClickHandler: vi.fn(),
-        registerComponentDataPointsSelectedHandler: vi.fn(),
-        registerComponentRenderToolbarHandler: vi.fn(),
-      } as unknown as WidgetModel;
+      };
     });
 
-    it('should connect common filters as highlights to widget model by default', () => {
+    it('should connect common filters as highlights to widget props by default', () => {
       const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'])];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock);
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock);
 
-      expect(connectedWidget.highlights).toEqual(initialFilters);
-      expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(initialFilters);
+      expect(getProperty(connectedWidget, 'filters')).toEqual(
+        getProperty(widgetPropsMock, 'filters'),
+      );
     });
 
     it("should ignore 'Include all' filters as highlights", () => {
-      const widgetModelWithTwoCategories = {
-        ...widgetModelMock,
+      const widgetPropsWithTwoCategories = {
+        ...widgetPropsMock,
         dataOptions: {
-          ...widgetModelMock.dataOptions,
+          ...getProperty(widgetPropsMock, 'dataOptions'),
           category: [DM.Commerce.AgeRange, DM.Commerce.Gender],
         },
-      } as unknown as WidgetModel;
+      };
       const emptyIncludeAllFilter = filterFactory.members(DM.Commerce.Gender, []);
       const meaningfulFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18']);
       const { result } = renderHook(() =>
         useCommonFilters({ initialFilters: [emptyIncludeAllFilter, meaningfulFilter] }),
       );
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelWithTwoCategories);
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsWithTwoCategories);
 
-      expect(connectedWidget.highlights).toEqual([meaningfulFilter]);
-      expect(connectedWidget.filters).toEqual([]);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual([meaningfulFilter]);
+      expect(getProperty(connectedWidget, 'filters')).toEqual([]);
     });
 
-    it('should connect common filters as filters to table widget model by default', () => {
+    it('should connect common filters as filters to table widget props by default', () => {
       const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'])];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel({
-        ...widgetModelMock,
-        widgetType: 'tablewidget',
+      const connectedWidget = result.current.connectToWidgetProps({
+        ...widgetPropsMock,
+        widgetType: 'chart',
+        chartType: 'table',
         dataOptions: {
           columns: [DM.Commerce.AgeRange],
         },
-      } as unknown as WidgetModel);
+      } as unknown as WidgetProps);
 
-      expect(connectedWidget.highlights).toEqual(widgetModelMock.highlights);
-      expect(connectedWidget.filters).toEqual(initialFilters);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(
+        getProperty(widgetPropsMock, 'highlights'),
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual(initialFilters);
     });
 
-    it('should connect common filters as filters to widget model', () => {
+    it('should connect common filters as filters to widget props', () => {
       const initialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['0-18'])];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         applyMode: 'filter',
       });
 
-      expect(connectedWidget.filters).toEqual(initialFilters);
-      expect(connectedWidget.highlights).toEqual(widgetModelMock.highlights);
+      expect(getProperty(connectedWidget, 'filters')).toEqual(initialFilters);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(
+        getProperty(widgetPropsMock, 'highlights'),
+      );
     });
 
-    it('should ingore connected filter by id', () => {
+    it('should ignore connected filter by id', () => {
       const initialFilters = [
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         ignoreFilters: { ids: ['123'] },
       });
 
-      expect(connectedWidget.highlights).toEqual(widgetModelMock.highlights);
-      expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(
+        getProperty(widgetPropsMock, 'highlights'),
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual(
+        getProperty(widgetPropsMock, 'filters'),
+      );
     });
 
     it('should ignore all connected filters', () => {
@@ -149,12 +183,16 @@ describe('useCommonFilters', () => {
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         ignoreFilters: { all: true },
       });
 
-      expect(connectedWidget.highlights).toEqual(widgetModelMock.highlights);
-      expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(
+        getProperty(widgetPropsMock, 'highlights'),
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual(
+        getProperty(widgetPropsMock, 'filters'),
+      );
     });
 
     it('should select new filter via connected onDataPointClick handler', () => {
@@ -162,13 +200,14 @@ describe('useCommonFilters', () => {
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      let connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      const onDataPointClickHandler: DataPointEventHandler = (
-        connectedWidget.registerComponentDataPointClickHandler as MockedFn
-      ).mock.calls[0][0];
+      const onDataPointClickHandler: DataPointEventHandler = getChartDataPointHandler(
+        connectedWidget,
+        'onDataPointClick',
+      );
 
       expect(onDataPointClickHandler).toBeDefined();
 
@@ -189,27 +228,38 @@ describe('useCommonFilters', () => {
         );
       });
       // need to reconnect widget to get the latest changes
-      connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      expect((connectedWidget.highlights[0] as MembersFilter).members).toEqual(['65+']);
-      expect((connectedWidget.highlights[0] as MembersFilter).guid).toEqual(initialFilters[0].guid);
-      expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
+      expect((getProperty(connectedWidget, 'highlights')?.[0] as MembersFilter).members).toEqual([
+        '65+',
+      ]);
+      expect((getProperty(connectedWidget, 'highlights')?.[0] as MembersFilter).guid).toEqual(
+        initialFilters[0].guid,
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual(
+        getProperty(widgetPropsMock, 'filters'),
+      );
     });
 
     it('should select new filter via connected onDataPointsSelected handler', () => {
       const initialFilters = [
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
       ];
-      const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+
+      // openMenu mock that automatically makes the selections
+      const openMenu = (options: MenuOptions) => options.itemSections[1].items?.[0].onClick?.();
+
+      const { result } = renderHook(() => useCommonFilters({ initialFilters, openMenu }));
+      let connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      const onDataPointsSelectedHandler: DataPointsEventHandler = (
-        connectedWidget.registerComponentDataPointsSelectedHandler as MockedFn
-      ).mock.calls[0][0];
+      const onDataPointsSelectedHandler: DataPointsEventHandler = getChartDataPointHandler(
+        connectedWidget,
+        'onDataPointsSelected',
+      );
 
       expect(onDataPointsSelectedHandler).toBeDefined();
 
@@ -223,6 +273,7 @@ describe('useCommonFilters', () => {
                     id: 'category.0',
                     attribute: DM.Commerce.AgeRange,
                     value: '19-24',
+                    displayValue: '19-24',
                   },
                 ],
               },
@@ -234,6 +285,7 @@ describe('useCommonFilters', () => {
                     id: 'category.0',
                     attribute: DM.Commerce.AgeRange,
                     value: '65+',
+                    displayValue: '65+',
                   },
                 ],
               },
@@ -242,29 +294,87 @@ describe('useCommonFilters', () => {
           {} as PointerEvent,
         );
       });
-      connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      expect((connectedWidget.highlights[0] as MembersFilter).members).toEqual(['19-24', '65+']);
-      expect((connectedWidget.highlights[0] as MembersFilter).guid).toEqual(initialFilters[0].guid);
-      expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
+      expect((getProperty(connectedWidget, 'highlights')?.[0] as MembersFilter).members).toEqual([
+        '19-24',
+        '65+',
+      ]);
+      expect((getProperty(connectedWidget, 'highlights')?.[0] as MembersFilter).guid).toEqual(
+        initialFilters[0].guid,
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual(
+        getProperty(widgetPropsMock, 'filters'),
+      );
     });
 
-    it('should clear selected filters via connected onRenderTooltip handler', async () => {
+    it('should select new filter via connected onDataPointContextMenu handler', () => {
+      const initialFilters = [
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
+      ];
+      // openMenu mock that automatically makes the selections
+      const openMenu = (options: MenuOptions) => options.itemSections[1].items?.[0].onClick?.();
+
+      const { result } = renderHook(() => useCommonFilters({ initialFilters, openMenu }));
+      let connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
+        shouldAffectFilters: true,
+      });
+
+      const onDataPointContextMenuHandler: DataPointEventHandler = getProperty(
+        connectedWidget,
+        'onDataPointContextMenu',
+      );
+
+      expect(onDataPointContextMenuHandler).toBeDefined();
+
+      act(() => {
+        onDataPointContextMenuHandler?.(
+          {
+            entries: {
+              category: [
+                {
+                  id: 'category.0',
+                  attribute: DM.Commerce.AgeRange,
+                  value: '65+',
+                  displayValue: '65+',
+                },
+              ],
+            },
+          } as DataPoint,
+          {} as PointerEvent,
+        );
+      });
+      connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
+        shouldAffectFilters: true,
+      });
+
+      expect((getProperty(connectedWidget, 'highlights')[0] as MembersFilter).members).toEqual([
+        '65+',
+      ]);
+      expect((getProperty(connectedWidget, 'highlights')[0] as MembersFilter).guid).toEqual(
+        initialFilters[0].guid,
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual(
+        getProperty(connectedWidget, 'filters'),
+      );
+    });
+
+    it('should clear selected filters via connected onRenderToolbar handler', async () => {
       const initialFilters = [
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      let connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      const onRenderToolbar: RenderToolbarHandler = (
-        connectedWidget.registerComponentRenderToolbarHandler as MockedFn
-      ).mock.calls[0][0];
+      const onRenderToolbar: RenderToolbarHandler | undefined =
+        getRenderToolbarHandler(connectedWidget);
 
       expect(onRenderToolbar).toBeDefined();
+      if (!onRenderToolbar) return;
 
       render(onRenderToolbar(() => {}, null as unknown as JSX.Element));
 
@@ -272,12 +382,14 @@ describe('useCommonFilters', () => {
 
       fireEvent.click(screen.getByText('commonFilter.clearSelectionButton'));
 
-      connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      expect(connectedWidget.highlights).toEqual([]);
-      expect(connectedWidget.filters).toEqual(widgetModelMock.filters);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual([]);
+      expect(getProperty(connectedWidget, 'filters')).toEqual(
+        getProperty(widgetPropsMock, 'filters'),
+      );
     });
 
     it('should connect background filter as slice filters by default', () => {
@@ -290,10 +402,10 @@ describe('useCommonFilters', () => {
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', [], backgroundFilter),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock);
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock);
 
-      expect(connectedWidget.highlights).toEqual(initialFilters);
-      expect(connectedWidget.filters).toEqual([backgroundFilter]);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(initialFilters);
+      expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
     });
 
     it('should connect filter without separate background filter if "filter" mode selected', () => {
@@ -306,12 +418,14 @@ describe('useCommonFilters', () => {
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', [], backgroundFilter),
       ];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         applyMode: 'filter',
       });
 
-      expect(connectedWidget.highlights).toEqual(widgetModelMock.highlights);
-      expect(connectedWidget.filters).toEqual(initialFilters);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(
+        getProperty(widgetPropsMock, 'highlights'),
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual(initialFilters);
     });
 
     it('should connect background filter even if containing filter is disabled', () => {
@@ -331,10 +445,12 @@ describe('useCommonFilters', () => {
       filter.disabled = true;
       const initialFilters = [filter];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock);
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock);
 
-      expect(connectedWidget.highlights).toEqual(widgetModelMock.highlights);
-      expect(connectedWidget.filters).toEqual([backgroundFilter]);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(
+        getProperty(widgetPropsMock, 'highlights'),
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
     });
 
     it('should connect background filter even if containing filter is ignored by "ignoreFilters" rules', () => {
@@ -353,12 +469,14 @@ describe('useCommonFilters', () => {
       );
       const initialFilters = [filter];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      const connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         ignoreFilters: { all: true },
       });
 
-      expect(connectedWidget.highlights).toEqual(widgetModelMock.highlights);
-      expect(connectedWidget.filters).toEqual([backgroundFilter]);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual(
+        getProperty(widgetPropsMock, 'highlights'),
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
     });
 
     it('should select new filter with keeping background filter via connected onDataPointClick handler', () => {
@@ -377,13 +495,14 @@ describe('useCommonFilters', () => {
       );
       const initialFilters = [filter];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      let connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      const onDataPointClickHandler: DataPointEventHandler = (
-        connectedWidget.registerComponentDataPointClickHandler as MockedFn
-      ).mock.calls[0][0];
+      const onDataPointClickHandler: DataPointEventHandler = getChartDataPointHandler(
+        connectedWidget,
+        'onDataPointClick',
+      );
 
       expect(onDataPointClickHandler).toBeDefined();
 
@@ -404,16 +523,20 @@ describe('useCommonFilters', () => {
         );
       });
       // need to reconnect widget to get the latest changes
-      connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      expect((connectedWidget.highlights[0] as MembersFilter).members).toEqual(['19-24']);
-      expect((connectedWidget.highlights[0] as MembersFilter).guid).toEqual(initialFilters[0].guid);
-      expect(connectedWidget.filters).toEqual([backgroundFilter]);
+      expect((getProperty(connectedWidget, 'highlights')?.[0] as MembersFilter).members).toEqual([
+        '19-24',
+      ]);
+      expect((getProperty(connectedWidget, 'highlights')?.[0] as MembersFilter).guid).toEqual(
+        initialFilters[0].guid,
+      );
+      expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
     });
 
-    it('should clear selected filters with keeping background filters via connected onRenderTooltip handler', async () => {
+    it('should clear selected filters with keeping background filters via connected onRenderToolbar handler', async () => {
       const backgroundFilter = filterFactory.members(DM.Commerce.AgeRange, [
         '0-18',
         '19-24',
@@ -429,15 +552,15 @@ describe('useCommonFilters', () => {
       );
       const initialFilters = [filter];
       const { result } = renderHook(() => useCommonFilters({ initialFilters }));
-      let connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      let connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      const onRenderToolbar: RenderToolbarHandler = (
-        connectedWidget.registerComponentRenderToolbarHandler as MockedFn
-      ).mock.calls[0][0];
+      const onRenderToolbar: RenderToolbarHandler | undefined =
+        getRenderToolbarHandler(connectedWidget);
 
       expect(onRenderToolbar).toBeDefined();
+      if (!onRenderToolbar) return;
 
       render(onRenderToolbar(() => {}, null as unknown as JSX.Element));
 
@@ -445,12 +568,12 @@ describe('useCommonFilters', () => {
 
       fireEvent.click(screen.getByText('commonFilter.clearSelectionButton'));
 
-      connectedWidget = result.current.connectToWidgetModel(widgetModelMock, {
+      connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
         shouldAffectFilters: true,
       });
 
-      expect(connectedWidget.highlights).toEqual([]);
-      expect(connectedWidget.filters).toEqual([backgroundFilter]);
+      expect(getProperty(connectedWidget, 'highlights')).toEqual([]);
+      expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
     });
   });
 });

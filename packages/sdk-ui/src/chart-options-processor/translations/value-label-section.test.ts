@@ -155,4 +155,14 @@ describe('getPolarValueLabelSettings()', () => {
       rotation: -90,
     });
   });
+
+  it('should return enabled=false when `valueLabel` is disabled', () => {
+    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+      { enabled: false },
+      'column',
+    );
+    expect(valueLabelSettings).contain({
+      enabled: false,
+    });
+  });
 });

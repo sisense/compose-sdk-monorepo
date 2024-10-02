@@ -27,6 +27,7 @@ export const addQueryParamsToUrl = (url: string, params: { [key: string]: string
 
 /**
  * Checks if API token or WAT token is pending (e.g., being generated)
+ *
  * @param token - API token
  * @param wat - WAT token
  * @returns true if the token is pending

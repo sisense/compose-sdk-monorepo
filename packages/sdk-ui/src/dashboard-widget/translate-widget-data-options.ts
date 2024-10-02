@@ -15,6 +15,7 @@ import {
   Attribute,
   ForecastFormulaOptions,
   TrendFormulaOptions,
+  JaqlDataSource,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -49,7 +50,7 @@ import {
   getSortType,
   getRootPanelItem,
   isTableWidget,
-  isPivotWidget,
+  isPivotTableWidget,
 } from './utils';
 import {
   AreamapChartDataOptions,
@@ -65,6 +66,8 @@ import camelCase from 'lodash-es/camelCase';
 
 export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem['format']) {
   const isFormulaJaql = 'formula' in jaql;
+
+  const dataSource = 'datasource' in jaql ? jaql.datasource : undefined;
 
   let sort;
   if (jaql.sort) {
@@ -105,7 +108,7 @@ export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem[
         undefined,
         sort,
       )
-    : new DimensionalAttribute(jaql.title, jaql.dim, attributeType, undefined, sort);
+    : new DimensionalAttribute(jaql.title, jaql.dim, attributeType, undefined, sort, dataSource);
 
   if (hasAggregation) {
     return new DimensionalBaseMeasure(
@@ -587,6 +590,49 @@ function extractAreamapChartDataOptions(
   };
 }
 
+/**
+ * Recursive helper function for attachDataSourceToPanels
+ */
+function attachDataSourceToPanelItem(item: PanelItem, dataSource: JaqlDataSource): PanelItem {
+  const updatedItem =
+    'dim' in item.jaql
+      ? {
+          ...item,
+          jaql: {
+            ...item.jaql,
+            datasource: dataSource,
+          },
+        }
+      : item;
+
+  const updatedParent = item.parent
+    ? attachDataSourceToPanelItem(item.parent, dataSource)
+    : undefined;
+
+  const updatedThrough = item.through
+    ? attachDataSourceToPanelItem(item.through, dataSource)
+    : undefined;
+
+  return {
+    ...updatedItem,
+    parent: updatedParent,
+    through: updatedThrough,
+  };
+}
+
+/**
+ * Attach a data source to all dimensions in the panels.
+ * This is to support multi-source dashboards.
+ */
+export function attachDataSourceToPanels(panels: Panel[], dataSource: JaqlDataSource): Panel[] {
+  return panels.map((panel) => {
+    return {
+      ...panel,
+      items: panel.items.map((item) => attachDataSourceToPanelItem(item, dataSource)),
+    };
+  });
+}
+
 export function extractDataOptions(
   widgetType: WidgetType,
   panels: Panel[],
@@ -608,7 +654,7 @@ export function extractDataOptions(
   if (isTableWidget(widgetType)) {
     return extractTableChartDataOptions(panels, customPaletteColors);
   }
-  if (isPivotWidget(widgetType)) {
+  if (isPivotTableWidget(widgetType)) {
     return extractPivotTableChartDataOptions(
       panels,
       style as PivotWidgetStyle,

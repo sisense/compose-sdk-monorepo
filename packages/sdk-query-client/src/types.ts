@@ -10,6 +10,7 @@ import {
   PivotQueryResultData,
   PivotGrandTotals,
   FilterRelationsJaql,
+  JaqlDataSource,
 } from '@sisense/sdk-data';
 import { AnyObject } from './helpers/utility-types.js';
 
@@ -57,16 +58,6 @@ export type QueryExecutionConfig = {
 export type QueryExecutionConfigInternal = QueryExecutionConfig & {
   shouldSkipHighlightsWithoutAttributes: boolean;
 };
-
-/**
- * Data source description used in JAQL.
- */
-export type JaqlDataSource =
-  | string
-  | {
-      title: string;
-      live: boolean;
-    };
 
 export type QueryOptions = {
   // notice datasource (in lower case) is expected by JAQL API
@@ -245,6 +236,7 @@ export type DataSourceSchema = {
 
 export type DataSourceMetadata = {
   title: string;
+  fullname: string;
   live: boolean;
 };
 

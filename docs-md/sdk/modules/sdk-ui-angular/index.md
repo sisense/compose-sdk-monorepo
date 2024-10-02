@@ -29,7 +29,6 @@ Angular components for charts
 
 Utilities to be used with charts
 
-- [ChartWidgetComponent](chart-utilities/class.ChartWidgetComponent.md)
 - [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
 
 ## Data Grids
@@ -70,14 +69,25 @@ Angular query service
 
 - [QueryService](queries/class.QueryService.md)
 
+## Dashboarding
+
+Angular modules, services, and components for composing dashboards
+
+- [ChartWidgetComponent](dashboarding/class.ChartWidgetComponent.md)
+- [DashboardComponent](dashboarding/class.DashboardComponent.md) <Badge type="beta" text="Beta" />
+
 ## Fusion Embed
 
 Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
 
-- [DashboardByIdComponent](fusion-embed/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
-- [DashboardComponent](fusion-embed/class.DashboardComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="alpha" text="Alpha" />
-- [DashboardModel](fusion-embed/class.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardByIdComponent](fusion-embed/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardModel](fusion-embed/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](fusion-embed/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](fusion-embed/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](fusion-embed/class.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-embed/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetService](fusion-embed/class.WidgetService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+
+## Namespaces
+
+- [dashboardModelTranslator](namespaces/namespace.dashboardModelTranslator/index.md)
+- [widgetModelTranslator](namespaces/namespace.widgetModelTranslator/index.md)

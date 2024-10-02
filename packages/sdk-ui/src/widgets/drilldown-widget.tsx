@@ -1,11 +1,18 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Attribute } from '@sisense/sdk-data';
-import { DataPoint, MenuPosition, MenuItemSection } from '../types';
-import { ContextMenu } from './common/context-menu';
+import { DataPoint, MenuPosition, MenuItemSection, DrilldownSelection } from '../types';
 import { DrilldownBreadcrumbs } from './common/drilldown-breadcrumbs';
-import { useDrilldown } from './common/use-drilldown';
+import {
+  getDrilldownMenuItems,
+  getSelectionTitleMenuItem,
+  useDrilldown,
+} from './common/use-drilldown';
 import { DrilldownWidgetProps } from '../props';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import { useMenu } from '@/common/hooks/use-menu';
+import { useHasChanged } from '@/common/hooks/use-has-changed';
+import { useTranslation } from 'react-i18next';
+import { Hierarchy } from '@/models/hierarchy';
 
 /**
  * React component designed to add drilldown functionality to any type of chart.
@@ -45,26 +52,44 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
 export const DrilldownWidget = asSisenseComponent({
   componentName: 'DrilldownWidget',
   trackingConfig: { transparent: true },
+  shouldSkipSisenseContextWaiting: true,
+  shouldHaveOwnMenuRoot: true,
 })((props: DrilldownWidgetProps) => {
-  const { drilldownDimensions, initialDimension, drilldownSelections, config, children } = props;
+  const { t: translate } = useTranslation();
+  const {
+    drilldownDimensions = [],
+    drilldownPaths = [],
+    initialDimension,
+    drilldownSelections,
+    config,
+    onChange,
+    children,
+  } = props;
+  const { openMenu } = useMenu();
   const [selectedDataPoints, setSelectedDataPoints] = useState<DataPoint[]>([]);
   const [contextMenuPos, setContextMenuPos] = useState<null | MenuPosition>(null);
+  const isContextMenuPositionChanged = useHasChanged(contextMenuPos);
 
-  const ContextMenuComponent = config?.contextMenuComponent ?? ContextMenu;
+  const CustomContextMenuComponent = config?.contextMenuComponent;
   const BreadcrumbsComponent = config?.breadcrumbsComponent ?? DrilldownBreadcrumbs;
+  const onDrilldownSelectionsChange = useCallback(
+    (selections: DrilldownSelection[]) => onChange?.({ drilldownSelections: selections }),
+    [onChange],
+  );
 
   const {
     selectDrilldown,
     sliceDrilldownSelections,
     clearDrilldownSelections,
-    availableDrilldowns,
+    availableDrilldownPaths,
     drilldownFilters,
     drilldownFiltersDisplayValues,
     drilldownDimension,
   } = useDrilldown({
-    drilldownDimensions,
+    drilldownPaths: [...drilldownPaths, ...drilldownDimensions],
     initialDimension,
     drilldownSelections,
+    onDrilldownSelectionsChange,
   });
 
   const breadcrumbs = useMemo(() => {
@@ -86,9 +111,9 @@ export const DrilldownWidget = asSisenseComponent({
     sliceDrilldownSelections,
   ]);
 
-  const openContextMenu = (menuPos: { top: number; left: number }) => {
+  const openContextMenu = useCallback((menuPos: { top: number; left: number }) => {
     setContextMenuPos(menuPos);
-  };
+  }, []);
 
   const closeContextMenu = useCallback(() => {
     setSelectedDataPoints([]);
@@ -96,8 +121,8 @@ export const DrilldownWidget = asSisenseComponent({
   }, [setSelectedDataPoints]);
 
   const onMenuDrilldownClick = useCallback(
-    (nextDimension: Attribute) => {
-      selectDrilldown(selectedDataPoints, nextDimension);
+    (nextDimension: Attribute, hierarchy?: Hierarchy) => {
+      selectDrilldown(selectedDataPoints, nextDimension, hierarchy);
     },
     [selectDrilldown, selectedDataPoints],
   );
@@ -109,27 +134,70 @@ export const DrilldownWidget = asSisenseComponent({
     [setSelectedDataPoints],
   );
 
-  const drilldownMenuItems: MenuItemSection[] = useMemo(
-    () => [
-      ...(drilldownDimension ? [{ sectionTitle: drilldownDimension?.name }] : []),
-      {
-        sectionTitle: 'Drill',
-        items: availableDrilldowns.map((nextDimension) => ({
-          caption: nextDimension.name,
-          onClick: () => onMenuDrilldownClick(nextDimension),
-        })),
-      },
-    ],
-    [drilldownDimension, availableDrilldowns, onMenuDrilldownClick],
-  );
+  const drilldownMenuItems: MenuItemSection[] = useMemo(() => {
+    return [
+      getSelectionTitleMenuItem(selectedDataPoints, drilldownDimension),
+      getDrilldownMenuItems(
+        availableDrilldownPaths,
+        drilldownDimension,
+        onMenuDrilldownClick,
+        translate,
+      ),
+    ];
+  }, [
+    drilldownDimension,
+    availableDrilldownPaths,
+    selectedDataPoints,
+    onMenuDrilldownClick,
+    translate,
+  ]);
+
+  /**
+   * Note: The context menu is opened in the next render cycle to ensure that "drilldownMenuItems" is fully updated.
+   * This is necessary due to the separate execution of "onDataPointsSelected" and "openContextMenu" in the drilldown interface.
+   * If both functions are executed within the same render cycle, "openContextMenu" may use outdated "drilldownMenuItems"
+   * because it depends on the points set by "onDataPointsSelected".
+   */
+  useEffect(() => {
+    const shouldOpenMenu = contextMenuPos && isContextMenuPositionChanged;
+    if (shouldOpenMenu && !CustomContextMenuComponent) {
+      openMenu({ position: contextMenuPos, itemSections: drilldownMenuItems });
+    }
+  }, [
+    contextMenuPos,
+    isContextMenuPositionChanged,
+    drilldownMenuItems,
+    openMenu,
+    CustomContextMenuComponent,
+  ]);
+
+  const memoizedChildren = useMemo(() => {
+    return children({
+      drilldownFilters,
+      drilldownDimension,
+      onDataPointsSelected,
+      onContextMenu: openContextMenu,
+      breadcrumbsComponent: config?.isBreadcrumbsDetached ? breadcrumbs : undefined,
+    });
+  }, [
+    children,
+    drilldownFilters,
+    drilldownDimension,
+    onDataPointsSelected,
+    openContextMenu,
+    config,
+    breadcrumbs,
+  ]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <ContextMenuComponent
-        position={contextMenuPos}
-        itemSections={drilldownMenuItems}
-        closeContextMenu={closeContextMenu}
-      />
+      {CustomContextMenuComponent && (
+        <CustomContextMenuComponent
+          position={contextMenuPos}
+          itemSections={drilldownMenuItems}
+          closeContextMenu={closeContextMenu}
+        />
+      )}
       {drilldownDimension && !config?.isBreadcrumbsDetached && breadcrumbs}
       <div
         style={{
@@ -139,13 +207,7 @@ export const DrilldownWidget = asSisenseComponent({
           minHeight: 0,
         }}
       >
-        {children({
-          drilldownFilters,
-          drilldownDimension,
-          onDataPointsSelected,
-          onContextMenu: openContextMenu,
-          breadcrumbsComponent: config?.isBreadcrumbsDetached ? breadcrumbs : undefined,
-        })}
+        {memoizedChildren}
       </div>
     </div>
   );

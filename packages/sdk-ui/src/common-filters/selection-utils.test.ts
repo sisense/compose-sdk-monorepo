@@ -25,6 +25,7 @@ describe('createCommonFiltersOverSelections()', () => {
         {
           attribute: DM.Commerce.Condition,
           values: ['New'],
+          displayValues: ['New'],
         },
       ],
       filters,
@@ -41,6 +42,7 @@ describe('createCommonFiltersOverSelections()', () => {
         {
           attribute: DM.Commerce.AgeRange,
           values: ['65+'],
+          displayValues: ['65+'],
         },
       ],
       filters,
@@ -56,6 +58,7 @@ describe('createCommonFiltersOverSelections()', () => {
     const selections = filters.map(({ attribute, members: values }) => ({
       attribute,
       values,
+      displayValues: values,
     }));
     const createdFilters = createCommonFiltersOverSelections(selections, filters);
 
@@ -240,15 +243,15 @@ describe('getWidgetSelections()', () => {
             attribute: DM.Commerce.Gender,
             value: 'Male',
           },
-          breakByColor: {
-            id: 'breakByColor',
-            attribute: DM.Commerce.Condition,
-            value: 'New',
-          },
           breakByPoint: {
             id: 'breakByPoint',
             attribute: DM.Commerce.CategoryID,
             value: '1',
+          },
+          breakByColor: {
+            id: 'breakByColor',
+            attribute: DM.Commerce.Condition,
+            value: 'New',
           },
         },
       },
@@ -258,10 +261,10 @@ describe('getWidgetSelections()', () => {
     expect(selections[0].values).toEqual(['0-18']);
     expect(selections[1].attribute.expression).toEqual(DM.Commerce.Gender.expression);
     expect(selections[1].values).toEqual(['Male']);
-    expect(selections[2].attribute.expression).toEqual(DM.Commerce.Condition.expression);
-    expect(selections[2].values).toEqual(['New']);
-    expect(selections[3].attribute.expression).toEqual(DM.Commerce.CategoryID.expression);
-    expect(selections[3].values).toEqual(['1']);
+    expect(selections[2].attribute.expression).toEqual(DM.Commerce.CategoryID.expression);
+    expect(selections[2].values).toEqual(['1']);
+    expect(selections[3].attribute.expression).toEqual(DM.Commerce.Condition.expression);
+    expect(selections[3].values).toEqual(['New']);
   });
 
   it('should return selections for "scattermap" widget', () => {

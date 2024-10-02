@@ -1,7 +1,11 @@
 // This file re-exports common types/utils from @sisense/sdk-ui-preact
 
 // Re-exports utils from @sisense/sdk-ui-preact
-export { boxWhiskerProcessResult } from '@sisense/sdk-ui-preact';
+export {
+  boxWhiskerProcessResult,
+  widgetModelTranslator,
+  dashboardModelTranslator,
+} from '@sisense/sdk-ui-preact';
 
 // Re-exports types from @sisense/sdk-ui-preact
 export type {
@@ -81,6 +85,7 @@ export type {
   DashboardWidgetStyleOptions,
   TableStyleOptions,
   PivotTableStyleOptions,
+  PivotTableWidgetStyleOptions,
   AreaRangeStyleOptions,
 
   // Style related:
@@ -109,8 +114,14 @@ export type {
   BoxplotDataPoint,
 
   // Dashboard:
-  Layout,
-  WidgetFilterOptions,
+  DashboardProps,
+  DashboardLayoutOptions,
+  DashboardConfig,
+  WidgetsPanelLayout,
+  WidgetsPanelColumnLayout,
+  WidgetId,
+  WidgetsOptions,
+  WidgetProps,
 
   // General (Others):
   AppConfig,

@@ -221,6 +221,11 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
 
     result.jaql.filter = this.filterJaql();
 
+    // prioritize attribute dataSource for the use case of multi-source dashboard
+    if (this.attribute.dataSource) {
+      result.jaql.datasource = this.attribute.dataSource;
+    }
+
     if (this.isScope) {
       result.panel = 'scope';
     }

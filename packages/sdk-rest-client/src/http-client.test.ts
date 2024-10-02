@@ -1,19 +1,12 @@
-import fetchIntercept from 'fetch-intercept';
 import { getAuthenticator } from './authenticator.js';
 import { HttpClient } from './http-client.js';
-import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
+import * as interceptors from './interceptors.js';
 
 const mockSuccessResponse = {
   ok: true,
   status: 200,
   json: () => Promise.resolve({ data: 'response data' }),
 };
-
-const mockResponseInterceptor = vi.fn();
-vi.mock('./interceptors.js', () => ({
-  getResponseInterceptor: vi.fn(() => mockResponseInterceptor),
-  errorInterceptor: vi.fn(),
-}));
 
 describe('HttpClient', () => {
   let httpClient: HttpClient;
@@ -42,16 +35,6 @@ describe('HttpClient', () => {
     expect(httpClient.env).toBe('test');
   });
 
-  it('should have the correct interceptors registered', () => {
-    const fetchInterceptRegister = vi.spyOn(fetchIntercept, 'register');
-    new HttpClient('https://example.com/', httpClient.auth, 'test');
-    expect(getResponseInterceptor).toHaveBeenCalledWith(httpClient.auth);
-    expect(fetchInterceptRegister).toHaveBeenCalledWith({
-      response: mockResponseInterceptor,
-      responseError: errorInterceptor,
-    });
-  });
-
   it('should call the authenticate method when logging in', async () => {
     const authenticateSpy = vi.spyOn(httpClient.auth, 'authenticate');
     await httpClient.login();
@@ -62,6 +45,25 @@ describe('HttpClient', () => {
     afterEach(() => {
       vi.restoreAllMocks();
     });
+    it('should execute response interceptor', async () => {
+      const getResponseInterceptorSpy = vi.spyOn(interceptors, 'getResponseInterceptor');
+
+      global.fetch = vi.fn().mockResolvedValue(mockSuccessResponse);
+
+      await httpClient.call(httpClient.url + '/endpoint', {});
+      expect(getResponseInterceptorSpy).toHaveBeenCalledWith(httpClient.auth);
+    });
+
+    it('should execute error interceptor', async () => {
+      const errorInterceptorSpy = vi.spyOn(interceptors, 'errorInterceptor');
+
+      const error = 'Test error';
+      global.fetch = vi.fn().mockRejectedValue(error);
+
+      await expect(httpClient.call(httpClient.url + '/endpoint', {})).rejects.toThrow(error);
+      expect(errorInterceptorSpy).toHaveBeenCalledWith(error);
+    });
+
     it('should handle successful API call', async () => {
       global.fetch = vi.fn().mockResolvedValue(mockSuccessResponse);
 

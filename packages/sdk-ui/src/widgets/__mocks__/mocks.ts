@@ -30,7 +30,7 @@ export const mockChartWidgetPropsForTable: ChartWidgetProps = {
 export const mockResolvedQuery: QueryResultData = {
   columns: [
     {
-      name: 'AgeRange',
+      name: 'Age Range',
       type: 'text',
     },
     {

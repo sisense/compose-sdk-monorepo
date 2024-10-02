@@ -1,12 +1,13 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from './rest-api';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 const httpGetMock = vi.fn();
 const httpClientMock = {
   get: httpGetMock,
 } as unknown as HttpClient;
 
-const restApi = new RestApi(httpClientMock);
+const restApi = new RestApi(httpClientMock, DM.DataSource);
 
 describe('Rest API', () => {
   beforeEach(() => {
@@ -68,5 +69,51 @@ describe('Rest API', () => {
   it('should send correct request to fetch USA states geo json', async () => {
     await restApi.getUsaStatesGeoJson();
     expect(httpGetMock).toHaveBeenCalledWith('api/v1/geo/geojson/usa');
+  });
+
+  it('should send correct request to fetch hierarchies', async () => {
+    await restApi.getHierarchies({
+      dataSource: DM.DataSource,
+      dimension: DM.Commerce.AgeRange,
+    });
+    expect(httpGetMock).toHaveBeenCalledWith(
+      '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range',
+    );
+  });
+
+  it('should send correct request to fetch hierarchies specified by ids', async () => {
+    await restApi.getHierarchies({
+      dataSource: DM.DataSource,
+      dimension: DM.Commerce.AgeRange,
+      ids: ['1', '2'],
+    });
+    expect(httpGetMock).toHaveBeenCalledWith(
+      '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range&ids=1%2C2',
+    );
+  });
+
+  it('should send correct request to fetch hierarchies with "alwaysIncluded" field equal "true"', async () => {
+    await restApi.getHierarchies({
+      dataSource: DM.DataSource,
+      dimension: DM.Commerce.AgeRange,
+      alwaysIncluded: true,
+    });
+    expect(httpGetMock).toHaveBeenCalledWith(
+      '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range&alwaysIncluded=true',
+    );
+  });
+
+  it('should send correct request to fetch hierarchies with default datasource', async () => {
+    await restApi.getHierarchies({
+      dimension: DM.Commerce.AgeRange,
+    });
+    expect(httpGetMock).toHaveBeenCalledWith(
+      '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range',
+    );
+  });
+
+  it('should throw an error when fetching hierarchies without a provided or default datasource', () => {
+    const restApi = new RestApi(httpClientMock);
+    expect(() => restApi.getHierarchies({ dimension: DM.Commerce.AgeRange })).toThrow();
   });
 });

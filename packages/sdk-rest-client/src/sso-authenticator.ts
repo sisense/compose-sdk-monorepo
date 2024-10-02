@@ -3,6 +3,7 @@
 import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
+import { errorInterceptor } from './interceptors.js';
 
 interface IsAuthResponse {
   isAuthenticated: boolean;
@@ -69,7 +70,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
     const response = await fetch(fetchUrl, {
       headers: { Internal: 'true' },
       credentials: 'include',
-    });
+    }).catch(errorInterceptor);
 
     const result: IsAuthResponse = await response.json();
 

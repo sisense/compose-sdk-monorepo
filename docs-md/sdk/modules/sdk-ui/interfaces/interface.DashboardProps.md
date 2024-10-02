@@ -18,23 +18,23 @@ The default data source to use for the dashboard
 
 ### filters
 
-> **filters**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 The dashboard filters to be applied to each of the widgets based on the widget filter options
 
 ***
 
-### layout
+### layoutOptions
 
-> **layout**: [`Layout`](interface.Layout.md)
+> **layoutOptions**?: [`DashboardLayoutOptions`](interface.DashboardLayoutOptions.md)
 
-The layout of the dashboard
+Dashboard layout options
 
 ***
 
 ### styleOptions
 
-> **styleOptions**: [`DashboardStyleOptions`](../type-aliases/type-alias.DashboardStyleOptions.md)
+> **styleOptions**?: [`DashboardStyleOptions`](../type-aliases/type-alias.DashboardStyleOptions.md)
 
 The style options for the dashboard
 
@@ -42,22 +42,22 @@ The style options for the dashboard
 
 ### title
 
-> **title**: `string`
+> **title**?: `string`
 
 The title of the dashboard
 
 ***
 
-### widgetFilterOptions
+### widgets
 
-> **widgetFilterOptions**?: [`WidgetFilterOptions`](../type-aliases/type-alias.WidgetFilterOptions.md)
+> **widgets**: [`WidgetProps`](../type-aliases/type-alias.WidgetProps.md)[]
 
-The filter options for each of the widgets
+The widgets to render in the dashboard
 
 ***
 
-### widgets
+### widgetsOptions
 
-> **widgets**: [`WidgetModel`](../fusion-embed/class.WidgetModel.md)[]
+> **widgetsOptions**?: [`WidgetsOptions`](../type-aliases/type-alias.WidgetsOptions.md)
 
-The widgets to render in the dashboard
+The options for each of the widgets

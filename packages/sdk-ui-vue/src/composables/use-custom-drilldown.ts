@@ -6,6 +6,7 @@ import {
   type StyledColumn,
 } from '@sisense/sdk-ui-preact';
 import { ref, computed, type Ref } from 'vue';
+import type { TFunction } from '@sisense/sdk-common';
 
 /**
  * @internal
@@ -52,7 +53,14 @@ export const useCustomDrilldown = ({
   };
 
   const updateDrilldownProps = () => {
-    const drilldownProps = processDrilldownSelections(drilldownSelections.value, initialDimension);
+    // todo: connect internationalization to vue
+    const translate = ((key: string) =>
+      key === 'drilldown.breadcrumbsAllSuffix' ? 'All' : key) as TFunction;
+    const drilldownProps = processDrilldownSelections(
+      drilldownSelections.value,
+      initialDimension,
+      translate,
+    );
     drilldownDimension.value = drilldownProps.drilldownDimension;
     drilldownFilters.value = drilldownProps.drilldownFilters;
     drilldownFiltersDisplayValues.value = drilldownProps.drilldownFiltersDisplayValues;

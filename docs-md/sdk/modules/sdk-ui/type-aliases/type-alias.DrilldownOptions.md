@@ -16,6 +16,18 @@ Configuration for the drilldown
 
 Dimensions that can be used for drilldown
 
+::: warning Deprecated
+Use DrilldownOptions.drilldownPaths instead
+:::
+
+***
+
+### `drilldownPaths`
+
+**drilldownPaths**?: ([`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Hierarchy`](../interfaces/interface.Hierarchy.md) \| [`HierarchyId`](type-alias.HierarchyId.md))[]
+
+Dimensions and hierarchies available for drilldown on.
+
 ***
 
 ### `drilldownSelections`

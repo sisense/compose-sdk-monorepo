@@ -52,6 +52,6 @@ Loading status
 
 ### `widget`
 
-**widget**: [`WidgetModel`](../fusion-embed/class.WidgetModel.md)
+**widget**: [`WidgetModel`](../fusion-embed/interface.WidgetModel.md)
 
 Widget model, if the load succeeded

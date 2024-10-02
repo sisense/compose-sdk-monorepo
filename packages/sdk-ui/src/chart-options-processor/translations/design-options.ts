@@ -59,6 +59,12 @@ export type PolarChartDesignOptions = CartesianChartDesignOptions & {
   polarType: PolarType;
 };
 
+export function isPolarChartDesignOptions(
+  options: CartesianChartDesignOptions,
+): options is PolarChartDesignOptions {
+  return 'polarType' in options;
+}
+
 export type PieChartDesignOptions = BaseDesignOptionsType & {
   pieType?: PieType;
   pieLabels?: PieLabels;

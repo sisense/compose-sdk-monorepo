@@ -12,7 +12,7 @@ State of a dashboard model load that has succeeded.
 
 ### `dashboard`
 
-**dashboard**: [`DashboardModel`](../fusion-embed/class.DashboardModel.md)
+**dashboard**: [`DashboardModel`](../fusion-embed/interface.DashboardModel.md)
 
 The result dashboard model if the load has succeeded
 

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { PluginsContext } from './plugins-context';
-import { WidgetPlugin } from './types';
+import { PluginComponent } from './types';
 
 /** @internal */
 export type CustomPluginsProviderProps = {
@@ -10,9 +10,9 @@ export type CustomPluginsProviderProps = {
 
 /** @internal */
 export type CustomPluginsContext = {
-  pluginMap: Map<string, WidgetPlugin>;
-  registerPlugin: (pluginType: string, plugin: WidgetPlugin) => void;
-  getPlugin: (pluginType: string) => WidgetPlugin | undefined;
+  pluginMap: Map<string, PluginComponent>;
+  registerPlugin: (pluginType: string, plugin: PluginComponent) => void;
+  getPlugin: (pluginType: string) => PluginComponent | undefined;
 };
 
 /**

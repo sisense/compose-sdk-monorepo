@@ -5,7 +5,7 @@ import { useSisenseContext } from '../sisense-context/sisense-context';
 import { executePivotQuery, executeQuery } from '../query/execute-query';
 import {
   convertFilterRelationsModelToJaql,
-  isPivotWidget,
+  isPivotTableWidget,
   mergeFilters,
   mergeFiltersByStrategy,
 } from '../dashboard-widget/utils';
@@ -24,7 +24,7 @@ import {
   QueryByWidgetIdQueryParams,
 } from './types';
 import { Filter, QueryResultData } from '@sisense/sdk-data';
-import { WidgetModel } from '../models';
+import { widgetModelTranslator } from '../models';
 import { useShouldLoad } from '../common/hooks/use-should-load';
 
 /**
@@ -186,7 +186,7 @@ export async function executeQueryByWidgetId({
     throw new Error(`Widget with oid ${widgetOid} not found`);
   }
 
-  const widgetModel = new WidgetModel(fetchedWidget);
+  const widgetModel = widgetModelTranslator.fromWidgetDto(fetchedWidget);
 
   const prepareExecuteQueryParams = (
     query: ExecuteQueryParams | ExecutePivotQueryParams,
@@ -243,7 +243,7 @@ export async function executeQueryByWidgetId({
     }
   };
 
-  if (isPivotWidget(widgetModel.widgetType)) {
+  if (isPivotTableWidget(widgetModel.widgetType)) {
     const widgetQuery = widgetModel.getExecutePivotQueryParams();
     const executeQueryParams = prepareExecuteQueryParams(widgetQuery, true);
     const pivotData = await executePivotQuery(executeQueryParams, app, { onBeforeQuery });

@@ -1,4 +1,4 @@
-import React, { useState, type FunctionComponent } from 'react';
+import { useState, type FunctionComponent } from 'react';
 import { PivotTableWidgetProps } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
@@ -8,7 +8,7 @@ import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { PivotTable } from '../pivot-table';
 
 /**
- * The PivotTableWidget component extending the PivotTable component to support widget style options.
+ * React component extending `PivotTable` to support widget style options.
  *
  * @example
  * Example of using the `PivotTableWidget` component to
@@ -24,7 +24,8 @@ import { PivotTable } from '../pivot-table';
  * ```
  * @param props - Pivot Table Widget properties
  * @returns Widget component representing a pivot table
- * @internal
+ * @group Dashboarding
+ * @beta
  */
 export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSisenseComponent({
   componentName: 'PivotTableWidget',
