@@ -4,7 +4,8 @@ import { BoxplotChartData } from '../../../chart-data/types';
 import { Axis, AxisLabelsFormatterContextObject, AxisSettings } from '../axis-section';
 import { fontStyleDefault } from '../../defaults/cartesian';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from '../number-format-config';
-import { isCategory, Value, type Category } from '../../../chart-data-options/types';
+import { StyledColumn, StyledMeasureColumn } from '../../../chart-data-options/types';
+import { isMeasureColumn } from '@/chart-data-options/utils';
 
 export const commonColor = '#d1d1d7';
 
@@ -23,7 +24,7 @@ export const calculateYAxisMinMax = (chartData: BoxplotChartData) => {
 export const getBoxplotXAxisSettings = (
   axis: Axis,
   categories: string[],
-  axisDataOption?: Category,
+  axisDataOption?: StyledColumn,
 ): AxisSettings[] => {
   return [
     {
@@ -35,7 +36,11 @@ export const getBoxplotXAxisSettings = (
         formatter(this: AxisLabelsFormatterContextObject) {
           const { value } = this;
 
-          if (axisDataOption && isCategory(axisDataOption) && !isNumberType(axisDataOption.type)) {
+          if (
+            axisDataOption &&
+            !isMeasureColumn(axisDataOption) &&
+            !isNumberType(axisDataOption.column.type)
+          ) {
             return `${value}`;
           }
 
@@ -78,7 +83,7 @@ export const getBoxplotXAxisSettings = (
 export const getBoxplotYAxisSettings = (
   axis: Axis,
   chartData: BoxplotChartData,
-  axisDataOption?: Value,
+  axisDataOption?: StyledMeasureColumn,
 ): AxisSettings[] => {
   const axisAutoMinMax = calculateYAxisMinMax(chartData);
   return [

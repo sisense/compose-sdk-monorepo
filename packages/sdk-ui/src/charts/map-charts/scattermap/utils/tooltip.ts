@@ -1,9 +1,6 @@
 import { ScattermapChartLocation } from '../../../../chart-data/types';
-import {
-  ScattermapChartDataOptionsInternal,
-  isMeasureColumn,
-} from '../../../../chart-data-options/types.js';
-import { getDataOptionTitle } from '../../../../chart-data-options/utils.js';
+import { ScattermapChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
+import { getDataOptionTitle, isMeasureColumn } from '../../../../chart-data-options/utils.js';
 import {
   spanSegment,
   tooltipWrapper,

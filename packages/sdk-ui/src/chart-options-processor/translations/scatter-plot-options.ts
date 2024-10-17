@@ -1,10 +1,11 @@
-import { isValue, ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
+import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
 import { getRotationType, ValueLabelOptions, ValueLabelSettings } from './value-label-section';
 import { ScatterChartDesignOptions } from './design-options';
 import { InternalSeries } from './tooltip-utils';
 import { ScatterCustomPointOptions } from './scatter-tooltip';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
+import { isMeasureColumn } from '@/chart-data-options/utils';
 
 // TODO write API docs
 export type ScatterMarkerSize = {
@@ -67,7 +68,9 @@ const getScatterValueLabelSettings = (
       chartDataOptions.size,
       chartDataOptions.breakByColor,
     ];
-    const usedDataItem = dataItemsByUsagePriority.find((dataItem) => dataItem && isValue(dataItem));
+    const usedDataItem = dataItemsByUsagePriority.find(
+      (dataItem) => dataItem && isMeasureColumn(dataItem),
+    );
     const pointValueKey = Object.entries(pointValueKeyToDataItemMapping).find(
       ([, dataItem]) => dataItem === usedDataItem,
     )?.[0] as keyof ScatterCustomPointOptions;

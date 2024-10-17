@@ -13,5 +13,5 @@ More description
 - [Dog](interface.Dog.md) <Badge type="beta" text="Beta" />
 - [IndexableInterface](interface.IndexableInterface.md)
 - [SomeConfig](interface.SomeConfig.md)
+- [SomeInterface](interface.SomeInterface.md)
 - [SomePropInterface](interface.SomePropInterface.md)
-- [SomeProps](interface.SomeProps.md)

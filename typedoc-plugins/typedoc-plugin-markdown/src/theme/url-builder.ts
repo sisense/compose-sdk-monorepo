@@ -35,35 +35,26 @@ export class UrlBuilder {
     const hasReadme = !this.options.getValue('readme').endsWith('none');
 
     if (hasReadme) {
-      this.urls.push(
-        new UrlMapping(entryFileName, project, this.theme.readmeTemplate),
-      );
+      this.urls.push(new UrlMapping(entryFileName, project, this.theme.readmeTemplate));
 
       if (this.options.getValue('skipIndexPage')) {
         project.url = entryFileName;
       } else {
         project.url = this.getPartName(indexFileName, 1);
         this.urls.push(
-          new UrlMapping(
-            this.getPartName(indexFileName, 1),
-            project,
-            this.theme.projectTemplate,
-          ),
+          new UrlMapping(this.getPartName(indexFileName, 1), project, this.theme.projectTemplate),
         );
       }
     } else {
       if (!this.options.getValue('skipIndexPage')) {
         project.url = entryFileName;
 
-        this.urls.push(
-          new UrlMapping(entryFileName, project, this.theme.projectTemplate),
-        );
+        this.urls.push(new UrlMapping(entryFileName, project, this.theme.projectTemplate));
       }
     }
 
     if (
-      this.options.getValue('entryPointStrategy') ===
-        EntryPointStrategy.Packages &&
+      this.options.getValue('entryPointStrategy') === EntryPointStrategy.Packages &&
       !Boolean(project.groups)
     ) {
       // [tuan]: each projectChild is a module (e.g., @sisense/sdk-ui, @sisense/sdk-data, etc)
@@ -77,13 +68,8 @@ export class UrlBuilder {
         const startIndex = hasReadme ? 2 : 1;
 
         const directoryPosition = projectChildIndex + startIndex;
-        const url = `${this.getPartName(
-          projectChild.name,
-          directoryPosition,
-        )}/${
-          Boolean(projectChild.readme)
-            ? this.getPartName(indexFileName, 1)
-            : entryFileName
+        const url = `${this.getPartName(projectChild.name, directoryPosition)}/${
+          Boolean(projectChild.readme) ? this.getPartName(indexFileName, 1) : entryFileName
         }`;
         if (projectChild.readme) {
           this.urls.push(
@@ -94,9 +80,7 @@ export class UrlBuilder {
             ),
           );
         }
-        this.urls.push(
-          new UrlMapping(url, projectChild as any, this.theme.projectTemplate),
-        );
+        this.urls.push(new UrlMapping(url, projectChild as any, this.theme.projectTemplate));
         projectChild.url = url;
         this.buildUrlsFromProject(projectChild, url);
       });
@@ -142,7 +126,9 @@ export class UrlBuilder {
         // clone the project with only the current group
         const groupProject = Object.create(project);
         groupProject.name = projectGroup.title;
-        groupProject.groups = groupProject.groups?.filter((group) => group.title === projectGroup.title);
+        groupProject.groups = groupProject.groups?.filter(
+          (group) => group.title === projectGroup.title,
+        );
 
         this.urls.push(
           new UrlMapping(projectGroupUrl, groupProject as any, this.theme.projectKindTemplate),
@@ -155,7 +141,7 @@ export class UrlBuilder {
           // [tuan]: each projectGroupChild is an API item (e.g., Chart, ChartProps, etc)
           (projectGroupChild, projectGroupChildIndex) => {
             // console.log('----projectGroupChild', projectGroupChild.name, projectGroupChild.url);
-            this.buildUrlsFromGroup(projectGroupChild, {
+            this.buildUrlsFromGroup(projectGroupChild as DeclarationReflection, {
               // CSDK: use the group title as the directory name
               directory: projectGroupDirName,
               directoryPosition: projectGroupIndex + startIndex,
@@ -168,11 +154,7 @@ export class UrlBuilder {
     }
   }
 
-  private buildUrlsFromGroup(
-    reflection: DeclarationReflection,
-    options: UrlOption,
-  ) {
-
+  private buildUrlsFromGroup(reflection: DeclarationReflection, options: UrlOption) {
     const mapping = this.getTemplateMapping(reflection.kind);
     if (mapping) {
       const directory = options.directory || mapping.directory;
@@ -190,7 +172,7 @@ export class UrlBuilder {
         if (reflection.categories) {
           reflection.categories.forEach((category, categoryIndex) => {
             category.children.forEach((categoryChild, categoryChildIndex) => {
-              this.buildUrlsFromGroup(categoryChild, {
+              this.buildUrlsFromGroup(categoryChild as DeclarationReflection, {
                 parentUrl: url,
                 directoryPosition: categoryIndex + 1,
                 directory: category.title,
@@ -238,7 +220,7 @@ export class UrlBuilder {
               category.children.forEach((categoryChild, categoryChildIndex) => {
                 // console.log('--------categoryChild', categoryChild.name);
                 const mapping = this.getTemplateMapping(categoryChild.kind);
-                this.buildUrlsFromGroup(categoryChild, {
+                this.buildUrlsFromGroup(categoryChild as DeclarationReflection, {
                   parentUrl: url,
                   directoryPosition: groupIndex + 1,
                   directory: `${mapping?.directory}/${this.getPartName(
@@ -253,7 +235,7 @@ export class UrlBuilder {
             group.children.forEach((groupChild, groupChildIndex) => {
               // console.log('--------groupChild', groupChild.name);
               const mapping = this.getTemplateMapping(groupChild.kind);
-              this.buildUrlsFromGroup(groupChild, {
+              this.buildUrlsFromGroup(groupChild as DeclarationReflection, {
                 parentUrl: url,
                 directoryPosition: groupIndex + 1,
                 directory: mapping?.directory || null,
@@ -270,9 +252,7 @@ export class UrlBuilder {
 
   private getUrl(reflection: DeclarationReflection, options: UrlOption) {
     if (this.options.getValue('flattenOutputFiles')) {
-      const kindAlias = ReflectionKind.singularString(reflection.kind).split(
-        ' ',
-      )[0];
+      const kindAlias = ReflectionKind.singularString(reflection.kind).split(' ')[0];
       if (options.parentUrl) {
         return `${path
           .dirname(options.parentUrl.split('.').join('/'))
@@ -293,29 +273,20 @@ export class UrlBuilder {
     alias = alias.replace(/-\d+$/, '');
     /** CSDK END */
 
-    const parentDir = options.parentUrl
-      ? path.dirname(options.parentUrl)
-      : null;
+    const parentDir = options.parentUrl ? path.dirname(options.parentUrl) : null;
 
     const dir = () => {
       if (reflection.kindOf(ReflectionKind.Namespace)) {
         if (!this.options.getValue('excludeGroups')) {
           return this.getPartName(
-            `${options.directory}/${this.getPartName(
-              'namespace.' + alias,
-              options.pagePosition,
-            )}`,
+            `${options.directory}/${this.getPartName('namespace.' + alias, options.pagePosition)}`,
             options.directoryPosition,
           );
         }
         return this.getPartName(alias, options.pagePosition);
       }
 
-      if (
-        options.directory &&
-        this.options.getValue('excludeGroups') &&
-        !options.forceDirectory
-      ) {
+      if (options.directory && this.options.getValue('excludeGroups') && !options.forceDirectory) {
         return null;
       }
 
@@ -340,17 +311,13 @@ export class UrlBuilder {
     const filename = () => {
       if (
         reflection.kindOf([ReflectionKind.Module, ReflectionKind.Namespace]) &&
-        this.options.getValue('outputFileStrategy') ===
-          OutputFileStrategy.Modules &&
+        this.options.getValue('outputFileStrategy') === OutputFileStrategy.Modules &&
         !this.childrenIncludeNamespaces(reflection)
       ) {
         return null;
       }
-      if (
-        reflection.kindOf([ReflectionKind.Module, ReflectionKind.Namespace])
-      ) {
-        return path.parse(this.options.getValue('entryFileName') as string)
-          .name;
+      if (reflection.kindOf([ReflectionKind.Module, ReflectionKind.Namespace])) {
+        return path.parse(this.options.getValue('entryFileName') as string).name;
       }
 
       return `${this.getPartName(
@@ -359,16 +326,10 @@ export class UrlBuilder {
       )}.${alias}`;
     };
 
-    return (
-      [parentDir, dir(), filename()].filter((part) => Boolean(part)).join('/') +
-      '.md'
-    );
+    return [parentDir, dir(), filename()].filter((part) => Boolean(part)).join('/') + '.md';
   }
 
-  private applyAnchorUrl(
-    reflection: DeclarationReflection,
-    container: Reflection,
-  ) {
+  private applyAnchorUrl(reflection: DeclarationReflection, container: Reflection) {
     if (container.url) {
       if (!reflection.kindOf(ReflectionKind.TypeLiteral)) {
         const anchorPrefix = this.options.getValue('anchorPrefix');
@@ -381,9 +342,7 @@ export class UrlBuilder {
 
           this.anchors[container.url].push(anchorId);
 
-          const count = this.anchors[container.url]?.filter(
-            (id) => id === anchorId,
-          )?.length;
+          const count = this.anchors[container.url]?.filter((id) => id === anchorId)?.length;
 
           const anchorParts = [anchorId];
 
@@ -411,9 +370,7 @@ export class UrlBuilder {
   }
 
   private getAnchorId(reflection: DeclarationReflection) {
-    const preserveAnchorCasing = this.options.getValue(
-      'preserveAnchorCasing',
-    ) as boolean;
+    const preserveAnchorCasing = this.options.getValue('preserveAnchorCasing') as boolean;
 
     const anchorName = this.getAnchorName(reflection);
 
@@ -426,8 +383,7 @@ export class UrlBuilder {
 
   private getAnchorName(reflection: DeclarationReflection) {
     const namedAnchors = this.options.getValue('namedAnchors');
-    const propertiesTableStyle =
-      this.options.getValue('propertiesFormat') === 'table';
+    const propertiesTableStyle = this.options.getValue('propertiesFormat') === 'table';
 
     if (!namedAnchors) {
       if (reflection.kindOf(ReflectionKind.Property) && propertiesTableStyle) {
@@ -444,9 +400,7 @@ export class UrlBuilder {
   }
 
   private childrenIncludeNamespaces(reflection: DeclarationReflection) {
-    return reflection.children?.some((child) =>
-      child.kindOf(ReflectionKind.Namespace),
-    );
+    return reflection.children?.some((child) => child.kindOf(ReflectionKind.Namespace));
   }
 
   /**

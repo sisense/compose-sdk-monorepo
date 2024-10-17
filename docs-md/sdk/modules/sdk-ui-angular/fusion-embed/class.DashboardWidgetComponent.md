@@ -4,7 +4,7 @@ title: DashboardWidgetComponent
 
 # Class DashboardWidgetComponent <Badge type="fusionEmbed" text="Fusion Embed" />
 
-The Dashboard Widget component, which is a thin wrapper on [ChartWidgetComponent](../dashboarding/class.ChartWidgetComponent.md),
+The Dashboard Widget component, which is a thin wrapper on [ChartWidgetComponent](../dashboards/class.ChartWidgetComponent.md),
 is used to render a widget created in a Sisense Fusion instance.
 
 To learn more about using Sisense Fusion Widgets in Compose SDK, see
@@ -65,7 +65,7 @@ export class WidgetsComponent {
 
 #### filters
 
-> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| `undefined`
 
 Filters that will slice query results
 
@@ -75,7 +75,7 @@ Provided filters will be merged with the existing filters from the widget config
 
 #### filtersMergeStrategy
 
-> **filtersMergeStrategy**: `undefined` \| `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
+> **filtersMergeStrategy**: `"codeFirst"` \| `"codeOnly"` \| `"widgetFirst"` \| `undefined`
 
 Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
 
@@ -89,7 +89,7 @@ If not specified, the default strategy is `codeFirst`.
 
 #### highlights
 
-> **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **highlights**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| `undefined`
 
 Highlight filters that will highlight results that pass filter criteria
 
@@ -97,7 +97,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### includeDashboardFilters
 
-> **includeDashboardFilters**: `undefined` \| `boolean`
+> **includeDashboardFilters**: `boolean` \| `undefined`
 
 Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
 
@@ -115,7 +115,7 @@ Identifier of the dashboard that contains the widget
 
 #### description
 
-> **description**: `undefined` \| `string`
+> **description**: `string` \| `undefined`
 
 Description of the widget
 
@@ -125,7 +125,7 @@ If not specified, it takes the existing value from the widget configuration.
 
 #### highlightSelectionDisabled
 
-> **highlightSelectionDisabled**: `undefined` \| `boolean`
+> **highlightSelectionDisabled**: `boolean` \| `undefined`
 
 Boolean flag whether selecting data points triggers highlight filter of the selected data
 
@@ -137,7 +137,7 @@ If not specified, the default value is `false`
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
+> **styleOptions**: [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md) \| `undefined`
 
 Style options for the widget including the widget container and the chart or table inside.
 
@@ -145,7 +145,7 @@ Style options for the widget including the widget container and the chart or tab
 
 #### title
 
-> **title**: `undefined` \| `string`
+> **title**: `string` \| `undefined`
 
 Title of the widget
 

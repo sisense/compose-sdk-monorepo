@@ -48,7 +48,7 @@ export type CriteriaFilterType = NumericFilter | TextFilter | RankingFilter | Ex
 
 /**
  * UI component that allows the user to filter numeric or text attributes according to
- * a number of built-in operations defined in the {@link NumericFilter}, {@link TextFilter}, or {@link RankingFilter}.
+ * a number of built-in operations defined in the numeric filter, text filter, or ranking filter.
  *
  * The arrangement prop determines whether the filter is rendered vertically or horizontally, with the latter intended for toolbar use and omitting title, enable/disable, and collapse/expand functionality.
  *

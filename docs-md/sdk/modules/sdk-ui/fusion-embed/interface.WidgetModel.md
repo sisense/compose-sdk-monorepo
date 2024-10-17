@@ -133,6 +133,31 @@ Use [widgetModelTranslator.toPivotTableProps](namespace.widgetModelTranslator/fu
 
 ***
 
+### getPivotTableWidgetProps
+
+> **getPivotTableWidgetProps**(): [`PivotTableWidgetProps`](../interfaces/interface.PivotTableWidgetProps.md)
+
+Returns the props to be used for rendering a pivot table widget.
+
+#### Returns
+
+[`PivotTableWidgetProps`](../interfaces/interface.PivotTableWidgetProps.md)
+
+#### Example
+
+```ts
+<PivotTableWidget {...widget.getPivotTableWidgetProps()} />
+```
+
+Note: this method is not supported for chart or table widgets.
+Use [getChartWidgetProps](interface.WidgetModel.md#getchartwidgetprops) instead for getting props for the `<ChartWidget>`  component.
+
+::: warning Deprecated
+Use [widgetModelTranslator.toPivotTableWidgetProps](namespace.widgetModelTranslator/functions/function.toPivotTableWidgetProps.md) instead
+:::
+
+***
+
 ### getTableProps
 
 > **getTableProps**(): [`TableProps`](../interfaces/interface.TableProps.md)
@@ -177,7 +202,7 @@ Returns the props to be used for rendering a text widget.
 
 Note: this method is not supported for chart or pivot widgets.
 Use [getChartWidgetProps](interface.WidgetModel.md#getchartwidgetprops) instead for getting props for the `<ChartWidget>`  component.
-Use getPivotTableWidgetProps instead for getting props for the `<PivotTableWidget>`  component.
+Use [getPivotTableWidgetProps](interface.WidgetModel.md#getpivottablewidgetprops) instead for getting props for the `<PivotTableWidget>`  component.
 
 ::: warning Deprecated
 Use [widgetModelTranslator.toTextWidgetProps](namespace.widgetModelTranslator/functions/function.toTextWidgetProps.md) instead
@@ -261,7 +286,7 @@ If this is a plugin widget, this is typically the name/ID of the plugin.
 
 ### styleOptions
 
-> **styleOptions**: `TextWidgetStyleOptions | ChartStyleOptions` & [`WidgetContainerStyleOptions`](../interfaces/interface.WidgetContainerStyleOptions.md)
+> **styleOptions**: `ChartStyleOptions | TextWidgetStyleOptions` & [`WidgetContainerStyleOptions`](../interfaces/interface.WidgetContainerStyleOptions.md)
 
 Widget style options.
 

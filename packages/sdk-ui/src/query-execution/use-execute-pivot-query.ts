@@ -26,7 +26,6 @@ import { useShouldLoad } from '../common/hooks/use-should-load';
  *  style='border:none;'
  * />
  *
- * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  * @group Queries
  * @beta
@@ -38,6 +37,7 @@ export const useExecutePivotQuery = withTracking('useExecutePivotQuery')(
 /**
  * {@link useExecutePivotQuery} without tracking to be used inside other hooks or components in Compose SDK.
  *
+ * @param params - Parameters of the query
  * @internal
  */
 export function useExecutePivotQueryInternal(params: ExecutePivotQueryParams): PivotQueryState {

@@ -4,7 +4,7 @@ title: AreaRangeChart
 
 # Function AreaRangeChart <Badge type="beta" text="Beta" />
 
-> **AreaRangeChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **AreaRangeChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component that displays a range of data over a given time period or across multiple categories.
 It is particularly useful for visualizing the minimum and maximum values in a dataset, along with the area between these values.
@@ -17,7 +17,7 @@ It is particularly useful for visualizing the minimum and maximum values in a da
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Area Range Chart component
 

@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { Scattermap } from '@/charts/map-charts/scattermap/scattermap';
-import { Category, ScattermapChartDataOptionsInternal, Value } from '@/chart-data-options/types';
+import { ScattermapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { scattermapData } from '@/chart-data/scattermap-data';
 import { ScattermapChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { DataTable } from '@/chart-data-processor/table-processor';
@@ -68,19 +68,22 @@ const dataSet = {
 } as unknown as DataTable;
 
 const cat1 = {
-  name: 'Country',
-  type: 'string',
-} as Category;
+  column: {
+    name: 'Country',
+    type: 'string',
+  },
+};
 const cat2 = {
-  name: 'Lat',
-  type: 'number',
-} as Category;
+  column: { name: 'Lat', type: 'number' },
+};
 const cat3 = {
-  name: 'Lng',
-  type: 'number',
-} as Category;
+  column: {
+    name: 'Lng',
+    type: 'number',
+  },
+};
 
-const meas1 = { name: 'Quantity', aggregation: 'sum' } as Value;
+const meas1 = { column: { name: 'Quantity', aggregation: 'sum' } };
 
 const designOptions = {
   markers: {

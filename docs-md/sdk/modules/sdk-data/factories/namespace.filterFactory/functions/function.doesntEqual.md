@@ -19,7 +19,7 @@ When filtering against a string:
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Text or numeric attribute to filter on |
-| `value` | `string` \| `number` | Value to filter by |
+| `value` | `number` \| `string` | Value to filter by |
 
 ## Returns
 

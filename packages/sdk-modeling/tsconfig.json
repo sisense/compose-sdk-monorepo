@@ -3,7 +3,9 @@
   "compilerOptions": {
     "composite": true,
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "references": [{ "path": "../sdk-data" }]

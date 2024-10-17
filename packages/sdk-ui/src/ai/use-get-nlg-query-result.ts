@@ -60,6 +60,9 @@ export interface UseGetNlgQueryResultState {
 }
 
 /**
+ *
+ * @param params - {@link UseGetNlgQueryResultParams}
+ * @param enabled - boolean flag to enable/disable this hook
  * @internal
  */
 export const useGetNlgQueryResultInternal = (
@@ -146,7 +149,6 @@ const useGetNlgQueryResultWithoutTracking = (params: UseGetNlgQueryResultParams)
  *
  * return <p>{data}</p>;
  * ```
- * @param params - {@link UseGetNlgQueryResultParams}
  * @returns Response object containing a text summary
  * @group Generative AI
  * @beta

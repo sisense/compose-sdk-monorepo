@@ -4,7 +4,7 @@ title: DashboardWidget
 
 # Class DashboardWidget <Badge type="fusionEmbed" text="Fusion Embed" />
 
-The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../dashboarding/class.ChartWidget.md) component,
+The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../dashboards/class.ChartWidget.md) component,
 used to render a widget created in the Sisense instance.
 
 **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
@@ -33,7 +33,7 @@ import { DashboardWidget } from '@sisense/sdk-ui-vue';
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **`readonly`** **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters that will slice query results
 
@@ -43,7 +43,7 @@ Provided filters will be merged with the existing filters from the widget config
 
 #### filtersMergeStrategy
 
-> **filtersMergeStrategy**?: `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
+> **`readonly`** **filtersMergeStrategy**?: `"codeFirst"` \| `"codeOnly"` \| `"widgetFirst"`
 
 Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
 
@@ -57,7 +57,7 @@ If not specified, the default strategy is `codeFirst`.
 
 #### highlights
 
-> **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **`readonly`** **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Highlight filters that will highlight results that pass filter criteria
 
@@ -65,7 +65,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### includeDashboardFilters
 
-> **includeDashboardFilters**?: `boolean`
+> **`readonly`** **includeDashboardFilters**?: `boolean`
 
 Boolean flag whether to include dashboard filters in the widget's `filters` and `highlights`
 
@@ -75,7 +75,7 @@ If not specified, the default value is `false`.
 
 #### dashboardOid
 
-> **dashboardOid**?: `string`
+> **`readonly`** **dashboardOid**?: `string`
 
 Identifier of the dashboard that contains the widget
 
@@ -83,7 +83,7 @@ Identifier of the dashboard that contains the widget
 
 #### description
 
-> **description**?: `string`
+> **`readonly`** **description**?: `string`
 
 Description of the widget
 
@@ -93,7 +93,7 @@ If not specified, it takes the existing value from the widget configuration.
 
 #### highlightSelectionDisabled
 
-> **highlightSelectionDisabled**?: `boolean`
+> **`readonly`** **highlightSelectionDisabled**?: `boolean`
 
 Boolean flag whether selecting data points triggers highlight filter of the selected data
 
@@ -105,7 +105,7 @@ If not specified, the default value is `false`
 
 #### styleOptions
 
-> **styleOptions**?: [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
+> **`readonly`** **styleOptions**?: [`DashboardWidgetStyleOptions`](../interfaces/interface.DashboardWidgetStyleOptions.md)
 
 Style options for the widget including the widget container and the chart or table inside.
 
@@ -113,7 +113,7 @@ Style options for the widget including the widget container and the chart or tab
 
 #### title
 
-> **title**?: `string`
+> **`readonly`** **title**?: `string`
 
 Title of the widget
 
@@ -123,7 +123,7 @@ If not specified, it takes the existing value from the widget configuration.
 
 #### widgetOid
 
-> **widgetOid**?: `string`
+> **`readonly`** **widgetOid**?: `string`
 
 Identifier of the widget
 
@@ -131,7 +131,7 @@ Identifier of the widget
 
 #### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+> **`readonly`** **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 A callback that allows you to customize the underlying chart element before it is rendered.
 Use the `highchartsOptions` object that is passed to the callback to change
@@ -147,7 +147,7 @@ For an example of how the `onBeforeRender` callback can be used, see the
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+> **`readonly`** **onDataPointClick**?: [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
 
@@ -155,7 +155,7 @@ Click handler callback for a data point
 
 #### onDataPointContextMenu
 
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+> **`readonly`** **onDataPointContextMenu**?: [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md)
 
 Context menu handler callback for a data point
 
@@ -163,6 +163,6 @@ Context menu handler callback for a data point
 
 #### onDataPointsSelected
 
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
+> **`readonly`** **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points

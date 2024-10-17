@@ -4,6 +4,6 @@ title: AlignmentTypes
 
 # Type alias AlignmentTypes
 
-> **AlignmentTypes**: `"Left"` \| `"Center"` \| `"Right"`
+> **AlignmentTypes**: `"Center"` \| `"Left"` \| `"Right"`
 
 Possible types of text alignment.

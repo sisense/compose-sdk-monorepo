@@ -4,6 +4,6 @@ title: ShadowsTypes
 
 # Type alias ShadowsTypes
 
-> **ShadowsTypes**: `"None"` \| `"Light"` \| `"Medium"` \| `"Dark"`
+> **ShadowsTypes**: `"Dark"` \| `"Light"` \| `"Medium"` \| `"None"`
 
 Possible types of shadows.

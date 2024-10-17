@@ -15,22 +15,20 @@ const defaultAreamapColorOptions = createValueColorOptions({
 })!;
 
 export const getAreamapData = (
-  chartDataOptions: AreamapChartDataOptionsInternal,
+  dataOptions: AreamapChartDataOptionsInternal,
   dataTable: DataTable,
 ): AreamapData => {
-  const geoColumn = getColumnByName(dataTable, chartDataOptions.geo.name);
+  const geoColumn = getColumnByName(dataTable, dataOptions.geo.column.name);
   const colorColumn = getColumnByName(
     dataTable,
-    chartDataOptions.color?.name ?? chartDataOptions.geo.name,
+    dataOptions.color?.column.name ?? dataOptions.geo.column.name,
   );
   if (!geoColumn || !colorColumn) {
     throw new Error('Missing required column');
   }
   const rawGeoData: RawGeoDataElement[] = dataTable.rows.map((row) => {
     const originalValue = getValue(row, colorColumn) as number;
-    const numberFormatConfig = getCompleteNumberFormatConfig(
-      chartDataOptions.color?.numberFormatConfig,
-    );
+    const numberFormatConfig = getCompleteNumberFormatConfig(dataOptions.color?.numberFormatConfig);
     const formattedOriginalValue = applyFormatPlainText(numberFormatConfig, originalValue);
     return {
       geoName: getValue(row, geoColumn) as string,
@@ -40,10 +38,10 @@ export const getAreamapData = (
   });
 
   let coloredGeoData;
-  if (chartDataOptions.color) {
+  if (dataOptions.color) {
     coloredGeoData = geoDataColoringFunction(
       rawGeoData,
-      chartDataOptions.color?.color || defaultAreamapColorOptions,
+      dataOptions.color.color || defaultAreamapColorOptions,
     );
   }
 

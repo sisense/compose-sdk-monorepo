@@ -4,7 +4,7 @@ title: LineSubtype
 
 # Type alias LineSubtype
 
-> **LineSubtype**: `"line/spline"` \| `"line/basic"`
+> **LineSubtype**: `"line/basic"` \| `"line/spline"`
 
 Property of [LineStyleOptions](../interfaces/interface.LineStyleOptions.md)
 

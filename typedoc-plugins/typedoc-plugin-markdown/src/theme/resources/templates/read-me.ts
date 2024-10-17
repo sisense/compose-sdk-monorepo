@@ -23,10 +23,7 @@ export function readmeTemplate(
     md.push(
       readmeContent
         .replace(INDEX_PAGE_PLACEHOLDER, getIndexReplacer(context, page) || '')
-        .replace(
-          INDEX_URL_PLACEHOLDER_KEY,
-          `./${context.options.getValue('indexFileName')}`,
-        ),
+        .replace(INDEX_URL_PLACEHOLDER_KEY, `./${context.options.getValue('indexFileName')}`),
     );
   }
 

@@ -61,8 +61,11 @@ describe('indicatorData', () => {
   const indicatorChartDataOptions: IndicatorChartDataOptionsInternal = {
     value: [
       {
-        name: 'Total Cost',
-        aggregation: 'sum',
+        column: {
+          name: 'Total Cost',
+          aggregation: 'sum',
+          title: 'Total Cost',
+        },
         numberFormatConfig: {
           name: 'Percent',
           decimalScale: 3,
@@ -74,28 +77,33 @@ describe('indicatorData', () => {
           prefix: true,
           symbol: '',
         },
-        title: 'Total Cost',
       },
     ],
     secondary: [
       {
-        name: 'Total Revenue',
-        aggregation: 'sum',
-        title: 'Total Revenue',
+        column: {
+          name: 'Total Revenue',
+          aggregation: 'sum',
+          title: 'Total Revenue',
+        },
       },
     ],
     min: [
       {
-        name: 'min',
-        aggregation: 'min',
-        title: 'Min',
+        column: {
+          name: 'min',
+          aggregation: 'min',
+          title: 'Min',
+        },
       },
     ],
     max: [
       {
-        name: 'max',
-        aggregation: 'max',
-        title: 'Max',
+        column: {
+          name: 'max',
+          aggregation: 'max',
+          title: 'Max',
+        },
       },
     ],
   };

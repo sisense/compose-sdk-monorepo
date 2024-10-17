@@ -27,7 +27,7 @@ forecasted series according to the uncertainty level. The valid range is (0.8 <=
 
 ### `endDate`
 
-**endDate**?: `string` \| `Date`
+**endDate**?: `Date` \| `string`
 
 End date of the time series data that the forecasting model will be
 trained on. This parameter can be used to discard the end of the series.
@@ -92,7 +92,7 @@ false
 
 ### `startDate`
 
-**startDate**?: `string` \| `Date`
+**startDate**?: `Date` \| `string`
 
 Start date of the time series data that the forecasting model will
 be trained on. This parameter can be used to discard the beginning of

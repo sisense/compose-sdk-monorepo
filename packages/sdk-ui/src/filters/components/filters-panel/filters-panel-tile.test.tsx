@@ -165,7 +165,7 @@ describe('FiltersPanelTile', () => {
         <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, 'unsupportedFilter.title');
+    const tile = await findByText(container, 'unsupportedFilterMessage');
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });

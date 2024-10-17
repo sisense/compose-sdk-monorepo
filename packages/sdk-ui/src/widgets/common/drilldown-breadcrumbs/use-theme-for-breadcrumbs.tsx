@@ -1,5 +1,5 @@
 import { useThemeContext } from '../../../theme-provider';
-import { darken } from '@mui/system/colorManipulator';
+import { scaleBrightness } from '@/utils/color';
 
 export const useThemeForBreadcrumbs = () => {
   const {
@@ -9,8 +9,9 @@ export const useThemeForBreadcrumbs = () => {
       chart: { backgroundColor: chartBackgroundColor },
     },
   } = useThemeContext();
-  const activeDrillBackgroundColor: string = darken(chartBackgroundColor, 0.02);
-  const activeDrillHoverBackgroundColor = darken(activeDrillBackgroundColor, 0.05);
+
+  const activeDrillBackgroundColor: string = scaleBrightness(chartBackgroundColor, -0.02);
+  const activeDrillHoverBackgroundColor = scaleBrightness(activeDrillBackgroundColor, -0.05);
   return {
     primaryTextColor,
     secondaryTextColor,

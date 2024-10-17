@@ -1,5 +1,6 @@
 {
-  "version": "1.20.0",
+  "version": "1.21.0",
+  "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
@@ -12,9 +13,9 @@
   ],
   "scripts": {
     "dev": "yarn workspace @sisense/sdk-ui dev",
-    "demo": "yarn workspace react-ts-demo dev",
-    "demo:vue": "yarn workspace vue-ts-demo dev",
-    "demo:angular": "yarn workspace angular-demo start",
+    "demo": "yarn workspace @sisense/react-ts-demo dev",
+    "demo:vue": "yarn workspace @sisense/vue-ts-demo dev",
+    "demo:angular": "yarn workspace @sisense/angular-demo start",
     "build": "yarn workspaces foreach --no-private --verbose --topological run build",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
     "build:prod": "yarn workspaces foreach --no-private --verbose --topological run build:prod",
@@ -30,6 +31,7 @@
     "test:coverage:collect": "mkdir -p .nyc_output && node ./ci/collect-coverage-files.cjs collectFiles --pattern='packages/**/coverage-final.json' --target='.nyc_output'",
     "test:coverage:report": "nyc report --reporter lcov --reporter text-summary --reporter cobertura",
     "test:coverage:combine": "yarn test:coverage && yarn test:coverage:collect && yarn test:coverage:report",
+    "test:collect:report": "yarn test:coverage:collect && yarn test:coverage:report",
     "test:ct": "yarn workspaces foreach --verbose run test:ct",
     "test:visual": "yarn workspaces foreach --verbose run test:visual",
     "g:cli": "yarn workspace @sisense/sdk-cli run cli",
@@ -42,7 +44,21 @@
     "docs:serve:internal": "node ./scripts/serve-static.cjs docs-internal",
     "docs:gen:md": "./scripts/gen-docs-md.sh",
     "docs:check:md": "./scripts/check-docs-md.sh",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "nx:build": "nx run-many -t build",
+    "nx:build:af": "nx affected -t build",
+    "nx:test": "nx run-many -t test",
+    "nx:test:af": "nx affected -t test",
+    "nx:test:coverage": "nx run-many -t test:coverage",
+    "nx:test:coverage:af": "nx affected -t test:coverage",
+    "nx:lint": "nx run-many -t lint",
+    "nx:lint:af": "nx affected -t lint",
+    "nx:format": "nx run-many -t format",
+    "nx:format:check": "nx run-many -t format:check",
+    "nx:build:prod": "nx run-many -t build:prod",
+    "nx:build:prod:af": "nx affected -t build:prod",
+    "nx:component:tests": "nx run-many -t component:tests",
+    "nx:component:tests:af": "nx affected -t component:tests"
   },
   "files": [
     "packages/**/dist/*"
@@ -64,11 +80,11 @@
     "express": "^4.18.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
+    "nx": "20.0.0",
     "nyc": "^15.1.0",
     "prettier": "^2.8.8",
-    "typedoc": "0.25.12",
-    "typedoc-plugin-versions": "^0.2.3",
-    "typedoc-plugin-vue": "^1.1.0",
+    "typedoc": "0.26.10",
+    "typedoc-plugin-vue": "^1.2.0",
     "vitest": "^1.5.0"
   },
   "lint-staged": {

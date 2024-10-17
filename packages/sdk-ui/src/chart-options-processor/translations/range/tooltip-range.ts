@@ -1,4 +1,4 @@
-import { RangeChartDataOptionsInternal, Value } from '../../../chart-data-options/types';
+import { RangeChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import {
   InternalSeries,
@@ -10,6 +10,7 @@ import {
 import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
 import { TFunction } from '@sisense/sdk-common';
 import { cartesianDataFormatter } from '../tooltip';
+import { getDataOptionTitle } from '@/chart-data-options/utils';
 
 export const getRangeTooltipSettings = (
   showDecimals: boolean | undefined,
@@ -42,7 +43,7 @@ export const getRangeTooltipSettings = (
       const dataOptions = rangeChartDataOptions.rangeValues?.find(
         rangeChartDataOptions.breakBy.length > 0
           ? (y) => y[0].enabled
-          : (y) => y[0].title === that.series.name,
+          : (y) => getDataOptionTitle(y[0]) === that.series.name,
       );
 
       // If dataOptions is defined, destructure it, otherwise set to a default value
@@ -50,8 +51,8 @@ export const getRangeTooltipSettings = (
 
       const isPercentValueSupported = isTooltipPercentValueSupported(dataOptionY);
 
-      const upperYValue = formatTooltipValue(dataOptionY as Value, that.point.high, '');
-      const bottomYValue = formatTooltipValue(dataOptionY2 as Value, that.point.low, '');
+      const upperYValue = formatTooltipValue(dataOptionY, that.point.high, '');
+      const bottomYValue = formatTooltipValue(dataOptionY2, that.point.low, '');
       // const middle = formatTooltipValue(dataOptionY2 as Value, that.point.y, '');
 
       const maskedX = that.point?.custom?.xDisplayValue ?? that.x;

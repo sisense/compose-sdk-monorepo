@@ -21,11 +21,11 @@ const format3: NumberFormatConfig = {
 
 const dataOptions: CartesianChartDataOptionsInternal = {
   x: [
-    { name: 'x1', type: 'number', numberFormatConfig: format1 },
-    { name: 'x2', type: 'number', numberFormatConfig: format2 },
+    { column: { name: 'x1', type: 'number' }, numberFormatConfig: format1 },
+    { column: { name: 'x2', type: 'number' }, numberFormatConfig: format2 },
   ],
-  y: [{ title: 'v', name: 'v', numberFormatConfig: format3, enabled: true }],
-  breakBy: [{ name: 'b', type: 'number' }],
+  y: [{ column: { title: 'v', name: 'v' }, numberFormatConfig: format3, enabled: true }],
+  breakBy: [{ column: { name: 'b', type: 'number' } }],
 };
 
 it('should display cartesian tooltip for point', () => {

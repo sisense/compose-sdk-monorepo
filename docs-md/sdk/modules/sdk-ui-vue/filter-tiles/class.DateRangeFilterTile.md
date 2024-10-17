@@ -22,7 +22,7 @@ Vue example of configuring the date min max values and handling onChange event.
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { CriteriaFilterTile, type DateRangeFilterTileProps } from '@sisense/sdk-ui-vue';
+import { DateRangeFilterTile, type DateRangeFilterTileProps } from '@sisense/sdk-ui-vue';
 import { filterFactory } from '@sisense/sdk-data';
 import * as DM from '../assets/sample-retail-model';
 
@@ -48,7 +48,7 @@ DateRangeFilterTile props
 
 ### attribute
 
-> **attribute**?: [`LevelAttribute`](../../sdk-data/interfaces/interface.LevelAttribute.md)
+> **`readonly`** **attribute**?: [`LevelAttribute`](../../sdk-data/interfaces/interface.LevelAttribute.md)
 
 Date level attribute the filter is based on
 
@@ -56,7 +56,7 @@ Date level attribute the filter is based on
 
 ### datasource
 
-> **datasource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+> **`readonly`** **datasource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -66,7 +66,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 ### earliestDate
 
-> **earliestDate**?: `string`
+> **`readonly`** **earliestDate**?: `string`
 
 Earliest allowed date for selection.
 
@@ -76,7 +76,7 @@ If not specified, the earliest date of the target date-level attribute will be u
 
 ### filter
 
-> **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
+> **`readonly`** **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
 
 Date range filter.
 
@@ -84,7 +84,7 @@ Date range filter.
 
 ### lastDate
 
-> **lastDate**?: `string`
+> **`readonly`** **lastDate**?: `string`
 
 Latest allowed date for selection.
 
@@ -94,7 +94,7 @@ If not specified, the latest date of the target date-level attribute will be use
 
 ### onChange
 
-> **onChange**?: (`filter`) => `void`
+> **`readonly`** **onChange**?: (`filter`) => `void`
 
 Callback function that is called when the date range filter object should be updated.
 
@@ -112,7 +112,7 @@ Callback function that is called when the date range filter object should be upd
 
 ### parentFilters
 
-> **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **`readonly`** **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 List of filters this filter is dependent on.
 
@@ -120,6 +120,6 @@ List of filters this filter is dependent on.
 
 ### title
 
-> **title**?: `string`
+> **`readonly`** **title**?: `string`
 
 Filter tile title

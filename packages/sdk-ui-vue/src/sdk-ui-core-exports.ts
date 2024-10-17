@@ -47,6 +47,7 @@ export type {
   BasicMemberFilterTileProps,
   CriteriaFilterTileProps,
   DateRangeFilterTileProps,
+  RelativeDateFilterTileProps,
   ChartWidgetProps,
   TableWidgetProps,
   TableProps,

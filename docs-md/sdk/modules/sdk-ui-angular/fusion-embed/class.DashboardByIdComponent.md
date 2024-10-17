@@ -10,23 +10,23 @@ An Angular component used for easily rendering a dashboard by its ID created in 
 
 ## Example
 
-```html
-<csdk-dashboard-by-id
-  [dashboardOid]="dashboardOid"
-/>
-```
 ```ts
 import { Component } from '@angular/core';
-
 @Component({
- selector: 'app-dashboard',
- templateUrl: './dashboard.component.html',
- styleUrls: ['./dashboard.component.scss'],
-})
-export class DashboardComponent {
- dashboardOid: string = '60f3e3e3e4b0e3e3e4b0e3e3';
+  selector: 'code-example',
+  template: `
+    <div style="width: 100vw;">
+      `<csdk-dashboard-by-id *ngIf="dashboardOid" [dashboardOid]="dashboardOid" />`
+    </div>
+  `,
+ })
+export class CodeExampleComponent {
+  dashboardOid = 'your-dashboard-oid';
 }
 ```
+
+To learn more about this and related dashboard components,
+see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
 
 ## Implements
 

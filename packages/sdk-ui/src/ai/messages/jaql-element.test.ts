@@ -1,13 +1,13 @@
 import MOCK_NLQ_RESPONSE from '@/ai/__mocks__/nlq-response';
 import { createJaqlElement } from '@/ai/messages/jaql-element';
-import { isValue } from '@/chart-data-options/types';
+import { isMeasureColumn } from '@/chart-data-options/utils';
 import { MetadataItem } from '@sisense/sdk-query-client';
 
 describe('createJaqlElement', () => {
   it('should create JaqlElement with correct Category or Value type', () => {
     MOCK_NLQ_RESPONSE.jaql.metadata.forEach((metadataItem) => {
       const jaqlElement = createJaqlElement(metadataItem);
-      expect('formula' in metadataItem.jaql).toEqual(isValue(jaqlElement));
+      expect('formula' in metadataItem.jaql).toEqual(isMeasureColumn(jaqlElement));
     });
   });
 

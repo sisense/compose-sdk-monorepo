@@ -36,17 +36,17 @@ Configuration for legend - a key that provides information about the data series
 
 ***
 
-### markerSize
-
-> **markerSize**?: [`ScatterMarkerSize`](../type-aliases/type-alias.ScatterMarkerSize.md)
-
-***
-
 ### markers
 
 > **markers**?: [`Markers`](../type-aliases/type-alias.Markers.md)
 
 Configuration for markers - symbols or data points that highlight specific values
+
+***
+
+### markerSize
+
+> **markerSize**?: [`ScatterMarkerSize`](../type-aliases/type-alias.ScatterMarkerSize.md)
 
 ***
 

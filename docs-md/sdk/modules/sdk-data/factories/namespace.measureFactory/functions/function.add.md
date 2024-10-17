@@ -16,8 +16,8 @@ Creates a calculated measure by adding two given numbers or measures.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `value1` | `number` \| [`Measure`](../../../interfaces/interface.Measure.md) | First value |
-| `value2` | `number` \| [`Measure`](../../../interfaces/interface.Measure.md) | Second value |
+| `value1` | [`Measure`](../../../interfaces/interface.Measure.md) \| `number` | First value |
+| `value2` | [`Measure`](../../../interfaces/interface.Measure.md) \| `number` | Second value |
 | `name`? | `string` | Optional name for the new measure |
 | `withParentheses`? | `boolean` | Optional boolean flag whether to wrap the arithmetic operation with parentheses |
 

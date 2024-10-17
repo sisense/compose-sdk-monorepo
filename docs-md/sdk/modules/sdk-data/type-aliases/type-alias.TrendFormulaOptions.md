@@ -28,7 +28,7 @@ false
 
 ### `modelType`
 
-**modelType**?: `"linear"` \| `"logarithmic"` \| `"advancedSmoothing"` \| `"localEstimates"`
+**modelType**?: `"advancedSmoothing"` \| `"linear"` \| `"localEstimates"` \| `"logarithmic"`
 
 Trend analysis model type to be used for the operation.
 

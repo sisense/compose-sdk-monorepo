@@ -299,7 +299,6 @@ export function toTableWidgetProps(widgetModel: WidgetModel): TableWidgetProps {
 
  * Note: this method is not supported for chart or table widgets.
  * Use {@link toChartWidgetProps} instead for getting props for the <ChartWidget> component.
- * Use {@link toTableWidgetProps} instead for getting props for the <TableWidget> component.
  */
 export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWidgetProps {
   if (!isPivotTableWidget(widgetModel.widgetType)) {

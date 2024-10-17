@@ -60,7 +60,7 @@ Settings for the main chat body
 
 ### border
 
-> **border**?: `string` \| `false`
+> **border**?: `false` \| `string`
 
 Border of the chatbot
 
@@ -68,7 +68,7 @@ Border of the chatbot
 
 ### borderRadius
 
-> **borderRadius**?: `string` \| `false`
+> **borderRadius**?: `false` \| `string`
 
 Border radius of the chatbot
 
@@ -90,13 +90,13 @@ Settings for the chatbot clickable messages
 >
 > ##### `clickableMessages.border`
 >
-> **border**?: `string` \| `false`
+> **border**?: `false` \| `string`
 >
 > Border of the chatbot clickable messages
 >
 > ##### `clickableMessages.borderGradient`
 >
-> **borderGradient**?: `null` \| [`string`, `string`]
+> **borderGradient**?: [`string`, `string`] \| `null`
 >
 > 2-color gradient to be applied on the border
 >
@@ -424,7 +424,7 @@ Settings for the chatbot suggestions
 >
 > ##### `suggestions.borderGradient`
 >
-> **borderGradient**?: `null` \| [`string`, `string`]
+> **borderGradient**?: [`string`, `string`] \| `null`
 >
 > 2-color gradient to be applied on the border
 >

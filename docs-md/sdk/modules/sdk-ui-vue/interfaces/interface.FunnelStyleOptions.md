@@ -18,7 +18,7 @@ Data limit for series or categories that will be plotted
 
 ### funnelDirection
 
-> **funnelDirection**?: `"regular"` \| `"inverted"`
+> **funnelDirection**?: `"inverted"` \| `"regular"`
 
 Direction of FunnelChart narrowing
 
@@ -26,7 +26,7 @@ Direction of FunnelChart narrowing
 
 ### funnelSize
 
-> **funnelSize**?: `"wide"` \| `"regular"` \| `"narrow"`
+> **funnelSize**?: `"narrow"` \| `"regular"` \| `"wide"`
 
 Visual size of the lowest slice (degree of funnel narrowing from highest to lowest slices)
 
@@ -34,7 +34,7 @@ Visual size of the lowest slice (degree of funnel narrowing from highest to lowe
 
 ### funnelType
 
-> **funnelType**?: `"regular"` \| `"pinched"`
+> **funnelType**?: `"pinched"` \| `"regular"`
 
 Visual type of the lowest slice of FunnelChart
 

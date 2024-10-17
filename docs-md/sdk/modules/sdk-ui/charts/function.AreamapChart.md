@@ -4,7 +4,7 @@ title: AreamapChart
 
 # Function AreamapChart
 
-> **AreamapChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **AreamapChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component for visualizing geographical data as colored polygons on a map.
 
@@ -29,6 +29,6 @@ Areamap chart displaying total revenue per country from the Sample ECommerce dat
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Areamap Chart component

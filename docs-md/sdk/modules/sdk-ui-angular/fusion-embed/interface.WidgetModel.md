@@ -133,6 +133,31 @@ Use [widgetModelTranslator.toPivotTableProps](../namespaces/namespace.widgetMode
 
 ***
 
+### getPivotTableWidgetProps
+
+> **getPivotTableWidgetProps**(): [`PivotTableWidgetProps`](../../sdk-ui/interfaces/interface.PivotTableWidgetProps.md)
+
+Returns the props to be used for rendering a pivot table widget.
+
+#### Returns
+
+[`PivotTableWidgetProps`](../../sdk-ui/interfaces/interface.PivotTableWidgetProps.md)
+
+#### Example
+
+```ts
+<PivotTableWidget {...widget.getPivotTableWidgetProps()} />
+```
+
+Note: this method is not supported for chart or table widgets.
+Use [getChartWidgetProps](interface.WidgetModel.md#getchartwidgetprops) instead for getting props for the `<ChartWidget>`  component.
+
+::: warning Deprecated
+Use [widgetModelTranslator.toPivotTableWidgetProps](../namespaces/namespace.widgetModelTranslator/functions/function.toPivotTableWidgetProps.md) instead
+:::
+
+***
+
 ### getTableProps
 
 > **getTableProps**(): [`TableProps`](../../sdk-ui/interfaces/interface.TableProps.md)
@@ -177,7 +202,7 @@ Returns the props to be used for rendering a text widget.
 
 Note: this method is not supported for chart or pivot widgets.
 Use [getChartWidgetProps](interface.WidgetModel.md#getchartwidgetprops) instead for getting props for the `<ChartWidget>`  component.
-Use getPivotTableWidgetProps instead for getting props for the `<PivotTableWidget>`  component.
+Use [getPivotTableWidgetProps](interface.WidgetModel.md#getpivottablewidgetprops) instead for getting props for the `<PivotTableWidget>`  component.
 
 ::: warning Deprecated
 Use [widgetModelTranslator.toTextWidgetProps](../namespaces/namespace.widgetModelTranslator/functions/function.toTextWidgetProps.md) instead

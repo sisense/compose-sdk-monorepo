@@ -5,7 +5,6 @@ import {
   CategoricalChartDataOptionsInternal,
   ChartDataOptions,
   ChartDataOptionsInternal,
-  Value,
 } from '../types';
 import { ChartType } from '../../types';
 import merge from 'ts-deepmerge';
@@ -22,7 +21,7 @@ export type DataColumnNamesMapping = Record<string, string>;
  * @param measures - An array of Value objects representing measures.
  * @returns - The mapping of unique names to original names.
  */
-export const generateUniqueDataColumnsNames = (measures: Value[]): DataColumnNamesMapping => {
+export const generateUniqueDataColumnsNames = (measures: Measure[]): DataColumnNamesMapping => {
   const dataColumnNamesMapping: DataColumnNamesMapping = {};
   const getMeasurePrefix = (id: number): string => `$measure${id}_`;
 

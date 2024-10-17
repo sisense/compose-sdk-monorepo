@@ -1,5 +1,5 @@
 import { DataPoint, ChartType, ChartDataOptions, ScatterChartDataOptions } from '../../types';
-import { Attribute, type Filter } from '@sisense/sdk-data';
+import { Attribute, type Filter, Column } from '@sisense/sdk-data';
 import { mergeFilters } from '@/dashboard-widget/utils';
 import { combineHandlers } from '../../utils/combine-handlers';
 import {
@@ -15,10 +15,18 @@ import {
   isScatter,
 } from '@/chart-options-processor/translations/types';
 import { getSelectableWidgetAttributes } from '@/common-filters/selection-utils';
-import { ChartProps, CustomDrilldownResult, ScatterDataPoint, isMeasureColumn } from '../..';
+import {
+  CartesianChartDataOptions,
+  ChartProps,
+  CustomDrilldownResult,
+  ScatterDataPoint,
+  StyledColumn,
+} from '../..';
 import { PointClickEventObject } from '@sisense/sisense-charts';
 import { ScatterCustomPointOptions } from '@/chart-options-processor/translations/scatter-tooltip';
 import camelCase from 'lodash-es/camelCase';
+import { isMeasureColumn, translateColumnToAttribute } from '@/chart-data-options/utils';
+import { isSameAttribute } from '@/utils/filters';
 
 export function getDrilldownInitialDimension(chartType: ChartType, dataOptions: ChartDataOptions) {
   return getSelectableWidgetAttributes(chartType, dataOptions)[0];
@@ -56,22 +64,39 @@ export function applyDrilldownDimension(
   dataOptions: ChartDataOptions,
   drilldownDimension: Attribute,
 ): ChartDataOptions {
+  const shouldUpdateDataOption = (
+    currentDataOption: Column | StyledColumn | undefined,
+  ): boolean => {
+    return (
+      !!currentDataOption &&
+      !isSameAttribute(drilldownDimension, translateColumnToAttribute(currentDataOption))
+    );
+  };
+
   if (
     isCartesian(chartType) ||
     isCategorical(chartType) ||
     isBoxplot(chartType) ||
     isRange(chartType)
   ) {
-    return {
-      ...dataOptions,
-      category: [drilldownDimension],
-    } as ChartDataOptions;
+    const targetDataOption = (dataOptions as CartesianChartDataOptions).category[0];
+    if (shouldUpdateDataOption(targetDataOption)) {
+      return {
+        ...dataOptions,
+        category: [drilldownDimension],
+      } as ChartDataOptions;
+    }
   } else if (isScatter(chartType)) {
     const scatterDataOptions = dataOptions as ScatterChartDataOptions;
-    const scatterTargetDataOptionsKeys = ['x', 'y', 'breakByPoint', 'breakByColor'];
+    const scatterTargetKeys = ['x', 'y', 'breakByPoint', 'breakByColor'];
 
-    for (const key of scatterTargetDataOptionsKeys) {
-      if (scatterDataOptions[key] && !isMeasureColumn(scatterDataOptions[key])) {
+    for (const key of scatterTargetKeys) {
+      const targetDataOption = scatterDataOptions[key];
+      if (
+        targetDataOption &&
+        !isMeasureColumn(targetDataOption) &&
+        shouldUpdateDataOption(targetDataOption)
+      ) {
         return {
           ...scatterDataOptions,
           [key]: drilldownDimension,

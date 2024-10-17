@@ -24,7 +24,7 @@ import { PivotTable } from '../pivot-table';
  * ```
  * @param props - Pivot Table Widget properties
  * @returns Widget component representing a pivot table
- * @group Dashboarding
+ * @group Dashboards
  * @beta
  */
 export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSisenseComponent({

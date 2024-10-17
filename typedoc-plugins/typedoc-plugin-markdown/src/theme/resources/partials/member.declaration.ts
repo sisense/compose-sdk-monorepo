@@ -1,9 +1,4 @@
-import {
-  DeclarationReflection,
-  IntersectionType,
-  ReflectionKind,
-  ReflectionType,
-} from 'typedoc';
+import { DeclarationReflection, IntersectionType, ReflectionKind, ReflectionType } from 'typedoc';
 import { MarkdownThemeRenderContext } from '../..';
 import { codeBlock, heading } from '../../../support/elements';
 
@@ -20,17 +15,12 @@ export function declarationMember(
 
   const useCodeBlocks = context.options.getValue('identifiersAsCodeBlocks');
 
-  const typeDeclaration = (declaration.type as any)
-    ?.declaration as DeclarationReflection;
+  const typeDeclaration = (declaration.type as any)?.declaration as DeclarationReflection;
 
   if (useCodeBlocks) {
     md.push(codeBlock(context.declarationMemberIdentifier(declaration)));
   } else {
-    md.push(
-      `${!nested ? '> ' : ''}${context.declarationMemberIdentifier(
-        declaration,
-      )}`,
-    );
+    md.push(`${!nested ? '> ' : ''}${context.declarationMemberIdentifier(declaration)}`);
   }
 
   if (declaration.comment) {
@@ -59,15 +49,14 @@ export function declarationMember(
   if (typeDeclaration) {
     const hasParent = typeDeclaration.parent?.kindOf(ReflectionKind.Property);
 
-    if (typeDeclaration?.indexSignature) {
+    if (typeDeclaration?.indexSignatures) {
       md.push(heading(headingLevel, `Index signature`));
-      md.push(context.indexSignatureTitle(typeDeclaration.indexSignature));
+      typeDeclaration.indexSignatures.forEach((indexSignature) => {
+        md.push(context.indexSignatureTitle(indexSignature));
+      });
     }
 
-    if (
-      typeDeclaration?.signatures?.length ||
-      typeDeclaration?.children?.length
-    ) {
+    if (typeDeclaration?.signatures?.length || typeDeclaration?.children?.length) {
       if (typeDeclaration?.signatures?.length) {
         typeDeclaration.signatures.forEach((signature) => {
           md.push(context.signatureMember(signature, headingLevel, false));

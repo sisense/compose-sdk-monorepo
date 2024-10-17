@@ -1,4 +1,4 @@
-import { Category, Value } from '../chart-data-options/types';
+import { Column, MeasureColumn } from '@sisense/sdk-data';
 import {
   createSortableTable,
   rownumColumnName,
@@ -45,13 +45,13 @@ describe('Aggregate Chart Data', () => {
     const catColumn = {
       name: 'col_string',
       type: 'string',
-    } as Category;
+    } as Column;
     const measColumn = {
       name: 'col_number',
       aggregation: 'sum',
       type: 'number',
       title: 'Col Number Title',
-    } as Value;
+    } as MeasureColumn;
 
     const groupByTable = filterAndAggregateChartData(sortableTable, [catColumn], [measColumn]);
 

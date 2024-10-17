@@ -5,12 +5,7 @@
  * @module
  */
 
-import {
-  DeclarationReflection,
-  Options,
-  ProjectReflection,
-  ReflectionKind,
-} from 'typedoc';
+import { DeclarationReflection, Options, ProjectReflection, ReflectionKind } from 'typedoc';
 
 export function getDeclarationType(declaration: DeclarationReflection) {
   if (declaration.getSignature) {
@@ -22,17 +17,12 @@ export function getDeclarationType(declaration: DeclarationReflection) {
   return declaration.type;
 }
 
-export function getProjectDisplayName(
-  project: ProjectReflection,
-  includeVersion: boolean,
-): string {
+export function getProjectDisplayName(project: ProjectReflection, includeVersion: boolean): string {
   const version = includeVersion ? ` - v${project.packageVersion}` : '';
   return `${project.name}${version}`;
 }
 
-export function hasIndex(
-  reflection: DeclarationReflection | ProjectReflection,
-) {
+export function hasIndex(reflection: DeclarationReflection | ProjectReflection) {
   return reflection.groups?.some((group) => group.allChildrenHaveOwnDocument());
 }
 
@@ -55,6 +45,9 @@ export function getModifier(reflection: DeclarationReflection) {
   }
   if (reflection.flags.isStatic) {
     return 'Static';
+  }
+  if (reflection.flags.isConst) {
+    return 'Const';
   }
   if (reflection.getSignature) {
     return 'get';

@@ -37,7 +37,6 @@ import { useShouldLoad } from '../common/hooks/use-should-load';
  * - [Query with Sorting](https://www.sisense.com/platform/compose-sdk/playground/?example=queries%2Fuse-execute-query-sorting)
  * - [Take Control of Your Data Visualizations]( https://www.sisense.com/blog/take-control-of-your-data-visualizations/) blog post with examples of using the hook to fetch data to display in third-party charts.
  *
- * @param params - Parameters of the query
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  * @group Queries
  */
@@ -46,6 +45,7 @@ export const useExecuteQuery = withTracking('useExecuteQuery')(useExecuteQueryIn
 /**
  * {@link useExecuteQuery} without tracking to be used inside other hooks or components in Compose SDK.
  *
+ * @param params - Parameters of the query
  * @internal
  */
 // eslint-disable-next-line sonarjs/cognitive-complexity

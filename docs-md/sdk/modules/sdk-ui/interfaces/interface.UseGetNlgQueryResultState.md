@@ -10,7 +10,7 @@ State for [useGetNlgQueryResult](../generative-ai/function.useGetNlgQueryResult.
 
 ### data
 
-> **data**: `undefined` \| `string`
+> **data**: `string` \| `undefined`
 
 The result data
 

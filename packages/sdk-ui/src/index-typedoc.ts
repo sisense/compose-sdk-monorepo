@@ -1,9 +1,7 @@
 /**
  * @packageDocumentation
  * @groupDescription Charts
- * React components for charts
- * @groupDescription Chart Utilities
- * Utilities to be used with charts
+ * React components and utilities for working with charts
  * @groupDescription Data Grids
  * React components for data grids
  * @groupDescription Drilldown
@@ -14,8 +12,8 @@
  * React context components
  * @groupDescription Queries
  * React components and hooks for working with queries
- * @groupDescription Dashboarding
- * React components, hooks, and utilities for composing dashboards
+ * @groupDescription Dashboards
+ * React components and utilities for working with dashboards
  * @groupDescription Fusion Embed
  * React components, hooks, and utilities for working with Fusion Embed dashboards, widgets, queries, and formulas
  * @groupDescription Generative AI

@@ -15,10 +15,9 @@ import {
 import { MemberFilterTile } from '../member-filter-tile';
 import { CriteriaFilterTile } from '../criteria-filter-tile';
 import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter';
-import { FilterTile } from '../filter-tile';
-import { useTranslation } from 'react-i18next';
 import { CascadingFilterTile } from '../cascading-filter-tile';
 import { CustomFilterTile } from '../custom-filter-tile';
+import { UnsupportedFilterTile } from '@/filters/components/unsupported-filter-tile';
 
 /**
  * Props of the {@link FiltersPanelTile} component
@@ -44,8 +43,6 @@ export const FiltersPanelTile = ({
   onChange,
   defaultDataSource,
 }: FiltersPanelTileProps) => {
-  const { t } = useTranslation();
-
   const attribute = filter.attribute;
   const title = attribute.name;
   const props = {
@@ -92,16 +89,5 @@ export const FiltersPanelTile = ({
     return <CascadingFilterTile {...props} filter={filter} onChange={onChange} />;
   }
 
-  return (
-    <FilterTile
-      title={t('unsupportedFilter.title')}
-      renderContent={() => (
-        <div className="csdk-p-[8px] csdk-text-center csdk-text-[13px]">
-          <span>{t('unsupportedFilter.message')}</span>
-        </div>
-      )}
-      design={{ header: { isCollapsible: false } }}
-      locked={filter.locked}
-    />
-  );
+  return <UnsupportedFilterTile filter={filter} design={{ header: { isCollapsible: false } }} />;
 };

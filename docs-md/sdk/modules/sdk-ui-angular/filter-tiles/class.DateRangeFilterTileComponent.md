@@ -18,7 +18,6 @@ Date Range Filter Tile Component
 ```
 ```ts
 import { Component } from '@angular/core';
-import { Member } from '@sisense/sdk-ui-angular';
 import { Filter, filterFactory } from '@sisense/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
@@ -100,7 +99,7 @@ Date level attribute the filter is based on
 
 #### dataSource
 
-> **dataSource**: `undefined` \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+> **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -110,7 +109,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 #### earliestDate
 
-> **earliestDate**: `undefined` \| `string`
+> **earliestDate**: `string` \| `undefined`
 
 Earliest allowed date for selection.
 
@@ -136,7 +135,7 @@ Callback function that is called when the date range filter object should be upd
 
 #### lastDate
 
-> **lastDate**: `undefined` \| `string`
+> **lastDate**: `string` \| `undefined`
 
 Latest allowed date for selection.
 

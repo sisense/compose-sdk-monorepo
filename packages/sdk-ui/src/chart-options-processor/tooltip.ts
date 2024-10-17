@@ -54,7 +54,7 @@ export const getTooltipSettings = (
       const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
         chartDataOptions as CartesianChartDataOptionsInternal;
       let partialNumberFormatConfig = cartesianChartDataOptions.y?.find(
-        (y) => y.name === that.series.name,
+        (y) => y.column.name === that.series.name,
       )?.numberFormatConfig;
       if (!partialNumberFormatConfig && cartesianChartDataOptions.breakBy.length > 0) {
         partialNumberFormatConfig = cartesianChartDataOptions.y?.find(

@@ -14,9 +14,14 @@ import {
   executeQueryWithCache,
   executeQuery as executeQueryWithoutCache,
 } from '../../query/execute-query';
-import { isMeasureColumn, TableDataOptionsInternal } from '../../chart-data-options/types';
+import { TableDataOptionsInternal } from '../../chart-data-options/types';
 import { useSetError } from '../../error-boundary/use-set-error';
 import { TranslatableError } from '../../translation/translatable-error';
+import {
+  isMeasureColumn,
+  translateColumnToAttribute,
+  translateColumnToMeasure,
+} from '@/chart-data-options/utils';
 
 type UseDataProps = {
   dataSet: Data | DataSource | undefined;
@@ -33,9 +38,9 @@ export const getTableAttributesAndMeasures = (dataOptions: TableDataOptionsInter
 
   for (const column of dataOptions.columns) {
     if (isMeasureColumn(column)) {
-      measures.push(column as Measure);
+      measures.push(translateColumnToMeasure(column));
     } else {
-      attributes.push(column as Attribute);
+      attributes.push(translateColumnToAttribute(column));
     }
   }
 

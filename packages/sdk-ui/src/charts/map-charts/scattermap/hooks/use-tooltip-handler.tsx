@@ -2,14 +2,14 @@ import { useCallback } from 'react';
 import delay from 'lodash-es/delay';
 import { ScattermapChartLocation } from '../../../../chart-data/types';
 import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
-import {
-  ScattermapChartDataOptionsInternal,
-  isMeasureColumn,
-} from '../../../../chart-data-options/types.js';
+import { ScattermapChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
 import { QueryDescription, executeQuery } from '../../../../query/execute-query.js';
 import { DataSource, Filter, filterFactory } from '@sisense/sdk-data';
 import { mergeFilters } from '../../../../dashboard-widget/utils.js';
-import { translateCategoryToAttribute } from '../../../../chart-data-options/utils.js';
+import {
+  isMeasureColumn,
+  translateColumnToAttribute,
+} from '../../../../chart-data-options/utils.js';
 import { TooltipShowDetails, createScattermapTooltip } from '../utils/tooltip';
 import { splitLocationName } from '../utils/location';
 
@@ -36,17 +36,17 @@ export const useTooltipHandler = ({
 
   const loadTooltipDetails = useCallback(
     async (locationName: ScattermapChartLocation['name']) => {
-      if (!app) return [];
+      if (!app || !dataOptions.details || isMeasureColumn(dataOptions.details)) return [];
 
       const locationFilters = dataOptions.locations.map((locationDataOption, index) => {
-        const attribute = translateCategoryToAttribute(locationDataOption);
+        const attribute = translateColumnToAttribute(locationDataOption);
         const locationValue = splitLocationName(locationName)[index];
         return filterFactory.members(attribute, [locationValue]);
       });
 
       const detailsQuery: QueryDescription = {
         dataSource,
-        dimensions: [dataOptions.details],
+        dimensions: [translateColumnToAttribute(dataOptions.details)],
         filters: mergeFilters(filters, locationFilters),
         count: TOOLTIP_DETAILS_QUERY_COUNT,
       } as QueryDescription;

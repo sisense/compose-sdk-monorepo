@@ -154,7 +154,7 @@ export interface HierarchyDto {
 }
 
 /**
- * @description the scroll location of the navigator scroller / auto zoom feature
+ * The scroll location of the navigator scroller / auto zoom feature
  */
 export type AutoZoomNavigatorScrollerLocation = {
   min: number;

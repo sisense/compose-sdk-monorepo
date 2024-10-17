@@ -16,8 +16,8 @@ Creates a filter to isolate items between and including the given dates and leve
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `level` | [`LevelAttribute`](../../../interfaces/interface.LevelAttribute.md) | Date [LevelAttribute](../../../interfaces/interface.LevelAttribute.md) to filter on |
-| `from`? | `string` \| `Date` | Date or string representing the start member to filter from |
-| `to`? | `string` \| `Date` | Date or string representing the end member to filter to |
+| `from`? | `Date` \| `string` | Date or string representing the start member to filter from |
+| `to`? | `Date` \| `string` | Date or string representing the end member to filter to |
 
 ## Returns
 

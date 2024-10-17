@@ -24,7 +24,7 @@ Animation options
 >
 > > ###### `init.duration`
 > >
-> > **duration**?: `number` \| `"auto"`
+> > **duration**?: `"auto"` \| `number`
 > >
 > > Animation duration in milliseconds.
 > > If not specified, the default value, `auto`, will be used with a different default value applied per chart type.
@@ -39,7 +39,7 @@ Animation options
 >
 > > ###### `redraw.duration`
 > >
-> > **duration**?: `number` \| `"auto"`
+> > **duration**?: `"auto"` \| `number`
 > >
 > > Animation duration in milliseconds.
 > > If not specified, the default value, `auto`, will be used with a different default value applied per chart type.

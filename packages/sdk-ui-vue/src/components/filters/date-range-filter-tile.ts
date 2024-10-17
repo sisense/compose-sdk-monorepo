@@ -22,7 +22,7 @@ import { setupHelper } from '../../setup-helper';
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { CriteriaFilterTile, type DateRangeFilterTileProps } from '@sisense/sdk-ui-vue';
+ * import { DateRangeFilterTile, type DateRangeFilterTileProps } from '@sisense/sdk-ui-vue';
  * import { filterFactory } from '@sisense/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
  *

@@ -4,6 +4,6 @@ title: DataSource
 
 # Type alias DataSource
 
-> **DataSource**: `string` \| [`DataSourceInfo`](type-alias.DataSourceInfo.md)
+> **DataSource**: [`DataSourceInfo`](type-alias.DataSourceInfo.md) \| `string`
 
 Data source for queries to run against

@@ -35,7 +35,7 @@ export const cartesianDataFormatter = function (
   const dataOptionY =
     cartesianChartDataOptions.breakBy.length > 0
       ? cartesianChartDataOptions.y?.find((y) => y.enabled)
-      : cartesianChartDataOptions.y?.find((y) => y.title === that.series.name);
+      : cartesianChartDataOptions.y?.find((y) => y.column.title === that.series.name);
 
   const isPercentValueSupported = isTooltipPercentValueSupported(dataOptionY);
   const yValue = formatTooltipValue(dataOptionY, that.point.y, '');
@@ -80,7 +80,7 @@ export const cartesianDataFormatter = function (
 
   if (isTrend) {
     const modelTypeFromExpressionRegex = /modelType=([^"]+)/;
-    const match = (dataOptionY as unknown as DimensionalCalculatedMeasure)?.expression.match(
+    const match = (dataOptionY?.column as DimensionalCalculatedMeasure)?.expression.match(
       modelTypeFromExpressionRegex,
     );
     const modelTypeValue = match ? match[1] : null;
@@ -110,7 +110,7 @@ export const cartesianDataFormatter = function (
 
   if (isForecast) {
     const confidenceIntervalFromExpressionRegex = /confidenceInterval=([^"]+)/;
-    const match = (dataOptionY as unknown as DimensionalCalculatedMeasure)?.expression.match(
+    const match = (dataOptionY?.column as DimensionalCalculatedMeasure)?.expression.match(
       confidenceIntervalFromExpressionRegex,
     );
     const confidenceValue = match ? match[1] : '0.8';

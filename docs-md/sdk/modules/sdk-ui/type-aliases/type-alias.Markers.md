@@ -28,6 +28,6 @@ Marker fill style
 
 ### `size`
 
-**size**?: `"small"` \| `"large"`
+**size**?: `"large"` \| `"small"`
 
 Size of markers

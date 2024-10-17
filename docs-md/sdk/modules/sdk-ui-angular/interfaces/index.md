@@ -6,10 +6,10 @@ title: Interfaces
 
 TypeScript interfaces for components and services listed above
 
-- [AreaRangeStyleOptions](interface.AreaRangeStyleOptions.md)
-- [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
 - [AreamapStyleOptions](interface.AreamapStyleOptions.md)
+- [AreaRangeStyleOptions](interface.AreaRangeStyleOptions.md)
+- [AreaStyleOptions](interface.AreaStyleOptions.md)
 - [BoxplotStyleOptions](interface.BoxplotStyleOptions.md)
 - [CartesianChartDataOptions](interface.CartesianChartDataOptions.md)
 - [CategoricalChartDataOptions](interface.CategoricalChartDataOptions.md)
@@ -35,9 +35,9 @@ TypeScript interfaces for components and services listed above
 - [PolarStyleOptions](interface.PolarStyleOptions.md)
 - [RangeChartDataOptions](interface.RangeChartDataOptions.md)
 - [ScatterChartDataOptions](interface.ScatterChartDataOptions.md)
-- [ScatterStyleOptions](interface.ScatterStyleOptions.md)
 - [ScattermapChartDataOptions](interface.ScattermapChartDataOptions.md)
 - [ScattermapStyleOptions](interface.ScattermapStyleOptions.md)
+- [ScatterStyleOptions](interface.ScatterStyleOptions.md)
 - [SisenseContextConfig](interface.SisenseContextConfig.md)
 - [StackableStyleOptions](interface.StackableStyleOptions.md)
 - [StyledColumn](interface.StyledColumn.md)

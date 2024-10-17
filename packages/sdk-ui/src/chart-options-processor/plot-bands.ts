@@ -22,10 +22,10 @@ type CategoryIndexMapPlotBands = {
 };
 
 export const applyNumberFormatToPlotBands = (
-  chartDataOptions: ChartDataOptionsInternal,
+  dataOptions: ChartDataOptionsInternal,
   categoryIndexMapPlotBands: CategoryIndexMapPlotBands,
 ): CategoryIndexMapPlotBands => {
-  const cartesianChartDataOptions = chartDataOptions as CartesianChartDataOptionsInternal;
+  const cartesianChartDataOptions = dataOptions as CartesianChartDataOptionsInternal;
   if (cartesianChartDataOptions.x.length !== 2) {
     return categoryIndexMapPlotBands;
   }
@@ -38,7 +38,7 @@ export const applyNumberFormatToPlotBands = (
 
   // Category is x1
   let newCategories: string[] = categories;
-  if (x1 && isNumber(x1.type)) {
+  if (x1 && isNumber(x1.column.type)) {
     newCategories = categories.map((category: string) => {
       return applyFormatPlainText(x1NumberFormatConfig, parseFloat(category));
     });
@@ -46,7 +46,7 @@ export const applyNumberFormatToPlotBands = (
 
   // PlotBand is x2
   let newPlotBands: PlotBand[] = plotBands;
-  if (x2 && isNumber(x2.type)) {
+  if (x2 && isNumber(x2.column.type)) {
     newPlotBands = plotBands.map((plotBand: PlotBand) => {
       const text = applyFormatPlainText(x2NumberFormatConfig, parseFloat(plotBand.text));
       return { ...plotBand, text };

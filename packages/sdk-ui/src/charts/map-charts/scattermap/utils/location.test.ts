@@ -55,9 +55,11 @@ describe('getScattermapDataPoint', () => {
     } as unknown as ScattermapChartLocation;
 
     const result = getScattermapDataPoint(location, {
-      locations: [{ name: 'Country' }, { name: 'City' }],
+      locations: [{ column: { name: 'Country' } }, { column: { name: 'City' } }],
       size: {
-        name: 'Revenue',
+        column: {
+          name: 'Revenue',
+        },
       },
     } as ScattermapChartDataOptionsInternal);
 
@@ -70,18 +72,18 @@ describe('getScattermapDataPoint', () => {
         geo: [
           {
             id: 'geo.0',
-            dataOption: { name: 'Country' },
+            dataOption: { column: { name: 'Country' } },
             value: 'USA',
           },
           {
             id: 'geo.1',
-            dataOption: { name: 'City' },
+            dataOption: { column: { name: 'City' } },
             value: 'New York',
           },
         ],
         size: {
           id: 'size',
-          dataOption: { name: 'Revenue' },
+          dataOption: { column: { name: 'Revenue' } },
           value: 100,
         },
       },

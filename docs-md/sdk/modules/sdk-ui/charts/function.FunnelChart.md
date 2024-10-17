@@ -4,7 +4,7 @@ title: FunnelChart
 
 # Function FunnelChart
 
-> **FunnelChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **FunnelChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component representing data progressively decreasing in size or quantity through a funnel shape.
 
@@ -27,6 +27,6 @@ Funnel chart displaying data from the Sample ECommerce data model.
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Funnel Chart component

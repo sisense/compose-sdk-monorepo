@@ -5,25 +5,29 @@ import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { normalizePivotSort } from '../sorting-utils';
 import isEqual from 'lodash-es/isEqual';
 import { ExecutePivotQueryParams } from '@/query-execution';
-import { translateCategoryToAttribute, translateValueToMeasure } from '@/chart-data-options/utils';
-import { Category, PivotTableDataOptionsInternal, Value } from '@/chart-data-options/types';
+import { translateColumnToAttribute, translateColumnToMeasure } from '@/chart-data-options/utils';
+import {
+  PivotTableDataOptionsInternal,
+  StyledColumn,
+  StyledMeasureColumn,
+} from '@/chart-data-options/types';
 import { useExecutePivotQueryInternal } from '@/query-execution/use-execute-pivot-query';
 
-const getPivotAttribute = (category: Category) => {
+const getPivotAttribute = (dataOption: StyledColumn) => {
   return {
-    attribute: translateCategoryToAttribute(category),
-    includeSubTotals: category.includeSubTotals || false,
-    ...(category.sortType && {
-      sort: normalizePivotSort(category.sortType),
+    attribute: translateColumnToAttribute(dataOption),
+    includeSubTotals: dataOption.includeSubTotals || false,
+    ...(dataOption.sortType && {
+      sort: normalizePivotSort(dataOption.sortType),
     }),
   };
 };
 
-const getPivotMeasure = (value: Value) => {
+const getPivotMeasure = (dataOption: StyledMeasureColumn) => {
   return {
-    measure: translateValueToMeasure(value),
-    totalsCalculation: value.totalsCalculation,
-    dataBars: value.dataBars || false,
+    measure: translateColumnToMeasure(dataOption),
+    totalsCalculation: dataOption.totalsCalculation,
+    dataBars: dataOption.dataBars || false,
   };
 };
 

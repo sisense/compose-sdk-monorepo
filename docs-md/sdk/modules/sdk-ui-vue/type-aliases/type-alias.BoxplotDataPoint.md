@@ -44,7 +44,7 @@ Display value of category of the data point
 
 ### `categoryValue`
 
-**categoryValue**?: `string` \| `number`
+**categoryValue**?: `number` \| `string`
 
 Value of the category for the data point
 

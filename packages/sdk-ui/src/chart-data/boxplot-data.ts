@@ -26,14 +26,14 @@ import { rownumColumnName } from '../chart-data-processor/table-creators.js';
  */
 // eslint-disable-next-line max-lines-per-function
 export const boxplotData = (
-  chartDataOptions: BoxplotChartDataOptionsInternal,
+  dataOptions: BoxplotChartDataOptionsInternal,
   dataTable: DataTable,
 ): BoxplotChartData => {
   const xColumn: Column | undefined =
-    chartDataOptions.category && getColumnByName(dataTable, chartDataOptions.category.name);
+    dataOptions.category && getColumnByName(dataTable, dataOptions.category.column.name);
 
   if (xColumn) {
-    xColumn.direction = sortDirection(chartDataOptions.category!.sortType as SortDirection);
+    xColumn.direction = sortDirection(dataOptions.category!.sortType as SortDirection);
   }
 
   const xValuesOrdered = getOrderedXValues(
@@ -44,13 +44,13 @@ export const boxplotData = (
   );
 
   const rowsByXColumns = getIndexedRows(dataTable.rows, xColumn ? [xColumn] : []);
-  const boxMinColumn = getColumnByName(dataTable, chartDataOptions.boxMin.name);
-  const boxMedianColumn = getColumnByName(dataTable, chartDataOptions.boxMedian.name);
-  const boxMaxColumn = getColumnByName(dataTable, chartDataOptions.boxMax.name);
-  const whiskerMinColumn = getColumnByName(dataTable, chartDataOptions.whiskerMin.name);
-  const whiskerMaxColumn = getColumnByName(dataTable, chartDataOptions.whiskerMax.name);
+  const boxMinColumn = getColumnByName(dataTable, dataOptions.boxMin.column.name);
+  const boxMedianColumn = getColumnByName(dataTable, dataOptions.boxMedian.column.name);
+  const boxMaxColumn = getColumnByName(dataTable, dataOptions.boxMax.column.name);
+  const whiskerMinColumn = getColumnByName(dataTable, dataOptions.whiskerMin.column.name);
+  const whiskerMaxColumn = getColumnByName(dataTable, dataOptions.whiskerMax.column.name);
   const outliersColumn =
-    chartDataOptions.outliers && getColumnByName(dataTable, chartDataOptions.outliers.name);
+    dataOptions.outliers && getColumnByName(dataTable, dataOptions.outliers.column.name);
 
   const seriesValues: BoxplotSeriesValueData[] = [];
   const outliersSeriesValues: BoxplotOutliersSeriesValueData[] = [];
@@ -88,16 +88,16 @@ export const boxplotData = (
 
   const series: BoxplotChartData['series'] = [
     {
-      name: chartDataOptions.valueTitle,
-      title: chartDataOptions.valueTitle,
+      name: dataOptions.valueTitle,
+      title: dataOptions.valueTitle,
       data: seriesValues,
     },
   ];
 
   if (outliersSeriesValues.length > 0) {
     series.push({
-      name: chartDataOptions.valueTitle,
-      title: chartDataOptions.valueTitle,
+      name: dataOptions.valueTitle,
+      title: dataOptions.valueTitle,
       data: outliersSeriesValues,
     });
   }

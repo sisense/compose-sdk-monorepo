@@ -7,10 +7,11 @@ import { Data, isDatetime } from '@sisense/sdk-data';
 import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
 import { applyDateFormat, defaultDateConfig } from './date-formats';
 import type { DateFormat, DateConfig } from './date-formats';
-import { Category, isCategory } from '../chart-data-options/types';
+import { StyledColumn } from '../chart-data-options/types';
 import type { Column, Cell, QueryResultData } from '@sisense/sdk-data';
 import { isCell } from '../chart-data-processor/table-creators';
 import { createCompareValue } from '../chart-data-processor/row-comparator';
+import { isMeasureColumn } from '@/chart-data-options/utils';
 
 //TODO: refactor this function
 // eslint-disable-next-line max-lines-per-function, sonarjs/cognitive-complexity
@@ -30,15 +31,17 @@ export function applyDateFormats(
         : [chartDataOptions.x]
       : []),
     ...(chartDataOptions.columns ? chartDataOptions.columns : []),
-  ].forEach(function collectDateFormatsFromCategoriesOptions(cat: Category): void {
-    if (!isCategory(cat) || !cat.dateFormat) {
+  ].forEach(function collectDateFormatsFromCategoriesOptions(cat: StyledColumn): void {
+    if (isMeasureColumn(cat) || !cat.dateFormat) {
       return;
     }
 
     const columnIndex = data.columns.findIndex(function isDatetimeColumnWithSameNameSameType(
       column: Column,
     ): boolean {
-      return column.name === cat.name && isDatetime(cat.type) && isDatetime(column.type);
+      return (
+        column.name === cat.column.name && isDatetime(cat.column.type) && isDatetime(column.type)
+      );
     });
 
     if (columnIndex === -1) {

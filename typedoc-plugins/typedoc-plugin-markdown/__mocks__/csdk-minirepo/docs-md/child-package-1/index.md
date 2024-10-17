@@ -14,6 +14,7 @@ Group 1 description
 
 Group 1 description more and more
 
+- [SomeProps](group-1/interface.SomeProps.md)
 - [alphaFunction](group-1/function.alphaFunction.md) <Badge type="alpha" text="Alpha" />
 - [betaFunction](group-1/function.betaFunction.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 

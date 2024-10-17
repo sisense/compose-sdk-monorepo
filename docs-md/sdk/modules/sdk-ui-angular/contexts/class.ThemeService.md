@@ -35,7 +35,7 @@ If no theme service is used, the current Fusion theme is applied by default.
 
 | Parameter | Type |
 | :------ | :------ |
-| `theme` | `string` \| [`ThemeSettings`](../interfaces/interface.ThemeSettings.md) |
+| `theme` | [`ThemeSettings`](../interfaces/interface.ThemeSettings.md) \| `string` |
 
 #### Returns
 

@@ -18,4 +18,4 @@ Info of data source
 
 ### `type`
 
-**type**: `"live"` \| `"elasticube"`
+**type**: `"elasticube"` \| `"live"`

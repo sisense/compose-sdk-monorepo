@@ -4,7 +4,7 @@ title: ExecuteQuery
 
 # Function ExecuteQuery
 
-> **ExecuteQuery**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **ExecuteQuery**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 Executes a query and renders a function as child component. The child
 component is passed the state of the query as defined in [QueryState](../type-aliases/type-alias.QueryState.md).
@@ -20,7 +20,7 @@ offers an alternative approach to the [useExecuteQuery](function.useExecuteQuery
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 ExecuteQuery component
 

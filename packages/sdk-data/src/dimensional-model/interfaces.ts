@@ -529,6 +529,7 @@ export type FilterRelationsJaqlNode = FilterRelationsJaqlIdNode | FilterRelation
 /**
  * Representation of filter logical relations (AND/OR)
  *
+ * @privateRemarks
  * Unlike {@link FilterRelationsModel} or {@link FilterRelationsJaql},
  * this interface contains filter objects, not just id nodes
  */
@@ -560,9 +561,16 @@ export interface FilterRelationsJaql {
   operator: 'AND' | 'OR';
 }
 
-/** A node of a {@link FilterRelationsJaql} tree that represents a filter */
+/**
+ * A node of a {@link FilterRelationsJaql} tree that represents a filter
+ *
+ * @internal
+ */
 export type FilterRelationsJaqlIdNode = { instanceid: string };
-/** A node of a {@link FilterRelationsModel} tree that represents a filter */
+/**
+ * A node of a {@link FilterRelationsModel} tree that represents a filter
+ * @internal
+ */
 export type FilterRelationsModelIdNode = { instanceId: string };
 /**
  * A node of a {@link FilterRelationsModel} tree that represents a bracket expression

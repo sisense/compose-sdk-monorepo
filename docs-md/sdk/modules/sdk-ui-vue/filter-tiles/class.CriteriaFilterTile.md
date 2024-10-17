@@ -5,7 +5,7 @@ title: CriteriaFilterTile
 # Class CriteriaFilterTile
 
 UI component that allows the user to filter numeric or text attributes according to
-a number of built-in operations defined in the NumericFilter, TextFilter, or RankingFilter.
+a number of built-in operations defined in the numeric filter, text filter, or ranking filter.
 
 The arrangement prop determines whether the filter is rendered vertically or horizontally, with the latter intended for toolbar use and omitting title, enable/disable, and collapse/expand functionality.
 
@@ -46,7 +46,7 @@ Criteria filter tile props
 
 ### arrangement
 
-> **arrangement**?: [`FilterVariant`](../type-aliases/type-alias.FilterVariant.md)
+> **`readonly`** **arrangement**?: [`FilterVariant`](../type-aliases/type-alias.FilterVariant.md)
 
 Arrangement of the filter inputs. Use vertical for standard filter tiles and horizontal for toolbars
 
@@ -54,7 +54,7 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ### filter
 
-> **filter**?: [`CriteriaFilterType`](../type-aliases/type-alias.CriteriaFilterType.md)
+> **`readonly`** **filter**?: [`CriteriaFilterType`](../type-aliases/type-alias.CriteriaFilterType.md)
 
 Text or numeric filter object to initialize filter type and default values
 
@@ -62,7 +62,7 @@ Text or numeric filter object to initialize filter type and default values
 
 ### measures
 
-> **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
+> **`readonly`** **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
 List of available measures to rank by. Required only for ranking filters.
 
@@ -70,7 +70,7 @@ List of available measures to rank by. Required only for ranking filters.
 
 ### onUpdate
 
-> **onUpdate**?: (`filter`) => `void`
+> **`readonly`** **onUpdate**?: (`filter`) => `void`
 
 Callback returning filter object, or null for failure
 
@@ -78,7 +78,7 @@ Callback returning filter object, or null for failure
 
 | Parameter | Type |
 | :------ | :------ |
-| `filter` | `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md) |
+| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null` |
 
 #### Returns
 
@@ -88,6 +88,6 @@ Callback returning filter object, or null for failure
 
 ### title
 
-> **title**?: `string`
+> **`readonly`** **title**?: `string`
 
 Title for the filter tile, which is rendered into the header

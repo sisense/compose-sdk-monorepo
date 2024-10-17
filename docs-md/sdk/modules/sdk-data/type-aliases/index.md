@@ -7,8 +7,6 @@ title: Type Aliases
 - [AnyObject](type-alias.AnyObject.md)
 - [DataSource](type-alias.DataSource.md)
 - [DataSourceInfo](type-alias.DataSourceInfo.md)
-- [FilterRelationsJaqlIdNode](type-alias.FilterRelationsJaqlIdNode.md)
-- [FilterRelationsModelIdNode](type-alias.FilterRelationsModelIdNode.md)
 - [FilterRelationsNode](type-alias.FilterRelationsNode.md)
 - [ForecastFormulaOptions](type-alias.ForecastFormulaOptions.md)
 - [PivotGrandTotals](type-alias.PivotGrandTotals.md)

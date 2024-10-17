@@ -13,7 +13,6 @@ import {
   StyledMeasureColumn,
   ChartDataOptions,
   AnyColumn,
-  Category,
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
   PivotTableDataOptions,
@@ -21,7 +20,7 @@ import {
 import { Attribute, Column, Measure, MeasureColumn, analyticsFactory } from '@sisense/sdk-data';
 import { ChartType } from '../types';
 import { describe } from 'vitest';
-import { translateColumnToCategory, translateColumnToValue } from './utils.js';
+import { normalizeColumn, normalizeMeasureColumn } from './utils';
 
 vi.mock('@sisense/sdk-data', async () => {
   const actual: typeof import('@sisense/sdk-data') = await vi.importActual('@sisense/sdk-data');
@@ -131,7 +130,7 @@ const boxplotCustomDataOptions: BoxplotChartCustomDataOptions = {
   valueTitle: 'Cost',
 };
 
-type ConvertableToColumn = Measure | Attribute | Category | AnyColumn;
+type ConvertableToColumn = Measure | Attribute | AnyColumn;
 
 function verifyColumn(column: ConvertableToColumn, expectedColumn: AnyColumn) {
   // need to verify props separately in order to access inherited properties from the result column
@@ -301,9 +300,9 @@ describe('translate data options', () => {
     it('should translate correctly to internal data options', () => {
       const result = translatePivotTableDataOptions(dataOptions1);
       expect(result).toEqual({
-        rows: [col1].map(translateColumnToCategory),
-        columns: [col2].map(translateColumnToCategory),
-        values: [meas1, meas2Styled].map(translateColumnToValue),
+        rows: [col1].map(normalizeColumn),
+        columns: [col2].map(normalizeColumn),
+        values: [meas1, meas2Styled].map(normalizeMeasureColumn),
         grandTotals: undefined,
       });
     });

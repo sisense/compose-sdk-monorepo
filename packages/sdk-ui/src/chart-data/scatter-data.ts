@@ -7,16 +7,16 @@ import {
   ScatterDataTable,
 } from './types';
 import {
-  Category,
-  isCategory,
   ScatterChartDataOptionsInternal,
-  Value,
+  StyledColumn,
+  StyledMeasureColumn,
 } from '../chart-data-options/types';
 import { isNumber } from '@sisense/sdk-data';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '../chart-options-processor/translations/number-format-config';
+import { isMeasureColumn } from '@/chart-data-options/utils';
 
 export const defaultScatterDataValue: ComparableData = { displayValue: '0' };
 
@@ -30,10 +30,13 @@ export interface DataOptionsIndexes {
   size: number;
 }
 
-const getColumnIndex = (table: DataTable, column?: Category | Value): number => {
-  if (column) {
+const getColumnIndex = (
+  table: DataTable,
+  dataOption?: StyledColumn | StyledMeasureColumn,
+): number => {
+  if (dataOption) {
     for (let i = 0; i < table.columns.length; i++) {
-      if (table.columns[i].name === column.name) {
+      if (table.columns[i].name === dataOption.column.name) {
         return i;
       }
     }
@@ -73,9 +76,9 @@ export const buildCategories = (
 const getCategories = (
   data: ScatterDataRow[],
   axisColumnName: AxisColumnName,
-  axis?: Category | Value,
+  axis?: StyledColumn | StyledMeasureColumn,
 ): ScatterCategories => {
-  if (axis && isCategory(axis)) {
+  if (axis && !isMeasureColumn(axis)) {
     return buildCategories(data, axisColumnName);
   }
   return undefined;
@@ -97,18 +100,18 @@ export const createCategoriesMap = (
 };
 
 export const groupData = (
-  chartDataOptions: ScatterChartDataOptionsInternal,
+  dataOptions: ScatterChartDataOptionsInternal,
   dataTable: DataTable,
 ): ScatterDataTable => {
-  const indexes = defineIndexes(chartDataOptions, dataTable);
+  const indexes = defineIndexes(dataOptions, dataTable);
   const pointNumFormatConfig =
-    chartDataOptions?.breakByPoint && isNumber(chartDataOptions.breakByPoint.type)
-      ? getCompleteNumberFormatConfig(chartDataOptions.breakByPoint?.numberFormatConfig)
+    dataOptions?.breakByPoint && isNumber(dataOptions.breakByPoint.column.type)
+      ? getCompleteNumberFormatConfig(dataOptions.breakByPoint?.numberFormatConfig)
       : undefined;
   const colorNumFormatConfig =
-    chartDataOptions?.breakByColor &&
-    (!isCategory(chartDataOptions.breakByColor) || isNumber(chartDataOptions.breakByColor.type))
-      ? getCompleteNumberFormatConfig(chartDataOptions.breakByColor?.numberFormatConfig)
+    dataOptions?.breakByColor &&
+    (isMeasureColumn(dataOptions.breakByColor) || isNumber(dataOptions.breakByColor.column.type))
+      ? getCompleteNumberFormatConfig(dataOptions.breakByColor?.numberFormatConfig)
       : undefined;
 
   return dataTable.rows.map((row) => {
@@ -147,13 +150,13 @@ export const groupData = (
  * @returns Scatter chart data
  */
 export const scatterData = (
-  chartDataOptions: ScatterChartDataOptionsInternal,
+  dataOptions: ScatterChartDataOptionsInternal,
   dataTable: DataTable,
 ): ScatterChartData => {
   // TODO consider applyNullMask
-  const scatterDataTable = groupData(chartDataOptions, dataTable);
+  const scatterDataTable = groupData(dataOptions, dataTable);
 
-  const { x: xAxis, y: yAxis } = chartDataOptions;
+  const { x: xAxis, y: yAxis } = dataOptions;
 
   const xCategories = getCategories(scatterDataTable, 'xAxis', xAxis);
   const yCategories = getCategories(scatterDataTable, 'yAxis', yAxis);

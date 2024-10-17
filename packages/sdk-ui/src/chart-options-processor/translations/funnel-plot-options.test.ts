@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { PlotOptions } from '../chart-options-service';
-import { CategoricalChartDataOptionsInternal, Value } from '../../chart-data-options/types';
+import {
+  CategoricalChartDataOptionsInternal,
+  StyledMeasureColumn,
+} from '../../chart-data-options/types';
 import {
   getFunnelPlotOptions,
   DefaultFunnelType,
@@ -29,15 +32,17 @@ describe('getFunnelPlotOptions', () => {
       funnelLabels: DefaultFunnelLabels,
     };
 
-    const measure: Value = {
-      name: 'column',
-      aggregation: 'sum',
-      title: 'column',
+    const measure = {
+      column: {
+        name: 'column',
+        aggregation: 'sum',
+        title: 'column',
+      },
       sortType: 'sortNone',
       showOnRightAxis: false,
       enabled: true,
-    };
-    const category = createAttribute({ name: 'series' });
+    } as StyledMeasureColumn;
+    const category = { column: createAttribute({ name: 'series' }) };
 
     const chartDataOptions: CategoricalChartDataOptionsInternal = {
       y: [measure],

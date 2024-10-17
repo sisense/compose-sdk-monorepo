@@ -99,7 +99,6 @@ export type HierarchyModelsSuccessState = {
   }
   return null;
  ```
- * @param params - Parameters of the hierarchies to be retrieved
  * @returns Load state that contains the status of the execution, the result hierarchy models, or the error if one has occurred
  * @group Fusion Embed
  * @fusionEmbed
@@ -111,6 +110,7 @@ export const useGetHierarchyModels = withTracking('useGetHierarchyModels')(
 /**
  * {@link useGetHierarchyModels} without tracking to be used inside other hooks or components in Compose SDK.
  *
+ * @param params - Parameters of the hierarchies to be retrieved
  * @internal
  */
 export function useGetHierarchyModelsInternal(params: GetHierarchiesParams): HierarchyModelsState {

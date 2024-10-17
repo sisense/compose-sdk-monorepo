@@ -26,4 +26,3 @@ Translates a [WidgetModel](../../interface.WidgetModel.md) to the props for rend
 
 Note: this method is not supported for chart or table widgets.
 Use [toChartWidgetProps](function.toChartWidgetProps.md) instead for getting props for the `<ChartWidget>`  component.
-Use toTableWidgetProps instead for getting props for the `<TableWidget>`  component.

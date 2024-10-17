@@ -4,6 +4,6 @@ title: QueryState
 
 # Type alias QueryState
 
-> **QueryState**: [`QueryLoadingState`](type-alias.QueryLoadingState.md) \| [`QueryErrorState`](type-alias.QueryErrorState.md) \| [`QuerySuccessState`](type-alias.QuerySuccessState.md)
+> **QueryState**: [`QueryErrorState`](type-alias.QueryErrorState.md) \| [`QueryLoadingState`](type-alias.QueryLoadingState.md) \| [`QuerySuccessState`](type-alias.QuerySuccessState.md)
 
 State of a query execution.

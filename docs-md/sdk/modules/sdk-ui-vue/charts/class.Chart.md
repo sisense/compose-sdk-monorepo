@@ -70,17 +70,17 @@ Chart properties
 
 #### dataSet
 
-> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
+> **`readonly`** **dataSet**?: [`Data`](../../sdk-data/interfaces/interface.Data.md) \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
-will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/class.SisenseContextProvider.md)
+will use the `defaultDataSource` specified in the parent `SisenseContextProvider`
 component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
 [command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
 connects to the data source, executes a query, and loads the data as specified in
-[dataOptions](class.Chart.md#dataoptions), [filters](class.Chart.md#filters), and [highlights](class.Chart.md#highlights).
+`dataOptions`, `filters`, and `highlights`.
 
 To learn more about using data from a Sisense data source, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#sisense-data).
@@ -117,7 +117,7 @@ const sampleData = {
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
+> **`readonly`** **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters to limit (or slice) a chart’s data using one of the following options.
 
@@ -129,7 +129,7 @@ or for filters where you will supply your own UI components or use pre-built UI 
 
 To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../filter-tiles/class.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for filters that you want your users to set using pre-built UI components.
 
@@ -139,12 +139,12 @@ To learn more about using filter UI components to create filters, see the [Compo
 
 #### highlights
 
-> **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **`readonly`** **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Highlights based on filter criteria to apply to a chart using one of the following options.
 
 NOTE that the filter dimensions used in highlights must match those defined in the
-[dataOptions](class.Chart.md#dataoptions) of the chart. Otherwise, the filters will be applied as regular slice filters.
+`dataOptions` of the chart. Otherwise, the filters will be applied as regular slice filters.
 
 (1) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) returned from filter factory functions, such as
 [`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
@@ -155,7 +155,7 @@ or for highlights where you will supply your own UI components or use pre-built 
 To learn more about using filter factory functions to create highlights, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../filter-tiles/class.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for highlights that you want your users to set using pre-built UI components.
 
@@ -166,7 +166,7 @@ To learn more about using filter components to create highlights, see the
 
 #### chartType
 
-> **chartType**?: [`ChartType`](../type-aliases/type-alias.ChartType.md)
+> **`readonly`** **chartType**?: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 Default chart type of each series.
 
@@ -174,7 +174,7 @@ Default chart type of each series.
 
 #### dataOptions
 
-> **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
+> **`readonly`** **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 Configurations for how to interpret and present a chart's data.
 
@@ -185,7 +185,7 @@ see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-c
 
 #### styleOptions
 
-> **styleOptions**?: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
+> **`readonly`** **styleOptions**?: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
 
 Configurations for how to style and present a chart's data.
 
@@ -196,7 +196,7 @@ see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-c
 
 #### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+> **`readonly`** **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
 
 A callback that allows you to customize the underlying chart element before it is rendered.
 Use the `highchartsOptions` object that is passed to the callback to change
@@ -212,7 +212,7 @@ For an example of how the `onBeforeRender` callback can be used, see the
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+> **`readonly`** **onDataPointClick**?: [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
 
@@ -220,7 +220,7 @@ Click handler callback for a data point
 
 #### onDataPointContextMenu
 
-> **onDataPointContextMenu**?: [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md)
+> **`readonly`** **onDataPointContextMenu**?: [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md)
 
 Context menu handler callback for a data point
 
@@ -228,6 +228,6 @@ Context menu handler callback for a data point
 
 #### onDataPointsSelected
 
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
+> **`readonly`** **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points

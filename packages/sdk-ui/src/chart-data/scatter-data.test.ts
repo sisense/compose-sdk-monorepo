@@ -36,7 +36,7 @@ describe('Scatter Chart Data', () => {
   describe('groupData', () => {
     it('should group data and fill y-axis with default values', () => {
       const dataOptions = {
-        x: { name: 'col_1' },
+        x: { column: { name: 'col_1' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -53,7 +53,7 @@ describe('Scatter Chart Data', () => {
 
     it('should group data and fill x-axis with default values', () => {
       const dataOptions = {
-        y: { name: 'col_1' },
+        y: { column: { name: 'col_1' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -70,8 +70,8 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill x and y axis', () => {
       const dataOptions = {
-        x: { name: 'col_1' },
-        y: { name: 'col_2' },
+        x: { column: { name: 'col_1' } },
+        y: { column: { name: 'col_2' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -88,7 +88,7 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill break by / point', () => {
       const dataOptions = {
-        breakByPoint: { name: 'col_1', type: 'string' },
+        breakByPoint: { column: { name: 'col_1', type: 'string' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -106,9 +106,9 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill x-axis, y-axis and break by / point', () => {
       const dataOptions = {
-        x: { name: 'col_1' },
-        y: { name: 'col_2' },
-        breakByPoint: { name: 'col_3', type: 'string' },
+        x: { column: { name: 'col_1' } },
+        y: { column: { name: 'col_2' } },
+        breakByPoint: { column: { name: 'col_3', type: 'string' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -126,16 +126,14 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill x-axis, y-axis, point with numeric break by', () => {
       const dataOptions = {
-        x: { name: 'col_1' },
-        y: { name: 'col_2' },
+        x: { column: { name: 'col_1' } },
+        y: { column: { name: 'col_2' } },
         breakByPoint: {
-          name: 'col_5',
-          type: 'number',
+          column: { name: 'col_5', type: 'number' },
           numberFormatConfig: { decimalScale: 1 },
         },
         breakByColor: {
-          name: 'col_5',
-          type: 'number',
+          column: { name: 'col_5', type: 'number' },
           numberFormatConfig: { decimalScale: 2 },
         },
       } as ScatterChartDataOptionsInternal;
@@ -156,7 +154,7 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill break by / color', () => {
       const dataOptions = {
-        breakByColor: { name: 'col_1', type: 'string' },
+        breakByColor: { column: { name: 'col_1', type: 'string' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -174,9 +172,9 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill x-axis, y-axis and break by / color', () => {
       const dataOptions = {
-        x: { name: 'col_1' },
-        y: { name: 'col_2' },
-        breakByColor: { name: 'col_3', type: 'string' },
+        x: { column: { name: 'col_1' } },
+        y: { column: { name: 'col_2' } },
+        breakByColor: { column: { name: 'col_3', type: 'string' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -194,7 +192,7 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill size', () => {
       const dataOptions = {
-        size: { name: 'col_5' },
+        size: { column: { name: 'col_5' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);
@@ -212,10 +210,10 @@ describe('Scatter Chart Data', () => {
 
     it('should correct fill x-axis, y-axis, break by / point and size', () => {
       const dataOptions = {
-        x: { name: 'col_1' },
-        y: { name: 'col_2' },
-        breakByPoint: { name: 'col_3', type: 'string' },
-        size: { name: 'col_5' },
+        x: { column: { name: 'col_1' } },
+        y: { column: { name: 'col_2' } },
+        breakByPoint: { column: { name: 'col_3', type: 'string' } },
+        size: { column: { name: 'col_5' } },
       } as ScatterChartDataOptionsInternal;
 
       const groupedData = groupData(dataOptions, mockData);

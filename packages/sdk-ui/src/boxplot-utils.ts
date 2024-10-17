@@ -5,8 +5,8 @@ import { executeQuery as executeQueryFunction } from './query/execute-query.js';
 import {
   BoxplotChartCustomDataOptions,
   BoxplotChartDataOptionsInternal,
-  Category,
-  Value,
+  StyledColumn,
+  StyledMeasureColumn,
 } from './chart-data-options/types.js';
 import { translateBoxplotDataOptions } from './chart-data-options/translate-boxplot-data-options.js';
 
@@ -14,10 +14,10 @@ const OUTLIERS_LIMIT = 20000;
 
 function getDataColumnIndex(
   dataColumns: QueryResultData['columns'],
-  dataOption?: Value | Category,
+  dataOption?: StyledColumn | StyledMeasureColumn,
 ) {
   if (dataOption) {
-    const targetColumnName = dataOption.name;
+    const targetColumnName = dataOption.column.name;
     const index = dataColumns.findIndex((column) => column.name === targetColumnName);
 
     return index === -1 ? null : index;
@@ -95,7 +95,7 @@ export const boxWhiskerProcessResultInternal = (
  * @param {QueryResultData} outliersData - The data for the outliers.
  * @param {BoxplotChartCustomDataOptions} [dataOptions] - Optional data options for customizing data processing.
  * @returns {QueryResultData} The combined data with outliers included in the box whisker plot.
- * @group Chart Utilities
+ * @group Charts
  */
 export function boxWhiskerProcessResult(
   boxWhiskerData: QueryResultData,
@@ -138,7 +138,7 @@ export const executeBoxplotQuery = async (
   let queryResultData = mainQueryResultData;
 
   const outliersTotalCount = chartDataOptions.outliersCount
-    ? getOutliersTotalCount(mainQueryResultData, chartDataOptions.outliersCount.name)
+    ? getOutliersTotalCount(mainQueryResultData, chartDataOptions.outliersCount.column.name)
     : 0;
 
   if (chartDataOptions.outliers && outliersTotalCount < OUTLIERS_LIMIT) {

@@ -1,8 +1,4 @@
-import {
-  DeclarationReflection,
-  ReflectionKind,
-  SignatureReflection,
-} from 'typedoc';
+import { DeclarationReflection, ReflectionKind, SignatureReflection } from 'typedoc';
 import { MarkdownThemeRenderContext } from '../..';
 import { blockQuoteBlock, codeBlock, heading } from '../../../support/elements';
 
@@ -25,12 +21,17 @@ export function signatureMember(
     }
   }
 
-  if (signature.comment) {
-    md.push(context.comment(signature.comment, headingLevel, true, false));
+  // Function defined with `const` or `let` will have a parent with a function description
+  const signatureComment =
+    signature.comment && signature.comment.summary.length > 0
+      ? signature.comment
+      : signature.parent.comment;
+
+  if (signatureComment) {
+    md.push(context.comment(signatureComment, headingLevel, true, false));
   }
 
-  const typeDeclaration = (signature.type as any)
-    ?.declaration as DeclarationReflection;
+  const typeDeclaration = (signature.type as any)?.declaration as DeclarationReflection;
 
   if (signature.typeParameters?.length) {
     md.push(heading(headingLevel, 'Type parameters'));
@@ -58,9 +59,7 @@ export function signatureMember(
 
     if (typeDeclaration?.signatures) {
       typeDeclaration.signatures.forEach((signature) => {
-        md.push(
-          blockQuoteBlock(context.signatureMember(signature, headingLevel + 1)),
-        );
+        md.push(blockQuoteBlock(context.signatureMember(signature, headingLevel + 1)));
       });
     }
 
@@ -84,8 +83,8 @@ export function signatureMember(
     md.push(context.sources(signature, headingLevel));
   }
 
-  if (signature.comment) {
-    md.push(context.comment(signature.comment, headingLevel, false, true));
+  if (signatureComment) {
+    md.push(context.comment(signatureComment, headingLevel, false, true));
   }
 
   return md.join('\n\n');

@@ -310,18 +310,16 @@ exports[`FiltersPanelTile > renders FilterTile for unsupported filter type 1`] =
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          unsupportedFilter.title
+          Unsupported Filter
         </span>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="csdk-p-[8px] csdk-text-center csdk-text-[13px]"
+          class="csdk-p-[12px] csdk-text-[13px]"
         >
-          <span>
-            unsupportedFilter.message
-          </span>
+          unsupportedFilterMessage
         </div>
       </main>
       <footer

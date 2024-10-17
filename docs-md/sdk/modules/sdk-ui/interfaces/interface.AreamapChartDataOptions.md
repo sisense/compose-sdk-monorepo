@@ -11,7 +11,7 @@ to geographic features of an Areamap chart.
 
 ### color
 
-> **color**?: [[`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)]
+> **color**?: [[`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)]
 
 Measure column (or measure) encoded by the color of the countries (or states) on the map.
 
@@ -19,6 +19,6 @@ Measure column (or measure) encoded by the color of the countries (or states) on
 
 ### geo
 
-> **geo**: [[`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md)]
+> **geo**: [[`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md)]
 
 Column or attribute representing the countries (or states) on the map.

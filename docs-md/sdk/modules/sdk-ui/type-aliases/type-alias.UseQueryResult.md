@@ -9,7 +9,7 @@ title: UseQueryResult
 The result of the `useFetch` hook.
 Return value of the `useQuery` hook from `@tanstack/react-query`.
 
-## Link
+## See
 
 https://tanstack.com/query/v4/docs/framework/react/reference/useQuery
 

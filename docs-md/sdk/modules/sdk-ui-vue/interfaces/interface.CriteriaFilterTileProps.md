@@ -42,7 +42,7 @@ Callback returning filter object, or null for failure
 
 | Parameter | Type |
 | :------ | :------ |
-| `filter` | `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md) |
+| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null` |
 
 #### Returns
 

@@ -4,7 +4,7 @@ title: MemberFilterTile
 
 # Function MemberFilterTile
 
-> **MemberFilterTile**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **MemberFilterTile**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 UI component that allows the user to select members to include/exclude in a
 filter. A query is executed against the provided data source to fetch
@@ -18,7 +18,7 @@ all members that are selectable.
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Member filter tile component
 

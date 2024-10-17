@@ -1,4 +1,4 @@
-import { CategoricalChartDataOptionsInternal, ChartDataOptions, Value } from '../types';
+import { CategoricalChartDataOptionsInternal, ChartDataOptions } from '../types';
 import {
   generateUniqueDataColumnsNames,
   DataColumnNamesMapping,
@@ -10,7 +10,7 @@ import { Attribute, Filter, Measure } from '@sisense/sdk-data';
 
 describe('generateUniqueDataColumnsNames', () => {
   it('should generate unique names and return the mapping', () => {
-    const values = [{ name: 'Revenue' }, { name: 'Expenses' }, { name: 'Profit' }] as Value[];
+    const values = [{ name: 'Revenue' }, { name: 'Expenses' }, { name: 'Profit' }] as Measure[];
     const expected: DataColumnNamesMapping = {
       $measure0_Revenue: 'Revenue',
       $measure1_Expenses: 'Expenses',
@@ -21,7 +21,7 @@ describe('generateUniqueDataColumnsNames', () => {
   });
 
   it('should modify the values names with unique names', () => {
-    const values = [{ name: 'Sales' }, { name: 'Cost' }] as Value[];
+    const values = [{ name: 'Sales' }, { name: 'Cost' }] as Measure[];
     const expected = [{ name: '$measure0_Sales' }, { name: '$measure1_Cost' }];
     generateUniqueDataColumnsNames(values);
     expect(values).toEqual(expected);
@@ -32,15 +32,19 @@ describe('applyDefaultChartDataOptions', () => {
   const baseDataOptions = {
     y: [
       {
-        name: 'Unique Users',
-        title: 'Unique Users',
-        aggregation: 'sum',
+        column: {
+          name: 'Unique Users',
+          title: 'Unique Users',
+          aggregation: 'sum',
+        },
       },
     ],
     breakBy: [
       {
-        name: 'Stage',
-        type: 'string',
+        column: {
+          name: 'Stage',
+          type: 'string',
+        },
       },
     ],
   };
@@ -49,9 +53,11 @@ describe('applyDefaultChartDataOptions', () => {
     ...baseDataOptions,
     y: [
       {
-        name: 'Unique Users',
-        title: 'Unique Users',
-        aggregation: 'sum',
+        column: {
+          name: 'Unique Users',
+          title: 'Unique Users',
+          aggregation: 'sum',
+        },
         sortType: 'sortDesc',
       },
     ],
@@ -61,8 +67,10 @@ describe('applyDefaultChartDataOptions', () => {
     ...baseDataOptions,
     breakBy: [
       {
-        name: 'Stage',
-        type: 'string',
+        column: {
+          name: 'Stage',
+          type: 'string',
+        },
         sortType: 'sortAsc',
       },
     ],

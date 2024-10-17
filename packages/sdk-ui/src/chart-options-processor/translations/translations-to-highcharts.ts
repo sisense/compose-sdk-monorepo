@@ -510,8 +510,10 @@ export const determineYAxisOptions = (
   let yAxisChartType: (HighchartsType | undefined)[] = [];
 
   const cartesianDataOptions = dataOptions as CartesianChartDataOptionsInternal;
-  let yTreatNullDataAsZeros = cartesianDataOptions.y.map((y) => !!y.treatNullDataAsZeros);
-  let yConnectNulls = cartesianDataOptions.y.map((y) => !!y.connectNulls);
+  let yTreatNullDataAsZeros = cartesianDataOptions.y.map(
+    ({ treatNullDataAsZeros }) => !!treatNullDataAsZeros,
+  );
+  let yConnectNulls = cartesianDataOptions.y.map(({ connectNulls }) => !!connectNulls);
   if (cartesianDataOptions.breakBy.length === 0) {
     // handle a special case when there is no break by and no y values
     if (cartesianDataOptions.y.length === 0) {
@@ -519,13 +521,13 @@ export const determineYAxisOptions = (
     }
 
     // Each Y value has individual axis setting, 0 is on left axis, 1 is on right axis
-    yAxisSide = cartesianDataOptions.y.map((y) => (y.showOnRightAxis ? 1 : 0));
+    yAxisSide = cartesianDataOptions.y.map(({ showOnRightAxis }) => (showOnRightAxis ? 1 : 0));
     // SeriesChartType is only respected if multiple Y values enabled.
     let ignoreSeriesChartType = cartesianDataOptions.y.length <= 1;
     if (!ignoreSeriesChartType) {
       let numEnabled = 0;
-      cartesianDataOptions.y.map((y) => {
-        if (y.enabled) {
+      cartesianDataOptions.y.map(({ enabled }) => {
+        if (enabled) {
           numEnabled += 1;
         }
         // This line is needed so Typescript doesn't complain.
@@ -535,11 +537,11 @@ export const determineYAxisOptions = (
         ignoreSeriesChartType = true;
       }
     }
-    yAxisChartType = cartesianDataOptions.y.map((y) => {
-      if (!y.chartType || y.chartType === 'auto' || ignoreSeriesChartType) {
+    yAxisChartType = cartesianDataOptions.y.map(({ chartType }) => {
+      if (!chartType || chartType === 'auto' || ignoreSeriesChartType) {
         return undefined;
       }
-      return y.chartType;
+      return chartType;
     });
   } else {
     // Each series has same value of these measure options (only one measure allowed)
@@ -561,7 +563,7 @@ export const getColorSetting = (
     if (dataOptions.y.length === 0) {
       return colorChineseSilver;
     }
-    const colorOpts = dataOptions.y.find((v) => v.name === key)?.color;
+    const colorOpts = dataOptions.y.find((v) => v.column.name === key)?.color;
     return legendColor(colorOpts);
   } else {
     return (dataOptions.seriesToColorMap as ValueToColorMap)?.[key];

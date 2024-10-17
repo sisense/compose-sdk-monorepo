@@ -12,17 +12,17 @@ Props of the [Table](../data-grids/function.Table.md) component.
 
 #### dataSet
 
-> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
+> **dataSet**?: [`Data`](../../sdk-data/interfaces/interface.Data.md) \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
-will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/function.SisenseContextProvider.md)
+will use the `defaultDataSource` specified in the parent `SisenseContextProvider`
 component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
 [command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
 connects to the data source, executes a query, and loads the data as specified in
-[dataOptions](interface.TableProps.md#dataoptions), [filters](interface.TableProps.md#filters), and [highlights](interface.ChartProps.md#highlights).
+`dataOptions`, `filters`, and `highlights`.
 
 To learn more about using data from a Sisense data source, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#sisense-data).
@@ -59,7 +59,7 @@ const sampleData = {
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
+> **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters that will slice query results
 

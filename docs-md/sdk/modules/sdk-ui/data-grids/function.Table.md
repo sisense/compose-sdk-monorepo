@@ -4,7 +4,7 @@ title: Table
 
 # Function Table
 
-> **Table**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **Table**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 Table with aggregation and pagination.
 
@@ -27,6 +27,6 @@ Table displaying year, condition, and total revenue from the Sample ECommerce da
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Table component

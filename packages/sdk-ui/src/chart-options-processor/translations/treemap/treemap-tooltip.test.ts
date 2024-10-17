@@ -5,7 +5,7 @@ import { treemapTooltipFormatter } from './treemap-tooltip';
 
 describe('Treemap Chart tooltip formatter', () => {
   const dataOptions = {
-    y: [{ title: 'test' }],
+    y: [{ column: { title: 'test' } }],
   } as CategoricalChartDataOptionsInternal;
 
   const designOptions = {} as TreemapChartDesignOptions;

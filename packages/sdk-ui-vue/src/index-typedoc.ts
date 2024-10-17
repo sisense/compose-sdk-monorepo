@@ -3,9 +3,7 @@
 /**
  * @packageDocumentation
  * @groupDescription Charts
- * Vue components for charts
- * @groupDescription Chart Utilities
- * Utilities to be used with charts
+ * Vue components and utilities for working with charts
  * @groupDescription Data Grids
  * Vue components for data grids
  * @groupDescription Drilldown
@@ -16,8 +14,8 @@
  * Vue context modules, services, and variables
  * @groupDescription Queries
  * Vue query service
- * @groupDescription Dashboarding
- * Vue components and functions for composing dashboards
+ * @groupDescription Dashboards
+ * Vue components and utilities for working with dashboards
  * @groupDescription Fusion Embed
  * Vue components and functions for working with Fusion Embed dashboards, widgets, queries, and formulas
  * @groupDescription Interfaces

@@ -4,6 +4,6 @@ title: TabularWidgetType
 
 # Type alias TabularWidgetType
 
-> **TabularWidgetType**: `"tablewidget"` \| `"tablewidgetagg"` \| `"pivot"` \| `"pivot2"`
+> **TabularWidgetType**: `"pivot"` \| `"pivot2"` \| `"tablewidget"` \| `"tablewidgetagg"`
 
 The type of a widget on a dashboard that is a variant of tabular widget.

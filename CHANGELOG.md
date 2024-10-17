@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.21.0] - 2024-10-15
+
+### Added
+- Add utility methods for manipulating filters of `DashboardProps`
+- Implement component `CriteriaFilerTile` in Angular
+- Implement component `RelativeDateFilterTile` in Vue
+
+### Changed
+- Show filter attribute title in unsupported filter tiles
+- Make filter panel collapsible in `DashboardById` and `Dashboard` components
+- Fix error caused by CSS named colors in `ThemeProvider`
+- Enable forecast and trend in Fusion widgets
+
 ## [1.20.0] - 2024-10-01
 
 ### Added
@@ -21,7 +34,7 @@
 - Handle Fusion date formats from locale
 - Extend data point entries with `displayValue`
 - Consolidate interface for custom chart plugins
-- Improve fitlers: translation of `doesn't equal` filter, update of `CriteriaFilterTile`, formula in ranked filter
+- Improve filters: translation of `doesn't equal` filter, update of `CriteriaFilterTile`, formula in ranked filter
 - Replace `fetch-intercept` with an isolated in-house implementation
 - Extend CLI `get-data-model` to support perspectives
 - Improve charts: "No Results" overlay added to all charts, data options validation for trend or forecast, polar chart stacking and value labels disabling

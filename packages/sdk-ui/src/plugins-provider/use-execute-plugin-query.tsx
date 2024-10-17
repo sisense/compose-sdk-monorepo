@@ -1,10 +1,13 @@
 import { Attribute, Cell, Measure, QueryResultData } from '@sisense/sdk-data';
-import { isMeasureColumn } from '@/chart-data-options/types';
 import { useExecuteQuery } from '@/query-execution/use-execute-query';
 import { GenericDataOptions, NumberFormatConfig } from '@/types';
 import { PluginComponentProps } from './types';
 import { useMemo } from 'react';
-import { translateColumnToAttribure, translateColumnToMeasure } from '@/chart-data-options/utils';
+import {
+  isMeasureColumn,
+  translateColumnToAttribute,
+  translateColumnToMeasure,
+} from '@/chart-data-options/utils';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
@@ -13,7 +16,7 @@ import {
 /**
  * Utility function for converting data options to parameters for executing a query.
  *
- * @group Dashboarding
+ * @group Dashboards
  * @alpha
  */
 export function extractDimensionsAndMeasures(dataOptions: GenericDataOptions) {
@@ -29,7 +32,7 @@ export function extractDimensionsAndMeasures(dataOptions: GenericDataOptions) {
       if (isMeasureColumn(c)) {
         measures.push(translateColumnToMeasure(c));
       } else {
-        dimensions.push(translateColumnToAttribure(c));
+        dimensions.push(translateColumnToAttribute(c));
       }
     });
   });
@@ -77,7 +80,7 @@ function applyNumberFormat(
 /**
  * React hook that takes a plugin component's props and executes a data query.
  *
- * @group Dashboarding
+ * @group Dashboards
  * @alpha
  */
 export function useExecutePluginQuery({

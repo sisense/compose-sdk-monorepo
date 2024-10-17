@@ -6,7 +6,7 @@ import { ChartType, CompleteThemeSettings } from '../types';
 import {
   CartesianChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
-  Value,
+  StyledMeasureColumn,
 } from '../chart-data-options/types';
 import { TFunction } from '@sisense/sdk-common';
 import { getCartesianChartOptions } from './cartesian-chart-options';
@@ -40,8 +40,8 @@ export const getRangeChartOptions = (
   themeSettings?: CompleteThemeSettings,
   dateFormatter?: (date: Date, format: string) => string,
 ) => {
-  const lowerValues: Value[] = [];
-  const upperValues: Value[] = [];
+  const lowerValues: StyledMeasureColumn[] = [];
+  const upperValues: StyledMeasureColumn[] = [];
 
   const upperIndex = 1;
   const lowerIndex = 0;
@@ -134,9 +134,9 @@ export const getRangeChartOptions = (
       }
       const rangeValue = dataOptions.rangeValues[rangeIndex];
       // skip past $measure prefix
-      const nameStartIndex = rangeValue[0].name.indexOf('_') + 1;
-      const upperPointName = rangeValue[upperIndex].name.substring(nameStartIndex);
-      const lowerPointName = rangeValue[lowerIndex].name.substring(nameStartIndex);
+      const nameStartIndex = rangeValue[0].column.name.indexOf('_') + 1;
+      const upperPointName = rangeValue[upperIndex].column.name.substring(nameStartIndex);
+      const lowerPointName = rangeValue[lowerIndex].column.name.substring(nameStartIndex);
 
       s.type = 'arearange';
       if (isForecastSeries(s.name)) {

@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Event, ProjectReflection, Reflection } from 'typedoc';
+import { PageEvent, ProjectReflection, Reflection } from 'typedoc';
 import { NavigationItem } from '../theme/models';
 import { RenderTemplate, UrlMapping } from './url-mapping';
 
@@ -17,11 +17,7 @@ export class MarkdownRendererEvent extends Event {
   static readonly BEGIN = 'beginRender';
   static readonly END = 'endRender';
 
-  constructor(
-    name: string,
-    outputDirectory: string,
-    project: ProjectReflection,
-  ) {
+  constructor(name: string, outputDirectory: string, project: ProjectReflection) {
     super(name);
     this.outputDirectory = outputDirectory;
     this.project = project;
@@ -30,10 +26,7 @@ export class MarkdownRendererEvent extends Event {
   public createPageEvent<Model>(
     mapping: UrlMapping<Model>,
   ): [RenderTemplate<MarkdownPageEvent<Model>>, MarkdownPageEvent<Model>] {
-    const event = new MarkdownPageEvent<Model>(
-      MarkdownPageEvent.BEGIN,
-      mapping.model,
-    );
+    const event = new MarkdownPageEvent<Model>(MarkdownPageEvent.BEGIN, mapping.model);
     event.project = this.project;
     event.url = mapping.url;
     event.filename = path.join(this.outputDirectory, mapping.url);
@@ -41,17 +34,19 @@ export class MarkdownRendererEvent extends Event {
   }
 }
 
-export class MarkdownPageEvent<out Model = unknown> extends Event {
-  project!: ProjectReflection;
-  filename!: string;
-  url!: string;
-  contents?: string;
-  pageHeadings: any;
-  readonly model: Model;
-  static readonly BEGIN = 'beginPage';
-  static readonly END = 'endPage';
-  constructor(name: string, model: Model) {
-    super(name);
-    this.model = model;
-  }
-}
+// export class MarkdownPageEvent<out Model = unknown> extends Event {
+//   project!: ProjectReflection;
+//   filename!: string;
+//   url!: string;
+//   contents?: string;
+//   pageHeadings: any;
+//   readonly model: Model;
+//   static readonly BEGIN = 'beginPage';
+//   static readonly END = 'endPage';
+//   constructor(name: string, model: Model) {
+//     super(name);
+//     this.model = model;
+//   }
+// }
+
+export class MarkdownPageEvent<Model> extends PageEvent<Model> {}

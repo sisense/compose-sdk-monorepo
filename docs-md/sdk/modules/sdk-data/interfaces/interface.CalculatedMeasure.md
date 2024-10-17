@@ -34,13 +34,13 @@ A formatted instance of this measure
 
 ### getFormat
 
-> **getFormat**(): `undefined` \| `string`
+> **getFormat**(): `string` \| `undefined`
 
 Gets the formatting string of this measure.
 
 #### Returns
 
-`undefined` \| `string`
+`string` \| `undefined`
 
 Formatting string
 

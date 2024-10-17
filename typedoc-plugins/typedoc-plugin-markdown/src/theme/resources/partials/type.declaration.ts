@@ -15,16 +15,16 @@ export function declarationType(
     return backTicks('object');
   }
 
-  if (declarationReflection.indexSignature || declarationReflection.children) {
+  if (declarationReflection.indexSignatures || declarationReflection.children) {
     let indexSignature = '';
-    const declarationIndexSignature = declarationReflection.indexSignature;
-    if (declarationIndexSignature) {
-      const key = declarationIndexSignature.parameters
-        ? declarationIndexSignature.parameters.map(
+    const declarationIndexSignatures = declarationReflection.indexSignatures;
+    if (declarationIndexSignatures?.length) {
+      const key = declarationIndexSignatures[0].parameters
+        ? declarationIndexSignatures[0].parameters.map(
             (param) => `\`[${param.name}: ${param.type}]\``,
           )
         : '';
-      const obj = context.someType(declarationIndexSignature.type as SomeType);
+      const obj = context.someType(declarationIndexSignatures[0].type as SomeType);
       indexSignature = `${key}: ${obj}; `;
     }
 

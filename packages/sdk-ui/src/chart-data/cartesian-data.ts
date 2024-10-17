@@ -21,7 +21,11 @@ import {
 } from '../chart-data-processor/table-processor';
 import { rownumColumnName } from '../chart-data-processor/table-creators';
 import { SeriesValueData, CartesianChartData, CategoricalXValues } from './types';
-import { CartesianChartDataOptionsInternal, Category, Value } from '../chart-data-options/types';
+import {
+  CartesianChartDataOptionsInternal,
+  StyledColumn,
+  StyledMeasureColumn,
+} from '../chart-data-options/types';
 import { isEnabled } from './utils';
 import { isNumber } from '@sisense/sdk-data';
 import {
@@ -34,11 +38,11 @@ import { getDataOptionTitle } from '../chart-data-options/utils';
 export const validateCartesianChartDataOptions = (
   chartDataOptions: CartesianChartDataOptionsInternal,
 ): CartesianChartDataOptionsInternal => {
-  const x = chartDataOptions.x.filter((x) => isEnabled(x.enabled));
-  const y = chartDataOptions.y.filter((value) => isEnabled(value.enabled));
+  const x = chartDataOptions.x.filter(({ enabled }) => isEnabled(enabled));
+  const y = chartDataOptions.y.filter(({ enabled }) => isEnabled(enabled));
   // break by series column only when there is one y column
-  const breakByChart = y.length === 1 && chartDataOptions.breakBy.length > 0;
-  const breakBy = breakByChart ? chartDataOptions.breakBy : [];
+  const isBreakByAllowed = y.length === 1 && chartDataOptions.breakBy.length > 0;
+  const breakBy = isBreakByAllowed ? chartDataOptions.breakBy : [];
 
   return {
     ...chartDataOptions,
@@ -56,31 +60,32 @@ export const validateCartesianChartDataOptions = (
  * @returns Cartesian chart data
  */
 export const cartesianData = (
-  chartDataOptions: CartesianChartDataOptionsInternal,
+  dataOptions: CartesianChartDataOptionsInternal,
   dataTable: DataTable,
 ): CartesianChartData => {
   if (dataTable.rows.length === 0) {
     return { type: 'cartesian', series: [], xValues: [], xAxisCount: 0 };
   }
-  const options = chartDataOptions;
 
   // get various columns lists
-  const xAxisCount: number = options.x.length;
+  const xAxisCount: number = dataOptions.x.length;
   let xColumns: Column[] = getColumnsByName(
     dataTable,
-    options.x.map((x) => x.name),
+    dataOptions.x.map(({ column: { name } }) => name),
   );
   // add direction of sorting
   xColumns = xColumns.map((c, index) => ({
     ...c,
-    direction: sortDirection(options.x[index].sortType as SortDirection),
+    direction: sortDirection(dataOptions.x[index].sortType as SortDirection),
   }));
   const seriesColumns: Column[] = getColumnsByName(
     dataTable,
-    options.breakBy.map((s) => s.name),
+    dataOptions.breakBy.map(({ column: { name } }) => name),
   );
 
-  const sortedMeasures = options.y.filter((y) => y?.sortType && y.sortType !== 'sortNone');
+  const sortedMeasures = dataOptions.y.filter(
+    ({ sortType }) => sortType && sortType !== 'sortNone',
+  );
 
   const x1Index = xColumns.length > 1 ? 1 : 0;
   const xValuesOrdered = getOrderedXValues(
@@ -92,18 +97,18 @@ export const cartesianData = (
 
   // only support multiple values or breakBy not both
   // interface prevents having a combination of both
-  const yColumnNames: string[] = options.y.map((value) => value.name);
+  const yColumnNames: string[] = dataOptions.y.map(({ column: { name } }) => name);
   const chartData =
-    options.breakBy.length > 0
+    dataOptions.breakBy.length > 0
       ? withBreakBy(
           dataTable,
           xValuesOrdered,
           xColumns,
           yColumnNames[0],
           seriesColumns,
-          options.breakBy,
+          dataOptions.breakBy,
         )
-      : withMultipleValues(dataTable, xValuesOrdered, xColumns, yColumnNames, options.y);
+      : withMultipleValues(dataTable, xValuesOrdered, xColumns, yColumnNames, dataOptions.y);
 
   const cartesianChartData: CartesianChartData = {
     ...chartData,
@@ -127,7 +132,7 @@ export const sortDirection = (sortType: SortDirection | undefined) => {
 
 export const getOrderedXValues = (
   dataTable: DataTable,
-  sortedMeasures: Value[],
+  sortedMeasures: StyledMeasureColumn[],
   xColumns: Column[],
   rownumColumnName?: string,
 ): CategoricalXValues[] => {
@@ -137,10 +142,10 @@ export const getOrderedXValues = (
     return [{ key: '', xValues: [''], rawValues: [] }];
   }
 
-  const measures: ColumnMeasure[] = sortedMeasures.map((sv) => ({
-    column: sv.name,
+  const measures: ColumnMeasure[] = sortedMeasures.map(({ column: { name } }) => ({
+    column: name,
     agg: 'sum', // any ranking or ordering is by sum
-    title: sv.name,
+    title: name,
   }));
 
   // check if source table has a $rownum for sorting
@@ -171,7 +176,7 @@ export const getOrderedXValues = (
   }
   // optionally order by a value column
   sortedMeasures.map((v) => {
-    const IValue = getColumnByName(xValueTable, v.name);
+    const IValue = getColumnByName(xValueTable, v.column.name);
     if (IValue) {
       sortColumns.push({
         ...IValue,
@@ -255,12 +260,12 @@ const withMultipleValues = (
   xValuesOrdered: CategoricalXValues[],
   xColumns: Column[],
   yColumnNames: string[],
-  yDataOptions: Value[],
+  yDataOptions: StyledMeasureColumn[],
 ) => {
   const yAggColumns =
     yColumnNames.length > 0 ? getColumnsByName(dataTable, yColumnNames) : [undefined];
-  const optionsByColumn = yDataOptions.reduce<Record<string, Value>>((acc, opts) => {
-    acc[opts.name] = opts;
+  const optionsByColumn = yDataOptions.reduce<Record<string, StyledMeasureColumn>>((acc, opts) => {
+    acc[opts.column.name] = opts;
     return acc;
   }, {});
 
@@ -295,7 +300,7 @@ const withMultipleValues = (
   return { xValues: xValuesOrdered, series: seriesValues };
 };
 
-const getSeriesName = (row: Row, columns: readonly Column[], breakBy: Category[]) => {
+const getSeriesName = (row: Row, columns: readonly Column[], breakBy: StyledColumn[]) => {
   // maybe format series value
   return getValues(row, columns)
     .map((data, index) => {
@@ -329,7 +334,7 @@ const withBreakBy = (
   xColumns: Column[],
   yColumnName: string,
   seriesColumns: Column[],
-  breakBy: Category[],
+  breakBy: StyledColumn[],
 ) => {
   const yAggColumn = getColumnByName(dataTable, yColumnName);
 

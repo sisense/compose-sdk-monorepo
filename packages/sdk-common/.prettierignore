@@ -1,0 +1,14 @@
+.git/
+.idea/
+.vscode/
+node_modules/
+
+# Ignore artifacts:
+dist/
+**/dist/
+coverage/
+**/coverage/
+
+# Ignore auto-generated files:
+CHANGELOG.md
+docs-md/

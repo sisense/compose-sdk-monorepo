@@ -5,7 +5,7 @@ import {
   StyledMeasureColumn,
   ValueStyle,
 } from './types';
-import { translateColumnToCategory, translateColumnToValue } from './utils';
+import { normalizeColumn, normalizeMeasureColumn, safeMerge } from './utils';
 
 export function translateRangeChartDataOptions(
   areaRange: RangeChartDataOptions,
@@ -13,18 +13,18 @@ export function translateRangeChartDataOptions(
   const y = areaRange.value.map((v) => {
     // if chart type specified
     if ((v as ValueStyle)?.chartType) {
-      return [translateColumnToValue(v as StyledMeasureColumn)];
+      return [normalizeMeasureColumn(v as StyledMeasureColumn)];
     }
 
-    const { lowerBound, upperBound, ...styles } = v as AreaRangeMeasureColumn;
+    const { lowerBound, upperBound, title, ...styles } = v as AreaRangeMeasureColumn;
 
     return [
-      translateColumnToValue({
-        column: lowerBound,
+      normalizeMeasureColumn({
+        column: safeMerge(lowerBound, { title }),
         ...styles,
       } as StyledMeasureColumn),
-      translateColumnToValue({
-        column: upperBound,
+      normalizeMeasureColumn({
+        column: safeMerge(upperBound, { title }),
         ...styles,
       } as StyledMeasureColumn),
     ];
@@ -35,8 +35,8 @@ export function translateRangeChartDataOptions(
   const seriesValues = y.filter((v) => v.length === 1).flat();
 
   return {
-    x: areaRange.category.map(translateColumnToCategory),
-    breakBy: areaRange.breakBy?.map(translateColumnToCategory) || [],
+    x: areaRange.category.map(normalizeColumn),
+    breakBy: areaRange.breakBy?.map(normalizeColumn) || [],
     y: cartesianValues,
     rangeValues: rangeValues,
     seriesValues: seriesValues,

@@ -25,9 +25,9 @@ export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChar
 
 const getValueCustomBackgroundColor = (
   chartData: IndicatorChartData,
-  chartDataOptions: IndicatorChartDataOptions,
+  dataOptions: IndicatorChartDataOptions,
 ) => {
-  const colorOptions = getValueColorOptions(chartDataOptions);
+  const colorOptions = getValueColorOptions(dataOptions);
 
   if (colorOptions && chartData.value) {
     const coloringService = getColoringServiceByColorOptions(
@@ -43,17 +43,17 @@ const getValueCustomBackgroundColor = (
 export const createLegacyChartDataOptions = (
   chartData: IndicatorChartData,
   chartDesignOptions: IndicatorChartDesignOptions,
-  chartDataOptions: IndicatorChartDataOptions,
+  dataOptions: IndicatorChartDataOptions,
 ) => {
   const min = isNumber(chartData.min) ? chartData.min : 0;
   const max = isNumber(chartData.max) ? chartData.max : 100;
 
-  const numberConfigForValue = getNumberFormatConfigForColumn(chartDataOptions, 'value');
-  const numberConfigForSecondary = getNumberFormatConfigForColumn(chartDataOptions, 'secondary');
-  const numberConfigForMin = getNumberFormatConfigForColumn(chartDataOptions, 'min');
-  const numberConfigForMax = getNumberFormatConfigForColumn(chartDataOptions, 'max');
+  const numberConfigForValue = getNumberFormatConfigForColumn(dataOptions, 'value');
+  const numberConfigForSecondary = getNumberFormatConfigForColumn(dataOptions, 'secondary');
+  const numberConfigForMin = getNumberFormatConfigForColumn(dataOptions, 'min');
+  const numberConfigForMax = getNumberFormatConfigForColumn(dataOptions, 'max');
 
-  const valueCustomBgColor = getValueCustomBackgroundColor(chartData, chartDataOptions);
+  const valueCustomBgColor = getValueCustomBackgroundColor(chartData, dataOptions);
 
   const defaultSkin = chartDesignOptions.indicatorType === 'gauge' ? 1 : 'vertical';
 

@@ -30,6 +30,6 @@ Expression representing the data value
 
 ### `operator`
 
-**operator**: `"<"` \| `">"` \| `"≤"` \| `"<="` \| `"≥"` \| `">="` \| `"="` \| `"≠"` \| `"!="`
+**operator**: `"!="` \| `"<"` \| `"<="` \| `"="` \| `">"` \| `">="` \| `"≠"` \| `"≤"` \| `"≥"`
 
 Supported operators for `expression`

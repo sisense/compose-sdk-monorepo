@@ -1,12 +1,8 @@
 import { DeclarationReflection, ReflectionKind } from 'typedoc';
 import { MarkdownThemeRenderContext } from '../..';
 import { backTicks, bold } from '../../../support/elements';
-import {
-  escapeChars,
-  stripComments,
-  stripLineBreaks,
-} from '../../../support/utils';
-import { getDeclarationType } from '../../helpers';
+import { escapeChars, stripComments, stripLineBreaks } from '../../../support/utils';
+import { getDeclarationType, getModifier } from '../../helpers';
 
 /**
  * @category Partials
@@ -21,16 +17,10 @@ export function declarationMemberIdentifier(
 
   const declarationType = getDeclarationType(reflection);
 
-  if (
-    reflection.flags?.length &&
-    !reflection.flags.isRest &&
-    !reflection.flags.isOptional
-  ) {
-    md.push(
-      reflection.flags
-        .map((flag) => bold(backTicks(flag.toLowerCase())))
-        .join(' '),
-    );
+  const modifier = getModifier(reflection);
+
+  if (modifier) {
+    md.push(bold(backTicks(modifier.toLowerCase())));
   }
 
   if (reflection.kindOf(ReflectionKind.Variable) && !reflection.flags.isConst) {
@@ -48,9 +38,7 @@ export function declarationMemberIdentifier(
   } else {
     name.push(
       bold(
-        reflection.name.startsWith('<')
-          ? backTicks(reflection.name)
-          : escapeChars(reflection.name),
+        reflection.name.startsWith('<') ? backTicks(reflection.name) : escapeChars(reflection.name),
       ),
     );
   }

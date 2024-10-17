@@ -25,7 +25,7 @@ the `anchor` date.
 | `level` | [`LevelAttribute`](../../../interfaces/interface.LevelAttribute.md) | Date [LevelAttribute](../../../interfaces/interface.LevelAttribute.md) to filter on |
 | `offset` | `number` | Number of levels to skip from the given `anchor` or the default of the current day.<br />Positive numbers skip forwards and negative numbers skip backwards (e.g. `-6` is 6 months backwards when `level` is a months level attribute) |
 | `count` | `number` | Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute) |
-| `anchor`? | `string` \| `Date` | Date to filter from, defaults to the current day |
+| `anchor`? | `Date` \| `string` | Date to filter from, defaults to the current day |
 
 ## Returns
 

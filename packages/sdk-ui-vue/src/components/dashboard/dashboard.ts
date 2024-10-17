@@ -17,14 +17,15 @@ import { setupHelper } from '../../setup-helper';
  *    :layoutOptions="dashboardProps.layoutOptions"
  *    :widgets="dashboardProps.widgets"
  *    :filters="dashboardProps.filters"
- *    :defaultDataSource="dashboardProps.dataSource"
+ *    :defaultDataSource="dashboardProps.defaultDataSource"
  *    :widgetsOptions="dashboardProps.widgetsOptions"
  *    :styleOptions="dashboardProps.styleOptions"
  *  />
  * </template>
  *
  * <script setup lang="ts">
- * import { dashboardModelTranslator, useGetDashboardModel } from '@sisense/sdk-ui-vue';
+ * import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@sisense/sdk-ui-vue';
+ * import { computed } from 'vue';
  *
  * const { dashboard } = useGetDashboardModel({
  *  dashboardOid: '6441e728dac1920034bce737',
@@ -37,7 +38,10 @@ import { setupHelper } from '../../setup-helper';
  * );
  * </script>
  * ```
- * @group Dashboarding
+ *
+ * To learn more about this and related dashboard components,
+ * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
+ * @group Dashboards
  * @beta
  */
 export const Dashboard = defineComponent({

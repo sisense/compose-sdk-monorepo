@@ -13,7 +13,7 @@ Creates a filter to isolate date values starting from and including the given da
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `level` | [`LevelAttribute`](../../../interfaces/interface.LevelAttribute.md) | Date [LevelAttribute](../../../interfaces/interface.LevelAttribute.md) to filter on |
-| `from` | `string` \| `Date` | Date or string representing the value to filter from |
+| `from` | `Date` \| `string` | Date or string representing the value to filter from |
 
 ## Returns
 

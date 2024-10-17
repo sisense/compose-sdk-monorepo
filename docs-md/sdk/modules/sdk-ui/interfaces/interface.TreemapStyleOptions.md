@@ -66,7 +66,7 @@ Tooltip options object
 
 > ##### `tooltip.mode`
 >
-> **mode**?: `"value"` \| `"contribution"`
+> **mode**?: `"contribution"` \| `"value"`
 >
 > Define mode of data showing
 >

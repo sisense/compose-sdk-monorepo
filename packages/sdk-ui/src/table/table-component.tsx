@@ -11,7 +11,7 @@ import { updateInnerDataOptionsSort } from '../chart-data/table-data';
 import { PureTable } from '../charts/table';
 import { getCustomPaginationStyles } from './styles/get-custom-pagination-styles';
 import { generateUniqueDataColumnsNames } from '../chart-data-options/validate-data-options';
-import { isValue, TableDataOptionsInternal } from '../chart-data-options/types';
+import { StyledMeasureColumn, TableDataOptionsInternal } from '../chart-data-options/types';
 import { isDataTableEmpty } from '../chart-data-processor/table-creators';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
@@ -19,6 +19,7 @@ import { LoadingIndicator } from '../common/components/loading-indicator';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
 import { translateTableStyleOptionsToDesignOptions } from './translations/design-options';
 import { orderBy } from '../chart-data-processor/table-processor';
+import { isMeasureColumn, translateColumnToMeasure } from '@/chart-data-options/utils';
 
 export const DEFAULT_TABLE_ROWS_PER_PAGE = 25;
 
@@ -46,7 +47,12 @@ export const TableComponent = ({
     [dataOptions],
   );
   const dataColumnNamesMapping = useMemo(
-    () => generateUniqueDataColumnsNames(translatedDataOptions.columns.filter(isValue)),
+    () =>
+      generateUniqueDataColumnsNames(
+        (translatedDataOptions.columns.filter(isMeasureColumn) as StyledMeasureColumn[]).map(
+          translateColumnToMeasure,
+        ),
+      ),
     [translatedDataOptions],
   );
 

@@ -85,17 +85,17 @@ Constructor for the `Chart` component.
 
 #### dataSet
 
-> **dataSet**: `undefined` \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
+> **dataSet**: [`Data`](../../sdk-data/interfaces/interface.Data.md) \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
-will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../../sdk-ui/contexts/function.SisenseContextProvider.md)
+will use the `defaultDataSource` specified in the parent `SisenseContextProvider`
 component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
 [command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
 connects to the data source, executes a query, and loads the data as specified in
-[dataOptions](class.ChartComponent.md#dataoptions), [filters](class.ChartComponent.md#filters), and [highlights](class.ChartComponent.md#highlights).
+`dataOptions`, `filters`, and `highlights`.
 
 To learn more about using data from a Sisense data source, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#sisense-data).
@@ -132,7 +132,7 @@ const sampleData = {
 
 #### filters
 
-> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
+> **filters**: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| `undefined`
 
 Filters to limit (or slice) a chart’s data using one of the following options.
 
@@ -154,12 +154,12 @@ To learn more about using filter UI components to create filters, see the [Compo
 
 #### highlights
 
-> **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **highlights**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| `undefined`
 
 Highlights based on filter criteria to apply to a chart using one of the following options.
 
 NOTE that the filter dimensions used in highlights must match those defined in the
-[dataOptions](class.ChartComponent.md#dataoptions) of the chart. Otherwise, the filters will be applied as regular slice filters.
+`dataOptions` of the chart. Otherwise, the filters will be applied as regular slice filters.
 
 (1) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) returned from filter factory functions, such as
 [`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
@@ -200,7 +200,7 @@ see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-c
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md)
+> **styleOptions**: [`ChartStyleOptions`](../type-aliases/type-alias.ChartStyleOptions.md) \| `undefined`
 
 Configurations for how to style and present a chart's data.
 
@@ -211,7 +211,7 @@ see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-c
 
 #### beforeRender
 
-> **beforeRender**: `undefined` \| [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+> **beforeRender**: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| `undefined`
 
 A callback that allows you to customize the underlying chart element before it is rendered.
 Use the `highchartsOptions` object that is passed to the callback to change
@@ -227,7 +227,7 @@ For an example of how the `onBeforeRender` callback can be used, see the
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md), [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
 
 Click handler callback for a data point
 
@@ -235,7 +235,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md), [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointContextMenu**: `EventEmitter`\< `ArgumentsAsObject`\< [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
 
 Context menu handler callback for a data point
 
@@ -243,7 +243,7 @@ Context menu handler callback for a data point
 
 #### dataPointsSelect
 
-> **dataPointsSelect**: `EventEmitter`\< `ArgumentsAsObject`\< `undefined` \| [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md), [`"points"`, `"nativeEvent"`] \> \>
+> **dataPointsSelect**: `EventEmitter`\< `ArgumentsAsObject`\< [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md) \| `undefined`, [`"points"`, `"nativeEvent"`] \> \>
 
 Handler callback for selection of multiple data points
 

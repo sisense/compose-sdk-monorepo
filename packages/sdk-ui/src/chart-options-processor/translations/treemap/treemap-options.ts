@@ -7,6 +7,7 @@ import { TreemapChartDesignOptions } from '../design-options';
 import { getTreemapTooltipSettings } from './treemap-tooltip';
 import { prepareTreemapLevels } from './treemap-labels';
 import { prepareTreemapDataItems } from './treemap-series';
+import { getDataOptionTitle } from '@/chart-data-options/utils';
 
 const DEFAULT_TREEMAP_SERIES_COLOR = 'rgb(0, 206, 230)';
 
@@ -48,7 +49,7 @@ export function prepareTreemapOptions(
     series: [
       {
         ...DEFAULT_TREEMAP_SERIES,
-        name: dataOptions.y[0]?.title ?? dataOptions.y[0]?.name,
+        name: getDataOptionTitle(dataOptions.y[0]),
         data: prepareTreemapDataItems(chartData, dataOptions, themeSettings),
         levels: prepareTreemapLevels(dataOptions, designOptions, themeSettings),
       },

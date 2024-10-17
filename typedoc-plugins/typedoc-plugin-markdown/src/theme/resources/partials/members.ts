@@ -15,22 +15,16 @@ export function members(
 ): string {
   const md: string[] = [];
 
-  const pushCategories = (
-    categories: ReflectionCategory[],
-    headingLevel: number,
-  ) => {
+  const pushCategories = (categories: ReflectionCategory[], headingLevel: number) => {
     categories
       ?.filter((category) => !category.allChildrenHaveOwnDocument())
       .forEach((item) => {
         md.push(heading(headingLevel, item.title));
-        pushChildren(item.children, headingLevel + 1);
+        pushChildren(item.children as DeclarationReflection[], headingLevel + 1);
       });
   };
 
-  const pushChildren = (
-    children?: DeclarationReflection[],
-    memberHeadingLevel?: number,
-  ) => {
+  const pushChildren = (children?: DeclarationReflection[], memberHeadingLevel?: number) => {
     const items = children?.filter((item) => !item.hasOwnDocument);
     items?.forEach((item, index) => {
       md.push(context.member(item, memberHeadingLevel || headingLevel));
@@ -55,11 +49,7 @@ export function members(
   } else {
     if (
       context.options.getValue('excludeGroups') &&
-      container.kindOf([
-        ReflectionKind.Project,
-        ReflectionKind.Module,
-        ReflectionKind.Namespace,
-      ])
+      container.kindOf([ReflectionKind.Project, ReflectionKind.Module, ReflectionKind.Namespace])
     ) {
       if (container.categories?.length) {
         pushCategories(container.categories, headingLevel);
@@ -84,18 +74,12 @@ export function members(
 
             md.push(heading(headingLevel, group.title));
 
-            if (
-              isPropertiesGroup &&
-              context.options.getValue('propertiesFormat') === 'table'
-            ) {
-              md.push(context.propertiesTable(group.children));
-            } else if (
-              isEnumGroup &&
-              context.options.getValue('enumMembersFormat') === 'table'
-            ) {
-              md.push(context.enumMembersTable(group.children));
+            if (isPropertiesGroup && context.options.getValue('propertiesFormat') === 'table') {
+              md.push(context.propertiesTable(group.children as DeclarationReflection[]));
+            } else if (isEnumGroup && context.options.getValue('enumMembersFormat') === 'table') {
+              md.push(context.enumMembersTable(group.children as DeclarationReflection[]));
             } else {
-              pushChildren(group.children, headingLevel + 1);
+              pushChildren(group.children as DeclarationReflection[], headingLevel + 1);
             }
           }
         });

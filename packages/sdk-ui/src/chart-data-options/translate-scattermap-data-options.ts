@@ -4,11 +4,7 @@ import {
   ScattermapLocationLevel,
   StyledColumn,
 } from './types';
-import {
-  translateColumnToCategory,
-  translateColumnToValue,
-  translateColumnToCategoryOrValue,
-} from './utils';
+import { normalizeColumn, normalizeMeasureColumn, normalizeAnyColumn } from './utils';
 
 const locationLevelPriorityMap = {
   city: 4,
@@ -34,12 +30,11 @@ export function translateScattermapChartDataOptions(
   scattermap: ScattermapChartDataOptions,
 ): ScattermapChartDataOptionsInternal {
   const { geo, size, colorBy, details } = scattermap;
-
   return {
-    locations: geo && geo.map(translateColumnToCategory),
-    size: size && translateColumnToValue(size),
-    colorBy: colorBy && translateColumnToValue(colorBy),
-    details: details && translateColumnToCategoryOrValue(details),
+    locations: geo.map(normalizeColumn),
+    size: size && normalizeMeasureColumn(size),
+    colorBy: colorBy && normalizeMeasureColumn(colorBy),
+    details: details && normalizeAnyColumn(details),
     locationLevel: getLocationLevel(geo),
-  } as ScattermapChartDataOptionsInternal;
+  };
 }

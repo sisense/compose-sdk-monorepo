@@ -8,7 +8,7 @@ describe('prepareSunburstDataItems', () => {
   it('should prepare data items with sorting and coloring', () => {
     const result = prepareSunburstDataItems(
       mockedSunburstSeriesProps.chartData as CategoricalChartData,
-      mockedSunburstSeriesProps.dataOptions as unknown as CategoricalChartDataOptionsInternal,
+      mockedSunburstSeriesProps.dataOptions as CategoricalChartDataOptionsInternal,
       mockedSunburstSeriesProps.themeSettings as CompleteThemeSettings,
     );
 

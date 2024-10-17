@@ -27,11 +27,11 @@ configura_angular_env="node ./scripts/configure-angular-demo-env.cjs";
 
 # Define the servers with their start commands and URLs to check
 server_commands=(
-    "yarn workspace react-ts-demo dev --port 5300 --host"
+    "yarn workspace @sisense/react-ts-demo dev --port 5300 --host"
     "yarn workspace @sisense/sdk-ui dev --port 5301 --host"
     "yarn workspace @sisense/sdk-ui storybook --port 5302 --no-open"
-    "yarn workspace vue-ts-demo dev --port 5303 --host"
-    "yarn workspace angular-demo start --port 5304 --disable-host-check --host='0.0.0.0'"
+    "yarn workspace @sisense/vue-ts-demo dev --port 5303 --host"
+    "yarn workspace @sisense/angular-demo start --port 5304 --disable-host-check --host='0.0.0.0'"
 )
 server_urls=(
     "http://localhost:5300"

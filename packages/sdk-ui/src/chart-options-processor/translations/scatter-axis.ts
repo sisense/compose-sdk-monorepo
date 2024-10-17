@@ -3,19 +3,19 @@
 import { ScatterCategories } from '../../chart-data/types';
 import {
   ScatterChartDataOptionsInternal,
-  isCategory,
-  Category,
-  Value,
+  StyledColumn,
+  StyledMeasureColumn,
 } from './../../chart-data-options/types';
 import { Axis, AxisSettings } from './axis-section';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { isNumber } from '@sisense/sdk-data';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
+import { isMeasureColumn } from '@/chart-data-options/utils';
 
 export const commonColor = '#d1d1d7';
 
 export function scatterFormatter(
-  axisAttribute: Category | Value | undefined,
+  axisAttribute: StyledColumn | StyledMeasureColumn | undefined,
   value: string | number,
   categories: (string | number)[] | undefined,
 ): string {
@@ -31,7 +31,7 @@ export function scatterFormatter(
     return `${value}`;
   }
 
-  if (axisAttribute && isCategory(axisAttribute) && !isNumber(axisAttribute.type)) {
+  if (axisAttribute && !isMeasureColumn(axisAttribute) && !isNumber(axisAttribute.column.type)) {
     return `${value}`;
   }
 

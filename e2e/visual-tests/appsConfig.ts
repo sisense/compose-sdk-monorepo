@@ -16,7 +16,7 @@ const host = process.env.USE_EXTERNAL_HOST ? 'host.docker.internal' : 'localhost
 
 const appsConfig: AppsConfig = {
   [AppsNames.REACT_DEMO]: {
-    command: 'yarn workspace react-ts-demo dev --port 5300',
+    command: 'yarn workspace @sisense/react-ts-demo dev --port 5300',
     url: `http://${host}:5300`,
   },
   [AppsNames.REACT_LOCAL_DEMO]: {
@@ -28,12 +28,12 @@ const appsConfig: AppsConfig = {
     url: `http://${host}:5302`,
   },
   [AppsNames.VUE_DEMO]: {
-    command: 'yarn workspace vue-ts-demo dev --port 5303',
+    command: 'yarn workspace @sisense/vue-ts-demo dev --port 5303',
     url: `http://${host}:5303`,
   },
   [AppsNames.ANGULAR_DEMO]: {
     command:
-      'node ./scripts/configure-angular-demo-env.cjs && yarn workspace angular-demo start --port 5304',
+      'node ./scripts/configure-angular-demo-env.cjs && yarn workspace @sisense/angular-demo start --port 5304',
     url: `http://${host}:5304`,
   },
 };

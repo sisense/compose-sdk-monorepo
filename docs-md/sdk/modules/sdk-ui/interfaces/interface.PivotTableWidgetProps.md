@@ -4,7 +4,7 @@ title: PivotTableWidgetProps
 
 # Interface PivotTableWidgetProps
 
-Props for the [PivotTableWidget](../dashboarding/function.PivotTableWidget.md) component
+Props for the [PivotTableWidget](../dashboards/function.PivotTableWidget.md) component
 
 ## Properties
 
@@ -22,7 +22,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
+> **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters that will slice query results
 

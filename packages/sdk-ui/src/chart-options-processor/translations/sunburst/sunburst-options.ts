@@ -12,6 +12,7 @@ import { getLegendSettings } from '../legend-section';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './sunburst.scss';
 import { getLegend } from '../../style-to-design-options-translator/translate-to-highcharts-options';
+import { getDataOptionTitle } from '@/chart-data-options/utils';
 
 const DEFAULT_SUNBURST_SERIES = {
   type: 'sunburst',
@@ -65,7 +66,7 @@ export function prepareSunburstOptions(
         turboThreshold: 2000,
       },
       ...dataOptions.breakBy.map((column, index) => ({
-        name: column.title || column.name,
+        name: getDataOptionTitle(column),
         showInLegend: true,
         color:
           (column?.color as UniformDataColorOptions)?.color ||

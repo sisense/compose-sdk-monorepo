@@ -13,11 +13,11 @@ import {
 import { MemberFilterTile } from '../member-filter-tile/index.js';
 import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
 import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter/index.js';
-import { CompleteFilterTileDesignOptions, FilterTile } from '../filter-tile.js';
-import { useTranslation } from 'react-i18next';
+import { CompleteFilterTileDesignOptions } from '../filter-tile.js';
 import { useThemeContext } from '@/theme-provider';
 import { TRIANGLE_COLOR_ADJUSTMENT, getSlightlyDifferentColor } from '@/utils/color';
 import { CustomFilterTile } from '@/filters';
+import { UnsupportedFilterTile } from '@/filters/components/unsupported-filter-tile';
 
 /**
  * Props of the {@link CascadingLevelFilterTile} component
@@ -68,7 +68,6 @@ export const CascadingLevelFilterTile = ({
   onChange,
   isLast,
 }: CascadingLevelFilterTileProps) => {
-  const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
   const { backgroundColor: bgColor } = themeSettings.general;
   const triangleColor = getSlightlyDifferentColor(bgColor, TRIANGLE_COLOR_ADJUSTMENT);
@@ -98,14 +97,7 @@ export const CascadingLevelFilterTile = ({
   ) : isCustomFilter(filter) ? (
     <CustomFilterTile {...props} filter={filter} />
   ) : (
-    <FilterTile
-      title={t('unsupportedFilter.title')}
-      renderContent={() => (
-        <p className="csdk-text-center csdk-text-[13px]">{t('unsupportedFilter.message')}</p>
-      )}
-      design={cascadingLevelTileDesign}
-      locked={filter.locked}
-    />
+    <UnsupportedFilterTile filter={filter} design={cascadingLevelTileDesign} />
   );
 
   return (

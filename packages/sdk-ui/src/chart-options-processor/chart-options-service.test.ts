@@ -13,7 +13,7 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
-  Category,
+  StyledColumn,
 } from '../chart-data-options/types';
 import { ChartDesignOptions, DesignOptions } from './translations/types';
 import { DateLevels } from '@sisense/sdk-data';
@@ -24,19 +24,23 @@ const translateMock = ((key: string) => key) as TFunction;
 
 const TestChartDataOptionsMultipleXandYValues: CartesianChartDataOptionsInternal = {
   x: [
-    { name: 'Food', type: 'string', sortType: 'sortNone' },
-    { name: 'Geo', type: 'string', sortType: 'sortNone' },
+    { column: { name: 'Food', type: 'string' }, sortType: 'sortNone' },
+    { column: { name: 'Geo', type: 'string' }, sortType: 'sortNone' },
   ],
   y: [
     {
-      name: 'Revenue',
-      aggregation: 'sum',
-      title: 'Revenue',
+      column: {
+        name: 'Revenue',
+        aggregation: 'sum',
+        title: 'Revenue',
+      },
     },
     {
-      name: 'Expenses',
-      aggregation: 'sum',
-      title: 'Expenses',
+      column: {
+        name: 'Expenses',
+        aggregation: 'sum',
+        title: 'Expenses',
+      },
       showOnRightAxis: true,
     },
   ],
@@ -44,16 +48,18 @@ const TestChartDataOptionsMultipleXandYValues: CartesianChartDataOptionsInternal
 };
 
 const TestChartDataOptions: ChartDataOptionsInternal = {
-  x: [{ name: 'Food', type: 'string', sortType: 'sortNone' }],
+  x: [{ column: { name: 'Food', type: 'string' }, sortType: 'sortNone' }],
   y: [
     {
-      name: 'Revenue',
-      aggregation: 'sum',
-      title: 'Revenue',
+      column: {
+        name: 'Revenue',
+        aggregation: 'sum',
+        title: 'Revenue',
+      },
       sortType: 'sortNone',
     },
   ],
-  breakBy: [{ name: 'Geo', type: 'string' }],
+  breakBy: [{ column: { name: 'Geo', type: 'string' } }],
 };
 
 const TestQueryResult = createDataTableFromData({
@@ -95,25 +101,33 @@ const TimeSeriesData = createDataTableFromData({
 });
 
 const months = {
-  name: 'Months',
-  type: 'date',
+  column: {
+    name: 'Months',
+    type: 'date',
+  },
   continuous: true,
   dateFormat: 'Y-MM',
 };
 const area = {
-  name: 'Area',
-  type: 'string',
+  column: {
+    name: 'Area',
+    type: 'string',
+  },
 };
 const meas1 = {
-  name: 'Quantity',
-  aggregation: 'sum',
-  title: 'Quantity',
+  column: {
+    name: 'Quantity',
+    aggregation: 'sum',
+    title: 'Quantity',
+  },
 };
 
 const meas2 = {
-  name: 'Units',
-  aggregation: 'sum',
-  title: 'Units',
+  column: {
+    name: 'Units',
+    aggregation: 'sum',
+    title: 'Units',
+  },
 };
 
 const baseChartDesignOptions = {
@@ -127,8 +141,10 @@ const themeSettings = getDefaultThemeSettings();
 
 const continuousWithGranularityMonths = () => {
   const months2 = {
-    name: 'Months',
-    type: 'date',
+    column: {
+      name: 'Months',
+      type: 'date',
+    },
     continuous: true,
     granularity: DateLevels.Months,
     dateFormat: 'Y-MM',
@@ -460,8 +476,10 @@ it('applyNumberFormatToPlotBands should work for x1 and x2 if type is number', (
   const chartDataOptions: ChartDataOptionsInternal = {
     x: [
       {
-        name: 'revenue',
-        type: 'number',
+        column: {
+          name: 'revenue',
+          type: 'number',
+        },
         numberFormatConfig: {
           name: 'Currency',
           prefix: true,
@@ -469,8 +487,10 @@ it('applyNumberFormatToPlotBands should work for x1 and x2 if type is number', (
         },
       },
       {
-        name: 'percentage',
-        type: 'number',
+        column: {
+          name: 'percentage',
+          type: 'number',
+        },
         numberFormatConfig: { name: 'Percent' },
       },
     ],
@@ -522,8 +542,10 @@ it('applyNumberFormatToPlotBands should not change value when x1 and x2 are not 
   const chartDataOptions: ChartDataOptionsInternal = {
     x: [
       {
-        name: 'revenue',
-        type: 'string',
+        column: {
+          name: 'revenue',
+          type: 'string',
+        },
         numberFormatConfig: {
           name: 'Currency',
           prefix: true,
@@ -531,8 +553,10 @@ it('applyNumberFormatToPlotBands should not change value when x1 and x2 are not 
         },
       },
       {
-        name: 'percentage',
-        type: 'string',
+        column: {
+          name: 'percentage',
+          type: 'string',
+        },
         numberFormatConfig: { name: 'Percent' },
       },
     ],
@@ -584,7 +608,7 @@ describe('cartesianData', () => {
   it('default will order X-Axis by sortType ascending', () => {
     const dataOptions = {
       ...TestChartDataOptions,
-      x: [{ name: 'Food', type: 'string' }],
+      x: [{ column: { name: 'Food', type: 'string' } }],
     } as CartesianChartDataOptionsInternal;
     const chartData = cartesianData(dataOptions, TestQueryResult);
     expect(chartData.xValues.map((x) => x.key)).toEqual(['Pasta', 'Pies', 'Wine']);
@@ -592,7 +616,7 @@ describe('cartesianData', () => {
   it('sortNone will order X-Axis by source data order', () => {
     const dataOptions = {
       ...TestChartDataOptions,
-      x: [{ name: 'Food', type: 'string', sortType: 'sortNone' }],
+      x: [{ column: { name: 'Food', type: 'string' }, sortType: 'sortNone' }],
     } as CartesianChartDataOptionsInternal;
     const chartData = cartesianData(dataOptions, TestQueryResult);
     expect(chartData.xValues.map((x) => x.key)).toEqual(['Pies', 'Wine', 'Pasta']);
@@ -600,7 +624,7 @@ describe('cartesianData', () => {
   it('sortDesc will order X-Axis descending', () => {
     const dataOptions = {
       ...TestChartDataOptions,
-      x: [{ name: 'Food', type: 'string', sortType: 'sortDesc' }],
+      x: [{ column: { name: 'Food', type: 'string' }, sortType: 'sortDesc' }],
     } as CartesianChartDataOptionsInternal;
     const chartData = cartesianData(dataOptions, TestQueryResult);
     expect(chartData.xValues.map((x) => x.key)).toEqual(['Wine', 'Pies', 'Pasta']);
@@ -608,7 +632,7 @@ describe('cartesianData', () => {
   it('sortAsc will order X-Axis ascending', () => {
     const dataOptions = {
       ...TestChartDataOptions,
-      x: [{ name: 'Food', type: 'string', sortType: 'sortAsc' }],
+      x: [{ column: { name: 'Food', type: 'string' }, sortType: 'sortAsc' }],
     } as CartesianChartDataOptionsInternal;
     const chartData = cartesianData(dataOptions, TestQueryResult);
     expect(chartData.xValues.map((x) => x.key)).toEqual(['Pasta', 'Pies', 'Wine']);
@@ -685,8 +709,10 @@ describe('cartesianData', () => {
     });
 
     const months2 = {
-      name: 'Months',
-      type: 'date',
+      column: {
+        name: 'Months',
+        type: 'date',
+      },
       continuous: true,
       granularity: DateLevels.Months,
       dateFormat: 'Y-MM',
@@ -750,8 +776,10 @@ describe('cartesianData', () => {
     });
 
     const months2 = {
-      name: 'Months',
-      type: 'date',
+      column: {
+        name: 'Months',
+        type: 'date',
+      },
       continuous: true,
       granularity: DateLevels.Months,
       dateFormat: 'Y-MM',
@@ -805,8 +833,10 @@ describe('cartesianData', () => {
     });
 
     const months2 = {
-      name: 'Months',
-      type: 'date',
+      column: {
+        name: 'Months',
+        type: 'date',
+      },
       continuous: true,
       dateFormat: 'Y-MM',
     };
@@ -834,8 +864,10 @@ describe('cartesianData', () => {
       ...TestChartDataOptions,
       breakBy: [
         {
-          name: 'COGS',
-          type: 'number',
+          column: {
+            name: 'COGS',
+            type: 'number',
+          },
         },
       ],
     } as CartesianChartDataOptionsInternal;
@@ -845,8 +877,10 @@ describe('cartesianData', () => {
       ...TestChartDataOptions,
       breakBy: [
         {
-          name: 'COGS',
-          type: 'number',
+          column: {
+            name: 'COGS',
+            type: 'number',
+          },
           numberFormatConfig: { decimalScale: 1 },
         },
       ],
@@ -860,8 +894,10 @@ describe('cartesianData', () => {
       ...TestChartDataOptions,
       x: [
         {
-          name: 'COGS',
-          type: 'number',
+          column: {
+            name: 'COGS',
+            type: 'number',
+          },
         },
       ],
       breakBy: [],
@@ -898,8 +934,10 @@ describe('cartesianData', () => {
       ...TestChartDataOptions,
       x: [
         {
-          name: 'COGS',
-          type: 'number',
+          column: {
+            name: 'COGS',
+            type: 'number',
+          },
           numberFormatConfig: { decimalScale: 1 },
         },
       ],
@@ -1059,32 +1097,42 @@ describe('categoricalCharts', () => {
   });
 
   const units = {
-    name: 'Units',
-    aggregation: 'sum',
+    column: {
+      name: 'Units',
+      aggregation: 'sum',
+    },
     title: 'Units',
   };
 
   const quantity = {
-    name: 'Quantity',
-    aggregation: 'sum',
+    column: {
+      name: 'Quantity',
+      aggregation: 'sum',
+    },
     title: 'Quantity',
   };
 
   const returns = {
-    name: 'Returns',
-    aggregation: 'sum',
-    title: 'Returns',
+    column: {
+      name: 'Returns',
+      aggregation: 'sum',
+      title: 'Returns',
+    },
   };
 
   const inventory = {
-    name: 'Inventory',
-    aggregation: 'sum',
-    title: 'Inventory',
+    column: {
+      name: 'Inventory',
+      aggregation: 'sum',
+      title: 'Inventory',
+    },
   };
 
   const group = {
-    name: 'Group',
-    type: 'string',
+    column: {
+      name: 'Group',
+      type: 'string',
+    },
   };
 
   describe('with break by', () => {
@@ -1344,8 +1392,10 @@ describe('categoricalCharts', () => {
           ...pieDataOptions,
           breakBy: [
             {
-              name: 'Quantity',
-              type: 'number',
+              column: {
+                name: 'Quantity',
+                type: 'number',
+              },
               numberFormatConfig: { decimalScale: 2 },
             },
           ],
@@ -1502,15 +1552,19 @@ describe('funnelChart', () => {
     ],
   });
 
-  const stage: Category = {
-    name: 'Stage',
-    type: 'string',
+  const stage = {
+    column: {
+      name: 'Stage',
+      type: 'string',
+    },
     sortType: 'sortNone',
-  };
+  } as StyledColumn;
   const uniqueUsers = {
-    name: 'Unique Users',
-    aggregation: 'count',
-    title: 'Unique Users',
+    column: {
+      name: 'Unique Users',
+      aggregation: 'count',
+      title: 'Unique Users',
+    },
   };
 
   describe('with break by', () => {

@@ -6,22 +6,22 @@ import {
   RangeChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { cartesianData, cartesianData as getCartesianData } from './cartesian-data';
+import { cartesianData as getCartesianData } from './cartesian-data';
 
 /**
  * Creates data for range charts given chart data table and data options
  *
- * @param chartDataOptions - Data options for range charts
+ * @param dataOptions - Data options for range charts
  * @param dataTable - Chart data table
  * @returns range chart data
  */
 export const rangeData = (
-  chartDataOptions: RangeChartDataOptionsInternal,
+  dataOptions: RangeChartDataOptionsInternal,
   dataTable: DataTable,
 ): RangeChartData => {
   const getInitialCartesianDataOptions = () =>
     ({
-      ...chartDataOptions,
+      ...dataOptions,
       y: [],
     } as CartesianChartDataOptionsInternal);
   const cartesianChartDataOptionsUpper = getInitialCartesianDataOptions();
@@ -31,11 +31,11 @@ export const rangeData = (
   const lowerValueIndex = 0;
 
   // assumes no sorting by Y for range chart - open issue
-  chartDataOptions.seriesValues.forEach((value) => {
+  dataOptions.seriesValues.forEach((value) => {
     cartesianChartDataOptionsUpper.y.push(value);
     cartesianChartDataOptionsLower.y.push(value);
   });
-  chartDataOptions.rangeValues.forEach((value) => {
+  dataOptions.rangeValues.forEach((value) => {
     const upperValue = value[upperValueIndex];
     const lowerValue = value[lowerValueIndex];
 

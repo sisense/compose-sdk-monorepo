@@ -1,10 +1,10 @@
 import { ScatterDataTable } from '../../chart-data/types';
 import { createCategoriesMap } from '../../chart-data/scatter-data';
 import { buildScatterSeries } from './scatter-series';
-import { Category, Value } from '../../chart-data-options/types';
 import { MarkerSettings } from './marker-section';
 import { SeriesType } from '../chart-options-service';
 import { SeriesPointStructure } from './translations-to-highcharts';
+import { StyledMeasureColumn } from '@/index';
 
 describe('Scatter series builder', () => {
   const xCategories = ['x1', 'x2', 'x3'];
@@ -325,9 +325,11 @@ describe('Scatter series builder', () => {
 
   it('should fill break by / color for the categorical column correctly', () => {
     const categoriesMap = createCategoriesMap(xCategories, yCategories);
-    const breakByColor: Category = {
-      name: 'breakByColor',
-      type: 'string',
+    const breakByColor = {
+      column: {
+        name: 'breakByColor',
+        type: 'string',
+      },
     };
     const dataOptions = {
       breakByColor,
@@ -439,10 +441,12 @@ describe('Scatter series builder', () => {
 
   it('should fill break by / color for the measure column correctly', () => {
     const categoriesMap = createCategoriesMap(xCategories, yCategories);
-    const breakByColor: Value = {
-      name: 'breakByColor',
-      aggregation: 'sum',
-      title: 'Break By Color',
+    const breakByColor = {
+      column: {
+        name: 'breakByColor',
+        aggregation: 'sum',
+        title: 'Break By Color',
+      },
     };
     const dataOptions = {
       breakByColor,
@@ -527,15 +531,17 @@ describe('Scatter series builder', () => {
   it('should set series colors based on color options from "break by / color" measure', () => {
     const expectedColor = 'red';
     const categoriesMap = createCategoriesMap(xCategories, yCategories);
-    const breakByColor: Value = {
-      name: 'breakByColor',
-      aggregation: 'sum',
+    const breakByColor = {
+      column: {
+        name: 'breakByColor',
+        aggregation: 'sum',
+        title: 'breakByColor',
+      },
       color: {
         type: 'uniform',
         color: expectedColor,
       },
-      title: 'breakByColor',
-    };
+    } as StyledMeasureColumn;
     const dataOptions = {
       breakByColor,
     };
@@ -699,9 +705,11 @@ describe('Scatter series builder', () => {
     const seriesCapacity = 2;
 
     const categoriesMap = createCategoriesMap(xCategories, yCategories);
-    const breakByColor: Category = {
-      name: 'breakByColor',
-      type: 'string',
+    const breakByColor = {
+      column: {
+        name: 'breakByColor',
+        type: 'string',
+      },
     };
     const dataOptions = {
       breakByColor,

@@ -4,16 +4,16 @@ title: useQueryCache
 
 # Function useQueryCache <Badge type="alpha" text="Alpha" />
 
-> **useQueryCache**(): `undefined` \| \{
+> **useQueryCache**(): \{
   `clear`: () => `void`;
- }
+ } \| `undefined`
 
 React hook that returns the instance to manage query cache.
 
 ## Returns
 
-`undefined` \| \{
+\{
   `clear`: () => `void`;
- }
+ } \| `undefined`
 
 Query cache

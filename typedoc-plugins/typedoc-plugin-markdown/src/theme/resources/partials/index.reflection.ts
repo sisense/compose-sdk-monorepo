@@ -95,7 +95,7 @@ function getTable(
 
 function getList(context: MarkdownThemeRenderContext, group: ReflectionGroup | ReflectionCategory) {
   const children = group.children.map(
-    (child) =>
+    (child: DeclarationReflection) =>
       // CSDK: add member badge
       `- [${escapeChars(child.name)}](${context.relativeURL(child.url)})${context.memberBadge(
         child,

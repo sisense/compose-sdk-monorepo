@@ -404,20 +404,6 @@ export interface AreamapChartDataOptions {
 }
 
 /**
- * Checks if the given argument is a measure column.
- *
- * @param arg
- * @internal
- */
-export function isMeasureColumn(
-  arg: AnyColumn,
-): arg is MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn {
-  const column = 'column' in arg ? arg.column : arg;
-  if ('context' in column || 'aggregation' in column) return true;
-  return !('type' in column);
-}
-
-/**
  * Configuration for how to query data and assign data to Table.
  */
 export interface TableDataOptions {
@@ -632,76 +618,52 @@ export type RegularChartDataOptions =
   | RangeChartDataOptions;
 
 /** @internal */
-export interface Category extends CategoryStyle {
-  name: string;
-  type: string;
-  title?: string;
-}
-
-/** @internal */
-export const isValue = (arg: Category | Value): arg is Value => {
-  return 'aggregation' in arg || 'context' in arg || 'formula' in arg;
-};
-
-/** @internal */
-export const isCategory = (arg: Category | Value): arg is Category => {
-  return !isValue(arg);
-};
-
-/** @internal */
-export interface Value extends ValueStyle, SeriesStyle {
-  name: string;
-  aggregation?: string;
-  title: string;
-}
-
-/** @internal */
 export interface CartesianChartDataOptionsInternal {
-  x: Category[];
-  y: Value[];
-  breakBy: Category[];
+  x: StyledColumn[];
+  y: StyledMeasureColumn[];
+  breakBy: StyledColumn[];
   seriesToColorMap?: ValueToColorMap;
 }
 
 /** @internal */
 export interface CategoricalChartDataOptionsInternal {
-  y: Value[];
-  breakBy: Category[];
+  y: StyledMeasureColumn[];
+  breakBy: StyledColumn[];
   seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
 }
 
 /** @internal */
 export interface ScatterChartDataOptionsInternal {
-  x?: Value | Category;
-  y?: Value | Category;
-  breakByPoint?: Category;
-  breakByColor?: Category | Value;
-  size?: Value;
+  x?: StyledColumn | StyledMeasureColumn;
+  y?: StyledColumn | StyledMeasureColumn;
+  breakByPoint?: StyledColumn;
+  breakByColor?: StyledColumn | StyledMeasureColumn;
+  size?: StyledMeasureColumn;
   seriesToColorMap?: ValueToColorMap;
 }
 
 /** @internal */
 export interface ScattermapChartDataOptionsInternal {
-  locations: Category[];
-  size?: Value;
-  colorBy?: Value;
-  details?: Category | Value;
+  locations: StyledColumn[];
+  size?: StyledMeasureColumn;
+  colorBy?: StyledMeasureColumn;
+  details?: StyledColumn | StyledMeasureColumn;
   locationLevel: ScattermapLocationLevel;
 }
 
 /** @internal */
 export type RangeChartDataOptionsInternal = {
-  x: Category[];
-  rangeValues: Value[][];
-  seriesValues: Value[];
-  breakBy: Category[];
-  y: Value[];
+  x: StyledColumn[];
+  y: StyledMeasureColumn[];
+  breakBy: StyledColumn[];
   seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
+  rangeValues: StyledMeasureColumn[][];
+  seriesValues: StyledMeasureColumn[];
 };
 
 /** @internal */
 export type TableDataOptionsInternal = {
-  columns: (Category | Value)[];
+  columns: (StyledColumn | StyledMeasureColumn)[];
 };
 
 /**
@@ -713,21 +675,21 @@ export interface PivotTableDataOptionsInternal {
    *
    * @category Data Options
    */
-  rows?: Category[];
+  rows?: StyledColumn[];
 
   /**
    * Dimensions for the columns of the pivot table
    *
    * @category Data Options
    */
-  columns?: Category[];
+  columns?: StyledColumn[];
 
   /**
    * Measures for the values of the pivot table
    *
    * @category Data Options
    */
-  values?: Value[];
+  values?: StyledMeasureColumn[];
 
   /**
    * Options for grand totals
@@ -750,27 +712,27 @@ export type ChartDataOptionsInternal =
 
 /** @internal */
 export type IndicatorChartDataOptionsInternal = {
-  min?: Value[];
-  max?: Value[];
-  value?: Value[];
-  secondary?: Value[];
+  value?: StyledMeasureColumn[];
+  secondary?: StyledMeasureColumn[];
+  min?: StyledMeasureColumn[];
+  max?: StyledMeasureColumn[];
 };
 
 /** @internal */
 export interface BoxplotChartDataOptionsInternal {
-  category?: Category;
-  boxMin: Value;
-  boxMedian: Value;
-  boxMax: Value;
-  whiskerMin: Value;
-  whiskerMax: Value;
-  outliersCount: Value;
-  outliers?: Category;
+  category?: StyledColumn;
+  boxMin: StyledMeasureColumn;
+  boxMedian: StyledMeasureColumn;
+  boxMax: StyledMeasureColumn;
+  whiskerMin: StyledMeasureColumn;
+  whiskerMax: StyledMeasureColumn;
+  outliersCount: StyledMeasureColumn;
+  outliers?: StyledColumn;
   valueTitle: string;
 }
 
 /** @internal */
 export type AreamapChartDataOptionsInternal = {
-  geo: Category;
-  color?: Value;
+  geo: StyledColumn;
+  color?: StyledMeasureColumn;
 };

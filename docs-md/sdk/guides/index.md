@@ -22,6 +22,9 @@ indexTopics:
     - title: Generative AI
       description: Learn how to deliver conversational analytics using large language models (Beta)
       link: ./ai-features
+    - title: Dashboards
+      description: Learn how to render dashboards using Compose SDK (Beta)
+      link: ./dashboards
     - title: Chart Plugins
       description: Render a custom chart plugin with Compose SDK dashboards
       link: ./chart-plugins

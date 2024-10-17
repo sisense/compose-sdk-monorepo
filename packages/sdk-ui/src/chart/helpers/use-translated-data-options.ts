@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { getTranslatedDataOptions } from '@/chart-data-options/get-translated-data-options';
-import { translateMeasureToValue } from '@/chart-data-options/utils';
 import { generateUniqueDataColumnsNames } from '@/chart-data-options/validate-data-options';
 import { ChartDataOptions, ChartType } from '@/types';
 
@@ -13,9 +12,7 @@ export const useTranslatedDataOptions = (
       chartDataOptions,
       chartType,
     );
-    const dataColumnNamesMapping = generateUniqueDataColumnsNames(
-      measures.map(translateMeasureToValue),
-    );
+    const dataColumnNamesMapping = generateUniqueDataColumnsNames(measures);
     return {
       dataOptions,
       attributes,

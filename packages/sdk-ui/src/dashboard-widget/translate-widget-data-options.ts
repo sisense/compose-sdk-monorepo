@@ -171,7 +171,7 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
  *
  * @internal
  */
-const ENABLE_STATISTICAL_MODELS = false;
+const ENABLE_STATISTICAL_MODELS = true;
 
 /** @internal */
 export function applyStatisticalModels(

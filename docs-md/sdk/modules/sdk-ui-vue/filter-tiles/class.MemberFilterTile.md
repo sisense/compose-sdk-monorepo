@@ -49,7 +49,7 @@ MemberFilterTile props
 
 ### attribute
 
-> **attribute**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
+> **`readonly`** **attribute**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
 
 Attribute to filter on. A query will run to fetch all this attribute's members
 
@@ -57,7 +57,7 @@ Attribute to filter on. A query will run to fetch all this attribute's members
 
 ### dataSource
 
-> **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+> **`readonly`** **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -67,7 +67,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 ### filter
 
-> **filter**?: `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
+> **`readonly`** **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null`
 
 Source filter object. Caller is responsible for keeping track of filter state
 
@@ -75,7 +75,7 @@ Source filter object. Caller is responsible for keeping track of filter state
 
 ### onChange
 
-> **onChange**?: (`filter`) => `void`
+> **`readonly`** **onChange**?: (`filter`) => `void`
 
 Callback indicating when the source member filter object should be updated
 
@@ -83,7 +83,7 @@ Callback indicating when the source member filter object should be updated
 
 | Parameter | Type |
 | :------ | :------ |
-| `filter` | `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md) |
+| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null` |
 
 #### Returns
 
@@ -93,7 +93,7 @@ Callback indicating when the source member filter object should be updated
 
 ### parentFilters
 
-> **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **`readonly`** **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 List of filters this filter is dependent on
 
@@ -101,6 +101,6 @@ List of filters this filter is dependent on
 
 ### title
 
-> **title**?: `string`
+> **`readonly`** **title**?: `string`
 
 Title for the filter tile, which is rendered into the header

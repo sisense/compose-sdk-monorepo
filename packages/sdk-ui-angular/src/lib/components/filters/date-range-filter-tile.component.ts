@@ -38,7 +38,6 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * ```
  * ```ts
  * import { Component } from '@angular/core';
- * import { Member } from '@sisense/sdk-ui-angular';
  * import { Filter, filterFactory } from '@sisense/sdk-data';
  * import * as DM from '../../assets/sample-healthcare-model';
  *
@@ -64,7 +63,6 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * }
  * ```
  * <img src="media://angular-date-range-filter-tile-example.png" width="600px" />
- *
  * @group Filter Tiles
  */
 @Component({

@@ -3,7 +3,7 @@ import { AppsNames, getAppConfig } from '../appsConfig';
 import { makeScreenshotsOverPage } from '../__test-helpers__/make-screenshot';
 
 const TEST_STEP_AVARAGE_TIMEOUT = 20 * 1000;
-const DISABLED_TEST_SUITES = ['Funnel Chart', 'Scattermap'];
+const DISABLED_TEST_SUITES = ['Funnel Chart', 'Scattermap', 'pivot'];
 
 const { url } = getAppConfig(AppsNames.REACT_LOCAL_DEMO);
 

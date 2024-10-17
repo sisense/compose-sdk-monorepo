@@ -12,7 +12,7 @@ There are separate configurations for [Cartesian](../interfaces/interface.Cartes
 [Categorical](../interfaces/interface.CategoricalChartDataOptions.md),
 [Scatter](../interfaces/interface.ScatterChartDataOptions.md),
 [Indicator](../interfaces/interface.IndicatorChartDataOptions.md),
-[Table](../data-grids/class.Table.md),
+[Table](../interfaces/interface.TableDataOptions.md),
 [Boxplot](type-alias.BoxplotChartDataOptions.md),
 [Areamap](../interfaces/interface.AreamapChartDataOptions.md), and
 [Scattermap](../interfaces/interface.ScattermapChartDataOptions.md) charts.

@@ -56,7 +56,7 @@ The provided filters will be merged with the existing widget filters based on `f
 
 ### filtersMergeStrategy
 
-> **filtersMergeStrategy**?: `"widgetFirst"` \| `"codeFirst"` \| `"codeOnly"`
+> **filtersMergeStrategy**?: `"codeFirst"` \| `"codeOnly"` \| `"widgetFirst"`
 
 Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
 

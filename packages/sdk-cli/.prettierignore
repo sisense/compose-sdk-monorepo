@@ -9,3 +9,4 @@ coverage/
 
 # Ignore auto-generated files:
 CHANGELOG.md
+src/package-version.ts

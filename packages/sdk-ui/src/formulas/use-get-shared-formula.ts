@@ -99,8 +99,6 @@ export type SharedFormulaSuccessState = {
     ```tsx
     const { formula, isLoading, isError } = useGetSharedFormula({ name: 'My Shared Formula', datasource: DM.DataSource })
     ```
- * @param params - {@link UseGetSharedFormulaParams}
- * @param dataSource - Data source in Sisense instance
  * @returns Formula load state that contains the status of the execution, the result formula, or the error if any
  * @group Fusion Embed
  * @fusionEmbed
@@ -110,6 +108,7 @@ export const useGetSharedFormula = withTracking('useGetSharedFormula')(useGetSha
 /**
  * {@link useGetSharedFormula} without tracking to be used inside other hooks or components in Compose SDK.
  *
+ * @param params - {@link UseGetSharedFormulaParams}
  * @internal
  */
 export function useGetSharedFormulaInternal(params: UseGetSharedFormulaParams) {

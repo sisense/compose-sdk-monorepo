@@ -47,7 +47,7 @@ for a number greater than or equal one million - e.g. 1M
 
 ### `name`
 
-**name**?: `"Numbers"` \| `"Currency"` \| `"Percent"`
+**name**?: `"Currency"` \| `"Numbers"` \| `"Percent"`
 
 Supported formats
 

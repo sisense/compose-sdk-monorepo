@@ -2,7 +2,7 @@ import { createAttribute, Measure, type Data, type QueryResultData } from '@sise
 import { boxWhiskerProcessResult, executeBoxplotQuery } from './boxplot-utils.js';
 import isObject from 'lodash-es/isObject';
 import { executePivotQueryMock } from './query/__mocks__/execute-query';
-import { Value, type ClientApplication } from './index.js';
+import { type ClientApplication } from './index.js';
 
 vi.mock('./query/execute-query');
 
@@ -189,13 +189,13 @@ describe('Boxplot Utils', () => {
         {
           app: {} as ClientApplication,
           chartDataOptions: {
-            category: fullDataSet.columns[0],
-            boxMin: fullDataSet.columns[1] as unknown as Value,
-            boxMedian: fullDataSet.columns[2] as unknown as Value,
-            boxMax: fullDataSet.columns[3] as unknown as Value,
-            whiskerMin: fullDataSet.columns[4] as unknown as Value,
-            whiskerMax: fullDataSet.columns[5] as unknown as Value,
-            outliersCount: fullDataSet.columns[6] as unknown as Value,
+            category: { column: fullDataSet.columns[0] },
+            boxMin: { column: fullDataSet.columns[1] },
+            boxMedian: { column: fullDataSet.columns[2] },
+            boxMax: { column: fullDataSet.columns[3] },
+            whiskerMin: { column: fullDataSet.columns[4] },
+            whiskerMax: { column: fullDataSet.columns[5] },
+            outliersCount: { column: fullDataSet.columns[6] },
             valueTitle: 'Test data',
           },
           dataSource: 'Dummy datasource',
@@ -218,14 +218,14 @@ describe('Boxplot Utils', () => {
         {
           app: {} as ClientApplication,
           chartDataOptions: {
-            category: fullDataSet.columns[0],
-            boxMin: fullDataSet.columns[1] as unknown as Value,
-            boxMedian: fullDataSet.columns[2] as unknown as Value,
-            boxMax: fullDataSet.columns[3] as unknown as Value,
-            whiskerMin: fullDataSet.columns[4] as unknown as Value,
-            whiskerMax: fullDataSet.columns[5] as unknown as Value,
-            outliersCount: fullDataSet.columns[6] as unknown as Value,
-            outliers: fullDataSet.columns[7],
+            category: { column: fullDataSet.columns[0] },
+            boxMin: { column: fullDataSet.columns[1] },
+            boxMedian: { column: fullDataSet.columns[2] },
+            boxMax: { column: fullDataSet.columns[3] },
+            whiskerMin: { column: fullDataSet.columns[4] },
+            whiskerMax: { column: fullDataSet.columns[5] },
+            outliersCount: { column: fullDataSet.columns[6] },
+            outliers: { column: fullDataSet.columns[7] },
             valueTitle: 'Test data',
           },
           dataSource: 'Dummy datasource',

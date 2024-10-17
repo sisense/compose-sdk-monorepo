@@ -1,5 +1,5 @@
 import { type Column } from '@sisense/sdk-data';
-import { translateColumnToCategory } from '@/chart-data-options/utils';
+import { getDataOptionGranularity, normalizeColumn } from '@/chart-data-options/utils';
 import {
   type PivotTableDataOptions,
   type StyledColumn,
@@ -28,7 +28,8 @@ export const getNumberFormatConfig = (dataOption?: AnyColumn) => {
 };
 
 export const getDateFormatConfig = (dataOption: Column | StyledColumn) => {
-  // Note: need to convert column into category in order to get `dateFormat` with default value
-  const category = translateColumnToCategory(dataOption);
-  return category?.dateFormat || getDefaultDateFormat(category?.granularity);
+  // Note: need to normalize column in order to get `dateFormat` with default value
+  const column = normalizeColumn(dataOption);
+  const granularity = getDataOptionGranularity(column);
+  return column?.dateFormat || getDefaultDateFormat(granularity);
 };

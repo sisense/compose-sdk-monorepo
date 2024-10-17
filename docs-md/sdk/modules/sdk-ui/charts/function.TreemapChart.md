@@ -4,7 +4,7 @@ title: TreemapChart
 
 # Function TreemapChart
 
-> **TreemapChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **TreemapChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component displaying hierarchical data in the form of nested rectangles.
 
@@ -29,6 +29,6 @@ Tree map chart displaying total revenue, categorized by condition and age range,
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Treemap Chart component

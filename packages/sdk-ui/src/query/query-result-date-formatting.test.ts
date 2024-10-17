@@ -28,7 +28,7 @@ describe('applyDateFormats', () => {
     it('mutates `text` with a reformatted date string, on cells for one datetime column with a `dateFormat` configured', () => {
       const dataIn = newData();
       const dataOut = applyDateFormats(dataIn, {
-        x: [{ name: 'Years', type: 'datelevel', dateFormat: 'yyyy MMM' }],
+        x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yyyy MMM' }],
         breakBy: [],
       }) as QueryResultData;
 
@@ -66,10 +66,10 @@ describe('applyDateFormats', () => {
       const originalDataIn = cloneDeep(dataIn);
       const dataOut = applyDateFormats(dataIn, {
         x: [
-          { name: 'Quarter', type: 'datelevel', dateFormat: 'QQQQ' },
-          { name: 'Timestamp', type: 'datelevel', dateFormat: 'MMM d' },
+          { column: { name: 'Quarter', type: 'datelevel' }, dateFormat: 'QQQQ' },
+          { column: { name: 'Timestamp', type: 'datelevel' }, dateFormat: 'MMM d' },
         ],
-        breakBy: [{ name: 'Years', type: 'datelevel', dateFormat: 'yy' }],
+        breakBy: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yy' }],
       });
 
       expect(dataOut).toBe(dataIn);
@@ -97,7 +97,7 @@ describe('applyDateFormats', () => {
       };
 
       const dataOut = applyDateFormats(dataIn, {
-        x: [{ name: 'Years', type: 'datelevel', dateFormat: 'yy' }],
+        x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yy' }],
         breakBy: [],
       }) as QueryResultData;
 
@@ -121,7 +121,7 @@ describe('applyDateFormats', () => {
       it('does not mutate `text` on cells for datetime columns, when the column is used in `x` with an explicitly undefined `dateFormat`', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'Years', type: 'datelevel', dateFormat: undefined }],
+          x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: undefined }],
           breakBy: [],
         });
         expect(dataOut).toBe(dataIn);
@@ -132,7 +132,7 @@ describe('applyDateFormats', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
           x: [],
-          breakBy: [{ name: 'Years', type: 'datelevel', dateFormat: undefined }],
+          breakBy: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: undefined }],
         });
         expect(dataOut).toBe(dataIn);
         expect(dataOut).toStrictEqual(newData());
@@ -142,7 +142,7 @@ describe('applyDateFormats', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
           x: [],
-          breakBy: [{ name: 'Years', type: 'datelevel' }],
+          breakBy: [{ column: { name: 'Years', type: 'datelevel' } }],
         });
         expect(dataOut).toBe(dataIn);
         expect(dataOut).toStrictEqual(newData());
@@ -152,7 +152,7 @@ describe('applyDateFormats', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
           x: [],
-          breakBy: [{ name: 'Years', type: 'datelevel', dateFormat: '' }],
+          breakBy: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: '' }],
         });
         expect(dataOut).toBe(dataIn);
         expect(dataOut).toStrictEqual(newData());
@@ -163,7 +163,7 @@ describe('applyDateFormats', () => {
       it('does not mutate `text` on cells when the column is a datetime column, but the `name` does not match', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'YEARS', type: 'datelevel', dateFormat: 'yy' }],
+          x: [{ column: { name: 'YEARS', type: 'datelevel' }, dateFormat: 'yy' }],
           breakBy: [],
         });
         expect(dataOut).toBe(dataIn);
@@ -173,7 +173,7 @@ describe('applyDateFormats', () => {
       it('does mutate `text` on cells when the column is a datetime column, but the `type` does not match', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'Years', type: 'timewithtimezone', dateFormat: 'yy' }],
+          x: [{ column: { name: 'Years', type: 'timewithtimezone' }, dateFormat: 'yy' }],
           breakBy: [],
         }) as QueryResultData;
         expect(dataOut.rows[0][1].text).toBe('09');
@@ -183,7 +183,7 @@ describe('applyDateFormats', () => {
       it('does not mutate `text` on non-datetime columns that are configured with a `dateFormat`', () => {
         const dataIn = newData();
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'Revenue', type: 'basemeasure', dateFormat: 'yy' }],
+          x: [{ column: { name: 'Revenue', type: 'basemeasure' }, dateFormat: 'yy' }],
           breakBy: [],
         });
         expect(dataOut).toBe(dataIn);
@@ -199,7 +199,7 @@ describe('applyDateFormats', () => {
         };
 
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'Years', type: 'datelevel', dateFormat: 'yy' }],
+          x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yy' }],
           breakBy: [],
         });
 
@@ -214,7 +214,7 @@ describe('applyDateFormats', () => {
         };
 
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'Years', type: 'datelevel', dateFormat: 'yy' }],
+          x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yy' }],
           breakBy: [],
         });
 
@@ -229,7 +229,7 @@ describe('applyDateFormats', () => {
         };
 
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'Years', type: 'datelevel', dateFormat: 'yy' }],
+          x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yy' }],
           breakBy: [],
         });
 
@@ -245,7 +245,7 @@ describe('applyDateFormats', () => {
 
         const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementationOnce(() => {});
         const dataOut = applyDateFormats(dataIn, {
-          x: [{ name: 'Years', type: 'datelevel', dateFormat: 'yy' }],
+          x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yy' }],
           breakBy: [],
         }) as QueryResultData;
 

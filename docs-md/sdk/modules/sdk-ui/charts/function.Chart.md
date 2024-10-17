@@ -4,7 +4,7 @@ title: Chart
 
 # Function Chart
 
-> **Chart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **Chart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component used for easily switching chart types or rendering multiple series of different chart types.
 
@@ -27,6 +27,6 @@ A chart component displaying total revenue per quarter from the Sample ECommerce
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Chart component representing a chart type as specified in `ChartProps.`[chartType](../interfaces/interface.ChartProps.md#charttype)

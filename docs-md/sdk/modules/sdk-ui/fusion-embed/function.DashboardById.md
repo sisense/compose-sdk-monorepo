@@ -4,7 +4,7 @@ title: DashboardById
 
 # Function DashboardById <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 
-> **DashboardById**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **DashboardById**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 React component that renders a dashboard created in Sisense Fusion by its ID.
 
@@ -18,7 +18,7 @@ React component that renders a dashboard created in Sisense Fusion by its ID.
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 ## Example
 
@@ -37,3 +37,6 @@ import { DashboardById } from '@sisense/sdk-ui';
 
  export default CodeExample;
 ```
+
+To learn more about this and related dashboard components,
+see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).

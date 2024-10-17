@@ -17,12 +17,12 @@ interface HookEventDetails extends TrackingEventDetails {
 const action = 'sdkHookInit';
 
 /**
- * @internal
- * @description This is a function that tracks the hook event and sends it to the server.
+ * Tracks the hook event and sends it to the server.
  * @param hookName - The name of the hook
  * @param packageName - The name of the package
  * @param app - The client application
  * @param onFinally - The function to call after the tracking is done
+ * @internal
  */
 export const trackHook = (
   hookName: string,

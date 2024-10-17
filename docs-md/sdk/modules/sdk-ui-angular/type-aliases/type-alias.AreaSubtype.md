@@ -4,7 +4,7 @@ title: AreaSubtype
 
 # Type alias AreaSubtype
 
-> **AreaSubtype**: `"area/basic"` \| `"area/stacked"` \| `"area/stacked100"` \| `"area/spline"` \| `"area/stackedspline"` \| `"area/stackedspline100"`
+> **AreaSubtype**: `"area/basic"` \| `"area/spline"` \| `"area/stacked"` \| `"area/stacked100"` \| `"area/stackedspline"` \| `"area/stackedspline100"`
 
 Property of [AreaStyleOptions](../interfaces/interface.AreaStyleOptions.md)
 

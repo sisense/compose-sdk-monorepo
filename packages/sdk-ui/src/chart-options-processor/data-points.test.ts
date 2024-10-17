@@ -4,11 +4,11 @@ import {
   BoxplotChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
-  Category,
   HighchartsPoint,
   RangeChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
-  Value,
+  StyledColumn,
+  StyledMeasureColumn,
 } from '..';
 import { getDataPoint } from './data-points';
 
@@ -32,19 +32,25 @@ const createPointMock = (chartType: string, point: Partial<HighchartsPoint>) => 
   ) as HighchartsPoint;
 };
 
-const createDataOptionMock = (isMeasure?: boolean): Category | Value => {
+const createDataOptionMock = (isMeasure?: boolean) => {
   const base = { testId: uniqueId() };
 
   if (isMeasure) {
     return {
       ...base,
-      aggregation: 'sum',
-    } as unknown as Value;
+      column: {
+        name: 'some measure name',
+        aggregation: 'sum',
+      },
+    } as StyledMeasureColumn;
   }
   return {
     ...base,
-    type: 'attribute',
-  } as unknown as Category;
+    column: {
+      name: 'some attribute name',
+      type: 'attribute',
+    },
+  } as StyledColumn;
 };
 
 describe('getDataPoint', () => {

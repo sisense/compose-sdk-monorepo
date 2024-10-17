@@ -102,7 +102,7 @@ Constructor for the `DrilldownWidgetComponent`.
 
 #### config
 
-> **config**?: `Omit`\< `undefined` \| [`DrilldownWidgetConfig`](../../sdk-ui/type-aliases/type-alias.DrilldownWidgetConfig.md), "breadcrumbsComponent \| contextMenuComponent" \> & \{
+> **config**?: `Omit`\< [`DrilldownWidgetConfig`](../../sdk-ui/type-aliases/type-alias.DrilldownWidgetConfig.md) \| `undefined`, "breadcrumbsComponent \| contextMenuComponent" \> & \{
   `breadcrumbsComponent`: (`drilldownBreadcrumbsProps`) => `HTMLDivElement`;
   `contextMenuComponent`: (`contextMenuProps`) => `HTMLDivElement`;
  }

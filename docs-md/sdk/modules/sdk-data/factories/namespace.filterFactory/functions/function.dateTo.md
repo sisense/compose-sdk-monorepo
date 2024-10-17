@@ -13,7 +13,7 @@ Creates a filter to isolate items up until and including the given date and leve
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `level` | [`LevelAttribute`](../../../interfaces/interface.LevelAttribute.md) | Date [LevelAttribute](../../../interfaces/interface.LevelAttribute.md) to filter on |
-| `to` | `string` \| `Date` | Date or string representing the last member to filter to |
+| `to` | `Date` \| `string` | Date or string representing the last member to filter to |
 
 ## Returns
 

@@ -4,13 +4,14 @@ title: Charts
 
 # Charts
 
-Angular components for charts
+Angular components and utilities for working with charts
 
 - [AreaChartComponent](class.AreaChartComponent.md)
-- [AreaRangeChartComponent](class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
 - [AreamapChartComponent](class.AreamapChartComponent.md)
+- [AreaRangeChartComponent](class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
 - [BarChartComponent](class.BarChartComponent.md)
 - [BoxplotChartComponent](class.BoxplotChartComponent.md)
+- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md)
 - [ChartComponent](class.ChartComponent.md)
 - [ColumnChartComponent](class.ColumnChartComponent.md)
 - [FunnelChartComponent](class.FunnelChartComponent.md)

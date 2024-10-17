@@ -2,11 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { isNumber } from '@sisense/sdk-data';
 import {
-  Category,
-  Value,
-  isCategory,
-  isValue,
   ScatterChartDataOptionsInternal,
+  StyledColumn,
+  StyledMeasureColumn,
 } from '../../chart-data-options/types';
 import { SeriesType } from '../chart-options-service';
 import { ScatterAxisCategoriesMap, ScatterDataRow, ScatterDataTable } from '../../chart-data/types';
@@ -17,7 +15,7 @@ import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 import { SeriesWithAlerts, CompleteThemeSettings } from '../../types';
 import { DataColorOptions, legendColor } from '../../chart-data/data-coloring';
 import { seriesSliceWarning } from '../../utils/data-limit-warning';
-import { getDataOptionTitle } from '../../chart-data-options/utils';
+import { getDataOptionTitle, isMeasureColumn } from '../../chart-data-options/utils';
 import { compareValues, SortDirectionValue } from '../../chart-data-processor/row-comparator';
 import { createDataColoringFunction } from '../../chart-data/data-coloring/create-data-coloring-function';
 
@@ -108,7 +106,9 @@ const fillColors = (
   });
 
   const sortedColorsMap = new Map<string, ScatterSeriesColor>();
-  const dataType = isNumber((dataOptions?.breakByColor as Category)?.type) ? 'number' : 'string';
+  const dataType = isNumber((dataOptions?.breakByColor as StyledColumn)?.column?.type)
+    ? 'number'
+    : 'string';
 
   // Creates sorted "colors map" in order to apply default pallete colors over sorted values.
   // This ensures that series array will be generated in correct order
@@ -189,9 +189,9 @@ const fillSeriesPointsWithColors = (series: SeriesType[], colorOptions: DataColo
 };
 
 const getColorOptions = (
-  breakByColor: Category | Value | undefined,
+  breakByColor: StyledColumn | StyledMeasureColumn | undefined,
 ): DataColorOptions | undefined => {
-  if (breakByColor && isValue(breakByColor) && breakByColor.color) {
+  if (breakByColor && isMeasureColumn(breakByColor) && breakByColor.color) {
     return breakByColor.color;
   }
   return undefined;
@@ -278,7 +278,7 @@ const fill = (
   const colorOptions = getColorOptions(breakByColor);
 
   const colorsMap =
-    breakByColor && isCategory(breakByColor)
+    breakByColor && !isMeasureColumn(breakByColor)
       ? fillColors(data, dataOptions, themeSettings)
       : new Map();
 

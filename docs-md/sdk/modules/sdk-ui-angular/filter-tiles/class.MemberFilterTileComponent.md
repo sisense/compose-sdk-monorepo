@@ -18,7 +18,6 @@ Member Filter Tile Component
 ```
 ```ts
 import { Component } from '@angular/core';
-import { Member } from '@sisense/sdk-ui-angular';
 import { Filter, filterFactory } from '@sisense/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
@@ -96,7 +95,7 @@ Attribute to filter on. A query will run to fetch all this attribute's members
 
 #### dataSource
 
-> **dataSource**: `undefined` \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+> **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`
 
 Data source the query is run against - e.g. `Sample ECommerce`
 
@@ -106,7 +105,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 #### filter
 
-> **filter**: `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
+> **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null`
 
 Source filter object. Caller is responsible for keeping track of filter state
 

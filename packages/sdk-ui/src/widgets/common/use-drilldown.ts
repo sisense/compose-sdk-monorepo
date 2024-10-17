@@ -18,7 +18,7 @@ import { useHasChanged } from '@/common/hooks/use-has-changed.js';
 import { SELECTION_TITLE_MAXIMUM_ITEMS } from '@/common-filters/selection-utils.js';
 import { MenuIds } from '@/common/components/menu/menu-ids.js';
 import { isSameAttribute } from '@/utils/filters.js';
-import { translateColumnToAttribure } from '@/chart-data-options/utils.js';
+import { translateColumnToAttribute } from '@/chart-data-options/utils.js';
 import { Hierarchy } from '@/models';
 
 import './drilldown.scss';
@@ -75,7 +75,7 @@ export const useDrilldown = (params: UseDrilldownParams) => {
 
   const selectedAttributes = useMemo(
     () => [
-      translateColumnToAttribure(initialDimension),
+      translateColumnToAttribute(initialDimension),
       ...drilldownSelections.map(({ nextDimension }) => nextDimension),
     ],
     [initialDimension, drilldownSelections],
@@ -179,7 +179,7 @@ export const processDrilldownSelections = (
   initialDimension: Column | StyledColumn,
   translate: TFunction,
 ) => {
-  let currentDimension = initialDimension && translateColumnToAttribure(initialDimension);
+  let currentDimension = initialDimension && translateColumnToAttribute(initialDimension);
   const drilldownFilters: MembersFilter[] = [];
   const drilldownFiltersDisplayValues: string[][] = [];
 

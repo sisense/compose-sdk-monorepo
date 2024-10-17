@@ -19,16 +19,20 @@ describe('prepareChartDesignOptions', () => {
     const dataOptionsInternal: CartesianChartDataOptionsInternal = {
       x: [
         {
+          column: {
+            name: 'Months',
+            type: 'datelevel',
+          },
           dateFormat: 'yy-MM',
-          name: 'Months',
-          type: 'datelevel',
         },
       ],
       y: [
-        { name: '$measure0_avg Cost', title: 'avg Cost' },
+        { column: { name: '$measure0_avg Cost', title: 'avg Cost' } },
         {
-          name: '$measure1_Total Revenue',
-          title: 'Total Revenue',
+          column: {
+            name: '$measure1_Total Revenue',
+            title: 'Total Revenue',
+          },
           seriesStyleOptions: {
             lineWidth: {
               width: 'thick',
@@ -78,12 +82,16 @@ describe('prepareChartDesignOptions', () => {
     const chartType = 'areamap';
     const dataOptionsInternal: AreamapChartDataOptionsInternal = {
       geo: {
-        name: 'Country',
-        type: 'text-attribute',
+        column: {
+          name: 'Country',
+          type: 'text-attribute',
+        },
       },
       color: {
-        name: '$measure0_sum Cost',
-        title: 'Total Cost',
+        column: {
+          name: '$measure0_sum Cost',
+          title: 'Total Cost',
+        },
       },
     };
     const styleOptions: AreamapStyleOptions = {
@@ -98,8 +106,10 @@ describe('prepareChartDesignOptions', () => {
     const dataOptionsInternal: ScattermapChartDataOptionsInternal = {
       locations: [
         {
-          name: 'Country',
-          type: 'text-attribute',
+          column: {
+            name: 'Country',
+            type: 'text-attribute',
+          },
         },
       ],
       locationLevel: 'auto',
@@ -118,14 +128,16 @@ describe('prepareChartDesignOptions', () => {
     const dataOptionsInternal: CategoricalChartDataOptionsInternal = {
       y: [
         {
-          title: 'Unique Users',
+          column: {
+            title: 'Unique Users',
+            aggregation: 'sum',
+            name: '$measure0_Unique Users',
+          },
           enabled: true,
-          aggregation: 'sum',
           sortType: 'sortDesc',
-          name: '$measure0_Unique Users',
         },
       ],
-      breakBy: [{ name: 'Stage', type: 'string' }],
+      breakBy: [{ column: { name: 'Stage', type: 'string' } }],
     };
     const styleOptions: FunnelStyleOptions = {
       legend: {

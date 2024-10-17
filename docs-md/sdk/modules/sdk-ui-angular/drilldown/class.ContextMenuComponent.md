@@ -61,7 +61,7 @@ Callback function that is evaluated when the context menu is closed
 
 #### itemSections
 
-> **itemSections**: `undefined` \| [`MenuItemSection`](../type-aliases/type-alias.MenuItemSection.md)[]
+> **itemSections**: [`MenuItemSection`](../type-aliases/type-alias.MenuItemSection.md)[] \| `undefined`
 
 Menu item sections
 
@@ -69,6 +69,6 @@ Menu item sections
 
 #### position
 
-> **position**: `undefined` \| `null` \| [`MenuPosition`](../type-aliases/type-alias.MenuPosition.md)
+> **position**: [`MenuPosition`](../type-aliases/type-alias.MenuPosition.md) \| `null` \| `undefined`
 
 Context menu position

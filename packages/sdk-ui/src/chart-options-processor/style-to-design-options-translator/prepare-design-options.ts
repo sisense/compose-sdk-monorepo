@@ -2,7 +2,7 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
   SeriesStyleOptions,
-  Value,
+  StyledMeasureColumn,
 } from '@/chart-data-options/types';
 import { ChartStyleOptions, ChartType } from '@/types';
 import { WithRequiredProp } from '@/utils/utility-types';
@@ -87,14 +87,16 @@ type StyleOptionsForSpecificSeries = {
 function getStyleOptionsPerSeriesFromCartesianDataOptions(
   dataOptions: CartesianChartDataOptionsInternal,
 ): StyleOptionsForSpecificSeries[] {
-  return dataOptions.y.filter(hasDefinedStyleOptionsForSeries).map((y) => ({
-    seriesId: y.name,
-    seriesStyleOptions: y.seriesStyleOptions,
-  }));
+  return dataOptions.y
+    .filter(hasDefinedStyleOptionsForSeries)
+    .map(({ column: { name }, seriesStyleOptions }) => ({
+      seriesId: name,
+      seriesStyleOptions: seriesStyleOptions,
+    }));
 }
 
 function hasDefinedStyleOptionsForSeries(
-  value: Value,
-): value is WithRequiredProp<Value, 'seriesStyleOptions'> {
-  return value.seriesStyleOptions !== undefined;
+  dataOption: StyledMeasureColumn,
+): dataOption is WithRequiredProp<StyledMeasureColumn, 'seriesStyleOptions'> {
+  return dataOption.seriesStyleOptions !== undefined;
 }

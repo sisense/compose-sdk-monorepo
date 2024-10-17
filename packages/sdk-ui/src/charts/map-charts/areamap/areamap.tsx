@@ -59,7 +59,8 @@ export const Areamap: React.FC<AreamapProps> = ({
           geoJson={geoJson}
           geoData={geoData}
           dataOptions={{
-            originalValueTitle: dataOptions.color?.title || dataOptions.color?.name || '',
+            originalValueTitle:
+              dataOptions.color?.column.title || dataOptions.color?.column.name || '',
             onAreaClick: onAreaClickHandler,
           }}
           mapType={designOptions.mapType}

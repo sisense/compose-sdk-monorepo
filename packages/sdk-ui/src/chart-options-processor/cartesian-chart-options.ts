@@ -72,7 +72,7 @@ export const getCartesianChartOptions = (
   const continuousDatetimeXAxis =
     (dataOptions.x.length === 1 &&
       dataOptions.x[0].continuous &&
-      isDatetime(dataOptions.x[0].type)) ||
+      isDatetime(dataOptions.x[0].column.type)) ||
     false;
   const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
   if (chartData.type !== 'cartesian') {
@@ -235,8 +235,8 @@ export const getCartesianChartOptions = (
         .map((v: CategoricalSeriesValues, index: number) => {
           const dataOption = dataOptions.breakBy.length
             ? dataOptions.y[0]
-            : dataOptions.y.find(({ name }) => name === v.name);
-          const seriesId = dataOption?.name;
+            : dataOptions.y.find(({ column: { name } }) => name === v.name);
+          const seriesId = dataOption?.column.name;
           const cartesianChartDesignOptions = chartDesignOptions as CartesianChartDesignOptions;
           const seriesSpecificDesignOptions = seriesId
             ? cartesianChartDesignOptions.designPerSeries[seriesId]

@@ -4,7 +4,7 @@ title: AreaRangeSubtype
 
 # Type alias AreaRangeSubtype
 
-> **AreaRangeSubtype**: `"arearange/spline"` \| `"arearange/basic"`
+> **AreaRangeSubtype**: `"arearange/basic"` \| `"arearange/spline"`
 
 Property of [AreaRangeStyleOptions](../interfaces/interface.AreaRangeStyleOptions.md)
 

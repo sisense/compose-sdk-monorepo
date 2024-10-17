@@ -50,7 +50,7 @@ Sorting target configuration, allowing sorting "rows" by the data in a specific 
 
 > #### `by.columnsMembersPath`
 >
-> **columnsMembersPath**?: (`string` \| `number`)[]
+> **columnsMembersPath**?: (`number` \| `string`)[]
 >
 > Path to the target column if selected "columns" items (dimensions) are involved
 >

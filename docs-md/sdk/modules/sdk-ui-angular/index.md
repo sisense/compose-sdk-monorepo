@@ -6,13 +6,14 @@ title: sdk-ui-angular
 
 ## Charts
 
-Angular components for charts
+Angular components and utilities for working with charts
 
 - [AreaChartComponent](charts/class.AreaChartComponent.md)
-- [AreaRangeChartComponent](charts/class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
 - [AreamapChartComponent](charts/class.AreamapChartComponent.md)
+- [AreaRangeChartComponent](charts/class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
 - [BarChartComponent](charts/class.BarChartComponent.md)
 - [BoxplotChartComponent](charts/class.BoxplotChartComponent.md)
+- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md)
 - [ChartComponent](charts/class.ChartComponent.md)
 - [ColumnChartComponent](charts/class.ColumnChartComponent.md)
 - [FunnelChartComponent](charts/class.FunnelChartComponent.md)
@@ -24,12 +25,6 @@ Angular components for charts
 - [ScattermapChartComponent](charts/class.ScattermapChartComponent.md)
 - [SunburstChartComponent](charts/class.SunburstChartComponent.md)
 - [TreemapChartComponent](charts/class.TreemapChartComponent.md)
-
-## Chart Utilities
-
-Utilities to be used with charts
-
-- [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
 
 ## Data Grids
 
@@ -50,6 +45,7 @@ Angular components for creating drilldown experiences
 
 Angular filter tile components
 
+- [CriteriaFilterTileComponent](filter-tiles/class.CriteriaFilterTileComponent.md)
 - [DateRangeFilterTileComponent](filter-tiles/class.DateRangeFilterTileComponent.md)
 - [MemberFilterTileComponent](filter-tiles/class.MemberFilterTileComponent.md)
 
@@ -57,8 +53,8 @@ Angular filter tile components
 
 Angular context modules, services, and variables
 
-- [SISENSE\_CONTEXT\_CONFIG\_TOKEN](contexts/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md)
 - [SdkUiModule](contexts/class.SdkUiModule.md)
+- [SISENSE\_CONTEXT\_CONFIG\_TOKEN](contexts/variable.SISENSE_CONTEXT_CONFIG_TOKEN.md)
 - [SisenseContextService](contexts/class.SisenseContextService.md)
 - [THEME\_CONFIG\_TOKEN](contexts/variable.THEME_CONFIG_TOKEN.md)
 - [ThemeService](contexts/class.ThemeService.md)
@@ -69,12 +65,12 @@ Angular query service
 
 - [QueryService](queries/class.QueryService.md)
 
-## Dashboarding
+## Dashboards
 
-Angular modules, services, and components for composing dashboards
+Angular components and utilities for working with dashboards
 
-- [ChartWidgetComponent](dashboarding/class.ChartWidgetComponent.md)
-- [DashboardComponent](dashboarding/class.DashboardComponent.md) <Badge type="beta" text="Beta" />
+- [ChartWidgetComponent](dashboards/class.ChartWidgetComponent.md)
+- [DashboardComponent](dashboards/class.DashboardComponent.md) <Badge type="beta" text="Beta" />
 
 ## Fusion Embed
 

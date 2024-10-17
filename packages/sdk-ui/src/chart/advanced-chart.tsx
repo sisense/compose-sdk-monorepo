@@ -9,6 +9,8 @@ import {
   extractForecastMeasures,
   extractTrendMeasures,
 } from '@/chart-options-processor/advanced-chart-options.js';
+import { useCallback } from 'react';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 
 /**
  *
@@ -26,5 +28,17 @@ export const AdvancedChart = (props: RegularChartProps) => {
   const measureWithForecast = extractForecastMeasures(cartesianDataOptions);
   cartesianDataOptions.value.push(...measureWithForecast);
 
-  return <RegularChart {...props} dataOptions={cartesianDataOptions} />;
+  const unexpectedErrorHandler = useCallback(
+    ({ error }: FallbackProps) => {
+      console.debug('Unexpected error occurred when rendering advanced chart:', error);
+      return <RegularChart {...props} />;
+    },
+    [props],
+  );
+
+  return (
+    <ErrorBoundary fallbackRender={unexpectedErrorHandler}>
+      <RegularChart {...props} dataOptions={cartesianDataOptions} />
+    </ErrorBoundary>
+  );
 };

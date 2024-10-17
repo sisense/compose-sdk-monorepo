@@ -53,7 +53,6 @@ import { useShouldLoad } from '../common/hooks/use-should-load';
   return null;
  ```
  * See also hook {@link useExecuteQuery}, which execute a query specified in code.
- * @param params - Parameters to identify the target widget
  * @returns Query state that contains the status of the query execution, the result data, the constructed query parameters, or the error if any occurred
  * @group Fusion Embed
  * @fusionEmbed
@@ -65,6 +64,7 @@ export const useExecuteQueryByWidgetId = withTracking('useExecuteQueryByWidgetId
 /**
  * {@link useExecuteQueryByWidgetId} without tracking to be used inside other hooks or components in Compose SDK.
  *
+ * @param params - Parameters to identify the target widget
  * @internal
  */
 export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetIdParams) {

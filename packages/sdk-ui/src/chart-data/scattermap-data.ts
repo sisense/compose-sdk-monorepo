@@ -15,22 +15,21 @@ const DATA_VALUE_N_A = 'N\\A';
 const LOCATION_DEFAULT_VALUE = 1;
 
 export const scattermapData = (
-  chartDataOptions: ScattermapChartDataOptionsInternal,
+  dataOptions: ScattermapChartDataOptionsInternal,
   dataTable: DataTable,
 ): ScattermapChartData => {
-  const isLatLngCase = checkForScattermapLatLngCase(chartDataOptions);
+  const isLatLngCase = checkForScattermapLatLngCase(dataOptions);
   const locationColumns: Column[] =
-    chartDataOptions.locations &&
+    dataOptions.locations &&
     getColumnsByName(
       dataTable,
-      chartDataOptions.locations.map(({ name }) => name),
+      dataOptions.locations.map(({ column: { name } }) => name),
     );
-  const sizeColumn =
-    chartDataOptions.size && getColumnByName(dataTable, chartDataOptions.size.name);
+  const sizeColumn = dataOptions.size && getColumnByName(dataTable, dataOptions.size.column.name);
   const colorByColumn =
-    chartDataOptions.colorBy && getColumnByName(dataTable, chartDataOptions.colorBy.name);
+    dataOptions.colorBy && getColumnByName(dataTable, dataOptions.colorBy.column.name);
   const detailsColumn =
-    chartDataOptions.details && getColumnByName(dataTable, chartDataOptions.details.name);
+    dataOptions.details && getColumnByName(dataTable, dataOptions.details.column.name);
 
   const locations = dataTable.rows
     .filter((row) => {
@@ -69,6 +68,6 @@ export const scattermapData = (
 function checkForScattermapLatLngCase(chartDataOptions: ScattermapChartDataOptionsInternal) {
   return (
     chartDataOptions.locations.length === 2 &&
-    chartDataOptions.locations.filter((location) => isNumber(location.type)).length === 2
+    chartDataOptions.locations.filter(({ column: { type } }) => isNumber(type)).length === 2
   );
 }

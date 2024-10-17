@@ -6,13 +6,14 @@ title: sdk-ui-vue
 
 ## Charts
 
-Vue components for charts
+Vue components and utilities for working with charts
 
 - [AreaChart](charts/class.AreaChart.md)
-- [AreaRangeChart](charts/class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [AreamapChart](charts/class.AreamapChart.md)
+- [AreaRangeChart](charts/class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](charts/class.BarChart.md)
 - [BoxplotChart](charts/class.BoxplotChart.md)
+- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md)
 - [Chart](charts/class.Chart.md)
 - [ColumnChart](charts/class.ColumnChart.md)
 - [FunnelChart](charts/class.FunnelChart.md)
@@ -24,12 +25,6 @@ Vue components for charts
 - [ScattermapChart](charts/class.ScattermapChart.md)
 - [SunburstChart](charts/class.SunburstChart.md)
 - [TreemapChart](charts/class.TreemapChart.md)
-
-## Chart Utilities
-
-Utilities to be used with charts
-
-- [boxWhiskerProcessResult](chart-utilities/function.boxWhiskerProcessResult.md)
 
 ## Data Grids
 
@@ -53,6 +48,7 @@ Vue filter tile components
 - [CriteriaFilterTile](filter-tiles/class.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/class.DateRangeFilterTile.md)
 - [MemberFilterTile](filter-tiles/class.MemberFilterTile.md)
+- [RelativeDateFilterTile](filter-tiles/class.RelativeDateFilterTile.md)
 
 ## Contexts
 
@@ -67,12 +63,12 @@ Vue query service
 
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
-## Dashboarding
+## Dashboards
 
-Vue components and functions for composing dashboards
+Vue components and utilities for working with dashboards
 
-- [ChartWidget](dashboarding/class.ChartWidget.md)
-- [Dashboard](dashboarding/class.Dashboard.md) <Badge type="beta" text="Beta" />
+- [ChartWidget](dashboards/class.ChartWidget.md)
+- [Dashboard](dashboards/class.Dashboard.md) <Badge type="beta" text="Beta" />
 
 ## Fusion Embed
 
@@ -81,13 +77,13 @@ Vue components and functions for working with Fusion Embed dashboards, widgets, 
 - [DashboardById](fusion-embed/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 - [DashboardModel](fusion-embed/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-embed/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](fusion-embed/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useFetch](fusion-embed/function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModel](fusion-embed/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModels](fusion-embed/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](fusion-embed/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](fusion-embed/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-embed/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Namespaces
 

@@ -39,6 +39,10 @@ export interface UseGetQueryRecommendationsState {
   refetch: () => void;
 }
 
+/**
+ * @param params - {@link UseGetQueryRecommendationsParams}
+ * @internal
+ */
 export const useGetQueryRecommendationsInternal = (
   params: UseGetQueryRecommendationsParams,
 ): UseGetQueryRecommendationsState => {
@@ -97,7 +101,6 @@ export const useGetQueryRecommendationsInternal = (
  *   </ul>
  * );
  * ```
- * @param params - {@link UseGetQueryRecommendationsParams}
  * @returns An array of objects, each containing recommended question text and its corresponding JAQL
  * @group Generative AI
  * @beta

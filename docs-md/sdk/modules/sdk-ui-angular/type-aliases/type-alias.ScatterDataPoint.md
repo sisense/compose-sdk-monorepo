@@ -30,10 +30,10 @@ Data point in a Scatter chart.
 
 ### `x`
 
-**x**?: `string` \| `number`
+**x**?: `number` \| `string`
 
 ***
 
 ### `y`
 
-**y**?: `string` \| `number`
+**y**?: `number` \| `string`

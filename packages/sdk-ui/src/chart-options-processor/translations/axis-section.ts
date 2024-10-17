@@ -17,12 +17,13 @@ import { DateLevels, isNumber } from '@sisense/sdk-data';
 import {
   ChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
-  Category,
+  StyledColumn,
 } from '../../chart-data-options/types';
 import { ChartType, CompleteNumberFormatConfig } from '../../types';
 import { isPolar } from './types';
 import { CategoricalXValues } from '../../chart-data/types';
 import { AxisClipped } from './translations-to-highcharts';
+import { getDataOptionGranularity } from '@/chart-data-options/utils';
 
 export type Axis = {
   enabled?: boolean;
@@ -197,10 +198,11 @@ export const getDefaultDateFormat = (granularity?: string) => {
 };
 
 export const getDateFormatter = (
-  category: Category,
+  category: StyledColumn,
   dateFormatter?: (date: Date, format: string) => string,
 ) => {
-  const format = category?.dateFormat || getDefaultDateFormat(category?.granularity);
+  const granularity = getDataOptionGranularity(category);
+  const format = category?.dateFormat || getDefaultDateFormat(granularity);
   if (!dateFormatter || !format) return (time: number) => `${time}`;
 
   return function (time: number) {
@@ -210,10 +212,11 @@ export const getDateFormatter = (
 
 export const getXAxisDatetimeSettings = (
   axis: Axis,
-  category: Category,
+  category: StyledColumn,
   values: number[],
   dateFormatter?: (date: Date, format: string) => string,
 ): AxisSettings[] => {
+  const granularity = getDataOptionGranularity(category);
   const calcMinInterval = (
     acc: { minInterval: number; lastValue: number | undefined },
     value: number,
@@ -227,8 +230,8 @@ export const getXAxisDatetimeSettings = (
 
   const min = values[0];
   const max = values[values.length - 1];
-  let interval = category.granularity
-    ? getInterval(category.granularity)
+  let interval = granularity
+    ? getInterval(granularity)
     : values.reduce<{ minInterval: number; lastValue: number | undefined }>(calcMinInterval, {
         minInterval: (max - min) / (values.length - 1),
         lastValue: undefined,
@@ -243,7 +246,7 @@ export const getXAxisDatetimeSettings = (
     throw new Error(`Unable to calculate tic interval. Try specifying datetime granularity.`);
 
   let formatter;
-  const format = category?.dateFormat || getDefaultDateFormat(category?.granularity);
+  const format = category?.dateFormat || getDefaultDateFormat(granularity);
   if (dateFormatter && format) {
     formatter = function (this: any) {
       const that: { value: number } = this as { value: number };
@@ -303,7 +306,7 @@ export const getXAxisSettings = (
   categories: string[],
   plotBands: PlotBand[],
   xAxisOrientation: AxisOrientation,
-  chartDataOptions: ChartDataOptionsInternal,
+  dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
 ): AxisSettings[] => {
   const plotBandsSettings = (plotBands || []).map((p) => ({
@@ -334,7 +337,7 @@ export const getXAxisSettings = (
       width: 1,
       value: p.from,
     }));
-  const cartesianDataOptions = chartDataOptions as CartesianChartDataOptionsInternal;
+  const cartesianDataOptions = dataOptions as CartesianChartDataOptionsInternal;
   const x1 = cartesianDataOptions.x[cartesianDataOptions.x.length - 1];
   const isPolarChart = isPolar(chartType);
 
@@ -363,7 +366,7 @@ export const getXAxisSettings = (
         ...(isPolarChart && { rotation: 0 }),
         formatter: function () {
           const that: { value: string } = this as unknown as { value: string };
-          if (!x1 || !isNumber(x1?.type) || isNaN(parseFloat(that.value))) {
+          if (!x1 || !isNumber(x1?.column.type) || isNaN(parseFloat(that.value))) {
             return that.value;
           }
           return applyFormatPlainText(
@@ -406,16 +409,16 @@ export const getYAxisSettings = (
   axisMinMax: AxisMinMax,
   axis2MinMax: AxisMinMax | undefined,
   showTotal: boolean,
-  chartDataOptions: ChartDataOptionsInternal,
+  dataOptions: ChartDataOptionsInternal,
   stacking: Stacking | undefined,
 ): [AxisSettings[], AxisClipped[]] => {
   const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
-    chartDataOptions as CartesianChartDataOptionsInternal;
+    dataOptions as CartesianChartDataOptionsInternal;
   const y1NumberFormatConfig = getCompleteNumberFormatConfig(
-    cartesianChartDataOptions.y.find((y) => !y.showOnRightAxis)?.numberFormatConfig,
+    cartesianChartDataOptions.y.find(({ showOnRightAxis }) => !showOnRightAxis)?.numberFormatConfig,
   );
   const y2NumberFormatConfig = getCompleteNumberFormatConfig(
-    cartesianChartDataOptions.y.find((y) => y.showOnRightAxis)?.numberFormatConfig,
+    cartesianChartDataOptions.y.find(({ showOnRightAxis }) => showOnRightAxis)?.numberFormatConfig,
   );
   const axisClipped = [
     { minClipped: !!(axis.enabled && axis.min), maxClipped: !!(axis.enabled && axis.max) },

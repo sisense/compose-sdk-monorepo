@@ -38,7 +38,7 @@
     "typedoc"
   ],
   "peerDependencies": {
-    "typedoc": ">=0.25.12"
+    "typedoc": ">=0.26.8"
   },
   "devDependencies": {
     "prettier": "^3.0.2",

@@ -31,8 +31,9 @@ export function toDeepRaw<T>(data: T): T {
 }
 
 /**
+ * Renders a component without children.
+ *
  * @internal
- * @description This is a helper function to render a component without children.
  */
 export const setupHelper = <P, C>(component: C, props: P) => {
   if (!props) return null;
@@ -61,8 +62,9 @@ export const setupHelper = <P, C>(component: C, props: P) => {
 };
 
 /**
+ * Renders a component with children.
+ *
  * @internal
- * @description This is a helper function to render a component with children.
  */
 export const setupHelperWithChildren = <P, C>(
   component: C,

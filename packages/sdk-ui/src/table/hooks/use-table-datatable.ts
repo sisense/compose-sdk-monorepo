@@ -1,14 +1,12 @@
 import { useMemo } from 'react';
 import { createDataTableFromData } from '../../chart-data-processor/table-creators';
 import { filterAndAggregateChartData } from '../../chart-data/filter-and-aggregate-chart-data';
-import { Attribute, Data, Measure } from '@sisense/sdk-data';
+import { Data } from '@sisense/sdk-data';
 import { tableData } from '../../chart-data/table-data';
 import {
-  Category,
-  isCategory,
-  isValue,
+  StyledColumn,
+  StyledMeasureColumn,
   TableDataOptionsInternal,
-  Value,
 } from '../../chart-data-options/types';
 import {
   DataColumnNamesMapping,
@@ -16,6 +14,11 @@ import {
 } from '../../chart-data-options/validate-data-options';
 import { applyDateFormats } from '../../query/query-result-date-formatting';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
+import {
+  isMeasureColumn,
+  translateColumnToAttribute,
+  translateColumnToMeasure,
+} from '@/chart-data-options/utils';
 
 type UseTableDataTableProps = {
   data: null | Data;
@@ -37,23 +40,17 @@ export const useTableDataTable = ({
     let table = createDataTableFromData(
       applyDateFormats(data, innerDataOptions, app?.settings.locale, app?.settings.dateConfig),
     );
-    const attributes = innerDataOptions.columns.filter((c) => isCategory(c));
-    const measures = innerDataOptions.columns.filter((c) => isValue(c));
+    const attributes = (
+      innerDataOptions.columns.filter((c) => !isMeasureColumn(c)) as StyledColumn[]
+    ).map(translateColumnToAttribute);
+    const measures = (
+      innerDataOptions.columns.filter((c) => isMeasureColumn(c)) as StyledMeasureColumn[]
+    ).map(translateColumnToMeasure);
 
-    validateDataOptionsAgainstData(
-      table,
-      attributes as Attribute[],
-      measures as Measure[],
-      dataColumnNamesMapping,
-    );
+    validateDataOptionsAgainstData(table, attributes, measures, dataColumnNamesMapping);
 
     if (needToAggregate) {
-      table = filterAndAggregateChartData(
-        table,
-        attributes as Category[],
-        measures as Value[],
-        dataColumnNamesMapping,
-      );
+      table = filterAndAggregateChartData(table, attributes, measures, dataColumnNamesMapping);
     }
 
     return tableData(innerDataOptions, table);

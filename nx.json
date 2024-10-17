@@ -1,0 +1,80 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "master",
+  "parallel": 8,
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": true
+    },
+    "build:prod": {
+      "dependsOn": [
+        "^build:prod"
+      ],
+      "cache": true
+    },
+    "format": {
+      "dependsOn": [
+        "^format"
+      ],
+      "cache": true
+    },
+    "format:check": {
+      "dependsOn": [
+        "^format:check"
+      ],
+      "cache": true
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ],
+      "cache": true
+    },
+    "test:unit": {
+      "dependsOn": [
+        "^test:coverage",
+        "^test:coverage:collect",
+        "^test:coverage:report"
+      ],
+      "cache": true
+    },
+    "component:tests": {
+      "dependsOn": [
+        "^test:ct"
+      ],
+      "cache": true
+    },
+    "lint": {
+      "params":"--quiet",
+      "dependsOn": [
+        "^lint"
+      ],
+      "cache": true
+    },
+    "test:coverage": {
+      "dependsOn": [
+        "test:coverage"
+      ],
+      "cache": true
+    },
+    "test:coverage:collect": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "your-collect-command"
+      }
+    },
+    "test:coverage:report": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "your-report-command"
+      }
+    }
+  },
+  "workspaceLayout": {
+    "appsDir": "examples/*demo",
+    "libsDir": "packages"
+  }
+}

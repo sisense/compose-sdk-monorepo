@@ -4,18 +4,25 @@ import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import { DASHBOARD_HEADER_HEIGHT } from '@/dashboard/components/dashboard-header';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
   border: 1px solid #dadada;
   width: fit-content;
   min-width: 240px;
+  max-height: 100%;
+  overflow: hidden;
 `;
 
 const PanelBody = styled.div`
-  margin: 12px;
-  margin-top: 6px;
   background-color: transparent;
+  max-height: calc(100% - ${DASHBOARD_HEADER_HEIGHT}px);
+  overflow-y: auto;
+`;
+
+const PanelBodyInner = styled.div`
+  padding: 0px 12px 12px;
 `;
 
 const PanelHeader = styled.div<Themable>`
@@ -71,16 +78,18 @@ export const FiltersPanel = asSisenseComponent({
         <PanelTitle>Filters</PanelTitle>
       </PanelHeader>
       <PanelBody>
-        {filters?.map((filter, index) => (
-          <div className="csdk-mt-[6px]" key={filter.guid}>
-            <FiltersPanelTile
-              key={filter.guid}
-              filter={filter}
-              onChange={(newFilter) => handleFilterChange(newFilter, index)}
-              defaultDataSource={defaultDataSource}
-            />
-          </div>
-        ))}
+        <PanelBodyInner>
+          {filters?.map((filter, index) => (
+            <div className="csdk-mt-[6px]" key={filter.guid}>
+              <FiltersPanelTile
+                key={filter.guid}
+                filter={filter}
+                onChange={(newFilter) => handleFilterChange(newFilter, index)}
+                defaultDataSource={defaultDataSource}
+              />
+            </div>
+          ))}
+        </PanelBodyInner>
       </PanelBody>
     </PanelWrapper>
   );

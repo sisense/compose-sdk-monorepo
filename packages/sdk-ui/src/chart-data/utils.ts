@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { CartesianChartDataOptionsInternal, Value, Category } from '../chart-data-options/types';
+import {
+  CartesianChartDataOptionsInternal,
+  StyledMeasureColumn,
+  StyledColumn,
+} from '../chart-data-options/types';
 
 export const onlyY = ({ x, y, breakBy }: CartesianChartDataOptionsInternal): boolean =>
   hasYColumns(y) && noXColumns(x) && breakBy.length === 0;
@@ -7,9 +11,9 @@ export const onlyY = ({ x, y, breakBy }: CartesianChartDataOptionsInternal): boo
 export const onlyYAndSeries = ({ x, y, breakBy }: CartesianChartDataOptionsInternal): boolean =>
   noXColumns(x) && hasYColumns(y) && breakBy.length > 0;
 
-const noXColumns = (x: Category[]) => x.length === 0;
+const noXColumns = (x: StyledColumn[]) => x.length === 0;
 
-const hasYColumns = (y: Value[]) => y.length > 0;
+const hasYColumns = (y: StyledMeasureColumn[]) => y.length > 0;
 
 export const isEnabled = (enabled?: boolean) => enabled === undefined || enabled === true;
 

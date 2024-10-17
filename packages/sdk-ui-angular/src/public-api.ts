@@ -4,9 +4,7 @@
 /**
  * @packageDocumentation
  * @groupDescription Charts
- * Angular components for charts
- * @groupDescription Chart Utilities
- * Utilities to be used with charts
+ * Angular components and utilities for working with charts
  * @groupDescription Data Grids
  * Angular components for data grids
  * @groupDescription Drilldown
@@ -17,8 +15,8 @@
  * Angular context modules, services, and variables
  * @groupDescription Queries
  * Angular query service
- * @groupDescription Dashboarding
- * Angular modules, services, and components for composing dashboards
+ * @groupDescription Dashboards
+ * Angular components and utilities for working with dashboards
  * @groupDescription Fusion Embed
  * Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
  * @groupDescription Interfaces

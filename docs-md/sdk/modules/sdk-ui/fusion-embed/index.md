@@ -8,10 +8,9 @@ React components, hooks, and utilities for working with Fusion Embed dashboards,
 
 - [DashboardById](function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
 - [DashboardModel](interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [dashboardModelTranslator](namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [ExecuteQueryByWidgetId](function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [dashboardModelTranslator](namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useFetch](function.useFetch.md)
 - [useGetDashboardModel](function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
@@ -19,4 +18,5 @@ React components, hooks, and utilities for working with Fusion Embed dashboards,
 - [useGetHierarchyModels](function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [widgetModelTranslator](namespace.widgetModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" />

@@ -2,15 +2,22 @@
 title: PluginComponentProps
 ---
 
-# Interface PluginComponentProps <Badge type="alpha" text="Alpha" />
+# Interface PluginComponentProps <Badge type="alpha" text="Alpha" />`<DataOptions, StyleOptions>`
 
 Props passed to a user-defined widget component.
+
+## Type parameters
+
+| Parameter | Default |
+| :------ | :------ |
+| `DataOptions` | [`GenericDataOptions`](../type-aliases/type-alias.GenericDataOptions.md) |
+| `StyleOptions` | `any` |
 
 ## Properties
 
 ### dataOptions
 
-> **dataOptions**: [`GenericDataOptions`](../type-aliases/type-alias.GenericDataOptions.md)
+> **dataOptions**: `DataOptions`
 
 ***
 
@@ -34,4 +41,4 @@ Props passed to a user-defined widget component.
 
 ### styleOptions
 
-> **styleOptions**: `any`
+> **styleOptions**: `StyleOptions`

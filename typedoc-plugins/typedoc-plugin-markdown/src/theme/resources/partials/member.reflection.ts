@@ -1,11 +1,6 @@
 import { DeclarationReflection, ReflectionKind } from 'typedoc';
 import { MarkdownThemeRenderContext } from '../..';
-import {
-  backTicks,
-  bold,
-  heading,
-  unorderedList,
-} from '../../../support/elements';
+import { backTicks, bold, heading, unorderedList } from '../../../support/elements';
 import { hasIndex, hasTOC } from '../../helpers';
 
 /**
@@ -42,9 +37,7 @@ export function reflectionMember(
     md.push(heading(headingLevel, 'Implements'));
     md.push(
       unorderedList(
-        reflection.implementedTypes.map((implementedType) =>
-          context.someType(implementedType),
-        ),
+        reflection.implementedTypes.map((implementedType) => context.someType(implementedType)),
       ),
     );
   }
@@ -55,9 +48,11 @@ export function reflectionMember(
     });
   }
 
-  if ('indexSignature' in reflection && reflection.indexSignature) {
+  if ('indexSignatures' in reflection && reflection.indexSignatures) {
     md.push(heading(headingLevel, 'Indexable'));
-    md.push(context.indexSignatureTitle(reflection.indexSignature));
+    reflection.indexSignatures.forEach((indexSignature) => {
+      md.push(context.indexSignatureTitle(indexSignature));
+    });
   }
 
   if (hasIndex(reflection) || hasTOC(reflection, context.options)) {

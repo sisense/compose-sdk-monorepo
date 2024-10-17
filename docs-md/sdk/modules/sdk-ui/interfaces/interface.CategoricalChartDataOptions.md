@@ -11,7 +11,7 @@ to a [Categorical chart](../type-aliases/type-alias.CategoricalChartType.md).
 
 ### category
 
-> **category**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md))[]
+> **category**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) whose values represent categories in the chart.
 
@@ -19,7 +19,7 @@ Columns (or attributes) whose values represent categories in the chart.
 
 ### seriesToColorMap
 
-> **seriesToColorMap**?: [`ValueToColorMap`](../type-aliases/type-alias.ValueToColorMap.md) \| [`MultiColumnValueToColorMap`](../type-aliases/type-alias.MultiColumnValueToColorMap.md)
+> **seriesToColorMap**?: [`MultiColumnValueToColorMap`](../type-aliases/type-alias.MultiColumnValueToColorMap.md) \| [`ValueToColorMap`](../type-aliases/type-alias.ValueToColorMap.md)
 
 Optional mapping of each of the series to colors.
 ([MultiColumnValueToColorMap](../type-aliases/type-alias.MultiColumnValueToColorMap.md) used only for the Sunburst Chart component)
@@ -28,7 +28,7 @@ Optional mapping of each of the series to colors.
 
 ### value
 
-> **value**: ([`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md))[]
+> **value**: ([`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md))[]
 
 Measure columns (or measures) whose values are scaled to visual elements of the chart.
 For example, the size of the pie slices of a pie chart.

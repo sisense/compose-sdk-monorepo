@@ -4,7 +4,7 @@ title: ScattermapLocationLevel
 
 # Type alias ScattermapLocationLevel
 
-> **ScattermapLocationLevel**: `"auto"` \| `"country"` \| `"state"` \| `"city"`
+> **ScattermapLocationLevel**: `"auto"` \| `"city"` \| `"country"` \| `"state"`
 
 Geographic location level for Scattermap chart.
 This type can have one of the following values:

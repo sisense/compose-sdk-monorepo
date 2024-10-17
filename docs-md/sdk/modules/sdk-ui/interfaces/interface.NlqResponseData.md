@@ -8,7 +8,7 @@ title: NlqResponseData
 
 ### chartRecommendations
 
-> **chartRecommendations**: \{} \| [`ChartRecommendations`](interface.ChartRecommendations.md)
+> **chartRecommendations**: [`ChartRecommendations`](interface.ChartRecommendations.md) \| \{}
 
 ***
 

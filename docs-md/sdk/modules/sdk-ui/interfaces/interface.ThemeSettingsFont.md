@@ -22,7 +22,7 @@ Loading font details
 
 ### fontWeight
 
-> **fontWeight**: `string` \| `number`
+> **fontWeight**: `number` \| `string`
 
 ***
 

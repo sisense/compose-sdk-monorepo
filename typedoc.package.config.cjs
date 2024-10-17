@@ -9,13 +9,12 @@ const baseConfig = {
   groupOrder: [
     /* sdk-ui* */
     'Charts',
-    'Chart Utilities',
     'Data Grids',
     'Drilldown',
     'Filter Tiles',
     'Contexts',
     'Queries',
-    'Dashboarding',
+    'Dashboards',
     'Fusion Embed',
     'Generative AI',
     /* sdk-data */
@@ -29,6 +28,8 @@ const baseConfig = {
     'Advanced Analytics',
     '*',
   ],
+  // set to empty so @alpha and @beta tags are not passed down to the children
+  cascadedModifierTags: [],
 };
 
 if (process.env.TYPEDOC_MODE === 'PUBLIC') {

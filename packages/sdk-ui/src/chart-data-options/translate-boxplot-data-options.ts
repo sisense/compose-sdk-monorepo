@@ -13,12 +13,7 @@ import {
   BoxWhiskerType,
   StyledMeasureColumn,
 } from './types';
-import {
-  translateColumnToCategory,
-  translateColumnToValue,
-  getDataOptionTitle,
-  splitColumn,
-} from './utils';
+import { getDataOptionTitle, splitColumn, normalizeColumn, normalizeMeasureColumn } from './utils';
 
 const boxWhiskerValues = (target: Attribute, type: BoxWhiskerType) => {
   switch (type) {
@@ -101,11 +96,8 @@ export const translateBoxplotDataOptions = (
     valueTitle = boxplotDataOptions.valueTitle;
     outliers = boxplotDataOptions.outliers?.[0];
   } else {
-    const {
-      outliersEnabled,
-      boxType,
-      value: [targetValue],
-    } = boxplotDataOptions;
+    const { outliersEnabled, boxType } = boxplotDataOptions;
+    const targetValue = normalizeColumn(boxplotDataOptions.value[0]);
     const { values: generatedValues, outliers: generatedOutliers } = generateBoxplotValues(
       targetValue,
       boxType,
@@ -113,20 +105,20 @@ export const translateBoxplotDataOptions = (
     );
     values = generatedValues;
     outliers = generatedOutliers;
-    valueTitle = getDataOptionTitle(translateColumnToCategory(targetValue));
+    valueTitle = getDataOptionTitle(targetValue);
   }
 
   const [boxMin, boxMedian, boxMax, whiskerMin, whiskerMax, outliersCount] = values;
 
   return {
-    category: category[0] && translateColumnToCategory(category[0]),
-    boxMin: boxMin && translateColumnToValue(boxMin),
-    boxMedian: boxMedian && translateColumnToValue(boxMedian),
-    boxMax: boxMax && translateColumnToValue(boxMax),
-    whiskerMin: whiskerMin && translateColumnToValue(whiskerMin),
-    whiskerMax: whiskerMax && translateColumnToValue(whiskerMax),
-    outliersCount: outliersCount && translateColumnToValue(outliersCount),
-    outliers: outliers && translateColumnToCategory(outliers),
+    category: category[0] && normalizeColumn(category[0]),
+    boxMin: boxMin && normalizeMeasureColumn(boxMin),
+    boxMedian: boxMedian && normalizeMeasureColumn(boxMedian),
+    boxMax: boxMax && normalizeMeasureColumn(boxMax),
+    whiskerMin: whiskerMin && normalizeMeasureColumn(whiskerMin),
+    whiskerMax: whiskerMax && normalizeMeasureColumn(whiskerMax),
+    outliersCount: outliersCount && normalizeMeasureColumn(outliersCount),
+    outliers: outliers && normalizeColumn(outliers),
     valueTitle,
   };
 };

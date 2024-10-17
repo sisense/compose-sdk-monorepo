@@ -1,6 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Data } from '@sisense/sdk-data';
-import { IndicatorChartDataOptions } from '../chart-data-options/types';
 import { Chart } from '../chart';
 import { IndicatorChart } from '../indicator-chart';
 import { IndicatorStyleOptions, NumberFormatConfig } from '../types';
@@ -34,7 +33,7 @@ const indicatorData: Data = {
   rows: [[107.27, 38.76, 0, 255]],
 };
 
-const indicatorChartDataOptions: IndicatorChartDataOptions = {
+const indicatorChartDataOptions = {
   value: [
     {
       name: 'Total Cost',
@@ -111,7 +110,7 @@ export const simpleVerticalNumericIndicatorWithCustomNumberFormatting = template
     ...indicatorChartDataOptions,
     value: [
       {
-        ...indicatorChartDataOptions.value![0],
+        column: indicatorChartDataOptions.value[0],
         numberFormatConfig: customNumberFormat,
       },
     ],
@@ -164,7 +163,7 @@ export const numericIndicatorWithStringColorOptions = template({
   ...indicatorProps,
   dataOptions: {
     ...indicatorProps.dataOptions,
-    value: [{ ...indicatorProps.dataOptions.value![0], color: 'red' }],
+    value: [{ column: indicatorProps.dataOptions.value[0], color: 'red' }],
   },
   styleOptions: {
     ...basicStyleOptions,
@@ -179,7 +178,9 @@ export const numericIndicatorWithUniformColorOptions = template({
   ...indicatorProps,
   dataOptions: {
     ...indicatorProps.dataOptions,
-    value: [{ ...indicatorProps.dataOptions.value![0], color: { type: 'uniform', color: 'blue' } }],
+    value: [
+      { column: indicatorProps.dataOptions.value[0], color: { type: 'uniform', color: 'blue' } },
+    ],
   },
   styleOptions: {
     ...basicStyleOptions,
@@ -196,7 +197,7 @@ export const numericIndicatorWithConditionalColorOptions = template({
     ...indicatorProps.dataOptions,
     value: [
       {
-        ...indicatorProps.dataOptions.value![0],
+        column: indicatorProps.dataOptions.value[0],
         color: {
           type: 'conditional',
           conditions: [
@@ -281,7 +282,7 @@ export const TickerGaugeIndicatorWithColor = () => {
       <IndicatorChart
         dataSet={indicatorData}
         dataOptions={{
-          value: [{ ...indicatorChartDataOptions.value![0], color: 'red' }],
+          value: [{ column: indicatorChartDataOptions.value[0], color: 'red' }],
           min: indicatorChartDataOptions.min,
           max: indicatorChartDataOptions.max,
         }}
@@ -299,7 +300,7 @@ export const TickerGaugeIndicatorWithForcedTicker = template({
   chartType: 'indicator',
   ...indicatorProps,
   dataOptions: {
-    value: [{ ...indicatorChartDataOptions.value![0], color: 'red' }],
+    value: [{ column: indicatorChartDataOptions.value[0], color: 'red' }],
     min: indicatorChartDataOptions.min,
     max: indicatorChartDataOptions.max,
     secondary: indicatorChartDataOptions.secondary,

@@ -30,13 +30,13 @@ A formatted instance of this level attribute
 
 ### getFormat
 
-> **getFormat**(): `undefined` \| `string`
+> **getFormat**(): `string` \| `undefined`
 
 String formatting of this instance.
 
 #### Returns
 
-`undefined` \| `string`
+`string` \| `undefined`
 
 string formatting
 

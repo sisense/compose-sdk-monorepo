@@ -6,9 +6,12 @@ import {
   getColumnsByName,
   selectColumns,
 } from '../chart-data-processor/table-processor';
-import { Category, TableDataOptionsInternal, Value } from '../chart-data-options/types';
+import {
+  StyledColumn,
+  StyledMeasureColumn,
+  TableDataOptionsInternal,
+} from '../chart-data-options/types';
 import { Attribute, Sort } from '@sisense/sdk-data';
-import { translateColumnToCategoryOrValue } from '../chart-data-options/utils';
 
 const flatResults = (dimensions: string[], sourceTable: DataTable): DataTable => {
   if (emptyTable(sourceTable)) {
@@ -20,9 +23,12 @@ const flatResults = (dimensions: string[], sourceTable: DataTable): DataTable =>
   return selectColumns(sourceTable, tableColumns);
 };
 
-export const unifySortToDirection = (category: Category | Value): number => {
-  const isAttribute = 'getSort' in category;
-  const sort = isAttribute ? (category as Attribute).getSort() : category.sortType;
+export const unifySortToDirection = ({
+  column,
+  sortType,
+}: StyledColumn | StyledMeasureColumn): number => {
+  const isAttribute = 'getSort' in column;
+  const sort = isAttribute ? (column as Attribute).getSort() : sortType;
   switch (sort) {
     case 'sortAsc':
     case Sort.Ascending:
@@ -42,7 +48,7 @@ export const syncDataTableWithDataOptionsSort = (
   const sortedColumn = chartDataOptions.columns.find((c) => unifySortToDirection(c) !== 0);
 
   if (sortedColumn) {
-    const tableColumn = getColumnByName(dataTable, sortedColumn.name);
+    const tableColumn = getColumnByName(dataTable, sortedColumn.column.name);
     if (tableColumn) {
       tableColumn.direction = unifySortToDirection(sortedColumn);
     }
@@ -56,26 +62,22 @@ export const updateInnerDataOptionsSort = (
   sortColumn: DataTableColumn,
 ): TableDataOptionsInternal => {
   return {
-    columns: dataOptions.columns.map((column) => {
-      const isElementBased = 'getSort' in column;
-      const isNewSortedColumn = column.name === sortColumn.name;
-      const currentDirection = unifySortToDirection(column);
+    columns: dataOptions.columns.map((dataOption) => {
+      const isNewSortedColumn = dataOption.column.name === sortColumn.name;
+      const currentDirection = unifySortToDirection(dataOption);
+      const newSortType = currentDirection === 1 ? 'sortDesc' : 'sortAsc';
+      const newSortDirection = currentDirection === 1 ? Sort.Descending : Sort.Ascending;
 
-      if (isElementBased) {
-        const newSort = currentDirection === 1 ? Sort.Descending : Sort.Ascending;
-
-        return translateColumnToCategoryOrValue({
-          ...(column as Category),
-          column: (column as Attribute).sort(isNewSortedColumn ? newSort : Sort.None),
-        });
-      } else {
-        const newSort = currentDirection === 1 ? 'sortDesc' : 'sortAsc';
-        return translateColumnToCategoryOrValue({
-          ...column,
-          sortType: isNewSortedColumn ? newSort : 'sortNone',
-          column: column,
-        });
-      }
+      return {
+        ...dataOption,
+        sortType: isNewSortedColumn ? newSortType : 'sortNone',
+        column:
+          'sort' in dataOption.column
+            ? (dataOption.column as Attribute).sort(
+                isNewSortedColumn ? newSortDirection : Sort.None,
+              )
+            : dataOption.column,
+      };
     }),
   };
 };
@@ -86,7 +88,7 @@ export const tableData = (
   dataTable: DataTable,
 ): DataTable => {
   const tableChartData: DataTable = flatResults(
-    chartDataOptions.columns.map((c) => c.name),
+    chartDataOptions.columns.map(({ column: { name } }) => name),
     dataTable,
   );
 

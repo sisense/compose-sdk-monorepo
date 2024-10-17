@@ -200,9 +200,7 @@ export interface WidgetModel {
 
    * Note: this method is not supported for chart or table widgets.
    * Use {@link getChartWidgetProps} instead for getting props for the <ChartWidget> component.
-   * Use {@link getTableWidgetProps} instead for getting props for the <TableWidget> component.
    * @deprecated Use {@link widgetModelTranslator.toPivotTableWidgetProps} instead
-   * @internal
    */
   getPivotTableWidgetProps(): PivotTableWidgetProps;
 

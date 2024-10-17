@@ -4,7 +4,7 @@ title: ColumnChart
 
 # Function ColumnChart
 
-> **ColumnChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **ColumnChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component representing categorical data with vertical rectangular bars
 whose heights are proportional to the values that they represent.
@@ -35,6 +35,6 @@ Additional Column Chart examples:
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Column Chart component

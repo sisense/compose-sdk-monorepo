@@ -4,13 +4,14 @@ title: Charts
 
 # Charts
 
-Vue components for charts
+Vue components and utilities for working with charts
 
 - [AreaChart](class.AreaChart.md)
-- [AreaRangeChart](class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [AreamapChart](class.AreamapChart.md)
+- [AreaRangeChart](class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](class.BarChart.md)
 - [BoxplotChart](class.BoxplotChart.md)
+- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md)
 - [Chart](class.Chart.md)
 - [ColumnChart](class.ColumnChart.md)
 - [FunnelChart](class.FunnelChart.md)

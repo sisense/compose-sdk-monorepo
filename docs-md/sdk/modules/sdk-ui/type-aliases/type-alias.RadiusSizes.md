@@ -4,6 +4,6 @@ title: RadiusSizes
 
 # Type alias RadiusSizes
 
-> **RadiusSizes**: `"None"` \| `"Large"` \| `"Medium"` \| `"Small"`
+> **RadiusSizes**: `"Large"` \| `"Medium"` \| `"None"` \| `"Small"`
 
 Possible sizes for border radius.

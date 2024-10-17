@@ -26,4 +26,3 @@ Translates a [WidgetModel](../../../fusion-embed/interface.WidgetModel.md) to th
 
 Note: this method is not supported for chart or table widgets.
 Use [toChartWidgetProps](function.toChartWidgetProps.md) instead for getting props for the `<ChartWidget>`  component.
-Use toTableWidgetProps instead for getting props for the `<TableWidget>`  component.

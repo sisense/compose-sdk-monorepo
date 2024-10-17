@@ -20,7 +20,7 @@ Display value of categorical value of the data point
 
 ### `categoryValue`
 
-**categoryValue**?: `string` \| `number`
+**categoryValue**?: `number` \| `string`
 
 Categorical value of the data point
 
@@ -28,7 +28,7 @@ Categorical value of the data point
 
 ### `seriesValue`
 
-**seriesValue**?: `string` \| `number`
+**seriesValue**?: `number` \| `string`
 
 Series associated with the data point
 
@@ -36,6 +36,6 @@ Series associated with the data point
 
 ### `value`
 
-**value**?: `string` \| `number`
+**value**?: `number` \| `string`
 
 Value of the data point

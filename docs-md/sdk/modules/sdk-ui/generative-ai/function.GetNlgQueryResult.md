@@ -4,7 +4,7 @@ title: GetNlgQueryResult
 
 # Function GetNlgQueryResult <Badge type="beta" text="Beta" />
 
-> **GetNlgQueryResult**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **GetNlgQueryResult**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 React component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [useExecuteQuery](../queries/function.useExecuteQuery.md) hook, using dimensions, measures, and filters.
@@ -21,7 +21,7 @@ This component is currently under beta release for our managed cloud customers o
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Collapsible container wrapping a text summary
 

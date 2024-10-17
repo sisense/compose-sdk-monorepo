@@ -36,7 +36,7 @@ export default {
 
 ### closeContextMenu
 
-> **closeContextMenu**?: () => `void`
+> **`readonly`** **closeContextMenu**?: () => `void`
 
 Function to close the context menu. It should be a function that sets the visibility of the context menu to false.
 
@@ -48,7 +48,7 @@ Function to close the context menu. It should be a function that sets the visibi
 
 ### itemSections
 
-> **itemSections**?: [`MenuItemSection`](../type-aliases/type-alias.MenuItemSection.md)[]
+> **`readonly`** **itemSections**?: [`MenuItemSection`](../type-aliases/type-alias.MenuItemSection.md)[]
 
 An array of sections, each containing an array of items to be rendered in the context menu. Each item can be a string or an object specifying the item's properties.
 
@@ -56,6 +56,6 @@ An array of sections, each containing an array of items to be rendered in the co
 
 ### position
 
-> **position**?: `null` \| [`MenuPosition`](../type-aliases/type-alias.MenuPosition.md)
+> **`readonly`** **position**?: [`MenuPosition`](../type-aliases/type-alias.MenuPosition.md) \| `null`
 
 An object specifying the position of the context menu. It should contain `top` and `left` properties to position the menu on the screen.

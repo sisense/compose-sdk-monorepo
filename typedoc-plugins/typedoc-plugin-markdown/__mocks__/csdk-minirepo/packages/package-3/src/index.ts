@@ -65,11 +65,9 @@ export interface SomePropInterface {
  *
  * @param paramZ - This is a string parameter.
  * @param paramG - This is a parameter with intersection type literal.
- * @param paramA
- *   This is a **parameter** pointing to an interface.
+ * @param paramA - This is a **parameter** pointing to an interface.
  * @returns This is a numeric return value.
  * @beta
- *
  */
 export function betaFunction(
   paramZ: string,
@@ -82,7 +80,7 @@ export function betaFunction(
 /**
  * This is a function that is assigned to a variable.
  *
- * @param someParam  This is some numeric parameter.
+ * @param someParam - This is some numeric parameter.
  * @returns This is a numeric return value.
  * @alpha
  */
@@ -93,7 +91,7 @@ export const alphaFunction = (someParam: number) => {
 /**
  * This is a function that is assigned to a variable.
  *
- * @param someParam  This is some numeric parameter.
+ * @param someParam - This is some numeric parameter.
  * @returns This is a numeric return value.
  * @category Some Category
  */

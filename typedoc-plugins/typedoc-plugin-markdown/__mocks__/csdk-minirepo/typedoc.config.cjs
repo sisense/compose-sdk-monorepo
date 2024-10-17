@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
   tsconfig: path.join(__dirname, './tsconfig.json'),
-  media: '../media/',
+  // media: '../media/',
   cleanOutputDir: true,
   sort: ['kind', 'instance-first'],
   disableSources: true,

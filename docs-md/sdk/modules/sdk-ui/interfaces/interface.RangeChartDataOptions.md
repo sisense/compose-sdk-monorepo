@@ -11,7 +11,7 @@ to axes of a Range chart.
 
 ### breakBy
 
-> **breakBy**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md))[]
+> **breakBy**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) by which to break (group) the data represented in the chart.
 
@@ -22,7 +22,7 @@ and is automatically added to the chart's legend.
 
 ### category
 
-> **category**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md))[]
+> **category**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) whose values are placed on the X-axis.
 
@@ -40,7 +40,7 @@ Optional mapping of each of the series to colors.
 
 ### value
 
-> **value**: ([`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md) \| [`AreaRangeMeasureColumn`](interface.AreaRangeMeasureColumn.md))[]
+> **value**: ([`AreaRangeMeasureColumn`](interface.AreaRangeMeasureColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md))[]
 
 An array of measure columns used to represent the target numeric values for computing the metrics
 in an area range chart.

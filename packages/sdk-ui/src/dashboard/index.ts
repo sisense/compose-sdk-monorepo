@@ -7,3 +7,4 @@ export type {
   DashboardStyleOptions,
   DashboardConfig,
 } from './types';
+export { DashboardHelpers } from './dashboard-helpers';

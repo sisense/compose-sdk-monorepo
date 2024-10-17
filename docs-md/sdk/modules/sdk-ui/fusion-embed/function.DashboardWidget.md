@@ -4,9 +4,9 @@ title: DashboardWidget
 
 # Function DashboardWidget <Badge type="fusionEmbed" text="Fusion Embed" />
 
-> **DashboardWidget**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **DashboardWidget**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
-The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../dashboarding/function.ChartWidget.md) component,
+The Dashboard Widget component, which is a thin wrapper on the [ChartWidget](../dashboards/function.ChartWidget.md) component,
 is used to render a widget created in a Sisense Fusion instance.
 
 To learn more about using Sisense Fusion Widgets in Compose SDK,
@@ -33,4 +33,4 @@ Display two dashboard widgets from a Fusion Embed instance.
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`

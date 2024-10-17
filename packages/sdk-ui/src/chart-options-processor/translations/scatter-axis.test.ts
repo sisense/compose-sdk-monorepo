@@ -183,8 +183,10 @@ describe('Scatter axis options', () => {
         value: 5000,
       };
       const axisAttribute = {
-        name: 'Category',
-        type: 'string',
+        column: {
+          name: 'Category',
+          type: 'string',
+        },
       };
       const resK = scatterFormatter(axisAttribute, contextK.value, undefined);
 
@@ -196,8 +198,10 @@ describe('Scatter axis options', () => {
         value: 5000,
       };
       const axisAttribute = {
-        name: 'Category',
-        type: 'number',
+        column: {
+          name: 'Category',
+          type: 'number',
+        },
       };
       const resK = scatterFormatter(axisAttribute, contextK.value, undefined);
 
@@ -209,8 +213,10 @@ describe('Scatter axis options', () => {
         value: -146,
       };
       const axisAttribute = {
-        name: 'Category',
-        type: 'number',
+        column: {
+          name: 'Category',
+          type: 'number',
+        },
       };
       const categories = ['Category1', 'Category2', 'Category3'];
 

@@ -95,7 +95,7 @@ Configurations for how to interpret and present the data passed to the component
 
 #### dataSet
 
-> **dataSet**: `undefined` \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+> **dataSet**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`
 
 Data source name (as a `string`) - e.g. `Sample ECommerce`.
 
@@ -105,7 +105,7 @@ If not specified, the component will use the `defaultDataSource` specified in th
 
 #### filters
 
-> **filters**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
+> **filters**: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| `undefined`
 
 Filters that will slice query results
 
@@ -113,7 +113,7 @@ Filters that will slice query results
 
 #### highlights
 
-> **highlights**: `undefined` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **highlights**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| `undefined`
 
 Filters that will highlight query results
 
@@ -121,6 +121,6 @@ Filters that will highlight query results
 
 #### styleOptions
 
-> **styleOptions**: `undefined` \| [`PivotTableStyleOptions`](../interfaces/interface.PivotTableStyleOptions.md)
+> **styleOptions**: [`PivotTableStyleOptions`](../interfaces/interface.PivotTableStyleOptions.md) \| `undefined`
 
 Configurations for how to style and present a pivot table's data.

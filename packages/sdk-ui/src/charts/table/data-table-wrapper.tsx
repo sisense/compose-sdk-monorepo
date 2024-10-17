@@ -20,7 +20,7 @@ import {
 } from './styles/style-constants';
 import { getCellStyles } from './helpers/get-cell-styles';
 import Tooltip from '@mui/material/Tooltip';
-import { Category } from '@/chart-data-options/types';
+import { getDataOptionTitle } from '@/chart-data-options/utils';
 
 const alignmentForColumnType = (columnType: string) => (isNumber(columnType) ? 'right' : 'left');
 
@@ -84,7 +84,7 @@ export const DataTableWrapper = ({
   const columnsOptions = useMemo(
     () =>
       dataOptions.columns.map((col) => ({
-        isHtml: !!(col as Category).isHtml,
+        isHtml: 'isHtml' in col && !!col.isHtml,
         width: widthVal,
       })),
     [dataOptions.columns, widthVal],
@@ -137,7 +137,7 @@ export const DataTableWrapper = ({
                   sortIcon={customStyles?.sortIcon || 'standard'}
                 >
                   {renderDisplayValue({
-                    displayValue: columnOptions.title ?? columnOptions.name,
+                    displayValue: getDataOptionTitle(columnOptions),
                     width: columnWidth,
                     padding: headerPadding,
                     ellipsizedLength: HEADER_ELLIPSIZED_LENGTH,
@@ -162,7 +162,7 @@ export const DataTableWrapper = ({
                   width: columnWidth,
                   padding: DATA_PADDING,
                   ellipsizedLength: DATA_ELLIPSIZED_LENGTH,
-                  isHtml: (columnOptions as Category).isHtml ?? false,
+                  isHtml: 'isHtml' in columnOptions && columnOptions.isHtml,
                 })}
               </Cell>
             )}

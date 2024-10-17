@@ -30,18 +30,22 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * ```html
  * <csdk-dashboard
  *  *ngIf="dashboard"
- *  [title]="dashboard!.title"
- *  [layoutOptions]="dashboard!.layoutOptions"
- *  [widgets]="dashboard!.widgets"
- *  [filters]="dashboard!.filters"
- *  [defaultDataSource]="dashboard!.dataSource"
- *  [widgetsOptions]="dashboard!.widgetsOptions"
+ *  [title]="dashboard.title"
+ *  [layoutOptions]="dashboard.layoutOptions"
+ *  [widgets]="dashboard.widgets"
+ *  [filters]="dashboard.filters"
+ *  [defaultDataSource]="dashboard.defaultDataSource"
+ *  [widgetsOptions]="dashboard.widgetsOptions"
  * />
  * ```
  *
  * ```ts
  * import { Component } from '@angular/core';
- * import { type DashboardProps, DashboardService } from '@sisense/sdk-ui-angular';
+ * import {
+ *   type DashboardProps,
+ *   DashboardService,
+ *   dashboardModelTranslator,
+ * } from '@sisense/sdk-ui-angular';
  *
  * @Component({
  *  selector: 'app-dashboard',
@@ -55,11 +59,14 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  *  constructor(private dashboardService: DashboardService) {}
  *
  *  async ngOnInit(): Promise<void> {
- *    const dashboardModel = await this.dashboardService.getDashboardModel('60f3e3e3e4b0e3e3e4b0e3e3', { includeWidgets: true, includeFilters: true });
- *    this.dashboardProps = dashboardModelTranslator.toDashboardProps(dashboardModel);
+ *    const dashboardModel = await this.dashboardService.getDashboardModel('your-dashboard-oid', { includeWidgets: true, includeFilters: true });
+ *    this.dashboard = dashboardModelTranslator.toDashboardProps(dashboardModel);
  *  }
  * ```
- * @group Dashboarding
+ *
+ * To learn more about this and related dashboard components,
+ * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
+ * @group Dashboards
  * @beta
  */
 @Component({

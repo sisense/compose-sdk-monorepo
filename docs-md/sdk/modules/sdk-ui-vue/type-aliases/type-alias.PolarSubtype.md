@@ -4,7 +4,7 @@ title: PolarSubtype
 
 # Type alias PolarSubtype
 
-> **PolarSubtype**: `"polar/column"` \| `"polar/area"` \| `"polar/line"`
+> **PolarSubtype**: `"polar/area"` \| `"polar/column"` \| `"polar/line"`
 
 Property of [PolarStyleOptions](../interfaces/interface.PolarStyleOptions.md)
 

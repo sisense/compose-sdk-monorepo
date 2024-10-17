@@ -22,5 +22,5 @@ This is used to extend the props of a widget with its respective widget type.
 
 | Parameter |
 | :------ |
-| `W` *extends* [`ChartWidgetProps`](../interfaces/interface.ChartWidgetProps.md) \| [`PivotTableWidgetProps`](../interfaces/interface.PivotTableWidgetProps.md) \| [`TextWidgetProps`](../interfaces/interface.TextWidgetProps.md) \| [`PluginWidgetProps`](../interfaces/interface.PluginWidgetProps.md) |
-| `T` *extends* `"chart"` \| `"pivot"` \| `"text"` \| `"plugin"` |
+| `W` *extends* [`ChartWidgetProps`](../interfaces/interface.ChartWidgetProps.md) \| [`PivotTableWidgetProps`](../interfaces/interface.PivotTableWidgetProps.md) \| [`PluginWidgetProps`](../interfaces/interface.PluginWidgetProps.md) \| [`TextWidgetProps`](../interfaces/interface.TextWidgetProps.md) |
+| `T` *extends* `"chart"` \| `"pivot"` \| `"plugin"` \| `"text"` |

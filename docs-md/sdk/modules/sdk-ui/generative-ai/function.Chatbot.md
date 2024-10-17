@@ -4,7 +4,7 @@ title: Chatbot
 
 # Function Chatbot <Badge type="beta" text="Beta" />
 
-> **Chatbot**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **Chatbot**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 React component that renders a chatbot with data topic selection. You can optionally provide `width` and/or `height`.
 
@@ -20,7 +20,7 @@ This component is currently under beta release for our managed cloud customers o
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 ## Example
 

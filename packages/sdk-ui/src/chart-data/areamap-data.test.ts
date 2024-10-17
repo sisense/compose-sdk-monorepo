@@ -8,14 +8,18 @@ describe('areamap-data', () => {
     it("should process data with 'geo' category and 'color' measure", () => {
       const dataOptions: AreamapChartDataOptionsInternal = {
         geo: {
-          name: 'Country',
-          type: 'text',
+          column: {
+            name: 'Country',
+            type: 'text',
+          },
         },
 
         color: {
-          name: 'Cost',
-          aggregation: 'sum',
-          title: 'Total Cost',
+          column: {
+            name: 'Cost',
+            aggregation: 'sum',
+            title: 'Total Cost',
+          },
         },
       };
       const dataTable: DataTable = {

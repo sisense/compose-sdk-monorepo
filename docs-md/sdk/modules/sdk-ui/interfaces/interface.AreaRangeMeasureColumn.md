@@ -10,6 +10,9 @@ title: AreaRangeMeasureColumn
 
 > **chartType**?: `"arearange"`
 
+Series chart type, which is used with [StyledMeasureColumn](interface.StyledMeasureColumn.md) to customize
+series in a mixed chart.
+
 ***
 
 ### color
@@ -38,7 +41,7 @@ Boolean flag whether to display data bars for this measure in the pivot table.
 
 ### lowerBound
 
-> **lowerBound**: [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md)
+> **lowerBound**: [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md)
 
 ***
 
@@ -100,4 +103,4 @@ Boolean flag whether null values are treated as zeros in the chart
 
 ### upperBound
 
-> **upperBound**: [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md)
+> **upperBound**: [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md)

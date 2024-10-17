@@ -58,11 +58,11 @@ Factory function `measureFactory.sum()` is used to create a measure that sums th
 
 ### Time-based
 
+- [difference](functions/function.difference.md)
 - [diffPastMonth](functions/function.diffPastMonth.md)
 - [diffPastQuarter](functions/function.diffPastQuarter.md)
 - [diffPastWeek](functions/function.diffPastWeek.md)
 - [diffPastYear](functions/function.diffPastYear.md)
-- [difference](functions/function.difference.md)
 - [monthToDateSum](functions/function.monthToDateSum.md)
 - [pastDay](functions/function.pastDay.md)
 - [pastMonth](functions/function.pastMonth.md)

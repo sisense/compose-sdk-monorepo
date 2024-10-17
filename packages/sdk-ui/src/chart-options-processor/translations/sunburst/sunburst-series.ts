@@ -5,6 +5,7 @@ import { CompleteThemeSettings, UniformDataColorOptions } from '../../../types';
 import { SeriesPointStructure } from '../translations-to-highcharts';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { getExplicitColorSteps, scaleBrightness } from '../../../utils/color';
+import { getDataOptionTitle } from '@/chart-data-options/utils';
 
 export const SUNBURST_ROOT_PARENT_ID = 'SUNBURST_ROOT_PARENT_ID';
 
@@ -15,7 +16,7 @@ export function prepareSunburstDataItems(
 ) {
   const rootDataItem = {
     id: SUNBURST_ROOT_PARENT_ID,
-    name: dataOptions.y[0]?.title ?? dataOptions.y[0]?.name,
+    name: getDataOptionTitle(dataOptions.y[0]),
     custom: { level: 0, levelsCount: chartData.xAxisCount },
   };
 
@@ -95,7 +96,7 @@ function handleSunburstSeriesColor(
 }
 
 function prepareColorMapByLevels(dataOptions: CategoricalChartDataOptionsInternal) {
-  return dataOptions.breakBy.reduce((map, column, index) => {
+  return dataOptions.breakBy.reduce((map, { column }, index) => {
     if (dataOptions?.seriesToColorMap?.[column.name]) {
       map[index + 1] = dataOptions.seriesToColorMap[column.name];
     }

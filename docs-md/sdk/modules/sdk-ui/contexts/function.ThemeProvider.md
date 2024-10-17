@@ -4,7 +4,7 @@ title: ThemeProvider
 
 # Function ThemeProvider
 
-> **ThemeProvider**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **ThemeProvider**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 Theme provider, which allows you to adjust the look and feel of child components.
 
@@ -18,7 +18,7 @@ Components not wrapped in a theme provider use the current theme from the connec
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 A Theme Provider component
 

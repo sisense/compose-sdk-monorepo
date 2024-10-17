@@ -1,4 +1,4 @@
-import { translateColumnToAttribure } from '@/chart-data-options/utils';
+import { isMeasureColumn, translateColumnToAttribute } from '@/chart-data-options/utils';
 import {
   isAreamap,
   isBoxplot,
@@ -20,7 +20,6 @@ import {
   ChartDataPoint,
   DataPoint,
   DataPointEntry,
-  isMeasureColumn,
   PivotTableDataOptions,
   ScatterChartDataOptions,
   ScatterDataPoint,
@@ -103,7 +102,7 @@ function getTreemapChartSelections(
 
     // deselect all other levels
     return {
-      attribute: translateColumnToAttribure(dataOption),
+      attribute: translateColumnToAttribute(dataOption),
       values: [],
       displayValues: [],
     };
@@ -189,7 +188,7 @@ export function getSelectableWidgetAttributes(
     targetDataOptions = [...(dataOptions as ScattermapChartDataOptions).geo];
   }
 
-  return targetDataOptions.map(translateColumnToAttribure);
+  return targetDataOptions.map(translateColumnToAttribute);
 }
 
 export function createCommonFiltersOverSelections(

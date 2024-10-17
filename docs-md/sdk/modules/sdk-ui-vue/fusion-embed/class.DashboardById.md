@@ -25,10 +25,13 @@ const dashboardOid = '6441e728dac1920034bce737';
 </script>
 ```
 
+To learn more about this and related dashboard components,
+see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
+
 ## Properties
 
 ### dashboardOid
 
-> **dashboardOid**?: `string`
+> **`readonly`** **dashboardOid**?: `string`
 
 The OID of the dashboard to render.

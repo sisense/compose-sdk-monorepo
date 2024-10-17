@@ -106,7 +106,6 @@ export type WidgetModelSuccessState = {
  *
  * - [Modify Chart Type](https://www.sisense.com/platform/compose-sdk/playground/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
  *
- * @param params - Parameters of the widget to be retrieved
  * @returns Widget load state that contains the status of the execution, the result widget model, or the error if one has occurred
  * @group Fusion Embed
  * @fusionEmbed
@@ -116,6 +115,7 @@ export const useGetWidgetModel = withTracking('useGetWidgetModel')(useGetWidgetM
 /**
  * {@link useGetWidgetModel} without tracking to be used inside other hooks or components in Compose SDK.
  *
+ * @param params - Parameters of the widget to be retrieved
  * @internal
  */
 export function useGetWidgetModelInternal(params: GetWidgetModelParams): WidgetModelState {

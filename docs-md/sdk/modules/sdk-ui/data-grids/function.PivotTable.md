@@ -4,7 +4,7 @@ title: PivotTable
 
 # Function PivotTable <Badge type="beta" text="Beta" />
 
-> **PivotTable**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **PivotTable**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 Pivot table with pagination.
 
@@ -16,7 +16,7 @@ Pivot table with pagination.
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Pivot Table component
 

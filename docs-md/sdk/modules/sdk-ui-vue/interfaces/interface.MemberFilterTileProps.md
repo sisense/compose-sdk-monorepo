@@ -28,7 +28,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 ### filter
 
-> **filter**: `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
+> **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null`
 
 Source filter object. Caller is responsible for keeping track of filter state
 
@@ -44,7 +44,7 @@ Callback indicating when the source member filter object should be updated
 
 | Parameter | Type |
 | :------ | :------ |
-| `filter` | `null` \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md) |
+| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null` |
 
 #### Returns
 

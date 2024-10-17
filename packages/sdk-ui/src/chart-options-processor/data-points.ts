@@ -2,6 +2,7 @@ import {
   MetadataTypes,
   isNumber as isNumberType,
   isDatetime as isDatetimeType,
+  Measure,
 } from '@sisense/sdk-data';
 import isDate from 'lodash-es/isDate';
 import { DataPoint, HighchartsPoint, ScatterDataPoint, BoxplotDataPoint } from '../types';
@@ -10,18 +11,13 @@ import {
   BoxplotChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
-  Category,
   ChartDataOptionsInternal,
   DataPointEntry,
   RangeChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
-  Value,
+  StyledColumn,
+  StyledMeasureColumn,
 } from '..';
-import {
-  translateCategoryOrValueToColumn,
-  translateCategoryToAttribute,
-  translateValueToMeasure,
-} from '@/chart-data-options/utils';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
@@ -29,12 +25,13 @@ import {
 import { formatDateTimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
 import { getDefaultDateFormat } from './translations/axis-section';
 import { applyDateFormat } from '@/query/date-formats';
+import { getDataOptionGranularity } from '@/chart-data-options/utils';
 
 type FormatterFn = (value: any) => string;
 
 // todo: move all formatters related logic into a single place
-function createFormatter(dataOption: Category | Value) {
-  const type = 'type' in dataOption ? dataOption.type : 'numeric';
+function createFormatter(dataOption: StyledColumn | StyledMeasureColumn) {
+  const type = 'type' in dataOption.column ? dataOption.column.type : 'numeric';
   let formatter: FormatterFn = (value: number | string | Date) => `${value}`;
 
   if (isNumberType(type)) {
@@ -47,8 +44,8 @@ function createFormatter(dataOption: Category | Value) {
 
   if (isDatetimeType(type)) {
     const dateFormat =
-      (dataOption as Category).dateFormat ||
-      getDefaultDateFormat((dataOption as Category).granularity);
+      (dataOption as StyledColumn).dateFormat ||
+      getDefaultDateFormat(getDataOptionGranularity(dataOption as StyledColumn));
     // todo: connect "app?.settings.locale" and "app?.settings.dateConfig" configurations
     const dateFormatter = (date: Date, format: string) => applyDateFormat(date, format);
     formatter = (value: Date | string) =>
@@ -60,15 +57,18 @@ function createFormatter(dataOption: Category | Value) {
   };
 }
 
-export function getDataPointMetadata(dataOptionPath: string, dataOption: Category | Value) {
+export function getDataPointMetadata(
+  dataOptionPath: string,
+  dataOption: StyledColumn | StyledMeasureColumn,
+) {
   return {
     id: dataOptionPath,
-    dataOption: translateCategoryOrValueToColumn(dataOption),
-    ...(MetadataTypes.isAttribute(dataOption) && {
-      attribute: translateCategoryToAttribute(dataOption as Category),
+    dataOption,
+    ...(MetadataTypes.isAttribute(dataOption.column) && {
+      attribute: dataOption.column,
     }),
-    ...(MetadataTypes.isMeasure(dataOption) && {
-      measure: translateValueToMeasure(dataOption as Value),
+    ...(MetadataTypes.isMeasure(dataOption.column) && {
+      measure: dataOption.column as Measure,
     }),
   };
 }

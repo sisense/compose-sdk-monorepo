@@ -16,8 +16,6 @@ export interface GetDashboardModelOptions {
    * Boolean flag whether to include filters in the dashboard model
    *
    * If not specified, the default value is `false`
-   *
-   * @internal
    */
   includeFilters?: boolean;
 }

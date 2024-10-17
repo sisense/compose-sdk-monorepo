@@ -71,6 +71,6 @@ Theme provider props
 
 ### theme
 
-> **theme**?: `string` \| [`ThemeSettings`](../interfaces/interface.ThemeSettings.md)
+> **`readonly`** **theme**?: [`ThemeSettings`](../interfaces/interface.ThemeSettings.md) \| `string`
 
 Theme settings object for custom themes or a string identifier to fetch theme settings. When provided as an object, it merges with the default theme settings. When provided as a string, it attempts to fetch theme settings using the provided ID.

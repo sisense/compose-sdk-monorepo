@@ -16,7 +16,6 @@ import {
 } from '../charts/map-charts/scattermap/scattermap';
 import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
 import { useThemeContext } from '../theme-provider';
-import { translateAttributeToCategory, translateMeasureToValue } from '../chart-data-options/utils';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
@@ -130,8 +129,8 @@ export const RegularChart = (props: RegularChartProps) => {
     if (!isDataSource(dataSet)) {
       dataTable = filterAndAggregateChartData(
         dataTable,
-        attributes.map(translateAttributeToCategory),
-        measures.map(translateMeasureToValue),
+        attributes,
+        measures,
         dataColumnNamesMapping,
       );
     }

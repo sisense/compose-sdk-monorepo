@@ -41,7 +41,7 @@ export class NavigationBuilder {
         return {
           title: child.name,
           url: child.url,
-          children: this.getChildrenOrGroups(child) || [],
+          children: this.getChildrenOrGroups(child as DeclarationReflection) || [],
         };
       });
   }
@@ -61,15 +61,13 @@ export class NavigationBuilder {
         return {
           title: child.name,
           url: child.url,
-          children: this.getChildrenOrGroups(child) || [],
+          children: this.getChildrenOrGroups(child as DeclarationReflection) || [],
         };
       });
   }
 
   getChildrenOrGroups(reflection: DeclarationReflection) {
-    if (
-      reflection.groups?.some((group) => group.allChildrenHaveOwnDocument())
-    ) {
+    if (reflection.groups?.some((group) => group.allChildrenHaveOwnDocument())) {
       if (this.options.getValue('excludeGroups')) {
         return reflection.children
           ?.filter((child) => child.hasOwnDocument)

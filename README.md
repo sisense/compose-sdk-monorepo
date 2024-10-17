@@ -1,8 +1,8 @@
 # Compose SDK Monorepo
 
-Compose SDK is a Software Development Kit that enables a composable, code-driven way to use Sisense platform capabilities. Build analytics and data-driven experiences into your product with code using Compose SDK, a set of client-side libraries and components for query composition, data visualization, and more.
+Compose SDK is a Software Development Kit that enables a composable, code-driven way to use Sisense platform capabilities. Build analytics and data-driven experiences into your product with code using Compose SDK, a set of client-side libraries and components for query composition, data visualization, dashboard, and more.
 
-- **Create Sisense queries, charts, and filters directly from your application code.** No predefined dashboards or widgets required - or render existing widgets by ID. Mix and match approaches to fit your needs.
+- **Create Sisense queries, filters, charts, and dashboards directly from your application code.** No predefined dashboards or widgets required - or render existing widgets or dashboards by ID. Mix and match approaches to fit your needs.
 - **Composable, modular and extensible.** Use our components, customize them, or bring your own. Compose SDK works equally well for building new applications or upgrading existing ones to use Sisense’s powerful analytics platform.
 - **Built with developer experience in mind.** The SDK is available via GitHub and NPM, supports Typescript and common UI frameworks (React, Angular, Vue), and includes documentation, code samples and CLI tools that help you get things done with ease.
 

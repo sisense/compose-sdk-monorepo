@@ -13,18 +13,13 @@ import { MarkdownPageEvent, MarkdownRendererEvent } from './events';
  * Replacement of TypeDoc's [Application.generateDocs](https://typedoc.org/api/classes/Application.html#generateDocs) to decouple HTML logic.
  *
  */
-export async function generateMarkdown(
-  project: ProjectReflection,
-  out: string,
-) {
+export async function generateMarkdown(project: ProjectReflection, out: string) {
   const start = Date.now();
 
   await this.renderer.render(project, out);
 
   if (this.logger.hasErrors()) {
-    this.logger.error(
-      'Documentation could not be generated due to the errors above.',
-    );
+    this.logger.error('Documentation could not be generated due to the errors above.');
   } else {
     this.logger.info(`Documentation generated at ${out}`);
 
@@ -55,9 +50,7 @@ export async function renderMarkdown(
   try {
     fs.mkdirSync(outputDirectory, { recursive: true });
   } catch (error) {
-    this.application.logger.error(
-      `Could not create output directory ${outputDirectory}.`,
-    );
+    this.application.logger.error(`Could not create output directory ${outputDirectory}.`);
     return;
   }
 
@@ -77,11 +70,7 @@ export async function renderMarkdown(
 
   this.prepareTheme();
 
-  const output = new MarkdownRendererEvent(
-    MarkdownRendererEvent.BEGIN,
-    outputDirectory,
-    project,
-  );
+  const output = new MarkdownRendererEvent(MarkdownRendererEvent.BEGIN, outputDirectory, project);
 
   output.urls = this.theme!.getUrls(project);
 
@@ -91,9 +80,7 @@ export async function renderMarkdown(
 
   this.preRenderAsyncJobs = [];
 
-  this.application.logger.info(
-    `There are ${output.urls?.length} pages to write.`,
-  );
+  this.application.logger.info(`There are ${output.urls?.length} pages to write.`);
 
   output.urls
     ?.filter(
@@ -105,9 +92,9 @@ export async function renderMarkdown(
       const [template, page] = output.createPageEvent(urlMapping);
 
       this.trigger(MarkdownPageEvent.BEGIN, page);
-      if (page.isDefaultPrevented) {
-        return false;
-      }
+      // if (page.isDefaultPrevented) {
+      //   return false;
+      // }
 
       if (page.model instanceof Reflection) {
         page.contents = this.theme!.render(page, template);
@@ -117,9 +104,9 @@ export async function renderMarkdown(
 
       this.trigger(MarkdownPageEvent.END, page);
 
-      if (page.isDefaultPrevented) {
-        return false;
-      }
+      // if (page.isDefaultPrevented) {
+      //   return false;
+      // }
 
       try {
         writeFileSync(page.filename, formatContents(page.contents as string));

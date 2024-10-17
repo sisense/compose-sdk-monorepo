@@ -4,13 +4,14 @@ title: Charts
 
 # Charts
 
-React components for charts
+React components and utilities for working with charts
 
 - [AreaChart](function.AreaChart.md)
-- [AreaRangeChart](function.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [AreamapChart](function.AreamapChart.md)
+- [AreaRangeChart](function.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](function.BarChart.md)
 - [BoxplotChart](function.BoxplotChart.md)
+- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md)
 - [Chart](function.Chart.md)
 - [ColumnChart](function.ColumnChart.md)
 - [FunnelChart](function.FunnelChart.md)

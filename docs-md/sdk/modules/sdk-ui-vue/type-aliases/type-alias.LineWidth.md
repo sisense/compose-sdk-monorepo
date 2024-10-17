@@ -12,6 +12,6 @@ Configuration that defines line width
 
 ### `width`
 
-**width**: `"thin"` \| `"bold"` \| `"thick"`
+**width**: `"bold"` \| `"thick"` \| `"thin"`
 
 Line width type

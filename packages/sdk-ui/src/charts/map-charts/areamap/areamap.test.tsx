@@ -25,13 +25,16 @@ describe('Areamap', () => {
         chartData={{ type: 'areamap', geoData: countriesGeoData }}
         dataOptions={{
           color: {
-            name: 'color',
-            title: 'Color',
+            column: {
+              name: 'color',
+              title: 'Color',
+            },
           },
           geo: {
-            name: 'geo',
-            title: 'Geo',
-            type: 'string',
+            column: {
+              name: 'geo',
+              type: 'string',
+            },
           },
         }}
         designOptions={

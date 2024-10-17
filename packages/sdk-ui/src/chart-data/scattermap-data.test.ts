@@ -7,13 +7,17 @@ describe('Scattermap Chart Data', () => {
     const dataOptions = {
       locations: [
         {
-          name: 'Country',
-          type: 'text',
+          column: {
+            name: 'Country',
+            type: 'text',
+          },
         },
       ],
       size: {
-        name: 'Cost',
-        aggregation: 'sum',
+        column: {
+          name: 'Cost',
+          aggregation: 'sum',
+        },
       },
     } as ScattermapChartDataOptionsInternal;
     const dataTable: DataTable = {
@@ -68,17 +72,23 @@ describe('Scattermap Chart Data', () => {
     const dataOptions = {
       locations: [
         {
-          name: 'Country',
-          type: 'text',
+          column: {
+            name: 'Country',
+            type: 'text',
+          },
         },
         {
-          name: 'City',
-          type: 'text',
+          column: {
+            name: 'City',
+            type: 'text',
+          },
         },
       ],
       size: {
-        name: 'Cost',
-        aggregation: 'sum',
+        column: {
+          name: 'Cost',
+          aggregation: 'sum',
+        },
       },
     } as ScattermapChartDataOptionsInternal;
     const dataTable: DataTable = {
@@ -154,17 +164,23 @@ describe('Scattermap Chart Data', () => {
     const dataOptions = {
       locations: [
         {
-          name: 'Lat',
-          type: 'number',
+          column: {
+            name: 'Lat',
+            type: 'number',
+          },
         },
         {
-          name: 'Lng',
-          type: 'number',
+          column: {
+            name: 'Lng',
+            type: 'number',
+          },
         },
       ],
       size: {
-        name: 'Cost',
-        aggregation: 'sum',
+        column: {
+          name: 'Cost',
+          aggregation: 'sum',
+        },
       },
     } as ScattermapChartDataOptionsInternal;
     const dataTable: DataTable = {

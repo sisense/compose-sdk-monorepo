@@ -1110,42 +1110,50 @@ export const mockedSunburstSeriesProps = {
   dataOptions: {
     y: [
       {
-        name: '$measure0_Total Revenue',
-        type: 'basemeasure',
-        desc: '',
-        __serializable: 'DimensionalElement',
-        sort: 0,
-        aggregation: 'sum',
-        attribute: {
-          name: 'TotalRevenue',
-          type: 'numeric-attribute',
+        column: {
+          name: '$measure0_Total Revenue',
+          type: 'basemeasure',
           desc: '',
           __serializable: 'DimensionalElement',
-          expression: '[Commerce.Revenue]',
+          sort: 0,
+          aggregation: 'sum',
+          attribute: {
+            name: 'TotalRevenue',
+            type: 'numeric-attribute',
+            desc: '',
+            __serializable: 'DimensionalElement',
+            expression: '[Commerce.Revenue]',
+          },
         },
       },
     ],
     breakBy: [
       {
-        name: 'Condition',
-        type: 'text-attribute',
-        desc: '',
-        __serializable: 'DimensionalElement',
-        expression: '[Commerce.Condition]',
+        column: {
+          name: 'Condition',
+          type: 'text-attribute',
+          desc: '',
+          __serializable: 'DimensionalElement',
+          expression: '[Commerce.Condition]',
+        },
       },
       {
-        name: 'Gender',
-        type: 'text-attribute',
-        desc: '',
-        __serializable: 'DimensionalElement',
-        expression: '[Commerce.Gender]',
+        column: {
+          name: 'Gender',
+          type: 'text-attribute',
+          desc: '',
+          __serializable: 'DimensionalElement',
+          expression: '[Commerce.Gender]',
+        },
       },
       {
-        name: 'AgeRange',
-        type: 'text-attribute',
-        desc: '',
-        __serializable: 'DimensionalElement',
-        expression: '[Commerce.Age Range]',
+        column: {
+          name: 'AgeRange',
+          type: 'text-attribute',
+          desc: '',
+          __serializable: 'DimensionalElement',
+          expression: '[Commerce.Age Range]',
+        },
       },
     ],
     seriesToColorMap: {

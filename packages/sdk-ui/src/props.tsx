@@ -495,7 +495,7 @@ interface BoxplotChartEventProps extends HighchartsBasedChartEventProps {
 export interface BaseChartProps {
   /**
    * Data set for a chart using one of the following options. If neither option is specified, the chart
-   * will use the `defaultDataSource` specified in the parent {@link SisenseContextProvider}
+   * will use the `defaultDataSource` specified in the parent `SisenseContextProvider`
    * component.
    *
    *
@@ -503,7 +503,7 @@ export interface BaseChartProps {
    * retrieve the data source name from a data model you create using the `get-data-model`
    * {@link https://sisense.dev/guides/sdk/guides/cli.html | command} of the Compose SDK CLI. Under the hood, the chart
    * connects to the data source, executes a query, and loads the data as specified in
-   * {@link dataOptions}, {@link filters}, and {@link highlights}.
+   * `dataOptions`, `filters`, and `highlights`.
    *
    * To learn more about using data from a Sisense data source, see the
    * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#sisense-data).
@@ -565,7 +565,7 @@ export interface BaseChartProps {
    * Highlights based on filter criteria to apply to a chart using one of the following options.
    *
    * NOTE that the filter dimensions used in highlights must match those defined in the
-   * {@link dataOptions} of the chart. Otherwise, the filters will be applied as regular slice filters.
+   * `dataOptions` of the chart. Otherwise, the filters will be applied as regular slice filters.
    *
    * (1) Array of {@link Filter} returned from filter factory functions, such as
    * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.

@@ -4,7 +4,7 @@ title: BarChart
 
 # Function BarChart
 
-> **BarChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **BarChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component representing categorical data with horizontal rectangular bars,
 whose lengths are proportional to the values that they represent.
@@ -33,6 +33,6 @@ Additional Bar Chart examples:
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Bar Chart component

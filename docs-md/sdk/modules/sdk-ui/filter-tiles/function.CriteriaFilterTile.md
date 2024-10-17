@@ -4,10 +4,10 @@ title: CriteriaFilterTile
 
 # Function CriteriaFilterTile
 
-> **CriteriaFilterTile**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **CriteriaFilterTile**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 UI component that allows the user to filter numeric or text attributes according to
-a number of built-in operations defined in the NumericFilter, TextFilter, or RankingFilter.
+a number of built-in operations defined in the numeric filter, text filter, or ranking filter.
 
 The arrangement prop determines whether the filter is rendered vertically or horizontally, with the latter intended for toolbar use and omitting title, enable/disable, and collapse/expand functionality.
 
@@ -19,7 +19,7 @@ The arrangement prop determines whether the filter is rendered vertically or hor
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Criteria filter tile component
 

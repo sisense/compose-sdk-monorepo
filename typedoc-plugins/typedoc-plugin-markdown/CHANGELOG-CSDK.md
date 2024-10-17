@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024-10-16
+
+- Implement workaround for https://github.com/TypeStrong/typedoc/issues/2751
+
+## 2024-10-11
+
+- Upgrade TypeDoc from 0.25.xx to 0.26.xx
+- Adjust this plugin accordingly to the breaking changes https://typedoc.org/guides/changelog/#v0.26.0-(2024-06-22)
+
 ## 2024-05-21
 
 - Add config `hiddenFunctionParameters` to hide function parameters – e.g., `deprecatedLegacyContext`

@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
   "types": [ "node" ],
   "include": ["src/**/*.ts"],

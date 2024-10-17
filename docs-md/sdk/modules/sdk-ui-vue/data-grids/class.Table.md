@@ -49,7 +49,7 @@ Table properties
 
 #### dataOptions
 
-> **dataOptions**?: [`TableDataOptions`](../interfaces/interface.TableDataOptions.md)
+> **`readonly`** **dataOptions**?: [`TableDataOptions`](../interfaces/interface.TableDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the component
 
@@ -57,17 +57,17 @@ Configurations for how to interpret and present the data passed to the component
 
 #### dataSet
 
-> **dataSet**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| [`Data`](../../sdk-data/interfaces/interface.Data.md)
+> **`readonly`** **dataSet**?: [`Data`](../../sdk-data/interfaces/interface.Data.md) \| [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 Data set for a chart using one of the following options. If neither option is specified, the chart
-will use the `defaultDataSource` specified in the parent [SisenseContextProvider](../contexts/class.SisenseContextProvider.md)
+will use the `defaultDataSource` specified in the parent `SisenseContextProvider`
 component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
 [command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
 connects to the data source, executes a query, and loads the data as specified in
-[dataOptions](class.Table.md#dataoptions), [filters](class.Table.md#filters), and [highlights](../../sdk-ui/interfaces/interface.ChartProps.md#highlights).
+`dataOptions`, `filters`, and `highlights`.
 
 To learn more about using data from a Sisense data source, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#sisense-data).
@@ -104,7 +104,7 @@ const sampleData = {
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md)
+> **`readonly`** **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters that will slice query results
 
@@ -112,6 +112,6 @@ Filters that will slice query results
 
 #### styleOptions
 
-> **styleOptions**?: [`TableStyleOptions`](../interfaces/interface.TableStyleOptions.md)
+> **`readonly`** **styleOptions**?: [`TableStyleOptions`](../interfaces/interface.TableStyleOptions.md)
 
 Configurations for how to style and present a table's data.

@@ -1,10 +1,10 @@
-import { isRange } from './../chart-options-processor/translations/types';
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Attribute, Measure } from '@sisense/sdk-data';
+import { isRange } from './../chart-options-processor/translations/types';
 import {
   isCartesian,
   isCategorical,
@@ -23,16 +23,12 @@ import {
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
+  IndicatorChartDataOptionsInternal,
   ScatterChartDataOptions,
   ScatterChartDataOptionsInternal,
-  IndicatorChartDataOptionsInternal,
   IndicatorChartDataOptions,
   TableDataOptionsInternal,
   TableDataOptions,
-  Value,
-  isCategory,
-  isValue,
-  Category,
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
   AreamapChartDataOptions,
@@ -41,13 +37,15 @@ import {
   PivotTableDataOptions,
   PivotTableDataOptionsInternal,
   RangeChartDataOptions,
+  StyledMeasureColumn,
+  StyledColumn,
 } from './types';
 import {
-  translateColumnToCategory,
-  translateColumnToValue,
-  translateColumnToCategoryOrValue,
-  translateCategoryToAttribute,
-  translateValueToMeasure,
+  normalizeColumn,
+  normalizeMeasureColumn,
+  normalizeAnyColumn,
+  safeMerge,
+  isMeasureColumn,
 } from './utils';
 import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
 import { translateRangeChartDataOptions } from './translate-range-data-options';
@@ -81,35 +79,35 @@ const translateCartesianChartDataOptions = (
   cartesian: CartesianChartDataOptions,
 ): CartesianChartDataOptionsInternal => {
   return {
-    x: cartesian.category.map(translateColumnToCategory),
-    y: cartesian.value.map(translateColumnToValue),
+    x: cartesian.category.map(normalizeColumn),
+    y: cartesian.value.map(normalizeMeasureColumn),
     // breakBy may be undefined. If so, default to empty array
-    breakBy: cartesian.breakBy?.map(translateColumnToCategory) || [],
+    breakBy: cartesian.breakBy?.map(normalizeColumn) || [],
     seriesToColorMap: cartesian.seriesToColorMap,
-  } as CartesianChartDataOptionsInternal;
+  };
 };
 
 const translateCategoricalChartDataOptions = (
   categorical: CategoricalChartDataOptions,
 ): CategoricalChartDataOptionsInternal => {
   return {
-    y: categorical.value.map(translateColumnToValue),
-    breakBy: categorical.category.map(translateColumnToCategory),
+    y: categorical.value.map(normalizeMeasureColumn),
+    breakBy: categorical.category.map(normalizeColumn),
     seriesToColorMap: categorical.seriesToColorMap,
-  } as CategoricalChartDataOptionsInternal;
+  };
 };
 
 const translateIndicatorChartDataOptions = (
   indicatorChartDataOptions: IndicatorChartDataOptions,
 ): IndicatorChartDataOptionsInternal => {
   return {
-    value: indicatorChartDataOptions.value?.map(translateColumnToValue),
-    secondary: indicatorChartDataOptions.secondary?.map(translateColumnToValue),
+    value: indicatorChartDataOptions.value?.map(normalizeMeasureColumn),
+    secondary: indicatorChartDataOptions.secondary?.map(normalizeMeasureColumn),
     min: indicatorChartDataOptions.min
-      ?.map(translateColumnToValue)
+      ?.map(normalizeMeasureColumn)
       ?.map(withDefaultAggregation('min')),
     max: indicatorChartDataOptions.max
-      ?.map(translateColumnToValue)
+      ?.map(normalizeMeasureColumn)
       ?.map(withDefaultAggregation('max')),
   };
 };
@@ -120,12 +118,15 @@ const translateIndicatorChartDataOptions = (
  * @param defaultAggregation - The name of the aggregate function to use as the default. For example, 'sum', 'count', etc. *
  * @returns A function that applies the default aggregation to the passed value if the aggregation is not specified.
  */
-const withDefaultAggregation = (defaultAggregation: string) => (value: Value) => {
-  // Notes: keeps original object in order to be able to convert it into the "measure"
-  return Object.assign(value, {
-    aggregation: value.aggregation ?? defaultAggregation,
-  });
-};
+const withDefaultAggregation =
+  (defaultAggregation: string) => (targetColumn: StyledMeasureColumn) => {
+    const { column } = targetColumn;
+    const aggregation = ('aggregation' in column && column.aggregation) || defaultAggregation;
+    return {
+      ...targetColumn,
+      column: safeMerge(column, { aggregation }),
+    } as StyledMeasureColumn;
+  };
 
 // TODO: review Styled*Column types for x and y
 const translateScatterChartDataOptions = (
@@ -133,21 +134,21 @@ const translateScatterChartDataOptions = (
 ): ScatterChartDataOptionsInternal => {
   const { x, y, breakByPoint, breakByColor, size, seriesToColorMap } = scatter;
   return {
-    x: x && translateColumnToCategoryOrValue(x),
-    y: y && translateColumnToCategoryOrValue(y),
-    breakByPoint: breakByPoint && translateColumnToCategory(breakByPoint),
-    breakByColor: breakByColor && translateColumnToCategoryOrValue(breakByColor),
-    size: size && translateColumnToValue(size),
+    x: x && normalizeAnyColumn(x),
+    y: y && normalizeAnyColumn(y),
+    breakByPoint: breakByPoint && normalizeColumn(breakByPoint),
+    breakByColor: breakByColor && normalizeAnyColumn(breakByColor),
+    size: size && normalizeMeasureColumn(size),
     seriesToColorMap: seriesToColorMap,
-  } as ScatterChartDataOptionsInternal;
+  };
 };
 
 const translateAreamapDataOptions = (
   dataOptions: AreamapChartDataOptions,
 ): AreamapChartDataOptionsInternal => {
   return {
-    geo: dataOptions.geo && translateColumnToCategory(dataOptions.geo[0]),
-    color: dataOptions.color && translateColumnToValue(dataOptions.color[0]),
+    geo: dataOptions.geo && normalizeColumn(dataOptions.geo[0]),
+    color: dataOptions.color && normalizeMeasureColumn(dataOptions.color[0]),
   };
 };
 
@@ -155,77 +156,64 @@ export function getAttributes(
   dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
 ): Attribute[] {
-  let categories: Category[] = [];
+  let targetDataOptionKeys: string[] = [];
 
   if (isScatter(chartType)) {
-    categories = ['x', 'y', 'breakByPoint', 'breakByColor'].flatMap((key) => {
-      return dataOptions[key] && isCategory(dataOptions[key]) ? [dataOptions[key]] : [];
-    });
+    targetDataOptionKeys = ['x', 'y', 'breakByPoint', 'breakByColor'];
   } else if (isCartesian(chartType) || isCategorical(chartType) || isRange(chartType)) {
-    categories = ['x', 'breakBy'].flatMap((key) => {
-      return dataOptions[key] ?? [];
-    });
+    targetDataOptionKeys = ['x', 'breakBy'];
   } else if (isBoxplot(chartType)) {
-    categories = ['category', 'outliers'].flatMap((key) => {
-      return dataOptions[key] ? [dataOptions[key]] : [];
-    });
+    targetDataOptionKeys = ['category', 'outliers'];
   } else if (isAreamap(chartType)) {
-    categories = [(dataOptions as AreamapChartDataOptionsInternal).geo];
+    targetDataOptionKeys = ['geo'];
   } else if (isScattermap(chartType)) {
-    categories = ['locations'].flatMap((key) => {
-      return dataOptions[key] ?? [];
-    });
+    targetDataOptionKeys = ['locations'];
   }
 
-  return categories.map(translateCategoryToAttribute);
+  const targetColumns = targetDataOptionKeys
+    .flatMap<StyledColumn>((key) => dataOptions[key] ?? [])
+    .filter((dataOption) => !isMeasureColumn(dataOption));
+
+  return targetColumns.map(({ column: attribute }) => attribute as Attribute);
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export function getMeasures(
   dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
 ): Measure[] {
-  let values: Value[] = [];
+  let targetDataOptionKeys: string[] = [];
 
   if (isIndicator(chartType)) {
-    values = getIndicatorValues(dataOptions as IndicatorChartDataOptionsInternal);
+    targetDataOptionKeys = ['value', 'secondary', 'min', 'max'];
   } else if (isScatter(chartType)) {
-    values = ['x', 'y', 'breakByColor', 'size'].flatMap((key) => {
-      return dataOptions[key] && isValue(dataOptions[key]) ? [dataOptions[key]] : [];
-    });
-  } else if (isCartesian(chartType) || isCategorical(chartType)) {
-    values = (dataOptions as CartesianChartDataOptionsInternal).y;
+    targetDataOptionKeys = ['x', 'y', 'breakByColor', 'size'];
+  } else if (isCartesian(chartType) || isCategorical(chartType) || isRange(chartType)) {
+    targetDataOptionKeys = ['y'];
   } else if (isBoxplot(chartType)) {
-    values = ['boxMin', 'boxMedian', 'boxMax', 'whiskerMin', 'whiskerMax', 'outliersCount'].flatMap(
-      (key) => {
-        return dataOptions[key] ? [dataOptions[key]] : [];
-      },
-    );
+    targetDataOptionKeys = [
+      'boxMin',
+      'boxMedian',
+      'boxMax',
+      'whiskerMin',
+      'whiskerMax',
+      'outliersCount',
+    ];
   } else if (isAreamap(chartType)) {
-    const color = (dataOptions as AreamapChartDataOptionsInternal).color;
-    values = color ? [color] : [];
+    targetDataOptionKeys = ['color'];
   } else if (isScattermap(chartType)) {
-    values = ['size', 'colorBy', 'details'].flatMap((key) => {
-      return dataOptions[key] && isValue(dataOptions[key]) ? [dataOptions[key]] : [];
-    });
-  } else if (isRange(chartType)) {
-    values = (dataOptions as CartesianChartDataOptionsInternal).y;
+    targetDataOptionKeys = ['size', 'colorBy', 'details'];
   }
-  return values.map(translateValueToMeasure);
-}
 
-function getIndicatorValues(indicatorChartDataOptions: IndicatorChartDataOptionsInternal): Value[] {
-  const value = indicatorChartDataOptions.value?.[0];
-  const secondary = indicatorChartDataOptions.secondary?.[0];
-  const min = indicatorChartDataOptions.min?.[0];
-  const max = indicatorChartDataOptions.max?.[0];
+  const targetColumns = targetDataOptionKeys
+    .flatMap<StyledMeasureColumn>((key) => dataOptions[key] ?? [])
+    .filter(isMeasureColumn);
 
-  return [value, secondary, min, max].filter((item): item is Value => !!item);
+  return targetColumns.map(({ column: measure }) => measure as Measure);
 }
 
 export function translateTableDataOptions(dataOptions: TableDataOptions): TableDataOptionsInternal {
   return {
-    columns: dataOptions.columns.map(translateColumnToCategoryOrValue),
+    columns: dataOptions.columns.map(normalizeAnyColumn),
   };
 }
 
@@ -236,9 +224,9 @@ export function translatePivotTableDataOptions(
   dataOptions: PivotTableDataOptions,
 ): PivotTableDataOptionsInternal {
   return {
-    rows: dataOptions.rows?.map(translateColumnToCategory),
-    columns: dataOptions.columns?.map(translateColumnToCategory),
-    values: dataOptions.values?.map(translateColumnToValue),
+    rows: dataOptions.rows?.map(normalizeColumn),
+    columns: dataOptions.columns?.map(normalizeColumn),
+    values: dataOptions.values?.map(normalizeMeasureColumn),
     grandTotals: dataOptions.grandTotals,
   };
 }

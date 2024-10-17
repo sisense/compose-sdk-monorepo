@@ -18,9 +18,11 @@ describe('getScatterPlotOptions', () => {
     it('should have correct options when "size" data options selected', () => {
       const dataOptions = {
         size: {
-          name: 'size',
-          aggregation: 'count',
-          title: 'Size',
+          column: {
+            name: 'size',
+            aggregation: 'count',
+            title: 'Size',
+          },
         },
       };
       const options = getScatterPlotOptions(chartDesignOptions, dataOptions);
@@ -113,10 +115,12 @@ describe('getScatterPlotOptions', () => {
             },
           },
           {
-            y: { name: 'y', aggregation: 'sum', title: 'Y' },
-            x: { name: 'x', aggregation: 'sum', title: 'X' },
-            size: { name: 'size', aggregation: 'sum', title: 'Size' },
-            breakByColor: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            y: { column: { name: 'y', aggregation: 'sum', title: 'Y' } },
+            x: { column: { name: 'x', aggregation: 'sum', title: 'X' } },
+            size: { column: { name: 'size', aggregation: 'sum', title: 'Size' } },
+            breakByColor: {
+              column: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            },
           },
         );
 
@@ -142,10 +146,12 @@ describe('getScatterPlotOptions', () => {
             },
           },
           {
-            y: { name: 'y', title: 'Y' },
-            x: { name: 'x', aggregation: 'sum', title: 'X' },
-            size: { name: 'size', aggregation: 'sum', title: 'Size' },
-            breakByColor: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            y: { column: { name: 'y', title: 'Y', type: 'string' } },
+            x: { column: { name: 'x', aggregation: 'sum', title: 'X' } },
+            size: { column: { name: 'size', aggregation: 'sum', title: 'Size' } },
+            breakByColor: {
+              column: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            },
           },
         );
 
@@ -171,10 +177,12 @@ describe('getScatterPlotOptions', () => {
             },
           },
           {
-            y: { name: 'y', title: 'Y' },
-            x: { name: 'x', title: 'X' },
-            size: { name: 'size', aggregation: 'sum', title: 'Size' },
-            breakByColor: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            y: { column: { name: 'y', title: 'Y', type: 'string' } },
+            x: { column: { name: 'x', title: 'X', type: 'string' } },
+            size: { column: { name: 'size', aggregation: 'sum', title: 'Size' } },
+            breakByColor: {
+              column: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            },
           },
         );
 
@@ -200,10 +208,12 @@ describe('getScatterPlotOptions', () => {
             },
           },
           {
-            y: { name: 'y', title: 'Y' },
-            x: { name: 'x', title: 'X' },
-            size: { name: 'size', title: 'Size' },
-            breakByColor: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            y: { column: { name: 'y', title: 'Y', type: 'string' } },
+            x: { column: { name: 'x', title: 'X', type: 'string' } },
+            size: { column: { name: 'size', title: 'Size', type: 'string' } },
+            breakByColor: {
+              column: { name: 'breakByColor', aggregation: 'sum', title: 'Break By Color' },
+            },
           },
         );
 

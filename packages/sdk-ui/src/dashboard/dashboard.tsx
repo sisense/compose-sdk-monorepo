@@ -62,7 +62,11 @@ const CodeExample = () => {
 
 export default CodeExample;
  * ```
- * @group Dashboarding
+ *
+ * To learn more about this and related dashboard components,
+ * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
+ *
+ * @group Dashboards
  * @beta
  */
 export const Dashboard = asSisenseComponent({

@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
+import { CalculatedMeasureColumn, Column, MeasureColumn } from '@sisense/sdk-data';
 import union from 'lodash-es/union';
-import { Category, Value } from '../chart-data-options/types';
 import { DataColumnNamesMapping } from '../chart-data-options/validate-data-options';
 import { rownumColumnName } from '../chart-data-processor/table-creators';
 import {
@@ -16,8 +16,8 @@ import {
 // one measure value exists per row of unique attributes
 export const filterAndAggregateChartData = (
   sourceTable: DataTable,
-  attributes: Category[],
-  measures: Value[],
+  attributes: Column[],
+  measures: (MeasureColumn | CalculatedMeasureColumn)[],
   dataColumnNamesMapping: DataColumnNamesMapping = {},
   //filters?: IFilter,
   //locale?: Locale,
@@ -39,7 +39,7 @@ export const filterAndAggregateChartData = (
     // uses original data column name
     column: dataColumnNamesMapping[value.name] ?? value.name,
     title: value.name,
-    agg: value.aggregation ?? 'sum', // only simple aggregations
+    agg: (value as MeasureColumn).aggregation ?? 'sum', // only simple aggregations
   }));
 
   // add min value of row num, will be used to preserve original order

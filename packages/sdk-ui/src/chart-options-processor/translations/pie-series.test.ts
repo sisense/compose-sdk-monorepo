@@ -30,17 +30,21 @@ describe('formatCategoricalChartData', () => {
       breakBy: [],
       y: [
         {
-          name: 'y1',
-          aggregation: 'sum',
-          title: 'y1',
+          column: {
+            name: 'y1',
+            aggregation: 'sum',
+            title: 'y1',
+          },
           sortType: 'sortNone',
           color: '#a1a1a1',
           enabled: true,
         },
         {
-          name: 'y2',
-          aggregation: 'sum',
-          title: 'y2',
+          column: {
+            name: 'y2',
+            aggregation: 'sum',
+            title: 'y2',
+          },
           sortType: 'sortNone',
           color: '#b2b2b2',
           enabled: true,
@@ -88,12 +92,14 @@ describe('formatCategoricalChartData', () => {
       ],
     };
     const mockDataOptions: CategoricalChartDataOptionsInternal = {
-      breakBy: [createAttribute({ name: 'x1' })],
+      breakBy: [{ column: createAttribute({ name: 'x1' }) }],
       y: [
         {
-          name: 'y1',
-          aggregation: 'sum',
-          title: 'y1',
+          column: {
+            name: 'y1',
+            aggregation: 'sum',
+            title: 'y1',
+          },
           sortType: 'sortNone',
           color: '#d4d4d4',
         },

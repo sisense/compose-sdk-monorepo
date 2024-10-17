@@ -73,7 +73,7 @@ If not specified, the default value is `4`
 
 ### suggestionsWelcomeText
 
-> **suggestionsWelcomeText**?: `string` \| `false`
+> **suggestionsWelcomeText**?: `false` \| `string`
 
 The message text to show above the initial suggested questions in a chat session.
 
@@ -85,7 +85,7 @@ If not specified, a default message will be displayed.
 
 ### welcomeText
 
-> **welcomeText**?: `string` \| `false`
+> **welcomeText**?: `false` \| `string`
 
 The welcome text to show at the top of a chat session.
 

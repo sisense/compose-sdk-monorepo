@@ -4,7 +4,7 @@ title: ScatterChart
 
 # Function ScatterChart
 
-> **ScatterChart**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **ScatterChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 A React component displaying the distribution of two variables on an X-Axis, Y-Axis,
 and two additional fields of data that are shown as colored circles scattered across the chart.
@@ -37,6 +37,6 @@ Additional Scatter Chart examples:
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`
 
 Scatter Chart component

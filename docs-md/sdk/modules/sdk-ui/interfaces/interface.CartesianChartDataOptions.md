@@ -14,7 +14,7 @@ as well as a break-down by categories displayed on the Y-axis.
 
 ### breakBy
 
-> **breakBy**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md))[]
+> **breakBy**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) by which to break (group) the data represented in the chart.
 
@@ -25,7 +25,7 @@ and is automatically added to the chart's legend.
 
 ### category
 
-> **category**: ([`StyledColumn`](interface.StyledColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md))[]
+> **category**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) whose values are placed on the X-axis.
 
@@ -43,7 +43,7 @@ Optional mapping of each of the series to colors.
 
 ### value
 
-> **value**: ([`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md))[]
+> **value**: ([`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md))[]
 
 Measure columns (or measures) whose values are scaled to the Y-axis of the chart.
 

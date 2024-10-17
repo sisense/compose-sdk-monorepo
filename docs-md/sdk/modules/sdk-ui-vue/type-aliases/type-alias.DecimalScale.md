@@ -4,6 +4,6 @@ title: DecimalScale
 
 # Type alias DecimalScale
 
-> **DecimalScale**: `number` \| `"auto"`
+> **DecimalScale**: `"auto"` \| `number`
 
 The number of decimal places

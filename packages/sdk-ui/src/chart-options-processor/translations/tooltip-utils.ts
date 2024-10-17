@@ -1,13 +1,16 @@
 import { isNumber } from '@sisense/sdk-data';
-import { Category, Value, isValue } from '../../chart-data-options/types.js';
+import { StyledMeasureColumn, StyledColumn } from '../../chart-data-options/types.js';
 import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
 import type { SeriesChartType } from '@/types';
+import { isMeasureColumn } from '@/chart-data-options/utils.js';
 
-export const isXValueNumeric = (dataOptionX: Value | Category | undefined) =>
-  dataOptionX ? isValue(dataOptionX) || (dataOptionX.type && isNumber(dataOptionX.type)) : false;
+export const isXValueNumeric = (dataOptionX: StyledMeasureColumn | StyledColumn | undefined) =>
+  dataOptionX
+    ? isMeasureColumn(dataOptionX) || (dataOptionX.column.type && isNumber(dataOptionX.column.type))
+    : false;
 
 export const formatTooltipValue = (
-  dataOption: Value | Category | undefined,
+  dataOption: StyledMeasureColumn | StyledColumn | undefined,
   value: number | undefined,
   displayValue: string,
 ) => {
@@ -18,7 +21,7 @@ export const formatTooltipValue = (
 };
 
 export const formatTooltipXValue = (
-  dataOption: Value | Category | undefined,
+  dataOption: StyledMeasureColumn | StyledColumn | undefined,
   value: number | string | undefined,
   displayValue: string,
 ) => {
@@ -38,7 +41,7 @@ const percentSupportedSubChartTypes: SeriesChartType[] = [
   'scatter',
   'arearange',
 ];
-export function isTooltipPercentValueSupported(options: Value | undefined) {
+export function isTooltipPercentValueSupported(options: StyledMeasureColumn | undefined) {
   if (options?.chartType) {
     return percentSupportedSubChartTypes.includes(options.chartType);
   }

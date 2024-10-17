@@ -129,10 +129,7 @@ export const translation = {
       max: 'Max',
     },
   },
-  unsupportedFilter: {
-    title: 'Unsupported Filter',
-    message: 'Applied to the data query',
-  },
+  unsupportedFilterMessage: 'Unsupported Filter (applied to the data query)',
   commonFilter: {
     clearSelectionButton: 'Clear Selection',
     selectMenuItem: 'Select',

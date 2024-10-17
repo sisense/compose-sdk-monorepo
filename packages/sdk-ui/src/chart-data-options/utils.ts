@@ -1,3 +1,4 @@
+import { type JaqlElement } from '@/ai';
 import {
   Attribute,
   CalculatedMeasureColumn,
@@ -6,17 +7,9 @@ import {
   Measure,
   MeasureColumn,
   isDatetime,
+  DimensionalLevelAttribute,
 } from '@sisense/sdk-data';
-import isEmpty from 'lodash-es/isEmpty';
-import {
-  Category,
-  Value,
-  StyledColumn,
-  StyledMeasureColumn,
-  isMeasureColumn,
-  AnyColumn,
-  CategoryStyle,
-} from './types';
+import { StyledColumn, StyledMeasureColumn, AnyColumn, CategoryStyle, ValueStyle } from './types';
 
 type AnyObject = Record<string, any>;
 
@@ -30,15 +23,11 @@ type AnyObject = Record<string, any>;
  * @param sourceToAbsorb - The object whose properties will be copied as own properties.
  * @returns - A new object that combines the properties of the two input objects.
  */
-const safeMerge = (sourceToInherit: AnyObject, sourceToAbsorb: AnyObject): AnyObject => {
-  return Object.assign(Object.create(sourceToInherit), sourceToAbsorb) as AnyObject;
-};
-
-const safeUnmerge = (sourceWithInheritance: AnyObject) => {
-  return {
-    child: { ...sourceWithInheritance },
-    parent: Object.getPrototypeOf(sourceWithInheritance),
-  };
+export const safeMerge = <T extends AnyObject, S extends AnyObject>(
+  sourceToInherit: T,
+  sourceToAbsorb: S,
+): T & S => {
+  return Object.assign(Object.create(sourceToInherit), sourceToAbsorb) as T & S;
 };
 
 /**
@@ -59,114 +48,74 @@ export const safeCombine = <T extends AnyObject>(
   ) as T;
 };
 
-export const splitColumn = (c: StyledColumn | Column) => {
-  const isStyledColumn = 'column' in c;
-  let column: Column = c as Column;
-  let style: CategoryStyle | undefined;
-
-  if (isStyledColumn) {
-    const { column: extractedColumn, ...extractedStyle } = c;
-    column = extractedColumn;
-    if (!isEmpty(extractedStyle)) {
-      style = extractedStyle;
-    }
+export const splitColumn = <C extends AnyColumn>(targetColumn: C) => {
+  if (isStyledColumn(targetColumn)) {
+    const { column, ...style } = targetColumn;
+    return {
+      column: column,
+      style: style as CategoryStyle | ValueStyle,
+    };
   }
 
   return {
-    column,
-    style,
+    column: targetColumn,
+    style: {} as CategoryStyle | ValueStyle,
   };
 };
 
-export const translateColumnToCategory = (c: StyledColumn | Column): Category => {
-  const { column, style: baseStyle } = splitColumn(c);
+/**
+ * Checks if the given argument is a measure column.
+ *
+ * @param arg
+ * @internal
+ */
+export function isMeasureColumn(
+  arg: AnyColumn,
+): arg is MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn {
+  const column = 'column' in arg ? arg.column : arg;
+  const hasAggregation = 'aggregation' in column && !!column.aggregation;
+  const hasContext = 'context' in column && !!(column as CalculatedMeasureColumn).context;
+  const hasFormula = 'formula' in column && !!(column as JaqlElement).formula;
 
-  const levelDimensionDateFormat = isDatetime(column.type)
-    ? (column as LevelAttribute)?.getFormat?.()
-    : undefined;
-  const style = { ...baseStyle, dateFormat: baseStyle?.dateFormat || levelDimensionDateFormat };
+  if (hasAggregation || hasContext || hasFormula) {
+    return true;
+  }
+  /**
+   * Note: implicitly verifies that the column is a "measure" by checking that it is not
+   * an "attribute" related column with a mandatory "type" property.
+   */
+  return !('type' in column);
+}
 
-  return safeMerge(column, style) as Category;
+export const getDataOptionTitle = ({ column }: StyledColumn | StyledMeasureColumn) => {
+  return ('title' in column && column.title) || column.name;
 };
 
-export const translateColumnToValue = (
-  c: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn,
-): Value => {
-  const isStyledColumn = 'column' in c;
-  const column = isStyledColumn ? c.column : c;
-  const style = isStyledColumn ? c : {};
-
-  const value = safeMerge(column, {
-    ...style,
-    title: (c as Value).title ?? column.title ?? column.name,
-    enabled: true,
-  }) as Value;
-
-  value.aggregation = value.aggregation || 'sum';
-
-  return value;
+export const getDataOptionGranularity = ({ column, granularity }: StyledColumn) => {
+  return granularity || (column as DimensionalLevelAttribute).granularity;
 };
 
-export const translateColumnToCategoryOrValue = (value: AnyColumn) => {
-  return isMeasureColumn(value) ? translateColumnToValue(value) : translateColumnToCategory(value);
-};
-
-export const translateMeasureToValue = (measure: Measure) => measure as unknown as Value;
-export const translateAttributeToCategory = (attribute: Attribute) => attribute as Category;
-
-export const translateValueToMeasure = (value: Value) => value as unknown as Measure;
-export const translateCategoryToAttribute = (category: Category) => category as Attribute;
-
-export const getDataOptionTitle = (option: Category | Value) => {
-  return (option as Value).title ?? option.name;
-};
-
-export const translateColumnToAttribure = (c: StyledColumn | Column) => {
-  return translateCategoryToAttribute(translateColumnToCategory(c));
+export const translateColumnToAttribute = (c: Column | StyledColumn) => {
+  const { column: attribute } = splitColumn(c);
+  return attribute as Attribute;
 };
 export const translateColumnToMeasure = (
   c: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn,
 ) => {
-  return translateValueToMeasure(translateColumnToValue(c));
-};
-
-export const translateCategoryOrValueToColumn = <
-  Source extends Category | Value,
-  Target extends AnyColumn,
->(
-  option: Source,
-) => {
-  const { child: style, parent: column } = safeUnmerge(option);
-
-  if (isEmpty(style)) {
-    return column as Target;
-  }
-
-  return {
-    ...style,
-    column,
-  } as Target;
-};
-
-export const translateCategoryToColumn = (option: Category) => {
-  return translateCategoryOrValueToColumn<Category, Column | StyledColumn>(option);
-};
-
-export const translateValueToColumn = (option: Value) => {
-  return translateCategoryOrValueToColumn<
-    Value,
-    MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn
-  >(option);
+  const { column: measure } = splitColumn(c);
+  return measure as Measure;
 };
 
 /**
- * Checks if category is a StyledColumns.
+ * Checks if column is a StyledColumns.
  *
- * @param category - The category to check.
+ * @param category - The target column to check.
  * @internal
  */
-export function isStyledColumn(category: Column | StyledColumn): category is StyledColumn {
-  return 'column' in category && category.column !== undefined;
+export function isStyledColumn(
+  targetColumn: AnyColumn,
+): targetColumn is StyledColumn | StyledMeasureColumn {
+  return 'column' in targetColumn && targetColumn.column !== undefined;
 }
 
 /**
@@ -177,4 +126,42 @@ export function isStyledColumn(category: Column | StyledColumn): category is Sty
  */
 export function isCategoryStyle(category: Column | CategoryStyle): category is CategoryStyle {
   return !('column' in category);
+}
+
+export function normalizeColumn(targetColumn: Column | StyledColumn): StyledColumn {
+  const { column, style } = splitColumn(targetColumn) as { column: Column; style: CategoryStyle };
+
+  const levelDimensionDateFormat = isDatetime(column.type)
+    ? (column as LevelAttribute)?.getFormat?.()
+    : undefined;
+
+  return {
+    ...style,
+    dateFormat: style.dateFormat || levelDimensionDateFormat,
+    column,
+  };
+}
+
+export function normalizeMeasureColumn(
+  targetColumn: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn,
+): StyledMeasureColumn {
+  const { column, style } = splitColumn(targetColumn) as {
+    column: MeasureColumn | CalculatedMeasureColumn;
+    style: ValueStyle;
+  };
+
+  return {
+    ...style,
+    column: safeMerge(column, {
+      title: column.title ?? column.name,
+      aggregation: (column as MeasureColumn).aggregation ?? 'sum',
+    }) as MeasureColumn,
+    enabled: true,
+  };
+}
+
+export function normalizeAnyColumn(targetColumn: AnyColumn) {
+  return isMeasureColumn(targetColumn)
+    ? normalizeMeasureColumn(targetColumn)
+    : normalizeColumn(targetColumn);
 }

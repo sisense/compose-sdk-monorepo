@@ -130,10 +130,7 @@ export const translation: TranslationDictionary = {
       max: 'Максимум',
     },
   },
-  unsupportedFilter: {
-    title: 'Непідтримуваний Фільтр',
-    message: 'Застосовано до запиту даних',
-  },
+  unsupportedFilterMessage: 'Непідтримуваний Фільтр (застосовано до запиту даних)',
   commonFilter: {
     clearSelectionButton: 'Очистити виділення',
     selectMenuItem: 'Вибрати',

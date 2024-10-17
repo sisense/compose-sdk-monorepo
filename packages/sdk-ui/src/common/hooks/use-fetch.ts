@@ -20,7 +20,7 @@ export type RequestConfig = {
  * The result of the `useFetch` hook.
  * Return value of the `useQuery` hook from `@tanstack/react-query`.
  *
- * @link https://tanstack.com/query/v4/docs/framework/react/reference/useQuery
+ * @see https://tanstack.com/query/v4/docs/framework/react/reference/useQuery
  * @template TData - The type of the data returned by the fetch request
  * @template TError - The type of the error returned by the fetch request
  */
@@ -35,16 +35,22 @@ export type UseQueryResult<TData, TError> = TanstackUseQueryResult<TData, TError
     method: 'POST',
   });
  ```
- * @param path - The endpoint path to fetch data from. This should be a relative path like '/api/v1/endpoint'.
- * @param init - The request init object
- * @param options - The additional request options
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  * @group Fusion Embed
  */
 export const useFetch = withTracking('useFetch')(
   <TData = unknown, TError = unknown>(
+    /**
+     * The endpoint path to fetch data from. This should be a relative path like '/api/v1/endpoint'
+     */
     path: string,
+    /**
+     * The request init object
+     */
     init?: RequestInit,
+    /**
+     * The additional request options
+     */
     options?: {
       requestConfig?: RequestConfig;
       enabled?: boolean;

@@ -28,6 +28,10 @@ import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-tr
 
   export default CodeExample;
  * ```
+ *
+ * To learn more about this and related dashboard components,
+ * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
+ *
  * @group Fusion Embed
  * @fusionEmbed
  * @beta

@@ -5,9 +5,7 @@ let baseConfig = {
   // "declaration" and "declarationMap" in tsconfig.json must be set to true
   entryPointStrategy: 'packages',
   plugin: ['typedoc-plugin-vue', './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs'],
-  readme: './README.md',
-  // Media directory that will be copied to the output file
-  media: './media',
+  readme: 'none',
   out: 'docs',
 };
 
@@ -32,11 +30,17 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
     hideBreadcrumbs: true,
     hideInPageTOC: true,
     titleTemplate: '{kind} {name}',
-    readme: './README.md',
+    readme: 'none',
     out: 'docs-md/sdk/modules',
     treatWarningsAsErrors: true,
     logLevel: 'Info',
-    hiddenFunctionParameters: ['deprecatedLegacyContext', 'guid', 'deactivatedMembers', 'backgroundFilter', 'excludeMembers'],
+    hiddenFunctionParameters: [
+      'deprecatedLegacyContext',
+      'guid',
+      'deactivatedMembers',
+      'backgroundFilter',
+      'excludeMembers',
+    ],
   };
 }
 

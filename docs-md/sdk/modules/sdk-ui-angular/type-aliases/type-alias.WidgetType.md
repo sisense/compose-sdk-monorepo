@@ -4,6 +4,6 @@ title: WidgetType
 
 # Type alias WidgetType
 
-> **WidgetType**: [`CartesianWidgetType`](type-alias.CartesianWidgetType.md) \| [`CategoricalWidgetType`](type-alias.CategoricalWidgetType.md) \| `"chart/scatter"` \| `"indicator"` \| [`TabularWidgetType`](type-alias.TabularWidgetType.md) \| `"chart/boxplot"` \| `"map/scatter"` \| `"map/area"` \| [`TextWidgetType`](../../sdk-ui/type-aliases/type-alias.TextWidgetType.md) \| `"plugin"`
+> **WidgetType**: `"chart/boxplot"` \| `"chart/scatter"` \| `"indicator"` \| `"map/area"` \| `"map/scatter"` \| `"plugin"` \| [`CartesianWidgetType`](type-alias.CartesianWidgetType.md) \| [`CategoricalWidgetType`](type-alias.CategoricalWidgetType.md) \| [`TabularWidgetType`](type-alias.TabularWidgetType.md) \| [`TextWidgetType`](../../sdk-ui/type-aliases/type-alias.TextWidgetType.md)
 
 The type of a widget on a dashboard.

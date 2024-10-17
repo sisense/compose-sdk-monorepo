@@ -80,7 +80,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * ```
  * <img src="media://angular-chart-widget-example.png" width="800px" />
  *
- * @group Dashboarding
+ * @group Dashboards
  */
 @Component({
   selector: 'csdk-chart-widget',

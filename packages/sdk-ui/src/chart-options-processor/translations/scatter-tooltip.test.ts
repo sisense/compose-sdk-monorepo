@@ -27,7 +27,9 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       x: {
-        name: 'Total Costs',
+        column: {
+          name: 'Total Costs',
+        },
       },
     } as ScatterChartDataOptionsInternal;
 
@@ -53,10 +55,14 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       x: {
-        name: 'Total Costs',
+        column: {
+          name: 'Total Costs',
+        },
       },
       y: {
-        name: 'Category',
+        column: {
+          name: 'Category',
+        },
       },
     } as ScatterChartDataOptionsInternal;
 
@@ -83,7 +89,7 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       y: {
-        name: 'Category',
+        column: { name: 'Category' },
       },
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
@@ -109,13 +115,13 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       x: {
-        name: 'Total Costs',
+        column: { name: 'Total Costs' },
       },
       y: {
-        name: 'Category',
+        column: { name: 'Category' },
       },
       breakByPoint: {
-        name: 'Brand',
+        column: { name: 'Brand' },
       },
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
@@ -142,16 +148,16 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       x: {
-        name: 'Total Costs',
+        column: { name: 'Total Costs' },
       },
       y: {
-        name: 'Category',
+        column: { name: 'Category' },
       },
       breakByPoint: {
-        name: 'Brand',
+        column: { name: 'Brand' },
       },
       size: {
-        name: 'Total Costs',
+        column: { name: 'Total Costs' },
       },
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
@@ -179,19 +185,19 @@ describe('Scatter tooltip', () => {
 
     const dataOptions: ScatterChartDataOptionsInternal = {
       x: {
-        name: 'Total Costs',
+        column: { name: 'Total Costs' },
       },
       y: {
-        name: 'Category',
+        column: { name: 'Category' },
       },
       breakByPoint: {
-        name: 'Brand',
+        column: { name: 'Brand' },
       },
       breakByColor: {
-        name: 'Brand',
+        column: { name: 'Brand' },
       },
       size: {
-        name: 'Total Costs',
+        column: { name: 'Total Costs' },
       },
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
@@ -217,7 +223,7 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       breakByPoint: {
-        name: 'Brand',
+        column: { name: 'Brand' },
       },
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
@@ -243,7 +249,7 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       breakByColor: {
-        name: 'Brand',
+        column: { name: 'Brand' },
       },
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
@@ -269,7 +275,7 @@ describe('Scatter tooltip', () => {
 
     const dataOptions = {
       size: {
-        name: 'Total Costs',
+        column: { name: 'Total Costs' },
       },
     } as ScatterChartDataOptionsInternal;
     const tooltip = tooltipFormatter(tooltipContext, dataOptions);
@@ -317,26 +323,34 @@ it('Format numbers when x-axis, y-axis, break by / point, color, and size', () =
 
   const dataOptions: ScatterChartDataOptionsInternal = {
     x: {
-      name: 'x',
-      type: 'number',
+      column: {
+        name: 'x',
+        type: 'number',
+      },
       numberFormatConfig: format1,
     },
     y: {
-      name: 'y',
+      column: { name: 'y' },
       numberFormatConfig: format2,
     },
     breakByPoint: {
-      name: 'p',
-      type: 'number',
+      column: {
+        name: 'p',
+        type: 'number',
+      },
       numberFormatConfig: format3,
     },
     breakByColor: {
-      name: 'c',
-      type: 'number',
+      column: {
+        name: 'c',
+        type: 'number',
+      },
       numberFormatConfig: format3,
     },
     size: {
-      name: 'x',
+      column: {
+        name: 'x',
+      },
       numberFormatConfig: format3,
     },
   } as ScatterChartDataOptionsInternal;

@@ -20,9 +20,9 @@ export function signatureMemberIdentifier(
     md.push('set ');
   }
 
-  if (signature.parent && signature.parent.flags?.length > 0) {
-    md.push(signature.parent.flags.map((flag) => `\`${flag.toLowerCase()}\``).join(' ') + ' ');
-  }
+  // if (signature.parent && signature.parent.flags?.length > 0) {
+  //   md.push(signature.parent.flags.map((flag) => `\`${flag.toLowerCase()}\``).join(' ') + ' ');
+  // }
 
   if (!['__call', '__type'].includes(signature.name)) {
     md.push(bold(escapeChars(signature.name)));

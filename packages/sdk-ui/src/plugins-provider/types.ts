@@ -7,10 +7,10 @@ import { GenericDataOptions } from '@/types';
  *
  * @alpha
  */
-export interface PluginComponentProps {
+export interface PluginComponentProps<DataOptions = GenericDataOptions, StyleOptions = any> {
   dataSource?: DataSource;
-  dataOptions: GenericDataOptions;
-  styleOptions: any;
+  dataOptions: DataOptions;
+  styleOptions: StyleOptions;
   filters?: Filter[];
   highlights?: Filter[];
 }
@@ -21,4 +21,6 @@ export interface PluginComponentProps {
  *
  * @alpha
  */
-export type PluginComponent = (props: PluginComponentProps) => ReactNode;
+export type PluginComponent<DataOptions = GenericDataOptions, StyleOptions = any> = (
+  props: PluginComponentProps<DataOptions, StyleOptions>,
+) => ReactNode;

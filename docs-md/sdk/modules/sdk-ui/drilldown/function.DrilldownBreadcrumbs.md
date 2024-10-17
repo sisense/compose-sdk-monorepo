@@ -4,7 +4,7 @@ title: DrilldownBreadcrumbs
 
 # Function DrilldownBreadcrumbs
 
-> **DrilldownBreadcrumbs**(`props`): `null` \| `ReactElement`\< `any`, `any` \>
+> **DrilldownBreadcrumbs**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 Drilldown breadcrumbs component
 
@@ -16,4 +16,4 @@ Drilldown breadcrumbs component
 
 ## Returns
 
-`null` \| `ReactElement`\< `any`, `any` \>
+`ReactElement`\< `any`, `any` \> \| `null`

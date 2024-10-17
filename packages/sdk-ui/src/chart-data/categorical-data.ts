@@ -1,7 +1,6 @@
 import {
   CategoricalChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
-  Value,
 } from '../chart-data-options/types';
 import { cartesianData } from './cartesian-data';
 import { DataTable } from '../chart-data-processor/table-processor';
@@ -16,11 +15,11 @@ import { isNumber } from '@sisense/sdk-data';
 export const validateCategoricalChartDataOptions = (
   chartDataOptions: CategoricalChartDataOptionsInternal,
 ): CategoricalChartDataOptionsInternal => {
-  const y = chartDataOptions.y.filter((value: Value) => isEnabled(value.enabled));
+  const y = chartDataOptions.y.filter(({ enabled }) => isEnabled(enabled));
 
   // break by series column only when there is one y column
-  const breakByChart = y.length === 1 && chartDataOptions.breakBy.length > 0;
-  const breakBy = breakByChart ? chartDataOptions.breakBy : [];
+  const isBreakByAllowed = y.length === 1 && chartDataOptions.breakBy.length > 0;
+  const breakBy = isBreakByAllowed ? chartDataOptions.breakBy : [];
 
   return {
     ...chartDataOptions,
@@ -30,28 +29,29 @@ export const validateCategoricalChartDataOptions = (
 };
 
 export const categoricalData = (
-  chartDataOptions: CategoricalChartDataOptionsInternal,
-  dataTable: DataTable, // 	chartSourceData: ChartSource,
+  dataOptions: CategoricalChartDataOptionsInternal,
+  dataTable: DataTable,
 ): CategoricalChartData => {
   const cartesianChartDataOptions = {
-    ...chartDataOptions,
-    x: chartDataOptions.breakBy,
+    ...dataOptions,
+    x: dataOptions.breakBy,
     breakBy: [],
   } as CartesianChartDataOptionsInternal;
   let cartesianChartData = cartesianData(cartesianChartDataOptions, dataTable);
-
   // maybe format break By values
-  const breakByHasNumberFormatConfig = chartDataOptions.breakBy.some(
-    (s) => isNumber(s.type) && s?.numberFormatConfig,
+  const breakByHasNumberFormatConfig = dataOptions.breakBy.some(
+    ({ column: { type }, numberFormatConfig }) => isNumber(type) && numberFormatConfig,
   );
   if (breakByHasNumberFormatConfig) {
     const xValues = cartesianChartData.xValues.map((xValue) => {
       const formattedXValues: string[] = [];
-      chartDataOptions.breakBy.forEach((breakBy, index) => {
-        const numberFormatConfig = getCompleteNumberFormatConfig(breakBy?.numberFormatConfig);
+      dataOptions.breakBy.forEach(({ column: { type }, numberFormatConfig }, index) => {
+        const completeNumberFormatConfig = getCompleteNumberFormatConfig(numberFormatConfig);
         const value = xValue.xValues[index];
-        if (isNumber(breakBy.type)) {
-          formattedXValues.push(applyFormatPlainText(numberFormatConfig, parseFloat(value)));
+        if (isNumber(type)) {
+          formattedXValues.push(
+            applyFormatPlainText(completeNumberFormatConfig, parseFloat(value)),
+          );
         } else {
           formattedXValues.push(xValue.xValues[index]);
         }

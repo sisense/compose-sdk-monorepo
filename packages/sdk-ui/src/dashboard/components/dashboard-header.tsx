@@ -4,12 +4,14 @@ import { useThemeContext } from '@/theme-provider';
 import { getDividerStyle } from '@/dashboard/utils';
 import { DASHBOARD_DIVIDER_COLOR, DASHBOARD_DIVIDER_WIDTH } from '@/dashboard/constants';
 
+export const DASHBOARD_HEADER_HEIGHT = 48;
+
 const DashboardHeaderContainer = styled.div<{
   background: string;
   color: string;
   font: string;
 }>`
-  height: 48px;
+  height: ${DASHBOARD_HEADER_HEIGHT}px;
   font-family: ${({ font }) => font};
   background-color: ${({ background }) => background};
   color: ${({ color }) => color};

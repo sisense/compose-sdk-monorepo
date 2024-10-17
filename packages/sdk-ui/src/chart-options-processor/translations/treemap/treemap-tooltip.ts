@@ -5,6 +5,7 @@ import { colorChineseSilver, colorWhite } from '../../../chart-data-options/colo
 import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './treemap-tooltip.scss';
+import { getDataOptionTitle } from '@/chart-data-options/utils';
 
 type TooltipFormatterOptions = {
   displayTotalContribution: boolean;
@@ -80,7 +81,7 @@ export function treemapTooltipFormatter(
     chartDataOptions.y?.[0]?.numberFormatConfig,
   );
   const isContributionMode = designOptions?.tooltip?.mode === 'contribution';
-  const valueTitle = chartDataOptions.y?.[0]?.title ?? chartDataOptions.y?.[0]?.name;
+  const valueTitle = getDataOptionTitle(chartDataOptions.y?.[0]);
   const color = context.color as string;
 
   let rootValue = 0;

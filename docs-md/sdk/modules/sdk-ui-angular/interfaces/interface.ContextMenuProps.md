@@ -40,6 +40,6 @@ Menu item sections
 
 #### position
 
-> **position**?: `null` \| [`MenuPosition`](../type-aliases/type-alias.MenuPosition.md)
+> **position**?: [`MenuPosition`](../type-aliases/type-alias.MenuPosition.md) \| `null`
 
 Context menu position
