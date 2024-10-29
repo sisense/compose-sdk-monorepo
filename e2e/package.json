@@ -14,8 +14,7 @@
     "test:ct:debug": "playwright test -c playwright-ct.config.ts --project=chromium --debug",
     "test:visual": "./scripts/start-servers.sh ./scripts/run-under-docker.sh yarn run playwright test -c playwright-visual-tests.config.ts --project chromium",
     "test:visual:ui": "yarn run test:visual --ui --ui-port=5400 --ui-host=0.0.0.0",
-    "test:visual:update": "yarn test:visual:clean && yarn run test:visual --update-snapshots",
-    "test:visual:clean": "find . -type d -name '__screenshots__' -print0 | xargs -0r rm -r",
+    "test:visual:update": "yarn run test:visual --update-snapshots",
     "test:visual:report": "yarn playwright show-report --host localhost --port 5400"
   },
   "dependencies": {

@@ -102,6 +102,15 @@ export class AreamapChartComponent {
   styleOptions: AreamapChartProps['styleOptions'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!AreamapChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: AreamapChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.onDataPointClick}
    *
    * @category Callbacks

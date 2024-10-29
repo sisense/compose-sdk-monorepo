@@ -1,6 +1,7 @@
 import { DashboardStyleOptions, WidgetsOptions, WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 import { DataSource, Filter } from '@sisense/sdk-data';
+import { DashboardChangeAction } from '@/dashboard/dashboard';
 
 export type { DashboardStyleOptions, WidgetsPanelColumnLayout } from '@/models';
 
@@ -12,6 +13,17 @@ export interface DashboardByIdProps {
    * The OID of the dashboard to render.
    */
   dashboardOid: string;
+  /**
+   * Boolean flag indicating whether changes to the embedded dashboard should be saved to the dashboard in Fusion.
+   *
+   * If not specified, the default value is `false`.
+   *
+   * Limitations:
+   * - WAT authentication does not support persistence.
+   * - As an alpha feature, currently only changes to dashboard filters are persisted.
+   * @internal
+   */
+  persist?: boolean;
 }
 
 /**
@@ -78,6 +90,12 @@ export interface DashboardProps {
   widgetsOptions?: WidgetsOptions;
   /** The style options for the dashboard */
   styleOptions?: DashboardStyleOptions;
+  /**
+   * Callback to receive changes
+   *
+   * @internal
+   */
+  onChange?: (action: DashboardChangeAction) => void;
 }
 
 /**

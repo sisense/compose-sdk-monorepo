@@ -93,7 +93,7 @@ export abstract class DimensionalElement implements Element {
  */
 export function normalizeName(name: string): string {
   // Remove all invalid characters
-  let normalizedName = name.replace(/[^a-zA-Z0-9_]/g, '');
+  let normalizedName = name.replace(/[^a-zA-Z0-9_.]/g, '').replace('.', '_');
 
   // Prefix with '_' if it starts with a number
   const firstChar = normalizedName.charAt(0);

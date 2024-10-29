@@ -2,12 +2,12 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { CHAT_UNAVAILABLE_ERROR, FETCH_HISTORY_ERROR } from './api/errors';
 import { Chat, ChatResponse, QueryRecommendation } from './api/types';
 import ChatBox from './chat-box';
 import { AiTestWrapper } from './__mocks__';
 import { chat, contexts } from './__mocks__/data';
 import { setTimeout } from 'timers/promises';
+import { translation } from '../translation/resources/en';
 
 beforeEach(() => {
   server.use(
@@ -127,7 +127,9 @@ it('renders the correct error message when fetching history fails', async () => 
     </AiTestWrapper>,
   );
 
-  await waitFor(() => expect(screen.getByText(FETCH_HISTORY_ERROR)).toBeInTheDocument());
+  await waitFor(() =>
+    expect(screen.getByText(translation.ai.errors.fetchHistory)).toBeInTheDocument(),
+  );
 });
 
 it('renders the error container when chat is unavailable', async () => {
@@ -142,7 +144,9 @@ it('renders the error container when chat is unavailable', async () => {
     </AiTestWrapper>,
   );
 
-  await waitFor(() => expect(screen.getByText(CHAT_UNAVAILABLE_ERROR)).toBeInTheDocument());
+  await waitFor(() =>
+    expect(screen.getByText(translation.ai.errors.chatUnavailable)).toBeInTheDocument(),
+  );
 
   // input should not be available
   expect(screen.queryByLabelText('chat input')).toBeNull();

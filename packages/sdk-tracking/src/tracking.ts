@@ -19,7 +19,7 @@ export const trackProductEvent = (
     direct: true,
     ...details,
   };
-  if (isDebugMode) {
+  if (isDebugMode && (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')) {
     console.debug('DEBUG: event payload to send', payload);
     return Promise.resolve();
   }

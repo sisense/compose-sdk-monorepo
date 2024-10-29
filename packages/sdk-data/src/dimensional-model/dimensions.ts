@@ -8,7 +8,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Attribute, LevelAttribute, Dimension, DateDimension } from './interfaces.js';
 
-import { Sort, DateLevels, MetadataTypes } from './types.js';
+import { Sort, DateLevels, MetadataTypes, JaqlDataSource } from './types.js';
 
 import {
   DimensionalAttribute,
@@ -62,8 +62,9 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
     type?: string,
     desc?: string,
     sort?: Sort,
+    dataSource?: JaqlDataSource,
   ) {
-    super(name, type || MetadataTypes.Dimension, desc);
+    super(name, type || MetadataTypes.Dimension, desc, dataSource);
 
     this._sort = sort || Sort.None;
     this._expression = expression;
@@ -168,6 +169,7 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
       this.type,
       this.description,
       sort,
+      this.dataSource,
     );
   }
 
@@ -229,8 +231,14 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
  * @internal
  */
 export class DimensionalDateDimension extends DimensionalDimension implements DateDimension {
-  constructor(name: string, expression: string, desc?: string, sort?: Sort) {
-    super(name, expression, [], [], MetadataTypes.DateDimension, desc, sort);
+  constructor(
+    name: string,
+    expression: string,
+    desc?: string,
+    sort?: Sort,
+    dataSource?: JaqlDataSource,
+  ) {
+    super(name, expression, [], [], MetadataTypes.DateDimension, desc, sort, dataSource);
 
     this.defaultLevel = DateLevels.Years;
     this.Years = new DimensionalLevelAttribute(
@@ -238,60 +246,90 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
       expression,
       DateLevels.Years,
       'yyyy',
+      desc,
+      sort,
+      dataSource,
     );
     this.Quarters = new DimensionalLevelAttribute(
       DateLevels.Quarters,
       expression,
       DateLevels.Quarters,
       'Q yyyy',
+      desc,
+      sort,
+      dataSource,
     );
     this.Months = new DimensionalLevelAttribute(
       DateLevels.Months,
       expression,
       DateLevels.Months,
       'yyyy-MM',
+      desc,
+      sort,
+      dataSource,
     );
     this.Weeks = new DimensionalLevelAttribute(
       DateLevels.Weeks,
       expression,
       DateLevels.Weeks,
       'ww yyyy',
+      desc,
+      sort,
+      dataSource,
     );
     this.Days = new DimensionalLevelAttribute(
       DateLevels.Days,
       expression,
       DateLevels.Days,
       'yyyy-MM-dd',
+      desc,
+      sort,
+      dataSource,
     );
     this.Hours = new DimensionalLevelAttribute(
       DateLevels.Hours,
       expression,
       DateLevels.Hours,
       'yyyy-MM-dd HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
     this.MinutesRoundTo30 = new DimensionalLevelAttribute(
       DateLevels.MinutesRoundTo30,
       expression,
       DateLevels.MinutesRoundTo30,
       'yyyy-MM-dd HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
     this.MinutesRoundTo15 = new DimensionalLevelAttribute(
       DateLevels.MinutesRoundTo15,
       expression,
       DateLevels.MinutesRoundTo15,
       'yyyy-MM-dd HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
     this.Minutes = new DimensionalLevelAttribute(
       DateLevels.Minutes,
       expression,
       DateLevels.Minutes,
       'yyyy-MM-dd HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
     this.Seconds = new DimensionalLevelAttribute(
       DateLevels.Seconds,
       expression,
       DateLevels.Seconds,
       'yyyy-MM-dd HH:mm:ss',
+      desc,
+      sort,
+      dataSource,
     );
 
     this.AggHours = new DimensionalLevelAttribute(
@@ -299,24 +337,36 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
       expression,
       DateLevels.AggHours,
       'HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
     this.AggMinutesRoundTo30 = new DimensionalLevelAttribute(
       DateLevels.AggMinutesRoundTo30,
       expression,
       DateLevels.AggMinutesRoundTo30,
       'HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
     this.AggMinutesRoundTo15 = new DimensionalLevelAttribute(
       DateLevels.AggMinutesRoundTo15,
       expression,
       DateLevels.AggMinutesRoundTo15,
       'HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
     this.AggMinutesRoundTo1 = new DimensionalLevelAttribute(
       DateLevels.AggMinutesRoundTo1,
       expression,
       DateLevels.AggMinutesRoundTo1,
       'HH:mm',
+      desc,
+      sort,
+      dataSource,
     );
 
     this.setAttributes([
@@ -440,7 +490,13 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
    * @returns An instance representing the sorted {@link Dimension} of this instance
    */
   sort(sort: Sort): Attribute {
-    return new DimensionalDateDimension(this.name, this.expression, this.description, sort);
+    return new DimensionalDateDimension(
+      this.name,
+      this.expression,
+      this.description,
+      sort,
+      this.dataSource,
+    );
   }
 
   /**
@@ -484,10 +540,12 @@ export function createDimension(json: any): Dimension {
   const description = json.desc || json.description;
   const expression = json.expression || json.dim;
   const type = DimensionalDimension.parseType(json.dimtype || json.type);
+  const sort = json.sort;
+  const dataSource = json.dataSource;
 
   // date dimension
   if (type == MetadataTypes.DateDimension) {
-    return new DimensionalDateDimension(name, expression, description);
+    return new DimensionalDateDimension(name, expression, description, sort, dataSource);
   }
 
   // attributes
@@ -500,13 +558,22 @@ export function createDimension(json: any): Dimension {
       for (let i = 0; i < json.attributes.length; i++) {
         att = json.attributes[i];
 
-        atts.push(new DimensionalAttribute(att.name, att.expression, att.type, att.description));
+        atts.push(
+          new DimensionalAttribute(
+            att.name,
+            att.expression,
+            att.type,
+            att.description,
+            att.sort,
+            att.dataSource,
+          ),
+        );
       }
     }
 
     // default attribute
     else if (expression) {
-      atts.push(new DimensionalAttribute(name, expression, type, description));
+      atts.push(new DimensionalAttribute(name, expression, type, description, sort, dataSource));
     }
   }
 
@@ -520,7 +587,16 @@ export function createDimension(json: any): Dimension {
     }
   }
 
-  const d = new DimensionalDimension(name, expression, atts, dims, type, description);
+  const d = new DimensionalDimension(
+    name,
+    expression,
+    atts,
+    dims,
+    type,
+    description,
+    sort,
+    dataSource,
+  );
 
   if (json.defaultAttribute) {
     d.defaultAttribute = atts.find((a) => a.name === json.defaultAttribute);
@@ -544,5 +620,7 @@ export function createDateDimension(json: any): DateDimension {
   const name = json.name || json.title;
   const expression = json.expression || json.dim;
   const description = json.desc || json.description;
-  return new DimensionalDateDimension(name, expression, description);
+  const sort = json.sort;
+  const dataSource = json.dataSource;
+  return new DimensionalDateDimension(name, expression, description, sort, dataSource);
 }

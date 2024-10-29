@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { RestApi, useGetApi } from '../api/rest-api';
 import { DashboardDto } from '../api/types/dashboard-dto';
 import { WidgetDto } from './types';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Fetches a Widget DTO model and, optionally, a Dashboard DTO model.
@@ -67,7 +68,7 @@ export const useFetchWidgetDtoModel = ({
     fetchWidgetDtoModel({ widgetOid, dashboardOid, includeDashboard, api })
       .then(({ widget, dashboard }) => {
         if (!widget) {
-          throw new Error(`Widget with oid ${widgetOid} empty response`);
+          throw new TranslatableError('errors.widgetEmptyResponse', { widgetOid });
         }
         setFetchedDtoModelsWidget({
           widget,

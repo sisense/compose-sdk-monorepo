@@ -2,6 +2,7 @@ import ThumbsDownIcon from '@/ai/icons/thumbs-down-icon';
 import Tooltip from '@/ai/common/tooltip';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import IconButton from '@/ai/common/icon-button';
+import { useTranslation } from 'react-i18next';
 
 type ThumbsDownButtonProps = {
   onClick?: () => void;
@@ -10,9 +11,10 @@ type ThumbsDownButtonProps = {
 
 export default function ThumbsDownButton({ onClick, disabled }: ThumbsDownButtonProps) {
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   return (
-    <Tooltip title="Incorrect response">
+    <Tooltip title={t('ai.buttons.incorectResponse')}>
       <IconButton
         aria-label="thumbs-down"
         onClick={onClick}

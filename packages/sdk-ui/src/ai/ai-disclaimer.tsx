@@ -1,6 +1,7 @@
 import { Themable } from '@/theme-provider/types';
 import styled from '@emotion/styled';
 import { CompleteThemeSettings } from '..';
+import { useTranslation } from 'react-i18next';
 
 const AiDisclaimerContainer = styled.div<Themable>`
   text-align: center;
@@ -18,10 +19,12 @@ const AiDisclaimerContainer = styled.div<Themable>`
 `;
 
 export default function AiDisclaimer({ theme }: { theme: CompleteThemeSettings }) {
+  const { t } = useTranslation();
+
   return (
     <AiDisclaimerContainer theme={theme}>
-      <div>Content is powered by AI, so surprises and mistakes are possible.</div>
-      <div> Please rate responses so we can improve!</div>
+      <div>{t('ai.disclaimer.poweredByAi')}</div>
+      <div> {t('ai.disclaimer.rateRequest')}</div>
     </AiDisclaimerContainer>
   );
 }

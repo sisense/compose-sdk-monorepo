@@ -4,19 +4,19 @@ title: toDashboardProps
 
 # Function toDashboardProps <Badge type="fusionEmbed" text="Fusion Embed" />
 
-> **toDashboardProps**(`dashboardModel`): `Required`\< [`DashboardProps`](../../../interfaces/interface.DashboardProps.md) \>
+> **toDashboardProps**(`dashboardModel`): [`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
 
-Translates [DashboardModel](../../../fusion-embed/interface.DashboardModel.md) to [DashboardProps](../../../interfaces/interface.DashboardProps.md).
+Translates [DashboardModel](../../../fusion-assets/interface.DashboardModel.md) to [DashboardProps](../../../interfaces/interface.DashboardProps.md).
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `dashboardModel` | [`DashboardModel`](../../../fusion-embed/interface.DashboardModel.md) |
+| `dashboardModel` | [`DashboardModel`](../../../fusion-assets/interface.DashboardModel.md) |
 
 ## Returns
 
-`Required`\< [`DashboardProps`](../../../interfaces/interface.DashboardProps.md) \>
+[`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
 
 ## Example
 

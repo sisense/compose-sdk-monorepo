@@ -20,6 +20,7 @@ import { usePivotTableDataOptionsInternal } from './hooks/use-pivot-table-data-o
 import { useApplyPivotTableFormatting } from './hooks/use-apply-pivot-table-formatting';
 import { usePivotTableQuery } from './hooks/use-get-pivot-table-query';
 import { useRenderPivot } from './hooks/use-render-pivot';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Pivot table with pagination.
@@ -118,7 +119,7 @@ export const PivotTable = asSisenseComponent({
   const pivotClient = app?.pivotClient;
 
   if (!pivotClient) {
-    throw new Error('Pivot client not initialized');
+    throw new TranslatableError('errors.noPivotClient');
   }
 
   const { dataOptionsInternal, updateSort } = usePivotTableDataOptionsInternal({ dataOptions });

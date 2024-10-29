@@ -1,5 +1,9 @@
 # Changelog
 
+## 2024-10-21
+
+- Support custom block tag `@shortDescription`
+
 ## 2024-10-16
 
 - Implement workaround for https://github.com/TypeStrong/typedoc/issues/2751

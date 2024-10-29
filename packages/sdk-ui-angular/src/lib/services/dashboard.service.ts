@@ -13,7 +13,7 @@ import { TrackableService } from '../decorators/trackable.decorator';
  *
  * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 @Injectable({

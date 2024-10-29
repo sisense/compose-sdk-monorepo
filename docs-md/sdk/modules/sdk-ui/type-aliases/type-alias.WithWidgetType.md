@@ -16,6 +16,8 @@ This is used to extend the props of a widget with its respective widget type.
 >
 > **widgetType**: `T`
 >
+> Widget type
+>
 >
 
 ## Type parameters

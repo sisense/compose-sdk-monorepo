@@ -22,9 +22,9 @@ export class QueryApiDispatcher {
     // when error is encountered, API returns only status code 400 without informative error message
     // to remedy, catch error and throw a more informative error message
     return this.httpClient.post<DataSourceField[]>(url, { offset, count }).catch(() => {
-      throw new Error(
-        `Failed to get fields for data source "${dataSource}". Please make sure the data source exists and is accessible.`,
-      );
+      throw new TranslatableError('errors.dataSourceNotFound', {
+        dataSource: typeof dataSource === 'string' ? dataSource : dataSource.title,
+      });
     });
   }
 

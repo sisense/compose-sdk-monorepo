@@ -5,6 +5,7 @@ export {
   boxWhiskerProcessResult,
   widgetModelTranslator,
   dashboardModelTranslator,
+  dashboardHelpers,
 } from '@sisense/sdk-ui-preact';
 
 // Re-exports types from @sisense/sdk-ui-preact

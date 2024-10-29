@@ -32,7 +32,7 @@ export class RestApi {
   private defaultDataSource?: DataSource;
 
   constructor(httpClient: HttpClient | undefined, defaultDataSource?: DataSource) {
-    if (!httpClient) throw new Error('HttpClient not found.');
+    if (!httpClient) throw new TranslatableError('errors.httpClientNotFound');
     this.httpClient = httpClient;
     this.defaultDataSource = defaultDataSource;
   }
@@ -161,6 +161,13 @@ export class RestApi {
           ? rawHierarchies.filter(({ _id }) => ids.includes(_id))
           : rawHierarchies;
       });
+  };
+
+  /**
+   * Partially update a dashboard
+   */
+  public patchDashboard = (dashboardOid: string, dashboard: Partial<DashboardDto>) => {
+    return this.httpClient.patch<DashboardDto>(`api/v1/dashboards/${dashboardOid}`, dashboard);
   };
 }
 

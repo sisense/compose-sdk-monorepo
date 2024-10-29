@@ -24,6 +24,7 @@ import { isPolar } from './types';
 import { CategoricalXValues } from '../../chart-data/types';
 import { AxisClipped } from './translations-to-highcharts';
 import { getDataOptionGranularity } from '@/chart-data-options/utils';
+import { TranslatableError } from '@/translation/translatable-error';
 
 export type Axis = {
   enabled?: boolean;
@@ -241,9 +242,8 @@ export const getXAxisDatetimeSettings = (
     interval = 2592000000;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-throw-literal
   if (values.length > 1 && (isNaN(interval) || interval === 0))
-    throw new Error(`Unable to calculate tic interval. Try specifying datetime granularity.`);
+    throw new TranslatableError('errors.ticIntervalCalculationFailed');
 
   let formatter;
   const format = category?.dateFormat || getDefaultDateFormat(granularity);

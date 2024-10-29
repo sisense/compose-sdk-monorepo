@@ -1,7 +1,7 @@
 import { SocketI, SocketQueryOptions } from '../data-load/types.js';
 import {
+  Authenticator,
   BearerAuthenticator,
-  HttpClient,
   isBearerAuthenticator,
   isSsoAuthenticator,
   isWatAuthenticator,
@@ -20,7 +20,9 @@ const ENDPOINT_PIVOT = 'pivot2';
 export class SocketBuilder {
   private _socket: SocketI;
 
-  private readonly _httpClient: HttpClient;
+  private readonly _url: string;
+
+  private readonly _auth: Authenticator;
 
   /**
    * Boolean flag to indicate if the socket should be mocked or not (for testing).
@@ -29,8 +31,9 @@ export class SocketBuilder {
    */
   private readonly _mockSocket: boolean;
 
-  constructor(httpClient: HttpClient, mockSocket = false) {
-    this._httpClient = httpClient;
+  constructor(url: string, auth: Authenticator, mockSocket = false) {
+    this._url = url;
+    this._auth = auth;
     this._mockSocket = mockSocket;
   }
 
@@ -73,8 +76,8 @@ export class SocketBuilder {
         return this._socket;
       }
 
-      const auth = this._httpClient.auth;
-      const url = this._httpClient.url;
+      const auth = this._auth;
+      const url = this._url;
       let query: SocketQueryOptions = {};
 
       // Do not use instanceof because it checks if the constructors are the same.

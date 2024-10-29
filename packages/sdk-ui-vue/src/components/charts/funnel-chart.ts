@@ -78,6 +78,13 @@ export const FunnelChart = defineComponent({
      */
     onBeforeRender: Function as PropType<FunnelChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<FunnelChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointClick}
      *
      * @category Callbacks

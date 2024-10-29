@@ -2,17 +2,14 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Attribute } from '@sisense/sdk-data';
 import { DataPoint, MenuPosition, MenuItemSection, DrilldownSelection } from '../types';
 import { DrilldownBreadcrumbs } from './common/drilldown-breadcrumbs';
-import {
-  getDrilldownMenuItems,
-  getSelectionTitleMenuItem,
-  useDrilldown,
-} from './common/use-drilldown';
+import { useDrilldownCore } from './common/use-drilldown-core';
 import { DrilldownWidgetProps } from '../props';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { useMenu } from '@/common/hooks/use-menu';
 import { useHasChanged } from '@/common/hooks/use-has-changed';
 import { useTranslation } from 'react-i18next';
 import { Hierarchy } from '@/models/hierarchy';
+import { getDrilldownMenuItems, getSelectionTitleMenuItem } from './hooks/use-drilldown';
 
 /**
  * React component designed to add drilldown functionality to any type of chart.
@@ -77,6 +74,11 @@ export const DrilldownWidget = asSisenseComponent({
     [onChange],
   );
 
+  const fullDrilldownPaths = useMemo(
+    () => [...drilldownPaths, ...drilldownDimensions],
+    [drilldownPaths, drilldownDimensions],
+  );
+
   const {
     selectDrilldown,
     sliceDrilldownSelections,
@@ -85,8 +87,8 @@ export const DrilldownWidget = asSisenseComponent({
     drilldownFilters,
     drilldownFiltersDisplayValues,
     drilldownDimension,
-  } = useDrilldown({
-    drilldownPaths: [...drilldownPaths, ...drilldownDimensions],
+  } = useDrilldownCore({
+    drilldownPaths: fullDrilldownPaths,
     initialDimension,
     drilldownSelections,
     onDrilldownSelectionsChange,

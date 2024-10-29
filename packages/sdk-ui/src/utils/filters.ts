@@ -1,3 +1,4 @@
+import { TranslatableError } from '@/translation/translatable-error';
 import {
   Attribute,
   DimensionalLevelAttribute,
@@ -31,7 +32,7 @@ function createIncludeAllFilter(attribute: Attribute, backgroundFilter?: Filter,
 
 export function clearMembersFilter(filter: Filter) {
   if (!isMembersFilter(filter)) {
-    throw new Error('Filter is not a MembersFilter');
+    throw new TranslatableError('errors.notAMembersFilter');
   }
   const { attribute, guid, backgroundFilter } = filter;
   return createIncludeAllFilter(attribute, backgroundFilter, guid);

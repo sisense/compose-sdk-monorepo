@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { PivotBuilder, PivotDataBuilder, SocketBuilder } from './builders';
 import { JaqlRequest } from './data-load/types.js';
 import { PivotQueryResultData } from '@sisense/sdk-data';
@@ -20,8 +20,8 @@ export class PivotClient {
    */
   public socketBuilder: SocketBuilder;
 
-  constructor(httpClient: HttpClient, mockSocket = false) {
-    this.socketBuilder = new SocketBuilder(httpClient, mockSocket);
+  constructor(url: string, auth: Authenticator, mockSocket = false) {
+    this.socketBuilder = new SocketBuilder(url, auth, mockSocket);
   }
 
   async queryData(

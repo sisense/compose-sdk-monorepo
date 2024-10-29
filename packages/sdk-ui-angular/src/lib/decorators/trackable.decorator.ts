@@ -42,11 +42,9 @@ export function TrackableService<T>(trackableMethods: MethodsArray<T>) {
 
 async function track(action: TrackingEventType, methodName: string) {
   try {
-    const { enableTracking } = DecoratorsModule.sisenseContextService.getConfig();
     const app = await DecoratorsModule.sisenseContextService.getApp();
 
-    const trackingEnabled =
-      enableTracking && (app.settings?.trackingConfig?.enabled ?? enableTracking);
+    const trackingEnabled = app.settings?.trackingConfig?.enabled ?? true;
 
     if (app?.httpClient) {
       const payload = {

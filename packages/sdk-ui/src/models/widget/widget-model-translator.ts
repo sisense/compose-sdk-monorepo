@@ -7,6 +7,7 @@ import {
 } from '@/chart-data-options/translate-data-options';
 import {
   getChartType,
+  getWidgetTypeFromChartType,
   isChartWidget,
   isPivotTableWidget,
   isPluginWidget,
@@ -28,13 +29,16 @@ import {
 } from '@/props';
 import { getTableAttributesAndMeasures } from '@/table/hooks/use-table-data';
 import { DEFAULT_TABLE_ROWS_PER_PAGE, PAGES_BATCH_SIZE } from '@/table/table-component';
-import { Attribute, Measure, convertDataSource } from '@sisense/sdk-data';
+import { Attribute, Filter, JaqlDataSource, Measure, convertDataSource } from '@sisense/sdk-data';
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { getPivotQueryOptions } from '@/pivot-table/hooks/use-get-pivot-table-query.js';
 import {
+  CartesianChartDataOptions,
   ChartDataOptions,
+  IndicatorChartDataOptions,
   PivotTableDataOptions,
   TableDataOptions,
+  TableDataOptionsInternal,
 } from '@/chart-data-options/types.js';
 import {
   ChartStyleOptions,
@@ -45,11 +49,18 @@ import {
   TableStyleOptions,
   TextWidgetStyleOptions,
 } from '@/types.js';
-import { WidgetDto } from '@/dashboard-widget/types.js';
+import {
+  IndicatorWidgetStyle,
+  Panel,
+  PanelItem,
+  WidgetDto,
+  WidgetStyle,
+} from '@/dashboard-widget/types.js';
 import { AppSettings } from '@/app/settings/settings.js';
 import {
   attachDataSourceToPanels,
   createDataOptionsFromPanels,
+  createPanelItem,
   extractDataOptions,
 } from '@/dashboard-widget/translate-widget-data-options.js';
 import {
@@ -58,6 +69,8 @@ import {
 } from '@/dashboard-widget/translate-widget-style-options.js';
 import { extractDrilldownOptions } from '@/dashboard-widget/translate-widget-drilldown-options.js';
 import { extractWidgetFilters } from '@/dashboard-widget/translate-widget-filters.js';
+import { isCartesian, isIndicator, isTable } from '@/chart-options-processor/translations/types.js';
+import { normalizeColumn, normalizeMeasureColumn } from '@/chart-data-options/utils.js';
 
 /**
  * Translates a {@link WidgetModel} to the parameters for executing a query for the widget.
@@ -392,7 +405,7 @@ export function toWidgetProps(widgetModel: WidgetModel): WidgetProps {
 }
 
 const throwNotImplemented = () => {
-  throw new Error('Method not implemented.');
+  throw new TranslatableError('errors.methodNotImplemented');
 };
 
 /**
@@ -421,6 +434,45 @@ const DEFAULT_WIDGET_MODEL: WidgetModel = {
   getTableWidgetProps: throwNotImplemented,
   getTextWidgetProps: throwNotImplemented,
 };
+
+/**
+ * Returns default methods for a widget model.
+ *
+ * @param widgetModel - The widget model
+ * @returns widget model with default methods
+ */
+function withDefaultWidgetModelMethods(widgetModel: WidgetModel): WidgetModel {
+  return {
+    ...widgetModel,
+    getExecuteQueryParams: () => {
+      return toExecuteQueryParams(widgetModel);
+    },
+    getExecutePivotQueryParams: () => {
+      return toExecutePivotQueryParams(widgetModel);
+    },
+    getChartProps: () => {
+      return toChartProps(widgetModel);
+    },
+    getTableProps: () => {
+      return toTableProps(widgetModel);
+    },
+    getPivotTableProps: () => {
+      return toPivotTableProps(widgetModel);
+    },
+    getChartWidgetProps: () => {
+      return toChartWidgetProps(widgetModel);
+    },
+    getTableWidgetProps: () => {
+      return toTableWidgetProps(widgetModel);
+    },
+    getPivotTableWidgetProps: () => {
+      return toPivotTableWidgetProps(widgetModel);
+    },
+    getTextWidgetProps: () => {
+      return toTextWidgetProps(widgetModel);
+    },
+  };
+}
 
 /**
  * Creates a {@link WidgetModel} from a widget DTO.
@@ -489,36 +541,128 @@ export function fromWidgetDto(
     filters: filters,
   };
 
-  return {
-    ...widgetModel,
-    getExecuteQueryParams: () => {
-      return toExecuteQueryParams(widgetModel);
-    },
-    getExecutePivotQueryParams: () => {
-      return toExecutePivotQueryParams(widgetModel);
-    },
-    getChartProps: () => {
-      return toChartProps(widgetModel);
-    },
-    getTableProps: () => {
-      return toTableProps(widgetModel);
-    },
-    getPivotTableProps: () => {
-      return toPivotTableProps(widgetModel);
-    },
-    getChartWidgetProps: () => {
-      return toChartWidgetProps(widgetModel);
-    },
-    getTableWidgetProps: () => {
-      return toTableWidgetProps(widgetModel);
-    },
-    getPivotTableWidgetProps: () => {
-      return toPivotTableWidgetProps(widgetModel);
-    },
-    getTextWidgetProps: () => {
-      return toTextWidgetProps(widgetModel);
-    },
+  return withDefaultWidgetModelMethods(widgetModel);
+}
+
+/**
+ * Creates a {@link WidgetModel} from a {@link ChartWidgetProps}.
+ *
+ * @param chartWidgetProps - The ChartWidgetProps to be converted to a widget model
+ * @returns WidgetModel
+ * @internal
+ */
+export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): WidgetModel {
+  const widgetType = getWidgetTypeFromChartType(chartWidgetProps.chartType);
+
+  const widgetModel: WidgetModel = {
+    ...DEFAULT_WIDGET_MODEL,
+    ...chartWidgetProps,
+    filters: (chartWidgetProps.filters as Filter[]) || [], // typecast because of FilterRelation tmp incompatibility
+    widgetType,
   };
+
+  return withDefaultWidgetModelMethods(widgetModel);
+}
+
+/**
+ * Translates a {@link WidgetModel} to {@link WidgetDto}.
+ *
+ * @param widgetModel - The WidgetModel to be converted to a widgetDto
+ * @param dataSource - The full datasource details
+ * @returns WidgetDto
+ * @internal
+ */
+export function toWidgetDto(widgetModel: WidgetModel, dataSource: JaqlDataSource): WidgetDto {
+  const chartType = widgetModel.chartType;
+  let type = widgetModel.widgetType;
+  let style: WidgetStyle = {};
+  // TODO: For some reason TreeMap, Sunburst (and maybe others) are not include subtype in the styleOptions
+  let subtype = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype! || '';
+
+  if (!chartType) throw new Error('Chart type is required');
+
+  const panels: Panel[] = [];
+  if (isCartesian(chartType)) {
+    const categoriesPanelName = ['chart/line', 'chart/area'].includes(widgetModel.widgetType)
+      ? 'x-axis'
+      : 'categories';
+    const items: PanelItem[] = (widgetModel.dataOptions as CartesianChartDataOptions).category.map(
+      (column) => createPanelItem(normalizeColumn(column)),
+    );
+    const categoryPanel: Panel = {
+      name: categoriesPanelName,
+      items,
+    };
+    panels.push(categoryPanel);
+    const valueItems = (widgetModel.dataOptions as CartesianChartDataOptions).value.map((column) =>
+      createPanelItem(normalizeMeasureColumn(column)),
+    );
+
+    panels.push({
+      name: 'values',
+      items: valueItems,
+    });
+    const breakByItems = (widgetModel.dataOptions as CartesianChartDataOptions).breakBy.map(
+      (column) => createPanelItem(normalizeColumn(column)),
+    );
+
+    panels.push({
+      name: 'break by',
+      items: breakByItems,
+    });
+    // Sytyling: TBD
+  } else if (isTable(chartType)) {
+    const { attributes, measures } = getTableAttributesAndMeasures(
+      widgetModel.dataOptions as TableDataOptionsInternal,
+    );
+    const items: PanelItem[] = [
+      ...attributes.map((column) => createPanelItem(normalizeColumn(column))),
+      ...measures.map((column) => createPanelItem(normalizeMeasureColumn(column))),
+    ];
+    panels.push({
+      name: 'columns',
+      items,
+    });
+    panels.push({
+      name: 'filters',
+      items: [],
+    });
+    // tablewidgetagg is now a disabled plugin by default, and tablewidget should be fully compatible
+    type = 'tablewidget';
+  } else if (isIndicator(chartType)) {
+    ['value', 'min', 'max', 'secondary'].forEach((panelName) => {
+      const items: PanelItem[] = (
+        (widgetModel.dataOptions as IndicatorChartDataOptions)[
+          panelName as keyof IndicatorChartDataOptions
+        ] || []
+      ).map((column) => createPanelItem(normalizeMeasureColumn(column)));
+      panels.push({ name: panelName, items });
+    });
+    panels.push({
+      name: 'filters',
+      items: [],
+    });
+    subtype = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype;
+
+    // Empty style required for indicator ({} breaks it)
+    style = undefined as any as WidgetStyle;
+  } else {
+    throw new Error('Unsupported chart type');
+  }
+
+  const widget: WidgetDto = {
+    oid: widgetModel.oid || '',
+    title: widgetModel.title,
+    desc: widgetModel.description,
+    datasource: dataSource,
+    type,
+    metadata: {
+      panels,
+    },
+    style,
+    subtype,
+  };
+  return widget;
 }
 
 class PivotNotSupportedMethodError extends TranslatableError {

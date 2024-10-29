@@ -5,6 +5,7 @@ import { WidgetModel } from './widget-model';
 import { CompleteThemeSettings } from '../../types';
 import { AppSettings } from '@/app/settings/settings';
 import { widgetModelTranslator } from '@/models/widget/';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Retrieves a widget model by its OID.
@@ -31,7 +32,7 @@ export async function getWidgetModel(
     api,
   });
   if (!fetchedWidget) {
-    throw new Error(`Widget with oid ${widgetOid} not found`);
+    throw new TranslatableError('errors.widgetWithOidNotFound', { widgetOid });
   }
   return widgetModelTranslator.fromWidgetDto(fetchedWidget, themeSettings, appSettings);
 }

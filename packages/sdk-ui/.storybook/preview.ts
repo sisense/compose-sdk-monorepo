@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react';
 import './global.css';
 type CallbackArg = `on${string}`;
-const argsToExclude: CallbackArg[] = ['onBeforeRender'];
+const argsToExclude: CallbackArg[] = ['onBeforeRender', 'onDataReady'];
 
 const preview: Preview = {
   parameters: {

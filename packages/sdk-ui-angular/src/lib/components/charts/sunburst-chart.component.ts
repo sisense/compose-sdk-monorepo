@@ -125,6 +125,15 @@ export class SunburstChartComponent {
   beforeRender: SunburstChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!SunburstChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: SunburstChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointClick}
    *
    * @category Callbacks

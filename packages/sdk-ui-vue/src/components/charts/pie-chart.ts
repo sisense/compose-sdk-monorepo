@@ -74,6 +74,13 @@ export const PieChart = defineComponent({
      */
     onBeforeRender: Function as PropType<PieChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<PieChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointClick}
      *
      * @category Callbacks

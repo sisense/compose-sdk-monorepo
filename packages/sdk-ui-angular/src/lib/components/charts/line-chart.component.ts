@@ -123,6 +123,15 @@ export class LineChartComponent {
   beforeRender: LineChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!LineChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: LineChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointClick}
    *
    * @category Callbacks

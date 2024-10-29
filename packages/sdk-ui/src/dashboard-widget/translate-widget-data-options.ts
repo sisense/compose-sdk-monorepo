@@ -16,6 +16,8 @@ import {
   ForecastFormulaOptions,
   TrendFormulaOptions,
   JaqlDataSource,
+  Filter,
+  MeasureColumn,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -271,6 +273,32 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
 }
 
 /** @internal */
+export function createPanelItem(column: StyledColumn | StyledMeasureColumn): PanelItem {
+  const element:
+    | Filter
+    | DimensionalAttribute
+    | DimensionalCalculatedMeasure
+    | DimensionalBaseMeasure
+    | MeasureColumn = column.column;
+  let jaql;
+  if (MetadataTypes.isFilter(element)) {
+    // Highlight cases are not covered; assumption is that we are using plain JAQL filter
+    jaql = (element as Filter).filterJaql();
+  } else if (MetadataTypes.isAttribute(element)) {
+    jaql = (element as DimensionalAttribute).jaql(true);
+  } else if (MetadataTypes.isMeasure(element)) {
+    jaql = (element as DimensionalCalculatedMeasure).jaql(true);
+  } else {
+    throw new TranslatableError('errors.unsupportedDimensionalElement');
+  }
+
+  return {
+    jaql,
+    // TODO: add format
+  };
+}
+
+/** @internal */
 export const createDataOptionsFromPanels = (panels: Panel[], variantColors: Color[]) => {
   const dataOptions: { [key: string]: any[] } = {};
   panels.forEach((panel) => {
@@ -283,6 +311,15 @@ export const createDataOptionsFromPanels = (panels: Panel[], variantColors: Colo
     }
   });
   return dataOptions;
+};
+
+export const createPanelsFromDataOptions = (dataOptions: { [key: string]: any[] }) => {
+  return Object.entries(dataOptions).map(([panelName, items]) => {
+    return {
+      name: panelName,
+      items: items.map((item) => ({ jaql: item })),
+    };
+  });
 };
 
 type PanelItemCallback<ProcessResult> = (

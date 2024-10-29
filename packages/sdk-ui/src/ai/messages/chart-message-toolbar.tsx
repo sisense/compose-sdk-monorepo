@@ -13,6 +13,7 @@ import RefreshIcon from '../icons/refresh-icon';
 import ThreeDotsIcon from '../icons/three-dots-icon';
 import { getSlightlyDifferentColor } from '@/utils/color';
 import { CompleteThemeSettings } from '@/index';
+import { useTranslation } from 'react-i18next';
 
 const getHoverColor = (themeSettings: CompleteThemeSettings) =>
   getSlightlyDifferentColor(themeSettings.chart.backgroundColor);
@@ -95,9 +96,10 @@ const ThreeDotsMenu = ({ items }: ThreeDotsMenuProps) => {
 
 const ExpandButton = ({ onClick }: { onClick: () => void }) => {
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   return (
-    <Tooltip title="Preview">
+    <Tooltip title={t('ai.preview')}>
       <IconButton onClick={onClick} $hoverColor={getHoverColor(themeSettings)}>
         <ExpandIcon fill={themeSettings.chart.textColor} />
       </IconButton>

@@ -14,6 +14,9 @@ export const translation = {
     invalidOffset: 'Invalid offset "{{offset}}". Offset should be non-negative.',
     missingHttpClient: 'Query requires httpClient to work properly.',
     missingPostMethod: 'httpClient must provide "post" method.',
+    noJaqlResponse: 'No jaql response received from the server',
+    dataSourceNotFound:
+      'Failed to get fields for data source "{{dataSource}}". Please make sure the data source exists and is accessible.',
   },
 };
 

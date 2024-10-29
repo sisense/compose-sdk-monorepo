@@ -22,7 +22,7 @@ export type WidgetDataOptions = ChartDataOptions | PivotTableDataOptions | Empty
 /**
  * Model of Sisense widget defined in the abstractions of Compose SDK.
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export interface WidgetModel {

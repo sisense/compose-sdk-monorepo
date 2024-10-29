@@ -1,4 +1,5 @@
 import { usePrevious } from '@/common/hooks/use-previous';
+import { TranslatableError } from '@/translation/translatable-error';
 import { Filter } from '@sisense/sdk-data';
 import { useEffect, useState, useCallback } from 'react';
 
@@ -15,9 +16,7 @@ export function useSynchronizedFilter<TFilter extends Filter = Filter>(
   createEmptyFilter?: () => TFilter,
 ) {
   if (!filterFromProps && !createEmptyFilter) {
-    throw new Error(
-      '`useSynchronizedFilter` hook must take at least one of [non-null `filterFromProps`] or [`createEmptyFilter` function]',
-    );
+    throw new TranslatableError('errors.synchronizedFilterInvalidProps');
   }
   const initialFilter = filterFromProps || createEmptyFilter!();
 

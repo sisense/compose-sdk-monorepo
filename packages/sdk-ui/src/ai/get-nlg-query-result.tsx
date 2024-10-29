@@ -1,10 +1,10 @@
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { UNEXPECTED_ERROR } from './api/errors';
 import Collapsible from './common/collapsible';
 import {
   useGetNlgQueryResultInternal,
   UseGetNlgQueryResultParams,
 } from './use-get-nlg-query-result';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Props for {@link GetNlgQueryResult} component.
@@ -36,9 +36,10 @@ export default asSisenseComponent({
   componentName: 'GetNlgQueryResult',
 })(function GetNlgQueryResult(props: GetNlgQueryResultProps) {
   const { data, isLoading, isError } = useGetNlgQueryResultInternal(props);
+  const { t } = useTranslation();
 
   if (isError) {
-    return <>{UNEXPECTED_ERROR}</>;
+    return <>{t('ai.errors.unexpected')}</>;
   }
 
   const summary = data ?? 'Oops, no data came back for that.';

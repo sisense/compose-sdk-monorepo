@@ -13,8 +13,8 @@ React components and utilities for working with charts
 - [AreaRangeChart](charts/function.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](charts/function.BarChart.md)
 - [BoxplotChart](charts/function.BoxplotChart.md)
-- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md)
-- [Chart](charts/function.Chart.md)
+- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [Chart](charts/function.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](charts/function.ColumnChart.md)
 - [FunnelChart](charts/function.FunnelChart.md)
 - [IndicatorChart](charts/function.IndicatorChart.md)
@@ -47,6 +47,7 @@ React filter tile components
 
 - [CriteriaFilterTile](filter-tiles/function.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/function.DateRangeFilterTile.md)
+- [FiltersPanel](filter-tiles/function.FiltersPanel.md) <Badge type="alpha" text="Alpha" />
 - [MemberFilterTile](filter-tiles/function.MemberFilterTile.md)
 - [RelativeDateFilterTile](filter-tiles/function.RelativeDateFilterTile.md)
 
@@ -73,29 +74,31 @@ React components and utilities for working with dashboards
 
 - [ChartWidget](dashboards/function.ChartWidget.md)
 - [Dashboard](dashboards/function.Dashboard.md) <Badge type="beta" text="Beta" />
-- [DashboardHelpers](dashboards/variable.DashboardHelpers.md)
+- [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md) <Badge type="alpha" text="Alpha" />
 - [PivotTableWidget](dashboards/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
+- [useComposedDashboard](dashboards/function.useComposedDashboard.md) <Badge type="alpha" text="Alpha" />
 - [useExecutePluginQuery](dashboards/function.useExecutePluginQuery.md) <Badge type="alpha" text="Alpha" />
+- [Widget](dashboards/function.Widget.md) <Badge type="alpha" text="Alpha" />
 
-## Fusion Embed
+## Fusion Assets
 
-React components, hooks, and utilities for working with Fusion Embed dashboards, widgets, queries, and formulas
+React components, hooks, and utilities for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardById](fusion-embed/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
-- [DashboardModel](fusion-embed/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [dashboardModelTranslator](fusion-embed/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [DashboardWidget](fusion-embed/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [ExecuteQueryByWidgetId](fusion-embed/function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useFetch](fusion-embed/function.useFetch.md)
-- [useGetDashboardModel](fusion-embed/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetDashboardModels](fusion-embed/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetHierarchyModels](fusion-embed/function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetSharedFormula](fusion-embed/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetWidgetModel](fusion-embed/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](fusion-embed/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [widgetModelTranslator](fusion-embed/namespace.widgetModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardById](fusion-assets/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
+- [DashboardWidget](fusion-assets/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [ExecuteQueryByWidgetId](fusion-assets/function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useFetch](fusion-assets/function.useFetch.md)
+- [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetHierarchyModels](fusion-assets/function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [widgetModelTranslator](fusion-assets/namespace.widgetModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion widget model from and to other widget data structures
 
 ## Generative AI
 

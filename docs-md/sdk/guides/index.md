@@ -31,6 +31,9 @@ indexTopics:
     - title: Migration Guide
       description: Migrate your project from 0.X.X to 1.0.0
       link: ./migration-guide-1.0.0
+    - title: Internationalization (Alpha)
+      description: Learn how to configure language and extend translations in Compose SDK
+      link: ./internationalization
 ---
 
 # Guides

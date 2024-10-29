@@ -124,6 +124,15 @@ export class PolarChartComponent {
   beforeRender: PolarChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!PolarChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: PolarChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointClick}
    *
    * @category Callbacks

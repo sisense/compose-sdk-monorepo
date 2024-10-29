@@ -15,6 +15,7 @@ import { stringifyProps } from './translate-props-to-code';
 import { stringifyFilterList } from './translate-filters-to-code';
 // .js is required for lodash import
 import cloneDeep from 'lodash-es/cloneDeep.js';
+import { TranslatableError } from '@/translation/translatable-error';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;
@@ -163,7 +164,7 @@ export class ModelTranslator {
 
   private stringifyDataSource = (dataSource: DataSource | undefined): string => {
     if (!dataSource) {
-      throw new Error('Data source is not defined');
+      throw new TranslatableError('errors.undefinedDataSource');
     }
 
     let dataSourceString: string;
@@ -189,7 +190,7 @@ export class ModelTranslator {
       return stringifyFilterList(filters, 2);
     }
 
-    throw new Error('Filter relations not supported yet');
+    throw new TranslatableError('errors.filterRelationsNotSupported');
   };
 
   private stringifyDataOptions = (dataOptions: ChartDataOptions): string => {

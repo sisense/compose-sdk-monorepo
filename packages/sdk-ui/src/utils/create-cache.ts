@@ -1,3 +1,5 @@
+import { TranslatableError } from '@/translation/translatable-error';
+
 export type CacheKey = string;
 
 /**
@@ -86,7 +88,7 @@ export const createCache: CreateCacheFn = <AsyncFnToCache extends AsyncFn>(
         } else if (isPromisedCacheValue(cacheValue)) {
           return cacheValue.valuePromise;
         }
-        throw new Error('Unexpected cache value');
+        throw new TranslatableError('errors.unexpectedCacheValue');
       }
     }) as AsyncFnToCache;
   };

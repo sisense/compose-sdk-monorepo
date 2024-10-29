@@ -13,7 +13,7 @@ module.exports = {
     {
       files: ['*.{ts,js,tsx,jsx}'],
       excludedFiles: ['**/*.config.{ts,js}', '**/*.workspace.{ts,js}'],
-      extends: ['@sisense/eslint-config/typescript/react'],
+      extends: ['@sisense/eslint-config/typescript/react', 'plugin:i18next/recommended'],
       overrides: [
         {
           // https://stackoverflow.com/questions/66773897/react-using-typescript-dont-use-as-a-type
@@ -58,6 +58,15 @@ module.exports = {
             'no-global-assign': 'error',
             'no-extend-native': 'error',
             'no-implicit-globals': 'error',
+            // change jsx-text-only to jsx-only for deeper analysis
+            'i18next/no-literal-string': ['error', { mode: 'jsx-text-only' }],
+          },
+        },
+        {
+          // Disable the translation rule for files in the /examples folder
+          files: ['examples/**/*'],
+          rules: {
+            'i18next/no-literal-string': 'off',
           },
         },
         {
@@ -93,6 +102,7 @@ module.exports = {
             'max-lines-per-function': 'off',
             'max-lines': 'off',
             'no-global-assign': ['error', { exceptions: ['window', 'document'] }],
+            'i18next/no-literal-string': 'off',
           },
         },
         {

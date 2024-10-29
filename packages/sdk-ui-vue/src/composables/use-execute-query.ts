@@ -1,7 +1,7 @@
 import { toRefs, watch } from 'vue';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
 import {
-  ClientApplication,
+  type ClientApplication,
   executeQuery,
   queryStateReducer,
   type ExecuteQueryParams,

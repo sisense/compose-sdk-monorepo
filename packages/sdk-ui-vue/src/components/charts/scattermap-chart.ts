@@ -75,6 +75,13 @@ export const ScattermapChart = defineComponent({
      */
     styleOptions: Object as PropType<ScattermapChartProps['styleOptions']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<ScattermapChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
      *
      * @category Callbacks

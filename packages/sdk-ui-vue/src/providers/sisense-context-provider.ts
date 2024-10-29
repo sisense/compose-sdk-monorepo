@@ -132,13 +132,6 @@ export const SisenseContextProvider = defineComponent({
       type: Boolean as PropType<SisenseContextProviderProps['showRuntimeErrors']>,
       default: defaultSisenseContext.showRuntimeErrors,
     },
-    /**
-     * @internal
-     */
-    enableTracking: {
-      type: Boolean as PropType<SisenseContextProviderProps['enableTracking']>,
-      default: defaultSisenseContext.tracking.enabled,
-    },
   },
 
   setup(props, { slots }) {
@@ -148,9 +141,7 @@ export const SisenseContextProvider = defineComponent({
       showRuntimeErrors: props.showRuntimeErrors!,
       tracking: {
         ...defaultSisenseContext.tracking,
-        enabled:
-          props.enableTracking! &&
-          (props.appConfig?.trackingConfig?.enabled ?? props.enableTracking),
+        enabled: props.appConfig?.trackingConfig?.enabled ?? true,
       },
     });
     createClientApplication(props as SisenseContextProviderProps).then((newApp) => {

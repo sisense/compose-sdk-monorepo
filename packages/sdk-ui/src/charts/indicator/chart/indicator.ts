@@ -18,6 +18,7 @@ import {
   NumericSimpleOptions,
 } from '../types.js';
 import { prepareTickerOptions } from '@/charts/indicator/indicator-legacy-chart-options/prepare-ticker-options';
+import { TranslatableError } from '@/translation/translatable-error.js';
 
 const $indicatorHelper = new IndicatorHelper();
 const $numericSimple = new NumericSimple();
@@ -109,7 +110,7 @@ export class Indicator {
       } else if ('value' in item) {
         originalValue = item.value;
       } else {
-        throw new Error('Invalid relative size options');
+        throw new TranslatableError('errors.indicatorInvalidRelativeSize');
       }
 
       const value = originalValue * baseValue;

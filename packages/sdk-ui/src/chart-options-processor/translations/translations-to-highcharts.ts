@@ -25,6 +25,7 @@ import { AxisMinMax, AxisSettings } from './axis-section';
 import { Stacking } from '../chart-options-service';
 import { DesignOptions, isPolar } from './types';
 import { colorChineseSilver } from '@/chart-data-options/coloring/consts';
+import { TranslatableError } from '@/translation/translatable-error';
 
 export type LineType = 'straight' | 'smooth';
 export type StackType = 'classic' | 'stacked' | 'stack100';
@@ -123,11 +124,11 @@ export const addStackingIfSpecified = (
         showTotal: false,
       };
     }
-    throw new Error('Polar chart design options expected for polar chart');
+    throw new TranslatableError('errors.polarChartDesignOptionsExpected');
   }
 
   if (isPolarChartDesignOptions(designOptions)) {
-    throw new Error('Polar chart design options not expected for non-polar chart');
+    throw new TranslatableError('errors.polarChartDesignOptionsNotExpected');
   }
 
   const showTotal = designOptions.valueLabel ? designOptions.showTotal || false : false;
@@ -278,8 +279,9 @@ export const formatSeries = (
   treatNullDataAsZeros: boolean,
   categories?: string[],
   categoryColors?: string[],
+  convertValuesToAbsolute?: boolean,
 ): HighchartsSeriesValues => {
-  const input = formatData(series, treatNullDataAsZeros);
+  const input = formatData(series, treatNullDataAsZeros, convertValuesToAbsolute);
   const { title, ...seriesWithoutTitle } = series;
   return {
     ...seriesWithoutTitle,
@@ -308,9 +310,15 @@ const isIsolatedPoint = (
 const formatData = (
   seriesValues: CategoricalSeriesValues,
   treatNullDataAsZeros: boolean,
+  convertValuesToAbsolute?: boolean,
 ): SeriesValueData[] =>
   seriesValues.data.map(({ value, ...restData }) => ({
-    value: treatNullDataAsZeros && Number.isNaN(value) ? 0 : value,
+    value:
+      treatNullDataAsZeros && Number.isNaN(value)
+        ? 0
+        : convertValuesToAbsolute
+        ? Math.abs(value)
+        : value,
     ...restData,
   }));
 

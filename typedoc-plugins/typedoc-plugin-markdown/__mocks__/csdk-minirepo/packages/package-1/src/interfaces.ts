@@ -117,3 +117,15 @@ export interface SomeConfig extends SomeProps {
     authorized?: (params: { request: boolean; auth: string }) => string;
   };
 }
+
+/**
+ * @shortDescription This is class summary.
+ */
+export class SomeConfigClass implements SomeConfig {
+  prop1: string;
+  prop2: string;
+  prop3: string;
+  callbacks?: SomeProps & {
+    authorized?: (params: { request: boolean; auth: string }) => string;
+  };
+}

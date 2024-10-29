@@ -125,6 +125,15 @@ export class TreemapChartComponent {
   beforeRender: TreemapChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!TreemapChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: TreemapChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointClick}
    *
    * @category Callbacks

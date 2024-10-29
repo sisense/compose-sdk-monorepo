@@ -4,7 +4,7 @@ title: GetHierarchiesParams
 
 # Interface GetHierarchiesParams
 
-Parameters for [useGetHierarchyModels](../fusion-embed/function.useGetHierarchyModels.md) hook.
+Parameters for [useGetHierarchyModels](../fusion-assets/function.useGetHierarchyModels.md) hook.
 
 ## Properties
 

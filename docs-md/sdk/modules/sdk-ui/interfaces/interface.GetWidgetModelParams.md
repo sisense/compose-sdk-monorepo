@@ -4,7 +4,7 @@ title: GetWidgetModelParams
 
 # Interface GetWidgetModelParams
 
-Parameters for [useGetWidgetModel](../fusion-embed/function.useGetWidgetModel.md) hook.
+Parameters for [useGetWidgetModel](../fusion-assets/function.useGetWidgetModel.md) hook.
 
 ## Properties
 

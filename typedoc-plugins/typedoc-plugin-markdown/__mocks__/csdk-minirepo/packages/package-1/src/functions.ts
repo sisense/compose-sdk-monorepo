@@ -1,3 +1,8 @@
+/**
+ * Some prop interface.
+ *
+ * @shortDescription This is interface summary.
+ */
 export interface SomePropInterface {
   prop: string;
 }
@@ -40,6 +45,7 @@ export function betaFunction(
  *
  * Testing new tag for fusion embed
  *
+ *
  * @example
  *
  * ```ts
@@ -56,6 +62,7 @@ export function betaFunction(
  * @param someParam1  This is some numeric parameter 1.
  * @param someParam2  This is some numeric parameter 2.
  * @returns This is a numeric return value.
+ * @shortDescription This is function summary.
  * @alpha
  * @group Group 1
  */

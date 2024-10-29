@@ -1,8 +1,9 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { TestInfo, expect, type Locator, type Page } from '@playwright/test';
+import { updateScreenshotModifyTime } from './cleanup-utils';
 
 const SCREENSHOT_FILE_EXTENSION = '.png';
 const SCREENSHOT_DEFAILT_NAME = 'asset';
-const TEST_ID_ATTRIBUTE = 'data-visual-testid';
+const TEST_ID_ATTRIBUTE = 'data-visual-test-id';
 const READINESS_DELAY = 0.2 * 1000;
 const LOADERS_APPEAR_WAIT_TIMEOUT = 2 * 1000;
 const LOADERS_DISAPPEAR_WAIT_TIMEOUT = 20 * 1000;
@@ -11,7 +12,12 @@ const LOADERS_STABILITY_WAIT_DURATION = 0.5 * 1000;
 // todo: set correct timeout to cover tests over large dashboards with multiple widgets (20+)
 const SCREENSHOT_GENERATION_TIMEOUT = 20 * 1000;
 
-export async function makeScreenshot(page: Page, locator: Locator, name?: string) {
+export async function makeScreenshot(
+  page: Page,
+  testInfo: TestInfo,
+  locator: Locator,
+  name?: string,
+) {
   expect(locator).toBeAttached();
 
   const screenshotName =
@@ -30,9 +36,16 @@ export async function makeScreenshot(page: Page, locator: Locator, name?: string
     animations: 'disabled',
     timeout: SCREENSHOT_GENERATION_TIMEOUT,
   });
+
+  await updateScreenshotModifyTime(screenshotFileName, testInfo);
 }
 
-export async function makeScreenshots(page: Page, locators: Locator[], name?: string) {
+export async function makeScreenshots(
+  page: Page,
+  testInfo: TestInfo,
+  locators: Locator[],
+  name?: string,
+) {
   expect(locators.length > 0).toBeTruthy();
 
   // sequentially takes screenshots for all the locators
@@ -43,7 +56,7 @@ export async function makeScreenshots(page: Page, locators: Locator[], name?: st
       nameWithIndex ||
       (await locator.getAttribute(TEST_ID_ATTRIBUTE)) ||
       `${SCREENSHOT_DEFAILT_NAME}${index}`;
-    await makeScreenshot(page, locator, screenshotName);
+    await makeScreenshot(page, testInfo, locator, screenshotName);
   }, Promise.resolve());
 }
 
@@ -51,7 +64,7 @@ export async function makeScreenshots(page: Page, locators: Locator[], name?: st
  * Automatically makes screenshots over the page elements marked by `TEST_ID_ATTRIBUTE`
  * The value of this attribute will be used as part of the target screenshot name.
  */
-export async function makeScreenshotsOverPage(page: Page) {
+export async function makeScreenshotsOverPage(page: Page, testInfo: TestInfo) {
   await page.waitForSelector(`[${TEST_ID_ATTRIBUTE}]`, {
     state: 'visible',
   });
@@ -61,7 +74,7 @@ export async function makeScreenshotsOverPage(page: Page) {
   await page.waitForTimeout(READINESS_DELAY);
 
   const locators = await page.locator(`[${TEST_ID_ATTRIBUTE}]`).all();
-  await makeScreenshots(page, locators);
+  await makeScreenshots(page, testInfo, locators);
 }
 
 // Function to wait for all loaders to disappear

@@ -6,7 +6,7 @@ import { TrackableService } from '../decorators/trackable.decorator';
 /**
  * Service for working with Sisense Fusion widgets.
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 @Injectable({

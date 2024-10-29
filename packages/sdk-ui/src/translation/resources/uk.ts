@@ -54,9 +54,46 @@ export const translation: TranslationDictionary = {
     missingMenuRoot: 'Відсутній ініціалізований корінь меню',
     missingDataSource:
       "Значення 'dataSource' відсутнє. Воно має бути передано явно, або 'defaultDataSource' має бути вказано в SisenseContextProvider.",
+    incorrectOnDataReadyHandler: "'onDataReady' має повертати дійсний об'єкт даних",
+    undefinedDataSource: 'Не задане джерело даних',
+    emptyModel: 'Пуста модель',
+    missingMetadata: 'Поле metadata відсутнє',
+    missingModelTitle: 'Не знайдено заголовоку моделі',
+    httpClientNotFound: 'HttpClient не знайдено',
+    serverSettingsNotLoaded: 'Failed to load server settings',
+    requiredColumnMissing: 'Відсутній обов’язковий стовпець',
+    unexpectedChartType: 'Невідомий тип графіка: {{chartType}}',
+    noRowNumColumn: 'Дані не містять row num column',
+    ticIntervalCalculationFailed:
+      'Неможливо обрахувати tic interval. Спробуйте задати datetime granularity.',
+    polarChartDesignOptionsExpected: 'Polar chart design options очікуються для polar chart',
+    polarChartDesignOptionsNotExpected:
+      'Polar chart design options не очікуються для non-polar chart',
+    indicatorInvalidRelativeSize: 'Невірні опції relative size',
+    unsupportedMapType: 'Непідтримуваний тип мапи: {{mapType}}',
+    mapLoadingFailed: 'Не вдалося завантажити мапу',
+    cascadingFilterOriginalNotFound:
+      'Помилка при реструктуризації каскадних фільтрів. Оригінальний фільтр не знайдено',
+    dashboardLoadFailed: 'Не вдалося завантажити Dashboard',
+    dashboardWithOidNotFound: 'Dashboard з oid {{dashboardOid}} не знайдено',
+    widgetWithOidNotFound: 'Віджет з oid {{widgetOid}} не знайдено',
+    widgetEmptyResponse: 'Пуста відповідь для віджета з oid {{widgetOid}}',
+    dateFilterIncorrectOperator: 'Некорректний оператор: {{operator}}',
+    synchronizedFilterInvalidProps:
+      '`useSynchronizedFilter` хук потребує одне з [non-null `filterFromProps`] чи [`createEmptyFilter` function]',
+    methodNotImplemented: 'Метод не реалізовано.',
+    noPivotClient: 'Pivot client не ініціалізовано',
+    unexpectedCacheValue: 'Неочікуване значення кешу',
+    notAMembersFilter: 'Фільтр не є MembersFilter',
+    drilldownNoInitialDimension:
+      'Initial dimension має бути задано щоб використовувати drilldown з користувацькими компонентами',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',
+  filters: 'Фільтри',
+  widgetDetails: 'Деталі віджета',
+  cancel: 'Відміна',
+  includeAll: 'Всі елементи',
   criteriaFilter: {
     displayModePrefix: 'Всі елементи',
     equals: 'Дорівнює {{val}}',
@@ -82,19 +119,26 @@ export const translation: TranslationDictionary = {
     by: 'by',
   },
   dateFilter: {
-    last: 'Last',
-    next: 'Next',
-    from: 'From',
-    count: 'Count',
-    today: 'Today',
-    days: 'Days',
-    weeks: 'Weeks',
-    months: 'Months',
-    quarters: 'Quarters',
-    years: 'Years',
-    earliestDate: 'Earliest Date',
-    latestDate: 'Latest Date',
-    todayOutOfRange: 'Today is out of available date range',
+    last: 'Останній',
+    next: 'Наступний',
+    from: 'Від',
+    to: 'До',
+    count: 'Кількість',
+    select: 'Вибрати',
+    today: 'Сьогодні',
+    days: 'Дні',
+    weeks: 'Тижні',
+    months: 'Місяці',
+    quarters: 'Квартали',
+    years: 'Роки',
+    earliestDate: 'Найбільш Рання Дата',
+    latestDate: 'Найбільш Пізня Дата',
+    todayOutOfRange: 'Сьогоднішній день поза доступним діапазоном дат',
+    dateRange: {
+      fromTo: '{{from}} до {{to}}',
+      from: 'Від {{val}}',
+      to: 'До {{val}}',
+    },
   },
   boxplot: {
     tooltip: {
@@ -131,6 +175,7 @@ export const translation: TranslationDictionary = {
     },
   },
   unsupportedFilterMessage: 'Непідтримуваний Фільтр (застосовано до запиту даних)',
+  unsupportedFilter: 'Непідтримуваний фільтр {{filter}}',
   commonFilter: {
     clearSelectionButton: 'Очистити виділення',
     selectMenuItem: 'Вибрати',
@@ -140,5 +185,67 @@ export const translation: TranslationDictionary = {
   drilldown: {
     drillMenuItem: 'Деталізація',
     breadcrumbsAllSuffix: 'Все',
+    breadcrumbsPrev: 'Попередній',
+    breadcrumbsNext: 'Наступний',
+    popover: {
+      members: 'Учасники',
+      table: 'Таблиця',
+      column: 'Колонка',
+    },
+  },
+  widgetHeader: {
+    info: {
+      details: 'Деталі віджета',
+      tooltip: 'Натисніть щоб побачити повну інформацію',
+    },
+  },
+  plugins: {
+    registerPrompt:
+      'Невідомий плагін: {{pluginType}}. Будь ласка зареєструйте цей плагін щоб він міг бути відображений.',
+  },
+  ai: {
+    analyticsChatbot: 'Аналітичний чат-бот',
+    dataTopics: 'Теми Даних',
+    chatbotDescription:
+      'Аналітичний чат-бот розроблено, щоб допомогти вам взаємодіяти з вашими даними за допомогою розмовної мови.',
+    topicSelectPrompt: 'Виберіть тему, яку б ви хотіли дослідити:',
+    betaLabel: 'Бета',
+    preview: 'Попередній перегляд',
+    clearHistoryPrompt: 'Ви дійсно хочете очистити чат?',
+    config: {
+      inputPromptText: 'Поставте запитання або введіть «/» для отримання ідей',
+      welcomeText:
+        'Вітаємо в Аналітичному помічнику! Я можу допомогти вам досліджувати та зрозуміти ваші дані.',
+      suggestionsWelcomeText: 'Деякі запитання, які у вас можуть виникнути:',
+    },
+    buttons: {
+      insights: 'Інсайти',
+      correctResponse: 'Коректна відповідь',
+      incorrectResponse: 'Некоректна відповідь',
+      clearChat: 'Очистити чат',
+      refresh: 'Оновити',
+      readMore: 'Читати ще',
+      collapse: 'Згорнути',
+      yes: 'Так',
+      no: 'Ні',
+      seeMore: 'Більше',
+    },
+    disclaimer: {
+      poweredByAi: 'Вміст створено за допомогою ШІ, тому можливі несподіванки та помилки.',
+      rateRequest: ' Будь ласка, оцінюйте відповіді, щоб ми могли покращити продукт!',
+    },
+    errors: {
+      chatUnavailable: 'Чат недоступний. Спробуйте пізніше.',
+      fetchHistory: 'Щось пішло не так, і ми не змогли відновити історію чату. Почнімо спочатку!',
+      recommendationsNotAvailable:
+        'Наразі рекомендації недоступні. Спробуйте ще раз через кілька хвилин.',
+      insightsNotAvailable: 'Немає доступних інсайтів.',
+      unexpectedChatResponse:
+        'Ой, щось пішло не так. Повторіть спробу пізніше або спробуйте поставити інше запитання.',
+      unexpected: 'Ой, лихо! Шось йому стало. Спробуйте трохи пізніше.',
+      unknownResponse: 'Отримано невідомий тип відповіді, необроблена відповідь=',
+      invalidInput: 'Недійсне введення',
+      noAvailableDataTopics: 'Жодне з наданих моделей даних або перспектив доступне',
+    },
   },
 };

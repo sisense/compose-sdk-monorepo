@@ -35,6 +35,11 @@ describe('tracking', () => {
     expect(postMock).toHaveBeenCalledWith('api/activities/', [expectedPayload], expectedOptions);
   });
 
+  it('trackProductEvent should NOT send tracking in debug mode and test environment', async () => {
+    await trackProductEvent(fakeAction, {}, httpClient, true);
+    expect(postMock).not.toHaveBeenCalled();
+  });
+
   it('trackProductEvent should handle failure', async () => {
     const fakeError = new Error('fakeError');
     postMock.mockRejectedValueOnce(fakeError);

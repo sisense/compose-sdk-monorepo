@@ -13,8 +13,8 @@ Vue components and utilities for working with charts
 - [AreaRangeChart](charts/class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](charts/class.BarChart.md)
 - [BoxplotChart](charts/class.BoxplotChart.md)
-- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md)
-- [Chart](charts/class.Chart.md)
+- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [Chart](charts/class.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](charts/class.ColumnChart.md)
 - [FunnelChart](charts/class.FunnelChart.md)
 - [IndicatorChart](charts/class.IndicatorChart.md)
@@ -70,22 +70,23 @@ Vue components and utilities for working with dashboards
 - [ChartWidget](dashboards/class.ChartWidget.md)
 - [Dashboard](dashboards/class.Dashboard.md) <Badge type="beta" text="Beta" />
 
-## Fusion Embed
+## Fusion Assets
 
-Vue components and functions for working with Fusion Embed dashboards, widgets, queries, and formulas
+Vue components and functions for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardById](fusion-embed/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
-- [DashboardModel](fusion-embed/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [DashboardWidget](fusion-embed/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useExecuteQueryByWidgetId](fusion-embed/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useFetch](fusion-embed/function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetDashboardModel](fusion-embed/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetDashboardModels](fusion-embed/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetSharedFormula](fusion-embed/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [useGetWidgetModel](fusion-embed/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](fusion-embed/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardById](fusion-assets/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardWidget](fusion-assets/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useFetch](fusion-assets/function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Namespaces
 
+- [dashboardHelpers](namespaces/namespace.dashboardHelpers/index.md)
 - [dashboardModelTranslator](namespaces/namespace.dashboardModelTranslator/index.md)
 - [widgetModelTranslator](namespaces/namespace.widgetModelTranslator/index.md)

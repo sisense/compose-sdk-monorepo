@@ -1,5 +1,11 @@
 export { DashboardById } from './dashboard-by-id';
 export { Dashboard } from './dashboard';
+export {
+  useComposedDashboard,
+  type ComposableDashboardProps,
+  type UseComposedDashboardOptions,
+} from './use-composed-dashboard';
+export { useDashboardTheme, type DashboardThemeParams } from './use-dashboard-theme';
 export type {
   DashboardByIdProps,
   DashboardProps,
@@ -7,4 +13,3 @@ export type {
   DashboardStyleOptions,
   DashboardConfig,
 } from './types';
-export { DashboardHelpers } from './dashboard-helpers';

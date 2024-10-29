@@ -87,7 +87,7 @@ export type WidgetModelSuccessState = {
 };
 
 /**
- * React hook that retrieves an existing widget model from a Fusion Embed instance.
+ * React hook that retrieves an existing widget model from a Fusion instance.
  *
  * **Note:** Widget extensions based on JS scripts and add-ons in Fusion are not supported.
  *
@@ -107,7 +107,7 @@ export type WidgetModelSuccessState = {
  * - [Modify Chart Type](https://www.sisense.com/platform/compose-sdk/playground/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
  *
  * @returns Widget load state that contains the status of the execution, the result widget model, or the error if one has occurred
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useGetWidgetModel = withTracking('useGetWidgetModel')(useGetWidgetModelInternal);

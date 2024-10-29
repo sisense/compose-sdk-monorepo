@@ -6,13 +6,13 @@ title: toTableProps
 
 > **toTableProps**(`widgetModel`): [`TableProps`](../../../interfaces/interface.TableProps.md)
 
-Translates a [WidgetModel](../../../fusion-embed/interface.WidgetModel.md) to the props for rendering a table.
+Translates a [WidgetModel](../../../fusion-assets/interface.WidgetModel.md) to the props for rendering a table.
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `widgetModel` | [`WidgetModel`](../../../fusion-embed/interface.WidgetModel.md) |
+| `widgetModel` | [`WidgetModel`](../../../fusion-assets/interface.WidgetModel.md) |
 
 ## Returns
 

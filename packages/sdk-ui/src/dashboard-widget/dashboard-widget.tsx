@@ -52,7 +52,7 @@ function getWidgetProps(widgetModel: WidgetModel): {
  *
  * ## Example
  *
- * Display two dashboard widgets from a Fusion Embed instance.
+ * Display two dashboard widgets from a Fusion instance.
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=fusion-assets%2Ffusion-widgets&mode=docs'
@@ -61,7 +61,7 @@ function getWidgetProps(widgetModel: WidgetModel): {
  *  style='border:none;'
  * />
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const DashboardWidget: FunctionComponent<DashboardWidgetProps> = asSisenseComponent({

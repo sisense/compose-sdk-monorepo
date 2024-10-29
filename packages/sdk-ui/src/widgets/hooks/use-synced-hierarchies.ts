@@ -37,7 +37,10 @@ export function useSyncedDrilldownPaths({
   });
 
   return useMemo(
-    () => [...loadedHierarchies, ...otherDrilldownPaths],
+    () =>
+      loadedHierarchies.length
+        ? [...loadedHierarchies, ...otherDrilldownPaths]
+        : otherDrilldownPaths,
     [loadedHierarchies, otherDrilldownPaths],
   );
 }

@@ -82,6 +82,13 @@ export const BoxplotChart = defineComponent({
      */
     onBeforeRender: Function as PropType<BoxplotChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<BoxplotChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointClick}
      *
      * @category Callbacks

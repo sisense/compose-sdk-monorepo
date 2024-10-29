@@ -4,6 +4,7 @@ import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { useGetApi } from '../../../api/rest-api';
 import { AreamapType } from '../../../types';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Hook to get geoJson from API or cache (LocalStorage)
@@ -36,11 +37,11 @@ export const useGeoJson = (
               getGeoJsonFromServer = api.getUsaStatesGeoJson;
               break;
             default:
-              throw new Error(`Unsupported map type: ${mapType}`);
+              throw new TranslatableError('errors.unsupportedMapType', { mapType });
           }
           const geoJsonFromServer = await getGeoJsonFromServer();
           if (!geoJsonFromServer) {
-            throw new Error('Failed loading map');
+            throw new TranslatableError('errors.mapLoadingFailed');
           }
           const fixedGeoJsonFromServer =
             mapType === 'world'

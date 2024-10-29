@@ -74,6 +74,13 @@ export const SunburstChart = defineComponent({
      */
     onBeforeRender: Function as PropType<SunburstChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<SunburstChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointClick}
      *
      * @category Callbacks

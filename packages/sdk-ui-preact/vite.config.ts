@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => ({
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/index.ts'),
       name: '@sisense/sdk-ui-preact',
-      formats: ['es', 'umd'],
+      formats: ['es', 'cjs', 'umd'],
       // the proper extensions will be added
       fileName: (format) => `index.${format}.js`,
     },

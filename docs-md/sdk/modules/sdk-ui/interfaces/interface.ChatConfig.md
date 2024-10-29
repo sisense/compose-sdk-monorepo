@@ -45,7 +45,7 @@ false
 
 ### inputPromptText
 
-> **inputPromptText**: `string`
+> **inputPromptText**?: `string`
 
 The input prompt text to show in the chat input box
 

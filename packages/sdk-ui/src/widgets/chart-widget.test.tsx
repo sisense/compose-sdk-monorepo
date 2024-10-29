@@ -48,7 +48,9 @@ describe('ChartWidget', () => {
   it('should render table widget', async () => {
     executeQueryMock.mockResolvedValue(mockResolvedQuery);
     const { container, findByLabelText } = render(
-      <ChartWidget {...mockChartWidgetPropsForTable} />,
+      <MenuProvider>
+        <ChartWidget {...mockChartWidgetPropsForTable} />
+      </MenuProvider>,
     );
     const table = await findByLabelText('table-root');
     expect(table).toBeTruthy();

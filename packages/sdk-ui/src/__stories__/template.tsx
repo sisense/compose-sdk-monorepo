@@ -35,7 +35,7 @@ const contextDecorator = {
 const visualTestIdDecorator = {
   decorators: [
     (Story: StoryFn, { id }: StoryContext) => (
-      <div data-visual-testid={id}>
+      <div data-visual-test-id={id}>
         <Story />
       </div>
     ),

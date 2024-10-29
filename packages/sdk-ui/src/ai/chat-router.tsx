@@ -6,6 +6,7 @@ import { useChatConfig } from './chat-config';
 import ChatHome from './chat-home';
 import ErrorContainer from './common/error-container';
 import LoadingSpinner from '../common/components/loading-spinner';
+import { useTranslation } from 'react-i18next';
 
 export default function ChatRouter() {
   const [validDataTopicsList, setValidDataTopicsList] = useState<string[]>([]);
@@ -15,6 +16,7 @@ export default function ChatRouter() {
   const { data, fetchStatus } = useGetDataTopics();
 
   const { dataTopicsList } = useChatConfig();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (data && fetchStatus === 'idle') {
@@ -24,13 +26,13 @@ export default function ChatRouter() {
       }
       setValidDataTopicsList(allowedContexts.map((dataTopic) => dataTopic.title));
       if (!allowedContexts.length) {
-        setErrorMessage(`None of the provided data models or perspectives are available`);
+        setErrorMessage(t('ai.errors.noAvailableDataTopics'));
       } else if (allowedContexts.length === 1) {
         setErrorMessage(undefined);
         setSelectedContext(allowedContexts[0].title);
       }
     }
-  }, [data, dataTopicsList, fetchStatus]);
+  }, [data, dataTopicsList, fetchStatus, t]);
 
   const queryClient = useQueryClient();
   const handleRefresh = useCallback(() => {
@@ -40,7 +42,10 @@ export default function ChatRouter() {
 
   if (errorMessage) {
     return (
-      <ErrorContainer text={errorMessage} action={{ text: 'Refresh', onClick: handleRefresh }} />
+      <ErrorContainer
+        text={errorMessage}
+        action={{ text: t('ai.buttons.refresh'), onClick: handleRefresh }}
+      />
     );
   }
 
@@ -49,14 +54,10 @@ export default function ChatRouter() {
   }
 
   return selectedContext ? (
-    <>
-      <ChatBox
-        contextTitle={selectedContext}
-        onGoBack={
-          validDataTopicsList.length === 1 ? undefined : () => setSelectedContext(undefined)
-        }
-      />
-    </>
+    <ChatBox
+      contextTitle={selectedContext}
+      onGoBack={validDataTopicsList.length === 1 ? undefined : () => setSelectedContext(undefined)}
+    />
   ) : (
     <ChatHome
       dataTopicsList={validDataTopicsList}

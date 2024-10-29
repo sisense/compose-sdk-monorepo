@@ -1,5 +1,6 @@
 import { withTracking } from '@/decorators/hook-decorators';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { TranslatableError } from '@/translation/translatable-error';
 import { useQuery, type UseQueryResult as TanstackUseQueryResult } from '@tanstack/react-query';
 
 /**
@@ -36,7 +37,7 @@ export type UseQueryResult<TData, TError> = TanstackUseQueryResult<TData, TError
   });
  ```
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
- * @group Fusion Embed
+ * @group Fusion Assets
  */
 export const useFetch = withTracking('useFetch')(
   <TData = unknown, TError = unknown>(
@@ -65,7 +66,7 @@ export const useFetch = withTracking('useFetch')(
       queryKey: ['fetch', path, init, options?.requestConfig],
       queryFn: async () => {
         if (!httpClient) {
-          throw new Error('HttpClient is not available');
+          throw new TranslatableError('errors.httpClientNotFound');
         }
         return httpClient.call(httpClient.url + path, init ?? {}, {
           ...options?.requestConfig,

@@ -16,5 +16,5 @@ Two options are supported:
 
 OR
 
-(2) `ThemeOid` -- Theme identifier as defined in a Fusion Embed instance (**Admin > App Configuration > Look and Feel**).
+(2) `ThemeOid` -- Theme identifier as defined in a Fusion instance (**Admin > App Configuration > Look and Feel**).
 See [Customizing the Sisense User Interface](https://docs.sisense.com/main/SisenseLinux/customizing-the-sisense-user-interface.htm) for more details.

@@ -35,6 +35,7 @@ import { getAreamapData } from './areamap-data';
 import { scattermapData } from './scattermap-data';
 import { rangeData as getRangeData } from './range-data';
 import { advancedAnalyticsData, isForecastChart } from './advanced-analytics-data';
+import { TranslatableError } from '@/translation/translatable-error';
 
 export const chartDataService = (
   chartType: ChartType,
@@ -69,7 +70,7 @@ export const chartDataService = (
     );
   } else if (isRange(chartType)) {
     return getRangeData(chartDataOptions as RangeChartDataOptionsInternal, dataTable);
-  } else throw new Error(`Unexpected chart type: ${chartType}`);
+  } else throw new TranslatableError('errors.unexpectedChartType', { chartType });
 };
 
 export type ValueColumn = {

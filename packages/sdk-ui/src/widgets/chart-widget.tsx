@@ -1,21 +1,17 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ReactNode, useCallback, useMemo, useState, type FunctionComponent } from 'react';
+import { useCallback, useMemo, useState, type FunctionComponent } from 'react';
+import omit from 'lodash-es/omit';
 import { Chart } from '../chart';
-import { ChartProps, ChartWidgetProps, DrilldownWidgetProps, HighchartsOptions } from '../props';
+import { ChartWidgetProps, HighchartsOptions } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
 import { getDataSourceName } from '@sisense/sdk-data';
 import { WidgetContainer } from './common/widget-container';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { DrilldownWidget } from './drilldown-widget';
 import { useHighlightSelection } from './hooks/use-highlight-selection';
 import { combineHandlers } from '../utils/combine-handlers';
-import {
-  createDrilldownToChartConnector,
-  getDrilldownInitialDimension,
-  isDrilldownApplicableToChart,
-} from './common/drilldown-connector';
-import { useSyncedDrilldownPaths } from './hooks/use-synced-hierarchies';
+import { ChartWidgetStyleOptions, DrilldownSelection } from '..';
+import { useWithDrilldown } from './hooks/use-with-drilldown';
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.
  * It can be used along with the {@link DrilldownWidget} component to support advanced data drilldown.
@@ -49,36 +45,37 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     dataSource = app?.defaultDataSource,
     dataOptions,
     styleOptions,
-    drilldownOptions,
     highlightSelectionDisabled = false,
     highlights,
     description,
     onChange,
   } = props;
-  const { width, height, ...styleOptionsWithoutSizing } = styleOptions || {};
+  const { width, height } = styleOptions || {};
   const defaultSize = getWidgetDefaultSize(chartType, {
     hasHeader: !styleOptions?.header?.hidden,
   });
+
   const [refreshCounter, setRefreshCounter] = useState(0);
-  const isDrilldownApplicable = useMemo(
-    () => isDrilldownApplicableToChart(chartType, dataOptions),
-    [chartType, dataOptions],
+
+  const styleOptionsWithoutSizing = useMemo(
+    () => omit(styleOptions, ['width', 'height']) as ChartWidgetStyleOptions,
+    [styleOptions],
   );
-  const drilldownPaths = useSyncedDrilldownPaths({
-    attribute: getDrilldownInitialDimension(chartType, dataOptions),
-    dataSource: dataSource,
-    drilldownPaths: drilldownOptions?.drilldownPaths,
-    enabled: isDrilldownApplicable,
+  const onDrilldownSelectionsChange = useCallback(
+    (selections: DrilldownSelection[]) => {
+      onChange?.({
+        drilldownOptions: {
+          drilldownSelections: selections,
+        },
+      });
+    },
+    [onChange],
+  );
+
+  const { propsWithDrilldown, isDrilldownEnabled, breadcrumbs } = useWithDrilldown({
+    propsToExtend: props,
+    onDrilldownSelectionsChange,
   });
-
-  const isDrilldownEnabled = useMemo(() => {
-    const hasDrilldownConfig =
-      drilldownOptions?.drilldownSelections?.length ||
-      drilldownOptions?.drilldownDimensions?.length ||
-      drilldownPaths?.length;
-
-    return hasDrilldownConfig && isDrilldownApplicable;
-  }, [drilldownOptions, isDrilldownApplicable, drilldownPaths]);
 
   const highlightSelection = useHighlightSelection({
     chartType,
@@ -105,62 +102,44 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     [description, isAccessibilityEnabled],
   );
 
-  const onDrilldownWidgetChange = useCallback(
-    ({ drilldownSelections }: Partial<DrilldownWidgetProps>) => {
-      if (drilldownSelections) {
-        onChange?.({
-          drilldownOptions: {
-            drilldownSelections,
-          },
-        });
-      }
-    },
-    [onChange],
-  );
-
   if (!chartType || !dataOptions) {
     return null;
   }
 
   const chartProps = {
-    ...props,
+    ...propsWithDrilldown,
     dataSet: dataSource,
     styleOptions: styleOptionsWithoutSizing,
     refreshCounter: refreshCounter,
-    onDataPointClick: combineHandlers([
-      highlightSelection.onDataPointClick,
-      props.onDataPointClick,
-    ]),
-    onDataPointsSelected: combineHandlers([
-      highlightSelection.onDataPointsSelected,
-      props.onDataPointsSelected,
-    ]),
-    onBeforeRender: combineHandlers(
+    onDataPointClick: useMemo(
+      () => combineHandlers([highlightSelection.onDataPointClick, props.onDataPointClick]),
+      [highlightSelection.onDataPointClick, props.onDataPointClick],
+    ),
+    onDataPointContextMenu: propsWithDrilldown.onDataPointContextMenu,
+    onDataPointsSelected: useMemo(
+      () =>
+        combineHandlers([
+          highlightSelection.onDataPointsSelected,
+          propsWithDrilldown.onDataPointsSelected,
+        ]),
+      [highlightSelection.onDataPointsSelected, propsWithDrilldown.onDataPointsSelected],
+    ),
+    onBeforeRender: useMemo(
+      () =>
+        combineHandlers(
+          [
+            applyWidgetDescriptionAsAccessibilityDescription,
+            highlightSelection.onBeforeRender,
+            props.onBeforeRender,
+          ],
+          true,
+        ),
       [
         applyWidgetDescriptionAsAccessibilityDescription,
         highlightSelection.onBeforeRender,
         props.onBeforeRender,
       ],
-      true,
     ),
-  };
-
-  const renderChart = (chartProps: ChartProps, topSlot?: ReactNode) => {
-    return (
-      <WidgetContainer
-        {...props}
-        topSlot={
-          <>
-            {props.topSlot}
-            {topSlot}
-          </>
-        }
-        dataSetName={dataSource && getDataSourceName(dataSource)}
-        onRefresh={() => setRefreshCounter(refreshCounter + 1)}
-      >
-        <Chart {...chartProps} />
-      </WidgetContainer>
-    );
   };
 
   return (
@@ -171,27 +150,19 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
         height,
       }}
     >
-      {isDrilldownEnabled ? (
-        <DrilldownWidget
-          drilldownDimensions={drilldownOptions?.drilldownDimensions}
-          drilldownPaths={drilldownPaths}
-          initialDimension={getDrilldownInitialDimension(chartType, dataOptions)}
-          drilldownSelections={drilldownOptions?.drilldownSelections || []}
-          config={{
-            isBreadcrumbsDetached: true,
-          }}
-          onChange={onDrilldownWidgetChange}
-        >
-          {(drilldownConnectProps) => {
-            const { breadcrumbsComponent } = drilldownConnectProps;
-            const withDrilldown = createDrilldownToChartConnector(drilldownConnectProps);
-
-            return renderChart(withDrilldown(chartProps), breadcrumbsComponent);
-          }}
-        </DrilldownWidget>
-      ) : (
-        renderChart(chartProps)
-      )}
+      <WidgetContainer
+        {...props}
+        topSlot={
+          <>
+            {props.topSlot}
+            {breadcrumbs}
+          </>
+        }
+        dataSetName={dataSource && getDataSourceName(dataSource)}
+        onRefresh={() => setRefreshCounter(refreshCounter + 1)}
+      >
+        <Chart {...chartProps} />
+      </WidgetContainer>
     </DynamicSizeContainer>
   );
 });

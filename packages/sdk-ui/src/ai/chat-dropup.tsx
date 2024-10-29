@@ -4,6 +4,7 @@ import DropupSection, { DropupSectionProps } from './common/dropup-section';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider/theme-context';
+import { useTranslation } from 'react-i18next';
 
 const PopupContent = styled.div<Themable>`
   font-family: ${({ theme }) => theme.typography.fontFamily};
@@ -65,6 +66,7 @@ export default function ChatDropup({
   );
 
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   const alwaysExpanded = filteredSections.length === 1;
 
@@ -92,7 +94,7 @@ export default function ChatDropup({
           ))}
         {recommendationsError && (
           <ErrorMessage theme={themeSettings}>
-            Recommendations aren't available right now. Try again in a few minutes.
+            {t('ai.errors.recommendationsNotAvailable')}
           </ErrorMessage>
         )}
       </PopupContent>

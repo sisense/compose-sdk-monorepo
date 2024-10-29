@@ -68,6 +68,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * ```
  *
  * <img src="media://angular-chart-example.png" width="800px" />
+ * @shortDescription Common component for rendering charts of different types including table
  *
  * @group Charts
  */
@@ -137,6 +138,15 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
    */
   @Input()
   beforeRender: ChartProps['onBeforeRender'];
+
+  /**
+   * {@inheritDoc  @sisense/sdk-ui!ChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: ChartProps['onDataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}

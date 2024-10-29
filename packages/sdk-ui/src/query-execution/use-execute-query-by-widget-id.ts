@@ -54,7 +54,7 @@ import { useShouldLoad } from '../common/hooks/use-should-load';
  ```
  * See also hook {@link useExecuteQuery}, which execute a query specified in code.
  * @returns Query state that contains the status of the query execution, the result data, the constructed query parameters, or the error if any occurred
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useExecuteQueryByWidgetId = withTracking('useExecuteQueryByWidgetId')(
@@ -183,7 +183,7 @@ export async function executeQueryByWidgetId({
   });
 
   if (!fetchedWidget) {
-    throw new Error(`Widget with oid ${widgetOid} not found`);
+    throw new TranslatableError('errors.widgetWithOidNotFound', { widgetOid });
   }
 
   const widgetModel = widgetModelTranslator.fromWidgetDto(fetchedWidget);

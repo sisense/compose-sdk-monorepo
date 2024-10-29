@@ -57,6 +57,7 @@ const chartProps = ref<ChartProps>({
  * ```
  *
  * <img src="media://vue-chart-example.png" width="800px" />
+ * @shortDescription Common component for rendering charts of different types including table
  * @param props - Chart properties
  * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType | chartType}
  * @group Charts
@@ -99,6 +100,13 @@ export const Chart = defineComponent({
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<ChartProps['onBeforeRender']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<ChartProps['onDataReady']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
      *

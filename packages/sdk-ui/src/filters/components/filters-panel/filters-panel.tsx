@@ -5,6 +5,7 @@ import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { DASHBOARD_HEADER_HEIGHT } from '@/dashboard/components/dashboard-header';
+import { useTranslation } from 'react-i18next';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
@@ -45,7 +46,6 @@ const PanelTitle = styled.div`
 /**
  * Props of the {@link FiltersPanel} component
  *
- * @internal
  */
 export type FiltersPanelProps = {
   /** Array of filters to display */
@@ -59,11 +59,13 @@ export type FiltersPanelProps = {
 /**
  * Filters panel component that renders a list of filter tiles
  *
- * @internal
+ * @group Filter Tiles
+ * @alpha
  */
 export const FiltersPanel = asSisenseComponent({
   componentName: 'FiltersPanel',
 })(({ filters, onFiltersChange, defaultDataSource }: FiltersPanelProps) => {
+  const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
   const filterList = [...filters] as (Filter | null)[];
   const handleFilterChange = (filter: Filter | null, index: number) => {
@@ -75,7 +77,7 @@ export const FiltersPanel = asSisenseComponent({
   return (
     <PanelWrapper theme={themeSettings}>
       <PanelHeader theme={themeSettings}>
-        <PanelTitle>Filters</PanelTitle>
+        <PanelTitle>{t('filters')}</PanelTitle>
       </PanelHeader>
       <PanelBody>
         <PanelBodyInner>

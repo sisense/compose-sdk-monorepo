@@ -502,6 +502,7 @@ export function numeric(
  * @param deactivatedMembers - Array of deactivated member values
  * @param backgroundFilter - Optional background filter
  * @returns A filter instance
+ * @shortDescription Creates filter on attribute to match certain string values
  */
 export function members(
   attribute: Attribute,

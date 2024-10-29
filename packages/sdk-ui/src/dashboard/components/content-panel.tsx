@@ -3,8 +3,8 @@ import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 import styled from '@emotion/styled';
 import { useThemeContext } from '@/theme-provider';
-import { CommonWidget } from '@/widgets/common-widget';
 import { useMemo } from 'react';
+import { Widget } from '@/widgets/widget';
 
 const Row = styled.div<{ widths: number[] }>`
   display: grid;
@@ -85,7 +85,7 @@ export const ContentPanel = ({ layout, widgets }: ContentPanelProps) => {
                     dividerWidth={themeSettings.dashboard.dividerLineWidth}
                     dividerColor={themeSettings.dashboard.dividerLineColor}
                   >
-                    {widgetProps && <CommonWidget {...widgetProps} />}
+                    {widgetProps && <Widget {...widgetProps} />}
                   </Subcell>
                 );
               })}

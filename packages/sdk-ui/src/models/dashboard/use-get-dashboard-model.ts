@@ -113,7 +113,7 @@ export type DashboardModelSuccessState = {
   return null;
  ```
  * @returns Dashboard load state that contains the status of the execution, the result dashboard model, or the error if any
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useGetDashboardModel = withTracking('useGetDashboardModel')(
@@ -124,7 +124,6 @@ export const useGetDashboardModel = withTracking('useGetDashboardModel')(
  * {@link useGetDashboardModel} without tracking to be used inside other hooks or components in Compose SDK.
  *
  * @param params - Parameters of the dashboard to be retrieved
- *
  * @internal
  */
 export function useGetDashboardModelInternal(params: GetDashboardModelParams) {

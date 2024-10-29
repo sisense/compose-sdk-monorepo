@@ -32,7 +32,7 @@ export class DimensionalQueryClient implements QueryClient {
 
   constructor(
     httpClient: HttpClient,
-    pivotClient: PivotClient = new PivotClient(httpClient),
+    pivotClient: PivotClient = new PivotClient(httpClient.url, httpClient.auth),
     shouldSkipHighlightsWithoutAttributes?: boolean,
   ) {
     validateHttpClient(httpClient);

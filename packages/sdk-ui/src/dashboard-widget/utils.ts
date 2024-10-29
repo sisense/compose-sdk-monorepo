@@ -40,27 +40,36 @@ import {
 import { combineHandlers } from '@/utils/combine-handlers';
 import { WidgetTypeInternal } from '@/models/widget/types';
 
+const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
+  'chart/line': 'line',
+  'chart/area': 'area',
+  'chart/bar': 'bar',
+  'chart/column': 'column',
+  'chart/polar': 'polar',
+  'chart/pie': 'pie',
+  'chart/funnel': 'funnel',
+  treemap: 'treemap',
+  sunburst: 'sunburst',
+  'chart/scatter': 'scatter',
+  indicator: 'indicator',
+  'chart/boxplot': 'boxplot',
+  'map/scatter': 'scattermap',
+  'map/area': 'areamap',
+  tablewidget: 'table',
+  tablewidgetagg: 'table',
+};
 export function getChartType(widgetType: WidgetType) {
-  const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
-    'chart/line': 'line',
-    'chart/area': 'area',
-    'chart/bar': 'bar',
-    'chart/column': 'column',
-    'chart/polar': 'polar',
-    'chart/pie': 'pie',
-    'chart/funnel': 'funnel',
-    treemap: 'treemap',
-    sunburst: 'sunburst',
-    'chart/scatter': 'scatter',
-    indicator: 'indicator',
-    'chart/boxplot': 'boxplot',
-    'map/scatter': 'scattermap',
-    'map/area': 'areamap',
-    tablewidget: 'table',
-    tablewidgetagg: 'table',
-  };
-
   return widgetTypeToChartType[widgetType];
+}
+export function getWidgetTypeFromChartType(chartType: ChartType): WidgetType {
+  const reversedWidgetTypeToChartType = Object.entries(widgetTypeToChartType).reduce(
+    (acc, [key, value]) => {
+      acc[value] = key as WidgetType;
+      return acc;
+    },
+    {} as Record<ChartType, WidgetType>,
+  );
+  return reversedWidgetTypeToChartType[chartType];
 }
 
 export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | undefined {

@@ -7,6 +7,7 @@ import { DateFilterRange } from '../types';
 import Popover from '@mui/material/Popover';
 import { DateRangeFieldButton, TriangleIndicator } from '../../common';
 import { useThemeContext } from '../../../../theme-provider';
+import { useTranslation } from 'react-i18next';
 
 const DATE_RANGE = 'date-range';
 
@@ -115,6 +116,7 @@ export function DateFilter(props: DateRangeFilterProps) {
   };
 
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
   const buttonsVariant = props.variant || 'grey';
 
   return (
@@ -130,8 +132,8 @@ export function DateFilter(props: DateRangeFilterProps) {
         ref={filterContainerRef}
       >
         <DateRangeFieldButton
-          value={fromVal ? fromVal.format(DEFAULT_FORMAT) : 'Select'}
-          label="From"
+          value={fromVal ? fromVal.format(DEFAULT_FORMAT) : t('dateFilter.select')}
+          label={t('dateFilter.from')}
           onClick={() => openDateRangeSelector('fromSelector')}
           isActive={isDateRangeSelectorOpen && activeSelectorMode === 'fromSelector'}
           theme={themeSettings}
@@ -140,8 +142,8 @@ export function DateFilter(props: DateRangeFilterProps) {
         />
         <DateRangeFieldButton
           onClick={() => openDateRangeSelector('toSelector')}
-          value={toVal ? toVal.format(DEFAULT_FORMAT) : 'Today'}
-          label="To"
+          value={toVal ? toVal.format(DEFAULT_FORMAT) : t('dateFilter.today')}
+          label={t('dateFilter.to')}
           isActive={isDateRangeSelectorOpen && activeSelectorMode === 'toSelector'}
           theme={themeSettings}
           variant={buttonsVariant}

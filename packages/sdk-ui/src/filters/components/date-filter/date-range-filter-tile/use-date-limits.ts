@@ -1,4 +1,10 @@
-import { DataSource, Filter, LevelAttribute, measureFactory } from '@sisense/sdk-data';
+import {
+  DataSource,
+  Filter,
+  LevelAttribute,
+  convertDataSource,
+  measureFactory,
+} from '@sisense/sdk-data';
 import { useSisenseContext } from '../../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { executeQuery } from '../../../../query/execute-query';
@@ -24,9 +30,14 @@ export const useDateLimits = (
       return;
     }
 
+    // prioritize attribute dataSource for the use case of multi-source dashboard
+    const dataSourceInternal = attribute.dataSource
+      ? convertDataSource(attribute.dataSource)
+      : dataSource;
+
     void executeQuery(
       {
-        dataSource,
+        dataSource: dataSourceInternal,
         measures: [measureFactory.min(attribute), measureFactory.max(attribute)],
         filters: parentFilters,
       },

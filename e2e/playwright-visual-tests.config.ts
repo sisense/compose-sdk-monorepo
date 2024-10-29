@@ -26,6 +26,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
+  /* Maximum failures count */
+  maxFailures: 1,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -35,8 +37,8 @@ export default defineConfig({
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Use `data-visual-testid` as test id attribute */
-    testIdAttribute: 'data-visual-testid',
+    /* Use `data-visual-test-id` as test id attribute */
+    testIdAttribute: 'data-visual-test-id',
   },
   webServer: process.env.USE_EXTERNAL_HOST ? null : getAppsConfig(),
   /* Configure projects for major browsers */
@@ -58,4 +60,6 @@ export default defineConfig({
       },
     },
   ],
+  globalSetup: './visual-tests/__test-helpers__/global-setup.ts',
+  globalTeardown: './visual-tests/__test-helpers__/global-teardown.ts',
 });

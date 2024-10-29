@@ -51,7 +51,7 @@ export type UseFetchOptions = {
  * - `isSuccess`: A boolean indicating whether the fetch operation was successfully completed without any errors.
  * - `error`: An error object containing details about any errors that occurred during the fetch operation.
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useFetch = <TData = unknown>(

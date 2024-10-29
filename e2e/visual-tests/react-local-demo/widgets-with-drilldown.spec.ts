@@ -1,11 +1,10 @@
-import { test } from '@playwright/test';
+import { test } from '../__test-helpers__/test-setup';
 import { AppsNames, getAppConfig } from '../appsConfig';
-import { makeScreenshotsOverPage } from '../__test-helpers__/make-screenshot';
 
 const { url } = getAppConfig(AppsNames.REACT_LOCAL_DEMO);
 
-test('verify widgets with drilldown page', async ({ page }) => {
+test('verify widgets with drilldown page', async ({ page, testHelper }) => {
   await page.goto(url);
   await page.locator('span', { hasText: 'WidgetsWithDrilldownDemo' }).click();
-  await makeScreenshotsOverPage(page);
+  await testHelper.makeScreenshotsOverPage();
 });

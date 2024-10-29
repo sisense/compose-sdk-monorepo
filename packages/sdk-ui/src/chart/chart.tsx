@@ -27,6 +27,7 @@ import { AdvancedChart } from './advanced-chart';
  *
  * @param props - Chart properties
  * @returns Chart component representing a chart type as specified in `ChartProps.`{@link ChartProps.chartType | chartType}
+ * @shortDescription Common component for rendering charts of different types including table
  * @group Charts
  */
 export const Chart = asSisenseComponent({

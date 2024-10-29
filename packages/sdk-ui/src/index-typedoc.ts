@@ -14,8 +14,8 @@
  * React components and hooks for working with queries
  * @groupDescription Dashboards
  * React components and utilities for working with dashboards
- * @groupDescription Fusion Embed
- * React components, hooks, and utilities for working with Fusion Embed dashboards, widgets, queries, and formulas
+ * @groupDescription Fusion Assets
+ * React components, hooks, and utilities for working with Fusion dashboards, widgets, queries, and formulas
  * @groupDescription Generative AI
  * React components and hooks for creating experiences using generative AI
  * @groupDescription Interfaces

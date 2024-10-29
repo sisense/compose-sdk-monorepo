@@ -53,9 +53,46 @@ export const translation = {
     missingMenuRoot: 'Missing initialized menu root',
     missingDataSource:
       "The 'dataSource' value is missing. It must be provided explicitly, or a 'defaultDataSource' should be specified in the Sisense context provider.",
+    incorrectOnDataReadyHandler: "'onDataReady' handler must return a valid data object",
+    undefinedDataSource: 'Data source is not defined',
+    emptyModel: 'Empty model',
+    missingMetadata: 'Missing metadata',
+    missingModelTitle: 'Missing model title',
+    httpClientNotFound: 'HttpClient not found.',
+    serverSettingsNotLoaded: 'Failed to load server settings',
+    requiredColumnMissing: 'Missing required column',
+    unexpectedChartType: 'Unexpected chart type: {{chartType}}',
+    noRowNumColumn: 'Data has no row num column',
+    ticIntervalCalculationFailed:
+      'Unable to calculate tic interval. Try specifying datetime granularity.',
+    polarChartDesignOptionsExpected: 'Polar chart design options expected for polar chart',
+    polarChartDesignOptionsNotExpected:
+      'Polar chart design options not expected for non-polar chart',
+    indicatorInvalidRelativeSize: 'Invalid relative size options',
+    unsupportedMapType: 'Unsupported map type: {{mapType}}',
+    mapLoadingFailed: 'Failed loading map',
+    cascadingFilterOriginalNotFound:
+      'Error in cascading filters reassembling. Original cascading filter not found',
+    dashboardLoadFailed: 'Failed to load Dashboard',
+    dashboardWithOidNotFound: 'Dashboard with oid {{dashboardOid}} not found',
+    widgetWithOidNotFound: 'Widget with oid {{widgetOid}} not found',
+    widgetEmptyResponse: 'Empty response for widget with oid {{widgetOid}}',
+    dateFilterIncorrectOperator: 'Incorrect operator: {{operator}}',
+    synchronizedFilterInvalidProps:
+      '`useSynchronizedFilter` hook must take at least one of [non-null `filterFromProps`] or [`createEmptyFilter` function]',
+    methodNotImplemented: 'Method not implemented.',
+    noPivotClient: 'Pivot client not initialized',
+    unexpectedCacheValue: 'Unexpected cache value',
+    notAMembersFilter: 'Filter is not a MembersFilter',
+    drilldownNoInitialDimension:
+      'Initial dimension has to be specified to use drilldown with custom components',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
+  filters: 'Filters',
+  widgetDetails: 'Widget Details',
+  cancel: 'Cancel',
+  includeAll: 'Include all',
   criteriaFilter: {
     displayModePrefix: 'All items',
     equals: 'Equals {{val}}',
@@ -84,7 +121,9 @@ export const translation = {
     last: 'Last',
     next: 'Next',
     from: 'From',
+    to: 'To',
     count: 'Count',
+    select: 'Select',
     today: 'Today',
     days: 'Days',
     weeks: 'Weeks',
@@ -94,6 +133,11 @@ export const translation = {
     earliestDate: 'Earliest Date',
     latestDate: 'Latest Date',
     todayOutOfRange: 'Today is out of available date range',
+    dateRange: {
+      fromTo: '{{from}} to {{to}}',
+      from: 'From {{val}}',
+      to: 'To {{val}}',
+    },
   },
   boxplot: {
     tooltip: {
@@ -130,6 +174,7 @@ export const translation = {
     },
   },
   unsupportedFilterMessage: 'Unsupported Filter (applied to the data query)',
+  unsupportedFilter: 'Unsupported filter {{filter}}',
   commonFilter: {
     clearSelectionButton: 'Clear Selection',
     selectMenuItem: 'Select',
@@ -139,6 +184,69 @@ export const translation = {
   drilldown: {
     drillMenuItem: 'Drill',
     breadcrumbsAllSuffix: 'All',
+    breadcrumbsPrev: 'Prev',
+    breadcrumbsNext: 'Next',
+    popover: {
+      members: 'Members',
+      table: 'Table',
+      column: 'Column',
+    },
+  },
+  widgetHeader: {
+    info: {
+      details: 'Widget Details',
+      tooltip: 'Click to view full details',
+    },
+  },
+  plugins: {
+    registerPrompt:
+      'Unknown plugin type: {{pluginType}}. Please register this plugin so it can be rendered.',
+  },
+  ai: {
+    analyticsChatbot: 'Analytics Chatbot',
+    dataTopics: 'Data Topics',
+    chatbotDescription:
+      'Analytics Chatbot is designed to help you interact with your data using natural language.',
+    topicSelectPrompt: 'Pick a topic you would like to explore:',
+    betaLabel: 'Beta',
+    preview: 'Preview',
+    clearHistoryPrompt: 'Do you want to clear this chat?',
+    config: {
+      inputPromptText: 'Ask a question or type "/" for ideas',
+      welcomeText:
+        'Welcome to the Analytics Assistant! I can help you explore and gain insights from your data.',
+      suggestionsWelcomeText: 'Some questions you may have:',
+    },
+    buttons: {
+      insights: 'Insights',
+      correctResponse: 'Correct response',
+      incorrectResponse: 'Incorrect response',
+      clearChat: 'Clear chat',
+      refresh: 'Refresh',
+      readMore: 'Read more',
+      collapse: 'Collapse',
+      yes: 'Yes',
+      no: 'No',
+      seeMore: 'See more',
+    },
+    disclaimer: {
+      poweredByAi: 'Content is powered by AI, so surprises and mistakes are possible.',
+      rateRequest: 'Please rate responses so we can improve!',
+    },
+    errors: {
+      chatUnavailable: 'Chat unavailable. Please try again later.',
+      fetchHistory:
+        "Something went wrong and we were unable to retrieve the chat thread. Let's start over!",
+      recommendationsNotAvailable:
+        "Recommendations aren't available right now. Try again in a few minutes.",
+      insightsNotAvailable: 'No insights available.',
+      unexpectedChatResponse:
+        'Oh snap, something went wrong. Please try again later or try asking a different question.',
+      unexpected: 'Oh snap, something went wrong. Please try again later.',
+      unknownResponse: 'Received unknown responseType, raw response=',
+      invalidInput: 'Invalid input',
+      noAvailableDataTopics: 'None of the provided data models or perspectives are available',
+    },
   },
 };
 

@@ -320,12 +320,25 @@ export const dimensionalModelECommerceWithFieldDescriptions = {
       type: 'dimension',
       dimensions: [],
       attributes: [
-        { name: 'Brand', expression: '[Brand.Brand]', type: 'text-attribute', description: '' },
+        {
+          name: 'Brand',
+          expression: '[Brand.Brand]',
+          type: 'text-attribute',
+          description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
+        },
         {
           name: 'Brand ID',
           expression: '[Brand.Brand ID]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
       ],
     },
@@ -339,12 +352,20 @@ export const dimensionalModelECommerceWithFieldDescriptions = {
           expression: '[Category.Category]',
           type: 'text-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Category ID',
           expression: '[Category.Category ID]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
       ],
     },
@@ -357,6 +378,10 @@ export const dimensionalModelECommerceWithFieldDescriptions = {
           expression: '[Commerce.Date (Calendar)]',
           type: 'datedimension',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
       ],
       attributes: [
@@ -365,66 +390,110 @@ export const dimensionalModelECommerceWithFieldDescriptions = {
           expression: '[Commerce.Age Range]',
           type: 'text-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Brand ID',
           expression: '[Commerce.Brand ID]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Category ID',
           expression: '[Commerce.Category ID]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Condition',
           expression: '[Commerce.Condition]',
           type: 'text-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Cost',
           expression: '[Commerce.Cost]',
           type: 'numeric-attribute',
           description: 'Cost Long `Description` !@#$%^*&*())_ \'\' "" ``',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Country ID',
           expression: '[Commerce.Country ID]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Date (Month)',
           expression: '[Commerce.Date (Month)]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Gender',
           expression: '[Commerce.Gender]',
           type: 'text-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Quantity',
           expression: '[Commerce.Quantity]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Revenue',
           expression: '[Commerce.Revenue]',
           type: 'numeric-attribute',
           description: 'Some More description',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Visit ID',
           expression: '[Commerce.Visit ID]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
       ],
     },
@@ -438,12 +507,20 @@ export const dimensionalModelECommerceWithFieldDescriptions = {
           expression: '[Country.Country]',
           type: 'text-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
         {
           name: 'Country ID',
           expression: '[Country.Country ID]',
           type: 'numeric-attribute',
           description: '',
+          dataSource: {
+            title: 'Sample ECommerce',
+            live: false,
+          },
         },
       ],
     },

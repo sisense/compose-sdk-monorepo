@@ -15,12 +15,18 @@ import {
 
 describe('createCommonFiltersOverSelections()', () => {
   const filters: MembersFilter[] = [
-    filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []) as MembersFilter,
+    filterFactory.members(
+      DM.Commerce.AgeRange,
+      ['0-18', '19-24'],
+      false,
+      '123',
+      [],
+    ) as MembersFilter,
     filterFactory.members(DM.Commerce.Gender, ['Male'], false, '234', []) as MembersFilter,
   ];
 
   it('should create new filters by selections', () => {
-    const createdFilters = createCommonFiltersOverSelections(
+    const { filters: createdFilters, isSelection } = createCommonFiltersOverSelections(
       [
         {
           attribute: DM.Commerce.Condition,
@@ -34,10 +40,11 @@ describe('createCommonFiltersOverSelections()', () => {
     expect(createdFilters.length).toBe(1);
     expect(createdFilters[0].attribute).toEqual(DM.Commerce.Condition);
     expect((createdFilters[0] as MembersFilter).members).toEqual(['New']);
+    expect(isSelection).toBe(true);
   });
 
   it('should update existing filter (creates new filter with same guid) by selections', () => {
-    const createdFilters = createCommonFiltersOverSelections(
+    const { filters: createdFilters, isSelection } = createCommonFiltersOverSelections(
       [
         {
           attribute: DM.Commerce.AgeRange,
@@ -52,6 +59,7 @@ describe('createCommonFiltersOverSelections()', () => {
     expect(createdFilters[0].attribute).toEqual(DM.Commerce.AgeRange);
     expect((createdFilters[0] as MembersFilter).members).toEqual(['65+']);
     expect(createdFilters[0].guid).toEqual(filters[0].guid);
+    expect(isSelection).toBe(true);
   });
 
   it('should deselect all filters if they matches the existing filters', () => {
@@ -60,7 +68,10 @@ describe('createCommonFiltersOverSelections()', () => {
       values,
       displayValues: values,
     }));
-    const createdFilters = createCommonFiltersOverSelections(selections, filters);
+    const { filters: createdFilters, isSelection } = createCommonFiltersOverSelections(
+      selections,
+      filters,
+    );
 
     expect(createdFilters.length).toBe(2);
     expect(createdFilters[0].attribute).toEqual(filters[0].attribute);
@@ -69,6 +80,56 @@ describe('createCommonFiltersOverSelections()', () => {
     expect(createdFilters[1].attribute).toEqual(filters[1].attribute);
     expect((createdFilters[1] as MembersFilter).members).toEqual([]); // include all filter
     expect(createdFilters[1].guid).toEqual(filters[1].guid);
+    expect(isSelection).toBe(false);
+  });
+
+  it('should deselect some members of the filter if "allowPartialUnselection" enabled', () => {
+    const allowPartialUnselection = true;
+    const { filters: createdFilters, isSelection } = createCommonFiltersOverSelections(
+      [
+        {
+          attribute: DM.Commerce.AgeRange,
+          values: ['0-18'],
+          displayValues: ['0-18'],
+        },
+        {
+          attribute: DM.Commerce.Condition,
+          values: ['New'],
+          displayValues: ['New'],
+        },
+      ],
+      [filters[0]],
+      allowPartialUnselection,
+    );
+
+    expect(createdFilters.length).toBe(2);
+    expect(createdFilters[0].attribute).toEqual(filters[0].attribute);
+    expect((createdFilters[0] as MembersFilter).members).toEqual(['0-18']);
+    expect(createdFilters[0].guid).toEqual(filters[0].guid);
+    expect(createdFilters[1].attribute).toEqual(DM.Commerce.Condition);
+    expect((createdFilters[1] as MembersFilter).members).toEqual(['New']);
+    expect(isSelection).toBe(true);
+  });
+
+  it('should select filters for 2 attributes when one filter already selected (allowPartialUnselection=enabled)', () => {
+    const allowPartialUnselection = true;
+    const { filters: createdFilters, isSelection } = createCommonFiltersOverSelections(
+      [
+        {
+          attribute: DM.Commerce.AgeRange,
+          values: ['0-18'],
+          displayValues: ['0-18'],
+        },
+      ],
+      filters,
+      allowPartialUnselection,
+    );
+
+    expect(createdFilters.length).toBe(1);
+    expect(createdFilters[0].attribute).toEqual(filters[0].attribute);
+    expect((createdFilters[0] as MembersFilter).members).toEqual(['19-24']); // excluded '0-18'
+    expect(createdFilters[0].guid).toEqual(filters[0].guid);
+    expect(isSelection).toBe(false);
   });
 });
 

@@ -91,10 +91,11 @@ export const boxWhiskerProcessResultInternal = (
 /**
  * Processes box whisker data and outliers data to combine them into a single data set.
  *
- * @param {QueryResultData} boxWhiskerData - The data for the box whisker.
- * @param {QueryResultData} outliersData - The data for the outliers.
- * @param {BoxplotChartCustomDataOptions} [dataOptions] - Optional data options for customizing data processing.
- * @returns {QueryResultData} The combined data with outliers included in the box whisker plot.
+ * @param boxWhiskerData - The data for the box whisker.
+ * @param outliersData - The data for the outliers.
+ * @param dataOptions - Optional data options for customizing data processing.
+ * @returns The combined data with outliers included in the box whisker plot.
+ * @shortDescription Utility function that combines box whisker data and outliers data
  * @group Charts
  */
 export function boxWhiskerProcessResult(

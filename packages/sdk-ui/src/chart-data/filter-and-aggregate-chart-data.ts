@@ -11,6 +11,7 @@ import {
   groupBy,
   orderBy,
 } from '../chart-data-processor/table-processor';
+import { TranslatableError } from '@/translation/translatable-error';
 
 // when user supplies chart data, ensure only
 // one measure value exists per row of unique attributes
@@ -53,7 +54,7 @@ export const filterAndAggregateChartData = (
   const rownumColumn = getColumnByName(aggregatedTable, rownumColumnName);
   if (!rownumColumn) {
     // this should not happen, we add a row num when creating DataTable
-    throw new Error(`Unexpected data has no row num column`);
+    throw new TranslatableError('errors.noRowNumColumn');
   }
 
   // put rows back into the original order

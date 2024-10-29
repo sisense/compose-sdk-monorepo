@@ -22,7 +22,6 @@ TypeScript interfaces for components and composables listed above
 - [ChartWidgetProps](interface.ChartWidgetProps.md)
 - [ColumnChartProps](interface.ColumnChartProps.md)
 - [CriteriaFilterTileProps](interface.CriteriaFilterTileProps.md)
-- [DashboardByIdProps](interface.DashboardByIdProps.md)
 - [DashboardLayoutOptions](interface.DashboardLayoutOptions.md)
 - [DashboardProps](interface.DashboardProps.md)
 - [DashboardWidgetProps](interface.DashboardWidgetProps.md)

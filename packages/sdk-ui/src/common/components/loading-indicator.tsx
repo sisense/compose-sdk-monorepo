@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { CompleteThemeSettings } from '../../types';
 import { LoadingDots } from './loading-dots';
 
@@ -16,6 +17,7 @@ export const LoadingIndicator = ({
   themeSettings?: CompleteThemeSettings;
   onCancel?: () => void;
 }) => {
+  const { t } = useTranslation();
   const backgroundColor = themeSettings?.chart.backgroundColor
     ? { backgroundColor: themeSettings.chart.backgroundColor }
     : undefined;
@@ -36,7 +38,7 @@ export const LoadingIndicator = ({
             className="csdk-text-ai-sm csdk-text-text-link csdk-cursor-pointer"
             onClick={onCancel}
           >
-            {'Cancel'}
+            {t('cancel')}
           </div>
         )}
       </div>

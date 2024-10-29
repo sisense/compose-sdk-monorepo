@@ -3,22 +3,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
-import {
-  HttpClient,
-  Authenticator,
-  getAuthenticator,
-  isWatAuthenticator,
-} from '@sisense/sdk-rest-client';
+import { HttpClient, getAuthenticator, isWatAuthenticator } from '@sisense/sdk-rest-client';
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import { DataSource } from '@sisense/sdk-data';
 import { DateConfig } from '../query/date-formats';
 import { AppSettings, getSettings } from './settings/settings';
 import { TranslatableError } from '../translation/translatable-error';
 import { PivotClient } from '@sisense/sdk-pivot-client';
-import { LoadingIndicatorConfig } from '../types';
+import { CustomTranslationObject, LoadingIndicatorConfig } from '../types';
 import { clearExecuteQueryCache } from '@/query/execute-query';
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
 import { SisenseContextProviderProps } from '@/props';
+
+const SYSTEM_TENANT_NAME = 'system';
 
 /**
  * Application configuration
@@ -30,9 +27,61 @@ export type AppConfig = {
   locale?: Locale;
 
   /**
+   * Translation Configurations
+   *
+   * @internal
+   */
+  translationConfig?: {
+    /**
+     * Language code to be used for translations
+     *
+     * @internal
+     */
+    language?: string;
+
+    /**
+     * Additional translation resources to be loaded
+     *
+     * You can find the list of available translation keys in the translation folder of every package.
+     *
+     * Translation keys that are not provided will default to the English translation.
+     * If translation is provided for a package other than sdk-ui, please specify the packageName property using camelCase.
+     *
+     * Important: Do not translate parts in {{}} - these are placeholders for dynamic values and will be matched using provided variable names.
+     *
+     * @example
+     * ```typescript
+     * customTranslations: [
+     *   {
+     *     language: 'fr',
+     *     resources: {
+     *       errors: {
+     *        invalidFilterType: 'Type de filtre invalide',
+     *       },
+     *     },
+     *   },
+     *   {
+     *     language: 'es',
+     *     packageName: 'sdkData'
+     *     resources: {
+     *       errors: {
+     *         measure: {
+     *           unsupportedType: 'Tipo de medida no compatible',
+     *         },
+     *       },
+     *     },
+     *   },
+     * ]
+     * ```
+     */
+    customTranslations?: CustomTranslationObject[];
+  };
+
+  /**
    * Language code to be used for translations
    *
    * @internal
+   * @deprecated Use `translationConfig.language` instead
    */
   language?: string;
 
@@ -101,9 +150,11 @@ export type AppConfig = {
    */
   trackingConfig?: {
     /**
-     * Whether to enable tracking
+     * Whether to enable or disable tracking in development or test environment.
      *
      * If not specified, the default value is `true`
+     *
+     * In production, tracking is always enabled.
      *
      * @internal
      */
@@ -120,7 +171,7 @@ export type AppConfig = {
  *
  * @internal
  */
-export class ClientApplication {
+export interface ClientApplication {
   /**
    * Gets the underlying HTTP Client
    */
@@ -139,7 +190,7 @@ export class ClientApplication {
   /**
    * Gets the default data source being used as default for child components with no explicitly defined data source
    */
-  readonly defaultDataSource: DataSource;
+  readonly defaultDataSource?: DataSource;
 
   /**
    * Gets the application settings
@@ -155,40 +206,6 @@ export class ClientApplication {
      */
     clear: () => void;
   };
-
-  /**
-   * Construct new Sisense Client Application
-   *
-   * @param url - URL to the sisense environment
-   * @param auth - Authentication to be used
-   * @param defaultDataSource - Default data source to be used by child components by default
-   */
-  constructor(url: string, auth: Authenticator, defaultDataSource?: DataSource) {
-    window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
-      // TODO: replace this with custom logger
-      if (event.reason instanceof Error) {
-        console.error(event.reason.message);
-      } else {
-        console.error(event.reason);
-      }
-    });
-
-    this.httpClient = new HttpClient(
-      url,
-      auth,
-      'sdk-ui' + (__PACKAGE_VERSION__ ? `-${__PACKAGE_VERSION__}` : ''),
-    );
-    this.pivotClient = new PivotClient(this.httpClient);
-    this.queryClient = new DimensionalQueryClient(this.httpClient, this.pivotClient);
-
-    this.queryCache = {
-      clear: clearExecuteQueryCache,
-    };
-
-    if (defaultDataSource !== undefined) {
-      this.defaultDataSource = defaultDataSource;
-    }
-  }
 }
 
 type ClientApplicationParams = Pick<
@@ -203,6 +220,22 @@ type ClientApplicationParams = Pick<
   | 'useFusionAuth'
 >;
 
+function getBaseUrl(url: string, tenantName: string) {
+  return tenantName === SYSTEM_TENANT_NAME ? url : url.replace(`/${tenantName}`, '');
+}
+
+function normalizeErrors() {
+  // todo: add unsubscribe flow
+  window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
+    // TODO: replace this with custom logger
+    if (event.reason instanceof Error) {
+      console.error(event.reason.message);
+    } else {
+      console.error(event.reason);
+    }
+  });
+}
+
 /** @internal */
 export const createClientApplication = async ({
   defaultDataSource,
@@ -214,27 +247,52 @@ export const createClientApplication = async ({
   enableSilentPreAuth,
   useFusionAuth,
 }: ClientApplicationParams): Promise<ClientApplication> => {
-  if (url !== undefined) {
-    const auth = getAuthenticator({
-      url,
-      token,
-      wat,
-      ssoEnabled,
-      enableSilentPreAuth,
-      useFusionAuth,
-    });
-
-    if (auth) {
-      const app = new ClientApplication(url, auth, defaultDataSource);
-      const loginSuccess = await app.httpClient.login();
-      // do not fetch palette settings from server if login failed
-      // SSO redirect is considered failed login as there will be another login attempt
-      // TODO: Remove WAT check once the server will be able to return the palette under the WAT
-      const useDefaultPalette = isWatAuthenticator(auth) || !loginSuccess;
-      app.settings = await getSettings(appConfig || {}, app.httpClient, useDefaultPalette);
-      return app;
-    }
+  if (url === undefined) {
+    throw new TranslatableError('errors.sisenseContextNoAuthentication');
   }
 
-  throw new TranslatableError('errors.sisenseContextNoAuthentication');
+  const auth = getAuthenticator({
+    url,
+    token,
+    wat,
+    ssoEnabled,
+    enableSilentPreAuth,
+    useFusionAuth,
+  });
+
+  if (!auth) {
+    throw new TranslatableError('errors.sisenseContextNoAuthentication');
+  }
+
+  normalizeErrors();
+
+  const httpClient = new HttpClient(
+    url,
+    auth,
+    'sdk-ui' + (__PACKAGE_VERSION__ ? `-${__PACKAGE_VERSION__}` : ''),
+  );
+  const loginSuccess = await httpClient.login();
+
+  // do not fetch palette settings from server if login failed
+  // SSO redirect is considered failed login as there will be another login attempt
+  // TODO: Remove WAT check once the server will be able to return the palette under the WAT
+  const useDefaultPalette = isWatAuthenticator(auth) || !loginSuccess;
+  const settings = await getSettings(appConfig || {}, httpClient, useDefaultPalette);
+
+  const pivotClient = new PivotClient(getBaseUrl(url, settings.user.tenant.name), auth);
+  const queryClient = new DimensionalQueryClient(httpClient, pivotClient);
+
+  const queryCache = {
+    clear: clearExecuteQueryCache,
+  };
+
+  return {
+    httpClient,
+    pivotClient,
+    queryClient,
+    settings,
+    // todo: make it optional (incorrect previous implementation)
+    defaultDataSource: defaultDataSource,
+    queryCache,
+  };
 };

@@ -43,7 +43,11 @@ describe('when user has typed non-empty input text', () => {
 
 describe('when user has not typed any input text', () => {
   it('input has a default placeholder', () => {
-    setup(<ChatInput {...chatInputProps} />);
+    setup(
+      <ChatConfigProvider value={{}}>
+        <ChatInput {...chatInputProps} />
+      </ChatConfigProvider>,
+    );
 
     expect(screen.getByRole('textbox')).toHaveAttribute(
       'placeholder',

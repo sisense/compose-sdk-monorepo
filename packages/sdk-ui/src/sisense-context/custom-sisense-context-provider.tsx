@@ -4,6 +4,7 @@ import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext, SisenseContextPayload } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { CustomTranslationsLoader } from '@/translation/custom-translations-loader';
 
 /** @internal */
 export type CustomSisenseContext = SisenseContextPayload & {
@@ -34,19 +35,27 @@ export const CustomSisenseContextProvider: FunctionComponent<
         </I18nProvider>
       </ErrorBoundary>
     );
+
+  const userLanguage =
+    context?.app?.settings.translationConfig.language ||
+    context?.app?.settings.language ||
+    context?.app?.settings.serverLanguage;
+
   return (
-    <I18nProvider
-      userLanguage={context?.app?.settings.language || context?.app?.settings.serverLanguage}
-    >
-      <ErrorBoundary showErrorBox={context?.showRuntimeErrors} error={error}>
-        {context && (
-          <SisenseContext.Provider value={context}>
-            <ThemeProvider skipTracking theme={context.app?.settings.serverThemeSettings}>
-              <MenuProvider>{children}</MenuProvider>
-            </ThemeProvider>
-          </SisenseContext.Provider>
-        )}
-      </ErrorBoundary>
+    <I18nProvider userLanguage={userLanguage}>
+      <CustomTranslationsLoader
+        customTranslations={context.app?.settings.translationConfig.customTranslations}
+      >
+        <ErrorBoundary showErrorBox={context?.showRuntimeErrors} error={error}>
+          {context && (
+            <SisenseContext.Provider value={context}>
+              <ThemeProvider skipTracking theme={context.app?.settings.serverThemeSettings}>
+                <MenuProvider>{children}</MenuProvider>
+              </ThemeProvider>
+            </SisenseContext.Provider>
+          )}
+        </ErrorBoundary>
+      </CustomTranslationsLoader>
     </I18nProvider>
   );
 };

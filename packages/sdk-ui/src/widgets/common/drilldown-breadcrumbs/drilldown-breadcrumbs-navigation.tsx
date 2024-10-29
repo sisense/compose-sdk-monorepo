@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Attribute } from '@sisense/sdk-data';
 import { StyledNextButton, StyledPrevButton } from './styled-buttons';
+import { useTranslation } from 'react-i18next';
 
 interface DrilldownBreadcrumbsNavigationProps {
   currentDimension: Attribute;
@@ -11,6 +12,7 @@ export const DrilldownBreadcrumbsNavigation: React.FC<DrilldownBreadcrumbsNaviga
   currentDimension,
   children,
 }) => {
+  const { t } = useTranslation();
   const breadcrumbsRef = useRef<HTMLDivElement>(null);
   const [breadcrumbsWidth, setBreadcrumbsWidth] = useState(0);
   const [breadcrumbsScrollWidth, setBreadcrumbsScrollWidth] = useState(0);
@@ -82,12 +84,12 @@ export const DrilldownBreadcrumbsNavigation: React.FC<DrilldownBreadcrumbsNaviga
     <div style={{ position: 'relative' }}>
       {showPrevButton && (
         <StyledPrevButton onClick={() => scroll('left')}>
-          <span aria-label="prev-item">Prev</span>
+          <span aria-label="prev-item">{t('drilldown.breadcrumbsPrev')}</span>
         </StyledPrevButton>
       )}
       {showNextButton && (
         <StyledNextButton onClick={() => scroll('right')}>
-          <span aria-label="next-item">Next</span>
+          <span aria-label="next-item">{t('drilldown.breadcrumbsNext')}</span>
         </StyledNextButton>
       )}
       <div ref={breadcrumbsRef}>{children}</div>

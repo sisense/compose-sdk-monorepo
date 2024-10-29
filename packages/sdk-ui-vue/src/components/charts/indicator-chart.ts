@@ -72,6 +72,13 @@ export const IndicatorChart = defineComponent({
      * @category Chart
      */
     styleOptions: Object as PropType<IndicatorChartProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<IndicatorChartProps['onDataReady']>,
   },
   setup: (props) => setupHelper(IndicatorChartPreact, props),
 });

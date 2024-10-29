@@ -19,6 +19,7 @@ import { CalendarDateSelector } from '../date-filter/calendar-date-selector.js';
 import dayjs from 'dayjs';
 import { useThemeContext } from '../../../../theme-provider/index.js';
 import isToday from 'dayjs/plugin/isToday';
+import { TranslatableError } from '@/translation/translatable-error.js';
 dayjs.extend(isToday);
 
 /**
@@ -88,7 +89,9 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
         ) as RelativeDateFilterType;
         break;
       default:
-        throw new Error(`Incorrect operator: ${newOperator}`);
+        throw new TranslatableError('errors.dateFilterIncorrectOperator', {
+          operator: newOperator,
+        });
     }
     onUpdate(newFilter);
   };

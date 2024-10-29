@@ -3,6 +3,7 @@ import { RestApi } from '../../api/rest-api';
 import { dashboardModelTranslator } from '@/models/dashboard';
 import { CompleteThemeSettings } from '../../types';
 import { AppSettings } from '@/app/settings/settings';
+import { TranslatableError } from '@/translation/translatable-error';
 
 export interface GetDashboardModelOptions {
   /**
@@ -57,7 +58,7 @@ export async function getDashboardModel(
 
   const [dashboard, widgets] = await Promise.all(promises);
   if (!dashboard) {
-    throw new Error(`Dashboard with oid ${dashboardOid} not found`);
+    throw new TranslatableError('errors.dashboardWithOidNotFound', { dashboardOid });
   }
   if (widgets) {
     dashboard.widgets = widgets;

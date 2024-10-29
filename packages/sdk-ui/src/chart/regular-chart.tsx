@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { isDataSource } from '@sisense/sdk-data';
+import { Data, isDataSource } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
 import { createDataTableFromData } from '../chart-data-processor/table-creators';
 import { chartDataService } from '../chart-data/chart-data-service';
@@ -29,6 +29,8 @@ import { useTranslatedDataOptions } from './helpers/use-translated-data-options'
 import { ChartType } from '@/types';
 import { useChartRendererProps } from './helpers/use-chart-renderer-props';
 import { isBoxplotChartData } from '@/chart-data/boxplot-data';
+import isArray from 'lodash-es/isArray';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -85,6 +87,7 @@ export const RegularChart = (props: RegularChartProps) => {
     onDataPointContextMenu,
     onDataPointsSelected,
     onBeforeRender,
+    onDataReady,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -123,8 +126,15 @@ export const RegularChart = (props: RegularChartProps) => {
     if (!data || !chartDataOptions) {
       return null;
     }
-
-    let dataTable = createDataTableFromData(data);
+    let customizedData;
+    if (onDataReady) {
+      customizedData = onDataReady(data);
+      if (!isData(customizedData)) {
+        throw new TranslatableError('errors.incorrectOnDataReadyHandler');
+      }
+    }
+    const dataToProcess = customizedData || data;
+    let dataTable = createDataTableFromData(dataToProcess);
 
     if (!isDataSource(dataSet)) {
       dataTable = filterAndAggregateChartData(
@@ -214,3 +224,15 @@ export const RegularChart = (props: RegularChartProps) => {
     </DynamicSizeContainer>
   );
 };
+
+/** Type guard for Data */
+function isData(data: any): data is Data {
+  return (
+    data &&
+    typeof data === 'object' &&
+    'columns' in data &&
+    isArray(data.columns) &&
+    'rows' in data &&
+    isArray(data.rows)
+  );
+}

@@ -124,11 +124,14 @@ export function prepareCommonFiltersToWidgetConnectProps(
 
     if (shouldWidgetAffectFilters) {
       const selections = getWidgetSelections(widgetType, dataOptions, points);
-      const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
-      const isUnselection = selectedFilters.every((f) => isIncludeAllFilter(f));
-      const selectMenuTitle = isUnselection
-        ? translate('commonFilter.unselectMenuItem')
-        : translate('commonFilter.selectMenuItem');
+      const { filters: selectedFilters, isSelection } = createCommonFiltersOverSelections(
+        selections,
+        pureFilters,
+        true,
+      );
+      const selectMenuTitle = isSelection
+        ? translate('commonFilter.selectMenuItem')
+        : translate('commonFilter.unselectMenuItem');
       const selectMenuItem = getSelectMenuItem(selectMenuTitle, () => {
         updateFilters(mergeFilters(pureFilters, selectedFilters));
       });
@@ -161,11 +164,14 @@ export function prepareCommonFiltersToWidgetConnectProps(
 
     if (shouldWidgetAffectFilters) {
       const selections = getWidgetSelections(widgetType, dataOptions, [point]);
-      const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
-      const isUnselection = selectedFilters.every((f) => isIncludeAllFilter(f));
-      const selectMenuTitle = isUnselection
-        ? translate('commonFilter.unselectMenuItem')
-        : translate('commonFilter.selectMenuItem');
+      const { filters: selectedFilters, isSelection } = createCommonFiltersOverSelections(
+        selections,
+        pureFilters,
+        true,
+      );
+      const selectMenuTitle = isSelection
+        ? translate('commonFilter.selectMenuItem')
+        : translate('commonFilter.unselectMenuItem');
       const selectMenuItem = getSelectMenuItem(selectMenuTitle, () => {
         updateFilters(mergeFilters(pureFilters, selectedFilters));
       });
@@ -187,7 +193,10 @@ export function prepareCommonFiltersToWidgetConnectProps(
     // registers "onDataPointClick" handler
     props.onDataPointClick = (point: DataPoint) => {
       const selections = getWidgetSelections(widgetType, dataOptions, [point]);
-      const selectedFilters = createCommonFiltersOverSelections(selections, pureFilters);
+      const { filters: selectedFilters } = createCommonFiltersOverSelections(
+        selections,
+        pureFilters,
+      );
       updateFilters(mergeFilters(pureFilters, selectedFilters));
     };
 

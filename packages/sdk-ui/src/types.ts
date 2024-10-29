@@ -1117,11 +1117,8 @@ export type WidgetThemeSettings = {
  * @internal
  */
 export type DashboardThemeSettings = {
-  /** Background color */
   backgroundColor?: string;
-  /** Width of the divider line between widgets */
   dividerLineWidth?: number;
-  /** Divider line color */
   dividerLineColor?: string;
 };
 
@@ -1687,3 +1684,29 @@ export type LoadingIndicatorConfig = {
  * Data options with arbitrary keys. This is typically used in the context of a plugin widget.
  */
 export type GenericDataOptions = Record<string, Array<StyledColumn | StyledMeasureColumn>>;
+
+/**
+ * Translation resources with nested structure.
+ */
+export type NestedTranslationResources = {
+  [key: string]: string | NestedTranslationResources;
+};
+
+/**
+ * Custom translation object.
+ */
+export type CustomTranslationObject = {
+  /**
+   * The language code of the translations.
+   */
+  language: string;
+  /**
+   * The translation resources.
+   */
+  resources: NestedTranslationResources;
+  /**
+   * The package name of the translations.
+   * Default value is `sdkUi`.
+   */
+  packageName?: string;
+};

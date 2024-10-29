@@ -78,7 +78,7 @@ export type HierarchyModelsSuccessState = {
 };
 
 /**
- * React hook that retrieves existing hierarchy models from a Fusion Embed instance.
+ * React hook that retrieves existing hierarchy models from a Fusion instance.
  *
  * @example
  * Retrieve the hierarchy models and render their counts.
@@ -100,7 +100,7 @@ export type HierarchyModelsSuccessState = {
   return null;
  ```
  * @returns Load state that contains the status of the execution, the result hierarchy models, or the error if one has occurred
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useGetHierarchyModels = withTracking('useGetHierarchyModels')(

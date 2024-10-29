@@ -52,7 +52,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  *  dashboardOid: string = '60f3e3e3e4b0e3e3e4b0e3e3';
  * }
  * ```
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 @Component({

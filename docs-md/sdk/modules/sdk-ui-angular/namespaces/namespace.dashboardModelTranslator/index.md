@@ -6,6 +6,6 @@ title: dashboardModelTranslator
 
 ## Index
 
-### Fusion Embed
+### Fusion Assets
 
 - [toDashboardProps](functions/function.toDashboardProps.md) <Badge type="fusionEmbed" text="Fusion Embed" />

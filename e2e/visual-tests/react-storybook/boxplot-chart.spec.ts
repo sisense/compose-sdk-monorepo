@@ -1,13 +1,12 @@
-import { test } from '@playwright/test';
+import { test } from '../__test-helpers__/test-setup';
 import { AppsNames, getAppConfig } from '../appsConfig';
-import { makeScreenshotsOverPage } from '../__test-helpers__/make-screenshot';
 
 const { url } = getAppConfig(AppsNames.REACT_STORYBOOK);
 
 test.describe('boxplot', () => {
-  test('verify basic boxplot', async ({ page }) => {
+  test('verify basic boxplot', async ({ page, testHelper }) => {
     await page.goto(`${url}/iframe.html?id=charts-boxplot--boxplot`);
 
-    await makeScreenshotsOverPage(page);
+    await testHelper.makeScreenshotsOverPage();
   });
 });

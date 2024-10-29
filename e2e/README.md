@@ -103,11 +103,26 @@ The following applications are used as target apps for visual regression testing
 
 See `./visual-tests/appsConfig.ts` and `./scripts/start-servers.sh` for details of taget apps configuration.
 
-Testing helpers (see `./visual-tests/__test-helpers__/makeScreenshot.ts`):
+### Testing helpers
 
-- `makeScreenshotsOverPage(page: Page)` - performs automatic screenshots verification over the page elements marked by `data-visual-testid` attribute. The value of this attribute will be used as part of the target screenshot name.
-- `makeScreenshots(page: Page, locators: Locator[], name?: string)` - performs screenshots verification over the array of locators
-- `makeScreenshot(page: Page, locator: Locator, name?: string)` - performs screeshot verification over the target locator
+There is a custom fixture (see `./visual-tests/__test-helpers__/test-setup.ts`) that extends Playwright’s base `test` object by adding `testHelper`, a utility designed for taking screenshots and verifying visual elements in your tests.
+
+This utility provides methods for automatic screenshots verification over a page, group of elements or certain element:
+
+- `testHelper.makeScreenshotsOverPage()` - performs automatic screenshots verification over the page elements marked by `data-visual-test-id` attribute. The value of this attribute will be used as part of the target screenshot name.
+- `testHelper.makeScreenshots(locators: Locator[], name?: string)` - performs screenshots verification over the array of locators
+- `testHelper.makeScreenshot(locator: Locator, name?: string)` - performs screeshot verification over the target locator
+
+Usage:
+
+```tsx
+import { test } from '../__test-helpers__/test-setup';
+
+test('verify dashboard page', async ({ page, testHelper }) => {
+  await page.goto('some url');
+  await testHelper.makeScreenshotsOverPage();
+});
+```
 
 ### Test Suites with Predefined Dashboards
 
@@ -120,5 +135,5 @@ To add a new dashboard asset, simply place a `*.dash` file exported from "Sisens
 ### Known issues:
 
 - The default system font is used in all screenshots to prevent flaky test results caused by differences in rendered text when custom fonts are used.
-- Possibility to catch a flaky test due to a temporal network communication slowness of connected Fusion Embed app.\
+- Possibility to catch a flaky test due to a temporal network communication slowness of connected Fusion Assets app.\
   Note: the testing strategy with 2 retries for failed test should eliminate this problem.

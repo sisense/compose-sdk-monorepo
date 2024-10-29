@@ -46,7 +46,7 @@ import { PluginsService } from '../../services/plugins.service';
  *
  * To learn more about this and related dashboard components,
  * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  * @beta
  */

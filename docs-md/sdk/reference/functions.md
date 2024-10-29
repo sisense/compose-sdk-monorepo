@@ -93,7 +93,7 @@ The following functions are available:
     - [Now (`NOW`)](#now-now-1)
     - [Running Average (`RAVG`)](#running-average-ravg)
     - [Running Sum (`RSUM`)](#running-sum-rsum)
-- [Fusion Embed ElastiCube-only Functions](#fusion-embed-elasticube-only-functions)
+- [Fusion Assets ElastiCube-only Functions](#fusion-embed-elasticube-only-functions)
   - [Aggregative Functions](#aggregative-functions-1)
     - [Correlation (`CORREL`)](#correlation-correl)
     - [Covariance - Population (`COVARP`)](#covariance---population-covarp)
@@ -194,7 +194,7 @@ However, if you query that same data model for difference in total cost and you 
 
 ## Universal Functions
 
-Universal functions are functions that can be used all across the Sisense Fusion platform, including projects that use Fusion Embed or Fusion Forge.
+Universal functions are functions that can be used all across the Sisense Fusion platform, including projects that use Fusion Assets or Fusion Forge.
 
 ### Aggregative Functions
 
@@ -480,7 +480,7 @@ RANK(<numeric_field>, [sort_order], [rank_type], [<group-by field 1>,... , <grou
 - `sort_order`: Optional sort order. Either `DESC` or `ASC`. Defaults to ascending order.
 - `rank_type`: Optional ranking type. Defaults to `1224` ranking.
   - `1224`: Standard competition, meaning items that rank equally receive the same ranking number, and then a gap is left after the equally ranked items in the ranking numbers.
-  - `1334`: Modified competition ranking, meaning items that rank equally receive the same ranking number, and a gap is left before the equally ranked items in the ranking numbers. Only supported for Fusion Embed Elasticubes.
+  - `1334`: Modified competition ranking, meaning items that rank equally receive the same ranking number, and a gap is left before the equally ranked items in the ranking numbers. Only supported for Fusion Assets Elasticubes.
   - `1223`: Dense ranking, meaning items that rank equally receive the same ranking number, and the next items receive the immediately following ranking number.
   - `1234`: Ordinal ranking, meaning all items receive distinct ordinal numbers, including items that rank equally. The assignment of distinct ordinal numbers for equal-ranking items is arbitrary.
 - `[<group-by field 1>,... , <group-by field n>]`: Optional fields to group by.
@@ -2063,9 +2063,9 @@ RSUM([Total Revenue])
 
 ---
 
-## Fusion Embed ElastiCube-only Functions
+## Fusion Assets ElastiCube-only Functions
 
-Fusion Embed ElastiCube-only functions are functions that can be only be used with Fusion Embed and only with ElastiCube data models.
+Fusion Assets ElastiCube-only functions are functions that can be only be used with Fusion Assets and only with ElastiCube data models.
 
 ### Aggregative Functions
 

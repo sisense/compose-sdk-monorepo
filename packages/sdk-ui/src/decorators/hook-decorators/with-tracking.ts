@@ -18,6 +18,7 @@ const action = 'sdkHookInit';
 
 /**
  * Tracks the hook event and sends it to the server.
+ *
  * @param hookName - The name of the hook
  * @param packageName - The name of the package
  * @param app - The client application

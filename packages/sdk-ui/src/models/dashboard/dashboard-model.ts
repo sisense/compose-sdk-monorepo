@@ -6,7 +6,7 @@ import { DashboardLayoutOptions } from '@/dashboard';
 /**
  * Model of Sisense Fusion dashboard defined in the abstractions of Compose SDK.
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export interface DashboardModel {

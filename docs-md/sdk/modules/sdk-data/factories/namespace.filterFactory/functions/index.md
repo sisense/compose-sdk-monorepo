@@ -66,7 +66,7 @@ greater than 1000.
 - [measureGreaterThanOrEqual](function.measureGreaterThanOrEqual.md)
 - [measureLessThan](function.measureLessThan.md)
 - [measureLessThanOrEqual](function.measureLessThanOrEqual.md)
-- [members](function.members.md)
+- [members](function.members.md) - Creates filter on attribute to match certain string values
 - [numeric](function.numeric.md)
 - [startsWith](function.startsWith.md)
 - [thisMonth](function.thisMonth.md)

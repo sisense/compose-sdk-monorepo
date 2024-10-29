@@ -22,6 +22,7 @@ import {
   createMeasureFromFilterJaql,
 } from './attribute-measure-util.js';
 import { guidFast } from '../../../utils.js';
+import { TranslatableError } from '../../../translation/translatable-error.js';
 
 /**
  * Creates a generic filter (aka pass-through JAQL filter) if the JAQL cannot be translated to a specific filter type.
@@ -235,7 +236,9 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid?: st
   try {
     if ('formula' in jaql) {
       // generic pass-through JAQL filter will be used instead
-      throw 'Formula-based filter not supported yet: ' + JSON.stringify(jaql);
+      throw new TranslatableError('errors.filter.formulaFiltersNotSupported', {
+        filter: JSON.stringify(jaql),
+      });
     }
     const filterJaqlWrapperWithType = extractFilterTypeFromFilterJaql(
       jaql,

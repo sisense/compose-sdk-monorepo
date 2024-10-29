@@ -9,6 +9,7 @@ import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
 import { PluginsProvider } from '@/plugins-provider';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { CustomTranslationsLoader } from '@/translation/custom-translations-loader';
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -54,19 +55,15 @@ export const SisenseContextProvider: FunctionComponent<
   ssoEnabled,
   children,
   appConfig,
-  enableTracking = true,
   showRuntimeErrors = true,
   enableSilentPreAuth = false,
   useFusionAuth = false,
   onError,
 }) => {
   const tracking = {
-    // if tracking is configured in appConfig, use it, otherwise use enableTracking
+    // if tracking is configured in appConfig, use it
     // if none is set, default to true
-    enabled:
-      appConfig?.trackingConfig?.enabled !== undefined
-        ? appConfig.trackingConfig.enabled
-        : enableTracking ?? true,
+    enabled: appConfig?.trackingConfig?.enabled ?? true,
     onTrackingEvent: appConfig?.trackingConfig?.onTrackingEvent,
     packageName: 'sdk-ui',
   };
@@ -120,19 +117,28 @@ export const SisenseContextProvider: FunctionComponent<
     onError,
   ]);
 
+  const userLanguage =
+    app?.settings.translationConfig.language ||
+    app?.settings.language ||
+    app?.settings.serverLanguage;
+
   return (
-    <I18nProvider userLanguage={app?.settings.language || app?.settings.serverLanguage}>
-      <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
-        <SisenseContext.Provider value={{ isInitialized: true, app, tracking }}>
-          <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
-            <SisenseQueryClientProvider>
-              <PluginsProvider>
-                <MenuProvider>{children}</MenuProvider>
-              </PluginsProvider>
-            </SisenseQueryClientProvider>
-          </ThemeProvider>
-        </SisenseContext.Provider>
-      </ErrorBoundary>
+    <I18nProvider userLanguage={userLanguage}>
+      <CustomTranslationsLoader
+        customTranslations={app?.settings.translationConfig.customTranslations}
+      >
+        <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
+          <SisenseContext.Provider value={{ isInitialized: true, app, tracking }}>
+            <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
+              <SisenseQueryClientProvider>
+                <PluginsProvider>
+                  <MenuProvider>{children}</MenuProvider>
+                </PluginsProvider>
+              </SisenseQueryClientProvider>
+            </ThemeProvider>
+          </SisenseContext.Provider>
+        </ErrorBoundary>
+      </CustomTranslationsLoader>
     </I18nProvider>
   );
 };

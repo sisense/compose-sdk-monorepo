@@ -17,8 +17,8 @@
  * Angular query service
  * @groupDescription Dashboards
  * Angular components and utilities for working with dashboards
- * @groupDescription Fusion Embed
- * Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
+ * @groupDescription Fusion Assets
+ * Angular modules, services, and components for working with Fusion dashboards, widgets, queries, and formulas
  * @groupDescription Interfaces
  * TypeScript interfaces for components and services listed above
  * @groupDescription Type Aliases

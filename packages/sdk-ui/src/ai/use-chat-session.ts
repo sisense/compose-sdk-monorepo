@@ -7,7 +7,8 @@ import {
 } from './api/hooks';
 import type { ChatMessage, NlqMessage, NlqResponseData } from './api/types';
 import { useChatHistory } from './api/chat-history';
-import { CHAT_UNAVAILABLE_ERROR, FETCH_HISTORY_ERROR } from './api/errors';
+import { useTranslation } from 'react-i18next';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Result of the useChatSession hook.
@@ -40,6 +41,7 @@ export const isNlqMessage = (message: ChatMessage | null | undefined): message i
  * @internal
  */
 export const useChatSession = (contextTitle: string): UseChatSessionResult => {
+  const { t } = useTranslation();
   const { data: dataTopics, isLoading: dataTopicsLoading } = useGetDataTopics();
   const { data: chats, isLoading: chatsLoading } = useGetAllChats();
 
@@ -59,11 +61,11 @@ export const useChatSession = (contextTitle: string): UseChatSessionResult => {
 
   useEffect(() => {
     if (isCreateChatError) {
-      setLastError(new Error(CHAT_UNAVAILABLE_ERROR));
+      setLastError(new TranslatableError('ai.errors.chatUnavailable'));
     } else if (isFetchHistoryError) {
-      setLastError(new Error(FETCH_HISTORY_ERROR));
+      setLastError(new TranslatableError('ai.errors.fetchHistory'));
     }
-  }, [isCreateChatError, isFetchHistoryError]);
+  }, [isCreateChatError, isFetchHistoryError, t]);
 
   const { mutate: sendMessage, isLoading: isSendMessageLoading } = useSendChatMessage(chatId);
 

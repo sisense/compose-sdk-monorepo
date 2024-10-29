@@ -6,13 +6,13 @@ title: toTextWidgetProps
 
 > **toTextWidgetProps**(`widgetModel`): [`TextWidgetProps`](../../../../sdk-ui/interfaces/interface.TextWidgetProps.md)
 
-Translates a [WidgetModel](../../../fusion-embed/interface.WidgetModel.md) to the props for rendering a text widget.
+Translates a [WidgetModel](../../../fusion-assets/interface.WidgetModel.md) to the props for rendering a text widget.
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `widgetModel` | [`WidgetModel`](../../../fusion-embed/interface.WidgetModel.md) |
+| `widgetModel` | [`WidgetModel`](../../../fusion-assets/interface.WidgetModel.md) |
 
 ## Returns
 

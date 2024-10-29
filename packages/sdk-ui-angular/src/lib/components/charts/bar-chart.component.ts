@@ -126,6 +126,15 @@ export class BarChartComponent {
   beforeRender: BarChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!BarChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: BarChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointClick}
    *
    * @category Callbacks

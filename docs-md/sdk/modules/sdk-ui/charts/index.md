@@ -11,8 +11,8 @@ React components and utilities for working with charts
 - [AreaRangeChart](function.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](function.BarChart.md)
 - [BoxplotChart](function.BoxplotChart.md)
-- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md)
-- [Chart](function.Chart.md)
+- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [Chart](function.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](function.ColumnChart.md)
 - [FunnelChart](function.FunnelChart.md)
 - [IndicatorChart](function.IndicatorChart.md)

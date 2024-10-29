@@ -14,6 +14,7 @@ import { GlobalsObject } from './types';
 import { QUERY_DEFAULT_LIMIT } from '@/const';
 import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings.js';
 import { Features, FeatureMap } from './types/features.js';
+import { TranslatableError } from '@/translation/translatable-error.js';
 
 /**
  * Application settings
@@ -33,6 +34,11 @@ type ServerSettings = {
   serverLanguage: string;
   serverVersion: string;
   serverFeatures: FeatureMap;
+  user: {
+    tenant: {
+      name: string;
+    };
+  };
 };
 
 const defaultLoadingIndicatorConfig = { enabled: true, delay: 500 };
@@ -41,6 +47,10 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   locale: getBaseDateFnsLocale(),
   dateConfig: defaultDateConfig,
   loadingIndicatorConfig: defaultLoadingIndicatorConfig,
+  translationConfig: {
+    language: 'en',
+    customTranslations: [],
+  },
   language: 'en',
   queryCacheConfig: {
     enabled: false,
@@ -108,7 +118,7 @@ async function loadServerSettings(
 ) {
   const globals = await httpClient.get<GlobalsObject>('api/globals');
   if (!globals) {
-    throw new Error('Failed to load server settings');
+    throw new TranslatableError('errors.serverSettingsNotLoaded');
   }
   const palette = useDefaultPalette
     ? ({ colors: getDefaultThemeSettings().palette.variantColors } as LegacyPalette)
@@ -118,6 +128,11 @@ async function loadServerSettings(
     serverLanguage: globals.language,
     serverVersion: globals.version,
     serverFeatures: mapFeatures(globals.features),
+    user: {
+      tenant: {
+        name: globals.user.tenant.name,
+      },
+    },
   };
   return serverSettings;
 }

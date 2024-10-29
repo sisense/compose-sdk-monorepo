@@ -3,6 +3,7 @@ import { clearMembersFilter, haveSameAttribute } from '@/utils/filters';
 import { CascadingFilter, Filter, isCascadingFilter } from '@sisense/sdk-data';
 import { FiltersIgnoringRules, PureFilter } from './types';
 import { isEqualMembersFilters } from './utils';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Flattens cascading filters into a single array of filters.
@@ -57,9 +58,7 @@ export function reassembleCascadingFilters(
         (cascadingFilter) => cascadingFilter.guid === filterOrGroup.groupId,
       );
       if (!originalCascadingFilter) {
-        throw new Error(
-          'Error in cascading filters reassembling. Original cascading filter not found',
-        );
+        throw new TranslatableError('errors.cascadingFilterOriginalNotFound');
       }
       return createNewCascadingFilter(filterOrGroup, originalCascadingFilter);
     }

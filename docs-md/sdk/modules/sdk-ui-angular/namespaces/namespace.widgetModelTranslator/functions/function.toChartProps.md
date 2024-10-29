@@ -6,13 +6,13 @@ title: toChartProps
 
 > **toChartProps**(`widgetModel`): [`ChartProps`](../../../../sdk-ui/interfaces/interface.ChartProps.md)
 
-Translates a [WidgetModel](../../../fusion-embed/interface.WidgetModel.md) to the props for rendering a chart.
+Translates a [WidgetModel](../../../fusion-assets/interface.WidgetModel.md) to the props for rendering a chart.
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `widgetModel` | [`WidgetModel`](../../../fusion-embed/interface.WidgetModel.md) |
+| `widgetModel` | [`WidgetModel`](../../../fusion-assets/interface.WidgetModel.md) |
 
 ## Returns
 

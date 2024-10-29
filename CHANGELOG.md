@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.22.0] - 2024-10-28
+
+### Added
+- Add hook `useComposedDashboard` (alpha) for flexible dashboard composition in React
+- Add hook `useDashboardTheme` for internal testing
+- Support persistence of dashboard for internal testing
+- Add callback `onDataReady` to `ChartProps` for internal testing
+- Add custom translations loader for internal testing
+- Extend CLI `get-data-model` command to include attribute's data source into resulting data model
+- Add CommonJS builds to the packages of `sdk-common`, `sdk-modeling`, `sdk-query-client`, `sdk-rest-client`, `sdk-tracking`, and `sdk-preact` to support Jest compatibility
+
+### Changed
+- Remove internal `enableTracking` property in `SisenseContextProviderProps`
+- Make `ErrorBox` not show by default
+- Fix empty pivot due to incorrect socket namespace for custom tenant
+- Use absolute y-values for pie charts
+- Align “select/unselect” cross-filtering behavior with Fusion
+- Migrate `ChartWidget` to use a new internal `useWithDrilldown` hook
+
+
 ## [1.21.0] - 2024-10-15
 
 ### Added

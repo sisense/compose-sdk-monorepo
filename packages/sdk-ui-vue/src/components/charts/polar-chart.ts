@@ -72,6 +72,13 @@ export const PolarChart = defineComponent({
      */
     onBeforeRender: Function as PropType<PolarChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<PolarChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointClick}
      *
      * @category Callbacks

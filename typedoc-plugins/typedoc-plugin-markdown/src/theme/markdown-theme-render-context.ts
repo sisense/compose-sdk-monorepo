@@ -55,6 +55,7 @@ import { projectKindTemplate } from './resources/templates/project-kind';
 import { projectTemplate } from './resources/templates/project';
 import { readmeTemplate } from './resources/templates/read-me';
 import { reflectionTemplate } from './resources/templates/reflection';
+import { memberShortDescription } from './resources/partials/member.short-description';
 /* end_imports */
 
 function bind<F, L extends any[], R>(fn: (f: F, ...a: L) => R, first: F) {
@@ -83,13 +84,8 @@ export class MarkdownThemeRenderContext {
     if (URL_PREFIX.test(url)) {
       return url;
     } else {
-      const relative = path.relative(
-        path.dirname(this.page?.url || '.'),
-        path.dirname(url),
-      );
-      return this.parseUrl(
-        path.join(relative, path.basename(url)).replace(/\\/g, '/'),
-      );
+      const relative = path.relative(path.dirname(this.page?.url || '.'), path.dirname(url));
+      return this.parseUrl(path.join(relative, path.basename(url)).replace(/\\/g, '/'));
     }
   };
 
@@ -153,6 +149,7 @@ export class MarkdownThemeRenderContext {
   /** CSDK START */
   /** @hidden */
   memberBadge = bind(memberBadge, this);
+  memberShortDescription = bind(memberShortDescription, this);
   /** CSDK END */
   /** @hidden */
   member = bind(member, this);

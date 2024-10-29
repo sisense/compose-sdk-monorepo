@@ -5,6 +5,7 @@ export {
   boxWhiskerProcessResult,
   widgetModelTranslator,
   dashboardModelTranslator,
+  dashboardHelpers,
 } from '@sisense/sdk-ui-preact';
 
 // Re-exports types from @sisense/sdk-ui-preact
@@ -58,7 +59,6 @@ export type {
   ScattermapChartProps,
   SisenseContextProviderProps,
   DashboardWidgetProps,
-  DashboardByIdProps,
   DashboardProps,
   WidgetProps,
 
@@ -189,7 +189,9 @@ export type {
 import type {
   ContextMenuProps as ContextMenuPropsPreact,
   ThemeProviderProps as ThemeProviderPropsPreact,
+  DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
 
 export type ContextMenuProps = Omit<ContextMenuPropsPreact, 'children'>;
 export type ThemeProviderProps = Omit<ThemeProviderPropsPreact, 'children'>;
+export type DashboardByIdProps = Omit<DashboardByIdPropsPreact, 'persist'>;

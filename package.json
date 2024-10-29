@@ -1,5 +1,5 @@
 {
-  "version": "1.21.0",
+  "version": "1.22.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -75,6 +75,7 @@
     "@sisense/typedoc-plugin-markdown": "0.0.0",
     "@vitest/coverage-istanbul": "0.34.1",
     "eslint": "^8.40.0",
+    "eslint-plugin-i18next": "^6.1.0",
     "eslint-plugin-tsdoc": "0.2.17",
     "eslint-plugin-vitest": "0.2.8",
     "express": "^4.18.2",

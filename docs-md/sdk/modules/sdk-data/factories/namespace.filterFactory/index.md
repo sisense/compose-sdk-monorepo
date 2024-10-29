@@ -70,7 +70,7 @@ greater than 1000.
 - [measureGreaterThanOrEqual](functions/function.measureGreaterThanOrEqual.md)
 - [measureLessThan](functions/function.measureLessThan.md)
 - [measureLessThanOrEqual](functions/function.measureLessThanOrEqual.md)
-- [members](functions/function.members.md)
+- [members](functions/function.members.md) - Creates filter on attribute to match certain string values
 - [numeric](functions/function.numeric.md)
 - [startsWith](functions/function.startsWith.md)
 - [thisMonth](functions/function.thisMonth.md)

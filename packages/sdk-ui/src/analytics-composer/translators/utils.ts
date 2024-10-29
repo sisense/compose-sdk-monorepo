@@ -1,3 +1,4 @@
+import { TranslatableError } from '@/translation/translatable-error';
 import { ExpandedQueryModel, SimpleQueryModel } from './types';
 
 export function toKebabCase(str: string): string {
@@ -27,11 +28,11 @@ export function sanitizeDimensionId(str: string) {
 
 export function validateQueryModel(model: any): SimpleQueryModel {
   if (!model) {
-    throw Error('Empty model');
+    throw new TranslatableError('errors.emptyModel');
   } else if (!model.metadata) {
-    throw Error('Missing metadata');
+    throw new TranslatableError('errors.missingMetadata');
   } else if (!model.model) {
-    throw Error('Missing model title');
+    throw new TranslatableError('errors.missingModelTitle');
   }
 
   return model;

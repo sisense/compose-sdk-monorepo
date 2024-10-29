@@ -3,6 +3,7 @@ import SuggestedItem from './suggestion-item';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
+import { useTranslation } from 'react-i18next';
 
 const ListContainer = styled.div<Themable>`
   display: flex;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export default function SuggestionList({ questions, onSelection }: Props) {
+  const { t } = useTranslation();
   const [showLess, setShowLess] = useState(true);
 
   const questionsToShow = useMemo(() => {
@@ -34,7 +36,7 @@ export default function SuggestionList({ questions, onSelection }: Props) {
         <SuggestedItem key={question} question={question} onClick={() => onSelection(question)} />
       ))}
       {questionsToShow.length < questions.length && (
-        <SuggestedItem question="See more" onClick={() => setShowLess(false)} />
+        <SuggestedItem question={t('ai.buttons.seeMore')} onClick={() => setShowLess(false)} />
       )}
     </ListContainer>
   );

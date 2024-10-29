@@ -10,6 +10,8 @@ import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisens
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { ClientApplication } from '../app/client-application';
 import { DeepPartial } from 'ts-essentials';
+import { useTranslation } from 'react-i18next';
+import { translation } from '../translation/resources/en';
 
 type UserSetupFn = (typeof userEvent)['setup'];
 interface SetupResult extends RenderResult {
@@ -99,3 +101,42 @@ export const withBlurredRows = (data: Data, blurRowsIndexes: number[]) => ({
     }),
   ),
 });
+
+/**
+ * Mocking the i18next translation functionality for tests.
+ */
+export const setupI18nMock = () => {
+  vi.mock('react-i18next', async () => {
+    const original: { useTranslation: typeof useTranslation } = await vi.importActual(
+      'react-i18next',
+    );
+
+    // Helper function to get nested translations safely
+    const getNestedTranslation = (key: string): string | undefined => {
+      return key.split('.').reduce((accumulator: any, currentKey: string) => {
+        if (accumulator && typeof accumulator === 'object' && currentKey in accumulator) {
+          return accumulator[currentKey];
+        }
+        return undefined;
+      }, translation) as string | undefined;
+    };
+
+    return {
+      ...original,
+      useTranslation: () => ({
+        ...original.useTranslation(),
+        t: vi.fn((key, options?: Record<string, any>) => {
+          const translatedValue = getNestedTranslation(key);
+          if (translatedValue && options) {
+            // Replace variables in the translated string
+            return translatedValue.replace(/{{(.*?)}}/g, (_, varName) => {
+              const trimmedVarName = varName.trim();
+              return options[trimmedVarName] || `{{${trimmedVarName}}}`; // Fallback if variable is not found
+            });
+          }
+          return translatedValue ?? key; // Fallback to the key if translation is not found
+        }),
+      }),
+    };
+  });
+};

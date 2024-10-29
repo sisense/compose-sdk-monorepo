@@ -36,6 +36,7 @@ import { getBoxplotChartOptions } from './boxplot-chart-options';
 import { getRangeChartOptions } from './range-chart-options';
 import { createForecastDataOptions, isForecastChart } from '@/chart-data/advanced-analytics-data';
 import { formatAdvancedAnalyticsSeries } from './advanced-chart-options';
+import { TranslatableError } from '@/translation/translatable-error';
 
 // Notes: extends type by recreating it via `Pick` in order to force IntelliSense to use it as target type.
 /**
@@ -131,7 +132,7 @@ export const highchartsOptionsService = (
     }
     default:
       // TODO: "typescript exhaustive union type switch" so this is a compile error
-      throw new Error('Unexpected chart type');
+      throw new TranslatableError('errors.unexpectedChartType', { chartType: chartData.type });
   }
 };
 

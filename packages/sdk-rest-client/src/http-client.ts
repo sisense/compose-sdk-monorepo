@@ -100,6 +100,27 @@ export class HttpClient {
     return this.call<T>(this.url + endpoint, request, config);
   }
 
+  patch<T = unknown>(
+    endpoint: string,
+    data: unknown,
+    options: RequestInit = {},
+    abortSignal?: AbortSignal,
+    config?: HttpClientRequestConfig,
+  ): Promise<T | undefined> {
+    const request = {
+      method: 'PATCH',
+      body: (config?.nonJSONBody ? data : JSON.stringify(data)) as BodyInit,
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      signal: abortSignal,
+      ...options,
+    };
+
+    return this.call<T>(this.url + endpoint, request, config);
+  }
+
   get<T = unknown>(
     endpoint: string,
     request: RequestInit = {},

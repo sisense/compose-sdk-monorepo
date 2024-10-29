@@ -47,6 +47,7 @@ import { OptionsWithAlerts } from './../types';
 import { getPaletteColor } from '../chart-data-options/coloring/utils';
 import { TFunction } from '@sisense/sdk-common';
 import { NavigatorOptions } from '@sisense/sisense-charts';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -76,7 +77,7 @@ export const getCartesianChartOptions = (
     false;
   const sisenseChartType = determineHighchartsChartType(chartType, chartDesignOptions);
   if (chartData.type !== 'cartesian') {
-    throw new Error('Unexpected chart type');
+    throw new TranslatableError('errors.unexpectedChartType', { chartType: chartData.type });
   }
 
   const { seriesCapacity, categoriesCapacity } = chartDesignOptions.dataLimits;

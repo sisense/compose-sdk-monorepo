@@ -112,7 +112,9 @@ export class ComponentAdapter {
   destroy() {
     // cleans all subscriptions
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-    // destroys rendered element
-    render(null, this.rootElement);
+    if (this.rootElement) {
+      // destroys rendered element
+      render(null, this.rootElement);
+    }
   }
 }

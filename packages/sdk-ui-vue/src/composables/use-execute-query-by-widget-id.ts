@@ -53,7 +53,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  * Utilizing this composable allows for declarative and reactive handling of widget-specific queries within Vue applications,
  * facilitating easier data fetching and state management with the Sisense SDK.
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useExecuteQueryByWidgetId = (

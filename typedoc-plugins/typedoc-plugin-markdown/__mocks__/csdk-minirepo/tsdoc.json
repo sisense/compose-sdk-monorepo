@@ -8,6 +8,11 @@
 	  "allowMultiple": false
 	},
 	{
+	  "tagName": "@shortDescription",
+	  "syntaxKind": "block",
+	  "allowMultiple": false
+	},
+	{
 	  "tagName": "@fusionEmbed",
 	  "syntaxKind": "modifier",
 	  "allowMultiple": false

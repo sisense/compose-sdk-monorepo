@@ -24,6 +24,7 @@ const DataTopicsContainer = styled.div<Themable>`
   background-color: ${({ theme }) => theme.aiChat.dataTopics.backgroundColor};
 `;
 import { Themable } from '@/theme-provider/types';
+import { useTranslation } from 'react-i18next';
 
 type ChatHomeProps = {
   dataTopicsList: string[];
@@ -33,6 +34,7 @@ type ChatHomeProps = {
 export default function ChatHome({ dataTopicsList, onDataTopicClick }: ChatHomeProps) {
   const { enableHeader } = useChatConfig();
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   const dataTopics = useMemo(() => {
     return dataTopicsList?.map((title) => ({
@@ -47,7 +49,7 @@ export default function ChatHome({ dataTopicsList, onDataTopicClick }: ChatHomeP
     <>
       {enableHeader ? (
         <Toolbar
-          title="Analytics Chatbot"
+          title={t('ai.analyticsChatbot')}
           leftNav={
             <LogoContainer>
               <SisenseLogo colorSchema={isDarkBackground ? 'yellow-white' : 'yellow-black'} />

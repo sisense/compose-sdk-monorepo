@@ -165,7 +165,11 @@ export class DateDimensionWriter extends ElementWriter<DateDimension> {
         ident + 1,
       );
     }
-
+    writeIndented(
+      stream,
+      `dataSource: ${JSON.stringify(this.element.dataSource)},${NEWLINE}`,
+      ident + 1,
+    );
     stream.write(NEWLINE);
     writeIndented(stream, `}),`, ident);
 
@@ -201,6 +205,7 @@ ${rnt(ident + 2)}name: '${this.element.name}',\
 ${rnt(ident + 2)}type: '${this.element.type}',\
 ${rnt(ident + 2)}expression: '${escapeSpecialChars(this.element.expression)}',\
 ${this.element.description ? `${rnt(ident + 2)}description: ${prepareDescription(this.element.description)},` : ''}\
+${rnt(ident + 2)}dataSource: ${JSON.stringify(this.element.dataSource)},\
 ${rnt(ident + 1)}}),`,
       ident,
     );

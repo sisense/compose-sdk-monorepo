@@ -1,3 +1,4 @@
+import { TranslatableError } from '@/translation/translatable-error.js';
 import { AreamapChartDataOptionsInternal } from '../chart-data-options/types.js';
 import { DataTable, getColumnByName, getValue } from '../chart-data-processor/table-processor.js';
 import {
@@ -24,7 +25,7 @@ export const getAreamapData = (
     dataOptions.color?.column.name ?? dataOptions.geo.column.name,
   );
   if (!geoColumn || !colorColumn) {
-    throw new Error('Missing required column');
+    throw new TranslatableError('errors.requiredColumnMissing');
   }
   const rawGeoData: RawGeoDataElement[] = dataTable.rows.map((row) => {
     const originalValue = getValue(row, colorColumn) as number;

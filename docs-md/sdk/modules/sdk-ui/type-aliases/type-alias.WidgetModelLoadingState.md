@@ -52,6 +52,6 @@ Loading status
 
 ### `widget`
 
-**widget**: [`WidgetModel`](../fusion-embed/interface.WidgetModel.md) \| `undefined`
+**widget**: [`WidgetModel`](../fusion-assets/interface.WidgetModel.md) \| `undefined`
 
 Widget model, if the load succeeded

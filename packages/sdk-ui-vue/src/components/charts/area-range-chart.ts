@@ -86,10 +86,18 @@ export const AreaRangeChart = defineComponent({
      */
     onBeforeRender: Function as PropType<AreaRangeChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<AreaRangeChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
+
     onDataPointClick: Function as PropType<AreaRangeChartProps['onDataPointClick']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointContextMenu}

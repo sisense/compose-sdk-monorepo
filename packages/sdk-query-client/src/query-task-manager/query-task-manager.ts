@@ -9,6 +9,7 @@ import { JaqlRequest, PivotClient } from '@sisense/sdk-pivot-client';
 
 import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
 import { EmptyObject } from '../helpers/utility-types.js';
+import { TranslatableError } from '../translation/translatable-error.js';
 
 type QueryTask = Task<QueryTaskPassport>;
 type PivotQueryTask = Task<PivotQueryTaskPassport>;
@@ -181,7 +182,7 @@ export function validateJaqlResponse(
   jaqlResponse: JaqlResponse | undefined,
 ): asserts jaqlResponse is JaqlResponse {
   if (!jaqlResponse) {
-    throw new Error('No jaql response received from the server');
+    throw new TranslatableError('errors.noJaqlResponse');
   }
   if (jaqlResponse.error) {
     throw new Error(

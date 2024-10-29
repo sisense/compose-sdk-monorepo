@@ -6,13 +6,13 @@ title: toExecuteQueryParams
 
 > **toExecuteQueryParams**(`widgetModel`): [`ExecuteQueryParams`](../../../../sdk-ui/interfaces/interface.ExecuteQueryParams.md)
 
-Translates a [WidgetModel](../../../fusion-embed/interface.WidgetModel.md) to the parameters for executing a query for the widget.
+Translates a [WidgetModel](../../../fusion-assets/interface.WidgetModel.md) to the parameters for executing a query for the widget.
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `widgetModel` | [`WidgetModel`](../../../fusion-embed/interface.WidgetModel.md) |
+| `widgetModel` | [`WidgetModel`](../../../fusion-assets/interface.WidgetModel.md) |
 
 ## Returns
 

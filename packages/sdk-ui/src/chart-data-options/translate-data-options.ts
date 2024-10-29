@@ -49,6 +49,7 @@ import {
 } from './utils';
 import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
 import { translateRangeChartDataOptions } from './translate-range-data-options';
+import { TranslatableError } from '@/translation/translatable-error';
 
 export function translateChartDataOptions(
   chartType: ChartType,
@@ -72,7 +73,7 @@ export function translateChartDataOptions(
     return translateScattermapChartDataOptions(dataOptions as ScattermapChartDataOptions);
   } else if (isRange(chartType)) {
     return translateRangeChartDataOptions(dataOptions as RangeChartDataOptions);
-  } else throw new Error(`Unexpected chart type: ${chartType}`);
+  } else throw new TranslatableError('errors.unexpectedChartType', { chartType });
 }
 
 const translateCartesianChartDataOptions = (

@@ -21,25 +21,21 @@ export function comment(
 
   if (showTags && comment.blockTags?.length) {
     const tags = comment.blockTags
-      .filter((tag) => tag.tag !== '@returns')
+      .filter((tag) => tag.tag !== '@returns' && tag.tag !== '@shortDescription')
       .map((tag) => {
         const tagName = tag.tag.substring(1);
         const tagText = camelToTitleCase(tagName);
 
         /** CSDK START */
         if (tagName === 'deprecated') {
-          const tagDeprecated = [
-          '::: warning Deprecated',
-          ];
+          const tagDeprecated = ['::: warning Deprecated'];
           tagDeprecated.push(context.commentParts(tag.content));
           tagDeprecated.push(':::');
           return tagDeprecated.join('\n');
         }
         /** CSDK END */
 
-        const tagMd = [
-          headingLevel ? heading(headingLevel, tagText) : bold(tagText),
-        ];
+        const tagMd = [headingLevel ? heading(headingLevel, tagText) : bold(tagText)];
         tagMd.push(context.commentParts(tag.content));
         return tagMd.join('\n\n');
       });

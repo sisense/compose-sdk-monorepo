@@ -17,6 +17,7 @@ import {
   TextOperators,
 } from '@sisense/sdk-data';
 import { CriteriaFilterType } from './criteria-filter-tile';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Collection of filter options for the {@link CriteriaFilterMenu},
@@ -267,7 +268,8 @@ export const filterToOption = (filter: CriteriaFilterType): FilterOptionType => 
   const key = Object.keys(FilterOption).find(
     (option) => FilterOption[option] == opStr,
   ) as keyof typeof FilterOption;
-  if (FilterOption[key] === undefined) throw new Error(`Unsupported filter ${filter}`);
+  if (FilterOption[key] === undefined)
+    throw new TranslatableError('errors.unsupportedFilter', { filter: JSON.stringify(filter) });
   return FilterOption[key] as FilterOptionType;
 };
 

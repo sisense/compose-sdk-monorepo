@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.21.0",
+  "version": "1.22.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
@@ -23,7 +23,7 @@
   "author": "Sisense",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "build:prod": "tsc --project tsconfig.prod.json",
+    "build:prod": "tsc --project tsconfig.prod.json && tsc --project tsconfig.prod.cjs.json && cp package.cjs.json ./dist/cjs/package.json",
     "build.watch": "tsc --build --watch",
     "clean": "rm -rf dist coverage tsconfig.tsbuildinfo tsconfig.prod.tsbuildinfo",
     "format": "run -T prettier --write .",

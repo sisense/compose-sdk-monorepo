@@ -109,6 +109,15 @@ export class ScattermapChartComponent {
   styleOptions: ScattermapChartProps['styleOptions'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!ScattermapChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: ScattermapChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
    *
    * @category Callbacks

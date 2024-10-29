@@ -6,13 +6,13 @@ title: toExecutePivotQueryParams
 
 > **toExecutePivotQueryParams**(`widgetModel`): [`ExecutePivotQueryParams`](../../../../sdk-ui/interfaces/interface.ExecutePivotQueryParams.md)
 
-Translates a [WidgetModel](../../../fusion-embed/interface.WidgetModel.md) to the parameters for executing a query for the pivot widget.
+Translates a [WidgetModel](../../../fusion-assets/interface.WidgetModel.md) to the parameters for executing a query for the pivot widget.
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `widgetModel` | [`WidgetModel`](../../../fusion-embed/interface.WidgetModel.md) |
+| `widgetModel` | [`WidgetModel`](../../../fusion-assets/interface.WidgetModel.md) |
 
 ## Returns
 

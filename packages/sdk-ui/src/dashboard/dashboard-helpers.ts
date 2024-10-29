@@ -17,7 +17,7 @@ import { DashboardProps } from './types';
  * @param newFilters - An array of new filters to set on the dashboard.
  * @returns A new dashboard instance with the updated filters.
  */
-const replaceFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
+export const replaceFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
   const newDashboard = { ...dashboard };
   newDashboard.filters = newFilters;
   return newDashboard;
@@ -39,7 +39,7 @@ const replaceFilters = (dashboard: DashboardProps, newFilters: Filter[]): Dashbo
  * @param newFilter - The filter to add to the dashboard.
  * @returns A new dashboard instance with the new filter added.
  */
-const addFilter = (dashboard: DashboardProps, newFilter: Filter): DashboardProps => {
+export const addFilter = (dashboard: DashboardProps, newFilter: Filter): DashboardProps => {
   const newDashboard = { ...dashboard };
   if (!newDashboard.filters) {
     newDashboard.filters = [];
@@ -64,7 +64,7 @@ const addFilter = (dashboard: DashboardProps, newFilter: Filter): DashboardProps
  * @param newFilters - An array of filters to add to the dashboard.
  * @returns A new dashboard instance with the new filters added.
  */
-const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
+export const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
   const newDashboard = { ...dashboard };
   if (!newDashboard.filters) {
     newDashboard.filters = [];
@@ -92,7 +92,7 @@ const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardP
  * @param newFilter - The new filter to replace the existing one.
  * @returns A new dashboard instance with the specified filter modified.
  */
-const modifyFilter = (
+export const modifyFilter = (
   dashboard: DashboardProps,
   filterToModify: Filter,
   newFilter: Filter,
@@ -124,24 +124,11 @@ const modifyFilter = (
  * @param filter - The filter to be removed.
  * @returns A new dashboard instance with the specified filter removed.
  */
-const removeFilter = (dashboard: DashboardProps, filter: Filter): DashboardProps => {
+export const removeFilter = (dashboard: DashboardProps, filter: Filter): DashboardProps => {
   const newDashboard = { ...dashboard };
   if (!newDashboard.filters) {
     newDashboard.filters = [];
   }
   newDashboard.filters = newDashboard.filters.filter((f) => f.guid !== filter.guid);
   return newDashboard;
-};
-
-/**
- * Utility functions to manipulate DashboardProps.
- *
- * @group Dashboards
- */
-export const DashboardHelpers = {
-  replaceFilters,
-  modifyFilter,
-  removeFilter,
-  addFilter,
-  addFilters,
 };

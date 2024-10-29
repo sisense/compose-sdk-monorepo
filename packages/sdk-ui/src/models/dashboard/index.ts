@@ -5,3 +5,5 @@ export * from './use-get-dashboard-model';
 export * from './use-get-dashboard-models';
 export * from './dashboard-model';
 export * as dashboardModelTranslator from './dashboard-model-translator';
+export * from './use-dashboard-model/use-dashboard-model';
+export * from './use-dashboard-model/use-dashboard-model-reducer';

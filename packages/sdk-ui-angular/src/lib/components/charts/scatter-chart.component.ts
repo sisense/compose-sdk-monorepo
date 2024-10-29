@@ -127,6 +127,15 @@ export class ScatterChartComponent {
   beforeRender: ScatterChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!ScatterChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: ScatterChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
    *
    * @category Callbacks

@@ -139,6 +139,15 @@ export class AreaRangeChartComponent {
   beforeRender: AreaRangeChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!AreaRangeChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: AreaRangeChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointClick}
    *
    * @category Callbacks

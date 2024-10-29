@@ -4,8 +4,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ChatMessage, ChatResponse } from './types';
 import { useChatApi } from './chat-api-provider';
 import { useChatConfig } from '../chat-config';
-import { UNEXPECTED_CHAT_RESPONSE_ERROR } from './errors';
 import { CHAT_HISTORY_QUERY_KEY } from './chat-history';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @internal
@@ -73,7 +73,7 @@ export const useMaybeCreateChat = (contextId: string | undefined, shouldCreate: 
   return mutation;
 };
 
-const mapToChatMessage = (response: ChatResponse): ChatMessage => {
+const mapToChatMessage = (response: ChatResponse, errorMessage: string): ChatMessage => {
   // TODO: Remove this in the next release.
   response.responseType = response.responseType.toLowerCase() as ChatResponse['responseType'];
 
@@ -91,7 +91,7 @@ const mapToChatMessage = (response: ChatResponse): ChatMessage => {
         role: 'assistant',
       };
     default:
-      throw Error(`Received unknown responseType, raw response=${JSON.stringify(response)}`);
+      throw Error(`${errorMessage}${JSON.stringify(response)}`);
   }
 };
 
@@ -111,6 +111,7 @@ export const useSendChatMessage = (chatId: string | undefined) => {
   );
 
   const { enableFollowupQuestions } = useChatConfig();
+  const { t } = useTranslation();
   const api = useChatApi();
   const { mutate, isLoading } = useMutation({
     mutationFn: async (message: string) => {
@@ -133,7 +134,7 @@ export const useSendChatMessage = (chatId: string | undefined) => {
       if (error instanceof Error) {
         console.error('Error when sending message:', error.message);
         appendToHistory({
-          content: UNEXPECTED_CHAT_RESPONSE_ERROR,
+          content: t('errors.unexpectedChatResponse'),
           role: 'assistant',
         });
       }
@@ -143,7 +144,8 @@ export const useSendChatMessage = (chatId: string | undefined) => {
         return;
       }
 
-      appendToHistory(mapToChatMessage(response));
+      const errorMessage = t('ai.errors.unknownResponse');
+      appendToHistory(mapToChatMessage(response, errorMessage));
     },
   });
 

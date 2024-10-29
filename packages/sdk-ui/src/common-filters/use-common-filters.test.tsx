@@ -7,10 +7,10 @@ import {
   CartesianChartDataOptions,
   DataPoint,
   DataPointEventHandler,
-  DataPointsEventHandler,
   RenderToolbarHandler,
   ChartWidgetProps,
   WidgetProps,
+  DataPointsEventHandler,
 } from '..';
 import { isChartWidgetProps, isTextWidgetProps } from '@/dashboard-widget/utils';
 import { MenuOptions } from '@/common/components/menu/types';
@@ -359,6 +359,26 @@ describe('useCommonFilters', () => {
       expect(getProperty(connectedWidget, 'filters')).toEqual(
         getProperty(connectedWidget, 'filters'),
       );
+    });
+
+    it('should assign onBeforeMenuOpen to widget props', () => {
+      const initialFilters = [
+        filterFactory.members(DM.Commerce.AgeRange, ['0-18'], false, '123', []),
+      ];
+      // openMenu mock that automatically makes the selections
+      const openMenu = (options: MenuOptions) => options.itemSections[1].items?.[0].onClick?.();
+
+      const onBeforeMenuOpen = (options: MenuOptions) => options;
+
+      const { result } = renderHook(() =>
+        useCommonFilters({ initialFilters, openMenu, onBeforeMenuOpen }),
+      );
+      const connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {
+        shouldAffectFilters: true,
+      });
+
+      expect(connectedWidget.onBeforeMenuOpen).toBeDefined();
+      expect(connectedWidget.onBeforeMenuOpen).toEqual(onBeforeMenuOpen);
     });
 
     it('should clear selected filters via connected onRenderToolbar handler', async () => {

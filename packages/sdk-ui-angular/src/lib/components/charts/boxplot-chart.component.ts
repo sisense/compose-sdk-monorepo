@@ -119,6 +119,15 @@ export class BoxplotChartComponent {
   beforeRender: BoxplotChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!BoxplotChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: BoxplotChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointClick}
    *
    * @category Callbacks

@@ -125,6 +125,15 @@ export class ColumnChartComponent {
   beforeRender: ColumnChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!ColumnChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: ColumnChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointClick}
    *
    * @category Callbacks

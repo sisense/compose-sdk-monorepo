@@ -141,7 +141,11 @@ function combineDataSourceAndDataFields(
       title: dataSource.title,
       type: dataSource.live ? 'live' : 'elasticube',
     },
-    metadata: dataFields,
+    // include Jaql data source in each of the data fields
+    metadata: dataFields.map((field) => ({
+      ...field,
+      dataSource: { title: dataSource.title, live: dataSource.live },
+    })),
   };
 }
 
@@ -187,6 +191,7 @@ function rewriteDataModel(dataModel: any): DataModel {
         type: MetadataTypes.Dimension,
         group: undefined,
         description: item.description,
+        dataSource: item.dataSource,
       };
 
       result.group = item.table;

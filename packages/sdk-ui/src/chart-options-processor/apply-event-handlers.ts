@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import merge from 'deepmerge';
+import isNull from 'lodash-es/isNull';
 import {
   HighchartsPointerEvent,
   HighchartsSelectEvent,
@@ -101,7 +102,12 @@ const getSelectedPoints = (
 ): HighchartsPoint[] => {
   const xPoints = xAxis.axis.series
     .flatMap((series) => series.points)
-    .filter(({ x }) => x >= xAxis.min && x <= xAxis.max);
+    .filter(({ x, y }) => {
+      const isInRange = x >= xAxis.min && x <= xAxis.max;
+      // filters out the redundant points (for cartesian chart with 2 categories)
+      const isValidPoint = !isNull(y);
+      return isInRange && isValidPoint;
+    });
 
   if (!yAxis) return xPoints;
 

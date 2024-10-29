@@ -4,7 +4,7 @@ title: UseGetSharedFormulaParams
 
 # Interface UseGetSharedFormulaParams
 
-Params of the [useGetSharedFormula](../fusion-embed/function.useGetSharedFormula.md) hook
+Params of the [useGetSharedFormula](../fusion-assets/function.useGetSharedFormula.md) hook
 
 Can consist either of an oid or a name/dataSource pair
 

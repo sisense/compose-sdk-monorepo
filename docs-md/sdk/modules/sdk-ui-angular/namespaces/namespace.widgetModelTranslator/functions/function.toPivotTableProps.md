@@ -6,13 +6,13 @@ title: toPivotTableProps
 
 > **toPivotTableProps**(`widgetModel`): [`PivotTableProps`](../../../../sdk-ui/interfaces/interface.PivotTableProps.md)
 
-Translates a [WidgetModel](../../../fusion-embed/interface.WidgetModel.md) to the props for rendering a pivot table.
+Translates a [WidgetModel](../../../fusion-assets/interface.WidgetModel.md) to the props for rendering a pivot table.
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `widgetModel` | [`WidgetModel`](../../../fusion-embed/interface.WidgetModel.md) |
+| `widgetModel` | [`WidgetModel`](../../../fusion-assets/interface.WidgetModel.md) |
 
 ## Returns
 

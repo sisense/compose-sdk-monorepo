@@ -15,7 +15,7 @@ const baseConfig = {
     'Contexts',
     'Queries',
     'Dashboards',
-    'Fusion Embed',
+    'Fusion Assets',
     'Generative AI',
     /* sdk-data */
     'Factories',

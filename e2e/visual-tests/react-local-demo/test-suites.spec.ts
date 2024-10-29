@@ -1,13 +1,12 @@
-import { test } from '@playwright/test';
+import { test } from '../__test-helpers__/test-setup';
 import { AppsNames, getAppConfig } from '../appsConfig';
-import { makeScreenshotsOverPage } from '../__test-helpers__/make-screenshot';
 
 const TEST_STEP_AVARAGE_TIMEOUT = 20 * 1000;
 const DISABLED_TEST_SUITES = ['Funnel Chart', 'Scattermap', 'pivot'];
 
 const { url } = getAppConfig(AppsNames.REACT_LOCAL_DEMO);
 
-test('verify test suites in light mode', async ({ page }) => {
+test('verify test suites in light mode', async ({ page, testHelper }) => {
   await page.goto(url);
   await page.locator('span', { hasText: 'TestSuiteDashboards' }).click();
   await page.locator('#selectDashboard').waitFor();
@@ -27,12 +26,12 @@ test('verify test suites in light mode', async ({ page }) => {
     await test.step(`check ${dashboard}`, async () => {
       page.locator('#selectDashboard').selectOption({ label: dashboard });
 
-      await makeScreenshotsOverPage(page);
+      await testHelper.makeScreenshotsOverPage();
     });
   }
 });
 
-test('verify test suites in dark mode', async ({ page }) => {
+test('verify test suites in dark mode', async ({ page, testHelper }) => {
   await page.goto(url);
   await page.locator('span', { hasText: 'TestSuiteDashboards' }).click();
   await page.locator('#selectDashboard').waitFor();
@@ -52,7 +51,7 @@ test('verify test suites in dark mode', async ({ page }) => {
     await test.step(`check ${dashboard}`, async () => {
       page.locator('#selectDashboard').selectOption({ label: dashboard });
 
-      await makeScreenshotsOverPage(page);
+      await testHelper.makeScreenshotsOverPage();
     });
   }
 });

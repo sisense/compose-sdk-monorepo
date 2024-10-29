@@ -62,7 +62,14 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
    * @returns An instance representing the sorted {@link Attribute} of this instance
    */
   sort(sort: Sort): Attribute {
-    return new DimensionalAttribute(this.name, this.expression, this.type, this.description, sort);
+    return new DimensionalAttribute(
+      this.name,
+      this.expression,
+      this.type,
+      this.description,
+      sort,
+      this.dataSource,
+    );
   }
 
   /**
@@ -164,6 +171,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       this._format,
       this.description,
       sort,
+      this.dataSource,
     );
   }
 
@@ -190,6 +198,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       format,
       this.description,
       this._sort,
+      this.dataSource,
     );
   }
 
@@ -415,6 +424,8 @@ export function createAttribute(json: any): Attribute {
     json.attribute || json.expression || json.dim,
     json.type,
     json.desc || json.description,
+    json.sort,
+    json.dataSource,
   );
 }
 
@@ -431,6 +442,8 @@ export function createLevel(json: any): LevelAttribute {
     json.granularity,
     json.format,
     json.desc || json.description,
+    json.sort,
+    json.dataSource,
   );
 }
 

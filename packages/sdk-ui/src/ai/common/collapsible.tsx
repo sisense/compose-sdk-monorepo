@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type CollapsibleProps = {
   text: string;
@@ -15,6 +16,8 @@ const MAX_HEIGHT_PX = 18 * 5;
 export default function Collapsible({ text }: CollapsibleProps) {
   const [collapsed, setCollapsed] = useState(true);
   const [showReadMore, setShowReadMore] = useState(false);
+
+  const { t } = useTranslation();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -35,7 +38,7 @@ export default function Collapsible({ text }: CollapsibleProps) {
             className="csdk-text-ai-xs csdk-text-text-link csdk-cursor-pointer"
             onClick={() => setCollapsed((v) => !v)}
           >
-            {collapsed ? 'Read more' : 'Collapse'}
+            {collapsed ? t('ai.buttons.readMore') : t('ai.buttons.collapse')}
           </div>
         </div>
       )}

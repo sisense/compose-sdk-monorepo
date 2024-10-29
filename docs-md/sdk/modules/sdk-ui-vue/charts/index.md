@@ -11,8 +11,8 @@ Vue components and utilities for working with charts
 - [AreaRangeChart](class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
 - [BarChart](class.BarChart.md)
 - [BoxplotChart](class.BoxplotChart.md)
-- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md)
-- [Chart](class.Chart.md)
+- [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [Chart](class.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](class.ColumnChart.md)
 - [FunnelChart](class.FunnelChart.md)
 - [IndicatorChart](class.IndicatorChart.md)

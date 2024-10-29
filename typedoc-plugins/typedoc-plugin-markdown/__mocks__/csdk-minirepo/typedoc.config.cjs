@@ -26,4 +26,5 @@ module.exports = {
   titleTemplate: '{kind} {name}',
   propertiesFormat: 'list',
   hiddenFunctionParameters: ['paramG', 'paramA'],
+  treatWarningsAsErrors: true,
 };

@@ -52,7 +52,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  *
  * This composable is ideal for Vue applications requiring a list of Sisense dashboards, providing a streamlined, reactive
  * way to fetch and manage the state of multiple dashboard models.
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 

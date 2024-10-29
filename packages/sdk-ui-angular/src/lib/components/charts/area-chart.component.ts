@@ -125,6 +125,15 @@ export class AreaChartComponent {
   beforeRender: AreaChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!AreaChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: AreaChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointClick}
    *
    * @category Callbacks

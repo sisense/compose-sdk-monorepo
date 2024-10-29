@@ -145,7 +145,7 @@ Use the `highchartsOptions` object that is passed to the callback to change
 [options values](https://api.highcharts.com/highcharts/) and then return the modified options
 object. The returned options are then used when rendering the chart.
 
-This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
+This callback is not supported for Indicator Chart, Areamap Chart, Scattermap Chart, and Table.
 
 For an example of how the `onBeforeRender` callback can be used, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).

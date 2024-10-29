@@ -14,4 +14,4 @@ More description
 - [IndexableInterface](interface.IndexableInterface.md)
 - [SomeConfig](interface.SomeConfig.md)
 - [SomeInterface](interface.SomeInterface.md)
-- [SomePropInterface](interface.SomePropInterface.md)
+- [SomePropInterface](interface.SomePropInterface.md) - This is interface summary.

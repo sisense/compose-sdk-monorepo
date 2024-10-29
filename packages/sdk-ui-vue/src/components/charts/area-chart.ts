@@ -81,6 +81,13 @@ export const AreaChart = defineComponent({
      */
     onBeforeRender: Function as PropType<AreaChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<AreaChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointClick}
      *
      * @category Callbacks

@@ -125,6 +125,15 @@ export class PieChartComponent {
   beforeRender: PieChartProps['onBeforeRender'];
 
   /**
+   * {@inheritDoc  @sisense/sdk-ui!PieChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: PieChartProps['onDataReady'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointClick}
    *
    * @category Callbacks

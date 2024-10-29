@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import last from 'lodash-es/last';
 import { type Filter } from '@sisense/sdk-data';
@@ -14,20 +14,30 @@ import {
 import { CommonFiltersOptions } from './types.js';
 import { prepareCommonFiltersToWidgetConnectProps } from './common-filters-connector.js';
 import { WidgetProps } from '@/props.js';
-import { OpenMenuFn } from '@/common/components/menu/types.js';
+import { BeforeMenuOpenHandler, OpenMenuFn } from '@/common/components/menu/types.js';
 import { useTranslation } from 'react-i18next';
-import { applyDrilldownDimension } from '@/widgets/common/drilldown-connector.js';
+import { applyDrilldownDimension } from '@/widgets/common/drilldown-utils.js';
+import { useSyncedState } from '@/common/hooks/use-synced-state';
 
 /** @internal */
 export const useCommonFilters = ({
-  initialFilters = [],
+  initialFilters,
   openMenu,
+  onBeforeMenuOpen,
+  onFiltersChange,
 }: {
   initialFilters?: Filter[];
   openMenu?: OpenMenuFn;
+  onBeforeMenuOpen?: BeforeMenuOpenHandler;
+  onFiltersChange?: (filters: Filter[]) => void;
 } = {}) => {
   const { t: translate } = useTranslation();
-  const [filters, setFilters] = useState<Filter[]>(initialFilters);
+  const [filters, setFilters] = useSyncedState<Filter[]>(
+    useMemo(() => initialFilters ?? [], [initialFilters]),
+    {
+      onLocalStateChange: onFiltersChange,
+    },
+  );
 
   const addFilter = useCallback(
     (newFilter: Filter) => {
@@ -72,6 +82,9 @@ export const useCommonFilters = ({
         props.filters as Filter[],
         connectedWidget.filters as Filter[],
       );
+
+      connectedWidget.onBeforeMenuOpen = onBeforeMenuOpen;
+
       if (props.onDataPointClick) {
         registerDataPointClickHandler(connectedWidget, props.onDataPointClick);
       }
@@ -86,7 +99,7 @@ export const useCommonFilters = ({
       }
       return connectedWidget;
     },
-    [setFilters, filters, openMenu, translate],
+    [setFilters, filters, openMenu, onBeforeMenuOpen, translate],
   );
 
   return {

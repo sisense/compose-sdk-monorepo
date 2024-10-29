@@ -31,6 +31,7 @@ TypeScript type aliases for components and composables listed above
 - [ContextMenuProps](type-alias.ContextMenuProps.md)
 - [Convolution](type-alias.Convolution.md)
 - [CriteriaFilterType](type-alias.CriteriaFilterType.md)
+- [DashboardByIdProps](type-alias.DashboardByIdProps.md)
 - [DataColorCondition](type-alias.DataColorCondition.md)
 - [DataColorOptions](type-alias.DataColorOptions.md)
 - [DataPoint](type-alias.DataPoint.md)

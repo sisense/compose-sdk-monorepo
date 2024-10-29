@@ -75,7 +75,7 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsBetween} />
       </MockedSisenseContextProvider>,
     );
-    const element = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.between');
+    const element = screen.getByText('All items between 0 and 100');
     expect(element).toBeInTheDocument();
   });
 
@@ -85,7 +85,7 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsBetween} />
       </MockedSisenseContextProvider>,
     );
-    const textElt = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.between');
+    const textElt = screen.getByText('All items between 0 and 100');
     expect(textElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
     expect(textElt).not.toBeInTheDocument();
@@ -104,7 +104,7 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsNotContain} />
       </MockedSisenseContextProvider>,
     );
-    const textElt = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.notContains');
+    const textElt = screen.getByText("All items doesn't contain boop");
     expect(textElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
     expect(textElt).not.toBeInTheDocument();
@@ -123,11 +123,11 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsTopRank} />
       </MockedSisenseContextProvider>,
     );
-    const textElt = screen.getByText('criteriaFilter.displayModePrefix criteriaFilter.top');
+    const textElt = screen.getByText(`All items top 5 by ${mockMeasureB.name}`);
     expect(textElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
     expect(textElt).not.toBeInTheDocument();
-    expect(screen.getByText('criteriaFilter.byMeasure')).toBeInTheDocument();
+    expect(screen.getByText('By measure')).toBeInTheDocument();
     expect(screen.getByLabelText(mockMeasureB.name)).toBeChecked();
   });
 

@@ -1,7 +1,7 @@
 import './app.css';
 import '../styles';
 import React, { useMemo } from 'react';
-import { BearerAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { BearerAuthenticator } from '@sisense/sdk-rest-client';
 import { PivotClient } from '../pivot-client';
 import { PivotBuilderDemo } from './pivot-builder-demo';
 import { defaultQuery as defaultQuery1, defaultQuery2 } from './examples';
@@ -21,13 +21,10 @@ export function App() {
 
   // create pivot client
   const pivotClient = useMemo(() => {
-    // create http client
-    const httpClient = new HttpClient(
+    return new PivotClient(
       VITE_APP_SISENSE_URL,
       new BearerAuthenticator(VITE_APP_SISENSE_URL, VITE_APP_SISENSE_TOKEN),
-      'sdk-pivot-client' + (__PACKAGE_VERSION__ ? `-${__PACKAGE_VERSION__}` : ''),
     );
-    return new PivotClient(httpClient);
   }, [VITE_APP_SISENSE_TOKEN, VITE_APP_SISENSE_URL]);
 
   const handleOnClick = () => {

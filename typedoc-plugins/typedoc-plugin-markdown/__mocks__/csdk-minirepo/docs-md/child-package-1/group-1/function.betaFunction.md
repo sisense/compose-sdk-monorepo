@@ -2,7 +2,7 @@
 title: betaFunction
 ---
 
-# Function betaFunction <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+# Function betaFunction <Badge type="fusionEmbed" text="Fusion Assets" /> <Badge type="beta" text="Beta" />
 
 > **betaFunction**(`paramZ`): `number`
 

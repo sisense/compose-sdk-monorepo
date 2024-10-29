@@ -76,6 +76,13 @@ export const ColumnChart = defineComponent({
      */
     onBeforeRender: Function as PropType<ColumnChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<ColumnChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointClick}
      *
      * @category Callbacks

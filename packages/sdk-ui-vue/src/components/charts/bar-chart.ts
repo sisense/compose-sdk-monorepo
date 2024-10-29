@@ -76,6 +76,13 @@ export const BarChart = defineComponent({
      */
     onBeforeRender: Function as PropType<BarChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<BarChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointClick}
      *
      * @category Callbacks

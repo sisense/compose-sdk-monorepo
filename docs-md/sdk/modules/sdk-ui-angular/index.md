@@ -13,8 +13,8 @@ Angular components and utilities for working with charts
 - [AreaRangeChartComponent](charts/class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
 - [BarChartComponent](charts/class.BarChartComponent.md)
 - [BoxplotChartComponent](charts/class.BoxplotChartComponent.md)
-- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md)
-- [ChartComponent](charts/class.ChartComponent.md)
+- [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [ChartComponent](charts/class.ChartComponent.md) - Common component for rendering charts of different types including table
 - [ColumnChartComponent](charts/class.ColumnChartComponent.md)
 - [FunnelChartComponent](charts/class.FunnelChartComponent.md)
 - [IndicatorChartComponent](charts/class.IndicatorChartComponent.md)
@@ -72,18 +72,19 @@ Angular components and utilities for working with dashboards
 - [ChartWidgetComponent](dashboards/class.ChartWidgetComponent.md)
 - [DashboardComponent](dashboards/class.DashboardComponent.md) <Badge type="beta" text="Beta" />
 
-## Fusion Embed
+## Fusion Assets
 
-Angular modules, services, and components for working with Fusion Embed dashboards, widgets, queries, and formulas
+Angular modules, services, and components for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardByIdComponent](fusion-embed/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
-- [DashboardModel](fusion-embed/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [DashboardService](fusion-embed/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [DashboardWidgetComponent](fusion-embed/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetModel](fusion-embed/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [WidgetService](fusion-embed/class.WidgetService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardByIdComponent](fusion-assets/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetService](fusion-assets/class.WidgetService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Namespaces
 
+- [dashboardHelpers](namespaces/namespace.dashboardHelpers/index.md)
 - [dashboardModelTranslator](namespaces/namespace.dashboardModelTranslator/index.md)
 - [widgetModelTranslator](namespaces/namespace.widgetModelTranslator/index.md)

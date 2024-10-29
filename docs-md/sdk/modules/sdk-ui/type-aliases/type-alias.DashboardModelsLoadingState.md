@@ -12,7 +12,7 @@ State of a dashboard models loading.
 
 ### `dashboards`
 
-**dashboards**: [`DashboardModel`](../fusion-embed/interface.DashboardModel.md)[] \| `undefined`
+**dashboards**: [`DashboardModel`](../fusion-assets/interface.DashboardModel.md)[] \| `undefined`
 
 The result dashboard models if the load has succeeded
 

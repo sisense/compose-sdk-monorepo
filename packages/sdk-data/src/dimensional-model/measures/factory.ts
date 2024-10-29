@@ -23,6 +23,7 @@ import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.j
 import { isDatetime, isNumber } from './../simple-column-types.js';
 import { convertSort, createFilterFromJaql } from '../../utils.js';
 import { CustomFormulaJaql } from '../filters/utils/types.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
 
 /**
  * Defines the different numeric operators that can be used with numeric filters
@@ -159,7 +160,7 @@ export function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedM
   const isFormulaJaql = 'formula' in jaql;
 
   if (!isFormulaJaql) {
-    throw new Error('Jaql is not a formula');
+    throw new TranslatableError('errors.measure.notAFormula');
   }
 
   const sort = convertSort(jaql.sort);

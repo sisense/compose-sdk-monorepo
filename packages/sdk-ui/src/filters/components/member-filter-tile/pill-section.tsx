@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import type { FunctionComponent } from 'react';
 import { useThemeContext } from '../../../theme-provider';
 import { Member, SelectedMember } from './members-reducer';
+import { useTranslation } from 'react-i18next';
 
 const StyledPillButton = styled.button<{
   backgroundColor: string;
@@ -54,9 +55,11 @@ const Pill = ({ name, active, excludeMembers, disabled, onClick }: PillProps) =>
   );
 };
 
-const IncludeAllPill = ({ disabled }: { disabled: boolean }) => (
-  <Pill name="Include all" disabled={disabled} excludeMembers={false} active />
-);
+const IncludeAllPill = ({ disabled }: { disabled: boolean }) => {
+  const { t } = useTranslation();
+
+  return <Pill name={t('includeAll')} disabled={disabled} excludeMembers={false} active />;
+};
 
 export interface PillSectionProps {
   members: Member[];

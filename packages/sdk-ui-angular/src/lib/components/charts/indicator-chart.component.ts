@@ -115,6 +115,15 @@ export class IndicatorChartComponent {
   @Input()
   styleOptions: IndicatorChartProps['styleOptions'];
 
+  /**
+   * {@inheritDoc  @sisense/sdk-ui!IndicatorChartProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: IndicatorChartProps['onDataReady'];
+
   /** @internal */
   public chartType: ChartType = 'indicator';
 }

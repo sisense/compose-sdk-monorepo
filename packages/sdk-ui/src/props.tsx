@@ -52,6 +52,7 @@ import {
   DrilldownSelection,
   TextWidgetStyleOptions,
   GenericDataOptions,
+  CustomTranslationObject,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -74,6 +75,7 @@ import { FiltersMergeStrategy } from './dashboard-widget/types';
 import { HookEnableParam } from './common/hooks/types';
 import { ExecuteQueryResult } from './query-execution/types';
 import { Hierarchy } from './models';
+import { BeforeMenuOpenHandler } from './common/components/menu/types';
 
 export type { MenuItemSection, HighchartsOptions };
 
@@ -168,18 +170,6 @@ export interface SisenseContextProviderProps {
   onError?: (error: Error) => void;
 
   /**
-   * Boolean flag to enable sending tracking events to the Sisense instance.
-   *
-   * If not specified, the default value is `true`.
-   *
-   * Deprecated: Use {@link AppConfig.trackingConfig | trackingConfig.enabled }
-   *
-   * @deprecated Use {@link AppConfig.trackingConfig | trackingConfig.enabled }
-   * @internal
-   */
-  enableTracking?: boolean;
-
-  /**
    * Boolean flag to enable sending silent pre-authentication requests to the Sisense instance.
    * Used to check if user is already authenticated, check is performed in an ivisible iframe.
    * Used only with SSO authentication.
@@ -246,7 +236,7 @@ export interface ExecuteQueryProps {
  *
  * OR
  *
- * (2) `ThemeOid` -- Theme identifier as defined in a Fusion Embed instance (**Admin > App Configuration > Look and Feel**).
+ * (2) `ThemeOid` -- Theme identifier as defined in a Fusion instance (**Admin > App Configuration > Look and Feel**).
  * See [Customizing the Sisense User Interface](https://docs.sisense.com/main/SisenseLinux/customizing-the-sisense-user-interface.htm) for more details.
  */
 export type ThemeProviderProps = PropsWithChildren<{
@@ -368,7 +358,7 @@ interface HighchartsBasedChartEventProps {
    * [options values](https://api.highcharts.com/highcharts/) and then return the modified options
    * object. The returned options are then used when rendering the chart.
    *
-   * This callback is not supported for Indicator Chart, Areamap Chart, and Scattermap Chart.
+   * This callback is not supported for Indicator Chart, Areamap Chart, Scattermap Chart, and Table.
    *
    * For an example of how the `onBeforeRender` callback can be used, see the
    * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
@@ -378,11 +368,22 @@ interface HighchartsBasedChartEventProps {
   onBeforeRender?: BeforeRenderHandler;
 }
 
+interface BaseChartEventProps {
+  /**
+   * A callback that allows to modify data immediately after it has been retrieved.
+   * Can be used to inject modification of queried data.
+   *
+   * @category Callbacks
+   * @internal
+   */
+  onDataReady?: (data: Data) => Data;
+}
+
 /**
  * Event props for regular (non-specific) charts which uses DataPoint type
  * to describe data points for events.
  */
-interface RegularChartEventProps extends HighchartsBasedChartEventProps {
+interface RegularChartEventProps extends BaseChartEventProps, HighchartsBasedChartEventProps {
   /**
    * A callback that allows you to customize what happens when a data point is clicked.
    *
@@ -413,7 +414,7 @@ interface RegularChartEventProps extends HighchartsBasedChartEventProps {
  * Event props for Scatter chart which uses ScatterDataPoint type
  * to describe data points for events.
  */
-interface ScatterChartEventProps extends HighchartsBasedChartEventProps {
+interface ScatterChartEventProps extends BaseChartEventProps, HighchartsBasedChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -464,7 +465,7 @@ interface ScattermapChartEventProps {
  * Event props for Boxplot chart which uses BoxplotDataPoint type
  * to describe data points for events.
  */
-interface BoxplotChartEventProps extends HighchartsBasedChartEventProps {
+interface BoxplotChartEventProps extends BaseChartEventProps, HighchartsBasedChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -492,7 +493,7 @@ interface BoxplotChartEventProps extends HighchartsBasedChartEventProps {
  *
  * @internal
  */
-export interface BaseChartProps {
+export interface BaseChartProps extends BaseChartEventProps {
   /**
    * Data set for a chart using one of the following options. If neither option is specified, the chart
    * will use the `defaultDataSource` specified in the parent `SisenseContextProvider`
@@ -591,7 +592,7 @@ export interface BaseChartProps {
 /**
  * Chart props to be able to react on chart events.
  */
-interface ChartEventProps extends HighchartsBasedChartEventProps {
+interface ChartEventProps extends BaseChartEventProps, HighchartsBasedChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -1388,16 +1389,29 @@ export interface PluginWidgetProps {
 export type WithWidgetType<
   W extends ChartWidgetProps | PivotTableWidgetProps | TextWidgetProps | PluginWidgetProps,
   T extends 'chart' | 'pivot' | 'text' | 'plugin',
-> = W & { widgetType: T };
+> = W & {
+  /**
+   * Widget type
+   */
+  widgetType: T;
+};
 
 /**
  * Props for the facade widget component.
  */
-export type CommonWidgetProps =
+export type CommonWidgetProps = (
   | WithWidgetType<ChartWidgetProps, 'chart'>
   | WithWidgetType<PivotTableWidgetProps, 'pivot'>
   | WithWidgetType<TextWidgetProps, 'text'>
-  | WithWidgetType<PluginWidgetProps, 'plugin'>;
+  | WithWidgetType<PluginWidgetProps, 'plugin'>
+) & {
+  /**
+   * Optional handler function to process menu options before opening the context menu.
+   *
+   * @internal
+   */
+  onBeforeMenuOpen?: BeforeMenuOpenHandler;
+};
 
 /**
  * Props for the widget component within a container component like dashboard.
@@ -1723,4 +1737,14 @@ export interface UseGetSharedFormulaParams extends HookEnableParam {
    * Data source - e.g. `Sample ECommerce`
    */
   dataSource?: DataSource;
+}
+
+/**
+ * Params of the {@link CustomTranslationsLoader} component
+ *
+ * @internal
+ */
+export interface CustomTranslationsLoaderProps {
+  customTranslations?: CustomTranslationObject[];
+  children?: React.ReactNode;
 }

@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import { ChatMode } from '@/ai/api/types';
+import { useTranslation } from 'react-i18next';
 
 export interface ChatConfig {
   /**
@@ -40,7 +41,7 @@ export interface ChatConfig {
   chatMode?: ChatMode;
 
   /** The input prompt text to show in the chat input box */
-  inputPromptText: string;
+  inputPromptText?: string;
 
   /**
    * The welcome text to show at the top of a chat session.
@@ -92,10 +93,6 @@ export const DEFAULTS = Object.freeze<ChatConfig>({
   enableInsights: true,
   numOfRecommendations: 4,
   numOfRecentPrompts: 5,
-  inputPromptText: 'Ask a question or type "/" for ideas',
-  welcomeText:
-    'Welcome to the Analytics Assistant! I can help you explore and gain insights from your data.',
-  suggestionsWelcomeText: 'Some questions you may have:',
 });
 
 const ChatConfigContext = createContext<ChatConfig>({
@@ -110,6 +107,7 @@ export type ChatConfigProviderProps = {
 export const useChatConfig = () => useContext(ChatConfigContext);
 
 export const ChatConfigProvider = ({ children, value }: ChatConfigProviderProps) => {
+  const { t } = useTranslation();
   const config = Object.entries(value).reduce<ChatConfig>(
     (acc, [key, val]) => {
       if (val !== undefined) {
@@ -118,7 +116,12 @@ export const ChatConfigProvider = ({ children, value }: ChatConfigProviderProps)
 
       return acc;
     },
-    { ...DEFAULTS },
+    {
+      ...DEFAULTS,
+      inputPromptText: t('ai.config.inputPromptText'),
+      welcomeText: t('ai.config.welcomeText'),
+      suggestionsWelcomeText: t('ai.config.suggestionsWelcomeText'),
+    },
   );
 
   return <ChatConfigContext.Provider value={config}>{children}</ChatConfigContext.Provider>;

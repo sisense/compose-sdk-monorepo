@@ -75,6 +75,13 @@ export const TreemapChart = defineComponent({
      */
     onBeforeRender: Function as PropType<TreemapChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<TreemapChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointClick}
      *
      * @category Callbacks

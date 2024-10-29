@@ -8,6 +8,7 @@ import {
   type InputHTMLAttributes,
 } from 'react';
 import { SearchIcon } from '../icons';
+import { useTranslation } from 'react-i18next';
 
 type InputProps = {
   variant?: 'white' | 'grey';
@@ -15,6 +16,7 @@ type InputProps = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export const Input: FunctionComponent<InputProps> = (props) => {
+  const { t } = useTranslation();
   const [isValid, setIsValid] = useState(true);
   const inputRef = createRef<HTMLInputElement>();
   const grey = 'csdk-bg-background-priority ';
@@ -56,7 +58,7 @@ export const Input: FunctionComponent<InputProps> = (props) => {
         />
       </div>
       <small className={'csdk-text-semantic-error csdk-min-h-[20px]'}>
-        {isValid ? '' : 'Error message goes here'}
+        {isValid ? '' : t('errors.invalidInput')}
       </small>
     </div>
   );

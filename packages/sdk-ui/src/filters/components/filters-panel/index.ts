@@ -1,2 +1,2 @@
-export { FiltersPanel } from './filters-panel';
+export { FiltersPanel, type FiltersPanelProps } from './filters-panel';
 export { FiltersPanelTile } from './filters-panel-tile';

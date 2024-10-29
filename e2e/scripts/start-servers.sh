@@ -17,10 +17,26 @@ while IFS='=' read -r key value; do
     fi
 done < "$ENV_FILE"
 
+# Function to remove surrounding quotes (single or double) from a string
+remove_quotes() {
+  local input="$1"
+
+  # Remove leading and trailing double quotes if they exist
+  input="${input#\"}"
+  input="${input%\"}"
+
+  # Remove leading and trailing single quotes if they exist
+  input="${input#\'}"
+  input="${input%\'}"
+
+  echo "$input"
+}
+
 # Set the environment variables for all child process
-export VITE_APP_SISENSE_URL=$E2E_SISENSE_URL
-export VITE_APP_SISENSE_TOKEN=$E2E_SISENSE_TOKEN
+export VITE_APP_SISENSE_URL=$(remove_quotes "$E2E_SISENSE_URL")
+export VITE_APP_SISENSE_TOKEN=$(remove_quotes "$E2E_SISENSE_TOKEN")
 export VITE_APP_DISABLE_ANIMATION="true"
+export VITE_APP_DISABLE_STRICT_MODE="true"
 
 # Preparation scripts
 configura_angular_env="node ./scripts/configure-angular-demo-env.cjs";

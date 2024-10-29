@@ -83,7 +83,7 @@ export type SharedFormulaSuccessState = {
 };
 
 /**
- * Fetch a [shared formula](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm) from the a Fusion Embed instance.
+ * Fetch a [shared formula](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm) from the a Fusion instance.
  *
  * The formula can be identified either by `oid` or by name and data source pair.
  *
@@ -100,7 +100,7 @@ export type SharedFormulaSuccessState = {
     const { formula, isLoading, isError } = useGetSharedFormula({ name: 'My Shared Formula', datasource: DM.DataSource })
     ```
  * @returns Formula load state that contains the status of the execution, the result formula, or the error if any
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useGetSharedFormula = withTracking('useGetSharedFormula')(useGetSharedFormulaInternal);

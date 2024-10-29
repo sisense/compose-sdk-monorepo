@@ -96,7 +96,7 @@ export type DashboardModelsSuccessState = {
   return null;
  ```
  * @returns Load state that contains the status of the execution, the result dashboards, or the error if any
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
  */
 export const useGetDashboardModels = withTracking('useGetDashboardModels')(

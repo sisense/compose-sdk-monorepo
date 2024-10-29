@@ -75,6 +75,13 @@ export const LineChart = defineComponent({
      */
     onBeforeRender: Function as PropType<LineChartProps['onBeforeRender']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataReady}
+     *
+     * @category Callbacks
+     * @internal
+     */
+    onDataReady: Function as PropType<LineChartProps['onDataReady']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointClick}
      *
      * @category Callbacks

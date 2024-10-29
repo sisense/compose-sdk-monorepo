@@ -23,6 +23,7 @@ import {
 } from '../chart-data-options/types';
 import { prepareTreemapOptions } from './translations/treemap/treemap-options';
 import { prepareSunburstOptions } from './translations/sunburst/sunburst-options';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -141,6 +142,6 @@ export const getCategoricalChartOptions = (
         alerts,
       };
     default:
-      throw new Error('Unexpected chart type');
+      throw new TranslatableError('errors.unexpectedChartType', { chartType });
   }
 };

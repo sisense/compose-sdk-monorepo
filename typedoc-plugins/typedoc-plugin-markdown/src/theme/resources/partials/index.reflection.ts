@@ -99,7 +99,7 @@ function getList(context: MarkdownThemeRenderContext, group: ReflectionGroup | R
       // CSDK: add member badge
       `- [${escapeChars(child.name)}](${context.relativeURL(child.url)})${context.memberBadge(
         child,
-      )}`,
+      )}${context.memberShortDescription(child)}`,
   );
   return children.join('\n');
 }

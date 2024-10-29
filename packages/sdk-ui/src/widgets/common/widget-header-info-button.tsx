@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useThemeContext } from '../../theme-provider';
 import { WidgetContainerStyleOptions } from '../../types';
 import { getSlightlyDifferentColor } from '@/utils/color';
+import { useTranslation } from 'react-i18next';
 
 export default function WidgetHeaderInfoButton({
   title,
@@ -24,6 +25,7 @@ export default function WidgetHeaderInfoButton({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   const handleInfoButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -36,7 +38,7 @@ export default function WidgetHeaderInfoButton({
   return (
     <>
       <Tooltip
-        title="Click to view full details"
+        title={t('widgetHeader.info.tooltip')}
         style={{
           color: themeSettings.chart?.textColor,
           fontFamily: themeSettings.typography?.fontFamily,
@@ -91,7 +93,7 @@ export default function WidgetHeaderInfoButton({
                 fontFamily: themeSettings.typography.fontFamily,
               }}
             >
-              Widget Details
+              {t('widgetHeader.info.details')}
             </Typography>
             <IconButton onClick={onRefresh} sx={{ p: 0 }}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">

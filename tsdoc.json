@@ -1,16 +1,21 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
-  "extends": ["typedoc/tsdoc.json"],
-  "tagDefinitions": [
-	{
-	  "tagName": "@expandType",
-	  "syntaxKind": "block",
-	  "allowMultiple": false
-	},
-	{
-	  "tagName": "@fusionEmbed",
-	  "syntaxKind": "modifier",
-	  "allowMultiple": false
-	}
-  ]
-}
+	"$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+	"extends": ["typedoc/tsdoc.json"],
+	"tagDefinitions": [
+	  {
+		"tagName": "@expandType",
+		"syntaxKind": "block",
+		"allowMultiple": false
+	  },
+	  {
+		"tagName": "@shortDescription",
+		"syntaxKind": "block",
+		"allowMultiple": false
+	  },
+	  {
+		"tagName": "@fusionEmbed",
+		"syntaxKind": "modifier",
+		"allowMultiple": false
+	  }
+	]
+  }

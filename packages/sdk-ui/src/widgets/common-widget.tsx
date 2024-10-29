@@ -1,4 +1,5 @@
 import {
+  isChartWidgetProps,
   isPivotTableWidgetProps,
   isPluginWidgetProps,
   isTextWidgetProps,
@@ -8,20 +9,23 @@ import { PivotTableWidget } from '@/widgets/pivot-table-widget';
 import { ChartWidget } from '@/widgets/chart-widget';
 import { TextWidget } from '@/widgets/text-widget';
 import { PluginWidget } from '@/widgets/plugin-widget';
+import { MenuProvider } from '@/common/components/menu/menu-provider';
 
 /**
  * Facade component that renders a widget within a dashboard based on the widget type.
  *
+ * @group Dashboards
  * @internal
  */
 export const CommonWidget: React.FC<CommonWidgetProps> = (widgetProps) => {
-  if (isPluginWidgetProps(widgetProps)) {
-    return <PluginWidget {...widgetProps} />;
-  } else if (isPivotTableWidgetProps(widgetProps)) {
-    return <PivotTableWidget {...widgetProps} />;
-  } else if (isTextWidgetProps(widgetProps)) {
-    return <TextWidget {...widgetProps} />;
-  } else {
-    return <ChartWidget {...widgetProps} highlightSelectionDisabled={true} />;
-  }
+  return (
+    <MenuProvider onBeforeMenuOpen={widgetProps.onBeforeMenuOpen}>
+      {isPluginWidgetProps(widgetProps) && <PluginWidget {...widgetProps} />}
+      {isPivotTableWidgetProps(widgetProps) && <PivotTableWidget {...widgetProps} />}
+      {isTextWidgetProps(widgetProps) && <TextWidget {...widgetProps} />}
+      {isChartWidgetProps(widgetProps) && (
+        <ChartWidget {...widgetProps} highlightSelectionDisabled={true} />
+      )}
+    </MenuProvider>
+  );
 };

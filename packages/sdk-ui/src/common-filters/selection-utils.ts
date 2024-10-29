@@ -8,9 +8,10 @@ import {
   isScatter,
   isScattermap,
 } from '@/chart-options-processor/translations/types';
-import { Column, Attribute, Filter } from '@sisense/sdk-data';
+import { Column, Attribute, Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
 import uniq from 'lodash-es/uniq';
 import groupBy from 'lodash-es/groupBy';
+import partition from 'lodash-es/partition';
 import {
   AreamapDataPoint,
   BoxplotDataPoint,
@@ -30,7 +31,7 @@ import {
 } from '../index.js';
 import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 import { WidgetTypeInternal } from '@/models/widget/types.js';
-import { clearMembersFilter, haveSameAttribute } from '@/utils/filters.js';
+import { clearMembersFilter, haveSameAttribute, isIncludeAllFilter } from '@/utils/filters.js';
 import { MenuIds } from '@/common/components/menu/menu-ids.js';
 
 export const SELECTION_TITLE_MAXIMUM_ITEMS = 2;
@@ -191,36 +192,102 @@ export function getSelectableWidgetAttributes(
   return targetDataOptions.map(translateColumnToAttribute);
 }
 
+/**
+ * Applies unselection rules to a given filter based on the existing filters.
+ * If the filter matches or partially matches the existing filter, it will apply
+ * unselection logic and return a modified filter. Otherwise, it returns `null`.
+ */
+function applyUnselectionRulesToFilter(
+  selectionFilter: Filter,
+  existingFilters: Filter[],
+  allowPartialUnselection: boolean,
+): Filter | null {
+  const existingFilter = getFilterByAttribute(existingFilters, selectionFilter.attribute);
+
+  if (!existingFilter || isIncludeAllFilter(existingFilter)) {
+    return null;
+  }
+
+  if (isEqualMembersFilters(selectionFilter, existingFilter)) {
+    return clearMembersFilter(selectionFilter);
+  }
+
+  if (isMembersFilter(existingFilter) && allowPartialUnselection) {
+    const [intersectedMembers, differentMembers] = partition(existingFilter.members, (member) =>
+      (selectionFilter as MembersFilter).members.includes(member),
+    );
+
+    const shouldUnselect =
+      intersectedMembers.length === (selectionFilter as MembersFilter).members.length &&
+      differentMembers.length;
+
+    if (shouldUnselect) {
+      return createCommonFilter(selectionFilter.attribute, differentMembers, [existingFilter]);
+    }
+  }
+
+  return null;
+}
+
+type FiltersWithSelectionFlag = {
+  filters: Filter[];
+  isSelection: boolean;
+};
+
+/**
+ * Applies unselection rules to a set of filters based on existing filters and selection options.
+ * This function maps over the selected filters, applying the unselection logic when appropriate.
+ */
+function applyUnselectionRulesToFilters(
+  selectionFilters: Filter[],
+  existingFilters: Filter[],
+  allowPartialUnselection: boolean,
+): FiltersWithSelectionFlag {
+  const enabledExistingFilters = existingFilters.filter((f) => !f.disabled);
+  const unselectionFilters = selectionFilters
+    .map((selectionFilter) =>
+      applyUnselectionRulesToFilter(
+        selectionFilter,
+        enabledExistingFilters,
+        allowPartialUnselection,
+      ),
+    )
+    .filter((filter): filter is Filter => !!filter);
+  const isSelection = selectionFilters.length !== unselectionFilters.length;
+
+  return {
+    filters: isSelection ? selectionFilters : unselectionFilters,
+    isSelection,
+  };
+}
+
+/**
+ * Creates a set of common filters based on the current selections, considering existing filters and
+ * the common filters unselection rules.
+ */
 export function createCommonFiltersOverSelections(
   selections: DataSelection[],
   existingCommonFilters: Filter[],
-) {
-  const commonFiltersFromSelections = selections.map(({ attribute, values }) =>
+  allowPartialUnselection = false,
+): FiltersWithSelectionFlag {
+  const selectionFilters = selections.map(({ attribute, values }) =>
     createCommonFilter(attribute, values, existingCommonFilters),
   );
-
-  const newSelectedFilters = removeLockedFilters(
+  const selectionFiltersWithoutLockedFilters = removeLockedFilters(
     existingCommonFilters,
-    commonFiltersFromSelections,
+    selectionFilters,
   );
-
-  const enabledFilters = existingCommonFilters.filter((f) => !f.disabled);
-  const isAlreadySelectedFilters = newSelectedFilters.every((filter) => {
-    const existingFilter = getFilterByAttribute(enabledFilters, filter.attribute);
-    return existingFilter && isEqualMembersFilters(filter, existingFilter);
-  });
-
-  if (isAlreadySelectedFilters) {
-    return newSelectedFilters.map(clearMembersFilter);
-  }
-
-  return newSelectedFilters;
+  return applyUnselectionRulesToFilters(
+    selectionFiltersWithoutLockedFilters,
+    existingCommonFilters,
+    allowPartialUnselection,
+  );
 }
 
 /**
  * Removes filters, that are present in `existingFilters` and are locked, from `filtersToRemoveFrom`
  */
-function removeLockedFilters(existingFilters: Filter[], filtersToRemoveFrom: Filter[]) {
+function removeLockedFilters(existingFilters: Filter[], filtersToRemoveFrom: Filter[]): Filter[] {
   const lockedExistingFilters = existingFilters.filter((filter) => filter.locked);
 
   if (!lockedExistingFilters.length) {

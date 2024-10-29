@@ -6,6 +6,7 @@ import { PluginWidgetProps } from '@/props';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { getDataSourceName } from '@sisense/sdk-data';
 import { WidgetContainer } from './common/widget-container';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Component that renders a plugin widget.
@@ -13,6 +14,7 @@ import { WidgetContainer } from './common/widget-container';
  * @internal
  */
 export const PluginWidget: React.FC<PluginWidgetProps> = (widgetProps) => {
+  const { t } = useTranslation();
   const { plugins } = usePlugins();
   const { app } = useSisenseContext();
 
@@ -20,7 +22,7 @@ export const PluginWidget: React.FC<PluginWidgetProps> = (widgetProps) => {
   if (!renderPlugin) {
     return (
       <ErrorBoundaryBox
-        error={`Unknown plugin type: ${widgetProps.pluginType}. Please register this plugin so it can be rendered.`}
+        error={t('plugins.registerPrompt', { pluginType: widgetProps.pluginType })}
       />
     );
   }

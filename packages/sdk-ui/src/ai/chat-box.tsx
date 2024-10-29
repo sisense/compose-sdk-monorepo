@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 
 import LoadingSpinner from '../common/components/loading-spinner';
 import { useClearChatHistory } from './api/chat-history';
-import { CHAT_UNAVAILABLE_ERROR } from './api/errors';
 import { useChatConfig } from './chat-config';
 import ChatInput from './chat-input';
 import ChatWelcomeMessage from './messages/chat-welcome-message';
@@ -23,6 +22,7 @@ import AiDisclaimer from './ai-disclaimer';
 import ClickableMessage from './messages/clickable-message';
 import { BetaLabel } from './common/beta-label';
 import { ScrollToBottom } from './scroll-to-bottom';
+import { useTranslation } from 'react-i18next';
 
 export type ChatBoxProps = {
   contextTitle: string;
@@ -59,6 +59,7 @@ const FollowupQuestionsContainer = styled.div<Themable>`
 `;
 
 export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
+  const { t } = useTranslation();
   const {
     data: queryRecommendations,
     isLoading: recommendationsLoading,
@@ -147,7 +148,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
     [history, numOfRecentPrompts, questions],
   );
 
-  if (lastError?.message === CHAT_UNAVAILABLE_ERROR) {
+  if (lastError?.message === t('ai.errors.chatUnavailable')) {
     return (
       <>
         {enableHeader && header}

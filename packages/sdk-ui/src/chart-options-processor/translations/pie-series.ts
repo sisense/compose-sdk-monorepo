@@ -51,7 +51,10 @@ export const formatCategoricalChartData = (
       {
         name: '',
         data: seriesValues
-          .map((v: CategoricalSeriesValues) => formatSeries(v, [0], false, categories).data)
+          .map(
+            (v: CategoricalSeriesValues) =>
+              formatSeries(v, [0], false, categories, undefined, true).data,
+          )
           .flat()
           .map((v, index) => {
             return {
@@ -88,6 +91,7 @@ export const formatCategoricalChartData = (
         false,
         categories,
         categoryColors,
+        true,
       );
       return {
         ...otherSeriesOptions,

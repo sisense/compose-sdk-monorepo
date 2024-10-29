@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import DataTopicItem from './data-topic-item';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
+import { useTranslation } from 'react-i18next';
 
 export interface DataTopic {
   title: string;
@@ -42,14 +43,16 @@ export default function DataTopicList(props: Props) {
 
   const { themeSettings } = useThemeContext();
 
+  const { t } = useTranslation();
+
   return (
     <FlexContainer>
-      <Title theme={themeSettings}>Data Topics</Title>
+      <Title theme={themeSettings}>{t('ai.dataTopics')}</Title>
       <Subtitle theme={themeSettings}>
-        Analytics Chatbot is designed to help you interact with your data using natural language.
+        {t('ai.chatbotDescription')}
         <br />
         <br />
-        Pick a topic you would like to explore:
+        {t('ai.topicSelectPrompt')}
       </Subtitle>
       {dataTopics.map((dataTopic) => {
         return <DataTopicItem {...dataTopic} key={dataTopic.title} />;

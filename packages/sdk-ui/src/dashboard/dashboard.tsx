@@ -1,36 +1,21 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import cloneDeep from 'lodash-es/cloneDeep';
 import { DashboardProps } from '@/dashboard/types';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
-import { useCommonFilters } from '@/common-filters/use-common-filters';
-import { ThemeProvider, useThemeContext } from '@/theme-provider';
+import { ThemeProvider } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { WidgetProps } from '@/props';
-import { MenuProvider } from '@/common/components/menu/menu-provider';
-import { MenuOptions } from '@/common/components/menu/types';
-import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
-import { MenuIds } from '@/common/components/menu/menu-ids';
-import { defaultMerger, useWithChangeDetection } from '@/common/hooks/use-with-change-detection';
+import { useDashboardTheme } from './use-dashboard-theme';
+import { useComposedDashboard } from './use-composed-dashboard';
+import { Filter } from '@sisense/sdk-data';
+import { useCallback } from 'react';
 
-function combineCommonFiltersAndWidgetMenus(
-  commonFiltersMenuOptions: MenuOptions,
-  drilldownMenuOptions: MenuOptions,
-): MenuOptions {
-  const drilldownMenuItemsWithoutSelectionSection = drilldownMenuOptions.itemSections.filter(
-    ({ id }) => id !== MenuIds.DRILLDOWN_CHART_POINTS_SELECTION,
-  );
-  return {
-    ...commonFiltersMenuOptions,
-    itemSections: [
-      ...commonFiltersMenuOptions.itemSections,
-      ...drilldownMenuItemsWithoutSelectionSection,
-    ],
-  };
+export enum DashboardChangeType {
+  /** Dashboard filters have been updated */
+  FILTERS_UPDATE = 'FILTERS.UPDATE',
 }
 
-function isDrilldownMenu(options: MenuOptions): boolean {
-  return options.itemSections.some(({ id }) => id === MenuIds.DRILLDOWN_CHART_POINTS_SELECTION);
-}
+export type DashboardChangeAction = {
+  type: DashboardChangeType.FILTERS_UPDATE;
+  payload: Filter[];
+};
 
 /**
  * React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
@@ -65,7 +50,6 @@ export default CodeExample;
  *
  * To learn more about this and related dashboard components,
  * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
- *
  * @group Dashboards
  * @beta
  */
@@ -81,67 +65,40 @@ export const Dashboard = asSisenseComponent({
     defaultDataSource,
     widgetsOptions,
     styleOptions,
+    onChange,
   }: DashboardProps) => {
-    const { palette, ...restDashboardStyles } = styleOptions ?? {};
+    const { themeSettings } = useDashboardTheme({ styleOptions });
 
-    const [innerWidgets, setInnerWidgets] = useState<WidgetProps[]>(widgets);
-    const { themeSettings } = useThemeContext();
-    const { openMenu, onBeforeMenuOpen } = useCombinedMenu({
-      isTargetMenu: isDrilldownMenu,
-      combineMenus: combineCommonFiltersAndWidgetMenus,
-    });
     const {
-      filters: commonFilters,
+      dashboard: { filters: dashboardFilters = [], widgets: dashboardWidgets },
       setFilters,
-      connectToWidgetProps,
-    } = useCommonFilters({ initialFilters: filters, openMenu });
-
-    const widgetsWithChangeDetection = useWithChangeDetection({
-      target: innerWidgets,
-      onChange: useCallback((delta: Partial<WidgetProps>, index?: number) => {
-        setInnerWidgets((existingInnerWidgets) => {
-          const newInnerWidgets = cloneDeep(existingInnerWidgets);
-          newInnerWidgets[index!] = defaultMerger(existingInnerWidgets[index!], delta);
-          return newInnerWidgets;
-        });
-      }, []),
-    }) as WidgetProps[];
-
-    const widgetsWithCommonFilters = useMemo(() => {
-      return widgetsWithChangeDetection.map((widget) =>
-        connectToWidgetProps(widget, widgetsOptions?.[widget.id]?.filtersOptions),
-      );
-    }, [widgetsWithChangeDetection, widgetsOptions, connectToWidgetProps]);
-
-    useEffect(() => {
-      if (filters) setFilters(filters);
-    }, [filters, setFilters]);
-
-    useEffect(() => {
-      setInnerWidgets(widgets);
-    }, [widgets]);
+    } = useComposedDashboard(
+      {
+        filters,
+        widgets,
+        widgetsOptions,
+      },
+      {
+        onFiltersChange: useCallback(
+          (filters: Filter[]) => {
+            onChange?.({ type: DashboardChangeType.FILTERS_UPDATE, payload: filters });
+          },
+          [onChange],
+        ),
+      },
+    );
 
     return (
-      <ThemeProvider
-        theme={{
-          ...(palette && { palette }),
-          dashboard: {
-            ...themeSettings.dashboard,
-            ...restDashboardStyles,
-          },
-        }}
-      >
-        <MenuProvider onBeforeMenuOpen={onBeforeMenuOpen}>
-          <DashboardContainer
-            title={title}
-            layoutOptions={layoutOptions}
-            config={config}
-            widgets={widgetsWithCommonFilters}
-            defaultDataSource={defaultDataSource}
-            filters={commonFilters}
-            onFiltersChange={setFilters}
-          />
-        </MenuProvider>
+      <ThemeProvider theme={themeSettings}>
+        <DashboardContainer
+          title={title}
+          layoutOptions={layoutOptions}
+          config={config}
+          widgets={dashboardWidgets}
+          defaultDataSource={defaultDataSource}
+          filters={dashboardFilters}
+          onFiltersChange={setFilters}
+        />
       </ThemeProvider>
     );
   },

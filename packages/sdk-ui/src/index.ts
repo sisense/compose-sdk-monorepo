@@ -1,7 +1,7 @@
 import './translation/initialize-i18n';
 import './index.css';
 
-export { ClientApplication, createClientApplication } from './app/client-application';
+export { type ClientApplication, createClientApplication } from './app/client-application';
 export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
@@ -19,11 +19,12 @@ export * from './query-execution';
 export { executeQuery } from './query/execute-query';
 export { SisenseContextProvider } from './sisense-context/sisense-context-provider';
 export { DrilldownWidget } from './widgets/drilldown-widget';
-export { processDrilldownSelections } from './widgets/common/use-drilldown';
+export { processDrilldownSelections } from './widgets/common/use-drilldown-core';
 export { ChartWidget } from './widgets/chart-widget';
 export { TableWidget } from './widgets/table-widget';
 export { PivotTableWidget } from './widgets/pivot-table-widget';
 export { TextWidget } from './widgets/text-widget';
+export { Widget } from './widgets/widget';
 export { ContextMenu } from './common/components/menu/context-menu/context-menu';
 export { DrilldownBreadcrumbs } from './widgets/common/drilldown-breadcrumbs';
 export * from './line-chart';
@@ -103,19 +104,29 @@ export {
 } from './models';
 
 /**
- * Utility functions to translate between widget abstractions of models and UI props.
+ * Utility functions to translate a Fusion widget model from and to other widget data structures
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
+ * @shortDescription Utility functions to translate a Fusion widget model from and to other widget data structures
  */
 export * as widgetModelTranslator from './models/widget/widget-model-translator';
 /**
- * Utility functions to translate between dashboard abstractions of models and UI props.
+ * Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
  *
- * @group Fusion Embed
+ * @group Fusion Assets
  * @fusionEmbed
+ * @shortDescription Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
  */
 export * as dashboardModelTranslator from './models/dashboard/dashboard-model-translator';
+
+/**
+ * Utility functions to manipulate `DashboardProps`
+ *
+ * @group Dashboards
+ * @shortDescription Utility functions to manipulate dashboard elements
+ */
+export * as dashboardHelpers from './dashboard/dashboard-helpers';
 
 export type { AutoZoomNavigatorScrollerLocation } from './dashboard-widget/types';
 export { boxWhiskerProcessResult } from './boxplot-utils';

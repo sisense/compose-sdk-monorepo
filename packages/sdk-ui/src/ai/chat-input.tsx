@@ -10,6 +10,7 @@ import { css } from '@emotion/react';
 import ChatDropup, { isCommand } from './chat-dropup';
 import Tooltip from './common/tooltip';
 import { CHAT_INPUT_MAX_LENGTH } from './common/constants';
+import { useTranslation } from 'react-i18next';
 
 const ChatInputContainer = styled.div<Themable>`
   display: flex;
@@ -166,6 +167,7 @@ export default function ChatInput({
   }, []);
 
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   return (
     <ChatInputContainer theme={themeSettings}>
@@ -179,7 +181,7 @@ export default function ChatInput({
         recommendationsError={recommendationsError}
       />
       {onClearHistoryClick && (
-        <Tooltip title="Clear chat" placement="bottom-start">
+        <Tooltip title={t('ai.buttons.clearChat')} placement="bottom-start">
           <ClearHistoryButton aria-label="clear history" onClick={onClearHistoryClick}>
             <ClearChatIcon theme={themeSettings} />
           </ClearHistoryButton>

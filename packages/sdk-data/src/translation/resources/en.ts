@@ -13,6 +13,7 @@ export const translation = {
           "DimensionalBaseMeasure must have 'attribute'/'dim'/'expression' property",
         noAggAggregation: "DimensionalBaseMeasure must have 'agg' or 'aggregation' property",
       },
+      notAFormula: 'Jaql is not a formula',
     },
     dataModelConfig: {
       noName: "'name' must be specified in config for DataModel",
@@ -23,6 +24,8 @@ export const translation = {
       unsupportedDatetimeLevel:
         'Filters do not support the next "datetime" levels: Hours, MinutesRoundTo30, MinutesRoundTo15, Minutes, Seconds',
       membersFilterNullMember: 'MembersFilter of {{attributeId}} - member cannot be null',
+      unsupportedConditionFilter: 'Jaql contains unsupported condition filter: {{filter}}',
+      formulaFiltersNotSupported: 'Formula-based filter not supported yet: {{filter}}',
     },
     unsupportedDimensionalElement: 'Unsupported dimensional element type',
   },

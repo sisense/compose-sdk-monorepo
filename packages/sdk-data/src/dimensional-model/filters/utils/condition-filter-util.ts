@@ -3,6 +3,7 @@ import { Attribute, BaseMeasure, Filter } from '../../interfaces.js';
 import { withComposeCode } from './filter-code-util.js';
 import * as filterFactory from '../factory.js';
 import { createMeasureFromRankingFilterJaql } from './attribute-measure-util.js';
+import { TranslatableError } from '../../../translation/translatable-error.js';
 
 const isTopCondition = (filter: ConditionFilterJaql): boolean => filter.top !== undefined;
 const isBottomCondition = (filter: ConditionFilterJaql): boolean => filter.bottom !== undefined;
@@ -220,6 +221,8 @@ export const createAttributeFilterFromConditionFilterJaql = (
         conditionFilterJaql.exclude?.members || [],
         true,
         guid,
+        (conditionFilterJaql.filter?.turnedOff && conditionFilterJaql.filter.exclude?.members) ||
+          [],
       );
     case ConditionFilterType.AFTER:
     case ConditionFilterType.BEFORE:
@@ -229,7 +232,9 @@ export const createAttributeFilterFromConditionFilterJaql = (
       break;
   }
 
-  throw 'Jaql contains unsupported condition filter: ' + JSON.stringify(conditionFilterJaql);
+  throw new TranslatableError('errors.filter.unsupportedConditionFilter', {
+    filter: JSON.stringify(conditionFilterJaql),
+  });
 };
 
 /**
@@ -285,5 +290,7 @@ export const createMeasureFilterFromConditionFilterJaql = (
         guid,
       );
   }
-  throw 'Jaql contains unsupported condition filter: ' + JSON.stringify(conditionFilterJaql);
+  throw new TranslatableError('errors.filter.unsupportedConditionFilter', {
+    filter: JSON.stringify(conditionFilterJaql),
+  });
 };
