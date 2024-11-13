@@ -501,6 +501,7 @@ export function numeric(
  * @param guid - Optional GUID for the filter
  * @param deactivatedMembers - Array of deactivated member values
  * @param backgroundFilter - Optional background filter
+ * @param multiSelection - Optional flag to disable multi-selection
  * @returns A filter instance
  * @shortDescription Creates filter on attribute to match certain string values
  */
@@ -511,6 +512,7 @@ export function members(
   guid?: string,
   deactivatedMembers?: string[],
   backgroundFilter?: Filter,
+  multiSelection?: boolean,
 ): Filter {
   return new MembersFilter(
     attribute,
@@ -519,6 +521,7 @@ export function members(
     guid,
     deactivatedMembers,
     backgroundFilter,
+    multiSelection,
   );
 }
 

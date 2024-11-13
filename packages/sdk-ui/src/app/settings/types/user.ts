@@ -13,7 +13,6 @@ export type User = {
   manifest: Record<string, unknown>;
   tenantId: string;
   groups: string[];
-  internalGroups: string[];
   default: boolean;
   email: string;
   firstName: string;

@@ -25,6 +25,7 @@
  */
 
 export * from './index';
+export * from './analytics-composer/index';
 export * from './ai/index';
 
 // Main entry point for typedoc documentation generation

@@ -1,0 +1,340 @@
+default:
+  image: dockerhub.sisense.com/node:18.16.0-slim
+  tags:
+    - k8s
+  before_script:
+    - yarn --version
+    # These directories _might_ be restored (not guaranteed) from a previously created cache.
+    #
+    # These directories are restored from a previous cache when this Job is running on a
+    # GitLab Runner that has already has a cache for our configured cache key.
+    #
+    # For transparency, always print out how many subdirectories are in these directories,
+    # so that it is obvious in the GitLab logs whether this Job ran with these files initially
+    # restored from a cache or not.
+    - '(ls .yarn/cache || true) | wc -l'
+
+# If there is an open MR, do not run the branch pipeline. Run the merge request
+# pipeline instead.
+# https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
+variables:
+  NX_REJECT_UNKNOWN_LOCAL_CACHE: 0 # Allow unknown local cache / shared cache between runners
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+# The GL_RELEASE_BOT_USER_NAME value used below references the bot user created
+# with the project access token.
+# More on bot users/project access tokens: https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html#bot-users-for-projects
+.configure_git: &configure_git |-
+  apt-get update && apt-get install -y git
+  echo 'Git client is being configured...'
+  git remote set-url origin "https://${GL_RELEASE_BOT_USER_NAME}:${GITLAB_TOKEN}@gitlab.rnd.sisense.com/${CI_PROJECT_PATH}.git"
+  git config user.name "${GL_RELEASE_BOT_USER_NAME}"
+  git config user.email "${GL_RELEASE_BOT_USER_EMAIL}"
+  git config --add push.pushOption ci.skip
+  git fetch
+  git checkout --force -B "${CI_COMMIT_REF_NAME}" "origin/${CI_COMMIT_REF_NAME}"
+  git reset --hard
+  git clean -fdx
+  git status
+  echo 'Git client is configured successfully'
+
+.default-needs: &default-needs
+  - job: install # Only specify the job name if no artifacts are needed from this job
+    artifacts: true # Explicitly specify to download artifacts from the 'build-workspaces' job
+
+stages:
+  - install
+  - post-install
+  - test
+  - publish
+  - external
+  - security
+
+.nx_build_cache_pull: &nx_build_cache_pull
+  key: 'BUILD_$CI_COMMIT_REF_NAME' # Separate key for build outputs cache
+  paths:
+    - '.nx/'
+    # - '**/dist/'  # Cache all dist folders
+    - 'packages/sdk-ui-angular/src/version.ts' # Cache version file
+    - 'packages/sdk-cli/src/package-version.ts' # Cache package-version file
+  policy: pull # Pull the cache before job runs and push it after job finishes
+
+install:
+  stage: install
+  interruptible: true
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull-push # Only pull dependencies, do not push to this cache
+
+    # Second cache for build outputs
+    - key: 'BUILD_$CI_COMMIT_REF_NAME' # Separate key for build outputs cache
+      paths:
+        - '.nx/'
+        - 'packages/sdk-ui-angular/src/version.ts' # Cache version file
+        - 'packages/sdk-cli/src/package-version.ts' # Cache package-version file
+      policy: pull-push # Pull the cache before job runs and push it after job finishes
+
+  script:
+    - yarn install --immutable
+    - yarn nx run @sisense/sdk-cli:prebuild
+    - yarn nx run @sisense/sdk-ui-angular:sync-version
+    - yarn nx:build:prod
+
+format:
+  stage: post-install
+  interruptible: true
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+
+    # Second cache for build outputs
+    - key: 'FORMAT_$CI_COMMIT_REF_NAME' # Separate key for build outputs cache
+      paths:
+        - '.nx/'
+      policy: pull-push # Pull the cache before job runs and push it after job finishes
+  needs:
+    - job: install
+  script:
+    - yarn nx:format:check
+
+lint:
+  stage: post-install
+  interruptible: true
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+
+    # Second cache for build outputs
+    - key: 'LINT_$CI_COMMIT_REF_NAME' # Separate key for build outputs cache
+      paths:
+        - '.nx/'
+      policy: pull-push # Pull the cache before job runs and push it after job finishes
+    - <<: *nx_build_cache_pull
+
+  script:
+    - yarn nx:lint --quiet
+
+unit-tests:
+  stage: test
+  interruptible: true
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+    - <<: *nx_build_cache_pull
+    # Second cache for build outputs
+    - key: 'UNIT_TESTS_$CI_COMMIT_REF_NAME' # Separate key for build outputs cache
+      paths:
+        - '.nx/'
+      policy: pull-push # Pull the cache before job runs and push it after job finishes
+  coverage: /Branches\s*:\s*([^%]+)/
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    paths:
+      - .nyc_output/
+      - coverage/
+    expire_in: 3 days
+  needs:
+    - job: install
+  rules:
+    - if: $CI_COMMIT_BRANCH != "external-main"
+  script:
+    - yarn nx nx:test:coverage:collect:report
+
+lint-commits:
+  stage: post-install
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+
+  script:
+    - ./ci/lint_commits.sh
+  rules:
+    - if: $CI_COMMIT_AUTHOR == "svc_whitesource <svc_whitesource@sisense.com>"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH != "external-main"
+
+audit:
+  stage: post-install
+  rules:
+    - if: $CI_COMMIT_BRANCH != "external-main"
+  script:
+    - yarn npm audit --environment production
+
+component-tests:
+  stage: test
+  needs:
+    - job: install
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+    - <<: *nx_build_cache_pull
+    - key: 'COMPONENTS_TESTS_$CI_COMMIT_REF_NAME' # Separate key for build outputs cache
+      paths:
+        - '.nx/'
+      policy: pull-push # Pull the cache before job runs and push it after job finishes
+  rules:
+    - if: $CI_COMMIT_BRANCH != "external-main"
+  image: mcr.microsoft.com/playwright:v1.44.1-jammy
+  script:
+    - yarn nx run @sisense/e2e:components:test #cache true
+    - mkdir -p public/$CI_PIPELINE_ID
+    - mv e2e/playwright-report/* public/$CI_PIPELINE_ID/
+    - ls -l public
+
+  artifacts:
+    when: always
+    paths:
+      - e2e/playwright-report/
+      - e2e/test-results/
+      - e2e/results.xml
+      - public
+    reports:
+      junit: e2e/results.xml
+    expire_in: 1 week
+
+visual-regression-tests:
+  allow_failure: true
+  stage: test
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+    - <<: *nx_build_cache_pull
+    - key: 'VISUAL_REGRESSION_TESTS_$CI_COMMIT_REF_NAME' # Separate key for build outputs cache
+      paths:
+        - '.nx/'
+      policy: pull-push # Pull the cache before job runs and push it after job finishes
+  rules:
+    - if: $CI_COMMIT_BRANCH != "external-main"
+  image: mcr.microsoft.com/playwright:v1.44.1-jammy
+  script:
+    - yarn nx run @sisense/e2e:playwright-test #cache true
+  needs:
+    - job: unit-tests # can be removed when infreastructure can handle it
+
+  artifacts:
+    when: always
+    paths:
+      - e2e/playwright-report
+      - e2e/test-results
+      - e2e/results.xml
+    reports:
+      junit: e2e/results.xml
+    expire_in: 1 week
+
+docs:check:md:
+  stage: post-install
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+    - <<: *nx_build_cache_pull
+  rules:
+    - if: $CI_COMMIT_BRANCH != "external-main"
+  script:
+    - apt-get update && apt-get install -y git
+    - yarn nx run @sisense/root:docs:gen:md
+    - yarn nx run @sisense/root:docs:check:md
+
+version-and-publish-to-npm:
+  stage: publish
+  when: manual
+  script:
+    - *configure_git
+    - yarn install --immutable
+    - yarn config unset npmAuthToken
+    - yarn version-and-publish "${BUMP_STRATEGY}"
+  variables:
+    BUMP_STRATEGY: patch
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
+push-to-github:
+  stage: external
+  when: manual
+  script:
+    - *configure_git
+    - yarn install --immutable
+    - ./ci/sync-gitlab-to-github.sh
+  variables:
+    GITHUB_URL: git@github.com:sisense/compose-sdk-monorepo.git
+  rules:
+    - if: $CI_COMMIT_BRANCH == "external-main"
+
+.configure_git_for_prerelease: &configure_git_for_prerelease |-
+  apt-get update && apt-get install -y git
+  echo 'Git client is being configured...'
+  git remote set-url origin "https://${GL_RELEASE_BOT_USER_NAME}:${GITLAB_TOKEN}@gitlab.rnd.sisense.com/${CI_PROJECT_PATH}.git"
+  git config user.name "${GL_RELEASE_BOT_USER_NAME}"
+  git config user.email "${GL_RELEASE_BOT_USER_EMAIL}"
+  git fetch origin  # Fetch all branches from origin
+  git fetch origin master --unshallow  # Ensure full history for master
+  git checkout -B $CI_COMMIT_REF_NAME origin/$CI_COMMIT_REF_NAME  # Check out the branch being built
+  git branch --set-upstream-to=origin/master  # Set upstream to origin/master
+  git status
+  echo 'Git client is configured successfully'
+
+prerelease:
+  stage: publish
+  when: manual
+  cache:
+    # First cache for dependencies
+    - key: '$CI_COMMIT_REF_NAME' # Reuse the same key for dependencies cache
+      paths:
+        - .yarn/ # Cache yarn folder
+        - '**/node_modules/' # Cache all node_modules folders
+      policy: pull # Only pull dependencies, do not push to this cache
+    - <<: *nx_build_cache_pull
+
+  script:
+    - *configure_git_for_prerelease
+    - yarn config set npmRegistryServer "https://artifactory.sisense.com/artifactory/api/npm/sisense-node-modules/"
+    - yarn config set npmAuthIdent "${NPM_REGISTRY_AUTH_TOKEN}"
+    - yarn workspaces foreach --since --recursive --no-private version prerelease --deferred
+    - yarn version apply --all --prerelease="alpha-${CI_COMMIT_SHORT_SHA}"
+    - yarn nx:build:prod
+    - yarn workspaces foreach --since --no-private npm publish --tolerate-republish
+    - echo 'The following prerelease versions have been published:'
+    - yarn workspaces foreach --since --recursive --no-private exec node -p "require('./package.json').name + ' - ' + require('./package.json').version"
+  except:
+    - master

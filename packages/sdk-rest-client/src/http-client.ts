@@ -1,4 +1,5 @@
 /// <reference lib="dom" />
+import { normalizeUrl } from '@sisense/sdk-common';
 import { Authenticator } from './interfaces.js';
 import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
 import { isSsoAuthenticator } from './sso-authenticator.js';
@@ -18,11 +19,7 @@ export class HttpClient {
   readonly env: string;
 
   constructor(url: string, auth: Authenticator, env: string) {
-    if (!url.endsWith('/')) {
-      url += '/';
-    }
-
-    this.url = url;
+    this.url = normalizeUrl(url);
     this.auth = auth;
     this.env = env;
   }

@@ -1233,8 +1233,8 @@ export type RenderToolbarHandler = (
   defaultToolbar: JSX.Element,
 ) => JSX.Element | null;
 
-/** Style settings defining the look and feel of DashboardWidget */
-export interface DashboardWidgetStyleOptions extends WidgetContainerStyleOptions {
+/** Style settings defining the look and feel of the widget created in Fusion */
+export interface WidgetByIdStyleOptions extends WidgetContainerStyleOptions {
   /**
    * Total width of the component, which is considered in the following order of priority:
    *
@@ -1253,6 +1253,13 @@ export interface DashboardWidgetStyleOptions extends WidgetContainerStyleOptions
    */
   height?: number;
 }
+
+/**
+ * Style settings defining the look and feel of DashboardWidget
+ *
+ * @deprecated Use {@link WidgetByIdStyleOptions} instead
+ */
+export interface DashboardWidgetStyleOptions extends WidgetByIdStyleOptions {}
 
 /** Style settings defining the look and feel of ChartWidget */
 export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetContainerStyleOptions;
@@ -1705,8 +1712,8 @@ export type CustomTranslationObject = {
    */
   resources: NestedTranslationResources;
   /**
-   * The package name of the translations.
-   * Default value is `sdkUi`.
+   * The translation namespace (usually a package name in camelCase). It identifies the specific context in which the translation is being registered.
+   * If not specified, the default value is `sdkUi`.
    */
-  packageName?: string;
+  namespace?: string;
 };

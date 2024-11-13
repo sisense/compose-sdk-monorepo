@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import { computed, ref, toRaw, toRefs } from 'vue';
+import { computed, ref, toRefs } from 'vue';
+import type { TFunction } from '@sisense/sdk-common';
+import { getSelectionTitleMenuItem, getDrilldownMenuItems } from '@sisense/sdk-ui-preact';
+import type { DataPoint, MenuPosition, Hierarchy } from '@sisense/sdk-ui-preact';
 import { useCustomDrilldown } from '../composables/use-custom-drilldown';
-import type { DataPoint, MenuPosition } from '@sisense/sdk-ui-preact';
 import { ContextMenu } from './context-menu';
 import { DrilldownBreadcrumbs } from './drilldown-breadcrumbs';
 import type { Attribute } from '@sisense/sdk-data';
@@ -9,22 +11,24 @@ import { DrilldownWidgetTs } from './drilldown-widget';
 
 const props = defineProps(DrilldownWidgetTs.props);
 
-const { drilldownDimensions, initialDimension, config } = toRefs(props);
+const { drilldownDimensions, drilldownPaths, initialDimension, config } = toRefs(props);
 
 const position = ref<MenuPosition | null>(null);
 const selectedDataPoints = ref<DataPoint[]>([]);
-const drilldownDimensionsRef = ref<Attribute[]>(drilldownDimensions.value);
+const fullDrilldownPaths = computed(
+  () => [...drilldownPaths.value, ...drilldownDimensions.value] as (Attribute | Hierarchy)[],
+);
 
 const {
   drilldownFilters, // computed
   drilldownDimension, // computed
   drilldownFiltersDisplayValues, // computed
-  availableDrilldowns, // computed
+  availableDrilldownPaths, // computed
   selectDrilldown,
   sliceDrilldownSelections,
   clearDrilldownSelections,
 } = useCustomDrilldown({
-  drilldownDimensions: drilldownDimensionsRef,
+  drilldownPaths: fullDrilldownPaths,
   initialDimension: initialDimension.value,
 });
 
@@ -32,19 +36,20 @@ const onMenuDrilldownClick = (nextDimension: Attribute) => {
   selectDrilldown(selectedDataPoints.value, nextDimension);
 };
 
-const itemSections = computed(() => [
-  ...(drilldownDimension ? [{ sectionTitle: drilldownDimension.value?.name }] : []),
-  {
-    sectionTitle: 'Drill',
-    items: availableDrilldowns.value.map((nextDimensionProxy) => {
-      const nextDimension = toRaw(nextDimensionProxy);
-      return {
-        caption: nextDimension.name,
-        onClick: () => onMenuDrilldownClick(nextDimension),
-      };
-    }),
-  },
-]);
+const itemSections = computed(() => {
+  // todo: connect internationalization to vue
+  const translate = ((key: string) =>
+    key === 'drilldown.drillMenuItem' ? 'Drill' : key) as TFunction;
+  return [
+    getSelectionTitleMenuItem(selectedDataPoints.value, drilldownDimension.value!),
+    getDrilldownMenuItems(
+      availableDrilldownPaths.value,
+      drilldownDimension.value!,
+      onMenuDrilldownClick,
+      translate,
+    ),
+  ];
+});
 
 const openContextMenu = (menuPos: { top: number; left: number }) => {
   position.value = menuPos;

@@ -88,7 +88,7 @@ export type DashboardModelSuccessState = {
  * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
  *
  * @example
- * An example of retrieving an existing dashboard model from the Sisense instance and render its widgets with component `DashboardWidget`:
+ * An example of retrieving an existing dashboard model from the Sisense instance and render its widgets with component `WidgetById`:
  ```tsx
   const { dashboard, isLoading, isError } = useGetDashboardModel({
     dashboardOid: '6448665edac1920034bce7a8',
@@ -105,7 +105,7 @@ export type DashboardModelSuccessState = {
       <div>
         {`Dashboard Title - ${dashboard.title}`}
         {dashboard.widgets?.map((widget) => (
-          <DashboardWidget key={widget.oid} widgetOid={widget.oid} dashboardOid={dashboard.oid} />
+          <WidgetById key={widget.oid} widgetOid={widget.oid} dashboardOid={dashboard.oid} />
         ))}
       </div>
     );

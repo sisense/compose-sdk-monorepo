@@ -1,7 +1,7 @@
-import { mergeConfig, UserConfig } from 'vitest/config';
+import { mergeConfig, ViteUserConfig } from 'vitest/config';
 import baseConfig from '../../vitest.config.js';
 
-const config: UserConfig = {
+const config: ViteUserConfig = {
   test: {
     environment: 'jsdom',
     environmentOptions: {

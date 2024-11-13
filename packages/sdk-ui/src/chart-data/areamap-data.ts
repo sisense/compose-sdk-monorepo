@@ -5,7 +5,7 @@ import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '../chart-options-processor/translations/number-format-config.js';
-import { createValueColorOptions } from '../dashboard-widget/translate-panel-color-format.js';
+import { createValueColorOptions } from '../widget-by-id/translate-panel-color-format.js';
 import { geoDataColoringFunction } from './data-coloring/geo-data-coloring-function.js';
 import { AreamapData, RawGeoDataElement } from './types.js';
 

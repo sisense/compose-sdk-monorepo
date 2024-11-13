@@ -50,7 +50,9 @@ describe('SSOAuthenticator', () => {
     // flush promises
     await new Promise((resolve) => setImmediate(resolve));
 
-    expect(window.location.href).toBe(`${fakeLoginUrl}?return_to=${fakeDeploymentUrl}`);
+    expect(window.location.href).toBe(
+      `${fakeLoginUrl}?return_to=${encodeURIComponent(fakeDeploymentUrl)}`,
+    );
   });
 
   it('should throw an error if sso is not enabled on the instance', async () => {

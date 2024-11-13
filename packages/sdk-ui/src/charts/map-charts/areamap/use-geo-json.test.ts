@@ -33,10 +33,7 @@ vi.mock('../../../sisense-context/sisense-context', async () => {
   };
 });
 
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
+const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext>;
 
 // Mock the api/rest-api.js module
 const mockApi = {
@@ -202,6 +199,9 @@ describe('useGeoJson', () => {
       tracking: {
         enabled: false,
         packageName: 'sdk-ui',
+      },
+      errorBoundary: {
+        showErrorBox: true,
       },
     });
 

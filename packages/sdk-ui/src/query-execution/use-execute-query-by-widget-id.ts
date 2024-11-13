@@ -8,14 +8,14 @@ import {
   isPivotTableWidget,
   mergeFilters,
   mergeFiltersByStrategy,
-} from '../dashboard-widget/utils';
+} from '../widget-by-id/utils';
 import { isFiltersChanged } from '../utils/filters-comparator';
 import { ClientApplication } from '../app/client-application';
 import { TranslatableError } from '../translation/translatable-error';
 import { RestApi } from '../api/rest-api';
 import { useHasChanged } from '../common/hooks/use-has-changed';
-import { extractDashboardFiltersForWidget } from '../dashboard-widget/translate-dashboard-filters';
-import { fetchWidgetDtoModel } from '../dashboard-widget/use-fetch-widget-dto-model';
+import { extractDashboardFiltersForWidget } from '../widget-by-id/translate-dashboard-filters';
+import { fetchWidgetDtoModel } from '../widget-by-id/use-fetch-widget-dto-model';
 import {
   ExecutePivotQueryParams,
   ExecuteQueryByWidgetIdParams,

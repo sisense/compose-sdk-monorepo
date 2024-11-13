@@ -79,7 +79,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
               </MessageContainer>
               {buttonRow}
             </FlexRow>
-            {isAnalyzeMode && <ChartMessage content={data} dataSource={dataSourceTitle} />}
+            {isAnalyzeMode && <ChartMessage content={data} />}
           </>
         )}
       />

@@ -16,7 +16,7 @@ import { useExecuteQueryByWidgetId, useParamsChanged } from './use-execute-query
 import { executeQuery, executePivotQuery } from '../query/execute-query.js';
 import { ClientApplication } from '../app/client-application.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
-import { WidgetDashboardFilterMode, WidgetDto } from '../dashboard-widget/types.js';
+import { WidgetDashboardFilterMode, WidgetDto } from '../widget-by-id/types.js';
 import { trackProductEvent } from '@sisense/sdk-tracking';
 import { ExecuteQueryByWidgetIdParams } from './types';
 
@@ -45,22 +45,10 @@ vi.mock('@sisense/sdk-tracking', async () => {
   };
 });
 
-const executeQueryMock = executeQuery as Mock<
-  Parameters<typeof executeQuery>,
-  ReturnType<typeof executeQuery>
->;
-const executePivotQueryMock = executePivotQuery as Mock<
-  Parameters<typeof executePivotQuery>,
-  ReturnType<typeof executePivotQuery>
->;
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
-const trackProductEventMock = trackProductEvent as Mock<
-  Parameters<typeof trackProductEvent>,
-  ReturnType<typeof trackProductEvent>
->;
+const executeQueryMock = executeQuery as Mock<typeof executeQuery>;
+const executePivotQueryMock = executePivotQuery as Mock<typeof executePivotQuery>;
+const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext>;
+const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
 const mockChartWidget = {
   type: 'chart/column',
@@ -212,6 +200,9 @@ describe('useExecuteQueryByWidgetId', () => {
       tracking: {
         enabled: false,
         packageName: 'sdk-ui',
+      },
+      errorBoundary: {
+        showErrorBox: true,
       },
     });
   });
@@ -468,6 +459,9 @@ describe('useExecuteQueryByWidgetId', () => {
       useSisenseContextMock.mockReturnValue({
         isInitialized: false,
         tracking: { enabled: false, packageName: 'sdk-ui' },
+        errorBoundary: {
+          showErrorBox: true,
+        },
       });
 
       const { result } = renderHook(() => useExecuteQueryByWidgetId(params));
@@ -511,6 +505,9 @@ describe('useExecuteQueryByWidgetId', () => {
         tracking: {
           enabled: true,
           packageName: `sdk-ui`,
+        },
+        errorBoundary: {
+          showErrorBox: true,
         },
       });
       vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');

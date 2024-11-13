@@ -17,9 +17,8 @@ import {
 import { fieldsOrdersDB, dimensionalModelOrdersDB } from '../__mocks__/data-model-orders-db.js';
 import { dataSources } from '../__mocks__/data-sources.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
-import { DataModel } from '@sisense/sdk-data';
+import { DataModel, DataSourceField } from '@sisense/sdk-data';
 import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
-import { DataSourceField } from '@sisense/sdk-query-client';
 import { Mocked } from 'vitest';
 
 vi.mock('@sisense/sdk-modeling', () => ({
@@ -35,6 +34,7 @@ describe('helpers', () => {
     beforeEach(() => {
       // Initialize the httpClient and queryApi for each test
       httpClient = {
+        url: '',
         post: vi.fn(),
         get: vi.fn(),
       } as unknown as Mocked<HttpClient>;

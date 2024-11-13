@@ -16,7 +16,7 @@
     "reset": "echo 'reset TODO'",
     "format": "echo 'format TODO'",
     "format:check": "echo 'format:check TODO'",
-    "docs:md-csdk": "run -T typedoc --options ./__mocks__/csdk-minirepo/typedoc.config.cjs --out ./__mocks__/csdk-minirepo/docs-md"
+    "docs:md-csdk": "run -T typedoc --options ../__mocks__/csdk-minirepo/typedoc.config.cjs --out ../__mocks__/csdk-minirepo/docs-md"
   },
   "author": "Thomas Grey",
   "license": "MIT",

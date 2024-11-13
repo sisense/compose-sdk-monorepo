@@ -306,6 +306,9 @@ export class MembersFilter extends AbstractFilter {
   excludeMembers: boolean;
 
   /** @internal */
+  multiSelection: boolean;
+
+  /** @internal */
   deactivatedMembers: any[];
 
   /** @internal */
@@ -318,11 +321,13 @@ export class MembersFilter extends AbstractFilter {
     guid?: string,
     deactivatedMembers?: any[],
     backgroundFilter?: Filter,
+    multiSelection = true,
   ) {
     super(attribute, FilterTypes.members, guid);
 
     this.members = members ?? [];
     this.excludeMembers = excludeMembers ?? false;
+    this.multiSelection = multiSelection;
     this.deactivatedMembers = deactivatedMembers ?? [];
     this.backgroundFilter = backgroundFilter;
 
@@ -362,11 +367,7 @@ export class MembersFilter extends AbstractFilter {
       members: this.members.map((m) => m.toString()),
     };
 
-    // if there's no members to exclude, do not add the exclude property
-    const filterJaql =
-      this.excludeMembers && this.members.length
-        ? { exclude: membersFilterJaql }
-        : membersFilterJaql;
+    const filterJaql = this.excludeMembers ? { exclude: membersFilterJaql } : membersFilterJaql;
 
     if (this.backgroundFilter) {
       return {

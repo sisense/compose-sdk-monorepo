@@ -1,5 +1,5 @@
-import { JaqlQueryPayload, MetadataItem } from '@sisense/sdk-query-client';
-import { ChartDataOptions } from '../../types';
+import { JaqlQueryPayload } from '@sisense/sdk-query-client';
+import { ExpandedQueryModel } from '@/analytics-composer';
 
 export interface ChatContext {
   title: string;
@@ -62,36 +62,10 @@ interface ErrorResponse {
   responseType: 'error';
 }
 
-export type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type AllPossibleChartOptionKeys = KeysOfUnion<ChartDataOptions>;
-export type AxesMappingKey = Exclude<AllPossibleChartOptionKeys, 'seriesToColorMap'>;
-export type AxesMapping = Partial<
-  Record<
-    AxesMappingKey,
-    Array<{
-      name: string;
-      type?: string;
-    }>
-  >
->;
-
-export interface ChartRecommendations {
-  chartFamily: string;
-  chartType: string;
-  axesMapping: AxesMapping;
-}
-export interface NlqResponseData {
+export interface NlqResponseData extends ExpandedQueryModel {
   detailedDescription: string;
   followupQuestions: string[];
   nlqPrompt: string;
-  chartRecommendations: ChartRecommendations | {};
-  jaql: {
-    datasource: {
-      title: string;
-    };
-    metadata: MetadataItem[];
-  };
-  queryTitle: string;
 }
 export interface NlqResponse {
   data: NlqResponseData;

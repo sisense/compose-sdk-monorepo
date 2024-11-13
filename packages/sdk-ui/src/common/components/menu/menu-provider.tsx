@@ -35,6 +35,11 @@ const MenuTreeRootProvider: React.FC<MenuProviderProps> = ({ children, onBeforeM
     setMenuOptions(null);
   }, []);
 
+  const onMenuClose = useCallback(() => {
+    menuOptions?.onClose?.();
+    closeMenu();
+  }, [closeMenu, menuOptions]);
+
   // Note: should have memoization to prevent redundant context update due to component state change
   const menuApi = useMemo(() => {
     return {
@@ -48,7 +53,7 @@ const MenuTreeRootProvider: React.FC<MenuProviderProps> = ({ children, onBeforeM
       <ContextMenu
         position={menuOptions?.position}
         itemSections={menuOptions?.itemSections}
-        closeContextMenu={closeMenu}
+        closeContextMenu={onMenuClose}
       />
       {children}
     </MenuContext.Provider>

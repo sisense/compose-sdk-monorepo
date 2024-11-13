@@ -1,6 +1,6 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api';
-import { fetchWidgetDtoModel } from '../../dashboard-widget/use-fetch-widget-dto-model';
+import { fetchWidgetDtoModel } from '../../widget-by-id/use-fetch-widget-dto-model';
 import { WidgetModel } from './widget-model';
 import { CompleteThemeSettings } from '../../types';
 import { AppSettings } from '@/app/settings/settings';

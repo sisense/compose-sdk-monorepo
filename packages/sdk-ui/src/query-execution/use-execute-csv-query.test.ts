@@ -26,10 +26,7 @@ vi.mock('@sisense/sdk-tracking', async () => {
   };
 });
 
-const trackProductEventMock = trackProductEvent as Mock<
-  Parameters<typeof trackProductEvent>,
-  ReturnType<typeof trackProductEvent>
->;
+const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
 const mockCsv = 'Name,Age,Location\nJohn,25,New York\nEmma,28,Los Angeles';
 const mockData = new Blob([mockCsv], { type: 'text/csv' });

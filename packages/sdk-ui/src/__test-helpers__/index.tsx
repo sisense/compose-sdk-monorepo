@@ -74,6 +74,9 @@ export const MockedSisenseContextProvider = ({
           packageName: tracking.packageName ?? 'sdk-ui',
         },
         isInitialized,
+        errorBoundary: {
+          showErrorBox: true,
+        },
       }}
     >
       {children}

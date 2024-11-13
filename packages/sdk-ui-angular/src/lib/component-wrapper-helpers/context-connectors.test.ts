@@ -1,6 +1,8 @@
 /** @vitest-environment jsdom */
 import {
+  ClientApplication,
   createContextProviderRenderer,
+  CustomSisenseContext,
   CustomSisenseContextProvider,
   CustomThemeProvider,
   type CustomThemeProviderProps,
@@ -20,8 +22,7 @@ vi.mock('@sisense/sdk-ui-preact', () => ({
 }));
 
 const createContextProviderRendererMock = createContextProviderRenderer as Mock<
-  Parameters<typeof createContextProviderRenderer>,
-  ReturnType<typeof createContextProviderRenderer>
+  typeof createContextProviderRenderer
 >;
 
 describe('createSisenseContextConnector', () => {
@@ -55,16 +56,18 @@ describe('createSisenseContextConnector', () => {
   it('should prepare correct sisense context', async () => {
     const connector = createSisenseContextConnector(sisenseContextService);
     const preparedContext = await connector.prepareContext();
-
-    expect(preparedContext).toStrictEqual({
-      app: appMock,
+    const expectedContext: CustomSisenseContext = {
+      app: appMock as ClientApplication,
       isInitialized: true,
-      showRuntimeErrors: sisenseContextConfigMock.showRuntimeErrors,
       tracking: {
         enabled: true,
         packageName: 'sdk-ui-angular',
       },
-    });
+      errorBoundary: {
+        showErrorBox: sisenseContextConfigMock.showRuntimeErrors,
+      },
+    };
+    expect(preparedContext).toStrictEqual(expectedContext);
   });
 
   it('should render correct custom sisense context provider', () => {

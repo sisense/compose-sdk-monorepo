@@ -13,6 +13,7 @@ import { executeQueryMock } from '@/query/__mocks__/execute-query';
 import * as DM from '../__test-helpers__/sample-ecommerce';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
 import { translation } from '@/translation/resources/en';
+import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
@@ -30,7 +31,7 @@ vi.mock('react-i18next', async (importOriginal) => {
 describe('ChartWidget', () => {
   beforeEach(() => {
     const url = 'mock-url';
-    useSisenseContextMock.mockReturnValue({
+    const contextMock: SisenseContextPayload = {
       app: {
         httpClient: new HttpClient(url, new SsoAuthenticator(url), 'test'),
         settings: {
@@ -39,10 +40,11 @@ describe('ChartWidget', () => {
           trackingConfig: { enabled: false },
         },
       } as unknown as ClientApplication,
-      tracking: { packageName: 'mock-package-name' },
-
+      tracking: { packageName: 'mock-package-name', enabled: false },
       isInitialized: true,
-    });
+      errorBoundary: { showErrorBox: true },
+    };
+    useSisenseContextMock.mockReturnValue(contextMock);
   });
 
   it('should render table widget', async () => {

@@ -84,6 +84,7 @@ export type {
   ChartWidgetStyleOptions,
   WidgetStyleOptions,
   DashboardWidgetStyleOptions,
+  WidgetByIdStyleOptions,
   TableStyleOptions,
   PivotTableStyleOptions,
   PivotTableWidgetStyleOptions,

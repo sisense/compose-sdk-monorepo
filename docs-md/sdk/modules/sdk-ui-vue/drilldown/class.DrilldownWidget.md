@@ -25,7 +25,7 @@ Here's how to use the `DrilldownWidget` component:
 ```vue
 <template>
    <DrilldownWidget
-     :drilldownDimensions="drilldownDimensions"
+     :drilldownPaths="drilldownPaths"
      :initialDimension="dimProductName"
    >
      <template
@@ -49,7 +49,7 @@ Here's how to use the `DrilldownWidget` component:
            onDataPointsSelected([dataPoint]);
            onContextMenu({ left: event.clientX, top: event.clientY });
          }"
-                       :on-data-point-context-menu="(dataPoint: any, event: any) => {
+         :on-data-point-context-menu="(dataPoint: any, event: any) => {
            onDataPointsSelected([dataPoint]);
            onContextMenu({ left: event.clientX, top: event.clientY });
          }"
@@ -86,7 +86,7 @@ const chartProps = ref<ChartProps>({
    },
  },
 });
-const drilldownDimensions = [DM.DimCountries.CountryName, DM.DimProducts.ProductName];
+const drilldownPaths = [DM.DimCountries.CountryName, DM.DimProducts.ProductName];
 const dimProductName = DM.DimProducts.ProductName;
 </script>
 ```
@@ -110,9 +110,21 @@ An object that allows users to pass advanced configuration options as a prop for
 
 #### drilldownDimensions
 
-> **`readonly`** **drilldownDimensions**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
+> **`readonly`** **drilldownDimensions**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[] \| `undefined`
 
 List of dimensions to allow drilldowns on
+
+::: warning Deprecated
+Use [drilldownPaths](class.DrilldownWidget.md#drilldownpaths) instead
+:::
+
+***
+
+#### drilldownPaths
+
+> **`readonly`** **drilldownPaths**: ([`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Hierarchy`](../../sdk-ui/interfaces/interface.Hierarchy.md))[] \| `undefined`
+
+Dimensions and hierarchies available for drilldown on.
 
 ***
 

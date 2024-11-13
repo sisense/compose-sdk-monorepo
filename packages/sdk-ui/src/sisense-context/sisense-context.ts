@@ -10,6 +10,9 @@ export type SisenseContextPayload = {
     packageName: string;
     onTrackingEvent?: (payload: TrackingEventDetails) => void;
   };
+  errorBoundary: {
+    showErrorBox: boolean;
+  };
 };
 
 export const SisenseContext = createContext<SisenseContextPayload>({
@@ -17,6 +20,9 @@ export const SisenseContext = createContext<SisenseContextPayload>({
   tracking: {
     enabled: true,
     packageName: 'sdk-ui',
+  },
+  errorBoundary: {
+    showErrorBox: true,
   },
 });
 

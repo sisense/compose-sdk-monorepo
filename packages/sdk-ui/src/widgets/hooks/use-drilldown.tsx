@@ -106,6 +106,7 @@ export const useDrilldown = ({
   };
 };
 
+/** @internal */
 export function getSelectionTitleMenuItem(
   points: DataPoint[],
   drilldownDimension: Attribute,
@@ -134,6 +135,7 @@ function getHierarchyLevelMenuItemOffset(index: number) {
   return MENU_ITEM_DEFAUT_PADDING_LEFT + NESTED_MENU_ITEM_OFFSET_LEFT * index;
 }
 
+/** @internal */
 export function getDrilldownMenuItems(
   availableDrilldownPaths: (Attribute | Hierarchy)[],
   drilldownDimension: Attribute,

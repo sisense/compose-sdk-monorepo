@@ -173,6 +173,9 @@ describe('Scattermap Chart', () => {
             enabled: false,
             packageName: 'sdk-ui',
           },
+          errorBoundary: {
+            showErrorBox: true,
+          },
         }}
       >
         <Scattermap

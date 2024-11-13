@@ -75,7 +75,9 @@ describe('interceptors', () => {
     // flush promises
     await new Promise((resolve) => setImmediate(resolve));
 
-    expect(window.location.href).toBe(`${fakeLoginUrl}?return_to=${fakeDeploymentUrl}`);
+    expect(window.location.href).toBe(
+      `${fakeLoginUrl}?return_to=${encodeURIComponent(fakeDeploymentUrl)}`,
+    );
   });
 
   it('should throw an error on failed response', () => {

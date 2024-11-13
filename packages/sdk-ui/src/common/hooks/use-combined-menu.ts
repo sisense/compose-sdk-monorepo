@@ -32,7 +32,13 @@ export const useCombinedMenu = ({ isTargetMenu, combineMenus }: CombinedMenuPara
         ? combineMenus(currentMenuOptions.current, capturedMenuOptions.current)
         : currentMenuOptions.current;
 
-      menuApi.openMenu(finalMenuOptions);
+      menuApi.openMenu({
+        ...finalMenuOptions,
+        onClose: () => {
+          currentMenuOptions.current = null;
+          capturedMenuOptions.current = null;
+        },
+      });
     }
   }, [menuApi, combineMenus]);
 

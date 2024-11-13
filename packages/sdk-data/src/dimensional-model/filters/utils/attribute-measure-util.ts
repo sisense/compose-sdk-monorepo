@@ -14,6 +14,7 @@ import {
 } from './types.js';
 import * as measureFactory from '../../measures/factory.js';
 import { transformCustomFormulaJaql } from '../../measures/factory.js';
+import { DimensionalBaseMeasure } from '../../measures/measures.js';
 
 const DATA_MODEL_MODULE_NAME = 'DM';
 
@@ -120,7 +121,7 @@ export const createMeasureHelper = (
   dataSource?: JaqlDataSource,
 ): BaseMeasure => {
   const attribute = createAttributeHelper(dim, table, column, level, dataType, title, dataSource);
-  const measure = measureFactory.aggregate(attribute, agg);
+  const measure = measureFactory.aggregate(attribute, agg, title);
   measure.composeCode = `measureFactory.${agg}(${attribute.composeCode})`;
   return measure;
 };
@@ -157,7 +158,16 @@ export const createMeasureFromFilterJaql = (jaql: FilterJaqlInternal): BaseMeasu
     datasource: dataSource,
   } = jaql;
   if (!agg) return undefined;
-  return createMeasureHelper(dim, table, column, level, dataType, agg, title, dataSource);
+  return createMeasureHelper(
+    dim,
+    table,
+    column,
+    level,
+    dataType,
+    DimensionalBaseMeasure.aggregationFromJAQL(agg),
+    title,
+    dataSource,
+  );
 };
 
 /**
@@ -168,8 +178,17 @@ export const createMeasureFromFilterJaql = (jaql: FilterJaqlInternal): BaseMeasu
  */
 export const createMeasureFromRankingFilterJaql = (
   jaql: RankingFilterJaql | CustomFormulaJaql,
+  rankingMessage?: string,
 ): BaseMeasure | CalculatedMeasure => {
   if ('formula' in jaql) return createCalculatedMeasureFromJaql(jaql);
   const { dim, table, column, level, datatype: dataType, agg } = jaql as RankingFilterJaql;
-  return createMeasureHelper(dim, table, column, level, dataType, agg);
+  return createMeasureHelper(
+    dim,
+    table,
+    column,
+    level,
+    dataType,
+    DimensionalBaseMeasure.aggregationFromJAQL(agg),
+    rankingMessage,
+  );
 };

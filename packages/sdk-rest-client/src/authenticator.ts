@@ -1,4 +1,5 @@
 /* eslint-disable max-params */
+import { normalizeUrl } from '@sisense/sdk-common';
 import { Authenticator } from './interfaces.js';
 import { PasswordAuthenticator } from './password-authenticator.js';
 import { BearerAuthenticator } from './bearer-authenticator.js';
@@ -18,7 +19,7 @@ type AuthenticatorConfig = {
 };
 
 export function getAuthenticator({
-  url,
+  url: rawUrl,
   username,
   password,
   token,
@@ -27,6 +28,8 @@ export function getAuthenticator({
   enableSilentPreAuth = false,
   useFusionAuth = false,
 }: AuthenticatorConfig): Authenticator | null {
+  const url = normalizeUrl(rawUrl);
+
   // sso overrides all other auth methods
   if (ssoEnabled) {
     return new SsoAuthenticator(url, enableSilentPreAuth);

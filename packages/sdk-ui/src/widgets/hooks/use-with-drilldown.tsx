@@ -12,7 +12,7 @@ import {
   isDrilldownApplicableToChart,
   prepareDrilldownSelectionPoints,
 } from '../common/drilldown-utils.js';
-import { mergeFilters } from '@/dashboard-widget/utils.js';
+import { mergeFilters } from '@/widget-by-id/utils.js';
 import { combineHandlers } from '@/utils/combine-handlers.js';
 
 type UseWithDrilldownParams = {

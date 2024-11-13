@@ -34,6 +34,9 @@ indexTopics:
     - title: Internationalization (Alpha)
       description: Learn how to configure language and extend translations in Compose SDK
       link: ./internationalization
+    - title: Jest Compatibility
+      description: Configure Jest for testing with the Compose SDK by using CommonJS builds for compatibility
+      link: ./jest-compatibility
 ---
 
 # Guides

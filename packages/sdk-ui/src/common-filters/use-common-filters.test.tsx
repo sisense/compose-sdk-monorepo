@@ -12,7 +12,7 @@ import {
   WidgetProps,
   DataPointsEventHandler,
 } from '..';
-import { isChartWidgetProps, isTextWidgetProps } from '@/dashboard-widget/utils';
+import { isChartWidgetProps, isTextWidgetProps } from '@/widget-by-id/utils';
 import { MenuOptions } from '@/common/components/menu/types';
 
 describe('useCommonFilters', () => {

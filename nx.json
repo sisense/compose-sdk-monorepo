@@ -7,70 +7,65 @@
       "dependsOn": [
         "^build"
       ],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/public"
+      ],
       "cache": true
     },
     "build:prod": {
       "dependsOn": [
         "^build:prod"
       ],
+      "options": {
+        "env": {
+          "NX_VERBOSE_LOGGING": "true"
+        }
+      },
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/public"
+      ],
       "cache": true
     },
     "format": {
-      "dependsOn": [
-        "^format"
-      ],
       "cache": true
     },
     "format:check": {
-      "dependsOn": [
-        "^format:check"
-      ],
       "cache": true
     },
     "test": {
+      "cache": true
+    },
+    "test:unit": {
       "dependsOn": [
         "^test"
       ],
       "cache": true
     },
-    "test:unit": {
-      "dependsOn": [
-        "^test:coverage",
-        "^test:coverage:collect",
-        "^test:coverage:report"
-      ],
-      "cache": true
-    },
     "component:tests": {
       "dependsOn": [
-        "^test:ct"
+        "^build:prod"
       ],
       "cache": true
     },
     "lint": {
-      "params":"--quiet",
+      "options": {
+        "args": ["--quiet"]
+      },
       "dependsOn": [
-        "^lint"
+        "^build:prod"
       ],
       "cache": true
     },
     "test:coverage": {
       "dependsOn": [
-        "test:coverage"
+        "^build:prod"
+      ],
+      "outputs": [
+        "{projectRoot}/coverage"
       ],
       "cache": true
-    },
-    "test:coverage:collect": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "your-collect-command"
-      }
-    },
-    "test:coverage:report": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "your-report-command"
-      }
     }
   },
   "workspaceLayout": {

@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.23.0] - 2024-11-12
+
+### Added
+- Add component `NlqChartWidget` for internal testing
+- Add `fromChartWidgetProps()` and  `toWidgetDto()` to `widgetModelTranslator` for internal testing
+- Implement `typedoc-plugin-diff-packages` to check feature parity across UI frameworks
+
+### Changed
+- Deprecate component `DashboardWidget` – use component `WidgetById` instead
+- Implement new `DrilldownWidget.drilldownPaths` in Angular and Vue
+- Extend `MembersFilter` and `MemberFilterTile` to support single and multi selection
+- Refactor `analytics-composer/ModelTranslator` to `widgetComposer` and `dashboardComposer`
+- Refactor component `ChartMessage` (internal) to use `widgetComposer.toWidgetProps`
+- Fix wrong drilldown menu items on a dasbhoard
+- Fix error boxes showing control in `ErrorBoundary`
+- Improve pivot tables: fix pivot url without trailing slash, add the 'csrf' validation event and trigger the 'register' event in the correct sequence
+- Improve CI pipeline: move build artifacts to cache and add more nx adaptation
+- Update code templates for Widget Embed Code in Fusion
+
 ## [1.22.0] - 2024-10-28
 
 ### Added

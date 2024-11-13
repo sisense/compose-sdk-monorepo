@@ -4,6 +4,7 @@ import {
   FILTER_TYPES,
   FilterJaqlInternal,
   FilterModalType,
+  FilterMultiSelectJaql,
   PeriodFilterJaql,
   RangeFilterJaql,
   SpecificItemsFilterJaql,
@@ -85,6 +86,7 @@ export const createFilterFromSpecificItemsFilterJaql = (
   attribute: Attribute,
   specificItemsFilterJaql: SpecificItemsFilterJaql,
   guid?: string,
+  multiSelection?: boolean,
 ): Filter => {
   const deactivatedMembers = getDeactivatedMembersFromFilterJaql(specificItemsFilterJaql);
   const activeMembers = getActiveMembersFromFilterJaql(specificItemsFilterJaql, deactivatedMembers);
@@ -94,6 +96,8 @@ export const createFilterFromSpecificItemsFilterJaql = (
     undefined, // use undefined instead of false to avoid including the property in composeCode
     guid,
     deactivatedMembers,
+    undefined,
+    multiSelection,
   );
 };
 
@@ -258,6 +262,7 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid?: st
           attribute,
           filterJaqlWithType as SpecificItemsFilterJaql,
           guid,
+          (filterJaqlWithType as FilterMultiSelectJaql).multiSelection,
         );
       case FILTER_TYPES.CONDITION:
         return createFilterFromConditionFilterJaql(

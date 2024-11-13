@@ -7,9 +7,9 @@ export const translation: TranslationDictionary = {
     sisenseContextNoAuthentication: 'Не вказано метод аутентифікації',
     chartNoSisenseContext:
       'Контекст Sisense для діаграми не знайдено. Щоб виправити, додайте набір даних до Chart або оберніть компонент у SisenseContextProvider.',
-    dashboardWidgetNoSisenseContext:
+    widgetByIdNoSisenseContext:
       'Контекст Sisense для віджета дашборди не знайдено. Щоб виправити, оберніть компонент у SisenseContextProvider.',
-    dashboardWidgetInvalidIdentifiers:
+    widgetByIdInvalidIdentifier:
       'Не вдалося отримати віджет. ' + 'Переконайтеся, що віджет дашборди існує і доступний.',
     dashboardWidgetsInvalidIdentifiers:
       'Не вдалося отримати віджети дашборди. ' + 'Переконайтеся, що дашборда існує і доступна.',
@@ -87,6 +87,7 @@ export const translation: TranslationDictionary = {
     notAMembersFilter: 'Фільтр не є MembersFilter',
     drilldownNoInitialDimension:
       'Initial dimension має бути задано щоб використовувати drilldown з користувацькими компонентами',
+    otherWidgetTypesNotSupported: 'Інші типи віджетів поки що не підтримуються',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',

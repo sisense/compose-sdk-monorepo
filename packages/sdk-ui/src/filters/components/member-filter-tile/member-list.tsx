@@ -1,8 +1,9 @@
 import debounce from 'lodash-es/debounce';
-import { FunctionComponent, useMemo, useState } from 'react';
+import { CSSProperties, FunctionComponent, useMemo, useState } from 'react';
 import { Checkbox } from '../common';
 import { Member, SelectedMember } from './members-reducer';
 import styled from '@emotion/styled';
+import { MemberRadio } from '@/filters/components/common/member-radio';
 
 const SearchInput = styled.input`
   font-size: 13px;
@@ -35,7 +36,8 @@ const SearchBox: FunctionComponent<{
   onChange: (searchString: string) => void;
   delayMs?: number;
   disabled: boolean;
-}> = ({ onChange, delayMs = SEARCH_DELAY_MS, disabled }) => {
+  style?: CSSProperties;
+}> = ({ onChange, delayMs = SEARCH_DELAY_MS, disabled, style }) => {
   const debouncedOnChange = debounce((v: string) => onChange(v), delayMs);
 
   return (
@@ -46,6 +48,7 @@ const SearchBox: FunctionComponent<{
         debouncedOnChange(e.target.value);
       }}
       type="search"
+      style={style}
     />
   );
 };
@@ -56,8 +59,20 @@ const MemberRow: FunctionComponent<{
   onCheck: (isChecked: boolean) => void;
   inactive: boolean;
   disabled: boolean;
-}> = ({ label, checked, onCheck, disabled, inactive }) => {
-  return (
+  mode?: 'radio' | 'checkbox';
+}> = ({ label, checked, onCheck, disabled, inactive, mode }) => {
+  return mode === 'radio' ? (
+    <MemberRadio
+      wrapperClassName="csdk-border-b hover:csdk-bg-row-hover"
+      label={label}
+      isLabelInactive={inactive}
+      checked={checked}
+      readOnly
+      name="member-radio"
+      onChange={(e) => onCheck(e.target.checked)}
+      disabled={disabled}
+    />
+  ) : (
     <Checkbox
       wrapperClassName="csdk-border-b hover:csdk-bg-row-hover"
       label={label}
@@ -77,6 +92,7 @@ export interface MemberListProps {
   checkAllMembers: () => void;
   uncheckAllMembers: () => void;
   excludeMembers: boolean;
+  multiSelection: boolean;
   disabled: boolean;
 }
 
@@ -87,6 +103,7 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
   checkAllMembers,
   uncheckAllMembers,
   excludeMembers,
+  multiSelection,
   disabled,
 }) => {
   const [searchString, setSearchString] = useState('');
@@ -102,46 +119,70 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
     ? selectedMembers.length === 0
     : selectedMembers.length === members.length;
 
+  const [inactiveMembersMap, selectedMembersMap] = useMemo(() => {
+    const inactiveMembersMap = new Map<string, boolean>();
+    const selectedMembersMap = new Map<string, boolean>();
+
+    selectedMembers.forEach((member) => {
+      selectedMembersMap.set(member.key, true);
+      if (member.inactive) inactiveMembersMap.set(member.key, true);
+    });
+
+    return [inactiveMembersMap, selectedMembersMap];
+  }, [selectedMembers]);
+
   return (
     <div className={'csdk-p-3'}>
       <div className="csdk-flex csdk-mb-[3px]">
-        <Checkbox
-          aria-label="change-all"
-          checked={allChecked}
-          onChange={(e) => {
-            if (e.target.checked) {
-              checkAllMembers();
-            } else {
-              uncheckAllMembers();
+        {multiSelection && (
+          <Checkbox
+            aria-label="change-all"
+            checked={allChecked}
+            onChange={(e) => {
+              if (e.target.checked) {
+                checkAllMembers();
+              } else {
+                uncheckAllMembers();
+              }
+            }}
+            readOnly
+            indeterminate={
+              excludeMembers &&
+              selectedMembers.length > 0 &&
+              selectedMembers.length < members.length
             }
-          }}
-          readOnly
-          indeterminate={
-            excludeMembers && selectedMembers.length > 0 && selectedMembers.length < members.length
-          }
+            disabled={disabled}
+          />
+        )}
+        <SearchBox
+          onChange={(s) => setSearchString(s)}
           disabled={disabled}
+          style={multiSelection ? {} : { paddingLeft: 6 }}
         />
-        <SearchBox onChange={(s) => setSearchString(s)} disabled={disabled} />
       </div>
       <div className="csdk-max-h-[150px] csdk-overflow-auto">
         {filteredMembers.map((member) => (
           <MemberRow
             key={member.key}
             label={member.title}
+            mode={multiSelection ? 'checkbox' : 'radio'}
             checked={
-              // when excludeMembers is true, checking (ticking) a member means deselecting it.
-              // In other words, selected member is unchecked
-              selectedMembers.some((selectedMember) => member.key === selectedMember.key) ===
-              !excludeMembers
+              multiSelection
+                ? // when excludeMembers is true, checking (ticking) a member means deselecting it.
+                  // In other words, selected member is unchecked
+                  selectedMembersMap.has(member.key) === !excludeMembers
+                : selectedMembersMap.has(member.key)
             }
-            onCheck={(isChecked) =>
-              // when excludeMembers is true, unchecking (unticking) a member means selecting it
-              onSelectMember(member, excludeMembers ? !isChecked : isChecked)
-            }
+            onCheck={(isChecked) => {
+              if (multiSelection) {
+                // when excludeMembers is true, unchecking (unticking) a member means selecting it
+                onSelectMember(member, excludeMembers ? !isChecked : isChecked);
+              } else {
+                onSelectMember(member, isChecked);
+              }
+            }}
             disabled={disabled}
-            inactive={selectedMembers.some(
-              (selectedMember) => member.key === selectedMember.key && selectedMember.inactive,
-            )}
+            inactive={inactiveMembersMap.has(member.key)}
           />
         ))}
       </div>

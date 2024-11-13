@@ -1,6 +1,7 @@
 import { dashboardModelTranslator, useDashboardModel, UseDashboardModelActionType } from '@/models';
 import { act, renderHook } from '@testing-library/react';
-import { DimensionalAttribute, MembersFilter } from '@sisense/sdk-data';
+import { filterFactory } from '@sisense/sdk-data';
+import * as DM from '../../../__test-helpers__/sample-ecommerce';
 import { SisenseContextPayload, useSisenseContext } from '@/sisense-context/sisense-context';
 import type { Mock } from 'vitest';
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
@@ -61,10 +62,7 @@ const dashboardMock = dashboardModelTranslator.fromDashboardDto({
   widgets: [],
 });
 
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
+const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext>;
 
 describe('useGetDashboardModel', () => {
   beforeEach(() => {
@@ -96,7 +94,7 @@ describe('useGetDashboardModel', () => {
   });
 
   it('should update and persist dashboard filters', async () => {
-    const newFilters = [new MembersFilter(new DimensionalAttribute('Date', '[TEST]'), ['test-1'])];
+    const newFilters = [filterFactory.members(DM.Commerce.Date, ['02/01/2021'])];
     const { result } = renderHook(() =>
       useDashboardModel({
         dashboardOid: dashboardMock.oid,
@@ -132,7 +130,7 @@ describe('useGetDashboardModel', () => {
       } as ClientApplication,
     } as SisenseContextPayload);
 
-    const newFilters = [new MembersFilter(new DimensionalAttribute('Date', '[TEST]'), ['test-1'])];
+    const newFilters = [filterFactory.members(DM.Commerce.Date, ['01/01/2021'])];
     const { result } = renderHook(() =>
       useDashboardModel({
         dashboardOid: dashboardMock.oid,
@@ -158,7 +156,7 @@ describe('useGetDashboardModel', () => {
   });
 
   it('should update dashboard filters without persist', async () => {
-    const newFilters = [new MembersFilter(new DimensionalAttribute('Date', '[TEST]'), ['test-1'])];
+    const newFilters = [filterFactory.members(DM.Commerce.Date, ['03/01/2021'])];
     const { result } = renderHook(() =>
       useDashboardModel({
         dashboardOid: dashboardMock.oid,

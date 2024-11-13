@@ -32,7 +32,7 @@ import {
   SunburstStyleOptions,
   ChartWidgetStyleOptions,
   TableWidgetStyleOptions,
-  DashboardWidgetStyleOptions,
+  WidgetByIdStyleOptions,
   BoxplotStyleOptions,
   ScattermapStyleOptions,
   AreamapStyleOptions,
@@ -52,7 +52,7 @@ import {
   DrilldownSelection,
   TextWidgetStyleOptions,
   GenericDataOptions,
-  CustomTranslationObject,
+  DashboardWidgetStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -71,7 +71,7 @@ import {
 } from './chart-data-options/types';
 import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams, QueryByWidgetIdState } from './query-execution';
-import { FiltersMergeStrategy } from './dashboard-widget/types';
+import { FiltersMergeStrategy } from './widget-by-id/types';
 import { HookEnableParam } from './common/hooks/types';
 import { ExecuteQueryResult } from './query-execution/types';
 import { Hierarchy } from './models';
@@ -979,9 +979,9 @@ export interface ScatterChartProps
 }
 
 /**
- * Props for the {@link DashboardWidget} component
+ * Props for the {@link WidgetById} component
  */
-export interface DashboardWidgetProps
+export interface WidgetByIdProps
   extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'> {
   /**
    * Identifier of the widget
@@ -1042,7 +1042,7 @@ export interface DashboardWidgetProps
    *
    * @category Widget
    */
-  styleOptions?: DashboardWidgetStyleOptions;
+  styleOptions?: WidgetByIdStyleOptions;
   /**
    * {@inheritDoc ChartWidgetProps.drilldownOptions}
    *
@@ -1050,6 +1050,20 @@ export interface DashboardWidgetProps
    * @internal
    */
   drilldownOptions?: DrilldownOptions;
+}
+
+/**
+ * Props for the {@link DashboardWidget} component
+ *
+ * @deprecated Use {@link WidgetById} and {@link WidgetByIdProps} instead
+ */
+export interface DashboardWidgetProps extends WidgetByIdProps {
+  /**
+   * Style options for the widget including the widget container and the chart or table inside.
+   *
+   * @category Widget
+   */
+  styleOptions?: DashboardWidgetStyleOptions;
 }
 
 /**
@@ -1737,14 +1751,4 @@ export interface UseGetSharedFormulaParams extends HookEnableParam {
    * Data source - e.g. `Sample ECommerce`
    */
   dataSource?: DataSource;
-}
-
-/**
- * Params of the {@link CustomTranslationsLoader} component
- *
- * @internal
- */
-export interface CustomTranslationsLoaderProps {
-  customTranslations?: CustomTranslationObject[];
-  children?: React.ReactNode;
 }

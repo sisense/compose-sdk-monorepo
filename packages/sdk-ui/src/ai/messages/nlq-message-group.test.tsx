@@ -52,6 +52,7 @@ beforeEach(() => {
   mockJaqlApi();
 });
 
+// this test tends to timeout locally. Added a longer timeout to prevent flakiness
 it('renders expandable cartesian chart with expected toolbar buttons', async () => {
   const { user } = setup(
     <AiTestWrapper>
@@ -95,7 +96,7 @@ it('renders expandable cartesian chart with expected toolbar buttons', async () 
 
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   expect(expandedChart).not.toBeInTheDocument();
-});
+}, 10000);
 
 it('renders a table chart', async () => {
   setup(

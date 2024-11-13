@@ -15,6 +15,7 @@ export const appendHeaders = (
 };
 
 export const addQueryParamsToUrl = (url: string, params: { [key: string]: string }): string => {
+  if (!url || typeof url !== 'string') return url;
   // can't just append to the url because it might already have a query string
   const urlObject = new URL(url);
   for (const [paramName, paramValue] of Object.entries(params)) {

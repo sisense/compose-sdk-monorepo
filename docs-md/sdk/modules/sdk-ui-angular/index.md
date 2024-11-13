@@ -80,6 +80,7 @@ Angular modules, services, and components for working with Fusion dashboards, wi
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetByIdComponent](fusion-assets/class.WidgetByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetService](fusion-assets/class.WidgetService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 

@@ -80,7 +80,7 @@ export type CustomDrilldownResult = CustomDrilldownResultBase & {
  * drilldownResult?: CustomDrilldownResult;
  *
  * drilldown = {
- *   drilldownDimensions: [DM.Patients.Gender, DM.Admissions.Surgical_Procedure],
+ *   drilldownPaths: [DM.Patients.Gender, DM.Admissions.Surgical_Procedure],
  *   initialDimension: DM.Divisions.Divison_name,
  *   drilldownChange: (drilldownResult: CustomDrilldownResult) => {
  *     this.drilldownResult = drilldownResult;
@@ -94,7 +94,7 @@ export type CustomDrilldownResult = CustomDrilldownResultBase & {
  * ```html
  * <!--Component HTML template in .component.html-->
  * <csdk-drilldown-widget
- *   [drilldownDimensions]="drilldown.drilldownDimensions"
+ *   [drilldownPaths]="drilldown.drilldownPaths"
  *   [initialDimension]="drilldown.initialDimension"
  *   (drilldownResultChange)="drilldown.drilldownChange($event)"
  * >
@@ -131,10 +131,20 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
    * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownDimensions}
    *
    * @category Widget
+   * @deprecated Use {@link drilldownPaths} instead
    *
    */
   @Input()
-  drilldownDimensions!: NonNullable<DrilldownWidgetProps['drilldownDimensions']>;
+  drilldownDimensions: DrilldownWidgetProps['drilldownDimensions'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownPaths}
+   *
+   * @category Widget
+   *
+   */
+  @Input()
+  drilldownPaths: DrilldownWidgetProps['drilldownPaths'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.initialDimension}
@@ -213,6 +223,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
   private createPreactComponent() {
     const props = {
       drilldownDimensions: this.drilldownDimensions,
+      drilldownPaths: this.drilldownPaths,
       initialDimension: this.initialDimension,
       config: {
         ...this.config,

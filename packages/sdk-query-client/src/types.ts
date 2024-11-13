@@ -11,8 +11,8 @@ import {
   PivotGrandTotals,
   FilterRelationsJaql,
   JaqlDataSource,
+  MetadataItem,
 } from '@sisense/sdk-data';
-import { AnyObject } from './helpers/utility-types.js';
 
 /**
  * All the properties that fully describe a query you want to send.
@@ -96,124 +96,9 @@ export type ExecutingPivotQueryResult = {
   cancel: (reason?: string) => Promise<void>;
 };
 
-interface DecimalAbbreviations {
-  k: boolean;
-  m: boolean;
-  b: boolean;
-  t: boolean;
-}
-
-export enum CurrencyPosition {
-  PRE = 'pre',
-  POST = 'post',
-}
-
-export type NumericMask = {
-  isdefault?: boolean;
-  abbreviations?: DecimalAbbreviations;
-  decimals?: 'auto' | number | string;
-  currency?: { symbol: string; position: CurrencyPosition };
-  percent?: boolean;
-  number?: { separated: boolean };
-  separated?: boolean;
-  type?: string;
-};
-
-export type DatetimeMask = {
-  isdefault?: boolean;
-  years: string;
-  quarters: string;
-  months: string;
-  weeks: string;
-  minutes: string;
-  days: string;
-  type: string;
-  dateAndTime?: string;
-};
-
-export type MetadataItem = {
-  instanceid?: string;
-  measure?: MetadataItemJaql;
-  jaql: MetadataItemJaql;
-  panel?: string;
-  isScope?: boolean;
-  format?: {
-    mask?: Partial<DatetimeMask> | Partial<NumericMask>;
-    number?: string;
-    /* PIVOT OPTIONS START */
-    subtotal?: boolean;
-    width?: number;
-    databars?: boolean;
-    color?: {
-      type: string;
-      color?: string;
-      conditions?: Array<{
-        color: string;
-        operator: string;
-        expression: string | Record<string, any>;
-      }>;
-    };
-  };
-  field?: {
-    id?: string;
-    index?: number;
-  };
-  /* PIVOT OPTIONS END */
-  filter?: MetadataItem;
-  exclude?: MetadataItem;
-  by?: MetadataItemJaql;
-  level?: string;
-  anchor?: string;
-
-  from?: string;
-  to?: string;
-};
-
-export type MetadataItemJaql = {
-  dim?: string;
-  agg?: string;
-  datatype?: string;
-  table?: string;
-  column?: string;
-  level?: string;
-  dateTimeLevel?: string;
-  bucket?: string;
-  sort?: string;
-  in?: {
-    selected: {
-      jaql: MetadataItemJaql;
-    };
-  };
-  title?: string;
-  type?: string;
-  formula?: string;
-  context?: {
-    [itemId: string]: MetadataItemJaql;
-  };
-  filter?: MetadataItem;
-  sortDetails?: {
-    dir: string;
-    field?: number;
-    measurePath?: Record<number, string | number>;
-    sortingLastDimension?: boolean;
-    initialized?: boolean;
-  };
-};
-
 export type JaqlQueryPayload = QueryOptions & {
   filterRelations?: FilterRelationsJaql;
   metadata: MetadataItem[];
-};
-
-export type DataSourceField = {
-  column: string;
-  dimtype: string;
-  id: string;
-  indexed: boolean;
-  merged: boolean;
-  table: string;
-  title: string;
-  type: string;
 };
 
 export type JaqlResponse = {
@@ -227,17 +112,6 @@ export type JaqlResponse = {
   errorSource?: string;
   httpStatusCode?: number;
   database?: string;
-};
-
-export type DataSourceSchema = {
-  title: string;
-  type: 'extract' | 'live';
-} & AnyObject;
-
-export type DataSourceMetadata = {
-  title: string;
-  fullname: string;
-  live: boolean;
 };
 
 export type AbortRequestFunction = (reason?: string) => void;

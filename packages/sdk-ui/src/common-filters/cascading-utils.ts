@@ -1,4 +1,4 @@
-import { getFilterCompareId } from '@/dashboard-widget/utils';
+import { getFilterCompareId } from '@/widget-by-id/utils';
 import { clearMembersFilter, haveSameAttribute } from '@/utils/filters';
 import { CascadingFilter, Filter, isCascadingFilter } from '@sisense/sdk-data';
 import { FiltersIgnoringRules, PureFilter } from './types';

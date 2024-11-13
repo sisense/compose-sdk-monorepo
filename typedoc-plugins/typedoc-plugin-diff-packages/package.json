@@ -1,0 +1,37 @@
+{
+  "name": "@sisense/typedoc-plugin-diff-packages",
+  "private": true,
+  "version": "0.1.0",
+  "description": "TypeDoc plugin to generate doc differences among packages",
+  "main": "dist/index.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "lint": "echo 'eslint TODO'",
+    "build": "tsc --build tsconfig.json",
+    "build:prod": "tsc --project tsconfig.prod.json",
+    "test": "echo 'test TODO'",
+    "clean": "echo 'clean TODO'",
+    "reset": "echo 'reset TODO'",
+    "format": "echo 'format TODO'",
+    "format:check": "echo 'format:check TODO'",
+    "docs:diff-csdk": "run -T typedoc --options ../__mocks__/csdk-minirepo/typedoc.diff.config.cjs --out ../__mocks__/csdk-minirepo/docs-diff"
+  },
+  "author": "Sisense",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "homepage": "https://sisense.dev/guides/sdk/",
+  "keywords": [
+    "typedoc",
+    "typedoc-plugin",
+    "diff-packages"
+  ],
+  "peerDependencies": {
+    "typedoc": ">=0.26.8"
+  },
+  "devDependencies": {
+    "flatted": "^3.3.1",
+    "prettier": "^3.0.2",
+    "typescript": "^5.2.2"
+  }
+}

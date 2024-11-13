@@ -6,15 +6,15 @@ export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
 export * from './dashboard';
-export { DashboardWidget } from './dashboard-widget/dashboard-widget';
-export { getSortType } from './dashboard-widget/utils';
+export { DashboardWidget } from './widget-by-id/dashboard-widget';
+export { WidgetById } from './widget-by-id/widget-by-id';
 export {
   type WidgetType,
   type CartesianWidgetType,
   type CategoricalWidgetType,
   type TabularWidgetType,
   type TextWidgetType,
-} from './dashboard-widget/types';
+} from './widget-by-id/types';
 export * from './query-execution';
 export { executeQuery } from './query/execute-query';
 export { SisenseContextProvider } from './sisense-context/sisense-context-provider';
@@ -128,7 +128,7 @@ export * as dashboardModelTranslator from './models/dashboard/dashboard-model-tr
  */
 export * as dashboardHelpers from './dashboard/dashboard-helpers';
 
-export type { AutoZoomNavigatorScrollerLocation } from './dashboard-widget/types';
+export type { AutoZoomNavigatorScrollerLocation } from './widget-by-id/types';
 export { boxWhiskerProcessResult } from './boxplot-utils';
 export { queryStateReducer } from './query-execution/query-state-reducer';
 
@@ -139,12 +139,21 @@ export * from './filters';
 export * from './formulas';
 export { trackHook } from './decorators/hook-decorators';
 export * from './common/hooks/data-load-state-reducer';
-export { createDataOptionsFromPanels } from './dashboard-widget/translate-widget-data-options';
+export { createDataOptionsFromPanels } from './widget-by-id/translate-widget-data-options';
 export { type DashboardDto } from './api/types/dashboard-dto';
-export { type WidgetDto } from './dashboard-widget/types';
-export { extractCombinedFilters } from './dashboard-widget/translate-dashboard-filters';
+export { type WidgetDto } from './widget-by-id/types';
+export { extractCombinedFilters } from './widget-by-id/translate-dashboard-filters';
 export { useThemeContext } from './theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
 export { LoadingOverlay } from './common/components/loading-overlay';
 export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';
 export type { EmptyObject } from './utils/utility-types';
+export { translateColumnToAttribute } from './chart-data-options/utils';
+export { isSameAttribute } from './utils/filters';
+export { updateDrilldownSelections } from './widgets/common/use-drilldown-core';
+export { getSelectionTitleMenuItem, getDrilldownMenuItems } from './widgets/hooks/use-drilldown';
+
+export {
+  type TranslationDictionary,
+  PACKAGE_NAMESPACE as translationNamespace,
+} from '@/translation/resources';

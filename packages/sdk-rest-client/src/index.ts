@@ -11,3 +11,8 @@ export { getAuthenticator } from './authenticator.js';
 export { isAuthTokenPending } from './helpers.js';
 
 export { HttpClient } from './http-client.js';
+
+export type {
+  TranslationDictionary,
+  PACKAGE_NAMESPACE as translationNamespace,
+} from './translation/resources/index.js';

@@ -1,5 +1,5 @@
 {
-  "name": "e2e",
+  "name": "@sisense/e2e",
   "type": "module",
   "private": true,
   "devDependencies": {

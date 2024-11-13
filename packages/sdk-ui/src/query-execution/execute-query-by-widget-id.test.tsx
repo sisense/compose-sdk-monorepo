@@ -5,8 +5,6 @@ import * as widgetDrilldown from '../__mocks__/data/mock-widget-drilldown.json';
 import * as jaqlDrilldown from '../__mocks__/data/mock-jaql-drilldown.json';
 import { ExecuteQueryByWidgetId } from './execute-query-by-widget-id';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
-import { QueryResultData } from '@sisense/sdk-data';
-import { ExecuteQueryParams } from './types';
 import { mockUrl, mockToken, mockDashboardId, mockWidgetId, server } from '@/__mocks__/msw';
 import { http, HttpResponse } from 'msw';
 
@@ -50,7 +48,7 @@ describe('ExecuteQueryByWidgetId', () => {
   });
 
   it('should execute "onDataChanged" callback when query results are ready', async () => {
-    const onDataChangedMock = vi.fn<[QueryResultData, ExecuteQueryParams]>();
+    const onDataChangedMock = vi.fn();
 
     const { getByText } = render(
       <SisenseContextProvider
@@ -81,7 +79,7 @@ describe('ExecuteQueryByWidgetId', () => {
   });
 
   it('should execute "onBeforeQuery" callback before query execution', async () => {
-    const onBeforeQueryMock = vi.fn<[ExecuteQueryParams]>();
+    const onBeforeQueryMock = vi.fn();
 
     const TEXT_TO_DISPLAY = 'Query result ready';
 

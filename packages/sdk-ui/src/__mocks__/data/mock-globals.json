@@ -10,7 +10,6 @@
     "manifest": {},
     "tenantId": "63742d045f74f4001a9dab95",
     "groups": ["63742d04966fea6b7e871116", "63742d035f74f4001a9dab86", "63742d035f74f4001a9dab87"],
-    "internalGroups": ["63742d075f74f4001a9dab9e"],
     "default": true,
     "email": "admin@sisense.com",
     "firstName": "Test",

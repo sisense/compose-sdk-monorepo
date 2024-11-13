@@ -1,5 +1,6 @@
 /// <reference lib="dom" />
 
+import { normalizeUrl } from '@sisense/sdk-common';
 import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
@@ -22,7 +23,7 @@ export class WatAuthenticator extends BaseAuthenticator {
 
   constructor(url: string, wat: string) {
     super('wat');
-    this.url = `${url}${!url.endsWith('/') ? '/' : ''}api/v1/wat/sessionToken`;
+    this.url = `${normalizeUrl(url)}api/v1/wat/sessionToken`;
     this.body = `{"webAccessToken": "${wat}"}`;
   }
 

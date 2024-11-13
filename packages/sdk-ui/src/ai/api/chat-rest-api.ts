@@ -12,7 +12,7 @@ import type {
   QueryRecommendationResponse,
   SendFeedbackRequest,
 } from './types';
-import { DataSourceField } from '@sisense/sdk-query-client';
+import { DataSourceField } from '@sisense/sdk-data';
 
 export class ChatRestApi {
   private httpClient: HttpClient;

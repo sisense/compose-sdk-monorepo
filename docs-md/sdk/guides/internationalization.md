@@ -14,16 +14,30 @@ To facilitate language changes, the `AppConfig` of `SisenseContextProvider` incl
 By default, the Compose SDK offers a limited number of translation resources. You can utilize `translationConfig` to load additional translation resources into the internationalization framework.
 
 ### Preparing Translation Resources
-A translation resource is essentially a nested object comprising translation keys and their corresponding string values. A reference file is available on our GitLab as the [`en.ts` file](https://github.com/sisense/compose-sdk-monorepo/blob/main/packages/sdk-ui/src/translation/resources/en.ts) located in the `translation` folder. If you are providing translations for a package other than `sdk-ui`, refer to that package's `en.ts` file.
-
-It’s important to note that you don’t have to specify all translation keys; any keys that are not provided will default to English.
+A translation resource consists of translation keys paired with their corresponding string values. This resource is typically structured as a nested object, making it easier to manage different translations. You can register multiple languages by creating separate translation resources for each language and then adding them to your configuration.
 
 **IMPORTANT:** Do not translate parts within double curly brackets (i.e., `{{chartType}}`), as these are placeholders for dynamic values that will be matched using the provided variable names.
+
+#### TranslationDictionary type
+Each package with translations provides a `TranslationDictionary` type listing all keys used within that package. Use this type to ensure your custom translation includes all relevant keys.
+
+**Example: complete translation for the `sdk-ui` package**
+```
+import { TranslationDictionary } from '@sisense/sdk-ui';
+
+const customTranslationResources: TranslationDictionary = {
+  ...
+};
+```
+
+Note that specifying all translation keys is not required; any keys you do not provide will default to English. Using the `TranslationDictionary` type as a Partial can help prevent typos in your custom translation.
 
 #### Example: Translation Resources
 Let’s create translation resources for some fields in `sdk-ui` in **French**, and one error message in `sdk-data` in **Spanish**:
 ```
-const frenchTranslationResources = {
+import { TranslationDictionary } from '@sisense/sdk-ui';
+
+const frenchTranslationResources: Partial<TranslationDictionary> = {
   errors: {
     invalidFilterType: 'Type de filtre invalide',
   },
@@ -31,7 +45,9 @@ const frenchTranslationResources = {
 };
 ```
 ```
-const spanishTranslationResources = {
+import { TranslationDictionary } from '@sisense/sdk-data';
+
+const spanishTranslationResources: Partial<TranslationDictionary> = {
   errors: {
     measure: {
       unsupportedType: 'Tipo de medida no compatible',
@@ -43,8 +59,12 @@ const spanishTranslationResources = {
 As these files may grow larger, consider storing translations in separate files and loading them as needed. JSON format is a suitable option for nested objects like these.
 
 ###  Configuring Custom Translations
-Similar to how we set the language, we can now provide additional translation resources through the `translationConfig`. Below is an example of loading both translations while setting the default language to **French**:
+Similar to how we set the language, we can now provide additional translation resources through the `translationConfig`
+
+Below is an example of loading both translations while setting the default language to **French**:
 ```
+import { translationNamespace as sdkDataNamespace } from '@sisense/sdk-data';
+
 <SisenseContextProvider
   appConfig={{
     translationConfig: {
@@ -55,18 +75,17 @@ Similar to how we set the language, we can now provide additional translation re
       },
       {
         language: 'es',
-        packageName: 'sdkData',
+        namespace: sdkDataNamespace, // 'sdkData'
         resources: spanishTranslationResources,
       }]
     }
   }}
  >
 ```
-Note that we specified the package name for **Spanish**, as this translation is meant to be loaded for the `sdk-data` package.
+Note that we specified the namespace for **Spanish**, as this translation is meant to be loaded for the `sdk-data` package.
 
-Package names can be found in `src/translation/resources/index.ts` of every package - look for `PACKAGE_NAMESPACE` variable.
-If `packageName` is not specified, the translation resource will be registered for `sdkUi` namespace that corresponds to `sdk-ui` package.
-
+Translation namespace values can be found in `translationNamespace` constant exported from every package that has translations.
+If `namespace` is not specified, the translation resource will be registered for `sdkUi` namespace that corresponds to the `sdk-ui` package.
 
 ## Advanced Configuration
 For more advanced internationalization configurations, the `i18n` instance is accessible through the [`useTranslation` hook](https://react.i18next.com/latest/usetranslation-hook) from the `react-i18next` package.

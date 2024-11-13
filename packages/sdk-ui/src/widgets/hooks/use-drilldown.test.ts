@@ -81,12 +81,14 @@ describe('useDrilldown', () => {
 
     act(() => openDrilldownMenu(menuPosition, []));
 
-    expect(openMenuMock.mock.lastCall[0].position).toStrictEqual(menuPosition);
-    expect(openMenuMock.mock.lastCall[0].itemSections[0].id).toBe(
-      'drilldown-chart-points-selection',
-    );
-    expect(openMenuMock.mock.lastCall[0].itemSections[1].id).toBe('drilldown-drill-directions');
-    expect(openMenuMock.mock.lastCall[0].itemSections[1].items[0].caption).toBe(ageRange.name);
+    const lastCall = openMenuMock.mock.lastCall as any;
+
+    expect(lastCall).toBeDefined();
+
+    expect(lastCall[0].position).toStrictEqual(menuPosition);
+    expect(lastCall[0].itemSections[0].id).toBe('drilldown-chart-points-selection');
+    expect(lastCall[0].itemSections[1].id).toBe('drilldown-drill-directions');
+    expect(lastCall[0].itemSections[1].items[0].caption).toBe(ageRange.name);
   });
 
   it('should make selection via menu item', () => {
@@ -123,12 +125,16 @@ describe('useDrilldown', () => {
       ]),
     );
 
-    act(() => openMenuMock.mock.lastCall[0].itemSections[1].items[0].onClick());
+    const lastCall = openMenuMock.mock.lastCall as any;
+    expect(lastCall).toBeDefined();
 
-    expect(onDrilldownSelectionsChange.mock.lastCall[0][0]).toMatchObject(
-      params.drilldownSelections[0],
-    );
-    expect(onDrilldownSelectionsChange.mock.lastCall[0][1]).toMatchObject({
+    act(() => lastCall[0].itemSections[1].items[0].onClick());
+
+    const lastCallDrilldown = onDrilldownSelectionsChange.mock.lastCall as any;
+    expect(lastCallDrilldown).toBeDefined();
+
+    expect(lastCallDrilldown[0][0]).toMatchObject(params.drilldownSelections[0]);
+    expect(lastCallDrilldown[0][1]).toMatchObject({
       points: [
         {
           categoryValue: 'Cell Phones',

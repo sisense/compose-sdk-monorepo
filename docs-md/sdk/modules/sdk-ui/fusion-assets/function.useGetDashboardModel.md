@@ -24,7 +24,7 @@ Dashboard load state that contains the status of the execution, the result dashb
 
 ## Example
 
-An example of retrieving an existing dashboard model from the Sisense instance and render its widgets with component `DashboardWidget`:
+An example of retrieving an existing dashboard model from the Sisense instance and render its widgets with component `WidgetById`:
 ```ts
  const { dashboard, isLoading, isError } = useGetDashboardModel({
    dashboardOid: '6448665edac1920034bce7a8',
@@ -41,7 +41,7 @@ An example of retrieving an existing dashboard model from the Sisense instance a
      <div>
        {`Dashboard Title - ${dashboard.title}`}
        {dashboard.widgets?.map((widget) => (
-         <DashboardWidget key={widget.oid} widgetOid={widget.oid} dashboardOid={dashboard.oid} />
+         <WidgetById key={widget.oid} widgetOid={widget.oid} dashboardOid={dashboard.oid} />
        ))}
      </div>
    );

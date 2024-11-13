@@ -1,5 +1,5 @@
-import { createDimensionalElementFromJaql } from '@/dashboard-widget/translate-widget-data-options';
-import { type HierarchyDto } from '@/dashboard-widget/types';
+import { createDimensionalElementFromJaql } from '@/widget-by-id/translate-widget-data-options';
+import { type HierarchyDto } from '@/widget-by-id/types';
 import { Attribute } from '@sisense/sdk-data';
 import { type HierarchyModel } from './hierarchy-model';
 

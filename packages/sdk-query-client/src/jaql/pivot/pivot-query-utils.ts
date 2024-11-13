@@ -1,12 +1,13 @@
 import type {
   Attribute,
   Measure,
+  MetadataItem,
+  MetadataItemJaql,
   PivotAttribute,
   PivotMeasure,
   PivotRowsSort,
   SortDirection,
 } from '@sisense/sdk-data';
-import { MetadataItem, MetadataItemJaql } from '../../types.js';
 
 /**
  * Represents statistics about a pivot table metadata.

@@ -23,8 +23,8 @@ vi.mock('../formatters/header-cell-formatters', () => ({
 }));
 
 const DataServiceMock = {
-  on: vi.fn<Parameters<DataService['on']>>(),
-  off: vi.fn<Parameters<DataService['off']>>(),
+  on: vi.fn(),
+  off: vi.fn(),
 };
 
 describe('useApplyPivotTableFormatting', () => {

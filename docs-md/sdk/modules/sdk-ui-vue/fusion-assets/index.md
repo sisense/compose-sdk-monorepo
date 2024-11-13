@@ -15,4 +15,5 @@ Vue components and functions for working with Fusion dashboards, widgets, querie
 - [useGetDashboardModels](function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetById](class.WidgetById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

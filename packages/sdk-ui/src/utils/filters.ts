@@ -46,6 +46,7 @@ export function haveSameAttribute(filterA: Filter, filterB: Filter) {
   return isSameAttribute(filterA.attribute, filterB.attribute);
 }
 
+/** @internal */
 export function isSameAttribute(attributeA: Attribute, attributeB: Attribute) {
   return (
     attributeA.expression === attributeB?.expression &&

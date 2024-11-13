@@ -1,35 +1,33 @@
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
-import { Filter } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
-import { ChartWidgetProps, TableWidgetProps } from '../../props';
-import { ChartType, TableType, WidgetContainerStyleOptions } from '../../types';
+import { WidgetContainerStyleOptions } from '../../types';
 import { ChartWidget } from '../../widgets/chart-widget';
-import { TableWidget } from '../../widgets/table-widget';
 import { NlqResponseData } from '../api/types';
 import CloseDialogIcon from '../icons/close-dialog-icon';
 import ChartMessageToolbar from './chart-message-toolbar';
-import {
-  getChartOptions,
-  getChartRecommendationsOrDefault,
-  getTableOptions,
-} from './get-widget-options';
-import { createJaqlElement } from './jaql-element';
+import { widgetComposer } from '@/analytics-composer';
+import { isChartWidgetProps } from '@/widget-by-id/utils';
+import { TranslatableError } from '@/translation/translatable-error';
+import { isTable } from '@/chart-options-processor/translations/types';
 
 type ChartMessageProps = {
   content: NlqResponseData;
-  dataSource: string;
 };
 
-export default function ChartMessage({ content, dataSource }: ChartMessageProps) {
+export default function ChartMessage({ content }: ChartMessageProps) {
   const [expanded, setExpanded] = useState(false);
 
-  const { chartElement, expandedElement } = useMemo(() => {
-    const { detailedDescription, jaql } = content;
+  const { inlineElement, expandedElement } = useMemo(() => {
+    // Chart in message uses custom style options
+    const widgetProps = widgetComposer.toWidgetProps(content, { useCustomizedStyleOptions: true });
+    if (widgetProps === undefined || !isChartWidgetProps(widgetProps)) {
+      throw new TranslatableError('errors.otherWidgetTypesNotSupported');
+    }
 
-    const chartRecommendations = getChartRecommendationsOrDefault(content);
+    const { detailedDescription } = content;
+    const { styleOptions } = widgetProps;
 
-    const chartType = chartRecommendations.chartType.toLowerCase() as ChartType | TableType;
     const widgetStyleOptions: WidgetContainerStyleOptions = {
       cornerRadius: 'Small',
       header: {
@@ -42,63 +40,51 @@ export default function ChartMessage({ content, dataSource }: ChartMessageProps)
         ),
       },
     };
-    const filters = jaql.metadata
-      .filter((item) => item.panel === 'scope')
-      .map(createJaqlElement) as unknown as Filter[];
-    const metadata = jaql.metadata.filter((item) => item.panel !== 'scope');
 
-    let chartElement: JSX.Element;
+    let inlineElement: JSX.Element;
     let expandedElement: JSX.Element;
-    if (chartType === 'table') {
-      const { dataOptions } = getTableOptions(metadata);
-
-      const tableWidgetProps: TableWidgetProps = {
-        dataOptions,
-        dataSource,
-        filters,
-      };
-
-      chartElement = (
+    if (isTable(widgetProps.chartType)) {
+      inlineElement = (
         <div className="csdk-h-[245px]">
-          <TableWidget {...tableWidgetProps} styleOptions={widgetStyleOptions} />
+          <ChartWidget {...widgetProps} styleOptions={widgetStyleOptions} />
         </div>
       );
       expandedElement = (
-        <TableWidget {...tableWidgetProps} styleOptions={{ header: { hidden: true } }} />
+        <ChartWidget {...widgetProps} styleOptions={{ header: { hidden: true } }} />
       );
     } else {
-      const { dataOptions, chartStyleOptions, expandedChartStyleOptions } = getChartOptions(
-        metadata,
-        chartRecommendations,
-      );
-
-      const styleOptions = { ...chartStyleOptions, ...widgetStyleOptions };
-
-      const chartWidgetProps: ChartWidgetProps = {
-        chartType,
-        dataOptions,
-        dataSource,
-        filters,
+      const expandedStyleOptions = {
+        ...styleOptions,
+        header: { hidden: true },
       };
 
-      chartElement = (
+      // inline style options do not include legend, yAxis, xAxis
+      const inlineStyleOptions = {
+        ...styleOptions,
+        legend: undefined,
+        xAxis: undefined,
+        yAxis: undefined,
+        ...widgetStyleOptions,
+      };
+
+      delete inlineStyleOptions.legend;
+      delete inlineStyleOptions.xAxis;
+      delete inlineStyleOptions.yAxis;
+
+      inlineElement = (
         <div>
-          <ChartWidget {...chartWidgetProps} styleOptions={styleOptions} />
+          <ChartWidget {...widgetProps} styleOptions={inlineStyleOptions} />
         </div>
       );
 
-      const expandedStyleOptions = {
-        ...expandedChartStyleOptions,
-        header: { hidden: true },
-      };
-      expandedElement = <ChartWidget {...chartWidgetProps} styleOptions={expandedStyleOptions} />;
+      expandedElement = <ChartWidget {...widgetProps} styleOptions={expandedStyleOptions} />;
     }
-    return { chartElement, expandedElement };
-  }, [content, dataSource]);
+    return { inlineElement, expandedElement };
+  }, [content]);
 
   return (
     <>
-      {chartElement}
+      {inlineElement}
       <Dialog open={expanded} onClose={() => setExpanded(false)} maxWidth="xl" fullWidth>
         <div className="csdk-flex csdk-items-center csdk-justify-between csdk-py-[30px] csdk-px-[40px]">
           <div className="csdk-text-ai-lg csdk-semibold csdk-text-text-active">

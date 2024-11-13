@@ -3,7 +3,7 @@ import {
   isPivotTableWidgetProps,
   isPluginWidgetProps,
   isTextWidgetProps,
-} from '@/dashboard-widget/utils';
+} from '@/widget-by-id/utils';
 import { CommonWidgetProps } from '@/props';
 import { PivotTableWidget } from '@/widgets/pivot-table-widget';
 import { ChartWidget } from '@/widgets/chart-widget';

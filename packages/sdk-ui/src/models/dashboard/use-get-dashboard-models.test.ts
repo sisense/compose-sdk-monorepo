@@ -42,19 +42,10 @@ vi.mock('./get-dashboard-models', () => ({
   getDashboardModels: vi.fn(),
 }));
 
-const getDashboarsdModelsMock = getDashboardModels as Mock<
-  Parameters<typeof getDashboardModels>,
-  ReturnType<typeof getDashboardModels>
->;
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
+const getDashboarsdModelsMock = getDashboardModels as Mock<typeof getDashboardModels>;
+const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext>;
 
-const trackProductEventMock = trackProductEvent as Mock<
-  Parameters<typeof trackProductEvent>,
-  ReturnType<typeof trackProductEvent>
->;
+const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
 describe('useGetDashboardModels', () => {
   beforeEach(() => {
@@ -66,6 +57,9 @@ describe('useGetDashboardModels', () => {
       tracking: {
         enabled: false,
         packageName: 'sdk-ui',
+      },
+      errorBoundary: {
+        showErrorBox: true,
       },
     });
   });
@@ -105,6 +99,9 @@ describe('useGetDashboardModels', () => {
       tracking: {
         enabled: true,
         packageName: 'sdk-ui',
+      },
+      errorBoundary: {
+        showErrorBox: true,
       },
     });
     vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');

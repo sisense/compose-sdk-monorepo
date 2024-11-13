@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import io from 'socket.io-client';
 import { SocketI, SocketQueryOptions } from '../types.js';
+import { getCsrfResponseData } from './helpers';
 
 export class SisenseSocket implements SocketI {
   /**
@@ -140,8 +141,13 @@ export class SisenseSocket implements SocketI {
       console.log(`connect_error due to ${err.message}`);
     });
 
-    socket.on('connect', () => {
-      // console.log('socket connect', socket.id);
+    socket.on('csrf', () => {
+      // If CSRF is enabled, we will receive a CSRF event from the server and should send a CSRF event back to initiate the CSRF check
+      socket.emit('csrf', getCsrfResponseData());
+    });
+
+    socket.on('listen', () => {
+      // Send the register event only when the server is ready to listen
       socket.emit('register', {});
     });
 

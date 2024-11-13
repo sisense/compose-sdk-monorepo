@@ -5,7 +5,7 @@ import { useSisenseContext } from '../../../../sisense-context/sisense-context.j
 import { ScattermapChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
 import { QueryDescription, executeQuery } from '../../../../query/execute-query.js';
 import { DataSource, Filter, filterFactory } from '@sisense/sdk-data';
-import { mergeFilters } from '../../../../dashboard-widget/utils.js';
+import { mergeFilters } from '../../../../widget-by-id/utils.js';
 import {
   isMeasureColumn,
   translateColumnToAttribute,

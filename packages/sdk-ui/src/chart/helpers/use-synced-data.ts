@@ -28,7 +28,7 @@ import { useSetError } from '../../error-boundary/use-set-error';
 import '../chart.css';
 import { executeBoxplotQuery } from '../../boxplot-utils';
 import { getFilterListAndRelations } from '@sisense/sdk-data';
-import { deriveChartFamily } from '@/ai/messages/get-widget-options';
+import { deriveChartFamily } from './derive-chart-family';
 
 type DataSet = DataSource | Data | undefined;
 

@@ -14,7 +14,7 @@ import {
   isSupportedWidgetType,
   isTableWidget,
   isTextWidget,
-} from '@/dashboard-widget/utils';
+} from '@/widget-by-id/utils.js';
 import {
   ChartProps,
   ChartWidgetProps,
@@ -55,20 +55,20 @@ import {
   PanelItem,
   WidgetDto,
   WidgetStyle,
-} from '@/dashboard-widget/types.js';
+} from '@/widget-by-id/types.js';
 import { AppSettings } from '@/app/settings/settings.js';
 import {
   attachDataSourceToPanels,
   createDataOptionsFromPanels,
   createPanelItem,
   extractDataOptions,
-} from '@/dashboard-widget/translate-widget-data-options.js';
+} from '@/widget-by-id/translate-widget-data-options.js';
 import {
   extractStyleOptions,
   getStyleWithWidgetDesign,
-} from '@/dashboard-widget/translate-widget-style-options.js';
-import { extractDrilldownOptions } from '@/dashboard-widget/translate-widget-drilldown-options.js';
-import { extractWidgetFilters } from '@/dashboard-widget/translate-widget-filters.js';
+} from '@/widget-by-id/translate-widget-style-options.js';
+import { extractDrilldownOptions } from '@/widget-by-id/translate-widget-drilldown-options.js';
+import { extractWidgetFilters } from '@/widget-by-id/translate-widget-filters.js';
 import { isCartesian, isIndicator, isTable } from '@/chart-options-processor/translations/types.js';
 import { normalizeColumn, normalizeMeasureColumn } from '@/chart-data-options/utils.js';
 
@@ -577,7 +577,7 @@ export function toWidgetDto(widgetModel: WidgetModel, dataSource: JaqlDataSource
   let type = widgetModel.widgetType;
   let style: WidgetStyle = {};
   // TODO: For some reason TreeMap, Sunburst (and maybe others) are not include subtype in the styleOptions
-  let subtype = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype! || '';
+  let subtype = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype || '';
 
   if (!chartType) throw new Error('Chart type is required');
 

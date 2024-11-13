@@ -6,6 +6,10 @@ title: DashboardWidgetStyleOptions
 
 Style settings defining the look and feel of DashboardWidget
 
+::: warning Deprecated
+Use [WidgetByIdStyleOptions](interface.WidgetByIdStyleOptions.md) instead
+:::
+
 ## Properties
 
 ### backgroundColor

@@ -6,7 +6,7 @@ import {
 } from '../../api/types/dashboard-dto';
 import type { WidgetsPanelColumnLayout, WidgetsOptions } from './types';
 import { CascadingFilter, Filter, createFilterFromJaql } from '@sisense/sdk-data';
-import { WidgetDto } from '@/dashboard-widget/types';
+import { WidgetDto } from '@/widget-by-id/types';
 import { CommonFiltersApplyMode } from '@/common-filters/types';
 
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({

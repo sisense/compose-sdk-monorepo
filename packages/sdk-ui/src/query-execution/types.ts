@@ -11,7 +11,7 @@ import {
   QueryResultData,
 } from '@sisense/sdk-data';
 import { DataLoadAction } from '../common/hooks/data-load-state-reducer';
-import { FiltersMergeStrategy } from '../dashboard-widget/types';
+import { FiltersMergeStrategy } from '../widget-by-id/types';
 
 /**
  * State of a query execution.

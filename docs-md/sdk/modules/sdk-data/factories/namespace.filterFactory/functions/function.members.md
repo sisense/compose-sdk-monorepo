@@ -4,7 +4,10 @@ title: members
 
 # Function members
 
-> **members**(`attribute`, `members`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **members**(
+  `attribute`,
+  `members`,
+  `multiSelection`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values that match any of the specified strings.
 
@@ -16,6 +19,7 @@ Matching is case sensitive.
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Attribute to filter on |
 | `members` | `string`[] | Array of member values to filter by |
+| `multiSelection`? | `boolean` | Optional flag to disable multi-selection |
 
 ## Returns
 

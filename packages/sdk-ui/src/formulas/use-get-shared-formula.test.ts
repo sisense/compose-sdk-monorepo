@@ -29,20 +29,11 @@ vi.mock('./fetch-formula', () => ({
   fetchFormulaByOid: vi.fn(),
 }));
 
-const fetchFormulaMock = fetchFormula as Mock<
-  Parameters<typeof fetchFormula>,
-  ReturnType<typeof fetchFormula>
->;
+const fetchFormulaMock = fetchFormula as Mock<typeof fetchFormula>;
 
-const fetchFormulaByOidMock = fetchFormulaByOid as Mock<
-  Parameters<typeof fetchFormulaByOid>,
-  ReturnType<typeof fetchFormulaByOid>
->;
+const fetchFormulaByOidMock = fetchFormulaByOid as Mock<typeof fetchFormulaByOid>;
 
-const trackProductEventMock = trackProductEvent as Mock<
-  Parameters<typeof trackProductEvent>,
-  ReturnType<typeof trackProductEvent>
->;
+const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
 const formulaParamsMock = {
   name: 'mock formula',

@@ -4,16 +4,11 @@ import {
   isBearerAuthenticator,
   isWatAuthenticator,
 } from '@sisense/sdk-rest-client';
-import { DataModel, MetadataTypes } from '@sisense/sdk-data';
+import { DataModel, DataSourceField, MetadataTypes, DataSourceMetadata } from '@sisense/sdk-data';
 import { writeTypescript, writeJavascript } from '@sisense/sdk-modeling';
 import path from 'path';
 import levenshtein from 'js-levenshtein';
-import {
-  DataSourceField,
-  DataSourceMetadata,
-  DimensionalQueryClient,
-  QueryClient,
-} from '@sisense/sdk-query-client';
+import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import { PKG_VERSION } from '../package-version.js';
 import { trackCliError } from '@sisense/sdk-tracking';
 import { DataSourceSchemaDataset } from '../types.js';

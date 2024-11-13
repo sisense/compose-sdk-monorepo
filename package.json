@@ -1,33 +1,69 @@
 {
-  "version": "1.22.0",
+  "version": "1.23.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@sisense/sdk-data",
+      "@sisense/sdk-ui",
+      "@sisense/sdk-ui-preact",
+      "@sisense/sdk-ui-angular",
+      "@sisense/sdk-ui-vue"
+    ],
+    "targets": {
+      "docs:check:md": {
+        "cache": true,
+        "dependsOn": [
+          "^build:prod"
+        ]
+      },
+      "docs:gen:md": {
+        "outputs": [
+          "{workspaceRoot}/docs-md"
+        ],
+        "cache": true,
+        "dependsOn": [
+          "^build:prod"
+        ]
+      },
+      "nx:test:coverage:collect:report": {
+        "dependsOn": [
+          "^build:prod"
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage"
+        ],
+        "cache": true
+      }
+    }
+  },
   "workspaces": [
     "packages/*",
     "packages/internal/*",
     "examples/*demo",
     "e2e/",
-    "typedoc-plugins/typedoc-plugin-markdown/"
+    "typedoc-plugins/typedoc-plugin-markdown/",
+    "typedoc-plugins/typedoc-plugin-diff-packages/"
   ],
   "scripts": {
     "dev": "yarn workspace @sisense/sdk-ui dev",
     "demo": "yarn workspace @sisense/react-ts-demo dev",
     "demo:vue": "yarn workspace @sisense/vue-ts-demo dev",
     "demo:angular": "yarn workspace @sisense/angular-demo start",
-    "build": "yarn workspaces foreach --no-private --verbose --topological run build",
+    "build": "yarn nx:build",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
-    "build:prod": "yarn workspaces foreach --no-private --verbose --topological run build:prod",
+    "build:prod": "yarn nx:build:prod",
     "build:changed:prod": "yarn workspaces foreach --since=origin/master --verbose  --verbose --topological --no-private -R run build:prod",
-    "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output",
+    "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output && nx reset",
     "reset": "yarn clean && rm -rf ./node_modules",
     "lint": "yarn workspaces foreach -p --verbose run lint",
     "lint:changed": "yarn workspaces foreach --since run lint",
     "format": "yarn workspaces foreach -p run format",
     "format:check": "yarn workspaces foreach -p run format:check",
     "test": "yarn workspaces foreach -p --verbose run test",
-    "test:coverage": "yarn workspaces foreach -p -vA run test:coverage",
+    "test:coverage": "yarn nx:test:coverage",
     "test:coverage:collect": "mkdir -p .nyc_output && node ./ci/collect-coverage-files.cjs collectFiles --pattern='packages/**/coverage-final.json' --target='.nyc_output'",
     "test:coverage:report": "nyc report --reporter lcov --reporter text-summary --reporter cobertura",
     "test:coverage:combine": "yarn test:coverage && yarn test:coverage:collect && yarn test:coverage:report",
@@ -44,21 +80,25 @@
     "docs:serve:internal": "node ./scripts/serve-static.cjs docs-internal",
     "docs:gen:md": "./scripts/gen-docs-md.sh",
     "docs:check:md": "./scripts/check-docs-md.sh",
+    "docs:diff:ui": "./scripts/diff-docs-ui.sh",
     "prepare": "husky install",
-    "nx:build": "nx run-many -t build",
-    "nx:build:af": "nx affected -t build",
-    "nx:test": "nx run-many -t test",
-    "nx:test:af": "nx affected -t test",
-    "nx:test:coverage": "nx run-many -t test:coverage",
-    "nx:test:coverage:af": "nx affected -t test:coverage",
-    "nx:lint": "nx run-many -t lint",
-    "nx:lint:af": "nx affected -t lint",
-    "nx:format": "nx run-many -t format",
-    "nx:format:check": "nx run-many -t format:check",
-    "nx:build:prod": "nx run-many -t build:prod",
-    "nx:build:prod:af": "nx affected -t build:prod",
-    "nx:component:tests": "nx run-many -t component:tests",
-    "nx:component:tests:af": "nx affected -t component:tests"
+    "nx:build": "nx run-many --exclude @sisense/root -t build",
+    "nx:build:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t build",
+    "nx:test": "nx run-many --exclude @sisense/root -t test",
+    "nx:test:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t test",
+    "nx:test:coverage": "nx run-many --exclude @sisense/root -t test:coverage",
+    "nx:test:coverage:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t test:coverage",
+    "nx:lint": "nx run-many --exclude @sisense/root -t lint",
+    "nx:lint:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t lint",
+    "nx:format": "nx run-many --exclude @sisense/root -t format",
+    "nx:format:af": "nx nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t format",
+    "nx:format:check": "nx run-many --exclude @sisense/root -t format:check",
+    "nx:format:check:af": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t format:check",
+    "nx:build:prod": "nx run-many --exclude @sisense/root -t build:prod",
+    "nx:build:prod:af": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t build:prod",
+    "nx:component:tests": "nx run-many --exclude @sisense/root -t component:tests",
+    "nx:component:tests:af": "nx affected --exclude @sisense/root -t component:tests",
+    "nx:test:coverage:collect:report": "nx run @sisense/root:nx:test:coverage && nx run @sisense/root:test:coverage:collect && nx run @sisense/root:test:coverage:report"
   },
   "files": [
     "packages/**/dist/*"
@@ -72,8 +112,9 @@
     "@sisense/commitlint-config": "^1.9.9",
     "@sisense/eslint-config": "1.9.12",
     "@sisense/prettier-config": "^1.9.9",
+    "@sisense/typedoc-plugin-diff-packages": "0.1.0",
     "@sisense/typedoc-plugin-markdown": "0.0.0",
-    "@vitest/coverage-istanbul": "0.34.1",
+    "@vitest/coverage-istanbul": "2.1.4",
     "eslint": "^8.40.0",
     "eslint-plugin-i18next": "^6.1.0",
     "eslint-plugin-tsdoc": "0.2.17",
@@ -82,11 +123,11 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "nx": "20.0.0",
-    "nyc": "^15.1.0",
+    "nyc": "^17.1.0",
     "prettier": "^2.8.8",
     "typedoc": "0.26.10",
     "typedoc-plugin-vue": "^1.2.0",
-    "vitest": "^1.5.0"
+    "vitest": "^2.1.4"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

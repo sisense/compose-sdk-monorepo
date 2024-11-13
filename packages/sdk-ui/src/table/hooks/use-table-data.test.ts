@@ -68,6 +68,9 @@ describe('useTableData', () => {
       enabled: false,
       packageName: 'sdk-ui',
     },
+    errorBoundary: {
+      showErrorBox: true,
+    },
   };
 
   beforeEach(() => {

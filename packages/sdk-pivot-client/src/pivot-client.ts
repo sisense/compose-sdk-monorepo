@@ -1,4 +1,5 @@
-import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { normalizeUrl } from '@sisense/sdk-common';
+import { Authenticator } from '@sisense/sdk-rest-client';
 import { PivotBuilder, PivotDataBuilder, SocketBuilder } from './builders';
 import { JaqlRequest } from './data-load/types.js';
 import { PivotQueryResultData } from '@sisense/sdk-data';
@@ -21,7 +22,7 @@ export class PivotClient {
   public socketBuilder: SocketBuilder;
 
   constructor(url: string, auth: Authenticator, mockSocket = false) {
-    this.socketBuilder = new SocketBuilder(url, auth, mockSocket);
+    this.socketBuilder = new SocketBuilder(normalizeUrl(url), auth, mockSocket);
   }
 
   async queryData(

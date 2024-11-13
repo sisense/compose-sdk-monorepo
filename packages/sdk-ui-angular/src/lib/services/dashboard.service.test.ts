@@ -16,15 +16,9 @@ vi.mock('@sisense/sdk-ui-preact', () => ({
   getDashboardModels: vi.fn(),
 }));
 
-const getDashboardModelMock = getDashboardModel as Mock<
-  Parameters<typeof getDashboardModel>,
-  ReturnType<typeof getDashboardModel>
->;
+const getDashboardModelMock = getDashboardModel as Mock<typeof getDashboardModel>;
 
-const getDashboardModelsMock = getDashboardModels as Mock<
-  Parameters<typeof getDashboardModels>,
-  ReturnType<typeof getDashboardModels>
->;
+const getDashboardModelsMock = getDashboardModels as Mock<typeof getDashboardModels>;
 
 describe('DashboardService', () => {
   let sisenseContextService: Mocked<SisenseContextService>;

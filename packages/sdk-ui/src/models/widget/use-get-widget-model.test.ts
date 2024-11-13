@@ -39,18 +39,9 @@ vi.mock('./get-widget-model', () => ({
   getWidgetModel: vi.fn(),
 }));
 
-const getWidgetModelMock = getWidgetModel as Mock<
-  Parameters<typeof getWidgetModel>,
-  ReturnType<typeof getWidgetModel>
->;
-const useSisenseContextMock = useSisenseContext as Mock<
-  Parameters<typeof useSisenseContext>,
-  ReturnType<typeof useSisenseContext>
->;
-const trackProductEventMock = trackProductEvent as Mock<
-  Parameters<typeof trackProductEvent>,
-  ReturnType<typeof trackProductEvent>
->;
+const getWidgetModelMock = getWidgetModel as Mock<typeof getWidgetModel>;
+const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext>;
+const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
 describe('useGetWidgetModel', () => {
   beforeEach(() => {
@@ -62,6 +53,9 @@ describe('useGetWidgetModel', () => {
       tracking: {
         enabled: false,
         packageName: 'sdk-ui',
+      },
+      errorBoundary: {
+        showErrorBox: true,
       },
     });
   });
@@ -112,6 +106,9 @@ describe('useGetWidgetModel', () => {
       tracking: {
         enabled: true,
         packageName: 'sdk-ui',
+      },
+      errorBoundary: {
+        showErrorBox: true,
       },
     });
     vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');

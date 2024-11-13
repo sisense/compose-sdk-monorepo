@@ -5,7 +5,6 @@
 import { getDashboardModels, type GetDashboardModelsOptions } from './get-dashboard-models.js';
 import { type HttpClient } from '@sisense/sdk-rest-client';
 import { DashboardDto } from '../../api/types/dashboard-dto.js';
-import { type RestApi } from '../../api/rest-api.js';
 import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
 import { samplePivotDashboard } from '../__mocks__/sample-pivot-dashboard.js';
@@ -18,21 +17,19 @@ const dashboardsMock: DashboardDto[] = [
   samplePivotDashboard,
 ];
 
-const getDashboardsMock = vi.fn<Parameters<RestApi['getDashboards']>>(
-  ({ expand, searchByTitle } = {}) => {
-    return dashboardsMock
-      .map((dashboardMock) => {
-        const result = { ...dashboardMock };
+const getDashboardsMock = vi.fn(({ expand, searchByTitle } = {}): unknown => {
+  return dashboardsMock
+    .map((dashboardMock) => {
+      const result = { ...dashboardMock };
 
-        if (!expand || !expand?.includes('widgets')) {
-          delete result.widgets;
-        }
+      if (!expand || !expand?.includes('widgets')) {
+        delete result.widgets;
+      }
 
-        return result;
-      })
-      .filter((dashboardMock) => !searchByTitle || dashboardMock.title === searchByTitle);
-  },
-);
+      return result;
+    })
+    .filter((dashboardMock) => !searchByTitle || dashboardMock.title === searchByTitle);
+});
 
 /**
  * Custom 'expect' extension to check if a value is in an array

@@ -137,8 +137,8 @@ export const MetadataTypes = {
       const type = o;
       return type.toLowerCase() === MetadataTypes.BaseMeasure;
     }
-
-    return (o.agg || o.aggregation) && o.attribute && !this.isMeasureTemplate(o);
+    // JaqlElement doesn't have property attribute. Check for jaql instead
+    return (o.agg || o.aggregation) && (o.attribute || o.jaql) && !this.isMeasureTemplate(o);
   },
 
   /**
@@ -435,6 +435,7 @@ export type IncludeAllFilter = {
 /** @internal */
 export type IncludeMembersFilter = {
   members: string[];
+  multiSelection?: boolean;
 };
 
 /** @internal */
@@ -442,6 +443,7 @@ export type ExcludeMembersFilter = {
   exclude: {
     members: string[];
   };
+  multiSelection?: boolean;
 };
 
 /** @internal */
@@ -486,3 +488,155 @@ export type OrFilter<FilterItem> = {
  * Abstract object with any unknown values
  */
 export type AnyObject = Record<string, any>;
+
+/**
+ * @internal
+ */
+interface DecimalAbbreviations {
+  k: boolean;
+  m: boolean;
+  b: boolean;
+  t: boolean;
+}
+/**
+ * @internal
+ */
+export enum CurrencyPosition {
+  PRE = 'pre',
+  POST = 'post',
+}
+
+/**
+ * @internal
+ */
+export type NumericMask = {
+  isdefault?: boolean;
+  abbreviations?: DecimalAbbreviations;
+  decimals?: 'auto' | number | string;
+  currency?: { symbol: string; position: CurrencyPosition };
+  percent?: boolean;
+  number?: { separated: boolean };
+  separated?: boolean;
+  type?: string;
+};
+
+/**
+ * @internal
+ */
+export type DatetimeMask = {
+  isdefault?: boolean;
+  years: string;
+  quarters: string;
+  months: string;
+  weeks: string;
+  minutes: string;
+  days: string;
+  type: string;
+  dateAndTime?: string;
+};
+
+/**
+ * @internal
+ */
+export type MetadataItem = {
+  instanceid?: string;
+  measure?: MetadataItemJaql;
+  jaql: MetadataItemJaql;
+  panel?: string;
+  isScope?: boolean;
+  format?: {
+    mask?: Partial<DatetimeMask> | Partial<NumericMask>;
+    number?: string;
+    /* PIVOT OPTIONS START */
+    subtotal?: boolean;
+    width?: number;
+    databars?: boolean;
+    color?: {
+      type: string;
+      color?: string;
+      conditions?: Array<{
+        color: string;
+        operator: string;
+        expression: string | Record<string, any>;
+      }>;
+    };
+  };
+  field?: {
+    id?: string;
+    index?: number;
+  };
+  /* PIVOT OPTIONS END */
+  filter?: MetadataItem;
+  exclude?: MetadataItem;
+  by?: MetadataItemJaql;
+  level?: string;
+  anchor?: string;
+
+  from?: string;
+  to?: string;
+};
+
+/**
+ * @internal
+ */
+export type MetadataItemJaql = {
+  dim?: string;
+  agg?: string;
+  datatype?: string;
+  table?: string;
+  column?: string;
+  level?: string;
+  dateTimeLevel?: string;
+  bucket?: string;
+  sort?: string;
+  in?: {
+    selected: {
+      jaql: MetadataItemJaql;
+    };
+  };
+  title?: string;
+  type?: string;
+  formula?: string;
+  context?: {
+    [itemId: string]: MetadataItemJaql;
+  };
+  filter?: MetadataItem;
+  sortDetails?: {
+    dir: string;
+    field?: number;
+    measurePath?: Record<number, string | number>;
+    sortingLastDimension?: boolean;
+    initialized?: boolean;
+  };
+};
+
+/**
+ * @internal
+ */
+export type DataSourceField = {
+  column: string;
+  dimtype: string;
+  id: string;
+  indexed: boolean;
+  merged: boolean;
+  table: string;
+  title: string;
+  type: string;
+};
+
+/**
+ * @internal
+ */
+export type DataSourceSchema = {
+  title: string;
+  type: 'extract' | 'live';
+} & AnyObject;
+
+/**
+ * @internal
+ */
+export type DataSourceMetadata = {
+  title: string;
+  fullname: string;
+  live: boolean;
+};

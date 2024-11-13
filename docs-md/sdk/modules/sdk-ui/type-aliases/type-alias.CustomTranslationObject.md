@@ -18,12 +18,12 @@ The language code of the translations.
 
 ***
 
-### `packageName`
+### `namespace`
 
-**packageName**?: `string`
+**namespace**?: `string`
 
-The package name of the translations.
-Default value is `sdkUi`.
+The translation namespace (usually a package name in camelCase). It identifies the specific context in which the translation is being registered.
+If not specified, the default value is `sdkUi`.
 
 ***
 

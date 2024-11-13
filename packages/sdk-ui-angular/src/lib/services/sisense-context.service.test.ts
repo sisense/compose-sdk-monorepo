@@ -6,10 +6,7 @@ vi.mock('@sisense/sdk-ui-preact', () => ({
   createClientApplication: vi.fn().mockResolvedValue(undefined),
 }));
 
-const createClientApplicationMock = createClientApplication as Mock<
-  Parameters<typeof createClientApplication>,
-  ReturnType<typeof createClientApplication>
->;
+const createClientApplicationMock = createClientApplication as Mock<typeof createClientApplication>;
 
 describe('SisenseContextService', () => {
   let sisenseContextService: SisenseContextService;

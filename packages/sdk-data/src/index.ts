@@ -16,6 +16,7 @@ export * from './dimensional-model/data-model.js';
 export * from './dimensional-model/attributes.js';
 export * from './dimensional-model/dimensions.js';
 export * from './dimensional-model/factory.js';
+export * from './dimensional-model/jaql-element.js';
 
 export * from './dimensional-model/filters/filters.js';
 
@@ -100,3 +101,8 @@ export * from './dimensional-model/simple-column-types.js';
 export * as analyticsFactory from './dimensional-model/analytics/factory.js';
 
 export * from './utils.js';
+
+export {
+  type TranslationDictionary,
+  PACKAGE_NAMESPACE as translationNamespace,
+} from './translation/resources/index.js';

@@ -51,14 +51,16 @@ export const createSisenseContextConnector = (
       return {
         app,
         isInitialized: true,
-        showRuntimeErrors,
         tracking: {
           // if tracking is configured in appConfig, use it
           // if none is set, default to true
           enabled: appConfig?.trackingConfig?.enabled ?? true,
           packageName: 'sdk-ui-angular',
         },
-      } as CustomSisenseContext;
+        errorBoundary: {
+          showErrorBox: showRuntimeErrors ?? true,
+        },
+      };
     },
     renderContextProvider: createContextProviderRenderer(CustomSisenseContextProvider),
   };

@@ -1,19 +1,18 @@
 import cloneDeep from 'lodash-es/cloneDeep.js';
-import {
-  Filter,
-  FilterRelations,
-  FilterRelationsNode,
-  FilterRelationsJaql,
-  FilterRelationsJaqlNode,
-  DataSource,
-  DataSourceInfo,
-  FilterJaql,
-  MembersFilter,
-  Sort,
-  Attribute,
-} from './index.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
 import { FilterJaqlInternal, JaqlDataSource } from './dimensional-model/filters/utils/types.js';
+import {
+  Attribute,
+  Filter,
+  FilterRelations,
+  FilterRelationsJaql,
+  FilterRelationsJaqlNode,
+  FilterRelationsNode,
+  SortDirection,
+} from './dimensional-model/interfaces.js';
+import { DataSource, DataSourceInfo } from './interfaces.js';
+import { FilterJaql, JaqlSortDirection, Sort } from './dimensional-model/types.js';
+import { MembersFilter } from './dimensional-model/filters/filters.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
@@ -188,7 +187,12 @@ function parseExpression(expression: string) {
   const [table, column] = expression.slice(1, -1).split('.');
   return {
     table,
-    column,
+    column: column
+      ? column
+          // in case of Date we have to remove the (Calendar) part
+          .replace('(Calendar)', '')
+          .trim()
+      : '',
   };
 }
 
@@ -208,4 +212,22 @@ export function getTableNameFromAttribute(attribute: Attribute) {
  */
 export function getColumnNameFromAttribute(attribute: Attribute) {
   return parseExpression(attribute.expression).column;
+}
+
+/**
+ * Gets the sort type based on the jaql sort direction.
+ *
+ * @param jaqlSort - The jaql sort direction.
+ * @returns  The sort direction.
+ * @internal
+ */
+export function getSortType(jaqlSort: `${JaqlSortDirection}` | undefined): SortDirection {
+  switch (jaqlSort) {
+    case JaqlSortDirection.ASC:
+      return 'sortAsc';
+    case JaqlSortDirection.DESC:
+      return 'sortDesc';
+    default:
+      return 'sortNone';
+  }
 }

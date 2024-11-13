@@ -66,46 +66,9 @@ export const useDrilldownCore = (params: UseDrilldownCoreParams) => {
 
   const selectDrilldown = useCallback(
     (points: DataPoint[], nextDimension: Attribute, hierarchy?: Hierarchy) => {
-      setDrilldownSelections((currentSelections) => {
-        if (!hierarchy) {
-          return [...currentSelections, { points, nextDimension }];
-        }
-
-        const isFirstLevelSelected = isSameAttribute(hierarchy.levels[0], nextDimension);
-        // clears all selections, as the first hierarchy level always matches the initial dimensions
-        if (isFirstLevelSelected) {
-          return [];
-        }
-
-        const matchingSelectionIndex = currentSelections.findIndex((currentSelection) =>
-          isSameAttribute(currentSelection.nextDimension, nextDimension),
-        );
-        const isLevelAlreadySelected = matchingSelectionIndex !== -1;
-
-        // trims selections to include only hierarchy levels up to the current one
-        if (isLevelAlreadySelected) {
-          return currentSelections.slice(0, matchingSelectionIndex + 1);
-        }
-
-        const lastSelectedLevel = last(currentSelections)?.nextDimension;
-        const lastSelectedLevelIndex = currentSelections.length
-          ? hierarchy.levels.findIndex(
-              (level) => lastSelectedLevel && isSameAttribute(level, lastSelectedLevel),
-            )
-          : 0;
-        const nextLevelIndex = hierarchy.levels.indexOf(nextDimension);
-        const hierarchyLevelsToApply = hierarchy.levels.slice(
-          lastSelectedLevelIndex + 1,
-          nextLevelIndex + 1,
-        );
-        const newSelections = hierarchyLevelsToApply.map((level, index) => ({
-          points: index === 0 ? points : [],
-          nextDimension: level,
-        }));
-
-        // extends selections with hierarchy levels down from the current one
-        return [...currentSelections, ...newSelections];
-      });
+      setDrilldownSelections((currentSelections) =>
+        updateDrilldownSelections(currentSelections, points, nextDimension, hierarchy),
+      );
     },
     [setDrilldownSelections],
   );
@@ -136,6 +99,58 @@ export const useDrilldownCore = (params: UseDrilldownCoreParams) => {
     sliceDrilldownSelections,
     clearDrilldownSelections,
   };
+};
+
+/**
+ * Updates the drilldown selections based on the current selections, the next data points,
+ * and the specified hierarchy level.
+ *
+ * @internal
+ */
+export const updateDrilldownSelections = (
+  currentSelections: DrilldownSelection[],
+  points: DataPoint[],
+  nextDimension: Attribute,
+  hierarchy?: Hierarchy,
+) => {
+  if (!hierarchy) {
+    return [...currentSelections, { points, nextDimension }];
+  }
+
+  const isFirstLevelSelected = isSameAttribute(hierarchy.levels[0], nextDimension);
+  // clears all selections, as the first hierarchy level always matches the initial dimensions
+  if (isFirstLevelSelected) {
+    return [];
+  }
+
+  const matchingSelectionIndex = currentSelections.findIndex((currentSelection) =>
+    isSameAttribute(currentSelection.nextDimension, nextDimension),
+  );
+  const isLevelAlreadySelected = matchingSelectionIndex !== -1;
+
+  // trims selections to include only hierarchy levels up to the current one
+  if (isLevelAlreadySelected) {
+    return currentSelections.slice(0, matchingSelectionIndex + 1);
+  }
+
+  const lastSelectedLevel = last(currentSelections)?.nextDimension;
+  const lastSelectedLevelIndex = currentSelections.length
+    ? hierarchy.levels.findIndex(
+        (level) => lastSelectedLevel && isSameAttribute(level, lastSelectedLevel),
+      )
+    : 0;
+  const nextLevelIndex = hierarchy.levels.indexOf(nextDimension);
+  const hierarchyLevelsToApply = hierarchy.levels.slice(
+    lastSelectedLevelIndex + 1,
+    nextLevelIndex + 1,
+  );
+  const newSelections = hierarchyLevelsToApply.map((level, index) => ({
+    points: index === 0 ? points : [],
+    nextDimension: level,
+  }));
+
+  // extends selections with hierarchy levels down from the current one
+  return [...currentSelections, ...newSelections];
 };
 
 /**

@@ -43,7 +43,7 @@ chart = {
 drilldownResult?: CustomDrilldownResult;
 
 drilldown = {
-  drilldownDimensions: [DM.Patients.Gender, DM.Admissions.Surgical_Procedure],
+  drilldownPaths: [DM.Patients.Gender, DM.Admissions.Surgical_Procedure],
   initialDimension: DM.Divisions.Divison_name,
   drilldownChange: (drilldownResult: CustomDrilldownResult) => {
     this.drilldownResult = drilldownResult;
@@ -57,7 +57,7 @@ drilldown = {
 ```html
 <!--Component HTML template in .component.html-->
 <csdk-drilldown-widget
-  [drilldownDimensions]="drilldown.drilldownDimensions"
+  [drilldownPaths]="drilldown.drilldownPaths"
   [initialDimension]="drilldown.initialDimension"
   (drilldownResultChange)="drilldown.drilldownChange($event)"
 >
@@ -151,9 +151,21 @@ An object that allows users to pass advanced configuration options as a prop for
 
 #### drilldownDimensions
 
-> **drilldownDimensions**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
+> **drilldownDimensions**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[] \| `undefined`
 
 List of dimensions to allow drilldowns on
+
+::: warning Deprecated
+Use [drilldownPaths](class.DrilldownWidgetComponent.md#drilldownpaths) instead
+:::
+
+***
+
+#### drilldownPaths
+
+> **drilldownPaths**: ([`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Hierarchy`](../../sdk-ui/interfaces/interface.Hierarchy.md))[] \| `undefined`
+
+Dimensions and hierarchies available for drilldown on.
 
 ***
 

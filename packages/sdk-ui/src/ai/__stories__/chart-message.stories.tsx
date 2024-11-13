@@ -2,9 +2,9 @@ import { Meta, StoryObj } from '@storybook/react';
 import ChartMessage from '../messages/chart-message';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../../props';
-import { MetadataItemJaql } from '@sisense/sdk-query-client';
 import { AiContextProvider } from '@/ai';
 import { getDefaultThemeSettings, ThemeProvider } from '@/index';
+import { MetadataItemJaql } from '@sisense/sdk-data';
 
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',
@@ -84,15 +84,45 @@ const props = {
   },
 };
 
-export const Default: Story = {
+export const DefaultChart: Story = {
   args: {
     ...props,
   },
 };
 
-export const DarkTheme: Story = {
+export const DarkThemeChart: Story = {
   args: {
     ...props,
+  },
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={getDefaultThemeSettings(true)}>
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
+};
+
+const tableProps = {
+  ...props,
+  content: {
+    ...props.content,
+    chartRecommendations: {
+      chartType: 'table',
+      chartFamily: 'table',
+    },
+  },
+};
+
+export const DefaultTable: Story = {
+  args: {
+    ...tableProps,
+  },
+};
+
+export const DarkThemeTable: Story = {
+  args: {
+    ...tableProps,
   },
   decorators: [
     (Story) => (

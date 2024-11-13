@@ -12,7 +12,7 @@ set -o errexit
 set -o xtrace
 
 # Build typedoc-plugin-markdown
-yarn workspace @sisense/typedoc-plugin-markdown run build
+yarn nx run @sisense/typedoc-plugin-markdown:build
 
 # Run typedoc with typedoc-plugin-markdown to generate the markdown files
 TYPEDOC_MODE=PUBLIC TYPEDOC_FORMAT=MD typedoc --options typedoc.config.cjs

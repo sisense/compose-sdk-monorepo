@@ -1,4 +1,4 @@
-import { WidgetDto } from '../../dashboard-widget/types';
+import { WidgetDto } from '../../widget-by-id/types';
 import { FilterJaql, FilterRelationsModel, JaqlDataSource } from '@sisense/sdk-data';
 import { AnyObject } from '../../utils/utility-types';
 

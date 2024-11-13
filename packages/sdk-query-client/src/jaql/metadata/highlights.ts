@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Filter } from '@sisense/sdk-data';
-import { MetadataItem } from '../../types.js';
+import { Filter, MetadataItem } from '@sisense/sdk-data';
 
 export function applyHighlightFilters(metadataItem: MetadataItem, highlights: Filter[]) {
   const filter = highlights?.find((f) => getMetadataItemId(metadataItem) === f.attribute.id);

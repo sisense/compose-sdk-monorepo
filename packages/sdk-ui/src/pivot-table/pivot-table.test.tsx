@@ -11,6 +11,7 @@ import { PivotClient } from '@sisense/sdk-pivot-client';
 import { SsoAuthenticator } from '@sisense/sdk-rest-client';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
+import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
@@ -18,7 +19,7 @@ vi.mock('../sisense-context/sisense-context');
 describe('PivotTable', () => {
   beforeEach(() => {
     const url = 'mock-url';
-    useSisenseContextMock.mockReturnValue({
+    const contextMock: SisenseContextPayload = {
       app: {
         pivotClient: new PivotClient(url, new SsoAuthenticator(url), true),
         settings: {
@@ -26,7 +27,15 @@ describe('PivotTable', () => {
         },
       } as ClientApplication,
       isInitialized: true,
-    });
+      tracking: {
+        enabled: false,
+        packageName: '',
+      },
+      errorBoundary: {
+        showErrorBox: true,
+      },
+    };
+    useSisenseContextMock.mockReturnValue(contextMock);
   });
   it('should render empty pivot table', async () => {
     executePivotQueryMock.mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA);

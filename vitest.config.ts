@@ -1,6 +1,6 @@
-import { UserConfig } from 'vitest/config';
+import { ViteUserConfig } from 'vitest/config';
 
-const config: UserConfig = {
+const config: ViteUserConfig = {
   test: {
     pool: 'forks', // https://github.com/vitest-dev/vitest/issues/3077
     globals: true,

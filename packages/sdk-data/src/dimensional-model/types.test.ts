@@ -13,6 +13,11 @@ describe('MetadataTypes', () => {
       expect(MetadataTypes.isMeasure(measure)).toBeFalsy();
     });
 
+    it('should fail validation for an invalid base measure', () => {
+      expect(MetadataTypes.isBaseMeasure(undefined)).toBeFalsy();
+      expect(MetadataTypes.isBaseMeasure(MetadataTypes.BaseMeasure)).toBeTruthy();
+    });
+
     it('should pass validation for a valid measure', () => {
       const measure = {
         name: 'sum Revenue',

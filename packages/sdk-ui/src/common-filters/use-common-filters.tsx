@@ -10,7 +10,7 @@ import {
   registerDataPointsSelectedHandler,
   registerRenderToolbarHandler,
   translateWidgetTypeInternal,
-} from '@/dashboard-widget/utils';
+} from '@/widget-by-id/utils.js';
 import { CommonFiltersOptions } from './types.js';
 import { prepareCommonFiltersToWidgetConnectProps } from './common-filters-connector.js';
 import { WidgetProps } from '@/props.js';

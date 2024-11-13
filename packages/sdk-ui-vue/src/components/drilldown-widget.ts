@@ -28,7 +28,7 @@ export type DrilldownWidgetConfig = {
  * ```vue
  * <template>
     <DrilldownWidget
-      :drilldownDimensions="drilldownDimensions"
+      :drilldownPaths="drilldownPaths"
       :initialDimension="dimProductName"
     >
       <template
@@ -52,7 +52,7 @@ export type DrilldownWidgetConfig = {
             onDataPointsSelected([dataPoint]);
             onContextMenu({ left: event.clientX, top: event.clientY });
           }"
-                        :on-data-point-context-menu="(dataPoint: any, event: any) => {
+          :on-data-point-context-menu="(dataPoint: any, event: any) => {
             onDataPointsSelected([dataPoint]);
             onContextMenu({ left: event.clientX, top: event.clientY });
           }"
@@ -89,7 +89,7 @@ export type DrilldownWidgetConfig = {
     },
   },
 });
- * const drilldownDimensions = [DM.DimCountries.CountryName, DM.DimProducts.ProductName];
+ * const drilldownPaths = [DM.DimCountries.CountryName, DM.DimProducts.ProductName];
  * const dimProductName = DM.DimProducts.ProductName;
  * </script>
  * ```
@@ -114,10 +114,22 @@ export const DrilldownWidgetTs = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownDimensions}
      *
      * @category Widget
+     * @deprecated Use {@link drilldownPaths} instead
      *
      */
     drilldownDimensions: {
-      type: Array as PropType<NonNullable<DrilldownWidgetProps['drilldownDimensions']>>,
+      type: Array as PropType<DrilldownWidgetProps['drilldownDimensions']>,
+      required: false,
+      default: () => [],
+    },
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownPaths}
+     *
+     * @category Widget
+     *
+     */
+    drilldownPaths: {
+      type: Array as PropType<DrilldownWidgetProps['drilldownPaths']>,
       required: false,
       default: () => [],
     },
@@ -128,7 +140,7 @@ export const DrilldownWidgetTs = defineComponent({
      */
     initialDimension: {
       type: Object as PropType<DrilldownWidgetProps['initialDimension']>,
-      required: false,
+      required: true,
       default: () => ({}),
     },
   },

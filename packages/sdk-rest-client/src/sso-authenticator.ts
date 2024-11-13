@@ -1,9 +1,11 @@
 /// <reference lib="dom" />
 
+import { normalizeUrl } from '@sisense/sdk-common';
 import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
 import { errorInterceptor } from './interceptors.js';
+import { addQueryParamsToUrl } from './helpers.js';
 
 interface IsAuthResponse {
   isAuthenticated: boolean;
@@ -18,7 +20,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
 
   constructor(url: string, enableSilentPreAuth = false) {
     super('sso');
-    this.url = url;
+    this.url = normalizeUrl(url);
     this._enableSilentPreAuth = enableSilentPreAuth;
   }
 
@@ -26,12 +28,14 @@ export class SsoAuthenticator extends BaseAuthenticator {
     try {
       this._authenticating = true;
 
-      const { isAuthenticated, loginUrl } = await this.checkAuthentication();
+      const { isAuthenticated, loginUrl: url } = await this.checkAuthentication();
 
       if (isAuthenticated) {
         this._resolve(true);
         return await this._result;
       }
+
+      const loginUrl = addQueryParamsToUrl(url, { return_to: window.location.href });
 
       if (this._enableSilentPreAuth && silent) {
         await this.authenticateSilent(loginUrl);
@@ -54,7 +58,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
-    iframe.src = `${loginUrl}?return_to=${window.location.href}`;
+    iframe.src = loginUrl;
 
     await new Promise((resolve) => {
       iframe.onload = () => {
@@ -66,7 +70,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
   }
 
   private async checkAuthentication(): Promise<{ isAuthenticated: boolean; loginUrl: string }> {
-    const fetchUrl = `${this.url}${!this.url.endsWith('/') ? '/' : ''}api/auth/isauth`;
+    const fetchUrl = `${this.url}api/auth/isauth`;
     const response = await fetch(fetchUrl, {
       headers: { Internal: 'true' },
       credentials: 'include',
@@ -86,7 +90,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
 
     return {
       isAuthenticated: result.isAuthenticated,
-      loginUrl: `${result.loginUrl}?return_to=${window.location.href}`,
+      loginUrl: result.loginUrl || '',
     };
   }
 }

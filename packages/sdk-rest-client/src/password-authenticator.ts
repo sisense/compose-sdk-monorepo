@@ -1,4 +1,5 @@
 /// <reference lib="dom" />
+import { normalizeUrl } from '@sisense/sdk-common';
 import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
@@ -13,7 +14,7 @@ export class PasswordAuthenticator extends BaseAuthenticator {
 
   constructor(url: string, user: string, pass: string) {
     super('password');
-    this.url = `${url}${!url.endsWith('/') ? '/' : ''}api/v1/authentication/login`;
+    this.url = `${normalizeUrl(url)}api/v1/authentication/login`;
     const username = encodeURIComponent(user);
     const password = encodeURIComponent(pass);
     this.body = `username=${username}&password=${password}`;

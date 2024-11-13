@@ -90,7 +90,10 @@ export const createAttributeFilterFromConditionFilterJaql = (
       if (conditionFilterJaql.by) {
         return withComposeCode(filterFactory.bottomRanking)(
           attribute,
-          createMeasureFromRankingFilterJaql(conditionFilterJaql.by),
+          createMeasureFromRankingFilterJaql(
+            conditionFilterJaql.by,
+            conditionFilterJaql.rankingMessage,
+          ),
           conditionFilterJaql[ConditionFilterType.BOTTOM] as number,
           guid,
         );
@@ -124,7 +127,10 @@ export const createAttributeFilterFromConditionFilterJaql = (
       if (conditionFilterJaql.by) {
         return withComposeCode(filterFactory.topRanking)(
           attribute,
-          createMeasureFromRankingFilterJaql(conditionFilterJaql.by),
+          createMeasureFromRankingFilterJaql(
+            conditionFilterJaql.by,
+            conditionFilterJaql.rankingMessage,
+          ),
           conditionFilterJaql[ConditionFilterType.TOP] as number,
           guid,
         );
@@ -214,16 +220,26 @@ export const createAttributeFilterFromConditionFilterJaql = (
         );
       }
       break;
-    case ConditionFilterType.IS_NOT:
+    case ConditionFilterType.IS_NOT: {
+      const deactivatedMembers =
+        (conditionFilterJaql.filter?.turnedOff && conditionFilterJaql.filter.exclude?.members) ||
+        [];
+      const selectedMembers =
+        conditionFilterJaql.exclude?.members?.filter(
+          (member) => !deactivatedMembers.includes(member),
+        ) || [];
+
       // use members filter with exclude instead of exclude filter
       return withComposeCode(filterFactory.members)(
         attribute,
-        conditionFilterJaql.exclude?.members || [],
+        selectedMembers,
         true,
         guid,
-        (conditionFilterJaql.filter?.turnedOff && conditionFilterJaql.filter.exclude?.members) ||
-          [],
+        deactivatedMembers,
+        undefined,
+        conditionFilterJaql.multiSelection,
       );
+    }
     case ConditionFilterType.AFTER:
     case ConditionFilterType.BEFORE:
     case ConditionFilterType.IS_EMPTY:

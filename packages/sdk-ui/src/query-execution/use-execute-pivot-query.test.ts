@@ -26,10 +26,7 @@ vi.mock('@sisense/sdk-tracking', async () => {
   };
 });
 
-const trackProductEventMock = trackProductEvent as Mock<
-  Parameters<typeof trackProductEvent>,
-  ReturnType<typeof trackProductEvent>
->;
+const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
 describe('useExecutePivotQuery', () => {
   const params: ExecuteQueryParams = {

@@ -24,15 +24,13 @@ type ErrorBoundaryState = { error: AbstractTranslatableError | Error | string | 
  * @internal
  */
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  showErrorBox = false;
+  showErrorBox = true;
 
   context: SisenseContextPayload;
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    // set showErrorBox to false by default when applied to SisenseContextProvider.
-    // This is to avoid showing the error box when somehow props.showErrorBox is not correctly passed
-    this.showErrorBox = props.showErrorBox ?? (props.resetKeys ? true : false);
+    this.showErrorBox = props.showErrorBox ?? true;
     this.state = { error: null };
   }
 

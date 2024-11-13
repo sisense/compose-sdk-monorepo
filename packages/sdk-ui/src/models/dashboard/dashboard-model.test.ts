@@ -1,5 +1,5 @@
 import { dashboardModelTranslator } from '@/models';
-import { WidgetStyle } from '@/dashboard-widget/types';
+import { WidgetStyle } from '@/widget-by-id/types';
 import { DataType } from '@sisense/sdk-data';
 
 describe('DashboardModel', () => {

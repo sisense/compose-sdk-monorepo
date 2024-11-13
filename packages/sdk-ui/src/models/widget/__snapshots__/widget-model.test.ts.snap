@@ -128,7 +128,7 @@ exports[`WidgetModel > getExecutePivotQueryParams > getChartProps > should retur
       "filterType": "ranking",
       "measure": {
         "__serializable": "DimensionalElement",
-        "aggregation": "count",
+        "aggregation": "countDistinct",
         "attribute": {
           "__serializable": "DimensionalElement",
           "dataSource": undefined,
@@ -139,11 +139,11 @@ exports[`WidgetModel > getExecutePivotQueryParams > getChartProps > should retur
         },
         "dataSource": undefined,
         "desc": "",
-        "name": "count Patient_ID",
+        "name": "countDistinct Patient_ID",
         "sort": 0,
         "type": "basemeasure",
       },
-      "name": "cd8e97fcc8c",
+      "name": "7a707cfbd72",
       "operator": "top",
       "type": "filter",
     },

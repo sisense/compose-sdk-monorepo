@@ -6,7 +6,7 @@ import {
   isNumber,
   MembersFilter,
 } from '@sisense/sdk-data';
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useCallback, useMemo } from 'react';
 import { Member, SelectedMember } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { useExecuteQueryInternal } from '../../../query-execution/use-execute-query';
@@ -86,6 +86,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     () => new MembersFilter(attribute, []),
   );
 
+  const multiSelection = filter.multiSelection;
   const excludeMembers = filter.excludeMembers;
 
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
@@ -132,6 +133,26 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
 
   const hasBackgroundFilterIcon = !!backgroundFilter && parentFilters.length === 0;
 
+  const updateFilterFromMembersList = useCallback(
+    (member: Member, isSelected: boolean) => {
+      if (multiSelection) {
+        const newSelectedMembers = isSelected
+          ? addSelectedMember(selectedMembers, member)
+          : removeSelectedMember(selectedMembers, member);
+
+        updateFilter(
+          // if all members are excluded, we should reset the filter to exclude none to match the behavior in Fusion
+          newSelectedMembers.length === allMembers.length && excludeMembers
+            ? withSelectedMembers(filter, [], false)
+            : withSelectedMembers(filter, newSelectedMembers, excludeMembers),
+        );
+      } else {
+        updateFilter(withSelectedMembers(filter, [member], excludeMembers));
+      }
+    },
+    [multiSelection, selectedMembers, allMembers, excludeMembers, filter, updateFilter],
+  );
+
   if (error) {
     throw error;
   }
@@ -164,21 +185,11 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
           <MemberList
             members={allMembers}
             selectedMembers={selectedMembers}
-            onSelectMember={(member, isSelected) => {
-              const newSelectedMembers = isSelected
-                ? addSelectedMember(selectedMembers, member)
-                : removeSelectedMember(selectedMembers, member);
-
-              updateFilter(
-                // if all members are excluded, we should reset the filter to exclude none to match the behavior in Fusion
-                newSelectedMembers.length === allMembers.length && excludeMembers
-                  ? withSelectedMembers(filter, [], false)
-                  : withSelectedMembers(filter, newSelectedMembers, excludeMembers),
-              );
-            }}
+            onSelectMember={updateFilterFromMembersList}
             checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
             uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
             excludeMembers={excludeMembers}
+            multiSelection={multiSelection}
             disabled={tileDisabled}
           />
         );
@@ -215,6 +226,7 @@ function withSelectedMembers(
     filter.guid,
     inactiveFilterMembers,
     filter.backgroundFilter,
+    filter.multiSelection,
   );
 }
 

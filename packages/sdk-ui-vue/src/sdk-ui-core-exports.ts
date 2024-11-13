@@ -59,6 +59,7 @@ export type {
   ScattermapChartProps,
   SisenseContextProviderProps,
   DashboardWidgetProps,
+  WidgetByIdProps,
   DashboardProps,
   WidgetProps,
 
@@ -125,6 +126,7 @@ export type {
   ChartWidgetStyleOptions,
   WidgetStyleOptions,
   DashboardWidgetStyleOptions,
+  WidgetByIdStyleOptions,
   TableStyleOptions,
   PivotTableStyleOptions,
   AreaRangeStyleOptions,

@@ -11,10 +11,12 @@ import {
 const defaultSisenseContext: CustomSisenseContext = {
   isInitialized: false,
   app: undefined,
-  showRuntimeErrors: true,
   tracking: {
     enabled: true,
     packageName: 'sdk-ui-vue',
+  },
+  errorBoundary: {
+    showErrorBox: true,
   },
 };
 
@@ -130,7 +132,7 @@ export const SisenseContextProvider = defineComponent({
      */
     showRuntimeErrors: {
       type: Boolean as PropType<SisenseContextProviderProps['showRuntimeErrors']>,
-      default: defaultSisenseContext.showRuntimeErrors,
+      default: defaultSisenseContext.errorBoundary.showErrorBox,
     },
   },
 
@@ -138,7 +140,9 @@ export const SisenseContextProvider = defineComponent({
     const context = ref<CustomSisenseContext>({
       ...defaultSisenseContext,
       isInitialized: true,
-      showRuntimeErrors: props.showRuntimeErrors!,
+      errorBoundary: {
+        showErrorBox: props.showRuntimeErrors ?? true,
+      },
       tracking: {
         ...defaultSisenseContext.tracking,
         enabled: props.appConfig?.trackingConfig?.enabled ?? true,
@@ -148,7 +152,7 @@ export const SisenseContextProvider = defineComponent({
       context.value = {
         ...context.value,
         app: newApp,
-      } as CustomSisenseContext;
+      };
     });
 
     provide(sisenseContextKey, context as Ref<CustomSisenseContext>);

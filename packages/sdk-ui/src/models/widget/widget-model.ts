@@ -1,6 +1,6 @@
 import { DataSource, Filter } from '@sisense/sdk-data';
 import { ChartDataOptions, PivotTableDataOptions } from '../../chart-data-options/types';
-import { WidgetType } from '../../dashboard-widget/types';
+import { WidgetType } from '../../widget-by-id/types';
 import {
   ChartProps,
   ChartWidgetProps,

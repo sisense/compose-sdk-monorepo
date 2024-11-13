@@ -29,10 +29,7 @@ vi.mock('@sisense/sdk-tracking', async () => {
   };
 });
 
-const trackProductEventMock = trackProductEvent as Mock<
-  Parameters<typeof trackProductEvent>,
-  ReturnType<typeof trackProductEvent>
->;
+const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
 const sisenseContextMock = {
   app: {
@@ -70,6 +67,9 @@ describe('useExecuteQuery', () => {
     tracking: {
       enabled: false,
       packageName: 'sdk-ui',
+    },
+    errorBoundary: {
+      showErrorBox: true,
     },
   };
 

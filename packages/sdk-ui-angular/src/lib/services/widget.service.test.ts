@@ -11,10 +11,7 @@ vi.mock('@sisense/sdk-ui-preact', () => ({
   getWidgetModel: vi.fn(),
 }));
 
-const getWidgetModelMock = getWidgetModel as Mock<
-  Parameters<typeof getWidgetModel>,
-  ReturnType<typeof getWidgetModel>
->;
+const getWidgetModelMock = getWidgetModel as Mock<typeof getWidgetModel>;
 
 describe('WidgetService', () => {
   let sisenseContextService: Mocked<SisenseContextService>;

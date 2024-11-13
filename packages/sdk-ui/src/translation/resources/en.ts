@@ -5,9 +5,9 @@ export const translation = {
     sisenseContextNoAuthentication: 'Authentication method is not specified',
     chartNoSisenseContext:
       'Sisense Context for Chart not found. To fix, add a dataSet to the Chart or wrap the component inside a Sisense context provider.',
-    dashboardWidgetNoSisenseContext:
+    widgetByIdNoSisenseContext:
       'Sisense Context for Dashboard Widget not found. To fix, wrap the component inside a Sisense context provider.',
-    dashboardWidgetInvalidIdentifiers:
+    widgetByIdInvalidIdentifier:
       'Failed to retrieve widget. ' +
       'Please make sure the dashboard widget exists and is accessible.',
     dashboardWidgetsInvalidIdentifiers:
@@ -86,6 +86,7 @@ export const translation = {
     notAMembersFilter: 'Filter is not a MembersFilter',
     drilldownNoInitialDimension:
       'Initial dimension has to be specified to use drilldown with custom components',
+    otherWidgetTypesNotSupported: 'Other widget types are not supported yet',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
@@ -250,4 +251,18 @@ export const translation = {
   },
 };
 
+/**
+ * A reference type containing all currently used translation keys.
+ * This type serves as a complete resource for creating custom translations,
+ * ensuring that all required keys are present and included.
+ * It can also be used as Partial to make sure custom translation does not contain any typos.
+ *
+ * @example
+ * ```typescript
+ * import { TranslationDictionary } from '@sisense/sdk-ui';
+ *
+ * const customTranslationResources: Partial<TranslationDictionary> = {
+ * ```
+ * @internal
+ */
 export type TranslationDictionary = typeof translation;

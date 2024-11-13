@@ -2,7 +2,6 @@ import { v4 as uuid } from 'uuid';
 import merge from 'ts-deepmerge';
 import {
   JaqlQueryPayload,
-  MetadataItem,
   QueryDescription,
   PivotQueryDescription,
   QueryOptions,
@@ -20,6 +19,7 @@ import {
   DEFAULT_PIVOT_GRAND_TOTALS,
   FilterRelationsJaql,
   convertJaqlDataSource,
+  MetadataItem,
 } from '@sisense/sdk-data';
 import { applyHighlightFilters, matchHighlightsWithAttributes } from './metadata/highlights.js';
 import {

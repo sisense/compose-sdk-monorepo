@@ -5,18 +5,15 @@
 import { getDashboardModel, type GetDashboardModelOptions } from './get-dashboard-model';
 import { type HttpClient } from '@sisense/sdk-rest-client';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
-import { type RestApi } from '../../api/rest-api';
 import zipObject from 'lodash-es/zipObject';
 import { isWidgetModel } from '../widget';
 
-const getDashboardMock = vi.fn<Parameters<RestApi['getDashboard']>>(() => {
+const getDashboardMock = vi.fn((): typeof dashboardMock | undefined => {
   // eslint-disable-next-line no-unused-vars
   const { widgets, ...dashboardWithoutWidgets } = dashboardMock;
   return dashboardWithoutWidgets;
 });
-const getDashboardWidgetsMock = vi.fn<Parameters<RestApi['getDashboardWidgets']>>(
-  () => dashboardMock.widgets,
-);
+const getDashboardWidgetsMock = vi.fn(() => dashboardMock.widgets);
 vi.mock('../../api/rest-api', () => ({
   RestApi: class {
     getDashboard = getDashboardMock;

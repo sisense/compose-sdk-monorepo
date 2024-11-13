@@ -5,7 +5,7 @@ import InsightsMessage from '../messages/insights-message';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../../props';
 import AiContextProvider from '../ai-context-provider';
-import { MetadataItem } from '@sisense/sdk-query-client';
+import { MetadataItem } from '@sisense/sdk-data';
 
 const template = templateForComponent(InsightsMessage);
 

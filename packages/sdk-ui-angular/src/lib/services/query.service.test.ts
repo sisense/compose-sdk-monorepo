@@ -17,15 +17,9 @@ vi.mock('@sisense/sdk-ui-preact', () => ({
   executeQueryByWidgetId: vi.fn(),
 }));
 
-const executeQueryMock = executeQuery as Mock<
-  Parameters<typeof executeQuery>,
-  ReturnType<typeof executeQuery>
->;
+const executeQueryMock = executeQuery as Mock<typeof executeQuery>;
 
-const executeQueryByWidgetIdMock = executeQueryByWidgetId as Mock<
-  Parameters<typeof executeQueryByWidgetId>,
-  ReturnType<typeof executeQueryByWidgetId>
->;
+const executeQueryByWidgetIdMock = executeQueryByWidgetId as Mock<typeof executeQueryByWidgetId>;
 
 describe('QueryService', () => {
   let queryService: QueryService;

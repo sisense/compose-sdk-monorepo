@@ -7,7 +7,6 @@ import * as jaqlForecast from '@/__mocks__/data/mock-jaql-forecast.json';
 import * as jaqlTrend from '@/__mocks__/data/mock-jaql-trend.json';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
-import { setTimeout } from 'timers/promises';
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,
@@ -28,7 +27,7 @@ describe('Advanced Charts', () => {
       http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlForecast)),
     );
 
-    render(
+    const { findByLabelText } = render(
       <SisenseContextProvider {...contextProviderProps}>
         <Chart
           dataSet={DM.DataSource}
@@ -63,14 +62,13 @@ describe('Advanced Charts', () => {
       </SisenseContextProvider>,
     );
 
-    // need to wait when doing http
-    await setTimeout(250);
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
   it('should render trend chart', async () => {
     server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlTrend)));
 
-    render(
+    const { findByLabelText } = render(
       <SisenseContextProvider {...contextProviderProps}>
         <Chart
           dataSet={DM.DataSource}
@@ -95,7 +93,6 @@ describe('Advanced Charts', () => {
       </SisenseContextProvider>,
     );
 
-    // need to wait when doing http
-    await setTimeout(250);
+    expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 });

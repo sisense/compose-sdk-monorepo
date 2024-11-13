@@ -1,4 +1,3 @@
-import { type JaqlElement } from '@/ai';
 import {
   Attribute,
   CalculatedMeasureColumn,
@@ -8,6 +7,7 @@ import {
   MeasureColumn,
   isDatetime,
   DimensionalLevelAttribute,
+  JaqlElement,
 } from '@sisense/sdk-data';
 import { StyledColumn, StyledMeasureColumn, AnyColumn, CategoryStyle, ValueStyle } from './types';
 
@@ -95,10 +95,12 @@ export const getDataOptionGranularity = ({ column, granularity }: StyledColumn) 
   return granularity || (column as DimensionalLevelAttribute).granularity;
 };
 
+/** @internal */
 export const translateColumnToAttribute = (c: Column | StyledColumn) => {
   const { column: attribute } = splitColumn(c);
   return attribute as Attribute;
 };
+
 export const translateColumnToMeasure = (
   c: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn,
 ) => {

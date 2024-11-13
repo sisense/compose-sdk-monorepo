@@ -18,5 +18,6 @@ React components, hooks, and utilities for working with Fusion dashboards, widge
 - [useGetHierarchyModels](function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [WidgetById](function.WidgetById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [widgetModelTranslator](namespace.widgetModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion widget model from and to other widget data structures

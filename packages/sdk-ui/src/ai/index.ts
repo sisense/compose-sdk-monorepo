@@ -20,13 +20,7 @@ export type {
   QueryRecommendationResponse,
   QueryRecommendation,
   NlqResponseData,
-  ChartRecommendations,
-  AxesMapping,
-  AxesMappingKey,
-  AllPossibleChartOptionKeys,
-  KeysOfUnion,
 } from './api/types';
 export { Chatbot, type ChatbotProps } from './chatbot';
 export { default as GetNlgQueryResult, type GetNlgQueryResultProps } from './get-nlg-query-result';
-export { getChartOptions, getTableOptions, deriveChartFamily } from './messages/get-widget-options';
-export { JaqlElement } from './messages/jaql-element';
+export { NlqChartWidget, type NlqChartWidgetProps } from './chart/nlq-chart-widget';

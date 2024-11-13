@@ -14,6 +14,7 @@ const props: MemberListProps = {
     { key: '2015-01-01T00:00:00', title: '2015', inactive: true },
   ],
   disabled: false,
+  multiSelection: true,
   excludeMembers: false,
   onSelectMember: vi.fn(),
   checkAllMembers: vi.fn(),

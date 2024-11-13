@@ -6,13 +6,14 @@
 import { HttpClient, getAuthenticator, isWatAuthenticator } from '@sisense/sdk-rest-client';
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import { DataSource } from '@sisense/sdk-data';
+import { PivotClient } from '@sisense/sdk-pivot-client';
+import { TrackingEventDetails } from '@sisense/sdk-tracking';
+import { normalizeUrl } from '@sisense/sdk-common';
 import { DateConfig } from '../query/date-formats';
 import { AppSettings, getSettings } from './settings/settings';
 import { TranslatableError } from '../translation/translatable-error';
-import { PivotClient } from '@sisense/sdk-pivot-client';
 import { CustomTranslationObject, LoadingIndicatorConfig } from '../types';
 import { clearExecuteQueryCache } from '@/query/execute-query';
-import { TrackingEventDetails } from '@sisense/sdk-tracking';
 import { SisenseContextProviderProps } from '@/props';
 
 const SYSTEM_TENANT_NAME = 'system';
@@ -33,19 +34,19 @@ export type AppConfig = {
    */
   translationConfig?: {
     /**
-     * Language code to be used for translations
+     * Language code to be used for translations.
      *
      * @internal
      */
     language?: string;
 
     /**
-     * Additional translation resources to be loaded
+     * Additional translation resources to be loaded.
      *
      * You can find the list of available translation keys in the translation folder of every package.
      *
      * Translation keys that are not provided will default to the English translation.
-     * If translation is provided for a package other than sdk-ui, please specify the packageName property using camelCase.
+     * If translation is provided for a package other than sdk-ui, please specify the namespace property.
      *
      * Important: Do not translate parts in {{}} - these are placeholders for dynamic values and will be matched using provided variable names.
      *
@@ -62,7 +63,7 @@ export type AppConfig = {
      *   },
      *   {
      *     language: 'es',
-     *     packageName: 'sdkData'
+     *     namespace: 'sdkData'
      *     resources: {
      *       errors: {
      *         measure: {
@@ -239,7 +240,7 @@ function normalizeErrors() {
 /** @internal */
 export const createClientApplication = async ({
   defaultDataSource,
-  url,
+  url: rawUrl,
   token,
   wat,
   ssoEnabled,
@@ -247,9 +248,11 @@ export const createClientApplication = async ({
   enableSilentPreAuth,
   useFusionAuth,
 }: ClientApplicationParams): Promise<ClientApplication> => {
-  if (url === undefined) {
+  if (rawUrl === undefined) {
     throw new TranslatableError('errors.sisenseContextNoAuthentication');
   }
+
+  const url = normalizeUrl(rawUrl);
 
   const auth = getAuthenticator({
     url,

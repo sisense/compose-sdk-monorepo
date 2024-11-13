@@ -10,7 +10,7 @@ import {
   type DataSource,
 } from '@sisense/sdk-data';
 import { useSisenseContext } from '../sisense-context/sisense-context';
-import { HierarchyDto, WidgetDto } from '../dashboard-widget/types';
+import { HierarchyDto, WidgetDto } from '../widget-by-id/types';
 import type { DashboardDto } from './types/dashboard-dto';
 import { TranslatableError } from '../translation/translatable-error';
 import { PaletteDto } from '@/api/types/palette-dto';
@@ -92,7 +92,7 @@ export class RestApi {
       .catch(() => {
         // when error is encountered, API may return only status code 422 without informative error message
         // to remedy, catch error and throw a more informative error message
-        throw new TranslatableError('errors.dashboardWidgetInvalidIdentifiers');
+        throw new TranslatableError('errors.widgetByIdInvalidIdentifier');
       });
   };
 

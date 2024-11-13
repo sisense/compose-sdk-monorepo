@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { widgetModelTranslator } from '.';
-import { WidgetDto, WidgetType } from '../../dashboard-widget/types';
+import { WidgetDto, WidgetType } from '../../widget-by-id/types';
 import { TranslatableError } from '../../translation/translatable-error';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard';

@@ -17,15 +17,9 @@ vi.mock('@sisense/sdk-ui-preact', () => ({
   getThemeSettingsByOid: vi.fn().mockResolvedValue({}),
 }));
 
-const getDefaultThemeSettingsMock = getDefaultThemeSettings as Mock<
-  Parameters<typeof getDefaultThemeSettings>,
-  ReturnType<typeof getDefaultThemeSettings>
->;
+const getDefaultThemeSettingsMock = getDefaultThemeSettings as Mock<typeof getDefaultThemeSettings>;
 
-const getThemeSettingsByOidMock = getThemeSettingsByOid as Mock<
-  Parameters<typeof getThemeSettingsByOid>,
-  ReturnType<typeof getThemeSettingsByOid>
->;
+const getThemeSettingsByOidMock = getThemeSettingsByOid as Mock<typeof getThemeSettingsByOid>;
 
 describe('ThemeService', () => {
   let themeService: ThemeService;
