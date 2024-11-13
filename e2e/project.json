@@ -2,10 +2,7 @@
     "implicitDependencies": [
         "@sisense/sdk-ui",
         "@sisense/sdk-ui-angular",
-        "@sisense/sdk-ui-vue",
-        "@sisense/angular-demo",
-        "@sisense/react-ts-demo",
-        "@sisense/vue-ts-demo"
+        "@sisense/sdk-ui-vue"        
     ],
     "targets": {
       "playwright-test": {
