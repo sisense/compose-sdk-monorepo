@@ -8,6 +8,7 @@ import { getTreemapTooltipSettings } from './treemap-tooltip';
 import { prepareTreemapLevels } from './treemap-labels';
 import { prepareTreemapDataItems } from './treemap-series';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
+import { TFunction } from '@sisense/sdk-common';
 
 const DEFAULT_TREEMAP_SERIES_COLOR = 'rgb(0, 206, 230)';
 
@@ -42,6 +43,7 @@ export function prepareTreemapOptions(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: TreemapChartDesignOptions,
+  translate: TFunction,
   themeSettings?: CompleteThemeSettings,
 ): HighchartsOptionsInternal {
   return {
@@ -54,6 +56,6 @@ export function prepareTreemapOptions(
         levels: prepareTreemapLevels(dataOptions, designOptions, themeSettings),
       },
     ],
-    tooltip: getTreemapTooltipSettings(dataOptions, designOptions),
+    tooltip: getTreemapTooltipSettings(dataOptions, designOptions, translate),
   };
 }

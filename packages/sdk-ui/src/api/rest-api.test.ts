@@ -1,11 +1,29 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
-import { RestApi } from './rest-api';
+import { RestApi, useRestApi } from './rest-api';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { renderHook } from '@testing-library/react';
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { Mock } from 'vitest';
+import { ClientApplication } from '..';
 
 const httpGetMock = vi.fn();
+const httpPostMock = vi.fn();
 const httpClientMock = {
   get: httpGetMock,
+  post: httpPostMock,
 } as unknown as HttpClient;
+
+vi.mock('../sisense-context/sisense-context', async () => {
+  const actual: typeof import('../sisense-context/sisense-context') = await vi.importActual(
+    '../sisense-context/sisense-context',
+  );
+
+  return {
+    ...actual,
+    useSisenseContext: vi.fn(() => ({})),
+  };
+});
+const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext>;
 
 const restApi = new RestApi(httpClientMock, DM.DataSource);
 
@@ -115,5 +133,32 @@ describe('Rest API', () => {
   it('should throw an error when fetching hierarchies without a provided or default datasource', () => {
     const restApi = new RestApi(httpClientMock);
     expect(() => restApi.getHierarchies({ dimension: DM.Commerce.AgeRange })).toThrow();
+  });
+
+  it('should send correct post to add a widget with correct dashboardId', async () => {
+    const dashboardId = '123';
+    await restApi.addWidgetToDashboard(dashboardId, {} as any);
+    expect(httpPostMock).toHaveBeenCalledWith(`api/v1/dashboards/${dashboardId}/widgets`, {});
+  });
+
+  it('useRestApi should load and return restApi', async () => {
+    useSisenseContextMock.mockReturnValueOnce({
+      app: { httpClient: httpClientMock } as ClientApplication,
+      isInitialized: true,
+      tracking: {
+        enabled: false,
+        packageName: 'sdk-ui',
+      },
+      errorBoundary: {
+        showErrorBox: true,
+      },
+    });
+    const { result } = renderHook(() => useRestApi());
+    expect(result.current.restApi).toBeTruthy();
+  });
+
+  it('useRestApi should wait until clientApp initialized', async () => {
+    const { result } = renderHook(() => useRestApi());
+    expect(result.current.isReady).toBeFalsy();
   });
 });

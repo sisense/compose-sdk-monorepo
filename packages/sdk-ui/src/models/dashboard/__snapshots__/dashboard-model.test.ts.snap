@@ -58,6 +58,8 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
         "value": [],
       },
       "dataSource": {
+        "address": undefined,
+        "id": "test",
         "title": "test",
         "type": "elasticube",
       },

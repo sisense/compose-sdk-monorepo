@@ -1,6 +1,7 @@
 import { WidgetProps } from '@/props';
 import { ChartDataOptions } from '@/types';
 import { MetadataItem } from '@sisense/sdk-data';
+import { DynamicChartType } from '../chart-options-processor/translations/types.js';
 
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type AllPossibleChartOptionKeys = KeysOfUnion<ChartDataOptions>;
@@ -30,6 +31,8 @@ export interface ExpandedQueryModel {
   chartRecommendations: ChartRecommendations | {};
   jaql: {
     datasource: {
+      id?: string;
+      type?: 'elasticube' | 'live';
       title: string;
     };
     metadata: MetadataItem[];
@@ -105,7 +108,13 @@ export type UiFramework = 'react' | 'vue' | 'angular';
  * Code Template Key
  * @internal
  */
-export type CodeTemplateKey = 'baseChartTmpl' | 'chartTmpl' | 'chartWidgetTmpl' | 'widgetByIdTmpl';
+export type CodeTemplateKey =
+  | 'baseChartTmpl'
+  | 'chartTmpl'
+  | 'chartWidgetTmpl'
+  | 'widgetByIdTmpl'
+  | 'executeQueryByWidgetIdTmpl'
+  | 'executeQueryWidgetTmpl';
 
 /**
  * Code Templates
@@ -148,6 +157,7 @@ export type ClientSideWidgetCodeParams = WidgetCodeConfig & {
 export type ByIdWidgetCodeParams = WidgetCodeConfig & {
   dashboardOid: string;
   widgetOid: string;
+  chartType: DynamicChartType;
 };
 
 /**

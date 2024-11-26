@@ -37,6 +37,12 @@ export interface DashboardContainerProps {
   filters: Filter[];
   onFiltersChange: (filters: Filter[]) => void;
   defaultDataSource?: DataSource;
+  /**
+   * Callback to receive changes
+   *
+   * @internal
+   */
+  onChange?: (action: DashboardChangeAction) => void;
 }
 
 /**
@@ -46,7 +52,19 @@ export interface DashboardContainerProps {
  */
 export interface DashboardConfig {
   filtersPanel?: {
-    isVisible: boolean;
+    isVisible?: boolean;
+    /**
+     * Boolean flag that controls the initial "collapsed" state of the filters panel.
+     *
+     * If not specified, the default value is `false`.
+     */
+    isCollapsedInitially?: boolean;
+    /**
+     * Setting this to true will use the isCollapsed state from local storage, if available, and store any changes to local storage.
+     * This state is shared across all dashboards.
+     * This state has a higher priority than "initialIsCollapsed" when enabled.
+     */
+    persistCollapsedStateToLocalStorage?: boolean;
   };
   toolbar?: {
     isVisible: boolean;

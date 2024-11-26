@@ -6,7 +6,10 @@ import styled from '@emotion/styled';
 import { FiltersPanel } from '@/filters';
 import { getDividerStyle } from '@/dashboard/utils';
 import { DASHBOARD_DIVIDER_COLOR, DASHBOARD_DIVIDER_WIDTH } from '@/dashboard/constants';
-import { HorizontalCollapse } from '@/dashboard/components/HorizontalCollapse';
+import { HorizontalCollapse } from '@/dashboard/components/horizontal-collapse';
+import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-panel-collapsed-state';
+import { useCallback } from 'react';
+import { DashboardChangeType } from '@/dashboard/dashboard';
 
 const DashboardWrapper = styled.div<{
   background: string;
@@ -22,7 +25,8 @@ const ContentColumn = styled.div<{
   background: string;
 }>`
   background-color: ${({ background }) => background};
-  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
   border-top: ${getDividerStyle(DASHBOARD_DIVIDER_COLOR, DASHBOARD_DIVIDER_WIDTH)};
   border-bottom: ${getDividerStyle(DASHBOARD_DIVIDER_COLOR, DASHBOARD_DIVIDER_WIDTH)};
   border-left: ${getDividerStyle(DASHBOARD_DIVIDER_COLOR, DASHBOARD_DIVIDER_WIDTH)};
@@ -44,8 +48,21 @@ export const DashboardContainer = ({
   filters,
   onFiltersChange,
   defaultDataSource,
+  onChange,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
+
+  const [isFilterPanelCollapsed, setIsFilterPanelCollapsed] = useFiltersPanelCollapsedState(
+    config?.filtersPanel?.isCollapsedInitially,
+    config?.filtersPanel?.persistCollapsedStateToLocalStorage,
+  );
+  const setIsFilterPanelCollapsedAndFireEvent = useCallback(
+    (state: boolean) => {
+      setIsFilterPanelCollapsed(state);
+      onChange?.({ type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE, payload: state });
+    },
+    [onChange, setIsFilterPanelCollapsed],
+  );
 
   const isToolbarVisible = config?.toolbar?.isVisible !== false;
   const isFiltersPanelVisible = config?.filtersPanel?.isVisible !== false;
@@ -63,7 +80,10 @@ export const DashboardContainer = ({
       </ContentColumn>
 
       {isFiltersPanelVisible && (
-        <HorizontalCollapse>
+        <HorizontalCollapse
+          collapsed={isFilterPanelCollapsed}
+          onCollapsedChange={setIsFilterPanelCollapsedAndFireEvent}
+        >
           <div className="csdk-w-[240px] csdk-h-[100%] csdk-flex">
             <FiltersPanel
               filters={filters}

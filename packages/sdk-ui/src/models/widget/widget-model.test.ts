@@ -22,6 +22,8 @@ describe('WidgetModel', () => {
       expect(widget.title).toBe(mockWidgetDto.title);
       expect(widget.description).toBe(mockWidgetDto.desc || '');
       expect(widget.dataSource).toStrictEqual({
+        address: 'LocalHost',
+        id: mockWidgetDto.datasource.id,
         title: mockWidgetDto.datasource.fullname || mockWidgetDto.datasource.title,
         type: 'elasticube',
       });
@@ -95,7 +97,11 @@ describe('WidgetModel', () => {
       const executeQueryParams = tableWidgetModel.getExecuteQueryParams();
 
       expect(executeQueryParams).toMatchObject({
-        dataSource: { title: 'Sample Healthcare', type: 'elasticube' },
+        dataSource: {
+          id: 'localhost_aSampleIAAaHealthcare',
+          title: 'Sample Healthcare',
+          type: 'elasticube',
+        },
         dimensions: [expect.objectContaining({ name: 'DIAGNOSIS' })],
         measures: expect.arrayContaining([
           expect.objectContaining({

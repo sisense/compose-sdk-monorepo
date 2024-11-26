@@ -32,6 +32,18 @@ List of available measures to rank by. Required only for ranking filters.
 
 ***
 
+### onDelete
+
+> **onDelete**?: () => `void`
+
+Filter delete callback
+
+#### Returns
+
+`void`
+
+***
+
 ### onUpdate
 
 > **onUpdate**: (`filter`) => `void`

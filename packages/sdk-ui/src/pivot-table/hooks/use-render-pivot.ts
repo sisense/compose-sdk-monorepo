@@ -20,6 +20,8 @@ type PivotRenderOptions = {
   themeSettings: CompleteThemeSettings;
   /** The size of the pivot table container. */
   size: ContainerSize | null;
+  /** Callback to handle total height change. */
+  onTotalHeightChange?: (totalHeight: number) => void;
 };
 
 /**
@@ -32,6 +34,7 @@ export function useRenderPivot({
   styleOptions,
   themeSettings,
   size,
+  onTotalHeightChange,
 }: PivotRenderOptions): void {
   const onUpdatePredefinedColumnWidth = useCallback(
     (horizontalLastLevelsNodes: Array<PivotTreeNode>, resizedColumnWidth?: Array<number>) => {
@@ -85,11 +88,12 @@ export function useRenderPivot({
         itemsPerPage: rowsPerPage,
         isSelectedMode: true,
         onUpdatePredefinedColumnWidth,
+        onTotalHeightChange,
         ...pivotStylingProps,
       };
     }
     return null;
-  }, [size, rowsPerPage, onUpdatePredefinedColumnWidth, pivotStylingProps]);
+  }, [size, rowsPerPage, onUpdatePredefinedColumnWidth, pivotStylingProps, onTotalHeightChange]);
 
   useEffect(() => {
     if (nodeRef.current && props) {

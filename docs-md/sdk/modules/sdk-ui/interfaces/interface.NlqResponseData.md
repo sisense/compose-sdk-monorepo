@@ -34,9 +34,17 @@ title: NlqResponseData
 >
 > **datasource**: `object`
 >
+> > ###### `datasource.id`
+> >
+> > **id**?: `string`
+> >
 > > ###### `datasource.title`
 > >
 > > **title**: `string`
+> >
+> > ###### `datasource.type`
+> >
+> > **type**?: `"elasticube"` \| `"live"`
 > >
 > >
 >

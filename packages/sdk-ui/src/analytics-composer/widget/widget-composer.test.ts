@@ -6,10 +6,15 @@ import {
   MOCK_CODE_REACT_3,
   MOCK_CODE_ANGULAR_2,
   MOCK_CODE_VUE_2,
+  MOCK_CODE_EXECUTE_QUERY_REACT_1,
+  MOCK_CODE_EXECUTE_QUERY_ANGULAR_1,
+  MOCK_CODE_EXECUTE_QUERY_VUE_1,
 } from '../__mocks__/mock-code-examples';
+import { commonDataSources } from '../__mocks__/common-datasources';
 import * as widgetComposer from './widget-composer';
 import { ExpandedQueryModel, WidgetCodeParams } from '../types';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
+import { widgetModelTranslator, ChartWidgetProps } from '@/index';
 
 describe('widgetComposer', () => {
   describe('toWidgetProps', () => {
@@ -32,6 +37,33 @@ describe('widgetComposer', () => {
         const widgetProps = widgetComposer.toWidgetProps(queryModel);
         expect(widgetProps).toBeUndefined();
       });
+    });
+
+    it('check Nlq/composer compatibility with WidgetDto transformation', () => {
+      const widgetProps = widgetComposer.toWidgetProps(MOCK_QUERY_MODEL_1);
+      expect(widgetProps).toBeDefined();
+      const widgetFromChart = widgetModelTranslator.fromChartWidgetProps(
+        widgetProps as ChartWidgetProps,
+      );
+
+      expect(widgetFromChart.chartType).toBe('bar');
+      const dataSource = {
+        ...commonDataSources[0],
+        type: commonDataSources[0].live ? 'live' : 'elasticube',
+      };
+
+      const resWidgetDto = widgetModelTranslator.toWidgetDto(widgetFromChart, dataSource);
+
+      // console.log(JSON.stringify(resWidgetDto, null, 2));
+
+      const filtersPanels = resWidgetDto.metadata.panels.filter(({ name }) => name === 'filters');
+      expect(filtersPanels.length).toBe(1);
+
+      expect((filtersPanels[0].items[0].jaql as any).filter.members).toBeDefined();
+      expect((filtersPanels[0].items[0].jaql as any).filter.members).toEqual(
+        expect.arrayContaining(['Cambodia', 'United States']),
+      );
+      expect(resWidgetDto.type).toBe('chart/bar');
     });
   });
 
@@ -61,7 +93,11 @@ describe('widgetComposer', () => {
   describe('toWidgetCode By ID', () => {
     let widgetCodeParams: WidgetCodeParams;
     beforeEach(() => {
-      widgetCodeParams = { dashboardOid: 'SOME_DASHBOARD_OID', widgetOid: 'SOME_WIDGET_BY_ID' }; // react by default
+      widgetCodeParams = {
+        dashboardOid: 'SOME_DASHBOARD_OID',
+        widgetOid: 'SOME_WIDGET_BY_ID',
+        chartType: 'table',
+      }; // react by default
     });
 
     it('should compose By ID widget code in React', () => {
@@ -76,6 +112,33 @@ describe('widgetComposer', () => {
       expect(widgetComposer.toWidgetCode({ ...widgetCodeParams, uiFramework: 'vue' })).toEqual(
         MOCK_CODE_VUE_2,
       );
+    });
+    it('should compose By ID widget code in React with chart not included', () => {
+      expect(
+        widgetComposer.toWidgetCode({
+          ...widgetCodeParams,
+          uiFramework: 'react',
+          includeChart: false,
+        }),
+      ).toEqual(MOCK_CODE_EXECUTE_QUERY_REACT_1);
+    });
+    it('should compose By ID widget code in Angular with chart not included', () => {
+      expect(
+        widgetComposer.toWidgetCode({
+          ...widgetCodeParams,
+          uiFramework: 'angular',
+          includeChart: false,
+        }),
+      ).toEqual(MOCK_CODE_EXECUTE_QUERY_ANGULAR_1);
+    });
+    it('should compose By ID widget code in Vue with chart not included', () => {
+      expect(
+        widgetComposer.toWidgetCode({
+          ...widgetCodeParams,
+          uiFramework: 'vue',
+          includeChart: false,
+        }),
+      ).toEqual(MOCK_CODE_EXECUTE_QUERY_VUE_1);
     });
   });
 });

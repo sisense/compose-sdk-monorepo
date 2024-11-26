@@ -10,6 +10,7 @@ import { toWidgetPropsFromQuery } from './to-widget-props.js';
 
 /**
  * Converts query model to widget props.
+ *
  * @param queryModel - Expanded query model
  * @returns Widget props
  */

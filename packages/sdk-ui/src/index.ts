@@ -9,12 +9,19 @@ export * from './dashboard';
 export { DashboardWidget } from './widget-by-id/dashboard-widget';
 export { WidgetById } from './widget-by-id/widget-by-id';
 export {
+  isChartWidgetProps,
+  isPivotTableWidgetProps,
+  isTextWidgetProps,
+  isPluginWidgetProps,
+} from './widget-by-id/utils';
+export {
   type WidgetType,
   type CartesianWidgetType,
   type CategoricalWidgetType,
   type TabularWidgetType,
   type TextWidgetType,
 } from './widget-by-id/types';
+export { getChartType } from './widget-by-id/utils';
 export * from './query-execution';
 export { executeQuery } from './query/execute-query';
 export { SisenseContextProvider } from './sisense-context/sisense-context-provider';
@@ -58,6 +65,7 @@ export { getDefaultThemeSettings } from './theme-provider/default-theme-settings
 export {
   useGetDashboardModel,
   useGetDashboardModels,
+  useDashboardModel,
   getDashboardModel,
   getDashboardModels,
   useGetWidgetModel,
@@ -96,11 +104,12 @@ export {
   type HierarchyModel,
   type Hierarchy,
   type HierarchyId,
-  type GetHierarchiesParams,
+  type GetHierarchyModelsParams,
   type HierarchyModelsState,
   type HierarchyModelsLoadingState,
   type HierarchyModelsErrorState,
   type HierarchyModelsSuccessState,
+  UseDashboardModelActionType,
 } from './models';
 
 /**

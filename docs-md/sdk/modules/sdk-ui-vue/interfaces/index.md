@@ -38,6 +38,7 @@ TypeScript interfaces for components and composables listed above
 - [GetDashboardModelParams](interface.GetDashboardModelParams.md)
 - [GetDashboardModelsOptions](interface.GetDashboardModelsOptions.md)
 - [GetDashboardModelsParams](interface.GetDashboardModelsParams.md)
+- [GetHierarchyModelsParams](interface.GetHierarchyModelsParams.md)
 - [GetSharedFormulaParams](interface.GetSharedFormulaParams.md)
 - [GetWidgetModelParams](interface.GetWidgetModelParams.md)
 - [IndicatorChartDataOptions](interface.IndicatorChartDataOptions.md)

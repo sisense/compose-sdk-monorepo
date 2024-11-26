@@ -7,13 +7,12 @@ import { TranslatableError } from '../../translation/translatable-error.js';
 import { withTracking } from '../../decorators/hook-decorators/index.js';
 import { useShouldLoad } from '../../common/hooks/use-should-load.js';
 import { HierarchyModel } from '@/models/hierarchy/hierarchy-model';
-import { getHierarchyModels } from './get-hierarchy-models.js';
-import { GetHierarchiesOptions } from './types.js';
+import { GetHierarchyModelsOptions, getHierarchyModels } from './get-hierarchy-models.js';
 
 /**
  * Parameters for {@link useGetHierarchyModels} hook.
  */
-export interface GetHierarchiesParams extends GetHierarchiesOptions, HookEnableParam {}
+export interface GetHierarchyModelsParams extends GetHierarchyModelsOptions, HookEnableParam {}
 
 /**
  * States of hierarchy models load.
@@ -113,7 +112,9 @@ export const useGetHierarchyModels = withTracking('useGetHierarchyModels')(
  * @param params - Parameters of the hierarchies to be retrieved
  * @internal
  */
-export function useGetHierarchyModelsInternal(params: GetHierarchiesParams): HierarchyModelsState {
+export function useGetHierarchyModelsInternal(
+  params: GetHierarchyModelsParams,
+): HierarchyModelsState {
   const isParamsChanged = useHasChanged(params, [
     'dataSource',
     'dimension',

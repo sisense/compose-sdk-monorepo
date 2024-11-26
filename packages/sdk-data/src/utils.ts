@@ -114,6 +114,8 @@ export function isDataSourceInfo(dataSource: DataSource): dataSource is DataSour
  */
 export function convertDataSource(jaqlDataSource: JaqlDataSource): DataSource {
   return {
+    id: jaqlDataSource.id,
+    address: jaqlDataSource.address,
     title: jaqlDataSource.title,
     type: jaqlDataSource.live ? 'live' : 'elasticube',
   };

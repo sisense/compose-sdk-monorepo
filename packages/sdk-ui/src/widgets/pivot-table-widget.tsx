@@ -49,9 +49,8 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
       defaultSize={defaultSize}
       size={{
         width: width,
-        height: height,
+        height: styleOptions?.isAutoHeight ? undefined : height,
       }}
-      useContentSize={{ height: styleOptions?.isAutoHeight }}
     >
       <WidgetContainer
         {...props}

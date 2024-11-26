@@ -12,6 +12,7 @@ import {
 import { vi } from 'vitest';
 import { FiltersPanelTile } from './filters-panel-tile';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 const mockOnChange = vi.fn();
 
@@ -55,26 +56,26 @@ describe('FiltersPanelTile', () => {
   });
 
   it('renders RelativeDateFilterTile for RelativeDateFilter', async () => {
-    const mockFilter = new RelativeDateFilter(mockAttribute as LevelAttribute, 0, 1);
+    const mockFilter = new RelativeDateFilter(DM.Commerce.Date.Years, 0, 1);
     const { container } = render(
       <MockedSisenseContextProvider>
         <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, DM.Commerce.Date.Years.name);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
 
   it('renders locked RelativeDateFilter component', async () => {
-    const mockFilter = new RelativeDateFilter(mockAttribute as LevelAttribute, 0, 1) as Filter;
+    const mockFilter = new RelativeDateFilter(DM.Commerce.Date.Years, 0, 1) as Filter;
     mockFilter.locked = true;
     const { container } = render(
       <MockedSisenseContextProvider>
         <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, DM.Commerce.Date.Years.name);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });

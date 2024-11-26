@@ -34,7 +34,7 @@ Retrieves an existing widget model from the Sisense instance.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`GetWidgetModelParams`](../../sdk-ui/interfaces/interface.GetWidgetModelParams.md) | Parameters to identify the target widget |
+| `params` | [`GetWidgetModelParams`](../interfaces/interface.GetWidgetModelParams.md) | Parameters to identify the target widget |
 
 #### Returns
 

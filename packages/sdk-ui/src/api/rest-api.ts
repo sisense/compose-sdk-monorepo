@@ -169,9 +169,25 @@ export class RestApi {
   public patchDashboard = (dashboardOid: string, dashboard: Partial<DashboardDto>) => {
     return this.httpClient.patch<DashboardDto>(`api/v1/dashboards/${dashboardOid}`, dashboard);
   };
+
+  /**
+   * Add widget to a dashboard
+   */
+  public addWidgetToDashboard = (dashboardOid: string, widgetDto: WidgetDto) => {
+    return this.httpClient.post<WidgetDto>(`api/v1/dashboards/${dashboardOid}/widgets`, widgetDto);
+  };
 }
 
-export const useGetApi = () => {
+export const useRestApi = () => {
   const { app } = useSisenseContext();
-  return useMemo(() => new RestApi(app?.httpClient, app?.defaultDataSource), [app]);
+  return {
+    restApi: useMemo(() => app && new RestApi(app.httpClient, app.defaultDataSource), [app]),
+    isReady: !!app,
+  };
 };
+
+export class RestApiNotReadyError extends TranslatableError {
+  constructor() {
+    super('errors.restApiNotReady');
+  }
+}

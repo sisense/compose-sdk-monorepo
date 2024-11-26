@@ -2,7 +2,7 @@ import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
 
 import { SisenseSwitchButton, TriangleIndicator } from './common';
-import { ArrowDownIcon, LockIcon } from './icons';
+import { ArrowDownIcon, LockIcon, TrashIcon } from './icons';
 import { useThemeContext } from '../../theme-provider';
 import { getSlightlyDifferentColor } from '../../utils/color';
 import { FilterVariant, isVertical } from './common/filter-utils';
@@ -11,6 +11,7 @@ import merge from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
 import { BackgroundFilterIcon } from '@/filters/components/icons/background-filter-icon';
 import { css } from '@emotion/react';
+import { IconButton } from '@mui/material';
 
 const BORDER_STYLE = '1px solid #dadada';
 const FILTER_TILE_MIN_WIDTH = 215;
@@ -82,6 +83,7 @@ interface Props {
   isDependent?: boolean;
   design?: FilterTileDesignOptions;
   onToggleDisabled?: () => void;
+  onDelete?: () => void;
   locked?: boolean;
 }
 
@@ -125,6 +127,7 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
     disabled,
     onToggleDisabled,
     isDependent,
+    onDelete,
     locked = false,
   } = props;
   const design = merge.withOptions(
@@ -157,6 +160,7 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
               {!locked && design.header.isCollapsible && (
                 <ArrowDownIcon
                   aria-label="arrow-down"
+                  data-testid="expand-collapse-button"
                   width="16"
                   height="16"
                   fill={`${textColor ?? '#5B6372'}`}
@@ -198,6 +202,19 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
         </main>
         {isVertical(arrangement) && design.footer.shouldBeShown && (
           <Footer>
+            {onDelete && (
+              <IconButton
+                onClick={onDelete}
+                sx={{ p: 0, mr: 'auto' }}
+                disabled={locked}
+                data-testid="filter-delete-button"
+              >
+                <TrashIcon
+                  aria-label="trash-bin"
+                  fill={`${textColor ?? themeSettings.typography.primaryTextColor}`}
+                />
+              </IconButton>
+            )}
             {!locked && (
               <SisenseSwitchButton
                 checked={!disabled}

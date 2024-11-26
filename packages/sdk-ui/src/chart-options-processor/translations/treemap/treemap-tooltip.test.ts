@@ -2,6 +2,13 @@ import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import { TreemapChartDesignOptions } from '../design-options';
 import { treemapTooltipFormatter } from './treemap-tooltip';
+import { TFunction } from '@sisense/sdk-common';
+import get from 'lodash/get';
+import { translation as enTranslation } from '../../../translation/resources/en';
+
+const translateMock = ((path: string) => {
+  return get(enTranslation, path, '');
+}) as TFunction;
 
 describe('Treemap Chart tooltip formatter', () => {
   const dataOptions = {
@@ -38,7 +45,9 @@ describe('Treemap Chart tooltip formatter', () => {
       },
     } as unknown as TooltipFormatterContextObject;
 
-    expect(treemapTooltipFormatter(context, dataOptions, designOptions)).toMatchSnapshot();
+    expect(
+      treemapTooltipFormatter(context, dataOptions, designOptions, translateMock),
+    ).toMatchSnapshot();
   });
 
   it('three categories tooltip', () => {
@@ -60,7 +69,9 @@ describe('Treemap Chart tooltip formatter', () => {
       },
     } as unknown as TooltipFormatterContextObject;
 
-    expect(treemapTooltipFormatter(context, dataOptions, designOptions)).toMatchSnapshot();
+    expect(
+      treemapTooltipFormatter(context, dataOptions, designOptions, translateMock),
+    ).toMatchSnapshot();
   });
 
   it('contribution mode', () => {
@@ -86,7 +97,7 @@ describe('Treemap Chart tooltip formatter', () => {
     } as TreemapChartDesignOptions;
 
     expect(
-      treemapTooltipFormatter(context, dataOptions, designOptionsWithContribution),
+      treemapTooltipFormatter(context, dataOptions, designOptionsWithContribution, translateMock),
     ).toMatchSnapshot();
   });
 });

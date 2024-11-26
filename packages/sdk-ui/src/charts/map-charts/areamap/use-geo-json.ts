@@ -2,7 +2,7 @@ import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
-import { useGetApi } from '../../../api/rest-api';
+import { useRestApi } from '../../../api/rest-api';
 import { AreamapType } from '../../../types';
 import { TranslatableError } from '@/translation/translatable-error';
 
@@ -12,14 +12,14 @@ import { TranslatableError } from '@/translation/translatable-error';
 export const useGeoJson = (
   mapType: AreamapType,
 ): { geoJson: GeoJsonFeatureCollection | undefined; error: Error | undefined } => {
-  const api = useGetApi();
+  const { isReady: apiIsReady, restApi: api } = useRestApi();
   const [geoJson, setGeoJson] = useState<GeoJsonFeatureCollection | undefined>();
   const [error, setError] = useState<Error | undefined>();
   const sisenseVersion = useSisenseVersion();
 
   // retrieve geoJson from API or cache (LocalStorage)
   useEffect(() => {
-    if (!sisenseVersion) {
+    if (!sisenseVersion || !apiIsReady || !api) {
       return;
     }
     const getGeoJsonData = async () => {
@@ -57,7 +57,7 @@ export const useGeoJson = (
       }
     };
     getGeoJsonData();
-  }, [api, mapType, sisenseVersion]);
+  }, [api, apiIsReady, mapType, sisenseVersion]);
 
   return { geoJson, error };
 };

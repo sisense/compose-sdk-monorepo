@@ -1,5 +1,9 @@
 import { TranslatableError } from '@/translation/translatable-error';
 import { ExpandedQueryModel, SimpleQueryModel } from '../types.js';
+import {
+  ALL_CHART_TYPES,
+  DynamicChartType,
+} from '../../chart-options-processor/translations/types.js';
 
 export function toKebabCase(str: string): string {
   return str
@@ -49,4 +53,9 @@ export function escapeSingleQuotes(str?: string) {
   // Replace single quotes with escaped single quotes
   // Only when the single quote is not preceded by a backslash
   return str.replace(/(?<!\\)'/g, "\\'");
+}
+
+export function validateChartType(chartType: DynamicChartType) {
+  if (!ALL_CHART_TYPES.includes(chartType))
+    throw new TranslatableError('errors.chartTypeNotSupported', { chartType });
 }

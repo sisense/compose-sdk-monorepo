@@ -544,6 +544,7 @@ export type MetadataItem = {
   jaql: MetadataItemJaql;
   panel?: string;
   isScope?: boolean;
+  members?: string[];
   format?: {
     mask?: Partial<DatetimeMask> | Partial<NumericMask>;
     number?: string;
@@ -574,6 +575,13 @@ export type MetadataItem = {
 
   from?: string;
   to?: string;
+};
+
+/**
+ * @internal
+ */
+export type VagueMetadataItem = Omit<MetadataItem, 'json'> & {
+  json?: MetadataItem;
 };
 
 /**

@@ -199,3 +199,68 @@ import { WidgetById } from '@sisense/sdk-ui-vue';
   />
 </template>
 `;
+
+export const MOCK_CODE_EXECUTE_QUERY_REACT_1 = `import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+  const { data, isLoading, isError } = useExecuteQueryByWidgetId({
+    widgetOid: "SOME_WIDGET_BY_ID",
+    dashboardOid: "SOME_DASHBOARD_OID"
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error</div>;
+  }
+  if (data) {
+    return <div>Total Rows: {data.rows.length}</div>;
+  }
+
+  return null;
+};
+
+export default CodeExample;
+`;
+
+export const MOCK_CODE_EXECUTE_QUERY_ANGULAR_1 = `import { Component } from '@angular/core';
+import { QueryService } from '@sisense/sdk-ui-angular';
+import { type QueryResultData } from '@sisense/sdk-data';
+
+@Component({
+  selector: 'code-example',
+  template: '<div>Total Rows: {{ queryResult.rows.length }}</div>',
+})
+
+export class CodeExample {
+    queryResult: QueryResultData = { rows: [], columns: [] };
+
+    constructor(private queryService: QueryService) {}
+
+    async ngOnInit(): Promise<void> {
+      const { data } = await this.queryService.executeQueryByWidgetId({
+        widgetOid: "SOME_WIDGET_BY_ID",
+        dashboardOid: "SOME_DASHBOARD_OID",
+      });
+      this.queryResult = data as QueryResultData;
+    }
+}
+`;
+
+export const MOCK_CODE_EXECUTE_QUERY_VUE_1 = `<script setup lang="ts">
+import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui-vue';
+
+const { data, isLoading, isError } = useExecuteQueryByWidgetId({
+  widgetOid: "SOME_WIDGET_BY_ID",
+  dashboardOid: "SOME_DASHBOARD_OID"
+});
+</script>
+<template>
+  <div>
+    <div v-if="isLoading">Loading...</div>
+    <div v-else-if="isError">Error</div>
+    <div v-else-if="data">Total Rows: {{data.rows.length}}</div>
+  </div>
+</template>
+`;

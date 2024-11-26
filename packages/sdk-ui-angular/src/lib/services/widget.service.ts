@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
-import { getWidgetModel, type GetWidgetModelParams } from '@sisense/sdk-ui-preact';
+import {
+  getWidgetModel,
+  type GetWidgetModelParams as GetWidgetModelParamsPreact,
+} from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from './sisense-context.service';
 import { TrackableService } from '../decorators/trackable.decorator';
+
+/**
+ * Parameters for retrieving an existing widget model from the Sisense instance
+ */
+export interface GetWidgetModelParams extends Omit<GetWidgetModelParamsPreact, 'enabled'> {}
 
 /**
  * Service for working with Sisense Fusion widgets.

@@ -44,6 +44,18 @@ Limit of the date range that can be selected.
 
 ***
 
+### onDelete
+
+> **onDelete**?: () => `void`
+
+Filter delete callback
+
+#### Returns
+
+`void`
+
+***
+
 ### onUpdate
 
 > **onUpdate**: (`filter`) => `void`

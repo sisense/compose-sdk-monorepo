@@ -65,7 +65,7 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
         customContextErrorMessageKey: customContextErrorMessageKey,
       }),
       withTracking({ componentName, config: trackingConfig }),
-      withErrorBoundary(),
+      withErrorBoundary({ componentName }),
       withDefaultTranslations(),
       withMenu({ shouldHaveOwnMenuRoot }),
     )(Component);

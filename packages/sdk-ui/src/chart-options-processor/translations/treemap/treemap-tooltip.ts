@@ -6,6 +6,7 @@ import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-con
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './treemap-tooltip.scss';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
+import { TFunction } from '@sisense/sdk-common';
 
 type TooltipFormatterOptions = {
   displayTotalContribution: boolean;
@@ -16,6 +17,7 @@ type TooltipFormatterOptions = {
 export const getTreemapTooltipSettings = (
   chartDataOptions: CategoricalChartDataOptionsInternal,
   designOptions: TreemapChartDesignOptions,
+  translate: TFunction,
   formatterOptions?: TooltipFormatterOptions,
 ): TooltipSettings => ({
   animation: false,
@@ -27,7 +29,13 @@ export const getTreemapTooltipSettings = (
   useHTML: true,
   outside: true,
   formatter: function (this) {
-    return treemapTooltipFormatter(this, chartDataOptions, designOptions, formatterOptions);
+    return treemapTooltipFormatter(
+      this,
+      chartDataOptions,
+      designOptions,
+      translate,
+      formatterOptions,
+    );
   },
 });
 
@@ -72,6 +80,7 @@ export function treemapTooltipFormatter(
   context: TooltipFormatterContextObject,
   chartDataOptions: CategoricalChartDataOptionsInternal,
   designOptions: TreemapChartDesignOptions,
+  translate: TFunction,
   formatterOptions?: TooltipFormatterOptions,
 ) {
   if (formatterOptions?.shouldSkip && formatterOptions.shouldSkip(context)) {
@@ -134,7 +143,7 @@ export function treemapTooltipFormatter(
     isContributionMode
       ? getFormattedContribution(nodesToShow[0].val, rootValue)
       : applyFormat(numberFormatConfig, nodesToShow[0]?.val)
-  }</span> of ${valueTitle}
+  }</span> ${translate('treemap.tooltip.of')} ${valueTitle}
         </div>
         ${
           nodesToShow[1]
@@ -143,7 +152,7 @@ export function treemapTooltipFormatter(
                 nodesToShow[0]?.val,
                 nodesToShow[1]?.val,
               )}
-                  </span> of ${nodesToShow[1]?.name}
+                  </span> ${translate('treemap.tooltip.of')} ${nodesToShow[1]?.name}
                 </div>`
             : ''
         }
@@ -154,7 +163,7 @@ export function treemapTooltipFormatter(
                 nodesToShow[0]?.val,
                 rootValue,
               )}
-                    </span> of total
+                    </span> ${translate('treemap.tooltip.ofTotal')}
                    </div>`
             : ''
         }

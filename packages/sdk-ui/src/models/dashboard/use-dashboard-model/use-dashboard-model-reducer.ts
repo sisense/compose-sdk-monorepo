@@ -1,4 +1,4 @@
-import { DashboardModel } from '@/models';
+import { DashboardModel, WidgetModel, widgetModelTranslator } from '@/models';
 import { Filter } from '@sisense/sdk-data';
 import { RestApi } from '@/api/rest-api';
 import { filterToFilterDto } from '../translate-dashboard-dto-utils';
@@ -12,6 +12,7 @@ export type UseDashboardModelState = DashboardModel | null;
  */
 export enum UseDashboardModelActionTypeInternal {
   DASHBOARD_INIT = 'DASHBOARD.INIT',
+  DASHBOARD_UPDATE_LAYOUT = 'DASHBOARD.UPDATE_LAYOUT',
 }
 
 /**
@@ -21,6 +22,7 @@ export enum UseDashboardModelActionTypeInternal {
  */
 export enum UseDashboardModelActionType {
   FILTERS_UPDATE = 'FILTERS.UPDATE',
+  ADD_WIDGET = 'WIDGETS.ADD',
 }
 
 /**
@@ -28,7 +30,7 @@ export enum UseDashboardModelActionType {
  *
  * @internal
  */
-type UseDashboardModelInternalAction =
+export type UseDashboardModelInternalAction =
   | UseDashboardModelAction
   | {
       type: UseDashboardModelActionTypeInternal.DASHBOARD_INIT;
@@ -40,16 +42,35 @@ type UseDashboardModelInternalAction =
  *
  * @internal
  */
-export type UseDashboardModelAction = {
+export type UseDashboardModelAction =
+  | UseDashboardModelFilterUpdateAction
+  | UseDashboardModelAddWidgetAction;
+
+/**
+ * Filter update actions for the dashboard model state used in {@link useDashboardModel}.
+ *
+ * @internal
+ */
+export type UseDashboardModelFilterUpdateAction = {
   type: UseDashboardModelActionType.FILTERS_UPDATE;
   payload: Filter[];
 };
 
 /**
+ * Add widget action for the dashboard model state used in {@link useDashboardModel}.
+ *
+ * @internal
+ */
+export type UseDashboardModelAddWidgetAction = {
+  type: UseDashboardModelActionType.ADD_WIDGET;
+  payload: WidgetModel;
+};
+
+/**
  * Reducer for the dashboard model state used in {@link useDashboardModel}.
+ *
  * @param state
  * @param action
- *
  * @internal
  */
 export function dashboardReducer(
@@ -67,53 +88,68 @@ export function dashboardReducer(
         ...(state as DashboardModel),
         filters: action.payload,
       };
+    case UseDashboardModelActionType.ADD_WIDGET: {
+      const widgets = [...(state as DashboardModel).widgets, action.payload];
+      const columns = [...((state as DashboardModel)?.layoutOptions?.widgetsPanel?.columns || [])];
+      if (columns[0]) {
+        if (!columns[0].rows.length) columns[0].rows.push({ cells: [] });
+        columns[0].rows[0].cells.push({
+          widgetId: action.payload.oid,
+          widthPercentage: 100,
+        });
+      }
+      return {
+        ...(state as DashboardModel),
+        ...(state?.layoutOptions.widgetsPanel
+          ? {
+              layoutOptions: {
+                ...state?.layoutOptions,
+                widgetsPanel: {
+                  ...state?.layoutOptions.widgetsPanel,
+                  columns,
+                },
+              },
+            }
+          : null),
+        widgets,
+      };
+    }
     default:
       return state;
   }
 }
 
 /**
- * Middleware connector for {@link persistDashboardModelMiddleware}.
- * @param restApi - The Sisense REST API instance
- * @param reducer - The dashboard model reducer
- *
- * @internal
- */
-export function withPersistDashboardModelMiddleware(
-  restApi: RestApi,
-  reducer: (
-    state: UseDashboardModelState,
-    action: UseDashboardModelInternalAction,
-  ) => UseDashboardModelState,
-) {
-  return (state: UseDashboardModelState, action: UseDashboardModelInternalAction) => {
-    if (state !== null && action.type !== UseDashboardModelActionTypeInternal.DASHBOARD_INIT) {
-      persistDashboardModelMiddleware(state, action, restApi).catch((error) => {
-        console.error('Failed to persist dashboard model changes with error:', error);
-      });
-    }
-
-    return reducer(state, action);
-  };
-}
-
-/**
  * Middleware that persists the dashboard model changes to the Sisense server.
+ *
  * @param restApi - The Sisense REST API instance
  * @param reducer - The dashboard model reducer
- *
  * @internal
  */
 export function persistDashboardModelMiddleware(
-  state: DashboardModel,
-  action: UseDashboardModelAction,
+  dashbordOid: string | undefined,
+  action: UseDashboardModelInternalAction,
   restApi: RestApi,
-) {
+): Promise<UseDashboardModelInternalAction> {
+  if (!dashbordOid) throw new Error('Dashboard model is not initialized');
+
   if (action.type === UseDashboardModelActionType.FILTERS_UPDATE) {
-    return restApi.patchDashboard(state.oid, {
-      filters: action.payload.map(filterToFilterDto),
-    });
+    return restApi
+      .patchDashboard(dashbordOid, {
+        filters: action.payload.map(filterToFilterDto),
+      })
+      .then(() => action);
+  } else if (action.type === UseDashboardModelActionType.ADD_WIDGET) {
+    return restApi
+      .addWidgetToDashboard(dashbordOid, widgetModelTranslator.toWidgetDto(action.payload))
+      .then((widgetDto) => {
+        if (!widgetDto) throw new Error('Failed to add widget to dashboard');
+        return {
+          type: UseDashboardModelActionType.ADD_WIDGET,
+          payload: widgetModelTranslator.fromWidgetDto(widgetDto),
+        };
+      });
   }
 
-  return Promise.resolve(null);
+  return Promise.resolve(action);
 }

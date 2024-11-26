@@ -164,10 +164,19 @@ export interface SisenseContextProviderProps {
    * This callback is useful for handling errors that happen during the initialization or runtime of the Sisense context,
    * such as incorrect configuration, invalid authentication, or network-related issues.
    *
-   * @param error - The error object containing details about the issue.
    * @category Sisense App Error Handling
    */
-  onError?: (error: Error) => void;
+  onError?: (
+    /** The error object containing details about the issue. */
+    error: Error,
+    /** Additional details about the error, such as the component name and props that caused this error. */
+    errorDetails?: {
+      /** The name of the component that caused the error. */
+      componentName: string;
+      /** The props of the component that caused the error. */
+      componentProps: unknown;
+    },
+  ) => void;
 
   /**
    * Boolean flag to enable sending silent pre-authentication requests to the Sisense instance.
@@ -868,7 +877,7 @@ export interface IndicatorChartProps extends BaseChartProps {
 /**
  * Props of the {@link Table} component.
  */
-export interface TableProps {
+export interface TableProps extends BaseChartEventProps {
   /**
    * {@inheritDoc ChartProps.dataSet}
    *

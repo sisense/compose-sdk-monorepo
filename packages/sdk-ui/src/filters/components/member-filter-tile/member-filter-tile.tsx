@@ -35,6 +35,8 @@ export interface MemberFilterTileProps {
   filter: Filter | null;
   /** Callback indicating when the source member filter object should be updated */
   onChange: (filter: Filter | null) => void;
+  /** Filter delete callback */
+  onDelete?: () => void;
   /** List of filters this filter is dependent on */
   parentFilters?: Filter[];
   /** Design options for the tile @internal */
@@ -74,6 +76,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     attribute,
     filter: filterFromProps,
     dataSource,
+    onDelete,
     onChange: updateFilterFromProps,
     parentFilters = [],
     tileDesignOptions,
@@ -204,6 +207,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         header: { hasBackgroundFilterIcon },
       })}
       locked={filter.locked}
+      onDelete={onDelete}
     />
   );
 });

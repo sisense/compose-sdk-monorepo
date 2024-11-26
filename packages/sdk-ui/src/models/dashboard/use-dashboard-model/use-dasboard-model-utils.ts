@@ -4,10 +4,9 @@ import { Authenticator } from '@sisense/sdk-rest-client';
 
 /**
  * Convert a dashboard change action to a use dashboard model action.
+ *
  * @param action - The dashboard change action to convert
- *
  * @returns The useDashboardModel action or null if the action is not supported
- *
  * @internal
  */
 export function dashboardChangeActionToUseDashboardModelAction(
@@ -25,11 +24,10 @@ export function dashboardChangeActionToUseDashboardModelAction(
 
 /**
  * Check if the persistence is supported and log a warning if it is not.
+ *
  * @param authType - The authentication type
  * @param shouldWarn - Whether to log a warning
- *
  * @returns True if the persistence is supported, false otherwise
- *
  * @internal
  */
 export function checkPersistenceSupport(authType: Authenticator['type'], shouldWarn: boolean) {

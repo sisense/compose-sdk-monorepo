@@ -24,6 +24,7 @@ import {
 import { prepareTreemapOptions } from './translations/treemap/treemap-options';
 import { prepareSunburstOptions } from './translations/sunburst/sunburst-options';
 import { TranslatableError } from '@/translation/translatable-error';
+import { TFunction } from '@sisense/sdk-common';
 
 /**
  * Convert intermediate chart data, data options, and design options
@@ -40,6 +41,7 @@ export const getCategoricalChartOptions = (
   chartType: ChartType,
   chartDesignOptions: ChartDesignOptions,
   dataOptions: ChartDataOptionsInternal,
+  translate: TFunction,
   themeSettings?: CompleteThemeSettings,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
@@ -127,6 +129,7 @@ export const getCategoricalChartOptions = (
           chartData,
           dataOptions as CategoricalChartDataOptionsInternal,
           chartDesignOptions as TreemapChartDesignOptions,
+          translate,
           themeSettings,
         ),
         alerts,
@@ -137,6 +140,7 @@ export const getCategoricalChartOptions = (
           chartData,
           dataOptions as CategoricalChartDataOptionsInternal,
           chartDesignOptions as TreemapChartDesignOptions,
+          translate,
           themeSettings,
         ),
         alerts,

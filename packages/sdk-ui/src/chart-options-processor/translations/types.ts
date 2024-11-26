@@ -176,6 +176,21 @@ export const isRange = (chartType: ChartType): chartType is RangeChartType => {
   return RANGE_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
 
+export const ALL_CHART_TYPES = [
+  ...CARTESIAN_CHART_TYPES,
+  ...CATEGORICAL_CHART_TYPES,
+  ...SCATTER_CHART_TYPES,
+  ...TABLE_TYPES,
+  ...INDICATOR_CHART_TYPES,
+  ...BOXPLOT_CHART_TYPES,
+  ...AREAMAP_CHART_TYPES,
+  ...IMAGE_CHART_TYPES,
+  ...SCATTERMAP_CHART_TYPES,
+  ...RANGE_CHART_TYPES,
+] as const;
+
+export type DynamicChartType = (typeof ALL_CHART_TYPES)[number];
+
 /*
 export const isImage = (chartType: ChartType): chartType is ImageChartType => {
   return IMAGE_CHART_TYPES.find((value) => value === chartType) !== undefined;

@@ -109,4 +109,83 @@ describe('DateRangeFilterTile', () => {
     fireEvent.click(expandFilterButton);
     expect(await screen.findByLabelText('date range filter')).toBeInTheDocument();
   });
+
+  it('should not have delete button in tiled mode by default', async () => {
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+
+    const { queryByTestId } = render(
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
+        <DateRangeFilterTile
+          title="Date Range"
+          dataSource={DM.DataSource}
+          attribute={DM.Commerce.Date.Years}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          tiled={true}
+        />
+      </SisenseContextProvider>,
+    );
+    const deleteButton = queryByTestId('filter-delete-button');
+    expect(deleteButton).not.toBeInTheDocument();
+  });
+
+  it('should have delete button in tiled mode if onDelete is provided', async () => {
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+
+    const { findByTestId } = render(
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
+        <DateRangeFilterTile
+          title="Date Range"
+          attribute={DM.Commerce.Date.Years}
+          dataSource={DM.DataSource}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          onDelete={() => {}}
+          tiled={true}
+        />
+      </SisenseContextProvider>,
+    );
+    const deleteButton = await findByTestId('filter-delete-button');
+    expect(deleteButton).toBeInTheDocument();
+  });
+
+  it('should execute onDelete callback when delete button is clicked', async () => {
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+
+    const onDelete = vi.fn();
+    const { findByTestId } = render(
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
+        <DateRangeFilterTile
+          title="Date Range"
+          attribute={DM.Commerce.Date.Years}
+          dataSource={DM.DataSource}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          onDelete={onDelete}
+          tiled={true}
+        />
+      </SisenseContextProvider>,
+    );
+    const deleteButton = await findByTestId('filter-delete-button');
+    fireEvent.click(deleteButton);
+    expect(onDelete).toHaveBeenCalled();
+  });
 });

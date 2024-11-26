@@ -85,6 +85,7 @@ export const getPiePlotOptions = (
     pieOptions.dataLabels.style = {
       color: themeSettings.chart.textColor,
       fontFamily: themeSettings.typography.fontFamily,
+      textOutline: 'none',
     };
   }
 

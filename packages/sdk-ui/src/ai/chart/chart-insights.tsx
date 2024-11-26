@@ -2,14 +2,12 @@ import { GetNlgQueryResultRequest } from '@/ai';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
-import { useGetNlgQueryResultInternal } from '@/ai/use-get-nlg-query-result';
 import FeedbackWrapper from '@/ai/messages/feedback-wrapper';
 import Collapsible from '@/ai/common/collapsible';
 import AiIcon from '@/ai/icons/ai-icon';
-import { useTranslation } from 'react-i18next';
-import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
 
 export interface ChartInsightsProps {
+  summary: string;
   nlgRequest: GetNlgQueryResultRequest;
 }
 
@@ -25,21 +23,8 @@ const IconDiv = styled.div<Themable>`
   align-self: flex-start;
 `;
 
-export const ChartInsights = ({ nlgRequest }: ChartInsightsProps) => {
+export const ChartInsights = ({ summary, nlgRequest }: ChartInsightsProps) => {
   const { themeSettings } = useThemeContext();
-  const { t } = useTranslation();
-
-  const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlgRequest);
-
-  if (isError) {
-    return <>{t('ai.errors.unexpected')}</>;
-  }
-
-  if (isLoading) {
-    return <LoadingDotsIcon />;
-  }
-
-  const summary = data ?? t('ai.errors.insightsNotAvailable');
 
   return (
     <FeedbackWrapper

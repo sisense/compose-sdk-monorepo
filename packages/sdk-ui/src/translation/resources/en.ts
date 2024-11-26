@@ -1,6 +1,7 @@
 export const translation = {
   errors: {
     noSisenseContext: 'Sisense context is not initialized',
+    restApiNotReady: 'Rest API is not initialized',
     componentRenderError: 'Unable to render the component',
     sisenseContextNoAuthentication: 'Authentication method is not specified',
     chartNoSisenseContext:
@@ -38,6 +39,9 @@ export const translation = {
       failedToFetch: 'Failed to fetch shared formula',
     },
     widgetModel: {
+      incomleteWidget:
+        'Widget can not be transformed to DTO because of incomplete property ({{prop}})',
+      unsupportedWidgetTypeDto: 'Saving the widget of type {{chartType}} is not supported',
       pivotWidgetNotSupported: 'Pivot widget is not supported for method {{methodName}}',
       textWidgetNotSupported: 'Text widget is not supported for method {{methodName}}',
       onlyTableWidgetSupported: 'Only table widget is supported for method {{methodName}}',
@@ -75,6 +79,7 @@ export const translation = {
       'Error in cascading filters reassembling. Original cascading filter not found',
     dashboardLoadFailed: 'Failed to load Dashboard',
     dashboardWithOidNotFound: 'Dashboard with oid {{dashboardOid}} not found',
+    failedToAddWidget: 'Failed to add widget to dashboard',
     widgetWithOidNotFound: 'Widget with oid {{widgetOid}} not found',
     widgetEmptyResponse: 'Empty response for widget with oid {{widgetOid}}',
     dateFilterIncorrectOperator: 'Incorrect operator: {{operator}}',
@@ -147,6 +152,12 @@ export const translation = {
       min: 'Min',
       median: 'Median',
       max: 'Max',
+    },
+  },
+  treemap: {
+    tooltip: {
+      ofTotal: 'of total',
+      of: 'of',
     },
   },
   advanced: {

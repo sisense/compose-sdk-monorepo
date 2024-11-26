@@ -48,6 +48,7 @@ Angular filter tile components
 - [CriteriaFilterTileComponent](filter-tiles/class.CriteriaFilterTileComponent.md)
 - [DateRangeFilterTileComponent](filter-tiles/class.DateRangeFilterTileComponent.md)
 - [MemberFilterTileComponent](filter-tiles/class.MemberFilterTileComponent.md)
+- [RelativeDateFilterTileComponent](filter-tiles/class.RelativeDateFilterTileComponent.md)
 
 ## Contexts
 
@@ -80,6 +81,7 @@ Angular modules, services, and components for working with Fusion dashboards, wi
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [HierarchyService](fusion-assets/class.HierarchyService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetByIdComponent](fusion-assets/class.WidgetByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetService](fusion-assets/class.WidgetService.md) <Badge type="fusionEmbed" text="Fusion Embed" />

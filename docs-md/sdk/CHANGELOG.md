@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.24.0] - 2024-11-25
+
+### Added
+- Add internal `sdk-shared-ui` library
+- Implement `HierarchyService.getHierarchyModels` in Angular
+- Implement composable `useGetHierarchyModels` in Vue
+- Implement `RelativeDateFilterTileComponent` in Angular
+
+### Changed
+- Make `FiltersPanel` collapsable initially in the `Dashboard` component via API
+- Support delete button on the filter tiles
+- Enable copying text in `Chatbox`
+- Improve error handling and `ErrorBoundary`
+- Add callback `onDataReady` to `TableProps` and `NlqChartWidgetProps` for internal testing
+- Handle date offset in `RelativeDateFilterTile` correctly
+- Improve Widget Embed Code in Fusion: unsupported chart type
+- Improve charts: `Treemap` tooltip with translations, display of labels on `PieChart`
+- Improve advanced charts: display of errors in widget header
+
+
 ## [1.23.0] - 2024-11-12
 
 ### Added

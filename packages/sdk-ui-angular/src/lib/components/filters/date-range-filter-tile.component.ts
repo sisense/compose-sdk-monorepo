@@ -30,7 +30,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * @example
  * ```html
  * <csdk-date-range-filter-tile
- *       title="dateRangeFilterTileProps.title"
+ *       [title]="dateRangeFilterTileProps.title"
  *       [attribute]="dateRangeFilterTileProps.attribute"
  *       [filter]="dateRangeFilterTileProps.filter"
  *       (filterChange)="dateRangeFilterTileProps.setFilter($event)"

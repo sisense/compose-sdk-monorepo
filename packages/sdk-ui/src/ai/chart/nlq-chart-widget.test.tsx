@@ -58,4 +58,34 @@ describe('NlqChartWidget', () => {
 
     await waitFor(() => expect(screen.getByTestId('chart-widget-mocked')).toBeInTheDocument());
   });
+
+  it('renders loading icon, then default text if API call returns empty response', async () => {
+    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.json({})));
+
+    setup(
+      <AiTestWrapper>
+        <NlqChartWidget nlqResponse={mockNlqResponseData} />
+      </AiTestWrapper>,
+    );
+
+    await waitFor(() => expect(screen.getByText('No insights available.')).toBeInTheDocument());
+  });
+
+  it('renders loading icon, then error text if API call fails', async () => {
+    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.error()));
+
+    setup(
+      <AiTestWrapper>
+        <NlqChartWidget nlqResponse={mockNlqResponseData} />
+      </AiTestWrapper>,
+    );
+
+    await waitFor(() => expect(screen.getByLabelText('loading dots')).toBeInTheDocument());
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('Oh snap, something went wrong. Please try again later.'),
+      ).toBeInTheDocument(),
+    );
+  });
 });

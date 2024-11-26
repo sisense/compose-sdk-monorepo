@@ -169,6 +169,22 @@ export default function ChatInput({
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
 
+  const handleBlur = useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
+    if (document.getElementById('csdk-chatbot-frame')?.contains(e.relatedTarget)) {
+      const cb = (event: Event) => {
+        document.removeEventListener('mouseup', cb);
+        document.removeEventListener('keyup', cb);
+
+        if (event.type === 'mouseup' && document.getSelection()?.type !== 'Range') {
+          e.target.focus({ preventScroll: true });
+        }
+      };
+
+      document.addEventListener('mouseup', cb);
+      document.addEventListener('keyup', cb);
+    }
+  }, []);
+
   return (
     <ChatInputContainer theme={themeSettings}>
       <ChatDropup
@@ -189,11 +205,7 @@ export default function ChatInput({
       )}
       <TextInput
         aria-label="chat input"
-        onBlur={(e) => {
-          if (document.getElementById('csdk-chatbot-frame')?.contains(e.relatedTarget)) {
-            e.target.focus({ preventScroll: true });
-          }
-        }}
+        onBlur={handleBlur}
         maxLength={CHAT_INPUT_MAX_LENGTH}
         ref={ref}
         rows={1}

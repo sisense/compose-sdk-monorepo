@@ -10,12 +10,19 @@ import { useCallback } from 'react';
 export enum DashboardChangeType {
   /** Dashboard filters have been updated */
   FILTERS_UPDATE = 'FILTERS.UPDATE',
+  /** Filters panel collapsed state changed */
+  UI_FILTERS_PANEL_COLLAPSE = 'UI.FILTERS.PANEL.COLLAPSE',
 }
 
-export type DashboardChangeAction = {
-  type: DashboardChangeType.FILTERS_UPDATE;
-  payload: Filter[];
-};
+export type DashboardChangeAction =
+  | {
+      type: DashboardChangeType.FILTERS_UPDATE;
+      payload: Filter[];
+    }
+  | {
+      type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE;
+      payload: boolean;
+    };
 
 /**
  * React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
@@ -98,6 +105,7 @@ export const Dashboard = asSisenseComponent({
           defaultDataSource={defaultDataSource}
           filters={dashboardFilters}
           onFiltersChange={setFilters}
+          onChange={onChange}
         />
       </ThemeProvider>
     );

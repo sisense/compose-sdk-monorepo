@@ -75,7 +75,7 @@ export const toWidgetPropsFromQuery = (
     const { jaql, chartRecommendations: chartRecommendationsOriginal, queryTitle } = queryModel;
     const {
       metadata,
-      datasource: { title: dataSource },
+      datasource: { title: dataSourceTitle, id: dataSourceId, type: dataSourceType = 'elasticube' },
     } = jaql;
 
     const chartRecommendations = getChartRecommendationsOrDefault(chartRecommendationsOriginal);
@@ -105,7 +105,11 @@ export const toWidgetPropsFromQuery = (
       id: queryTitle,
       title: queryTitle,
       chartType,
-      dataSource,
+      dataSource: {
+        title: dataSourceTitle,
+        id: dataSourceId,
+        type: dataSourceType,
+      },
       dataOptions,
       filters,
       styleOptions,

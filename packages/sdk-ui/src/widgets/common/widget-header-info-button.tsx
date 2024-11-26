@@ -5,26 +5,33 @@ import IconButton from '@mui/material/IconButton';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useThemeContext } from '../../theme-provider';
 import { WidgetContainerStyleOptions } from '../../types';
 import { getSlightlyDifferentColor } from '@/utils/color';
 import { useTranslation } from 'react-i18next';
+import ExclamationMarkBrandIcon from '@/ai/icons/exclamation-mark-brand-icon';
 
 export default function WidgetHeaderInfoButton({
   title,
   description,
+  errorMessages = [],
   styleOptions,
   onRefresh,
 }: {
   title?: string;
   description?: string;
   styleOptions?: WidgetContainerStyleOptions['header'];
+  errorMessages?: string[];
+  warningMessages?: string[];
   onRefresh: () => void;
 }) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const { themeSettings } = useThemeContext();
+  const {
+    typography: { primaryTextColor, secondaryTextColor, fontFamily },
+  } = themeSettings;
   const { t } = useTranslation();
 
   const handleInfoButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,6 +41,94 @@ export default function WidgetHeaderInfoButton({
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
+
+  const renderTitle = useMemo(() => {
+    if (!title) {
+      return null;
+    }
+
+    return (
+      <Typography
+        variant="body2"
+        style={{
+          color: primaryTextColor,
+          fontFamily: fontFamily,
+          fontSize: 13,
+        }}
+      >
+        {title}
+      </Typography>
+    );
+  }, [title, primaryTextColor, fontFamily]);
+
+  const renderErrorMessages = useMemo(() => {
+    if (errorMessages.length === 0) {
+      return null;
+    }
+
+    return errorMessages.map((errorMessage) => {
+      return (
+        <>
+          <Divider
+            sx={{
+              my: 1,
+              borderColor: secondaryTextColor,
+              opacity: 0.3,
+              marginY: '8px',
+            }}
+          />
+          <div className="csdk-flex">
+            <div className="csdk-shrink-0 csdk-grow-0">
+              <ExclamationMarkBrandIcon fill="#fa5656" />
+            </div>
+            <Typography
+              variant="body2"
+              className="csdk-grow-1"
+              style={{
+                color: secondaryTextColor,
+                fontFamily: fontFamily,
+                fontSize: 13,
+                marginLeft: 5,
+                lineHeight: '24px',
+                letterSpacing: 'normal',
+                overflowWrap: 'anywhere',
+              }}
+            >
+              {errorMessage}
+            </Typography>
+          </div>
+        </>
+      );
+    });
+  }, [errorMessages, secondaryTextColor, fontFamily]);
+
+  const renderDescription = useMemo(() => {
+    if (!description) {
+      return null;
+    }
+
+    return (
+      <>
+        <Divider
+          sx={{
+            my: '8px',
+            borderColor: secondaryTextColor,
+            opacity: 0.3,
+          }}
+        />
+        <Typography
+          variant="body2"
+          style={{
+            color: secondaryTextColor,
+            fontFamily: fontFamily,
+            fontSize: 13,
+          }}
+        >
+          {description}
+        </Typography>
+      </>
+    );
+  }, [description, secondaryTextColor, fontFamily]);
 
   return (
     <>
@@ -113,40 +208,9 @@ export default function WidgetHeaderInfoButton({
               padding: 12,
             }}
           >
-            {title && (
-              <Typography
-                variant="body2"
-                style={{
-                  color: themeSettings.typography.primaryTextColor,
-                  fontFamily: themeSettings.typography.fontFamily,
-                  fontSize: 13,
-                }}
-              >
-                {title}
-              </Typography>
-            )}
-
-            {!!description && (
-              <>
-                <Divider
-                  sx={{
-                    my: 1,
-                    borderColor: themeSettings.typography.secondaryTextColor,
-                    opacity: 0.3,
-                  }}
-                />
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: themeSettings.typography.primaryTextColor,
-                    fontFamily: themeSettings.typography.fontFamily,
-                    fontSize: 13,
-                  }}
-                >
-                  {description}
-                </Typography>
-              </>
-            )}
+            {renderTitle}
+            {renderErrorMessages}
+            {renderDescription}
           </CardContent>
         </Card>
       </Popover>

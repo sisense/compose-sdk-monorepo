@@ -27,6 +27,8 @@ export interface RelativeDateFilterTileProps {
    * @param filter - Relative date filter
    */
   onUpdate: (filter: Filter) => void;
+  /** Filter delete callback */
+  onDelete?: () => void;
   /**
    * Limit of the date range that can be selected.
    */
@@ -59,6 +61,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
     filter: filterFromProps,
     arrangement = 'horizontal',
     onUpdate: updateFilterFromProps,
+    onDelete,
     limit,
     tileDesignOptions,
   } = props;
@@ -93,6 +96,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
       arrangement={arrangement}
       design={tileDesignOptions}
       locked={filter.locked}
+      onDelete={onDelete}
     />
   );
 });

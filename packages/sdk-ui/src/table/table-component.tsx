@@ -20,6 +20,8 @@ import { getFilterListAndRelations } from '@sisense/sdk-data';
 import { translateTableStyleOptionsToDesignOptions } from './translations/design-options';
 import { orderBy } from '../chart-data-processor/table-processor';
 import { isMeasureColumn, translateColumnToMeasure } from '@/chart-data-options/utils';
+import { TranslatableError } from '@/translation/translatable-error';
+import { isData } from '@/chart/regular-chart';
 
 export const DEFAULT_TABLE_ROWS_PER_PAGE = 25;
 
@@ -34,6 +36,7 @@ export const TableComponent = ({
   dataOptions,
   styleOptions = {},
   filters,
+  onDataReady,
 }: TableProps) => {
   const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE, width, height } = styleOptions;
   const { themeSettings } = useThemeContext();
@@ -74,8 +77,22 @@ export const TableComponent = ({
     offset,
   });
 
+  const finalData = useMemo(() => {
+    if (data && onDataReady) {
+      const customizedData = onDataReady(data);
+      if (!isData(customizedData)) {
+        throw new TranslatableError('errors.incorrectOnDataReadyHandler');
+      }
+      return customizedData;
+    }
+    return data;
+    // Ignore rule to avoid unnecessary calls "onDataReady"
+    // Trigger only on "data" update
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   const dataTable = useTableDataTable({
-    data,
+    data: finalData,
     innerDataOptions: updatedDataOptions,
     dataColumnNamesMapping,
     needToAggregate: !isDataSource(usedDataSet),

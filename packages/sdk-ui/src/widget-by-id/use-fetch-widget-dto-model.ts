@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { RestApi, useGetApi } from '../api/rest-api.js';
+import { RestApi, useRestApi } from '../api/rest-api.js';
 import { DashboardDto } from '../api/types/dashboard-dto.js';
 import { WidgetDto } from './types.js';
 import { TranslatableError } from '@/translation/translatable-error';
@@ -57,7 +57,7 @@ export const useFetchWidgetDtoModel = ({
   includeDashboard?: boolean;
 }) => {
   const [error, setError] = useState<Error | undefined>();
-  const api = useGetApi();
+  const { restApi: api, isReady: apiIsReady } = useRestApi();
 
   const [fetchedDtoModels, setFetchedDtoModelsWidget] = useState<{
     widget: WidgetDto;
@@ -65,6 +65,9 @@ export const useFetchWidgetDtoModel = ({
   }>();
 
   useEffect(() => {
+    if (!apiIsReady || !api) {
+      return;
+    }
     fetchWidgetDtoModel({ widgetOid, dashboardOid, includeDashboard, api })
       .then(({ widget, dashboard }) => {
         if (!widget) {
@@ -79,7 +82,7 @@ export const useFetchWidgetDtoModel = ({
         // set error state to trigger rerender and throw synchronous error
         setError(asyncError);
       });
-  }, [widgetOid, dashboardOid, api, includeDashboard]);
+  }, [widgetOid, dashboardOid, api, apiIsReady, includeDashboard]);
 
   return {
     ...fetchedDtoModels,

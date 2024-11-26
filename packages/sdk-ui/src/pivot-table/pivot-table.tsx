@@ -113,6 +113,7 @@ export const PivotTable = asSisenseComponent({
   );
   const nodeRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<ContainerSize | null>(null);
+  const [pivotTotalHeight, setPivotTotalHeight] = useState<number | null>(null);
   // retrieve and validate the pivot client
   const { app } = useSisenseContext();
   const { themeSettings } = useThemeContext();
@@ -153,7 +154,15 @@ export const PivotTable = asSisenseComponent({
     isForceReload,
   });
 
-  useRenderPivot({ nodeRef, pivotBuilder, dataOptions, styleOptions, themeSettings, size });
+  useRenderPivot({
+    nodeRef,
+    pivotBuilder,
+    dataOptions,
+    styleOptions,
+    themeSettings,
+    size,
+    onTotalHeightChange: setPivotTotalHeight,
+  });
 
   const onSort = useCallback(
     (payload: SortingSettingsChangePayload) => {
@@ -186,9 +195,10 @@ export const PivotTable = asSisenseComponent({
       defaultSize={DEFAULT_PIVOT_TABLE_SIZE}
       size={{
         width: styleOptions?.width,
-        height: styleOptions?.height,
+        height: styleOptions?.isAutoHeight
+          ? pivotTotalHeight ?? styleOptions?.height
+          : styleOptions?.height,
       }}
-      useContentSize={{ height: styleOptions?.isAutoHeight }}
       onSizeChange={updateSize}
     >
       <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>

@@ -163,7 +163,7 @@ Use [drilldownPaths](class.DrilldownWidgetComponent.md#drilldownpaths) instead
 
 #### drilldownPaths
 
-> **drilldownPaths**: ([`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Hierarchy`](../../sdk-ui/interfaces/interface.Hierarchy.md))[] \| `undefined`
+> **drilldownPaths**: ([`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Hierarchy`](../interfaces/interface.Hierarchy.md))[] \| `undefined`
 
 Dimensions and hierarchies available for drilldown on.
 

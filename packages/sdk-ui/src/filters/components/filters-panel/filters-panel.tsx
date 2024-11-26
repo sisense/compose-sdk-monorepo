@@ -74,6 +74,11 @@ export const FiltersPanel = asSisenseComponent({
     onFiltersChange(filterList.filter((f) => f !== null) as Filter[]);
   };
 
+  const handleFilterDelete = (index: number) => {
+    if (!filters) return;
+    handleFilterChange(null, index);
+  };
+
   return (
     <PanelWrapper theme={themeSettings}>
       <PanelHeader theme={themeSettings}>
@@ -84,6 +89,7 @@ export const FiltersPanel = asSisenseComponent({
           {filters?.map((filter, index) => (
             <div className="csdk-mt-[6px]" key={filter.guid}>
               <FiltersPanelTile
+                onDelete={() => handleFilterDelete(index)}
                 key={filter.guid}
                 filter={filter}
                 onChange={(newFilter) => handleFilterChange(newFilter, index)}

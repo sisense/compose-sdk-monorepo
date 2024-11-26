@@ -52,7 +52,7 @@ TypeScript interfaces for components and hooks listed above
 - [GetDashboardModelParams](interface.GetDashboardModelParams.md)
 - [GetDashboardModelsOptions](interface.GetDashboardModelsOptions.md)
 - [GetDashboardModelsParams](interface.GetDashboardModelsParams.md)
-- [GetHierarchiesParams](interface.GetHierarchiesParams.md)
+- [GetHierarchyModelsParams](interface.GetHierarchyModelsParams.md)
 - [GetNlgQueryResultProps](interface.GetNlgQueryResultProps.md)
 - [GetNlgQueryResultRequest](interface.GetNlgQueryResultRequest.md)
 - [GetSharedFormulaParams](interface.GetSharedFormulaParams.md)

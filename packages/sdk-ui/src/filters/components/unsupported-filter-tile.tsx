@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 export type UnsupportedFilterTileProps = {
   filter: Filter;
   design?: FilterTileDesignOptions;
+  /** Filter delete callback */
+  onDelete?: () => void;
 };
 
 /**
@@ -12,7 +14,7 @@ export type UnsupportedFilterTileProps = {
  *
  * @internal
  */
-export const UnsupportedFilterTile = ({ filter, design }: UnsupportedFilterTileProps) => {
+export const UnsupportedFilterTile = ({ filter, design, onDelete }: UnsupportedFilterTileProps) => {
   const { t } = useTranslation();
   return (
     <FilterTile
@@ -22,6 +24,7 @@ export const UnsupportedFilterTile = ({ filter, design }: UnsupportedFilterTileP
       )}
       design={design}
       locked={filter.locked}
+      onDelete={onDelete}
     />
   );
 };

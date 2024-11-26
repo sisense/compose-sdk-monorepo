@@ -1,9 +1,12 @@
 import { ChartWidget } from '@/widgets/chart-widget';
 import { widgetComposer } from '@/analytics-composer';
 import { ChartInsights } from '@/ai/chart/chart-insights';
-import { Filter } from '@sisense/sdk-data';
+import { Filter, Data } from '@sisense/sdk-data';
 import type { NlqResponseData } from '@/ai';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
+import { useGetNlgQueryResultInternal } from '@/ai/use-get-nlg-query-result';
+import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Props for {@link NlqChartWidget} component.
@@ -21,6 +24,12 @@ export interface NlqChartWidgetProps {
    * The dashboard filters to be applied to the chart
    */
   filters?: Filter[];
+
+  /**
+   * A callback that allows to modify data immediately after it has been retrieved.
+   * Can be used to inject modification of queried data.
+   */
+  onDataReady?: (data: Data) => Data;
 }
 
 /**
@@ -45,20 +54,38 @@ export interface NlqChartWidgetProps {
  * @group Generative AI
  * @internal
  */
-export const NlqChartWidget = ({ nlqResponse, filters = [] }: NlqChartWidgetProps) => {
+export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqChartWidgetProps) => {
+  const { t } = useTranslation();
+
   const chartWidgetProps = widgetComposer.toWidgetProps(nlqResponse, {
     useCustomizedStyleOptions: true,
   });
 
+  const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlqResponse);
+
+  if (isLoading) {
+    return <LoadingDotsIcon />;
+  }
+
   if (!chartWidgetProps || !isChartWidgetProps(chartWidgetProps)) {
     return <></>;
   }
+
+  const summary = data ?? t('ai.errors.insightsNotAvailable');
+
   chartWidgetProps[chartWidgetProps?.chartType === 'table' ? 'filters' : 'highlights'] = filters;
 
   return (
     <ChartWidget
       {...chartWidgetProps}
-      topSlot={<ChartInsights nlgRequest={nlqResponse}></ChartInsights>}
+      onDataReady={onDataReady}
+      topSlot={
+        isError ? (
+          t('ai.errors.unexpected')
+        ) : (
+          <ChartInsights nlgRequest={nlqResponse} summary={summary}></ChartInsights>
+        )
+      }
     ></ChartWidget>
   );
 };

@@ -109,6 +109,7 @@ export const highchartsOptionsService = (
         chartType,
         chartDesignOptions,
         dataOptions,
+        translate,
         themeSettings,
       );
     }

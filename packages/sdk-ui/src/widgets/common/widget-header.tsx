@@ -9,18 +9,21 @@ interface WidgetHeaderProps {
   title?: string;
   description?: string;
   dataSetName?: string;
+  errorMessages?: string[];
+  warningMessages?: string[];
   styleOptions?: WidgetContainerStyleOptions['header'];
 }
 
 export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
   title,
   description,
+  errorMessages = [],
+  warningMessages = [],
   dataSetName,
   styleOptions,
   onRefresh,
 }: WidgetHeaderProps) => {
   const { themeSettings } = useThemeContext();
-
   const renderToolbar = () => {
     const toolbar = (
       <>
@@ -28,6 +31,8 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
           title={dataSetName}
           description={description}
           styleOptions={styleOptions}
+          errorMessages={errorMessages}
+          warningMessages={warningMessages}
           onRefresh={onRefresh}
         />
       </>
@@ -70,7 +75,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
             backgroundColor:
               styleOptions?.dividerLineColor ||
               themeSettings.widget.header.dividerLineColor ||
-              '#d5d5d5',
+              '#e6e6e6',
           }}
         />
       )}

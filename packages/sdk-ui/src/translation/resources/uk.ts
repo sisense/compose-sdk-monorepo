@@ -3,6 +3,7 @@ import { TranslationDictionary } from './index.js';
 export const translation: TranslationDictionary = {
   errors: {
     noSisenseContext: 'Контекст Sisense не ініціалізовано',
+    restApiNotReady: 'Rest API не ініціалізовано',
     componentRenderError: 'Не вдалося відобразити компонент',
     sisenseContextNoAuthentication: 'Не вказано метод аутентифікації',
     chartNoSisenseContext:
@@ -39,6 +40,8 @@ export const translation: TranslationDictionary = {
       failedToFetch: 'Не вдалося отримати спільну формулу',
     },
     widgetModel: {
+      incomleteWidget: 'Неможливо створити DTO віджету через неповноту властивості ({{prop}})',
+      unsupportedWidgetTypeDto: 'Сберігання віджету типу {{chartType}} не підтримується',
       pivotWidgetNotSupported: 'Метод {{methodName}} не підтримується для півот віджету',
       textWidgetNotSupported: 'Метод {{methodName}} не підтримується для текстового віджету',
       onlyTableWidgetSupported: 'Метод {{methodName}} підтримується тільки для табличних віджетів',
@@ -76,6 +79,7 @@ export const translation: TranslationDictionary = {
       'Помилка при реструктуризації каскадних фільтрів. Оригінальний фільтр не знайдено',
     dashboardLoadFailed: 'Не вдалося завантажити Dashboard',
     dashboardWithOidNotFound: 'Dashboard з oid {{dashboardOid}} не знайдено',
+    failedToAddWidget: 'Не вдалося додати віджет',
     widgetWithOidNotFound: 'Віджет з oid {{widgetOid}} не знайдено',
     widgetEmptyResponse: 'Пуста відповідь для віджета з oid {{widgetOid}}',
     dateFilterIncorrectOperator: 'Некорректний оператор: {{operator}}',
@@ -148,6 +152,12 @@ export const translation: TranslationDictionary = {
       min: 'Мінімум',
       median: 'Медіана',
       max: 'Максимум',
+    },
+  },
+  treemap: {
+    tooltip: {
+      ofTotal: 'загальної кількості',
+      of: 'з',
     },
   },
   advanced: {

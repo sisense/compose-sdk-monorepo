@@ -73,6 +73,7 @@ export type {
   GetDashboardModelParams,
   UseGetSharedFormulaParams,
   GetDashboardModelsParams,
+  GetHierarchyModelsParams,
 
   // Data Options:
   ChartDataOptions,

@@ -110,4 +110,43 @@ describe('Table', () => {
     const headerFromSecondRender = await findByText('Cost');
     expect(headerFromSecondRender).toBeTruthy();
   });
+
+  it('should trigger onDataReady callback and render Table with modified data', async () => {
+    const MODIFIED_VALUE = 'Modified Table Value';
+    const onDataReadyMock = vi.fn().mockImplementation((data) => {
+      expect(data).toEqual(dataSet);
+      return {
+        ...data,
+        rows: [[MODIFIED_VALUE, 1]],
+      };
+    });
+
+    const { findByText } = render(
+      <Table
+        dataSet={dataSet}
+        dataOptions={{ columns: [col1, col2] }}
+        onDataReady={onDataReadyMock}
+      />,
+    );
+
+    const renderedModifiedValue = await findByText(MODIFIED_VALUE);
+    expect(renderedModifiedValue).toBeTruthy();
+    expect(onDataReadyMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should trigger onDataReady callback and render error for incorrect callback return', async () => {
+    const onDataReadyMock = vi.fn().mockImplementation(() => undefined);
+
+    const { findByLabelText } = render(
+      <Table
+        dataSet={dataSet}
+        dataOptions={{ columns: [col1, col2] }}
+        onDataReady={onDataReadyMock}
+      />,
+    );
+
+    const errorBoxContainer = await findByLabelText('error-box');
+    expect(errorBoxContainer).toBeTruthy();
+    expect(onDataReadyMock).toHaveBeenCalledTimes(4);
+  });
 });

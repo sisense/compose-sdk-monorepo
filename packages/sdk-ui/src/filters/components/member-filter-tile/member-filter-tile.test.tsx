@@ -196,4 +196,73 @@ describe('MemberFilterTile', () => {
 
     expect(errorBoxText).toBeTruthy();
   });
+
+  it('should not have a delete button by default', async () => {
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
+    const { queryByTestId } = render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={DM.Commerce.AgeRange}
+          filter={filter}
+          onChange={() => {}}
+        />
+      </SisenseContextProvider>,
+    );
+    const deleteButton = queryByTestId('filter-delete-button');
+    expect(deleteButton).not.toBeInTheDocument();
+  });
+
+  it('should render a MemberFilterTile with delete button', async () => {
+    // Rendering a MemberFilterTile requires 3 fetches
+    server.use(
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
+    );
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
+    const { findByTestId } = render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={DM.Commerce.AgeRange}
+          filter={filter}
+          onChange={() => {}}
+          onDelete={() => {}}
+        />
+      </SisenseContextProvider>,
+    );
+
+    const deleteButton = await findByTestId('filter-delete-button');
+    expect(deleteButton).toBeInTheDocument();
+  });
+
+  it('should call onDelete when delete button is clicked', async () => {
+    // Rendering a MemberFilterTile requires 3 fetches
+    server.use(
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
+    );
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
+    const onDelete = vi.fn();
+    const { findByTestId } = render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={DM.Commerce.AgeRange}
+          filter={filter}
+          onChange={() => {}}
+          onDelete={onDelete}
+        />
+      </SisenseContextProvider>,
+    );
+
+    const deleteButton = await findByTestId('filter-delete-button');
+    if (deleteButton) fireEvent.click(deleteButton);
+
+    expect(onDelete).toHaveBeenCalled();
+  });
 });

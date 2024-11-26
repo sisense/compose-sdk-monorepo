@@ -29,14 +29,24 @@ import {
 } from '@/props';
 import { getTableAttributesAndMeasures } from '@/table/hooks/use-table-data';
 import { DEFAULT_TABLE_ROWS_PER_PAGE, PAGES_BATCH_SIZE } from '@/table/table-component';
-import { Attribute, Filter, JaqlDataSource, Measure, convertDataSource } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Filter,
+  Measure,
+  MeasureColumn,
+  Column,
+  convertDataSource,
+  JaqlDataSource,
+} from '@sisense/sdk-data';
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { getPivotQueryOptions } from '@/pivot-table/hooks/use-get-pivot-table-query.js';
 import {
   CartesianChartDataOptions,
+  CategoricalChartDataOptions,
   ChartDataOptions,
   IndicatorChartDataOptions,
   PivotTableDataOptions,
+  ScatterChartDataOptions,
   TableDataOptions,
   TableDataOptionsInternal,
 } from '@/chart-data-options/types.js';
@@ -69,8 +79,19 @@ import {
 } from '@/widget-by-id/translate-widget-style-options.js';
 import { extractDrilldownOptions } from '@/widget-by-id/translate-widget-drilldown-options.js';
 import { extractWidgetFilters } from '@/widget-by-id/translate-widget-filters.js';
-import { isCartesian, isIndicator, isTable } from '@/chart-options-processor/translations/types.js';
-import { normalizeColumn, normalizeMeasureColumn } from '@/chart-data-options/utils.js';
+import {
+  isCartesian,
+  isCategorical,
+  isIndicator,
+  isScatter,
+  isTable,
+} from '@/chart-options-processor/translations/types.js';
+
+import {
+  normalizeAnyColumn,
+  normalizeColumn,
+  normalizeMeasureColumn,
+} from '@/chart-data-options/utils.js';
 
 /**
  * Translates a {@link WidgetModel} to the parameters for executing a query for the widget.
@@ -565,6 +586,14 @@ export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): Widget
 }
 
 /**
+ * Data source as specified in the jaql
+ * but with required filelds
+ *
+ * @internal
+ */
+export type JaqlDataSourceForWidgetDto = JaqlDataSource & { id: string; address: string };
+
+/**
  * Translates a {@link WidgetModel} to {@link WidgetDto}.
  *
  * @param widgetModel - The WidgetModel to be converted to a widgetDto
@@ -572,12 +601,20 @@ export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): Widget
  * @returns WidgetDto
  * @internal
  */
-export function toWidgetDto(widgetModel: WidgetModel, dataSource: JaqlDataSource): WidgetDto {
+export function toWidgetDto(
+  widgetModel: WidgetModel,
+  dataSource?: JaqlDataSourceForWidgetDto,
+): WidgetDto {
+  const datasource = dataSource || widgetModel.dataSource;
+  if (typeof datasource === 'string') throw new IncompleteWidgetTypeError('dataSource');
+  if (!datasource.id || !(datasource as JaqlDataSource).address)
+    throw new IncompleteWidgetTypeError('dataSource');
+
   const chartType = widgetModel.chartType;
   let type = widgetModel.widgetType;
   let style: WidgetStyle = {};
   // TODO: For some reason TreeMap, Sunburst (and maybe others) are not include subtype in the styleOptions
-  let subtype = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype || '';
+  let subtype: string = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype || '';
 
   if (!chartType) throw new Error('Chart type is required');
 
@@ -610,7 +647,20 @@ export function toWidgetDto(widgetModel: WidgetModel, dataSource: JaqlDataSource
       name: 'break by',
       items: breakByItems,
     });
-    // Sytyling: TBD
+    // fix subtype
+    if (chartType === 'polar') {
+      subtype = 'column/polar';
+    } else if (chartType === 'bar') {
+      subtype = subtype || 'bar/classic';
+    } else if (chartType === 'column') {
+      subtype = subtype || 'column/classic';
+    } else if (chartType === 'area') {
+      subtype = subtype || 'area/basic';
+    } else if (chartType === 'line') {
+      subtype = subtype || 'line/basic';
+    }
+
+    // Styling: TBD
   } else if (isTable(chartType)) {
     const { attributes, measures } = getTableAttributesAndMeasures(
       widgetModel.dataOptions as TableDataOptionsInternal,
@@ -623,10 +673,6 @@ export function toWidgetDto(widgetModel: WidgetModel, dataSource: JaqlDataSource
       name: 'columns',
       items,
     });
-    panels.push({
-      name: 'filters',
-      items: [],
-    });
     // tablewidgetagg is now a disabled plugin by default, and tablewidget should be fully compatible
     type = 'tablewidget';
   } else if (isIndicator(chartType)) {
@@ -638,23 +684,123 @@ export function toWidgetDto(widgetModel: WidgetModel, dataSource: JaqlDataSource
       ).map((column) => createPanelItem(normalizeMeasureColumn(column)));
       panels.push({ name: panelName, items });
     });
-    panels.push({
-      name: 'filters',
-      items: [],
-    });
-    subtype = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype;
+    subtype = subtype || 'indicator/numeric';
 
-    // Empty style required for indicator ({} breaks it)
-    style = undefined as any as WidgetStyle;
+    // Simple default style,  Empty style or {} cause errors
+    style = {
+      ...(subtype === 'indicator/gauge'
+        ? {
+            subtype: 'round',
+            skin: '1',
+          }
+        : {
+            subtype: 'simple',
+            skin: 'vertical',
+          }),
+      components: {
+        ticks: {
+          inactive: false,
+          enabled: true,
+        },
+        labels: {
+          inactive: false,
+          enabled: true,
+        },
+        title: {
+          inactive: false,
+          enabled: true,
+        },
+        secondaryTitle: {
+          inactive: true,
+          enabled: true,
+        },
+      },
+    } as WidgetStyle;
+  } else if (isCategorical(chartType)) {
+    const items: PanelItem[] = (
+      widgetModel.dataOptions as CategoricalChartDataOptions
+    ).category.map((column) => createPanelItem(normalizeAnyColumn(column)));
+    panels.push({
+      name: 'categories',
+      items,
+    });
+    const valueItems = (widgetModel.dataOptions as CategoricalChartDataOptions).value.map(
+      (column) => createPanelItem(normalizeAnyColumn(column)),
+    );
+    const isTreemap = chartType === 'treemap';
+    panels.push({
+      name: isTreemap ? 'size' : 'values',
+      items: valueItems,
+    });
+    if (isTreemap) {
+      const emptyPanels = ['color', 'values']; // required for treemap
+      emptyPanels.forEach((panelName) => {
+        panels.push({
+          name: panelName,
+          items: [],
+        });
+      });
+    }
+
+    // Styling: TBD
+    if (chartType === 'pie') {
+      subtype = subtype || 'pie/basic';
+      style = {
+        convolution: {
+          enabled: true,
+          selectedConvolutionType: 'bySlicesCount',
+          minimalIndependentSlicePercentage: 3,
+          independentSlicesCount: 7,
+        },
+      } as WidgetStyle;
+    } else if (chartType === 'treemap' || chartType === 'sunburst') {
+      subtype = subtype || chartType;
+    } else if (chartType === 'funnel') {
+      subtype = subtype || 'chart/funnel';
+    }
+  } else if (isScatter(chartType)) {
+    (
+      ['x', 'y', 'size', 'breakByColor', 'breakByPoint'] as (keyof ScatterChartDataOptions)[]
+    ).forEach((panelName) => {
+      if (
+        (widgetModel.dataOptions as ScatterChartDataOptions)[panelName] as Column | MeasureColumn
+      ) {
+        const aliases: { [key: string]: string } = {
+          breakByColor: 'Break By / Color',
+          breakByPoint: 'point',
+          x: 'x-axis',
+          y: 'y-axis',
+        };
+        const items: PanelItem[] = [
+          createPanelItem(
+            normalizeAnyColumn(
+              (widgetModel.dataOptions as ScatterChartDataOptions)[panelName]! as Column,
+            ),
+          ),
+        ];
+        panels.push({
+          name: aliases[panelName] || panelName,
+          items,
+        });
+      }
+    });
+    // default subtype
+    subtype = subtype || 'bubble/scatter';
+    // Styling
   } else {
-    throw new Error('Unsupported chart type');
+    throw new UnsupportedChartTypeError(chartType);
   }
+  const filterItems = (widgetModel.filters || []).map((filter) => filter.jaql());
+  panels.push({
+    name: 'filters',
+    items: filterItems,
+  });
 
   const widget: WidgetDto = {
     oid: widgetModel.oid || '',
     title: widgetModel.title,
     desc: widgetModel.description,
-    datasource: dataSource,
+    datasource,
     type,
     metadata: {
       panels,
@@ -663,6 +809,17 @@ export function toWidgetDto(widgetModel: WidgetModel, dataSource: JaqlDataSource
     subtype,
   };
   return widget;
+}
+
+class IncompleteWidgetTypeError extends TranslatableError {
+  constructor(prop: string) {
+    super('errors.widgetModel.incomleteWidget', { prop });
+  }
+}
+class UnsupportedChartTypeError extends TranslatableError {
+  constructor(chartType: string) {
+    super('errors.widgetModel.unsupportedWidgetTypeDto', { chartType });
+  }
 }
 
 class PivotNotSupportedMethodError extends TranslatableError {

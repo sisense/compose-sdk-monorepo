@@ -13,6 +13,7 @@ import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './sunburst.scss';
 import { getLegend } from '../../style-to-design-options-translator/translate-to-highcharts-options';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
+import { TFunction } from '@sisense/sdk-common';
 
 const DEFAULT_SUNBURST_SERIES = {
   type: 'sunburst',
@@ -52,6 +53,7 @@ export function prepareSunburstOptions(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: SunburstChartDesignOptions,
+  translate: TFunction,
   themeSettings?: CompleteThemeSettings,
 ): HighchartsOptionsInternal {
   return {
@@ -79,7 +81,7 @@ export function prepareSunburstOptions(
         },
       })),
     ],
-    tooltip: getTreemapTooltipSettings(dataOptions, designOptions, {
+    tooltip: getTreemapTooltipSettings(dataOptions, designOptions, translate, {
       displayTotalContribution: true,
       displayColorCircles: true,
       shouldSkip: (context: TooltipFormatterContextObject) =>

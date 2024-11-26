@@ -102,7 +102,8 @@ describe('ExecuteQueryByWidgetId', () => {
     await waitFor(() => {
       expect(getByText(TEXT_TO_DISPLAY)).toBeInTheDocument();
     });
-
-    expect(onBeforeQueryMock).toHaveBeenCalledOnce();
+    await waitFor(() => {
+      expect(onBeforeQueryMock).toHaveBeenCalledOnce();
+    });
   });
 });

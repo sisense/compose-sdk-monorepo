@@ -226,7 +226,7 @@ export const RegularChart = (props: RegularChartProps) => {
 };
 
 /** Type guard for Data */
-function isData(data: any): data is Data {
+export function isData(data: any): data is Data {
   return (
     data &&
     typeof data === 'object' &&

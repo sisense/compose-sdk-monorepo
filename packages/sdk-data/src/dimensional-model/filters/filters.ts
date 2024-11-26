@@ -58,7 +58,7 @@ export const DateOperators = {
   Last: 'last',
   Next: 'next',
   Anchor: 'Anchor',
-};
+} as const;
 
 /**
  * Different logical operators that can be used with logical filters
@@ -800,7 +800,7 @@ export class RelativeDateFilter extends AbstractFilter {
 
   readonly count: number;
 
-  readonly operator: string;
+  readonly operator: typeof DateOperators.Last | typeof DateOperators.Next;
 
   readonly anchor?: Date | string;
 
@@ -808,7 +808,7 @@ export class RelativeDateFilter extends AbstractFilter {
     l: LevelAttribute,
     offset: number,
     count: number,
-    operator?: string,
+    operator?: typeof DateOperators.Last | typeof DateOperators.Next,
     anchor?: Date | string,
     guid?: string,
   ) {

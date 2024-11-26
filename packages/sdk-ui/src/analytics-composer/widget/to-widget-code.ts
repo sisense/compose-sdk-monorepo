@@ -3,11 +3,17 @@ import { ByIdWidgetCodeParams, ClientSideWidgetCodeParams, UiFramework } from '.
 import { isChartWidgetProps } from '@/widget-by-id/utils.js';
 import { DataSource } from '@sisense/sdk-data';
 import { TranslatableError } from '@/translation/translatable-error';
-import { toKebabCase } from '../common/utils.js';
+import { toKebabCase, validateChartType } from '../common/utils.js';
 import { ChartDataOptions, ChartType } from '@/types';
 import { stringifyProps } from './stringify-props.js';
 import { generateCode } from '../code/generate-code.js';
 import { stringifyFilters } from './stringify-filters.js';
+import { CodeTemplateKey } from '../types.js';
+import {
+  fromChartWidgetProps,
+  toExecuteQueryParams,
+} from '../../models/widget/widget-model-translator.js';
+import { ExecuteQueryParams } from '@/query-execution';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;
@@ -19,6 +25,13 @@ type ExtraCodeProps = {
 };
 
 type ChartWidgetCodeProps = Stringify<ChartWidgetProps> & ExtraCodeProps;
+type ExecuteQueryCodeProps = Stringify<ExecuteQueryParams> & { extraImportsString: string };
+
+const widgetByIdTemplateKeys: CodeTemplateKey[] = ['executeQueryByWidgetIdTmpl', 'widgetByIdTmpl'];
+const widgetClientSideTemplateKeys: CodeTemplateKey[] = [
+  'executeQueryWidgetTmpl',
+  'chartWidgetTmpl',
+];
 
 const stringifyDataSource = (dataSource: DataSource | undefined): string => {
   if (!dataSource) {
@@ -55,7 +68,11 @@ const stringifyExtraImports = (props: ChartWidgetProps): string => {
   return `import { ${importNames.join(', ')} } from '@sisense/sdk-data';`;
 };
 
-const getChartWidgetCode = (props: ChartWidgetProps, uiFramework: UiFramework): string => {
+const getChartWidgetCode = (
+  props: ChartWidgetProps,
+  uiFramework: UiFramework,
+  templateKey: CodeTemplateKey,
+): string => {
   const codeProps: ChartWidgetCodeProps = {
     titleString: props.title,
     dataSourceString: stringifyDataSource(props.dataSource),
@@ -65,24 +82,50 @@ const getChartWidgetCode = (props: ChartWidgetProps, uiFramework: UiFramework): 
     componentString: 'ChartWidget',
     extraImportsString: stringifyExtraImports(props),
   };
-  return generateCode('chartWidgetTmpl', codeProps, uiFramework);
+  return generateCode(templateKey, codeProps, uiFramework);
+};
+
+const getExecuteQueryWidgetCode = (
+  props: ChartWidgetProps,
+  uiFramework: UiFramework,
+  templateKey: CodeTemplateKey,
+): string => {
+  const widgetModel = fromChartWidgetProps(props);
+  const queryParams = toExecuteQueryParams(widgetModel);
+  const codeProps: ExecuteQueryCodeProps = {
+    dataSourceString: stringifyDataSource(queryParams.dataSource),
+    dimensionsString: '[]', // TODO
+    measuresString: '[]', // TODO
+    filtersString: stringifyFilters(queryParams.filters),
+    highlightsString: '[]', // TODO
+    extraImportsString: stringifyExtraImports(props),
+  };
+  return generateCode(templateKey, codeProps, uiFramework);
 };
 
 export const toWidgetCodeById = ({
   dashboardOid,
   widgetOid,
   uiFramework = 'react',
+  chartType = 'table',
+  includeChart = true,
 }: ByIdWidgetCodeParams): string => {
+  validateChartType(chartType);
   const codeProps = { dashboardOid, widgetOid };
-  return generateCode('widgetByIdTmpl', codeProps, uiFramework);
+  const templateKey = widgetByIdTemplateKeys[Number(includeChart)];
+  return generateCode(templateKey, codeProps, uiFramework);
 };
 
 export const toWidgetCodeClientSide = ({
   widgetProps,
   uiFramework = 'react',
+  includeChart = true,
 }: ClientSideWidgetCodeParams): string => {
   if (isChartWidgetProps(widgetProps)) {
-    return getChartWidgetCode(widgetProps, uiFramework);
+    validateChartType(widgetProps.chartType);
+    const templateKey = widgetClientSideTemplateKeys[Number(includeChart)];
+    if (includeChart) return getChartWidgetCode(widgetProps, uiFramework, templateKey);
+    return getExecuteQueryWidgetCode(widgetProps, uiFramework, templateKey);
   }
 
   throw new TranslatableError('errors.otherWidgetTypesNotSupported');

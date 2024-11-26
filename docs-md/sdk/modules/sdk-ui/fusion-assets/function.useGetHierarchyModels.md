@@ -12,7 +12,7 @@ React hook that retrieves existing hierarchy models from a Fusion instance.
 
 | Parameter | Type |
 | :------ | :------ |
-| ...`args` | [[`GetHierarchiesParams`](../interfaces/interface.GetHierarchiesParams.md)] |
+| ...`args` | [[`GetHierarchyModelsParams`](../interfaces/interface.GetHierarchyModelsParams.md)] |
 
 ## Returns
 

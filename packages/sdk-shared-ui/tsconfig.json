@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "types": ["vite/client", "vitest", "./src/types"]
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
+  "extends": "../../tsconfig.json"
+}

@@ -52,6 +52,18 @@ Callback indicating when the source member filter object should be updated
 
 ***
 
+### onDelete
+
+> **onDelete**?: () => `void`
+
+Filter delete callback
+
+#### Returns
+
+`void`
+
+***
+
 ### parentFilters
 
 > **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]

@@ -16,6 +16,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         <svg
           aria-label="arrow-down"
           class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+          data-testid="expand-collapse-button"
           fill="#5B6372"
           height="16"
           viewBox="0 0 24 24"
@@ -93,6 +94,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         <svg
           aria-label="arrow-down"
           class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+          data-testid="expand-collapse-button"
           fill="#5B6372"
           height="16"
           viewBox="0 0 24 24"
@@ -170,6 +172,7 @@ exports[`FiltersPanelTile > renders CriteriaFilterTile for TextFilter 1`] = `
         <svg
           aria-label="arrow-down"
           class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+          data-testid="expand-collapse-button"
           fill="#5B6372"
           height="16"
           viewBox="0 0 24 24"
@@ -371,6 +374,7 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
         <svg
           aria-label="arrow-down"
           class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+          data-testid="expand-collapse-button"
           fill="#5B6372"
           height="16"
           viewBox="0 0 24 24"
@@ -387,7 +391,7 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          Test Revenue
+          Years
         </span>
       </header>
       <main
@@ -396,7 +400,7 @@ exports[`FiltersPanelTile > renders RelativeDateFilterTile for RelativeDateFilte
         <div
           class="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
         >
-          dateFilter.next 1 undefined dateFilter.from dateFilter.today
+          dateFilter.next 1 dateFilter.years dateFilter.from dateFilter.today
         </div>
       </main>
       <footer
@@ -533,7 +537,7 @@ exports[`FiltersPanelTile > renders locked RelativeDateFilter component 1`] = `
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114);"
         >
-          Test Revenue
+          Years
         </span>
       </header>
       <main
@@ -542,7 +546,7 @@ exports[`FiltersPanelTile > renders locked RelativeDateFilter component 1`] = `
         <div
           class="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center"
         >
-          dateFilter.next 1 undefined dateFilter.from dateFilter.today
+          dateFilter.next 1 dateFilter.years dateFilter.from dateFilter.today
         </div>
         <div
           style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"

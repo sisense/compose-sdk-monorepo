@@ -1545,6 +1545,7 @@ exports[`Chart > pie chart > render pie chart with cat and no value 1`] = `
         "style": {
           "color": "#000000",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
+          "textOutline": "none",
         },
       },
       "innerSize": "0%",
@@ -1786,6 +1787,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         "style": {
           "color": "#000000",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
+          "textOutline": "none",
         },
       },
       "innerSize": "0%",
@@ -2027,6 +2029,7 @@ exports[`Chart > pie chart > render pie chart with two values 1`] = `
         "style": {
           "color": "#000000",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
+          "textOutline": "none",
         },
       },
       "innerSize": "0%",

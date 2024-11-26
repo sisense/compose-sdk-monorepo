@@ -4,6 +4,10 @@ import { WidgetContainerStyleOptions } from '../../types';
 import { getShadowValue, WidgetCornerRadius, WidgetSpaceAround } from './widget-style-utils';
 import { WidgetHeader } from './widget-header';
 import get from 'lodash-es/get';
+import {
+  useWidgetErrorsAndWarnings,
+  WidgetErrorsAndWarningsProvider,
+} from './widget-errors-and-warnings-context';
 
 interface WidgetContainerProps {
   dataSetName?: string;
@@ -17,7 +21,16 @@ interface WidgetContainerProps {
 }
 
 /** @internal */
-export const WidgetContainer: React.FC<WidgetContainerProps> = ({
+export const WidgetContainer: React.FC<WidgetContainerProps> = (props) => {
+  return (
+    <WidgetErrorsAndWarningsProvider>
+      <RawWidgetContainer {...props} />
+    </WidgetErrorsAndWarningsProvider>
+  );
+};
+
+/** @internal */
+export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
   dataSetName,
   styleOptions,
   title,
@@ -27,8 +40,8 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
   children,
   onRefresh = () => {},
 }: WidgetContainerProps) => {
+  const { errors, warnings } = useWidgetErrorsAndWarnings();
   const { themeSettings } = useThemeContext();
-
   return (
     <div className="csdk-w-full csdk-h-full csdk-overflow-hidden">
       <div
@@ -58,6 +71,8 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
               title={title}
               description={description}
               dataSetName={dataSetName}
+              errorMessages={errors}
+              warningMessages={warnings}
               styleOptions={styleOptions?.header}
               onRefresh={onRefresh}
             />

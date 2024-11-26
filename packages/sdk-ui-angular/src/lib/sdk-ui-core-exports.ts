@@ -107,6 +107,7 @@ export type {
   // Models:
   WidgetModel,
   DashboardModel,
+  HierarchyModel,
 
   // Charts related:
   BeforeRenderHandler,
@@ -147,4 +148,5 @@ export type {
   CriteriaFilterType,
   Member,
   FilterVariant,
+  Hierarchy,
 } from '@sisense/sdk-ui-preact';

@@ -102,6 +102,8 @@ exports[`WidgetModel > getExecutePivotQueryParams > getChartProps > should retur
     ],
   },
   "dataSet": {
+    "address": "localHost",
+    "id": "localhost_aSampleIAAaHealthcare",
     "title": "Sample Healthcare",
     "type": "elasticube",
   },

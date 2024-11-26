@@ -42,7 +42,7 @@ URL of the Sisense environment the app connects to
 
 #### onError
 
-> **onError**?: (`error`) => `void`
+> **onError**?: (`error`, `errorDetails`?) => `void`
 
 Callback function that is triggered when an error occurs within the Sisense context.
 
@@ -54,6 +54,9 @@ such as incorrect configuration, invalid authentication, or network-related issu
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `error` | `Error` | The error object containing details about the issue. |
+| `errorDetails`? | `object` | Additional details about the error, such as the component name and props that caused this error. |
+| `errorDetails.componentName`? | `string` | The name of the component that caused the error. |
+| `errorDetails.componentProps`? | `unknown` | The props of the component that caused the error. |
 
 ##### Returns
 

@@ -10,7 +10,7 @@ import {
   filterFactory,
 } from '@sisense/sdk-data';
 import { BasicInput, DateRangeFieldButton, Dropdown, FilterVariant } from '../../common/index.js';
-import { FunctionComponent, useRef, useState } from 'react';
+import { FunctionComponent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isVertical } from '../../common/filter-utils.js';
 import { DEFAULT_FORMAT } from '../consts.js';
@@ -20,6 +20,8 @@ import dayjs from 'dayjs';
 import { useThemeContext } from '../../../../theme-provider/index.js';
 import isToday from 'dayjs/plugin/isToday';
 import { TranslatableError } from '@/translation/translatable-error.js';
+import { createAnchorDateFromRelativeDateFilter } from './helpers';
+
 dayjs.extend(isToday);
 
 /**
@@ -44,7 +46,7 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
   const operator = filter.operator;
   const count = filter.count;
   const levelAttr = filter.attribute as DimensionalLevelAttribute;
-  const anchor = dayjs(filter.anchor);
+  const anchor = useMemo(() => createAnchorDateFromRelativeDateFilter(filter), [filter]);
   const dateLimits = {
     maxDate: limit ? dayjs(limit.maxDate) : undefined,
     minDate: limit ? dayjs(limit?.minDate) : undefined,

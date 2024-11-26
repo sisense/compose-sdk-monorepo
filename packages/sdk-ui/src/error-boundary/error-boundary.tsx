@@ -1,7 +1,7 @@
 import { Component, ReactNode } from 'react';
 import ErrorBoundaryBox from './error-boundary-box';
-import { SisenseContextPayload } from '../sisense-context/sisense-context';
 import { AbstractTranslatableError } from '@sisense/sdk-common';
+import isEqual from 'lodash-es/isEqual';
 
 /**
  * @internal
@@ -11,6 +11,8 @@ interface ErrorBoundaryProps {
   error?: AbstractTranslatableError | Error | string;
   children: ReactNode;
   resetKeys?: any[];
+  onError?: (error: Error) => void;
+  isContainerComponent?: boolean;
 }
 
 type ErrorBoundaryState = { error: AbstractTranslatableError | Error | string | null };
@@ -26,11 +28,15 @@ type ErrorBoundaryState = { error: AbstractTranslatableError | Error | string | 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   showErrorBox = true;
 
-  context: SisenseContextPayload;
+  onError?: (error: Error) => void;
+
+  isContainerComponent: boolean;
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.showErrorBox = props.showErrorBox ?? true;
+    this.onError = props.onError;
+    this.isContainerComponent = props.isContainerComponent || false;
     this.state = { error: null };
   }
 
@@ -40,6 +46,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   componentDidCatch(error: Error) {
     this.setState({ error });
+    this.onError?.(error instanceof Error ? error : new Error(error));
   }
 
   componentDidUpdate(prevProps: ErrorBoundaryProps, prevState: ErrorBoundaryState) {
@@ -50,14 +57,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   render() {
     const error = this.state.error || this.props.error;
-    if (error && this.showErrorBox) {
-      return <ErrorBoundaryBox error={error} />;
+    if (!error || (this.isContainerComponent && !this.showErrorBox)) {
+      return this.props.children;
     }
-
-    return this.props.children;
+    return this.showErrorBox ? <ErrorBoundaryBox error={error} /> : null;
   }
 }
 
 function hasArrayChanged(a: any[] = [], b: any[] = []) {
-  return a.length !== b.length || a.some((item, index) => !Object.is(item, b[index]));
+  return a.length !== b.length || a.some((item, index) => !isEqual(item, b[index]));
 }

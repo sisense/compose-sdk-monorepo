@@ -37,11 +37,14 @@ const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext
 
 // Mock the api/rest-api.js module
 const mockApi = {
-  getCountriesGeoJson: vi.fn(),
-  getUsaStatesGeoJson: vi.fn(),
+  isReady: true,
+  restApi: {
+    getCountriesGeoJson: vi.fn(),
+    getUsaStatesGeoJson: vi.fn(),
+  },
 };
 vi.mock('../../../api/rest-api.js', () => ({
-  useGetApi: vi.fn(() => mockApi),
+  useRestApi: vi.fn(() => mockApi),
 }));
 
 // Mock the LocalStorage
@@ -71,15 +74,15 @@ describe('useGeoJson', () => {
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllMocks();
-    mockApi.getCountriesGeoJson.mockClear();
-    mockApi.getUsaStatesGeoJson.mockClear();
+    mockApi.restApi.getCountriesGeoJson.mockClear();
+    mockApi.restApi.getUsaStatesGeoJson.mockClear();
   });
 
   it('should fetch geoJson from the server and store it in LocalStorage when not cached', async () => {
     const mapType: AreamapType = 'world';
 
     // Mock the getCountriesGeoJson function from the api module
-    mockApi.getCountriesGeoJson.mockResolvedValueOnce({
+    mockApi.restApi.getCountriesGeoJson.mockResolvedValueOnce({
       type: 'FeatureCollection',
       features: [{ type: 'Feature', properties: {}, geometry: {} }],
     });
@@ -104,7 +107,7 @@ describe('useGeoJson', () => {
     const mapType: AreamapType = 'world';
 
     // Mock an error in the getCountriesGeoJson function from the api module
-    mockApi.getCountriesGeoJson.mockResolvedValueOnce(undefined);
+    mockApi.restApi.getCountriesGeoJson.mockResolvedValueOnce(undefined);
 
     const { result } = renderHook(() => useGeoJson(mapType));
 
@@ -138,7 +141,7 @@ describe('useGeoJson', () => {
     const mapType: AreamapType = 'world';
 
     // Mock an error in the getCountriesGeoJson function from the api module
-    mockApi.getCountriesGeoJson.mockRejectedValueOnce(new Error('Server error'));
+    mockApi.restApi.getCountriesGeoJson.mockRejectedValueOnce(new Error('Server error'));
 
     const { result } = renderHook(() => useGeoJson(mapType));
 
@@ -152,7 +155,7 @@ describe('useGeoJson', () => {
     const mapType: AreamapType = 'world';
 
     // Mock the getCountriesGeoJson function from the api module
-    mockApi.getCountriesGeoJson.mockResolvedValueOnce({
+    mockApi.restApi.getCountriesGeoJson.mockResolvedValueOnce({
       type: 'FeatureCollection',
       features: [
         { type: 'Feature', properties: { name: 'Atlantida' }, geometry: {}, id: '-99' },
@@ -205,7 +208,7 @@ describe('useGeoJson', () => {
       },
     });
 
-    mockApi.getCountriesGeoJson.mockResolvedValueOnce({
+    mockApi.restApi.getCountriesGeoJson.mockResolvedValueOnce({
       type: 'FeatureCollection',
       features: [{ type: 'Feature', properties: {}, geometry: {}, id: 'SomeNewCountry' }],
     });

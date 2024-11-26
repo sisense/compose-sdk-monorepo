@@ -16,8 +16,6 @@ import {
   ForecastFormulaOptions,
   TrendFormulaOptions,
   JaqlDataSource,
-  Filter,
-  MeasureColumn,
   getSortType,
 } from '@sisense/sdk-data';
 import {
@@ -274,17 +272,9 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
 
 /** @internal */
 export function createPanelItem(column: StyledColumn | StyledMeasureColumn): PanelItem {
-  const element:
-    | Filter
-    | DimensionalAttribute
-    | DimensionalCalculatedMeasure
-    | DimensionalBaseMeasure
-    | MeasureColumn = column.column;
+  const element = column.column;
   let jaql;
-  if (MetadataTypes.isFilter(element)) {
-    // Highlight cases are not covered; assumption is that we are using plain JAQL filter
-    jaql = (element as Filter).filterJaql();
-  } else if (MetadataTypes.isAttribute(element)) {
+  if (MetadataTypes.isAttribute(element)) {
     jaql = (element as DimensionalAttribute).jaql(true);
   } else if (MetadataTypes.isMeasure(element)) {
     jaql = (element as DimensionalCalculatedMeasure).jaql(true);
@@ -292,10 +282,7 @@ export function createPanelItem(column: StyledColumn | StyledMeasureColumn): Pan
     throw new TranslatableError('errors.unsupportedDimensionalElement');
   }
 
-  return {
-    jaql,
-    // TODO: add format
-  };
+  return jaql.jaql ? jaql : { jaql };
 }
 
 /** @internal */

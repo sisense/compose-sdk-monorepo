@@ -3,11 +3,14 @@ import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model.js';
 
 // Mock the api/rest-api.js module
 const mockApi = {
-  getWidget: vi.fn(),
-  getDashboard: vi.fn(),
+  isReady: true,
+  restApi: {
+    getWidget: vi.fn(),
+    getDashboard: vi.fn(),
+  },
 };
 vi.mock('../api/rest-api', () => ({
-  useGetApi: vi.fn(() => mockApi),
+  useRestApi: vi.fn(() => mockApi),
 }));
 
 describe('useFetchWidgetDtoModel', () => {
@@ -16,8 +19,8 @@ describe('useFetchWidgetDtoModel', () => {
   });
 
   test('should fetch widget DTO model', async () => {
-    mockApi.getWidget.mockResolvedValueOnce({});
-    mockApi.getDashboard.mockResolvedValueOnce({});
+    mockApi.restApi.getWidget.mockResolvedValueOnce({});
+    mockApi.restApi.getDashboard.mockResolvedValueOnce({});
 
     const widgetOid = 'widget-123';
     const dashboardOid = 'dashboard-123';
@@ -31,8 +34,8 @@ describe('useFetchWidgetDtoModel', () => {
   });
 
   test('should fetch widget and dashboard DTO models', async () => {
-    mockApi.getWidget.mockResolvedValueOnce({});
-    mockApi.getDashboard.mockResolvedValueOnce({});
+    mockApi.restApi.getWidget.mockResolvedValueOnce({});
+    mockApi.restApi.getDashboard.mockResolvedValueOnce({});
 
     const widgetOid = 'widget-678';
     const dashboardOid = 'dashboard-678';
@@ -48,8 +51,8 @@ describe('useFetchWidgetDtoModel', () => {
   });
 
   test('should handle empty fetch', async () => {
-    mockApi.getWidget.mockResolvedValueOnce(undefined);
-    mockApi.getDashboard.mockResolvedValueOnce({});
+    mockApi.restApi.getWidget.mockResolvedValueOnce(undefined);
+    mockApi.restApi.getDashboard.mockResolvedValueOnce({});
 
     const widgetOid = 'widget-456';
     const dashboardOid = 'dashboard-456';
@@ -63,8 +66,8 @@ describe('useFetchWidgetDtoModel', () => {
   });
 
   test('should handle fetch error', async () => {
-    mockApi.getWidget.mockRejectedValueOnce(new Error('Fetch error'));
-    mockApi.getDashboard.mockResolvedValueOnce({});
+    mockApi.restApi.getWidget.mockRejectedValueOnce(new Error('Fetch error'));
+    mockApi.restApi.getDashboard.mockResolvedValueOnce({});
 
     const widgetOid = 'widget-901';
     const dashboardOid = 'dashboard-901';

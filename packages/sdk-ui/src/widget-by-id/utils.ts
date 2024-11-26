@@ -57,6 +57,11 @@ const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
   tablewidget: 'table',
   tablewidgetagg: 'table',
 };
+/**
+ * Returns the corresponding chart type for a given widget type
+ *
+ * @internal
+ */
 export function getChartType(widgetType: WidgetType) {
   return widgetTypeToChartType[widgetType];
 }
@@ -160,6 +165,7 @@ export function isChartWidget(widgetType: WidgetTypeOrString) {
  *
  * @param widgetProps - The widget props to check.
  * @returns whether the widget props is for a text widget
+ * @internal
  */
 export function isTextWidgetProps(
   widgetProps: CommonWidgetProps,
@@ -172,6 +178,7 @@ export function isTextWidgetProps(
  *
  * @param widgetProps - The widget props to check.
  * @returns whether the widget props is for a pivot table widget
+ * @internal
  */
 export function isPivotTableWidgetProps(
   widgetProps: CommonWidgetProps,
@@ -184,6 +191,7 @@ export function isPivotTableWidgetProps(
  *
  * @param widgetProps - The widget props to check.
  * @returns whether the widget props is for a plugin widget
+ * @internal
  */
 export function isPluginWidgetProps(
   widgetProps: CommonWidgetProps,
@@ -196,6 +204,7 @@ export function isPluginWidgetProps(
  *
  * @param widgetProps - The widget props to check.
  * @returns whether the widget props is for a chart widget
+ * @internal
  */
 export function isChartWidgetProps(
   widgetProps: CommonWidgetProps,

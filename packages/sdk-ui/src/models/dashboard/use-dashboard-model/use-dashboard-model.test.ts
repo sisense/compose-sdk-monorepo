@@ -1,11 +1,17 @@
-import { dashboardModelTranslator, useDashboardModel, UseDashboardModelActionType } from '@/models';
-import { act, renderHook } from '@testing-library/react';
+import {
+  dashboardModelTranslator,
+  useDashboardModel,
+  UseDashboardModelActionType,
+  widgetModelTranslator,
+} from '@/models';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { filterFactory } from '@sisense/sdk-data';
 import * as DM from '../../../__test-helpers__/sample-ecommerce';
 import { SisenseContextPayload, useSisenseContext } from '@/sisense-context/sisense-context';
 import type { Mock } from 'vitest';
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { ClientApplication } from '@/app/client-application';
+import { sampleEcommerceDashboard } from '../../__mocks__/sample-ecommerce-dashboard';
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
@@ -32,10 +38,21 @@ vi.mock('../../../sisense-context/sisense-context', async () => {
 });
 
 const patchDashboardMock = vi.fn().mockImplementation(() => Promise.resolve());
+const NEW_WIDGET_OID = 'widget-123';
+const addWidgetToDashboardMock = vi.fn().mockImplementation(() =>
+  Promise.resolve({
+    ...sampleEcommerceDashboard.widgets![0]!,
+    oid: NEW_WIDGET_OID,
+  }),
+);
 vi.mock('@/api/rest-api', async () => {
   return {
-    useGetApi: () => ({
-      patchDashboard: patchDashboardMock,
+    useRestApi: () => ({
+      isReady: true,
+      restApi: {
+        patchDashboard: patchDashboardMock,
+        addWidgetToDashboard: addWidgetToDashboardMock,
+      },
     }),
   };
 });
@@ -103,6 +120,9 @@ describe('useGetDashboardModel', () => {
         persist: true,
       }),
     );
+    await waitFor(() => {
+      expect(result.current.dashboard).toBeTruthy();
+    });
 
     const { dispatchChanges } = result.current;
     act(() => {
@@ -112,11 +132,46 @@ describe('useGetDashboardModel', () => {
       });
     });
 
-    expect(result.current.dashboard).toEqual({
-      ...dashboardMock,
-      filters: newFilters,
+    await waitFor(() => {
+      expect(result.current.dashboard).toEqual({
+        ...dashboardMock,
+        filters: newFilters,
+      });
     });
     expect(patchDashboardMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should update and persist dashboard widgets', async () => {
+    const newWidget = widgetModelTranslator.fromWidgetDto(sampleEcommerceDashboard.widgets![0]!);
+    const { result } = renderHook(() =>
+      useDashboardModel({
+        dashboardOid: dashboardMock.oid,
+        includeWidgets: true,
+        persist: true,
+      }),
+    );
+    await waitFor(() => {
+      expect(result.current.dashboard).toBeTruthy();
+    });
+
+    const { dispatchChanges } = result.current;
+    act(() => {
+      dispatchChanges({
+        type: UseDashboardModelActionType.ADD_WIDGET,
+        payload: newWidget,
+      });
+    });
+
+    await waitFor(() => {
+      // id is assigned by the server
+      expect(result.current.dashboard?.widgets[0].dataOptions).toStrictEqual(
+        expect.objectContaining(newWidget.dataOptions),
+      );
+      expect(result.current.dashboard?.widgets[0].oid).toBe(NEW_WIDGET_OID);
+    });
+    await waitFor(() => {
+      expect(addWidgetToDashboardMock).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('should update and not persist dashboard filters in case of WAT auth', async () => {
@@ -139,6 +194,9 @@ describe('useGetDashboardModel', () => {
         persist: true,
       }),
     );
+    await waitFor(() => {
+      expect(result.current.dashboard).toBeTruthy();
+    });
 
     const { dispatchChanges } = result.current;
     act(() => {
@@ -148,9 +206,12 @@ describe('useGetDashboardModel', () => {
       });
     });
 
-    expect(result.current.dashboard).toEqual({
-      ...dashboardMock,
-      filters: newFilters,
+    await waitFor(() => {
+      expect(result.current.dashboard).toEqual(
+        expect.objectContaining({
+          filters: newFilters,
+        }),
+      );
     });
     expect(patchDashboardMock).toHaveBeenCalledTimes(0);
   });

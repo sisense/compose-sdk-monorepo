@@ -161,4 +161,36 @@ describe('criteria tests', () => {
     expect(button1).not.toBeInTheDocument();
     expect(screen.getByText('max Revenue')).toBeInTheDocument();
   });
+
+  it('should not have delete button by default', async () => {
+    const { queryByTestId } = render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsBetween} />
+      </MockedSisenseContextProvider>,
+    );
+    const deleteButton = queryByTestId('filter-delete-button');
+    expect(deleteButton).not.toBeInTheDocument();
+  });
+
+  it('should have delete button if onDelete is provided', async () => {
+    const { findByTestId } = render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsBetween} onDelete={() => {}} />
+      </MockedSisenseContextProvider>,
+    );
+    const deleteButton = await findByTestId('filter-delete-button');
+    expect(deleteButton).toBeInTheDocument();
+  });
+
+  it('should call onDelete when delete button is clicked', async () => {
+    const onDelete = vi.fn();
+    const { findByTestId } = render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsBetween} onDelete={onDelete} />
+      </MockedSisenseContextProvider>,
+    );
+    const deleteButton = await findByTestId('filter-delete-button');
+    deleteButton.click();
+    expect(onDelete).toHaveBeenCalled();
+  });
 });

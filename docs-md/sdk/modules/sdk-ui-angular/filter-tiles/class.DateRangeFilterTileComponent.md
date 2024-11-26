@@ -10,7 +10,7 @@ Date Range Filter Tile Component
 
 ```html
 <csdk-date-range-filter-tile
-      title="dateRangeFilterTileProps.title"
+      [title]="dateRangeFilterTileProps.title"
       [attribute]="dateRangeFilterTileProps.attribute"
       [filter]="dateRangeFilterTileProps.filter"
       (filterChange)="dateRangeFilterTileProps.setFilter($event)"

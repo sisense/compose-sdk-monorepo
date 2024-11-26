@@ -4,3 +4,4 @@ export * from './theme.service';
 export * from './plugins.service';
 export * from './dashboard.service';
 export * from './widget.service';
+export * from './hierarchy.service';

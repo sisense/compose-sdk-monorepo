@@ -18,6 +18,8 @@ export interface CustomFilterTileProps {
    * @param filter - Custom filter
    */
   onUpdate: (filter: Filter | null) => void;
+  /** Filter delete callback */
+  onDelete?: () => void;
   /** Design options for the tile @internal */
   tileDesignOptions?: FilterTileDesignOptions;
 }
@@ -52,7 +54,7 @@ export const CustomFilterTile = asSisenseComponent({
 })((props: CustomFilterTileProps) => {
   const { t } = useTranslation();
 
-  const { filter, onUpdate, tileDesignOptions } = props;
+  const { filter, onUpdate, onDelete, tileDesignOptions } = props;
   const filterJaql = filter.jaql().jaql.filter;
   // Remove internal properties from the filter jaql
   delete filterJaql.custom;
@@ -82,6 +84,7 @@ export const CustomFilterTile = asSisenseComponent({
       onToggleDisabled={() => onUpdate(getFilterWithToggledDisabled(filter))}
       design={tileDesignOptions || { header: { isCollapsible: false } }}
       locked={filter.locked}
+      onDelete={onDelete}
     />
   );
 });

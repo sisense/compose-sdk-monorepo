@@ -124,13 +124,18 @@ export const SisenseContextProvider: FunctionComponent<
 
   return (
     <I18nProvider userLanguage={userLanguage} customTranslations={customTranslations}>
-      <ErrorBoundary showErrorBox={showRuntimeErrors} error={clientApplicationError}>
+      <ErrorBoundary
+        showErrorBox={showRuntimeErrors}
+        error={clientApplicationError}
+        onError={onError}
+        isContainerComponent
+      >
         <SisenseContext.Provider
           value={{
             isInitialized: true,
             app,
             tracking,
-            errorBoundary: { showErrorBox: showRuntimeErrors },
+            errorBoundary: { showErrorBox: showRuntimeErrors, onError },
           }}
         >
           <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>

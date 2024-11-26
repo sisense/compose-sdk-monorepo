@@ -81,6 +81,7 @@ Vue components and functions for working with Fusion dashboards, widgets, querie
 - [useFetch](fusion-assets/function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetHierarchyModels](fusion-assets/function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetById](fusion-assets/class.WidgetById.md) <Badge type="fusionEmbed" text="Fusion Embed" />

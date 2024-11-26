@@ -24,6 +24,8 @@ export interface CascadingFilterTileProps {
   arrangement?: FilterVariant;
   /** Callback returning filter object, or null for failure */
   onChange: (filter: Filter) => void;
+  /** Filter delete callback */
+  onDelete?: () => void;
 }
 
 /**
@@ -40,6 +42,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
       filter: filterFromProps,
       arrangement,
       onChange: updateFilterFromProps,
+      onDelete,
       dataSource,
     } = props;
 
@@ -103,6 +106,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
           },
         }}
         locked={filter.locked}
+        onDelete={onDelete}
       />
     );
   },

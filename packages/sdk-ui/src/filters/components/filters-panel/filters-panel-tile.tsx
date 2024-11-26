@@ -29,6 +29,8 @@ export type FiltersPanelTileProps = {
   filter: Filter;
   /** Callback to handle filter change */
   onChange: (filter: Filter | null) => void;
+  /** Filter delete callback */
+  onDelete?: () => void;
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
 };
@@ -41,6 +43,7 @@ export type FiltersPanelTileProps = {
 export const FiltersPanelTile = ({
   filter,
   onChange,
+  onDelete,
   defaultDataSource,
 }: FiltersPanelTileProps) => {
   const attribute = filter.attribute;
@@ -50,6 +53,7 @@ export const FiltersPanelTile = ({
     title,
     onChange,
     onUpdate: onChange,
+    onDelete,
     ...(defaultDataSource ? { dataSource: defaultDataSource } : null),
   };
   // checking for custom filters first to prevent conversion attempts
@@ -89,5 +93,11 @@ export const FiltersPanelTile = ({
     return <CascadingFilterTile {...props} filter={filter} onChange={onChange} />;
   }
 
-  return <UnsupportedFilterTile filter={filter} design={{ header: { isCollapsible: false } }} />;
+  return (
+    <UnsupportedFilterTile
+      filter={filter}
+      design={{ header: { isCollapsible: false } }}
+      onDelete={onDelete}
+    />
+  );
 };

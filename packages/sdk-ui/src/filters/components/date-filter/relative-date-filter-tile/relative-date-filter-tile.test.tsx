@@ -101,4 +101,54 @@ describe('RelativeDateFilterTile tests', () => {
     expect(props.onUpdate).toHaveBeenCalled();
     expect(calendarDay).not.toBeInTheDocument();
   });
+
+  it('should not have delete button by default', async () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'vertical' as FilterVariant,
+      onUpdate: vi.fn(),
+    };
+    const { queryByTestId } = render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} />
+      </MockedSisenseContextProvider>,
+    );
+    const deleteButton = queryByTestId('filter-delete-button');
+    expect(deleteButton).not.toBeInTheDocument();
+  });
+
+  it('should have delete button if onDelete is provided', async () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'vertical' as FilterVariant,
+      onUpdate: vi.fn(),
+    };
+    const { findByTestId } = render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} onDelete={() => {}} />
+      </MockedSisenseContextProvider>,
+    );
+    const deleteButton = await findByTestId('filter-delete-button');
+    expect(deleteButton).toBeInTheDocument();
+  });
+
+  it('should call onDelete when delete button is clicked', async () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'vertical' as FilterVariant,
+      onUpdate: vi.fn(),
+    };
+    const onDelete = vi.fn();
+    const { findByTestId } = render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} onDelete={onDelete} />
+      </MockedSisenseContextProvider>,
+    );
+    const deleteButton = await findByTestId('filter-delete-button');
+    deleteButton.click();
+    expect(onDelete).toHaveBeenCalled();
+  });
 });
