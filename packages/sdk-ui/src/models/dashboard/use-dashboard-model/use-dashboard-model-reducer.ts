@@ -1,7 +1,11 @@
 import { DashboardModel, WidgetModel, widgetModelTranslator } from '@/models';
-import { Filter } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { RestApi } from '@/api/rest-api';
 import { filterToFilterDto } from '../translate-dashboard-dto-utils';
+import {
+  filterRelationRulesToFilterRelationsModel,
+  splitFiltersAndRelations,
+} from '@/utils/filter-relations';
 
 export type UseDashboardModelState = DashboardModel | null;
 
@@ -53,7 +57,7 @@ export type UseDashboardModelAction =
  */
 export type UseDashboardModelFilterUpdateAction = {
   type: UseDashboardModelActionType.FILTERS_UPDATE;
-  payload: Filter[];
+  payload: Filter[] | FilterRelations;
 };
 
 /**
@@ -126,7 +130,7 @@ export function dashboardReducer(
  * @param reducer - The dashboard model reducer
  * @internal
  */
-export function persistDashboardModelMiddleware(
+export async function persistDashboardModelMiddleware(
   dashbordOid: string | undefined,
   action: UseDashboardModelInternalAction,
   restApi: RestApi,
@@ -134,22 +138,41 @@ export function persistDashboardModelMiddleware(
   if (!dashbordOid) throw new Error('Dashboard model is not initialized');
 
   if (action.type === UseDashboardModelActionType.FILTERS_UPDATE) {
-    return restApi
-      .patchDashboard(dashbordOid, {
-        filters: action.payload.map(filterToFilterDto),
-      })
-      .then(() => action);
+    const { filters, relations } = splitFiltersAndRelations(action.payload);
+    const filterDtos = filters.map(filterToFilterDto);
+    const filterRelationsModel = filterRelationRulesToFilterRelationsModel(relations, filters);
+    const stringDataSource = getDataSourceStringFromFilters(filters);
+    await restApi.patchDashboard(dashbordOid, {
+      filters: filterDtos,
+      filterRelations: filterRelationsModel
+        ? [
+            {
+              datasource: stringDataSource,
+              filterRelations: filterRelationsModel,
+            },
+          ]
+        : undefined,
+    });
   } else if (action.type === UseDashboardModelActionType.ADD_WIDGET) {
-    return restApi
-      .addWidgetToDashboard(dashbordOid, widgetModelTranslator.toWidgetDto(action.payload))
-      .then((widgetDto) => {
-        if (!widgetDto) throw new Error('Failed to add widget to dashboard');
-        return {
-          type: UseDashboardModelActionType.ADD_WIDGET,
-          payload: widgetModelTranslator.fromWidgetDto(widgetDto),
-        };
-      });
+    const widgetDto = await restApi.addWidgetToDashboard(
+      dashbordOid,
+      widgetModelTranslator.toWidgetDto(action.payload),
+    );
+
+    if (!widgetDto) throw new Error('Failed to add widget to dashboard');
+    return {
+      type: UseDashboardModelActionType.ADD_WIDGET,
+      payload: widgetModelTranslator.fromWidgetDto(widgetDto),
+    };
   }
 
-  return Promise.resolve(action);
+  return action;
+}
+
+function getDataSourceStringFromFilters(filters: Filter[]): string {
+  const allUniqueDatasources = new Set(filters.map((filter) => filter.dataSource?.title));
+  if (allUniqueDatasources.size > 1) {
+    throw new Error('Persisting filters from multiple datasources is not supported now');
+  }
+  return allUniqueDatasources.values().next().value;
 }

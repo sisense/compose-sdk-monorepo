@@ -8,7 +8,7 @@ import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
 import { MenuOptions } from '@/common/components/menu/types';
 import { MenuIds } from '@/common/components/menu/menu-ids';
 import { DashboardProps } from './types.js';
-import { Filter } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { useSyncedState } from '@/common/hooks/use-synced-state.js';
 
 export type ComposableDashboardProps = Pick<
@@ -40,7 +40,7 @@ export type UseComposedDashboardOptions = {
   /**
    * @internal
    */
-  onFiltersChange?: (filters: Filter[]) => void;
+  onFiltersChange?: (filters: Filter[] | FilterRelations) => void;
 };
 
 /**
@@ -55,11 +55,14 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
 ): {
   dashboard: D;
   // APIs:
-  setFilters: (filters: Filter[]) => void;
+  setFilters: (filters: Filter[] | FilterRelations) => void;
 } {
   const { filters, widgets, widgetsOptions } = initialDashboard;
+  // This state is needed to avoid losing the inner state when new widget objects are received from toDashboardProps.
+  // Known issue: if the user forces an update with identical widgets as those already present in widgetsFromProps, it will be ignored.
+  const [widgetsFromProps] = useSyncedState<WidgetProps[]>(widgets);
   // Internal widget state
-  const [innerWidgets, setInnerWidgets] = useSyncedState<WidgetProps[]>(widgets);
+  const [innerWidgets, setInnerWidgets] = useSyncedState<WidgetProps[]>(widgetsFromProps);
   // Combined menu logic
   const { openMenu, onBeforeMenuOpen } = useCombinedMenu({
     isTargetMenu: isDrilldownMenu,

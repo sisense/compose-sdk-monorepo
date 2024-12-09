@@ -16,7 +16,7 @@ import { isDataTableEmpty } from '../chart-data-processor/table-creators';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { translateTableStyleOptionsToDesignOptions } from './translations/design-options';
 import { orderBy } from '../chart-data-processor/table-processor';
 import { isMeasureColumn, translateColumnToMeasure } from '@/chart-data-options/utils';
@@ -41,7 +41,8 @@ export const TableComponent = ({
   const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE, width, height } = styleOptions;
   const { themeSettings } = useThemeContext();
   const [offset, setOffset] = useState(0);
-  const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
+  const { filters: filterList, relations: filterRelations } =
+    getFilterListAndRelationsJaql(filters);
   const [currentPage, setCurrentPage] = useState(1);
   const paginationEl = useRef(null);
 

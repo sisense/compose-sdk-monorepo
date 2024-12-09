@@ -9,7 +9,8 @@ title: numeric
   `operatorA`?,
   `valueA`?,
   `operatorB`?,
-  `valueB`?): [`Filter`](../../../interfaces/interface.Filter.md)
+  `valueB`?,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a custom numeric filter that filters for given attribute values.
 
@@ -22,6 +23,7 @@ Creates a custom numeric filter that filters for given attribute values.
 | `valueA`? | `number` | First value |
 | `operatorB`? | `string` | Second operator |
 | `valueB`? | `number` | Second value |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

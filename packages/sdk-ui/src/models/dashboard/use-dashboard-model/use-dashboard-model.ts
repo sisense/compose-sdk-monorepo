@@ -74,6 +74,7 @@ export function useDashboardModelInternal({
     dashboard: fetchedDashboard,
     isLoading,
     isError,
+    error,
   } = useGetDashboardModel({
     dashboardOid,
     includeWidgets,
@@ -93,6 +94,7 @@ export function useDashboardModelInternal({
     dashboard,
     isLoading,
     isError,
+    error,
     dispatchChanges: persistantDispatch as Dispatch<UseDashboardModelAction>,
   };
 }

@@ -17,6 +17,7 @@ const FlexDiv = styled.div<Themable>`
   align-items: center;
   gap: 10px;
   margin: 24px 0;
+  max-width: 640px;
 `;
 
 const IconDiv = styled.div<Themable>`

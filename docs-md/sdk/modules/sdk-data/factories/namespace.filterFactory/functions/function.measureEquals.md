@@ -4,7 +4,10 @@ title: measureEquals
 
 # Function measureEquals
 
-> **measureEquals**(`measure`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **measureEquals**(
+  `measure`,
+  `value`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate a measure value equal to a given number.
 
@@ -14,6 +17,7 @@ Creates a filter to isolate a measure value equal to a given number.
 | :------ | :------ | :------ |
 | `measure` | [`BaseMeasure`](../../../interfaces/interface.BaseMeasure.md) | Measure to filter by |
 | `value` | `number` | Value |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

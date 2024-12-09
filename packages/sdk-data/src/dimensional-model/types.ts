@@ -413,33 +413,33 @@ export type FormulaJaql = {
 };
 
 /** @internal */
-export type BaseFilter =
-  | IncludeAllFilter
-  | IncludeMembersFilter
-  | ExcludeMembersFilter
-  | JaqlNumericFilter
+export type BaseFilterJaql =
+  | IncludeAllFilterJaql
+  | IncludeMembersFilterJaql
+  | ExcludeMembersFilterJaql
+  | NumericFilterJaql
   | ConditionFilterJaql
-  | AndFilter<JaqlNumericFilter | ConditionFilterJaql>
-  | OrFilter<JaqlNumericFilter | ConditionFilterJaql>;
+  | AndFilterJaql<NumericFilterJaql | ConditionFilterJaql>
+  | OrFilterJaql<NumericFilterJaql | ConditionFilterJaql>;
 
 /** @internal */
-export type BackgroundFilter = BaseFilter & {
+export type BackgroundFilterJaql = BaseFilterJaql & {
   level?: 'string';
 };
 
 /** @internal */
-export type IncludeAllFilter = {
+export type IncludeAllFilterJaql = {
   all: true;
 };
 
 /** @internal */
-export type IncludeMembersFilter = {
+export type IncludeMembersFilterJaql = {
   members: string[];
   multiSelection?: boolean;
 };
 
 /** @internal */
-export type ExcludeMembersFilter = {
+export type ExcludeMembersFilterJaql = {
   exclude: {
     members: string[];
   };
@@ -447,21 +447,21 @@ export type ExcludeMembersFilter = {
 };
 
 /** @internal */
-export type TurnOffMembersFilter = ExcludeMembersFilter & {
+export type TurnOffMembersFilterJaql = ExcludeMembersFilterJaql & {
   turnedOff: boolean;
 };
 
 /** @internal */
 export type FilterJaql = BaseJaql & {
-  filter: BaseFilter & {
-    filter?: BackgroundFilter | TurnOffMembersFilter;
+  filter: BaseFilterJaql & {
+    filter?: BackgroundFilterJaql | TurnOffMembersFilterJaql;
   };
 };
 
 type NumericFilterValue = number | FormulaJaql;
 
 /** @internal */
-export type JaqlNumericFilter = {
+export type NumericFilterJaql = {
   equals?: NumericFilterValue;
   doesntEqual?: NumericFilterValue;
   toNotEqual?: NumericFilterValue;
@@ -475,12 +475,12 @@ export type JaqlNumericFilter = {
   '<='?: NumericFilterValue;
 };
 
-type AndFilter<FilterItem> = {
+type AndFilterJaql<FilterItem> = {
   and: FilterItem[];
 };
 
 /** @internal */
-export type OrFilter<FilterItem> = {
+export type OrFilterJaql<FilterItem> = {
   or: FilterItem[];
 };
 

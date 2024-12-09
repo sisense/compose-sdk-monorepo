@@ -1,7 +1,7 @@
 import * as analyticsFactory from './factory.js';
 import { createAttribute } from '../attributes.js';
 import { Attribute, Measure } from '../interfaces.js';
-import { BaseJaql, FilterJaql, FormulaJaql, JaqlNumericFilter, OrFilter } from '../types.js';
+import { BaseJaql, FilterJaql, FormulaJaql, NumericFilterJaql, OrFilterJaql } from '../types.js';
 
 const attribute = createAttribute({
   name: 'text',
@@ -40,7 +40,7 @@ function validateBoxWhiskerOutliers(
   expect(outliersAttrJaql.filter).toBeDefined();
 
   expectedFilterFormulas.forEach((expectedFormula) => {
-    const filterJaql = (outliersAttrJaql.filter as OrFilter<JaqlNumericFilter>).or
+    const filterJaql = (outliersAttrJaql.filter as OrFilterJaql<NumericFilterJaql>).or
       .map(({ fromNotEqual, toNotEqual }) => (fromNotEqual || toNotEqual) as FormulaJaql)
       .find((formulaJaql) => formulaJaql.formula.includes(expectedFormula));
     expect(filterJaql).toBeDefined();

@@ -1,10 +1,15 @@
 import { WidgetDto } from '../../widget-by-id/types';
-import { FilterJaql, FilterRelationsModel, JaqlDataSource } from '@sisense/sdk-data';
+import {
+  FilterJaql,
+  FilterRelationsModel,
+  FilterRelationsModelNode,
+  JaqlDataSource,
+} from '@sisense/sdk-data';
 import { AnyObject } from '../../utils/utility-types';
 
 /** @internal */
 export type LayoutDto = {
-  columns: {
+  columns?: {
     width: number;
     cells?: {
       subcells: {
@@ -26,9 +31,11 @@ export type FilterDto = {
   locked?: boolean;
 };
 
+type CascadeLevel = FilterJaql & { instanceid?: string };
+
 export type CascadingFilterDto = {
   isCascading: true;
-  levels: FilterJaql[];
+  levels: CascadeLevel[];
   instanceid?: string;
   disabled?: boolean;
   locked?: boolean;
@@ -58,7 +65,8 @@ export type DashboardDto = {
   widgets?: WidgetDto[];
   filters?: Array<FilterDto | CascadingFilterDto>;
   filterRelations?: {
-    filterRelations: FilterRelationsModel;
+    datasource: string;
+    filterRelations: FilterRelationsModel | FilterRelationsModelNode;
   }[];
   layout?: LayoutDto;
   style?: DashboardStyleDto;

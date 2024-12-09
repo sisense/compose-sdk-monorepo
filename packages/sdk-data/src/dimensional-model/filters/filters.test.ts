@@ -332,16 +332,10 @@ describe('Filters jaql preparations', () => {
     };
     const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]');
     const backgroundFilter = new MembersFilter(attribute, ['Female', 'Male']);
-    const filter = new MembersFilter(
-      attribute,
-      ['Female'],
-      false,
-      undefined,
-      undefined,
-      backgroundFilter,
-    );
+    const filter = new MembersFilter(attribute, ['Female']);
+    filter.config = { ...filter.config, backgroundFilter, guid: 'some-id' };
 
-    expect(filter.backgroundFilter).toBe(backgroundFilter);
+    expect(filter.config.backgroundFilter).toBe(backgroundFilter);
 
     const jaql = filter.jaql();
 
@@ -354,11 +348,9 @@ describe('Disabled Filter', () => {
     const filter = new MembersFilter(
       new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
       ['Female'],
+      { guid: 'filter-id', disabled: true },
     );
 
-    expect(filter.disabled).toBe(false);
-
-    filter.disabled = true;
     expect(filter.jaql(true)).toStrictEqual({ filter: {} });
     expect(filter.jaql()).toStrictEqual({ jaql: { filter: {} } });
   });
@@ -371,10 +363,13 @@ describe('Disabled Filter', () => {
         new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
         'sum',
       ),
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      { guid: 'filter-id', disabled: true },
     );
-    expect(filter.disabled).toBe(false);
 
-    filter.disabled = true;
     expect(filter.jaql(true)).toStrictEqual({ filter: {} });
     expect(filter.jaql()).toStrictEqual({ jaql: { filter: {} } });
   });

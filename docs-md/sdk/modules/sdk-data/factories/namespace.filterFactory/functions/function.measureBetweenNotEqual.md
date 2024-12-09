@@ -7,7 +7,8 @@ title: measureBetweenNotEqual
 > **measureBetweenNotEqual**(
   `measure`,
   `valueA`,
-  `valueB`): [`Filter`](../../../interfaces/interface.Filter.md)
+  `valueB`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate a measure value between but not equal to two given numbers.
 
@@ -18,6 +19,7 @@ Creates a filter to isolate a measure value between but not equal to two given n
 | `measure` | [`BaseMeasure`](../../../interfaces/interface.BaseMeasure.md) | Measure to filter by |
 | `valueA` | `number` | Min value |
 | `valueB` | `number` | Max value |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

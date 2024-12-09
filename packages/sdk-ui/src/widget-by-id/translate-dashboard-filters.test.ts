@@ -199,8 +199,8 @@ describe('extractDashboardFiltersForWidget', () => {
 
   it('should extract no filters when all dashboard filters are disabled', () => {
     // disables dashboard filters
-    dummyDashboard.filters?.forEach((filter) => {
-      filter.disabled = true;
+    dummyDashboard.filters?.forEach((filterDto) => {
+      filterDto.disabled = true;
     });
     const { filters, highlights } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
 
@@ -319,8 +319,8 @@ describe('extractDashboardFiltersForWidget', () => {
 
     it('should extract no filters when cascading dashboard filters is disabled', () => {
       // disables dashboard filters
-      dummyDashboard.filters?.forEach((filter) => {
-        filter.disabled = true;
+      dummyDashboard.filters?.forEach((filterDto) => {
+        filterDto.disabled = true;
       });
       const { filters, highlights } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
 
@@ -417,8 +417,8 @@ describe('extractDashboardFiltersForWidget', () => {
 
     it('should extract only background filters when dashboard filters are disabled', () => {
       // disables dashboard filters
-      dummyDashboard.filters?.forEach((filter) => {
-        filter.disabled = true;
+      dummyDashboard.filters?.forEach((filterDto) => {
+        filterDto.disabled = true;
       });
       const { filters, highlights } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
 

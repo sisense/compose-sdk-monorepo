@@ -11,7 +11,9 @@ import { lineChartWidgetDTO } from './__mocks__/line-chart-widget-dto.js';
 import { textWidgetDTO } from './__mocks__/text-widget-dto.js';
 
 const mockFilter1 = {
-  guid: 'mockFilter1',
+  config: {
+    guid: 'mockFilter1',
+  },
   attribute: {
     expression: 'mockExpression1',
   },
@@ -20,7 +22,9 @@ const mockFilter1 = {
   }),
 } as Filter;
 const mockFilter2 = {
-  guid: 'mockFilter2',
+  config: {
+    guid: 'mockFilter2',
+  },
   attribute: {
     expression: 'mockExpression2',
   },
@@ -29,7 +33,9 @@ const mockFilter2 = {
   }),
 } as Filter;
 const mockFilter3 = {
-  guid: 'mockFilter3',
+  config: {
+    guid: 'mockFilter3',
+  },
   attribute: {
     expression: 'mockExpression3',
   },
@@ -38,7 +44,9 @@ const mockFilter3 = {
   }),
 } as Filter;
 const mockFilter4 = {
-  guid: 'mockFilter4',
+  config: {
+    guid: 'mockFilter4',
+  },
   attribute: {
     expression: 'mockExpression4',
   },
@@ -86,14 +94,14 @@ describe('mergeFilters', () => {
 describe('getFilterRelationsFromJaql', () => {
   const incomingFilterRelationsJaql = {
     operator: 'AND' as const,
-    left: { instanceid: mockFilter1.guid },
+    left: { instanceid: mockFilter1.config.guid },
     right: {
       operator: 'OR' as const,
-      left: { instanceid: mockFilter2.guid },
+      left: { instanceid: mockFilter2.config.guid },
       right: {
         operator: 'OR' as const,
-        left: { instanceid: mockFilter3.guid },
-        right: { instanceid: mockFilter4.guid },
+        left: { instanceid: mockFilter3.config.guid },
+        right: { instanceid: mockFilter4.config.guid },
       },
     },
   };
@@ -139,7 +147,7 @@ describe('getFilterRelationsFromJaql', () => {
 
 describe('applyWidgetFiltersToRelations', () => {
   const mockDimFilter = {
-    guid: 'dimGuid',
+    config: { guid: 'dimGuid' },
     attribute: {
       expression: 'dimExpression',
     },
@@ -148,7 +156,7 @@ describe('applyWidgetFiltersToRelations', () => {
     }),
   } as Filter;
   const mockSameDimFilter = {
-    guid: 'sameDimGuid',
+    config: { guid: 'sameDimGuid' },
     attribute: {
       expression: 'dimExpression',
     },
@@ -158,13 +166,13 @@ describe('applyWidgetFiltersToRelations', () => {
   } as Filter;
   const filterRelationsJaql = {
     operator: 'OR' as const,
-    left: { instanceid: mockFilter1.guid },
-    right: { instanceid: mockDimFilter.guid },
+    left: { instanceid: mockFilter1.config.guid },
+    right: { instanceid: mockDimFilter.config.guid },
   };
 
   const replacedRelaationsJaql = {
     ...filterRelationsJaql,
-    right: { instanceid: mockSameDimFilter.guid },
+    right: { instanceid: mockSameDimFilter.config.guid },
   };
 
   it('should return undefined if relations are not defined', () => {

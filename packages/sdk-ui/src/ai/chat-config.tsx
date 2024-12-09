@@ -12,9 +12,11 @@ export interface ChatConfig {
   enableFollowupQuestions: boolean;
 
   /**
-   * Number of recommended queries that should be shown in a chat session
+   * Number of recommended queries that should initially be shown in a chat session
    *
-   * If not specified, the default value is `4`
+   * If not specified, the default value is `4`.
+   *
+   * Set to `0` to disable initial recommendations.
    */
   numOfRecommendations: number;
 

@@ -4,7 +4,7 @@ title: thisQuarter
 
 # Function thisQuarter
 
-> **thisQuarter**(`dimension`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **thisQuarter**(`dimension`, `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate items with a date dimension value in the current quarter.
 
@@ -13,6 +13,7 @@ Creates a filter to isolate items with a date dimension value in the current qua
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `dimension` | [`DateDimension`](../../../interfaces/interface.DateDimension.md) | Date dimension to filter |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

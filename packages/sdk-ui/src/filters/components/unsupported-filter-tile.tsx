@@ -23,7 +23,7 @@ export const UnsupportedFilterTile = ({ filter, design, onDelete }: UnsupportedF
         <div className="csdk-p-[12px] csdk-text-[13px]">{t('unsupportedFilterMessage')}</div>
       )}
       design={design}
-      locked={filter.locked}
+      locked={filter.config.locked}
       onDelete={onDelete}
     />
   );

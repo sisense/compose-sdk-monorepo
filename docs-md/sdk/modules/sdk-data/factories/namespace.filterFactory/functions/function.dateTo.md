@@ -4,7 +4,10 @@ title: dateTo
 
 # Function dateTo
 
-> **dateTo**(`level`, `to`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **dateTo**(
+  `level`,
+  `to`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate items up until and including the given date and level.
 
@@ -14,6 +17,7 @@ Creates a filter to isolate items up until and including the given date and leve
 | :------ | :------ | :------ |
 | `level` | [`LevelAttribute`](../../../interfaces/interface.LevelAttribute.md) | Date [LevelAttribute](../../../interfaces/interface.LevelAttribute.md) to filter on |
 | `to` | `Date` \| `string` | Date or string representing the last member to filter to |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

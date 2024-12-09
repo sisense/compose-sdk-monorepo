@@ -1,39 +1,42 @@
 import {
-  BackgroundFilter,
-  BaseFilter,
+  BackgroundFilterJaql,
+  BaseFilterJaql,
   CascadingFilter,
   DimensionalBaseMeasure,
-  ExcludeMembersFilter,
+  ExcludeMembersFilterJaql,
   Filter,
   FilterJaql,
   getColumnNameFromAttribute,
   getTableNameFromAttribute,
-  IncludeMembersFilter,
+  IncludeMembersFilterJaql,
+  isCascadingFilter,
+  isMembersFilter,
+  isRankingFilter,
   MembersFilter,
   RankingFilter,
-  TurnOffMembersFilter,
+  TurnOffMembersFilterJaql,
 } from '@sisense/sdk-data';
 import { CascadingFilterDto, FilterDto } from '@/api/types/dashboard-dto';
 import { ConditionFilterJaql } from '@sisense/sdk-data/dist/dimensional-model/filters/utils/types';
 
 /**
  * Translates a {@link Filter} to a {@link FilterDto}.
- * @param filter
  *
+ * @param filter - The filter to translate.
  * @returns FilterDto
  *
  * @internal
  */
 export function filterToFilterDto(filter: Filter): FilterDto | CascadingFilterDto {
-  return filter instanceof CascadingFilter
+  return isCascadingFilter(filter)
     ? cascadingFilterToFilterDto(filter)
     : regularFilterToFilterDto(filter);
 }
 
 function regularFilterToFilterDto(filter: Filter): FilterDto {
-  if (filter instanceof MembersFilter) {
+  if (isMembersFilter(filter)) {
     return membersFilterToDto(filter);
-  } else if (filter instanceof RankingFilter) {
+  } else if (isRankingFilter(filter)) {
     return rankingFilterToDto(filter);
   }
   return getFilterBaseDto(filter);
@@ -42,17 +45,24 @@ function regularFilterToFilterDto(filter: Filter): FilterDto {
 function cascadingFilterToFilterDto(filter: CascadingFilter): CascadingFilterDto {
   return {
     isCascading: true,
-    instanceid: filter.id,
-    disabled: filter.disabled,
-    levels: filter.filters.map((f) => regularFilterToFilterDto(f).jaql),
+    instanceid: filter.config.guid,
+    disabled: filter.config.disabled,
+    levels: filter.filters.map((f) => {
+      const levelFilterDto = regularFilterToFilterDto(f);
+      return {
+        ...levelFilterDto.jaql,
+        instanceid: levelFilterDto.instanceid,
+      };
+    }),
   };
 }
 
 function getFilterBaseDto(filter: Filter): FilterDto {
-  const { disabled } = filter;
+  const {
+    config: { disabled },
+  } = filter;
   const filterJaql: FilterJaql = Object.assign(Object.create(filter), {
-    disabled: false,
-    backgroundFilter: undefined,
+    config: { ...filter.config, disabled: false },
   }).jaql(true);
 
   return {
@@ -62,7 +72,7 @@ function getFilterBaseDto(filter: Filter): FilterDto {
       column: getColumnNameFromAttribute(filter.attribute),
     },
     disabled,
-    instanceid: filter.guid,
+    instanceid: filter.config.guid,
     isCascading: false,
   };
 }
@@ -70,30 +80,34 @@ function getFilterBaseDto(filter: Filter): FilterDto {
 function membersFilterToDto(filter: MembersFilter) {
   const filterDto = getFilterBaseDto(filter);
 
-  (filterDto.jaql.filter as IncludeMembersFilter).multiSelection = filter.multiSelection;
+  (filterDto.jaql.filter as IncludeMembersFilterJaql).multiSelection =
+    filter.config.enableMultiSelection;
 
   // Current implementation of MembersFilter missing original order of members
-  if (filter.deactivatedMembers.length > 0) {
-    if (filter.excludeMembers) {
-      (filterDto.jaql.filter as ExcludeMembersFilter).exclude.members = [
+  if (filter.config.deactivatedMembers.length > 0) {
+    if (filter.config.excludeMembers) {
+      (filterDto.jaql.filter as ExcludeMembersFilterJaql).exclude.members = [
         ...filter.members,
-        ...filter.deactivatedMembers,
+        ...filter.config.deactivatedMembers,
       ];
     } else {
-      (filterDto.jaql.filter as IncludeMembersFilter).members = [
+      (filterDto.jaql.filter as IncludeMembersFilterJaql).members = [
         ...filter.members,
-        ...filter.deactivatedMembers,
+        ...filter.config.deactivatedMembers,
       ];
     }
   }
 
-  if (filter.backgroundFilter) {
-    setInnerFilter(filterDto.jaql, regularFilterToFilterDto(filter.backgroundFilter).jaql.filter);
+  if (filter.config.backgroundFilter) {
+    setInnerFilter(
+      filterDto.jaql,
+      regularFilterToFilterDto(filter.config.backgroundFilter).jaql.filter,
+    );
   }
 
-  if (filter.deactivatedMembers.length > 0) {
+  if (filter.config.deactivatedMembers.length > 0) {
     setInnerFilter(filterDto.jaql, {
-      exclude: { members: filter.deactivatedMembers },
+      exclude: { members: filter.config.deactivatedMembers },
       turnedOff: true,
     });
   }
@@ -125,7 +139,7 @@ function rankingFilterToDto(filter: RankingFilter): FilterDto {
  */
 function setInnerFilter(
   parentFilter: FilterJaql,
-  innerFilter: BaseFilter | BackgroundFilter | TurnOffMembersFilter,
+  innerFilter: BaseFilterJaql | BackgroundFilterJaql | TurnOffMembersFilterJaql,
 ): void {
   if (parentFilter.filter) {
     return setInnerFilter(parentFilter.filter as FilterJaql, innerFilter);

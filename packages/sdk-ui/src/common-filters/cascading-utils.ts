@@ -1,9 +1,10 @@
 import { getFilterCompareId } from '@/widget-by-id/utils';
-import { clearMembersFilter, haveSameAttribute } from '@/utils/filters';
+import { clearMembersFilter } from '@/utils/filters';
 import { CascadingFilter, Filter, isCascadingFilter } from '@sisense/sdk-data';
 import { FiltersIgnoringRules, PureFilter } from './types';
 import { isEqualMembersFilters } from './utils';
 import { TranslatableError } from '@/translation/translatable-error';
+import { haveSameAttribute } from '@/utils/filters-comparator';
 
 /**
  * Flattens cascading filters into a single array of filters.
@@ -15,11 +16,11 @@ export function flattenCascadingFilters(filters: Filter[]): {
   const cascadingToPureFiltersMap: Record<string, PureFilter[]> = {};
   const flatFilters = filters.reduce<Filter[]>((acc, filter) => {
     if (isCascadingFilter(filter)) {
-      if (!cascadingToPureFiltersMap[filter.guid]) {
-        cascadingToPureFiltersMap[filter.guid] = [];
+      if (!cascadingToPureFiltersMap[filter.config.guid]) {
+        cascadingToPureFiltersMap[filter.config.guid] = [];
       }
       filter.filters.forEach((levelFilter) => {
-        cascadingToPureFiltersMap[filter.guid].push(levelFilter);
+        cascadingToPureFiltersMap[filter.config.guid].push(levelFilter);
         acc.push(levelFilter);
       });
     } else {
@@ -46,6 +47,7 @@ type CascadingGroup = { groupId: string; filters: Filter[]; previousFilters: Fil
 export function reassembleCascadingFilters(
   updatedFilters: PureFilter[],
   originalFilters: (PureFilter | CascadingFilter)[],
+  config?: { shouldResetFiltersDeeperThanModified?: boolean },
 ): (PureFilter | CascadingFilter)[] {
   const originalCascadingFilters = originalFilters.filter(isCascadingFilter);
   const regroupedFilters = combineFiltersIntoCascadingGroups(
@@ -55,12 +57,15 @@ export function reassembleCascadingFilters(
   return regroupedFilters.map((filterOrGroup) => {
     if (isCascadingGroup(filterOrGroup)) {
       const originalCascadingFilter = originalCascadingFilters.find(
-        (cascadingFilter) => cascadingFilter.guid === filterOrGroup.groupId,
+        (cascadingFilter) => cascadingFilter.config.guid === filterOrGroup.groupId,
       );
       if (!originalCascadingFilter) {
         throw new TranslatableError('errors.cascadingFilterOriginalNotFound');
       }
-      return createNewCascadingFilter(filterOrGroup, originalCascadingFilter);
+      const shouldResetFiltersDeeperThanModified = config?.shouldResetFiltersDeeperThanModified;
+      return createNewCascadingFilter(filterOrGroup, originalCascadingFilter, {
+        shouldResetFiltersDeeperThanModified,
+      });
     }
 
     return filterOrGroup;
@@ -86,7 +91,7 @@ function combineFiltersIntoCascadingGroups(
       ),
     );
     if (originalCascadingFilter) {
-      const groupId = originalCascadingFilter.guid;
+      const groupId = originalCascadingFilter.config.guid;
       const group = groupedFilters.find((group) => 'groupId' in group && group.groupId === groupId);
       if (group) {
         (group as CascadingGroup).filters.push(mergedFilter);
@@ -110,16 +115,21 @@ function combineFiltersIntoCascadingGroups(
 function createNewCascadingFilter(
   cascadingGroup: CascadingGroup,
   originalCascadingFilter: CascadingFilter,
+  config?: { shouldResetFiltersDeeperThanModified?: boolean },
 ) {
-  const newLevelFilters = resetFiltersDeeperThanModified(
-    cascadingGroup.filters,
-    cascadingGroup.previousFilters,
+  const newLevelFilters = config?.shouldResetFiltersDeeperThanModified
+    ? resetFiltersDeeperThanModified(cascadingGroup.filters, cascadingGroup.previousFilters)
+    : cascadingGroup.filters;
+
+  const newDisabled = calculateDisablingStatus(
+    newLevelFilters,
+    originalCascadingFilter.config.disabled,
   );
 
-  const newDisabled = calculateDisablingStatus(newLevelFilters, originalCascadingFilter.disabled);
-
-  const newCascadingFilter = new CascadingFilter(newLevelFilters, originalCascadingFilter.guid);
-  newCascadingFilter.disabled = newDisabled;
+  const newCascadingFilter = new CascadingFilter(newLevelFilters, {
+    guid: originalCascadingFilter.config.guid,
+    disabled: newDisabled,
+  });
 
   return newCascadingFilter;
 }
@@ -133,7 +143,7 @@ function calculateDisablingStatus(
   previousDisablingStatus: boolean,
 ): boolean {
   const wasDisablingStatusChanged = levelFilters.some(
-    (filter) => filter.disabled !== previousDisablingStatus,
+    (filter) => filter.config.disabled !== previousDisablingStatus,
   );
   return wasDisablingStatusChanged ? !previousDisablingStatus : previousDisablingStatus;
 }
@@ -158,7 +168,9 @@ export function withCascadingFiltersConversion(
   const { flatFilters, cascadingToPureFiltersMap } = flattenCascadingFilters(complexFilters);
 
   const updateFilters = (newFilters: PureFilter[]) => {
-    const newComplexFilters = reassembleCascadingFilters(newFilters, complexFilters);
+    const newComplexFilters = reassembleCascadingFilters(newFilters, complexFilters, {
+      shouldResetFiltersDeeperThanModified: true,
+    });
     updateComplexFilters(newComplexFilters);
   };
 
@@ -202,6 +214,11 @@ function resetFiltersDeeperThanModified(
     -1,
   );
 
+  // If no modified filters found, return filters as is
+  if (deepestModifiedNewFilterIndex === -1) {
+    return newLevelFilters;
+  }
+
   // Reset filters deeper than the deepest modified filter
   return newLevelFilters.map((newFilter, index) => {
     if (index > deepestModifiedNewFilterIndex) {
@@ -229,7 +246,7 @@ function convertFiltersIgnoringRules(
       filtersIgnoringRules.ids?.reduce<string[]>((acc, id) => {
         const pureFilters = cascadingToPureFiltersMap[id];
         if (pureFilters) {
-          return acc.concat(pureFilters.map((f) => f.guid));
+          return acc.concat(pureFilters.map((f) => f.config.guid));
         }
         return acc.concat(id);
       }, []) || [],

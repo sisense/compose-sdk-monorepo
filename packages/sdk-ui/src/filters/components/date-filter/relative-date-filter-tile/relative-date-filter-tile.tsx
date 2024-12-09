@@ -70,7 +70,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
     filterFromProps as RelativeDateFilterType,
     updateFilterFromProps,
   );
-  const disabled = filter.disabled;
+  const disabled = filter.config.disabled;
 
   return (
     <FilterTile
@@ -95,7 +95,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
       disabled={disabled}
       arrangement={arrangement}
       design={tileDesignOptions}
-      locked={filter.locked}
+      locked={filter.config.locked}
       onDelete={onDelete}
     />
   );

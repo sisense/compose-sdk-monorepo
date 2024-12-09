@@ -1,4 +1,5 @@
-import { isSameAttribute, haveSameAttribute } from '@/utils/filters.js';
+import { haveSameAttribute } from '@/utils/filters-comparator.js';
+import { isSameAttribute } from '@/utils/filters.js';
 import { Filter, Attribute, filterFactory, MembersFilter } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 import { FiltersIgnoringRules, PureFilter } from './types.js';
@@ -12,7 +13,7 @@ export function getAllowedFilters(
   }
 
   return filters.filter((pureFilter) => {
-    return !ignoreFiltersOptions.ids?.includes(pureFilter.guid);
+    return !ignoreFiltersOptions.ids?.includes(pureFilter.config.guid);
   });
 }
 
@@ -29,10 +30,10 @@ export function createCommonFilter(
   return filterFactory.members(
     attribute,
     members.map((v) => `${v}`),
-    false,
-    existingFilter?.guid,
-    undefined,
-    (existingFilter as MembersFilter | undefined)?.backgroundFilter,
+    {
+      guid: existingFilter?.config.guid,
+      backgroundFilter: (existingFilter as MembersFilter | undefined)?.config.backgroundFilter,
+    },
   );
 }
 

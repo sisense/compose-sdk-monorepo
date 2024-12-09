@@ -16,7 +16,7 @@ import cloneDeep from 'lodash-es/cloneDeep.js';
  */
 export const cloneFilterAndToggleDisabled = <TFilter extends Filter>(filter: TFilter): TFilter => {
   const newFilter = cloneFilter(filter);
-  newFilter.disabled = !filter.disabled;
+  newFilter.config.disabled = !filter.config.disabled;
   return newFilter;
 };
 
@@ -26,24 +26,28 @@ export const cloneFilter = <TFilter extends Filter>(filter: TFilter): TFilter =>
   return newFilter;
 };
 
-function createIncludeAllFilter(attribute: Attribute, backgroundFilter?: Filter, guid?: string) {
-  return filterFactory.members(attribute, [], false, guid, undefined, backgroundFilter);
+function createIncludeAllFilter(attribute: Attribute, guid: string, backgroundFilter?: Filter) {
+  const config = {
+    guid,
+    excludeMembers: false,
+    backgroundFilter: backgroundFilter,
+  };
+  return filterFactory.members(attribute, [], config);
 }
 
 export function clearMembersFilter(filter: Filter) {
   if (!isMembersFilter(filter)) {
     throw new TranslatableError('errors.notAMembersFilter');
   }
-  const { attribute, guid, backgroundFilter } = filter;
-  return createIncludeAllFilter(attribute, backgroundFilter, guid);
+  const {
+    attribute,
+    config: { guid, backgroundFilter },
+  } = filter;
+  return createIncludeAllFilter(attribute, guid, backgroundFilter);
 }
 
 export function isIncludeAllFilter(filter: Filter) {
   return 'members' in filter && (filter as MembersFilter).members.length === 0;
-}
-
-export function haveSameAttribute(filterA: Filter, filterB: Filter) {
-  return isSameAttribute(filterA.attribute, filterB.attribute);
 }
 
 /** @internal */

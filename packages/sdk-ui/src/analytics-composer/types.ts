@@ -1,5 +1,6 @@
 import { WidgetProps } from '@/props';
 import { ChartDataOptions } from '@/types';
+import { ExecuteQueryParams } from '@/query-execution';
 import { MetadataItem } from '@sisense/sdk-data';
 import { DynamicChartType } from '../chart-options-processor/translations/types.js';
 
@@ -114,7 +115,7 @@ export type CodeTemplateKey =
   | 'chartWidgetTmpl'
   | 'widgetByIdTmpl'
   | 'executeQueryByWidgetIdTmpl'
-  | 'executeQueryWidgetTmpl';
+  | 'executeQueryTmpl';
 
 /**
  * Code Templates
@@ -146,7 +147,7 @@ export type WidgetCodeConfig = BaseCodeConfig & { includeChart?: boolean };
  * Client-side Widget Code Params
  * @internal
  */
-export type ClientSideWidgetCodeParams = WidgetCodeConfig & {
+export type ClientSideWidgetCodeParams = BaseCodeConfig & {
   widgetProps: WidgetProps;
 };
 
@@ -190,3 +191,10 @@ export const isByIdWidgetCodeParams = (
  * @internal
  **/
 export type WidgetPropsConfig = { useCustomizedStyleOptions?: boolean };
+
+/**
+ * @internal
+ */
+export type ExecuteQueryCodeParams = BaseCodeConfig & {
+  queryParams: ExecuteQueryParams;
+};

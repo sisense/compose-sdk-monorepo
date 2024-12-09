@@ -12,3 +12,9 @@ export * as widgetComposer from './widget/widget-composer';
  * @internal
  */
 export * as dashboardComposer from './dashboard/dashboard-composer';
+
+/**
+ * Utility functions to compose props and code for executing queries.
+ * @internal
+ */
+export * as executeQueryComposer from './execute-query/execute-query-composer';

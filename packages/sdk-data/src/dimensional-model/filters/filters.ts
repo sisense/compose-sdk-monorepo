@@ -1,13 +1,14 @@
-/* eslint-disable max-lines */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable max-params */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import hash from 'hash-it';
-import { LevelAttribute, Attribute, Measure, Filter } from '../interfaces.js';
+import {
+  LevelAttribute,
+  Attribute,
+  Measure,
+  Filter,
+  MembersFilterConfig,
+  CompleteMembersFilterConfig,
+  CompleteBaseFilterConfig,
+  BaseFilterConfig,
+} from '../interfaces.js';
 
 import { DimensionalElement } from '../base.js';
 
@@ -16,7 +17,11 @@ import { AnyObject, DateLevels, MetadataTypes } from '../types.js';
 import { create } from '../factory.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { guidFast } from '../../utils.js';
+import {
+  getDefaultBaseFilterConfig,
+  getDefaultMembersFilterConfig,
+} from './filter-config-utils.js';
+import merge from 'lodash-es/merge.js';
 
 /**
  * Different text operators that can be used with text filters
@@ -119,50 +124,18 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
   readonly filterType: string;
 
   /**
-   * Global filter identifier
+   * Filter configuration
    */
-  readonly guid: string;
+  config: CompleteBaseFilterConfig;
 
-  private _disabled: boolean;
-
-  private _locked: boolean;
-
-  /**
-   * Boolean flag whether the filter is disabled
-   *
-   * @internal
-   */
-  get disabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(value: boolean) {
-    this._disabled = value;
-  }
-
-  /**
-   * Boolean flag whether the filter is locked
-   *
-   * @internal
-   */
-  get locked(): boolean {
-    return this._locked;
-  }
-
-  set locked(value: boolean) {
-    this._locked = value;
-  }
-
-  constructor(att: Attribute, filterType: string, guid?: string) {
+  constructor(att: Attribute, filterType: string, config?: BaseFilterConfig) {
     super('filter', MetadataTypes.Filter);
     this.filterType = filterType;
 
     AbstractFilter.checkAttributeSupport(att);
     this.attribute = att;
 
-    this.guid = guid || guidFast(13);
-    this.disabled = false;
-    this.locked = false;
+    this.config = merge({}, getDefaultBaseFilterConfig(), config ?? {});
   }
 
   get name(): string {
@@ -203,7 +176,7 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    * @param nested - defines whether the JAQL is nested within parent JAQL statement or a root JAQL element
    */
   jaql(nested?: boolean): any {
-    if (this.disabled) {
+    if (this.config.disabled) {
       return AbstractFilter.disabledJaql(nested);
     }
 
@@ -259,8 +232,8 @@ export class LogicalAttributeFilter extends AbstractFilter {
 
   readonly operator: string;
 
-  constructor(filters: Filter[], operator: string, guid?: string) {
-    super(filters[0].attribute, FilterTypes.logicalAttribute, guid);
+  constructor(filters: Filter[], operator: string, config?: BaseFilterConfig) {
+    super(filters[0].attribute, FilterTypes.logicalAttribute, config);
 
     this.operator = operator;
     this.filters = filters;
@@ -300,42 +273,23 @@ export class LogicalAttributeFilter extends AbstractFilter {
  * @internal
  */
 export class MembersFilter extends AbstractFilter {
-  readonly members: any[];
+  readonly members: string[];
 
-  /** @internal */
-  excludeMembers: boolean;
+  config: CompleteMembersFilterConfig;
 
-  /** @internal */
-  multiSelection: boolean;
-
-  /** @internal */
-  deactivatedMembers: any[];
-
-  /** @internal */
-  backgroundFilter?: Filter;
-
-  constructor(
-    attribute: Attribute,
-    members?: any[],
-    excludeMembers?: boolean,
-    guid?: string,
-    deactivatedMembers?: any[],
-    backgroundFilter?: Filter,
-    multiSelection = true,
-  ) {
-    super(attribute, FilterTypes.members, guid);
-
+  constructor(attribute: Attribute, members?: string[], config?: MembersFilterConfig) {
+    super(attribute, FilterTypes.members);
     this.members = members ?? [];
-    this.excludeMembers = excludeMembers ?? false;
-    this.multiSelection = multiSelection;
-    this.deactivatedMembers = deactivatedMembers ?? [];
-    this.backgroundFilter = backgroundFilter;
 
     if (this.members.filter((m) => m === null || m === undefined).length > 0) {
       throw new TranslatableError('errors.filter.membersFilterNullMember', {
         attributeId: attribute.id,
       });
     }
+
+    // merge default config and input config into a new object
+    // to avoid mutation
+    this.config = merge({}, getDefaultMembersFilterConfig(), config ?? {});
   }
 
   /**
@@ -350,12 +304,7 @@ export class MembersFilter extends AbstractFilter {
    */
   serializable(): any {
     const result = super.serializable();
-
     result.members = this.members;
-    if (this.backgroundFilter) {
-      result.backgroundFilter = this.backgroundFilter.serializable();
-    }
-
     return result;
   }
 
@@ -367,11 +316,13 @@ export class MembersFilter extends AbstractFilter {
       members: this.members.map((m) => m.toString()),
     };
 
-    const filterJaql = this.excludeMembers ? { exclude: membersFilterJaql } : membersFilterJaql;
+    const filterJaql = this.config.excludeMembers
+      ? { exclude: membersFilterJaql }
+      : membersFilterJaql;
 
-    if (this.backgroundFilter) {
+    if (this.config.backgroundFilter) {
       return {
-        and: [filterJaql, this.backgroundFilter.filterJaql()],
+        and: [filterJaql, this.config.backgroundFilter.filterJaql()],
       };
     }
 
@@ -386,9 +337,21 @@ export class CascadingFilter extends AbstractFilter {
   // level filters
   readonly filters: Filter[];
 
-  constructor(filters: Filter[], guid?: string) {
-    super(filters[0].attribute, FilterTypes.cascading, guid);
+  constructor(filters: Filter[], config?: BaseFilterConfig) {
+    super(filters[0].attribute, FilterTypes.cascading, config);
     this.filters = filters;
+    this.propagateConfig();
+  }
+
+  /**
+   * Propagates the parent config to all level filters
+   */
+  propagateConfig(): void {
+    const { disabled, locked } = this.config;
+    this.filters.forEach((f) => {
+      f.config.disabled = disabled;
+      f.config.locked = locked;
+    });
   }
 
   /**
@@ -396,32 +359,6 @@ export class CascadingFilter extends AbstractFilter {
    */
   get id(): string {
     return `${this.filterType}_${this.filters.map((f) => f.id).join()}`;
-  }
-
-  get disabled(): boolean {
-    return super.disabled;
-  }
-
-  set disabled(value: boolean) {
-    super.disabled = value;
-    if (this.filters) {
-      this.filters.forEach((filter) => {
-        filter.disabled = value;
-      });
-    }
-  }
-
-  get locked(): boolean {
-    return super.locked;
-  }
-
-  set locked(value: boolean) {
-    super.locked = value;
-    if (this.filters) {
-      this.filters.forEach((filter) => {
-        filter.locked = value;
-      });
-    }
   }
 
   /**
@@ -442,7 +379,7 @@ export class CascadingFilter extends AbstractFilter {
   }
 
   jaql(nested?: boolean): any {
-    if (this.disabled) {
+    if (this.config.disabled) {
       return AbstractFilter.disabledJaql(nested);
     }
 
@@ -462,8 +399,8 @@ export class ExcludeFilter extends AbstractFilter {
 
   readonly input?: Filter;
 
-  constructor(filter: Filter, input?: Filter, guid?: string) {
-    super(filter.attribute, FilterTypes.exclude, guid);
+  constructor(filter: Filter, input?: Filter, config?: BaseFilterConfig) {
+    super(filter.attribute, FilterTypes.exclude, config);
 
     this.input = input;
     this.filter = filter;
@@ -535,9 +472,9 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
     valueA?: Type,
     operatorB?: string,
     valueB?: Type,
-    guid?: string,
+    config?: BaseFilterConfig,
   ) {
-    super(att, filterType, guid);
+    super(att, filterType, config);
 
     if (operatorA && valueA !== undefined) {
       this.valueA = valueA;
@@ -623,9 +560,9 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
     valueA?: number,
     operatorB?: string,
     valueB?: number,
-    guid?: string,
+    config?: BaseFilterConfig,
   ) {
-    super(att, FilterTypes.measure, operatorA, valueA, operatorB, valueB, guid);
+    super(att, FilterTypes.measure, operatorA, valueA, operatorB, valueB, config);
 
     this.measure = measure;
   }
@@ -659,7 +596,7 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
   }
 
   jaql(nested?: boolean | undefined) {
-    if (this.disabled) {
+    if (this.config.disabled) {
       return AbstractFilter.disabledJaql(nested);
     }
 
@@ -685,8 +622,14 @@ export class RankingFilter extends AbstractFilter {
 
   measure: Measure;
 
-  constructor(att: Attribute, measure: Measure, operator: string, count: number, guid?: string) {
-    super(att, FilterTypes.ranking, guid);
+  constructor(
+    att: Attribute,
+    measure: Measure,
+    operator: string,
+    count: number,
+    config?: BaseFilterConfig,
+  ) {
+    super(att, FilterTypes.ranking, config);
 
     this.count = count;
     this.operator = operator;
@@ -736,9 +679,9 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
     valueA?: number,
     operatorB?: string,
     valueB?: number,
-    guid?: string,
+    config?: BaseFilterConfig,
   ) {
-    super(att, FilterTypes.numeric, operatorA, valueA, operatorB, valueB, guid);
+    super(att, FilterTypes.numeric, operatorA, valueA, operatorB, valueB, config);
   }
 }
 
@@ -746,8 +689,8 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
  * @internal
  */
 export class TextFilter extends DoubleOperatorFilter<string> {
-  constructor(att: Attribute, operator: string, value: string, guid?: string) {
-    super(att, FilterTypes.text, operator, value, undefined, undefined, guid);
+  constructor(att: Attribute, operator: string, value: string, config?: BaseFilterConfig) {
+    super(att, FilterTypes.text, operator, value, undefined, undefined, config);
   }
 }
 
@@ -759,9 +702,17 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
     l: LevelAttribute,
     valueFrom?: Date | string,
     valueTo?: Date | string,
-    guid?: string,
+    config?: BaseFilterConfig,
   ) {
-    super(l, FilterTypes.dateRange, DateOperators.From, valueFrom, DateOperators.To, valueTo, guid);
+    super(
+      l,
+      FilterTypes.dateRange,
+      DateOperators.From,
+      valueFrom,
+      DateOperators.To,
+      valueTo,
+      config,
+    );
 
     if (typeof valueFrom === 'object') {
       this.valueA = valueFrom.toISOString();
@@ -810,9 +761,9 @@ export class RelativeDateFilter extends AbstractFilter {
     count: number,
     operator?: typeof DateOperators.Last | typeof DateOperators.Next,
     anchor?: Date | string,
-    guid?: string,
+    config?: BaseFilterConfig,
   ) {
-    super(l, FilterTypes.relativeDate, guid);
+    super(l, FilterTypes.relativeDate, config);
 
     if (!operator) {
       operator = DateOperators.Next;
@@ -892,8 +843,8 @@ export class RelativeDateFilter extends AbstractFilter {
 export class CustomFilter extends AbstractFilter {
   readonly jaqlExpression: any;
 
-  constructor(att: Attribute, jaql: any, guid?: string) {
-    super(att, FilterTypes.advanced, guid);
+  constructor(att: Attribute, jaql: any, config?: BaseFilterConfig) {
+    super(att, FilterTypes.advanced, config);
     // remove filterType from jaql as it is not needed
     delete jaql.filterType;
     this.jaqlExpression = jaql;
@@ -903,7 +854,7 @@ export class CustomFilter extends AbstractFilter {
    * gets the element's ID
    */
   get id(): string {
-    return `custom_${this.attribute.id}_${this.guid}`;
+    return `custom_${this.attribute.id}_${this.config.guid}`;
   }
 
   /**

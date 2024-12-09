@@ -7,7 +7,8 @@ title: topRanking
 > **topRanking**(
   `attribute`,
   `measure`,
-  `count`): [`Filter`](../../../interfaces/interface.Filter.md)
+  `count`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate items that rank towards the top for a given measure.
 
@@ -18,6 +19,7 @@ Creates a filter to isolate items that rank towards the top for a given measure.
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Attribute to filter |
 | `measure` | [`Measure`](../../../interfaces/interface.Measure.md) | Measure to filter by |
 | `count` | `number` | Number of members to return |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

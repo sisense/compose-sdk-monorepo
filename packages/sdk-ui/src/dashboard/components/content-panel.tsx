@@ -78,6 +78,14 @@ export const ContentPanel = ({ layout, widgets }: ContentPanelProps) => {
               {row.cells.map((subcell) => {
                 const widgetProps = widgets.find((w) => w.id === subcell.widgetId);
 
+                if (
+                  widgetProps?.widgetType === 'pivot' &&
+                  subcell.height &&
+                  widgetProps?.styleOptions?.isAutoHeight
+                ) {
+                  widgetProps.styleOptions.isAutoHeight = false;
+                }
+
                 return (
                   <Subcell
                     key={`${subcell.widgetId},${subcell.widthPercentage}`}

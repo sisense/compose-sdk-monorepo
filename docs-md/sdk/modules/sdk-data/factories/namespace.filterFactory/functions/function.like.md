@@ -4,7 +4,10 @@ title: like
 
 # Function like
 
-> **like**(`attribute`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **like**(
+  `attribute`,
+  `value`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values that match a specified string pattern.
 
@@ -24,6 +27,7 @@ Matching is case insensitive.
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Text attribute to filter on |
 | `value` | `string` | Value to filter by |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

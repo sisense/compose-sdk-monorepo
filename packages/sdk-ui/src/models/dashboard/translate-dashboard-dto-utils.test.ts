@@ -1,10 +1,4 @@
-import {
-  CascadingFilter,
-  createDimension,
-  filterFactory,
-  measureFactory,
-  MembersFilter,
-} from '@sisense/sdk-data';
+import { CascadingFilter, filterFactory, measureFactory, MembersFilter } from '@sisense/sdk-data';
 import * as DM from '../../__test-helpers__/sample-ecommerce';
 import { filterToFilterDto } from '@/models/dashboard/translate-dashboard-dto-utils';
 import { CascadingFilterDto, FilterDto } from '@/api/types/dashboard-dto';
@@ -13,79 +7,44 @@ describe('baseFilterToFilterDto', () => {
   it('should return correctly translated simple filter', () => {
     const filter = filterFactory.members(DM.Commerce.Gender, ['Male']);
     const result = filterToFilterDto(filter);
-    expect(result).toEqual({
-      jaql: {
-        title: 'Gender',
-        dim: '[Commerce.Gender]',
-        datatype: 'text',
-        filter: { members: ['Male'], multiSelection: true },
-        table: 'Commerce',
-        column: 'Gender',
-      },
-      disabled: false,
-      instanceid: filter.guid,
-      isCascading: false,
-    });
+    expect(withoutInstanceId(result)).toMatchSnapshot();
   });
 
   it('should return correctly translated disabled filter', () => {
-    const filter = filterFactory.members(DM.Commerce.Gender, ['Female']);
-    filter.disabled = true;
-    const result = filterToFilterDto(filter);
-    expect(result).toEqual({
-      jaql: {
-        title: 'Gender',
-        dim: '[Commerce.Gender]',
-        datatype: 'text',
-        filter: { members: ['Female'], multiSelection: true },
-        table: 'Commerce',
-        column: 'Gender',
-      },
+    const filter = filterFactory.members(DM.Commerce.Gender, ['Female'], {
+      guid: 'filter-id',
       disabled: true,
-      instanceid: filter.guid,
-      isCascading: false,
     });
+    const result = filterToFilterDto(filter);
+    expect(withoutInstanceId(result)).toMatchSnapshot();
   });
 
   it('should return correctly translated members filter with disabled members', () => {
     const filter = filterFactory.members(DM.Commerce.Gender, ['Female']) as MembersFilter;
-    filter.deactivatedMembers = ['Male'];
+    filter.config.deactivatedMembers = ['Male'];
     const result = filterToFilterDto(filter) as FilterDto;
 
-    expect(result.jaql.filter).toEqual({
-      members: ['Female', 'Male'],
-      filter: { exclude: { members: ['Male'] }, turnedOff: true },
-      multiSelection: true,
-    });
+    expect(result.jaql.filter).toMatchSnapshot();
   });
 
   it('should return correctly translated exclude members filter', () => {
-    const filter = filterFactory.members(DM.Commerce.Gender, ['Female'], true);
+    const config = { excludeMembers: true };
+    const filter = filterFactory.members(DM.Commerce.Gender, ['Female'], config);
     const result = filterToFilterDto(filter) as FilterDto;
 
-    expect(result.jaql.filter).toEqual({
-      exclude: {
-        members: ['Female'],
-      },
-      multiSelection: true,
-    });
+    expect(result.jaql.filter).toMatchSnapshot();
   });
 
   it('should return correctly translated members filter with background filter', () => {
-    const filter = filterFactory.members(
-      DM.Commerce.Gender,
-      ['Female'],
-      false,
-      undefined,
-      undefined,
-      filterFactory.members(DM.Commerce.Gender, ['Female', 'Male']),
-    );
+    const config = {
+      excludeMembers: false,
+      backgroundFilter: filterFactory.members(DM.Commerce.Gender, ['Female', 'Male']),
+    };
+
+    const filter = filterFactory.members(DM.Commerce.Gender, ['Female'], config);
     const result = filterToFilterDto(filter) as FilterDto;
 
-    expect(result.jaql.filter.filter).toEqual({
-      members: ['Female', 'Male'],
-      multiSelection: true,
-    });
+    expect(result.jaql.filter.filter).toMatchSnapshot();
   });
 
   it('should return correctly translated ranking filter', () => {
@@ -96,64 +55,28 @@ describe('baseFilterToFilterDto', () => {
     );
     const result = filterToFilterDto(filter) as FilterDto;
 
-    expect(result.jaql.filter).toEqual({
-      bottom: 5,
-      by: {
-        agg: 'sum',
-        column: 'Revenue',
-        datatype: 'numeric',
-        dim: '[Commerce.Revenue]',
-        table: 'Commerce',
-        title: 'sum Revenue',
-      },
-      rankingMessage: 'sum Revenue',
-    });
-  });
-
-  it('should return correctly translated base filter', () => {
-    const TextDim = createDimension({
-      name: 'text',
-      type: 'textdimension',
-      expression: '[Text]',
-    });
-
-    const filter = filterFactory.doesntContain(TextDim, 'mem');
-    const result = filterToFilterDto(filter) as FilterDto;
-
-    expect(result.jaql.filter).toEqual({
-      doesntContain: 'mem',
-    });
+    expect(result.jaql.filter).toMatchSnapshot();
   });
 
   it('should return correctly translated cascading filter', () => {
-    const filter = new CascadingFilter([
-      filterFactory.members(DM.Commerce.BrandID, ['1']),
-      filterFactory.members(DM.Commerce.Gender, ['Female']),
-    ]);
-    const result = filterToFilterDto(filter) as CascadingFilterDto;
-
-    expect(result).toEqual({
-      isCascading: true,
-      instanceid: 'cascading_[Commerce.Brand ID]_1,[Commerce.Gender]_Female',
-      disabled: false,
-      levels: [
-        {
-          title: 'Brand ID',
-          dim: '[Commerce.Brand ID]',
-          datatype: 'numeric',
-          filter: { members: ['1'], multiSelection: true },
-          table: 'Commerce',
-          column: 'Brand ID',
-        },
-        {
-          title: 'Gender',
-          dim: '[Commerce.Gender]',
-          datatype: 'text',
-          filter: { members: ['Female'], multiSelection: true },
-          table: 'Commerce',
-          column: 'Gender',
-        },
+    const filter = new CascadingFilter(
+      [
+        filterFactory.members(DM.Commerce.BrandID, ['1'], { guid: 'BRAND_FILTER_ID' }),
+        filterFactory.members(DM.Commerce.Gender, ['Female'], { guid: 'GENDER_FILTER_ID' }),
       ],
-    });
+      { guid: 'CASCADING_FILTER_ID' },
+    );
+    const result = filterToFilterDto(filter);
+
+    expect(result).toMatchSnapshot();
   });
 });
+
+/** Removes the instanceid from the filter dto */
+function withoutInstanceId<T extends FilterDto | CascadingFilterDto>(
+  filter: T,
+): Omit<T, 'instanceid'> {
+  // eslint-disable-next-line no-unused-vars
+  const { instanceid, ...rest } = filter;
+  return rest;
+}

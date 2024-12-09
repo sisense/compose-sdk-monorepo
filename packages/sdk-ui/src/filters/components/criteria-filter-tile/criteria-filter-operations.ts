@@ -134,12 +134,8 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
     type: FilterTypes.numeric,
   },
   [FilterOption.NOT_BETWEEN]: {
-    fn: (attribute: Attribute, valueA: number, valueB: number, guid?: string): Filter => {
-      return filterFactory.exclude(
-        filterFactory.between(attribute, valueA, valueB),
-        undefined,
-        guid,
-      );
+    fn: (attribute: Attribute, valueA: number, valueB: number): Filter => {
+      return filterFactory.exclude(filterFactory.between(attribute, valueA, valueB), undefined);
     },
     inputCount: 2,
     symbols: ['≤', '≥'],

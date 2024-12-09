@@ -87,7 +87,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
 
     const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
 
-    const disabled = filter.disabled;
+    const disabled = filter.config.disabled;
 
     const filterOption = filterToOption(filter as CriteriaFilterType);
     const filterInfo: FilterInfo = CRITERIA_FILTER_MAP[filterOption];
@@ -111,19 +111,20 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         let newFilter: Filter | null = null;
         if (filterInfo.ranked) {
           // for ranked functions, Measure must come before count.
-          newFilter = filterInfo.fn(
-            filter.attribute,
-            newValues?.[1],
-            newValues?.[0],
-            filterFromProps.guid,
-          );
+          newFilter = filterInfo.fn(filter.attribute, newValues?.[1], newValues?.[0], {
+            guid: filterFromProps.config.guid,
+            disabled: newDisabled,
+          });
         } else {
-          newFilter = filterInfo.fn(filter.attribute, ...newValues, filterFromProps.guid);
+          newFilter = filterInfo.fn(filter.attribute, ...newValues, {
+            guid: filterFromProps.config.guid,
+            disabled: newDisabled,
+          });
         }
-        newFilter.disabled = newDisabled;
+
         return newFilter;
       },
-      [filterFromProps.guid, filter.attribute, filterInfo],
+      [filterFromProps.config.guid, filter.attribute, filterInfo],
     );
 
     return (
@@ -154,7 +155,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
           updateFilter(newFilter);
         }}
         design={tileDesignOptions}
-        locked={filter.locked}
+        locked={filter.config.locked}
         onDelete={onDelete}
       />
     );

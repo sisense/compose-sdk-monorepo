@@ -17,7 +17,12 @@ import {
 } from '../../../chart-data-options/types.js';
 import { ScattermapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
 import { useTooltipHandler } from './hooks/use-tooltip-handler.js';
-import { DataSource, Filter, FilterRelations, getFilterListAndRelations } from '@sisense/sdk-data';
+import {
+  DataSource,
+  Filter,
+  FilterRelations,
+  getFilterListAndRelationsJaql,
+} from '@sisense/sdk-data';
 
 import '../map-charts.scss';
 import './scattermap.scss';
@@ -48,7 +53,7 @@ export const Scattermap = ({
 
   const locationsWithCoordinates = useLocations(locations, dataOptions.locationLevel);
 
-  const { filters: filterList } = getFilterListAndRelations(filters);
+  const { filters: filterList } = getFilterListAndRelationsJaql(filters);
   const tooltipHandler = useTooltipHandler({
     dataOptions,
     dataSource,

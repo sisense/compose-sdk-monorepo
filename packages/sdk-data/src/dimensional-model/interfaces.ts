@@ -1,9 +1,5 @@
 import { DataSource } from '../interfaces.js';
-import {
-  JaqlDataSource,
-  //DateLevels,
-  Sort,
-} from './types.js';
+import { FilterJaql, JaqlDataSource, Sort } from './types.js';
 
 /**
  * @internal
@@ -397,16 +393,119 @@ export interface LevelAttribute extends Attribute {
 }
 
 /**
+ * Base filter configuration
+ */
+export interface BaseFilterConfig {
+  /**
+   * Optional filter identifier
+   *
+   * If not provided, a unique identifier will be generated.
+   *
+   * @category Base Configurations
+   */
+  readonly guid?: string;
+
+  /**
+   * Original filter JAQL
+   *
+   * @category Base Configurations
+   * @internal
+   */
+  originalFilterJaql?: FilterJaql;
+
+  /**
+   * Boolean flag whether the filter is disabled
+   *
+   * If not specified, the default value is `false`.
+   *
+   * @category Base Configurations
+   */
+  disabled?: boolean;
+
+  /**
+   * Boolean flag whether the filter is locked
+   *
+   * If not specified, the default value is `false`.
+   *
+   * @category Base Configurations
+   */
+  locked?: boolean;
+}
+
+/**
+ * Complete configuration for base filter
+ *
+ * All properties are required except for originalFilterJaql
+ *
+ * @internal
+ */
+export type CompleteBaseFilterConfig = Required<Omit<BaseFilterConfig, 'originalFilterJaql'>> & {
+  originalFilterJaql?: FilterJaql;
+};
+
+/**
+ * Configurations for members filter
+ */
+export interface MembersFilterConfig extends BaseFilterConfig {
+  /**
+   * Boolean flag whether selected members are excluded or included in the filter
+   *
+   * If not specified, the default value is false.
+   *
+   * @category Extended Configurations
+   */
+  excludeMembers?: boolean;
+
+  /**
+   * Boolean flag whether selection of multiple members is enabled
+   *
+   * If not specified, the default value is `true`.
+   *
+   * @category Extended Configurations
+   */
+  enableMultiSelection?: boolean;
+
+  /**
+   * Optional list of members to be shown as deactivated in the `MemberFilterTile` component.
+   *
+   * This list should not contain members that are already included in the filter.
+   *
+   * @category Extended Configurations
+   */
+  deactivatedMembers?: string[];
+
+  /**
+   * Optional filter to be applied in the background
+   */
+  backgroundFilter?: Filter;
+}
+
+/**
+ * Complete configuration for members filter
+ *
+ * All properties are required except for originalFilterJaql and backgroundFilter
+ *
+ * @internal
+ */
+export type CompleteMembersFilterConfig = Required<
+  Omit<MembersFilterConfig, 'originalFilterJaql' | 'backgroundFilter'>
+> & {
+  originalFilterJaql?: FilterJaql;
+  backgroundFilter?: Filter;
+};
+
+/**
+ * @internal
+ */
+export type FilterConfig = CompleteBaseFilterConfig | CompleteMembersFilterConfig;
+
+/**
  * Base interface for filter. See {@link filterFactory} for how to create filters.
  */
 export interface Filter extends Element {
   /**
-   * Global filter identifier
-   */
-  readonly guid: string;
-
-  /**
    * Attribute this filter instance is filtering
+   * @internal
    */
   readonly attribute: Attribute;
 
@@ -417,22 +516,16 @@ export interface Filter extends Element {
 
   /**
    * Boolean flag whether the filter is a scope filter
+   * @internal
    */
   isScope: boolean;
 
   /**
-   * Boolean flag whether the filter is disabled
+   * Filter config
    *
    * @internal
    */
-  disabled: boolean;
-
-  /**
-   * Boolean flag whether the filter is locked
-   *
-   * @internal
-   */
-  locked: boolean;
+  config: FilterConfig;
 
   /**
    * Gets JAQL representing this Filter instance
@@ -516,6 +609,7 @@ export type FilterRelationsNode = Filter | Filter[] | FilterRelations;
  */
 export type FilterRelationsModelNode =
   | FilterRelationsModelIdNode
+  | FilterRelationsModelCascadeNode
   | FilterRelationsModelBracketNode
   | FilterRelationsModel;
 
@@ -540,11 +634,12 @@ export interface FilterRelations {
 }
 
 /**
- * Incoming filter logical relations (AND/OR) when fetched from the instance
+ * Model of filter logical relations (AND/OR) from Fusion dashboard
  *
  * @internal
  */
 export interface FilterRelationsModel {
+  type: 'LogicalExpression';
   left: FilterRelationsModelNode;
   right: FilterRelationsModelNode;
   operator: 'AND' | 'OR';
@@ -572,13 +667,25 @@ export type FilterRelationsJaqlIdNode = { instanceid: string };
  *
  * @internal
  */
-export type FilterRelationsModelIdNode = { instanceId: string };
+export type FilterRelationsModelIdNode = { type: 'Identifier'; instanceId: string };
 /**
  * A node of a {@link FilterRelationsModel} tree that represents a bracket expression
  *
  * @internal
  */
-export type FilterRelationsModelBracketNode = { value: FilterRelationsModelNode };
+export type FilterRelationsModelBracketNode = {
+  type: 'ParenthesizedLogicalExpression';
+  value: FilterRelationsModelNode;
+};
+/**
+ * A node of a {@link FilterRelationsModel} tree that represents a cascading filter
+ *
+ * @internal
+ */
+export type FilterRelationsModelCascadeNode = {
+  type: 'CascadingIdentifier';
+  levels: FilterRelationsModelIdNode[];
+};
 
 /** Sorting direction, either in Ascending order, Descending order, or None */
 export type SortDirection = 'sortAsc' | 'sortDesc' | 'sortNone';

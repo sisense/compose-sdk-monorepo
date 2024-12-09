@@ -8,7 +8,7 @@ import {
   DimensionalAttribute,
   BaseJaql,
   FilterJaql,
-  IncludeMembersFilter,
+  IncludeMembersFilterJaql,
   Filter,
   PivotQueryResultData,
 } from '@sisense/sdk-data';
@@ -331,11 +331,11 @@ describe('useExecuteQueryByWidgetId', () => {
         // verifies that query contains only widget filter, while provided filter was ignored due to the lower priority
         expect(queryFilters?.length).toBe(1);
         expect(
-          ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+          ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilterJaql).members,
         ).toStrictEqual(
           (
             (mockChartWidgetWithMetadataItems.metadata.panels[2].items[0].jaql as FilterJaql)
-              .filter as IncludeMembersFilter
+              .filter as IncludeMembersFilterJaql
           ).members,
         );
       });
@@ -370,9 +370,9 @@ describe('useExecuteQueryByWidgetId', () => {
         // verifies that query contains only provided filter, while widget filter was ignored due to the lower priority
         expect(queryFilters?.length).toBe(1);
         expect(
-          ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+          ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilterJaql).members,
         ).toStrictEqual(
-          ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+          ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilterJaql).members,
         );
       });
     });
@@ -403,9 +403,9 @@ describe('useExecuteQueryByWidgetId', () => {
         // verifies that query contains only provided filter, while widget filter was fully ignored
         expect(queryFilters?.length).toBe(1);
         expect(
-          ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+          ((queryFilters?.[0].jaql(true) as FilterJaql).filter as IncludeMembersFilterJaql).members,
         ).toStrictEqual(
-          ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+          ((filters[0].jaql(true) as FilterJaql).filter as IncludeMembersFilterJaql).members,
         );
       });
     });
@@ -573,17 +573,17 @@ describe('useExecuteQueryByWidgetId', () => {
         expect(
           (
             (result.current.query?.highlights?.[1].jaql(true) as FilterJaql)
-              .filter as IncludeMembersFilter
+              .filter as IncludeMembersFilterJaql
           ).members,
         ).toStrictEqual(
-          ((highlights[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+          ((highlights[0].jaql(true) as FilterJaql).filter as IncludeMembersFilterJaql).members,
         );
         expect(
           (
             (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
-              .filter as IncludeMembersFilter
+              .filter as IncludeMembersFilterJaql
           ).members,
-        ).toStrictEqual((mockDashboard.filters[0].jaql.filter as IncludeMembersFilter).members);
+        ).toStrictEqual((mockDashboard.filters[0].jaql.filter as IncludeMembersFilterJaql).members);
       });
     });
 
@@ -616,10 +616,10 @@ describe('useExecuteQueryByWidgetId', () => {
         expect(
           (
             (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
-              .filter as IncludeMembersFilter
+              .filter as IncludeMembersFilterJaql
           ).members,
         ).toStrictEqual(
-          ((highlights[0].jaql(true) as FilterJaql).filter as IncludeMembersFilter).members,
+          ((highlights[0].jaql(true) as FilterJaql).filter as IncludeMembersFilterJaql).members,
         );
       });
     });
@@ -653,9 +653,9 @@ describe('useExecuteQueryByWidgetId', () => {
         expect(
           (
             (result.current.query?.highlights?.[0].jaql(true) as FilterJaql)
-              .filter as IncludeMembersFilter
+              .filter as IncludeMembersFilterJaql
           ).members,
-        ).toStrictEqual((mockDashboard.filters[0].jaql.filter as IncludeMembersFilter).members);
+        ).toStrictEqual((mockDashboard.filters[0].jaql.filter as IncludeMembersFilterJaql).members);
       });
     });
   });

@@ -8,12 +8,7 @@
 // https://github.com/TypeStrong/typedoc/issues/1696
 // https://github.com/TypeStrong/typedoc/issues/521
 
-const {
-  Converter,
-  ReflectionKind,
-  TypeScript: ts,
-  UnknownType,
-} = require('typedoc');
+const { Converter, ReflectionKind, TypeScript: ts, UnknownType } = require('typedoc');
 
 /** @param {import("typedoc").Application} param0 */
 exports.load = function ({ application }) {
@@ -30,14 +25,19 @@ exports.load = function ({ application }) {
      * @param {import("typedoc").DeclarationReflection} reflection
      */
     (context, reflection) => {
-      const node =
-        context.project.getSymbolFromReflection(reflection)?.declarations?.[0];
+      const node = context.project.getSymbolFromReflection(reflection)?.declarations?.[0];
 
       if (reflection.kind === ReflectionKind.TypeAlias && node) {
         if (reflection.comment?.getTag('@expandType')) {
           reflection.comment.removeTags('@expandType');
 
           const type = context.checker.getTypeAtLocation(node);
+          // workaround for https://github.com/TypeStrong/typedoc/issues/2751
+          if ('types' in type) {
+            type.types.sort((a, b) => {
+              return a.value.toString() < b.value.toString() ? -1 : 1;
+            });
+          }
           const typeNode = context.checker.typeToTypeNode(
             type,
             node.getSourceFile(),
@@ -47,11 +47,7 @@ exports.load = function ({ application }) {
           typeOverrides.set(
             reflection,
             new UnknownType(
-              printer.printNode(
-                ts.EmitHint.Unspecified,
-                typeNode,
-                node.getSourceFile(),
-              ),
+              printer.printNode(ts.EmitHint.Unspecified, typeNode, node.getSourceFile()),
             ),
           );
         }

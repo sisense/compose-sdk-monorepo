@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, MouseEventHandler } from 'react';
 import classnames from 'classnames';
 
-import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
+import { DEPRECATED_Icon } from '@sisense/sdk-shared-ui/DEPRECATED_Icon';
 
 import styles from './Input.module.scss';
 

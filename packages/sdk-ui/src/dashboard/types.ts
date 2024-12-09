@@ -1,7 +1,7 @@
 import { DashboardStyleOptions, WidgetsOptions, WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
-import { DataSource, Filter } from '@sisense/sdk-data';
 import { DashboardChangeAction } from '@/dashboard/dashboard';
+import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
 export type { DashboardStyleOptions, WidgetsPanelColumnLayout } from '@/models';
 
@@ -21,7 +21,7 @@ export interface DashboardByIdProps {
    * Limitations:
    * - WAT authentication does not support persistence.
    * - As an alpha feature, currently only changes to dashboard filters are persisted.
-   * @internal
+   * @alpha
    */
   persist?: boolean;
 }
@@ -34,8 +34,8 @@ export interface DashboardContainerProps {
   layoutOptions?: DashboardLayoutOptions;
   config?: DashboardConfig;
   widgets: WidgetProps[];
-  filters: Filter[];
-  onFiltersChange: (filters: Filter[]) => void;
+  filters: Filter[] | FilterRelations;
+  onFiltersChange: (filters: Filter[] | FilterRelations) => void;
   defaultDataSource?: DataSource;
   /**
    * Callback to receive changes
@@ -101,7 +101,7 @@ export interface DashboardProps {
   /** The widgets to render in the dashboard */
   widgets: WidgetProps[];
   /** The dashboard filters to be applied to each of the widgets based on the widget filter options */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelations;
   /** The default data source to use for the dashboard */
   defaultDataSource?: DataSource;
   /** The options for each of the widgets */

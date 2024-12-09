@@ -4,7 +4,7 @@ title: thisMonth
 
 # Function thisMonth
 
-> **thisMonth**(`dimension`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **thisMonth**(`dimension`, `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate items with a date dimension value in the current calendar month.
 
@@ -13,6 +13,7 @@ Creates a filter to isolate items with a date dimension value in the current cal
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `dimension` | [`DateDimension`](../../../interfaces/interface.DateDimension.md) | Date dimension to filter |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

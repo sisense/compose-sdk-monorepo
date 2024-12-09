@@ -53,24 +53,26 @@ export const useGetQueryRecommendationsInternal = (
 
   const finalCount = count ?? numOfRecommendations;
 
+  const shouldGetReccomendations = finalCount > 0;
+
   const { isLoading, isError, isSuccess, data, error, refetch } = useQuery({
     queryKey: ['getQueryRecommendations', contextTitle, finalCount, api],
     queryFn: () =>
       api?.ai.getQueryRecommendations(contextTitle, {
         numOfRecommendations: finalCount,
       }),
-    enabled: !!api,
+    enabled: !!api && shouldGetReccomendations,
   });
 
   return {
-    isLoading,
-    isError,
-    isSuccess,
-    data: data ?? [],
-    error,
+    isLoading: shouldGetReccomendations ? isLoading : false,
+    isError: shouldGetReccomendations ? isError : false,
+    isSuccess: shouldGetReccomendations ? isSuccess : false,
+    data: shouldGetReccomendations && data ? data : [],
+    error: shouldGetReccomendations ? error : null,
     refetch: useCallback(() => {
-      refetch();
-    }, [refetch]),
+      if (shouldGetReccomendations) refetch();
+    }, [refetch, shouldGetReccomendations]),
   };
 };
 

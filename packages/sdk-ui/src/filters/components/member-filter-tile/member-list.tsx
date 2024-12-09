@@ -92,7 +92,7 @@ export interface MemberListProps {
   checkAllMembers: () => void;
   uncheckAllMembers: () => void;
   excludeMembers: boolean;
-  multiSelection: boolean;
+  enableMultiSelection: boolean;
   disabled: boolean;
 }
 
@@ -103,7 +103,7 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
   checkAllMembers,
   uncheckAllMembers,
   excludeMembers,
-  multiSelection,
+  enableMultiSelection,
   disabled,
 }) => {
   const [searchString, setSearchString] = useState('');
@@ -134,7 +134,7 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
   return (
     <div className={'csdk-p-3'}>
       <div className="csdk-flex csdk-mb-[3px]">
-        {multiSelection && (
+        {enableMultiSelection && (
           <Checkbox
             aria-label="change-all"
             checked={allChecked}
@@ -157,7 +157,7 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
         <SearchBox
           onChange={(s) => setSearchString(s)}
           disabled={disabled}
-          style={multiSelection ? {} : { paddingLeft: 6 }}
+          style={enableMultiSelection ? {} : { paddingLeft: 6 }}
         />
       </div>
       <div className="csdk-max-h-[150px] csdk-overflow-auto">
@@ -165,16 +165,16 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
           <MemberRow
             key={member.key}
             label={member.title}
-            mode={multiSelection ? 'checkbox' : 'radio'}
+            mode={enableMultiSelection ? 'checkbox' : 'radio'}
             checked={
-              multiSelection
+              enableMultiSelection
                 ? // when excludeMembers is true, checking (ticking) a member means deselecting it.
                   // In other words, selected member is unchecked
                   selectedMembersMap.has(member.key) === !excludeMembers
                 : selectedMembersMap.has(member.key)
             }
             onCheck={(isChecked) => {
-              if (multiSelection) {
+              if (enableMultiSelection) {
                 // when excludeMembers is true, unchecking (unticking) a member means selecting it
                 onSelectMember(member, excludeMembers ? !isChecked : isChecked);
               } else {

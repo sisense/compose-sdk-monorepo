@@ -8,7 +8,7 @@ import { MockedSisenseContextProvider } from '@/__test-helpers__';
 const filter = {
   attribute: { name: 'mockAttribute' },
   jaql: () => ({ jaql: { filter: 'mockJaql' } }),
-  disabled: false,
+  config: { disabled: false },
 } as Filter;
 
 const contextProviderProps: SisenseContextProviderProps = {

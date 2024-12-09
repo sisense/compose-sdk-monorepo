@@ -148,12 +148,6 @@ export const PivotTable = asSisenseComponent({
   });
   useApplyPivotTableFormatting({ dataService, dataOptions });
 
-  const { isLoading, isNoResults } = usePivotDataLoading({
-    jaql,
-    pivotBuilder,
-    isForceReload,
-  });
-
   useRenderPivot({
     nodeRef,
     pivotBuilder,
@@ -162,6 +156,14 @@ export const PivotTable = asSisenseComponent({
     themeSettings,
     size,
     onTotalHeightChange: setPivotTotalHeight,
+  });
+
+  // The pivot data layer depends on the pivot's render props.
+  // Therefore, "usePivotDataLoading" hook should be invoked only after the "useRenderPivot" hook.
+  const { isLoading, isNoResults } = usePivotDataLoading({
+    jaql,
+    pivotBuilder,
+    isForceReload,
   });
 
   const onSort = useCallback(
@@ -195,9 +197,10 @@ export const PivotTable = asSisenseComponent({
       defaultSize={DEFAULT_PIVOT_TABLE_SIZE}
       size={{
         width: styleOptions?.width,
-        height: styleOptions?.isAutoHeight
-          ? pivotTotalHeight ?? styleOptions?.height
-          : styleOptions?.height,
+        height:
+          styleOptions?.isAutoHeight && !isNoResults
+            ? pivotTotalHeight ?? styleOptions?.height
+            : styleOptions?.height,
       }}
       onSizeChange={updateSize}
     >

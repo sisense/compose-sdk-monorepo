@@ -84,6 +84,9 @@ export async function getSettings(
   return merge.withOptions(
     { mergeArrays: false },
     defaultAppConfig,
+    {
+      locale: getBaseDateFnsLocale(customConfig?.translationConfig?.language),
+    },
     serverSettings,
     customConfig,
   ) as AppSettings;

@@ -1,9 +1,11 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api';
-import { dashboardModelTranslator } from '@/models/dashboard';
+import { DashboardModel, dashboardModelTranslator } from '@/models/dashboard';
 import { CompleteThemeSettings } from '../../types';
 import { AppSettings } from '@/app/settings/settings';
 import { TranslatableError } from '@/translation/translatable-error';
+import { getWidgetIdsFromDashboard } from '@/utils/extract-widget-ids';
+import { WidgetDto } from '@/widget-by-id/types';
 
 export interface GetDashboardModelOptions {
   /**
@@ -38,10 +40,12 @@ export async function getDashboardModel(
   options: GetDashboardModelOptions = {},
   themeSettings?: CompleteThemeSettings,
   appSettings?: AppSettings,
-) {
+): Promise<DashboardModel> {
   const { includeWidgets, includeFilters } = options;
   const api = new RestApi(http);
   const fields = ['oid', 'title', 'datasource', 'style'];
+
+  const isWat = http.auth?.type === 'wat';
 
   if (includeWidgets) {
     fields.push('layout');
@@ -49,18 +53,32 @@ export async function getDashboardModel(
 
   if (includeFilters) {
     fields.push('filters');
+    fields.push('filterRelations');
   }
 
-  const promises = [
-    api.getDashboard(dashboardOid, { fields }),
-    includeWidgets ? api.getDashboardWidgets(dashboardOid) : undefined,
-  ] as const;
+  const dashboard = await api.getDashboard(dashboardOid, { fields });
 
-  const [dashboard, widgets] = await Promise.all(promises);
   if (!dashboard) {
     throw new TranslatableError('errors.dashboardWithOidNotFound', { dashboardOid });
   }
-  if (widgets) {
+
+  if (includeWidgets) {
+    let widgets: WidgetDto[];
+
+    if (isWat) {
+      // WAT (Web Access Token) authentication method restricts direct access to the
+      // API endpoint `api/v1/dashboards/${dashboardOid}/widgets`.
+      // As a workaround, widgets are fetched individually based on their references in the dashboard layout.
+      const widgetIds = getWidgetIdsFromDashboard(dashboard);
+      const fetchedWidgets = await Promise.all(
+        widgetIds.map((id) => api.getWidget(id, dashboard.oid)),
+      );
+      widgets = fetchedWidgets.filter((widget): widget is WidgetDto => widget !== undefined);
+    } else {
+      // Fetch all widgets at once
+      widgets = (await api.getDashboardWidgets(dashboardOid)) || [];
+    }
+
     dashboard.widgets = widgets;
   }
 

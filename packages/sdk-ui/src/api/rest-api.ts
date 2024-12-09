@@ -40,7 +40,7 @@ export class RestApi {
   /**
    * Get all dashboards
    */
-  public getDashboards = (options: GetDashboardsOptions = {}) => {
+  public getDashboards = async (options: GetDashboardsOptions = {}) => {
     const { fields, expand, searchByTitle } = options;
     const queryParams = new URLSearchParams({
       ...(searchByTitle && { name: searchByTitle }),
@@ -48,7 +48,26 @@ export class RestApi {
       ...(expand?.length && { expand: expand?.join(',') }),
     }).toString();
 
-    return this.httpClient.get<DashboardDto[]>(`api/v1/dashboards?${queryParams}`);
+    const dashboards = await this.httpClient.get<DashboardDto[]>(
+      `api/v1/dashboards?${queryParams}`,
+    );
+
+    if (!dashboards) return [];
+
+    // fetch datasources that are not present in the dashboard object
+    // a workaround for the API issue where the datasource is not returned in the dashboard object (WAT)
+    const dashboardsPromises = dashboards.map(async (dashboard) => {
+      if (dashboard.oid && !dashboard.datasource) {
+        const dashboardInfo = await this.getDashboard(dashboard.oid, { fields: ['datasource'] });
+
+        return dashboardInfo?.datasource
+          ? { ...dashboard, datasource: dashboardInfo.datasource }
+          : dashboard;
+      }
+      return dashboard;
+    });
+
+    return Promise.all(dashboardsPromises);
   };
 
   /**

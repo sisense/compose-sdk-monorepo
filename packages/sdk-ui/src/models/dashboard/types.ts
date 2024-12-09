@@ -34,6 +34,9 @@ export interface WidgetsPanelColumnLayout {
  */
 export type WidgetsPanelLayout = WidgetsPanelColumnLayout;
 
+/**
+ * Widget ID
+ */
 export type WidgetId = string;
 /**
  * Options for widgets in a dashboard

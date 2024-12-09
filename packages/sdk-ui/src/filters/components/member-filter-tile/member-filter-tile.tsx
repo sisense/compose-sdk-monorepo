@@ -2,7 +2,9 @@ import {
   Attribute,
   convertDataSource,
   DataSource,
+  DimensionalLevelAttribute,
   Filter,
+  isDatetime,
   isNumber,
   MembersFilter,
 } from '@sisense/sdk-data';
@@ -16,6 +18,9 @@ import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
 import merge from 'lodash-es/merge';
 import { cloneFilterAndToggleDisabled } from '@/utils/filters';
+import { applyDateFormat } from '@/query/date-formats';
+import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 /**
  * Props for {@link MemberFilterTile}
@@ -81,16 +86,15 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     parentFilters = [],
     tileDesignOptions,
   } = props;
-  const { backgroundFilter } = (filterFromProps as MembersFilter) ?? {};
+  const {
+    config: { backgroundFilter = undefined, enableMultiSelection, excludeMembers },
+  } = (filterFromProps as MembersFilter) ?? { config: {} };
 
   const { filter, updateFilter } = useSynchronizedFilter<MembersFilter>(
     filterFromProps as MembersFilter | null,
     updateFilterFromProps,
     () => new MembersFilter(attribute, []),
   );
-
-  const multiSelection = filter.multiSelection;
-  const excludeMembers = filter.excludeMembers;
 
   // TODO: this is a temporary fix for useExecuteQuery so the reference to
   // "dimensions" does not change on every render, causing infinite rerenders.
@@ -108,11 +112,35 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     filters: queryFilters,
   });
 
-  const queriedMembers = useMemo(() => (!data ? [] : data.rows.map((r) => r[0])), [data]);
+  const { app } = useSisenseContext();
+  const formattedData = useMemo(() => {
+    if (!data) return;
+    if (isDatetime(attribute.type)) {
+      return {
+        ...data,
+        rows: data.rows.map((cell) =>
+          cell.map((d) => ({
+            ...d,
+            text: applyDateFormat(
+              new Date(d.data),
+              getDefaultDateMask((attribute as DimensionalLevelAttribute).granularity),
+              app?.settings?.locale,
+            ),
+          })),
+        ),
+      };
+    }
+    return data;
+  }, [data, attribute, app]);
+
+  const queriedMembers = useMemo(
+    () => (!formattedData ? [] : formattedData.rows.map((r) => r[0])),
+    [formattedData],
+  );
 
   const selectedMembers: SelectedMember[] = useMemo(() => {
     const members = alignMembersType(filter.members, attribute.type);
-    const deactivatedMembers = alignMembersType(filter.deactivatedMembers, attribute.type);
+    const deactivatedMembers = alignMembersType(filter.config.deactivatedMembers, attribute.type);
     return queriedMembers
       .filter(
         (queriedMember) =>
@@ -123,7 +151,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         title: queriedMember.text ?? queriedMember.data.toString(),
         inactive: deactivatedMembers.includes(queriedMember.data),
       }));
-  }, [filter.deactivatedMembers, filter.members, queriedMembers, attribute.type]);
+  }, [filter.config.deactivatedMembers, filter.members, queriedMembers, attribute.type]);
 
   const allMembers: Member[] = useMemo(
     () =>
@@ -138,7 +166,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
 
   const updateFilterFromMembersList = useCallback(
     (member: Member, isSelected: boolean) => {
-      if (multiSelection) {
+      if (enableMultiSelection) {
         const newSelectedMembers = isSelected
           ? addSelectedMember(selectedMembers, member)
           : removeSelectedMember(selectedMembers, member);
@@ -153,13 +181,13 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         updateFilter(withSelectedMembers(filter, [member], excludeMembers));
       }
     },
-    [multiSelection, selectedMembers, allMembers, excludeMembers, filter, updateFilter],
+    [enableMultiSelection, selectedMembers, allMembers, excludeMembers, filter, updateFilter],
   );
 
   if (error) {
     throw error;
   }
-  if (!data) {
+  if (!formattedData) {
     return null;
   }
 
@@ -192,12 +220,12 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
             checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
             uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
             excludeMembers={excludeMembers}
-            multiSelection={multiSelection}
+            enableMultiSelection={enableMultiSelection}
             disabled={tileDisabled}
           />
         );
       }}
-      disabled={filter.disabled}
+      disabled={filter.config.disabled}
       onToggleDisabled={() => {
         const newFilter = cloneFilterAndToggleDisabled(filter);
         updateFilter(newFilter);
@@ -206,7 +234,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       design={merge(tileDesignOptions, {
         header: { hasBackgroundFilterIcon },
       })}
-      locked={filter.locked}
+      locked={filter.config.locked}
       onDelete={onDelete}
     />
   );
@@ -223,15 +251,15 @@ function withSelectedMembers(
   const { activeFilterMembers, inactiveFilterMembers } =
     splitToActiveAndInactiveFilterMembers(selectedMembers);
 
-  return new MembersFilter(
-    filter.attribute,
-    activeFilterMembers,
-    excludeMembers,
-    filter.guid,
-    inactiveFilterMembers,
-    filter.backgroundFilter,
-    filter.multiSelection,
-  );
+  const config = {
+    guid: filter.config.guid,
+    excludeMembers: excludeMembers,
+    deactivatedMembers: inactiveFilterMembers,
+    backgroundFilter: filter.config.backgroundFilter,
+    enableMultiSelection: filter.config.enableMultiSelection,
+  };
+
+  return new MembersFilter(filter.attribute, activeFilterMembers, config);
 }
 
 /**

@@ -77,7 +77,7 @@ export const translation: TranslationDictionary = {
     mapLoadingFailed: 'Не вдалося завантажити мапу',
     cascadingFilterOriginalNotFound:
       'Помилка при реструктуризації каскадних фільтрів. Оригінальний фільтр не знайдено',
-    dashboardLoadFailed: 'Не вдалося завантажити Dashboard',
+    dashboardLoadFailed: 'Не вдалося завантажити Dashboard. {{error}}',
     dashboardWithOidNotFound: 'Dashboard з oid {{dashboardOid}} не знайдено',
     failedToAddWidget: 'Не вдалося додати віджет',
     widgetWithOidNotFound: 'Віджет з oid {{widgetOid}} не знайдено',

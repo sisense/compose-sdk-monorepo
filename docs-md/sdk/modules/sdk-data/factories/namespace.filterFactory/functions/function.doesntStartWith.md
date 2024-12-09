@@ -4,7 +4,10 @@ title: doesntStartWith
 
 # Function doesntStartWith
 
-> **doesntStartWith**(`attribute`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **doesntStartWith**(
+  `attribute`,
+  `value`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values that do not start with a specified string.
 
@@ -19,6 +22,7 @@ You can optionally use wildcard characters for pattern matching, as described in
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Text attribute to filter on |
 | `value` | `string` | Value to filter by |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

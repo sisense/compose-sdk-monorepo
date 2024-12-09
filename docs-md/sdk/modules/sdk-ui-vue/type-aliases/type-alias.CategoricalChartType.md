@@ -4,6 +4,6 @@ title: CategoricalChartType
 
 # Type alias CategoricalChartType
 
-> **CategoricalChartType**: `"funnel" | "pie" | "treemap" | "sunburst"`
+> **CategoricalChartType**: `"funnel" | "pie" | "sunburst" | "treemap"`
 
 Categorical family of chart types

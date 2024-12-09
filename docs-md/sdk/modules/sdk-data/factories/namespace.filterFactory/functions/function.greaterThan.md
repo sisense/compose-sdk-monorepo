@@ -4,7 +4,10 @@ title: greaterThan
 
 # Function greaterThan
 
-> **greaterThan**(`attribute`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **greaterThan**(
+  `attribute`,
+  `value`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values strictly greater than a specified number.
 
@@ -14,6 +17,7 @@ Creates a filter to isolate attribute values strictly greater than a specified n
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Numeric attribute to filter on |
 | `value` | `number` | Value to filter by |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

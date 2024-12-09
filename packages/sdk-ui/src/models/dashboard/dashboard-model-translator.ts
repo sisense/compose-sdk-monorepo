@@ -63,6 +63,7 @@ export function fromDashboardDto(
     widgets: widgetDtoList,
     layout: layoutDto,
     filters: filterDtoList,
+    filterRelations: filterRelationsDtoOptions,
     style,
   } = dashboardDto;
 
@@ -85,7 +86,8 @@ export function fromDashboardDto(
       widgetModelTranslator.fromWidgetDto(widget, mergedThemeSettings, appSettings),
     ) || [];
   const widgetsPanelLayout = layoutDto ? translateLayout(layoutDto) : { columns: [] };
-  const filters = extractDashboardFilters(filterDtoList || []);
+  const filterRelationsModel = filterRelationsDtoOptions?.[0]?.filterRelations;
+  const filters = extractDashboardFilters(filterDtoList || [], filterRelationsModel);
   const widgetsOptions = translateWidgetsOptions(widgetDtoList);
 
   const dashboardModel: DashboardModel = {

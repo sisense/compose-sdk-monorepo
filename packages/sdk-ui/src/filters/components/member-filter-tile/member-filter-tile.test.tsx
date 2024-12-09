@@ -60,11 +60,10 @@ describe('MemberFilterTile', () => {
     );
 
     const filterTitle = 'Member Filter Title';
-    const filter = filterFactory.members(
-      DM.Commerce.AgeRange,
-      ['0-18', '65+'],
-      true,
-    ) as MembersFilter;
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+'], {
+      guid: 'id-123',
+      excludeMembers: true,
+    }) as MembersFilter;
     render(
       <SisenseContextProvider {...contextProviderProps}>
         <MemberFilterTile
@@ -124,15 +123,10 @@ describe('MemberFilterTile', () => {
     );
 
     const filterTitle = 'Member Filter Title';
-    const filter = filterFactory.members(
-      DM.Commerce.AgeRange,
-      ['0-18'],
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      false,
-    ) as MembersFilter;
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18'], {
+      guid: 'id-123',
+      enableMultiSelection: false,
+    }) as MembersFilter;
     const { container } = render(
       <SisenseContextProvider {...contextProviderProps}>
         <MemberFilterTile

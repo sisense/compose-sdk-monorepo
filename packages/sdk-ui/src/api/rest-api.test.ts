@@ -55,6 +55,28 @@ describe('Rest API', () => {
     );
   });
 
+  it('should send correct request to fetch dashboards and their datasources for wat', async () => {
+    httpGetMock
+      .mockResolvedValueOnce([{ oid: 'oid1', datasource: null }])
+      .mockResolvedValueOnce({ datasource: 'someDatasource' });
+
+    const result = await restApi.getDashboards({
+      searchByTitle: 'title',
+      fields: ['field1', 'field2'],
+      expand: ['expand1', 'expand2'],
+    });
+
+    expect(httpGetMock).toHaveBeenNthCalledWith(
+      1, // First call
+      'api/v1/dashboards?name=title&fields=field1%2Cfield2&expand=expand1%2Cexpand2',
+    );
+    expect(httpGetMock).toHaveBeenNthCalledWith(
+      2, // Second call
+      'api/v1/dashboards/oid1?fields=datasource',
+    );
+    expect(result).toEqual([{ oid: 'oid1', datasource: 'someDatasource' }]);
+  });
+
   it('should send correct request to fetch particular dashboard', async () => {
     await restApi.getDashboard('dashboardOid', {
       fields: ['field1', 'field2'],

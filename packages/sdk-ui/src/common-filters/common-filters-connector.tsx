@@ -30,10 +30,11 @@ import { isSameAttribute, isIncludeAllFilter, clearMembersFilter } from '@/utils
 import { OpenMenuFn } from '@/common/components/menu/types';
 import { TFunction } from '@sisense/sdk-common';
 
-type CommonFiltersToWidgetConnectProps = Pick<
+type CommonFiltersConnectionProps = Pick<
   ChartWidgetProps,
-  'filters' | 'highlights' | 'onDataPointClick' | 'onDataPointsSelected' | 'onDataPointContextMenu'
+  'highlights' | 'onDataPointClick' | 'onDataPointsSelected' | 'onDataPointContextMenu'
 > & {
+  filters: Filter[];
   renderToolbar: RenderToolbarHandler;
 };
 
@@ -62,12 +63,12 @@ function normalizeCommonFiltersOptions(
 }
 
 /**
- * Prepares common filters to be used in widget connect props
+ * Prepares common filters for connection to widget props
  *
  * @param filters - Pure filters (non-cascading)
  * @param setFilters - Function to set updated pure filters (non-cascading)
  */
-export function prepareCommonFiltersToWidgetConnectProps(
+export function prepareCommonFiltersConnectionProps(
   commonFilters: Filter[],
   updateCommonFilters: (filters: Filter[]) => void,
   widgetType: WidgetTypeInternal,
@@ -75,8 +76,8 @@ export function prepareCommonFiltersToWidgetConnectProps(
   options: CommonFiltersOptions,
   translate: TFunction,
   openMenu?: OpenMenuFn,
-): CommonFiltersToWidgetConnectProps {
-  const props = {} as CommonFiltersToWidgetConnectProps;
+): CommonFiltersConnectionProps {
+  const props = {} as CommonFiltersConnectionProps;
   const normalizedOptions = normalizeCommonFiltersOptions(widgetType, options);
 
   // convert cascading filters to pure filters and vice versa
@@ -87,7 +88,7 @@ export function prepareCommonFiltersToWidgetConnectProps(
   );
 
   // filters that are not disabled
-  const enabledFilters = pureFilters.filter((f) => !f.disabled);
+  const enabledFilters = pureFilters.filter((f) => !f.config.disabled);
   // filters that are not ignored
   const allowedFilters = getAllowedFilters(enabledFilters, pureFiltersIgnoringRules);
 
@@ -207,7 +208,7 @@ export function prepareCommonFiltersToWidgetConnectProps(
           isMembersFilter(f) &&
           isSameAttribute(f.attribute, a) &&
           !isIncludeAllFilter(f) &&
-          !f.locked,
+          !f.config.locked,
       ),
     );
     const hasSelection = !!selectedFilters.length;
@@ -234,7 +235,7 @@ export function prepareCommonFiltersToWidgetConnectProps(
 
 function getBackgroundFilters(filters: PureFilter[]): PureFilter[] {
   return filters
-    .map((filter) => (filter as MembersFilter).backgroundFilter)
+    .map((filter) => (filter as MembersFilter).config?.backgroundFilter)
     .filter((filter) => !!filter) as MembersFilter[];
 }
 

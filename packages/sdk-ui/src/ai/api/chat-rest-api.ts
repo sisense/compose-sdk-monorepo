@@ -22,7 +22,8 @@ export class ChatRestApi {
   }
 
   public getChatContexts = async () => {
-    const result = await this.httpClient.get<ChatContext[]>(`api/datasources?sharedWith=r,w`);
+    //TODO: refactor to use getDataSourceList() from sdk-query-client after applying same change there?
+    const result = await this.httpClient.get<ChatContext[]>(`api/datasources`);
     return result || [];
   };
 

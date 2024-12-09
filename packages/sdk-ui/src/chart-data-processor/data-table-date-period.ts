@@ -29,11 +29,8 @@ import { enUS, enGB, de, fr, es, it, ja, ko, nl, pt, ru, tr, zhCN, uk } from 'da
 
 import range from 'lodash-es/range';
 
-export type SystemSettings = { language: string };
-
-export const getBaseDateFnsLocale = (systemSettings?: SystemSettings): Locale => {
-  const [localePrimary, localeSecondary] = systemSettings?.language?.split('-') ?? [];
-  switch (localePrimary) {
+export const getBaseDateFnsLocale = (language?: string): Locale => {
+  switch (language) {
     case 'de':
       return de;
     case 'fr':
@@ -59,8 +56,9 @@ export const getBaseDateFnsLocale = (systemSettings?: SystemSettings): Locale =>
     case 'uk':
       return uk;
     case 'en':
-      if (localeSecondary.toLowerCase() === 'gb') return enGB;
       return enUS;
+    case 'gb':
+      return enGB;
     default:
       return enUS;
   }

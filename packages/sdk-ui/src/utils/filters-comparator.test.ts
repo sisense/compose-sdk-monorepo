@@ -1,5 +1,5 @@
 import { isFiltersChanged, isRelationsChanged } from './filters-comparator'; // Update with the correct path
-import { Filter, filterFactory, getFilterListAndRelations } from '@sisense/sdk-data';
+import { Filter, filterFactory, getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 describe('isFiltersChanged', () => {
@@ -69,30 +69,30 @@ describe('isRelationsChanged', () => {
 
   it('should return true if one relation is undefined and another is not', () => {
     const { filters: prevFilters, relations: prevRelations } =
-      getFilterListAndRelations(orRelation);
+      getFilterListAndRelationsJaql(orRelation);
     expect(isRelationsChanged(prevFilters, [], prevRelations, undefined)).toBe(true);
   });
 
   it('should return false if filters are same and relations are same', () => {
     const { filters: prevFilters, relations: prevRelations } =
-      getFilterListAndRelations(orRelation);
+      getFilterListAndRelationsJaql(orRelation);
     const { filters: newFilters, relations: newRelations } =
-      getFilterListAndRelations(sameOrRelation);
+      getFilterListAndRelationsJaql(sameOrRelation);
     expect(isRelationsChanged(prevFilters, newFilters, prevRelations, newRelations)).toBe(false);
   });
 
   it('should return true if filters are different', () => {
     const { filters: prevFilters, relations: prevRelations } =
-      getFilterListAndRelations(orRelation);
+      getFilterListAndRelationsJaql(orRelation);
     const { filters: newFilters, relations: newRelations } =
-      getFilterListAndRelations(differentOrRelation);
+      getFilterListAndRelationsJaql(differentOrRelation);
     expect(isRelationsChanged(prevFilters, newFilters, prevRelations, newRelations)).toBe(true);
   });
 
   it('should return true if operators are different', () => {
     const { filters: prevFilters, relations: prevRelations } =
-      getFilterListAndRelations(andRelation);
-    const { filters: newFilters, relations: newRelations } = getFilterListAndRelations(
+      getFilterListAndRelationsJaql(andRelation);
+    const { filters: newFilters, relations: newRelations } = getFilterListAndRelationsJaql(
       filterFactory.logic.or(someFilter, someAnotherFilter),
     );
     expect(isRelationsChanged(prevFilters, newFilters, prevRelations, newRelations)).toBe(true);
@@ -100,8 +100,8 @@ describe('isRelationsChanged', () => {
 
   it('should return true if structure is different', () => {
     const { filters: prevFilters, relations: prevRelations } =
-      getFilterListAndRelations(orRelation);
-    const { filters: newFilters, relations: newRelations } = getFilterListAndRelations(
+      getFilterListAndRelationsJaql(orRelation);
+    const { filters: newFilters, relations: newRelations } = getFilterListAndRelationsJaql(
       filterFactory.logic.or(someFilter, someAnotherFilter),
     );
     expect(isRelationsChanged(prevFilters, newFilters, prevRelations, newRelations)).toBe(true);
@@ -109,8 +109,8 @@ describe('isRelationsChanged', () => {
 
   it('should return false if nodes are swapped, but logical structure is the same', () => {
     const { filters: prevFilters, relations: prevRelations } =
-      getFilterListAndRelations(orRelation);
-    const { filters: newFilters, relations: newRelations } = getFilterListAndRelations(
+      getFilterListAndRelationsJaql(orRelation);
+    const { filters: newFilters, relations: newRelations } = getFilterListAndRelationsJaql(
       filterFactory.logic.or(andRelation, someFilter),
     );
     expect(isRelationsChanged(prevFilters, newFilters, prevRelations, newRelations)).toBe(false);

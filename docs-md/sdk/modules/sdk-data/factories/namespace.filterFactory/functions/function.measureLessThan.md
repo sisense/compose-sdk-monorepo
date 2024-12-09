@@ -4,7 +4,10 @@ title: measureLessThan
 
 # Function measureLessThan
 
-> **measureLessThan**(`measure`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **measureLessThan**(
+  `measure`,
+  `value`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate a measure value less than a given number.
 
@@ -14,6 +17,7 @@ Creates a filter to isolate a measure value less than a given number.
 | :------ | :------ | :------ |
 | `measure` | [`BaseMeasure`](../../../interfaces/interface.BaseMeasure.md) | Measure to filter by |
 | `value` | `number` | Value |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

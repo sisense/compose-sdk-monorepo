@@ -14,8 +14,14 @@ Filters ignoring rules.
 
 **all**?: `boolean`
 
+Boolean flag whether to ignore all filters.
+
+If not specified, the default value is `false`.
+
 ***
 
 ### `ids`
 
 **ids**?: `string`[]
+
+Filter GUIDs to ignore.

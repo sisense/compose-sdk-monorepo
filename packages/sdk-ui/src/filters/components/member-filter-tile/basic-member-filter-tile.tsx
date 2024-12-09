@@ -183,7 +183,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
             checkAllMembers={() => dispatchMembersAction({ type: 'selectAllMembers' })}
             uncheckAllMembers={() => dispatchMembersAction({ type: 'clearAllMembers' })}
             excludeMembers={false}
-            multiSelection={true}
+            enableMultiSelection={true}
             disabled={tileDisabled}
           />
         );

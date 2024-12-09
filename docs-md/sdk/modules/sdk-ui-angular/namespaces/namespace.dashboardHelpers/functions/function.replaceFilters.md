@@ -15,7 +15,7 @@ This function does not modify the original dashboard; instead, it returns a new 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `dashboard` | [`DashboardProps`](../../../interfaces/interface.DashboardProps.md) | The original dashboard (`DashboardProps`) whose filters are to be replaced. |
-| `newFilters` | [`Filter`](../../../../sdk-data/interfaces/interface.Filter.md)[] | An array of new filters to set on the dashboard. |
+| `newFilters` | [`FilterRelations`](../../../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../../../sdk-data/interfaces/interface.Filter.md)[] | An array of new filters or filter relations to set on the dashboard. |
 
 ## Returns
 

@@ -67,7 +67,7 @@ const CodeExample = () => {
 
 export default CodeExample;
 `,
-    executeQueryWidgetTmpl: `import { useExecuteQuery } from '@sisense/sdk-ui';
+    executeQueryTmpl: `import { useExecuteQuery } from '@sisense/sdk-ui';
 {{extraImportsString}}
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
 
@@ -162,7 +162,7 @@ export class CodeExample {
     }
 }
 `,
-    executeQueryWidgetTmpl: `import { Component } from '@angular/core';
+    executeQueryTmpl: `import { Component } from '@angular/core';
 {{extraImportsString}}
 import { type QueryResultData } from '@sisense/sdk-data';
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
@@ -239,7 +239,7 @@ const { data, isLoading, isError } = useExecuteQueryByWidgetId({
   </div>
 </template>
 `,
-    executeQueryWidgetTmpl: `<script setup lang="ts">
+    executeQueryTmpl: `<script setup lang="ts">
 import { useExecuteQuery } from '@sisense/sdk-ui-vue';
 {{extraImportsString}}
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli

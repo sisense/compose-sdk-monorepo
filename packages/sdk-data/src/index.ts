@@ -19,6 +19,7 @@ export * from './dimensional-model/factory.js';
 export * from './dimensional-model/jaql-element.js';
 
 export * from './dimensional-model/filters/filters.js';
+export * from './dimensional-model/filters/filter-config-utils.js';
 
 export { createFilterMatcher } from './dimensional-model/filters/utils/filter-matcher-utils.js';
 
@@ -92,6 +93,8 @@ export * from './dimensional-model/measures/measures.js';
 export * as measureFactory from './dimensional-model/measures/factory.js';
 
 export * from './dimensional-model/simple-column-types.js';
+
+export * from './dimensional-model/filter-relations.js';
 
 /**
  * Functions to create elements for advanced analytics – for example, attributes and measures for constructing a custom Boxplot chart

@@ -126,7 +126,7 @@ export const useGetDashboardModel = withTracking('useGetDashboardModel')(
  * @param params - Parameters of the dashboard to be retrieved
  * @internal
  */
-export function useGetDashboardModelInternal(params: GetDashboardModelParams) {
+export function useGetDashboardModelInternal(params: GetDashboardModelParams): DashboardModelState {
   const isParamsChanged = useHasChanged(params, ['dashboardOid']);
   const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<DashboardModel>, {

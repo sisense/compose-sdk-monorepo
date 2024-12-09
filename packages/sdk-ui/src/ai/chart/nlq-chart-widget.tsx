@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { ChartWidget } from '@/widgets/chart-widget';
 import { widgetComposer } from '@/analytics-composer';
 import { ChartInsights } from '@/ai/chart/chart-insights';
@@ -7,6 +8,8 @@ import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { useGetNlgQueryResultInternal } from '@/ai/use-get-nlg-query-result';
 import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
 import { useTranslation } from 'react-i18next';
+import { useCommonFilters } from '@/common-filters/use-common-filters';
+import { WidgetProps } from '@/props';
 
 /**
  * Props for {@link NlqChartWidget} component.
@@ -56,24 +59,28 @@ export interface NlqChartWidgetProps {
  */
 export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqChartWidgetProps) => {
   const { t } = useTranslation();
+  const { connectToWidgetProps } = useCommonFilters({ initialFilters: filters });
+  const [chartWidgetProps, setChartWidgetProps] = useState<WidgetProps | null>(null);
 
-  const chartWidgetProps = widgetComposer.toWidgetProps(nlqResponse, {
-    useCustomizedStyleOptions: true,
-  });
+  useEffect(() => {
+    const w = widgetComposer.toWidgetProps(nlqResponse, {
+      useCustomizedStyleOptions: true,
+    });
+    if (!w) setChartWidgetProps(null);
+    else setChartWidgetProps(connectToWidgetProps(w));
+  }, [nlqResponse, connectToWidgetProps]);
 
   const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlqResponse);
 
-  if (isLoading) {
+  if (isLoading || !chartWidgetProps) {
     return <LoadingDotsIcon />;
   }
 
-  if (!chartWidgetProps || !isChartWidgetProps(chartWidgetProps)) {
+  if (!isChartWidgetProps(chartWidgetProps)) {
     return <></>;
   }
 
   const summary = data ?? t('ai.errors.insightsNotAvailable');
-
-  chartWidgetProps[chartWidgetProps?.chartType === 'table' ? 'filters' : 'highlights'] = filters;
 
   return (
     <ChartWidget

@@ -1,6 +1,7 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { RestApi } from '../../api/rest-api.js';
 import { dashboardModelTranslator } from '@/models';
+import { dedupe } from '@/utils/dedupe.js';
 
 export interface GetDashboardModelsOptions {
   /**
@@ -33,5 +34,17 @@ export async function getDashboardModels(
 
   const dashboards = await api.getDashboards({ fields, expand, searchByTitle });
 
-  return dashboards?.map((dashboard) => dashboardModelTranslator.fromDashboardDto(dashboard)) || [];
+  if (!dashboards) return [];
+
+  // Remove duplicated dashboards due to co-authoring
+  // The deduplication algorithm iterates forward through the array elements.
+  // It retains the leading elements, which are assumed to be the owner's dashboards,
+  // and removes duplicate copies of co-owned or shared dashboards.
+  const dedupedDashboards = dedupe(dashboards, (m) => m.oid);
+
+  if (dedupedDashboards.length !== dashboards.length) {
+    console.warn('Removing detected duplicate dashboard(s)');
+  }
+
+  return dedupedDashboards.map((dashboard) => dashboardModelTranslator.fromDashboardDto(dashboard));
 }

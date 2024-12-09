@@ -77,7 +77,7 @@ export const translation = {
     mapLoadingFailed: 'Failed loading map',
     cascadingFilterOriginalNotFound:
       'Error in cascading filters reassembling. Original cascading filter not found',
-    dashboardLoadFailed: 'Failed to load Dashboard',
+    dashboardLoadFailed: 'Failed to load Dashboard. {{error}}',
     dashboardWithOidNotFound: 'Dashboard with oid {{dashboardOid}} not found',
     failedToAddWidget: 'Failed to add widget to dashboard',
     widgetWithOidNotFound: 'Widget with oid {{widgetOid}} not found',

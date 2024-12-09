@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { DEPRECATED_Icon } from '../../../DEPRECATED_Icon';
+import { DEPRECATED_Icon } from '@sisense/sdk-shared-ui/DEPRECATED_Icon';
 
 import type { DropdownItem } from '../../types';
 

@@ -1,5 +1,5 @@
 import { isFiltersChanged, isRelationsChanged } from '@/utils/filters-comparator';
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { ExecuteQueryParams } from '../index.js';
 import { useHasChanged } from '../common/hooks/use-has-changed';
 
@@ -15,10 +15,10 @@ const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
 
 export function useQueryParamsChanged(params: ExecuteQueryParams) {
   return useHasChanged(params, simplySerializableParamNames, (params, prev) => {
-    const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelations(
+    const { filters: prevFilterList, relations: prevRelationsList } = getFilterListAndRelationsJaql(
       prev.filters,
     );
-    const { filters: newFilterList, relations: newRelationsList } = getFilterListAndRelations(
+    const { filters: newFilterList, relations: newRelationsList } = getFilterListAndRelationsJaql(
       params.filters,
     );
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo } from 'react';
-import { Filter, createAttribute } from '@sisense/sdk-data';
+import { createAttribute } from '@sisense/sdk-data';
 import { DataPoint, DrilldownSelection, ScatterDataPoint } from '../../types.js';
 import { ChartWidgetProps } from '@/props.js';
 import { useMenu } from '@/common/hooks/use-menu.js';
@@ -12,8 +12,8 @@ import {
   isDrilldownApplicableToChart,
   prepareDrilldownSelectionPoints,
 } from '../common/drilldown-utils.js';
-import { mergeFilters } from '@/widget-by-id/utils.js';
 import { combineHandlers } from '@/utils/combine-handlers.js';
+import { mergeFiltersOrFilterRelations } from '@/utils/filter-relations.js';
 
 type UseWithDrilldownParams = {
   propsToExtend: ChartWidgetProps;
@@ -105,8 +105,7 @@ export const useWithDrilldown = ({
 
   const filtersWithDrilldown = useMemo(() => {
     return drilldownFilters.length
-      ? // todo: cover filter relations case
-        mergeFilters(propsToExtend.filters as Filter[], drilldownFilters)
+      ? mergeFiltersOrFilterRelations(propsToExtend.filters || [], drilldownFilters)
       : propsToExtend.filters;
   }, [propsToExtend.filters, drilldownFilters]);
 

@@ -1,0 +1,181 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`executeQuery > createExecuteQueryCacheKey > should return cache key 1`] = `"{"metadata":[{"jaql":{"title":"Condition","dim":"[Commerce.Condition]","datatype":"text"}},{"jaql":{"title":"sum Cost","dim":"[Commerce.Cost]","datatype":"numeric","agg":"sum"}},{"jaql":{"title":"Age Range","dim":"[Commerce.Age Range]","datatype":"text","filter":{"members":["18-24"]}},"panel":"scope"},{"jaql":{"title":"Gender","dim":"[Commerce.Gender]","datatype":"text","filter":{"members":["Male"]}},"panel":"scope"}],"datasource":{"title":"Sample ECommerce","live":false},"by":"ComposeSDK","queryGuid":""}"`;
+
+exports[`executeQuery > executePivotQuery > should call executePivotQuery from queryClient with correct args 1`] = `
+[
+  {
+    "columnsAttributes": [
+      {
+        "__serializable": "DimensionalElement",
+        "dataSource": undefined,
+        "desc": "",
+        "expression": "[Commerce.Age Range]",
+        "name": "Age Range",
+        "type": "text-attribute",
+      },
+    ],
+    "count": undefined,
+    "dataSource": "Sample ECommerce",
+    "filterRelations": undefined,
+    "filters": [
+      {
+        "__serializable": "DimensionalElement",
+        "attribute": {
+          "__serializable": "DimensionalElement",
+          "dataSource": undefined,
+          "desc": "",
+          "expression": "[Commerce.Gender]",
+          "name": "Gender",
+          "type": "text-attribute",
+        },
+        "dataSource": undefined,
+        "desc": "",
+        "filterType": "members",
+        "members": [
+          "Female",
+        ],
+        "name": "4753e5d5477",
+        "type": "filter",
+      },
+    ],
+    "grandTotals": {},
+    "highlights": [
+      {
+        "__serializable": "DimensionalElement",
+        "attribute": {
+          "__serializable": "DimensionalElement",
+          "dataSource": undefined,
+          "desc": "",
+          "expression": "[Commerce.Age Range]",
+          "name": "Age Range",
+          "type": "text-attribute",
+        },
+        "dataSource": undefined,
+        "desc": "",
+        "filterType": "members",
+        "members": [
+          "18-24",
+        ],
+        "name": "67f10cf7c33",
+        "type": "filter",
+      },
+    ],
+    "measures": [
+      {
+        "__serializable": "DimensionalElement",
+        "aggregation": "sum",
+        "attribute": {
+          "__serializable": "DimensionalElement",
+          "dataSource": undefined,
+          "desc": "",
+          "expression": "[Commerce.Cost]",
+          "name": "Cost",
+          "type": "numeric-attribute",
+        },
+        "dataSource": undefined,
+        "desc": "",
+        "name": "sum Cost",
+        "sort": 0,
+        "type": "basemeasure",
+      },
+    ],
+    "offset": undefined,
+    "rowsAttributes": [
+      {
+        "__serializable": "DimensionalElement",
+        "dataSource": undefined,
+        "desc": "",
+        "expression": "[Commerce.Condition]",
+        "name": "Condition",
+        "type": "text-attribute",
+      },
+    ],
+  },
+  undefined,
+]
+`;
+
+exports[`executeQuery > executeQuery > should call executeQuery from queryClient 1`] = `
+[
+  {
+    "attributes": [
+      {
+        "__serializable": "DimensionalElement",
+        "dataSource": undefined,
+        "desc": "",
+        "expression": "[Commerce.Condition]",
+        "name": "Condition",
+        "type": "text-attribute",
+      },
+    ],
+    "count": undefined,
+    "dataSource": "Sample ECommerce",
+    "filterRelations": undefined,
+    "filters": [
+      {
+        "__serializable": "DimensionalElement",
+        "attribute": {
+          "__serializable": "DimensionalElement",
+          "dataSource": undefined,
+          "desc": "",
+          "expression": "[Commerce.Age Range]",
+          "name": "Age Range",
+          "type": "text-attribute",
+        },
+        "dataSource": undefined,
+        "desc": "",
+        "filterType": "members",
+        "members": [
+          "18-24",
+        ],
+        "name": "67f10cf7c33",
+        "type": "filter",
+      },
+    ],
+    "highlights": [
+      {
+        "__serializable": "DimensionalElement",
+        "attribute": {
+          "__serializable": "DimensionalElement",
+          "dataSource": undefined,
+          "desc": "",
+          "expression": "[Commerce.Gender]",
+          "name": "Gender",
+          "type": "text-attribute",
+        },
+        "dataSource": undefined,
+        "desc": "",
+        "filterType": "members",
+        "members": [
+          "Male",
+        ],
+        "name": "76c7dc97ab4",
+        "type": "filter",
+      },
+    ],
+    "measures": [
+      {
+        "__serializable": "DimensionalElement",
+        "aggregation": "sum",
+        "attribute": {
+          "__serializable": "DimensionalElement",
+          "dataSource": undefined,
+          "desc": "",
+          "expression": "[Commerce.Cost]",
+          "name": "Cost",
+          "type": "numeric-attribute",
+        },
+        "dataSource": undefined,
+        "desc": "",
+        "name": "sum Cost",
+        "sort": 0,
+        "type": "basemeasure",
+      },
+    ],
+    "offset": undefined,
+    "ungroup": undefined,
+  },
+  undefined,
+]
+`;

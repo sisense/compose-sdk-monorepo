@@ -92,9 +92,9 @@ function prepareFilterMetadata(
     if (filterRelations) {
       // instanceid is needed for filter relations only
       if (Array.isArray(jaql)) {
-        return jaql.map((j) => ({ ...j, instanceid: f.guid }));
+        return jaql.map((j) => ({ ...j, instanceid: f.config.guid }));
       } else {
-        return { ...jaql, instanceid: f.guid };
+        return { ...jaql, instanceid: f.config.guid };
       }
     }
     return jaql;
@@ -177,7 +177,7 @@ export function getPivotJaqlQueryPayload(
   } = pivotQueryDescription;
   const queryPayload = {
     metadata: preparePivotQueryMetadata(
-      { rowsAttributes, columnsAttributes, measures, filters, highlights },
+      { rowsAttributes, columnsAttributes, measures, filters, highlights, filterRelations },
       shouldSkipHighlightsWithoutAttributes,
     ),
     ...preparePivotQueryOptions(dataSource, grandTotals, count, offset),

@@ -67,9 +67,16 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
         return levelFilter;
       });
 
-      const newCascadingFilter = new CascadingFilter(newLevelFilters, filter.guid);
-      newCascadingFilter.disabled = filter.disabled;
+      const { guid, disabled } = filter.config;
 
+      const newCascadingFilter = new CascadingFilter(newLevelFilters, { guid, disabled });
+
+      updateFilter(newCascadingFilter);
+    };
+
+    const handleToggleDisabled = () => {
+      const newCascadingFilter = cloneFilterAndToggleDisabled(filter);
+      newCascadingFilter.propagateConfig();
       updateFilter(newCascadingFilter);
     };
 
@@ -95,17 +102,14 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
           });
         }}
         arrangement={arrangement}
-        disabled={filter.disabled}
-        onToggleDisabled={() => {
-          const newCascadingFilter = cloneFilterAndToggleDisabled(filter);
-          updateFilter(newCascadingFilter);
-        }}
+        disabled={filter.config.disabled}
+        onToggleDisabled={handleToggleDisabled}
         design={{
           header: {
             shouldBeShown: false,
           },
         }}
-        locked={filter.locked}
+        locked={filter.config.locked}
         onDelete={onDelete}
       />
     );

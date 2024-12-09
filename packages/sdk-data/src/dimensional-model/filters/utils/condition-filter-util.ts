@@ -1,9 +1,10 @@
 import { ConditionFilterJaql, ConditionFilterType } from './types.js';
-import { Attribute, BaseMeasure, Filter } from '../../interfaces.js';
+import { Attribute, BaseMeasure, Filter, MembersFilterConfig } from '../../interfaces.js';
 import { withComposeCode } from './filter-code-util.js';
 import * as filterFactory from '../factory.js';
 import { createMeasureFromRankingFilterJaql } from './attribute-measure-util.js';
 import { TranslatableError } from '../../../translation/translatable-error.js';
+import { simplifyFilterConfig } from '../filter-config-utils.js';
 
 const isTopCondition = (filter: ConditionFilterJaql): boolean => filter.top !== undefined;
 const isBottomCondition = (filter: ConditionFilterJaql): boolean => filter.bottom !== undefined;
@@ -76,147 +77,149 @@ export const getSelectedConditionOption = (filter: ConditionFilterJaql): Conditi
  *
  * @param attribute - Provided attribute
  * @param conditionFilterJaql - Condition filter JAQL object
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns attribute filter
  */
 export const createAttributeFilterFromConditionFilterJaql = (
   attribute: Attribute,
   conditionFilterJaql: ConditionFilterJaql,
-  guid?: string,
+  guid: string,
 ): Filter => {
   const conditionType = getSelectedConditionOption(conditionFilterJaql);
   switch (conditionType) {
     case ConditionFilterType.BOTTOM:
       if (conditionFilterJaql.by) {
-        return withComposeCode(filterFactory.bottomRanking)(
+        return withComposeCode(filterFactory.bottomRanking, 'bottomRanking')(
           attribute,
           createMeasureFromRankingFilterJaql(
             conditionFilterJaql.by,
             conditionFilterJaql.rankingMessage,
           ),
           conditionFilterJaql[ConditionFilterType.BOTTOM] as number,
-          guid,
+          { guid },
         );
       }
       break;
     case ConditionFilterType.EQUALS:
-      return withComposeCode(filterFactory.equals)(
+      return withComposeCode(filterFactory.equals, 'equals')(
         attribute,
-        conditionFilterJaql[ConditionFilterType.EQUALS],
-        guid,
+        conditionFilterJaql[ConditionFilterType.EQUALS] as string | number,
+        { guid },
       );
     case ConditionFilterType.DOESNT_EQUAL:
-      return withComposeCode(filterFactory.doesntEqual)(
+      return withComposeCode(filterFactory.doesntEqual, 'doesntEqual')(
         attribute,
-        conditionFilterJaql[ConditionFilterType.DOESNT_EQUAL],
-        guid,
+        conditionFilterJaql[ConditionFilterType.DOESNT_EQUAL] as string | number,
+        { guid },
       );
+
     case ConditionFilterType.GREATER_THAN:
-      return withComposeCode(filterFactory.greaterThan)(
+      return withComposeCode(filterFactory.greaterThan, 'greaterThan')(
         attribute,
         conditionFilterJaql[ConditionFilterType.GREATER_THAN] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.GREATER_THAN_OR_EQUAL:
-      return withComposeCode(filterFactory.greaterThanOrEqual)(
+      return withComposeCode(filterFactory.greaterThanOrEqual, 'greaterThanOrEqual')(
         attribute,
         conditionFilterJaql[ConditionFilterType.GREATER_THAN_OR_EQUAL] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.TOP:
       if (conditionFilterJaql.by) {
-        return withComposeCode(filterFactory.topRanking)(
+        return withComposeCode(filterFactory.topRanking, 'topRanking')(
           attribute,
           createMeasureFromRankingFilterJaql(
             conditionFilterJaql.by,
             conditionFilterJaql.rankingMessage,
           ),
           conditionFilterJaql[ConditionFilterType.TOP] as number,
-          guid,
+          { guid },
         );
       }
       break;
     case ConditionFilterType.STARTS_WITH:
-      return withComposeCode(filterFactory.startsWith)(
+      return withComposeCode(filterFactory.startsWith, 'startsWith')(
         attribute,
         conditionFilterJaql[ConditionFilterType.STARTS_WITH] as string,
-        guid,
+        { guid },
       );
     case ConditionFilterType.DOESNT_START_WITH:
-      return withComposeCode(filterFactory.doesntStartWith)(
+      return withComposeCode(filterFactory.doesntStartWith, 'doesntStartWith')(
         attribute,
         conditionFilterJaql[ConditionFilterType.DOESNT_START_WITH] as string,
-        guid,
+        { guid },
       );
     case ConditionFilterType.ENDS_WITH:
-      return withComposeCode(filterFactory.endsWith)(
+      return withComposeCode(filterFactory.endsWith, 'endsWith')(
         attribute,
         conditionFilterJaql[ConditionFilterType.ENDS_WITH] as string,
-        guid,
+        { guid },
       );
     case ConditionFilterType.DOESNT_END_WITH:
-      return withComposeCode(filterFactory.doesntEndWith)(
+      return withComposeCode(filterFactory.doesntEndWith, 'doesntEndWith')(
         attribute,
         conditionFilterJaql[ConditionFilterType.DOESNT_END_WITH] as string,
-        guid,
+        { guid },
       );
     case ConditionFilterType.CONTAINS:
-      return withComposeCode(filterFactory.contains)(
+      return withComposeCode(filterFactory.contains, 'contains')(
         attribute,
         conditionFilterJaql[ConditionFilterType.CONTAINS] as string,
-        guid,
+        { guid },
       );
     case ConditionFilterType.DOESNT_CONTAIN:
-      return withComposeCode(filterFactory.doesntContain)(
+      return withComposeCode(filterFactory.doesntContain, 'doesntContain')(
         attribute,
         conditionFilterJaql[ConditionFilterType.DOESNT_CONTAIN] as string,
-        guid,
+        { guid },
       );
     case ConditionFilterType.LESS_THAN:
-      return withComposeCode(filterFactory.lessThan)(
+      return withComposeCode(filterFactory.lessThan, 'lessThan')(
         attribute,
         conditionFilterJaql[ConditionFilterType.LESS_THAN] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.LESS_THAN_OR_EQUAL:
-      return withComposeCode(filterFactory.lessThanOrEqual)(
+      return withComposeCode(filterFactory.lessThanOrEqual, 'lessThanOrEqual')(
         attribute,
         conditionFilterJaql[ConditionFilterType.LESS_THAN_OR_EQUAL] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.BETWEEN:
-      return withComposeCode(filterFactory.between)(
+      return withComposeCode(filterFactory.between, 'between')(
         attribute,
-        conditionFilterJaql.from,
-        conditionFilterJaql.to,
-        guid,
+        conditionFilterJaql.from as number,
+        conditionFilterJaql.to as number,
+        { guid },
       );
+
     case ConditionFilterType.IS_NOT_BETWEEN:
-      return withComposeCode(filterFactory.exclude)(
-        withComposeCode(filterFactory.between)(
+      return withComposeCode(filterFactory.exclude, 'exclude')(
+        withComposeCode(filterFactory.between, 'between')(
           attribute,
           conditionFilterJaql.exclude?.from as number,
           conditionFilterJaql.exclude?.to as number,
-          guid,
+          { guid },
         ),
         undefined,
-        guid,
+        { guid },
       );
     case ConditionFilterType.MULTIPLE_CONDITION:
       if (conditionFilterJaql.and) {
-        return withComposeCode(filterFactory.intersection)(
+        return withComposeCode(filterFactory.intersection, 'intersection')(
           conditionFilterJaql.and.map((c) =>
             createAttributeFilterFromConditionFilterJaql(attribute, c, guid),
           ),
-          guid,
+          { guid },
         );
       }
       if (conditionFilterJaql.or) {
-        return withComposeCode(filterFactory.union)(
+        return withComposeCode(filterFactory.union, 'union')(
           conditionFilterJaql.or.map((c) =>
             createAttributeFilterFromConditionFilterJaql(attribute, c, guid),
           ),
-          guid,
+          { guid },
         );
       }
       break;
@@ -230,15 +233,13 @@ export const createAttributeFilterFromConditionFilterJaql = (
         ) || [];
 
       // use members filter with exclude instead of exclude filter
-      return withComposeCode(filterFactory.members)(
-        attribute,
-        selectedMembers,
-        true,
+      const config: MembersFilterConfig = simplifyFilterConfig({
         guid,
+        excludeMembers: true,
+        enableMultiSelection: conditionFilterJaql.multiSelection ?? true,
         deactivatedMembers,
-        undefined,
-        conditionFilterJaql.multiSelection,
-      );
+      });
+      return withComposeCode(filterFactory.members, 'members')(attribute, selectedMembers, config);
     }
     case ConditionFilterType.AFTER:
     case ConditionFilterType.BEFORE:
@@ -258,52 +259,52 @@ export const createAttributeFilterFromConditionFilterJaql = (
  *
  * @param measure - Provided measure
  * @param conditionFilterJaql - Condition filter JAQL object
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns measure filter
  */
 export const createMeasureFilterFromConditionFilterJaql = (
   measure: BaseMeasure,
   conditionFilterJaql: ConditionFilterJaql,
-  guid?: string,
+  guid: string,
 ): Filter => {
   const conditionType = getSelectedConditionOption(conditionFilterJaql);
   switch (conditionType) {
     case ConditionFilterType.EQUALS:
-      return withComposeCode(filterFactory.measureEquals)(
+      return withComposeCode(filterFactory.measureEquals, 'measureEquals')(
         measure,
         conditionFilterJaql[ConditionFilterType.EQUALS] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.GREATER_THAN:
-      return withComposeCode(filterFactory.measureGreaterThan)(
+      return withComposeCode(filterFactory.measureGreaterThan, 'measureGreaterThan')(
         measure,
         conditionFilterJaql[ConditionFilterType.GREATER_THAN] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.GREATER_THAN_OR_EQUAL:
-      return withComposeCode(filterFactory.measureGreaterThanOrEqual)(
+      return withComposeCode(filterFactory.measureGreaterThanOrEqual, 'measureGreaterThanOrEqual')(
         measure,
         conditionFilterJaql[ConditionFilterType.GREATER_THAN_OR_EQUAL] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.LESS_THAN:
-      return withComposeCode(filterFactory.measureLessThan)(
+      return withComposeCode(filterFactory.measureLessThan, 'measureLessThan')(
         measure,
         conditionFilterJaql[ConditionFilterType.LESS_THAN] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.LESS_THAN_OR_EQUAL:
-      return withComposeCode(filterFactory.measureLessThanOrEqual)(
+      return withComposeCode(filterFactory.measureLessThanOrEqual, 'measureLessThanOrEqual')(
         measure,
         conditionFilterJaql[ConditionFilterType.LESS_THAN_OR_EQUAL] as number,
-        guid,
+        { guid },
       );
     case ConditionFilterType.BETWEEN:
-      return withComposeCode(filterFactory.measureBetween)(
+      return withComposeCode(filterFactory.measureBetween, 'measureBetween')(
         measure,
-        conditionFilterJaql.from,
-        conditionFilterJaql.to,
-        guid,
+        conditionFilterJaql.from as number,
+        conditionFilterJaql.to as number,
+        { guid },
       );
   }
   throw new TranslatableError('errors.filter.unsupportedConditionFilter', {

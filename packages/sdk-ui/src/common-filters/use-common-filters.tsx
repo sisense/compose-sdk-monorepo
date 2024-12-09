@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import last from 'lodash-es/last';
-import { type Filter } from '@sisense/sdk-data';
+import { FilterRelations, type Filter } from '@sisense/sdk-data';
 import {
   isTextWidgetProps,
   mergeFilters,
@@ -9,66 +9,65 @@ import {
   registerDataPointContextMenuHandler,
   registerDataPointsSelectedHandler,
   registerRenderToolbarHandler,
-  translateWidgetTypeInternal,
+  getInternalWidgetType,
 } from '@/widget-by-id/utils.js';
 import { CommonFiltersOptions } from './types.js';
-import { prepareCommonFiltersToWidgetConnectProps } from './common-filters-connector.js';
+import { prepareCommonFiltersConnectionProps } from './common-filters-connector.js';
 import { WidgetProps } from '@/props.js';
 import { BeforeMenuOpenHandler, OpenMenuFn } from '@/common/components/menu/types.js';
 import { useTranslation } from 'react-i18next';
 import { applyDrilldownDimension } from '@/widgets/common/drilldown-utils.js';
-import { useSyncedState } from '@/common/hooks/use-synced-state';
+import { useConvertFilterRelations } from './use-convert-filter-relations.js';
+import { getFiltersArray } from '@/utils/filter-relations.js';
 
 /** @internal */
 export const useCommonFilters = ({
-  initialFilters,
+  initialFilters: initialCommonFiltersOrFilterRelations = [],
   openMenu,
   onBeforeMenuOpen,
   onFiltersChange,
 }: {
-  initialFilters?: Filter[];
+  initialFilters?: Filter[] | FilterRelations;
   openMenu?: OpenMenuFn;
   onBeforeMenuOpen?: BeforeMenuOpenHandler;
-  onFiltersChange?: (filters: Filter[]) => void;
+  onFiltersChange?: (filters: Filter[] | FilterRelations) => void;
 } = {}) => {
   const { t: translate } = useTranslation();
-  const [filters, setFilters] = useSyncedState<Filter[]>(
-    useMemo(() => initialFilters ?? [], [initialFilters]),
-    {
-      onLocalStateChange: onFiltersChange,
-    },
-  );
 
-  const addFilter = useCallback(
-    (newFilter: Filter) => {
-      setFilters(mergeFilters(filters, [newFilter]));
-    },
-    [setFilters, filters],
-  );
+  const {
+    filtersOrFilterRelations: commonFiltersOrFilterRelations,
+    regularFilters: regularCommonFilters,
+    addFilter: addCommonFilter,
+    setFiltersOrFilterRelations: setCommonFiltersOrFilterRelations,
+    setFilters: setCommonFilters,
+    applyRelationsToOtherFilters,
+  } = useConvertFilterRelations(initialCommonFiltersOrFilterRelations, onFiltersChange);
 
   const connectToWidgetProps = useCallback(
-    (widget: WidgetProps, options: CommonFiltersOptions = {}): WidgetProps => {
+    (widgetProps: WidgetProps, options: CommonFiltersOptions = {}): WidgetProps => {
       // Text widgets do not support filters, highlights, and data options
-      if (isTextWidgetProps(widget)) {
-        return widget;
+      if (isTextWidgetProps(widgetProps)) {
+        return widgetProps;
       }
 
-      const widgetType = translateWidgetTypeInternal(widget);
+      const widgetType = getInternalWidgetType(widgetProps);
 
-      const connectedWidget = cloneDeep(widget);
+      const initialWidgetProps = widgetProps;
+      const connectedWidgetProps = cloneDeep(widgetProps);
       const hasDrilldownSelection =
-        'drilldownOptions' in widget && widget.drilldownOptions?.drilldownSelections?.length;
+        'drilldownOptions' in widgetProps &&
+        widgetProps.drilldownOptions?.drilldownSelections?.length;
       const dataOptions = hasDrilldownSelection
         ? applyDrilldownDimension(
-            widget.chartType,
-            widget.dataOptions,
-            last(widget.drilldownOptions!.drilldownSelections)!.nextDimension,
+            widgetProps.chartType,
+            widgetProps.dataOptions,
+            last(widgetProps.drilldownOptions!.drilldownSelections)!.nextDimension,
           )
-        : widget.dataOptions;
+        : widgetProps.dataOptions;
 
-      const props = prepareCommonFiltersToWidgetConnectProps(
-        filters,
-        setFilters,
+      const commonFiltersConnectionProps = prepareCommonFiltersConnectionProps(
+        regularCommonFilters,
+        setCommonFilters,
         widgetType,
         dataOptions,
         options,
@@ -76,36 +75,66 @@ export const useCommonFilters = ({
         openMenu,
       );
 
-      connectedWidget.highlights = mergeFilters(props.highlights, connectedWidget.highlights);
-
-      connectedWidget.filters = mergeFilters(
-        props.filters as Filter[],
-        connectedWidget.filters as Filter[],
+      connectedWidgetProps.highlights = mergeFilters(
+        commonFiltersConnectionProps.highlights,
+        initialWidgetProps.highlights,
       );
 
-      connectedWidget.onBeforeMenuOpen = onBeforeMenuOpen;
+      connectedWidgetProps.onBeforeMenuOpen = onBeforeMenuOpen;
 
-      if (props.onDataPointClick) {
-        registerDataPointClickHandler(connectedWidget, props.onDataPointClick);
+      if (commonFiltersConnectionProps.onDataPointClick) {
+        registerDataPointClickHandler(
+          connectedWidgetProps,
+          commonFiltersConnectionProps.onDataPointClick,
+        );
       }
-      if (props.onDataPointsSelected) {
-        registerDataPointsSelectedHandler(connectedWidget, props.onDataPointsSelected);
+      connectedWidgetProps.filters = applyRelationsToOtherFilters(
+        mergeFilters(
+          commonFiltersConnectionProps.filters,
+          getFiltersArray(initialWidgetProps.filters),
+        ),
+      );
+
+      if (commonFiltersConnectionProps.onDataPointClick) {
+        registerDataPointClickHandler(
+          connectedWidgetProps,
+          commonFiltersConnectionProps.onDataPointClick,
+        );
       }
-      if (props.onDataPointContextMenu) {
-        registerDataPointContextMenuHandler(connectedWidget, props.onDataPointContextMenu);
+      if (commonFiltersConnectionProps.onDataPointsSelected) {
+        registerDataPointsSelectedHandler(
+          connectedWidgetProps,
+          commonFiltersConnectionProps.onDataPointsSelected,
+        );
       }
-      if (props.renderToolbar) {
-        registerRenderToolbarHandler(connectedWidget, props.renderToolbar);
+      if (commonFiltersConnectionProps.onDataPointContextMenu) {
+        registerDataPointContextMenuHandler(
+          connectedWidgetProps,
+          commonFiltersConnectionProps.onDataPointContextMenu,
+        );
       }
-      return connectedWidget;
+      if (commonFiltersConnectionProps.renderToolbar) {
+        registerRenderToolbarHandler(
+          connectedWidgetProps,
+          commonFiltersConnectionProps.renderToolbar,
+        );
+      }
+      return connectedWidgetProps;
     },
-    [setFilters, filters, openMenu, onBeforeMenuOpen, translate],
+    [
+      regularCommonFilters,
+      setCommonFilters,
+      translate,
+      openMenu,
+      onBeforeMenuOpen,
+      applyRelationsToOtherFilters,
+    ],
   );
 
   return {
-    filters,
-    setFilters,
-    addFilter,
+    filters: commonFiltersOrFilterRelations,
+    setFilters: setCommonFiltersOrFilterRelations,
+    addFilter: addCommonFilter,
     connectToWidgetProps,
   };
 };

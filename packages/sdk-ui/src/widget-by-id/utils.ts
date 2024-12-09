@@ -38,6 +38,7 @@ import {
 } from '../index.js';
 import { combineHandlers } from '@/utils/combine-handlers';
 import { WidgetTypeInternal } from '@/models/widget/types';
+import { mergeFiltersOrFilterRelations } from '@/utils/filter-relations.js';
 
 const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
   'chart/line': 'line',
@@ -212,7 +213,7 @@ export function isChartWidgetProps(
   return widgetProps.widgetType === 'chart';
 }
 
-export function translateWidgetTypeInternal(widgetProps: CommonWidgetProps): WidgetTypeInternal {
+export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTypeInternal {
   if (isPivotTableWidgetProps(widgetProps)) {
     return 'pivot';
   } else if (isPluginWidgetProps(widgetProps)) {
@@ -361,20 +362,20 @@ export function mergeFilters(sourceFilters: Filter[] = [], targetFilters: Filter
  * @returns {Filter[]} The merged filters based on the selected strategy.
  */
 export function mergeFiltersByStrategy(
-  widgetFilters: Filter[] = [],
-  codeFilters: Filter[] = [],
+  widgetFilters: Filter[] | FilterRelations = [],
+  codeFilters: Filter[] | FilterRelations = [],
   mergeStrategy?: FiltersMergeStrategy,
 ) {
   switch (mergeStrategy) {
     case FiltersMergeStrategyEnum.WIDGET_FIRST:
-      return mergeFilters(codeFilters, widgetFilters);
+      return mergeFiltersOrFilterRelations(codeFilters, widgetFilters);
     case FiltersMergeStrategyEnum.CODE_FIRST:
-      return mergeFilters(widgetFilters, codeFilters);
+      return mergeFiltersOrFilterRelations(widgetFilters, codeFilters);
     case FiltersMergeStrategyEnum.CODE_ONLY:
       return codeFilters;
     default:
       // apply 'codeFirst' filters merge strategy by default
-      return mergeFilters(widgetFilters, codeFilters);
+      return mergeFiltersOrFilterRelations(widgetFilters, codeFilters);
   }
 }
 
@@ -408,7 +409,7 @@ export function getFilterRelationsFromJaql(
     node: FilterRelationsJaqlNode | FilterRelationsNode,
   ): FilterRelationsJaqlNode | FilterRelationsNode {
     if ('instanceid' in node) {
-      const filter = filters.find((filter) => filter.guid === node.instanceid);
+      const filter = filters.find((filter) => filter.config.guid === node.instanceid);
       if (!filter) {
         throw new TranslatableError('errors.unknownFilterInFilterRelations');
       }
@@ -437,7 +438,7 @@ export function getFilterRelationsFromJaql(
  * @returns {FilterRelationsJaql} Filter relations jaql.
  */
 export function convertFilterRelationsModelToJaql(
-  filterRelations: FilterRelationsModel | undefined,
+  filterRelations: FilterRelationsModel | FilterRelationsModelNode | undefined,
 ): FilterRelationsJaql | undefined {
   if (!filterRelations) {
     return filterRelations;
@@ -492,13 +493,13 @@ export function applyWidgetFiltersToRelations(
 
   const replacementsMap = {};
   widgetFilters.forEach((widgetFilter) => {
-    if (widgetFilter.guid) {
+    if (widgetFilter.config.guid) {
       const correspondingFilter = dashboardFilters.find(
         (dashboardFilter) =>
           getFilterCompareId(dashboardFilter) === getFilterCompareId(widgetFilter),
       );
-      if (correspondingFilter && correspondingFilter.guid) {
-        replacementsMap[correspondingFilter.guid] = widgetFilter.guid;
+      if (correspondingFilter && correspondingFilter.config.guid) {
+        replacementsMap[correspondingFilter.config.guid] = widgetFilter.config.guid;
       }
     }
   });

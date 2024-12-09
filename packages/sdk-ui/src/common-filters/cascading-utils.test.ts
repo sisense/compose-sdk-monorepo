@@ -8,7 +8,7 @@ import {
 } from './cascading-utils';
 
 function withoutGuids(filters: Filter[]) {
-  return filters.map((filter) => omit(filter, 'guid'));
+  return filters.map((filter) => omit(filter.config, 'guid'));
 }
 
 describe('cascading-utils', () => {

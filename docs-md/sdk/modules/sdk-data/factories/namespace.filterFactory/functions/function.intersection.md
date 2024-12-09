@@ -4,7 +4,7 @@ title: intersection
 
 # Function intersection
 
-> **intersection**(`filters`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **intersection**(`filters`, `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter representing the intersection of multiple filters on the same attribute. The resulting
 intersection filter filters on items that match all of the given filters.
@@ -16,6 +16,7 @@ To create 'and' filters using different attributes, use the [`and()`](../namespa
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `filters` | [`Filter`](../../../interfaces/interface.Filter.md)[] | Filters to intersect. The filters must all be on the same attribute. |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

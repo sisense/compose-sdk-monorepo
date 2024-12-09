@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   VITE_APP_DEMO_DYNAMIC_IMPORTS?: string;
   VITE_APP_DISABLE_ANIMATION?: string;
   VITE_APP_DISABLE_STRICT_MODE?: string;
+  VITE_APP_DISABLE_ERROR_OVERLAY?: string;
 }
 
 interface ImportMeta {

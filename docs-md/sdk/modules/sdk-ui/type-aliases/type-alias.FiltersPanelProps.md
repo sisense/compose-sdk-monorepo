@@ -20,7 +20,7 @@ Default data source used for filter tiles
 
 ### `filters`
 
-**filters**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+**filters**: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Array of filters to display
 
@@ -36,7 +36,7 @@ Callback to handle changes in filters
 
 | Parameter | Type |
 | :------ | :------ |
-| `filters` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] |
+| `filters` | [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] |
 
 #### Returns
 

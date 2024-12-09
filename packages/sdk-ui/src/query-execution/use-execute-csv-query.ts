@@ -5,7 +5,7 @@ import { TranslatableError } from '../translation/translatable-error.js';
 import { withTracking } from '../decorators/hook-decorators/index.js';
 import { downloadCsvQueryStateReducer } from './csv-query-state-reducer.js';
 import { CsvQueryState, ExecuteCsvQueryParams } from './types.js';
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { useQueryParamsChanged } from '@/query-execution/query-params-comparator.js';
 import { useShouldLoad } from '../common/hooks/use-should-load.js';
 
@@ -123,7 +123,7 @@ export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQu
         onBeforeQuery,
       } = params;
       const { filters: filterList, relations: filterRelations } =
-        getFilterListAndRelations(filters);
+        getFilterListAndRelationsJaql(filters);
       void executeCsvQuery(
         {
           dataSource,

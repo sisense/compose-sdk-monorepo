@@ -2,9 +2,9 @@ import { DashboardProps } from '@/dashboard/types';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
 import { ThemeProvider } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { useDashboardTheme } from './use-dashboard-theme';
-import { useComposedDashboard } from './use-composed-dashboard';
-import { Filter } from '@sisense/sdk-data';
+import { useDashboardThemeInternal } from './use-dashboard-theme';
+import { useComposedDashboardInternal } from './use-composed-dashboard';
+import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { useCallback } from 'react';
 
 export enum DashboardChangeType {
@@ -17,7 +17,7 @@ export enum DashboardChangeType {
 export type DashboardChangeAction =
   | {
       type: DashboardChangeType.FILTERS_UPDATE;
-      payload: Filter[];
+      payload: Filter[] | FilterRelations;
     }
   | {
       type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE;
@@ -74,12 +74,12 @@ export const Dashboard = asSisenseComponent({
     styleOptions,
     onChange,
   }: DashboardProps) => {
-    const { themeSettings } = useDashboardTheme({ styleOptions });
+    const { themeSettings } = useDashboardThemeInternal({ styleOptions });
 
     const {
       dashboard: { filters: dashboardFilters = [], widgets: dashboardWidgets },
       setFilters,
-    } = useComposedDashboard(
+    } = useComposedDashboardInternal(
       {
         filters,
         widgets,
@@ -87,7 +87,7 @@ export const Dashboard = asSisenseComponent({
       },
       {
         onFiltersChange: useCallback(
-          (filters: Filter[]) => {
+          (filters: Filter[] | FilterRelations) => {
             onChange?.({ type: DashboardChangeType.FILTERS_UPDATE, payload: filters });
           },
           [onChange],

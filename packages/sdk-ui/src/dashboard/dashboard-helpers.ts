@@ -1,5 +1,12 @@
-import { Filter } from '@sisense/sdk-data';
 import { DashboardProps } from './types';
+import { Filter, FilterRelations } from '@sisense/sdk-data';
+import {
+  withAddedFilter,
+  withAddedFilters,
+  withoutFilter,
+  withoutFilters,
+  withReplacedFilter,
+} from '@/filters/helpers';
 
 /**
  * Creates a new dashboard instance with its filters replaced by a new set of filters.
@@ -14,13 +21,14 @@ import { DashboardProps } from './types';
  * const updatedDashboard = replaceFilters(existingDashboard, newFilters);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) whose filters are to be replaced.
- * @param newFilters - An array of new filters to set on the dashboard.
+ * @param newFilters - An array of new filters or filter relations to set on the dashboard.
  * @returns A new dashboard instance with the updated filters.
  */
-export const replaceFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
-  const newDashboard = { ...dashboard };
-  newDashboard.filters = newFilters;
-  return newDashboard;
+export const replaceFilters = (
+  dashboard: DashboardProps,
+  newFilters: Filter[] | FilterRelations,
+): DashboardProps => {
+  return { ...dashboard, filters: newFilters };
 };
 
 /**
@@ -40,12 +48,7 @@ export const replaceFilters = (dashboard: DashboardProps, newFilters: Filter[]):
  * @returns A new dashboard instance with the new filter added.
  */
 export const addFilter = (dashboard: DashboardProps, newFilter: Filter): DashboardProps => {
-  const newDashboard = { ...dashboard };
-  if (!newDashboard.filters) {
-    newDashboard.filters = [];
-  }
-  newDashboard.filters = [...newDashboard.filters, newFilter];
-  return newDashboard;
+  return replaceFilters(dashboard, withAddedFilter(newFilter)(dashboard.filters));
 };
 
 /**
@@ -65,28 +68,45 @@ export const addFilter = (dashboard: DashboardProps, newFilter: Filter): Dashboa
  * @returns A new dashboard instance with the new filters added.
  */
 export const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
-  const newDashboard = { ...dashboard };
-  if (!newDashboard.filters) {
-    newDashboard.filters = [];
-  }
-  newDashboard.filters = [...newDashboard.filters, ...newFilters];
-  return newDashboard;
+  return replaceFilters(dashboard, withAddedFilters(newFilters)(dashboard.filters));
+};
+
+/**
+ * Creates a new dashboard instance with a specific filter replaced.
+ *
+ * This function searches for a filter with the same GUID as the provided `filterToReplace` and replaces it with `newFilter`.
+ * This function does not modify the original dashboard; instead, it returns a new dashboard with the updated filters.
+ *
+ * @example
+ * Replace a filter in a dashboard.
+ * ```ts
+ * const existingDashboard: DashboardProps = {...};
+ * const filterToReplace: Filter = {...};
+ * const newFilter: Filter = {...};
+ * const updatedDashboard = replaceFilter(existingDashboard, filterToReplace, newFilter);
+ * ```
+ * @param dashboard - The original dashboard (`DashboardProps`) containing the filter to be replaced.
+ * @param filterToReplace - The existing filter to be replaced.
+ * @param newFilter - The new filter to replace the existing one.
+ * @returns A new dashboard instance with the specified filter replaced.
+ */
+export const replaceFilter = (
+  dashboard: DashboardProps,
+  filterToReplace: Filter,
+  newFilter: Filter,
+): DashboardProps => {
+  return replaceFilters(
+    dashboard,
+    withReplacedFilter(filterToReplace, newFilter)(dashboard.filters),
+  );
 };
 
 /**
  * Creates a new dashboard instance with a specific filter modified.
+ * Alias for `replaceFilter`.
  *
- * This function searches for a filter with the same GUID as the provided `filterToModify` and replaces it with `newFilter`.
- * This function does not modify the original dashboard; instead, it returns a new dashboard with the updated filters.
+ * @deprecated Use {@link replaceFilter} instead
  *
- * @example
- * Modify a filter in a dashboard.
- * ```ts
- * const existingDashboard: DashboardProps = {...};
- * const filterToModify: Filter = {...};
- * const newFilter: Filter = {...};
- * const updatedDashboard = modifyFilter(existingDashboard, filterToModify, newFilter);
- * ```
  * @param dashboard - The original dashboard (`DashboardProps`) containing the filter to modify.
  * @param filterToModify - The existing filter to be modified.
  * @param newFilter - The new filter to replace the existing one.
@@ -97,14 +117,7 @@ export const modifyFilter = (
   filterToModify: Filter,
   newFilter: Filter,
 ): DashboardProps => {
-  const newDashboard = { ...dashboard };
-  if (!newDashboard.filters) {
-    newDashboard.filters = [];
-  }
-  newDashboard.filters = newDashboard.filters.map((filter) =>
-    filter.guid === filterToModify.guid ? newFilter : filter,
-  );
-  return newDashboard;
+  return replaceFilter(dashboard, filterToModify, newFilter);
 };
 
 /**
@@ -121,14 +134,33 @@ export const modifyFilter = (
  * const updatedDashboard = removeFilter(existingDashboard, filterToRemove);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) from which to remove the filter.
- * @param filter - The filter to be removed.
+ * @param filterToRemove - The filter to be removed.
  * @returns A new dashboard instance with the specified filter removed.
  */
-export const removeFilter = (dashboard: DashboardProps, filter: Filter): DashboardProps => {
-  const newDashboard = { ...dashboard };
-  if (!newDashboard.filters) {
-    newDashboard.filters = [];
-  }
-  newDashboard.filters = newDashboard.filters.filter((f) => f.guid !== filter.guid);
-  return newDashboard;
+export const removeFilter = (dashboard: DashboardProps, filterToRemove: Filter): DashboardProps => {
+  return replaceFilters(dashboard, withoutFilter(filterToRemove)(dashboard.filters));
+};
+
+/**
+ * Creates a new dashboard instance with multiple filters removed.
+ *
+ * This function removes all filters with the same GUID as the provided filters from the dashboard's filters.
+ * This function does not modify the original dashboard; instead, it returns a new dashboard with the updated filters.
+ *
+ * @example
+ * Remove multiple filters from a dashboard.
+ * ```ts
+ * const existingDashboard: DashboardProps = {...};
+ * const filtersToRemove: Filter[] = [{...}, {...}, ...];
+ * const updatedDashboard = removeFilters(existingDashboard, filtersToRemove);
+ * ```
+ * @param dashboard - The original dashboard (`DashboardProps`) from which the specified filters are removed.
+ * @param filtersToRemove - An array of filters to remove.
+ * @returns A new dashboard instance with the specified filters removed.
+ */
+export const removeFilters = (
+  dashboard: DashboardProps,
+  filtersToRemove: Filter[],
+): DashboardProps => {
+  return replaceFilters(dashboard, withoutFilters(filtersToRemove)(dashboard.filters));
 };

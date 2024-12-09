@@ -152,7 +152,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
               <EditableDateRangeFilter
                 filter={filter}
                 dateLimits={dateLimits}
-                disabled={filter.disabled}
+                disabled={filter.config.disabled}
                 onChange={updateFilter}
                 title={title}
                 attribute={attribute}
@@ -164,9 +164,9 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
           const newFilter = cloneFilterAndToggleDisabled(filter);
           updateFilter(newFilter);
         }}
-        disabled={filter.disabled}
+        disabled={filter.config.disabled}
         design={tileDesignOptions}
-        locked={filter.locked}
+        locked={filter.config.locked}
         onDelete={onDelete}
       />
     );

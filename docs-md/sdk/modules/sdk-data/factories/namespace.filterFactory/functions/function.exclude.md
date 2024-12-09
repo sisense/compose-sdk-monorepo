@@ -4,7 +4,10 @@ title: exclude
 
 # Function exclude
 
-> **exclude**(`filter`, `input`?): [`Filter`](../../../interfaces/interface.Filter.md)
+> **exclude**(
+  `filter`,
+  `input`?,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter that excludes items matching the given filter
 from all items or from items matching the optional input filter.
@@ -15,6 +18,7 @@ from all items or from items matching the optional input filter.
 | :------ | :------ | :------ |
 | `filter` | [`Filter`](../../../interfaces/interface.Filter.md) | Filter to exclude |
 | `input`? | [`Filter`](../../../interfaces/interface.Filter.md) | Input filter to exclude from, on the same attribute. If not provided, the filter excludes from all items. |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

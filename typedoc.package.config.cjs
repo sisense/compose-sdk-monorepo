@@ -5,7 +5,15 @@ const baseConfig = {
   // sort the code items by alphabetical order
   sort: ['alphabetical'],
   categorizeByGroup: true,
-  categoryOrder: ['Data', 'Chart', 'Widget', 'Callbacks', '*'],
+  categoryOrder: [
+    'Data',
+    'Chart',
+    'Widget',
+    'Callbacks',
+    'Base Configurations',
+    'Extended Configurations',
+    '*',
+  ],
   groupOrder: [
     /* sdk-ui* */
     'Charts',

@@ -4,7 +4,10 @@ title: doesntEqual
 
 # Function doesntEqual
 
-> **doesntEqual**(`attribute`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **doesntEqual**(
+  `attribute`,
+  `value`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values that do not equal a specified string or number.
 
@@ -20,6 +23,7 @@ When filtering against a string:
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Text or numeric attribute to filter on |
 | `value` | `number` \| `string` | Value to filter by |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

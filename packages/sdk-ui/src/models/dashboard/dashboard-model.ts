@@ -1,4 +1,4 @@
-import { DataSource, Filter } from '@sisense/sdk-data';
+import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { DashboardStyleOptions, WidgetModel } from '@/models';
 import { type WidgetsOptions } from './types';
 import { DashboardLayoutOptions } from '@/dashboard';
@@ -49,7 +49,7 @@ export interface DashboardModel {
    *
    * @internal
    */
-  filters: Filter[];
+  filters: Filter[] | FilterRelations;
 
   /**
    * Dashboard options for each of the widgets.

@@ -9,7 +9,7 @@ import {
   RangeFilterJaql,
   SpecificItemsFilterJaql,
 } from './types.js';
-import { Attribute, BaseMeasure, Filter, LevelAttribute } from '../../interfaces.js';
+import { Attribute, Filter, LevelAttribute, MembersFilterConfig } from '../../interfaces.js';
 import { FilterJaql } from '../../types.js';
 import * as filterFactory from '../factory.js';
 import {
@@ -22,8 +22,8 @@ import {
   createAttributeFromFilterJaql,
   createMeasureFromFilterJaql,
 } from './attribute-measure-util.js';
-import { guidFast } from '../../../utils.js';
 import { TranslatableError } from '../../../translation/translatable-error.js';
+import { getDefaultBaseFilterConfig, simplifyFilterConfig } from '../filter-config-utils.js';
 
 /**
  * Creates a generic filter (aka pass-through JAQL filter) if the JAQL cannot be translated to a specific filter type.
@@ -34,10 +34,10 @@ import { TranslatableError } from '../../../translation/translatable-error.js';
  */
 export const createGenericFilter = (
   jaql: FilterJaql | FilterJaqlInternal,
-  guid?: string,
+  guid: string,
 ): Filter => {
   return {
-    guid: guid || guidFast(13),
+    config: { ...getDefaultBaseFilterConfig(), guid, originalFilterJaql: jaql },
     jaql: (nested?: boolean) => {
       if (nested) {
         return jaql;
@@ -65,13 +65,17 @@ export const createGenericFilter = (
  * Creates a filter that includes all members of the attribute.
  *
  * @param attribute - The attribute.
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns The created Filter object.
  */
-export const createFilterIncludeAll = (attribute: Attribute, guid?: string): Filter => {
+export const createFilterIncludeAll = (attribute: Attribute, guid: string): Filter => {
   // including all members is equivalent to excluding none
   // so we can simply create a filter with no members and excludeMembers set to true
-  return withComposeCode(filterFactory.members)(attribute, [], true, guid);
+  const config: MembersFilterConfig = {
+    guid,
+    excludeMembers: true,
+  };
+  return withComposeCode(filterFactory.members, 'members')(attribute, [], config);
 };
 
 /**
@@ -79,32 +83,29 @@ export const createFilterIncludeAll = (attribute: Attribute, guid?: string): Fil
  *
  * @param attribute - attribute
  * @param specificItemsFilterJaql - Specific Items Filter Jaql
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns Filter object
  */
 export const createFilterFromSpecificItemsFilterJaql = (
   attribute: Attribute,
   specificItemsFilterJaql: SpecificItemsFilterJaql,
-  guid?: string,
+  guid: string,
   multiSelection?: boolean,
 ): Filter => {
   const deactivatedMembers = getDeactivatedMembersFromFilterJaql(specificItemsFilterJaql);
   const activeMembers = getActiveMembersFromFilterJaql(specificItemsFilterJaql, deactivatedMembers);
-  return withComposeCode(filterFactory.members)(
-    attribute,
-    activeMembers,
-    undefined, // use undefined instead of false to avoid including the property in composeCode
+  const config: MembersFilterConfig = simplifyFilterConfig({
     guid,
+    excludeMembers: false,
+    enableMultiSelection: multiSelection ?? true,
     deactivatedMembers,
-    undefined,
-    multiSelection,
-  );
+  });
+
+  return withComposeCode(filterFactory.members, 'members')(attribute, activeMembers, config);
 };
 
-function getDeactivatedMembersFromFilterJaql(
-  filterJaql: SpecificItemsFilterJaql,
-): string[] | undefined {
-  return filterJaql.filter?.turnedOff ? filterJaql.filter?.exclude?.members : undefined;
+function getDeactivatedMembersFromFilterJaql(filterJaql: SpecificItemsFilterJaql): string[] {
+  return filterJaql.filter?.turnedOff ? filterJaql.filter?.exclude?.members ?? [] : [];
 }
 
 function getActiveMembersFromFilterJaql(
@@ -122,19 +123,19 @@ function getActiveMembersFromFilterJaql(
  *
  * @param attribute - attribute
  * @param rangeFilterJaql - Range Filter Jaql
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns Filter object
  */
 export const createFilterFromDateRangeFilterJaql = (
   attribute: LevelAttribute,
   rangeFilterJaql: RangeFilterJaql,
-  guid?: string,
+  guid: string,
 ): Filter => {
-  return withComposeCode(filterFactory.dateRange)(
+  return withComposeCode(filterFactory.dateRange, 'dateRange')(
     attribute,
     rangeFilterJaql.from as string,
     rangeFilterJaql.to as string,
-    guid,
+    { guid },
   );
 };
 
@@ -143,19 +144,19 @@ export const createFilterFromDateRangeFilterJaql = (
  *
  * @param attribute - attribute
  * @param rangeFilterJaql - Range Filter Jaql
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns Filter object
  */
 export const createFilterFromNumericRangeJaql = (
   attribute: Attribute,
   rangeFilterJaql: RangeFilterJaql,
-  guid?: string,
+  guid: string,
 ): Filter => {
-  return withComposeCode(filterFactory.between)(
+  return withComposeCode(filterFactory.between, 'between')(
     attribute,
     rangeFilterJaql.from as number,
     rangeFilterJaql.to as number,
-    guid,
+    { guid },
   );
 };
 
@@ -164,52 +165,30 @@ export const createFilterFromNumericRangeJaql = (
  *
  * @param attribute - attribute
  * @param periodFilterJaql - Period Filter Jaql
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns Filter object
  */
 export const createFilterFromPeriodFilterJaql = (
   attribute: LevelAttribute,
   periodFilterJaql: PeriodFilterJaql,
-  guid?: string,
+  guid: string,
 ): Filter => {
   if (periodFilterJaql.last) {
-    return withComposeCode(filterFactory.dateRelativeTo)(
+    return withComposeCode(filterFactory.dateRelativeTo, 'dateRelativeTo')(
       attribute,
       periodFilterJaql.last.offset,
       periodFilterJaql.last.count,
       periodFilterJaql.last.anchor,
-      guid,
+      { guid },
     );
   } else {
-    return withComposeCode(filterFactory.dateRelativeFrom)(
+    return withComposeCode(filterFactory.dateRelativeFrom, 'dateRelativeFrom')(
       attribute,
       periodFilterJaql.next.offset,
       periodFilterJaql.next.count,
       periodFilterJaql.next.anchor,
-      guid,
+      { guid },
     );
-  }
-};
-
-/**
- * Creates a filter from a condition filter JAQL object.
- *
- * @param attribute - attribute
- * @param conditionFilterJaql - Condition Filter Jaql
- * @param measure - measure
- * @param guid - Optional GUID for the filter
- * @returns Filter object
- */
-export const createFilterFromConditionFilterJaql = (
-  attribute: Attribute,
-  conditionFilterJaql: ConditionFilterJaql,
-  measure?: BaseMeasure,
-  guid?: string,
-): Filter => {
-  if (measure) {
-    return createMeasureFilterFromConditionFilterJaql(measure, conditionFilterJaql, guid);
-  } else {
-    return createAttributeFilterFromConditionFilterJaql(attribute, conditionFilterJaql, guid);
   }
 };
 
@@ -218,25 +197,27 @@ export const createFilterFromConditionFilterJaql = (
  *
  * @param attribute - attribute
  * @param customFilterJaql - Custom Filter Jaql
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns Filter object
  */
 export const createFilterFromCustomFilterJaql = (
   attribute: Attribute,
   customFilterJaql: BaseFilterJaql,
-  guid?: string,
+  guid: string,
 ): Filter => {
-  return withComposeCode(filterFactory.customFilter)(attribute, customFilterJaql, guid);
+  return withComposeCode(filterFactory.customFilter, 'customFilter')(attribute, customFilterJaql, {
+    guid,
+  });
 };
 
 /**
  * Creates a filter from a filter JAQL object.
  *
  * @param jaql - The filter JAQL object.
- * @param guid - Optional GUID for the filter
+ * @param guid - GUID for the filter
  * @returns Filter object.
  */
-export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid?: string): Filter => {
+export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid: string): Filter => {
   try {
     if ('formula' in jaql) {
       // generic pass-through JAQL filter will be used instead
@@ -265,12 +246,19 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid?: st
           (filterJaqlWithType as FilterMultiSelectJaql).multiSelection,
         );
       case FILTER_TYPES.CONDITION:
-        return createFilterFromConditionFilterJaql(
-          attribute,
-          filterJaqlWithType as ConditionFilterJaql,
-          measure,
-          guid,
-        );
+        if (measure) {
+          return createMeasureFilterFromConditionFilterJaql(
+            measure,
+            filterJaqlWithType as ConditionFilterJaql,
+            guid,
+          );
+        } else {
+          return createAttributeFilterFromConditionFilterJaql(
+            attribute,
+            filterJaqlWithType as ConditionFilterJaql,
+            guid,
+          );
+        }
       case FILTER_TYPES.DATE_RANGE:
         return createFilterFromDateRangeFilterJaql(
           attribute as LevelAttribute,

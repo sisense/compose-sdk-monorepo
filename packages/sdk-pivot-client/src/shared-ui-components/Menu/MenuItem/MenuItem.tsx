@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
-import { DEPRECATED_Icon } from '../../DEPRECATED_Icon';
+import { DEPRECATED_Icon } from '@sisense/sdk-shared-ui/DEPRECATED_Icon';
+
 import { RadioButton } from '../../RadioButton';
 import { DEPRECATED_Toggle } from '../../DEPRECATED_Toggle';
 import { DEPRECATED_Checkbox } from '../../DEPRECATED_Checkbox';

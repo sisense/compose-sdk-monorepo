@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
+import { DEPRECATED_Icon } from '@sisense/sdk-shared-ui/DEPRECATED_Icon';
 
 import styles from './CheckableList.module.scss';
 

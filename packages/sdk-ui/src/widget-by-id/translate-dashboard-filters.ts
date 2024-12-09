@@ -10,10 +10,10 @@ import {
 import { getEnabledPanelItems, mergeFilters } from './utils.js';
 
 import {
-  BackgroundFilter,
+  BackgroundFilterJaql,
   BaseJaql,
   createFilterFromJaql,
-  IncludeAllFilter,
+  IncludeAllFilterJaql,
 } from '@sisense/sdk-data';
 
 /**
@@ -136,7 +136,7 @@ export function getDashboardBackgroundFilters(
           ...jaql,
           filter: backgroundFilter,
           ...(jaql.datatype === 'datetime' && {
-            level: (backgroundFilter as BackgroundFilter).level,
+            level: (backgroundFilter as BackgroundFilterJaql).level,
           }),
         },
       } as FilterDto);
@@ -189,7 +189,7 @@ function groupDashboardFilters(
 function isHighlightFilterApplicableToWidget(filter: FilterDto, widget: WidgetDto) {
   const allowedAttributes = getAllowedWidgetHighlightAttributes(widget);
   return (
-    allowedAttributes.includes(filter.jaql.dim) && !(filter.jaql.filter as IncludeAllFilter).all
+    allowedAttributes.includes(filter.jaql.dim) && !(filter.jaql.filter as IncludeAllFilterJaql).all
   );
 }
 

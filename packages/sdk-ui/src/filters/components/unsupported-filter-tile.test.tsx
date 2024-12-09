@@ -7,7 +7,7 @@ import { SisenseContextProviderProps } from '@/props';
 
 const filter = {
   attribute: { name: 'mockAttribute' },
-  disabled: false,
+  config: { disabled: false },
 } as Filter;
 
 const contextProviderProps: SisenseContextProviderProps = {

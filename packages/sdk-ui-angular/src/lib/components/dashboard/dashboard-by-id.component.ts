@@ -67,6 +67,14 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
   @Input()
   dashboardOid!: DashboardByIdProps['dashboardOid'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.persist}
+   *
+   * @alpha
+   */
+  @Input()
+  persist: DashboardByIdProps['persist'];
+
   private componentAdapter: ComponentAdapter;
 
   /**
@@ -125,6 +133,7 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
   private createPreactComponent() {
     const props = {
       dashboardOid: this.dashboardOid,
+      persist: this.persist,
     };
 
     return createElement(DashboardById, props);

@@ -4,7 +4,10 @@ title: dateFrom
 
 # Function dateFrom
 
-> **dateFrom**(`level`, `from`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **dateFrom**(
+  `level`,
+  `from`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate date values starting from and including the given date and level.
 
@@ -14,6 +17,7 @@ Creates a filter to isolate date values starting from and including the given da
 | :------ | :------ | :------ |
 | `level` | [`LevelAttribute`](../../../interfaces/interface.LevelAttribute.md) | Date [LevelAttribute](../../../interfaces/interface.LevelAttribute.md) to filter on |
 | `from` | `Date` \| `string` | Date or string representing the value to filter from |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

@@ -27,7 +27,7 @@ import {
 import { useSetError } from '../../error-boundary/use-set-error';
 import '../chart.css';
 import { executeBoxplotQuery } from '../../boxplot-utils';
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { deriveChartFamily } from './derive-chart-family';
 
 type DataSet = DataSource | Data | undefined;
@@ -67,7 +67,8 @@ export const useSyncedData = (
   useEffect(() => {
     let ignore = false;
 
-    const { filters: filterList, relations: filterRelations } = getFilterListAndRelations(filters);
+    const { filters: filterList, relations: filterRelations } =
+      getFilterListAndRelationsJaql(filters);
     if (isDataSource(dataSet)) {
       if (!app) {
         return;

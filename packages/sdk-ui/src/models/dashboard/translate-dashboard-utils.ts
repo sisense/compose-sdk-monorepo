@@ -5,12 +5,24 @@ import {
   isCascadingFilterDto,
 } from '../../api/types/dashboard-dto';
 import type { WidgetsPanelColumnLayout, WidgetsOptions } from './types';
-import { CascadingFilter, Filter, createFilterFromJaql } from '@sisense/sdk-data';
-import { WidgetDto } from '@/widget-by-id/types';
+import {
+  CascadingFilter,
+  Filter,
+  createFilterFromJaql,
+  FilterRelations,
+  FilterRelationsModel,
+  FilterRelationsModelNode,
+} from '@sisense/sdk-data';
 import { CommonFiltersApplyMode } from '@/common-filters/types';
+import {
+  combineFiltersAndRelations,
+  convertFilterRelationsModelToRelationRules,
+  isTrivialSingleNodeRelations,
+} from '@/utils/filter-relations';
+import { WidgetDto } from '@/widget-by-id/types';
 
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
-  columns: layout.columns.map((c) => ({
+  columns: (layout.columns || []).map((c) => ({
     widthPercentage: c.width,
     rows: (c.cells || []).map((cell) => {
       const totalWidth = cell.subcells.reduce((acc, subcell) => acc + subcell.width, 0);
@@ -27,30 +39,39 @@ export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => 
 });
 
 const createFilterFromFilterDto = (filterDto: FilterDto): Filter => {
-  const filter: Filter = createFilterFromJaql(filterDto.jaql, filterDto.instanceid);
-  filter.disabled = filterDto.disabled ?? false;
-  filter.locked = filterDto.locked ?? false;
+  const filter: Filter = createFilterFromJaql(
+    filterDto.jaql,
+    filterDto.instanceid,
+    filterDto.disabled,
+    filterDto.locked,
+  );
   return filter;
 };
 
 const createFilterFromCascadingFilterDto = (
   cascadingFilterDto: CascadingFilterDto,
 ): CascadingFilter => {
-  const innerFilters = cascadingFilterDto.levels.map((level) =>
-    createFilterFromJaql(level, cascadingFilterDto.instanceid),
-  );
-  const filter = new CascadingFilter(innerFilters, cascadingFilterDto.instanceid);
-  filter.disabled = cascadingFilterDto.disabled ?? false;
-  filter.locked = cascadingFilterDto.locked ?? false;
-  return filter;
+  const { levels, instanceid, disabled, locked } = cascadingFilterDto;
+
+  const innerFilters = levels.map((level) => createFilterFromJaql(level, level.instanceid));
+  return new CascadingFilter(innerFilters, { guid: instanceid, disabled, locked });
 };
 
 export function extractDashboardFilters(
   dashboardFilters: Array<FilterDto | CascadingFilterDto>,
-): Filter[] {
-  return dashboardFilters.map((f) =>
+  filterRelationsModel?: FilterRelationsModel | FilterRelationsModelNode,
+): Filter[] | FilterRelations {
+  const filters = dashboardFilters.map((f) =>
     isCascadingFilterDto(f) ? createFilterFromCascadingFilterDto(f) : createFilterFromFilterDto(f),
   );
+  if (!filterRelationsModel) {
+    return filters;
+  }
+  const filterRelations = convertFilterRelationsModelToRelationRules(filterRelationsModel, filters);
+  if (!filterRelations || isTrivialSingleNodeRelations(filterRelations)) {
+    return filters;
+  }
+  return combineFiltersAndRelations(filters, filterRelations);
 }
 
 export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptions {

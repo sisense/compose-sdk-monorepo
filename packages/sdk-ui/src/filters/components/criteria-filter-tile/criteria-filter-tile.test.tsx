@@ -154,10 +154,9 @@ describe('criteria tests', () => {
     const item = screen.getByText('max Revenue');
     expect(item).toBeInTheDocument();
     await user.click(item);
-    expect(propsTopRank.onUpdate).toHaveBeenCalledWith({
-      ...filterFactory.bottomRanking(mockAttribute, mockMeasureC, 5),
-      guid: expect.any(String),
-    });
+    expect(propsTopRank.onUpdate).toHaveBeenCalledWith(
+      filterFactory.bottomRanking(mockAttribute, mockMeasureC, 5, { guid: expect.any(String) }),
+    );
     expect(button1).not.toBeInTheDocument();
     expect(screen.getByText('max Revenue')).toBeInTheDocument();
   });

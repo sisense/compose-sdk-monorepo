@@ -31,8 +31,9 @@ import {
 } from '../index.js';
 import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 import { WidgetTypeInternal } from '@/models/widget/types.js';
-import { clearMembersFilter, haveSameAttribute, isIncludeAllFilter } from '@/utils/filters.js';
+import { clearMembersFilter, isIncludeAllFilter } from '@/utils/filters.js';
 import { MenuIds } from '@/common/components/menu/menu-ids.js';
+import { haveSameAttribute } from '@/utils/filters-comparator.js';
 
 export const SELECTION_TITLE_MAXIMUM_ITEMS = 2;
 
@@ -243,7 +244,7 @@ function applyUnselectionRulesToFilters(
   existingFilters: Filter[],
   allowPartialUnselection: boolean,
 ): FiltersWithSelectionFlag {
-  const enabledExistingFilters = existingFilters.filter((f) => !f.disabled);
+  const enabledExistingFilters = existingFilters.filter((f) => !f.config.disabled);
   const unselectionFilters = selectionFilters
     .map((selectionFilter) =>
       applyUnselectionRulesToFilter(
@@ -288,7 +289,7 @@ export function createCommonFiltersOverSelections(
  * Removes filters, that are present in `existingFilters` and are locked, from `filtersToRemoveFrom`
  */
 function removeLockedFilters(existingFilters: Filter[], filtersToRemoveFrom: Filter[]): Filter[] {
-  const lockedExistingFilters = existingFilters.filter((filter) => filter.locked);
+  const lockedExistingFilters = existingFilters.filter((filter) => filter.config.locked);
 
   if (!lockedExistingFilters.length) {
     return filtersToRemoveFrom;

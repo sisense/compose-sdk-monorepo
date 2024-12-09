@@ -1,11 +1,9 @@
-import isEqual from 'lodash-es/isEqual';
 import merge from 'ts-deepmerge';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ThemeOid, ThemeSettings, isThemeOid, CompleteThemeSettings } from '../types';
 import { useThemeContext } from './theme-context';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { getThemeSettingsByOid } from '../themes/theme-loader';
-import { getDefaultThemeSettings } from './default-theme-settings';
 
 /**
  * Returns the theme settings for the given theme OID or theme settings and error if it happened.
@@ -20,40 +18,60 @@ import { getDefaultThemeSettings } from './default-theme-settings';
 export function useThemeSettings(
   userTheme?: ThemeOid | ThemeSettings,
 ): [CompleteThemeSettings, null] | [null, Error] {
-  const currentThemeSettings = useThemeContext().themeSettings;
-  const [userThemeSettings, setUserThemeSettings] = useState<ThemeSettings>(
-    getDefaultThemeSettings(),
+  const parentThemeSettings = useThemeContext().themeSettings;
+  const [loadedThemeSettings, setLoadedThemeSettings] = useState<CompleteThemeSettings | null>(
+    null,
   );
   const [themeError, setThemeError] = useState<Error | null>(null);
   const httpClient = useSisenseContext().app?.httpClient;
 
+  // If the user theme is a theme OID, fetch the theme settings from the Sisense instance
   useEffect(() => {
-    if (!userTheme) {
-      return;
+    if (userTheme && isThemeOid(userTheme) && httpClient) {
+      void getThemeSettingsByOid(userTheme, httpClient)
+        .then((loadedThemeSettings) => {
+          setLoadedThemeSettings(loadedThemeSettings);
+        })
+        .catch(setThemeError);
     }
-    if (!isThemeOid(userTheme)) {
-      setUserThemeSettings(userTheme);
-    } else {
-      if (httpClient) {
-        void getThemeSettingsByOid(userTheme, httpClient)
-          .then(setUserThemeSettings)
-          .catch(setThemeError);
-      }
+  }, [httpClient, userTheme]);
+
+  // If the user theme is not a theme OID anymore, reset the loaded theme settings
+  useEffect(() => {
+    if (!userTheme || !isThemeOid(userTheme)) {
+      setLoadedThemeSettings(null);
+      setThemeError(null);
     }
-  }, [userTheme, httpClient]);
+  }, [userTheme]);
+
+  // Theme settings for the current level can be:
+  // - loaded theme settings if user theme is a theme OID and loaded
+  // - user theme settings if user theme is a theme settings
+  // - parent theme settings if no user theme is set
+  const currentThemeSettings = useMemo(() => {
+    if (loadedThemeSettings) {
+      return mergeThemeSettings(parentThemeSettings, loadedThemeSettings);
+    }
+    if (userTheme && !isThemeOid(userTheme)) {
+      return mergeThemeSettings(parentThemeSettings, userTheme);
+    }
+    return parentThemeSettings;
+  }, [loadedThemeSettings, parentThemeSettings, userTheme]);
 
   if (themeError) {
     return [null, themeError];
   }
 
-  if (isEqual(currentThemeSettings, userThemeSettings)) {
-    return [currentThemeSettings, null];
-  }
+  return [currentThemeSettings, null];
+}
 
-  const mergedThemeSettings = merge.withOptions(
+function mergeThemeSettings(
+  parentThemeSettings: CompleteThemeSettings,
+  userTheme: ThemeSettings,
+): CompleteThemeSettings {
+  return merge.withOptions(
     { mergeArrays: false },
-    currentThemeSettings,
-    userThemeSettings,
+    parentThemeSettings,
+    userTheme,
   ) as CompleteThemeSettings;
-  return [mergedThemeSettings, null];
 }

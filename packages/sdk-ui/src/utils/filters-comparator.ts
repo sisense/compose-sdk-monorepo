@@ -8,6 +8,7 @@ import {
 } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 import isEqualWith from 'lodash-es/isEqualWith';
+import { isSameAttribute } from './filters';
 
 /**
  * Checks if the filters have changed by deep comparison.
@@ -43,27 +44,31 @@ export function isFiltersChanged(
   // if filters at some index in the two arrays do not equal,
   // return true (filters have changed)
   return prevFilters!.some(
-    (prevFilter, i) =>
-      !isEqualWith(
-        prevFilter,
-        newFilters![i]!,
-        (prevFilterWithRandomName: Filter, newFilterWithRandomName: Filter) => {
-          const prevFilterWithoutRandomName = isRealCSDKFilter(prevFilterWithRandomName)
-            ? {
-                ...(prevFilterWithRandomName.toJSON() as Record<string, unknown>),
-                name: undefined,
-              }
-            : prevFilterWithRandomName;
-          const newFilterWithoutRandomName = isRealCSDKFilter(newFilterWithRandomName)
-            ? {
-                ...(newFilterWithRandomName.toJSON() as Record<string, unknown>),
-                name: undefined,
-              }
-            : newFilterWithRandomName;
-          return isEqual(prevFilterWithoutRandomName, newFilterWithoutRandomName);
-        },
-      ),
+    (prevFilter, i) => !isEqualWith(prevFilter, newFilters![i]!, areFiltersEqual),
   );
+}
+
+export function haveSameAttribute(filterA: Filter, filterB: Filter) {
+  return isSameAttribute(filterA.attribute, filterB.attribute);
+}
+
+/**
+ * Compare filters with ignoring randomly generated names
+ */
+export function areFiltersEqual(filterA: Filter, filterB: Filter): boolean {
+  const filterAWithoutRandomName = isRealCSDKFilter(filterA)
+    ? {
+        ...(filterA.toJSON() as Record<string, unknown>),
+        name: undefined,
+      }
+    : filterA;
+  const filterBWithoutRandomName = isRealCSDKFilter(filterB)
+    ? {
+        ...(filterB.toJSON() as Record<string, unknown>),
+        name: undefined,
+      }
+    : filterB;
+  return isEqual(filterAWithoutRandomName, filterBWithoutRandomName);
 }
 
 /**
@@ -130,8 +135,8 @@ export function isRelationsChanged(
     // since node has just filter uuid that will be different on every generation, actual filter comparison is done
     if (prevFilterNode.instanceid && newFilterNode.instanceid) {
       return !isFiltersChanged(
-        prevFilters?.filter((filter) => filter.guid === prevFilterNode.instanceid),
-        newFilters?.filter((filter) => filter.guid === newFilterNode.instanceid),
+        prevFilters?.filter((filter) => filter.config.guid === prevFilterNode.instanceid),
+        newFilters?.filter((filter) => filter.config.guid === newFilterNode.instanceid),
       );
     }
 

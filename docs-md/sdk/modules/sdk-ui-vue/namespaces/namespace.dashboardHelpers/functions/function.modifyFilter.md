@@ -10,9 +10,7 @@ title: modifyFilter
   `newFilter`): [`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
 
 Creates a new dashboard instance with a specific filter modified.
-
-This function searches for a filter with the same GUID as the provided `filterToModify` and replaces it with `newFilter`.
-This function does not modify the original dashboard; instead, it returns a new dashboard with the updated filters.
+Alias for `replaceFilter`.
 
 ## Parameters
 
@@ -28,12 +26,6 @@ This function does not modify the original dashboard; instead, it returns a new 
 
 A new dashboard instance with the specified filter modified.
 
-## Example
-
-Modify a filter in a dashboard.
-```ts
-const existingDashboard: DashboardProps = {...};
-const filterToModify: Filter = {...};
-const newFilter: Filter = {...};
-const updatedDashboard = modifyFilter(existingDashboard, filterToModify, newFilter);
-```
+::: warning Deprecated
+Use [replaceFilter](function.replaceFilter.md) instead
+:::

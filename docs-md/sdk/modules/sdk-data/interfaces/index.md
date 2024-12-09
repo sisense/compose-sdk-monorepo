@@ -5,6 +5,7 @@ title: Interfaces
 # Interfaces
 
 - [Attribute](interface.Attribute.md)
+- [BaseFilterConfig](interface.BaseFilterConfig.md)
 - [BaseMeasure](interface.BaseMeasure.md)
 - [CalculatedMeasure](interface.CalculatedMeasure.md)
 - [CalculatedMeasureColumn](interface.CalculatedMeasureColumn.md)
@@ -20,6 +21,7 @@ title: Interfaces
 - [Measure](interface.Measure.md)
 - [MeasureColumn](interface.MeasureColumn.md)
 - [MeasureContext](interface.MeasureContext.md)
+- [MembersFilterConfig](interface.MembersFilterConfig.md)
 - [PivotAttribute](interface.PivotAttribute.md)
 - [PivotMeasure](interface.PivotMeasure.md)
 - [PivotQueryResultData](interface.PivotQueryResultData.md)

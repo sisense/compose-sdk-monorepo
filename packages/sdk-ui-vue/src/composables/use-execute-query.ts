@@ -1,5 +1,5 @@
 import { toRefs, watch } from 'vue';
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import {
   type ClientApplication,
   executeQuery,
@@ -81,7 +81,7 @@ export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) 
         onBeforeQuery,
       } = toPlainObject(params);
       const { filters: filterList, relations: filterRelations } =
-        getFilterListAndRelations(filters);
+        getFilterListAndRelationsJaql(filters);
 
       dispatch({ type: 'loading' });
 

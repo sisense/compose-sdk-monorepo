@@ -23,9 +23,10 @@ import {
   QueryByWidgetIdState,
   QueryByWidgetIdQueryParams,
 } from './types';
-import { Filter, QueryResultData } from '@sisense/sdk-data';
+import { Filter, getFilterListAndRelationsJaql, QueryResultData } from '@sisense/sdk-data';
 import { widgetModelTranslator } from '../models';
 import { useShouldLoad } from '../common/hooks/use-should-load';
+import { convertToQueryDescription } from './utils';
 
 /**
  * React hook that executes a data query extracted from an existing widget in the Sisense instance.
@@ -191,25 +192,31 @@ export async function executeQueryByWidgetId({
   const prepareExecuteQueryParams = (
     query: ExecuteQueryParams | ExecutePivotQueryParams,
     isPivot: boolean,
-  ) => {
+  ): ExecuteQueryParams | ExecutePivotQueryParams => {
     const { dataSource, filters: widgetFilters, highlights: widgetHighlights } = query;
 
-    let mergedFilters = widgetFilters;
+    // TODO: correctly handle filter relations - here just getting only pure filters array without relations
+    const { filters: widgetFiltersWithoutRelations } = getFilterListAndRelationsJaql(widgetFilters);
+    let mergedFilters = widgetFiltersWithoutRelations;
     let mergedHighlights = widgetHighlights;
 
     if (includeDashboardFilters && fetchedDashboard) {
       const { filters: dashboardFilters, highlights: dashboardHighlight } =
         extractDashboardFiltersForWidget(fetchedDashboard, fetchedWidget);
-      mergedFilters = mergeFilters(dashboardFilters, widgetFilters as Filter[]);
+      mergedFilters = mergeFilters(dashboardFilters, widgetFiltersWithoutRelations);
       mergedHighlights = mergeFilters(dashboardHighlight, widgetHighlights);
     }
 
     mergedFilters = mergeFiltersByStrategy(
-      mergedFilters as Filter[],
+      mergedFilters,
       filters,
       filtersMergeStrategy,
-    );
-    mergedHighlights = mergeFiltersByStrategy(mergedHighlights, highlights, filtersMergeStrategy);
+    ) as Filter[];
+    mergedHighlights = mergeFiltersByStrategy(
+      mergedHighlights,
+      highlights,
+      filtersMergeStrategy,
+    ) as Filter[];
 
     const filterRelations = fetchedDashboard?.filterRelations?.length
       ? convertFilterRelationsModelToJaql(fetchedDashboard.filterRelations[0].filterRelations)
@@ -244,25 +251,30 @@ export async function executeQueryByWidgetId({
   };
 
   if (isPivotTableWidget(widgetModel.widgetType)) {
-    const widgetQuery = widgetModel.getExecutePivotQueryParams();
-    const executeQueryParams = prepareExecuteQueryParams(widgetQuery, true);
-    const pivotData = await executePivotQuery(executeQueryParams, app, { onBeforeQuery });
+    const widgetQuery = widgetModelTranslator.toExecutePivotQueryParams(widgetModel);
+    const executePivotQueryParams: ExecutePivotQueryParams = prepareExecuteQueryParams(
+      widgetQuery,
+      true,
+    );
+    const pivotQueryDescription = convertToQueryDescription(executePivotQueryParams);
+    const pivotData = await executePivotQuery(pivotQueryDescription, app, { onBeforeQuery });
 
     return {
       // return flat table structure only
       data: pivotData.table,
       query: undefined,
       // return pivotQuery instead of query
-      pivotQuery: executeQueryParams as ExecutePivotQueryParams,
+      pivotQuery: executePivotQueryParams,
     };
   } else {
-    const widgetQuery = widgetModel.getExecuteQueryParams();
-    const executeQueryParams = prepareExecuteQueryParams(widgetQuery, false);
-    const data = await executeQuery(executeQueryParams, app, { onBeforeQuery });
+    const widgetQuery = widgetModelTranslator.toExecuteQueryParams(widgetModel);
+    const executeQueryParams: ExecuteQueryParams = prepareExecuteQueryParams(widgetQuery, false);
+    const queryDescription = convertToQueryDescription(executeQueryParams);
+    const data = await executeQuery(queryDescription, app, { onBeforeQuery });
 
     return {
       data,
-      query: executeQueryParams as ExecuteQueryParams,
+      query: executeQueryParams,
       pivotQuery: undefined,
     };
   }

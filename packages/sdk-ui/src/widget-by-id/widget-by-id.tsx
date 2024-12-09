@@ -1,51 +1,14 @@
-import { useMemo, type FunctionComponent } from 'react';
-import { type Filter } from '@sisense/sdk-data';
+import { useCallback, type FunctionComponent } from 'react';
 import { ChartWidget } from '../widgets/chart-widget.js';
-import {
-  ChartWidgetProps,
-  TextWidgetProps,
-  PivotTableWidgetProps,
-  WidgetByIdProps,
-} from '../props.js';
-import { useThemeContext } from '../theme-provider/index.js';
+import { WidgetByIdProps, WidgetProps } from '../props.js';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component.js';
-import {
-  convertFilterRelationsModelToJaql,
-  getFilterRelationsFromJaql,
-  isPivotTableWidget,
-  isTextWidget,
-  mergeFilters,
-  mergeFiltersByStrategy,
-} from './utils.js';
-import { extractDashboardFiltersForWidget } from './translate-dashboard-filters.js';
-import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model.js';
-import { WidgetModel, widgetModelTranslator } from '../models/index.js';
-import { WidgetType } from './types.js';
+import { isChartWidgetProps, isPivotTableWidgetProps, mergeFiltersByStrategy } from './utils.js';
+import { dashboardModelTranslator, widgetModelTranslator } from '../models/index.js';
 import { PivotTableWidget } from '@/widgets/pivot-table-widget';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { isTextWidgetProps, TextWidget } from '@/widgets/text-widget';
-import { DashboardDto } from '@/api/types/dashboard-dto';
-
-function getWidgetProps(widgetModel: WidgetModel): {
-  props: TextWidgetProps | ChartWidgetProps | PivotTableWidgetProps;
-  widgetType: WidgetType;
-} {
-  const { widgetType } = widgetModel;
-  let props;
-
-  if (isPivotTableWidget(widgetType)) {
-    props = widgetModelTranslator.toPivotTableWidgetProps(widgetModel);
-  } else if (isTextWidget(widgetType)) {
-    props = widgetModelTranslator.toTextWidgetProps(widgetModel);
-  } else {
-    props = widgetModelTranslator.toChartWidgetProps(widgetModel);
-  }
-
-  return {
-    props,
-    widgetType,
-  };
-}
+import { useCommonFilters } from '@/common-filters/use-common-filters.js';
+import { useGetDashboardModelAndWidgetModel } from './use-get-dashboard-model-and-widget-model.js';
+import flow from 'lodash-es/flow';
 
 /**
  * The WidgetById component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -74,114 +37,119 @@ export const WidgetById: FunctionComponent<WidgetByIdProps> = asSisenseComponent
   componentName: 'WidgetById',
   customContextErrorMessageKey: 'errors.widgetByIdNoSisenseContext',
 })((props) => {
-  const { widgetOid, dashboardOid, includeDashboardFilters, ...restProps } = props;
-  const { themeSettings } = useThemeContext();
-  const { app } = useSisenseContext();
-
   const {
-    widget: fetchedWidget,
-    dashboard: fetchedDashboard,
-    error: fetchError,
-  } = useFetchWidgetDtoModel({
     widgetOid,
     dashboardOid,
-    includeDashboard: includeDashboardFilters,
+    includeDashboardFilters,
+    filters: filtersFromProps,
+    highlights: highlightsFromProps,
+    filtersMergeStrategy,
+    ...restProps
+  } = props;
+
+  const { dashboardModel, widgetModel } = useGetDashboardModelAndWidgetModel({
+    widgetOid,
+    dashboardOid,
+    shouldLoadFullDashboard: includeDashboardFilters,
   });
 
-  if (fetchError) throw fetchError;
+  const widgetProps: WidgetProps | null = widgetModel
+    ? widgetModelTranslator.toWidgetProps(widgetModel)
+    : null;
 
-  const { widgetType, props: fetchedProps } = useMemo(() => {
-    if (!fetchedWidget) {
-      return { widgetType: null, props: null };
-    }
+  const dashboardFiltersToMergeWith = dashboardModel
+    ? dashboardModelTranslator.toDashboardProps(dashboardModel).filters
+    : undefined;
 
-    const widgetModel = widgetModelTranslator.fromWidgetDto(
-      fetchedWidget,
-      themeSettings,
-      app?.settings,
-    );
-    const extractedWidgetProps = getWidgetProps(widgetModel);
-    if (isTextWidgetProps(extractedWidgetProps.props)) {
-      return { widgetType: 'richtexteditor', props: extractedWidgetProps.props };
-    }
-    if (includeDashboardFilters) {
-      const { filters: dashboardFilters, highlights: dashboardHighlights } =
-        extractDashboardFiltersForWidget(fetchedDashboard as DashboardDto, fetchedWidget);
+  const { connectToWidgetProps: updateWidgetPropsWithDashboardFilters } = useCommonFilters({
+    initialFilters: dashboardFiltersToMergeWith,
+  });
 
-      extractedWidgetProps.props.filters = mergeFilters(
-        dashboardFilters,
-        extractedWidgetProps.props.filters as Filter[],
+  const withDashboardFilters = useCallback(
+    (widgetProps: WidgetProps) => {
+      if (!includeDashboardFilters || !dashboardModel) {
+        return widgetProps;
+      }
+
+      return updateWidgetPropsWithDashboardFilters(widgetProps, {
+        ...dashboardModel.widgetsOptions?.[widgetOid]?.filtersOptions,
+        shouldAffectFilters: false,
+      });
+    },
+    [dashboardModel, includeDashboardFilters, updateWidgetPropsWithDashboardFilters, widgetOid],
+  );
+
+  const withFiltersFromProps = useCallback(
+    (widgetProps: WidgetProps) => {
+      if (!filtersFromProps || !('filters' in widgetProps)) {
+        return widgetProps;
+      }
+      const mergedFilters = mergeFiltersByStrategy(
+        widgetProps.filters,
+        filtersFromProps,
+        filtersMergeStrategy,
       );
-      (extractedWidgetProps.props as ChartWidgetProps).highlights = dashboardHighlights;
-    }
+      return { ...widgetProps, filters: mergedFilters };
+    },
+    [filtersFromProps, filtersMergeStrategy],
+  );
 
-    return extractedWidgetProps;
-  }, [fetchedWidget, fetchedDashboard, themeSettings, includeDashboardFilters, app?.settings]);
+  const withHighlightsFromProps = useCallback(
+    (widgetProps: WidgetProps) => {
+      if (!highlightsFromProps || !('highlights' in widgetProps)) {
+        return widgetProps;
+      }
+      const mergedHighlights = mergeFiltersByStrategy(
+        widgetProps.highlights,
+        highlightsFromProps,
+        filtersMergeStrategy,
+      );
+      return { ...widgetProps, highlights: mergedHighlights };
+    },
+    [filtersMergeStrategy, highlightsFromProps],
+  );
 
-  if (!fetchedProps) {
+  if (!widgetProps) {
     return null;
   }
 
-  // if filter relations are set on the widget, additionally provided filters will be ignored
-  // since there is not enough information how to merge them
-  const filters = isTextWidgetProps(fetchedProps)
-    ? []
-    : mergeFiltersByStrategy(
-        fetchedProps?.filters as Filter[],
-        restProps.filters,
-        restProps.filtersMergeStrategy,
-      );
+  const updatedWidgetProps = flow([
+    withDashboardFilters,
+    withFiltersFromProps,
+    withHighlightsFromProps,
+  ])(widgetProps);
 
-  const highlights = isTextWidgetProps(fetchedProps)
-    ? []
-    : mergeFiltersByStrategy(
-        (fetchedProps as ChartWidgetProps)?.highlights,
-        restProps.highlights,
-        restProps.filtersMergeStrategy,
-      );
-
-  const filterRelations = getFilterRelationsFromJaql(
-    filters,
-    highlights,
-    convertFilterRelationsModelToJaql(
-      fetchedDashboard?.filterRelations?.length
-        ? fetchedDashboard?.filterRelations[0].filterRelations
-        : undefined,
-    ),
-  );
-
-  if (isTextWidgetProps(fetchedProps)) {
-    return <TextWidget {...fetchedProps} />;
+  if (isTextWidgetProps(updatedWidgetProps)) {
+    return <TextWidget {...updatedWidgetProps} />;
   }
-  if (isPivotTableWidget(widgetType)) {
+  if (isPivotTableWidgetProps(updatedWidgetProps)) {
     return (
       <PivotTableWidget
-        {...(fetchedProps as PivotTableWidgetProps)}
+        {...updatedWidgetProps}
         {...restProps}
-        filters={filterRelations}
-        highlights={highlights}
         styleOptions={{
-          ...fetchedProps.styleOptions,
+          ...updatedWidgetProps.styleOptions,
           ...props.styleOptions,
         }}
       />
     );
   }
 
-  return (
-    <ChartWidget
-      {...(fetchedProps as ChartWidgetProps)}
-      {...restProps}
-      filters={filterRelations}
-      highlights={highlights}
-      drilldownOptions={{
-        ...(fetchedProps as ChartWidgetProps).drilldownOptions,
-        ...props.drilldownOptions,
-      }}
-      styleOptions={{
-        ...fetchedProps.styleOptions,
-        ...props.styleOptions,
-      }}
-    />
-  );
+  if (isChartWidgetProps(updatedWidgetProps)) {
+    return (
+      <ChartWidget
+        {...updatedWidgetProps}
+        {...restProps}
+        drilldownOptions={{
+          ...updatedWidgetProps.drilldownOptions,
+          ...props.drilldownOptions,
+        }}
+        styleOptions={{
+          ...updatedWidgetProps.styleOptions,
+          ...props.styleOptions,
+        }}
+      />
+    );
+  }
+  return null;
 });

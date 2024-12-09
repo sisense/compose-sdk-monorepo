@@ -15,3 +15,7 @@ title: sdk-data
 - [createAttribute](data-model-utilities/function.createAttribute.md)
 - [createDateDimension](data-model-utilities/function.createDateDimension.md)
 - [createDimension](data-model-utilities/function.createDimension.md)
+
+## Filter Utilities
+
+- [isFilterRelations](filter-utilities/function.isFilterRelations.md)

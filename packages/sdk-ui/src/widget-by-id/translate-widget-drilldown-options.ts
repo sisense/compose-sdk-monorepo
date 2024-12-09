@@ -3,7 +3,7 @@ import {
   BaseJaql,
   DateLevels,
   DimensionalLevelAttribute,
-  IncludeMembersFilter,
+  IncludeMembersFilterJaql,
   isDatetime,
 } from '@sisense/sdk-data';
 import parseISO from 'date-fns/parseISO';
@@ -33,7 +33,7 @@ const getDrilldownSelections = (
     const dateFormat = 'level' in jaql && jaql.level && mask && (mask as DatetimeMask)[jaql.level];
 
     const points =
-      (item.through.jaql.filter as IncludeMembersFilter)?.members?.map(
+      (item.through.jaql.filter as IncludeMembersFilterJaql)?.members?.map(
         dateFormat
           ? (member) => ({
               categoryValue: member,

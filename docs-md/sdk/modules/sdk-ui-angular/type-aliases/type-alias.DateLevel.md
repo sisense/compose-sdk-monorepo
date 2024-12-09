@@ -4,4 +4,4 @@ title: DateLevel
 
 # Type alias DateLevel
 
-> **DateLevel**: `"years" | "quarters" | "months" | "weeks" | "days" | "dateAndTime" | "minutes"`
+> **DateLevel**: `"dateAndTime" | "days" | "minutes" | "months" | "quarters" | "weeks" | "years"`

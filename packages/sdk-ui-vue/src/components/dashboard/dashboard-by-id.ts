@@ -37,6 +37,12 @@ export const DashboardById = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.dashboardOid}
      */
     dashboardOid: String as PropType<DashboardByIdProps['dashboardOid']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.persist}
+     *
+     * @alpha
+     */
+    persist: Boolean as PropType<DashboardByIdProps['persist']>,
   },
   setup: (props) => setupHelper(DashboardByIdPreact, props),
 });

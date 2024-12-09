@@ -202,4 +202,14 @@ describe('translateLayout', () => {
       ],
     });
   });
+
+  it('should correctly translate empty layout', () => {
+    const dashboardDtoLayout = {};
+
+    const result = translateLayout(dashboardDtoLayout);
+
+    expect(result).toEqual({
+      columns: [],
+    });
+  });
 });

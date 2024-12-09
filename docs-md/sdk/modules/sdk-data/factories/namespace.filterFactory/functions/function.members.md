@@ -7,7 +7,7 @@ title: members
 > **members**(
   `attribute`,
   `members`,
-  `multiSelection`?): [`Filter`](../../../interfaces/interface.Filter.md)
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values that match any of the specified strings.
 
@@ -19,7 +19,7 @@ Matching is case sensitive.
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Attribute to filter on |
 | `members` | `string`[] | Array of member values to filter by |
-| `multiSelection`? | `boolean` | Optional flag to disable multi-selection |
+| `config`? | [`MembersFilterConfig`](../../../interfaces/interface.MembersFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

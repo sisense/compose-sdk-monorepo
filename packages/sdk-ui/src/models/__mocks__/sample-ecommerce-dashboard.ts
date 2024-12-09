@@ -254,6 +254,72 @@ export const sampleEcommerceDashboard = {
           },
         ],
       },
+      {
+        width: 43.9921530161844,
+        pxlWidth: 612,
+        index: 3,
+        cells: [
+          {
+            subcells: [
+              {
+                elements: [
+                  {
+                    minHeight: 96,
+                    maxHeight: 2048,
+                    minWidth: 128,
+                    maxWidth: 2048,
+                    height: '392px',
+                    defaultWidth: 512,
+                    widgetid: '67111cb76ab71f0032d8599d',
+                  },
+                ],
+                width: 100,
+                stretchable: false,
+                pxlWidth: 582,
+                index: 0,
+              },
+            ],
+          },
+          {
+            subcells: [
+              {
+                elements: [
+                  {
+                    minHeight: 96,
+                    maxHeight: 2048,
+                    minWidth: 128,
+                    maxWidth: 2048,
+                    defaultWidth: 512,
+                    widgetid: '672352d827ea67002bdcf485',
+                    height: '384px',
+                  },
+                ],
+                width: 50.25466893039049,
+                stretchable: false,
+                pxlWidth: 296,
+                index: 0,
+              },
+              {
+                elements: [
+                  {
+                    minHeight: 96,
+                    maxHeight: 2048,
+                    minWidth: 128,
+                    maxWidth: 2048,
+                    defaultWidth: 512,
+                    widgetid: '6742206527ea67002bdcf6ac',
+                    height: '384px',
+                  },
+                ],
+                width: 49.745331069609506,
+                stretchable: false,
+                pxlWidth: 293,
+                index: 1,
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   instanceType: 'owner',

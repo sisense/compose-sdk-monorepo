@@ -4,7 +4,7 @@ import { Filter, MetadataItem } from '@sisense/sdk-data';
 export function applyHighlightFilters(metadataItem: MetadataItem, highlights: Filter[]) {
   const filter = highlights?.find((f) => getMetadataItemId(metadataItem) === f.attribute.id);
 
-  if (filter && !filter.disabled) {
+  if (filter && !filter.config.disabled) {
     if (filter.isScope) {
       filter.isScope = false;
     }

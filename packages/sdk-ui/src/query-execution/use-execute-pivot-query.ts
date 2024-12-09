@@ -8,7 +8,7 @@ import { TranslatableError } from '../translation/translatable-error';
 import { withTracking } from '../decorators/hook-decorators';
 import { ExecutePivotQueryParams, PivotQueryState } from './types';
 import { pivotQueryStateReducer } from './pivot-query-state-reducer';
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { useShouldLoad } from '../common/hooks/use-should-load';
 
 /**
@@ -76,7 +76,7 @@ export function useExecutePivotQueryInternal(params: ExecutePivotQueryParams): P
       } = params;
 
       const { filters: filterList, relations: filterRelations } =
-        getFilterListAndRelations(filters);
+        getFilterListAndRelationsJaql(filters);
 
       void executePivotQuery(
         {
@@ -132,8 +132,8 @@ const simplySerializableParamNames: (keyof ExecutePivotQueryParams)[] = [
 export function usePivotQueryParamsChanged(params: ExecutePivotQueryParams) {
   return useHasChanged(params, simplySerializableParamNames, (params, prev) => {
     // Function has to compare logical structure of relations, not just references
-    const { filters: prevFilterList } = getFilterListAndRelations(prev.filters);
-    const { filters: newFilterList } = getFilterListAndRelations(params.filters);
+    const { filters: prevFilterList } = getFilterListAndRelationsJaql(prev.filters);
+    const { filters: newFilterList } = getFilterListAndRelationsJaql(params.filters);
     return (
       isFiltersChanged(prevFilterList, newFilterList) ||
       isFiltersChanged(prev.highlights, params.highlights)

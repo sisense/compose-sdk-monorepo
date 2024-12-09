@@ -14,11 +14,14 @@ const getDashboardMock = vi.fn((): typeof dashboardMock | undefined => {
   return dashboardWithoutWidgets;
 });
 const getDashboardWidgetsMock = vi.fn(() => dashboardMock.widgets);
+const getWidgetMock = vi.fn((id) => dashboardMock.widgets?.find((w) => w.oid === id));
 vi.mock('../../api/rest-api', () => ({
   RestApi: class {
     getDashboard = getDashboardMock;
 
     getDashboardWidgets = getDashboardWidgetsMock;
+
+    getWidget = getWidgetMock;
   },
 }));
 
@@ -28,6 +31,7 @@ describe('getDashboardModel', () => {
   beforeEach(() => {
     getDashboardMock.mockClear();
     getDashboardWidgetsMock.mockClear();
+    getWidgetMock.mockClear();
   });
 
   it('should fetch a dashboard model', async () => {
@@ -83,6 +87,22 @@ describe('getDashboardModel', () => {
           variantColors: dashboardMock.style!.palette!.colors,
         },
       },
+    });
+  });
+
+  it('should include widgets when includeWidgets is true and auth is wat', async () => {
+    const options: GetDashboardModelOptions = {
+      includeWidgets: true,
+    };
+    const result = await getDashboardModel(
+      { auth: { type: 'wat' } } as HttpClient,
+      dashboardMock.oid,
+      options,
+    );
+
+    expect(getWidgetMock).toHaveBeenCalledTimes(dashboardMock.widgets?.length || 0);
+    result.widgets.forEach((widget) => {
+      expect(isWidgetModel(widget)).toBe(true);
     });
   });
 

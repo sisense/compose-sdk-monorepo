@@ -18,6 +18,7 @@ import {
   newDateFormatWithExpandedQuartersMasks,
 } from './fiscal-date-format-replacers';
 import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period';
+import { DateLevels } from '@sisense/sdk-data';
 
 export type DateFormat = string;
 
@@ -156,4 +157,32 @@ export function applyDateFormat(
     locale,
     weekStartsOn: cfg.weekFirstDay,
   });
+}
+
+export function getDefaultDateMask(granularity?: string) {
+  switch (granularity) {
+    case DateLevels.Years:
+      return 'yyyy';
+    case DateLevels.Quarters:
+      return 'Q yyyy';
+    case DateLevels.Months:
+      return 'MM/yyyy';
+    case DateLevels.Weeks:
+      return 'ww yyyy';
+    case DateLevels.Days:
+      return 'shortDate';
+    case DateLevels.Hours:
+    case DateLevels.Minutes:
+    case DateLevels.MinutesRoundTo15:
+    case DateLevels.MinutesRoundTo30:
+    case DateLevels.AggMinutesRoundTo1:
+    case DateLevels.AggMinutesRoundTo15:
+    case DateLevels.AggMinutesRoundTo30:
+    case DateLevels.AggHours:
+      return 'HH:mm';
+    case DateLevels.Seconds:
+      return 'HH:mm:ss';
+    default:
+      return 'fullDate';
+  }
 }

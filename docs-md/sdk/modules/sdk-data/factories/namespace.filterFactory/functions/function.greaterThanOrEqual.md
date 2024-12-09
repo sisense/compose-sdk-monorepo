@@ -4,7 +4,10 @@ title: greaterThanOrEqual
 
 # Function greaterThanOrEqual
 
-> **greaterThanOrEqual**(`attribute`, `value`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **greaterThanOrEqual**(
+  `attribute`,
+  `value`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values greater than or equal to a specified number.
 
@@ -14,6 +17,7 @@ Creates a filter to isolate attribute values greater than or equal to a specifie
 | :------ | :------ | :------ |
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Numeric attribute to filter on |
 | `value` | `number` | Value to filter by |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

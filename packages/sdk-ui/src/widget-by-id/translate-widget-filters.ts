@@ -1,8 +1,8 @@
 import {
   createFilterFromJaql,
   FilterJaql,
-  IncludeAllFilter,
-  IncludeMembersFilter,
+  IncludeAllFilterJaql,
+  IncludeMembersFilterJaql,
 } from '@sisense/sdk-data';
 import { Panel, PanelItem } from './types.js';
 
@@ -27,10 +27,10 @@ export function extractFilterModelFromJaql(jaql: FilterJaql) {
 
   // Transforms member filter without selected items into "include all" filter
   if (
-    (baseFilter as IncludeMembersFilter).members &&
-    (baseFilter as IncludeMembersFilter).members.length === 0
+    (baseFilter as IncludeMembersFilterJaql).members &&
+    (baseFilter as IncludeMembersFilterJaql).members.length === 0
   ) {
-    (baseFilter as IncludeAllFilter).all = true;
+    (baseFilter as IncludeAllFilterJaql).all = true;
   }
 
   return {

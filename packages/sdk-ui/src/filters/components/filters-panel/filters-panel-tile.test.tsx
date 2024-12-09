@@ -69,7 +69,7 @@ describe('FiltersPanelTile', () => {
 
   it('renders locked RelativeDateFilter component', async () => {
     const mockFilter = new RelativeDateFilter(DM.Commerce.Date.Years, 0, 1) as Filter;
-    mockFilter.locked = true;
+    mockFilter.config.locked = true;
     const { container } = render(
       <MockedSisenseContextProvider>
         <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
@@ -108,7 +108,7 @@ describe('FiltersPanelTile', () => {
 
   it('renders locked CriteriaFilterTile', async () => {
     const mockFilter = filterFactory.greaterThan(mockAttribute, 100);
-    mockFilter.locked = true;
+    mockFilter.config.locked = true;
     const { container } = render(
       <MockedSisenseContextProvider>
         <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />
@@ -160,7 +160,10 @@ describe('FiltersPanelTile', () => {
   });
 
   it('renders FilterTile for unsupported filter type', async () => {
-    const mockFilter = { attribute: { name: 'Unsupported Filter' } } as Filter;
+    const mockFilter = {
+      attribute: { name: 'Unsupported Filter' },
+      config: { disabled: false, locked: false },
+    } as Filter;
     const { container } = render(
       <MockedSisenseContextProvider>
         <FiltersPanelTile filter={mockFilter} onChange={mockOnChange} />

@@ -4,5 +4,5 @@
     "sourceMap": false,
     "declarationMap": false
   },
-  "exclude": ["**/*.test.*"]
+  "exclude": ["**/*.test.*", "**/__test-helpers__/**/*"]
 }

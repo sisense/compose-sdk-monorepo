@@ -34,7 +34,7 @@ export function checkPersistenceSupport(authType: Authenticator['type'], shouldW
   if (authType === 'wat') {
     if (shouldWarn)
       console.warn(
-        `WAT authentication does not support persistence. The changes will not be saved.Disable "persist" flag to avoid this warning.`,
+        `WAT authentication does not support persistence. The changes will not be saved. Set "persist" flag to false to avoid this warning.`,
       );
 
     return false;

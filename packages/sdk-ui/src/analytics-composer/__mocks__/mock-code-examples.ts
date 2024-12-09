@@ -264,3 +264,34 @@ const { data, isLoading, isError } = useExecuteQueryByWidgetId({
   </div>
 </template>
 `;
+
+export const MOCK_CODE_EXECUTE_QUERY_REACT_2 = `import { useExecuteQuery } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+
+const CodeExample = () => {
+  const queryProps = {
+    dataSource: DM.DataSource,
+    dimensions: [],
+    measures: [],
+    filters: [],
+    highlights: [],
+  }
+
+  const { data, isLoading, isError } = useExecuteQuery(queryProps);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error</div>;
+  }
+  if (data) {
+    return <div>Total Rows: {data.rows.length}</div>;
+  }
+
+  return null;
+};
+
+export default CodeExample;
+`;

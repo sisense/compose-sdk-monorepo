@@ -4,6 +4,6 @@ title: CartesianChartType
 
 # Type alias CartesianChartType
 
-> **CartesianChartType**: `"area" | "line" | "bar" | "column" | "polar"`
+> **CartesianChartType**: `"area" | "bar" | "column" | "line" | "polar"`
 
 Cartesian family of chart types

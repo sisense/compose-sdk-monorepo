@@ -12,9 +12,11 @@ import {
   SUN,
   YEARS,
   DAYS,
+  getDefaultDateMask,
 } from './apply-date-format';
 import type { DateConfig } from './apply-date-format';
 import { enUS, fr } from 'date-fns/locale';
+import { DateLevels } from '@sisense/sdk-data';
 
 const zero = new Date(0);
 const dec292009 = new Date('2009-12-29T06:28:13.999Z');
@@ -375,5 +377,48 @@ describe('behavior that is the same regardless of fiscal year settings', () => {
         expect(actual).toBe(expected);
       },
     );
+  });
+});
+
+describe('getDefaultDateMask', () => {
+  it('should correctly return default date mask for all cases', () => {
+    const cases = [
+      DateLevels.Years,
+      DateLevels.Quarters,
+      DateLevels.Months,
+      DateLevels.Weeks,
+      DateLevels.Days,
+      DateLevels.Hours,
+      DateLevels.Minutes,
+      DateLevels.MinutesRoundTo15,
+      DateLevels.MinutesRoundTo30,
+      DateLevels.AggMinutesRoundTo1,
+      DateLevels.AggMinutesRoundTo15,
+      DateLevels.AggMinutesRoundTo30,
+      DateLevels.AggHours,
+      DateLevels.Seconds,
+      undefined,
+    ];
+    const results = [
+      'yyyy',
+      'Q yyyy',
+      'MM/yyyy',
+      'ww yyyy',
+      'shortDate',
+      'HH:mm',
+      'HH:mm',
+      'HH:mm',
+      'HH:mm',
+      'HH:mm',
+      'HH:mm',
+      'HH:mm',
+      'HH:mm',
+      'HH:mm:ss',
+      'fullDate',
+    ];
+
+    cases.forEach((c, i) => {
+      expect(getDefaultDateMask(c)).toBe(results[i]);
+    });
   });
 });

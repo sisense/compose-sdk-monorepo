@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash-es/cloneDeep.js';
+import { isCascadingFilter, FilterRelationsJaqlIdNode } from './index.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
 import { FilterJaqlInternal, JaqlDataSource } from './dimensional-model/filters/utils/types.js';
 import {
@@ -51,7 +52,7 @@ export const guidFast = function (len?: number) {
  *
  * @internal
  */
-export const getFilterListAndRelations = (
+export const getFilterListAndRelationsJaql = (
   filterRelations: FilterRelations | Filter[] | undefined,
 ): { filters: Filter[] | undefined; relations: FilterRelationsJaql | undefined } => {
   if (!filterRelations) {
@@ -62,14 +63,29 @@ export const getFilterListAndRelations = (
   }
   const filters = new Set<Filter>();
 
+  function traverseCascade(cascade: Filter[]): FilterRelationsJaqlNode {
+    const [firstFilter, ...restFilters] = cascade;
+    filters.add(firstFilter);
+    if (!restFilters.length) {
+      return traverse({ instanceid: firstFilter.config.guid }) as FilterRelationsJaqlIdNode;
+    }
+    const left = traverse(firstFilter) as FilterRelationsJaqlNode;
+    const right = traverseCascade(restFilters);
+    return { left, right, operator: 'AND' };
+  }
+
   function traverse(
     node: FilterRelationsNode | FilterRelationsJaqlNode,
   ): FilterRelationsNode | FilterRelationsJaqlNode {
     if (!node) return node;
 
-    if ('guid' in node) {
+    if (isFilter(node)) {
+      if (isCascadingFilter(node)) {
+        return traverseCascade(node.filters);
+      }
+
       filters.add(node);
-      return { instanceid: node.guid };
+      return { instanceid: node.config.guid };
     } else {
       if ('left' in node) {
         node.left = traverse(node.left);
@@ -88,6 +104,10 @@ export const getFilterListAndRelations = (
 
   return { filters: Array.from(filters), relations };
 };
+
+function isFilter(node: FilterRelationsNode | FilterRelationsJaqlNode): node is Filter {
+  return 'config' in node && 'guid' in node.config;
+}
 
 /**
  * Gets the name of the data source
@@ -157,25 +177,40 @@ export function convertSort(sort?: string) {
  * Creates a filter from a JAQL object.
  *
  * @param jaql - The filter JAQL object.
- * @param instanceid - The instance ID.
+ * @param instanceid - Optional instance ID.
+ * @param disabled - Optional disabled flag.
+ * @param locked - Optional locked flag.
  * @returns - The created Filter object.
  * @internal
  */
-export const createFilterFromJaql = (jaql: FilterJaql, instanceid?: string): Filter => {
+export const createFilterFromJaql = (
+  jaql: FilterJaql,
+  instanceid?: string,
+  disabled: boolean = false,
+  locked: boolean = false,
+): Filter => {
   // translation logic is based on FilterJaqlInternal type (from internal modern-analytics-filters)
   // TODO reconcile FilterJaql and FilterJaqlInternal
   const hasBackgroundFilter = jaql.filter.filter && !('turnedOff' in jaql.filter.filter);
-  const filter = createFilterFromJaqlInternal(jaql as FilterJaqlInternal, instanceid);
+
+  const guid = instanceid || guidFast();
+
+  const filter = createFilterFromJaqlInternal(jaql as FilterJaqlInternal, guid);
 
   if (hasBackgroundFilter) {
-    (filter as MembersFilter).backgroundFilter = createFilterFromJaqlInternal(
+    const backgroundFilter = createFilterFromJaqlInternal(
       {
         ...jaql,
         filter: jaql.filter.filter,
       } as FilterJaqlInternal,
       `${instanceid}-bg`,
     );
+    const config = (filter as MembersFilter).config;
+    filter.config = { ...config, backgroundFilter };
+    return filter;
   }
+
+  filter.config = { ...filter.config, originalFilterJaql: jaql, disabled, locked };
 
   return filter;
 };

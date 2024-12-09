@@ -10,7 +10,7 @@ import { queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
 import { withTracking } from '../decorators/hook-decorators';
 import { ExecuteQueryParams, ExecuteQueryResult } from './types';
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { ClientApplication } from '@/app/client-application';
 import { CacheKey } from '@/utils/create-cache';
 import { useQueryParamsChanged } from '@/query-execution/query-params-comparator';
@@ -94,7 +94,7 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
       dispatch({ type: 'loading' });
 
       const { filters: filterList, relations: filterRelations } =
-        getFilterListAndRelations(filters);
+        getFilterListAndRelationsJaql(filters);
       const executeQueryParams: Parameters<typeof executeQuery> = [
         {
           dataSource,

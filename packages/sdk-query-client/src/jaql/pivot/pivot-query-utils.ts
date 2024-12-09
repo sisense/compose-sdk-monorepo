@@ -89,21 +89,22 @@ export function preparePivotRowJaqlSortOptions(
 /**
  * Normalizes sorting for the last row of the pivot table.
  *
- * According to the existing pivot JAQL structure,the sorting configuration of the last row
- * should be located inside the target measure metadata
+ * According to the existing pivot JAQL structure, the sorting configuration of the last row
+ * may be located inside the target measure metadata
  */
 export function normalizeLastRowSorting(
   metadata: MetadataItem[],
   metadataStats: PivotMetadataStats,
 ) {
-  const lastRowMetadata = metadata[metadataStats.rowsCount - 1];
+  const lastRowIndex = metadataStats.rowsCount - 1;
+  const lastRowMetadata = metadata[lastRowIndex];
+  const { sortDetails, sort, ...jaqlWithoutSortOptions } = lastRowMetadata.jaql;
+
   const isSortedByMeasure =
-    lastRowMetadata.jaql.sortDetails &&
-    lastRowMetadata.jaql.sortDetails.field !== metadataStats.rowsCount - 1;
+    sortDetails && sortDetails.field !== lastRowIndex && sortDetails.field! < metadata.length;
 
   if (isSortedByMeasure) {
-    const targetMeasureMetadata = metadata[lastRowMetadata.jaql.sortDetails!.field!];
-    const { sortDetails, sort, ...jaqlWithoutSortOptions } = lastRowMetadata.jaql;
+    const targetMeasureMetadata = metadata[sortDetails.field!];
     targetMeasureMetadata.jaql.sortDetails = sortDetails;
     targetMeasureMetadata.jaql.sort = sort;
     lastRowMetadata.jaql = jaqlWithoutSortOptions;

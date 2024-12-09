@@ -35,7 +35,7 @@ composes them into a coordinated dashboard with change detection, cross filterin
 
 | Parameter | Type |
 | :------ | :------ |
-| `filters` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] |
+| `filters` | [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] |
 
 #### Returns
 

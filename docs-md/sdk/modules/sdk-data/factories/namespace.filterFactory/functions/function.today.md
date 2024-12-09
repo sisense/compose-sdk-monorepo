@@ -4,7 +4,7 @@ title: today
 
 # Function today
 
-> **today**(`dimension`): [`Filter`](../../../interfaces/interface.Filter.md)
+> **today**(`dimension`, `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate items with a date dimension value of the current date.
 
@@ -13,6 +13,7 @@ Creates a filter to isolate items with a date dimension value of the current dat
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `dimension` | [`DateDimension`](../../../interfaces/interface.DateDimension.md) | date dimension to filter |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

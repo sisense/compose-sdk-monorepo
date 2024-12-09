@@ -1,0 +1,133 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`baseFilterToFilterDto > should return correctly translated cascading filter 1`] = `
+{
+  "disabled": false,
+  "instanceid": "CASCADING_FILTER_ID",
+  "isCascading": true,
+  "levels": [
+    {
+      "column": "Brand ID",
+      "datatype": "numeric",
+      "dim": "[Commerce.Brand ID]",
+      "filter": {
+        "members": [
+          "1",
+        ],
+        "multiSelection": true,
+      },
+      "instanceid": "BRAND_FILTER_ID",
+      "table": "Commerce",
+      "title": "Brand ID",
+    },
+    {
+      "column": "Gender",
+      "datatype": "text",
+      "dim": "[Commerce.Gender]",
+      "filter": {
+        "members": [
+          "Female",
+        ],
+        "multiSelection": true,
+      },
+      "instanceid": "GENDER_FILTER_ID",
+      "table": "Commerce",
+      "title": "Gender",
+    },
+  ],
+}
+`;
+
+exports[`baseFilterToFilterDto > should return correctly translated disabled filter 1`] = `
+{
+  "disabled": true,
+  "isCascading": false,
+  "jaql": {
+    "column": "Gender",
+    "datatype": "text",
+    "dim": "[Commerce.Gender]",
+    "filter": {
+      "members": [
+        "Female",
+      ],
+      "multiSelection": true,
+    },
+    "table": "Commerce",
+    "title": "Gender",
+  },
+}
+`;
+
+exports[`baseFilterToFilterDto > should return correctly translated exclude members filter 1`] = `
+{
+  "exclude": {
+    "members": [
+      "Female",
+    ],
+  },
+  "multiSelection": true,
+}
+`;
+
+exports[`baseFilterToFilterDto > should return correctly translated members filter with background filter 1`] = `
+{
+  "members": [
+    "Female",
+    "Male",
+  ],
+  "multiSelection": true,
+}
+`;
+
+exports[`baseFilterToFilterDto > should return correctly translated members filter with disabled members 1`] = `
+{
+  "filter": {
+    "exclude": {
+      "members": [
+        "Male",
+      ],
+    },
+    "turnedOff": true,
+  },
+  "members": [
+    "Female",
+    "Male",
+  ],
+  "multiSelection": true,
+}
+`;
+
+exports[`baseFilterToFilterDto > should return correctly translated ranking filter 1`] = `
+{
+  "bottom": 5,
+  "by": {
+    "agg": "sum",
+    "column": "Revenue",
+    "datatype": "numeric",
+    "dim": "[Commerce.Revenue]",
+    "table": "Commerce",
+    "title": "sum Revenue",
+  },
+  "rankingMessage": "sum Revenue",
+}
+`;
+
+exports[`baseFilterToFilterDto > should return correctly translated simple filter 1`] = `
+{
+  "disabled": false,
+  "isCascading": false,
+  "jaql": {
+    "column": "Gender",
+    "datatype": "text",
+    "dim": "[Commerce.Gender]",
+    "filter": {
+      "members": [
+        "Male",
+      ],
+      "multiSelection": true,
+    },
+    "table": "Commerce",
+    "title": "Gender",
+  },
+}
+`;

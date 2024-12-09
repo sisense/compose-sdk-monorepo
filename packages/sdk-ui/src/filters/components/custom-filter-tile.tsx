@@ -63,7 +63,7 @@ export const CustomFilterTile = asSisenseComponent({
 
   const getFilterWithToggledDisabled = (filter: Filter): Filter => {
     const newFilter = cloneDeep(filter);
-    newFilter.disabled = !filter.disabled;
+    newFilter.config.disabled = !filter.config.disabled;
     Object.setPrototypeOf(newFilter, filter);
     return newFilter;
   };
@@ -80,10 +80,10 @@ export const CustomFilterTile = asSisenseComponent({
           </div>
         );
       }}
-      disabled={filter.disabled}
+      disabled={filter.config.disabled}
       onToggleDisabled={() => onUpdate(getFilterWithToggledDisabled(filter))}
       design={tileDesignOptions || { header: { isCollapsible: false } }}
-      locked={filter.locked}
+      locked={filter.config.locked}
       onDelete={onDelete}
     />
   );

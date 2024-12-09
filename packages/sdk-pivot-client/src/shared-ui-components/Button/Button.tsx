@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
+import { DEPRECATED_Icon } from '@sisense/sdk-shared-ui/DEPRECATED_Icon';
 
 import styles from './Button.module.scss';
 

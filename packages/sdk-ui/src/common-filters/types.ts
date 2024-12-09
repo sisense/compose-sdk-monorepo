@@ -13,9 +13,26 @@ export enum CommonFiltersApplyMode {
  * Options for common filters defined at the dashboard level to be applied to certain widgets.
  */
 export type CommonFiltersOptions = {
+  /**
+   * Apply mode for common filters: 'highlight' or 'filter'.
+   */
   applyMode?: `${CommonFiltersApplyMode}`;
+  /**
+   * Boolean flag whether widget interactions – for example, selection of bars on a bar chart –
+   * should affect common filters.
+   *
+   * If not specified, the default value is `true`.
+   */
   shouldAffectFilters?: boolean;
+  /**
+   * Filters to ignore when applying common filters.
+   */
   ignoreFilters?: FiltersIgnoringRules;
+  /**
+   * Boolean flag whether to apply all background filters as slice filters ignoring "disabled" state and "ignoreFilters" rules
+   *
+   * If not specified, the default value is `true`.
+   */
   forceApplyBackgroundFilters?: boolean;
 };
 
@@ -23,7 +40,15 @@ export type CommonFiltersOptions = {
  * Filters ignoring rules.
  */
 export type FiltersIgnoringRules = {
+  /**
+   * Boolean flag whether to ignore all filters.
+   *
+   * If not specified, the default value is `false`.
+   */
   all?: boolean;
+  /**
+   * Filter GUIDs to ignore.
+   */
   ids?: string[];
 };
 

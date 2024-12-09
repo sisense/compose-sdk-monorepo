@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'lodash-es/isEqual';
 import isFunction from 'lodash-es/isFunction';
 
@@ -24,13 +24,14 @@ export function useSyncedState<T>(
   { onLocalStateChange, syncCompareFn = isEqual }: UseSyncedStateOptions<T> = {},
 ) {
   const [state, setState] = useState(syncValue);
+  const prevSyncValueRef = useRef(syncValue);
 
-  // Synchronize state with syncValue only if it has changed (by value)
+  // Synchronize state with syncValue only if syncValue has changed (by value)
   useEffect(() => {
-    setState((existingState) =>
-      // Returns the existing state if the current value hasn't changed. It doesn't provide state update or children re-render.
-      syncCompareFn(existingState, syncValue) ? existingState : syncValue,
-    );
+    if (!syncCompareFn(prevSyncValueRef.current, syncValue)) {
+      setState(syncValue);
+    }
+    prevSyncValueRef.current = syncValue;
   }, [syncValue, syncCompareFn]);
 
   // Updates the state and triggers the onLocalStateChange callback (if provided)

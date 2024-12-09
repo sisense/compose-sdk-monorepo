@@ -8,7 +8,8 @@ title: dateRelativeTo
   `level`,
   `offset`,
   `count`,
-  `anchor`?): [`Filter`](../../../interfaces/interface.Filter.md)
+  `anchor`?,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate items with a date dimension value within a specified range before a
 given date and level.
@@ -21,6 +22,7 @@ given date and level.
 | `offset` | `number` | Number of levels to skip from the given `anchor` or the default of the current day (e.g. `6` is 6 months when `level` is a months level attribute) |
 | `count` | `number` | Number of levels to include in the filter (e.g. `6` is 6 months when `level` is a months level attribute) |
 | `anchor`? | `Date` \| `string` | Date to filter to, defaults to the current day |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

@@ -15,14 +15,10 @@ import {
 
 describe('createCommonFiltersOverSelections()', () => {
   const filters: MembersFilter[] = [
-    filterFactory.members(
-      DM.Commerce.AgeRange,
-      ['0-18', '19-24'],
-      false,
-      '123',
-      [],
-    ) as MembersFilter,
-    filterFactory.members(DM.Commerce.Gender, ['Male'], false, '234', []) as MembersFilter,
+    filterFactory.members(DM.Commerce.AgeRange, ['0-18', '19-24'], {
+      guid: '123',
+    }) as MembersFilter,
+    filterFactory.members(DM.Commerce.Gender, ['Male'], { guid: '234' }) as MembersFilter,
   ];
 
   it('should create new filters by selections', () => {
@@ -58,7 +54,7 @@ describe('createCommonFiltersOverSelections()', () => {
     expect(createdFilters.length).toBe(1);
     expect(createdFilters[0].attribute).toEqual(DM.Commerce.AgeRange);
     expect((createdFilters[0] as MembersFilter).members).toEqual(['65+']);
-    expect(createdFilters[0].guid).toEqual(filters[0].guid);
+    expect(createdFilters[0].config.guid).toEqual(filters[0].config.guid);
     expect(isSelection).toBe(true);
   });
 
@@ -76,10 +72,10 @@ describe('createCommonFiltersOverSelections()', () => {
     expect(createdFilters.length).toBe(2);
     expect(createdFilters[0].attribute).toEqual(filters[0].attribute);
     expect((createdFilters[0] as MembersFilter).members).toEqual([]); // include all filter
-    expect(createdFilters[0].guid).toEqual(filters[0].guid);
+    expect(createdFilters[0].config.guid).toEqual(filters[0].config.guid);
     expect(createdFilters[1].attribute).toEqual(filters[1].attribute);
     expect((createdFilters[1] as MembersFilter).members).toEqual([]); // include all filter
-    expect(createdFilters[1].guid).toEqual(filters[1].guid);
+    expect(createdFilters[1].config.guid).toEqual(filters[1].config.guid);
     expect(isSelection).toBe(false);
   });
 
@@ -105,7 +101,7 @@ describe('createCommonFiltersOverSelections()', () => {
     expect(createdFilters.length).toBe(2);
     expect(createdFilters[0].attribute).toEqual(filters[0].attribute);
     expect((createdFilters[0] as MembersFilter).members).toEqual(['0-18']);
-    expect(createdFilters[0].guid).toEqual(filters[0].guid);
+    expect(createdFilters[0].config.guid).toEqual(filters[0].config.guid);
     expect(createdFilters[1].attribute).toEqual(DM.Commerce.Condition);
     expect((createdFilters[1] as MembersFilter).members).toEqual(['New']);
     expect(isSelection).toBe(true);
@@ -128,7 +124,7 @@ describe('createCommonFiltersOverSelections()', () => {
     expect(createdFilters.length).toBe(1);
     expect(createdFilters[0].attribute).toEqual(filters[0].attribute);
     expect((createdFilters[0] as MembersFilter).members).toEqual(['19-24']); // excluded '0-18'
-    expect(createdFilters[0].guid).toEqual(filters[0].guid);
+    expect(createdFilters[0].config.guid).toEqual(filters[0].config.guid);
     expect(isSelection).toBe(false);
   });
 });

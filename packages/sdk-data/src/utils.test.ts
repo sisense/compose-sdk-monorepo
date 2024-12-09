@@ -1,38 +1,47 @@
-import { createFilterFromJaql, DataSourceInfo, DataType, Filter, MembersFilter } from './index.js';
+import {
+  CascadingFilter,
+  createFilterFromJaql,
+  DataSourceInfo,
+  DataType,
+  MembersFilter,
+} from './index.js';
 import {
   getDataSourceName,
-  getFilterListAndRelations,
+  getFilterListAndRelationsJaql,
   guidFast,
   isDataSourceInfo,
 } from './utils.js';
 import { describe } from 'vitest';
 import * as filterFactory from './dimensional-model/filters/factory.js';
+import * as DM from './__test-helpers__/sample-ecommerce.js';
+
 import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
 
-const mockFilter1 = { guid: 'filter-1', name: 'Filter 1' } as Filter;
-const mockFilter2 = { guid: 'filter-2', name: 'Filter 2' } as Filter;
+const filter1 = filterFactory.members(DM.Category.Category, ['Cell Phones', 'GPS Devices']);
+const filter2 = filterFactory.exclude(filterFactory.contains(DM.Country.Country, 'A'));
+const filter3 = filterFactory.members(DM.Commerce.Gender, ['Male']);
 
 const mockSimpleFilterRelations = {
   operator: 'OR' as const,
-  left: mockFilter1,
-  right: mockFilter2,
+  left: filter1,
+  right: filter2,
 };
 
 const mockNestedFilterRelations = {
   operator: 'AND' as const,
-  left: mockFilter1,
+  left: filter1,
   right: mockSimpleFilterRelations,
 };
 
 const simpleFilterRelationsResult = {
   operator: 'OR' as const,
-  left: { instanceid: mockFilter1.guid },
-  right: { instanceid: mockFilter2.guid },
+  left: { instanceid: filter1.config.guid },
+  right: { instanceid: filter2.config.guid },
 };
 
 const nestedFilterRelationsResult = {
   operator: 'AND' as const,
-  left: { instanceid: mockFilter1.guid },
+  left: { instanceid: filter1.config.guid },
   right: simpleFilterRelationsResult,
 };
 
@@ -59,32 +68,51 @@ describe('utils', () => {
       expect(guids[0]).not.toBe(guids[1]);
     });
   });
-  describe('getFilterListAndRelations', () => {
+  describe('getFilterListAndRelationsJaql', () => {
     test('should return undefined filters and undefined relations when input is undefined', () => {
-      const result = getFilterListAndRelations(undefined);
+      const result = getFilterListAndRelationsJaql(undefined);
       expect(result.filters).toBeUndefined();
       expect(result.relations).toBeUndefined();
     });
     test('should return filter list and undefined relations when input is an empty array', () => {
-      const result = getFilterListAndRelations([]);
+      const result = getFilterListAndRelationsJaql([]);
       expect(result.filters).toEqual([]);
       expect(result.relations).toBeUndefined();
     });
     test('should return filter list and undefined relations when input is an array of filters', () => {
-      const filterArray = [mockFilter1, mockFilter2];
-      const result = getFilterListAndRelations(filterArray);
+      const filterArray = [filter1, filter2];
+      const result = getFilterListAndRelationsJaql(filterArray);
       expect(result.filters).toEqual(filterArray);
       expect(result.relations).toBeUndefined();
     });
     test('should return filter list and relations when input is a simple FilterRelations', () => {
-      const result = getFilterListAndRelations(mockSimpleFilterRelations);
-      expect(result.filters).toEqual([mockFilter1, mockFilter2]);
+      const result = getFilterListAndRelationsJaql(mockSimpleFilterRelations);
+      expect(result.filters).toEqual([filter1, filter2]);
       expect(result.relations).toEqual(simpleFilterRelationsResult);
     });
     test('should return filter list and relations when input is a nested FilterRelations', () => {
-      const result = getFilterListAndRelations(mockNestedFilterRelations);
-      expect(result.filters).toEqual([mockFilter1, mockFilter2]);
+      const result = getFilterListAndRelationsJaql(mockNestedFilterRelations);
+      expect(result.filters).toEqual([filter1, filter2]);
       expect(result.relations).toEqual(nestedFilterRelationsResult);
+    });
+    test('should correctly handle FilterRelations with cascading filters', () => {
+      const cascadingFilter: CascadingFilter = new CascadingFilter([filter2, filter3]);
+      const filterRelationsWithCascading = {
+        operator: 'OR' as const,
+        left: filter1,
+        right: cascadingFilter,
+      };
+      const result = getFilterListAndRelationsJaql(filterRelationsWithCascading);
+      expect(result.filters).toEqual([filter1, filter2, filter3]);
+      expect(result.relations).toEqual({
+        left: { instanceid: filter1.config.guid },
+        operator: 'OR',
+        right: {
+          left: { instanceid: filter2.config.guid },
+          operator: 'AND',
+          right: { instanceid: filter3.config.guid },
+        },
+      });
     });
   });
 
@@ -148,7 +176,7 @@ describe('utils', () => {
       expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
     });
 
-    test('should creact MembersFilter with inner background filter', () => {
+    test('should create MembersFilter with inner background filter', () => {
       const jaql = {
         table: 'Category',
         column: 'Category',
@@ -165,22 +193,17 @@ describe('utils', () => {
         title: 'Category',
       };
 
-      const filter = createFilterFromJaql(jaql, instanceid);
-
+      const filter = createFilterFromJaql(jaql, instanceid) as MembersFilter;
       const attribute = createAttributeFromFilterJaql(jaql);
-      const backgroundFilter = filterFactory.members(attribute, jaql.filter.filter.members);
-      const expectedFilter = filterFactory.members(
-        attribute,
-        jaql.filter.members,
-        false,
-        undefined,
-        undefined,
-        backgroundFilter,
-      );
+
+      const expectedFilter = filterFactory.members(attribute, jaql.filter.members, {
+        guid: 'id-123',
+        backgroundFilter: filterFactory.members(attribute, jaql.filter.filter.members),
+      }) as MembersFilter;
 
       expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
-      expect((filter as MembersFilter).backgroundFilter).toBeDefined();
-      expect((expectedFilter as MembersFilter).backgroundFilter).toBeDefined();
+      expect(filter.config.backgroundFilter).toBeDefined();
+      expect(expectedFilter.config.backgroundFilter).toBeDefined();
     });
   });
 });

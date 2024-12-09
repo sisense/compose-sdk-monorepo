@@ -7,7 +7,8 @@ title: between
 > **between**(
   `attribute`,
   `valueA`,
-  `valueB`): [`Filter`](../../../interfaces/interface.Filter.md)
+  `valueB`,
+  `config`?): [`Filter`](../../../interfaces/interface.Filter.md)
 
 Creates a filter to isolate attribute values within or exactly matching two specified numerical boundaries.
 
@@ -18,6 +19,7 @@ Creates a filter to isolate attribute values within or exactly matching two spec
 | `attribute` | [`Attribute`](../../../interfaces/interface.Attribute.md) | Numeric attribute to filter on |
 | `valueA` | `number` | Value to filter from |
 | `valueB` | `number` | Value to filter to |
+| `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 
 ## Returns
 

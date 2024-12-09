@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.25.0] - 2024-12-09
+
+### Added
+- Support persistence of filters for embedded Fusion dashboards using flag `DashboardByIdProps.persist` (alpha)
+- Add `FilterRelations` support for dashboards
+- Add package `@sisense/sdk-shared-ui`
+
+### Changed
+- Extend `filterFactory` functions to support the `config` param
+- Support alternative API calls for dashboard and widgets fetch with WAT
+- Use translation language for date locale
+- Extend Widget Embed Code to support code snippets for execute query
+- Fix date format in `MemberFilterTile`
+- Handle losing widgets' inner state on the update of `DashboardProps`
+- Improve testing: visual tests with new Sisense theme, tests for execute query
+- Improve pivot table: correct the display of `rowsPerPage`, adjust the last row sorting, handle `isAutoHeight` in Dashboard layout and "No Results" case
+- Improve AI `Chatbot`: allow disabling query recommendations, show all data models queryable, apply filters to `NlqChartWidget`
+
 ## [1.24.0] - 2024-11-25
 
 ### Added
@@ -16,7 +34,7 @@
 - Add callback `onDataReady` to `TableProps` and `NlqChartWidgetProps` for internal testing
 - Handle date offset in `RelativeDateFilterTile` correctly
 - Improve Widget Embed Code in Fusion: unsupported chart type
-- Improve charts: `Treemap` tooltip with translations, display of labels on `PieChart`
+- Improve charts: `TreemapChart` tooltip with translations, display of labels on `PieChart`
 - Improve advanced charts: display of errors in widget header
 
 

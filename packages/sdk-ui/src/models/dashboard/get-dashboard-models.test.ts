@@ -17,8 +17,13 @@ const dashboardsMock: DashboardDto[] = [
   samplePivotDashboard,
 ];
 
+const dashboardsWithDuplicateMock = [
+  ...dashboardsMock,
+  { ...sampleEcommerceDashboard, isCoAuthored: true },
+];
+
 const getDashboardsMock = vi.fn(({ expand, searchByTitle } = {}): unknown => {
-  return dashboardsMock
+  return dashboardsWithDuplicateMock
     .map((dashboardMock) => {
       const result = { ...dashboardMock };
 

@@ -9,7 +9,7 @@ import {
   DataSource,
   Filter,
   FilterRelations,
-  getFilterListAndRelations,
+  getFilterListAndRelationsJaql,
   JaqlDataSource,
   Measure,
 } from '@sisense/sdk-data';
@@ -75,7 +75,7 @@ export const useGetNlgQueryResultInternal = (
     } else {
       const dataSource: JaqlDataSource = convertJaqlDataSource(params.dataSource);
 
-      const { filters = [], relations } = getFilterListAndRelations(params.filters);
+      const { filters = [], relations } = getFilterListAndRelationsJaql(params.filters);
       const { metadata, filterRelations } = getJaqlQueryPayload(
         {
           dataSource: params.dataSource,

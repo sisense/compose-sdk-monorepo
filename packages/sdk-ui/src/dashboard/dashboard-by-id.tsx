@@ -42,7 +42,7 @@ export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',
 })(({ dashboardOid, persist = false }: DashboardByIdProps) => {
   const { themeSettings } = useThemeContext();
-  const { dashboard, isLoading, isError, dispatchChanges } = useDashboardModel({
+  const { dashboard, isLoading, isError, error, dispatchChanges } = useDashboardModel({
     dashboardOid,
     includeWidgets: true,
     includeFilters: true,
@@ -59,7 +59,8 @@ export const DashboardById = asSisenseComponent({
     [dispatchChanges],
   );
 
-  if (isError) throw new TranslatableError('errors.dashboardLoadFailed');
+  if (isError && error)
+    throw new TranslatableError('errors.dashboardLoadFailed', { error: error.message });
 
   return (
     <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>

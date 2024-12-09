@@ -54,7 +54,7 @@ The default data source to use for the dashboard
 
 ### filters
 
-> **`readonly`** **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **`readonly`** **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 The dashboard filters to be applied to each of the widgets based on the widget filter options
 

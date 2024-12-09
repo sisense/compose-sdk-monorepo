@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { CascadingFilter, filterFactory, type MembersFilter } from '@sisense/sdk-data';
+import { CascadingFilter, filterFactory } from '@sisense/sdk-data';
 import { SisenseContextProviderProps } from '@/index';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
@@ -26,8 +26,8 @@ describe('CascadingFilterTile', () => {
     server.use(
       http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
     );
-    const topFilter = filterFactory.members(DM.Commerce.Gender, ['Unspecified']) as MembersFilter;
-    const bottomFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18']) as MembersFilter;
+    const topFilter = filterFactory.members(DM.Commerce.Gender, ['Unspecified']);
+    const bottomFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18']);
 
     cascadingFilter = new CascadingFilter([topFilter, bottomFilter]);
   });
@@ -56,13 +56,19 @@ describe('CascadingFilterTile', () => {
       http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
     );
 
-    const topFilter = filterFactory.members(DM.Commerce.Gender, ['Unspecified']) as MembersFilter;
-    const bottomFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18']) as MembersFilter;
-
-    topFilter.locked = true;
-    bottomFilter.locked = true;
-    const lockedCascadingFilter = new CascadingFilter([topFilter, bottomFilter]);
-    lockedCascadingFilter.locked = true;
+    const config = { locked: true };
+    const topFilter = filterFactory.members(DM.Commerce.Gender, ['Unspecified'], {
+      ...config,
+      guid: 'member1',
+    });
+    const bottomFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18'], {
+      ...config,
+      guid: 'member2',
+    });
+    const lockedCascadingFilter = new CascadingFilter([topFilter, bottomFilter], {
+      ...config,
+      guid: 'cascading1',
+    });
 
     const { container } = render(
       <SisenseContextProvider {...contextProviderProps}>
@@ -95,9 +101,9 @@ describe('CascadingFilterTile', () => {
     const toggle = await screen.findByRole('switch');
     toggle.click();
     // check if cascading filter and all internal filters are disabled
-    expect(updatedFilter && updatedFilter.disabled).toBe(true);
+    expect(updatedFilter && updatedFilter.config.disabled).toBe(true);
     updatedFilter!.filters.forEach((filter) => {
-      expect(filter.disabled).toBe(true);
+      expect(filter.config.disabled).toBe(true);
     });
   });
 });

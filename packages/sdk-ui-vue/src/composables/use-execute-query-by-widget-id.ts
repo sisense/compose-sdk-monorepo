@@ -1,4 +1,4 @@
-import { getFilterListAndRelations } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import type {
   ClientApplication,
   ExecuteQueryByWidgetIdParams,
@@ -76,7 +76,7 @@ export const useExecuteQueryByWidgetId = (
     try {
       dispatch({ type: 'loading' });
       const { filters, ...rest } = toPlainObject(params);
-      const { filters: filterList } = getFilterListAndRelations(toPlainValue(filters));
+      const { filters: filterList } = getFilterListAndRelationsJaql(toPlainValue(filters));
       const {
         data,
         query: resQuery,
