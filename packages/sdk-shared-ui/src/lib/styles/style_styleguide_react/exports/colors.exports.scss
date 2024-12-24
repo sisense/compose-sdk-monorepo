@@ -1,0 +1,69 @@
+@import '../colors.scss';
+
+:export {
+  highlightListItem: $highlightListItem;
+  listItemHover: $listItemHover;
+  captionUnder: $captionUnder;
+  commonLinkBlue: $commonLinkBlue;
+  fore: $fore;
+  wizardFore: $fore;
+  foreDisabled: $foreDisabled;
+  foreHeader: $foreHeader;
+  foreSubtitle: $foreSubtitle;
+  forePlaceholder: $forePlaceholder;
+  foreNonchosen: $foreNonchosen;
+  foreHover: $foreHover;
+  textSearch: $textSearch;
+  stepCaption: $stepCaption;
+  captionUnder: $captionUnder;
+  title: $title;
+  textCode: $textCode;
+
+  back: $back;
+  backHover: $backHover;
+  backDisabled: $backDisabled;
+  backHeader: $backHeader;
+  backToolbar: $backToolbar;
+  separator: $separator;
+  wizardSeparator: $wizardSeparator;
+  lightSeparator: $lightSeparator;
+  lineSeparator: $lineSeparator;
+  listItemHover: $listItemHover;
+
+  border: $border;
+  borderSearch: $borderSearch;
+  borderSeparator: $borderSeparator;
+  borderJaqlEditor: $borderJaqlEditor;
+  scrollbarHovered: $scrollbarHovered;
+  buttonCancel: $buttonCancel;
+  buttonCancelHovered: $buttonCancelHovered;
+  buttonCancelText: $buttonCancelText;
+  buttonOk: $buttonOk;
+  buttonOkText: $buttonOkText;
+  buttonNext: $buttonNext;
+  buttonOkHovered: $buttonOkHovered;
+  buttonSecondary: $buttonSecondary;
+  buttonSecondaryHovered: $buttonSecondaryHovered;
+  buttonSecondaryDisabled: $buttonSecondaryDisabled;
+
+  hyperlink: $hyperlink;
+  hyperlinkHovered: $hyperlinkHovered;
+
+  errRed: $errRed;
+  negativeSign: $negativeSign;
+  positiveSign: $positiveSign;
+  noResults: $noResults;
+  selectedItem: $selectedItem;
+  selectedItemBackground: $selectedItemBackground;
+  highlight: $highlight;
+  highlightListItem: $highlightListItem;
+  highlightOrange: $highlightOrange;
+
+  color1: $color1;
+  color2: $color2;
+  color3: $color3;
+  color4: $color4;
+  color5: $color5;
+  color6: $color6;
+  color7: $color7;
+}

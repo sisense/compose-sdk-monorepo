@@ -88,6 +88,18 @@ describe('widgetComposer', () => {
         MOCK_CODE_VUE_1,
       );
     });
+    it('should compose client-side widget code for pivot widget type in Vue', () => {
+      if ('widgetProps' in widgetCodeParams) widgetCodeParams.widgetProps.widgetType = 'pivot';
+      expect(widgetComposer.toWidgetCode({ ...widgetCodeParams, uiFramework: 'vue' })).toBe(
+        'Not implemented yet',
+      );
+    });
+    it('should compose client-side widget code for pivot widget type in Angular', () => {
+      if ('widgetProps' in widgetCodeParams) widgetCodeParams.widgetProps.widgetType = 'pivot';
+      expect(widgetComposer.toWidgetCode({ ...widgetCodeParams, uiFramework: 'angular' })).toBe(
+        'Not implemented yet',
+      );
+    });
   });
 
   describe('toWidgetCode By ID', () => {

@@ -6,6 +6,7 @@ import { AppSettings } from '@/app/settings/settings';
 import { TranslatableError } from '@/translation/translatable-error';
 import { getWidgetIdsFromDashboard } from '@/utils/extract-widget-ids';
 import { WidgetDto } from '@/widget-by-id/types';
+import { withSharedFormulas } from './translate-dashboard-utils';
 
 export interface GetDashboardModelOptions {
   /**
@@ -96,5 +97,7 @@ export async function getDashboardModel(
     }
   }
 
-  return dashboardModelTranslator.fromDashboardDto(dashboard, themeSettings, appSettings);
+  const dashboardDto = await withSharedFormulas(dashboard, api);
+
+  return dashboardModelTranslator.fromDashboardDto(dashboardDto, themeSettings, appSettings);
 }

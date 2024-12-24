@@ -10,7 +10,7 @@ import {
   type DataSource,
 } from '@sisense/sdk-data';
 import { useSisenseContext } from '../sisense-context/sisense-context';
-import { HierarchyDto, WidgetDto } from '../widget-by-id/types';
+import { HierarchyDto, SharedFormulaDto, WidgetDto } from '../widget-by-id/types';
 import type { DashboardDto } from './types/dashboard-dto';
 import { TranslatableError } from '../translation/translatable-error';
 import { PaletteDto } from '@/api/types/palette-dto';
@@ -195,6 +195,36 @@ export class RestApi {
   public addWidgetToDashboard = (dashboardOid: string, widgetDto: WidgetDto) => {
     return this.httpClient.post<WidgetDto>(`api/v1/dashboards/${dashboardOid}/widgets`, widgetDto);
   };
+
+  /**
+   * Get shared formulas by ids
+   * @param sharedFormulasIds - An array of shared formulas ids
+   * @returns A dictionary of shared formulas
+   */
+  public getSharedFormulas = async (
+    sharedFormulasIds: string[],
+  ): Promise<Record<string, SharedFormulaDto>> => {
+    const sharedFormulas = await Promise.all(sharedFormulasIds.map(this.getSharedFormula));
+    return sharedFormulas.filter(isSharedFormulaDto).reduce((acc, sharedFormula) => {
+      acc[sharedFormula.oid] = sharedFormula;
+      return acc;
+    }, {});
+  };
+
+  /**
+   * Get a shared formula by id
+   * @param sharedFormulaId - A shared formula id
+   * @returns A shared formula
+   */
+  public getSharedFormula = async (sharedFormulaId: string) => {
+    return this.httpClient.get<SharedFormulaDto>(`api/v1/formulas/${sharedFormulaId}`);
+  };
+}
+
+function isSharedFormulaDto(
+  sharedFormula: SharedFormulaDto | undefined,
+): sharedFormula is SharedFormulaDto {
+  return !!sharedFormula;
 }
 
 export const useRestApi = () => {

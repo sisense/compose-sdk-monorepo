@@ -203,7 +203,7 @@ import { WidgetById } from '@sisense/sdk-ui-vue';
 export const MOCK_CODE_EXECUTE_QUERY_REACT_1 = `import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui';
 
 const CodeExample = () => {
-  const { data, isLoading, isError } = useExecuteQueryByWidgetId({
+  const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
     widgetOid: "SOME_WIDGET_BY_ID",
     dashboardOid: "SOME_DASHBOARD_OID"
   });
@@ -212,7 +212,7 @@ const CodeExample = () => {
     return <div>Loading...</div>;
   }
   if (isError) {
-    return <div>Error</div>;
+    return <div>Error: {error.message}</div>;
   }
   if (data) {
     return <div>Total Rows: {data.rows.length}</div>;
@@ -230,20 +230,31 @@ import { type QueryResultData } from '@sisense/sdk-data';
 
 @Component({
   selector: 'code-example',
-  template: '<div>Total Rows: {{ queryResult.rows.length }}</div>',
+  template: \`<div>
+    <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
+    <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>
+  </div>\`,
 })
 
 export class CodeExample {
     queryResult: QueryResultData = { rows: [], columns: [] };
 
+    errorMessage: string | null = null;
+
     constructor(private queryService: QueryService) {}
 
     async ngOnInit(): Promise<void> {
-      const { data } = await this.queryService.executeQueryByWidgetId({
-        widgetOid: "SOME_WIDGET_BY_ID",
-        dashboardOid: "SOME_DASHBOARD_OID",
-      });
-      this.queryResult = data as QueryResultData;
+      try {
+        const { data } = await this.queryService.executeQueryByWidgetId({
+          widgetOid: "SOME_WIDGET_BY_ID",
+          dashboardOid: "SOME_DASHBOARD_OID",
+        });
+        this.queryResult = data as QueryResultData;
+      } catch(error: unknown) {
+        if (error instanceof Error) {
+          this.errorMessage = error.message;
+        }
+      }
     }
 }
 `;
@@ -251,7 +262,7 @@ export class CodeExample {
 export const MOCK_CODE_EXECUTE_QUERY_VUE_1 = `<script setup lang="ts">
 import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui-vue';
 
-const { data, isLoading, isError } = useExecuteQueryByWidgetId({
+const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
   widgetOid: "SOME_WIDGET_BY_ID",
   dashboardOid: "SOME_DASHBOARD_OID"
 });
@@ -259,7 +270,7 @@ const { data, isLoading, isError } = useExecuteQueryByWidgetId({
 <template>
   <div>
     <div v-if="isLoading">Loading...</div>
-    <div v-else-if="isError">Error</div>
+    <div v-else-if="isError">Error: {{error.message}}</div>
     <div v-else-if="data">Total Rows: {{data.rows.length}}</div>
   </div>
 </template>
@@ -278,13 +289,13 @@ const CodeExample = () => {
     highlights: [],
   }
 
-  const { data, isLoading, isError } = useExecuteQuery(queryProps);
+  const { data, isLoading, isError, error } = useExecuteQuery(queryProps);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (isError) {
-    return <div>Error</div>;
+    return <div>Error: {error.message}</div>;
   }
   if (data) {
     return <div>Total Rows: {data.rows.length}</div>;

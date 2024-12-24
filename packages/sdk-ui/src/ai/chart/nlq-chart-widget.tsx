@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ChartWidget } from '@/widgets/chart-widget';
 import { widgetComposer } from '@/analytics-composer';
 import { ChartInsights } from '@/ai/chart/chart-insights';
-import { Filter, Data } from '@sisense/sdk-data';
+import { Filter, Data, MetadataItem } from '@sisense/sdk-data';
 import type { NlqResponseData } from '@/ai';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { useGetNlgQueryResultInternal } from '@/ai/use-get-nlg-query-result';
@@ -59,18 +59,46 @@ export interface NlqChartWidgetProps {
  */
 export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqChartWidgetProps) => {
   const { t } = useTranslation();
-  const { connectToWidgetProps } = useCommonFilters({ initialFilters: filters });
+  const { connectToWidgetProps } = useCommonFilters({
+    initialFilters: filters,
+  });
   const [chartWidgetProps, setChartWidgetProps] = useState<WidgetProps | null>(null);
 
   useEffect(() => {
-    const w = widgetComposer.toWidgetProps(nlqResponse, {
+    const widgetProps = widgetComposer.toWidgetProps(nlqResponse, {
       useCustomizedStyleOptions: true,
     });
-    if (!w) setChartWidgetProps(null);
-    else setChartWidgetProps(connectToWidgetProps(w));
+    if (!widgetProps) setChartWidgetProps(null);
+    else {
+      const connectedProps = connectToWidgetProps(widgetProps, {
+        shouldAffectFilters: false,
+        applyMode: 'filter',
+      });
+
+      setChartWidgetProps(connectedProps);
+    }
   }, [nlqResponse, connectToWidgetProps]);
 
-  const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlqResponse);
+  const nlqResponseWithFilters = useMemo(() => {
+    const filters =
+      chartWidgetProps &&
+      isChartWidgetProps(chartWidgetProps) &&
+      Array.isArray(chartWidgetProps.filters)
+        ? chartWidgetProps.filters
+        : [];
+
+    const metadata = nlqResponse.jaql.metadata
+      .filter((meta) => !meta.jaql.filter)
+      .concat(
+        filters
+          .filter((filter) => !filter.config.disabled)
+          .map((filter) => filter.jaql() as MetadataItem),
+      );
+
+    return { ...nlqResponse, jaql: { ...nlqResponse.jaql, metadata } };
+  }, [nlqResponse, chartWidgetProps]);
+
+  const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlqResponseWithFilters);
 
   if (isLoading || !chartWidgetProps) {
     return <LoadingDotsIcon />;
@@ -85,12 +113,13 @@ export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqCh
   return (
     <ChartWidget
       {...chartWidgetProps}
+      highlightSelectionDisabled={true}
       onDataReady={onDataReady}
       topSlot={
         isError ? (
           t('ai.errors.unexpected')
         ) : (
-          <ChartInsights nlgRequest={nlqResponse} summary={summary}></ChartInsights>
+          <ChartInsights nlgRequest={nlqResponseWithFilters} summary={summary}></ChartInsights>
         )
       }
     ></ChartWidget>

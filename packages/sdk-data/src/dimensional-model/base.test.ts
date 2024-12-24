@@ -5,6 +5,10 @@ describe('normalizeName', () => {
     expect(normalizeName('my!name!is!awesome!')).toBe('mynameisawesome');
   });
 
+  it('should replace all dots with underscores', () => {
+    expect(normalizeName('my.name.is.awesome')).toBe('my_name_is_awesome');
+  });
+
   it('should prefix name with underscore if it starts with a non-alphabetical character', () => {
     expect(normalizeName('123name')).toBe('_123name');
   });

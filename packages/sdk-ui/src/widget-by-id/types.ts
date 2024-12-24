@@ -1,6 +1,13 @@
 import { WidgetContainerStyleOptions } from '../types';
 import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
-import { BaseJaql, Jaql, JaqlDataSource, JaqlSortDirection } from '@sisense/sdk-data';
+import {
+  BaseJaql,
+  FormulaContext,
+  FormulaJaql,
+  Jaql,
+  JaqlDataSource,
+  JaqlSortDirection,
+} from '@sisense/sdk-data';
 import { HierarchyId } from '@/models/hierarchy';
 
 /**
@@ -291,7 +298,7 @@ export type PanelItem = {
     width?: number;
     colorIndex?: number;
   };
-  jaql: Jaql;
+  jaql: WidgetJaql;
   disabled?: boolean;
   y2?: boolean;
   parent?: PanelItem;
@@ -308,6 +315,29 @@ export type PanelItem = {
   panel?: string;
   hierarchies?: HierarchyId[];
 };
+
+type WidgetJaql = Jaql | SharedFormulaJaql;
+export function isJaqlWithFormula(jaql: WidgetJaql): jaql is FormulaJaql | SharedFormulaJaql {
+  return 'formula' in jaql;
+}
+
+type SharedFormulaJaql = FormulaJaql & {
+  context?: Record<string, FormulaContext | SharedFormulaReferenceContext> | undefined;
+};
+
+export type SharedFormulaDto = FormulaJaql & {
+  oid: string;
+};
+
+export type SharedFormulaReferenceContext = {
+  formulaRef: string;
+};
+
+export function isSharedFormulaReferenceContext(
+  context: FormulaContext | SharedFormulaReferenceContext,
+): context is SharedFormulaReferenceContext {
+  return 'formulaRef' in context;
+}
 
 export type PanelColorFormat =
   | PanelColorFormatSingle

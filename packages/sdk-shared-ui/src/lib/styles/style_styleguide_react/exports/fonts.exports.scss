@@ -1,0 +1,33 @@
+@import '../fonts.scss';
+
+:export {
+  paddingLarge: $paddingLarge;
+
+  /* fonts families */
+  font: $font;
+  fontHeader: $fontHeader, 'PT Sans Narrow';
+  fontFacelift: $fontFacelift;
+  fontFamily: $fontFamily;
+
+  /* sizes */
+  sizeSmall: $sizeSmall;
+  sizeMedium: $sizeMedium;
+  sizeLarge: $sizeLarge;
+  sizeMediumModal: $sizeMediumModal;
+  sizeDefault: $sizeMedium;
+
+  /* padding */
+  paddingLarge: $paddingLarge;
+  paddingSmall: $paddingSmall;
+
+  /* height */
+  heightMedium: $heightMedium;
+  heightLarge: $heightLarge;
+
+  /* line height */
+  lineHeightMedium: $lineHeightMedium;
+  lineHeightLarge: $lineHeightLarge;
+
+  /* font weight */
+  fontWeightBold: $fontWeightBold;
+}

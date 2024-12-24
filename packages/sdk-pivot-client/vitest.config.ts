@@ -9,12 +9,12 @@ const config: ViteUserConfig = {
         // temporarily exclude source files until
         // we move the test files from pivot2 over to this package
         'src/**',
-        '!src/shared-ui-components/Button/**/*.tsx',
         '!src/shared-ui-components/CheckableList/**/*.tsx',
         '!src/shared-ui-components/DEPRECATED_Checkbox/**/*.tsx',
         '!src/shared-ui-components/DropdownButtonBody/**/*.tsx',
         '!src/shared-ui-components/Input/**/*.tsx',
         '!src/shared-ui-components/Menu/MenuItem/**/*.tsx',
+        '!src/components/SortingSettings/Complex/**/*.test.tsx',
       ],
     },
   },

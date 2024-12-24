@@ -1,5 +1,5 @@
 {
-  "version": "1.25.0",
+  "version": "1.26.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -54,6 +54,7 @@
     "demo:angular": "yarn workspace @sisense/angular-demo start",
     "build": "yarn nx:build",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
+    "storybook:dev": "nx run-many --exclude @sisense/root -t  storybook:dev",
     "build:prod": "yarn nx:build:prod",
     "build:changed:prod": "yarn workspaces foreach --since=origin/master --verbose  --verbose --topological --no-private -R run build:prod",
     "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output && nx reset",

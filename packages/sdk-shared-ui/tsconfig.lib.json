@@ -15,7 +15,8 @@
     "**/*.spec.jsx",
     "**/*.test.jsx",
     "dist",
-    "node_modules"
+    "node_modules",
+    "**/*.stories.tsx"
   ],
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
 }

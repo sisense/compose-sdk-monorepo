@@ -449,6 +449,26 @@ describe('Chart', () => {
     expect(overlayTitle).toBeTruthy();
   });
 
+  it('should show No Results overlay in Chart when no dimension is provided', async () => {
+    const container = render(
+      <Chart
+        dataSet={{
+          columns: dataSet.columns,
+          rows: [],
+        }}
+        chartType={'line'}
+        dataOptions={{
+          // empty data options
+          category: [],
+          value: [],
+          breakBy: [],
+        }}
+      />,
+    );
+    const overlayTitle = await container.findByText('No Results');
+    expect(overlayTitle).toBeTruthy();
+  });
+
   it('should show No Results overlay in Table when data missing', async () => {
     const container = render(
       <Table

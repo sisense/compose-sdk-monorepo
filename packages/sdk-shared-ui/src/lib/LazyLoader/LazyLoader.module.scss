@@ -1,0 +1,18 @@
+// @import '~@sbi/styleguide/src/sass/components/_loader-two-dots.scss';
+
+.loader {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+
+  .caption {
+    margin-top: 50%;
+    word-break: break-word;
+    text-align: center;
+
+    span {
+      position: unset;
+    }
+  }
+}

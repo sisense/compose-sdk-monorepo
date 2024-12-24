@@ -10,7 +10,6 @@ import { configDefaults } from 'vitest/config';
 import * as fs from 'fs';
 import { join, resolve, relative } from 'path';
 import { env } from 'process';
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 
 const THRESHOLD_LINES = parseInt(env.DEV_APP_THRESHOLD_LINES || '70', 10);
 const THRESHOLD_FUNCTIONS = parseInt(env.DEV_APP_THRESHOLD_FUNCTIONS || '50', 10);
@@ -117,6 +116,24 @@ export default defineConfig(({ mode }) => ({
         'src/lib/index.ts',
         'src/lib/**/index.ts',
         'src/lib/@types/**/*',
+        'src/**/*.stories.tsx',
+        '.storybook/**/*',
+        'src/lib/Checkbox/**/*',
+        'src/lib/themes/**/*',
+        'src/lib/DEPRECATED_Toggle/**/*',
+        'src/lib/DEPRECATED_Tooltip/**/*',
+        'src/lib/constants/**/*',
+        'src/lib/Icon/**/*',
+        'src/lib/LazyLoader/**/*',
+        'src/lib/Popover/**/*',
+        'src/lib/RadioButton/**/*',
+        'src/lib/Tooltip/**/*',
+        'src/lib/Typography/**/*',
+        'src/lib/TablePagination/**/*',
+        'src/lib/Menu/**/*',
+        '!src/lib/Menu/**/MenuItem/MenuItem.test.tsx',
+        'src/lib/Dropdown/**/*',
+        '!src/lib/Dropdown/**/DropdownButtonBody/DropdownButtonBody.test.tsx',
       ],
     },
   },

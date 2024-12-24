@@ -1,0 +1,107 @@
+//----------------------- Colors ---------------------------
+
+$font-color-1: #56535b;
+$font-color-2: #9f9e9e;
+$font-color-3: #212633;
+$font-color-4: #c7c7c7;
+$delete: #fc7470;
+$gray-0: #f9f9f9;
+$gray-1: #f5f5f5;
+$gray-2: #e6e6e6;
+$gray-3: #e5e5e5;
+$gray-4: #dcdcdc;
+$gray-5: #dadada;
+$gray-6: #d8d8d8;
+$gray-7: #d5d5d5;
+$gray-8: #cdcdcd;
+$gray-9: #aaa;
+$gray-10: #999;
+$gray-11: #979797;
+$gray-12: #bababa;
+$gray-13: #3f4a5a;
+$gray-14: #56535b;
+$gray-15: #f2f2f2;
+$gray-16: #777;
+$gray-17: #e8e8e8;
+$gray-18: #56635b;
+$gray-19: #b8b8b8;
+$gray-20: #6d6d6d;
+$gray-21: #666;
+$gray-22: #7d7d7d;
+$gray-24: #747474;
+
+$back-revision: #444f67;
+$green-0: #6ed956;
+
+$turquoise-blue: #00b9c5;
+$turquoise-light-blue: #00daeb;
+
+$scroll-back: #c8c8c8;
+$scroll-back-hover: #56535b;
+
+$default-svg-color: #56535b;
+$default-svg-color-cancel: #ff8c9a;
+$default-svg-color-save: #65d049;
+$default-svg-color-add: #00daeb;
+$default-svg-color-login: #2c3342;
+
+$baaaase-color: #2c3342;
+
+// background
+
+$back: #fff;
+$back-zone: $gray-15;
+$back-container: #fff;
+$back-hover: #ffff9c;
+
+$back-alternating: #f8f8f8;
+$back-cancel: #cecece;
+$back-cancel-hover: #fc7571;
+$back-cancel-accented: #fa8a8a;
+$back-ok: #6ed855;
+$back-ok-hover: #6ee555;
+$back-header: #e7e7e7;
+$back-toolbar: #fafafa;
+
+$button-yes: #57ba3e;
+$button-no: #fe746e;
+$button-yes-hovered: #6ad44f;
+$button-no-hovered: #fb9995;
+
+$border-ltgray: $gray-2;
+
+$border-toolbar: $gray-9;
+$background-toolbar: #f6f6f6;
+
+// foregound
+
+$fore: #272a34;
+$fore-disabled: #b3b3b3;
+$fore-header: $baaaase-color;
+$fore-subtitle: $fore-disabled;
+$fore-placeholder: #ececec;
+$fore-nonchosen: $gray-14;
+$x-blue: #00dae9;
+$common-link-blue: #008db8;
+$err-red: #fa7573;
+$selected-item: #01cbd9;
+
+//----------------------- Sizing ---------------------------
+
+$size-header-xl: 24px;
+$size-header-l: 16px;
+$size-header-m: 15px;
+$size-header-s: 13px;
+$size-exception-mn: 14px;
+$size-body-xl: 16px;
+$size-body-l: 13px;
+$size-body-m: 12.5px;
+$size-body-s: 12px;
+$size-body-xs: 11px;
+$size-fl-icon: 24px;
+
+$button-ok-cancel-height: 36px;
+
+$scroll-width: 8px;
+
+$border-elements: 1px solid $gray-7;

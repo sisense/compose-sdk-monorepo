@@ -6,6 +6,11 @@ export interface ChatContext {
   live: boolean;
 }
 
+export interface TextMessage {
+  role: 'assistant';
+  content: string; // stringified json { answer: string }
+  type: 'text';
+}
 export interface NlqMessage {
   role: 'assistant';
   content: string; // stringified json
@@ -15,7 +20,7 @@ interface RegularMessage {
   role: 'user' | 'assistant';
   content: string;
 }
-export type ChatMessage = RegularMessage | NlqMessage;
+export type ChatMessage = RegularMessage | NlqMessage | TextMessage;
 
 export interface Chat {
   chatId: string;

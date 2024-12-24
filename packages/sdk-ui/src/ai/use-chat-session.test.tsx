@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { Chat } from './api/types';
-import { useChatSession } from './use-chat-session';
+import { Chat, ChatMessage } from './api/types';
+import { isNlqMessage, isTextMessage, useChatSession } from './use-chat-session';
 import { AiTestWrapper } from './__mocks__';
 import { contexts } from './__mocks__/data';
 import { http, HttpResponse } from 'msw';
@@ -97,5 +97,23 @@ describe('useChatSession', () => {
     await waitFor(() => expect(result.current.chatId).toBeUndefined());
 
     expect(cache.chats).toHaveLength(0);
+  });
+
+  it('should check message type of chat message', () => {
+    const textMessage: ChatMessage = {
+      type: 'text',
+      content: 'Hello',
+      role: 'assistant',
+    };
+    const nlqMessage: ChatMessage = {
+      type: 'nlq',
+      content: '{"data": "something"}',
+      role: 'assistant',
+    };
+
+    expect(isNlqMessage(nlqMessage)).toBeTruthy();
+    expect(isTextMessage(textMessage)).toBeTruthy();
+    expect(isNlqMessage(textMessage)).toBeFalsy();
+    expect(isTextMessage(nlqMessage)).toBeFalsy();
   });
 });

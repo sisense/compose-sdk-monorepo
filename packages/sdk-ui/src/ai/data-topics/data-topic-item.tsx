@@ -6,13 +6,13 @@ import { getSlightlyDifferentColor } from '@/utils/color';
 
 const Container = styled.button<Themable>`
   font-family: ${({ theme }) => theme.typography.fontFamily};
-  padding: 30px;
+  padding: 20px;
   border: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-align: left;
-  border-radius: 30px;
+  border-radius: 15px;
   box-shadow: 0px 1px 2px rgba(9, 9, 10, 0.1), 0px 2px 4px rgba(9, 9, 10, 0.1);
   cursor: pointer;
 
@@ -20,7 +20,7 @@ const Container = styled.button<Themable>`
 `;
 
 const Title = styled.div<Themable>`
-  font-size: 20px;
+  font-size: 1.05rem;
   line-height: 28px;
 
   color: ${({ theme }) => theme.aiChat.dataTopics.items.textColor};

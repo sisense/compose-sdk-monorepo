@@ -5,7 +5,7 @@ import {
   useSendChatMessage,
   useMaybeCreateChat,
 } from './api/hooks';
-import type { ChatMessage, NlqMessage, NlqResponseData } from './api/types';
+import { ChatMessage, NlqMessage, NlqResponseData, TextMessage } from './api/types';
 import { useChatHistory } from './api/chat-history';
 import { useTranslation } from 'react-i18next';
 import { TranslatableError } from '@/translation/translatable-error';
@@ -27,6 +27,9 @@ export interface UseChatSessionResult {
 
 export const isNlqMessage = (message: ChatMessage | null | undefined): message is NlqMessage =>
   !!message && 'type' in message && message.type === 'nlq';
+
+export const isTextMessage = (message: ChatMessage | null | undefined): message is TextMessage =>
+  !!message && 'type' in message && message.type === 'text';
 
 /**
  * React hook that returns a chat session object for the given data model or

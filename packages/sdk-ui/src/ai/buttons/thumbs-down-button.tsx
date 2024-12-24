@@ -14,7 +14,7 @@ export default function ThumbsDownButton({ onClick, disabled }: ThumbsDownButton
   const { t } = useTranslation();
 
   return (
-    <Tooltip title={t('ai.buttons.incorectResponse')}>
+    <Tooltip title={t('ai.buttons.incorrectResponse')}>
       <IconButton
         aria-label="thumbs-down"
         onClick={onClick}
