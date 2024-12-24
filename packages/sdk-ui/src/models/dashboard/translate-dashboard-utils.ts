@@ -3,6 +3,7 @@ import {
   type FilterDto,
   type CascadingFilterDto,
   isCascadingFilterDto,
+  DashboardDto,
 } from '../../api/types/dashboard-dto';
 import type { WidgetsPanelColumnLayout, WidgetsOptions } from './types';
 import {
@@ -12,6 +13,8 @@ import {
   FilterRelations,
   FilterRelationsModel,
   FilterRelationsModelNode,
+  FormulaJaql,
+  FormulaContext,
 } from '@sisense/sdk-data';
 import { CommonFiltersApplyMode } from '@/common-filters/types';
 import {
@@ -19,7 +22,13 @@ import {
   convertFilterRelationsModelToRelationRules,
   isTrivialSingleNodeRelations,
 } from '@/utils/filter-relations';
-import { WidgetDto } from '@/widget-by-id/types';
+import {
+  isJaqlWithFormula,
+  isSharedFormulaReferenceContext,
+  SharedFormulaReferenceContext,
+  WidgetDto,
+} from '@/widget-by-id/types';
+import { RestApi } from '@/api/rest-api';
 
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
   columns: (layout.columns || []).map((c) => ({
@@ -95,4 +104,97 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
   });
 
   return widgetsOptionsMap;
+}
+
+/**
+ * Replace all shared formulas, which defined by id references, in the dashboard with their actual values.
+ * @param dashboard - The dashboard DTO to replace shared formulas in
+ * @param api - The REST API instance
+ * @returns The dashboard DTO with shared formulas, defined by id references, replaced
+ */
+export async function withSharedFormulas(
+  dashboard: DashboardDto,
+  api: RestApi,
+): Promise<DashboardDto> {
+  // collect shared formulas ids from all widgets
+  const sharedFormulasIds = getSharedFormulas(dashboard.widgets || []);
+  if (sharedFormulasIds.length === 0) {
+    return dashboard;
+  }
+  // load all shared formulas in parallel
+  const sharedFormulasDictionary = await api.getSharedFormulas(sharedFormulasIds);
+  // return dashboard with widgets updated with shared formulas
+  return {
+    ...dashboard,
+    widgets: dashboard.widgets?.map((widget) =>
+      applySharedFormulas(widget, sharedFormulasDictionary),
+    ),
+  };
+}
+
+/**
+ * Extracts unique shared formulas ids from widgets
+ * @param widgets - An array of widgets to extract shared formulas from
+ * @returns An array of unique shared formulas ids
+ */
+function getSharedFormulas(widgets: WidgetDto[]): string[] {
+  const sharedFormulas = widgets.flatMap((widget) =>
+    widget.metadata.panels.flatMap((panel) =>
+      panel.items.flatMap((item) => {
+        if (!isJaqlWithFormula(item.jaql) || !item.jaql.context) return [];
+        const formulaContexts: (FormulaContext | SharedFormulaReferenceContext)[] = Object.values(
+          item.jaql.context,
+        );
+        return formulaContexts.filter(isSharedFormulaReferenceContext).map((ctx) => ctx.formulaRef);
+      }),
+    ),
+  );
+
+  return Array.from(new Set(sharedFormulas));
+}
+
+/**
+ * Applies shared formulas to a widget
+ * @param widget - The widget to apply shared formulas to
+ * @param sharedFormulasDictionary - A dictionary of shared formulas
+ * @returns The widget with shared formulas applied
+ */
+function applySharedFormulas(
+  widget: WidgetDto,
+  sharedFormulasDictionary: Record<string, FormulaJaql>,
+): WidgetDto {
+  const updatedPanels = widget.metadata.panels.map((panel) => {
+    const updatedPanelItems = panel.items.map((panelItem) => {
+      const { jaql } = panelItem;
+      if (!isJaqlWithFormula(jaql) || !jaql.context) {
+        return panelItem;
+      }
+
+      const newContext = Object.fromEntries(
+        Object.entries(jaql.context).map(([key, value]) =>
+          isSharedFormulaReferenceContext(value)
+            ? [key, sharedFormulasDictionary[value.formulaRef]]
+            : [key, value],
+        ),
+      );
+
+      return {
+        ...panelItem,
+        jaql: {
+          ...jaql,
+          context: newContext,
+        },
+      };
+    });
+
+    return { ...panel, items: updatedPanelItems };
+  });
+
+  return {
+    ...widget,
+    metadata: {
+      ...widget.metadata,
+      panels: updatedPanels,
+    },
+  };
 }

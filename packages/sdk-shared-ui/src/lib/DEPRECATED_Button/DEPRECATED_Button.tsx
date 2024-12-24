@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { DEPRECATED_Icon } from '@sisense/sdk-shared-ui/DEPRECATED_Icon';
+import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
 
-import styles from './Button.module.scss';
+import styles from './DEPRECATED_Button.module.scss';
 
 export type ButtonProps = {
   allowDisabledTitle?: boolean;
@@ -29,7 +29,8 @@ export type ButtonProps = {
 // so we are doing it as well until the styleguide will be changed
 const SPACE = ' ';
 
-export const Button = (props: ButtonProps) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const DEPRECATED_Button = (props: ButtonProps) => {
   const {
     allowDisabledTitle,
     className,
@@ -104,7 +105,7 @@ export const Button = (props: ButtonProps) => {
   );
 };
 
-Button.propTypes = {
+DEPRECATED_Button.propTypes = {
   allowDisabledTitle: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
@@ -120,8 +121,9 @@ Button.propTypes = {
   gray: PropTypes.bool,
 };
 
-Button.defaultProps = {
+DEPRECATED_Button.defaultProps = {
   allowDisabledTitle: false,
 };
 
-export default Button;
+export default DEPRECATED_Button;
+export { DEPRECATED_Button }; // Named export

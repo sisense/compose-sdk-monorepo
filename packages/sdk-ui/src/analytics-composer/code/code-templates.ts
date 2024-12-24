@@ -47,7 +47,7 @@ export default CodeExample;
     executeQueryByWidgetIdTmpl: `import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui';
 
 const CodeExample = () => {
-  const { data, isLoading, isError } = useExecuteQueryByWidgetId({
+  const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
     widgetOid: "{{widgetOid}}",
     dashboardOid: "{{dashboardOid}}"
   });
@@ -56,7 +56,7 @@ const CodeExample = () => {
     return <div>Loading...</div>;
   }
   if (isError) {
-    return <div>Error</div>;
+    return <div>Error: {error.message}</div>;
   }
   if (data) {
     return <div>Total Rows: {data.rows.length}</div>;
@@ -80,13 +80,13 @@ const CodeExample = () => {
     highlights: {{highlightsString}},
   }
 
-  const { data, isLoading, isError } = useExecuteQuery(queryProps);
+  const { data, isLoading, isError, error } = useExecuteQuery(queryProps);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (isError) {
-    return <div>Error</div>;
+    return <div>Error: {error.message}</div>;
   }
   if (data) {
     return <div>Total Rows: {data.rows.length}</div>;
@@ -97,6 +97,46 @@ const CodeExample = () => {
 
 export default CodeExample;
 `,
+    executePivotQueryTmpl: `import { useExecutePivotQuery, ExecutePivotQueryParams } from '@sisense/sdk-ui';
+import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+
+const CodeExample = () => {
+    const pivotQueryProps: ExecutePivotQueryParams = {
+      dataSource: DM.DataSource,
+      rows: {{rowsString}},
+      values: {{valuesString}},
+    }
+
+    const { data, isLoading, isError, error } = useExecutePivotQuery(pivotQueryProps);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+    if (isError) {
+      return <div>Error: {error.message}</div>;
+    }
+    if (data) {
+      return <div>Total Rows: {data.rows.length}</div>;
+    }
+
+    return null;
+};
+
+export default CodeExample;
+`,
+    pivotTableWidgetTmpl: `import { {{componentString}} } from '@sisense/sdk-ui';
+{{extraImportsString}}
+import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  return (
+    <{{componentString}}
+      title={'{{titleString}}'}
+      dataSource={DM.DataSource}
+      dataOptions={ {{dataOptionsString}} }
+    />
+  );
+}`,
   },
   angular: {
     baseChartTmpl: `import { Component } from '@angular/core';
@@ -145,20 +185,31 @@ import { type QueryResultData } from '@sisense/sdk-data';
 
 @Component({
   selector: 'code-example',
-  template: '<div>Total Rows: {{ queryResult.rows.length }}</div>',
+  template: \`<div>
+    <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
+    <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>
+  </div>\`,
 })
 
 export class CodeExample {
     queryResult: QueryResultData = { rows: [], columns: [] };
 
+    errorMessage: string | null = null;
+
     constructor(private queryService: QueryService) {}
 
     async ngOnInit(): Promise<void> {
-      const { data } = await this.queryService.executeQueryByWidgetId({
-        widgetOid: "{{widgetOid}}",
-        dashboardOid: "{{dashboardOid}}",
-      });
-      this.queryResult = data as QueryResultData;
+      try {
+        const { data } = await this.queryService.executeQueryByWidgetId({
+          widgetOid: "{{widgetOid}}",
+          dashboardOid: "{{dashboardOid}}",
+        });
+        this.queryResult = data as QueryResultData;
+      } catch(error: unknown) {
+        if (error instanceof Error) {
+          this.errorMessage = error.message;
+        }
+      }
     }
 }
 `,
@@ -170,11 +221,16 @@ import { QueryService } from '@sisense/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
-  template: '<div>Total Rows: {{ queryResult.rows.length }}</div>',
+  template: \`<div>
+    <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
+    <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>
+  </div>\`,
 })
 
 export class CodeExample {
     queryResult: QueryResultData = { rows: [], columns: [] };
+
+    errorMessage: string | null = null;
 
     constructor(private queryService: QueryService) {}
 
@@ -186,11 +242,20 @@ export class CodeExample {
         filters: {{filtersString}},
         highlights: {{highlightsString}},
       }
-      const { data } = await this.queryService.executeQuery(queryProps);
-      this.queryResult = data as QueryResultData;
+
+      try {
+        const { data } = await this.queryService.executeQuery(queryProps);
+        this.queryResult = data as QueryResultData;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          this.errorMessage = error.message;
+        }
+      }
     }
 }
 `,
+    executePivotQueryTmpl: `Not implemented yet`,
+    pivotTableWidgetTmpl: `Not implemented yet`,
   },
   vue: {
     baseChartTmpl: `<script setup lang="ts">
@@ -226,7 +291,7 @@ import { WidgetById } from '@sisense/sdk-ui-vue';
     executeQueryByWidgetIdTmpl: `<script setup lang="ts">
 import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui-vue';
 
-const { data, isLoading, isError } = useExecuteQueryByWidgetId({
+const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
   widgetOid: "{{widgetOid}}",
   dashboardOid: "{{dashboardOid}}"
 });
@@ -234,7 +299,7 @@ const { data, isLoading, isError } = useExecuteQueryByWidgetId({
 <template>
   <div>
     <div v-if="isLoading">Loading...</div>
-    <div v-else-if="isError">Error</div>
+    <div v-else-if="isError">Error: {{error.message}}</div>
     <div v-else-if="data">Total Rows: {{data.rows.length}}</div>
   </div>
 </template>
@@ -251,14 +316,16 @@ const queryProps = {
   filters: {{filtersString}},
   highlights: {{highlightsString}},
 }
-const { data, isLoading, isError } = useExecuteQuery(queryProps);
+const { data, isLoading, isError, error } = useExecuteQuery(queryProps);
 </script>
 <template>
   <div>
     <div v-if="isLoading">Loading...</div>
-    <div v-else-if="isError">Error</div>
+    <div v-else-if="isError">Error: {{error.message}}</div>
     <div v-else-if="data">Total Rows: {{data.rows.length}}</div>
   </div>
 </template>`,
+    executePivotQueryTmpl: 'Not implemented yet',
+    pivotTableWidgetTmpl: `Not implemented yet`,
   },
 };

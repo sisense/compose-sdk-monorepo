@@ -1,6 +1,6 @@
 import { WidgetProps } from '@/props';
 import { ChartDataOptions } from '@/types';
-import { ExecuteQueryParams } from '@/query-execution';
+import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
 import { MetadataItem } from '@sisense/sdk-data';
 import { DynamicChartType } from '../chart-options-processor/translations/types.js';
 
@@ -115,7 +115,9 @@ export type CodeTemplateKey =
   | 'chartWidgetTmpl'
   | 'widgetByIdTmpl'
   | 'executeQueryByWidgetIdTmpl'
-  | 'executeQueryTmpl';
+  | 'executeQueryTmpl'
+  | 'executePivotQueryTmpl'
+  | 'pivotTableWidgetTmpl';
 
 /**
  * Code Templates
@@ -197,4 +199,11 @@ export type WidgetPropsConfig = { useCustomizedStyleOptions?: boolean };
  */
 export type ExecuteQueryCodeParams = BaseCodeConfig & {
   queryParams: ExecuteQueryParams;
+};
+
+/**
+ * @internal
+ */
+export type ExecutePivotQueryCodeParams = BaseCodeConfig & {
+  pivotQueryParams: ExecutePivotQueryParams;
 };

@@ -2,20 +2,20 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { Button } from './Button';
+import { DEPRECATED_Button } from './DEPRECATED_Button';
 
 import '@testing-library/jest-dom';
 
 describe('Button Component', () => {
   it('should render correctly with default props', () => {
-    render(<Button text="Click Me" />);
+    render(<DEPRECATED_Button text="Click Me" />);
 
     expect(screen.getByText('Click Me')).toBeInTheDocument();
     expect(screen.getByRole('button')).toHaveClass('btn');
   });
 
   it('should apply custom className when provided as prop', () => {
-    render(<Button text="Click Me" className="custom-class" />);
+    render(<DEPRECATED_Button text="Click Me" className="custom-class" />);
 
     expect(screen.getByRole('button')).toHaveClass('custom-class');
   });
@@ -26,7 +26,7 @@ describe('Button Component', () => {
     const hoverSuffix = 'hover-suffix';
 
     const { container } = render(
-      <Button
+      <DEPRECATED_Button
         text="Button with Icon"
         iconName={iconName}
         iconClassName={iconClassName}
@@ -48,7 +48,7 @@ describe('Button Component', () => {
     const hoverSuffix = 'hover-suffix';
 
     const { container } = render(
-      <Button
+      <DEPRECATED_Button
         text="Button with Icon"
         iconName={iconName}
         iconClassName={iconClassName}
@@ -67,7 +67,7 @@ describe('Button Component', () => {
     const hoverSuffix = 'trailing-hover';
 
     const { container } = render(
-      <Button
+      <DEPRECATED_Button
         text="Button with Trailing Icon"
         trailingIconName={trailingIconName}
         hoverSuffix={hoverSuffix}
@@ -81,7 +81,7 @@ describe('Button Component', () => {
 
   it('should render only an DEPRECATED_Icon when no text is provided and passes correct props', () => {
     const iconName = 'icon-only';
-    const { container } = render(<Button iconName={iconName} disabled />);
+    const { container } = render(<DEPRECATED_Button iconName={iconName} disabled />);
 
     const button = screen.getByRole('button');
     const icon = container.querySelector(".app-icon[class~='app-icon--icon-only']");
@@ -93,7 +93,7 @@ describe('Button Component', () => {
   });
 
   it('should render both text and DEPRECATED_Icon with proper spacing', () => {
-    const { container } = render(<Button text="Text with Icon" iconName="icon-name" />);
+    const { container } = render(<DEPRECATED_Button text="Text with Icon" iconName="icon-name" />);
 
     const button = screen.getByRole('button');
     const icon = container.querySelector('.app-icon.app-icon--icon-name.btn__icon');
@@ -103,7 +103,7 @@ describe('Button Component', () => {
   });
 
   it('should disable the button when disabled is true', () => {
-    render(<Button text="Disabled" disabled />);
+    render(<DEPRECATED_Button text="Disabled" disabled />);
 
     const button = screen.getByRole('button');
 
@@ -113,7 +113,7 @@ describe('Button Component', () => {
 
   it('should call the onClick handler when clicked', () => {
     const handleClick = vi.fn();
-    render(<Button text="Click Me" onClick={handleClick} />);
+    render(<DEPRECATED_Button text="Click Me" onClick={handleClick} />);
     const button = screen.getByRole('button');
 
     button.click();
@@ -122,7 +122,7 @@ describe('Button Component', () => {
   });
 
   it('should apply the correct aria-label', () => {
-    render(<Button text="Aria Test" ariaLabel="custom-label" />);
+    render(<DEPRECATED_Button text="Aria Test" ariaLabel="custom-label" />);
 
     const button = screen.getByRole('button');
 
@@ -131,7 +131,12 @@ describe('Button Component', () => {
 
   it('should set the title when button is disabled and allowDisabledTitle is true', () => {
     render(
-      <Button title="Disabled Button Allowed" disabled allowDisabledTitle dataTestId="button" />,
+      <DEPRECATED_Button
+        title="Disabled Button Allowed"
+        disabled
+        allowDisabledTitle
+        dataTestId="button"
+      />,
     );
 
     const button = screen.getByTestId('button');
@@ -140,7 +145,7 @@ describe('Button Component', () => {
   });
 
   it('should not set the title when button is disabled and allowDisabledTitle is false', () => {
-    render(<Button title="Disabled Button" disabled dataTestId="button" />);
+    render(<DEPRECATED_Button title="Disabled Button" disabled dataTestId="button" />);
 
     const button = screen.getByTestId('button');
 

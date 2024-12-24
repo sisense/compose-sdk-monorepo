@@ -55,7 +55,9 @@ export function escapeSingleQuotes(str?: string) {
   return str.replace(/(?<!\\)'/g, "\\'");
 }
 
-export function validateChartType(chartType: DynamicChartType) {
-  if (!ALL_CHART_TYPES.includes(chartType))
+export function validateChartType(chartType: DynamicChartType | 'pivot' | 'pivot2') {
+  const ALLOWED_TYPES = [...ALL_CHART_TYPES, 'pivot', 'pivot2'] as const;
+
+  if (!ALLOWED_TYPES.includes(chartType))
     throw new TranslatableError('errors.chartTypeNotSupported', { chartType });
 }

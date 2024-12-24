@@ -101,9 +101,12 @@ export const RegularChart = (props: RegularChartProps) => {
     dataColumnNamesMapping,
   } = useTranslatedDataOptions(chartDataOptions, chartType);
 
-  const [data, dataOptions] = useSyncedData(
+  /** Indicates if the provided data options has no dimensions */
+  const hasNoDimensions = attributes.length === 0 && measures.length === 0;
+
+  const [data, dataOptions] = useSyncedData({
     dataSet,
-    syncDataOptions,
+    chartDataOptions: syncDataOptions,
     chartType,
     attributes,
     measures,
@@ -112,7 +115,8 @@ export const RegularChart = (props: RegularChartProps) => {
     highlights,
     refreshCounter,
     setIsLoading,
-  );
+    enabled: !hasNoDimensions,
+  });
 
   const designOptions = useMemo((): ChartDesignOptions | DesignOptions | null => {
     if (!chartDataOptions) {
@@ -175,10 +179,10 @@ export const RegularChart = (props: RegularChartProps) => {
       rerenderOnResize={shouldRerenderOnResize(chartType)}
     >
       {() => {
-        if (!chartData) {
+        if (!chartData && isLoading) {
           return <LoadingIndicator themeSettings={themeSettings} />;
         }
-        if (hasNoResults(chartType, chartData)) {
+        if ((chartData && hasNoResults(chartType, chartData)) || hasNoDimensions) {
           return <NoResultsOverlay iconType={chartType} />;
         }
 

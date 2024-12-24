@@ -12,6 +12,7 @@ import styled from '@emotion/styled';
 
 const LogoContainer = styled.div`
   margin-left: 14px;
+  margin-top: 3px;
 `;
 
 const DataTopicsContainer = styled.div<Themable>`
@@ -52,7 +53,7 @@ export default function ChatHome({ dataTopicsList, onDataTopicClick }: ChatHomeP
           title={t('ai.analyticsChatbot')}
           leftNav={
             <LogoContainer>
-              <SisenseLogo colorSchema={isDarkBackground ? 'yellow-white' : 'yellow-black'} />
+              <SisenseLogo isDarkBackground={isDarkBackground} />
             </LogoContainer>
           }
           rightNav={<BetaLabel />}

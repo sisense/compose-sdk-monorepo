@@ -10,6 +10,7 @@ import { widgetComposer } from '@/analytics-composer';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { TranslatableError } from '@/translation/translatable-error';
 import { isTable } from '@/chart-options-processor/translations/types';
+import { useThemeContext } from '@/theme-provider';
 
 type ChartMessageProps = {
   content: NlqResponseData;
@@ -17,6 +18,7 @@ type ChartMessageProps = {
 
 export default function ChartMessage({ content }: ChartMessageProps) {
   const [expanded, setExpanded] = useState(false);
+  const { themeSettings } = useThemeContext();
 
   const { inlineElement, expandedElement } = useMemo(() => {
     // Chart in message uses custom style options
@@ -77,7 +79,12 @@ export default function ChartMessage({ content }: ChartMessageProps) {
         </div>
       );
 
-      expandedElement = <ChartWidget {...widgetProps} styleOptions={expandedStyleOptions} />;
+      expandedElement = (
+        <ChartWidget
+          {...widgetProps}
+          styleOptions={{ cornerRadius: 'None', ...expandedStyleOptions }}
+        />
+      );
     }
     return { inlineElement, expandedElement };
   }, [content]);
@@ -85,16 +92,27 @@ export default function ChartMessage({ content }: ChartMessageProps) {
   return (
     <>
       {inlineElement}
-      <Dialog open={expanded} onClose={() => setExpanded(false)} maxWidth="xl" fullWidth>
-        <div className="csdk-flex csdk-items-center csdk-justify-between csdk-py-[30px] csdk-px-[40px]">
-          <div className="csdk-text-ai-lg csdk-semibold csdk-text-text-active">
-            {content.queryTitle}
-          </div>
+      <Dialog
+        open={expanded}
+        onClose={() => setExpanded(false)}
+        maxWidth="xl"
+        fullWidth
+        PaperProps={{
+          sx: {
+            backgroundColor: themeSettings.chart.backgroundColor,
+            color: themeSettings.aiChat.primaryTextColor,
+          },
+        }}
+      >
+        <div className="csdk-flex csdk-items-center csdk-justify-between csdk-mt-[16px] csdk-mx-[16px] csdk-pl-[20px]">
+          <div className="csdk-text-ai-lg csdk-semibold">{content.queryTitle}</div>
           <IconButton onClick={() => setExpanded(false)} aria-label="close expanded chart">
-            <CloseDialogIcon />
+            <CloseDialogIcon fillColor={themeSettings.aiChat.primaryTextColor} />
           </IconButton>
         </div>
-        <div className="csdk-h-screen">{expandedElement}</div>
+        <div className="csdk-h-screen csdk-mt-[8px] csdk-mb-[24px] csdk-mx-[16px]">
+          {expandedElement}
+        </div>
       </Dialog>
     </>
   );

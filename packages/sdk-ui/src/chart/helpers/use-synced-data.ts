@@ -37,20 +37,32 @@ const chartDataOptionsFamily = (chartType: ChartType): string => {
   if (chartType === 'funnel') return chartType;
   return deriveChartFamily(chartType);
 };
-
-export const useSyncedData = (
-  dataSet: DataSet,
-  chartDataOptions: ChartDataOptionsInternal,
-  chartType: ChartType,
-  attributes: Attribute[],
-  measures: Measure[],
-  dataColumnNamesMapping: DataColumnNamesMapping,
-  filters?: Filter[] | FilterRelations,
-  highlights?: Filter[],
-  refreshCounter?: number,
-  setIsLoading?: Dispatch<SetStateAction<boolean>>,
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-) => {
+type UseSyncedDataProps = {
+  dataSet: DataSet;
+  chartDataOptions: ChartDataOptionsInternal;
+  chartType: ChartType;
+  attributes: Attribute[];
+  measures: Measure[];
+  dataColumnNamesMapping: DataColumnNamesMapping;
+  filters?: Filter[] | FilterRelations;
+  highlights?: Filter[];
+  refreshCounter?: number;
+  setIsLoading?: Dispatch<SetStateAction<boolean>>;
+  enabled?: boolean;
+};
+export const useSyncedData = ({
+  dataSet,
+  chartDataOptions,
+  chartType,
+  attributes,
+  measures,
+  dataColumnNamesMapping,
+  filters,
+  highlights,
+  refreshCounter,
+  setIsLoading,
+  enabled = true,
+}: UseSyncedDataProps) => {
   const setError = useSetError();
 
   const chartFamily = useMemo(() => chartDataOptionsFamily(chartType), [chartType]);
@@ -65,6 +77,9 @@ export const useSyncedData = (
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
     let ignore = false;
 
     const { filters: filterList, relations: filterRelations } =
@@ -164,7 +179,7 @@ export const useSyncedData = (
       ignore = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartType, chartDataOptions, dataSet, filters, highlights, app, refreshCounter]);
+  }, [chartType, chartDataOptions, dataSet, filters, highlights, app, refreshCounter, enabled]);
 
   return synchedData[chartFamily] || undefinedSynchedData;
 };

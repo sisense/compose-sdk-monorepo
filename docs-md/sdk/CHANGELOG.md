@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.26.0] - 2024-12-23
+
+### Added
+- Add shared formulas support
+- Display "No results" for charts without defined dimensions
+- Enable pivot widget type support for generating `pivotTableWidget` templates
+
+### Changed
+- Extract shared UI components from `sdk-pivot-client` to `sdk-shared-ui`
+- Restrict chatbot data topics to only those from the current tenant
+- Add dashboard filters to the chatbot insights requests
+- Resolve issue with `scrollerLocation` for disabled navigator
+
 ## [1.25.0] - 2024-12-09
 
 ### Added

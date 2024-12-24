@@ -23,7 +23,8 @@ export class ChatRestApi {
 
   public getChatContexts = async () => {
     //TODO: refactor to use getDataSourceList() from sdk-query-client after applying same change there?
-    const result = await this.httpClient.get<ChatContext[]>(`api/datasources`);
+    //INFO: trailing slash after /datasources is needed for REST API otherwise ALL tenants models are returned instead of current tenant
+    const result = await this.httpClient.get<ChatContext[]>(`api/datasources//`);
     return result || [];
   };
 

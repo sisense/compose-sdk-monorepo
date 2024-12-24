@@ -1,6 +1,6 @@
-import { ChartWidgetProps } from '@/props';
+import { ChartWidgetProps, PivotTableWidgetProps } from '@/props';
 import { ByIdWidgetCodeParams, ClientSideWidgetCodeParams, UiFramework } from '../types.js';
-import { isChartWidgetProps } from '@/widget-by-id/utils.js';
+import { isChartWidgetProps, isPivotTableWidgetProps } from '@/widget-by-id/utils.js';
 import { TranslatableError } from '@/translation/translatable-error';
 import { validateChartType } from '../common/utils.js';
 import {
@@ -12,6 +12,7 @@ import { ChartType } from '@/types';
 import { generateCode } from '../code/generate-code.js';
 import { stringifyFilters } from './stringify-filters.js';
 import { CodeTemplateKey } from '../types.js';
+import { stringifyProps } from '../widget/stringify-props';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;
@@ -23,9 +24,11 @@ type ExtraCodeProps = {
 };
 
 type ChartWidgetCodeProps = Stringify<ChartWidgetProps> & ExtraCodeProps;
+type PivotTableWidgetCodeProps = Stringify<PivotTableWidgetProps> & ExtraCodeProps;
 
 const widgetByIdTemplateKeys: CodeTemplateKey[] = ['executeQueryByWidgetIdTmpl', 'widgetByIdTmpl'];
 const widgetTemplateKey: CodeTemplateKey = 'chartWidgetTmpl';
+const pivotTableWidgetTemplateKey: CodeTemplateKey = 'pivotTableWidgetTmpl';
 
 const stringifyChartType = (chartType: ChartType): string => {
   return chartType as string;
@@ -43,6 +46,21 @@ const getChartWidgetCode = (
     dataOptionsString: stringifyDataOptions(props.dataOptions),
     filtersString: stringifyFilters(props.filters),
     componentString: 'ChartWidget',
+    extraImportsString: stringifyExtraImports(props.filters || []),
+  };
+  return generateCode(templateKey, codeProps, uiFramework);
+};
+
+const getPivotTableWidgetCode = (
+  props: PivotTableWidgetProps,
+  uiFramework: UiFramework,
+  templateKey: CodeTemplateKey,
+): string => {
+  const codeProps: PivotTableWidgetCodeProps = {
+    titleString: props.title,
+    dataSourceString: stringifyDataSource(props.dataSource),
+    dataOptionsString: stringifyProps(props.dataOptions),
+    componentString: 'PivotTableWidget',
     extraImportsString: stringifyExtraImports(props.filters || []),
   };
   return generateCode(templateKey, codeProps, uiFramework);
@@ -69,6 +87,11 @@ export const toWidgetCodeClientSide = ({
     validateChartType(widgetProps.chartType);
     const templateKey = widgetTemplateKey;
     return getChartWidgetCode(widgetProps, uiFramework, templateKey);
+  }
+
+  if (isPivotTableWidgetProps(widgetProps)) {
+    const templateKey = pivotTableWidgetTemplateKey;
+    return getPivotTableWidgetCode(widgetProps, uiFramework, templateKey);
   }
 
   throw new TranslatableError('errors.otherWidgetTypesNotSupported');

@@ -1,0 +1,49 @@
+:global(.sis-scope) {
+  :global(.custom-checkbox__icon.app-icon) {
+    &.transparent {
+      background: transparent !important;
+      color: transparent;
+    }
+  }
+
+  :global(.custom-checkbox__input:checked + .custom-checkbox__icon) {
+    &.transparent {
+      color: #3a4356;
+    }
+  }
+
+  :global(.custom-checkbox__text) {
+    padding-left: 4px;
+  }
+}
+
+.icon {
+  margin: 0 -5px 0 0px;
+  // If there is not a onDescriptionClick, the icon will not have
+  // onClick set, and thus would not show a pointer but should.
+  cursor: pointer;
+}
+
+.disabled {
+  pointer-events: none;
+  // sis-scope uses an adjacency selector to style the span,
+  // but the optional icon is between the checkbox and text.
+  :global(.custom-checkbox__text) {
+    color: rgba(91, 99, 114, 0.4);
+  }
+
+  :global(.app-icon) {
+    opacity: 0.4;
+  }
+}
+
+.sharedComponentsInputCheckbox {
+  width: 28px;
+  height: 28px;
+  padding: 8px;
+
+  &:hover {
+    background-color: rgba(91, 99, 114, 0.1);
+    border-radius: 50%;
+  }
+}

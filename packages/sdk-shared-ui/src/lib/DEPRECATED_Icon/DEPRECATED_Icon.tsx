@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import styles from './DEPRECATED_Icon.module.scss';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type DEPRECATED_IconProps = {
   className?: string;
   disabled?: boolean;
@@ -18,6 +19,7 @@ export type DEPRECATED_IconProps = {
 
 const noop = () => {};
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const DEPRECATED_Icon = (props: DEPRECATED_IconProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const {

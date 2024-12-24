@@ -8,18 +8,17 @@ import { makeGetCaption } from '../getCaption.js';
 import { SortingSettingItem } from '../SortingSettingItem.js';
 import { detectElementOverflow } from '../detectElementOverflow.js';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-import { Button } from '../../../shared-ui-components/Button';
+import { DEPRECATED_Button } from '@sisense/sdk-shared-ui';
 
-type Props = {
+export type ComplexSortingSettingsPopupProps = {
   titleOfPopUp: string[];
   currentSortingSettings: Array<SortingSettingItem>;
-  onSortingSettingsUpdate: Function;
+  onSortingSettingsUpdate: (sortingSettingItems: Array<SortingSettingItem>) => void;
   onCrossIconClick: MouseEventHandler<HTMLSpanElement>;
   messages: TranslatedMessages;
 };
 
-export const ComplexSortingSettingsPopup = (props: Props) => {
+export const ComplexSortingSettingsPopup = (props: ComplexSortingSettingsPopupProps) => {
   const {
     titleOfPopUp,
     currentSortingSettings: initialSortingSettings,
@@ -96,7 +95,7 @@ export const ComplexSortingSettingsPopup = (props: Props) => {
 
   const someSettingsSelected = initialSortingSettings.some((itemProps) => itemProps.selected);
   const clearSortingButton = someSettingsSelected ? (
-    <Button text={messages.clearSorting} gray onClick={handleClearSortingClick} />
+    <DEPRECATED_Button text={messages.clearSorting} gray onClick={handleClearSortingClick} />
   ) : null;
 
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -161,7 +160,7 @@ export const ComplexSortingSettingsPopup = (props: Props) => {
         </div>
         <div className="complex-sorting-settings__actions" style={actionsDynamicStyles}>
           <div className="sp-buttons">
-            <Button onClick={handleApplyButtonClick} text={messages.apply} />
+            <DEPRECATED_Button onClick={handleApplyButtonClick} text={messages.apply} />
             {clearSortingButton}
           </div>
         </div>
