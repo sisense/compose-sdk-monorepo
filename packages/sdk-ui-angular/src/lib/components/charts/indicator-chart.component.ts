@@ -71,6 +71,7 @@ export class AnalyticsComponent {
       [filters]="filters"
       [highlights]="highlights"
       [styleOptions]="styleOptions"
+      [beforeRender]="beforeRender"
     />
   `,
 })
@@ -114,6 +115,14 @@ export class IndicatorChartComponent {
    */
   @Input()
   styleOptions: IndicatorChartProps['styleOptions'];
+
+  /**
+   * {@inheritDoc  @sisense/sdk-ui!IndicatorChartProps.onBeforeRender}
+   *
+   * @category Callbacks
+   */
+  @Input()
+  beforeRender: IndicatorChartProps['onBeforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!IndicatorChartProps.onDataReady}

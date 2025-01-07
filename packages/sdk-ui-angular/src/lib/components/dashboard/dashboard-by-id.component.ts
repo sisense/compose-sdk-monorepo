@@ -26,7 +26,7 @@ import { PluginsService } from '../../services/plugins.service';
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
  *
- * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
  *
  * @example
  * ```ts
@@ -48,7 +48,6 @@ import { PluginsService } from '../../services/plugins.service';
  * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
  * @group Fusion Assets
  * @fusionEmbed
- * @beta
  */
 @Component({
   selector: 'csdk-dashboard-by-id',

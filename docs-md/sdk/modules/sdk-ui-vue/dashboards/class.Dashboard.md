@@ -2,7 +2,7 @@
 title: Dashboard
 ---
 
-# Class Dashboard <Badge type="beta" text="Beta" />
+# Class Dashboard
 
 A component used for easily rendering a dashboard.
 

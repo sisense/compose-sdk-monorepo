@@ -138,17 +138,11 @@ see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-c
 
 #### onBeforeRender
 
-> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md)
 
-A callback that allows you to customize the underlying chart element before it is rendered.
-Use the `highchartsOptions` object that is passed to the callback to change
-[options values](https://api.highcharts.com/highcharts/) and then return the modified options
-object. The returned options are then used when rendering the chart.
+A callback that allows you to customize the underlying chart element before it is rendered. The returned options are then used when rendering the chart.
 
-This callback is not supported for Indicator Chart, Areamap Chart, Scattermap Chart, and Table.
-
-For an example of how the `onBeforeRender` callback can be used, see the
-[Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
+This callback is not supported for Areamap Chart, Scattermap Chart, Table, and PivotTable.
 
 ***
 

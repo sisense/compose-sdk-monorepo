@@ -3,6 +3,7 @@ import { cleanup } from '@testing-library/react';
 import { vi } from 'vitest';
 import 'vitest-canvas-mock';
 import { server } from '../__mocks__/msw';
+import '../__mocks__/font-face-polyfill';
 
 beforeAll(() =>
   server.listen({

@@ -44,6 +44,18 @@ Filter delete callback
 
 ***
 
+### onEdit
+
+> **onEdit**?: () => `void`
+
+Filter edit callback
+
+#### Returns
+
+`void`
+
+***
+
 ### onUpdate
 
 > **onUpdate**: (`filter`) => `void`

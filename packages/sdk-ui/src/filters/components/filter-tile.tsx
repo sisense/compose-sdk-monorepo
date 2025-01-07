@@ -2,7 +2,7 @@ import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
 
 import { SisenseSwitchButton, TriangleIndicator } from './common';
-import { ArrowDownIcon, LockIcon, TrashIcon } from './icons';
+import { ArrowDownIcon, LockIcon, PencilIcon, TrashIcon } from './icons';
 import { useThemeContext } from '../../theme-provider';
 import { getSlightlyDifferentColor } from '../../utils/color';
 import { FilterVariant, isVertical } from './common/filter-utils';
@@ -84,6 +84,7 @@ interface Props {
   design?: FilterTileDesignOptions;
   onToggleDisabled?: () => void;
   onDelete?: () => void;
+  onEdit?: () => void;
   locked?: boolean;
 }
 
@@ -107,8 +108,15 @@ const GroupHoverWrapper = styled('div')({
     opacity: 0.55,
     transition: 'all .3s ease',
   },
+  '.MuiButtonBase-root.csdk-filter-edit-button': {
+    opacity: 0,
+    transition: 'all .3s ease',
+  },
   '&:hover': {
     '.MuiSwitch-root': {
+      opacity: 1,
+    },
+    '.MuiButtonBase-root.csdk-filter-edit-button': {
       opacity: 1,
     },
   },
@@ -128,6 +136,7 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
     onToggleDisabled,
     isDependent,
     onDelete,
+    onEdit,
     locked = false,
   } = props;
   const design = merge.withOptions(
@@ -176,10 +185,21 @@ export const FilterTile: FunctionComponent<Props> = (props) => {
                 className={
                   'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
                 }
-                style={{ color: textColor }}
+                style={{ color: textColor, flexGrow: 1 }}
               >
                 {title}
               </span>
+              {onEdit && !disabled && (
+                <IconButton
+                  className="csdk-filter-edit-button"
+                  onClick={onEdit}
+                  sx={{ p: 0, mr: 'auto' }}
+                  disabled={locked}
+                  data-testid="filter-edit-button"
+                >
+                  <PencilIcon aria-label="edit" />
+                </IconButton>
+              )}
             </Header>
           </>
         )}

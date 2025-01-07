@@ -1,5 +1,5 @@
 ---
-title: Embedded Dashboards (Beta)
+title: Embedded Dashboards
 indexTopics:
     - title: Embed Fusion Dashboard
       description: Learn how to embed a dashboard pre-created in Sisense Fusion
@@ -15,8 +15,8 @@ indexTopics:
     #   link: ./guide-4-decompose-dashboard
 ---
 
-# Embedded Dashboards (Beta)
+# Embedded Dashboards
 
-Alternative to iFrame and Embed SDK, Compose SDK now allows you (1) to embed an existing Fusion dashboard into your application, (2) to customize the dashboard to your specific needs, or (3) to compose a dashboard fully in code. These beta capabilities are available in React, Angular, and Vue.
+Alternative to iFrame and Embed SDK, Compose SDK now allows you (1) to embed an existing Fusion dashboard into your application, (2) to customize the dashboard to your specific needs, or (3) to compose a dashboard fully in code. These capabilities are available in React, Angular, and Vue.
 
 <SectionIndex />

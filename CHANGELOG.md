@@ -1,11 +1,23 @@
 # Changelog
 
+## [1.27.0] - 2025-01-07
+
+### Added
+- Add AI module `SdkAiModule` to Angular. This module will soon contain Chatbot.
+- Add `onBeforeRender` callback to Indicator chart
+- Add component `FilterRelationsTile` for internal use by `Dashboard` and `DashboardById` components
+
+### Changed
+- Improve change detection for complex calculated measures
+- Improve charts and theming: hide errors related to insights in NLQ chart, remove redundant zero value label for cartesian charts with 2 categories, move number abbreviations to translation files, improve waiting of fonts loading
+- Improve filter tiles: add Edit button and `onEdit` callback, add empty `FilterEditorPopover` component for internal testing, refactor common filter tile display
+
 ## [1.26.0] - 2024-12-23
 
 ### Added
 - Add shared formulas support
 - Display "No results" for charts without defined dimensions
-- Enable pivot widget type support for generating `pivotTableWidget` templates
+- Extend Widget Embed Code to support pivot widget type
 
 ### Changed
 - Extract shared UI components from `sdk-pivot-client` to `sdk-shared-ui`

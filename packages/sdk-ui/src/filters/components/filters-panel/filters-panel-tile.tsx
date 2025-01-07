@@ -31,6 +31,8 @@ export type FiltersPanelTileProps = {
   onChange: (filter: Filter | null) => void;
   /** Filter delete callback */
   onDelete?: () => void;
+  /** Filter edit callback */
+  onEdit?: () => void;
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
 };
@@ -44,6 +46,7 @@ export const FiltersPanelTile = ({
   filter,
   onChange,
   onDelete,
+  onEdit,
   defaultDataSource,
 }: FiltersPanelTileProps) => {
   const attribute = filter.attribute;
@@ -54,6 +57,7 @@ export const FiltersPanelTile = ({
     onChange,
     onUpdate: onChange,
     onDelete,
+    onEdit,
     ...(defaultDataSource ? { dataSource: defaultDataSource } : null),
   };
   // checking for custom filters first to prevent conversion attempts

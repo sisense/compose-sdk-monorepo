@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.26.0",
+  "version": "1.27.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "dist",
@@ -24,10 +24,41 @@
   "files": [
     "dist/**/*"
   ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "esm2020": "./dist/esm2020/sisense-sdk-ui-angular.mjs",
+      "es2020": "./dist/fesm2020/sisense-sdk-ui-angular.mjs",
+      "es2015": "./dist/fesm2015/sisense-sdk-ui-angular.mjs",
+      "node": "./dist/fesm2015/sisense-sdk-ui-angular.mjs",
+      "default": "./dist/fesm2020/sisense-sdk-ui-angular.mjs"
+    },
+    "./ai": {
+      "types": "./dist/ai/index.d.ts",
+      "esm2020": "./dist/esm2020/ai/sisense-sdk-ui-angular-ai.mjs",
+      "es2020": "./dist/fesm2020/sisense-sdk-ui-angular-ai.mjs",
+      "es2015": "./dist/fesm2015/sisense-sdk-ui-angular-ai.mjs",
+      "node": "./dist/fesm2015/sisense-sdk-ui-angular-ai.mjs",
+      "default": "./dist/fesm2020/sisense-sdk-ui-angular-ai.mjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "ai": [
+        "./dist/ai/index.d.ts"
+      ]
+    }
+  },
+  "publishConfig": {
+    "directory": "dist"
+  },
   "scripts": {
     "ng": "ng",
-    "build": "yarn sync-version && ng build",
-    "build:prod": "yarn sync-version && ng build",
+    "build": "yarn prebuild && ng build && yarn postbuild",
+    "build:prod": "yarn prebuild && ng build && yarn postbuild",
+    "prebuild": "yarn sync-version && node ./scripts/generate-build-package-config.cjs",
+    "postbuild": "rm ./src/package.json",
     "watch": "ng build --watch --configuration development",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

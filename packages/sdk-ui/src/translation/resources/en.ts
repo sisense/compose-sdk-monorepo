@@ -99,6 +99,16 @@ export const translation = {
   widgetDetails: 'Widget Details',
   cancel: 'Cancel',
   includeAll: 'Include all',
+  formatting: {
+    number: {
+      abbreviations: {
+        thousand: 'K',
+        million: 'M',
+        billion: 'B',
+        trillion: 'T',
+      },
+    },
+  },
   criteriaFilter: {
     displayModePrefix: 'All items',
     equals: 'Equals {{val}}',
@@ -193,6 +203,11 @@ export const translation = {
     unselectMenuItem: 'Un-Select',
   },
   customFilterTileMessage: 'filtered with custom filter',
+  filterRelations: {
+    and: 'AND',
+    or: 'OR',
+    andOrFormulaApplied: 'AND/OR Formula applied',
+  },
   drilldown: {
     drillMenuItem: 'Drill',
     breadcrumbsAllSuffix: 'All',
@@ -258,6 +273,12 @@ export const translation = {
       unknownResponse: 'Received unknown responseType, raw response=',
       invalidInput: 'Invalid input',
       noAvailableDataTopics: 'None of the provided data models or perspectives are available',
+    },
+  },
+  filterEditor: {
+    buttons: {
+      apply: 'Apply',
+      cancel: 'Cancel',
     },
   },
 };

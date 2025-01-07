@@ -6,3 +6,4 @@ export { TrashIcon } from './trash-icon';
 export { LockIcon } from './lock-icon';
 export { DateIcon } from './date-icon';
 export { ArrowDownIcon } from './arrow-down-icon';
+export { CubeIcon } from './cube-icon';

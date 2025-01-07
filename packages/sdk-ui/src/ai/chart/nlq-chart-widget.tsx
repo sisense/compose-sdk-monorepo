@@ -7,9 +7,9 @@ import type { NlqResponseData } from '@/ai';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { useGetNlgQueryResultInternal } from '@/ai/use-get-nlg-query-result';
 import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
-import { useTranslation } from 'react-i18next';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
 import { WidgetProps } from '@/props';
+import { getFiltersArray } from '@/utils/filter-relations';
 
 /**
  * Props for {@link NlqChartWidget} component.
@@ -58,7 +58,6 @@ export interface NlqChartWidgetProps {
  * @internal
  */
 export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqChartWidgetProps) => {
-  const { t } = useTranslation();
   const { connectToWidgetProps } = useCommonFilters({
     initialFilters: filters,
   });
@@ -81,10 +80,8 @@ export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqCh
 
   const nlqResponseWithFilters = useMemo(() => {
     const filters =
-      chartWidgetProps &&
-      isChartWidgetProps(chartWidgetProps) &&
-      Array.isArray(chartWidgetProps.filters)
-        ? chartWidgetProps.filters
+      chartWidgetProps && isChartWidgetProps(chartWidgetProps)
+        ? getFiltersArray(chartWidgetProps?.filters)
         : [];
 
     const metadata = nlqResponse.jaql.metadata
@@ -98,7 +95,11 @@ export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqCh
     return { ...nlqResponse, jaql: { ...nlqResponse.jaql, metadata } };
   }, [nlqResponse, chartWidgetProps]);
 
-  const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlqResponseWithFilters);
+  const {
+    data: summary,
+    isLoading,
+    isError,
+  } = useGetNlgQueryResultInternal(nlqResponseWithFilters);
 
   if (isLoading || !chartWidgetProps) {
     return <LoadingDotsIcon />;
@@ -108,17 +109,14 @@ export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqCh
     return <></>;
   }
 
-  const summary = data ?? t('ai.errors.insightsNotAvailable');
-
   return (
     <ChartWidget
       {...chartWidgetProps}
       highlightSelectionDisabled={true}
       onDataReady={onDataReady}
       topSlot={
-        isError ? (
-          t('ai.errors.unexpected')
-        ) : (
+        summary &&
+        !isError && (
           <ChartInsights nlgRequest={nlqResponseWithFilters} summary={summary}></ChartInsights>
         )
       }

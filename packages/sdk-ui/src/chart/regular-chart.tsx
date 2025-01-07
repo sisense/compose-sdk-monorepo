@@ -130,7 +130,7 @@ export const RegularChart = (props: RegularChartProps) => {
     if (!data || !chartDataOptions) {
       return null;
     }
-    let customizedData;
+    let customizedData: Data | undefined;
     if (onDataReady) {
       customizedData = onDataReady(data);
       if (!isData(customizedData)) {

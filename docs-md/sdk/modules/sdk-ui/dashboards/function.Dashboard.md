@@ -2,13 +2,13 @@
 title: Dashboard
 ---
 
-# Function Dashboard <Badge type="beta" text="Beta" />
+# Function Dashboard
 
 > **Dashboard**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
 
-**Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+**Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
 
 ## Parameters
 

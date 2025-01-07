@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DEFAULT_FORMAT } from '../consts.js';
 import isToday from 'dayjs/plugin/isToday';
 import { createAnchorDateFromRelativeDateFilter } from '@/filters/components/date-filter/relative-date-filter-tile/helpers';
+import { FilterContentDisplay } from '@/filters/components/common';
 dayjs.extend(isToday);
 
 /**
@@ -35,8 +36,8 @@ export const RelativeDateFilterDisplay: FunctionComponent<RelativeDateFilterDisp
     : anchorDate.format(DEFAULT_FORMAT);
 
   return (
-    <div className="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center">{`${operatorTxt} ${countTxt} ${levelTxt} ${t(
-      'dateFilter.from',
-    )} ${anchorTxt}`}</div>
+    <FilterContentDisplay>
+      {`${operatorTxt} ${countTxt} ${levelTxt} ${t('dateFilter.from')} ${anchorTxt}`}
+    </FilterContentDisplay>
   );
 };

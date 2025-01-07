@@ -1,12 +1,15 @@
 import { FilterTile, FilterTileDesignOptions } from '@/filters/components/filter-tile';
 import { Filter } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
+import { FilterContentDisplay } from '@/filters/components/common';
 
 export type UnsupportedFilterTileProps = {
   filter: Filter;
   design?: FilterTileDesignOptions;
   /** Filter delete callback */
   onDelete?: () => void;
+  /** Filter edit callback */
+  onEdit?: () => void;
 };
 
 /**
@@ -14,17 +17,23 @@ export type UnsupportedFilterTileProps = {
  *
  * @internal
  */
-export const UnsupportedFilterTile = ({ filter, design, onDelete }: UnsupportedFilterTileProps) => {
+export const UnsupportedFilterTile = ({
+  filter,
+  design,
+  onDelete,
+  onEdit,
+}: UnsupportedFilterTileProps) => {
   const { t } = useTranslation();
   return (
     <FilterTile
       title={filter.attribute.name ?? ''}
       renderContent={() => (
-        <div className="csdk-p-[12px] csdk-text-[13px]">{t('unsupportedFilterMessage')}</div>
+        <FilterContentDisplay>{t('unsupportedFilterMessage')}</FilterContentDisplay>
       )}
       design={design}
       locked={filter.config.locked}
       onDelete={onDelete}
+      onEdit={onEdit}
     />
   );
 };

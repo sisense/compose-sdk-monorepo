@@ -36,6 +36,8 @@ export interface CriteriaFilterTileProps {
   onUpdate: (filter: Filter | null) => void;
   /** Filter delete callback */
   onDelete?: () => void;
+  /** Filter edit callback */
+  onEdit?: () => void;
   /** List of available measures to rank by. Required only for ranking filters. */
   measures?: Measure[];
   /**
@@ -81,6 +83,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
       arrangement = 'vertical',
       onUpdate: updateFilterFromProps,
       onDelete,
+      onEdit,
       measures,
       tileDesignOptions,
     } = props;
@@ -157,6 +160,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         design={tileDesignOptions}
         locked={filter.config.locked}
         onDelete={onDelete}
+        onEdit={onEdit}
       />
     );
   },

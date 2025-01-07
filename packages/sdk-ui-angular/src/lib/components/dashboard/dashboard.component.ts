@@ -24,7 +24,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
 /**
  * An Angular component used for easily rendering a dashboard created in Sisense Fusion.
  *
- * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
  *
  * @example
  * ```html
@@ -67,7 +67,6 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * To learn more about this and related dashboard components,
  * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
  * @group Dashboards
- * @beta
  */
 @Component({
   selector: 'csdk-dashboard',

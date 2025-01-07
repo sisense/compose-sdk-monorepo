@@ -3,7 +3,7 @@
 exports[`CascadingFilterTile > should render a locked CascadingFilterTile component 1`] = `
 <div>
   <div
-    class="css-xhbwdz"
+    class="css-1k5rk27"
   >
     <div
       class="css-l4aa93"
@@ -17,7 +17,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           style="border-bottom-color: rgba(232, 232, 232, 1);"
         >
           <div
-            class="css-xhbwdz"
+            class="css-1k5rk27"
           >
             <div
               class="css-n759pn"
@@ -51,7 +51,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                 </svg>
                 <span
                   class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-                  style="color: rgb(91, 99, 114);"
+                  style="color: rgb(91, 99, 114); flex-grow: 1;"
                 >
                   Gender
                 </span>
@@ -60,13 +60,17 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                 style="color: rgb(91, 99, 114); position: relative;"
               >
                 <div
-                  class="csdk-flex csdk-flex-wrap csdk-p-3 csdk-gap-[5px]"
+                  class="css-1uvk1au"
                 >
-                  <button
-                    class="css-sc98s6"
+                  <div
+                    class="css-w34bcj"
                   >
-                    Include all
-                  </button>
+                    <button
+                      class="css-sc98s6"
+                    >
+                      Include all
+                    </button>
+                  </div>
                 </div>
                 <div
                   style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
@@ -79,7 +83,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           class=""
         >
           <div
-            class="css-xhbwdz"
+            class="css-1k5rk27"
           >
             <div
               class="css-n759pn"
@@ -100,7 +104,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
               >
                 <span
                   class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-                  style="color: rgb(91, 99, 114);"
+                  style="color: rgb(91, 99, 114); flex-grow: 1;"
                 >
                   Age Range
                 </span>
@@ -109,13 +113,17 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                 style="color: rgb(91, 99, 114); position: relative;"
               >
                 <div
-                  class="csdk-flex csdk-flex-wrap csdk-p-3 csdk-gap-[5px]"
+                  class="css-1uvk1au"
                 >
-                  <button
-                    class="css-sc98s6"
+                  <div
+                    class="css-w34bcj"
                   >
-                    0-18
-                  </button>
+                    <button
+                      class="css-sc98s6"
+                    >
+                      0-18
+                    </button>
+                  </div>
                 </div>
                 <div
                   style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"

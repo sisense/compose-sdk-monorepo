@@ -434,12 +434,12 @@ export function filterRelationRulesToFilterRelationsModel(
  *
  * @internal
  */
-export function getRelationsAsText(
-  relations: FilterRelationsRules,
-  filters: Filter[],
-): string | null {
-  if (!relations) return null;
-  if ('instanceid' in relations) return relations.instanceid;
+export function getRelationsAsText(relations: FilterRelationsRules, filters: Filter[]): string {
+  if (!relations) return '';
+  if ('instanceid' in relations)
+    return relations.instanceid
+      ? findFilterByGuid(filters, relations.instanceid)?.attribute.name ?? ''
+      : '';
   const left =
     'instanceid' in relations.left
       ? `[${findFilterByGuid(filters, relations.left.instanceid)?.attribute.name}]`
@@ -455,6 +455,38 @@ function findFilterByGuid(filters: Filter[], guid: string): Filter | undefined {
   return filters.find((filter) => filter.config.guid === guid);
 }
 
+export function getFilterRelationsDescription(
+  relations: FilterRelationsRules,
+  filters: Filter[],
+): FilterRelationsDescription {
+  if (!relations) {
+    return [];
+  }
+
+  return traverse(relations);
+
+  function traverse(node: FilterRelationsRuleNode): FilterRelationsDescription {
+    if (isRelationsRuleIdNode(node)) {
+      return [
+        {
+          nodeType: 'attribute',
+          attribute: findFilterByGuid(filters, node.instanceid)?.attribute?.name || node.instanceid,
+        },
+      ];
+    }
+    if (isRelationsRule(node)) {
+      return [
+        { nodeType: 'openBracket' },
+        ...traverse(node.left),
+        { nodeType: 'operator', operator: node.operator },
+        ...traverse(node.right),
+        { nodeType: 'closeBracket' },
+      ];
+    }
+    throw new UnknownRelationsNodeError();
+  }
+}
+
 /**
  * Error thrown when an unknown node type is encountered in filter relations.
  */
@@ -462,4 +494,54 @@ class UnknownRelationsNodeError extends Error {
   constructor() {
     super('Broken filter relations. Unknown node type.');
   }
+}
+
+export type FilterRelationsDescription = FilterRelationsDescriptionNode[];
+
+type FilterRelationsDescriptionNode =
+  | OpenBracketDescriptionNode
+  | CloseBracketDescriptionNode
+  | AttributeDescriptionNode
+  | OperatorDescriptionNode;
+
+type OpenBracketDescriptionNode = {
+  nodeType: 'openBracket';
+};
+
+export function isOpenBracketDescriptionNode(
+  node: FilterRelationsDescriptionNode,
+): node is OpenBracketDescriptionNode {
+  return node.nodeType === 'openBracket';
+}
+
+type CloseBracketDescriptionNode = {
+  nodeType: 'closeBracket';
+};
+
+export function isCloseBracketDescriptionNode(
+  node: FilterRelationsDescriptionNode,
+): node is CloseBracketDescriptionNode {
+  return node.nodeType === 'closeBracket';
+}
+
+type AttributeDescriptionNode = {
+  nodeType: 'attribute';
+  attribute: string;
+};
+
+export function isAttributeDescriptionNode(
+  node: FilterRelationsDescriptionNode,
+): node is AttributeDescriptionNode {
+  return node.nodeType === 'attribute';
+}
+
+type OperatorDescriptionNode = {
+  nodeType: 'operator';
+  operator: 'AND' | 'OR';
+};
+
+export function isOperatorDescriptionNode(
+  node: FilterRelationsDescriptionNode,
+): node is OperatorDescriptionNode {
+  return node.nodeType === 'operator';
 }

@@ -2,11 +2,11 @@
 title: DashboardById
 ---
 
-# Class DashboardById <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+# Class DashboardById <Badge type="fusionEmbed" text="Fusion Embed" />
 
 A component used for easily rendering a dashboard by its ID in a Sisense Fusion instance.
 
-**Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+**Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
 
 ## Example
 

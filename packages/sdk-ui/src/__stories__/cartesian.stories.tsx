@@ -2,6 +2,7 @@ import { Chart } from '../chart';
 import { templateForComponent } from './template';
 import { NumberFormatConfig, ChartStyleOptions } from '../types';
 import { Data } from '@sisense/sdk-data';
+import { HighchartsOptions } from '..';
 
 const template = templateForComponent(Chart);
 
@@ -170,7 +171,7 @@ export const Column = template({
 
 export const Column2X = template({
   ...cartesian2XArgs,
-  onBeforeRender: (o) => {
+  onBeforeRender: (o: HighchartsOptions) => {
     console.log('DEBUG', o);
     return o;
   },

@@ -81,6 +81,30 @@ Limit of the date range that can be selected.
 
 ***
 
+### onDelete
+
+> **`readonly`** **onDelete**?: () => `void`
+
+Filter delete callback
+
+#### Returns
+
+`void`
+
+***
+
+### onEdit
+
+> **`readonly`** **onEdit**?: () => `void`
+
+Filter edit callback
+
+#### Returns
+
+`void`
+
+***
+
 ### onUpdate
 
 > **`readonly`** **onUpdate**?: (`filter`) => `void`

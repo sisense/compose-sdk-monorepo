@@ -8,3 +8,4 @@ export { TriangleIndicator } from './triangle-indicator';
 export { DateRangeFieldButton } from './date-range-field-button';
 export { Dropdown } from './dropdown';
 export { type FilterVariant } from './filter-utils';
+export { FilterContentDisplay } from './filter-content-display';

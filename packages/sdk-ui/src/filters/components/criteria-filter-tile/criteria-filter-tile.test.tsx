@@ -192,4 +192,16 @@ describe('criteria tests', () => {
     deleteButton.click();
     expect(onDelete).toHaveBeenCalled();
   });
+
+  it('should call "onEdit" when edit button is clicked', async () => {
+    const onEditMock = vi.fn();
+    const { findByTestId } = render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsBetween} onEdit={onEditMock} />
+      </MockedSisenseContextProvider>,
+    );
+    const editButton = await findByTestId('filter-edit-button');
+    editButton.click();
+    expect(onEditMock).toHaveBeenCalled();
+  });
 });

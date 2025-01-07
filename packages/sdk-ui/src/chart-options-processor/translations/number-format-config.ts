@@ -2,6 +2,7 @@
 import { numericFormatter } from 'react-number-format';
 import round from 'lodash-es/round';
 import { CompleteNumberFormatConfig, NumberFormatConfig } from '@/types';
+import { i18nextInstance } from '@/translation/initialize-i18n';
 
 const oneKilo = 1000;
 const oneMillion = oneKilo * 1000;
@@ -73,6 +74,7 @@ export const applyFormat = (config: CompleteNumberFormatConfig, value: number) =
 
   // If fixedDecimalScale is true, it adds 0 to match given decimalScale,
   // please see https://www.npmjs.com/package/react-number-format
+  const { t: translate } = i18nextInstance;
   const fixedDecimalScale = config.decimalScale !== 0 && config.decimalScale !== 'auto';
   const decimalScale = config.decimalScale === 'auto' ? 2 : config.decimalScale;
 
@@ -92,16 +94,16 @@ export const applyFormat = (config: CompleteNumberFormatConfig, value: number) =
   if (config.name === 'Numbers' || config.name === 'Currency') {
     if (config.trillion && Math.abs(value) / oneTrillion >= 1) {
       newValue = value / oneTrillion;
-      suffix = 'T';
+      suffix = translate('formatting.number.abbreviations.trillion');
     } else if (config.billion && Math.abs(value) / oneBillion >= 1) {
       newValue = value / oneBillion;
-      suffix = 'B';
+      suffix = translate('formatting.number.abbreviations.billion');
     } else if (config.million && Math.abs(value) / oneMillion >= 1) {
       newValue = value / oneMillion;
-      suffix = 'M';
+      suffix = translate('formatting.number.abbreviations.million');
     } else if (config.kilo && Math.abs(value) / oneKilo >= 1) {
       newValue = value / oneKilo;
-      suffix = 'K';
+      suffix = translate('formatting.number.abbreviations.thousand');
     }
   }
 

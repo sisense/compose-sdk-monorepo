@@ -53,6 +53,7 @@ import {
   TextWidgetStyleOptions,
   GenericDataOptions,
   DashboardWidgetStyleOptions,
+  IndicatorRenderOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -283,6 +284,43 @@ export type BeforeRenderHandler = (
 ) => HighchartsOptions;
 
 /**
+ * Type guard for checking if the render options are of type HighchartsOptions
+ *
+ * @param renderOptions - The render options to check
+ * @returns whether the render options are of type HighchartsOptions
+ * @internal
+ */
+export const isHighchartsOptions = (renderOptions: any): renderOptions is HighchartsOptions => {
+  return renderOptions?.chart?.type !== undefined;
+};
+
+/**
+ * Type guard for checking if the render options are of type IndicatorRenderOptions
+ *
+ * @param renderOptions - The render options to check
+ * @returns whether the render options are of type IndicatorRenderOptions
+ * @internal
+ */
+export const isIndicatorRenderOptions = (
+  renderOptions: any,
+): renderOptions is IndicatorRenderOptions => {
+  return renderOptions?.value !== undefined && renderOptions?.secondary !== undefined;
+};
+
+/**
+ * A handler function that allows you to customize the underlying chart element before it is
+ * rendered. Use the {@link IndicatorRenderOptions} object that is passed to the callback to change
+ * and then return the modified options object.
+ * The returned options are then used when rendering the chart.
+ *
+ * This callback is supported only for Indicator Chart.
+ */
+export type IndicatorBeforeRenderHandler = (
+  /** Indicator render options */
+  renderOptions: IndicatorRenderOptions,
+) => IndicatorRenderOptions;
+
+/**
  * Click handler for when an abstract data point (data point of any chart) is clicked
  */
 export type ChartDataPointsEventHandler = (
@@ -497,6 +535,16 @@ interface BoxplotChartEventProps extends BaseChartEventProps, HighchartsBasedCha
   onDataPointsSelected?: DataPointsEventHandler;
 }
 
+interface IndicatorChartEventProps extends BaseChartEventProps {
+  /**
+   * A callback that allows you to customize the underlying indicator chart element before it is rendered.
+   * The returned options are then used when rendering the chart.
+   *
+   * @category Callbacks
+   */
+  onBeforeRender?: IndicatorBeforeRenderHandler;
+}
+
 /**
  * Base Chart Props to be extended by {@link ChartProps}
  *
@@ -601,7 +649,7 @@ export interface BaseChartProps extends BaseChartEventProps {
 /**
  * Chart props to be able to react on chart events.
  */
-interface ChartEventProps extends BaseChartEventProps, HighchartsBasedChartEventProps {
+interface ChartEventProps extends BaseChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -630,6 +678,17 @@ interface ChartEventProps extends BaseChartEventProps, HighchartsBasedChartEvent
    * @category Callbacks
    */
   onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
+
+  /**
+   * A callback that allows you to customize the underlying chart element before it is rendered. The returned options are then used when rendering the chart.
+   *
+   * This callback is not supported for Areamap Chart, Scattermap Chart, Table, and PivotTable.
+   *
+   * @category Callbacks
+   */
+  onBeforeRender?:
+    | HighchartsBasedChartEventProps['onBeforeRender']
+    | IndicatorChartEventProps['onBeforeRender'];
 }
 
 /**
@@ -859,7 +918,7 @@ export interface PolarChartProps
 /**
  * Props of the {@link IndicatorChart} component.
  */
-export interface IndicatorChartProps extends BaseChartProps {
+export interface IndicatorChartProps extends BaseChartProps, IndicatorChartEventProps {
   /**
    * Configurations for how to interpret and present the data passed to the chart
    *

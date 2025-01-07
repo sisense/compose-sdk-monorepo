@@ -72,6 +72,14 @@ export const MemberFilterTile = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.title}
      */
     title: Object as PropType<MemberFilterTileProps['title']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onDelete}
+     */
+    onDelete: Function as PropType<MemberFilterTileProps['onDelete']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onEdit}
+     */
+    onEdit: Function as PropType<MemberFilterTileProps['onEdit']>,
   },
   setup: (props) => setupHelper(MemberFilterTilePreact, props),
 });

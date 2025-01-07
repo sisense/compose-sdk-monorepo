@@ -12,7 +12,7 @@ import { TranslatableError } from '@/translation/translatable-error';
 /**
  * React component that renders a dashboard created in Sisense Fusion by its ID.
  *
- * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
  *
  * @example
  *
@@ -36,7 +36,6 @@ import { TranslatableError } from '@/translation/translatable-error';
  * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
  * @group Fusion Assets
  * @fusionEmbed
- * @beta
  */
 export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',

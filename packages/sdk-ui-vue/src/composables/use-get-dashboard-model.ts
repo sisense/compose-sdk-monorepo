@@ -23,7 +23,7 @@ import { useTracking } from './use-tracking';
  * for Vue applications that need to integrate Sisense dashboard analytics, providing a reactive way to fetch
  * and display dashboard data.
  *
- * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
  *
  * @param {GetDashboardModelParams} params - The parameters for fetching the dashboard model, including the
  * dashboard OID and an option to include widgets within the dashboard. Supports dynamic parameter values through

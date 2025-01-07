@@ -82,6 +82,18 @@ Filter delete callback
 
 ***
 
+### onEdit
+
+> **onEdit**?: () => `void`
+
+Filter edit callback
+
+#### Returns
+
+`void`
+
+***
+
 ### parentFilters
 
 > **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]

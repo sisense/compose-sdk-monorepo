@@ -3,6 +3,7 @@ import { FilterTile, FilterTileDesignOptions } from './filter-tile';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { useTranslation } from 'react-i18next';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import { FilterContentDisplay } from '@/filters/components/common';
 
 /**
  * Props for {@link CustomFilterTile}
@@ -20,6 +21,8 @@ export interface CustomFilterTileProps {
   onUpdate: (filter: Filter | null) => void;
   /** Filter delete callback */
   onDelete?: () => void;
+  /** Filter edit callback */
+  onEdit?: () => void;
   /** Design options for the tile @internal */
   tileDesignOptions?: FilterTileDesignOptions;
 }
@@ -54,7 +57,7 @@ export const CustomFilterTile = asSisenseComponent({
 })((props: CustomFilterTileProps) => {
   const { t } = useTranslation();
 
-  const { filter, onUpdate, onDelete, tileDesignOptions } = props;
+  const { filter, onUpdate, onDelete, onEdit, tileDesignOptions } = props;
   const filterJaql = filter.jaql().jaql.filter;
   // Remove internal properties from the filter jaql
   delete filterJaql.custom;
@@ -71,20 +74,17 @@ export const CustomFilterTile = asSisenseComponent({
   return (
     <FilterTile
       title={filter.attribute.name}
-      renderContent={(collapsed) => {
-        return collapsed ? (
-          <p className="csdk-text-center csdk-text-[13px]">{t('customFilterTileMessage')}</p>
-        ) : (
-          <div className="csdk-text-[13px] csdk-m-3" style={{ whiteSpace: 'pre-wrap' }}>
-            {JSON.stringify(filterJaql, null, 4)}
-          </div>
-        );
-      }}
+      renderContent={(collapsed) => (
+        <FilterContentDisplay>
+          {collapsed ? t('customFilterTileMessage') : JSON.stringify(filterJaql, null, 4)}
+        </FilterContentDisplay>
+      )}
       disabled={filter.config.disabled}
       onToggleDisabled={() => onUpdate(getFilterWithToggledDisabled(filter))}
       design={tileDesignOptions || { header: { isCollapsible: false } }}
       locked={filter.config.locked}
       onDelete={onDelete}
+      onEdit={onEdit}
     />
   );
 });

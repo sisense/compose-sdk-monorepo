@@ -9,10 +9,9 @@ import { useTranslation } from 'react-i18next';
 import {
   calculateNewRelations,
   combineFiltersAndRelations,
-  FilterRelationsRules,
-  getRelationsAsText,
   splitFiltersAndRelations,
 } from '@/utils/filter-relations';
+import { FilterRelationsTile } from './filter-relations-tile';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
@@ -95,9 +94,6 @@ export const FiltersPanel = asSisenseComponent({
       handleFilterChange(null, index);
     };
 
-    // Temporary flag to show pseudo filter relations tile for debugging purposes
-    const showPseudoFilterRelationsTile = false;
-
     return (
       <PanelWrapper theme={themeSettings}>
         <PanelHeader theme={themeSettings}>
@@ -105,9 +101,7 @@ export const FiltersPanel = asSisenseComponent({
         </PanelHeader>
         <PanelBody>
           <PanelBodyInner>
-            {relations && showPseudoFilterRelationsTile && (
-              <PseudoFilterRelationsTile relations={relations} filters={filters} />
-            )}
+            {relations && <FilterRelationsTile relations={relations} filters={filters} />}
             {filters?.map((filter, index) => (
               <div className="csdk-mt-[6px]" key={filter.config.guid}>
                 <FiltersPanelTile
@@ -125,17 +119,3 @@ export const FiltersPanel = asSisenseComponent({
     );
   },
 );
-
-/**
- * Internal component that renders textual representation of filter relations for debugging purposes.
- * Remove after the real production FilterRelationsTile is implemented.
- */
-function PseudoFilterRelationsTile({
-  relations,
-  filters,
-}: {
-  relations: FilterRelationsRules;
-  filters: Filter[];
-}) {
-  return <div className="csdk-mt-[6px]">{getRelationsAsText(relations, filters)}</div>;
-}

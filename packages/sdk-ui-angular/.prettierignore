@@ -10,3 +10,4 @@ coverage/
 # Ignore auto-generated files:
 CHANGELOG.md
 src/version.ts
+src/package.json

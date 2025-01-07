@@ -108,6 +108,10 @@ export function useConvertFilterRelations(
   );
   const applyRelationsToOtherFilters = useCallback(
     (otherFilters: Filter[]) => {
+      // If there are no relations to apply, return the filters as is
+      if (!relations) {
+        return otherFilters;
+      }
       // If cascading filters are present in original filters,
       // try to reassemble passed filters to match the original relations
       const alignedOtherFilters = areCascadingFiltersPresent

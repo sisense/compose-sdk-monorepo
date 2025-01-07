@@ -42,3 +42,4 @@ testem.log
 Thumbs.db
 
 /src/version.ts
+/src/package.json

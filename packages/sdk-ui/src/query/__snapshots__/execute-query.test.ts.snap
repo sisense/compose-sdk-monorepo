@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`executeQuery > createExecuteQueryCacheKey > should return cache key 1`] = `"{"metadata":[{"jaql":{"title":"Condition","dim":"[Commerce.Condition]","datatype":"text"}},{"jaql":{"title":"sum Cost","dim":"[Commerce.Cost]","datatype":"numeric","agg":"sum"}},{"jaql":{"title":"Age Range","dim":"[Commerce.Age Range]","datatype":"text","filter":{"members":["18-24"]}},"panel":"scope"},{"jaql":{"title":"Gender","dim":"[Commerce.Gender]","datatype":"text","filter":{"members":["Male"]}},"panel":"scope"}],"datasource":{"title":"Sample ECommerce","live":false},"by":"ComposeSDK","queryGuid":""}"`;
+exports[`executeQuery > createExecuteQueryCacheKey > should return cache key 1`] = `"{"metadata":[{"jaql":{"title":"Condition","dim":"[Commerce.Condition]","datatype":"text"}},{"jaql":{"title":"sum Cost","dim":"[Commerce.Cost]","datatype":"numeric","agg":"sum"}},{"jaql":{"title":"Age Range","dim":"[Commerce.Age Range]","datatype":"text","filter":{"members":["18-24"]},"datasource":{"title":"Sample ECommerce","live":false}},"panel":"scope"},{"jaql":{"title":"Gender","dim":"[Commerce.Gender]","datatype":"text","filter":{"members":["Male"]},"datasource":{"title":"Sample ECommerce","live":false}},"panel":"scope"}],"datasource":{"title":"Sample ECommerce","live":false},"by":"ComposeSDK","queryGuid":""}"`;
 
 exports[`executeQuery > executePivotQuery > should call executePivotQuery from queryClient with correct args 1`] = `
 [
@@ -8,7 +8,10 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
     "columnsAttributes": [
       {
         "__serializable": "DimensionalElement",
-        "dataSource": undefined,
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
         "desc": "",
         "expression": "[Commerce.Age Range]",
         "name": "Age Range",
@@ -23,7 +26,10 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
         "__serializable": "DimensionalElement",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Gender]",
           "name": "Gender",
@@ -35,7 +41,7 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
         "members": [
           "Female",
         ],
-        "name": "4753e5d5477",
+        "name": "b47e93666e1",
         "type": "filter",
       },
     ],
@@ -45,7 +51,10 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
         "__serializable": "DimensionalElement",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Age Range]",
           "name": "Age Range",
@@ -57,7 +66,7 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
         "members": [
           "18-24",
         ],
-        "name": "67f10cf7c33",
+        "name": "60e720dab25",
         "type": "filter",
       },
     ],
@@ -67,7 +76,10 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
         "aggregation": "sum",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Cost]",
           "name": "Cost",
@@ -84,7 +96,10 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
     "rowsAttributes": [
       {
         "__serializable": "DimensionalElement",
-        "dataSource": undefined,
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
         "desc": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
@@ -102,7 +117,10 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
     "attributes": [
       {
         "__serializable": "DimensionalElement",
-        "dataSource": undefined,
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
         "desc": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
@@ -117,7 +135,10 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
         "__serializable": "DimensionalElement",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Age Range]",
           "name": "Age Range",
@@ -129,7 +150,7 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
         "members": [
           "18-24",
         ],
-        "name": "67f10cf7c33",
+        "name": "60e720dab25",
         "type": "filter",
       },
     ],
@@ -138,7 +159,10 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
         "__serializable": "DimensionalElement",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Gender]",
           "name": "Gender",
@@ -150,7 +174,7 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
         "members": [
           "Male",
         ],
-        "name": "76c7dc97ab4",
+        "name": "7bccec9f8e2",
         "type": "filter",
       },
     ],
@@ -160,7 +184,10 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
         "aggregation": "sum",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Cost]",
           "name": "Cost",

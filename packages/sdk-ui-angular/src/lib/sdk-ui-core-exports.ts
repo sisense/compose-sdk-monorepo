@@ -115,6 +115,8 @@ export type {
   ScatterDataPoint,
   HighchartsOptions,
   BoxplotDataPoint,
+  IndicatorBeforeRenderHandler,
+  IndicatorRenderOptions,
 
   // Dashboard:
   DashboardProps,

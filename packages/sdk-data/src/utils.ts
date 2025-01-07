@@ -13,7 +13,6 @@ import {
 } from './dimensional-model/interfaces.js';
 import { DataSource, DataSourceInfo } from './interfaces.js';
 import { FilterJaql, JaqlSortDirection, Sort } from './dimensional-model/types.js';
-import { MembersFilter } from './dimensional-model/filters/filters.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
@@ -186,8 +185,8 @@ export function convertSort(sort?: string) {
 export const createFilterFromJaql = (
   jaql: FilterJaql,
   instanceid?: string,
-  disabled: boolean = false,
-  locked: boolean = false,
+  disabled = false,
+  locked = false,
 ): Filter => {
   // translation logic is based on FilterJaqlInternal type (from internal modern-analytics-filters)
   // TODO reconcile FilterJaql and FilterJaqlInternal
@@ -205,7 +204,7 @@ export const createFilterFromJaql = (
       } as FilterJaqlInternal,
       `${instanceid}-bg`,
     );
-    const config = (filter as MembersFilter).config;
+    const config = filter.config;
     filter.config = { ...config, backgroundFilter };
     return filter;
   }

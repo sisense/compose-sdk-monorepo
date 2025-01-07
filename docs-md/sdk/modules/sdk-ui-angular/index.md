@@ -71,13 +71,13 @@ Angular query service
 Angular components and utilities for working with dashboards
 
 - [ChartWidgetComponent](dashboards/class.ChartWidgetComponent.md)
-- [DashboardComponent](dashboards/class.DashboardComponent.md) <Badge type="beta" text="Beta" />
+- [DashboardComponent](dashboards/class.DashboardComponent.md)
 
 ## Fusion Assets
 
 Angular modules, services, and components for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardByIdComponent](fusion-assets/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardByIdComponent](fusion-assets/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />

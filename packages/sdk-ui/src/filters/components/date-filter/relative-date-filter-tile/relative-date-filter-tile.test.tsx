@@ -151,4 +151,22 @@ describe('RelativeDateFilterTile tests', () => {
     deleteButton.click();
     expect(onDelete).toHaveBeenCalled();
   });
+
+  it('should call "onEdit" when edit button is clicked', async () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'vertical' as FilterVariant,
+      onUpdate: vi.fn(),
+    };
+    const onEditMock = vi.fn();
+    const { findByTestId } = render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} onEdit={onEditMock} />
+      </MockedSisenseContextProvider>,
+    );
+    const editButton = await findByTestId('filter-edit-button');
+    editButton.click();
+    expect(onEditMock).toHaveBeenCalled();
+  });
 });

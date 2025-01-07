@@ -33,7 +33,7 @@ const DATA_MODEL_MODULE_NAME = 'DM';
 export const createAttributeHelper = (
   dim: string,
   table: string | undefined,
-  column: string,
+  column: string | undefined,
   level: string | undefined,
   dataType: string,
   title?: string,
@@ -41,12 +41,14 @@ export const createAttributeHelper = (
 ): Attribute | LevelAttribute => {
   // if table is undefined, extract it from dim
   const dimTable = table ?? dim.slice(1, -1).split('.')[0];
+  // if column is undefined, extract it from dim
+  const dimColumn = column ?? dim.slice(1, -1).split('.')[1];
 
   if (level) {
     const dateLevel = DimensionalLevelAttribute.translateJaqlToGranularity({ level });
     const format = DimensionalLevelAttribute.getDefaultFormatForGranularity(dateLevel);
     const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
-      title ?? column,
+      title ?? dimColumn,
       dim,
       dateLevel,
       format,
@@ -56,7 +58,7 @@ export const createAttributeHelper = (
     );
     levelAttribute.composeCode = normalizeAttributeName(
       dimTable,
-      column,
+      dimColumn,
       level,
       DATA_MODEL_MODULE_NAME,
     );
@@ -66,7 +68,7 @@ export const createAttributeHelper = (
     ? MetadataTypes.NumericAttribute
     : MetadataTypes.TextAttribute;
   const attribute: Attribute = new DimensionalAttribute(
-    title ?? column,
+    title ?? dimColumn,
     dim,
     attributeType,
     undefined,
@@ -75,7 +77,7 @@ export const createAttributeHelper = (
   );
   attribute.composeCode = normalizeAttributeName(
     dimTable,
-    column,
+    dimColumn,
     undefined,
     DATA_MODEL_MODULE_NAME,
   );

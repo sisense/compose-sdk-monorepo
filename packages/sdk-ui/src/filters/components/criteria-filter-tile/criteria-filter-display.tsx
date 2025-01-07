@@ -6,6 +6,7 @@ import {
   CriteriaFilterValueType,
 } from './criteria-filter-operations.js';
 import { useTranslation } from 'react-i18next';
+import { FilterContentDisplay } from '@/filters/components/common';
 
 /**
  * Props for {@link CriteriaFilterDisplay}
@@ -58,11 +59,5 @@ export const CriteriaFilterDisplay: FunctionComponent<CriteriaFilterDisplayProps
     text[0].toLowerCase() + text.slice(1)
   }`;
 
-  return (
-    <div
-      className={`csdk-p-[12px] csdk-leading-[26px] csdk-mx-auto csdk-text-[13px] csdk-flex csdk-flex-wrap csdk-gap-x-1`}
-    >
-      {displayText}
-    </div>
-  );
+  return <FilterContentDisplay>{displayText}</FilterContentDisplay>;
 };

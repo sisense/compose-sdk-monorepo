@@ -32,6 +32,8 @@ const config: ViteUserConfig = {
         'src/**/__mocks__',
         'src/__stories__/template.tsx',
         '**/*.stories.tsx',
+        '**/*.test.tsx',
+        '**/*.test.ts',
         'src/@types',
         'src/widgets/common/drilldown-breadcrumbs',
         'src/charts/indicator/chart/*', // legacy indicator's code, copy-pasted from PWC

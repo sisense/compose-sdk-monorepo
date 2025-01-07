@@ -62,6 +62,14 @@ export const CriteriaFilterTile = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.title}
      */
     title: Object as PropType<CriteriaFilterTileProps['title']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onDelete}
+     */
+    onDelete: Function as PropType<CriteriaFilterTileProps['onDelete']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onEdit}
+     */
+    onEdit: Function as PropType<CriteriaFilterTileProps['onEdit']>,
   },
 
   setup: (props) => setupHelper(CriteriaFilterTilePreact, props),

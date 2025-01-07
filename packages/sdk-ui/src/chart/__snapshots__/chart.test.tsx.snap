@@ -1464,6 +1464,78 @@ exports[`Chart > funnel chart > render funnel chart with two values 1`] = `
 }
 `;
 
+exports[`Chart > indicator chart > render indicator gauge chart 1`] = `
+{
+  "secondary": {
+    "color": "#E4E4E4",
+    "data": 490,
+    "fontWeight": 800,
+    "text": "490",
+  },
+  "secondaryTitle": {
+    "color": "#E4E4E4",
+    "text": "Total Revenue",
+  },
+  "title": {
+    "color": "#000000",
+    "text": "Total Cost",
+  },
+  "value": {
+    "color": "#00cee6",
+    "data": 33745,
+    "text": "33.75K",
+  },
+}
+`;
+
+exports[`Chart > indicator chart > render indicator numericBar chart 1`] = `
+{
+  "secondary": {
+    "color": "#E4E4E4",
+    "data": 490,
+    "fontWeight": 800,
+    "text": "490",
+  },
+  "secondaryTitle": {
+    "color": "#E4E4E4",
+    "text": "",
+  },
+  "title": {
+    "color": "#000000",
+    "text": "",
+  },
+  "value": {
+    "color": "#00cee6",
+    "data": 490,
+    "text": "490",
+  },
+}
+`;
+
+exports[`Chart > indicator chart > should render indicator chart 1`] = `
+{
+  "secondary": {
+    "color": "#E4E4E4",
+    "data": 490,
+    "fontWeight": 800,
+    "text": "490",
+  },
+  "secondaryTitle": {
+    "color": "#E4E4E4",
+    "text": "",
+  },
+  "title": {
+    "color": "#000000",
+    "text": "",
+  },
+  "value": {
+    "color": "#00cee6",
+    "data": 33745,
+    "text": "33.75K",
+  },
+}
+`;
+
 exports[`Chart > pie chart > render pie chart with cat and no value 1`] = `
 {
   "accessibility": {

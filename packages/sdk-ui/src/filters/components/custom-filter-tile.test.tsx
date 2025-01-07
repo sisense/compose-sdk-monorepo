@@ -76,4 +76,16 @@ describe('CustomFilterTile', () => {
     fireEvent.click(deleteButton);
     expect(onDelete).toHaveBeenCalled();
   });
+
+  it('should call "onEdit" when edit button is clicked', async () => {
+    const onEditMock = vi.fn();
+    const { findByTestId } = render(
+      <MockedSisenseContextProvider {...contextProviderProps}>
+        <CustomFilterTile filter={filter} onUpdate={() => {}} onEdit={onEditMock} />
+      </MockedSisenseContextProvider>,
+    );
+    const editButton = await findByTestId('filter-edit-button');
+    fireEvent.click(editButton);
+    expect(onEditMock).toHaveBeenCalled();
+  });
 });

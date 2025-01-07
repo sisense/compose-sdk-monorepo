@@ -42,7 +42,6 @@ import { setupHelper } from '../../setup-helper';
  * To learn more about this and related dashboard components,
  * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
  * @group Dashboards
- * @beta
  */
 export const Dashboard = defineComponent({
   props: {

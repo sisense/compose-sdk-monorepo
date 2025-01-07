@@ -8,7 +8,7 @@
     "target": "es6",
     "module": "es2020",
     "moduleResolution": "node",
-    "lib": ["es2017", "dom"],
+    "lib": ["ES2017", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {

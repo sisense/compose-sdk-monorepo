@@ -97,6 +97,8 @@ export type {
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
 
+export type { IndicatorRenderOptions } from './charts/indicator/indicator-render-options';
+
 /**
  * @internal
  */

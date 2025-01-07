@@ -82,6 +82,14 @@ export const DateRangeFilterTile = defineComponent({
      * @internal
      */
     tiled: Boolean as PropType<DateRangeFilterTileProps['tiled']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onDelete}
+     */
+    onDelete: Function as PropType<DateRangeFilterTileProps['onDelete']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onEdit}
+     */
+    onEdit: Function as PropType<DateRangeFilterTileProps['onEdit']>,
   },
   setup: (props) => setupHelper(DateRangeFilterTilePreact, props),
 });

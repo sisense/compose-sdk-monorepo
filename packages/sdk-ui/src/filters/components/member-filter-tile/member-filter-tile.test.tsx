@@ -259,4 +259,31 @@ describe('MemberFilterTile', () => {
 
     expect(onDelete).toHaveBeenCalled();
   });
+
+  it('should call "onEdit" when edit button is clicked', async () => {
+    // Rendering a MemberFilterTile requires 3 fetches
+    server.use(
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
+    );
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
+    const onEditMock = vi.fn();
+    const { findByTestId } = render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={DM.Commerce.AgeRange}
+          filter={filter}
+          onChange={() => {}}
+          onEdit={onEditMock}
+        />
+      </SisenseContextProvider>,
+    );
+
+    const editButton = await findByTestId('filter-edit-button');
+    if (editButton) fireEvent.click(editButton);
+
+    expect(onEditMock).toHaveBeenCalled();
+  });
 });

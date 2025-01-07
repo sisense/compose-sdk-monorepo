@@ -69,6 +69,14 @@ export const RelativeDateFilterTile = defineComponent({
      * @internal
      */
     tileDesignOptions: Object as PropType<RelativeDateFilterTileProps['tileDesignOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onDelete}
+     */
+    onDelete: Function as PropType<RelativeDateFilterTileProps['onDelete']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onEdit}
+     */
+    onEdit: Function as PropType<RelativeDateFilterTileProps['onEdit']>,
   },
   setup: (props) => setupHelper(RelativeDateFilterTilePreact, props),
 });

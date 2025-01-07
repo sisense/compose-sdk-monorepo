@@ -45,7 +45,8 @@ const defaultValueLabelSettings: ValueLabelSettings = {
 
 export const createValueLabelFormatter = (numberFormatConfig?: NumberFormatConfig) => {
   return function (this: InternalSeries) {
-    if (this.y === undefined || isNaN(this.y)) {
+    const isDummyPointBetweenCategoriesGroups = this.y === 0 && this.x === ' ';
+    if (this.y === undefined || isNaN(this.y) || isDummyPointBetweenCategoriesGroups) {
       return '';
     }
     return applyFormatPlainText(getCompleteNumberFormatConfig(numberFormatConfig), this.y);

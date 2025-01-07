@@ -2,13 +2,13 @@
 title: DashboardById
 ---
 
-# Function DashboardById <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+# Function DashboardById <Badge type="fusionEmbed" text="Fusion Embed" />
 
 > **DashboardById**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 React component that renders a dashboard created in Sisense Fusion by its ID.
 
-**Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+**Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
 
 ## Parameters
 

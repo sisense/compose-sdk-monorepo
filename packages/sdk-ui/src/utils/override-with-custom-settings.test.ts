@@ -1,4 +1,4 @@
-import { overrideWithCustomSettings } from './override-with-custom-settings';
+import { overrideWithCustomSettings } from './override-with-custom-settings.js';
 describe('overrideWithCustomSettings', () => {
   const customSettings = { a: { b: { c: 'custom_cc' } } };
   const defaultOptions = { aa: { bb: { cc: 'cc' } }, cc: 'cc' };

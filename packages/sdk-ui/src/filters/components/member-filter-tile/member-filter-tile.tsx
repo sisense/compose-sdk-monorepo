@@ -42,6 +42,8 @@ export interface MemberFilterTileProps {
   onChange: (filter: Filter | null) => void;
   /** Filter delete callback */
   onDelete?: () => void;
+  /** Filter edit callback */
+  onEdit?: () => void;
   /** List of filters this filter is dependent on */
   parentFilters?: Filter[];
   /** Design options for the tile @internal */
@@ -82,6 +84,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     filter: filterFromProps,
     dataSource,
     onDelete,
+    onEdit,
     onChange: updateFilterFromProps,
     parentFilters = [],
     tileDesignOptions,
@@ -236,6 +239,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       })}
       locked={filter.config.locked}
       onDelete={onDelete}
+      onEdit={onEdit}
     />
   );
 });

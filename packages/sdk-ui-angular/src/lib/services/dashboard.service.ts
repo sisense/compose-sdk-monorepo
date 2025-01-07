@@ -11,7 +11,7 @@ import { TrackableService } from '../decorators/trackable.decorator';
 /**
  * Service for working with Sisense Fusion dashboards.
  *
- * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
  *
  * @group Fusion Assets
  * @fusionEmbed

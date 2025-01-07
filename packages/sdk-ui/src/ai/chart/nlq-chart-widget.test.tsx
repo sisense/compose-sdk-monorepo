@@ -68,7 +68,9 @@ describe('NlqChartWidget', () => {
       </AiTestWrapper>,
     );
 
-    await waitFor(() => expect(screen.getByText('No insights available.')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.queryByText('No insights available.')).not.toBeInTheDocument(),
+    );
   });
 
   it('renders loading icon, then error text if API call fails', async () => {
@@ -84,8 +86,8 @@ describe('NlqChartWidget', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByText('Oh snap, something went wrong. Please try again later.'),
-      ).toBeInTheDocument(),
+        screen.queryByText('Oh snap, something went wrong. Please try again later.'),
+      ).not.toBeInTheDocument(),
     );
   });
 });

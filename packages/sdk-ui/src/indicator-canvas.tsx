@@ -18,12 +18,23 @@ import { ChartData } from './chart-data/types';
 import { DesignOptions } from './chart-options-processor/translations/types';
 import { ChartRendererProps } from './chart/types';
 import { useThemeContext } from './theme-provider';
+import {
+  applyIndicatorRenderOptions,
+  IndicatorRenderOptions,
+  buildRenderOptionsFromLegacyOptions,
+} from './charts/indicator/indicator-render-options';
 
+export type IndicatorLegacyChartOptions = ReturnType<typeof createIndicatorLegacyChartOptions>;
+
+type IndicatorOnBeforeRender = (options: IndicatorRenderOptions) => IndicatorRenderOptions;
 export interface IndicatorCanvasProps {
   chartData: IndicatorChartData;
   dataOptions: IndicatorChartDataOptionsInternal;
   designOptions: IndicatorChartDesignOptions;
+  onBeforeRender?: IndicatorOnBeforeRender;
 }
+
+const defaultOnBeforeRender: IndicatorOnBeforeRender = (options) => options;
 
 /**
  * @internal
@@ -32,6 +43,7 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
   chartData,
   dataOptions,
   designOptions,
+  onBeforeRender = defaultOnBeforeRender,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -62,13 +74,25 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
         themeSettings,
       },
     );
-    indicator.render(
-      canvasRef.current,
+
+    // convert legacy options to render options, apply 'onBeforeRender' and convert back to legacy options
+    const renderOptions = buildRenderOptionsFromLegacyOptions(
       legacyDataOptions,
       legacyChartOptions,
+    );
+    const customizedRenderOptions = onBeforeRender(renderOptions);
+    const {
+      legacyDataOptions: customizedLegacyDataOptions,
+      legacyChartOptions: customizedLegacyChartOptions,
+    } = applyIndicatorRenderOptions(customizedRenderOptions, legacyDataOptions, legacyChartOptions);
+
+    indicator.render(
+      canvasRef.current,
+      customizedLegacyDataOptions,
+      customizedLegacyChartOptions,
       containerRef.current,
     );
-  }, [chartData, dataOptions, designOptions, themeSettings]);
+  }, [chartData, dataOptions, designOptions, themeSettings, onBeforeRender]);
 
   return (
     <div

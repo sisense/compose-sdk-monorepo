@@ -6,7 +6,10 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     {
       "column": {
         "__serializable": "DimensionalElement",
-        "dataSource": undefined,
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
         "desc": "",
         "expression": "[Commerce.Gender]",
         "name": "Gender",
@@ -25,7 +28,10 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     {
       "column": {
         "__serializable": "DimensionalElement",
-        "dataSource": undefined,
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
         "desc": "",
         "expression": "[Category.Category]",
         "name": "Category",
@@ -38,7 +44,10 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     {
       "column": {
         "__serializable": "DimensionalElement",
-        "dataSource": undefined,
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
         "desc": "",
         "expression": "[Commerce.Age Range]",
         "name": "Age Range",
@@ -59,7 +68,10 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     {
       "column": {
         "__serializable": "DimensionalElement",
-        "dataSource": undefined,
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
         "desc": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
@@ -75,7 +87,10 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
         "aggregation": "sum",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Cost]",
           "name": "Cost",
@@ -97,7 +112,10 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
         "aggregation": "sum",
         "attribute": {
           "__serializable": "DimensionalElement",
-          "dataSource": undefined,
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
           "desc": "",
           "expression": "[Commerce.Revenue]",
           "name": "Revenue",

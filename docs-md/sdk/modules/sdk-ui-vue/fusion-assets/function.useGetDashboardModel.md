@@ -12,7 +12,7 @@ by managing the loading, success, and error states of the request. This composab
 for Vue applications that need to integrate Sisense dashboard analytics, providing a reactive way to fetch
 and display dashboard data.
 
-**Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+**Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
 
 ## Parameters
 

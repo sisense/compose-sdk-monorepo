@@ -73,6 +73,12 @@ export const IndicatorChart = defineComponent({
      */
     styleOptions: Object as PropType<IndicatorChartProps['styleOptions']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onBeforeRender}
+     *
+     * @category Callbacks
+     */
+    onBeforeRender: Function as PropType<IndicatorChartProps['onBeforeRender']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onDataReady}
      *
      * @category Callbacks

@@ -68,13 +68,13 @@ Vue query service
 Vue components and utilities for working with dashboards
 
 - [ChartWidget](dashboards/class.ChartWidget.md)
-- [Dashboard](dashboards/class.Dashboard.md) <Badge type="beta" text="Beta" />
+- [Dashboard](dashboards/class.Dashboard.md)
 
 ## Fusion Assets
 
 Vue components and functions for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardById](fusion-assets/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardById](fusion-assets/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](fusion-assets/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />

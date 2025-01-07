@@ -110,6 +110,30 @@ Callback function that is called when the date range filter object should be upd
 
 ***
 
+### onDelete
+
+> **`readonly`** **onDelete**?: () => `void`
+
+Filter delete callback
+
+#### Returns
+
+`void`
+
+***
+
+### onEdit
+
+> **`readonly`** **onEdit**?: () => `void`
+
+Filter edit callback
+
+#### Returns
+
+`void`
+
+***
+
 ### parentFilters
 
 > **`readonly`** **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]

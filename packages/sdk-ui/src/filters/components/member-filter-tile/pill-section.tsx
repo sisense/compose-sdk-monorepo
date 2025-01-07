@@ -3,6 +3,7 @@ import type { FunctionComponent } from 'react';
 import { useThemeContext } from '../../../theme-provider';
 import { Member, SelectedMember } from './members-reducer';
 import { useTranslation } from 'react-i18next';
+import { FilterContentDisplay } from '@/filters/components/common';
 
 const StyledPillButton = styled.button<{
   backgroundColor: string;
@@ -24,6 +25,12 @@ const StyledPillButton = styled.button<{
   max-width: calc(50% - 2.5px);
   user-select: none;
   cursor: pointer;
+`;
+
+const PillsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 `;
 
 interface PillProps {
@@ -80,21 +87,23 @@ export const PillSection: FunctionComponent<PillSectionProps> = ({
     (selectedMembers.length === 0 || selectedMembers.length === members.length) &&
     selectedMembers.every((m) => !m.inactive);
   return (
-    <div className={'csdk-flex csdk-flex-wrap csdk-p-3 csdk-gap-[5px]'}>
-      {showIncludeAll && <IncludeAllPill disabled={disabled} />}
-      {!showIncludeAll &&
-        selectedMembers.map((m) => {
-          return (
-            <Pill
-              key={m.key}
-              name={m.title}
-              active={!m.inactive}
-              onClick={() => onToggleSelectedMember(m.key)}
-              excludeMembers={excludeMembers}
-              disabled={disabled}
-            />
-          );
-        })}
-    </div>
+    <FilterContentDisplay>
+      <PillsContainer>
+        {showIncludeAll && <IncludeAllPill disabled={disabled} />}
+        {!showIncludeAll &&
+          selectedMembers.map((m) => {
+            return (
+              <Pill
+                key={m.key}
+                name={m.title}
+                active={!m.inactive}
+                onClick={() => onToggleSelectedMember(m.key)}
+                excludeMembers={excludeMembers}
+                disabled={disabled}
+              />
+            );
+          })}
+      </PillsContainer>
+    </FilterContentDisplay>
   );
 };

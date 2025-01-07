@@ -119,3 +119,12 @@ Configurations for how to interpret and present the data passed to the chart
 > **styleOptions**?: [`IndicatorStyleOptions`](../type-aliases/type-alias.IndicatorStyleOptions.md)
 
 Configurations for how to style and present a chart's data.
+
+### Callbacks
+
+#### onBeforeRender
+
+> **onBeforeRender**?: [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md)
+
+A callback that allows you to customize the underlying indicator chart element before it is rendered.
+The returned options are then used when rendering the chart.

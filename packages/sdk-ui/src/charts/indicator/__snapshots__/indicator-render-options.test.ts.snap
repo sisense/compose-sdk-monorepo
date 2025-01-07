@@ -1,0 +1,457 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`applyIndicatorRenderOptions > should override legacyDataOptions and legacyChartOptions from indicatorRenderOptions 1`] = `
+{
+  "color": "#00cee6",
+  "max": {
+    "data": 100,
+    "text": "100",
+  },
+  "min": {
+    "data": 0,
+    "text": "0",
+  },
+  "secondary": {
+    "data": 1000,
+    "text": "New Secondary",
+  },
+  "secondaryTitle": {
+    "text": "New Secondary Title",
+  },
+  "showLabels": false,
+  "showSecondary": true,
+  "showTicks": false,
+  "showTitle": true,
+  "skin": "vertical",
+  "title": {
+    "text": "New Title",
+  },
+  "type": "numericSimple",
+  "value": {
+    "data": 999,
+    "text": "New Value",
+  },
+}
+`;
+
+exports[`applyIndicatorRenderOptions > should override legacyDataOptions and legacyChartOptions from indicatorRenderOptions 2`] = `
+{
+  "backgroundColor": "#FFFFFF",
+  "borderColor": "rgb(215, 215, 215)",
+  "borderWidth": 1,
+  "fitMeasures": [
+    {
+      "dataKey": "title",
+      "key": "fitTitleMeasure",
+      "prop": "string",
+    },
+    {
+      "dataKey": "value",
+      "key": "fitValueMeasure",
+      "prop": "string",
+    },
+    {
+      "dataKey": "secondaryTitle",
+      "key": "fitSecondaryMeasure",
+      "prop": "titleString",
+    },
+    {
+      "dataKey": "secondary",
+      "key": "fitSecondaryMeasure",
+      "prop": "valueString",
+    },
+  ],
+  "fontFamily": "Open Sans",
+  "forceTickerView": false,
+  "measureKeys": [
+    "indicatorMargin",
+    "numericMinWidth",
+    "titleSectionHeight",
+    "secSectionHeight",
+    "valueSectionMarginBottom",
+    "secSectionMarginTop",
+    "indicatorHorizontalMargin",
+    "indicatorVerticalMargin",
+  ],
+  "relativeSizes": [
+    {
+      "decimals": 0,
+      "key": "titleSectionHeight",
+      "value": 0.5,
+    },
+    {
+      "decimals": 0,
+      "key": "titleSectionMarginTop",
+      "value": 0.13,
+    },
+    {
+      "decimals": 0,
+      "key": "titleSectionMinWidth",
+      "value": 0.29,
+    },
+    {
+      "decimals": 0,
+      "key": "numericMinWidth",
+      "value": 4.69,
+    },
+    {
+      "decimals": 0,
+      "key": "valueSectionHeight",
+      "value": 1,
+    },
+    {
+      "decimals": 0,
+      "key": "valueSectionMarginRight",
+      "value": 0.14,
+    },
+    {
+      "decimals": 0,
+      "key": "valueSectionMarginBottom",
+      "value": 0.07,
+    },
+    {
+      "decimals": 0,
+      "key": "secSectionHeight",
+      "value": 0.34,
+    },
+    {
+      "decimals": 0,
+      "key": "secSectionMarginTop",
+      "value": 0.14,
+    },
+    {
+      "decimals": 0,
+      "key": "secDividerWidth",
+      "value": 0.14,
+    },
+    {
+      "decimals": 0,
+      "key": "secTitleMinWidth",
+      "value": 0.29,
+    },
+    {
+      "decimals": 0,
+      "key": "indicatorHorizontalMargin",
+      "value": 0.31,
+    },
+    {
+      "decimals": 0,
+      "key": "indicatorVerticalMargin",
+      "value": 0.46,
+    },
+  ],
+  "secondaryTitle": {
+    "color": "#555555",
+    "fontSizes": {
+      "big": 20,
+      "medium": 14,
+      "micro": 10,
+      "small": 10,
+    },
+  },
+  "secondaryValue": {
+    "color": "#123123",
+    "fontSizes": {
+      "big": 20,
+      "medium": 14,
+      "micro": 10,
+      "small": 10,
+    },
+    "fontWeight": "extra-bold",
+  },
+  "sizes": [
+    {
+      "size": "big",
+      "value": 70,
+    },
+    {
+      "size": "medium",
+      "value": 49,
+    },
+    {
+      "size": "small",
+      "value": 34,
+    },
+    {
+      "size": "micro",
+      "value": 24,
+    },
+  ],
+  "textKeys": [
+    "title",
+    "value",
+    "secondaryTitle",
+    "secondaryValue",
+  ],
+  "title": {
+    "color": "#987987",
+    "fontSizes": {
+      "big": 22,
+      "medium": 18,
+      "micro": 12,
+      "small": 15,
+    },
+  },
+  "value": {
+    "color": "#999999",
+    "fontSizes": {
+      "big": 66,
+      "medium": 46,
+      "micro": 23,
+      "small": 32,
+    },
+  },
+}
+`;
+
+exports[`buildRenderOptionsFromLegacyOptions > should build merged IndicatorRenderOptions from legacy data and chart options 1`] = `
+{
+  "secondary": {
+    "color": "#9EA2AB",
+    "data": 3735080.7951049805,
+    "fontWeight": 800,
+    "text": "3.74M",
+  },
+  "secondaryTitle": {
+    "color": "#9EA2AB",
+    "text": "Total Cost",
+  },
+  "title": {
+    "color": "#5B6372",
+    "text": "Total Revenue",
+  },
+  "value": {
+    "color": "#00cee6",
+    "data": 28732733.036079407,
+    "text": "28.73M",
+  },
+}
+`;
+
+exports[`indicator-render-options > applyIndicatorRenderOptions > should override legacyDataOptions and legacyChartOptions from indicatorRenderOptions 1`] = `
+{
+  "color": "#00cee6",
+  "max": {
+    "data": 100,
+    "text": "100",
+  },
+  "min": {
+    "data": 0,
+    "text": "0",
+  },
+  "secondary": {
+    "data": 1000,
+    "text": "New Secondary",
+  },
+  "secondaryTitle": {
+    "text": "New Secondary Title",
+  },
+  "showLabels": false,
+  "showSecondary": true,
+  "showTicks": false,
+  "showTitle": true,
+  "skin": "vertical",
+  "title": {
+    "text": "New Title",
+  },
+  "type": "numericSimple",
+  "value": {
+    "data": 999,
+    "text": "New Value",
+  },
+}
+`;
+
+exports[`indicator-render-options > applyIndicatorRenderOptions > should override legacyDataOptions and legacyChartOptions from indicatorRenderOptions 2`] = `
+{
+  "backgroundColor": "#FFFFFF",
+  "borderColor": "rgb(215, 215, 215)",
+  "borderWidth": 1,
+  "fitMeasures": [
+    {
+      "dataKey": "title",
+      "key": "fitTitleMeasure",
+      "prop": "string",
+    },
+    {
+      "dataKey": "value",
+      "key": "fitValueMeasure",
+      "prop": "string",
+    },
+    {
+      "dataKey": "secondaryTitle",
+      "key": "fitSecondaryMeasure",
+      "prop": "titleString",
+    },
+    {
+      "dataKey": "secondary",
+      "key": "fitSecondaryMeasure",
+      "prop": "valueString",
+    },
+  ],
+  "fontFamily": "Open Sans",
+  "forceTickerView": false,
+  "measureKeys": [
+    "indicatorMargin",
+    "numericMinWidth",
+    "titleSectionHeight",
+    "secSectionHeight",
+    "valueSectionMarginBottom",
+    "secSectionMarginTop",
+    "indicatorHorizontalMargin",
+    "indicatorVerticalMargin",
+  ],
+  "relativeSizes": [
+    {
+      "decimals": 0,
+      "key": "titleSectionHeight",
+      "value": 0.5,
+    },
+    {
+      "decimals": 0,
+      "key": "titleSectionMarginTop",
+      "value": 0.13,
+    },
+    {
+      "decimals": 0,
+      "key": "titleSectionMinWidth",
+      "value": 0.29,
+    },
+    {
+      "decimals": 0,
+      "key": "numericMinWidth",
+      "value": 4.69,
+    },
+    {
+      "decimals": 0,
+      "key": "valueSectionHeight",
+      "value": 1,
+    },
+    {
+      "decimals": 0,
+      "key": "valueSectionMarginRight",
+      "value": 0.14,
+    },
+    {
+      "decimals": 0,
+      "key": "valueSectionMarginBottom",
+      "value": 0.07,
+    },
+    {
+      "decimals": 0,
+      "key": "secSectionHeight",
+      "value": 0.34,
+    },
+    {
+      "decimals": 0,
+      "key": "secSectionMarginTop",
+      "value": 0.14,
+    },
+    {
+      "decimals": 0,
+      "key": "secDividerWidth",
+      "value": 0.14,
+    },
+    {
+      "decimals": 0,
+      "key": "secTitleMinWidth",
+      "value": 0.29,
+    },
+    {
+      "decimals": 0,
+      "key": "indicatorHorizontalMargin",
+      "value": 0.31,
+    },
+    {
+      "decimals": 0,
+      "key": "indicatorVerticalMargin",
+      "value": 0.46,
+    },
+  ],
+  "secondaryTitle": {
+    "color": "#555555",
+    "fontSizes": {
+      "big": 20,
+      "medium": 14,
+      "micro": 10,
+      "small": 10,
+    },
+  },
+  "secondaryValue": {
+    "color": "#123123",
+    "fontSizes": {
+      "big": 20,
+      "medium": 14,
+      "micro": 10,
+      "small": 10,
+    },
+    "fontWeight": "extra-bold",
+  },
+  "sizes": [
+    {
+      "size": "big",
+      "value": 70,
+    },
+    {
+      "size": "medium",
+      "value": 49,
+    },
+    {
+      "size": "small",
+      "value": 34,
+    },
+    {
+      "size": "micro",
+      "value": 24,
+    },
+  ],
+  "textKeys": [
+    "title",
+    "value",
+    "secondaryTitle",
+    "secondaryValue",
+  ],
+  "title": {
+    "color": "#987987",
+    "fontSizes": {
+      "big": 22,
+      "medium": 18,
+      "micro": 12,
+      "small": 15,
+    },
+  },
+  "value": {
+    "color": "#999999",
+    "fontSizes": {
+      "big": 66,
+      "medium": 46,
+      "micro": 23,
+      "small": 32,
+    },
+  },
+}
+`;
+
+exports[`indicator-render-options > buildRenderOptionsFromLegacyOptions > should build merged IndicatorRenderOptions from legacy data and chart options 1`] = `
+{
+  "secondary": {
+    "color": "#9EA2AB",
+    "data": 3735080.7951049805,
+    "fontWeight": 800,
+    "text": "3.74M",
+  },
+  "secondaryTitle": {
+    "color": "#9EA2AB",
+    "text": "Total Cost",
+  },
+  "title": {
+    "color": "#5B6372",
+    "text": "Total Revenue",
+  },
+  "value": {
+    "color": "#00cee6",
+    "data": 28732733.036079407,
+    "text": "28.73M",
+  },
+}
+`;

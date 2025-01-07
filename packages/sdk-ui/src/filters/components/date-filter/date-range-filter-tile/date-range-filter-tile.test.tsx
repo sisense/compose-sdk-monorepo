@@ -188,4 +188,32 @@ describe('DateRangeFilterTile', () => {
     fireEvent.click(deleteButton);
     expect(onDelete).toHaveBeenCalled();
   });
+
+  it('should execute "onEdit" callback when edit button is clicked', async () => {
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+
+    const onEditMock = vi.fn();
+    const { findByTestId } = render(
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
+        <DateRangeFilterTile
+          title="Date Range"
+          attribute={DM.Commerce.Date.Years}
+          dataSource={DM.DataSource}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          onEdit={onEditMock}
+          tiled={true}
+        />
+      </SisenseContextProvider>,
+    );
+    const editButton = await findByTestId('filter-edit-button');
+    fireEvent.click(editButton);
+    expect(onEditMock).toHaveBeenCalled();
+  });
 });

@@ -6,6 +6,7 @@ import {
   FilterRelationsJaqlIdNode,
   FilterRelationsJaqlNode,
 } from '@sisense/sdk-data';
+import flow from 'lodash-es/flow';
 import isEqual from 'lodash-es/isEqual';
 import isEqualWith from 'lodash-es/isEqualWith';
 import { isSameAttribute } from './filters';
@@ -53,31 +54,30 @@ export function haveSameAttribute(filterA: Filter, filterB: Filter) {
 }
 
 /**
- * Compare filters with ignoring randomly generated names
+ * Compare filters with ignoring randomly generated things
  */
 export function areFiltersEqual(filterA: Filter, filterB: Filter): boolean {
-  const filterAWithoutRandomName = isRealCSDKFilter(filterA)
-    ? {
-        ...(filterA.toJSON() as Record<string, unknown>),
-        name: undefined,
-      }
-    : filterA;
-  const filterBWithoutRandomName = isRealCSDKFilter(filterB)
-    ? {
-        ...(filterB.toJSON() as Record<string, unknown>),
-        name: undefined,
-      }
-    : filterB;
-  return isEqual(filterAWithoutRandomName, filterBWithoutRandomName);
+  const withCleaning = flow(withoutName, withoutGuid);
+  return isEqual(withCleaning(filterA), withCleaning(filterB));
 }
 
-/**
- * Validates if the filter is a real Compose SDK Filter with all props and methods or a partially converted filter from widget DTO
- *
- * @returns
- */
-function isRealCSDKFilter(filter: Filter): filter is Filter {
-  return 'toJSON' in filter && typeof filter.toJSON === 'function';
+/** Removes the randomly generated name from the filter. */
+function withoutName(filter: Filter): Filter {
+  return {
+    ...filter,
+    name: '',
+  };
+}
+
+/** Removes the randomly generated guid from the filter. */
+function withoutGuid(filter: Filter): Filter {
+  return {
+    ...filter,
+    config: {
+      ...filter.config,
+      guid: '',
+    },
+  };
 }
 
 /**

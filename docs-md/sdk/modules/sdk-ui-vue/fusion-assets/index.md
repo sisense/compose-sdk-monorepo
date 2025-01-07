@@ -6,7 +6,7 @@ title: Fusion Assets
 
 Vue components and functions for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardById](class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardById](class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidget](class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />

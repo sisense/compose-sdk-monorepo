@@ -99,6 +99,16 @@ export const translation: TranslationDictionary = {
   widgetDetails: 'Деталі віджета',
   cancel: 'Відміна',
   includeAll: 'Всі елементи',
+  formatting: {
+    number: {
+      abbreviations: {
+        thousand: 'Тис.',
+        million: 'Млн',
+        billion: 'Млрд',
+        trillion: 'Трлн',
+      },
+    },
+  },
   criteriaFilter: {
     displayModePrefix: 'Всі елементи',
     equals: 'Дорівнює {{val}}',
@@ -257,6 +267,17 @@ export const translation: TranslationDictionary = {
       unknownResponse: 'Отримано невідомий тип відповіді, необроблена відповідь=',
       invalidInput: 'Недійсне введення',
       noAvailableDataTopics: 'Жодне з наданих моделей даних або перспектив доступне',
+    },
+  },
+  filterRelations: {
+    and: 'І',
+    or: 'АБО',
+    andOrFormulaApplied: 'Застосовано формулу І/АБО',
+  },
+  filterEditor: {
+    buttons: {
+      apply: 'Застосувати',
+      cancel: 'Відміна',
     },
   },
 };

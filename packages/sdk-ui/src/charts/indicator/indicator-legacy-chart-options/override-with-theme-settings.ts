@@ -1,6 +1,6 @@
-import { ThemeSettings } from '../../../types.js';
-import { LegacyIndicatorChartOptions } from '../types.js';
-import { overrideWithCustomSettings } from './utils/override-with-custom-settings.js';
+import { ThemeSettings } from '@/types';
+import { LegacyIndicatorChartOptions } from '../types';
+import { overrideWithCustomSettings } from '@/utils/override-with-custom-settings';
 
 export function overrideWithThemeSettings(
   themeSettings: ThemeSettings,

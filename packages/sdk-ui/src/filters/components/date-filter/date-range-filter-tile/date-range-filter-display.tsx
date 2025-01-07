@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { DateRangeFilter } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
+import { FilterContentDisplay } from '@/filters/components/common/filter-content-display';
 
 type DateRangeFilterDisplayProps = {
   filter: DateRangeFilter;
@@ -27,9 +28,5 @@ export const DateRangeFilterDisplay: React.FC<DateRangeFilterDisplayProps> = ({ 
     }
   }, [displayVariant, from, to, t]);
 
-  return (
-    <div className="csdk-leading-[26px] csdk-mx-auto csdk-my-2 csdk-px-1 csdk-text-[13px] csdk-whitespace-nowrap csdk-flex csdk-flex-wrap csdk-gap-x-1 csdk-justify-center">
-      {textContent}
-    </div>
-  );
+  return <FilterContentDisplay>{textContent}</FilterContentDisplay>;
 };

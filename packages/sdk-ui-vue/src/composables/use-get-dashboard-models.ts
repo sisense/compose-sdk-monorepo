@@ -22,7 +22,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  * dashboard models from Sisense. It provides a reactive interface to handle loading, success, and error states,
  * making it easier to integrate Sisense analytics within Vue applications.
  *
- * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
  *
  * @param params - Parameters for fetching the dashboard models, which can include filters,
  * sorting options, and pagination settings to customize the fetch operation. The parameters allow for precise control

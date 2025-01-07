@@ -1,5 +1,5 @@
 default:
-  image: dockerhub.sisense.com/node:18.16.0-slim
+  image: quay.io/sisense/node:18.16.0-slim
   tags:
     - k8s
   before_script:
@@ -358,11 +358,11 @@ internal-release:
     - *configure_git_for_local_release
     - yarn config set npmRegistryServer "https://artifactory.sisense.com/artifactory/api/npm/sisense-node-modules/"
     - yarn config set npmAuthIdent "${NPM_REGISTRY_AUTH_TOKEN}"
-    - yarn workspaces foreach --since --recursive --no-private version prerelease --deferred
+    - yarn workspaces foreach --all --no-private version prerelease --deferred
     - yarn version apply --all --prerelease="internal-${CI_COMMIT_SHORT_SHA}"
     - yarn nx:build:prod
-    - yarn workspaces foreach --since --no-private npm publish --tolerate-republish
+    - yarn workspaces foreach --all --no-private npm publish --tolerate-republish
     - echo 'The following internal release versions have been published:'
-    - yarn workspaces foreach --since --recursive --no-private exec node -p "require('./package.json').name + ' - ' + require('./package.json').version"
+    - yarn workspaces foreach --all --no-private exec node -p "require('./package.json').name + ' - ' + require('./package.json').version"
   only:
     - master

@@ -633,16 +633,17 @@ describe('filter-from-jaql-util', () => {
 
     describe('Advanced filter (pass-through JAQL)', () => {
       test('should handle', () => {
-        const jaql = {
+        const jaql: FilterJaqlInternal = {
           table: 'Commerce',
           column: 'Revenue',
+          dim: '[Commerce.Revenue]',
           datatype: 'numeric',
           title: 'sum Revenue',
           filter: {
             custom: true,
             isAdvanced: true,
           },
-        } as unknown as FilterJaqlInternal;
+        };
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
         const expectedFilter = filterFactory.customFilter(attribute, jaql.filter, { guid });

@@ -73,7 +73,7 @@ React components and hooks for working with queries
 React components and utilities for working with dashboards
 
 - [ChartWidget](dashboards/function.ChartWidget.md)
-- [Dashboard](dashboards/function.Dashboard.md) <Badge type="beta" text="Beta" />
+- [Dashboard](dashboards/function.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md) <Badge type="alpha" text="Alpha" />
 - [PivotTableWidget](dashboards/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
@@ -85,7 +85,7 @@ React components and utilities for working with dashboards
 
 React components, hooks, and utilities for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardById](fusion-assets/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardById](fusion-assets/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
 - [DashboardWidget](fusion-assets/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />

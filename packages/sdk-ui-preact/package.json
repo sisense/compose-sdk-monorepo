@@ -11,21 +11,36 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.26.0",
+  "version": "1.27.0",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./ai": {
+      "import": "./dist/ai.js",
+      "require": "./dist/ai.cjs",
+      "default": "./dist/ai.js",
+      "types": "./dist/ai.d.ts"
     }
   },
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "ai": [
+        "./dist/ai.d.ts"
+      ]
+    }
+  },
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-ui": "^1.26.0",
+    "@sisense/sdk-ui": "^1.27.0",
     "preact": "^10.13.2"
   },
   "scripts": {

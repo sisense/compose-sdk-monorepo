@@ -91,6 +91,30 @@ Callback indicating when the source member filter object should be updated
 
 ***
 
+### onDelete
+
+> **`readonly`** **onDelete**?: () => `void`
+
+Filter delete callback
+
+#### Returns
+
+`void`
+
+***
+
+### onEdit
+
+> **`readonly`** **onEdit**?: () => `void`
+
+Filter edit callback
+
+#### Returns
+
+`void`
+
+***
+
 ### parentFilters
 
 > **`readonly`** **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]

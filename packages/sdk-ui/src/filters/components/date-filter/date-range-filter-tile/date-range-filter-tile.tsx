@@ -47,6 +47,8 @@ export interface DateRangeFilterTileProps {
   onChange: (filter: Filter) => void;
   /** Filter delete callback */
   onDelete?: () => void;
+  /** Filter edit callback */
+  onEdit?: () => void;
   /**
    * List of filters this filter is dependent on.
    */
@@ -100,6 +102,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     filter: filterFromProps,
     onChange: updateFilterFromProps,
     onDelete,
+    onEdit,
     title,
     earliestDate,
     lastDate,
@@ -168,6 +171,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
         design={tileDesignOptions}
         locked={filter.config.locked}
         onDelete={onDelete}
+        onEdit={onEdit}
       />
     );
   },

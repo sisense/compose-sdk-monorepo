@@ -7,7 +7,7 @@ title: Dashboards
 React components and utilities for working with dashboards
 
 - [ChartWidget](function.ChartWidget.md)
-- [Dashboard](function.Dashboard.md) <Badge type="beta" text="Beta" />
+- [Dashboard](function.Dashboard.md)
 - [dashboardHelpers](namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](function.extractDimensionsAndMeasures.md) <Badge type="alpha" text="Alpha" />
 - [PivotTableWidget](function.PivotTableWidget.md) <Badge type="beta" text="Beta" />

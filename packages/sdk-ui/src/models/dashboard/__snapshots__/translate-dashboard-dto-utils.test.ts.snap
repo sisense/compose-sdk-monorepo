@@ -8,6 +8,10 @@ exports[`baseFilterToFilterDto > should return correctly translated cascading fi
   "levels": [
     {
       "column": "Brand ID",
+      "datasource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
       "datatype": "numeric",
       "dim": "[Commerce.Brand ID]",
       "filter": {
@@ -22,6 +26,10 @@ exports[`baseFilterToFilterDto > should return correctly translated cascading fi
     },
     {
       "column": "Gender",
+      "datasource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
       "datatype": "text",
       "dim": "[Commerce.Gender]",
       "filter": {
@@ -44,6 +52,10 @@ exports[`baseFilterToFilterDto > should return correctly translated disabled fil
   "isCascading": false,
   "jaql": {
     "column": "Gender",
+    "datasource": {
+      "live": false,
+      "title": "Sample ECommerce",
+    },
     "datatype": "text",
     "dim": "[Commerce.Gender]",
     "filter": {
@@ -118,6 +130,10 @@ exports[`baseFilterToFilterDto > should return correctly translated simple filte
   "isCascading": false,
   "jaql": {
     "column": "Gender",
+    "datasource": {
+      "live": false,
+      "title": "Sample ECommerce",
+    },
     "datatype": "text",
     "dim": "[Commerce.Gender]",
     "filter": {

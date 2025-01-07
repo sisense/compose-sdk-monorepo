@@ -6,7 +6,7 @@ title: Fusion Assets
 
 React components, hooks, and utilities for working with Fusion dashboards, widgets, queries, and formulas
 
-- [DashboardById](function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" /> <Badge type="beta" text="Beta" />
+- [DashboardById](function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [dashboardModelTranslator](namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
 - [DashboardWidget](function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />

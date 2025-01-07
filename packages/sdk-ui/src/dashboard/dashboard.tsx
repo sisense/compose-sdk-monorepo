@@ -27,7 +27,7 @@ export type DashboardChangeAction =
 /**
  * React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
  *
- * **Note:** Dashboard extensions based on JS scripts and add-ons in Fusion are not supported.
+ * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
  *
  * @example
  *
@@ -58,7 +58,6 @@ export default CodeExample;
  * To learn more about this and related dashboard components,
  * see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
  * @group Dashboards
- * @beta
  */
 export const Dashboard = asSisenseComponent({
   componentName: 'Dashboard',

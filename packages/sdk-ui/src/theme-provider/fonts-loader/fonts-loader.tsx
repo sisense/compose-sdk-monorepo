@@ -18,14 +18,14 @@ export const FontsLoader = ({
 }) => {
   const { loadedFonts: prevLoadedFonts } = useContext(FontLoaderContext);
   const { themeSettings } = useThemeContext();
-  const loadedFonts = useFontsLoader(
+  const { loadedFonts, areAllFontsLoaded } = useFontsLoader(
     fonts || themeSettings.typography.fontsLoader?.fonts || [],
     prevLoadedFonts,
   );
 
   return (
     <FontLoaderContext.Provider value={{ loadedFonts: [...prevLoadedFonts, ...loadedFonts] }}>
-      {children}
+      {areAllFontsLoaded && children}
     </FontLoaderContext.Provider>
   );
 };

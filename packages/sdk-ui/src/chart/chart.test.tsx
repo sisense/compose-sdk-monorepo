@@ -2,7 +2,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import { Chart } from '.';
 import { HighchartsOptions } from '../chart-options-processor/chart-options-service';
-import { IndicatorStyleOptions } from '../types';
+import { IndicatorRenderOptions, IndicatorStyleOptions } from '../types';
 import { Table } from '../table';
 import { ThemeProvider } from '../theme-provider';
 import { DataPointEventHandler, DataPointsEventHandler } from '../props';
@@ -345,80 +345,86 @@ describe('Chart', () => {
     });
   });
 
-  it('render indicator chart', async () => {
-    const { container, findByLabelText } = render(
-      <Chart
-        dataSet={dataSet}
-        chartType={'indicator'}
-        dataOptions={{ value: [meas1], secondary: [meas2] }}
-        onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
-          return options;
-        }}
-      />,
-    );
-    const indicator = await findByLabelText('indicator-root');
-    setTimeout(100);
-    const canvas = container.querySelector('canvas');
-    expect(indicator).toBeTruthy();
-    expect(canvas).toBeTruthy();
-  });
+  describe('indicator chart', () => {
+    it('should render indicator chart', async () => {
+      const { container, findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'indicator'}
+          dataOptions={{ value: [meas1], secondary: [meas2] }}
+          onBeforeRender={(options: IndicatorRenderOptions) => {
+            expect(options).toMatchSnapshot();
+            return options;
+          }}
+        />,
+      );
+      const indicator = await findByLabelText('indicator-root');
+      setTimeout(100);
+      const canvas = container.querySelector('canvas');
+      expect(indicator).toBeTruthy();
+      expect(canvas).toBeTruthy();
+    });
 
-  it('render indicator gauge chart', async () => {
-    const styleOptions: IndicatorStyleOptions = {
-      subtype: 'indicator/gauge',
-      skin: 1,
-      indicatorComponents: {
-        title: {
-          shouldBeShown: true,
-          text: 'Total Cost',
+    it('render indicator gauge chart', async () => {
+      const styleOptions: IndicatorStyleOptions = {
+        subtype: 'indicator/gauge',
+        skin: 1,
+        indicatorComponents: {
+          title: {
+            shouldBeShown: true,
+            text: 'Total Cost',
+          },
+          secondaryTitle: {
+            text: 'Total Revenue',
+          },
+          ticks: {
+            shouldBeShown: true,
+          },
+          labels: {
+            shouldBeShown: true,
+          },
         },
-        secondaryTitle: {
-          text: 'Total Revenue',
-        },
-        ticks: {
-          shouldBeShown: true,
-        },
-        labels: {
-          shouldBeShown: true,
-        },
-      },
-    };
-    const { container, findByLabelText } = render(
-      <Chart
-        dataSet={dataSet}
-        chartType={'indicator'}
-        dataOptions={{ value: [meas1], secondary: [meas2] }}
-        onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
-          return options;
-        }}
-        styleOptions={styleOptions}
-      />,
-    );
-    const indicator = await findByLabelText('indicator-root');
-    const canvas = container.querySelector('canvas');
-    expect(indicator).toBeTruthy();
-    expect(canvas).toBeTruthy();
-  });
+      };
+      const { container, findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'indicator'}
+          dataOptions={{ value: [meas1], secondary: [meas2] }}
+          onBeforeRender={(options: IndicatorRenderOptions) => {
+            expect(options).toMatchSnapshot();
+            return options;
+          }}
+          styleOptions={styleOptions}
+        />,
+      );
+      const indicator = await findByLabelText('indicator-root');
+      const canvas = container.querySelector('canvas');
+      expect(indicator).toBeTruthy();
+      expect(canvas).toBeTruthy();
+    });
 
-  it('render indicator numericBar chart', async () => {
-    const styleOptions: IndicatorStyleOptions = {
-      subtype: 'indicator/numeric',
-      numericSubtype: 'numericBar',
-    };
-    const { container, findByLabelText } = render(
-      <Chart
-        dataSet={dataSet}
-        chartType={'indicator'}
-        dataOptions={{ value: [meas2], secondary: [meas2] }}
-        styleOptions={styleOptions}
-      />,
-    );
-    const indicator = await findByLabelText('indicator-root');
-    const canvas = container.querySelector('canvas');
-    expect(indicator).toBeTruthy();
-    expect(canvas).toBeTruthy();
+    it('render indicator numericBar chart', async () => {
+      const styleOptions: IndicatorStyleOptions = {
+        subtype: 'indicator/numeric',
+        numericSubtype: 'numericBar',
+      };
+      const { container, findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'indicator'}
+          dataOptions={{ value: [meas2], secondary: [meas2] }}
+          styleOptions={styleOptions}
+          onBeforeRender={(options: IndicatorRenderOptions) => {
+            expect(options).toMatchSnapshot();
+            return options;
+          }}
+        />,
+      );
+      const indicator = await findByLabelText('indicator-root');
+      const canvas = container.querySelector('canvas');
+      expect(indicator).toBeTruthy();
+      expect(canvas).toBeTruthy();
+    });
   });
 
   it('render Table', async () => {
