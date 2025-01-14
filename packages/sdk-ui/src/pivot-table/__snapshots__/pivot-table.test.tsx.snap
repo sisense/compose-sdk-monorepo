@@ -183,41 +183,41 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                 class="responsive-table-pagination xs"
                               >
                                 <div
-                                  class="MuiTablePagination-root css-1tpa2y9-MuiTablePagination-root"
+                                  class="MuiTablePagination-root css-9axv9a-MuiTablePagination-root"
                                   data-testid="TablePagination"
                                 >
                                   <div
-                                    class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-x2tutx-MuiToolbar-root-MuiTablePagination-toolbar"
+                                    class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-16ivfxo-MuiToolbar-root-MuiTablePagination-toolbar"
                                   >
                                     <div
-                                      class="MuiTablePagination-spacer css-gbqq2u-MuiTablePagination-spacer"
+                                      class="MuiTablePagination-spacer css-1nm6itp-MuiTablePagination-spacer"
                                     />
                                     <p
-                                      class="MuiTablePagination-selectLabel css-jwrofo-MuiTablePagination-selectLabel"
+                                      class="MuiTablePagination-selectLabel css-1h1jad9-MuiTablePagination-selectLabel"
                                       id=":r1:"
                                     >
                                       <span
-                                        class="MuiTypography-root MuiTypography-bodyParagraph css-13gjm91-MuiTypography-root"
+                                        class="MuiTypography-root MuiTypography-bodyParagraph css-15i8j8x-MuiTypography-root"
                                       >
                                         Rows
                                       </span>
                                     </p>
                                     <div
-                                      class="MuiInputBase-root MuiInputBase-colorPrimary MuiTablePagination-input css-1jxoux2-MuiInputBase-root-MuiTablePagination-select"
+                                      class="MuiInputBase-root MuiInputBase-colorPrimary MuiTablePagination-input css-ifs44r-MuiInputBase-root-MuiTablePagination-select"
                                     >
                                       <div
                                         aria-controls=":r2:"
                                         aria-expanded="false"
                                         aria-haspopup="listbox"
                                         aria-labelledby=":r1: :r0:"
-                                        class="MuiSelect-select MuiTablePagination-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
+                                        class="MuiSelect-select MuiTablePagination-select MuiSelect-standard MuiInputBase-input css-mmygx2-MuiSelect-select-MuiInputBase-input"
                                         data-testid="TablePaginationSelect"
                                         id=":r0:"
                                         role="combobox"
                                         tabindex="0"
                                       >
                                         <span
-                                          class="MuiTypography-root MuiTypography-bodyParagraph css-13gjm91-MuiTypography-root"
+                                          class="MuiTypography-root MuiTypography-bodyParagraph css-15i8j8x-MuiTypography-root"
                                         >
                                           25
                                         </span>
@@ -225,17 +225,17 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                       <input
                                         aria-hidden="true"
                                         aria-invalid="false"
-                                        class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                                        class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
                                         tabindex="-1"
                                         value="25"
                                       />
                                       <span
-                                        class="app-icon app-icon--general-arrow-big-down MuiSelect-icon MuiTablePagination-selectIcon MuiSelect-iconStandard css-19xtc65-MuiSelect-icon"
+                                        class="app-icon app-icon--general-arrow-big-down MuiSelect-icon MuiTablePagination-selectIcon MuiSelect-iconStandard css-ukvncv-MuiSelect-icon"
                                         name="general-arrow-big-down"
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                          class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
                                           focusable="false"
                                         >
                                           <use
@@ -356,26 +356,26 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                       </span>
                                     </div>
                                     <p
-                                      class="MuiTablePagination-displayedRows css-1qtlrlj-MuiTablePagination-displayedRows"
+                                      class="MuiTablePagination-displayedRows css-1lmww14-MuiTablePagination-displayedRows"
                                     >
                                       <span
-                                        class="MuiTypography-root MuiTypography-bodyParagraph css-tqgkz1-MuiTypography-root"
+                                        class="MuiTypography-root MuiTypography-bodyParagraph css-w1jat1-MuiTypography-root"
                                       >
                                         0-0 / 0
                                       </span>
                                     </p>
                                     <nav
                                       aria-label="pagination navigation"
-                                      class="MuiPagination-root MuiPagination-text css-qy3wnj-MuiPagination-root"
+                                      class="MuiPagination-root MuiPagination-text css-ycpbll-MuiPagination-root"
                                       data-testid="PaginationActionsComponent"
                                     >
                                       <ul
-                                        class="MuiPagination-ul css-wjh20t-MuiPagination-ul"
+                                        class="MuiPagination-ul css-1c5o7vy-MuiPagination-ul"
                                       >
                                         <li>
                                           <button
                                             aria-label="Go to first page"
-                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-firstLast css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-firstLast css-1f6prgu-MuiButtonBase-root-MuiPaginationItem-root"
                                             disabled=""
                                             tabindex="-1"
                                             type="button"
@@ -387,7 +387,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-171vh7x-MuiSvgIcon-root"
                                                 focusable="false"
                                               >
                                                 <use
@@ -511,7 +511,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                         <li>
                                           <button
                                             aria-label="Go to previous page"
-                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-previousNext css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-previousNext css-1f6prgu-MuiButtonBase-root-MuiPaginationItem-root"
                                             disabled=""
                                             tabindex="-1"
                                             type="button"
@@ -523,7 +523,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-171vh7x-MuiSvgIcon-root"
                                                 focusable="false"
                                               >
                                                 <use
@@ -647,7 +647,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                         <li>
                                           <button
                                             aria-label="Go to next page"
-                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-previousNext css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-previousNext css-1f6prgu-MuiButtonBase-root-MuiPaginationItem-root"
                                             disabled=""
                                             tabindex="-1"
                                             type="button"
@@ -659,7 +659,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-171vh7x-MuiSvgIcon-root"
                                                 focusable="false"
                                               >
                                                 <use
@@ -783,7 +783,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                         <li>
                                           <button
                                             aria-label="Go to last page"
-                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-firstLast css-p4cglw-MuiButtonBase-root-MuiPaginationItem-root"
+                                            class="MuiButtonBase-root Mui-disabled MuiPaginationItem-root MuiPaginationItem-sizeSmall MuiPaginationItem-text MuiPaginationItem-circular Mui-disabled MuiPaginationItem-firstLast css-1f6prgu-MuiButtonBase-root-MuiPaginationItem-root"
                                             disabled=""
                                             tabindex="-1"
                                             type="button"
@@ -795,7 +795,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-1w8j8c5-MuiSvgIcon-root"
+                                                class="MuiSvgIcon-root app-icon__svg MuiSvgIcon-fontSizeMedium css-171vh7x-MuiSvgIcon-root"
                                                 focusable="false"
                                               >
                                                 <use

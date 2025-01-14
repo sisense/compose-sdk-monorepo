@@ -132,6 +132,10 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
     super('filter', MetadataTypes.Filter);
     this.filterType = filterType;
 
+    // need to set isScope
+    // to make filter complete for comparison
+    this.isScope = true;
+
     AbstractFilter.checkAttributeSupport(att);
     this.attribute = att;
 

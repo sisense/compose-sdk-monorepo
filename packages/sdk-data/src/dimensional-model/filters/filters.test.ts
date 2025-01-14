@@ -22,6 +22,20 @@ import { DimensionalBaseMeasure } from '../measures/measures.js';
 import { DateLevels } from '../types.js';
 import { Filter } from '../interfaces.js';
 
+describe('General Filter', () => {
+  it('must be complete with all properties populated', () => {
+    const filter = new MembersFilter(
+      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+      ['Female'],
+    );
+
+    expect(filter.attribute).toBeDefined();
+    expect(filter.filterType).toBeDefined();
+    expect(filter.config).toBeDefined();
+    expect(filter.isScope).toBeTruthy();
+  });
+});
+
 describe('Filters jaql preparations', () => {
   it('must prepare members filter jaql', () => {
     const result = {
@@ -31,6 +45,7 @@ describe('Filters jaql preparations', () => {
         datatype: 'text',
         filter: { members: ['Female'] },
       },
+      panel: 'scope',
     };
     const filter = new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), [
       'Female',
@@ -49,6 +64,7 @@ describe('Filters jaql preparations', () => {
         datatype: 'text',
         filter: { exclude: { members: ['Female'] } },
       },
+      panel: 'scope',
     };
     const filter = new ExcludeFilter(
       new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Female']),
@@ -71,6 +87,7 @@ describe('Filters jaql preparations', () => {
           to: '2012-01-01T00:00:00.000Z',
         },
       },
+      panel: 'scope',
     };
     const filter = new DateRangeFilter(
       new DimensionalLevelAttribute('Years', '[Commerce.Date (Calendar)]', 'Years'),
@@ -114,6 +131,7 @@ describe('Filters jaql preparations', () => {
           or: [{ members: ['Female'] }, { exclude: { members: ['Male'] } }],
         },
       },
+      panel: 'scope',
     };
     const filter = new LogicalAttributeFilter(
       [
@@ -139,6 +157,7 @@ describe('Filters jaql preparations', () => {
         agg: 'sum',
         filter: {},
       },
+      panel: 'scope',
     };
     const filter = new MeasureFilter(
       new DimensionalAttribute('Gender', '[Commerce.Gender]'),
@@ -165,6 +184,7 @@ describe('Filters jaql preparations', () => {
           last: { offset: 0, count: 2, anchor: '2012-01-01T00:00:00.000Z' },
         },
       },
+      panel: 'scope',
     };
     const filter = new RelativeDateFilter(
       new DimensionalLevelAttribute('Years', '[Commerce.Date (Calendar)]', 'Years'),
@@ -191,6 +211,7 @@ describe('Filters jaql preparations', () => {
           last: { offset: 0, count: 2, anchor: '2012-01-01T00:00:00.000Z' },
         },
       },
+      panel: 'scope',
     };
     const filter = new RelativeDateFilter(
       new DimensionalLevelAttribute(
@@ -217,6 +238,7 @@ describe('Filters jaql preparations', () => {
         datatype: 'text',
         filter: { contains: 'Male' },
       },
+      panel: 'scope',
     };
     const filter = new TextFilter(
       new DimensionalAttribute('Gender', '[Commerce.Gender]'),
@@ -237,6 +259,7 @@ describe('Filters jaql preparations', () => {
         datatype: 'numeric',
         filter: { from: 1, to: 3 },
       },
+      panel: 'scope',
     };
     const filter = new NumericFilter(
       new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
@@ -262,6 +285,7 @@ describe('Filters jaql preparations', () => {
           by: { title: 'Cost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
         },
       },
+      panel: 'scope',
     };
     const filter = new RankingFilter(
       new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
@@ -329,6 +353,7 @@ describe('Filters jaql preparations', () => {
         datatype: 'text',
         filter: { and: [{ members: ['Female'] }, { members: ['Female', 'Male'] }] },
       },
+      panel: 'scope',
     };
     const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]');
     const backgroundFilter = new MembersFilter(attribute, ['Female', 'Male']);
@@ -407,6 +432,7 @@ describe('Multiple Data Sources', () => {
           database: 'aSampleIAAaECommerce',
         },
       },
+      panel: 'scope',
     };
 
     const jaql = filter.jaql();
@@ -429,6 +455,7 @@ describe('Multiple Data Sources', () => {
           database: 'aSampleIAAaECommerce',
         },
       },
+      panel: 'scope',
     };
     const filter = new MeasureFilter(
       new DimensionalAttribute(

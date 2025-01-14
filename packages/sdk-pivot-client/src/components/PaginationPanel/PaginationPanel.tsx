@@ -1,5 +1,8 @@
 import * as React from 'react';
 import cn from 'classnames';
+
+import { TablePagination } from '@sisense/sdk-shared-ui/TablePagination';
+
 import {
   createCallbackMemoizer,
   createTemplate,
@@ -20,10 +23,6 @@ import {
   PANEL_WRAPPER,
 } from './classes.js';
 import CustomScroll from '../CustomScroll/index.js';
-import { TablePagination } from '../../shared-ui-components/TablePagination';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { TablePagination } = require('@sisense/shared-ui-components');
 
 export type PaginationOptions = {
   isMobile: boolean;

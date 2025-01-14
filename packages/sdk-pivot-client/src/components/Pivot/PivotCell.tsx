@@ -1,5 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
+import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
+
 import {
   CONTENT,
   CONTENT_WRAPPER,
@@ -33,6 +35,7 @@ import {
 import { Metadata } from '../../data-handling/utils/plugins/types.js';
 import { Defer, Styles, InputStyles } from '../../utils/types.js';
 import { TableSize, EVENT_RANGEMINMAX_CHANGED } from '../../sizing/index.js';
+
 import { EmbedImage } from './EmbedImage.js';
 import {
   getMetadataClasses,
@@ -46,6 +49,7 @@ import {
   clearCellContentStyles,
   clearDatabarsStyles,
   getRangeColor,
+  getTooltip,
 } from '../PivotCell/helpers.js';
 import { SortingSettingsIcon } from './SortingSettingsIcon.js';
 
@@ -59,7 +63,7 @@ const ContentTypes = {
   COMPONENT: 'component',
 };
 
-type Props = {
+export type PivotCellProps = {
   // common properties
   isDataCell: boolean;
   /** function to notify cell size changed */
@@ -151,10 +155,13 @@ type State = {
   merge?: { colSpan?: number; rowSpan?: number };
   isEmbedImage?: boolean;
   backgroundColor?: string;
+  toolTipText: string;
+  cellPadding: number;
 };
 
-export class PivotCell extends React.PureComponent<Props, State> {
+export class PivotCell extends React.PureComponent<PivotCellProps, State> {
   cellEl: HTMLDivElement | undefined;
+  contentRef: React.RefObject<HTMLDivElement>;
 
   metadataClassName?: string;
 
@@ -179,7 +186,7 @@ export class PivotCell extends React.PureComponent<Props, State> {
     onSortingMetadataUpdate: () => {},
   };
 
-  constructor(props: Props) {
+  constructor(props: PivotCellProps) {
     super(props);
 
     this.state = {
@@ -189,7 +196,10 @@ export class PivotCell extends React.PureComponent<Props, State> {
       sortingPopup: null,
       merge: props.merge ? props.merge : { colSpan: props.colSpan, rowSpan: props.rowSpan },
       isEmbedImage: this.getIsEmbedImageStatus(props),
+      toolTipText: '',
+      cellPadding: 0,
     };
+    this.contentRef = React.createRef();
   }
 
   componentDidMount(): void {
@@ -204,10 +214,11 @@ export class PivotCell extends React.PureComponent<Props, State> {
       }
     }
     this.dataBarsCheck();
-    // eslint-disable-next-line max-lines
+
+    this.updateCellPadding();
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: PivotCellProps): void {
     // const changedProps = getChangedProps(this.props, nextProps);
     // console.log(changedProps);
     if (
@@ -302,6 +313,7 @@ export class PivotCell extends React.PureComponent<Props, State> {
       this.props.tableSize.notifyChange();
     }
     this.dataBarsCheck();
+    this.updateTooltip();
   }
 
   componentWillUnmount() {
@@ -329,6 +341,35 @@ export class PivotCell extends React.PureComponent<Props, State> {
     }
   }
 
+  updateCellPadding() {
+    const elementStyles =
+      this.contentRef.current?.parentElement &&
+      getComputedStyle(this.contentRef?.current?.parentElement);
+    this.setState({
+      ...this.state,
+      cellPadding:
+        parseInt(elementStyles?.paddingLeft || '') + parseInt(elementStyles?.paddingRight || '') ||
+        0,
+    });
+  }
+
+  /**
+   * add/remove tooltip text for header cell in case text is hidden/visible
+   *
+   * @private
+   */
+  updateTooltip() {
+    if (this.props.isDataCell) {
+      return;
+    }
+
+    const { toolTipText, cellPadding } = this.state;
+    const toolTipAfterRender = getTooltip(this.cellEl, this.contentRef.current, cellPadding);
+    if (toolTipText !== toolTipAfterRender) {
+      this.setState({ ...this.state, toolTipText: toolTipAfterRender });
+    }
+  }
+
   getSelectStatus(): boolean {
     let node;
     if (this.props.columnTreeNode) {
@@ -346,7 +387,7 @@ export class PivotCell extends React.PureComponent<Props, State> {
     );
   }
 
-  getIsEmbedImageStatus(props: Props): boolean {
+  getIsEmbedImageStatus(props: PivotCellProps): boolean {
     const { isDataCell, tableType, imageColumns } = props;
     const { columnIndex } = this.props;
     if (!isDataCell) {
@@ -808,7 +849,7 @@ export class PivotCell extends React.PureComponent<Props, State> {
   // eslint-disable-next-line max-lines-per-function,sonarjs/cognitive-complexity
   render() {
     const { isDataCell, treeNode, tableType, tdComponent, isMobile } = this.props;
-    const { merge } = this.state;
+    const { merge, toolTipText } = this.state;
 
     const cellStyle = this.getCellStyle();
     const contentStyle = this.getCellContentStyle();
@@ -898,7 +939,11 @@ export class PivotCell extends React.PureComponent<Props, State> {
           )}
         </div>,
         <div className={CONTENT} style={contentStyle} key="content">
-          <div className={CONTENT_WRAPPER}>{contentNode}</div>
+          <Tooltip placement="top" title={toolTipText}>
+            <div className={CONTENT_WRAPPER} ref={this.contentRef} data-testid="cell-content">
+              {contentNode}
+            </div>
+          </Tooltip>
         </div>,
       ],
     );

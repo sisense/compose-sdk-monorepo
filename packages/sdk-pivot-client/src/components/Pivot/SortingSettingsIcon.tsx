@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Popover, AlignPoints, type PopoverProps } from '../../shared-ui-components/Popover';
+import { Popover, AlignPoints, type PopoverProps } from '@sisense/sdk-shared-ui/Popover';
 
 type Props = {
   onRequestClose: PopoverProps['onRequestClose'];

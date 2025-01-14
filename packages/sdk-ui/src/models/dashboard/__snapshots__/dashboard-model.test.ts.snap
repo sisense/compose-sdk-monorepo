@@ -23,7 +23,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
       "members": [
         "member",
       ],
-      "name": "8cbfe2c92d",
+      "name": "99ab976f594",
       "type": "filter",
     },
   ],

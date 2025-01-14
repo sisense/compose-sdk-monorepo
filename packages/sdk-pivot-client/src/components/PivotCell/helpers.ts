@@ -260,6 +260,28 @@ export const clearDatabarsStyles = (style: InputStyles): Styles => {
   return clone;
 };
 
+/**
+ * get tooltip text for header cell
+ *
+ * @param {HTMLDivElement | null} contentElement - pivot cell content element
+ * @param {HTMLDivElement | null} containerElement - pivot cell container element
+ * @returns {string} - tooltip text
+ */
+export const getTooltip = (
+  containerElement?: HTMLDivElement | null,
+  contentElement?: HTMLDivElement | null,
+  cellPadding: number = 0,
+): string => {
+  if (
+    contentElement &&
+    containerElement &&
+    contentElement.offsetWidth + cellPadding >= containerElement.offsetWidth
+  ) {
+    return contentElement.textContent || '';
+  }
+  return '';
+};
+
 export const getRangeColor = (
   rangeMinMax: Array<Array<number>> | undefined,
   node: PivotDataNode | undefined,

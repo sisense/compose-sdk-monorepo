@@ -1,14 +1,13 @@
 import React from 'react';
 import { produce } from 'immer';
+
+import { CheckableList, type CheckableListProps } from '@sisense/sdk-shared-ui/CheckableList';
+
 import { Header } from '../Header/index.js';
 import { SortingDirection } from '../../../data-handling/constants.js';
 import { TranslatedMessages } from '../../../builders/pivot-builder.js';
 import { makeGetCaption } from '../getCaption.js';
 import { SortingSettingItem } from '../SortingSettingItem.js';
-import {
-  CheckableList,
-  type CheckableListProps,
-} from '../../../shared-ui-components/CheckableList';
 
 type Props = {
   titleOfPopUp: string[];

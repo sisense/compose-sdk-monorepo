@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 
+import { Checkbox } from '@sisense/sdk-shared-ui/Checkbox';
+import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
+
 import { DirectionSelector } from './DirectionSelector/index.js';
 import { ListOfSortingDirections, SortingDirection } from '../../../data-handling/constants.js';
-
-import { Checkbox } from '../../../shared-ui-components/Checkbox';
-import { Tooltip } from '../../../shared-ui-components/Tooltip';
 
 type Props = {
   title: string;

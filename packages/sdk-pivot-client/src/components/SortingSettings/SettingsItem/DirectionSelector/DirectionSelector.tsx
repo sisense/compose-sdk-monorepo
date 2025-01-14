@@ -1,7 +1,8 @@
 import React from 'react';
 
+import { Dropdown, type DropdownProps } from '@sisense/sdk-shared-ui/Dropdown';
+
 import { ListOfSortingDirections } from '../../../../data-handling/constants.js';
-import { Dropdown, type DropdownProps } from '../../../../shared-ui-components/Dropdown';
 
 type Props = {
   direction: ListOfSortingDirections;

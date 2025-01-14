@@ -85,7 +85,7 @@ export default defineConfig(({ mode }) => ({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['classnames', 'react', 'react-dom'],
+      external: ['classnames', 'react', 'react-dom', 'react/jsx-runtime'],
       treeshake: 'recommended',
     },
     chunkSizeWarningLimit: 500,

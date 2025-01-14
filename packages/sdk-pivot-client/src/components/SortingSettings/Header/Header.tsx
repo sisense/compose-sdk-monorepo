@@ -1,10 +1,8 @@
 import React, { MouseEventHandler } from 'react';
 
-import { HeaderText } from './HeaderText.js';
+import { Icon } from '@sisense/sdk-shared-ui/Icon';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { Icon } = require('@sisense/shared-ui-components');
-import { Icon } from '../../../shared-ui-components/Icon';
+import { HeaderText } from './HeaderText.js';
 
 type Props = {
   onCrossIconClick?: MouseEventHandler<HTMLSpanElement>;

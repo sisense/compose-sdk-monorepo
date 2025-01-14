@@ -145,7 +145,7 @@ exports[`WidgetModel > getExecutePivotQueryParams > getChartProps > should retur
         "sort": 0,
         "type": "basemeasure",
       },
-      "name": "7a707cfbd72",
+      "name": "c93a047290b",
       "operator": "top",
       "type": "filter",
     },
