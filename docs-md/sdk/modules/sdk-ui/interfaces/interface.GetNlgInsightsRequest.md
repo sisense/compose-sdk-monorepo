@@ -1,8 +1,8 @@
 ---
-title: GetNlgQueryResultRequest
+title: GetNlgInsightsRequest
 ---
 
-# Interface GetNlgQueryResultRequest
+# Interface GetNlgInsightsRequest
 
 ## Properties
 

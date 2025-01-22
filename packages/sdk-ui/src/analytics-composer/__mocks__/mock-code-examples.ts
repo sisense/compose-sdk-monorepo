@@ -277,7 +277,6 @@ const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
 `;
 
 export const MOCK_CODE_EXECUTE_QUERY_REACT_2 = `import { useExecuteQuery } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
 import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
 
 const CodeExample = () => {

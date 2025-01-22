@@ -1,6 +1,6 @@
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { TranslatableError } from '@/translation/translatable-error';
-import { toKebabCase } from './utils';
+import { toKebabCase, isNonEmptyArray } from './utils';
 import { stringifyProps } from '../widget/stringify-props';
 import { ChartDataOptions } from '@/types';
 
@@ -24,12 +24,21 @@ export function stringifyDataSource(dataSource: DataSource | undefined): string 
   return toKebabCase(dataSourceString);
 }
 
-export function stringifyExtraImports(filters: Filter[] | FilterRelations): string {
-  const importNames = ['measureFactory'];
+export function stringifyExtraImports(
+  filters: Filter[] | FilterRelations,
+  importMeasureFactory = true,
+): string {
+  const importNames = [];
 
-  if (Array.isArray(filters) && filters.length > 0) {
+  if (importMeasureFactory) {
+    importNames.push('measureFactory');
+  }
+
+  if (isNonEmptyArray(filters as Filter[])) {
     importNames.push('filterFactory');
   }
 
-  return `import { ${importNames.join(', ')} } from '@sisense/sdk-data';`;
+  return importNames.length > 0
+    ? `import { ${importNames.join(', ')} } from '@sisense/sdk-data';`
+    : '';
 }

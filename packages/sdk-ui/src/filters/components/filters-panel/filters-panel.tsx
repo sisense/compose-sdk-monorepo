@@ -1,4 +1,4 @@
-import { FiltersPanelTile } from './filters-panel-tile';
+import { FilterTile } from '../filter-tile';
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
@@ -104,7 +104,7 @@ export const FiltersPanel = asSisenseComponent({
             {relations && <FilterRelationsTile relations={relations} filters={filters} />}
             {filters?.map((filter, index) => (
               <div className="csdk-mt-[6px]" key={filter.config.guid}>
-                <FiltersPanelTile
+                <FilterTile
                   onDelete={() => handleFilterDelete(index)}
                   key={filter.config.guid}
                   filter={filter}

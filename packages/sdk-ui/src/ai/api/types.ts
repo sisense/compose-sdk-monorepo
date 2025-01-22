@@ -83,18 +83,37 @@ export interface QueryRecommendationConfig {
   numOfRecommendations: number;
 }
 
+export type NlqResult = Omit<NlqResponseData, 'followupQuestions'>;
+
 export type QueryRecommendation = Omit<NlqResponseData, 'followupQuestions'>;
 export type QueryRecommendationResponse = QueryRecommendation[];
 
-export interface GetNlgQueryResultRequest {
+export interface GetNlgInsightsRequest {
   jaql: Pick<JaqlQueryPayload, 'datasource' | 'metadata' | 'filterRelations'>;
 }
 
-export interface GetNlgQueryResultResponse {
+export interface GetNlgInsightsResponse {
   data?: {
     answer: string;
   };
   responseType: 'Text';
+}
+
+/** @internal */
+export const NLQ_RESULT_CHART_TYPES = [
+  'indicator',
+  'column',
+  'line',
+  'table',
+  'pie',
+  'bar',
+] as const;
+/** NLQ result chart types @expandType */
+export type NlqResultChartType = (typeof NLQ_RESULT_CHART_TYPES)[number];
+export interface GetNlqResultRequest {
+  text: string;
+  timezone?: string;
+  chartTypes: NlqResultChartType[];
 }
 
 export interface SendFeedbackRequest {

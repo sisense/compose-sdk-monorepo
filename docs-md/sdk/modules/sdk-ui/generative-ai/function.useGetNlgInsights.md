@@ -1,10 +1,10 @@
 ---
-title: useGetNlgQueryResult
+title: useGetNlgInsights
 ---
 
-# Function useGetNlgQueryResult <Badge type="beta" text="Beta" />
+# Function useGetNlgInsights <Badge type="beta" text="Beta" />
 
-> **useGetNlgQueryResult**(...`args`): [`UseGetNlgQueryResultState`](../interfaces/interface.UseGetNlgQueryResultState.md)
+> **useGetNlgInsights**(...`args`): [`UseGetNlgInsightsState`](../interfaces/interface.UseGetNlgInsightsState.md)
 
 React hook that fetches an analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [useExecuteQuery](../queries/function.useExecuteQuery.md) hook, using dimensions, measures, and filters.
@@ -17,18 +17,18 @@ This hook is currently under beta release for our managed cloud customers on ver
 
 | Parameter | Type |
 | :------ | :------ |
-| ...`args` | [[`UseGetNlgQueryResultParams`](../interfaces/interface.UseGetNlgQueryResultParams.md)] |
+| ...`args` | [[`UseGetNlgInsightsParams`](../interfaces/interface.UseGetNlgInsightsParams.md)] |
 
 ## Returns
 
-[`UseGetNlgQueryResultState`](../interfaces/interface.UseGetNlgQueryResultState.md)
+[`UseGetNlgInsightsState`](../interfaces/interface.UseGetNlgInsightsState.md)
 
 Response object containing a text summary
 
 ## Example
 
 ```ts
-const { data, isLoading } = useGetNlgQueryResult({
+const { data, isLoading } = useGetNlgInsights({
   dataSource: 'Sample ECommerce',
   dimensions: [DM.Commerce.Date.Years],
   measures: [measureFactory.sum(DM.Commerce.Revenue)],

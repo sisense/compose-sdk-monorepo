@@ -261,11 +261,9 @@ export class PivotBuilder {
       onGetInitialData: () => {},
       onMoreLoadingFinish: this.onMoreLoadingFinish,
       onPageChange: this.onPageChange,
-      onItemsPerPageChange: this.onItemsPerPageChange,
       onSortingSettingsChanged: this.handleSortingSettingsChanged,
       onSortingMetadataUpdate: this.onSortingMetadataUpdate,
       onEmptyChange: this.onEmptyChange,
-      onTotalHeightChange: this.onTotalHeightChange,
       onGridUpdated: this.onGridUpdated,
       onDomReady: this.onDomReady,
       ...defaultProps,
@@ -337,7 +335,7 @@ export class PivotBuilder {
       ref: (ref: Pivot) => (this.pivot = ref),
     };
 
-    const reactElement = React.createElement(Pivot, nextProps, null);
+    const reactElement = React.createElement(Pivot, this.withHandlers(nextProps), null);
 
     // ReactDOM.render is no longer supported in React 18. Use ReactDOMClient.createRoot instead
     // See https://react.dev/blog/2022/03/08/react-18-upgrade-guide#updates-to-client-rendering-apis
@@ -466,7 +464,7 @@ export class PivotBuilder {
       this.loadInitData(undefined, nextProps as Props);
     }
 
-    const reactElement = React.createElement(Pivot, nextProps, null);
+    const reactElement = React.createElement(Pivot, this.withHandlers(nextProps), null);
 
     // See notes in the render() method
     try {
@@ -822,19 +820,25 @@ export class PivotBuilder {
     this.loadPageData(args.selected);
   };
 
-  onItemsPerPageChange = (itemsPerPage: number) => {
+  onItemsPerPageChangeHandler = (itemsPerPage: number) => {
     this.updateProps({
       activePage: DEFAULT_ACTIVE_PAGE,
       itemsPerPage,
     });
+    if (this.props.onItemsPerPageChange) {
+      this.props.onItemsPerPageChange(itemsPerPage);
+    }
   };
 
   onEmptyChange = (isEmpty: boolean) => {
     this.emit(EVENT_EMPTY_CHANGE, isEmpty);
   };
 
-  onTotalHeightChange = (totalHeight: number) => {
+  onTotalHeightChangeHandler = (totalHeight: number) => {
     this.emit(EVENT_TOTAL_HEIGHT_CHANGE, totalHeight);
+    if (this.props.onTotalHeightChange) {
+      this.props.onTotalHeightChange(totalHeight);
+    }
   };
 
   onDomReady = () => {
@@ -908,6 +912,18 @@ export class PivotBuilder {
       state.isReceivedRowsCountCalculated &&
       (!hasGrandTotalRow || state.isGrandTotalRowRendered)
     );
+  }
+
+  /**
+   * Enables the usage of local handlers alongside prop handlers.
+   * This addresses the awkward pivot design that overrides local handlers containing important business logic.
+   */
+  withHandlers(props: Props) {
+    return {
+      ...props,
+      onItemsPerPageChange: this.onItemsPerPageChangeHandler,
+      onTotalHeightChange: this.onTotalHeightChangeHandler,
+    };
   }
 }
 

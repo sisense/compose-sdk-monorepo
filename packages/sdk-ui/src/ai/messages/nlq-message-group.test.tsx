@@ -2,7 +2,7 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { GetNlgQueryResultResponse } from '../api/types.js';
+import { GetNlgInsightsResponse } from '../api/types.js';
 import { AiTestWrapper } from '../__mocks__/index.js';
 import MOCK_JAQL_RESPONSE from '../__mocks__/jaql-response.js';
 import MOCK_NLQ_RESPONSE from '../__mocks__/nlq-response.js';
@@ -38,7 +38,7 @@ const mockJaqlApi = () => {
 const mockNlgApi = (text: string) => {
   server.use(
     http.post('*/api/v2/ai/nlg/queryResult', () =>
-      HttpResponse.json<GetNlgQueryResultResponse>({
+      HttpResponse.json<GetNlgInsightsResponse>({
         responseType: 'Text',
         data: {
           answer: text,

@@ -1,8 +1,17 @@
-import { WidgetProps } from '@/props';
+import { WidgetProps, ChartWidgetProps, PivotTableWidgetProps } from '@/props';
 import { ChartDataOptions } from '@/types';
 import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
 import { MetadataItem } from '@sisense/sdk-data';
 import { DynamicChartType } from '../chart-options-processor/translations/types.js';
+
+type Stringify<T> = {
+  [K in keyof T as `${K & string}String`]: string;
+};
+
+type ExtraCodeProps = {
+  componentString: string;
+  extraImportsString: string;
+};
 
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type AllPossibleChartOptionKeys = KeysOfUnion<ChartDataOptions>;
@@ -38,6 +47,7 @@ export interface ExpandedQueryModel {
     };
     metadata: MetadataItem[];
   };
+  widgetProps?: WidgetProps | undefined;
   queryTitle: string;
 }
 
@@ -49,6 +59,7 @@ export interface ExpandedQueryModel {
  */
 export const EMPTY_EXPANDED_QUERY_MODEL: ExpandedQueryModel = {
   jaql: { datasource: { title: '' }, metadata: [] },
+  widgetProps: undefined,
   queryTitle: '',
   chartRecommendations: {},
 };
@@ -207,3 +218,25 @@ export type ExecuteQueryCodeParams = BaseCodeConfig & {
 export type ExecutePivotQueryCodeParams = BaseCodeConfig & {
   pivotQueryParams: ExecutePivotQueryParams;
 };
+
+/**
+ * @internal
+ */
+export type ExecuteQueryCodeProps = Stringify<ExecuteQueryParams> & { extraImportsString: string };
+
+/**
+ * @internal
+ */
+export type ExecutePivotQueryCodeProps = Stringify<ExecutePivotQueryParams> & {
+  extraImportsString: string;
+};
+
+/**
+ * @internal
+ */
+export type ChartWidgetCodeProps = Stringify<ChartWidgetProps> & ExtraCodeProps;
+
+/**
+ * @internal
+ */
+export type PivotTableWidgetCodeProps = Stringify<PivotTableWidgetProps> & ExtraCodeProps;

@@ -15,12 +15,16 @@ describe('cascading-utils', () => {
   describe('flattenCascadingFilters()', () => {
     it('should flatten cascading filters', () => {
       const dashboardingFilters = [
-        new CascadingFilter([
+        filterFactory.cascading([
           filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished']),
           filterFactory.members(DM.Commerce.AgeRange, ['18-24']),
           filterFactory.members(DM.Commerce.Gender, ['Male']),
         ]),
       ];
+
+      if (!isCascadingFilter(dashboardingFilters[0])) {
+        throw new Error('Expected cascading filter');
+      }
 
       const { flatFilters } = flattenCascadingFilters(dashboardingFilters);
       expect(flatFilters).toHaveLength(3);
@@ -30,7 +34,7 @@ describe('cascading-utils', () => {
   describe('reassembleCascadingFilters()', () => {
     it('should reassemble cascading filters', () => {
       const initialFilters = [
-        new CascadingFilter([
+        filterFactory.cascading([
           filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished']),
           filterFactory.members(DM.Commerce.AgeRange, ['18-24']),
         ]),
@@ -43,17 +47,20 @@ describe('cascading-utils', () => {
       const reassembledFilters = reassembleCascadingFilters(updatedFilters, initialFilters);
 
       expect(reassembledFilters).toHaveLength(1);
+
+      if (!isCascadingFilter(reassembledFilters[0])) {
+        throw new Error('Expected cascading filter');
+      }
+
       expect(isCascadingFilter(reassembledFilters[0])).toBe(true);
-      expect(withoutGuids((reassembledFilters[0] as CascadingFilter).filters)).toEqual(
-        withoutGuids(updatedFilters),
-      );
+      expect(withoutGuids(reassembledFilters[0].filters)).toEqual(withoutGuids(updatedFilters));
     });
   });
 
   describe('withCascadingFiltersConversion()', () => {
     it('should flatten and reassemble cascading filters', () => {
       const dashboardingFilters = [
-        new CascadingFilter([
+        filterFactory.cascading([
           filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished']),
           filterFactory.members(DM.Commerce.Gender, ['Male']),
           filterFactory.members(DM.Commerce.AgeRange, ['18-24']),
@@ -69,6 +76,10 @@ describe('cascading-utils', () => {
         setDashboardingFilters,
         { all: false, ids: [] },
       );
+
+      if (!isCascadingFilter(dashboardingFilters[0])) {
+        throw new Error('Expected cascading filter');
+      }
 
       expect(pureFilters).toHaveLength(3);
       expect(withoutGuids(pureFilters)).toEqual(withoutGuids(dashboardingFilters[0].filters));
@@ -92,12 +103,17 @@ describe('cascading-utils', () => {
     });
     it('should reset level filters deeper than modified after reassembling Cascading filter', () => {
       const dashboardingFilters = [
-        new CascadingFilter([
+        filterFactory.cascading([
           filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished']),
           filterFactory.members(DM.Commerce.AgeRange, ['18-24']),
           filterFactory.members(DM.Commerce.Gender, ['Male']),
         ]),
       ];
+
+      if (!isCascadingFilter(dashboardingFilters[0])) {
+        throw new Error('Expected cascading filter');
+      }
+
       const setDashboardingFilters = vi.fn();
 
       const widgetFilters: Filter[] = [filterFactory.members(DM.Commerce.AgeRange, ['65+'])];

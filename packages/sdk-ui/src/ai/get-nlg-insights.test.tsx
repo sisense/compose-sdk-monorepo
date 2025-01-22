@@ -3,10 +3,10 @@ import { setup } from '@/__test-helpers__';
 import { screen, waitFor } from '@testing-library/react';
 import { AiTestWrapper } from './__mocks__';
 import { http, HttpResponse } from 'msw';
-import GetNlgQueryResult, { GetNlgQueryResultProps } from './get-nlg-query-result';
-import { GetNlgQueryResultResponse } from './api/types';
+import GetNlgInsights, { GetNlgInsightsProps } from './get-nlg-insights';
+import { GetNlgInsightsResponse } from './api/types';
 
-const nlgRequest: GetNlgQueryResultProps = {
+const nlgRequest: GetNlgInsightsProps = {
   dataSource: 'Sample ECommerce',
   measures: [],
 };
@@ -14,7 +14,7 @@ const nlgRequest: GetNlgQueryResultProps = {
 beforeEach(() => {
   server.use(
     http.post('*/api/v2/ai/nlg/queryResult', () =>
-      HttpResponse.json<GetNlgQueryResultResponse>({
+      HttpResponse.json<GetNlgInsightsResponse>({
         responseType: 'Text',
         data: {
           answer: 'nlg response text',
@@ -27,7 +27,7 @@ beforeEach(() => {
 it('renders a text summary', async () => {
   setup(
     <AiTestWrapper>
-      <GetNlgQueryResult {...nlgRequest} />
+      <GetNlgInsights {...nlgRequest} />
     </AiTestWrapper>,
   );
 
@@ -39,7 +39,7 @@ it('renders error messsage if API call fails', async () => {
 
   setup(
     <AiTestWrapper>
-      <GetNlgQueryResult {...nlgRequest} />
+      <GetNlgInsights {...nlgRequest} />
     </AiTestWrapper>,
   );
 

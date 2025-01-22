@@ -1,6 +1,6 @@
 // useConvertFilterRelations.spec.tsx
 import { useConvertFilterRelations } from './use-convert-filter-relations';
-import { CascadingFilter, filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@sisense/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
@@ -147,7 +147,7 @@ describe('useConvertFilterRelations', () => {
       );
     });
     it('should reassemble cascading filters if they are present in original filters', () => {
-      const cascadingFilter = new CascadingFilter([filter2, filter3]);
+      const cascadingFilter = filterFactory.cascading([filter2, filter3]);
       const initialRelations = filterFactory.logic.or(filter1, cascadingFilter);
 
       const { result } = renderHook(() => useConvertFilterRelations(initialRelations));

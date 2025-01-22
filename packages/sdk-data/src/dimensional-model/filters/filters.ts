@@ -339,22 +339,22 @@ export class MembersFilter extends AbstractFilter {
  */
 export class CascadingFilter extends AbstractFilter {
   // level filters
-  readonly filters: Filter[];
+  readonly _filters: Filter[];
 
   constructor(filters: Filter[], config?: BaseFilterConfig) {
     super(filters[0].attribute, FilterTypes.cascading, config);
-    this.filters = filters;
-    this.propagateConfig();
+    this._filters = filters;
   }
 
   /**
-   * Propagates the parent config to all level filters
+   * Returns the level filters with the root config applied.
    */
-  propagateConfig(): void {
+  get filters(): Filter[] {
     const { disabled, locked } = this.config;
-    this.filters.forEach((f) => {
-      f.config.disabled = disabled;
-      f.config.locked = locked;
+
+    return this._filters.map((filter) => {
+      filter.config = { ...filter.config, disabled, locked };
+      return filter;
     });
   }
 
@@ -362,7 +362,7 @@ export class CascadingFilter extends AbstractFilter {
    * gets the element's ID
    */
   get id(): string {
-    return `${this.filterType}_${this.filters.map((f) => f.id).join()}`;
+    return `${this.filterType}_${this._filters.map((f) => f.id).join()}`;
   }
 
   /**

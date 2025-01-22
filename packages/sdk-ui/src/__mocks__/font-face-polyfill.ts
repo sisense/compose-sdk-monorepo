@@ -20,3 +20,17 @@ export class FontFaceMock {
 }
 
 globalThis.FontFace = FontFaceMock as never;
+
+// Polyfill for document.fonts to avoid errors in tests
+// https://developer.mozilla.org/en-US/docs/Web/API/FontFaceSet
+const fontFaceSetMock = {
+  ...new Set(),
+  ready: Promise.resolve({}),
+  status: 'loaded',
+};
+if (!document.fonts) {
+  Object.defineProperty(document, 'fonts', {
+    value: fontFaceSetMock,
+    writable: true,
+  });
+}

@@ -1,6 +1,6 @@
 import { LevelAttribute, DataSource, Filter, isDateRangeFilter } from '@sisense/sdk-data';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
-import { FilterTile, FilterTileDesignOptions } from '../../filter-tile';
+import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container';
 import { EditableDateRangeFilter } from './editable-date-range-filter';
 import { DateRangeFilterDisplay } from './date-range-filter-display';
 import { TranslatableError } from '@/translation/translatable-error';
@@ -145,7 +145,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     }
 
     return (
-      <FilterTile
+      <FilterTileContainer
         title={title}
         renderContent={(collapsed) => {
           return collapsed || !dateLimits ? (

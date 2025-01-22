@@ -1,57 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`generateTooltipLines > should generate tooltip with attributes and operators 1`] = `
-[
-  <React.Fragment>
-    <i>
-      Age
-    </i>
-  </React.Fragment>,
-  <b>
-    AND
-  </b>,
-  <React.Fragment>
-    <i>
-      Salary
-    </i>
-  </React.Fragment>,
-]
-`;
-
-exports[`generateTooltipLines > should handle multiple operators and brackets 1`] = `
-[
-  <React.Fragment>
-    <React.Fragment>
-      (
-    </React.Fragment>
-    <i>
-      Age
-    </i>
-  </React.Fragment>,
-  <b>
-    <b>
-      OR
-    </b>
-  </b>,
-  <React.Fragment>
-    <i>
-      Salary
-    </i>
-    <React.Fragment>
-      )
-    </React.Fragment>
-  </React.Fragment>,
-  <b>
-    AND
-  </b>,
-  <React.Fragment>
-    <i>
-      Location
-    </i>
-  </React.Fragment>,
-]
-`;
-
 exports[`tooltip-utils > generateTooltipLines > should generate tooltip with attributes and operators 1`] = `
 [
   <React.Fragment>

@@ -13,7 +13,7 @@ import {
 import { MemberFilterTile } from '../member-filter-tile/index.js';
 import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
 import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter/index.js';
-import { CompleteFilterTileDesignOptions } from '../filter-tile.js';
+import { CompleteFilterTileDesignOptions } from '../filter-tile-container.js';
 import { useThemeContext } from '@/theme-provider';
 import { TRIANGLE_COLOR_ADJUSTMENT, getSlightlyDifferentColor } from '@/utils/color';
 import { CustomFilterTile } from '@/filters';

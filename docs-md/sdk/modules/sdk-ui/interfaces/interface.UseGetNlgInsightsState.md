@@ -1,10 +1,10 @@
 ---
-title: UseGetNlgQueryResultState
+title: UseGetNlgInsightsState
 ---
 
-# Interface UseGetNlgQueryResultState
+# Interface UseGetNlgInsightsState
 
-State for [useGetNlgQueryResult](../generative-ai/function.useGetNlgQueryResult.md) hook.
+State for [useGetNlgInsights](../generative-ai/function.useGetNlgInsights.md) hook.
 
 ## Properties
 

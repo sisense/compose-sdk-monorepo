@@ -5,9 +5,9 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { AiTestWrapper } from '../__mocks__';
 import InsightsMessage from './insights-message';
-import { GetNlgQueryResultRequest, GetNlgQueryResultResponse } from '../api/types';
+import { GetNlgInsightsRequest, GetNlgInsightsResponse } from '../api/types';
 
-const mockNlgRequest: GetNlgQueryResultRequest = {
+const mockNlgRequest: GetNlgInsightsRequest = {
   jaql: {
     datasource: { title: 'Sample ECommerce' },
     metadata: [],
@@ -18,7 +18,7 @@ describe('InsightsMessage', () => {
   beforeEach(() => {
     server.use(
       http.post('*/api/v2/ai/nlg/queryResult', () =>
-        HttpResponse.json<GetNlgQueryResultResponse>({
+        HttpResponse.json<GetNlgInsightsResponse>({
           responseType: 'Text',
           data: {
             answer: 'nlg response text',

@@ -1,7 +1,7 @@
 import { Filter, RelativeDateFilter as RelativeDateFilterType } from '@sisense/sdk-data';
 import { FilterVariant } from '../../common/index.js';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component.js';
-import { FilterTile, FilterTileDesignOptions } from '../../filter-tile.js';
+import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container.js';
 import { isVertical } from '../../common/filter-utils.js';
 import dayjs from 'dayjs';
 import { RelativeDateFilterDisplay } from './relative-date-filter-display.js';
@@ -76,7 +76,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
   const disabled = filter.config.disabled;
 
   return (
-    <FilterTile
+    <FilterTileContainer
       title={title}
       renderContent={(collapsed) => {
         return collapsed && isVertical(arrangement) ? (

@@ -109,25 +109,25 @@ To change the look and feel of the chatbot, wrap the component in a `ThemeProvid
 </ThemeProvider>
 ```
 
-## Query Results Natural Language Generation (NLG)
+## Natural Language Generation (NLG)
 
-NLG query results are natural language textual insights generated from the query result. You can get NLG query results without using a chatbot. This allows you to create your own interface for NLGs.
+Natural language textual insights generated from the data results of the provided query parameters.
 
-To do so, you can use the `useNlgQueryResult()` hook or the `<GetNlgQueryResult />` component.
+You can either use the `useNlgInsights()` hook or the `<GetNlgInsights />` component.
 
-- Use the `useNlgQueryResult()` hook to get a plain text response to a query, without any built-in UI.
-- Use the `<GetNlgQueryResult />` component to get a text response in a container that is collapsible if the returned text is long.
+- Use the `useNlgInsights()` hook to get a plain text response to a query, without a Compose SDK UI Component.
+- Use the `<GetNlgInsights />` component to get a text response rendered within a container, that is collapsible if the returned text is long.
 
-### useNlgQueryResult Hook
+### useNlgInsights Hook
 
-To use the `useNlgQueryResult()` hook, call the hook with the query information and handle the returned result.
+To use the `useNlgInsights()` hook, call the hook with the query information and handle the returned result.
 
 ```ts
-import { useNlgQueryResult } from '@sisense/sdk-ui/ai';
+import { useNlgInsights } from '@sisense/sdk-ui/ai';
 
 // ...
 
-const { data, isLoading } = useGetNlgQueryResult({
+const { data, isLoading } = useGetNlgInsights({
   dataSource: DM.DataSource,
   dimensions: [DM.Commerce.Date.Years],
   measures: [measureFactory.sum(DM.Commerce.Revenue)],
@@ -140,16 +140,16 @@ if (isLoading) {
 return <p>{data}</p>;
 ```
 
-### GetNlgQueryResult Component
+### GetNlgInsights Component
 
-To use the `<GetNlgQueryResult />` component, add it to your code with the query information.
+To use the `<GetNlgInsights />` component, add it to your code with the query information.
 
 ```ts
-import { GetNlgQueryResult } from '@sisense/sdk-ui/ai';
+import { GetNlgInsights } from '@sisense/sdk-ui/ai';
 
 // ...
 
-<GetNlgQueryResult
+<GetNlgInsights
   dataSource={DM.DataSource}
   dimensions={[DM.Commerce.Date.Years]}
   measures={[measureFactory.sum(DM.Commerce.Revenue)]}

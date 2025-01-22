@@ -80,20 +80,20 @@ This should be the result:
 
 ## Add NLG
 
-Let's supplement this chart with some insights using Sisense's natural language generation (NLG) API. We'll add the `GetNlgQueryResult` component underneath the chart we just made.
+Let's supplement this chart with some insights using Sisense's natural language generation (NLG) API. We'll add the `GetNlgInsights` component underneath the chart we just made.
 
 ```ts
 <Chart
   // ...
 />
-<GetNlgQueryResult
+<GetNlgInsights
   dataSource={DM.DataSource}
   dimensions={dimensions}
   measures={measures}
 >
 ```
 
-The props into the `GetNlgQueryResult` component are pretty similar to what is passed into the `ExecuteQuery` component. The difference is that we're getting text in natural language instead of tabular data as a result.
+The props into the `GetNlgInsights` component are pretty similar to what is passed into the `ExecuteQuery` component. The difference is that we're getting text in natural language instead of tabular data as a result.
 
 Depending on how your LLM is configured, the text output might be a little different, but it should look something like this:
 
@@ -101,7 +101,7 @@ Depending on how your LLM is configured, the text output might be a little diffe
 
 ## Format NLG output
 
-We want to highlight key text from the NLG output, like any numbers or quantities that might appear. To do this, it might be easier to switch to the `useGetNlgQueryResult` hook, which will just give us a plain string without the container.
+We want to highlight key text from the NLG output, like any numbers or quantities that might appear. To do this, it might be easier to switch to the `useGetNlgInsights` hook, which will just give us a plain string without the container.
 
 Let's go ahead and add the hook right after where we define our `dimensions` and `measures` variables.
 
@@ -111,19 +111,19 @@ const measures = [
   measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue),
   measureFactory.sum(DM.Fact_Sale_orders.OrderQty),
 ];
-const { data } = useGetNlgQueryResult({
+const { data } = useGetNlgInsights({
   dataSource: DM.DataSource,
   dimensions,
   measures,
 })
 ```
 
-The `useGetNlgQueryResult` hook expects the exact same props as the `GetNlgQueryResult` component.
+The `useGetNlgInsights` hook expects the exact same props as the `GetNlgInsights` component.
 
-Let's format the data and then render it right underneath our `GetNlgQueryResult` hook.
+Let's format the data and then render it right underneath our `GetNlgInsights` hook.
 
 ```ts
-const { data } = useGetNlgQueryResult({
+const { data } = useGetNlgInsights({
   dataSource: DM.DataSource,
   dimensions,
   measures,
@@ -141,7 +141,7 @@ return (
     <Chart
       // ...
     />
-    <GetNlgQueryResult
+    <GetNlgInsights
       // ...
     />
     {summaryMarkup && <div dangerouslySetInnerHTML={summaryMarkup} />}
@@ -159,7 +159,7 @@ Here's the complete `App.tsx` file with all the code we've written in this lesso
 
 ```ts
 import { Chart } from "@sisense/sdk-ui";
-import { GetNlgQueryResult, useGetNlgQueryResult } from "@sisense/sdk-ui/ai";
+import { GetNlgInsights, useGetNlgInsights } from "@sisense/sdk-ui/ai";
 import { measureFactory } from "@sisense/sdk-data";
 import * as DM from "./models/sample-retail";
 
@@ -169,7 +169,7 @@ function App() {
     measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue),
     measureFactory.sum(DM.Fact_Sale_orders.OrderQty),
   ];
-  const { data } = useGetNlgQueryResult({
+  const { data } = useGetNlgInsights({
     dataSource: DM.DataSource,
     dimensions,
     measures,
@@ -208,7 +208,7 @@ function App() {
           height: 400,
         }}
       />
-      <GetNlgQueryResult
+      <GetNlgInsights
         dataSource={DM.DataSource}
         dimensions={dimensions}
         measures={measures}

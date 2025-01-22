@@ -13,14 +13,14 @@ import {
   JaqlDataSource,
   Measure,
 } from '@sisense/sdk-data';
-import { GetNlgQueryResultRequest } from './api/types';
-import { GetNlgQueryResultProps } from './get-nlg-query-result';
+import { GetNlgInsightsRequest } from './api/types';
+import { GetNlgInsightsProps } from './get-nlg-insights';
 import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 
 /**
- * Parameters for {@link useGetNlgQueryResult} hook.
+ * Parameters for {@link useGetNlgInsights} hook.
  */
-export interface UseGetNlgQueryResultParams {
+export interface UseGetNlgInsightsParams {
   /** The data source that the query targets - e.g. `Sample ECommerce` */
   dataSource: DataSource;
 
@@ -42,9 +42,9 @@ export interface UseGetNlgQueryResultParams {
 }
 
 /**
- * State for {@link useGetNlgQueryResult} hook.
+ * State for {@link useGetNlgInsights} hook.
  */
-export interface UseGetNlgQueryResultState {
+export interface UseGetNlgInsightsState {
   /** Whether the data fetching is loading */
   isLoading: boolean;
   /** Whether the data fetching has failed */
@@ -61,15 +61,15 @@ export interface UseGetNlgQueryResultState {
 
 /**
  *
- * @param params - {@link UseGetNlgQueryResultParams}
+ * @param params - {@link UseGetNlgInsightsParams}
  * @param enabled - boolean flag to enable/disable this hook
  * @internal
  */
-export const useGetNlgQueryResultInternal = (
-  params: GetNlgQueryResultProps | GetNlgQueryResultRequest,
+export const useGetNlgInsightsInternal = (
+  params: GetNlgInsightsProps | GetNlgInsightsRequest,
   enabled = true,
-): UseGetNlgQueryResultState => {
-  const payload: GetNlgQueryResultRequest = useMemo(() => {
+): UseGetNlgInsightsState => {
+  const payload: GetNlgInsightsRequest = useMemo(() => {
     if ('jaql' in params) {
       return params;
     } else {
@@ -101,8 +101,8 @@ export const useGetNlgQueryResultInternal = (
   const api = useChatApi();
 
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery({
-    queryKey: ['getNlgQueryResult', payload, api],
-    queryFn: () => api?.ai.getNlgQueryResult(payload),
+    queryKey: ['getNlgInsights', payload, api],
+    queryFn: () => api?.ai.getNlgInsights(payload),
     select: (data) => data?.data?.answer,
     enabled: !!api && enabled,
   });
@@ -122,9 +122,9 @@ export const useGetNlgQueryResultInternal = (
 /**
  * @internal
  */
-const useGetNlgQueryResultWithoutTracking = (params: UseGetNlgQueryResultParams) => {
+const useGetNlgInsightsWithoutTracking = (params: UseGetNlgInsightsParams) => {
   const { enabled, ...restParams } = params;
-  return useGetNlgQueryResultInternal(restParams, enabled);
+  return useGetNlgInsightsInternal(restParams, enabled);
 };
 
 /**
@@ -137,7 +137,7 @@ const useGetNlgQueryResultWithoutTracking = (params: UseGetNlgQueryResultParams)
  *
  * @example
  * ```tsx
- * const { data, isLoading } = useGetNlgQueryResult({
+ * const { data, isLoading } = useGetNlgInsights({
  *   dataSource: 'Sample ECommerce',
  *   dimensions: [DM.Commerce.Date.Years],
  *   measures: [measureFactory.sum(DM.Commerce.Revenue)],
@@ -153,6 +153,16 @@ const useGetNlgQueryResultWithoutTracking = (params: UseGetNlgQueryResultParams)
  * @group Generative AI
  * @beta
  */
+export const useGetNlgInsights = withTracking('useGetNlgInsights')(
+  useGetNlgInsightsWithoutTracking,
+);
+
+/**
+ * @returns Response object containing a text summary
+ * @group Generative AI
+ * @deprecated Use {@link useGetNlgInsights} instead
+ * @internal
+ */
 export const useGetNlgQueryResult = withTracking('useGetNlgQueryResult')(
-  useGetNlgQueryResultWithoutTracking,
+  useGetNlgInsightsWithoutTracking,
 );

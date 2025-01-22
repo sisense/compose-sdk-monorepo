@@ -23,6 +23,7 @@ import {
   BoxplotChartDataOptions,
   PivotTableDataOptions,
   StyledColumn,
+  StyledMeasureColumn,
   TableDataOptions,
 } from '../chart-data-options/types.js';
 import { Panel, WidgetStyle } from './types.js';
@@ -139,7 +140,7 @@ describe('translate widget data options', () => {
       verifyColumn(tableDataOptions.columns[0], panels[0].items[0]);
     });
 
-    it('should returns correct data options for cartesian chart', () => {
+    it('should return correct data options for cartesian chart', () => {
       const {
         // eslint-disable-next-line no-unused-vars
         sort,
@@ -181,7 +182,7 @@ describe('translate widget data options', () => {
       verifyColumn(breakBy[0], panels[2].items[0]);
     });
 
-    it('should returns correct data options for cartesian chart with multiple values', () => {
+    it('should return correct data options for cartesian chart with multiple values', () => {
       const panels: Panel[] = [
         {
           name: 'x-axis',
@@ -219,7 +220,7 @@ describe('translate widget data options', () => {
       verifyColumn(value[1], panels[1].items[1]);
     });
 
-    it('should returns correct data options for categorical chart', () => {
+    it('should return correct data options for categorical chart', () => {
       const panels: Panel[] = [
         {
           name: 'categories',
@@ -246,7 +247,7 @@ describe('translate widget data options', () => {
       verifyColumn(value[0], panels[1].items[0]);
     });
 
-    it('should returns correct data options for indicator', () => {
+    it('should return correct data options for indicator', () => {
       const panels: Panel[] = [
         {
           name: 'value',
@@ -291,7 +292,7 @@ describe('translate widget data options', () => {
       verifyColumn(max![0], panels[3].items[0]);
     });
 
-    it('should returns correct data options for scatter chart', () => {
+    it('should return correct data options for scatter chart', () => {
       const panels: Panel[] = [
         {
           name: 'x-axis',
@@ -345,7 +346,7 @@ describe('translate widget data options', () => {
       verifyColumn(size!, panels[4].items[0]);
     });
 
-    it('should returns correct data options for boxplot chart', () => {
+    it('should return correct data options for boxplot chart', () => {
       const panels: Panel[] = [
         {
           name: 'category',
@@ -377,7 +378,7 @@ describe('translate widget data options', () => {
       verifyColumn(value[0]!, panels[1].items[0]);
     });
 
-    it('should returns correct data options for chart with "measured value" formula', () => {
+    it('should return correct data options for chart with "measured value" formula', () => {
       const panels: Panel[] = [
         {
           name: 'categories',
@@ -416,7 +417,45 @@ describe('translate widget data options', () => {
       verifyColumn(value[0], panels[1].items[0]);
     });
 
-    it('should returns correct data options for pivot table', () => {
+    it('should apply numberFormat for count aggregation on text dimensions', () => {
+      const panels: Panel[] = [
+        {
+          name: 'values',
+          items: [
+            {
+              jaql: {
+                table: 'Commerce',
+                column: 'Brand',
+                dim: '[Commerce.Brand]',
+                datatype: 'text',
+                agg: 'count',
+                title: '# of unique Brand',
+              },
+              format: {
+                mask: {
+                  abbreviations: {
+                    t: false,
+                    b: false,
+                    m: false,
+                    k: true,
+                  },
+                },
+              },
+            },
+          ],
+        },
+      ];
+
+      const dataOptions = extractDataOptions('chart/column', panels, styleMock);
+      const { value } = dataOptions as CartesianChartDataOptions;
+
+      console.log('value', value);
+
+      expect(value[0]).toHaveProperty('numberFormatConfig');
+      expect((value[0] as StyledMeasureColumn).numberFormatConfig?.kilo).toBe(true);
+    });
+
+    it('should return correct data options for pivot table', () => {
       const panels: Panel[] = [
         {
           name: 'rows',
@@ -498,7 +537,7 @@ describe('translate widget plugin data options from pluginPanels', () => {
       verifyColumn(dataOptions.columns[0], panels[0].items[0]);
     });
 
-    it('should returns correct data options for cartesian chart', () => {
+    it('should return correct data options for cartesian chart', () => {
       const {
         // eslint-disable-next-line no-unused-vars
         sort,

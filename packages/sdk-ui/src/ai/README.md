@@ -13,8 +13,8 @@ The following is a list of components and hooks we export, starting in `v0.15.0`
 
 - `AiContextProvider`
 - `Chatbot`
-- `GetNlgQueryResult`
-- `useGetNlgQueryResult`
+- `GetNlgInsights`
+- `useGetNlgInsights`
 - `useGetQueryRecommendations`
 
 ## Usage and Examples
@@ -59,7 +59,7 @@ function App() {
 }
 ```
 
-### `useGetNlgQueryResult`
+### `useGetNlgInsights`
 
 This hook returns a summary in natural language, highlighting key insights about the passed-in JAQL.
 
@@ -67,10 +67,10 @@ Note that this hook expects `metadata` below to be in standard JAQL syntax. In t
 
 ```tsx
 import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { AiContextProvider, useGetNlgQueryResult } from '@sisense/sdk-ui/ai';
+import { AiContextProvider, useGetNlgInsights } from '@sisense/sdk-ui/ai';
 
 function Page() {
-  const { data } = useGetNlgQueryResult({
+  const { data } = useGetNlgInsights({
     dataSource: 'Sample ECommerce',
     metadata: [
       {
@@ -126,17 +126,17 @@ function App() {
 }
 ```
 
-### `GetNlgQueryResult`
+### `GetNlgInsights`
 
-This takes the same props as `useGetNlgQueryResult` and makes the same API call but presents the result in a collapsible container.
+This takes the same props as `useGetNlgInsights` and makes the same API call but presents the result in a collapsible container.
 
 ```tsx
 import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { AiContextProvider, GetNlgQueryResult } from '@sisense/sdk-ui/ai';
+import { AiContextProvider, GetNlgInsights } from '@sisense/sdk-ui/ai';
 
 function Page() {
   return (
-    <GetNlgQueryResult
+    <GetNlgInsights
       dataSource="Sample ECommerce"
       metadata={[
         {

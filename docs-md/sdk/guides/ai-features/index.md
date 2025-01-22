@@ -14,16 +14,13 @@ indexTopics:
 Compose SDK contains generative AI (GenAI) React components and hooks for creating conversational analytics experiences.
 
 ::: warning Note
-This feature is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
-
-To be considered for the beta program, please sign up at [www.sisense.com/get/gen-ai-partner](https://www.sisense.com/get/gen-ai-partner/).
-:::
+This feature is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
 
 The GenAI components and hooks enable you to:
 
 - **Deliver in-app analytics chat**: Enable business users to uncover data insights easily by asking questions in a conversational interface, using the `<Chatbot />` component. Learn more [about the chatbot](./chatbot.md) or see how to [get started using the chatbot](./quickstart.md#chatbot) in your code.
 - **Provide easy quickstart insights**: Encourage exploration of the data landscape with AI-generated recommended queries from within the chatbot or with the `useGetQueryRecommendations()` hook. See how to [get started using query recommendations](./quickstart.md#query-recommendations) in your code.
-- **Bring insights to life with data storytelling**: Enhance collaboration and add context to your data with auto-generated, natural language insights using the `<GetNlgQueryResult />` component or the `useGetNlgQueryResult()` hook. See how to [get started using natural language insights](./quickstart.md#natural-language-generation-nlg-query-results) in your code.
+- **Bring insights to life with data storytelling**: Enhance collaboration and add context to your data with auto-generated, natural language insights using the `<GetNlgInsights />` component or the `useGetNlgInsights()` hook. See how to [get started using natural language insights](./quickstart.md#natural-language-generation-nlg-insights) in your code.
 
 <SectionIndex />
 
@@ -33,6 +30,6 @@ Visit the following pages to learn more about usage and examples:
 
 - Component [AiContextProvider](../../modules/sdk-ui/generative-ai/function.AiContextProvider.md)
 - Component [Chatbot](../../modules/sdk-ui/generative-ai/function.Chatbot.md)
-- Component [GetNlgQueryResult](../../modules/sdk-ui/generative-ai/function.GetNlgQueryResult.md)
-- Hook [useGetNlgQueryResult](../../modules/sdk-ui/generative-ai/function.useGetNlgQueryResult.md)
+- Component [GetNlgInsights](../../modules/sdk-ui/generative-ai/function.GetNlgInsights.md)
+- Hook [useGetNlgInsights](../../modules/sdk-ui/generative-ai/function.useGetNlgInsights.md)
 - Hook [useGetQueryRecommendations](../../modules/sdk-ui/generative-ai/function.useGetQueryRecommendations.md)

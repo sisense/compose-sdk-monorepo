@@ -1,6 +1,6 @@
 import { getFilterCompareId } from '@/widget-by-id/utils';
 import { clearMembersFilter } from '@/utils/filters';
-import { CascadingFilter, Filter, isCascadingFilter } from '@sisense/sdk-data';
+import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
 import { FiltersIgnoringRules, PureFilter } from './types';
 import { isEqualMembersFilters } from './utils';
 import { TranslatableError } from '@/translation/translatable-error';
@@ -126,7 +126,7 @@ function createNewCascadingFilter(
     originalCascadingFilter.config.disabled,
   );
 
-  const newCascadingFilter = new CascadingFilter(newLevelFilters, {
+  const newCascadingFilter = filterFactory.cascading(newLevelFilters, {
     guid: originalCascadingFilter.config.guid,
     disabled: newDisabled,
   });

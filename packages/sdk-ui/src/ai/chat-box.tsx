@@ -60,12 +60,16 @@ const FollowupQuestionsContainer = styled.div<Themable>`
 
 export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   const { t } = useTranslation();
+  const { enableFollowupQuestions, enableHeader, numOfRecentPrompts, numOfRecommendations } =
+    useChatConfig();
+  const { themeSettings } = useThemeContext();
   const {
     data: queryRecommendations,
     isLoading: recommendationsLoading,
     isError: recommendationsError,
   } = useGetQueryRecommendationsInternal({
-    contextTitle,
+    contextTitle: contextTitle,
+    count: numOfRecommendations,
   });
   const questions = useMemo(
     () => queryRecommendations.map((q) => q.nlqPrompt),
@@ -116,9 +120,6 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
   }, [history, isClearHistoryOptionsVisible, isAwaitingResponse]);
 
   const ref = useRef<HTMLDivElement>(null);
-
-  const { enableFollowupQuestions, enableHeader, numOfRecentPrompts } = useChatConfig();
-  const { themeSettings } = useThemeContext();
 
   const header = enableHeader ? (
     <Toolbar

@@ -1,16 +1,16 @@
-import { GetNlgQueryResultRequest } from '../api/types';
+import { GetNlgInsightsRequest } from '../api/types';
 import LoadingDotsIcon from '../icons/loading-dots-icon';
 import TextMessage from './text-message';
-import { useGetNlgQueryResultInternal } from '../use-get-nlg-query-result';
+import { useGetNlgInsightsInternal } from '../use-get-nlg-insights';
 import Collapsible from '../common/collapsible';
 import { useTranslation } from 'react-i18next';
 
 type InsightsMessageProps = {
-  nlgRequest: GetNlgQueryResultRequest;
+  nlgRequest: GetNlgInsightsRequest;
 };
 
 export default function InsightsMessage({ nlgRequest }: InsightsMessageProps) {
-  const { data, isLoading, isError } = useGetNlgQueryResultInternal(nlgRequest);
+  const { data, isLoading, isError } = useGetNlgInsightsInternal(nlgRequest);
   const { t } = useTranslation();
 
   if (isLoading) {

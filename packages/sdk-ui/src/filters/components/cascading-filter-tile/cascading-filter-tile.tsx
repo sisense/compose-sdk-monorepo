@@ -1,4 +1,4 @@
-import { FilterTile } from '../filter-tile.js';
+import { FilterTileContainer } from '../filter-tile-container.js';
 import { CascadingFilter, DataSource, Filter } from '@sisense/sdk-data';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component.js';
 import { FilterVariant } from '../common/filter-utils.js';
@@ -13,7 +13,7 @@ import { clearMembersFilter, cloneFilterAndToggleDisabled } from '@/utils/filter
  */
 export interface CascadingFilterTileProps {
   /** Cascading filter object to initialize filter type and default values */
-  filter: CascadingFilter;
+  filter: Filter;
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
@@ -47,7 +47,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
     } = props;
 
     const { filter, updateFilter } = useSynchronizedFilter<CascadingFilter>(
-      filterFromProps,
+      filterFromProps as CascadingFilter,
       updateFilterFromProps,
     );
 
@@ -76,12 +76,11 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
 
     const handleToggleDisabled = () => {
       const newCascadingFilter = cloneFilterAndToggleDisabled(filter);
-      newCascadingFilter.propagateConfig();
       updateFilter(newCascadingFilter);
     };
 
     return (
-      <FilterTile
+      <FilterTileContainer
         renderContent={() => {
           const parentFilters: Filter[] = [];
           return levelFilters.map((levelFilter, index) => {

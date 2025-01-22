@@ -4,6 +4,7 @@ import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
 import type { PivotTableDataOptions, StyledColumn } from '@/chart-data-options/types';
 import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { preparePivotStylingProps } from '../helpers/prepare-pivot-styling-props';
+import { useSyncedState } from '@/common/hooks/use-synced-state';
 
 const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
 
@@ -36,6 +37,9 @@ export function useRenderPivot({
   size,
   onTotalHeightChange,
 }: PivotRenderOptions): void {
+  const [rowsPerPage, setRowsPerPage] = useSyncedState<number>(
+    styleOptions?.rowsPerPage || DEFAULT_TABLE_ROWS_PER_PAGE,
+  );
   const onUpdatePredefinedColumnWidth = useCallback(
     (horizontalLastLevelsNodes: Array<PivotTreeNode>, resizedColumnWidth?: Array<number>) => {
       const dataOptionsFlatten = [
@@ -72,12 +76,17 @@ export function useRenderPivot({
     [dataOptions],
   );
 
+  const onItemsPerPageChange = useCallback(
+    (newRowsPerPage: number) => {
+      setRowsPerPage(newRowsPerPage);
+    },
+    [setRowsPerPage],
+  );
+
   const pivotStylingProps = useMemo(
     () => preparePivotStylingProps(styleOptions, themeSettings),
     [styleOptions, themeSettings],
   );
-
-  const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE } = styleOptions;
 
   const props = useMemo(() => {
     if (size) {
@@ -88,12 +97,20 @@ export function useRenderPivot({
         itemsPerPage: rowsPerPage,
         isSelectedMode: true,
         onUpdatePredefinedColumnWidth,
+        onItemsPerPageChange,
         onTotalHeightChange,
         ...pivotStylingProps,
       };
     }
     return null;
-  }, [size, rowsPerPage, onUpdatePredefinedColumnWidth, pivotStylingProps, onTotalHeightChange]);
+  }, [
+    size,
+    rowsPerPage,
+    onUpdatePredefinedColumnWidth,
+    pivotStylingProps,
+    onTotalHeightChange,
+    onItemsPerPageChange,
+  ]);
 
   useEffect(() => {
     if (nodeRef.current && props) {

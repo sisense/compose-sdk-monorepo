@@ -9,6 +9,7 @@ import { ChatMessage, NlqMessage, NlqResponseData, TextMessage } from './api/typ
 import { useChatHistory } from './api/chat-history';
 import { useTranslation } from 'react-i18next';
 import { TranslatableError } from '@/translation/translatable-error';
+import { useChatConfig } from './chat-config';
 
 /**
  * Result of the useChatSession hook.
@@ -45,6 +46,7 @@ export const isTextMessage = (message: ChatMessage | null | undefined): message 
  */
 export const useChatSession = (contextTitle: string): UseChatSessionResult => {
   const { t } = useTranslation();
+  const { enableFollowupQuestions } = useChatConfig();
   const { data: dataTopics, isLoading: dataTopicsLoading } = useGetDataTopics();
   const { data: chats, isLoading: chatsLoading } = useGetAllChats();
 
@@ -70,7 +72,10 @@ export const useChatSession = (contextTitle: string): UseChatSessionResult => {
     }
   }, [isCreateChatError, isFetchHistoryError, t]);
 
-  const { mutate: sendMessage, isLoading: isSendMessageLoading } = useSendChatMessage(chatId);
+  const { mutate: sendMessage, isLoading: isSendMessageLoading } = useSendChatMessage(
+    chatId,
+    enableFollowupQuestions,
+  );
 
   const lastNlqResponse: NlqResponseData | null = useMemo(() => {
     if (chatHistory?.length) {

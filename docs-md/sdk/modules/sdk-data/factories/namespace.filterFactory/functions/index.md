@@ -39,6 +39,7 @@ greater than 1000.
 - [between](function.between.md)
 - [betweenNotEqual](function.betweenNotEqual.md)
 - [bottomRanking](function.bottomRanking.md)
+- [cascading](function.cascading.md)
 - [contains](function.contains.md)
 - [dateFrom](function.dateFrom.md)
 - [dateRange](function.dateRange.md)

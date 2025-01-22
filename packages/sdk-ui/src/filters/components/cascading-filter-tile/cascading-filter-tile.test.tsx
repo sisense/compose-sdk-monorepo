@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { CascadingFilter, filterFactory } from '@sisense/sdk-data';
+import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
 import { SisenseContextProviderProps } from '@/index';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
@@ -20,7 +20,7 @@ const contextProviderProps: SisenseContextProviderProps = {
 };
 
 describe('CascadingFilterTile', () => {
-  let cascadingFilter: CascadingFilter;
+  let cascadingFilter: Filter;
   beforeEach(() => {
     server.resetHandlers();
     server.use(
@@ -29,12 +29,16 @@ describe('CascadingFilterTile', () => {
     const topFilter = filterFactory.members(DM.Commerce.Gender, ['Unspecified']);
     const bottomFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18']);
 
-    cascadingFilter = new CascadingFilter([topFilter, bottomFilter]);
+    cascadingFilter = filterFactory.cascading([topFilter, bottomFilter]);
   });
   it('should render a CascadingFilterTile component', async () => {
     server.use(
       http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
     );
+
+    if (!isCascadingFilter(cascadingFilter)) {
+      throw new Error('Expected cascading filter');
+    }
 
     render(
       <SisenseContextProvider {...contextProviderProps}>
@@ -42,7 +46,7 @@ describe('CascadingFilterTile', () => {
       </SisenseContextProvider>,
     );
 
-    await setTimeout(250);
+    await setTimeout(200);
 
     await Promise.all(
       cascadingFilter.filters.map(async (filter) =>
@@ -65,16 +69,22 @@ describe('CascadingFilterTile', () => {
       ...config,
       guid: 'member2',
     });
-    const lockedCascadingFilter = new CascadingFilter([topFilter, bottomFilter], {
+    const lockedCascadingFilter = filterFactory.cascading([topFilter, bottomFilter], {
       ...config,
       guid: 'cascading1',
     });
+
+    if (!isCascadingFilter(cascadingFilter)) {
+      throw new Error('Expected cascading filter');
+    }
 
     const { container } = render(
       <SisenseContextProvider {...contextProviderProps}>
         <CascadingFilterTile filter={lockedCascadingFilter} onChange={() => {}} />
       </SisenseContextProvider>,
     );
+
+    await setTimeout(200);
 
     await Promise.all(
       cascadingFilter.filters.map(async (filter) =>

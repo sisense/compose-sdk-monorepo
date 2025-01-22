@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
 import { useMembers } from './use-members';
-import { FilterTile } from '../filter-tile';
+import { FilterTileContainer } from '../filter-tile-container';
 import { Member, SelectedMember } from './members-reducer';
 import { useValidatedMembers } from './use-validate-members';
 import isEqual from 'lodash-es/isEqual';
@@ -159,7 +159,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
   ]);
 
   return (
-    <FilterTile
+    <FilterTileContainer
       title={title}
       renderContent={(collapsed, tileDisabled) => {
         if (collapsed) {

@@ -65,3 +65,9 @@ title: NlqResponseData
 ### queryTitle
 
 > **queryTitle**: `string`
+
+***
+
+### widgetProps
+
+> **widgetProps**?: [`WidgetProps`](../type-aliases/type-alias.WidgetProps.md)

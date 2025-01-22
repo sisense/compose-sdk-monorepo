@@ -68,7 +68,7 @@ describe('useGetSharedFormula', () => {
     }
   });
 
-  it('should trow an error if name is provided without data source', () => {
+  it('should throw an error if name is provided without data source', () => {
     try {
       renderHook(() => {
         useGetSharedFormula({ name: formulaParamsMock.name });

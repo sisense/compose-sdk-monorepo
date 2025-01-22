@@ -1,8 +1,14 @@
 import { ChartWidgetProps, PivotTableWidgetProps } from '@/props';
-import { ByIdWidgetCodeParams, ClientSideWidgetCodeParams, UiFramework } from '../types.js';
+import {
+  ByIdWidgetCodeParams,
+  ClientSideWidgetCodeParams,
+  UiFramework,
+  ChartWidgetCodeProps,
+  PivotTableWidgetCodeProps,
+} from '../types.js';
 import { isChartWidgetProps, isPivotTableWidgetProps } from '@/widget-by-id/utils.js';
 import { TranslatableError } from '@/translation/translatable-error';
-import { validateChartType } from '../common/utils.js';
+import { validateChartType, checkIfMeasuresExist } from '../common/utils.js';
 import {
   stringifyDataSource,
   stringifyExtraImports,
@@ -13,18 +19,6 @@ import { generateCode } from '../code/generate-code.js';
 import { stringifyFilters } from './stringify-filters.js';
 import { CodeTemplateKey } from '../types.js';
 import { stringifyProps } from '../widget/stringify-props';
-
-type Stringify<T> = {
-  [K in keyof T as `${K & string}String`]: string;
-};
-
-type ExtraCodeProps = {
-  componentString: string;
-  extraImportsString: string;
-};
-
-type ChartWidgetCodeProps = Stringify<ChartWidgetProps> & ExtraCodeProps;
-type PivotTableWidgetCodeProps = Stringify<PivotTableWidgetProps> & ExtraCodeProps;
 
 const widgetByIdTemplateKeys: CodeTemplateKey[] = ['executeQueryByWidgetIdTmpl', 'widgetByIdTmpl'];
 const widgetTemplateKey: CodeTemplateKey = 'chartWidgetTmpl';
@@ -39,6 +33,7 @@ const getChartWidgetCode = (
   uiFramework: UiFramework,
   templateKey: CodeTemplateKey,
 ): string => {
+  const hasMeasures = checkIfMeasuresExist(props);
   const codeProps: ChartWidgetCodeProps = {
     titleString: props.title,
     dataSourceString: stringifyDataSource(props.dataSource),
@@ -46,7 +41,7 @@ const getChartWidgetCode = (
     dataOptionsString: stringifyDataOptions(props.dataOptions),
     filtersString: stringifyFilters(props.filters),
     componentString: 'ChartWidget',
-    extraImportsString: stringifyExtraImports(props.filters || []),
+    extraImportsString: stringifyExtraImports(props.filters || [], hasMeasures),
   };
   return generateCode(templateKey, codeProps, uiFramework);
 };
@@ -56,12 +51,13 @@ const getPivotTableWidgetCode = (
   uiFramework: UiFramework,
   templateKey: CodeTemplateKey,
 ): string => {
+  const hasMeasures = checkIfMeasuresExist(props);
   const codeProps: PivotTableWidgetCodeProps = {
     titleString: props.title,
     dataSourceString: stringifyDataSource(props.dataSource),
     dataOptionsString: stringifyProps(props.dataOptions),
     componentString: 'PivotTableWidget',
-    extraImportsString: stringifyExtraImports(props.filters || []),
+    extraImportsString: stringifyExtraImports(props.filters || [], hasMeasures),
   };
   return generateCode(templateKey, codeProps, uiFramework);
 };

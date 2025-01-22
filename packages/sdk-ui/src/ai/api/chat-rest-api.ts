@@ -5,12 +5,14 @@ import type {
   ChatResponse,
   ChatWithoutHistory,
   ChatContext,
-  GetNlgQueryResultRequest,
-  GetNlgQueryResultResponse,
+  GetNlgInsightsRequest,
+  GetNlgInsightsResponse,
   LlmConfig,
   QueryRecommendationConfig,
   QueryRecommendationResponse,
   SendFeedbackRequest,
+  GetNlqResultRequest,
+  NlqResult,
 } from './types';
 import { DataSourceField } from '@sisense/sdk-data';
 
@@ -29,14 +31,18 @@ export class ChatRestApi {
   };
 
   // ==== /v2/ai endpoints ====
-  private getNlgQueryResult = (request: GetNlgQueryResultRequest) => {
-    return this.httpClient.post<GetNlgQueryResultResponse>('api/v2/ai/nlg/queryResult', request);
+  private getNlgInsights = (request: GetNlgInsightsRequest) => {
+    return this.httpClient.post<GetNlgInsightsResponse>('api/v2/ai/nlg/queryResult', request);
   };
 
   private getQueryRecommendations = (contextTitle: string, config: QueryRecommendationConfig) => {
     return this.httpClient.get<QueryRecommendationResponse>(
       `api/v2/ai/recommendations/query/${contextTitle}/${config.numOfRecommendations}`,
     );
+  };
+
+  private getNlqResult = (contextTitle: string, request: GetNlqResultRequest) => {
+    return this.httpClient.post<NlqResult>(`api/v2/ai/nlq/query/${contextTitle}`, request);
   };
 
   private setLlmConfig = (config: LlmConfig) => {
@@ -82,7 +88,8 @@ export class ChatRestApi {
   };
 
   ai = {
-    getNlgQueryResult: this.getNlgQueryResult,
+    getNlgInsights: this.getNlgInsights,
+    getNlqResult: this.getNlqResult,
     getQueryRecommendations: this.getQueryRecommendations,
     setLlmConfig: this.setLlmConfig,
     sendFeedback: this.sendFeedback,

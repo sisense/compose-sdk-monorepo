@@ -9,6 +9,7 @@ import {
   getChartType,
   getWidgetTypeFromChartType,
   isChartWidget,
+  isChartWidgetProps,
   isPivotTableWidget,
   isPluginWidget,
   isSupportedWidgetType,
@@ -586,12 +587,27 @@ export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): Widget
 }
 
 /**
+ * Creates a {@link WidgetModel} from a {@link WidgetProps}.
+ *
+ * @param widgetProps - The WidgetProps to be converted to a widget model
+ * @returns WidgetModel
+ * @internal
+ */
+export function fromWidgetProps(widgetProps: WidgetProps): WidgetModel {
+  if (isChartWidgetProps(widgetProps)) {
+    return fromChartWidgetProps(widgetProps);
+  }
+
+  throw new TranslatableError('errors.otherWidgetTypesNotSupported');
+}
+
+/**
  * Data source as specified in the jaql
  * but with required filelds
  *
  * @internal
  */
-export type JaqlDataSourceForWidgetDto = JaqlDataSource & { id: string; address: string };
+export type JaqlDataSourceForWidgetDto = JaqlDataSource & { id: string; address?: string };
 
 /**
  * Translates a {@link WidgetModel} to {@link WidgetDto}.
@@ -607,7 +623,10 @@ export function toWidgetDto(
 ): WidgetDto {
   const datasource = dataSource || widgetModel.dataSource;
   if (typeof datasource === 'string') throw new IncompleteWidgetTypeError('dataSource');
-  if (!datasource.id || !(datasource as JaqlDataSource).address)
+  if (
+    !datasource.id ||
+    (!(datasource as JaqlDataSource).live && !(datasource as JaqlDataSource).address)
+  )
     throw new IncompleteWidgetTypeError('dataSource');
 
   const chartType = widgetModel.chartType;

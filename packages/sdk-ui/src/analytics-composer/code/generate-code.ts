@@ -1,5 +1,6 @@
 import { CODE_TEMPLATES } from './code-templates.js';
 import { CodePlaceholderMap, CodeTemplateKey, UiFramework } from '../types.js';
+import { removeEmptyLineBeforeImport } from '../common/utils.js';
 
 /**
  * Populates templates recursively.
@@ -51,5 +52,5 @@ export const generateCode = (
   uiFramework: UiFramework = 'react',
 ): string => {
   const template = populateTemplates(templateKey, uiFramework);
-  return populatePlaceholders(template, placeholderMap);
+  return removeEmptyLineBeforeImport(populatePlaceholders(template, placeholderMap));
 };

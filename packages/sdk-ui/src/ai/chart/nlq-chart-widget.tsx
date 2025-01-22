@@ -5,11 +5,12 @@ import { ChartInsights } from '@/ai/chart/chart-insights';
 import { Filter, Data, MetadataItem } from '@sisense/sdk-data';
 import type { NlqResponseData } from '@/ai';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
-import { useGetNlgQueryResultInternal } from '@/ai/use-get-nlg-query-result';
+import { useGetNlgInsightsInternal } from '@/ai/use-get-nlg-insights';
 import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
 import { WidgetProps } from '@/props';
 import { getFiltersArray } from '@/utils/filter-relations';
+import upperFirst from 'lodash-es/upperFirst';
 
 /**
  * Props for {@link NlqChartWidget} component.
@@ -58,6 +59,8 @@ export interface NlqChartWidgetProps {
  * @internal
  */
 export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqChartWidgetProps) => {
+  nlqResponse.queryTitle = upperFirst(nlqResponse.queryTitle);
+
   const { connectToWidgetProps } = useCommonFilters({
     initialFilters: filters,
   });
@@ -95,11 +98,7 @@ export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqCh
     return { ...nlqResponse, jaql: { ...nlqResponse.jaql, metadata } };
   }, [nlqResponse, chartWidgetProps]);
 
-  const {
-    data: summary,
-    isLoading,
-    isError,
-  } = useGetNlgQueryResultInternal(nlqResponseWithFilters);
+  const { data: summary, isLoading, isError } = useGetNlgInsightsInternal(nlqResponseWithFilters);
 
   if (isLoading || !chartWidgetProps) {
     return <LoadingDotsIcon />;

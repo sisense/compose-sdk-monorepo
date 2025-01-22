@@ -1,5 +1,7 @@
 import { TranslatableError } from '@/translation/translatable-error';
 import { ExpandedQueryModel, SimpleQueryModel } from '../types.js';
+import { ChartWidgetProps, PivotTableWidgetProps } from '@/props';
+import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
 import {
   ALL_CHART_TYPES,
   DynamicChartType,
@@ -60,4 +62,61 @@ export function validateChartType(chartType: DynamicChartType | 'pivot' | 'pivot
 
   if (!ALLOWED_TYPES.includes(chartType))
     throw new TranslatableError('errors.chartTypeNotSupported', { chartType });
+}
+
+export function checkIfMeasuresExist(
+  props: ChartWidgetProps | PivotTableWidgetProps | ExecuteQueryParams | ExecutePivotQueryParams,
+): boolean {
+  const hasMeasuresOrValues =
+    ('measures' in props && isNonEmptyArray(props.measures as [])) ||
+    ('values' in props && isNonEmptyArray(props.values as []));
+
+  if ('chartType' in props) {
+    if (props.chartType === 'scatter') {
+      return (
+        'x' in props.dataOptions &&
+        'y' in props.dataOptions &&
+        (props.dataOptions.x !== undefined || props.dataOptions.y !== undefined)
+      );
+    }
+    if (props.chartType === 'scattermap')
+      return 'geo' in props.dataOptions && isNonEmptyArray(props.dataOptions.geo);
+    return 'value' in props.dataOptions && isNonEmptyArray(props.dataOptions.value as []);
+  }
+
+  return hasMeasuresOrValues;
+}
+
+export function isNonEmptyArray<T>(array: T[]): boolean {
+  return Array.isArray(array) && array.length > 0;
+}
+
+/**
+ * Removes the first empty line or string if the next line contains "import *" or "import {".
+ *
+ * The `stringifyExtraImports` function can return an empty string if there are no measures or filters, then
+ * `filterFactory` or `measureFactory` are not required for import.
+ * In our code templates, we use the `{{extraImportsString}}` placeholder, and
+ * if it is replaced with an empty string, our tests may break.
+ * This function ensures that such invalid empty lines before imports are removed to maintain proper formatting.
+ *
+ * @param input - the populated template
+ * @returns The modified string with the first empty line removed if the next line contains "import *" or "import {". If no such condition is met, the input remains unchanged.
+ */
+export function removeEmptyLineBeforeImport(input: string) {
+  const lines = input.split('\n');
+
+  for (let i = 0; i < lines.length - 1; i++) {
+    if (lines[i].trim() === '') {
+      // Check if the current line is empty
+      const nextLine = lines[i + 1].trim();
+      // Check if the next line contains "import *" or "import {"
+      if (nextLine.startsWith('import *') || nextLine.startsWith('import {')) {
+        lines.splice(i, 1); // Remove the empty line
+        break; // Stop after removing the first match
+      }
+    }
+  }
+
+  return lines.join('\n');
 }

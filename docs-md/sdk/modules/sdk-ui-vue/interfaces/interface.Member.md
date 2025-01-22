@@ -10,8 +10,12 @@ title: Member
 
 > **key**: `string`
 
+Key of the member
+
 ***
 
 ### title
 
 > **title**: `string`
+
+Title of the member

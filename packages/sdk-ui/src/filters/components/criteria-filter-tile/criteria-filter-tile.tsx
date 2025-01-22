@@ -7,7 +7,7 @@ import {
   filterToDefaultValues,
   valuesToDisplayValues,
 } from './criteria-filter-operations.js';
-import { FilterTile, FilterTileDesignOptions } from '../filter-tile.js';
+import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container.js';
 import { CriteriaFilterMenu } from './criteria-filter-menu.js';
 import {
   ExcludeFilter,
@@ -131,7 +131,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
     );
 
     return (
-      <FilterTile
+      <FilterTileContainer
         title={title}
         renderContent={(collapsed) => {
           return collapsed && isVertical(arrangement) ? (

@@ -115,7 +115,7 @@ Source filter object. Caller is responsible for keeping track of filter state
 
 > **filterChange**: `EventEmitter`\< `ArgumentsAsObject`\< (`filter`) => `void`, [`"filter"`] \> \>
 
-Callback indicating when the source member filter object should be updated
+Callback indicating when the source members filter should be updated
 
 ***
 

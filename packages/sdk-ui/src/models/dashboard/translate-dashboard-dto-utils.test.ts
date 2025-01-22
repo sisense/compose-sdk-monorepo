@@ -1,4 +1,4 @@
-import { CascadingFilter, filterFactory, measureFactory, MembersFilter } from '@sisense/sdk-data';
+import { filterFactory, measureFactory, MembersFilter } from '@sisense/sdk-data';
 import * as DM from '../../__test-helpers__/sample-ecommerce';
 import { filterToFilterDto } from '@/models/dashboard/translate-dashboard-dto-utils';
 import { CascadingFilterDto, FilterDto } from '@/api/types/dashboard-dto';
@@ -59,7 +59,7 @@ describe('baseFilterToFilterDto', () => {
   });
 
   it('should return correctly translated cascading filter', () => {
-    const filter = new CascadingFilter(
+    const filter = filterFactory.cascading(
       [
         filterFactory.members(DM.Commerce.BrandID, ['1'], { guid: 'BRAND_FILTER_ID' }),
         filterFactory.members(DM.Commerce.Gender, ['Female'], { guid: 'GENDER_FILTER_ID' }),

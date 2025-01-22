@@ -1,10 +1,4 @@
-import {
-  CascadingFilter,
-  createFilterFromJaql,
-  DataSourceInfo,
-  DataType,
-  MembersFilter,
-} from './index.js';
+import { createFilterFromJaql, DataSourceInfo, DataType, MembersFilter } from './index.js';
 import {
   getDataSourceName,
   getFilterListAndRelationsJaql,
@@ -96,7 +90,7 @@ describe('utils', () => {
       expect(result.relations).toEqual(nestedFilterRelationsResult);
     });
     test('should correctly handle FilterRelations with cascading filters', () => {
-      const cascadingFilter: CascadingFilter = new CascadingFilter([filter2, filter3]);
+      const cascadingFilter = filterFactory.cascading([filter2, filter3]);
       const filterRelationsWithCascading = {
         operator: 'OR' as const,
         left: filter1,

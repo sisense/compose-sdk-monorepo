@@ -1,10 +1,10 @@
 ---
-title: GetNlgQueryResult
+title: GetNlgInsights
 ---
 
-# Function GetNlgQueryResult <Badge type="beta" text="Beta" />
+# Function GetNlgInsights <Badge type="beta" text="Beta" />
 
-> **GetNlgQueryResult**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **GetNlgInsights**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 React component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [useExecuteQuery](../queries/function.useExecuteQuery.md) hook, using dimensions, measures, and filters.
@@ -17,7 +17,7 @@ This component is currently under beta release for our managed cloud customers o
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `props` | [`GetNlgQueryResultProps`](../interfaces/interface.GetNlgQueryResultProps.md) | [GetNlgQueryResultProps](../interfaces/interface.GetNlgQueryResultProps.md) |
+| `props` | [`GetNlgInsightsProps`](../interfaces/interface.GetNlgInsightsProps.md) | [GetNlgInsightsProps](../interfaces/interface.GetNlgInsightsProps.md) |
 
 ## Returns
 
@@ -28,7 +28,7 @@ Collapsible container wrapping a text summary
 ## Example
 
 ```ts
-<GetNlgQueryResult
+<GetNlgInsights
   dataSource="Sample ECommerce"
   dimensions={[DM.Commerce.Date.Years]}
   measures={[measureFactory.sum(DM.Commerce.Revenue)]}

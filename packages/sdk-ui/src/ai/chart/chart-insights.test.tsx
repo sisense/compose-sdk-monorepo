@@ -3,9 +3,9 @@ import { setup } from '@/__test-helpers__';
 import { AiTestWrapper } from '../__mocks__';
 import { ChartInsights } from '@/ai/chart/chart-insights';
 
-import { GetNlgQueryResultRequest } from '../api/types';
+import { GetNlgInsightsRequest } from '../api/types';
 
-const mockNlgRequest: GetNlgQueryResultRequest = {
+const mockNlgRequest: GetNlgInsightsRequest = {
   jaql: {
     datasource: { title: 'Sample ECommerce' },
     metadata: [],

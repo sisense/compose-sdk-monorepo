@@ -21,7 +21,8 @@ export default function ChartMessage({ content }: ChartMessageProps) {
   const { themeSettings } = useThemeContext();
 
   const { inlineElement, expandedElement } = useMemo(() => {
-    // Chart in message uses custom style options
+    // Chart in expanded view uses custom style options, inline chart (message) will remove some options later in the code
+    // Currently the REST API does not return widgetProps or store them in chat history .. if it does in future, should use it directly as content.widgetProps
     const widgetProps = widgetComposer.toWidgetProps(content, { useCustomizedStyleOptions: true });
     if (widgetProps === undefined || !isChartWidgetProps(widgetProps)) {
       throw new TranslatableError('errors.otherWidgetTypesNotSupported');

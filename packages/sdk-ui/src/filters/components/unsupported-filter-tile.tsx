@@ -1,4 +1,7 @@
-import { FilterTile, FilterTileDesignOptions } from '@/filters/components/filter-tile';
+import {
+  FilterTileContainer,
+  FilterTileDesignOptions,
+} from '@/filters/components/filter-tile-container';
 import { Filter } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
 import { FilterContentDisplay } from '@/filters/components/common';
@@ -25,7 +28,7 @@ export const UnsupportedFilterTile = ({
 }: UnsupportedFilterTileProps) => {
   const { t } = useTranslation();
   return (
-    <FilterTile
+    <FilterTileContainer
       title={filter.attribute.name ?? ''}
       renderContent={() => (
         <FilterContentDisplay>{t('unsupportedFilterMessage')}</FilterContentDisplay>

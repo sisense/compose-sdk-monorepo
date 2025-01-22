@@ -16,7 +16,7 @@ import {
   FilterRelationsJaqlIdNode,
   filterFactory,
   FilterRelationsModel,
-  CascadingFilter,
+  isCascadingFilter,
 } from '@sisense/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
@@ -205,8 +205,13 @@ describe('filter-relations', () => {
       const genderFilter = filterFactory.members(DM.Commerce.Gender, ['Female']);
       const countryFilter = filterFactory.members(DM.Country.Country, ['Brazil']);
       const categoryFilter = filterFactory.members(DM.Category.Category, ['Calculators']);
-      const cascadingFilter = new CascadingFilter([countryFilter, categoryFilter]);
+      const cascadingFilter = filterFactory.cascading([countryFilter, categoryFilter]);
       const conditionFilter = filterFactory.members(DM.Commerce.Condition, ['New', 'Refurbished']);
+
+      if (!isCascadingFilter(cascadingFilter)) {
+        throw new Error('Expected cascading filter');
+      }
+
       const filterRelationsModel: FilterRelationsModel = {
         type: 'LogicalExpression',
         operator: 'OR',

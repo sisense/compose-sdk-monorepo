@@ -104,7 +104,7 @@ Text or numeric filter object to initialize filter type and default values
 
 > **filterChange**: `EventEmitter`\< `ArgumentsAsObject`\< (`filter`) => `void`, [`"filter"`] \> \>
 
-Callback indicating when the source member filter object should be updated
+Callback returning filter object, or null for failure
 
 ***
 

@@ -1,11 +1,18 @@
 import { produce } from 'immer';
 
 export interface Member {
+  /** Key of the member */
   key: string;
+  /** Title of the member */
   title: string;
 }
 
 export interface SelectedMember extends Member {
+  /**
+   * Boolean flag whether the member is inactive
+   *
+   * If not specified, the default value is `false`
+   */
   inactive?: boolean;
 }
 

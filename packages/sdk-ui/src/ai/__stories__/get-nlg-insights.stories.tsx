@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import GetNlgQueryResult from '../get-nlg-query-result';
+import GetNlgInsights from '../get-nlg-insights';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import { SisenseContextProviderProps } from '../../props';
 import AiContextProvider from '../ai-context-provider';
@@ -13,9 +13,9 @@ const sisenseContextProps: SisenseContextProviderProps = {
   appConfig: { errorBoundaryConfig: { alwaysShowErrorText: true } },
 };
 
-const meta: Meta<typeof GetNlgQueryResult> = {
-  title: 'AI/Chat/GetNlgQueryResult',
-  component: GetNlgQueryResult,
+const meta: Meta<typeof GetNlgInsights> = {
+  title: 'AI/Chat/GetNlgInsights',
+  component: GetNlgInsights,
   decorators: [
     (Story) => (
       <SisenseContextProvider {...sisenseContextProps}>
@@ -28,7 +28,7 @@ const meta: Meta<typeof GetNlgQueryResult> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof GetNlgQueryResult>;
+type Story = StoryObj<typeof GetNlgInsights>;
 
 export const Default: Story = {
   args: {

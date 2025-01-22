@@ -1,4 +1,4 @@
-import { GetNlgQueryResultRequest } from '@/ai';
+import { GetNlgInsightsRequest } from '@/ai';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
@@ -8,7 +8,7 @@ import AiIcon from '@/ai/icons/ai-icon';
 
 export interface ChartInsightsProps {
   summary: string;
-  nlgRequest: GetNlgQueryResultRequest;
+  nlgRequest: GetNlgInsightsRequest;
 }
 
 const FlexDiv = styled.div<Themable>`

@@ -4,8 +4,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Filter, filterFactory } from '@sisense/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
-vi.mock('./filters-panel-tile', async () => {
-  const FiltersPanelTile = ({
+vi.mock('../filter-tile', async () => {
+  const FilterTile = ({
     filter,
     onChange,
   }: {
@@ -13,12 +13,12 @@ vi.mock('./filters-panel-tile', async () => {
     onChange: (filter: Filter) => void;
   }) => (
     <div data-testid={'filter-tile'}>
-      FiltersPanelTile
+      FilterTile
       <button data-testid={'filter-tile-button'} onClick={() => onChange(filter)} />
     </div>
   );
   return {
-    FiltersPanelTile,
+    FilterTile,
   };
 });
 

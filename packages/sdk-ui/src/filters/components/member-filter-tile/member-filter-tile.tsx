@@ -1,26 +1,14 @@
-import {
-  Attribute,
-  convertDataSource,
-  DataSource,
-  DimensionalLevelAttribute,
-  Filter,
-  isDatetime,
-  isNumber,
-  MembersFilter,
-} from '@sisense/sdk-data';
-import { FunctionComponent, useCallback, useMemo } from 'react';
+import { Attribute, DataSource, Filter, MembersFilter } from '@sisense/sdk-data';
+import { FunctionComponent, useCallback } from 'react';
 import { Member, SelectedMember } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
-import { useExecuteQueryInternal } from '../../../query-execution/use-execute-query';
-import { FilterTile, FilterTileDesignOptions } from '../filter-tile';
+import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
 import merge from 'lodash-es/merge';
 import { cloneFilterAndToggleDisabled } from '@/utils/filters';
-import { applyDateFormat } from '@/query/date-formats';
-import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members';
 
 /**
  * Props for {@link MemberFilterTile}
@@ -38,7 +26,7 @@ export interface MemberFilterTileProps {
   attribute: Attribute;
   /** Source filter object. Caller is responsible for keeping track of filter state */
   filter: Filter | null;
-  /** Callback indicating when the source member filter object should be updated */
+  /** Callback indicating when the source members filter should be updated */
   onChange: (filter: Filter | null) => void;
   /** Filter delete callback */
   onDelete?: () => void;
@@ -89,9 +77,6 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     parentFilters = [],
     tileDesignOptions,
   } = props;
-  const {
-    config: { backgroundFilter = undefined, enableMultiSelection, excludeMembers },
-  } = (filterFromProps as MembersFilter) ?? { config: {} };
 
   const { filter, updateFilter } = useSynchronizedFilter<MembersFilter>(
     filterFromProps as MembersFilter | null,
@@ -99,73 +84,18 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     () => new MembersFilter(attribute, []),
   );
 
-  // TODO: this is a temporary fix for useExecuteQuery so the reference to
-  // "dimensions" does not change on every render, causing infinite rerenders.
-  const dimensions = useMemo(() => [attribute], [attribute]);
-  const queryFilters = [...parentFilters];
-
-  if (backgroundFilter) {
-    queryFilters.push(backgroundFilter);
-  }
-
-  const { data, error } = useExecuteQueryInternal({
-    // prioritize attribute dataSource for the use case of multi-source dashboard
-    dataSource: attribute.dataSource ? convertDataSource(attribute.dataSource) : dataSource,
-    dimensions,
-    filters: queryFilters,
+  const { isError, error, data } = useGetFilterMembersInternal({
+    filter,
+    defaultDataSource: dataSource,
+    parentFilters,
   });
 
-  const { app } = useSisenseContext();
-  const formattedData = useMemo(() => {
-    if (!data) return;
-    if (isDatetime(attribute.type)) {
-      return {
-        ...data,
-        rows: data.rows.map((cell) =>
-          cell.map((d) => ({
-            ...d,
-            text: applyDateFormat(
-              new Date(d.data),
-              getDefaultDateMask((attribute as DimensionalLevelAttribute).granularity),
-              app?.settings?.locale,
-            ),
-          })),
-        ),
-      };
-    }
-    return data;
-  }, [data, attribute, app]);
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
 
-  const queriedMembers = useMemo(
-    () => (!formattedData ? [] : formattedData.rows.map((r) => r[0])),
-    [formattedData],
-  );
-
-  const selectedMembers: SelectedMember[] = useMemo(() => {
-    const members = alignMembersType(filter.members, attribute.type);
-    const deactivatedMembers = alignMembersType(filter.config.deactivatedMembers, attribute.type);
-    return queriedMembers
-      .filter(
-        (queriedMember) =>
-          members.includes(queriedMember.data) || deactivatedMembers.includes(queriedMember.data),
-      )
-      .map((queriedMember) => ({
-        key: queriedMember.data.toString(),
-        title: queriedMember.text ?? queriedMember.data.toString(),
-        inactive: deactivatedMembers.includes(queriedMember.data),
-      }));
-  }, [filter.config.deactivatedMembers, filter.members, queriedMembers, attribute.type]);
-
-  const allMembers: Member[] = useMemo(
-    () =>
-      queriedMembers.map((queriedMember) => ({
-        key: queriedMember.data.toString(),
-        title: queriedMember.text ?? queriedMember.data.toString(),
-      })),
-    [queriedMembers],
-  );
-
-  const hasBackgroundFilterIcon = !!backgroundFilter && parentFilters.length === 0;
+  const { selectedMembers, allMembers, excludeMembers, enableMultiSelection, hasBackgroundFilter } =
+    data;
 
   const updateFilterFromMembersList = useCallback(
     (member: Member, isSelected: boolean) => {
@@ -187,15 +117,8 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     [enableMultiSelection, selectedMembers, allMembers, excludeMembers, filter, updateFilter],
   );
 
-  if (error) {
-    throw error;
-  }
-  if (!formattedData) {
-    return null;
-  }
-
   return (
-    <FilterTile
+    <FilterTileContainer
       title={title}
       renderContent={(collapsed, tileDisabled) => {
         if (collapsed) {
@@ -235,7 +158,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
       }}
       isDependent={parentFilters && parentFilters.length > 0}
       design={merge(tileDesignOptions, {
-        header: { hasBackgroundFilterIcon },
+        header: { hasBackgroundFilter },
       })}
       locked={filter.config.locked}
       onDelete={onDelete}
@@ -330,11 +253,4 @@ function toggleActivationInSelectedMemberByMemberKey(
       ? { ...selectedMember, inactive: !selectedMember.inactive }
       : selectedMember,
   );
-}
-
-/**
- * Returns new `members` array with members transformed to required type.
- */
-function alignMembersType(members: any[], type: string) {
-  return members.map((member) => (isNumber(type) ? Number(member) : member.toString()));
 }

@@ -3,10 +3,16 @@ import '../index.css';
 export { default as AiContextProvider, type AiContextProviderProps } from './ai-context-provider';
 export { type ChatConfig } from './chat-config';
 export {
+  useGetNlgInsights,
+  type UseGetNlgInsightsParams,
+  type UseGetNlgInsightsState,
   useGetNlgQueryResult,
-  type UseGetNlgQueryResultParams,
-  type UseGetNlgQueryResultState,
-} from './use-get-nlg-query-result';
+} from './use-get-nlg-insights';
+export {
+  useGetNlqResult,
+  type UseGetNlqResultParams,
+  type UseGetNlqResultState,
+} from './use-get-nlq-result';
 export {
   useGetQueryRecommendations,
   type UseGetQueryRecommendationsParams,
@@ -16,11 +22,19 @@ export { useChatSession, type UseChatSessionResult } from './use-chat-session';
 export { useLastNlqResponse } from './use-last-nlq-response';
 export { useGetDataSourceFields } from './use-get-data-source-fields';
 export type {
-  GetNlgQueryResultRequest,
+  GetNlgInsightsRequest,
   QueryRecommendationResponse,
   QueryRecommendation,
   NlqResponseData,
+  NlqResult,
+  NLQ_RESULT_CHART_TYPES,
+  NlqResultChartType,
 } from './api/types';
 export { Chatbot, type ChatbotProps } from './chatbot';
-export { default as GetNlgQueryResult, type GetNlgQueryResultProps } from './get-nlg-query-result';
+export {
+  default as GetNlgInsights,
+  type GetNlgInsightsProps,
+  GetNlgQueryResult,
+  type GetNlgQueryResultProps,
+} from './get-nlg-insights';
 export { NlqChartWidget, type NlqChartWidgetProps } from './chart/nlq-chart-widget';

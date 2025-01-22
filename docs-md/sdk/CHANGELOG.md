@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.28.0] - 2025-01-21
+
+### Added
+- Add React hook for nlq `useGetNlqResult` (beta)
+- Implement React hook for retrieving filter members, `useGetFilterMembers` (beta)
+- Add `filterFactory.cascading()` to create a Cascading Filter instance
+
+### Changed
+- **Breaking:** Rename beta hook `useGetNlgQueryResult` and `GetNlgQueryResult` to `useGetNlgInsights` and `GetNlgInsights`, respectively
+- Extend hook `useGetQueryRecommendations` (beta) to return `WidgetProps` additionally
+- Refactor `MemberFilterTile` to use hook `useGetFilterMembers` internally
+- Move React component `FilterTile` from internal to beta
+- Refactor `CascadingFilterTileProps.filter` from class `CascadingFilter` to interface `Filter`
+- Improve `PivotTable`: fix `rowsPerPage` to work with `isAutoHeight` option
+- Improve charts: add number format config extraction for count aggregations, extend the `Popover` mask to fill the full page
+- Improve testing: polyfill `document.fonts` for unit tests environment
+- Improve Widget Embed Code: improve extra imports
+
+## [1.27.1] - 2025-01-14
+
+### Changed
+- Fix internal `Filter.isScope` by default for correct filters comparison
+- Add tooltip to pivot headers in case of truncated text
+- Replace shared components in `sdk-pivot-client` by components `sdk-shared-ui`
+
 ## [1.27.0] - 2025-01-07
 
 ### Added

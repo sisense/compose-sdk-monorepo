@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { ChatMessage, ChatResponse } from './types';
 import { useChatApi } from './chat-api-provider';
-import { useChatConfig } from '../chat-config';
 import { CHAT_HISTORY_QUERY_KEY } from './chat-history';
 import { useTranslation } from 'react-i18next';
 
@@ -96,7 +95,10 @@ const mapToChatMessage = (response: ChatResponse, errorMessage: string): ChatMes
 };
 
 // eslint-disable-next-line max-lines-per-function
-export const useSendChatMessage = (chatId: string | undefined) => {
+export const useSendChatMessage = (
+  chatId: string | undefined,
+  enableFollowupQuestions?: boolean,
+) => {
   const queryClient = useQueryClient();
   const appendToHistory = useCallback(
     (messageObj: ChatMessage) => {
@@ -110,7 +112,6 @@ export const useSendChatMessage = (chatId: string | undefined) => {
     [queryClient, chatId],
   );
 
-  const { enableFollowupQuestions } = useChatConfig();
   const { t } = useTranslation();
   const api = useChatApi();
   const { mutate, isLoading } = useMutation({

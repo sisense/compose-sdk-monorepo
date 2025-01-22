@@ -1,10 +1,10 @@
 ---
-title: UseGetNlgQueryResultParams
+title: GetNlgInsightsProps
 ---
 
-# Interface UseGetNlgQueryResultParams
+# Interface GetNlgInsightsProps
 
-Parameters for [useGetNlgQueryResult](../generative-ai/function.useGetNlgQueryResult.md) hook.
+Props for [GetNlgInsights](../generative-ai/function.GetNlgInsights.md) component.
 
 ## Properties
 
@@ -21,16 +21,6 @@ The data source that the query targets - e.g. `Sample ECommerce`
 > **dimensions**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
 
 Dimensions of the query
-
-***
-
-### enabled
-
-> **enabled**?: `boolean`
-
-Boolean flag to enable/disable API call by default
-
-If not specified, the default value is `true`
 
 ***
 

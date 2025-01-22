@@ -30,6 +30,7 @@ import {
   DateRangeFilter,
   RelativeDateFilter,
   CustomFilter,
+  CascadingFilter,
 } from './filters.js';
 
 // LOGICAL FILTERS
@@ -1100,6 +1101,34 @@ const relate = (node: FilterRelationsNode): FilterRelationsNode => {
   }
   return node;
 };
+
+// CASCADING FILTERS
+
+/**
+ * Creates a filter that contains a list of dependent/cascading filters,
+ * where each filter depends on the results or state of the previous ones in the array.
+ *
+ * Each filter in the array operates in the context of its predecessors, and the
+ * cascading behavior ensures that all filters are applied sequentially.
+ *
+ * @example
+ * ```ts
+ * // Create a cascading filter for gender and age range
+ * const cascadingFilter = filterFactory.cascading(
+ *   [
+ *     filterFactory.members(DM.Commerce.Gender, ['Male', 'Female']),
+ *     filterFactory.members(DM.Commerce.AgeRange, ['0-18']),
+ *   ],
+ *   { disabled: true }, // Optional configuration to disable the cascading filter
+ * );
+ * ```
+ * @param filters - Array of dependent filters
+ * @param config - Optional configuration for the filter
+ * @returns A filter instance
+ */
+export function cascading(filters: Filter[], config?: BaseFilterConfig): Filter {
+  return new CascadingFilter(filters, config);
+}
 
 /**
  * Set of logic operators for filter relations construction

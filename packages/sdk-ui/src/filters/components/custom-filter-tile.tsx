@@ -1,5 +1,5 @@
 import { Filter } from '@sisense/sdk-data';
-import { FilterTile, FilterTileDesignOptions } from './filter-tile';
+import { FilterTileContainer, FilterTileDesignOptions } from './filter-tile-container';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { useTranslation } from 'react-i18next';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
@@ -72,7 +72,7 @@ export const CustomFilterTile = asSisenseComponent({
   };
 
   return (
-    <FilterTile
+    <FilterTileContainer
       title={filter.attribute.name}
       renderContent={(collapsed) => (
         <FilterContentDisplay>

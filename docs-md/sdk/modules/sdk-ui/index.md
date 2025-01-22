@@ -48,8 +48,10 @@ React filter tile components
 - [CriteriaFilterTile](filter-tiles/function.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/function.DateRangeFilterTile.md)
 - [FiltersPanel](filter-tiles/function.FiltersPanel.md) <Badge type="alpha" text="Alpha" />
+- [FilterTile](filter-tiles/function.FilterTile.md) <Badge type="beta" text="Beta" /> - Facade component rendering a filter tile based on filter type
 - [MemberFilterTile](filter-tiles/function.MemberFilterTile.md)
 - [RelativeDateFilterTile](filter-tiles/function.RelativeDateFilterTile.md)
+- [useGetFilterMembers](filter-tiles/function.useGetFilterMembers.md) <Badge type="beta" text="Beta" /> - Hook to fetch members of a filter
 
 ## Contexts
 
@@ -107,6 +109,7 @@ React components and hooks for creating experiences using generative AI
 
 - [AiContextProvider](generative-ai/function.AiContextProvider.md) <Badge type="beta" text="Beta" />
 - [Chatbot](generative-ai/function.Chatbot.md) <Badge type="beta" text="Beta" />
-- [GetNlgQueryResult](generative-ai/function.GetNlgQueryResult.md) <Badge type="beta" text="Beta" />
-- [useGetNlgQueryResult](generative-ai/function.useGetNlgQueryResult.md) <Badge type="beta" text="Beta" />
+- [GetNlgInsights](generative-ai/function.GetNlgInsights.md) <Badge type="beta" text="Beta" />
+- [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md) <Badge type="beta" text="Beta" />
+- [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
 - [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />

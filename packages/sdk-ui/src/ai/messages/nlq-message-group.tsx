@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import { useCallback, useState } from 'react';
-import { GetNlgQueryResultRequest, NlqResponseData } from '../api/types';
+import { GetNlgInsightsRequest, NlqResponseData } from '../api/types';
 import { useChatConfig } from '../chat-config';
 import ChartMessage from './chart-message';
 import FeedbackWrapper from './feedback-wrapper';
@@ -9,6 +9,7 @@ import InsightsButton from '../buttons/insights-button';
 import { MessageContainer } from './text-message';
 import styled from '@emotion/styled';
 import { useThemeContext } from '@/theme-provider';
+import lowerFirst from 'lodash-es/lowerFirst';
 
 const FlexRow = styled.div`
   display: flex;
@@ -55,7 +56,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
     setShowInsights((prev) => !prev);
   }, []);
 
-  const nlgRequest: GetNlgQueryResultRequest = {
+  const nlgRequest: GetNlgInsightsRequest = {
     jaql: {
       datasource: jaql.datasource,
       metadata: jaql.metadata,
@@ -75,7 +76,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
           <>
             <FlexRow>
               <MessageContainer align="left" theme={themeSettings}>
-                {`Here's ${chartTypeSegment} showing ${data.queryTitle.toLowerCase()}.`}
+                {`Here's ${chartTypeSegment} showing ${lowerFirst(queryTitle)}.`}
               </MessageContainer>
               {buttonRow}
             </FlexRow>

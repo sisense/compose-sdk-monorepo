@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 import { useChatApi } from './api/chat-api-provider';
 import { QueryRecommendation } from './api/types';
-import { useChatConfig } from './chat-config';
+import { widgetComposer } from '@/analytics-composer';
 
 /**
  * Parameters for {@link useGetQueryRecommendations} hook.
@@ -19,6 +19,14 @@ export interface UseGetQueryRecommendationsParams {
    * If not specified, the default value is `4`
    */
   count?: number;
+
+  /**
+   * Enable suggested axis titles in generated widget
+   *
+   * If not specified, the default value is `false`
+   * @internal
+   */
+  enableAxisTitlesInWidgetProps?: boolean;
 }
 
 /**
@@ -46,33 +54,40 @@ export interface UseGetQueryRecommendationsState {
 export const useGetQueryRecommendationsInternal = (
   params: UseGetQueryRecommendationsParams,
 ): UseGetQueryRecommendationsState => {
-  const { contextTitle, count } = params;
+  const { contextTitle, count, enableAxisTitlesInWidgetProps } = params;
 
   const api = useChatApi();
-  const { numOfRecommendations } = useChatConfig();
 
-  const finalCount = count ?? numOfRecommendations;
+  const recCount = count ?? 4;
 
-  const shouldGetReccomendations = finalCount > 0;
+  const shouldGetRecommendations = recCount > 0;
 
   const { isLoading, isError, isSuccess, data, error, refetch } = useQuery({
-    queryKey: ['getQueryRecommendations', contextTitle, finalCount, api],
+    queryKey: ['getQueryRecommendations', contextTitle, recCount, api],
     queryFn: () =>
       api?.ai.getQueryRecommendations(contextTitle, {
-        numOfRecommendations: finalCount,
+        numOfRecommendations: recCount,
       }),
-    enabled: !!api && shouldGetReccomendations,
+    enabled: !!api && shouldGetRecommendations,
+  });
+
+  data?.map((r: QueryRecommendation) => {
+    r.widgetProps = r.jaql
+      ? widgetComposer.toWidgetProps(r, {
+          useCustomizedStyleOptions: enableAxisTitlesInWidgetProps,
+        })
+      : undefined;
   });
 
   return {
-    isLoading: shouldGetReccomendations ? isLoading : false,
-    isError: shouldGetReccomendations ? isError : false,
-    isSuccess: shouldGetReccomendations ? isSuccess : false,
-    data: shouldGetReccomendations && data ? data : [],
-    error: shouldGetReccomendations ? error : null,
+    isLoading: shouldGetRecommendations ? isLoading : false,
+    isError: shouldGetRecommendations ? isError : false,
+    isSuccess: shouldGetRecommendations ? isSuccess : false,
+    data: shouldGetRecommendations && data ? data : [],
+    error: shouldGetRecommendations ? error : null,
     refetch: useCallback(() => {
-      if (shouldGetReccomendations) refetch();
-    }, [refetch, shouldGetReccomendations]),
+      if (shouldGetRecommendations) refetch();
+    }, [refetch, shouldGetRecommendations]),
   };
 };
 
@@ -103,7 +118,7 @@ export const useGetQueryRecommendationsInternal = (
  *   </ul>
  * );
  * ```
- * @returns An array of objects, each containing recommended question text and its corresponding JAQL
+ * @returns An array of objects, each containing recommended question text and its corresponding `widgetProps`, as well as other variants of this information such as JAQL + chartMappings
  * @group Generative AI
  * @beta
  */

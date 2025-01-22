@@ -1,15 +1,12 @@
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import Collapsible from './common/collapsible';
-import {
-  useGetNlgQueryResultInternal,
-  UseGetNlgQueryResultParams,
-} from './use-get-nlg-query-result';
+import { useGetNlgInsightsInternal, UseGetNlgInsightsParams } from './use-get-nlg-insights';
 import { useTranslation } from 'react-i18next';
 
 /**
- * Props for {@link GetNlgQueryResult} component.
+ * Props for {@link GetNlgInsights} component.
  */
-export interface GetNlgQueryResultProps extends Omit<UseGetNlgQueryResultParams, 'enabled'> {}
+export interface GetNlgInsightsProps extends Omit<UseGetNlgInsightsParams, 'enabled'> {}
 
 /**
  * React component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
@@ -21,21 +18,50 @@ export interface GetNlgQueryResultProps extends Omit<UseGetNlgQueryResultParams,
  *
  * @example
  * ```tsx
- * <GetNlgQueryResult
+ * <GetNlgInsights
  *   dataSource="Sample ECommerce"
  *   dimensions={[DM.Commerce.Date.Years]}
  *   measures={[measureFactory.sum(DM.Commerce.Revenue)]}
  * />
  * ```
- * @param props - {@link GetNlgQueryResultProps}
+ * @param props - {@link GetNlgInsightsProps}
  * @returns Collapsible container wrapping a text summary
  * @group Generative AI
  * @beta
  */
 export default asSisenseComponent({
+  componentName: 'GetNlgInsights',
+})(function GetNlgInsights(props: GetNlgInsightsProps) {
+  const { data, isLoading, isError } = useGetNlgInsightsInternal(props);
+  const { t } = useTranslation();
+
+  if (isError) {
+    return <>{t('ai.errors.unexpected')}</>;
+  }
+
+  const summary = data ?? 'Oops, no data came back for that.';
+
+  return <Collapsible text={isLoading ? 'Loading...' : summary} />;
+});
+
+/**
+ * Props for {@link GetNlgQueryResult} component.
+ * @deprecated Use {@link GetNlgInsightsProps} instead
+ * @internal
+ */
+export interface GetNlgQueryResultProps extends GetNlgInsightsProps {}
+
+/**
+ * @param props - {@link GetNlgQueryResultProps}
+ * @returns Collapsible container wrapping a text summary
+ * @group Generative AI
+ * @deprecated Use {@link GetNlgInsights} instead
+ * @internal
+ */
+export const GetNlgQueryResult = asSisenseComponent({
   componentName: 'GetNlgQueryResult',
 })(function GetNlgQueryResult(props: GetNlgQueryResultProps) {
-  const { data, isLoading, isError } = useGetNlgQueryResultInternal(props);
+  const { data, isLoading, isError } = useGetNlgInsightsInternal(props as GetNlgInsightsProps);
   const { t } = useTranslation();
 
   if (isError) {

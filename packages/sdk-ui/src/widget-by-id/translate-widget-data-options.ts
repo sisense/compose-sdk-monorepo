@@ -146,7 +146,11 @@ function getNumberFormatDecimalScale(mask: NumericMask): number | 'auto' {
 }
 
 function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
-  const isNumeric = (item.jaql as BaseJaql).datatype === 'numeric' || 'context' in item.jaql;
+  const isNumeric =
+    (item.jaql as BaseJaql).datatype === 'numeric' ||
+    // count aggregation on a non-numeric field results in a numeric value
+    (item.jaql as BaseJaql).agg === 'count' ||
+    'context' in item.jaql;
   const numberFormat = item.format?.mask as NumericMask;
 
   if (isNumeric && numberFormat) {

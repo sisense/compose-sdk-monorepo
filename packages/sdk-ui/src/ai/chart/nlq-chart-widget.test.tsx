@@ -5,7 +5,7 @@ import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
 import { AiTestWrapper } from '../__mocks__';
 
-import { GetNlgQueryResultResponse, type NlqResponseData } from '../api/types';
+import { GetNlgInsightsResponse, type NlqResponseData } from '../api/types';
 import { NlqChartWidget } from '@/ai';
 import MOCK_NLQ_RESPONSE from '@/ai/__mocks__/nlq-response';
 import { setTimeout } from 'timers/promises';
@@ -33,7 +33,7 @@ describe('NlqChartWidget', () => {
   beforeEach(() => {
     server.use(
       http.post('*/api/v2/ai/nlg/queryResult', () =>
-        HttpResponse.json<GetNlgQueryResultResponse>({
+        HttpResponse.json<GetNlgInsightsResponse>({
           responseType: 'Text',
           data: {
             answer: mockNlqResponseText,

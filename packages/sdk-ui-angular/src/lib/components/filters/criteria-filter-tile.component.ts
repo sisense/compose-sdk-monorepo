@@ -100,7 +100,7 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
   tileDesignOptions: CriteriaFilterTileProps['tileDesignOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onChange}
+   * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onUpdate}
    */
   @Output()
   filterChange = new EventEmitter<
