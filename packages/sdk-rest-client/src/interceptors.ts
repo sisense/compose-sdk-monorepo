@@ -5,11 +5,18 @@ import { isPasswordAuthenticator } from './password-authenticator.js';
 import { isSsoAuthenticator } from './sso-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
 
-function handleErrorResponse(response: Response): Response {
+async function handleErrorResponse(response: Response): Promise<Response> {
   if (!response.ok) {
+    const contentType = response.headers?.get('Content-Type');
+    const data =
+      contentType && contentType.includes('application/json')
+        ? await response.json().catch(() => ({}))
+        : {};
     throw new TranslatableError('errors.responseError', {
       status: response.status.toString(),
       statusText: response.statusText,
+      errorCode: data.error?.code,
+      errorMessage: data.error?.message,
       context: response.statusText ? 'withStatusText' : 'onlyStatus',
     });
   }
@@ -54,7 +61,7 @@ function handleNetworkError(): Promise<never> {
   return Promise.reject(new TranslatableError('errors.networkError'));
 }
 
-export const getResponseInterceptor = (auth: Authenticator) => (response: Response) => {
+export const getResponseInterceptor = (auth: Authenticator) => async (response: Response) => {
   if (response.status === 401) {
     return handleUnauthorizedResponse(response, auth);
   }

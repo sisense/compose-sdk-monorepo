@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import { type Filter } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { Popover, PopoverAnchorPosition } from '@/common/components/popover';
 import { CubeIcon } from '../icons';
 import { Stack } from '@mui/material';
 import { Button } from '@/common/components/button';
+import { FilterEditor } from './filter-editor';
 
 type FilterEditorPopoverPosition = Pick<PopoverAnchorPosition, 'anchorEl'>;
 
@@ -76,7 +77,7 @@ export const FilterEditorPopover = ({
   onClose,
 }: FilterEditorPopoverProps) => {
   const { t } = useTranslation();
-  const editedFilter = useRef<Filter | null>({} as Filter | null);
+  const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
   const shouldShowPopover = !!(filter && position);
 
   if (!shouldShowPopover) {
@@ -113,6 +114,7 @@ export const FilterEditorPopover = ({
             </span>
           </ModalHeaderInfo>
         </ModalHeader>
+        <FilterEditor filter={filter} onChange={(filter) => setEditedFilter(filter)} />
         <ModalFooter>
           <Stack
             direction="row"
@@ -124,7 +126,8 @@ export const FilterEditorPopover = ({
             }}
           >
             <Button
-              onClick={() => editedFilter.current && onChange?.(editedFilter.current)}
+              onClick={() => editedFilter && onChange?.(editedFilter)}
+              disabled={!editedFilter}
               data-testid="filter-editor-popover-apply-button"
             >
               {t('filterEditor.buttons.apply')}

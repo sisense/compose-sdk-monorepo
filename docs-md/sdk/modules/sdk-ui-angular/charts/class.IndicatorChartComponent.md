@@ -136,7 +136,7 @@ or for filters where you will supply your own UI components or use pre-built UI 
 
 To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for filters that you want your users to set using pre-built UI components.
 
@@ -162,7 +162,7 @@ or for highlights where you will supply your own UI components or use pre-built 
 To learn more about using filter factory functions to create highlights, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for highlights that you want your users to set using pre-built UI components.
 
@@ -189,7 +189,7 @@ Configurations for how to style and present a chart's data.
 
 #### beforeRender
 
-> **beforeRender**: [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md) \| `undefined`
+> **beforeRender**: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| `undefined`
 
 A callback that allows you to customize the underlying indicator chart element before it is rendered.
 The returned options are then used when rendering the chart.

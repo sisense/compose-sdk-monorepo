@@ -160,6 +160,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
         style={{
           minWidth: isVertical(arrangement) ? minWidth : 'auto',
           backgroundColor: disabled ? disabledBgColor : bgColor,
+          fontFamily: themeSettings.typography.fontFamily,
         }}
       >
         {isVertical(arrangement) && design.header.shouldBeShown && (

@@ -72,7 +72,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
     count: numOfRecommendations,
   });
   const questions = useMemo(
-    () => queryRecommendations.map((q) => q.nlqPrompt),
+    () => queryRecommendations?.map((q) => q.nlqPrompt),
     [queryRecommendations],
   );
 
@@ -141,7 +141,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
         ...new Set(
           history
             .filter((m) => m.role === 'user')
-            .filter((m) => !questions.includes(m.content))
+            .filter((m) => !questions?.includes(m.content))
             .map((m) => m.content)
             .reverse(),
         ),
@@ -174,7 +174,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
         />
         <ChatWelcomeMessage />
         <SuggestionsWithIntro
-          questions={questions}
+          questions={questions || []}
           isLoading={recommendationsLoading}
           onSelection={sendMessage}
         />
@@ -209,7 +209,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
           onSendMessage={sendMessage}
           disabled={isAwaitingResponse || isLoading}
           onClearHistoryClick={showClearHistoryOptions}
-          suggestions={questions}
+          suggestions={questions || []}
           recentPrompts={uniqueRecentPrompts}
           isLoading={recommendationsLoading || isLoading}
           recommendationsError={recommendationsError}

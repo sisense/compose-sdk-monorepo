@@ -12,33 +12,39 @@ describe('interceptors', () => {
     vi.restoreAllMocks();
   });
 
-  it('should notify user about failed password authentication', () => {
+  it('should notify user about failed password authentication', async () => {
     const response = {
       status: 401,
     } as Response;
 
     const auth = new PasswordAuthenticator(fakeDeploymentUrl, 'user', 'pass');
 
-    expect(() => getResponseInterceptor(auth)(response)).toThrow();
+    await expect(async () => {
+      await getResponseInterceptor(auth)(response);
+    }).rejects.toThrow();
   });
 
-  it('should notify user about failed API token authentication', () => {
+  it('should notify user about failed API token authentication', async () => {
     const response = {
       status: 401,
     } as Response;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
-    expect(() => getResponseInterceptor(auth)(response)).toThrow();
+    await expect(async () => {
+      await getResponseInterceptor(auth)(response);
+    }).rejects.toThrow();
   });
 
-  it('should notify user about failed WAT authentication', () => {
+  it('should notify user about failed WAT authentication', async () => {
     const response = {
       status: 401,
     } as Response;
 
     const auth = new WatAuthenticator(fakeDeploymentUrl, 'wat');
 
-    expect(() => getResponseInterceptor(auth)(response)).toThrow();
+    await expect(async () => {
+      await getResponseInterceptor(auth)(response);
+    }).rejects.toThrow();
   });
 
   it('should redirect to login page for SSO authentication', async () => {
@@ -70,7 +76,7 @@ describe('interceptors', () => {
       } as Response);
     });
 
-    getResponseInterceptor(auth)(response);
+    await getResponseInterceptor(auth)(response);
 
     // flush promises
     await new Promise((resolve) => setImmediate(resolve));
@@ -80,7 +86,7 @@ describe('interceptors', () => {
     );
   });
 
-  it('should throw an error on failed response', () => {
+  it('should throw an error on failed response', async () => {
     const response = {
       ok: false,
       status: 400,
@@ -88,10 +94,12 @@ describe('interceptors', () => {
     } as Response;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
-    expect(() => getResponseInterceptor(auth)(response)).toThrow(TranslatableError);
+    await expect(async () => {
+      await getResponseInterceptor(auth)(response);
+    }).rejects.toThrow(TranslatableError);
   });
 
-  it('should pass response through on success', () => {
+  it('should pass response through on success', async () => {
     const response = {
       ok: true,
       status: 200,
@@ -99,7 +107,7 @@ describe('interceptors', () => {
     } as Response;
 
     const auth = new BearerAuthenticator(fakeDeploymentUrl, 'token');
-    const result = getResponseInterceptor(auth)(response);
+    const result = await getResponseInterceptor(auth)(response);
     expect(result).toEqual(response);
   });
 

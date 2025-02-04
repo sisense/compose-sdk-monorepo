@@ -39,7 +39,7 @@ import { TranslatableError } from '@/translation/translatable-error';
  */
 export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',
-})(({ dashboardOid, persist = false }: DashboardByIdProps) => {
+})(({ dashboardOid, persist = false, enableFilterEditor = false }: DashboardByIdProps) => {
   const { themeSettings } = useThemeContext();
   const { dashboard, isLoading, isError, error, dispatchChanges } = useDashboardModel({
     dashboardOid,
@@ -67,6 +67,7 @@ export const DashboardById = asSisenseComponent({
         <Dashboard
           {...dashboardModelTranslator.toDashboardProps(dashboard)}
           onChange={handleChange}
+          enableFilterEditor={enableFilterEditor}
         />
       )}
     </LoadingOverlay>

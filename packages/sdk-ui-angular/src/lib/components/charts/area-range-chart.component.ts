@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type AreaRangeChartProps } from '@sisense/sdk-ui-preact';
-import { ArgumentsAsObject } from '../../types';
+import { type AreaRangeChartProps as AreaRangeChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface AreaRangeChartProps
+  extends WithoutPreactChartEventProps<AreaRangeChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component that displays a range of data over a given time period or across multiple categories.
@@ -83,9 +91,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -136,7 +144,7 @@ export class AreaRangeChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: AreaRangeChartProps['onBeforeRender'];
+  beforeRender: AreaRangeChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!AreaRangeChartProps.onDataReady}
@@ -145,7 +153,7 @@ export class AreaRangeChartComponent {
    * @internal
    */
   @Input()
-  dataReady: AreaRangeChartProps['onDataReady'];
+  dataReady: AreaRangeChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointClick}
@@ -153,9 +161,7 @@ export class AreaRangeChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<AreaRangeChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointContextMenu}
@@ -163,9 +169,7 @@ export class AreaRangeChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<AreaRangeChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointsSelected}
@@ -173,9 +177,7 @@ export class AreaRangeChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<AreaRangeChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'arearange';

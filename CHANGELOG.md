@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.29.0] - 2025-02-04
+
+### Added
+- Add total and percentage value labels support in `ColumnChart`, `BarChart` and `AreaChart`
+- Add filter relations support to `BoxplotChart`
+- Add prop types for Angular components
+- Add `FilterEditorPopover` component for internal testing
+
+### Changed
+- Extend `useGetQueryRecommendations` hook to support `enabled` flag
+- Fix `useExecuteQueryByWidgetId` hook and `ExecuteQueryByWidgetId` component to support pivot query with rows only
+- Fix error handling in forecast and trend when chart has no data
+- Fix missing title in `WidgetById` component for Angular and Vue
+- Improve dashboard: align scatter chart cross-filtering behavior with Fusion, minor style improvements
+- Improve `PivotTable`: improve formatting of grand-total and sub-total header cells
+- Improve theming: apply theme fonts to dashboard filters panel and filter tiles
+- Improve AI `Chatbot`: add new error messages, pass through error codes from the Sisense REST API
+- Extend Widget Embed Code to populate code representation for dimensions and measures
+- Move filter utilities to `sdk-data` package
+
 ## [1.28.0] - 2025-01-21
 
 ### Added

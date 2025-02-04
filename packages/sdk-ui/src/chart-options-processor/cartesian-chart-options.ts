@@ -49,6 +49,90 @@ import { TFunction } from '@sisense/sdk-common';
 import { NavigatorOptions } from '@sisense/sisense-charts';
 import { TranslatableError } from '@/translation/translatable-error';
 
+const DEFAULT_CHART_SPACING = 20;
+
+enum TotalLabelVerticalSpacing {
+  Small = 10,
+  Medium = 30,
+  Large = 40,
+}
+
+enum TotalLabelHorizontalSpacing {
+  Small = 15,
+  Medium = 25,
+  Large = 40,
+}
+
+/**
+ * Get additional spacing around chart needed for the total labels based on the chart type and design options.
+ * @internal
+ */
+function getChartSpacingForTotalLabels(
+  chartType: ChartType,
+  chartDesignOptions: StackableChartDesignOptions,
+) {
+  let rightSpacing = 0;
+  let topSpacing = 0;
+
+  if (chartDesignOptions.showTotal && chartDesignOptions.stackType === 'stack100') {
+    const rotation = Math.abs(chartDesignOptions.totalLabelRotation || 0) % 180;
+
+    if (chartType === 'bar') {
+      if (rotation < 20) {
+        rightSpacing = TotalLabelHorizontalSpacing.Large;
+      } else if (rotation < 70) {
+        rightSpacing = TotalLabelHorizontalSpacing.Medium;
+      } else if (rotation < 110) {
+        rightSpacing = TotalLabelHorizontalSpacing.Small;
+      } else if (rotation < 160) {
+        rightSpacing = TotalLabelHorizontalSpacing.Medium;
+      } else {
+        rightSpacing = TotalLabelHorizontalSpacing.Large;
+      }
+    }
+
+    if (chartType === 'column' || chartType === 'area') {
+      if (rotation < 20) {
+        topSpacing = TotalLabelVerticalSpacing.Small;
+      } else if (rotation < 70) {
+        topSpacing = TotalLabelVerticalSpacing.Medium;
+      } else if (rotation < 110) {
+        topSpacing = TotalLabelVerticalSpacing.Large;
+      } else if (rotation < 160) {
+        topSpacing = TotalLabelVerticalSpacing.Medium;
+      } else {
+        topSpacing = TotalLabelVerticalSpacing.Small;
+      }
+    }
+  }
+
+  return { rightSpacing, topSpacing };
+}
+
+/**
+ * Get the shift for the total labels based on the chart type and design options.
+ * @internal
+ */
+function getTotalLabelsShift(
+  chartType: ChartType,
+  chartDesignOptions: StackableChartDesignOptions,
+) {
+  const { rightSpacing, topSpacing } = getChartSpacingForTotalLabels(chartType, chartDesignOptions);
+  let rightShift = 0;
+  let topShift = 0;
+  if (topSpacing > 0) {
+    topShift = -1 * (topSpacing / 2);
+  }
+  if (rightSpacing > 0) {
+    rightShift = 0.1;
+  }
+
+  return {
+    rightShift,
+    topShift,
+  };
+}
+
 /**
  * Convert intermediate chart data, data options, and design options
  * into pure highcharts config data.
@@ -179,12 +263,45 @@ export const getCartesianChartOptions = (
     yAxisMinMax,
     y2AxisMinMax,
     showTotal,
+    (chartDesignOptions as StackableChartDesignOptions).totalLabelRotation ?? 0,
     dataOptions,
     stacking,
+    themeSettings,
   );
 
   // if vertical x2 axis increase right spacing
-  const rightSpacing = chartData.xAxisCount > 1 && xAxisOrientation === 'vertical' ? 90 : 20;
+  const xAxisLabelRightSpacing =
+    chartData.xAxisCount > 1 && xAxisOrientation === 'vertical' ? 70 : 0;
+  const xAxisLabelTopSpacing =
+    chartData.xAxisCount > 1 && xAxisOrientation === 'horizontal' ? 20 : 0;
+  const { rightSpacing: totalLabelRightSpacing, topSpacing: totalLabelTopSpacing } =
+    getChartSpacingForTotalLabels(chartType, chartDesignOptions as StackableChartDesignOptions);
+  const { rightShift, topShift } = getTotalLabelsShift(
+    chartType,
+    chartDesignOptions as StackableChartDesignOptions,
+  );
+  yAxisSettings.forEach((axis) => {
+    if (axis.stackLabels) {
+      axis.stackLabels.x = rightShift;
+      axis.stackLabels.y = topShift;
+    }
+  });
+  xAxisSettings.forEach((axis) => {
+    axis.plotBands?.forEach((plotBand) => {
+      if (plotBand.label) {
+        const ADDITIONAL_SPACING = 15;
+        if (plotBand.label.x === undefined) plotBand.label.x = 0;
+        plotBand.label.x += totalLabelRightSpacing
+          ? totalLabelRightSpacing + ADDITIONAL_SPACING
+          : 0;
+        if (plotBand.label.y === undefined) plotBand.label.y = 0;
+        plotBand.label.y -= totalLabelTopSpacing ? totalLabelTopSpacing + ADDITIONAL_SPACING : 0;
+      }
+    });
+  });
+
+  const totalTopSpacing = DEFAULT_CHART_SPACING + totalLabelTopSpacing + xAxisLabelTopSpacing;
+  const totalRightSpacing = DEFAULT_CHART_SPACING + totalLabelRightSpacing + xAxisLabelRightSpacing;
 
   // change null data to 0 for area stacked charts
   const treatNullDataAsZeros = chartType === 'area' && stacking !== undefined;
@@ -200,7 +317,7 @@ export const getCartesianChartOptions = (
       title: { text: null },
       chart: {
         type: sisenseChartType,
-        spacing: [20, rightSpacing, 20, 20],
+        spacing: [totalTopSpacing, totalRightSpacing, DEFAULT_CHART_SPACING, DEFAULT_CHART_SPACING],
         alignTicks: false,
         polar: isPolarChart,
         events: {
@@ -271,7 +388,10 @@ export const getCartesianChartOptions = (
               getPaletteColor(themeSettings?.palette?.variantColors, index),
             yAxis: yAxisSide[index],
             dataLabels: {
-              formatter: createValueLabelFormatter(dataOption?.numberFormatConfig),
+              formatter: createValueLabelFormatter(
+                dataOption?.numberFormatConfig,
+                chartDesignOptions.valueLabel,
+              ),
             },
             ...(yAxisChartType[index] && { type: yAxisChartType[index] }),
             connectNulls: yConnectNulls[index],

@@ -4,7 +4,7 @@ title: removeFilters
 
 # Function removeFilters
 
-> **removeFilters**(`dashboard`, `filtersToRemove`): [`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
+> **removeFilters**(`dashboard`, `filtersToRemove`): [`DashboardProps`](../../../../sdk-ui/interfaces/interface.DashboardProps.md)
 
 Creates a new dashboard instance with multiple filters removed.
 
@@ -15,12 +15,12 @@ This function does not modify the original dashboard; instead, it returns a new 
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `dashboard` | [`DashboardProps`](../../../interfaces/interface.DashboardProps.md) | The original dashboard (`DashboardProps`) from which the specified filters are removed. |
+| `dashboard` | [`DashboardProps`](../../../../sdk-ui/interfaces/interface.DashboardProps.md) | The original dashboard (`DashboardProps`) from which the specified filters are removed. |
 | `filtersToRemove` | [`Filter`](../../../../sdk-data/interfaces/interface.Filter.md)[] | An array of filters to remove. |
 
 ## Returns
 
-[`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
+[`DashboardProps`](../../../../sdk-ui/interfaces/interface.DashboardProps.md)
 
 A new dashboard instance with the specified filters removed.
 

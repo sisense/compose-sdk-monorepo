@@ -91,7 +91,7 @@ Geographic location level for Scattermap chart.
 
 Date granularity that works with continuous timeline.
 
-Values from [@sisense/sdk-data!DateLevels](../../sdk-data/variables/variable.DateLevels.md).
+Values from [`DateLevels`](../../sdk-data/variables/variable.DateLevels.md).
 
 ***
 

@@ -142,7 +142,7 @@ or for filters where you will supply your own UI components or use pre-built UI 
 
 To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for filters that you want your users to set using pre-built UI components.
 
@@ -168,7 +168,7 @@ or for highlights where you will supply your own UI components or use pre-built 
 To learn more about using filter factory functions to create highlights, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for highlights that you want your users to set using pre-built UI components.
 
@@ -203,7 +203,7 @@ For an example of how the `onBeforeRender` callback can be used, see the
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointClick**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
 
 Click handler callback for a data point
 
@@ -211,7 +211,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< `ArgumentsAsObject`\< [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointContextMenu**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
 
 Context menu handler callback for a data point
 
@@ -219,6 +219,6 @@ Context menu handler callback for a data point
 
 #### dataPointsSelect
 
-> **dataPointsSelect**: `EventEmitter`\< `ArgumentsAsObject`\< [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md) \| `undefined`, [`"points"`, `"nativeEvent"`] \> \>
+> **dataPointsSelect**: `EventEmitter`\< [`DataPointsEvent`](../type-aliases/type-alias.DataPointsEvent.md) \>
 
 Handler callback for selection of multiple data points

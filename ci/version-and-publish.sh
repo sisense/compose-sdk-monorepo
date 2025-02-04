@@ -21,8 +21,9 @@ git add .
 git commit -m "chore(release): bump all packages to ${new_tag} [skip ci]"
 
 yarn build:prod
+token=$(curl -u${NEW_ARTIFACTORY_USERNAME}:${NEW_ARTIFACTORY_PASSWORD} ${NPM_REGISTRY_AUTH_URL} | grep _auth | awk '{print $NF}')
 yarn config set npmPublishRegistry "${NPM_REGISTRY_URL}"
-yarn config set npmAuthIdent "${NPM_REGISTRY_AUTH_TOKEN}"
+yarn config set npmAuthIdent "${token}"
 yarn publish
 
 git push origin HEAD:${CI_COMMIT_BRANCH}

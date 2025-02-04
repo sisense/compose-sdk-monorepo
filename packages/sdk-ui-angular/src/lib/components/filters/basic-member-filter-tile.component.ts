@@ -4,7 +4,7 @@ import { OnDestroy } from '@angular/core';
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import {
   BasicMemberFilterTile,
-  BasicMemberFilterTileProps,
+  type BasicMemberFilterTileProps,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';

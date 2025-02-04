@@ -11,6 +11,8 @@ import { applyDateFormat } from '@/query/date-formats';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { createDataCellValueFormatter, createHeaderCellValueFormatter } from '../formatters';
 import { createHeaderCellHighlightFormatter } from '../formatters/header-cell-formatters/header-cell-highlight-formatter';
+import { createHeaderCellTotalsFormatter } from '@/pivot-table/formatters/header-cell-formatters/header-cell-totals-formatter';
+import { useTranslation } from 'react-i18next';
 
 /**
  * A hook that applies formatting over pivot table cells.
@@ -25,6 +27,7 @@ export const useApplyPivotTableFormatting = ({
   dataOptions: PivotTableDataOptions;
 }) => {
   const { app } = useSisenseContext();
+  const { t: translate } = useTranslation();
 
   const onDataCellFormat = useCallback(over([createDataCellValueFormatter(dataOptions)]), [
     dataOptions,
@@ -39,9 +42,10 @@ export const useApplyPivotTableFormatting = ({
   const onHeaderCellFormat = useCallback(
     over([
       createHeaderCellValueFormatter(dataOptions, dateFormatter),
+      createHeaderCellTotalsFormatter(dataOptions, translate),
       createHeaderCellHighlightFormatter(),
     ]),
-    [dataOptions],
+    [dataOptions, translate],
   );
 
   useEffect(() => {

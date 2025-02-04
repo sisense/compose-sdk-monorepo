@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.28.0",
+  "version": "1.29.0",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/index.js",
@@ -27,8 +27,8 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "^1.28.0",
-    "@sisense/sdk-rest-client": "^1.28.0",
+    "@sisense/sdk-common": "^1.29.0",
+    "@sisense/sdk-rest-client": "^1.29.0",
     "guid-typescript": "^1.0.9",
     "hash-it": "^6.0.0",
     "lodash-es": "^4.17.21",
@@ -55,6 +55,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
     "@types/lodash": "^4.14.201",
+    "@types/lodash-es": "^4.17.12",
     "@types/numeral": "2.0.2",
     "eslint": "^8.40.0",
     "prettier": "2.8.4",

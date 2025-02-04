@@ -4,7 +4,7 @@ title: FunnelChartProps
 
 # Interface FunnelChartProps
 
-Props of the [FunnelChart](../charts/function.FunnelChart.md) component.
+Props of the [`FunnelChart`](../charts/function.FunnelChart.md) component.
 
 ## Properties
 
@@ -71,7 +71,7 @@ or for filters where you will supply your own UI components or use pre-built UI 
 
 To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../filter-tiles/function.MemberFilterTile.md).
 
 Use this option for filters that you want your users to set using pre-built UI components.
 
@@ -97,7 +97,7 @@ or for highlights where you will supply your own UI components or use pre-built 
 To learn more about using filter factory functions to create highlights, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../filter-tiles/function.MemberFilterTile.md).
 
 Use this option for highlights that you want your users to set using pre-built UI components.
 

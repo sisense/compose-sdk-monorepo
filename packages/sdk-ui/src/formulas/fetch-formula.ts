@@ -1,10 +1,10 @@
 import { ClientApplication } from '../app/client-application.js';
-import { createDimensionalElementFromJaql } from '../widget-by-id/translate-widget-data-options.js';
 import { TranslatableError } from '../translation/translatable-error.js';
 import {
   DataSource,
   DimensionalCalculatedMeasure,
   FormulaJaql,
+  createDimensionalElementFromJaql,
   getDataSourceName,
 } from '@sisense/sdk-data';
 

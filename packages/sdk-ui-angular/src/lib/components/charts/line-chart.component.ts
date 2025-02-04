@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type LineChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type LineChartProps as LineChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface LineChartProps
+  extends WithoutPreactChartEventProps<LineChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component displaying data as a series of points connected by a line. Used to show trends or changes over time.
@@ -67,9 +75,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -120,7 +128,7 @@ export class LineChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: LineChartProps['onBeforeRender'];
+  beforeRender: LineChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!LineChartProps.onDataReady}
@@ -129,7 +137,7 @@ export class LineChartComponent {
    * @internal
    */
   @Input()
-  dataReady: LineChartProps['onDataReady'];
+  dataReady: LineChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointClick}
@@ -137,9 +145,7 @@ export class LineChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<LineChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointContextMenu}
@@ -147,9 +153,7 @@ export class LineChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<LineChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointsSelected}
@@ -157,9 +161,7 @@ export class LineChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<LineChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'line';

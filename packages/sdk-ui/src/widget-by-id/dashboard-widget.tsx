@@ -24,6 +24,6 @@ import { WidgetById } from './widget-by-id.js';
  *
  * @group Fusion Assets
  * @fusionEmbed
- * @deprecated Use {@link WidgetById} instead.
+ * @deprecated Use {@link @sisense/sdk-ui!WidgetById | `WidgetById`} instead.
  */
 export const DashboardWidget = WidgetById as FunctionComponent<DashboardWidgetProps>;

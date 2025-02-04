@@ -136,7 +136,7 @@ An object that allows users to pass advanced configuration options as a prop for
 >
 > | Parameter | Type |
 > | :------ | :------ |
-> | `contextMenuProps` | [`ContextMenuProps`](../interfaces/interface.ContextMenuProps.md) |
+> | `contextMenuProps` | [`ContextMenuProps`](../../sdk-ui/interfaces/interface.ContextMenuProps.md) |
 >
 >
 > ###### Returns

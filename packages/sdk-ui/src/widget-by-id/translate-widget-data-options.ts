@@ -1,22 +1,15 @@
-import mapValues from 'lodash-es/mapValues';
 import {
   MetadataTypes,
-  DimensionalBaseMeasure,
   DimensionalAttribute,
-  DimensionalLevelAttribute,
   DimensionalCalculatedMeasure,
-  MeasureContext,
-  DataType,
   Sort,
-  Jaql,
   BaseJaql,
-  createFilterFromJaql,
   PivotJaql,
-  Attribute,
   ForecastFormulaOptions,
   TrendFormulaOptions,
   JaqlDataSource,
   getSortType,
+  createDimensionalElementFromJaql,
 } from '@sisense/sdk-data';
 import {
   CartesianChartDataOptions,
@@ -63,70 +56,6 @@ import { WidgetDataOptions } from '../models/index.js';
 import { TranslatableError } from '../translation/translatable-error.js';
 import findKey from 'lodash-es/findKey';
 import camelCase from 'lodash-es/camelCase';
-
-export function createDimensionalElementFromJaql(jaql: Jaql, format?: PanelItem['format']) {
-  const isFormulaJaql = 'formula' in jaql;
-
-  const dataSource = 'datasource' in jaql ? jaql.datasource : undefined;
-
-  let sort;
-  if (jaql.sort) {
-    sort = jaql.sort === 'asc' ? Sort.Ascending : Sort.Descending;
-  }
-
-  if (isFormulaJaql) {
-    const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) => {
-      if (typeof jaqlContextValue === 'string') {
-        return jaqlContextValue;
-      }
-      return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
-    });
-
-    return new DimensionalCalculatedMeasure(
-      jaql.title,
-      jaql.formula,
-      context,
-      undefined,
-      undefined,
-      sort,
-    );
-  }
-
-  const hasAggregation = !!jaql.agg;
-  const isDatatypeDatetime = jaql.datatype === DataType.DATETIME;
-  const attributeType =
-    jaql.datatype === DataType.NUMERIC
-      ? MetadataTypes.NumericAttribute
-      : MetadataTypes.TextAttribute;
-  const attribute = isDatatypeDatetime
-    ? new DimensionalLevelAttribute(
-        jaql.title,
-        jaql.dim,
-        DimensionalLevelAttribute.translateJaqlToGranularity(jaql),
-        (format?.mask as DatetimeMask)?.[jaql.level!] ??
-          (format?.mask as DatetimeMask)?.dateAndTime,
-        undefined,
-        sort,
-      )
-    : new DimensionalAttribute(jaql.title, jaql.dim, attributeType, undefined, sort, dataSource);
-
-  if (hasAggregation) {
-    return new DimensionalBaseMeasure(
-      jaql.title,
-      attribute,
-      DimensionalBaseMeasure.aggregationFromJAQL(jaql.agg || ''),
-      undefined,
-      undefined,
-      sort,
-    );
-  }
-
-  if ('filter' in jaql) {
-    return createFilterFromJaql(jaql);
-  }
-
-  return attribute;
-}
 
 function getNumberFormatName(mask: NumericMask) {
   if (mask.percent || mask.type === 'percent') {
@@ -222,8 +151,18 @@ export function applyStatisticalModels(
   return newDataOption;
 }
 
+const extractDatetimeFormat = (item: PanelItem) => {
+  if (item.jaql && 'level' in item.jaql) {
+    return (
+      (item.format?.mask as DatetimeMask)?.[item.jaql.level!] ??
+      (item.format?.mask as DatetimeMask)?.dateAndTime
+    );
+  }
+  return (item.format?.mask as DatetimeMask)?.dateAndTime;
+};
+
 export function createDataColumn(item: PanelItem, customPaletteColors?: Color[]) {
-  const element = createDimensionalElementFromJaql(item.jaql, item.format);
+  const element = createDimensionalElementFromJaql(item.jaql, extractDatetimeFormat(item));
   const sortType = getSortType(item.jaql.sort ?? item.categoriesSorting);
   const numberFormatConfig = extractNumberFormat(item);
   const subtotal = item.format?.subtotal;
@@ -500,7 +439,9 @@ function extractPivotTableChartDataOptions(
 
     const row = createDataColumn(item, paletteColors);
     // remove attribute inner sorting
-    row.column = (row.column as Attribute).sort(Sort.None);
+    if (row.column && MetadataTypes.isAttribute(row.column)) {
+      row.column = row.column.sort(Sort.None);
+    }
 
     if (isLastRow && valuesSortDetails) {
       sortDetails = valuesSortDetails;

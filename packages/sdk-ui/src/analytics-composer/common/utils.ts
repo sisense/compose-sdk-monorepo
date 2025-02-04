@@ -48,20 +48,15 @@ export function isEmptyQueryModel(queryModel: ExpandedQueryModel | undefined | n
   return !queryModel || !queryModel.jaql.datasource.title || !queryModel.jaql.metadata.length;
 }
 
-export function escapeSingleQuotes(str?: string) {
-  if (!str) {
-    return str;
-  }
-  // Replace single quotes with escaped single quotes
-  // Only when the single quote is not preceded by a backslash
-  return str.replace(/(?<!\\)'/g, "\\'");
-}
-
 export function validateChartType(chartType: DynamicChartType | 'pivot' | 'pivot2') {
   const ALLOWED_TYPES = [...ALL_CHART_TYPES, 'pivot', 'pivot2'] as const;
 
   if (!ALLOWED_TYPES.includes(chartType))
     throw new TranslatableError('errors.chartTypeNotSupported', { chartType });
+}
+
+function isPivotTableWidgetPropsLocal(props: any): props is PivotTableWidgetProps {
+  return 'widgetType' in props && props.widgetType === 'pivot';
 }
 
 export function checkIfMeasuresExist(
@@ -70,6 +65,11 @@ export function checkIfMeasuresExist(
   const hasMeasuresOrValues =
     ('measures' in props && isNonEmptyArray(props.measures as [])) ||
     ('values' in props && isNonEmptyArray(props.values as []));
+
+  // for pivot table widget
+  if (isPivotTableWidgetPropsLocal(props)) {
+    return 'values' in props.dataOptions && isNonEmptyArray(props.dataOptions.values as []);
+  }
 
   if ('chartType' in props) {
     if (props.chartType === 'scatter') {

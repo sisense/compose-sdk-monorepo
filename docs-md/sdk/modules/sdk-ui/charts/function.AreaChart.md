@@ -6,7 +6,7 @@ title: AreaChart
 
 > **AreaChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
-A React component similar to a [LineChart](function.LineChart.md),
+A React component similar to a [`LineChart`](function.LineChart.md),
 but with filled in areas under each line and an option to display them as stacked.
 
 ## Example

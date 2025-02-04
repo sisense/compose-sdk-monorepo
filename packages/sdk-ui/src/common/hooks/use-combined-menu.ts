@@ -2,13 +2,13 @@ import { useCallback, useRef } from 'react';
 import { MenuOptions } from '../components/menu/types.js';
 import { useMenu } from './use-menu.js';
 
-type IsTargetMenuFn = (menuOptions: MenuOptions) => boolean;
-type CombineMenusFn = (
+export type IsTargetMenuFn = (menuOptions: MenuOptions) => boolean;
+export type CombineMenusFn = (
   currentMenuOptions: MenuOptions,
   capturedMenuOptions: MenuOptions,
 ) => MenuOptions;
 
-interface CombinedMenuParams {
+export interface CombinedMenuParams {
   /** Function to determine if the captured menu is the target menu */
   isTargetMenu: IsTargetMenuFn;
   /** Function to combine the current menu options with the captured menu options */

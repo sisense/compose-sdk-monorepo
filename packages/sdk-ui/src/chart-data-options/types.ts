@@ -41,7 +41,7 @@ export interface CategoryStyle {
   /**
    * Date granularity that works with continuous timeline.
    *
-   * Values from {@link @sisense/sdk-data!DateLevels}.
+   * Values from {@link @sisense/sdk-data!DateLevels | `DateLevels`}.
    *
    */
   granularity?: string;

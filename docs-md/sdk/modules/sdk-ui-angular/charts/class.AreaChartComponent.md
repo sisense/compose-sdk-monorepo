@@ -132,7 +132,7 @@ or for filters where you will supply your own UI components or use pre-built UI 
 
 To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for filters that you want your users to set using pre-built UI components.
 
@@ -158,7 +158,7 @@ or for highlights where you will supply your own UI components or use pre-built 
 To learn more about using filter factory functions to create highlights, see the
 [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
 
-(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [MemberFilterTile](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
+(2) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) controlled by filter UI components – for example [`MemberFilterTile`](../../sdk-ui/filter-tiles/function.MemberFilterTile.md).
 
 Use this option for highlights that you want your users to set using pre-built UI components.
 
@@ -204,7 +204,7 @@ For an example of how the `onBeforeRender` callback can be used, see the
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointClick**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
 
 A callback that allows you to customize what happens when a data point is clicked.
 
@@ -214,7 +214,7 @@ To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/gu
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< `ArgumentsAsObject`\< [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointContextMenu**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
 
 A callback that allows you to customize what happens when a context menu is displayed for a data point.
 
@@ -224,7 +224,7 @@ To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/gu
 
 #### dataPointsSelect
 
-> **dataPointsSelect**: `EventEmitter`\< `ArgumentsAsObject`\< [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| `undefined`, [`"points"`, `"nativeEvent"`] \> \>
+> **dataPointsSelect**: `EventEmitter`\< [`DataPointsEvent`](../type-aliases/type-alias.DataPointsEvent.md) \>
 
 A callback that allows you to customize what happens when data points are selected.
 

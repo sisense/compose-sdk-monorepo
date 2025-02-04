@@ -3,12 +3,12 @@ import {
   getRootPanelItem,
   getFilterRelationsFromJaql,
   mergeFilters,
-  applyWidgetFiltersToRelations,
   isTextWidgetDtoStyle,
 } from './utils.js';
 import { PanelItem } from './types.js';
 import { lineChartWidgetDTO } from './__mocks__/line-chart-widget-dto.js';
 import { textWidgetDTO } from './__mocks__/text-widget-dto.js';
+import { applyWidgetFiltersToRelations } from '@/utils/filter-relations.js';
 
 const mockFilter1 = {
   config: {

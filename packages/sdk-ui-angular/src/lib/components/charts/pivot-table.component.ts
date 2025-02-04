@@ -11,7 +11,7 @@ import {
   PivotTable,
   ComponentAdapter,
   createElement,
-  type PivotTableProps,
+  type PivotTableProps as PivotTablePropsPreact,
 } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from '../../services';
 import { ThemeService } from '../../services';
@@ -20,6 +20,8 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface PivotTableProps extends PivotTablePropsPreact {}
 
 /**
  * Pivot Table with and pagination.

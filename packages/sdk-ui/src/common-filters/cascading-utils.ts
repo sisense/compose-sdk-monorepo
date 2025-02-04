@@ -126,12 +126,10 @@ function createNewCascadingFilter(
     originalCascadingFilter.config.disabled,
   );
 
-  const newCascadingFilter = filterFactory.cascading(newLevelFilters, {
+  return filterFactory.cascading(newLevelFilters, {
     guid: originalCascadingFilter.config.guid,
     disabled: newDisabled,
   });
-
-  return newCascadingFilter;
 }
 
 /**

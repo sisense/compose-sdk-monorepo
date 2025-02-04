@@ -4,7 +4,7 @@ title: MemberFilterTileProps
 
 # Interface MemberFilterTileProps
 
-Props for [MemberFilterTile](../filter-tiles/class.MemberFilterTile.md)
+Props for [`MemberFilterTile`](../../sdk-ui/filter-tiles/function.MemberFilterTile.md)
 
 ## Properties
 

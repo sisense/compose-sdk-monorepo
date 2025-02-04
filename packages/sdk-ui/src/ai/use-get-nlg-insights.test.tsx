@@ -29,7 +29,11 @@ describe('useGetNlgInsights', () => {
   it('returns data when successful', async () => {
     const { result } = renderHookWithWrapper(mockNlgParams);
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockNlgResponse.data?.answer);
+      expect(result.current.isLoading).toBe(false);
+    });
 
     expect(result.current.data).toBe('This is a summary');
   });
@@ -40,7 +44,11 @@ describe('useGetNlgInsights', () => {
       dataSource: { title: 'My Data Source', type: 'live' },
     });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockNlgResponse.data?.answer);
+      expect(result.current.isLoading).toBe(false);
+    });
 
     expect(result.current.data).toBe('This is a summary');
   });
@@ -50,11 +58,12 @@ describe('useGetNlgInsights', () => {
 
     const { result } = renderHookWithWrapper(mockNlgParams);
 
-    await waitFor(() => expect(result.current.isError).toBe(true));
-
-    expect(result.current.data).toBeUndefined();
-    expect(result.current.error).toBeDefined();
-    expect(result.current.isSuccess).toBe(false);
+    await waitFor(() => {
+      expect(result.current.isError).toBe(true);
+      expect(result.current.data).toBeUndefined();
+      expect(result.current.error).toBeDefined();
+      expect(result.current.isSuccess).toBe(false);
+    });
   });
 
   it('when disabled, data is not present, but triggering refetch() returns data', async () => {
@@ -63,13 +72,19 @@ describe('useGetNlgInsights', () => {
       enabled: false,
     });
 
-    await waitFor(() => expect(result.current.isLoading).toBe(true));
-
-    expect(result.current.data).toBeUndefined();
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+      expect(result.current.data).toBeUndefined();
+      expect(result.current.isSuccess).toBe(false);
+    });
 
     result.current.refetch();
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockNlgResponse.data?.answer);
+      expect(result.current.isLoading).toBe(false);
+    });
 
     expect(result.current.data).toBe('This is a summary');
   });

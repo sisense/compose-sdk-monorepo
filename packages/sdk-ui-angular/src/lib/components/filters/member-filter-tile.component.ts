@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {
   MemberFilterTile,
-  type MemberFilterTileProps,
+  type MemberFilterTileProps as MemberFilterTilePropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -23,6 +23,10 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface MemberFilterTileProps extends Omit<MemberFilterTilePropsPreact, 'onChange'> {
+  filterChange?: (filter: Arguments<MemberFilterTilePropsPreact['onChange']>[0]) => void;
+}
 
 /**
  * Member Filter Tile Component
@@ -101,7 +105,7 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
    */
   @Output()
   filterChange = new EventEmitter<
-    ArgumentsAsObject<MemberFilterTileProps['onChange'], ['filter']>
+    ArgumentsAsObject<MemberFilterTilePropsPreact['onChange'], ['filter']>
   >();
 
   private componentAdapter: ComponentAdapter;
@@ -157,7 +161,7 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
       dataSource: this.dataSource,
       attribute: this.attribute,
       filter: this.filter,
-      onChange: (...[filter]: Arguments<MemberFilterTileProps['onChange']>) =>
+      onChange: (...[filter]: Arguments<MemberFilterTilePropsPreact['onChange']>) =>
         this.filterChange.emit({ filter }),
     };
 

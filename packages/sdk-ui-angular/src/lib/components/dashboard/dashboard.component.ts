@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {
   Dashboard,
-  type DashboardProps,
+  type DashboardProps as DashboardPropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -20,6 +20,8 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface DashboardProps extends DashboardPropsPreact {}
 
 /**
  * An Angular component used for easily rendering a dashboard created in Sisense Fusion.

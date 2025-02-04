@@ -1,12 +1,13 @@
+import { escapeSingleQuotes } from '@sisense/sdk-common';
 import {
   DimensionalBaseMeasure,
+  DimensionalElement,
   JaqlElement,
   JaqlSortDirection,
   MetadataItemJaql,
   getSortType,
   normalizeAttributeName,
 } from '@sisense/sdk-data';
-import { escapeSingleQuotes } from '../common/utils.js';
 
 const NEW_LINE = '\n';
 const VALUE_UNKNOWN = 'UNKNOWN';
@@ -106,6 +107,10 @@ export const stringifyProps = (
 
   if (props instanceof JaqlElement) {
     return stringifyJaqlElement(props, indent);
+  }
+
+  if (props instanceof DimensionalElement) {
+    return props.composeCode || '';
   }
 
   let s = '';

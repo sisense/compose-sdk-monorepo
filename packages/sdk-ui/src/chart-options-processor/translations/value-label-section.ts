@@ -10,6 +10,8 @@ import { NumberFormatConfig } from '@/types';
 export type ValueLabelOptions = {
   enabled?: boolean;
   rotation?: number;
+  showValue?: boolean;
+  showPercentage?: boolean;
 };
 
 export type RotationType = 'horizontal' | 'diagonal' | 'vertical';
@@ -43,13 +45,29 @@ const defaultValueLabelSettings: ValueLabelSettings = {
   },
 };
 
-export const createValueLabelFormatter = (numberFormatConfig?: NumberFormatConfig) => {
+export const createValueLabelFormatter = (
+  numberFormatConfig?: NumberFormatConfig,
+  options?: ValueLabelOptions,
+) => {
   return function (this: InternalSeries) {
     const isDummyPointBetweenCategoriesGroups = this.y === 0 && this.x === ' ';
     if (this.y === undefined || isNaN(this.y) || isDummyPointBetweenCategoriesGroups) {
       return '';
     }
-    return applyFormatPlainText(getCompleteNumberFormatConfig(numberFormatConfig), this.y);
+
+    let labelText = '';
+    const showValue = options?.showValue ?? true;
+    if (showValue) {
+      labelText += applyFormatPlainText(getCompleteNumberFormatConfig(numberFormatConfig), this.y);
+    }
+    if (showValue && options?.showPercentage) {
+      labelText += ' / ';
+    }
+    if (options?.showPercentage && this.percentage !== undefined) {
+      labelText += `${Math.round(this.percentage)}%`;
+    }
+
+    return labelText;
   };
 };
 

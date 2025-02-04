@@ -42,4 +42,4 @@ export {
   type DataService,
 } from './data-handling/DataService.js';
 export { type PivotDataNode, type PivotTreeNode } from './data-handling';
-export { UserType } from './data-handling/constants';
+export { UserType, PanelType } from './data-handling/constants';

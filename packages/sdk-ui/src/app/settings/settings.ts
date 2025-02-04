@@ -11,7 +11,7 @@ import {
 import { getLegacyPalette } from '../../themes/theme-loader';
 import { AppConfig, ThemeSettings } from '../../types';
 import { GlobalsObject } from './types';
-import { QUERY_DEFAULT_LIMIT } from '@/const';
+import { QUERY_DEFAULT_LIMIT, SYSTEM_TENANT_NAME } from '@/const';
 import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings.js';
 import { Features, FeatureMap } from './types/features.js';
 import { TranslatableError } from '@/translation/translatable-error.js';
@@ -133,7 +133,7 @@ async function loadServerSettings(
     serverFeatures: mapFeatures(globals.features),
     user: {
       tenant: {
-        name: globals.user.tenant.name,
+        name: globals.user?.tenant?.name || SYSTEM_TENANT_NAME,
       },
     },
   };

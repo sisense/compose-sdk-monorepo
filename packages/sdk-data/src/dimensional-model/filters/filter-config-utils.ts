@@ -9,6 +9,7 @@ import {
 
 /**
  * Returns a default configuration for a base filter.
+ *
  * @internal
  */
 export const getDefaultBaseFilterConfig = (): CompleteBaseFilterConfig => ({
@@ -19,6 +20,7 @@ export const getDefaultBaseFilterConfig = (): CompleteBaseFilterConfig => ({
 
 /**
  * Returns a default configuration for a members filter.
+ *
  * @internal
  */
 export const getDefaultMembersFilterConfig = (): CompleteMembersFilterConfig => ({
@@ -30,6 +32,7 @@ export const getDefaultMembersFilterConfig = (): CompleteMembersFilterConfig => 
 
 /**
  * Checks whether the given configuration is a members filter configuration.
+ *
  * @param config - The filter configuration.
  * @returns Whether the configuration is a members filter configuration.
  * @internal
@@ -42,6 +45,7 @@ export function isMembersFilterConfig(
 
 /**
  * Simplifies the filter configuration by removing default values.
+ *
  * @param config - The filter configuration.
  * @returns The simplified filter configuration.
  * @internal
@@ -54,11 +58,9 @@ export const simplifyFilterConfig = (
     : getDefaultBaseFilterConfig();
 
   // Filter out properties that match their default values
-  const simplifiedConfig = Object.fromEntries(
+  return Object.fromEntries(
     Object.entries(config).filter(
       ([key, value]) => !isEqual(value, defaultConfig[key as keyof MembersFilterConfig]),
     ),
   );
-
-  return simplifiedConfig;
 };

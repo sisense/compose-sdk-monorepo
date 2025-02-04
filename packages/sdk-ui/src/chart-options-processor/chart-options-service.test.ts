@@ -19,6 +19,8 @@ import { ChartDesignOptions, DesignOptions } from './translations/types';
 import { DateLevels } from '@sisense/sdk-data';
 import { applyDateFormat } from '../query/date-formats/apply-date-format';
 import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
+import { describe } from 'vitest';
+import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 
 const translateMock = ((key: string) => key) as TFunction;
 
@@ -1632,6 +1634,62 @@ describe('funnelChart', () => {
           custom: { number1: 5.40436949022614, rawValue: 846, xValue: ['Finalized'] },
         },
       ]);
+    });
+  });
+});
+
+describe('highchartsOptionsService - cartesian charts', () => {
+  const chartData = cartesianData(TestChartDataOptions, TestQueryResult);
+  const dataOptions: CartesianChartDataOptionsInternal = TestChartDataOptions;
+
+  describe('labels', () => {
+    it('should prepare correct options for total labels - stacked', () => {
+      const chartOptions = highchartsOptionsService(
+        chartData,
+        'bar',
+        {
+          ...baseChartDesignOptions,
+          stackType: 'stacked',
+          showTotal: true,
+        } as StackableChartDesignOptions,
+        dataOptions,
+        translateMock,
+      );
+      expect(chartOptions?.options?.yAxis?.map((axis) => axis.stackLabels)).toMatchSnapshot();
+    });
+
+    it('should prepare correct options for total labels - column stacked100', () => {
+      const chartOptions = highchartsOptionsService(
+        chartData,
+        'column',
+        {
+          ...baseChartDesignOptions,
+          stackType: 'stack100',
+          showTotal: true,
+          totalLabelRotation: 90,
+        } as unknown as StackableChartDesignOptions,
+        dataOptions,
+        translateMock,
+      );
+      expect(chartOptions?.options?.yAxis?.map((axis) => axis.stackLabels)).toMatchSnapshot();
+      expect(chartOptions?.options.chart.spacing).toEqual([60, 20, 20, 20]);
+    });
+
+    it('should prepare correct options for total labels - bar stacked100', () => {
+      const chartOptions = highchartsOptionsService(
+        chartData,
+        'bar',
+        {
+          ...baseChartDesignOptions,
+          stackType: 'stack100',
+          showTotal: true,
+          totalLabelRotation: 45,
+        } as unknown as StackableChartDesignOptions,
+        dataOptions,
+        translateMock,
+      );
+      expect(chartOptions?.options?.yAxis?.map((axis) => axis.stackLabels)).toMatchSnapshot();
+      expect(chartOptions?.options.chart.spacing).toEqual([20, 45, 20, 20]);
     });
   });
 });

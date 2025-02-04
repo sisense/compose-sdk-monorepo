@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-export const SearchIcon = (props: Pick<SVGProps<SVGElement>, 'className' | 'width' | 'height'>) => (
+export const SearchIcon = (
+  props: Pick<SVGProps<SVGElement>, 'className' | 'width' | 'height' | 'color' | 'opacity'>,
+) => (
   <svg
     width="24"
     height="24"

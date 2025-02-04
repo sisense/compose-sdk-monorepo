@@ -96,6 +96,27 @@ const SisenseSvgIcon = (props: IconProps) => {
           d="M12 12.293L6.854 7.146a.5.5 0 1 0-.708.708L11.293 13l-5.147 5.146a.5.5 0 0 0 .708.708L12 13.707l5.146 5.147a.5.5 0 0 0 .708-.708L12.707 13l5.147-5.146a.5.5 0 0 0-.708-.708L12 12.293z"
         ></path>
       </symbol>
+
+      <symbol id="header-doc" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M14 5.562V10h3.698L14 5.562zM18 11h-5V5H7a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8zm1-1v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h7l5 6zm-7 5.84l3.174-2.719a.5.5 0 0 1 .65.76l-3.5 2.998a.5.5 0 0 1-.65 0l-3.5-2.998a.5.5 0 1 1 .65-.76L12 15.841z"
+        ></path>
+      </symbol>
+
+      <symbol id="general-arrow-down" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M12 13.84l3.174-2.719a.5.5 0 0 1 .65.76l-3.5 2.998a.5.5 0 0 1-.65 0l-3.5-2.998a.5.5 0 1 1 .65-.76L12 13.841z"
+        ></path>
+      </symbol>
+
+      <symbol id="general-plus" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M12 12V7.5a.5.5 0 1 0-1 0V12H6.5a.5.5 0 1 0 0 1H11v4.5a.5.5 0 1 0 1 0V13h4.5a.5.5 0 1 0 0-1H12z"
+        ></path>
+      </symbol>
     </SvgIcon>
   );
 };

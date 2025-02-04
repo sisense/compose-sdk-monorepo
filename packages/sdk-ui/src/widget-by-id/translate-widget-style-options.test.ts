@@ -17,6 +17,7 @@ import {
   WidgetSubtype,
 } from './types.js';
 import { jaqlMock } from './__mocks__/jaql-mock.js';
+import { describe } from 'vitest';
 
 type BaseStyleOptionsWithAxes = BaseStyleOptions & BaseAxisStyleOptions;
 
@@ -291,6 +292,234 @@ describe('translate widget style options', () => {
         funnelSize: widgetStyle.size,
         funnelType: widgetStyle.type,
         funnelDirection: widgetStyle.direction,
+      });
+    });
+  });
+
+  describe('labels style for cartesian chart', () => {
+    it('should prepare correct labels options - base case', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 45,
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 45,
+        showPercentage: false,
+        showValue: true,
+      });
+    });
+    it('should prepare correct labels options - base case with redundant types', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 45,
+          labels: {
+            types: {
+              count: false,
+              relative: false,
+              totals: false,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 45,
+        showPercentage: false,
+        showValue: true,
+      });
+    });
+
+    it('should prepare correct labels options - stacked with value', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 45,
+          labels: {
+            types: {
+              count: false,
+              relative: true,
+              totals: false,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('column/stackedcolumn', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 45,
+        showPercentage: false,
+        showValue: true,
+      });
+    });
+
+    it('should prepare correct labels options - stacked without value', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 90,
+          labels: {
+            types: {
+              count: false,
+              relative: false,
+              totals: false,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('column/stackedcolumn', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 90,
+        showPercentage: false,
+        showValue: false,
+      });
+    });
+
+    it('should prepare correct labels options - stacked with totals', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 45,
+          labels: {
+            types: {
+              count: false,
+              relative: false,
+              totals: true,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('column/stackedcolumn', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 45,
+        showPercentage: false,
+        showValue: false,
+      });
+      expect(styleOptions.totalLabels).toEqual({
+        enabled: true,
+        rotation: 45,
+      });
+    });
+
+    it('should prepare correct labels options - stacked 100 with percentage', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 90,
+          labels: {
+            types: {
+              percentage: true,
+              count: false,
+              relative: false,
+              totals: false,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('column/stackedcolumn100', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 90,
+        showPercentage: true,
+        showValue: false,
+      });
+    });
+
+    it('should prepare correct labels options - stacked 100 with value', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 90,
+          labels: {
+            types: {
+              count: true,
+              relative: false,
+              totals: false,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('column/stackedcolumn100', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 90,
+        showPercentage: false,
+        showValue: true,
+      });
+    });
+
+    it('should prepare correct labels options - stacked 100 with value, percentage and totals', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 45,
+          labels: {
+            types: {
+              percentage: true,
+              count: true,
+              relative: false,
+              totals: true,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/column',
+        mockWidgetDto('column/stackedcolumn100', widgetStyle, []),
+      ) as BaseStyleOptions;
+
+      expect(styleOptions.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 45,
+        showPercentage: true,
+        showValue: true,
+      });
+      expect(styleOptions.totalLabels).toEqual({
+        enabled: true,
+        rotation: 45,
       });
     });
   });

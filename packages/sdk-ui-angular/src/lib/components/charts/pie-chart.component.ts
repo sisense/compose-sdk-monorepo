@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type PieChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type PieChartProps as PieChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface PieChartProps
+  extends WithoutPreactChartEventProps<PieChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component representing data in a circular graph with the data shown as slices of a whole,
@@ -69,9 +77,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -122,7 +130,7 @@ export class PieChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: PieChartProps['onBeforeRender'];
+  beforeRender: PieChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!PieChartProps.onDataReady}
@@ -131,7 +139,7 @@ export class PieChartComponent {
    * @internal
    */
   @Input()
-  dataReady: PieChartProps['onDataReady'];
+  dataReady: PieChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointClick}
@@ -139,9 +147,7 @@ export class PieChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<PieChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointContextMenu}
@@ -149,9 +155,7 @@ export class PieChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<PieChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointsSelected}
@@ -159,9 +163,7 @@ export class PieChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<PieChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'pie';

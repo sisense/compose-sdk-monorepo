@@ -6,7 +6,7 @@
     "url": "https://github.com/sisense/compose-sdk-monorepo",
     "directory": "packages/sdk-shared-ui"
   },
-  "version": "1.28.0",
+  "version": "1.29.0",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
@@ -103,6 +103,16 @@
       "import": "./dist/lib/Dropdown/Dropdown.js",
       "require": "./dist/lib/Dropdown/Dropdown.cjs",
       "types": "./dist/lib/Dropdown/Dropdown.d.ts"
+    },
+    "./Button": {
+      "import": "./dist/lib/Button/Button.js",
+      "require": "./dist/lib/Button/Button.cjs",
+      "types": "./dist/lib/Button/Button.d.ts"
+    },
+    "./Breadcrumbs": {
+      "import": "./dist/lib/Breadcrumbs/Breadcrumbs.js",
+      "require": "./dist/lib/Breadcrumbs/Breadcrumbs.cjs",
+      "types": "./dist/lib/Breadcrumbs/Breadcrumbs.d.ts"
     }
   },
   "typesVersions": {
@@ -145,6 +155,12 @@
       ],
       "TablePagination": [
         "./dist/lib/TablePagination/TablePagination.d.ts"
+      ],
+      "Button": [
+        "./dist/lib/Button/Button.d.ts"
+      ],
+      "Breadcrumbs": [
+        "./dist/lib/Breadcrumbs/Breadcrumbs.d.ts"
       ]
     }
   },
@@ -199,6 +215,7 @@
   },
   "dependencies": {
     "@mui/material": "^6.2.1",
+    "@mui/utils": "^6.4.1",
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
     "rc-tooltip": "^6.3.2",

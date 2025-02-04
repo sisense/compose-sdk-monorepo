@@ -8,7 +8,7 @@ title: AreamapChart
 
 A React component for visualizing geographical data as colored polygons on a map.
 
-For another way do display data on a map, see [ScattermapChart](function.ScattermapChart.md).
+For another way do display data on a map, see [`ScattermapChart`](function.ScattermapChart.md).
 
 ## Example
 

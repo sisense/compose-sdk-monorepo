@@ -147,6 +147,26 @@ export type SeriesLabels = {
   enabled: boolean;
   /** Rotation of series labels (in degrees) */
   rotation?: number;
+  /**
+   * Boolean flag that defines if value should be shown in series labels
+   * (if not specified, value will be shown by default)
+   * */
+  showValue?: boolean;
+  /**
+   * Boolean flag that defines if percentage should be shown in series labels
+   * (only applicable for subtypes that support percentage, like "stacked100")
+   * */
+  showPercentage?: boolean;
+};
+
+/**
+ * @internal
+ */
+export type TotalLabels = {
+  /** Boolean flag that defines if total labels should be shown on the chart */
+  enabled: boolean;
+  /** Rotation of total labels (in degrees) */
+  rotation?: number;
 };
 
 /** Options that define legend - a key that provides information about the data series or colors used in chart. */
@@ -272,6 +292,12 @@ export interface BaseStyleOptions extends ReservedStyleOptions {
    * @internal
    */
   seriesLabels?: SeriesLabels;
+  /**
+   * Configuration for total labels
+   *
+   * @internal
+   */
+  totalLabels?: TotalLabels;
   /** Data limit for series or categories that will be plotted */
   dataLimits?: DataLimits;
   /**
@@ -1611,7 +1637,7 @@ export type SeriesWithAlerts<T> = {
 
 /**
  * Context menu position coordinates
- * Used in {@link ContextMenuProps}
+ * Used in {@link @sisense/sdk-ui!ContextMenuProps | `ContextMenuProps`}
  */
 export type MenuPosition = {
   /** Horizontal position */
@@ -1622,7 +1648,7 @@ export type MenuPosition = {
 
 /**
  * Context menu section
- * Used in {@link ContextMenuProps}
+ * Used in {@link @sisense/sdk-ui!ContextMenuProps | `ContextMenuProps`}
  */
 export type MenuItemSection = {
   /** @internal */

@@ -23,3 +23,13 @@ Data model title or perspective title
 Number of recommendations that should be returned
 
 If not specified, the default value is `4`
+
+***
+
+### enabled
+
+> **enabled**?: `boolean`
+
+Boolean flag to control if the hook is executed
+
+If not specified, the default value is `true`

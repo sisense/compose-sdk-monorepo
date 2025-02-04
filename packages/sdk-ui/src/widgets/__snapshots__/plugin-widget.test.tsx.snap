@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PluginWidget > renders plugin when plugin is found 1`] = `
+[
+  {
+    "dataOptions": {
+      "someProp": [],
+    },
+    "dataSource": "Sample ECommerce",
+    "filters": [],
+    "highlights": [],
+    "styleOptions": {
+      "someStyle": "value",
+    },
+  },
+]
+`;

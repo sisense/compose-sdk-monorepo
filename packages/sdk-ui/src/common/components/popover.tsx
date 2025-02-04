@@ -32,7 +32,9 @@ export const Popover = (props: PopoverProps) => {
       anchorEl={position?.anchorEl}
       anchorOrigin={position?.anchorOrigin}
       transformOrigin={position?.contentOrigin}
+      transitionDuration={0}
       open={open}
+      slotProps={{ paper: { sx: { boxShadow: '-1px -1px 10px rgba(0, 0, 0, 0.2)' } } }}
       onClose={onClose}
       {...restProps}
     >

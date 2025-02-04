@@ -7,3 +7,4 @@ export { LockIcon } from './lock-icon';
 export { DateIcon } from './date-icon';
 export { ArrowDownIcon } from './arrow-down-icon';
 export { CubeIcon } from './cube-icon';
+export { CheckIcon } from './check-icon';

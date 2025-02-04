@@ -169,7 +169,7 @@ export class RestApi {
     }).toString();
 
     return this.httpClient
-      .get<HierarchyDto[]>(`/api/elasticubes/hierarchies?${queryParams}`)
+      .get<HierarchyDto[]>(`api/elasticubes/hierarchies?${queryParams}`)
       .then((rawHierarchies = []) => {
         /**
          * Note: fixes an API issue where the 'ids' parameter does not work correctly

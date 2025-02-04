@@ -7,7 +7,7 @@ title: DashboardWidgetProps
 Props for the [DashboardWidget](../fusion-assets/function.DashboardWidget.md) component
 
 ::: warning Deprecated
-Use [WidgetById](../fusion-assets/function.WidgetById.md) and [WidgetByIdProps](interface.WidgetByIdProps.md) instead
+Use [`WidgetById`](../fusion-assets/function.WidgetById.md) and [WidgetByIdProps](interface.WidgetByIdProps.md) instead
 :::
 
 ## Properties

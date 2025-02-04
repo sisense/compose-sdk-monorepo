@@ -100,6 +100,7 @@ export const useSyncedData = ({
             attributes,
             measures,
             filters: filterList,
+            filterRelations,
             highlights,
           },
           executeQuery,

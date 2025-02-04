@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type AreaChartProps } from '@sisense/sdk-ui-preact';
-import { ArgumentsAsObject } from '../../types';
+import { type AreaChartProps as AreaChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface AreaChartProps
+  extends WithoutPreactChartEventProps<AreaChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component similar to a {@link LineChartComponent},
@@ -69,9 +77,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -122,7 +130,7 @@ export class AreaChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: AreaChartProps['onBeforeRender'];
+  beforeRender: AreaChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!AreaChartProps.onDataReady}
@@ -131,7 +139,7 @@ export class AreaChartComponent {
    * @internal
    */
   @Input()
-  dataReady: AreaChartProps['onDataReady'];
+  dataReady: AreaChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointClick}
@@ -139,9 +147,7 @@ export class AreaChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<AreaChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointContextMenu}
@@ -149,9 +155,7 @@ export class AreaChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<AreaChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointsSelected}
@@ -159,9 +163,7 @@ export class AreaChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<AreaChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'area';

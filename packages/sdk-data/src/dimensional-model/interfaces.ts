@@ -505,6 +505,7 @@ export type FilterConfig = CompleteBaseFilterConfig | CompleteMembersFilterConfi
 export interface Filter extends Element {
   /**
    * Attribute this filter instance is filtering
+   *
    * @internal
    */
   readonly attribute: Attribute;
@@ -517,6 +518,7 @@ export interface Filter extends Element {
   /**
    * Boolean flag whether the filter is a scope filter
    * which is on a dimension that isn’t used in the query
+   *
    * @internal
    */
   isScope: boolean;

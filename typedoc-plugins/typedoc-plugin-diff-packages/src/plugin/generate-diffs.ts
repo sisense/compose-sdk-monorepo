@@ -1,13 +1,25 @@
 import { DeclarationReflection, ProjectReflection } from 'typedoc';
+import { ReflectionKind } from './options/custom-maps';
 
-type PackageMap = {
+type ReflectionMap = {
   packageName: string;
   // indexed map of children by name
   children: Record<string, DeclarationReflection>;
   // non matching keys to compute parity percentage
   nonMatchingKeys: string[];
 };
-type IndexedPackages = PackageMap[];
+type ReflectionMaps = ReflectionMap[];
+
+const isType = (child: DeclarationReflection) => {
+  return ['Interface', 'TypeAlias'].some((kind) => ReflectionKind[child.kind] === kind);
+};
+
+const shouldSkipChild = (child: DeclarationReflection) => {
+  const isInternal = child?.comment?.modifierTags?.has('@internal');
+  const hasDescription = child?.comment !== undefined;
+
+  return isInternal || isType(child) || !hasDescription;
+};
 
 /**
  * Indexes packages by name.
@@ -17,34 +29,44 @@ type IndexedPackages = PackageMap[];
  * @param project - The project reflection.
  * @returns The indexed packages.
  */
-function indexPackages(project: ProjectReflection): IndexedPackages {
-  const indexedPackages: IndexedPackages = [];
+function indexPackages(project: ProjectReflection): ReflectionMaps[] {
+  const indexedPackages: ReflectionMaps = [];
+  const indexedTypes: ReflectionMaps = [];
 
   project.children?.forEach((packageReflection) => {
-    const packageMap: PackageMap = {
+    const packageMap: ReflectionMap = {
+      packageName: packageReflection.name,
+      children: {},
+      nonMatchingKeys: [],
+    };
+    const typesMap: ReflectionMap = {
       packageName: packageReflection.name,
       children: {},
       nonMatchingKeys: [],
     };
 
-    packageReflection.children?.forEach((child) => {
-      packageMap.children[child.name] = child;
+    packageReflection.children
+      ?.filter((child) => (process.env.FULL_DIFF_REPORT ? true : !shouldSkipChild(child)))
+      .forEach((child) => {
+        const destination = isType(child) ? typesMap : packageMap;
+        destination.children[child.name] = child;
 
-      // Angular has service methods instead of hooks.
-      // so we need to index those service methods as well.
-      if (child.name.endsWith('Service')) {
-        child.children?.forEach((grandChild) => {
-          const key = grandChild.name;
-          grandChild.name = `${child.name}.${grandChild.name}`;
-          packageMap.children[key] = grandChild;
-        });
-      }
-    });
+        // Angular has service methods instead of hooks.
+        // so we need to index those service methods as well.
+        if (child.name.endsWith('Service')) {
+          child.children?.forEach((grandChild) => {
+            const key = grandChild.name;
+            grandChild.name = `${child.name}.${grandChild.name}`;
+            destination.children[key] = grandChild;
+          });
+        }
+      });
 
     indexedPackages.push(packageMap);
+    indexedTypes.push(typesMap);
   });
 
-  return indexedPackages;
+  return [indexedPackages, indexedTypes];
 }
 
 const calculateParityPercentage = (keyCount: number, nonMatchingKeyCount: number): number => {
@@ -56,7 +78,7 @@ const calculateParityPercentage = (keyCount: number, nonMatchingKeyCount: number
  * @param indexedPackages - The indexed packages.
  * @returns The diff table header.
  */
-function generateDiffTableHeader(indexedPackages: IndexedPackages): string {
+function generateDiffTableHeader(indexedPackages: ReflectionMaps): string {
   const keyCount = Object.keys(indexedPackages[0].children).length;
 
   const headerRow = indexedPackages
@@ -78,7 +100,7 @@ function generateDiffTableHeader(indexedPackages: IndexedPackages): string {
   return `| ${headerRow} |\n| ${separatorRow} |\n`;
 }
 
-function matchReflection(packageMap: PackageMap, key: string): string {
+function matchReflection(packageMap: ReflectionMap, key: string): string {
   if (packageMap.children[key]) {
     return packageMap.children[key].name;
   }
@@ -108,10 +130,10 @@ function matchReflection(packageMap: PackageMap, key: string): string {
  * @param indexedPackages - The indexed packages.
  * @returns The diff table data.
  */
-function generateDiffTableData(indexedPackages: IndexedPackages): string {
+function generateDiffTableData(indexedPackages: ReflectionMaps): string {
   const keys = Object.keys(indexedPackages[0].children);
 
-  const output = keys
+  return keys
     .map((key) => {
       let row = '';
       indexedPackages.forEach((packageMap) => {
@@ -119,9 +141,8 @@ function generateDiffTableData(indexedPackages: IndexedPackages): string {
       });
       return row;
     })
+    .filter((row) => (process.env.FULL_DIFF_REPORT ? true : row.includes('|  ')))
     .join('\n');
-
-  return output;
 }
 
 /**
@@ -129,8 +150,14 @@ function generateDiffTableData(indexedPackages: IndexedPackages): string {
  * @param indexedPackages - The indexed packages.
  * @returns The diff table string
  */
-function generateDiffTable(indexedPackages: IndexedPackages): string {
-  if (indexPackages.length === 0) return '';
+function generateDiffTable(indexedPackages: ReflectionMaps): string {
+  // early return if all packages are empty
+  if (
+    indexedPackages.every((item) => {
+      return Object.keys(item.children).length === 0 && item.nonMatchingKeys.length === 0;
+    })
+  )
+    return '';
 
   const data = generateDiffTableData(indexedPackages);
   const header = generateDiffTableHeader(indexedPackages);
@@ -139,8 +166,12 @@ function generateDiffTable(indexedPackages: IndexedPackages): string {
 }
 
 export function generateDiffs(project: ProjectReflection): string {
-  const indexedPackages = indexPackages(project);
-  const output = generateDiffTable(indexedPackages);
-
+  const [indexedPackages, indexedTypes] = indexPackages(project);
+  const elementsDiff = generateDiffTable(indexedPackages);
+  const typesDiff = generateDiffTable(indexedTypes);
+  let output = elementsDiff;
+  if (typesDiff) {
+    output += '\n\n## Types\n\n' + typesDiff;
+  }
   return output;
 }

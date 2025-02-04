@@ -36,6 +36,10 @@ export class WidgetsComponent {
 }
 ```
 
+::: warning Deprecated
+Use the `widget-by-id` component instead.
+:::
+
 ## Implements
 
 - `AfterViewInit`

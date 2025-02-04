@@ -1,18 +1,43 @@
 import cloneDeep from 'lodash-es/cloneDeep.js';
-import { isCascadingFilter, FilterRelationsJaqlIdNode } from './index.js';
+import mapValues from 'lodash-es/mapValues.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
 import { FilterJaqlInternal, JaqlDataSource } from './dimensional-model/filters/utils/types.js';
 import {
   Attribute,
+  BaseMeasure,
+  CalculatedMeasure,
   Filter,
   FilterRelations,
   FilterRelationsJaql,
+  FilterRelationsJaqlIdNode,
   FilterRelationsJaqlNode,
   FilterRelationsNode,
+  LevelAttribute,
+  MeasureContext,
   SortDirection,
 } from './dimensional-model/interfaces.js';
 import { DataSource, DataSourceInfo } from './interfaces.js';
-import { FilterJaql, JaqlSortDirection, Sort } from './dimensional-model/types.js';
+import {
+  DataType,
+  FilterJaql,
+  FormulaJaql,
+  Jaql,
+  JaqlSortDirection,
+  MetadataTypes,
+  Sort,
+} from './dimensional-model/types.js';
+import { escapeSingleQuotes } from '@sisense/sdk-common';
+import {
+  DimensionalBaseMeasure,
+  DimensionalCalculatedMeasure,
+} from './dimensional-model/measures/measures.js';
+import { isCascadingFilter } from './dimensional-model/filters/filters.js';
+import {
+  DimensionalAttribute,
+  DimensionalLevelAttribute,
+  normalizeAttributeName,
+} from './dimensional-model/attributes.js';
+import { isNumber } from './dimensional-model/simple-column-types.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
@@ -266,4 +291,261 @@ export function getSortType(jaqlSort: `${JaqlSortDirection}` | undefined): SortD
     default:
       return 'sortNone';
   }
+}
+
+const DATA_MODEL_MODULE_NAME = 'DM';
+
+/**
+ * Creates an attribute or level attribute from the provided parameters
+ * @returns attribute or level attribute
+ *
+ * @internal
+ */
+export const createAttributeHelper = ({
+  dim,
+  table,
+  column,
+  dataType,
+  level,
+  format,
+  sort,
+  title,
+  dataSource,
+}: {
+  /** Dimension expression */
+  dim: string;
+  /** Table name */
+  table: string | undefined;
+  /** Column name */
+  column: string | undefined;
+  /** Data type */
+  dataType: string;
+  /** Date level */
+  level: string | undefined;
+  /** Format */
+  format: string | undefined;
+  /** Sort */
+  sort: string | undefined;
+  /** Attribute title */
+  title?: string;
+  /** Jaql data source */
+  dataSource?: JaqlDataSource;
+}): Attribute | LevelAttribute => {
+  // if table is undefined, extract it from dim
+  const dimTable = table ?? parseExpression(dim).table;
+  // if column is undefined, extract it from dim
+  const dimColumn = column ?? parseExpression(dim).column;
+  const sortEnum = convertSort(sort);
+
+  const isDataTypeDatetime = dataType === DataType.DATETIME;
+
+  if (isDataTypeDatetime) {
+    const dateLevel = DimensionalLevelAttribute.translateJaqlToGranularity({ level });
+    const composeCode = normalizeAttributeName(dimTable, dimColumn, level, DATA_MODEL_MODULE_NAME);
+    const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
+      title ?? dimColumn,
+      dim,
+      dateLevel,
+      format || DimensionalLevelAttribute.getDefaultFormatForGranularity(dateLevel),
+      undefined,
+      sortEnum,
+      dataSource,
+      composeCode,
+    );
+
+    return levelAttribute;
+  }
+
+  const attributeType =
+    !dataType || isNumber(dataType) ? MetadataTypes.NumericAttribute : MetadataTypes.TextAttribute;
+  const composeCode = normalizeAttributeName(
+    dimTable,
+    dimColumn,
+    undefined,
+    DATA_MODEL_MODULE_NAME,
+  );
+  const attribute: Attribute = new DimensionalAttribute(
+    title ?? dimColumn,
+    dim,
+    attributeType,
+    undefined,
+    sortEnum,
+    dataSource,
+    composeCode,
+  );
+
+  return attribute;
+};
+
+/**
+ * Creates a measure from the provided parameters
+ *
+ * @returns measure
+ *
+ * @internal
+ */
+export const createMeasureHelper = ({
+  dim,
+  table,
+  column,
+  dataType,
+  agg,
+  level,
+  format,
+  sort,
+  title,
+  dataSource,
+}: {
+  /** Dimension expression */
+  dim: string;
+  /** Table name */
+  table: string | undefined;
+  /** Column name */
+  column: string;
+  /** Data type */
+  dataType: string;
+  /** Aggregation function */
+  agg: string;
+  /** Date level */
+  level: string | undefined;
+  /** Format */
+  format: string | undefined;
+  /** Sort */
+  sort: string | undefined;
+  /** Measure title */
+  title?: string;
+  /** Jaql data source */
+  dataSource?: JaqlDataSource;
+}): BaseMeasure => {
+  const sortEnum = convertSort(sort);
+
+  const attribute = createAttributeHelper({
+    dim,
+    table,
+    column,
+    dataType,
+    level,
+    format,
+    sort,
+    title,
+    dataSource,
+  });
+
+  const tranformedAgg = DimensionalBaseMeasure.aggregationFromJAQL(agg);
+
+  const updatedTitle = title ?? `${tranformedAgg} ${column}`;
+
+  // currently, sort and format applied to attribute but not to measure
+  const composeCode = `measureFactory.${tranformedAgg}(${
+    attribute.composeCode
+  }, '${escapeSingleQuotes(updatedTitle)}')`;
+  const measure: BaseMeasure = new DimensionalBaseMeasure(
+    updatedTitle,
+    attribute,
+    tranformedAgg,
+    undefined,
+    undefined,
+    sortEnum,
+    composeCode,
+  );
+
+  return measure;
+};
+
+const getContextComposeCode = (context: MeasureContext) => {
+  return (
+    '{' +
+    Object.entries(context).reduce((acc, [key, value]) => {
+      acc =
+        acc +
+        `'${key.slice(1, -1)}': ${
+          value && 'composeCode' in value ? value.composeCode : JSON.stringify(value)
+        },`;
+
+      return acc;
+    }, '') +
+    '}'
+  );
+};
+
+/**
+ * Creates a measure from the provided parameters
+ *
+ * @returns calculated measure
+ *
+ * @internal
+ */
+export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeasure => {
+  const sortEnum = convertSort(jaql.sort);
+
+  const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) => {
+    if (typeof jaqlContextValue === 'string') {
+      return jaqlContextValue;
+    }
+    return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
+  });
+
+  const composeCode = `measureFactory.customFormula('${escapeSingleQuotes(jaql.title)}', '${
+    jaql.formula
+  }', ${getContextComposeCode(context)})`;
+
+  return new DimensionalCalculatedMeasure(
+    jaql.title,
+    jaql.formula,
+    context,
+    undefined,
+    undefined,
+    sortEnum,
+    composeCode,
+  );
+};
+
+/**
+ * Creates a dimensional element from a JAQL object.
+ * @param jaql - The JAQL object.
+ * @param datetimeFormat - The datetime format.
+ * @returns The created dimensional element.
+ *
+ * @internal
+ */
+export function createDimensionalElementFromJaql(jaql: Jaql, datetimeFormat?: string) {
+  const isFilterJaql = 'filter' in jaql;
+  if (isFilterJaql) {
+    return createFilterFromJaql(jaql);
+  }
+
+  const isFormulaJaql = 'formula' in jaql;
+  if (isFormulaJaql) {
+    return createCalculatedMeasureHelper(jaql);
+  }
+
+  const dataSource = 'datasource' in jaql ? jaql.datasource : undefined;
+
+  const hasAggregation = !!jaql.agg;
+  if (hasAggregation) {
+    return createMeasureHelper({
+      dim: jaql.dim,
+      table: jaql.table,
+      column: jaql.column,
+      dataType: jaql.datatype,
+      agg: jaql.agg || '',
+      level: jaql.level,
+      format: datetimeFormat,
+      sort: jaql.sort,
+      title: jaql.title,
+      dataSource,
+    });
+  }
+
+  return createAttributeHelper({
+    dim: jaql.dim,
+    table: jaql.table,
+    column: jaql.column,
+    dataType: jaql.datatype,
+    level: jaql.level,
+    format: datetimeFormat,
+    sort: jaql.sort,
+    title: jaql.title,
+    dataSource,
+  });
 }

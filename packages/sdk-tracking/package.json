@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.28.0",
+  "version": "1.29.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {
   WidgetById,
-  type WidgetByIdProps,
+  type WidgetByIdProps as WidgetByIdPropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -20,6 +20,8 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface WidgetByIdProps extends WidgetByIdPropsPreact {}
 
 /**
  * The `WidgetById` component, which is a thin wrapper on {@link ChartWidgetComponent},

@@ -195,6 +195,8 @@ export const getStackableChartDesignOptions = (
     ...style,
     designPerSeries,
     stackType: DefaultStackType,
+    showTotal: styleOptions.totalLabels?.enabled ?? false,
+    totalLabelRotation: styleOptions.totalLabels?.rotation ?? 0,
   };
 };
 

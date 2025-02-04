@@ -1,7 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type BarChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type BarChartProps as BarChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+export interface BarChartProps
+  extends WithoutPreactChartEventProps<BarChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component representing categorical data with horizontal rectangular bars,
@@ -70,9 +77,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -123,7 +130,7 @@ export class BarChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: BarChartProps['onBeforeRender'];
+  beforeRender: BarChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!BarChartProps.onDataReady}
@@ -132,7 +139,7 @@ export class BarChartComponent {
    * @internal
    */
   @Input()
-  dataReady: BarChartProps['onDataReady'];
+  dataReady: BarChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointClick}
@@ -140,9 +147,7 @@ export class BarChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<BarChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointContextMenu}
@@ -150,9 +155,7 @@ export class BarChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<BarChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointsSelected}
@@ -160,9 +163,7 @@ export class BarChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<BarChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'bar';

@@ -11,7 +11,7 @@ import { cloneFilterAndToggleDisabled } from '@/utils/filters';
 import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members';
 
 /**
- * Props for {@link MemberFilterTile}
+ * Props for {@link @sisense/sdk-ui!MemberFilterTile | `MemberFilterTile`}
  */
 export interface MemberFilterTileProps {
   /** Title for the filter tile, which is rendered into the header */

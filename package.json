@@ -1,5 +1,5 @@
 {
-  "version": "1.28.0",
+  "version": "1.29.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -81,7 +81,8 @@
     "docs:serve:internal": "node ./scripts/serve-static.cjs docs-internal",
     "docs:gen:md": "./scripts/gen-docs-md.sh",
     "docs:check:md": "./scripts/check-docs-md.sh",
-    "docs:diff:ui": "./scripts/diff-docs-ui.sh",
+    "docs:frameworks:diff": "./scripts/diff-docs-ui.sh",
+    "docs:frameworks:diff:full": "FULL_DIFF_REPORT=true ./scripts/diff-docs-ui.sh",
     "prepare": "husky install",
     "nx:build": "nx run-many --exclude @sisense/root -t build",
     "nx:build:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t build",

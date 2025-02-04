@@ -177,7 +177,7 @@ This callback is not supported for Areamap Chart, Scattermap Chart, Table, and P
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< `ArgumentsAsObject`\< [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointClick**: `EventEmitter`\< [`ChartDataPointEvent`](../type-aliases/type-alias.ChartDataPointEvent.md) \>
 
 Click handler callback for a data point
 
@@ -185,7 +185,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< `ArgumentsAsObject`\< [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| `undefined`, [`"point"`, `"nativeEvent"`] \> \>
+> **dataPointContextMenu**: `EventEmitter`\< [`ChartDataPointEvent`](../type-aliases/type-alias.ChartDataPointEvent.md) \>
 
 Context menu handler callback for a data point
 
@@ -193,6 +193,6 @@ Context menu handler callback for a data point
 
 #### dataPointsSelect
 
-> **dataPointsSelect**: `EventEmitter`\< `ArgumentsAsObject`\< [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md) \| `undefined`, [`"points"`, `"nativeEvent"`] \> \>
+> **dataPointsSelect**: `EventEmitter`\< [`ChartDataPointsEvent`](../type-aliases/type-alias.ChartDataPointsEvent.md) \>
 
 Handler callback for selection of multiple data points

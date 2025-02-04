@@ -28,3 +28,21 @@ export * from './lib/sdk-ui.module';
 export * from './lib/components';
 export * from './lib/services';
 export * from './lib/sdk-ui-core-exports';
+export type {
+  DataPointEvent,
+  AreamapDataPointEvent,
+  BoxplotDataPointEvent,
+  ScatterDataPointEvent,
+  ScattermapDataPointEvent,
+  ChartDataPointEvent,
+  DataPointsEvent,
+  ChartDataPointsEvent,
+  ScatterDataPointsEvent,
+  DataPointEventHandler,
+  ScattermapDataPointEventHandler,
+  AreamapDataPointEventHandler,
+  BoxplotDataPointEventHandler,
+  DataPointsEventHandler,
+  ScatterDataPointEventHandler,
+  ScatterDataPointsEventHandler,
+} from './lib/types';

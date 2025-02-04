@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type ScatterChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type ScatterChartProps as ScatterChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface ScatterChartProps
+  extends WithoutPreactChartEventProps<ScatterChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component displaying the distribution of two variables on an X-Axis, Y-Axis,
@@ -71,9 +79,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -124,7 +132,7 @@ export class ScatterChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: ScatterChartProps['onBeforeRender'];
+  beforeRender: ScatterChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!ScatterChartProps.onDataReady}
@@ -133,7 +141,7 @@ export class ScatterChartComponent {
    * @internal
    */
   @Input()
-  dataReady: ScatterChartProps['onDataReady'];
+  dataReady: ScatterChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
@@ -141,9 +149,7 @@ export class ScatterChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<ScatterChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointContextMenu}
@@ -151,9 +157,7 @@ export class ScatterChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<ScatterChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointsSelected}
@@ -161,9 +165,7 @@ export class ScatterChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<ScatterChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'scatter';

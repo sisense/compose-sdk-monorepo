@@ -7,7 +7,7 @@ import {
   DimensionalMeasureTemplate,
 } from './measures.js';
 import { DimensionalAttribute } from '../attributes.js';
-import { AggregationTypes } from '../types.js';
+import { AggregationTypes, Sort } from '../types.js';
 
 describe('Measures jaql preparations', () => {
   it('must prepare simple measure jaql', () => {
@@ -71,6 +71,65 @@ describe('Measures jaql preparations', () => {
     const jaql = measure.jaql();
 
     expect(jaql).toStrictEqual(result);
+  });
+
+  it('must prepare template measure jaql', () => {
+    const result = {
+      jaql: { title: 'sum Cost', agg: 'sum', dim: '[Commerce.Cost]', datatype: 'numeric' },
+    };
+    const measure = new DimensionalMeasureTemplate(
+      'Count',
+      new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
+    );
+
+    const jaql = measure.jaql();
+
+    expect(jaql).toStrictEqual(result);
+  });
+});
+
+describe('Measures with composeCode', () => {
+  const MOCK_COMPOSE_CODE = 'someCode';
+  it('must prepare simple measure with composeCode', () => {
+    const measure = new DimensionalBaseMeasure(
+      'Cost',
+      new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+      'sum',
+      undefined,
+      undefined,
+      undefined,
+      MOCK_COMPOSE_CODE,
+    );
+    expect(measure.composeCode).toEqual(MOCK_COMPOSE_CODE);
+    expect(measure.format('someFormat').composeCode).toEqual(MOCK_COMPOSE_CODE);
+    expect(measure.sort(Sort.Descending).composeCode).toEqual(MOCK_COMPOSE_CODE);
+  });
+
+  it('must prepare calculated measure with composeCode', () => {
+    const measure = new DimensionalCalculatedMeasure(
+      'sum([Cost] + [Total Revenue])',
+      'sum([M1] + [M2])',
+      {
+        '[M1]': new DimensionalBaseMeasure(
+          'Revenue',
+          new DimensionalAttribute('[Commerce.Revenue]', '[Commerce.Revenue]', 'numeric-attribute'),
+          'sum',
+        ),
+        '[M2]': new DimensionalBaseMeasure(
+          'Cost',
+          new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]', 'numeric-attribute'),
+          'sum',
+        ),
+      },
+      undefined,
+      undefined,
+      undefined,
+      MOCK_COMPOSE_CODE,
+    );
+
+    expect(measure.composeCode).toEqual(MOCK_COMPOSE_CODE);
+    expect(measure.format('someFormat').composeCode).toEqual(MOCK_COMPOSE_CODE);
+    expect(measure.sort(Sort.Descending).composeCode).toEqual(MOCK_COMPOSE_CODE);
   });
 
   it('must prepare template measure jaql', () => {

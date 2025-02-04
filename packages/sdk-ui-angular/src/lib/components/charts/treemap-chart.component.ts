@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type TreemapChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type TreemapChartProps as TreemapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface TreemapChartProps
+  extends WithoutPreactChartEventProps<TreemapChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component displaying hierarchical data in the form of nested rectangles.
@@ -69,9 +77,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -122,7 +130,7 @@ export class TreemapChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: TreemapChartProps['onBeforeRender'];
+  beforeRender: TreemapChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!TreemapChartProps.onDataReady}
@@ -131,7 +139,7 @@ export class TreemapChartComponent {
    * @internal
    */
   @Input()
-  dataReady: TreemapChartProps['onDataReady'];
+  dataReady: TreemapChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointClick}
@@ -139,9 +147,7 @@ export class TreemapChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<TreemapChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointContextMenu}
@@ -149,9 +155,7 @@ export class TreemapChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<TreemapChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointsSelected}
@@ -159,9 +163,7 @@ export class TreemapChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<TreemapChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'treemap';

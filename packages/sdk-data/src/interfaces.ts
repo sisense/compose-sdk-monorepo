@@ -143,11 +143,11 @@ export interface CalculatedMeasureColumn {
 export type DataSourceInfo = {
   /**
    * @internal
-   **/
+   */
   id?: string;
   /**
    * @internal
-   **/
+   */
   address?: string;
   title: string;
   type: 'live' | 'elasticube';

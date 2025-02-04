@@ -27,6 +27,7 @@ const fontFaceSetMock = {
   ...new Set(),
   ready: Promise.resolve({}),
   status: 'loaded',
+  add: vi.fn(),
 };
 if (!document.fonts) {
   Object.defineProperty(document, 'fonts', {

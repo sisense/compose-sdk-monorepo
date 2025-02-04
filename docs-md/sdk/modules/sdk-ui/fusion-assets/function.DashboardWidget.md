@@ -36,5 +36,5 @@ Display two dashboard widgets from a Fusion instance.
 `ReactElement`\< `any`, `any` \> \| `null`
 
 ::: warning Deprecated
-Use [WidgetById](function.WidgetById.md) instead.
+Use [`WidgetById`](function.WidgetById.md) instead.
 :::

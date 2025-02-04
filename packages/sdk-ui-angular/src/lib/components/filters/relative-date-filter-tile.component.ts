@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {
   RelativeDateFilterTile,
-  type RelativeDateFilterTileProps,
+  type RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -23,6 +23,11 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface RelativeDateFilterTileProps
+  extends Omit<RelativeDateFilterTilePropsPreact, 'onUpdate'> {
+  filterChange?: (filter: Arguments<RelativeDateFilterTilePropsPreact['onUpdate']>[0]) => void;
+}
 
 /**
  * Relative Date Filter Tile Component
@@ -105,7 +110,7 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
    */
   @Output()
   filterChange = new EventEmitter<
-    ArgumentsAsObject<RelativeDateFilterTileProps['onUpdate'], ['filter']>
+    ArgumentsAsObject<RelativeDateFilterTilePropsPreact['onUpdate'], ['filter']>
   >();
 
   private componentAdapter: ComponentAdapter;
@@ -161,7 +166,7 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
       filter: this.filter,
       arrangement: this.arrangement,
       limit: this.limit,
-      onUpdate: (...[filter]: Arguments<RelativeDateFilterTileProps['onUpdate']>) =>
+      onUpdate: (...[filter]: Arguments<RelativeDateFilterTilePropsPreact['onUpdate']>) =>
         this.filterChange.emit({ filter }),
     };
 

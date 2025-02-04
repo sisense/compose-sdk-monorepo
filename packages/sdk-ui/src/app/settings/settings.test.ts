@@ -1,6 +1,7 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { getSettings } from './settings';
 import * as mockGlobals from '@/__mocks__/data/mock-globals.json';
+import { SYSTEM_TENANT_NAME } from '@/const';
 
 const mockGet = vi.fn().mockImplementation((url) => {
   switch (url) {
@@ -91,5 +92,13 @@ describe('getSettings function', () => {
 
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/globals');
     expect(mockHttpClient.get).not.toHaveBeenCalledWith('api/palettes/Vivid');
+  });
+
+  it('sets tenant name to defult if there is not tenant in globals', async () => {
+    const settings = await getSettings(
+      {},
+      { get: vi.fn().mockResolvedValue({ ...mockGlobals, user: {} }), url: 'http://test.com/' },
+    );
+    expect(settings.user.tenant.name).toBe(SYSTEM_TENANT_NAME);
   });
 });

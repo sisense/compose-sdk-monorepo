@@ -261,6 +261,10 @@ export const translation: TranslationDictionary = {
       recommendationsNotAvailable:
         'Наразі рекомендації недоступні. Спробуйте ще раз через кілька хвилин.',
       insightsNotAvailable: 'Немає доступних інсайтів.',
+      VectorDBEmptyResponseError:
+        'AI ще конфігурується, будьласка зачекайте та спробуйте ще раз за хвилинку чи дві.',
+      LlmBadConfigurationError:
+        'Схоже що LLM невірно сконфігурований. Зверніться до вашого Адміністратора щоб він оновив конфігурацію LLM провайдера.',
       unexpectedChatResponse:
         'Ой, щось пішло не так. Повторіть спробу пізніше або спробуйте поставити інше запитання.',
       unexpected: 'Ой, лихо! Шось йому стало. Спробуйте трохи пізніше.',
@@ -278,6 +282,33 @@ export const translation: TranslationDictionary = {
     buttons: {
       apply: 'Застосувати',
       cancel: 'Відміна',
+      selectAll: 'Обрати всі',
+      clearAll: 'Очистити всі',
     },
+    labels: {
+      includeAll: 'Обрати всі (фільтр не використовується)',
+      allowMultiSelection: 'Дозволити вибір кількох значень для списків',
+    },
+    placeholders: {
+      selectFromList: 'Виберіть зі списку',
+      enterValue: 'Введіть значення...',
+    },
+    conditions: {
+      exclude: 'Не є',
+      contains: 'Mістить',
+      notContain: 'Не містить',
+      startsWith: 'Починається з',
+      notStartsWith: 'Не починається з',
+      endsWith: 'Закінчується на',
+      notEndsWith: 'Не закінчується на',
+      equals: 'Дорівнює',
+      notEquals: 'Не дорівнює',
+      isEmpty: 'Порожній',
+      isNotEmpty: 'Не порожній',
+    },
+  },
+  pivotTable: {
+    grandTotal: 'Загальний підсумок',
+    subTotal: 'Усього {{value}}',
   },
 };

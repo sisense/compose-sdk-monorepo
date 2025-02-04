@@ -8,7 +8,7 @@ import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { useGetNlgInsightsInternal } from '@/ai/use-get-nlg-insights';
 import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
-import { WidgetProps } from '@/props';
+import { ChartWidgetProps, WidgetProps } from '@/props';
 import { getFiltersArray } from '@/utils/filter-relations';
 import upperFirst from 'lodash-es/upperFirst';
 
@@ -34,6 +34,15 @@ export interface NlqChartWidgetProps {
    * Can be used to inject modification of queried data.
    */
   onDataReady?: (data: Data) => Data;
+
+  /**
+   * Boolean flag to show or hide the widget header
+   *
+   * Note: set to 'false' to hide the widget header
+   *
+   * @default true
+   */
+  enableHeader?: boolean;
 }
 
 /**
@@ -58,7 +67,12 @@ export interface NlqChartWidgetProps {
  * @group Generative AI
  * @internal
  */
-export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqChartWidgetProps) => {
+export const NlqChartWidget = ({
+  nlqResponse,
+  onDataReady,
+  filters = [],
+  enableHeader = true,
+}: NlqChartWidgetProps) => {
   nlqResponse.queryTitle = upperFirst(nlqResponse.queryTitle);
 
   const { connectToWidgetProps } = useCommonFilters({
@@ -72,6 +86,16 @@ export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqCh
     });
     if (!widgetProps) setChartWidgetProps(null);
     else {
+      if (!enableHeader) {
+        (widgetProps as ChartWidgetProps).styleOptions = {
+          ...(widgetProps as ChartWidgetProps).styleOptions,
+          header: {
+            ...(widgetProps as ChartWidgetProps).styleOptions?.header,
+            hidden: true,
+          },
+        };
+      }
+
       const connectedProps = connectToWidgetProps(widgetProps, {
         shouldAffectFilters: false,
         applyMode: 'filter',
@@ -79,7 +103,7 @@ export const NlqChartWidget = ({ nlqResponse, onDataReady, filters = [] }: NlqCh
 
       setChartWidgetProps(connectedProps);
     }
-  }, [nlqResponse, connectToWidgetProps]);
+  }, [nlqResponse, connectToWidgetProps, enableHeader]);
 
   const nlqResponseWithFilters = useMemo(() => {
     const filters =

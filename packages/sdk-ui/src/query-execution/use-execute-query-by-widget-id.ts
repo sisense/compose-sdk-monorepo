@@ -7,7 +7,6 @@ import {
   convertFilterRelationsModelToJaql,
   isPivotTableWidget,
   mergeFilters,
-  mergeFiltersByStrategy,
 } from '../widget-by-id/utils';
 import { isFiltersChanged } from '../utils/filters-comparator';
 import { ClientApplication } from '../app/client-application';
@@ -27,6 +26,7 @@ import { Filter, getFilterListAndRelationsJaql, QueryResultData } from '@sisense
 import { widgetModelTranslator } from '../models';
 import { useShouldLoad } from '../common/hooks/use-should-load';
 import { convertToQueryDescription } from './utils';
+import { mergeFiltersByStrategy } from '@/utils/filter-relations';
 
 /**
  * React hook that executes a data query extracted from an existing widget in the Sisense instance.

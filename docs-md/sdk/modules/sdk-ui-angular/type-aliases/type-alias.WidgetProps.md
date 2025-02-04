@@ -4,7 +4,7 @@ title: WidgetProps
 
 # Type alias WidgetProps
 
-> **WidgetProps**: [`CommonWidgetProps`](../../sdk-ui/type-aliases/type-alias.CommonWidgetProps.md) & \{
+> **WidgetProps**: [`CommonWidgetProps`](type-alias.CommonWidgetProps.md) & \{
   `id`: `string`;
  }
 

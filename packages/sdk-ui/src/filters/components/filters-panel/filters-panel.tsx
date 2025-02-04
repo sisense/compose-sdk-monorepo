@@ -1,6 +1,8 @@
+import { useRef, useState } from 'react';
 import { FilterTile } from '../filter-tile';
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import styled from '@emotion/styled';
+import isNumber from 'lodash-es/isNumber';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
@@ -12,12 +14,14 @@ import {
   splitFiltersAndRelations,
 } from '@/utils/filter-relations';
 import { FilterRelationsTile } from './filter-relations-tile';
+import { FilterEditorPopover } from '../filter-editor-popover/filter-editor-popover';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   border: 1px solid #dadada;
   width: fit-content;
-  min-width: 240px;
+  min-width: 238px;
   max-height: 100%;
   overflow: hidden;
 `;
@@ -60,6 +64,8 @@ export type FiltersPanelProps = {
   onFiltersChange: (filters: Filter[] | FilterRelations) => void;
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
+  /** @internal */
+  enableFilterEditor?: boolean;
 };
 
 /**
@@ -75,11 +81,14 @@ export const FiltersPanel = asSisenseComponent({
     filters: filtersOrFilterRelations,
     onFiltersChange,
     defaultDataSource,
+    enableFilterEditor = false,
   }: FiltersPanelProps) => {
     const { t } = useTranslation();
     const { themeSettings } = useThemeContext();
     const { filters, relations } = splitFiltersAndRelations(filtersOrFilterRelations);
     const filterList: (Filter | null)[] = [...filters];
+    const [editedFilterIndex, setEditedFilterIndex] = useState<number | null>(null);
+    const filterElementsRef = useRef<HTMLElement[]>([]);
 
     const handleFilterChange = (filter: Filter | null, index: number) => {
       if (!filters) return;
@@ -103,16 +112,34 @@ export const FiltersPanel = asSisenseComponent({
           <PanelBodyInner>
             {relations && <FilterRelationsTile relations={relations} filters={filters} />}
             {filters?.map((filter, index) => (
-              <div className="csdk-mt-[6px]" key={filter.config.guid}>
+              <div
+                className="csdk-mt-[6px]"
+                key={filter.config.guid}
+                ref={(el) => (filterElementsRef.current[index] = el as HTMLElement)}
+              >
                 <FilterTile
                   onDelete={() => handleFilterDelete(index)}
                   key={filter.config.guid}
                   filter={filter}
                   onChange={(newFilter) => handleFilterChange(newFilter, index)}
                   defaultDataSource={defaultDataSource}
+                  onEdit={enableFilterEditor ? () => setEditedFilterIndex(index) : undefined}
                 />
               </div>
             ))}
+            <FilterEditorPopover
+              filter={isNumber(editedFilterIndex) ? filterList[editedFilterIndex] : null}
+              position={
+                isNumber(editedFilterIndex)
+                  ? { anchorEl: filterElementsRef.current[editedFilterIndex] }
+                  : undefined
+              }
+              onChange={(filter: Filter) => {
+                handleFilterChange(filter, editedFilterIndex as number);
+                setEditedFilterIndex(null);
+              }}
+              onClose={() => setEditedFilterIndex(null)}
+            />
           </PanelBodyInner>
         </PanelBody>
       </PanelWrapper>

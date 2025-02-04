@@ -7,7 +7,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
   >
     <div
       class="css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255);"
+      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
     >
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -21,7 +21,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           >
             <div
               class="css-n759pn"
-              style="min-width: 215px; background-color: rgb(255, 255, 255);"
+              style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
             >
               <header
                 class="css-1yqya5g"
@@ -87,7 +87,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           >
             <div
               class="css-n759pn"
-              style="min-width: 213px; background-color: rgb(255, 255, 255);"
+              style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
             >
               <div
                 class="csdk-flex csdk-justify-center"

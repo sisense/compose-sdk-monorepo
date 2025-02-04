@@ -49,6 +49,7 @@ export const DashboardContainer = ({
   onFiltersChange,
   defaultDataSource,
   onChange,
+  enableFilterEditor = false,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
 
@@ -89,6 +90,7 @@ export const DashboardContainer = ({
               filters={filters}
               onFiltersChange={onFiltersChange}
               defaultDataSource={defaultDataSource}
+              enableFilterEditor={enableFilterEditor}
             />
           </div>
         </HorizontalCollapse>

@@ -1,4 +1,11 @@
-import { Attribute, Measure, Filter, QueryResultData, DataSource } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Measure,
+  Filter,
+  QueryResultData,
+  DataSource,
+  FilterRelationsJaql,
+} from '@sisense/sdk-data';
 import isNull from 'lodash-es/isNull';
 import { ClientApplication } from './app/client-application.js';
 import { executeQuery as executeQueryFunction } from './query/execute-query.js';
@@ -115,6 +122,7 @@ export const executeBoxplotQuery = async (
     attributes,
     measures,
     filters,
+    filterRelations,
     highlights,
   }: {
     app: ClientApplication;
@@ -123,6 +131,7 @@ export const executeBoxplotQuery = async (
     attributes: Attribute[];
     measures: Measure[];
     filters?: Filter[];
+    filterRelations?: FilterRelationsJaql;
     highlights?: Filter[];
   },
   executeQuery: typeof executeQueryFunction,
@@ -132,6 +141,7 @@ export const executeBoxplotQuery = async (
     dimensions: chartDataOptions.category ? [attributes[0]] : [],
     measures,
     filters,
+    filterRelations,
     highlights,
   };
 
@@ -148,6 +158,7 @@ export const executeBoxplotQuery = async (
       dimensions: attributes,
       measures: [],
       filters,
+      filterRelations,
       highlights,
     };
     try {

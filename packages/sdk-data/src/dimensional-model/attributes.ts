@@ -32,8 +32,9 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
     desc?: string,
     sort?: Sort,
     dataSource?: JaqlDataSource,
+    composeCode?: string,
   ) {
-    super(name, type || MetadataTypes.Attribute, desc, dataSource);
+    super(name, type || MetadataTypes.Attribute, desc, dataSource, composeCode);
 
     this.expression = expression;
     this._sort = sort || Sort.None;
@@ -69,6 +70,7 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
       this.description,
       sort,
       this.dataSource,
+      this.composeCode,
     );
   }
 
@@ -125,8 +127,9 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     desc?: string,
     sort?: Sort,
     dataSource?: JaqlDataSource,
+    composeCode?: string,
   ) {
-    super(l, expression, MetadataTypes.DateLevel, desc, sort, dataSource);
+    super(l, expression, MetadataTypes.DateLevel, desc, sort, dataSource, composeCode);
 
     this._format = format;
     this.granularity = granularity;
@@ -172,6 +175,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       this.description,
       sort,
       this.dataSource,
+      this.composeCode,
     );
   }
 
@@ -199,6 +203,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       this.description,
       this._sort,
       this.dataSource,
+      this.composeCode,
     );
   }
 

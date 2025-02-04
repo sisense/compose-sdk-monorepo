@@ -1,0 +1,41 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Button Component > should match the snapshot when variant gray 1`] = `
+<button
+  class="MuiButtonBase-root MuiButton-root MuiButton-gray MuiButton-grayPrimary MuiButton-sizeMedium MuiButton-graySizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-gray MuiButton-grayPrimary MuiButton-sizeMedium MuiButton-graySizeMedium MuiButton-colorPrimary css-nlk8yv-MuiButtonBase-root-MuiButton-root"
+  tabindex="0"
+  type="button"
+>
+  Variant Gray
+</button>
+`;
+
+exports[`Button Component > should match the snapshot when variant primary 1`] = `
+<button
+  class="MuiButtonBase-root MuiButton-root MuiButton-primary MuiButton-primaryPrimary MuiButton-sizeMedium MuiButton-primarySizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-primary MuiButton-primaryPrimary MuiButton-sizeMedium MuiButton-primarySizeMedium MuiButton-colorPrimary css-1fw694k-MuiButtonBase-root-MuiButton-root"
+  tabindex="0"
+  type="button"
+>
+  Variant Primary
+</button>
+`;
+
+exports[`Button Component > should match the snapshot when variant secondary 1`] = `
+<button
+  class="MuiButtonBase-root MuiButton-root MuiButton-secondary MuiButton-secondaryPrimary MuiButton-sizeMedium MuiButton-secondarySizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-secondary MuiButton-secondaryPrimary MuiButton-sizeMedium MuiButton-secondarySizeMedium MuiButton-colorPrimary css-rhvemw-MuiButtonBase-root-MuiButton-root"
+  tabindex="0"
+  type="button"
+>
+  Variant Secondary
+</button>
+`;
+
+exports[`Button Component > should match the snapshot when variant text 1`] = `
+<button
+  class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1rk2iuf-MuiButtonBase-root-MuiButton-root"
+  tabindex="0"
+  type="button"
+>
+  Variant Text
+</button>
+`;

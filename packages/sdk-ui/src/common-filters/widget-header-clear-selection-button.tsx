@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 const ClearSelectionButton = styled.button<Themable>`
   color: ${({ theme }) => theme.chart?.textColor};
-  background-color: ${({ theme }) => theme.chart?.backgroundColor};
+  background: none;
   font-size: 13px;
   border: none;
-  height: 28px;
-  padding: 0 11px 0 9px;
+  height: 26px;
+  padding: 0 6px 0 2px;
+  margin: 0 4px 0 4px;
   border-radius: 4px;
   cursor: pointer;
   display: flex;

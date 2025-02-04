@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {
   DashboardById,
-  type DashboardByIdProps,
+  type DashboardByIdProps as DashboardByIdPropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -23,6 +23,7 @@ import {
 import { template, rootId } from '../../component-wrapper-helpers/template';
 import { PluginsService } from '../../services/plugins.service';
 
+export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
  *

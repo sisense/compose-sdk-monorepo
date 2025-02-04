@@ -53,6 +53,7 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
  * }
  * ```
  * @group Fusion Assets
+ * @deprecated Use the `widget-by-id` component instead.
  * @fusionEmbed
  */
 @Component({

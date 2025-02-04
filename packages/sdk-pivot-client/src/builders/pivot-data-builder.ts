@@ -117,8 +117,11 @@ export class PivotDataBuilder {
     columnType: string,
     grid?: Array<Array<TreeNode | string>>,
   ): Column[] {
-    const columns: Column[] = [];
+    if (!grid || grid.length === 0) {
+      return [];
+    }
 
+    const columns: Column[] = [];
     grid?.[0].forEach((cell) => {
       if (typeof cell === 'string') return;
 
@@ -132,18 +135,13 @@ export class PivotDataBuilder {
   private transformTreeStructuresToResultData(pivotTreeData: InitPageData): PivotQueryResultData {
     const { rowsTreeService, columnsTreeService, cornerTreeService } = pivotTreeData;
 
-    if (!rowsTreeService || !columnsTreeService || !cornerTreeService) {
+    if (!rowsTreeService && !columnsTreeService && !cornerTreeService) {
       return EMPTY_PIVOT_QUERY_RESULT_DATA;
     }
 
-    let cornerGrid: PivotGrid = [];
-    cornerGrid = cornerTreeService.getGrid();
-
-    let columnsGrid: PivotGrid = [];
-    columnsGrid = columnsTreeService.getGrid();
-
-    let rowsGrid: PivotGrid = [];
-    rowsGrid = rowsTreeService.getGrid();
+    const cornerGrid: PivotGrid = cornerTreeService ? cornerTreeService.getGrid() : [];
+    const columnsGrid: PivotGrid = columnsTreeService ? columnsTreeService.getGrid() : [];
+    const rowsGrid: PivotGrid = rowsTreeService ? rowsTreeService.getGrid() : [];
 
     const cornerColumns = this.transformGridToColumns('string', cornerGrid);
 
@@ -152,10 +150,11 @@ export class PivotDataBuilder {
 
     const FILL_IN_THE_BLANKS = true;
 
-    let valuesGrid: PivotGrid = [];
-    valuesGrid = rowsTreeService.extractData(columnsTreeService);
+    const valuesGrid: PivotGrid = rowsTreeService
+      ? rowsTreeService.extractData(columnsTreeService)
+      : [];
 
-    const rowCount = valuesGrid.length;
+    const rowCount = rowsGrid.length;
     const columnCount = columns.length;
 
     const rows: Cell[][] = [];

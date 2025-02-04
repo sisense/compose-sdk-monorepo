@@ -94,8 +94,6 @@ export * as measureFactory from './dimensional-model/measures/factory.js';
 
 export * from './dimensional-model/simple-column-types.js';
 
-export * from './dimensional-model/filter-relations.js';
-
 /**
  * Functions to create elements for advanced analytics – for example, attributes and measures for constructing a custom Boxplot chart
  *
@@ -104,6 +102,8 @@ export * from './dimensional-model/filter-relations.js';
 export * as analyticsFactory from './dimensional-model/analytics/factory.js';
 
 export * from './utils.js';
+
+export * from './dimensional-model/filters/index.js';
 
 export {
   type TranslationDictionary,

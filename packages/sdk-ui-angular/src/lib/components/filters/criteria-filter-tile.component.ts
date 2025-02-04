@@ -13,7 +13,7 @@ import {
   ComponentAdapter,
   createElement,
   CriteriaFilterTile,
-  type CriteriaFilterTileProps,
+  type CriteriaFilterTileProps as CriteriaFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
@@ -23,6 +23,10 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface CriteriaFilterTileProps extends Omit<CriteriaFilterTilePropsPreact, 'onUpdate'> {
+  filterChange?: (filter: Arguments<CriteriaFilterTilePropsPreact['onUpdate']>[0]) => void;
+}
 
 /**
  * Criteria Filter Tile Component
@@ -104,7 +108,7 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
    */
   @Output()
   filterChange = new EventEmitter<
-    ArgumentsAsObject<CriteriaFilterTileProps['onUpdate'], ['filter']>
+    ArgumentsAsObject<CriteriaFilterTilePropsPreact['onUpdate'], ['filter']>
   >();
 
   private componentAdapter: ComponentAdapter;
@@ -161,7 +165,7 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
       arrangement: this.arrangement,
       measures: this.measures,
       tileDesignOptions: this.tileDesignOptions,
-      onUpdate: (...[filter]: Arguments<CriteriaFilterTileProps['onUpdate']>) =>
+      onUpdate: (...[filter]: Arguments<CriteriaFilterTilePropsPreact['onUpdate']>) =>
         this.filterChange.emit({ filter }),
     };
 

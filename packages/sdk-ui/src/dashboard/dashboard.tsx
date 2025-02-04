@@ -72,6 +72,7 @@ export const Dashboard = asSisenseComponent({
     widgetsOptions,
     styleOptions,
     onChange,
+    enableFilterEditor = false,
   }: DashboardProps) => {
     const { themeSettings } = useDashboardThemeInternal({ styleOptions });
 
@@ -105,6 +106,7 @@ export const Dashboard = asSisenseComponent({
           filters={dashboardFilters}
           onFiltersChange={setFilters}
           onChange={onChange}
+          enableFilterEditor={enableFilterEditor}
         />
       </ThemeProvider>
     );

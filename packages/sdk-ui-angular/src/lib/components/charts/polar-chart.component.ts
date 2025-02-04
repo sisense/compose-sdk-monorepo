@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type PolarChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type PolarChartProps as PolarChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface PolarChartProps
+  extends WithoutPreactChartEventProps<PolarChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component comparing multiple categories/variables with a spacial perspective in a radial chart.
@@ -68,9 +76,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -121,7 +129,7 @@ export class PolarChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: PolarChartProps['onBeforeRender'];
+  beforeRender: PolarChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!PolarChartProps.onDataReady}
@@ -130,7 +138,7 @@ export class PolarChartComponent {
    * @internal
    */
   @Input()
-  dataReady: PolarChartProps['onDataReady'];
+  dataReady: PolarChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointClick}
@@ -138,9 +146,7 @@ export class PolarChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<PolarChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointContextMenu}
@@ -148,9 +154,7 @@ export class PolarChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<PolarChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointsSelected}
@@ -158,9 +162,7 @@ export class PolarChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<PolarChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'polar';

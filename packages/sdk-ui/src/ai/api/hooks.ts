@@ -5,6 +5,7 @@ import type { ChatMessage, ChatResponse } from './types';
 import { useChatApi } from './chat-api-provider';
 import { CHAT_HISTORY_QUERY_KEY } from './chat-history';
 import { useTranslation } from 'react-i18next';
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * @internal
@@ -131,11 +132,13 @@ export const useSendChatMessage = (
         role: 'user',
       });
     },
-    onError: (error) => {
+    onError: (error: TranslatableError) => {
       if (error instanceof Error) {
         console.error('Error when sending message:', error.message);
         appendToHistory({
-          content: t('errors.unexpectedChatResponse'),
+          content: t(`ai.errors.${error.interpolationOptions.errorCode}`, {
+            defaultValue: t('ai.errors.unexpectedChatResponse'),
+          }),
           role: 'assistant',
         });
       }

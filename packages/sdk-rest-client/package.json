@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.28.0",
+  "version": "1.29.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -20,7 +20,7 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "^1.28.0"
+    "@sisense/sdk-common": "^1.29.0"
   },
   "scripts": {
     "type-check": "tsc --noEmit",

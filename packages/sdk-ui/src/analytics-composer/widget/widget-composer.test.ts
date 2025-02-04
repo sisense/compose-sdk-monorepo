@@ -14,7 +14,15 @@ import { commonDataSources } from '../__mocks__/common-datasources';
 import * as widgetComposer from './widget-composer';
 import { ExpandedQueryModel, WidgetCodeParams } from '../types';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
-import { widgetModelTranslator, ChartWidgetProps } from '@/index';
+import { widgetModelTranslator, ChartWidgetProps, WidgetDto } from '@/index';
+import {
+  MOCK_WIDGET_CODE_COMPLEX_CHART,
+  MOCK_WIDGET_CODE_LINE_CHART,
+  MOCK_WIDGET_CODE_PIVOT_TABLE,
+  MOCK_WIDGET_DTO_COMPLEX_CHART,
+  MOCK_WIDGET_DTO_LINE_CHART,
+  MOCK_WIDGET_DTO_PIVOT_TABLE,
+} from '../__mocks__/mock-widgets';
 
 describe('widgetComposer', () => {
   describe('toWidgetProps', () => {
@@ -67,7 +75,7 @@ describe('widgetComposer', () => {
     });
   });
 
-  describe('toWidgetCode Client Side', () => {
+  describe('toWidgetCode from Query Model', () => {
     let widgetCodeParams: WidgetCodeParams;
     beforeEach(() => {
       const widgetProps = widgetComposer.toWidgetProps(MOCK_QUERY_MODEL_1);
@@ -99,6 +107,28 @@ describe('widgetComposer', () => {
       expect(widgetComposer.toWidgetCode({ ...widgetCodeParams, uiFramework: 'angular' })).toBe(
         'Not implemented yet',
       );
+    });
+  });
+
+  describe('toWidgetCode from WidgetDto', () => {
+    const testHelper = (widgetDto: WidgetDto, expectedWidgetCode: string) => {
+      const widgetProps = widgetModelTranslator.toWidgetProps(
+        widgetModelTranslator.fromWidgetDto(widgetDto),
+      );
+      const widgetCodeParams: WidgetCodeParams = { widgetProps }; // react by default
+      const widgetCode = widgetComposer.toWidgetCode(widgetCodeParams);
+      expect(widgetCode).toEqual(expectedWidgetCode);
+    };
+    it('should compose widget code for line chart', () => {
+      testHelper(MOCK_WIDGET_DTO_LINE_CHART, MOCK_WIDGET_CODE_LINE_CHART);
+    });
+
+    it('should compose widget code for complex chart', () => {
+      testHelper(MOCK_WIDGET_DTO_COMPLEX_CHART, MOCK_WIDGET_CODE_COMPLEX_CHART);
+    });
+
+    it('should compose widget code for simple pivot table', () => {
+      testHelper(MOCK_WIDGET_DTO_PIVOT_TABLE, MOCK_WIDGET_CODE_PIVOT_TABLE);
     });
   });
 

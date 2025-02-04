@@ -4,12 +4,13 @@ import ButtonMui from '@mui/material/Button';
 type ButtonProps = {
   children: ReactNode;
   type?: 'primary' | 'secondary';
+  disabled?: boolean;
   onClick?: () => void;
 };
 
 /** @internal */
 export const Button = (props: ButtonProps) => {
-  const { children, type = 'primary', onClick, ...restProps } = props;
+  const { children, type = 'primary', disabled, onClick, ...restProps } = props;
   return (
     <ButtonMui
       variant="contained"
@@ -28,8 +29,14 @@ export const Button = (props: ButtonProps) => {
           backgroundColor: type === 'primary' ? '#f2b900' : '#d0d3db',
           boxShadow: 'none',
         },
+        '&[disabled]': {
+          backgroundColor: type === 'primary' ? '#ffcb05' : '#edeef1',
+          color: '#3a4356',
+          opacity: 0.4,
+        },
       }}
       onClick={onClick}
+      disabled={disabled}
       {...restProps}
     >
       {children}

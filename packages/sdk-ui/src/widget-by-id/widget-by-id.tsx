@@ -2,13 +2,16 @@ import { useCallback, type FunctionComponent } from 'react';
 import { ChartWidget } from '../widgets/chart-widget.js';
 import { WidgetByIdProps, WidgetProps } from '../props.js';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component.js';
-import { isChartWidgetProps, isPivotTableWidgetProps, mergeFiltersByStrategy } from './utils.js';
+import { isChartWidgetProps, isPivotTableWidgetProps } from './utils.js';
 import { dashboardModelTranslator, widgetModelTranslator } from '../models/index.js';
 import { PivotTableWidget } from '@/widgets/pivot-table-widget';
 import { isTextWidgetProps, TextWidget } from '@/widgets/text-widget';
 import { useCommonFilters } from '@/common-filters/use-common-filters.js';
 import { useGetDashboardModelAndWidgetModel } from './use-get-dashboard-model-and-widget-model.js';
 import flow from 'lodash-es/flow';
+import omitBy from 'lodash-es/omitBy';
+import isUndefined from 'lodash-es/isUndefined';
+import { mergeFiltersByStrategy } from '@/utils/filter-relations.js';
 
 /**
  * The WidgetById component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -119,14 +122,17 @@ export const WidgetById: FunctionComponent<WidgetByIdProps> = asSisenseComponent
     withHighlightsFromProps,
   ])(widgetProps);
 
+  // Remove undefined props from external props to avoid overwriting defaults from widget model
+  const nonEmptyExternalProps = omitBy(restProps, isUndefined);
+
   if (isTextWidgetProps(updatedWidgetProps)) {
-    return <TextWidget {...updatedWidgetProps} />;
+    return <TextWidget {...updatedWidgetProps} {...nonEmptyExternalProps} />;
   }
   if (isPivotTableWidgetProps(updatedWidgetProps)) {
     return (
       <PivotTableWidget
         {...updatedWidgetProps}
-        {...restProps}
+        {...nonEmptyExternalProps}
         styleOptions={{
           ...updatedWidgetProps.styleOptions,
           ...props.styleOptions,
@@ -139,7 +145,7 @@ export const WidgetById: FunctionComponent<WidgetByIdProps> = asSisenseComponent
     return (
       <ChartWidget
         {...updatedWidgetProps}
-        {...restProps}
+        {...nonEmptyExternalProps}
         drilldownOptions={{
           ...updatedWidgetProps.drilldownOptions,
           ...props.drilldownOptions,

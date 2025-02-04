@@ -1,7 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type BoxplotChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type BoxplotChartProps as BoxplotChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+export interface BoxplotChartProps
+  extends WithoutPreactChartEventProps<BoxplotChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * An Angular component representing data in a way that visually describes the distribution
@@ -63,9 +70,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -116,7 +123,7 @@ export class BoxplotChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: BoxplotChartProps['onBeforeRender'];
+  beforeRender: BoxplotChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!BoxplotChartProps.onDataReady}
@@ -125,7 +132,7 @@ export class BoxplotChartComponent {
    * @internal
    */
   @Input()
-  dataReady: BoxplotChartProps['onDataReady'];
+  dataReady: BoxplotChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointClick}
@@ -133,9 +140,7 @@ export class BoxplotChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<BoxplotChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
@@ -143,9 +148,7 @@ export class BoxplotChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<BoxplotChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointsSelected}
@@ -153,9 +156,7 @@ export class BoxplotChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<BoxplotChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'boxplot';

@@ -1,7 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type ScattermapChartProps } from '@sisense/sdk-ui-preact';
-import { ArgumentsAsObject } from '../../types';
+import { type ScattermapChartProps as ScattermapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
+import { DataPointEvent, DataPointEventHandler } from '../../types/data-point';
+
+export interface ScattermapChartProps
+  extends WithoutPreactChartEventProps<ScattermapChartPropsPreact>,
+    BaseChartEventProps {
+  dataPointClick?: DataPointEventHandler;
+}
 
 /**
  * An Angular component that allows to visualize geographical data as data points on a map.
@@ -63,7 +70,7 @@ export class AnalyticsComponent {
       [filters]="filters"
       [highlights]="highlights"
       [styleOptions]="styleOptions"
-      (dataPointClick)="dataPointClick.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
     />
   `,
 })
@@ -115,7 +122,7 @@ export class ScattermapChartComponent {
    * @internal
    */
   @Input()
-  dataReady: ScattermapChartProps['onDataReady'];
+  dataReady: ScattermapChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
@@ -123,9 +130,7 @@ export class ScattermapChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<ScattermapChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /** @internal */
   public chartType: ChartType = 'scattermap';

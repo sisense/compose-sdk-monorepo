@@ -18,4 +18,10 @@ title: sdk-data
 
 ## Filter Utilities
 
+- [findFilter](filter-utilities/function.findFilter.md)
 - [isFilterRelations](filter-utilities/function.isFilterRelations.md)
+- [withAddedFilter](filter-utilities/function.withAddedFilter.md)
+- [withAddedFilters](filter-utilities/function.withAddedFilters.md)
+- [withoutFilter](filter-utilities/function.withoutFilter.md)
+- [withoutFilters](filter-utilities/function.withoutFilters.md)
+- [withReplacedFilter](filter-utilities/function.withReplacedFilter.md)

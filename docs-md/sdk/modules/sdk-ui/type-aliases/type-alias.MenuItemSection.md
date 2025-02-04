@@ -7,7 +7,7 @@ title: MenuItemSection
 > **MenuItemSection**: `object`
 
 Context menu section
-Used in [ContextMenuProps](../interfaces/interface.ContextMenuProps.md)
+Used in [`ContextMenuProps`](../interfaces/interface.ContextMenuProps.md)
 
 ## Type declaration
 

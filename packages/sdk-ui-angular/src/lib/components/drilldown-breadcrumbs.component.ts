@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {
   DrilldownBreadcrumbs,
-  type DrilldownBreadcrumbsProps,
+  type DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -23,6 +23,14 @@ import {
   createThemeContextConnector,
 } from '../component-wrapper-helpers';
 import { template, rootId } from '../component-wrapper-helpers/template';
+
+export interface DrilldownBreadcrumbsProps
+  extends Omit<DrilldownBreadcrumbsPropsPreact, 'clearDrilldownSelections'> {
+  drilldownSelectionsClear?: () => void;
+  drilldownSelectionsSlice?: (event: {
+    i: Arguments<DrilldownBreadcrumbsPropsPreact['sliceDrilldownSelections']>[0];
+  }) => void;
+}
 
 /**
  * Drilldown Breadcrumbs Component
@@ -63,7 +71,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
    */
   @Output()
   drilldownSelectionsClear = new EventEmitter<
-    ArgumentsAsObject<DrilldownBreadcrumbsProps['clearDrilldownSelections'], []>
+    ArgumentsAsObject<DrilldownBreadcrumbsPropsPreact['clearDrilldownSelections'], []>
   >();
 
   /**
@@ -73,7 +81,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
    */
   @Output()
   drilldownSelectionsSlice = new EventEmitter<
-    Arguments<DrilldownBreadcrumbsProps['sliceDrilldownSelections']>[0]
+    Arguments<DrilldownBreadcrumbsPropsPreact['sliceDrilldownSelections']>[0]
   >();
 
   private componentAdapter: ComponentAdapter;

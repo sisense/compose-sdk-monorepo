@@ -33,11 +33,19 @@ export abstract class AbstractMeasure extends DimensionalElement {
 
   protected _format: string | undefined = '#,#.00';
 
-  constructor(name: string, type: string, format?: string, desc?: string, sort?: Sort) {
+  constructor(
+    name: string,
+    type: string,
+    format?: string,
+    desc?: string,
+    sort?: Sort,
+    composeCode?: string,
+  ) {
     super(name, type, desc);
 
     this._format = format;
     this._sort = sort || Sort.None;
+    this.composeCode = composeCode;
   }
 
   /**
@@ -176,8 +184,9 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
     format?: string,
     desc?: string,
     sort?: Sort,
+    composeCode?: string,
   ) {
-    super(name, MetadataTypes.BaseMeasure, format, desc, sort);
+    super(name, MetadataTypes.BaseMeasure, format, desc, sort, composeCode);
 
     this.attribute = attribute;
     this.aggregation = agg;
@@ -207,6 +216,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
       this._format,
       this.description,
       sort,
+      this.composeCode,
     );
   }
 
@@ -226,6 +236,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
       format,
       this.description,
       this._sort,
+      this.composeCode,
     );
   }
 
@@ -284,8 +295,9 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
     format?: string,
     desc?: string,
     sort?: Sort,
+    composeCode?: string,
   ) {
-    super(name, MetadataTypes.CalculatedMeasure, format, desc, sort);
+    super(name, MetadataTypes.CalculatedMeasure, format, desc, sort, composeCode);
 
     this.expression = expression;
     this.context = context;
@@ -315,6 +327,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       this._format,
       this.description,
       sort,
+      this.composeCode,
     );
   }
 
@@ -334,6 +347,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       format,
       this.description,
       this._sort,
+      this.composeCode,
     );
   }
 

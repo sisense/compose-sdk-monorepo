@@ -119,19 +119,16 @@ export type {
   IndicatorRenderOptions,
 
   // Dashboard:
-  DashboardProps,
   DashboardLayoutOptions,
   DashboardConfig,
   WidgetsPanelLayout,
   WidgetsPanelColumnLayout,
   WidgetId,
   WidgetsOptions,
-  WidgetProps,
 
   // General (Others):
   AppConfig,
   DateConfig,
-  ContextMenuProps,
   MenuItemSection,
   MonthOfYear,
   DayOfWeek,
@@ -151,4 +148,8 @@ export type {
   Member,
   FilterVariant,
   Hierarchy,
+
+  // Props:
+  CommonWidgetProps,
+  WidgetProps,
 } from '@sisense/sdk-ui-preact';

@@ -609,7 +609,7 @@ export interface BaseChartProps extends BaseChartEventProps {
    *
    * To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
    *
-   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link MemberFilterTile}.
+   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link @sisense/sdk-ui!MemberFilterTile | `MemberFilterTile`}.
    *
    * Use this option for filters that you want your users to set using pre-built UI components.
    *
@@ -634,7 +634,7 @@ export interface BaseChartProps extends BaseChartEventProps {
    * To learn more about using filter factory functions to create highlights, see the
    * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
    *
-   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link MemberFilterTile}.
+   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link @sisense/sdk-ui!MemberFilterTile | `MemberFilterTile`}.
    *
    * Use this option for highlights that you want your users to set using pre-built UI components.
    *
@@ -826,7 +826,7 @@ export interface ColumnChartProps
 }
 
 /**
- * Props of the {@link FunnelChart} component.
+ * Props of the {@link @sisense/sdk-ui!FunnelChart | `FunnelChart`} component.
  */
 export interface FunnelChartProps
   extends BaseChartProps,
@@ -847,7 +847,7 @@ export interface FunnelChartProps
 }
 
 /**
- * Props of the {@link LineChart} component.
+ * Props of the {@link @sisense/sdk-ui!LineChart | `LineChart`} component.
  */
 export interface LineChartProps
   extends BaseChartProps,
@@ -871,7 +871,7 @@ export interface LineChartProps
 }
 
 /**
- * Props of the {@link PieChart} component.
+ * Props of the {@link @sisense/sdk-ui!PieChart | `PieChart`} component.
  */
 export interface PieChartProps
   extends BaseChartProps,
@@ -892,7 +892,7 @@ export interface PieChartProps
 }
 
 /**
- * Props of the {@link PolarChart} component.
+ * Props of the {@link @sisense/sdk-ui!PolarChart | `PolarChart`} component.
  */
 export interface PolarChartProps
   extends BaseChartProps,
@@ -916,7 +916,7 @@ export interface PolarChartProps
 }
 
 /**
- * Props of the {@link IndicatorChart} component.
+ * Props of the {@link @sisense/sdk-ui!IndicatorChart | `IndicatorChart`} component.
  */
 export interface IndicatorChartProps extends BaseChartProps, IndicatorChartEventProps {
   /**
@@ -934,7 +934,7 @@ export interface IndicatorChartProps extends BaseChartProps, IndicatorChartEvent
 }
 
 /**
- * Props of the {@link Table} component.
+ * Props of the {@link @sisense/sdk-ui!Table | `Table`} component.
  */
 export interface TableProps extends BaseChartEventProps {
   /**
@@ -976,7 +976,7 @@ export interface TableProps extends BaseChartEventProps {
 }
 
 /**
- * Props of the {@link PivotTable} component.
+ * Props of the {@link @sisense/sdk-ui!PivotTable | `PivotTable`} component.
  */
 export interface PivotTableProps {
   /**
@@ -1026,7 +1026,7 @@ export interface PivotTableProps {
 }
 
 /**
- * Props of the {@link ScatterChart} component.
+ * Props of the {@link @sisense/sdk-ui!ScatterChart | `ScatterChart`} component.
  */
 export interface ScatterChartProps
   extends BaseChartProps,
@@ -1047,7 +1047,7 @@ export interface ScatterChartProps
 }
 
 /**
- * Props for the {@link WidgetById} component
+ * Props for the {@link @sisense/sdk-ui!WidgetById | `WidgetById`} component
  */
 export interface WidgetByIdProps
   extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'> {
@@ -1123,7 +1123,7 @@ export interface WidgetByIdProps
 /**
  * Props for the {@link DashboardWidget} component
  *
- * @deprecated Use {@link WidgetById} and {@link WidgetByIdProps} instead
+ * @deprecated Use {@link @sisense/sdk-ui!WidgetById | `WidgetById`} and {@link WidgetByIdProps} instead
  */
 export interface DashboardWidgetProps extends WidgetByIdProps {
   /**
@@ -1550,7 +1550,7 @@ export interface ExecuteQueryByWidgetIdProps {
 }
 
 /**
- * Props of the {@link TreemapChart} component.
+ * Props of the {@link @sisense/sdk-ui!TreemapChart | `TreemapChart`} component.
  */
 export interface TreemapChartProps
   extends BaseChartProps,
@@ -1571,7 +1571,7 @@ export interface TreemapChartProps
 }
 
 /**
- * Props of the {@link SunburstChart} component.
+ * Props of the {@link @sisense/sdk-ui!SunburstChart | `SunburstChart`} component.
  */
 export interface SunburstChartProps
   extends BaseChartProps,
@@ -1613,7 +1613,7 @@ export interface BoxplotChartProps
 }
 
 /**
- * Props of the {@link ScattermapChart} component.
+ * Props of the {@link @sisense/sdk-ui!ScattermapChart | `ScattermapChart`} component.
  */
 export interface ScattermapChartProps extends BaseChartProps, ScattermapChartEventProps {
   /**

@@ -130,6 +130,13 @@ describe('filter-relations', () => {
       expect(result).toBeNull();
     });
 
+    it('should return null when there are no prevRelations', () => {
+      const prevFilters = [filter1];
+      const newFilters = [filter1, filter2];
+      const result = calculateNewRelations(prevFilters, null, newFilters);
+      expect(result).toBeNull();
+    });
+
     it('should handle adding a filter', () => {
       const prevFilters = [filter1, filter2];
       const prevRelations: FilterRelationsRules = {

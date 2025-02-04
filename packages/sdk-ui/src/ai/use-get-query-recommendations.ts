@@ -5,11 +5,12 @@ import { useCallback } from 'react';
 import { useChatApi } from './api/chat-api-provider';
 import { QueryRecommendation } from './api/types';
 import { widgetComposer } from '@/analytics-composer';
+import { HookEnableParam } from '@/common/hooks/types';
 
 /**
  * Parameters for {@link useGetQueryRecommendations} hook.
  */
-export interface UseGetQueryRecommendationsParams {
+export interface UseGetQueryRecommendationsParams extends HookEnableParam {
   /** Data model title or perspective title */
   contextTitle: string;
 
@@ -40,7 +41,7 @@ export interface UseGetQueryRecommendationsState {
   /** Whether the data fetching has succeeded */
   isSuccess: boolean;
   /** The result data */
-  data: QueryRecommendation[];
+  data: QueryRecommendation[] | undefined;
   /** The error if any occurred */
   error: unknown;
   /** Callback to trigger a refetch of the data */
@@ -54,13 +55,13 @@ export interface UseGetQueryRecommendationsState {
 export const useGetQueryRecommendationsInternal = (
   params: UseGetQueryRecommendationsParams,
 ): UseGetQueryRecommendationsState => {
-  const { contextTitle, count, enableAxisTitlesInWidgetProps } = params;
+  const { contextTitle, count, enableAxisTitlesInWidgetProps, enabled } = params;
 
   const api = useChatApi();
 
   const recCount = count ?? 4;
 
-  const shouldGetRecommendations = recCount > 0;
+  const shouldGetRecommendations = (enabled === undefined || enabled === true) && recCount > 0;
 
   const { isLoading, isError, isSuccess, data, error, refetch } = useQuery({
     queryKey: ['getQueryRecommendations', contextTitle, recCount, api],
@@ -81,13 +82,13 @@ export const useGetQueryRecommendationsInternal = (
 
   return {
     isLoading: shouldGetRecommendations ? isLoading : false,
-    isError: shouldGetRecommendations ? isError : false,
-    isSuccess: shouldGetRecommendations ? isSuccess : false,
-    data: shouldGetRecommendations && data ? data : [],
-    error: shouldGetRecommendations ? error : null,
+    isError: isError,
+    isSuccess: isSuccess,
+    data: data ?? undefined,
+    error: error,
     refetch: useCallback(() => {
-      if (shouldGetRecommendations) refetch();
-    }, [refetch, shouldGetRecommendations]),
+      refetch();
+    }, [refetch]),
   };
 };
 

@@ -35,7 +35,13 @@ export abstract class DimensionalElement implements Element {
     return this._dataSource;
   }
 
-  constructor(name: string, type: string, desc?: string, dataSource?: JaqlDataSource) {
+  constructor(
+    name: string,
+    type: string,
+    desc?: string,
+    dataSource?: JaqlDataSource,
+    composeCode?: string,
+  ) {
     this._name = name;
     this.type = type;
     this.description = desc || '';
@@ -43,6 +49,8 @@ export abstract class DimensionalElement implements Element {
     if (dataSource) {
       this._dataSource = dataSource;
     }
+
+    this.composeCode = composeCode;
   }
 
   /**
@@ -59,6 +67,13 @@ export abstract class DimensionalElement implements Element {
    * gets the element's ID
    */
   abstract get id(): string;
+
+  /**
+   * Optional CSDK code to initialize this element
+   *
+   * @internal
+   */
+  composeCode?: string;
 
   /**
    * Gets a serializable representation of the element

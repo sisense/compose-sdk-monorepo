@@ -403,6 +403,20 @@ export type PanelColorFormatConditionOperator =
 type LabelsStyle = {
   enabled: boolean;
   rotation: number;
+  /**
+   * @internal
+   */
+  labels?: {
+    enabled?: boolean;
+    stacked?: boolean;
+    stackedPercentage?: boolean;
+    types?: {
+      count?: boolean;
+      percentage?: boolean;
+      relative?: boolean;
+      totals?: boolean;
+    };
+  };
 };
 
 type AxisTitleStyle = {

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {
   DateRangeFilterTile,
-  type DateRangeFilterTileProps,
+  type DateRangeFilterTileProps as DateRangeFilterTilePropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -23,6 +23,10 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface DateRangeFilterTileProps extends Omit<DateRangeFilterTilePropsPreact, 'onChange'> {
+  filterChange?: (filter: Arguments<DateRangeFilterTilePropsPreact['onChange']>[0]) => void;
+}
 
 /**
  * Date Range Filter Tile Component
@@ -117,7 +121,7 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
    */
   @Output()
   filterChange = new EventEmitter<
-    ArgumentsAsObject<DateRangeFilterTileProps['onChange'], ['filter']>
+    ArgumentsAsObject<DateRangeFilterTilePropsPreact['onChange'], ['filter']>
   >();
 
   private componentAdapter: ComponentAdapter;
@@ -175,7 +179,7 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
       filter: this.filter,
       earliestDate: this.earliestDate,
       lastDate: this.lastDate,
-      onChange: (...[filter]: Arguments<DateRangeFilterTileProps['onChange']>) =>
+      onChange: (...[filter]: Arguments<DateRangeFilterTilePropsPreact['onChange']>) =>
         this.filterChange.emit({ filter }),
     };
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {
   TableWidget,
-  type TableWidgetProps,
+  type TableWidgetProps as TableWidgetPropsPreact,
   ComponentAdapter,
   createElement,
 } from '@sisense/sdk-ui-preact';
@@ -20,6 +20,8 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+
+export interface TableWidgetProps extends TableWidgetPropsPreact {}
 
 /**
  * The Table Widget component extending {@link TableComponent} component to support widget style options.

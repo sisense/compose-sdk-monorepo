@@ -15,3 +15,5 @@ export * from './Typography';
 export * from './TablePagination';
 export * from './Menu';
 export * from './Dropdown';
+export * from './Button';
+export * from './Breadcrumbs';

@@ -18,10 +18,7 @@ import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures
 import { AggregationTypes, MetadataTypes } from '../types.js';
 import { normalizeName } from '../base.js';
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
-import mapValues from 'lodash-es/mapValues.js';
-import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
-import { isDatetime, isNumber } from './../simple-column-types.js';
-import { convertSort, createFilterFromJaql } from '../../utils.js';
+import { createCalculatedMeasureHelper } from '../../utils.js';
 import { CustomFormulaJaql } from '../filters/utils/types.js';
 import { TranslatableError } from '../../translation/translatable-error.js';
 
@@ -105,48 +102,6 @@ function measureFunction(
   return new DimensionalCalculatedMeasure(name, builder.join(''), context);
 }
 
-function transformFormulaJaqlHelper(jaql: CustomFormulaJaql) {
-  const isFormulaJaql = 'formula' in jaql;
-
-  if (isFormulaJaql) {
-    return transformCustomFormulaJaql(jaql);
-  }
-
-  const sort = convertSort(jaql.sort);
-  const hasAggregation = !!jaql.agg;
-  const isDatatypeDatetime = isDatetime(jaql.datatype);
-  const attributeType = isNumber(jaql.datatype)
-    ? MetadataTypes.NumericAttribute
-    : MetadataTypes.TextAttribute;
-  const attribute = isDatatypeDatetime
-    ? new DimensionalLevelAttribute(
-        jaql.title,
-        jaql.dim,
-        DimensionalLevelAttribute.translateJaqlToGranularity(jaql),
-        undefined,
-        undefined,
-        sort,
-      )
-    : new DimensionalAttribute(jaql.title, jaql.dim, attributeType, undefined, sort);
-
-  if (hasAggregation) {
-    return new DimensionalBaseMeasure(
-      jaql.title,
-      attribute,
-      DimensionalBaseMeasure.aggregationFromJAQL(jaql.agg || ''),
-      undefined,
-      undefined,
-      sort,
-    );
-  }
-
-  if ('filter' in jaql) {
-    return createFilterFromJaql(jaql);
-  }
-
-  return attribute;
-}
-
 /**
  * Transforms a custom formula jaql into a calculated measure instance.
  *
@@ -163,19 +118,7 @@ export function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedM
     throw new TranslatableError('errors.measure.notAFormula');
   }
 
-  const sort = convertSort(jaql.sort);
-  const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) =>
-    jaqlContextValue ? transformFormulaJaqlHelper(jaqlContextValue) : {},
-  );
-
-  return new DimensionalCalculatedMeasure(
-    jaql.title,
-    jaql.formula,
-    context,
-    undefined,
-    undefined,
-    sort,
-  );
+  return createCalculatedMeasureHelper(jaql);
 }
 
 /**

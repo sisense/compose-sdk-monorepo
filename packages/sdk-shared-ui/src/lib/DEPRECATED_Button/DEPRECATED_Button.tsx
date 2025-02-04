@@ -6,7 +6,8 @@ import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
 
 import styles from './DEPRECATED_Button.module.scss';
 
-export type ButtonProps = {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type DEPRECATED_ButtonProps = {
   allowDisabledTitle?: boolean;
   className?: string;
   disabled?: boolean;
@@ -30,7 +31,7 @@ export type ButtonProps = {
 const SPACE = ' ';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const DEPRECATED_Button = (props: ButtonProps) => {
+const DEPRECATED_Button = (props: DEPRECATED_ButtonProps) => {
   const {
     allowDisabledTitle,
     className,

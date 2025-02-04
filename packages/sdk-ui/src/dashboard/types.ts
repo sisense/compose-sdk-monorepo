@@ -24,6 +24,8 @@ export interface DashboardByIdProps {
    * @alpha
    */
   persist?: boolean;
+  /** @internal */
+  enableFilterEditor?: boolean;
 }
 
 /**
@@ -43,6 +45,8 @@ export interface DashboardContainerProps {
    * @internal
    */
   onChange?: (action: DashboardChangeAction) => void;
+  /** @internal */
+  enableFilterEditor?: boolean;
 }
 
 /**
@@ -114,6 +118,8 @@ export interface DashboardProps {
    * @internal
    */
   onChange?: (action: DashboardChangeAction) => void;
+  /** @internal */
+  enableFilterEditor?: boolean;
 }
 
 /**

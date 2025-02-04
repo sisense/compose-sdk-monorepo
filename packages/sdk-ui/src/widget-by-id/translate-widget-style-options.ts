@@ -258,6 +258,48 @@ function prepareBoxplotChartAxisOptions(
 /**
  * @internal
  */
+function extractCartesianLabelsOptions(
+  widgetSubtype: WidgetSubtype,
+  widgetStyle: CartesianWidgetStyle,
+) {
+  const showTotals =
+    widgetStyle.seriesLabels?.enabled && widgetStyle.seriesLabels?.labels?.types?.totals;
+  const isStacked =
+    widgetSubtype === 'area/stacked' ||
+    widgetSubtype === 'area/stackedspline' ||
+    widgetSubtype === 'column/stackedcolumn' ||
+    widgetSubtype === 'bar/stacked';
+  const isStacked100 =
+    widgetSubtype === 'area/stacked100' ||
+    widgetSubtype === 'area/stackedspline100' ||
+    widgetSubtype === 'column/stackedcolumn100' ||
+    widgetSubtype === 'bar/stacked100';
+  let showValue = widgetStyle.seriesLabels?.enabled ?? false;
+  if (isStacked || isStacked100) {
+    showValue = !!(
+      (isStacked && widgetStyle.seriesLabels?.labels?.types?.relative) ||
+      (isStacked100 && widgetStyle.seriesLabels?.labels?.types?.count)
+    );
+  }
+  return {
+    ...(showTotals && {
+      totalLabels: {
+        enabled: showTotals,
+        rotation: widgetStyle.seriesLabels?.rotation ?? 0,
+      },
+    }),
+    seriesLabels: {
+      enabled: widgetStyle.seriesLabels?.enabled ?? false,
+      rotation: widgetStyle.seriesLabels?.rotation ?? 0,
+      showValue: showValue,
+      showPercentage: !!(isStacked100 && widgetStyle.seriesLabels?.labels?.types?.percentage),
+    },
+  };
+}
+
+/**
+ * @internal
+ */
 export type CartesianChartStyleOptions =
   | LineStyleOptions
   | AreaStyleOptions
@@ -272,6 +314,7 @@ function extractCartesianChartStyleOptions(
   return {
     ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
     ...prepareCartesianChartAxisOptions(widgetType, widgetStyle, panels),
+    ...extractCartesianLabelsOptions(widgetSubtype, widgetStyle),
     lineWidth: widgetStyle.lineWidth,
     markers: widgetStyle.markers,
   } as CartesianChartStyleOptions;

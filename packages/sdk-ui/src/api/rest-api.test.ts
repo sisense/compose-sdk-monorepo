@@ -127,7 +127,7 @@ describe('Rest API', () => {
         dimension: DM.Commerce.AgeRange,
       });
       expect(httpGetMock).toHaveBeenCalledWith(
-        '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range',
+        'api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range',
       );
     });
 
@@ -138,7 +138,7 @@ describe('Rest API', () => {
         ids: ['1', '2'],
       });
       expect(httpGetMock).toHaveBeenCalledWith(
-        '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range&ids=1%2C2',
+        'api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range&ids=1%2C2',
       );
     });
 
@@ -149,7 +149,7 @@ describe('Rest API', () => {
         alwaysIncluded: true,
       });
       expect(httpGetMock).toHaveBeenCalledWith(
-        '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range&alwaysIncluded=true',
+        'api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range&alwaysIncluded=true',
       );
     });
 
@@ -158,7 +158,7 @@ describe('Rest API', () => {
         dimension: DM.Commerce.AgeRange,
       });
       expect(httpGetMock).toHaveBeenCalledWith(
-        '/api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range',
+        'api/elasticubes/hierarchies?elasticube=Sample+ECommerce&table=Commerce&column=Age+Range',
       );
     });
 

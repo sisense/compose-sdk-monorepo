@@ -15,8 +15,7 @@ import { TranslatableError } from '../translation/translatable-error';
 import { CustomTranslationObject, LoadingIndicatorConfig } from '../types';
 import { clearExecuteQueryCache } from '@/query/execute-query';
 import { SisenseContextProviderProps } from '@/props';
-
-const SYSTEM_TENANT_NAME = 'system';
+import { SYSTEM_TENANT_NAME } from '@/const';
 
 /**
  * Application configuration

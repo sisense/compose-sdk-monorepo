@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type FunnelChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type FunnelChartProps as FunnelChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface FunnelChartProps
+  extends WithoutPreactChartEventProps<FunnelChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component representing data progressively decreasing in size or quantity through a funnel shape.
@@ -67,9 +75,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -120,7 +128,7 @@ export class FunnelChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: FunnelChartProps['onBeforeRender'];
+  beforeRender: FunnelChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!FunnelChartProps.onDataReady}
@@ -129,7 +137,7 @@ export class FunnelChartComponent {
    * @internal
    */
   @Input()
-  dataReady: FunnelChartProps['onDataReady'];
+  dataReady: FunnelChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointClick}
@@ -137,9 +145,7 @@ export class FunnelChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<FunnelChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointContextMenu}
@@ -147,9 +153,7 @@ export class FunnelChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<FunnelChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointsSelected}
@@ -157,9 +161,7 @@ export class FunnelChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<FunnelChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'funnel';

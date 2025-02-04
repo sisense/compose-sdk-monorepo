@@ -9,6 +9,7 @@ import {
   yAxisDefaults,
   fontStyleDefault,
   lineColorDefault,
+  stackTotalFontStyleDefault,
 } from '../defaults/cartesian';
 import merge from 'deepmerge';
 import { Stacking, Style } from '../chart-options-service';
@@ -19,7 +20,7 @@ import {
   CartesianChartDataOptionsInternal,
   StyledColumn,
 } from '../../chart-data-options/types';
-import { ChartType, CompleteNumberFormatConfig } from '../../types';
+import { ChartType, CompleteNumberFormatConfig, CompleteThemeSettings } from '../../types';
 import { isPolar } from './types';
 import { CategoricalXValues } from '../../chart-data/types';
 import { AxisClipped } from './translations-to-highcharts';
@@ -103,6 +104,8 @@ export type StackLabel = {
   enabled: boolean;
   rotation: number;
   labelrank: number;
+  x?: number;
+  y?: number;
 };
 
 export type PlotBand = { text: string; from: number; to: number };
@@ -120,6 +123,7 @@ export type AxisPlotBand = {
   color?: string;
   label?: {
     text: string;
+    x: number;
     y: number;
     style?: Style;
   };
@@ -409,8 +413,10 @@ export const getYAxisSettings = (
   axisMinMax: AxisMinMax,
   axis2MinMax: AxisMinMax | undefined,
   showTotal: boolean,
+  totalLabelRotation: number,
   dataOptions: ChartDataOptionsInternal,
   stacking: Stacking | undefined,
+  themeSettings?: CompleteThemeSettings,
 ): [AxisSettings[], AxisClipped[]] => {
   const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
     dataOptions as CartesianChartDataOptionsInternal;
@@ -424,9 +430,16 @@ export const getYAxisSettings = (
     { minClipped: !!(axis.enabled && axis.min), maxClipped: !!(axis.enabled && axis.max) },
   ];
 
-  function getLabelsFormatter(numberFormatConfig: CompleteNumberFormatConfig, stacking?: Stacking) {
-    return function (this: { value: number }) {
-      const formattedValue = applyFormatPlainText(numberFormatConfig, this.value);
+  function getLabelsFormatter(
+    numberFormatConfig: CompleteNumberFormatConfig,
+    stacking?: Stacking,
+    isTotal = false,
+  ) {
+    return function (this: { value: number; total: number }) {
+      const formattedValue = applyFormatPlainText(
+        numberFormatConfig,
+        isTotal ? this.total : this.value,
+      );
       return stacking === 'percent' ? `${formattedValue}%` : formattedValue;
     };
   }
@@ -452,7 +465,15 @@ export const getYAxisSettings = (
       min: axis.enabled ? axis.min ?? axisMinMax.min : null,
       max: axis.enabled ? axis.max ?? axisMinMax.max : null,
       tickInterval: axis.enabled ? axis.tickInterval : null,
-      stackLabels: { enabled: showTotal },
+      stackLabels: {
+        enabled: showTotal,
+        formatter: getLabelsFormatter(y2NumberFormatConfig, 'normal', true),
+        style: {
+          ...stackTotalFontStyleDefault,
+          ...(themeSettings ? { color: themeSettings.typography.primaryTextColor } : null),
+        },
+        rotation: totalLabelRotation ?? 0,
+      },
     }),
   ];
 
@@ -482,7 +503,15 @@ export const getYAxisSettings = (
             formatter: getLabelsFormatter(y2NumberFormatConfig, stacking),
           },
           tickInterval: axis2.enabled ? axis2.tickInterval : null,
-          stackLabels: { enabled: showTotal },
+          stackLabels: {
+            enabled: showTotal,
+            formatter: getLabelsFormatter(y2NumberFormatConfig, 'normal', true),
+            style: {
+              ...stackTotalFontStyleDefault,
+              ...(themeSettings ? { color: themeSettings.typography.primaryTextColor } : null),
+            },
+            rotation: totalLabelRotation ?? 0,
+          },
         }
       : ({ visible: false } as AxisSettings);
 

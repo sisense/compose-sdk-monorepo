@@ -267,6 +267,10 @@ export const translation = {
       recommendationsNotAvailable:
         "Recommendations aren't available right now. Try again in a few minutes.",
       insightsNotAvailable: 'No insights available.',
+      VectorDBEmptyResponseError:
+        'The AI configuration is not ready, please wait a few minutes and try again.',
+      LlmBadConfigurationError:
+        'The LLM configuration is wrong. Reach out to your Admin to update the LLM provider configuration.',
       unexpectedChatResponse:
         'Oh snap, something went wrong. Please try again later or try asking a different question.',
       unexpected: 'Oh snap, something went wrong. Please try again later.',
@@ -279,7 +283,34 @@ export const translation = {
     buttons: {
       apply: 'Apply',
       cancel: 'Cancel',
+      selectAll: 'Select All',
+      clearAll: 'Clear All',
     },
+    labels: {
+      includeAll: 'Include all (no filter applied)',
+      allowMultiSelection: 'Allow multiselect for lists',
+    },
+    placeholders: {
+      selectFromList: 'Select from list',
+      enterValue: 'Type your entry...',
+    },
+    conditions: {
+      exclude: 'Is not',
+      contains: 'Contains',
+      notContain: 'Does not contain',
+      startsWith: 'Starts with',
+      notStartsWith: 'Does not start with',
+      endsWith: 'Ends with',
+      notEndsWith: 'Does not end with',
+      equals: 'Equals',
+      notEquals: 'Does not equal',
+      isEmpty: 'Is empty',
+      isNotEmpty: 'Is not empty',
+    },
+  },
+  pivotTable: {
+    grandTotal: 'Grand Total',
+    subTotal: '{{value}} Total',
   },
 };
 

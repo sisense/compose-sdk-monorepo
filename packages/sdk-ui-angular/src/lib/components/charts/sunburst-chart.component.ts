@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type SunburstChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type SunburstChartProps as SunburstChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface SunburstChartProps
+  extends WithoutPreactChartEventProps<SunburstChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component displaying hierarchical data in the form of nested slices.
@@ -69,9 +77,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -122,7 +130,7 @@ export class SunburstChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: SunburstChartProps['onBeforeRender'];
+  beforeRender: SunburstChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!SunburstChartProps.onDataReady}
@@ -131,7 +139,7 @@ export class SunburstChartComponent {
    * @internal
    */
   @Input()
-  dataReady: SunburstChartProps['onDataReady'];
+  dataReady: SunburstChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointClick}
@@ -139,9 +147,7 @@ export class SunburstChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<SunburstChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointContextMenu}
@@ -149,9 +155,7 @@ export class SunburstChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<SunburstChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointsSelected}
@@ -159,9 +163,7 @@ export class SunburstChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<SunburstChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'sunburst';

@@ -4,7 +4,7 @@ title: replaceFilters
 
 # Function replaceFilters
 
-> **replaceFilters**(`dashboard`, `newFilters`): [`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
+> **replaceFilters**(`dashboard`, `newFilters`): [`DashboardProps`](../../../../sdk-ui/interfaces/interface.DashboardProps.md)
 
 Creates a new dashboard instance with its filters replaced by a new set of filters.
 
@@ -14,12 +14,12 @@ This function does not modify the original dashboard; instead, it returns a new 
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `dashboard` | [`DashboardProps`](../../../interfaces/interface.DashboardProps.md) | The original dashboard (`DashboardProps`) whose filters are to be replaced. |
+| `dashboard` | [`DashboardProps`](../../../../sdk-ui/interfaces/interface.DashboardProps.md) | The original dashboard (`DashboardProps`) whose filters are to be replaced. |
 | `newFilters` | [`FilterRelations`](../../../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../../../sdk-data/interfaces/interface.Filter.md)[] | An array of new filters or filter relations to set on the dashboard. |
 
 ## Returns
 
-[`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
+[`DashboardProps`](../../../../sdk-ui/interfaces/interface.DashboardProps.md)
 
 A new dashboard instance with the updated filters.
 

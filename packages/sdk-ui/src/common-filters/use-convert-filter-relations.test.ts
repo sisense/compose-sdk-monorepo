@@ -163,5 +163,17 @@ describe('useConvertFilterRelations', () => {
         filterFactory.logic.and(filterFactory.logic.or(filter1, cascadingFilter), filter4),
       );
     });
+    it('shouldn`t apply relations to new filters if there are no previous relations', () => {
+      const initialFilters = [filter1, filter2];
+      const { result } = renderHook(() => useConvertFilterRelations(initialFilters));
+
+      const newFilters = [filter1, filter2, filter3, filter4];
+
+      let newFiltersOrRelations;
+      act(() => {
+        newFiltersOrRelations = result.current.applyRelationsToOtherFilters(newFilters);
+      });
+      expect(newFiltersOrRelations).toEqual([filter1, filter2, filter3, filter4]);
+    });
   });
 });

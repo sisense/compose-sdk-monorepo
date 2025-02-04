@@ -7,7 +7,12 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { Table, type TableProps, ComponentAdapter, createElement } from '@sisense/sdk-ui-preact';
+import {
+  Table,
+  type TableProps as TablePropsPreact,
+  ComponentAdapter,
+  createElement,
+} from '@sisense/sdk-ui-preact';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import {
@@ -16,6 +21,7 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+export interface TableProps extends TablePropsPreact {}
 /**
  * Table with aggregation and pagination.
  *

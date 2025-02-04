@@ -1,6 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type IndicatorChartProps } from '@sisense/sdk-ui-preact';
+import { type IndicatorChartProps as IndicatorChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  BaseChartEventProps,
+  HighchartsBasedChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+
+export interface IndicatorChartProps
+  extends WithoutPreactChartEventProps<IndicatorChartPropsPreact>,
+    BaseChartEventProps,
+    HighchartsBasedChartEventProps {}
 
 /**
  * A component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
@@ -122,7 +132,7 @@ export class IndicatorChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: IndicatorChartProps['onBeforeRender'];
+  beforeRender: IndicatorChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!IndicatorChartProps.onDataReady}
@@ -131,7 +141,7 @@ export class IndicatorChartComponent {
    * @internal
    */
   @Input()
-  dataReady: IndicatorChartProps['onDataReady'];
+  dataReady: IndicatorChartProps['dataReady'];
 
   /** @internal */
   public chartType: ChartType = 'indicator';

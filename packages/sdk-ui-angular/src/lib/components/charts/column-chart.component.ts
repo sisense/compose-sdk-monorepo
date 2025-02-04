@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { type ChartType } from '../../sdk-ui-core-exports';
-import { type ColumnChartProps } from '@sisense/sdk-ui-preact';
-import { type ArgumentsAsObject } from '../../types/utility-types';
+import { type ColumnChartProps as ColumnChartPropsPreact } from '@sisense/sdk-ui-preact';
+import {
+  RegularChartEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types/chart-event-props';
+import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+export interface ColumnChartProps
+  extends WithoutPreactChartEventProps<ColumnChartPropsPreact>,
+    RegularChartEventProps {}
 
 /**
  * A component representing categorical data with vertical rectangular bars
@@ -69,9 +77,9 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
-      (dataPointClick)="dataPointClick.emit($event)"
-      (dataPointContextMenu)="dataPointContextMenu.emit($event)"
-      (dataPointsSelect)="dataPointsSelect.emit($event)"
+      (dataPointClick)="dataPointClick.emit($any($event))"
+      (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
+      (dataPointsSelect)="dataPointsSelect.emit($any($event))"
     />
   `,
 })
@@ -122,7 +130,7 @@ export class ColumnChartComponent {
    * @category Callbacks
    */
   @Input()
-  beforeRender: ColumnChartProps['onBeforeRender'];
+  beforeRender: ColumnChartProps['beforeRender'];
 
   /**
    * {@inheritDoc  @sisense/sdk-ui!ColumnChartProps.onDataReady}
@@ -131,7 +139,7 @@ export class ColumnChartComponent {
    * @internal
    */
   @Input()
-  dataReady: ColumnChartProps['onDataReady'];
+  dataReady: ColumnChartProps['dataReady'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointClick}
@@ -139,9 +147,7 @@ export class ColumnChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<
-    ArgumentsAsObject<ColumnChartProps['onDataPointClick'], ['point', 'nativeEvent']>
-  >();
+  dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointContextMenu}
@@ -149,9 +155,7 @@ export class ColumnChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<
-    ArgumentsAsObject<ColumnChartProps['onDataPointContextMenu'], ['point', 'nativeEvent']>
-  >();
+  dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointsSelected}
@@ -159,9 +163,7 @@ export class ColumnChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<
-    ArgumentsAsObject<ColumnChartProps['onDataPointsSelected'], ['points', 'nativeEvent']>
-  >();
+  dataPointsSelect = new EventEmitter<DataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'column';

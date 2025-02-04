@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   FilterInfo,
   CRITERIA_FILTER_MAP,
@@ -21,6 +21,7 @@ import { CriteriaFilterDisplay } from './criteria-filter-display.js';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { FilterVariant, isVertical } from '../common/filter-utils.js';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
+import { useSyncedState } from '@/common/hooks/use-synced-state.js';
 
 /**
  * Props for {@link CriteriaFilterTile}
@@ -96,11 +97,12 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
     const filterInfo: FilterInfo = CRITERIA_FILTER_MAP[filterOption];
 
     // These variables will change throughout filter editing
-    const defaultValues: CriteriaFilterValueType[] = filterToDefaultValues(
-      filter as CriteriaFilterType,
+    const defaultValues: CriteriaFilterValueType[] = useMemo(
+      () => filterToDefaultValues(filter as CriteriaFilterType),
+      [filter],
     );
 
-    const [values, setValues] = useState<CriteriaFilterValueType[]>(defaultValues);
+    const [values, setValues] = useSyncedState<CriteriaFilterValueType[]>(defaultValues);
 
     // callback to update filter values
     const updateValues = (newValues: CriteriaFilterValueType[]) => {

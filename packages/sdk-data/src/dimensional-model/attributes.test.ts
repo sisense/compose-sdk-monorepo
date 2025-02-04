@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable vitest/no-identical-title */
 import { createAttribute, DimensionalAttribute, DimensionalLevelAttribute } from './attributes.js';
-import { DateLevels } from './types.js';
+import { DateLevels, Sort } from './types.js';
 
 describe('Attributes jaql preparations', () => {
   it('must prepare simple attribute jaql', () => {
@@ -88,6 +88,40 @@ describe('Attributes jaql preparations', () => {
 
     const jaql = level.jaql();
     expect(jaql.format?.mask?.years).toEqual(format);
+  });
+});
+
+describe('Attributes with composeCode', () => {
+  const MOCK_COMPOSE_CODE = 'someCode';
+  it('must prepare simple attribute with composeCode', () => {
+    const attribute = new DimensionalAttribute(
+      'Brand',
+      '[Brand.Brand ID]',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      MOCK_COMPOSE_CODE,
+    );
+    expect(attribute.composeCode).toBe(MOCK_COMPOSE_CODE);
+    expect(attribute.sort(Sort.Descending).composeCode).toBe(MOCK_COMPOSE_CODE);
+  });
+
+  it('must prepare simple level attribute with composeCode', () => {
+    const level = new DimensionalLevelAttribute(
+      'Years',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.Years,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      MOCK_COMPOSE_CODE,
+    );
+
+    expect(level.composeCode).toBe(MOCK_COMPOSE_CODE);
+    expect(level.sort(Sort.Descending).composeCode).toBe(MOCK_COMPOSE_CODE);
+    expect(level.format('someFormat').composeCode).toBe(MOCK_COMPOSE_CODE);
   });
 });
 

@@ -46,6 +46,7 @@ export const AdvancedChart = (props: RegularChartProps) => {
   return (
     // this is advanced chart rendering
     <ErrorBoundary
+      key={`errorboundary_'${new Date().getTime().toString()}`}
       fallbackRender={unexpectedErrorHandler}
       onError={(err) => {
         setErrors((errs: string[]) => {

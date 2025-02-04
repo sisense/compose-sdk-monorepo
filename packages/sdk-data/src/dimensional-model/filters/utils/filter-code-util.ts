@@ -87,7 +87,7 @@ export function withComposeCode<T extends (...args: any[]) => any>(
     const filter = func(...args);
 
     // Add the composeCode property
-    (filter as any).composeCode = signature;
+    filter.composeCode = signature;
 
     return filter;
   } as T;
