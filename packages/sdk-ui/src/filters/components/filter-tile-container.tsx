@@ -11,7 +11,8 @@ import merge from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
 import { BackgroundFilterIcon } from '@/filters/components/icons/background-filter-icon';
 import { css } from '@emotion/react';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import { DEFAULT_TEXT_COLOR } from '@/const';
 
 const BORDER_STYLE = '1px solid #dadada';
 const FILTER_TILE_MIN_WIDTH = 215;
@@ -173,7 +174,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                   data-testid="expand-collapse-button"
                   width="16"
                   height="16"
-                  fill={`${textColor ?? '#5B6372'}`}
+                  fill={`${textColor ?? DEFAULT_TEXT_COLOR}`}
                   className={`csdk-transition csdk-ml-[4px] csdk-cursor-pointer ${
                     collapsed ? '-csdk-rotate-90' : ''
                   }`}
@@ -198,7 +199,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                   disabled={locked}
                   data-testid="filter-edit-button"
                 >
-                  <PencilIcon aria-label="edit" />
+                  <PencilIcon color={themeSettings.typography.primaryTextColor} aria-label="edit" />
                 </IconButton>
               )}
             </Header>

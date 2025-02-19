@@ -23,7 +23,7 @@ function getDataColumnIndex(
   dataColumns: QueryResultData['columns'],
   dataOption?: StyledColumn | StyledMeasureColumn,
 ) {
-  if (dataOption) {
+  if (dataColumns && dataOption) {
     const targetColumnName = dataOption.column.name;
     const index = dataColumns.findIndex((column) => column.name === targetColumnName);
 
@@ -45,6 +45,8 @@ export const boxWhiskerProcessResultInternal = (
   outliersData: QueryResultData,
   dataOptions?: BoxplotChartDataOptionsInternal,
 ): QueryResultData => {
+  if (!boxWhiskerData) return { columns: [], rows: [] };
+
   let boxCategoryColumnIndex: number | null = 0;
   let boxWhiskerMinColumnIndex: number | null = 4;
   let boxWhiskerMaxColumnIndex: number | null = 5;
@@ -181,6 +183,7 @@ export const executeBoxplotQuery = async (
 };
 
 const getOutliersTotalCount = (data: QueryResultData, outliersCountColumnName: string) => {
+  if (!data?.columns) return 0;
   const outliersCountColumnIndex = data.columns.findIndex(
     ({ name }) => name === outliersCountColumnName,
   );

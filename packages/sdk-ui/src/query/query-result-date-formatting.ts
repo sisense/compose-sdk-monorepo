@@ -32,7 +32,7 @@ export function applyDateFormats(
       : []),
     ...(chartDataOptions.columns ? chartDataOptions.columns : []),
   ].forEach(function collectDateFormatsFromCategoriesOptions(cat: StyledColumn): void {
-    if (isMeasureColumn(cat) || !cat.dateFormat) {
+    if (isMeasureColumn(cat) || !cat.dateFormat || !data?.columns) {
       return;
     }
 

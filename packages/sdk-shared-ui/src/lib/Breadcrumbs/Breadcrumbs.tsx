@@ -1,8 +1,5 @@
 import React, { ForwardedRef } from 'react';
-import {
-  Breadcrumbs as MuiBreadcrumbs,
-  BreadcrumbsProps as MuiBreadcrumbsProps,
-} from '@mui/material';
+import MuiBreadcrumbs, { BreadcrumbsProps as MuiBreadcrumbsProps } from '@mui/material/Breadcrumbs';
 import { ThemeProvider } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 

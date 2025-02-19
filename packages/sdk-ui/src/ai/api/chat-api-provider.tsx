@@ -27,9 +27,18 @@ export const useChatApi = () => useContext(ChatApiContext);
  *
  * @internal
  */
-export const ChatApiProvider = ({ children }: { children: ReactNode }) => {
+export const ChatApiProvider = ({
+  children,
+  volatile,
+}: {
+  children: ReactNode;
+  volatile?: boolean;
+}) => {
   const { app } = useSisenseContext();
-  const api = useMemo(() => (app ? new ChatRestApi(app.httpClient) : undefined), [app]);
+  const api = useMemo(
+    () => (app ? new ChatRestApi(app.httpClient, volatile) : undefined),
+    [app, volatile],
+  );
 
   return (
     <ChatApiContext.Provider value={api}>

@@ -1,4 +1,4 @@
-import { Popper } from '@mui/material';
+import Popper from '@mui/material/Popper';
 import { ScrollToBottomButton } from './buttons/scroll-to-bottom-button';
 
 type ScrollToBottomProps = {

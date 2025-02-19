@@ -1,26 +1,40 @@
+import { ReactNode } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
-import { Chat, ChatMessage } from './api/types';
+import { Chat, ChatContextDetails, ChatMessage } from './api/types';
 import { isNlqMessage, isTextMessage, useChatSession } from './use-chat-session';
 import { AiTestWrapper } from './__mocks__';
 import { contexts } from './__mocks__/data';
 import { http, HttpResponse } from 'msw';
 import { server } from '@/__mocks__/msw';
 
-const renderHookWithWrapper = (contextTitle: string) => {
-  return renderHook(() => useChatSession(contextTitle), { wrapper: AiTestWrapper });
+const getWrapper =
+  (volatile = false) =>
+  ({ children }: { children: ReactNode }) =>
+    <AiTestWrapper volatile={volatile}>{children}</AiTestWrapper>;
+
+const renderHookWithWrapper = (
+  contextTitle: string,
+  volatile?: boolean,
+  contextDetails?: ChatContextDetails,
+) => {
+  return renderHook(() => useChatSession(contextTitle, contextDetails), {
+    wrapper: getWrapper(volatile),
+  });
 };
 
+type ServerChat = Chat & { volatile?: boolean };
+
 interface Cache {
-  chats: Chat[];
+  chats: ServerChat[];
 }
 
 const cache: Cache = {
   chats: [],
 };
 
-const partialMockChat: Omit<Chat, 'chatId' | 'contextId' | 'contextTitle' | 'contextType'> = {
+const partialMockChat: Omit<ServerChat, 'chatId' | 'contextId' | 'contextTitle' | 'contextType'> = {
   chatHistory: [],
-  lastUpdate: '2021-01-01T00:00:00Z',
+  expireAt: '2021-01-01T00:00:00Z',
   tenantId: 't1',
   userId: 'u1',
 };
@@ -31,27 +45,38 @@ const setupMockDataTopicsApi = () => {
 
 const setupMockChatApi = () => {
   server.use(
-    http.post<object, { sourceId: string }, Chat, string>('*/api/v2/ai/chats', async (req) => {
-      const { sourceId } = await req.request.json();
+    http.post<
+      object,
+      {
+        sourceId: string;
+        contextDetails?: ChatContextDetails;
+        volatile?: boolean;
+      },
+      Chat,
+      string
+    >('*/api/v2/ai/chats', async (req) => {
+      const { sourceId, contextDetails, volatile } = await req.request.json();
       const model = [...contexts].find((d) => sourceId === d.title);
       if (!model) {
         throw Error('Data model or perspective not found');
       }
 
-      const newChat: Chat = {
+      const newChat: ServerChat = {
         chatId: 'new-chat',
         chatHistory: [],
         contextId: sourceId,
         contextTitle: model.title,
-        lastUpdate: '2021-01-01T00:00:00Z',
+        contextDetails: contextDetails,
+        expireAt: '2021-01-01T00:00:00Z',
         tenantId: 't1',
         userId: 'u1',
+        volatile,
       };
       cache.chats = [newChat, ...cache.chats];
 
       return HttpResponse.json(newChat);
     }),
-    http.get('*/api/v2/ai/chats', () => HttpResponse.json(cache.chats)),
+    http.get('*/api/v2/ai/chats', () => HttpResponse.json(cache.chats.filter((c) => !c.volatile))),
     http.get('*/api/v2/ai/chats/:id', (req) => {
       const chat = cache.chats.find((c) => c.chatId === req.params.id);
 
@@ -83,11 +108,34 @@ describe('useChatSession', () => {
           contextId: 'm2',
           contextTitle: 'Model 2',
         },
+        {
+          ...partialMockChat,
+          chatId: 'existing-chat-volatile',
+          contextId: 'm3',
+          contextTitle: 'Model 3',
+          volatile: true,
+        },
+        {
+          ...partialMockChat,
+          chatId: 'existing-chat-with-context',
+          contextId: 'm2',
+          contextTitle: 'Model 2',
+          contextDetails: {
+            dashboardId: 'dashboard-1',
+          },
+        },
       ];
 
       const { result } = renderHookWithWrapper('Model 2');
-
       await waitFor(() => expect(result.current.chatId).toBe('existing-chat'));
+
+      const { result: result2 } = renderHookWithWrapper('Model 3');
+      await waitFor(() => expect(result2.current.chatId).toBe('new-chat'));
+
+      const { result: result3 } = renderHookWithWrapper('Model 2', false, {
+        dashboardId: 'dashboard-1',
+      });
+      await waitFor(() => expect(result3.current.chatId).toBe('existing-chat-with-context'));
     });
   });
 

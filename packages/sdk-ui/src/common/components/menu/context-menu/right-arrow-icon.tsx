@@ -1,4 +1,6 @@
-export default function RightArrowIcon({ color = '#5B6372' }: { color?: string }) {
+import { DEFAULT_TEXT_COLOR } from '@/const';
+
+export default function RightArrowIcon({ color = DEFAULT_TEXT_COLOR }: { color?: string }) {
   return (
     <svg width="24px" height="24px" viewBox="0 0 24 24">
       <path

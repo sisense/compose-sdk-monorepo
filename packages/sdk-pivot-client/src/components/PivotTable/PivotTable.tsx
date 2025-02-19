@@ -184,6 +184,10 @@ export class PivotTable extends React.PureComponent<Props, State> {
 
   cellDomReadyPromises?: Array<Promise<any>>;
 
+  prevDataBars: Array<[string, string]> | undefined;
+
+  prevRangeMinMax: Array<[string, string]> | undefined;
+
   static defaultProps = {
     borderWidth: 1,
     borderColor: '',
@@ -251,12 +255,6 @@ export class PivotTable extends React.PureComponent<Props, State> {
         zoomRatio,
       });
     }
-    if (nextProps.dataBars !== this.props.dataBars) {
-      this.notifyDataBars(nextProps.dataBars);
-    }
-    if (nextProps.rangeMinMax !== this.props.rangeMinMax) {
-      this.notifyRangeMinMax(nextProps.rangeMinMax);
-    }
   }
 
   componentDidUpdate(): void {
@@ -274,7 +272,16 @@ export class PivotTable extends React.PureComponent<Props, State> {
         this.rightContainer.classList.remove('active');
       }
     }
-    this.notifyDataBars(this.props.dataBars);
+
+    if (this.props.dataBars !== this.prevDataBars) {
+      this.prevDataBars = this.props.dataBars;
+      this.notifyDataBars(this.props.dataBars);
+    }
+
+    if (this.props.rangeMinMax !== this.prevRangeMinMax) {
+      this.prevRangeMinMax = this.props.rangeMinMax;
+      this.notifyRangeMinMax(this.props.rangeMinMax);
+    }
   }
 
   componentWillUnmount(): void {

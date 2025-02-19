@@ -62,6 +62,7 @@ export const MockedSisenseContextProvider = ({
     enabled: true,
   },
   isInitialized = true,
+  errorBoundary,
 }: MockedSisenseContextProviderProps) => {
   return (
     <SisenseContext.Provider
@@ -74,9 +75,7 @@ export const MockedSisenseContextProvider = ({
           packageName: tracking.packageName ?? 'sdk-ui',
         },
         isInitialized,
-        errorBoundary: {
-          showErrorBox: true,
-        },
+        errorBoundary: { showErrorBox: true, ...errorBoundary },
       }}
     >
       {children}

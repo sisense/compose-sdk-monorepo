@@ -15,11 +15,12 @@ import type {
   NlqResult,
 } from './types';
 import { DataSourceField } from '@sisense/sdk-data';
+import { ChatContextDetails } from '@/ai/api/types';
 
 export class ChatRestApi {
   private httpClient: HttpClient;
 
-  constructor(httpClient: HttpClient) {
+  constructor(httpClient: HttpClient, private readonly volatile = false) {
     this.httpClient = httpClient;
   }
 
@@ -52,16 +53,20 @@ export class ChatRestApi {
   };
 
   // ==== /v2/ai/chats endpoints ====
-  private getAllChats = () => {
-    return this.httpClient.get<ChatWithoutHistory[]>('api/v2/ai/chats');
+  private getAllChats = async () => {
+    return this.volatile ? [] : this.httpClient.get<ChatWithoutHistory[]>('api/v2/ai/chats');
   };
 
   private getChatById = (chatId: string) => {
     return this.httpClient.get<Chat>(`api/v2/ai/chats/${chatId}`);
   };
 
-  private createChat = (sourceId: string) => {
-    return this.httpClient.post<Chat>('api/v2/ai/chats', { sourceId });
+  private createChat = (sourceId: string, contextDetails?: ChatContextDetails) => {
+    return this.httpClient.post<Chat>('api/v2/ai/chats', {
+      sourceId,
+      volatile: this.volatile,
+      contextDetails,
+    });
   };
 
   private postChat = (chatId: string, request: ChatRequest) => {

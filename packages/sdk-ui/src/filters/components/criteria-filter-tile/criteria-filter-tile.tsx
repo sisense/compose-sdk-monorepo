@@ -9,14 +9,7 @@ import {
 } from './criteria-filter-operations.js';
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container.js';
 import { CriteriaFilterMenu } from './criteria-filter-menu.js';
-import {
-  ExcludeFilter,
-  Filter,
-  Measure,
-  NumericFilter,
-  RankingFilter,
-  TextFilter,
-} from '@sisense/sdk-data';
+import { Filter, Measure } from '@sisense/sdk-data';
 import { CriteriaFilterDisplay } from './criteria-filter-display.js';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { FilterVariant, isVertical } from '../common/filter-utils.js';
@@ -30,11 +23,11 @@ export interface CriteriaFilterTileProps {
   /** Title for the filter tile, which is rendered into the header */
   title: string;
   /** Text or numeric filter object to initialize filter type and default values */
-  filter: CriteriaFilterType;
+  filter: Filter;
   /** Arrangement of the filter inputs. Use vertical for standard filter tiles and horizontal for toolbars */
   arrangement?: FilterVariant;
-  /** Callback returning filter object, or null for failure */
-  onUpdate: (filter: Filter | null) => void;
+  /** Callback returning updated filter object*/
+  onUpdate: (filter: Filter) => void;
   /** Filter delete callback */
   onDelete?: () => void;
   /** Filter edit callback */
@@ -48,8 +41,6 @@ export interface CriteriaFilterTileProps {
    */
   tileDesignOptions?: FilterTileDesignOptions;
 }
-
-export type CriteriaFilterType = NumericFilter | TextFilter | RankingFilter | ExcludeFilter;
 
 /**
  * UI component that allows the user to filter numeric or text attributes according to
@@ -93,12 +84,12 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
 
     const disabled = filter.config.disabled;
 
-    const filterOption = filterToOption(filter as CriteriaFilterType);
+    const filterOption = filterToOption(filter);
     const filterInfo: FilterInfo = CRITERIA_FILTER_MAP[filterOption];
 
     // These variables will change throughout filter editing
     const defaultValues: CriteriaFilterValueType[] = useMemo(
-      () => filterToDefaultValues(filter as CriteriaFilterType),
+      () => filterToDefaultValues(filter),
       [filter],
     );
 
@@ -113,21 +104,17 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
 
     const createFilter = useCallback(
       (newValues: CriteriaFilterValueType[], newDisabled: boolean): Filter => {
-        let newFilter: Filter | null = null;
         if (filterInfo.ranked) {
           // for ranked functions, Measure must come before count.
-          newFilter = filterInfo.fn(filter.attribute, newValues?.[1], newValues?.[0], {
-            guid: filterFromProps.config.guid,
-            disabled: newDisabled,
-          });
-        } else {
-          newFilter = filterInfo.fn(filter.attribute, ...newValues, {
+          return filterInfo.fn(filter.attribute, newValues?.[1], newValues?.[0], {
             guid: filterFromProps.config.guid,
             disabled: newDisabled,
           });
         }
-
-        return newFilter;
+        return filterInfo.fn(filter.attribute, ...newValues, {
+          guid: filterFromProps.config.guid,
+          disabled: newDisabled,
+        });
       },
       [filterFromProps.config.guid, filter.attribute, filterInfo],
     );

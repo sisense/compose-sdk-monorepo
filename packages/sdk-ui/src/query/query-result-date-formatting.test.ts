@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { applyDateFormats } from './query-result-date-formatting';
 import cloneDeep from 'lodash-es/cloneDeep';
-import type { Cell, QueryResultData } from '@sisense/sdk-data';
+import type { Cell, Data, QueryResultData } from '@sisense/sdk-data';
 
 describe('applyDateFormats', () => {
   function newData(): QueryResultData {
@@ -23,6 +23,14 @@ describe('applyDateFormats', () => {
     };
     return data;
   }
+
+  it('should not fail when no data is provided', () => {
+    const dataOut = applyDateFormats(undefined as unknown as Data, {
+      x: [{ column: { name: 'Years', type: 'datelevel' }, dateFormat: 'yyyy MMM' }],
+      breakBy: [],
+    });
+    expect(dataOut).toBeUndefined();
+  });
 
   describe('when the `text` property of cells are mutated', () => {
     it('mutates `text` with a reformatted date string, on cells for one datetime column with a `dateFormat` configured', () => {

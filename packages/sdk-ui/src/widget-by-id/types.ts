@@ -291,6 +291,7 @@ export type PanelItem = {
   instanceid?: string;
   format?: {
     color?: PanelColorFormat;
+    colorSecond?: PanelColorFormat;
     mask?: DatetimeMask | NumericMask;
     members?: PanelMembersFormat;
     subtotal?: boolean;

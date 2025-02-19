@@ -144,10 +144,10 @@ export type {
   Navigator,
   DrilldownOptions,
   DrilldownSelection,
-  CriteriaFilterType,
   Member,
   FilterVariant,
   Hierarchy,
+  CriteriaFilterType,
 
   // Props:
   CommonWidgetProps,

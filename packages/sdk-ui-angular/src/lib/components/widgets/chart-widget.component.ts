@@ -179,7 +179,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   highlightSelectionDisabled: ChartWidgetProps['highlightSelectionDisabled'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -187,7 +187,16 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   beforeRender: ChartWidgetProps['beforeRender'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+   * {@inheritDoc  @sisense/sdk-ui!ChartWidgetProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: ChartWidgetProps['dataReady'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -195,7 +204,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   dataPointClick = new EventEmitter<ChartDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -203,7 +212,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   dataPointContextMenu = new EventEmitter<ChartDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointsSelected}
    *
    * @category Callbacks
    */
@@ -250,6 +259,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
       description: this.description,
       highlightSelectionDisabled: this.highlightSelectionDisabled,
       onBeforeRender: this.beforeRender?.bind(this),
+      onDataReady: this.dataReady?.bind(this),
       onDataPointClick: (
         ...[point, nativeEvent]: Arguments<ChartWidgetPropsPreact['onDataPointClick']>
       ) => this.dataPointClick.emit({ point, nativeEvent }),

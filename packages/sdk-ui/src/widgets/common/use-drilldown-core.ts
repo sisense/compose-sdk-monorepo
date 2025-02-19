@@ -113,7 +113,7 @@ export const updateDrilldownSelections = (
   nextDimension: Attribute,
   hierarchy?: Hierarchy,
 ) => {
-  if (!hierarchy) {
+  if (!hierarchy?.levels) {
     return [...currentSelections, { points, nextDimension }];
   }
 
@@ -123,9 +123,10 @@ export const updateDrilldownSelections = (
     return [];
   }
 
-  const matchingSelectionIndex = currentSelections.findIndex((currentSelection) =>
-    isSameAttribute(currentSelection.nextDimension, nextDimension),
-  );
+  const matchingSelectionIndex =
+    currentSelections?.findIndex((currentSelection) =>
+      isSameAttribute(currentSelection.nextDimension, nextDimension),
+    ) ?? -1;
   const isLevelAlreadySelected = matchingSelectionIndex !== -1;
 
   // trims selections to include only hierarchy levels up to the current one
@@ -135,7 +136,8 @@ export const updateDrilldownSelections = (
 
   const lastSelectedLevel = last(currentSelections)?.nextDimension;
   const lastSelectedLevelIndex = currentSelections.length
-    ? hierarchy.levels.findIndex(
+    ? // findIndex should be safe here, as there is an early return if the hierarchy is not defined
+      hierarchy.levels.findIndex(
         (level) => lastSelectedLevel && isSameAttribute(level, lastSelectedLevel),
       )
     : 0;

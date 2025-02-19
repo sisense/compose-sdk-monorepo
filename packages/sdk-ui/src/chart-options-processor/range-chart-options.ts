@@ -170,6 +170,7 @@ export const getRangeChartOptions = (
     baseChartOptionsUpper.options.xAxis = [];
   }
 
+  // TODO: what if 0?
   if (forecastStartIndex > 0) {
     formatForecastPlotBands(baseChartOptionsUpper.options.xAxis, forecastStartIndex, lastTickIndex);
   }

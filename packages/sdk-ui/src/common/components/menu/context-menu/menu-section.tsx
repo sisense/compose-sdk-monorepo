@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
 import { useThemeContext } from '@/theme-provider/theme-context';
+import { DEFAULT_TEXT_COLOR } from '@/const';
 
 type MenuSectionProps = {
   children: ReactNode;
@@ -21,7 +22,7 @@ export const MenuSection = ({ children }: MenuSectionProps) => {
         fontSize: '13px',
         paddingLeft: '15px',
         paddingRight: '15px',
-        color: '#5b6372',
+        color: DEFAULT_TEXT_COLOR,
       }}
     >
       {children}

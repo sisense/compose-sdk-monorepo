@@ -5,6 +5,7 @@ import { TFunction } from '@sisense/sdk-common';
 import AdvancedAnalyticsTooltipTitle from './tooltip-title.js';
 import AdvancedAnalyticsTooltipRow from './tooltip-row.js';
 import AdvancedAnalyticsTooltipFooter from './tooltip-footer.js';
+import { DEFAULT_TEXT_COLOR } from '@/const';
 
 type ForecastToolipProps = {
   x1Value?: string;
@@ -25,7 +26,7 @@ export default function ForecastToolipComponent(props: ForecastToolipProps) {
   return (
     <div
       style={{
-        color: '#5B6372',
+        color: DEFAULT_TEXT_COLOR,
         fontSize: '13px',
         lineHeight: '18px',
         margin: '4px 6px',

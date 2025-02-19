@@ -1,7 +1,9 @@
 import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import RightArrowIcon from './right-arrow-icon';
-import { Menu, MenuItem } from '@mui/material';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from '@/const';
 
 type NestedMenuItemProps = {
   children: ReactNode;
@@ -49,9 +51,9 @@ export const NestedMenuItem = ({
           fontSize: '13px',
           paddingLeft: '30px',
           paddingRight: '0px',
-          color: '#5b6372',
+          color: DEFAULT_TEXT_COLOR,
           '&:hover': {
-            backgroundColor: '#f4f4f8',
+            backgroundColor: DEFAULT_BACKGROUND_COLOR,
           },
           ...style,
         }}

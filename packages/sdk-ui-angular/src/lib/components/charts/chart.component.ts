@@ -239,6 +239,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       highlights: this.highlights,
       styleOptions: this.styleOptions,
       onBeforeRender: this.beforeRender?.bind(this),
+      onDataReady: this.dataReady?.bind(this),
       onDataPointClick: (
         ...[point, nativeEvent]: Arguments<ChartPropsPreact['onDataPointClick']>
       ) => this.dataPointClick.emit({ point, nativeEvent }),

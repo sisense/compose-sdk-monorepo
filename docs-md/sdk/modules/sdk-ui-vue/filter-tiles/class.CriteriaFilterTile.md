@@ -54,7 +54,7 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ### filter
 
-> **`readonly`** **filter**?: [`CriteriaFilterType`](../type-aliases/type-alias.CriteriaFilterType.md)
+> **`readonly`** **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
 
 Text or numeric filter object to initialize filter type and default values
 
@@ -96,13 +96,13 @@ Filter edit callback
 
 > **`readonly`** **onUpdate**?: (`filter`) => `void`
 
-Callback returning filter object, or null for failure
+Callback returning updated filter object
 
 #### Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null` |
+| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) |
 
 #### Returns
 

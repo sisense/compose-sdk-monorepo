@@ -9,11 +9,11 @@ import {
   filterToDefaultValues,
   filterToOption,
 } from '../../criteria-filter-tile/criteria-filter-operations.js';
-import { CriteriaFilterType } from '../../criteria-filter-tile';
 import { isConditionalFilter, isExcludeMembersFilter } from '../utils.js';
 import { SearchableMultiSelect } from '../common/select/searchable-multi-select.js';
 import { SearchableSingleSelect } from '../common/select/searchable-single-select.js';
 import { usePrevious } from '@/common/hooks/use-previous.js';
+import { useThemeContext } from '@/theme-provider';
 
 const TextCondition = {
   EXCLUDE: 'exclude',
@@ -53,7 +53,7 @@ const getTextFilterCondition = (filter: Filter) => {
     return TextCondition.EXCLUDE;
   }
 
-  const condition = filterToOption(filter as CriteriaFilterType);
+  const condition = filterToOption(filter);
   const value = getTextFilterValue(filter);
 
   if (condition === TextCondition.EQUALS && value === '') {
@@ -71,7 +71,7 @@ const getTextFilterValue = (filter: Filter) => {
   if (!isConditionalFilter(filter)) {
     return '';
   }
-  return filterToDefaultValues(filter as CriteriaFilterType)[0] || '';
+  return filterToDefaultValues(filter)[0] || '';
 };
 
 const getCriteriaFilterBuilder = (condition: string) => {
@@ -134,6 +134,7 @@ export const TextConditionSection = ({
   multiSelectEnabled,
   onChange,
 }: TextConditionSectionProps) => {
+  const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
   const [condition, setCondition] = useState<string>(getTextFilterCondition(filter));
   const [value, setValue] = useState(getTextFilterValue(filter) as string);
@@ -260,19 +261,31 @@ export const TextConditionSection = ({
   );
 
   return (
-    <SelectableSection selected={selected} onSelect={handleSectionSelect}>
+    <SelectableSection
+      selected={selected}
+      onSelect={handleSectionSelect}
+      aria-label="Text condition section"
+    >
       <SingleSelect
         style={{ width: '168px', marginRight: '8px' }}
         value={condition}
         items={translatedConditionItems}
         onChange={handleConditionChange}
+        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
+        primaryColor={themeSettings.typography.primaryTextColor}
+        aria-label="Condition select"
       />
       {showInput && (
         <Input
-          style={{ width: '300px' }}
+          style={{
+            width: '300px',
+            backgroundColor: themeSettings.filter.panel.backgroundColor,
+            color: themeSettings.typography.primaryTextColor,
+          }}
           placeholder={t('filterEditor.placeholders.enterValue')}
-          value={value as any}
+          value={value}
           onChange={handleValueChange}
+          aria-label="Value input"
         />
       )}
       {condition === TextCondition.EXCLUDE &&
@@ -283,6 +296,8 @@ export const TextConditionSection = ({
             placeholder={t('filterEditor.placeholders.selectFromList')}
             items={selectItems}
             onChange={handleMembersChange}
+            primaryColor={themeSettings.typography.primaryTextColor}
+            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
           />
         ) : (
           <SearchableSingleSelect<string>
@@ -291,6 +306,8 @@ export const TextConditionSection = ({
             placeholder={t('filterEditor.placeholders.selectFromList')}
             items={selectItems}
             onChange={handleMembersChange}
+            primaryColor={themeSettings.typography.primaryTextColor}
+            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
           />
         ))}
     </SelectableSection>

@@ -6,6 +6,7 @@ import { TranslatableError } from '../translation/translatable-error';
 import ExclamationMarkIcon from '@/common/icons/exclamation-mark-icon';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { DEFAULT_TEXT_COLOR } from '@/const';
 
 /**
  * This component is used to display an error message when a component fails to render.
@@ -71,7 +72,7 @@ const ErrorBoundaryBox = ({
           <div
             className={styles.text}
             style={{
-              color: themeSettings?.typography?.primaryTextColor || '#5b6372',
+              color: themeSettings?.typography?.primaryTextColor || DEFAULT_TEXT_COLOR,
               fontFamily: themeSettings?.typography?.fontFamily || 'inherit',
             }}
           >

@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { Radio } from '@/common/components/radio';
 
@@ -6,7 +6,6 @@ type ChildrenFn = (select: () => void) => ReactNode;
 
 type SelectableSectionProps = {
   selected: boolean;
-  style?: CSSProperties;
   onSelect: (selected: boolean) => void;
   children: ReactNode | ChildrenFn;
 };
@@ -21,17 +20,17 @@ const Section = styled.div`
 /** @internal */
 export const SelectableSection = ({
   selected,
-  style,
   children,
   onSelect,
+  ...rest
 }: SelectableSectionProps) => {
   const select = () => {
     onSelect(true);
   };
 
   return (
-    <Section style={style}>
-      <Radio checked={selected} onChange={onSelect} />
+    <Section {...rest}>
+      <Radio checked={selected} onChange={onSelect} aria-label={'Select button'} />
       <>{typeof children === 'function' ? children(select) : children}</>
     </Section>
   );

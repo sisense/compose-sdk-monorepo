@@ -3,14 +3,16 @@ import { ChartWidget } from '@/widgets/chart-widget';
 import { widgetComposer } from '@/analytics-composer';
 import { ChartInsights } from '@/ai/chart/chart-insights';
 import { Filter, Data, MetadataItem } from '@sisense/sdk-data';
-import type { NlqResponseData } from '@/ai';
+import type { GetNlgInsightsRequest, NlqResponseData } from '@/ai';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { useGetNlgInsightsInternal } from '@/ai/use-get-nlg-insights';
 import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
-import { ChartWidgetProps, WidgetProps } from '@/props';
+import { WidgetProps } from '@/props';
 import { getFiltersArray } from '@/utils/filter-relations';
 import upperFirst from 'lodash-es/upperFirst';
+import merge from 'ts-deepmerge';
+import { NlqChartWidgetStyleOptions } from '@/types';
 
 /**
  * Props for {@link NlqChartWidget} component.
@@ -42,7 +44,8 @@ export interface NlqChartWidgetProps {
    *
    * @default true
    */
-  enableHeader?: boolean;
+
+  styleOptions?: NlqChartWidgetStyleOptions;
 }
 
 /**
@@ -70,8 +73,8 @@ export interface NlqChartWidgetProps {
 export const NlqChartWidget = ({
   nlqResponse,
   onDataReady,
+  styleOptions,
   filters = [],
-  enableHeader = true,
 }: NlqChartWidgetProps) => {
   nlqResponse.queryTitle = upperFirst(nlqResponse.queryTitle);
 
@@ -86,14 +89,8 @@ export const NlqChartWidget = ({
     });
     if (!widgetProps) setChartWidgetProps(null);
     else {
-      if (!enableHeader) {
-        (widgetProps as ChartWidgetProps).styleOptions = {
-          ...(widgetProps as ChartWidgetProps).styleOptions,
-          header: {
-            ...(widgetProps as ChartWidgetProps).styleOptions?.header,
-            hidden: true,
-          },
-        };
+      if (styleOptions && widgetProps.styleOptions) {
+        widgetProps.styleOptions = merge(widgetProps.styleOptions, styleOptions);
       }
 
       const connectedProps = connectToWidgetProps(widgetProps, {
@@ -103,9 +100,9 @@ export const NlqChartWidget = ({
 
       setChartWidgetProps(connectedProps);
     }
-  }, [nlqResponse, connectToWidgetProps, enableHeader]);
+  }, [nlqResponse, connectToWidgetProps, styleOptions]);
 
-  const nlqResponseWithFilters = useMemo(() => {
+  const nlqResponseWithFilters: GetNlgInsightsRequest = useMemo(() => {
     const filters =
       chartWidgetProps && isChartWidgetProps(chartWidgetProps)
         ? getFiltersArray(chartWidgetProps?.filters)
@@ -119,7 +116,7 @@ export const NlqChartWidget = ({
           .map((filter) => filter.jaql() as MetadataItem),
       );
 
-    return { ...nlqResponse, jaql: { ...nlqResponse.jaql, metadata } };
+    return { ...nlqResponse, jaql: { ...nlqResponse.jaql, metadata }, verbosity: 'Low' };
   }, [nlqResponse, chartWidgetProps]);
 
   const { data: summary, isLoading, isError } = useGetNlgInsightsInternal(nlqResponseWithFilters);

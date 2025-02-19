@@ -3,6 +3,7 @@ import { type FunctionComponent, type ButtonHTMLAttributes } from 'react';
 import { DateIcon } from '../icons';
 import { getSlightlyDifferentColor } from '../../../utils/color';
 import { Themable } from '@/theme-provider/types';
+import { DEFAULT_BACKGROUND_COLOR } from '@/const';
 
 export type Variant = 'white' | 'grey';
 
@@ -22,7 +23,11 @@ const disabledColor = 'rgba(0, 0, 0, 0.26)';
 const CalendarButton = styled.button<DateRangeFieldButtonProps>`
   cursor: pointer;
   background-color: ${({ theme, variant, disabled }) =>
-    disabled ? disabledBg : isWhite(variant) ? theme.general.backgroundColor : '#f4f4f8'};
+    disabled
+      ? disabledBg
+      : isWhite(variant)
+      ? theme.general.backgroundColor
+      : DEFAULT_BACKGROUND_COLOR};
   border: ${({ variant }) =>
     isWhite(variant) ? '1px solid rgb(110 115 125 / var(--tw-border-opacity))' : 'none'};
   color: ${({ theme, isActive, disabled }) =>
@@ -36,7 +41,9 @@ const CalendarButton = styled.button<DateRangeFieldButtonProps>`
     background-color: ${({ theme, variant, disabled }) =>
       disabled
         ? disabledBg
-        : getSlightlyDifferentColor(isWhite(variant) ? theme.general.backgroundColor : '#f4f4f8')};
+        : getSlightlyDifferentColor(
+            isWhite(variant) ? theme.general.backgroundColor : DEFAULT_BACKGROUND_COLOR,
+          )};
     transition: 0.2s;
   }
   transition: color 250ms;
@@ -53,8 +60,7 @@ const CalendarLabel = styled.label<Themable & Variantable>`
 
 export const DateRangeFieldButton: FunctionComponent<DateRangeFieldButtonProps> = (props) => {
   const { variant = 'grey', label, isActive, theme } = props;
-  const defaultClass =
-    'csdk-text-left csdk-w-[152px] csdk-bg-[#f4f4f8] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-6 csdk-rounded-[4px] ';
+  const defaultClass = `csdk-text-left csdk-w-[152px] csdk-bg-[${DEFAULT_BACKGROUND_COLOR}] csdk-text-[13px] csdk-outline-0 csdk-border csdk-border-transparent csdk-p-input csdk-h-6 csdk-rounded-[4px] `;
   const disabled = 'disabled:csdk-placeholder:csdk-opacity-30 disabled:csdk-cursor-not-allowed ';
   const focus = 'focus:csdk-border-solid focus:csdk-border-input focus:csdk-border-UI-default ';
   const hover = 'hover:csdk-border-guiding csdk-text-text-active ';

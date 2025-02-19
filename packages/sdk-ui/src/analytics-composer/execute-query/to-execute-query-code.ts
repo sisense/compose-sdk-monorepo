@@ -41,8 +41,8 @@ const getExecutePivotQueryCode = (
   const hasMeasures = checkIfMeasuresExist(pivotQueryParams);
   const pivotQueryProps: ExecutePivotQueryCodeProps = {
     dataSourceString: stringifyDataSource(pivotQueryParams.dataSource),
-    rowsString: '[]', // TODO
-    valuesString: '[]', // TODO
+    rowsString: stringifyProps(pivotQueryParams.rows || []),
+    valuesString: stringifyProps(pivotQueryParams.values || []),
     extraImportsString: stringifyExtraImports(pivotQueryParams.filters || [], hasMeasures),
   };
   return generateCode(templateKey, pivotQueryProps, uiFramework);

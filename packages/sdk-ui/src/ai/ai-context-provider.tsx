@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
 
 import { ChatApiProvider } from './api/chat-api-provider';
+import { ChatIdStorageProvider } from '@/ai/chat-id-storage-provider';
 
 export type AiContextProviderProps = {
   children: ReactNode;
+  volatile?: boolean;
 };
 
 /**
@@ -31,6 +33,10 @@ export type AiContextProviderProps = {
  * @group Generative AI
  * @beta
  */
-export default function AiContextProvider({ children }: AiContextProviderProps) {
-  return <ChatApiProvider>{children}</ChatApiProvider>;
+export default function AiContextProvider({ children, volatile }: AiContextProviderProps) {
+  return (
+    <ChatIdStorageProvider>
+      <ChatApiProvider volatile={volatile}>{children}</ChatApiProvider>
+    </ChatIdStorageProvider>
+  );
 }

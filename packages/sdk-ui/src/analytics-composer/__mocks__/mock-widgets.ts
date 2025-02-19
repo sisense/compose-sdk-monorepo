@@ -441,6 +441,7 @@ export const MOCK_WIDGET_DTO_PIVOT_TABLE = {
               },
               color: {
                 type: 'color',
+                color: '#00cee6',
               },
             },
           },

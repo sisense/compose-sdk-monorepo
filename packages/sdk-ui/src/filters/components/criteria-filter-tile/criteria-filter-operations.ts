@@ -1,6 +1,3 @@
-/* eslint-disable no-case-declarations */
-/* eslint-disable security/detect-object-injection */
-/* eslint-disable @typescript-eslint/ban-types */
 import {
   Attribute,
   ExcludeFilter,
@@ -16,8 +13,8 @@ import {
   TextFilter,
   TextOperators,
 } from '@sisense/sdk-data';
-import { CriteriaFilterType } from './criteria-filter-tile';
 import { TranslatableError } from '@/translation/translatable-error';
+import { TFunction } from '@sisense/sdk-common';
 
 /**
  * Collection of filter options for the {@link CriteriaFilterMenu},
@@ -239,8 +236,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
  *
  * @internal
  */
-// eslint-disable-next-line complexity
-export const filterToOption = (filter: CriteriaFilterType): FilterOptionType => {
+export const filterToOption = (filter: Filter): FilterOptionType => {
   let operatorA: string | undefined = '';
   let operatorB: string | undefined = '';
   switch (filter.filterType) {
@@ -259,18 +255,19 @@ export const filterToOption = (filter: CriteriaFilterType): FilterOptionType => 
       operatorA = (<TextFilter>filter).operatorA;
       operatorA = (<TextFilter>filter).operatorA;
       break;
+    default:
+      throw new UnsupportedFilterError(filter);
   }
   const opStr = `${filter.filterType}${operatorA ?? ''}${operatorB ?? ''}`;
   const key = Object.keys(FilterOption).find(
     (option) => FilterOption[option] == opStr,
   ) as keyof typeof FilterOption;
-  if (FilterOption[key] === undefined)
-    throw new TranslatableError('errors.unsupportedFilter', { filter: JSON.stringify(filter) });
+  if (FilterOption[key] === undefined) throw new UnsupportedFilterError(filter);
   return FilterOption[key] as FilterOptionType;
 };
 
 export type CriteriaFilterValueType = string | number | Measure;
-export const filterToDefaultValues = (filter: CriteriaFilterType): CriteriaFilterValueType[] => {
+export const filterToDefaultValues = (filter: Filter): CriteriaFilterValueType[] => {
   const values: CriteriaFilterValueType[] = [];
   let valA: CriteriaFilterValueType | undefined = undefined;
   let valB: CriteriaFilterValueType | undefined = undefined;
@@ -291,6 +288,7 @@ export const filterToDefaultValues = (filter: CriteriaFilterType): CriteriaFilte
       valA = (<TextFilter>filter).valueA;
       valB = (<TextFilter>filter).valueB;
       break;
+    default:
   }
   if (valA !== undefined) values.push(valA);
   if (valB !== undefined) values.push(valB);
@@ -304,7 +302,7 @@ export const valuesToDisplayValues = (values: CriteriaFilterValueType[]): (strin
   });
 };
 
-export const translatedMsgNoVal = (message: string, t: Function) => {
+export const translatedMsgNoVal = (message: string, t: TFunction) => {
   return t(message, { val: '---' }).replace('---', '');
 };
 
@@ -319,3 +317,9 @@ export const filterTypeToInputType = (filterType: string): string => {
       return 'text';
   }
 };
+
+class UnsupportedFilterError extends TranslatableError {
+  constructor(filter: Filter) {
+    super('errors.unsupportedFilter', { filter: JSON.stringify(filter) });
+  }
+}

@@ -5,6 +5,7 @@ import { TFunction } from '@sisense/sdk-common';
 import AdvancedAnalyticsTooltipTitle from './tooltip-title';
 import AdvancedAnalyticsTooltipRow from './tooltip-row';
 import AdvancedAnalyticsTooltipFooter from './tooltip-footer';
+import { DEFAULT_TEXT_COLOR } from '@/const';
 
 const TrendTypesFromExpression = {
   smooth: 'Advanced Smoothing',
@@ -42,7 +43,7 @@ export default function TrendToolip(props: TrendToolipProps) {
   return (
     <div
       style={{
-        color: '#5B6372',
+        color: DEFAULT_TEXT_COLOR,
         fontSize: '13px',
         lineHeight: '18px',
         margin: '4px 6px',

@@ -1,6 +1,7 @@
 import { CSSProperties, ReactNode } from 'react';
 import MuiMenuItem from '@mui/material/MenuItem';
 import { useThemeContext } from '@/theme-provider/theme-context';
+import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from '@/const';
 
 type MenuItemProps = {
   children: ReactNode;
@@ -25,9 +26,9 @@ export const MenuItem = ({ children, disabled, style, className = '', onClick }:
           fontSize: '13px',
           paddingLeft: '30px',
           paddingRight: '15px',
-          color: '#5b6372',
+          color: DEFAULT_TEXT_COLOR,
           '&:hover': {
-            backgroundColor: '#f4f4f8',
+            backgroundColor: DEFAULT_BACKGROUND_COLOR,
           },
           ...style,
         }}

@@ -12,6 +12,10 @@ import {
   StyledMeasureColumn,
 } from '@/chart-data-options/types';
 import { useExecutePivotQueryInternal } from '@/query-execution/use-execute-pivot-query';
+import { RangeDataColorOptions } from '@/chart-data/data-coloring';
+import { useDebouncedValue } from '@/common/hooks/use-debounced-value';
+
+const PIVOT_JAQL_UPDATE_DEBOUNCE = 200;
 
 const getPivotAttribute = (dataOption: StyledColumn) => {
   return {
@@ -28,6 +32,7 @@ const getPivotMeasure = (dataOption: StyledMeasureColumn) => {
     measure: translateColumnToMeasure(dataOption),
     totalsCalculation: dataOption.totalsCalculation,
     dataBars: dataOption.dataBars || false,
+    shouldRequestMinMax: (dataOption.color as RangeDataColorOptions)?.type === 'range',
   };
 };
 
@@ -77,16 +82,21 @@ export const usePivotTableQuery = ({
     [setJaql],
   );
 
-  const queryParams: ExecutePivotQueryParams = {
-    dataSource: dataSet,
-    rows,
-    columns,
-    values,
-    grandTotals,
-    filters,
-    highlights,
-    onBeforeQuery,
-  };
+  // Debounce the query parameters to avoid frequent re-renders that may lead to formatting issues
+  const queryParams: ExecutePivotQueryParams = useDebouncedValue(
+    {
+      dataSource: dataSet,
+      rows,
+      columns,
+      values,
+      grandTotals,
+      filters,
+      highlights,
+      onBeforeQuery,
+    },
+    PIVOT_JAQL_UPDATE_DEBOUNCE,
+  );
+
   const { error } = useExecutePivotQueryInternal(queryParams);
 
   return { jaql, error };

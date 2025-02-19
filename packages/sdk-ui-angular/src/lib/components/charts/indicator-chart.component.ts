@@ -82,6 +82,7 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
+      [dataReady]="dataReady"
     />
   `,
 })

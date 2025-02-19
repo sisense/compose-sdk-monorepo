@@ -18,7 +18,7 @@ describe('useChatHistory', () => {
           chatHistory: [{ content: 'hello', role: 'user' }],
           contextId: 'm2',
           contextTitle: 'Model 2',
-          lastUpdate: '2021-01-01T00:00:00Z',
+          expireAt: '2021-01-01T00:00:00Z',
           tenantId: 't1',
           userId: 'u1',
         }),

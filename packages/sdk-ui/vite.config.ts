@@ -4,7 +4,8 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import checker from 'vite-plugin-checker';
-import replace from 'rollup-plugin-re';
+import { fixJsxRuntime } from './scripts/vite-plugins/fix-jsx-runtime';
+import { replaceReact18Hooks } from './scripts/vite-plugins/replace-react18-hooks';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -53,38 +54,9 @@ export default defineConfig(({ mode }) => ({
       },
       external: ['react', 'react-dom', 'react/jsx-runtime'],
       plugins: [
-        replace({
-          patterns: [
-            {
-              transform(code: string) {
-                // Workaround in MUI for webpack to support React18 API
-                // https://github.com/webpack/webpack/issues/14814
-                // https://github.com/mui/material-ui/issues/41190
-                const muiUseIdWorkaround = "React['useId'.toString()]";
-                // more stable workaround to make sure the code can't be simplified by bundler
-                const betterUseIdWorkaround = 'React[`useId${Math.random()}`.slice(0, 5)]';
-                if (code.includes(muiUseIdWorkaround)) {
-                  return code.replace(toGlobalRegExp(muiUseIdWorkaround), betterUseIdWorkaround);
-                }
-              },
-            },
-            {
-              transform(code: string) {
-                // Workaround in Emotion for webpack to support React18 API
-                const emotionUseInsertionEffectWorkaround = "['useInsertion' + 'Effect']";
-                // more stable workaround to be sure that this code can't be simplified by bundler
-                const betterUseInsertionEffectWorkaround =
-                  '[`useInsertionEffect${Math.random()}`.slice(0, 5)]';
-                if (code.includes(emotionUseInsertionEffectWorkaround)) {
-                  return code.replace(
-                    toGlobalRegExp(emotionUseInsertionEffectWorkaround),
-                    betterUseInsertionEffectWorkaround,
-                  );
-                }
-              },
-            },
-          ],
-        }),
+        replaceReact18Hooks(),
+        // TODO: commented until we have a proper solution for `preact/compat` compatibility
+        // fixJsxRuntime()
       ],
     },
   },
@@ -94,11 +66,3 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
-
-/**
- * Convert a string to a global RegExp
- */
-function toGlobalRegExp(str: string): RegExp {
-  const escapedStr = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(escapedStr, 'g');
-}

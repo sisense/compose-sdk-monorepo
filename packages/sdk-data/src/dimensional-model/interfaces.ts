@@ -576,6 +576,10 @@ export interface PivotMeasure {
    * @internal
    */
   dataBars?: boolean;
+  /**
+   * @internal
+   */
+  shouldRequestMinMax?: boolean;
 }
 
 /**
@@ -591,13 +595,19 @@ export function isPivotMeasure(arg: Measure | PivotMeasure): arg is PivotMeasure
 /**
  * Data options for grand totals of a pivot table
  */
-export type PivotGrandTotals = { title?: string; rows?: boolean; columns?: boolean };
+export type PivotGrandTotals = {
+  /**
+   * @deprecated
+   */
+  title?: string;
+  rows?: boolean;
+  columns?: boolean;
+};
 
 /**
  * @internal
  */
 export const DEFAULT_PIVOT_GRAND_TOTALS: PivotGrandTotals = {
-  title: 'Grand Total',
   rows: false,
   columns: false,
 };

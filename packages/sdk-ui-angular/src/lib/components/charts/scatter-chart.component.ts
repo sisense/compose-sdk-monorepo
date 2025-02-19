@@ -79,6 +79,7 @@ export class AnalyticsComponent {
       [highlights]="highlights"
       [styleOptions]="styleOptions"
       [beforeRender]="beforeRender"
+      [dataReady]="dataReady"
       (dataPointClick)="dataPointClick.emit($any($event))"
       (dataPointContextMenu)="dataPointContextMenu.emit($any($event))"
       (dataPointsSelect)="dataPointsSelect.emit($any($event))"

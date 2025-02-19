@@ -8,7 +8,8 @@ type ButtonProps = {
 };
 
 /** @internal */
-export const Radio = ({ checked, value, onChange }: ButtonProps) => {
+export const Radio = (props: ButtonProps) => {
+  const { checked, value, onChange } = props;
   return (
     <RadioMui
       sx={{
@@ -17,9 +18,9 @@ export const Radio = ({ checked, value, onChange }: ButtonProps) => {
         padding: '8px',
         marginRight: '4px',
         boxSizing: 'border-box',
-        color: '#5B6372',
+        color: 'inherit',
         '&.Mui-checked': {
-          color: '#5B6372',
+          color: 'inherit',
         },
         '& .MuiSvgIcon-root': {
           fontSize: 16,
@@ -32,7 +33,7 @@ export const Radio = ({ checked, value, onChange }: ButtonProps) => {
       checked={checked}
       onChange={(event, isChecked) => onChange?.(isChecked)}
       value={value}
-      inputProps={{ 'aria-label': value }}
+      inputProps={{ ...(props['aria-label'] && { 'aria-label': props['aria-label'] }) }}
     />
   );
 };

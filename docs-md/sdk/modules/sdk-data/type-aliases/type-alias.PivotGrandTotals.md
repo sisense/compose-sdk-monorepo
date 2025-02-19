@@ -25,3 +25,7 @@ Data options for grand totals of a pivot table
 ### `title`
 
 **title**?: `string`
+
+::: warning Deprecated
+
+:::

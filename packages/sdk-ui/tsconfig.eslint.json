@@ -1,4 +1,12 @@
 {
   "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.json",
+    "src/**/*.dash.json",
+    "scripts/**/*.ts"
+  ],
+
   "exclude": []
 }

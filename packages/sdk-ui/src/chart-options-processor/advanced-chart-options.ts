@@ -21,6 +21,7 @@ export const formatForecastSeries = (
     [x: string]: SeriesType;
   },
 ) => {
+  if (!s?.data) return -1;
   const upperSeries = upperSeriesHash[rangeTitle(s.name)];
   const lowerSeries = lowerSeriesHash[rangeTitle(s.name)];
   const measureName = s.name.substring(FORECAST_PREFIX.length + 1);
@@ -59,6 +60,7 @@ export const formatForecastAdjustRangeStart = (
     [x: string]: SeriesType;
   },
 ) => {
+  if (!s.data) return;
   const measureName = s.name.substring(10, s.name.length - 7);
   const measure = seriesHash[measureName];
   const startIndex = s.data.findIndex((d) => !isNaN(d?.low || NaN));
@@ -194,7 +196,9 @@ const isValidForAdvancedAnalytics = (dataOptions: CartesianChartDataOptions): bo
  * @returns An array of trend measures.
  * @internal
  */
-export const extractTrendMeasures = (dataOptions: CartesianChartDataOptions): Measure[] => {
+export const extractTrendMeasures = (
+  dataOptions: CartesianChartDataOptions,
+): StyledMeasureColumn[] => {
   if (!isValidForAdvancedAnalytics(dataOptions)) {
     return [];
   }
@@ -204,13 +208,16 @@ export const extractTrendMeasures = (dataOptions: CartesianChartDataOptions): Me
       (measure): measure is StyledMeasureColumn =>
         (measure as StyledMeasureColumn)?.trend !== undefined,
     )
-    .map((measure) =>
-      measureFactory.trend(
-        measure.column as Measure,
-        `${TREND_PREFIX}_${measure.column.name}`,
-        measure.trend,
-      ),
-    );
+    .map((measure) => {
+      return {
+        column: measureFactory.trend(
+          measure.column as Measure,
+          `${TREND_PREFIX}_${measure.column.name}`,
+          measure.trend,
+        ),
+        numberFormatConfig: measure.numberFormatConfig,
+      };
+    });
 };
 
 /**
@@ -220,7 +227,9 @@ export const extractTrendMeasures = (dataOptions: CartesianChartDataOptions): Me
  * @returns An array of forecast measures.
  * @internal
  */
-export const extractForecastMeasures = (dataOptions: CartesianChartDataOptions): Measure[] => {
+export const extractForecastMeasures = (
+  dataOptions: CartesianChartDataOptions,
+): StyledMeasureColumn[] => {
   if (!isValidForAdvancedAnalytics(dataOptions)) {
     return [];
   }
@@ -230,11 +239,15 @@ export const extractForecastMeasures = (dataOptions: CartesianChartDataOptions):
       (measure): measure is StyledMeasureColumn =>
         (measure as StyledMeasureColumn)?.forecast !== undefined,
     )
-    .map((measure) =>
-      measureFactory.forecast(
-        measure.column as Measure,
-        `${FORECAST_PREFIX}_${measure.column.name}`,
-        measure.forecast,
-      ),
-    );
+
+    .map((measure) => {
+      return {
+        column: measureFactory.forecast(
+          measure.column as Measure,
+          `${FORECAST_PREFIX}_${measure.column.name}`,
+          measure.forecast,
+        ),
+        numberFormatConfig: measure.numberFormatConfig,
+      };
+    });
 };

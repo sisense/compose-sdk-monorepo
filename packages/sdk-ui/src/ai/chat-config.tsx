@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from 'react';
 
-import { ChatMode } from '@/ai/api/types';
+import { ChatMode, ChatContextDetails } from '@/ai/api/types';
 import { useTranslation } from 'react-i18next';
 
 export interface ChatConfig {
@@ -87,6 +87,13 @@ export interface ChatConfig {
    * @default false
    */
   hideHistory?: boolean;
+
+  /**
+   * Optional chat context details.
+   *
+   * @internal
+   */
+  contextDetails?: ChatContextDetails;
 }
 
 export const DEFAULTS = Object.freeze<ChatConfig>({

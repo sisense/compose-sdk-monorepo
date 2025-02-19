@@ -52,11 +52,11 @@ export interface CriteriaFilterTileProps extends Omit<CriteriaFilterTilePropsPre
  * export class FiltersComponent {
  *   DM = DM;
  *   title: 'Room Number',
- *   filter: filterFactory.lessThan(DM.Rooms.Room_number, 200) as CriteriaFilterType,
+ *   filter: filterFactory.lessThan(DM.Rooms.Room_number, 200) ,
  *   setFilter({ filter }: { filter: Filter | null }) {
  *     console.log(filter);
  *     if (filter) {
- *       this.filter = filter as CriteriaFilterType;
+ *       this.filter = filter ;
  *     }
  *   },
  * }

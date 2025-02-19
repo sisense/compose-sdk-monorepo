@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  BasicMemberFilterTileComponent,
   ChartComponent,
   TableComponent,
   ChartWidgetComponent,
@@ -66,7 +65,6 @@ import { DecoratorsModule } from './decorators/decorators.module';
  */
 @NgModule({
   declarations: [
-    BasicMemberFilterTileComponent,
     ChartComponent,
     TableComponent,
     ChartWidgetComponent,
@@ -101,7 +99,6 @@ import { DecoratorsModule } from './decorators/decorators.module';
   ],
   imports: [CommonModule, DecoratorsModule],
   exports: [
-    BasicMemberFilterTileComponent,
     ChartComponent,
     TableComponent,
     ChartWidgetComponent,

@@ -51,7 +51,7 @@ describe('useApplyPivotTableFormatting', () => {
     const [event, handler] = DataServiceMock.on.mock.calls[0];
     expect(event).toBe(EVENT_DATA_CELL_FORMAT);
 
-    handler(cell);
+    handler(cell, {}, {});
 
     expect(dataCellFormatterMock).toHaveBeenCalledTimes(1);
   });

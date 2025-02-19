@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.30.0] - 2025-02-18
+
+### Added
+- Add pivot cell coloring and conditional styling
+- Add `dataReady` property support for Angular charts and widgets
+- Add an option to control the verbosity of the NLG summarization
+- Add theming support on `FilterEditorPopover` component for internal testing
+
+### Changed
+- Improve charts: fix missing formatting for pivot, number formatting for trend/forecast features, enhance pivot performance
+- Improve types of `CriteriaFilterTile` component's props
+- Deprecate `PivotGrandTotals.title` prop
+- Improve testing: added pivot visual-regression tests, cover textual filter editing with unit tests
+- Improve code-templates in analitycs-composer
+- Improve AI `Chatbot` with context details
+- Fix compatibility with old React versions
+
 ## [1.29.0] - 2025-02-04
 
 ### Added

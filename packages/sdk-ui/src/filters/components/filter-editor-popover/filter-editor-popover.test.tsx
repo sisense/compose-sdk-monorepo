@@ -33,7 +33,7 @@ describe('FilterEditorPopover', () => {
         <FilterEditorPopover filter={filter} position={{ anchorEl: document.body }} />
       </SisenseContextProvider>,
     );
-    const filterEditorPopover = await screen.findByTestId('filter-editor-popover');
+    const filterEditorPopover = await screen.findByLabelText('Filter editor popover');
     expect(filterEditorPopover).toBeInTheDocument();
   });
 
@@ -60,7 +60,7 @@ describe('FilterEditorPopover', () => {
         />
       </SisenseContextProvider>,
     );
-    const applyButton = await screen.findByTestId('filter-editor-popover-apply-button');
+    const applyButton = await screen.findByText('Apply');
     await user.click(applyButton);
     expect(onChangeMock).toHaveBeenCalled();
   });
@@ -76,8 +76,8 @@ describe('FilterEditorPopover', () => {
         />
       </SisenseContextProvider>,
     );
-    const applyButton = await screen.findByTestId('filter-editor-popover-cancel-button');
-    await user.click(applyButton);
+    const cancelButton = await screen.findByText('Cancel');
+    await user.click(cancelButton);
     expect(onCloseMock).toHaveBeenCalled();
   });
 });

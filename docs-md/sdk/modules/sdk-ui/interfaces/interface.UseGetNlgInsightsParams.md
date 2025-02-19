@@ -47,3 +47,11 @@ Filters of the query
 > **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]
 
 Measures of the query
+
+***
+
+### verbosity
+
+> **verbosity**?: `"High"` \| `"Low"`
+
+The verbosity of the NLG summarization

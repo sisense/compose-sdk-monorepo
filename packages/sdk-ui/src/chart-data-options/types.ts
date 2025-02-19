@@ -1,4 +1,8 @@
-import type { DataColorOptions } from '../chart-data/data-coloring';
+import {
+  ConditionalDataColorOptions,
+  DataColorOptions,
+  UniformDataColorOptions,
+} from '../chart-data/data-coloring';
 import type {
   NumberFormatConfig,
   SeriesChartType,
@@ -155,6 +159,10 @@ export type ValueStyle = {
    * Boolean flag whether to display data bars for this measure in the pivot table.
    */
   dataBars?: boolean;
+  /**
+   * Color options for data bars for this measure in the pivot table
+   */
+  dataBarsColor?: string | UniformDataColorOptions | ConditionalDataColorOptions;
   /**
    * Options to add forecast to this measure
    *

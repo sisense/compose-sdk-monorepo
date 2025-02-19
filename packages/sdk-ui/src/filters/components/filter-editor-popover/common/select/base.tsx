@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 import { Focusable } from './types';
+import { getSlightlyDifferentColor } from '@/utils/color';
+import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from '@/const';
 
 export const SelectContainer = styled.div<Focusable>`
   box-sizing: border-box;
@@ -7,14 +9,14 @@ export const SelectContainer = styled.div<Focusable>`
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  background: #f4f4f8;
+  background: ${DEFAULT_BACKGROUND_COLOR};
   height: 28px;
   border-radius: 4px;
   padding-left: 12px;
-  border: 1px solid ${({ focus }) => (focus ? '#5b6372' : '#f4f4f8')};
+  border: 1px solid ${({ focus }) => (focus ? DEFAULT_TEXT_COLOR : 'transparent')};
 `;
 
-export const SelectItemContainer = styled.div`
+export const SelectItemContainer = styled.div<{ background?: string; color?: string }>`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -23,10 +25,12 @@ export const SelectItemContainer = styled.div`
   height: 28px;
   padding-left: 14px;
   padding-right: 14px;
-  color: #5b6372;
+  color: ${({ color = DEFAULT_TEXT_COLOR }) => color};
   transition: color 0.2s ease;
+  background-color: ${({ background = 'transparent' }) => background};
   &:hover {
-    background-color: #f4f4f8;
+    background-color: ${({ background }) =>
+      background ? getSlightlyDifferentColor(background, 0.03) : DEFAULT_BACKGROUND_COLOR};
   }
 `;
 

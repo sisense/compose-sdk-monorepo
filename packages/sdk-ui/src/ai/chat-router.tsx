@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { useGetDataTopics } from './api/hooks';
 import ChatBox from './chat-box';
 import { useChatConfig } from './chat-config';
@@ -9,30 +9,40 @@ import LoadingSpinner from '../common/components/loading-spinner';
 import { useTranslation } from 'react-i18next';
 
 export default function ChatRouter() {
-  const [validDataTopicsList, setValidDataTopicsList] = useState<string[]>([]);
   const [selectedContext, setSelectedContext] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const { data, fetchStatus } = useGetDataTopics();
 
-  const { dataTopicsList } = useChatConfig();
+  const { dataTopicsList, contextDetails } = useChatConfig();
   const { t } = useTranslation();
+  const noAvailableDataTopicsErrorMessage = t('ai.errors.noAvailableDataTopics');
 
-  useEffect(() => {
-    if (data && fetchStatus === 'idle') {
-      let allowedContexts = data;
-      if (dataTopicsList && dataTopicsList.length) {
-        allowedContexts = data?.filter((dataTopic) => dataTopicsList?.includes(dataTopic.title));
-      }
-      setValidDataTopicsList(allowedContexts.map((dataTopic) => dataTopic.title));
-      if (!allowedContexts.length) {
-        setErrorMessage(t('ai.errors.noAvailableDataTopics'));
-      } else if (allowedContexts.length === 1) {
+  const onContextsLoaded = useCallback(
+    (validDataTopicsList: string[]) => {
+      if (!validDataTopicsList.length) {
+        setErrorMessage(noAvailableDataTopicsErrorMessage);
+      } else if (validDataTopicsList.length === 1) {
         setErrorMessage(undefined);
-        setSelectedContext(allowedContexts[0].title);
+        setSelectedContext(validDataTopicsList[0]);
       }
+    },
+    [noAvailableDataTopicsErrorMessage],
+  );
+
+  const validDataTopicsList = useMemo(() => {
+    if (data && fetchStatus === 'idle') {
+      const allowedContexts = dataTopicsList?.length
+        ? data?.filter((dataTopic) => dataTopicsList?.includes(dataTopic.title))
+        : data;
+      const validDataTopicsList = allowedContexts.map((dataTopic) => dataTopic.title);
+
+      onContextsLoaded(validDataTopicsList);
+
+      return validDataTopicsList;
     }
-  }, [data, dataTopicsList, fetchStatus, t]);
+    return [];
+  }, [data, fetchStatus, dataTopicsList, onContextsLoaded]);
 
   const queryClient = useQueryClient();
   const handleRefresh = useCallback(() => {
@@ -56,6 +66,7 @@ export default function ChatRouter() {
   return selectedContext ? (
     <ChatBox
       contextTitle={selectedContext}
+      contextDetails={contextDetails}
       onGoBack={validDataTopicsList.length === 1 ? undefined : () => setSelectedContext(undefined)}
     />
   ) : (

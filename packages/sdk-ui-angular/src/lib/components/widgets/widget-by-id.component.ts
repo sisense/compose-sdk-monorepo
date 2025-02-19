@@ -20,8 +20,12 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types';
 
 export interface WidgetByIdProps extends WidgetByIdPropsPreact {}
+export interface WidgetByIdProps
+  extends WithoutPreactChartEventProps<WidgetByIdPropsPreact>,
+    BaseChartEventProps {}
 
 /**
  * The `WidgetById` component, which is a thin wrapper on {@link ChartWidgetComponent},
@@ -147,6 +151,15 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input()
   drilldownOptions: WidgetByIdProps['drilldownOptions'];
 
+  /**
+   * {@inheritDoc  @sisense/sdk-ui!WidgetByIdProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: WidgetByIdProps['dataReady'];
+
   private componentAdapter: ComponentAdapter;
 
   constructor(
@@ -188,6 +201,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
       styleOptions: this.styleOptions,
       highlightSelectionDisabled: this.highlightSelectionDisabled,
       drilldownOptions: this.drilldownOptions,
+      onDataReady: this.dataReady?.bind(this),
     };
 
     return createElement(WidgetById, props);

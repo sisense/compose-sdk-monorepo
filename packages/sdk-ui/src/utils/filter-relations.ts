@@ -13,7 +13,7 @@ import {
   mergeFiltersOrFilterRelations,
   UnknownRelationsNodeError,
 } from '@sisense/sdk-data';
-import { cloneDeep } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 
 export {
   splitFiltersAndRelations,

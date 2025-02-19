@@ -27,11 +27,13 @@ export default function CodeExample() {
 }`;
 
 export const MOCK_CODE_ANGULAR_1 = `import { Component } from '@angular/core';
+import { SdkUiModule, type ChartDataOptions } from '@sisense/sdk-ui-angular';
 import { measureFactory, filterFactory } from '@sisense/sdk-data';
 import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
 
 @Component({
     selector: 'code-example',
+    imports: [SdkUiModule],
     template: \`
       <csdk-chart-widget
         chartType='bar'
@@ -43,7 +45,7 @@ import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
 })
 export class CodeExample {
     DM = DM;
-    dataOptions = {
+    dataOptions: ChartDataOptions = {
     category: [
       DM.Commerce.Condition
     ],
@@ -171,9 +173,11 @@ export default CodeExample;
 `;
 
 export const MOCK_CODE_ANGULAR_2 = `import { Component } from '@angular/core';
+import { SdkUiModule } from '@sisense/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
+  imports: [SdkUiModule],
   template: \`
     <csdk-widget-by-id
       [widgetOid]="widgetOid"
@@ -225,11 +229,13 @@ export default CodeExample;
 `;
 
 export const MOCK_CODE_EXECUTE_QUERY_ANGULAR_1 = `import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { QueryService } from '@sisense/sdk-ui-angular';
 import { type QueryResultData } from '@sisense/sdk-data';
 
 @Component({
   selector: 'code-example',
+  imports: [CommonModule],
   template: \`<div>
     <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
     <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>
@@ -301,6 +307,34 @@ const CodeExample = () => {
   }
 
   return null;
+};
+
+export default CodeExample;
+`;
+
+export const MOCK_CODE_EXECUTE_PIVOT_QUERY_REACT_1 = `import { useExecutePivotQuery, ExecutePivotQueryParams } from '@sisense/sdk-ui';
+import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+
+const CodeExample = () => {
+    const pivotQueryProps: ExecutePivotQueryParams = {
+      dataSource: DM.DataSource,
+      rows: [],
+      values: [],
+    }
+
+    const { data, isLoading, isError, error } = useExecutePivotQuery(pivotQueryProps);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+    if (isError) {
+      return <div>Error: {error.message}</div>;
+    }
+    if (data) {
+      return <div>Total Rows: {data.table.rows.length}</div>;
+    }
+
+    return null;
 };
 
 export default CodeExample;

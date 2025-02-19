@@ -1,5 +1,5 @@
 import React, { type ForwardedRef, forwardRef } from 'react';
-import { Button as MuiButton, ButtonProps as MuiButtonProps } from '@mui/material';
+import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 

@@ -18,7 +18,7 @@ export const IncludeAllSection = ({ filter, selected, onChange }: IncludeAllSect
   }, [onChange, filter]);
 
   return (
-    <SelectableSection selected={selected} onSelect={handleSelect}>
+    <SelectableSection selected={selected} onSelect={handleSelect} aria-label="Include all section">
       {(select) => (
         <span style={{ cursor: 'pointer' }} onClick={select}>
           {t('filterEditor.labels.includeAll')}

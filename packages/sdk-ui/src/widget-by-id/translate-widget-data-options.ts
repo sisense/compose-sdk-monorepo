@@ -168,6 +168,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   const subtotal = item.format?.subtotal;
   const width = item.format?.width;
   let color = createValueColorOptions(item.format?.color, customPaletteColors);
+  const colorSecondary = createValueColorOptions(item.format?.colorSecond, customPaletteColors);
 
   // Hande specific case in Fusion dashboard model
   // Sunburst palette index stores that way
@@ -190,6 +191,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     const dataOption = {
       column: element,
       ...(color && { color }),
+      ...(colorSecondary && { dataBarsColor: colorSecondary }),
       ...(showOnRightAxis && { showOnRightAxis }),
       ...(sortType && { sortType }),
       ...(chartType && { chartType }),
@@ -429,7 +431,19 @@ function extractPivotTableChartDataOptions(
       valuesFieldIndexesMapping[field.index] = index;
     }
 
-    return createDataColumn(item, paletteColors);
+    // remove color formatting if color not set, because otherwise it will be colored with palette color
+    if (item.format?.color?.type === 'color' && !item.format?.color?.color) {
+      delete item.format.color;
+    }
+
+    const dataColumn = createDataColumn(item, paletteColors);
+
+    // By default, we provide defaultColor from palette for conditional coloring, but it's not needed in the case of pivot table
+    if (typeof dataColumn.color !== 'string' && dataColumn.color?.type === 'conditional') {
+      delete dataColumn.color.defaultColor;
+    }
+
+    return dataColumn;
   });
 
   // process rows

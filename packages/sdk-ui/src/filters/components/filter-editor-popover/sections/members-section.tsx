@@ -6,6 +6,7 @@ import { Attribute, Filter, FilterConfig, filterFactory } from '@sisense/sdk-dat
 import { isIncludeMembersFilter } from '../utils';
 import { SearchableSingleSelect } from '../common/select/searchable-single-select';
 import { usePrevious } from '@/common/hooks/use-previous';
+import { useThemeContext } from '@/theme-provider';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
   return members.length
@@ -28,6 +29,7 @@ type MembersSectionProps = {
 
 /** @internal */
 export const MembersSection = (props: MembersSectionProps) => {
+  const { themeSettings } = useThemeContext();
   const { filter, selected, members, multiSelectEnabled, onChange } = props;
   const { t } = useTranslation();
   const [selectedMembers, setSelectedMembers] = useState(
@@ -78,7 +80,11 @@ export const MembersSection = (props: MembersSectionProps) => {
   );
 
   return (
-    <SelectableSection selected={selected} onSelect={handleSectionSelect}>
+    <SelectableSection
+      selected={selected}
+      onSelect={handleSectionSelect}
+      aria-label="Members section"
+    >
       {() =>
         multiSelectEnabled ? (
           <SearchableMultiSelect<string>
@@ -87,6 +93,8 @@ export const MembersSection = (props: MembersSectionProps) => {
             placeholder={t('filterEditor.placeholders.selectFromList')}
             items={selectItems}
             onChange={handleMembersChange}
+            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
+            primaryColor={themeSettings.typography.primaryTextColor}
           />
         ) : (
           <SearchableSingleSelect<string>
@@ -95,6 +103,8 @@ export const MembersSection = (props: MembersSectionProps) => {
             placeholder={t('filterEditor.placeholders.selectFromList')}
             items={selectItems}
             onChange={handleMembersChange}
+            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
+            primaryColor={themeSettings.typography.primaryTextColor}
           />
         )
       }

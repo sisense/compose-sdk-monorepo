@@ -6,6 +6,9 @@ export interface ChatContext {
   live: boolean;
 }
 
+export interface ChatContextDetails {
+  dashboardId?: string;
+}
 export interface TextMessage {
   role: 'assistant';
   content: string; // stringified json { answer: string }
@@ -26,7 +29,8 @@ export interface Chat {
   chatId: string;
   contextId: string;
   contextTitle: string;
-  lastUpdate: string;
+  contextDetails?: ChatContextDetails;
+  expireAt: string;
   tenantId: string;
   userId: string;
   chatHistory: ChatMessage[];
@@ -90,6 +94,7 @@ export type QueryRecommendationResponse = QueryRecommendation[];
 
 export interface GetNlgInsightsRequest {
   jaql: Pick<JaqlQueryPayload, 'datasource' | 'metadata' | 'filterRelations'>;
+  verbosity?: 'Low' | 'High';
 }
 
 export interface GetNlgInsightsResponse {

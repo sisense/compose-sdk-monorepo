@@ -175,6 +175,15 @@ describe('Boxplot Utils', () => {
 
       expect(result).toEqual(normalizeDataset(withoutCategoryColumn(fullDataSet)));
     });
+
+    it('should not fail when there is no data', () => {
+      const result = boxWhiskerProcessResult(
+        undefined as unknown as QueryResultData,
+        undefined as unknown as QueryResultData,
+      );
+
+      expect(result).toEqual({ columns: [], rows: [] });
+    });
   });
 
   describe('executeBoxplotQuery', () => {
@@ -241,6 +250,38 @@ describe('Boxplot Utils', () => {
       );
 
       expect(result).toEqual(normalizeDataset(fullDataSet));
+    });
+    it('should  not fail when there is no data', async () => {
+      executePivotQueryMock.mockResolvedValueOnce(undefined);
+      executePivotQueryMock.mockResolvedValueOnce(undefined);
+
+      const result = await executeBoxplotQuery(
+        {
+          app: {} as ClientApplication,
+          chartDataOptions: {
+            category: { column: fullDataSet.columns[0] },
+            boxMin: { column: fullDataSet.columns[1] },
+            boxMedian: { column: fullDataSet.columns[2] },
+            boxMax: { column: fullDataSet.columns[3] },
+            whiskerMin: { column: fullDataSet.columns[4] },
+            whiskerMax: { column: fullDataSet.columns[5] },
+            outliersCount: { column: fullDataSet.columns[6] },
+            outliers: { column: fullDataSet.columns[7] },
+            valueTitle: 'Test data',
+          },
+          dataSource: 'Dummy datasource',
+          attributes: [
+            createAttribute(fullDataSet.columns[0]),
+            createAttribute(fullDataSet.columns[7]),
+          ],
+          measures: fullDataSet.columns.slice(1, 7) as Measure[],
+          filters: [],
+          highlights: [],
+        },
+        executePivotQueryMock,
+      );
+
+      expect(result).toEqual({ columns: [], rows: [] });
     });
   });
 });

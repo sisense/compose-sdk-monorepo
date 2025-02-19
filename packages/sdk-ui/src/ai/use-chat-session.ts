@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useSendChatMessage } from './api/hooks';
 import {
-  useGetAllChats,
-  useGetDataTopics,
-  useSendChatMessage,
-  useMaybeCreateChat,
-} from './api/hooks';
-import { ChatMessage, NlqMessage, NlqResponseData, TextMessage } from './api/types';
+  ChatMessage,
+  NlqMessage,
+  NlqResponseData,
+  TextMessage,
+  ChatContextDetails,
+} from './api/types';
 import { useChatHistory } from './api/chat-history';
 import { useTranslation } from 'react-i18next';
 import { TranslatableError } from '@/translation/translatable-error';
 import { useChatConfig } from './chat-config';
+import { useGetChat } from '@/ai/use-get-chat';
 
 /**
  * Result of the useChatSession hook.
@@ -41,26 +43,20 @@ export const isTextMessage = (message: ChatMessage | null | undefined): message 
  *
  * If a chat session does not already exist, then one is created.
  *
- * @param contextTitle - the title of the data model or perspective
+ * @param {string} contextTitle - the title of the data model or perspective
+ * @param {ChatContextDetails} [contextDetails] - optional chat context details
  * @internal
  */
-export const useChatSession = (contextTitle: string): UseChatSessionResult => {
+export const useChatSession = (
+  contextTitle: string,
+  contextDetails?: ChatContextDetails,
+): UseChatSessionResult => {
   const { t } = useTranslation();
   const { enableFollowupQuestions } = useChatConfig();
-  const { data: dataTopics, isLoading: dataTopicsLoading } = useGetDataTopics();
-  const { data: chats, isLoading: chatsLoading } = useGetAllChats();
 
-  const contextId = dataTopics?.find((d) => d.title === contextTitle)?.title;
-  const chatId = chats.find((c) => c.contextTitle === contextId)?.chatId;
-
-  const contextExists = dataTopicsLoading || !!contextId;
-  const chatExists = chatsLoading || !!chatId;
+  const { chatId, isError: isCreateChatError } = useGetChat(contextTitle, contextDetails, true);
 
   const [lastError, setLastError] = useState<Error | null>(null);
-  const { isError: isCreateChatError } = useMaybeCreateChat(
-    contextId,
-    contextExists && !chatExists,
-  );
 
   const { history: chatHistory, isLoading, isError: isFetchHistoryError } = useChatHistory(chatId);
 

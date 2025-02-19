@@ -271,6 +271,13 @@ export const translation = {
         'The AI configuration is not ready, please wait a few minutes and try again.',
       LlmBadConfigurationError:
         'The LLM configuration is wrong. Reach out to your Admin to update the LLM provider configuration.',
+      ChartTypeUnsupportedError: 'Requested chart type is not supported.',
+      BlockedByLlmContentFiltering:
+        'This question is blocked by our content management policy. Please try asking a different question.',
+      LlmContextLengthExceedsLimitError:
+        "Looks like you've reached the message length limit, please clear this conversation.",
+      UserPromptExeedsLimitError:
+        'The prompt exceeds the limit. Rephrase your question and use shorter prompt.',
       unexpectedChatResponse:
         'Oh snap, something went wrong. Please try again later or try asking a different question.',
       unexpected: 'Oh snap, something went wrong. Please try again later.',

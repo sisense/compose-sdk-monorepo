@@ -6,7 +6,7 @@ import {
   validateDataOptionsAgainstData,
   validateDataOptions,
 } from './validate-data-options';
-import { Attribute, Filter, Measure } from '@sisense/sdk-data';
+import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
 
 describe('generateUniqueDataColumnsNames', () => {
   it('should generate unique names and return the mapping', () => {
@@ -123,6 +123,19 @@ describe('validateDataOptionsAgainstData', () => {
     ],
     rows: [],
   };
+
+  it('should not fail if no data is provided', () => {
+    expect(
+      validateDataOptionsAgainstData(
+        undefined as unknown as Data,
+        attributes,
+        measures,
+        dataColumnNamesMapping,
+        filters,
+        highlights,
+      ),
+    ).toBe(true);
+  });
 
   it('should be true with valid dataOptions', () => {
     expect(

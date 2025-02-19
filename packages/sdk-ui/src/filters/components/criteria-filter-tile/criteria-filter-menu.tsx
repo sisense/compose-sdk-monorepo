@@ -191,6 +191,7 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
     );
   };
 
+  // measures will always have findIndex as it falls back to an empty array
   const selectedIdx = measures.findIndex((m) => m.name === selectedMeasure.name);
   const dropdownItems = measures.map((m) => {
     return (

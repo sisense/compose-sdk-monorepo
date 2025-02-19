@@ -23,9 +23,11 @@ import ClickableMessage from './messages/clickable-message';
 import { BetaLabel } from './common/beta-label';
 import { ScrollToBottom } from './scroll-to-bottom';
 import { useTranslation } from 'react-i18next';
+import { ChatContextDetails } from '@/ai/api/types';
 
 export type ChatBoxProps = {
   contextTitle: string;
+  contextDetails?: ChatContextDetails;
   onGoBack?: () => void;
 };
 
@@ -58,7 +60,7 @@ const FollowupQuestionsContainer = styled.div<Themable>`
   row-gap: ${({ theme }) => theme.aiChat.suggestions.gap};
 `;
 
-export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
+export default function ChatBox({ contextTitle, onGoBack, contextDetails }: ChatBoxProps) {
   const { t } = useTranslation();
   const { enableFollowupQuestions, enableHeader, numOfRecentPrompts, numOfRecommendations } =
     useChatConfig();
@@ -84,7 +86,7 @@ export default function ChatBox({ contextTitle, onGoBack }: ChatBoxProps) {
     isLoading,
     chatId,
     lastError,
-  } = useChatSession(contextTitle);
+  } = useChatSession(contextTitle, contextDetails);
 
   const { mutate: clearHistory, isLoading: isClearingHistory } = useClearChatHistory(chatId);
 

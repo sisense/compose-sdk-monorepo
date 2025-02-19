@@ -3,17 +3,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedSisenseContextProvider, setup } from '../../../__test-helpers__/index.js';
 import { CriteriaFilterTile, CriteriaFilterTileProps } from './criteria-filter-tile';
-import {
-  NumericFilter,
-  RankingFilter,
-  TextFilter,
-  createAttribute,
-  createMeasure,
-  filterFactory,
-} from '@sisense/sdk-data';
+import { createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
 
 const mockAttribute = createAttribute({
   name: 'BrandID',
@@ -51,7 +44,7 @@ const measures = [mockMeasureA, mockMeasureB, mockMeasureC];
 
 const propsBetween: CriteriaFilterTileProps = {
   title: 'Test Title',
-  filter: filterFactory.between(mockAttribute, 0, 100) as NumericFilter,
+  filter: filterFactory.between(mockAttribute, 0, 100),
   onUpdate: vi.fn(),
 };
 
@@ -96,7 +89,7 @@ describe('criteria tests', () => {
   it('renders text input boxes when expanded', async () => {
     const propsNotContain: CriteriaFilterTileProps = {
       title: 'Test Title',
-      filter: filterFactory.doesntContain(mockAttribute, 'boop') as TextFilter,
+      filter: filterFactory.doesntContain(mockAttribute, 'boop'),
       onUpdate: vi.fn(),
     };
     const { user } = setup(
@@ -114,7 +107,7 @@ describe('criteria tests', () => {
   it('renders ranked controls when expanded', async () => {
     const propsTopRank: CriteriaFilterTileProps = {
       title: 'Test Title',
-      filter: filterFactory.topRanking(mockAttribute, mockMeasureB, 5) as RankingFilter,
+      filter: filterFactory.topRanking(mockAttribute, mockMeasureB, 5),
       onUpdate: vi.fn(),
       measures,
     };
@@ -134,7 +127,7 @@ describe('criteria tests', () => {
   it('renders dropdown for horizontal ranked variant', async () => {
     const propsTopRank: CriteriaFilterTileProps = {
       title: 'Test Title',
-      filter: filterFactory.bottomRanking(mockAttribute, mockMeasureA, 5) as RankingFilter,
+      filter: filterFactory.bottomRanking(mockAttribute, mockMeasureA, 5),
       arrangement: 'horizontal',
       onUpdate: vi.fn(),
       measures,
@@ -203,5 +196,48 @@ describe('criteria tests', () => {
     const editButton = await findByTestId('filter-edit-button');
     editButton.click();
     expect(onEditMock).toHaveBeenCalled();
+  });
+
+  it('should render filter tile if Exclude filter passed as initial filter', async () => {
+    const propsExclude = {
+      title: 'Test Title',
+      filter: filterFactory.exclude(filterFactory.between(mockAttribute, 0, 100)),
+      onUpdate: vi.fn(),
+    };
+
+    render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsExclude} />
+      </MockedSisenseContextProvider>,
+    );
+
+    const element = screen.getByText('All items not between 0 and 100');
+    expect(element).toBeInTheDocument();
+  });
+
+  it('should throw an error if incompatible filter passed as initial filter', async () => {
+    const propsWithMembersFilter = {
+      title: 'Test Title',
+      // members filter is not supported for criteria filter tile
+      filter: filterFactory.members(mockAttribute, []),
+      onUpdate: vi.fn(),
+      measures,
+    };
+
+    let caughtError: Error | undefined = undefined;
+
+    render(
+      <MockedSisenseContextProvider
+        errorBoundary={{ showErrorBox: false, onError: (error) => (caughtError = error) }}
+      >
+        <CriteriaFilterTile {...propsWithMembersFilter} />
+      </MockedSisenseContextProvider>,
+    );
+
+    // it should throw an error
+    await waitFor(() => {
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('errors.unsupportedFilter');
+    });
   });
 });

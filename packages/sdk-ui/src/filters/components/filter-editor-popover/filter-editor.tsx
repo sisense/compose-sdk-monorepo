@@ -9,11 +9,7 @@ import { TextConditionSection } from './sections/text-condition-section';
 import { useExecuteQueryInternal } from '@/query-execution/use-execute-query';
 import { isIncludeAllFilter, isIncludeMembersFilter } from './utils';
 import { MultiSelectControl } from './multi-select-control';
-
-type FilterEditorProps = {
-  filter: Filter;
-  onChange?: (filter: Filter | null) => void;
-};
+import { useThemeContext } from '@/theme-provider';
 
 const FilterEditorContainer = styled.div`
   display: flex;
@@ -21,7 +17,6 @@ const FilterEditorContainer = styled.div`
   padding: 20px 16px 16px 40px;
   justify-content: space-around;
   align-items: stretch;
-  color: #5b6372;
   font-size: 13px;
 `;
 
@@ -95,8 +90,14 @@ const useGetMembers = (params: UseGetMembersParams): MembersState => {
   };
 };
 
+type FilterEditorProps = {
+  filter: Filter;
+  onChange?: (filter: Filter | null) => void;
+};
+
 /** @internal */
 export const FilterEditor = ({ filter, onChange }: FilterEditorProps) => {
+  const { themeSettings } = useThemeContext();
   const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
   const [selectedSection, setSelectedSection] = useState<FilterSections | null>(
     getSelectedSection(editedFilter),
@@ -130,7 +131,12 @@ export const FilterEditor = ({ filter, onChange }: FilterEditorProps) => {
   }, []);
 
   return (
-    <FilterEditorContainer>
+    <FilterEditorContainer
+      style={{
+        color: themeSettings.typography.primaryTextColor,
+      }}
+      aria-label="Filter editor"
+    >
       <Stack
         direction="row"
         spacing={2}

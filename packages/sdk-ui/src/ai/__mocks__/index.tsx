@@ -10,14 +10,20 @@ import AiContextProvider from '../ai-context-provider';
  *
  * @internal
  */
-export const AiTestWrapper = ({ children }: { children: ReactNode }) => (
+export const AiTestWrapper = ({
+  children,
+  volatile,
+}: {
+  children: ReactNode;
+  volatile?: boolean;
+}) => (
   <SisenseContextProvider
     url={mockUrl}
     token={mockToken}
     showRuntimeErrors={true}
     appConfig={{ errorBoundaryConfig: { alwaysShowErrorText: true } }}
   >
-    <AiContextProvider>
+    <AiContextProvider volatile={volatile}>
       <QueryClientProvider
         client={
           new QueryClient({

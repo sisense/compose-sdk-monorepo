@@ -220,7 +220,12 @@ function jaqlPivotMeasure(m: Measure | PivotMeasure, panel: string, index: numbe
     ...(isPivotMeasure(m)
       ? merge(m.measure.jaql(), {
           jaql: { subtotalAgg: m.totalsCalculation },
-          format: { databars: m.dataBars || false },
+          format: {
+            databars: m.dataBars || false,
+            ...(m.shouldRequestMinMax && {
+              color: { type: 'range' },
+            }),
+          },
         })
       : m.jaql()),
     panel,

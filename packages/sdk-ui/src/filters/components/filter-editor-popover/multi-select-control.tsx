@@ -26,11 +26,20 @@ export const MultiSelectControl = ({ enabled, onChange }: MultiSelectControlProp
   const { themeSettings } = useThemeContext();
   return (
     <Container>
-      <Label>{t('filterEditor.labels.allowMultiSelection')}</Label>
+      <Label
+        style={{ color: themeSettings.typography.primaryTextColor }}
+        id="multiselect-switch-label"
+      >
+        {t('filterEditor.labels.allowMultiSelection')}
+      </Label>
       <SisenseSwitchButton
         checked={enabled}
         size="small"
-        inputProps={{ role: 'switch', name: 'multiselect-switch' }}
+        inputProps={{
+          role: 'switch',
+          name: 'multiselect-switch',
+          'aria-labelledby': 'multiselect-switch-label',
+        }}
         onChange={() => onChange?.(!enabled)}
         theme={themeSettings}
       />

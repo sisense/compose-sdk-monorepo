@@ -45,7 +45,6 @@ export type {
   IndicatorChartProps,
   AreaRangeChartProps,
   MemberFilterTileProps,
-  BasicMemberFilterTileProps,
   CriteriaFilterTileProps,
   DateRangeFilterTileProps,
   RelativeDateFilterTileProps,
@@ -185,9 +184,9 @@ export type {
   Navigator,
   DrilldownOptions,
   DrilldownSelection,
-  CriteriaFilterType,
   Member,
   FilterVariant,
+  CriteriaFilterType,
 } from '@sisense/sdk-ui-preact';
 
 // Re-exports redefined types from @sisense/sdk-ui-preact

@@ -116,7 +116,7 @@ const CodeExample = () => {
       return <div>Error: {error.message}</div>;
     }
     if (data) {
-      return <div>Total Rows: {data.rows.length}</div>;
+      return <div>Total Rows: {data.table.rows.length}</div>;
     }
 
     return null;
@@ -140,11 +140,13 @@ export default function CodeExample() {
   },
   angular: {
     baseChartTmpl: `import { Component } from '@angular/core';
+import { SdkUiModule, type ChartDataOptions } from '@sisense/sdk-ui-angular';
 {{extraImportsString}}
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
 
 @Component({
     selector: 'code-example',
+    imports: [SdkUiModule],
     template: \`
       <csdk-chart-widget
         chartType='{{chartTypeString}}'
@@ -156,15 +158,17 @@ import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
 })
 export class CodeExample {
     DM = DM;
-    dataOptions = {{dataOptionsString}};
+    dataOptions: ChartDataOptions = {{dataOptionsString}};
     filters = {{filtersString}};
 }`,
     chartTmpl: `{{baseChartTmpl}}`,
     chartWidgetTmpl: `{{baseChartTmpl}}`,
     widgetByIdTmpl: `import { Component } from '@angular/core';
+import { SdkUiModule } from '@sisense/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
+  imports: [SdkUiModule],
   template: \`
     <csdk-widget-by-id
       [widgetOid]="widgetOid"
@@ -180,11 +184,13 @@ export class CodeExample {
   includeDashboardFilters = true;
 }`,
     executeQueryByWidgetIdTmpl: `import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { QueryService } from '@sisense/sdk-ui-angular';
 import { type QueryResultData } from '@sisense/sdk-data';
 
 @Component({
   selector: 'code-example',
+  imports: [CommonModule],
   template: \`<div>
     <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
     <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>
@@ -214,6 +220,7 @@ export class CodeExample {
 }
 `,
     executeQueryTmpl: `import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 {{extraImportsString}}
 import { type QueryResultData } from '@sisense/sdk-data';
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
@@ -221,6 +228,7 @@ import { QueryService } from '@sisense/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
+  imports: [CommonModule],
   template: \`<div>
     <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
     <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>

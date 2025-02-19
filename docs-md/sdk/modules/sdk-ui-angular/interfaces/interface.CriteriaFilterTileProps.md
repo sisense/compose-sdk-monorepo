@@ -16,7 +16,7 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ### filter
 
-> **filter**: [`CriteriaFilterType`](../type-aliases/type-alias.CriteriaFilterType.md)
+> **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
 
 Text or numeric filter object to initialize filter type and default values
 
@@ -30,7 +30,7 @@ Text or numeric filter object to initialize filter type and default values
 
 | Parameter | Type |
 | :------ | :------ |
-| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null` |
+| `filter` | [`Filter`](../../sdk-data/interfaces/interface.Filter.md) |
 
 #### Returns
 

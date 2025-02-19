@@ -70,6 +70,7 @@ export class AnalyticsComponent {
       [filters]="filters"
       [highlights]="highlights"
       [styleOptions]="styleOptions"
+      [dataReady]="dataReady"
       (dataPointClick)="dataPointClick.emit($any($event))"
     />
   `,

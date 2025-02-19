@@ -11,7 +11,6 @@ export function usePivotDataService(options: {
   shouldBeRecreated: boolean;
 }): DataService {
   const { pivotClient, pivotBuilder, shouldBeRecreated } = options;
-
   const [dataService, setDataService] = useState<DataService>(() =>
     pivotClient.prepareDataService(),
   );
@@ -23,6 +22,13 @@ export function usePivotDataService(options: {
       pivotBuilder.updateDataService(newDataService);
     }
   }, [pivotClient, pivotBuilder, shouldBeRecreated]);
+
+  useEffect(() => {
+    // Cleanup
+    return () => {
+      dataService.destroy();
+    };
+  }, [dataService]);
 
   return dataService;
 }

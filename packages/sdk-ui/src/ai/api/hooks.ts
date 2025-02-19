@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { ChatMessage, ChatResponse } from './types';
+import type { ChatMessage, ChatResponse, ChatContextDetails } from './types';
 import { useChatApi } from './chat-api-provider';
 import { CHAT_HISTORY_QUERY_KEY } from './chat-history';
 import { useTranslation } from 'react-i18next';
@@ -49,7 +49,11 @@ export const useGetAllChats = () => {
 /**
  * @internal
  */
-export const useMaybeCreateChat = (contextId: string | undefined, shouldCreate: boolean) => {
+export const useMaybeCreateChat = (
+  contextId: string | undefined,
+  shouldCreate: boolean,
+  contextDetails?: ChatContextDetails,
+) => {
   const queryClient = useQueryClient();
   const api = useChatApi();
 
@@ -59,7 +63,7 @@ export const useMaybeCreateChat = (contextId: string | undefined, shouldCreate: 
         return;
       }
 
-      return api.ai.chat.create(contextId);
+      return api.ai.chat.create(contextId, contextDetails);
     },
     onSuccess: () => queryClient.invalidateQueries(['getAllChats']),
   });

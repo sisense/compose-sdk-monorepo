@@ -73,6 +73,8 @@ export const validateDataOptionsAgainstData = (
   filters?: Filter[],
   highlights?: Filter[],
 ): boolean => {
+  if (!data) return true;
+
   if (attributes.length + measures.length === 0) {
     throw new TranslatableError('errors.dataOptions.noDimensionsAndMeasures');
   }

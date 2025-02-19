@@ -91,7 +91,7 @@ export const BasicMemberFilterTile: FunctionComponent<BasicMemberFilterTileProps
   });
 
   const onChangeSelectedMembers = (member: Member) => {
-    const memberIndex = selectedMembers.findIndex((m) => m.key === member.key);
+    const memberIndex = selectedMembers?.findIndex((m) => m.key === member.key) ?? -1;
     if (memberIndex === -1) {
       dispatchMembersAction({
         type: 'selectMember',

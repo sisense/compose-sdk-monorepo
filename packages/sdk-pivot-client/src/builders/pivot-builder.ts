@@ -290,14 +290,19 @@ export class PivotBuilder {
       const dataService = this.dataService;
       this.destroyDataServiceListeners(dataService);
     }
-    if (this.domElem) {
-      // See notes in the render() method
-      try {
-        this.rootDom.unmount();
-      } catch (e) {
-        ReactDOM.unmountComponentAtNode(this.domElem);
+
+    // Prevents React warning about unmounting component while rendering
+    setTimeout(() => {
+      if (this.domElem) {
+        // See notes in the render() method
+        try {
+          this.rootDom.unmount();
+        } catch (e) {
+          ReactDOM.unmountComponentAtNode(this.domElem);
+        }
       }
-    }
+    });
+
     if (this.currentRowsTreeService) {
       this.currentRowsTreeService.destroy();
       this.currentRowsTreeService = undefined;

@@ -28,11 +28,11 @@ import * as DM from '../../assets/sample-healthcare-model';
 export class FiltersComponent {
   DM = DM;
   title: 'Room Number',
-  filter: filterFactory.lessThan(DM.Rooms.Room_number, 200) as CriteriaFilterType,
+  filter: filterFactory.lessThan(DM.Rooms.Room_number, 200) ,
   setFilter({ filter }: { filter: Filter | null }) {
     console.log(filter);
     if (filter) {
-      this.filter = filter as CriteriaFilterType;
+      this.filter = filter ;
     }
   },
 }
@@ -94,7 +94,7 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 #### filter
 
-> **filter**: [`CriteriaFilterType`](../type-aliases/type-alias.CriteriaFilterType.md)
+> **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
 
 Text or numeric filter object to initialize filter type and default values
 
@@ -104,7 +104,7 @@ Text or numeric filter object to initialize filter type and default values
 
 > **filterChange**: `EventEmitter`\< `ArgumentsAsObject`\< (`filter`) => `void`, [`"filter"`] \> \>
 
-Callback returning filter object, or null for failure
+Callback returning updated filter object
 
 ***
 

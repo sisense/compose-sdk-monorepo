@@ -21,6 +21,7 @@ import { useApplyPivotTableFormatting } from './hooks/use-apply-pivot-table-form
 import { usePivotTableQuery } from './hooks/use-get-pivot-table-query';
 import { useRenderPivot } from './hooks/use-render-pivot';
 import { TranslatableError } from '@/translation/translatable-error';
+import { usePivotBuilder } from './hooks/use-pivot-builder';
 
 /**
  * Pivot table with pagination.
@@ -136,8 +137,7 @@ export const PivotTable = asSisenseComponent({
     throw error;
   }
 
-  const pivotBuilder = useMemo(() => pivotClient.preparePivotBuilder(), [pivotClient]);
-
+  const pivotBuilder = usePivotBuilder({ pivotClient });
   const isJaqlChanged = useHasChanged(jaql);
   const isForceReload = refreshCounter > 0 && useHasChanged(refreshCounter);
 

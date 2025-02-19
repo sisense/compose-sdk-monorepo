@@ -20,8 +20,12 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types';
 
 export interface TableProps extends TablePropsPreact {}
+export interface TableProps
+  extends WithoutPreactChartEventProps<TablePropsPreact>,
+    BaseChartEventProps {}
 /**
  * Table with aggregation and pagination.
  *
@@ -96,6 +100,15 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   styleOptions: TableProps['styleOptions'];
 
+  /**
+   * {@inheritDoc  @sisense/sdk-ui!TableProps.onDataReady}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  @Input()
+  dataReady: TableProps['dataReady'];
+
   private componentAdapter: ComponentAdapter;
 
   constructor(
@@ -129,6 +142,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
       dataOptions: this.dataOptions,
       filters: this.filters,
       styleOptions: this.styleOptions,
+      onDataReady: this.dataReady,
     };
 
     return createElement(Table, props);

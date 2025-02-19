@@ -47,7 +47,7 @@ export function getRangeColoringFunction(
  * @param steps - The number of interpolation steps.
  * @returns The interpolator function.
  */
-const getInterpolatorFn = (
+export const getInterpolatorFn = (
   minColor: string,
   maxColor: string,
   minValue: number,

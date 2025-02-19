@@ -85,6 +85,14 @@ Boolean flag whether to display data bars for this measure in the pivot table.
 
 ***
 
+### dataBarsColor
+
+> **dataBarsColor**?: [`ConditionalDataColorOptions`](../type-aliases/type-alias.ConditionalDataColorOptions.md) \| [`UniformDataColorOptions`](../type-aliases/type-alias.UniformDataColorOptions.md) \| `string`
+
+Color options for data bars for this measure in the pivot table
+
+***
+
 ### numberFormatConfig
 
 > **numberFormatConfig**?: [`NumberFormatConfig`](../type-aliases/type-alias.NumberFormatConfig.md)

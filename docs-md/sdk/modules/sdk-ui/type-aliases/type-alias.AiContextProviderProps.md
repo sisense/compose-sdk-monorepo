@@ -11,3 +11,9 @@ title: AiContextProviderProps
 ### `children`
 
 **children**: `ReactNode`
+
+***
+
+### `volatile`
+
+**volatile**?: `boolean`

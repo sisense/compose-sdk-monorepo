@@ -39,6 +39,9 @@ export interface UseGetNlgInsightsParams {
    * If not specified, the default value is `true`
    */
   enabled?: boolean;
+
+  /** The verbosity of the NLG summarization */
+  verbosity?: 'Low' | 'High';
 }
 
 /**
@@ -88,13 +91,19 @@ export const useGetNlgInsightsInternal = (
         true,
       );
 
-      return {
+      const parameters: GetNlgInsightsRequest = {
         jaql: {
           datasource: dataSource,
           metadata,
           filterRelations,
         },
       };
+
+      if (params.verbosity) {
+        parameters.verbosity = params.verbosity;
+      }
+
+      return parameters;
     }
   }, [params]);
 

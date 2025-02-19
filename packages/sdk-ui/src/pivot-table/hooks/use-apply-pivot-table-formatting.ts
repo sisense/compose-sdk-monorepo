@@ -13,6 +13,8 @@ import { createDataCellValueFormatter, createHeaderCellValueFormatter } from '..
 import { createHeaderCellHighlightFormatter } from '../formatters/header-cell-formatters/header-cell-highlight-formatter';
 import { createHeaderCellTotalsFormatter } from '@/pivot-table/formatters/header-cell-formatters/header-cell-totals-formatter';
 import { useTranslation } from 'react-i18next';
+import { createDataCellColorFormatter } from '@/pivot-table/formatters/data-cell-formatters/data-cell-color-formatter';
+import { useThemeContext } from '@/theme-provider';
 
 /**
  * A hook that applies formatting over pivot table cells.
@@ -28,10 +30,15 @@ export const useApplyPivotTableFormatting = ({
 }) => {
   const { app } = useSisenseContext();
   const { t: translate } = useTranslation();
+  const { themeSettings } = useThemeContext();
 
-  const onDataCellFormat = useCallback(over([createDataCellValueFormatter(dataOptions)]), [
-    dataOptions,
-  ]);
+  const onDataCellFormat = useCallback(
+    over([
+      createDataCellValueFormatter(dataOptions),
+      createDataCellColorFormatter(dataOptions, themeSettings),
+    ]),
+    [dataOptions],
+  );
 
   const dateFormatter = useCallback(
     (date: Date, format: string) =>

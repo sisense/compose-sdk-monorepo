@@ -7,6 +7,9 @@ import { SelectContainer, SelectLabel } from './base';
 import { calculatePopoverPosition, getSelectedItemsDisplayValue } from './utils';
 import { MultiSelectItem } from './multi-select-item';
 import { useTranslation } from 'react-i18next';
+import { DEFAULT_TEXT_COLOR } from '@/const';
+
+const Content = styled.div``;
 
 const ContentToolbar = styled.div`
   display: flex;
@@ -30,17 +33,21 @@ const ContentToolbarButton = styled.button`
   }
 `;
 
+const ContentList = styled.div``;
+
 type SearchableMultiSelectProps<Value> = {
   values?: Value[];
   items: SelectItem<Value>[];
   style?: CSSProperties;
   placeholder?: string;
   onChange?: (values: Value[]) => void;
+  primaryColor?: string;
+  primaryBackgroundColor?: string;
 };
 
 /** @internal */
 export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSelectProps<Value>) {
-  const { items, style, placeholder, onChange, ...rest } = props;
+  const { items, style, placeholder, onChange, primaryColor, primaryBackgroundColor } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
@@ -74,15 +81,19 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
         ref={selectElementRef}
         focus={open}
         onClick={() => setOpen((isOpen) => !isOpen)}
-        style={style}
-        {...rest}
+        style={{
+          ...style,
+          ...(primaryColor && { color: primaryColor }),
+          ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
+        }}
+        aria-label="Searchable multi-select"
       >
-        <SelectLabel style={{ opacity: values.length ? '100%' : '50%' }}>
+        <SelectLabel style={{ opacity: values.length ? '100%' : '50%' }} aria-label="Value">
           {getSelectedItemsDisplayValue(items, values) ?? placeholder}
         </SelectLabel>
         <ArrowDownIcon
-          aria-label="select-icon"
-          fill="#5B6372"
+          fill={primaryColor || DEFAULT_TEXT_COLOR}
+          aria-label="Open icon"
           style={{
             minWidth: '24px',
             transform: `rotate(${open ? 180 : 0}deg)`,
@@ -94,12 +105,15 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
         onClose={() => setOpen(false)}
         position={calculatePopoverPosition(selectElementRef.current, 10 * 20)}
       >
-        <div
+        <Content
           style={{
             minWidth: selectElementRef.current?.clientWidth,
             maxWidth:
               selectElementRef.current?.clientWidth && selectElementRef.current?.clientWidth * 2,
+            backgroundColor: primaryBackgroundColor,
+            color: primaryColor,
           }}
+          aria-label="Searchable multi-select content"
         >
           <ContentToolbar>
             <ContentToolbarButton
@@ -113,15 +127,21 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
               {t('filterEditor.buttons.clearAll')}
             </ContentToolbarButton>
           </ContentToolbar>
-          {items.map((item, index) => (
-            <MultiSelectItem
-              key={index}
-              {...item}
-              selected={!!values?.includes(item.value)}
-              onSelect={handleItemSelect}
-            />
-          ))}
-        </div>
+          <ContentList aria-label="List">
+            {items.map((item, index) => (
+              <MultiSelectItem
+                key={index}
+                style={{
+                  backgroundColor: primaryBackgroundColor,
+                  color: primaryColor,
+                }}
+                {...item}
+                selected={!!values?.includes(item.value)}
+                onSelect={handleItemSelect}
+              />
+            ))}
+          </ContentList>
+        </Content>
       </Popover>
     </>
   );

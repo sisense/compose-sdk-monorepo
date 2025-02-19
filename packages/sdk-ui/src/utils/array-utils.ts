@@ -13,7 +13,7 @@
  * ```
  */
 export function sliceFromMatched<T>(array: T[], matchValue: T): T[] {
-  const index = array.findIndex((item) => item === matchValue);
+  const index = array?.findIndex((item) => item === matchValue) ?? -1;
 
   if (index === -1) {
     return [];

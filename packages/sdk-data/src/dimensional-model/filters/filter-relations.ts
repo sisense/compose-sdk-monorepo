@@ -13,7 +13,8 @@ import {
   FilterRelationsNode,
   isCascadingFilter,
 } from '../../index.js';
-import { cloneDeep, isArray } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep.js';
+import isArray from 'lodash-es/isArray.js';
 
 import { TranslatableError } from '../../translation/translatable-error.js';
 
@@ -606,6 +607,7 @@ export function mergeFilters(sourceFilters: Filter[] = [], targetFilters: Filter
   const filters = [...sourceFilters];
 
   targetFilters.forEach((filter) => {
+    // filters will always have findIndex as sourceFilters fall back to an empty array
     const existingFilterIndex = filters.findIndex(
       (existingFilter) => getFilterCompareId(filter) === getFilterCompareId(existingFilter),
     );

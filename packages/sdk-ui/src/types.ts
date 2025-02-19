@@ -1255,6 +1255,17 @@ export interface WidgetContainerStyleOptions {
   };
 }
 
+/**
+ * Configuration options that define functional style of the various elements of the Nlq Chart Widget
+ *
+ * @internal
+ * */
+export type NlqChartWidgetStyleOptions = {
+  header?: {
+    hidden?: boolean;
+  };
+};
+
 /** @internal */
 export type RenderToolbarHandler = (
   onRefresh: () => void,

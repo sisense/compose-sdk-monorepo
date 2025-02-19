@@ -46,6 +46,7 @@ export const ComplexSortingSettingsPopup = (props: ComplexSortingSettingsPopupPr
 
   const handleSettingsItemChange = (itemState: Omit<SortingSettingItem, 'datatype'>) => {
     const updatedSettingsItemState = produce(settings, (settingsDraft) => {
+      // settingsDraft will always have findIndex as settings fall back to initialSortingSettings
       const index = settingsDraft.findIndex(({ title }) => itemState.title === title);
       if (index !== -1) {
         settingsDraft[index].selected = itemState.selected;
