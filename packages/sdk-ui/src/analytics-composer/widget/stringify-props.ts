@@ -3,9 +3,7 @@ import {
   DimensionalBaseMeasure,
   DimensionalElement,
   JaqlElement,
-  JaqlSortDirection,
   MetadataItemJaql,
-  getSortType,
   normalizeAttributeName,
 } from '@sisense/sdk-data';
 
@@ -51,8 +49,8 @@ const stringifyFormula = (jaql: MetadataItemJaql, indent: number): string => {
 };
 
 // eslint-disable-next-line complexity
-const stringifyDimensionOrMeasure = (jaql: MetadataItemJaql, indent: number): string => {
-  const { level, table, column, agg, sort, title } = jaql;
+const stringifyDimensionOrMeasure = (jaql: MetadataItemJaql): string => {
+  const { level, table, column, agg, title } = jaql;
   let elementDef;
 
   // create dimension attribute
@@ -67,26 +65,16 @@ const stringifyDimensionOrMeasure = (jaql: MetadataItemJaql, indent: number): st
     )}(${elementDef}, '${escapeSingleQuotes(title)}')`;
   }
 
-  // add sorting
-  if (sort) {
-    elementDef = `{column: ${elementDef}, sortType: '${getSortType(sort as JaqlSortDirection)}'}`;
-  }
-
-  // add indentation
-  if (elementDef) {
-    return `${' '.repeat(indent)}${elementDef}`;
-  }
-
-  return VALUE_UNKNOWN;
+  return elementDef || VALUE_UNKNOWN;
 };
 
 const stringifyJaqlElement = (jaqlElement: JaqlElement, indent: number): string => {
-  const jaql = jaqlElement.jaql().jaql;
+  const jaql = jaqlElement.jaql(false).jaql;
 
   if ('formula' in jaql) {
     return stringifyFormula(jaql, indent);
   } else {
-    return NEW_LINE + stringifyDimensionOrMeasure(jaql, indent);
+    return stringifyDimensionOrMeasure(jaql);
   }
 };
 

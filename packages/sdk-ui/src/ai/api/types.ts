@@ -1,5 +1,6 @@
 import { JaqlQueryPayload } from '@sisense/sdk-query-client';
 import { ExpandedQueryModel } from '@/analytics-composer';
+import { WidgetProps } from '@/props';
 
 export interface ChatContext {
   title: string;
@@ -71,10 +72,14 @@ interface ErrorResponse {
   responseType: 'error';
 }
 
+/**
+ * Response data to NLQ request
+ */
 export interface NlqResponseData extends ExpandedQueryModel {
   detailedDescription: string;
   followupQuestions: string[];
   nlqPrompt: string;
+  widgetProps?: WidgetProps | undefined;
 }
 export interface NlqResponse {
   data: NlqResponseData;

@@ -18,6 +18,8 @@ const FlexDiv = styled.div<Themable>`
   gap: 10px;
   margin: 24px 0;
   max-width: 640px;
+  color: ${({ theme }) => theme.chart.textColor};
+  background-color: ${({ theme }) => theme.chart.backgroundColor};
 `;
 
 const IconDiv = styled.div<Themable>`

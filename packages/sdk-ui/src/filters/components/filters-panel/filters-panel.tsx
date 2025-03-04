@@ -1,13 +1,19 @@
-import { useRef, useState } from 'react';
-import { FilterTile } from '../filter-tile';
-import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { useCallback, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
+import {
+  DataSource,
+  Filter,
+  FilterRelations,
+  isText as isTextAttributeType,
+  isNumber as isNumberAttributeType,
+} from '@sisense/sdk-data';
+import { FilterTile } from '../filter-tile';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { DASHBOARD_HEADER_HEIGHT } from '@/dashboard/components/dashboard-header';
-import { useTranslation } from 'react-i18next';
 import {
   calculateNewRelations,
   combineFiltersAndRelations,
@@ -103,6 +109,17 @@ export const FiltersPanel = asSisenseComponent({
       handleFilterChange(null, index);
     };
 
+    const isFilterSupportEditing = useCallback(
+      (filter: Filter) => {
+        return (
+          enableFilterEditor &&
+          (isTextAttributeType(filter.attribute.type) ||
+            isNumberAttributeType(filter.attribute.type))
+        );
+      },
+      [enableFilterEditor],
+    );
+
     return (
       <PanelWrapper theme={themeSettings}>
         <PanelHeader theme={themeSettings}>
@@ -123,7 +140,9 @@ export const FiltersPanel = asSisenseComponent({
                   filter={filter}
                   onChange={(newFilter) => handleFilterChange(newFilter, index)}
                   defaultDataSource={defaultDataSource}
-                  onEdit={enableFilterEditor ? () => setEditedFilterIndex(index) : undefined}
+                  onEdit={
+                    isFilterSupportEditing(filter) ? () => setEditedFilterIndex(index) : undefined
+                  }
                 />
               </div>
             ))}

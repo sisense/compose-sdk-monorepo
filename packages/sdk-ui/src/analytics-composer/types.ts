@@ -1,8 +1,9 @@
 import { WidgetProps, ChartWidgetProps, PivotTableWidgetProps } from '@/props';
-import { ChartDataOptions } from '@/types';
+import { ChartDataOptions, ChartStyleOptions } from '@/types';
 import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
 import { MetadataItem } from '@sisense/sdk-data';
 import { DynamicChartType } from '../chart-options-processor/translations/types.js';
+import { AnyColumn } from '@/chart-data-options/types.js';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;
@@ -13,23 +14,21 @@ type ExtraCodeProps = {
   extraImportsString: string;
 };
 
+/** @internal */
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
+/** @internal */
 export type AllPossibleChartOptionKeys = KeysOfUnion<ChartDataOptions>;
+/** @internal */
 export type AxesMappingKey = Exclude<AllPossibleChartOptionKeys, 'seriesToColorMap'>;
-export type AxesMapping = Partial<
-  Record<
-    AxesMappingKey,
-    Array<{
-      name: string;
-      type?: string;
-    }>
-  >
->;
+/** @internal */
+export type AxesMapping = Partial<Record<AxesMappingKey, Array<AnyColumn>>>;
 
+/** @internal */
 export interface ChartRecommendations {
   chartFamily: string;
   chartType: string;
   axesMapping: AxesMapping;
+  styleOptions?: ChartStyleOptions;
 }
 
 /**
@@ -38,7 +37,9 @@ export interface ChartRecommendations {
  * @internal
  */
 export interface ExpandedQueryModel {
+  /** @internal */
   chartRecommendations: ChartRecommendations | {};
+  /** @internal */
   jaql: {
     datasource: {
       id?: string;
@@ -47,7 +48,7 @@ export interface ExpandedQueryModel {
     };
     metadata: MetadataItem[];
   };
-  widgetProps?: WidgetProps | undefined;
+  /** @internal */
   queryTitle: string;
 }
 
@@ -59,7 +60,6 @@ export interface ExpandedQueryModel {
  */
 export const EMPTY_EXPANDED_QUERY_MODEL: ExpandedQueryModel = {
   jaql: { datasource: { title: '' }, metadata: [] },
-  widgetProps: undefined,
   queryTitle: '',
   chartRecommendations: {},
 };
@@ -71,6 +71,7 @@ export const EMPTY_EXPANDED_QUERY_MODEL: ExpandedQueryModel = {
 export interface SimpleChartRecommendations {
   chartType: string;
   dataOptions: AxesMapping;
+  styleOptions: ChartStyleOptions;
 }
 
 /**

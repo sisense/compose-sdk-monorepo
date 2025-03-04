@@ -38,7 +38,7 @@ export const TextOperators = {
   DoesntContain: 'doesntContain',
   DoesntEndWith: 'doesntEndWith',
   Like: 'like',
-};
+} as const;
 
 /**
  * Different numeric operators that can be used with numeric filters
@@ -50,7 +50,7 @@ export const NumericOperators = {
   FromNotEqual: 'fromNotEqual',
   To: 'to',
   ToNotEqual: 'toNotEqual',
-};
+} as const;
 
 /**
  * Different date operators that can be used with date filters
@@ -84,7 +84,7 @@ export const LogicalOperators = {
 export const RankingOperators = {
   Top: 'top',
   Bottom: 'bottom',
-};
+} as const;
 
 /**
  * Different filter types
@@ -103,7 +103,7 @@ export const FilterTypes = {
   relativeDate: 'relativeDate',
   cascading: 'cascading',
   advanced: 'advanced',
-};
+} as const;
 
 // CLASSES
 

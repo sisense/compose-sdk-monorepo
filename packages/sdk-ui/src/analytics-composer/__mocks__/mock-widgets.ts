@@ -311,54 +311,54 @@ export default function CodeExample() {
       dataSource={DM.DataSource}
       chartType={'line'}
       dataOptions={ {
-    category: [{
-        column: DM.Commerce.Date.Months,
-        isColored: false,
-        sortType: 'sortNone',
-      }
-    ],
-    value: [{
-        column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
-        color: {
-          type: 'uniform',
-          color: '#00cee6',
-        },
-        sortType: 'sortNone',
-        numberFormatConfig: {
-          decimalScale: 'auto',
-          kilo: true,
-          million: true,
-          billion: true,
-          trillion: true,
-          thousandSeparator: true,
-          prefix: false,
-          symbol: undefined,
-          name: 'Numbers',
-        },
-      },{
-        column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
-        color: {
-          type: 'uniform',
-          color: '#00cee6',
-        },
-        showOnRightAxis: true,
-        sortType: 'sortNone',
-        chartType: 'column',
-        numberFormatConfig: {
-          decimalScale: 'auto',
-          kilo: true,
-          million: true,
-          billion: true,
-          trillion: true,
-          thousandSeparator: true,
-          prefix: false,
-          symbol: undefined,
-          name: 'Numbers',
-        },
-      }
-    ],
-    breakBy: [],
-  } }
+        category: [{
+            column: DM.Commerce.Date.Months,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          },{
+            column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            showOnRightAxis: true,
+            sortType: 'sortNone',
+            chartType: 'column',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        breakBy: [],
+      } }
       filters={ [] }
     />
   );
@@ -571,6 +571,7 @@ export default function CodeExample() {
     columns: undefined,
   },
 } }
+      filters={ [] }
     />
   );
 }`;
@@ -1093,41 +1094,41 @@ export default function CodeExample() {
       dataSource={DM.DataSource}
       chartType={'bar'}
       dataOptions={ {
-    category: [{
-        column: DM.Commerce.AgeRange,
-        isColored: false,
-        sortType: 'sortNone',
-      }
-    ],
-    value: [{
-        column: measureFactory.customFormula('Revenue Median', 'QUARTILE([28B80-CD8], 2)', {'28B80-CD8': DM.Commerce.Revenue,}),
-        sortType: 'sortNone',
-        numberFormatConfig: {
-          decimalScale: 'auto',
-          kilo: true,
-          million: true,
-          billion: true,
-          trillion: true,
-          thousandSeparator: true,
-          prefix: false,
-          symbol: undefined,
-          name: 'Numbers',
+        category: [{
+            column: DM.Commerce.AgeRange,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.customFormula('Revenue Median', 'QUARTILE([28B80-CD8], 2)', {'28B80-CD8': DM.Commerce.Revenue,}),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        breakBy: [{
+            column: DM.Category.Category,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        seriesToColorMap: {
         },
-      }
-    ],
-    breakBy: [{
-        column: DM.Category.Category,
-        isColored: false,
-        sortType: 'sortNone',
-      }
-    ],
-    seriesToColorMap: {
-    },
-  } }
+      } }
       filters={ [
-    filterFactory.topRanking(DM.Category.Category, measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'), 3),
-    filterFactory.bottomRanking(DM.Category.Category, measureFactory.customFormula('QUARTILE([Revenue], 2)', 'QUARTILE([AB202-E4C], 2)', {'AB202-E4C': DM.Commerce.Revenue,}), 10)
-    ] }
+        filterFactory.topRanking(DM.Category.Category, measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'), 3),
+        filterFactory.bottomRanking(DM.Category.Category, measureFactory.customFormula('QUARTILE([Revenue], 2)', 'QUARTILE([AB202-E4C], 2)', {'AB202-E4C': DM.Commerce.Revenue,}), 10)
+        ] }
     />
   );
 }`;

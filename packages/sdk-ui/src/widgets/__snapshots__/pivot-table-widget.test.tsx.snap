@@ -219,7 +219,7 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                                 class="sis-scope"
                               >
                                 <div
-                                  class="sisense-pivot__pagination-panel sisense-pivot__pagination-panel--hidden sisense-pivot__pagination-panel--desktop"
+                                  class="sisense-pivot__pagination-panel sisense-pivot__pagination-panel--showed sisense-pivot__pagination-panel--desktop"
                                   data-html2canvas-ignore="true"
                                 >
                                   <div

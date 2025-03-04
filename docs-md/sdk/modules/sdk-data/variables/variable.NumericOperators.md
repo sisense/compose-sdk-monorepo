@@ -12,34 +12,34 @@ Different numeric operators that can be used with numeric filters
 
 ### `DoesntEqual`
 
-**DoesntEqual**: `string` = `'doesntEqual'`
+**`readonly`** **DoesntEqual**: `"doesntEqual"` = `'doesntEqual'`
 
 ***
 
 ### `Equals`
 
-**Equals**: `string` = `'equals'`
+**`readonly`** **Equals**: `"equals"` = `'equals'`
 
 ***
 
 ### `From`
 
-**From**: `string` = `'from'`
+**`readonly`** **From**: `"from"` = `'from'`
 
 ***
 
 ### `FromNotEqual`
 
-**FromNotEqual**: `string` = `'fromNotEqual'`
+**`readonly`** **FromNotEqual**: `"fromNotEqual"` = `'fromNotEqual'`
 
 ***
 
 ### `To`
 
-**To**: `string` = `'to'`
+**`readonly`** **To**: `"to"` = `'to'`
 
 ***
 
 ### `ToNotEqual`
 
-**ToNotEqual**: `string` = `'toNotEqual'`
+**`readonly`** **ToNotEqual**: `"toNotEqual"` = `'toNotEqual'`

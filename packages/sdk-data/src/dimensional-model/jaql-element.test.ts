@@ -34,6 +34,8 @@ describe('createJaqlElement', () => {
     metadata.forEach((metadataItem) => {
       const jaqlElement = createJaqlElement(metadataItem);
       expect(jaqlElement.jaql()).toEqual(metadataItem);
+      expect(jaqlElement.jaql(false)).toEqual(metadataItem);
+      expect(jaqlElement.jaql(true)).toEqual(metadataItem.jaql);
     });
   });
 

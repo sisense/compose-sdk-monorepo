@@ -1,15 +1,23 @@
 import { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { ArrowDownIcon } from '../../../icons';
-import { Popover } from '@/common/components/popover';
 import { SelectItem } from './types';
 import { SelectContainer, SelectLabel } from './base';
-import { calculatePopoverPosition, getSelectedItemsDisplayValue } from './utils';
+import { getSelectedItemsDisplayValue } from './utils';
 import { MultiSelectItem } from './multi-select-item';
 import { useTranslation } from 'react-i18next';
+import {
+  ScrollWrapper,
+  ScrollWrapperOnScrollEvent,
+} from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
+import { Popper } from '@/common/components/popper';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
-const Content = styled.div``;
+const Content = styled.div`
+  max-height: 320px;
+`;
 
 const ContentToolbar = styled.div`
   display: flex;
@@ -43,11 +51,22 @@ type SearchableMultiSelectProps<Value> = {
   onChange?: (values: Value[]) => void;
   primaryColor?: string;
   primaryBackgroundColor?: string;
+  onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
+  showListLoader?: boolean;
 };
 
 /** @internal */
 export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSelectProps<Value>) {
-  const { items, style, placeholder, onChange, primaryColor, primaryBackgroundColor } = props;
+  const {
+    items,
+    style,
+    placeholder,
+    onChange,
+    primaryColor,
+    primaryBackgroundColor,
+    onListScroll,
+    showListLoader = false,
+  } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
@@ -74,75 +93,76 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
   const handleClearAll = useCallback(() => {
     onChange?.([]);
   }, [onChange]);
-
   return (
-    <>
-      <SelectContainer
-        ref={selectElementRef}
-        focus={open}
-        onClick={() => setOpen((isOpen) => !isOpen)}
-        style={{
-          ...style,
-          ...(primaryColor && { color: primaryColor }),
-          ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-        }}
-        aria-label="Searchable multi-select"
-      >
-        <SelectLabel style={{ opacity: values.length ? '100%' : '50%' }} aria-label="Value">
-          {getSelectedItemsDisplayValue(items, values) ?? placeholder}
-        </SelectLabel>
-        <ArrowDownIcon
-          fill={primaryColor || DEFAULT_TEXT_COLOR}
-          aria-label="Open icon"
+    <ClickAwayListener onClickAway={() => setOpen(false)}>
+      <div>
+        <SelectContainer
+          ref={selectElementRef}
+          focus={open}
+          onClick={() => setOpen((isOpen) => !isOpen)}
           style={{
-            minWidth: '24px',
-            transform: `rotate(${open ? 180 : 0}deg)`,
+            ...style,
+            ...(primaryColor && { color: primaryColor }),
+            ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
           }}
-        />
-      </SelectContainer>
-      <Popover
-        open={open}
-        onClose={() => setOpen(false)}
-        position={calculatePopoverPosition(selectElementRef.current, 10 * 20)}
-      >
-        <Content
-          style={{
-            minWidth: selectElementRef.current?.clientWidth,
-            maxWidth:
-              selectElementRef.current?.clientWidth && selectElementRef.current?.clientWidth * 2,
-            backgroundColor: primaryBackgroundColor,
-            color: primaryColor,
-          }}
-          aria-label="Searchable multi-select content"
+          aria-label="Searchable multi-select"
         >
-          <ContentToolbar>
-            <ContentToolbarButton
-              style={{ marginRight: '8px' }}
-              disabled={items.length === values.length}
-              onClick={handleSelectAll}
+          <SelectLabel style={{ opacity: values.length ? '100%' : '50%' }} aria-label="Value">
+            {getSelectedItemsDisplayValue(items, values) ?? placeholder}
+          </SelectLabel>
+          <ArrowDownIcon
+            fill={primaryColor || DEFAULT_TEXT_COLOR}
+            aria-label="Open icon"
+            style={{
+              minWidth: '24px',
+              transform: `rotate(${open ? 180 : 0}deg)`,
+            }}
+          />
+        </SelectContainer>
+        <Popper open={open} anchorEl={selectElementRef.current} style={{ maxHeight: 300 }}>
+          <ScrollWrapper onScroll={onListScroll}>
+            <Content
+              style={{
+                minWidth: selectElementRef.current?.clientWidth,
+                maxWidth:
+                  selectElementRef.current?.clientWidth &&
+                  selectElementRef.current?.clientWidth * 2,
+                backgroundColor: primaryBackgroundColor,
+                color: primaryColor,
+              }}
+              aria-label="Searchable multi-select content"
             >
-              {t('filterEditor.buttons.selectAll')}
-            </ContentToolbarButton>
-            <ContentToolbarButton disabled={!values.length} onClick={handleClearAll}>
-              {t('filterEditor.buttons.clearAll')}
-            </ContentToolbarButton>
-          </ContentToolbar>
-          <ContentList aria-label="List">
-            {items.map((item, index) => (
-              <MultiSelectItem
-                key={index}
-                style={{
-                  backgroundColor: primaryBackgroundColor,
-                  color: primaryColor,
-                }}
-                {...item}
-                selected={!!values?.includes(item.value)}
-                onSelect={handleItemSelect}
-              />
-            ))}
-          </ContentList>
-        </Content>
-      </Popover>
-    </>
+              <ContentToolbar>
+                <ContentToolbarButton
+                  style={{ marginRight: '8px' }}
+                  disabled={items.length === values.length}
+                  onClick={handleSelectAll}
+                >
+                  {t('filterEditor.buttons.selectAll')}
+                </ContentToolbarButton>
+                <ContentToolbarButton disabled={!values.length} onClick={handleClearAll}>
+                  {t('filterEditor.buttons.clearAll')}
+                </ContentToolbarButton>
+              </ContentToolbar>
+              <ContentList aria-label="List">
+                {items.map((item, index) => (
+                  <MultiSelectItem
+                    key={index}
+                    style={{
+                      backgroundColor: primaryBackgroundColor,
+                      color: primaryColor,
+                    }}
+                    {...item}
+                    selected={!!values?.includes(item.value)}
+                    onSelect={handleItemSelect}
+                  />
+                ))}
+                {showListLoader && <SmallLoader />}
+              </ContentList>
+            </Content>
+          </ScrollWrapper>
+        </Popper>
+      </div>
+    </ClickAwayListener>
   );
 }

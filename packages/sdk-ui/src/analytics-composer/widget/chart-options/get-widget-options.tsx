@@ -11,7 +11,8 @@ import {
 import { ScattermapChartDataOptions } from '../../../chart-data-options/types';
 import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
 import { DatetimeMask, MetadataItem, createJaqlElement, isDatetime } from '@sisense/sdk-data';
-import { ChartRecommendations, ExpandedQueryModel } from '@/analytics-composer/types';
+import { AxesMapping, ChartRecommendations, ExpandedQueryModel } from '@/analytics-composer/types';
+import { normalizeAnyColumn } from '@/chart-data-options/utils';
 
 export const getChartRecommendationsOrDefault = (
   response: ExpandedQueryModel,
@@ -68,9 +69,9 @@ const DEFAULT_SUBTYPE_FOR = Object.freeze<Partial<Record<ChartType, ChartSubtype
 
 const mapToDataOptions = (
   metadataItems: MetadataItem[],
-  chartRecommendations: ChartRecommendations,
+  chartFamily: string,
+  axesMapping: AxesMapping,
 ): ChartDataOptions => {
-  const { axesMapping = {}, chartFamily } = chartRecommendations;
   const metadataItemByTitle = metadataItems.reduce((acc, item) => {
     acc[item.jaql.title!] = item;
     return acc;
@@ -81,17 +82,20 @@ const mapToDataOptions = (
 
     acc[`${key}`] = Array.isArray(value)
       ? value.map((v) => {
-          const m = metadataItemByTitle[v.name];
+          const nColumn = normalizeAnyColumn(v);
+          // enabled is an internal property that should not be excluded in the generated widget code
+          delete nColumn.enabled;
+          const m = metadataItemByTitle[nColumn.column.name];
           // this will generate an error in the chart instead of failing
           // error will contain the name of the problematic item
           // TODO: remove when proper validation is introduced
-          if (!m) return { column: { type: '', name: v.name } };
+          if (!m) return { column: { type: '', name: nColumn.column.name } };
           const column = createJaqlElement(m);
 
           if (m.panel === 'measures') {
             return {
+              ...nColumn,
               column,
-              sortType: 'sortNone',
             };
           }
 
@@ -101,13 +105,14 @@ const mapToDataOptions = (
             ];
             if (dateFormat) {
               return {
+                ...nColumn,
                 column,
                 dateFormat,
               };
             }
           }
 
-          return column;
+          return { ...nColumn, column };
         })
       : value;
 
@@ -156,12 +161,12 @@ const mapToDataOptions = (
 const getAxisTitle = (chartRecommendations: ChartRecommendations, axis: 'x' | 'y') => {
   if (axis === 'x') {
     return (chartRecommendations.axesMapping.category ?? chartRecommendations.axesMapping.x)
-      ?.map((item) => item.name)
+      ?.map((item) => normalizeAnyColumn(item).column.name)
       .join(', ');
   }
 
   return (chartRecommendations.axesMapping.value ?? chartRecommendations.axesMapping.y)
-    ?.map((item) => item.name)
+    ?.map((item) => normalizeAnyColumn(item).column.name)
     .join(', ');
 };
 
@@ -178,7 +183,8 @@ export const getChartOptions = (
   chartRecommendations: ChartRecommendations,
   useCustomizedStyleOptions = true,
 ) => {
-  const dataOptions = mapToDataOptions(jaql, chartRecommendations);
+  const { chartFamily, axesMapping = {}, styleOptions = {} } = chartRecommendations;
+  const dataOptions = mapToDataOptions(jaql, chartFamily, axesMapping);
 
   let chartStyleOptions;
 
@@ -205,9 +211,10 @@ export const getChartOptions = (
           },
         },
       },
+      styleOptions,
     ) as ChartStyleOptions;
   } else {
-    chartStyleOptions = getDefaultStyleOptions();
+    chartStyleOptions = merge(getDefaultStyleOptions(), styleOptions);
   }
 
   return {

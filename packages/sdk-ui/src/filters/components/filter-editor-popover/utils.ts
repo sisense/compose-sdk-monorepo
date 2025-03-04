@@ -6,6 +6,7 @@ import {
   isNumericFilter,
   isRankingFilter,
   isTextFilter,
+  NumericOperators,
 } from '@sisense/sdk-data';
 
 export function isIncludeAllFilter(filter: Filter): filter is MembersFilter {
@@ -27,5 +28,13 @@ export function isConditionalFilter(filter: Filter) {
     isNumericFilter(filter) ||
     isTextFilter(filter) ||
     isRankingFilter(filter)
+  );
+}
+
+export function isNumericBetweenFilter(filter: Filter): boolean {
+  return (
+    isNumericFilter(filter) &&
+    filter.operatorA === NumericOperators.From &&
+    filter.operatorB === NumericOperators.To
   );
 }

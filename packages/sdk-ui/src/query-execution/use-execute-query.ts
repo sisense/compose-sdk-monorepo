@@ -58,6 +58,26 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
   const isCacheEnabled = app?.settings.queryCacheConfig?.enabled;
   const executeQuery = isCacheEnabled ? executeQueryWithCache : executeQueryWithoutCache;
 
+  const [loadMoreOffset, setLoadMoreOffset] = useState(
+    (params.offset ?? 0) + (params.count ?? app?.settings.queryLimit ?? 0),
+  );
+  const [loadMoreCount, setLoadMoreCount] = useState(0);
+  const [isAllItemsLoaded, setIsAllItemsLoaded] = useState(false);
+  const [shouldLoadMore, setShouldLoadMore] = useState(false);
+
+  const resetLoadMore = useCallback(() => {
+    setLoadMoreOffset((params.offset ?? 0) + (params.count ?? app?.settings.queryLimit ?? 0));
+    setIsAllItemsLoaded(false);
+    setLoadMoreCount(0);
+    setShouldLoadMore(false);
+  }, [params, app]);
+
+  useEffect(() => {
+    if (isParamsChanged) {
+      resetLoadMore();
+    }
+  }, [resetLoadMore, isParamsChanged]);
+
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
     isError: false,
@@ -73,12 +93,13 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
       setLastQueryCacheKey(undefined);
     }
     if (!queryState.isLoading) {
+      resetLoadMore();
       setShouldForceRefetch(true);
     }
-  }, [isCacheEnabled, lastQueryCacheKey, queryState.isLoading]);
+  }, [isCacheEnabled, lastQueryCacheKey, queryState.isLoading, resetLoadMore]);
 
   const runQuery = useCallback(
-    (app: ClientApplication, params: ExecuteQueryParams) => {
+    (app: ClientApplication, params: ExecuteQueryParams, extendData = false) => {
       const {
         dataSource,
         dimensions,
@@ -118,7 +139,10 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
       }
       void executeQuery(...executeQueryParams)
         .then((data) => {
-          dispatch({ type: 'success', data });
+          if (count > data.rows.length) {
+            setIsAllItemsLoaded(true);
+          }
+          dispatch({ type: extendData ? 'success-load-more' : 'success', data });
         })
         .catch((error: Error) => {
           dispatch({ type: 'error', error });
@@ -126,6 +150,48 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
     },
     [executeQuery, isCacheEnabled, lastQueryCacheKey],
   );
+
+  const loadMore = useCallback(
+    (count: number) => {
+      if (
+        params.enabled !== false &&
+        app &&
+        count > 0 &&
+        !isAllItemsLoaded &&
+        !queryState.isError &&
+        !queryState.isLoading
+      ) {
+        setLoadMoreCount(count);
+        setShouldLoadMore(true);
+      }
+    },
+    [
+      params,
+      app,
+      isAllItemsLoaded,
+      setLoadMoreCount,
+      queryState.isLoading,
+      queryState.isError,
+      setShouldLoadMore,
+    ],
+  );
+
+  useEffect(() => {
+    if (isInitialized && shouldLoadMore && app) {
+      runQuery(
+        app,
+        {
+          ...params,
+          count: loadMoreCount,
+          offset: loadMoreOffset,
+        },
+        true,
+      );
+
+      setLoadMoreOffset(loadMoreOffset + loadMoreCount);
+      setShouldLoadMore(false);
+    }
+  }, [isInitialized, params, loadMoreOffset, loadMoreCount, shouldLoadMore, app, runQuery]);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -145,8 +211,8 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
   if (queryState.data && isParamsChanged) {
-    return { ...queryStateReducer(queryState, { type: 'loading' }), refetch };
+    return { ...queryStateReducer(queryState, { type: 'loading' }), refetch, loadMore };
   }
 
-  return { ...queryState, refetch };
+  return { ...queryState, refetch, loadMore };
 }

@@ -21,7 +21,6 @@ TypeScript interfaces for components and hooks listed above
 - [CartesianChartDataOptions](interface.CartesianChartDataOptions.md)
 - [CategoricalChartDataOptions](interface.CategoricalChartDataOptions.md)
 - [ChartProps](interface.ChartProps.md)
-- [ChartRecommendations](interface.ChartRecommendations.md)
 - [ChartThemeSettings](interface.ChartThemeSettings.md)
 - [ChartWidgetProps](interface.ChartWidgetProps.md)
 - [ChatConfig](interface.ChatConfig.md)

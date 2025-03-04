@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useCallback, useMemo, useState, type FunctionComponent } from 'react';
 import omit from 'lodash-es/omit';
-import { Chart } from '../chart';
+import { Chart } from '@/chart';
 import { ChartWidgetProps, HighchartsOptions } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';

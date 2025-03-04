@@ -43,6 +43,7 @@ const getExecutePivotQueryCode = (
     dataSourceString: stringifyDataSource(pivotQueryParams.dataSource),
     rowsString: stringifyProps(pivotQueryParams.rows || []),
     valuesString: stringifyProps(pivotQueryParams.values || []),
+    filtersString: stringifyFilters(pivotQueryParams.filters),
     extraImportsString: stringifyExtraImports(pivotQueryParams.filters || [], hasMeasures),
   };
   return generateCode(templateKey, pivotQueryProps, uiFramework);

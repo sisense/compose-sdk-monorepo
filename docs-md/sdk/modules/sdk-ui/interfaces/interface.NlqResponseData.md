@@ -4,13 +4,9 @@ title: NlqResponseData
 
 # Interface NlqResponseData
 
+Response data to NLQ request
+
 ## Properties
-
-### chartRecommendations
-
-> **chartRecommendations**: [`ChartRecommendations`](interface.ChartRecommendations.md) \| \{}
-
-***
 
 ### detailedDescription
 
@@ -24,47 +20,9 @@ title: NlqResponseData
 
 ***
 
-### jaql
-
-> **jaql**: `object`
-
-#### Type declaration
-
-> ##### `jaql.datasource`
->
-> **datasource**: `object`
->
-> > ###### `datasource.id`
-> >
-> > **id**?: `string`
-> >
-> > ###### `datasource.title`
-> >
-> > **title**: `string`
-> >
-> > ###### `datasource.type`
-> >
-> > **type**?: `"elasticube"` \| `"live"`
-> >
-> >
->
-> ##### `jaql.metadata`
->
-> **metadata**: `MetadataItem`[]
->
->
-
-***
-
 ### nlqPrompt
 
 > **nlqPrompt**: `string`
-
-***
-
-### queryTitle
-
-> **queryTitle**: `string`
 
 ***
 

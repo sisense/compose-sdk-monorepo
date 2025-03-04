@@ -295,9 +295,12 @@ export const translation: TranslationDictionary = {
     labels: {
       includeAll: 'Обрати всі (фільтр не використовується)',
       allowMultiSelection: 'Дозволити вибір кількох значень для списків',
+      from: 'Від',
+      to: 'До',
     },
     placeholders: {
       selectFromList: 'Виберіть зі списку',
+      enterEntry: 'Введіть значення...',
       enterValue: 'Введіть значення...',
     },
     conditions: {
@@ -312,6 +315,14 @@ export const translation: TranslationDictionary = {
       notEquals: 'Не дорівнює',
       isEmpty: 'Порожній',
       isNotEmpty: 'Не порожній',
+      lessThan: 'Менше ніж',
+      lessThanOrEqual: 'Менше або дорівнює',
+      greaterThan: 'Більше ніж',
+      greaterThanOrEqual: 'Більше або дорівнює',
+    },
+    validationErrors: {
+      invalidNumber: 'Тільки цифри',
+      invalidNumericRange: '"До" має бути більше, ніж "Від"',
     },
   },
   pivotTable: {

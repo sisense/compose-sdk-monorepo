@@ -39,7 +39,7 @@ export const stringifyFilters = (filters: Filter[] | FilterRelations | undefined
     return '';
   }
   if (Array.isArray(filters)) {
-    return stringifyFilterList(filters, 2);
+    return stringifyFilterList(filters, 6);
   }
 
   throw new TranslatableError('errors.filterRelationsNotSupported');

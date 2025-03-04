@@ -48,11 +48,6 @@ export const getBoxplotChartOptions = (
       events: {
         load: function () {
           const chart = this as Highcharts.Chart;
-
-          if (chartDesignOptions.autoZoom && chartDesignOptions.autoZoom.scrollerLocation) {
-            const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
-            setInitialScrollerPosition(chart, min, max);
-          }
           const chartWidth = chart.chartWidth;
 
           const navigator = getNavigator(
@@ -61,6 +56,12 @@ export const getBoxplotChartOptions = (
             chartData.xValues.length,
             chartWidth,
           ) as NavigatorOptions;
+
+          if (navigator.enabled && chartDesignOptions.autoZoom?.scrollerLocation) {
+            const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
+            setInitialScrollerPosition(chart, min, max);
+          }
+
           chart.update({ navigator }, true);
         },
         // disables default zooming

@@ -23,7 +23,7 @@ import {
   isRange,
 } from '../chart-options-processor/translations/types';
 import { DataTable } from '../chart-data-processor/table-processor';
-import type { ChartType, NumberFormatConfig, SeriesChartType, SortDirection } from '../types';
+import type { ChartType } from '../types';
 import { cartesianData } from './cartesian-data';
 import { categoricalData } from './categorical-data';
 import { scatterData } from './scatter-data';
@@ -71,17 +71,4 @@ export const chartDataService = (
   } else if (isRange(chartType)) {
     return getRangeData(chartDataOptions as RangeChartDataOptionsInternal, dataTable);
   } else throw new TranslatableError('errors.unexpectedChartType', { chartType });
-};
-
-export type ValueColumn = {
-  column: string;
-  agg: string;
-  columnTitle: string;
-  enabled: boolean;
-  sort: SortDirection;
-  showOnRightAxis?: boolean; // true is on right axis, false is on left axis
-  numberFormatConfig?: NumberFormatConfig;
-  chartType?: SeriesChartType;
-  color?: string;
-  legacyInstanceId?: string;
 };

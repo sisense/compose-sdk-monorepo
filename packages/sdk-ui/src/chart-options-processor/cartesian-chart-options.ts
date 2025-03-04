@@ -324,11 +324,6 @@ export const getCartesianChartOptions = (
           load: function () {
             if (dataOptions.x.length === 2) return;
             const chart = this as Highcharts.Chart;
-
-            if (chartDesignOptions.autoZoom && chartDesignOptions.autoZoom.scrollerLocation) {
-              const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
-              setInitialScrollerPosition(chart, min, max);
-            }
             const chartWidth = chart.chartWidth;
             const chartHeight = chart.chartHeight;
 
@@ -339,6 +334,12 @@ export const getCartesianChartOptions = (
               chartType === 'bar' ? chartHeight : chartWidth,
               chartType === 'bar',
             ) as NavigatorOptions;
+
+            if (navigator.enabled && chartDesignOptions.autoZoom?.scrollerLocation) {
+              const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
+              setInitialScrollerPosition(chart, min, max);
+            }
+
             chart.update({ navigator }, true);
           },
         },

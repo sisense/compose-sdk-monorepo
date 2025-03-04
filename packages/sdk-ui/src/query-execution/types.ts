@@ -133,7 +133,12 @@ export type QuerySuccessState = {
   status: 'success';
 };
 
-export type QueryAction = DataLoadAction<QueryResultData>;
+export type QueryAction =
+  | DataLoadAction<QueryResultData>
+  | {
+      type: 'success-load-more';
+      data: QueryResultData;
+    };
 
 /**
  * Parameters for {@link useExecuteQueryByWidgetId} hook.
@@ -277,6 +282,12 @@ export interface ExecuteQueryParams {
 export type ExecuteQueryResult = QueryState & {
   /** Function to refetch the query */
   refetch: () => void;
+  /**
+   * Function to load more data rows
+   *
+   * @internal
+   * */
+  loadMore: (count: number) => void;
 };
 
 /** Configuration for {@link useExecuteCsvQuery} hook. */

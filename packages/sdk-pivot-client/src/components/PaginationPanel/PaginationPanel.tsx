@@ -133,7 +133,6 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
     super(props);
     const { itemsCount, itemsPerPage, options, style } = this.props;
     this.logger = debug.create('PaginationPanel');
-
     const pagesCount = Math.ceil(itemsCount / itemsPerPage) || 0;
     const finalOptions: PaginationOptions = { ...defaultOptions, ...options, style };
 
@@ -385,7 +384,7 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
 
     const isOnlyTotalRowsVisible = totalItemsCount > itemsCount && pagesCount === 1;
 
-    const isPaginationShowed = activePage > -1 && pagesCount > 1;
+    const isPaginationShowed = activePage > -1;
     const isNotificationVisible =
       this.isRowsLimitReached(this.props) || this.isColumnsLimitReached(this.props);
     const isAllHidden = !isPaginationShowed && !isOnlyTotalRowsVisible && !isNotificationVisible;

@@ -195,39 +195,41 @@ export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = asSisen
     if (!filtersDisplayValues.length) return null;
 
     return (
-      <DrilldownBreadcrumbsNavigation currentDimension={currentDimension}>
-        <StyledBreadcrumbs
-          separator={null}
-          sx={{ backgroundColor: themeProps.chartBackgroundColor, padding: '4px' }}
-        >
-          <CancelButton />
-          {filtersDisplayValues.map((filterDisplayValue, i) => {
-            const isActive = isActiveDrill(i);
-            const isLastActive = isLastActiveDrill(i);
-            return (
-              <div key={i}>
-                <DrillButton
-                  isActive={isActive}
-                  isLastActive={isLastActive}
-                  filterDisplayValue={filterDisplayValue}
-                  handleMouseEnter={handleMouseEnter(filterDisplayValue)}
-                  handleMouseLeave={handleMouseLeave}
-                  handleClick={() => sliceDrilldownSelections(i + 1)}
-                  themeProps={themeProps}
-                  popperParams={popperParams}
-                  index={i}
-                />
-              </div>
-            );
-          })}
-          <CurrentDrillButton />
-          <DrillPopper
-            popperParams={popperParams}
-            currentDimension={currentDimension}
-            themeProps={themeProps}
-          />
-        </StyledBreadcrumbs>
-      </DrilldownBreadcrumbsNavigation>
+      <div aria-label="drilldown-breadcrumbs">
+        <DrilldownBreadcrumbsNavigation currentDimension={currentDimension}>
+          <StyledBreadcrumbs
+            separator={null}
+            sx={{ backgroundColor: themeProps.chartBackgroundColor, padding: '4px' }}
+          >
+            <CancelButton />
+            {filtersDisplayValues.map((filterDisplayValue, i) => {
+              const isActive = isActiveDrill(i);
+              const isLastActive = isLastActiveDrill(i);
+              return (
+                <div key={i}>
+                  <DrillButton
+                    isActive={isActive}
+                    isLastActive={isLastActive}
+                    filterDisplayValue={filterDisplayValue}
+                    handleMouseEnter={handleMouseEnter(filterDisplayValue)}
+                    handleMouseLeave={handleMouseLeave}
+                    handleClick={() => sliceDrilldownSelections(i + 1)}
+                    themeProps={themeProps}
+                    popperParams={popperParams}
+                    index={i}
+                  />
+                </div>
+              );
+            })}
+            <CurrentDrillButton />
+            <DrillPopper
+              popperParams={popperParams}
+              currentDimension={currentDimension}
+              themeProps={themeProps}
+            />
+          </StyledBreadcrumbs>
+        </DrilldownBreadcrumbsNavigation>
+      </div>
     );
   },
 );

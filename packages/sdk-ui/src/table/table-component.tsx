@@ -178,7 +178,7 @@ export const TableComponent = ({
         }
 
         const pagesCount = Math.ceil(dataTable.rows.length / rowsPerPage);
-        const paginationHeight = pagesCount > 1 ? 32 : 0;
+        const paginationHeight = 32;
 
         return (
           <div
@@ -199,15 +199,13 @@ export const TableComponent = ({
               height={size.height - paginationHeight}
               onSortUpdate={onSortUpdate}
             />
-            {pagesCount > 1 && (
-              <Pagination
-                ref={paginationEl}
-                page={currentPage}
-                count={pagesCount}
-                onChange={(event, page) => onPageChange(page)}
-                sx={getCustomPaginationStyles(themeSettings)}
-              />
-            )}
+            <Pagination
+              ref={paginationEl}
+              page={currentPage}
+              count={pagesCount}
+              onChange={(event, page) => onPageChange(page)}
+              sx={getCustomPaginationStyles(themeSettings)}
+            />
           </div>
         );
       }}

@@ -1,12 +1,12 @@
 import { CSSProperties, useCallback, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { ArrowDownIcon } from '../../../icons';
-import { Popover } from '@/common/components/popover';
 import { SelectItem } from './types';
-import { calculatePopoverPosition, getSelectedItemsDisplayValue } from './utils';
-import { SelectContainer, SelectLabel } from './base';
+import { SelectContainer, SelectIconContainer, SelectLabel } from './base';
 import { SingleSelectItem } from './single-select-item';
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import { Popper } from '@/common/components/popper';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 const Content = styled.div``;
 
@@ -26,6 +26,7 @@ export function SingleSelect<Value = unknown>(props: SelectProps<Value>) {
 
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
+  const selectedItem = items.find((item) => item.value === value);
 
   const handleItemSelect = useCallback(
     (newValue: Value) => {
@@ -36,58 +37,57 @@ export function SingleSelect<Value = unknown>(props: SelectProps<Value>) {
   );
 
   return (
-    <>
-      <SelectContainer
-        ref={selectElementRef}
-        focus={open}
-        onClick={() => setOpen((isOpen) => !isOpen)}
-        style={{
-          ...style,
-          ...(primaryColor && { color: primaryColor }),
-          ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-        }}
-        {...rest}
-      >
-        <SelectLabel style={{ color: primaryColor }} aria-label="Value">
-          {getSelectedItemsDisplayValue(items, [value])}
-        </SelectLabel>
-        <ArrowDownIcon
-          aria-label="Select icon"
-          fill={primaryColor || DEFAULT_TEXT_COLOR}
+    <ClickAwayListener onClickAway={() => setOpen(false)}>
+      <div>
+        <SelectContainer
+          ref={selectElementRef}
+          focus={open}
+          onClick={() => setOpen((isOpen) => !isOpen)}
           style={{
-            minWidth: '24px',
-            transform: `rotate(${open ? 180 : 0}deg)`,
+            ...style,
+            ...(primaryColor && { color: primaryColor }),
+            ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
           }}
-        />
-      </SelectContainer>
-      <Popover
-        open={open}
-        onClose={() => setOpen(false)}
-        position={calculatePopoverPosition(selectElementRef.current, items.length * 28)}
-      >
-        <Content
-          style={{
-            minWidth: selectElementRef.current?.clientWidth,
-            maxWidth:
-              selectElementRef.current?.clientWidth && selectElementRef.current?.clientWidth * 2,
-            ...(primaryBackgroundColor ? { backgroundColor: primaryBackgroundColor } : null),
-          }}
-          aria-label="Single-select content"
+          {...rest}
         >
-          {items.map((item, index) => (
-            <SingleSelectItem
-              key={index}
-              style={{
-                backgroundColor: primaryBackgroundColor,
-                color: primaryColor,
-              }}
-              {...item}
-              selected={item.value === value}
-              onSelect={handleItemSelect}
-            />
-          ))}
-        </Content>
-      </Popover>
-    </>
+          {selectedItem?.icon && <SelectIconContainer>{selectedItem?.icon}</SelectIconContainer>}
+          <SelectLabel style={{ color: primaryColor }} aria-label="Value">
+            <>{selectedItem?.displayValue ?? selectedItem?.value}</>
+          </SelectLabel>
+          <ArrowDownIcon
+            aria-label="Select icon"
+            fill={primaryColor || DEFAULT_TEXT_COLOR}
+            style={{
+              minWidth: '24px',
+              transform: `rotate(${open ? 180 : 0}deg)`,
+            }}
+          />
+        </SelectContainer>
+        <Popper open={open} anchorEl={selectElementRef.current}>
+          <Content
+            style={{
+              minWidth: selectElementRef.current?.clientWidth,
+              maxWidth:
+                selectElementRef.current?.clientWidth && selectElementRef.current?.clientWidth * 2,
+              ...(primaryBackgroundColor ? { backgroundColor: primaryBackgroundColor } : null),
+            }}
+            aria-label="Single-select content"
+          >
+            {items.map((item, index) => (
+              <SingleSelectItem
+                key={index}
+                style={{
+                  backgroundColor: primaryBackgroundColor,
+                  color: primaryColor,
+                }}
+                {...item}
+                selected={item.value === value}
+                onSelect={handleItemSelect}
+              />
+            ))}
+          </Content>
+        </Popper>
+      </div>
+    </ClickAwayListener>
   );
 }

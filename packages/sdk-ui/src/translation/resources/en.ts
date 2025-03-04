@@ -296,10 +296,13 @@ export const translation = {
     labels: {
       includeAll: 'Include all (no filter applied)',
       allowMultiSelection: 'Allow multiselect for lists',
+      from: 'From',
+      to: 'To',
     },
     placeholders: {
       selectFromList: 'Select from list',
-      enterValue: 'Type your entry...',
+      enterEntry: 'Type your entry...',
+      enterValue: 'Enter value...',
     },
     conditions: {
       exclude: 'Is not',
@@ -313,6 +316,14 @@ export const translation = {
       notEquals: 'Does not equal',
       isEmpty: 'Is empty',
       isNotEmpty: 'Is not empty',
+      lessThan: 'Smaller than',
+      lessThanOrEqual: 'Equals or smaller than',
+      greaterThan: 'Greater than',
+      greaterThanOrEqual: 'Equals or greater than',
+    },
+    validationErrors: {
+      invalidNumber: 'Numbers only',
+      invalidNumericRange: '"To" must be greater than "From"',
     },
   },
   pivotTable: {

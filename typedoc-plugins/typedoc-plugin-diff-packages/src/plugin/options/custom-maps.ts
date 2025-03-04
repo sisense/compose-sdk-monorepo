@@ -9,7 +9,8 @@ export const OutputFileStrategy = {
   Modules: 'modules',
 } as const;
 
-export type OutputFileStrategy = (typeof OutputFileStrategy)[keyof typeof OutputFileStrategy];
+export type OutputFileStrategy =
+  (typeof OutputFileStrategy)[keyof typeof OutputFileStrategy];
 /**
  *
  * @enum

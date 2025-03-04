@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.31.0] - 2025-03-04
+
+### Added
+- Add numeric filters support in `FilterEditorPopover` for internal testing
+- Add lazy loading for `FilterEditorPopover` members lists for internal testing
+
+### Changed
+- **Breaking:** Make `chartRecommendations` in `NlqResponseData` internal
+- Update `FilterEditorPopover` selects to use `Popper` instead of `Popover`
+- Change prefix for CSS variables in Tailwind to avoid conflicts (`--tw` → `--csdk-tw`)
+- Fix chart re-rendering when a trend/forecast fails after a props change
+- Improve charts: fix `Pivot` pagination panel visibility after changing the results per page, fix invalid axis points related to navigator
+- Improve Widget Embed Code: add `StyledColumn` and `StyledMeasureColumn` support, fix missing filters prop
+- Improve testing: add `Chart` component mocking with user interactions, add more pie chart cases to visual tests
+
 ## [1.30.0] - 2025-02-18
 
 ### Added

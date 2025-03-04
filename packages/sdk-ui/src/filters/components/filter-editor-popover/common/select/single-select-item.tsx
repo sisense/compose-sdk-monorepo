@@ -1,5 +1,5 @@
 import { CheckIcon } from '@/filters/components/icons';
-import { SelectItemContainer, SelectLabel } from './base';
+import { SelectIconContainer, SelectItemContainer, SelectLabel } from './base';
 import { SelectItem } from './types';
 import { CSSProperties } from 'react';
 import { DEFAULT_TEXT_COLOR } from '@/const';
@@ -11,7 +11,7 @@ type SingleSelectItemProps<Value> = SelectItem<Value> & {
 };
 
 export function SingleSelectItem<Value = unknown>(props: SingleSelectItemProps<Value>) {
-  const { value, displayValue, selected, onSelect, style } = props;
+  const { value, displayValue, icon, selected, onSelect, style } = props;
   return (
     <SelectItemContainer
       color={style?.color}
@@ -19,6 +19,7 @@ export function SingleSelectItem<Value = unknown>(props: SingleSelectItemProps<V
       style={{ paddingRight: '6px' }}
       onClick={() => onSelect?.(value)}
     >
+      {icon && <SelectIconContainer>{icon}</SelectIconContainer>}
       <SelectLabel style={{ paddingRight: selected ? 0 : '24px', color: style?.color }}>
         {displayValue ?? `${value}`}
       </SelectLabel>

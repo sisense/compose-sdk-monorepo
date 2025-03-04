@@ -59,6 +59,10 @@ function isPivotTableWidgetPropsLocal(props: any): props is PivotTableWidgetProp
   return 'widgetType' in props && props.widgetType === 'pivot';
 }
 
+function hasExpressionWithParentheses(column: any): boolean {
+  return 'column' in column && column.column?.expression && /\(.*\)/.test(column.column.expression);
+}
+
 export function checkIfMeasuresExist(
   props: ChartWidgetProps | PivotTableWidgetProps | ExecuteQueryParams | ExecutePivotQueryParams,
 ): boolean {
@@ -72,15 +76,51 @@ export function checkIfMeasuresExist(
   }
 
   if ('chartType' in props) {
+    if (props.chartType === 'indicator') {
+      return (
+        ('value' in props.dataOptions && isNonEmptyArray(props.dataOptions.value as [])) ||
+        ('secondary' in props.dataOptions && isNonEmptyArray(props.dataOptions.secondary!))
+      );
+    }
+    if (props.chartType === 'table') {
+      if (!('columns' in props.dataOptions) || !isNonEmptyArray(props.dataOptions.columns))
+        return false;
+      const columns = props.dataOptions.columns;
+      return columns.some((column) => hasExpressionWithParentheses(column));
+    }
+    if (props.chartType === 'boxplot') {
+      return false;
+    }
     if (props.chartType === 'scatter') {
       return (
-        'x' in props.dataOptions &&
-        'y' in props.dataOptions &&
-        (props.dataOptions.x !== undefined || props.dataOptions.y !== undefined)
+        ('x' in props.dataOptions &&
+          props.dataOptions.x !== undefined &&
+          hasExpressionWithParentheses(props.dataOptions.x)) ||
+        ('y' in props.dataOptions &&
+          props.dataOptions.y !== undefined &&
+          hasExpressionWithParentheses(props.dataOptions.y)) ||
+        ('size' in props.dataOptions && props.dataOptions.size !== undefined)
       );
     }
     if (props.chartType === 'scattermap')
-      return 'geo' in props.dataOptions && isNonEmptyArray(props.dataOptions.geo);
+      return (
+        ('colorBy' in props.dataOptions &&
+          props.dataOptions.colorBy !== undefined &&
+          hasExpressionWithParentheses(props.dataOptions.colorBy)) ||
+        ('details' in props.dataOptions &&
+          props.dataOptions.details !== undefined &&
+          hasExpressionWithParentheses(props.dataOptions.details)) ||
+        ('size' in props.dataOptions &&
+          props.dataOptions.size !== undefined &&
+          hasExpressionWithParentheses(props.dataOptions.size))
+      );
+    if (props.chartType === 'areamap')
+      return (
+        'geo' in props.dataOptions &&
+        isNonEmptyArray(props.dataOptions.geo) &&
+        'color' in props.dataOptions &&
+        isNonEmptyArray(props.dataOptions.color!)
+      );
     return 'value' in props.dataOptions && isNonEmptyArray(props.dataOptions.value as []);
   }
 

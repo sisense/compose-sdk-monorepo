@@ -1,0 +1,2 @@
+export const QUERY_MEMBERS_COUNT = 50;
+export const LIST_SCROLL_LOAD_MORE_THRESHOLD = 0.75;

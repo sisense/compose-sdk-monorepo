@@ -98,6 +98,7 @@ const CodeExample = () => {
 export default CodeExample;
 `,
     executePivotQueryTmpl: `import { useExecutePivotQuery, ExecutePivotQueryParams } from '@sisense/sdk-ui';
+{{extraImportsString}}
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
 
 const CodeExample = () => {
@@ -105,6 +106,7 @@ const CodeExample = () => {
       dataSource: DM.DataSource,
       rows: {{rowsString}},
       values: {{valuesString}},
+      filters: {{filtersString}},
     }
 
     const { data, isLoading, isError, error } = useExecutePivotQuery(pivotQueryProps);
@@ -134,6 +136,7 @@ export default function CodeExample() {
       title={'{{titleString}}'}
       dataSource={DM.DataSource}
       dataOptions={ {{dataOptionsString}} }
+      filters={ {{filtersString}} }
     />
   );
 }`,

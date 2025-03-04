@@ -1,12 +1,27 @@
+import type { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
-import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from '@/const';
+import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR, ERROR_COLOR } from '@/const';
 
-export const Input = styled.input`
+const InputContainer = styled.span`
+  display: inline-flex;
+  position: relative;
+`;
+
+const InputErrorLabel = styled.span`
+  position: absolute;
+  bottom: -19px;
+  left: 0;
+  color: ${ERROR_COLOR};
+  font-size: 11px;
+  white-space: nowrap;
+`;
+
+export const BaseInput = styled.input`
   box-sizing: border-box;
   border-radius: 4px;
   outline: none;
   background: ${DEFAULT_BACKGROUND_COLOR};
-  color: #5b6372;
+  color: ${DEFAULT_TEXT_COLOR};
   line-height: 28px;
   height: 28px;
   border: none;
@@ -24,3 +39,25 @@ export const Input = styled.input`
     opacity: 0.5;
   }
 `;
+
+type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
+  error?: boolean | string;
+};
+
+/** @internal */
+export function Input(props: InputProps) {
+  const { error, ...baseInputProps } = props;
+
+  return (
+    <InputContainer>
+      <BaseInput
+        {...baseInputProps}
+        style={{
+          ...baseInputProps.style,
+          ...(error && { borderColor: ERROR_COLOR }),
+        }}
+      />
+      {error && <InputErrorLabel>{error}</InputErrorLabel>}
+    </InputContainer>
+  );
+}

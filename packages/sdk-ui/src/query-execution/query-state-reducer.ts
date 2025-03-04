@@ -4,5 +4,25 @@ import { QueryAction, QueryState } from './types';
 
 /** @internal */
 export function queryStateReducer(state: QueryState, action: QueryAction): QueryState {
-  return dataLoadStateReducer<QueryResultData>(state, action);
+  // eslint-disable-next-line sonarjs/no-small-switch
+  switch (action.type) {
+    case 'success-load-more':
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        status: 'success',
+        error: undefined,
+        data: {
+          columns: state.data?.columns ?? action.data?.columns ?? [],
+          rows: [
+            ...(state?.data?.rows ? state.data.rows : []),
+            ...(action.data.rows ? action.data.rows : []),
+          ],
+        },
+      };
+    default:
+      return dataLoadStateReducer<QueryResultData>(state, action);
+  }
 }

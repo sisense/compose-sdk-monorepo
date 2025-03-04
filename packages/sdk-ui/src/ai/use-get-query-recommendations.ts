@@ -119,7 +119,7 @@ export const useGetQueryRecommendationsInternal = (
  *   </ul>
  * );
  * ```
- * @returns An array of objects, each containing recommended question text and its corresponding `widgetProps`, as well as other variants of this information such as JAQL + chartMappings
+ * @returns An array of objects, each containing recommended question text and its corresponding `widgetProps`
  * @group Generative AI
  * @beta
  */

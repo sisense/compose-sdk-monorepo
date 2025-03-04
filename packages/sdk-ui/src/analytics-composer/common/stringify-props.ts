@@ -5,7 +5,7 @@ import { stringifyProps } from '../widget/stringify-props';
 import { ChartDataOptions } from '@/types';
 
 export function stringifyDataOptions(dataOptions: ChartDataOptions): string {
-  return stringifyProps(dataOptions, 2);
+  return stringifyProps(dataOptions, 6);
 }
 
 export function stringifyDataSource(dataSource: DataSource | undefined): string {

@@ -1,7 +1,14 @@
 import { DimensionalElement } from './base.js';
 import { SortDirection } from './interfaces.js';
 import { getSortType } from '../utils.js';
-import { BaseJaql, DataType, JaqlSortDirection, MetadataItem, MetadataTypes } from './types.js';
+import {
+  BaseJaql,
+  DataType,
+  JaqlSortDirection,
+  MetadataItem,
+  MetadataItemJaql,
+  MetadataTypes,
+} from './types.js';
 
 /**
  * This implementation wraps metadata for a JAQL query. The metadata could be
@@ -63,8 +70,10 @@ export class JaqlElement extends DimensionalElement {
     return this.expression;
   }
 
-  jaql() {
-    return this.metadataItem;
+  jaql(nested?: true): MetadataItemJaql;
+  jaql(nested?: false | undefined): MetadataItem;
+  jaql(nested?: boolean): MetadataItemJaql | MetadataItem {
+    return nested === true ? this.metadataItem.jaql : this.metadataItem;
   }
 }
 

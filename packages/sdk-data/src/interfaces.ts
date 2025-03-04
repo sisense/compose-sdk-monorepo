@@ -59,7 +59,7 @@ export interface Column {
    *
    * @internal
    */
-  id?: string; // required when associated with a model
+  id?: string;
   /** Column name */
   name: string;
   /** Column type */

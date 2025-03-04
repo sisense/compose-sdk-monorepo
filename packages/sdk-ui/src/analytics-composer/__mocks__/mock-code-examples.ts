@@ -9,19 +9,21 @@ export default function CodeExample() {
       dataSource={DM.DataSource}
       chartType={'bar'}
       dataOptions={ {
-    category: [
-      DM.Commerce.Condition
-    ],
-    value: [
-      {column: measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue'), sortType: 'sortDesc'}
-    ],
-    breakBy: [],
-  } }
+        category: [{
+            column: DM.Commerce.Condition,
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue'),
+          }
+        ],
+        breakBy: [],
+      } }
       filters={ [
-    filterFactory.members(DM.Country.Country, ['Cambodia', 'United States']),
-    filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
-    filterFactory.greaterThan(DM.Commerce.Revenue, 1000)
-    ] }
+        filterFactory.members(DM.Country.Country, ['Cambodia', 'United States']),
+        filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
+        filterFactory.greaterThan(DM.Commerce.Revenue, 1000)
+        ] }
     />
   );
 }`;
@@ -46,19 +48,21 @@ import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
 export class CodeExample {
     DM = DM;
     dataOptions: ChartDataOptions = {
-    category: [
-      DM.Commerce.Condition
-    ],
-    value: [
-      {column: measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue'), sortType: 'sortDesc'}
-    ],
-    breakBy: [],
-  };
+        category: [{
+            column: DM.Commerce.Condition,
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue'),
+          }
+        ],
+        breakBy: [],
+      };
     filters = [
-    filterFactory.members(DM.Country.Country, ['Cambodia', 'United States']),
-    filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
-    filterFactory.greaterThan(DM.Commerce.Revenue, 1000)
-    ];
+        filterFactory.members(DM.Country.Country, ['Cambodia', 'United States']),
+        filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
+        filterFactory.greaterThan(DM.Commerce.Revenue, 1000)
+        ];
 }`;
 
 export const MOCK_CODE_VUE_1 = `<script setup lang="ts">
@@ -68,19 +72,21 @@ export const MOCK_CODE_VUE_1 = `<script setup lang="ts">
   import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
 
   const dataOptions = ref({
-    category: [
-      DM.Commerce.Condition
-    ],
-    value: [
-      {column: measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue'), sortType: 'sortDesc'}
-    ],
-    breakBy: [],
-  });
+        category: [{
+            column: DM.Commerce.Condition,
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'total of Revenue'),
+          }
+        ],
+        breakBy: [],
+      });
   const filters = ref([
-    filterFactory.members(DM.Country.Country, ['Cambodia', 'United States']),
-    filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
-    filterFactory.greaterThan(DM.Commerce.Revenue, 1000)
-    ]);
+        filterFactory.members(DM.Country.Country, ['Cambodia', 'United States']),
+        filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
+        filterFactory.greaterThan(DM.Commerce.Revenue, 1000)
+        ]);
 </script>
 
 <template>
@@ -320,6 +326,7 @@ const CodeExample = () => {
       dataSource: DM.DataSource,
       rows: [],
       values: [],
+      filters: [],
     }
 
     const { data, isLoading, isError, error } = useExecutePivotQuery(pivotQueryProps);

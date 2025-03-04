@@ -43,3 +43,9 @@ export const SelectLabel = styled.span`
   text-overflow: ellipsis;
   overflow: hidden;
 `;
+
+export const SelectIconContainer = styled.span`
+  margin-right: 10px;
+  margin-left: -4px;
+  display: inline-flex;
+`;

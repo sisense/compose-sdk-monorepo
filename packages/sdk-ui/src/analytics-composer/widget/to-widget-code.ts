@@ -56,6 +56,7 @@ const getPivotTableWidgetCode = (
     titleString: props.title,
     dataSourceString: stringifyDataSource(props.dataSource),
     dataOptionsString: stringifyProps(props.dataOptions),
+    filtersString: stringifyFilters(props.filters),
     componentString: 'PivotTableWidget',
     extraImportsString: stringifyExtraImports(props.filters || [], hasMeasures),
   };

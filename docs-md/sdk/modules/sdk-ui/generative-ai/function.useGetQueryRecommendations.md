@@ -24,7 +24,7 @@ This hook is currently under beta release for our managed cloud customers on ver
 
 [`UseGetQueryRecommendationsState`](../interfaces/interface.UseGetQueryRecommendationsState.md)
 
-An array of objects, each containing recommended question text and its corresponding `widgetProps`, as well as other variants of this information such as JAQL + chartMappings
+An array of objects, each containing recommended question text and its corresponding `widgetProps`
 
 ## Example
 

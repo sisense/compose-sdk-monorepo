@@ -15,7 +15,6 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
         "name": "Gender",
         "type": "text-attribute",
       },
-      "dateFormat": undefined,
       "includeSubTotals": true,
     },
   ],
@@ -37,7 +36,6 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
         "name": "Category",
         "type": "text-attribute",
       },
-      "dateFormat": undefined,
       "includeSubTotals": true,
       "sortType": "sortAsc",
     },
@@ -53,7 +51,6 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
         "name": "Age Range",
         "type": "text-attribute",
       },
-      "dateFormat": undefined,
       "includeSubTotals": true,
       "sortType": {
         "by": {
@@ -77,7 +74,6 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
         "name": "Condition",
         "type": "text-attribute",
       },
-      "dateFormat": undefined,
     },
   ],
   "values": [

@@ -33,11 +33,25 @@ export interface GetFilterMembersParams {
   defaultDataSource?: DataSource;
   /** List of filters this filter is dependent on */
   parentFilters?: Filter[];
+  /**
+   * Number of requested members to return in the query result
+   *
+   * If not specified, the default value is `20000`
+   *
+   * @internal
+   */
+  count?: number;
 }
 
 export interface GetFilterMembersSuccess {
   /** Whether the data fetching is loading */
   isLoading: boolean;
+  /**
+   * Function to load more data rows
+   *
+   * @internal
+   * */
+  loadMore: (count: number) => void;
   /** Whether the data fetching has failed */
   isError: false;
   /** The error if any occurred */
@@ -61,6 +75,12 @@ export interface GetFilterMembersError {
   isError: true;
   /** The result data */
   data: undefined;
+  /**
+   * Function to load more data rows
+   *
+   * @internal
+   * */
+  loadMore: (count: number) => void;
 }
 
 /**
@@ -78,6 +98,7 @@ export const useGetFilterMembersInternal = ({
   filter,
   defaultDataSource,
   parentFilters = [],
+  count,
 }: GetFilterMembersParams): GetFilterMembersResult => {
   if (!isMembersFilter(filter)) {
     throw new TranslatableError('errors.notAMembersFilter');
@@ -96,14 +117,14 @@ export const useGetFilterMembersInternal = ({
   if (backgroundFilter) {
     queryFilters.push(backgroundFilter);
   }
-
-  const { data, isLoading, isError, error } = useExecuteQueryInternal({
+  const { data, isLoading, isError, error, loadMore } = useExecuteQueryInternal({
     // prioritize attribute dataSource for the use case of multi-source dashboard
     dataSource: filterAttribute.dataSource
       ? convertDataSource(filterAttribute.dataSource)
       : defaultDataSource,
     dimensions,
     filters: queryFilters,
+    count,
   });
 
   const { app } = useSisenseContext();
@@ -164,6 +185,7 @@ export const useGetFilterMembersInternal = ({
   if (error) {
     return {
       isLoading,
+      loadMore,
       isError,
       error,
       data: undefined,
@@ -172,6 +194,7 @@ export const useGetFilterMembersInternal = ({
 
   return {
     isLoading,
+    loadMore,
     isError,
     error,
     data: {

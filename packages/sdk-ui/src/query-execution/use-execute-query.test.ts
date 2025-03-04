@@ -12,6 +12,7 @@ import { ClientApplication } from '../app/client-application';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ExecuteQueryParams } from './types';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
+import { act } from 'react';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
@@ -213,6 +214,107 @@ describe('useExecuteQuery', () => {
         expect.anything(),
         expect.anything(),
       );
+    });
+  });
+
+  it('should load more data successfully', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [[{ data: 1 }]] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteQuery({ ...params, count: 1 }));
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    const loadMoreMockData: QueryResultData = { columns: [], rows: [[{ data: 2 }]] };
+    executeQueryMock.mockResolvedValue(loadMoreMockData);
+    act(() => {
+      result.current.loadMore(1);
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.data).toEqual({
+        columns: mockData.columns,
+        rows: [...mockData.rows, ...loadMoreMockData.rows],
+      });
+    });
+  });
+
+  it('should not start loading new chunk if data is already loading', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [[{ data: 1 }]] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteQuery({ ...params, count: 1 }));
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    const loadMoreMockData: QueryResultData = { columns: [], rows: [[{ data: 2 }]] };
+    executeQueryMock.mockResolvedValue(loadMoreMockData);
+    act(() => {
+      result.current.loadMore(1);
+      result.current.loadMore(1);
+      result.current.loadMore(1);
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    const loadMoreMockData2: QueryResultData = { columns: [], rows: [[{ data: 3 }]] };
+    executeQueryMock.mockResolvedValue(loadMoreMockData2);
+    act(() => {
+      result.current.loadMore(1);
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.data).toEqual({
+        columns: mockData.columns,
+        rows: [...mockData.rows, ...loadMoreMockData.rows, ...loadMoreMockData2.rows],
+      });
+    });
+  });
+
+  it('should stop load more when all rows loaded', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [[{ data: 1 }]] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteQuery({ ...params, count: 2 }));
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    const loadMoreMockData: QueryResultData = { columns: [], rows: [[{ data: 2 }]] };
+    executeQueryMock.mockResolvedValue(loadMoreMockData);
+    act(() => {
+      result.current.loadMore(2);
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.data).toBe(mockData);
+    });
+  });
+
+  it('if enabled is set to false, should not load more', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteQuery({ ...params, enabled: false }));
+
+    const loadMoreMockData: QueryResultData = { columns: [], rows: [[{ data: 2 }]] };
+    executeQueryMock.mockResolvedValue(loadMoreMockData);
+    act(() => {
+      result.current.loadMore(1);
+    });
+
+    await waitFor(() => {
+      expect(result.current.data).toBeUndefined();
     });
   });
 

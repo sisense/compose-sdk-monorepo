@@ -118,52 +118,54 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   );
 
   return (
-    <FilterTileContainer
-      title={title}
-      renderContent={(collapsed, tileDisabled) => {
-        if (collapsed) {
+    <div aria-label="member-filter-tile">
+      <FilterTileContainer
+        title={title}
+        renderContent={(collapsed, tileDisabled) => {
+          if (collapsed) {
+            return (
+              <PillSection
+                members={allMembers}
+                selectedMembers={selectedMembers}
+                onToggleSelectedMember={(memberKey) => {
+                  const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
+                    selectedMembers,
+                    memberKey,
+                  );
+                  updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
+                }}
+                excludeMembers={excludeMembers}
+                disabled={tileDisabled}
+              />
+            );
+          }
           return (
-            <PillSection
+            <MemberList
               members={allMembers}
               selectedMembers={selectedMembers}
-              onToggleSelectedMember={(memberKey) => {
-                const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
-                  selectedMembers,
-                  memberKey,
-                );
-                updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
-              }}
+              onSelectMember={updateFilterFromMembersList}
+              checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
+              uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
               excludeMembers={excludeMembers}
+              enableMultiSelection={enableMultiSelection}
               disabled={tileDisabled}
             />
           );
-        }
-        return (
-          <MemberList
-            members={allMembers}
-            selectedMembers={selectedMembers}
-            onSelectMember={updateFilterFromMembersList}
-            checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
-            uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
-            excludeMembers={excludeMembers}
-            enableMultiSelection={enableMultiSelection}
-            disabled={tileDisabled}
-          />
-        );
-      }}
-      disabled={filter.config.disabled}
-      onToggleDisabled={() => {
-        const newFilter = cloneFilterAndToggleDisabled(filter);
-        updateFilter(newFilter);
-      }}
-      isDependent={parentFilters && parentFilters.length > 0}
-      design={merge(tileDesignOptions, {
-        header: { hasBackgroundFilter },
-      })}
-      locked={filter.config.locked}
-      onDelete={onDelete}
-      onEdit={onEdit}
-    />
+        }}
+        disabled={filter.config.disabled}
+        onToggleDisabled={() => {
+          const newFilter = cloneFilterAndToggleDisabled(filter);
+          updateFilter(newFilter);
+        }}
+        isDependent={parentFilters && parentFilters.length > 0}
+        design={merge(tileDesignOptions, {
+          header: { hasBackgroundFilter },
+        })}
+        locked={filter.config.locked}
+        onDelete={onDelete}
+        onEdit={onEdit}
+      />
+    </div>
   );
 });
 

@@ -46,7 +46,7 @@ export const FilterOption = {
   ENDS_WITH: `${FilterTypes.text}${TextOperators.EndsWith}`,
   NOT_ENDS_WITH: `${FilterTypes.text}${TextOperators.DoesntEndWith}`,
   LIKE: `${FilterTypes.text}${TextOperators.Like}`,
-};
+} as const;
 
 export type FilterOptionType = keyof typeof FilterOption;
 

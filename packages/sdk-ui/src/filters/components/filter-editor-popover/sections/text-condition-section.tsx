@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Filter } from '@sisense/sdk-data';
 import { SelectableSection } from '../common/selectable-section.js';
 import { Input, SingleSelect } from '../common/index.js';
-import { Attribute, Filter, filterFactory, MembersFilterConfig } from '@sisense/sdk-data';
 import {
   CRITERIA_FILTER_MAP,
   FilterOption,
@@ -14,6 +14,9 @@ import { SearchableMultiSelect } from '../common/select/searchable-multi-select.
 import { SearchableSingleSelect } from '../common/select/searchable-single-select.js';
 import { usePrevious } from '@/common/hooks/use-previous.js';
 import { useThemeContext } from '@/theme-provider';
+import { Member } from '@/filters';
+import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
+import { createExcludeMembersFilter } from './utils.js';
 
 const TextCondition = {
   EXCLUDE: 'exclude',
@@ -27,7 +30,9 @@ const TextCondition = {
   NOT_EQUALS: FilterOption.NOT_EQUALS_TEXT,
   IS_EMPTY: 'isEmpty',
   IS_NOT_EMPTY: 'isNotEmpty',
-};
+} as const;
+
+type TextConditionType = (typeof TextCondition)[keyof typeof TextCondition];
 
 const conditionItems = [
   { value: TextCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
@@ -43,7 +48,7 @@ const conditionItems = [
   { value: TextCondition.IS_NOT_EMPTY, displayValue: 'filterEditor.conditions.isNotEmpty' },
 ];
 
-const getTextFilterCondition = (filter: Filter) => {
+const getTextFilterCondition = (filter: Filter): TextConditionType => {
   if (!isConditionalFilter(filter)) {
     // returns first condition by default
     return conditionItems[0].value;
@@ -53,7 +58,7 @@ const getTextFilterCondition = (filter: Filter) => {
     return TextCondition.EXCLUDE;
   }
 
-  const condition = filterToOption(filter);
+  const condition = filterToOption(filter) as TextConditionType;
   const value = getTextFilterValue(filter);
 
   if (condition === TextCondition.EQUALS && value === '') {
@@ -84,19 +89,6 @@ const getCriteriaFilterBuilder = (condition: string) => {
   return CRITERIA_FILTER_MAP[condition];
 };
 
-function createExcludeMembersFilter(
-  attribute: Attribute,
-  members: string[],
-  config?: MembersFilterConfig,
-) {
-  return members.length
-    ? filterFactory.members(attribute, members, {
-        ...config,
-        excludeMembers: true,
-      })
-    : null;
-}
-
 function createConditionalFilter(baseFilter: Filter, data: TextConditionFilterData) {
   const { attribute, config } = baseFilter;
   const { condition, value, selectedMembers, multiSelectEnabled } = data;
@@ -121,9 +113,11 @@ type TextConditionFilterData = {
 type TextConditionSectionProps = {
   filter: Filter;
   selected: boolean;
-  members: string[];
+  members: Member[];
   multiSelectEnabled: boolean;
   onChange: (filter: Filter | null) => void;
+  onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
+  showListLoader?: boolean;
 };
 
 /** @internal */
@@ -133,16 +127,28 @@ export const TextConditionSection = ({
   members,
   multiSelectEnabled,
   onChange,
+  onListScroll,
+  showListLoader = false,
 }: TextConditionSectionProps) => {
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
-  const [condition, setCondition] = useState<string>(getTextFilterCondition(filter));
+  const [condition, setCondition] = useState<TextConditionType>(getTextFilterCondition(filter));
   const [value, setValue] = useState(getTextFilterValue(filter) as string);
   const [selectedMembers, setSelectedMembers] = useState(
     isExcludeMembersFilter(filter) ? filter.members : [],
   );
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
-  const selectItems = useMemo(() => members.map((member) => ({ value: member })), [members]);
+  const selectItems = useMemo(() => {
+    let allMembers = members.map((member) => ({ value: member.key }));
+    if (isExcludeMembersFilter(filter) && filter.members.length) {
+      const selectedMembers = multiSelectEnabled ? filter.members : [filter.members[0]];
+      allMembers = [
+        ...selectedMembers.map((member) => ({ value: member })),
+        ...allMembers.filter((member) => !selectedMembers.includes(member.value)),
+      ];
+    }
+    return allMembers;
+  }, [multiSelectEnabled, members, filter]);
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
   const translatedConditionItems = useMemo(
@@ -152,16 +158,18 @@ export const TextConditionSection = ({
 
   const showInput = useMemo(
     () =>
-      [
-        TextCondition.CONTAINS,
-        TextCondition.ENDS_WITH,
-        TextCondition.EQUALS,
-        TextCondition.NOT_CONTAIN,
-        TextCondition.NOT_ENDS_WITH,
-        TextCondition.NOT_EQUALS,
-        TextCondition.NOT_STARTS_WITH,
-        TextCondition.STARTS_WITH,
-      ].includes(condition),
+      (
+        [
+          TextCondition.CONTAINS,
+          TextCondition.ENDS_WITH,
+          TextCondition.EQUALS,
+          TextCondition.NOT_CONTAIN,
+          TextCondition.NOT_ENDS_WITH,
+          TextCondition.NOT_EQUALS,
+          TextCondition.NOT_STARTS_WITH,
+          TextCondition.STARTS_WITH,
+        ] as TextConditionType[]
+      ).includes(condition),
     [condition],
   );
 
@@ -225,7 +233,7 @@ export const TextConditionSection = ({
   );
 
   const handleConditionChange = useCallback(
-    (newCondition: string) => {
+    (newCondition: TextConditionType) => {
       let currentValue = value;
 
       setCondition(newCondition);
@@ -282,7 +290,7 @@ export const TextConditionSection = ({
             backgroundColor: themeSettings.filter.panel.backgroundColor,
             color: themeSettings.typography.primaryTextColor,
           }}
-          placeholder={t('filterEditor.placeholders.enterValue')}
+          placeholder={t('filterEditor.placeholders.enterEntry')}
           value={value}
           onChange={handleValueChange}
           aria-label="Value input"
@@ -298,6 +306,8 @@ export const TextConditionSection = ({
             onChange={handleMembersChange}
             primaryColor={themeSettings.typography.primaryTextColor}
             primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
+            onListScroll={onListScroll}
+            showListLoader={showListLoader}
           />
         ) : (
           <SearchableSingleSelect<string>
@@ -308,6 +318,8 @@ export const TextConditionSection = ({
             onChange={handleMembersChange}
             primaryColor={themeSettings.typography.primaryTextColor}
             primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
+            onListScroll={onListScroll}
+            showListLoader={showListLoader}
           />
         ))}
     </SelectableSection>

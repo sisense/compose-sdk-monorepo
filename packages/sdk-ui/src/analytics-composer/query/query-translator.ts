@@ -19,6 +19,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import { QUERY_TEMPLATE } from './query-templates.js';
 import { populatePlaceholders } from '../code/generate-code.js';
 import { deriveChartFamily } from '@/chart/helpers/derive-chart-family.js';
+import { normalizeAnyColumn } from '@/chart-data-options/utils.js';
 
 /**
  * A class that translates ExpandedQueryModel (Raw JAQL+Chart Recommendations)
@@ -215,15 +216,15 @@ export class QueryTranslator {
       return {};
     }
 
-    const { chartType, axesMapping } = chartRecommendations;
+    const { chartType, axesMapping, styleOptions } = chartRecommendations;
 
     const dataOptions = Object.entries(axesMapping).reduce((acc, [key, items]) => {
-      acc[key] = items.map((item) => ({ name: item.name }));
+      acc[key] = items.map((item) => normalizeAnyColumn(item));
       return acc;
     }, {});
 
     // Remove chartFamily from chartRecommendations and rename axesMapping to dataOptions
-    return { chartType, dataOptions };
+    return { chartType, dataOptions, styleOptions };
   }
 
   /**
@@ -327,11 +328,11 @@ export class QueryTranslator {
       return {};
     }
 
-    const { chartType, dataOptions: axesMapping } = chartRecommendations;
+    const { chartType, dataOptions: axesMapping, styleOptions } = chartRecommendations;
     const chartFamily = deriveChartFamily(chartType);
 
     // Add back chartFamily
-    return { chartFamily, chartType, axesMapping };
+    return { chartFamily, chartType, axesMapping, styleOptions };
   }
 
   /**

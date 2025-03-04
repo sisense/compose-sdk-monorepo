@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { SelectableSection } from '../common/selectable-section';
 import { SearchableMultiSelect } from '../common/select/searchable-multi-select';
 import { Attribute, Filter, FilterConfig, filterFactory } from '@sisense/sdk-data';
-import { isIncludeMembersFilter } from '../utils';
 import { SearchableSingleSelect } from '../common/select/searchable-single-select';
 import { usePrevious } from '@/common/hooks/use-previous';
 import { useThemeContext } from '@/theme-provider';
+import { Member } from '@/filters';
+import { isIncludeMembersFilter } from '@/filters/components/filter-editor-popover/utils';
+import { ScrollWrapperOnScrollEvent } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
   return members.length
@@ -22,21 +24,41 @@ type MembersFilterData = {
 type MembersSectionProps = {
   filter: Filter;
   selected: boolean;
-  members: string[];
+  members: Member[];
   multiSelectEnabled: boolean;
   onChange: (filter: Filter | null) => void;
+  onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
+  showListLoader?: boolean;
 };
 
 /** @internal */
 export const MembersSection = (props: MembersSectionProps) => {
   const { themeSettings } = useThemeContext();
-  const { filter, selected, members, multiSelectEnabled, onChange } = props;
+  const {
+    filter,
+    selected,
+    members,
+    multiSelectEnabled,
+    onChange,
+    onListScroll,
+    showListLoader = false,
+  } = props;
   const { t } = useTranslation();
   const [selectedMembers, setSelectedMembers] = useState(
     isIncludeMembersFilter(filter) ? filter.members : [],
   );
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
-  const selectItems = useMemo(() => members.map((member) => ({ value: member })), [members]);
+  const selectItems = useMemo(() => {
+    let allMembers = members.map((member) => ({ value: member.key }));
+    if (isIncludeMembersFilter(filter) && filter.members.length) {
+      const selectedMembers = multiSelectEnabled ? filter.members : [filter.members[0]];
+      allMembers = [
+        ...selectedMembers.map((member) => ({ value: member })),
+        ...allMembers.filter((member) => !selectedMembers.includes(member.value)),
+      ];
+    }
+    return allMembers;
+  }, [multiSelectEnabled, members, filter]);
   const isMultiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
 
@@ -95,6 +117,8 @@ export const MembersSection = (props: MembersSectionProps) => {
             onChange={handleMembersChange}
             primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
             primaryColor={themeSettings.typography.primaryTextColor}
+            onListScroll={onListScroll}
+            showListLoader={showListLoader}
           />
         ) : (
           <SearchableSingleSelect<string>
@@ -105,6 +129,8 @@ export const MembersSection = (props: MembersSectionProps) => {
             onChange={handleMembersChange}
             primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
             primaryColor={themeSettings.typography.primaryTextColor}
+            onListScroll={onListScroll}
+            showListLoader={showListLoader}
           />
         )
       }

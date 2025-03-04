@@ -91,7 +91,6 @@ export const toWidgetPropsFromQuery = (
 
     const { metadataColumns, metadataFilters } = splitMetadata(metadata);
     const filters = getFilters(metadataFilters);
-    // get chart options. Use default style for charts in Query Composer
     const { dataOptions, chartStyleOptions } = getChartOptions(
       metadataColumns,
       chartRecommendations,

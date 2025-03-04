@@ -9,9 +9,11 @@ import {
   extractForecastMeasures,
   extractTrendMeasures,
 } from '@/chart-options-processor/advanced-chart-options.js';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useWidgetErrorsAndWarnings } from '@/widgets/common/widget-errors-and-warnings-context';
+import { useHasChanged } from '@/common/hooks/use-has-changed.js';
+import { TranslatableError } from '@/translation/translatable-error.js';
 
 /**
  *
@@ -19,8 +21,21 @@ import { useWidgetErrorsAndWarnings } from '@/widgets/common/widget-errors-and-w
  * @returns
  */
 export const AdvancedChart = (props: RegularChartProps) => {
+  const [refreshCounter, setRefreshCounter] = useState(0);
+
   const { setErrors, errors } = useWidgetErrorsAndWarnings();
-  if (!isDataSource(props.dataSet)) throw 'error, advanced charts only works against a data model';
+
+  const couldDataChange = useHasChanged(props, ['dataOptions', 'filters']);
+
+  useEffect(() => {
+    if (couldDataChange && errors.length > 0) {
+      // retry trend/forecast rendering
+      setRefreshCounter(refreshCounter + 1);
+      setErrors([]);
+    }
+  }, [props.dataOptions, props.filters]);
+
+  if (!isDataSource(props.dataSet)) throw new TranslatableError('errors.undefinedDataSource');
   const cartesianDataOptions = cloneDeep(props.dataOptions) as CartesianChartDataOptions;
   const trendMeasures = extractTrendMeasures(cartesianDataOptions);
   cartesianDataOptions.value.push(...trendMeasures);
@@ -46,7 +61,7 @@ export const AdvancedChart = (props: RegularChartProps) => {
   return (
     // this is advanced chart rendering
     <ErrorBoundary
-      key={`errorboundary_'${new Date().getTime().toString()}`}
+      key={`errorboundary_${refreshCounter}`}
       fallbackRender={unexpectedErrorHandler}
       onError={(err) => {
         setErrors((errs: string[]) => {

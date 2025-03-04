@@ -123,9 +123,17 @@ export const MOCK_EXPANDED_QUERY_MODEL = {
   },
   queryTitle: 'Expanded Query Title',
   chartRecommendations: {
-    chartFamily: 'table',
-    chartType: 'table',
-    axesMapping: { columns: [{ name: 'Condition' }, { name: 'Total Revenue' }] },
+    chartFamily: 'cartesian',
+    chartType: 'column',
+    axesMapping: {
+      category: [{ name: 'Condition', type: 'string' }],
+      value: [{ name: 'Total Revenue', type: 'number' }],
+    },
+    styleOptions: {
+      legend: {
+        position: 'top',
+      },
+    },
   },
 } as ExpandedQueryModel;
 
@@ -196,19 +204,32 @@ export const MOCK_SIMPLE_QUERY_MODEL = {
     },
   ],
   chart: {
-    chartType: 'table',
+    chartType: 'column',
     dataOptions: {
-      columns: [
+      category: [
         {
-          name: 'Condition',
+          column: {
+            name: 'Condition',
+            type: 'string',
+          },
         },
+      ],
+      value: [
         {
-          name: 'Total Revenue',
+          column: {
+            name: 'Total Revenue',
+            type: 'number',
+          },
         },
       ],
     },
+    styleOptions: {
+      legend: {
+        position: 'top',
+      },
+    },
   },
-  queryTitle: 'table showing expanded query title',
+  queryTitle: 'column chart showing expanded query title',
 } as SimpleQueryModel;
 
 export const MOCK_RE_EXPANDED_QUERY_MODEL = {
@@ -304,23 +325,36 @@ export const MOCK_RE_EXPANDED_QUERY_MODEL = {
     ],
   },
   chartRecommendations: {
-    chartFamily: 'table',
-    chartType: 'table',
+    chartFamily: 'cartesian',
+    chartType: 'column',
     axesMapping: {
-      columns: [
+      category: [
         {
-          name: 'Condition',
+          column: {
+            name: 'Condition',
+            type: 'string',
+          },
         },
+      ],
+      value: [
         {
-          name: 'Total Revenue',
+          column: {
+            name: 'Total Revenue',
+            type: 'number',
+          },
         },
       ],
     },
+    styleOptions: {
+      legend: {
+        position: 'top',
+      },
+    },
   },
-  queryTitle: 'table showing expanded query title',
+  queryTitle: 'column chart showing expanded query title',
 } as ExpandedQueryModel;
 
-export const MOCK_SIMPLE_QUERY_YAML = `# Table showing expanded query title
+export const MOCK_SIMPLE_QUERY_YAML = `# Column chart showing expanded query title
 ---
 model: Sample ECommerce
 metadata:
@@ -363,11 +397,19 @@ metadata:
           agg: sum
     panel: scope
 chart:
-  chartType: table
+  chartType: column
   dataOptions:
-    columns:
-      - name: Condition
-      - name: Total Revenue
+    category:
+      - column:
+          name: Condition
+          type: string
+    value:
+      - column:
+          name: Total Revenue
+          type: number
+  styleOptions:
+    legend:
+      position: top
 `;
 
 export const MOCK_QUERY_YAML_1 = `# bar chart of total of revenue by condition

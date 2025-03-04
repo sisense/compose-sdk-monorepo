@@ -137,11 +137,18 @@ export function normalizeColumn(targetColumn: Column | StyledColumn): StyledColu
     ? (column as LevelAttribute)?.getFormat?.()
     : undefined;
 
-  return {
+  const dateFormat = style.dateFormat || levelDimensionDateFormat;
+
+  const nColumn = {
     ...style,
-    dateFormat: style.dateFormat || levelDimensionDateFormat,
     column,
   };
+
+  if (dateFormat) {
+    nColumn.dateFormat = dateFormat;
+  }
+
+  return nColumn;
 }
 
 export function normalizeMeasureColumn(
