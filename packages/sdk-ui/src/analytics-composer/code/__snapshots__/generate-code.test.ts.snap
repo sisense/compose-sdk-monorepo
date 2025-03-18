@@ -2,19 +2,21 @@
 
 exports[`generateCode > should generate code from template for Angular 1`] = `
 "import { Component } from '@angular/core';
-import { SdkUiModule, type ChartDataOptions } from '@sisense/sdk-ui-angular';
+import { type ChartDataOptions, type ChartStyleOptions } from '@sisense/sdk-ui-angular';
 import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import * as DM from './data-source'; // generated with @sisense/sdk-cli
 
 @Component({
     selector: 'code-example',
-    imports: [SdkUiModule],
     template: \`
       <csdk-chart-widget
+        [title]="'My Chart'"
         chartType='bar'
         [dataSource]='DM.DataSource'
         [dataOptions]='dataOptions'
         [filters]='filters'
+        [styleOptions]='styleOptions'
+        [drilldownOptions]='drilldownOptions'
       />
     \`
 })
@@ -22,6 +24,8 @@ export class CodeExample {
     DM = DM;
     dataOptions: ChartDataOptions = { category: [DM.Commerce.Date.Years], value: [measureFactory.sum(DM.Commerce.Revenue)] };
     filters = [filterFactory.greaterThan(DM.Commerce.Revenue, 0)];
+    styleOptions: ChartStyleOptions = {{styleOptionsString}};
+    drilldownOptions = {{drilldownOptionsString}};
 }"
 `;
 
@@ -38,6 +42,8 @@ export default function CodeExample() {
       chartType={'bar'}
       dataOptions={ { category: [DM.Commerce.Date.Years], value: [measureFactory.sum(DM.Commerce.Revenue)] } }
       filters={ [filterFactory.greaterThan(DM.Commerce.Revenue, 0)] }
+      styleOptions={ {{styleOptionsString}} }
+      drilldownOptions={ {{drilldownOptionsString}} }
     />
   );
 }"
@@ -46,12 +52,14 @@ export default function CodeExample() {
 exports[`generateCode > should generate code from template for Vue 1`] = `
 "<script setup lang="ts">
   import { ref } from 'vue';
-  import { Chart } from '@sisense/sdk-ui-vue';
+  import { Chart, type ChartStyleOptions } from '@sisense/sdk-ui-vue';
   import { filterFactory, measureFactory } from '@sisense/sdk-data';
   import * as DM from './data-source'; // generated with @sisense/sdk-cli
 
   const dataOptions = ref({ category: [DM.Commerce.Date.Years], value: [measureFactory.sum(DM.Commerce.Revenue)] });
   const filters = ref([filterFactory.greaterThan(DM.Commerce.Revenue, 0)]);
+  const styleOptions = ref<ChartStyleOptions>({{styleOptionsString}});
+  const drilldownOptions = ref({{drilldownOptionsString}});
 </script>
 
 <template>
@@ -59,6 +67,8 @@ exports[`generateCode > should generate code from template for Vue 1`] = `
     chartType="bar"
     :dataOptions="dataOptions"
     :filters="filters"
+    :styleOptions="styleOptions"
+    :drilldownOptions="drilldownOptions"
     :dataSource="DM.DataSource"
     title="My Chart" />
 </template>"

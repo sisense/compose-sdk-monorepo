@@ -7,6 +7,9 @@ import {
 } from '../../types/chart-event-props';
 import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
 
+/**
+ * Props of the {@link TreemapChartComponent}.
+ */
 export interface TreemapChartProps
   extends WithoutPreactChartEventProps<TreemapChartPropsPreact>,
     RegularChartEventProps {}

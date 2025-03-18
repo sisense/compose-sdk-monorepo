@@ -4,6 +4,8 @@ title: PolarChartProps
 
 # Interface PolarChartProps
 
+Props of the [PolarChartComponent](../charts/class.PolarChartComponent.md).
+
 ## Properties
 
 ### Data

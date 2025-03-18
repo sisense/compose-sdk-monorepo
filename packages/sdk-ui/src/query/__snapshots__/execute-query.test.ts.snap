@@ -41,7 +41,7 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
         "members": [
           "Female",
         ],
-        "name": "b47e93666e1",
+        "name": "6765f4132d6",
         "type": "filter",
       },
     ],
@@ -66,7 +66,7 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
         "members": [
           "18-24",
         ],
-        "name": "60e720dab25",
+        "name": "84fa8d5c2b2",
         "type": "filter",
       },
     ],
@@ -150,7 +150,7 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
         "members": [
           "18-24",
         ],
-        "name": "60e720dab25",
+        "name": "84fa8d5c2b2",
         "type": "filter",
       },
     ],
@@ -174,7 +174,7 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
         "members": [
           "Male",
         ],
-        "name": "7bccec9f8e2",
+        "name": "9d2957eadd5",
         "type": "filter",
       },
     ],

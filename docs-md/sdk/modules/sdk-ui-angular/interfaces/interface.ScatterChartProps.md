@@ -4,6 +4,8 @@ title: ScatterChartProps
 
 # Interface ScatterChartProps
 
+Props of the [ScatterChartComponent](../charts/class.ScatterChartComponent.md).
+
 ## Properties
 
 ### Data

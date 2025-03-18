@@ -8,7 +8,7 @@
 /* eslint-disable vitest/no-identical-title */
 import { DimensionalAttribute } from '../attributes.js';
 import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
-import { createDimension } from '../dimensions.js';
+import { createDimension } from '../dimensions/index.js';
 import { AggregationTypes } from '../types.js';
 import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';
 import { normalizeName } from '../base.js';

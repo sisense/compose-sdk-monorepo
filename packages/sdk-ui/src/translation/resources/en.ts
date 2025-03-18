@@ -25,6 +25,11 @@ export const translation = {
       filterAttributeNotFound: 'Filter attribute "{{attributeName}}" not found in the data',
       highlightAttributeNotFound: 'Highlight attribute "{{attributeName}}" not found in the data',
     },
+    optionsTranslation: {
+      invalidStyleOptions: "Invalid style options for '{{chartType}}' chart",
+      invalidInternalDataOptions:
+        "Data options are not correctly converted for '{{chartType}}' chart",
+    },
     themeNotFound: 'Theme with oid {{themeOid}} not found in the Sisense instance',
     paletteNotFound: "Palette '{{paletteName}}' not found in the Sisense instance",
     chartTypeNotSupported: 'Chart type {{chartType}} is not supported',
@@ -92,6 +97,10 @@ export const translation = {
     drilldownNoInitialDimension:
       'Initial dimension has to be specified to use drilldown with custom components',
     otherWidgetTypesNotSupported: 'Other widget types are not supported yet',
+    dataBrowser: {
+      dimensionNotFound: 'Dimension with id {{dimensionId}} not found',
+      attributeNotFound: 'Attribute with id {{attributeId}} not found',
+    },
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
@@ -286,6 +295,17 @@ export const translation = {
       noAvailableDataTopics: 'None of the provided data models or perspectives are available',
     },
   },
+  attribute: {
+    datetimeName: {
+      years: 'Years in {{columnName}}',
+      quarters: 'Quarters in {{columnName}}',
+      months: 'Months in {{columnName}}',
+      weeks: 'Weeks in {{columnName}}',
+      days: 'Days in {{columnName}}',
+      hours: 'Hours in {{columnName}}',
+      minutes: 'Minutes in {{columnName}}',
+    },
+  },
   filterEditor: {
     buttons: {
       apply: 'Apply',
@@ -298,11 +318,13 @@ export const translation = {
       allowMultiSelection: 'Allow multiselect for lists',
       from: 'From',
       to: 'To',
+      includeCurrent: 'Including current',
     },
     placeholders: {
       selectFromList: 'Select from list',
       enterEntry: 'Type your entry...',
       enterValue: 'Enter value...',
+      select: 'Select',
     },
     conditions: {
       exclude: 'Is not',
@@ -320,10 +342,29 @@ export const translation = {
       lessThanOrEqual: 'Equals or smaller than',
       greaterThan: 'Greater than',
       greaterThanOrEqual: 'Equals or greater than',
+      isWithin: 'Is within',
     },
     validationErrors: {
       invalidNumber: 'Numbers only',
       invalidNumericRange: '"To" must be greater than "From"',
+    },
+    datetimeLevels: {
+      year: 'Year',
+      quarter: 'Quarter',
+      month: 'Month',
+      week: 'Week',
+      day: 'Day',
+      aggrigatedHour: 'Hour (aggregated)',
+      aggrigatedMinutesRoundTo15: '15-min (aggregated)',
+    },
+    relativeTypes: {
+      last: 'Last',
+      this: 'This',
+      next: 'Next',
+    },
+    datetimePositions: {
+      before: 'Before',
+      after: 'After',
     },
   },
   pivotTable: {

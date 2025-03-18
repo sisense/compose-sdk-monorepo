@@ -12,7 +12,7 @@ import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.j
 dayjs.extend(isToday);
 
 /**
- * Props for {@link RelativeDateFilterTile}
+ * Props of the {@link RelativeDateFilterTile} component.
  */
 export interface RelativeDateFilterTileProps {
   /**Filter tile title */

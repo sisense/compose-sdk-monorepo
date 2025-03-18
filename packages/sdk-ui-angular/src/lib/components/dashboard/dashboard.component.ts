@@ -21,6 +21,9 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link DashboardComponent}.
+ */
 export interface DashboardProps extends DashboardPropsPreact {}
 
 /**

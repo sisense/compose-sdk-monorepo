@@ -4,7 +4,6 @@ import {
   InternalSeries,
   TooltipSettings,
   formatTooltipValue,
-  formatTooltipXValue,
   isTooltipPercentValueSupported,
 } from '../tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
@@ -53,11 +52,10 @@ export const getRangeTooltipSettings = (
 
       const upperYValue = formatTooltipValue(dataOptionY, that.point.high, '');
       const bottomYValue = formatTooltipValue(dataOptionY2, that.point.low, '');
-      // const middle = formatTooltipValue(dataOptionY2 as Value, that.point.y, '');
 
       const maskedX = that.point?.custom?.xDisplayValue ?? that.x;
       const x1Value = rangeChartDataOptions.x
-        ? formatTooltipXValue(rangeChartDataOptions.x[0], that.x, maskedX)
+        ? formatTooltipValue(rangeChartDataOptions.x[0], that.x, maskedX)
         : maskedX;
 
       const topValue =

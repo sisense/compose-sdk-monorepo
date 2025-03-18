@@ -4,7 +4,7 @@ title: TreemapChartProps
 
 # Interface TreemapChartProps
 
-Props of the [`TreemapChart`](../../sdk-ui/charts/function.TreemapChart.md) component.
+Props of the [`TreemapChart`](../charts/class.TreemapChart.md) component.
 
 ## Properties
 

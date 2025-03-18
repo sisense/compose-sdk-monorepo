@@ -4,6 +4,8 @@ title: DrilldownBreadcrumbsProps
 
 # Interface DrilldownBreadcrumbsProps
 
+Props of the [`DrilldownBreadcrumbs`](../drilldown/class.DrilldownBreadcrumbs.md) component.
+
 ## Properties
 
 ### Widget

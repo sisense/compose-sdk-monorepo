@@ -21,7 +21,7 @@ export const TrackingContextProvider = ({
 }) => <TrackingContext.Provider value={skipNested}>{children}</TrackingContext.Provider>;
 
 export const useTrackComponentInit = <P extends {}>(componentName: string, props: P) => {
-  const { tracking } = useSisenseContext();
+  const { tracking, app } = useSisenseContext();
   const { trackEvent } = useTracking();
 
   const inTrackingContext = useContext(TrackingContext);
@@ -29,7 +29,7 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!tracking) return;
+    if (!tracking || !app) return;
     const hasBeenTracked = hasTrackedRef.current;
     if (!hasBeenTracked && !inTrackingContext) {
       const payload: ComponentInitEventDetails = {
@@ -46,5 +46,5 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
         () => (hasTrackedRef.current = true),
       );
     }
-  }, [componentName, props, tracking, inTrackingContext, trackEvent]);
+  }, [componentName, props, tracking, inTrackingContext, trackEvent, app]);
 };

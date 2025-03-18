@@ -17,7 +17,7 @@ import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.j
 import { useSyncedState } from '@/common/hooks/use-synced-state.js';
 
 /**
- * Props for {@link CriteriaFilterTile}
+ * Props of the {@link CriteriaFilterTile} component.
  */
 export interface CriteriaFilterTileProps {
   /** Title for the filter tile, which is rendered into the header */

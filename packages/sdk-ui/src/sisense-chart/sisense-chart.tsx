@@ -1,48 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChartDataOptionsInternal } from '../chart-data-options/types';
-import { ChartData } from '../chart-data/types';
-import { applyEventHandlersToChart } from '../chart-options-processor/apply-event-handlers';
-import { BeforeRenderHandler } from '../props';
+import { ChartType } from '@/types';
+import { useThemeContext } from '@/theme-provider';
+import { ChartRendererProps } from '@/chart/types';
+import { applyEventHandlersToChart } from '@/chart-options-processor/apply-event-handlers';
+
 import {
   HighchartsOptionsInternal,
   highchartsOptionsService,
   HighchartsOptions,
-} from '../chart-options-processor/chart-options-service';
-import { applyThemeToChart } from '../chart-options-processor/theme-option-service';
-import { applyCommonHighchartsOptions } from '../chart-options-processor/common-highcharts-option-service';
+} from '@/chart-options-processor/chart-options-service';
+import { applyThemeToChart } from '@/chart-options-processor/theme-option-service';
+import { applyCommonHighchartsOptions } from '@/chart-options-processor/common-highcharts-option-service';
 import {
-  BoxplotChartType,
   BOXPLOT_CHART_TYPES,
-  CartesianChartType,
   CARTESIAN_CHART_TYPES,
-  CategoricalChartType,
   CATEGORICAL_CHART_TYPES,
-  ChartDesignOptions,
-  ScatterChartType,
   SCATTER_CHART_TYPES,
   RANGE_CHART_TYPES,
-} from '../chart-options-processor/translations/types';
-import { ChartType } from '../types';
-import { useSisenseContext } from '../sisense-context/sisense-context';
-import { applyDateFormat } from '../query/date-formats';
-import AlertBox from '../alert-box/alert-box';
-import { HighchartsReactMemoized } from '../highcharts-memorized';
-import { SisenseChartDataPointEventHandler, SisenseChartDataPointsEventHandler } from './types';
-import { ChartRendererProps } from '@/chart/types';
-import { useThemeContext } from '..';
+} from '@/chart-options-processor/translations/types';
 
-export interface SisenseChartProps {
-  chartType: SisenseChartType;
-  chartData: ChartData;
-  dataOptions: ChartDataOptionsInternal;
-  designOptions: ChartDesignOptions;
-  onDataPointClick?: SisenseChartDataPointEventHandler;
-  onDataPointContextMenu?: SisenseChartDataPointEventHandler;
-  onDataPointsSelected?: SisenseChartDataPointsEventHandler;
-  onBeforeRender?: BeforeRenderHandler;
-}
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { applyDateFormat } from '@/query/date-formats';
+import AlertBox from '@/alert-box/alert-box';
+import { HighchartsReactMemoized } from '@/highcharts-memorized';
+import { SisenseChartProps, SisenseChartType } from './types';
 
 const defaultOnBeforeRender = (options: HighchartsOptions) => options;
 
@@ -152,12 +135,6 @@ const ALL_CHARTS_RENDERED_BY_SISENSE_CHART: ChartType[] = [
 export const isSisenseChartType = (chartType: ChartType): chartType is SisenseChartType => {
   return ALL_CHARTS_RENDERED_BY_SISENSE_CHART.includes(chartType);
 };
-
-export type SisenseChartType =
-  | CartesianChartType
-  | CategoricalChartType
-  | ScatterChartType
-  | BoxplotChartType;
 
 export const isSisenseChartProps = (props: ChartRendererProps): props is SisenseChartProps => {
   return !!props.chartType && isSisenseChartType(props.chartType) && !!props.chartData;

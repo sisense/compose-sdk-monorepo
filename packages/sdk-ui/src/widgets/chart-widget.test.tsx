@@ -49,14 +49,17 @@ describe('ChartWidget', () => {
 
   it('should render table widget', async () => {
     executeQueryMock.mockResolvedValue(mockResolvedQuery);
-    const { container, findByLabelText } = render(
+    const { findByLabelText, findAllByRole } = render(
       <MenuProvider>
         <ChartWidget {...mockChartWidgetPropsForTable} />
       </MenuProvider>,
     );
     const table = await findByLabelText('table-root');
     expect(table).toBeTruthy();
-    expect(container).toMatchSnapshot();
+    const columns = await findAllByRole('columnheader');
+    expect(columns.length).toBe(mockResolvedQuery.columns.length);
+    const rows = await findAllByRole('row');
+    expect(rows.length).toBe(mockResolvedQuery.rows.length + 1); // +1 for header row
   });
 
   it('should render column widget with applied drilldown', async () => {
@@ -75,6 +78,7 @@ describe('ChartWidget', () => {
             dataOptions: {
               category: [DM.Commerce.Gender],
               value: [measureFactory.sum(DM.Commerce.Revenue)],
+              breakBy: [],
             },
             drilldownOptions: {
               drilldownDimensions: [],

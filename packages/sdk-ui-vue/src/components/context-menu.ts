@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ContextMenu as ContextMenuPreact } from '@sisense/sdk-ui-preact';
-import type { ContextMenuProps } from '@sisense/sdk-ui-preact';
+import type { ContextMenuProps as ContextMenuPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelperWithChildren } from '../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!ContextMenu | `ContextMenu`} component.
+ */
+export interface ContextMenuProps extends Omit<ContextMenuPropsPreact, 'children'> {}
 
 /**
  * `ContextMenu` component from the `@sisense/sdk-ui-vue` package.

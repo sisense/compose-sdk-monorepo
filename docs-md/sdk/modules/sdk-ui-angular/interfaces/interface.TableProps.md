@@ -4,7 +4,7 @@ title: TableProps
 
 # Interface TableProps
 
-Props of the [`Table`](../../sdk-ui/data-grids/function.Table.md) component.
+Props of the [TableComponent](../data-grids/class.TableComponent.md).
 
 ## Properties
 

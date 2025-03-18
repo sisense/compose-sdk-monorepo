@@ -156,6 +156,7 @@ export { useThemeContext } from './theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
 export { LoadingOverlay } from './common/components/loading-overlay';
 export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';
+export { useGetDataSourceFields } from './common/hooks/fusion-endpoints/use-get-data-source-fields';
 export type { EmptyObject } from './utils/utility-types';
 export { translateColumnToAttribute } from './chart-data-options/utils';
 export { isSameAttribute } from './utils/filters';

@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { FunnelChart as FunnelChartPreact } from '@sisense/sdk-ui-preact';
-import type { FunnelChartProps } from '@sisense/sdk-ui-preact';
+import type { FunnelChartProps as FunnelChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!FunnelChart | `FunnelChart`} component.
+ */
+export interface FunnelChartProps extends FunnelChartPropsPreact {}
 
 /**
  * A Vue component that wraps the FunnelChart Preact component for use in Vue applications.

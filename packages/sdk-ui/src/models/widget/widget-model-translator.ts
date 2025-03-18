@@ -76,6 +76,7 @@ import {
 } from '@/widget-by-id/translate-widget-data-options.js';
 import {
   extractStyleOptions,
+  getFlattenWidgetDesign,
   getStyleWithWidgetDesign,
 } from '@/widget-by-id/translate-widget-style-options.js';
 import { extractDrilldownOptions } from '@/widget-by-id/translate-widget-drilldown-options.js';
@@ -521,7 +522,8 @@ export function fromWidgetDto(
     pluginType = widgetType;
     widgetType = 'plugin' as const;
     dataOptions = createDataOptionsFromPanels(panels, themeSettings?.palette.variantColors ?? []);
-    styleOptions = widgetDto.style as unknown;
+    const { widgetDesign, ...rest } = widgetDto.style;
+    styleOptions = { ...rest, ...(widgetDesign ? getFlattenWidgetDesign(widgetDesign) : {}) };
   } else {
     dataOptions = extractDataOptions(
       widgetType,

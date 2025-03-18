@@ -27,7 +27,7 @@ exports[`TableWidget Component > renders Table with correct props 1`] = `
         "Used",
         "Refurbished",
       ],
-      "name": "28400200b58",
+      "name": "af21c794bcf",
       "type": "filter",
     },
   ],

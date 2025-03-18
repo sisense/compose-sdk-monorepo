@@ -18,7 +18,10 @@ import {
   SunburstStyleOptions,
   BoxplotStyleOptions,
   ScattermapStyleOptions,
-} from '../../types';
+  BaseAxisStyleOptions,
+  ChartStyleOptions,
+  ChartType,
+} from '@/types';
 import { Axis } from '../translations/axis-section';
 import {
   BaseDesignOptions,
@@ -58,13 +61,8 @@ import {
   extendStyleOptionsWithDefaults,
   getDesignOptionsPerSeries,
 } from './prepare-design-options';
-import {
-  BaseAxisStyleOptions,
-  ChartDataOptionsInternal,
-  ChartStyleOptions,
-  ChartType,
-} from '@/index';
-import { SeriesDesignOptions } from '../translations/types';
+import { CartesianChartType, SeriesDesignOptions } from '../translations/types';
+import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 
 export const getLegend = (legend?: Legend): LegendPosition => {
   if (legend?.enabled) {
@@ -121,12 +119,12 @@ const getLineWidth = (lineWidth: LineWidth): number => {
 };
 
 export const DefaultStackType: StackType = 'classic';
-const getCartesianChartStyle = (
+export const getCartesianChartStyle = (
   styleOptions: BaseStyleOptions & BaseAxisStyleOptions,
-  hasY2Axis: boolean,
+  shouldHaveY2Axis: boolean,
 ): BaseDesignOptionsType => {
   const legend = getLegend(styleOptions.legend);
-  const dataLimits = getDataLimits(styleOptions, 'cartesian');
+  const dataLimits = getCartesianDataLimits();
   const xAxis = getAxisLabel(styleOptions.xAxis, BaseDesignOptions.xAxis);
   let x2Axis = null;
   if (styleOptions?.xAxis?.x2Title?.enabled && styleOptions?.xAxis?.x2Title?.text) {
@@ -137,20 +135,21 @@ const getCartesianChartStyle = (
   }
 
   const yAxis = getAxisLabel(styleOptions.yAxis, BaseDesignOptions.yAxis);
-  let y2Axis: Axis = {
-    type: 'linear',
-    enabled: true,
-    titleEnabled: true,
-    title: 'Y2 Axis title',
-    gridLine: true,
-    labels: true,
-    min: null,
-    max: null,
-    tickInterval: null,
-  };
-  if (styleOptions.y2Axis) {
-    y2Axis = { ...y2Axis, ...getY2AxisLabel(styleOptions.y2Axis) };
-  }
+  const y2Axis: Axis | undefined =
+    shouldHaveY2Axis && styleOptions.y2Axis
+      ? {
+          type: 'linear',
+          enabled: true,
+          titleEnabled: true,
+          title: 'Y2 Axis title',
+          gridLine: true,
+          labels: true,
+          min: null,
+          max: null,
+          tickInterval: null,
+          ...getY2AxisLabel(styleOptions.y2Axis),
+        }
+      : undefined;
 
   const autoZoom = getNavigator(styleOptions.navigator);
 
@@ -161,7 +160,7 @@ const getCartesianChartStyle = (
     valueLabel: styleOptions.seriesLabels || {},
     xAxis,
     yAxis,
-    ...(hasY2Axis && y2Axis && { y2Axis }),
+    ...(y2Axis && { y2Axis }),
     ...(x2Axis && { x2Axis }),
     dataLimits,
   };
@@ -177,11 +176,11 @@ const getMarkers = (marker: Markers): Marker => {
 
 export const getStackableChartDesignOptions = (
   styleOptions: AreaStyleOptions | StackableStyleOptions,
-  dataOptions: ChartDataOptionsInternal,
+  dataOptions: CartesianChartDataOptionsInternal,
   hasY2Axis: boolean,
-  chartType: ChartType,
+  chartType: CartesianChartType,
 ): StackableChartDesignOptions => {
-  const style = getCartesianChartStyle(styleOptions, hasY2Axis);
+  const cartesianDesignOptions = getCartesianChartStyle(styleOptions, hasY2Axis);
   const styleOptionsWithDefaults = extendStyleOptionsWithDefaults(
     styleOptions ?? {},
     getDefaultStyleOptions(),
@@ -192,7 +191,7 @@ export const getStackableChartDesignOptions = (
     styleOptionsWithDefaults,
   );
   return {
-    ...style,
+    ...cartesianDesignOptions,
     designPerSeries,
     stackType: DefaultStackType,
     showTotal: styleOptions.totalLabels?.enabled ?? false,
@@ -220,7 +219,7 @@ export const getSeriesChartDesignOptions = (
 
 export const getLineChartDesignOptions = (
   styleOptions: LineStyleOptions,
-  dataOptions: ChartDataOptionsInternal,
+  dataOptions: CartesianChartDataOptionsInternal,
   hasY2Axis: boolean,
 ): LineChartDesignOptions => {
   const style = getCartesianChartStyle(styleOptions, hasY2Axis);
@@ -241,7 +240,7 @@ export const getLineChartDesignOptions = (
 
 export const getAreaChartDesignOptions = (
   styleOptions: AreaStyleOptions,
-  dataOptions: ChartDataOptionsInternal,
+  dataOptions: CartesianChartDataOptionsInternal,
   hasY2Axis: boolean,
 ): AreaChartDesignOptions => {
   return {
@@ -253,7 +252,7 @@ export const getAreaChartDesignOptions = (
 
 const getDataLimits = (
   styleOptions: BaseStyleOptions,
-  chartDataType: 'cartesian' | 'categorical' | 'pie' | 'scatter',
+  chartDataType: 'categorical' | 'pie' | 'scatter',
 ) => {
   const dataLimits = {
     seriesCapacity:
@@ -279,6 +278,16 @@ const getDataLimits = (
   }
   return dataLimits;
 };
+
+function getCartesianDataLimits(): {
+  seriesCapacity: number;
+  categoriesCapacity: number;
+} {
+  return {
+    seriesCapacity: SERIES_CAPACITY,
+    categoriesCapacity: CATEGORIES_CAPACITY,
+  };
+}
 
 const DefaultPieLabels: PieLabels = {
   enabled: true,
@@ -369,7 +378,7 @@ export const getSunburstChartDesignOptions = (
 const DefaultPolarType: PolarType = 'column';
 export const getPolarChartDesignOptions = (
   styleOptions: PolarStyleOptions,
-  dataOptions: ChartDataOptionsInternal,
+  dataOptions: CartesianChartDataOptionsInternal,
 ): PolarChartDesignOptions => {
   const style = getCartesianChartStyle(styleOptions, false);
   const styleOptionsWithDefaults = extendStyleOptionsWithDefaults(

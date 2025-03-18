@@ -1,6 +1,14 @@
 import { defineComponent, type PropType } from 'vue';
-import { PolarChart as PolarChartPreact, type PolarChartProps } from '@sisense/sdk-ui-preact';
+import {
+  PolarChart as PolarChartPreact,
+  type PolarChartProps as PolarChartPropsPreact,
+} from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!PolarChart | `PolarChart`} component.
+ */
+export interface PolarChartProps extends PolarChartPropsPreact {}
 
 /**
  * A Vue component comparing multiple categories/variables with a spacial perspective in a radial chart.

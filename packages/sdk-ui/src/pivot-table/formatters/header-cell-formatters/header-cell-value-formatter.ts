@@ -36,7 +36,7 @@ export const createHeaderCellValueFormatter = (
         );
         break;
       case 'datetime':
-        cell.content = formatDateTimeString(cell.value!, dateFormatter, dateFormat);
+        cell.content = formatDatetimeString(cell.value!, dateFormatter, dateFormat);
         break;
       default:
         cell.content = cell.value;
@@ -52,7 +52,7 @@ export const createHeaderCellValueFormatter = (
  * Formats the date time string.
  * If the date is invalid, it returns the original value.
  */
-export function formatDateTimeString(
+export function formatDatetimeString(
   value: string,
   dateFormatter: DateFormatter,
   dateFormat?: string,

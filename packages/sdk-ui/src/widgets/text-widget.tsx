@@ -2,9 +2,11 @@ import styled from '@emotion/styled';
 import { FunctionComponent } from 'react';
 import DOMPurify from 'dompurify';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { TextWidgetStyleOptions } from '@/types';
+import { TextWidgetStyleOptions, CompleteThemeSettings } from '@/types';
 import { TextWidgetProps } from '@/props';
-
+import { WidgetSpaceAround } from './common/widget-style-utils';
+import { useThemeContext } from '../theme-provider';
+import get from 'lodash-es/get';
 export function isTextWidgetProps(props: any): props is TextWidgetProps {
   return (
     props !== null &&
@@ -16,6 +18,11 @@ export function isTextWidgetProps(props: any): props is TextWidgetProps {
   );
 }
 
+type Themeable = {
+  styleOptions: TextWidgetStyleOptions;
+  themeSettings: CompleteThemeSettings;
+};
+
 type Stylable = {
   styleOptions: TextWidgetStyleOptions;
 };
@@ -25,6 +32,13 @@ const VERTICAL_ALIGNMENT_DICTIONARY = {
   'valign-middle': 'center',
   'valign-bottom': 'flex-end',
 } as const;
+
+const TextWidgetSpaceAroundWrapper = styled.div<Themeable>`
+  padding: ${(props) =>
+    WidgetSpaceAround[
+      get(props.styleOptions, 'spaceAround', props.themeSettings.widget.spaceAround)
+    ] || '0px'};
+`;
 
 const TextWidgetContainer = styled.div<Stylable>`
   background-color: ${(props) => props.styleOptions.bgColor};
@@ -50,9 +64,12 @@ export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent
   componentName: 'TextWidget',
 })((props) => {
   const sanitizedHtml = DOMPurify.sanitize(props.styleOptions.html);
+  const { themeSettings } = useThemeContext();
   return (
-    <TextWidgetContainer styleOptions={props.styleOptions}>
-      <InnerHtml dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
-    </TextWidgetContainer>
+    <TextWidgetSpaceAroundWrapper themeSettings={themeSettings} styleOptions={props.styleOptions}>
+      <TextWidgetContainer styleOptions={props.styleOptions}>
+        <InnerHtml dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+      </TextWidgetContainer>
+    </TextWidgetSpaceAroundWrapper>
   );
 });

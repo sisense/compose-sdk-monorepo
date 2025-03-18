@@ -1,16 +1,16 @@
 import { withTracking } from '@/decorators/hook-decorators';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useChatApi } from './api/chat-api-provider';
 import { QueryRecommendation } from './api/types';
 import { widgetComposer } from '@/analytics-composer';
 import { HookEnableParam } from '@/common/hooks/types';
 
-/**
- * Parameters for {@link useGetQueryRecommendations} hook.
- */
-export interface UseGetQueryRecommendationsParams extends HookEnableParam {
+/** @internal */
+export const DEFAULT_RECOMMENDATIONS_COUNT = 4;
+
+export interface GetQueryRecommendationsParams {
   /** Data model title or perspective title */
   contextTitle: string;
 
@@ -29,6 +29,13 @@ export interface UseGetQueryRecommendationsParams extends HookEnableParam {
    */
   enableAxisTitlesInWidgetProps?: boolean;
 }
+
+/**
+ * Parameters for {@link useGetQueryRecommendations} hook.
+ */
+export interface UseGetQueryRecommendationsParams
+  extends GetQueryRecommendationsParams,
+    HookEnableParam {}
 
 /**
  * State for {@link useGetQueryRecommendations} hook.
@@ -59,11 +66,18 @@ export const useGetQueryRecommendationsInternal = (
 
   const api = useChatApi();
 
-  const recCount = count ?? 4;
+  const recCount = count ?? DEFAULT_RECOMMENDATIONS_COUNT;
 
   const shouldGetRecommendations = (enabled === undefined || enabled === true) && recCount > 0;
 
-  const { isLoading, isError, isSuccess, data, error, refetch } = useQuery({
+  const {
+    isLoading,
+    isError,
+    isSuccess,
+    data: rawRecommendations,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['getQueryRecommendations', contextTitle, recCount, api],
     queryFn: () =>
       api?.ai.getQueryRecommendations(contextTitle, {
@@ -72,19 +86,22 @@ export const useGetQueryRecommendationsInternal = (
     enabled: !!api && shouldGetRecommendations,
   });
 
-  data?.map((r: QueryRecommendation) => {
-    r.widgetProps = r.jaql
-      ? widgetComposer.toWidgetProps(r, {
-          useCustomizedStyleOptions: enableAxisTitlesInWidgetProps,
-        })
-      : undefined;
-  });
+  const recommendations = useMemo(() => {
+    return rawRecommendations?.map((recommendation: QueryRecommendation) => ({
+      ...recommendation,
+      widgetProps: recommendation.jaql
+        ? widgetComposer.toWidgetProps(recommendation, {
+            useCustomizedStyleOptions: enableAxisTitlesInWidgetProps,
+          })
+        : undefined,
+    }));
+  }, [rawRecommendations, enableAxisTitlesInWidgetProps]);
 
   return {
     isLoading: shouldGetRecommendations ? isLoading : false,
     isError: isError,
     isSuccess: isSuccess,
-    data: data ?? undefined,
+    data: recommendations ?? undefined,
     error: error,
     refetch: useCallback(() => {
       refetch();

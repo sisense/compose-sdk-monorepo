@@ -4,7 +4,7 @@ title: WidgetByIdProps
 
 # Interface WidgetByIdProps
 
-Props for the [`WidgetById`](../../sdk-ui/fusion-assets/function.WidgetById.md) component
+Props of the [WidgetByIdComponent](../fusion-assets/class.WidgetByIdComponent.md).
 
 ## Properties
 
@@ -105,37 +105,3 @@ If not specified, it takes the existing value from the widget configuration.
 > **widgetOid**: `string`
 
 Identifier of the widget
-
-### Callbacks
-
-#### onBeforeRender
-
-> **onBeforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md)
-
-A callback that allows you to customize the underlying chart element before it is rendered. The returned options are then used when rendering the chart.
-
-This callback is not supported for Areamap Chart, Scattermap Chart, Table, and PivotTable.
-
-***
-
-#### onDataPointClick
-
-> **onDataPointClick**?: [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
-
-Click handler callback for a data point
-
-***
-
-#### onDataPointContextMenu
-
-> **onDataPointContextMenu**?: [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md)
-
-Context menu handler callback for a data point
-
-***
-
-#### onDataPointsSelected
-
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
-
-Handler callback for selection of multiple data points

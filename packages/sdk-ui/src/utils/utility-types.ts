@@ -66,3 +66,44 @@ export type EmptyObject = Record<string, never>;
  * type TRequiredB = WithRequiredProp<T, 'b'>; // { a: string; b: number; c?: boolean; }
  */
 export type WithRequiredProp<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+
+/**
+ * Universal generic state for hooks that fetch data from the REST API.
+ */
+export type RestApiHookState<DataKey extends string, SuccessDataType extends AnyObject> =
+  | RestApiHookSuccessState<DataKey, SuccessDataType>
+  | RestApiHookErrorState<DataKey>
+  | RestApiHookLoadingState<DataKey>;
+
+/** Success state of the REST API hook */
+export type RestApiHookSuccessState<DataKey extends string, SuccessDataType extends AnyObject> = {
+  isLoading: false;
+  isError: false;
+  isSuccess: true;
+  error: undefined;
+  status: 'success';
+} & {
+  [key in DataKey]: SuccessDataType;
+};
+
+/** Error state of the REST API hook */
+export type RestApiHookErrorState<DataKey extends string> = {
+  isLoading: false;
+  isError: true;
+  isSuccess: false;
+  error: Error;
+  status: 'error';
+} & {
+  [key in DataKey]: undefined;
+};
+
+/** Loading state of the REST API hook */
+export type RestApiHookLoadingState<DataKey extends string> = {
+  isLoading: true;
+  isError: false;
+  isSuccess: false;
+  error: undefined;
+  status: 'loading';
+} & {
+  [key in DataKey]: undefined;
+};

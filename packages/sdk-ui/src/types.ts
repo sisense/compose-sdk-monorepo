@@ -41,11 +41,12 @@ import {
 } from './chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
 import { LegendPosition } from './chart-options-processor/translations/legend-section';
-import { GeoDataElement, RawGeoDataElement } from './chart-data/types';
 import { Coordinates } from '@/charts/map-charts/scattermap/types';
 import { StyledColumn, StyledMeasureColumn, Hierarchy, HierarchyId } from '.';
 import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
 import { CSSProperties } from 'react';
+import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
+import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
@@ -336,6 +337,9 @@ export interface BaseAxisStyleOptions {
   /** Configuration for second Y axis */
   y2Axis?: AxisLabel;
 }
+
+/** Style options for charts of cartesian family @internal */
+export type CartesianStyleOptions = LineStyleOptions | AreaStyleOptions | StackableStyleOptions;
 
 /** Configuration options that define functional style of the various elements of LineChart */
 export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
@@ -1755,4 +1759,57 @@ export type CustomTranslationObject = {
    * If not specified, the default value is `sdkUi`.
    */
   namespace?: string;
+};
+
+/**
+ * Single Tabber Widget tab object without styling
+ * @internal
+ */
+export type TabberTab = {
+  displayWidgetIds: string[];
+  title: string;
+};
+
+/**
+ * Tabber widget DTO style property
+ * @internal
+ */
+export type TabberDtoStyle = TabberStyleProps & {
+  activeTab: string;
+};
+
+/**
+ * Configuration options that define style of the various elements of the Tabber component.
+ * @internal
+ */
+export type TabberStyleOptions = {
+  descriptionColor: string;
+  selectedBkgColor: string;
+  selectedColor: string;
+  showDescription: boolean;
+  showSeparators: boolean;
+  showTitle: boolean;
+  tabCornerRadius: TabCornerRadius;
+  tabsAlignment: string;
+  tabsInterval: TabInterval;
+  tabsSize: TabSize;
+  unselectedBkgColor: string;
+  unselectedColor: string;
+  useSelectedBkg: boolean;
+  useUnselectedBkg: boolean;
+};
+
+/**
+ * Configuration options that defined tabber look and feel, including tabs and active tab.
+ * @internal
+ */
+export type TabberStyleProps = TabberStyleOptions & TabberConfig;
+
+/**
+ * Tabber business logic configuration
+ * @internal
+ */
+export type TabberConfig = {
+  tabs: TabberTab[];
+  activeTab: number;
 };

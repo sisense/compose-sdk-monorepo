@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { BoxplotChart as BoxplotChartPreact } from '@sisense/sdk-ui-preact';
-import type { BoxplotChartProps } from '@sisense/sdk-ui-preact';
+import type { BoxplotChartProps as BoxplotChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!BoxplotChart | `BoxplotChart`} component.
+ */
+export interface BoxplotChartProps extends BoxplotChartPropsPreact {}
 
 /**
  * A Vue component representing data in a way that visually describes the distribution, variability,

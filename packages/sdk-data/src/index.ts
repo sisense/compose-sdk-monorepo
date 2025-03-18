@@ -14,7 +14,7 @@ export * from './dimensional-model/interfaces.js';
 export * from './dimensional-model/base.js';
 export * from './dimensional-model/data-model.js';
 export * from './dimensional-model/attributes.js';
-export * from './dimensional-model/dimensions.js';
+export * from './dimensional-model/dimensions/index.js';
 export * from './dimensional-model/factory.js';
 export * from './dimensional-model/jaql-element.js';
 

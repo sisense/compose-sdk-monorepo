@@ -22,7 +22,9 @@ import {
 import { template, rootId } from '../../component-wrapper-helpers/template';
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types';
 
-export interface TableProps extends TablePropsPreact {}
+/**
+ * Props of the {@link TableComponent}.
+ */
 export interface TableProps
   extends WithoutPreactChartEventProps<TablePropsPreact>,
     BaseChartEventProps {}

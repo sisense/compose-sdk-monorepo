@@ -2,9 +2,9 @@
 title: PluginComponent
 ---
 
-# Type alias PluginComponent <Badge type="alpha" text="Alpha" />`<DataOptions, StyleOptions>`
+# Type alias PluginComponent <Badge type="alpha" text="Alpha" />`<Props>`
 
-> **PluginComponent**: <`DataOptions`, `StyleOptions`> (`props`) => `ReactNode`
+> **PluginComponent**: <`Props`> (`props`) => `ReactNode`
 
 A user-defined widget component. This is can be specified when registering a
 plugin with `registerPlugin` from the `usePlugins` hook.
@@ -13,14 +13,13 @@ plugin with `registerPlugin` from the `usePlugins` hook.
 
 | Parameter | Default |
 | :------ | :------ |
-| `DataOptions` | [`GenericDataOptions`](type-alias.GenericDataOptions.md) |
-| `StyleOptions` | `any` |
+| `Props` | [`PluginComponentProps`](../interfaces/interface.PluginComponentProps.md) |
 
 ## Parameters
 
 | Parameter | Type |
 | :------ | :------ |
-| `props` | [`PluginComponentProps`](../interfaces/interface.PluginComponentProps.md)\< `DataOptions`, `StyleOptions` \> |
+| `props` | `Props` |
 
 ## Returns
 

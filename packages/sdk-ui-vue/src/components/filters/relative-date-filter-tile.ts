@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { RelativeDateFilterTile as RelativeDateFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { RelativeDateFilterTileProps } from '@sisense/sdk-ui-preact';
+import type { RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper.js';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!RelativeDateFilterTile | `RelativeDateFilterTile`} component.
+ */
+export interface RelativeDateFilterTileProps extends RelativeDateFilterTilePropsPreact {}
 
 /**
  * Relative Date Filter Tile component for filtering data by relative date.

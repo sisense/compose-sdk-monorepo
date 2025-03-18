@@ -176,7 +176,7 @@ export const MOCK_WIDGET_DTO_LINE_CHART = {
         enabled: true,
         text: 'SALES',
       },
-      min: '',
+      min: null,
       intervalEnabled: false,
     },
     y2Axis: {
@@ -360,6 +360,95 @@ export default function CodeExample() {
         breakBy: [],
       } }
       filters={ [] }
+      styleOptions={ {
+        lineWidth: {
+          width: 'bold',
+        },
+        legend: {
+          enabled: true,
+          position: 'bottom',
+        },
+        seriesLabels: {
+          enabled: false,
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
+        },
+        markers: {
+          enabled: true,
+          fill: 'hollow',
+          size: 'small',
+        },
+        xAxis: {
+          enabled: true,
+          ticks: true,
+          labels: {
+            enabled: true,
+            rotation: 0,
+          },
+          gridLines: false,
+          title: {
+            enabled: false,
+            text: 'MONTH',
+          },
+          x2Title: {
+            enabled: false,
+          },
+          intervalEnabled: false,
+          min: null,
+          max: null,
+        },
+        yAxis: {
+          inactive: false,
+          enabled: true,
+          ticks: true,
+          labels: {
+            enabled: true,
+            rotation: 0,
+          },
+          gridLines: true,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          min: null,
+          intervalEnabled: false,
+          max: null,
+        },
+        y2Axis: {
+          inactive: false,
+          enabled: true,
+          ticks: true,
+          labels: {
+            enabled: true,
+            rotation: 0,
+          },
+          gridLines: false,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+          templateMainYHasGridLines: true,
+          intervalEnabled: true,
+          min: null,
+          max: null,
+        },
+        navigator: {
+          enabled: true,
+          scrollerLocation: undefined,
+        },
+        dataLimits: {
+          seriesCapacity: 50,
+          categoriesCapacity: 100000,
+        },
+        subtype: 'line/spline',
+      } }
+      drilldownOptions={ {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      } }
     />
   );
 }`;
@@ -544,6 +633,7 @@ export default function CodeExample() {
       column: DM.Commerce.Gender,
       isColored: false,
       sortType: 'sortNone',
+      panel: 'columns',
     }
   ],
   values: [{
@@ -572,6 +662,16 @@ export default function CodeExample() {
   },
 } }
       filters={ [] }
+      styleOptions={ {
+        rowsPerPage: 25,
+        isAutoHeight: true,
+        rowHeight: undefined,
+        alternatingRowsColor: true,
+        alternatingColumnsColor: false,
+        headersColor: false,
+        membersColor: false,
+        totalsColor: false,
+      } }
     />
   );
 }`;
@@ -1129,6 +1229,112 @@ export default function CodeExample() {
         filterFactory.topRanking(DM.Category.Category, measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'), 3),
         filterFactory.bottomRanking(DM.Category.Category, measureFactory.customFormula('QUARTILE([Revenue], 2)', 'QUARTILE([AB202-E4C], 2)', {'AB202-E4C': DM.Commerce.Revenue,}), 10)
         ] }
+      styleOptions={ {
+        legend: {
+          enabled: true,
+          position: 'bottom',
+        },
+        seriesLabels: {
+          enabled: false,
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
+        },
+        xAxis: {
+          enabled: true,
+          ticks: true,
+          labels: {
+            enabled: true,
+            rotation: 0,
+          },
+          gridLines: false,
+          title: {
+            enabled: true,
+            text: 'AGE RANGE',
+          },
+          x2Title: {
+            enabled: false,
+          },
+          intervalEnabled: false,
+          isIntervalEnabled: false,
+          min: null,
+          max: null,
+        },
+        yAxis: {
+          inactive: false,
+          enabled: true,
+          ticks: true,
+          labels: {
+            enabled: true,
+            rotation: 0,
+          },
+          gridLines: true,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          intervalEnabled: true,
+          hideMinMax: false,
+          isIntervalEnabled: true,
+          min: null,
+          max: null,
+        },
+        y2Axis: {
+          inactive: true,
+          enabled: true,
+          ticks: true,
+          labels: {
+            enabled: true,
+            rotation: 0,
+          },
+          gridLines: false,
+          logarithmic: false,
+          title: {
+            enabled: false,
+          },
+          intervalEnabled: true,
+          hideMinMax: false,
+          isIntervalEnabled: true,
+          min: null,
+          max: null,
+        },
+        dataLimits: {
+          seriesCapacity: 50,
+          categoriesCapacity: 100000,
+        },
+        navigator: {
+          enabled: true,
+          scrollerLocation: undefined,
+        },
+        narration: {
+          enabled: false,
+          display: 'above',
+          format: 'bullets',
+          verbosity: 'medium',
+          up_sentiment: 'good',
+          aggregation: 'sum',
+          labels: [{
+              id: 'age_range',
+              title: 'Age Range',
+              singular: 'Age Range',
+              plural: 'Age Range',
+            },{
+              id: 'category',
+              title: 'Category',
+              singular: 'Category',
+              plural: 'Category',
+            }
+          ],
+        },
+        subtype: 'bar/stacked',
+        lineWidth: undefined,
+        markers: undefined,
+      } }
+      drilldownOptions={ {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      } }
     />
   );
 }`;

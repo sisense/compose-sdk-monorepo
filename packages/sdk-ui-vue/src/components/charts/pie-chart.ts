@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { PieChart as PieChartPreact } from '@sisense/sdk-ui-preact';
-import type { PieChartProps } from '@sisense/sdk-ui-preact';
+import type { PieChartProps as PieChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!PieChart | `PieChart`} component.
+ */
+export interface PieChartProps extends PieChartPropsPreact {}
 
 /**
  * A Vue component representing data in a circular graph with the data shown as slices of a whole,

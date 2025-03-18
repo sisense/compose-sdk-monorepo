@@ -24,6 +24,9 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link MemberFilterTileComponent}.
+ */
 export interface MemberFilterTileProps extends Omit<MemberFilterTilePropsPreact, 'onChange'> {
   filterChange?: (filter: Arguments<MemberFilterTilePropsPreact['onChange']>[0]) => void;
 }

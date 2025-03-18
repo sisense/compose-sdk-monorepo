@@ -1,12 +1,23 @@
 import { defineComponent, inject, provide, ref } from 'vue';
 import type { PropType, InjectionKey, Ref } from 'vue';
-import type { SisenseContextProviderProps } from '@sisense/sdk-ui-preact';
+import type { SisenseContextProviderProps as SisenseContextProviderPropsPreact } from '@sisense/sdk-ui-preact';
 import {
   createClientApplication,
   createContextProviderRenderer,
   CustomSisenseContextProvider,
   type CustomSisenseContext,
 } from '@sisense/sdk-ui-preact';
+
+/**
+ * Configurations and authentication for Sisense Context.
+ *
+ * Use one of the following to authenticate:
+ *
+ * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.ssoEnabled | `ssoEnabled`}
+ * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.token | `token`}
+ * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.wat | `wat`}
+ */
+export interface SisenseContextProviderProps extends SisenseContextProviderPropsPreact {}
 
 const defaultSisenseContext: CustomSisenseContext = {
   isInitialized: false,

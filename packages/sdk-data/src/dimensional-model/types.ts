@@ -395,6 +395,7 @@ export type BaseJaql = {
     };
   };
   merged?: boolean;
+  panel?: 'rows' | 'columns';
 };
 
 /** @internal */
@@ -628,6 +629,7 @@ export type DataSourceField = {
   indexed: boolean;
   merged: boolean;
   table: string;
+  tableTitle?: null | string;
   title: string;
   type: string;
 };

@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { AreamapChart as AreamapChartPreact } from '@sisense/sdk-ui-preact';
-import type { AreamapChartProps } from '@sisense/sdk-ui-preact';
+import type { AreamapChartProps as AreamapChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!AreamapChart | `AreamapChart`} component.
+ */
+export interface AreamapChartProps extends AreamapChartPropsPreact {}
 
 /**
  * A Vue component for visualizing geographical data as polygons on a map.

@@ -8,9 +8,9 @@ import { PluginComponent } from './types';
  * @internal
  */
 export const PluginsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const pluginMapRef = useRef(new Map<string, PluginComponent>());
+  const pluginMapRef = useRef(new Map<string, PluginComponent<any>>());
 
-  const registerPlugin = useCallback((pluginType: string, plugin: PluginComponent) => {
+  const registerPlugin = useCallback(<T,>(pluginType: string, plugin: PluginComponent<T>) => {
     if (!pluginMapRef.current.has(pluginType)) {
       pluginMapRef.current.set(pluginType, plugin);
     }

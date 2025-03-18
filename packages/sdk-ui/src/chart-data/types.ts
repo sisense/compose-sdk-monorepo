@@ -1,10 +1,8 @@
-import { Color, NumberFormatConfig } from '../types';
-import {
-  AreamapChartType,
-  IndicatorChartType,
-} from '../chart-options-processor/translations/types';
-import { ComparableData, Value } from '../chart-data-processor/table-processor';
-import { Coordinates } from '../charts/map-charts/scattermap/types';
+import { NumberFormatConfig } from '@/types';
+import { IndicatorChartType } from '@/chart-options-processor/translations/types';
+import { ComparableData, Value } from '@/chart-data-processor/table-processor';
+import { Coordinates } from '@/charts/map-charts/scattermap/types';
+import { AreamapData } from '@/chart/restructured-charts/areamap-chart/types';
 
 export type CategoricalXValues = {
   key: string;
@@ -145,35 +143,6 @@ export type IndicatorChartData = {
   secondary?: number;
   min?: number;
   max?: number;
-};
-/**
- * Raw GeoDataElement from data
- */
-export type RawGeoDataElement = {
-  /** Name of geo-element (country or state) */
-  geoName: string;
-  /** Original numeric measure value for this geo-element */
-  originalValue: number;
-  /** Formatted measure value for this geo-element to display*/
-  formattedOriginalValue: string;
-};
-
-/**
- * GeoDataElement with color property, calculated from `originalValue`
- */
-export type GeoDataElement = RawGeoDataElement & {
-  /** Calculated color for this geo-element */
-  color?: Color;
-};
-
-/**
- * Fact final data that will be passed to Areamap-component to render
- *
- * @internal
- */
-export type AreamapData = {
-  type: AreamapChartType;
-  geoData: GeoDataElement[];
 };
 
 /**

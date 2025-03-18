@@ -5,7 +5,10 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
 import { useDashboardThemeInternal } from './use-dashboard-theme';
 import { useComposedDashboardInternal } from './use-composed-dashboard';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import { usePlugins } from '@/plugins-provider';
+import { TabberWidget } from '@/widgets/tabber-widget';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 export enum DashboardChangeType {
   /** Dashboard filters have been updated */
@@ -70,20 +73,32 @@ export const Dashboard = asSisenseComponent({
     filters,
     defaultDataSource,
     widgetsOptions,
+    tabbersOptions,
     styleOptions,
     onChange,
     enableFilterEditor = false,
   }: DashboardProps) => {
     const { themeSettings } = useDashboardThemeInternal({ styleOptions });
+    const { registerPlugin } = usePlugins();
+    const app = useSisenseContext().app;
 
+    useEffect(() => {
+      const tabberEnabled = app?.settings?.tabberConfig?.enabled || false;
+      if (tabberEnabled) {
+        registerPlugin('WidgetsTabber', TabberWidget);
+      }
+    }, [app?.settings?.tabberConfig?.enabled, registerPlugin]);
     const {
       dashboard: { filters: dashboardFilters = [], widgets: dashboardWidgets },
       setFilters,
+      layoutOptions: updatedLayoutOptions,
     } = useComposedDashboardInternal(
       {
         filters,
         widgets,
         widgetsOptions,
+        layoutOptions,
+        tabbersOptions,
       },
       {
         onFiltersChange: useCallback(
@@ -99,7 +114,7 @@ export const Dashboard = asSisenseComponent({
       <ThemeProvider theme={themeSettings}>
         <DashboardContainer
           title={title}
-          layoutOptions={layoutOptions}
+          layoutOptions={updatedLayoutOptions}
           config={config}
           widgets={dashboardWidgets}
           defaultDataSource={defaultDataSource}

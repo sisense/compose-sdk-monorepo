@@ -7,6 +7,7 @@ import { AppSettings } from '@/app/settings/settings.js';
 import {
   extractDashboardFilters,
   translateLayout,
+  translateTabbersOptions,
   translateWidgetsOptions,
 } from './translate-dashboard-utils.js';
 import { DataSource } from '@sisense/sdk-data';
@@ -29,6 +30,7 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     layoutOptions,
     filters,
     widgetsOptions,
+    tabbersOptions,
     styleOptions,
   } = dashboardModel;
   return {
@@ -40,6 +42,7 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     filters,
     widgetsOptions,
     styleOptions,
+    tabbersOptions,
   };
 }
 
@@ -89,6 +92,7 @@ export function fromDashboardDto(
   const filterRelationsModel = filterRelationsDtoOptions?.[0]?.filterRelations;
   const filters = extractDashboardFilters(filterDtoList || [], filterRelationsModel);
   const widgetsOptions = translateWidgetsOptions(widgetDtoList);
+  const tabbersOptions = translateTabbersOptions(widgetDtoList);
 
   const dashboardModel: DashboardModel = {
     oid,
@@ -99,6 +103,7 @@ export function fromDashboardDto(
     layoutOptions: { widgetsPanel: widgetsPanelLayout },
     filters,
     widgetsOptions,
+    tabbersOptions,
   };
 
   return dashboardModel;

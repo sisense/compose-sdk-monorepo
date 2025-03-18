@@ -8,7 +8,6 @@ import {
   ScatterChartDataOptionsInternal,
   IndicatorChartDataOptionsInternal,
   BoxplotChartDataOptionsInternal,
-  AreamapChartDataOptionsInternal,
   ScattermapChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
 } from '../chart-data-options/types';
@@ -18,7 +17,6 @@ import {
   isScatter,
   isIndicator,
   isBoxplot,
-  isAreamap,
   isScattermap,
   isRange,
 } from '../chart-options-processor/translations/types';
@@ -31,7 +29,6 @@ import { indicatorData } from './indicator-data';
 
 import { ChartData } from './types';
 import { boxplotData } from './boxplot-data';
-import { getAreamapData } from './areamap-data';
 import { scattermapData } from './scattermap-data';
 import { rangeData as getRangeData } from './range-data';
 import { advancedAnalyticsData, isForecastChart } from './advanced-analytics-data';
@@ -63,11 +60,6 @@ export const chartDataService = (
     );
   } else if (isBoxplot(chartType)) {
     return boxplotData(chartDataOptions as BoxplotChartDataOptionsInternal, dataTable);
-  } else if (isAreamap(chartType)) {
-    return getAreamapData(
-      chartDataOptions as unknown as AreamapChartDataOptionsInternal,
-      dataTable,
-    );
   } else if (isRange(chartType)) {
     return getRangeData(chartDataOptions as RangeChartDataOptionsInternal, dataTable);
   } else throw new TranslatableError('errors.unexpectedChartType', { chartType });

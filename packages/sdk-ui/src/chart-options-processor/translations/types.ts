@@ -1,3 +1,4 @@
+import { AreamapChartDesignOptions } from '@/chart/restructured-charts/areamap-chart/types';
 import { ChartType } from '../../types';
 import {
   LineChartDesignOptions,
@@ -11,7 +12,6 @@ import {
   ScatterChartDesignOptions,
   TreemapChartDesignOptions,
   BoxplotChartDesignOptions,
-  AreamapChartDesignOptions,
   ScattermapChartDesignOptions,
   AreaRangeChartDesignOptions,
   BaseDesignOptionsType,

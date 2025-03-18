@@ -27,6 +27,12 @@ Props passed to a user-defined widget component.
 
 ***
 
+### description
+
+> **description**?: `string`
+
+***
+
 ### filters
 
 > **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]

@@ -10,6 +10,7 @@ import {
   FunnelStyleOptions,
   LineStyleOptions,
   ScattermapStyleOptions,
+  StackableStyleOptions,
 } from '@/types';
 import { prepareChartDesignOptions } from './prepare-design-options';
 
@@ -99,6 +100,74 @@ describe('prepareChartDesignOptions', () => {
     };
     const result = prepareChartDesignOptions(chartType, dataOptionsInternal, styleOptions);
     expect(result).toMatchSnapshot();
+  });
+
+  it('should throw an error if style options is not compatible with chart type (for restructured charts)', () => {
+    const chartType = 'column';
+    const dataOptionsInternal: CartesianChartDataOptionsInternal = {
+      x: [
+        {
+          column: {
+            name: 'Months',
+            type: 'datelevel',
+          },
+          dateFormat: 'yy-MM',
+        },
+      ],
+      y: [
+        { column: { name: '$measure0_avg Cost', title: 'avg Cost' } },
+        {
+          column: {
+            name: '$measure1_Total Revenue',
+            title: 'Total Revenue',
+          },
+          seriesStyleOptions: {
+            lineWidth: {
+              width: 'thick',
+            },
+            markers: {
+              enabled: true,
+              fill: 'filled',
+              size: 'large',
+            },
+          },
+        },
+      ],
+      breakBy: [],
+    };
+
+    const incorrectStyleOptions = {
+      subtype: 'line/basic',
+    };
+
+    expect(() =>
+      prepareChartDesignOptions(chartType, dataOptionsInternal, incorrectStyleOptions as any),
+    ).toThrowErrorMatchingSnapshot();
+  });
+
+  it('should throw an error if internal data options is not compatible with chart type (for restructured charts)', () => {
+    const chartType = 'column';
+    const incorrectDataOptionsInternal: AreamapChartDataOptionsInternal = {
+      geo: {
+        column: {
+          name: 'Country',
+          type: 'text-attribute',
+        },
+      },
+      color: {
+        column: {
+          name: '$measure0_sum Cost',
+          title: 'Total Cost',
+        },
+      },
+    };
+    const styleOptions: StackableStyleOptions = {
+      subtype: 'column/stackedcolumn100',
+    };
+
+    expect(() =>
+      prepareChartDesignOptions(chartType, incorrectDataOptionsInternal as any, styleOptions),
+    ).toThrowErrorMatchingSnapshot();
   });
 
   it('should return design options for scattermap chart', () => {

@@ -428,12 +428,18 @@ describe('Chart', () => {
   });
 
   it('render Table', async () => {
-    const { container, findByLabelText } = render(
-      <Table dataSet={dataSet} dataOptions={{ columns: [cat1, cat2] }} />,
+    const tableDataOptions = {
+      columns: [cat1, cat2],
+    };
+    const { findByLabelText, findAllByRole } = render(
+      <Table dataSet={dataSet} dataOptions={tableDataOptions} />,
     );
     const table = await findByLabelText('table-root');
     expect(table).toBeTruthy();
-    expect(container).toMatchSnapshot();
+    const columns = await findAllByRole('columnheader');
+    expect(columns.length).toBe(tableDataOptions.columns.length);
+    const rows = await findAllByRole('row');
+    expect(rows.length).toBe(dataSet.rows.length + 1); // +1 for header row
   });
 
   it('should show No Results overlay in Chart when data missing', async () => {

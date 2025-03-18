@@ -4,6 +4,8 @@ title: SunburstChartProps
 
 # Interface SunburstChartProps
 
+Props of the [SunburstChartComponent](../charts/class.SunburstChartComponent.md).
+
 ## Properties
 
 ### Data

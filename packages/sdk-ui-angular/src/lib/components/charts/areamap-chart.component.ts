@@ -6,6 +6,9 @@ import {
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
 import { DataPointEvent, DataPointEventHandler } from '../../types/data-point';
 
+/**
+ * Props of the {@link AreamapChartComponent}.
+ */
 export interface AreamapChartProps
   extends WithoutPreactChartEventProps<AreamapChartPropsPreact>,
     BaseChartEventProps {

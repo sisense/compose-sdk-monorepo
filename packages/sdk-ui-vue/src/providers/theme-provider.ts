@@ -1,6 +1,9 @@
 import { defineComponent, inject, provide, ref, watchEffect } from 'vue';
 import type { PropType, InjectionKey, Ref } from 'vue';
-import type { CompleteThemeSettings, ThemeProviderProps } from '@sisense/sdk-ui-preact';
+import type {
+  CompleteThemeSettings,
+  ThemeProviderProps as ThemeProviderPropsPreact,
+} from '@sisense/sdk-ui-preact';
 import {
   createContextProviderRenderer,
   CustomThemeProvider,
@@ -9,6 +12,11 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { getSisenseContext } from './sisense-context-provider';
 import merge from 'ts-deepmerge';
+
+/**
+ * {@inheritDoc @sisense/sdk-ui!ThemeProviderProps}
+ */
+export interface ThemeProviderProps extends Omit<ThemeProviderPropsPreact, 'children'> {}
 
 const themeContextConfigKey = Symbol('themeContextConfigKey') as InjectionKey<
   Ref<CompleteThemeSettings>

@@ -23,7 +23,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
       "members": [
         "member",
       ],
-      "name": "99ab976f594",
+      "name": "1690ab7a183",
       "type": "filter",
     },
   ],
@@ -49,6 +49,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
   },
   "oid": "test",
   "styleOptions": {},
+  "tabbersOptions": {},
   "title": "test",
   "widgets": [
     {
@@ -118,6 +119,7 @@ exports[`DashboardModel > should create a new dashboard model with minimum of ar
   },
   "oid": "test",
   "styleOptions": {},
+  "tabbersOptions": {},
   "title": "test",
   "widgets": [],
   "widgetsOptions": {},

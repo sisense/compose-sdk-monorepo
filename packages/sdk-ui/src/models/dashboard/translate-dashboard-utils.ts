@@ -5,7 +5,7 @@ import {
   isCascadingFilterDto,
   DashboardDto,
 } from '../../api/types/dashboard-dto';
-import type { WidgetsPanelColumnLayout, WidgetsOptions } from './types';
+import type { WidgetsPanelColumnLayout, WidgetsOptions, TabbersOptions } from './types';
 import {
   CascadingFilter,
   Filter,
@@ -29,6 +29,7 @@ import {
   WidgetDto,
 } from '@/widget-by-id/types';
 import { RestApi } from '@/api/rest-api';
+import { TabberConfig, TabberDtoStyle } from '@/types';
 
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
   columns: (layout.columns || []).map((c) => ({
@@ -83,6 +84,10 @@ export function extractDashboardFilters(
   return combineFiltersAndRelations(filters, filterRelations);
 }
 
+const isTabberWidgetDto = (widget: WidgetDto): widget is WidgetDto & { style: TabberDtoStyle } => {
+  return widget.subtype === 'WidgetsTabber';
+};
+
 export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptions {
   const widgetsOptionsMap: WidgetsOptions = {};
 
@@ -104,6 +109,21 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
   });
 
   return widgetsOptionsMap;
+}
+
+export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersOptions {
+  const tabberOptionsMap: Record<string, TabberConfig> = {};
+
+  widgets.forEach((widget: WidgetDto) => {
+    if (isTabberWidgetDto(widget)) {
+      tabberOptionsMap[widget.oid] = {
+        tabs: widget.style.tabs,
+        activeTab: parseInt(widget.style.activeTab || '1', 10),
+      };
+    }
+  });
+
+  return tabberOptionsMap;
 }
 
 /**

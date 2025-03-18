@@ -4,13 +4,16 @@ import {
   SeriesStyleOptions,
   StyledMeasureColumn,
 } from '@/chart-data-options/types';
+import { getChartBuilder } from '@/chart/restructured-charts/chart-builder-factory';
+import { isRestructuredChartType } from '@/chart/restructured-charts/utils';
+import { TranslatableError } from '@/translation/translatable-error';
 import { ChartStyleOptions, ChartType } from '@/types';
 import { WithRequiredProp } from '@/utils/utility-types';
 import pick from 'lodash-es/pick';
 import merge from 'ts-deepmerge';
 import { getDefaultStyleOptions } from '../chart-options-service';
-import { DesignOptions, isCartesian, SeriesDesignOptions } from '../translations/types';
-import { translateStyleOptionsToDesignOptions } from './translate-style-to-design-options';
+import { CartesianChartType, DesignOptions, SeriesDesignOptions } from '../translations/types';
+import { translateStyleOptionsToDesignOptions as legacyTranslateStyleOptionsToDesignOptions } from './translate-style-to-design-options';
 import { getSeriesChartDesignOptions } from './translate-to-highcharts-options';
 
 export function prepareChartDesignOptions(
@@ -22,11 +25,27 @@ export function prepareChartDesignOptions(
     styleOptions ?? {},
     getDefaultStyleOptions(),
   );
-  return translateStyleOptionsToDesignOptions(
-    chartType,
-    styleOptionsWithDefaults,
-    dataOptionsInternal,
-  );
+  if (isRestructuredChartType(chartType)) {
+    const chartBuilder = getChartBuilder(chartType);
+    if (!chartBuilder.designOptions.isCorrectStyleOptions(styleOptionsWithDefaults)) {
+      throw new TranslatableError('errors.optionsTranslation.invalidStyleOptions', { chartType });
+    }
+    if (!chartBuilder.dataOptions.isCorrectDataOptionsInternal(dataOptionsInternal)) {
+      throw new TranslatableError('errors.optionsTranslation.invalidInternalDataOptions', {
+        chartType,
+      });
+    }
+    return chartBuilder.designOptions.translateStyleOptionsToDesignOptions(
+      styleOptionsWithDefaults,
+      dataOptionsInternal,
+    );
+  } else {
+    return legacyTranslateStyleOptionsToDesignOptions(
+      chartType,
+      styleOptionsWithDefaults,
+      dataOptionsInternal,
+    );
+  }
 }
 
 export function extendStyleOptionsWithDefaults(
@@ -42,12 +61,15 @@ export function extendStyleOptionsWithDefaults(
   ) as ChartStyleOptions;
 }
 
+/**
+ * Get design options per series for cartesian charts
+ */
 export function getDesignOptionsPerSeries(
-  dataOptionsInternal: ChartDataOptionsInternal,
-  chartType: ChartType,
+  dataOptionsInternal: CartesianChartDataOptionsInternal,
+  chartType: CartesianChartType,
   styleOptions: ChartStyleOptions,
 ): Record<string, SeriesDesignOptions> {
-  const seriesDesignOptions = getAllSeriesStyleOptions(dataOptionsInternal, chartType).map(
+  const seriesDesignOptions = getStyleOptionsPerSeries(dataOptionsInternal).map(
     (styleOptionsForSpecificSeries) => {
       const seriesId = styleOptionsForSpecificSeries.seriesId;
       const seriesStyleOptions = styleOptionsForSpecificSeries.seriesStyleOptions;
@@ -67,24 +89,12 @@ export function getDesignOptionsPerSeries(
   );
 }
 
-function getAllSeriesStyleOptions(
-  dataOptions: ChartDataOptionsInternal,
-  chartType: ChartType,
-): StyleOptionsForSpecificSeries[] {
-  if (isCartesian(chartType)) {
-    return getStyleOptionsPerSeriesFromCartesianDataOptions(
-      dataOptions as CartesianChartDataOptionsInternal,
-    );
-  }
-  return [];
-}
-
 type StyleOptionsForSpecificSeries = {
   seriesId: string;
   seriesStyleOptions: SeriesStyleOptions;
 };
 
-function getStyleOptionsPerSeriesFromCartesianDataOptions(
+function getStyleOptionsPerSeries(
   dataOptions: CartesianChartDataOptionsInternal,
 ): StyleOptionsForSpecificSeries[] {
   return dataOptions.y

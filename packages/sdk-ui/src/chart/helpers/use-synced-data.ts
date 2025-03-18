@@ -1,4 +1,3 @@
-/* eslint-disable promise/catch-or-return */
 import {
   Attribute,
   Data,
@@ -9,14 +8,7 @@ import {
   Measure,
 } from '@sisense/sdk-data';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-import {
-  BoxplotChartDataOptionsInternal,
-  ChartDataOptionsInternal,
-} from '../../chart-data-options/types';
-import {
-  executeQueryWithCache,
-  executeQuery as executeQueryWithoutCache,
-} from '../../query/execute-query';
+import { ChartDataOptionsInternal } from '../../chart-data-options/types';
 import { applyDateFormats } from '../../query/query-result-date-formatting';
 import { ChartType } from '../../types';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
@@ -26,9 +18,9 @@ import {
 } from '../../chart-data-options/validate-data-options';
 import { useSetError } from '../../error-boundary/use-set-error';
 import '../chart.css';
-import { executeBoxplotQuery } from '../../boxplot-utils';
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { deriveChartFamily } from './derive-chart-family';
+import { LoadDataFunction } from './get-load-data-function';
 
 type DataSet = DataSource | Data | undefined;
 
@@ -37,6 +29,7 @@ const chartDataOptionsFamily = (chartType: ChartType): string => {
   if (chartType === 'funnel') return chartType;
   return deriveChartFamily(chartType);
 };
+
 type UseSyncedDataProps = {
   dataSet: DataSet;
   chartDataOptions: ChartDataOptionsInternal;
@@ -49,6 +42,7 @@ type UseSyncedDataProps = {
   refreshCounter?: number;
   setIsLoading?: Dispatch<SetStateAction<boolean>>;
   enabled?: boolean;
+  loadData: LoadDataFunction;
 };
 export const useSyncedData = ({
   dataSet,
@@ -62,6 +56,7 @@ export const useSyncedData = ({
   refreshCounter,
   setIsLoading,
   enabled = true,
+  loadData,
 }: UseSyncedDataProps) => {
   const setError = useSetError();
 
@@ -71,11 +66,7 @@ export const useSyncedData = ({
     [key: string]: [Data, ChartDataOptionsInternal];
   }>({});
   const { app } = useSisenseContext();
-  const executeQuery = app?.settings.queryCacheConfig?.enabled
-    ? executeQueryWithCache
-    : executeQueryWithoutCache;
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     if (!enabled) {
       return;
@@ -89,36 +80,19 @@ export const useSyncedData = ({
         return;
       }
 
-      let executeQueryPromise;
-
-      if (chartType === 'boxplot') {
-        executeQueryPromise = executeBoxplotQuery(
-          {
-            app,
-            chartDataOptions: chartDataOptions as BoxplotChartDataOptionsInternal,
-            dataSource: dataSet,
-            attributes,
-            measures,
-            filters: filterList,
-            filterRelations,
-            highlights,
-          },
-          executeQuery,
-        );
-      } else {
-        executeQueryPromise = executeQuery(
-          {
-            dataSource: dataSet,
-            dimensions: attributes,
-            measures,
-            filters: filterList,
-            filterRelations,
-            highlights,
-            count: app.settings.queryLimit,
-          },
-          app,
-        );
-      }
+      const executeQueryPromise = loadData({
+        app,
+        chartDataOptionsInternal: chartDataOptions,
+        queryDescription: {
+          dataSource: dataSet,
+          dimensions: attributes,
+          measures,
+          filters: filterList,
+          filterRelations,
+          highlights,
+          count: app.settings.queryLimit,
+        },
+      });
 
       const loadingIndicatorConfig = app?.settings.loadingIndicatorConfig;
 
@@ -127,6 +101,7 @@ export const useSyncedData = ({
           setIsLoading?.(true);
         }
       }, loadingIndicatorConfig?.delay);
+      // eslint-disable-next-line promise/catch-or-return
       executeQueryPromise
         .then((queryResultData) => {
           const dataWithDateFormatting = applyDateFormats(

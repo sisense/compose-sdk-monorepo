@@ -102,6 +102,7 @@ export interface GetNlgInsightsRequest {
   verbosity?: 'Low' | 'High';
 }
 
+/** @internal */
 export interface GetNlgInsightsResponse {
   data?: {
     answer: string;

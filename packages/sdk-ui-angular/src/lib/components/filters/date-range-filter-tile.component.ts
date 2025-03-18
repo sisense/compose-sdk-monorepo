@@ -24,6 +24,9 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link DateRangeFilterTileComponent}.
+ */
 export interface DateRangeFilterTileProps extends Omit<DateRangeFilterTilePropsPreact, 'onChange'> {
   filterChange?: (filter: Arguments<DateRangeFilterTilePropsPreact['onChange']>[0]) => void;
 }

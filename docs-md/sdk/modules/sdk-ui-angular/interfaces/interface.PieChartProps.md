@@ -4,6 +4,8 @@ title: PieChartProps
 
 # Interface PieChartProps
 
+Props of the [PieChartComponent](../charts/class.PieChartComponent.md).
+
 ## Properties
 
 ### Data

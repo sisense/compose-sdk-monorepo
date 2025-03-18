@@ -24,6 +24,9 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link RelativeDateFilterTileComponent}.
+ */
 export interface RelativeDateFilterTileProps
   extends Omit<RelativeDateFilterTilePropsPreact, 'onUpdate'> {
   filterChange?: (filter: Arguments<RelativeDateFilterTilePropsPreact['onUpdate']>[0]) => void;

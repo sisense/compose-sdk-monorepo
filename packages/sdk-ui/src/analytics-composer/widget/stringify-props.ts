@@ -118,9 +118,9 @@ export const stringifyProps = (
         s += `${key}: [${value.map((v) => stringifyProps(v, indent + 4, wrapInQuotes))}${
           value.length ? NEW_LINE + ' '.repeat(indent + 2) : ''
         }]`;
-      } else if (typeof value === 'object') {
+      } else if (typeof value === 'object' && value !== null) {
         s += `${key}: ${stringifyProps(value, indent + 2, wrapInQuotes)}`;
-      } else if (['number', 'boolean', 'undefined', null].includes(typeof value)) {
+      } else if (['number', 'boolean', 'undefined'].includes(typeof value) || value === null) {
         s += `${key}: ${value}`;
       } else {
         s += `${key}: '${escapeSingleQuotes(value)}'`;

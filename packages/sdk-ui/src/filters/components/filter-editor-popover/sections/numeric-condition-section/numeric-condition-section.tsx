@@ -4,8 +4,6 @@ import { Filter } from '@sisense/sdk-data';
 import { SelectableSection } from '../../common/selectable-section.js';
 import { Input, SingleSelect } from '../../common/index.js';
 import { isExcludeMembersFilter } from '../../utils.js';
-import { SearchableMultiSelect } from '../../common/select/searchable-multi-select.js';
-import { SearchableSingleSelect } from '../../common/select/searchable-single-select.js';
 import { usePrevious } from '@/common/hooks/use-previous.js';
 import {
   EqualIcon,
@@ -17,8 +15,6 @@ import {
 } from '../../../icons';
 import { useThemeContext } from '@/index-typedoc.js';
 import { useWasModified } from '@/common/hooks/use-was-modified.js';
-import { Member } from '@/filters';
-import { ScrollWrapperOnScrollEvent } from '../../common/scroll-wrapper';
 import { NumericCondition, NumericConditionFilterData, NumericConditionType } from './types.js';
 import {
   createConditionalFilter,
@@ -26,6 +22,7 @@ import {
   getNumericFilterValue,
   validateInputValue,
 } from './utils.js';
+import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
 
 const conditionItems = [
   { value: NumericCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
@@ -64,22 +61,16 @@ const conditionItems = [
 type NumericConditionSectionProps = {
   filter: Filter;
   selected: boolean;
-  members: Member[];
   multiSelectEnabled: boolean;
   onChange: (filter: Filter | null) => void;
-  onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
-  showListLoader?: boolean;
 };
 
 /** @internal */
 export const NumericConditionSection = ({
   filter,
   selected,
-  members,
   multiSelectEnabled,
   onChange,
-  onListScroll,
-  showListLoader = false,
 }: NumericConditionSectionProps) => {
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
@@ -92,17 +83,7 @@ export const NumericConditionSection = ({
   );
   const isValueWasModified = useWasModified(value, '');
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
-  const selectItems = useMemo(() => {
-    let allMembers = members.map((member) => ({ value: member.key }));
-    if (isExcludeMembersFilter(filter) && filter.members.length) {
-      const selectedMembers = multiSelectEnabled ? filter.members : [filter.members[0]];
-      allMembers = [
-        ...selectedMembers.map((member) => ({ value: member })),
-        ...allMembers.filter((member) => !selectedMembers.includes(member.value)),
-      ];
-    }
-    return allMembers;
-  }, [multiSelectEnabled, members, filter]);
+
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
   const translatedConditionItems = useMemo(
@@ -246,32 +227,15 @@ export const NumericConditionSection = ({
           aria-label="Value input"
         />
       )}
-      {condition === NumericCondition.EXCLUDE &&
-        (multiSelectEnabled ? (
-          <SearchableMultiSelect<string>
-            style={{ width: '240px' }}
-            values={selectedMembers}
-            placeholder={t('filterEditor.placeholders.selectFromList')}
-            items={selectItems}
-            onChange={handleMembersChange}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            onListScroll={onListScroll}
-            showListLoader={showListLoader}
-          />
-        ) : (
-          <SearchableSingleSelect<string>
-            style={{ width: '240px' }}
-            value={selectedMembers[0]}
-            placeholder={t('filterEditor.placeholders.selectFromList')}
-            items={selectItems}
-            onChange={handleMembersChange}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            onListScroll={onListScroll}
-            showListLoader={showListLoader}
-          />
-        ))}
+      {condition === NumericCondition.EXCLUDE && (
+        <MembersListSelect
+          width={240}
+          attribute={filter.attribute}
+          multiSelect={multiSelectEnabled}
+          selectedMembers={selectedMembers}
+          onChange={handleMembersChange}
+        />
+      )}
     </SelectableSection>
   );
 };

@@ -1,11 +1,11 @@
-import { ScattermapChartLocation } from '../../../../chart-data/types';
-import { ScattermapChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
-import { getDataOptionTitle, isMeasureColumn } from '../../../../chart-data-options/utils.js';
+import { ScattermapChartLocation } from '@/chart-data/types';
+import { ScattermapChartDataOptionsInternal } from '@/chart-data-options/types.js';
+import { getDataOptionTitle, isMeasureColumn } from '@/chart-data-options/utils.js';
 import {
   spanSegment,
   tooltipWrapper,
-} from '../../../../chart-options-processor/translations/scatter-tooltip.js';
-import { formatTooltipValue } from '../../../../chart-options-processor/translations/tooltip-utils.js';
+} from '@/chart-options-processor/translations/scatter-tooltip.js';
+import { formatTooltipValue } from '@/chart-options-processor/translations/tooltip-utils.js';
 
 export const enum TooltipShowDetails {
   YES,
@@ -91,7 +91,6 @@ export const createScattermapTooltip = (
   );
   const formatedDetails =
     dataOptions.details &&
-    isMeasureColumn(dataOptions.details) &&
     formatTooltipValue(dataOptions.details, location.details as number, `${location.details}`);
 
   return tooltipWrapper(`

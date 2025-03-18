@@ -4,6 +4,8 @@ title: IndicatorChartProps
 
 # Interface IndicatorChartProps
 
+Props of the [IndicatorChartComponent](../charts/class.IndicatorChartComponent.md).
+
 ## Properties
 
 ### Data

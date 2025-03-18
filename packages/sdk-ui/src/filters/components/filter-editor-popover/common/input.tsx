@@ -1,4 +1,4 @@
-import type { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { DetailedHTMLProps, InputHTMLAttributes, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR, ERROR_COLOR } from '@/const';
 
@@ -42,19 +42,31 @@ export const BaseInput = styled.input`
 
 type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   error?: boolean | string;
+  wrapperStyle?: React.CSSProperties;
+  inputRef?: (input: HTMLInputElement) => void;
 };
 
 /** @internal */
 export function Input(props: InputProps) {
-  const { error, ...baseInputProps } = props;
+  const { error, wrapperStyle, inputRef, ...baseInputProps } = props;
+
+  const inputElRef = useRef(null);
+
+  useEffect(() => {
+    if (inputElRef.current) {
+      inputRef?.(inputElRef.current);
+    }
+  }, [inputRef]);
 
   return (
-    <InputContainer>
+    <InputContainer style={wrapperStyle}>
       <BaseInput
+        ref={inputElRef}
         {...baseInputProps}
         style={{
           ...baseInputProps.style,
           ...(error && { borderColor: ERROR_COLOR }),
+          ...(baseInputProps.type === 'number' && { paddingRight: '0' }),
         }}
       />
       {error && <InputErrorLabel>{error}</InputErrorLabel>}

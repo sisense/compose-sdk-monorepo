@@ -1,7 +1,10 @@
 import type { SVGProps } from 'react';
 import { DEFAULT_TEXT_COLOR } from '@/const';
 
-export type DateIconProps = Pick<SVGProps<SVGElement>, 'className' | 'width' | 'height'> & {
+export type DateIconProps = Pick<
+  SVGProps<SVGElement>,
+  'className' | 'width' | 'height' | 'style'
+> & {
   iconColor?: string;
 };
 export const DateIcon = (props: DateIconProps) => {
@@ -13,6 +16,7 @@ export const DateIcon = (props: DateIconProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={props.className}
+      style={props.style}
       width={width}
       height={height}
     >

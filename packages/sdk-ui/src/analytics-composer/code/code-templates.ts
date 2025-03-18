@@ -23,6 +23,8 @@ export default function CodeExample() {
       chartType={'{{chartTypeString}}'}
       dataOptions={ {{dataOptionsString}} }
       filters={ {{filtersString}} }
+      styleOptions={ {{styleOptionsString}} }
+      drilldownOptions={ {{drilldownOptionsString}} }
     />
   );
 }`,
@@ -137,25 +139,28 @@ export default function CodeExample() {
       dataSource={DM.DataSource}
       dataOptions={ {{dataOptionsString}} }
       filters={ {{filtersString}} }
+      styleOptions={ {{styleOptionsString}} }
     />
   );
 }`,
   },
   angular: {
     baseChartTmpl: `import { Component } from '@angular/core';
-import { SdkUiModule, type ChartDataOptions } from '@sisense/sdk-ui-angular';
+import { type ChartDataOptions, type ChartStyleOptions } from '@sisense/sdk-ui-angular';
 {{extraImportsString}}
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
 
 @Component({
     selector: 'code-example',
-    imports: [SdkUiModule],
     template: \`
       <csdk-chart-widget
+        [title]="'{{titleString}}'"
         chartType='{{chartTypeString}}'
         [dataSource]='DM.DataSource'
         [dataOptions]='dataOptions'
         [filters]='filters'
+        [styleOptions]='styleOptions'
+        [drilldownOptions]='drilldownOptions'
       />
     \`
 })
@@ -163,15 +168,15 @@ export class CodeExample {
     DM = DM;
     dataOptions: ChartDataOptions = {{dataOptionsString}};
     filters = {{filtersString}};
+    styleOptions: ChartStyleOptions = {{styleOptionsString}};
+    drilldownOptions = {{drilldownOptionsString}};
 }`,
     chartTmpl: `{{baseChartTmpl}}`,
     chartWidgetTmpl: `{{baseChartTmpl}}`,
     widgetByIdTmpl: `import { Component } from '@angular/core';
-import { SdkUiModule } from '@sisense/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
-  imports: [SdkUiModule],
   template: \`
     <csdk-widget-by-id
       [widgetOid]="widgetOid"
@@ -187,13 +192,11 @@ export class CodeExample {
   includeDashboardFilters = true;
 }`,
     executeQueryByWidgetIdTmpl: `import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { QueryService } from '@sisense/sdk-ui-angular';
 import { type QueryResultData } from '@sisense/sdk-data';
 
 @Component({
   selector: 'code-example',
-  imports: [CommonModule],
   template: \`<div>
     <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
     <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>
@@ -223,7 +226,6 @@ export class CodeExample {
 }
 `,
     executeQueryTmpl: `import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 {{extraImportsString}}
 import { type QueryResultData } from '@sisense/sdk-data';
 import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
@@ -231,7 +233,6 @@ import { QueryService } from '@sisense/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
-  imports: [CommonModule],
   template: \`<div>
     <div *ngIf="errorMessage">Error: {{ errorMessage }}</div>
     <div *ngIf="!errorMessage">Total Rows: {{ queryResult.rows.length }}</div>
@@ -271,12 +272,14 @@ export class CodeExample {
   vue: {
     baseChartTmpl: `<script setup lang="ts">
   import { ref } from 'vue';
-  import { {{componentString}} } from '@sisense/sdk-ui-vue';
+  import { {{componentString}}, type ChartStyleOptions } from '@sisense/sdk-ui-vue';
   {{extraImportsString}}
   import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
 
   const dataOptions = ref({{dataOptionsString}});
   const filters = ref({{filtersString}});
+  const styleOptions = ref<ChartStyleOptions>({{styleOptionsString}});
+  const drilldownOptions = ref({{drilldownOptionsString}});
 </script>
 
 <template>
@@ -284,6 +287,8 @@ export class CodeExample {
     chartType="{{chartTypeString}}"
     :dataOptions="dataOptions"
     :filters="filters"
+    :styleOptions="styleOptions"
+    :drilldownOptions="drilldownOptions"
     :dataSource="DM.DataSource"
     title="{{titleString}}" />
 </template>`,
@@ -294,8 +299,8 @@ import { WidgetById } from '@sisense/sdk-ui-vue';
 </script>
 <template>
   <WidgetById
-    :widgetOid="{{widgetOid}}"
-    :dashboardOid="{{dashboardOid}}"
+    :widgetOid="'{{widgetOid}}'"
+    :dashboardOid="'{{dashboardOid}}'"
   />
 </template>
 `,

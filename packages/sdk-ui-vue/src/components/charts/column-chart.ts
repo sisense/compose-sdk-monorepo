@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ColumnChart as ColumnChartPreact } from '@sisense/sdk-ui-preact';
-import type { ColumnChartProps } from '@sisense/sdk-ui-preact';
+import type { ColumnChartProps as ColumnChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!ColumnChart | `ColumnChart`} component.
+ */
+export interface ColumnChartProps extends ColumnChartPropsPreact {}
 
 /**
  * A Vue component representing categorical data with vertical rectangular bars

@@ -1,5 +1,5 @@
 import { CommonFiltersOptions } from '@/common-filters/types';
-import { ColorPaletteTheme } from '@/types';
+import { ColorPaletteTheme, TabberConfig } from '@/types';
 
 export type {
   CommonFiltersOptions,
@@ -44,6 +44,14 @@ export type WidgetId = string;
  * For example, how common filters defined at the dashboard level should be applied to widgets.
  */
 export type WidgetsOptions = Record<WidgetId, { filtersOptions?: CommonFiltersOptions }>;
+/**
+ * Options for TabberWidetss in a dashboard
+ *
+ * This property actually moves responsibility on the layout management from the tabber widgets to the dashboard,
+ * storing all the tabbers configs in the single place
+ * @internal
+ */
+export type TabbersOptions = Record<WidgetId, TabberConfig>;
 
 /**
  * Style options for the dashboard.

@@ -1,9 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Data, isDataSource } from '@sisense/sdk-data';
+import { Data } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
-import { createDataTableFromData } from '../chart-data-processor/table-creators';
-import { chartDataService } from '../chart-data/chart-data-service';
-import { filterAndAggregateChartData } from '../chart-data/filter-and-aggregate-chart-data';
 import { ChartData } from '../chart-data/types';
 import { ChartDesignOptions, DesignOptions } from '../chart-options-processor/translations/types';
 import { RegularChartProps } from '../props';
@@ -14,14 +10,13 @@ import {
   isScattermapProps,
   Scattermap,
 } from '../charts/map-charts/scattermap/scattermap';
-import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
 import { useThemeContext } from '../theme-provider';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
 import './chart.css';
 
-import { Areamap, isAreamapData, isAreamapProps } from '../charts/map-charts/areamap/areamap';
+import { isAreamapData } from './restructured-charts/areamap-chart/renderer/areamap';
 import { prepareChartDesignOptions } from '../chart-options-processor/style-to-design-options-translator';
 import { LoadingOverlay } from '../common/components/loading-overlay';
 import { useSyncedData } from './helpers/use-synced-data';
@@ -30,7 +25,11 @@ import { ChartType } from '@/types';
 import { useChartRendererProps } from './helpers/use-chart-renderer-props';
 import { isBoxplotChartData } from '@/chart-data/boxplot-data';
 import isArray from 'lodash-es/isArray';
-import { TranslatableError } from '@/translation/translatable-error';
+import { getLoadDataFunction } from './helpers/get-load-data-function';
+import { useChartDataPreparation } from './helpers/use-chart-data-preparation';
+import { isRestructuredChartType } from './restructured-charts/utils';
+import { getChartBuilder } from './restructured-charts/chart-builder-factory';
+import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -104,6 +103,9 @@ export const RegularChart = (props: RegularChartProps) => {
   /** Indicates if the provided data options has no dimensions */
   const hasNoDimensions = attributes.length === 0 && measures.length === 0;
 
+  const loadData = useMemo(() => {
+    return getLoadDataFunction(chartType);
+  }, [chartType]);
   const [data, dataOptions] = useSyncedData({
     dataSet,
     chartDataOptions: syncDataOptions,
@@ -116,6 +118,7 @@ export const RegularChart = (props: RegularChartProps) => {
     refreshCounter,
     setIsLoading,
     enabled: !hasNoDimensions,
+    loadData,
   });
 
   const designOptions = useMemo((): ChartDesignOptions | DesignOptions | null => {
@@ -126,31 +129,16 @@ export const RegularChart = (props: RegularChartProps) => {
     return prepareChartDesignOptions(chartType, dataOptions, styleOptions);
   }, [chartDataOptions, chartType, dataOptions, styleOptions]);
 
-  const chartData = useMemo((): ChartData | null => {
-    if (!data || !chartDataOptions) {
-      return null;
-    }
-    let customizedData: Data | undefined;
-    if (onDataReady) {
-      customizedData = onDataReady(data);
-      if (!isData(customizedData)) {
-        throw new TranslatableError('errors.incorrectOnDataReadyHandler');
-      }
-    }
-    const dataToProcess = customizedData || data;
-    let dataTable = createDataTableFromData(dataToProcess);
-
-    if (!isDataSource(dataSet)) {
-      dataTable = filterAndAggregateChartData(
-        dataTable,
-        attributes,
-        measures,
-        dataColumnNamesMapping,
-      );
-    }
-
-    return chartDataService(chartType, dataOptions, dataTable);
-  }, [data, chartType]);
+  const chartData = useChartDataPreparation({
+    dataSet,
+    data,
+    chartDataOptions: syncDataOptions,
+    chartType,
+    attributes,
+    measures,
+    dataColumnNamesMapping,
+    onDataReady,
+  });
 
   const chartRendererProps = useChartRendererProps({
     dataSet,
@@ -186,6 +174,13 @@ export const RegularChart = (props: RegularChartProps) => {
           return <NoResultsOverlay iconType={chartType} />;
         }
 
+        if (isRestructuredChartType(chartType)) {
+          const chartBuilder = getChartBuilder(chartType);
+          if (chartBuilder.renderer.isCorrectRendererProps(chartRendererProps)) {
+            return <chartBuilder.renderer.ChartRendererComponent {...chartRendererProps} />;
+          }
+        }
+
         if (chartType === 'scattermap' && isScattermapProps(chartRendererProps)) {
           return (
             <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
@@ -198,14 +193,6 @@ export const RegularChart = (props: RegularChartProps) => {
           return (
             <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
               <IndicatorCanvas {...chartRendererProps} />
-            </LoadingOverlay>
-          );
-        }
-
-        if (chartType === 'areamap' && isAreamapProps(chartRendererProps)) {
-          return (
-            <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-              <Areamap {...chartRendererProps} />
             </LoadingOverlay>
           );
         }

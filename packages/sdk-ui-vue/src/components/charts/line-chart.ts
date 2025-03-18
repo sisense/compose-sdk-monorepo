@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { LineChart as LineChartPreact } from '@sisense/sdk-ui-preact';
-import type { LineChartProps } from '@sisense/sdk-ui-preact';
+import type { LineChartProps as LineChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!LineChart | `LineChart`} component.
+ */
+export interface LineChartProps extends LineChartPropsPreact {}
 
 /**
  * A Vue component that wraps the LineChart Preact component for use in Vue applications.

@@ -4,6 +4,8 @@ title: MemberFilterTileProps
 
 # Interface MemberFilterTileProps
 
+Props of the [MemberFilterTileComponent](../filter-tiles/class.MemberFilterTileComponent.md).
+
 ## Properties
 
 ### attribute

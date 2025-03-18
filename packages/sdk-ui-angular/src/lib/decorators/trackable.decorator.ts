@@ -25,6 +25,7 @@ type SubType<Base, Condition> = Pick<
 type MethodsOnly<T> = SubType<T, (...args: any[]) => any>;
 type MethodsArray<T> = T extends infer C ? (keyof MethodsOnly<C>)[] : [];
 
+/** @internal */
 export function TrackableService<T>(trackableMethods: MethodsArray<T>) {
   return function (ServiceClass: ConstructorOf<T>): void | ConstructorOf<T> {
     trackableMethods.forEach((methodName) => {

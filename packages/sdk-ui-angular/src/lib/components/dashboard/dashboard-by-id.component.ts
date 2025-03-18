@@ -23,6 +23,9 @@ import {
 import { template, rootId } from '../../component-wrapper-helpers/template';
 import { PluginsService } from '../../services/plugins.service';
 
+/**
+ * Props of the {@link DashboardByIdComponent}.
+ */
 export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.

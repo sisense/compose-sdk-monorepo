@@ -3,9 +3,10 @@ import { TranslatableError } from '@/translation/translatable-error';
 import { toKebabCase, isNonEmptyArray } from './utils';
 import { stringifyProps } from '../widget/stringify-props';
 import { ChartDataOptions } from '@/types';
+import { CODE_TEMPLATES_INDENT } from './constants';
 
 export function stringifyDataOptions(dataOptions: ChartDataOptions): string {
-  return stringifyProps(dataOptions, 6);
+  return stringifyProps(dataOptions, CODE_TEMPLATES_INDENT);
 }
 
 export function stringifyDataSource(dataSource: DataSource | undefined): string {

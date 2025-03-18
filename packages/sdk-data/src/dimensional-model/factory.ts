@@ -5,7 +5,7 @@ import { DimensionalElement } from './base.js';
 
 import { createMeasure } from './measures/measures.js';
 import { createFilter } from './filters/filters.js';
-import { createDimension } from './dimensions.js';
+import { createDimension } from './dimensions/index.js';
 import { createAttribute } from './attributes.js';
 import { TranslatableError } from '../translation/translatable-error.js';
 

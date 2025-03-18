@@ -21,6 +21,11 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link TableWidgetComponent}.
+ *
+ * @internal
+ */
 export interface TableWidgetProps extends TableWidgetPropsPreact {}
 
 /**

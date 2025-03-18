@@ -7,10 +7,14 @@ type DayjsDateRange = {
 };
 
 export function calculateNewDateRange(
-  currentDateRange: DayjsDateRange,
+  existingDateRange: Partial<DayjsDateRange>,
   newSelectedDate: dayjs.Dayjs,
   selectorMode: SelectorMode,
 ): DayjsDateRange {
+  const currentDateRange = {
+    from: existingDateRange.from || newSelectedDate,
+    to: existingDateRange.to || newSelectedDate,
+  };
   const isBeforeCurrentFrom = newSelectedDate.isBefore(currentDateRange.from);
   const isAfterCurrentTo = newSelectedDate.isAfter(currentDateRange.to);
 

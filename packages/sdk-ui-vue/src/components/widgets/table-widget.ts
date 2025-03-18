@@ -1,7 +1,10 @@
 import { defineComponent, type Prop } from 'vue';
 import { TableWidget as TableWidgetPreact, type TableWidgetProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
-import type { Table } from '../charts/table';
+
+// Note: uses direct reexport as a temporary workaround for getting the correct API docs
+export { TableWidgetProps };
+
 /**
  * The TableWidget component extending the Table component to support widget style options.
  *

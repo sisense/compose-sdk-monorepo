@@ -7,13 +7,17 @@ import { withTracking } from '@/decorators/hook-decorators';
 import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
 import { MenuOptions } from '@/common/components/menu/types';
 import { MenuIds } from '@/common/components/menu/menu-ids';
-import { DashboardProps } from './types.js';
+import { DashboardLayoutOptions, DashboardProps } from './types.js';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { useSyncedState } from '@/common/hooks/use-synced-state.js';
+import { useWidgetsLayoutManagement } from '@/dashboard/hooks/use-widgets-layout';
+import { getDefaultWidgetsPanelLayout } from '@/dashboard/utils';
+import { useTabber } from '@/dashboard/hooks/use-tabber';
+import { WidgetsPanelLayout } from '@/models';
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
-  'filters' | 'widgets' | 'widgetsOptions'
+  'filters' | 'widgets' | 'widgetsOptions' | 'layoutOptions' | 'tabbersOptions'
 >;
 
 function combineCommonFiltersAndWidgetMenus(
@@ -56,6 +60,8 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   dashboard: D;
   // APIs:
   setFilters: (filters: Filter[] | FilterRelations) => void;
+  setWidgetsLayout: (newLayout: WidgetsPanelLayout) => void;
+  layoutOptions: DashboardLayoutOptions;
 } {
   const { filters, widgets, widgetsOptions } = initialDashboard;
   // This state is needed to avoid losing the inner state when new widget objects are received from toDashboardProps.
@@ -95,13 +101,31 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     );
   }, [widgetsWithChangeDetection, widgetsOptions, connectToWidgetProps]);
 
+  const { layoutManager: tabberLayoutManager, widgets: widgetsWithTabberConfigs } = useTabber({
+    widgets: widgetsWithCommonFilters,
+    config: initialDashboard.tabbersOptions,
+  });
+
+  const { layout: widgetsLayout, setLayout: setWidgetsLayout } = useWidgetsLayoutManagement({
+    layout:
+      initialDashboard.layoutOptions?.widgetsPanel ||
+      getDefaultWidgetsPanelLayout(widgetsWithCommonFilters),
+    layoutManagers: [tabberLayoutManager],
+  });
+
+  const resultLayout = useMemo(() => {
+    return { ...initialDashboard.layoutOptions, widgetsPanel: widgetsLayout };
+  }, [widgetsLayout, initialDashboard.layoutOptions]);
+
   return {
     dashboard: {
       ...initialDashboard,
       filters: commonFilters,
-      widgets: widgetsWithCommonFilters,
+      widgets: widgetsWithTabberConfigs,
     },
+    layoutOptions: resultLayout,
     setFilters,
+    setWidgetsLayout,
   };
 }
 

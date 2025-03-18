@@ -23,6 +23,8 @@ export const jaqlSimpleColumnType = (datatype: string) =>
 export class DimensionalAttribute extends DimensionalElement implements Attribute {
   readonly expression: string;
 
+  readonly panel: string;
+
   protected _sort: Sort = Sort.None;
 
   constructor(
@@ -33,10 +35,14 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
     sort?: Sort,
     dataSource?: JaqlDataSource,
     composeCode?: string,
+    panel?: string,
   ) {
     super(name, type || MetadataTypes.Attribute, desc, dataSource, composeCode);
-
     this.expression = expression;
+    // panel is not needed in most cases, this is to support break by columns functionality
+    if (panel === 'columns') {
+      this.panel = panel;
+    }
     this._sort = sort || Sort.None;
   }
 
@@ -71,6 +77,7 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
       sort,
       this.dataSource,
       this.composeCode,
+      this.panel,
     );
   }
 
@@ -87,6 +94,9 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
         datatype: jaqlSimpleColumnType(this.type),
       },
     };
+    if (this.panel) {
+      result.panel = this.panel;
+    }
 
     if (this._sort != Sort.None) {
       result.jaql.sort = this._sort == Sort.Ascending ? 'asc' : 'desc';
@@ -119,6 +129,8 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
 
   readonly granularity: string;
 
+  readonly panel: string;
+
   constructor(
     l: string,
     expression: string,
@@ -128,11 +140,17 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     sort?: Sort,
     dataSource?: JaqlDataSource,
     composeCode?: string,
+    panel?: string,
   ) {
     super(l, expression, MetadataTypes.DateLevel, desc, sort, dataSource, composeCode);
 
     this._format = format;
     this.granularity = granularity;
+
+    // panel is not needed in most cases, this is to support break by columns functionality
+    if (panel === 'columns') {
+      this.panel = panel;
+    }
   }
 
   /**
@@ -236,6 +254,10 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
         ...this.translateGranularityToJaql(),
       },
     };
+
+    if (this.panel) {
+      r.panel = this.panel;
+    }
 
     if (this._format !== undefined) {
       const levelName = r.jaql.dateTimeLevel || r.jaql.level;

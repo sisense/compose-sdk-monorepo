@@ -4,6 +4,9 @@ import { type ScattermapChartProps as ScattermapChartPropsPreact } from '@sisens
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
 import { DataPointEvent, DataPointEventHandler } from '../../types/data-point';
 
+/**
+ * Props of the {@link ScattermapChartComponent}.
+ */
 export interface ScattermapChartProps
   extends WithoutPreactChartEventProps<ScattermapChartPropsPreact>,
     BaseChartEventProps {

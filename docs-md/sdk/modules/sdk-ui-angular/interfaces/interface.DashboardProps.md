@@ -4,7 +4,7 @@ title: DashboardProps
 
 # Interface DashboardProps
 
-Props for the Dashboard component
+Props of the [DashboardComponent](../dashboards/class.DashboardComponent.md).
 
 ## Properties
 

@@ -1,2 +1,2 @@
-export { DashboardById } from './dashboard-by-id';
-export { Dashboard } from './dashboard';
+export { DashboardById, type DashboardByIdProps } from './dashboard-by-id';
+export { Dashboard, type DashboardProps } from './dashboard';

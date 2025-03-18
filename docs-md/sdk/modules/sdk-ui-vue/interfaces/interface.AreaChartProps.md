@@ -4,7 +4,7 @@ title: AreaChartProps
 
 # Interface AreaChartProps
 
-Props of the [AreaChart](../charts/class.AreaChart.md) component.
+Props of the [`AreaChart`](../charts/class.AreaChart.md) component.
 
 ## Properties
 

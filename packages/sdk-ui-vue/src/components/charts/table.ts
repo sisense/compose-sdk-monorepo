@@ -4,6 +4,9 @@ import { Table as TablePreact } from '@sisense/sdk-ui-preact';
 import type { TableProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
+// Note: uses direct reexport as a temporary workaround for getting the correct API docs
+export { TableProps };
+
 /**
  * Table with aggregation and pagination.
  *

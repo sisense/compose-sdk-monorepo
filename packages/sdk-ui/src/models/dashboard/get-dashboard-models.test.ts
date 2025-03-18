@@ -93,6 +93,7 @@ describe('getDashboardModels', () => {
         },
         widgets: expect.anything(),
         widgetsOptions: expect.anything(),
+        tabbersOptions: expect.anything(),
         styleOptions: {
           ...(dashboardMock.style?.palette?.colors && {
             palette: {
@@ -131,6 +132,8 @@ describe('getDashboardModels', () => {
             dashboardMock.widgets!.map(() => expect.anything()),
           ),
         ),
+        tabbersOptions: expect.anything(),
+
         styleOptions: {
           ...(dashboardMock.style?.palette?.colors && {
             palette: {
@@ -161,6 +164,7 @@ describe('getDashboardModels', () => {
       },
       widgets: expect.anything(),
       widgetsOptions: expect.anything(),
+      tabbersOptions: expect.anything(),
       styleOptions: {
         ...(targetDashboardMock.style?.palette?.colors
           ? {

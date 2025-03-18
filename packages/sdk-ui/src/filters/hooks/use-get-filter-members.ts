@@ -15,6 +15,7 @@ import { useExecuteQueryInternal } from '@/query-execution/use-execute-query';
 import { withTracking } from '@/decorators/hook-decorators';
 import { Member, SelectedMember } from '../components/member-filter-tile';
 import { TranslatableError } from '@/translation/translatable-error';
+import { HookEnableParam } from '@/common/hooks/types';
 
 /**
  * Returns new `members` array with members transformed to required type.
@@ -26,7 +27,7 @@ function castMembersToType(members: any[], type: string) {
 /**
  * Params for {@link useGetFilterMembers}
  */
-export interface GetFilterMembersParams {
+export interface GetFilterMembersParams extends HookEnableParam {
   /** Provided members filter */
   filter: Filter;
   /** Default data source to use if filter does not have one */
@@ -99,6 +100,7 @@ export const useGetFilterMembersInternal = ({
   defaultDataSource,
   parentFilters = [],
   count,
+  enabled,
 }: GetFilterMembersParams): GetFilterMembersResult => {
   if (!isMembersFilter(filter)) {
     throw new TranslatableError('errors.notAMembersFilter');
@@ -125,6 +127,7 @@ export const useGetFilterMembersInternal = ({
     dimensions,
     filters: queryFilters,
     count,
+    enabled,
   });
 
   const { app } = useSisenseContext();

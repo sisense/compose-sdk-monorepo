@@ -133,6 +133,22 @@ export type AppConfig = {
      */
     enabled?: boolean;
   };
+
+  /**
+   * Configuration of the tabber widget
+   *
+   * Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unkwon plugin type'.
+   *
+   * @internal
+   */
+  tabberConfig?: {
+    /**
+     * Whether to enable tabber widget support
+     *
+     * If not specified, the default value is `false`
+     */
+    enabled?: boolean;
+  };
   /**
    * Configuration of the component that is rendered in case of an error
    */

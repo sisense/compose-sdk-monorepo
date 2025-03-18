@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { AreaRangeChart as AreaRangeChartPreact } from '@sisense/sdk-ui-preact';
-import type { AreaRangeChartProps } from '@sisense/sdk-ui-preact';
+import type { AreaRangeChartProps as AreaRangeChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!AreaRangeChart | `AreaRangeChart`} component.
+ */
+export interface AreaRangeChartProps extends AreaRangeChartPropsPreact {}
 
 /**
  * A Vue component that displays a range of data over a given time period

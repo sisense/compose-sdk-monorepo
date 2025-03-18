@@ -22,6 +22,7 @@ import {
   getDefaultMembersFilterConfig,
 } from './filter-config-utils.js';
 import merge from 'lodash-es/merge.js';
+import omit from 'lodash-es/omit.js';
 
 /**
  * Different text operators that can be used with text filters
@@ -301,6 +302,11 @@ export class MembersFilter extends AbstractFilter {
    */
   get id(): string {
     return `${this.attribute.id}_${this.members.map((m) => m.toString()).join()}`;
+  }
+
+  get name(): string {
+    // to hexadecimal string
+    return hash([this.jaql(), omit(this.config, ['guid', 'originalFilterJaql'])]).toString(16);
   }
 
   /**

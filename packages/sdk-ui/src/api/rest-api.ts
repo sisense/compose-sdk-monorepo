@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
 import isUndefined from 'lodash-es/isUndefined';
 import {
+  DataSourceField,
   DimensionalLevelAttribute,
   getColumnNameFromAttribute,
   getDataSourceName,
@@ -218,6 +219,26 @@ export class RestApi {
    */
   public getSharedFormula = async (sharedFormulaId: string) => {
     return this.httpClient.get<SharedFormulaDto>(`api/v1/formulas/${sharedFormulaId}`);
+  };
+
+  /**
+   * Get datasource fields
+   * @param dataSource - A datasource name
+   * @param options - An object with offset and count
+   * @returns A list of datasource fields
+   */
+  public getDataSourceFields = (
+    dataSource: string,
+    options?: { offset: number; count: number },
+  ) => {
+    const { offset = 0, count = 9999 } = options || {};
+    return this.httpClient.post<DataSourceField[]>(
+      `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
+      {
+        offset: offset,
+        count: count,
+      },
+    );
   };
 }
 

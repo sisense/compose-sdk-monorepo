@@ -7,6 +7,9 @@ import {
   WithoutPreactChartEventProps,
 } from '../../types/chart-event-props';
 
+/**
+ * Props of the {@link IndicatorChartComponent}.
+ */
 export interface IndicatorChartProps
   extends WithoutPreactChartEventProps<IndicatorChartPropsPreact>,
     BaseChartEventProps,

@@ -52,7 +52,7 @@ current_version=$(node ./scripts/current-version.cjs)
 target_tag="v${current_version}"
 
 # Commit changes using current package.json.
-git commit -m "Release ${target_tag}" --no-verify
+git commit -m "Release ${target_tag}"
 
 # Push to the destination branch. This should be a fast-forward update, so no
 # force is needed.

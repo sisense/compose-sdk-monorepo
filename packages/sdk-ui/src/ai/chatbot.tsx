@@ -8,7 +8,7 @@ import ChatRouter from './chat-router';
 /**
  * Props for {@link Chatbot} component.
  */
-export type ChatbotProps = {
+export interface ChatbotProps {
   /**
    * Total width of the chatbot
    *
@@ -27,7 +27,7 @@ export type ChatbotProps = {
    * Various configuration options for the chatbot
    */
   config?: Partial<ChatConfig>;
-};
+}
 
 /**
  * React component that renders a chatbot with data topic selection. You can optionally provide `width` and/or `height`.

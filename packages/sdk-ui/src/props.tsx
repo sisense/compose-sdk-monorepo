@@ -54,6 +54,7 @@ import {
   GenericDataOptions,
   DashboardWidgetStyleOptions,
   IndicatorRenderOptions,
+  TabberStyleProps,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -826,7 +827,7 @@ export interface ColumnChartProps
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!FunnelChart | `FunnelChart`} component.
+ * Props of the {@link FunnelChart} component.
  */
 export interface FunnelChartProps
   extends BaseChartProps,
@@ -847,7 +848,7 @@ export interface FunnelChartProps
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!LineChart | `LineChart`} component.
+ * Props of the {@link LineChart} component.
  */
 export interface LineChartProps
   extends BaseChartProps,
@@ -871,7 +872,7 @@ export interface LineChartProps
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!PieChart | `PieChart`} component.
+ * Props of the {@link PieChart} component.
  */
 export interface PieChartProps
   extends BaseChartProps,
@@ -892,7 +893,7 @@ export interface PieChartProps
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!PolarChart | `PolarChart`} component.
+ * Props of the {@link PolarChart} component.
  */
 export interface PolarChartProps
   extends BaseChartProps,
@@ -916,7 +917,7 @@ export interface PolarChartProps
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!IndicatorChart | `IndicatorChart`} component.
+ * Props of the {@link IndicatorChart} component.
  */
 export interface IndicatorChartProps extends BaseChartProps, IndicatorChartEventProps {
   /**
@@ -934,7 +935,7 @@ export interface IndicatorChartProps extends BaseChartProps, IndicatorChartEvent
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!Table | `Table`} component.
+ * Props of the {@link Table} component.
  */
 export interface TableProps extends BaseChartEventProps {
   /**
@@ -976,7 +977,7 @@ export interface TableProps extends BaseChartEventProps {
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!PivotTable | `PivotTable`} component.
+ * Props of the {@link PivotTable} component.
  */
 export interface PivotTableProps {
   /**
@@ -1026,7 +1027,7 @@ export interface PivotTableProps {
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!ScatterChart | `ScatterChart`} component.
+ * Props of the {@link ScatterChart} component.
  */
 export interface ScatterChartProps
   extends BaseChartProps,
@@ -1047,7 +1048,7 @@ export interface ScatterChartProps
 }
 
 /**
- * Props for the {@link @sisense/sdk-ui!WidgetById | `WidgetById`} component
+ * Props for the {@link WidgetById} component
  */
 export interface WidgetByIdProps
   extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'> {
@@ -1123,7 +1124,7 @@ export interface WidgetByIdProps
 /**
  * Props for the {@link DashboardWidget} component
  *
- * @deprecated Use {@link @sisense/sdk-ui!WidgetById | `WidgetById`} and {@link WidgetByIdProps} instead
+ * @deprecated Use {@link WidgetById} and {@link WidgetByIdProps} instead
  */
 export interface DashboardWidgetProps extends WidgetByIdProps {
   /**
@@ -1550,7 +1551,7 @@ export interface ExecuteQueryByWidgetIdProps {
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!TreemapChart | `TreemapChart`} component.
+ * Props of the {@link TreemapChart} component.
  */
 export interface TreemapChartProps
   extends BaseChartProps,
@@ -1571,7 +1572,7 @@ export interface TreemapChartProps
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!SunburstChart | `SunburstChart`} component.
+ * Props of the {@link SunburstChart} component.
  */
 export interface SunburstChartProps
   extends BaseChartProps,
@@ -1613,7 +1614,7 @@ export interface BoxplotChartProps
 }
 
 /**
- * Props of the {@link @sisense/sdk-ui!ScattermapChart | `ScattermapChart`} component.
+ * Props of the {@link ScattermapChart} component.
  */
 export interface ScattermapChartProps extends BaseChartProps, ScattermapChartEventProps {
   /**
@@ -1670,7 +1671,7 @@ export interface AreaRangeChartProps
 }
 
 /**
- * Props for ContextMenu component.
+ * Props of the {@link ContextMenu} component.
  */
 export interface ContextMenuProps {
   /**
@@ -1699,6 +1700,9 @@ export interface ContextMenuProps {
   children?: React.ReactNode;
 }
 
+/**
+ * Props of the {@link DrilldownBreadcrumbs} component.
+ */
 export interface DrilldownBreadcrumbsProps {
   /**
    * List of drilldown filters formatted to be displayed as breadcrumbs
@@ -1800,6 +1804,25 @@ export interface DrilldownWidgetProps {
    */
   children: (customDrilldownResult: CustomDrilldownResult) => ReactNode;
 }
+
+/**
+ * Tabber widget props designed to be a current state and is provided by use-tabber hook
+ * @internal
+ */
+export type TabberWidgetExtraProps = {
+  onTabSelected: (tab: number) => void;
+  selectedTab: number;
+};
+
+/**
+ * Tabber widget props
+ * @internal
+ */
+export type TabberWidgetProps = {
+  styleOptions?: TabberStyleProps;
+  description?: string;
+  width?: string;
+} & TabberWidgetExtraProps;
 
 /**
  * Params of the {@link useGetSharedFormula} hook

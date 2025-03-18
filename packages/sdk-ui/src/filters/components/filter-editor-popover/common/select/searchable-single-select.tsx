@@ -1,8 +1,9 @@
-import { CSSProperties, useCallback, useRef, useState } from 'react';
+import React, { CSSProperties, useCallback, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { ArrowDownIcon } from '../../../icons';
 import { SelectItem } from './types';
-import { SelectContainer, SelectLabel } from './base';
+import { SelectField, SelectLabel } from './base';
+import { getSelectedItemsDisplayValue } from './utils';
 import { SingleSelectItem } from './single-select-item';
 import { DEFAULT_TEXT_COLOR } from '@/const';
 import {
@@ -12,6 +13,8 @@ import {
 import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { Popper } from '@/common/components/popper';
+import { SearchInput } from '@/filters/components/filter-editor-popover/common';
+import { useTranslation } from 'react-i18next';
 
 const Content = styled.div`
   max-height: 294px;
@@ -27,7 +30,22 @@ type SearchableSingleSelectProps<Value> = {
   primaryBackgroundColor?: string;
   onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
   showListLoader?: boolean;
+  showSearch?: boolean;
+  onSearchUpdate?: (searchValue: string) => void;
 };
+
+/** @internal */
+export const StyledSearchInput = styled(SearchInput)<{
+  backgroundColor?: string;
+  color?: string;
+}>`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  color: ${(props) => props.color};
+  background-color: ${(props) => props.backgroundColor};
+`;
 
 /** @internal */
 export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleSelectProps<Value>) {
@@ -41,7 +59,10 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
     primaryBackgroundColor,
     onListScroll,
     showListLoader,
+    showSearch = true,
+    onSearchUpdate,
   } = props;
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
 
@@ -52,32 +73,59 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
     [onChange],
   );
 
+  const onClose = useCallback(() => {
+    setOpen(false);
+    onSearchUpdate?.('');
+  }, [onSearchUpdate]);
+
+  const onContainerClick = useCallback(() => {
+    if (open) {
+      onClose();
+    } else {
+      setOpen(true);
+    }
+  }, [open, onClose]);
+
   return (
-    <ClickAwayListener onClickAway={() => setOpen(false)}>
+    <ClickAwayListener onClickAway={onClose}>
       <div>
-        <SelectContainer
-          ref={selectElementRef}
-          focus={open}
-          onClick={() => setOpen((isOpen) => !isOpen)}
-          style={{
-            ...style,
-            ...(primaryColor && { color: primaryColor }),
-            ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-          }}
-          aria-label="Searchable single-select"
-        >
-          <SelectLabel style={{ opacity: value ? '100%' : '50%' }} aria-label="Value">
-            {`${value || placeholder}`}
-          </SelectLabel>
-          <ArrowDownIcon
-            aria-label="select-icon"
-            fill={primaryColor || DEFAULT_TEXT_COLOR}
+        <div style={{ position: 'relative' }}>
+          <SelectField
+            ref={selectElementRef}
+            focus={open}
+            onClick={onContainerClick}
             style={{
-              minWidth: '24px',
-              transform: `rotate(${open ? 180 : 0}deg)`,
+              ...style,
+              ...(primaryColor && { color: primaryColor }),
+              ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
             }}
-          />
-        </SelectContainer>
+            aria-label="Searchable single-select"
+          >
+            <SelectLabel style={{ opacity: value ? '100%' : '50%' }} aria-label="Value">
+              {`${getSelectedItemsDisplayValue(items, [value]) || placeholder}`}
+            </SelectLabel>
+            <ArrowDownIcon
+              aria-label="select-icon"
+              fill={primaryColor || DEFAULT_TEXT_COLOR}
+              style={{
+                minWidth: '24px',
+                transform: `rotate(${open ? 180 : 0}deg)`,
+              }}
+            />
+          </SelectField>
+          {showSearch && open && (
+            <StyledSearchInput
+              inputRef={(input) => input?.focus()}
+              backgroundColor={primaryBackgroundColor}
+              color={primaryColor}
+              placeholder={t('filterEditor.placeholders.enterValue')}
+              onChange={(e) => {
+                onSearchUpdate?.(e.target.value);
+              }}
+              aria-label="Value input"
+            />
+          )}
+        </div>
         <Popper open={open} anchorEl={selectElementRef.current}>
           <ScrollWrapper onScroll={onListScroll}>
             <Content

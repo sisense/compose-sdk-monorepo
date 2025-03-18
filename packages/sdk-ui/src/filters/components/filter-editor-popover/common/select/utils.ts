@@ -7,18 +7,18 @@ export const calculatePopoverPosition = (
 ): PopoverAnchorPosition => {
   const positionBottom: PopoverAnchorPosition = {
     anchorEl: anchorEl as HTMLElement,
-    anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
     contentOrigin: {
       vertical: 'top',
-      horizontal: 'left',
+      horizontal: 'center',
     },
   };
   const positionTop: PopoverAnchorPosition = {
     anchorEl: anchorEl as HTMLElement,
-    anchorOrigin: { vertical: 'top', horizontal: 'left' },
+    anchorOrigin: { vertical: 'top', horizontal: 'center' },
     contentOrigin: {
       vertical: 'bottom',
-      horizontal: 'left',
+      horizontal: 'center',
     },
   };
 

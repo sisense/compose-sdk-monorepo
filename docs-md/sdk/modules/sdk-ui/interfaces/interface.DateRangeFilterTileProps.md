@@ -4,6 +4,8 @@ title: DateRangeFilterTileProps
 
 # Interface DateRangeFilterTileProps
 
+Props of the [DateRangeFilterTile](../filter-tiles/function.DateRangeFilterTile.md) component.
+
 ## Properties
 
 ### attribute

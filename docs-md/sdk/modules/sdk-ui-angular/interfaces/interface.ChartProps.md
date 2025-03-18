@@ -4,6 +4,8 @@ title: ChartProps
 
 # Interface ChartProps
 
+Props shared across the [ChartComponent](../charts/class.ChartComponent.md).
+
 ## Properties
 
 ### Data

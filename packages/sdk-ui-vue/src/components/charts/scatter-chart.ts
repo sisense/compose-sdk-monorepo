@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ScatterChart as ScatterChartPreact } from '@sisense/sdk-ui-preact';
-import type { ScatterChartProps } from '@sisense/sdk-ui-preact';
+import type { ScatterChartProps as ScatterChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!ScatterChart | `ScatterChart`} component.
+ */
+export interface ScatterChartProps extends ScatterChartPropsPreact {}
 
 /**
  * A Vue component displaying the distribution of two variables on an X-Axis, Y-Axis,

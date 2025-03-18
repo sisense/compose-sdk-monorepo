@@ -4,7 +4,7 @@ title: RelativeDateFilterTileProps
 
 # Interface RelativeDateFilterTileProps
 
-Props for [RelativeDateFilterTile](../filter-tiles/function.RelativeDateFilterTile.md)
+Props of the [RelativeDateFilterTile](../filter-tiles/function.RelativeDateFilterTile.md) component.
 
 ## Properties
 

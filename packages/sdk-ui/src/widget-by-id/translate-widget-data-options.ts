@@ -162,13 +162,19 @@ const extractDatetimeFormat = (item: PanelItem) => {
 };
 
 export function createDataColumn(item: PanelItem, customPaletteColors?: Color[]) {
-  const element = createDimensionalElementFromJaql(item.jaql, extractDatetimeFormat(item));
+  const element = createDimensionalElementFromJaql(
+    item.jaql,
+    extractDatetimeFormat(item),
+    item.panel,
+  );
   const sortType = getSortType(item.jaql.sort ?? item.categoriesSorting);
   const numberFormatConfig = extractNumberFormat(item);
   const subtotal = item.format?.subtotal;
   const width = item.format?.width;
   let color = createValueColorOptions(item.format?.color, customPaletteColors);
   const colorSecondary = createValueColorOptions(item.format?.colorSecond, customPaletteColors);
+  // panel is not needed in most cases, this is to support break by columns functionality
+  const panel = item.panel === 'columns' && item.panel;
 
   // Hande specific case in Fusion dashboard model
   // Sunburst palette index stores that way
@@ -199,6 +205,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
       ...(totalsCalculation && { totalsCalculation }),
       ...(dataBars && { dataBars }),
       ...(width && { width }),
+      ...(panel && { panel }),
     } as StyledMeasureColumn;
 
     return applyStatisticalModels(dataOption, item.statisticalModels);
@@ -212,6 +219,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     ...(subtotal && { includeSubTotals: subtotal }),
     ...(width && { width }),
     ...(color && { color }),
+    ...(panel && { panel }),
   } as StyledColumn;
 }
 

@@ -297,8 +297,8 @@ const DATA_MODEL_MODULE_NAME = 'DM';
 
 /**
  * Creates an attribute or level attribute from the provided parameters
- * @returns attribute or level attribute
  *
+ * @returns attribute or level attribute
  * @internal
  */
 export const createAttributeHelper = ({
@@ -310,6 +310,7 @@ export const createAttributeHelper = ({
   format,
   sort,
   title,
+  panel,
   dataSource,
 }: {
   /** Dimension expression */
@@ -328,6 +329,8 @@ export const createAttributeHelper = ({
   sort: string | undefined;
   /** Attribute title */
   title?: string;
+  /** Panel */
+  panel?: string;
   /** Jaql data source */
   dataSource?: JaqlDataSource;
 }): Attribute | LevelAttribute => {
@@ -351,6 +354,7 @@ export const createAttributeHelper = ({
       sortEnum,
       dataSource,
       composeCode,
+      panel,
     );
 
     return levelAttribute;
@@ -372,6 +376,7 @@ export const createAttributeHelper = ({
     sortEnum,
     dataSource,
     composeCode,
+    panel,
   );
 
   return attribute;
@@ -381,7 +386,6 @@ export const createAttributeHelper = ({
  * Creates a measure from the provided parameters
  *
  * @returns measure
- *
  * @internal
  */
 export const createMeasureHelper = ({
@@ -472,7 +476,6 @@ const getContextComposeCode = (context: MeasureContext) => {
  * Creates a measure from the provided parameters
  *
  * @returns calculated measure
- *
  * @internal
  */
 export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeasure => {
@@ -502,13 +505,17 @@ export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeas
 
 /**
  * Creates a dimensional element from a JAQL object.
+ *
  * @param jaql - The JAQL object.
  * @param datetimeFormat - The datetime format.
  * @returns The created dimensional element.
- *
  * @internal
  */
-export function createDimensionalElementFromJaql(jaql: Jaql, datetimeFormat?: string) {
+export function createDimensionalElementFromJaql(
+  jaql: Jaql,
+  datetimeFormat?: string,
+  panel?: string,
+) {
   const isFilterJaql = 'filter' in jaql;
   if (isFilterJaql) {
     return createFilterFromJaql(jaql);
@@ -546,6 +553,7 @@ export function createDimensionalElementFromJaql(jaql: Jaql, datetimeFormat?: st
     format: datetimeFormat,
     sort: jaql.sort,
     title: jaql.title,
+    panel: panel,
     dataSource,
   });
 }

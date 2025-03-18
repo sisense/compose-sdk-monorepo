@@ -26,6 +26,9 @@ import { template, rootId } from '../../component-wrapper-helpers/template';
 import { ChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
 import { ChartDataPointEvent, ChartDataPointsEvent } from '../../types/data-point';
 
+/**
+ * Props of the {@link ChartWidgetComponent}.
+ */
 export interface ChartWidgetProps
   extends WithoutPreactChartEventProps<ChartWidgetPropsPreact>,
     ChartEventProps {}

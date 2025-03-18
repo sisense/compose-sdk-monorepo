@@ -3,9 +3,6 @@ import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
 import { TranslatableError } from '../translation/translatable-error';
 import {
   ChartStyleOptions,
-  LineStyleOptions,
-  AreaStyleOptions,
-  StackableStyleOptions,
   AxisLabel,
   PolarStyleOptions,
   ScatterStyleOptions,
@@ -29,6 +26,7 @@ import {
   AlignmentTypes,
   WidgetStyleOptions,
   TextWidgetStyleOptions,
+  CartesianStyleOptions,
 } from '../types';
 import {
   Panel,
@@ -297,27 +295,19 @@ function extractCartesianLabelsOptions(
   };
 }
 
-/**
- * @internal
- */
-export type CartesianChartStyleOptions =
-  | LineStyleOptions
-  | AreaStyleOptions
-  | StackableStyleOptions;
-
 function extractCartesianChartStyleOptions(
   widgetType: WidgetType,
   widgetSubtype: WidgetSubtype,
   widgetStyle: CartesianWidgetStyle,
   panels: Panel[],
-): CartesianChartStyleOptions {
+): CartesianStyleOptions {
   return {
     ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
     ...prepareCartesianChartAxisOptions(widgetType, widgetStyle, panels),
     ...extractCartesianLabelsOptions(widgetSubtype, widgetStyle),
     lineWidth: widgetStyle.lineWidth,
     markers: widgetStyle.markers,
-  } as CartesianChartStyleOptions;
+  } as CartesianStyleOptions;
 }
 
 function extractPolarChartStyleOptions(
@@ -601,22 +591,9 @@ export function extractStyleOptions<WType extends WidgetType>(
       throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }
 }
-/**
- * Merges the widget style with the widget design
- *
- * @param widgetStyle - The widget style
- * @param widgetDesign - The widget design
- * @param isWidgetDesignStyleEnabled - The flag to enable the widget design style
- * @returns The merged widget style
- */
-export function getStyleWithWidgetDesign(
-  widgetStyle: ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions,
-  widgetDesign?: WidgetDesign,
-  isWidgetDesignStyleEnabled?: boolean,
-): WidgetStyleOptions {
-  if (!widgetDesign || !isWidgetDesignStyleEnabled) return widgetStyle;
 
-  const flattenedWidgetDesign = {
+export const getFlattenWidgetDesign = (widgetDesign: WidgetDesign) => {
+  return {
     backgroundColor: widgetDesign.widgetBackgroundColor,
     spaceAround: LEGACY_DESIGN_TYPES[widgetDesign.widgetSpacing] as SpaceSizes,
     cornerRadius: LEGACY_DESIGN_TYPES[widgetDesign.widgetCornerRadius] as RadiusSizes,
@@ -631,6 +608,23 @@ export function getStyleWithWidgetDesign(
       backgroundColor: widgetDesign.widgetTitleBackgroundColor,
     },
   };
+};
+
+/**
+ * Merges the widget style with the widget design
+ *
+ * @param widgetStyle - The widget style
+ * @param widgetDesign - The widget design
+ * @param isWidgetDesignStyleEnabled - The flag to enable the widget design style
+ * @returns The merged widget style
+ */
+export function getStyleWithWidgetDesign(
+  widgetStyle: ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions,
+  widgetDesign?: WidgetDesign,
+  isWidgetDesignStyleEnabled?: boolean,
+): WidgetStyleOptions {
+  if (!widgetDesign || !isWidgetDesignStyleEnabled) return widgetStyle;
+  const flattenedWidgetDesign = getFlattenWidgetDesign(widgetDesign);
 
   return {
     ...widgetStyle,

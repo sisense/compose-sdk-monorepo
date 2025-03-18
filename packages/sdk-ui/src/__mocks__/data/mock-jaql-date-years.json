@@ -1,0 +1,33 @@
+{
+  "headers": ["[Commerce.Date (Calendar)]"],
+  "metadata": [
+    {
+      "firstday": "mon",
+      "level": "years",
+      "dim": "[Commerce.Date (Calendar)]",
+      "sort": "desc"
+    }
+  ],
+  "datasource": {
+    "revisionId": "TBD",
+    "fullname": "LocalHost/Sample ECommerce"
+  },
+  "processingInfo": {
+    "cacheType": "result",
+    "cacheTime": "2025-03-04T23:45:22.834Z"
+  },
+  "translationInfo": {
+    "translationServiceProvider": "NewTranslationService",
+    "isTranslationFallback": false,
+    "isQueryFallback": false,
+    "translationDuration": 0.013,
+    "sqlFromCache": false
+  },
+  "values": [
+    ["2013-01-01T00:00:00"],
+    ["2012-01-01T00:00:00"],
+    ["2011-01-01T00:00:00"],
+    ["2010-01-01T00:00:00"],
+    ["2009-01-01T00:00:00"]
+  ]
+}

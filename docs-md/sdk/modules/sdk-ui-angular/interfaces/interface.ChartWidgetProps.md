@@ -4,6 +4,8 @@ title: ChartWidgetProps
 
 # Interface ChartWidgetProps
 
+Props of the [ChartWidgetComponent](../dashboards/class.ChartWidgetComponent.md).
+
 ## Properties
 
 ### Data

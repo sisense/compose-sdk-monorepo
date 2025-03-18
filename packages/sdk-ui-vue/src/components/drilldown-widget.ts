@@ -1,5 +1,8 @@
 import type { Component, PropType } from 'vue';
-import type { ContextMenuProps, DrilldownWidgetProps } from '@sisense/sdk-ui-preact';
+import type {
+  ContextMenuProps,
+  DrilldownWidgetProps as DrilldownWidgetPropsPreact,
+} from '@sisense/sdk-ui-preact';
 import { defineComponent } from 'vue';
 
 export type DrilldownWidgetConfig = {
@@ -7,6 +10,19 @@ export type DrilldownWidgetConfig = {
   breadcrumbsComponent?: Component;
   contextMenuComponent?: (props: ContextMenuProps) => Component;
 };
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!DrilldownWidget | `DrilldownWidget`} component.
+ */
+export interface DrilldownWidgetProps
+  extends Omit<DrilldownWidgetPropsPreact, 'children' | 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: DrilldownWidgetConfig;
+}
 
 /**
  * Vue component designed to add drilldown functionality to any type of chart

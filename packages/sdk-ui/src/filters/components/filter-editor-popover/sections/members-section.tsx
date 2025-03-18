@@ -1,14 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SelectableSection } from '../common/selectable-section';
-import { SearchableMultiSelect } from '../common/select/searchable-multi-select';
 import { Attribute, Filter, FilterConfig, filterFactory } from '@sisense/sdk-data';
-import { SearchableSingleSelect } from '../common/select/searchable-single-select';
 import { usePrevious } from '@/common/hooks/use-previous';
-import { useThemeContext } from '@/theme-provider';
-import { Member } from '@/filters';
 import { isIncludeMembersFilter } from '@/filters/components/filter-editor-popover/utils';
-import { ScrollWrapperOnScrollEvent } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
+import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
   return members.length
@@ -24,41 +19,19 @@ type MembersFilterData = {
 type MembersSectionProps = {
   filter: Filter;
   selected: boolean;
-  members: Member[];
   multiSelectEnabled: boolean;
   onChange: (filter: Filter | null) => void;
-  onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
-  showListLoader?: boolean;
 };
 
 /** @internal */
 export const MembersSection = (props: MembersSectionProps) => {
-  const { themeSettings } = useThemeContext();
-  const {
-    filter,
-    selected,
-    members,
-    multiSelectEnabled,
-    onChange,
-    onListScroll,
-    showListLoader = false,
-  } = props;
-  const { t } = useTranslation();
+  const { filter, selected, multiSelectEnabled, onChange } = props;
+
   const [selectedMembers, setSelectedMembers] = useState(
     isIncludeMembersFilter(filter) ? filter.members : [],
   );
+
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
-  const selectItems = useMemo(() => {
-    let allMembers = members.map((member) => ({ value: member.key }));
-    if (isIncludeMembersFilter(filter) && filter.members.length) {
-      const selectedMembers = multiSelectEnabled ? filter.members : [filter.members[0]];
-      allMembers = [
-        ...selectedMembers.map((member) => ({ value: member })),
-        ...allMembers.filter((member) => !selectedMembers.includes(member.value)),
-      ];
-    }
-    return allMembers;
-  }, [multiSelectEnabled, members, filter]);
   const isMultiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
 
@@ -107,33 +80,15 @@ export const MembersSection = (props: MembersSectionProps) => {
       onSelect={handleSectionSelect}
       aria-label="Members section"
     >
-      {() =>
-        multiSelectEnabled ? (
-          <SearchableMultiSelect<string>
-            style={{ width: '320px' }}
-            values={selectedMembers}
-            placeholder={t('filterEditor.placeholders.selectFromList')}
-            items={selectItems}
-            onChange={handleMembersChange}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            onListScroll={onListScroll}
-            showListLoader={showListLoader}
-          />
-        ) : (
-          <SearchableSingleSelect<string>
-            style={{ width: '320px' }}
-            value={selectedMembers[0]}
-            placeholder={t('filterEditor.placeholders.selectFromList')}
-            items={selectItems}
-            onChange={handleMembersChange}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            onListScroll={onListScroll}
-            showListLoader={showListLoader}
-          />
-        )
-      }
+      {() => (
+        <MembersListSelect
+          width={320}
+          attribute={filter.attribute}
+          multiSelect={multiSelectEnabled}
+          selectedMembers={selectedMembers}
+          onChange={handleMembersChange}
+        />
+      )}
     </SelectableSection>
   );
 };

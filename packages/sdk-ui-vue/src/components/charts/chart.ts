@@ -2,6 +2,9 @@ import { defineComponent, type PropType } from 'vue';
 import { Chart as ChartPreact, type ChartProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
+// Note: uses direct reexport as a temporary workaround for getting the correct API docs
+export { ChartProps };
+
 /**
  * A Vue component used for easily switching chart types or rendering multiple series of different chart types.
  *

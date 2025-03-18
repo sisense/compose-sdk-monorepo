@@ -11,7 +11,6 @@ import {
   isScatter,
   isIndicator,
   isBoxplot,
-  isAreamap,
   isScattermap,
 } from '../chart-options-processor/translations/types';
 import { ChartType } from '../types';
@@ -19,7 +18,6 @@ import { translateBoxplotDataOptions } from './translate-boxplot-data-options';
 import {
   ChartDataOptions,
   CartesianChartDataOptions,
-  CartesianChartDataOptionsInternal,
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -31,8 +29,6 @@ import {
   TableDataOptions,
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
-  AreamapChartDataOptions,
-  AreamapChartDataOptionsInternal,
   ScattermapChartDataOptions,
   PivotTableDataOptions,
   PivotTableDataOptionsInternal,
@@ -50,6 +46,7 @@ import {
 import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
 import { translateRangeChartDataOptions } from './translate-range-data-options';
 import { TranslatableError } from '@/translation/translatable-error';
+import { translateCartesianChartDataOptions } from '@/chart/restructured-charts/helpers/cartesians/data-options';
 
 export function translateChartDataOptions(
   chartType: ChartType,
@@ -67,26 +64,12 @@ export function translateChartDataOptions(
     return translateBoxplotDataOptions(
       dataOptions as BoxplotChartDataOptions | BoxplotChartCustomDataOptions,
     );
-  } else if (isAreamap(chartType)) {
-    return translateAreamapDataOptions(dataOptions as AreamapChartDataOptions);
   } else if (isScattermap(chartType)) {
     return translateScattermapChartDataOptions(dataOptions as ScattermapChartDataOptions);
   } else if (isRange(chartType)) {
     return translateRangeChartDataOptions(dataOptions as RangeChartDataOptions);
   } else throw new TranslatableError('errors.unexpectedChartType', { chartType });
 }
-
-const translateCartesianChartDataOptions = (
-  cartesian: CartesianChartDataOptions,
-): CartesianChartDataOptionsInternal => {
-  return {
-    x: cartesian.category.map(normalizeColumn),
-    y: cartesian.value.map(normalizeMeasureColumn),
-    // breakBy may be undefined. If so, default to empty array
-    breakBy: cartesian.breakBy?.map(normalizeColumn) || [],
-    seriesToColorMap: cartesian.seriesToColorMap,
-  };
-};
 
 const translateCategoricalChartDataOptions = (
   categorical: CategoricalChartDataOptions,
@@ -144,15 +127,6 @@ const translateScatterChartDataOptions = (
   };
 };
 
-const translateAreamapDataOptions = (
-  dataOptions: AreamapChartDataOptions,
-): AreamapChartDataOptionsInternal => {
-  return {
-    geo: dataOptions.geo && normalizeColumn(dataOptions.geo[0]),
-    color: dataOptions.color && normalizeMeasureColumn(dataOptions.color[0]),
-  };
-};
-
 export function getAttributes(
   dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
@@ -165,8 +139,6 @@ export function getAttributes(
     targetDataOptionKeys = ['x', 'breakBy'];
   } else if (isBoxplot(chartType)) {
     targetDataOptionKeys = ['category', 'outliers'];
-  } else if (isAreamap(chartType)) {
-    targetDataOptionKeys = ['geo'];
   } else if (isScattermap(chartType)) {
     targetDataOptionKeys = ['locations'];
   }
@@ -199,8 +171,6 @@ export function getMeasures(
       'whiskerMax',
       'outliersCount',
     ];
-  } else if (isAreamap(chartType)) {
-    targetDataOptionKeys = ['color'];
   } else if (isScattermap(chartType)) {
     targetDataOptionKeys = ['size', 'colorBy', 'details'];
   }

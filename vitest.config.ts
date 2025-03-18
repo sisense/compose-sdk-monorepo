@@ -9,7 +9,7 @@ const config: ViteUserConfig = {
       all: true,
       provider: 'istanbul',
       include: ['src'],
-      exclude: ['src/__test-helpers__', 'src/**/__mocks__/**'],
+      exclude: ['src/__test-helpers__', 'src/**/__mocks__/**', 'src/**/*.test.ts'],
     },
   },
 };

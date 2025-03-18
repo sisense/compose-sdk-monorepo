@@ -5,7 +5,7 @@ export function addCopyright(map: leaflet.Map, mapUrl: string) {
       © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
       © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
       <strong>
-        <a href='https://www.mapbox.com/map-feedback/' target='_blank'>
+        <a href='https://www.mapbox.com/map-feedback/' target='_blank' aria-label='Improve this map (opens in a new tab)'>
           Improve this map
         </a>
       </strong>`;

@@ -4,7 +4,7 @@ title: WidgetByIdProps
 
 # Interface WidgetByIdProps
 
-Props for the [`WidgetById`](../fusion-assets/function.WidgetById.md) component
+Props for the [WidgetById](../fusion-assets/function.WidgetById.md) component
 
 ## Properties
 

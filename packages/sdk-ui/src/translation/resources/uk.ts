@@ -25,6 +25,11 @@ export const translation: TranslationDictionary = {
       filterAttributeNotFound: 'Атрибут фільтра "{{attributeName}}" не знайдено в даних',
       highlightAttributeNotFound: 'Атрибут виділення "{{attributeName}}" не знайдено в даних',
     },
+    optionsTranslation: {
+      invalidStyleOptions: "Недійсні параметри `styleOptions` для діаграми '{{chartType}}'",
+      invalidInternalDataOptions:
+        "Параметри `dataOptions` некоректно перетворені для діаграми '{{chartType}}'",
+    },
     themeNotFound: 'Тему з oid {{themeOid}} не знайдено на Sisense-сервері',
     paletteNotFound: 'Палітру "{{paletteName}}" не знайдено на Sisense-сервері',
     chartTypeNotSupported: 'Тип діаграми {{chartType}} не підтримується',
@@ -92,6 +97,10 @@ export const translation: TranslationDictionary = {
     drilldownNoInitialDimension:
       'Initial dimension має бути задано щоб використовувати drilldown з користувацькими компонентами',
     otherWidgetTypesNotSupported: 'Інші типи віджетів поки що не підтримуються',
+    dataBrowser: {
+      dimensionNotFound: 'Dimension з id {{dimensionId}} не знайдено',
+      attributeNotFound: 'Attribute з id {{attributeId}} не знайдено',
+    },
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',
@@ -285,6 +294,17 @@ export const translation: TranslationDictionary = {
     or: 'АБО',
     andOrFormulaApplied: 'Застосовано формулу І/АБО',
   },
+  attribute: {
+    datetimeName: {
+      years: 'Роки в {{columnName}}',
+      quarters: 'Квартали в {{columnName}}',
+      months: 'Місяці в {{columnName}}',
+      weeks: 'Тижні в {{columnName}}',
+      days: 'Дні в {{columnName}}',
+      hours: 'Години в {{columnName}}',
+      minutes: 'Хвилини в {{columnName}}',
+    },
+  },
   filterEditor: {
     buttons: {
       apply: 'Застосувати',
@@ -297,11 +317,13 @@ export const translation: TranslationDictionary = {
       allowMultiSelection: 'Дозволити вибір кількох значень для списків',
       from: 'Від',
       to: 'До',
+      includeCurrent: 'Включаючи поточний',
     },
     placeholders: {
       selectFromList: 'Виберіть зі списку',
       enterEntry: 'Введіть значення...',
       enterValue: 'Введіть значення...',
+      select: 'Вибрати',
     },
     conditions: {
       exclude: 'Не є',
@@ -319,10 +341,29 @@ export const translation: TranslationDictionary = {
       lessThanOrEqual: 'Менше або дорівнює',
       greaterThan: 'Більше ніж',
       greaterThanOrEqual: 'Більше або дорівнює',
+      isWithin: 'В межах',
     },
     validationErrors: {
       invalidNumber: 'Тільки цифри',
       invalidNumericRange: '"До" має бути більше, ніж "Від"',
+    },
+    datetimeLevels: {
+      year: 'Year',
+      quarter: 'Quarter',
+      month: 'Month',
+      week: 'Week',
+      day: 'Day',
+      aggrigatedHour: 'Hour (aggregated)',
+      aggrigatedMinutesRoundTo15: '15-min (aggregated)',
+    },
+    relativeTypes: {
+      last: 'Останній',
+      this: 'Поточний',
+      next: 'Наступний',
+    },
+    datetimePositions: {
+      before: 'Перед',
+      after: 'Після',
     },
   },
   pivotTable: {

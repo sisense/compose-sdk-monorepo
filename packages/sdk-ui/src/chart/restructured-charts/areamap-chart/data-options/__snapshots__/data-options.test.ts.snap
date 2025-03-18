@@ -1,0 +1,49 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`areamap - data options translators > translateDataOptionsToInternal > should return an object with geo and color properties 1`] = `
+{
+  "color": {
+    "color": {
+      "maxColor": "#ff0000",
+      "minColor": "#ffab03",
+      "steps": 9,
+      "type": "range",
+    },
+    "column": {
+      "__serializable": "DimensionalElement",
+      "aggregation": "sum",
+      "attribute": {
+        "__serializable": "DimensionalElement",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "desc": "",
+        "expression": "[Commerce.Cost]",
+        "name": "Cost",
+        "type": "numeric-attribute",
+      },
+      "dataSource": undefined,
+      "desc": "",
+      "name": "sum Cost",
+      "sort": 0,
+      "type": "basemeasure",
+    },
+    "enabled": true,
+  },
+  "geo": {
+    "column": {
+      "__serializable": "DimensionalElement",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "desc": "",
+      "expression": "[Country.Country]",
+      "name": "Country",
+      "type": "text-attribute",
+    },
+    "isColored": false,
+  },
+}
+`;

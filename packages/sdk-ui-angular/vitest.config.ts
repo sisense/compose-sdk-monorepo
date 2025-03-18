@@ -10,7 +10,12 @@ const config: ViteUserConfig = {
       },
     },
     coverage: {
-      exclude: ['src/lib/components', 'src/lib/sdk-ui.module.ts'],
+      exclude: [
+        'src/lib/components',
+        'src/lib/sdk-ui.module.ts',
+        'src/ai/lib/components',
+        'src/ai/lib/sdk-ai.module.ts',
+      ],
     },
   },
 };

@@ -30,36 +30,8 @@ export type {
   CategoricalWidgetType,
   TabularWidgetType,
 
-  // Components Props:
-  AreaChartProps,
-  BarChartProps,
-  ChartProps,
-  LineChartProps,
-  ColumnChartProps,
-  FunnelChartProps,
-  PolarChartProps,
-  ScatterChartProps,
-  PieChartProps,
-  TreemapChartProps,
-  SunburstChartProps,
-  IndicatorChartProps,
-  AreaRangeChartProps,
-  MemberFilterTileProps,
-  CriteriaFilterTileProps,
-  DateRangeFilterTileProps,
-  RelativeDateFilterTileProps,
-  ChartWidgetProps,
-  TableWidgetProps,
-  TableProps,
-  PivotTableProps,
-  DrilldownBreadcrumbsProps,
-  BoxplotChartProps,
-  AreamapChartProps,
-  ScattermapChartProps,
-  SisenseContextProviderProps,
-  DashboardWidgetProps,
-  WidgetByIdProps,
-  DashboardProps,
+  // Props:
+  CommonWidgetProps,
   WidgetProps,
 
   // Hooks/Composables Props:
@@ -188,14 +160,3 @@ export type {
   FilterVariant,
   CriteriaFilterType,
 } from '@sisense/sdk-ui-preact';
-
-// Re-exports redefined types from @sisense/sdk-ui-preact
-import type {
-  ContextMenuProps as ContextMenuPropsPreact,
-  ThemeProviderProps as ThemeProviderPropsPreact,
-  DashboardByIdProps as DashboardByIdPropsPreact,
-} from '@sisense/sdk-ui-preact';
-
-export type ContextMenuProps = Omit<ContextMenuPropsPreact, 'children'>;
-export type ThemeProviderProps = Omit<ThemeProviderPropsPreact, 'children'>;
-export type DashboardByIdProps = Omit<DashboardByIdPropsPreact, 'persist'>;

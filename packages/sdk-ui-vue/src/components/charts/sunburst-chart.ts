@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { SunburstChart as SunburstChartPreact } from '@sisense/sdk-ui-preact';
-import type { SunburstChartProps } from '@sisense/sdk-ui-preact';
+import type { SunburstChartProps as SunburstChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!SunburstChart | `SunburstChart`} component.
+ */
+export interface SunburstChartProps extends SunburstChartPropsPreact {}
 
 /**
  * A Vue component that wraps the SunburstChart Preact component for use in Vue applications.

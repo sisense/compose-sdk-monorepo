@@ -4,7 +4,7 @@ title: SunburstChartProps
 
 # Interface SunburstChartProps
 
-Props of the [`SunburstChart`](../../sdk-ui/charts/function.SunburstChart.md) component.
+Props of the [`SunburstChart`](../charts/class.SunburstChart.md) component.
 
 ## Properties
 

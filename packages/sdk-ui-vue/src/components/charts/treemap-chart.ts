@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { TreemapChart as TreemapChartPreact } from '@sisense/sdk-ui-preact';
-import type { TreemapChartProps } from '@sisense/sdk-ui-preact';
+import type { TreemapChartProps as TreemapChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!TreemapChart | `TreemapChart`} component.
+ */
+export interface TreemapChartProps extends TreemapChartPropsPreact {}
 
 /**
  * A Vue component displaying hierarchical data in the form of nested rectangles.

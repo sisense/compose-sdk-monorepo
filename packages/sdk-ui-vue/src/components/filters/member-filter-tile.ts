@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { MemberFilterTile as MemberFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { MemberFilterTileProps } from '@sisense/sdk-ui-preact';
+import type { MemberFilterTileProps as MemberFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!MemberFilterTile | `MemberFilterTile`} component.
+ */
+export interface MemberFilterTileProps extends MemberFilterTilePropsPreact {}
 
 /**
  * UI component that allows the user to select members to include/exclude in a

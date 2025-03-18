@@ -4,6 +4,8 @@ title: AreamapChartProps
 
 # Interface AreamapChartProps
 
+Props of the [AreamapChartComponent](../charts/class.AreamapChartComponent.md).
+
 ## Properties
 
 ### Data

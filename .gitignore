@@ -62,3 +62,4 @@ packages/sdk-*/vite.config.ts.timestamp-*
 
 .nx/cache
 .nx/workspace-data
+.swc

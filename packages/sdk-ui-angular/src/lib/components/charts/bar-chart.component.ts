@@ -6,6 +6,10 @@ import {
   WithoutPreactChartEventProps,
 } from '../../types/chart-event-props';
 import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+
+/**
+ * Props of the {@link BarChartComponent}.
+ */
 export interface BarChartProps
   extends WithoutPreactChartEventProps<BarChartPropsPreact>,
     RegularChartEventProps {}

@@ -88,7 +88,7 @@ export const ContentPanel = ({ layout, widgets }: ContentPanelProps) => {
 
                 return (
                   <Subcell
-                    key={`${subcell.widgetId},${subcell.widthPercentage}`}
+                    key={`${subcell.widgetId}`}
                     height={subcell.height || 0}
                     dividerWidth={themeSettings.dashboard.dividerLineWidth}
                     dividerColor={themeSettings.dashboard.dividerLineColor}

@@ -1,18 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
-import { Filter, filterFactory, isMembersFilter } from '@sisense/sdk-data';
+import { Filter } from '@sisense/sdk-data';
 import { IncludeAllSection } from './sections/include-all-section';
 import { MembersSection } from './sections/members-section';
 import { isIncludeAllFilter, isIncludeMembersFilter, isNumericBetweenFilter } from './utils';
 import { MultiSelectControl } from './multi-select-control';
 import { FilterEditorContainer } from './filter-editor-container';
 import { NumericRangeSection } from './sections/numeric-range-section';
-import { NumericAttributeStats, useGetAttributeStats } from './hooks/use-get-attribute-stats';
+import {
+  NumericAttributeStats,
+  useGetAttributeStats,
+} from '@/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
 import { NumericConditionSection } from './sections/numeric-condition-section';
 import { useThemeContext } from '@/theme-provider';
-import { ScrollWrapperOnScrollEvent } from './common/scroll-wrapper';
-import { useGetFilterMembers } from '@/filters';
-import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from './constants';
 
 enum FilterSections {
   ALL = 'all',
@@ -55,28 +55,6 @@ export const FilterEditorNumerical = ({ filter, onChange }: FilterEditorNumerica
   );
   const [multiSelectEnabled, setMultiSelectEnabled] = useState<boolean>(
     'enableMultiSelection' in filter.config ? filter.config.enableMultiSelection : true,
-  );
-
-  const filterToQueryMembers = useMemo(
-    () => (isMembersFilter(filter) ? filter : filterFactory.members(filter.attribute, [])),
-    [filter],
-  );
-  const {
-    data: membersData,
-    isLoading: membersLoading,
-    loadMore: loadMoreMembers,
-  } = useGetFilterMembers({
-    filter: filterToQueryMembers,
-    count: QUERY_MEMBERS_COUNT,
-  });
-
-  const handleMembersListScroll = useCallback(
-    ({ top, direction }: ScrollWrapperOnScrollEvent) => {
-      if (!membersLoading && top > LIST_SCROLL_LOAD_MORE_THRESHOLD && direction === 'down') {
-        loadMoreMembers(QUERY_MEMBERS_COUNT);
-      }
-    },
-    [loadMoreMembers, membersLoading],
   );
 
   const { data: attributeStats } = useGetAttributeStats<NumericAttributeStats>({
@@ -133,12 +111,9 @@ export const FilterEditorNumerical = ({ filter, onChange }: FilterEditorNumerica
       </Stack>
       <MembersSection
         filter={filter}
-        members={membersData?.allMembers || []}
         selected={selectedSection === FilterSections.MEMBERS}
         multiSelectEnabled={multiSelectEnabled}
         onChange={handleMembersSectionChange}
-        onListScroll={handleMembersListScroll}
-        showListLoader={membersLoading}
       />
       <NumericRangeSection
         filter={filter}
@@ -149,12 +124,9 @@ export const FilterEditorNumerical = ({ filter, onChange }: FilterEditorNumerica
       />
       <NumericConditionSection
         filter={filter}
-        members={membersData?.allMembers || []}
         selected={selectedSection === FilterSections.CONDITION}
         multiSelectEnabled={multiSelectEnabled}
         onChange={handleConditionSectionChange}
-        onListScroll={handleMembersListScroll}
-        showListLoader={membersLoading}
       />
     </FilterEditorContainer>
   );

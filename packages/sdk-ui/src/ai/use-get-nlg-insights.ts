@@ -62,6 +62,44 @@ export interface UseGetNlgInsightsState {
   refetch: () => void;
 }
 
+/** @internal */
+export function prepareGetNlgInsightsPayload(
+  params: UseGetNlgInsightsParams | GetNlgInsightsRequest,
+): GetNlgInsightsRequest {
+  if ('jaql' in params) {
+    return params;
+  } else {
+    const dataSource: JaqlDataSource = convertJaqlDataSource(params.dataSource);
+
+    const { filters = [], relations } = getFilterListAndRelationsJaql(params.filters);
+    const { metadata, filterRelations } = getJaqlQueryPayload(
+      {
+        dataSource: params.dataSource,
+        attributes: params.dimensions ?? [],
+        measures: params.measures ?? [],
+        filters,
+        filterRelations: relations,
+        highlights: [],
+      },
+      true,
+    );
+
+    const parameters: GetNlgInsightsRequest = {
+      jaql: {
+        datasource: dataSource,
+        metadata,
+        filterRelations,
+      },
+    };
+
+    if (params.verbosity) {
+      parameters.verbosity = params.verbosity;
+    }
+
+    return parameters;
+  }
+}
+
 /**
  *
  * @param params - {@link UseGetNlgInsightsParams}
@@ -73,38 +111,7 @@ export const useGetNlgInsightsInternal = (
   enabled = true,
 ): UseGetNlgInsightsState => {
   const payload: GetNlgInsightsRequest = useMemo(() => {
-    if ('jaql' in params) {
-      return params;
-    } else {
-      const dataSource: JaqlDataSource = convertJaqlDataSource(params.dataSource);
-
-      const { filters = [], relations } = getFilterListAndRelationsJaql(params.filters);
-      const { metadata, filterRelations } = getJaqlQueryPayload(
-        {
-          dataSource: params.dataSource,
-          attributes: params.dimensions ?? [],
-          measures: params.measures ?? [],
-          filters,
-          filterRelations: relations,
-          highlights: [],
-        },
-        true,
-      );
-
-      const parameters: GetNlgInsightsRequest = {
-        jaql: {
-          datasource: dataSource,
-          metadata,
-          filterRelations,
-        },
-      };
-
-      if (params.verbosity) {
-        parameters.verbosity = params.verbosity;
-      }
-
-      return parameters;
-    }
+    return prepareGetNlgInsightsPayload(params);
   }, [params]);
 
   const api = useChatApi();

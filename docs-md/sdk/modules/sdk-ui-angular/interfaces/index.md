@@ -6,6 +6,7 @@ title: Interfaces
 
 TypeScript interfaces for components and services listed above
 
+- [AiContextConfig](interface.AiContextConfig.md)
 - [AreaChartProps](interface.AreaChartProps.md)
 - [AreamapChartDataOptions](interface.AreamapChartDataOptions.md)
 - [AreamapChartProps](interface.AreamapChartProps.md)
@@ -20,6 +21,8 @@ TypeScript interfaces for components and services listed above
 - [CategoricalChartDataOptions](interface.CategoricalChartDataOptions.md)
 - [ChartProps](interface.ChartProps.md)
 - [ChartWidgetProps](interface.ChartWidgetProps.md)
+- [ChatbotProps](interface.ChatbotProps.md)
+- [ChatConfig](interface.ChatConfig.md)
 - [ColumnChartProps](interface.ColumnChartProps.md)
 - [CriteriaFilterTileProps](interface.CriteriaFilterTileProps.md)
 - [DashboardByIdProps](interface.DashboardByIdProps.md)
@@ -37,6 +40,10 @@ TypeScript interfaces for components and services listed above
 - [GetDashboardModelOptions](interface.GetDashboardModelOptions.md)
 - [GetDashboardModelsOptions](interface.GetDashboardModelsOptions.md)
 - [GetHierarchyModelsParams](interface.GetHierarchyModelsParams.md)
+- [GetNlgInsightsParams](interface.GetNlgInsightsParams.md)
+- [GetNlgInsightsProps](interface.GetNlgInsightsProps.md)
+- [GetNlqResultParams](interface.GetNlqResultParams.md)
+- [GetQueryRecommendationsParams](interface.GetQueryRecommendationsParams.md)
 - [GetWidgetModelParams](interface.GetWidgetModelParams.md)
 - [Hierarchy](interface.Hierarchy.md)
 - [HierarchyModel](interface.HierarchyModel.md)
@@ -72,7 +79,6 @@ TypeScript interfaces for components and services listed above
 - [TableDataOptions](interface.TableDataOptions.md)
 - [TableProps](interface.TableProps.md)
 - [TableStyleOptions](interface.TableStyleOptions.md)
-- [TableWidgetProps](interface.TableWidgetProps.md)
 - [ThemeSettings](interface.ThemeSettings.md)
 - [TreemapChartProps](interface.TreemapChartProps.md)
 - [TreemapStyleOptions](interface.TreemapStyleOptions.md)

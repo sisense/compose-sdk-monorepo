@@ -4,7 +4,7 @@ title: PolarChartProps
 
 # Interface PolarChartProps
 
-Props of the [`PolarChart`](../../sdk-ui/charts/function.PolarChart.md) component.
+Props of the [`PolarChart`](../charts/class.PolarChart.md) component.
 
 ## Properties
 

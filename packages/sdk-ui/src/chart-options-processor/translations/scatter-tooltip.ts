@@ -1,9 +1,4 @@
-import {
-  InternalSeries,
-  TooltipSettings,
-  formatTooltipValue,
-  formatTooltipXValue,
-} from './tooltip-utils';
+import { InternalSeries, TooltipSettings, formatTooltipValue } from './tooltip-utils';
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { getDataOptionTitle } from '../../chart-data-options/utils';
 
@@ -56,7 +51,7 @@ const buildSpans = (
   const { maskedX, maskedY, maskedBreakByPoint, maskedSize, maskedBreakByColor } = ctx.point
     .custom as ScatterCustomPointOptions;
 
-  const formatedX = formatTooltipXValue(dataOptions.x, ctx.point.x, maskedX);
+  const formatedX = formatTooltipValue(dataOptions.x, ctx.point.x, maskedX);
   const formatedY = formatTooltipValue(dataOptions.y, ctx.point.y, maskedY);
   const formatedSize = formatTooltipValue(dataOptions.size, ctx.point.z, maskedSize || '');
 

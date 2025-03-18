@@ -36,7 +36,6 @@ TypeScript type aliases for components and hooks listed above
 - [ChartStyleOptions](type-alias.ChartStyleOptions.md)
 - [ChartType](type-alias.ChartType.md)
 - [ChartWidgetStyleOptions](type-alias.ChartWidgetStyleOptions.md)
-- [ChatbotProps](type-alias.ChatbotProps.md)
 - [Color](type-alias.Color.md)
 - [ColorPaletteTheme](type-alias.ColorPaletteTheme.md)
 - [CommonFiltersOptions](type-alias.CommonFiltersOptions.md)

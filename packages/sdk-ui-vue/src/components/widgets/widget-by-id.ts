@@ -1,9 +1,14 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { WidgetById as WidgetByIdPreact } from '@sisense/sdk-ui-preact';
-import type { WidgetByIdProps } from '@sisense/sdk-ui-preact';
+import type { WidgetByIdProps as WidgetByIdPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 import type { ChartWidget } from './chart-widget';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!WidgetById | `WidgetById`} component.
+ */
+export interface WidgetByIdProps extends WidgetByIdPropsPreact {}
 
 /**
  * The `WidgetById` component, which is a thin wrapper on the {@link ChartWidget} component,

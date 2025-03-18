@@ -1,8 +1,8 @@
-import { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { ArrowDownIcon } from '../../../icons';
 import { SelectItem } from './types';
-import { SelectContainer, SelectLabel } from './base';
+import { SelectField, SelectLabel } from './base';
 import { getSelectedItemsDisplayValue } from './utils';
 import { MultiSelectItem } from './multi-select-item';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { DEFAULT_TEXT_COLOR } from '@/const';
 import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
 import { Popper } from '@/common/components/popper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { StyledSearchInput } from '@/filters/components/filter-editor-popover/common/select/searchable-single-select';
 
 const Content = styled.div`
   max-height: 320px;
@@ -53,6 +54,8 @@ type SearchableMultiSelectProps<Value> = {
   primaryBackgroundColor?: string;
   onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
   showListLoader?: boolean;
+  showSearch?: boolean;
+  onSearchUpdate?: (searchValue: string) => void;
 };
 
 /** @internal */
@@ -66,11 +69,12 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
     primaryBackgroundColor,
     onListScroll,
     showListLoader = false,
+    showSearch = true,
+    onSearchUpdate,
   } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
-
   const values = useMemo(() => props.values || [], [props.values]);
 
   const handleItemSelect = useCallback(
@@ -93,32 +97,59 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
   const handleClearAll = useCallback(() => {
     onChange?.([]);
   }, [onChange]);
+
+  const onClose = useCallback(() => {
+    setOpen(false);
+    onSearchUpdate?.('');
+  }, [onSearchUpdate]);
+
+  const onContainerClick = useCallback(() => {
+    if (open) {
+      onClose();
+    } else {
+      setOpen(true);
+    }
+  }, [open, onClose]);
   return (
-    <ClickAwayListener onClickAway={() => setOpen(false)}>
+    <ClickAwayListener onClickAway={onClose}>
       <div>
-        <SelectContainer
-          ref={selectElementRef}
-          focus={open}
-          onClick={() => setOpen((isOpen) => !isOpen)}
-          style={{
-            ...style,
-            ...(primaryColor && { color: primaryColor }),
-            ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-          }}
-          aria-label="Searchable multi-select"
-        >
-          <SelectLabel style={{ opacity: values.length ? '100%' : '50%' }} aria-label="Value">
-            {getSelectedItemsDisplayValue(items, values) ?? placeholder}
-          </SelectLabel>
-          <ArrowDownIcon
-            fill={primaryColor || DEFAULT_TEXT_COLOR}
-            aria-label="Open icon"
+        <div style={{ position: 'relative' }}>
+          <SelectField
+            ref={selectElementRef}
+            focus={open}
+            onClick={onContainerClick}
             style={{
-              minWidth: '24px',
-              transform: `rotate(${open ? 180 : 0}deg)`,
+              ...style,
+              ...(primaryColor && { color: primaryColor }),
+              ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
             }}
-          />
-        </SelectContainer>
+            aria-label="Searchable multi-select"
+          >
+            <SelectLabel style={{ opacity: values.length ? '100%' : '50%' }} aria-label="Value">
+              {getSelectedItemsDisplayValue(items, values) ?? placeholder}
+            </SelectLabel>
+            <ArrowDownIcon
+              fill={primaryColor || DEFAULT_TEXT_COLOR}
+              aria-label="Open icon"
+              style={{
+                minWidth: '24px',
+                transform: `rotate(${open ? 180 : 0}deg)`,
+              }}
+            />
+          </SelectField>
+          {showSearch && open && (
+            <StyledSearchInput
+              inputRef={(input) => input?.focus()}
+              backgroundColor={primaryBackgroundColor}
+              color={primaryColor}
+              placeholder={t('filterEditor.placeholders.enterValue')}
+              onChange={(e) => {
+                onSearchUpdate?.(e.target.value);
+              }}
+              aria-label="Value input"
+            />
+          )}
+        </div>
         <Popper open={open} anchorEl={selectElementRef.current} style={{ maxHeight: 300 }}>
           <ScrollWrapper onScroll={onListScroll}>
             <Content

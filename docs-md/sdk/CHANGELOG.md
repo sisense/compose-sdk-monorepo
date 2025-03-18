@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.32.0] - 2025-03-18
+
+### Added
+- Add AI and `Chatbot` functionality into Angular
+- Add support for columns and rows in "Break By"
+- Add search for `FilterEditorPopover` members lists for internal testing
+- Add datetime fields support in `FilterEditorPopover` component for internal testing
+- Add Tabber widget support for internal testing
+- Add basic `GroupedItemsBrowser` and `DimensionsBrowser` components for internal testing
+
+### Changed
+- Update the `MembersFilterTile` UI to reflect the `enableMultiSelection` filter option
+- Fixed triggering of the component/hook init tracking event when the app initializes
+- Improve Widget Embed Code: update code templates
+- Improve charts: align text widget spacing with other widgets and unify tooltip formatting
+- Improve accessibility: add labels to links that open in a new tab for assistive technology
+- Improve testing: update visual tests to match new Fusion theme color, update unit test for Table chart
+
 ## [1.31.0] - 2025-03-04
 
 ### Added

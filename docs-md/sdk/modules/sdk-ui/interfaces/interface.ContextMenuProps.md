@@ -4,7 +4,7 @@ title: ContextMenuProps
 
 # Interface ContextMenuProps
 
-Props for ContextMenu component.
+Props of the [ContextMenu](../drilldown/function.ContextMenu.md) component.
 
 ## Properties
 

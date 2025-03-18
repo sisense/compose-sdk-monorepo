@@ -1,7 +1,6 @@
 import {
   PolarStyleOptions,
   PieStyleOptions,
-  StackableStyleOptions,
   LineStyleOptions,
   FunnelStyleOptions,
   ChartType,
@@ -12,15 +11,17 @@ import {
   TreemapStyleOptions,
   SunburstStyleOptions,
   BoxplotStyleOptions,
-  AreamapStyleOptions,
   ScattermapStyleOptions,
 } from '../../types';
 import { DesignOptions } from '../translations/types';
 import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
-import { ChartDataOptionsInternal, ValueStyle } from '../../chart-data-options/types';
+import {
+  CartesianChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+  ValueStyle,
+} from '../../chart-data-options/types';
 import { getIndicatorChartDesignOptions } from './translate-to-indicator-options';
 import {
-  getStackableChartDesignOptions,
   getLineChartDesignOptions,
   getPieChartDesignOptions,
   getFunnelChartDesignOptions,
@@ -33,7 +34,6 @@ import {
   getScattermapChartDesignOptions,
 } from './translate-to-highcharts-options';
 import { TranslatableError } from '../../translation/translatable-error';
-import { getAreamapChartDesignOptions } from './translate-to-areamap-options';
 
 export const translateStyleOptionsToDesignOptions = (
   chartType: ChartType,
@@ -47,19 +47,10 @@ export const translateStyleOptionsToDesignOptions = (
 
   let intermediateDesignOptions: DesignOptions;
   switch (chartType) {
-    case 'bar':
-    case 'column':
-      intermediateDesignOptions = getStackableChartDesignOptions(
-        styleOptions as StackableStyleOptions,
-        dataOptions,
-        hasY2Axis,
-        chartType,
-      );
-      break;
     case 'area':
       intermediateDesignOptions = getAreaChartDesignOptions(
         styleOptions as AreaStyleOptions,
-        dataOptions,
+        dataOptions as CartesianChartDataOptionsInternal,
         hasY2Axis,
       );
       break;
@@ -67,7 +58,7 @@ export const translateStyleOptionsToDesignOptions = (
     case 'line':
       intermediateDesignOptions = getLineChartDesignOptions(
         styleOptions as LineStyleOptions,
-        dataOptions,
+        dataOptions as CartesianChartDataOptionsInternal,
         hasY2Axis,
       );
       break;
@@ -88,7 +79,7 @@ export const translateStyleOptionsToDesignOptions = (
     case 'polar':
       intermediateDesignOptions = getPolarChartDesignOptions(
         styleOptions as PolarStyleOptions,
-        dataOptions,
+        dataOptions as CartesianChartDataOptionsInternal,
       );
       break;
     case 'indicator':
@@ -101,9 +92,6 @@ export const translateStyleOptionsToDesignOptions = (
       break;
     case 'boxplot':
       intermediateDesignOptions = getBoxplotChartDesignOptions(styleOptions as BoxplotStyleOptions);
-      break;
-    case 'areamap':
-      intermediateDesignOptions = getAreamapChartDesignOptions(styleOptions as AreamapStyleOptions);
       break;
     case 'scattermap':
       intermediateDesignOptions = getScattermapChartDesignOptions(

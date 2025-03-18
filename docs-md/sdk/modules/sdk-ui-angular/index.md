@@ -86,6 +86,14 @@ Angular modules, services, and components for working with Fusion dashboards, wi
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetService](fusion-assets/class.WidgetService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
+## Generative AI
+
+- [AI\_CONTEXT\_CONFIG\_TOKEN](generative-ai/variable.AI_CONTEXT_CONFIG_TOKEN.md) <Badge type="beta" text="Beta" />
+- [AiService](generative-ai/class.AiService.md) <Badge type="beta" text="Beta" />
+- [ChatbotComponent](generative-ai/class.ChatbotComponent.md) <Badge type="beta" text="Beta" /> - Angular component that renders a chatbot with data topic selection.
+- [GetNlgInsightsComponent](generative-ai/class.GetNlgInsightsComponent.md) <Badge type="beta" text="Beta" /> - Angular component that displays NLG insights.
+- [SdkAiModule](generative-ai/class.SdkAiModule.md) <Badge type="beta" text="Beta" />
+
 ## Namespaces
 
 - [dashboardHelpers](namespaces/namespace.dashboardHelpers/index.md)

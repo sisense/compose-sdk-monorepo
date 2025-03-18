@@ -4,7 +4,7 @@ title: BoxplotChartProps
 
 # Interface BoxplotChartProps
 
-Props of the [BoxplotChart](../charts/class.BoxplotChart.md) component.
+Props of the [`BoxplotChart`](../charts/class.BoxplotChart.md) component.
 
 ## Properties
 

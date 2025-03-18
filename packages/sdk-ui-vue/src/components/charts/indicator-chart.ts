@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { IndicatorChart as IndicatorChartPreact } from '@sisense/sdk-ui-preact';
-import type { IndicatorChartProps } from '@sisense/sdk-ui-preact';
+import type { IndicatorChartProps as IndicatorChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!IndicatorChart | `IndicatorChart`} component.
+ */
+export interface IndicatorChartProps extends IndicatorChartPropsPreact {}
 
 /**
  * A Vue component that provides various options for displaying one or two numeric values as a number, gauge or ticker.

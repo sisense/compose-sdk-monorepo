@@ -16,6 +16,16 @@ Default data source to use if filter does not have one
 
 ***
 
+### enabled
+
+> **enabled**?: `boolean`
+
+Boolean flag to control if the hook is executed
+
+If not specified, the default value is `true`
+
+***
+
 ### filter
 
 > **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)

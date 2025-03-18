@@ -330,4 +330,9 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
   }
 
   // ------------------------------------------------------
+
+  .react-datepicker__day--highlighted {
+    background-color: ${({ theme }) => theme.general.brandColor};
+    color: ${({ theme }) => theme.typography.primaryTextColor};
+  }
 `;

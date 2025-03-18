@@ -3,7 +3,7 @@ import { Focusable } from './types';
 import { getSlightlyDifferentColor } from '@/utils/color';
 import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from '@/const';
 
-export const SelectContainer = styled.div<Focusable>`
+export const SelectField = styled.div<Focusable>`
   box-sizing: border-box;
   display: inline-flex;
   flex-direction: row;

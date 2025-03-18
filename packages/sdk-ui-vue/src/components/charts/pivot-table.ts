@@ -4,6 +4,9 @@ import { PivotTable as PivotTablePreact } from '@sisense/sdk-ui-preact';
 import type { PivotTableProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
+// Note: uses direct reexport as a temporary workaround for getting the correct API docs
+export { PivotTableProps };
+
 /**
  * A Vue component for Pivot table with pagination.
  *

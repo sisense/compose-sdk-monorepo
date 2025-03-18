@@ -4,6 +4,8 @@ title: TreemapChartProps
 
 # Interface TreemapChartProps
 
+Props of the [TreemapChartComponent](../charts/class.TreemapChartComponent.md).
+
 ## Properties
 
 ### Data

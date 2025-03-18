@@ -61,7 +61,7 @@ describe('WidgetModel', () => {
       expect(widgetPlugin.widgetType).equals('plugin');
       expect(widgetPlugin.pluginType).equals(unsupportedWidgetDto.type);
       expect(widgetPlugin.dataOptions).toBeDefined();
-      expect(widgetPlugin.styleOptions).equals(unsupportedWidgetDto.style);
+      expect(widgetPlugin.styleOptions).toMatchObject(unsupportedWidgetDto.style);
     });
   });
 

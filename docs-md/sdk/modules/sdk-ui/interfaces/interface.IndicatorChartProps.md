@@ -4,7 +4,7 @@ title: IndicatorChartProps
 
 # Interface IndicatorChartProps
 
-Props of the [`IndicatorChart`](../charts/function.IndicatorChart.md) component.
+Props of the [IndicatorChart](../charts/function.IndicatorChart.md) component.
 
 ## Properties
 

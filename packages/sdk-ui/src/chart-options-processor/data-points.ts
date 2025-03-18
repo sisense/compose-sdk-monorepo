@@ -22,7 +22,7 @@ import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from './translations/number-format-config';
-import { formatDateTimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
+import { formatDatetimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
 import { getDefaultDateFormat } from './translations/axis-section';
 import { applyDateFormat } from '@/query/date-formats';
 import { getDataOptionGranularity } from '@/chart-data-options/utils';
@@ -49,7 +49,7 @@ function createFormatter(dataOption: StyledColumn | StyledMeasureColumn) {
     // todo: connect "app?.settings.locale" and "app?.settings.dateConfig" configurations
     const dateFormatter = (date: Date, format: string) => applyDateFormat(date, format);
     formatter = (value: Date | string) =>
-      formatDateTimeString(isDate(value) ? value.toISOString() : value, dateFormatter, dateFormat);
+      formatDatetimeString(isDate(value) ? value.toISOString() : value, dateFormatter, dateFormat);
   }
 
   return (value?: number | string | Date) => {

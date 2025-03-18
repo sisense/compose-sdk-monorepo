@@ -24,6 +24,9 @@ import {
 } from '../component-wrapper-helpers';
 import { template, rootId } from '../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link DrilldownBreadcrumbsComponent}.
+ */
 export interface DrilldownBreadcrumbsProps
   extends Omit<DrilldownBreadcrumbsPropsPreact, 'clearDrilldownSelections'> {
   drilldownSelectionsClear?: () => void;

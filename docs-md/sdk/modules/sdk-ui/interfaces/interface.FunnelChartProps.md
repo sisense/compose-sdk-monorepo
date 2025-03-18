@@ -4,7 +4,7 @@ title: FunnelChartProps
 
 # Interface FunnelChartProps
 
-Props of the [`FunnelChart`](../charts/function.FunnelChart.md) component.
+Props of the [FunnelChart](../charts/function.FunnelChart.md) component.
 
 ## Properties
 

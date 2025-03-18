@@ -1,5 +1,5 @@
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
-import { DashboardStyleOptions, WidgetModel } from '@/models';
+import { DashboardStyleOptions, TabbersOptions, WidgetModel } from '@/models';
 import { type WidgetsOptions } from './types';
 import { DashboardLayoutOptions } from '@/dashboard';
 
@@ -57,4 +57,11 @@ export interface DashboardModel {
    * @internal
    */
   widgetsOptions: WidgetsOptions;
+
+  /**
+   * Tabber configurations for the dashboard.
+   *
+   * @internal
+   */
+  tabbersOptions?: TabbersOptions;
 }

@@ -6,7 +6,6 @@ import { LineType, StackType } from './translations-to-highcharts';
 import { PieType, PieLabels } from './pie-plot-options';
 import { FunnelSize, FunnelType, FunnelDirection, FunnelLabels } from './funnel-plot-options';
 import {
-  AreamapType,
   Convolution,
   ScattermapMarkers,
   SunburstStyleOptions,
@@ -85,13 +84,6 @@ export type SunburstChartDesignOptions = BaseDesignOptionsType & SunburstStyleOp
 
 export type ScatterChartDesignOptions = BaseDesignOptionsType & {
   markerSize?: ScatterMarkerSize;
-};
-
-/**
- * Configuration for Areamap design options
- */
-export type AreamapChartDesignOptions = BaseDesignOptionsType & {
-  mapType: AreamapType;
 };
 
 /**

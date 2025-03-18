@@ -27,6 +27,10 @@ composes them into a coordinated dashboard with change detection, cross filterin
 
 **dashboard**: `D`
 
+### `layoutOptions`
+
+**layoutOptions**: [`DashboardLayoutOptions`](../interfaces/interface.DashboardLayoutOptions.md)
+
 ### `setFilters`
 
 **setFilters**: (`filters`) => `void`
@@ -36,6 +40,20 @@ composes them into a coordinated dashboard with change detection, cross filterin
 | Parameter | Type |
 | :------ | :------ |
 | `filters` | [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] |
+
+#### Returns
+
+`void`
+
+### `setWidgetsLayout`
+
+**setWidgetsLayout**: (`newLayout`) => `void`
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `newLayout` | [`WidgetsPanelColumnLayout`](../interfaces/interface.WidgetsPanelColumnLayout.md) |
 
 #### Returns
 

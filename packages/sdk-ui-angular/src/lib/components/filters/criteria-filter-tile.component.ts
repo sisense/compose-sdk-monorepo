@@ -24,6 +24,9 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link CriteriaFilterTileComponent}.
+ */
 export interface CriteriaFilterTileProps extends Omit<CriteriaFilterTilePropsPreact, 'onUpdate'> {
   filterChange?: (filter: Arguments<CriteriaFilterTilePropsPreact['onUpdate']>[0]) => void;
 }

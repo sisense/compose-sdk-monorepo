@@ -14,9 +14,9 @@ import type {
   GetNlqResultRequest,
   NlqResult,
 } from './types';
-import { DataSourceField } from '@sisense/sdk-data';
 import { ChatContextDetails } from '@/ai/api/types';
 
+/** @internal */
 export class ChatRestApi {
   private httpClient: HttpClient;
 
@@ -81,24 +81,12 @@ export class ChatRestApi {
     return this.httpClient.post('api/v2/ai/feedback', request);
   };
 
-  // ==== misc endpoints ====
-  private getDataSourceFields = (dataSource: string) => {
-    return this.httpClient.post<DataSourceField[]>(
-      `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
-      {
-        offset: 0,
-        count: 9999,
-      },
-    );
-  };
-
   ai = {
     getNlgInsights: this.getNlgInsights,
     getNlqResult: this.getNlqResult,
     getQueryRecommendations: this.getQueryRecommendations,
     setLlmConfig: this.setLlmConfig,
     sendFeedback: this.sendFeedback,
-    getDataSourceFields: this.getDataSourceFields,
     chat: {
       getAll: this.getAllChats,
       getById: this.getChatById,

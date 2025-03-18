@@ -4,6 +4,8 @@ title: LineChartProps
 
 # Interface LineChartProps
 
+Props of the [LineChartComponent](../charts/class.LineChartComponent.md).
+
 ## Properties
 
 ### Data

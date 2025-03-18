@@ -1,8 +1,14 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { CriteriaFilterTile as CriteriaFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { CriteriaFilterTileProps } from '@sisense/sdk-ui-preact';
+import type { CriteriaFilterTileProps as CriteriaFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!CriteriaFilterTile | `CriteriaFilterTile`} component.
+ */
+export interface CriteriaFilterTileProps extends CriteriaFilterTilePropsPreact {}
+
 /**
  * UI component that allows the user to filter numeric or text attributes according to
  * a number of built-in operations defined in the numeric filter, text filter, or ranking filter.

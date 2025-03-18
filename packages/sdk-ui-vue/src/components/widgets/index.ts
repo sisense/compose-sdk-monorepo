@@ -1,4 +1,4 @@
-export { ChartWidget } from './chart-widget';
-export { DashboardWidget } from './dashboard-widget';
-export { WidgetById } from './widget-by-id';
-export { TableWidget } from './table-widget';
+export { ChartWidget, type ChartWidgetProps } from './chart-widget';
+export { DashboardWidget, type DashboardWidgetProps } from './dashboard-widget';
+export { WidgetById, type WidgetByIdProps } from './widget-by-id';
+export { TableWidget, type TableWidgetProps } from './table-widget';

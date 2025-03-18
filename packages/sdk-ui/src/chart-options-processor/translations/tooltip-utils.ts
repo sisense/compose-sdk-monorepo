@@ -4,12 +4,10 @@ import { applyFormat, getCompleteNumberFormatConfig } from './number-format-conf
 import type { SeriesChartType } from '@/types';
 import { isMeasureColumn } from '@/chart-data-options/utils.js';
 
-export const isXValueNumeric = (dataOptionX: StyledMeasureColumn | StyledColumn | undefined) =>
-  dataOptionX
-    ? isMeasureColumn(dataOptionX) || (dataOptionX.column.type && isNumber(dataOptionX.column.type))
-    : false;
+export const isValueNumeric = (value: StyledMeasureColumn | StyledColumn | undefined) =>
+  value ? isMeasureColumn(value) || (value.column.type && isNumber(value.column.type)) : false;
 
-export const formatTooltipValue = (
+const formatNumericTooltipValue = (
   dataOption: StyledMeasureColumn | StyledColumn | undefined,
   value: number | undefined,
   displayValue: string,
@@ -20,15 +18,15 @@ export const formatTooltipValue = (
   return applyFormat(numberFormatConfig, value);
 };
 
-export const formatTooltipXValue = (
+export const formatTooltipValue = (
   dataOption: StyledMeasureColumn | StyledColumn | undefined,
   value: number | string | undefined,
   displayValue: string,
 ) => {
-  const isNumeric = isXValueNumeric(dataOption);
+  const isNumeric = isValueNumeric(dataOption);
 
   return isNumeric
-    ? formatTooltipValue(dataOption, parseFloat(`${value}`), displayValue)
+    ? formatNumericTooltipValue(dataOption, parseFloat(`${value}`), displayValue)
     : displayValue;
 };
 

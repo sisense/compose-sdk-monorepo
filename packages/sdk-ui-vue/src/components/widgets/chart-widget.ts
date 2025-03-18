@@ -6,6 +6,9 @@ import { setupHelper } from '../../setup-helper';
 import type { Chart } from '../charts';
 import type DrilldownWidget from '../drilldown-widget.vue';
 
+// Note: uses direct reexport as a temporary workaround for getting the correct API docs
+export { ChartWidgetProps };
+
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.
  * It can be used along with the {@link DrilldownWidget} component to support advanced data drilldown.

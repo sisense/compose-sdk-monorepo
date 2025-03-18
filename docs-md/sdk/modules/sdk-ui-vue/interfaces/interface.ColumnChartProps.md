@@ -4,7 +4,7 @@ title: ColumnChartProps
 
 # Interface ColumnChartProps
 
-Props of the [ColumnChart](../charts/class.ColumnChart.md) component.
+Props of the [`ColumnChart`](../charts/class.ColumnChart.md) component.
 
 ## Properties
 

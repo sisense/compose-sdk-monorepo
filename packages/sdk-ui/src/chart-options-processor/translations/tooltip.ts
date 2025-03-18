@@ -7,7 +7,6 @@ import {
   InternalSeries,
   TooltipSettings,
   formatTooltipValue,
-  formatTooltipXValue,
   isTooltipPercentValueSupported,
 } from './tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './scatter-tooltip';
@@ -42,7 +41,7 @@ export const cartesianDataFormatter = function (
 
   const maskedX = that.point?.custom?.xDisplayValue ?? that.x;
   const x1Value = cartesianChartDataOptions.x
-    ? formatTooltipXValue(cartesianChartDataOptions.x[0], that.x, maskedX)
+    ? formatTooltipValue(cartesianChartDataOptions.x[0], that.x, maskedX)
     : maskedX;
 
   let x2Value = undefined;
@@ -52,7 +51,7 @@ export const cartesianDataFormatter = function (
     cartesianChartDataOptions.x.length === 2
   ) {
     const maskedX1 = `${that.point.custom.xValue[0]}`; // X2 is in position xValue[0]
-    x2Value = formatTooltipXValue(cartesianChartDataOptions.x[1], maskedX1, maskedX1);
+    x2Value = formatTooltipValue(cartesianChartDataOptions.x[1], maskedX1, maskedX1);
   }
 
   const value = yValue + (isPercentValueSupported && percentage ? ` / ${percentage}%` : '');

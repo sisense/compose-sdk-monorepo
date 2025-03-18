@@ -4,6 +4,8 @@ title: AreaRangeChartProps
 
 # Interface AreaRangeChartProps
 
+Props of the [AreaRangeChartComponent](../charts/class.AreaRangeChartComponent.md).
+
 ## Properties
 
 ### Data

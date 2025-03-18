@@ -1,9 +1,16 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { DashboardWidget as DashboardWidgetPreact } from '@sisense/sdk-ui-preact';
-import type { DashboardWidgetProps } from '@sisense/sdk-ui-preact';
+import type { DashboardWidgetProps as DashboardWidgetPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 import type { ChartWidget } from './chart-widget';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!DashboardWidget | `DashboardWidget`} component.
+ *
+ * @deprecated Use {@link @sisense/sdk-ui-vue!WidgetById | `WidgetById`} and {@link @sisense/sdk-ui-vue!WidgetByIdProps | `WidgetByIdProps`} instead
+ */
+export interface DashboardWidgetProps extends DashboardWidgetPropsPreact {}
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -28,6 +35,7 @@ import type { ChartWidget } from './chart-widget';
  * </script>
  * ```
  * @group Fusion Assets
+ * @deprecated use the WidgetById component instead
  * @fusionEmbed
  */
 export const DashboardWidget = defineComponent({

@@ -4,7 +4,7 @@ title: ScattermapChartProps
 
 # Interface ScattermapChartProps
 
-Props of the [`ScattermapChart`](../charts/function.ScattermapChart.md) component.
+Props of the [ScattermapChart](../charts/function.ScattermapChart.md) component.
 
 ## Properties
 

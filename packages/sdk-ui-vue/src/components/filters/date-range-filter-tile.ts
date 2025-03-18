@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { DateRangeFilterTile as DateRangeFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { DateRangeFilterTileProps } from '@sisense/sdk-ui-preact';
+import type { DateRangeFilterTileProps as DateRangeFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!DateRangeFilterTile | `DateRangeFilterTile`} component.
+ */
+export interface DateRangeFilterTileProps extends DateRangeFilterTilePropsPreact {}
 
 /**
  * Date Range Filter Tile component for filtering data by date range.

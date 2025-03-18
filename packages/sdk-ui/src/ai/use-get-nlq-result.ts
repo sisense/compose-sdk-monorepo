@@ -7,12 +7,9 @@ import { widgetComposer } from '@/analytics-composer';
 import { WidgetProps } from '@/props';
 import { DataSource } from '@sisense/sdk-data';
 import { HookEnableParam } from '@/common/hooks/types';
-import { NLQ_RESULT_CHART_TYPES, NlqResultChartType } from './api/types';
+import { GetNlqResultRequest, NLQ_RESULT_CHART_TYPES, NlqResultChartType } from './api/types';
 
-/**
- * Parameters for {@link useGetNlqResult} hook.
- */
-export interface UseGetNlqResultParams extends HookEnableParam {
+export interface GetNlqResultParams {
   /** Data source for queries to run against */
   dataSource: DataSource;
 
@@ -30,6 +27,30 @@ export interface UseGetNlqResultParams extends HookEnableParam {
    */
   enableAxisTitlesInWidgetProps?: boolean;
 }
+
+/** @internal */
+export function prepareGetNlqResultPayload(params: GetNlqResultParams): {
+  contextTitle: string;
+  request: GetNlqResultRequest;
+} {
+  const { dataSource, query, chartTypes } = params;
+  const dataSourceTitle = typeof dataSource === 'string' ? dataSource : dataSource.title;
+
+  return {
+    contextTitle: dataSourceTitle,
+    request: {
+      text: query,
+      // Timezone is not used by AI API, but it is currently required by the endpoint
+      timezone: 'UTC',
+      chartTypes: chartTypes ?? [...NLQ_RESULT_CHART_TYPES],
+    },
+  };
+}
+
+/**
+ * Parameters for {@link useGetNlqResult} hook.
+ */
+export interface UseGetNlqResultParams extends GetNlqResultParams, HookEnableParam {}
 
 /**
  * State for {@link useGetNlqResult} hook.
@@ -54,20 +75,12 @@ export interface UseGetNlqResultState {
  * @internal
  */
 export const useGetNlqResultInternal = (params: UseGetNlqResultParams): UseGetNlqResultState => {
-  const { dataSource, query, chartTypes } = params;
-  const dataSourceTitle = typeof dataSource === 'string' ? dataSource : dataSource.title;
-
+  const { contextTitle, request } = prepareGetNlqResultPayload(params);
   const api = useChatApi();
 
   const { isLoading, isError, isSuccess, data, error, refetch } = useQuery({
-    queryKey: ['getNlqResult', dataSource, query, chartTypes, api],
-    queryFn: () =>
-      api?.ai.getNlqResult(dataSourceTitle, {
-        text: query,
-        // Per @Einat Shusterman: Timezone is not used by AI API, but it is currently required by the endpoint
-        timezone: 'UTC',
-        chartTypes: chartTypes ?? [...NLQ_RESULT_CHART_TYPES],
-      }),
+    queryKey: ['getNlqResult', contextTitle, request, api],
+    queryFn: () => api?.ai.getNlqResult(contextTitle, request),
     enabled: !!api && params.enabled,
   });
 

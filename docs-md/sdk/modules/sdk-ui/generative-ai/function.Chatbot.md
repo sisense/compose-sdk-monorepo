@@ -16,7 +16,7 @@ This component is currently under beta release for our managed cloud customers o
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `props` | [`ChatbotProps`](../type-aliases/type-alias.ChatbotProps.md) | [ChatbotProps](../type-aliases/type-alias.ChatbotProps.md) |
+| `props` | [`ChatbotProps`](../interfaces/interface.ChatbotProps.md) | [ChatbotProps](../interfaces/interface.ChatbotProps.md) |
 
 ## Returns
 

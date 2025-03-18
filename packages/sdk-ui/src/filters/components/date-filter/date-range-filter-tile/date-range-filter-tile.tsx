@@ -8,6 +8,9 @@ import { useDateLimits } from './use-date-limits';
 import { cloneFilterAndToggleDisabled } from '@/utils/filters';
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 
+/**
+ * Props of the {@link DateRangeFilterTile} component.
+ */
 export interface DateRangeFilterTileProps {
   /**
    * Filter tile title

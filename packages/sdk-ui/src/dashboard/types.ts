@@ -1,4 +1,9 @@
-import { DashboardStyleOptions, WidgetsOptions, WidgetsPanelLayout } from '@/models';
+import {
+  DashboardStyleOptions,
+  TabbersOptions,
+  WidgetsOptions,
+  WidgetsPanelLayout,
+} from '@/models';
 import { WidgetProps } from '@/props';
 import { DashboardChangeAction } from '@/dashboard/dashboard';
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
@@ -6,7 +11,7 @@ import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 export type { DashboardStyleOptions, WidgetsPanelColumnLayout } from '@/models';
 
 /**
- * Props for the DashboardById component
+ * Props of the {@link DashboardById} component.
  */
 export interface DashboardByIdProps {
   /**
@@ -110,6 +115,11 @@ export interface DashboardProps {
   defaultDataSource?: DataSource;
   /** The options for each of the widgets */
   widgetsOptions?: WidgetsOptions;
+  /**
+   * The Tabber widgets configurations as a single dashboard config
+   * @internal
+   * */
+  tabbersOptions?: TabbersOptions;
   /** The style options for the dashboard */
   styleOptions?: DashboardStyleOptions;
   /**

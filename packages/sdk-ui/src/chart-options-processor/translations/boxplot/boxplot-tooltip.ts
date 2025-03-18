@@ -1,12 +1,7 @@
 import { TFunction } from '@sisense/sdk-common';
 import { BoxplotChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
-import {
-  InternalSeries,
-  TooltipSettings,
-  formatTooltipValue,
-  formatTooltipXValue,
-} from '../tooltip-utils';
+import { InternalSeries, TooltipSettings, formatTooltipValue } from '../tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
 import isUndefined from 'lodash-es/isUndefined';
 import './boxplot-tooltip.scss';
@@ -34,7 +29,7 @@ export const getBoxplotTooltipSettings = (
         median: boxMedian,
       } = this.point;
       const isOutliersPoint = isUndefined(whiskerMax);
-      const formattedX = formatTooltipXValue(dataOptions.category, x, `${x}`);
+      const formattedX = formatTooltipValue(dataOptions.category, x, `${x}`);
 
       if (isOutliersPoint) {
         const formattedY = formatTooltipValue(dataOptions.outliers, y, `${y}`);

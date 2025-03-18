@@ -4,7 +4,7 @@ title: FunnelChartProps
 
 # Interface FunnelChartProps
 
-Props of the [`FunnelChart`](../../sdk-ui/charts/function.FunnelChart.md) component.
+Props of the [`FunnelChart`](../charts/class.FunnelChart.md) component.
 
 ## Properties
 

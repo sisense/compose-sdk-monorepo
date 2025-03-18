@@ -10,10 +10,22 @@ import { replaceReact18Hooks } from './scripts/vite-plugins/replace-react18-hook
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [
-    react(),
+    react({
+      jsxImportSource: '@emotion/react', // This tells SWC to use Emotion for JSX
+      plugins: [
+        [
+          '@swc/plugin-emotion',
+          {
+            sourceMap: mode !== 'production', // Enable source maps only in development
+            autoLabel: 'always', // Add labels for debugging
+            labelFormat: '[local]', // Use the component's variable name in class names
+          },
+        ],
+      ],
+    }),
     cssInjectedByJsPlugin({
       topExecutionPriority: false,
-      jsAssetsFilterFunction: function customJsAssetsfilterFunction(outputChunk) {
+      jsAssetsFilterFunction(outputChunk) {
         return ['index.js', 'ai.js', 'ai.cjs', 'index.cjs'].includes(outputChunk.fileName);
       },
     }),
@@ -24,9 +36,7 @@ export default defineConfig(({ mode }) => ({
     }),
     checker({
       typescript: true,
-      overlay: {
-        initialIsOpen: false,
-      },
+      overlay: { initialIsOpen: false },
     }),
   ],
   define: {
@@ -49,9 +59,7 @@ export default defineConfig(({ mode }) => ({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      treeshake: {
-        preset: 'smallest',
-      },
+      treeshake: { preset: 'smallest' },
       external: ['react', 'react-dom', 'react/jsx-runtime'],
       plugins: [
         replaceReact18Hooks(),
@@ -61,8 +69,6 @@ export default defineConfig(({ mode }) => ({
     },
   },
   resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
-    },
+    alias: { '@': resolve(__dirname, './src') },
   },
 }));

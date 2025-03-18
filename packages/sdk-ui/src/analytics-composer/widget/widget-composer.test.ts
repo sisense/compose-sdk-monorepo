@@ -78,7 +78,9 @@ describe('widgetComposer', () => {
   describe('toWidgetCode from Query Model', () => {
     let widgetCodeParams: WidgetCodeParams;
     beforeEach(() => {
-      const widgetProps = widgetComposer.toWidgetProps(MOCK_QUERY_MODEL_1);
+      const widgetProps = widgetModelTranslator.toWidgetProps(
+        widgetModelTranslator.fromWidgetDto(MOCK_WIDGET_DTO_LINE_CHART),
+      );
       if (!widgetProps) return;
       widgetCodeParams = { widgetProps }; // react by default
     });

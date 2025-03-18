@@ -7,11 +7,14 @@ exports[`PluginWidget > renders plugin when plugin is found 1`] = `
       "someProp": [],
     },
     "dataSource": "Sample ECommerce",
+    "description": undefined,
     "filters": [],
     "highlights": [],
+    "pluginType": "my-plugin",
     "styleOptions": {
       "someStyle": "value",
     },
+    "title": "My awesome plugin",
   },
 ]
 `;

@@ -31,7 +31,7 @@ type TextAttributeStats = {
   count: number;
 };
 
-type DatetimeAttributeStats = {
+export type DatetimeAttributeStats = {
   count: number;
   min: string;
   max: string;

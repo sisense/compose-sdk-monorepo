@@ -21,6 +21,9 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 
+/**
+ * Props of the {@link PivotTableComponent}.
+ */
 export interface PivotTableProps extends PivotTablePropsPreact {}
 
 /**

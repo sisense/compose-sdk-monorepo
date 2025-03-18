@@ -13,6 +13,7 @@ export interface PluginComponentProps<DataOptions = GenericDataOptions, StyleOpt
   styleOptions: StyleOptions;
   filters?: Filter[];
   highlights?: Filter[];
+  description?: string;
 }
 
 /**
@@ -21,6 +22,4 @@ export interface PluginComponentProps<DataOptions = GenericDataOptions, StyleOpt
  *
  * @alpha
  */
-export type PluginComponent<DataOptions = GenericDataOptions, StyleOptions = any> = (
-  props: PluginComponentProps<DataOptions, StyleOptions>,
-) => ReactNode;
+export type PluginComponent<Props = PluginComponentProps> = (props: Props) => ReactNode;

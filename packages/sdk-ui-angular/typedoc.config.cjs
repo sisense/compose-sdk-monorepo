@@ -3,7 +3,7 @@ const baseConfig = require('../../typedoc.package.config.cjs');
 /** @type {import('typedoc').TypeDocOptionValues} */
 module.exports = {
   ...baseConfig,
-  entryPoints: ['src/public-api.ts'],
+  entryPoints: ['src/index-typedoc.ts'],
   intentionallyNotExported: ['ArgumentsAsObject'],
   excludeCategories: ['Sisense App Error Handling'], // feature not supported yet in Angular
 };

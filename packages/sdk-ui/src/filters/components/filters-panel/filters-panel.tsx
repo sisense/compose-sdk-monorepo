@@ -8,6 +8,7 @@ import {
   FilterRelations,
   isText as isTextAttributeType,
   isNumber as isNumberAttributeType,
+  isDatetime as isDatetimeAttributeType,
 } from '@sisense/sdk-data';
 import { FilterTile } from '../filter-tile';
 import { Themable } from '@/theme-provider/types';
@@ -114,7 +115,8 @@ export const FiltersPanel = asSisenseComponent({
         return (
           enableFilterEditor &&
           (isTextAttributeType(filter.attribute.type) ||
-            isNumberAttributeType(filter.attribute.type))
+            isNumberAttributeType(filter.attribute.type) ||
+            isDatetimeAttributeType(filter.attribute.type))
         );
       },
       [enableFilterEditor],

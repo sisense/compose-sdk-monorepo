@@ -10,13 +10,11 @@ import {
   filterToOption,
 } from '../../criteria-filter-tile/criteria-filter-operations.js';
 import { isConditionalFilter, isExcludeMembersFilter } from '../utils.js';
-import { SearchableMultiSelect } from '../common/select/searchable-multi-select.js';
-import { SearchableSingleSelect } from '../common/select/searchable-single-select.js';
 import { usePrevious } from '@/common/hooks/use-previous.js';
 import { useThemeContext } from '@/theme-provider';
-import { Member } from '@/filters';
 import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
 import { createExcludeMembersFilter } from './utils.js';
+import { MembersListSelect } from '../common/select/members-list-select';
 
 const TextCondition = {
   EXCLUDE: 'exclude',
@@ -113,7 +111,6 @@ type TextConditionFilterData = {
 type TextConditionSectionProps = {
   filter: Filter;
   selected: boolean;
-  members: Member[];
   multiSelectEnabled: boolean;
   onChange: (filter: Filter | null) => void;
   onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
@@ -124,11 +121,8 @@ type TextConditionSectionProps = {
 export const TextConditionSection = ({
   filter,
   selected,
-  members,
   multiSelectEnabled,
   onChange,
-  onListScroll,
-  showListLoader = false,
 }: TextConditionSectionProps) => {
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
@@ -138,17 +132,6 @@ export const TextConditionSection = ({
     isExcludeMembersFilter(filter) ? filter.members : [],
   );
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
-  const selectItems = useMemo(() => {
-    let allMembers = members.map((member) => ({ value: member.key }));
-    if (isExcludeMembersFilter(filter) && filter.members.length) {
-      const selectedMembers = multiSelectEnabled ? filter.members : [filter.members[0]];
-      allMembers = [
-        ...selectedMembers.map((member) => ({ value: member })),
-        ...allMembers.filter((member) => !selectedMembers.includes(member.value)),
-      ];
-    }
-    return allMembers;
-  }, [multiSelectEnabled, members, filter]);
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
   const translatedConditionItems = useMemo(
@@ -296,32 +279,15 @@ export const TextConditionSection = ({
           aria-label="Value input"
         />
       )}
-      {condition === TextCondition.EXCLUDE &&
-        (multiSelectEnabled ? (
-          <SearchableMultiSelect<string>
-            style={{ width: '300px' }}
-            values={selectedMembers}
-            placeholder={t('filterEditor.placeholders.selectFromList')}
-            items={selectItems}
-            onChange={handleMembersChange}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            onListScroll={onListScroll}
-            showListLoader={showListLoader}
-          />
-        ) : (
-          <SearchableSingleSelect<string>
-            style={{ width: '300px' }}
-            value={selectedMembers[0]}
-            placeholder={t('filterEditor.placeholders.selectFromList')}
-            items={selectItems}
-            onChange={handleMembersChange}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            onListScroll={onListScroll}
-            showListLoader={showListLoader}
-          />
-        ))}
+      {condition === TextCondition.EXCLUDE && (
+        <MembersListSelect
+          width={300}
+          attribute={filter.attribute}
+          multiSelect={multiSelectEnabled}
+          selectedMembers={selectedMembers}
+          onChange={handleMembersChange}
+        />
+      )}
     </SelectableSection>
   );
 };

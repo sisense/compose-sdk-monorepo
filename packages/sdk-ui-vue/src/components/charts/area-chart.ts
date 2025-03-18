@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { AreaChart as AreaChartPreact } from '@sisense/sdk-ui-preact';
-import type { AreaChartProps } from '@sisense/sdk-ui-preact';
+import type { AreaChartProps as AreaChartPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!AreaChart | `AreaChart`} component.
+ */
+export interface AreaChartProps extends AreaChartPropsPreact {}
 
 /**
  * A Vue component similar to a {@link LineChart},

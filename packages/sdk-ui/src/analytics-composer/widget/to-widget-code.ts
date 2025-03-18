@@ -19,6 +19,7 @@ import { generateCode } from '../code/generate-code.js';
 import { stringifyFilters } from './stringify-filters.js';
 import { CodeTemplateKey } from '../types.js';
 import { stringifyProps } from '../widget/stringify-props';
+import { CODE_TEMPLATES_INDENT } from '../common/constants.js';
 
 const widgetByIdTemplateKeys: CodeTemplateKey[] = ['executeQueryByWidgetIdTmpl', 'widgetByIdTmpl'];
 const widgetTemplateKey: CodeTemplateKey = 'chartWidgetTmpl';
@@ -42,6 +43,8 @@ const getChartWidgetCode = (
     filtersString: stringifyFilters(props.filters),
     componentString: 'ChartWidget',
     extraImportsString: stringifyExtraImports(props.filters || [], hasMeasures),
+    styleOptionsString: stringifyProps(props.styleOptions || {}, CODE_TEMPLATES_INDENT),
+    drilldownOptionsString: stringifyProps(props.drilldownOptions || {}, CODE_TEMPLATES_INDENT),
   };
   return generateCode(templateKey, codeProps, uiFramework);
 };
@@ -59,6 +62,7 @@ const getPivotTableWidgetCode = (
     filtersString: stringifyFilters(props.filters),
     componentString: 'PivotTableWidget',
     extraImportsString: stringifyExtraImports(props.filters || [], hasMeasures),
+    styleOptionsString: stringifyProps(props.styleOptions || {}, CODE_TEMPLATES_INDENT),
   };
   return generateCode(templateKey, codeProps, uiFramework);
 };

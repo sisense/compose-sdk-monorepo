@@ -339,3 +339,7 @@ exports[`prepareChartDesignOptions > should return design options for scattermap
   },
 }
 `;
+
+exports[`prepareChartDesignOptions > should throw an error if internal data options is not compatible with chart type (for restructured charts) 1`] = `[Error: Data options are not correctly converted for 'column' chart]`;
+
+exports[`prepareChartDesignOptions > should throw an error if style options is not compatible with chart type (for restructured charts) 1`] = `[Error: Invalid style options for 'column' chart]`;

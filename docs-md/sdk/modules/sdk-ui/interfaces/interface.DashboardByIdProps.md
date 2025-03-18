@@ -4,7 +4,7 @@ title: DashboardByIdProps
 
 # Interface DashboardByIdProps
 
-Props for the DashboardById component
+Props of the [DashboardById](../fusion-assets/function.DashboardById.md) component.
 
 ## Properties
 

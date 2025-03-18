@@ -4,7 +4,7 @@ title: LineChartProps
 
 # Interface LineChartProps
 
-Props of the [`LineChart`](../../sdk-ui/charts/function.LineChart.md) component.
+Props of the [`LineChart`](../charts/class.LineChart.md) component.
 
 ## Properties
 

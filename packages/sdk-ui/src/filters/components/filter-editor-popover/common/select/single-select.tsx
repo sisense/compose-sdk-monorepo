@@ -2,27 +2,41 @@ import { CSSProperties, useCallback, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { ArrowDownIcon } from '../../../icons';
 import { SelectItem } from './types';
-import { SelectContainer, SelectIconContainer, SelectLabel } from './base';
+import { SelectField, SelectIconContainer, SelectLabel } from './base';
 import { SingleSelectItem } from './single-select-item';
 import { DEFAULT_TEXT_COLOR } from '@/const';
 import { Popper } from '@/common/components/popper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
+const SelectContainer = styled.div`
+  box-sizing: border-box;
+  display: inline-flex;
+`;
 const Content = styled.div``;
 
-type SelectProps<Value> = {
+type SingleSelectProps<Value> = {
   value?: Value;
   multiple?: boolean;
   items: SelectItem<Value>[];
   style?: CSSProperties;
+  className?: string;
   onChange?: (value: Value) => void;
   primaryColor?: string;
   primaryBackgroundColor?: string;
 };
 
 /** @internal */
-export function SingleSelect<Value = unknown>(props: SelectProps<Value>) {
-  const { value, items, style, onChange, primaryColor, primaryBackgroundColor, ...rest } = props;
+export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
+  const {
+    value,
+    items,
+    style,
+    className,
+    onChange,
+    primaryColor,
+    primaryBackgroundColor,
+    ...rest
+  } = props;
 
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
@@ -30,21 +44,23 @@ export function SingleSelect<Value = unknown>(props: SelectProps<Value>) {
 
   const handleItemSelect = useCallback(
     (newValue: Value) => {
-      onChange?.(newValue);
+      if (newValue !== value) {
+        onChange?.(newValue);
+      }
       setOpen(false);
     },
-    [onChange],
+    [value, onChange],
   );
 
   return (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
-      <div>
-        <SelectContainer
+      <SelectContainer className={className} style={style}>
+        <SelectField
           ref={selectElementRef}
           focus={open}
           onClick={() => setOpen((isOpen) => !isOpen)}
           style={{
-            ...style,
+            width: '100%',
             ...(primaryColor && { color: primaryColor }),
             ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
           }}
@@ -62,7 +78,7 @@ export function SingleSelect<Value = unknown>(props: SelectProps<Value>) {
               transform: `rotate(${open ? 180 : 0}deg)`,
             }}
           />
-        </SelectContainer>
+        </SelectField>
         <Popper open={open} anchorEl={selectElementRef.current}>
           <Content
             style={{
@@ -87,7 +103,7 @@ export function SingleSelect<Value = unknown>(props: SelectProps<Value>) {
             ))}
           </Content>
         </Popper>
-      </div>
+      </SelectContainer>
     </ClickAwayListener>
   );
 }

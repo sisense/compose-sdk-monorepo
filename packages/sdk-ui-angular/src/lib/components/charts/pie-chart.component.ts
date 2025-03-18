@@ -7,6 +7,9 @@ import {
 } from '../../types/chart-event-props';
 import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
 
+/**
+ * Props of the {@link PieChartComponent}.
+ */
 export interface PieChartProps
   extends WithoutPreactChartEventProps<PieChartPropsPreact>,
     RegularChartEventProps {}

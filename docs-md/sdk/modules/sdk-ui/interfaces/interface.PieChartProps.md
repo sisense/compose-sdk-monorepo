@@ -4,7 +4,7 @@ title: PieChartProps
 
 # Interface PieChartProps
 
-Props of the [`PieChart`](../charts/function.PieChart.md) component.
+Props of the [PieChart](../charts/function.PieChart.md) component.
 
 ## Properties
 

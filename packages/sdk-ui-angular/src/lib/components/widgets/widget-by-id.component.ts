@@ -22,7 +22,9 @@ import {
 import { template, rootId } from '../../component-wrapper-helpers/template';
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types';
 
-export interface WidgetByIdProps extends WidgetByIdPropsPreact {}
+/**
+ * Props of the {@link WidgetByIdComponent}.
+ */
 export interface WidgetByIdProps
   extends WithoutPreactChartEventProps<WidgetByIdPropsPreact>,
     BaseChartEventProps {}

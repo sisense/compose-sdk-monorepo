@@ -42,13 +42,13 @@ export const trackHook = (
 };
 
 function useTrackHook(hookName: string) {
-  const { tracking } = useSisenseContext();
+  const { tracking, app } = useSisenseContext();
   const { trackEvent } = useTracking();
 
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!tracking) return;
+    if (!tracking || !app) return;
     if (!hasTrackedRef.current) {
       const payload: HookEventDetails = {
         packageName: tracking.packageName || 'sdk-ui',
@@ -59,7 +59,7 @@ function useTrackHook(hookName: string) {
         () => (hasTrackedRef.current = true),
       );
     }
-  }, [tracking, hookName, trackEvent]);
+  }, [tracking, hookName, trackEvent, app]);
 }
 
 export const withTracking: HookDecorator<string> =

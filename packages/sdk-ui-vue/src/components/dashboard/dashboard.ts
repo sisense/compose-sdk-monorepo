@@ -4,6 +4,9 @@ import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
 import type { DashboardProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
 
+// Note: uses direct reexport as a temporary workaround for getting the correct API docs
+export { DashboardProps };
+
 /**
  * A component used for easily rendering a dashboard.
  *

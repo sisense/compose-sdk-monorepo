@@ -1,8 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact } from '@sisense/sdk-ui-preact';
-import type { DrilldownBreadcrumbsProps } from '@sisense/sdk-ui-preact';
+import type { DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelperWithChildren } from '../setup-helper';
+
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!DrilldownBreadcrumbs | `DrilldownBreadcrumbs`} component.
+ */
+export interface DrilldownBreadcrumbsProps extends DrilldownBreadcrumbsPropsPreact {}
 
 /**
  * `DrilldownBreadcrumbs` component from the `@sisense/sdk-ui-vue` package.

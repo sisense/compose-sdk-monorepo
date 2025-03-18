@@ -27,6 +27,10 @@ import { DashboardWidget } from '@sisense/sdk-ui-vue';
 </script>
 ```
 
+::: warning Deprecated
+use the WidgetById component instead
+:::
+
 ## Properties
 
 ### Data

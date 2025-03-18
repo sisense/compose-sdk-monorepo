@@ -4,7 +4,7 @@ title: BarChartProps
 
 # Interface BarChartProps
 
-Props of the [BarChart](../charts/class.BarChart.md) component.
+Props of the [`BarChart`](../charts/class.BarChart.md) component.
 
 ## Properties
 
