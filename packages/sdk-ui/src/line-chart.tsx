@@ -18,8 +18,8 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * Additional Line Chart examples:
  *
- * - [Curved Line Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fline-chart-spline)
- * - [Styled Line Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fline-chart-styled)
+ * - [Curved Line Chart](https://www.sisense.com/developers/playground/?example=charts%2Fline-chart-spline)
+ * - [Styled Line Chart](https://www.sisense.com/developers/playground/?example=charts%2Fline-chart-styled)
  *
  * @param props - Line chart properties
  * @returns Line Chart component

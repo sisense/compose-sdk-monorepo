@@ -1,16 +1,7 @@
-import { useCallback, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCallback, useRef } from 'react';
 import styled from '@emotion/styled';
-import isNumber from 'lodash-es/isNumber';
-import {
-  DataSource,
-  Filter,
-  FilterRelations,
-  isText as isTextAttributeType,
-  isNumber as isNumberAttributeType,
-  isDatetime as isDatetimeAttributeType,
-} from '@sisense/sdk-data';
-import { FilterTile } from '../filter-tile';
+import { DataSource, Filter, FilterRelations, mergeFilters } from '@sisense/sdk-data';
+import { FilterTile } from '@/filters/components/filter-tile';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
@@ -21,7 +12,15 @@ import {
   splitFiltersAndRelations,
 } from '@/utils/filter-relations';
 import { FilterRelationsTile } from './filter-relations-tile';
-import { FilterEditorPopover } from '../filter-editor-popover/filter-editor-popover';
+import { FiltersPanelHeader } from './filters-panel-header';
+import { useNewFilterCreation } from './hooks/use-new-filter-adding';
+import {
+  isFilterSupportEditing,
+  useExistingFilterEditing,
+} from './hooks/use-existing-filter-editing';
+import { FiltersPanelConfig } from './types';
+import { useDefaults } from '@/common/hooks/use-defaults';
+import { DEFAULT_FILTERS_PANEL_CONFIG } from './constants';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
@@ -43,23 +42,6 @@ const PanelBodyInner = styled.div`
   padding: 0px 12px 12px;
 `;
 
-const PanelHeader = styled.div<Themable>`
-  background-color: transparent;
-  color: ${({ theme }) => theme.filter.panel.titleColor};
-  margin: 0 9px;
-  height: 48px;
-  border-bottom: 1px solid #dadada;
-  box-sizing: border-box;
-`;
-const PanelTitle = styled.div`
-  font-size: 13px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  margin-left: 8px;
-`;
-
 /**
  * Props of the {@link FiltersPanel} component
  *
@@ -71,8 +53,10 @@ export type FiltersPanelProps = {
   onFiltersChange: (filters: Filter[] | FilterRelations) => void;
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
-  /** @internal */
-  enableFilterEditor?: boolean;
+  /** All data sources available for filter tiles @internal */
+  dataSources?: DataSource[];
+  /** The configuration for the filters panel */
+  config?: FiltersPanelConfig;
 };
 
 /**
@@ -88,45 +72,69 @@ export const FiltersPanel = asSisenseComponent({
     filters: filtersOrFilterRelations,
     onFiltersChange,
     defaultDataSource,
-    enableFilterEditor = false,
+    dataSources,
+    config: propConfig,
   }: FiltersPanelProps) => {
-    const { t } = useTranslation();
+    const filtersPanelRef = useRef<HTMLDivElement>(null);
+    const filterTilesRef = useRef<HTMLElement[]>([]);
     const { themeSettings } = useThemeContext();
     const { filters, relations } = splitFiltersAndRelations(filtersOrFilterRelations);
-    const filterList: (Filter | null)[] = [...filters];
-    const [editedFilterIndex, setEditedFilterIndex] = useState<number | null>(null);
-    const filterElementsRef = useRef<HTMLElement[]>([]);
+    const config = useDefaults(propConfig, DEFAULT_FILTERS_PANEL_CONFIG);
 
-    const handleFilterChange = (filter: Filter | null, index: number) => {
-      if (!filters) return;
-      filterList[`${index}`] = filter;
-      const newFilters: Filter[] = filterList.filter((f) => f !== null) as Filter[];
-      const newRelations = calculateNewRelations(filters, relations, newFilters);
-      onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
-    };
-
-    const handleFilterDelete = (index: number) => {
-      if (!filters) return;
-      handleFilterChange(null, index);
-    };
-
-    const isFilterSupportEditing = useCallback(
-      (filter: Filter) => {
-        return (
-          enableFilterEditor &&
-          (isTextAttributeType(filter.attribute.type) ||
-            isNumberAttributeType(filter.attribute.type) ||
-            isDatetimeAttributeType(filter.attribute.type))
+    const handleFilterChange = useCallback(
+      (changedFilter: Filter) => {
+        if (!filters) return;
+        const newFilters: Filter[] = filters.map((originalFilter) =>
+          originalFilter.config.guid === changedFilter.config.guid ? changedFilter : originalFilter,
         );
+        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
       },
-      [enableFilterEditor],
+      [filters, relations, onFiltersChange],
     );
 
+    const handleFilterAdd = useCallback(
+      (newFilter: Filter) => {
+        if (!filters) return;
+        const newFilters = mergeFilters(filters, [newFilter]);
+        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
+      },
+      [filters, relations, onFiltersChange],
+    );
+
+    const handleFilterDelete = useCallback(
+      (filter: Filter) => {
+        if (!filters) return;
+        const newFilters = filters.filter((f) => f.config.guid !== filter.config.guid);
+        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
+      },
+      [filters, onFiltersChange, relations],
+    );
+
+    const { ExistingFilterEditor, startEditingFilter } = useExistingFilterEditing({
+      onFilterChanged: handleFilterChange,
+      defaultDataSource: defaultDataSource,
+      config: config.actions.editFilter,
+    });
+
+    const { NewFilterCreator, startFilterCreation } = useNewFilterCreation({
+      dataSources: dataSources ? dataSources : defaultDataSource ? [defaultDataSource] : [],
+      onFilterCreated: handleFilterAdd,
+      defaultDataSource: defaultDataSource,
+      config: config.actions.addFilter,
+    });
+
     return (
-      <PanelWrapper theme={themeSettings}>
-        <PanelHeader theme={themeSettings}>
-          <PanelTitle>{t('filters')}</PanelTitle>
-        </PanelHeader>
+      <PanelWrapper theme={themeSettings} ref={filtersPanelRef}>
+        <FiltersPanelHeader
+          onAddFilterButtonClick={useCallback(
+            () => startFilterCreation(filtersPanelRef.current!),
+            [startFilterCreation],
+          )}
+          shouldShowAddFilterButton={config.actions.addFilter.enabled}
+        />
         <PanelBody>
           <PanelBodyInner>
             {relations && <FilterRelationsTile relations={relations} filters={filters} />}
@@ -134,33 +142,28 @@ export const FiltersPanel = asSisenseComponent({
               <div
                 className="csdk-mt-[6px]"
                 key={filter.config.guid}
-                ref={(el) => (filterElementsRef.current[index] = el as HTMLElement)}
+                ref={(el) => (filterTilesRef.current[index] = el!)}
               >
                 <FilterTile
-                  onDelete={() => handleFilterDelete(index)}
+                  onDelete={
+                    config.actions.deleteFilter.enabled
+                      ? () => handleFilterDelete(filter)
+                      : undefined
+                  }
                   key={filter.config.guid}
                   filter={filter}
-                  onChange={(newFilter) => handleFilterChange(newFilter, index)}
+                  onChange={(newFilter) => handleFilterChange(newFilter!)}
                   defaultDataSource={defaultDataSource}
                   onEdit={
-                    isFilterSupportEditing(filter) ? () => setEditedFilterIndex(index) : undefined
+                    config.actions.editFilter.enabled && isFilterSupportEditing(filter)
+                      ? () => startEditingFilter(filterTilesRef.current[index], filter)
+                      : undefined
                   }
                 />
               </div>
             ))}
-            <FilterEditorPopover
-              filter={isNumber(editedFilterIndex) ? filterList[editedFilterIndex] : null}
-              position={
-                isNumber(editedFilterIndex)
-                  ? { anchorEl: filterElementsRef.current[editedFilterIndex] }
-                  : undefined
-              }
-              onChange={(filter: Filter) => {
-                handleFilterChange(filter, editedFilterIndex as number);
-                setEditedFilterIndex(null);
-              }}
-              onClose={() => setEditedFilterIndex(null)}
-            />
+            {<ExistingFilterEditor />}
+            {<NewFilterCreator />}
           </PanelBodyInner>
         </PanelBody>
       </PanelWrapper>

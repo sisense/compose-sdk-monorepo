@@ -1,8 +1,9 @@
 import { CheckIcon } from '@/filters/components/icons';
-import { SelectIconContainer, SelectItemContainer, SelectLabel } from './base';
+import { DropdownSelectLabel, SelectIconContainer, SelectItemContainer } from './base';
 import { SelectItem } from './types';
 import { CSSProperties } from 'react';
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import { useThemeContext } from '@/theme-provider';
 
 type SingleSelectItemProps<Value> = SelectItem<Value> & {
   selected: boolean;
@@ -12,17 +13,17 @@ type SingleSelectItemProps<Value> = SelectItem<Value> & {
 
 export function SingleSelectItem<Value = unknown>(props: SingleSelectItemProps<Value>) {
   const { value, displayValue, icon, selected, onSelect, style } = props;
+  const { themeSettings } = useThemeContext();
   return (
     <SelectItemContainer
-      color={style?.color}
-      background={style?.backgroundColor}
+      theme={themeSettings}
       style={{ paddingRight: '6px' }}
       onClick={() => onSelect?.(value)}
     >
       {icon && <SelectIconContainer>{icon}</SelectIconContainer>}
-      <SelectLabel style={{ paddingRight: selected ? 0 : '24px', color: style?.color }}>
+      <DropdownSelectLabel theme={themeSettings} style={{ paddingRight: selected ? 0 : '24px' }}>
         {displayValue ?? `${value}`}
-      </SelectLabel>
+      </DropdownSelectLabel>
       {selected && <CheckIcon aria-label="check-icon" color={style?.color || DEFAULT_TEXT_COLOR} />}
     </SelectItemContainer>
   );

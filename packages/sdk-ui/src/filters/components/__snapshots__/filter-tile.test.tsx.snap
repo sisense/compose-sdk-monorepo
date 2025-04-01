@@ -3,32 +3,38 @@
 exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
-        <svg
-          aria-label="arrow-down"
-          class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
-          data-testid="expand-collapse-button"
-          fill="#5B6372"
-          height="16"
-          viewBox="0 0 24 24"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
         >
-          <path
-            d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
             fill="#5B6372"
-            fill-rule="nonzero"
-          />
-        </svg>
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
         <span
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114); flex-grow: 1;"
@@ -49,7 +55,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -81,32 +87,38 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
 exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
-        <svg
-          aria-label="arrow-down"
-          class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
-          data-testid="expand-collapse-button"
-          fill="#5B6372"
-          height="16"
-          viewBox="0 0 24 24"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
         >
-          <path
-            d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
             fill="#5B6372"
-            fill-rule="nonzero"
-          />
-        </svg>
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
         <span
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114); flex-grow: 1;"
@@ -127,7 +139,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -159,32 +171,38 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
 exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
-        <svg
-          aria-label="arrow-down"
-          class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
-          data-testid="expand-collapse-button"
-          fill="#5B6372"
-          height="16"
-          viewBox="0 0 24 24"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
         >
-          <path
-            d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
             fill="#5B6372"
-            fill-rule="nonzero"
-          />
-        </svg>
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
         <span
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114); flex-grow: 1;"
@@ -205,7 +223,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -237,10 +255,10 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
 exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
@@ -267,7 +285,7 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -299,10 +317,10 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
 exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
@@ -329,7 +347,7 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -361,32 +379,38 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
 exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
         style="color: rgb(91, 99, 114);"
       >
-        <svg
-          aria-label="arrow-down"
-          class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
-          data-testid="expand-collapse-button"
-          fill="#5B6372"
-          height="16"
-          viewBox="0 0 24 24"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
         >
-          <path
-            d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
             fill="#5B6372"
-            fill-rule="nonzero"
-          />
-        </svg>
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
         <span
           class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
           style="color: rgb(91, 99, 114); flex-grow: 1;"
@@ -407,7 +431,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-17lmbjk css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -439,10 +463,10 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
 exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
@@ -501,10 +525,10 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
 exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header

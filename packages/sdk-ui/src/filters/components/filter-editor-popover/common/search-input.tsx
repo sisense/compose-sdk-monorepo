@@ -1,6 +1,6 @@
+import { SearchIcon } from '@/common/icons/search-icon';
 import { CSSProperties } from 'react';
 import { Input } from './input';
-import { SearchIcon } from '../../icons';
 
 type SearchInputProps = {
   placeholder?: string;
@@ -19,7 +19,7 @@ export const SearchInput = (props: SearchInputProps) => {
   return (
     <div className={className} style={style}>
       <span style={{ position: 'absolute', top: '3px', left: '6px', zIndex: 2 }}>
-        <SearchIcon aria-label="search-icon" color="#5B6372" opacity="40%" />
+        <SearchIcon aria-label="search-icon" color={style?.color ?? '#5B6372'} opacity="40%" />
       </span>
       <Input
         inputRef={inputRef}

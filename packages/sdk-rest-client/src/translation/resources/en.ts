@@ -4,8 +4,8 @@
 export const translation = {
   errorPrefix: '[request-error]',
   errors: {
-    networkError:
-      "Network error. Probably you forgot to add your domain to 'CORS Allowed Origins' in Sisense Admin Panel -> Security Settings.",
+    networkError: 'Network error. Check browser console for further details.',
+    authFailed: 'Failed to authenticate.',
     ssoNotEnabled:
       'SSO is not enabled on target instance, please choose another authentication method.',
     ssoNoLoginUrl: 'Can not fetch login URL on target instance. Check SSO settings.',

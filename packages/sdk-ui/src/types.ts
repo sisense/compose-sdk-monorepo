@@ -1101,6 +1101,18 @@ export interface GeneralThemeSettings {
   primaryButtonTextColor?: string;
   /** Hover color for primary buttons */
   primaryButtonHoverColor?: string;
+  /**
+   * Theme settings for popover
+   *
+   * @internal
+   */
+  popover?: PopoverThemeSettings;
+  /**
+   * Theme settings for buttons
+   *
+   * @internal
+   */
+  buttons?: ButtonsThemeSettings;
 }
 
 /** Possible sizes for spacing. */
@@ -1163,6 +1175,150 @@ export type FilterThemeSettings = {
     titleColor?: string;
     /** Background color */
     backgroundColor?: string;
+  };
+};
+
+/**
+ * @internal
+ */
+export enum ElementStates {
+  DEFAULT = 'default',
+  HOVER = 'hover',
+  FOCUS = 'focus',
+}
+
+/**
+ * Represents state-based color settings for an element.
+ *
+ * @internal
+ */
+export type ElementStateColors = {
+  /** Default color */
+  default: string;
+  /** Hover state color */
+  hover?: string;
+  /** Focus state color */
+  focus?: string;
+};
+
+/**
+ * Theme settings for input elements.
+ *
+ * @internal
+ */
+export type InputThemeSettings = {
+  /** Background color */
+  backgroundColor?: string;
+  /** Text color */
+  textColor?: string;
+  /** Border color */
+  borderColor?: string | ElementStateColors;
+  /** Corner radius */
+  cornerRadius?: number;
+  /** Theme settings for dropdown list */
+  dropdownList?: {
+    /** Background color */
+    backgroundColor?: string;
+    /** Text color */
+    textColor?: string;
+    /** Border color */
+    borderColor?: string;
+    /** Corner radius */
+    cornerRadius?: number;
+    /** Shadow */
+    shadow?: string;
+    /** Theme settings for dropdown list item */
+    item?: {
+      /** Background color */
+      backgroundColor?: string | ElementStateColors;
+      /** Text color */
+      textColor?: string;
+    };
+  };
+  /** Theme settings for datepicker */
+  datepicker?: {
+    /** Background color */
+    backgroundColor?: string;
+    /** Text color */
+    textColor?: string;
+    /** Corner radius */
+    cornerRadius?: number;
+    /** Shadow */
+    shadow?: string;
+    /** Theme settings for datepicker day item */
+    item?: {
+      /** Background color */
+      backgroundColor?: string | ElementStateColors;
+      /** Text color */
+      textColor?: string | ElementStateColors;
+    };
+  };
+};
+
+/**
+ * Theme settings for popover
+ *
+ * @internal
+ */
+export type PopoverThemeSettings = {
+  /** Corner radius */
+  cornerRadius?: number;
+  /** Shadow */
+  shadow?: string;
+  /** Theme settings for popover header */
+  header?: {
+    /** Background color */
+    backgroundColor?: string;
+    /** Text color */
+    textColor?: string;
+  };
+  /** Theme settings for popover footer */
+  footer?: {
+    /** Background color */
+    backgroundColor?: string;
+    /** Text color */
+    textColor?: string;
+  };
+  /** Theme settings for popover content */
+  content?: {
+    /** Background color */
+    backgroundColor?: string;
+    /** Text color */
+    textColor?: string;
+
+    /** Theme settings for clickable list */
+    clickableList?: {
+      /** Theme settings for clickable list item */
+      item?: {
+        /** Text color */
+        textColor?: string;
+        /** Background color */
+        backgroundColor?: string;
+        /** Setting to be applied on hover */
+        hover?: {
+          /** Text color */
+          textColor?: string;
+          /** Background color */
+          backgroundColor?: string;
+        };
+      };
+    };
+  };
+  /** Theme settings for popover input */
+  input?: InputThemeSettings;
+};
+/**
+ * Theme settings for buttons
+ *
+ * @internal
+ */
+export type ButtonsThemeSettings = {
+  /** Theme settings for cancel button */
+  cancel?: {
+    /** Background color */
+    backgroundColor?: string | ElementStateColors;
+    /** Text color */
+    textColor?: string;
   };
 };
 

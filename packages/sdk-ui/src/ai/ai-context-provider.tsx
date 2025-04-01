@@ -3,10 +3,11 @@ import { ReactNode } from 'react';
 import { ChatApiProvider } from './api/chat-api-provider';
 import { ChatIdStorageProvider } from '@/ai/chat-id-storage-provider';
 
-export type AiContextProviderProps = {
+export interface AiContextProviderProps {
   children: ReactNode;
+  /** AI context volatile mode */
   volatile?: boolean;
-};
+}
 
 /**
  * React component that wraps all generative AI components and hooks.

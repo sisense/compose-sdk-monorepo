@@ -43,7 +43,7 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
   const { errors, warnings } = useWidgetErrorsAndWarnings();
   const { themeSettings } = useThemeContext();
   return (
-    <div className="csdk-w-full csdk-h-full csdk-overflow-hidden">
+    <div className="csdk-w-full csdk-h-full csdk-overflow-hidden csdk-accessible">
       <div
         className="csdk-h-full"
         style={{

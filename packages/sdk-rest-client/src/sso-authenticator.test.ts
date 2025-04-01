@@ -71,6 +71,20 @@ describe('SSOAuthenticator', () => {
     );
   });
 
+  it('should throw an error on receiving non json response from server', async () => {
+    global.fetch = vi.fn().mockImplementation(() => {
+      return Promise.resolve(
+        new Response('some html', {
+          headers: new Headers({
+            'Content-Type': 'text/html',
+          }),
+        }),
+      );
+    });
+
+    await expect(auth.authenticate()).rejects.toThrow('Failed to authenticate.');
+  });
+
   it('should run type guard correctly', () => {
     expect(isSsoAuthenticator(auth)).toBe(true);
   });

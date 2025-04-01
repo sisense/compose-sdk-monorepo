@@ -33,6 +33,85 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     brandColor: '#ffcb05',
     primaryButtonTextColor: '#3a4356',
     primaryButtonHoverColor: '#f2b900',
+    popover: {
+      cornerRadius: 0,
+      shadow: '0 -1px 5px 1px rgba(58, 67, 86, .2)',
+      header: {
+        backgroundColor: '#F4F4F8',
+        textColor: '#5B6372',
+      },
+      footer: {
+        backgroundColor: '#FFFFFF',
+        textColor: '#5B6372',
+      },
+      content: {
+        backgroundColor: '#FFFFFF',
+        textColor: '#5B6372',
+        clickableList: {
+          item: {
+            textColor: '#5B6372',
+            backgroundColor: '#FFFFFF',
+            hover: {
+              textColor: '#000000',
+              backgroundColor: '#F4F4F8',
+            },
+          },
+        },
+      },
+      input: {
+        backgroundColor: '#F4F4F8',
+        textColor: '#5B6372',
+        borderColor: {
+          default: 'transparent',
+          focus: '#5B6372',
+          hover: 'transparent',
+        },
+        cornerRadius: 4,
+        dropdownList: {
+          backgroundColor: '#FFFFFF',
+          textColor: '#5B6372',
+          borderColor: '#9EA2AB',
+          cornerRadius: 4,
+          shadow: '0 -1px 5px 1px rgba(58, 67, 86, .2)',
+          item: {
+            backgroundColor: {
+              default: '#FFFFFF',
+              focus: '#FFFFFF',
+              hover: '#F4F4F8',
+            },
+            textColor: '#5B6372',
+          },
+        },
+        datepicker: {
+          backgroundColor: '#FFFFFF',
+          textColor: '#5B6372',
+          cornerRadius: 4,
+          shadow: '0 -1px 5px 1px rgba(58, 67, 86, .2)',
+          item: {
+            backgroundColor: {
+              default: '#FFFFFF',
+              focus: '#FFFFFF',
+              hover: '#F4F4F8',
+            },
+            textColor: {
+              default: '#5B6372',
+              focus: '#5B6372',
+              hover: '#5B6372',
+            },
+          },
+        },
+      },
+    },
+    buttons: {
+      cancel: {
+        backgroundColor: {
+          default: '#EDEEF1',
+          focus: '#D0D3DB',
+          hover: '#D0D3DB',
+        },
+        textColor: '#3A4356',
+      },
+    },
   },
   widget: {
     spaceAround: 'None',
@@ -184,6 +263,85 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     brandColor: '#FFCB05',
     primaryButtonTextColor: '#3A4356',
     primaryButtonHoverColor: '#F2B900',
+    popover: {
+      cornerRadius: 0,
+      shadow: '0 -1px 5px 1px rgba(58, 67, 86, .2)',
+      header: {
+        backgroundColor: '#313138',
+        textColor: '#FFFFFF',
+      },
+      footer: {
+        backgroundColor: '#16161C',
+        textColor: '#FFFFFF',
+      },
+      content: {
+        backgroundColor: '#16161C',
+        textColor: '#FFFFFF',
+        clickableList: {
+          item: {
+            textColor: '#FFFFFF',
+            backgroundColor: '#16161C',
+            hover: {
+              textColor: '#FFFFFF',
+              backgroundColor: '#3C3C42',
+            },
+          },
+        },
+      },
+      input: {
+        cornerRadius: 4,
+        backgroundColor: '#3C3C42',
+        textColor: '#FFFFFF',
+        borderColor: {
+          default: 'transparent',
+          focus: '#FFFFFF',
+          hover: 'transparent',
+        },
+        dropdownList: {
+          backgroundColor: '#16161C',
+          textColor: '#FFFFFF',
+          borderColor: '#9EA2AB',
+          cornerRadius: 4,
+          shadow: '0 -1px 5px 1px rgba(58, 67, 86, .2)',
+          item: {
+            backgroundColor: {
+              default: '#16161C',
+              focus: '#16161C',
+              hover: '#3C3C42',
+            },
+            textColor: '#FFFFFF',
+          },
+        },
+        datepicker: {
+          backgroundColor: '#FFFFFF',
+          textColor: '#5B6372',
+          cornerRadius: 4,
+          shadow: '0 -1px 5px 1px rgba(58, 67, 86, .2)',
+          item: {
+            backgroundColor: {
+              default: '#FFFFFF',
+              focus: '#FFFFFF',
+              hover: '#F4F4F8',
+            },
+            textColor: {
+              default: '#5B6372',
+              focus: '#5B6372',
+              hover: '#5B6372',
+            },
+          },
+        },
+      },
+    },
+    buttons: {
+      cancel: {
+        backgroundColor: {
+          default: '#EDEEF1',
+          focus: '#D0D3DB',
+          hover: '#D0D3DB',
+        },
+        textColor: '#3A4356',
+      },
+    },
   },
   widget: {
     spaceAround: 'None',

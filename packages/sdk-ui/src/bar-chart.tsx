@@ -19,8 +19,8 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * Additional Bar Chart examples:
  *
- * - [Stacked Bar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fbar-chart-stacked)
- * - [Stacked Percentage Bar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fbar-chart-stacked100)
+ * - [Stacked Bar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fbar-chart-stacked)
+ * - [Stacked Percentage Bar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fbar-chart-stacked100)
  *
  * @param props - Bar chart properties
  * @returns Bar Chart component

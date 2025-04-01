@@ -1,5 +1,15 @@
 import { ReactNode } from 'react';
 import MuiPopover from '@mui/material/Popover';
+import styled from '@emotion/styled';
+
+const StyledMuiPopover = styled(MuiPopover)`
+  // This fixes an issue where the popover appears before its position is calculated, causing it to 'jump' from the top-left corner.
+  // Known MUI issue: https://github.com/mui/material-ui/issues/8040
+  .MuiPaper-root.MuiPopover-paper:not([style*='top']),
+  .MuiPaper-root.MuiPopover-paper:not([style*='left']) {
+    opacity: 0 !important;
+  }
+`;
 
 /** @internal */
 export type PopoverAnchorPosition = {
@@ -20,15 +30,18 @@ type PopoverPosition = PopoverAnchorPosition;
 type PopoverProps = {
   children: ReactNode;
   open: boolean;
+  id?: string;
   position?: PopoverPosition;
   onClose?: () => void;
 };
 
 /** @internal */
 export const Popover = (props: PopoverProps) => {
-  const { children, open, position, onClose, ...restProps } = props;
+  const { children, open, id, position, onClose, ...restProps } = props;
   return (
-    <MuiPopover
+    <StyledMuiPopover
+      id={id}
+      className={'csdk-accessible'}
       anchorEl={position?.anchorEl}
       anchorOrigin={position?.anchorOrigin}
       transformOrigin={position?.contentOrigin}
@@ -41,6 +54,6 @@ export const Popover = (props: PopoverProps) => {
       {...restProps}
     >
       {children}
-    </MuiPopover>
+    </StyledMuiPopover>
   );
 };

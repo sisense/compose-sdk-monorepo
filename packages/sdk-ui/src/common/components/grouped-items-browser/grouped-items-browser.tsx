@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { GroupedItemsBrowserProps } from './types';
 import { Group } from './group';
 import List from '@mui/material/List';
 import styled from '@emotion/styled';
 
-const GroupedItemsBrowserContainer = styled.div`
-  background-color: #f9f9f9;
+const GroupedItemsBrowserList = styled(List)`
+  padding: 0;
   overflow-y: auto;
-  height: 100%;
   width: 100%;
+  height: 100%;
 `;
 
 /**
@@ -19,20 +19,29 @@ export const GroupedItemsBrowser: React.FC<GroupedItemsBrowserProps> = ({
   groupSecondaryActionConfig,
   itemActionConfig,
   itemSecondaryActionConfig,
+  onScrolledToBottom,
 }) => {
+  const handleScroll = useCallback(
+    (event: React.UIEvent<HTMLUListElement>) => {
+      const target = event.target as HTMLUListElement;
+      // Check if scrolled to bottom (allowing a small margin)
+      if (target.scrollHeight - target.scrollTop - target.clientHeight < 1) {
+        onScrolledToBottom?.();
+      }
+    },
+    [onScrolledToBottom],
+  );
   return (
-    <GroupedItemsBrowserContainer>
-      <List>
-        {groupedItems.map((group) => (
-          <Group
-            key={group.id}
-            group={group}
-            groupSecondaryActionConfig={groupSecondaryActionConfig}
-            itemActionConfig={itemActionConfig}
-            itemSecondaryActionConfig={itemSecondaryActionConfig}
-          />
-        ))}
-      </List>
-    </GroupedItemsBrowserContainer>
+    <GroupedItemsBrowserList onScroll={handleScroll}>
+      {groupedItems.map((group) => (
+        <Group
+          key={group.id}
+          group={group}
+          groupSecondaryActionConfig={groupSecondaryActionConfig}
+          itemActionConfig={itemActionConfig}
+          itemSecondaryActionConfig={itemSecondaryActionConfig}
+        />
+      ))}
+    </GroupedItemsBrowserList>
   );
 };

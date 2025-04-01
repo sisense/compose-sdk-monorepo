@@ -1,6 +1,7 @@
 import {
   Attribute,
   convertDataSource,
+  DataSource,
   isText,
   measureFactory,
   QueryResultData,
@@ -19,6 +20,8 @@ const extractAttributeStats = (queryResult: QueryResultData) => {
 
 interface UseGetAttributeStatsParams extends HookEnableParam {
   attribute: Attribute;
+  /** Default data source to use if attribute does not have one */
+  defaultDataSource?: DataSource;
 }
 
 export type NumericAttributeStats = {
@@ -50,7 +53,7 @@ type AttributeStatsState<T = AttributeStats> = {
 export const useGetAttributeStats = <T = AttributeStats>(
   params: UseGetAttributeStatsParams,
 ): AttributeStatsState<T> => {
-  const { attribute, enabled } = params;
+  const { attribute, enabled, defaultDataSource } = params;
   const {
     data: queryResult,
     isLoading,
@@ -58,7 +61,8 @@ export const useGetAttributeStats = <T = AttributeStats>(
     isSuccess,
     error,
   } = useExecuteQueryInternal({
-    dataSource: attribute.dataSource && convertDataSource(attribute.dataSource),
+    dataSource:
+      (attribute.dataSource && convertDataSource(attribute.dataSource)) || defaultDataSource,
     measures: isText(attribute.type)
       ? [measureFactory.countDistinct(attribute)]
       : [

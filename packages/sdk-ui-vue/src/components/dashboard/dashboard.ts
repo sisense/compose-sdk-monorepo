@@ -1,11 +1,19 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
-import type { DashboardProps } from '@sisense/sdk-ui-preact';
+import type { DashboardProps as DashboardPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+import type { DashboardConfig } from '../../types';
 
-// Note: uses direct reexport as a temporary workaround for getting the correct API docs
-export { DashboardProps };
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!Dashboard | `Dashboard`} component.
+ */
+export interface DashboardProps extends DashboardPropsPreact {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
+   */
+  config?: DashboardConfig;
+}
 
 /**
  * A component used for easily rendering a dashboard.
@@ -58,8 +66,6 @@ export const Dashboard = defineComponent({
     layoutOptions: Object as PropType<DashboardProps['layoutOptions']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
-     *
-     * @internal
      */
     config: Object as PropType<DashboardProps['config']>,
     /**

@@ -4,6 +4,6 @@ title: Queries
 
 # Queries
 
-Vue query service
+Vue composables for working with queries
 
 - [useExecuteQuery](function.useExecuteQuery.md)

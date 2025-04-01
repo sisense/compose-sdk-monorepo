@@ -24,7 +24,7 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * Additional Scatter Chart examples:
  *
- * - [Bubble Scatter Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts/scatter-chart-bubble)
+ * - [Bubble Scatter Chart](https://www.sisense.com/developers/playground/?example=charts/scatter-chart-bubble)
  *
  * @param props - Scatter chart properties
  * @returns Scatter Chart component

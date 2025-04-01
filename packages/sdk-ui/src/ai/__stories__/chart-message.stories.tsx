@@ -36,6 +36,7 @@ const props = {
     queryTitle: 'Total Revenue by Year',
     detailedDescription: '[Commerce.Revenue] by [Commerce.Date]',
     followupQuestions: [],
+    userMsg: '',
     chartRecommendations: {
       axesMapping: {
         category: [{ name: 'Date', type: 'datetime' }],

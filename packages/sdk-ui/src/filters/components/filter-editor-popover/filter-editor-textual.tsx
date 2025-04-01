@@ -4,12 +4,14 @@ import { Filter } from '@sisense/sdk-data';
 import { IncludeAllSection } from './sections/include-all-section';
 import { MembersSection } from './sections/members-section';
 import { TextConditionSection } from './sections/text-condition-section';
-import { isIncludeAllFilter, isIncludeMembersFilter } from './utils';
+import { isIncludeAllFilter, isIncludeMembersFilter, isSupportedByFilterEditor } from './utils';
 import { MultiSelectControl } from './multi-select-control';
 import { FilterEditorContainer } from './filter-editor-container';
 import { useThemeContext } from '@/theme-provider';
+import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
 
 enum FilterSections {
+  NOT_SUPPORTED = 'not-supported',
   ALL = 'all',
   MEMBERS = 'members',
   TEXT_CONDITION = 'text-condition',
@@ -18,6 +20,10 @@ enum FilterSections {
 const getSelectedSection = (filter: Filter | null) => {
   if (!filter) {
     return null;
+  }
+
+  if (!isSupportedByFilterEditor(filter)) {
+    return FilterSections.NOT_SUPPORTED;
   }
 
   if (isIncludeAllFilter(filter)) {
@@ -34,10 +40,15 @@ const getSelectedSection = (filter: Filter | null) => {
 type FilterEditorTextualProps = {
   filter: Filter;
   onChange?: (filter: Filter | null) => void;
+  showMultiselectToggle?: boolean;
 };
 
 /** @internal */
-export const FilterEditorTextual = ({ filter, onChange }: FilterEditorTextualProps) => {
+export const FilterEditorTextual = ({
+  filter,
+  onChange,
+  showMultiselectToggle = true,
+}: FilterEditorTextualProps) => {
   const { themeSettings } = useThemeContext();
   const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
   const [selectedSection, setSelectedSection] = useState<FilterSections | null>(
@@ -67,12 +78,10 @@ export const FilterEditorTextual = ({ filter, onChange }: FilterEditorTextualPro
   }, []);
 
   return (
-    <FilterEditorContainer
-      style={{
-        color: themeSettings.typography.primaryTextColor,
-      }}
-      aria-label="Filter editor textual"
-    >
+    <FilterEditorContainer theme={themeSettings} aria-label="Filter editor textual">
+      {!isSupportedByFilterEditor(filter) && (
+        <NotSupportedSection selected={selectedSection === FilterSections.NOT_SUPPORTED} />
+      )}
       <Stack
         direction="row"
         spacing={2}
@@ -87,7 +96,9 @@ export const FilterEditorTextual = ({ filter, onChange }: FilterEditorTextualPro
           selected={selectedSection === FilterSections.ALL}
           onChange={handleIncludeAllSectionChange}
         />
-        <MultiSelectControl enabled={multiSelectEnabled} onChange={setMultiSelectEnabled} />
+        {showMultiselectToggle && (
+          <MultiSelectControl enabled={multiSelectEnabled} onChange={setMultiSelectEnabled} />
+        )}
       </Stack>
       <MembersSection
         filter={filter}

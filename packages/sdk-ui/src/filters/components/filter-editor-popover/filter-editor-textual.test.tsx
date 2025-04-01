@@ -387,6 +387,21 @@ describe('FilterEditorTextual', () => {
     );
   });
 
+  it('should hide multi-select toggle', async () => {
+    const multiSelectMembersFilter = filterFactory.members(DM.Commerce.CategoryID, ['1', '2']);
+    setup(
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorTextual
+          filter={multiSelectMembersFilter}
+          onChange={filterChangeHandlerMock}
+          showMultiselectToggle={false}
+        />
+      </SisenseContextProvider>,
+    );
+    const multiSelectSwitch = screen.queryByText('Allow multiselect for lists');
+    expect(multiSelectSwitch).not.toBeInTheDocument();
+  });
+
   it('should change filter to "is not" filter with multi-select mode by default', async () => {
     const initialFilter = includeAllFilter;
     const { user } = setup(

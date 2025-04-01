@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.33.0] - 2025-04-01
+
+### Added
+- Add filters creation and editing possibilities into `Dashboard`, `DashboardById` and `FiltersPanel` components
+- Add `PivotTableWidgetComponent` for Angular
+- Add `executePivotQuery` method to `queryService` in the Angular package
+- Add `widgetModelTranslator`, `dashboardModelTranslator` and `dashboardHelpers` for Angular and Vue
+- Add `config` property in the `Dashboard` and `DashboardById` components
+- Add responsive widget layout support to the `Dashboard` and `DashboardById`
+- Add AI and `Chatbot` functionality support for Vue
+
+### Changed
+- Improve `FilterEditorPopover`: add deactivated members and unsupported filters handling, add theming support
+- Improve `AddFilterPopover`: add theming support, add search and lazy loading
+- Improve docs: update broken links
+- Improve accessibility: add noticeable outline to focusable elements
+- Fix dashboard layout for cells with no height or numeric hight
+- Move the `persist` property of `DashboardById` into its config
+- Improve tests: add filter edit and filter creation visual tests, update dark theme screenshots
+
 ## [1.32.0] - 2025-03-18
 
 ### Added
@@ -171,7 +191,7 @@
 - Extend `MembersFilter` and `MemberFilterTile` to support single and multi selection
 - Refactor `analytics-composer/ModelTranslator` to `widgetComposer` and `dashboardComposer`
 - Refactor component `ChartMessage` (internal) to use `widgetComposer.toWidgetProps`
-- Fix wrong drilldown menu items on a dasbhoard
+- Fix wrong drilldown menu items on a dashboard
 - Fix error boxes showing control in `ErrorBoundary`
 - Improve pivot tables: fix pivot url without trailing slash, add the 'csrf' validation event and trigger the 'register' event in the correct sequence
 - Improve CI pipeline: move build artifacts to cache and add more nx adaptation

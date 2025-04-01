@@ -1,6 +1,9 @@
 import { defineComponent, inject, provide, ref } from 'vue';
 import type { PropType, InjectionKey, Ref } from 'vue';
-import type { SisenseContextProviderProps as SisenseContextProviderPropsPreact } from '@sisense/sdk-ui-preact';
+import type {
+  ContextConnector,
+  SisenseContextProviderProps as SisenseContextProviderPropsPreact,
+} from '@sisense/sdk-ui-preact';
 import {
   createClientApplication,
   createContextProviderRenderer,
@@ -45,7 +48,9 @@ export const getSisenseContext = () => {
  * Creates Sisense context connector
  * @internal
  */
-export const createSisenseContextConnector = (context: CustomSisenseContext) => {
+export const createSisenseContextConnector = (): ContextConnector<CustomSisenseContext> => {
+  const context = getSisenseContext().value;
+
   return {
     async prepareContext() {
       return context;

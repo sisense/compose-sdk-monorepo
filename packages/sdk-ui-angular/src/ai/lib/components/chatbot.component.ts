@@ -64,8 +64,7 @@ export class ExampleComponent {
 }
  * ```
  *
- * <img src="media://angular-chatbot-example.png" width="800px" />
- * @shortDescription Angular component that renders a chatbot with data topic selection.
+ * <img src="media://angular-chatbot-example.png" width="500px" />
  *
  * @group Generative AI
  * @beta

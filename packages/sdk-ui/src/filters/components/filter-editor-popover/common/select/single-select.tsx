@@ -7,12 +7,16 @@ import { SingleSelectItem } from './single-select-item';
 import { DEFAULT_TEXT_COLOR } from '@/const';
 import { Popper } from '@/common/components/popper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 
 const SelectContainer = styled.div`
   box-sizing: border-box;
   display: inline-flex;
 `;
-const Content = styled.div``;
+const Content = styled.div<Themable>`
+  background: ${({ theme }) => theme.general.popover.input.dropdownList.backgroundColor};
+`;
 
 type SingleSelectProps<Value> = {
   value?: Value;
@@ -27,17 +31,9 @@ type SingleSelectProps<Value> = {
 
 /** @internal */
 export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
-  const {
-    value,
-    items,
-    style,
-    className,
-    onChange,
-    primaryColor,
-    primaryBackgroundColor,
-    ...rest
-  } = props;
+  const { value, items, style, className, onChange, ...rest } = props;
 
+  const { themeSettings } = useThemeContext();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
   const selectedItem = items.find((item) => item.value === value);
@@ -56,23 +52,19 @@ export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <SelectContainer className={className} style={style}>
         <SelectField
+          theme={themeSettings}
           ref={selectElementRef}
           focus={open}
           onClick={() => setOpen((isOpen) => !isOpen)}
-          style={{
-            width: '100%',
-            ...(primaryColor && { color: primaryColor }),
-            ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-          }}
           {...rest}
         >
           {selectedItem?.icon && <SelectIconContainer>{selectedItem?.icon}</SelectIconContainer>}
-          <SelectLabel style={{ color: primaryColor }} aria-label="Value">
+          <SelectLabel theme={themeSettings} aria-label="Value">
             <>{selectedItem?.displayValue ?? selectedItem?.value}</>
           </SelectLabel>
           <ArrowDownIcon
             aria-label="Select icon"
-            fill={primaryColor || DEFAULT_TEXT_COLOR}
+            fill={themeSettings.general.popover.input.textColor || DEFAULT_TEXT_COLOR}
             style={{
               minWidth: '24px',
               transform: `rotate(${open ? 180 : 0}deg)`,
@@ -81,21 +73,17 @@ export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
         </SelectField>
         <Popper open={open} anchorEl={selectElementRef.current}>
           <Content
+            theme={themeSettings}
             style={{
               minWidth: selectElementRef.current?.clientWidth,
               maxWidth:
                 selectElementRef.current?.clientWidth && selectElementRef.current?.clientWidth * 2,
-              ...(primaryBackgroundColor ? { backgroundColor: primaryBackgroundColor } : null),
             }}
             aria-label="Single-select content"
           >
             {items.map((item, index) => (
               <SingleSelectItem
                 key={index}
-                style={{
-                  backgroundColor: primaryBackgroundColor,
-                  color: primaryColor,
-                }}
                 {...item}
                 selected={item.value === value}
                 onSelect={handleItemSelect}

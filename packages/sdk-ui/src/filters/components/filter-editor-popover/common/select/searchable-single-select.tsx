@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { ArrowDownIcon } from '../../../icons';
 import { SelectItem } from './types';
@@ -15,19 +15,23 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { Popper } from '@/common/components/popper';
 import { SearchInput } from '@/filters/components/filter-editor-popover/common';
 import { useTranslation } from 'react-i18next';
+import { Themable } from '@/theme-provider/types';
+import { useThemeContext } from '@/theme-provider';
 
-const Content = styled.div`
+const Content = styled.div<Themable>`
   max-height: 294px;
+  color: ${({ theme }) => theme.general.popover.input.dropdownList.textColor};
+  background-color: ${({ theme }) => theme.general.popover.input.dropdownList.backgroundColor};
+  border-radius: ${({ theme }) => theme.general.popover.input.dropdownList.cornerRadius};
+  box-shadow: ${({ theme }) => theme.general.popover.input.dropdownList.shadow};
 `;
 
 type SearchableSingleSelectProps<Value> = {
   value?: Value;
   items: SelectItem<Value>[];
-  style?: CSSProperties;
+  width?: number | string;
   placeholder?: string;
   onChange?: (value: Value) => void;
-  primaryColor?: string;
-  primaryBackgroundColor?: string;
   onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
   showListLoader?: boolean;
   showSearch?: boolean;
@@ -35,16 +39,18 @@ type SearchableSingleSelectProps<Value> = {
 };
 
 /** @internal */
-export const StyledSearchInput = styled(SearchInput)<{
-  backgroundColor?: string;
-  color?: string;
-}>`
+export const StyledSearchInput = styled(SearchInput)<Themable>`
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  color: ${(props) => props.color};
-  background-color: ${(props) => props.backgroundColor};
+  color: ${({ theme }) => theme.general.popover.input.textColor};
+  background-color: ${({ theme }) => theme.general.popover.input.backgroundColor};
+  border-radius: ${({ theme }) => theme.general.popover.input.cornerRadius};
+
+  svg path {
+    fill: ${({ theme }) => theme.general.popover.input.textColor};
+  }
 `;
 
 /** @internal */
@@ -52,17 +58,16 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
   const {
     value,
     items,
-    style,
     placeholder,
     onChange,
-    primaryColor,
-    primaryBackgroundColor,
     onListScroll,
     showListLoader,
     showSearch = true,
     onSearchUpdate,
+    width,
   } = props;
   const { t } = useTranslation();
+  const { themeSettings } = useThemeContext();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,25 +93,25 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
 
   return (
     <ClickAwayListener onClickAway={onClose}>
-      <div>
+      <div style={{ width }}>
         <div style={{ position: 'relative' }}>
           <SelectField
             ref={selectElementRef}
             focus={open}
             onClick={onContainerClick}
-            style={{
-              ...style,
-              ...(primaryColor && { color: primaryColor }),
-              ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-            }}
+            theme={themeSettings}
             aria-label="Searchable single-select"
           >
-            <SelectLabel style={{ opacity: value ? '100%' : '50%' }} aria-label="Value">
+            <SelectLabel
+              theme={themeSettings}
+              style={{ opacity: value ? '100%' : '50%' }}
+              aria-label="Value"
+            >
               {`${getSelectedItemsDisplayValue(items, [value]) || placeholder}`}
             </SelectLabel>
             <ArrowDownIcon
               aria-label="select-icon"
-              fill={primaryColor || DEFAULT_TEXT_COLOR}
+              fill={themeSettings.general.popover.input.textColor || DEFAULT_TEXT_COLOR}
               style={{
                 minWidth: '24px',
                 transform: `rotate(${open ? 180 : 0}deg)`,
@@ -116,8 +121,7 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
           {showSearch && open && (
             <StyledSearchInput
               inputRef={(input) => input?.focus()}
-              backgroundColor={primaryBackgroundColor}
-              color={primaryColor}
+              theme={themeSettings}
               placeholder={t('filterEditor.placeholders.enterValue')}
               onChange={(e) => {
                 onSearchUpdate?.(e.target.value);
@@ -129,6 +133,7 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
         <Popper open={open} anchorEl={selectElementRef.current}>
           <ScrollWrapper onScroll={onListScroll}>
             <Content
+              theme={themeSettings}
               style={{
                 minWidth: selectElementRef.current?.clientWidth,
                 maxWidth:
@@ -140,10 +145,6 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
               {items.map((item, index) => (
                 <SingleSelectItem
                   key={index}
-                  style={{
-                    backgroundColor: primaryBackgroundColor,
-                    color: primaryColor,
-                  }}
                   {...item}
                   selected={value === item.value}
                   onSelect={handleItemSelect}

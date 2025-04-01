@@ -10,6 +10,9 @@ import { HorizontalCollapse } from '@/dashboard/components/horizontal-collapse';
 import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-panel-collapsed-state';
 import { useCallback } from 'react';
 import { DashboardChangeType } from '@/dashboard/dashboard';
+import { WidgetProps } from '@/props';
+import { DataSource } from '@sisense/sdk-data';
+import { getDataSourceId, getDataSourceTitle } from '@/utils/data-sources-utils';
 
 const DashboardWrapper = styled.div<{
   background: string;
@@ -35,9 +38,13 @@ const ContentColumn = styled.div<{
   max-height: 100%;
 `;
 
-const ContentPanelWrapper = styled.div`
+const ContentPanelWrapper = styled.div<{
+  responsive?: boolean;
+}>`
   max-height: 100%;
   overflow: auto;
+  container-type: ${({ responsive }) => (responsive ? 'inline-size' : 'unset')};
+  container-name: content-panel-container;
 `;
 
 export const DashboardContainer = ({
@@ -49,12 +56,11 @@ export const DashboardContainer = ({
   onFiltersChange,
   defaultDataSource,
   onChange,
-  enableFilterEditor = false,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
 
   const [isFilterPanelCollapsed, setIsFilterPanelCollapsed] = useFiltersPanelCollapsedState(
-    config?.filtersPanel?.isCollapsedInitially,
+    config?.filtersPanel?.collapsedInitially,
     config?.filtersPanel?.persistCollapsedStateToLocalStorage,
   );
   const setIsFilterPanelCollapsedAndFireEvent = useCallback(
@@ -65,8 +71,9 @@ export const DashboardContainer = ({
     [onChange, setIsFilterPanelCollapsed],
   );
 
-  const isToolbarVisible = config?.toolbar?.isVisible !== false;
-  const isFiltersPanelVisible = config?.filtersPanel?.isVisible !== false;
+  const isToolbarVisible = config?.toolbar?.visible !== false;
+  const isFiltersPanelVisible = config?.filtersPanel?.visible !== false;
+  const isLayoutResponsive = config?.widgetsPanel?.responsive ?? false;
 
   return (
     <DashboardWrapper
@@ -75,8 +82,12 @@ export const DashboardContainer = ({
     >
       <ContentColumn background={themeSettings.dashboard.backgroundColor}>
         {isToolbarVisible && <DashboardHeader title={title} />}
-        <ContentPanelWrapper>
-          <ContentPanel layout={layoutOptions?.widgetsPanel} widgets={widgets} />
+        <ContentPanelWrapper responsive={isLayoutResponsive}>
+          <ContentPanel
+            layout={layoutOptions?.widgetsPanel}
+            responsive={isLayoutResponsive}
+            widgets={widgets}
+          />
         </ContentPanelWrapper>
       </ContentColumn>
 
@@ -90,11 +101,31 @@ export const DashboardContainer = ({
               filters={filters}
               onFiltersChange={onFiltersChange}
               defaultDataSource={defaultDataSource}
-              enableFilterEditor={enableFilterEditor}
+              config={config?.filtersPanel}
+              dataSources={getUniqueDataSources(widgets)}
             />
           </div>
         </HorizontalCollapse>
       )}
     </DashboardWrapper>
   );
+};
+
+const getUniqueDataSources = (widgets: WidgetProps[], defaultDataSource?: DataSource) => {
+  const dataSourcesMap = new Map<string, DataSource>();
+  if (defaultDataSource) {
+    dataSourcesMap.set(getDataSourceId(defaultDataSource), defaultDataSource);
+  }
+  widgets.forEach((widget) => {
+    if ('dataSource' in widget && widget.dataSource) {
+      // it's expected that title is unique
+      // and in some of Fusion widgets dataSource.id are different for the actually same dataSources
+      const dataSourceTitle = getDataSourceTitle(widget.dataSource);
+      if (!dataSourcesMap.has(dataSourceTitle)) {
+        dataSourcesMap.set(dataSourceTitle, widget.dataSource);
+      }
+    }
+  });
+
+  return Array.from(dataSourcesMap.values());
 };

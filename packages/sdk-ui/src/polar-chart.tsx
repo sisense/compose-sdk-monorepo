@@ -18,8 +18,8 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * Additional Polar Chart examples:
  *
- * - [Area Polar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpolar-chart-area)
- * - [Line Polar Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpolar-chart-line)
+ * - [Area Polar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpolar-chart-area)
+ * - [Line Polar Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpolar-chart-line)
  *
  * @param props - Polar chart properties
  * @returns Polar Chart component

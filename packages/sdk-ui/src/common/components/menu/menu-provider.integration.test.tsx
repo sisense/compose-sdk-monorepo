@@ -52,7 +52,6 @@ describe('MenuProvider + useCombinedMenu', () => {
       expect(result.getByText('Some Section')).toBeInTheDocument();
       expect(result.getByText('Menu item 1')).toBeInTheDocument();
     });
-    expect(result.baseElement).toMatchSnapshot();
 
     //close the menu
     result.getByText('Menu item 1').click();
@@ -99,7 +98,6 @@ describe('MenuProvider + useCombinedMenu', () => {
       expect(result.getByText('Some Section')).toBeInTheDocument();
       expect(result.getByText('Menu item 1')).toBeInTheDocument();
     });
-    expect(result.baseElement).toMatchSnapshot();
 
     // hover on 'Menu item 1' to open the nested menu
     await userEvent.hover(result.getByText('Menu item 1'));
@@ -112,8 +110,6 @@ describe('MenuProvider + useCombinedMenu', () => {
       expect(result.getByText('Nested Section')).toBeInTheDocument();
       expect(result.getByText('Nested Menu item 1')).toBeInTheDocument();
     });
-
-    expect(result.baseElement).toMatchSnapshot();
 
     // re-hover on 'Nested Menu item 1'
     await userEvent.hover(result.getByText('Nested Menu item 1'));

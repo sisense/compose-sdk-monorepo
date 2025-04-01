@@ -22,11 +22,17 @@ import {
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
 import { PluginsService } from '../../services/plugins.service';
+import type { DashboardByIdConfig } from '../../types';
 
 /**
  * Props of the {@link DashboardByIdComponent}.
  */
-export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
+export interface DashboardByIdProps extends DashboardByIdPropsPreact {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
+   */
+  config?: DashboardByIdConfig;
+}
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
  *
@@ -71,12 +77,10 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
   dashboardOid!: DashboardByIdProps['dashboardOid'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.persist}
-   *
-   * @alpha
+   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
    */
   @Input()
-  persist: DashboardByIdProps['persist'];
+  config: DashboardByIdProps['config'];
 
   private componentAdapter: ComponentAdapter;
 
@@ -136,7 +140,7 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
   private createPreactComponent() {
     const props = {
       dashboardOid: this.dashboardOid,
-      persist: this.persist,
+      config: this.config,
     };
 
     return createElement(DashboardById, props);

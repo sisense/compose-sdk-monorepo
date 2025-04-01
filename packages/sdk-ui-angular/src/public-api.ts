@@ -4,6 +4,7 @@
 export * from './lib/sdk-ui.module';
 export * from './lib/components';
 export * from './lib/services';
+export * from './lib/utilities';
 export * from './lib/sdk-ui-core-exports';
 export type {
   DataPointEvent,
@@ -22,6 +23,9 @@ export type {
   DataPointsEventHandler,
   ScatterDataPointEventHandler,
   ScatterDataPointsEventHandler,
+  DashboardConfig,
+  DashboardByIdConfig,
+  DashboardFiltersPanelConfig,
 } from './lib/types';
 
 /* Re-exports internal core functionalities to use in dependant angular modules */

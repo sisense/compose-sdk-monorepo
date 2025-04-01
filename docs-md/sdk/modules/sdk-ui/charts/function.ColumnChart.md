@@ -24,8 +24,8 @@ Column chart displaying total revenue per year, broken down by condition, from t
 
 Additional Column Chart examples:
 
-- [Stacked Column Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fcolumn-chart-stacked)
-- [Stacked Percentage Column Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fcolumn-chart-stacked100)
+- [Stacked Column Chart](https://www.sisense.com/developers/playground/?example=charts%2Fcolumn-chart-stacked)
+- [Stacked Percentage Column Chart](https://www.sisense.com/developers/playground/?example=charts%2Fcolumn-chart-stacked100)
 
 ## Parameters
 

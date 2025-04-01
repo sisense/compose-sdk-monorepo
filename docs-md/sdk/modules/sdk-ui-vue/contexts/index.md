@@ -4,7 +4,7 @@ title: Contexts
 
 # Contexts
 
-Vue context modules, services, and variables
+Vue context components
 
 - [SisenseContextProvider](class.SisenseContextProvider.md)
 - [ThemeProvider](class.ThemeProvider.md)

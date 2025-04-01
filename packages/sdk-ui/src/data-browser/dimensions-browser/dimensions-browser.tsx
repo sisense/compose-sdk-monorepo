@@ -21,6 +21,9 @@ import {
   DimensionSecondaryActionConfig,
 } from './types.js';
 import { TranslatableError } from '@/translation/translatable-error.js';
+import { LoadingDots } from '@/common/components/loading-dots.js';
+import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
 
 const attributeIconMapping: { [key: string]: React.ComponentType | undefined } = {
   'text-attribute': TextAttributeIcon,
@@ -36,21 +39,36 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
   attributeActionConfig,
   attributeSecondaryActionConfig,
   dimensionSecondaryActionConfig,
+  onScrolledToBottom,
+  isLoading,
 }) => {
+  const hasDimesions = dimensions.length > 0;
   const groupedItemsBrowserProps = useMemo(() => {
     return convertDimensionsBrowserProps({
       dimensions,
       attributeActionConfig,
       dimensionSecondaryActionConfig,
       attributeSecondaryActionConfig,
+      onScrolledToBottom,
     });
   }, [
     dimensions,
     attributeActionConfig,
     dimensionSecondaryActionConfig,
     attributeSecondaryActionConfig,
+    onScrolledToBottom,
   ]);
-  return <GroupedItemsBrowser {...groupedItemsBrowserProps} />;
+  return (
+    <>
+      {hasDimesions && <GroupedItemsBrowser {...groupedItemsBrowserProps} />}
+      {!isLoading && !hasDimesions && <NoResults />}
+      {isLoading && (
+        <LoadingContainer>
+          <LoadingDots />
+        </LoadingContainer>
+      )}
+    </>
+  );
 };
 
 const convertDimensionsBrowserProps = ({
@@ -58,25 +76,34 @@ const convertDimensionsBrowserProps = ({
   attributeActionConfig,
   attributeSecondaryActionConfig,
   dimensionSecondaryActionConfig,
+  onScrolledToBottom,
 }: DimensionsBrowserProps): GroupedItemsBrowserProps => {
   const findDimension = getDimensionFinder(dimensions);
   const findAttribute = getAttributeFinder(dimensions);
   return {
     groupedItems: convertDimensionsToGroupedItems(dimensions),
-    itemActionConfig: convertAttributeActionConfig(attributeActionConfig, findAttribute),
-    itemSecondaryActionConfig: convertAttributeSecondaryActionConfig(
-      attributeSecondaryActionConfig,
-      findAttribute,
-    ),
-    groupSecondaryActionConfig: convertDimensionSecondaryActionConfig(
-      dimensionSecondaryActionConfig,
-      findDimension,
-    ),
+    itemActionConfig:
+      attributeActionConfig && convertAttributeActionConfig(attributeActionConfig, findAttribute),
+    itemSecondaryActionConfig:
+      attributeSecondaryActionConfig &&
+      convertAttributeSecondaryActionConfig(attributeSecondaryActionConfig, findAttribute),
+    groupSecondaryActionConfig:
+      dimensionSecondaryActionConfig &&
+      convertDimensionSecondaryActionConfig(dimensionSecondaryActionConfig, findDimension),
+    onScrolledToBottom,
   };
 };
 
 function isDateDimension(dimension: Dimension): dimension is DateDimension {
   return dimension.type === MetadataTypes.DateDimension;
+}
+
+/**
+ * If you creat a dimension with the only DateTimeDimensions inside - it will add dummy TextDimension to the attributes list
+ * TODO: understand why we need this logic in `sdk-data`
+ */
+function isRealAttribute(attribute: Attribute | Dimension): attribute is Attribute {
+  return MetadataTypes.isAttribute(attribute);
 }
 
 function convertDimensionsToGroupedItems(dimensions: Dimension[]): ItemsGroup[] {
@@ -141,7 +168,7 @@ function convertDimensionSecondaryActionConfig(
 }
 
 function getAttributishElements(dimension: Dimension): AttributiveElement[] {
-  const pureAttributes = dimension.attributes;
+  const pureAttributes = dimension.attributes.filter(isRealAttribute);
   const dateDimensions = dimension.dimensions.filter(isDateDimension);
   return [...pureAttributes, ...dateDimensions].sort((a, b) => a.name.localeCompare(b.name));
 }
@@ -177,3 +204,18 @@ function getAttributeFinder(dimensions: Dimension[]): (item: Item) => Attributiv
     return attribute;
   };
 }
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const NoResultsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const NoResults = () => {
+  const { t } = useTranslation();
+  return <NoResultsContainer>{t('dataBrowser.noResults')}</NoResultsContainer>;
+};

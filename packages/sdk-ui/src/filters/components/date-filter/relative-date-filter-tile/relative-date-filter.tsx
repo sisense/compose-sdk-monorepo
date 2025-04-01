@@ -14,13 +14,13 @@ import { FunctionComponent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isVertical } from '../../common/filter-utils.js';
 import { DEFAULT_FORMAT } from '../consts.js';
-import Popover from '@mui/material/Popover';
 import { CalendarDateSelector } from '../date-filter/calendar-date-selector.js';
 import dayjs from 'dayjs';
 import { useThemeContext } from '../../../../theme-provider/index.js';
 import isToday from 'dayjs/plugin/isToday';
 import { TranslatableError } from '@/translation/translatable-error.js';
 import { createAnchorDateFromRelativeDateFilter } from './helpers';
+import { Popover } from '@/common/components/popover.js';
 
 dayjs.extend(isToday);
 
@@ -173,16 +173,22 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
         <Popover
           id={'simple-popover'}
           open={calendarOpen}
-          anchorEl={anchorRef.current}
+          position={
+            anchorRef.current
+              ? {
+                  anchorEl: anchorRef.current,
+                  anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  },
+                  contentOrigin: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                  },
+                }
+              : undefined
+          }
           onClose={() => setCalendarOpen(false)}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
         >
           <CalendarDateSelector
             selectorMode={'pointSelector'}

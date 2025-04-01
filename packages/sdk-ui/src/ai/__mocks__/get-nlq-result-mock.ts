@@ -64,6 +64,7 @@ export const MOCK_NLQ_RESULT_RESPONSE: QueryRecommendation = {
   },
   queryTitle: 'total of Revenue by Condition',
   detailedDescription: 'total of [Commerce.Revenue] by [Commerce.Condition]',
+  userMsg: '',
   widgetProps: {
     widgetType: 'chart',
     chartType: 'bar',

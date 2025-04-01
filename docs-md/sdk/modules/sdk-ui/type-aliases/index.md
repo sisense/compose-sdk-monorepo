@@ -6,7 +6,6 @@ title: Type Aliases
 
 TypeScript type aliases for components and hooks listed above
 
-- [AiContextProviderProps](type-alias.AiContextProviderProps.md)
 - [AlignmentTypes](type-alias.AlignmentTypes.md)
 - [AppConfig](type-alias.AppConfig.md)
 - [AreamapChartType](type-alias.AreamapChartType.md)
@@ -122,7 +121,6 @@ TypeScript type aliases for components and hooks listed above
 - [QueryByWidgetIdState](type-alias.QueryByWidgetIdState.md)
 - [QueryErrorState](type-alias.QueryErrorState.md)
 - [QueryLoadingState](type-alias.QueryLoadingState.md)
-- [QueryRecommendation](type-alias.QueryRecommendation.md)
 - [QueryRecommendationResponse](type-alias.QueryRecommendationResponse.md)
 - [QueryState](type-alias.QueryState.md)
 - [QuerySuccessState](type-alias.QuerySuccessState.md)

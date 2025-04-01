@@ -72,30 +72,30 @@ Angular components and utilities for working with dashboards
 
 - [ChartWidgetComponent](dashboards/class.ChartWidgetComponent.md)
 - [DashboardComponent](dashboards/class.DashboardComponent.md)
+- [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
+- [PivotTableWidgetComponent](dashboards/class.PivotTableWidgetComponent.md) <Badge type="beta" text="Beta" />
 
 ## Fusion Assets
 
-Angular modules, services, and components for working with Fusion dashboards, widgets, queries, and formulas
+Angular components, services, and utilities for working with Fusion dashboards, widgets, queries, and formulas
 
 - [DashboardByIdComponent](fusion-assets/class.DashboardByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
 - [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [HierarchyService](fusion-assets/class.HierarchyService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetByIdComponent](fusion-assets/class.WidgetByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [widgetModelTranslator](fusion-assets/namespace.widgetModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion widget model from and to other widget data structures
 - [WidgetService](fusion-assets/class.WidgetService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 
 ## Generative AI
 
+Angular modules, components, and services for creating experiences using generative AI
+
 - [AI\_CONTEXT\_CONFIG\_TOKEN](generative-ai/variable.AI_CONTEXT_CONFIG_TOKEN.md) <Badge type="beta" text="Beta" />
 - [AiService](generative-ai/class.AiService.md) <Badge type="beta" text="Beta" />
-- [ChatbotComponent](generative-ai/class.ChatbotComponent.md) <Badge type="beta" text="Beta" /> - Angular component that renders a chatbot with data topic selection.
-- [GetNlgInsightsComponent](generative-ai/class.GetNlgInsightsComponent.md) <Badge type="beta" text="Beta" /> - Angular component that displays NLG insights.
+- [ChatbotComponent](generative-ai/class.ChatbotComponent.md) <Badge type="beta" text="Beta" />
+- [GetNlgInsightsComponent](generative-ai/class.GetNlgInsightsComponent.md) <Badge type="beta" text="Beta" />
 - [SdkAiModule](generative-ai/class.SdkAiModule.md) <Badge type="beta" text="Beta" />
-
-## Namespaces
-
-- [dashboardHelpers](namespaces/namespace.dashboardHelpers/index.md)
-- [dashboardModelTranslator](namespaces/namespace.dashboardModelTranslator/index.md)
-- [widgetModelTranslator](namespaces/namespace.widgetModelTranslator/index.md)

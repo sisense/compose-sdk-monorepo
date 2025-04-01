@@ -40,7 +40,7 @@ import { getDrilldownMenuItems, getSelectionTitleMenuItem } from './hooks/use-dr
  *
  * Additional drilldown examples:
  *
- * - [Detached Breadcrumbs](https://www.sisense.com/platform/compose-sdk/playground/?example=use-cases%2Fdrilldown-detached-breadcrumbs)
+ * - [Detached Breadcrumbs](https://www.sisense.com/developers/playground/?example=use-cases%2Fdrilldown-detached-breadcrumbs)
  *
  * @param props - DrilldownWidget properties
  * @returns DrilldownWidget wrapper component

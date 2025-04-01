@@ -23,7 +23,7 @@ Execute a query to retrieve revenue per country per year from the Sample ECommer
 
 Additional `useExecuteQuery()` examples:
 
-- [Query with Sorting](https://www.sisense.com/platform/compose-sdk/playground/?example=queries%2Fuse-execute-query-sorting)
+- [Query with Sorting](https://www.sisense.com/developers/playground/?example=queries%2Fuse-execute-query-sorting)
 - [Take Control of Your Data Visualizations]( https://www.sisense.com/blog/take-control-of-your-data-visualizations/) blog post with examples of using the hook to fetch data to display in third-party charts.
 
 ## Parameters

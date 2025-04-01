@@ -73,13 +73,19 @@ interface ErrorResponse {
 }
 
 /**
- * Response data to NLQ request
+ * Response data for NLQ request
  */
 export interface NlqResponseData extends ExpandedQueryModel {
+  /** Detailed description of the response */
   detailedDescription: string;
-  followupQuestions: string[];
+  /** An array of suggested followup questions  */
+  followupQuestions?: string[];
+  /** NLQ prompt used in the request  */
   nlqPrompt: string;
+  /** Suggested widget props*/
   widgetProps?: WidgetProps | undefined;
+  /** The response message for the chat  */
+  userMsg: string;
 }
 export interface NlqResponse {
   data: NlqResponseData;
@@ -94,7 +100,8 @@ export interface QueryRecommendationConfig {
 
 export type NlqResult = Omit<NlqResponseData, 'followupQuestions'>;
 
-export type QueryRecommendation = Omit<NlqResponseData, 'followupQuestions'>;
+/** AI-generated recommended query you can run on your data model */
+export interface QueryRecommendation extends Omit<NlqResponseData, 'followupQuestions'> {}
 export type QueryRecommendationResponse = QueryRecommendation[];
 
 export interface GetNlgInsightsRequest {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSendChatMessage } from './api/hooks';
 import {
   ChatMessage,
@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { TranslatableError } from '@/translation/translatable-error';
 import { useChatConfig } from './chat-config';
 import { useGetChat } from '@/ai/use-get-chat';
+import { useLastNlqResponseFromHistory } from '@/ai/use-last-nlq-response-from-history';
 
 /**
  * Result of the useChatSession hook.
@@ -73,16 +74,7 @@ export const useChatSession = (
     enableFollowupQuestions,
   );
 
-  const lastNlqResponse: NlqResponseData | null = useMemo(() => {
-    if (chatHistory?.length) {
-      const lastNlqMessage = chatHistory[chatHistory.length - 1];
-      if (isNlqMessage(lastNlqMessage)) {
-        return JSON.parse(lastNlqMessage.content);
-      }
-    }
-
-    return null;
-  }, [chatHistory]);
+  const lastNlqResponse = useLastNlqResponseFromHistory(chatHistory);
 
   return {
     chatId,

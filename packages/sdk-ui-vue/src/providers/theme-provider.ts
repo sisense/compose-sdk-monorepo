@@ -2,6 +2,8 @@ import { defineComponent, inject, provide, ref, watchEffect } from 'vue';
 import type { PropType, InjectionKey, Ref } from 'vue';
 import type {
   CompleteThemeSettings,
+  ContextConnector,
+  CustomThemeProviderProps,
   ThemeProviderProps as ThemeProviderPropsPreact,
 } from '@sisense/sdk-ui-preact';
 import {
@@ -34,9 +36,12 @@ export const getThemeContext = () => {
  * Creates theme context connector
  * @internal
  */
-export const createThemeContextConnector = (
-  themeSettings: CompleteThemeSettings = getDefaultThemeSettings(),
-) => {
+export const createThemeContextConnector = (): ContextConnector<
+  CustomThemeProviderProps['context']
+> => {
+  const themeContext = getThemeContext();
+  const themeSettings = themeContext?.value ?? getDefaultThemeSettings();
+
   return {
     async prepareContext() {
       return {

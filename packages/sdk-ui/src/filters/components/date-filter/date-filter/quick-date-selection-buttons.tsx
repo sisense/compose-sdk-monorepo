@@ -50,7 +50,8 @@ const ThemedSecondaryButtonWithTooltip = styled(
 `;
 
 const ThemedButtonsContainer = styled.div<ThemePropMixin>`
-  background-color: ${({ theme }) => theme.general.backgroundColor};
+  background-color: ${({ theme }) => theme.general.popover.input.datepicker.backgroundColor};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
 `;
 
 export const QuickDateSelectionButtons = (props: QuickDateSelectionButtonsProps) => {

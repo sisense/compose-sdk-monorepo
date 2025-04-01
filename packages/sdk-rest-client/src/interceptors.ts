@@ -58,6 +58,9 @@ function isNetworkError(responseError: Error): boolean {
  * @returns A promise that rejects with an error message.
  */
 function handleNetworkError(): Promise<never> {
+  console.warn(
+    `Network error. Verify server is accessible and your domain is added to 'CORS Allowed Origins' in Sisense Admin Panel -> Security Settings.`,
+  );
   return Promise.reject(new TranslatableError('errors.networkError'));
 }
 

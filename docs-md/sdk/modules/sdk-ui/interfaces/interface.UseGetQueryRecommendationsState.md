@@ -10,7 +10,7 @@ State for [useGetQueryRecommendations](../generative-ai/function.useGetQueryReco
 
 ### data
 
-> **data**: [`QueryRecommendation`](../type-aliases/type-alias.QueryRecommendation.md)[] \| `undefined`
+> **data**: [`QueryRecommendation`](interface.QueryRecommendation.md)[] \| `undefined`
 
 The result data
 

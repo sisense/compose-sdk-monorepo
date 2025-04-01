@@ -11,21 +11,23 @@
  * @groupDescription Filter Tiles
  * Vue filter tile components
  * @groupDescription Contexts
- * Vue context modules, services, and variables
+ * Vue context components
  * @groupDescription Queries
- * Vue query service
+ * Vue composables for working with queries
  * @groupDescription Dashboards
  * Vue components and utilities for working with dashboards
  * @groupDescription Fusion Assets
- * Vue components and functions for working with Fusion dashboards, widgets, queries, and formulas
+ * Vue components, composables and utilities for working with Fusion dashboards, widgets, queries, and formulas
+ * @groupDescription Generative AI
+ * Vue components and composables for creating experiences using generative AI
  * @groupDescription Interfaces
  * TypeScript interfaces for components and composables listed above
  * @groupDescription Type Aliases
  * TypeScript type aliases for components and composables listed above
  */
 export * from './lib';
-
 export {
   type DrilldownWidgetConfig,
   DrilldownWidgetTs as DrilldownWidget,
 } from './components/drilldown-widget';
+export * from './ai';

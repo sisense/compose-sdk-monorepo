@@ -4,7 +4,7 @@ title: NlqResponseData
 
 # Interface NlqResponseData
 
-Response data to NLQ request
+Response data for NLQ request
 
 ## Properties
 
@@ -12,11 +12,15 @@ Response data to NLQ request
 
 > **detailedDescription**: `string`
 
+Detailed description of the response
+
 ***
 
 ### followupQuestions
 
-> **followupQuestions**: `string`[]
+> **followupQuestions**?: `string`[]
+
+An array of suggested followup questions
 
 ***
 
@@ -24,8 +28,20 @@ Response data to NLQ request
 
 > **nlqPrompt**: `string`
 
+NLQ prompt used in the request
+
+***
+
+### userMsg
+
+> **userMsg**: `string`
+
+The response message for the chat
+
 ***
 
 ### widgetProps
 
 > **widgetProps**?: [`WidgetProps`](../type-aliases/type-alias.WidgetProps.md)
+
+Suggested widget props

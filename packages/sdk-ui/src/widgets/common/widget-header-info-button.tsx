@@ -2,7 +2,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useMemo, useState } from 'react';
@@ -11,6 +10,7 @@ import { WidgetContainerStyleOptions } from '../../types';
 import { getSlightlyDifferentColor } from '@/utils/color';
 import { useTranslation } from 'react-i18next';
 import ExclamationMarkBrandIcon from '@/ai/icons/exclamation-mark-brand-icon';
+import { Popover } from '@/common/components/popover';
 
 export default function WidgetHeaderInfoButton({
   title,
@@ -150,26 +150,22 @@ export default function WidgetHeaderInfoButton({
       </Tooltip>
       <Popover
         open={!!anchorEl}
-        anchorEl={anchorEl}
+        position={
+          anchorEl
+            ? {
+                anchorEl,
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                },
+                contentOrigin: {
+                  vertical: 'top',
+                  horizontal: 'center',
+                },
+              }
+            : undefined
+        }
         onClose={handlePopoverClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        slotProps={{
-          root: {
-            sx: {
-              '.MuiPaper-root': {
-                boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.25)',
-                borderRadius: 0,
-              },
-            },
-          },
-        }}
       >
         <Card raised={true} className={'csdk-max-w-xs csdk-w-[300px]'}>
           <div

@@ -12,4 +12,6 @@ export type {
   DashboardLayoutOptions,
   DashboardStyleOptions,
   DashboardConfig,
+  DashboardByIdConfig,
+  DashboardFiltersPanelConfig,
 } from './types';

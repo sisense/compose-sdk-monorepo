@@ -10,6 +10,14 @@ Props of the [FiltersPanel](../filter-tiles/function.FiltersPanel.md) component
 
 ## Type declaration
 
+### `config`
+
+**config**?: [`FiltersPanelConfig`](../interfaces/interface.FiltersPanelConfig.md)
+
+The configuration for the filters panel
+
+***
+
 ### `defaultDataSource`
 
 **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

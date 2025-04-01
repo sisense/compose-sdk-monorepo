@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Filter, filterFactory, NumericFilter } from '@sisense/sdk-data';
 import { Input, SelectableSection } from '../common';
 import { isNumericBetweenFilter } from '../utils';
-import { useThemeContext } from '@/theme-provider';
 import { isNumericString } from '@/utils/is-numeric-string';
 import { TFunction } from '@sisense/sdk-common';
 import { useWasModified } from '@/common/hooks/use-was-modified';
@@ -40,7 +39,6 @@ type NumericRangeSectionProps = {
 
 /** @internal */
 export const NumericRangeSection = (props: NumericRangeSectionProps) => {
-  const { themeSettings } = useThemeContext();
   const { filter, selected, defaultFrom, defaultTo, onChange } = props;
   const { t } = useTranslation();
   const [from, setFrom] = useState<string>(
@@ -113,8 +111,6 @@ export const NumericRangeSection = (props: NumericRangeSectionProps) => {
       <Input
         style={{
           width: NUMERIC_RANGE_INPUT_WIDTH,
-          backgroundColor: themeSettings.filter.panel.backgroundColor,
-          color: themeSettings.typography.primaryTextColor,
         }}
         placeholder={t('filterEditor.placeholders.enterValue')}
         value={from}
@@ -128,8 +124,6 @@ export const NumericRangeSection = (props: NumericRangeSectionProps) => {
       <Input
         style={{
           width: NUMERIC_RANGE_INPUT_WIDTH,
-          backgroundColor: themeSettings.filter.panel.backgroundColor,
-          color: themeSettings.typography.primaryTextColor,
         }}
         placeholder={t('filterEditor.placeholders.enterValue')}
         value={to}

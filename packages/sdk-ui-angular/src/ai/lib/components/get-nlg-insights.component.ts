@@ -68,8 +68,7 @@ export class ExampleComponent {
 }
  * ```
  *
- * <img src="media://angular-get-nlg-insights-example.png" width="800px" />
- * @shortDescription Angular component that displays NLG insights.
+ * <img src="media://angular-get-nlg-insights-example.png" width="700px" />
  *
  * @group Generative AI
  * @beta

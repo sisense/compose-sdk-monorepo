@@ -4,9 +4,17 @@ title: DashboardProps
 
 # Interface DashboardProps
 
-Props for the Dashboard component
+Props of the [`Dashboard`](../dashboards/class.Dashboard.md) component.
 
 ## Properties
+
+### config
+
+> **config**?: [`DashboardConfig`](interface.DashboardConfig.md)
+
+The configuration for the dashboard
+
+***
 
 ### defaultDataSource
 

@@ -229,7 +229,7 @@ export class RestApi {
    */
   public getDataSourceFields = (
     dataSource: string,
-    options?: { offset: number; count: number },
+    options?: { offset?: number; count?: number; searchValue?: string },
   ) => {
     const { offset = 0, count = 9999 } = options || {};
     return this.httpClient.post<DataSourceField[]>(
@@ -237,6 +237,7 @@ export class RestApi {
       {
         offset: offset,
         count: count,
+        term: options?.searchValue,
       },
     );
   };

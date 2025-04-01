@@ -43,7 +43,7 @@ export class ExampleComponent {
 }
 ```
 
-<img src="../../../img/angular-chatbot-example.png" width="800px" />
+<img src="../../../img/angular-chatbot-example.png" width="500px" />
 
 ## Implements
 

@@ -1,15 +1,14 @@
-import { useMemo } from 'react';
 import type { NlqResponseData, ChatContextDetails } from './api/types';
 import { useChatHistory } from './api/chat-history';
-import { isNlqMessage } from './use-chat-session';
 import { useGetChat } from '@/ai/use-get-chat';
+import { useLastNlqResponseFromHistory } from '@/ai/use-last-nlq-response-from-history';
 
 /**
  * Parameters for the useLastNlqResponse hook.
  *
  * @internal
  */
-interface UseLastNlqResponseParams {
+export interface UseLastNlqResponseParams {
   /** The title of the data model or perspective */
   contextTitle: string;
 
@@ -32,14 +31,5 @@ export const useLastNlqResponse = ({
 
   const { history: chatHistory } = useChatHistory(chatId);
 
-  return useMemo(() => {
-    if (chatHistory?.length) {
-      const lastNlqMessage = chatHistory[chatHistory.length - 1];
-      if (isNlqMessage(lastNlqMessage)) {
-        return JSON.parse(lastNlqMessage.content);
-      }
-    }
-
-    return null;
-  }, [chatHistory]);
+  return useLastNlqResponseFromHistory(chatHistory);
 };

@@ -4,10 +4,10 @@ import { SelectorMode } from './calendar-date-selector';
 import { CalendarDateSelector } from './calendar-date-selector';
 import { DEFAULT_FORMAT } from '../consts';
 import { DateFilterRange } from '../types';
-import Popover from '@mui/material/Popover';
 import { DateRangeFieldButton, TriangleIndicator } from '../../common';
 import { useThemeContext } from '../../../../theme-provider';
 import { useTranslation } from 'react-i18next';
+import { Popover } from '@/common/components/popover';
 
 const DATE_RANGE = 'date-range';
 
@@ -152,16 +152,22 @@ export function DateFilter(props: DateRangeFilterProps) {
         <Popover
           id={id}
           open={isDateRangeSelectorOpen}
-          anchorEl={filterContainerRef.current}
+          position={
+            filterContainerRef.current
+              ? {
+                  anchorEl: filterContainerRef.current,
+                  anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  },
+                  contentOrigin: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                  },
+                }
+              : undefined
+          }
           onClose={closeDateRangeSelector}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
         >
           <CalendarDateSelector
             selectorMode={activeSelectorMode}

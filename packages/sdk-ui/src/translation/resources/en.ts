@@ -367,6 +367,13 @@ export const translation = {
       after: 'After',
     },
   },
+  dataBrowser: {
+    addFilter: 'Add Filter',
+    selectField: 'Select Field',
+    configureFilter: 'Configure Filter',
+    noResults: 'No results',
+    searchPlaceholder: 'Search',
+  },
   pivotTable: {
     grandTotal: 'Grand Total',
     subTotal: '{{value}} Total',

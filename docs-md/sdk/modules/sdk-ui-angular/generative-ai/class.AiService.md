@@ -72,7 +72,7 @@ The result as WidgetProps
 
 ### getQueryRecommendations
 
-> **getQueryRecommendations**(`params`): `Promise`\< [`QueryRecommendation`](../type-aliases/type-alias.QueryRecommendation.md)[] \>
+> **getQueryRecommendations**(`params`): `Promise`\< [`QueryRecommendation`](../interfaces/interface.QueryRecommendation.md)[] \>
 
 Fetches recommended questions for a data model or perspective.
 
@@ -84,6 +84,6 @@ Fetches recommended questions for a data model or perspective.
 
 #### Returns
 
-`Promise`\< [`QueryRecommendation`](../type-aliases/type-alias.QueryRecommendation.md)[] \>
+`Promise`\< [`QueryRecommendation`](../interfaces/interface.QueryRecommendation.md)[] \>
 
 An array of objects, each containing recommended question text and its corresponding `widgetProps`

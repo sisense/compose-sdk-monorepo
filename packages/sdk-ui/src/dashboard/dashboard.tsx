@@ -9,6 +9,8 @@ import { useCallback, useEffect } from 'react';
 import { usePlugins } from '@/plugins-provider';
 import { TabberWidget } from '@/widgets/tabber-widget';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { useDefaults } from '@/common/hooks/use-defaults';
+import { DEFAULT_DASHBOARD_CONFIG } from './constants';
 
 export enum DashboardChangeType {
   /** Dashboard filters have been updated */
@@ -68,7 +70,7 @@ export const Dashboard = asSisenseComponent({
   ({
     title = '',
     layoutOptions,
-    config,
+    config: propConfig,
     widgets,
     filters,
     defaultDataSource,
@@ -76,11 +78,11 @@ export const Dashboard = asSisenseComponent({
     tabbersOptions,
     styleOptions,
     onChange,
-    enableFilterEditor = false,
   }: DashboardProps) => {
     const { themeSettings } = useDashboardThemeInternal({ styleOptions });
     const { registerPlugin } = usePlugins();
     const app = useSisenseContext().app;
+    const config = useDefaults(propConfig, DEFAULT_DASHBOARD_CONFIG);
 
     useEffect(() => {
       const tabberEnabled = app?.settings?.tabberConfig?.enabled || false;
@@ -121,7 +123,6 @@ export const Dashboard = asSisenseComponent({
           filters={dashboardFilters}
           onFiltersChange={setFilters}
           onChange={onChange}
-          enableFilterEditor={enableFilterEditor}
         />
       </ThemeProvider>
     );

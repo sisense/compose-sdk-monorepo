@@ -52,14 +52,14 @@ Vue filter tile components
 
 ## Contexts
 
-Vue context modules, services, and variables
+Vue context components
 
 - [SisenseContextProvider](contexts/class.SisenseContextProvider.md)
 - [ThemeProvider](contexts/class.ThemeProvider.md)
 
 ## Queries
 
-Vue query service
+Vue composables for working with queries
 
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
@@ -69,13 +69,15 @@ Vue components and utilities for working with dashboards
 
 - [ChartWidget](dashboards/class.ChartWidget.md)
 - [Dashboard](dashboards/class.Dashboard.md)
+- [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 
 ## Fusion Assets
 
-Vue components and functions for working with Fusion dashboards, widgets, queries, and formulas
+Vue components, composables and utilities for working with Fusion dashboards, widgets, queries, and formulas
 
 - [DashboardById](fusion-assets/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
 - [DashboardWidget](fusion-assets/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useFetch](fusion-assets/function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
@@ -86,9 +88,15 @@ Vue components and functions for working with Fusion dashboards, widgets, querie
 - [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetById](fusion-assets/class.WidgetById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [widgetModelTranslator](fusion-assets/namespace.widgetModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion widget model from and to other widget data structures
 
-## Namespaces
+## Generative AI
 
-- [dashboardHelpers](namespaces/namespace.dashboardHelpers/index.md)
-- [dashboardModelTranslator](namespaces/namespace.dashboardModelTranslator/index.md)
-- [widgetModelTranslator](namespaces/namespace.widgetModelTranslator/index.md)
+Vue components and composables for creating experiences using generative AI
+
+- [AiContextProvider](generative-ai/class.AiContextProvider.md) <Badge type="beta" text="Beta" />
+- [Chatbot](generative-ai/class.Chatbot.md) <Badge type="beta" text="Beta" />
+- [GetNlgInsights](generative-ai/class.GetNlgInsights.md) <Badge type="beta" text="Beta" />
+- [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md) <Badge type="beta" text="Beta" />
+- [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
+- [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />

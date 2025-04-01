@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { ArrowDownIcon } from '../../../icons';
 import { SelectItem } from './types';
@@ -15,9 +15,15 @@ import { SmallLoader } from '@/filters/components/filter-editor-popover/common/s
 import { Popper } from '@/common/components/popper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { StyledSearchInput } from '@/filters/components/filter-editor-popover/common/select/searchable-single-select';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 
-const Content = styled.div`
+const Content = styled.div<Themable>`
   max-height: 320px;
+  color: ${({ theme }) => theme.general.popover.input.dropdownList.textColor};
+  background-color: ${({ theme }) => theme.general.popover.input.dropdownList.backgroundColor};
+  border-radius: ${({ theme }) => theme.general.popover.input.dropdownList.cornerRadius};
+  box-shadow: ${({ theme }) => theme.general.popover.input.dropdownList.shadow};
 `;
 
 const ContentToolbar = styled.div`
@@ -47,11 +53,9 @@ const ContentList = styled.div``;
 type SearchableMultiSelectProps<Value> = {
   values?: Value[];
   items: SelectItem<Value>[];
-  style?: CSSProperties;
+  width?: number | string;
   placeholder?: string;
   onChange?: (values: Value[]) => void;
-  primaryColor?: string;
-  primaryBackgroundColor?: string;
   onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
   showListLoader?: boolean;
   showSearch?: boolean;
@@ -62,17 +66,16 @@ type SearchableMultiSelectProps<Value> = {
 export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSelectProps<Value>) {
   const {
     items,
-    style,
     placeholder,
     onChange,
-    primaryColor,
-    primaryBackgroundColor,
     onListScroll,
     showListLoader = false,
     showSearch = true,
     onSearchUpdate,
+    width,
   } = props;
   const { t } = useTranslation();
+  const { themeSettings } = useThemeContext();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
   const values = useMemo(() => props.values || [], [props.values]);
@@ -112,24 +115,24 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
   }, [open, onClose]);
   return (
     <ClickAwayListener onClickAway={onClose}>
-      <div>
+      <div style={{ width }}>
         <div style={{ position: 'relative' }}>
           <SelectField
             ref={selectElementRef}
             focus={open}
             onClick={onContainerClick}
-            style={{
-              ...style,
-              ...(primaryColor && { color: primaryColor }),
-              ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-            }}
+            theme={themeSettings}
             aria-label="Searchable multi-select"
           >
-            <SelectLabel style={{ opacity: values.length ? '100%' : '50%' }} aria-label="Value">
+            <SelectLabel
+              theme={themeSettings}
+              style={{ opacity: values.length ? '100%' : '50%' }}
+              aria-label="Value"
+            >
               {getSelectedItemsDisplayValue(items, values) ?? placeholder}
             </SelectLabel>
             <ArrowDownIcon
-              fill={primaryColor || DEFAULT_TEXT_COLOR}
+              fill={themeSettings.general.popover.input.textColor || DEFAULT_TEXT_COLOR}
               aria-label="Open icon"
               style={{
                 minWidth: '24px',
@@ -140,8 +143,7 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
           {showSearch && open && (
             <StyledSearchInput
               inputRef={(input) => input?.focus()}
-              backgroundColor={primaryBackgroundColor}
-              color={primaryColor}
+              theme={themeSettings}
               placeholder={t('filterEditor.placeholders.enterValue')}
               onChange={(e) => {
                 onSearchUpdate?.(e.target.value);
@@ -153,13 +155,12 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
         <Popper open={open} anchorEl={selectElementRef.current} style={{ maxHeight: 300 }}>
           <ScrollWrapper onScroll={onListScroll}>
             <Content
+              theme={themeSettings}
               style={{
                 minWidth: selectElementRef.current?.clientWidth,
                 maxWidth:
                   selectElementRef.current?.clientWidth &&
                   selectElementRef.current?.clientWidth * 2,
-                backgroundColor: primaryBackgroundColor,
-                color: primaryColor,
               }}
               aria-label="Searchable multi-select content"
             >
@@ -179,10 +180,6 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
                 {items.map((item, index) => (
                   <MultiSelectItem
                     key={index}
-                    style={{
-                      backgroundColor: primaryBackgroundColor,
-                      color: primaryColor,
-                    }}
                     {...item}
                     selected={!!values?.includes(item.value)}
                     onSelect={handleItemSelect}

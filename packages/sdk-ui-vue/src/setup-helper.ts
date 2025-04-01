@@ -4,11 +4,21 @@ import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from './providers';
-import { ComponentAdapter, createElement, createWrapperElement } from '@sisense/sdk-ui-preact';
-import { getSisenseContext } from './providers/sisense-context-provider';
-import { getThemeContext } from './providers/theme-provider';
+import {
+  ComponentAdapter,
+  type ContextConnector,
+  createElement,
+  createWrapperElement,
+} from '@sisense/sdk-ui-preact';
 import { isObject } from './utils';
-import { getPluginsContext } from './providers/plugins-provider';
+
+export function createDefaultContextConnectors() {
+  return [
+    createSisenseContextConnector(),
+    createThemeContextConnector(),
+    createPluginsContextConnector(),
+  ];
+}
 
 export function getRawData<T>(data: T): T {
   return isReactive(data) ? toRaw(data) : data;
@@ -35,24 +45,24 @@ export function toDeepRaw<T>(data: T): T {
  *
  * @internal
  */
-export const setupHelper = <P, C>(component: C, props: P) => {
+export const setupHelper = <P, C>(
+  component: C,
+  props: P,
+  createContextConnectorsFn: () => ContextConnector<any>[] = createDefaultContextConnectors,
+) => {
   if (!props) return null;
   const rawProps = toDeepRaw(props);
   const refElement = ref<HTMLDivElement | null>(null);
-  const context = getSisenseContext();
-  const themeSettings = getThemeContext();
-  const pluginsContext = getPluginsContext();
 
   return () => {
     if (refElement.value) {
       const createPreactComponent = () => {
         return createElement(component as FunctionalComponent, rawProps as P);
       };
-      const componentAdapter = new ComponentAdapter(createPreactComponent, [
-        createSisenseContextConnector(context.value),
-        createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
-        createPluginsContextConnector(pluginsContext.value),
-      ]);
+      const componentAdapter = new ComponentAdapter(
+        createPreactComponent,
+        createContextConnectorsFn(),
+      );
 
       componentAdapter.render(refElement.value);
     }
@@ -75,9 +85,6 @@ export const setupHelperWithChildren = <P, C>(
   const rawProps = toDeepRaw(props) as P;
   const contextMenuRef = ref<HTMLDivElement>();
   const contextMenuChildrenRef = ref<HTMLDivElement>();
-  const context = getSisenseContext();
-  const themeSettings = getThemeContext();
-  const pluginsContext = getPluginsContext();
 
   return () => {
     if (contextMenuRef.value && contextMenuChildrenRef.value) {
@@ -89,9 +96,9 @@ export const setupHelperWithChildren = <P, C>(
         contexts
           ? contexts
           : [
-              createSisenseContextConnector(context.value),
-              createThemeContextConnector(themeSettings ? themeSettings.value : undefined),
-              createPluginsContextConnector(pluginsContext.value),
+              createSisenseContextConnector(),
+              createThemeContextConnector(),
+              createPluginsContextConnector(),
             ],
       );
 

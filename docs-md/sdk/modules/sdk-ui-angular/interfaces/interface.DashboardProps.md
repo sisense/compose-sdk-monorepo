@@ -8,6 +8,14 @@ Props of the [DashboardComponent](../dashboards/class.DashboardComponent.md).
 
 ## Properties
 
+### config
+
+> **config**?: [`DashboardConfig`](interface.DashboardConfig.md)
+
+The configuration for the dashboard
+
+***
+
 ### defaultDataSource
 
 > **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

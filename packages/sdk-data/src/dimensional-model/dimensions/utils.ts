@@ -3,6 +3,7 @@ import { createAttribute } from '../attributes.js';
 import { createDimension, createDateDimension } from './dimensions.js';
 import { Dimension, Attribute } from '../interfaces.js';
 import { DataSourceField } from '../types.js';
+import { isDataSourceInfo } from '../../utils.js';
 
 /**
  * Function to convert data source fields to dimensions.
@@ -36,7 +37,9 @@ const createAttributeEntry = (
   const dimensionName = field.tableTitle || dimensionId;
   const attributeId = field.id;
   const attributeName = field.title || attributeId;
-  const dataSourceConfig = { title: dataSource, live: false };
+  const dataSourceConfig = isDataSourceInfo(dataSource)
+    ? dataSource
+    : { title: dataSource, live: false };
 
   const attribute =
     field.dimtype === 'datetime'

@@ -9,8 +9,10 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === 'production' ? false : true,
     lib: {
       name: 'sdk-ui-vue',
-      entry: './src/lib.ts',
-      fileName: 'index',
+      entry: {
+        index: resolve(__dirname, './src/lib.ts'),
+        ai: resolve(__dirname, './src/ai/index.ts'),
+      },
       formats: ['es', 'cjs'],
     },
     rollupOptions: {

@@ -33,6 +33,7 @@ describe('FilterEditor', () => {
         <FilterEditor
           filter={filterFactory.members(DM.Commerce.AgeRange, [])}
           onChange={filterChangeHandler}
+          defaultDataSource={''}
         />
       </SisenseContextProvider>,
     );
@@ -47,6 +48,7 @@ describe('FilterEditor', () => {
         <FilterEditor
           filter={filterFactory.members(DM.Commerce.Quantity, [])}
           onChange={filterChangeHandler}
+          defaultDataSource={''}
         />
       </SisenseContextProvider>,
     );

@@ -9,11 +9,19 @@ import {
   filterToDefaultValues,
   filterToOption,
 } from '../../criteria-filter-tile/criteria-filter-operations.js';
-import { isConditionalFilter, isExcludeMembersFilter } from '../utils.js';
+import {
+  isConditionalFilter,
+  isExcludeMembersFilter,
+  isSupportedByFilterEditor,
+} from '../utils.js';
 import { usePrevious } from '@/common/hooks/use-previous.js';
-import { useThemeContext } from '@/theme-provider';
 import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
-import { createExcludeMembersFilter } from './utils.js';
+import {
+  createExcludeMembersFilter,
+  getConfigWithUpdatedDeactivated,
+  getMembersWithDeactivated,
+  getMembersWithoutDeactivated,
+} from './utils.js';
 import { MembersListSelect } from '../common/select/members-list-select';
 
 const TextCondition = {
@@ -47,7 +55,7 @@ const conditionItems = [
 ];
 
 const getTextFilterCondition = (filter: Filter): TextConditionType => {
-  if (!isConditionalFilter(filter)) {
+  if (!isConditionalFilter(filter) || !isSupportedByFilterEditor(filter)) {
     // returns first condition by default
     return conditionItems[0].value;
   }
@@ -88,17 +96,19 @@ const getCriteriaFilterBuilder = (condition: string) => {
 };
 
 function createConditionalFilter(baseFilter: Filter, data: TextConditionFilterData) {
-  const { attribute, config } = baseFilter;
+  const { attribute } = baseFilter;
   const { condition, value, selectedMembers, multiSelectEnabled } = data;
   if (condition === TextCondition.EXCLUDE) {
-    return createExcludeMembersFilter(attribute, selectedMembers, {
+    const config = getConfigWithUpdatedDeactivated(baseFilter, selectedMembers);
+    const members = getMembersWithoutDeactivated(baseFilter, selectedMembers);
+    return createExcludeMembersFilter(attribute, members, {
       ...config,
       enableMultiSelection: multiSelectEnabled,
     });
   }
 
   const builder = getCriteriaFilterBuilder(condition);
-  return builder.fn(attribute, value, config);
+  return builder.fn(attribute, value, baseFilter.config);
 }
 
 type TextConditionFilterData = {
@@ -124,12 +134,11 @@ export const TextConditionSection = ({
   multiSelectEnabled,
   onChange,
 }: TextConditionSectionProps) => {
-  const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
   const [condition, setCondition] = useState<TextConditionType>(getTextFilterCondition(filter));
   const [value, setValue] = useState(getTextFilterValue(filter) as string);
   const [selectedMembers, setSelectedMembers] = useState(
-    isExcludeMembersFilter(filter) ? filter.members : [],
+    isExcludeMembersFilter(filter) ? getMembersWithDeactivated(filter) : [],
   );
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
   const multiSelectChanged =
@@ -262,16 +271,12 @@ export const TextConditionSection = ({
         value={condition}
         items={translatedConditionItems}
         onChange={handleConditionChange}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-        primaryColor={themeSettings.typography.primaryTextColor}
         aria-label="Condition select"
       />
       {showInput && (
         <Input
           style={{
             width: '300px',
-            backgroundColor: themeSettings.filter.panel.backgroundColor,
-            color: themeSettings.typography.primaryTextColor,
           }}
           placeholder={t('filterEditor.placeholders.enterEntry')}
           value={value}

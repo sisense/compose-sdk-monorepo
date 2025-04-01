@@ -182,21 +182,23 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
         />
         {lastError && <TextMessage align="left">{lastError.message}</TextMessage>}
         {isLoading ? <LoadingSpinner /> : <MessageListResolver messages={history} />}
-        {enableFollowupQuestions && lastNlqResponse && (
-          <FollowupQuestionsContainer theme={themeSettings}>
-            {lastNlqResponse.followupQuestions.slice(0, 2).map((question, i) => (
-              <ClickableMessage
-                key={i}
-                align="left"
-                onClick={() => {
-                  sendMessage(question);
-                }}
-              >
-                <div className="csdk-py-[7px] csdk-px-4">{question}</div>
-              </ClickableMessage>
-            ))}
-          </FollowupQuestionsContainer>
-        )}
+        {enableFollowupQuestions &&
+          lastNlqResponse &&
+          (lastNlqResponse.followupQuestions?.length ?? 0) > 0 && (
+            <FollowupQuestionsContainer theme={themeSettings}>
+              {lastNlqResponse.followupQuestions?.slice(0, 2).map((question, i) => (
+                <ClickableMessage
+                  key={i}
+                  align="left"
+                  onClick={() => {
+                    sendMessage(question);
+                  }}
+                >
+                  <div className="csdk-py-[7px] csdk-px-4">{question}</div>
+                </ClickableMessage>
+              ))}
+            </FollowupQuestionsContainer>
+          )}
         {(isAwaitingResponse || isClearingHistory) && <LoadingDotsIcon />}
         {isClearHistoryOptionsVisible && (
           <ClearHistoryMessage

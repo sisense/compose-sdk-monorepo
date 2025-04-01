@@ -39,8 +39,8 @@ const TypeSelect = styled(SingleSelect<RelativeFilterType>)`
 const CountInput = styled(Input)<Themable>`
   width: 64px;
   margin-right: 8px;
-  background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
-  color: ${({ theme }) => theme.typography.primaryTextColor};
+  background-color: ${({ theme }) => theme.general.popover.input.backgroundColor};
+  color: ${({ theme }) => theme.general.popover.input.textColor};
 `;
 
 const GranularitySelect = styled(SingleSelect<string>)`
@@ -205,8 +205,6 @@ export const DatetimeRelativeSection = (props: DatetimeRelativeSectionProps) => 
             value={type}
             items={translatedTypes}
             onChange={handleTypeChange}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            primaryColor={themeSettings.typography.primaryTextColor}
             aria-label="Type"
           />
           {type !== RelativeFilterType.THIS && (

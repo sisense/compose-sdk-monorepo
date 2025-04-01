@@ -3,6 +3,8 @@ import DatePicker, { type DatePickerProps } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { applyOpacity, getSlightlyDifferentColor } from '../../../../utils/color/index.js';
 import { Themable } from '@/theme-provider/types.js';
+import { getElementStateColor } from '@/theme-provider/utils';
+import { ElementStates } from '@/types';
 
 type ThemableDatePickerProps = DatePickerProps & Themable;
 
@@ -15,13 +17,23 @@ const DatePickerWithCustomCalendar = ({
 
 export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
   border: none;
-  background-color: ${({ theme }) => theme.general.backgroundColor};
+  background-color: ${({ theme }) => theme.general.popover.input.datepicker.backgroundColor};
   display: flex;
   align-items: stretch;
   flex-direction: column;
   padding-bottom: 5px;
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  .react-datepicker__header--custom {
+    button,
+    span {
+      color: ${({ theme }) => theme.general.popover.input.datepicker.textColor};
+    }
+    svg path {
+      fill: ${({ theme }) => theme.general.popover.input.datepicker.textColor} !important;
+    }
+  }
   .react-datepicker__header {
-    background-color: ${({ theme }) => theme.general.backgroundColor};
+    background-color: ${({ theme }) => theme.general.popover.input.datepicker.backgroundColor};
     border-bottom: none;
     padding-bottom: 0;
     & > div > button {
@@ -29,16 +41,16 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
       width: 34px;
       &:hover {
         background-color: ${({ theme }) =>
-          getSlightlyDifferentColor(theme.general.backgroundColor)};
+          getSlightlyDifferentColor(theme.general.popover.input.datepicker.backgroundColor)};
         transition: 0.1s;
       }
       &:disabled {
-        background-color: ${({ theme }) => theme.general.backgroundColor};
+        background-color: ${({ theme }) => theme.general.popover.input.datepicker.backgroundColor};
       }
     }
   }
   .react-datepicker__day-name {
-    color: ${({ theme }) => theme.typography.primaryTextColor};
+    color: ${({ theme }) => theme.general.popover.input.datepicker.textColor};
     font-weight: 700;
   }
   .react-datepicker__day {
@@ -50,13 +62,42 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
     margin-top: 1px;
     margin-bottom: 1px;
     border-radius: 100%;
-    background-color: ${({ theme }) => theme.general.backgroundColor};
-    color: ${({ theme }) => theme.typography.primaryTextColor};
+    background-color: ${({ theme }) =>
+      getElementStateColor(
+        theme.general.popover.input.datepicker.item.backgroundColor,
+        ElementStates.DEFAULT,
+      )};
+    color: ${({ theme }) =>
+      getElementStateColor(
+        theme.general.popover.input.datepicker.item.textColor,
+        ElementStates.DEFAULT,
+      )};
     position: relative;
     z-index: 1;
     &:hover {
-      background-color: ${({ theme }) => theme.general.brandColor};
-      color: ${({ theme }) => theme.typography.primaryTextColor};
+      background-color: ${({ theme }) =>
+        getElementStateColor(
+          theme.general.popover.input.datepicker.item.backgroundColor,
+          ElementStates.HOVER,
+        )};
+      color: ${({ theme }) =>
+        getElementStateColor(
+          theme.general.popover.input.datepicker.item.textColor,
+          ElementStates.HOVER,
+        )};
+      transition: 0.1s;
+    }
+    &:focus {
+      background-color: ${({ theme }) =>
+        getElementStateColor(
+          theme.general.popover.input.datepicker.item.backgroundColor,
+          ElementStates.FOCUS,
+        )};
+      color: ${({ theme }) =>
+        getElementStateColor(
+          theme.general.popover.input.datepicker.item.textColor,
+          ElementStates.FOCUS,
+        )};
       transition: 0.1s;
     }
 
@@ -119,8 +160,8 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
   // Days in range that becomes out of selecting range when user is hovering dates in calendar
   .react-datepicker__month--selecting-range .react-datepicker__day--in-range {
     &:not(.react-datepicker__day--in-selecting-range) {
-      background-color: ${({ theme }) => theme.general.backgroundColor};
-      color: ${({ theme }) => theme.typography.secondaryTextColor};
+      background-color: ${({ theme }) => theme.general.popover.input.datepicker.backgroundColor};
+      color: ${({ theme }) => theme.general.popover.input.datepicker.textColor};
       &:before {
         visibility: visible;
         background-color: ${({ theme }) => applyOpacity(theme.general.brandColor, 0.15)};
@@ -141,7 +182,7 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
       &.react-datepicker__day--selecting-range-end:before {
         border-radius: 0 100% 100% 0;
       }
-      color: ${({ theme }) => theme.typography.secondaryTextColor};
+      color: ${({ theme }) => theme.general.popover.input.datepicker.textColor};
     }
   }
 
@@ -262,7 +303,14 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
   }
 
   .react-datepicker__day--disabled {
-    color: ${({ theme }) => applyOpacity(theme.typography.primaryTextColor, 0.5)};
+    color: ${({ theme }) =>
+      applyOpacity(
+        getElementStateColor(
+          theme.general.popover.input.datepicker.item.textColor,
+          ElementStates.DEFAULT,
+        ),
+        0.5,
+      )};
   }
 
   // Hover on day out of the possible selecting range
@@ -333,6 +381,10 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
 
   .react-datepicker__day--highlighted {
     background-color: ${({ theme }) => theme.general.brandColor};
-    color: ${({ theme }) => theme.typography.primaryTextColor};
+    color: ${({ theme }) =>
+      getElementStateColor(
+        theme.general.popover.input.datepicker.item.textColor,
+        ElementStates.DEFAULT,
+      )};
   }
 `;

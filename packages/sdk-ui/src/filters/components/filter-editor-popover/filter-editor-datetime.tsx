@@ -6,6 +6,7 @@ import {
   isIncludeAllFilter,
   isIncludeMembersFilter,
   isRelativeDateFilterWithoutAnchor,
+  isSupportedByFilterEditor,
 } from './utils';
 import { MultiSelectControl } from './multi-select-control';
 import { FilterEditorContainer } from './filter-editor-container';
@@ -18,8 +19,11 @@ import { DatetimeMembersSection } from './sections/datetime-members-section';
 import { DatetimeRangeSection } from './sections/datetime-range-section';
 import { DatetimeConditionSection } from './sections/datetime-condition-section';
 import { DatetimeRelativeSection } from './sections/datetime-relative-section';
+import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
+import { useFilterEditorContext } from './filter-editor-context';
 
 enum FilterSections {
+  NOT_SUPPORTED = 'not-supported',
   ALL = 'all',
   MEMBERS = 'members',
   RELATIVE = 'relative',
@@ -30,6 +34,10 @@ enum FilterSections {
 const getSelectedSection = (filter: Filter | null) => {
   if (!filter) {
     return null;
+  }
+
+  if (!isSupportedByFilterEditor(filter)) {
+    return FilterSections.NOT_SUPPORTED;
   }
 
   if (isIncludeAllFilter(filter)) {
@@ -54,11 +62,17 @@ const getSelectedSection = (filter: Filter | null) => {
 type FilterEditorDatetimeProps = {
   filter: Filter;
   onChange?: (filter: Filter | null) => void;
+  showMultiselectToggle?: boolean;
 };
 
 /** @internal */
-export const FilterEditorDatetime = ({ filter, onChange }: FilterEditorDatetimeProps) => {
+export const FilterEditorDatetime = ({
+  filter,
+  onChange,
+  showMultiselectToggle = true,
+}: FilterEditorDatetimeProps) => {
   const { themeSettings } = useThemeContext();
+  const { defaultDataSource } = useFilterEditorContext();
   const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
   const [selectedSection, setSelectedSection] = useState<FilterSections | null>(
     getSelectedSection(editedFilter),
@@ -70,6 +84,7 @@ export const FilterEditorDatetime = ({ filter, onChange }: FilterEditorDatetimeP
   const { data: attributeStats } = useGetAttributeStats<DatetimeAttributeStats>({
     attribute: filter.attribute,
     enabled: !!filter,
+    ...(defaultDataSource && { defaultDataSource }),
   });
 
   const dateLimits = useMemo(
@@ -110,12 +125,10 @@ export const FilterEditorDatetime = ({ filter, onChange }: FilterEditorDatetimeP
   }, []);
 
   return (
-    <FilterEditorContainer
-      style={{
-        color: themeSettings.typography.primaryTextColor,
-      }}
-      aria-label="Filter editor datetime"
-    >
+    <FilterEditorContainer theme={themeSettings} aria-label="Filter editor datetime">
+      {!isSupportedByFilterEditor(filter) && (
+        <NotSupportedSection selected={selectedSection === FilterSections.NOT_SUPPORTED} />
+      )}
       <Stack
         direction="row"
         spacing={2}
@@ -130,7 +143,10 @@ export const FilterEditorDatetime = ({ filter, onChange }: FilterEditorDatetimeP
           selected={selectedSection === FilterSections.ALL}
           onChange={handleIncludeAllSectionChange}
         />
-        <MultiSelectControl enabled={multiSelectEnabled} onChange={setMultiSelectEnabled} />
+
+        {showMultiselectToggle && (
+          <MultiSelectControl enabled={multiSelectEnabled} onChange={setMultiSelectEnabled} />
+        )}
       </Stack>
       <DatetimeMembersSection
         filter={filter}

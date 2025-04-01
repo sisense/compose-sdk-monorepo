@@ -1,6 +1,5 @@
-import { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import { ClickAwayListener } from '@mui/material';
 import { DateIcon } from '../../../../icons';
 import { CalendarRangeValue, CalendarSelectLimits, CalendarSelectTypes } from './types';
 import { getCalendarDateSelectorMode, getCalendarSelectedItemsDisplayValue } from './utils';
@@ -11,13 +10,13 @@ import {
 } from '@/filters/components/date-filter/date-filter/calendar-date-selector';
 import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter';
 import { Popper } from '@/common/components/popper';
+import { useThemeContext } from '@/theme-provider';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 type BaseCalendarSelectProps = {
   limits?: CalendarSelectLimits;
-  style?: CSSProperties;
   placeholder?: string;
-  primaryColor?: string;
-  primaryBackgroundColor?: string;
+  width?: number | string;
 };
 
 type CalendarSingleSelectProps = BaseCalendarSelectProps & {
@@ -44,18 +43,9 @@ type CalendarSelectProps =
   | CalendarRangeSelectProps;
 
 export function CalendarSelect(props: CalendarSelectProps) {
-  const {
-    value,
-    type,
-    style,
-    limits,
-    placeholder,
-    onChange,
-    primaryColor,
-    primaryBackgroundColor,
-    ...rest
-  } = props;
+  const { value, type, limits, placeholder, onChange, width, ...rest } = props;
   const formatter = useDatetimeFormatter();
+  const { themeSettings } = useThemeContext();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
 
@@ -145,25 +135,26 @@ export function CalendarSelect(props: CalendarSelectProps) {
 
   return (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
-      <div>
+      <div style={{ width }}>
         <SelectField
           ref={selectElementRef}
           focus={open}
           onClick={() => setOpen((isOpen) => !isOpen)}
-          style={{
-            ...style,
-            ...(primaryColor && { color: primaryColor }),
-            ...(primaryBackgroundColor && { backgroundColor: primaryBackgroundColor }),
-          }}
+          theme={themeSettings}
           {...rest}
         >
           <SelectLabel
-            style={{ color: primaryColor, opacity: valuesToDisplay.length ? '100%' : '50%' }}
+            theme={themeSettings}
+            style={{ opacity: valuesToDisplay.length ? '100%' : '50%' }}
             aria-label="Value"
           >
             <>{getCalendarSelectedItemsDisplayValue(valuesToDisplay, formatter) ?? placeholder}</>
           </SelectLabel>
-          <DateIcon aria-label="Calendar icon" style={{ marginRight: '3px' }} />
+          <DateIcon
+            iconColor={themeSettings.general.popover.input.textColor}
+            aria-label="Calendar icon"
+            style={{ marginRight: '3px' }}
+          />
         </SelectField>
         <Popper open={open} anchorEl={selectElementRef.current}>
           <CalendarDateSelector

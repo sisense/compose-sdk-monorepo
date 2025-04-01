@@ -1,9 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SelectableSection } from '../common/selectable-section';
 import { Attribute, Filter, FilterConfig, filterFactory } from '@sisense/sdk-data';
 import { usePrevious } from '@/common/hooks/use-previous';
-import { isIncludeMembersFilter } from '@/filters/components/filter-editor-popover/utils';
 import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
+import {
+  getConfigWithUpdatedDeactivated,
+  getMembersWithDeactivated,
+  getMembersWithoutDeactivated,
+} from './utils';
+import { isIncludeMembersFilter } from '../utils';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
   return members.length
@@ -26,9 +31,8 @@ type MembersSectionProps = {
 /** @internal */
 export const MembersSection = (props: MembersSectionProps) => {
   const { filter, selected, multiSelectEnabled, onChange } = props;
-
   const [selectedMembers, setSelectedMembers] = useState(
-    isIncludeMembersFilter(filter) ? filter.members : [],
+    isIncludeMembersFilter(filter) ? getMembersWithDeactivated(filter) : [],
   );
 
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
@@ -37,8 +41,10 @@ export const MembersSection = (props: MembersSectionProps) => {
 
   const prepareAndChangeFilter = useCallback(
     ({ selectedMembers, multiSelectEnabled }: MembersFilterData) => {
-      const newFilter = createMembersFilter(filter.attribute, selectedMembers, {
-        ...filter.config,
+      const config = getConfigWithUpdatedDeactivated(filter, selectedMembers);
+      const members = getMembersWithoutDeactivated(filter, selectedMembers);
+      const newFilter = createMembersFilter(filter.attribute, members, {
+        ...config,
         enableMultiSelection: multiSelectEnabled,
       });
       onChange(newFilter);

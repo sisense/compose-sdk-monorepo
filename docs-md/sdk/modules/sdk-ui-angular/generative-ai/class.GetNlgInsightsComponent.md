@@ -44,7 +44,7 @@ export class ExampleComponent {
 }
 ```
 
-<img src="../../../img/angular-get-nlg-insights-example.png" width="800px" />
+<img src="../../../img/angular-get-nlg-insights-example.png" width="700px" />
 
 ## Implements
 

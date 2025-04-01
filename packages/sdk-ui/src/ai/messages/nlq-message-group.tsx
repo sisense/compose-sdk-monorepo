@@ -33,7 +33,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
   const { chatMode = 'analyze', enableInsights } = useChatConfig();
   const { themeSettings } = useThemeContext();
 
-  const { queryTitle, chartRecommendations, jaql } = data;
+  const { queryTitle, chartRecommendations, jaql, userMsg } = data;
   console.debug(`JAQL for ${queryTitle}`, jaql);
   console.debug(`chart recommendations for ${queryTitle}`, chartRecommendations);
 
@@ -76,7 +76,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
           <>
             <FlexRow>
               <MessageContainer align="left" theme={themeSettings}>
-                {`Here's ${chartTypeSegment} showing ${lowerFirst(queryTitle)}.`}
+                {userMsg || `Here's ${chartTypeSegment} showing ${lowerFirst(queryTitle)}.`}
               </MessageContainer>
               {buttonRow}
             </FlexRow>

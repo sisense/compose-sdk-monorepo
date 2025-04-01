@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from '@sisense/sdk-common';
 import {
@@ -18,7 +18,6 @@ import {
 import { SearchableMultiSelect } from '../../../common/select/searchable-multi-select.js';
 import { SearchableSingleSelect } from '../../../common/select/searchable-single-select.js';
 import { usePrevious } from '@/common/hooks/use-previous.js';
-import { useThemeContext } from '@/index-typedoc.js';
 import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter.js';
 import { getDefaultDateMask } from '@/query/date-formats/apply-date-format.js';
 import {
@@ -30,13 +29,17 @@ import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-memb
 import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from '../../../constants.js';
 import { ScrollWrapperOnScrollEvent } from '../../../common/scroll-wrapper.js';
 import { isSameAttribute } from '@/utils/filters';
-import { createExcludeMembersFilter } from '../../utils.js';
+import {
+  createExcludeMembersFilter,
+  getConfigWithUpdatedDeactivated,
+  getMembersWithDeactivated,
+} from '../../utils.js';
 import { granularities } from '../../common/granularities';
+import { useFilterEditorContext } from '../../../filter-editor-context';
 
 function createExcludeConditionFilter(baseFilter: Filter, data: DatetimeConditionFilterData) {
-  const { config } = baseFilter;
   const { selectedMembers, multiSelectEnabled, attribute } = data;
-
+  const config = getConfigWithUpdatedDeactivated(baseFilter, selectedMembers);
   if (selectedMembers?.length) {
     return createExcludeMembersFilter(attribute, selectedMembers, {
       ...config,
@@ -69,7 +72,7 @@ function getDatetimeExcludeConditionFilterData(
   if (isExcludeMembersFilter(filter)) {
     return {
       ...defaultData,
-      selectedMembers: filter.members,
+      selectedMembers: getMembersWithDeactivated(filter),
       attribute: filter.attribute as DimensionalLevelAttribute,
     };
   }
@@ -91,13 +94,18 @@ export const DatetimeExcludeConditionForm = ({
   limits,
   onChange,
 }: DatetimeConditionSectionFormProps) => {
-  const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
-  const initialFilterData = getDatetimeExcludeConditionFilterData(filter, t);
+  const { defaultDataSource } = useFilterEditorContext();
+  const initialFilterData = useMemo(
+    () => getDatetimeExcludeConditionFilterData(filter, t),
+    [filter, t],
+  );
   const [attribute, setAttribute] = useState<DimensionalLevelAttribute>(
     initialFilterData.attribute,
   );
-  const [selectedMembers, setSelectedMembers] = useState(initialFilterData.selectedMembers);
+  const members = initialFilterData.selectedMembers;
+
+  const [selectedMembers, setSelectedMembers] = useState(members);
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
   const formatter = useDatetimeFormatter();
   const isDaysLevel = attribute.granularity === DateLevels.Days;
@@ -113,6 +121,7 @@ export const DatetimeExcludeConditionForm = ({
     filter: filterToQueryMembers,
     count: QUERY_MEMBERS_COUNT,
     enabled: !isDaysLevel,
+    ...(defaultDataSource && { defaultDataSource }),
   });
 
   const handleMembersListScroll = useCallback(
@@ -132,9 +141,9 @@ export const DatetimeExcludeConditionForm = ({
     if (
       isIncludeMembersFilter(filter) &&
       isSameAttribute(filter.attribute, attribute) &&
-      filter.members.length
+      members.length
     ) {
-      const selectedMembers = multiSelectEnabled ? filter.members : [filter.members[0]];
+      const selectedMembers = multiSelectEnabled ? members : [members[0]];
       allMembers = [
         ...selectedMembers.map((member) => ({
           value: member,
@@ -144,7 +153,7 @@ export const DatetimeExcludeConditionForm = ({
       ];
     }
     return allMembers;
-  }, [multiSelectEnabled, membersData, filter, attribute, formatter]);
+  }, [multiSelectEnabled, membersData, filter, attribute, formatter, members]);
 
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
@@ -239,49 +248,41 @@ export const DatetimeExcludeConditionForm = ({
         value={attribute.granularity}
         items={translatedGranularities}
         onChange={handleGranularityChange}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-        primaryColor={themeSettings.typography.primaryTextColor}
         aria-label="Condition select"
       />
       <>
         {multiSelectEnabled && !isDaysLevel && (
           <SearchableMultiSelect<string>
-            style={{ width: '152px' }}
+            width={152}
             values={selectedMembers}
             placeholder={t('filterEditor.placeholders.selectFromList')}
             items={selectItems}
             onChange={handleMembersChange}
             onListScroll={handleMembersListScroll}
             showListLoader={membersLoading}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
             showSearch={false}
           />
         )}
         {!multiSelectEnabled && !isDaysLevel && (
           <SearchableSingleSelect<string>
-            style={{ width: '152px' }}
+            width={152}
             value={selectedMembers[0]}
             placeholder={t('filterEditor.placeholders.selectFromList')}
             items={selectItems}
             onChange={handleMembersChange}
             onListScroll={handleMembersListScroll}
             showListLoader={membersLoading}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
             showSearch={false}
           />
         )}
         {isDaysLevel && (
           <CalendarSelect
-            style={{ width: '152px' }}
+            width={152}
             type={CalendarSelectTypes.MULTI_SELECT}
             value={selectedDaysMembers}
             limits={normalizedLimits}
             onChange={handleDaysMembersChange}
             placeholder={t('filterEditor.placeholders.select')}
-            primaryColor={themeSettings.typography.primaryTextColor}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
           />
         )}
       </>

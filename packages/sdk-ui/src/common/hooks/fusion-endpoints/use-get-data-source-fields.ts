@@ -13,10 +13,13 @@ import { useQuery } from '@tanstack/react-query';
 export const useGetDataSourceFields = (params: {
   dataSource: DataSource | undefined;
   enabled?: boolean;
+  count?: number;
+  offset?: number;
+  searchValue?: string;
 }): DataSourceFieldsState => {
-  const { dataSource, enabled = true } = params;
+  const { dataSource, enabled = true, count, offset, searchValue } = params;
   const { app, isInitialized } = useSisenseContext();
-  const canLoad = isInitialized && app;
+  const canLoad = isInitialized && !!app;
   const api = canLoad ? new RestApi(app?.httpClient) : undefined;
 
   const dataSourceToQuery = dataSource || app?.defaultDataSource;
@@ -32,17 +35,24 @@ export const useGetDataSourceFields = (params: {
     status,
     error: unknownError,
   } = useQuery({
-    queryKey: ['getDataSourceFields', dataSource, api],
+    queryKey: ['getDataSourceFields', dataSource, count, offset, api, searchValue],
     queryFn: () =>
-      dataSourceString && api ? api.getDataSourceFields(dataSourceString) : undefined,
-    select: (data) => data,
+      dataSourceString && api
+        ? api.getDataSourceFields(dataSourceString, { count, offset, searchValue })
+        : undefined,
     enabled: shouldBeQueried,
+    // Disable caching of this request.
+    // Cached data causes changes of loaded data without setting 'isLoading' state to true
+    // and it causes a flickering effect.
+    // TODO: Handle this case in `withLazyLoading` decorator, after that enable caching.
+    staleTime: 0,
+    cacheTime: 0,
   });
 
   switch (status) {
     case 'success':
       return {
-        dataSourceFields: data as DataSourceField[],
+        dataSourceFields: data!,
         isLoading: false,
         isError: false,
         isSuccess: true,
@@ -50,7 +60,14 @@ export const useGetDataSourceFields = (params: {
         status,
       };
     case 'loading':
-      return loadingState;
+      return {
+        dataSourceFields: undefined,
+        isLoading: true,
+        isError: false,
+        isSuccess: false,
+        error: undefined,
+        status: 'loading',
+      };
     case 'error':
       return {
         dataSourceFields: undefined,
@@ -63,15 +80,6 @@ export const useGetDataSourceFields = (params: {
     default:
       throw new Error(`Unknown status: ${status}`);
   }
-};
-
-const loadingState: DataSourceFieldsState = {
-  dataSourceFields: undefined,
-  isLoading: true,
-  isError: false,
-  isSuccess: false,
-  error: undefined,
-  status: 'loading',
 };
 
 type DataSourceFieldsState = RestApiHookState<'dataSourceFields', DataSourceField[]>;

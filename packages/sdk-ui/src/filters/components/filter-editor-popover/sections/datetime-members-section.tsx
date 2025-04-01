@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SelectableSection } from '../common/selectable-section';
 import { SearchableMultiSelect } from '../common/select/searchable-multi-select';
@@ -14,7 +14,6 @@ import {
 import { convertDateToMemberString, createLevelAttribute, isIncludeMembersFilter } from '../utils';
 import { SearchableSingleSelect } from '../common/select/searchable-single-select';
 import { usePrevious } from '@/common/hooks/use-previous';
-import { useThemeContext } from '@/theme-provider';
 import { SingleSelect } from '../common';
 import { useDatetimeFormatter } from '../hooks/use-datetime-formatter';
 import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
@@ -25,6 +24,12 @@ import { isSameAttribute } from '@/utils/filters';
 import { CalendarSelect, CalendarSelectTypes } from '../common/select/calendar-select';
 import { DatetimeLimits } from './types';
 import { granularities } from './common/granularities';
+import { useFilterEditorContext } from '../filter-editor-context';
+import {
+  getConfigWithUpdatedDeactivated,
+  getMembersWithDeactivated,
+  getMembersWithoutDeactivated,
+} from './utils';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
   return members.length
@@ -48,15 +53,22 @@ type DatetimeMembersSectionProps = {
 
 /** @internal */
 export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
-  const { themeSettings } = useThemeContext();
   const { filter, selected, multiSelectEnabled, limits, onChange } = props;
   const { t } = useTranslation();
+  const { defaultDataSource } = useFilterEditorContext();
+  const isIncludeFilter = isIncludeMembersFilter(filter);
+
   const [attribute, setAttribute] = useState<DimensionalLevelAttribute>(
-    filter.attribute as DimensionalLevelAttribute,
+    isIncludeFilter
+      ? (filter.attribute as DimensionalLevelAttribute)
+      : createLevelAttribute(filter.attribute as DimensionalLevelAttribute, DateLevels.Years, t),
   );
-  const [selectedMembers, setSelectedMembers] = useState(
-    isIncludeMembersFilter(filter) ? filter.members : [],
+
+  const members = useMemo(
+    () => (isIncludeFilter ? getMembersWithDeactivated(filter) : []),
+    [isIncludeFilter, filter],
   );
+  const [selectedMembers, setSelectedMembers] = useState(members);
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
   const formatter = useDatetimeFormatter();
   const isDaysLevel = attribute.granularity === DateLevels.Days;
@@ -71,6 +83,7 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
   } = useGetFilterMembersInternal({
     filter: filterToQueryMembers,
     count: QUERY_MEMBERS_COUNT,
+    ...(defaultDataSource && { defaultDataSource }),
   });
 
   const handleMembersListScroll = useCallback(
@@ -90,9 +103,9 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
     if (
       isIncludeMembersFilter(filter) &&
       isSameAttribute(filter.attribute, attribute) &&
-      filter.members.length
+      members.length
     ) {
-      const selectedMembers = multiSelectEnabled ? filter.members : [filter.members[0]];
+      const selectedMembers = multiSelectEnabled ? members : [members[0]];
       allMembers = [
         ...selectedMembers.map((member) => ({
           value: member,
@@ -102,8 +115,7 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
       ];
     }
     return allMembers;
-  }, [multiSelectEnabled, membersData, filter, attribute, formatter]);
-
+  }, [multiSelectEnabled, membersData, filter, attribute, formatter, members]);
   const isMultiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
   const translatedGranularities = useMemo(
@@ -117,8 +129,10 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
 
   const prepareAndChangeFilter = useCallback(
     ({ selectedMembers, multiSelectEnabled, attribute }: MembersFilterData) => {
-      const newFilter = createMembersFilter(attribute, selectedMembers, {
-        ...filter.config,
+      const config = getConfigWithUpdatedDeactivated(filter, selectedMembers);
+      const members = getMembersWithoutDeactivated(filter, selectedMembers);
+      const newFilter = createMembersFilter(attribute, members, {
+        ...config,
         enableMultiSelection: multiSelectEnabled,
       });
       onChange(newFilter);
@@ -129,7 +143,6 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
   useEffect(() => {
     if (isMultiSelectChanged && selected) {
       let newSelectedMembers = selectedMembers;
-
       if (!multiSelectEnabled) {
         if (selectedMembers.length > 1) {
           newSelectedMembers = [selectedMembers.sort()[0]];
@@ -209,49 +222,41 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
             value={attribute.granularity}
             items={translatedGranularities}
             onChange={handleGranularityChange}
-            primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-            primaryColor={themeSettings.typography.primaryTextColor}
             aria-label="Condition select"
           />
           <>
             {multiSelectEnabled && !isDaysLevel && (
               <SearchableMultiSelect<string>
-                style={{ width: '150px' }}
+                width={150}
                 values={selectedMembers}
                 placeholder={t('filterEditor.placeholders.selectFromList')}
                 items={selectItems}
                 onChange={handleMembersChange}
                 onListScroll={handleMembersListScroll}
                 showListLoader={membersLoading}
-                primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-                primaryColor={themeSettings.typography.primaryTextColor}
                 showSearch={false}
               />
             )}
             {!multiSelectEnabled && !isDaysLevel && (
               <SearchableSingleSelect<string>
-                style={{ width: '150px' }}
+                width={150}
                 value={selectedMembers[0]}
                 placeholder={t('filterEditor.placeholders.selectFromList')}
                 items={selectItems}
                 onChange={handleMembersChange}
                 onListScroll={handleMembersListScroll}
                 showListLoader={membersLoading}
-                primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-                primaryColor={themeSettings.typography.primaryTextColor}
                 showSearch={false}
               />
             )}
             {isDaysLevel && (
               <CalendarSelect
-                style={{ width: '152px' }}
+                width={152}
                 type={CalendarSelectTypes.MULTI_SELECT}
                 value={selectedDaysMembers}
                 limits={normalizedLimits}
                 onChange={handleDaysMembersChange}
                 placeholder={t('filterEditor.placeholders.select')}
-                primaryColor={themeSettings.typography.primaryTextColor}
-                primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
               />
             )}
           </>

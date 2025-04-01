@@ -3,11 +3,17 @@ import type { PropType } from 'vue';
 import { DashboardById as DashboardByIdPreact } from '@sisense/sdk-ui-preact';
 import type { DashboardByIdProps as DashboardByIdPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../setup-helper';
+import type { DashboardByIdConfig } from '../../types';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!DashboardById | `DashboardById`} component.
  */
-export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
+export interface DashboardByIdProps extends DashboardByIdPropsPreact {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
+   */
+  config?: DashboardByIdConfig;
+}
 
 /**
  * A component used for easily rendering a dashboard by its ID in a Sisense Fusion instance.
@@ -42,11 +48,9 @@ export const DashboardById = defineComponent({
      */
     dashboardOid: String as PropType<DashboardByIdProps['dashboardOid']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.persist}
-     *
-     * @alpha
+     * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
      */
-    persist: Boolean as PropType<DashboardByIdProps['persist']>,
+    config: Boolean as PropType<DashboardByIdProps['config']>,
   },
   setup: (props) => setupHelper(DashboardByIdPreact, props),
 });

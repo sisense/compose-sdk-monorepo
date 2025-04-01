@@ -6,11 +6,19 @@ type CheckboxProps = {
   isLabelInactive?: boolean;
   wrapperClassName?: string;
   indeterminate?: boolean;
+  labelProps?: React.HTMLProps<HTMLLabelElement>;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export const Checkbox: FunctionComponent<CheckboxProps> = (props) => {
-  const { wrapperClassName, label, isLabelInactive, indeterminate, className, ...checkboxProps } =
-    props;
+  const {
+    wrapperClassName,
+    label,
+    isLabelInactive,
+    indeterminate,
+    className,
+    labelProps,
+    ...checkboxProps
+  } = props;
   const labelClassnames = ['csdk-border-l', 'csdk-pl-3'];
 
   const cbRef = useRef<HTMLInputElement>(null);
@@ -23,6 +31,7 @@ export const Checkbox: FunctionComponent<CheckboxProps> = (props) => {
 
   return (
     <label
+      {...labelProps}
       className={classNames(
         'csdk-my-[2px] csdk-flex csdk-items-center csdk-leading-4 csdk-text-[13px]',
         wrapperClassName,
@@ -30,6 +39,7 @@ export const Checkbox: FunctionComponent<CheckboxProps> = (props) => {
           'csdk-cursor-pointer': !props.disabled,
         },
         className,
+        labelProps?.className,
       )}
     >
       <input

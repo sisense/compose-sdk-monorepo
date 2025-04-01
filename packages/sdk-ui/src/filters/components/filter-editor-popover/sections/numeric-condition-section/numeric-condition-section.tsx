@@ -13,7 +13,6 @@ import {
   GreaterThanIcon,
   GreaterThanOrEqualIcon,
 } from '../../../icons';
-import { useThemeContext } from '@/index-typedoc.js';
 import { useWasModified } from '@/common/hooks/use-was-modified.js';
 import { NumericCondition, NumericConditionFilterData, NumericConditionType } from './types.js';
 import {
@@ -23,6 +22,7 @@ import {
   validateInputValue,
 } from './utils.js';
 import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
+import { getMembersWithDeactivated } from '../utils.js';
 
 const conditionItems = [
   { value: NumericCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
@@ -72,14 +72,13 @@ export const NumericConditionSection = ({
   multiSelectEnabled,
   onChange,
 }: NumericConditionSectionProps) => {
-  const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
   const [condition, setCondition] = useState<NumericConditionType>(
     getNumericFilterCondition(filter, conditionItems[0].value),
   );
   const [value, setValue] = useState(getNumericFilterValue(filter));
   const [selectedMembers, setSelectedMembers] = useState(
-    isExcludeMembersFilter(filter) ? filter.members : [],
+    isExcludeMembersFilter(filter) ? getMembersWithDeactivated(filter) : [],
   );
   const isValueWasModified = useWasModified(value, '');
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
@@ -209,16 +208,12 @@ export const NumericConditionSection = ({
         value={condition}
         items={translatedConditionItems}
         onChange={handleConditionChange}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-        primaryColor={themeSettings.typography.primaryTextColor}
         aria-label="Condition select"
       />
       {showInput && (
         <Input
           style={{
             width: '136px',
-            backgroundColor: themeSettings.filter.panel.backgroundColor,
-            color: themeSettings.typography.primaryTextColor,
           }}
           placeholder={t('filterEditor.placeholders.enterEntry')}
           value={value}

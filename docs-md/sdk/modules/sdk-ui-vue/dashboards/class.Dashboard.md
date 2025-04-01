@@ -44,6 +44,14 @@ see [Embedded Dashboards](/guides/sdk/guides/dashboards/index.html).
 
 ## Properties
 
+### config
+
+> **`readonly`** **config**?: [`DashboardConfig`](../interfaces/interface.DashboardConfig.md)
+
+The configuration for the dashboard
+
+***
+
 ### defaultDataSource
 
 > **`readonly`** **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

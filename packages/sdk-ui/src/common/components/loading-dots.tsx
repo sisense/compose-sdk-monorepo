@@ -1,4 +1,4 @@
-export const LoadingDots = ({ color }: { color: string | undefined }) => {
+export const LoadingDots = ({ color }: { color?: string }) => {
   const dotStyle = {
     backgroundColor: color || '#333333',
     float: 'left' as const,

@@ -21,8 +21,8 @@ import { dateLevelGranularities as granularities } from '../../common/granularit
 const CountInput = styled(Input)<Themable>`
   width: 64px;
   margin-right: 8px;
-  background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
-  color: ${({ theme }) => theme.typography.primaryTextColor};
+  background-color: ${({ theme }) => theme.general.popover.input.backgroundColor};
+  color: ${({ theme }) => theme.general.popover.input.textColor};
 `;
 
 const GranularitySelect = styled(SingleSelect<string>)`
@@ -225,27 +225,21 @@ export const DatetimeIsWithinConditionForm = ({
         value={attribute.granularity}
         items={translatedGranularities}
         onChange={handleGranularityChange}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-        primaryColor={themeSettings.typography.primaryTextColor}
         aria-label="Granularity select"
       />
       <PositionSelect
         value={position}
         items={translatedPositions}
         onChange={handlePositionChange}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-        primaryColor={themeSettings.typography.primaryTextColor}
         aria-label="Position select"
       />
       <CalendarSelect
-        style={{ width: '152px' }}
+        width={152}
         type={CalendarSelectTypes.SINGLE_SELECT}
         value={baseDate}
         limits={normalizedLimits}
         onChange={handleBaseDateChange}
         placeholder={t('filterEditor.placeholders.select')}
-        primaryColor={themeSettings.typography.primaryTextColor}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
       />
     </>
   );

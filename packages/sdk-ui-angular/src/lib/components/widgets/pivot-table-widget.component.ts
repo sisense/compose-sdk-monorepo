@@ -1,0 +1,197 @@
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
+import {
+  PivotTableWidget as PivotTableWidgetPreact,
+  ComponentAdapter,
+  createElement,
+  type PivotTableWidgetProps as PivotTableWidgetPropsPreact,
+} from '@sisense/sdk-ui-preact';
+import { SisenseContextService } from '../../services';
+import { ThemeService } from '../../services';
+import {
+  createSisenseContextConnector,
+  createThemeContextConnector,
+} from '../../component-wrapper-helpers';
+import { template, rootId } from '../../component-wrapper-helpers/template';
+
+/**
+ * Props of the {@link PivotTableWidgetComponent}.
+ */
+export interface PivotTableWidgetProps extends PivotTableWidgetPropsPreact {}
+
+/**
+ * The Pivot Table Widget component extends the {@link PivotTableComponent} component to support widget features,
+ * including a header, widget style options, and more.
+ *
+ * @example
+ * ```html
+<csdk-pivot-table-widget
+  [dataSource]="pivotProps.dataSource"
+  [dataOptions]="pivotProps.dataOptions"
+  [filters]="pivotProps.filters"
+  [styleOptions]="pivotProps.styleOptions"
+  [title]="pivotProps.title"
+  [description]="pivotProps.description"
+/>
+ * ```
+ * ```ts
+import { Component } from '@angular/core';
+import { type PivotTableWidgetProps } from '@sisense/sdk-ui-angular';
+import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import * as DM from '../../assets/sample-ecommerce';
+
+@Component({
+  selector: 'app-analytics',
+  templateUrl: './analytics.component.html',
+  styleUrls: ['./analytics.component.scss'],
+})
+export class AnalyticsComponent {
+
+  pivotProps: PivotTableWidgetProps = {
+    dataSource: DM.DataSource,
+    dataOptions: {
+      rows: [
+        { column: DM.Category.Category, includeSubTotals: true },
+        { column: DM.Commerce.AgeRange, includeSubTotals: true },
+        DM.Commerce.Condition,
+      ],
+      columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],
+      values: [
+        measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+        {
+          column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+          totalsCalculation: 'sum',
+          dataBars: true,
+        },
+      ],
+      grandTotals: { title: 'Grand Total', rows: true, columns: true },
+    },
+    filters: [filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])],
+    styleOptions: { width: 1400, height: 600, rowsPerPage: 25 },
+    title: 'Pivot Table Widget',
+    description: 'Pivot Table Widget Description',
+  };
+}
+ * ```
+ * <img src="media://angular-pivot-table-widget-example.png" width="800px" />
+ * @group Dashboards
+ * @beta
+ */
+@Component({
+  selector: 'csdk-pivot-table-widget',
+  template,
+})
+export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
+  /** @internal */
+  @ViewChild(rootId)
+  preactRef!: ElementRef<HTMLDivElement>;
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.dataSource}
+   *
+   * @category Data
+   */
+  @Input()
+  dataSource: PivotTableWidgetProps['dataSource'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.dataOptions}
+   *
+   * @category Data
+   */
+  @Input()
+  dataOptions!: PivotTableWidgetProps['dataOptions'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.filters}
+   *
+   * @category Data
+   */
+  @Input()
+  filters: PivotTableWidgetProps['filters'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.highlights}
+   *
+   * @category Data
+   */
+  @Input()
+  highlights: PivotTableWidgetProps['highlights'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.styleOptions}
+   *
+   * @category Representation
+   */
+  @Input()
+  styleOptions: PivotTableWidgetProps['styleOptions'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.title}
+   *
+   * @category Widget
+   */
+  @Input()
+  title: PivotTableWidgetProps['title'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.title}
+   *
+   * @category Widget
+   */
+  @Input()
+  description: PivotTableWidgetProps['description'];
+
+  private componentAdapter: ComponentAdapter;
+
+  constructor(
+    private sisenseContextService: SisenseContextService,
+    private themeService: ThemeService,
+  ) {
+    this.componentAdapter = new ComponentAdapter(
+      () => this.createPreactComponent(),
+      [
+        createSisenseContextConnector(this.sisenseContextService),
+        createThemeContextConnector(this.themeService),
+      ],
+    );
+  }
+
+  /** @internal */
+  ngAfterViewInit() {
+    this.componentAdapter.render(this.preactRef.nativeElement);
+  }
+
+  /** @internal */
+  ngOnChanges() {
+    if (this.preactRef) {
+      this.componentAdapter.render(this.preactRef.nativeElement);
+    }
+  }
+
+  private createPreactComponent() {
+    const props = {
+      dataSource: this.dataSource,
+      dataOptions: this.dataOptions,
+      filters: this.filters,
+      highlights: this.highlights,
+      styleOptions: this.styleOptions,
+      title: this.title,
+      description: this.description,
+    };
+
+    return createElement(PivotTableWidgetPreact, props);
+  }
+
+  /** @internal */
+  ngOnDestroy() {
+    this.componentAdapter.destroy();
+  }
+}

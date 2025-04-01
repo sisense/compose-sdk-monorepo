@@ -5,11 +5,11 @@ title: Chart Plugins
 # Chart Plugins
 
 > **Note**:
-> This guide is for [<img src="../img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart.md). Chart plugins are not currently supported in <img src="../img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular and <img src="../img/vue-logo.png" height="14px" /> Vue.
+> This guide is for [<img src="../img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](../getting-started/quickstart.md). Chart plugins are not currently supported in <img src="../img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular and <img src="../img/vue-logo.png" height="14px" /> Vue.
 
 This guide explains how to define your own chart plugin component and register it in your application code, so that it will be automatically rendered (based on the corresponding widget type) when using the `DashboardById` component.
 
-**Note:** It is assumed that the application is [already configured correctly](./quickstart.md) for use with Compose SDK.
+**Note:** It is assumed that the application is [already configured correctly](../getting-started/quickstart.md) for use with Compose SDK.
 
 ## Sample dashboard
 

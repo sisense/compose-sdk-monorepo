@@ -21,8 +21,8 @@ Line chart displaying total revenue per quarter from the Sample ECommerce data m
 
 Additional Line Chart examples:
 
-- [Curved Line Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fline-chart-spline)
-- [Styled Line Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fline-chart-styled)
+- [Curved Line Chart](https://www.sisense.com/developers/playground/?example=charts%2Fline-chart-spline)
+- [Styled Line Chart](https://www.sisense.com/developers/playground/?example=charts%2Fline-chart-styled)
 
 ## Parameters
 

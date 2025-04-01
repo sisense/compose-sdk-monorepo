@@ -8,6 +8,24 @@ Parameters for data query execution.
 
 ## Properties
 
+### beforeQuery
+
+> **beforeQuery**?: (`jaql`) => `any`
+
+Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `jaql` | `any` |
+
+#### Returns
+
+`any`
+
+***
+
 ### count
 
 > **count**?: `number`
@@ -76,13 +94,9 @@ If not specified, the default value is `0`
 
 Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
 
-**Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
-```ts
-const onBeforeQuery = useCallback((jaql) => {
-  // modify jaql here
-  return jaql;
-}, []);
-```
+::: warning Deprecated
+Use `beforeQuery` instead.
+:::
 
 #### Parameters
 

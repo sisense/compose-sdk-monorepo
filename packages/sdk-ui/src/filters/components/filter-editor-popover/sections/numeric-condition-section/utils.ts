@@ -9,10 +9,16 @@ import {
   isConditionalFilter,
   isExcludeMembersFilter,
   isNumericBetweenFilter,
+  isSupportedByFilterEditor,
 } from '../../utils.js';
 import { isNumericString } from '@/utils/is-numeric-string.js';
 import { NumericCondition, NumericConditionType, NumericConditionFilterData } from './types.js';
-import { createExcludeMembersFilter, getCriteriaFilterBuilder } from '../utils.js';
+import {
+  createExcludeMembersFilter,
+  getConfigWithUpdatedDeactivated,
+  getCriteriaFilterBuilder,
+  getMembersWithoutDeactivated,
+} from '../utils.js';
 
 export function validateInputValue(value: string, t: TFunction) {
   if (!isNumericString(value)) {
@@ -26,7 +32,11 @@ export function getNumericFilterCondition(
   filter: Filter,
   initialCondition: NumericConditionType,
 ): NumericConditionType {
-  if (!isConditionalFilter(filter) || isNumericBetweenFilter(filter)) {
+  if (
+    !isConditionalFilter(filter) ||
+    isNumericBetweenFilter(filter) ||
+    !isSupportedByFilterEditor(filter)
+  ) {
     // returns first condition by default
     return initialCondition;
   }
@@ -47,11 +57,13 @@ export function getNumericFilterValue(filter: Filter): string {
 }
 
 export function createConditionalFilter(baseFilter: Filter, data: NumericConditionFilterData) {
-  const { attribute, config } = baseFilter;
+  const { attribute } = baseFilter;
   const { condition, value, selectedMembers, multiSelectEnabled } = data;
-
   if (condition === NumericCondition.EXCLUDE) {
-    return createExcludeMembersFilter(attribute, selectedMembers, {
+    const config = getConfigWithUpdatedDeactivated(baseFilter, selectedMembers);
+    const members = getMembersWithoutDeactivated(baseFilter, selectedMembers);
+
+    return createExcludeMembersFilter(attribute, members, {
       ...config,
       enableMultiSelection: multiSelectEnabled,
     });
@@ -62,5 +74,5 @@ export function createConditionalFilter(baseFilter: Filter, data: NumericConditi
   }
 
   const builder = getCriteriaFilterBuilder(condition);
-  return builder.fn(attribute, parseFloat(value), config);
+  return builder.fn(attribute, parseFloat(value), baseFilter.config);
 }

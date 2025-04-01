@@ -46,5 +46,8 @@ export const SisenseSwitchButton = styled(Switch)<Themable>(({ theme }) => {
       backgroundColor: '#6e737d',
       borderRadius: 9,
     },
+    '&:focus-visible, & .Mui-focusVisible': {
+      outline: '-webkit-focus-ring-color auto 1px',
+    },
   };
 });

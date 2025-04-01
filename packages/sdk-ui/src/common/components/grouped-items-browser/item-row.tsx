@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 import styled from '@emotion/styled';
 import ListItemButton from '@mui/material/ListItemButton';
 import React from 'react';
@@ -21,12 +23,16 @@ const ItemRowContent = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding-left: 48px;
 `;
 
 const ItemRowTitle = styled.div`
   display: flex;
   align-items: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.1px;
 `;
 
 export const ItemRow: React.FC<ItemRowProps> = ({
@@ -34,12 +40,14 @@ export const ItemRow: React.FC<ItemRowProps> = ({
   itemActionConfig,
   itemSecondaryActionConfig,
 }) => {
+  const { themeSettings } = useThemeContext();
   const [isHovered, setIsHovered] = React.useState(false);
   return (
-    <ListItemButton
+    <ItemRowButton
       onClick={() => itemActionConfig?.onClick(item)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      theme={themeSettings}
     >
       <ItemRowContent>
         <ItemRowTitle>
@@ -57,6 +65,31 @@ export const ItemRow: React.FC<ItemRowProps> = ({
           </div>
         )}
       </ItemRowContent>
-    </ListItemButton>
+    </ItemRowButton>
   );
 };
+
+const ItemRowButton = styled(ListItemButton)<Themable>`
+  display: flex;
+  padding: 0px 8px 0px 40px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  height: 28px;
+
+  color: ${({ theme }) => theme.general.popover.content.clickableList.item.textColor};
+  background: ${({ theme }) => theme.general.popover.content.clickableList.item.backgroundColor};
+
+  &:hover {
+    background: ${({ theme }) =>
+      theme.general.popover.content.clickableList.item.hover.backgroundColor};
+    color: ${({ theme }) => theme.general.popover.content.clickableList.item.hover.textColor};
+  }
+
+  svg path {
+    fill: ${({ theme }) => theme.general.popover.content.clickableList.item.textColor};
+    &:hover {
+      fill: ${({ theme }) => theme.general.popover.content.clickableList.item.hover.textColor};
+    }
+  }
+`;

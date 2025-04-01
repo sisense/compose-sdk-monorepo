@@ -16,7 +16,7 @@ This component is currently under beta release for our managed cloud customers o
 
 | Parameter | Type |
 | :------ | :------ |
-| `__namedParameters` | [`AiContextProviderProps`](../type-aliases/type-alias.AiContextProviderProps.md) |
+| `__namedParameters` | [`AiContextProviderProps`](../interfaces/interface.AiContextProviderProps.md) |
 
 ## Returns
 

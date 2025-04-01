@@ -6,9 +6,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useGetFilterMembers } from '@/filters';
 import { Attribute, filterFactory } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
-import { useThemeContext } from '@/theme-provider';
 import { ScrollWrapperOnScrollEvent } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
 import debounce from 'lodash-es/debounce';
+import { useFilterEditorContext } from '../../filter-editor-context';
 
 type MembersListSelectProps = {
   attribute: Attribute;
@@ -32,7 +32,7 @@ export const MembersListSelect = ({
   width = '100%',
 }: MembersListSelectProps) => {
   const { t } = useTranslation();
-  const { themeSettings } = useThemeContext();
+  const { defaultDataSource } = useFilterEditorContext();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSetSearchValue = useMemo(
     () => debounce(setSearchValue, SEARCH_VALUE_UPDATE_DELAY),
@@ -51,6 +51,7 @@ export const MembersListSelect = ({
     ),
     filter: useMemo(() => filterFactory.members(attribute, []), [attribute]),
     count: QUERY_MEMBERS_COUNT,
+    ...(defaultDataSource && { defaultDataSource }),
   });
 
   const selectItems = useMemo(() => {
@@ -82,13 +83,11 @@ export const MembersListSelect = ({
 
   return multiSelect ? (
     <SearchableMultiSelect<string>
-      style={{ width }}
+      width={width}
       values={selectedMembers}
       placeholder={t('filterEditor.placeholders.selectFromList')}
       items={selectItems}
       onChange={onChange}
-      primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-      primaryColor={themeSettings.typography.primaryTextColor}
       onListScroll={handleMembersListScroll}
       showListLoader={membersLoading}
       showSearch={showSearch}
@@ -96,13 +95,11 @@ export const MembersListSelect = ({
     />
   ) : (
     <SearchableSingleSelect<string>
-      style={{ width }}
+      width={width}
       value={selectedMembers[0]}
       placeholder={t('filterEditor.placeholders.selectFromList')}
       items={selectItems}
       onChange={(value) => onChange([value])}
-      primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-      primaryColor={themeSettings.typography.primaryTextColor}
       onListScroll={handleMembersListScroll}
       showListLoader={membersLoading}
       showSearch={showSearch}

@@ -11,15 +11,26 @@ export type DimensionsBrowserProps = {
   /**
    * Action to be performed when an attribute is clicked.
    */
-  attributeActionConfig: AttributeActionConfig;
+  attributeActionConfig?: AttributeActionConfig;
   /**
    * Config for secondary action to be performed on an attribute.
    */
-  attributeSecondaryActionConfig: AttributeSecondaryActionConfig;
+  attributeSecondaryActionConfig?: AttributeSecondaryActionConfig;
   /**
    * Config for secondary action to be performed on a dimension.
    */
-  dimensionSecondaryActionConfig: DimensionSecondaryActionConfig;
+  dimensionSecondaryActionConfig?: DimensionSecondaryActionConfig;
+
+  /**
+   * Callback to be executed when the user scrolls to the bottom of the list.
+   */
+  onScrolledToBottom?: () => void;
+
+  /**
+   * Flag indicating whether the component is in a loading state.
+   * If `true`, a loading spinner will be displayed.
+   */
+  isLoading?: boolean;
 };
 
 /**

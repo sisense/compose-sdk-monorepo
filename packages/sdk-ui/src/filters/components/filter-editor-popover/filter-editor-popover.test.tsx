@@ -30,7 +30,11 @@ describe('FilterEditorPopover', () => {
   it('should render filter editor popover', async () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
-        <FilterEditorPopover filter={filter} position={{ anchorEl: document.body }} />
+        <FilterEditorPopover
+          filter={filter}
+          position={{ anchorEl: document.body }}
+          defaultDataSource={''}
+        />
       </SisenseContextProvider>,
     );
     const filterEditorPopover = await screen.findByLabelText('Filter editor popover');
@@ -40,7 +44,11 @@ describe('FilterEditorPopover', () => {
   it('should contain valid filter information in header', async () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
-        <FilterEditorPopover filter={filter} position={{ anchorEl: document.body }} />
+        <FilterEditorPopover
+          filter={filter}
+          position={{ anchorEl: document.body }}
+          defaultDataSource={''}
+        />
       </SisenseContextProvider>,
     );
     const headerAttribute = await screen.findByTestId('filter-editor-popover-header-attribute');
@@ -57,6 +65,7 @@ describe('FilterEditorPopover', () => {
           filter={filter}
           position={{ anchorEl: document.body }}
           onChange={onChangeMock}
+          defaultDataSource={''}
         />
       </SisenseContextProvider>,
     );
@@ -73,6 +82,7 @@ describe('FilterEditorPopover', () => {
           filter={filter}
           position={{ anchorEl: document.body }}
           onClose={onCloseMock}
+          defaultDataSource={''}
         />
       </SisenseContextProvider>,
     );

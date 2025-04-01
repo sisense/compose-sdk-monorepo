@@ -5,6 +5,18 @@ import { useThemeContext } from '../../../../theme-provider/index.js';
 import { CalendarHeader } from './calendar-header.js';
 import { ButtonId, QuickDateSelectionButtons } from './quick-date-selection-buttons.js';
 import { calculateNewDateRange } from './date-range-calculator.js';
+import { Themable } from '@/theme-provider/types';
+import styled from '@emotion/styled';
+
+const Container = styled.div<Themable>`
+  background-color: ${({ theme }) => theme.general.popover.input.datepicker.backgroundColor};
+  border-radius: ${({ theme }) => theme.general.popover.input.datepicker.cornerRadius};
+  box-shadow: ${({ theme }) => theme.general.popover.input.datepicker.shadow};
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+`;
 
 export type SelectorMode = 'fromSelector' | 'toSelector' | 'pointSelector' | 'multiPointsSelector';
 
@@ -81,16 +93,7 @@ export function CalendarDateSelector({
   }, [selectorMode, selectedDates]);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        backgroundColor: themeSettings.general.backgroundColor,
-      }}
-      aria-label="date range filter calendar container"
-    >
+    <Container theme={themeSettings} aria-label="date range filter calendar container">
       {limit && (
         <QuickDateSelectionButtons
           enabledButtons={buttons}
@@ -128,6 +131,6 @@ export function CalendarDateSelector({
         fixedHeight
         disabledKeyboardNavigation
       />
-    </div>
+    </Container>
   );
 }

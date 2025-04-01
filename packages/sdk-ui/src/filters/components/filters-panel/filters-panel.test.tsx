@@ -1,53 +1,212 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
-import { FiltersPanel } from '@/filters';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { Filter, filterFactory } from '@sisense/sdk-data';
+import { Attribute, Filter, filterFactory } from '@sisense/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { FiltersPanel } from './filters-panel';
 
-vi.mock('../filter-tile', async () => {
+vi.mock('@/filters/components/filter-tile', () => {
   const FilterTile = ({
     filter,
     onChange,
+    onEdit,
   }: {
     filter: Filter;
     onChange: (filter: Filter) => void;
-  }) => (
-    <div data-testid={'filter-tile'}>
-      FilterTile
-      <button data-testid={'filter-tile-button'} onClick={() => onChange(filter)} />
-    </div>
-  );
-  return {
-    FilterTile,
+    onEdit: (filter: Filter) => void;
+  }) => {
+    return (
+      <div data-testid="filter-tile">
+        FilterTile
+        {/* Button to trigger inline editing */}
+        <button data-testid="inline-edit-filter-tile-button" onClick={() => onChange(filter)} />
+        <button data-testid="edit-filter-button" onClick={() => onEdit(filter)} />
+      </div>
+    );
   };
+  return { FilterTile };
+});
+
+vi.mock('@/data-browser/add-filter-popover/add-filter-data-browser', () => {
+  const AddFilterDataBrowserMock = ({
+    onAttributeClick,
+  }: {
+    onAttributeClick: (attribute: Attribute) => void;
+  }) => {
+    return (
+      <div data-testid="add-filter-data-browser-mock">
+        AddFilterDataBrowser
+        <button
+          data-testid="select-some-attribute-button"
+          onClick={() => onAttributeClick(DM.Commerce.AgeRange)}
+        >
+          Select some attribute
+        </button>
+      </div>
+    );
+  };
+  return { AddFilterDataBrowser: AddFilterDataBrowserMock };
+});
+
+vi.mock('@/filters/components/filter-editor-popover/filter-editor-popover', () => {
+  const FilterEditorPopoverMock = ({
+    filter,
+    onChange,
+  }: {
+    filter?: Filter | null;
+    onChange?: (filter: Filter) => void;
+  }) => {
+    return (
+      <div data-testid="filter-editor-popover">
+        FilterEditorPopover
+        <button
+          data-testid="apply-button"
+          onClick={() => {
+            if (filter && onChange) {
+              onChange(filter);
+            }
+          }}
+        >
+          Apply
+        </button>
+      </div>
+    );
+  };
+  return { FilterEditorPopover: FilterEditorPopoverMock };
 });
 
 describe('FiltersPanel', () => {
-  it('should render FiltersPanel with filters and trigger onFiltersChange', async () => {
-    const filters = [
-      filterFactory.members(DM.Brand.BrandID, ['1', '2', '3']),
-      filterFactory.greaterThan(DM.Commerce.Cost, 100),
-    ];
-    const mockOnFiltersChange = vi.fn().mockImplementation((filters: Filter[]) => {
-      // check that we receive the same filters as we passed to the FiltersPanel
-      expect(filters).toEqual(filters);
+  describe('FiltersPanel — basic', () => {
+    it('renders filters and triggers onFiltersChange', async () => {
+      const filters = [
+        filterFactory.members(DM.Brand.BrandID, ['1', '2']),
+        filterFactory.greaterThan(DM.Commerce.Cost, 100),
+      ];
+      const onFiltersChange = vi.fn();
+
+      render(
+        <MockedSisenseContextProvider>
+          <FiltersPanel
+            filters={filters}
+            onFiltersChange={onFiltersChange}
+            dataSources={[DM.DataSource]}
+          />
+        </MockedSisenseContextProvider>,
+      );
+
+      await waitFor(() => expect(screen.getAllByTestId('filter-tile')).toHaveLength(2));
+      fireEvent.click(screen.getAllByTestId('inline-edit-filter-tile-button')[0]);
+      expect(onFiltersChange).toHaveBeenCalledOnce();
+      expect(onFiltersChange.mock.calls[0][0]).toMatchSnapshot();
     });
+  });
 
-    render(
-      <MockedSisenseContextProvider>
-        <FiltersPanel filters={filters} onFiltersChange={mockOnFiltersChange} />
-      </MockedSisenseContextProvider>,
-    );
+  describe('adding new filter', () => {
+    it('opens and closes the "Add filter" popover', async () => {
+      render(
+        <MockedSisenseContextProvider>
+          <FiltersPanel
+            filters={[filterFactory.members(DM.Brand.BrandID, ['1', '2'])]}
+            onFiltersChange={vi.fn()}
+            config={{
+              actions: {
+                addFilter: {
+                  enabled: true,
+                },
+              },
+            }}
+          />
+        </MockedSisenseContextProvider>,
+      );
 
-    // check that we render same amount of filters as we passed
-    const filterTiles = screen.getAllByTestId('filter-tile');
+      const addFilterButton = await screen.findByTestId('add-filter-button');
+      fireEvent.click(addFilterButton);
 
-    expect(filterTiles.length).toBe(2);
+      await waitFor(() => {
+        expect(screen.getByTestId('add-filter-popover')).toBeInTheDocument();
+        expect(screen.getByTestId('add-filter-data-browser-mock')).toBeInTheDocument();
+      });
 
-    // check that callback is called when filter is changed
-    const filterTileOnChangeButtons = screen.getAllByTestId('filter-tile-button');
-    fireEvent.click(filterTileOnChangeButtons[0]);
+      const popoverCloseButton = screen.getByTestId('popover-close-button');
+      fireEvent.click(popoverCloseButton);
+      await waitFor(() => {
+        expect(screen.queryByTestId('add-filter-popover')).not.toBeInTheDocument();
+      });
+    });
+    it('creates empty filter on attribute selection, opens filter editor, and after applying updates the filters list', async () => {
+      const onFiltersChange = vi.fn();
+      render(
+        <MockedSisenseContextProvider>
+          <FiltersPanel
+            filters={[filterFactory.members(DM.Brand.BrandID, ['1', '2'])]}
+            onFiltersChange={onFiltersChange}
+            config={{
+              actions: {
+                addFilter: {
+                  enabled: true,
+                },
+                editFilter: {
+                  enabled: true,
+                },
+              },
+            }}
+          />
+        </MockedSisenseContextProvider>,
+      );
 
-    expect(mockOnFiltersChange).toHaveBeenCalledTimes(1);
+      const addFilterButton = await screen.findByTestId('add-filter-button');
+      fireEvent.click(addFilterButton);
+
+      const selectAttributeButton = await screen.findByTestId('select-some-attribute-button');
+      fireEvent.click(selectAttributeButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('filter-editor-popover')).toBeInTheDocument();
+      });
+
+      const applyButton = screen.getByTestId('apply-button');
+      fireEvent.click(applyButton);
+
+      await waitFor(() => {
+        expect(onFiltersChange).toHaveBeenCalledOnce();
+        expect(onFiltersChange.mock.calls[0][0]).toMatchSnapshot();
+      });
+    });
+  });
+  describe('editing existing filter', () => {
+    it('opens filter editor, and after applying updates the filters list', async () => {
+      const filters = [filterFactory.members(DM.Brand.BrandID, ['1', '2'])];
+      const onFiltersChange = vi.fn();
+      render(
+        <MockedSisenseContextProvider>
+          <FiltersPanel
+            filters={filters}
+            onFiltersChange={onFiltersChange}
+            config={{
+              actions: {
+                editFilter: {
+                  enabled: true,
+                },
+              },
+            }}
+          />
+        </MockedSisenseContextProvider>,
+      );
+
+      const editFilterButton = await screen.findByTestId('edit-filter-button');
+      fireEvent.click(editFilterButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('filter-editor-popover')).toBeInTheDocument();
+      });
+
+      const applyButton = screen.getByTestId('apply-button');
+      fireEvent.click(applyButton);
+
+      await waitFor(() => {
+        expect(onFiltersChange).toHaveBeenCalledOnce();
+        expect(onFiltersChange.mock.calls[0][0]).toMatchSnapshot();
+      });
+    });
   });
 });

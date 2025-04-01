@@ -72,7 +72,6 @@ TypeScript type aliases for components and services listed above
 - [PivotRowsSort](type-alias.PivotRowsSort.md)
 - [PivotTableWidgetStyleOptions](type-alias.PivotTableWidgetStyleOptions.md)
 - [PolarSubtype](type-alias.PolarSubtype.md)
-- [QueryRecommendation](type-alias.QueryRecommendation.md)
 - [RangeChartType](type-alias.RangeChartType.md)
 - [RangeDataColorOptions](type-alias.RangeDataColorOptions.md)
 - [ScatterChartType](type-alias.ScatterChartType.md)

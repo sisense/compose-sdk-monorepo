@@ -2,7 +2,7 @@
 title: toDashboardProps
 ---
 
-# Function toDashboardProps <Badge type="fusionEmbed" text="Fusion Embed" />
+# Function toDashboardProps
 
 > **toDashboardProps**(`dashboardModel`): [`DashboardProps`](../../../interfaces/interface.DashboardProps.md)
 

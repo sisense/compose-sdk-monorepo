@@ -22,8 +22,8 @@ Area chart displaying total revenue per quarter from the Sample ECommerce data m
 
 Additional Area Chart examples:
 
-- [Stacked Area Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Farea-chart-stacked)
-- [Stacked Percentage Area Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Farea-chart-stacked100)
+- [Stacked Area Chart](https://www.sisense.com/developers/playground/?example=charts%2Farea-chart-stacked)
+- [Stacked Percentage Area Chart](https://www.sisense.com/developers/playground/?example=charts%2Farea-chart-stacked100)
 
 ## Parameters
 

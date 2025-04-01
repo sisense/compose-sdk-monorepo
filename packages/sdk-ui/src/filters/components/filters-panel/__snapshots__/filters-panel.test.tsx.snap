@@ -1,0 +1,126 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FiltersPanel > FiltersPanel — basic > renders filters and triggers onFiltersChange 1`] = `
+[
+  {
+    "__serializable": "DimensionalElement",
+    "attribute": {
+      "__serializable": "DimensionalElement",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "desc": "",
+      "expression": "[Brand.Brand ID]",
+      "name": "Brand ID",
+      "type": "numeric-attribute",
+    },
+    "dataSource": undefined,
+    "desc": "",
+    "filterType": "members",
+    "members": [
+      "1",
+      "2",
+    ],
+    "name": "e0b6f65ae7c",
+    "type": "filter",
+  },
+  {
+    "__serializable": "DimensionalElement",
+    "attribute": {
+      "__serializable": "DimensionalElement",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "desc": "",
+      "expression": "[Commerce.Cost]",
+      "name": "Cost",
+      "type": "numeric-attribute",
+    },
+    "dataSource": undefined,
+    "desc": "",
+    "filterType": "numeric",
+    "name": "bf69f7fc38f",
+    "operatorA": "fromNotEqual",
+    "type": "filter",
+    "valueA": 100,
+  },
+]
+`;
+
+exports[`FiltersPanel > adding new filter > creates empty filter on attribute selection, opens filter editor, and after applying updates the filters list 1`] = `
+[
+  {
+    "__serializable": "DimensionalElement",
+    "attribute": {
+      "__serializable": "DimensionalElement",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "desc": "",
+      "expression": "[Brand.Brand ID]",
+      "name": "Brand ID",
+      "type": "numeric-attribute",
+    },
+    "dataSource": undefined,
+    "desc": "",
+    "filterType": "members",
+    "members": [
+      "1",
+      "2",
+    ],
+    "name": "e0b6f65ae7c",
+    "type": "filter",
+  },
+  {
+    "__serializable": "DimensionalElement",
+    "attribute": {
+      "__serializable": "DimensionalElement",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "desc": "",
+      "expression": "[Commerce.Age Range]",
+      "name": "Age Range",
+      "type": "text-attribute",
+    },
+    "dataSource": undefined,
+    "desc": "",
+    "filterType": "members",
+    "members": [],
+    "name": "70e93572443",
+    "type": "filter",
+  },
+]
+`;
+
+exports[`FiltersPanel > editing existing filter > opens filter editor, and after applying updates the filters list 1`] = `
+[
+  {
+    "__serializable": "DimensionalElement",
+    "attribute": {
+      "__serializable": "DimensionalElement",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "desc": "",
+      "expression": "[Brand.Brand ID]",
+      "name": "Brand ID",
+      "type": "numeric-attribute",
+    },
+    "dataSource": undefined,
+    "desc": "",
+    "filterType": "members",
+    "members": [
+      "1",
+      "2",
+    ],
+    "name": "e0b6f65ae7c",
+    "type": "filter",
+  },
+]
+`;

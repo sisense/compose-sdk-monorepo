@@ -370,4 +370,11 @@ export const translation: TranslationDictionary = {
     grandTotal: 'Загальний підсумок',
     subTotal: 'Усього {{value}}',
   },
+  dataBrowser: {
+    addFilter: 'Додати фільтр',
+    selectField: 'Вибрати поле',
+    configureFilter: 'Налаштувати фільтр',
+    noResults: 'Немає результатів',
+    searchPlaceholder: 'Пошук',
+  },
 };

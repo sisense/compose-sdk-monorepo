@@ -3,10 +3,10 @@
 exports[`CascadingFilterTile > should render a locked CascadingFilterTile component 1`] = `
 <div>
   <div
-    class="css-1k5rk27"
+    class="css-16sc0wl"
   >
     <div
-      class="css-l4aa93"
+      class="csdk-accessible  css-l4aa93"
       style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
     >
       <main
@@ -20,10 +20,10 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
             aria-label="member-filter-tile"
           >
             <div
-              class="css-1k5rk27"
+              class="css-16sc0wl"
             >
               <div
-                class="css-n759pn"
+                class="csdk-accessible  css-n759pn"
                 style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
               >
                 <header
@@ -90,10 +90,10 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
             aria-label="member-filter-tile"
           >
             <div
-              class="css-1k5rk27"
+              class="css-16sc0wl"
             >
               <div
-                class="css-n759pn"
+                class="csdk-accessible  css-n759pn"
                 style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
               >
                 <div

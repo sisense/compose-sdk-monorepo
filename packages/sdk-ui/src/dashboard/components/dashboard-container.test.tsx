@@ -54,10 +54,10 @@ describe('DashboardContainer', () => {
         layoutOptions={{}}
         config={{
           toolbar: {
-            isVisible: false,
+            visible: false,
           },
           filtersPanel: {
-            isVisible: false,
+            visible: false,
           },
         }}
         widgets={[]}

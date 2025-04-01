@@ -155,6 +155,17 @@ export function convertToThemeSettings(
       backgroundColor: legacyDesignSettings.general.backgroundColor,
       primaryButtonTextColor: legacyDesignSettings.general.primaryButtonTextColor,
       primaryButtonHoverColor: legacyDesignSettings.general.primaryButtonHoverColor,
+      popover: getDefaultThemeSettings().general.popover,
+      buttons: {
+        cancel: {
+          backgroundColor: {
+            default: legacyDesignSettings.general.secondaryButtonBaseColor,
+            hover: legacyDesignSettings.general.secondaryButtonHoverColor,
+            focus: legacyDesignSettings.general.secondaryButtonHoverColor,
+          },
+          textColor: legacyDesignSettings.general.secondaryButtonTextColor,
+        },
+      },
     },
     widget: {
       spaceAround: LEGACY_DESIGN_TYPES[legacyDesignSettings.dashboards.widgetSpacing] as SpaceSizes,

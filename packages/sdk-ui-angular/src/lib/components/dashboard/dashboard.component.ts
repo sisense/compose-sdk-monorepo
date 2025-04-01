@@ -20,11 +20,17 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { template, rootId } from '../../component-wrapper-helpers/template';
+import type { DashboardConfig } from '../../types';
 
 /**
  * Props of the {@link DashboardComponent}.
  */
-export interface DashboardProps extends DashboardPropsPreact {}
+export interface DashboardProps extends DashboardPropsPreact {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+   */
+  config?: DashboardConfig;
+}
 
 /**
  * An Angular component used for easily rendering a dashboard created in Sisense Fusion.
@@ -98,8 +104,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
-   *
-   * @internal
    */
   @Input()
   config: DashboardProps['config'];

@@ -28,7 +28,7 @@ Note: this method is not supported for pivot table widgets.
 Use [getPivotTableProps](interface.WidgetModel.md#getpivottableprops) instead for getting props for the `<PivotTable>`  component.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toChartProps](../namespaces/namespace.widgetModelTranslator/functions/function.toChartProps.md) instead
+Use [widgetModelTranslator.toChartProps](namespace.widgetModelTranslator/functions/function.toChartProps.md) instead
 :::
 
 ***
@@ -52,7 +52,7 @@ Returns the props to be used for rendering a chart widget.
 Note: this method is not supported for pivot widgets.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toChartWidgetProps](../namespaces/namespace.widgetModelTranslator/functions/function.toChartWidgetProps.md) instead
+Use [widgetModelTranslator.toChartWidgetProps](namespace.widgetModelTranslator/functions/function.toChartWidgetProps.md) instead
 :::
 
 ***
@@ -77,7 +77,7 @@ Note: this method is supported only for getting pivot query.
 Use [getExecuteQueryParams](interface.WidgetModel.md#getexecutequeryparams) instead for getting query parameters for non-pivot widgets.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toExecutePivotQueryParams](../namespaces/namespace.widgetModelTranslator/functions/function.toExecutePivotQueryParams.md) instead
+Use [widgetModelTranslator.toExecutePivotQueryParams](namespace.widgetModelTranslator/functions/function.toExecutePivotQueryParams.md) instead
 :::
 
 ***
@@ -102,7 +102,7 @@ Note: this method is not supported for getting pivot query.
 Use [getExecutePivotQueryParams](interface.WidgetModel.md#getexecutepivotqueryparams) instead for getting query parameters for the pivot widget.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toExecuteQueryParams](../namespaces/namespace.widgetModelTranslator/functions/function.toExecuteQueryParams.md) instead
+Use [widgetModelTranslator.toExecuteQueryParams](namespace.widgetModelTranslator/functions/function.toExecuteQueryParams.md) instead
 :::
 
 ***
@@ -128,7 +128,7 @@ Use [getChartProps](interface.WidgetModel.md#getchartprops) instead for getting 
 Use [getTableProps](interface.WidgetModel.md#gettableprops) instead for getting props for the `<Table>`  component.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toPivotTableProps](../namespaces/namespace.widgetModelTranslator/functions/function.toPivotTableProps.md) instead
+Use [widgetModelTranslator.toPivotTableProps](namespace.widgetModelTranslator/functions/function.toPivotTableProps.md) instead
 :::
 
 ***
@@ -153,7 +153,7 @@ Note: this method is not supported for chart or table widgets.
 Use [getChartWidgetProps](interface.WidgetModel.md#getchartwidgetprops) instead for getting props for the `<ChartWidget>`  component.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toPivotTableWidgetProps](../namespaces/namespace.widgetModelTranslator/functions/function.toPivotTableWidgetProps.md) instead
+Use [widgetModelTranslator.toPivotTableWidgetProps](namespace.widgetModelTranslator/functions/function.toPivotTableWidgetProps.md) instead
 :::
 
 ***
@@ -179,7 +179,7 @@ Use [getChartProps](interface.WidgetModel.md#getchartprops) instead for getting 
 Use [getPivotTableProps](interface.WidgetModel.md#getpivottableprops) instead for getting props for the `<PivotTable>`  component.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toTableProps](../namespaces/namespace.widgetModelTranslator/functions/function.toTableProps.md) instead
+Use [widgetModelTranslator.toTableProps](namespace.widgetModelTranslator/functions/function.toTableProps.md) instead
 :::
 
 ***
@@ -205,7 +205,7 @@ Use [getChartWidgetProps](interface.WidgetModel.md#getchartwidgetprops) instead 
 Use [getPivotTableWidgetProps](interface.WidgetModel.md#getpivottablewidgetprops) instead for getting props for the `<PivotTableWidget>`  component.
 
 ::: warning Deprecated
-Use [widgetModelTranslator.toTextWidgetProps](../namespaces/namespace.widgetModelTranslator/functions/function.toTextWidgetProps.md) instead
+Use [widgetModelTranslator.toTextWidgetProps](namespace.widgetModelTranslator/functions/function.toTextWidgetProps.md) instead
 :::
 
 ## Properties
@@ -307,5 +307,5 @@ Widget title.
 Widget type.
 
 ::: warning Deprecated
-Use [widgetModelTranslator](../namespaces/namespace.widgetModelTranslator/index.md) methods instead
+Use [widgetModelTranslator](namespace.widgetModelTranslator/index.md) methods instead
 :::

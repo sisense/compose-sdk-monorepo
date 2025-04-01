@@ -6,7 +6,7 @@ import { type ChatRestApi } from './api/chat-rest-api';
 
 /** @internal */
 export type CustomAiContext = {
-  api: ChatRestApi;
+  api?: ChatRestApi;
 };
 
 /** @internal */

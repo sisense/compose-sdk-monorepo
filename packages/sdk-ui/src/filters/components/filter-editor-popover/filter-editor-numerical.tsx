@@ -3,7 +3,12 @@ import Stack from '@mui/material/Stack';
 import { Filter } from '@sisense/sdk-data';
 import { IncludeAllSection } from './sections/include-all-section';
 import { MembersSection } from './sections/members-section';
-import { isIncludeAllFilter, isIncludeMembersFilter, isNumericBetweenFilter } from './utils';
+import {
+  isIncludeAllFilter,
+  isIncludeMembersFilter,
+  isNumericBetweenFilter,
+  isSupportedByFilterEditor,
+} from './utils';
 import { MultiSelectControl } from './multi-select-control';
 import { FilterEditorContainer } from './filter-editor-container';
 import { NumericRangeSection } from './sections/numeric-range-section';
@@ -13,8 +18,11 @@ import {
 } from '@/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
 import { NumericConditionSection } from './sections/numeric-condition-section';
 import { useThemeContext } from '@/theme-provider';
+import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
+import { useFilterEditorContext } from './filter-editor-context';
 
 enum FilterSections {
+  NOT_SUPPORTED = 'not-supported',
   ALL = 'all',
   MEMBERS = 'members',
   RANGE = 'range',
@@ -24,6 +32,10 @@ enum FilterSections {
 const getSelectedSection = (filter: Filter | null) => {
   if (!filter) {
     return null;
+  }
+
+  if (!isSupportedByFilterEditor(filter)) {
+    return FilterSections.NOT_SUPPORTED;
   }
 
   if (isIncludeAllFilter(filter)) {
@@ -44,11 +56,17 @@ const getSelectedSection = (filter: Filter | null) => {
 type FilterEditorNumericalProps = {
   filter: Filter;
   onChange?: (filter: Filter | null) => void;
+  showMultiselectToggle?: boolean;
 };
 
 /** @internal */
-export const FilterEditorNumerical = ({ filter, onChange }: FilterEditorNumericalProps) => {
+export const FilterEditorNumerical = ({
+  filter,
+  onChange,
+  showMultiselectToggle = true,
+}: FilterEditorNumericalProps) => {
   const { themeSettings } = useThemeContext();
+  const { defaultDataSource } = useFilterEditorContext();
   const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
   const [selectedSection, setSelectedSection] = useState<FilterSections | null>(
     getSelectedSection(editedFilter),
@@ -60,6 +78,7 @@ export const FilterEditorNumerical = ({ filter, onChange }: FilterEditorNumerica
   const { data: attributeStats } = useGetAttributeStats<NumericAttributeStats>({
     attribute: filter.attribute,
     enabled: !!filter,
+    ...(defaultDataSource && { defaultDataSource }),
   });
 
   useEffect(() => {
@@ -87,12 +106,10 @@ export const FilterEditorNumerical = ({ filter, onChange }: FilterEditorNumerica
   }, []);
 
   return (
-    <FilterEditorContainer
-      style={{
-        color: themeSettings.typography.primaryTextColor,
-      }}
-      aria-label="Filter editor numerical"
-    >
+    <FilterEditorContainer theme={themeSettings} aria-label="Filter editor numerical">
+      {!isSupportedByFilterEditor(filter) && (
+        <NotSupportedSection selected={selectedSection === FilterSections.NOT_SUPPORTED} />
+      )}
       <Stack
         direction="row"
         spacing={2}
@@ -107,7 +124,10 @@ export const FilterEditorNumerical = ({ filter, onChange }: FilterEditorNumerica
           selected={selectedSection === FilterSections.ALL}
           onChange={handleIncludeAllSectionChange}
         />
-        <MultiSelectControl enabled={multiSelectEnabled} onChange={setMultiSelectEnabled} />
+
+        {showMultiselectToggle && (
+          <MultiSelectControl enabled={multiSelectEnabled} onChange={setMultiSelectEnabled} />
+        )}
       </Stack>
       <MembersSection
         filter={filter}

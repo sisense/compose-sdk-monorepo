@@ -39,7 +39,7 @@ export default asSisenseComponent({
     return <>{t('ai.errors.unexpected')}</>;
   }
 
-  const summary = data ?? 'Oops, no data came back for that.';
+  const summary = data ?? t('ai.errors.insightsNotAvailable');
 
   return <Collapsible text={isLoading ? 'Loading...' : summary} />;
 });
@@ -68,7 +68,7 @@ export const GetNlgQueryResult = asSisenseComponent({
     return <>{t('ai.errors.unexpected')}</>;
   }
 
-  const summary = data ?? 'Oops, no data came back for that.';
+  const summary = data ?? t('ai.errors.insightsNotAvailable');
 
   return <Collapsible text={isLoading ? 'Loading...' : summary} />;
 });

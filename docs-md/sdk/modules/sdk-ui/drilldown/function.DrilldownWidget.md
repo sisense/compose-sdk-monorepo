@@ -34,7 +34,7 @@ A column chart displaying total revenue by category from the Sample ECommerce da
 
 Additional drilldown examples:
 
-- [Detached Breadcrumbs](https://www.sisense.com/platform/compose-sdk/playground/?example=use-cases%2Fdrilldown-detached-breadcrumbs)
+- [Detached Breadcrumbs](https://www.sisense.com/developers/playground/?example=use-cases%2Fdrilldown-detached-breadcrumbs)
 
 ## Parameters
 

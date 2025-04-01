@@ -1,7 +1,8 @@
-import { SelectItemContainer, SelectLabel } from './base';
+import { DropdownSelectLabel, SelectItemContainer } from './base';
 import { SelectItem } from './types';
 import { Checkbox } from '../../../common';
 import { CSSProperties } from 'react';
+import { useThemeContext } from '@/theme-provider';
 
 type MultiSelectItemProps<Value> = SelectItem<Value> & {
   selected: boolean;
@@ -10,11 +11,11 @@ type MultiSelectItemProps<Value> = SelectItem<Value> & {
 };
 
 export function MultiSelectItem<Value = unknown>(props: MultiSelectItemProps<Value>) {
-  const { value, displayValue, selected, onSelect, style } = props;
+  const { themeSettings } = useThemeContext();
+  const { value, displayValue, selected, onSelect } = props;
   return (
     <SelectItemContainer
-      color={style?.color}
-      background={style?.backgroundColor}
+      theme={themeSettings}
       style={{ height: '36px', paddingLeft: '8px' }}
       onClick={() => onSelect?.(value)}
     >
@@ -22,8 +23,9 @@ export function MultiSelectItem<Value = unknown>(props: MultiSelectItemProps<Val
         checked={selected}
         readOnly={true}
         style={{ width: '13px', height: '13px', marginRight: '12px' }}
+        labelProps={{ onClick: (e) => e.preventDefault() }}
       />
-      <SelectLabel>{displayValue ?? `${value}`}</SelectLabel>
+      <DropdownSelectLabel theme={themeSettings}>{displayValue ?? `${value}`}</DropdownSelectLabel>
     </SelectItemContainer>
   );
 }

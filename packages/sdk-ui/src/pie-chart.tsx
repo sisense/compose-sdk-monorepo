@@ -19,8 +19,8 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * Additional Pie Chart examples:
  *
- * - [Donut Pie Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpie-chart-donut)
- * - [Ring Pie Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fpie-chart-ring)
+ * - [Donut Pie Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpie-chart-donut)
+ * - [Ring Pie Chart](https://www.sisense.com/developers/playground/?example=charts%2Fpie-chart-ring)
  *
  * @param props - Pie chart properties
  * @returns Pie Chart component

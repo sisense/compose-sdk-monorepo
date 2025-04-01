@@ -18,7 +18,7 @@ import {
  * ```ts
  * const existingDashboard: DashboardProps = {...}
  * const newFilters: Filter[] = [{...}, {...}, ...];
- * const updatedDashboard = replaceFilters(existingDashboard, newFilters);
+ * const updatedDashboard = dashboardHelpers.replaceFilters(existingDashboard, newFilters);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) whose filters are to be replaced.
  * @param newFilters - An array of new filters or filter relations to set on the dashboard.
@@ -41,7 +41,7 @@ export const replaceFilters = (
  * ```ts
  * const existingDashboard: DashboardProps = {...};
  * const newFilter: Filter = {...};
- * const updatedDashboard = addFilter(existingDashboard, newFilter);
+ * const updatedDashboard = dashboardHelpers.addFilter(existingDashboard, newFilter);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) to which the filter will be added.
  * @param newFilter - The filter to add to the dashboard.
@@ -61,7 +61,7 @@ export const addFilter = (dashboard: DashboardProps, newFilter: Filter): Dashboa
  * ```ts
  * const existingDashboard: DashboardProps = {...};
  * const newFilters: Filter[] = [{...}, {...}, ...];
- * const updatedDashboard = addFilters(existingDashboard, newFilters);
+ * const updatedDashboard = dashboardHelpers.addFilters(existingDashboard, newFilters);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) to which the filters will be added.
  * @param newFilters - An array of filters to add to the dashboard.
@@ -83,7 +83,7 @@ export const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): Das
  * const existingDashboard: DashboardProps = {...};
  * const filterToReplace: Filter = {...};
  * const newFilter: Filter = {...};
- * const updatedDashboard = replaceFilter(existingDashboard, filterToReplace, newFilter);
+ * const updatedDashboard = dashboardHelpers.replaceFilter(existingDashboard, filterToReplace, newFilter);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) containing the filter to be replaced.
  * @param filterToReplace - The existing filter to be replaced.
@@ -131,7 +131,7 @@ export const modifyFilter = (
  * ```ts
  * const existingDashboard: DashboardProps = {...};
  * const filterToRemove: Filter = {...};
- * const updatedDashboard = removeFilter(existingDashboard, filterToRemove);
+ * const updatedDashboard = dashboardHelpers.removeFilter(existingDashboard, filterToRemove);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) from which to remove the filter.
  * @param filterToRemove - The filter to be removed.
@@ -152,7 +152,7 @@ export const removeFilter = (dashboard: DashboardProps, filterToRemove: Filter):
  * ```ts
  * const existingDashboard: DashboardProps = {...};
  * const filtersToRemove: Filter[] = [{...}, {...}, ...];
- * const updatedDashboard = removeFilters(existingDashboard, filtersToRemove);
+ * const updatedDashboard = dashboardHelpers.removeFilters(existingDashboard, filtersToRemove);
  * ```
  * @param dashboard - The original dashboard (`DashboardProps`) from which the specified filters are removed.
  * @param filtersToRemove - An array of filters to remove.

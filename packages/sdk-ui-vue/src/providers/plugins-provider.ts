@@ -30,10 +30,12 @@ export const getPluginsContext = () => {
  * @group Contexts
  * @internal
  */
-export const createPluginsContextConnector = (context: CustomPluginsContext) => {
+export const createPluginsContextConnector = () => {
+  const pluginsContext = getPluginsContext();
+
   return {
     async prepareContext() {
-      return context;
+      return pluginsContext.value;
     },
     renderContextProvider: createContextProviderRenderer(CustomPluginsProvider),
   };

@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import ButtonMui from '@mui/material/Button';
 import { useThemeContext } from '@/theme-provider';
 import { getSlightlyDifferentColor } from '@/utils/color';
+import { ElementStates } from '@/types';
+import { getElementStateColor } from '@/theme-provider/utils';
 
 type ButtonProps = {
   children: ReactNode;
@@ -10,20 +12,22 @@ type ButtonProps = {
   onClick?: () => void;
 };
 
-const SECONDARY_BUTTON_BACKGROUND_COLOR = '#edeef1';
 const BUTTON_TEXT_COLOR = '#3a4356';
 
 /** @internal */
 export const Button = (props: ButtonProps) => {
   const { themeSettings } = useThemeContext();
+  const theme = themeSettings.general.buttons;
   const { children, type = 'primary', disabled, onClick, ...restProps } = props;
   return (
     <ButtonMui
       variant="contained"
       sx={{
         backgroundColor:
-          type === 'primary' ? themeSettings.general.brandColor : SECONDARY_BUTTON_BACKGROUND_COLOR,
-        color: BUTTON_TEXT_COLOR,
+          type === 'primary'
+            ? themeSettings.general.brandColor
+            : getElementStateColor(theme.cancel.backgroundColor, ElementStates.DEFAULT),
+        color: type === 'primary' ? BUTTON_TEXT_COLOR : theme.cancel.textColor,
         width: '74px',
         height: '28px',
         lineHeight: '18px',
@@ -36,15 +40,21 @@ export const Button = (props: ButtonProps) => {
           backgroundColor:
             type === 'primary'
               ? getSlightlyDifferentColor(themeSettings.general.brandColor, 0.1)
-              : getSlightlyDifferentColor(SECONDARY_BUTTON_BACKGROUND_COLOR, 0.1),
+              : getElementStateColor(theme.cancel.backgroundColor, ElementStates.HOVER),
           boxShadow: 'none',
+        },
+        '&:focus': {
+          backgroundColor:
+            type === 'primary'
+              ? getSlightlyDifferentColor(themeSettings.general.brandColor, 0.1)
+              : getElementStateColor(theme.cancel.backgroundColor, ElementStates.FOCUS),
         },
         '&[disabled]': {
           backgroundColor:
             type === 'primary'
               ? themeSettings.general.brandColor
-              : SECONDARY_BUTTON_BACKGROUND_COLOR,
-          color: BUTTON_TEXT_COLOR,
+              : getElementStateColor(theme.cancel.backgroundColor, ElementStates.DEFAULT),
+          color: type === 'primary' ? BUTTON_TEXT_COLOR : theme.cancel.textColor,
           opacity: 0.4,
         },
       }}

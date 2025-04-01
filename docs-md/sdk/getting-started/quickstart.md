@@ -296,6 +296,6 @@ The sample application in this quickstart guide is designed to give you a basis 
 
 For some ideas and examples, check out:
 
--   [Compose SDK Playground](https://www.sisense.com/platform/compose-sdk/playground/)
+-   [Compose SDK Playground](https://www.sisense.com/developers/playground/)
 -   [Demo application for Compose SDK with React](https://csdk-react.sisense.com)
 -   [Chart Tutorial](../tutorials/tutorial-charts/index.md)

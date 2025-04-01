@@ -76,6 +76,15 @@ export class SsoAuthenticator extends BaseAuthenticator {
       credentials: 'include',
     }).catch(errorInterceptor);
 
+    // covers the case when isAuth returns 200 with html in the body
+    // (i.e. redirect to /app/main for deleted user)
+    if (
+      response.status === 200 &&
+      !response.headers?.get('Content-Type')?.includes('application/json')
+    ) {
+      throw new TranslatableError('errors.authFailed');
+    }
+
     const result: IsAuthResponse = await response.json();
 
     if (!result.isAuthenticated) {

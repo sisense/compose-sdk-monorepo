@@ -54,6 +54,10 @@ export type AnyObject = Record<string, any>;
 export type EmptyObject = Record<string, never>;
 
 /**
+ * Any array
+ */
+export type AnyArray = any[];
+/**
  * Allows you to make a property of an object required.
  *
  * @example
@@ -70,13 +74,19 @@ export type WithRequiredProp<T, K extends keyof T> = Omit<T, K> & Required<Pick<
 /**
  * Universal generic state for hooks that fetch data from the REST API.
  */
-export type RestApiHookState<DataKey extends string, SuccessDataType extends AnyObject> =
+export type RestApiHookState<
+  DataKey extends string,
+  SuccessDataType extends AnyObject | AnyArray,
+> =
   | RestApiHookSuccessState<DataKey, SuccessDataType>
   | RestApiHookErrorState<DataKey>
   | RestApiHookLoadingState<DataKey>;
 
 /** Success state of the REST API hook */
-export type RestApiHookSuccessState<DataKey extends string, SuccessDataType extends AnyObject> = {
+export type RestApiHookSuccessState<
+  DataKey extends string,
+  SuccessDataType extends AnyObject | AnyArray,
+> = {
   isLoading: false;
   isError: false;
   isSuccess: true;

@@ -1,13 +1,15 @@
 import { Dashboard, DashboardChangeAction } from './dashboard';
-import { DashboardByIdProps } from './types';
+import { DashboardByIdProps, DashboardConfig } from './types';
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
 import { useDashboardModel } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { dashboardChangeActionToUseDashboardModelAction } from '@/models/dashboard/use-dashboard-model/use-dasboard-model-utils';
 import { TranslatableError } from '@/translation/translatable-error';
+import { useDefaults } from '@/common/hooks/use-defaults';
+import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from './constants';
 
 /**
  * React component that renders a dashboard created in Sisense Fusion by its ID.
@@ -39,13 +41,15 @@ import { TranslatableError } from '@/translation/translatable-error';
  */
 export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',
-})(({ dashboardOid, persist = false, enableFilterEditor = false }: DashboardByIdProps) => {
+})(({ dashboardOid, config: propConfig }: DashboardByIdProps) => {
   const { themeSettings } = useThemeContext();
+  const config = useDefaults(propConfig, DEFAULT_DASHBOARD_BY_ID_CONFIG);
+
   const { dashboard, isLoading, isError, error, dispatchChanges } = useDashboardModel({
     dashboardOid,
     includeWidgets: true,
     includeFilters: true,
-    persist,
+    persist: config.persist,
   });
 
   const handleChange = useCallback(
@@ -61,14 +65,19 @@ export const DashboardById = asSisenseComponent({
   if (isError && error)
     throw new TranslatableError('errors.dashboardLoadFailed', { error: error.message });
 
+  const dashboardProps = useMemo(() => {
+    return dashboard && dashboardModelTranslator.toDashboardProps(dashboard);
+  }, [dashboard]);
+
+  const dashboardConfig = useDefaults<DashboardConfig>(
+    propConfig,
+    useDefaults(dashboardProps?.config, DEFAULT_DASHBOARD_BY_ID_CONFIG),
+  );
+
   return (
     <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
-      {dashboard && (
-        <Dashboard
-          {...dashboardModelTranslator.toDashboardProps(dashboard)}
-          onChange={handleChange}
-          enableFilterEditor={enableFilterEditor}
-        />
+      {dashboardProps && (
+        <Dashboard {...dashboardProps} onChange={handleChange} config={dashboardConfig} />
       )}
     </LoadingOverlay>
   );

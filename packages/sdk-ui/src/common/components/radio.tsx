@@ -5,11 +5,12 @@ type ButtonProps = {
   checked?: boolean;
   value?: string;
   onChange?: (checked: boolean) => void;
+  disabled?: boolean;
 };
 
 /** @internal */
 export const Radio = (props: ButtonProps) => {
-  const { checked, value, onChange } = props;
+  const { checked, value, disabled, onChange } = props;
   return (
     <RadioMui
       sx={{
@@ -28,12 +29,17 @@ export const Radio = (props: ButtonProps) => {
         '&:hover': {
           backgroundColor: 'rgba(91, 99, 114, .1)',
         },
+        '&.Mui-disabled': {
+          color: 'inherit',
+          opacity: 0.5,
+        },
       }}
       size="small"
       checked={checked}
       onChange={(event, isChecked) => onChange?.(isChecked)}
       value={value}
       inputProps={{ ...(props['aria-label'] && { 'aria-label': props['aria-label'] }) }}
+      disabled={disabled}
     />
   );
 };

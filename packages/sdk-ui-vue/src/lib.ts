@@ -13,3 +13,4 @@ export { type DrilldownWidgetProps } from './components/drilldown-widget';
 export * from './sdk-ui-core-exports';
 export * from './components/widgets';
 export * from './components/dashboard';
+export * from './utilities';

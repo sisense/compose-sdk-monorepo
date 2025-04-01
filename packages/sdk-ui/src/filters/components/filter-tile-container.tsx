@@ -17,9 +17,7 @@ import { DEFAULT_TEXT_COLOR } from '@/const';
 const BORDER_STYLE = '1px solid #dadada';
 const FILTER_TILE_MIN_WIDTH = 215;
 
-const Container = styled.div<{
-  shouldShowBorder: boolean;
-}>`
+const BaseContainer = styled.div<{ shouldShowBorder: boolean }>`
   width: min-content;
   max-width: 100%;
   align-self: flex-start;
@@ -31,6 +29,10 @@ const Container = styled.div<{
       border: ${BORDER_STYLE};
     `}
 `;
+
+export const Container = (props: React.ComponentProps<typeof BaseContainer>) => (
+  <BaseContainer {...props} className={`csdk-accessible ${props.className ?? ''}`} />
+);
 
 const Header = styled.header<{
   shouldShowBorder: boolean;
@@ -112,6 +114,9 @@ const GroupHoverWrapper = styled('div')({
   '.MuiButtonBase-root.csdk-filter-edit-button': {
     opacity: 0,
     transition: 'all .3s ease',
+    '&:focus-visible': {
+      opacity: 1,
+    },
   },
   '&:hover': {
     '.MuiSwitch-root': {
@@ -169,17 +174,23 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
             {isDependent && <TriangleIndicator />}
             <Header shouldShowBorder={design.header.hasBorder} style={{ color: textColor }}>
               {!locked && design.header.isCollapsible && (
-                <ArrowDownIcon
-                  aria-label="arrow-down"
-                  data-testid="expand-collapse-button"
-                  width="16"
-                  height="16"
-                  fill={`${textColor ?? DEFAULT_TEXT_COLOR}`}
-                  className={`csdk-transition csdk-ml-[4px] csdk-cursor-pointer ${
-                    collapsed ? '-csdk-rotate-90' : ''
-                  }`}
+                <IconButton
+                  sx={{ padding: 0 }}
                   onClick={() => setCollapsed((value) => !value)}
-                />
+                  disableRipple
+                  disableTouchRipple
+                >
+                  <ArrowDownIcon
+                    aria-label="arrow-down"
+                    data-testid="expand-collapse-button"
+                    width="16"
+                    height="16"
+                    fill={`${textColor ?? DEFAULT_TEXT_COLOR}`}
+                    className={`csdk-transition csdk-ml-[4px] csdk-cursor-pointer ${
+                      collapsed ? '-csdk-rotate-90' : ''
+                    }`}
+                  />
+                </IconButton>
               )}
               {design.header.hasBackgroundFilterIcon && <BackgroundFilterIcon />}
               {locked && !isDependent && <LockIcon />}

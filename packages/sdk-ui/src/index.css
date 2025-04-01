@@ -8,6 +8,19 @@
   font-family: inherit;
 }
 
+.csdk-accessible button:focus-visible,
+.csdk-accessible a:focus-visible,
+.csdk-accessible textarea:focus-visible,
+.csdk-accessible select:focus-visible,
+.csdk-accessible input:focus-visible:not(.PrivateSwitchBase-input),
+.csdk-accessible [tabindex]:focus-visible {
+  outline: -webkit-focus-ring-color auto 1px;
+}
+
+.csdk-accessible .MuiTouchRipple-root {
+  display: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

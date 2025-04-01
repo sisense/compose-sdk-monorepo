@@ -1,9 +1,9 @@
 import merge from 'ts-deepmerge';
 import { useState, useEffect, useMemo } from 'react';
-import { ThemeOid, ThemeSettings, isThemeOid, CompleteThemeSettings } from '../types';
 import { useThemeContext } from './theme-context';
-import { useSisenseContext } from '../sisense-context/sisense-context';
-import { getThemeSettingsByOid } from '../themes/theme-loader';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { getThemeSettingsByOid } from '@/themes/theme-loader';
+import { CompleteThemeSettings, isThemeOid, ThemeOid, ThemeSettings } from '@/types';
 
 /**
  * Returns the theme settings for the given theme OID or theme settings and error if it happened.

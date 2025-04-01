@@ -8,6 +8,7 @@ export const translation: TranslationDictionary = {
   errors: {
     networkError:
       'Помилка мережі. Можливо ви забули додати свій домен до «CORS Allowed Origins» в панелі адміністратора Sisense -> Security Settings.',
+    authFailed: 'Автентифікація не вдалася.',
     ssoNotEnabled:
       'SSO не ввімкнено на цьому сервері, будь ласка, виберіть інший метод аутентифікації',
     ssoNoLoginUrl: 'Неможливо отримати loginUrl з сервера. Перевірте налаштування SSO.',

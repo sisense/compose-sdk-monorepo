@@ -4,4 +4,4 @@ title: QueryRecommendationResponse
 
 # Type alias QueryRecommendationResponse
 
-> **QueryRecommendationResponse**: [`QueryRecommendation`](type-alias.QueryRecommendation.md)[]
+> **QueryRecommendationResponse**: [`QueryRecommendation`](../interfaces/interface.QueryRecommendation.md)[]

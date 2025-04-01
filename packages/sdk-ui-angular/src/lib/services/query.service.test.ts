@@ -5,21 +5,24 @@
 import {
   executeQuery,
   executeQueryByWidgetId,
+  executePivotQuery,
   ExecuteQueryByWidgetIdParams,
   ExecuteQueryParams,
 } from '@sisense/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
-import { QueryService } from './query.service';
+import { ExecutePivotQueryParams, QueryService } from './query.service';
 import { SisenseContextService } from './sisense-context.service';
+import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
 
 vi.mock('@sisense/sdk-ui-preact', () => ({
   executeQuery: vi.fn(),
   executeQueryByWidgetId: vi.fn(),
+  executePivotQuery: vi.fn(),
 }));
 
 const executeQueryMock = executeQuery as Mock<typeof executeQuery>;
-
 const executeQueryByWidgetIdMock = executeQueryByWidgetId as Mock<typeof executeQueryByWidgetId>;
+const executePivotQueryMock = executePivotQuery as Mock<typeof executePivotQuery>;
 
 describe('QueryService', () => {
   let queryService: QueryService;
@@ -99,6 +102,44 @@ describe('QueryService', () => {
         query: { dimensions: [], measures: [], filters: [], highlights: [] },
         pivotQuery: undefined,
       });
+    });
+  });
+
+  describe('executePivotQuery', () => {
+    it('should execute a pivot data query', async () => {
+      const mockData: PivotQueryResultData = EMPTY_PIVOT_QUERY_RESULT_DATA;
+      executePivotQueryMock.mockResolvedValue(mockData);
+
+      const params: ExecutePivotQueryParams = {
+        dataSource: 'Sample ECommerce',
+        rows: [],
+        columns: [],
+        values: [],
+        filters: [],
+        highlights: [],
+        grandTotals: {},
+        count: 10,
+        offset: 0,
+        beforeQuery: vi.fn(),
+      };
+      const result = await queryService.executePivotQuery(params);
+      expect(sisenseContextServiceMock.getApp).toHaveBeenCalled();
+      expect(executePivotQueryMock).toHaveBeenCalledWith(
+        {
+          dataSource: params.dataSource,
+          rows: params.rows,
+          columns: params.columns,
+          values: params.values,
+          filters: params.filters,
+          highlights: params.highlights,
+          grandTotals: params.grandTotals,
+          count: params.count,
+          offset: params.offset,
+        },
+        {},
+        { onBeforeQuery: params.beforeQuery },
+      );
+      expect(result).toEqual({ data: mockData });
     });
   });
 });

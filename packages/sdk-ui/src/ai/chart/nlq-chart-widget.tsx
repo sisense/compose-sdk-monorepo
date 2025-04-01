@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { ChartWidget } from '@/widgets/chart-widget';
 import { widgetComposer } from '@/analytics-composer';
 import { ChartInsights } from '@/ai/chart/chart-insights';
-import { Filter, Data, MetadataItem } from '@sisense/sdk-data';
+import { Filter, Data, MetadataItem, FilterRelations } from '@sisense/sdk-data';
 import type { GetNlgInsightsRequest, NlqResponseData } from '@/ai';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { useGetNlgInsightsInternal } from '@/ai/use-get-nlg-insights';
@@ -29,7 +29,7 @@ export interface NlqChartWidgetProps {
   /**
    * The dashboard filters to be applied to the chart
    */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelations;
 
   /**
    * A callback that allows to modify data immediately after it has been retrieved.

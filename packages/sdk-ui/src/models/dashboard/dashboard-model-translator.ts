@@ -19,8 +19,6 @@ import { DataSource } from '@sisense/sdk-data';
  * ```tsx
  * <Dashboard {...dashboardModelTranslator.toDashboardProps(dashboardModel)} />
  * ```
- * @group Fusion Assets
- * @fusionEmbed
  */
 export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps {
   const {

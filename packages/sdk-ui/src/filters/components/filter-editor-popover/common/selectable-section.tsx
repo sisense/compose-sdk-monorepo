@@ -8,6 +8,7 @@ type SelectableSectionProps = {
   selected: boolean;
   onSelect: (selected: boolean) => void;
   children: ReactNode | ChildrenFn;
+  disabled?: boolean;
 };
 
 const Section = styled.div`
@@ -22,6 +23,7 @@ export const SelectableSection = ({
   selected,
   children,
   onSelect,
+  disabled,
   ...rest
 }: SelectableSectionProps) => {
   const select = () => {
@@ -30,7 +32,12 @@ export const SelectableSection = ({
 
   return (
     <Section {...rest}>
-      <Radio checked={selected} onChange={onSelect} aria-label={'Select button'} />
+      <Radio
+        disabled={disabled}
+        checked={selected}
+        onChange={onSelect}
+        aria-label={'Select button'}
+      />
       <>{typeof children === 'function' ? children(select) : children}</>
     </Section>
   );

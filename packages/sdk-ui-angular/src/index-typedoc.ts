@@ -19,7 +19,9 @@
  * @groupDescription Dashboards
  * Angular components and utilities for working with dashboards
  * @groupDescription Fusion Assets
- * Angular modules, services, and components for working with Fusion dashboards, widgets, queries, and formulas
+ * Angular components, services, and utilities for working with Fusion dashboards, widgets, queries, and formulas
+ * @groupDescription Generative AI
+ * Angular modules, components, and services for creating experiences using generative AI
  * @groupDescription Interfaces
  * TypeScript interfaces for components and services listed above
  * @groupDescription Type Aliases

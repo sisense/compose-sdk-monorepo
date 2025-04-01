@@ -9,3 +9,5 @@ title: AiContextConfig
 ### volatile
 
 > **volatile**?: `boolean`
+
+AI context volatile mode

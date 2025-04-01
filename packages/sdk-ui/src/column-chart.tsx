@@ -22,8 +22,8 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * Additional Column Chart examples:
  *
- * - [Stacked Column Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fcolumn-chart-stacked)
- * - [Stacked Percentage Column Chart](https://www.sisense.com/platform/compose-sdk/playground/?example=charts%2Fcolumn-chart-stacked100)
+ * - [Stacked Column Chart](https://www.sisense.com/developers/playground/?example=charts%2Fcolumn-chart-stacked)
+ * - [Stacked Percentage Column Chart](https://www.sisense.com/developers/playground/?example=charts%2Fcolumn-chart-stacked100)
  *
  * @param props - Column chart properties
  * @returns Column Chart component

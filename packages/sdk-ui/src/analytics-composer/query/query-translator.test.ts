@@ -7,7 +7,7 @@ import {
   MOCK_SIMPLE_QUERY_MODEL,
   MOCK_SIMPLE_QUERY_YAML,
 } from '../__mocks__/mock-queries.js';
-import { MOCK_DATA_SOURCE_FIELDS } from '../__mocks__/mock-data-source-fields.js';
+import { sampleEcommerceFields as MOCK_DATA_SOURCE_FIELDS } from '@/__mocks__/sample-ecommerce-fields.js';
 import { capitalizeFirstLetter } from '../common/utils.js';
 import { QUERY_TEMPLATE } from './query-templates.js';
 import { EMPTY_SIMPLE_QUERY_MODEL } from '../types.js';

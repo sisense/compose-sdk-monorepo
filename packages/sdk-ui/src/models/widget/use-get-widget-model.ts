@@ -104,7 +104,7 @@ export type WidgetModelSuccessState = {
  *
  * Additional `useGetWidgetModel` examples:
  *
- * - [Modify Chart Type](https://www.sisense.com/platform/compose-sdk/playground/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
+ * - [Modify Chart Type](https://www.sisense.com/developers/playground/?example=fusion-assets%2Fuse-get-widget-model-change-chart-type)
  *
  * @returns Widget load state that contains the status of the execution, the result widget model, or the error if one has occurred
  * @group Fusion Assets

@@ -1,6 +1,10 @@
 import { DetailedHTMLProps, InputHTMLAttributes, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
-import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR, ERROR_COLOR } from '@/const';
+import { ERROR_COLOR } from '@/const';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import { getElementStateColor } from '@/theme-provider/utils';
+import { ElementStates } from '@/types';
 
 const InputContainer = styled.span`
   display: inline-flex;
@@ -16,22 +20,32 @@ const InputErrorLabel = styled.span`
   white-space: nowrap;
 `;
 
-export const BaseInput = styled.input`
+export const BaseInput = styled.input<Themable>`
   box-sizing: border-box;
   border-radius: 4px;
   outline: none;
-  background: ${DEFAULT_BACKGROUND_COLOR};
-  color: ${DEFAULT_TEXT_COLOR};
+  background: ${({ theme }) => theme.general.popover.input.backgroundColor};
+  color: ${({ theme }) => theme.general.popover.input.textColor};
   line-height: 28px;
   height: 28px;
   border: none;
   text-indent: 8px;
   font-family: inherit;
   padding-right: 8px;
-  border: 1px solid ${DEFAULT_BACKGROUND_COLOR};
+  border: 1px solid
+    ${({ theme }) =>
+      getElementStateColor(theme.general.popover.input.borderColor, ElementStates.DEFAULT)};
+
+  &:hover {
+    border: 1px solid
+      ${({ theme }) =>
+        getElementStateColor(theme.general.popover.input.borderColor, ElementStates.HOVER)};
+  }
 
   &:focus {
-    border: 1px solid ${DEFAULT_TEXT_COLOR};
+    border: 1px solid
+      ${({ theme }) =>
+        getElementStateColor(theme.general.popover.input.borderColor, ElementStates.FOCUS)};
   }
 
   &::placeholder {
@@ -48,6 +62,7 @@ type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLI
 
 /** @internal */
 export function Input(props: InputProps) {
+  const { themeSettings } = useThemeContext();
   const { error, wrapperStyle, inputRef, ...baseInputProps } = props;
 
   const inputElRef = useRef(null);
@@ -61,6 +76,7 @@ export function Input(props: InputProps) {
   return (
     <InputContainer style={wrapperStyle}>
       <BaseInput
+        theme={themeSettings}
         ref={inputElRef}
         {...baseInputProps}
         style={{

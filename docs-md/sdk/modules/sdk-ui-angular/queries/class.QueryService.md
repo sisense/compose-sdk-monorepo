@@ -24,6 +24,30 @@ Service for executing data queries.
 
 ## Methods
 
+### executePivotQuery <Badge type="beta" text="Beta" />
+
+> **executePivotQuery**(`params`): `Promise`\< \{
+  `data`: [`PivotQueryResultData`](../../sdk-data/interfaces/interface.PivotQueryResultData.md);
+ } \>
+
+Executes a data query for a pivot table.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `params` | [`ExecutePivotQueryParams`](../interfaces/interface.ExecutePivotQueryParams.md) | Pivot query parameters |
+
+#### Returns
+
+`Promise`\< \{
+  `data`: [`PivotQueryResultData`](../../sdk-data/interfaces/interface.PivotQueryResultData.md);
+ } \>
+
+Pivot query result
+
+***
+
 ### executeQuery
 
 > **executeQuery**(`params`): `Promise`\< \{

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
+import { SearchIcon } from '@/common/icons/search-icon';
 import {
   createRef,
   useEffect,
@@ -7,7 +8,6 @@ import {
   type FunctionComponent,
   type InputHTMLAttributes,
 } from 'react';
-import { SearchIcon } from '../icons';
 import { useTranslation } from 'react-i18next';
 
 type InputProps = {

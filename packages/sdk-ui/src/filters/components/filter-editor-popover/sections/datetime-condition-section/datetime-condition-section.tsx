@@ -6,7 +6,6 @@ import { Filter } from '@sisense/sdk-data';
 import { SelectableSection } from '../../common/selectable-section.js';
 import { SingleSelect } from '../../common/index.js';
 import { isExcludeMembersFilter, isRelativeDateFilterWithAnchor } from '../../utils.js';
-import { useThemeContext } from '@/index-typedoc.js';
 import { DatetimeLimits } from '../types.js';
 import { DatetimeExcludeConditionForm } from './condition-forms/datetime-exclude-condition-form.js';
 import { DatetimeIsWithinConditionForm } from './condition-forms/datetime-is-within-condition-form.js';
@@ -72,7 +71,6 @@ export const DatetimeConditionSection = ({
   limits,
   onChange,
 }: DatetimeConditionSectionProps) => {
-  const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
   const initialFilterData = getDatetimeConditionFilterData(filter);
   const [condition, setCondition] = useState<DatetimeCondition>(initialFilterData.condition);
@@ -116,8 +114,6 @@ export const DatetimeConditionSection = ({
         value={condition}
         items={translatedConditionItems}
         onChange={handleConditionChange}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
-        primaryColor={themeSettings.typography.primaryTextColor}
         aria-label="Condition select"
       />
       {condition === DatetimeCondition.EXCLUDE && (

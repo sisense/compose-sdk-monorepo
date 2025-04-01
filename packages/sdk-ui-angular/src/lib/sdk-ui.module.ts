@@ -32,6 +32,7 @@ import {
   PivotTableComponent,
   DashboardByIdComponent,
   DashboardComponent,
+  PivotTableWidgetComponent,
 } from './components';
 import { DecoratorsModule } from './decorators/decorators.module';
 
@@ -96,6 +97,7 @@ import { DecoratorsModule } from './decorators/decorators.module';
     PivotTableComponent,
     DashboardByIdComponent,
     DashboardComponent,
+    PivotTableWidgetComponent,
   ],
   imports: [CommonModule, DecoratorsModule],
   exports: [
@@ -130,6 +132,7 @@ import { DecoratorsModule } from './decorators/decorators.module';
     PivotTableComponent,
     DashboardByIdComponent,
     DashboardComponent,
+    PivotTableWidgetComponent,
   ],
   providers: [],
 })

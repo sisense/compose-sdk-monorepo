@@ -95,6 +95,14 @@ Theme service
 
 ### Other
 
+#### config
+
+> **config**: [`DashboardConfig`](../interfaces/interface.DashboardConfig.md) \| `undefined`
+
+The configuration for the dashboard
+
+***
+
 #### defaultDataSource
 
 > **defaultDataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`

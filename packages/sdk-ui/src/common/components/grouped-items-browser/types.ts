@@ -3,6 +3,7 @@ export type GroupedItemsBrowserProps = {
   groupSecondaryActionConfig?: GroupSecondaryActionConfig;
   itemActionConfig?: ItemActionConfig;
   itemSecondaryActionConfig?: ItemSecondaryActionConfig;
+  onScrolledToBottom?: () => void;
 };
 
 /**

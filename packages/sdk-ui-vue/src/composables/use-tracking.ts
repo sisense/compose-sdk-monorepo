@@ -3,43 +3,43 @@ import { getSisenseContext } from '../providers/sisense-context-provider.js';
 import { ref, watchEffect } from 'vue';
 
 /**
- * A Vue composable function `useTracking` designed to track the usage of hooks within Vue applications
- * using the Sisense SDK. It sends tracking information to the server whenever a specified hook is used,
+ * A Vue composable function `useTracking` designed to track the usage of composables within Vue applications
+ * using the Sisense SDK. It sends tracking information to the server whenever a specified composable is used,
  * helping in the analysis and optimization of application performance and usage patterns. This composable
- * is intended for internal use and aids in monitoring the integration and efficiency of Sisense SDK hooks.
+ * is intended for internal use and aids in monitoring the integration and efficiency of Sisense SDK composables.
  *
- * @param {string} hookName - The name of the hook being tracked. This identifier is used to log the hook
- * event uniquely, facilitating the collection of usage data for specific hooks within the application.
+ * @param {string} composableName - The name of the composable being tracked. This identifier is used to log the composable
+ * event uniquely, facilitating the collection of usage data for specific composables within the application.
  *
  * @example
- * How to use `useTracking` to track the usage of a custom hook:
+ * How to use `useTracking` to track the usage of a custom composable:
  * ```javascript
  * import { useTracking } from '@sisense/sdk-ui-vue';
  *
- * // Example hook that utilizes useTracking for monitoring its usage
- * export const useCustomHook = () => {
- *   const { hasTrackedRef } = useTracking('useCustomHook');
+ * // Example composable that utilizes useTracking for monitoring its usage
+ * export const useCustomComposable = () => {
+ *   const { hasTrackedRef } = useTracking('useCustomComposable');
  *
- *   // Hook implementation...
+ *   // composable implementation...
  *
  *   return {
- *     // Return values of your custom hook
+ *     // Return values of your custom composable
  *   };
  * };
  * ```
  *
  * The composable returns an object containing:
- * - `hasTrackedRef`: A Vue ref that indicates whether the tracking for the hook has been successfully
+ * - `hasTrackedRef`: A Vue ref that indicates whether the tracking for the composable has been successfully
  *   sent to the server. It starts as `false` and is set to `true` once tracking is completed, preventing
  *   duplicate tracking events.
  *
- * This internal utility composable is essential for maintaining insights into the usage of custom hooks
+ * This internal utility composable is essential for maintaining insights into the usage of custom composables
  * within applications leveraging the Sisense SDK, enabling developers and analysts to understand and optimize
- * hook interactions and performance.
+ * composable interactions and performance.
  *
  * @internal
  */
-export const useTracking = (hookName: string) => {
+export const useTracking = (composableName: string) => {
   const hasTrackedRef = ref(false);
   const contex = getSisenseContext();
 
@@ -47,9 +47,9 @@ export const useTracking = (hookName: string) => {
     const { app } = contex.value;
     if (!app || hasTrackedRef.value) return null;
     try {
-      trackHook(hookName, 'sdk-ui-vue', app, () => (hasTrackedRef.value = true));
+      trackHook(composableName, 'sdk-ui-vue', app, () => (hasTrackedRef.value = true));
     } catch (error) {
-      console.error('An error occurred when calling the traceHook', error);
+      console.error('An error occurred when calling the trackHook', error);
     }
   };
 

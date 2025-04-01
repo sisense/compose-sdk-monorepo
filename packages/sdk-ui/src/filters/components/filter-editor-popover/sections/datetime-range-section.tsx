@@ -7,7 +7,6 @@ import {
   isDateRangeFilter,
 } from '@sisense/sdk-data';
 import { SelectableSection } from '../common';
-import { useThemeContext } from '@/theme-provider';
 import { DatetimeLimits } from './types';
 import {
   CalendarRangeValue,
@@ -27,7 +26,6 @@ type DatetimeRangeSectionProps = {
 
 /** @internal */
 export const DatetimeRangeSection = (props: DatetimeRangeSectionProps) => {
-  const { themeSettings } = useThemeContext();
   const { filter, selected, limits, onChange } = props;
   const { t } = useTranslation();
   const formatter = useDatetimeFormatter();
@@ -86,29 +84,25 @@ export const DatetimeRangeSection = (props: DatetimeRangeSectionProps) => {
         {t('filterEditor.labels.from')}
       </span>
       <CalendarSelect
-        style={{ width: '152px' }}
+        width={152}
         type={CalendarSelectTypes.RANGE_FROM_SELECT}
         value={rangeValue}
         limits={normalizedLimits}
         aria-labelledby="datetime-range-from"
         onChange={handleRangeValueChange}
         placeholder={t('filterEditor.placeholders.select')}
-        primaryColor={themeSettings.typography.primaryTextColor}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
       />
       <span id="datetime-range-to" style={{ margin: '0 8px 0 8px' }}>
         {t('filterEditor.labels.to')}
       </span>
       <CalendarSelect
-        style={{ width: '152px' }}
+        width={152}
         type={CalendarSelectTypes.RANGE_TO_SELECT}
         value={rangeValue}
         limits={normalizedLimits}
         aria-labelledby="datetime-range-to"
         onChange={handleRangeValueChange}
         placeholder={t('filterEditor.placeholders.select')}
-        primaryColor={themeSettings.typography.primaryTextColor}
-        primaryBackgroundColor={themeSettings.filter.panel.backgroundColor}
       />
     </SelectableSection>
   );

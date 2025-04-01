@@ -12,7 +12,7 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"
       >
         <div
-          class="csdk-w-full csdk-h-full csdk-overflow-hidden"
+          class="csdk-w-full csdk-h-full csdk-overflow-hidden csdk-accessible"
         >
           <div
             class="csdk-h-full"

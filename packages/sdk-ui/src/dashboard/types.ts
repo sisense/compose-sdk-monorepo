@@ -7,6 +7,7 @@ import {
 import { WidgetProps } from '@/props';
 import { DashboardChangeAction } from '@/dashboard/dashboard';
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
 
 export type { DashboardStyleOptions, WidgetsPanelColumnLayout } from '@/models';
 
@@ -18,19 +19,11 @@ export interface DashboardByIdProps {
    * The OID of the dashboard to render.
    */
   dashboardOid: string;
+
   /**
-   * Boolean flag indicating whether changes to the embedded dashboard should be saved to the dashboard in Fusion.
-   *
-   * If not specified, the default value is `false`.
-   *
-   * Limitations:
-   * - WAT authentication does not support persistence.
-   * - As an alpha feature, currently only changes to dashboard filters are persisted.
-   * @alpha
+   * The configuration for the dashboard
    */
-  persist?: boolean;
-  /** @internal */
-  enableFilterEditor?: boolean;
+  config?: DashboardByIdConfig;
 }
 
 /**
@@ -50,34 +43,79 @@ export interface DashboardContainerProps {
    * @internal
    */
   onChange?: (action: DashboardChangeAction) => void;
-  /** @internal */
-  enableFilterEditor?: boolean;
+}
+
+/**
+ * Dashboard filters panel configuration
+ */
+export interface DashboardFiltersPanelConfig extends FiltersPanelConfig {
+  /**
+   * Determines whether the filters panel is visible.
+   *
+   * If not specified, the default value is `true`.
+   */
+  visible?: boolean;
+  /**
+   * Boolean flag that controls the initial "collapsed" state of the filters panel.
+   *
+   * If not specified, the default value is `false`.
+   */
+  collapsedInitially?: boolean;
+  /**
+   * Setting this to `true` will use the isCollapsed state from local storage, if available, and store any changes to local storage.
+   * This state is shared across all dashboards.
+   * This state has a higher priority than `collapsedInitially` when enabled.
+   */
+  persistCollapsedStateToLocalStorage?: boolean;
 }
 
 /**
  * Dashboard configuration
- *
- * @internal
  */
 export interface DashboardConfig {
-  filtersPanel?: {
-    isVisible?: boolean;
+  /**
+   * Configuration for the filters panel
+   */
+  filtersPanel?: DashboardFiltersPanelConfig;
+  /**
+   * Configuration for the toolbar
+   */
+  toolbar?: {
     /**
-     * Boolean flag that controls the initial "collapsed" state of the filters panel.
+     * Determines whether the toolbar is visible.
      *
      * If not specified, the default value is `false`.
      */
-    isCollapsedInitially?: boolean;
+    visible: boolean;
+  };
+  /**
+   * Configuration for the widgets panel
+   */
+  widgetsPanel?: {
     /**
-     * Setting this to true will use the isCollapsed state from local storage, if available, and store any changes to local storage.
-     * This state is shared across all dashboards.
-     * This state has a higher priority than "initialIsCollapsed" when enabled.
+     * If true adjust layout based on available width of widgets panel.
+     *
+     * If not specified, the default value is `false`.
      */
-    persistCollapsedStateToLocalStorage?: boolean;
+    responsive?: boolean;
   };
-  toolbar?: {
-    isVisible: boolean;
-  };
+}
+
+/**
+ * Dashboard configuration
+ */
+export interface DashboardByIdConfig extends DashboardConfig {
+  /**
+   * Boolean flag indicating whether changes to the embedded dashboard should be saved to the dashboard in Fusion.
+   *
+   * If not specified, the default value is `false`.
+   *
+   * Limitations:
+   * - WAT authentication does not support persistence.
+   * - As an alpha feature, currently only changes to dashboard filters are persisted.
+   * @alpha
+   */
+  persist?: boolean;
 }
 
 /**
@@ -103,8 +141,6 @@ export interface DashboardProps {
   layoutOptions?: DashboardLayoutOptions;
   /**
    * The configuration for the dashboard
-   *
-   * @internal
    */
   config?: DashboardConfig;
   /** The widgets to render in the dashboard */
@@ -128,8 +164,6 @@ export interface DashboardProps {
    * @internal
    */
   onChange?: (action: DashboardChangeAction) => void;
-  /** @internal */
-  enableFilterEditor?: boolean;
 }
 
 /**
