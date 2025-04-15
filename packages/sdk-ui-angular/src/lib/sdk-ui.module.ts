@@ -1,38 +1,39 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
 import {
+  AreaChartComponent,
+  AreamapChartComponent,
+  AreaRangeChartComponent,
+  BarChartComponent,
+  BoxplotChartComponent,
   ChartComponent,
-  TableComponent,
   ChartWidgetComponent,
   ColumnChartComponent,
-  BarChartComponent,
-  AreaChartComponent,
-  AreaRangeChartComponent,
-  LineChartComponent,
-  IndicatorChartComponent,
-  ScatterChartComponent,
-  PieChartComponent,
-  FunnelChartComponent,
-  PolarChartComponent,
-  TreemapChartComponent,
-  SunburstChartComponent,
-  TableWidgetComponent,
-  DashboardWidgetComponent,
-  WidgetByIdComponent,
-  MemberFilterTileComponent,
-  DrilldownWidgetComponent,
-  DateRangeFilterTileComponent,
-  RelativeDateFilterTileComponent,
-  CriteriaFilterTileComponent,
-  DrilldownBreadcrumbsComponent,
   ContextMenuComponent,
-  BoxplotChartComponent,
-  ScattermapChartComponent,
-  AreamapChartComponent,
-  PivotTableComponent,
+  CriteriaFilterTileComponent,
   DashboardByIdComponent,
   DashboardComponent,
+  DashboardWidgetComponent,
+  DateRangeFilterTileComponent,
+  DrilldownBreadcrumbsComponent,
+  DrilldownWidgetComponent,
+  FunnelChartComponent,
+  IndicatorChartComponent,
+  LineChartComponent,
+  MemberFilterTileComponent,
+  PieChartComponent,
+  PivotTableComponent,
   PivotTableWidgetComponent,
+  PolarChartComponent,
+  RelativeDateFilterTileComponent,
+  ScatterChartComponent,
+  ScattermapChartComponent,
+  SunburstChartComponent,
+  TableComponent,
+  TableWidgetComponent,
+  TreemapChartComponent,
+  WidgetByIdComponent,
 } from './components';
 import { DecoratorsModule } from './decorators/decorators.module';
 
@@ -61,7 +62,6 @@ import { DecoratorsModule } from './decorators/decorators.module';
  *   bootstrap: [AppComponent],
  * })
  * ```
- *
  * @group Contexts
  */
 @NgModule({

@@ -1,6 +1,12 @@
 import { useCallback, useRef } from 'react';
 import styled from '@emotion/styled';
-import { DataSource, Filter, FilterRelations, mergeFilters } from '@sisense/sdk-data';
+import {
+  DataSource,
+  Filter,
+  FilterRelations,
+  isCascadingFilter,
+  mergeFilters,
+} from '@sisense/sdk-data';
 import { FilterTile } from '@/filters/components/filter-tile';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
@@ -124,6 +130,11 @@ export const FiltersPanel = asSisenseComponent({
       onFilterCreated: handleFilterAdd,
       defaultDataSource: defaultDataSource,
       config: config.actions.addFilter,
+      disabledAttributes: filters.flatMap((filter) =>
+        isCascadingFilter(filter)
+          ? filter.filters.map((levelFilter) => levelFilter.attribute)
+          : [filter.attribute],
+      ),
     });
 
     return (
@@ -156,7 +167,8 @@ export const FiltersPanel = asSisenseComponent({
                   defaultDataSource={defaultDataSource}
                   onEdit={
                     config.actions.editFilter.enabled && isFilterSupportEditing(filter)
-                      ? () => startEditingFilter(filterTilesRef.current[index], filter)
+                      ? (levelIndex) =>
+                          startEditingFilter(filterTilesRef.current[index], filter, levelIndex)
                       : undefined
                   }
                 />

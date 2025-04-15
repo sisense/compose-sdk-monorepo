@@ -1,9 +1,17 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { DataSource } from '@sisense/sdk-data';
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { DataSource, Filter } from '@sisense/sdk-data';
 
-type FilterEditorContextValue = { defaultDataSource: DataSource | null };
+type FilterEditorContextValue = {
+  defaultDataSource: DataSource | null;
+  parentFilters: Filter[];
+  membersOnlyMode: boolean;
+};
 
-const FilterEditorContext = createContext<FilterEditorContextValue>({ defaultDataSource: null });
+const FilterEditorContext = createContext<FilterEditorContextValue>({
+  defaultDataSource: null,
+  parentFilters: [],
+  membersOnlyMode: false,
+});
 
 /** @internal */
 export const useFilterEditorContext = () => {
@@ -21,6 +29,8 @@ export const FilterEditorContextProvider = ({
   const [defaultDataSource, setDefaultDataSource] = useState<DataSource | null>(
     value.defaultDataSource,
   );
+  const parentFilters = useMemo(() => value.parentFilters ?? [], [value.parentFilters]);
+  const membersOnlyMode = useMemo(() => value.membersOnlyMode ?? [], [value.membersOnlyMode]);
 
   useEffect(() => {
     if (defaultDataSource !== value.defaultDataSource) {
@@ -29,7 +39,7 @@ export const FilterEditorContextProvider = ({
   }, [defaultDataSource, value.defaultDataSource]);
 
   return (
-    <FilterEditorContext.Provider value={{ defaultDataSource }}>
+    <FilterEditorContext.Provider value={{ defaultDataSource, parentFilters, membersOnlyMode }}>
       {children}
     </FilterEditorContext.Provider>
   );

@@ -10,21 +10,21 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  Chart,
+  Chart as ChartPreact,
   type ChartProps as ChartPropsPreact,
   ComponentAdapter,
-  createElement,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
-import type { Arguments } from '../../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 import { ChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
 import { ChartDataPointEvent, ChartDataPointsEvent } from '../../types/data-point';
+import type { Arguments } from '../../types/utility-types';
 
 /**
  * Props shared across the {@link ChartComponent}.
@@ -83,7 +83,6 @@ export interface ChartProps
  *
  * <img src="media://angular-chart-example.png" width="800px" />
  * @shortDescription Common component for rendering charts of different types including table
- *
  * @group Charts
  */
 @Component({
@@ -186,7 +185,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Output()
   dataPointsSelect = new EventEmitter<ChartDataPointsEvent>();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof ChartPreact>;
 
   /**
    * Constructor for the `Chart` component.
@@ -208,20 +207,17 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(ChartPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -229,12 +225,12 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): ChartPropsPreact {
+    return {
       chartType: this.chartType,
       dataSet: this.dataSet,
       dataOptions: this.dataOptions,
@@ -253,8 +249,6 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
         ...[points, nativeEvent]: Arguments<ChartPropsPreact['onDataPointsSelected']>
       ) => this.dataPointsSelect.emit({ points, nativeEvent }),
     };
-
-    return createElement(Chart, props);
   }
 
   /**

@@ -1,13 +1,13 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ScattermapChart as ScattermapChartPreact } from '@sisense/sdk-ui-preact';
-import type { ScattermapChartProps as ScattermapChartPropsPreqct } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import type { ScattermapChartProps as ScattermapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!ScattermapChart | `ScattermapChart`} component.
  */
-export interface ScattermapChartProps extends ScattermapChartPropsPreqct {}
+export interface ScattermapChartProps extends ScattermapChartPropsPreact {}
 
 /**
  * A Vue component that wraps the ScattermapChart Preact component for use in Vue applications.
@@ -93,5 +93,5 @@ export const ScattermapChart = defineComponent({
      */
     onDataPointClick: Object as PropType<ScattermapChartProps['onDataPointClick']>,
   },
-  setup: (props) => setupHelper(ScattermapChartPreact, props),
+  setup: (props) => setupHelper(ScattermapChartPreact, props as ScattermapChartPropsPreact),
 });

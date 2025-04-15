@@ -1,17 +1,17 @@
 import {
   ContextConnector,
-  createContextProviderRenderer,
-  CustomSisenseContext,
-  CustomSisenseContextProvider,
-  CustomThemeProvider,
-  CustomThemeProviderProps,
   CustomPluginsProvider,
   CustomPluginsProviderProps,
+  CustomSisenseContextProvider,
+  CustomSisenseContextProviderProps,
+  CustomThemeProvider,
+  CustomThemeProviderProps,
+  DataObserver,
 } from '@sisense/sdk-ui-preact';
-import { map } from 'rxjs';
+
+import { PluginsService } from '../services/plugins.service';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
-import { PluginsService } from '../services/plugins.service';
 
 /**
  * Creates theme context connector
@@ -21,17 +21,29 @@ import { PluginsService } from '../services/plugins.service';
  */
 export const createThemeContextConnector = (
   themeService: ThemeService,
-): ContextConnector<CustomThemeProviderProps['context']> => {
-  return {
-    prepareContext() {
-      return themeService.getThemeSettings().pipe(
-        map((themeSettings) => ({
-          themeSettings,
+): ContextConnector<CustomThemeProviderProps> => {
+  const themeSettings$ = themeService.getThemeSettings();
+  const propsObserver = new DataObserver<CustomThemeProviderProps>();
+
+  themeSettings$.subscribe({
+    next: (themeSettings) => {
+      propsObserver.setValue({
+        context: {
           skipTracking: true,
-        })),
-      );
+          themeSettings,
+        },
+      });
     },
-    renderContextProvider: createContextProviderRenderer(CustomThemeProvider),
+    error: (error: Error) => {
+      propsObserver.setValue({
+        error,
+      });
+    },
+  });
+
+  return {
+    propsObserver,
+    providerComponent: CustomThemeProvider,
   };
 };
 
@@ -43,26 +55,43 @@ export const createThemeContextConnector = (
  */
 export const createSisenseContextConnector = (
   sisenseContextService: SisenseContextService,
-): ContextConnector<CustomSisenseContext> => {
-  return {
-    async prepareContext() {
-      const { showRuntimeErrors, appConfig } = sisenseContextService.getConfig();
-      const app = await sisenseContextService.getApp();
-      return {
-        app,
-        isInitialized: true,
-        tracking: {
-          // if tracking is configured in appConfig, use it
-          // if none is set, default to true
-          enabled: appConfig?.trackingConfig?.enabled ?? true,
-          packageName: 'sdk-ui-angular',
-        },
-        errorBoundary: {
-          showErrorBox: showRuntimeErrors ?? true,
-        },
-      };
+): ContextConnector<CustomSisenseContextProviderProps> => {
+  const { showRuntimeErrors, appConfig } = sisenseContextService.getConfig();
+  const defaultSisenseContext = {
+    isInitialized: true,
+    tracking: {
+      // if tracking is configured in appConfig, use it
+      // if none is set, default to true
+      enabled: appConfig?.trackingConfig?.enabled ?? true,
+      packageName: 'sdk-ui-angular',
     },
-    renderContextProvider: createContextProviderRenderer(CustomSisenseContextProvider),
+    errorBoundary: {
+      showErrorBox: showRuntimeErrors ?? true,
+    },
+  };
+  const propsObserver = new DataObserver<CustomSisenseContextProviderProps>({
+    context: defaultSisenseContext,
+  });
+
+  sisenseContextService
+    .getApp()
+    .then((app) =>
+      propsObserver.setValue({
+        context: {
+          ...defaultSisenseContext,
+          app,
+        },
+      }),
+    )
+    .catch((error) =>
+      propsObserver.setValue({
+        error,
+      }),
+    );
+
+  return {
+    propsObserver,
+    providerComponent: CustomSisenseContextProvider,
   };
 };
 
@@ -74,15 +103,17 @@ export const createSisenseContextConnector = (
  */
 export const createPluginsContextConnector = (
   pluginsService: PluginsService,
-): ContextConnector<CustomPluginsProviderProps['context']> => {
+): ContextConnector<CustomPluginsProviderProps> => {
+  const pluginsContext = {
+    pluginMap: pluginsService.getPlugins().value,
+    registerPlugin: pluginsService.registerPlugin.bind(pluginsService),
+    getPlugin: pluginsService.getPlugin.bind(pluginsService),
+  };
+  const propsObserver = new DataObserver<CustomPluginsProviderProps>({
+    context: pluginsContext,
+  });
   return {
-    prepareContext() {
-      return {
-        pluginMap: pluginsService.getPlugins().value,
-        registerPlugin: pluginsService.registerPlugin.bind(pluginsService),
-        getPlugin: pluginsService.getPlugin.bind(pluginsService),
-      };
-    },
-    renderContextProvider: createContextProviderRenderer(CustomPluginsProvider),
+    propsObserver,
+    providerComponent: CustomPluginsProvider,
   };
 };

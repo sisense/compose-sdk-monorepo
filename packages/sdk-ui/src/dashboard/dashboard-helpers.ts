@@ -106,7 +106,6 @@ export const replaceFilter = (
  * Alias for `replaceFilter`.
  *
  * @deprecated Use {@link replaceFilter} instead
- *
  * @param dashboard - The original dashboard (`DashboardProps`) containing the filter to modify.
  * @param filterToModify - The existing filter to be modified.
  * @param newFilter - The new filter to replace the existing one.

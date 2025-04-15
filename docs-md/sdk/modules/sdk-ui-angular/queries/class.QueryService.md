@@ -24,6 +24,31 @@ Service for executing data queries.
 
 ## Methods
 
+### executeCsvQuery
+
+> **executeCsvQuery**(`params`): `Promise`\< \{
+  `data`: `Blob` \| `string`;
+ } \>
+
+Executes a CSV data query.
+Similar to [QueryService.executeQuery](class.QueryService.md#executequery), but returns the data in CSV format as text or as a stream.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `params` | [`ExecuteCsvQueryParams`](../interfaces/interface.ExecuteCsvQueryParams.md) | CSV query parameters |
+
+#### Returns
+
+`Promise`\< \{
+  `data`: `Blob` \| `string`;
+ } \>
+
+CSV query result
+
+***
+
 ### executePivotQuery <Badge type="beta" text="Beta" />
 
 > **executePivotQuery**(`params`): `Promise`\< \{

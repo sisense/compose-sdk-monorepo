@@ -1,9 +1,9 @@
 import {
-  widgetModelTranslator as widgetModelTranslatorPreact,
-  type WidgetModel,
   type TextWidgetProps,
+  type WidgetModel,
+  widgetModelTranslator as widgetModelTranslatorPreact,
 } from '@sisense/sdk-ui-preact';
-import { ExecutePivotQueryParams, ExecuteQueryParams } from '../services';
+
 import {
   ChartProps,
   ChartWidgetProps,
@@ -11,6 +11,7 @@ import {
   PivotTableWidgetProps,
   TableProps,
 } from '../components';
+import { ExecutePivotQueryParams, ExecuteQueryParams } from '../services';
 
 /**
  * Translates a {@link WidgetModel} to the parameters for executing a query for the widget.

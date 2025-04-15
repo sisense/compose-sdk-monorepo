@@ -23,6 +23,7 @@ import {
   getMembersWithoutDeactivated,
 } from './utils.js';
 import { MembersListSelect } from '../common/select/members-list-select';
+import { useFilterEditorContext } from '../filter-editor-context';
 
 const TextCondition = {
   EXCLUDE: 'exclude',
@@ -39,6 +40,10 @@ const TextCondition = {
 } as const;
 
 type TextConditionType = (typeof TextCondition)[keyof typeof TextCondition];
+
+const onlyMembersConditionItems = [
+  { value: TextCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
+];
 
 const conditionItems = [
   { value: TextCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
@@ -135,6 +140,7 @@ export const TextConditionSection = ({
   onChange,
 }: TextConditionSectionProps) => {
   const { t } = useTranslation();
+  const { membersOnlyMode } = useFilterEditorContext();
   const [condition, setCondition] = useState<TextConditionType>(getTextFilterCondition(filter));
   const [value, setValue] = useState(getTextFilterValue(filter) as string);
   const [selectedMembers, setSelectedMembers] = useState(
@@ -143,9 +149,11 @@ export const TextConditionSection = ({
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
+
+  const conditionItemsToUse = membersOnlyMode ? onlyMembersConditionItems : conditionItems;
   const translatedConditionItems = useMemo(
-    () => conditionItems.map((item) => ({ ...item, displayValue: t(item.displayValue) })),
-    [t],
+    () => conditionItemsToUse.map((item) => ({ ...item, displayValue: t(item.displayValue) })),
+    [t, conditionItemsToUse],
   );
 
   const showInput = useMemo(
@@ -230,7 +238,7 @@ export const TextConditionSection = ({
 
       setCondition(newCondition);
 
-      if (newCondition === TextCondition.IS_EMPTY) {
+      if (newCondition === TextCondition.IS_EMPTY || newCondition === TextCondition.IS_NOT_EMPTY) {
         setValue('');
         currentValue = '';
       }

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { writeJavascript, writeTypescript } from './writer.js';
-import { dimensionalModelECommerce } from '../__mocks__/data-model-ecommerce.js';
-import { Writable } from 'stream';
 import { DataSourceInfo } from '@sisense/sdk-data';
+import { Writable } from 'stream';
+
+import { dimensionalModelECommerce } from '../__mocks__/data-model-ecommerce.js';
+import { writeJavascript, writeTypescript } from './writer.js';
 
 // A class for mocking fs.createWriteStream.
 // It writes content to a buffer instead of to a file

@@ -1,6 +1,8 @@
 import { Popover } from '@/common/components/popover';
+import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types';
+import { TranslatableError } from '@/translation/translatable-error';
 import styled from '@emotion/styled';
 import { DataSource, DateDimension, Filter, filterFactory, MetadataTypes } from '@sisense/sdk-data';
 import { useCallback } from 'react';
@@ -15,15 +17,21 @@ type AddFilterPopoverProps = {
   onClose?: () => void;
   dataSources: DataSource[];
   initialDataSource: DataSource;
+  /**
+   * Optional. If provided, these attributes in the data browser will be disabled and can't be selected for filter creation.
+   */
+  disabledAttributes?: AttributiveElement[];
   onFilterCreated: (filter: Filter) => void;
 };
 
-const Container = styled.div<Themable>`
+const PopoverContent = withErrorBoundary({
+  componentName: 'AddFilterPopoverContent',
+})(styled.div<Themable>`
   width: 626px;
   height: 530px;
   display: flex;
   flex-direction: column;
-`;
+`);
 
 /**
  * A popover with "data browser" that allows users to select a data source and an attribute to create a filter.
@@ -35,21 +43,16 @@ export const AddFilterPopover = ({
   dataSources,
   initialDataSource,
   onFilterCreated,
+  disabledAttributes,
 }: AddFilterPopoverProps) => {
   const { t } = useTranslation();
-  const createFilter = useCallback((attributishElement: AttributiveElement) => {
-    const attribute = isDateDimension(attributishElement)
-      ? attributishElement.Years
-      : attributishElement;
-    return filterFactory.members(attribute, []);
-  }, []);
 
   const handleAttributeClick = useCallback(
     (attribute: AttributiveElement) => {
       const filter = createFilter(attribute);
       onFilterCreated(filter);
     },
-    [createFilter, onFilterCreated],
+    [onFilterCreated],
   );
 
   const { themeSettings } = useThemeContext();
@@ -69,7 +72,7 @@ export const AddFilterPopover = ({
       open={isOpen}
       onClose={onClose}
     >
-      <Container theme={themeSettings} data-testid="add-filter-popover">
+      <PopoverContent theme={themeSettings} data-testid="add-filter-popover">
         <PopoverHeader
           title={t('dataBrowser.addFilter')}
           flowPath={[
@@ -78,12 +81,17 @@ export const AddFilterPopover = ({
           ]}
           onClose={onClose}
         />
-        <AddFilterDataBrowser
-          dataSources={dataSources}
-          initialDataSource={initialDataSource}
-          onAttributeClick={handleAttributeClick}
-        />
-      </Container>
+        {dataSources.length > 0 ? (
+          <AddFilterDataBrowser
+            dataSources={dataSources}
+            initialDataSource={initialDataSource}
+            onAttributeClick={handleAttributeClick}
+            disabledAttributes={disabledAttributes}
+          />
+        ) : (
+          <ThrownError />
+        )}
+      </PopoverContent>
     </Popover>
   );
 };
@@ -91,3 +99,17 @@ export const AddFilterPopover = ({
 function isDateDimension(element: AttributiveElement): element is DateDimension {
   return element.type === MetadataTypes.DateDimension;
 }
+
+/**
+ * Creates a filter based on the selected attribute.
+ */
+const createFilter = (attributiveElement: AttributiveElement) => {
+  const attribute = isDateDimension(attributiveElement)
+    ? attributiveElement.Years
+    : attributiveElement;
+  return filterFactory.members(attribute, []);
+};
+
+const ThrownError = () => {
+  throw new TranslatableError('errors.addFilterPopover.noDataSources');
+};

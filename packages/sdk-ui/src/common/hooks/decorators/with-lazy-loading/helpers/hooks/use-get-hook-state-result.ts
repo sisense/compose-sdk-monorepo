@@ -1,7 +1,8 @@
+import { usePrevious } from '@/common/hooks/use-previous.js';
 import { AnyArray, RestApiHookState } from '@/utils/utility-types';
-import { HookExecutionStatus, WithLoadMore } from '../../types';
+import { HookExecutionStatus, WithLoadMore } from '../../types.js';
 
-export function getHookStateResult<
+export function useGetHookStateResult<
   DataKey extends string,
   SuccessDataType extends AnyArray,
 >(options: {
@@ -9,9 +10,17 @@ export function getHookStateResult<
   dataKey: DataKey;
   data: SuccessDataType;
   loadMore: () => void;
+  isDataReset: boolean;
   error?: Error;
 }): WithLoadMore<RestApiHookState<DataKey, SuccessDataType>> {
-  const { status, dataKey, data, loadMore, error } = options;
+  const { status, dataKey, data, loadMore, error, isDataReset } = options;
+  const prevStatus = usePrevious(status);
+  const prevData = usePrevious(data);
+  const wasDataCached = prevStatus === 'success' && status === 'success' && prevData !== data;
+  // data reset causes accumulated data to be empty at least for one render
+  // but if the new data synchronously taken from the cache ('success' -> 'success'),
+  // we want to return the previous data (instead of empty) for this render to avoid flickering
+  const dataToReturn = wasDataCached && isDataReset ? prevData : data;
   switch (status) {
     case 'loading':
       return {
@@ -20,7 +29,7 @@ export function getHookStateResult<
         isSuccess: false,
         error: undefined,
         status: 'loading',
-        [dataKey]: data.length ? data : undefined,
+        [dataKey]: dataToReturn && dataToReturn.length ? dataToReturn : undefined,
         loadMore,
       };
     case 'success':
@@ -30,7 +39,7 @@ export function getHookStateResult<
         isSuccess: true,
         error: undefined,
         status: 'success',
-        [dataKey]: data,
+        [dataKey]: dataToReturn,
         loadMore,
       };
     case 'error':

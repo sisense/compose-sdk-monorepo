@@ -6,8 +6,9 @@ import {
   getDashboardModel,
   getDashboardModels,
 } from '@sisense/sdk-ui-preact';
-import { type DashboardModel } from '../sdk-ui-core-exports';
 import { Mock, Mocked } from 'vitest';
+
+import { type DashboardModel } from '../sdk-ui-core-exports';
 import { DashboardService } from './dashboard.service';
 import { SisenseContextService } from './sisense-context.service';
 

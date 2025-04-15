@@ -5,8 +5,8 @@
 
 import { BaseMeasure, MeasureTemplate, normalizeName } from '@sisense/sdk-data';
 
-import { NEWLINE, rnt, writeIndented, ElementWriter } from './base.js';
 import { prepareDescription } from '../utils/prepare-description.js';
+import { ElementWriter, NEWLINE, rnt, writeIndented } from './base.js';
 
 export abstract class MeasureWriter<T> extends ElementWriter<T> {
   readonly isNested: boolean;

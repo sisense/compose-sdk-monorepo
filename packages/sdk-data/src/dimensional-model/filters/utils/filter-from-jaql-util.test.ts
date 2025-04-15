@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable vitest/expect-expect */
 import { describe } from 'vitest';
+
 import { Filter, LevelAttribute } from '../../interfaces.js';
-import { createFilterFromJaqlInternal } from './filter-from-jaql-util.js';
 import * as filterFactory from '../factory.js';
-import { ConditionFilterType, DatetimeLevel, FilterJaqlInternal } from './types.js';
+import { DateRangeFilter, ExcludeFilter } from '../filters.js';
 import {
   createAttributeFromFilterJaql,
   createMeasureFromFilterJaql,
   createMeasureFromRankingFilterJaql,
 } from './attribute-measure-util.js';
 import { createAttributeFilterFromConditionFilterJaql } from './condition-filter-util.js';
-import { DateRangeFilter, ExcludeFilter } from '../filters.js';
+import { createFilterFromJaqlInternal } from './filter-from-jaql-util.js';
 import { createGenericFilter } from './filter-from-jaql-util.js';
+import { ConditionFilterType, DatetimeLevel, FilterJaqlInternal } from './types.js';
 
 describe('filter-from-jaql-util', () => {
   describe('createFilterFromJaqlInternal', () => {

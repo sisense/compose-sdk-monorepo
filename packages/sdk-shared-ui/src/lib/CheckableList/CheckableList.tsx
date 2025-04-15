@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
-
 import styles from './CheckableList.module.scss';
 
 type Item = {

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React from 'react';
 import classnames from 'classnames';
 import RcTooltip from 'rc-tooltip';
 import type { TooltipProps } from 'rc-tooltip/lib/Tooltip';
+import React from 'react';
 
-import styles from './DEPRECATED_Tooltip.module.scss';
 import { styleguideConstants } from '../constants/styleguideConstants';
+import styles from './DEPRECATED_Tooltip.module.scss';
 
 export type DEPRECATED_TooltipProps = {
   breakingLongWord?: boolean;

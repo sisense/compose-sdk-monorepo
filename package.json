@@ -1,5 +1,5 @@
 {
-  "version": "1.33.0",
+  "version": "1.34.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -53,6 +53,7 @@
     "demo:vue": "yarn workspace @sisense/vue-ts-demo dev",
     "demo:angular": "yarn workspace @sisense/angular-demo start",
     "build": "yarn nx:build",
+    "build:packages": "yarn nx run-many --target=build --projects='packages/*'",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
     "storybook:dev": "nx run-many --exclude @sisense/root -t  storybook:dev",
     "build:prod": "yarn nx:build:prod",
@@ -60,6 +61,7 @@
     "clean": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output && nx reset",
     "reset": "yarn clean && rm -rf ./node_modules",
     "lint": "yarn workspaces foreach -p --verbose run lint",
+    "lint:fix": "yarn workspaces foreach -p --verbose run lint:fix",
     "lint:changed": "yarn workspaces foreach --since run lint",
     "format": "yarn workspaces foreach -p run format",
     "format:check": "yarn workspaces foreach -p run format:check",
@@ -116,9 +118,10 @@
     "@sisense/prettier-config": "^1.9.9",
     "@sisense/typedoc-plugin-diff-packages": "0.1.0",
     "@sisense/typedoc-plugin-markdown": "0.0.0",
-    "@vitest/coverage-istanbul": "2.1.4",
+    "@vitest/coverage-istanbul": "2.1.9",
     "eslint": "^8.40.0",
     "eslint-plugin-i18next": "^6.1.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-tsdoc": "0.2.17",
     "eslint-plugin-vitest": "0.2.8",
     "express": "^4.18.2",
@@ -129,11 +132,12 @@
     "prettier": "^2.8.8",
     "typedoc": "0.26.10",
     "typedoc-plugin-vue": "^1.2.0",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.9"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "prettier --write"
+      "prettier --write",
+      "eslint --fix --cache --cache-strategy content"
     ],
     "*.{json,yaml,yml,md}": [
       "prettier --write"

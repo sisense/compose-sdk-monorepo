@@ -48,6 +48,7 @@ TypeScript interfaces for components and hooks listed above
 - [ExecuteQueryParams](interface.ExecuteQueryParams.md)
 - [ExecuteQueryProps](interface.ExecuteQueryProps.md)
 - [FiltersPanelConfig](interface.FiltersPanelConfig.md)
+- [FilterTileProps](interface.FilterTileProps.md)
 - [FontsLoaderSettings](interface.FontsLoaderSettings.md)
 - [FunnelChartProps](interface.FunnelChartProps.md)
 - [FunnelStyleOptions](interface.FunnelStyleOptions.md)

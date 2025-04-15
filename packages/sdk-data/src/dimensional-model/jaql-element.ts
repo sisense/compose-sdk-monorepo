@@ -1,6 +1,6 @@
+import { getSortType } from '../utils.js';
 import { DimensionalElement } from './base.js';
 import { SortDirection } from './interfaces.js';
-import { getSortType } from '../utils.js';
 import {
   BaseJaql,
   DataType,

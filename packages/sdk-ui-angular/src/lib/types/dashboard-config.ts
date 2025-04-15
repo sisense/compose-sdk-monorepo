@@ -1,6 +1,6 @@
 import type {
-  DashboardConfig as DashboardConfigPreact,
   DashboardByIdConfig as DashboardByIdConfigPreact,
+  DashboardConfig as DashboardConfigPreact,
   DashboardFiltersPanelConfig as DashboardFiltersPanelConfigPreact,
 } from '@sisense/sdk-ui-preact';
 

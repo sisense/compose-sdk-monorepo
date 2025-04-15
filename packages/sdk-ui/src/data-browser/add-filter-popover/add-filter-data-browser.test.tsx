@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { AddFilterDataBrowser } from '@/data-browser/add-filter-popover/add-filter-data-browser';
 import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
 import { sampleEcommerceFields } from '@/__mocks__/sample-ecommerce-fields';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import type { Mock } from 'vitest';
 
 // Mock only the useGetDataSourceFields hook.
@@ -86,5 +87,37 @@ describe('AddFilterDataBrowser component', () => {
     const loadingSpinner = dataBrowser.childNodes[2];
     expect(loadingSpinner.childNodes.length).toBe(1);
     expect(loadingSpinner.firstChild!.childNodes.length).toBe(4);
+  });
+  it('should render DimensionsBrowser with disabled items for disabled attributes', () => {
+    // simulate the hook has returned fields
+    mockUseGetDataSourceFields.mockReturnValue({
+      dataSourceFields: sampleEcommerceFields,
+      isLoading: false,
+      isError: false,
+      isSuccess: true,
+      error: undefined,
+      status: 'success',
+    });
+
+    const { getByText, queryByText } = render(
+      <AddFilterDataBrowser
+        dataSources={allDataSources}
+        initialDataSource={sampleECommerceDataSource}
+        onAttributeClick={handleAttributeClick}
+        disabledAttributes={[DM.Commerce.AgeRange, DM.Commerce.Condition]}
+      />,
+    );
+    // other attributes should be shown
+    expect(getByText(DM.Commerce.Gender.name)).toBeInTheDocument();
+    expect(getByText(DM.Commerce.Quantity.name)).toBeInTheDocument();
+    // restricted attributes should be disabled
+    expect(queryByText(DM.Commerce.AgeRange.name)?.parentElement?.parentElement).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
+    expect(queryByText(DM.Commerce.Condition.name)?.parentElement?.parentElement).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
   });
 });

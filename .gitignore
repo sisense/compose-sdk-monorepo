@@ -57,9 +57,10 @@ e2e/results.xml
 storybook-static/
 packages/sdk-*/vite.config.ts.timestamp-*
 
-
-
-
+# generated from nx build
 .nx/cache
 .nx/workspace-data
 .swc
+
+# generated from eslint
+.eslintcache

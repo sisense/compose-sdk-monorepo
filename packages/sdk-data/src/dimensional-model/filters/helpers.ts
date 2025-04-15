@@ -1,11 +1,11 @@
+import { Filter, FilterRelations, isFilterRelations } from '../../index.js';
 import {
-  splitFiltersAndRelations,
   calculateNewRelations,
   combineFiltersAndRelations,
-  getRelationsWithReplacedFilter,
   getFiltersArray,
+  getRelationsWithReplacedFilter,
+  splitFiltersAndRelations,
 } from './filter-relations.js';
-import { Filter, FilterRelations, isFilterRelations } from '../../index.js';
 
 /**
  * Returns a function that adds a filter to existing filters or filter relations.
@@ -198,11 +198,11 @@ export function withReplacedFilter(
 /**
  * Finds a filter in an array of filters or filter relations.
  * Returns the first filter that satisfies the provided search function.
+ *
  * @group Filter Utilities
  * @param filters - An array of filters or filter relations to search.
  * @param searchFn - A function that takes a filter and returns a boolean indicating whether the filter satisfies the search criteria.
  * @returns The first filter that satisfies the search function, or `undefined` if no filter is found.
- *
  */
 export function findFilter(
   filters: Filter[] | FilterRelations | undefined,

@@ -27,5 +27,5 @@
  * @groupDescription Type Aliases
  * TypeScript type aliases for components and services listed above
  */
-export * from './public-api';
 export * from './ai/public-api';
+export * from './public-api';

@@ -12,7 +12,7 @@ Facade component that renders a filter tile based on filter type
 
 | Parameter | Type |
 | :------ | :------ |
-| `props` | [`FilterTileProps`](../type-aliases/type-alias.FilterTileProps.md) |
+| `props` | [`FilterTileProps`](../interfaces/interface.FilterTileProps.md) |
 
 ## Returns
 

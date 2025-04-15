@@ -2,8 +2,8 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { Chatbot as ChatbotPreact } from '@sisense/sdk-ui-preact/ai';
 import type { ChatbotProps as ChatbotPropsPreact } from '@sisense/sdk-ui-preact/ai';
-import { createDefaultContextConnectors, setupHelper } from '../../setup-helper';
-import { createAiContextConnector } from '../providers/ai-context-provider';
+import { createDefaultContextConnectors, setupHelper } from '../../helpers/setup-helper';
+import { createAiContextConnector } from '../helpers/context-connectors';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!Chatbot | `Chatbot`} component.
@@ -63,7 +63,7 @@ export const Chatbot = defineComponent({
     config: Object as PropType<ChatbotProps['config']>,
   },
   setup: (props) =>
-    setupHelper(ChatbotPreact, props, () => [
+    setupHelper(ChatbotPreact, props as ChatbotPropsPreact, [
       ...createDefaultContextConnectors(),
       createAiContextConnector(),
     ]),

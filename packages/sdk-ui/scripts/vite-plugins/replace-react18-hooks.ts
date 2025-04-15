@@ -7,6 +7,7 @@ function toGlobalRegExp(str: string): RegExp {
  * Get a safe replacement for a React hook name that can't be simplified by bundlers
  * to just `React.useId`, `React.useInsertionEffect`, etc.
  * Returned string is a JavaScript expression that unsolvable by bundlers optimisations.
+ *
  * @example
  * 'useId' => `useId${Math.random()}`.slice(0, 'useId'.length) // still 'useId' after evaluation
  */

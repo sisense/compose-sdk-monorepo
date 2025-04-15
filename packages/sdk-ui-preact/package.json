@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.33.0",
+  "version": "1.34.0",
   "type": "module",
   "exports": {
     ".": {
@@ -40,7 +40,7 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-ui": "^1.33.0",
+    "@sisense/sdk-ui": "^1.34.0",
     "preact": "^10.13.2"
   },
   "scripts": {
@@ -48,7 +48,8 @@
     "build": "tsc --noEmit && vite build --mode development",
     "build:prod": "tsc --noEmit && vite build",
     "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --quiet",
+    "lint:fix": "run lint --fix"
   },
   "files": [
     "dist/**/*"
@@ -59,9 +60,8 @@
     "@types/node": "^18.16.0",
     "eslint": "^8.40.0",
     "prettier": "2.8.4",
-    "rxjs": "^7.8.1",
     "typescript": "4.8.4",
-    "vite": "4.1.4",
+    "vite": "4.5.2",
     "vite-plugin-dts": "^2.3.0"
   },
   "volta": {

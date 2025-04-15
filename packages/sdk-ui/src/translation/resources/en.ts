@@ -101,6 +101,10 @@ export const translation = {
       dimensionNotFound: 'Dimension with id {{dimensionId}} not found',
       attributeNotFound: 'Attribute with id {{attributeId}} not found',
     },
+    addFilterPopover: {
+      noDataSources:
+        'No data sources available. Try to define `dataSource` in widgets or `defaultDataSource` on the dashboard level.',
+    },
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',

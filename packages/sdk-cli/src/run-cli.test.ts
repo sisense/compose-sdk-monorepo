@@ -1,14 +1,14 @@
-import { HttpClient, Authenticator } from '@sisense/sdk-rest-client';
-import * as prompts from './commands/prompts.js';
-import * as helpers from './commands/helpers.js';
+import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
 import * as auth from '@sisense/sdk-rest-client';
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+import { ArgumentsCamelCase } from 'yargs';
+
+import * as helpers from './commands/helpers.js';
+import * as prompts from './commands/prompts.js';
 import { PKG_VERSION } from './package-version.js';
 import { runCli } from './run-cli.js';
 import * as tracking from './tracking.js';
-import { ArgumentsCamelCase } from 'yargs';
-
-import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
 
 export const server = setupServer();
 beforeAll(() => server.listen());

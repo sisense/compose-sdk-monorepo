@@ -1,7 +1,19 @@
+import { escapeSingleQuotes } from '@sisense/sdk-common';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 import mapValues from 'lodash-es/mapValues.js';
+
+import {
+  DimensionalAttribute,
+  DimensionalLevelAttribute,
+  normalizeAttributeName,
+} from './dimensional-model/attributes.js';
+import { isCascadingFilter } from './dimensional-model/filters/filters.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
-import { FilterJaqlInternal, JaqlDataSource } from './dimensional-model/filters/utils/types.js';
+import {
+  FilterJaqlInternal,
+  JaqlDataSource,
+  RankingFilterJaql,
+} from './dimensional-model/filters/utils/types.js';
 import {
   Attribute,
   BaseMeasure,
@@ -16,9 +28,15 @@ import {
   MeasureContext,
   SortDirection,
 } from './dimensional-model/interfaces.js';
-import { DataSource, DataSourceInfo } from './interfaces.js';
 import {
+  DimensionalBaseMeasure,
+  DimensionalCalculatedMeasure,
+} from './dimensional-model/measures/measures.js';
+import { isDatetime, isNumber } from './dimensional-model/simple-column-types.js';
+import {
+  BaseJaql,
   DataType,
+  DateLevels,
   FilterJaql,
   FormulaJaql,
   Jaql,
@@ -26,18 +44,7 @@ import {
   MetadataTypes,
   Sort,
 } from './dimensional-model/types.js';
-import { escapeSingleQuotes } from '@sisense/sdk-common';
-import {
-  DimensionalBaseMeasure,
-  DimensionalCalculatedMeasure,
-} from './dimensional-model/measures/measures.js';
-import { isCascadingFilter } from './dimensional-model/filters/filters.js';
-import {
-  DimensionalAttribute,
-  DimensionalLevelAttribute,
-  normalizeAttributeName,
-} from './dimensional-model/attributes.js';
-import { isNumber } from './dimensional-model/simple-column-types.js';
+import { DataSource, DataSourceInfo } from './interfaces.js';
 
 /**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
@@ -198,6 +205,24 @@ export function convertSort(sort?: string) {
 }
 
 /**
+ * Converts a SortDirection to a Sort enum
+ *
+ * @param sortDirection - The SortDirection to convert
+ * @returns The converted Sort enum
+ * @internal
+ */
+export function convertSortDirectionToSort(sortDirection: SortDirection): Sort {
+  switch (sortDirection) {
+    case 'sortAsc':
+      return Sort.Ascending;
+    case 'sortDesc':
+      return Sort.Descending;
+    default:
+      return Sort.None;
+  }
+}
+
+/**
  * Creates a filter from a JAQL object.
  *
  * @param jaql - The filter JAQL object.
@@ -306,7 +331,7 @@ export const createAttributeHelper = ({
   table,
   column,
   dataType,
-  level,
+  granularity,
   format,
   sort,
   title,
@@ -321,8 +346,8 @@ export const createAttributeHelper = ({
   column: string | undefined;
   /** Data type */
   dataType: string;
-  /** Date level */
-  level: string | undefined;
+  /** Date granularity */
+  granularity: string | undefined;
   /** Format */
   format: string | undefined;
   /** Sort */
@@ -343,13 +368,18 @@ export const createAttributeHelper = ({
   const isDataTypeDatetime = dataType === DataType.DATETIME;
 
   if (isDataTypeDatetime) {
-    const dateLevel = DimensionalLevelAttribute.translateJaqlToGranularity({ level });
-    const composeCode = normalizeAttributeName(dimTable, dimColumn, level, DATA_MODEL_MODULE_NAME);
+    const composeCode = normalizeAttributeName(
+      dimTable,
+      dimColumn,
+      granularity,
+      DATA_MODEL_MODULE_NAME,
+    );
     const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
       title ?? dimColumn,
       dim,
-      dateLevel,
-      format || DimensionalLevelAttribute.getDefaultFormatForGranularity(dateLevel),
+      granularity || DateLevels.Years,
+      format ||
+        DimensionalLevelAttribute.getDefaultFormatForGranularity(granularity || DateLevels.Years),
       undefined,
       sortEnum,
       dataSource,
@@ -394,7 +424,7 @@ export const createMeasureHelper = ({
   column,
   dataType,
   agg,
-  level,
+  granularity,
   format,
   sort,
   title,
@@ -410,8 +440,8 @@ export const createMeasureHelper = ({
   dataType: string;
   /** Aggregation function */
   agg: string;
-  /** Date level */
-  level: string | undefined;
+  /** Date granularity */
+  granularity: string | undefined;
   /** Format */
   format: string | undefined;
   /** Sort */
@@ -428,7 +458,7 @@ export const createMeasureHelper = ({
     table,
     column,
     dataType,
-    level,
+    granularity,
     format,
     sort,
     title,
@@ -536,7 +566,7 @@ export function createDimensionalElementFromJaql(
       column: jaql.column,
       dataType: jaql.datatype,
       agg: jaql.agg || '',
-      level: jaql.level,
+      granularity: getGranularityFromJaql(jaql),
       format: datetimeFormat,
       sort: jaql.sort,
       title: jaql.title,
@@ -549,11 +579,26 @@ export function createDimensionalElementFromJaql(
     table: jaql.table,
     column: jaql.column,
     dataType: jaql.datatype,
-    level: jaql.level,
+    granularity: getGranularityFromJaql(jaql),
     format: datetimeFormat,
     sort: jaql.sort,
     title: jaql.title,
     panel: panel,
     dataSource,
   });
+}
+
+/**
+ * Returns the granularity from the provided JAQL object.
+ *
+ * @param jaql - The JAQL object.
+ * @returns string.
+ * @internal
+ */
+export function getGranularityFromJaql(
+  jaql: BaseJaql | FilterJaql | FilterJaqlInternal | RankingFilterJaql,
+): string | undefined {
+  return jaql?.datatype && isDatetime(jaql.datatype)
+    ? DimensionalLevelAttribute.translateJaqlToGranularity(jaql)
+    : undefined;
 }

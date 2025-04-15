@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { WidgetById as WidgetByIdPreact } from '@sisense/sdk-ui-preact';
 import type { WidgetByIdProps as WidgetByIdPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 import type { ChartWidget } from './chart-widget';
 
 /**
@@ -134,5 +134,5 @@ export const WidgetById = defineComponent({
     /** @internal */
     widgetStyleOptions: Object as PropType<WidgetByIdProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(WidgetByIdPreact, props),
+  setup: (props) => setupHelper(WidgetByIdPreact, props as WidgetByIdPropsPreact),
 });

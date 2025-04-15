@@ -2,13 +2,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import './app.css';
+
 import { measureFactory } from '@sisense/sdk-data';
 import { ExecuteQuery, SisenseContextProvider } from '@sisense/sdk-ui';
 import { useState } from 'preact/hooks';
-import './app.css';
+
+import viteLogo from '/vite.svg';
+
 import preactLogo from './assets/preact.svg';
 import * as DM from './data-model/sample-ecommerce';
-import viteLogo from '/vite.svg';
 
 export function App() {
   const [count, setCount] = useState(0);

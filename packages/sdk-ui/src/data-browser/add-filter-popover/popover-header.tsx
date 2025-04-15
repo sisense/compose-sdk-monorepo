@@ -112,8 +112,8 @@ const FlowPath = (props: { flowPath: FlowStep[] }) => {
           }
           return [
             ...acc,
-            <FlowPathDivider key={currentStep.key} theme={themeSettings}>
-              <BreadcrumbsArrowsIcon key={currentStep.key} />
+            <FlowPathDivider key={`${currentStep.key}-divider`} theme={themeSettings}>
+              <BreadcrumbsArrowsIcon />
             </FlowPathDivider>,
             currentStep,
           ];

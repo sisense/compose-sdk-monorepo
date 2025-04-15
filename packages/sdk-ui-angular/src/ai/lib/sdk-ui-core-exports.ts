@@ -3,7 +3,7 @@
 // Re-exports types from @sisense/sdk-ui-preact/ai
 export type {
   ChatConfig,
+  GetNlqResultParams,
   GetQueryRecommendationsParams,
   QueryRecommendation,
-  GetNlqResultParams,
 } from '@sisense/sdk-ui-preact/ai';

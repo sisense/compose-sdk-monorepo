@@ -4,7 +4,13 @@ export {
 } from './components/drilldown-breadcrumbs';
 export * from './components/charts';
 export * from './components/filters';
-export * from './providers';
+export {
+  SisenseContextProvider,
+  type SisenseContextProviderProps,
+  ThemeProvider,
+  type ThemeProviderProps,
+  PluginsProvider,
+} from './providers';
 export * from './composables';
 export * from './components/context-menu';
 export * from './types';

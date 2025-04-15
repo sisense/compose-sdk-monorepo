@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
-import { Filter, isDateRangeFilter } from '@sisense/sdk-data';
+import { DateLevels, Filter, isDateRangeFilter, LevelAttribute } from '@sisense/sdk-data';
 import { IncludeAllSection } from './sections/include-all-section';
 import {
   isIncludeAllFilter,
@@ -72,7 +72,7 @@ export const FilterEditorDatetime = ({
   showMultiselectToggle = true,
 }: FilterEditorDatetimeProps) => {
   const { themeSettings } = useThemeContext();
-  const { defaultDataSource } = useFilterEditorContext();
+  const { defaultDataSource, parentFilters, membersOnlyMode } = useFilterEditorContext();
   const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
   const [selectedSection, setSelectedSection] = useState<FilterSections | null>(
     getSelectedSection(editedFilter),
@@ -82,7 +82,11 @@ export const FilterEditorDatetime = ({
   );
 
   const { data: attributeStats } = useGetAttributeStats<DatetimeAttributeStats>({
-    attribute: filter.attribute,
+    attribute: useMemo(
+      () => (filter.attribute as LevelAttribute).setGranularity(DateLevels.Days),
+      [filter],
+    ),
+    filters: parentFilters,
     enabled: !!filter,
     ...(defaultDataSource && { defaultDataSource }),
   });
@@ -155,17 +159,21 @@ export const FilterEditorDatetime = ({
         limits={dateLimits}
         onChange={handleMembersSectionChange}
       />
-      <DatetimeRelativeSection
-        filter={filter}
-        selected={selectedSection === FilterSections.RELATIVE}
-        onChange={handleRelativeSectionChange}
-      />
-      <DatetimeRangeSection
-        filter={filter}
-        selected={selectedSection === FilterSections.RANGE}
-        limits={dateLimits}
-        onChange={handleRangeSectionChange}
-      />
+      {!membersOnlyMode && (
+        <>
+          <DatetimeRelativeSection
+            filter={filter}
+            selected={selectedSection === FilterSections.RELATIVE}
+            onChange={handleRelativeSectionChange}
+          />
+          <DatetimeRangeSection
+            filter={filter}
+            selected={selectedSection === FilterSections.RANGE}
+            limits={dateLimits}
+            onChange={handleRangeSectionChange}
+          />
+        </>
+      )}
       <DatetimeConditionSection
         filter={filter}
         selected={selectedSection === FilterSections.CONDITION}

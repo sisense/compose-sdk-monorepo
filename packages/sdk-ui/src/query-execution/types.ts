@@ -286,7 +286,7 @@ export type ExecuteQueryResult = QueryState & {
    * Function to load more data rows
    *
    * @internal
-   * */
+   */
   loadMore: (count: number) => void;
 };
 

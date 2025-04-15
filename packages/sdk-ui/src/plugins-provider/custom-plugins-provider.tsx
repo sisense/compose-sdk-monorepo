@@ -1,12 +1,12 @@
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import { PluginsContext } from './plugins-context';
 import { PluginComponent, PluginComponentProps } from './types';
+import { CustomContextProviderProps } from '../types';
 
 /** @internal */
-export type CustomPluginsProviderProps<T = PluginComponentProps> = {
-  context: CustomPluginsContext<T>;
-  error?: Error;
-};
+export type CustomPluginsProviderProps = CustomContextProviderProps<
+  CustomPluginsContext<PluginComponentProps>
+>;
 
 /** @internal */
 export type CustomPluginsContext<T = PluginComponentProps> = {
@@ -22,11 +22,16 @@ export type CustomPluginsContext<T = PluginComponentProps> = {
  *
  * @internal
  */
-export const CustomPluginsProvider: React.FC<{
-  context: CustomPluginsContext<any>;
-  children: ReactNode;
-}> = ({ context, children }) => {
-  const { pluginMap, registerPlugin, getPlugin } = context;
+export const CustomPluginsProvider: React.FC<PropsWithChildren<CustomPluginsProviderProps>> = (
+  props,
+) => {
+  const { error, context, children } = props;
+
+  if (error) {
+    throw error;
+  }
+
+  const { pluginMap, registerPlugin, getPlugin } = context as CustomPluginsContext<any>;
 
   return (
     <PluginsContext.Provider value={{ registerPlugin, getPlugin, plugins: pluginMap }}>

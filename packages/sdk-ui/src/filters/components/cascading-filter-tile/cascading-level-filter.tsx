@@ -36,6 +36,8 @@ export type CascadingLevelFilterTileProps = {
   parentFilters: Filter[];
   /** Callback to handle filter change */
   onChange: (filter: Filter | null) => void;
+  /** Filter edit callback */
+  onEdit?: () => void;
 
   /** Whether the filter is the last in the list */
   isLast?: boolean;
@@ -47,6 +49,7 @@ const cascadingLevelTileDesign: CompleteFilterTileDesignOptions = {
     isCollapsible: true,
     hasBorder: false,
     hasBackgroundFilterIcon: false,
+    disableGroupHover: false,
   },
   border: {
     shouldBeShown: false,
@@ -67,6 +70,7 @@ export const CascadingLevelFilterTile = ({
   parentFilters,
   onChange,
   isLast,
+  onEdit,
 }: CascadingLevelFilterTileProps) => {
   const { themeSettings } = useThemeContext();
   const { backgroundColor: bgColor } = themeSettings.general;
@@ -80,6 +84,7 @@ export const CascadingLevelFilterTile = ({
     title,
     onChange,
     onUpdate: onChange,
+    onEdit,
     tileDesignOptions: cascadingLevelTileDesign,
   };
 

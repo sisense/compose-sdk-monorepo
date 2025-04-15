@@ -1,4 +1,4 @@
-import { RefObject, SyntheticEvent, useEffect, useState, useCallback } from 'react';
+import { RefObject, SyntheticEvent, useCallback, useEffect, useState } from 'react';
 
 import type { DropdownInputProps, DropdownItem } from '../../types';
 

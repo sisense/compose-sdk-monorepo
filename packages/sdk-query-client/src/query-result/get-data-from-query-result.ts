@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import numeral from 'numeral';
 import { Cell, Column, DataCell, Element, QueryResultData } from '@sisense/sdk-data';
-import { JaqlResponse } from '../types.js';
 import { simpleColumnType } from '@sisense/sdk-data';
+import numeral from 'numeral';
+
+import { JaqlResponse } from '../types.js';
 
 export const getDataFromQueryResult = (
   result: JaqlResponse,

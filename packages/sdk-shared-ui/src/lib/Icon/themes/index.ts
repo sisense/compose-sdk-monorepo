@@ -1,1 +1,1 @@
-export { iconTheme, type IconTheme } from './iconTheme';
+export { type IconTheme, iconTheme } from './iconTheme';

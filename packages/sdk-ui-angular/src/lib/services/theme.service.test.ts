@@ -9,6 +9,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { firstValueFrom, take, toArray } from 'rxjs';
 import { Mock, Mocked } from 'vitest';
+
 import { ThemeService } from '.';
 import { SisenseContextService } from './sisense-context.service';
 

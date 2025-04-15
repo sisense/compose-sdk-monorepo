@@ -1,47 +1,14 @@
-import { defineComponent, inject, provide, ref, watchEffect } from 'vue';
-import type { PropType, InjectionKey, Ref } from 'vue';
-import { createContextProviderRenderer } from '@sisense/sdk-ui-preact';
+import { defineComponent, provide, ref, watchEffect } from 'vue';
+import type { PropType, Ref } from 'vue';
 import type { AiContextProviderProps as AiContextProviderPropsPreact } from '@sisense/sdk-ui-preact/ai';
-import {
-  ChatRestApi,
-  CustomAiContextProvider,
-  type CustomAiContext,
-} from '@sisense/sdk-ui-preact/ai';
-import { getSisenseContext } from '../../providers';
+import { ChatRestApi, type CustomAiContext } from '@sisense/sdk-ui-preact/ai';
+import { getSisenseContext } from '../../../providers';
+import { aiContextKey, defaultAiContext } from './ai-context';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!AiContextProvider | `AiContextProvider`} component.
  */
 export interface AiContextProviderProps extends Omit<AiContextProviderPropsPreact, 'children'> {}
-
-const defaultAiContext: Partial<CustomAiContext> = {
-  api: undefined,
-};
-
-const aiContextKey = Symbol('aiContextKey') as InjectionKey<Ref<CustomAiContext>>;
-
-/**
- * Gets AI context
- * @internal
- */
-export const getAiContext = () => {
-  return inject(aiContextKey, ref(defaultAiContext)) as Ref<CustomAiContext>;
-};
-
-/**
- * Creates AI context connector
- * @internal
- */
-export const createAiContextConnector = () => {
-  const aiContext = getAiContext();
-
-  return {
-    prepareContext() {
-      return aiContext.value;
-    },
-    renderContextProvider: createContextProviderRenderer(CustomAiContextProvider),
-  };
-};
 
 /**
  * A Vue component that wraps all generative AI components and hooks.

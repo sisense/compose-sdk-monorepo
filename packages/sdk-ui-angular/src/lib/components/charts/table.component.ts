@@ -8,18 +8,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  Table,
-  type TableProps as TablePropsPreact,
   ComponentAdapter,
-  createElement,
+  Table as TablePreact,
+  type TableProps as TablePropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types';
 
 /**
@@ -58,7 +58,6 @@ export class AnalyticsComponent {
 }
  * ```
  * <img src="media://angular-table-chart-example.png" width="800px" />
- *
  * @group Data Grids
  */
 @Component({
@@ -111,43 +110,38 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   dataReady: TableProps['dataReady'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof TablePreact>;
 
   constructor(
     private sisenseContextService: SisenseContextService,
     private themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(TablePreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /** @internal */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): TablePropsPreact {
+    return {
       dataSet: this.dataSet,
       dataOptions: this.dataOptions,
       filters: this.filters,
       styleOptions: this.styleOptions,
       onDataReady: this.dataReady,
     };
-
-    return createElement(Table, props);
   }
 
   /** @internal */

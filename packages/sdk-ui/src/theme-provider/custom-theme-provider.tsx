@@ -1,16 +1,13 @@
 import { PropsWithChildren } from 'react';
-import { CompleteThemeSettings } from '../types';
+import { CompleteThemeSettings, CustomContextProviderProps } from '../types';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { ThemeContext } from './theme-context';
 
 /** @internal */
-export type CustomThemeProviderProps = {
-  context: {
-    themeSettings: CompleteThemeSettings;
-    skipTracking?: boolean;
-  };
-  error?: Error;
-};
+export type CustomThemeProviderProps = CustomContextProviderProps<{
+  themeSettings: CompleteThemeSettings;
+  skipTracking?: boolean;
+}>;
 
 /**
  * Custom Theme Provider component that allows passing external theme context.
@@ -27,15 +24,13 @@ export const CustomThemeProvider = asSisenseComponent({
   },
   shouldSkipSisenseContextWaiting: true,
 })((props: PropsWithChildren<CustomThemeProviderProps>) => {
-  const {
-    context: { themeSettings },
-    error,
-    children,
-  } = props;
+  const { context, error, children } = props;
 
   if (error) {
     throw error;
   }
+
+  const { themeSettings } = context;
 
   return (
     <>

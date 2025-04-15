@@ -1,11 +1,12 @@
 /// <reference lib="dom" />
 
 import { normalizeUrl } from '@sisense/sdk-common';
-import { Authenticator } from './interfaces.js';
+
 import { BaseAuthenticator } from './base-authenticator.js';
-import { TranslatableError } from './translation/translatable-error.js';
-import { errorInterceptor } from './interceptors.js';
 import { addQueryParamsToUrl } from './helpers.js';
+import { errorInterceptor } from './interceptors.js';
+import { Authenticator } from './interfaces.js';
+import { TranslatableError } from './translation/translatable-error.js';
 
 interface IsAuthResponse {
   isAuthenticated: boolean;

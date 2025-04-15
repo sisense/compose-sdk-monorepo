@@ -35,6 +35,7 @@ TypeScript interfaces for components and services listed above
 - [DataLimits](interface.DataLimits.md)
 - [DateRangeFilterTileProps](interface.DateRangeFilterTileProps.md)
 - [DrilldownBreadcrumbsProps](interface.DrilldownBreadcrumbsProps.md)
+- [ExecuteCsvQueryParams](interface.ExecuteCsvQueryParams.md)
 - [ExecutePivotQueryParams](interface.ExecutePivotQueryParams.md)
 - [ExecuteQueryByWidgetIdParams](interface.ExecuteQueryByWidgetIdParams.md)
 - [ExecuteQueryParams](interface.ExecuteQueryParams.md)

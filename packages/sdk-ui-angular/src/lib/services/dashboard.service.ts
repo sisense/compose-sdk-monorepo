@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
   getDashboardModel,
+  type GetDashboardModelOptions,
   getDashboardModels,
   type GetDashboardModelsOptions,
-  type GetDashboardModelOptions,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from './sisense-context.service';
+
 import { TrackableService } from '../decorators/trackable.decorator';
+import { SisenseContextService } from './sisense-context.service';
 
 /**
  * Service for working with Sisense Fusion dashboards.

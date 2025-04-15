@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Filter, filterFactory, NumericFilter } from '@sisense/sdk-data';
+import isNumber from 'lodash-es/isNumber';
 import { Input, SelectableSection } from '../common';
 import { isNumericBetweenFilter } from '../utils';
 import { isNumericString } from '@/utils/is-numeric-string';
@@ -51,7 +52,7 @@ export const NumericRangeSection = (props: NumericRangeSectionProps) => {
   const isToValueWasModified = useWasModified(to, '');
 
   useEffect(() => {
-    if (defaultFrom) {
+    if (isNumber(defaultFrom)) {
       setFrom((existingFrom) => {
         return existingFrom === '' ? defaultFrom.toString() : existingFrom;
       });
@@ -59,7 +60,7 @@ export const NumericRangeSection = (props: NumericRangeSectionProps) => {
   }, [defaultFrom]);
 
   useEffect(() => {
-    if (defaultTo) {
+    if (isNumber(defaultTo)) {
       setTo((existingTo) => {
         return existingTo === '' ? defaultTo.toString() : existingTo;
       });

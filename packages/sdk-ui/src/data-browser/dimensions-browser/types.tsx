@@ -31,6 +31,15 @@ export type DimensionsBrowserProps = {
    * If `true`, a loading spinner will be displayed.
    */
   isLoading?: boolean;
+
+  /**
+   * Config for attributes disabling.
+   * If provided, the specified attributes will be disabled and a tooltip will be shown on hover.
+   */
+  disabledAttributesConfig?: {
+    disabledAttributes: AttributiveElement[];
+    getTooltip: (attribute: AttributiveElement) => string;
+  };
 };
 
 /**

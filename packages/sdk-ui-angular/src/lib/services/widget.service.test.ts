@@ -2,10 +2,11 @@
 /** @vitest-environment jsdom */
 
 import { type ClientApplication, getWidgetModel } from '@sisense/sdk-ui-preact';
-import { type WidgetModel } from '../sdk-ui-core-exports';
 import { Mock, Mocked } from 'vitest';
-import { WidgetService } from './widget.service';
+
+import { type WidgetModel } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
+import { WidgetService } from './widget.service';
 
 vi.mock('@sisense/sdk-ui-preact', () => ({
   getWidgetModel: vi.fn(),

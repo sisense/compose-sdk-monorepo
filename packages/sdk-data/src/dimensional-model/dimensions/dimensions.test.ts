@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { DimensionalAttribute } from '../attributes.js';
-import { DimensionalDateDimension, DimensionalDimension } from './dimensions.js';
 import { Sort } from '../types.js';
+import { DimensionalDateDimension, DimensionalDimension } from './dimensions.js';
 
 describe('Dimension jaql preparations', () => {
   it('must prepare simple text dimension jaql', () => {

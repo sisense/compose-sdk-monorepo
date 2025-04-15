@@ -1,4 +1,5 @@
 import createTheme from '@mui/material/styles/createTheme';
+
 import { siColors } from '../../themes';
 
 export const tooltipTheme = createTheme({

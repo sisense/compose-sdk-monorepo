@@ -41,12 +41,6 @@ export const useGetDataSourceFields = (params: {
         ? api.getDataSourceFields(dataSourceString, { count, offset, searchValue })
         : undefined,
     enabled: shouldBeQueried,
-    // Disable caching of this request.
-    // Cached data causes changes of loaded data without setting 'isLoading' state to true
-    // and it causes a flickering effect.
-    // TODO: Handle this case in `withLazyLoading` decorator, after that enable caching.
-    staleTime: 0,
-    cacheTime: 0,
   });
 
   switch (status) {

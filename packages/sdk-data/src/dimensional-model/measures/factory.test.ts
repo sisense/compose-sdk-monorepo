@@ -7,13 +7,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable vitest/no-identical-title */
 import { DimensionalAttribute } from '../attributes.js';
-import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
-import { createDimension } from '../dimensions/index.js';
-import { AggregationTypes } from '../types.js';
-import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';
 import { normalizeName } from '../base.js';
+import { createDimension } from '../dimensions/index.js';
 import * as filterFactory from '../filters/factory.js';
+import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';
+import { AggregationTypes } from '../types.js';
 import * as measureFactory from './factory.js';
+import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
 
 const sampleAttribute = new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute');
 const sampleAttribute2 = new DimensionalAttribute(

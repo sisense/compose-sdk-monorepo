@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ChartType } from '../../sdk-ui-core-exports';
 import { type LineChartProps as LineChartPropsPreact } from '@sisense/sdk-ui-preact';
+
+import { type ChartType } from '../../sdk-ui-core-exports';
 import {
   RegularChartEventProps,
   WithoutPreactChartEventProps,
@@ -64,7 +65,6 @@ export class AnalyticsComponent {
 }
  * ```
  * <img src="media://angular-line-chart-example.png" width="800px" />
- *
  * @group Charts
  */
 @Component({

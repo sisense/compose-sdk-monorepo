@@ -151,12 +151,12 @@ export type SeriesLabels = {
   /**
    * Boolean flag that defines if value should be shown in series labels
    * (if not specified, value will be shown by default)
-   * */
+   */
   showValue?: boolean;
   /**
    * Boolean flag that defines if percentage should be shown in series labels
    * (only applicable for subtypes that support percentage, like "stacked100")
-   * */
+   */
   showPercentage?: boolean;
 };
 
@@ -1419,7 +1419,7 @@ export interface WidgetContainerStyleOptions {
  * Configuration options that define functional style of the various elements of the Nlq Chart Widget
  *
  * @internal
- * */
+ */
 export type NlqChartWidgetStyleOptions = {
   header?: {
     hidden?: boolean;
@@ -1919,6 +1919,7 @@ export type CustomTranslationObject = {
 
 /**
  * Single Tabber Widget tab object without styling
+ *
  * @internal
  */
 export type TabberTab = {
@@ -1928,6 +1929,7 @@ export type TabberTab = {
 
 /**
  * Tabber widget DTO style property
+ *
  * @internal
  */
 export type TabberDtoStyle = TabberStyleProps & {
@@ -1936,6 +1938,7 @@ export type TabberDtoStyle = TabberStyleProps & {
 
 /**
  * Configuration options that define style of the various elements of the Tabber component.
+ *
  * @internal
  */
 export type TabberStyleOptions = {
@@ -1957,15 +1960,28 @@ export type TabberStyleOptions = {
 
 /**
  * Configuration options that defined tabber look and feel, including tabs and active tab.
+ *
  * @internal
  */
 export type TabberStyleProps = TabberStyleOptions & TabberConfig;
 
 /**
  * Tabber business logic configuration
+ *
  * @internal
  */
 export type TabberConfig = {
   tabs: TabberTab[];
   activeTab: number;
 };
+
+/** @internal */
+export type CustomContextProviderProps<P> =
+  | {
+      context: P;
+      error?: undefined;
+    }
+  | {
+      context?: undefined;
+      error: Error;
+    };

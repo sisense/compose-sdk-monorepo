@@ -3,6 +3,7 @@ import { DashboardModel, WidgetModel } from '@/models';
 
 /**
  * Custom hook for fetching a dashboard model and a widget model.
+ *
  * @returns
  */
 export function useGetDashboardModelAndWidgetModel({

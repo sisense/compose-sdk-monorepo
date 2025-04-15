@@ -23,6 +23,11 @@ import {
 } from './utils.js';
 import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
 import { getMembersWithDeactivated } from '../utils.js';
+import { useFilterEditorContext } from '../../filter-editor-context';
+
+const membersOnlyConditionItems = [
+  { value: NumericCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
+];
 
 const conditionItems = [
   { value: NumericCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
@@ -73,6 +78,7 @@ export const NumericConditionSection = ({
   onChange,
 }: NumericConditionSectionProps) => {
   const { t } = useTranslation();
+  const { membersOnlyMode } = useFilterEditorContext();
   const [condition, setCondition] = useState<NumericConditionType>(
     getNumericFilterCondition(filter, conditionItems[0].value),
   );
@@ -85,13 +91,15 @@ export const NumericConditionSection = ({
 
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
+
+  const conditionItemsToUse = membersOnlyMode ? membersOnlyConditionItems : conditionItems;
   const translatedConditionItems = useMemo(
     () =>
-      conditionItems.map((item) => ({
+      conditionItemsToUse.map((item) => ({
         ...item,
         displayValue: t(item.displayValue),
       })),
-    [t],
+    [t, conditionItemsToUse],
   );
 
   const showInput = useMemo(

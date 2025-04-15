@@ -1,12 +1,13 @@
 import { DataSource } from '../../interfaces.js';
-import { createAttribute } from '../attributes.js';
-import { createDimension, createDateDimension } from './dimensions.js';
-import { Dimension, Attribute } from '../interfaces.js';
-import { DataSourceField } from '../types.js';
 import { isDataSourceInfo } from '../../utils.js';
+import { createAttribute } from '../attributes.js';
+import { Attribute, Dimension } from '../interfaces.js';
+import { DataSourceField } from '../types.js';
+import { createDateDimension, createDimension } from './dimensions.js';
 
 /**
  * Function to convert data source fields to dimensions.
+ *
  * @param fields - The data source fields to convert.
  * @param dataSource - The data source title.
  * @returns - The dimensions created from the data source fields.

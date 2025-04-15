@@ -1,5 +1,6 @@
-import { ContextConnector, createContextProviderRenderer } from '@sisense/sdk-ui-preact';
-import { CustomAiContextProvider, CustomAiContext } from '@sisense/sdk-ui-preact/ai';
+import { ContextConnector, DataObserver } from '@sisense/sdk-ui-preact';
+import { CustomAiContextProvider, CustomAiContextProviderProps } from '@sisense/sdk-ui-preact/ai';
+
 import { AiService } from '../services/ai.service';
 
 /**
@@ -10,14 +11,26 @@ import { AiService } from '../services/ai.service';
  */
 export const createAiContextConnector = (
   aiService: AiService,
-): ContextConnector<CustomAiContext> => {
+): ContextConnector<CustomAiContextProviderProps> => {
+  const propsObserver = new DataObserver<CustomAiContextProviderProps>();
+
+  aiService
+    .getApi()
+    .then((api) =>
+      propsObserver.setValue({
+        context: {
+          api,
+        },
+      }),
+    )
+    .catch((error) =>
+      propsObserver.setValue({
+        error,
+      }),
+    );
+
   return {
-    async prepareContext() {
-      const api = await aiService.getApi();
-      return {
-        api,
-      };
-    },
-    renderContextProvider: createContextProviderRenderer(CustomAiContextProvider),
+    propsObserver,
+    providerComponent: CustomAiContextProvider,
   };
 };

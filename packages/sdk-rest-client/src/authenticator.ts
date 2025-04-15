@@ -1,11 +1,12 @@
 /* eslint-disable max-params */
 import { normalizeUrl } from '@sisense/sdk-common';
+
+import { BearerAuthenticator } from './bearer-authenticator.js';
+import { FusionAuthenticator } from './fusion-authenticator.js';
 import { Authenticator } from './interfaces.js';
 import { PasswordAuthenticator } from './password-authenticator.js';
-import { BearerAuthenticator } from './bearer-authenticator.js';
-import { WatAuthenticator } from './wat-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
-import { FusionAuthenticator } from './fusion-authenticator.js';
+import { WatAuthenticator } from './wat-authenticator.js';
 
 type AuthenticatorConfig = {
   url: string;

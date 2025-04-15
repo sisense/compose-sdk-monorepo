@@ -1,19 +1,19 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import {
-  ChatRestApi,
-  UseGetNlgInsightsParams,
-  prepareGetNlgInsightsPayload,
-  GetQueryRecommendationsParams,
-  AiContextProviderProps,
-  GetNlgInsightsResponse,
-  QueryRecommendation,
-  GetNlqResultParams,
-  DEFAULT_RECOMMENDATIONS_COUNT,
-  widgetComposer,
-  prepareGetNlqResultPayload,
-} from '@sisense/sdk-ui-preact/ai';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { SisenseContextService, TrackableService, WidgetProps } from '@sisense/sdk-ui-angular';
+import {
+  AiContextProviderProps,
+  ChatRestApi,
+  DEFAULT_RECOMMENDATIONS_COUNT,
+  GetNlgInsightsResponse,
+  GetNlqResultParams,
+  GetQueryRecommendationsParams,
+  prepareGetNlgInsightsPayload,
+  prepareGetNlqResultPayload,
+  QueryRecommendation,
+  UseGetNlgInsightsParams,
+  widgetComposer,
+} from '@sisense/sdk-ui-preact/ai';
 
 export interface AiContextConfig extends Omit<AiContextProviderProps, 'children'> {}
 export interface GetNlgInsightsParams extends Omit<UseGetNlgInsightsParams, 'enabled'> {}
@@ -52,7 +52,6 @@ export interface GetNlgInsightsParams extends Omit<UseGetNlgInsightsParams, 'ena
  *   bootstrap: [AppComponent],
  * })
  * ```
- *
  * @group Generative AI
  * @beta
  */

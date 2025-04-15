@@ -1,1 +1,1 @@
-export { breadcrumbsTheme, type BreadcrumbsTheme } from './breadcrumbsTheme';
+export { type BreadcrumbsTheme, breadcrumbsTheme } from './breadcrumbsTheme';

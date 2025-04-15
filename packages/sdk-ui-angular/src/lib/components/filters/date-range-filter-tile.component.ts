@@ -10,19 +10,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  DateRangeFilterTile,
-  type DateRangeFilterTileProps as DateRangeFilterTilePropsPreact,
   ComponentAdapter,
-  createElement,
+  DateRangeFilterTile as DateRangeFilterTilePreact,
+  type DateRangeFilterTileProps as DateRangeFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
-import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
+import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
 
 /**
  * Props of the {@link DateRangeFilterTileComponent}.
@@ -127,7 +127,7 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
     ArgumentsAsObject<DateRangeFilterTilePropsPreact['onChange'], ['filter']>
   >();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof DateRangeFilterTilePreact>;
 
   /**
    * Constructor for the `DateRangeFilterTileComponent`.
@@ -149,20 +149,17 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(DateRangeFilterTilePreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -170,12 +167,12 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): DateRangeFilterTilePropsPreact {
+    return {
       title: this.title,
       attribute: this.attribute,
       dataSource: this.dataSource,
@@ -185,8 +182,6 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
       onChange: (...[filter]: Arguments<DateRangeFilterTilePropsPreact['onChange']>) =>
         this.filterChange.emit({ filter }),
     };
-
-    return createElement(DateRangeFilterTile, props);
   }
 
   /**

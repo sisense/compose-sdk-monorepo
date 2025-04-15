@@ -5,8 +5,9 @@ import {
   useManageSliceToLoad,
   useLoadDataFromInternalHook,
   useGetLoadMoreFunction,
+  useGetHookStateResult,
 } from './helpers/hooks';
-import { calculateIfAllItemsLoaded, getHookStateResult } from './helpers/utils';
+import { calculateIfAllItemsLoaded } from './helpers/utils';
 import {
   LazyLoadingConfig,
   SliceableRestApiHook,
@@ -29,7 +30,9 @@ export const withLazyLoading =
   ): HookWithLazyLoading<HookParams, DataKey, SuccessDataType, typeof hook> => {
     return (params: UnsliceableParams<HookParams>) => {
       const areParamsChanged = useHasChanged(params);
-      const { accumulatedData, addData } = useDataAccumulation({ shouldBeReset: areParamsChanged });
+      const { accumulatedData, addData, isDataReset } = useDataAccumulation({
+        shouldBeReset: areParamsChanged,
+      });
 
       const { sliceToLoad, increaseSliceToLoad } = useManageSliceToLoad({
         initialCount: config.initialCount,
@@ -51,7 +54,7 @@ export const withLazyLoading =
       const isLoadMoreRequestsForbidden =
         isAllItemsLoaded || hookExecutionStatus !== 'success' || areParamsChanged;
 
-      return getHookStateResult({
+      return useGetHookStateResult({
         status: hookExecutionStatus,
         dataKey: config.dataKey,
         data: accumulatedData.flatMap((chunk) => chunk.data),
@@ -60,6 +63,7 @@ export const withLazyLoading =
           isLoadMoreRequestsForbidden,
         }),
         error: dataLoadingError,
+        isDataReset,
       });
     };
   };

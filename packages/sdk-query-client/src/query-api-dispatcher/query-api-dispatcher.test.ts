@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { QueryApiDispatcher } from './query-api-dispatcher.js';
-import { JaqlQueryPayload } from '../types.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { Mocked } from 'vitest';
+
+import { JaqlQueryPayload } from '../types.js';
+import { QueryApiDispatcher } from './query-api-dispatcher.js';
 
 describe('QueryApiDispatcher', () => {
   let httpClient: Mocked<HttpClient>;

@@ -1,7 +1,7 @@
-import * as analyticsFactory from './factory.js';
 import { createAttribute } from '../attributes.js';
 import { Attribute, Measure } from '../interfaces.js';
 import { BaseJaql, FilterJaql, FormulaJaql, NumericFilterJaql, OrFilterJaql } from '../types.js';
+import * as analyticsFactory from './factory.js';
 
 const attribute = createAttribute({
   name: 'text',

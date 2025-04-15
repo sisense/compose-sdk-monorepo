@@ -1,11 +1,10 @@
-import React, { ForwardedRef } from 'react';
 import MuiBreadcrumbs, { BreadcrumbsProps as MuiBreadcrumbsProps } from '@mui/material/Breadcrumbs';
 import { ThemeProvider } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
+import React, { ForwardedRef } from 'react';
 
-import { Typography } from '../Typography';
 import { Icon } from '../Icon';
-
+import { Typography } from '../Typography';
 import { BreadcrumbsTheme, breadcrumbsTheme } from './themes';
 
 export type BreadcrumbItem = {

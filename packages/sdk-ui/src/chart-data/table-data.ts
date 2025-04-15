@@ -11,7 +11,8 @@ import {
   StyledMeasureColumn,
   TableDataOptionsInternal,
 } from '../chart-data-options/types';
-import { Attribute, Sort } from '@sisense/sdk-data';
+import { Attribute, Sort, SortDirection } from '@sisense/sdk-data';
+import { convertSortDirectionToSort } from '@sisense/sdk-data';
 
 const flatResults = (dimensions: string[], sourceTable: DataTable): DataTable => {
   if (emptyTable(sourceTable)) {
@@ -57,27 +58,52 @@ export const syncDataTableWithDataOptionsSort = (
   return dataTable;
 };
 
+/**
+ * Updates the sort type of a styled column for table
+ * This is needed because sorting for Table is done at the JAQL level (backend)
+ * while sorting for other charts is done on the client side in CSDK. I am working on a fix for this
+ *
+ * @param styledColumn - The styled column to update
+ * @returns The updated styled column
+ * @internal
+ */
+export const updateStyledColumnSortForTable = (
+  styledColumn: StyledColumn | StyledMeasureColumn,
+): StyledColumn | StyledMeasureColumn => {
+  if (!('sortType' in styledColumn)) {
+    return styledColumn;
+  }
+
+  const sortDirection = styledColumn.sortType as SortDirection;
+  const sort = convertSortDirectionToSort(sortDirection);
+
+  return {
+    ...styledColumn,
+    sortType: sortDirection,
+    column:
+      'sort' in styledColumn.column
+        ? (styledColumn.column as Attribute).sort(sort)
+        : styledColumn.column,
+  };
+};
+
 export const updateInnerDataOptionsSort = (
   dataOptions: TableDataOptionsInternal,
   sortColumn: DataTableColumn,
 ): TableDataOptionsInternal => {
   return {
-    columns: dataOptions.columns.map((dataOption) => {
-      const isNewSortedColumn = dataOption.column.name === sortColumn.name;
-      const currentDirection = unifySortToDirection(dataOption);
-      const newSortType = currentDirection === 1 ? 'sortDesc' : 'sortAsc';
-      const newSortDirection = currentDirection === 1 ? Sort.Descending : Sort.Ascending;
+    columns: dataOptions.columns.map((styledColumn) => {
+      const isNewSortedColumn = styledColumn.column.name === sortColumn.name;
 
-      return {
-        ...dataOption,
-        sortType: isNewSortedColumn ? newSortType : 'sortNone',
-        column:
-          'sort' in dataOption.column
-            ? (dataOption.column as Attribute).sort(
-                isNewSortedColumn ? newSortDirection : Sort.None,
-              )
-            : dataOption.column,
-      };
+      const currentDirection = unifySortToDirection(styledColumn);
+      const newSortType = !isNewSortedColumn
+        ? 'sortNone'
+        : currentDirection === 1
+        ? 'sortDesc'
+        : 'sortAsc';
+      styledColumn.sortType = newSortType;
+
+      return updateStyledColumnSortForTable(styledColumn);
     }),
   };
 };

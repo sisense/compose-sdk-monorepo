@@ -1,7 +1,7 @@
-import React, { type ForwardedRef, forwardRef } from 'react';
 import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
+import React, { type ForwardedRef, forwardRef } from 'react';
 
 import { type ButtonsTheme, buttonsTheme } from './themes';
 

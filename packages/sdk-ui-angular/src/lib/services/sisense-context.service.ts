@@ -1,6 +1,6 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact';
 import type { SisenseContextProviderProps as SisenseContextConfig } from '@sisense/sdk-ui-preact';
+import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact';
 
 export { type SisenseContextConfig };
 

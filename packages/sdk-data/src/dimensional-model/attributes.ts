@@ -4,12 +4,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable sonarjs/no-nested-switch */
-import { Attribute, LevelAttribute } from './interfaces.js';
-
-import { Sort, MetadataTypes, DateLevels, JaqlDataSource } from './types.js';
-
 import { DimensionalElement, normalizeName } from './base.js';
+import { Attribute, LevelAttribute } from './interfaces.js';
 import { simpleColumnType } from './simple-column-types.js';
+import { DateLevel, DateLevels, JaqlDataSource, MetadataTypes, Sort } from './types.js';
 
 /**
  * @internal
@@ -218,6 +216,25 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       this.expression,
       this.granularity,
       format,
+      this.description,
+      this._sort,
+      this.dataSource,
+      this.composeCode,
+    );
+  }
+
+  /**
+   * Gets a {@link LevelAttribute} with the given granularity
+   *
+   * @param granularity - Date granularity
+   * @returns New instance representing {@link LevelAttribute} with provided granularity
+   */
+  setGranularity(granularity: DateLevel): LevelAttribute {
+    return new DimensionalLevelAttribute(
+      this.name,
+      this.expression,
+      granularity,
+      this._format,
       this.description,
       this._sort,
       this.dataSource,
@@ -487,7 +504,7 @@ export function createLevel(json: any): LevelAttribute {
 export function normalizeAttributeName(
   tableName: string,
   columnName: string,
-  dateLevel?: string,
+  granularity?: string,
   modelName?: string,
 ): string {
   return (
@@ -495,8 +512,6 @@ export function normalizeAttributeName(
     normalizeName(tableName) +
     '.' +
     normalizeName(columnName) +
-    (dateLevel && dateLevel.length > 0
-      ? '.' + DimensionalLevelAttribute.translateJaqlToGranularity({ level: dateLevel })
-      : '')
+    (granularity && granularity.length > 0 ? '.' + granularity : '')
   );
 }

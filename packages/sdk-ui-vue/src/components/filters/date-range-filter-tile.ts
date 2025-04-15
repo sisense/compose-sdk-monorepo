@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { DateRangeFilterTile as DateRangeFilterTilePreact } from '@sisense/sdk-ui-preact';
 import type { DateRangeFilterTileProps as DateRangeFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!DateRangeFilterTile | `DateRangeFilterTile`} component.
@@ -96,5 +96,5 @@ export const DateRangeFilterTile = defineComponent({
      */
     onEdit: Function as PropType<DateRangeFilterTileProps['onEdit']>,
   },
-  setup: (props) => setupHelper(DateRangeFilterTilePreact, props),
+  setup: (props) => setupHelper(DateRangeFilterTilePreact, props as DateRangeFilterTilePropsPreact),
 });

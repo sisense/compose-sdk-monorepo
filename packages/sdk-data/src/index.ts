@@ -7,21 +7,18 @@ import './translation/initialize-i18n.js';
  * @group Data Model Utilities
  * Utility functions for creating attributes and dimensions in code.
  */
-export * from './interfaces.js';
-
-export * from './dimensional-model/types.js';
-export * from './dimensional-model/interfaces.js';
+export * from './dimensional-model/attributes.js';
 export * from './dimensional-model/base.js';
 export * from './dimensional-model/data-model.js';
-export * from './dimensional-model/attributes.js';
 export * from './dimensional-model/dimensions/index.js';
 export * from './dimensional-model/factory.js';
-export * from './dimensional-model/jaql-element.js';
-
-export * from './dimensional-model/filters/filters.js';
 export * from './dimensional-model/filters/filter-config-utils.js';
-
+export * from './dimensional-model/filters/filters.js';
 export { createFilterMatcher } from './dimensional-model/filters/utils/filter-matcher-utils.js';
+export * from './dimensional-model/interfaces.js';
+export * from './dimensional-model/jaql-element.js';
+export * from './dimensional-model/types.js';
+export * from './interfaces.js';
 
 /**
  * Functions to create date, text, or numeric filters on specified data.
@@ -57,7 +54,6 @@ export { createFilterMatcher } from './dimensional-model/filters/utils/filter-ma
  * @group Factories
  */
 export * as filterFactory from './dimensional-model/filters/factory.js';
-
 export * from './dimensional-model/measures/measures.js';
 /**
  * Functions to create measures that aggregate, summarize, and accumulate data,
@@ -91,7 +87,6 @@ export * from './dimensional-model/measures/measures.js';
  * @group Factories
  */
 export * as measureFactory from './dimensional-model/measures/factory.js';
-
 export * from './dimensional-model/simple-column-types.js';
 
 /**
@@ -100,12 +95,9 @@ export * from './dimensional-model/simple-column-types.js';
  * @group Factories
  */
 export * as analyticsFactory from './dimensional-model/analytics/factory.js';
-
-export * from './utils.js';
-
 export * from './dimensional-model/filters/index.js';
-
 export {
   type TranslationDictionary,
   PACKAGE_NAMESPACE as translationNamespace,
 } from './translation/resources/index.js';
+export * from './utils.js';

@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 
 import { DEPRECATED_Icon } from '../../../DEPRECATED_Icon';
-
 import type { DropdownItem } from '../../types';
-
 import style from '../DropdownButton.module.scss';
 
 export type DropdownButtonBodyProps = {

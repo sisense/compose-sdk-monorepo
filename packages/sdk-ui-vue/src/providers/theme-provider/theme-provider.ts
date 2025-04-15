@@ -1,57 +1,19 @@
-import { defineComponent, inject, provide, ref, watchEffect } from 'vue';
-import type { PropType, InjectionKey, Ref } from 'vue';
+import { defineComponent, provide, ref, watchEffect } from 'vue';
+import type { PropType } from 'vue';
+import merge from 'ts-deepmerge';
 import type {
   CompleteThemeSettings,
-  ContextConnector,
-  CustomThemeProviderProps,
   ThemeProviderProps as ThemeProviderPropsPreact,
+  ThemeSettings,
 } from '@sisense/sdk-ui-preact';
-import {
-  createContextProviderRenderer,
-  CustomThemeProvider,
-  getDefaultThemeSettings,
-  getThemeSettingsByOid,
-} from '@sisense/sdk-ui-preact';
-import { getSisenseContext } from './sisense-context-provider';
-import merge from 'ts-deepmerge';
+import { getThemeSettingsByOid } from '@sisense/sdk-ui-preact';
+import { getSisenseContext } from '../sisense-context-provider/sisense-context';
+import { getThemeContext, themeContextConfigKey } from './theme-context';
 
 /**
  * {@inheritDoc @sisense/sdk-ui!ThemeProviderProps}
  */
 export interface ThemeProviderProps extends Omit<ThemeProviderPropsPreact, 'children'> {}
-
-const themeContextConfigKey = Symbol('themeContextConfigKey') as InjectionKey<
-  Ref<CompleteThemeSettings>
->;
-
-/**
- * Gets Theme context
- */
-export const getThemeContext = () => {
-  // TODO needs to review this logic along with that in setup()
-  return inject(themeContextConfigKey);
-};
-
-/**
- * Creates theme context connector
- * @internal
- */
-export const createThemeContextConnector = (): ContextConnector<
-  CustomThemeProviderProps['context']
-> => {
-  const themeContext = getThemeContext();
-  const themeSettings = themeContext?.value ?? getDefaultThemeSettings();
-
-  return {
-    async prepareContext() {
-      return {
-        themeSettings,
-        skipTracking: true,
-      };
-    },
-    renderContextProvider: createContextProviderRenderer(CustomThemeProvider),
-  };
-};
 
 /**
  * Theme provider, which allows you to adjust the look and feel of child components.
@@ -124,31 +86,30 @@ export const ThemeProvider = defineComponent({
     skipTracking: Boolean as PropType<ThemeProviderProps['skipTracking']>,
   },
 
-  setup({ theme: propTheme, skipTracking = false }, { slots }) {
-    // todo: move the symbol into here so every instance of theme provider has its own symbol and therefor configurations
-    const themeSettings = ref();
+  setup(props, { slots }) {
+    const existingThemeSettings = getThemeContext();
     const context = getSisenseContext();
-    if (propTheme && typeof propTheme === 'object') {
-      themeSettings.value = merge.withOptions(
-        { mergeArrays: false },
-        getDefaultThemeSettings(),
-        propTheme,
-      ) as CompleteThemeSettings;
-    }
+    const themeSettings = ref(existingThemeSettings?.value);
+
     watchEffect(async () => {
+      const { theme: propTheme = {} } = props;
       const { app } = context.value;
-      if (propTheme && typeof propTheme === 'string' && app) {
+      const isThemeOid = typeof propTheme === 'string';
+      let userThemeSettings = propTheme as ThemeSettings;
+
+      if (isThemeOid && app) {
         try {
-          const userThemeSettings = await getThemeSettingsByOid(propTheme, app.httpClient);
-          themeSettings.value = merge.withOptions(
-            { mergeArrays: false },
-            getDefaultThemeSettings(),
-            userThemeSettings,
-          ) as unknown as CompleteThemeSettings;
+          userThemeSettings = await getThemeSettingsByOid(propTheme, app.httpClient);
         } catch (error) {
           console.error('Vue ThemeProvider failed to fetch theme by id:', error);
         }
       }
+
+      themeSettings.value = merge.withOptions(
+        { mergeArrays: false },
+        existingThemeSettings?.value,
+        userThemeSettings,
+      ) as CompleteThemeSettings;
     });
 
     provide(themeContextConfigKey, themeSettings);

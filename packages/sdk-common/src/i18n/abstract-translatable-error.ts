@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next';
+
 import { basicI18Next } from './i18next.js';
 
 export abstract class AbstractTranslatableError<Namespace extends string = string> extends Error {

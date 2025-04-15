@@ -108,6 +108,7 @@ describe('FiltersPanel', () => {
           <FiltersPanel
             filters={[filterFactory.members(DM.Brand.BrandID, ['1', '2'])]}
             onFiltersChange={vi.fn()}
+            dataSources={[DM.DataSource]}
             config={{
               actions: {
                 addFilter: {
@@ -140,6 +141,7 @@ describe('FiltersPanel', () => {
           <FiltersPanel
             filters={[filterFactory.members(DM.Brand.BrandID, ['1', '2'])]}
             onFiltersChange={onFiltersChange}
+            dataSources={[DM.DataSource]}
             config={{
               actions: {
                 addFilter: {
@@ -170,6 +172,31 @@ describe('FiltersPanel', () => {
       await waitFor(() => {
         expect(onFiltersChange).toHaveBeenCalledOnce();
         expect(onFiltersChange.mock.calls[0][0]).toMatchSnapshot();
+      });
+    });
+    it('shows error when no data sources are available', async () => {
+      render(
+        <MockedSisenseContextProvider>
+          <FiltersPanel
+            filters={[filterFactory.members(DM.Brand.BrandID, ['1', '2'])]}
+            onFiltersChange={vi.fn()}
+            dataSources={undefined}
+            config={{
+              actions: {
+                addFilter: {
+                  enabled: true,
+                },
+              },
+            }}
+          />
+        </MockedSisenseContextProvider>,
+      );
+
+      const addFilterButton = await screen.findByTestId('add-filter-button');
+      fireEvent.click(addFilterButton);
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('error-box')).toBeInTheDocument();
       });
     });
   });

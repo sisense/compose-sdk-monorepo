@@ -1,10 +1,10 @@
-import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-
-import { MenuItem, itemTypes } from './MenuItem';
-import styles from '../Menu.module.scss';
-
 import '@testing-library/jest-dom';
+
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+
+import styles from '../Menu.module.scss';
+import { itemTypes, MenuItem } from './MenuItem';
 
 describe('MenuItem Component', () => {
   test('should render a basic menu item', () => {

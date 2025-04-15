@@ -1,6 +1,7 @@
-import { createClientApplication, ClientApplication } from '@sisense/sdk-ui-preact';
-import { SisenseContextService, SisenseContextConfig } from './sisense-context.service';
+import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact';
 import { Mock } from 'vitest';
+
+import { SisenseContextConfig, SisenseContextService } from './sisense-context.service';
 
 vi.mock('@sisense/sdk-ui-preact', () => ({
   createClientApplication: vi.fn().mockResolvedValue(undefined),

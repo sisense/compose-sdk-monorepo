@@ -8,18 +8,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  TableWidget,
-  type TableWidgetProps as TableWidgetPropsPreact,
   ComponentAdapter,
-  createElement,
+  TableWidget as TableWidgetPreact,
+  type TableWidgetProps as TableWidgetPropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 
 /**
  * Props of the {@link TableWidgetComponent}.
@@ -125,33 +125,30 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   @Input()
   description: TableWidgetProps['description'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof TableWidgetPreact>;
 
   constructor(
     private sisenseContextService: SisenseContextService,
     private themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(TableWidgetPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps() {
+    return {
       dataSource: this.dataSource,
       dataOptions: this.dataOptions,
       filters: this.filters,
@@ -159,8 +156,6 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
       title: this.title,
       description: this.description,
     };
-
-    return createElement(TableWidget, props);
   }
 
   ngOnDestroy() {

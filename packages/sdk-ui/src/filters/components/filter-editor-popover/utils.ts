@@ -12,22 +12,18 @@ import {
   getColumnNameFromAttribute,
   isRelativeDateFilter,
   RelativeDateFilter,
-  isCascadingFilter,
   isCustomFilter,
 } from '@sisense/sdk-data';
 import { generateAttributeName } from '@/utils/generate-attribute-name';
 
 export function isSupportedByFilterEditor(filter: Filter): boolean {
-  return (
-    !isCascadingFilter(filter) &&
-    !isRankingFilter(filter) &&
-    !isCustomFilter(filter) &&
-    !(isMembersFilter(filter) && filter.config.backgroundFilter)
-  );
+  return !isRankingFilter(filter) && !isCustomFilter(filter);
 }
 
 export function isIncludeAllFilter(filter: Filter): filter is MembersFilter {
-  return isMembersFilter(filter) && !filter.members.length;
+  return (
+    isMembersFilter(filter) && !filter.members.length && !filter.config.deactivatedMembers.length
+  );
 }
 
 export function isIncludeMembersFilter(filter: Filter): filter is MembersFilter {

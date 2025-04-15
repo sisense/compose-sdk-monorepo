@@ -1,4 +1,5 @@
 import isEqual from 'lodash-es/isEqual.js';
+
 import { guidFast } from '../../utils.js';
 import {
   BaseFilterConfig,

@@ -1,15 +1,16 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import merge from 'ts-deepmerge';
 import {
+  type CompleteThemeSettings,
   getDefaultThemeSettings,
   getThemeSettingsByOid,
   type ThemeProviderProps as ThemeConfig,
-  type CompleteThemeSettings,
 } from '@sisense/sdk-ui-preact';
+import { BehaviorSubject } from 'rxjs';
+import merge from 'ts-deepmerge';
+
+import { TrackableService } from '../decorators/trackable.decorator';
 import { type ThemeSettings } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
-import { TrackableService } from '../decorators/trackable.decorator';
 
 export { type ThemeConfig };
 

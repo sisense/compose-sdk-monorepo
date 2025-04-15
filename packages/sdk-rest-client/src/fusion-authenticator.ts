@@ -1,8 +1,8 @@
 /// <reference lib="dom" />
 
-import { Authenticator } from './interfaces.js';
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
+import { Authenticator } from './interfaces.js';
 
 export type FusionWindow = Window &
   typeof globalThis & { prism: { user: { _id: string | undefined } } | undefined };

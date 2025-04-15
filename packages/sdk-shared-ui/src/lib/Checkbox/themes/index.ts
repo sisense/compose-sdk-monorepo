@@ -1,1 +1,1 @@
-export { checkboxTheme, type CheckboxTheme } from './checkboxTheme';
+export { type CheckboxTheme, checkboxTheme } from './checkboxTheme';

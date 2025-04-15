@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ChartType } from '../../sdk-ui-core-exports';
 import { type ScattermapChartProps as ScattermapChartPropsPreact } from '@sisense/sdk-ui-preact';
+
+import { type ChartType } from '../../sdk-ui-core-exports';
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
 import { DataPointEvent, DataPointEventHandler } from '../../types/data-point';
 

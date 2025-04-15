@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { TreemapChart as TreemapChartPreact } from '@sisense/sdk-ui-preact';
 import type { TreemapChartProps as TreemapChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!TreemapChart | `TreemapChart`} component.
@@ -111,5 +111,5 @@ export const TreemapChart = defineComponent({
      */
     styleOptions: Object as PropType<TreemapChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(TreemapChartPreact, props),
+  setup: (props) => setupHelper(TreemapChartPreact, props as TreemapChartPropsPreact),
 });

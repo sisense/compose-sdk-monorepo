@@ -47,6 +47,7 @@ import { translateScattermapChartDataOptions } from './translate-scattermap-data
 import { translateRangeChartDataOptions } from './translate-range-data-options';
 import { TranslatableError } from '@/translation/translatable-error';
 import { translateCartesianChartDataOptions } from '@/chart/restructured-charts/helpers/cartesians/data-options';
+import { updateStyledColumnSortForTable } from '@/chart-data/table-data';
 
 export function translateChartDataOptions(
   chartType: ChartType,
@@ -184,7 +185,7 @@ export function getMeasures(
 
 export function translateTableDataOptions(dataOptions: TableDataOptions): TableDataOptionsInternal {
   return {
-    columns: dataOptions.columns.map(normalizeAnyColumn),
+    columns: dataOptions.columns.map(normalizeAnyColumn).map(updateStyledColumnSortForTable),
   };
 }
 

@@ -34,7 +34,7 @@ const renderHook: typeof originalRenderHook = (hook, options) => {
  * A mock API that returns a slice of the available numbers.
  * The slice is defined by the `count` and `offset` parameters.
  * The `multiplier` parameter is used to multiply each number in the slice.
- **/
+ */
 const useGetNumbersFromApi: SliceableRestApiHook<
   { multiplier?: number; count: number; offset: number },
   'numbers',

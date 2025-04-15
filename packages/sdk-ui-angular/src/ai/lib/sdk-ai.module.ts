@@ -1,7 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { SdkUiModule } from '@sisense/sdk-ui-angular';
+
 import { ChatbotComponent, GetNlgInsightsComponent } from './components';
 
 /**
@@ -38,7 +39,6 @@ import { ChatbotComponent, GetNlgInsightsComponent } from './components';
  *   bootstrap: [AppComponent],
  * })
  * ```
- *
  * @group Generative AI
  * @beta
  */

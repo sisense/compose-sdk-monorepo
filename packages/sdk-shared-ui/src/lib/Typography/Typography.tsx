@@ -1,10 +1,10 @@
-import React, { ForwardedRef } from 'react';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import MuiTypography, {
   type TypographyProps as MuiTypographyProps,
 } from '@mui/material/Typography';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import React, { ForwardedRef } from 'react';
 
-import { typographyTheme, type TypographyTheme } from './themes';
+import { type TypographyTheme, typographyTheme } from './themes';
 
 export type TypographyProps = MuiTypographyProps & {
   theme?: TypographyTheme;

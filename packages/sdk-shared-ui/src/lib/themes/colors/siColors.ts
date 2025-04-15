@@ -140,4 +140,4 @@ const stEffects = {
   },
 };
 
-export { siColors, sfColors, stEffects };
+export { sfColors, siColors, stEffects };

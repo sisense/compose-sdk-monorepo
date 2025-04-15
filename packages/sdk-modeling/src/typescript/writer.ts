@@ -3,30 +3,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
+import {
+  BaseMeasure,
+  DateDimension,
+  Dimension,
+  DimensionalDataModel,
+  Element,
+  MeasureTemplate,
+  MetadataTypes,
+} from '@sisense/sdk-data';
 import { createWriteStream } from 'fs';
 import path from 'path';
 
-import {
-  BaseMeasure,
-  DimensionalDataModel,
-  Dimension,
-  DateDimension,
-  MetadataTypes,
-  Element,
-  MeasureTemplate,
-} from '@sisense/sdk-data';
-
-import { BaseMeasureWriter, MeasureTemplateWriter } from './writers/measures.js';
-
-import { DimensionWriter, DateDimensionWriter } from './writers/dimensions.js';
-
-import { ElementWriter, NEWLINE } from './writers/base.js';
-import { createInMemoryDuplexStream } from './utils/create-in-memory-duplex-stream.js';
 import { compileTsCode } from './utils/compile-ts-code.js';
+import { createInMemoryDuplexStream } from './utils/create-in-memory-duplex-stream.js';
 import { formatCode } from './utils/format-code.js';
+import { ElementWriter, NEWLINE } from './writers/base.js';
 import { DataSourceWriter } from './writers/datasource.js';
+import { DateDimensionWriter, DimensionWriter } from './writers/dimensions.js';
 import { ImportsWriter } from './writers/imports.js';
 import { Writer } from './writers/interfaces.js';
+import { BaseMeasureWriter, MeasureTemplateWriter } from './writers/measures.js';
 
 function getMetadataWriter(item: Element): ElementWriter<any> {
   if (MetadataTypes.isDateDimension(item.type)) {

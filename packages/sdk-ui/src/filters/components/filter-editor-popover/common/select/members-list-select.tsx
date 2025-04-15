@@ -32,7 +32,7 @@ export const MembersListSelect = ({
   width = '100%',
 }: MembersListSelectProps) => {
   const { t } = useTranslation();
-  const { defaultDataSource } = useFilterEditorContext();
+  const { defaultDataSource, parentFilters } = useFilterEditorContext();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSetSearchValue = useMemo(
     () => debounce(setSearchValue, SEARCH_VALUE_UPDATE_DELAY),
@@ -46,8 +46,8 @@ export const MembersListSelect = ({
     loadMore: loadMoreMembers,
   } = useGetFilterMembers({
     parentFilters: useMemo(
-      () => [filterFactory.contains(attribute, searchValue)],
-      [attribute, searchValue],
+      () => [...parentFilters, filterFactory.contains(attribute, searchValue)],
+      [attribute, searchValue, parentFilters],
     ),
     filter: useMemo(() => filterFactory.members(attribute, []), [attribute]),
     count: QUERY_MEMBERS_COUNT,

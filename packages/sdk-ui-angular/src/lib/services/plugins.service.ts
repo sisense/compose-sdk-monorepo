@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { PluginComponent } from '@sisense/sdk-ui-preact';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Service for working with plugins fetched from an external environment.

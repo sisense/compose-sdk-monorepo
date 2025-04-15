@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ContextMenu as ContextMenuPreact } from '@sisense/sdk-ui-preact';
 import type { ContextMenuProps as ContextMenuPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelperWithChildren } from '../setup-helper';
+import { setupHelperWithChildren } from '../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!ContextMenu | `ContextMenu`} component.
@@ -57,5 +57,6 @@ export const ContextMenu = defineComponent({
      */
     position: Object as PropType<ContextMenuProps['position']>,
   },
-  setup: (props, { slots }) => setupHelperWithChildren(ContextMenuPreact, props, slots, []),
+  setup: (props, { slots }) =>
+    setupHelperWithChildren(ContextMenuPreact, props as ContextMenuPropsPreact, slots, []),
 });

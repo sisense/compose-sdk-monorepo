@@ -2,8 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { getDataModelCommand } from './commands/get-data-model.js';
+
 import { getApiTokenCommand } from './commands/get-api-token.js';
+import { getDataModelCommand } from './commands/get-data-model.js';
 
 export const runCli = () => {
   yargs(hideBin(process.argv))

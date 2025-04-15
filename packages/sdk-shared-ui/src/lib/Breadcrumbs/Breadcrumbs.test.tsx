@@ -1,10 +1,10 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-
-import { Breadcrumbs } from './Breadcrumbs';
-import { Icon } from '../Icon';
-
 import '@testing-library/jest-dom';
+
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+
+import { Icon } from '../Icon';
+import { Breadcrumbs } from './Breadcrumbs';
 
 describe('Breadcrumbs Component', () => {
   const breadcrumbOne = 'One';

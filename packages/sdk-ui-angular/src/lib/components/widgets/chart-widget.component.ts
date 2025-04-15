@@ -10,21 +10,21 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ChartWidget,
+  ChartWidget as ChartWidgetPreact,
   type ChartWidgetProps as ChartWidgetPropsPreact,
   ComponentAdapter,
-  createElement,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
-import type { Arguments } from '../../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 import { ChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
 import { ChartDataPointEvent, ChartDataPointsEvent } from '../../types/data-point';
+import type { Arguments } from '../../types/utility-types';
 
 /**
  * Props of the {@link ChartWidgetComponent}.
@@ -88,7 +88,6 @@ export interface ChartWidgetProps
  * }
  * ```
  * <img src="media://angular-chart-widget-example.png" width="800px" />
- *
  * @group Dashboards
  */
 @Component({
@@ -222,35 +221,32 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   @Output()
   dataPointsSelect = new EventEmitter<ChartDataPointsEvent>();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof ChartWidgetPreact>;
 
   constructor(
     private sisenseContextService: SisenseContextService,
     private themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(ChartWidgetPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /** @internal */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): ChartWidgetPropsPreact {
+    return {
       chartType: this.chartType,
       dataSource: this.dataSource,
       dataOptions: this.dataOptions,
@@ -273,8 +269,6 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
         ...[points, nativeEvent]: Arguments<ChartWidgetPropsPreact['onDataPointsSelected']>
       ) => this.dataPointsSelect.emit({ points, nativeEvent }),
     };
-
-    return createElement(ChartWidget, props);
   }
 
   /** @internal */

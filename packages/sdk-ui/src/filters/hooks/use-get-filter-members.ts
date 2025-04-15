@@ -51,7 +51,7 @@ export interface GetFilterMembersSuccess {
    * Function to load more data rows
    *
    * @internal
-   * */
+   */
   loadMore: (count: number) => void;
   /** Whether the data fetching has failed */
   isError: false;
@@ -80,7 +80,7 @@ export interface GetFilterMembersError {
    * Function to load more data rows
    *
    * @internal
-   * */
+   */
   loadMore: (count: number) => void;
 }
 
@@ -215,7 +215,7 @@ export const useGetFilterMembersInternal = ({
  *
  * Those members can be used to display a list of members in a third-party filter component such as Material UI Select.
  *
- * * ## Example
+ * ## Example
  *
  * Retrieve selected members from a Filter on Country of the Sample ECommerce data model.
  *

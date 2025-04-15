@@ -1,11 +1,12 @@
 /// <reference lib="dom" />
 
 import { normalizeUrl } from '@sisense/sdk-common';
-import { Authenticator } from './interfaces.js';
+
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
-import { TranslatableError } from './translation/translatable-error.js';
 import { errorInterceptor } from './interceptors.js';
+import { Authenticator } from './interfaces.js';
+import { TranslatableError } from './translation/translatable-error.js';
 
 interface WebSessionTokenResponse {
   webSessionToken: string;

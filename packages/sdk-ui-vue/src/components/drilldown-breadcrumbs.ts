@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact } from '@sisense/sdk-ui-preact';
 import type { DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelperWithChildren } from '../setup-helper';
+import { setupHelperWithChildren } from '../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!DrilldownBreadcrumbs | `DrilldownBreadcrumbs`} component.
@@ -79,6 +79,11 @@ export const DrilldownBreadcrumbs = defineComponent({
     filtersDisplayValues: Object as PropType<DrilldownBreadcrumbsProps['filtersDisplayValues']>,
   },
   setup: (props, { slots }) => {
-    return setupHelperWithChildren(DrilldownBreadcrumbsPreact, props, slots, []);
+    return setupHelperWithChildren(
+      DrilldownBreadcrumbsPreact,
+      props as DrilldownBreadcrumbsPropsPreact,
+      slots,
+      [],
+    );
   },
 });

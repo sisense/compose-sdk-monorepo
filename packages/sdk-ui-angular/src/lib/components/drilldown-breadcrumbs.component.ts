@@ -10,19 +10,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  DrilldownBreadcrumbs,
-  type DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact,
   ComponentAdapter,
-  createElement,
+  DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact,
+  type DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../services/sisense-context.service';
-import { ThemeService } from '../services/theme.service';
-import type { Arguments, ArgumentsAsObject } from '../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../component-wrapper-helpers';
-import { template, rootId } from '../component-wrapper-helpers/template';
+import { rootId, template } from '../component-wrapper-helpers/template';
+import { SisenseContextService } from '../services/sisense-context.service';
+import { ThemeService } from '../services/theme.service';
+import type { Arguments, ArgumentsAsObject } from '../types/utility-types';
 
 /**
  * Props of the {@link DrilldownBreadcrumbsComponent}.
@@ -87,7 +87,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
     Arguments<DrilldownBreadcrumbsPropsPreact['sliceDrilldownSelections']>[0]
   >();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof DrilldownBreadcrumbsPreact>;
 
   /**
    * Constructor for the `DrilldownBreadcrumbsComponent`.
@@ -109,20 +109,17 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(DrilldownBreadcrumbsPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -130,12 +127,12 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): DrilldownBreadcrumbsPropsPreact {
+    return {
       filtersDisplayValues: this.filtersDisplayValues,
       currentDimension: this.currentDimension,
       clearDrilldownSelections: () => this.drilldownSelectionsClear.emit(),
@@ -143,8 +140,6 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
         i: Arguments<DrilldownBreadcrumbsProps['sliceDrilldownSelections']>[0],
       ) => this.drilldownSelectionsSlice.emit(i),
     };
-
-    return createElement(DrilldownBreadcrumbs, props);
   }
 
   /**

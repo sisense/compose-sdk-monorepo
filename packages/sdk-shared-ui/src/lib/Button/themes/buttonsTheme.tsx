@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import { Components } from '@mui/material/styles/components';
 
-import { siColors, sfColors } from '../../themes';
+import { sfColors, siColors } from '../../themes';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {

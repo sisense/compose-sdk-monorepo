@@ -1,3 +1,16 @@
+import { DataModel, DataSourceField } from '@sisense/sdk-data';
+import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
+import { HttpClient } from '@sisense/sdk-rest-client';
+import { Mocked } from 'vitest';
+
+import {
+  dataSourceSchemaECommerce,
+  dimensionalModelECommerce,
+  dimensionalModelECommerceWithFieldDescriptions,
+  fieldsECommerce,
+} from '../__mocks__/data-model-ecommerce.js';
+import { dimensionalModelOrdersDB, fieldsOrdersDB } from '../__mocks__/data-model-orders-db.js';
+import { dataSources } from '../__mocks__/data-sources.js';
 import {
   addDescriptionToFields,
   createDataModel,
@@ -8,18 +21,6 @@ import {
   rewriteDataModel,
   writeFile,
 } from './helpers.js';
-import {
-  fieldsECommerce,
-  dataSourceSchemaECommerce,
-  dimensionalModelECommerce,
-  dimensionalModelECommerceWithFieldDescriptions,
-} from '../__mocks__/data-model-ecommerce.js';
-import { fieldsOrdersDB, dimensionalModelOrdersDB } from '../__mocks__/data-model-orders-db.js';
-import { dataSources } from '../__mocks__/data-sources.js';
-import { HttpClient } from '@sisense/sdk-rest-client';
-import { DataModel, DataSourceField } from '@sisense/sdk-data';
-import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
-import { Mocked } from 'vitest';
 
 vi.mock('@sisense/sdk-modeling', () => ({
   writeTypescript: vi.fn(),

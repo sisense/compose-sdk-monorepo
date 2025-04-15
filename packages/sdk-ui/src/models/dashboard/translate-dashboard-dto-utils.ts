@@ -24,7 +24,6 @@ import { ConditionFilterJaql } from '@sisense/sdk-data/dist/dimensional-model/fi
  *
  * @param filter - The filter to translate.
  * @returns FilterDto
- *
  * @internal
  */
 export function filterToFilterDto(filter: Filter): FilterDto | CascadingFilterDto {
@@ -132,9 +131,9 @@ function rankingFilterToDto(filter: RankingFilter): FilterDto {
 
 /**
  * Recursively sets the inner filter of a parent filter.
+ *
  * @param parentFilter - The parent filter.
  * @param innerFilter - The inner filter.
- *
  * @internal
  */
 function setInnerFilter(

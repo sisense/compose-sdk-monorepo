@@ -1,8 +1,9 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
+
+import { trackExecution } from '../tracking.js';
+import { Command, GetApiTokenOptions } from '../types.js';
 import { getHttpClient, handleHttpClientLogin } from './helpers.js';
 import { promptPasswordInteractive } from './prompts.js';
-import { Command, GetApiTokenOptions } from '../types.js';
-import { trackExecution } from '../tracking.js';
 
 const command: Command = 'get-api-token';
 const describe = 'Get an API token from the given Sisense URL using the provided credentials.';

@@ -1,26 +1,27 @@
-import { v4 as uuid } from 'uuid';
-import merge from 'ts-deepmerge';
-import {
-  JaqlQueryPayload,
-  QueryDescription,
-  PivotQueryDescription,
-  QueryOptions,
-} from '../types.js';
 import {
   Attribute,
+  convertJaqlDataSource,
   DataSource,
+  DEFAULT_PIVOT_GRAND_TOTALS,
+  Filter,
+  FilterRelationsJaql,
   isPivotAttribute,
   isPivotMeasure,
   Measure,
-  PivotAttribute,
-  PivotMeasure,
-  Filter,
-  PivotGrandTotals,
-  DEFAULT_PIVOT_GRAND_TOTALS,
-  FilterRelationsJaql,
-  convertJaqlDataSource,
   MetadataItem,
+  PivotAttribute,
+  PivotGrandTotals,
+  PivotMeasure,
 } from '@sisense/sdk-data';
+import merge from 'ts-deepmerge';
+import { v4 as uuid } from 'uuid';
+
+import {
+  JaqlQueryPayload,
+  PivotQueryDescription,
+  QueryDescription,
+  QueryOptions,
+} from '../types.js';
 import { applyHighlightFilters, matchHighlightsWithAttributes } from './metadata/highlights.js';
 import {
   getPivotMetadataStats,
@@ -117,13 +118,50 @@ function prepareFilterMetadata(
   return filtersMetadata;
 }
 
+/**
+ * WORKAROUND
+ *
+ * Ensures that any `text`-typed context fields with `agg: "count"`
+ * in analytic functions like `trend` or `forecast` are converted to `numeric`.
+ *
+ * This helps maintain compatibility with analytic functions that expect
+ * numeric input for aggregation.
+ *
+ * @param {MetadataItem} metadataItem - The metadata item to check and adjust.
+ * @returns {MetadataItem} A cloned and modified metadata item if needed, or the original one.
+ *
+ * @internal
+ */
+function ensureNumericCountInContext(metadataItem: MetadataItem): MetadataItem {
+  const formula = metadataItem.jaql?.formula;
+  if (!formula || (!formula.includes('trend') && !formula.includes('forecast'))) {
+    return metadataItem;
+  }
+
+  const clonedItem = structuredClone(metadataItem);
+  const context = clonedItem.jaql?.context;
+
+  if (context) {
+    for (const key in context) {
+      const item = context[key];
+      if (item.datatype === 'text' && item.agg === 'count') {
+        item.datatype = 'numeric';
+      }
+    }
+  }
+
+  return clonedItem;
+}
+
 function prepareQueryMetadata(
   metadataDescription: MetadataDescription,
   shouldSkipHighlightsWithoutAttributes: boolean,
 ): MetadataItem[] {
   const { attributes, measures, filters, filterRelations, highlights } = metadataDescription;
   const attributesMetadata: MetadataItem[] = attributes.map((d) => d.jaql() as MetadataItem);
-  const measuresMetadata: MetadataItem[] = measures.map((d) => d.jaql() as MetadataItem);
+  const measuresMetadata: MetadataItem[] = measures.map((d) =>
+    ensureNumericCountInContext(d.jaql()),
+  );
 
   const filtersMetadata = prepareFilterMetadata(
     attributesMetadata,

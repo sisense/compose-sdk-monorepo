@@ -1,4 +1,5 @@
 import { AbstractTranslatableError } from '@sisense/sdk-common';
+
 import { i18nextInstance } from './initialize-i18n.js';
 import { PACKAGE_NAMESPACE } from './resources/index.js';
 

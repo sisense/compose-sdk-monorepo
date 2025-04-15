@@ -8,18 +8,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  WidgetById,
-  type WidgetByIdProps as WidgetByIdPropsPreact,
   ComponentAdapter,
-  createElement,
+  WidgetById as WidgetByIdPreact,
+  type WidgetByIdProps as WidgetByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types';
 
 /**
@@ -162,36 +162,33 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input()
   dataReady: WidgetByIdProps['dataReady'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof WidgetByIdPreact>;
 
   constructor(
     private sisenseContextService: SisenseContextService,
     private themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(WidgetByIdPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /** @internal */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
   /** @internal */
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): WidgetByIdPropsPreact {
+    return {
       widgetOid: this.widgetOid,
       dashboardOid: this.dashboardOid,
       filters: this.filters,
@@ -205,8 +202,6 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
       drilldownOptions: this.drilldownOptions,
       onDataReady: this.dataReady?.bind(this),
     };
-
-    return createElement(WidgetById, props);
   }
 
   /** @internal */

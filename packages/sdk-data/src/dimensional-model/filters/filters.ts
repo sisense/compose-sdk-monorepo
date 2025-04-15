@@ -1,28 +1,26 @@
 import hash from 'hash-it';
-import {
-  LevelAttribute,
-  Attribute,
-  Measure,
-  Filter,
-  MembersFilterConfig,
-  CompleteMembersFilterConfig,
-  CompleteBaseFilterConfig,
-  BaseFilterConfig,
-} from '../interfaces.js';
+import merge from 'lodash-es/merge.js';
+import omit from 'lodash-es/omit.js';
 
-import { DimensionalElement } from '../base.js';
-
-import { AnyObject, DateLevels, MetadataTypes } from '../types.js';
-
-import { create } from '../factory.js';
-import { DimensionalBaseMeasure } from '../measures/measures.js';
 import { TranslatableError } from '../../translation/translatable-error.js';
+import { DimensionalElement } from '../base.js';
+import { create } from '../factory.js';
+import {
+  Attribute,
+  BaseFilterConfig,
+  CompleteBaseFilterConfig,
+  CompleteMembersFilterConfig,
+  Filter,
+  LevelAttribute,
+  Measure,
+  MembersFilterConfig,
+} from '../interfaces.js';
+import { DimensionalBaseMeasure } from '../measures/measures.js';
+import { AnyObject, DateLevels, MetadataTypes } from '../types.js';
 import {
   getDefaultBaseFilterConfig,
   getDefaultMembersFilterConfig,
 } from './filter-config-utils.js';
-import merge from 'lodash-es/merge.js';
-import omit from 'lodash-es/omit.js';
 
 /**
  * Different text operators that can be used with text filters

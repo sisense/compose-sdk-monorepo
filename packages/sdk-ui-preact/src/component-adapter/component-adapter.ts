@@ -1,101 +1,58 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { render, type VNode } from 'preact';
-import type { Subscription } from 'rxjs';
-import { isObservable, isPromise } from './utils';
-import { ContextConnector } from './context-connector';
+import { createElement, render } from 'preact';
 
-type ContextData = any;
-type ComponentBuilder = () => VNode;
-type Context = {
-  isReady: boolean;
-  data?: ContextData;
-  error?: Error;
-};
+import { ContextConnector } from './context-connector';
+import type { AnyComponentFunction, Context, ContextData } from './types';
+import { Subscription } from './utils';
 
 /** @internal */
-export class ComponentAdapter {
+export class ComponentAdapter<Component extends AnyComponentFunction> {
   private rootElement: HTMLElement;
 
   private contexts: Context[] = [];
 
   private subscriptions: Subscription[] = [];
 
+  private props: Parameters<Component>[0];
+
   constructor(
-    private componentBuilder: ComponentBuilder,
+    private component: Component,
     private contextConnectors: ContextConnector<ContextData>[] = [],
   ) {
     this.prepareContexts();
   }
 
   private prepareContexts() {
-    this.contextConnectors.forEach(({ prepareContext }, index) => {
+    this.contextConnectors.forEach(({ propsObserver }, index) => {
       const contextStore: Context = {
         isReady: false,
         data: null,
       };
       this.contexts[index] = contextStore;
-      const context = prepareContext();
 
-      if (isObservable(context)) {
-        const unsubscribe = context.subscribe({
-          next: (data: ContextData) => {
-            contextStore.data = data;
-            contextStore.isReady = true;
-
-            if (this.rootElement) {
-              this.renderComponentWithContext(this.rootElement);
-            }
-          },
-          error: (error: Error) => {
-            contextStore.error = error;
-            contextStore.isReady = true;
-
-            if (this.rootElement) {
-              this.renderComponentWithContext(this.rootElement);
-            }
-          },
-        });
-        this.subscriptions.push(unsubscribe);
-      } else if (isPromise(context)) {
-        context
-          .then((data: ContextData) => {
-            contextStore.data = data;
-            contextStore.isReady = true;
-
-            if (this.rootElement) {
-              this.renderComponentWithContext(this.rootElement);
-            }
-          })
-          .catch((error: Error) => {
-            contextStore.error = error;
-            contextStore.isReady = true;
-
-            if (this.rootElement) {
-              this.renderComponentWithContext(this.rootElement);
-            }
-          });
-      } else {
-        contextStore.data = context;
+      const subscription = propsObserver.subscribe((data: ContextData) => {
+        contextStore.data = data;
         contextStore.isReady = true;
-      }
+
+        if (this.rootElement) {
+          this.renderComponentWithContext(this.rootElement, this.props);
+        }
+      });
+      this.subscriptions.push(subscription);
     });
   }
 
-  private renderComponentWithContext(rootElement: HTMLElement) {
+  private renderComponentWithContext(rootElement: HTMLElement, props: Parameters<Component>[0]) {
     const isContextsReady = this.contexts.every(({ isReady }) => isReady);
 
     if (!isContextsReady || !rootElement) {
       return;
     }
 
-    const componentElement = this.componentBuilder();
+    const componentElement = createElement(this.component, props, props?.children);
     const componentWithContextElement = this.contextConnectors.reduceRight(
-      (children, { renderContextProvider }, index) => {
-        return renderContextProvider(
-          this.contexts[index].data,
-          children,
-          this.contexts[index].error,
-        );
+      (children, { providerComponent }, index) => {
+        return createElement(providerComponent, this.contexts[index].data, children);
       },
       componentElement,
     );
@@ -103,15 +60,18 @@ export class ComponentAdapter {
     render(componentWithContextElement, rootElement);
   }
 
-  render(rootElement: HTMLElement) {
+  render(rootElement: HTMLElement, props: Parameters<Component>[0]) {
     // saves target root element for later postponed render
     this.rootElement = rootElement;
-    this.renderComponentWithContext(rootElement);
+    this.props = props;
+    this.renderComponentWithContext(rootElement, props);
   }
 
   destroy() {
     // cleans all subscriptions
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.length = 0;
+    this.contexts.length = 0;
     if (this.rootElement) {
       // destroys rendered element
       render(null, this.rootElement);

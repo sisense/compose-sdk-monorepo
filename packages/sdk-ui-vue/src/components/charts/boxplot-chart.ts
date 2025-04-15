@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { BoxplotChart as BoxplotChartPreact } from '@sisense/sdk-ui-preact';
 import type { BoxplotChartProps as BoxplotChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!BoxplotChart | `BoxplotChart`} component.
@@ -112,5 +112,5 @@ export const BoxplotChart = defineComponent({
      */
     onDataPointsSelected: Function as PropType<BoxplotChartProps['onDataPointsSelected']>,
   },
-  setup: (props) => setupHelper(BoxplotChartPreact, props),
+  setup: (props) => setupHelper(BoxplotChartPreact, props as BoxplotChartPropsPreact),
 });

@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
 import type { DashboardProps as DashboardPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 import type { DashboardConfig } from '../../types';
 
 /**
@@ -89,5 +89,5 @@ export const Dashboard = defineComponent({
      */
     styleOptions: Object as PropType<DashboardProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(DashboardPreact, props),
+  setup: (props) => setupHelper(DashboardPreact, props as DashboardPropsPreact),
 });

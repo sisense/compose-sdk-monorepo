@@ -1,10 +1,9 @@
-import React from 'react';
 import ClassNames from 'classnames';
+import React from 'react';
+
 // todo: add translations support
 // import { FormattedMessage } from 'react-intl';
-
 import { styleguideConstants } from '../../constants/styleguideConstants';
-
 import styles from './Confirmation.module.scss';
 // import messages from './translation';
 

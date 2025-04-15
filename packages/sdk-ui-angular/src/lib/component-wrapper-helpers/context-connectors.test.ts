@@ -1,29 +1,18 @@
 /** @vitest-environment jsdom */
 import {
   ClientApplication,
-  createContextProviderRenderer,
   CustomSisenseContext,
   CustomSisenseContextProvider,
   CustomThemeProvider,
-  type CustomThemeProviderProps,
 } from '@sisense/sdk-ui-preact';
-import { Mock, Mocked } from 'vitest';
-import { firstValueFrom, of, type Observable } from 'rxjs';
-import { createSisenseContextConnector, createThemeContextConnector } from './context-connectors';
-import { type SisenseContextService } from '../services/sisense-context.service';
+import { of } from 'rxjs';
+import { Mocked } from 'vitest';
+
 import { ThemeService } from '../services';
+import { type SisenseContextService } from '../services/sisense-context.service';
+import { createSisenseContextConnector, createThemeContextConnector } from './context-connectors';
 
-const contextProviderRendererMock = vi.fn();
-
-vi.mock('@sisense/sdk-ui-preact', () => ({
-  createContextProviderRenderer: vi.fn(() => contextProviderRendererMock),
-  CustomSisenseContextProvider: vi.fn(),
-  CustomThemeProvider: vi.fn(),
-}));
-
-const createContextProviderRendererMock = createContextProviderRenderer as Mock<
-  typeof createContextProviderRenderer
->;
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('createSisenseContextConnector', () => {
   const sisenseContextConfigMock = {
@@ -38,7 +27,6 @@ describe('createSisenseContextConnector', () => {
   let sisenseContextService: Mocked<SisenseContextService>;
 
   beforeEach(() => {
-    createContextProviderRendererMock.mockClear();
     sisenseContextService = {
       getApp: vi.fn().mockResolvedValue(appMock),
       getConfig: vi.fn().mockReturnValue(sisenseContextConfigMock),
@@ -49,13 +37,12 @@ describe('createSisenseContextConnector', () => {
     const connector = createSisenseContextConnector(sisenseContextService);
 
     expect(connector).toBeTruthy();
-    expect(connector.prepareContext).toBeTruthy();
-    expect(connector.renderContextProvider).toBeTruthy();
+    expect(connector.propsObserver).toBeTruthy();
+    expect(connector.providerComponent).toBeTruthy();
   });
 
-  it('should prepare correct sisense context', async () => {
+  it('should prepare correct sisense context provider props', async () => {
     const connector = createSisenseContextConnector(sisenseContextService);
-    const preparedContext = await connector.prepareContext();
     const expectedContext: CustomSisenseContext = {
       app: appMock as ClientApplication,
       isInitialized: true,
@@ -67,14 +54,17 @@ describe('createSisenseContextConnector', () => {
         showErrorBox: sisenseContextConfigMock.showRuntimeErrors,
       },
     };
-    expect(preparedContext).toStrictEqual(expectedContext);
+
+    // Wait for the promise to resolve
+    await delay(0);
+
+    expect(connector.propsObserver.getValue()?.context).toStrictEqual(expectedContext);
   });
 
   it('should render correct custom sisense context provider', () => {
     const connector = createSisenseContextConnector(sisenseContextService);
 
-    expect(connector.renderContextProvider).toBe(contextProviderRendererMock);
-    expect(createContextProviderRenderer).toHaveBeenCalledWith(CustomSisenseContextProvider);
+    expect(connector.providerComponent).toBe(CustomSisenseContextProvider);
   });
 });
 
@@ -85,7 +75,6 @@ describe('createThemeContextConnector', () => {
   let themeService: Mocked<ThemeService>;
 
   beforeEach(() => {
-    createContextProviderRendererMock.mockClear();
     themeService = {
       getThemeSettings: vi.fn().mockReturnValue(of(themeSettingsMock)),
     } as unknown as Mocked<ThemeService>;
@@ -95,17 +84,17 @@ describe('createThemeContextConnector', () => {
     const connector = createThemeContextConnector(themeService);
 
     expect(connector).toBeTruthy();
-    expect(connector.prepareContext).toBeTruthy();
-    expect(connector.renderContextProvider).toBeTruthy();
+    expect(connector.propsObserver).toBeTruthy();
+    expect(connector.providerComponent).toBeTruthy();
   });
 
-  it('should prepare correct theme context', async () => {
+  it('should prepare correct theme context props', async () => {
     const connector = createThemeContextConnector(themeService);
-    const preparedContext = await firstValueFrom(
-      connector.prepareContext() as Observable<CustomThemeProviderProps['context']>,
-    );
 
-    expect(preparedContext).toStrictEqual({
+    // Wait for the observable to emit
+    await delay(0);
+
+    expect(connector.propsObserver.getValue()?.context).toStrictEqual({
       skipTracking: true,
       themeSettings: themeSettingsMock,
     });
@@ -114,7 +103,6 @@ describe('createThemeContextConnector', () => {
   it('should render correct custom theme context provider', () => {
     const connector = createThemeContextConnector(themeService);
 
-    expect(connector.renderContextProvider).toBe(contextProviderRendererMock);
-    expect(createContextProviderRenderer).toHaveBeenCalledWith(CustomThemeProvider);
+    expect(connector.providerComponent).toBe(CustomThemeProvider);
   });
 });

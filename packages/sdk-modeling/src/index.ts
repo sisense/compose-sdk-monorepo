@@ -1,1 +1,1 @@
-export { writeTypescript, writeJavascript } from './typescript/writer.js';
+export { writeJavascript, writeTypescript } from './typescript/writer.js';

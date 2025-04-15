@@ -8,18 +8,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  PivotTable,
   ComponentAdapter,
-  createElement,
+  PivotTable as PivotTablePreact,
   type PivotTableProps as PivotTablePropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services';
-import { ThemeService } from '../../services';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services';
+import { ThemeService } from '../../services';
 
 /**
  * Props of the {@link PivotTableComponent}.
@@ -131,43 +131,38 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input()
   styleOptions: PivotTableProps['styleOptions'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof PivotTablePreact>;
 
   constructor(
     private sisenseContextService: SisenseContextService,
     private themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(PivotTablePreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /** @internal */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): PivotTablePropsPreact {
+    return {
       dataSet: this.dataSet,
       dataOptions: this.dataOptions,
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
     };
-
-    return createElement(PivotTable, props);
   }
 
   /** @internal */

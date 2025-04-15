@@ -1,13 +1,14 @@
 import {
   DataSource,
-  getDataSourceName,
   DataSourceField,
   DataSourceMetadata,
   DataSourceSchema,
+  getDataSourceName,
 } from '@sisense/sdk-data';
 import { HttpClient } from '@sisense/sdk-rest-client';
-import { JaqlResponse, JaqlQueryPayload, QueryGuid } from '../types.js';
+
 import { TranslatableError } from '../translation/translatable-error.js';
+import { JaqlQueryPayload, JaqlResponse, QueryGuid } from '../types.js';
 
 const API_DATASOURCES_BASE_PATH = 'api/datasources';
 const API_DATAMODELS_BASE_PATH = 'api/v2/datamodels';

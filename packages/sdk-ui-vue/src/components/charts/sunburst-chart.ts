@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { SunburstChart as SunburstChartPreact } from '@sisense/sdk-ui-preact';
 import type { SunburstChartProps as SunburstChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!SunburstChart | `SunburstChart`} component.
@@ -110,5 +110,5 @@ export const SunburstChart = defineComponent({
      */
     styleOptions: Object as PropType<SunburstChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(SunburstChartPreact, props),
+  setup: (props) => setupHelper(SunburstChartPreact, props as SunburstChartPropsPreact),
 });

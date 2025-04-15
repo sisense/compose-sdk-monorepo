@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { LineChart as LineChartPreact } from '@sisense/sdk-ui-preact';
 import type { LineChartProps as LineChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!LineChart | `LineChart`} component.
@@ -111,5 +111,5 @@ export const LineChart = defineComponent({
      */
     styleOptions: Object as PropType<LineChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(LineChartPreact, props),
+  setup: (props) => setupHelper(LineChartPreact, props as LineChartPropsPreact),
 });

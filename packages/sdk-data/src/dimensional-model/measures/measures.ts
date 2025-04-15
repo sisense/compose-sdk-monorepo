@@ -5,25 +5,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import * as m from './factory.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
+import { createAttribute, DimensionalAttribute } from '../attributes.js';
+import { DimensionalElement } from '../base.js';
+import { create } from '../factory.js';
 import {
   Attribute,
-  Measure,
   BaseMeasure,
-  MeasureTemplate,
   CalculatedMeasure,
-  MeasureContext,
   Element,
+  Measure,
+  MeasureContext,
+  MeasureTemplate,
 } from '../interfaces.js';
-
-import { Sort, AggregationTypes, MetadataTypes } from '../types.js';
-
-import { DimensionalElement } from '../base.js';
-
-import { DimensionalAttribute, createAttribute } from '../attributes.js';
-
-import { create } from '../factory.js';
-import { TranslatableError } from '../../translation/translatable-error.js';
+import { AggregationTypes, MetadataTypes, Sort } from '../types.js';
+import * as m from './factory.js';
 
 /**
  * @internal

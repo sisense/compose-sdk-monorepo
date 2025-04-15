@@ -1,9 +1,9 @@
-import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
-import { PasswordAuthenticator } from './password-authenticator.js';
 import { BearerAuthenticator } from './bearer-authenticator.js';
-import { WatAuthenticator } from './wat-authenticator.js';
+import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
+import { PasswordAuthenticator } from './password-authenticator.js';
 import { SsoAuthenticator } from './sso-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
+import { WatAuthenticator } from './wat-authenticator.js';
 
 const fakeDeploymentUrl = 'https://10.0.0.1';
 

@@ -10,19 +10,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  RelativeDateFilterTile,
-  type RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact,
   ComponentAdapter,
-  createElement,
+  RelativeDateFilterTile as RelativeDateFilterTilePreact,
+  type RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
-import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
+import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
 
 /**
  * Props of the {@link RelativeDateFilterTileComponent}.
@@ -116,7 +116,7 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
     ArgumentsAsObject<RelativeDateFilterTilePropsPreact['onUpdate'], ['filter']>
   >();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof RelativeDateFilterTilePreact>;
 
   /**
    * Constructor for the `RelativeDateFilterTileComponent`.
@@ -138,20 +138,17 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(RelativeDateFilterTilePreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -159,12 +156,12 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): RelativeDateFilterTilePropsPreact {
+    return {
       title: this.title,
       filter: this.filter,
       arrangement: this.arrangement,
@@ -172,8 +169,6 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
       onUpdate: (...[filter]: Arguments<RelativeDateFilterTilePropsPreact['onUpdate']>) =>
         this.filterChange.emit({ filter }),
     };
-
-    return createElement(RelativeDateFilterTile, props);
   }
 
   /**

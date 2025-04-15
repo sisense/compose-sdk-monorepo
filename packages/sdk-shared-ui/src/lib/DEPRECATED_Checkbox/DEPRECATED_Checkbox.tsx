@@ -1,8 +1,7 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
 import classnames from 'classnames';
+import React, { ChangeEvent, MouseEvent } from 'react';
 
 import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
-
 import style from './Checkbox.module.scss';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

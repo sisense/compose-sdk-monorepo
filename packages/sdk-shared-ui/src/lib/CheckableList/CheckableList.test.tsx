@@ -1,10 +1,10 @@
+import '@testing-library/jest-dom';
+
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, vi, expect } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { CheckableList } from './CheckableList';
-
-import '@testing-library/jest-dom';
 
 describe('CheckableList', () => {
   const items = [

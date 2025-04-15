@@ -1,5 +1,6 @@
 /* eslint-disable max-params */
 import { HttpClient } from '@sisense/sdk-rest-client';
+
 import { TrackingEventType } from './registry.js';
 
 const TRACKING_CATEGORY = 'composesdk';

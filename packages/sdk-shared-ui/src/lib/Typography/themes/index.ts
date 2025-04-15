@@ -1,1 +1,1 @@
-export { typographyTheme, type TypographyTheme } from './typographyTheme';
+export { type TypographyTheme, typographyTheme } from './typographyTheme';

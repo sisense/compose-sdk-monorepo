@@ -1,5 +1,6 @@
-import { trackCliError, trackProductEvent, trackUiError } from './tracking.js';
 import { HttpClient } from '@sisense/sdk-rest-client';
+
+import { trackCliError, trackProductEvent, trackUiError } from './tracking.js';
 
 const fakeAction = 'sdkComponentInit';
 const fakeVersion = '0.0.0';

@@ -113,6 +113,7 @@ export interface DashboardByIdConfig extends DashboardConfig {
    * Limitations:
    * - WAT authentication does not support persistence.
    * - As an alpha feature, currently only changes to dashboard filters are persisted.
+   *
    * @alpha
    */
   persist?: boolean;
@@ -153,8 +154,9 @@ export interface DashboardProps {
   widgetsOptions?: WidgetsOptions;
   /**
    * The Tabber widgets configurations as a single dashboard config
+   *
    * @internal
-   * */
+   */
   tabbersOptions?: TabbersOptions;
   /** The style options for the dashboard */
   styleOptions?: DashboardStyleOptions;

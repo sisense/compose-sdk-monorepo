@@ -11,18 +11,18 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
-  createElement,
-  CriteriaFilterTile,
+  CriteriaFilterTile as CriteriaFilterTilePreact,
   type CriteriaFilterTileProps as CriteriaFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
-import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
+import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
 
 /**
  * Props of the {@link CriteriaFilterTileComponent}.
@@ -114,7 +114,7 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
     ArgumentsAsObject<CriteriaFilterTilePropsPreact['onUpdate'], ['filter']>
   >();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof CriteriaFilterTilePreact>;
 
   /**
    * Constructor for the `CriteriaFilterTileComponent`.
@@ -136,20 +136,17 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(CriteriaFilterTilePreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -157,12 +154,12 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): CriteriaFilterTilePropsPreact {
+    return {
       title: this.title,
       filter: this.filter,
       arrangement: this.arrangement,
@@ -171,8 +168,6 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
       onUpdate: (...[filter]: Arguments<CriteriaFilterTilePropsPreact['onUpdate']>) =>
         this.filterChange.emit({ filter }),
     };
-
-    return createElement(CriteriaFilterTile, props);
   }
 
   /**

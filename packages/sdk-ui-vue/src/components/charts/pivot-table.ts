@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { PivotTable as PivotTablePreact } from '@sisense/sdk-ui-preact';
 import type { PivotTableProps } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
 export { PivotTableProps };
@@ -80,5 +80,5 @@ export const PivotTable = defineComponent({
      */
     styleOptions: Object as PropType<PivotTableProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(PivotTablePreact, props),
+  setup: (props) => setupHelper(PivotTablePreact, props as PivotTableProps),
 });

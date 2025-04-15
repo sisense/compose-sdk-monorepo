@@ -5,6 +5,7 @@ import { AnyObject } from '@/utils/utility-types';
 
 /**
  * Merges the provided configuration with the default configuration.
+ *
  * @param config - The configuration to merge with the default configuration.
  * @param defaults - The default configuration.
  * @returns The merged configuration.

@@ -34,6 +34,7 @@ export interface ChartRecommendations {
 /**
  * Expanded Query Model that is based on NlqResponseData.
  * It contains expanded JAQL and chart recommendations returned from the chat response.
+ *
  * @internal
  */
 export interface ExpandedQueryModel {
@@ -56,6 +57,7 @@ export interface ExpandedQueryModel {
  * Empty Expanded Query Model
  *
  * Used as a default value for ExpandedQueryModel
+ *
  * @internal
  */
 export const EMPTY_EXPANDED_QUERY_MODEL: ExpandedQueryModel = {
@@ -66,6 +68,7 @@ export const EMPTY_EXPANDED_QUERY_MODEL: ExpandedQueryModel = {
 
 /**
  * Simple Chart Recommendations
+ *
  * @internal
  */
 export interface SimpleChartRecommendations {
@@ -83,6 +86,7 @@ export interface SimpleChartRecommendations {
  * Users manipulates this model via the query in YAML format.
  *
  * QueryTranslator is responsible for translating this query model to ExpandedWidgetModel.
+ *
  * @internal
  */
 export interface SimpleQueryModel {
@@ -102,6 +106,7 @@ export interface SimpleQueryModel {
  * Empty Simple Query Model
  *
  * Used as a default value for SimpleQueryModel
+ *
  * @internal
  */
 export const EMPTY_SIMPLE_QUERY_MODEL: SimpleQueryModel = {
@@ -113,12 +118,14 @@ export const EMPTY_SIMPLE_QUERY_MODEL: SimpleQueryModel = {
 
 /**
  * UI Framework
+ *
  * @internal
  */
 export type UiFramework = 'react' | 'vue' | 'angular';
 
 /**
  * Code Template Key
+ *
  * @internal
  */
 export type CodeTemplateKey =
@@ -133,6 +140,7 @@ export type CodeTemplateKey =
 
 /**
  * Code Templates
+ *
  * @internal
  */
 export type CodeTemplates = {
@@ -141,24 +149,28 @@ export type CodeTemplates = {
 
 /**
  * Code Placeholder Map
+ *
  * @internal
  */
 export type CodePlaceholderMap = Record<string, string>;
 
 /**
  * Base Code Config
+ *
  * @internal
  */
 export type BaseCodeConfig = { uiFramework?: UiFramework };
 
 /**
  * Widget Code Config
+ *
  * @internal
  */
 export type WidgetCodeConfig = BaseCodeConfig & { includeChart?: boolean };
 
 /**
  * Client-side Widget Code Params
+ *
  * @internal
  */
 export type ClientSideWidgetCodeParams = BaseCodeConfig & {
@@ -167,6 +179,7 @@ export type ClientSideWidgetCodeParams = BaseCodeConfig & {
 
 /**
  * By ID Widget Code Params
+ *
  * @internal
  */
 export type ByIdWidgetCodeParams = WidgetCodeConfig & {
@@ -177,12 +190,14 @@ export type ByIdWidgetCodeParams = WidgetCodeConfig & {
 
 /**
  * Widget Code Params
+ *
  * @internal
  */
 export type WidgetCodeParams = ClientSideWidgetCodeParams | ByIdWidgetCodeParams;
 
 /**
  * Check if widget code params is for client-side code
+ *
  * @internal
  */
 export const isClientSideWidgetCodeParams = (
@@ -193,6 +208,7 @@ export const isClientSideWidgetCodeParams = (
 
 /**
  * Check if widget code params is for by ID code
+ *
  * @internal
  */
 export const isByIdWidgetCodeParams = (
@@ -203,7 +219,7 @@ export const isByIdWidgetCodeParams = (
 
 /**
  * @internal
- **/
+ */
 export type WidgetPropsConfig = { useCustomizedStyleOptions?: boolean };
 
 /**

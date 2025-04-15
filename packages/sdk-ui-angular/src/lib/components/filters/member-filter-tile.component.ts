@@ -10,19 +10,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  MemberFilterTile,
-  type MemberFilterTileProps as MemberFilterTilePropsPreact,
   ComponentAdapter,
-  createElement,
+  MemberFilterTile as MemberFilterTilePreact,
+  type MemberFilterTileProps as MemberFilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
-import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
+import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
 
 /**
  * Props of the {@link MemberFilterTileComponent}.
@@ -111,7 +111,7 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
     ArgumentsAsObject<MemberFilterTilePropsPreact['onChange'], ['filter']>
   >();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof MemberFilterTilePreact>;
 
   /**
    * Constructor for the `MemberFilterTileComponent`.
@@ -133,20 +133,17 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(MemberFilterTilePreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -154,12 +151,12 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): MemberFilterTilePropsPreact {
+    return {
       title: this.title,
       dataSource: this.dataSource,
       attribute: this.attribute,
@@ -167,8 +164,6 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
       onChange: (...[filter]: Arguments<MemberFilterTilePropsPreact['onChange']>) =>
         this.filterChange.emit({ filter }),
     };
-
-    return createElement(MemberFilterTile, props);
   }
 
   /**

@@ -102,7 +102,7 @@ export const DashboardContainer = ({
               onFiltersChange={onFiltersChange}
               defaultDataSource={defaultDataSource}
               config={config?.filtersPanel}
-              dataSources={getUniqueDataSources(widgets)}
+              dataSources={getUniqueDataSources(widgets, defaultDataSource)}
             />
           </div>
         </HorizontalCollapse>

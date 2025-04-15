@@ -5,7 +5,7 @@
  * Types
  */
 
-import { JaqlDataSource, type ConditionFilterJaql } from './filters/utils/types.js';
+import { type ConditionFilterJaql, JaqlDataSource } from './filters/utils/types.js';
 import { Attribute } from './interfaces.js';
 
 /**
@@ -350,7 +350,13 @@ export const DateLevels = {
       DateLevels.AggMinutesRoundTo1,
     ];
   },
-};
+} as const;
+
+/** @internal */
+export type DateLevel = Exclude<
+  (typeof DateLevels)[keyof typeof DateLevels],
+  typeof DateLevels.all
+>;
 
 /** @internal */
 export enum DataType {

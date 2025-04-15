@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { MemberFilterTile as MemberFilterTilePreact } from '@sisense/sdk-ui-preact';
 import type { MemberFilterTileProps as MemberFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!MemberFilterTile | `MemberFilterTile`} component.
@@ -86,5 +86,5 @@ export const MemberFilterTile = defineComponent({
      */
     onEdit: Function as PropType<MemberFilterTileProps['onEdit']>,
   },
-  setup: (props) => setupHelper(MemberFilterTilePreact, props),
+  setup: (props) => setupHelper(MemberFilterTilePreact, props as MemberFilterTilePropsPreact),
 });

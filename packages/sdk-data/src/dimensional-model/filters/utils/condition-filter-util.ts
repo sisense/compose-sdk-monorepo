@@ -1,10 +1,10 @@
-import { ConditionFilterJaql, ConditionFilterType } from './types.js';
-import { Attribute, BaseMeasure, Filter, MembersFilterConfig } from '../../interfaces.js';
-import { withComposeCode } from './filter-code-util.js';
-import * as filterFactory from '../factory.js';
-import { createMeasureFromRankingFilterJaql } from './attribute-measure-util.js';
 import { TranslatableError } from '../../../translation/translatable-error.js';
+import { Attribute, BaseMeasure, Filter, MembersFilterConfig } from '../../interfaces.js';
+import * as filterFactory from '../factory.js';
 import { simplifyFilterConfig } from '../filter-config-utils.js';
+import { createMeasureFromRankingFilterJaql } from './attribute-measure-util.js';
+import { withComposeCode } from './filter-code-util.js';
+import { ConditionFilterJaql, ConditionFilterType } from './types.js';
 
 const isTopCondition = (filter: ConditionFilterJaql): boolean => filter.top !== undefined;
 const isBottomCondition = (filter: ConditionFilterJaql): boolean => filter.bottom !== undefined;

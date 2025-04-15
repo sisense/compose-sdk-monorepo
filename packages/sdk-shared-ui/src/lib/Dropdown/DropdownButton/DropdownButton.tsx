@@ -1,13 +1,11 @@
-import React, { FC, useRef } from 'react';
 import classNames from 'classnames';
+import React, { FC, useRef } from 'react';
 
-import { DropdownButtonSearch } from './DropdownButtonSearch';
-import { DropdownButtonBody } from './DropdownButtonBody';
-import { useDropdownButtonSearch } from './hooks';
-
-import type { DropdownItem, DropdownInputProps } from '../types';
-
+import type { DropdownInputProps, DropdownItem } from '../types';
 import style from './DropdownButton.module.scss';
+import { DropdownButtonBody } from './DropdownButtonBody';
+import { DropdownButtonSearch } from './DropdownButtonSearch';
+import { useDropdownButtonSearch } from './hooks';
 
 export type DropdownButtonProps = {
   items?: DropdownItem[];

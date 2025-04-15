@@ -1,15 +1,14 @@
-import React, { ForwardedRef, useContext } from 'react';
 import Pagination, { type PaginationRenderItemParams } from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import { TablePaginationActionsProps } from '@mui/material/TablePagination/TablePaginationActions';
-
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { TablePaginationActionsProps } from '@mui/material/TablePagination/TablePaginationActions';
+import React, { ForwardedRef, useContext } from 'react';
 
 import { Icon } from '../../Icon';
-import { paginationActionsComponentTheme } from './themes';
-import { Typography } from '../../Typography';
 import { siColors } from '../../themes';
+import { Typography } from '../../Typography';
 import { TablePaginationContext } from '../TablePaginationContext';
+import { paginationActionsComponentTheme } from './themes';
 
 export type PaginationActionsComponentProps = Omit<
   TablePaginationActionsProps,

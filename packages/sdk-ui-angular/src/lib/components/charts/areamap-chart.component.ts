@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
-  type ChartType,
   type AreamapChartProps as AreamapChartPropsPreact,
+  type ChartType,
 } from '@sisense/sdk-ui-preact';
+
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
 import { DataPointEvent, DataPointEventHandler } from '../../types/data-point';
 
@@ -56,7 +57,6 @@ export class AnalyticsComponent {
 }
  * ```
  * <img src="media://angular-areamap-chart-example.png" width="800px" />
- *
  * @group Charts
  */
 @Component({

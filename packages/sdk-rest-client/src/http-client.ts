@@ -1,9 +1,10 @@
 /// <reference lib="dom" />
 import { normalizeUrl } from '@sisense/sdk-common';
-import { Authenticator } from './interfaces.js';
-import { getResponseInterceptor, errorInterceptor } from './interceptors.js';
-import { isSsoAuthenticator } from './sso-authenticator.js';
+
 import { addQueryParamsToUrl } from './helpers.js';
+import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
+import { Authenticator } from './interfaces.js';
+import { isSsoAuthenticator } from './sso-authenticator.js';
 
 export interface HttpClientRequestConfig {
   skipTrackingParam?: boolean;

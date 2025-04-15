@@ -128,6 +128,7 @@ export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersOptio
 
 /**
  * Replace all shared formulas, which defined by id references, in the dashboard with their actual values.
+ *
  * @param dashboard - The dashboard DTO to replace shared formulas in
  * @param api - The REST API instance
  * @returns The dashboard DTO with shared formulas, defined by id references, replaced
@@ -154,6 +155,7 @@ export async function withSharedFormulas(
 
 /**
  * Extracts unique shared formulas ids from widgets
+ *
  * @param widgets - An array of widgets to extract shared formulas from
  * @returns An array of unique shared formulas ids
  */
@@ -175,6 +177,7 @@ function getSharedFormulas(widgets: WidgetDto[]): string[] {
 
 /**
  * Applies shared formulas to a widget
+ *
  * @param widget - The widget to apply shared formulas to
  * @param sharedFormulasDictionary - A dictionary of shared formulas
  * @returns The widget with shared formulas applied

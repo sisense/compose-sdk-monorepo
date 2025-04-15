@@ -4,15 +4,14 @@ import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext, SisenseContextPayload } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { SisenseQueryClientProvider } from './sisense-query-client-provider';
+import { CustomContextProviderProps } from '../types';
 
 /** @internal */
 export type CustomSisenseContext = SisenseContextPayload;
 
 /** @internal */
-export type CustomSisenseContextProviderProps = {
-  context?: CustomSisenseContext;
-  error?: Error;
-};
+export type CustomSisenseContextProviderProps = CustomContextProviderProps<CustomSisenseContext>;
 
 /**
  * Custom Sisense Context Provider component that allows passing external context.
@@ -45,7 +44,9 @@ export const CustomSisenseContextProvider: FunctionComponent<
         {context && (
           <SisenseContext.Provider value={context}>
             <ThemeProvider skipTracking theme={context.app?.settings.serverThemeSettings}>
-              <MenuProvider>{children}</MenuProvider>
+              <SisenseQueryClientProvider>
+                <MenuProvider>{children}</MenuProvider>
+              </SisenseQueryClientProvider>
             </ThemeProvider>
           </SisenseContext.Provider>
         )}

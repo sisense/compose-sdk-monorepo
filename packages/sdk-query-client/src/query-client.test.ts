@@ -9,6 +9,18 @@ import {
   Measure,
   QueryResultData,
 } from '@sisense/sdk-data';
+import { PivotClient } from '@sisense/sdk-pivot-client';
+import { HttpClient } from '@sisense/sdk-rest-client';
+import type { Mocked } from 'vitest';
+
+import {
+  ExecuteJaqlTestDataset,
+  getExecuteJaqlTestDataset,
+} from './__test-helpers__/execute-jaql-test-dataset-loader.js';
+import {
+  ExecutePivotJaqlTestDataset,
+  getExecutePivotJaqlTestDataset,
+} from './__test-helpers__/execute-pivot-jaql-test-dataset-loader.js';
 import {
   DatasourceFieldsTestDataset,
   getDatasourceFieldsTestDataset,
@@ -19,17 +31,6 @@ import {
   validateQueryDescription,
 } from './query-client.js';
 import { JaqlQueryPayload, PivotQueryDescription, QueryDescription } from './types.js';
-import {
-  ExecuteJaqlTestDataset,
-  getExecuteJaqlTestDataset,
-} from './__test-helpers__/execute-jaql-test-dataset-loader.js';
-import {
-  ExecutePivotJaqlTestDataset,
-  getExecutePivotJaqlTestDataset,
-} from './__test-helpers__/execute-pivot-jaql-test-dataset-loader.js';
-import { HttpClient } from '@sisense/sdk-rest-client';
-import type { Mocked } from 'vitest';
-import { PivotClient } from '@sisense/sdk-pivot-client';
 
 describe('DimensionalQueryClient', () => {
   let httpClientMock: Mocked<HttpClient>;

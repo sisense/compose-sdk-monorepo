@@ -1,23 +1,23 @@
 import { getSelectedConditionOption } from './condition-filter-util.js';
+import { getCorrectTimeLevel } from './date-time-filter-util.js';
 import {
-  FilterModalType,
   AnyTypeFilterJaql,
-  DatetimeLevel,
-  FilterType,
-  FILTER_TYPES,
-  nonSupportedMinutesBuckets,
-  IncludeAllFilterJaql,
-  PeriodFilterJaql,
-  SpecificItemsFilterJaql,
-  RangeFilterJaql,
+  BackgroundFilterExtraProps,
   ConditionFilterJaql,
   ConditionFilterType,
+  DatetimeLevel,
+  DEFAULT_FILTER_JAQL_WRAPPER,
+  FILTER_TYPES,
   FilterJaqlInternal,
   FilterJaqlWrapperWithType,
-  DEFAULT_FILTER_JAQL_WRAPPER,
-  BackgroundFilterExtraProps,
+  FilterModalType,
+  FilterType,
+  IncludeAllFilterJaql,
+  nonSupportedMinutesBuckets,
+  PeriodFilterJaql,
+  RangeFilterJaql,
+  SpecificItemsFilterJaql,
 } from './types.js';
-import { getCorrectTimeLevel } from './date-time-filter-util.js';
 
 const isIncludeAllFilter = (filter: AnyTypeFilterJaql): boolean =>
   (filter as IncludeAllFilterJaql)?.all;

@@ -1,16 +1,13 @@
-import React, { Component } from 'react';
 import classnames from 'classnames';
-
-import { DEPRECATED_Icon } from '../../DEPRECATED_Icon';
-
-import { RadioButton } from '../../RadioButton';
-import { DEPRECATED_Toggle } from '../../DEPRECATED_Toggle';
-import { DEPRECATED_Checkbox } from '../../DEPRECATED_Checkbox';
-import { DEPRECATED_Tooltip } from '../../DEPRECATED_Tooltip';
-
-import styles from '../Menu.module.scss';
+import React, { Component } from 'react';
 
 import { styleguideConstants } from '../../constants/styleguideConstants';
+import { DEPRECATED_Checkbox } from '../../DEPRECATED_Checkbox';
+import { DEPRECATED_Icon } from '../../DEPRECATED_Icon';
+import { DEPRECATED_Toggle } from '../../DEPRECATED_Toggle';
+import { DEPRECATED_Tooltip } from '../../DEPRECATED_Tooltip';
+import { RadioButton } from '../../RadioButton';
+import styles from '../Menu.module.scss';
 
 export type ItemType = 'item' | 'radio' | 'checkbox' | 'toggle' | 'nested';
 

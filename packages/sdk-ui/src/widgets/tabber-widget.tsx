@@ -24,6 +24,7 @@ const defaultStyleOptions = {
 };
 /**
  * Tabber widget tab size
+ *
  * @group TabberWidget
  * @internal
  */
@@ -31,6 +32,7 @@ export type TabSize = 'SMALL' | 'MEDIUM' | 'LARGE';
 
 /**
  * Tabber widget tab interval
+ *
  * @group TabberWidget
  * @internal
  */
@@ -38,6 +40,7 @@ export type TabInterval = 'SMALL' | 'MEDIUM' | 'LARGE';
 
 /**
  * Tabber widget tab alignment
+ *
  * @group TabberWidget
  * @internal
  */
@@ -45,6 +48,7 @@ export type TabAlignment = 'LEFT' | 'CENTER' | 'RIGHT';
 
 /**
  * Tabber widget tab corner radius
+ *
  * @group TabberWidget
  * @internal
  */
@@ -141,6 +145,7 @@ const Description = styled.span<{ descriptionColor: string }>`
 
 /**
  * Visual representation of a Fusion's tabber widget
+ *
  * @param styleOptions
  * @param description
  * @param props

@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ChartWidget as ChartWidgetPreact } from '@sisense/sdk-ui-preact';
 import type { ChartWidgetProps } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 import type { Chart } from '../charts';
 import type DrilldownWidget from '../drilldown-widget.vue';
 
@@ -188,5 +188,5 @@ export const ChartWidget = defineComponent({
      */
     widgetStyleOptions: Object as PropType<ChartWidgetProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(ChartWidgetPreact, props),
+  setup: (props) => setupHelper(ChartWidgetPreact, props as ChartWidgetProps),
 });

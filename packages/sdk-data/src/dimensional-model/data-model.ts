@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { DataModel, Element } from './interfaces.js';
-
-import { create } from './factory.js';
-
-import { DimensionalElement } from './base.js';
 import { DataSource, DataSourceInfo } from '../interfaces.js';
 import { TranslatableError } from '../translation/translatable-error.js';
+import { DimensionalElement } from './base.js';
+import { create } from './factory.js';
+import { DataModel, Element } from './interfaces.js';
 
 /**
  * @internal

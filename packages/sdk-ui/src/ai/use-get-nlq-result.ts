@@ -23,6 +23,7 @@ export interface GetNlqResultParams {
    * Enable suggested axis titles in generated widget
    *
    * If not specified, the default value is `false`
+   *
    * @internal
    */
   enableAxisTitlesInWidgetProps?: boolean;

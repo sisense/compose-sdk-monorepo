@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.33.0",
+  "version": "1.34.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
@@ -28,7 +28,8 @@
     "clean": "rm -rf dist coverage tsconfig.tsbuildinfo tsconfig.prod.tsbuildinfo",
     "format": "run -T prettier --write .",
     "format:check": "run -T prettier --check .",
-    "lint": "run -T eslint . --fix",
+    "lint": "run -T eslint . --quiet",
+    "lint:fix": "run lint --fix",
     "vitest": "run -T vitest",
     "test": "run vitest run",
     "test:watch": "run vitest watch",
@@ -39,7 +40,7 @@
   },
   "devDependencies": {
     "typescript": "4.8.4",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.9"
   },
   "packageManager": "yarn@3.2.3",
   "volta": {

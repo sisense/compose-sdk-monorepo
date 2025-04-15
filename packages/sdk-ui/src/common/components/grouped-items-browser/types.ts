@@ -23,6 +23,8 @@ export type Item = {
   id: string;
   title: string;
   Icon?: React.ComponentType;
+  isDisabled?: boolean;
+  hoverTooltip?: string;
 };
 
 export type GroupSecondaryActionConfig = {

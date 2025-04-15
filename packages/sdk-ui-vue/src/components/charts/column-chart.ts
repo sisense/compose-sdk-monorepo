@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ColumnChart as ColumnChartPreact } from '@sisense/sdk-ui-preact';
 import type { ColumnChartProps as ColumnChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!ColumnChart | `ColumnChart`} component.
@@ -112,5 +112,5 @@ export const ColumnChart = defineComponent({
      */
     styleOptions: Object as PropType<ColumnChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(ColumnChartPreact, props),
+  setup: (props) => setupHelper(ColumnChartPreact, props as ColumnChartPropsPreact),
 });

@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect, MouseEventHandler } from 'react';
 import classnames from 'classnames';
+import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
 
 import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
-
 import styles from './Input.module.scss';
 
 export interface InputProps

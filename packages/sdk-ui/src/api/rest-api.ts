@@ -199,6 +199,7 @@ export class RestApi {
 
   /**
    * Get shared formulas by ids
+   *
    * @param sharedFormulasIds - An array of shared formulas ids
    * @returns A dictionary of shared formulas
    */
@@ -214,6 +215,7 @@ export class RestApi {
 
   /**
    * Get a shared formula by id
+   *
    * @param sharedFormulaId - A shared formula id
    * @returns A shared formula
    */
@@ -223,6 +225,7 @@ export class RestApi {
 
   /**
    * Get datasource fields
+   *
    * @param dataSource - A datasource name
    * @param options - An object with offset and count
    * @returns A list of datasource fields

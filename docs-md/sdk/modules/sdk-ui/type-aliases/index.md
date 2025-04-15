@@ -77,7 +77,6 @@ TypeScript type aliases for components and hooks listed above
 - [FiltersIgnoringRules](type-alias.FiltersIgnoringRules.md)
 - [FiltersPanelProps](type-alias.FiltersPanelProps.md)
 - [FilterThemeSettings](type-alias.FilterThemeSettings.md)
-- [FilterTileProps](type-alias.FilterTileProps.md)
 - [FilterVariant](type-alias.FilterVariant.md)
 - [GenericDataOptions](type-alias.GenericDataOptions.md)
 - [GeoDataElement](type-alias.GeoDataElement.md)

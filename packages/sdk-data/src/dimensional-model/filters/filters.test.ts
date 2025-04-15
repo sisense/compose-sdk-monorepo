@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
+import { Filter } from '../interfaces.js';
+import { DimensionalBaseMeasure } from '../measures/measures.js';
+import { DateLevels } from '../types.js';
 import {
   CascadingFilter,
   DateOperators,
@@ -17,10 +21,6 @@ import {
   TextFilter,
   TextOperators,
 } from './filters.js';
-import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
-import { DimensionalBaseMeasure } from '../measures/measures.js';
-import { DateLevels } from '../types.js';
-import { Filter } from '../interfaces.js';
 
 describe('General Filter', () => {
   it('must be complete with all properties populated', () => {

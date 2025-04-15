@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ChartType } from '../../sdk-ui-core-exports';
 import { type BoxplotChartProps as BoxplotChartPropsPreact } from '@sisense/sdk-ui-preact';
+
+import { type ChartType } from '../../sdk-ui-core-exports';
 import {
   RegularChartEventProps,
   WithoutPreactChartEventProps,
@@ -60,7 +61,6 @@ export class AnalyticsComponent {
 }
  * ```
  * <img src="media://angular-boxplot-chart-example.png" width="800px" />
- *
  * @group Charts
  */
 @Component({

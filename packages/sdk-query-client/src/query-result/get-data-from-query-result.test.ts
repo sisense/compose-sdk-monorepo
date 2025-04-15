@@ -1,5 +1,6 @@
+import { DataCell, DimensionalAttribute, DimensionalBaseMeasure } from '@sisense/sdk-data';
+
 import { getDataFromQueryResult, setCellsBlur } from './get-data-from-query-result.js';
-import { DimensionalAttribute, DataCell, DimensionalBaseMeasure } from '@sisense/sdk-data';
 
 describe('Handle query service response', () => {
   it('handle simple response with neutral rows (neither highlighted nor blurred)', () => {

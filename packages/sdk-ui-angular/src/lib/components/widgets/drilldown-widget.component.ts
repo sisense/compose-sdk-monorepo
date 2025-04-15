@@ -11,29 +11,29 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
-  createElement,
-  DrilldownWidget,
-  type DrilldownWidgetProps,
-  type ContextMenuProps,
-  type CustomDrilldownResult as CustomDrilldownResultBase,
   type ComponentRenderer,
-  DrilldownBreadcrumbsProps,
+  type ContextMenuProps,
+  createComponentRenderer,
   createWrapperElement,
   createWrapperElementHandler,
-  createComponentRenderer,
+  type CustomDrilldownResult as CustomDrilldownResultBase,
+  DrilldownBreadcrumbsProps,
+  DrilldownWidget as DrilldownWidgetPreact,
+  type DrilldownWidgetProps,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
-import type { Arguments } from '../../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import {
-  templateWithContent,
-  rootId,
   rootContentId,
+  rootId,
+  templateWithContent,
 } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
+import type { Arguments } from '../../types/utility-types';
 
 export type CustomDrilldownResult = CustomDrilldownResultBase & {
   breadcrumbsComponent?: {
@@ -107,7 +107,6 @@ export type CustomDrilldownResult = CustomDrilldownResultBase & {
  * </csdk-drilldown-widget>
  * ```
  * <img src="media://angular-drilldown-widget-example.png" width="800px" />
- *
  * @group Drilldown
  */
 @Component({
@@ -132,7 +131,6 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
    *
    * @category Widget
    * @deprecated Use {@link drilldownPaths} instead
-   *
    */
   @Input()
   drilldownDimensions: DrilldownWidgetProps['drilldownDimensions'];
@@ -141,7 +139,6 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
    * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownPaths}
    *
    * @category Widget
-   *
    */
   @Input()
   drilldownPaths: DrilldownWidgetProps['drilldownPaths'];
@@ -173,7 +170,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
   @Output()
   drilldownResultChange = new EventEmitter<CustomDrilldownResult>();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof DrilldownWidgetPreact>;
 
   /**
    * Constructor for the `DrilldownWidgetComponent`.
@@ -195,20 +192,17 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(DrilldownWidgetPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -216,12 +210,12 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): DrilldownWidgetProps {
+    return {
       drilldownDimensions: this.drilldownDimensions,
       drilldownPaths: this.drilldownPaths,
       initialDimension: this.initialDimension,
@@ -235,12 +229,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
             createWrapperElement(this.config!.contextMenuComponent!(contextMenuProps)),
         }),
       },
-    } as DrilldownWidgetProps;
-
-    return createElement(
-      DrilldownWidget,
-      props,
-      (customDrilldownResult: Arguments<DrilldownWidgetProps['children']>[0]) => {
+      children: (customDrilldownResult: Arguments<DrilldownWidgetProps['children']>[0]) => {
         const { breadcrumbsComponent } = customDrilldownResult;
         this.drilldownResultChange.emit({
           ...customDrilldownResult,
@@ -250,7 +239,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
         } as CustomDrilldownResult);
         return createWrapperElement(this.preactContentRef.nativeElement);
       },
-    );
+    } as DrilldownWidgetProps;
   }
 
   /**

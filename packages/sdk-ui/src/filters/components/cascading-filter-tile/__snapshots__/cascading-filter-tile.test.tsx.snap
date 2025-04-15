@@ -3,7 +3,7 @@
 exports[`CascadingFilterTile > should render a locked CascadingFilterTile component 1`] = `
 <div>
   <div
-    class="css-16sc0wl"
+    class="css-cbo886"
   >
     <div
       class="csdk-accessible  css-l4aa93"
@@ -20,7 +20,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
             aria-label="member-filter-tile"
           >
             <div
-              class="css-16sc0wl"
+              class="css-12vk4to"
             >
               <div
                 class="csdk-accessible  css-n759pn"
@@ -90,7 +90,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
             aria-label="member-filter-tile"
           >
             <div
-              class="css-16sc0wl"
+              class="css-12vk4to"
             >
               <div
                 class="csdk-accessible  css-n759pn"

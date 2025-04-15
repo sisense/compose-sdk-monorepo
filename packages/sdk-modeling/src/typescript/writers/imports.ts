@@ -1,4 +1,5 @@
 import { DataSource, isDataSourceInfo } from '@sisense/sdk-data';
+
 import { NEWLINE } from './base.js';
 import { Writer } from './interfaces.js';
 

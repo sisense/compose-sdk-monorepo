@@ -1,7 +1,6 @@
 import createTheme from '@mui/material/styles/createTheme';
 
 // import { injectStylesWithWrapper, themeService } from '@sbi/styleguide';
-
 import { siColors, stEffects } from '../../themes';
 // import { calcStyles } from './uiCustomization';
 import { tablePaginationResponsiveWidth } from './tablePaginationResponsiveDesign';

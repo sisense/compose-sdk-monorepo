@@ -4,6 +4,7 @@ import { DataChunk } from '../../types';
 export function useDataAccumulation({ shouldBeReset }: { shouldBeReset: boolean }): {
   accumulatedData: DataChunk[];
   addData: (dataChunk: DataChunk | null) => void;
+  isDataReset: boolean;
 } {
   const [accumulatedData, setAccumulatedData] = useState<DataChunk[]>([]);
 
@@ -30,5 +31,9 @@ export function useDataAccumulation({ shouldBeReset }: { shouldBeReset: boolean 
     }
   }, [shouldBeReset]);
 
-  return { accumulatedData: shouldBeReset ? [] : accumulatedData, addData };
+  return {
+    accumulatedData: shouldBeReset ? [] : accumulatedData,
+    addData,
+    isDataReset: shouldBeReset,
+  };
 }

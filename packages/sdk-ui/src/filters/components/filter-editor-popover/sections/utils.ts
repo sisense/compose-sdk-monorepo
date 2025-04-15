@@ -16,7 +16,7 @@ export function createExcludeMembersFilter(
   members: string[],
   config?: MembersFilterConfig,
 ) {
-  return members.length
+  return members.length || config?.deactivatedMembers?.length
     ? filterFactory.members(attribute, members, {
         ...config,
         excludeMembers: true,

@@ -1,11 +1,9 @@
-import React, { forwardRef, MouseEventHandler } from 'react';
 import classNames from 'classnames';
+import React, { forwardRef, MouseEventHandler } from 'react';
 
 import { Input } from '../../../Input';
-
 import type { DropdownInputProps } from '../../types';
 import { DEFAULT_SEARCH_WIDTH } from './constants';
-
 import style from './DropdownButtonSearch.module.scss';
 
 const noop = () => {};

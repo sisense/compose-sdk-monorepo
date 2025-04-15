@@ -2,7 +2,8 @@
  TODO: i18next should be updated to the latest version when the issue with the types imports will be fixed.
  https://github.com/i18next/i18next/issues/2008
  */
-import i18next, { type Module, type Resource, type i18n } from 'i18next';
+import i18next, { type i18n, type Module, type Resource } from 'i18next';
+
 import { PACKAGE_NAMESPACE, resources as defaultResources } from './resources/index.js';
 
 type I18NextInstanceConfig = {
@@ -102,4 +103,4 @@ function insertNamespaceIntoResource(resource: Resource, namespace: string): Res
   }, {} as Resource);
 }
 
-export { type TOptions, type TFunction } from 'i18next';
+export { type TFunction, type TOptions } from 'i18next';

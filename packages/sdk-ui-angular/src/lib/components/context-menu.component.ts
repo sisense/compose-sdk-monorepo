@@ -10,20 +10,20 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  ContextMenu,
-  type ContextMenuProps,
   ComponentAdapter,
-  createElement,
+  ContextMenu as ContextMenuPreact,
+  type ContextMenuProps,
   createWrapperElement,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../services/sisense-context.service';
-import { ThemeService } from '../services/theme.service';
-import type { ArgumentsAsObject } from '../types/utility-types';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../component-wrapper-helpers';
-import { rootId, rootContentId, templateWithContent } from '../component-wrapper-helpers/template';
+import { rootContentId, rootId, templateWithContent } from '../component-wrapper-helpers/template';
+import { SisenseContextService } from '../services/sisense-context.service';
+import { ThemeService } from '../services/theme.service';
+import type { ArgumentsAsObject } from '../types/utility-types';
 
 /**
  * Context Menu Component
@@ -67,7 +67,7 @@ export class ContextMenuComponent implements AfterViewInit, OnChanges, OnDestroy
     ArgumentsAsObject<ContextMenuProps['closeContextMenu'], []>
   >();
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof ContextMenuPreact>;
 
   /**
    * Constructor for the `ContextMenuComponent`.
@@ -89,20 +89,17 @@ export class ContextMenuComponent implements AfterViewInit, OnChanges, OnDestroy
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(ContextMenuPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -110,22 +107,17 @@ export class ContextMenuComponent implements AfterViewInit, OnChanges, OnDestroy
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): ContextMenuProps {
+    return {
       position: this.position,
       itemSections: this.itemSections,
       closeContextMenu: () => this.contextMenuClose.emit(),
-    } as ContextMenuProps;
-
-    return createElement(
-      ContextMenu,
-      props,
-      createWrapperElement(this.preactContentRef.nativeElement),
-    );
+      children: createWrapperElement(this.preactContentRef.nativeElement),
+    };
   }
 
   /**

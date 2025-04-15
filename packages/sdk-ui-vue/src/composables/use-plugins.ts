@@ -1,4 +1,4 @@
-import { getPluginsContext } from '../providers/plugins-provider.js';
+import { getPluginsContext } from '../providers/plugins-provider';
 
 /**
  * @internal

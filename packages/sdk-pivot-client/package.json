@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "1.33.0",
+  "version": "1.34.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -26,6 +26,7 @@
     "build:prod": "run type-check && vite build",
     "clean": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
     "lint": "echo 'eslint disabled for now.'",
+    "lint:fix": "run lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "vitest": "run -T vitest",
@@ -39,8 +40,8 @@
   ],
   "dependencies": {
     "@mui/material": "^5.11.0",
-    "@sisense/sdk-data": "^1.33.0",
-    "@sisense/sdk-rest-client": "^1.33.0",
+    "@sisense/sdk-data": "^1.34.0",
+    "@sisense/sdk-rest-client": "^1.34.0",
     "@sisense/sdk-shared-ui": "workspace:*",
     "classnames": "2.3.2",
     "dom-css": "2.1.0",
@@ -71,10 +72,13 @@
     "react-dom": "~18.3.1",
     "rollup-plugin-re": "^1.0.7",
     "typescript": "4.8.4",
-    "vite": "4.1.4",
+    "vite": "4.5.2",
     "vite-plugin-checker": "^0.6.1",
     "vite-plugin-css-injected-by-js": "3.0.1",
     "vite-plugin-dts": "^2.3.0"
+  },
+  "resolutions": {
+    "socket.io-parser": "3.3.4"
   },
   "peerDependencies": {
     "@emotion/react": "^11.11.0",

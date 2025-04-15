@@ -1,10 +1,10 @@
+import '@testing-library/jest-dom';
+
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { DEPRECATED_Checkbox } from './DEPRECATED_Checkbox';
-
-import '@testing-library/jest-dom';
 
 describe('DEPRECATED_Checkbox', () => {
   it('should render the checkbox with the provided text', () => {

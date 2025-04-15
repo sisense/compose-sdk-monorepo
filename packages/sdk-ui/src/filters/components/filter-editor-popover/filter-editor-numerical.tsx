@@ -65,6 +65,7 @@ export const FilterEditorNumerical = ({
   onChange,
   showMultiselectToggle = true,
 }: FilterEditorNumericalProps) => {
+  const { membersOnlyMode } = useFilterEditorContext();
   const { themeSettings } = useThemeContext();
   const { defaultDataSource } = useFilterEditorContext();
   const [editedFilter, setEditedFilter] = useState<Filter | null>(filter ?? null);
@@ -135,13 +136,15 @@ export const FilterEditorNumerical = ({
         multiSelectEnabled={multiSelectEnabled}
         onChange={handleMembersSectionChange}
       />
-      <NumericRangeSection
-        filter={filter}
-        selected={selectedSection === FilterSections.RANGE}
-        defaultFrom={attributeStats?.min}
-        defaultTo={attributeStats?.max}
-        onChange={handleRangeSectionChange}
-      />
+      {!membersOnlyMode && (
+        <NumericRangeSection
+          filter={filter}
+          selected={selectedSection === FilterSections.RANGE}
+          defaultFrom={attributeStats?.min}
+          defaultTo={attributeStats?.max}
+          onChange={handleRangeSectionChange}
+        />
+      )}
       <NumericConditionSection
         filter={filter}
         selected={selectedSection === FilterSections.CONDITION}

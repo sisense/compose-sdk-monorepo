@@ -1,4 +1,4 @@
 export {
-  paginationActionsComponentTheme,
   type PaginationActionsComponentTheme,
+  paginationActionsComponentTheme,
 } from './paginationActionsComponentTheme';

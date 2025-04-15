@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { CriteriaFilterTile as CriteriaFilterTilePreact } from '@sisense/sdk-ui-preact';
 import type { CriteriaFilterTileProps as CriteriaFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!CriteriaFilterTile | `CriteriaFilterTile`} component.
@@ -78,5 +78,5 @@ export const CriteriaFilterTile = defineComponent({
     onEdit: Function as PropType<CriteriaFilterTileProps['onEdit']>,
   },
 
-  setup: (props) => setupHelper(CriteriaFilterTilePreact, props),
+  setup: (props) => setupHelper(CriteriaFilterTilePreact, props as CriteriaFilterTilePropsPreact),
 });

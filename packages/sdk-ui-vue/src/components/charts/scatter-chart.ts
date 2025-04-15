@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { ScatterChart as ScatterChartPreact } from '@sisense/sdk-ui-preact';
 import type { ScatterChartProps as ScatterChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!ScatterChart | `ScatterChart`} component.
@@ -115,5 +115,5 @@ export const ScatterChart = defineComponent({
      */
     styleOptions: Object as PropType<ScatterChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(ScatterChartPreact, props),
+  setup: (props) => setupHelper(ScatterChartPreact, props as ScatterChartPropsPreact),
 });

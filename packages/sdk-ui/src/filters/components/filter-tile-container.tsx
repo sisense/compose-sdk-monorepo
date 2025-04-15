@@ -67,6 +67,7 @@ export interface FilterTileDesignOptions {
     isCollapsible?: boolean;
     hasBorder?: boolean;
     hasBackgroundFilterIcon?: boolean;
+    disableGroupHover?: boolean;
   };
   border?: {
     shouldBeShown?: boolean;
@@ -97,6 +98,7 @@ const defaultDesign: CompleteFilterTileDesignOptions = {
     hasBorder: true,
     isCollapsible: true,
     hasBackgroundFilterIcon: false,
+    disableGroupHover: false,
   },
   border: {
     shouldBeShown: true,
@@ -106,27 +108,31 @@ const defaultDesign: CompleteFilterTileDesignOptions = {
   },
 };
 
-const GroupHoverWrapper = styled('div')({
-  '.MuiSwitch-root': {
-    opacity: 0.55,
-    transition: 'all .3s ease',
-  },
-  '.MuiButtonBase-root.csdk-filter-edit-button': {
-    opacity: 0,
-    transition: 'all .3s ease',
-    '&:focus-visible': {
-      opacity: 1,
-    },
-  },
-  '&:hover': {
-    '.MuiSwitch-root': {
-      opacity: 1,
-    },
-    '.MuiButtonBase-root.csdk-filter-edit-button': {
-      opacity: 1,
-    },
-  },
-});
+const GroupHoverWrapper = styled.div<{ disableHeaderGroupHover: boolean }>`
+  .MuiSwitch-root {
+    opacity: 0.55;
+    transition: all 0.3s ease;
+  }
+  .MuiButtonBase-root.csdk-filter-edit-button {
+    opacity: 0;
+    transition: all 0.3s ease;
+    &:focus-visible {
+      opacity: 1;
+    }
+  }
+  &:hover {
+    .MuiSwitch-root {
+      opacity: 1;
+    }
+    ${({ disableHeaderGroupHover }) =>
+      !disableHeaderGroupHover &&
+      css`
+        .MuiButtonBase-root.csdk-filter-edit-button {
+          opacity: 1;
+        }
+      `}
+  }
+`;
 
 /**
  * Generic component that owns common functionality of a filter "tile" like
@@ -160,7 +166,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
   const minWidth = isDependent ? FILTER_TILE_MIN_WIDTH - 2 : FILTER_TILE_MIN_WIDTH;
 
   return (
-    <GroupHoverWrapper>
+    <GroupHoverWrapper disableHeaderGroupHover={design.header.disableGroupHover}>
       <Container
         shouldShowBorder={design.border?.shouldBeShown}
         style={{

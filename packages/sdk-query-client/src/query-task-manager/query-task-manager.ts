@@ -1,15 +1,15 @@
-import { AbstractTaskManager, Task, Step } from '@sisense/task-manager';
+import { Element, PivotQueryResultData, QueryResultData } from '@sisense/sdk-data';
+import { JaqlRequest, PivotClient } from '@sisense/sdk-pivot-client';
+import { AbstractTaskManager, Step, Task } from '@sisense/task-manager';
+
+import { EmptyObject } from '../helpers/utility-types.js';
+import { getJaqlQueryPayload, getPivotJaqlQueryPayload } from '../jaql/get-jaql-query-payload.js';
+import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher.js';
+import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
+import { getDataFromQueryResult } from '../query-result/index.js';
+import { TranslatableError } from '../translation/translatable-error.js';
 import { AbortRequestFunction, JaqlQueryPayload, JaqlResponse } from '../types.js';
 import { PivotQueryTaskPassport, QueryTaskPassport } from './query-task-passport.js';
-import { QueryResultData, Element, PivotQueryResultData } from '@sisense/sdk-data';
-import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher.js';
-import { getJaqlQueryPayload, getPivotJaqlQueryPayload } from '../jaql/get-jaql-query-payload.js';
-import { getDataFromQueryResult } from '../query-result/index.js';
-import { JaqlRequest, PivotClient } from '@sisense/sdk-pivot-client';
-
-import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
-import { EmptyObject } from '../helpers/utility-types.js';
-import { TranslatableError } from '../translation/translatable-error.js';
 
 type QueryTask = Task<QueryTaskPassport>;
 type PivotQueryTask = Task<PivotQueryTaskPassport>;

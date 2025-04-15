@@ -1,5 +1,6 @@
 import type { Data } from '@sisense/sdk-data';
 import type { BeforeRenderHandler, IndicatorBeforeRenderHandler } from '@sisense/sdk-ui-preact';
+
 import type {
   AreamapDataPointEventHandler,
   BoxplotDataPointEventHandler,

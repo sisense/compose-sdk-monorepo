@@ -3,7 +3,8 @@ import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import styled from '@emotion/styled';
 import ListItemButton from '@mui/material/ListItemButton';
-import React from 'react';
+import Tooltip from '@mui/material/Tooltip';
+import React, { ReactElement } from 'react';
 
 import { Item, ItemActionConfig, ItemSecondaryActionConfig } from './types';
 
@@ -43,29 +44,32 @@ export const ItemRow: React.FC<ItemRowProps> = ({
   const { themeSettings } = useThemeContext();
   const [isHovered, setIsHovered] = React.useState(false);
   return (
-    <ItemRowButton
-      onClick={() => itemActionConfig?.onClick(item)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      theme={themeSettings}
-    >
-      <ItemRowContent>
-        <ItemRowTitle>
-          {item.Icon && <item.Icon />}
-          {item.title}
-        </ItemRowTitle>
-        {itemSecondaryActionConfig && isHovered && (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              itemSecondaryActionConfig.onClick(item);
-            }}
-          >
-            <itemSecondaryActionConfig.SecondaryActionButtonIcon item={item} />
-          </div>
-        )}
-      </ItemRowContent>
-    </ItemRowButton>
+    <ItemRowTooltip isDisabled={item.isDisabled} hoverTooltip={item.hoverTooltip}>
+      <ItemRowButton
+        onClick={() => itemActionConfig?.onClick(item)}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        theme={themeSettings}
+        disabled={item.isDisabled}
+      >
+        <ItemRowContent>
+          <ItemRowTitle>
+            {item.Icon && <item.Icon />}
+            {item.title}
+          </ItemRowTitle>
+          {itemSecondaryActionConfig && isHovered && (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                itemSecondaryActionConfig.onClick(item);
+              }}
+            >
+              <itemSecondaryActionConfig.SecondaryActionButtonIcon item={item} />
+            </div>
+          )}
+        </ItemRowContent>
+      </ItemRowButton>
+    </ItemRowTooltip>
   );
 };
 
@@ -93,3 +97,29 @@ const ItemRowButton = styled(ListItemButton)<Themable>`
     }
   }
 `;
+
+const ItemRowTooltip = ({
+  isDisabled,
+  hoverTooltip,
+  children,
+}: {
+  isDisabled?: boolean;
+  hoverTooltip?: string;
+  children: ReactElement;
+}) => {
+  if (hoverTooltip) {
+    if (isDisabled) {
+      return (
+        <Tooltip title={hoverTooltip} placement="top" arrow>
+          <span>{children}</span>
+        </Tooltip>
+      );
+    }
+    return (
+      <Tooltip title={hoverTooltip} placement="top" arrow>
+        {children}
+      </Tooltip>
+    );
+  }
+  return children;
+};

@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/default-param-last */
+import cloneDeep from 'lodash-es/cloneDeep.js';
+import isArray from 'lodash-es/isArray.js';
+
 import {
   DimensionalLevelAttribute,
   Filter,
@@ -13,9 +16,6 @@ import {
   FilterRelationsNode,
   isCascadingFilter,
 } from '../../index.js';
-import cloneDeep from 'lodash-es/cloneDeep.js';
-import isArray from 'lodash-es/isArray.js';
-
 import { TranslatableError } from '../../translation/translatable-error.js';
 
 /**
@@ -41,7 +41,6 @@ export function isFilterRelations(
  * Rules of filter relations - logical operators of how filters are related to each other.
  *
  * @internal
- *
  */
 export type FilterRelationsRules = FilterRelationsRule | FilterRelationsRuleNode | null;
 
@@ -93,6 +92,7 @@ export function mergeFiltersOrFilterRelations(
 
 /**
  * Splits filters or filter relations into filters and relations rules.
+ *
  * @internal
  */
 export function splitFiltersAndRelations(
@@ -131,6 +131,7 @@ export function splitFiltersAndRelations(
 
 /**
  * Returns pure filters array from the given filters or filter relations.
+ *
  * @internal
  */
 export function getFiltersArray(
@@ -145,6 +146,7 @@ export function getFiltersArray(
 /**
  * Combines filters and relations into a single FilterRelations object.
  * If the relations are empty or relations are trivial (single node), the filters are returned as is.
+ *
  * @internal
  */
 export function combineFiltersAndRelations(
@@ -174,7 +176,9 @@ export function combineFiltersAndRelations(
   }
 }
 
-/** Type guard for checking if a node is a single relations node (trivial case when relations are needless).
+/**
+ * Type guard for checking if a node is a single relations node (trivial case when relations are needless).
+ *
  * @internal
  */
 export function isTrivialSingleNodeRelations(
@@ -185,6 +189,7 @@ export function isTrivialSingleNodeRelations(
 
 /**
  * Calculates new relations based on the changes in filters.
+ *
  * @internal
  */
 export function calculateNewRelations(
@@ -219,6 +224,7 @@ function areFiltersEqualForRelations(filter1: Filter, filter2: Filter): boolean 
 
 /**
  * Replaces a filter in the relations tree with a new filter.
+ *
  * @internal
  */
 export function getRelationsWithReplacedFilter(
@@ -348,6 +354,7 @@ function removeFilterFromRelations(
 
 /**
  * Converts filter relations model from Fusion to internal CSDK filter relations rules.
+ *
  * @internal
  */
 export function convertFilterRelationsModelToRelationRules(
@@ -437,6 +444,7 @@ function isFilterNode(node: FilterRelationsNode): node is Filter {
 
 /**
  * Converts internal CSDK filter relations rules to filter relations model for Fusion.
+ *
  * @internal
  */
 export function filterRelationRulesToFilterRelationsModel(
@@ -493,6 +501,7 @@ export function findFilterByGuid(filters: Filter[], guid: string): Filter | unde
 
 /**
  * Error thrown when an unknown node type is encountered in filter relations.
+ *
  * @internal
  */
 export class UnknownRelationsNodeError extends Error {

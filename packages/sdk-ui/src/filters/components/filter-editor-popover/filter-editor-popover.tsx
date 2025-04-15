@@ -16,6 +16,7 @@ type FilterEditorPopoverPosition = Pick<PopoverAnchorPosition, 'anchorEl'>;
 
 type FilterEditorPopoverProps = {
   filter?: Filter | null;
+  parentFilters?: Filter[];
   position?: FilterEditorPopoverPosition;
   onChange?: (filter: Filter) => void;
   onClose?: () => void;
@@ -87,6 +88,7 @@ const Container = styled.div<Themable>`
 /** @internal */
 export const FilterEditorPopover = ({
   filter,
+  parentFilters,
   position,
   onChange,
   onClose,
@@ -135,6 +137,7 @@ export const FilterEditorPopover = ({
         </ModalHeader>
         <FilterEditor
           filter={filter}
+          parentFilters={parentFilters}
           onChange={(filter) => setEditedFilter(filter)}
           defaultDataSource={defaultDataSource}
           config={config}

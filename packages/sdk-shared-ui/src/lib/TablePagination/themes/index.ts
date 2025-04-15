@@ -1,1 +1,1 @@
-export { tablePaginationTheme, type TablePaginationTheme } from './tablePaginationTheme';
+export { type TablePaginationTheme, tablePaginationTheme } from './tablePaginationTheme';

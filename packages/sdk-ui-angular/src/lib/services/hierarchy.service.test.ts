@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /** @vitest-environment jsdom */
+import { Attribute } from '@sisense/sdk-data';
 import { type ClientApplication, getHierarchyModels } from '@sisense/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
+
 import { HierarchyService } from './hierarchy.service';
 import { SisenseContextService } from './sisense-context.service';
-import { Attribute } from '@sisense/sdk-data';
 
 vi.mock('@sisense/sdk-ui-preact', () => ({
   getHierarchyModels: vi.fn(),

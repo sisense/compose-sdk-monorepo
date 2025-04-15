@@ -1,15 +1,9 @@
-import { defineComponent, inject, provide, ref } from 'vue';
-import type { PropType, InjectionKey, Ref } from 'vue';
-import type {
-  ContextConnector,
-  SisenseContextProviderProps as SisenseContextProviderPropsPreact,
-} from '@sisense/sdk-ui-preact';
-import {
-  createClientApplication,
-  createContextProviderRenderer,
-  CustomSisenseContextProvider,
-  type CustomSisenseContext,
-} from '@sisense/sdk-ui-preact';
+import { defineComponent, provide, ref } from 'vue';
+import type { PropType, Ref } from 'vue';
+import type { SisenseContextProviderProps as SisenseContextProviderPropsPreact } from '@sisense/sdk-ui-preact';
+import { createClientApplication, type CustomSisenseContext } from '@sisense/sdk-ui-preact';
+import { ThemeProvider } from '../theme-provider';
+import { defaultSisenseContext, sisenseContextKey } from './sisense-context';
 
 /**
  * Configurations and authentication for Sisense Context.
@@ -21,43 +15,6 @@ import {
  * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.wat | `wat`}
  */
 export interface SisenseContextProviderProps extends SisenseContextProviderPropsPreact {}
-
-const defaultSisenseContext: CustomSisenseContext = {
-  isInitialized: false,
-  app: undefined,
-  tracking: {
-    enabled: true,
-    packageName: 'sdk-ui-vue',
-  },
-  errorBoundary: {
-    showErrorBox: true,
-  },
-};
-
-const sisenseContextKey = Symbol('sisenseContextKey') as InjectionKey<Ref<CustomSisenseContext>>;
-
-/**
- * Gets Sisense application
- * @internal
- */
-export const getSisenseContext = () => {
-  return inject(sisenseContextKey, ref(defaultSisenseContext)) as Ref<CustomSisenseContext>;
-};
-
-/**
- * Creates Sisense context connector
- * @internal
- */
-export const createSisenseContextConnector = (): ContextConnector<CustomSisenseContext> => {
-  const context = getSisenseContext().value;
-
-  return {
-    async prepareContext() {
-      return context;
-    },
-    renderContextProvider: createContextProviderRenderer(CustomSisenseContextProvider),
-  };
-};
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -174,7 +131,11 @@ export const SisenseContextProvider = defineComponent({
     provide(sisenseContextKey, context as Ref<CustomSisenseContext>);
 
     return () => {
-      return slots.default?.();
+      return (
+        <ThemeProvider theme={context.value.app?.settings.serverThemeSettings}>
+          {slots.default?.()}
+        </ThemeProvider>
+      );
     };
   },
 });

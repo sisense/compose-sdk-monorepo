@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
 import classnames from 'classnames';
-import { Scrollbars } from 'react-custom-scrollbars';
+import React, { Component } from 'react';
 import type { ScrollbarProps } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars';
 
-import { Popover } from '../Popover';
 import { LazyLoader } from '../LazyLoader';
-import { MenuItem } from './MenuItem';
+import { Popover } from '../Popover';
 import { Confirmation } from './Confirmation';
-
-import type { ItemType } from './MenuItem';
-
-import { groupBy } from './utils';
-
 import style from './Menu.module.scss';
+import type { ItemType } from './MenuItem';
+import { MenuItem } from './MenuItem';
+import { groupBy } from './utils';
 
 export type MenuItemConfig = {
   actionableComponent?: ActionableComponent;

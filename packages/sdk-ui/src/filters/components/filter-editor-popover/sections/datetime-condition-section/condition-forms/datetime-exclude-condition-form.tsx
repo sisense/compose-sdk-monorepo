@@ -95,7 +95,7 @@ export const DatetimeExcludeConditionForm = ({
   onChange,
 }: DatetimeConditionSectionFormProps) => {
   const { t } = useTranslation();
-  const { defaultDataSource } = useFilterEditorContext();
+  const { defaultDataSource, parentFilters } = useFilterEditorContext();
   const initialFilterData = useMemo(
     () => getDatetimeExcludeConditionFilterData(filter, t),
     [filter, t],
@@ -119,6 +119,7 @@ export const DatetimeExcludeConditionForm = ({
     loadMore: loadMoreMembers,
   } = useGetFilterMembersInternal({
     filter: filterToQueryMembers,
+    parentFilters,
     count: QUERY_MEMBERS_COUNT,
     enabled: !isDaysLevel,
     ...(defaultDataSource && { defaultDataSource }),

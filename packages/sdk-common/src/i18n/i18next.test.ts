@@ -1,4 +1,5 @@
 import { PostProcessorModule } from 'i18next';
+
 import { basicI18Next, initI18next } from './i18next.js';
 import { resources } from './resources/index.js';
 

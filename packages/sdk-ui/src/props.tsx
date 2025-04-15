@@ -1807,6 +1807,7 @@ export interface DrilldownWidgetProps {
 
 /**
  * Tabber widget props designed to be a current state and is provided by use-tabber hook
+ *
  * @internal
  */
 export type TabberWidgetExtraProps = {
@@ -1816,6 +1817,7 @@ export type TabberWidgetExtraProps = {
 
 /**
  * Tabber widget props
+ *
  * @internal
  */
 export type TabberWidgetProps = {

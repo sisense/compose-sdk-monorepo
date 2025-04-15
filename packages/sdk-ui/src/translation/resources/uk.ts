@@ -101,6 +101,10 @@ export const translation: TranslationDictionary = {
       dimensionNotFound: 'Dimension з id {{dimensionId}} не знайдено',
       attributeNotFound: 'Attribute з id {{attributeId}} не знайдено',
     },
+    addFilterPopover: {
+      noDataSources:
+        'Не знайдено жодного джерела даних. Спробуйте задати `dataSource` у віджетах або `defaultDataSource` на рівні дашборди.',
+    },
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',

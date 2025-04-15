@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import { ChatApiContext } from './api/chat-api-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ChatIdStorageProvider } from './chat-id-storage-provider';
 import { type ChatRestApi } from './api/chat-rest-api';
+import { CustomContextProviderProps } from '../types';
 
 /** @internal */
 export type CustomAiContext = {
@@ -10,10 +11,7 @@ export type CustomAiContext = {
 };
 
 /** @internal */
-export type CustomAiContextProviderProps = {
-  context?: CustomAiContext;
-  children: ReactNode;
-};
+export type CustomAiContextProviderProps = CustomContextProviderProps<CustomAiContext>;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,7 +23,10 @@ const queryClient = new QueryClient({
 });
 
 /** @internal */
-export function CustomAiContextProvider({ children, context }: CustomAiContextProviderProps) {
+export function CustomAiContextProvider({
+  children,
+  context,
+}: PropsWithChildren<CustomAiContextProviderProps>) {
   return (
     <ChatIdStorageProvider>
       <ChatApiContext.Provider value={context?.api}>

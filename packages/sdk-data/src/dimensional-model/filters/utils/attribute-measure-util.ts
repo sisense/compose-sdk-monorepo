@@ -1,11 +1,12 @@
-import { Attribute, BaseMeasure, CalculatedMeasure, LevelAttribute } from '../../interfaces.js';
-import { FilterJaql } from '../../types.js';
-import { CustomFormulaJaql, FilterJaqlInternal, RankingFilterJaql } from './types.js';
 import {
   createAttributeHelper,
   createCalculatedMeasureHelper,
   createMeasureHelper,
+  getGranularityFromJaql,
 } from '../../../utils.js';
+import { Attribute, BaseMeasure, CalculatedMeasure, LevelAttribute } from '../../interfaces.js';
+import { FilterJaql } from '../../types.js';
+import { CustomFormulaJaql, FilterJaqlInternal, RankingFilterJaql } from './types.js';
 
 /**
  * Creates an attribute or level attribute from the provided filter JAQL object
@@ -16,14 +17,13 @@ import {
 export const createAttributeFromFilterJaql = (
   jaql: FilterJaql | FilterJaqlInternal,
 ): Attribute | LevelAttribute => {
-  const { dim, table, column, level, datatype, title, datasource: dataSource } = jaql;
-
+  const { dim, table, column, datatype, title, datasource: dataSource } = jaql;
   return createAttributeHelper({
     dim,
     table,
     column,
     dataType: datatype,
-    level,
+    granularity: getGranularityFromJaql(jaql),
     format: undefined,
     sort: undefined,
     title,
@@ -38,16 +38,7 @@ export const createAttributeFromFilterJaql = (
  * @returns Measure
  */
 export const createMeasureFromFilterJaql = (jaql: FilterJaqlInternal): BaseMeasure | undefined => {
-  const {
-    dim,
-    table,
-    column,
-    title,
-    level,
-    datatype: dataType,
-    agg,
-    datasource: dataSource,
-  } = jaql;
+  const { dim, table, column, title, datatype: dataType, agg, datasource: dataSource } = jaql;
   if (!agg) return undefined;
   return createMeasureHelper({
     dim,
@@ -55,7 +46,7 @@ export const createMeasureFromFilterJaql = (jaql: FilterJaqlInternal): BaseMeasu
     column,
     dataType,
     agg,
-    level,
+    granularity: getGranularityFromJaql(jaql),
     format: undefined,
     sort: undefined,
     title,
@@ -74,12 +65,12 @@ export const createMeasureFromRankingFilterJaql = (
   rankingMessage?: string,
 ): BaseMeasure | CalculatedMeasure => {
   if ('formula' in jaql) return createCalculatedMeasureHelper(jaql);
-  const { dim, table, column, level, datatype: dataType, agg } = jaql as RankingFilterJaql;
+  const { dim, table, column, datatype: dataType, agg } = jaql as RankingFilterJaql;
   return createMeasureHelper({
     dim,
     table,
     column,
-    level,
+    granularity: getGranularityFromJaql(jaql),
     dataType,
     agg,
     format: undefined,

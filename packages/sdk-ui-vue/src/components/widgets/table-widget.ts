@@ -1,6 +1,6 @@
 import { defineComponent, type Prop } from 'vue';
 import { TableWidget as TableWidgetPreact, type TableWidgetProps } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
 export { TableWidgetProps };
@@ -41,5 +41,5 @@ export const TableWidget = defineComponent({
     topSlot: Object as Prop<TableWidgetProps['topSlot']>,
     widgetStyleOptions: Object as Prop<TableWidgetProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(TableWidgetPreact, props),
+  setup: (props) => setupHelper(TableWidgetPreact, props as TableWidgetProps),
 });

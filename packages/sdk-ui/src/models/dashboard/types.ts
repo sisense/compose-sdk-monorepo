@@ -49,6 +49,7 @@ export type WidgetsOptions = Record<WidgetId, { filtersOptions?: CommonFiltersOp
  *
  * This property actually moves responsibility on the layout management from the tabber widgets to the dashboard,
  * storing all the tabbers configs in the single place
+ *
  * @internal
  */
 export type TabbersOptions = Record<WidgetId, TabberConfig>;

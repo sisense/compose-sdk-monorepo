@@ -65,6 +65,7 @@ enum TotalLabelHorizontalSpacing {
 
 /**
  * Get additional spacing around chart needed for the total labels based on the chart type and design options.
+ *
  * @internal
  */
 function getChartSpacingForTotalLabels(
@@ -111,6 +112,7 @@ function getChartSpacingForTotalLabels(
 
 /**
  * Get the shift for the total labels based on the chart type and design options.
+ *
  * @internal
  */
 function getTotalLabelsShift(

@@ -1,11 +1,12 @@
 import {
-  render,
-  h,
-  type FunctionComponent,
-  type ComponentChildren,
-  type VNode,
   type ComponentChild,
+  type ComponentChildren,
+  type FunctionComponent,
+  h,
+  render,
+  type VNode,
 } from 'preact';
+
 import { CustomElement } from './component-adapter';
 
 /** @internal */
@@ -28,8 +29,8 @@ export const createElement = <P>(
 };
 
 /** @internal */
-export const createWrapperElement = (nativeElement: HTMLDivElement): VNode =>
-  createElement(CustomElement, { nativeElement });
+export const createWrapperElement = <R = VNode>(nativeElement: HTMLDivElement): R =>
+  createElement(CustomElement, { nativeElement }) as R;
 
 type AnyObject = Record<string, any>;
 

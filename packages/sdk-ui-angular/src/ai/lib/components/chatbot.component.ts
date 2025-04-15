@@ -7,18 +7,22 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { ComponentAdapter, createElement } from '@sisense/sdk-ui-preact';
-import { Chatbot, type ChatbotProps as ChatbotPropsPreact } from '@sisense/sdk-ui-preact/ai';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
-  SisenseContextService,
-  ThemeService,
   createSisenseContextConnector,
   createThemeContextConnector,
+  SisenseContextService,
+  ThemeService,
 } from '@sisense/sdk-ui-angular';
-import { template, rootId } from '../component-wrapper-helpers/template';
-import { AiService } from '../services/ai.service';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact';
+import {
+  Chatbot as ChatbotPreact,
+  type ChatbotProps as ChatbotPropsPreact,
+} from '@sisense/sdk-ui-preact/ai';
+
 import { createAiContextConnector } from '../component-wrapper-helpers';
+import { rootId, template } from '../component-wrapper-helpers/template';
+import { AiService } from '../services/ai.service';
 
 /**
  * Props of the {@link ChatbotComponent}.
@@ -65,7 +69,6 @@ export class ExampleComponent {
  * ```
  *
  * <img src="media://angular-chatbot-example.png" width="500px" />
- *
  * @group Generative AI
  * @beta
  */
@@ -98,7 +101,7 @@ export class ChatbotComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   config: ChatbotProps['config'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof ChatbotPreact>;
 
   /**
    * Constructor for the `ChatbotComponent`.
@@ -127,21 +130,18 @@ export class ChatbotComponent implements AfterViewInit, OnChanges, OnDestroy {
      */
     public aiService: AiService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-        createAiContextConnector(this.aiService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(ChatbotPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+      createAiContextConnector(this.aiService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -149,18 +149,16 @@ export class ChatbotComponent implements AfterViewInit, OnChanges, OnDestroy {
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): ChatbotPropsPreact {
+    return {
       width: this.width,
       height: this.height,
       config: this.config,
     };
-
-    return createElement(Chatbot, props);
   }
 
   /**

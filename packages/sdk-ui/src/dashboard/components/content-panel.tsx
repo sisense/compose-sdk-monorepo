@@ -104,6 +104,7 @@ export interface ContentPanelProps {
    * If true adjust layout based on available width of content panel.
    *
    * If not specified, the default value is `false`.
+   *
    * @internal
    */
   responsive?: boolean;

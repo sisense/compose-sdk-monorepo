@@ -1,19 +1,16 @@
+import classNames from 'classnames';
 import React, { forwardRef } from 'react';
 import { ScrollbarProps } from 'react-custom-scrollbars';
-import classNames from 'classnames';
-// import { SLF } from '@sbi/styleguide';
 
-import { Popover } from '../Popover';
-import { Menu, itemTypes } from '../Menu';
-import { DropdownButton } from './DropdownButton';
-
-import { useDropdown } from './hooks';
 import { styleguideConstants } from '../constants/styleguideConstants';
-
-import type { DropdownItem, DropdownInputProps } from './types';
 import type { MenuItemConfig } from '../Menu';
-
+import { itemTypes, Menu } from '../Menu';
+// import { SLF } from '@sbi/styleguide';
+import { Popover } from '../Popover';
 import style from './Dropdown.module.scss';
+import { DropdownButton } from './DropdownButton';
+import { useDropdown } from './hooks';
+import type { DropdownInputProps, DropdownItem } from './types';
 
 const noop = () => {};
 

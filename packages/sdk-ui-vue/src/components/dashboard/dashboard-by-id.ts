@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { DashboardById as DashboardByIdPreact } from '@sisense/sdk-ui-preact';
 import type { DashboardByIdProps as DashboardByIdPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 import type { DashboardByIdConfig } from '../../types';
 
 /**
@@ -52,5 +52,5 @@ export const DashboardById = defineComponent({
      */
     config: Boolean as PropType<DashboardByIdProps['config']>,
   },
-  setup: (props) => setupHelper(DashboardByIdPreact, props),
+  setup: (props) => setupHelper(DashboardByIdPreact, props as DashboardByIdPropsPreact),
 });

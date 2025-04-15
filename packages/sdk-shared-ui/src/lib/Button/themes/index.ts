@@ -1,1 +1,1 @@
-export { buttonsTheme, type ButtonsTheme } from './buttonsTheme';
+export { type ButtonsTheme, buttonsTheme } from './buttonsTheme';

@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { RelativeDateFilterTile as RelativeDateFilterTilePreact } from '@sisense/sdk-ui-preact';
 import type { RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper.js';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!RelativeDateFilterTile | `RelativeDateFilterTile`} component.
@@ -83,5 +83,6 @@ export const RelativeDateFilterTile = defineComponent({
      */
     onEdit: Function as PropType<RelativeDateFilterTileProps['onEdit']>,
   },
-  setup: (props) => setupHelper(RelativeDateFilterTilePreact, props),
+  setup: (props) =>
+    setupHelper(RelativeDateFilterTilePreact, props as RelativeDateFilterTilePropsPreact),
 });

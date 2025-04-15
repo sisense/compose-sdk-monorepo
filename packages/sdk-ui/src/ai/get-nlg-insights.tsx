@@ -46,6 +46,7 @@ export default asSisenseComponent({
 
 /**
  * Props for {@link GetNlgQueryResult} component.
+ *
  * @deprecated Use {@link GetNlgInsightsProps} instead
  * @internal
  */

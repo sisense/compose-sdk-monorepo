@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { DimensionalAttribute } from '../attributes.js';
+import { AggregationTypes, Sort } from '../types.js';
 import {
   DimensionalBaseMeasure,
   DimensionalCalculatedMeasure,
   DimensionalMeasureTemplate,
 } from './measures.js';
-import { DimensionalAttribute } from '../attributes.js';
-import { AggregationTypes, Sort } from '../types.js';
 
 describe('Measures jaql preparations', () => {
   it('must prepare simple measure jaql', () => {

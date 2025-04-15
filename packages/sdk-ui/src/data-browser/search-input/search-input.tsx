@@ -52,8 +52,6 @@ const SearchInputContainer = styled.div<Themable>`
   gap: 4px;
   align-self: stretch;
   border-radius: 4px;
-  border: 1px solid rgba(38, 46, 61, 0.15);
-  background: #fff;
   color: ${({ theme }) => theme.general.popover.input.textColor};
   svg path {
     fill: ${({ theme }) => theme.general.popover.input.textColor};
@@ -61,6 +59,13 @@ const SearchInputContainer = styled.div<Themable>`
   background-color: ${({ theme }) => theme.general.popover.input.backgroundColor};
   border-color: ${({ theme }) =>
     getElementStateColor(theme.general.popover.input.borderColor, ElementStates.DEFAULT)};
+
+  :focus-within {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
+  & input:focus-visible:not(.PrivateSwitchBase-input) {
+    outline: none;
+  }
 `;
 
 const Input = styled.input<Themable>`

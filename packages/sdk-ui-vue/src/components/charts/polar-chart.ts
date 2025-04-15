@@ -3,7 +3,7 @@ import {
   PolarChart as PolarChartPreact,
   type PolarChartProps as PolarChartPropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!PolarChart | `PolarChart`} component.
@@ -111,5 +111,5 @@ export const PolarChart = defineComponent({
      */
     styleOptions: Object as PropType<PolarChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(PolarChartPreact, props),
+  setup: (props) => setupHelper(PolarChartPreact, props as PolarChartPropsPreact),
 });

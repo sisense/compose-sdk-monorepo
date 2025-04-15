@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { BarChart as BarChartPreact } from '@sisense/sdk-ui-preact';
 import type { BarChartProps as BarChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!BarChart | `BarChart`} component.
@@ -112,5 +112,5 @@ export const BarChart = defineComponent({
      */
     styleOptions: Object as PropType<BarChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(BarChartPreact, props),
+  setup: (props) => setupHelper(BarChartPreact, props as BarChartPropsPreact),
 });

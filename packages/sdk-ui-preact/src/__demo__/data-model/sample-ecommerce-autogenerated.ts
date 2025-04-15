@@ -1,11 +1,11 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import {
-  Dimension,
-  DateDimension,
   Attribute,
   createAttribute,
   createDateDimension,
   createDimension,
+  DateDimension,
+  Dimension,
 } from '@sisense/sdk-data';
 
 export const DataSource = 'Sample ECommerce';

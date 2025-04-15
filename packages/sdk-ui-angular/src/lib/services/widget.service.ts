@@ -3,8 +3,9 @@ import {
   getWidgetModel,
   type GetWidgetModelParams as GetWidgetModelParamsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from './sisense-context.service';
+
 import { TrackableService } from '../decorators/trackable.decorator';
+import { SisenseContextService } from './sisense-context.service';
 
 /**
  * Parameters for retrieving an existing widget model from the Sisense instance

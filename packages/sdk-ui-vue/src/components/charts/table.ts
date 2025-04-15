@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { Table as TablePreact } from '@sisense/sdk-ui-preact';
 import type { TableProps } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
 export { TableProps };
@@ -74,5 +74,5 @@ export const Table = defineComponent({
      */
     styleOptions: Object as PropType<TableProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(TablePreact, props),
+  setup: (props) => setupHelper(TablePreact, props as TableProps),
 });

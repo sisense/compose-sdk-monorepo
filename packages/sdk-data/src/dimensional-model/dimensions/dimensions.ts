@@ -6,17 +6,14 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { Attribute, LevelAttribute, Dimension, DateDimension } from '../interfaces.js';
-
-import { Sort, DateLevels, MetadataTypes, JaqlDataSource } from '../types.js';
-
 import {
   DimensionalAttribute,
   DimensionalLevelAttribute,
   jaqlSimpleColumnType,
 } from '../attributes.js';
-
 import { DimensionalElement, normalizeName } from '../base.js';
+import { Attribute, DateDimension, Dimension, LevelAttribute } from '../interfaces.js';
+import { DateLevels, JaqlDataSource, MetadataTypes, Sort } from '../types.js';
 
 /**
  * Represents a Dimension in a Dimensional Model

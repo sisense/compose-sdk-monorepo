@@ -1,6 +1,6 @@
 export { ExecuteQuery } from './execute-query';
 export { useExecuteQuery } from './use-execute-query';
-export { useExecuteCsvQuery } from './use-execute-csv-query';
+export { useExecuteCsvQuery, useExecuteCsvQueryInternal } from './use-execute-csv-query';
 export { ExecuteQueryByWidgetId } from './execute-query-by-widget-id';
 export {
   useExecuteQueryByWidgetId,

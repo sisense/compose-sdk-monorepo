@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { AreaChart as AreaChartPreact } from '@sisense/sdk-ui-preact';
 import type { AreaChartProps as AreaChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!AreaChart | `AreaChart`} component.
@@ -111,5 +111,5 @@ export const AreaChart = defineComponent({
      */
     onDataPointsSelected: Function as PropType<AreaChartProps['onDataPointsSelected']>,
   },
-  setup: (props) => setupHelper(AreaChartPreact, props),
+  setup: (props) => setupHelper(AreaChartPreact, props as AreaChartPropsPreact),
 });

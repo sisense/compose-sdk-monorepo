@@ -2,6 +2,7 @@ import {
   Attribute,
   convertDataSource,
   DataSource,
+  Filter,
   isText,
   measureFactory,
   QueryResultData,
@@ -20,6 +21,7 @@ const extractAttributeStats = (queryResult: QueryResultData) => {
 
 interface UseGetAttributeStatsParams extends HookEnableParam {
   attribute: Attribute;
+  filters?: Filter[];
   /** Default data source to use if attribute does not have one */
   defaultDataSource?: DataSource;
 }
@@ -53,7 +55,7 @@ type AttributeStatsState<T = AttributeStats> = {
 export const useGetAttributeStats = <T = AttributeStats>(
   params: UseGetAttributeStatsParams,
 ): AttributeStatsState<T> => {
-  const { attribute, enabled, defaultDataSource } = params;
+  const { attribute, enabled, defaultDataSource, filters } = params;
   const {
     data: queryResult,
     isLoading,
@@ -71,6 +73,7 @@ export const useGetAttributeStats = <T = AttributeStats>(
           measureFactory.max(attribute),
         ],
     enabled,
+    filters,
   });
 
   return {

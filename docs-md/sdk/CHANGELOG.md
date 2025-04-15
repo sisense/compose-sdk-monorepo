@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.34.0] - 2025-04-15
+
+### Added
+- Add cascading filters editing support by extending `FilterTile` and `FilterEditorPopover` components
+- Add `executeCsvQuery` method to `queryService` for Angular
+- Add `useExecuteCsvQuery` composable for Vue
+- Add filters creation and editing possibilities into `Dashboard` and `DashboardById` components in Angular and Vue for internal testing
+
+### Changed
+- Improve `FilterEditorPopover`: fix incorrect members for datetime "day" granularity filter, add missing default "from" value for numeric filter, clear previous condition value for textual filter, allow updating filter with deactivated members only
+- Improve `AddFilterPopover`: restrict filter creation on an attribute if one already exists in the dashboard, add caching for datasource fields loading, handle missing datasource cases, fix search field focus outline
+- Improve `Table`: fix non-functional `StyledColumn.sortType` sorting configuration
+- Fix broken forecast and trend for measures with `count` aggregation over textual attributes
+- Improve testing: cover filter model logic in `sdk-data` package with unit tests
+
 ## [1.33.0] - 2025-04-01
 
 ### Added

@@ -23,7 +23,7 @@ import { UnsupportedFilterTile } from '@/filters/components/unsupported-filter-t
  * Props of the {@link FilterTile} component
  *
  */
-export type FilterTileProps = {
+export interface FilterTileProps {
   /** Filter to display */
   filter: Filter;
   /** Callback to handle filter change */
@@ -31,10 +31,13 @@ export type FilterTileProps = {
   /** Filter delete callback */
   onDelete?: () => void;
   /** Filter edit callback */
-  onEdit?: () => void;
+  onEdit?: (
+    /** Index of the filter level that triggers the onEdit action (in the case of a CascadingFilter) */
+    levelIndex?: number,
+  ) => void;
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
-};
+}
 
 /**
  * Facade component that renders a filter tile based on filter type

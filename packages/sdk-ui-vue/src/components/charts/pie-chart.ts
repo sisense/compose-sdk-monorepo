@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { PieChart as PieChartPreact } from '@sisense/sdk-ui-preact';
 import type { PieChartProps as PieChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!PieChart | `PieChart`} component.
@@ -110,5 +110,5 @@ export const PieChart = defineComponent({
      */
     styleOptions: Object as PropType<PieChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(PieChartPreact, props),
+  setup: (props) => setupHelper(PieChartPreact, props as PieChartPropsPreact),
 });

@@ -1,16 +1,17 @@
+import { DataModel, DataSourceField, DataSourceMetadata, MetadataTypes } from '@sisense/sdk-data';
+import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
+import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import {
-  HttpClient,
   getAuthenticator,
+  HttpClient,
   isBearerAuthenticator,
   isWatAuthenticator,
 } from '@sisense/sdk-rest-client';
-import { DataModel, DataSourceField, MetadataTypes, DataSourceMetadata } from '@sisense/sdk-data';
-import { writeTypescript, writeJavascript } from '@sisense/sdk-modeling';
-import path from 'path';
-import levenshtein from 'js-levenshtein';
-import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
-import { PKG_VERSION } from '../package-version.js';
 import { trackCliError } from '@sisense/sdk-tracking';
+import levenshtein from 'js-levenshtein';
+import path from 'path';
+
+import { PKG_VERSION } from '../package-version.js';
 import { DataSourceSchemaDataset } from '../types.js';
 
 type HttpClientConfig = {
@@ -330,10 +331,10 @@ export function addDescriptionToFields(
 }
 
 export {
-  getHttpClient,
   createDataModel,
+  getFilePathInfo,
+  getHttpClient,
+  isSupportedOutputFile,
   rewriteDataModel,
   writeFile,
-  getFilePathInfo,
-  isSupportedOutputFile,
 };

@@ -1,15 +1,23 @@
-import { createFilterFromJaql, DataSourceInfo, DataType, MembersFilter } from './index.js';
+import { describe } from 'vitest';
+
+import * as DM from './__test-helpers__/sample-ecommerce.js';
+import * as filterFactory from './dimensional-model/filters/factory.js';
+import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
 import {
+  createFilterFromJaql,
+  DataSourceInfo,
+  DataType,
+  MembersFilter,
+  Sort,
+  SortDirection,
+} from './index.js';
+import {
+  convertSortDirectionToSort,
   getDataSourceName,
   getFilterListAndRelationsJaql,
   guidFast,
   isDataSourceInfo,
 } from './utils.js';
-import { describe } from 'vitest';
-import * as filterFactory from './dimensional-model/filters/factory.js';
-import * as DM from './__test-helpers__/sample-ecommerce.js';
-
-import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
 
 const filter1 = filterFactory.members(DM.Category.Category, ['Cell Phones', 'GPS Devices']);
 const filter2 = filterFactory.exclude(filterFactory.contains(DM.Country.Country, 'A'));
@@ -198,6 +206,18 @@ describe('utils', () => {
       expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
       expect(filter.config.backgroundFilter).toBeDefined();
       expect(expectedFilter.config.backgroundFilter).toBeDefined();
+    });
+  });
+  describe('convertSortDirectionToSort', () => {
+    test('should convert SortDirection to Sort', () => {
+      [
+        ['sortAsc', Sort.Ascending],
+        ['sortDesc', Sort.Descending],
+        ['sortNone', Sort.None],
+      ].forEach(([sortDirection, expected]) => {
+        const result = convertSortDirectionToSort(sortDirection as SortDirection);
+        expect(result).toBe(expected);
+      });
     });
   });
 });

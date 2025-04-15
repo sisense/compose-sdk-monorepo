@@ -1,9 +1,9 @@
-import { Authenticator } from './interfaces.js';
 import { isBearerAuthenticator } from './bearer-authenticator.js';
-import { isWatAuthenticator } from './wat-authenticator.js';
+import { Authenticator } from './interfaces.js';
 import { isPasswordAuthenticator } from './password-authenticator.js';
 import { isSsoAuthenticator } from './sso-authenticator.js';
 import { TranslatableError } from './translation/translatable-error.js';
+import { isWatAuthenticator } from './wat-authenticator.js';
 
 async function handleErrorResponse(response: Response): Promise<Response> {
   if (!response.ok) {

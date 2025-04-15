@@ -1,16 +1,17 @@
 /* eslint-disable max-params */
 import { Arguments, Argv, CommandModule } from 'yargs';
+
+import { trackExecution } from '../tracking.js';
+import { Command, GetDataModelOptions } from '../types.js';
 import {
-  getHttpClient,
   createDataModel,
-  writeFile,
-  handleHttpClientLogin,
   getFilePathInfo,
+  getHttpClient,
+  handleHttpClientLogin,
   isSupportedOutputFile,
+  writeFile,
 } from './helpers.js';
 import { promptPasswordInteractive } from './prompts.js';
-import { Command, GetDataModelOptions } from '../types.js';
-import { trackExecution } from '../tracking.js';
 
 const command: Command = 'get-data-model';
 const describe =

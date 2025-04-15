@@ -41,6 +41,7 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
   dimensionSecondaryActionConfig,
   onScrolledToBottom,
   isLoading,
+  disabledAttributesConfig,
 }) => {
   const hasDimesions = dimensions.length > 0;
   const groupedItemsBrowserProps = useMemo(() => {
@@ -50,6 +51,7 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
       dimensionSecondaryActionConfig,
       attributeSecondaryActionConfig,
       onScrolledToBottom,
+      disabledAttributesConfig,
     });
   }, [
     dimensions,
@@ -57,6 +59,7 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
     dimensionSecondaryActionConfig,
     attributeSecondaryActionConfig,
     onScrolledToBottom,
+    disabledAttributesConfig,
   ]);
   return (
     <>
@@ -77,11 +80,12 @@ const convertDimensionsBrowserProps = ({
   attributeSecondaryActionConfig,
   dimensionSecondaryActionConfig,
   onScrolledToBottom,
+  disabledAttributesConfig,
 }: DimensionsBrowserProps): GroupedItemsBrowserProps => {
   const findDimension = getDimensionFinder(dimensions);
   const findAttribute = getAttributeFinder(dimensions);
   return {
-    groupedItems: convertDimensionsToGroupedItems(dimensions),
+    groupedItems: convertDimensionsToGroupedItems(dimensions, disabledAttributesConfig),
     itemActionConfig:
       attributeActionConfig && convertAttributeActionConfig(attributeActionConfig, findAttribute),
     itemSecondaryActionConfig:
@@ -106,17 +110,30 @@ function isRealAttribute(attribute: Attribute | Dimension): attribute is Attribu
   return MetadataTypes.isAttribute(attribute);
 }
 
-function convertDimensionsToGroupedItems(dimensions: Dimension[]): ItemsGroup[] {
+function convertDimensionsToGroupedItems(
+  dimensions: Dimension[],
+  disabledAttributesConfig?: DimensionsBrowserProps['disabledAttributesConfig'],
+): ItemsGroup[] {
   return dimensions.map((dimension) => {
-    const attributishElements = getAttributishElements(dimension);
+    const attributiveElements = getAttributiveElements(dimension);
     return {
       title: dimension.name,
       id: dimension.name,
-      items: attributishElements.map((attribute) => ({
-        id: attribute.id,
-        title: attribute.name,
-        Icon: attributeIconMapping[attribute.type],
-      })),
+      items: attributiveElements.map((attribute) => {
+        const isDisabled = disabledAttributesConfig?.disabledAttributes.some(
+          // on our default dashboards we have a case of filter attributes with table name in lowercase,
+          // when officially they are not, so we need to compare them in a case insensitive way
+          (disabledAttribute) =>
+            attribute.id.toLocaleLowerCase() === disabledAttribute.id.toLocaleLowerCase(),
+        );
+        return {
+          id: attribute.id,
+          title: attribute.name,
+          Icon: attributeIconMapping[attribute.type],
+          isDisabled,
+          hoverTooltip: isDisabled ? disabledAttributesConfig?.getTooltip?.(attribute) : undefined,
+        };
+      }),
       Icon: TableIcon,
     };
   }, []);
@@ -167,7 +184,7 @@ function convertDimensionSecondaryActionConfig(
   };
 }
 
-function getAttributishElements(dimension: Dimension): AttributiveElement[] {
+function getAttributiveElements(dimension: Dimension): AttributiveElement[] {
   const pureAttributes = dimension.attributes.filter(isRealAttribute);
   const dateDimensions = dimension.dimensions.filter(isDateDimension);
   return [...pureAttributes, ...dateDimensions].sort((a, b) => a.name.localeCompare(b.name));
@@ -194,7 +211,7 @@ function getDimensionFinder(dimensions: Dimension[]): (group: ItemsGroup) => Dim
  */
 function getAttributeFinder(dimensions: Dimension[]): (item: Item) => AttributiveElement {
   const attributeMap = new Map(
-    dimensions.flatMap(getAttributishElements).map((attribute) => [attribute.id, attribute]),
+    dimensions.flatMap(getAttributiveElements).map((attribute) => [attribute.id, attribute]),
   );
   return (item) => {
     const attribute = attributeMap.get(item.id);

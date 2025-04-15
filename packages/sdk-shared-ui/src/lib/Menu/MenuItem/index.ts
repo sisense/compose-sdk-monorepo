@@ -1,2 +1,2 @@
-export { MenuItem, itemTypes } from './MenuItem';
-export type { MenuItemProps, ItemType } from './MenuItem';
+export type { ItemType, MenuItemProps } from './MenuItem';
+export { itemTypes, MenuItem } from './MenuItem';

@@ -1,11 +1,11 @@
+import '@testing-library/jest-dom';
+
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
 import { Input } from './Input';
 import styles from './Input.module.scss';
-
-import '@testing-library/jest-dom';
 
 describe('Input Component', () => {
   it('should render correctly with basic props', () => {

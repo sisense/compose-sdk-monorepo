@@ -14,6 +14,11 @@ module.exports = {
       files: ['*.{ts,js,tsx,jsx}'],
       excludedFiles: ['**/*.config.{ts,js}', '**/*.workspace.{ts,js}'],
       extends: ['@sisense/eslint-config/typescript/react', 'plugin:i18next/recommended'],
+      rules: {
+        'simple-import-sort/imports': 'error',
+        'simple-import-sort/exports': 'error',
+      },
+      plugins: ['simple-import-sort'],
       overrides: [
         {
           // https://stackoverflow.com/questions/66773897/react-using-typescript-dont-use-as-a-type
@@ -129,6 +134,14 @@ module.exports = {
           files: ['packages/sdk-ui/analytics-composer/**/*.{ts,tsx}'],
           rules: {
             'import/extensions': ['error', 'ignorePackages'],
+          },
+        },
+        {
+          // Temporarily disable import sorting for the sdk-ui package
+          files: ['packages/sdk-ui/**/*.{ts,js,tsx,jsx}'],
+          rules: {
+            'simple-import-sort/imports': 'off',
+            'simple-import-sort/exports': 'off',
           },
         },
       ],

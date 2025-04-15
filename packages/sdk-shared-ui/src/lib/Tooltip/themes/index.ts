@@ -1,1 +1,1 @@
-export { tooltipTheme, type TooltipTheme } from './tooltipTheme';
+export { type TooltipTheme, tooltipTheme } from './tooltipTheme';

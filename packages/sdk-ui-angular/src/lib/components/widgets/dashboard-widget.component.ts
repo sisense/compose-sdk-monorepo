@@ -8,18 +8,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  DashboardWidget,
-  type DashboardWidgetProps,
   ComponentAdapter,
-  createElement,
+  DashboardWidget as DashboardWidgetPreact,
+  type DashboardWidgetProps,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 
 /**
  * The Dashboard Widget component, which is a thin wrapper on {@link ChartWidgetComponent},
@@ -149,36 +149,33 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
   @Input()
   drilldownOptions: DashboardWidgetProps['drilldownOptions'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof DashboardWidgetPreact>;
 
   constructor(
     private sisenseContextService: SisenseContextService,
     private themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(DashboardWidgetPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /** @internal */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /** @internal */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
   /** @internal */
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): DashboardWidgetProps {
+    return {
       widgetOid: this.widgetOid,
       dashboardOid: this.dashboardOid,
       filters: this.filters,
@@ -191,8 +188,6 @@ export class DashboardWidgetComponent implements AfterViewInit, OnChanges, OnDes
       highlightSelectionDisabled: this.highlightSelectionDisabled,
       drilldownOptions: this.drilldownOptions,
     };
-
-    return createElement(DashboardWidget, props);
   }
 
   /** @internal */

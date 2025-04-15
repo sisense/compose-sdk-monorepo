@@ -1,8 +1,8 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-
 import '@testing-library/jest-dom';
+
+import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { DEPRECATED_Icon, DEPRECATED_IconProps } from './DEPRECATED_Icon';
 

@@ -1,17 +1,17 @@
 import {
-  Filter,
-  Measure,
   Attribute,
   Cell,
-  QueryResultData,
   DataSource,
-  PivotAttribute,
-  PivotMeasure,
-  PivotQueryResultData,
-  PivotGrandTotals,
+  Filter,
   FilterRelationsJaql,
   JaqlDataSource,
+  Measure,
   MetadataItem,
+  PivotAttribute,
+  PivotGrandTotals,
+  PivotMeasure,
+  PivotQueryResultData,
+  QueryResultData,
 } from '@sisense/sdk-data';
 
 /**

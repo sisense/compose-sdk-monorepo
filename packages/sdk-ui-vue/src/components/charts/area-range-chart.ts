@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { AreaRangeChart as AreaRangeChartPreact } from '@sisense/sdk-ui-preact';
 import type { AreaRangeChartProps as AreaRangeChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!AreaRangeChart | `AreaRangeChart`} component.
@@ -123,5 +123,5 @@ export const AreaRangeChart = defineComponent({
      */
     styleOptions: Object as PropType<AreaRangeChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(AreaRangeChartPreact, props),
+  setup: (props) => setupHelper(AreaRangeChartPreact, props as AreaRangeChartPropsPreact),
 });

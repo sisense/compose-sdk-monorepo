@@ -1,6 +1,6 @@
 import { defineComponent, type PropType } from 'vue';
 import { Chart as ChartPreact, type ChartProps } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
 export { ChartProps };
@@ -139,5 +139,5 @@ export const Chart = defineComponent({
      */
     refreshCounter: Number as PropType<ChartProps['refreshCounter']>,
   },
-  setup: (props) => setupHelper(ChartPreact, props),
+  setup: (props) => setupHelper(ChartPreact, props as ChartProps),
 });

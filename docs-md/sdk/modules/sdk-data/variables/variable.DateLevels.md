@@ -12,82 +12,82 @@ Levels for [DateDimension](../interfaces/interface.DateDimension.md)
 
 ### `AggHours`
 
-**AggHours**: `string` = `'AggHours'`
+**`readonly`** **AggHours**: `"AggHours"` = `'AggHours'`
 
 ***
 
 ### `AggMinutesRoundTo1`
 
-**AggMinutesRoundTo1**: `string` = `'AggMinutesRoundTo1'`
+**`readonly`** **AggMinutesRoundTo1**: `"AggMinutesRoundTo1"` = `'AggMinutesRoundTo1'`
 
 ***
 
 ### `AggMinutesRoundTo15`
 
-**AggMinutesRoundTo15**: `string` = `'AggMinutesRoundTo15'`
+**`readonly`** **AggMinutesRoundTo15**: `"AggMinutesRoundTo15"` = `'AggMinutesRoundTo15'`
 
 ***
 
 ### `AggMinutesRoundTo30`
 
-**AggMinutesRoundTo30**: `string` = `'AggMinutesRoundTo30'`
+**`readonly`** **AggMinutesRoundTo30**: `"AggMinutesRoundTo30"` = `'AggMinutesRoundTo30'`
 
 ***
 
 ### `Days`
 
-**Days**: `string` = `'Days'`
+**`readonly`** **Days**: `"Days"` = `'Days'`
 
 ***
 
 ### `Hours`
 
-**Hours**: `string` = `'Hours'`
+**`readonly`** **Hours**: `"Hours"` = `'Hours'`
 
 ***
 
 ### `Minutes`
 
-**Minutes**: `string` = `'Minutes'`
+**`readonly`** **Minutes**: `"Minutes"` = `'Minutes'`
 
 ***
 
 ### `MinutesRoundTo15`
 
-**MinutesRoundTo15**: `string` = `'MinutesRoundTo15'`
+**`readonly`** **MinutesRoundTo15**: `"MinutesRoundTo15"` = `'MinutesRoundTo15'`
 
 ***
 
 ### `MinutesRoundTo30`
 
-**MinutesRoundTo30**: `string` = `'MinutesRoundTo30'`
+**`readonly`** **MinutesRoundTo30**: `"MinutesRoundTo30"` = `'MinutesRoundTo30'`
 
 ***
 
 ### `Months`
 
-**Months**: `string` = `'Months'`
+**`readonly`** **Months**: `"Months"` = `'Months'`
 
 ***
 
 ### `Quarters`
 
-**Quarters**: `string` = `'Quarters'`
+**`readonly`** **Quarters**: `"Quarters"` = `'Quarters'`
 
 ***
 
 ### `Seconds`
 
-**Seconds**: `string` = `'Seconds'`
+**`readonly`** **Seconds**: `"Seconds"` = `'Seconds'`
 
 ***
 
 ### `Weeks`
 
-**Weeks**: `string` = `'Weeks'`
+**`readonly`** **Weeks**: `"Weeks"` = `'Weeks'`
 
 ***
 
 ### `Years`
 
-**Years**: `string` = `'Years'`
+**`readonly`** **Years**: `"Years"` = `'Years'`

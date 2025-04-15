@@ -7,21 +7,22 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { ComponentAdapter, createElement } from '@sisense/sdk-ui-preact';
-import {
-  GetNlgInsights,
-  type GetNlgInsightsProps as GetNlgInsightsPropsPreact,
-} from '@sisense/sdk-ui-preact/ai';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
-  SisenseContextService,
-  ThemeService,
   createSisenseContextConnector,
   createThemeContextConnector,
+  SisenseContextService,
+  ThemeService,
 } from '@sisense/sdk-ui-angular';
-import { AiService } from '../services/ai.service';
+import { ComponentAdapter } from '@sisense/sdk-ui-preact';
+import {
+  GetNlgInsights as GetNlgInsightsPreact,
+  type GetNlgInsightsProps as GetNlgInsightsPropsPreact,
+} from '@sisense/sdk-ui-preact/ai';
+
 import { createAiContextConnector } from '../component-wrapper-helpers';
-import { template, rootId } from '../component-wrapper-helpers/template';
+import { rootId, template } from '../component-wrapper-helpers/template';
+import { AiService } from '../services/ai.service';
 
 /**
  * Props of the {@link GetNlgInsightsComponent}.
@@ -69,7 +70,6 @@ export class ExampleComponent {
  * ```
  *
  * <img src="media://angular-get-nlg-insights-example.png" width="700px" />
- *
  * @group Generative AI
  * @beta
  */
@@ -114,7 +114,7 @@ export class GetNlgInsightsComponent implements AfterViewInit, OnChanges, OnDest
   @Input()
   verbosity: GetNlgInsightsProps['verbosity'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof GetNlgInsightsPreact>;
 
   /**
    * Constructor for the `GetNlgInsightsProps`.
@@ -143,21 +143,18 @@ export class GetNlgInsightsComponent implements AfterViewInit, OnChanges, OnDest
      */
     public aiService: AiService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-        createAiContextConnector(this.aiService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(GetNlgInsightsPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+      createAiContextConnector(this.aiService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -165,20 +162,18 @@ export class GetNlgInsightsComponent implements AfterViewInit, OnChanges, OnDest
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): GetNlgInsightsPropsPreact {
+    return {
       dataSource: this.dataSource,
       dimensions: this.dimensions,
       measures: this.measures,
       filters: this.filters,
       verbosity: this.verbosity,
     };
-
-    return createElement(GetNlgInsights, props);
   }
 
   /**

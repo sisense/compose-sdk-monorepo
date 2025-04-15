@@ -1,7 +1,7 @@
 import createTheme from '@mui/material/styles/createTheme';
+
 // import { injectStylesWithWrapper } from '@sbi/styleguide';
 //import { calcStyles } from './uiCustomization';
-
 // TODO: review this later
 // injectStylesWithWrapper && injectStylesWithWrapper(calcStyles);
 import { siColors, type SisenseTheme } from '../../themes';

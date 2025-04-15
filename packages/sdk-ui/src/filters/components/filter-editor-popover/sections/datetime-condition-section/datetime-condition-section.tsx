@@ -9,6 +9,7 @@ import { isExcludeMembersFilter, isRelativeDateFilterWithAnchor } from '../../ut
 import { DatetimeLimits } from '../types.js';
 import { DatetimeExcludeConditionForm } from './condition-forms/datetime-exclude-condition-form.js';
 import { DatetimeIsWithinConditionForm } from './condition-forms/datetime-is-within-condition-form.js';
+import { useFilterEditorContext } from '../../filter-editor-context';
 
 const ConditionSelect = styled(SingleSelect<DatetimeCondition>)`
   width: 128px;
@@ -19,6 +20,10 @@ enum DatetimeCondition {
   EXCLUDE = 'exclude',
   IS_WITHIN = 'isWithin',
 }
+
+const membersOnlyConditionItems = [
+  { value: DatetimeCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
+];
 
 const conditionItems = [
   { value: DatetimeCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },
@@ -72,16 +77,18 @@ export const DatetimeConditionSection = ({
   onChange,
 }: DatetimeConditionSectionProps) => {
   const { t } = useTranslation();
+  const { membersOnlyMode } = useFilterEditorContext();
   const initialFilterData = getDatetimeConditionFilterData(filter);
   const [condition, setCondition] = useState<DatetimeCondition>(initialFilterData.condition);
   const [editedFilter, setEditedFilter] = useState<Filter | null>(initialFilterData.editedFilter);
+  const conditionItemsToUse = membersOnlyMode ? membersOnlyConditionItems : conditionItems;
   const translatedConditionItems = useMemo(
     () =>
-      conditionItems.map((item) => ({
+      conditionItemsToUse.map((item) => ({
         ...item,
         displayValue: t(item.displayValue),
       })),
-    [t],
+    [t, conditionItemsToUse],
   );
 
   const handleSectionSelect = useCallback(() => {

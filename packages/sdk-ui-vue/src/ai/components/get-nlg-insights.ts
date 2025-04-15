@@ -2,8 +2,8 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { GetNlgInsights as GetNlgInsightsPreact } from '@sisense/sdk-ui-preact/ai';
 import type { GetNlgInsightsProps as GetNlgInsightsPropsPreact } from '@sisense/sdk-ui-preact/ai';
-import { createDefaultContextConnectors, setupHelper } from '../../setup-helper';
-import { createAiContextConnector } from '../providers/ai-context-provider';
+import { createDefaultContextConnectors, setupHelper } from '../../helpers/setup-helper';
+import { createAiContextConnector } from '../helpers/context-connectors';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!GetNlgInsights | `GetNlgInsights`} component.
@@ -72,7 +72,7 @@ export const GetNlgInsights = defineComponent({
     verbosity: String as PropType<GetNlgInsightsProps['verbosity']>,
   },
   setup: (props) =>
-    setupHelper(GetNlgInsightsPreact, props, () => [
+    setupHelper(GetNlgInsightsPreact, props as GetNlgInsightsPropsPreact, [
       ...createDefaultContextConnectors(),
       createAiContextConnector(),
     ]),

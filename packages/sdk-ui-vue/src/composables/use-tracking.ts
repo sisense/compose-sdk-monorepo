@@ -1,5 +1,5 @@
 import { trackHook } from '@sisense/sdk-ui-preact';
-import { getSisenseContext } from '../providers/sisense-context-provider.js';
+import { getSisenseContext } from '../providers/sisense-context-provider';
 import { ref, watchEffect } from 'vue';
 
 /**

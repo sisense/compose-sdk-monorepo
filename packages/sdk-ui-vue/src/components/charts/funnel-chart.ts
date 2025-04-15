@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { FunnelChart as FunnelChartPreact } from '@sisense/sdk-ui-preact';
 import type { FunnelChartProps as FunnelChartPropsPreact } from '@sisense/sdk-ui-preact';
-import { setupHelper } from '../../setup-helper';
+import { setupHelper } from '../../helpers/setup-helper';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!FunnelChart | `FunnelChart`} component.
@@ -114,5 +114,5 @@ export const FunnelChart = defineComponent({
      */
     styleOptions: Object as PropType<FunnelChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(FunnelChartPreact, props),
+  setup: (props) => setupHelper(FunnelChartPreact, props as FunnelChartPropsPreact),
 });

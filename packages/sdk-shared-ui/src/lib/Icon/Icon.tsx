@@ -1,8 +1,8 @@
-import React, { type ForwardedRef, forwardRef } from 'react';
 import { IconProps as MuiIconProps } from '@mui/material/Icon';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import SvgIcon from '@mui/material/SvgIcon';
 import classNames from 'classnames';
+import React, { type ForwardedRef, forwardRef } from 'react';
 
 import { iconTheme } from './themes';
 

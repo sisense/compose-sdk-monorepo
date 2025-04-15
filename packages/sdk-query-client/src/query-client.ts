@@ -1,3 +1,16 @@
+import { DataSource, MetadataTypes } from '@sisense/sdk-data';
+import { PivotClient } from '@sisense/sdk-pivot-client';
+import { HttpClient } from '@sisense/sdk-rest-client';
+import { ExecutionResultStatus } from '@sisense/task-manager';
+
+import { QueryClient } from './interfaces.js';
+import { QueryApiDispatcher } from './query-api-dispatcher/query-api-dispatcher.js';
+import { QueryTaskManager } from './query-task-manager/query-task-manager.js';
+import {
+  PivotQueryTaskPassport,
+  QueryTaskPassport,
+} from './query-task-manager/query-task-passport.js';
+import { TranslatableError } from './translation/translatable-error.js';
 import {
   ExecutingCsvQueryResult,
   ExecutingPivotQueryResult,
@@ -6,18 +19,6 @@ import {
   QueryDescription,
   QueryExecutionConfig,
 } from './types.js';
-import { QueryClient } from './interfaces.js';
-import { QueryTaskManager } from './query-task-manager/query-task-manager.js';
-import {
-  PivotQueryTaskPassport,
-  QueryTaskPassport,
-} from './query-task-manager/query-task-passport.js';
-import { ExecutionResultStatus } from '@sisense/task-manager';
-import { QueryApiDispatcher } from './query-api-dispatcher/query-api-dispatcher.js';
-import { DataSource, MetadataTypes } from '@sisense/sdk-data';
-import { HttpClient } from '@sisense/sdk-rest-client';
-import { TranslatableError } from './translation/translatable-error.js';
-import { PivotClient } from '@sisense/sdk-pivot-client';
 
 /** @internal */
 export const QUERY_DEFAULT_LIMIT = 20000;

@@ -1,9 +1,10 @@
 /// <reference lib="dom" />
 import { normalizeUrl } from '@sisense/sdk-common';
-import { Authenticator } from './interfaces.js';
+
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
 import { errorInterceptor } from './interceptors.js';
+import { Authenticator } from './interfaces.js';
 
 export class PasswordAuthenticator extends BaseAuthenticator {
   private readonly url: string;

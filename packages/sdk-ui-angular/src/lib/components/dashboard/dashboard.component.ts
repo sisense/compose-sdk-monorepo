@@ -8,18 +8,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  Dashboard,
-  type DashboardProps as DashboardPropsPreact,
   ComponentAdapter,
-  createElement,
+  Dashboard as DashboardPreact,
+  type DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
+
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 import type { DashboardConfig } from '../../types';
 
 /**
@@ -138,7 +138,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   styleOptions: DashboardProps['styleOptions'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof DashboardPreact>;
 
   /**
    * Constructor for the `Dashboard` component.
@@ -160,20 +160,17 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
      */
     public themeService: ThemeService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(DashboardPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -181,12 +178,12 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): DashboardPropsPreact {
+    return {
       title: this.title,
       layoutOptions: this.layoutOptions,
       config: this.config,
@@ -196,8 +193,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
       widgetsOptions: this.widgetsOptions,
       styleOptions: this.styleOptions,
     };
-
-    return createElement(Dashboard, props);
   }
 
   /**

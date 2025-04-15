@@ -1,5 +1,5 @@
 import { DataSource } from '../interfaces.js';
-import { FilterJaql, JaqlDataSource, Sort } from './types.js';
+import { DateLevel, FilterJaql, JaqlDataSource, Sort } from './types.js';
 
 /**
  * @internal
@@ -390,6 +390,15 @@ export interface LevelAttribute extends Attribute {
     dateTimeLevel?: string;
     bucket?: string;
   };
+
+  /**
+   * Gets a {@link LevelAttribute} with the given granularity
+   *
+   * @param granularity - Date granularity
+   * @returns New instance representing {@link LevelAttribute} with provided granularity
+   * @internal
+   */
+  setGranularity(granularity: DateLevel): LevelAttribute;
 }
 
 /**

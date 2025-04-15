@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import {
+  type ExecuteCsvQueryParams as ExecuteCsvQueryParamsPreact,
+  executePivotQuery,
+  type ExecutePivotQueryParams as ExecutePivotQueryParamsPreact,
   executeQuery,
   executeQueryByWidgetId,
-  executePivotQuery,
-  type ExecuteQueryParams as ExecuteQueryParamsPreact,
   type ExecuteQueryByWidgetIdParams as ExecuteQueryByWidgetIdParamsPreact,
-  type ExecutePivotQueryParams as ExecutePivotQueryParamsPreact,
+  type ExecuteQueryParams as ExecuteQueryParamsPreact,
+  HookAdapter,
+  useExecuteCsvQueryInternal,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from './sisense-context.service';
+
+import { createSisenseContextConnector } from '../component-wrapper-helpers';
 import { TrackableService } from '../decorators/trackable.decorator';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { SisenseContextService } from './sisense-context.service';
 
 interface ExecuteQueryHandlers {
   /** Sync or async callback that allows to modify the JAQL payload before it is sent to the server. */
@@ -41,6 +46,13 @@ export interface ExecuteQueryByWidgetIdParams
  */
 export interface ExecutePivotQueryParams
   extends Omit<ExecutePivotQueryParamsPreact, 'enabled' | 'onBeforeQuery'>,
+    Omit<ExecuteQueryHandlers, 'onBeforeQuery'> {}
+
+/**
+ * Parameters for CSV data query execution.
+ */
+export interface ExecuteCsvQueryParams
+  extends Omit<ExecuteCsvQueryParamsPreact, 'enabled' | 'onBeforeQuery'>,
     Omit<ExecuteQueryHandlers, 'onBeforeQuery'> {}
 
 /**
@@ -156,5 +168,35 @@ export class QueryService {
     );
 
     return { data };
+  }
+
+  /**
+   * Executes a CSV data query.
+   * Similar to {@link QueryService.executeQuery}, but returns the data in CSV format as text or as a stream.
+   *
+   * @param params - CSV query parameters
+   * @return CSV query result
+   */
+  async executeCsvQuery(params: ExecuteCsvQueryParams) {
+    const hookAdapter = new HookAdapter(useExecuteCsvQueryInternal, [
+      createSisenseContextConnector(this.sisenseContextService),
+    ]);
+
+    const resultPromise = new Promise<{ data: Blob | string }>((resolve, reject) => {
+      hookAdapter.subscribe((res) => {
+        const { data, isSuccess, isError, error } = res;
+        if (isSuccess) {
+          resolve({ data });
+        } else if (isError) {
+          reject(error);
+        }
+      });
+    });
+
+    hookAdapter.run(params);
+
+    return resultPromise.finally(() => {
+      hookAdapter.destroy();
+    });
   }
 }

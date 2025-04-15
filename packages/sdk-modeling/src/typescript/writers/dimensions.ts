@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import {
-  Dimension,
-  DateDimension,
   Attribute,
-  MetadataTypes,
-  LevelAttribute,
+  DateDimension,
   DateLevels,
+  Dimension,
+  LevelAttribute,
+  MetadataTypes,
   normalizeName,
 } from '@sisense/sdk-data';
 
-import { ElementWriter, NEWLINE, escapeSpecialChars, rnt, writeIndented } from './base.js';
 import { prepareDescription } from '../utils/prepare-description.js';
+import { ElementWriter, escapeSpecialChars, NEWLINE, rnt, writeIndented } from './base.js';
 
 export class DimensionWriter extends ElementWriter<Dimension> {
   readonly isMultiAtts: boolean;

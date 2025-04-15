@@ -1,23 +1,22 @@
-import React, { ForwardedRef } from 'react';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import MuiTablePagination, {
   type TablePaginationProps as MuiTablePaginationProps,
 } from '@mui/material/TablePagination';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
-import { useMeasure } from 'react-use';
 import { UsePaginationProps } from '@mui/material/usePagination/usePagination';
+import React, { ForwardedRef } from 'react';
+import { useMeasure } from 'react-use';
 
+import { Icon, type IconProps } from '../Icon';
+import { siColors } from '../themes';
+import { Typography } from '../Typography';
+import { PaginationActionsComponent } from './PaginationActionsComponent';
 import { TablePaginationContext } from './TablePaginationContext';
+import { type TablePaginationTheme, tablePaginationTheme } from './themes';
 import {
   getCurrentBreakpoint,
   RESPONSIVE_TABLE_PAGINATION_CLASS,
   tablePaginationResponsiveWidth,
 } from './themes/tablePaginationResponsiveDesign';
-import { PaginationActionsComponent } from './PaginationActionsComponent';
-import { Typography } from '../Typography';
-import { Icon, type IconProps } from '../Icon';
-
-import { siColors } from '../themes';
-import { tablePaginationTheme, type TablePaginationTheme } from './themes';
 
 type MuiSelectDisplayProps = React.HTMLAttributes<HTMLDivElement> & {
   'data-testid'?: string;

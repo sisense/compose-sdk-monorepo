@@ -24,6 +24,7 @@ export {
 } from './use-get-query-recommendations';
 export { useChatSession, type UseChatSessionResult } from './use-chat-session';
 export { useLastNlqResponse } from './use-last-nlq-response';
+export { useFinalNlqResponse } from './use-final-nlq-response';
 export type {
   GetNlgInsightsRequest,
   GetNlgInsightsResponse,
@@ -44,6 +45,10 @@ export {
 export { NlqChartWidget, type NlqChartWidgetProps } from './chart/nlq-chart-widget';
 
 export { ChatRestApi } from './api/chat-rest-api';
-export { CustomAiContextProvider, type CustomAiContext } from './custom-ai-context-provider';
+export {
+  CustomAiContextProvider,
+  type CustomAiContext,
+  type CustomAiContextProviderProps,
+} from './custom-ai-context-provider';
 export { prepareGetNlgInsightsPayload } from './use-get-nlg-insights';
 export { widgetComposer } from '@/analytics-composer';

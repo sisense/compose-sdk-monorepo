@@ -1,10 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import type { TooltipProps } from 'rc-tooltip/lib/Tooltip';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { DEPRECATED_Tooltip } from '../DEPRECATED_Tooltip';
-
 import type { PositioningConfig } from './align.interface';
 
 const noop = () => {};

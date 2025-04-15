@@ -1,3 +1,18 @@
+import { TranslatableError } from '../../../translation/translatable-error.js';
+import { Attribute, Filter, LevelAttribute, MembersFilterConfig } from '../../interfaces.js';
+import { FilterJaql } from '../../types.js';
+import * as filterFactory from '../factory.js';
+import { getDefaultBaseFilterConfig, simplifyFilterConfig } from '../filter-config-utils.js';
+import {
+  createAttributeFromFilterJaql,
+  createMeasureFromFilterJaql,
+} from './attribute-measure-util.js';
+import {
+  createAttributeFilterFromConditionFilterJaql,
+  createMeasureFilterFromConditionFilterJaql,
+} from './condition-filter-util.js';
+import { withComposeCode } from './filter-code-util.js';
+import { extractFilterTypeFromFilterJaql } from './filter-types-util.js';
 import {
   BaseFilterJaql,
   ConditionFilterJaql,
@@ -9,21 +24,6 @@ import {
   RangeFilterJaql,
   SpecificItemsFilterJaql,
 } from './types.js';
-import { Attribute, Filter, LevelAttribute, MembersFilterConfig } from '../../interfaces.js';
-import { FilterJaql } from '../../types.js';
-import * as filterFactory from '../factory.js';
-import {
-  createAttributeFilterFromConditionFilterJaql,
-  createMeasureFilterFromConditionFilterJaql,
-} from './condition-filter-util.js';
-import { extractFilterTypeFromFilterJaql } from './filter-types-util.js';
-import { withComposeCode } from './filter-code-util.js';
-import {
-  createAttributeFromFilterJaql,
-  createMeasureFromFilterJaql,
-} from './attribute-measure-util.js';
-import { TranslatableError } from '../../../translation/translatable-error.js';
-import { getDefaultBaseFilterConfig, simplifyFilterConfig } from '../filter-config-utils.js';
 
 /**
  * Creates a generic filter (aka pass-through JAQL filter) if the JAQL cannot be translated to a specific filter type.

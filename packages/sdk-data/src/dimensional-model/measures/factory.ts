@@ -3,24 +3,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
+import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
+import { createCalculatedMeasureHelper } from '../../utils.js';
+import { normalizeName } from '../base.js';
+import { CustomFormulaJaql } from '../filters/utils/types.js';
 import {
   Attribute,
-  Measure,
-  MeasureTemplate,
-  Filter,
-  MeasureContext,
-  CalculatedMeasure,
   BaseMeasure,
+  CalculatedMeasure,
   CustomFormulaContext,
+  Filter,
+  Measure,
+  MeasureContext,
+  MeasureTemplate,
 } from '../interfaces.js';
-import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
-
 import { AggregationTypes, MetadataTypes } from '../types.js';
-import { normalizeName } from '../base.js';
-import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
-import { createCalculatedMeasureHelper } from '../../utils.js';
-import { CustomFormulaJaql } from '../filters/utils/types.js';
-import { TranslatableError } from '../../translation/translatable-error.js';
+import { DimensionalBaseMeasure, DimensionalCalculatedMeasure } from './measures.js';
 
 /**
  * Defines the different numeric operators that can be used with numeric filters

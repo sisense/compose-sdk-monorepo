@@ -1,2 +1,2 @@
-export { DropdownButtonSearch } from './DropdownButtonSearch';
 export type { DropdownButtonSearchProps } from './DropdownButtonSearch';
+export { DropdownButtonSearch } from './DropdownButtonSearch';

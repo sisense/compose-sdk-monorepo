@@ -1,7 +1,8 @@
-import { DecoratorsModule } from './decorators.module';
 import { trackProductEvent } from '@sisense/sdk-tracking';
-import packageVersion from '../../version';
 import { TrackingEventType } from '@sisense/sdk-tracking/src/registry';
+
+import packageVersion from '../../version';
+import { DecoratorsModule } from './decorators.module';
 
 export function Trackable(target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;

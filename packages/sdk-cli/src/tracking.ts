@@ -1,5 +1,6 @@
-import { TrackingEventDetails, trackProductEvent } from '@sisense/sdk-tracking';
 import { HttpClient } from '@sisense/sdk-rest-client';
+import { TrackingEventDetails, trackProductEvent } from '@sisense/sdk-tracking';
+
 import { PKG_VERSION } from './package-version.js';
 
 interface ExecutionEventDetails extends TrackingEventDetails {

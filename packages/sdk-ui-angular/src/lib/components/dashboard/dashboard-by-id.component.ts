@@ -8,20 +8,20 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  DashboardById,
-  type DashboardByIdProps as DashboardByIdPropsPreact,
   ComponentAdapter,
-  createElement,
+  DashboardById as DashboardByIdPreact,
+  type DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
-import { SisenseContextService } from '../../services/sisense-context.service';
-import { ThemeService } from '../../services/theme.service';
+
 import {
   createPluginsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
-import { template, rootId } from '../../component-wrapper-helpers/template';
+import { rootId, template } from '../../component-wrapper-helpers/template';
 import { PluginsService } from '../../services/plugins.service';
+import { SisenseContextService } from '../../services/sisense-context.service';
+import { ThemeService } from '../../services/theme.service';
 import type { DashboardByIdConfig } from '../../types';
 
 /**
@@ -82,7 +82,7 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
   @Input()
   config: DashboardByIdProps['config'];
 
-  private componentAdapter: ComponentAdapter;
+  private componentAdapter: ComponentAdapter<typeof DashboardByIdPreact>;
 
   /**
    * Constructor for the `DashboardById` component.
@@ -111,21 +111,18 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
      */
     public pluginService: PluginsService,
   ) {
-    this.componentAdapter = new ComponentAdapter(
-      () => this.createPreactComponent(),
-      [
-        createSisenseContextConnector(this.sisenseContextService),
-        createThemeContextConnector(this.themeService),
-        createPluginsContextConnector(this.pluginService),
-      ],
-    );
+    this.componentAdapter = new ComponentAdapter(DashboardByIdPreact, [
+      createSisenseContextConnector(this.sisenseContextService),
+      createThemeContextConnector(this.themeService),
+      createPluginsContextConnector(this.pluginService),
+    ]);
   }
 
   /**
    * @internal
    */
   ngAfterViewInit() {
-    this.componentAdapter.render(this.preactRef.nativeElement);
+    this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
   }
 
   /**
@@ -133,17 +130,15 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
    */
   ngOnChanges() {
     if (this.preactRef) {
-      this.componentAdapter.render(this.preactRef.nativeElement);
+      this.componentAdapter.render(this.preactRef.nativeElement, this.getPreactComponentProps());
     }
   }
 
-  private createPreactComponent() {
-    const props = {
+  private getPreactComponentProps(): DashboardByIdPropsPreact {
+    return {
       dashboardOid: this.dashboardOid,
       config: this.config,
     };
-
-    return createElement(DashboardById, props);
   }
 
   /**

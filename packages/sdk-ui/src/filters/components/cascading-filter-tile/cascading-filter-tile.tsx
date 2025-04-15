@@ -26,6 +26,8 @@ export interface CascadingFilterTileProps {
   onChange: (filter: Filter) => void;
   /** Filter delete callback */
   onDelete?: () => void;
+  /** Filter edit callback */
+  onEdit?: (levelIndex: number) => void;
 }
 
 /**
@@ -44,6 +46,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
       onChange: updateFilterFromProps,
       onDelete,
       dataSource,
+      onEdit,
     } = props;
 
     const { filter, updateFilter } = useSynchronizedFilter<CascadingFilter>(
@@ -96,6 +99,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
                   return newFilter ? handleLevelFilterChange(newFilter, index) : null;
                 }}
                 isLast={index === levelFilters.length - 1}
+                onEdit={onEdit ? () => onEdit?.(index) : undefined}
               />
             );
           });
@@ -106,6 +110,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
         design={{
           header: {
             shouldBeShown: false,
+            disableGroupHover: true,
           },
         }}
         locked={filter.config.locked}

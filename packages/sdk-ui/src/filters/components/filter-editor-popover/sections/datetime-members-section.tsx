@@ -4,6 +4,7 @@ import { SelectableSection } from '../common/selectable-section';
 import { SearchableMultiSelect } from '../common/select/searchable-multi-select';
 import {
   Attribute,
+  CompleteMembersFilterConfig,
   DateLevels,
   DimensionalLevelAttribute,
   Filter,
@@ -32,7 +33,7 @@ import {
 } from './utils';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
-  return members.length
+  return members.length || (config as CompleteMembersFilterConfig)?.deactivatedMembers?.length
     ? filterFactory.members(attribute, members, { ...config, excludeMembers: false })
     : null;
 }

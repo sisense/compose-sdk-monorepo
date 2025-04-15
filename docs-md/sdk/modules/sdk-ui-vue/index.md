@@ -61,6 +61,7 @@ Vue context components
 
 Vue composables for working with queries
 
+- [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
 ## Dashboards

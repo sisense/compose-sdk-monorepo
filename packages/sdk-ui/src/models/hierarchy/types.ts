@@ -4,7 +4,6 @@ import type { Attribute, DataSource } from '@sisense/sdk-data';
  * Options for retrieving hierarchies.
  *
  * @internal
- *
  */
 export type GetHierarchiesOptions = {
   /**

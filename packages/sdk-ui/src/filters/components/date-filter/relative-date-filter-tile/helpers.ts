@@ -1,4 +1,5 @@
 import {
+  DateLevel,
   DateLevels,
   DateOperators,
   DimensionalLevelAttribute,
@@ -18,14 +19,14 @@ export function createAnchorDateFromRelativeDateFilter(
 ): dayjs.Dayjs {
   const { offset, operator, attribute, anchor } = filter;
   const date = dayjs(anchor);
-  const granularity = (attribute as DimensionalLevelAttribute).granularity;
+  const granularity = (attribute as DimensionalLevelAttribute).granularity as DateLevel;
   const supportedGranularityToOffset = new Set([
     DateLevels.Years,
     DateLevels.Quarters,
     DateLevels.Months,
     DateLevels.Weeks,
     DateLevels.Days,
-  ]);
+  ]) as Set<DateLevel>;
 
   if (!supportedGranularityToOffset.has(granularity)) {
     throw new TranslatableError('errors.filter.unsupportedDatetimeLevel');

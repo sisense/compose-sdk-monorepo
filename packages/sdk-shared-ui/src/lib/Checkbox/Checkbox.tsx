@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react';
 import MuiCheckbox, { CheckboxProps as MuiCheckboxProps } from '@mui/material/Checkbox';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import React, { forwardRef } from 'react';
 
-import { checkboxTheme, type CheckboxTheme } from './themes';
+import { type CheckboxTheme, checkboxTheme } from './themes';
 
 export type CheckboxProps = {
   dataTestId?: string;

@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import {
-  isFusionAuthenticator,
   FusionAuthenticator,
   FusionWindow,
+  isFusionAuthenticator,
 } from './fusion-authenticator.js';
 
 describe('FusionAuthenticator', () => {

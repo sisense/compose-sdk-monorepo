@@ -1,6 +1,7 @@
-import { dashboardHelpers as dashboardHelpersPreact } from '@sisense/sdk-ui-preact';
-import { DashboardProps } from '../components';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { dashboardHelpers as dashboardHelpersPreact } from '@sisense/sdk-ui-preact';
+
+import { DashboardProps } from '../components';
 
 /**
  * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.replaceFilters}
@@ -87,7 +88,6 @@ export const replaceFilter = (
  * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.modifyFilter}
  *
  * @deprecated Use {@link replaceFilter} instead
- *
  * @param dashboard - The original dashboard (`DashboardProps`) containing the filter to modify.
  * @param filterToModify - The existing filter to be modified.
  * @param newFilter - The new filter to replace the existing one.

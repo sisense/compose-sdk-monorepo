@@ -6,6 +6,7 @@ import {
   DimensionalDateDimension,
   DimensionalLevelAttribute,
 } from '@sisense/sdk-data';
+
 import {
   applyHighlightFilters,
   getMetadataItemId,
