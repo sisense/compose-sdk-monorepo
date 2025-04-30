@@ -10,7 +10,7 @@ import parseISO from 'date-fns/parseISO';
 import uniqBy from 'lodash-es/uniqBy';
 import partition from 'lodash-es/partition';
 import { createDataColumn } from './translate-widget-data-options.js';
-import { DatetimeMask, Panel, PanelItem, WidgetType } from './types.js';
+import { DatetimeMask, Panel, PanelItem, FusionWidgetType } from './types.js';
 import { getEnabledPanelItems, getRootPanelItem } from './utils.js';
 import { DataPoint, DrilldownOptions } from '../types.js';
 import { applyDateFormat } from '../query/date-formats/apply-date-format.js';
@@ -50,10 +50,10 @@ const getDrilldownSelections = (
 /**
  * Gets the panel names allowed for drilling based on the widget type.
  *
- * @param {WidgetType} widgetType - The type of the widget.
+ * @param {FusionWidgetType} widgetType - The type of the widget.
  * @returns {string[]} An array of panel names allowed for drilling.
  */
-function getDrilldownAllowedPanelNames(widgetType: WidgetType) {
+function getDrilldownAllowedPanelNames(widgetType: FusionWidgetType) {
   switch (widgetType) {
     case 'chart/line':
     case 'chart/area':
@@ -67,7 +67,10 @@ function getDrilldownAllowedPanelNames(widgetType: WidgetType) {
   }
 }
 
-const findDrillableItem = (widgetType: WidgetType, panels: Panel[]): PanelItem | undefined => {
+const findDrillableItem = (
+  widgetType: FusionWidgetType,
+  panels: Panel[],
+): PanelItem | undefined => {
   const drillableItems = getDrilldownAllowedPanelNames(widgetType)
     .map((name) => getEnabledPanelItems(panels, name))
     .flat()
@@ -165,7 +168,7 @@ const extractDrilldownHierarchies = (
 };
 
 export const extractDrilldownOptions = (
-  widgetType: WidgetType,
+  widgetType: FusionWidgetType,
   panels: Panel[],
   drillHistory: PanelItem[] = [],
   enableDrillToAnywhere?: boolean,

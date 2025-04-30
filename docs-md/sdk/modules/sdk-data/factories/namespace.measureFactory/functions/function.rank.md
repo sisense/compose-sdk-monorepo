@@ -7,9 +7,9 @@ title: rank
 > **rank**(
   `measure`,
   `name`?,
-  `sort`? = `RankingSortTypes.Descending`,
-  `rankType`? = `RankingTypes.StandardCompetition`,
-  `groupBy`? = `[]`): [`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md)
+  `sort`?,
+  `rankType`?,
+  `groupBy`?): [`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md)
 
 Creates a calculated measure that calculates the rank of a value in a list of values.
 
@@ -32,13 +32,13 @@ The rank type options are:
 
 ## Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `measure` | [`Measure`](../../../interfaces/interface.Measure.md) | `undefined` | Measure to apply the ranking logic to |
-| `name`? | `string` | `undefined` | Name for the new measure |
-| `sort`? | `string` | `RankingSortTypes.Descending` | Sorting for ranking. By default sort order is descending, where the largest number is ranked first. |
-| `rankType`? | `string` | `RankingTypes.StandardCompetition` | How to handle equally ranked items. By default the type is standard competition ranking. |
-| `groupBy`? | [`Attribute`](../../../interfaces/interface.Attribute.md)[] | `[]` | Rank partition attributes |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `measure` | [`Measure`](../../../interfaces/interface.Measure.md) | Measure to apply the ranking logic to |
+| `name`? | `string` | Name for the new measure |
+| `sort`? | `string` | Sorting for ranking. By default sort order is descending, where the largest number is ranked first. |
+| `rankType`? | `string` | How to handle equally ranked items. By default the type is standard competition ranking. |
+| `groupBy`? | [`Attribute`](../../../interfaces/interface.Attribute.md)[] | Rank partition attributes |
 
 ## Returns
 

@@ -91,3 +91,15 @@ Measures of the query
 Offset of the first row to return
 
 If not specified, the default value is `0`
+
+***
+
+### ungroup
+
+> **ungroup**?: `boolean`
+
+Boolean flag whether to include `ungroup: true` in non-aggregated JAQL queries.
+
+This improves computation and performance of querying tables when no aggregation is needed
+
+If not specified, the default value is `false`

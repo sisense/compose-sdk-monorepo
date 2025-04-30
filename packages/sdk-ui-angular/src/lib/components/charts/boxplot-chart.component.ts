@@ -3,17 +3,17 @@ import { type BoxplotChartProps as BoxplotChartPropsPreact } from '@sisense/sdk-
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
-  RegularChartEventProps,
+  BoxplotChartEventProps,
   WithoutPreactChartEventProps,
 } from '../../types/chart-event-props';
-import { DataPointEvent, DataPointsEvent } from '../../types/data-point';
+import { BoxplotDataPointEvent, BoxplotDataPointsEvent } from '../../types/data-point';
 
 /**
  * Props of the {@link BoxplotChartComponent}.
  */
 export interface BoxplotChartProps
   extends WithoutPreactChartEventProps<BoxplotChartPropsPreact>,
-    RegularChartEventProps {}
+    BoxplotChartEventProps {}
 
 /**
  * An Angular component representing data in a way that visually describes the distribution
@@ -134,7 +134,6 @@ export class BoxplotChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!BoxplotChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: BoxplotChartProps['dataReady'];
@@ -145,7 +144,7 @@ export class BoxplotChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<DataPointEvent>();
+  dataPointClick = new EventEmitter<BoxplotDataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
@@ -153,7 +152,7 @@ export class BoxplotChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<DataPointEvent>();
+  dataPointContextMenu = new EventEmitter<BoxplotDataPointEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointsSelected}
@@ -161,7 +160,7 @@ export class BoxplotChartComponent {
    * @category Callbacks
    */
   @Output()
-  dataPointsSelect = new EventEmitter<DataPointsEvent>();
+  dataPointsSelect = new EventEmitter<BoxplotDataPointsEvent>();
 
   /** @internal */
   public chartType: ChartType = 'boxplot';

@@ -109,3 +109,15 @@ const onBeforeQuery = useCallback((jaql) => {
 #### Returns
 
 `any`
+
+***
+
+### ungroup
+
+> **ungroup**?: `boolean`
+
+Boolean flag whether to include `ungroup: true` in non-aggregated JAQL queries.
+
+This improves computation and performance of querying tables when no aggregation is needed
+
+If not specified, the default value is `false`

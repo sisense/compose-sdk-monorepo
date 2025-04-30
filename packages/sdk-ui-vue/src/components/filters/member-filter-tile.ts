@@ -56,19 +56,28 @@ export const MemberFilterTile = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.attribute}
      */
-    attribute: Object as PropType<MemberFilterTileProps['attribute']>,
+    attribute: {
+      type: Object as PropType<MemberFilterTileProps['attribute']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.dataSource}
      */
-    dataSource: Object as PropType<MemberFilterTileProps['dataSource']>,
+    dataSource: [String, Object] as PropType<MemberFilterTileProps['dataSource']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.filter}
      */
-    filter: Object as PropType<MemberFilterTileProps['filter']>,
+    filter: {
+      type: [Object, null] as PropType<MemberFilterTileProps['filter']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onChange}
      */
-    onChange: Function as PropType<MemberFilterTileProps['onChange']>,
+    onChange: {
+      type: Function as PropType<MemberFilterTileProps['onChange']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.parentFilters}
      */
@@ -76,7 +85,10 @@ export const MemberFilterTile = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.title}
      */
-    title: Object as PropType<MemberFilterTileProps['title']>,
+    title: {
+      type: String as PropType<MemberFilterTileProps['title']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onDelete}
      */
@@ -86,5 +98,5 @@ export const MemberFilterTile = defineComponent({
      */
     onEdit: Function as PropType<MemberFilterTileProps['onEdit']>,
   },
-  setup: (props) => setupHelper(MemberFilterTilePreact, props as MemberFilterTilePropsPreact),
+  setup: (props) => setupHelper(MemberFilterTilePreact, props),
 });

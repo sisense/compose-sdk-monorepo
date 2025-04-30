@@ -72,25 +72,31 @@ export const Chart = defineComponent({
      *
      * @category Chart
      */
-    chartType: String as PropType<ChartProps['chartType']>,
+    chartType: {
+      type: String as PropType<ChartProps['chartType']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartProps.dataOptions}
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<ChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<ChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<ChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<ChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
      *
      * @category Data
      */
-    filters: Array as PropType<ChartProps['filters']>,
+    filters: [Object, Array] as PropType<ChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartProps.highlights}
      *
@@ -107,7 +113,6 @@ export const Chart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<ChartProps['onDataReady']>,
     /**
@@ -139,5 +144,5 @@ export const Chart = defineComponent({
      */
     refreshCounter: Number as PropType<ChartProps['refreshCounter']>,
   },
-  setup: (props) => setupHelper(ChartPreact, props as ChartProps),
+  setup: (props) => setupHelper(ChartPreact, props),
 });

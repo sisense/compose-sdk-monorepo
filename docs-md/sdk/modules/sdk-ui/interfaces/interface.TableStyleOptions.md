@@ -8,30 +8,6 @@ Configuration options that define functional style of the various elements of th
 
 ## Properties
 
-### alternatingColumnsColor
-
-> **alternatingColumnsColor**?: `boolean`
-
-Boolean flag whether to apply background color to alternate columns
-
-::: warning Deprecated
-Use [TableStyleOptions.columns.alternatingColor](interface.TableStyleOptions.md#columns) instead.
-:::
-
-***
-
-### alternatingRowsColor
-
-> **alternatingRowsColor**?: `boolean`
-
-Boolean flag whether to apply background color to alternate rows.
-
-::: warning Deprecated
-Use [TableStyleOptions.rows.alternatingColor](interface.TableStyleOptions.md#rows) instead.
-:::
-
-***
-
 ### columns
 
 > **columns**?: `object`
@@ -73,18 +49,6 @@ Header options
 > Color of header
 >
 >
-
-***
-
-### headersColor
-
-> **headersColor**?: `boolean`
-
-Boolean flag whether to fill header cells with background color
-
-::: warning Deprecated
-Use [TableStyleOptions.header.color](interface.TableStyleOptions.md#header) instead.
-:::
 
 ***
 

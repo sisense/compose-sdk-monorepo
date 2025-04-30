@@ -54,25 +54,28 @@ export const TreemapChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<TreemapChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<TreemapChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<TreemapChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<TreemapChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<TreemapChartProps['filters']>,
+    filters: [Object, Array] as PropType<TreemapChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<TreemapChartProps['highlights']>,
+    highlights: Array as PropType<TreemapChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onBeforeRender}
      *
@@ -83,7 +86,6 @@ export const TreemapChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<TreemapChartProps['onDataReady']>,
     /**
@@ -111,5 +113,5 @@ export const TreemapChart = defineComponent({
      */
     styleOptions: Object as PropType<TreemapChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(TreemapChartPreact, props as TreemapChartPropsPreact),
+  setup: (props) => setupHelper(TreemapChartPreact, props),
 });

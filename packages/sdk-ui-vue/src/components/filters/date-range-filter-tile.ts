@@ -53,11 +53,14 @@ export const DateRangeFilterTile = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.attribute}
      */
-    attribute: Object as PropType<DateRangeFilterTileProps['attribute']>,
+    attribute: {
+      type: Object as PropType<DateRangeFilterTileProps['attribute']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.dataSource}
      */
-    datasource: Object as PropType<DateRangeFilterTileProps['dataSource']>,
+    datasource: [String, Object] as PropType<DateRangeFilterTileProps['dataSource']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.earliestDate}
      */
@@ -65,7 +68,10 @@ export const DateRangeFilterTile = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.filter}
      */
-    filter: Object as PropType<DateRangeFilterTileProps['filter']>,
+    filter: {
+      type: Object as PropType<DateRangeFilterTileProps['filter']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.lastDate}
      */
@@ -73,7 +79,10 @@ export const DateRangeFilterTile = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onChange}
      */
-    onChange: Function as PropType<DateRangeFilterTileProps['onChange']>,
+    onChange: {
+      type: Function as PropType<DateRangeFilterTileProps['onChange']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.parentFilters}
      */
@@ -81,7 +90,10 @@ export const DateRangeFilterTile = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.title}
      */
-    title: Object as PropType<DateRangeFilterTileProps['title']>,
+    title: {
+      type: String as PropType<DateRangeFilterTileProps['title']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.tiled}
      * @internal
@@ -96,5 +108,5 @@ export const DateRangeFilterTile = defineComponent({
      */
     onEdit: Function as PropType<DateRangeFilterTileProps['onEdit']>,
   },
-  setup: (props) => setupHelper(DateRangeFilterTilePreact, props as DateRangeFilterTilePropsPreact),
+  setup: (props) => setupHelper(DateRangeFilterTilePreact, props),
 });

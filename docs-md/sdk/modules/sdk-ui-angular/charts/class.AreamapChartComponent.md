@@ -174,6 +174,15 @@ Configurations for how to style and present a chart's data.
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
+> **dataPointClick**: `EventEmitter`\< [`AreamapDataPointEvent`](../type-aliases/type-alias.AreamapDataPointEvent.md) \>
 
 Click handler callback for a data point
+
+***
+
+#### dataReady
+
+> **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.

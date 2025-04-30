@@ -8,4 +8,5 @@ export { useGetWidgetModel } from './use-get-widget-model.js';
 export { useGetHierarchyModels } from './use-get-hierarchy-models.js';
 export { useFetch } from './use-fetch.js';
 export { usePlugins } from './use-plugins.js';
+export { useComposedDashboard, type ComposableDashboardProps } from './use-composed-dashboard.js';
 export type { UseFetchOptions } from './use-fetch.js';

@@ -78,6 +78,7 @@ export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) 
         highlights,
         count,
         offset,
+        ungroup,
         onBeforeQuery,
       } = toPlainObject(params);
       const { filters: filterList, relations: filterRelations } =
@@ -95,6 +96,7 @@ export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) 
           highlights,
           count,
           offset,
+          ungroup,
         },
         application,
         { onBeforeQuery: toPlainValue(onBeforeQuery) },

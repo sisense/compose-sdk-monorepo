@@ -26,7 +26,7 @@ import {
   CategoricalWidgetType,
   Panel,
   PanelItem,
-  WidgetType,
+  FusionWidgetType,
   NumericMask,
   CurrencyPosition,
   DatetimeMask,
@@ -42,8 +42,8 @@ import {
 import {
   getEnabledPanelItems,
   getRootPanelItem,
-  isTableWidget,
-  isPivotTableWidget,
+  isTableFusionWidget,
+  isPivotTableFusionWidget,
 } from './utils.js';
 import {
   AreamapChartDataOptions,
@@ -293,7 +293,7 @@ function extractCartesianChartDataOptions(
   widgetType: CartesianWidgetType,
   paletteColors?: Color[],
 ): CartesianChartDataOptions {
-  const widgetTypesWithXAxis: WidgetType[] = ['chart/line', 'chart/area'];
+  const widgetTypesWithXAxis: FusionWidgetType[] = ['chart/line', 'chart/area'];
   const categoriesPanelName = widgetTypesWithXAxis.includes(widgetType) ? 'x-axis' : 'categories';
   const category = createColumnsFromPanelItems<StyledColumn>(
     panels,
@@ -314,7 +314,7 @@ function extractCartesianChartDataOptions(
 }
 
 function extractCategoricalChartDataOptions(
-  widgetType: WidgetType,
+  widgetType: FusionWidgetType,
   panels: Panel[],
   customPaletteColors?: Color[],
 ): CategoricalChartDataOptions {
@@ -625,54 +625,54 @@ export function attachDataSourceToPanels(panels: Panel[], dataSource: JaqlDataSo
 }
 
 export function extractDataOptions(
-  widgetType: WidgetType,
+  fusionWidgetType: FusionWidgetType,
   panels: Panel[],
   style: WidgetStyle,
   customPaletteColors?: Color[],
 ): WidgetDataOptions {
-  if (isCartesianWidget(widgetType)) {
-    return extractCartesianChartDataOptions(panels, widgetType, customPaletteColors);
+  if (isCartesianWidget(fusionWidgetType)) {
+    return extractCartesianChartDataOptions(panels, fusionWidgetType, customPaletteColors);
   }
-  if (isCategoricalWidget(widgetType)) {
-    return extractCategoricalChartDataOptions(widgetType, panels, customPaletteColors);
+  if (isCategoricalWidget(fusionWidgetType)) {
+    return extractCategoricalChartDataOptions(fusionWidgetType, panels, customPaletteColors);
   }
-  if (widgetType === 'chart/scatter') {
+  if (fusionWidgetType === 'chart/scatter') {
     return extractScatterChartDataOptions(panels, customPaletteColors);
   }
-  if (widgetType === 'indicator') {
+  if (fusionWidgetType === 'indicator') {
     return extractIndicatorChartDataOptions(panels, customPaletteColors);
   }
-  if (isTableWidget(widgetType)) {
+  if (isTableFusionWidget(fusionWidgetType)) {
     return extractTableChartDataOptions(panels, customPaletteColors);
   }
-  if (isPivotTableWidget(widgetType)) {
+  if (isPivotTableFusionWidget(fusionWidgetType)) {
     return extractPivotTableChartDataOptions(
       panels,
       style as PivotWidgetStyle,
       customPaletteColors,
     );
   }
-  if (widgetType === 'chart/boxplot') {
+  if (fusionWidgetType === 'chart/boxplot') {
     return extractBoxplotChartDataOptions(panels, style as BoxplotWidgetStyle, customPaletteColors);
   }
-  if (widgetType === 'map/scatter') {
+  if (fusionWidgetType === 'map/scatter') {
     return extractScattermapChartDataOptions(panels, customPaletteColors);
   }
-  if (widgetType === 'map/area') {
+  if (fusionWidgetType === 'map/area') {
     return extractAreamapChartDataOptions(panels, customPaletteColors);
   }
-  if (widgetType === 'richtexteditor') {
+  if (fusionWidgetType === 'richtexteditor') {
     return {};
   }
-  throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
+  throw new TranslatableError('errors.unsupportedWidgetType', { widgetType: fusionWidgetType });
 }
 
-function isCartesianWidget(widgetType: WidgetType): widgetType is CartesianWidgetType {
+function isCartesianWidget(widgetType: FusionWidgetType): widgetType is CartesianWidgetType {
   return ['chart/line', 'chart/area', 'chart/bar', 'chart/column', 'chart/polar'].includes(
     widgetType,
   );
 }
 
-function isCategoricalWidget(widgetType: WidgetType): widgetType is CategoricalWidgetType {
+function isCategoricalWidget(widgetType: FusionWidgetType): widgetType is CategoricalWidgetType {
   return ['chart/pie', 'chart/funnel', 'treemap', 'sunburst'].includes(widgetType);
 }

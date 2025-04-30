@@ -55,7 +55,7 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ### filter
 
-> **`readonly`** **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
+> **`readonly`** **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
 
 Relative date filter.
 
@@ -107,7 +107,7 @@ Filter edit callback
 
 ### onUpdate
 
-> **`readonly`** **onUpdate**?: (`filter`) => `void`
+> **`readonly`** **onUpdate**: (`filter`) => `void`
 
 Callback function that is called when the relative date filter object should be updated.
 
@@ -125,6 +125,6 @@ Callback function that is called when the relative date filter object should be 
 
 ### title
 
-> **`readonly`** **title**?: `string`
+> **`readonly`** **title**: `string`
 
 Filter tile title

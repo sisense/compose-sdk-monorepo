@@ -134,7 +134,7 @@ This callback is not supported for Areamap Chart, Scattermap Chart, Table, and P
 
 #### dataPointClick
 
-> **dataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
+> **dataPointClick**?: [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
 
 Click handler callback for a data point
 
@@ -142,14 +142,33 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
+> **dataPointContextMenu**?: [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
 
 Context menu handler callback for a data point
 
 ***
 
-#### dataPointsSelected
+#### dataPointsSelect
 
-> **dataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md)
+> **dataPointsSelect**?: [`ScatterDataPointsEventHandler`](../type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
+
+***
+
+#### dataReady
+
+> **dataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

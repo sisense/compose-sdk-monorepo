@@ -27,10 +27,6 @@ export interface UseGetNlgInsightsState
  * A Vue composable that fetches an analysis of the provided query using natural language generation (NLG).
  * Specifying a query is similar to providing parameters to a {@link @sisense/sdk-ui-vue!useExecuteQuery | `useExecuteQuery`} composable, using dimensions, measures, and filters.
  *
- * ::: warning Note
- * This composable is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * ```vue
 <script setup lang="ts">
@@ -53,7 +49,6 @@ const { data: nlgInsights } = useGetNlgInsights(props);
  * @param params - {@link UseGetNlgInsightsParams}
  * @returns The composable load state that contains the status of the execution and a text summary result (data)
  * @group Generative AI
- * @beta
  */
 export const useGetNlgInsights = (
   params: MaybeRefOrWithRefs<UseGetNlgInsightsParams>,

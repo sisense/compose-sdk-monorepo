@@ -28,6 +28,7 @@ import { normalizeAnyColumn } from '@/chart-data-options/utils.js';
  * It also provides methods to stringify query models to YAML strings
  * and parse YAML strings to query models.
  *
+ * @deprecated QueryTranslator was designed for Forge, which is now discontinued. To simplify the JQL query from NLQ, use simplifyMetadataItem() instead.
  * @internal
  */
 export class QueryTranslator {

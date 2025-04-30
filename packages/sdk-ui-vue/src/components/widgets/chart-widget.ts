@@ -4,7 +4,6 @@ import { ChartWidget as ChartWidgetPreact } from '@sisense/sdk-ui-preact';
 import type { ChartWidgetProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 import type { Chart } from '../charts';
-import type DrilldownWidget from '../drilldown-widget.vue';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
 export { ChartWidgetProps };
@@ -16,7 +15,7 @@ export { ChartWidgetProps };
  * Here's how you can use the ChartWidget component in a Vue application:
  * ```vue
  * <template>
-    <DrilldownWidget :drilldownDimensions="drilldownDimensions" :initialDimension="dimProductName">
+    <DrilldownWidget :drilldownPaths="drilldownPaths" :initialDimension="dimProductName">
       <template
         #chart="{ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }"
       >
@@ -60,7 +59,7 @@ export { ChartWidgetProps };
  * });
  * </script>
  * ```
- * <img src="media://chart-widget-with-drilldown-example-1.png" width="800px" />
+ * <img src="media://vue-widget-example.png" width="800px" />
  * @param props - ChartWidget properties
  * @returns ChartWidget component representing a chart type as specified in `ChartWidgetProps.`{@link ChartWidgetProps.chartType | chartType}
  * @group Dashboards
@@ -79,7 +78,10 @@ export const ChartWidget = defineComponent({
      *
      * @category Chart
      */
-    chartType: String as PropType<ChartWidgetProps['chartType']>,
+    chartType: {
+      type: String as PropType<ChartWidgetProps['chartType']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.contextMenuItems}
      *
@@ -92,13 +94,16 @@ export const ChartWidget = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<ChartWidgetProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<ChartWidgetProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
      *
      * @category Data
      */
-    dataSource: Object as PropType<ChartWidgetProps['dataSource']>,
+    dataSource: [String, Object] as PropType<ChartWidgetProps['dataSource']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.description}
      *
@@ -117,7 +122,7 @@ export const ChartWidget = defineComponent({
      *
      * @category Data
      */
-    filters: Array as PropType<ChartWidgetProps['filters']>,
+    filters: [Array, Object] as PropType<ChartWidgetProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
      *
@@ -187,6 +192,12 @@ export const ChartWidget = defineComponent({
      * @internal
      */
     widgetStyleOptions: Object as PropType<ChartWidgetProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataReady}
+     *
+     * @category Callbacks
+     */
+    onDataReady: Function as PropType<ChartWidgetProps['onDataReady']>,
   },
-  setup: (props) => setupHelper(ChartWidgetPreact, props as ChartWidgetProps),
+  setup: (props) => setupHelper(ChartWidgetPreact, props),
 });

@@ -19,7 +19,10 @@
  * @groupDescription Fusion Assets
  * Vue components, composables and utilities for working with Fusion dashboards, widgets, queries, and formulas
  * @groupDescription Generative AI
- * Vue components and composables for creating experiences using generative AI
+ * Vue components and composables for working with Generative AI features provided by Sisense Fusion
+ * ::: tip Note
+ * For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
+ * :::
  * @groupDescription Interfaces
  * TypeScript interfaces for components and composables listed above
  * @groupDescription Type Aliases

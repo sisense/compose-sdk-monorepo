@@ -97,7 +97,6 @@ describe('Chart', () => {
             textColor: 'red',
             secondaryTextColor: 'green',
             backgroundColor: 'blue',
-            panelBackgroundColor: '#F6F6F6',
           },
         }}
       >

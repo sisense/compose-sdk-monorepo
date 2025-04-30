@@ -6,8 +6,8 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
@@ -90,8 +90,8 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
@@ -174,8 +174,8 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
@@ -258,8 +258,8 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
@@ -320,8 +320,8 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
@@ -382,8 +382,8 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
@@ -466,8 +466,8 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"
@@ -528,8 +528,8 @@ exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
     class="css-12vk4to"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
         class="css-3aw1ep"

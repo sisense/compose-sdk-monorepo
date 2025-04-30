@@ -6,14 +6,17 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { parseExpression } from '../../utils.js';
 import {
   DimensionalAttribute,
   DimensionalLevelAttribute,
   jaqlSimpleColumnType,
+  normalizeAttributeName,
 } from '../attributes.js';
 import { DimensionalElement, normalizeName } from '../base.js';
+import { DATA_MODEL_MODULE_NAME } from '../consts.js';
 import { Attribute, DateDimension, Dimension, LevelAttribute } from '../interfaces.js';
-import { DateLevels, JaqlDataSource, MetadataTypes, Sort } from '../types.js';
+import { DateLevels, JaqlDataSource, JSONObject, MetadataTypes, Sort } from '../types.js';
 
 /**
  * Represents a Dimension in a Dimensional Model
@@ -60,13 +63,24 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
     desc?: string,
     sort?: Sort,
     dataSource?: JaqlDataSource,
+    composeCode?: string,
+    defaultAttribute?: Attribute,
   ) {
-    super(name, type || MetadataTypes.Dimension, desc, dataSource);
+    super(name, type || MetadataTypes.Dimension, desc, dataSource, composeCode);
+
+    // if composeCode is not explicitly set by the caller, extract it from expression
+    if (!composeCode && expression) {
+      const { table, column } = parseExpression(expression);
+      this.composeCode = normalizeAttributeName(table, column, '', DATA_MODEL_MODULE_NAME);
+    }
 
     this._sort = sort || Sort.None;
     this._expression = expression;
     this.setDimensions(dimensions || []);
     this.setAttributes(attributes);
+    if (defaultAttribute) {
+      this.defaultAttribute = defaultAttribute;
+    }
   }
 
   private getAttachedName(name: string, expression: string): string {
@@ -167,14 +181,17 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
       this.description,
       sort,
       this.dataSource,
+      this.composeCode,
+      this.defaultAttribute,
     );
   }
 
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DimensionalDimension';
 
     result.expression = this.expression;
 
@@ -182,11 +199,11 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
       result.sort = this.getSort();
     }
 
-    result.attributes = this._attributes.map((att) => att.serializable());
-    result.diemsnions = this._dimensions.map((dim) => dim.serializable());
+    result.attributes = this._attributes.map((att) => att.serialize());
+    result.dimensions = this._dimensions.map((dim) => dim.serialize());
 
     if (this.defaultAttribute) {
-      result.defaultAttribute = this.defaultAttribute.serializable();
+      result.defaultAttribute = this.defaultAttribute.serialize();
     }
 
     return result;
@@ -234,8 +251,19 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
     desc?: string,
     sort?: Sort,
     dataSource?: JaqlDataSource,
+    composeCode?: string,
   ) {
-    super(name, expression, [], [], MetadataTypes.DateDimension, desc, sort, dataSource);
+    super(
+      name,
+      expression,
+      [],
+      [],
+      MetadataTypes.DateDimension,
+      desc,
+      sort,
+      dataSource,
+      composeCode,
+    );
 
     this.defaultLevel = DateLevels.Years;
     this.Years = new DimensionalLevelAttribute(
@@ -493,19 +521,16 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
       this.description,
       sort,
       this.dataSource,
+      this.composeCode,
     );
   }
 
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-
-    if (this.defaultLevel) {
-      result.defaultLevel = this.defaultLevel;
-    }
-
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DimensionalDateDimension';
     return result;
   }
 

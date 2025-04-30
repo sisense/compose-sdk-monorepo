@@ -40,6 +40,6 @@ The configuration for the dashboard
 
 ### dashboardOid
 
-> **`readonly`** **dashboardOid**?: `string`
+> **`readonly`** **dashboardOid**: `string`
 
 The OID of the dashboard to render.

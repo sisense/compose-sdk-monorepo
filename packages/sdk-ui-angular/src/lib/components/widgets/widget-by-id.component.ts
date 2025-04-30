@@ -157,7 +157,6 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
    * {@inheritDoc  @sisense/sdk-ui!WidgetByIdProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: WidgetByIdProps['dataReady'];

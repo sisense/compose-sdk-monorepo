@@ -52,7 +52,6 @@ import {
   DrilldownSelection,
   TextWidgetStyleOptions,
   GenericDataOptions,
-  DashboardWidgetStyleOptions,
   IndicatorRenderOptions,
   TabberStyleProps,
 } from './types';
@@ -78,6 +77,7 @@ import { HookEnableParam } from './common/hooks/types';
 import { ExecuteQueryResult } from './query-execution/types';
 import { Hierarchy } from './models';
 import { BeforeMenuOpenHandler } from './common/components/menu/types';
+import { DistributiveOmit } from './utils/utility-types/distributive-omit';
 
 export type { MenuItemSection, HighchartsOptions };
 
@@ -186,7 +186,8 @@ export interface SisenseContextProviderProps {
    * Used only with SSO authentication.
    * If not specified, the default value is `false`.
    *
-   * @internal
+   * @category Sisense Authentication
+   *
    */
   enableSilentPreAuth?: boolean;
 }
@@ -221,11 +222,7 @@ export interface ExecuteQueryProps {
   /** {@inheritDoc ExecuteQueryParams.offset} */
   offset?: number;
 
-  /**
-   * {@inheritDoc ExecuteQueryParams.ungroup}
-   *
-   * @internal
-   */
+  /** {@inheritDoc ExecuteQueryParams.ungroup} */
   ungroup?: boolean;
 
   /** Function as child component that is called to render the query results */
@@ -422,7 +419,6 @@ interface BaseChartEventProps {
    * Can be used to inject modification of queried data.
    *
    * @category Callbacks
-   * @internal
    */
   onDataReady?: (data: Data) => Data;
 }
@@ -1122,20 +1118,6 @@ export interface WidgetByIdProps
 }
 
 /**
- * Props for the {@link DashboardWidget} component
- *
- * @deprecated Use {@link WidgetById} and {@link WidgetByIdProps} instead
- */
-export interface DashboardWidgetProps extends WidgetByIdProps {
-  /**
-   * Style options for the widget including the widget container and the chart or table inside.
-   *
-   * @category Widget
-   */
-  styleOptions?: DashboardWidgetStyleOptions;
-}
-
-/**
  * Props for the {@link ChartWidget} component
  *
  */
@@ -1465,29 +1447,19 @@ export interface PluginWidgetProps {
 }
 
 /**
- * A utility type that combines widget-specific properties (`W`) with a corresponding widget type (`T`).
- *
- * This is used to extend the props of a widget with its respective widget type.
+ * A utility type that combines widget-specific properties (`BaseWidget`)
+ * with a common widget props including corresponding widget type (`Type`).
  */
-export type WithWidgetType<
-  W extends ChartWidgetProps | PivotTableWidgetProps | TextWidgetProps | PluginWidgetProps,
-  T extends 'chart' | 'pivot' | 'text' | 'plugin',
-> = W & {
+export type WithCommonWidgetProps<BaseWidget, Type extends WidgetType> = BaseWidget & {
+  /**
+   * Unique identifier of the widget within the container component (dashboard)
+   *
+   */
+  readonly id: string;
   /**
    * Widget type
    */
-  widgetType: T;
-};
-
-/**
- * Props for the facade widget component.
- */
-export type CommonWidgetProps = (
-  | WithWidgetType<ChartWidgetProps, 'chart'>
-  | WithWidgetType<PivotTableWidgetProps, 'pivot'>
-  | WithWidgetType<TextWidgetProps, 'text'>
-  | WithWidgetType<PluginWidgetProps, 'plugin'>
-) & {
+  widgetType: Type;
   /**
    * Optional handler function to process menu options before opening the context menu.
    *
@@ -1497,15 +1469,25 @@ export type CommonWidgetProps = (
 };
 
 /**
+ * Type of the widget component.
+ */
+export type WidgetType = 'chart' | 'pivot' | 'text' | 'plugin';
+
+/**
  * Props for the widget component within a container component like dashboard.
  */
-export type WidgetProps = CommonWidgetProps & {
-  /**
-   * Unique identifier of the widget within the container component (dashboard)
-   *
-   */
-  readonly id: string;
-};
+export type WidgetProps =
+  | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
+  | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
+  | WithCommonWidgetProps<TextWidgetProps, 'text'>
+  | WithCommonWidgetProps<PluginWidgetProps, 'plugin'>;
+
+/**
+ * Props for the facade widget component.
+ *
+ * @internal
+ */
+export type CommonWidgetProps = DistributiveOmit<WidgetProps, 'id'>;
 
 /**
  * Props for {@link ExecuteQueryByWidgetId} component.
@@ -1762,13 +1744,6 @@ export type DrilldownWidgetConfig = {
  * Props for the {@link DrilldownWidget} component
  */
 export interface DrilldownWidgetProps {
-  /**
-   * List of dimensions to allow drilldowns on
-   *
-   * @category Widget
-   * @deprecated Use {@link DrilldownWidgetProps.drilldownPaths} instead
-   */
-  drilldownDimensions?: Attribute[];
   /**
    * Dimensions and hierarchies available for drilldown on.
    *

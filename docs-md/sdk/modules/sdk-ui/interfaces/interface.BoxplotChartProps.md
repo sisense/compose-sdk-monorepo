@@ -159,3 +159,22 @@ Context menu handler callback for a data point
 > **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
+
+***
+
+#### onDataReady
+
+> **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

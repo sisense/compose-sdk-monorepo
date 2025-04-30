@@ -62,9 +62,9 @@ describe('DashboardModel', () => {
           {
             jaql: {
               datatype: DataType.TEXT,
-              dim: 'dim',
-              table: '[table]',
-              column: '[column]',
+              dim: '[table.column]',
+              table: 'table',
+              column: 'column',
               title: 'title',
               filter: {
                 members: ['member'],

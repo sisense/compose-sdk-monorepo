@@ -3,27 +3,51 @@
 exports[`DashboardModel > should create a new dashboard model with all arguments 1`] = `
 {
   "dataSource": {
+    "address": undefined,
+    "id": "test",
     "title": "test",
     "type": "elasticube",
   },
   "filters": [
     {
-      "__serializable": "DimensionalElement",
+      "__serializable": "MembersFilter",
       "attribute": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.table.column",
         "dataSource": undefined,
-        "desc": "",
-        "expression": "dim",
+        "description": "",
+        "expression": "[table.column]",
         "name": "title",
         "type": "text-attribute",
       },
+      "composeCode": "filterFactory.members(DM.table.column, ['member'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "test-id",
+        "locked": false,
+        "originalFilterJaql": {
+          "column": "column",
+          "datatype": "text",
+          "dim": "[table.column]",
+          "filter": {
+            "members": [
+              "member",
+            ],
+          },
+          "table": "table",
+          "title": "title",
+        },
+      },
       "dataSource": undefined,
-      "desc": "",
+      "description": "",
       "filterType": "members",
       "members": [
         "member",
       ],
-      "name": "1690ab7a183",
+      "name": "a9984db61c3",
       "type": "filter",
     },
   ],
@@ -70,15 +94,6 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
         "drilldownSelections": [],
       },
       "filters": [],
-      "getChartProps": [Function],
-      "getChartWidgetProps": [Function],
-      "getExecutePivotQueryParams": [Function],
-      "getExecuteQueryParams": [Function],
-      "getPivotTableProps": [Function],
-      "getPivotTableWidgetProps": [Function],
-      "getTableProps": [Function],
-      "getTableWidgetProps": [Function],
-      "getTextWidgetProps": [Function],
       "highlights": [],
       "oid": "widget-1",
       "pluginType": "",
@@ -86,7 +101,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
         "subtype": "pie/donut",
       },
       "title": "test",
-      "widgetType": "chart/pie",
+      "widgetType": "chart",
     },
   ],
   "widgetsOptions": {
@@ -108,6 +123,8 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
 exports[`DashboardModel > should create a new dashboard model with minimum of arguments 1`] = `
 {
   "dataSource": {
+    "address": undefined,
+    "id": "test",
     "title": "test",
     "type": "elasticube",
   },

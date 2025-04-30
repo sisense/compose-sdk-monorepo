@@ -140,7 +140,6 @@ export class ColumnChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!ColumnChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: ColumnChartProps['dataReady'];

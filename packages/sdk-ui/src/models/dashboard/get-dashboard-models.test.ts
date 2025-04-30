@@ -88,6 +88,8 @@ describe('getDashboardModels', () => {
         layoutOptions: expect.anything(),
         filters: expect.anything(),
         dataSource: {
+          id: dashboardMock.datasource.id,
+          address: dashboardMock.datasource.address,
           title: dashboardMock.datasource.title,
           type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
         },
@@ -116,6 +118,8 @@ describe('getDashboardModels', () => {
         oid: dashboardMock.oid,
         title: dashboardMock.title,
         dataSource: {
+          id: dashboardMock.datasource.id,
+          address: dashboardMock.datasource.address,
           title: dashboardMock.datasource.title,
           type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
         },
@@ -159,6 +163,8 @@ describe('getDashboardModels', () => {
       layoutOptions: expect.anything(),
       filters: expect.anything(),
       dataSource: {
+        address: 'localHost',
+        id: 'localhost_aSampleIAAaHealthcare',
         title: targetDashboardMock.datasource.title,
         type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
       },

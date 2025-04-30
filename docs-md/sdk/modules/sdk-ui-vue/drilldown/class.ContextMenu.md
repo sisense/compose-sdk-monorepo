@@ -36,7 +36,7 @@ export default {
 
 ### closeContextMenu
 
-> **`readonly`** **closeContextMenu**?: () => `void`
+> **`readonly`** **closeContextMenu**: () => `void`
 
 Function to close the context menu. It should be a function that sets the visibility of the context menu to false.
 

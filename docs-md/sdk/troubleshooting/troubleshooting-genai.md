@@ -1,11 +1,9 @@
-# GenAI Troubleshooting
+# Generative AI Troubleshooting
 
-This troubleshooting guide provides possible answers to common issues that may arise when using the Compose SDK GenAI components.
+This troubleshooting guide provides possible answers to common issues that may arise when using the Compose SDK Generative AI components.
 
-::: warning Note
-This feature is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements. We’re excited to work closely with customers who are eager to get hands-on, test, and help shape this game-changing feature.
-
-To be considered for the beta program, please sign up at [www.sisense.com/get/gen-ai-partner](https://www.sisense.com/get/gen-ai-partner/).
+::: tip Note
+For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
 :::
 
 ## Component Errors

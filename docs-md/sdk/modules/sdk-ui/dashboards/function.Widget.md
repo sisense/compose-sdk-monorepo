@@ -2,7 +2,7 @@
 title: Widget
 ---
 
-# Function Widget <Badge type="alpha" text="Alpha" />
+# Function Widget
 
 > **Widget**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 

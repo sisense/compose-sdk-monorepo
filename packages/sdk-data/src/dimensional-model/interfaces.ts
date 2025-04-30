@@ -1,5 +1,5 @@
 import { DataSource } from '../interfaces.js';
-import { DateLevel, FilterJaql, JaqlDataSource, Sort } from './types.js';
+import { DateLevel, FilterJaql, JaqlDataSource, JSONObject, Sort } from './types.js';
 
 /**
  * @internal
@@ -53,14 +53,14 @@ export interface Element {
    *
    * @internal
    */
-  serializable(): any;
+  serialize(): JSONObject;
 
   /**
    * Overrides JSON.stringify() behavior.
    *
    * @internal
    */
-  toJSON(): any;
+  toJSON(): JSONObject;
 
   /**
    * Gets the JAQL representation of this instance.
@@ -605,10 +605,6 @@ export function isPivotMeasure(arg: Measure | PivotMeasure): arg is PivotMeasure
  * Data options for grand totals of a pivot table
  */
 export type PivotGrandTotals = {
-  /**
-   * @deprecated
-   */
-  title?: string;
   rows?: boolean;
   columns?: boolean;
 };
@@ -653,6 +649,12 @@ export interface FilterRelations {
   left: FilterRelationsNode;
   right: FilterRelationsNode;
   operator: 'AND' | 'OR';
+  /**
+   * Compose code for the filter relations
+   *
+   * @internal
+   */
+  composeCode?: string;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { createJaqlElement } from './jaql-element.js';
+import { createDimensionalElementFromMetadataItem, createJaqlElement } from './jaql-element.js';
 import { MetadataItem } from './types.js';
 
 describe('createJaqlElement', () => {
@@ -52,5 +52,50 @@ describe('createJaqlElement', () => {
 
     delete item.jaql.sort;
     expect(createJaqlElement(item).sortType).toBeUndefined();
+  });
+});
+
+describe('createDimensionalElementFromMetadataItem', () => {
+  it('should create DimensionalElement with Attribute', () => {
+    const metadata = [
+      {
+        jaql: {
+          dim: '[Commerce.Condition]',
+          datatype: 'text',
+          title: 'Condition',
+        },
+      },
+      {
+        jaql: {
+          dim: '[Commerce.Revenue]',
+          agg: 'sum',
+          datatype: 'numeric',
+          title: 'Revenue',
+        },
+      },
+      {
+        jaql: {
+          formula: 'QUARTILE([28B80-CD8], 2)',
+          context: {
+            '[28B80-CD8]': {
+              dim: '[Commerce.Revenue]',
+              datatype: 'numeric',
+              title: 'Revenue',
+            },
+          },
+          title: 'Revenue Median',
+        },
+      },
+      {
+        jaql: {
+          invalidProp: 'invalid-value',
+        },
+      },
+    ];
+
+    metadata.forEach((metadataItem) => {
+      const dimensionalElement = createDimensionalElementFromMetadataItem(metadataItem);
+      expect(dimensionalElement.jaql()).toEqual(metadataItem);
+    });
   });
 });

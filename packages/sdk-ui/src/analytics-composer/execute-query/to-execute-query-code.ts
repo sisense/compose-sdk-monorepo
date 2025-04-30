@@ -1,5 +1,5 @@
 import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
-import { stringifyDataSource, stringifyExtraImports } from '../common/stringify-props';
+import { stringifyDataSource, stringifyExtraImports } from '../code/stringify-props';
 import {
   ExecuteQueryCodeParams,
   ExecutePivotQueryCodeParams,
@@ -9,8 +9,8 @@ import {
   ExecutePivotQueryCodeProps,
 } from '../types.js';
 import { generateCode } from '../code/generate-code.js';
-import { stringifyFilters } from '../widget/stringify-filters.js';
-import { stringifyProps } from '../widget/stringify-props.js';
+import { stringifyFilters } from '../code/stringify-filters.js';
+import { stringifyProps } from '../code/stringify-props.js';
 import { checkIfMeasuresExist } from '../common/utils.js';
 
 const executeQueryTemplateKey: CodeTemplateKey = 'executeQueryTmpl';

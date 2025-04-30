@@ -1,5 +1,45 @@
 # Changelog
 
+## [2.0.0] - 2025-04-30
+
+### Added
+- Add Angular and Vue support for `useComposedDashboard` hook
+- Add `Widget` component support for Angular and Vue
+- Add `FilterTile` component for Angular and Vue
+- Move the following features to General Availability (GA):
+  - `DashboardById` persistency
+  - `useComposedDashboard` hook
+  - `Widget` component
+  - AI components and hooks
+  - `AreaRangeChart` component
+  - `FilterTile` component
+  - `SisenseContextProviderProps.enableSilentPreAuth`
+  - `Chart.onDataReady`
+  - `ExecuteQueryProps.ungroup`
+  - `AppConfig.translationConfig`
+- Apply `composeCode` to `measureFactory` and `filterFactory`
+- Implement embed code for `Dashboard`
+
+### Changed
+- **Breaking:** The minimum supported version of Angular is now v17
+- **Breaking:** The minimum supported version of React is now v17
+- **Breaking:** Remove deprecated methods from `WidgetModel` API
+- **Breaking:** Remove deprecated `DashboardWidget` component
+- **Breaking:** Separate CSDK `WidgetType` and `FusionWidgetType`
+- **Breaking:** Remove deprecated `PivotGrandTotals.title` prop
+- **Breaking:** Remove other deprecated props and methods
+- **Breaking:** Improve types for Vue and Angular components
+> _See [migration guide](./guides/migration-guide-2.0.0.md) for more details._
+- Fix widgets not showing when switching dashboards when using tabber
+- Fixed border issue for filter tiles
+- Return only valid color format conditions
+- Improve pivot rendering performance
+- Improved handling of keys in `seriesToColorMap`
+- Align Vue component props validation with corresponding types
+- Improve component handler types in Angular
+- Highlight selected days correctly during multi-selection in date selector
+
+
 ## [1.34.0] - 2025-04-15
 
 ### Added
@@ -606,7 +646,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - **Breaking:** Rename type `IndicatorDataOptions` to `IndicatorChartDataOptions`
 - **Breaking:** Rename namespace `measures` to `measureFactory` and namespace `filters` to `filterFactory`
 
-_See [migration guide](./guides/migration-guide-1.0.0.md) for more details._
+> _See [migration guide](./guides/migration-guide-1.0.0.md) for more details._
 
 ## [0.16.0] - 2023-12-12
 

@@ -19,12 +19,6 @@ import { SisenseContextService } from './sisense-context.service';
 interface ExecuteQueryHandlers {
   /** Sync or async callback that allows to modify the JAQL payload before it is sent to the server. */
   beforeQuery?: ExecuteQueryParamsPreact['onBeforeQuery'];
-  /**
-   * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
-   *
-   * @deprecated Use `beforeQuery` instead.
-   */
-  onBeforeQuery?: ExecuteQueryParamsPreact['onBeforeQuery'];
 }
 
 /**
@@ -46,14 +40,14 @@ export interface ExecuteQueryByWidgetIdParams
  */
 export interface ExecutePivotQueryParams
   extends Omit<ExecutePivotQueryParamsPreact, 'enabled' | 'onBeforeQuery'>,
-    Omit<ExecuteQueryHandlers, 'onBeforeQuery'> {}
+    ExecuteQueryHandlers {}
 
 /**
  * Parameters for CSV data query execution.
  */
 export interface ExecuteCsvQueryParams
   extends Omit<ExecuteCsvQueryParamsPreact, 'enabled' | 'onBeforeQuery'>,
-    Omit<ExecuteQueryHandlers, 'onBeforeQuery'> {}
+    ExecuteQueryHandlers {}
 
 /**
  * Service for executing data queries.
@@ -86,8 +80,8 @@ export class QueryService {
       highlights,
       count,
       offset,
+      ungroup,
       beforeQuery,
-      onBeforeQuery,
     } = params;
     const app = await this.sisenseContextService.getApp();
     const { filters: filterList, relations: filterRelations } =
@@ -102,9 +96,10 @@ export class QueryService {
         highlights,
         count,
         offset,
+        ungroup,
       },
       app,
-      { onBeforeQuery: beforeQuery ?? onBeforeQuery },
+      { onBeforeQuery: beforeQuery },
     );
 
     return { data };
@@ -122,7 +117,7 @@ export class QueryService {
     return executeQueryByWidgetId({
       ...params,
       app,
-      onBeforeQuery: params.beforeQuery ?? params.onBeforeQuery,
+      onBeforeQuery: params.beforeQuery,
     });
   }
 

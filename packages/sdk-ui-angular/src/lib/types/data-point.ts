@@ -1,7 +1,6 @@
 import {
   AreamapDataPoint,
   BoxplotDataPoint,
-  ChartDataPoint,
   DataPoint,
   ScatterDataPoint,
   ScattermapDataPoint,
@@ -42,12 +41,17 @@ export type BoxplotDataPointEvent = {
   nativeEvent: PointerEvent;
 };
 
-export type ChartDataPointEvent = {
-  /** Data point that was clicked */
-  point: ChartDataPoint;
-  /** Native PointerEvent */
-  nativeEvent: MouseEvent | PointerEvent;
-};
+export type ChartDataPointClickEvent =
+  | DataPointEvent
+  | ScatterDataPointEvent
+  | BoxplotDataPointEvent
+  | AreamapDataPointEvent
+  | ScattermapDataPointEvent;
+
+export type ChartDataPointContextMenuEvent =
+  | DataPointEvent
+  | ScatterDataPointEvent
+  | BoxplotDataPointEvent;
 
 export type DataPointsEvent = {
   /** Data points that were selected */
@@ -63,12 +67,14 @@ export type ScatterDataPointsEvent = {
   nativeEvent: MouseEvent;
 };
 
-export type ChartDataPointsEvent = {
-  /** Data points that were selected */
-  points: ChartDataPoint[];
+export type BoxplotDataPointsEvent = {
+  /** Data point that were selected */
+  points: BoxplotDataPoint[];
   /** Native MouseEvent */
-  nativeEvent: MouseEvent | PointerEvent;
+  nativeEvent: MouseEvent;
 };
+
+export type ChartDataPointsEvent = DataPointsEvent | ScatterDataPointsEvent;
 
 /**
  * A handler function that allows you to customize what happens when certain events occur to
@@ -94,8 +100,21 @@ export type ScattermapDataPointEventHandler = (event: ScattermapDataPointEvent) 
  */
 export type BoxplotDataPointEventHandler = (event: BoxplotDataPointEvent) => void;
 
+/**
+ * Click handler for when a data point on Chart is clicked.
+ */
+export type ChartDataPointClickEventHandler = (event: ChartDataPointClickEvent) => void;
+
+/**
+ * Context menu handler for when a data point on the Chart is right-clicked.
+ */
+export type ChartDataPointContextMenuEventHandler = (event: ChartDataPointContextMenuEvent) => void;
+
 /** Click handler for when multiple scatter data points are selected. */
 export type ScatterDataPointsEventHandler = (event: ScatterDataPointsEvent) => void;
 
 /** Click handler for when multiple data points are selected. */
 export type DataPointsEventHandler = (event: DataPointsEvent) => void;
+
+/** Click handler for when multiple data points on Chart are selected. */
+export type ChartDataPointsEventHandler = (event: ChartDataPointsEvent) => void;

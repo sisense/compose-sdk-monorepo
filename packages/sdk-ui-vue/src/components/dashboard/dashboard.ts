@@ -4,11 +4,16 @@ import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
 import type { DashboardProps as DashboardPropsPreact } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 import type { DashboardConfig } from '../../types';
+import type { WidgetProps } from '../widgets';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!Dashboard | `Dashboard`} component.
  */
-export interface DashboardProps extends DashboardPropsPreact {
+export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
+   */
+  widgets: WidgetProps[];
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
    */
@@ -71,15 +76,18 @@ export const Dashboard = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
      */
-    widgets: Object as PropType<DashboardProps['widgets']>,
+    widgets: {
+      type: Object as PropType<DashboardProps['widgets']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.filters}
      */
-    filters: Object as PropType<DashboardProps['filters']>,
+    filters: [Object, Array] as PropType<DashboardProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.defaultDataSource}
      */
-    defaultDataSource: Object as PropType<DashboardProps['defaultDataSource']>,
+    defaultDataSource: [String, Object] as PropType<DashboardProps['defaultDataSource']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetsOptions}
      */
@@ -89,5 +97,5 @@ export const Dashboard = defineComponent({
      */
     styleOptions: Object as PropType<DashboardProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(DashboardPreact, props as DashboardPropsPreact),
+  setup: (props) => setupHelper(DashboardPreact, props),
 });

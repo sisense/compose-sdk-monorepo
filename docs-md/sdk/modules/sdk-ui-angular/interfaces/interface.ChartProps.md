@@ -148,7 +148,7 @@ This callback is not supported for Areamap Chart, Scattermap Chart, Table, and P
 
 #### dataPointClick
 
-> **dataPointClick**?: [`AreamapDataPointEventHandler`](../type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+> **dataPointClick**?: [`ChartDataPointClickEventHandler`](../type-aliases/type-alias.ChartDataPointClickEventHandler.md)
 
 Click handler callback for a data point
 
@@ -156,14 +156,33 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**?: [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
+> **dataPointContextMenu**?: [`ChartDataPointContextMenuEventHandler`](../type-aliases/type-alias.ChartDataPointContextMenuEventHandler.md)
 
 Context menu handler callback for a data point
 
 ***
 
-#### dataPointsSelected
+#### dataPointsSelect
 
-> **dataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../type-aliases/type-alias.ScatterDataPointsEventHandler.md)
+> **dataPointsSelect**?: [`ChartDataPointsEventHandler`](../type-aliases/type-alias.ChartDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
+
+***
+
+#### dataReady
+
+> **dataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

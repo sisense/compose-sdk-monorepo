@@ -32,10 +32,6 @@ export interface ChatbotProps extends ChatbotPropsPreact {}
 /**
  * An Angular component that renders a chatbot with data topic selection.
  *
- * ::: warning Note
- * This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * An example of using the `ChatbotComponent`:
  *
@@ -70,7 +66,6 @@ export class ExampleComponent {
  *
  * <img src="media://angular-chatbot-example.png" width="500px" />
  * @group Generative AI
- * @beta
  */
 @Component({
   selector: 'csdk-chatbot',

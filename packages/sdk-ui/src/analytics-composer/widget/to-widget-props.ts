@@ -1,9 +1,17 @@
-import { createFilterFromJaql, Filter, FilterJaql, MetadataItem } from '@sisense/sdk-data';
+import {
+  convertJaqlDataSourceForDto,
+  createFilterFromJaql,
+  DataSource,
+  Filter,
+  FilterJaql,
+  MetadataItem,
+} from '@sisense/sdk-data';
 import { ChartType, WidgetStyleOptions, WidgetProps } from '../../index.js';
 import { ChartRecommendations, ExpandedQueryModel, WidgetPropsConfig } from '../types.js';
 import { isEmptyQueryModel } from '../common/utils.js';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 import { getChartOptions } from './chart-options/get-widget-options.js';
+import { simplifyMetadataItem } from '../query/index.js';
 
 /**
  * Gets chart recommendations or default to table.
@@ -73,10 +81,22 @@ export const toWidgetPropsFromQuery = (
   try {
     const { useCustomizedStyleOptions = false } = config || {};
     const { jaql, chartRecommendations: chartRecommendationsOriginal, queryTitle } = queryModel;
-    const {
-      metadata,
-      datasource: { title: dataSourceTitle, id: dataSourceId, type: dataSourceType = 'elasticube' },
-    } = jaql;
+    const { metadata, datasource } = jaql;
+
+    const dataSource: DataSource = { ...datasource, type: datasource.type || 'elasticube' };
+    const jaqlDataSource = convertJaqlDataSourceForDto(dataSource);
+
+    const simplifiedMetadata = metadata
+      // simplify metadata items
+      .map((item) => simplifyMetadataItem(item))
+      // attach jaqlDataSource to each metadata item to support dashboard of multi sources
+      .map((item) => ({
+        ...item,
+        jaql: {
+          ...item.jaql,
+          datasource: jaqlDataSource,
+        },
+      }));
 
     const chartRecommendations = getChartRecommendationsOrDefault(chartRecommendationsOriginal);
     const chartType = chartRecommendations.chartType.toLowerCase() as ChartType;
@@ -89,7 +109,7 @@ export const toWidgetPropsFromQuery = (
       },
     };
 
-    const { metadataColumns, metadataFilters } = splitMetadata(metadata);
+    const { metadataColumns, metadataFilters } = splitMetadata(simplifiedMetadata);
     const filters = getFilters(metadataFilters);
     const { dataOptions, chartStyleOptions } = getChartOptions(
       metadataColumns,
@@ -104,11 +124,7 @@ export const toWidgetPropsFromQuery = (
       id: queryTitle,
       title: queryTitle,
       chartType,
-      dataSource: {
-        title: dataSourceTitle,
-        id: dataSourceId,
-        type: dataSourceType,
-      },
+      dataSource,
       dataOptions,
       filters,
       styleOptions,

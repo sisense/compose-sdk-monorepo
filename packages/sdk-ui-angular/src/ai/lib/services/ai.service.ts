@@ -10,13 +10,23 @@ import {
   GetQueryRecommendationsParams,
   prepareGetNlgInsightsPayload,
   prepareGetNlqResultPayload,
-  QueryRecommendation,
+  QueryRecommendation as QueryRecommendationPreact,
   UseGetNlgInsightsParams,
   widgetComposer,
 } from '@sisense/sdk-ui-preact/ai';
 
 export interface AiContextConfig extends Omit<AiContextProviderProps, 'children'> {}
 export interface GetNlgInsightsParams extends Omit<UseGetNlgInsightsParams, 'enabled'> {}
+
+/**
+ * {@inheritDoc @sisense/sdk-ui!QueryRecommendation}
+ */
+export interface QueryRecommendation extends Omit<QueryRecommendationPreact, 'widgetProps'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!QueryRecommendation.widgetProps}
+   */
+  widgetProps?: WidgetProps;
+}
 
 /**
  * Token used to inject {@link AiContextConfig} into your application.
@@ -53,19 +63,13 @@ export interface GetNlgInsightsParams extends Omit<UseGetNlgInsightsParams, 'ena
  * })
  * ```
  * @group Generative AI
- * @beta
  */
 export const AI_CONTEXT_CONFIG_TOKEN = new InjectionToken<AiContextConfig>('AI Context Config');
 
 /**
  * Service for working with Sisense Fusion Generative AI.
  *
- * ::: warning Note
- * This service is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @group Generative AI
- * @beta
  */
 @Injectable({
   providedIn: 'root',
@@ -108,6 +112,7 @@ export class AiService {
    *
    * @param params - Parameters for recommendations
    * @returns An array of objects, each containing recommended question text and its corresponding `widgetProps`
+   * @beta
    */
   async getQueryRecommendations(
     params: GetQueryRecommendationsParams,
@@ -138,6 +143,7 @@ export class AiService {
    *
    * @param params - NLQ query parameters
    * @returns The result as WidgetProps
+   * @beta
    */
   async getNlqResult(params: GetNlqResultParams): Promise<WidgetProps | undefined> {
     const { contextTitle, request } = prepareGetNlqResultPayload(params);
@@ -146,9 +152,9 @@ export class AiService {
     const data = await api?.ai.getNlqResult(contextTitle, request);
 
     return data
-      ? widgetComposer.toWidgetProps(data, {
+      ? (widgetComposer.toWidgetProps(data, {
           useCustomizedStyleOptions: params.enableAxisTitlesInWidgetProps || false,
-        })
+        }) as WidgetProps)
       : undefined;
   }
 }

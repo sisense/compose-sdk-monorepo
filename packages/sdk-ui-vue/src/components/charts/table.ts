@@ -52,19 +52,22 @@ export const Table = defineComponent({
      *
      * @category Data
      */
-    dataOptions: Object as PropType<TableProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<TableProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!TableProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<TableProps['dataSet']>,
+    dataSet: [String, Object] as PropType<TableProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!TableProps.filters}
      *
      * @category Data
      */
-    filters: Array as PropType<TableProps['filters']>,
+    filters: [Object, Array] as PropType<TableProps['filters']>,
     /** @internal */
     refreshCounter: Number as PropType<TableProps['refreshCounter']>,
     /**
@@ -73,6 +76,12 @@ export const Table = defineComponent({
      * @category Representation
      */
     styleOptions: Object as PropType<TableProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!TableProps.onDataReady}
+     *
+     * @category Callbacks
+     */
+    onDataReady: Function as PropType<TableProps['onDataReady']>,
   },
-  setup: (props) => setupHelper(TablePreact, props as TableProps),
+  setup: (props) => setupHelper(TablePreact, props),
 });

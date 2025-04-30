@@ -16,7 +16,7 @@ Compose SDK contains a set of React components needed to interface with your Sis
 
 1. Familiarity with [front-end web development](https://developer.mozilla.org/en-US/docs/Learn/Front-end_web_developer), including Node.js, JavaScript/TypeScript, and React.
 2. [Node.js](https://nodejs.org/en) version **16** or higher.
-3. [React](https://react.dev) version **16.14.0**, **17**, or **18**.
+3. [React](https://react.dev) version **17**, or **18**.
 4. A Node package manager such as [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) or [Yarn](https://yarnpkg.com/getting-started/install).
 5. Access to a [Sisense](https://sisense.com) instance with a queryable data source (for example, Sample ECommerce).
 6. React application **with TypeScript**. You can use your existing application, or if you do not have one, you can follow the [Vite tutorial](https://vitejs.dev/guide/#scaffolding-your-first-vite-project) to create one.

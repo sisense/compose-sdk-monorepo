@@ -55,25 +55,28 @@ export const BoxplotChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<BoxplotChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<BoxplotChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<BoxplotChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<BoxplotChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<BoxplotChartProps['filters']>,
+    filters: [Object, Array] as PropType<BoxplotChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<BoxplotChartProps['highlights']>,
+    highlights: Array as PropType<BoxplotChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.styleOptions}
      *
@@ -90,7 +93,6 @@ export const BoxplotChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<BoxplotChartProps['onDataReady']>,
     /**
@@ -112,5 +114,5 @@ export const BoxplotChart = defineComponent({
      */
     onDataPointsSelected: Function as PropType<BoxplotChartProps['onDataPointsSelected']>,
   },
-  setup: (props) => setupHelper(BoxplotChartPreact, props as BoxplotChartPropsPreact),
+  setup: (props) => setupHelper(BoxplotChartPreact, props),
 });

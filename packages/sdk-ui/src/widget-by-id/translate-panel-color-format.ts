@@ -92,10 +92,16 @@ export const createValueColorOptions = (
     case 'condition':
       return {
         type: 'conditional',
-        conditions: format.conditions.filter(
-          (condition): condition is PanelColorFormatConditionSimple =>
-            typeof condition.expression === 'string',
-        ),
+        conditions: format.conditions
+          .filter(
+            (condition): condition is PanelColorFormatConditionSimple =>
+              typeof condition.expression === 'string',
+          )
+          .map(({ color, expression, operator }) => ({
+            color,
+            expression,
+            operator,
+          })),
         defaultColor: getPaletteColor(customPaletteColors, 0),
       } as ConditionalDataColorOptions;
     default:

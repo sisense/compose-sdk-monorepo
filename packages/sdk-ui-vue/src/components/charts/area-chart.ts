@@ -54,25 +54,28 @@ export const AreaChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<AreaChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<AreaChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<AreaChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<AreaChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<AreaChartProps['filters']>,
+    filters: [Object, Array] as PropType<AreaChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<AreaChartProps['highlights']>,
+    highlights: Array as PropType<AreaChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaChartProps.styleOptions}
      *
@@ -89,7 +92,6 @@ export const AreaChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<AreaChartProps['onDataReady']>,
     /**
@@ -111,5 +113,5 @@ export const AreaChart = defineComponent({
      */
     onDataPointsSelected: Function as PropType<AreaChartProps['onDataPointsSelected']>,
   },
-  setup: (props) => setupHelper(AreaChartPreact, props as AreaChartPropsPreact),
+  setup: (props) => setupHelper(AreaChartPreact, props),
 });

@@ -10,7 +10,6 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     backgroundColor: '#FFFFFF',
     textColor: '#000000',
     secondaryTextColor: '#E4E4E4',
-    panelBackgroundColor: '#F6F6F6',
     animation: {
       init: {
         duration: 'auto',
@@ -240,7 +239,6 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     backgroundColor: '#313138',
     textColor: '#FFFFFF',
     secondaryTextColor: '#C5C8CF',
-    panelBackgroundColor: '#313138',
     animation: {
       init: {
         duration: 'auto',

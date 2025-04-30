@@ -17,7 +17,10 @@
  * @groupDescription Fusion Assets
  * React components, hooks, and utilities for working with Fusion dashboards, widgets, queries, and formulas
  * @groupDescription Generative AI
- * React components and hooks for creating experiences using generative AI
+ * React components and hooks for working with Generative AI features provided by Sisense Fusion
+ * ::: tip Note
+ * For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
+ * :::
  * @groupDescription Interfaces
  * TypeScript interfaces for components and hooks listed above
  * @groupDescription Type Aliases

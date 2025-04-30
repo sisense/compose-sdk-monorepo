@@ -105,7 +105,6 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
    * {@inheritDoc  @sisense/sdk-ui!TableProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: TableProps['dataReady'];

@@ -102,24 +102,6 @@ export const replaceFilter = (
 };
 
 /**
- * Creates a new dashboard instance with a specific filter modified.
- * Alias for `replaceFilter`.
- *
- * @deprecated Use {@link replaceFilter} instead
- * @param dashboard - The original dashboard (`DashboardProps`) containing the filter to modify.
- * @param filterToModify - The existing filter to be modified.
- * @param newFilter - The new filter to replace the existing one.
- * @returns A new dashboard instance with the specified filter modified.
- */
-export const modifyFilter = (
-  dashboard: DashboardProps,
-  filterToModify: Filter,
-  newFilter: Filter,
-): DashboardProps => {
-  return replaceFilter(dashboard, filterToModify, newFilter);
-};
-
-/**
  * Creates a new dashboard instance with a specific filter removed.
  *
  * This function removes the filter with the same GUID as the provided filter from the dashboard's filters.

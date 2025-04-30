@@ -31,7 +31,7 @@ export const executeTracking = (
 
 export const useTracking = () => {
   const { tracking, app } = useSisenseContext();
-
+  const authType = app?.httpClient?.auth?.type;
   const trackEvent = useCallback(
     (
       eventType: TrackingEventType,
@@ -42,13 +42,13 @@ export const useTracking = () => {
 
       return executeTracking(
         eventType,
-        eventPayload,
+        { ...eventPayload, authType },
         app.httpClient,
         tracking.onTrackingEvent,
         isDebugMode,
       );
     },
-    [tracking, app],
+    [tracking, app, authType],
   );
 
   const trackError = useCallback(
@@ -71,13 +71,13 @@ export const useTracking = () => {
       };
       return executeTracking(
         'sdkError',
-        payload,
+        { ...payload, authType },
         app.httpClient,
         tracking.onTrackingEvent,
         isDebugMode,
       );
     },
-    [tracking, app],
+    [tracking, app, authType],
   );
 
   return {

@@ -12,7 +12,7 @@ import { useCallback } from 'react';
 import { DashboardChangeType } from '@/dashboard/dashboard';
 import { WidgetProps } from '@/props';
 import { DataSource } from '@sisense/sdk-data';
-import { getDataSourceId, getDataSourceTitle } from '@/utils/data-sources-utils';
+import { getDataSourceTitle } from '@/utils/data-sources-utils';
 
 const DashboardWrapper = styled.div<{
   background: string;
@@ -113,13 +113,14 @@ export const DashboardContainer = ({
 
 const getUniqueDataSources = (widgets: WidgetProps[], defaultDataSource?: DataSource) => {
   const dataSourcesMap = new Map<string, DataSource>();
+  // it's expected that title is unique
+  // and in some of Fusion widgets dataSource.id are different for the actually same dataSources,
+  // so we need to use datasource title as a key
   if (defaultDataSource) {
-    dataSourcesMap.set(getDataSourceId(defaultDataSource), defaultDataSource);
+    dataSourcesMap.set(getDataSourceTitle(defaultDataSource), defaultDataSource);
   }
   widgets.forEach((widget) => {
     if ('dataSource' in widget && widget.dataSource) {
-      // it's expected that title is unique
-      // and in some of Fusion widgets dataSource.id are different for the actually same dataSources
       const dataSourceTitle = getDataSourceTitle(widget.dataSource);
       if (!dataSourcesMap.has(dataSourceTitle)) {
         dataSourcesMap.set(dataSourceTitle, widget.dataSource);

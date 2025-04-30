@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { type JaqlRequest } from '@sisense/sdk-pivot-client';
 import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
@@ -70,7 +70,10 @@ export const usePivotTableQuery = ({
   highlights?: Filter[];
 }) => {
   const [jaql, setJaql] = useState<JaqlRequest | undefined>();
-  const { rows, columns, values, grandTotals } = getPivotQueryOptions(dataOptionsInternal);
+  const { rows, columns, values, grandTotals } = useMemo(
+    () => getPivotQueryOptions(dataOptionsInternal),
+    [dataOptionsInternal],
+  );
 
   // retrieve the Jaql query without executing it
   const onBeforeQuery = useCallback(
@@ -84,16 +87,19 @@ export const usePivotTableQuery = ({
 
   // Debounce the query parameters to avoid frequent re-renders that may lead to formatting issues
   const queryParams: ExecutePivotQueryParams = useDebouncedValue(
-    {
-      dataSource: dataSet,
-      rows,
-      columns,
-      values,
-      grandTotals,
-      filters,
-      highlights,
-      onBeforeQuery,
-    },
+    useMemo(
+      () => ({
+        dataSource: dataSet,
+        rows,
+        columns,
+        values,
+        grandTotals,
+        filters,
+        highlights,
+        onBeforeQuery,
+      }),
+      [dataSet, rows, columns, values, grandTotals, filters, highlights, onBeforeQuery],
+    ),
     PIVOT_JAQL_UPDATE_DEBOUNCE,
   );
 

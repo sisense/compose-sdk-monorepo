@@ -2,14 +2,10 @@
 title: GetNlgInsightsComponent
 ---
 
-# Class GetNlgInsightsComponent <Badge type="beta" text="Beta" />
+# Class GetNlgInsightsComponent
 
 An Angular component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
 Specifying NLG parameters is similar to providing parameters to the [QueryService.executeQuery](../queries/class.QueryService.md#executequery) service method, using dimensions, measures, and filters.
-
-::: warning Note
-This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
 
 ## Example
 

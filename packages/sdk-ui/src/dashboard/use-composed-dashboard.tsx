@@ -7,7 +7,7 @@ import { withTracking } from '@/decorators/hook-decorators';
 import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
 import { MenuOptions } from '@/common/components/menu/types';
 import { MenuIds } from '@/common/components/menu/menu-ids';
-import { DashboardLayoutOptions, DashboardProps } from './types.js';
+import { DashboardProps } from './types.js';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { useSyncedState } from '@/common/hooks/use-synced-state.js';
 import { useWidgetsLayoutManagement } from '@/dashboard/hooks/use-widgets-layout';
@@ -61,7 +61,6 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   // APIs:
   setFilters: (filters: Filter[] | FilterRelations) => void;
   setWidgetsLayout: (newLayout: WidgetsPanelLayout) => void;
-  layoutOptions: DashboardLayoutOptions;
 } {
   const { filters, widgets, widgetsOptions } = initialDashboard;
   // This state is needed to avoid losing the inner state when new widget objects are received from toDashboardProps.
@@ -122,8 +121,8 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
       ...initialDashboard,
       filters: commonFilters,
       widgets: widgetsWithTabberConfigs,
+      layoutOptions: resultLayout,
     },
-    layoutOptions: resultLayout,
     setFilters,
     setWidgetsLayout,
   };
@@ -134,7 +133,6 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
  * composes them into a coordinated dashboard with change detection, cross filtering, and drill down.
  *
  * @group Dashboards
- * @alpha
  */
 export const useComposedDashboard = withTracking('useComposedDashboard')(
   useComposedDashboardInternal,

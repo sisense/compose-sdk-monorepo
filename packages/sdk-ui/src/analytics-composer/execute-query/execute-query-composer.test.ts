@@ -3,7 +3,7 @@ import * as executeQueryComposer from './execute-query-composer';
 import {
   MOCK_CODE_EXECUTE_QUERY_REACT_2,
   MOCK_CODE_EXECUTE_PIVOT_QUERY_REACT_1,
-} from '../__mocks__/mock-code-examples';
+} from '../__mocks__/mock-code-for-queries';
 import { ExecuteQueryCodeParams, ExecutePivotQueryCodeParams } from '../types';
 import { sampleEcommerceDashboard } from '../../models/__mocks__/sample-ecommerce-dashboard';
 

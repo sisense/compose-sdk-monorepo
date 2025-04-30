@@ -54,25 +54,28 @@ export const ScattermapChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<ScattermapChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<ScattermapChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<ScattermapChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<ScattermapChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<ScattermapChartProps['filters']>,
+    filters: [Object, Array] as PropType<ScattermapChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<ScattermapChartProps['highlights']>,
+    highlights: Array as PropType<ScattermapChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.styleOptions}
      *
@@ -83,7 +86,6 @@ export const ScattermapChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<ScattermapChartProps['onDataReady']>,
     /**
@@ -93,5 +95,5 @@ export const ScattermapChart = defineComponent({
      */
     onDataPointClick: Object as PropType<ScattermapChartProps['onDataPointClick']>,
   },
-  setup: (props) => setupHelper(ScattermapChartPreact, props as ScattermapChartPropsPreact),
+  setup: (props) => setupHelper(ScattermapChartPreact, props),
 });

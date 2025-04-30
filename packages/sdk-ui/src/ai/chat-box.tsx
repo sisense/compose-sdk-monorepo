@@ -20,7 +20,6 @@ import { useThemeContext } from '..';
 import { Themable } from '@/theme-provider/types';
 import AiDisclaimer from './ai-disclaimer';
 import ClickableMessage from './messages/clickable-message';
-import { BetaLabel } from './common/beta-label';
 import { ScrollToBottom } from './scroll-to-bottom';
 import { useTranslation } from 'react-i18next';
 import { ChatContextDetails } from '@/ai/api/types';
@@ -132,7 +131,6 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
           <NavBackButton onClick={onGoBack} color={themeSettings.aiChat.header.textColor} />
         )
       }
-      rightNav={<BetaLabel />}
       style={themeSettings.aiChat.header}
     />
   ) : null;

@@ -81,7 +81,7 @@ describe('ChartWidget', () => {
               breakBy: [],
             },
             drilldownOptions: {
-              drilldownDimensions: [],
+              drilldownPaths: [],
               drilldownSelections: [
                 {
                   points: [

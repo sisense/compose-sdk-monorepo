@@ -112,9 +112,7 @@ export interface DashboardByIdConfig extends DashboardConfig {
    *
    * Limitations:
    * - WAT authentication does not support persistence.
-   * - As an alpha feature, currently only changes to dashboard filters are persisted.
-   *
-   * @alpha
+   * - Currently only changes to dashboard filters are persisted.
    */
   persist?: boolean;
 }
@@ -134,6 +132,12 @@ export interface DashboardLayoutOptions {
  * Props for the Dashboard component
  */
 export interface DashboardProps {
+  /**
+   * Optional identifer of the dashboard
+   *
+   * @internal
+   */
+  id?: string;
   /** The title of the dashboard */
   title?: string;
   /**

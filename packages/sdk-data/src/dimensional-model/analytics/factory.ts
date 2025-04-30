@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash-es/cloneDeep.js';
 
+import { withComposeCodeForAnalytics } from '../compose-code-utils.js';
 import type { Attribute, Measure } from '../interfaces.js';
 import { customFormula } from '../measures/factory.js';
 
@@ -32,8 +33,8 @@ function boxWhiskerCommonValues(target: Attribute) {
 /**
  * Returns an array of values for box whisker plot using interquartile range (IQR) calculations.
  *
- * @param {Attribute} target - The target attribute for calculations.
- * @returns {Measure[]} An array of measures representing IQR values for box whisker plots.
+ * @param target - The target attribute for calculations.
+ * @returns An array of measures representing IQR values for box whisker plots.
  */
 export function boxWhiskerIqrValues(target: Attribute) {
   return [
@@ -53,8 +54,8 @@ export function boxWhiskerIqrValues(target: Attribute) {
 /**
  * Returns an array of extremum values for box whisker plot.
  *
- * @param {Attribute} target - The target attribute for calculations.
- * @returns {Measure[]} An array of measures representing extremum values for box whisker plots.
+ * @param target - The target attribute for calculations.
+ * @returns An array of measures representing extremum values for box whisker plots.
  */
 export function boxWhiskerExtremumsValues(target: Attribute) {
   return [
@@ -71,8 +72,8 @@ export function boxWhiskerExtremumsValues(target: Attribute) {
 /**
  * Returns an array of values for box whisker plot using standard deviation calculations.
  *
- * @param {Attribute} target - The target attribute for calculations.
- * @returns {Measure[]} An array of measures representing standard deviation values for box whisker plots.
+ * @param target - The target attribute for calculations.
+ * @returns An array of measures representing standard deviation values for box whisker plots.
  */
 export function boxWhiskerStdDevValues(target: Attribute) {
   return [
@@ -92,89 +93,93 @@ export function boxWhiskerStdDevValues(target: Attribute) {
 /**
  * Returns an attribute representing outlier points based on interquartile range (IQR) calculations.
  *
- * @param {Attribute} target - The target attribute for calculations.
- * @returns {Attribute} An attribute representing outliers for box whisker plots using IQR.
+ * @param target - The target attribute for calculations.
+ * @returns An attribute representing outliers for box whisker plots using IQR.
  */
-export const boxWhiskerIqrOutliers = (target: Attribute): Attribute => {
-  const outliersAttrWithInnerFilter = cloneDeep(target);
-  const outliersMax = customFormula(
-    BOX_WHISKER.OUTLIER_MAX_VALUE_NAME,
-    '(UPPERWHISKERMIN_IQR([Attr]), all([Attr]))',
-    {
-      Attr: target,
-    },
-  ) as Measure;
-  const outliersMin = customFormula(
-    BOX_WHISKER.OUTLIER_MIN_VALUE_NAME,
-    '(LOWERWHISKERMAX_IQR([Attr]), all([Attr]))',
-    {
-      Attr: target,
-    },
-  ) as Measure;
-
-  outliersAttrWithInnerFilter.name = `${outliersAttrWithInnerFilter.name} (Outliers)`;
-
-  outliersAttrWithInnerFilter.jaql = (nested?: boolean) => {
-    const jaql = {
-      ...target.jaql(true),
-      filter: {
-        or: [
-          {
-            fromNotEqual: outliersMax.jaql(true),
-          },
-          {
-            toNotEqual: outliersMin.jaql(true),
-          },
-        ],
+export const boxWhiskerIqrOutliers: (target: Attribute) => Attribute = withComposeCodeForAnalytics(
+  (target) => {
+    const outliersAttrWithInnerFilter = cloneDeep(target);
+    const outliersMax = customFormula(
+      BOX_WHISKER.OUTLIER_MAX_VALUE_NAME,
+      '(UPPERWHISKERMIN_IQR([Attr]), all([Attr]))',
+      {
+        Attr: target,
       },
+    ) as Measure;
+    const outliersMin = customFormula(
+      BOX_WHISKER.OUTLIER_MIN_VALUE_NAME,
+      '(LOWERWHISKERMAX_IQR([Attr]), all([Attr]))',
+      {
+        Attr: target,
+      },
+    ) as Measure;
+
+    outliersAttrWithInnerFilter.name = `${outliersAttrWithInnerFilter.name} (Outliers)`;
+
+    outliersAttrWithInnerFilter.jaql = (nested?: boolean) => {
+      const jaql = {
+        ...target.jaql(true),
+        filter: {
+          or: [
+            {
+              fromNotEqual: outliersMax.jaql(true),
+            },
+            {
+              toNotEqual: outliersMin.jaql(true),
+            },
+          ],
+        },
+      };
+
+      return nested ? jaql : { jaql };
     };
 
-    return nested ? jaql : { jaql };
-  };
-
-  return outliersAttrWithInnerFilter;
-};
+    return outliersAttrWithInnerFilter;
+  },
+  'boxWhiskerIqrOutliers',
+);
 
 /**
  * Returns an attribute representing outlier points based on standard deviation calculations.
  *
- * @param {Attribute} target - The target attribute for calculations.
- * @returns {Attribute} An attribute representing outliers for box whisker plots using standard deviation.
+ * @param target - The target attribute for calculations.
+ * @returns An attribute representing outliers for box whisker plots using standard deviation.
  */
-export const boxWhiskerStdDevOutliers = (target: Attribute): Attribute => {
-  const outliersAttrWithInnerFilter = cloneDeep(target);
-  const outliersMax = customFormula(
-    BOX_WHISKER.OUTLIER_MAX_VALUE_NAME,
-    '(UPPERWHISKERMIN_STDEVP([Attr]), all([Attr]))',
-    {
-      Attr: target,
-    },
-  ) as Measure;
-  const outliersMin = customFormula(
-    BOX_WHISKER.OUTLIER_MIN_VALUE_NAME,
-    '(LOWERWHISKERMAX_STDEVP([Attr]), all([Attr]))',
-    {
-      Attr: target,
-    },
-  ) as Measure;
-
-  outliersAttrWithInnerFilter.jaql = (nested?: boolean) => {
-    const jaql = {
-      ...target.jaql(true),
-      filter: {
-        or: [
-          {
-            fromNotEqual: outliersMax.jaql(true),
-          },
-          {
-            toNotEqual: outliersMin.jaql(true),
-          },
-        ],
+export const boxWhiskerStdDevOutliers: (target: Attribute) => Attribute =
+  withComposeCodeForAnalytics((target) => {
+    const outliersAttrWithInnerFilter = cloneDeep(target);
+    const outliersMax = customFormula(
+      BOX_WHISKER.OUTLIER_MAX_VALUE_NAME,
+      '(UPPERWHISKERMIN_STDEVP([Attr]), all([Attr]))',
+      {
+        Attr: target,
       },
+    ) as Measure;
+    const outliersMin = customFormula(
+      BOX_WHISKER.OUTLIER_MIN_VALUE_NAME,
+      '(LOWERWHISKERMAX_STDEVP([Attr]), all([Attr]))',
+      {
+        Attr: target,
+      },
+    ) as Measure;
+
+    outliersAttrWithInnerFilter.jaql = (nested?: boolean) => {
+      const jaql = {
+        ...target.jaql(true),
+        filter: {
+          or: [
+            {
+              fromNotEqual: outliersMax.jaql(true),
+            },
+            {
+              toNotEqual: outliersMin.jaql(true),
+            },
+          ],
+        },
+      };
+
+      return nested ? jaql : { jaql };
     };
 
-    return nested ? jaql : { jaql };
-  };
-
-  return outliersAttrWithInnerFilter;
-};
+    return outliersAttrWithInnerFilter;
+  }, 'boxWhiskerStdDevOutliers');

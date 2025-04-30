@@ -105,3 +105,22 @@ If not specified, it takes the existing value from the widget configuration.
 > **widgetOid**: `string`
 
 Identifier of the widget
+
+### Callbacks
+
+#### dataReady
+
+> **dataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

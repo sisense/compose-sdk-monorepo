@@ -2,6 +2,7 @@ export { DashboardById } from './dashboard-by-id';
 export { Dashboard } from './dashboard';
 export {
   useComposedDashboard,
+  useComposedDashboardInternal,
   type ComposableDashboardProps,
   type UseComposedDashboardOptions,
 } from './use-composed-dashboard';

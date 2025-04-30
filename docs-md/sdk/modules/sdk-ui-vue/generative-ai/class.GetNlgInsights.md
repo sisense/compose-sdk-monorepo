@@ -2,14 +2,10 @@
 title: GetNlgInsights
 ---
 
-# Class GetNlgInsights <Badge type="beta" text="Beta" />
+# Class GetNlgInsights
 
 A Vue component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [`useExecuteQuery`](../queries/function.useExecuteQuery.md) composable, using dimensions, measures, and filters.
-
-::: warning Note
-This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
 
 ## Example
 
@@ -45,7 +41,7 @@ const props: GetNlgInsightsProps = {
 
 ### dataSource
 
-> **`readonly`** **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
+> **`readonly`** **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
 The data source that the query targets - e.g. `Sample ECommerce`
 

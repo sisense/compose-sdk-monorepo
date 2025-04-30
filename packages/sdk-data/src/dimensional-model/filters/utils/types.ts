@@ -25,6 +25,14 @@ export type JaqlDataSource = {
   revisionId?: string;
 };
 
+/**
+ * Data source as specified in the jaql
+ * but with required filelds
+ *
+ * @internal
+ */
+export type JaqlDataSourceForDto = JaqlDataSource & { id: string; address?: string };
+
 export enum GeneralFilterType {
   INCLUDE_ALL = 'INCLUDE_ALL',
   ADVANCED = 'ADVANCED',

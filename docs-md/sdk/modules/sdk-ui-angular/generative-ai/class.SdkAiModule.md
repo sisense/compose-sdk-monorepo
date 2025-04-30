@@ -2,7 +2,7 @@
 title: SdkAiModule
 ---
 
-# Class SdkAiModule <Badge type="beta" text="Beta" />
+# Class SdkAiModule
 
 SDK AI Module, which is a container for generative AI components and services.
 

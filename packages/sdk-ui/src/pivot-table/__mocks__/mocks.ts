@@ -36,7 +36,7 @@ export const mockPivotTableProps: PivotTableProps = {
         totalsCalculation: 'sum',
       },
     ],
-    grandTotals: { title: 'Grand Total', rows: true, columns: true },
+    grandTotals: { rows: true, columns: true },
   },
   filters: [filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])],
 };

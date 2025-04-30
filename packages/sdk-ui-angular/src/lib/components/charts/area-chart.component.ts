@@ -140,7 +140,6 @@ export class AreaChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!AreaChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: AreaChartProps['dataReady'];

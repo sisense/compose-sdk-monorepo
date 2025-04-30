@@ -7,7 +7,6 @@ import Toolbar from './common/toolbar';
 import { useThemeContext } from '@/theme-provider';
 import { useChatConfig } from './chat-config';
 import { getDarkFactor, toColor } from '@/utils/color';
-import { BetaLabel } from './common/beta-label';
 import styled from '@emotion/styled';
 
 const LogoContainer = styled.div`
@@ -56,7 +55,6 @@ export default function ChatHome({ dataTopicsList, onDataTopicClick }: ChatHomeP
               <SisenseLogo isDarkBackground={isDarkBackground} />
             </LogoContainer>
           }
-          rightNav={<BetaLabel />}
           style={themeSettings.aiChat.header}
         />
       ) : null}

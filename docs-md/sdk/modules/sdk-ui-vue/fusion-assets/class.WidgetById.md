@@ -75,7 +75,7 @@ If not specified, the default value is `false`.
 
 #### dashboardOid
 
-> **`readonly`** **dashboardOid**?: `string`
+> **`readonly`** **dashboardOid**: `string`
 
 Identifier of the dashboard that contains the widget
 
@@ -123,7 +123,7 @@ If not specified, it takes the existing value from the widget configuration.
 
 #### widgetOid
 
-> **`readonly`** **widgetOid**?: `string`
+> **`readonly`** **widgetOid**: `string`
 
 Identifier of the widget
 
@@ -160,3 +160,22 @@ Context menu handler callback for a data point
 > **`readonly`** **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
+
+***
+
+#### onDataReady
+
+> **`readonly`** **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

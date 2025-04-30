@@ -10,10 +10,6 @@ A Vue composable that fetches recommended questions for a data model or perspect
 
 This composable includes the same code that fetches the initial suggested questions in the chatbot.
 
-::: warning Note
-This composable is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
-
 ## Parameters
 
 | Parameter | Type | Description |

@@ -230,3 +230,12 @@ To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/gu
 A callback that allows you to customize what happens when data points are selected.
 
 To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
+
+***
+
+#### dataReady
+
+> **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.

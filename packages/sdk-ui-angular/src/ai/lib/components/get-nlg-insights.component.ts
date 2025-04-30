@@ -33,10 +33,6 @@ export interface GetNlgInsightsProps extends GetNlgInsightsPropsPreact {}
  * An Angular component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
  * Specifying NLG parameters is similar to providing parameters to the {@link QueryService.executeQuery} service method, using dimensions, measures, and filters.
  *
- * ::: warning Note
- * This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * An example of using the `GetNlgInsightsComponent`:
  *
@@ -71,7 +67,6 @@ export class ExampleComponent {
  *
  * <img src="media://angular-get-nlg-insights-example.png" width="700px" />
  * @group Generative AI
- * @beta
  */
 @Component({
   selector: 'csdk-get-nlg-insights',

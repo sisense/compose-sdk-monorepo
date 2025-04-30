@@ -139,7 +139,6 @@ export class PolarChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!PolarChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: PolarChartProps['dataReady'];

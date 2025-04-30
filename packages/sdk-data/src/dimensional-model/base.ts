@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable no-useless-escape */
 import { Element } from './interfaces.js';
-import { JaqlDataSource } from './types.js';
+import { JaqlDataSource, JSONObject } from './types.js';
 
 /**
  * @internal
@@ -50,7 +50,9 @@ export abstract class DimensionalElement implements Element {
       this._dataSource = dataSource;
     }
 
-    this.composeCode = composeCode;
+    if (composeCode) {
+      this.composeCode = composeCode;
+    }
   }
 
   /**
@@ -78,18 +80,19 @@ export abstract class DimensionalElement implements Element {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
+  serialize(): JSONObject {
     return {
       name: this.name,
       type: this.type,
-      desc: this.description,
+      description: this.description,
       dataSource: this.dataSource,
+      composeCode: this.composeCode,
       __serializable: 'DimensionalElement',
     };
   }
 
-  toJSON(): any {
-    return this.serializable();
+  toJSON(): JSONObject {
+    return this.serialize();
   }
 
   abstract jaql(nested?: boolean): any;

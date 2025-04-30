@@ -55,25 +55,28 @@ export const ColumnChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<ColumnChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<ColumnChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<ColumnChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<ColumnChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<ColumnChartProps['filters']>,
+    filters: [Object, Array] as PropType<ColumnChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<ColumnChartProps['highlights']>,
+    highlights: Array as PropType<ColumnChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onBeforeRender}
      *
@@ -84,7 +87,6 @@ export const ColumnChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<ColumnChartProps['onDataReady']>,
     /**
@@ -112,5 +114,5 @@ export const ColumnChart = defineComponent({
      */
     styleOptions: Object as PropType<ColumnChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(ColumnChartPreact, props as ColumnChartPropsPreact),
+  setup: (props) => setupHelper(ColumnChartPreact, props),
 });

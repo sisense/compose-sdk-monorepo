@@ -140,7 +140,6 @@ export class SunburstChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!SunburstChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: SunburstChartProps['dataReady'];

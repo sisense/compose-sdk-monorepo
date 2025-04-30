@@ -2,16 +2,12 @@
 title: GetNlgInsights
 ---
 
-# Function GetNlgInsights <Badge type="beta" text="Beta" />
+# Function GetNlgInsights
 
 > **GetNlgInsights**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
 React component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [useExecuteQuery](../queries/function.useExecuteQuery.md) hook, using dimensions, measures, and filters.
-
-::: warning Note
-This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
 
 ## Parameters
 

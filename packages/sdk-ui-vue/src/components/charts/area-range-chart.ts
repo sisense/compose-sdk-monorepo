@@ -56,7 +56,6 @@ export interface AreaRangeChartProps extends AreaRangeChartPropsPreact {}
  * @param {AreaRangeChartProps} - Area chart properties
  * @returns Area Range Chart component
  * @group Charts
- * @beta
  */
 export const AreaRangeChart = defineComponent({
   props: {
@@ -65,25 +64,28 @@ export const AreaRangeChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<AreaRangeChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<AreaRangeChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<AreaRangeChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<AreaRangeChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<AreaRangeChartProps['filters']>,
+    filters: [Object, Array] as PropType<AreaRangeChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<AreaRangeChartProps['highlights']>,
+    highlights: Array as PropType<AreaRangeChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onBeforeRender}
      *
@@ -94,7 +96,6 @@ export const AreaRangeChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<AreaRangeChartProps['onDataReady']>,
     /**
@@ -123,5 +124,5 @@ export const AreaRangeChart = defineComponent({
      */
     styleOptions: Object as PropType<AreaRangeChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(AreaRangeChartPreact, props as AreaRangeChartPropsPreact),
+  setup: (props) => setupHelper(AreaRangeChartPreact, props),
 });

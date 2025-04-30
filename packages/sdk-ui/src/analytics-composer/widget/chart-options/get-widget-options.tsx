@@ -10,7 +10,12 @@ import {
 } from '../../../types';
 import { ScattermapChartDataOptions } from '../../../chart-data-options/types';
 import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
-import { DatetimeMask, MetadataItem, createJaqlElement, isDatetime } from '@sisense/sdk-data';
+import {
+  DatetimeMask,
+  MetadataItem,
+  createDimensionalElementFromMetadataItem,
+  isDatetime,
+} from '@sisense/sdk-data';
 import { AxesMapping, ChartRecommendations, ExpandedQueryModel } from '@/analytics-composer/types';
 import { normalizeAnyColumn } from '@/chart-data-options/utils';
 
@@ -32,7 +37,7 @@ export const getChartRecommendationsOrDefault = (
  * @internal
  */
 export const getTableOptions = (jaql: MetadataItem[]) => {
-  const columns = jaql.map(createJaqlElement);
+  const columns = jaql.map(createDimensionalElementFromMetadataItem);
 
   return {
     dataOptions: { columns },
@@ -90,7 +95,7 @@ const mapToDataOptions = (
           // error will contain the name of the problematic item
           // TODO: remove when proper validation is introduced
           if (!m) return { column: { type: '', name: nColumn.column.name } };
-          const column = createJaqlElement(m);
+          const column = createDimensionalElementFromMetadataItem(m);
 
           if (m.panel === 'measures') {
             return {

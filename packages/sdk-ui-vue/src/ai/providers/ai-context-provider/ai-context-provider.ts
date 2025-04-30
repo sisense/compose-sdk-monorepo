@@ -13,10 +13,6 @@ export interface AiContextProviderProps extends Omit<AiContextProviderPropsPreac
 /**
  * A Vue component that wraps all generative AI components and hooks.
  *
- * ::: warning Note
- * This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * ```vue
 <script setup lang="ts">
@@ -34,7 +30,6 @@ import { AiContextProvider, Chatbot } from '@sisense/sdk-ui-vue/ai';
  * ```
  * @param props - {@link AiContextProviderProps}
  * @group Generative AI
- * @beta
  */
 export const AiContextProvider = defineComponent({
   props: {

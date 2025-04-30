@@ -2,7 +2,7 @@
 title: AI_CONTEXT_CONFIG_TOKEN
 ---
 
-# Variable AI\_CONTEXT\_CONFIG\_TOKEN <Badge type="beta" text="Beta" />
+# Variable AI\_CONTEXT\_CONFIG\_TOKEN
 
 > **`const`** **AI\_CONTEXT\_CONFIG\_TOKEN**: `InjectionToken`\< [`AiContextConfig`](../interfaces/interface.AiContextConfig.md) \>
 

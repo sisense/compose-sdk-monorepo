@@ -48,7 +48,7 @@ DateRangeFilterTile props
 
 ### attribute
 
-> **`readonly`** **attribute**?: [`LevelAttribute`](../../sdk-data/interfaces/interface.LevelAttribute.md)
+> **`readonly`** **attribute**: [`LevelAttribute`](../../sdk-data/interfaces/interface.LevelAttribute.md)
 
 Date level attribute the filter is based on
 
@@ -76,7 +76,7 @@ If not specified, the earliest date of the target date-level attribute will be u
 
 ### filter
 
-> **`readonly`** **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
+> **`readonly`** **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
 
 Date range filter.
 
@@ -94,7 +94,7 @@ If not specified, the latest date of the target date-level attribute will be use
 
 ### onChange
 
-> **`readonly`** **onChange**?: (`filter`) => `void`
+> **`readonly`** **onChange**: (`filter`) => `void`
 
 Callback function that is called when the date range filter object should be updated.
 
@@ -144,6 +144,6 @@ List of filters this filter is dependent on.
 
 ### title
 
-> **`readonly`** **title**?: `string`
+> **`readonly`** **title**: `string`
 
 Filter tile title

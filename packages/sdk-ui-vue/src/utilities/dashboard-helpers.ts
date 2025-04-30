@@ -1,4 +1,7 @@
-import { dashboardHelpers as dashboardHelpersPreact } from '@sisense/sdk-ui-preact';
+import {
+  dashboardHelpers as dashboardHelpersPreact,
+  type DashboardProps as DashboardPropsPreact,
+} from '@sisense/sdk-ui-preact';
 import type { Filter, FilterRelations } from '@sisense/sdk-data';
 import type { DashboardProps } from '../components/dashboard';
 
@@ -20,7 +23,7 @@ export const replaceFilters = (
   dashboard: DashboardProps,
   newFilters: Filter[] | FilterRelations,
 ): DashboardProps => {
-  return dashboardHelpersPreact.replaceFilters(dashboard, newFilters);
+  return dashboardHelpersPreact.replaceFilters(dashboard as DashboardPropsPreact, newFilters);
 };
 
 /**
@@ -38,7 +41,7 @@ export const replaceFilters = (
  * @returns A new dashboard instance with the new filter added.
  */
 export const addFilter = (dashboard: DashboardProps, newFilter: Filter): DashboardProps => {
-  return dashboardHelpersPreact.addFilter(dashboard, newFilter);
+  return dashboardHelpersPreact.addFilter(dashboard as DashboardPropsPreact, newFilter);
 };
 
 /**
@@ -56,7 +59,7 @@ export const addFilter = (dashboard: DashboardProps, newFilter: Filter): Dashboa
  * @returns A new dashboard instance with the new filters added.
  */
 export const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
-  return dashboardHelpersPreact.addFilters(dashboard, newFilters);
+  return dashboardHelpersPreact.addFilters(dashboard as DashboardPropsPreact, newFilters);
 };
 
 /**
@@ -80,25 +83,11 @@ export const replaceFilter = (
   filterToReplace: Filter,
   newFilter: Filter,
 ): DashboardProps => {
-  return dashboardHelpersPreact.replaceFilter(dashboard, filterToReplace, newFilter);
-};
-
-/**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.modifyFilter}
- *
- * @deprecated Use {@link replaceFilter} instead
- *
- * @param dashboard - The original dashboard (`DashboardProps`) containing the filter to modify.
- * @param filterToModify - The existing filter to be modified.
- * @param newFilter - The new filter to replace the existing one.
- * @returns A new dashboard instance with the specified filter modified.
- */
-export const modifyFilter = (
-  dashboard: DashboardProps,
-  filterToModify: Filter,
-  newFilter: Filter,
-): DashboardProps => {
-  return dashboardHelpersPreact.modifyFilter(dashboard, filterToModify, newFilter);
+  return dashboardHelpersPreact.replaceFilter(
+    dashboard as DashboardPropsPreact,
+    filterToReplace,
+    newFilter,
+  );
 };
 
 /**
@@ -116,7 +105,7 @@ export const modifyFilter = (
  * @returns A new dashboard instance with the specified filter removed.
  */
 export const removeFilter = (dashboard: DashboardProps, filterToRemove: Filter): DashboardProps => {
-  return dashboardHelpersPreact.removeFilter(dashboard, filterToRemove);
+  return dashboardHelpersPreact.removeFilter(dashboard as DashboardPropsPreact, filterToRemove);
 };
 
 /**
@@ -137,5 +126,5 @@ export const removeFilters = (
   dashboard: DashboardProps,
   filtersToRemove: Filter[],
 ): DashboardProps => {
-  return dashboardHelpersPreact.removeFilters(dashboard, filtersToRemove);
+  return dashboardHelpersPreact.removeFilters(dashboard as DashboardPropsPreact, filtersToRemove);
 };

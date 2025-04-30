@@ -14,10 +14,6 @@ export interface GetNlgInsightsProps extends GetNlgInsightsPropsPreact {}
  * A Vue component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
  * Specifying a query is similar to providing parameters to a {@link @sisense/sdk-ui-vue!useExecuteQuery | `useExecuteQuery`} composable, using dimensions, measures, and filters.
  *
- * ::: warning Note
- * This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * Here's how you can use the GetNlgInsights component in a Vue application:
  * ```vue
@@ -46,14 +42,16 @@ const props: GetNlgInsightsProps = {
  * @param props - {@link GetNlgInsightsProps}
  * @returns Collapsible container wrapping a text summary
  * @group Generative AI
- * @beta
  */
 export const GetNlgInsights = defineComponent({
   props: {
     /**
      * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.dataSource}
      */
-    dataSource: Object as PropType<GetNlgInsightsProps['dataSource']>,
+    dataSource: {
+      type: [String, Object] as PropType<GetNlgInsightsProps['dataSource']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.dimensions}
      */
@@ -65,14 +63,14 @@ export const GetNlgInsights = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.filters}
      */
-    filters: (Array || Object) as PropType<GetNlgInsightsProps['filters']>,
+    filters: [Array, Object] as PropType<GetNlgInsightsProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.verbosity}
      */
     verbosity: String as PropType<GetNlgInsightsProps['verbosity']>,
   },
   setup: (props) =>
-    setupHelper(GetNlgInsightsPreact, props as GetNlgInsightsPropsPreact, [
+    setupHelper(GetNlgInsightsPreact, props, [
       ...createDefaultContextConnectors(),
       createAiContextConnector(),
     ]),

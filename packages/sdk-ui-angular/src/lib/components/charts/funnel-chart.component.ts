@@ -138,7 +138,6 @@ export class FunnelChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!FunnelChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: FunnelChartProps['dataReady'];

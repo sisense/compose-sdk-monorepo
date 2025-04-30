@@ -2,7 +2,7 @@
 title: AreaRangeChart
 ---
 
-# Function AreaRangeChart <Badge type="beta" text="Beta" />
+# Function AreaRangeChart
 
 > **AreaRangeChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 

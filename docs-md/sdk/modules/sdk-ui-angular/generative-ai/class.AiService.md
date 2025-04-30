@@ -2,13 +2,9 @@
 title: AiService
 ---
 
-# Class AiService <Badge type="beta" text="Beta" />
+# Class AiService
 
 Service for working with Sisense Fusion Generative AI.
-
-::: warning Note
-This service is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
 
 ## Constructors
 
@@ -50,7 +46,7 @@ NLG insights text summary
 
 ***
 
-### getNlqResult
+### getNlqResult <Badge type="beta" text="Beta" />
 
 > **getNlqResult**(`params`): `Promise`\< [`WidgetProps`](../type-aliases/type-alias.WidgetProps.md) \| `undefined` \>
 
@@ -70,7 +66,7 @@ The result as WidgetProps
 
 ***
 
-### getQueryRecommendations
+### getQueryRecommendations <Badge type="beta" text="Beta" />
 
 > **getQueryRecommendations**(`params`): `Promise`\< [`QueryRecommendation`](../interfaces/interface.QueryRecommendation.md)[] \>
 

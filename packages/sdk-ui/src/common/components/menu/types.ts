@@ -6,5 +6,6 @@ export type MenuOptions = {
   onClose?: () => void;
 };
 
+/** @internal */
 export type BeforeMenuOpenHandler = (options: MenuOptions) => MenuOptions | null;
 export type OpenMenuFn = (options: MenuOptions) => void;

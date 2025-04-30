@@ -68,7 +68,7 @@ export const MOCK_EXPANDED_QUERY_MODEL = {
             years: 'yyyy',
           },
         },
-        panel: 'measures',
+        panel: 'columns',
       },
       // should remove format from filter
       {
@@ -460,6 +460,8 @@ chart:
 export const MOCK_QUERY_MODEL_1 = {
   jaql: {
     datasource: {
+      id: 'localhost_aSampleIAAaECommerce',
+      address: 'LocalHost',
       title: 'Sample ECommerce',
     },
     metadata: [
@@ -556,7 +558,11 @@ export const MOCK_QUERY_MODEL_2 = {
     chartFamily: 'table',
   },
   jaql: {
-    datasource: { title: 'Sample ECommerce' },
+    datasource: {
+      id: 'localhost_aSampleIAAaECommerce',
+      address: 'LocalHost',
+      title: 'Sample ECommerce',
+    },
     metadata: [
       {
         jaql: {

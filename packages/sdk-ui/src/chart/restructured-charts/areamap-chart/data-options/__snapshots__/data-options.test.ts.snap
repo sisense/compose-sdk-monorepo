@@ -10,21 +10,23 @@ exports[`areamap - data options translators > translateDataOptionsToInternal > s
       "type": "range",
     },
     "column": {
-      "__serializable": "DimensionalElement",
+      "__serializable": "DimensionalBaseMeasure",
       "aggregation": "sum",
       "attribute": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Cost",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Cost]",
         "name": "Cost",
         "type": "numeric-attribute",
       },
+      "composeCode": "measureFactory.sum(DM.Commerce.Cost)",
       "dataSource": undefined,
-      "desc": "",
+      "description": "",
       "name": "sum Cost",
       "sort": 0,
       "type": "basemeasure",
@@ -33,12 +35,13 @@ exports[`areamap - data options translators > translateDataOptionsToInternal > s
   },
   "geo": {
     "column": {
-      "__serializable": "DimensionalElement",
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Country.Country",
       "dataSource": {
         "live": false,
         "title": "Sample ECommerce",
       },
-      "desc": "",
+      "description": "",
       "expression": "[Country.Country]",
       "name": "Country",
       "type": "text-attribute",

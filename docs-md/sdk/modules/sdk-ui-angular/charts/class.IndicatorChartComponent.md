@@ -189,7 +189,16 @@ Configurations for how to style and present a chart's data.
 
 #### beforeRender
 
-> **beforeRender**: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| `undefined`
+> **beforeRender**: [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md) \| `undefined`
 
 A callback that allows you to customize the underlying indicator chart element before it is rendered.
 The returned options are then used when rendering the chart.
+
+***
+
+#### dataReady
+
+> **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.

@@ -379,7 +379,8 @@ export const StyledDatePicker = styled(DatePickerWithCustomCalendar)`
 
   // ------------------------------------------------------
 
-  .react-datepicker__day--highlighted {
+  .react-datepicker__day--highlighted,
+  .react-datepicker__day--highlighted:focus {
     background-color: ${({ theme }) => theme.general.brandColor};
     color: ${({ theme }) =>
       getElementStateColor(

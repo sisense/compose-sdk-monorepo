@@ -72,7 +72,7 @@ Default data source explicitly set to be used by child components that are not d
 
 #### url
 
-> **`readonly`** **url**?: `string`
+> **`readonly`** **url**: `string`
 
 URL of the Sisense environment the app connects to
 

@@ -2,7 +2,7 @@
 title: useComposedDashboard
 ---
 
-# Function useComposedDashboard <Badge type="alpha" text="Alpha" />
+# Function useComposedDashboard
 
 > **useComposedDashboard**<`D`>(...`args`): `object`
 
@@ -26,10 +26,6 @@ composes them into a coordinated dashboard with change detection, cross filterin
 ### `dashboard`
 
 **dashboard**: `D`
-
-### `layoutOptions`
-
-**layoutOptions**: [`DashboardLayoutOptions`](../interfaces/interface.DashboardLayoutOptions.md)
 
 ### `setFilters`
 

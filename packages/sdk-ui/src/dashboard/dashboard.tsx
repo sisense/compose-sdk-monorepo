@@ -91,9 +91,12 @@ export const Dashboard = asSisenseComponent({
       }
     }, [app?.settings?.tabberConfig?.enabled, registerPlugin]);
     const {
-      dashboard: { filters: dashboardFilters = [], widgets: dashboardWidgets },
+      dashboard: {
+        filters: dashboardFilters = [],
+        widgets: dashboardWidgets,
+        layoutOptions: updatedLayoutOptions,
+      },
       setFilters,
-      layoutOptions: updatedLayoutOptions,
     } = useComposedDashboardInternal(
       {
         filters,

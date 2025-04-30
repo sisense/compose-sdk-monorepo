@@ -4,10 +4,8 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
-import { TranslatableError } from '../../translation/translatable-error.js';
-import { createCalculatedMeasureHelper } from '../../utils.js';
 import { normalizeName } from '../base.js';
-import { CustomFormulaJaql } from '../filters/utils/types.js';
+import { withComposeCodeForMeasure } from '../compose-code-utils.js';
 import {
   Attribute,
   BaseMeasure,
@@ -102,25 +100,6 @@ function measureFunction(
 }
 
 /**
- * Transforms a custom formula jaql into a calculated measure instance.
- *
- * As custom formulas can be nested, the function performs a recursive transformation via a helper function.
- *
- * @param jaql - Custom formula jaql
- * @returns Calculated measure instance
- * @internal
- */
-export function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedMeasure {
-  const isFormulaJaql = 'formula' in jaql;
-
-  if (!isFormulaJaql) {
-    throw new TranslatableError('errors.measure.notAFormula');
-  }
-
-  return createCalculatedMeasureHelper(jaql);
-}
-
-/**
  * Creates a calculated measure for a valid custom formula built from [base functions](/guides/sdk/reference/functions.html#measured-value-functions).
  *
  * Use square brackets (`[]`) within the `formula` property to include dimensions, measures, or filters.
@@ -172,17 +151,18 @@ export function transformCustomFormulaJaql(jaql: CustomFormulaJaql): CalculatedM
  * @returns A calculated measure instance
  * @group Advanced Analytics
  */
-export function customFormula(
+export const customFormula: (
   title: string,
   formula: string,
   context: CustomFormulaContext,
-): CalculatedMeasure {
-  const newContext = Object.entries(context).reduce((acc, [key, val]) => {
-    acc[`[${key}]`] = val.jaql().jaql;
-    return acc;
-  }, {});
-  return transformCustomFormulaJaql({ title, formula, context: newContext });
-}
+) => CalculatedMeasure = withComposeCodeForMeasure((title, formula, context) => {
+  // context keys must be in brackets
+  const newContext = Object.fromEntries(
+    Object.entries(context).map(([key, val]) => [key.startsWith('[') ? key : `[${key}]`, val]),
+  );
+
+  return new DimensionalCalculatedMeasure(title, formula, newContext);
+}, 'customFormula');
 
 function arithmetic(
   operand1: Measure | number,
@@ -229,19 +209,21 @@ function arithmetic(
  * @returns A measure instance
  * @group Aggregation
  */
-export function aggregate(
+export const aggregate: (
   attribute: Attribute,
   aggregationType: string,
   name?: string,
   format?: string,
-): BaseMeasure {
-  return new DimensionalBaseMeasure(
-    name ?? `${aggregationType.toString()} ${attribute.name}`,
-    attribute,
-    aggregationType,
-    format,
-  );
-}
+) => BaseMeasure = withComposeCodeForMeasure(
+  (attribute, aggregationType, name, format) =>
+    new DimensionalBaseMeasure(
+      name ?? `${aggregationType.toString()} ${attribute.name}`,
+      attribute,
+      aggregationType,
+      format,
+    ),
+  'aggregate',
+);
 
 /**
  * Creates a calculated measure from a numeric value.
@@ -255,9 +237,10 @@ export function aggregate(
  * @returns A calculated measure instance
  * @group Arithmetic
  */
-export function constant(value: number): CalculatedMeasure {
-  return new DimensionalCalculatedMeasure(`${value}`, `${value}`, {});
-}
+export const constant: (value: number) => CalculatedMeasure = withComposeCodeForMeasure(
+  (value) => new DimensionalCalculatedMeasure(`${value}`, `${value}`, {}),
+  'constant',
+);
 
 /**
  * Creates a sum aggregation measure over the given attribute.
@@ -275,9 +258,11 @@ export function constant(value: number): CalculatedMeasure {
  * @returns A measure instance
  * @group Aggregation
  */
-export function sum(attribute: Attribute, name?: string, format?: string) {
-  return aggregate(attribute, AggregationTypes.Sum, name, format);
-}
+export const sum: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Sum, name, format),
+    'sum',
+  );
 
 /**
  * Creates an average aggregation measure over the given attribute.
@@ -295,9 +280,11 @@ export function sum(attribute: Attribute, name?: string, format?: string) {
  * @returns A measure instance
  * @group Aggregation
  */
-export function average(attribute: Attribute, name?: string, format?: string) {
-  return aggregate(attribute, AggregationTypes.Average, name, format);
-}
+export const average: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Average, name, format),
+    'average',
+  );
 
 /**
  * {@inheritDoc average}
@@ -307,11 +294,17 @@ export function average(attribute: Attribute, name?: string, format?: string) {
  * ```ts
  * measureFactory.avg(DM.Commerce.Cost)
  * ```
+ * @param attribute - Attribute to aggregate
+ * @param name - Optional name for the new measure
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Can only be used for explicit queries. Cannot be used in charts, tables, etc.
+ * @returns A measure instance
  * @group Aggregation
  */
-export function avg(attribute: Attribute, name?: string, format?: string) {
-  return average(attribute, name, format);
-}
+export const avg: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Average, name, format),
+    'avg',
+  );
 
 /**
  * Creates a min aggregation measure over the given attribute.
@@ -327,9 +320,11 @@ export function avg(attribute: Attribute, name?: string, format?: string) {
  * @returns A measure instance
  * @group Aggregation
  */
-export function min(attribute: Attribute, name?: string, format?: string) {
-  return aggregate(attribute, AggregationTypes.Min, name, format);
-}
+export const min: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Min, name, format),
+    'min',
+  );
 
 /**
  * Creates a max aggregation measure over the given attribute.
@@ -345,9 +340,11 @@ export function min(attribute: Attribute, name?: string, format?: string) {
  * @returns A measure instance
  * @group Aggregation
  */
-export function max(attribute: Attribute, name?: string, format?: string) {
-  return aggregate(attribute, AggregationTypes.Max, name, format);
-}
+export const max: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Max, name, format),
+    'max',
+  );
 
 /**
  * Creates a median aggregation measure over the given attribute.
@@ -363,9 +360,11 @@ export function max(attribute: Attribute, name?: string, format?: string) {
  * @returns A measure instance
  * @group Aggregation
  */
-export function median(attribute: Attribute, name?: string, format?: string) {
-  return aggregate(attribute, AggregationTypes.Median, name, format);
-}
+export const median: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Median, name, format),
+    'median',
+  );
 
 /**
  * Creates a count aggregation measure over the given attribute.
@@ -383,9 +382,12 @@ export function median(attribute: Attribute, name?: string, format?: string) {
  * @returns A measure instance
  * @group Aggregation
  */
-export function count(attribute: Attribute, name?: string, format?: string) {
-  return aggregate(attribute, AggregationTypes.Count, name, format);
-}
+export const count: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Count, name, format),
+    'count',
+  );
+
 /**
  * Creates a count distinct aggregation measure over the given attribute.
  *
@@ -402,9 +404,11 @@ export function count(attribute: Attribute, name?: string, format?: string) {
  * @returns A measure instance
  * @group Aggregation
  */
-export function countDistinct(attribute: Attribute, name?: string, format?: string) {
-  return aggregate(attribute, AggregationTypes.CountDistinct, name, format);
-}
+export const countDistinct: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.CountDistinct, name, format),
+    'countDistinct',
+  );
 
 /**
  * Creates a measured value with the given measure and set of filters.
@@ -433,12 +437,12 @@ export function countDistinct(attribute: Attribute, name?: string, format?: stri
  * @returns A calculated measure instance
  * @group Advanced Analytics
  */
-export function measuredValue(
+export const measuredValue: (
   measure: Measure,
   filters: Filter[],
   name?: string,
   format?: string,
-): CalculatedMeasure {
+) => CalculatedMeasure = withComposeCodeForMeasure((measure, filters, name, format) => {
   const builder: string[] = [];
   const context: MeasureContext = <MeasureContext>{};
 
@@ -457,7 +461,7 @@ export function measuredValue(
   const exp = builder.join('');
 
   return new DimensionalCalculatedMeasure(name ?? exp, exp, context, format);
-}
+}, 'measuredValue');
 
 /**
  * Creates a calculated measure by adding two given numbers or measures.
@@ -475,14 +479,15 @@ export function measuredValue(
  * @returns A calculated measure instance
  * @group Arithmetic
  */
-export function add(
+export const add: (
   value1: Measure | number,
   value2: Measure | number,
   name?: string,
   withParentheses?: boolean,
-): CalculatedMeasure {
-  return arithmetic(value1, '+', value2, name, withParentheses);
-}
+) => CalculatedMeasure = withComposeCodeForMeasure(
+  (value1, value2, name, withParentheses) => arithmetic(value1, '+', value2, name, withParentheses),
+  'add',
+);
 
 /**
  * Creates a calculated measure by subtracting two given numbers or measures. Subtracts `value2` from `value1`.
@@ -500,14 +505,15 @@ export function add(
  * @returns A calculated measure instance
  * @group Arithmetic
  */
-export function subtract(
+export const subtract: (
   value1: Measure | number,
   value2: Measure | number,
   name?: string,
   withParentheses?: boolean,
-): CalculatedMeasure {
-  return arithmetic(value1, '-', value2, name, withParentheses);
-}
+) => CalculatedMeasure = withComposeCodeForMeasure(
+  (value1, value2, name, withParentheses) => arithmetic(value1, '-', value2, name, withParentheses),
+  'subtract',
+);
 
 /**
  * Creates a calculated measure by multiplying two given numbers or measures.
@@ -525,14 +531,15 @@ export function subtract(
  * @returns A calculated measure instance
  * @group Arithmetic
  */
-export function multiply(
+export const multiply: (
   value1: Measure | number,
   value2: Measure | number,
   name?: string,
   withParentheses?: boolean,
-): CalculatedMeasure {
-  return arithmetic(value1, '*', value2, name, withParentheses);
-}
+) => CalculatedMeasure = withComposeCodeForMeasure(
+  (value1, value2, name, withParentheses) => arithmetic(value1, '*', value2, name, withParentheses),
+  'multiply',
+);
 
 /**
  * Creates a calculated measure by dividing two given numbers or measures. Divides `value1` by `value2`.
@@ -550,14 +557,15 @@ export function multiply(
  * @returns A calculated measure instance
  * @group Arithmetic
  */
-export function divide(
+export const divide: (
   value1: Measure | number,
   value2: Measure | number,
   name?: string,
   withParentheses?: boolean,
-): CalculatedMeasure {
-  return arithmetic(value1, '/', value2, name, withParentheses);
-}
+) => CalculatedMeasure = withComposeCodeForMeasure(
+  (value1, value2, name, withParentheses) => arithmetic(value1, '/', value2, name, withParentheses),
+  'divide',
+);
 
 /**
  * Creates a calculated measure that calculates the running total starting from the beginning
@@ -577,9 +585,11 @@ export function divide(
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function yearToDateSum(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? 'YTD ' + measure.name, 'YTDSum');
-}
+export const yearToDateSum: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? 'YTD ' + measure.name, 'YTDSum'),
+    'yearToDateSum',
+  );
 
 /**
  * Creates a calculated measure that calculates the running total starting from the beginning
@@ -599,9 +609,11 @@ export function yearToDateSum(measure: Measure, name?: string): CalculatedMeasur
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function quarterToDateSum(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? 'QTD ' + name, 'QTDSum');
-}
+export const quarterToDateSum: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? 'QTD ' + name, 'QTDSum'),
+    'quarterToDateSum',
+  );
 
 /**
  * Creates a calculated measure that calculates the running total starting from the beginning
@@ -621,9 +633,11 @@ export function quarterToDateSum(measure: Measure, name?: string): CalculatedMea
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function monthToDateSum(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? 'MTD ' + measure.name, 'MTDSum');
-}
+export const monthToDateSum: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? 'MTD ' + measure.name, 'MTDSum'),
+    'monthToDateSum',
+  );
 
 /**
  * Creates a calculated measure that calculates the running total starting from the beginning
@@ -643,9 +657,11 @@ export function monthToDateSum(measure: Measure, name?: string): CalculatedMeasu
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function weekToDateSum(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? 'MTD ' + measure.name, 'WTDSum');
-}
+export const weekToDateSum: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? 'MTD ' + measure.name, 'WTDSum'),
+    'weekToDateSum',
+  );
 
 /**
  * Creates a calculated measure that calculates the running total of a given measure.
@@ -675,13 +691,15 @@ export function weekToDateSum(measure: Measure, name?: string): CalculatedMeasur
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function runningSum(
+export const runningSum: (
   measure: Measure,
   _continuous?: boolean,
   name?: string,
-): CalculatedMeasure {
-  return measureFunction(measure, name ?? 'Running Sum ' + measure.name, 'RSum');
-}
+) => CalculatedMeasure = withComposeCodeForMeasure(
+  (measure, _continuous, name) =>
+    measureFunction(measure, name ?? 'Running Sum ' + measure.name, 'RSum'),
+  'runningSum',
+);
 
 /**
  * Creates a calculated measure that calculates growth over a period of time.
@@ -710,9 +728,11 @@ export function runningSum(
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function growth(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Growth', 'growth');
-}
+export const growth: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? measure.name + '  Growth', 'growth'),
+    'growth',
+  );
 
 /**
  * Creates a calculated measure that calculates growth rate over a period of time.
@@ -741,9 +761,11 @@ export function growth(measure: Measure, name?: string): CalculatedMeasure {
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function growthRate(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Growth', 'growthrate');
-}
+export const growthRate: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? measure.name + '  Growth', 'growthrate'),
+    'growthRate',
+  );
 
 /**
  * Creates a calculated measure that calculates the growth from the previous week to the current week.
@@ -771,9 +793,12 @@ export function growthRate(measure: Measure, name?: string): CalculatedMeasure {
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function growthPastWeek(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastweek');
-}
+export const growthPastWeek: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastweek'),
+    'growthPastWeek',
+  );
 
 /**
  * Creates a calculated measure that calculates the growth from the previous month to the current month.
@@ -801,9 +826,12 @@ export function growthPastWeek(measure: Measure, name?: string): CalculatedMeasu
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function growthPastMonth(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastmonth');
-}
+export const growthPastMonth: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastmonth'),
+    'growthPastMonth',
+  );
 
 /**
  * Creates a calculated measure that calculates the growth from the previous quarter to the current quarter.
@@ -831,9 +859,12 @@ export function growthPastMonth(measure: Measure, name?: string): CalculatedMeas
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function growthPastQuarter(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastquarter');
-}
+export const growthPastQuarter: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastquarter'),
+    'growthPastQuarter',
+  );
 
 /**
  * Creates a calculated measure that calculates the growth from the previous year to the current year.
@@ -861,9 +892,12 @@ export function growthPastQuarter(measure: Measure, name?: string): CalculatedMe
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function growthPastYear(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastyear');
-}
+export const growthPastYear: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Growth', 'growthpastyear'),
+    'growthPastYear',
+  );
 
 /**
  * Creates a calculated measure that calculates the difference between this period's data
@@ -883,9 +917,12 @@ export function growthPastYear(measure: Measure, name?: string): CalculatedMeasu
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function difference(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastperiod');
-}
+export const difference: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastperiod'),
+    'difference',
+  );
 
 /**
  * Creates a calculated measure that calculates the difference between this week's data
@@ -904,9 +941,12 @@ export function difference(measure: Measure, name?: string): CalculatedMeasure {
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function diffPastWeek(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastweek');
-}
+export const diffPastWeek: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastweek'),
+    'diffPastWeek',
+  );
 
 /**
  * Creates a calculated measure that calculates the difference between this month's data
@@ -925,9 +965,12 @@ export function diffPastWeek(measure: Measure, name?: string): CalculatedMeasure
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function diffPastMonth(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastmonth');
-}
+export const diffPastMonth: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastmonth'),
+    'diffPastMonth',
+  );
 
 /**
  * Creates a calculated measure that calculates the difference between this quarter's data
@@ -946,9 +989,12 @@ export function diffPastMonth(measure: Measure, name?: string): CalculatedMeasur
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function diffPastQuarter(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastquarter');
-}
+export const diffPastQuarter: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastquarter'),
+    'diffPastQuarter',
+  );
 
 /**
  * Creates a calculated measure that calculates the difference between this year's data
@@ -967,9 +1013,12 @@ export function diffPastQuarter(measure: Measure, name?: string): CalculatedMeas
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function diffPastYear(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastyear');
-}
+export const diffPastYear: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Difference', 'diffpastyear'),
+    'diffPastYear',
+  );
 
 /**
  * Creates a calculated measure that calculates the value for the previous day.
@@ -984,9 +1033,11 @@ export function diffPastYear(measure: Measure, name?: string): CalculatedMeasure
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function pastDay(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Past Day', 'pastday');
-}
+export const pastDay: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Day', 'pastday'),
+    'pastDay',
+  );
 
 /**
  * Creates a calculated measure that calculates the value for the same day in the previous week.
@@ -1004,9 +1055,11 @@ export function pastDay(measure: Measure, name?: string): CalculatedMeasure {
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function pastWeek(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Past Week', 'pastweek');
-}
+export const pastWeek: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Week', 'pastweek'),
+    'pastWeek',
+  );
 
 /**
  * Creates a calculated measure that calculates the value for the same day or week in the previous month.
@@ -1025,9 +1078,11 @@ export function pastWeek(measure: Measure, name?: string): CalculatedMeasure {
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function pastMonth(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Past Month', 'pastmonth');
-}
+export const pastMonth: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Month', 'pastmonth'),
+    'pastMonth',
+  );
 
 /**
  * Creates a calculated measure that calculates the value for the same day, week, or month in the previous quarter.
@@ -1046,9 +1101,12 @@ export function pastMonth(measure: Measure, name?: string): CalculatedMeasure {
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function pastQuarter(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Past Quarter', 'pastquarter');
-}
+export const pastQuarter: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + '  Past Quarter', 'pastquarter'),
+    'pastQuarter',
+  );
 
 /**
  * Creates a calculated measure that calculates the value for the same day, week, month, or quarter in the previous year.
@@ -1067,9 +1125,11 @@ export function pastQuarter(measure: Measure, name?: string): CalculatedMeasure 
  * @returns A calculated measure instance
  * @group Time-based
  */
-export function pastYear(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + '  Past Year', 'pastyear');
-}
+export const pastYear: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) => measureFunction(measure, name ?? measure.name + '  Past Year', 'pastyear'),
+    'pastYear',
+  );
 
 /**
  * Creates a calculated contribution measure.
@@ -1105,9 +1165,12 @@ export function pastYear(measure: Measure, name?: string): CalculatedMeasure {
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function contribution(measure: Measure, name?: string): CalculatedMeasure {
-  return measureFunction(measure, name ?? measure.name + ' Contribution', 'contribution');
-}
+export const contribution: (measure: Measure, name?: string) => CalculatedMeasure =
+  withComposeCodeForMeasure(
+    (measure, name) =>
+      measureFunction(measure, name ?? measure.name + ' Contribution', 'contribution'),
+    'contribution',
+  );
 
 /**
  * Creates a calculated measure that computes a specified trend type for a given measure.
@@ -1135,11 +1198,11 @@ export function contribution(measure: Measure, name?: string): CalculatedMeasure
  * @returns A calculated measure instance
  * @group Advanced Analytics
  */
-export function trend(
+export const trend: (
   measure: Measure,
   name?: string,
   options?: TrendFormulaOptions,
-): CalculatedMeasure {
+) => CalculatedMeasure = withComposeCodeForMeasure((measure, name, options) => {
   let params: string | undefined;
   const adjustValues = (value: string) =>
     value.replace('advancedSmoothing', 'smooth').replace('localEstimates', 'local');
@@ -1151,7 +1214,7 @@ export function trend(
       .join(',');
   }
   return measureFunction(measure, name ?? measure.name + ' Trend', 'trend', params);
-}
+}, 'trend');
 
 /**
  * Creates a calculated measure that generates a forecast based on a specified measure employing
@@ -1187,11 +1250,11 @@ export function trend(
  * @returns A calculated measure instance
  * @group Advanced Analytics
  */
-export function forecast(
+export const forecast: (
   measure: Measure,
   name?: string,
   options?: ForecastFormulaOptions,
-): CalculatedMeasure {
+) => CalculatedMeasure = withComposeCodeForMeasure((measure, name, options) => {
   let params: string | undefined;
 
   if (options) {
@@ -1215,7 +1278,7 @@ export function forecast(
     params = '"forecastHorizon=3"';
   }
   return measureFunction(measure, name ?? measure.name + ' Forecast', 'forecast', params);
-}
+}, 'forecast');
 
 /**
  * Creates a calculated measure that calculates the rank of a value in a list of values.
@@ -1267,36 +1330,45 @@ export function forecast(
  * @returns A calculated measure instance
  * @group Statistics
  */
-export function rank(
+export const rank: (
   measure: Measure,
   name?: string,
-  sort: string = RankingSortTypes.Descending,
-  rankType: string = RankingTypes.StandardCompetition,
-  groupBy: Attribute[] = [],
-): CalculatedMeasure {
-  const builder: string[] = [];
-  const context: MeasureContext = <MeasureContext>{};
+  sort?: string,
+  rankType?: string,
+  groupBy?: Attribute[],
+) => CalculatedMeasure = withComposeCodeForMeasure(
+  (
+    measure,
+    name,
+    sort = RankingSortTypes.Descending,
+    rankType = RankingTypes.StandardCompetition,
+    groupBy = [],
+  ) => {
+    const builder: string[] = [];
+    const context: MeasureContext = <MeasureContext>{};
 
-  builder.push('rank(');
+    builder.push('rank(');
 
-  addToFormula(builder, context, measure);
+    addToFormula(builder, context, measure);
 
-  builder.push(`,${sort},${rankType}`);
+    builder.push(`,${sort},${rankType}`);
 
-  groupBy.forEach((groupByAttr) => {
-    builder.push(',');
+    groupBy.forEach((groupByAttr) => {
+      builder.push(',');
 
-    addToFormula(builder, context, groupByAttr);
-  });
+      addToFormula(builder, context, groupByAttr);
+    });
 
-  builder.push(')');
+    builder.push(')');
 
-  const exp = builder.join('');
+    const exp = builder.join('');
 
-  // default name
-  if (!name) {
-    name = `${measure.name} rank`;
-  }
+    // default name
+    if (!name) {
+      name = `${measure.name} rank`;
+    }
 
-  return new DimensionalCalculatedMeasure(name, exp, context);
-}
+    return new DimensionalCalculatedMeasure(name, exp, context);
+  },
+  'rank',
+);

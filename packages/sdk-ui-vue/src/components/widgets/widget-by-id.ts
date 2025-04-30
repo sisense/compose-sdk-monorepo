@@ -46,7 +46,10 @@ export const WidgetById = defineComponent({
      *
      * @category Widget
      */
-    dashboardOid: String as PropType<WidgetByIdProps['dashboardOid']>,
+    dashboardOid: {
+      type: String as PropType<WidgetByIdProps['dashboardOid']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.description}
      *
@@ -60,7 +63,7 @@ export const WidgetById = defineComponent({
      *
      * @category Data
      */
-    filters: Array as PropType<WidgetByIdProps['filters']>,
+    filters: [Array, Object] as PropType<WidgetByIdProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.filtersMergeStrategy}
      *
@@ -130,9 +133,18 @@ export const WidgetById = defineComponent({
      *
      * @category Widget
      */
-    widgetOid: String as PropType<WidgetByIdProps['widgetOid']>,
+    widgetOid: {
+      type: String as PropType<WidgetByIdProps['widgetOid']>,
+      required: true,
+    },
     /** @internal */
     widgetStyleOptions: Object as PropType<WidgetByIdProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.onDataReady}
+     *
+     * @category Callbacks
+     */
+    onDataReady: Function as PropType<WidgetByIdProps['onDataReady']>,
   },
-  setup: (props) => setupHelper(WidgetByIdPreact, props as WidgetByIdPropsPreact),
+  setup: (props) => setupHelper(WidgetByIdPreact, props),
 });

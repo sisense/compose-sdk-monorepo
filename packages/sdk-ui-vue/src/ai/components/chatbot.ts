@@ -13,10 +13,6 @@ export interface ChatbotProps extends ChatbotPropsPreact {}
 /**
  * An Vue component that renders a chatbot with data topic selection.
  *
- * ::: warning Note
- * This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * Here's how you can use the Chatbot component in a Vue application:
  * ```vue
@@ -45,25 +41,24 @@ const chatbotProps: ChatbotProps = {
  *
  * @param props - {@link ChatbotProps}
  * @group Generative AI
- * @beta
  */
 export const Chatbot = defineComponent({
   props: {
     /**
      * {@inheritDoc @sisense/sdk-ui!ChatbotProps.width}
      */
-    width: String as PropType<ChatbotProps['width']>,
+    width: [String, Number] as PropType<ChatbotProps['width']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChatbotProps.height}
      */
-    height: String as PropType<ChatbotProps['height']>,
+    height: [String, Number] as PropType<ChatbotProps['height']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChatbotProps.config}
      */
     config: Object as PropType<ChatbotProps['config']>,
   },
   setup: (props) =>
-    setupHelper(ChatbotPreact, props as ChatbotPropsPreact, [
+    setupHelper(ChatbotPreact, props, [
       ...createDefaultContextConnectors(),
       createAiContextConnector(),
     ]),

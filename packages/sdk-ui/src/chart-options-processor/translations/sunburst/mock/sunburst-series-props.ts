@@ -1167,7 +1167,6 @@ export const mockedSunburstSeriesProps = {
       backgroundColor: '#FFFFFF',
       textColor: '#5B6372',
       secondaryTextColor: '#9EA2AB',
-      panelBackgroundColor: '#F6F6F6',
       animation: {
         init: {
           duration: 'auto',
@@ -1209,6 +1208,11 @@ export const mockedSunburstSeriesProps = {
       backgroundColor: '#FFFFFF',
       dividerLineWidth: 4,
       dividerLineColor: '#F2F2F2',
+    },
+    filter: {
+      panel: {
+        backgroundColor: '#F6F6F6',
+      },
     },
     aiChat: {
       backgroundColor: 'rgba(244, 244, 248, 1)',

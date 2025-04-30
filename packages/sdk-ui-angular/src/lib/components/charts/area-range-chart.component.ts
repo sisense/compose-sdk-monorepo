@@ -81,7 +81,6 @@ export class AnalyticsComponent {
  * ```
  * <img src="media://angular-area-range-chart-example.png" width="800px" />
  * @group Charts
- * @beta
  */
 @Component({
   selector: 'csdk-area-range-chart',
@@ -154,7 +153,6 @@ export class AreaRangeChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!AreaRangeChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: AreaRangeChartProps['dataReady'];

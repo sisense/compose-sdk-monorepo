@@ -5,7 +5,7 @@ import {
   PanelItem,
   WidgetDashboardFilterMode,
   WidgetDto,
-  WidgetType,
+  FusionWidgetType,
 } from './types.js';
 import { getEnabledPanelItems, mergeFilters } from './utils.js';
 
@@ -196,15 +196,15 @@ function isHighlightFilterApplicableToWidget(filter: FilterDto, widget: WidgetDt
 /**
  * Retrieves a list of attributes allowed for widget highlight filters.
  *
- * @param {WidgetDto} widget - The widget to retrieve highlight attributes from.
+ * @param {WidgetDto} widgetDto - The widget to retrieve highlight attributes from.
  * @returns {string[]} An array of allowed attributes for highlight filters.
  */
-function getAllowedWidgetHighlightAttributes(widget: WidgetDto) {
-  const highlightsAllowedPanelNames = getHighlightsAllowedPanelNames(widget.type as WidgetType);
+function getAllowedWidgetHighlightAttributes(widgetDto: WidgetDto) {
+  const highlightsAllowedPanelNames = getHighlightsAllowedPanelNames(widgetDto.type);
   const allowedAttributes: string[] = [];
 
   for (const panelName of highlightsAllowedPanelNames) {
-    const panelItems = getEnabledPanelItems(widget.metadata.panels, panelName);
+    const panelItems = getEnabledPanelItems(widgetDto.metadata.panels, panelName);
     const panelAttributes = panelItems.map((item: PanelItem) => (item.jaql as BaseJaql).dim);
     allowedAttributes.push(...panelAttributes);
   }
@@ -215,10 +215,10 @@ function getAllowedWidgetHighlightAttributes(widget: WidgetDto) {
 /**
  * Gets the panel names allowed for highlight filters based on the widget type.
  *
- * @param {WidgetType} widgetType - The type of the widget.
+ * @param {FusionWidgetType} widgetType - The type of the widget.
  * @returns {string[]} An array of panel names allowed for highlight filters.
  */
-function getHighlightsAllowedPanelNames(widgetType: WidgetType) {
+function getHighlightsAllowedPanelNames(widgetType: FusionWidgetType) {
   switch (widgetType) {
     case 'chart/line':
     case 'chart/area':

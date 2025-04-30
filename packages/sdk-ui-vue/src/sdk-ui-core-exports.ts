@@ -25,16 +25,10 @@ export type {
   CategoricalWidgetType,
   TabularWidgetType,
 
-  // Props:
-  CommonWidgetProps,
-  WidgetProps,
-
   // Hooks/Composables Props:
   ExecuteQueryByWidgetIdParams,
   ExecuteQueryParams,
   GetWidgetModelParams,
-  // useExecuteCsvQuery is not ported to Vue yet
-  // ExecuteCsvQueryParams,
   GetSharedFormulaParams,
   GetDashboardModelParams,
   UseGetSharedFormulaParams,
@@ -92,7 +86,6 @@ export type {
   AreamapStyleOptions,
   ChartWidgetStyleOptions,
   WidgetStyleOptions,
-  DashboardWidgetStyleOptions,
   WidgetByIdStyleOptions,
   TableStyleOptions,
   PivotTableStyleOptions,
@@ -152,5 +145,5 @@ export type {
   DrilldownSelection,
   Member,
   FilterVariant,
-  CriteriaFilterType,
+  TranslationConfig,
 } from '@sisense/sdk-ui-preact';

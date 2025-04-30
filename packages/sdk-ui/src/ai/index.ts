@@ -6,7 +6,6 @@ export {
   useGetNlgInsights,
   type UseGetNlgInsightsParams,
   type UseGetNlgInsightsState,
-  useGetNlgQueryResult,
 } from './use-get-nlg-insights';
 export {
   useGetNlqResult,
@@ -32,16 +31,11 @@ export type {
   QueryRecommendation,
   NlqResponseData,
   NlqResult,
-  NLQ_RESULT_CHART_TYPES,
   NlqResultChartType,
 } from './api/types';
+export { NLQ_RESULT_CHART_TYPES } from './api/types';
 export { Chatbot, type ChatbotProps } from './chatbot';
-export {
-  default as GetNlgInsights,
-  type GetNlgInsightsProps,
-  GetNlgQueryResult,
-  type GetNlgQueryResultProps,
-} from './get-nlg-insights';
+export { default as GetNlgInsights, type GetNlgInsightsProps } from './get-nlg-insights';
 export { NlqChartWidget, type NlqChartWidgetProps } from './chart/nlq-chart-widget';
 
 export { ChatRestApi } from './api/chat-rest-api';

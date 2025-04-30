@@ -58,7 +58,7 @@ onBeforeRender(options: any) {
 
 }
 ```
-<img src="../../../img/angular-chart-widget-example.png" width="800px" />
+<img src="../../../img/angular-chart-widget-example.png" width="500px" />
 
 ## Implements
 
@@ -177,7 +177,7 @@ This callback is not supported for Areamap Chart, Scattermap Chart, Table, and P
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< [`ChartDataPointEvent`](../type-aliases/type-alias.ChartDataPointEvent.md) \>
+> **dataPointClick**: `EventEmitter`\< [`ChartDataPointClickEvent`](../type-aliases/type-alias.ChartDataPointClickEvent.md) \>
 
 Click handler callback for a data point
 
@@ -185,7 +185,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< [`ChartDataPointEvent`](../type-aliases/type-alias.ChartDataPointEvent.md) \>
+> **dataPointContextMenu**: `EventEmitter`\< [`ChartDataPointContextMenuEvent`](../type-aliases/type-alias.ChartDataPointContextMenuEvent.md) \>
 
 Context menu handler callback for a data point
 
@@ -196,3 +196,12 @@ Context menu handler callback for a data point
 > **dataPointsSelect**: `EventEmitter`\< [`ChartDataPointsEvent`](../type-aliases/type-alias.ChartDataPointsEvent.md) \>
 
 Handler callback for selection of multiple data points
+
+***
+
+#### dataReady
+
+> **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.

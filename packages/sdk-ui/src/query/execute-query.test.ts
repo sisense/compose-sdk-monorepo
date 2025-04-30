@@ -51,8 +51,8 @@ describe('executeQuery', () => {
           dataSource: DM.DataSource,
           dimensions: [DM.Commerce.Condition],
           measures: [measureFactory.sum(DM.Commerce.Cost)],
-          filters: [filterFactory.members(DM.Commerce.AgeRange, ['18-24'])],
-          highlights: [filterFactory.members(DM.Commerce.Gender, ['Male'])],
+          filters: [filterFactory.members(DM.Commerce.AgeRange, ['18-24'], { guid: 'test-id' })],
+          highlights: [filterFactory.members(DM.Commerce.Gender, ['Male'], { guid: 'test-id' })],
         },
         app as unknown as ClientApplication,
       );
@@ -109,8 +109,8 @@ describe('executeQuery', () => {
           columns: [DM.Commerce.AgeRange],
           values: [measureFactory.sum(DM.Commerce.Cost)],
           grandTotals: {},
-          filters: [filterFactory.members(DM.Commerce.Gender, ['Female'])],
-          highlights: [filterFactory.members(DM.Commerce.AgeRange, ['18-24'])],
+          filters: [filterFactory.members(DM.Commerce.Gender, ['Female'], { guid: 'test-id' })],
+          highlights: [filterFactory.members(DM.Commerce.AgeRange, ['18-24'], { guid: 'test-id' })],
         },
         app as unknown as ClientApplication,
       );
@@ -144,8 +144,8 @@ describe('executeQuery', () => {
           dataSource: DM.DataSource,
           dimensions: [DM.Commerce.Condition],
           measures: [measureFactory.sum(DM.Commerce.Cost)],
-          filters: [filterFactory.members(DM.Commerce.AgeRange, ['18-24'])],
-          highlights: [filterFactory.members(DM.Commerce.Gender, ['Male'])],
+          filters: [filterFactory.members(DM.Commerce.AgeRange, ['18-24'], { guid: 'test-id' })],
+          highlights: [filterFactory.members(DM.Commerce.Gender, ['Male'], { guid: 'test-id' })],
         },
         app as unknown as ClientApplication,
       );

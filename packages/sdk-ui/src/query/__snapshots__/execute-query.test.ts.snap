@@ -7,12 +7,13 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
   {
     "columnsAttributes": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.AgeRange",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Age Range]",
         "name": "Age Range",
         "type": "text-attribute",
@@ -23,20 +24,30 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
     "filterRelations": undefined,
     "filters": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "MembersFilter",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Gender",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Gender]",
           "name": "Gender",
           "type": "text-attribute",
         },
+        "composeCode": "filterFactory.members(DM.Commerce.Gender, ['Female'])",
+        "config": {
+          "deactivatedMembers": [],
+          "disabled": false,
+          "enableMultiSelection": true,
+          "excludeMembers": false,
+          "guid": "test-id",
+          "locked": false,
+        },
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "filterType": "members",
         "members": [
           "Female",
@@ -48,20 +59,30 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
     "grandTotals": {},
     "highlights": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "MembersFilter",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.AgeRange",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Age Range]",
           "name": "Age Range",
           "type": "text-attribute",
         },
+        "composeCode": "filterFactory.members(DM.Commerce.AgeRange, ['18-24'])",
+        "config": {
+          "deactivatedMembers": [],
+          "disabled": false,
+          "enableMultiSelection": true,
+          "excludeMembers": false,
+          "guid": "test-id",
+          "locked": false,
+        },
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "filterType": "members",
         "members": [
           "18-24",
@@ -72,21 +93,23 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
     ],
     "measures": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalBaseMeasure",
         "aggregation": "sum",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Cost",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Cost]",
           "name": "Cost",
           "type": "numeric-attribute",
         },
+        "composeCode": "measureFactory.sum(DM.Commerce.Cost)",
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "name": "sum Cost",
         "sort": 0,
         "type": "basemeasure",
@@ -95,12 +118,13 @@ exports[`executeQuery > executePivotQuery > should call executePivotQuery from q
     "offset": undefined,
     "rowsAttributes": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Condition",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
         "type": "text-attribute",
@@ -116,12 +140,13 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
   {
     "attributes": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Condition",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
         "type": "text-attribute",
@@ -132,20 +157,30 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
     "filterRelations": undefined,
     "filters": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "MembersFilter",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.AgeRange",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Age Range]",
           "name": "Age Range",
           "type": "text-attribute",
         },
+        "composeCode": "filterFactory.members(DM.Commerce.AgeRange, ['18-24'])",
+        "config": {
+          "deactivatedMembers": [],
+          "disabled": false,
+          "enableMultiSelection": true,
+          "excludeMembers": false,
+          "guid": "test-id",
+          "locked": false,
+        },
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "filterType": "members",
         "members": [
           "18-24",
@@ -156,20 +191,30 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
     ],
     "highlights": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "MembersFilter",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Gender",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Gender]",
           "name": "Gender",
           "type": "text-attribute",
         },
+        "composeCode": "filterFactory.members(DM.Commerce.Gender, ['Male'])",
+        "config": {
+          "deactivatedMembers": [],
+          "disabled": false,
+          "enableMultiSelection": true,
+          "excludeMembers": false,
+          "guid": "test-id",
+          "locked": false,
+        },
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "filterType": "members",
         "members": [
           "Male",
@@ -180,21 +225,23 @@ exports[`executeQuery > executeQuery > should call executeQuery from queryClient
     ],
     "measures": [
       {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalBaseMeasure",
         "aggregation": "sum",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Cost",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Cost]",
           "name": "Cost",
           "type": "numeric-attribute",
         },
+        "composeCode": "measureFactory.sum(DM.Commerce.Cost)",
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "name": "sum Cost",
         "sort": 0,
         "type": "basemeasure",

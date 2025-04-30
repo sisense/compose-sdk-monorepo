@@ -6696,12 +6696,12 @@ __metadata:
   resolution: "@sisense/sdk-cli@workspace:packages/sdk-cli"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^1.34.0
-    "@sisense/sdk-data": ^1.34.0
-    "@sisense/sdk-modeling": ^1.34.0
-    "@sisense/sdk-query-client": ^1.34.0
-    "@sisense/sdk-rest-client": ^1.34.0
-    "@sisense/sdk-tracking": ^1.34.0
+    "@sisense/sdk-common": ^2.0.0
+    "@sisense/sdk-data": ^2.0.0
+    "@sisense/sdk-modeling": ^2.0.0
+    "@sisense/sdk-query-client": ^2.0.0
+    "@sisense/sdk-rest-client": ^2.0.0
+    "@sisense/sdk-tracking": ^2.0.0
     "@types/inquirer": 8.2.6
     "@types/js-levenshtein": ^1.1.3
     "@types/yargs": ^17.0.22
@@ -6719,7 +6719,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-common@^1.34.0, @sisense/sdk-common@workspace:packages/sdk-common":
+"@sisense/sdk-common@^2.0.0, @sisense/sdk-common@workspace:packages/sdk-common":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-common@workspace:packages/sdk-common"
   dependencies:
@@ -6729,13 +6729,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-data@^1.34.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
+"@sisense/sdk-data@^2.0.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-data@workspace:packages/sdk-data"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^1.34.0
-    "@sisense/sdk-rest-client": ^1.34.0
+    "@sisense/sdk-common": ^2.0.0
+    "@sisense/sdk-rest-client": ^2.0.0
     "@types/lodash": ^4.14.201
     "@types/lodash-es": ^4.17.12
     "@types/numeral": 2.0.2
@@ -6749,19 +6749,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-modeling@^1.34.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
+"@sisense/sdk-modeling@^2.0.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-modeling@workspace:packages/sdk-modeling"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-data": ^1.34.0
+    "@sisense/sdk-data": ^2.0.0
     eslint: ^8.40.0
     prettier: ^3.2.5
     typescript: 4.8.4
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-pivot-client@^1.34.0, @sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client":
+"@sisense/sdk-pivot-client@^2.0.0, @sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client"
   dependencies:
@@ -6769,8 +6769,8 @@ __metadata:
     "@emotion/react": ^11.11.4
     "@emotion/styled": ^11.11.5
     "@mui/material": ^5.11.6
-    "@sisense/sdk-data": ^1.34.0
-    "@sisense/sdk-rest-client": ^1.34.0
+    "@sisense/sdk-data": ^2.0.0
+    "@sisense/sdk-rest-client": ^2.0.0
     "@sisense/sdk-shared-ui": "workspace:*"
     "@types/lodash-es": ^4.17.12
     "@types/react": ^18.3.1
@@ -6807,20 +6807,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-query-client@^1.34.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
+"@sisense/sdk-query-client@^2.0.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-query-client@workspace:packages/sdk-query-client"
   dependencies:
-    "@sisense/sdk-common": ^1.34.0
-    "@sisense/sdk-data": ^1.34.0
-    "@sisense/sdk-pivot-client": ^1.34.0
-    "@sisense/sdk-rest-client": ^1.34.0
+    "@sisense/sdk-common": ^2.0.0
+    "@sisense/sdk-data": ^2.0.0
+    "@sisense/sdk-pivot-client": ^2.0.0
+    "@sisense/sdk-rest-client": ^2.0.0
     "@sisense/task-manager": ^0.1.0
     "@types/tar": ^6.1.4
     "@types/uuid": ^9.0.0
     "@typescript-eslint/eslint-plugin": ^5.39.0
     "@typescript-eslint/parser": ^5.39.0
-    axios: ^1.3.6
     eslint: ^8.40.0
     numeral: ^2.0.6
     prettier: ^2.7.1
@@ -6831,12 +6830,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-rest-client@^1.34.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
+"@sisense/sdk-rest-client@^2.0.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-rest-client@workspace:packages/sdk-rest-client"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^1.34.0
+    "@sisense/sdk-common": ^2.0.0
     eslint: ^8.40.0
     prettier: 2.8.4
     typescript: 4.8.4
@@ -6884,7 +6883,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-tracking@^1.34.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
+"@sisense/sdk-tracking@^2.0.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-tracking@workspace:packages/sdk-tracking"
   dependencies:
@@ -6917,9 +6916,9 @@ __metadata:
     typescript: ~4.9.4
     vitest: ^2.1.9
   peerDependencies:
-    "@angular/common": ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    "@angular/compiler": ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    "@angular/core": ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    "@angular/common": ^17.0.0 || ^18.0.0 || ^19.0.0
+    "@angular/compiler": ^17.0.0 || ^18.0.0 || ^19.0.0
+    "@angular/core": ^17.0.0 || ^18.0.0 || ^19.0.0
   languageName: unknown
   linkType: soft
 
@@ -6929,7 +6928,7 @@ __metadata:
   dependencies:
     "@preact/preset-vite": 2.5.0
     "@sisense/sdk-data": "workspace:^"
-    "@sisense/sdk-ui": ^1.34.0
+    "@sisense/sdk-ui": ^2.0.0
     "@types/node": ^18.16.0
     eslint: ^8.40.0
     preact: ^10.13.2
@@ -6967,7 +6966,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-ui@^1.34.0, @sisense/sdk-ui@workspace:packages/sdk-ui":
+"@sisense/sdk-ui@^2.0.0, @sisense/sdk-ui@workspace:packages/sdk-ui":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-ui@workspace:packages/sdk-ui"
   dependencies:
@@ -6978,12 +6977,12 @@ __metadata:
     "@mui/material": ^5.16.7
     "@mui/system": ^5.16.7
     "@mui/x-data-grid": ^6.16.0
-    "@sisense/sdk-common": ^1.34.0
-    "@sisense/sdk-data": ^1.34.0
-    "@sisense/sdk-pivot-client": ^1.34.0
-    "@sisense/sdk-query-client": ^1.34.0
-    "@sisense/sdk-rest-client": ^1.34.0
-    "@sisense/sdk-tracking": ^1.34.0
+    "@sisense/sdk-common": ^2.0.0
+    "@sisense/sdk-data": ^2.0.0
+    "@sisense/sdk-pivot-client": ^2.0.0
+    "@sisense/sdk-query-client": ^2.0.0
+    "@sisense/sdk-rest-client": ^2.0.0
+    "@sisense/sdk-tracking": ^2.0.0
     "@sisense/sisense-charts": 5.1.1
     "@storybook/addon-actions": 7.0.24
     "@storybook/addon-docs": 7.0.24
@@ -7004,6 +7003,7 @@ __metadata:
     "@types/fixed-data-table-2": ^1.0.0
     "@types/leaflet": ^1.9.8
     "@types/lodash": ^4.14.194
+    "@types/prismjs": ^1.26.5
     "@types/proj4leaflet": ^1.0.10
     "@types/react": 18.3.1
     "@types/react-dom": 18.3.0
@@ -7036,6 +7036,7 @@ __metadata:
     postcss: ^8.4.31
     postcss-replace: ^2.0.1
     prettier: 2.8.4
+    prismjs: ^1.30.0
     proj4leaflet: ^1.0.2
     react: 18.3.1
     react-datepicker: ^7.3.0
@@ -7049,6 +7050,7 @@ __metadata:
     rollup-plugin-re: ^1.0.7
     sass: 1.58.3
     storybook: 7.0.24
+    superjson: ^2.2.2
     tailwindcss: ^3.3.1
     ts-deepmerge: 6.0.2
     ts-essentials: ^9.3.0
@@ -7061,8 +7063,8 @@ __metadata:
     whatwg-fetch: ^3.6.2
     yaml: ^2.4.5
   peerDependencies:
-    react: ^16.14.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
   languageName: unknown
   linkType: soft
 
@@ -9696,6 +9698,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prismjs@npm:^1.26.5":
+  version: 1.26.5
+  resolution: "@types/prismjs@npm:1.26.5"
+  checksum: d208b04ee9b6de6b2dc916439a81baa47e64ab3659a66d3d34bc3e42faccba9d4b26f590d76f97f7978d1dfaafa0861f81172b1e3c68696dd7a42d73aaaf5b7b
+  languageName: node
+  linkType: hard
+
 "@types/proj4@npm:*":
   version: 2.5.5
   resolution: "@types/proj4@npm:2.5.5"
@@ -11810,17 +11819,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.3.6":
-  version: 1.6.8
-  resolution: "axios@npm:1.6.8"
-  dependencies:
-    follow-redirects: ^1.15.6
-    form-data: ^4.0.0
-    proxy-from-env: ^1.1.0
-  checksum: bf007fa4b207d102459300698620b3b0873503c6d47bf5a8f6e43c0c64c90035a4f698b55027ca1958f61ab43723df2781c38a99711848d232cad7accbcdfcdd
-  languageName: node
-  linkType: hard
-
 "axios@npm:^1.7.4":
   version: 1.7.7
   resolution: "axios@npm:1.7.7"
@@ -12471,17 +12469,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001426, caniuse-lite@npm:^1.0.30001449, caniuse-lite@npm:^1.0.30001587, caniuse-lite@npm:^1.0.30001599":
-  version: 1.0.30001669
-  resolution: "caniuse-lite@npm:1.0.30001669"
-  checksum: 8ed0c69d0c6aa3b1cbc5ba4e5f5330943e7b7165e257f6955b8b73f043d07ad922265261f2b54d9bbaf02886bbdba5e6f5b16662310a13f91f17035af3212de1
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001669":
-  version: 1.0.30001680
-  resolution: "caniuse-lite@npm:1.0.30001680"
-  checksum: 2641d2b18c5ab0a6663cb350c5adc81e5ede1a7677d1c7518a8053ada87bf6f206419e1820a2608f76fa5e4f7bea327cbe47df423783e571569a88c0ea645270
+"caniuse-lite@npm:^1.0.30001426, caniuse-lite@npm:^1.0.30001449, caniuse-lite@npm:^1.0.30001587, caniuse-lite@npm:^1.0.30001599, caniuse-lite@npm:^1.0.30001669":
+  version: 1.0.30001714
+  resolution: "caniuse-lite@npm:1.0.30001714"
+  checksum: e68fbee9a115f842f0d907e033f14e8d476f965473556fb993c8870854a2608573eebf4dbc2aa5b03caa9c6224ff4afe63ea8c702566fbbcb78c369fba72395b
   languageName: node
   linkType: hard
 
@@ -13359,6 +13350,15 @@ __metadata:
   dependencies:
     is-what: ^3.14.1
   checksum: 7318dc00ca14f846d14fc886845cff63bf20a3c5f4fcdd31f68c40a213648c78a1093426947ac0f8f8577845e9a7a11eeaaeefb05d9a6f1b78ca5ec60c2aaf6e
+  languageName: node
+  linkType: hard
+
+"copy-anything@npm:^3.0.2":
+  version: 3.0.5
+  resolution: "copy-anything@npm:3.0.5"
+  dependencies:
+    is-what: ^4.1.8
+  checksum: d39f6601c16b7cbd81cdb1c1f40f2bf0f2ca0297601cf7bfbb4ef1d85374a6a89c559502329f5bada36604464df17623e111fe19a9bb0c3f6b1c92fe2cbe972f
   languageName: node
   linkType: hard
 
@@ -19260,6 +19260,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-what@npm:^4.1.8":
+  version: 4.1.16
+  resolution: "is-what@npm:4.1.16"
+  checksum: baf99e4b9f06003ceb3b2eea4a1e17179524ee3a6310dc44903eb675cfe3c0a17819ab057bb1ae6ba7ca4939ae4bdfcc6a0c4210a8457aff1756abd3607b713c
+  languageName: node
+  linkType: hard
+
 "is-windows@npm:^1.0.2":
   version: 1.0.2
   resolution: "is-windows@npm:1.0.2"
@@ -23484,6 +23491,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prismjs@npm:^1.30.0":
+  version: 1.30.0
+  resolution: "prismjs@npm:1.30.0"
+  checksum: a68eddd4c5f1c506badb5434b0b28a7cc2479ed1df91bc4218e6833c7971ef40c50ec481ea49749ac964256acb78d8b66a6bd11554938e8998e46c18b5f9a580
+  languageName: node
+  linkType: hard
+
 "prismjs@npm:~1.27.0":
   version: 1.27.0
   resolution: "prismjs@npm:1.27.0"
@@ -26638,6 +26652,15 @@ __metadata:
   dependencies:
     kdbush: ^3.0.0
   checksum: 69863238870093b96617135884721b6343746e14f396b2d67d6b55c52c362ec0516c5e386aa21815e75a9cef2054e831ac34023d0d8b600091d28cea0794f027
+  languageName: node
+  linkType: hard
+
+"superjson@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "superjson@npm:2.2.2"
+  dependencies:
+    copy-anything: ^3.0.2
+  checksum: 5120086d24dedc180284524e5bb247a146f3ecf17d2b5e0eafecc1fe7dc7eb74a5dcfd3c250684edccb9c15db0d5ce24ac968c68cd908285c0160a3138435707
   languageName: node
   linkType: hard
 

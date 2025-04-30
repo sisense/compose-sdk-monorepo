@@ -10,7 +10,7 @@ Angular components and utilities for working with charts
 
 - [AreaChartComponent](charts/class.AreaChartComponent.md)
 - [AreamapChartComponent](charts/class.AreamapChartComponent.md)
-- [AreaRangeChartComponent](charts/class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
+- [AreaRangeChartComponent](charts/class.AreaRangeChartComponent.md)
 - [BarChartComponent](charts/class.BarChartComponent.md)
 - [BoxplotChartComponent](charts/class.BoxplotChartComponent.md)
 - [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
@@ -47,6 +47,7 @@ Angular filter tile components
 
 - [CriteriaFilterTileComponent](filter-tiles/class.CriteriaFilterTileComponent.md)
 - [DateRangeFilterTileComponent](filter-tiles/class.DateRangeFilterTileComponent.md)
+- [FilterTileComponent](filter-tiles/class.FilterTileComponent.md) - Facade component rendering a filter tile based on filter type
 - [MemberFilterTileComponent](filter-tiles/class.MemberFilterTileComponent.md)
 - [RelativeDateFilterTileComponent](filter-tiles/class.RelativeDateFilterTileComponent.md)
 
@@ -74,6 +75,7 @@ Angular components and utilities for working with dashboards
 - [DashboardComponent](dashboards/class.DashboardComponent.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [PivotTableWidgetComponent](dashboards/class.PivotTableWidgetComponent.md) <Badge type="beta" text="Beta" />
+- [WidgetComponent](dashboards/class.WidgetComponent.md)
 
 ## Fusion Assets
 
@@ -83,7 +85,6 @@ Angular components, services, and utilities for working with Fusion dashboards, 
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
 - [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
-- [DashboardWidgetComponent](fusion-assets/class.DashboardWidgetComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [HierarchyService](fusion-assets/class.HierarchyService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetByIdComponent](fusion-assets/class.WidgetByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
@@ -92,10 +93,13 @@ Angular components, services, and utilities for working with Fusion dashboards, 
 
 ## Generative AI
 
-Angular modules, components, and services for creating experiences using generative AI
+Angular modules, components, and services for working with Generative AI features provided by Sisense Fusion
+::: tip Note
+For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
+:::
 
-- [AI\_CONTEXT\_CONFIG\_TOKEN](generative-ai/variable.AI_CONTEXT_CONFIG_TOKEN.md) <Badge type="beta" text="Beta" />
-- [AiService](generative-ai/class.AiService.md) <Badge type="beta" text="Beta" />
-- [ChatbotComponent](generative-ai/class.ChatbotComponent.md) <Badge type="beta" text="Beta" />
-- [GetNlgInsightsComponent](generative-ai/class.GetNlgInsightsComponent.md) <Badge type="beta" text="Beta" />
-- [SdkAiModule](generative-ai/class.SdkAiModule.md) <Badge type="beta" text="Beta" />
+- [AI\_CONTEXT\_CONFIG\_TOKEN](generative-ai/variable.AI_CONTEXT_CONFIG_TOKEN.md)
+- [AiService](generative-ai/class.AiService.md)
+- [ChatbotComponent](generative-ai/class.ChatbotComponent.md)
+- [GetNlgInsightsComponent](generative-ai/class.GetNlgInsightsComponent.md)
+- [SdkAiModule](generative-ai/class.SdkAiModule.md)

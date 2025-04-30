@@ -16,7 +16,7 @@ Configuration for the filters panel
 
 ***
 
-### persist <Badge type="alpha" text="Alpha" />
+### persist
 
 > **persist**?: `boolean`
 
@@ -26,7 +26,7 @@ If not specified, the default value is `false`.
 
 Limitations:
 - WAT authentication does not support persistence.
-- As an alpha feature, currently only changes to dashboard filters are persisted.
+- Currently only changes to dashboard filters are persisted.
 
 ***
 

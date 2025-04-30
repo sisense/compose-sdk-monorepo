@@ -114,11 +114,7 @@ describe('filter-relations', () => {
         operator: 'OR',
       };
       const result = combineFiltersAndRelations(filters, relations);
-      expect(result).toEqual({
-        left: filter1,
-        right: filter2,
-        operator: 'OR',
-      });
+      expect(result).toEqual(filterFactory.logic.or(filter1, filter2));
     });
   });
 

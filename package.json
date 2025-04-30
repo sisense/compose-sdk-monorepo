@@ -1,5 +1,5 @@
 {
-  "version": "1.34.0",
+  "version": "2.0.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -136,8 +136,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix --cache --cache-strategy content"
+      "prettier --write"
     ],
     "*.{json,yaml,yml,md}": [
       "prettier --write"

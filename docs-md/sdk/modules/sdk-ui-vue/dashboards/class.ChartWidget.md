@@ -12,7 +12,7 @@ It can be used along with the [DrilldownWidget](../drilldown/class.DrilldownWidg
 Here's how you can use the ChartWidget component in a Vue application:
 ```vue
 <template>
-   <DrilldownWidget :drilldownDimensions="drilldownDimensions" :initialDimension="dimProductName">
+   <DrilldownWidget :drilldownPaths="drilldownPaths" :initialDimension="dimProductName">
      <template
        #chart="{ drilldownFilters, drilldownDimension, onDataPointsSelected, onContextMenu }"
      >
@@ -56,7 +56,7 @@ const chartWidgetProps = ref({
 });
 </script>
 ```
-<img src="../../../img/chart-widget-with-drilldown-example-1.png" width="800px" />
+<img src="../../../img/vue-widget-example.png" width="800px" />
 
 ## Param
 
@@ -94,7 +94,7 @@ Highlight filters that will highlight results that pass filter criteria
 
 #### chartType
 
-> **`readonly`** **chartType**?: [`ChartType`](../type-aliases/type-alias.ChartType.md)
+> **`readonly`** **chartType**: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 Default chart type of each series
 
@@ -102,7 +102,7 @@ Default chart type of each series
 
 #### dataOptions
 
-> **`readonly`** **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
+> **`readonly`** **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -175,3 +175,22 @@ Context menu handler callback for a data point
 > **`readonly`** **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
+
+***
+
+#### onDataReady
+
+> **`readonly`** **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

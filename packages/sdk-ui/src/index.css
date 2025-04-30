@@ -12,7 +12,7 @@
 .csdk-accessible a:focus-visible,
 .csdk-accessible textarea:focus-visible,
 .csdk-accessible select:focus-visible,
-.csdk-accessible input:focus-visible:not(.PrivateSwitchBase-input),
+.csdk-accessible input:focus-visible,
 .csdk-accessible [tabindex]:focus-visible {
   outline: -webkit-focus-ring-color auto 1px;
 }

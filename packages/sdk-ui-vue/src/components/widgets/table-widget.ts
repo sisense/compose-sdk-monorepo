@@ -1,4 +1,5 @@
-import { defineComponent, type Prop } from 'vue';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { TableWidget as TableWidgetPreact, type TableWidgetProps } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
@@ -31,15 +32,18 @@ export { TableWidgetProps };
  */
 export const TableWidget = defineComponent({
   props: {
-    bottomSlot: Object as Prop<TableWidgetProps['bottomSlot']>,
-    dataOptions: Object as Prop<TableWidgetProps['dataOptions']>,
-    dataSource: String as Prop<TableWidgetProps['dataSource']>,
-    description: String as Prop<TableWidgetProps['description']>,
-    filters: Object as Prop<TableWidgetProps['filters']>,
-    styleOptions: Object as Prop<TableWidgetProps['styleOptions']>,
-    title: String as Prop<TableWidgetProps['title']>,
-    topSlot: Object as Prop<TableWidgetProps['topSlot']>,
-    widgetStyleOptions: Object as Prop<TableWidgetProps['styleOptions']>,
+    bottomSlot: Object as PropType<TableWidgetProps['bottomSlot']>,
+    dataOptions: {
+      type: Object as PropType<TableWidgetProps['dataOptions']>,
+      required: true,
+    },
+    dataSource: [String, Object] as PropType<TableWidgetProps['dataSource']>,
+    description: String as PropType<TableWidgetProps['description']>,
+    filters: [Object, Array] as PropType<TableWidgetProps['filters']>,
+    styleOptions: Object as PropType<TableWidgetProps['styleOptions']>,
+    title: String as PropType<TableWidgetProps['title']>,
+    topSlot: Object as PropType<TableWidgetProps['topSlot']>,
+    widgetStyleOptions: Object as PropType<TableWidgetProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(TableWidgetPreact, props as TableWidgetProps),
+  setup: (props) => setupHelper(TableWidgetPreact, props),
 });

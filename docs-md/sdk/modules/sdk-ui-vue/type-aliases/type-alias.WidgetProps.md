@@ -4,16 +4,6 @@ title: WidgetProps
 
 # Type alias WidgetProps
 
-> **WidgetProps**: [`CommonWidgetProps`](type-alias.CommonWidgetProps.md) & \{
-  `id`: `string`;
- }
+> **WidgetProps**: `SoftUnion`\< [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`ChartWidgetProps`](../interfaces/interface.ChartWidgetProps.md), `"chart"` \> \| [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`PivotTableWidgetProps`](../interfaces/interface.PivotTableWidgetProps.md), `"pivot"` \> \| [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`PluginWidgetProps`](../interfaces/interface.PluginWidgetProps.md), `"plugin"` \> \| [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`TextWidgetProps`](../interfaces/interface.TextWidgetProps.md), `"text"` \> \>
 
-Props for the widget component within a container component like dashboard.
-
-> ## `WidgetProps.id`
->
-> **`readonly`** **id**: `string`
->
-> Unique identifier of the widget within the container component (dashboard)
->
->
+Props of the [`Widget`](../dashboards/class.Widget.md) component.

@@ -8,10 +8,6 @@ title: useGetNlqResult
 
 A Vue composable that enables natural language query (NLQ) against a data model or perspective.
 
-::: warning Note
-This composable is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
-
 ## Parameters
 
 | Parameter | Type | Description |

@@ -354,4 +354,75 @@ describe('useTabber hook', () => {
     // Row 3 should be unaffected.
     expect(filteredLayoutUpdated.columns[0].rows[2].cells).toHaveLength(2);
   });
+
+  it('should initialize selectedTabs based on initial tabbersConfigs', () => {
+    const initialConfig = {
+      tabber1: {
+        activeTab: 0,
+        tabs: [
+          { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
+          { displayWidgetIds: ['w3'], title: 'Tab 1' },
+        ],
+      },
+    };
+    const { result } = renderHook(() => useTabber({ widgets: widgets, config: initialConfig }));
+
+    const tabberWidget = result.current.widgets.find((w) => w.id === 'tabber1') as any;
+    expect(tabberWidget.selectedTab).toBe(0);
+  });
+
+  it('should update selectedTabs when tabbersConfigs is updated', async () => {
+    const initialProps: { config: Record<string, any>; widgets: WidgetProps[] } = {
+      config: {
+        tabber1: {
+          activeTab: 0,
+          tabs: [
+            { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
+            { displayWidgetIds: ['w3'], title: 'Tab 1' },
+          ],
+        },
+      },
+      widgets: [
+        {
+          id: 'tabber1',
+          pluginType: 'WidgetsTabber',
+          name: 'Tabber Widget',
+        } as unknown as WidgetProps,
+        { id: 'wX', pluginType: 'OtherWidget', name: 'Regular Widget' } as unknown as WidgetProps,
+      ],
+    };
+
+    const { result, rerender } = renderHook(
+      ({ config, widgets }) => useTabber({ config, widgets }),
+      { initialProps },
+    );
+
+    let tabberWidget = result.current.widgets.find((w) => w.id === 'tabber1') as any;
+    expect(tabberWidget.selectedTab).toBe(0);
+
+    const updatedProps: { config: Record<string, any>; widgets: WidgetProps[] } = {
+      config: {
+        tabber2: {
+          activeTab: 1,
+          tabs: [
+            { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
+            { displayWidgetIds: ['w3'], title: 'Tab 1' },
+          ],
+        },
+      },
+      widgets: [
+        {
+          id: 'tabber2',
+          pluginType: 'WidgetsTabber',
+          name: 'Tabber Widget',
+        } as unknown as WidgetProps,
+        { id: 'wX', pluginType: 'OtherWidget', name: 'Regular Widget' } as unknown as WidgetProps,
+      ],
+    };
+
+    rerender(updatedProps);
+
+    tabberWidget = result.current.widgets.find((w) => w.id === 'tabber2') as any;
+    expect(tabberWidget.selectedTab).toBe(1);
+  });
 });

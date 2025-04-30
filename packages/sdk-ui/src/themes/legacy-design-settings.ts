@@ -125,7 +125,6 @@ export function convertToThemeSettings(
       textColor: legacyDesignSettings.dashboards.widgetTextColor,
       backgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
       secondaryTextColor: legacyDesignSettings.dashboards.widgetSecondaryTextColor,
-      panelBackgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,
       animation: {
         init: {
           duration: 'auto',

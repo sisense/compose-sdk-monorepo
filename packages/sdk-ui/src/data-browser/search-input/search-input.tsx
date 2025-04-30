@@ -63,7 +63,7 @@ const SearchInputContainer = styled.div<Themable>`
   :focus-within {
     outline: -webkit-focus-ring-color auto 1px;
   }
-  & input:focus-visible:not(.PrivateSwitchBase-input) {
+  & input:focus-visible {
     outline: none;
   }
 `;

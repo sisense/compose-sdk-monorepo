@@ -14,10 +14,10 @@ import {
   CriteriaFilterTileComponent,
   DashboardByIdComponent,
   DashboardComponent,
-  DashboardWidgetComponent,
   DateRangeFilterTileComponent,
   DrilldownBreadcrumbsComponent,
   DrilldownWidgetComponent,
+  FilterTileComponent,
   FunnelChartComponent,
   IndicatorChartComponent,
   LineChartComponent,
@@ -34,6 +34,7 @@ import {
   TableWidgetComponent,
   TreemapChartComponent,
   WidgetByIdComponent,
+  WidgetComponent,
 } from './components';
 import { DecoratorsModule } from './decorators/decorators.module';
 
@@ -82,7 +83,6 @@ import { DecoratorsModule } from './decorators/decorators.module';
     TreemapChartComponent,
     SunburstChartComponent,
     TableWidgetComponent,
-    DashboardWidgetComponent,
     WidgetByIdComponent,
     MemberFilterTileComponent,
     DrilldownWidgetComponent,
@@ -98,6 +98,8 @@ import { DecoratorsModule } from './decorators/decorators.module';
     DashboardByIdComponent,
     DashboardComponent,
     PivotTableWidgetComponent,
+    FilterTileComponent,
+    WidgetComponent,
   ],
   imports: [CommonModule, DecoratorsModule],
   exports: [
@@ -117,7 +119,6 @@ import { DecoratorsModule } from './decorators/decorators.module';
     TreemapChartComponent,
     SunburstChartComponent,
     TableWidgetComponent,
-    DashboardWidgetComponent,
     WidgetByIdComponent,
     MemberFilterTileComponent,
     DrilldownWidgetComponent,
@@ -133,6 +134,8 @@ import { DecoratorsModule } from './decorators/decorators.module';
     DashboardByIdComponent,
     DashboardComponent,
     PivotTableWidgetComponent,
+    FilterTileComponent,
+    WidgetComponent,
   ],
   providers: [],
 })

@@ -46,7 +46,7 @@ export default {
 
 #### clearDrilldownSelections
 
-> **`readonly`** **clearDrilldownSelections**?: () => `void`
+> **`readonly`** **clearDrilldownSelections**: () => `void`
 
 Callback function that is evaluated when the close (X) button is clicked
 
@@ -58,7 +58,7 @@ Callback function that is evaluated when the close (X) button is clicked
 
 #### currentDimension
 
-> **`readonly`** **currentDimension**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
+> **`readonly`** **currentDimension**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
 
 Currently selected drilldown dimension
 
@@ -66,7 +66,7 @@ Currently selected drilldown dimension
 
 #### filtersDisplayValues
 
-> **`readonly`** **filtersDisplayValues**?: `string`[][]
+> **`readonly`** **filtersDisplayValues**: `string`[][]
 
 List of drilldown filters formatted to be displayed as breadcrumbs
 
@@ -74,7 +74,7 @@ List of drilldown filters formatted to be displayed as breadcrumbs
 
 #### sliceDrilldownSelections
 
-> **`readonly`** **sliceDrilldownSelections**?: (`i`) => `void`
+> **`readonly`** **sliceDrilldownSelections**: (`i`) => `void`
 
 Callback function that is evaluated when a breadcrumb is clicked
 

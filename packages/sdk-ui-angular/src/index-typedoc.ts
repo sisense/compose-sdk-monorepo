@@ -21,7 +21,10 @@
  * @groupDescription Fusion Assets
  * Angular components, services, and utilities for working with Fusion dashboards, widgets, queries, and formulas
  * @groupDescription Generative AI
- * Angular modules, components, and services for creating experiences using generative AI
+ * Angular modules, components, and services for working with Generative AI features provided by Sisense Fusion
+ * ::: tip Note
+ * For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
+ * :::
  * @groupDescription Interfaces
  * TypeScript interfaces for components and services listed above
  * @groupDescription Type Aliases

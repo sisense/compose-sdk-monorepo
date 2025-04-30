@@ -1,3 +1,4 @@
+/* eslint-disable vitest/expect-expect */
 import { createAttribute } from '../attributes.js';
 import { Attribute, Measure } from '../interfaces.js';
 import { BaseJaql, FilterJaql, FormulaJaql, NumericFilterJaql, OrFilterJaql } from '../types.js';
@@ -5,8 +6,8 @@ import * as analyticsFactory from './factory.js';
 
 const attribute = createAttribute({
   name: 'text',
-  type: 'text',
-  expression: '[Text]',
+  type: 'text-attribute',
+  expression: '[Table.Text]',
 });
 
 function validateBoxWhiskerValues(

@@ -149,18 +149,6 @@ An object that allows users to pass advanced configuration options as a prop for
 
 ***
 
-#### drilldownDimensions
-
-> **drilldownDimensions**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[] \| `undefined`
-
-List of dimensions to allow drilldowns on
-
-::: warning Deprecated
-Use [drilldownPaths](class.DrilldownWidgetComponent.md#drilldownpaths) instead
-:::
-
-***
-
 #### drilldownPaths
 
 > **drilldownPaths**: ([`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Hierarchy`](../interfaces/interface.Hierarchy.md))[] \| `undefined`

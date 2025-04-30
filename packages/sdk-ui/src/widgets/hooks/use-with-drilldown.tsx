@@ -33,11 +33,8 @@ export const useWithDrilldown = ({
     [chartType, dataOptions],
   );
   const initialDrilldownPaths = useMemo(
-    () => [
-      ...(drilldownOptions?.drilldownPaths || []),
-      ...(drilldownOptions?.drilldownDimensions || []),
-    ],
-    [drilldownOptions?.drilldownPaths, drilldownOptions?.drilldownDimensions],
+    () => drilldownOptions?.drilldownPaths || [],
+    [drilldownOptions?.drilldownPaths],
   );
   const initialDimension = useMemo(() => {
     const dummyAttribute = createAttribute({ name: 'dummy drilldown initial attribute' });
@@ -53,9 +50,7 @@ export const useWithDrilldown = ({
 
   const isDrilldownEnabled = useMemo(() => {
     const hasDrilldownConfig =
-      drilldownOptions?.drilldownSelections?.length ||
-      drilldownOptions?.drilldownDimensions?.length ||
-      drilldownPaths?.length;
+      drilldownOptions?.drilldownSelections?.length || drilldownPaths?.length;
 
     return hasDrilldownConfig && isDrilldownApplicable;
   }, [drilldownOptions, isDrilldownApplicable, drilldownPaths]);

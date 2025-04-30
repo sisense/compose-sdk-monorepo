@@ -98,6 +98,7 @@ describe('Measures with composeCode', () => {
       undefined,
       undefined,
       undefined,
+      undefined,
       MOCK_COMPOSE_CODE,
     );
     expect(measure.composeCode).toEqual(MOCK_COMPOSE_CODE);
@@ -121,6 +122,7 @@ describe('Measures with composeCode', () => {
           'sum',
         ),
       },
+      undefined,
       undefined,
       undefined,
       undefined,

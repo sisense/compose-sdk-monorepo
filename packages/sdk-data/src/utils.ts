@@ -1,17 +1,13 @@
-import { escapeSingleQuotes } from '@sisense/sdk-common';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 import mapValues from 'lodash-es/mapValues.js';
 
-import {
-  DimensionalAttribute,
-  DimensionalLevelAttribute,
-  normalizeAttributeName,
-} from './dimensional-model/attributes.js';
+import { DimensionalAttribute, DimensionalLevelAttribute } from './dimensional-model/attributes.js';
 import { isCascadingFilter } from './dimensional-model/filters/filters.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
 import {
   FilterJaqlInternal,
   JaqlDataSource,
+  JaqlDataSourceForDto,
   RankingFilterJaql,
 } from './dimensional-model/filters/utils/types.js';
 import {
@@ -28,12 +24,11 @@ import {
   MeasureContext,
   SortDirection,
 } from './dimensional-model/interfaces.js';
-import {
-  DimensionalBaseMeasure,
-  DimensionalCalculatedMeasure,
-} from './dimensional-model/measures/measures.js';
+import * as measureFactory from './dimensional-model/measures/factory.js';
+import { DimensionalBaseMeasure } from './dimensional-model/measures/measures.js';
 import { isDatetime, isNumber } from './dimensional-model/simple-column-types.js';
 import {
+  AggregationTypes,
   BaseJaql,
   DataType,
   DateLevels,
@@ -190,6 +185,27 @@ export function convertJaqlDataSource(dataSource: DataSource): JaqlDataSource {
 }
 
 /**
+ * Converts a DataSource to JaqlDataSourceForDto.
+ *
+ * @internal
+ */
+export function convertJaqlDataSourceForDto(dataSource: DataSource): JaqlDataSourceForDto {
+  if (isDataSourceInfo(dataSource)) {
+    return {
+      title: dataSource.title,
+      live: dataSource.type === 'live',
+      id: dataSource.id ?? '',
+      address: dataSource.address,
+    };
+  } else {
+    return {
+      title: dataSource,
+      id: '',
+    };
+  }
+}
+
+/**
  * Converts a string to a Sort enum
  *
  * @param sort - The string to convert
@@ -269,7 +285,7 @@ export const createFilterFromJaql = (
  *
  * @internal
  */
-function parseExpression(expression: string) {
+export function parseExpression(expression: string) {
   const [table, column] = expression.slice(1, -1).split('.');
   return {
     table,
@@ -318,8 +334,6 @@ export function getSortType(jaqlSort: `${JaqlSortDirection}` | undefined): SortD
   }
 }
 
-const DATA_MODEL_MODULE_NAME = 'DM';
-
 /**
  * Creates an attribute or level attribute from the provided parameters
  *
@@ -327,9 +341,7 @@ const DATA_MODEL_MODULE_NAME = 'DM';
  * @internal
  */
 export const createAttributeHelper = ({
-  dim,
-  table,
-  column,
+  expression,
   dataType,
   granularity,
   format,
@@ -339,19 +351,15 @@ export const createAttributeHelper = ({
   dataSource,
 }: {
   /** Dimension expression */
-  dim: string;
-  /** Table name */
-  table: string | undefined;
-  /** Column name */
-  column: string | undefined;
+  expression: string;
   /** Data type */
   dataType: string;
   /** Date granularity */
-  granularity: string | undefined;
+  granularity?: string;
   /** Format */
-  format: string | undefined;
+  format?: string;
   /** Sort */
-  sort: string | undefined;
+  sort?: string;
   /** Attribute title */
   title?: string;
   /** Panel */
@@ -359,31 +367,22 @@ export const createAttributeHelper = ({
   /** Jaql data source */
   dataSource?: JaqlDataSource;
 }): Attribute | LevelAttribute => {
-  // if table is undefined, extract it from dim
-  const dimTable = table ?? parseExpression(dim).table;
-  // if column is undefined, extract it from dim
-  const dimColumn = column ?? parseExpression(dim).column;
+  const column = parseExpression(expression).column;
   const sortEnum = convertSort(sort);
 
   const isDataTypeDatetime = dataType === DataType.DATETIME;
 
   if (isDataTypeDatetime) {
-    const composeCode = normalizeAttributeName(
-      dimTable,
-      dimColumn,
-      granularity,
-      DATA_MODEL_MODULE_NAME,
-    );
     const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
-      title ?? dimColumn,
-      dim,
+      title ?? column,
+      expression,
       granularity || DateLevels.Years,
       format ||
         DimensionalLevelAttribute.getDefaultFormatForGranularity(granularity || DateLevels.Years),
       undefined,
       sortEnum,
       dataSource,
-      composeCode,
+      undefined,
       panel,
     );
 
@@ -392,20 +391,15 @@ export const createAttributeHelper = ({
 
   const attributeType =
     !dataType || isNumber(dataType) ? MetadataTypes.NumericAttribute : MetadataTypes.TextAttribute;
-  const composeCode = normalizeAttributeName(
-    dimTable,
-    dimColumn,
-    undefined,
-    DATA_MODEL_MODULE_NAME,
-  );
+
   const attribute: Attribute = new DimensionalAttribute(
-    title ?? dimColumn,
-    dim,
+    title ?? column,
+    expression,
     attributeType,
     undefined,
     sortEnum,
     dataSource,
-    composeCode,
+    undefined,
     panel,
   );
 
@@ -419,9 +413,7 @@ export const createAttributeHelper = ({
  * @internal
  */
 export const createMeasureHelper = ({
-  dim,
-  table,
-  column,
+  expression,
   dataType,
   agg,
   granularity,
@@ -431,32 +423,24 @@ export const createMeasureHelper = ({
   dataSource,
 }: {
   /** Dimension expression */
-  dim: string;
-  /** Table name */
-  table: string | undefined;
-  /** Column name */
-  column: string;
+  expression: string;
   /** Data type */
   dataType: string;
   /** Aggregation function */
   agg: string;
   /** Date granularity */
-  granularity: string | undefined;
+  granularity?: string;
   /** Format */
-  format: string | undefined;
+  format?: string;
   /** Sort */
-  sort: string | undefined;
+  sort?: string;
   /** Measure title */
   title?: string;
   /** Jaql data source */
   dataSource?: JaqlDataSource;
 }): BaseMeasure => {
-  const sortEnum = convertSort(sort);
-
   const attribute = createAttributeHelper({
-    dim,
-    table,
-    column,
+    expression,
     dataType,
     granularity,
     format,
@@ -466,40 +450,45 @@ export const createMeasureHelper = ({
   });
 
   const tranformedAgg = DimensionalBaseMeasure.aggregationFromJAQL(agg);
-
+  const column = parseExpression(expression).column;
   const updatedTitle = title ?? `${tranformedAgg} ${column}`;
 
-  // currently, sort and format applied to attribute but not to measure
-  const composeCode = `measureFactory.${tranformedAgg}(${
-    attribute.composeCode
-  }, '${escapeSingleQuotes(updatedTitle)}')`;
-  const measure: BaseMeasure = new DimensionalBaseMeasure(
-    updatedTitle,
-    attribute,
-    tranformedAgg,
-    undefined,
-    undefined,
-    sortEnum,
-    composeCode,
-  );
+  switch (tranformedAgg) {
+    case AggregationTypes.Sum:
+      return measureFactory.sum(attribute, updatedTitle, format);
 
-  return measure;
-};
+    case AggregationTypes.Average:
+      return measureFactory.avg(attribute, updatedTitle, format);
 
-const getContextComposeCode = (context: MeasureContext) => {
-  return (
-    '{' +
-    Object.entries(context).reduce((acc, [key, value]) => {
-      acc =
-        acc +
-        `'${key.slice(1, -1)}': ${
-          value && 'composeCode' in value ? value.composeCode : JSON.stringify(value)
-        },`;
+    case AggregationTypes.Min:
+      return measureFactory.min(attribute, updatedTitle, format);
 
-      return acc;
-    }, '') +
-    '}'
-  );
+    case AggregationTypes.Max:
+      return measureFactory.max(attribute, updatedTitle, format);
+
+    case AggregationTypes.Count:
+      return measureFactory.count(attribute, updatedTitle, format);
+
+    case AggregationTypes.CountDistinct:
+      return measureFactory.countDistinct(attribute, updatedTitle, format);
+
+    case AggregationTypes.Median:
+      return measureFactory.median(attribute, updatedTitle, format);
+
+    case AggregationTypes.Variance:
+      return measureFactory.aggregate(attribute, AggregationTypes.Variance, updatedTitle, format);
+
+    case AggregationTypes.StandardDeviation:
+      return measureFactory.aggregate(
+        attribute,
+        AggregationTypes.StandardDeviation,
+        updatedTitle,
+        format,
+      );
+
+    default:
+      return measureFactory.sum(attribute, updatedTitle, format);
+  }
 };
 
 /**
@@ -509,8 +498,6 @@ const getContextComposeCode = (context: MeasureContext) => {
  * @internal
  */
 export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeasure => {
-  const sortEnum = convertSort(jaql.sort);
-
   const context: MeasureContext = mapValues(jaql.context ?? {}, (jaqlContextValue) => {
     if (typeof jaqlContextValue === 'string') {
       return jaqlContextValue;
@@ -518,19 +505,7 @@ export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeas
     return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
   });
 
-  const composeCode = `measureFactory.customFormula('${escapeSingleQuotes(jaql.title)}', '${
-    jaql.formula
-  }', ${getContextComposeCode(context)})`;
-
-  return new DimensionalCalculatedMeasure(
-    jaql.title,
-    jaql.formula,
-    context,
-    undefined,
-    undefined,
-    sortEnum,
-    composeCode,
-  );
+  return measureFactory.customFormula(jaql.title, jaql.formula, context);
 };
 
 /**
@@ -561,9 +536,7 @@ export function createDimensionalElementFromJaql(
   const hasAggregation = !!jaql.agg;
   if (hasAggregation) {
     return createMeasureHelper({
-      dim: jaql.dim,
-      table: jaql.table,
-      column: jaql.column,
+      expression: jaql.dim,
       dataType: jaql.datatype,
       agg: jaql.agg || '',
       granularity: getGranularityFromJaql(jaql),
@@ -575,9 +548,7 @@ export function createDimensionalElementFromJaql(
   }
 
   return createAttributeHelper({
-    dim: jaql.dim,
-    table: jaql.table,
-    column: jaql.column,
+    expression: jaql.dim,
     dataType: jaql.datatype,
     granularity: getGranularityFromJaql(jaql),
     format: datetimeFormat,

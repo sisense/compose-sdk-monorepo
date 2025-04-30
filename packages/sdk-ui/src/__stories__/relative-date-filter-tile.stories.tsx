@@ -33,9 +33,7 @@ const onUpdate = (filter: Filter | null) => {
 
 export const Vertical = template({
   title: 'Relative Date: Vertical',
-  filter: (
-    filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter
-  ).serializable(),
+  filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
   arrangement: 'vertical',
   onUpdate,
   limit: {
@@ -46,9 +44,7 @@ export const Vertical = template({
 
 export const Horizontal = template({
   title: 'Relative Date: Horizontal',
-  filter: (
-    filterFactory.dateRelativeFrom(mockAttributeYears, 0, 1) as RelativeDateFilter
-  ).serializable(),
+  filter: filterFactory.dateRelativeFrom(mockAttributeYears, 0, 1) as RelativeDateFilter,
   arrangement: 'horizontal',
   onUpdate,
 });

@@ -96,28 +96,6 @@ If not specified, the default value is `0`
 
 ***
 
-### onBeforeQuery
-
-> **onBeforeQuery**?: (`jaql`) => `any`
-
-Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
-
-::: warning Deprecated
-Use `beforeQuery` instead.
-:::
-
-#### Parameters
-
-| Parameter | Type |
-| :------ | :------ |
-| `jaql` | `any` |
-
-#### Returns
-
-`any`
-
-***
-
 ### widgetOid
 
 > **widgetOid**: `string`

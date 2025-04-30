@@ -33,9 +33,7 @@ export const CustomSisenseContextProvider: FunctionComponent<
     );
 
   const userLanguage =
-    context?.app?.settings.translationConfig.language ||
-    context?.app?.settings.language ||
-    context?.app?.settings.serverLanguage;
+    context?.app?.settings.translationConfig.language || context?.app?.settings.serverLanguage;
   const customTranslations = context.app?.settings.translationConfig.customTranslations;
 
   return (

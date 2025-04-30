@@ -10,7 +10,7 @@ React components and utilities for working with charts
 
 - [AreaChart](charts/function.AreaChart.md)
 - [AreamapChart](charts/function.AreamapChart.md)
-- [AreaRangeChart](charts/function.AreaRangeChart.md) <Badge type="beta" text="Beta" />
+- [AreaRangeChart](charts/function.AreaRangeChart.md)
 - [BarChart](charts/function.BarChart.md)
 - [BoxplotChart](charts/function.BoxplotChart.md)
 - [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
@@ -48,7 +48,7 @@ React filter tile components
 - [CriteriaFilterTile](filter-tiles/function.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/function.DateRangeFilterTile.md)
 - [FiltersPanel](filter-tiles/function.FiltersPanel.md) <Badge type="alpha" text="Alpha" />
-- [FilterTile](filter-tiles/function.FilterTile.md) <Badge type="beta" text="Beta" /> - Facade component rendering a filter tile based on filter type
+- [FilterTile](filter-tiles/function.FilterTile.md) - Facade component rendering a filter tile based on filter type
 - [MemberFilterTile](filter-tiles/function.MemberFilterTile.md)
 - [RelativeDateFilterTile](filter-tiles/function.RelativeDateFilterTile.md)
 - [useGetFilterMembers](filter-tiles/function.useGetFilterMembers.md) <Badge type="beta" text="Beta" /> - Hook to fetch members of a filter
@@ -79,9 +79,9 @@ React components and utilities for working with dashboards
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md) <Badge type="alpha" text="Alpha" />
 - [PivotTableWidget](dashboards/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
-- [useComposedDashboard](dashboards/function.useComposedDashboard.md) <Badge type="alpha" text="Alpha" />
+- [useComposedDashboard](dashboards/function.useComposedDashboard.md)
 - [useExecutePluginQuery](dashboards/function.useExecutePluginQuery.md) <Badge type="alpha" text="Alpha" />
-- [Widget](dashboards/function.Widget.md) <Badge type="alpha" text="Alpha" />
+- [Widget](dashboards/function.Widget.md)
 
 ## Fusion Assets
 
@@ -90,7 +90,6 @@ React components, hooks, and utilities for working with Fusion dashboards, widge
 - [DashboardById](fusion-assets/function.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
-- [DashboardWidget](fusion-assets/function.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [ExecuteQueryByWidgetId](fusion-assets/function.ExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useFetch](fusion-assets/function.useFetch.md)
@@ -105,11 +104,14 @@ React components, hooks, and utilities for working with Fusion dashboards, widge
 
 ## Generative AI
 
-React components and hooks for creating experiences using generative AI
+React components and hooks for working with Generative AI features provided by Sisense Fusion
+::: tip Note
+For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
+:::
 
-- [AiContextProvider](generative-ai/function.AiContextProvider.md) <Badge type="beta" text="Beta" />
-- [Chatbot](generative-ai/function.Chatbot.md) <Badge type="beta" text="Beta" />
-- [GetNlgInsights](generative-ai/function.GetNlgInsights.md) <Badge type="beta" text="Beta" />
-- [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md) <Badge type="beta" text="Beta" />
+- [AiContextProvider](generative-ai/function.AiContextProvider.md)
+- [Chatbot](generative-ai/function.Chatbot.md)
+- [GetNlgInsights](generative-ai/function.GetNlgInsights.md)
+- [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md)
 - [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
 - [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />

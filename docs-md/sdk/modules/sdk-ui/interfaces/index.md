@@ -35,8 +35,6 @@ TypeScript interfaces for components and hooks listed above
 - [DashboardFiltersPanelConfig](interface.DashboardFiltersPanelConfig.md)
 - [DashboardLayoutOptions](interface.DashboardLayoutOptions.md)
 - [DashboardProps](interface.DashboardProps.md)
-- [DashboardWidgetProps](interface.DashboardWidgetProps.md)
-- [DashboardWidgetStyleOptions](interface.DashboardWidgetStyleOptions.md)
 - [DataLimits](interface.DataLimits.md)
 - [DateRangeFilterTileProps](interface.DateRangeFilterTileProps.md)
 - [DrilldownBreadcrumbsProps](interface.DrilldownBreadcrumbsProps.md)

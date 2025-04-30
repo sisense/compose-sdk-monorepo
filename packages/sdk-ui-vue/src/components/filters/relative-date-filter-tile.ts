@@ -52,19 +52,28 @@ export const RelativeDateFilterTile = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.title}
      */
-    title: Object as PropType<RelativeDateFilterTileProps['title']>,
+    title: {
+      type: String as PropType<RelativeDateFilterTileProps['title']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.filter}
      */
-    filter: Object as PropType<RelativeDateFilterTileProps['filter']>,
+    filter: {
+      type: Object as PropType<RelativeDateFilterTileProps['filter']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.arrangement}
      */
-    arrangement: Object as PropType<RelativeDateFilterTileProps['arrangement']>,
+    arrangement: String as PropType<RelativeDateFilterTileProps['arrangement']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onUpdate}
      */
-    onUpdate: Function as PropType<RelativeDateFilterTileProps['onUpdate']>,
+    onUpdate: {
+      type: Function as PropType<RelativeDateFilterTileProps['onUpdate']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.limit}
      */
@@ -83,6 +92,5 @@ export const RelativeDateFilterTile = defineComponent({
      */
     onEdit: Function as PropType<RelativeDateFilterTileProps['onEdit']>,
   },
-  setup: (props) =>
-    setupHelper(RelativeDateFilterTilePreact, props as RelativeDateFilterTilePropsPreact),
+  setup: (props) => setupHelper(RelativeDateFilterTilePreact, props),
 });

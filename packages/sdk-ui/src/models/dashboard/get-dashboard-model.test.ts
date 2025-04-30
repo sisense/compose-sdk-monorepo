@@ -46,6 +46,8 @@ describe('getDashboardModel', () => {
       widgetsOptions: expect.anything(),
       tabbersOptions: expect.anything(),
       dataSource: {
+        id: dashboardMock.datasource.id,
+        address: dashboardMock.datasource.address,
         title: dashboardMock.datasource.title,
         type: 'elasticube',
       },
@@ -67,6 +69,8 @@ describe('getDashboardModel', () => {
       oid: dashboardMock.oid,
       title: dashboardMock.title,
       dataSource: {
+        id: dashboardMock.datasource.id,
+        address: dashboardMock.datasource.address,
         title: dashboardMock.datasource.title,
         type: 'elasticube',
       },
@@ -118,6 +122,8 @@ describe('getDashboardModel', () => {
       oid: dashboardMock.oid,
       title: dashboardMock.title,
       dataSource: {
+        id: dashboardMock.datasource.id,
+        address: dashboardMock.datasource.address,
         title: dashboardMock.datasource.title,
         type: 'elasticube',
       },

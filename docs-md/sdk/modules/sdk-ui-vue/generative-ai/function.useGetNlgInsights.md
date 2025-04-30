@@ -2,16 +2,12 @@
 title: useGetNlgInsights
 ---
 
-# Function useGetNlgInsights <Badge type="beta" text="Beta" />
+# Function useGetNlgInsights
 
 > **useGetNlgInsights**(`params`): [`UseGetNlgInsightsState`](../interfaces/interface.UseGetNlgInsightsState.md)
 
 A Vue composable that fetches an analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [`useExecuteQuery`](../queries/function.useExecuteQuery.md) composable, using dimensions, measures, and filters.
-
-::: warning Note
-This composable is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
 
 ## Parameters
 

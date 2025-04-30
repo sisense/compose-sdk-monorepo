@@ -49,7 +49,7 @@ MemberFilterTile props
 
 ### attribute
 
-> **`readonly`** **attribute**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
+> **`readonly`** **attribute**: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)
 
 Attribute to filter on. A query will run to fetch all this attribute's members
 
@@ -67,7 +67,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 ### filter
 
-> **`readonly`** **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null`
+> **`readonly`** **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null`
 
 Source filter object. Caller is responsible for keeping track of filter state
 
@@ -75,7 +75,7 @@ Source filter object. Caller is responsible for keeping track of filter state
 
 ### onChange
 
-> **`readonly`** **onChange**?: (`filter`) => `void`
+> **`readonly`** **onChange**: (`filter`) => `void`
 
 Callback indicating when the source members filter should be updated
 
@@ -125,6 +125,6 @@ List of filters this filter is dependent on
 
 ### title
 
-> **`readonly`** **title**?: `string`
+> **`readonly`** **title**: `string`
 
 Title for the filter tile, which is rendered into the header

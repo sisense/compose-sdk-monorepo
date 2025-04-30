@@ -5,13 +5,17 @@
  * Types
  */
 
-import { type ConditionFilterJaql, JaqlDataSource } from './filters/utils/types.js';
+import type {
+  ConditionFilterJaql,
+  JaqlDataSource,
+  JaqlDataSourceForDto,
+} from './filters/utils/types.js';
 import { Attribute } from './interfaces.js';
 
 /**
  * @internal
  */
-export type { JaqlDataSource };
+export type { JaqlDataSource, JaqlDataSourceForDto };
 
 /**
  * Different aggregation types
@@ -417,6 +421,7 @@ export type FormulaJaql = {
   title: string;
   formula: string;
   context?: Record<FormulaID, FormulaContext>;
+  datasource?: JaqlDataSource;
 };
 
 /** @internal */
@@ -495,6 +500,29 @@ export type OrFilterJaql<FilterItem> = {
  * Abstract object with any unknown values
  */
 export type AnyObject = Record<string, any>;
+
+/**
+ * JSON Value
+ *
+ * @internal
+ */
+export type JSONValue = string | number | boolean | undefined | null | JSONArray | JSONObject;
+
+/**
+ * JSON Array
+ *
+ * @internal
+ */
+export interface JSONArray extends Array<JSONValue> {}
+
+/**
+ * JSON Object
+ *
+ * @internal
+ */
+export interface JSONObject {
+  [key: string]: JSONValue;
+}
 
 /**
  * @internal
@@ -623,6 +651,8 @@ export type MetadataItemJaql = {
     sortingLastDimension?: boolean;
     initialized?: boolean;
   };
+  // to support dashboard of multi sources
+  datasource?: JaqlDataSource;
 };
 
 /**

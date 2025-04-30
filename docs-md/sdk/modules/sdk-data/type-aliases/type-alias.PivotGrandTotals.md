@@ -19,13 +19,3 @@ Data options for grand totals of a pivot table
 ### `rows`
 
 **rows**?: `boolean`
-
-***
-
-### `title`
-
-**title**?: `string`
-
-::: warning Deprecated
-
-:::

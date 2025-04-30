@@ -54,7 +54,7 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ### filter
 
-> **`readonly`** **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
+> **`readonly`** **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)
 
 Text or numeric filter object to initialize filter type and default values
 
@@ -94,7 +94,7 @@ Filter edit callback
 
 ### onUpdate
 
-> **`readonly`** **onUpdate**?: (`filter`) => `void`
+> **`readonly`** **onUpdate**: (`filter`) => `void`
 
 Callback returning updated filter object
 
@@ -112,6 +112,6 @@ Callback returning updated filter object
 
 ### title
 
-> **`readonly`** **title**?: `string`
+> **`readonly`** **title**: `string`
 
 Title for the filter tile, which is rendered into the header

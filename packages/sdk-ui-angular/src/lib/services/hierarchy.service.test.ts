@@ -7,6 +7,10 @@ import { Mock, Mocked } from 'vitest';
 import { HierarchyService } from './hierarchy.service';
 import { SisenseContextService } from './sisense-context.service';
 
+vi.mock('../decorators/trackable.decorator', () => ({
+  TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
+}));
+
 vi.mock('@sisense/sdk-ui-preact', () => ({
   getHierarchyModels: vi.fn(),
 }));

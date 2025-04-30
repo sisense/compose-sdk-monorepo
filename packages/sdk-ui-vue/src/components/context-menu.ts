@@ -47,7 +47,10 @@ export const ContextMenu = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.closeContextMenu}
      */
-    closeContextMenu: Function as PropType<ContextMenuProps['closeContextMenu']>,
+    closeContextMenu: {
+      type: Function as PropType<ContextMenuProps['closeContextMenu']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.itemSections}
      */
@@ -57,6 +60,5 @@ export const ContextMenu = defineComponent({
      */
     position: Object as PropType<ContextMenuProps['position']>,
   },
-  setup: (props, { slots }) =>
-    setupHelperWithChildren(ContextMenuPreact, props as ContextMenuPropsPreact, slots, []),
+  setup: (props, { slots }) => setupHelperWithChildren(ContextMenuPreact, props, slots, []),
 });

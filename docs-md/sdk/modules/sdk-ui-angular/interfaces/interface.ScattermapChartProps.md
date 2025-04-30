@@ -120,8 +120,29 @@ Configurations for how to interpret and present the data passed to the chart
 
 Configurations for how to style and present a chart's data.
 
-### Other
+### Callbacks
 
 #### dataPointClick
 
-> **dataPointClick**?: [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md)
+> **dataPointClick**?: [`ScattermapDataPointEventHandler`](../type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+
+Click handler callback for a data point
+
+***
+
+#### dataReady
+
+> **dataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

@@ -166,7 +166,7 @@ To learn more about using filter components to create highlights, see the
 
 #### chartType
 
-> **`readonly`** **chartType**?: [`ChartType`](../type-aliases/type-alias.ChartType.md)
+> **`readonly`** **chartType**: [`ChartType`](../type-aliases/type-alias.ChartType.md)
 
 Default chart type of each series.
 
@@ -174,7 +174,7 @@ Default chart type of each series.
 
 #### dataOptions
 
-> **`readonly`** **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
+> **`readonly`** **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md)
 
 Configurations for how to interpret and present a chart's data.
 
@@ -225,3 +225,22 @@ Context menu handler callback for a data point
 > **`readonly`** **onDataPointsSelected**?: [`DataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
+
+***
+
+#### onDataReady
+
+> **`readonly`** **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

@@ -3,17 +3,16 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
-import {
-  executePivotQuery,
-  executeQuery,
-  executeQueryByWidgetId,
-  ExecuteQueryByWidgetIdParams,
-  ExecuteQueryParams,
-} from '@sisense/sdk-ui-preact';
+import type { ExecuteQueryByWidgetIdParams, ExecuteQueryParams } from '@sisense/sdk-ui-angular';
+import { executePivotQuery, executeQuery, executeQueryByWidgetId } from '@sisense/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
 
 import { ExecutePivotQueryParams, QueryService } from './query.service';
 import { SisenseContextService } from './sisense-context.service';
+
+vi.mock('../decorators/trackable.decorator', () => ({
+  TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
+}));
 
 vi.mock('@sisense/sdk-ui-preact', () => ({
   executeQuery: vi.fn(),
@@ -56,7 +55,7 @@ describe('QueryService', () => {
         highlights: [],
         count: 10,
         offset: 0,
-        onBeforeQuery: vi.fn(),
+        beforeQuery: vi.fn(),
       };
       const result = await queryService.executeQuery(params);
       expect(sisenseContextServiceMock.getApp).toHaveBeenCalled();

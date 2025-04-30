@@ -55,25 +55,28 @@ export const BarChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<BarChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<BarChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<BarChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<BarChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!BarChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<BarChartProps['filters']>,
+    filters: [Object, Array] as PropType<BarChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!BarChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<BarChartProps['highlights']>,
+    highlights: Array as PropType<BarChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!BarChartProps.onBeforeRender}
      *
@@ -84,7 +87,6 @@ export const BarChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<BarChartProps['onDataReady']>,
     /**
@@ -112,5 +114,5 @@ export const BarChart = defineComponent({
      */
     styleOptions: Object as PropType<BarChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(BarChartPreact, props as BarChartPropsPreact),
+  setup: (props) => setupHelper(BarChartPreact, props),
 });

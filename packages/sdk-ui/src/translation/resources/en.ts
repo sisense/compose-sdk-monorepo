@@ -53,6 +53,8 @@ export const translation = {
       onlyPivotWidgetSupported: 'Only pivot widget is supported for method {{methodName}}',
       onlyTextWidgetSupported: 'Only text widget is supported for method {{methodName}}',
       onlyPluginWidgetSupported: 'Only plugin widget is supported for method {{methodName}}',
+      unsupportedWidgetType: 'Unsupported widget type: {{widgetType}}',
+      unsupportedFusionWidgetType: 'Unsupported Fusion widget type: {{widgetType}}',
     },
     unknownFilterInFilterRelations: 'Filter relations contain unknown filter',
     filterRelationsNotSupported: 'Filter relations not supported yet',
@@ -248,7 +250,6 @@ export const translation = {
     chatbotDescription:
       'Analytics Chatbot is designed to help you interact with your data using natural language.',
     topicSelectPrompt: 'Pick a topic you would like to explore:',
-    betaLabel: 'Beta',
     preview: 'Preview',
     clearHistoryPrompt: 'Do you want to clear this chat?',
     config: {

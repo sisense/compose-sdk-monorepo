@@ -3,7 +3,7 @@ import { ChartType } from '@/index';
 /**
  * Widget type
  *
- * todo: as a future refactoring need to replace existing `WidgetType` by current one
+ * todo: as a future refactoring need to replace this type by combination of WidgetType and ChartType
  *
  * @internal
  */

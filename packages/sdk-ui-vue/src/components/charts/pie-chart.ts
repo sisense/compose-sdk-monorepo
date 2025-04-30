@@ -53,25 +53,28 @@ export const PieChart = defineComponent({
      *
      * @category Data
      */
-    dataOptions: Object as PropType<PieChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<PieChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!PieChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<PieChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<PieChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PieChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<PieChartProps['filters']>,
+    filters: [Object, Array] as PropType<PieChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PieChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<PieChartProps['highlights']>,
+    highlights: Array as PropType<PieChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PieChartProps.onBeforeRender}
      *
@@ -82,7 +85,6 @@ export const PieChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<PieChartProps['onDataReady']>,
     /**
@@ -110,5 +112,5 @@ export const PieChart = defineComponent({
      */
     styleOptions: Object as PropType<PieChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(PieChartPreact, props as PieChartPropsPreact),
+  setup: (props) => setupHelper(PieChartPreact, props),
 });

@@ -4,7 +4,6 @@ import {
   filterToDefaultValues,
   filterToOption,
 } from '../../../criteria-filter-tile/criteria-filter-operations.js';
-import { CriteriaFilterType } from '../../../criteria-filter-tile';
 import {
   isConditionalFilter,
   isExcludeMembersFilter,
@@ -45,14 +44,14 @@ export function getNumericFilterCondition(
     return NumericCondition.EXCLUDE;
   }
 
-  return filterToOption(filter as CriteriaFilterType) as NumericConditionType;
+  return filterToOption(filter) as NumericConditionType;
 }
 
 export function getNumericFilterValue(filter: Filter): string {
   if (!isConditionalFilter(filter)) {
     return '';
   }
-  const value = filterToDefaultValues(filter as CriteriaFilterType)[0] ?? '';
+  const value = filterToDefaultValues(filter)[0] ?? '';
   return `${value}`;
 }
 

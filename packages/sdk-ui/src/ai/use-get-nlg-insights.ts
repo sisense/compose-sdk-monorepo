@@ -147,10 +147,6 @@ const useGetNlgInsightsWithoutTracking = (params: UseGetNlgInsightsParams) => {
  * React hook that fetches an analysis of the provided query using natural language generation (NLG).
  * Specifying a query is similar to providing parameters to a {@link useExecuteQuery} hook, using dimensions, measures, and filters.
  *
- * ::: warning Note
- * This hook is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * ```tsx
  * const { data, isLoading } = useGetNlgInsights({
@@ -167,18 +163,7 @@ const useGetNlgInsightsWithoutTracking = (params: UseGetNlgInsightsParams) => {
  * ```
  * @returns Response object containing a text summary
  * @group Generative AI
- * @beta
  */
 export const useGetNlgInsights = withTracking('useGetNlgInsights')(
-  useGetNlgInsightsWithoutTracking,
-);
-
-/**
- * @returns Response object containing a text summary
- * @group Generative AI
- * @deprecated Use {@link useGetNlgInsights} instead
- * @internal
- */
-export const useGetNlgQueryResult = withTracking('useGetNlgQueryResult')(
   useGetNlgInsightsWithoutTracking,
 );

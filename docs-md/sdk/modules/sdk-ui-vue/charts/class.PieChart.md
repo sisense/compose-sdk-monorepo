@@ -48,7 +48,7 @@ Pie chart properties
 
 #### dataOptions
 
-> **`readonly`** **dataOptions**?: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
+> **`readonly`** **dataOptions**: [`CategoricalChartDataOptions`](../interfaces/interface.CategoricalChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -201,3 +201,22 @@ To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/gu
 A callback that allows you to customize what happens when data points are selected.
 
 To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#callbacks).
+
+***
+
+#### onDataReady
+
+> **`readonly`** **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

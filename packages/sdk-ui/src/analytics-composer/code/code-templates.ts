@@ -30,6 +30,18 @@ export default function CodeExample() {
 }`,
     chartTmpl: `{{baseChartTmpl}}`,
     chartWidgetTmpl: `{{baseChartTmpl}}`,
+    chartWidgetPropsTmpl: `
+    {
+      id: '{{idString}}',
+      widgetType: '{{widgetTypeString}}',
+      title: '{{titleString}}',
+      dataSource: DM.DataSource,
+      chartType: '{{chartTypeString}}',
+      dataOptions: {{dataOptionsString}},
+      filters: {{filtersString}},
+      styleOptions: {{styleOptionsString}},
+      drilldownOptions: {{drilldownOptionsString}},
+    }`,
     widgetByIdTmpl: `import { WidgetById } from '@sisense/sdk-ui';
 
 const CodeExample = () => {
@@ -143,6 +155,56 @@ export default function CodeExample() {
     />
   );
 }`,
+    pivotTableWidgetPropsTmpl: `{
+      id: '{{idString}}',
+      widgetType: '{{widgetTypeString}}',
+      title: '{{titleString}}',
+      dataSource: DM.DataSource,
+      dataOptions: {{dataOptionsString}},
+      filters: {{filtersString}},
+      styleOptions: {{styleOptionsString}},
+    }`,
+    dashboardByIdTmpl: `import { DashboardById } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+  return (
+    <>
+      <DashboardById dashboardOid="{{dashboardOid}}" />
+    </>
+  );
+};
+
+export default CodeExample;`,
+    dashboardTmpl: `import { useMemo } from 'react';
+import { Dashboard, DashboardProps, WidgetProps } from '@sisense/sdk-ui';
+import { Filter, FilterRelations } from '@sisense/sdk-data';
+{{extraImportsString}}
+import * as DM from './{{defaultDataSourceString}}'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  const dashboardProps: DashboardProps = useMemo(() => {
+    const widgets: WidgetProps[] = {{widgetsString}};
+    const filters: Filter[] | FilterRelations = {{filtersString}};
+
+    return {
+      title: '{{titleString}}',
+      widgets,
+      filters,
+      config: {
+        toolbar: { isVisible: true },
+        filtersPanel: { isVisible: true },
+      },
+      widgetsOptions: {{widgetsOptionsString}},
+      layoutOptions: {{layoutOptionsString}},
+      tabbersOptions: {{tabbersOptionsString}},
+      styleOptions: {{styleOptionsString}},
+    };
+  }, []);
+
+  return (
+    <Dashboard {...dashboardProps} />
+  );
+}`,
   },
   angular: {
     baseChartTmpl: `import { Component } from '@angular/core';
@@ -173,6 +235,17 @@ export class CodeExample {
 }`,
     chartTmpl: `{{baseChartTmpl}}`,
     chartWidgetTmpl: `{{baseChartTmpl}}`,
+    chartWidgetPropsTmpl: `{
+      id: '{{idString}}',
+      widgetType: '{{widgetTypeString}}',
+      title: '{{titleString}}',
+      dataSource: DM.DataSource,
+      chartType: '{{chartTypeString}}',
+      dataOptions: {{dataOptionsString}},
+      filters: {{filtersString}},
+      styleOptions: {{styleOptionsString}},
+      drilldownOptions: {{drilldownOptionsString}},
+    }`,
     widgetByIdTmpl: `import { Component } from '@angular/core';
 
 @Component({
@@ -268,6 +341,30 @@ export class CodeExample {
 `,
     executePivotQueryTmpl: `Not implemented yet`,
     pivotTableWidgetTmpl: `Not implemented yet`,
+    pivotTableWidgetPropsTmpl: `{
+      id: '{{idString}}',
+      widgetType: '{{widgetTypeString}}',
+      title: '{{titleString}}',
+      dataSource: DM.DataSource,
+      dataOptions: {{dataOptionsString}},
+      filters: {{filtersString}},
+      styleOptions: {{styleOptionsString}},
+    }`,
+    dashboardByIdTmpl: `import { Component } from '@angular/core';
+
+@Component({
+  selector: 'code-example',
+  template: \`
+    <csdk-dashboard-by-id
+      [dashboardOid]="dashboardOid"
+    />
+  \`,
+})
+
+export class CodeExample {
+  dashboardOid = "{{dashboardOid}}";
+}`,
+    dashboardTmpl: `/** COMING SOON */`,
   },
   vue: {
     baseChartTmpl: `<script setup lang="ts">
@@ -294,6 +391,17 @@ export class CodeExample {
 </template>`,
     chartTmpl: `{{baseChartTmpl}}`,
     chartWidgetTmpl: `{{baseChartTmpl}}`,
+    chartWidgetPropsTmpl: `{
+      id: '{{idString}}',
+      widgetType: '{{widgetTypeString}}',
+      title: '{{titleString}}',
+      dataSource: DM.DataSource,
+      chartType: '{{chartTypeString}}',
+      dataOptions: {{dataOptionsString}},
+      filters: {{filtersString}},
+      styleOptions: {{styleOptionsString}},
+      drilldownOptions: {{drilldownOptionsString}},
+    }`,
     widgetByIdTmpl: `<script setup lang="ts">
 import { WidgetById } from '@sisense/sdk-ui-vue';
 </script>
@@ -343,5 +451,21 @@ const { data, isLoading, isError, error } = useExecuteQuery(queryProps);
 </template>`,
     executePivotQueryTmpl: 'Not implemented yet',
     pivotTableWidgetTmpl: `Not implemented yet`,
+    pivotTableWidgetPropsTmpl: `{
+      id: '{{idString}}',
+      widgetType: '{{widgetTypeString}}',
+      title: '{{titleString}}',
+      dataSource: DM.DataSource,
+      dataOptions: {{dataOptionsString}},
+      filters: {{filtersString}},
+      styleOptions: {{styleOptionsString}},
+    }`,
+    dashboardByIdTmpl: `<script setup lang="ts">
+import { DashboardById } from '@sisense/sdk-ui-vue';
+</script>
+<template>
+  <DashboardById :dashboardOid="'{{dashboardOid}}'" />
+</template>`,
+    dashboardTmpl: `/** COMING SOON */`,
   },
 };

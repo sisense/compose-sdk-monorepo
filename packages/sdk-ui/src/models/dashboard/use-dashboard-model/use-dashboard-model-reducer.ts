@@ -124,6 +124,33 @@ export function dashboardReducer(
 }
 
 /**
+ * Translates filters and relations to DTOs.
+ *
+ * @param filtersOrFilterRelations - The filters or filter relations to translate
+ * @returns The translated filters and relations DTOs for Fusion
+ * @internal
+ */
+export function translateFiltersAndRelationsToDto(
+  filtersOrFilterRelations: Filter[] | FilterRelations,
+) {
+  const { filters, relations } = splitFiltersAndRelations(filtersOrFilterRelations);
+  const filterDtos = filters.map(filterToFilterDto);
+  const filterRelationsModel = filterRelationRulesToFilterRelationsModel(relations, filters);
+  const stringDataSource = getDataSourceStringFromFilters(filters);
+  return {
+    filters: filterDtos,
+    filterRelations: filterRelationsModel
+      ? [
+          {
+            datasource: stringDataSource,
+            filterRelations: filterRelationsModel,
+          },
+        ]
+      : undefined,
+  };
+}
+
+/**
  * Middleware that persists the dashboard model changes to the Sisense server.
  *
  * @param restApi - The Sisense REST API instance
@@ -131,31 +158,17 @@ export function dashboardReducer(
  * @internal
  */
 export async function persistDashboardModelMiddleware(
-  dashbordOid: string | undefined,
+  dashboardOid: string | undefined,
   action: UseDashboardModelInternalAction,
   restApi: RestApi,
 ): Promise<UseDashboardModelInternalAction> {
-  if (!dashbordOid) throw new Error('Dashboard model is not initialized');
+  if (!dashboardOid) throw new Error('Dashboard model is not initialized');
 
   if (action.type === UseDashboardModelActionType.FILTERS_UPDATE) {
-    const { filters, relations } = splitFiltersAndRelations(action.payload);
-    const filterDtos = filters.map(filterToFilterDto);
-    const filterRelationsModel = filterRelationRulesToFilterRelationsModel(relations, filters);
-    const stringDataSource = getDataSourceStringFromFilters(filters);
-    await restApi.patchDashboard(dashbordOid, {
-      filters: filterDtos,
-      filterRelations: filterRelationsModel
-        ? [
-            {
-              datasource: stringDataSource,
-              filterRelations: filterRelationsModel,
-            },
-          ]
-        : undefined,
-    });
+    await restApi.patchDashboard(dashboardOid, translateFiltersAndRelationsToDto(action.payload));
   } else if (action.type === UseDashboardModelActionType.ADD_WIDGET) {
     const widgetDto = await restApi.addWidgetToDashboard(
-      dashbordOid,
+      dashboardOid,
       widgetModelTranslator.toWidgetDto(action.payload),
     );
 

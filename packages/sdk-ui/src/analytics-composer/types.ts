@@ -4,14 +4,17 @@ import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
 import { MetadataItem } from '@sisense/sdk-data';
 import { DynamicChartType } from '../chart-options-processor/translations/types.js';
 import { AnyColumn } from '@/chart-data-options/types.js';
+import { DashboardProps } from '@/dashboard/types.js';
 
 type Stringify<T> = {
   [K in keyof T as `${K & string}String`]: string;
 };
 
-type ExtraCodeProps = {
+type ExtraWidgetCodeProps = {
   componentString: string;
   extraImportsString: string;
+  idString?: string;
+  widgetTypeString?: 'chart' | 'pivot' | 'text' | 'plugin';
 };
 
 /** @internal */
@@ -61,7 +64,7 @@ export interface ExpandedQueryModel {
  * @internal
  */
 export const EMPTY_EXPANDED_QUERY_MODEL: ExpandedQueryModel = {
-  jaql: { datasource: { title: '' }, metadata: [] },
+  jaql: { datasource: { title: '', type: 'elasticube' }, metadata: [] },
   queryTitle: '',
   chartRecommendations: {},
 };
@@ -132,11 +135,15 @@ export type CodeTemplateKey =
   | 'baseChartTmpl'
   | 'chartTmpl'
   | 'chartWidgetTmpl'
+  | 'chartWidgetPropsTmpl'
   | 'widgetByIdTmpl'
   | 'executeQueryByWidgetIdTmpl'
   | 'executeQueryTmpl'
   | 'executePivotQueryTmpl'
-  | 'pivotTableWidgetTmpl';
+  | 'pivotTableWidgetTmpl'
+  | 'pivotTableWidgetPropsTmpl'
+  | 'dashboardByIdTmpl'
+  | 'dashboardTmpl';
 
 /**
  * Code Templates
@@ -160,6 +167,8 @@ export type CodePlaceholderMap = Record<string, string>;
  * @internal
  */
 export type BaseCodeConfig = { uiFramework?: UiFramework };
+
+/** TYPES FOR WIDGET CODE */
 
 /**
  * Widget Code Config
@@ -218,11 +227,15 @@ export const isByIdWidgetCodeParams = (
 };
 
 /**
+ * Widget Props Config
+ *
  * @internal
  */
 export type WidgetPropsConfig = { useCustomizedStyleOptions?: boolean };
 
 /**
+ * Execute Query Code Params
+ *
  * @internal
  */
 export type ExecuteQueryCodeParams = BaseCodeConfig & {
@@ -230,6 +243,8 @@ export type ExecuteQueryCodeParams = BaseCodeConfig & {
 };
 
 /**
+ * Execute Pivot Query Code Params
+ *
  * @internal
  */
 export type ExecutePivotQueryCodeParams = BaseCodeConfig & {
@@ -237,6 +252,8 @@ export type ExecutePivotQueryCodeParams = BaseCodeConfig & {
 };
 
 /**
+ * Execute Query Code Props
+ *
  * @internal
  */
 export type ExecuteQueryCodeProps = Stringify<ExecuteQueryParams> & { extraImportsString: string };
@@ -249,11 +266,90 @@ export type ExecutePivotQueryCodeProps = Stringify<ExecutePivotQueryParams> & {
 };
 
 /**
+ * Chart Widget Code Props
+ *
  * @internal
  */
-export type ChartWidgetCodeProps = Stringify<ChartWidgetProps> & ExtraCodeProps;
+export type ChartWidgetCodeProps = Stringify<ChartWidgetProps> & ExtraWidgetCodeProps;
 
 /**
+ * Pivot Table Widget Code Props
+ *
  * @internal
  */
-export type PivotTableWidgetCodeProps = Stringify<PivotTableWidgetProps> & ExtraCodeProps;
+export type PivotTableWidgetCodeProps = Stringify<PivotTableWidgetProps> & ExtraWidgetCodeProps;
+
+/**
+ * Template Key by Widget Type
+ *
+ * @internal
+ */
+export type TemplateKeyMapByWidgetType = {
+  chart: CodeTemplateKey;
+  pivot: CodeTemplateKey;
+  text?: CodeTemplateKey;
+  plugin?: CodeTemplateKey;
+};
+
+/** TYPE FOR DASHBOARD CODE */
+
+/**
+ * Dashboard Code Config
+ *
+ * @internal
+ */
+export type DashboardCodeConfig = BaseCodeConfig;
+
+/**
+ * Client-side Dashboard Code Params
+ *
+ * @internal
+ */
+export type ClientSideDashboardCodeParams = BaseCodeConfig & {
+  dashboardProps: DashboardProps;
+};
+
+/**
+ * By ID Dashboard Code Params
+ *
+ * @internal
+ */
+export type ByIdDashboardCodeParams = DashboardCodeConfig & {
+  dashboardOid: string;
+};
+
+/**
+ * Dashboard Code Params
+ *
+ * @internal
+ */
+export type DashboardCodeParams = ClientSideDashboardCodeParams | ByIdDashboardCodeParams;
+
+/**
+ * Check if dashboard code params is for client-side code
+ *
+ * @internal
+ */
+export const isClientSideDashboardCodeParams = (
+  params: DashboardCodeParams,
+): params is ClientSideDashboardCodeParams => {
+  return 'dashboardProps' in params;
+};
+
+/**
+ * Check if dashboard code params is for by ID code
+ *
+ * @internal
+ */
+export const isByIdDashboardCodeParams = (
+  params: DashboardCodeParams,
+): params is ByIdDashboardCodeParams => {
+  return 'dashboardOid' in params;
+};
+
+/**
+ * Dashboard Code Props
+ *
+ * @internal
+ */
+export type DashboardCodeProps = Stringify<DashboardProps> & ExtraWidgetCodeProps;

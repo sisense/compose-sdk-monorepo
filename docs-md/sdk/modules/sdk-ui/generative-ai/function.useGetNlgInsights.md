@@ -2,16 +2,12 @@
 title: useGetNlgInsights
 ---
 
-# Function useGetNlgInsights <Badge type="beta" text="Beta" />
+# Function useGetNlgInsights
 
 > **useGetNlgInsights**(...`args`): [`UseGetNlgInsightsState`](../interfaces/interface.UseGetNlgInsightsState.md)
 
 React hook that fetches an analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [useExecuteQuery](../queries/function.useExecuteQuery.md) hook, using dimensions, measures, and filters.
-
-::: warning Note
-This hook is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
 
 ## Parameters
 

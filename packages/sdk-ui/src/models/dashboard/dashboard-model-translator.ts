@@ -10,7 +10,7 @@ import {
   translateTabbersOptions,
   translateWidgetsOptions,
 } from './translate-dashboard-utils.js';
-import { DataSource } from '@sisense/sdk-data';
+import { convertDataSource, DataSource } from '@sisense/sdk-data';
 
 /**
  * Translates {@link DashboardModel} to {@link DashboardProps}.
@@ -60,7 +60,7 @@ export function fromDashboardDto(
   const {
     oid,
     title,
-    datasource,
+    datasource: jaqlDataSource,
     widgets: widgetDtoList,
     layout: layoutDto,
     filters: filterDtoList,
@@ -68,10 +68,8 @@ export function fromDashboardDto(
     style,
   } = dashboardDto;
 
-  const dataSource: DataSource = {
-    title: datasource.title,
-    type: datasource.live ? 'live' : 'elasticube',
-  };
+  const dataSource: DataSource = convertDataSource(jaqlDataSource);
+
   const styleOptions = {
     ...(style?.palette ? { palette: { variantColors: style?.palette.colors } } : null),
   };

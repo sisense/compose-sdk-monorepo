@@ -1,7 +1,7 @@
 import { PluginWidgetProps, WidgetProps } from '@/props';
 import { WidgetPanelLayoutManager } from '@/dashboard/hooks/use-widgets-layout';
 import { TabberTab } from '@/types';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 import { TabbersOptions, WidgetsPanelColumnLayout } from '@/models';
 
 export type UseTabber = ({
@@ -84,13 +84,26 @@ export const modifyLayout =
     };
   };
 
+const getSelectedTabs = (config: TabbersOptions): Record<string, number> => {
+  return Object.keys(config).reduce((acc, key) => {
+    acc[key] = config[key].activeTab;
+    return acc;
+  }, {});
+};
+
 export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) => {
-  const [selectedTabs, setSelectedTabs] = useState<Record<string, number>>(
-    Object.keys(tabbersConfigs).reduce((acc, key) => {
-      acc[key] = 0;
-      return acc;
-    }, {}),
-  );
+  const initialSelectedTabs = useMemo(() => getSelectedTabs(tabbersConfigs), [tabbersConfigs]);
+  const [selectedTabs, setSelectedTabs] = useState<Record<string, number>>(initialSelectedTabs);
+
+  useEffect(() => {
+    const newSelectedTabs = getSelectedTabs(tabbersConfigs);
+    setSelectedTabs((prevSelectedTabs) => {
+      const shouldUpdate = Object.keys(newSelectedTabs).some(
+        (key) => prevSelectedTabs[key] !== newSelectedTabs[key],
+      );
+      return shouldUpdate ? newSelectedTabs : prevSelectedTabs;
+    });
+  }, [tabbersConfigs]);
 
   const widgetsWithTabberSubscription = widgets.map((widget) => {
     if (isTabberWidget(widget)) {

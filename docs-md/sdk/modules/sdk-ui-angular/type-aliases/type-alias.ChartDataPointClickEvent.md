@@ -1,0 +1,7 @@
+---
+title: ChartDataPointClickEvent
+---
+
+# Type alias ChartDataPointClickEvent
+
+> **ChartDataPointClickEvent**: [`AreamapDataPointEvent`](type-alias.AreamapDataPointEvent.md) \| [`BoxplotDataPointEvent`](type-alias.BoxplotDataPointEvent.md) \| [`DataPointEvent`](type-alias.DataPointEvent.md) \| [`ScatterDataPointEvent`](type-alias.ScatterDataPointEvent.md) \| [`ScattermapDataPointEvent`](type-alias.ScattermapDataPointEvent.md)

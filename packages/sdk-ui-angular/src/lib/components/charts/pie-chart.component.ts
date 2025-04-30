@@ -140,7 +140,6 @@ export class PieChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!PieChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: PieChartProps['dataReady'];

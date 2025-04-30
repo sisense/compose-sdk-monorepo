@@ -1,4 +1,4 @@
-import { Attribute, DataSource, Filter, MembersFilter } from '@sisense/sdk-data';
+import { Attribute, DataSource, Filter, filterFactory, MembersFilter } from '@sisense/sdk-data';
 import { FunctionComponent, useCallback } from 'react';
 import { Member, SelectedMember } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
@@ -81,7 +81,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   const { filter, updateFilter } = useSynchronizedFilter<MembersFilter>(
     filterFromProps as MembersFilter | null,
     updateFilterFromProps,
-    () => new MembersFilter(attribute, []),
+    () => filterFactory.members(attribute, []) as MembersFilter,
   );
 
   const { isError, error, data } = useGetFilterMembersInternal({
@@ -188,7 +188,7 @@ function withSelectedMembers(
     enableMultiSelection: filter.config.enableMultiSelection,
   };
 
-  return new MembersFilter(filter.attribute, activeFilterMembers, config);
+  return filterFactory.members(filter.attribute, activeFilterMembers, config) as MembersFilter;
 }
 
 /**

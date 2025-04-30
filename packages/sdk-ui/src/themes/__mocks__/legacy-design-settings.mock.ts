@@ -60,7 +60,6 @@ export const redThemeSettings: CompleteThemeSettings = {
     textColor: '#FFFFFF',
     backgroundColor: '#ec4646',
     secondaryTextColor: '#C5C8CF',
-    panelBackgroundColor: '#ec4646',
     animation: {
       init: {
         duration: 'auto',

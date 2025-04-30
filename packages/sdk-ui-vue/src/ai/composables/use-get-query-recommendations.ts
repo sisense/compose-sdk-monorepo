@@ -1,10 +1,10 @@
-import { toRefs, watch } from 'vue';
+import { type Ref, toRefs, watch } from 'vue';
 import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
 import {
   type UseGetQueryRecommendationsParams as UseGetQueryRecommendationsParamsPreact,
   type UseGetQueryRecommendationsState as UseGetQueryRecommendationsStatePreact,
   type ChatRestApi,
-  type QueryRecommendation,
+  type QueryRecommendation as QueryRecommendationPreact,
   DEFAULT_RECOMMENDATIONS_COUNT,
   widgetComposer,
 } from '@sisense/sdk-ui-preact/ai';
@@ -13,6 +13,7 @@ import { getAiContext } from '../providers/index.js';
 import { collectRefs, toPlainObject } from '../../utils.js';
 import { useTracking } from '../../composables/use-tracking.js';
 import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
+import type { WidgetProps } from '../../components/widgets';
 
 /**
  * Parameters for {@link @sisense/sdk-ui-vue!useGetQueryRecommendations | `useGetQueryRecommendations`} composable.
@@ -23,16 +24,27 @@ export interface UseGetQueryRecommendationsParams extends UseGetQueryRecommendat
  * State for {@link @sisense/sdk-ui-vue!useGetQueryRecommendations | `useGetQueryRecommendations`} composable.
  */
 export interface UseGetQueryRecommendationsState
-  extends ToRefsExceptFns<UseGetQueryRecommendationsStatePreact, 'refetch'> {}
+  extends ToRefsExceptFns<Omit<UseGetQueryRecommendationsStatePreact, 'data'>, 'refetch'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!UseGetQueryRecommendationsState.data}
+   */
+  data: Ref<QueryRecommendation[] | undefined>;
+}
+
+/**
+ * {@inheritDoc @sisense/sdk-ui!QueryRecommendation}
+ */
+export interface QueryRecommendation extends Omit<QueryRecommendationPreact, 'widgetProps'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!QueryRecommendation.widgetProps}
+   */
+  widgetProps?: WidgetProps;
+}
 
 /**
  * A Vue composable that fetches recommended questions for a data model or perspective.
  *
  * This composable includes the same code that fetches the initial suggested questions in the chatbot.
- *
- * ::: warning Note
- * This composable is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
  *
  * @example
  * ```vue

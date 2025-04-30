@@ -115,7 +115,14 @@ describe('FilterEditorDatetime', () => {
       within(includeAllSection).getByLabelText<HTMLInputElement>('Select button');
     await user.click(selectButton);
     expect(filterChangeHandlerMock).toHaveBeenCalledWith(
-      filterFactory.members(DM.Commerce.Date.Years, [], { guid: initialFilter.config?.guid }),
+      filterFactory.members(DM.Commerce.Date.Years, [], {
+        guid: initialFilter.config?.guid,
+        disabled: false,
+        locked: false,
+        excludeMembers: false,
+        enableMultiSelection: true,
+        deactivatedMembers: [],
+      }),
     );
   });
 });

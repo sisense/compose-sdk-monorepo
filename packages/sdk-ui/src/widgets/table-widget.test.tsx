@@ -36,7 +36,11 @@ describe('TableWidget Component', () => {
         dataSource={DM.DataSource}
         dataOptions={mockDataOptions}
         styleOptions={mockStyleOptions}
-        filters={[filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished'])]}
+        filters={[
+          filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished'], {
+            guid: 'test-id',
+          }),
+        ]}
       />,
     );
 

@@ -145,7 +145,7 @@ To learn more about using filter components to create highlights, see the
 
 #### dataOptions
 
-> **`readonly`** **dataOptions**?: [`ScattermapChartDataOptions`](../interfaces/interface.ScattermapChartDataOptions.md)
+> **`readonly`** **dataOptions**: [`ScattermapChartDataOptions`](../interfaces/interface.ScattermapChartDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
@@ -164,3 +164,22 @@ Configurations for how to style and present a chart's data.
 > **`readonly`** **onDataPointClick**?: [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
+
+***
+
+#### onDataReady
+
+> **`readonly`** **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

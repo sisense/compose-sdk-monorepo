@@ -13,12 +13,11 @@ import {
   Attribute,
   BaseMeasure,
   CalculatedMeasure,
-  Element,
   Measure,
   MeasureContext,
   MeasureTemplate,
 } from '../interfaces.js';
-import { AggregationTypes, MetadataTypes, Sort } from '../types.js';
+import { AggregationTypes, JaqlDataSource, JSONObject, MetadataTypes, Sort } from '../types.js';
 import * as m from './factory.js';
 
 /**
@@ -35,13 +34,13 @@ export abstract class AbstractMeasure extends DimensionalElement {
     format?: string,
     desc?: string,
     sort?: Sort,
+    dataSource?: JaqlDataSource,
     composeCode?: string,
   ) {
-    super(name, type, desc);
+    super(name, type, desc, dataSource, composeCode);
 
     this._format = format;
     this._sort = sort || Sort.None;
-    this.composeCode = composeCode;
   }
 
   /**
@@ -70,8 +69,8 @@ export abstract class AbstractMeasure extends DimensionalElement {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
 
     if (this.getFormat() !== undefined) {
       result.format = this.getFormat();
@@ -180,9 +179,10 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
     format?: string,
     desc?: string,
     sort?: Sort,
+    dataSource?: JaqlDataSource,
     composeCode?: string,
   ) {
-    super(name, MetadataTypes.BaseMeasure, format, desc, sort, composeCode);
+    super(name, MetadataTypes.BaseMeasure, format, desc, sort, dataSource, composeCode);
 
     this.attribute = attribute;
     this.aggregation = agg;
@@ -212,6 +212,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
       this._format,
       this.description,
       sort,
+      this.dataSource,
       this.composeCode,
     );
   }
@@ -232,6 +233,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
       format,
       this.description,
       this._sort,
+      this.dataSource,
       this.composeCode,
     );
   }
@@ -246,11 +248,11 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DimensionalBaseMeasure';
     result.aggregation = this.aggregation;
-    result.attribute = this.attribute.serializable();
+    result.attribute = this.attribute.serialize();
 
     return result;
   }
@@ -291,9 +293,10 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
     format?: string,
     desc?: string,
     sort?: Sort,
+    dataSource?: JaqlDataSource,
     composeCode?: string,
   ) {
-    super(name, MetadataTypes.CalculatedMeasure, format, desc, sort, composeCode);
+    super(name, MetadataTypes.CalculatedMeasure, format, desc, sort, dataSource, composeCode);
 
     this.expression = expression;
     this.context = context;
@@ -323,6 +326,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       this._format,
       this.description,
       sort,
+      this.dataSource,
       this.composeCode,
     );
   }
@@ -343,6 +347,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       format,
       this.description,
       this._sort,
+      this.dataSource,
       this.composeCode,
     );
   }
@@ -357,15 +362,16 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DimensionalCalculatedMeasure';
     result.expression = this.expression;
-    result.context = {};
-
-    Object.getOwnPropertyNames(this.context).forEach((p) => {
-      result.context[p] = (<Element>this.context[p]).serializable();
-    });
+    result.context = Object.fromEntries(
+      Object.entries(this.context).map(([key, value]) => [
+        key,
+        value.serialize ? value.serialize(value) : value,
+      ]),
+    );
 
     return result;
   }
@@ -402,8 +408,16 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
  * @internal
  */
 export class DimensionalMeasureTemplate extends AbstractMeasure implements MeasureTemplate {
-  constructor(name: string, attribute: Attribute, format?: string, desc?: string, sort?: Sort) {
-    super(name, MetadataTypes.MeasureTemplate, format, desc, sort);
+  constructor(
+    name: string,
+    attribute: Attribute,
+    format?: string,
+    desc?: string,
+    sort?: Sort,
+    dataSource?: JaqlDataSource,
+    composeCode?: string,
+  ) {
+    super(name, MetadataTypes.MeasureTemplate, format, desc, sort, dataSource, composeCode);
 
     this.attribute = attribute;
   }
@@ -423,10 +437,11 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DimensionalMeasureTemplate';
 
-    result.attribute = this.attribute.serializable();
+    result.attribute = this.attribute.serialize();
 
     return result;
   }
@@ -444,6 +459,8 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
       this._format,
       this.description,
       sort,
+      this.dataSource,
+      this.composeCode,
     );
   }
 
@@ -460,6 +477,8 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
       format,
       this.description,
       this._sort,
+      this.dataSource,
+      this.composeCode,
     );
   }
 

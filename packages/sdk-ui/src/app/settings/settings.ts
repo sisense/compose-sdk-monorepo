@@ -51,7 +51,6 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
     language: 'en',
     customTranslations: [],
   },
-  language: 'en',
   queryCacheConfig: {
     enabled: false,
   },

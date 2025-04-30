@@ -12,6 +12,10 @@ import { type DashboardModel } from '../sdk-ui-core-exports';
 import { DashboardService } from './dashboard.service';
 import { SisenseContextService } from './sisense-context.service';
 
+vi.mock('../decorators/trackable.decorator', () => ({
+  TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
+}));
+
 vi.mock('@sisense/sdk-ui-preact', () => ({
   getDashboardModel: vi.fn(),
   getDashboardModels: vi.fn(),

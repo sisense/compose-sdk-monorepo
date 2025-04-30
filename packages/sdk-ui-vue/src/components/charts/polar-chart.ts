@@ -54,25 +54,28 @@ export const PolarChart = defineComponent({
      *
      * @category Data
      */
-    dataOptions: Object as PropType<PolarChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<PolarChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<PolarChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<PolarChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PolarChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<PolarChartProps['filters']>,
+    filters: [Object, Array] as PropType<PolarChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PolarChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<PolarChartProps['highlights']>,
+    highlights: Array as PropType<PolarChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onBeforeRender}
      *
@@ -83,7 +86,6 @@ export const PolarChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<PolarChartProps['onDataReady']>,
     /**
@@ -111,5 +113,5 @@ export const PolarChart = defineComponent({
      */
     styleOptions: Object as PropType<PolarChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(PolarChartPreact, props as PolarChartPropsPreact),
+  setup: (props) => setupHelper(PolarChartPreact, props),
 });

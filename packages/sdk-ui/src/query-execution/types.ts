@@ -254,11 +254,9 @@ export interface ExecuteQueryParams {
   /**
    * Boolean flag whether to include `ungroup: true` in non-aggregated JAQL queries.
    *
-   * This improves computation and performance of querying huge tables when no aggregation is needed
+   * This improves computation and performance of querying tables when no aggregation is needed
    *
    * If not specified, the default value is `false`
-   *
-   * @internal
    */
   ungroup?: boolean;
 

@@ -4,11 +4,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable sonarjs/no-nested-switch */
+import { parseExpression } from '../utils.js';
 import { DimensionalElement, normalizeName } from './base.js';
+import { DATA_MODEL_MODULE_NAME } from './consts.js';
 import { Attribute, LevelAttribute } from './interfaces.js';
 import { simpleColumnType } from './simple-column-types.js';
-import { DateLevel, DateLevels, JaqlDataSource, MetadataTypes, Sort } from './types.js';
-
+import { DateLevel, DateLevels, JaqlDataSource, JSONObject, MetadataTypes, Sort } from './types.js';
 /**
  * @internal
  */
@@ -37,6 +38,13 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
   ) {
     super(name, type || MetadataTypes.Attribute, desc, dataSource, composeCode);
     this.expression = expression;
+
+    // if composeCode is not explicitly set by the caller, extract it from expression
+    if (!composeCode && expression) {
+      const { table, column } = parseExpression(expression);
+      this.composeCode = normalizeAttributeName(table, column, '', DATA_MODEL_MODULE_NAME);
+    }
+
     // panel is not needed in most cases, this is to support break by columns functionality
     if (panel === 'columns') {
       this.panel = panel;
@@ -106,13 +114,14 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DimensionalAttribute';
 
     result.expression = this.expression;
 
     if (this.getSort() !== Sort.None) {
-      result.sort = this.getSort().toString();
+      result.sort = this.getSort();
     }
 
     return result;
@@ -130,7 +139,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
   readonly panel: string;
 
   constructor(
-    l: string,
+    name: string,
     expression: string,
     granularity: string,
     format?: string,
@@ -140,10 +149,16 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     composeCode?: string,
     panel?: string,
   ) {
-    super(l, expression, MetadataTypes.DateLevel, desc, sort, dataSource, composeCode);
+    super(name, expression, MetadataTypes.DateLevel, desc, sort, dataSource, composeCode);
 
     this._format = format;
     this.granularity = granularity;
+
+    // if composeCode is not explicitly set by the caller, extract it from expression and granularity
+    if (!composeCode && expression) {
+      const { table, column } = parseExpression(expression);
+      this.composeCode = normalizeAttributeName(table, column, granularity, DATA_MODEL_MODULE_NAME);
+    }
 
     // panel is not needed in most cases, this is to support break by columns functionality
     if (panel === 'columns') {
@@ -245,9 +260,9 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DimensionalLevelAttribute';
     result.granularity = this.granularity;
 
     if (this.getFormat() !== undefined) {

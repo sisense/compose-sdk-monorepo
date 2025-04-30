@@ -203,7 +203,7 @@ For an example of how the `onBeforeRender` callback can be used, see the
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
+> **dataPointClick**: `EventEmitter`\< [`ScatterDataPointEvent`](../type-aliases/type-alias.ScatterDataPointEvent.md) \>
 
 Click handler callback for a data point
 
@@ -211,7 +211,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
+> **dataPointContextMenu**: `EventEmitter`\< [`ScatterDataPointEvent`](../type-aliases/type-alias.ScatterDataPointEvent.md) \>
 
 Context menu handler callback for a data point
 
@@ -219,6 +219,15 @@ Context menu handler callback for a data point
 
 #### dataPointsSelect
 
-> **dataPointsSelect**: `EventEmitter`\< [`DataPointsEvent`](../type-aliases/type-alias.DataPointsEvent.md) \>
+> **dataPointsSelect**: `EventEmitter`\< [`ScatterDataPointsEvent`](../type-aliases/type-alias.ScatterDataPointsEvent.md) \>
 
 Handler callback for selection of multiple data points
+
+***
+
+#### dataReady
+
+> **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.

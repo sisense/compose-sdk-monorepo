@@ -38,7 +38,7 @@ export class FiltersComponent {
   };
 }
 ```
-<img src="../../../img/angular-member-filter-tile-example.png" width="400px" />
+<img src="../../../img/angular-member-filter-tile-example.png" width="225px" />
 
 ## Implements
 

@@ -141,7 +141,6 @@ export class BarChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!BarChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: BarChartProps['dataReady'];

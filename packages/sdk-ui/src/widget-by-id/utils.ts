@@ -1,28 +1,33 @@
-import { ChartSubtype } from '../chart-options-processor/subtype-to-design-options.js';
-import { ChartType } from '../types.js';
+import { ChartSubtype } from '@/chart-options-processor/subtype-to-design-options.js';
+import {
+  ChartStyleOptions,
+  ChartType,
+  RenderToolbarHandler,
+  WidgetContainerStyleOptions,
+} from '@/types.js';
 import {
   Panel,
   PanelItem,
   TextWidgetDtoStyle,
   WidgetStyle,
   WidgetSubtype,
-  WidgetType,
+  FusionWidgetType,
 } from './types.js';
 import {
   ChartProps,
-  ChartStyleOptions,
   ChartWidgetProps,
   PivotTableWidgetProps,
   PluginWidgetProps,
-  RenderToolbarHandler,
   TextWidgetProps,
-  WidgetContainerStyleOptions,
   CommonWidgetProps,
-  WithWidgetType,
+  WithCommonWidgetProps,
   WidgetProps,
-} from '../index.js';
+  WidgetType,
+} from '@/props';
 import { combineHandlers } from '@/utils/combine-handlers';
 import { WidgetTypeInternal } from '@/models/widget/types';
+import { WidgetModel } from '@/models';
+import { TranslatableError } from '@/translation/translatable-error.js';
 export {
   mergeFilters,
   getFilterRelationsFromJaql,
@@ -30,7 +35,7 @@ export {
   getFilterCompareId,
 } from '@sisense/sdk-data';
 
-const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
+const fusionWidgetTypeToChartType = <Record<FusionWidgetType, ChartType>>{
   'chart/line': 'line',
   'chart/area': 'area',
   'chart/bar': 'bar',
@@ -48,23 +53,63 @@ const widgetTypeToChartType = <Record<WidgetType, ChartType>>{
   tablewidget: 'table',
   tablewidgetagg: 'table',
 };
+
+const chartTypeToFusionWidgetType: Record<ChartType, FusionWidgetType> = Object.entries(
+  fusionWidgetTypeToChartType,
+).reduce<Record<ChartType, FusionWidgetType>>((acc, [key, value]) => {
+  acc[value] = key as FusionWidgetType;
+  return acc;
+}, {} as Record<ChartType, FusionWidgetType>);
+
 /**
  * Returns the corresponding chart type for a given widget type
  *
  * @internal
  */
-export function getChartType(widgetType: WidgetType) {
-  return widgetTypeToChartType[widgetType];
+export function getChartType(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetTypeToChartType[fusionWidgetType];
 }
-export function getWidgetTypeFromChartType(chartType: ChartType): WidgetType {
-  const reversedWidgetTypeToChartType = Object.entries(widgetTypeToChartType).reduce(
-    (acc, [key, value]) => {
-      acc[value] = key as WidgetType;
-      return acc;
-    },
-    {} as Record<ChartType, WidgetType>,
-  );
-  return reversedWidgetTypeToChartType[chartType];
+export function getFusionWidgetTypeFromChartType(chartType: ChartType): FusionWidgetType {
+  return chartTypeToFusionWidgetType[chartType];
+}
+
+export function getFusionWidgetType(
+  widgetType: WidgetType,
+  chartType?: ChartType,
+): FusionWidgetType {
+  if (widgetType === 'chart') {
+    if (!chartType) {
+      throw new Error('chartType is required for chart widget type');
+    }
+    return getFusionWidgetTypeFromChartType(chartType);
+  }
+  if (widgetType === 'pivot') {
+    return 'pivot2';
+  }
+  if (widgetType === 'plugin') {
+    return 'plugin';
+  }
+  if (widgetType === 'text') {
+    return 'richtexteditor';
+  }
+  throw new TranslatableError('errors.widgetModel.unsupportedWidgetType', {
+    widgetType,
+  });
+}
+
+export function getWidgetType(fusionWidgetType: FusionWidgetType): WidgetType {
+  if (isPivotTableFusionWidget(fusionWidgetType)) {
+    return 'pivot';
+  } else if (isPluginFusionWidget(fusionWidgetType)) {
+    return 'plugin';
+  } else if (isTextFusionWidget(fusionWidgetType)) {
+    return 'text';
+  } else if (isChartFusionWidget(fusionWidgetType)) {
+    return 'chart';
+  }
+  throw new TranslatableError('errors.widgetModel.unsupportedFusionWidgetType', {
+    fusionWidgetType,
+  });
 }
 
 export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | undefined {
@@ -100,10 +145,10 @@ export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | un
   return widgetSubtypeToChartSubtype[widgetSubtype];
 }
 
-type WidgetTypeOrString = string | WidgetType;
-
-export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetType is WidgetType {
-  const supportedWidgetTypes: WidgetType[] = [
+export function isSupportedWidgetType(
+  fusionWidgetType: FusionWidgetType,
+): fusionWidgetType is FusionWidgetType {
+  const supportedWidgetTypes: FusionWidgetType[] = [
     'chart/line',
     'chart/area',
     'chart/bar',
@@ -124,31 +169,46 @@ export function isSupportedWidgetType(widgetType: WidgetTypeOrString): widgetTyp
     'map/area',
     'richtexteditor',
   ];
-  return supportedWidgetTypes.includes(widgetType as WidgetType);
+  return supportedWidgetTypes.includes(fusionWidgetType);
 }
 
-export function isTableWidget(widgetType: WidgetTypeOrString) {
-  return widgetType === 'tablewidget' || widgetType === 'tablewidgetagg';
+export function isTableFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'tablewidget' || fusionWidgetType === 'tablewidgetagg';
+}
+export function isTableWidgetModel(widgetModel: WidgetModel): boolean {
+  return isChartWidget(widgetModel.widgetType) && widgetModel.chartType === 'table';
 }
 
-export function isPivotTableWidget(widgetType: WidgetTypeOrString) {
-  return widgetType === 'pivot' || widgetType === 'pivot2';
+export function isPivotTableFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'pivot' || fusionWidgetType === 'pivot2';
+}
+export function isPivotWidget(widgetType: WidgetType) {
+  return widgetType === 'pivot';
 }
 
-export function isTextWidget(widgetType: WidgetTypeOrString) {
-  return widgetType === 'richtexteditor';
+export function isTextFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'richtexteditor';
+}
+export function isTextWidget(widgetType: WidgetType) {
+  return widgetType === 'text';
 }
 
 export function isTextWidgetDtoStyle(widgetStyle: WidgetStyle): widgetStyle is TextWidgetDtoStyle {
   return 'content' in widgetStyle && 'html' in widgetStyle.content;
 }
 
-export function isPluginWidget(widgetType: WidgetTypeOrString) {
+export function isPluginFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'plugin';
+}
+export function isPluginWidget(widgetType: WidgetType) {
   return widgetType === 'plugin';
 }
 
-export function isChartWidget(widgetType: WidgetTypeOrString) {
-  return !isPivotTableWidget(widgetType) && !isTextWidget(widgetType);
+export function isChartFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return !isPivotTableFusionWidget(fusionWidgetType) && !isTextFusionWidget(fusionWidgetType);
+}
+export function isChartWidget(widgetType: WidgetType) {
+  return widgetType === 'chart';
 }
 
 /**
@@ -160,7 +220,7 @@ export function isChartWidget(widgetType: WidgetTypeOrString) {
  */
 export function isTextWidgetProps(
   widgetProps: CommonWidgetProps,
-): widgetProps is WithWidgetType<TextWidgetProps, 'text'> {
+): widgetProps is WithCommonWidgetProps<TextWidgetProps, 'text'> {
   return widgetProps.widgetType === 'text';
 }
 
@@ -173,7 +233,7 @@ export function isTextWidgetProps(
  */
 export function isPivotTableWidgetProps(
   widgetProps: CommonWidgetProps,
-): widgetProps is WithWidgetType<PivotTableWidgetProps, 'pivot'> {
+): widgetProps is WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'> {
   return widgetProps.widgetType === 'pivot';
 }
 
@@ -186,7 +246,7 @@ export function isPivotTableWidgetProps(
  */
 export function isPluginWidgetProps(
   widgetProps: CommonWidgetProps,
-): widgetProps is WithWidgetType<PluginWidgetProps, 'plugin'> {
+): widgetProps is WithCommonWidgetProps<PluginWidgetProps, 'plugin'> {
   return widgetProps.widgetType === 'plugin';
 }
 
@@ -199,7 +259,7 @@ export function isPluginWidgetProps(
  */
 export function isChartWidgetProps(
   widgetProps: CommonWidgetProps,
-): widgetProps is WithWidgetType<ChartWidgetProps, 'chart'> {
+): widgetProps is WithCommonWidgetProps<ChartWidgetProps, 'chart'> {
   return widgetProps.widgetType === 'chart';
 }
 
@@ -212,7 +272,7 @@ export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTyp
     return 'text';
   }
 
-  return widgetProps.chartType;
+  return (widgetProps as WithCommonWidgetProps<ChartWidgetProps, 'chart'>).chartType;
 }
 
 /**

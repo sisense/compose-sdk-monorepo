@@ -32,7 +32,7 @@ import {
   Panel,
   WidgetStyle,
   WidgetSubtype,
-  WidgetType,
+  FusionWidgetType,
   CartesianWidgetStyle,
   PolarWidgetStyle,
   FunnelWidgetStyle,
@@ -75,7 +75,7 @@ function extractAxisStyleOptions(widgetAxisStyleOptions?: AxisStyle) {
 type AxisStyleOptions = Pick<BaseAxisStyleOptions, 'xAxis' | 'yAxis' | 'y2Axis'>;
 
 function prepareCartesianChartAxisOptions(
-  widgetType: WidgetType,
+  widgetType: FusionWidgetType,
   widgetStyle: CartesianWidgetStyle,
   panels: Panel[],
 ): AxisStyleOptions {
@@ -84,7 +84,7 @@ function prepareCartesianChartAxisOptions(
     yAxis: extractAxisStyleOptions(widgetStyle.yAxis),
     y2Axis: extractAxisStyleOptions(widgetStyle.y2Axis),
   } as AxisStyleOptions;
-  const widgetTypesWithXAxis: WidgetType[] = ['chart/line', 'chart/area'];
+  const widgetTypesWithXAxis: FusionWidgetType[] = ['chart/line', 'chart/area'];
   const xAxesRelatedPanelName = widgetTypesWithXAxis.includes(widgetType) ? 'x-axis' : 'categories';
   const xAxesRelatedPanelItems = getEnabledPanelItems(panels, xAxesRelatedPanelName);
   const yAxesRelatedPanelItems = getEnabledPanelItems(panels, 'values');
@@ -296,7 +296,7 @@ function extractCartesianLabelsOptions(
 }
 
 function extractCartesianChartStyleOptions(
-  widgetType: WidgetType,
+  widgetType: FusionWidgetType,
   widgetSubtype: WidgetSubtype,
   widgetStyle: CartesianWidgetStyle,
   panels: Panel[],
@@ -514,7 +514,7 @@ export function extractPivotTableStyleOptions(
   };
 }
 
-export function extractStyleOptions<WType extends WidgetType>(
+export function extractStyleOptions<WType extends FusionWidgetType>(
   widgetType: WType,
   widget: WidgetDto,
 ): ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions {

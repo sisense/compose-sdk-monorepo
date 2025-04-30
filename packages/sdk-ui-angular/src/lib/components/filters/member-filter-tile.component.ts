@@ -65,7 +65,7 @@ export interface MemberFilterTileProps extends Omit<MemberFilterTilePropsPreact,
  *   };
  * }
  * ```
- * <img src="media://angular-member-filter-tile-example.png" width="400px" />
+ * <img src="media://angular-member-filter-tile-example.png" width="225px" />
  * @group Filter Tiles
  */
 @Component({

@@ -2,6 +2,10 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-shadow */
 import {
+  withComposeCodeForFilter,
+  withComposeCodeForFilterRelations,
+} from '../compose-code-utils.js';
+import {
   Attribute,
   BaseFilterConfig,
   BaseMeasure,
@@ -53,9 +57,11 @@ import {
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function union(filters: Filter[], config?: BaseFilterConfig): Filter {
-  return new LogicalAttributeFilter(filters, LogicalOperators.Union, config);
-}
+export const union: (filters: Filter[], config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (filters, config) => new LogicalAttributeFilter(filters, LogicalOperators.Union, config),
+    'union',
+  );
 
 /**
  * Creates a filter representing the intersection of multiple filters on the same attribute. The resulting
@@ -76,9 +82,11 @@ export function union(filters: Filter[], config?: BaseFilterConfig): Filter {
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function intersection(filters: Filter[], config?: BaseFilterConfig): Filter {
-  return new LogicalAttributeFilter(filters, LogicalOperators.Intersection, config);
-}
+export const intersection: (filters: Filter[], config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (filters, config) => new LogicalAttributeFilter(filters, LogicalOperators.Intersection, config),
+    'intersection',
+  );
 
 /**
  * Creates a filter that excludes items matching the given filter
@@ -106,9 +114,11 @@ export function intersection(filters: Filter[], config?: BaseFilterConfig): Filt
  * @returns A filter representing an exclusion of the given filter
  * from all attribute members or from the optional input filter
  */
-export function exclude(filter: Filter, input?: Filter, config?: BaseFilterConfig): Filter {
-  return new ExcludeFilter(filter, input, config);
-}
+export const exclude: (filter: Filter, input?: Filter, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (filter, input, config) => new ExcludeFilter(filter, input, config),
+    'exclude',
+  );
 
 // TEXT / NUMERIC FILTERS
 
@@ -131,13 +141,15 @@ export function exclude(filter: Filter, input?: Filter, config?: BaseFilterConfi
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function doesntContain(
+export const doesntContain: (
   attribute: Attribute,
   value: string,
   config?: BaseFilterConfig,
-): Filter {
-  return new TextFilter(attribute, TextOperators.DoesntContain, value, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, value, config) =>
+    new TextFilter(attribute, TextOperators.DoesntContain, value, config),
+  'doesntContain',
+);
 
 /**
  * Creates a filter to isolate attribute values that do not end with a specified string.
@@ -158,13 +170,15 @@ export function doesntContain(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function doesntEndWith(
+export const doesntEndWith: (
   attribute: Attribute,
   value: string,
   config?: BaseFilterConfig,
-): Filter {
-  return new TextFilter(attribute, TextOperators.DoesntEndWith, value, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, value, config) =>
+    new TextFilter(attribute, TextOperators.DoesntEndWith, value, config),
+  'doesntEndWith',
+);
 
 /**
  * Creates a filter to isolate attribute values that do not start with a specified string.
@@ -185,13 +199,15 @@ export function doesntEndWith(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function doesntStartWith(
+export const doesntStartWith: (
   attribute: Attribute,
   value: string,
   config?: BaseFilterConfig,
-): Filter {
-  return new TextFilter(attribute, TextOperators.DoesntStartWith, value, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, value, config) =>
+    new TextFilter(attribute, TextOperators.DoesntStartWith, value, config),
+  'doesntStartWith',
+);
 
 /**
  * Creates a filter to isolate attribute values that contain a specified string.
@@ -212,9 +228,11 @@ export function doesntStartWith(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function contains(attribute: Attribute, value: string, config?: BaseFilterConfig): Filter {
-  return new TextFilter(attribute, TextOperators.Contains, value, config);
-}
+export const contains: (attribute: Attribute, value: string, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (attribute, value, config) => new TextFilter(attribute, TextOperators.Contains, value, config),
+    'contains',
+  );
 
 /**
  * Creates a filter to isolate attribute values that end with a specified string.
@@ -235,9 +253,11 @@ export function contains(attribute: Attribute, value: string, config?: BaseFilte
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function endsWith(attribute: Attribute, value: string, config?: BaseFilterConfig): Filter {
-  return new TextFilter(attribute, TextOperators.EndsWith, value, config);
-}
+export const endsWith: (attribute: Attribute, value: string, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (attribute, value, config) => new TextFilter(attribute, TextOperators.EndsWith, value, config),
+    'endsWith',
+  );
 
 /**
  * Creates a filter to isolate attribute values that start with a specified string.
@@ -258,9 +278,14 @@ export function endsWith(attribute: Attribute, value: string, config?: BaseFilte
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function startsWith(attribute: Attribute, value: string, config?: BaseFilterConfig): Filter {
-  return new TextFilter(attribute, TextOperators.StartsWith, value, config);
-}
+export const startsWith: (
+  attribute: Attribute,
+  value: string,
+  config?: BaseFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (attribute, value, config) => new TextFilter(attribute, TextOperators.StartsWith, value, config),
+  'startsWith',
+);
 
 /**
  * Creates a filter to isolate attribute values that match a specified string pattern.
@@ -286,9 +311,11 @@ export function startsWith(attribute: Attribute, value: string, config?: BaseFil
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function like(attribute: Attribute, value: string, config?: BaseFilterConfig): Filter {
-  return new TextFilter(attribute, TextOperators.Like, value, config);
-}
+export const like: (attribute: Attribute, value: string, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (attribute, value, config) => new TextFilter(attribute, TextOperators.Like, value, config),
+    'like',
+  );
 
 /**
  * Creates a filter to isolate attribute values that do not equal a specified string or number.
@@ -309,17 +336,17 @@ export function like(attribute: Attribute, value: string, config?: BaseFilterCon
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function doesntEqual(
+export const doesntEqual: (
   attribute: Attribute,
   value: string | number,
   config?: BaseFilterConfig,
-): Filter {
+) => Filter = withComposeCodeForFilter((attribute, value, config) => {
   if (typeof value === 'string') {
     return new TextFilter(attribute, TextOperators.DoesntEqual, value, config);
   } else {
     return numeric(attribute, NumericOperators.DoesntEqual, value, undefined, undefined, config);
   }
-}
+}, 'doesntEqual');
 
 /**
  * Creates a filter to isolate attribute values that equal a specified string or number.
@@ -340,17 +367,17 @@ export function doesntEqual(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function equals(
+export const equals: (
   attribute: Attribute,
   value: string | number,
   config?: BaseFilterConfig,
-): Filter {
+) => Filter = withComposeCodeForFilter((attribute, value, config) => {
   if (typeof value === 'string') {
     return new TextFilter(attribute, TextOperators.Equals, value, config);
   } else {
     return numeric(attribute, NumericOperators.Equals, value, undefined, undefined, config);
   }
-}
+}, 'equals');
 
 /**
  * Creates a filter to isolate attribute values strictly greater than a specified number.
@@ -365,13 +392,15 @@ export function equals(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function greaterThan(
+export const greaterThan: (
   attribute: Attribute,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return numeric(attribute, NumericOperators.FromNotEqual, value, undefined, undefined, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, value, config) =>
+    numeric(attribute, NumericOperators.FromNotEqual, value, undefined, undefined, config),
+  'greaterThan',
+);
 
 /**
  * Creates a filter to isolate attribute values greater than or equal to a specified number.
@@ -386,13 +415,15 @@ export function greaterThan(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function greaterThanOrEqual(
+export const greaterThanOrEqual: (
   attribute: Attribute,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return numeric(attribute, NumericOperators.From, value, undefined, undefined, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, value, config) =>
+    numeric(attribute, NumericOperators.From, value, undefined, undefined, config),
+  'greaterThanOrEqual',
+);
 
 /**
  * Creates a filter to isolate attribute values strictly less than a specified number.
@@ -407,9 +438,12 @@ export function greaterThanOrEqual(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function lessThan(attribute: Attribute, value: number, config?: BaseFilterConfig): Filter {
-  return numeric(attribute, NumericOperators.ToNotEqual, value, undefined, undefined, config);
-}
+export const lessThan: (attribute: Attribute, value: number, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (attribute, value, config) =>
+      numeric(attribute, NumericOperators.ToNotEqual, value, undefined, undefined, config),
+    'lessThan',
+  );
 
 /**
  * Creates a filter to isolate attribute values less than or equal to a specified number.
@@ -424,13 +458,15 @@ export function lessThan(attribute: Attribute, value: number, config?: BaseFilte
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function lessThanOrEqual(
+export const lessThanOrEqual: (
   attribute: Attribute,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return numeric(attribute, NumericOperators.To, value, undefined, undefined, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, value, config) =>
+    numeric(attribute, NumericOperators.To, value, undefined, undefined, config),
+  'lessThanOrEqual',
+);
 
 /**
  * Creates a filter to isolate attribute values within or exactly matching two specified numerical boundaries.
@@ -446,14 +482,16 @@ export function lessThanOrEqual(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function between(
+export const between: (
   attribute: Attribute,
   valueA: number,
   valueB: number,
   config?: BaseFilterConfig,
-): Filter {
-  return numeric(attribute, NumericOperators.From, valueA, NumericOperators.To, valueB, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, valueA, valueB, config) =>
+    numeric(attribute, NumericOperators.From, valueA, NumericOperators.To, valueB, config),
+  'between',
+);
 
 /**
  * Creates a filter that isolates attribute values strictly within two specified numerical boundaries.
@@ -469,21 +507,23 @@ export function between(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function betweenNotEqual(
+export const betweenNotEqual: (
   attribute: Attribute,
   valueA: number,
   valueB: number,
   config?: BaseFilterConfig,
-): Filter {
-  return numeric(
-    attribute,
-    NumericOperators.FromNotEqual,
-    valueA,
-    NumericOperators.ToNotEqual,
-    valueB,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, valueA, valueB, config) =>
+    numeric(
+      attribute,
+      NumericOperators.FromNotEqual,
+      valueA,
+      NumericOperators.ToNotEqual,
+      valueB,
+      config,
+    ),
+  'betweenNotEqual',
+);
 
 /**
  * Creates a custom numeric filter that filters for given attribute values.
@@ -508,16 +548,18 @@ export function betweenNotEqual(
  * @param config - Optional configuration for the filter
  * @returns A custom numeric filter of the given attribute
  */
-export function numeric(
+export const numeric: (
   attribute: Attribute,
   operatorA?: string,
   valueA?: number,
   operatorB?: string,
   valueB?: number,
   config?: BaseFilterConfig,
-): Filter {
-  return new NumericFilter(attribute, operatorA, valueA, operatorB, valueB, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, operatorA, valueA, operatorB, valueB, config) =>
+    new NumericFilter(attribute, operatorA, valueA, operatorB, valueB, config),
+  'numeric',
+);
 
 /**
  * Creates a filter to isolate attribute values that match any of the specified strings.
@@ -536,13 +578,14 @@ export function numeric(
  * @returns A filter instance
  * @shortDescription Creates filter on attribute to match certain string values
  */
-export function members(
+export const members: (
   attribute: Attribute,
   members: string[],
   config?: MembersFilterConfig,
-): Filter {
-  return new MembersFilter(attribute, members, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, members, config) => new MembersFilter(attribute, members, config),
+  'members',
+);
 
 // DATE FILTERS
 
@@ -559,13 +602,14 @@ export function members(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function dateFrom(
+export const dateFrom: (
   level: LevelAttribute,
   from: Date | string,
   config?: BaseFilterConfig,
-): Filter {
-  return dateRange(level, from, undefined, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (level, from, config) => dateRange(level, from, undefined, config),
+  'dateFrom',
+);
 
 /**
  * Creates a filter to isolate items up until and including the given date and level.
@@ -580,13 +624,14 @@ export function dateFrom(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function dateTo(
+export const dateTo: (
   level: LevelAttribute,
   to: Date | string,
   config?: BaseFilterConfig,
-): Filter {
-  return dateRange(level, undefined, to, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (level, to, config) => dateRange(level, undefined, to, config),
+  'dateTo',
+);
 
 /**
  * Creates a filter to isolate items between and including the given dates and level.
@@ -602,14 +647,15 @@ export function dateTo(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function dateRange(
+export const dateRange: (
   level: LevelAttribute,
   from?: Date | string,
   to?: Date | string,
   config?: BaseFilterConfig,
-): Filter {
-  return new DateRangeFilter(level, from, to, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (level, from, to, config) => new DateRangeFilter(level, from, to, config),
+  'dateRange',
+);
 
 /**
  * Creates a filter to isolate items with a date dimension value within a specified range after a
@@ -643,15 +689,17 @@ export function dateRange(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function dateRelative(
+export const dateRelative: (
   level: LevelAttribute,
   offset: number,
   count: number,
   anchor?: Date | string,
   config?: BaseFilterConfig,
-): Filter {
-  return new RelativeDateFilter(level, offset, count, undefined, anchor, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (level, offset, count, anchor, config) =>
+    new RelativeDateFilter(level, offset, count, undefined, anchor, config),
+  'dateRelative',
+);
 
 /**
  * Creates a filter to isolate items with a date dimension value within a specified range after a
@@ -669,15 +717,17 @@ export function dateRelative(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function dateRelativeFrom(
+export const dateRelativeFrom: (
   level: LevelAttribute,
   offset: number,
   count: number,
   anchor?: Date | string,
   config?: BaseFilterConfig,
-): Filter {
-  return new RelativeDateFilter(level, offset, count, DateOperators.Next, anchor, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (level, offset, count, anchor, config) =>
+    new RelativeDateFilter(level, offset, count, DateOperators.Next, anchor, config),
+  'dateRelativeFrom',
+);
 
 /**
  * Creates a filter to isolate items with a date dimension value within a specified range before a
@@ -695,15 +745,17 @@ export function dateRelativeFrom(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function dateRelativeTo(
+export const dateRelativeTo: (
   level: LevelAttribute,
   offset: number,
   count: number,
   anchor?: Date | string,
   config?: BaseFilterConfig,
-): Filter {
-  return new RelativeDateFilter(level, offset, count, DateOperators.Last, anchor, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (level, offset, count, anchor, config) =>
+    new RelativeDateFilter(level, offset, count, DateOperators.Last, anchor, config),
+  'dateRelativeTo',
+);
 
 /**
  * Creates a filter to isolate items with a date dimension value in the current calendar year.
@@ -717,9 +769,11 @@ export function dateRelativeTo(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function thisYear(dimension: DateDimension, config?: BaseFilterConfig): Filter {
-  return dateRelativeTo(dimension.Years, 0, 1, undefined, config);
-}
+export const thisYear: (dimension: DateDimension, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (dimension, config) => dateRelativeTo(dimension.Years, 0, 1, undefined, config),
+    'thisYear',
+  );
 
 /**
  * Creates a filter to isolate items with a date dimension value in the current calendar month.
@@ -733,9 +787,11 @@ export function thisYear(dimension: DateDimension, config?: BaseFilterConfig): F
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function thisMonth(dimension: DateDimension, config?: BaseFilterConfig): Filter {
-  return dateRelativeTo(dimension.Months, 0, 1, undefined, config);
-}
+export const thisMonth: (dimension: DateDimension, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (dimension, config) => dateRelativeTo(dimension.Months, 0, 1, undefined, config),
+    'thisMonth',
+  );
 
 /**
  * Creates a filter to isolate items with a date dimension value in the current quarter.
@@ -749,9 +805,11 @@ export function thisMonth(dimension: DateDimension, config?: BaseFilterConfig): 
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function thisQuarter(dimension: DateDimension, config?: BaseFilterConfig): Filter {
-  return dateRelativeTo(dimension.Quarters, 0, 1, undefined, config);
-}
+export const thisQuarter: (dimension: DateDimension, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (dimension, config) => dateRelativeTo(dimension.Quarters, 0, 1, undefined, config),
+    'thisQuarter',
+  );
 
 /**
  * Creates a filter to isolate items with a date dimension value of the current date.
@@ -765,9 +823,11 @@ export function thisQuarter(dimension: DateDimension, config?: BaseFilterConfig)
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function today(dimension: DateDimension, config?: BaseFilterConfig): Filter {
-  return dateRelativeTo(dimension.Days, 0, 1, undefined, config);
-}
+export const today: (dimension: DateDimension, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (dimension, config) => dateRelativeTo(dimension.Days, 0, 1, undefined, config),
+    'today',
+  );
 
 // MEASURE-RELATED FILTERS
 
@@ -812,21 +872,23 @@ export function measureBase(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function measureEquals(
+export const measureEquals: (
   measure: BaseMeasure,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return measureBase(
-    measure.attribute,
-    measure,
-    NumericOperators.Equals,
-    value,
-    undefined,
-    undefined,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (measure, value, config) =>
+    measureBase(
+      measure.attribute,
+      measure,
+      NumericOperators.Equals,
+      value,
+      undefined,
+      undefined,
+      config,
+    ),
+  'measureEquals',
+);
 
 /**
  * Creates a filter to isolate a measure value greater than to a given number.
@@ -845,21 +907,23 @@ export function measureEquals(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function measureGreaterThan(
+export const measureGreaterThan: (
   measure: BaseMeasure,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return measureBase(
-    measure.attribute,
-    measure,
-    NumericOperators.FromNotEqual,
-    value,
-    undefined,
-    undefined,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (measure, value, config) =>
+    measureBase(
+      measure.attribute,
+      measure,
+      NumericOperators.FromNotEqual,
+      value,
+      undefined,
+      undefined,
+      config,
+    ),
+  'measureGreaterThan',
+);
 
 /**
  * Creates a filter to isolate a measure value greater than or equal to a given number.
@@ -878,21 +942,23 @@ export function measureGreaterThan(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function measureGreaterThanOrEqual(
+export const measureGreaterThanOrEqual: (
   measure: BaseMeasure,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return measureBase(
-    measure.attribute,
-    measure,
-    NumericOperators.From,
-    value,
-    undefined,
-    undefined,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (measure, value, config) =>
+    measureBase(
+      measure.attribute,
+      measure,
+      NumericOperators.From,
+      value,
+      undefined,
+      undefined,
+      config,
+    ),
+  'measureGreaterThanOrEqual',
+);
 
 /**
  * Creates a filter to isolate a measure value less than or equal to a given number.
@@ -911,21 +977,23 @@ export function measureGreaterThanOrEqual(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function measureLessThanOrEqual(
+export const measureLessThanOrEqual: (
   measure: BaseMeasure,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return measureBase(
-    measure.attribute,
-    measure,
-    NumericOperators.To,
-    value,
-    undefined,
-    undefined,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (measure, value, config) =>
+    measureBase(
+      measure.attribute,
+      measure,
+      NumericOperators.To,
+      value,
+      undefined,
+      undefined,
+      config,
+    ),
+  'measureLessThanOrEqual',
+);
 
 /**
  * Creates a filter to isolate a measure value less than a given number.
@@ -943,21 +1011,23 @@ export function measureLessThanOrEqual(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function measureLessThan(
+export const measureLessThan: (
   measure: BaseMeasure,
   value: number,
   config?: BaseFilterConfig,
-): Filter {
-  return measureBase(
-    measure.attribute,
-    measure,
-    NumericOperators.ToNotEqual,
-    value,
-    undefined,
-    undefined,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (measure, value, config) =>
+    measureBase(
+      measure.attribute,
+      measure,
+      NumericOperators.ToNotEqual,
+      value,
+      undefined,
+      undefined,
+      config,
+    ),
+  'measureLessThan',
+);
 
 /**
  * Creates a filter to isolate a measure value between or equal to two given numbers.
@@ -978,22 +1048,24 @@ export function measureLessThan(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function measureBetween(
+export const measureBetween: (
   measure: BaseMeasure,
   valueA: number,
   valueB: number,
   config?: BaseFilterConfig,
-): Filter {
-  return measureBase(
-    measure.attribute,
-    measure,
-    NumericOperators.From,
-    valueA,
-    NumericOperators.To,
-    valueB,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (measure, valueA, valueB, config) =>
+    measureBase(
+      measure.attribute,
+      measure,
+      NumericOperators.From,
+      valueA,
+      NumericOperators.To,
+      valueB,
+      config,
+    ),
+  'measureBetween',
+);
 
 /**
  * Creates a filter to isolate a measure value between but not equal to two given numbers.
@@ -1014,22 +1086,24 @@ export function measureBetween(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function measureBetweenNotEqual(
+export const measureBetweenNotEqual: (
   measure: BaseMeasure,
   valueA: number,
   valueB: number,
   config?: BaseFilterConfig,
-): Filter {
-  return measureBase(
-    measure.attribute,
-    measure,
-    NumericOperators.FromNotEqual,
-    valueA,
-    NumericOperators.ToNotEqual,
-    valueB,
-    config,
-  );
-}
+) => Filter = withComposeCodeForFilter(
+  (measure, valueA, valueB, config) =>
+    measureBase(
+      measure.attribute,
+      measure,
+      NumericOperators.FromNotEqual,
+      valueA,
+      NumericOperators.ToNotEqual,
+      valueB,
+      config,
+    ),
+  'measureBetweenNotEqual',
+);
 
 // RANKING FILTERS
 
@@ -1051,14 +1125,16 @@ export function measureBetweenNotEqual(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function topRanking(
+export const topRanking: (
   attribute: Attribute,
   measure: Measure,
   count: number,
   config?: BaseFilterConfig,
-): Filter {
-  return new RankingFilter(attribute, measure, RankingOperators.Top, count, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, measure, count, config) =>
+    new RankingFilter(attribute, measure, RankingOperators.Top, count, config),
+  'topRanking',
+);
 
 /**
  * Creates a filter to isolate items that rank towards the bottom for a given measure.
@@ -1078,14 +1154,16 @@ export function topRanking(
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function bottomRanking(
+export const bottomRanking: (
   attribute: Attribute,
   measure: Measure,
   count: number,
   config?: BaseFilterConfig,
-): Filter {
-  return new RankingFilter(attribute, measure, RankingOperators.Bottom, count, config);
-}
+) => Filter = withComposeCodeForFilter(
+  (attribute, measure, count, config) =>
+    new RankingFilter(attribute, measure, RankingOperators.Bottom, count, config),
+  'bottomRanking',
+);
 
 const relate = (node: FilterRelationsNode): FilterRelationsNode => {
   if (Array.isArray(node)) {
@@ -1125,9 +1203,8 @@ const relate = (node: FilterRelationsNode): FilterRelationsNode => {
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
-export function cascading(filters: Filter[], config?: BaseFilterConfig): Filter {
-  return new CascadingFilter(filters, config);
-}
+export const cascading: (filters: Filter[], config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter((filters, config) => new CascadingFilter(filters, config), 'cascading');
 
 /**
  * Set of logic operators for filter relations construction
@@ -1177,11 +1254,16 @@ export namespace logic {
    * @returns Filter relations
    * @beta
    */
-  export const and = (left: FilterRelationsNode, right: FilterRelationsNode): FilterRelations => ({
-    operator: 'AND',
-    left: relate(left),
-    right: relate(right),
-  });
+  export const and: (left: FilterRelationsNode, right: FilterRelationsNode) => FilterRelations =
+    withComposeCodeForFilterRelations(
+      (left, right) => ({
+        operator: 'AND',
+        left: relate(left),
+        right: relate(right),
+      }),
+      'and',
+    );
+
   /**
    * Creates an 'OR' filter relations
    *
@@ -1199,11 +1281,15 @@ export namespace logic {
    * @returns Filter relations
    * @beta
    */
-  export const or = (left: FilterRelationsNode, right: FilterRelationsNode): FilterRelations => ({
-    operator: 'OR',
-    left: relate(left),
-    right: relate(right),
-  });
+  export const or: (left: FilterRelationsNode, right: FilterRelationsNode) => FilterRelations =
+    withComposeCodeForFilterRelations(
+      (left, right) => ({
+        operator: 'OR',
+        left: relate(left),
+        right: relate(right),
+      }),
+      'or',
+    );
 }
 
 // CUSTOM FILTER
@@ -1217,6 +1303,8 @@ export namespace logic {
  * @returns A filter instance
  * @internal
  */
-export function customFilter(attribute: Attribute, jaql: any, config?: BaseFilterConfig): Filter {
-  return new CustomFilter(attribute, jaql, config);
-}
+export const customFilter: (attribute: Attribute, jaql: any, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (attribute, jaql, config) => new CustomFilter(attribute, jaql, config),
+    'customFilter',
+  );

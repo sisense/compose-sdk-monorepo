@@ -53,25 +53,28 @@ export const SunburstChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<SunburstChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<SunburstChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<SunburstChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<SunburstChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<SunburstChartProps['filters']>,
+    filters: [Object, Array] as PropType<SunburstChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<SunburstChartProps['highlights']>,
+    highlights: Array as PropType<SunburstChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onBeforeRender}
      *
@@ -82,7 +85,6 @@ export const SunburstChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<SunburstChartProps['onDataReady']>,
     /**
@@ -110,5 +112,5 @@ export const SunburstChart = defineComponent({
      */
     styleOptions: Object as PropType<SunburstChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(SunburstChartPreact, props as SunburstChartPropsPreact),
+  setup: (props) => setupHelper(SunburstChartPreact, props),
 });

@@ -343,7 +343,7 @@ export const sampleEcommerceDashboard = {
           database: 'aSampleIAAaECommerce',
         },
         column: 'Country',
-        dim: '[country.Country]',
+        dim: '[Country.Country]',
         datatype: 'text',
         filter: {
           explicit: false,
@@ -2110,7 +2110,7 @@ export const sampleEcommerceDashboard = {
             items: [
               {
                 jaql: {
-                  table: 'category',
+                  table: 'Category',
                   column: 'Category',
                   dim: '[Category.Category]',
                   datatype: 'text',
@@ -2765,7 +2765,7 @@ export const sampleEcommerceDashboard = {
             items: [
               {
                 jaql: {
-                  table: 'category',
+                  table: 'Category',
                   column: 'Category',
                   dim: '[Category.Category]',
                   datatype: 'text',
@@ -2788,7 +2788,7 @@ export const sampleEcommerceDashboard = {
                     address: 'LocalHost',
                     database: 'aSampleIAAaECommerce',
                   },
-                  table: 'category',
+                  table: 'Category',
                   column: 'Category',
                   dim: '[Category.Category]',
                   datatype: 'text',

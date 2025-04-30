@@ -49,7 +49,7 @@ Table properties
 
 #### dataOptions
 
-> **`readonly`** **dataOptions**?: [`TableDataOptions`](../interfaces/interface.TableDataOptions.md)
+> **`readonly`** **dataOptions**: [`TableDataOptions`](../interfaces/interface.TableDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the component
 
@@ -107,6 +107,25 @@ const sampleData = {
 > **`readonly`** **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters that will slice query results
+
+### Callbacks
+
+#### onDataReady
+
+> **`readonly`** **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 ### Representation
 

@@ -5,6 +5,7 @@ import isArray from 'lodash-es/isArray.js';
 import {
   DimensionalLevelAttribute,
   Filter,
+  filterFactory,
   FilterRelations,
   FilterRelationsJaql,
   FilterRelationsJaqlNode,
@@ -166,11 +167,8 @@ export function combineFiltersAndRelations(
       return filters.find((filter) => filter.config.guid === node.instanceid)!;
     }
     if (isRelationsRule(node)) {
-      return {
-        left: traverse(node.left),
-        right: traverse(node.right),
-        operator: node.operator,
-      };
+      const func = node.operator === 'AND' ? filterFactory.logic.and : filterFactory.logic.or;
+      return func(traverse(node.left), traverse(node.right));
     }
     throw new UnknownRelationsNodeError();
   }

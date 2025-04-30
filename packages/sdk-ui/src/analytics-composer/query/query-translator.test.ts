@@ -53,7 +53,15 @@ describe('QueryTranslator', () => {
         queryTranslator.parseSimple(MOCK_QUERY_YAML_1),
       );
 
-      expect(expandedQueryModel).toEqual(MOCK_QUERY_MODEL_1);
+      const expectedExpandedQueryModel = {
+        ...MOCK_QUERY_MODEL_1,
+      };
+
+      // YAML query does not have datasource id and address
+      delete expectedExpandedQueryModel.jaql.datasource.id;
+      delete (expectedExpandedQueryModel.jaql.datasource as any).address;
+
+      expect(expandedQueryModel).toEqual(expectedExpandedQueryModel);
     });
   });
 

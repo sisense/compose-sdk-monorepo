@@ -3,20 +3,30 @@
 exports[`FiltersPanel > FiltersPanel — basic > renders filters and triggers onFiltersChange 1`] = `
 [
   {
-    "__serializable": "DimensionalElement",
+    "__serializable": "MembersFilter",
     "attribute": {
-      "__serializable": "DimensionalElement",
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Brand.BrandID",
       "dataSource": {
         "live": false,
         "title": "Sample ECommerce",
       },
-      "desc": "",
+      "description": "",
       "expression": "[Brand.Brand ID]",
       "name": "Brand ID",
       "type": "numeric-attribute",
     },
+    "composeCode": "filterFactory.members(DM.Brand.BrandID, ['1', '2'])",
+    "config": {
+      "deactivatedMembers": [],
+      "disabled": false,
+      "enableMultiSelection": true,
+      "excludeMembers": false,
+      "guid": "test-id-1",
+      "locked": false,
+    },
     "dataSource": undefined,
-    "desc": "",
+    "description": "",
     "filterType": "members",
     "members": [
       "1",
@@ -26,20 +36,27 @@ exports[`FiltersPanel > FiltersPanel — basic > renders filters and triggers on
     "type": "filter",
   },
   {
-    "__serializable": "DimensionalElement",
+    "__serializable": "NumericFilter",
     "attribute": {
-      "__serializable": "DimensionalElement",
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Commerce.Cost",
       "dataSource": {
         "live": false,
         "title": "Sample ECommerce",
       },
-      "desc": "",
+      "description": "",
       "expression": "[Commerce.Cost]",
       "name": "Cost",
       "type": "numeric-attribute",
     },
+    "composeCode": "filterFactory.greaterThan(DM.Commerce.Cost, 100)",
+    "config": {
+      "disabled": false,
+      "guid": "test-id-2",
+      "locked": false,
+    },
     "dataSource": undefined,
-    "desc": "",
+    "description": "",
     "filterType": "numeric",
     "name": "bf69f7fc38f",
     "operatorA": "fromNotEqual",
@@ -49,71 +66,33 @@ exports[`FiltersPanel > FiltersPanel — basic > renders filters and triggers on
 ]
 `;
 
-exports[`FiltersPanel > adding new filter > creates empty filter on attribute selection, opens filter editor, and after applying updates the filters list 1`] = `
-[
-  {
-    "__serializable": "DimensionalElement",
-    "attribute": {
-      "__serializable": "DimensionalElement",
-      "dataSource": {
-        "live": false,
-        "title": "Sample ECommerce",
-      },
-      "desc": "",
-      "expression": "[Brand.Brand ID]",
-      "name": "Brand ID",
-      "type": "numeric-attribute",
-    },
-    "dataSource": undefined,
-    "desc": "",
-    "filterType": "members",
-    "members": [
-      "1",
-      "2",
-    ],
-    "name": "e0b6f65ae7c",
-    "type": "filter",
-  },
-  {
-    "__serializable": "DimensionalElement",
-    "attribute": {
-      "__serializable": "DimensionalElement",
-      "dataSource": {
-        "live": false,
-        "title": "Sample ECommerce",
-      },
-      "desc": "",
-      "expression": "[Commerce.Age Range]",
-      "name": "Age Range",
-      "type": "text-attribute",
-    },
-    "dataSource": undefined,
-    "desc": "",
-    "filterType": "members",
-    "members": [],
-    "name": "70e93572443",
-    "type": "filter",
-  },
-]
-`;
-
 exports[`FiltersPanel > editing existing filter > opens filter editor, and after applying updates the filters list 1`] = `
 [
   {
-    "__serializable": "DimensionalElement",
+    "__serializable": "MembersFilter",
     "attribute": {
-      "__serializable": "DimensionalElement",
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Brand.BrandID",
       "dataSource": {
         "live": false,
         "title": "Sample ECommerce",
       },
-      "desc": "",
+      "description": "",
       "expression": "[Brand.Brand ID]",
       "name": "Brand ID",
       "type": "numeric-attribute",
     },
+    "composeCode": "filterFactory.members(DM.Brand.BrandID, ['1', '2'])",
+    "config": {
+      "deactivatedMembers": [],
+      "disabled": false,
+      "enableMultiSelection": true,
+      "excludeMembers": false,
+      "guid": "test-id",
+      "locked": false,
+    },
     "dataSource": undefined,
-    "desc": "",
+    "description": "",
     "filterType": "members",
     "members": [
       "1",

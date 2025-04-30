@@ -77,6 +77,17 @@ If not specified, the default value is `true`.
 
 ### Sisense Authentication
 
+#### enableSilentPreAuth
+
+> **enableSilentPreAuth**?: `boolean`
+
+Boolean flag to enable sending silent pre-authentication requests to the Sisense instance.
+Used to check if user is already authenticated, check is performed in an ivisible iframe.
+Used only with SSO authentication.
+If not specified, the default value is `false`.
+
+***
+
 #### ssoEnabled
 
 > **ssoEnabled**?: `boolean`

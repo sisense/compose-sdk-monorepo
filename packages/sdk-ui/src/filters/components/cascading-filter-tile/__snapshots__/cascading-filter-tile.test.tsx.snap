@@ -6,8 +6,8 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
     class="css-cbo886"
   >
     <div
-      class="csdk-accessible  css-l4aa93"
-      style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
+      class="csdk-accessible  css-1bejpym"
+      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
     >
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -24,7 +24,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
             >
               <div
                 class="csdk-accessible  css-n759pn"
-                style="min-width: 215px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
+                style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
               >
                 <header
                   class="css-1yqya5g"

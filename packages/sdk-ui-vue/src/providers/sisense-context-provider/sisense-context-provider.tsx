@@ -69,13 +69,18 @@ export const SisenseContextProvider = defineComponent({
      *
      * @category Sisense App
      */
-    defaultDataSource: String as PropType<SisenseContextProviderProps['defaultDataSource']>,
+    defaultDataSource: [String, Object] as PropType<
+      SisenseContextProviderProps['defaultDataSource']
+    >,
     /**
      * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.url}
      *
      * @category Sisense App
      */
-    url: String as PropType<SisenseContextProviderProps['url']>,
+    url: {
+      type: String as PropType<SisenseContextProviderProps['url']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.ssoEnabled}
      *
@@ -121,7 +126,7 @@ export const SisenseContextProvider = defineComponent({
         enabled: props.appConfig?.trackingConfig?.enabled ?? true,
       },
     });
-    createClientApplication(props as SisenseContextProviderProps).then((newApp) => {
+    createClientApplication(props).then((newApp) => {
       context.value = {
         ...context.value,
         app: newApp,

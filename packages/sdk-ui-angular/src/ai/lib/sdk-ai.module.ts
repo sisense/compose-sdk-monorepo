@@ -40,7 +40,6 @@ import { ChatbotComponent, GetNlgInsightsComponent } from './components';
  * })
  * ```
  * @group Generative AI
- * @beta
  */
 @NgModule({
   declarations: [ChatbotComponent, GetNlgInsightsComponent],

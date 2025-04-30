@@ -52,19 +52,22 @@ export const PivotTable = defineComponent({
      *
      * @category Data
      */
-    dataOptions: Object as PropType<PivotTableProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<PivotTableProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!PivotTableProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<PivotTableProps['dataSet']>,
+    dataSet: [String, Object] as PropType<PivotTableProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PivotTableProps.filters}
      *
      * @category Data
      */
-    filters: Array as PropType<PivotTableProps['filters']>,
+    filters: [Object, Array] as PropType<PivotTableProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PivotTableProps.highlights}
      *
@@ -80,5 +83,5 @@ export const PivotTable = defineComponent({
      */
     styleOptions: Object as PropType<PivotTableProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(PivotTablePreact, props as PivotTableProps),
+  setup: (props) => setupHelper(PivotTablePreact, props),
 });

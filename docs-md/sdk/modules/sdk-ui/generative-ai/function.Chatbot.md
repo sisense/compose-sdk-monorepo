@@ -2,15 +2,12 @@
 title: Chatbot
 ---
 
-# Function Chatbot <Badge type="beta" text="Beta" />
+# Function Chatbot
 
 > **Chatbot**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
-React component that renders a chatbot with data topic selection. You can optionally provide `width` and/or `height`.
-
-::: warning Note
-This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
+React component that displays a chatbot with data topic selection.
+You can optionally configure size, config e.g. data topics, recommendations, UI text.
 
 ## Parameters
 
@@ -32,7 +29,21 @@ function App() {
   return (
     <SisenseContextProvider {...sisenseContextProps}>
       <AiContextProvider>
-        <Chatbot width={1000} height={800} />
+        <Chatbot
+           width={1000}
+           height={800}
+           config={{
+              enableFollowupQuestions: true,
+              numOfRecommendations: 2,
+              dataTopicsList: [
+                 'Sample ECommerce',
+                  'Sample Healthcare'
+              ],
+              inputPromptText: 'What do you want to explore?',
+              welcomeText: 'Welcome to Acme AI, powered by Sisense',
+              suggestionsWelcomeText: 'Would you like to know:',
+           }}
+        />
       </AiContextProvider>
     </SisenseContextProvider>
   );

@@ -4,6 +4,9 @@ import type { BeforeRenderHandler, IndicatorBeforeRenderHandler } from '@sisense
 import type {
   AreamapDataPointEventHandler,
   BoxplotDataPointEventHandler,
+  ChartDataPointClickEventHandler,
+  ChartDataPointContextMenuEventHandler,
+  ChartDataPointsEventHandler,
   DataPointEventHandler,
   DataPointsEventHandler,
   ScatterDataPointEventHandler,
@@ -25,7 +28,6 @@ export interface BaseChartEventProps {
    * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   dataReady?: (data: Data) => Data;
 }
@@ -54,7 +56,7 @@ export interface RegularChartEventProps
    *
    * @category Callbacks
    */
-  dataPointsSelected?: DataPointsEventHandler;
+  dataPointsSelect?: DataPointsEventHandler;
 }
 
 /**
@@ -81,14 +83,14 @@ export interface ScatterChartEventProps
    *
    * @category Callbacks
    */
-  dataPointsSelected?: ScatterDataPointsEventHandler;
+  dataPointsSelect?: ScatterDataPointsEventHandler;
 }
 
 /**
  * Event props for Areamap chart which uses AreamapDataPoint type
  * to describe data points for events.
  */
-export interface AreamapChartEventProps {
+export interface AreamapChartEventProps extends BaseChartEventProps {
   /**
    * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.onDataPointClick}
    *
@@ -101,7 +103,7 @@ export interface AreamapChartEventProps {
  * Event props for Scattermap chart which uses ScattermapDataPoint type
  * to describe data points for events.
  */
-export interface ScattermapChartEventProps {
+export interface ScattermapChartEventProps extends BaseChartEventProps {
   /**
    * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
    *
@@ -136,7 +138,7 @@ export interface BoxplotChartEventProps
    *
    * @category Callbacks
    */
-  dataPointsSelected?: DataPointsEventHandler;
+  dataPointsSelect?: DataPointsEventHandler;
 }
 
 export interface IndicatorChartEventProps extends BaseChartEventProps {
@@ -154,29 +156,21 @@ export interface ChartEventProps extends BaseChartEventProps {
    *
    * @category Callbacks
    */
-  dataPointClick?:
-    | DataPointEventHandler
-    | ScatterDataPointEventHandler
-    | AreamapDataPointEventHandler
-    | BoxplotDataPointEventHandler
-    | ScattermapDataPointEventHandler;
+  dataPointClick?: ChartDataPointClickEventHandler;
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
-  dataPointContextMenu?:
-    | DataPointEventHandler
-    | ScatterDataPointEventHandler
-    | BoxplotDataPointEventHandler;
+  dataPointContextMenu?: ChartDataPointContextMenuEventHandler;
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */
-  dataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
+  dataPointsSelect?: ChartDataPointsEventHandler;
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}

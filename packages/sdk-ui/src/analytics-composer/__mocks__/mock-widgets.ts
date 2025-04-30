@@ -1201,7 +1201,7 @@ export default function CodeExample() {
           }
         ],
         value: [{
-            column: measureFactory.customFormula('Revenue Median', 'QUARTILE([28B80-CD8], 2)', {'28B80-CD8': DM.Commerce.Revenue,}),
+            column: measureFactory.customFormula('Revenue Median', 'QUARTILE([28B80-CD8], 2)', { '[28B80-CD8]': DM.Commerce.Revenue }),
             sortType: 'sortNone',
             numberFormatConfig: {
               decimalScale: 'auto',
@@ -1227,7 +1227,7 @@ export default function CodeExample() {
       } }
       filters={ [
         filterFactory.topRanking(DM.Category.Category, measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'), 3),
-        filterFactory.bottomRanking(DM.Category.Category, measureFactory.customFormula('QUARTILE([Revenue], 2)', 'QUARTILE([AB202-E4C], 2)', {'AB202-E4C': DM.Commerce.Revenue,}), 10)
+        filterFactory.bottomRanking(DM.Category.Category, measureFactory.customFormula('QUARTILE([Revenue], 2)', 'QUARTILE([AB202-E4C], 2)', { '[AB202-E4C]': DM.Commerce.Revenue }), 10)
         ] }
       styleOptions={ {
         legend: {

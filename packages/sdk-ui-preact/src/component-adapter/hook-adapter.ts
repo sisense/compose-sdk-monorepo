@@ -3,6 +3,7 @@ import { ComponentAdapter } from './component-adapter';
 import { ContextConnector } from './context-connector';
 import { HookWrapperComponent } from './hook-wrapper-component';
 import { AnyHookFunction, ContextData } from './types';
+import { DataObserver } from './utils';
 
 /** @internal */
 export class HookAdapter<Hook extends AnyHookFunction> {
@@ -10,7 +11,7 @@ export class HookAdapter<Hook extends AnyHookFunction> {
 
   private componentAdapter: ComponentAdapter<typeof HookWrapperComponent>;
 
-  private resultSubscribeFn: ((result: ReturnType<Hook>) => void) | null = null;
+  private resultObserver = new DataObserver<ReturnType<Hook>>();
 
   private params: Parameters<Hook>;
 
@@ -19,7 +20,7 @@ export class HookAdapter<Hook extends AnyHookFunction> {
   }
 
   private handleHookResult(result: ReturnType<Hook>) {
-    this.resultSubscribeFn?.(result);
+    this.resultObserver.setValue(result);
   }
 
   run(...params: Parameters<Hook>) {
@@ -31,13 +32,13 @@ export class HookAdapter<Hook extends AnyHookFunction> {
     });
   }
 
-  subscribe(hookResultSubscribeFn: (result: ReturnType<Hook>) => void) {
-    this.resultSubscribeFn = hookResultSubscribeFn;
+  subscribe(listener: (result: ReturnType<Hook>) => void) {
+    return this.resultObserver.subscribe(listener);
   }
 
   destroy() {
     this.componentAdapter.destroy();
-    this.resultSubscribeFn = null;
+    this.resultObserver.destroy();
     this.rootElement.remove();
   }
 }

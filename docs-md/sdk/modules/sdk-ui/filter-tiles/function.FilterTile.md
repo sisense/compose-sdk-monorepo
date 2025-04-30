@@ -2,7 +2,7 @@
 title: FilterTile
 ---
 
-# Function FilterTile <Badge type="beta" text="Beta" />
+# Function FilterTile
 
 > **FilterTile**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 

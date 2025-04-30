@@ -80,11 +80,13 @@ export interface ChatConfig {
   enableInsights?: boolean;
 
   /**
-   * Boolean flag to start a clean chat on every load.
+   * Boolean flag to hide chat history on every load.
    *
-   * Note: When the flag is `true`, chat history will be preserved and stored for the session but will not be fetched or displayed. Changing this setting back to `false` will make the entire history visible again, even if it was previously hidden. Use the "Clear History" button to completely erase the history.
+   * Note: When the flag is `true`, chat history will be preserved and stored for the session but will not be displayed. Changing this setting back to `false` will make the entire history visible again, even if it was previously hidden. Use the "Clear History" button to completely erase the history.
    *
    * @default false
+   * @deprecated
+   * This flag is deprecated and will be removed in a future version. Use {@link @sisense/sdk-ui!AiContextProviderProps.volatile} instead.
    */
   hideHistory?: boolean;
 

@@ -46,7 +46,7 @@ const pivotTableProps = ref<PivotTableProps>({
 
 #### dataOptions
 
-> **`readonly`** **dataOptions**?: [`PivotTableDataOptions`](../interfaces/interface.PivotTableDataOptions.md)
+> **`readonly`** **dataOptions**: [`PivotTableDataOptions`](../interfaces/interface.PivotTableDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the component
 

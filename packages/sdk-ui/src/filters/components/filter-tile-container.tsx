@@ -14,8 +14,9 @@ import { css } from '@emotion/react';
 import IconButton from '@mui/material/IconButton';
 import { DEFAULT_TEXT_COLOR } from '@/const';
 
-const BORDER_STYLE = '1px solid #dadada';
-const FILTER_TILE_MIN_WIDTH = 215;
+const BORDER_COLOR = '#dadada';
+const BORDER_THICKNESS = '1px';
+const FILTER_TILE_MIN_WIDTH = 213;
 
 const BaseContainer = styled.div<{ shouldShowBorder: boolean }>`
   width: min-content;
@@ -26,7 +27,11 @@ const BaseContainer = styled.div<{ shouldShowBorder: boolean }>`
   ${({ shouldShowBorder }) =>
     shouldShowBorder &&
     css`
-      border: ${BORDER_STYLE};
+      border-top: ${BORDER_THICKNESS} solid ${BORDER_COLOR};
+      border-bottom: ${BORDER_THICKNESS} solid ${BORDER_COLOR};
+      box-shadow: -${BORDER_THICKNESS} 0 0 0 ${BORDER_COLOR},
+        ${BORDER_THICKNESS} 0 0 0 ${BORDER_COLOR};
+      margin-left: 1px;
     `}
 `;
 
@@ -43,7 +48,7 @@ const Header = styled.header<{
   ${({ shouldShowBorder }) =>
     shouldShowBorder &&
     css`
-      border-bottom: ${BORDER_STYLE};
+      border-bottom: ${BORDER_THICKNESS} solid ${BORDER_COLOR};
     `}
 `;
 
@@ -53,7 +58,7 @@ const Footer = styled.footer`
   justify-content: flex-end;
   min-height: 26px;
 
-  border-top: ${BORDER_STYLE};
+  border-top: ${BORDER_THICKNESS} solid ${BORDER_COLOR};
 `;
 
 /**
@@ -163,14 +168,13 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
   const { backgroundColor: bgColor } = themeSettings.general;
   const { primaryTextColor: textColor } = themeSettings.typography;
   const disabledBgColor = getSlightlyDifferentColor(bgColor, 0.1);
-  const minWidth = isDependent ? FILTER_TILE_MIN_WIDTH - 2 : FILTER_TILE_MIN_WIDTH;
 
   return (
     <GroupHoverWrapper disableHeaderGroupHover={design.header.disableGroupHover}>
       <Container
         shouldShowBorder={design.border?.shouldBeShown}
         style={{
-          minWidth: isVertical(arrangement) ? minWidth : 'auto',
+          minWidth: isVertical(arrangement) ? FILTER_TILE_MIN_WIDTH : 'auto',
           backgroundColor: disabled ? disabledBgColor : bgColor,
           fontFamily: themeSettings.typography.fontFamily,
         }}

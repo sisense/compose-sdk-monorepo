@@ -40,7 +40,7 @@ describe('DrilldownWidget', () => {
   it('renders child function and passes drilldown props (no menu opened by default)', () => {
     const { getByText } = render(
       <DrilldownWidget
-        drilldownDimensions={[DM.Category.Category, DM.Commerce.Gender]}
+        drilldownPaths={[DM.Category.Category, DM.Commerce.Gender]}
         onChange={mockOnChange}
         initialDimension={DM.Commerce.AgeRange}
       >
@@ -65,7 +65,7 @@ describe('DrilldownWidget', () => {
   it('opens context menu if child calls onDataPointsSelected AND then calls onContextMenu with a position', () => {
     const { getByText } = render(
       <DrilldownWidget
-        drilldownDimensions={[DM.Category.Category]}
+        drilldownPaths={[DM.Category.Category]}
         initialDimension={DM.Commerce.Condition}
         onChange={mockOnChange}
       >
@@ -98,7 +98,7 @@ describe('DrilldownWidget', () => {
   it('renders breadcrumbs by default when there is a current drilldown dimension', () => {
     const { getByText, queryAllByText } = render(
       <DrilldownWidget
-        drilldownDimensions={[DM.Category.Category]}
+        drilldownPaths={[DM.Category.Category]}
         initialDimension={DM.Category.Category}
         onChange={mockOnChange}
         drilldownSelections={[{ points: [], nextDimension: DM.Category.Category }]}

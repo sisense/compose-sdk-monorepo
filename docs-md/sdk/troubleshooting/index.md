@@ -10,8 +10,8 @@ indexTopics:
   - title: Setup Troubleshooting
     description: Troubleshoot issues that arise when setting up a Compose SDK project
     link: ./troubleshooting-setup
-  - title: GenAI Troubleshooting
-    description: Troubleshoot issues that arise when using the Compose SDK GenAI components
+  - title: Generative AI Troubleshooting
+    description: Troubleshoot issues that arise when using the Compose SDK Generative AI components
     link: ./troubleshooting-genai
 ---
 

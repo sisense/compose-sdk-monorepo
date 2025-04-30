@@ -1,10 +1,17 @@
-import { getSortType } from '../utils.js';
+import {
+  createAttributeHelper,
+  createCalculatedMeasureHelper,
+  createMeasureHelper,
+  getSortType,
+} from '../utils.js';
 import { DimensionalElement } from './base.js';
 import { SortDirection } from './interfaces.js';
 import {
   BaseJaql,
   DataType,
+  FormulaJaql,
   JaqlSortDirection,
+  JSONObject,
   MetadataItem,
   MetadataItemJaql,
   MetadataTypes,
@@ -75,6 +82,19 @@ export class JaqlElement extends DimensionalElement {
   jaql(nested?: boolean): MetadataItemJaql | MetadataItem {
     return nested === true ? this.metadataItem.jaql : this.metadataItem;
   }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'JaqlElement';
+
+    result.metadataItem = this.metadataItem as JSONObject;
+    result.type = this.type;
+
+    return result;
+  }
 }
 
 const toMetadataType: Record<DataType, string> = {
@@ -94,4 +114,50 @@ export function createJaqlElement(item: MetadataItem): JaqlElement {
   // TODO: measures with a "formula" may not have a datatype. force this to be numeric because aggregations
   // will always be of type number. check if there is a more correct way to do this
   return new JaqlElement(item, toMetadataType[(item.jaql as BaseJaql).datatype] ?? 'numeric');
+}
+
+/**
+ * Create a DimensionalElement from a MetadataItem
+ *
+ * @param item - the metadata item in a JAQL query
+ * @returns a DimensionalElement
+ * @internal
+ */
+export function createDimensionalElementFromMetadataItem(item: MetadataItem) {
+  const { jaql } = item;
+
+  // calculated measure
+  if (jaql.formula) {
+    return createCalculatedMeasureHelper(jaql as FormulaJaql);
+  }
+
+  // measure
+  if ('agg' in jaql && jaql.dim && jaql.datatype) {
+    return createMeasureHelper({
+      expression: jaql.dim,
+      dataType: jaql.datatype,
+      agg: jaql.agg || '',
+      granularity: jaql.level,
+      format: undefined,
+      sort: jaql.sort,
+      title: jaql.title,
+      dataSource: jaql.datasource,
+    });
+  }
+
+  // attribute
+  if (jaql.dim && jaql.datatype) {
+    return createAttributeHelper({
+      expression: jaql.dim,
+      dataType: jaql.datatype,
+      granularity: jaql.level,
+      sort: jaql.sort,
+      title: jaql.title,
+      panel: item.panel,
+      dataSource: jaql.datasource,
+    });
+  }
+
+  // fall back to createJaqlElement
+  return createJaqlElement(item);
 }

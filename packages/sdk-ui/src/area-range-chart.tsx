@@ -65,7 +65,6 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  * @param props - Area Range chart properties
  * @returns Area Range Chart component
  * @group Charts
- * @beta
  */
 export const AreaRangeChart = asSisenseComponent({
   componentName: 'AreaRangeChart',

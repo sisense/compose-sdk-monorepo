@@ -23,7 +23,11 @@ import { rootId, template } from '../../component-wrapper-helpers/template';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import { ChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
-import { ChartDataPointEvent, ChartDataPointsEvent } from '../../types/data-point';
+import {
+  ChartDataPointClickEvent,
+  ChartDataPointContextMenuEvent,
+  ChartDataPointsEvent,
+} from '../../types/data-point';
 import type { Arguments } from '../../types/utility-types';
 
 /**
@@ -87,7 +91,7 @@ export interface ChartWidgetProps
  *
  * }
  * ```
- * <img src="media://angular-chart-widget-example.png" width="800px" />
+ * <img src="media://angular-chart-widget-example.png" width="500px" />
  * @group Dashboards
  */
 @Component({
@@ -192,7 +196,6 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
    * {@inheritDoc  @sisense/sdk-ui!ChartWidgetProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: ChartWidgetProps['dataReady'];
@@ -203,7 +206,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<ChartDataPointEvent>();
+  dataPointClick = new EventEmitter<ChartDataPointClickEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
@@ -211,7 +214,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<ChartDataPointEvent>();
+  dataPointContextMenu = new EventEmitter<ChartDataPointContextMenuEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointsSelected}
@@ -261,13 +264,13 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
       onDataReady: this.dataReady?.bind(this),
       onDataPointClick: (
         ...[point, nativeEvent]: Arguments<ChartWidgetPropsPreact['onDataPointClick']>
-      ) => this.dataPointClick.emit({ point, nativeEvent }),
+      ) => this.dataPointClick.emit({ point, nativeEvent } as ChartDataPointClickEvent),
       onDataPointContextMenu: (
         ...[point, nativeEvent]: Arguments<ChartWidgetPropsPreact['onDataPointContextMenu']>
-      ) => this.dataPointContextMenu.emit({ point, nativeEvent }),
+      ) => this.dataPointContextMenu.emit({ point, nativeEvent } as ChartDataPointContextMenuEvent),
       onDataPointsSelected: (
         ...[points, nativeEvent]: Arguments<ChartWidgetPropsPreact['onDataPointsSelected']>
-      ) => this.dataPointsSelect.emit({ points, nativeEvent }),
+      ) => this.dataPointsSelect.emit({ points, nativeEvent } as ChartDataPointsEvent),
     };
   }
 

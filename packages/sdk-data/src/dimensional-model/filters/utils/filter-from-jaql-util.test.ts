@@ -20,10 +20,8 @@ describe('filter-from-jaql-util', () => {
     const guid = 'instanceid';
 
     const expectEqualFilters = (actual: Filter, expected: Filter) => {
-      // delete compose code
-      delete actual.composeCode;
-      expect({ ...actual }).toEqual({ ...expected });
-      expect(actual.serializable()).toBeDefined();
+      expect(actual).toStrictEqual(expected);
+      expect(actual.serialize()).toBeDefined();
     };
 
     describe('MembersFilter', () => {
@@ -239,6 +237,10 @@ describe('filter-from-jaql-util', () => {
             operator: ConditionFilterType.LESS_THAN_OR_EQUAL,
             factoryFunc: filterFactory.lessThanOrEqual,
           },
+          {
+            operator: ConditionFilterType.DOESNT_EQUAL,
+            factoryFunc: filterFactory.doesntEqual,
+          },
         ].forEach((test) => {
           const jaql = {
             table: 'Commerce',
@@ -301,29 +303,46 @@ describe('filter-from-jaql-util', () => {
         });
       });
 
-      test('should handle binary operator', () => {
-        [{ operator: ConditionFilterType.BETWEEN, factoryFunc: filterFactory.between }].forEach(
-          (test) => {
-            const jaql = {
-              table: 'Commerce',
-              column: 'Revenue',
-              datatype: 'numeric',
-              dim: '[Commerce.Revenue]',
-              title: 'Revenue',
-              filter: {
-                from: 1000,
-                to: 2000,
-              },
-            };
-
-            const filter = createFilterFromJaqlInternal(jaql, guid);
-            const attribute = createAttributeFromFilterJaql(jaql);
-            const expectedFilter = test.factoryFunc(attribute, jaql.filter.from, jaql.filter.to, {
-              guid,
-            });
-            expectEqualFilters(filter, expectedFilter);
+      test('should handle between operator', () => {
+        [
+          {
+            table: 'Commerce',
+            column: 'Revenue',
+            datatype: 'numeric',
+            dim: '[Commerce.Revenue]',
+            title: 'Revenue',
+            filter: {
+              isBetween: true,
+              from: 1000,
+              to: 2000,
+            },
           },
-        );
+          // NOTE: without isBetween in filter jaql, the filter type is NUMERIC_RANGE
+          // the same filterFactory.between will be used regardless of isBetween
+          {
+            table: 'Commerce',
+            column: 'Revenue',
+            datatype: 'numeric',
+            dim: '[Commerce.Revenue]',
+            title: 'Revenue',
+            filter: {
+              from: 1000,
+              to: 2000,
+            },
+          },
+        ].forEach((jaql) => {
+          const filter = createFilterFromJaqlInternal(jaql, guid);
+          const attribute = createAttributeFromFilterJaql(jaql);
+          const expectedFilter = filterFactory.between(
+            attribute,
+            jaql.filter.from,
+            jaql.filter.to,
+            {
+              guid,
+            },
+          );
+          expectEqualFilters(filter, expectedFilter);
+        });
       });
 
       test('should handle not between operator', () => {
@@ -354,7 +373,7 @@ describe('filter-from-jaql-util', () => {
           (filter as ExcludeFilter).filter,
           (expectedFilter as ExcludeFilter).filter,
         );
-        expect(filter.serializable()).toBeDefined();
+        expect(filter.serialize()).toBeDefined();
         expect(filter.id).toEqual(expectedFilter.id);
       });
     });
@@ -391,7 +410,7 @@ describe('filter-from-jaql-util', () => {
             { guid },
           );
           expectEqualFilters(filter, expectedFilter);
-          expect(filter.serializable()).toBeDefined();
+          expect(filter.serialize()).toBeDefined();
           expect(filter.jaql().jaql).toEqual(expectedFilter.jaql().jaql);
         });
       });
@@ -549,7 +568,7 @@ describe('filter-from-jaql-util', () => {
         );
         expect(filter.type).toEqual(expectedFilter.type);
         expect(filter.id).toEqual(expectedFilter.id);
-        expect(filter.serializable()).toBeDefined();
+        expect(filter.serialize()).toBeDefined();
       });
 
       it('should handle and', () => {
@@ -582,7 +601,7 @@ describe('filter-from-jaql-util', () => {
         );
         expect(filter.type).toEqual(expectedFilter.type);
         expect(filter.id).toEqual(expectedFilter.id);
-        expect(filter.serializable()).toBeDefined();
+        expect(filter.serialize()).toBeDefined();
       });
     });
 
@@ -630,6 +649,78 @@ describe('filter-from-jaql-util', () => {
           expectEqualFilters(filter, expectedFilter);
         });
       });
+
+      it('should handle between operator', () => {
+        const jaql = {
+          table: 'Commerce',
+          column: 'Revenue',
+          datatype: 'numeric',
+          title: 'sum Revenue',
+          dim: '[Commerce.Revenue]',
+          agg: 'sum',
+          filter: {
+            isBetween: true,
+            from: 1000,
+            to: 2000,
+          },
+          datasource: {
+            address: 'LocalHost',
+            title: 'Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            database: 'aSampleIAAaECommerce',
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const measure = createMeasureFromFilterJaql(jaql);
+        expect(measure).toBeDefined();
+        if (!measure) return;
+        const expectedFilter = filterFactory.measureBetween(
+          measure,
+          jaql.filter.from,
+          jaql.filter.to,
+          {
+            guid,
+          },
+        );
+        expectEqualFilters(filter, expectedFilter);
+      });
+
+      it('should handle not between operator', () => {
+        const jaql = {
+          table: 'Commerce',
+          column: 'Revenue',
+          datatype: 'numeric',
+          title: 'sum Revenue',
+          dim: '[Commerce.Revenue]',
+          agg: 'sum',
+          filter: {
+            exclude: {
+              from: 1000,
+              to: 2000,
+            },
+          },
+          datasource: {
+            address: 'LocalHost',
+            title: 'Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            database: 'aSampleIAAaECommerce',
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const measure = createMeasureFromFilterJaql(jaql);
+        expect(measure).toBeDefined();
+        if (!measure) return;
+        const expectedFilter = filterFactory.exclude(
+          filterFactory.measureBetween(measure, jaql.filter.exclude.from, jaql.filter.exclude.to, {
+            guid,
+          }),
+          undefined,
+          { guid },
+        );
+        expectEqualFilters(filter, expectedFilter);
+      });
     });
 
     describe('Advanced filter (pass-through JAQL)', () => {
@@ -650,7 +741,7 @@ describe('filter-from-jaql-util', () => {
         const expectedFilter = filterFactory.customFilter(attribute, jaql.filter, { guid });
         expect(filter.jaql()).toEqual(expectedFilter.jaql());
         expect(filter.jaql(true)).toEqual(expectedFilter.jaql(true));
-        expect(filter.serializable()).toBeDefined();
+        expect(filter.serialize()).toBeDefined();
         expect(filter.toJSON()).toBeDefined();
       });
     });
@@ -705,8 +796,6 @@ describe('filter-from-jaql-util', () => {
           const expectedFilter = createGenericFilter(jaql, guid);
           expect(filter.jaql()).toEqual(expectedFilter.jaql());
           expect(filter.jaql(true)).toEqual(expectedFilter.jaql(true));
-          expect(filter.serializable()).toBeDefined();
-          expect(filter.toJSON()).toBeDefined();
         });
       });
     });

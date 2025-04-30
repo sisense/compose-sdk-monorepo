@@ -8,20 +8,30 @@ exports[`TableWidget Component > renders Table with correct props 1`] = `
   "dataSet": "Sample ECommerce",
   "filters": [
     {
-      "__serializable": "DimensionalElement",
+      "__serializable": "MembersFilter",
       "attribute": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Condition",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
         "type": "text-attribute",
       },
+      "composeCode": "filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "test-id",
+        "locked": false,
+      },
       "dataSource": undefined,
-      "desc": "",
+      "description": "",
       "filterType": "members",
       "members": [
         "Used",

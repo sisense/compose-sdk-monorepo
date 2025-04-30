@@ -11,7 +11,6 @@ import {
   createAttributeFilterFromConditionFilterJaql,
   createMeasureFilterFromConditionFilterJaql,
 } from './condition-filter-util.js';
-import { withComposeCode } from './filter-code-util.js';
 import { extractFilterTypeFromFilterJaql } from './filter-types-util.js';
 import {
   BaseFilterJaql,
@@ -36,7 +35,7 @@ export const createGenericFilter = (
   jaql: FilterJaql | FilterJaqlInternal,
   guid: string,
 ): Filter => {
-  return {
+  const baseFilter = {
     config: { ...getDefaultBaseFilterConfig(), guid, originalFilterJaql: jaql },
     jaql: (nested?: boolean) => {
       if (nested) {
@@ -51,13 +50,10 @@ export const createGenericFilter = (
       id: jaql.dim,
     },
     type: 'filter',
+  };
 
-    serializable() {
-      return { ...this, jaql: this.jaql() };
-    },
-    toJSON() {
-      return this.serializable();
-    },
+  return {
+    ...baseFilter,
   } as Filter;
 };
 
@@ -75,7 +71,7 @@ export const createFilterIncludeAll = (attribute: Attribute, guid: string): Filt
     guid,
     excludeMembers: true,
   };
-  return withComposeCode(filterFactory.members, 'members')(attribute, [], config);
+  return filterFactory.members(attribute, [], config);
 };
 
 /**
@@ -101,7 +97,7 @@ export const createFilterFromSpecificItemsFilterJaql = (
     deactivatedMembers,
   });
 
-  return withComposeCode(filterFactory.members, 'members')(attribute, activeMembers, config);
+  return filterFactory.members(attribute, activeMembers, config);
 };
 
 function getDeactivatedMembersFromFilterJaql(filterJaql: SpecificItemsFilterJaql): string[] {
@@ -131,7 +127,7 @@ export const createFilterFromDateRangeFilterJaql = (
   rangeFilterJaql: RangeFilterJaql,
   guid: string,
 ): Filter => {
-  return withComposeCode(filterFactory.dateRange, 'dateRange')(
+  return filterFactory.dateRange(
     attribute,
     rangeFilterJaql.from as string,
     rangeFilterJaql.to as string,
@@ -152,7 +148,7 @@ export const createFilterFromNumericRangeJaql = (
   rangeFilterJaql: RangeFilterJaql,
   guid: string,
 ): Filter => {
-  return withComposeCode(filterFactory.between, 'between')(
+  return filterFactory.between(
     attribute,
     rangeFilterJaql.from as number,
     rangeFilterJaql.to as number,
@@ -174,7 +170,7 @@ export const createFilterFromPeriodFilterJaql = (
   guid: string,
 ): Filter => {
   if (periodFilterJaql.last) {
-    return withComposeCode(filterFactory.dateRelativeTo, 'dateRelativeTo')(
+    return filterFactory.dateRelativeTo(
       attribute,
       periodFilterJaql.last.offset,
       periodFilterJaql.last.count,
@@ -182,7 +178,7 @@ export const createFilterFromPeriodFilterJaql = (
       { guid },
     );
   } else {
-    return withComposeCode(filterFactory.dateRelativeFrom, 'dateRelativeFrom')(
+    return filterFactory.dateRelativeFrom(
       attribute,
       periodFilterJaql.next.offset,
       periodFilterJaql.next.count,
@@ -205,7 +201,7 @@ export const createFilterFromCustomFilterJaql = (
   customFilterJaql: BaseFilterJaql,
   guid: string,
 ): Filter => {
-  return withComposeCode(filterFactory.customFilter, 'customFilter')(attribute, customFilterJaql, {
+  return filterFactory.customFilter(attribute, customFilterJaql, {
     guid,
   });
 };

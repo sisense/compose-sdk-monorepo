@@ -44,7 +44,6 @@ export interface FilterTileProps {
  *
  * @group Filter Tiles
  * @shortDescription Facade component rendering a filter tile based on filter type
- * @beta
  */
 export const FilterTile: React.FC<FilterTileProps> = ({
   filter,

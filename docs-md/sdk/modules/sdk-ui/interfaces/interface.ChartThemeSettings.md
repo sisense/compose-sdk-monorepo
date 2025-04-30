@@ -58,18 +58,6 @@ Background color
 
 ***
 
-### panelBackgroundColor
-
-> **panelBackgroundColor**?: `string`
-
-Toolbar Background color, can be used as a secondary background color
-
-::: warning Deprecated
-
-:::
-
-***
-
 ### secondaryTextColor
 
 > **secondaryTextColor**?: `string`

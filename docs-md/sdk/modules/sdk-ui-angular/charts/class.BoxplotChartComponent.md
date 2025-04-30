@@ -195,7 +195,7 @@ For an example of how the `onBeforeRender` callback can be used, see the
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
+> **dataPointClick**: `EventEmitter`\< [`BoxplotDataPointEvent`](../type-aliases/type-alias.BoxplotDataPointEvent.md) \>
 
 Click handler callback for a data point
 
@@ -203,7 +203,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< [`DataPointEvent`](../type-aliases/type-alias.DataPointEvent.md) \>
+> **dataPointContextMenu**: `EventEmitter`\< [`BoxplotDataPointEvent`](../type-aliases/type-alias.BoxplotDataPointEvent.md) \>
 
 Context menu handler callback for a data point
 
@@ -211,6 +211,15 @@ Context menu handler callback for a data point
 
 #### dataPointsSelect
 
-> **dataPointsSelect**: `EventEmitter`\< [`DataPointsEvent`](../type-aliases/type-alias.DataPointsEvent.md) \>
+> **dataPointsSelect**: `EventEmitter`\< [`BoxplotDataPointsEvent`](../type-aliases/type-alias.BoxplotDataPointsEvent.md) \>
 
 Handler callback for selection of multiple data points
+
+***
+
+#### dataReady
+
+> **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.

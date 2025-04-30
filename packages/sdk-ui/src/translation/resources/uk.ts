@@ -53,6 +53,8 @@ export const translation: TranslationDictionary = {
       onlyPivotWidgetSupported: 'Метод {{methodName}} підтримується тільки для півот віджетів',
       onlyTextWidgetSupported: 'Метод {{methodName}} підтримується тільки для текстових віджетів',
       onlyPluginWidgetSupported: 'Метод {{methodName}} підтримується тільки для плагінних віджетів',
+      unsupportedWidgetType: 'Тип віджету {{widgetType}} не підтримується',
+      unsupportedFusionWidgetType: 'Тип Fusion віджету {{widgetType}} не підтримується',
     },
     unknownFilterInFilterRelations: 'Логічні відношення фільтрів містять невідомий фільтр',
     filterRelationsNotSupported: 'Відносини фільтрів ще не підтримуються',
@@ -243,7 +245,6 @@ export const translation: TranslationDictionary = {
     chatbotDescription:
       'Аналітичний чат-бот розроблено, щоб допомогти вам взаємодіяти з вашими даними за допомогою розмовної мови.',
     topicSelectPrompt: 'Виберіть тему, яку б ви хотіли дослідити:',
-    betaLabel: 'Бета',
     preview: 'Попередній перегляд',
     clearHistoryPrompt: 'Ви дійсно хочете очистити чат?',
     config: {

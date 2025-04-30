@@ -16,7 +16,7 @@ import {
   MembersFilterConfig,
 } from '../interfaces.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
-import { AnyObject, DateLevels, MetadataTypes } from '../types.js';
+import { AnyObject, DateLevels, JSONObject, JSONValue, MetadataTypes } from '../types.js';
 import {
   getDefaultBaseFilterConfig,
   getDefaultMembersFilterConfig,
@@ -127,8 +127,8 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    */
   config: CompleteBaseFilterConfig;
 
-  constructor(att: Attribute, filterType: string, config?: BaseFilterConfig) {
-    super('filter', MetadataTypes.Filter);
+  constructor(att: Attribute, filterType: string, config?: BaseFilterConfig, composeCode?: string) {
+    super('filter', MetadataTypes.Filter, undefined, undefined, composeCode);
     this.filterType = filterType;
 
     // need to set isScope
@@ -164,11 +164,16 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'AbstractFilter';
 
     result.filterType = this.filterType;
-    result.attribute = this.attribute.serializable();
+    result.attribute = this.attribute.serialize();
+    if (this.config) {
+      result.config = this.config;
+    }
+    result.composeCode = this.composeCode;
 
     return result;
   }
@@ -235,8 +240,13 @@ export class LogicalAttributeFilter extends AbstractFilter {
 
   readonly operator: string;
 
-  constructor(filters: Filter[], operator: string, config?: BaseFilterConfig) {
-    super(filters[0].attribute, FilterTypes.logicalAttribute, config);
+  constructor(
+    filters: Filter[],
+    operator: string,
+    config?: BaseFilterConfig,
+    composeCode?: string,
+  ) {
+    super(filters[0].attribute, FilterTypes.logicalAttribute, config, composeCode);
 
     this.operator = operator;
     this.filters = filters;
@@ -252,11 +262,11 @@ export class LogicalAttributeFilter extends AbstractFilter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'LogicalAttributeFilter';
     result.operator = this.operator;
-    result.filters = this.filters.map((f) => f.serializable());
+    result.filters = this.filters.map((f) => f.serialize());
 
     return result;
   }
@@ -280,8 +290,13 @@ export class MembersFilter extends AbstractFilter {
 
   config: CompleteMembersFilterConfig;
 
-  constructor(attribute: Attribute, members?: string[], config?: MembersFilterConfig) {
-    super(attribute, FilterTypes.members);
+  constructor(
+    attribute: Attribute,
+    members?: string[],
+    config?: MembersFilterConfig,
+    composeCode?: string,
+  ) {
+    super(attribute, FilterTypes.members, undefined, composeCode);
     this.members = members ?? [];
 
     if (this.members.filter((m) => m === null || m === undefined).length > 0) {
@@ -310,8 +325,16 @@ export class MembersFilter extends AbstractFilter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'MembersFilter';
+    if (this.config) {
+      result.config = (
+        this.config.backgroundFilter
+          ? { ...this.config, backgroundFilter: this.config.backgroundFilter.serialize() }
+          : this.config
+      ) as JSONObject;
+    }
     result.members = this.members;
     return result;
   }
@@ -345,8 +368,8 @@ export class CascadingFilter extends AbstractFilter {
   // level filters
   readonly _filters: Filter[];
 
-  constructor(filters: Filter[], config?: BaseFilterConfig) {
-    super(filters[0].attribute, FilterTypes.cascading, config);
+  constructor(filters: Filter[], config?: BaseFilterConfig, composeCode?: string) {
+    super(filters[0].attribute, FilterTypes.cascading, config, composeCode);
     this._filters = filters;
   }
 
@@ -372,9 +395,10 @@ export class CascadingFilter extends AbstractFilter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-    result.filters = this.filters.map((f) => f.serializable());
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'CascadingFilter';
+    result._filters = this.filters.map((f) => f.serialize());
     return result;
   }
 
@@ -407,8 +431,8 @@ export class ExcludeFilter extends AbstractFilter {
 
   readonly input?: Filter;
 
-  constructor(filter: Filter, input?: Filter, config?: BaseFilterConfig) {
-    super(filter.attribute, FilterTypes.exclude, config);
+  constructor(filter: Filter, input?: Filter, config?: BaseFilterConfig, composeCode?: string) {
+    super(filter.attribute, FilterTypes.exclude, config, composeCode);
 
     this.input = input;
     this.filter = filter;
@@ -430,13 +454,14 @@ export class ExcludeFilter extends AbstractFilter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'ExcludeFilter';
 
-    result.filter = this.filter.serializable();
+    result.filter = this.filter.serialize();
 
     if (this.input) {
-      result.input = this.input.serializable();
+      result.input = this.input.serialize();
     }
 
     return result;
@@ -481,8 +506,9 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
     operatorB?: string,
     valueB?: Type,
     config?: BaseFilterConfig,
+    composeCode?: string,
   ) {
-    super(att, filterType, config);
+    super(att, filterType, config, composeCode);
 
     if (operatorA && valueA !== undefined) {
       this.valueA = valueA;
@@ -515,9 +541,9 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DoubleOperatorFilter';
     if (this.operatorA) {
       result.operatorA = this.operatorA;
     }
@@ -527,11 +553,11 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
     }
 
     if (this.valueA !== undefined) {
-      result.valueA = this.valueA;
+      result.valueA = this.valueA as JSONValue;
     }
 
     if (this.valueB !== undefined) {
-      result.valueB = this.valueB;
+      result.valueB = this.valueB as JSONValue;
     }
 
     return result;
@@ -569,8 +595,9 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
     operatorB?: string,
     valueB?: number,
     config?: BaseFilterConfig,
+    composeCode?: string,
   ) {
-    super(att, FilterTypes.measure, operatorA, valueA, operatorB, valueB, config);
+    super(att, FilterTypes.measure, operatorA, valueA, operatorB, valueB, config, composeCode);
 
     this.measure = measure;
   }
@@ -595,10 +622,11 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'MeasureFilter';
 
-    result.measure = this.measure.serializable();
+    result.measure = this.measure.serialize();
 
     return result;
   }
@@ -636,8 +664,9 @@ export class RankingFilter extends AbstractFilter {
     operator: string,
     count: number,
     config?: BaseFilterConfig,
+    composeCode?: string,
   ) {
-    super(att, FilterTypes.ranking, config);
+    super(att, FilterTypes.ranking, config, composeCode);
 
     this.count = count;
     this.operator = operator;
@@ -654,12 +683,13 @@ export class RankingFilter extends AbstractFilter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'RankingFilter';
 
     result.count = this.count;
     result.operator = this.operator;
-    result.measure = this.measure.serializable();
+    result.measure = this.measure.serialize();
 
     return result;
   }
@@ -688,8 +718,18 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
     operatorB?: string,
     valueB?: number,
     config?: BaseFilterConfig,
+    composeCode?: string,
   ) {
-    super(att, FilterTypes.numeric, operatorA, valueA, operatorB, valueB, config);
+    super(att, FilterTypes.numeric, operatorA, valueA, operatorB, valueB, config, composeCode);
+  }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'NumericFilter';
+    return result;
   }
 }
 
@@ -697,8 +737,23 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
  * @internal
  */
 export class TextFilter extends DoubleOperatorFilter<string> {
-  constructor(att: Attribute, operator: string, value: string, config?: BaseFilterConfig) {
-    super(att, FilterTypes.text, operator, value, undefined, undefined, config);
+  constructor(
+    att: Attribute,
+    operator: string,
+    value: string,
+    config?: BaseFilterConfig,
+    composeCode?: string,
+  ) {
+    super(att, FilterTypes.text, operator, value, undefined, undefined, config, composeCode);
+  }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'TextFilter';
+    return result;
   }
 }
 
@@ -707,19 +762,21 @@ export class TextFilter extends DoubleOperatorFilter<string> {
  */
 export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
   constructor(
-    l: LevelAttribute,
+    levelAttribute: LevelAttribute,
     valueFrom?: Date | string,
     valueTo?: Date | string,
     config?: BaseFilterConfig,
+    composeCode?: string,
   ) {
     super(
-      l,
+      levelAttribute,
       FilterTypes.dateRange,
       DateOperators.From,
       valueFrom,
       DateOperators.To,
       valueTo,
       config,
+      composeCode,
     );
 
     if (typeof valueFrom === 'object') {
@@ -749,6 +806,15 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
   filterJaql(): any {
     return super.filterJaql();
   }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'DateRangeFilter';
+    return result;
+  }
 }
 
 /**
@@ -764,14 +830,15 @@ export class RelativeDateFilter extends AbstractFilter {
   readonly anchor?: Date | string;
 
   constructor(
-    l: LevelAttribute,
+    levelAttribute: LevelAttribute,
     offset: number,
     count: number,
     operator?: typeof DateOperators.Last | typeof DateOperators.Next,
     anchor?: Date | string,
     config?: BaseFilterConfig,
+    composeCode?: string,
   ) {
-    super(l, FilterTypes.relativeDate, config);
+    super(levelAttribute, FilterTypes.relativeDate, config, composeCode);
 
     if (!operator) {
       operator = DateOperators.Next;
@@ -807,15 +874,15 @@ export class RelativeDateFilter extends AbstractFilter {
   /**
    * Gets a serializable representation of the element
    */
-  serializable(): any {
-    const result = super.serializable();
-
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'RelativeDateFilter';
     result.offset = this.offset;
     result.count = this.count;
     result.operator = this.operator;
 
     if (this.anchor) {
-      result.anchor = this.anchor;
+      result.anchor = typeof this.anchor === 'string' ? this.anchor : this.anchor.toISOString();
     }
 
     return result;
@@ -851,8 +918,8 @@ export class RelativeDateFilter extends AbstractFilter {
 export class CustomFilter extends AbstractFilter {
   readonly jaqlExpression: any;
 
-  constructor(att: Attribute, jaql: any, config?: BaseFilterConfig) {
-    super(att, FilterTypes.advanced, config);
+  constructor(att: Attribute, jaql: any, config?: BaseFilterConfig, composeCode?: string) {
+    super(att, FilterTypes.advanced, config, composeCode);
     // remove filterType from jaql as it is not needed
     delete jaql.filterType;
     this.jaqlExpression = jaql;
@@ -871,6 +938,17 @@ export class CustomFilter extends AbstractFilter {
    */
   filterJaql(): any {
     return this.jaqlExpression;
+  }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.__serializable = 'CustomFilter';
+    result.jaqlExpression = this.jaqlExpression;
+
+    return result;
   }
 }
 

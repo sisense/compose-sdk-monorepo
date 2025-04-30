@@ -8,6 +8,10 @@ import { type WidgetModel } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
 import { WidgetService } from './widget.service';
 
+vi.mock('../decorators/trackable.decorator', () => ({
+  TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
+}));
+
 vi.mock('@sisense/sdk-ui-preact', () => ({
   getWidgetModel: vi.fn(),
 }));

@@ -137,3 +137,11 @@ Tracking configuration
 >
 >
 >
+
+***
+
+### `translationConfig`
+
+**translationConfig**?: [`TranslationConfig`](type-alias.TranslationConfig.md)
+
+Translation Configuration

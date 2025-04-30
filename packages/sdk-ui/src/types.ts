@@ -47,6 +47,7 @@ import { HighchartsOptionsInternal } from './chart-options-processor/chart-optio
 import { CSSProperties } from 'react';
 import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
 import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
+import { SoftUnion } from './utils/utility-types';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
@@ -436,24 +437,6 @@ export type IndicatorStyleOptions = (
 /** Configuration options that define functional style of the various elements of the Table Component */
 export interface TableStyleOptions {
   /**
-   * Boolean flag whether to fill header cells with background color
-   *
-   * @deprecated Use {@link TableStyleOptions#header | TableStyleOptions.header.color} instead.
-   */
-  headersColor?: boolean;
-  /**
-   * Boolean flag whether to apply background color to alternate rows.
-   *
-   * @deprecated Use {@link TableStyleOptions#rows | TableStyleOptions.rows.alternatingColor} instead.
-   */
-  alternatingRowsColor?: boolean;
-  /**
-   * Boolean flag whether to apply background color to alternate columns
-   *
-   * @deprecated Use {@link TableStyleOptions#columns | TableStyleOptions.columns.alternatingColor} instead.
-   */
-  alternatingColumnsColor?: boolean;
-  /**
    * Vertical padding around whole table
    * Default value is 20px
    *
@@ -842,12 +825,6 @@ export interface ChartThemeSettings {
   secondaryTextColor?: string;
   /** Background color */
   backgroundColor?: string;
-  /**
-   * Toolbar Background color, can be used as a secondary background color
-   *
-   * @deprecated
-   */
-  panelBackgroundColor?: string;
   /** Animation options */
   animation?: {
     /** Chart initialization animation options */
@@ -1453,13 +1430,6 @@ export interface WidgetByIdStyleOptions extends WidgetContainerStyleOptions {
   height?: number;
 }
 
-/**
- * Style settings defining the look and feel of DashboardWidget
- *
- * @deprecated Use {@link WidgetByIdStyleOptions} instead
- */
-export interface DashboardWidgetStyleOptions extends WidgetByIdStyleOptions {}
-
 /** Style settings defining the look and feel of ChartWidget */
 export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetContainerStyleOptions;
 
@@ -1505,12 +1475,6 @@ export declare type ColorPaletteTheme = {
 
 /** Configuration for the drilldown */
 export type DrilldownOptions = {
-  /**
-   * Dimensions that can be used for drilldown
-   *
-   * @deprecated Use {@link DrilldownOptions.drilldownPaths} instead
-   */
-  drilldownDimensions?: Attribute[];
   /**
    * Dimensions and hierarchies available for drilldown on.
    */
@@ -1918,6 +1882,53 @@ export type CustomTranslationObject = {
 };
 
 /**
+ * Translation Configuration
+ */
+export type TranslationConfig = {
+  /**
+   * Language code to be used for translations.
+   */
+  language?: string;
+
+  /**
+   * Additional translation resources to be loaded.
+   *
+   * You can find the list of available translation keys in the translation folder of every package.
+   *
+   * Translation keys that are not provided will default to the English translation.
+   * If translation is provided for a package other than sdk-ui, please specify the namespace property.
+   *
+   * Important: Do not translate parts in {{}} - these are placeholders for dynamic values and will be matched using provided variable names.
+   *
+   * @example
+   * ```ts
+   * customTranslations: [
+   *   {
+   *     language: 'fr',
+   *     resources: {
+   *       errors: {
+   *        invalidFilterType: 'Type de filtre invalide',
+   *       },
+   *     },
+   *   },
+   *   {
+   *     language: 'es',
+   *     namespace: 'sdkData'
+   *     resources: {
+   *       errors: {
+   *         measure: {
+   *           unsupportedType: 'Tipo de medida no compatible',
+   *         },
+   *       },
+   *     },
+   *   },
+   * ]
+   * ```
+   */
+  customTranslations?: CustomTranslationObject[];
+};
+
+/**
  * Single Tabber Widget tab object without styling
  *
  * @internal
@@ -1976,12 +1987,11 @@ export type TabberConfig = {
 };
 
 /** @internal */
-export type CustomContextProviderProps<P> =
+export type CustomContextProviderProps<P> = SoftUnion<
   | {
       context: P;
-      error?: undefined;
     }
   | {
-      context?: undefined;
       error: Error;
-    };
+    }
+>;

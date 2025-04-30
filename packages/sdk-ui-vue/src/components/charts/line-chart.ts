@@ -54,25 +54,28 @@ export const LineChart = defineComponent({
      *
      * @category Data
      */
-    dataOptions: Object as PropType<LineChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<LineChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<LineChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<LineChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!LineChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<LineChartProps['filters']>,
+    filters: [Object, Array] as PropType<LineChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!LineChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<LineChartProps['highlights']>,
+    highlights: Array as PropType<LineChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!LineChartProps.onBeforeRender}
      *
@@ -83,7 +86,6 @@ export const LineChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<LineChartProps['onDataReady']>,
     /**
@@ -111,5 +113,5 @@ export const LineChart = defineComponent({
      */
     styleOptions: Object as PropType<LineChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(LineChartPreact, props as LineChartPropsPreact),
+  setup: (props) => setupHelper(LineChartPreact, props),
 });

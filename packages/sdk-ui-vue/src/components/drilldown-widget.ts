@@ -127,18 +127,6 @@ export const DrilldownWidgetTs = defineComponent({
       default: () => ({}),
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownDimensions}
-     *
-     * @category Widget
-     * @deprecated Use {@link drilldownPaths} instead
-     *
-     */
-    drilldownDimensions: {
-      type: Array as PropType<DrilldownWidgetProps['drilldownDimensions']>,
-      required: false,
-      default: () => [],
-    },
-    /**
      * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownPaths}
      *
      * @category Widget

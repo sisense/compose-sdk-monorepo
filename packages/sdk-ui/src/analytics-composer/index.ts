@@ -21,3 +21,5 @@ export * as dashboardComposer from './dashboard/dashboard-composer';
  * @internal
  */
 export * as executeQueryComposer from './execute-query/execute-query-composer';
+
+export * from './common/custom-superjson';

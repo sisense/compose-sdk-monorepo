@@ -3,4 +3,4 @@ export * from './context-connector';
 export * from './custom-element';
 export * from './hook-adapter';
 export type { AnyComponentFunction } from './types';
-export { DataObserver } from './utils/data-observer';
+export { createHookApiFacade, DataObserver } from './utils';

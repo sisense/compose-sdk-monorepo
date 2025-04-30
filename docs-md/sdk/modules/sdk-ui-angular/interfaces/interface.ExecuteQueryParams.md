@@ -88,22 +88,12 @@ If not specified, the default value is `0`
 
 ***
 
-### onBeforeQuery
+### ungroup
 
-> **onBeforeQuery**?: (`jaql`) => `any`
+> **ungroup**?: `boolean`
 
-Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
+Boolean flag whether to include `ungroup: true` in non-aggregated JAQL queries.
 
-::: warning Deprecated
-Use `beforeQuery` instead.
-:::
+This improves computation and performance of querying tables when no aggregation is needed
 
-#### Parameters
-
-| Parameter | Type |
-| :------ | :------ |
-| `jaql` | `any` |
-
-#### Returns
-
-`any`
+If not specified, the default value is `false`

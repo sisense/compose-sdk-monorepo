@@ -147,7 +147,9 @@ describe('useConvertFilterRelations', () => {
       );
     });
     it('should reassemble cascading filters if they are present in original filters', () => {
-      const cascadingFilter = filterFactory.cascading([filter2, filter3]);
+      const cascadingFilter = filterFactory.cascading([filter2, filter3], {
+        disabled: false,
+      });
       const initialRelations = filterFactory.logic.or(filter1, cascadingFilter);
 
       const { result } = renderHook(() => useConvertFilterRelations(initialRelations));

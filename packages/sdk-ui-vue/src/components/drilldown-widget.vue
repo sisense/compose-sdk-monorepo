@@ -11,13 +11,10 @@ import { DrilldownWidgetTs } from './drilldown-widget';
 
 const props = defineProps(DrilldownWidgetTs.props);
 
-const { drilldownDimensions, drilldownPaths, initialDimension, config } = toRefs(props);
+const { drilldownPaths, initialDimension, config } = toRefs(props);
 
 const position = ref<MenuPosition | null>(null);
 const selectedDataPoints = ref<DataPoint[]>([]);
-const fullDrilldownPaths = computed(
-  () => [...drilldownPaths.value, ...drilldownDimensions.value] as (Attribute | Hierarchy)[],
-);
 
 const {
   drilldownFilters, // computed
@@ -28,7 +25,7 @@ const {
   sliceDrilldownSelections,
   clearDrilldownSelections,
 } = useCustomDrilldown({
-  drilldownPaths: fullDrilldownPaths,
+  drilldownPaths,
   initialDimension: initialDimension.value,
 });
 
@@ -86,7 +83,7 @@ const closeContextMenu = () => {
         :clear-drilldown-selections="clearDrilldownSelections"
         :slice-drilldown-selections="sliceDrilldownSelections"
         :filters-display-values="drilldownFiltersDisplayValues"
-        :current-dimension="drilldownDimension"
+        :current-dimension="drilldownDimension!"
       >
       </DrilldownBreadcrumbs>
     </slot>

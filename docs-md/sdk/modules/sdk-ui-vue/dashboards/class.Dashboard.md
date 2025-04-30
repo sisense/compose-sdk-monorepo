@@ -94,7 +94,7 @@ The title of the dashboard
 
 ### widgets
 
-> **`readonly`** **widgets**?: [`WidgetProps`](../type-aliases/type-alias.WidgetProps.md)[]
+> **`readonly`** **widgets**: [`WidgetProps`](../type-aliases/type-alias.WidgetProps.md)[]
 
 The widgets to render in the dashboard
 

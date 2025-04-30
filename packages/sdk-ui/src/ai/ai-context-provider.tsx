@@ -5,16 +5,22 @@ import { ChatIdStorageProvider } from '@/ai/chat-id-storage-provider';
 
 export interface AiContextProviderProps {
   children: ReactNode;
-  /** AI context volatile mode */
+  /**
+   * Boolean flag to indicate whether the chat session should be volatile.
+   *
+   * When `false` the chat session history will be stored per user per datamodel. The retention period is configurable in Sisense Fusion.
+   *
+   * When the `Chatbot` component renders, if a previous chat history exists for the current user and datamodel, it will be restored. The user may continue the conversation or clear the history.
+   *
+   * When `true` a new chat session (with no history) will be created each time the `Chatbot` comoponent initializes.
+   *
+   * @default false
+   */
   volatile?: boolean;
 }
 
 /**
  * React component that wraps all generative AI components and hooks.
- *
- * ::: warning Note
- * This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
  *
  * @example
  * ```tsx
@@ -31,8 +37,9 @@ export interface AiContextProviderProps {
  *   );
  * }
  * ```
+ * @param props - AI Context Provider Props
+ * @returns An AI Context Provider Component
  * @group Generative AI
- * @beta
  */
 export default function AiContextProvider({ children, volatile }: AiContextProviderProps) {
   return (

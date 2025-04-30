@@ -178,11 +178,7 @@ describe('useComposedDashboard', () => {
             filters: [],
             highlights: [],
             drilldownOptions: {
-              drilldownDimensions: [
-                DM.Commerce.AgeRange,
-                DM.Commerce.Gender,
-                DM.Commerce.Condition,
-              ],
+              drilldownPaths: [DM.Commerce.AgeRange, DM.Commerce.Gender, DM.Commerce.Condition],
               drilldownSelections: [
                 {
                   points: [

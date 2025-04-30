@@ -1,8 +1,8 @@
 ---
-title: Internationalization with Compose SDK (Alpha)
+title: Internationalization with Compose SDK
 ---
 
-# Internationalization with Compose SDK (Alpha)
+# Internationalization with Compose SDK
 The Compose SDK utilizes the [i18next](https://www.i18next.com/) internationalization framework, making it straightforward to load your own translations.
 
 ## Changing the language

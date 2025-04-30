@@ -2,13 +2,9 @@
 title: ChatbotComponent
 ---
 
-# Class ChatbotComponent <Badge type="beta" text="Beta" />
+# Class ChatbotComponent
 
 An Angular component that renders a chatbot with data topic selection.
-
-::: warning Note
-This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
 
 ## Example
 

@@ -10,7 +10,7 @@ Vue components and utilities for working with charts
 
 - [AreaChart](charts/class.AreaChart.md)
 - [AreamapChart](charts/class.AreamapChart.md)
-- [AreaRangeChart](charts/class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
+- [AreaRangeChart](charts/class.AreaRangeChart.md)
 - [BarChart](charts/class.BarChart.md)
 - [BoxplotChart](charts/class.BoxplotChart.md)
 - [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
@@ -47,6 +47,7 @@ Vue filter tile components
 
 - [CriteriaFilterTile](filter-tiles/class.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/class.DateRangeFilterTile.md)
+- [FilterTile](filter-tiles/class.FilterTile.md) - Facade component rendering a filter tile based on filter type
 - [MemberFilterTile](filter-tiles/class.MemberFilterTile.md)
 - [RelativeDateFilterTile](filter-tiles/class.RelativeDateFilterTile.md)
 
@@ -71,6 +72,8 @@ Vue components and utilities for working with dashboards
 - [ChartWidget](dashboards/class.ChartWidget.md)
 - [Dashboard](dashboards/class.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
+- [useComposedDashboard](dashboards/function.useComposedDashboard.md)
+- [Widget](dashboards/class.Widget.md)
 
 ## Fusion Assets
 
@@ -79,7 +82,6 @@ Vue components, composables and utilities for working with Fusion dashboards, wi
 - [DashboardById](fusion-assets/class.DashboardById.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
-- [DashboardWidget](fusion-assets/class.DashboardWidget.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useExecuteQueryByWidgetId](fusion-assets/function.useExecuteQueryByWidgetId.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useFetch](fusion-assets/function.useFetch.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
@@ -93,11 +95,14 @@ Vue components, composables and utilities for working with Fusion dashboards, wi
 
 ## Generative AI
 
-Vue components and composables for creating experiences using generative AI
+Vue components and composables for working with Generative AI features provided by Sisense Fusion
+::: tip Note
+For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
+:::
 
-- [AiContextProvider](generative-ai/class.AiContextProvider.md) <Badge type="beta" text="Beta" />
-- [Chatbot](generative-ai/class.Chatbot.md) <Badge type="beta" text="Beta" />
-- [GetNlgInsights](generative-ai/class.GetNlgInsights.md) <Badge type="beta" text="Beta" />
-- [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md) <Badge type="beta" text="Beta" />
+- [AiContextProvider](generative-ai/class.AiContextProvider.md)
+- [Chatbot](generative-ai/class.Chatbot.md)
+- [GetNlgInsights](generative-ai/class.GetNlgInsights.md)
+- [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md)
 - [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
 - [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />

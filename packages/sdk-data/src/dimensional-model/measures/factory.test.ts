@@ -6,9 +6,8 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable vitest/no-identical-title */
-import { DimensionalAttribute } from '../attributes.js';
+import { createAttribute, DimensionalAttribute } from '../attributes.js';
 import { normalizeName } from '../base.js';
-import { createDimension } from '../dimensions/index.js';
 import * as filterFactory from '../filters/factory.js';
 import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';
 import { AggregationTypes } from '../types.js';
@@ -23,27 +22,26 @@ const sampleAttribute2 = new DimensionalAttribute(
 );
 const sampleMeasureName = 'measure name';
 const sampleMeasureFormat = '00.00';
-const sampleMeasure1 = new DimensionalBaseMeasure(
-  'measure 1',
-  sampleAttribute,
-  AggregationTypes.Sum,
-);
-const sampleMeasure2 = new DimensionalBaseMeasure(
-  'measure 2',
-  sampleAttribute,
-  AggregationTypes.Average,
-);
+const sampleMeasure1 = measureFactory.sum(sampleAttribute, 'measure 1', sampleMeasureFormat);
+const sampleMeasure2 = measureFactory.average(sampleAttribute, 'measure 2', sampleMeasureFormat);
 
 const getContextName = (target: Element) => {
   return `[${normalizeName(target.name)}]`;
 };
 
-const verifyMeasure = (m: Measure, expectedAggregationType: string) => {
+const verifyMeasure = (
+  m: Measure,
+  expectedAggregationType: string,
+  expectedComposeCode?: string,
+) => {
   expect(m).toBeInstanceOf(DimensionalBaseMeasure);
   expect(m).toHaveProperty('aggregation', expectedAggregationType);
   expect(m).toHaveProperty('attribute', sampleAttribute);
   expect(m).toHaveProperty('name', sampleMeasureName);
   expect(m.getFormat()).toBe(sampleMeasureFormat);
+  if (expectedComposeCode) {
+    expect(m.composeCode).toBe(expectedComposeCode);
+  }
 };
 
 const verifyCalculatedMeasure = (
@@ -51,48 +49,80 @@ const verifyCalculatedMeasure = (
   expectedExpression: string,
   expectedContext: MeasureContext,
   expectedName?: string,
+  expectedComposeCode?: string,
 ) => {
   expect(m).toBeInstanceOf(DimensionalCalculatedMeasure);
   expect(m).toHaveProperty('expression', expectedExpression);
   expect(m).toHaveProperty('context', expectedContext);
   expect(m).toHaveProperty('name', expectedName ?? sampleMeasureName);
+  if (expectedComposeCode) {
+    expect(m.composeCode).toBe(expectedComposeCode);
+  }
 };
 
 describe('measureFactory', () => {
   describe('constant', () => {
     test('measureFactory.constant()', () => {
       const m = measureFactory.constant(42);
-      verifyCalculatedMeasure(m, '42', {}, '42');
+      verifyCalculatedMeasure(m, '42', {}, '42', `measureFactory.constant(42)`);
     });
   });
   describe('aggregations', () => {
     test('measureFactory.sum()', () => {
       const m = measureFactory.sum(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
-      verifyMeasure(m, AggregationTypes.Sum);
+      verifyMeasure(
+        m,
+        AggregationTypes.Sum,
+        `measureFactory.sum(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
     });
     test('measureFactory.average()', () => {
       const m = measureFactory.average(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
-      verifyMeasure(m, AggregationTypes.Average);
+      verifyMeasure(
+        m,
+        AggregationTypes.Average,
+        `measureFactory.average(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
+    });
+    test('measureFactory.avg()', () => {
+      const m = measureFactory.avg(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+      verifyMeasure(
+        m,
+        AggregationTypes.Average,
+        `measureFactory.avg(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
     });
     test('measureFactory.min()', () => {
       const m = measureFactory.min(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
-      verifyMeasure(m, AggregationTypes.Min);
+      verifyMeasure(
+        m,
+        AggregationTypes.Min,
+        `measureFactory.min(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
     });
     test('measureFactory.max()', () => {
       const m = measureFactory.max(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
-      verifyMeasure(m, AggregationTypes.Max);
-    });
-    test('measureFactory.max()', () => {
-      const m = measureFactory.max(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
-      verifyMeasure(m, AggregationTypes.Max);
+      verifyMeasure(
+        m,
+        AggregationTypes.Max,
+        `measureFactory.max(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
     });
     test('measureFactory.median()', () => {
       const m = measureFactory.median(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
-      verifyMeasure(m, AggregationTypes.Median);
+      verifyMeasure(
+        m,
+        AggregationTypes.Median,
+        `measureFactory.median(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
     });
     test('measureFactory.count()', () => {
       const m = measureFactory.count(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
-      verifyMeasure(m, AggregationTypes.Count);
+      verifyMeasure(
+        m,
+        AggregationTypes.Count,
+        `measureFactory.count(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
     });
     test('measureFactory.countDistinct()', () => {
       const m = measureFactory.countDistinct(
@@ -100,7 +130,11 @@ describe('measureFactory', () => {
         sampleMeasureName,
         sampleMeasureFormat,
       );
-      verifyMeasure(m, AggregationTypes.CountDistinct);
+      verifyMeasure(
+        m,
+        AggregationTypes.CountDistinct,
+        `measureFactory.countDistinct(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
     });
   });
   describe('unary formula functions', () => {
@@ -110,91 +144,223 @@ describe('measureFactory', () => {
 
     test('measureFactory.yearToDateSum()', () => {
       const m = measureFactory.yearToDateSum(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'YTDSum([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'YTDSum([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.yearToDateSum(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.quarterToDateSum()', () => {
       const m = measureFactory.quarterToDateSum(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'QTDSum([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'QTDSum([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.quarterToDateSum(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.monthToDateSum()', () => {
       const m = measureFactory.monthToDateSum(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'MTDSum([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'MTDSum([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.monthToDateSum(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.weekToDateSum()', () => {
       const m = measureFactory.weekToDateSum(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'WTDSum([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'WTDSum([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.weekToDateSum(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.runningSum()', () => {
       const m = measureFactory.runningSum(sampleMeasure1, false, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'RSum([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'RSum([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.runningSum(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), false, 'measure name')`,
+      );
     });
     test('measureFactory.growth()', () => {
       const m = measureFactory.growth(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'growth([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'growth([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.growth(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.growthRate()', () => {
       const m = measureFactory.growthRate(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'growthrate([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'growthrate([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.growthRate(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.growthPastWeek()', () => {
       const m = measureFactory.growthPastWeek(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'growthpastweek([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'growthpastweek([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.growthPastWeek(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.growthPastMonth()', () => {
       const m = measureFactory.growthPastMonth(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'growthpastmonth([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'growthpastmonth([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.growthPastMonth(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.growthPastQuarter()', () => {
       const m = measureFactory.growthPastQuarter(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'growthpastquarter([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'growthpastquarter([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.growthPastQuarter(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.growthPastYear()', () => {
       const m = measureFactory.growthPastYear(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'growthpastyear([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'growthpastyear([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.growthPastYear(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.difference()', () => {
       const m = measureFactory.difference(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'diffpastperiod([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'diffpastperiod([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.difference(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.diffPastWeek()', () => {
       const m = measureFactory.diffPastWeek(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'diffpastweek([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'diffpastweek([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.diffPastWeek(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.diffPastMonth()', () => {
       const m = measureFactory.diffPastMonth(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'diffpastmonth([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'diffpastmonth([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.diffPastMonth(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.diffPastQuarter()', () => {
       const m = measureFactory.diffPastQuarter(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'diffpastquarter([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'diffpastquarter([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.diffPastQuarter(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.diffPastYear()', () => {
       const m = measureFactory.diffPastYear(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'diffpastyear([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'diffpastyear([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.diffPastYear(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.pastDay()', () => {
       const m = measureFactory.pastDay(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'pastday([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'pastday([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.pastDay(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.pastWeek()', () => {
       const m = measureFactory.pastWeek(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'pastweek([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'pastweek([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.pastWeek(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.pastMonth()', () => {
       const m = measureFactory.pastMonth(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'pastmonth([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'pastmonth([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.pastMonth(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.pastQuarter()', () => {
       const m = measureFactory.pastQuarter(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'pastquarter([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'pastquarter([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.pastQuarter(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.pastYear()', () => {
       const m = measureFactory.pastYear(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'pastyear([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'pastyear([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.pastYear(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
     test('measureFactory.contribution()', () => {
       const m = measureFactory.contribution(sampleMeasure1, sampleMeasureName);
-      verifyCalculatedMeasure(m, 'contribution([measure1])', expectedContext);
+      verifyCalculatedMeasure(
+        m,
+        'contribution([measure1])',
+        expectedContext,
+        undefined,
+        `measureFactory.contribution(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name')`,
+      );
     });
   });
   describe('arithmetical formula functions', () => {
@@ -206,19 +372,43 @@ describe('measureFactory', () => {
 
       test('measureFactory.add()', () => {
         const m = measureFactory.add(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
-        verifyCalculatedMeasure(m, '[measure1]+[measure2]', expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          '[measure1]+[measure2]',
+          expectedContext,
+          undefined,
+          `measureFactory.add(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00'), 'measure name', false)`,
+        );
       });
       test('measureFactory.subtract()', () => {
         const m = measureFactory.subtract(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
-        verifyCalculatedMeasure(m, '[measure1]-[measure2]', expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          '[measure1]-[measure2]',
+          expectedContext,
+          undefined,
+          `measureFactory.subtract(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00'), 'measure name', false)`,
+        );
       });
       test('measureFactory.multiply()', () => {
         const m = measureFactory.multiply(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
-        verifyCalculatedMeasure(m, '[measure1]*[measure2]', expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          '[measure1]*[measure2]',
+          expectedContext,
+          undefined,
+          `measureFactory.multiply(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00'), 'measure name', false)`,
+        );
       });
       test('measureFactory.divide()', () => {
         const m = measureFactory.divide(sampleMeasure1, sampleMeasure2, sampleMeasureName, false);
-        verifyCalculatedMeasure(m, '[measure1]/[measure2]', expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          '[measure1]/[measure2]',
+          expectedContext,
+          undefined,
+          `measureFactory.divide(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00'), 'measure name', false)`,
+        );
       });
     });
     describe('operands: measure and number', () => {
@@ -229,19 +419,43 @@ describe('measureFactory', () => {
 
       test('measureFactory.add()', () => {
         const m = measureFactory.add(sampleMeasure1, numberOperand, sampleMeasureName, true);
-        verifyCalculatedMeasure(m, `([measure1]+${numberOperand})`, expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          `([measure1]+${numberOperand})`,
+          expectedContext,
+          undefined,
+          `measureFactory.add(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 10, 'measure name', true)`,
+        );
       });
       test('measureFactory.subtract()', () => {
         const m = measureFactory.subtract(sampleMeasure1, numberOperand, sampleMeasureName, true);
-        verifyCalculatedMeasure(m, `([measure1]-${numberOperand})`, expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          `([measure1]-${numberOperand})`,
+          expectedContext,
+          undefined,
+          `measureFactory.subtract(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 10, 'measure name', true)`,
+        );
       });
       test('measureFactory.multiply()', () => {
         const m = measureFactory.multiply(sampleMeasure1, numberOperand, sampleMeasureName, true);
-        verifyCalculatedMeasure(m, `([measure1]*${numberOperand})`, expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          `([measure1]*${numberOperand})`,
+          expectedContext,
+          undefined,
+          `measureFactory.multiply(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 10, 'measure name', true)`,
+        );
       });
       test('measureFactory.divide()', () => {
         const m = measureFactory.divide(sampleMeasure1, numberOperand, sampleMeasureName, true);
-        verifyCalculatedMeasure(m, `([measure1]/${numberOperand})`, expectedContext);
+        verifyCalculatedMeasure(
+          m,
+          `([measure1]/${numberOperand})`,
+          expectedContext,
+          undefined,
+          `measureFactory.divide(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 10, 'measure name', true)`,
+        );
       });
     });
   });
@@ -255,25 +469,37 @@ describe('measureFactory', () => {
         measureFactory.RankingTypes.Dense,
         [groupByAttribute],
       );
-      verifyCalculatedMeasure(m, 'rank([measure1],DESC,1223,[AgeRange])', {
-        '[measure1]': sampleMeasure1,
-        '[AgeRange]': groupByAttribute,
-      });
+      verifyCalculatedMeasure(
+        m,
+        'rank([measure1],DESC,1223,[AgeRange])',
+        {
+          '[measure1]': sampleMeasure1,
+          '[AgeRange]': groupByAttribute,
+        },
+        undefined,
+        `measureFactory.rank(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name', 'DESC', '1223', [DM.Commerce.AgeRange])`,
+      );
     });
   });
   describe('measuredValue formula function', () => {
     test('measureFactory.measuredValue()', () => {
-      const textDimension = createDimension({
+      const textAttribute = createAttribute({
         name: 'Age Range',
-        type: 'textdimension',
+        type: 'text-attribute',
         expression: '[Commerce.Age Range]',
       });
-      const filter = filterFactory.equals(textDimension, '65+');
+      const filter = filterFactory.equals(textAttribute, '65+');
       const m = measureFactory.measuredValue(sampleMeasure1, [filter], sampleMeasureName);
-      verifyCalculatedMeasure(m, `([measure1],${getContextName(filter)})`, {
-        '[measure1]': sampleMeasure1,
-        [getContextName(filter)]: filter,
-      });
+      verifyCalculatedMeasure(
+        m,
+        `([measure1],${getContextName(filter)})`,
+        {
+          '[measure1]': sampleMeasure1,
+          [getContextName(filter)]: filter,
+        },
+        undefined,
+        `measureFactory.measuredValue(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), [filterFactory.equals(DM.Commerce.AgeRange, '65+')], 'measure name')`,
+      );
     });
   });
 
@@ -296,6 +522,7 @@ describe('measureFactory', () => {
           },
         },
       });
+      expect(mTrend.composeCode).toBe(`measureFactory.trend(measureFactory.sum(DM.Commerce.Cost))`);
     });
 
     test('measureFactory.trend() with modelType=advancedSmoothing', () => {
@@ -319,6 +546,9 @@ describe('measureFactory', () => {
           title: 'Trend',
         },
       });
+      expect(mTrend.composeCode).toBe(
+        `measureFactory.trend(measureFactory.sum(DM.Commerce.Cost), 'Trend', { modelType: 'advancedSmoothing', ignoreAnomalies: true })`,
+      );
     });
 
     test('measureFactory.trend() with modelType=localEstimates', () => {
@@ -341,6 +571,9 @@ describe('measureFactory', () => {
           title: 'Trend',
         },
       });
+      expect(mTrend.composeCode).toBe(
+        `measureFactory.trend(measureFactory.sum(DM.Commerce.Cost), 'Trend', { modelType: 'localEstimates' })`,
+      );
     });
     test('measureFactory.forecast() with no options', () => {
       const m = measureFactory.sum(sampleAttribute);
@@ -360,6 +593,9 @@ describe('measureFactory', () => {
           },
         },
       });
+      expect(mTrend.composeCode).toBe(
+        `measureFactory.forecast(measureFactory.sum(DM.Commerce.Cost))`,
+      );
     });
 
     test('measureFactory.forecast() with only modelType', () => {
@@ -382,6 +618,9 @@ describe('measureFactory', () => {
           },
         },
       });
+      expect(mTrend.composeCode).toBe(
+        `measureFactory.forecast(measureFactory.sum(DM.Commerce.Cost), 'Forecast', { modelType: 'holtWinters' })`,
+      );
     });
 
     test('measureFactory.forecast() with all options', () => {
@@ -412,6 +651,9 @@ describe('measureFactory', () => {
           },
         },
       });
+      expect(mTrend.composeCode).toBe(
+        `measureFactory.forecast(measureFactory.sum(DM.Commerce.Cost), 'Forecast', { forecastHorizon: 6, modelType: 'holtWinters', startDate: new Date('2023-01-01T00:00:00.000Z'), endDate: new Date('2023-06-01T00:00:00.000Z'), confidenceInterval: 0.9, lowerBound: 1000, upperBound: 100000, roundToInt: true })`,
+      );
     });
   });
 
@@ -443,6 +685,9 @@ describe('measureFactory', () => {
         },
       },
     });
+    expect(mTrend.composeCode).toBe(
+      `measureFactory.forecast(measureFactory.sum(DM.Commerce.Cost), 'Forecast', { forecastHorizon: 6, modelType: 'holtWinters', startDate: '2023-01-01', endDate: '2023-06-01', confidenceInterval: 0.9, lowerBound: 1000, upperBound: 100000, roundToInt: true })`,
+    );
   });
 
   describe('measureFactory.customFormula()', () => {
@@ -475,6 +720,9 @@ describe('measureFactory', () => {
           title: 'Total Attribute',
         },
       });
+      expect(m.composeCode).toBe(
+        `measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') })`,
+      );
     });
 
     test('with measure and filter', () => {
@@ -508,6 +756,9 @@ describe('measureFactory', () => {
           },
         },
       });
+      expect(m.composeCode).toBe(
+        `measureFactory.customFormula('Total Cost with Filter', '(SUM([cost]), [categoryFilter])', { cost: DM.Commerce.Cost, categoryFilter: filterFactory.members(DM.Category.Category, ['Apple Mac Desktops']) })`,
+      );
     });
 
     test('with nested formula', () => {
@@ -549,6 +800,9 @@ describe('measureFactory', () => {
           title: 'Nested formula',
         },
       });
+      expect(m.composeCode).toBe(
+        `measureFactory.customFormula('Nested formula', 'RANK([Nested], "ASC", "1224")', { Nested: measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') }) })`,
+      );
     });
   });
 });

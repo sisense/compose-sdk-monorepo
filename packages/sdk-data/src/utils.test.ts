@@ -3,16 +3,24 @@ import { describe } from 'vitest';
 import * as DM from './__test-helpers__/sample-ecommerce.js';
 import * as filterFactory from './dimensional-model/filters/factory.js';
 import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
+import * as measureFactory from './dimensional-model/measures/factory.js';
 import {
+  AggregationTypes,
   createFilterFromJaql,
+  DataSource,
   DataSourceInfo,
   DataType,
+  FormulaJaql,
   MembersFilter,
   Sort,
   SortDirection,
 } from './index.js';
 import {
+  convertJaqlDataSourceForDto,
   convertSortDirectionToSort,
+  createAttributeHelper,
+  createCalculatedMeasureHelper,
+  createMeasureHelper,
   getDataSourceName,
   getFilterListAndRelationsJaql,
   guidFast,
@@ -153,6 +161,32 @@ describe('utils', () => {
     });
   });
 
+  describe('convertJaqlDataSourceForDto', () => {
+    test('should convert a DataSource string to a JaqlDataSourceForDto object', () => {
+      const dataSourceName = 'data-source-name';
+      const result = convertJaqlDataSourceForDto(dataSourceName);
+      expect(result).toEqual({
+        title: dataSourceName,
+        id: '',
+      });
+    });
+    test('should convert a DataSourceInfo object to a JaqlDataSourceForDto object', () => {
+      const dataSource: DataSource = {
+        type: 'elasticube',
+        title: 'data-source-name',
+        id: 'data-source-id',
+        address: 'data-source-address',
+      };
+      const result = convertJaqlDataSourceForDto(dataSource);
+      expect(result).toEqual({
+        title: dataSource.title,
+        id: dataSource.id,
+        live: false,
+        address: dataSource.address,
+      });
+    });
+  });
+
   describe('createFilterFromJaql', () => {
     const instanceid = 'instanceid';
 
@@ -218,6 +252,73 @@ describe('utils', () => {
         const result = convertSortDirectionToSort(sortDirection as SortDirection);
         expect(result).toBe(expected);
       });
+    });
+  });
+
+  describe('createMeasureHelper', () => {
+    test('should create a measure helper', () => {
+      const testCases = [
+        AggregationTypes.Sum,
+        AggregationTypes.Count,
+        AggregationTypes.Average,
+        AggregationTypes.CountDistinct,
+        AggregationTypes.Median,
+        AggregationTypes.Variance,
+        AggregationTypes.StandardDeviation,
+        'invalid-agg',
+      ];
+
+      testCases.forEach((agg) => {
+        const baseObject = {
+          expression: '[Commerce.Revenue]',
+          dataType: 'numeric',
+          agg,
+        };
+
+        const result = createMeasureHelper(baseObject);
+        expect(result).toBeDefined();
+      });
+    });
+  });
+
+  describe('createCalculatedMeasureHelper', () => {
+    test('should create a calculated measure helper', () => {
+      const jaql = {
+        type: 'measure',
+        formula: 'QUARTILE([042C4-365], 2)',
+        context: {
+          '[042C4-365]': {
+            table: 'Commerce',
+            column: 'Revenue',
+            dim: '[Commerce.Revenue]',
+            datatype: 'numeric',
+            title: 'Revenue',
+          },
+        },
+        title: 'QUARTILE([Revenue], 2)',
+        datatype: 'numeric',
+        filter: {
+          fromNotEqual: '500',
+        },
+        datasource: {
+          address: 'LocalHost',
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          database: 'aSampleIAAaECommerce',
+        },
+      } as FormulaJaql;
+
+      const result = createCalculatedMeasureHelper(jaql);
+      const attribute = createAttributeHelper({
+        expression: '[Commerce.Revenue]',
+        dataType: 'numeric',
+        title: 'Revenue',
+      });
+      expect(result).toStrictEqual(
+        measureFactory.customFormula('QUARTILE([Revenue], 2)', 'QUARTILE([042C4-365], 2)', {
+          '[042C4-365]': attribute,
+        }),
+      );
     });
   });
 });

@@ -8,7 +8,7 @@ Angular components and utilities for working with charts
 
 - [AreaChartComponent](class.AreaChartComponent.md)
 - [AreamapChartComponent](class.AreamapChartComponent.md)
-- [AreaRangeChartComponent](class.AreaRangeChartComponent.md) <Badge type="beta" text="Beta" />
+- [AreaRangeChartComponent](class.AreaRangeChartComponent.md)
 - [BarChartComponent](class.BarChartComponent.md)
 - [BoxplotChartComponent](class.BoxplotChartComponent.md)
 - [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data

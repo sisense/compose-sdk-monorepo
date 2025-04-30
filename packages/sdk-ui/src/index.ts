@@ -6,7 +6,6 @@ export * from './chart-data-options/types';
 export { Chart } from './chart';
 export { ThemeProvider } from './theme-provider';
 export * from './dashboard';
-export { DashboardWidget } from './widget-by-id/dashboard-widget';
 export { WidgetById } from './widget-by-id/widget-by-id';
 export {
   isChartWidgetProps,
@@ -15,7 +14,6 @@ export {
   isPluginWidgetProps,
 } from './widget-by-id/utils';
 export {
-  type WidgetType,
   type CartesianWidgetType,
   type CategoricalWidgetType,
   type TabularWidgetType,
@@ -74,6 +72,7 @@ export {
   translateToDashboardsResponse,
   useGetHierarchyModels,
   getHierarchyModels,
+  translateFiltersAndRelationsToDto,
   type DashboardModel,
   type GetDashboardModelParams,
   type GetDashboardModelsParams,
@@ -143,6 +142,8 @@ export { queryStateReducer } from './query-execution/query-state-reducer';
 
 export * from './props';
 export * from './types';
+export type { SoftUnion } from './utils/utility-types';
+export type { BeforeMenuOpenHandler } from './common/components/menu/types';
 
 export * from './filters';
 export * from './formulas';

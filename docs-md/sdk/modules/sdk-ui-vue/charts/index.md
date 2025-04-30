@@ -8,7 +8,7 @@ Vue components and utilities for working with charts
 
 - [AreaChart](class.AreaChart.md)
 - [AreamapChart](class.AreamapChart.md)
-- [AreaRangeChart](class.AreaRangeChart.md) <Badge type="beta" text="Beta" />
+- [AreaRangeChart](class.AreaRangeChart.md)
 - [BarChart](class.BarChart.md)
 - [BoxplotChart](class.BoxplotChart.md)
 - [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data

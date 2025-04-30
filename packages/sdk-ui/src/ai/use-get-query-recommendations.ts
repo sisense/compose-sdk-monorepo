@@ -115,10 +115,6 @@ export const useGetQueryRecommendationsInternal = (
  *
  * This hook includes the same code that fetches the initial suggested questions in the chatbot.
  *
- * ::: warning Note
- * This hook is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
- * :::
- *
  * @example
  * ```tsx
  * const { data, isLoading } = useGetQueryRecommendations({

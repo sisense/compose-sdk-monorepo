@@ -13,6 +13,10 @@ import { Mock, Mocked } from 'vitest';
 import { ThemeService } from '.';
 import { SisenseContextService } from './sisense-context.service';
 
+vi.mock('../decorators/trackable.decorator', () => ({
+  TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
+}));
+
 vi.mock('@sisense/sdk-ui-preact', () => ({
   getDefaultThemeSettings: vi.fn().mockReturnValue({}),
   getThemeSettingsByOid: vi.fn().mockResolvedValue({}),

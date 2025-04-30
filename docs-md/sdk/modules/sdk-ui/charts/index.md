@@ -8,7 +8,7 @@ React components and utilities for working with charts
 
 - [AreaChart](function.AreaChart.md)
 - [AreamapChart](function.AreamapChart.md)
-- [AreaRangeChart](function.AreaRangeChart.md) <Badge type="beta" text="Beta" />
+- [AreaRangeChart](function.AreaRangeChart.md)
 - [BarChart](function.BarChart.md)
 - [BoxplotChart](function.BoxplotChart.md)
 - [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data

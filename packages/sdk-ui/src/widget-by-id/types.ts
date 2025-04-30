@@ -38,7 +38,7 @@ export type TextWidgetType = 'richtexteditor';
 /**
  * The type of a widget on a dashboard.
  */
-export type WidgetType =
+export type FusionWidgetType =
   | CartesianWidgetType
   | CategoricalWidgetType
   | 'chart/scatter'
@@ -98,7 +98,7 @@ export enum WidgetDashboardFilterMode {
  */
 export interface WidgetDto {
   oid: string;
-  type: WidgetType | string;
+  type: FusionWidgetType;
   subtype: WidgetSubtype | string;
   datasource: JaqlDataSource;
   metadata: {

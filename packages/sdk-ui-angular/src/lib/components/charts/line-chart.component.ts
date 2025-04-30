@@ -138,7 +138,6 @@ export class LineChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!LineChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: LineChartProps['dataReady'];

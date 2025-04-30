@@ -2,25 +2,23 @@
 title: AiContextProvider
 ---
 
-# Function AiContextProvider <Badge type="beta" text="Beta" />
+# Function AiContextProvider
 
-> **AiContextProvider**(`__namedParameters`): `Element`
+> **AiContextProvider**(`props`): `Element`
 
 React component that wraps all generative AI components and hooks.
 
-::: warning Note
-This component is currently under beta release for our managed cloud customers on version L2024.2 or above. It is subject to changes as we make fixes and improvements.
-:::
-
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `__namedParameters` | [`AiContextProviderProps`](../interfaces/interface.AiContextProviderProps.md) |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `props` | [`AiContextProviderProps`](../interfaces/interface.AiContextProviderProps.md) | AI Context Provider Props |
 
 ## Returns
 
 `Element`
+
+An AI Context Provider Component
 
 ## Example
 

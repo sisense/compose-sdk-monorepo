@@ -5,12 +5,13 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
   "columns": [
     {
       "column": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Gender",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Gender]",
         "name": "Gender",
         "type": "text-attribute",
@@ -21,17 +22,17 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
   "grandTotals": {
     "columns": true,
     "rows": true,
-    "title": "Grand Total",
   },
   "rows": [
     {
       "column": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Category.Category",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Category.Category]",
         "name": "Category",
         "type": "text-attribute",
@@ -41,12 +42,13 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     },
     {
       "column": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.AgeRange",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Age Range]",
         "name": "Age Range",
         "type": "text-attribute",
@@ -64,12 +66,13 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     },
     {
       "column": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Condition",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
         },
-        "desc": "",
+        "description": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
         "type": "text-attribute",
@@ -79,21 +82,23 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
   "values": [
     {
       "column": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalBaseMeasure",
         "aggregation": "sum",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Cost",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Cost]",
           "name": "Cost",
           "type": "numeric-attribute",
         },
+        "composeCode": "measureFactory.sum(DM.Commerce.Cost, 'Total Cost')",
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "name": "Total Cost",
         "sort": 0,
         "type": "basemeasure",
@@ -104,21 +109,23 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
     },
     {
       "column": {
-        "__serializable": "DimensionalElement",
+        "__serializable": "DimensionalBaseMeasure",
         "aggregation": "sum",
         "attribute": {
-          "__serializable": "DimensionalElement",
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Revenue",
           "dataSource": {
             "live": false,
             "title": "Sample ECommerce",
           },
-          "desc": "",
+          "description": "",
           "expression": "[Commerce.Revenue]",
           "name": "Revenue",
           "type": "numeric-attribute",
         },
+        "composeCode": "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
         "dataSource": undefined,
-        "desc": "",
+        "description": "",
         "name": "Total Revenue",
         "sort": 0,
         "type": "basemeasure",

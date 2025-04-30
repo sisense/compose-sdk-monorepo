@@ -15,7 +15,7 @@ Compose SDK contains a set of components needed to interface with your Sisense i
 
 1. Familiarity with [front-end web development](https://developer.mozilla.org/en-US/docs/Learn/Front-end_web_developer), including Node.js, JavaScript/TypeScript, and Angular.
 2. [Node.js](https://nodejs.org/en) version **16.0.0** or higher.
-3. [Angular](https://angular.io) version **16** or higher.
+3. [Angular](https://angular.io) version **17** or higher.
 4. A Node package manager such as [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) or [Yarn](https://yarnpkg.com/getting-started/install).
 5. Access to a [Sisense](https://sisense.com) instance with a queryable data source (for example, Sample Healthcare).
 6. Angular application **with TypeScript**. You can use an existing application, or if you don't have one, you can follow the [tutorial](https://angular.io/start) to create one.

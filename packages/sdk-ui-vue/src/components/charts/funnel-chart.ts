@@ -57,25 +57,28 @@ export const FunnelChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<FunnelChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<FunnelChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<FunnelChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<FunnelChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<FunnelChartProps['filters']>,
+    filters: [Object, Array] as PropType<FunnelChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<FunnelChartProps['highlights']>,
+    highlights: Array as PropType<FunnelChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onBeforeRender}
      *
@@ -86,7 +89,6 @@ export const FunnelChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<FunnelChartProps['onDataReady']>,
     /**
@@ -114,5 +116,5 @@ export const FunnelChart = defineComponent({
      */
     styleOptions: Object as PropType<FunnelChartProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(FunnelChartPreact, props as FunnelChartPropsPreact),
+  setup: (props) => setupHelper(FunnelChartPreact, props),
 });

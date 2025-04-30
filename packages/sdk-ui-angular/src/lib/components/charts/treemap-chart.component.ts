@@ -140,7 +140,6 @@ export class TreemapChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!TreemapChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: TreemapChartProps['dataReady'];

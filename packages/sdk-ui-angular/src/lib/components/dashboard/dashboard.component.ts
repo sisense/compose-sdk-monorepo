@@ -18,18 +18,24 @@ import {
   createThemeContextConnector,
 } from '../../component-wrapper-helpers';
 import { rootId, template } from '../../component-wrapper-helpers/template';
+import { translateToPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import type { DashboardConfig } from '../../types';
+import { WidgetProps } from '../widgets/widget.component';
 
 /**
  * Props of the {@link DashboardComponent}.
  */
-export interface DashboardProps extends DashboardPropsPreact {
+export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
    */
   config?: DashboardConfig;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
+   */
+  widgets: WidgetProps[];
 }
 
 /**
@@ -183,7 +189,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private getPreactComponentProps(): DashboardPropsPreact {
-    return {
+    return translateToPreactDashboardProps({
       title: this.title,
       layoutOptions: this.layoutOptions,
       config: this.config,
@@ -192,7 +198,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
       defaultDataSource: this.defaultDataSource,
       widgetsOptions: this.widgetsOptions,
       styleOptions: this.styleOptions,
-    };
+    });
   }
 
   /**

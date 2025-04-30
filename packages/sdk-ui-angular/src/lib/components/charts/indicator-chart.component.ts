@@ -3,8 +3,7 @@ import { type IndicatorChartProps as IndicatorChartPropsPreact } from '@sisense/
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
-  BaseChartEventProps,
-  HighchartsBasedChartEventProps,
+  IndicatorChartEventProps,
   WithoutPreactChartEventProps,
 } from '../../types/chart-event-props';
 
@@ -13,8 +12,7 @@ import {
  */
 export interface IndicatorChartProps
   extends WithoutPreactChartEventProps<IndicatorChartPropsPreact>,
-    BaseChartEventProps,
-    HighchartsBasedChartEventProps {}
+    IndicatorChartEventProps {}
 
 /**
  * A component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
@@ -142,7 +140,6 @@ export class IndicatorChartComponent {
    * {@inheritDoc  @sisense/sdk-ui!IndicatorChartProps.onDataReady}
    *
    * @category Callbacks
-   * @internal
    */
   @Input()
   dataReady: IndicatorChartProps['dataReady'];

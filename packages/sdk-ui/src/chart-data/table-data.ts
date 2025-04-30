@@ -11,8 +11,16 @@ import {
   StyledMeasureColumn,
   TableDataOptionsInternal,
 } from '../chart-data-options/types';
-import { Attribute, Sort, SortDirection } from '@sisense/sdk-data';
+import {
+  Attribute,
+  CalculatedMeasureColumn,
+  Column,
+  MeasureColumn,
+  Sort,
+  SortDirection,
+} from '@sisense/sdk-data';
 import { convertSortDirectionToSort } from '@sisense/sdk-data';
+import { isMeasureColumn } from '@/chart-data-options/utils';
 
 const flatResults = (dimensions: string[], sourceTable: DataTable): DataTable => {
   if (emptyTable(sourceTable)) {
@@ -80,12 +88,47 @@ export const updateStyledColumnSortForTable = (
   return {
     ...styledColumn,
     sortType: sortDirection,
-    column:
-      'sort' in styledColumn.column
-        ? (styledColumn.column as Attribute).sort(sort)
-        : styledColumn.column,
+    column: getSortedColumn(styledColumn.column, sort),
   };
 };
+
+/**
+ * Returns the sorted column based on the sort type
+ * If the column is not sortable, it returns the column as is
+ */
+function getSortedColumn(
+  column: Column | MeasureColumn | CalculatedMeasureColumn,
+  sortType: Sort,
+): Column | MeasureColumn | CalculatedMeasureColumn {
+  return isSortableColumn(column) ? sortColumn(column, sortType) : column;
+}
+
+/**
+ * Sorts the column based on the sort type
+ */
+function sortColumn(column: SortableColumn, sortType: Sort): SortableColumn {
+  const sortedColumn: SortableColumn = column.sort(sortType);
+  if (isMeasureColumn(sortedColumn) && isMeasureColumn(column)) {
+    sortedColumn.title = column.title; // keep the original title
+  }
+  return sortedColumn;
+}
+
+/**
+ * Column that inherits sort function from Attribute
+ */
+type SortableColumn = (Column | MeasureColumn | CalculatedMeasureColumn) & {
+  sort: Attribute['sort'];
+};
+
+/**
+ * Type guard to check if the column is sortable
+ */
+function isSortableColumn(
+  column: Column | MeasureColumn | CalculatedMeasureColumn,
+): column is SortableColumn {
+  return 'sort' in column && typeof (column as Attribute).sort === 'function';
+}
 
 export const updateInnerDataOptionsSort = (
   dataOptions: TableDataOptionsInternal,

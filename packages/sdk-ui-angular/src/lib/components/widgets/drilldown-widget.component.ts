@@ -127,15 +127,6 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
   preactContentRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownDimensions}
-   *
-   * @category Widget
-   * @deprecated Use {@link drilldownPaths} instead
-   */
-  @Input()
-  drilldownDimensions: DrilldownWidgetProps['drilldownDimensions'];
-
-  /**
    * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownPaths}
    *
    * @category Widget
@@ -216,7 +207,6 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
 
   private getPreactComponentProps(): DrilldownWidgetProps {
     return {
-      drilldownDimensions: this.drilldownDimensions,
       drilldownPaths: this.drilldownPaths,
       initialDimension: this.initialDimension,
       config: {

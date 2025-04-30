@@ -5,5 +5,4 @@ export type {
   ChatConfig,
   GetNlqResultParams,
   GetQueryRecommendationsParams,
-  QueryRecommendation,
 } from '@sisense/sdk-ui-preact/ai';

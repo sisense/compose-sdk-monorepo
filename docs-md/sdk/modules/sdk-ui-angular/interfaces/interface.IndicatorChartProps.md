@@ -124,8 +124,26 @@ Configurations for how to style and present a chart's data.
 
 #### beforeRender
 
-> **beforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md)
+> **beforeRender**?: [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md)
 
-A callback that allows you to customize the underlying chart element before it is rendered. The returned options are then used when rendering the chart.
+A callback that allows you to customize the underlying indicator chart element before it is rendered.
+The returned options are then used when rendering the chart.
 
-This callback is not supported for Areamap Chart, Scattermap Chart, Table, and PivotTable.
+***
+
+#### dataReady
+
+> **dataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
+
+A callback that allows to modify data immediately after it has been retrieved.
+Can be used to inject modification of queried data.
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `data` | [`Data`](../../sdk-data/interfaces/interface.Data.md) |
+
+##### Returns
+
+[`Data`](../../sdk-data/interfaces/interface.Data.md)

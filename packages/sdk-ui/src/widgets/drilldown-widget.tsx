@@ -54,7 +54,6 @@ export const DrilldownWidget = asSisenseComponent({
 })((props: DrilldownWidgetProps) => {
   const { t: translate } = useTranslation();
   const {
-    drilldownDimensions = [],
     drilldownPaths = [],
     initialDimension,
     drilldownSelections,
@@ -74,11 +73,6 @@ export const DrilldownWidget = asSisenseComponent({
     [onChange],
   );
 
-  const fullDrilldownPaths = useMemo(
-    () => [...drilldownPaths, ...drilldownDimensions],
-    [drilldownPaths, drilldownDimensions],
-  );
-
   const {
     selectDrilldown,
     sliceDrilldownSelections,
@@ -88,7 +82,7 @@ export const DrilldownWidget = asSisenseComponent({
     drilldownFiltersDisplayValues,
     drilldownDimension,
   } = useDrilldownCore({
-    drilldownPaths: fullDrilldownPaths,
+    drilldownPaths,
     initialDimension,
     drilldownSelections,
     onDrilldownSelectionsChange,

@@ -41,11 +41,9 @@ export type {
   CommonWidgetProps,
   ConditionalDataColorOptions,
   Convolution,
-  CriteriaFilterType,
   // Dashboard:
   DashboardLayoutOptions,
   DashboardModel,
-  DashboardWidgetStyleOptions,
   DataColorCondition,
   DataColorOptions,
   // Style related:
@@ -123,6 +121,7 @@ export type {
   TextWidgetProps,
   ThemeOid,
   ThemeSettings,
+  TranslationConfig,
   TreemapStyleOptions,
   UniformDataColorOptions,
   ValueToColorMap,
@@ -131,7 +130,6 @@ export type {
   WidgetId,
   // Models:
   WidgetModel,
-  WidgetProps,
   WidgetsOptions,
   WidgetsPanelColumnLayout,
   WidgetsPanelLayout,

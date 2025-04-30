@@ -1,3 +1,4 @@
+/* eslint-disable vitest/expect-expect */
 import { MOCK_QUERY_MODEL_1, MOCK_QUERY_MODEL_2 } from '../__mocks__/mock-queries';
 import {
   MOCK_CODE_REACT_1,
@@ -9,7 +10,7 @@ import {
   MOCK_CODE_EXECUTE_QUERY_REACT_1,
   MOCK_CODE_EXECUTE_QUERY_ANGULAR_1,
   MOCK_CODE_EXECUTE_QUERY_VUE_1,
-} from '../__mocks__/mock-code-examples';
+} from '../__mocks__/mock-code-for-queries';
 import { commonDataSources } from '../__mocks__/common-datasources';
 import * as widgetComposer from './widget-composer';
 import { ExpandedQueryModel, WidgetCodeParams } from '../types';

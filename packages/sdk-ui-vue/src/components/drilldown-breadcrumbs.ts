@@ -54,36 +54,39 @@ export const DrilldownBreadcrumbs = defineComponent({
      *
      * @category Widget
      */
-    clearDrilldownSelections: Function as PropType<
-      DrilldownBreadcrumbsProps['clearDrilldownSelections']
-    >,
+    clearDrilldownSelections: {
+      type: Function as PropType<DrilldownBreadcrumbsProps['clearDrilldownSelections']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.currentDimension}
      *
      * @category Widget
      */
-    currentDimension: Object as PropType<DrilldownBreadcrumbsProps['currentDimension']>,
+    currentDimension: {
+      type: Object as PropType<DrilldownBreadcrumbsProps['currentDimension']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.sliceDrilldownSelections}
      *
      * @category Widget
      */
-    sliceDrilldownSelections: Function as PropType<
-      DrilldownBreadcrumbsProps['sliceDrilldownSelections']
-    >,
+    sliceDrilldownSelections: {
+      type: Function as PropType<DrilldownBreadcrumbsProps['sliceDrilldownSelections']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.filtersDisplayValues}
      *
      * @category Widget
      */
-    filtersDisplayValues: Object as PropType<DrilldownBreadcrumbsProps['filtersDisplayValues']>,
+    filtersDisplayValues: {
+      type: Array as PropType<DrilldownBreadcrumbsProps['filtersDisplayValues']>,
+      required: true,
+    },
   },
   setup: (props, { slots }) => {
-    return setupHelperWithChildren(
-      DrilldownBreadcrumbsPreact,
-      props as DrilldownBreadcrumbsPropsPreact,
-      slots,
-      [],
-    );
+    return setupHelperWithChildren(DrilldownBreadcrumbsPreact, props, slots, []);
   },
 });

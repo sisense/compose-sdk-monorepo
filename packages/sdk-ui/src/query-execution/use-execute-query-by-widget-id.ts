@@ -5,7 +5,7 @@ import { useSisenseContext } from '../sisense-context/sisense-context';
 import { executePivotQuery, executeQuery } from '../query/execute-query';
 import {
   convertFilterRelationsModelToJaql,
-  isPivotTableWidget,
+  isPivotWidget,
   mergeFilters,
 } from '../widget-by-id/utils';
 import { isFiltersChanged } from '../utils/filters-comparator';
@@ -250,7 +250,7 @@ export async function executeQueryByWidgetId({
     }
   };
 
-  if (isPivotTableWidget(widgetModel.widgetType)) {
+  if (isPivotWidget(widgetModel.widgetType)) {
     const widgetQuery = widgetModelTranslator.toExecutePivotQueryParams(widgetModel);
     const executePivotQueryParams: ExecutePivotQueryParams = prepareExecuteQueryParams(
       widgetQuery,

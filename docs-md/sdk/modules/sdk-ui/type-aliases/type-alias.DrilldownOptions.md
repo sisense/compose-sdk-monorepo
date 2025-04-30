@@ -10,18 +10,6 @@ Configuration for the drilldown
 
 ## Type declaration
 
-### `drilldownDimensions`
-
-**drilldownDimensions**?: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md)[]
-
-Dimensions that can be used for drilldown
-
-::: warning Deprecated
-Use DrilldownOptions.drilldownPaths instead
-:::
-
-***
-
 ### `drilldownPaths`
 
 **drilldownPaths**?: ([`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Hierarchy`](../interfaces/interface.Hierarchy.md) \| [`HierarchyId`](type-alias.HierarchyId.md))[]

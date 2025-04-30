@@ -46,11 +46,14 @@ export const DashboardById = defineComponent({
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.dashboardOid}
      */
-    dashboardOid: String as PropType<DashboardByIdProps['dashboardOid']>,
+    dashboardOid: {
+      type: String as PropType<DashboardByIdProps['dashboardOid']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
      */
-    config: Boolean as PropType<DashboardByIdProps['config']>,
+    config: Object as PropType<DashboardByIdProps['config']>,
   },
-  setup: (props) => setupHelper(DashboardByIdPreact, props as DashboardByIdPropsPreact),
+  setup: (props) => setupHelper(DashboardByIdPreact, props),
 });

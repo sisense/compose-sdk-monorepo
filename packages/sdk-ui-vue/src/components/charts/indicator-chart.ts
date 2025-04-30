@@ -52,25 +52,28 @@ export const IndicatorChart = defineComponent({
      *
      * @category Chart
      */
-    dataOptions: Object as PropType<IndicatorChartProps['dataOptions']>,
+    dataOptions: {
+      type: Object as PropType<IndicatorChartProps['dataOptions']>,
+      required: true,
+    },
     /**
      * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataSet}
      *
      * @category Data
      */
-    dataSet: Object as PropType<IndicatorChartProps['dataSet']>,
+    dataSet: [String, Object] as PropType<IndicatorChartProps['dataSet']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.filters}
      *
      * @category Data
      */
-    filters: Object as PropType<IndicatorChartProps['filters']>,
+    filters: [Object, Array] as PropType<IndicatorChartProps['filters']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.highlights}
      *
      * @category Data
      */
-    highlights: Object as PropType<IndicatorChartProps['highlights']>,
+    highlights: Array as PropType<IndicatorChartProps['highlights']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.styleOptions}
      *
@@ -87,9 +90,8 @@ export const IndicatorChart = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onDataReady}
      *
      * @category Callbacks
-     * @internal
      */
     onDataReady: Function as PropType<IndicatorChartProps['onDataReady']>,
   },
-  setup: (props) => setupHelper(IndicatorChartPreact, props as IndicatorChartPropsPreact),
+  setup: (props) => setupHelper(IndicatorChartPreact, props),
 });

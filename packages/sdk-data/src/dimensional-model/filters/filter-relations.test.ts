@@ -1,3 +1,4 @@
+import { filterFactory } from '../../index.js';
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { DimensionalAttribute } from '../attributes.js';
 import { FilterRelations, FilterRelationsJaql, FilterRelationsModel } from '../interfaces.js';
@@ -18,41 +19,36 @@ import {
   mergeFiltersOrFilterRelations,
   splitFiltersAndRelations,
 } from './filter-relations.js';
-import { CascadingFilter, ExcludeFilter, MembersFilter } from './filters.js';
+import { CascadingFilter, MembersFilter } from './filters.js';
 
-const memberGenderFilter = new MembersFilter(
+const memberGenderFilter = filterFactory.members(
   new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
   ['Female'],
 );
 
-const memberCostFilter = new MembersFilter(
+const memberCostFilter = filterFactory.members(
   new DimensionalAttribute('[Commerce.Cost]', '[Commerce.Cost]'),
   ['1'],
 );
 
-const memberQuantityFilter = new MembersFilter(
+const memberQuantityFilter = filterFactory.members(
   new DimensionalAttribute('[Commerce.Quantity]', '[Commerce.Quantity]'),
   ['1'],
 );
 
-const memberAgeRangeFilter = new MembersFilter(
+const memberAgeRangeFilter = filterFactory.members(
   new DimensionalAttribute('[Commerce.Age Range]', '[Commerce.Age Range]'),
   ['0-18'],
 );
 
-const excludeGenderfilter = new ExcludeFilter(
-  new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Female']),
+const excludeGenderfilter = filterFactory.exclude(
+  filterFactory.members(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Female']),
 );
 
-const filterRelation: FilterRelations = {
-  left: {
-    left: memberCostFilter,
-    right: memberQuantityFilter,
-    operator: 'OR',
-  },
-  right: excludeGenderfilter,
-  operator: 'AND',
-};
+const filterRelation: FilterRelations = filterFactory.logic.and(
+  filterFactory.logic.or(memberCostFilter, memberQuantityFilter),
+  excludeGenderfilter,
+);
 
 const simpleJaql: FilterRelationsJaql = {
   operator: 'AND',
@@ -113,16 +109,16 @@ describe('filter-relations', () => {
 
     it('should merge filter relations with a filter for the same dimension', () => {
       const result = mergeFiltersOrFilterRelations(filterRelation, [memberGenderFilter]);
-      expect(result).toEqual({ ...filterRelation, right: memberGenderFilter });
+      expect(result).toEqual({
+        ...filterRelation,
+        right: memberGenderFilter,
+        composeCode: (result as FilterRelations).composeCode,
+      });
     });
 
     it('should combine filters with an AND operator for different dimensions', () => {
       const result = mergeFiltersOrFilterRelations(filterRelation, [memberAgeRangeFilter]);
-      expect(result).toEqual({
-        left: { ...filterRelation },
-        right: memberAgeRangeFilter,
-        operator: 'AND',
-      });
+      expect(result).toEqual(filterFactory.logic.and(filterRelation, memberAgeRangeFilter));
     });
 
     it('should merge filter relations with identical filter relations', () => {
@@ -220,11 +216,7 @@ describe('filter-relations', () => {
       const filters = [memberCostFilter, memberGenderFilter];
       const relations = simpleJaql;
       const result = combineFiltersAndRelations(filters, relations);
-      expect(result).toEqual({
-        operator: 'AND',
-        left: memberCostFilter,
-        right: memberGenderFilter,
-      });
+      expect(result).toEqual(filterFactory.logic.and(memberCostFilter, memberGenderFilter));
     });
 
     it('should handle relations with missing filters', () => {
@@ -235,6 +227,8 @@ describe('filter-relations', () => {
         operator: 'AND',
         left: memberCostFilter,
         right: undefined,
+        // bypassed composeCode check
+        composeCode: (result as FilterRelations).composeCode,
       });
     });
 
@@ -242,11 +236,7 @@ describe('filter-relations', () => {
       const filters = [memberCostFilter, memberGenderFilter, memberAgeRangeFilter];
       const relations = simpleJaql;
       const result = combineFiltersAndRelations(filters, relations);
-      expect(result).toEqual({
-        operator: 'AND',
-        left: memberCostFilter,
-        right: memberGenderFilter,
-      });
+      expect(result).toEqual(filterFactory.logic.and(memberCostFilter, memberGenderFilter));
     });
   });
   describe('calculateNewRelations', () => {

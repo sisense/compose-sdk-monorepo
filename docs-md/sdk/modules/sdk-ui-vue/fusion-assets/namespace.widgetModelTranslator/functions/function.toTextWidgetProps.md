@@ -4,7 +4,7 @@ title: toTextWidgetProps
 
 # Function toTextWidgetProps
 
-> **toTextWidgetProps**(`widgetModel`): [`TextWidgetProps`](../../../../sdk-ui/interfaces/interface.TextWidgetProps.md)
+> **toTextWidgetProps**(`widgetModel`): [`TextWidgetProps`](../../../interfaces/interface.TextWidgetProps.md)
 
 Translates a [WidgetModel](../../interface.WidgetModel.md) to the props for rendering a text widget.
 
@@ -16,7 +16,7 @@ Translates a [WidgetModel](../../interface.WidgetModel.md) to the props for rend
 
 ## Returns
 
-[`TextWidgetProps`](../../../../sdk-ui/interfaces/interface.TextWidgetProps.md)
+[`TextWidgetProps`](../../../interfaces/interface.TextWidgetProps.md)
 
 ## Example
 
