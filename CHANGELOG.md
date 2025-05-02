@@ -29,7 +29,7 @@
 - **Breaking:** Remove deprecated `PivotGrandTotals.title` prop
 - **Breaking:** Remove other deprecated props and methods
 - **Breaking:** Improve types for Vue and Angular components
-> _See [migration guide](./guides/migration-guide-2.0.0.md) for more details._
+> _See [migration guide](./docs-md/sdk/guides/migration-guide-2.0.0.md) for more details._
 - Fix widgets not showing when switching dashboards when using tabber
 - Fixed border issue for filter tiles
 - Return only valid color format conditions
@@ -646,7 +646,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - **Breaking:** Rename type `IndicatorDataOptions` to `IndicatorChartDataOptions`
 - **Breaking:** Rename namespace `measures` to `measureFactory` and namespace `filters` to `filterFactory`
 
-> _See [migration guide](./guides/migration-guide-1.0.0.md) for more details._
+> _See [migration guide](./docs-md/sdk/guides/migration-guide-1.0.0.md) for more details._
 
 ## [0.16.0] - 2023-12-12
 
