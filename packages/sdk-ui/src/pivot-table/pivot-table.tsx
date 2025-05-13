@@ -107,7 +107,14 @@ import { usePivotBuilder } from './hooks/use-pivot-builder';
 export const PivotTable = asSisenseComponent({
   componentName: 'PivotTable',
 })((pivotTableProps: PivotTableProps) => {
-  const { dataSet, dataOptions, filters, highlights, refreshCounter = 0 } = pivotTableProps;
+  const {
+    dataSet,
+    dataOptions,
+    filters,
+    highlights,
+    refreshCounter = 0,
+    onHeightChange,
+  } = pivotTableProps;
   const styleOptions = useMemo(
     () => pivotTableProps.styleOptions ?? {},
     [pivotTableProps.styleOptions],
@@ -148,6 +155,14 @@ export const PivotTable = asSisenseComponent({
   });
   useApplyPivotTableFormatting({ dataService, dataOptions });
 
+  const handlePivotHeightChange = useCallback(
+    (height: number) => {
+      onHeightChange?.(height);
+      setPivotTotalHeight(height);
+    },
+    [onHeightChange],
+  );
+
   useRenderPivot({
     nodeRef,
     pivotBuilder,
@@ -155,7 +170,7 @@ export const PivotTable = asSisenseComponent({
     styleOptions,
     themeSettings,
     size,
-    onTotalHeightChange: setPivotTotalHeight,
+    onTotalHeightChange: handlePivotHeightChange,
   });
 
   // The pivot data layer depends on the pivot's render props.

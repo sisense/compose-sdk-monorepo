@@ -1,9 +1,11 @@
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 /**
- * React hook that returns the instance to manage query cache.
+ * React hook that returns the QueryCacheClient module instance to control query cache.
  *
- * @returns Query cache
+ * How to enable query cache see in [Query Caching guide](/guides/sdk/guides/client-query-caching.html)
+ *
+ * @returns QueryCacheClient instance
  * @group Queries
  * @alpha
  */

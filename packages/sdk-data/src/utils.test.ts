@@ -10,6 +10,7 @@ import {
   DataSource,
   DataSourceInfo,
   DataType,
+  FilterRelations,
   FormulaJaql,
   MembersFilter,
   Sort,
@@ -31,16 +32,18 @@ const filter1 = filterFactory.members(DM.Category.Category, ['Cell Phones', 'GPS
 const filter2 = filterFactory.exclude(filterFactory.contains(DM.Country.Country, 'A'));
 const filter3 = filterFactory.members(DM.Commerce.Gender, ['Male']);
 
-const mockSimpleFilterRelations = {
+const mockSimpleFilterRelations: FilterRelations = {
   operator: 'OR' as const,
   left: filter1,
   right: filter2,
+  composeCode: 'some compose code',
 };
 
-const mockNestedFilterRelations = {
+const mockNestedFilterRelations: FilterRelations = {
   operator: 'AND' as const,
   left: filter1,
   right: mockSimpleFilterRelations,
+  composeCode: 'some compose code',
 };
 
 const simpleFilterRelationsResult = {
@@ -111,6 +114,7 @@ describe('utils', () => {
         operator: 'OR' as const,
         left: filter1,
         right: cascadingFilter,
+        composeCode: 'some compose code',
       };
       const result = getFilterListAndRelationsJaql(filterRelationsWithCascading);
       expect(result.filters).toEqual([filter1, filter2, filter3]);

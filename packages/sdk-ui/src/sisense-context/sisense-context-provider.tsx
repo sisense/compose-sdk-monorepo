@@ -9,6 +9,7 @@ import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
 import { PluginsProvider } from '@/plugins-provider';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { EmotionCacheProvider } from '@/emotion-cache-provider';
 
 /**
  * Sisense Context Provider Component allowing you to connect to
@@ -120,30 +121,32 @@ export const SisenseContextProvider: FunctionComponent<
   const customTranslations = app?.settings.translationConfig.customTranslations;
 
   return (
-    <I18nProvider userLanguage={userLanguage} customTranslations={customTranslations}>
-      <ErrorBoundary
-        showErrorBox={showRuntimeErrors}
-        error={clientApplicationError}
-        onError={onError}
-        isContainerComponent
-      >
-        <SisenseContext.Provider
-          value={{
-            isInitialized: true,
-            app,
-            tracking,
-            errorBoundary: { showErrorBox: showRuntimeErrors, onError },
-          }}
+    <EmotionCacheProvider>
+      <I18nProvider userLanguage={userLanguage} customTranslations={customTranslations}>
+        <ErrorBoundary
+          showErrorBox={showRuntimeErrors}
+          error={clientApplicationError}
+          onError={onError}
+          isContainerComponent
         >
-          <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
-            <SisenseQueryClientProvider>
-              <PluginsProvider>
-                <MenuProvider>{children}</MenuProvider>
-              </PluginsProvider>
-            </SisenseQueryClientProvider>
-          </ThemeProvider>
-        </SisenseContext.Provider>
-      </ErrorBoundary>
-    </I18nProvider>
+          <SisenseContext.Provider
+            value={{
+              isInitialized: true,
+              app,
+              tracking,
+              errorBoundary: { showErrorBox: showRuntimeErrors, onError },
+            }}
+          >
+            <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
+              <SisenseQueryClientProvider>
+                <PluginsProvider>
+                  <MenuProvider>{children}</MenuProvider>
+                </PluginsProvider>
+              </SisenseQueryClientProvider>
+            </ThemeProvider>
+          </SisenseContext.Provider>
+        </ErrorBoundary>
+      </I18nProvider>
+    </EmotionCacheProvider>
   );
 };

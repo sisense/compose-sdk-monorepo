@@ -1,10 +1,6 @@
 import { ScattermapChartLocation } from '@/chart-data/types';
 import { ScattermapChartDataOptionsInternal } from '@/chart-data-options/types.js';
 import { getDataOptionTitle, isMeasureColumn } from '@/chart-data-options/utils.js';
-import {
-  spanSegment,
-  tooltipWrapper,
-} from '@/chart-options-processor/translations/scatter-tooltip.js';
 import { formatTooltipValue } from '@/chart-options-processor/translations/tooltip-utils.js';
 
 export const enum TooltipShowDetails {
@@ -13,7 +9,6 @@ export const enum TooltipShowDetails {
   LOADING,
 }
 
-const TOOLTIP_CATEGORY_COLOR = '#9EA2AB';
 const TOOLTIP_NO_VALUE = `N/A`;
 const TOOLTIP_DETAILS_ITEMS_LIMIT = 10;
 
@@ -43,6 +38,10 @@ const loadingIconSvg = `
   </svg>
 `;
 
+const spanSegment = (value: string) => {
+  return `<span class="csdk-scattermap-tooltip-label">${value}</span>`;
+};
+
 const prepareTooltipDetailsListContent = (detailsItems: string[]) => {
   const limitExcededContent = `
     <div>
@@ -63,18 +62,14 @@ const prepareTooltipDetailsListContent = (detailsItems: string[]) => {
 
 const formatCategoryHtml = (category: string) => {
   return `
-    <span style="padding-right: 20px">
-      ${spanSegment(category, TOOLTIP_CATEGORY_COLOR)}
+    <span class="csdk-scattermap-tooltip-category">
+      ${spanSegment(category)}
     </span>
   `;
 };
 
 const formatLoaderIndicatorHtml = () => {
-  return `
-    <span style="verical-align: bottom">
-      ${spanSegment(loadingIconSvg)}
-    </span>
-  `;
+  return spanSegment(loadingIconSvg);
 };
 
 // eslint-disable-next-line max-lines-per-function
@@ -93,8 +88,9 @@ export const createScattermapTooltip = (
     dataOptions.details &&
     formatTooltipValue(dataOptions.details, location.details as number, `${location.details}`);
 
-  return tooltipWrapper(`
-    <div style="text-align: left">
+  return `
+    <div class="csdk-scattermap-tooltip-container">
+      <div class="csdk-scattermap-tooltip-content">
         <div>${spanSegment(location.name)}</div>
         <div class="csdk-scattermap-tooltip-row">
         ${dataOptions.size ? formatCategoryHtml(getDataOptionTitle(dataOptions.size)) : ''}
@@ -129,6 +125,7 @@ export const createScattermapTooltip = (
             : ''
         }
         </div>
+      </div>
     </div>
-  `);
+  `;
 };

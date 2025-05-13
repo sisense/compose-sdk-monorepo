@@ -1,0 +1,1 @@
+export const DEFAULT_WIDGET_HEADER_HEIGHT = 32;

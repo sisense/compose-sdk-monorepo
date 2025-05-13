@@ -2,6 +2,7 @@ import MuiCheckbox, { CheckboxProps as MuiCheckboxProps } from '@mui/material/Ch
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import React, { forwardRef } from 'react';
 
+import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { type CheckboxTheme, checkboxTheme } from './themes';
 
 export type CheckboxProps = {
@@ -18,9 +19,11 @@ export type CheckboxProps = {
 
 const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
   ({ theme = checkboxTheme, dataTestId, ...rest }, ref) => (
-    <ThemeProvider theme={theme}>
-      <MuiCheckbox data-testid={dataTestId} ref={ref} {...rest} />
-    </ThemeProvider>
+    <EmotionCacheProvider>
+      <ThemeProvider theme={theme}>
+        <MuiCheckbox data-testid={dataTestId} ref={ref} {...rest} />
+      </ThemeProvider>
+    </EmotionCacheProvider>
   ),
 );
 

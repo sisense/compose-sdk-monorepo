@@ -21,6 +21,7 @@ import {
 import { getCellStyles } from './helpers/get-cell-styles';
 import Tooltip from '@mui/material/Tooltip';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
+import { getScrollbarWidth } from '@/utils/get-scrollbar-width';
 
 const alignmentForColumnType = (columnType: string) => (isNumber(columnType) ? 'right' : 'left');
 
@@ -75,10 +76,10 @@ export const DataTableWrapper = ({
   const verticalPadding = customStyles?.paddingVertical || DEFAULT_PADDING;
   const horizontalPadding = customStyles?.paddingHorizontal || DEFAULT_PADDING;
 
-  // minus 1px need to avoid crop of right border
+  // subtract scrollbar width to avoid horizontal scroll and crop of the right border
   const widthVal =
     customStyles?.columns?.width === 'auto'
-      ? (width - horizontalPadding * 2 - 1) / dataOptions.columns.length
+      ? (width - horizontalPadding * 2 - getScrollbarWidth()) / dataOptions.columns.length
       : undefined;
 
   const columnsOptions = useMemo(

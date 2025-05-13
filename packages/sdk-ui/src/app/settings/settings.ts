@@ -56,7 +56,7 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   },
   queryLimit: QUERY_DEFAULT_LIMIT,
   tabberConfig: {
-    enabled: false,
+    enabled: true,
   },
   accessibilityConfig: {
     enabled: false,

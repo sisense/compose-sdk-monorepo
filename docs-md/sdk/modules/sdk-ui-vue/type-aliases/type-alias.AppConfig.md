@@ -80,15 +80,15 @@ A [date-fns Locale](https://date-fns.org/v2.30.0/docs/Locale)
 
 **queryCacheConfig**?: `object`
 
-Query Cache Configurations
+Query Cache Configurations.
 
-This feature is in alpha.
+See [Client query caching guide](/guides/sdk/guides/client-query-caching.html) for more details.
 
 > #### `queryCacheConfig.enabled`
 >
 > **enabled**?: `boolean`
 >
-> Whether to enable query caching
+> Whether to enable client-side query caching.
 >
 > If not specified, the default value is `false`
 >
@@ -107,6 +107,27 @@ Query limit (max rows count that will be fetched in query)
 ```ts
 20000
 ```
+
+***
+
+### `tabberConfig`
+
+**tabberConfig**?: `object`
+
+Configuration of the tabber widget
+
+Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unknown plugin type'.
+Only tabber widgets that are configured using the Fusion UI as documented [here](https://docs.sisense.com/main/SisenseLinux/tabber.htm#Creating) are supported.
+
+> #### `tabberConfig.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Whether to enable tabber widget support
+>
+> If not specified, the default value is `true`
+>
+>
 
 ***
 

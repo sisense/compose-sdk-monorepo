@@ -1,3 +1,7 @@
+import { getNonceFromMetaTag } from '@/emotion-cache-provider';
+
+const nonce = getNonceFromMetaTag();
+
 export const LoadingDots = ({ color }: { color?: string }) => {
   const dotStyle = {
     backgroundColor: color || '#333333',
@@ -41,7 +45,7 @@ export const LoadingDots = ({ color }: { color?: string }) => {
 
   return (
     <div>
-      <style>
+      <style {...(nonce && { nonce })}>
         {`
           @keyframes loading-dots-animation {
               ${Object.entries(keyframes)

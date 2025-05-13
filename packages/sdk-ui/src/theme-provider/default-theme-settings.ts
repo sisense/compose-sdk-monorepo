@@ -4,6 +4,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 
 export const DEFAULT_DIVIDER_COLOR = '#F2F2F2';
 export const DEFAULT_DIVIDER_WIDTH = 4;
+export const DEFAULT_TITLE_FONT_SIZE = 15;
 
 const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
   chart: {
@@ -120,6 +121,7 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     borderColor: '#9EA2AB',
     header: {
       titleTextColor: '#5B6372',
+      titleFontSize: DEFAULT_TITLE_FONT_SIZE,
       titleAlignment: 'Left',
       dividerLine: false,
       dividerLineColor: '#5B6372',
@@ -350,6 +352,7 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     header: {
       titleTextColor: '#FFFFFF',
       titleAlignment: 'Left',
+      titleFontSize: DEFAULT_TITLE_FONT_SIZE,
       dividerLine: false,
       dividerLineColor: '#FFFFFF',
       backgroundColor: '#313138',

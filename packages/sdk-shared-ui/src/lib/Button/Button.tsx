@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 import React, { type ForwardedRef, forwardRef } from 'react';
 
+import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { type ButtonsTheme, buttonsTheme } from './themes';
 
 export type ButtonProps = {
@@ -22,11 +23,13 @@ const Button = forwardRef((props: ButtonProps, ref: ForwardedRef<HTMLButtonEleme
     : buttonsTheme;
 
   return (
-    <ThemeProvider theme={appliedButtonTheme}>
-      <MuiButton {...rest} ref={ref}>
-        {children}
-      </MuiButton>
-    </ThemeProvider>
+    <EmotionCacheProvider>
+      <ThemeProvider theme={appliedButtonTheme}>
+        <MuiButton {...rest} ref={ref}>
+          {children}
+        </MuiButton>
+      </ThemeProvider>
+    </EmotionCacheProvider>
   );
 });
 

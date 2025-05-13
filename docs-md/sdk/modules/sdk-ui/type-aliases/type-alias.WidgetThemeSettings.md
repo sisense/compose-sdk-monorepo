@@ -64,6 +64,12 @@ Widget header styles
 >
 > Header title alignment
 >
+> #### `header.titleFontSize`
+>
+> **titleFontSize**?: `number`
+>
+> Header title font size
+>
 > #### `header.titleTextColor`
 >
 > **titleTextColor**?: `string`

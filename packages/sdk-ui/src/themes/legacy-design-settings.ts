@@ -2,6 +2,7 @@ import merge from 'ts-deepmerge';
 import {
   DEFAULT_DIVIDER_COLOR,
   DEFAULT_DIVIDER_WIDTH,
+  DEFAULT_TITLE_FONT_SIZE,
   getDefaultThemeSettings,
 } from '../theme-provider/default-theme-settings';
 import {
@@ -179,6 +180,7 @@ export function convertToThemeSettings(
         titleAlignment: LEGACY_DESIGN_TYPES[
           legacyDesignSettings.dashboards.widgetTitleAlignment
         ] as AlignmentTypes,
+        titleFontSize: DEFAULT_TITLE_FONT_SIZE,
         dividerLine: legacyDesignSettings.dashboards.widgetTitleDividerEnabled,
         dividerLineColor: legacyDesignSettings.dashboards.widgetTitleDividerColor,
         backgroundColor: legacyDesignSettings.dashboards.widgetTitleBackgroundColor,

@@ -42,13 +42,15 @@ export type AppConfig = {
   loadingIndicatorConfig?: LoadingIndicatorConfig;
 
   /**
-   * Query Cache Configurations
+   * Query Cache Configurations.
    *
-   * This feature is in alpha.
+   * See [Client query caching guide](/guides/sdk/guides/client-query-caching.html) for more details.
+   *
+   * @alpha
    */
   queryCacheConfig?: {
     /**
-     * Whether to enable query caching
+     * Whether to enable client-side query caching.
      *
      * If not specified, the default value is `false`
      */
@@ -83,15 +85,14 @@ export type AppConfig = {
   /**
    * Configuration of the tabber widget
    *
-   * Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unkwon plugin type'.
-   *
-   * @internal
+   * Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unknown plugin type'.
+   * Only tabber widgets that are configured using the Fusion UI as documented [here](https://docs.sisense.com/main/SisenseLinux/tabber.htm#Creating) are supported.
    */
   tabberConfig?: {
     /**
      * Whether to enable tabber widget support
      *
-     * If not specified, the default value is `false`
+     * If not specified, the default value is `true`
      */
     enabled?: boolean;
   };

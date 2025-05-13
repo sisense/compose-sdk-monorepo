@@ -16,6 +16,7 @@ export type LegendSettings = {
   backgroundColor?: string;
   itemMarginBottom?: number;
   itemMarginTop?: number;
+  margin?: number;
   title?: {
     style?: {
       [key: string]: string | number;

@@ -6,6 +6,11 @@ import { getDataSourceName } from '@sisense/sdk-data';
 import { WidgetContainer } from './common/widget-container';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { PivotTable } from '../pivot-table';
+import { DEFAULT_WIDGET_HEADER_HEIGHT } from './constants';
+
+function calcPivotTableWidgetHeight(pivotTableHeight: number | undefined) {
+  return pivotTableHeight ? pivotTableHeight + DEFAULT_WIDGET_HEADER_HEIGHT : undefined;
+}
 
 /**
  * React component extending `PivotTable` to support widget style options.
@@ -31,6 +36,7 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
   componentName: 'PivotTableWidget',
 })((props) => {
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const [pivotTableHeight, setPivotTableHeight] = useState<number | undefined>();
   const { app } = useSisenseContext();
 
   const { styleOptions, dataSource = app?.defaultDataSource, dataOptions } = props;
@@ -49,7 +55,7 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
       defaultSize={defaultSize}
       size={{
         width: width,
-        height: styleOptions?.isAutoHeight ? undefined : height,
+        height: styleOptions?.isAutoHeight ? calcPivotTableWidgetHeight(pivotTableHeight) : height,
       }}
     >
       <WidgetContainer
@@ -64,6 +70,7 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
           filters={props.filters}
           highlights={props.highlights}
           refreshCounter={refreshCounter}
+          onHeightChange={setPivotTableHeight}
         />
       </WidgetContainer>
     </DynamicSizeContainer>

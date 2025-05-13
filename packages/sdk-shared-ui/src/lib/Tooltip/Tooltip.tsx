@@ -3,6 +3,7 @@ import MuiTooltip, { type TooltipProps as MuiTooltipProps } from '@mui/material/
 import classnames from 'classnames';
 import React, { forwardRef } from 'react';
 
+import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { styleguideConstants } from '../constants/styleguideConstants';
 import { type TooltipTheme, tooltipTheme } from './themes';
 import styles from './Tooltip.module.scss';
@@ -21,11 +22,13 @@ const Tooltip = forwardRef(
       ),
     };
     return (
-      <ThemeProvider theme={theme}>
-        <MuiTooltip {...rest} title={title} arrow={arrow} ref={ref} classes={classes}>
-          {children}
-        </MuiTooltip>
-      </ThemeProvider>
+      <EmotionCacheProvider>
+        <ThemeProvider theme={theme}>
+          <MuiTooltip {...rest} title={title} arrow={arrow} ref={ref} classes={classes}>
+            {children}
+          </MuiTooltip>
+        </ThemeProvider>
+      </EmotionCacheProvider>
     );
   },
 );

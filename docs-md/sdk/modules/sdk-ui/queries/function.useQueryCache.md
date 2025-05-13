@@ -8,7 +8,9 @@ title: useQueryCache
   `clear`: () => `void`;
  } \| `undefined`
 
-React hook that returns the instance to manage query cache.
+React hook that returns the QueryCacheClient module instance to control query cache.
+
+How to enable query cache see in [Query Caching guide](/guides/sdk/guides/client-query-caching.html)
 
 ## Returns
 
@@ -16,4 +18,4 @@ React hook that returns the instance to manage query cache.
   `clear`: () => `void`;
  } \| `undefined`
 
-Query cache
+QueryCacheClient instance

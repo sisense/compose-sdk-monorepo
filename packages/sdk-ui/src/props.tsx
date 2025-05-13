@@ -1020,6 +1020,13 @@ export interface PivotTableProps {
    * @internal
    */
   refreshCounter?: number;
+
+  /**
+   * Callback function that is called when the height of the pivot table changes
+   *
+   * @internal
+   */
+  onHeightChange?: (height: number) => void;
 }
 
 /**

@@ -8,37 +8,37 @@ Facade component that renders a widget within a dashboard based on the widget ty
 
 ## Example
 
-* ```vue
+```vue
 <script setup lang="ts">
 import { Widget, type WidgetProps } from '@sisense/sdk-ui-vue';
 import { measureFactory } from '@sisense/sdk-data';
 
 const widgetProps: WidgetProps = {
- id: 'widget-id',
- widgetType: 'chart',
- dataSource: DM.DataSource,
- chartType: 'column',
- dataOptions: {
-   category: [dimProductName],
-   value: [
-     {
-       column: measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue'),
-       sortType: 'sortDesc',
-     },
-   ],
-   breakBy: [],
- },
+  id: 'widget-id',
+  widgetType: 'chart',
+  dataSource: DM.DataSource,
+  chartType: 'column',
+  dataOptions: {
+    category: [dimProductName],
+    value: [
+      {
+        column: measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue'),
+        sortType: 'sortDesc',
+      },
+    ],
+    breakBy: [],
+  },
 };
 </script>
 
 <template>
- <Widget
-   :id="widgetProps.id"
-   :widgetType="widgetProps.widgetType"
-   :dataSource="widgetProps.dataSource"
-   :chartType="widgetProps.chartType"
-   :dataOptions="widgetProps.dataOptions"
- />
+  <Widget
+    :id="widgetProps.id"
+    :widgetType="widgetProps.widgetType"
+    :dataSource="widgetProps.dataSource"
+    :chartType="widgetProps.chartType"
+    :dataOptions="widgetProps.dataOptions"
+  />
 </template>
 ```
 <img src="../../../img/vue-widget-example.png" width="800px" />

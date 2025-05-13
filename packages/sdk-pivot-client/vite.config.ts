@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => ({
       jsAssetsFilterFunction: function customJsAssetsfilterFunction(outputChunk: OutputChunk) {
         return ['index.js'].includes(outputChunk.fileName);
       },
+      useStrictCSP: true,
     }),
     dts({
       insertTypesEntry: true,

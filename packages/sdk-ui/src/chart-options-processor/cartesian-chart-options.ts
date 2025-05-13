@@ -2,7 +2,7 @@
 /* eslint-disable max-params */
 import { CategoricalSeriesValues, ChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
-import { getLegendSettings } from './translations/legend-section';
+import { getLegendSettings, LegendSettings } from './translations/legend-section';
 import {
   createValueLabelFormatter,
   getPolarValueLabelSettings,
@@ -133,6 +133,23 @@ function getTotalLabelsShift(
     rightShift,
     topShift,
   };
+}
+
+/**
+ * Get the additional legend settings based on the chart type and design options.
+ *
+ * @internal
+ */
+function getAdditionalLegendSettings(
+  chartType: ChartType,
+  dataOptions: CartesianChartDataOptionsInternal,
+  chartDesignOptions: ChartDesignOptions,
+): Omit<LegendSettings, 'enabled'> | undefined {
+  const LEGEND_RIGHT_MARGIN = 80;
+  if (chartType === 'bar' && dataOptions.x.length > 1 && chartDesignOptions.legend === 'right') {
+    return { margin: LEGEND_RIGHT_MARGIN };
+  }
+  return undefined;
 }
 
 /**
@@ -273,7 +290,11 @@ export const getCartesianChartOptions = (
 
   // if vertical x2 axis increase right spacing
   const xAxisLabelRightSpacing =
-    chartData.xAxisCount > 1 && xAxisOrientation === 'vertical' ? 70 : 0;
+    chartDesignOptions.legend !== 'right' &&
+    chartData.xAxisCount > 1 &&
+    xAxisOrientation === 'vertical'
+      ? 70
+      : 0;
   const xAxisLabelTopSpacing =
     chartData.xAxisCount > 1 && xAxisOrientation === 'horizontal' ? 20 : 0;
   const { rightSpacing: totalLabelRightSpacing, topSpacing: totalLabelTopSpacing } =
@@ -350,7 +371,10 @@ export const getCartesianChartOptions = (
       yAxis: yAxisSettings,
       // The series level animation disables all animations, the chart
       // level animation only disables initial or subsequent paints
-      legend: getLegendSettings(chartDesignOptions.legend),
+      legend: {
+        ...getLegendSettings(chartDesignOptions.legend),
+        ...getAdditionalLegendSettings(chartType, dataOptions, chartDesignOptions),
+      },
       series: chartData.series
         .slice(0, seriesCapacity)
         .map((v: CategoricalSeriesValues, index: number) => {

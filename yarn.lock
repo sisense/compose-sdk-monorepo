@@ -3151,6 +3151,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/cache@npm:^11.10.5, @emotion/cache@npm:^11.11.4, @emotion/cache@npm:^11.13.5":
+  version: 11.14.0
+  resolution: "@emotion/cache@npm:11.14.0"
+  dependencies:
+    "@emotion/memoize": ^0.9.0
+    "@emotion/sheet": ^1.4.0
+    "@emotion/utils": ^1.4.2
+    "@emotion/weak-memoize": ^0.4.0
+    stylis: 4.2.0
+  checksum: 0a81591541ea43bc7851742e6444b7800d72e98006f94e775ae6ea0806662d14e0a86ff940f5f19d33b4bb2c427c882aa65d417e7322a6e0d5f20fe65ed920c9
+  languageName: node
+  linkType: hard
+
 "@emotion/cache@npm:^11.11.0":
   version: 11.11.0
   resolution: "@emotion/cache@npm:11.11.0"
@@ -3161,19 +3174,6 @@ __metadata:
     "@emotion/weak-memoize": ^0.3.1
     stylis: 4.2.0
   checksum: 8eb1dc22beaa20c21a2e04c284d5a2630a018a9d51fb190e52de348c8d27f4e8ca4bbab003d68b4f6cd9cc1c569ca747a997797e0f76d6c734a660dc29decf08
-  languageName: node
-  linkType: hard
-
-"@emotion/cache@npm:^11.13.5":
-  version: 11.14.0
-  resolution: "@emotion/cache@npm:11.14.0"
-  dependencies:
-    "@emotion/memoize": ^0.9.0
-    "@emotion/sheet": ^1.4.0
-    "@emotion/utils": ^1.4.2
-    "@emotion/weak-memoize": ^0.4.0
-    stylis: 4.2.0
-  checksum: 0a81591541ea43bc7851742e6444b7800d72e98006f94e775ae6ea0806662d14e0a86ff940f5f19d33b4bb2c427c882aa65d417e7322a6e0d5f20fe65ed920c9
   languageName: node
   linkType: hard
 
@@ -3331,14 +3331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/utils@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@emotion/utils@npm:1.2.1"
-  checksum: e0b44be0705b56b079c55faff93952150be69e79b660ae70ddd5b6e09fc40eb1319654315a9f34bb479d7f4ec94be6068c061abbb9e18b9778ae180ad5d97c73
-  languageName: node
-  linkType: hard
-
-"@emotion/utils@npm:^1.4.2":
+"@emotion/utils@npm:^1.2.1, @emotion/utils@npm:^1.4.2":
   version: 1.4.2
   resolution: "@emotion/utils@npm:1.4.2"
   checksum: 04cf76849c6401205c058b82689fd0ec5bf501aed6974880fe9681a1d61543efb97e848f4c38664ac4a9068c7ad2d1cb84f73bde6cf95f1208aa3c28e0190321
@@ -6676,6 +6669,7 @@ __metadata:
     "@vitest/coverage-istanbul": 2.1.9
     eslint: ^8.40.0
     eslint-plugin-i18next: ^6.1.0
+    eslint-plugin-rulesdir: ^0.2.2
     eslint-plugin-simple-import-sort: ^12.1.1
     eslint-plugin-tsdoc: 0.2.17
     eslint-plugin-vitest: 0.2.8
@@ -6696,12 +6690,12 @@ __metadata:
   resolution: "@sisense/sdk-cli@workspace:packages/sdk-cli"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^2.0.0
-    "@sisense/sdk-data": ^2.0.0
-    "@sisense/sdk-modeling": ^2.0.0
-    "@sisense/sdk-query-client": ^2.0.0
-    "@sisense/sdk-rest-client": ^2.0.0
-    "@sisense/sdk-tracking": ^2.0.0
+    "@sisense/sdk-common": ^2.1.0
+    "@sisense/sdk-data": ^2.1.0
+    "@sisense/sdk-modeling": ^2.1.0
+    "@sisense/sdk-query-client": ^2.1.0
+    "@sisense/sdk-rest-client": ^2.1.0
+    "@sisense/sdk-tracking": ^2.1.0
     "@types/inquirer": 8.2.6
     "@types/js-levenshtein": ^1.1.3
     "@types/yargs": ^17.0.22
@@ -6719,7 +6713,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-common@^2.0.0, @sisense/sdk-common@workspace:packages/sdk-common":
+"@sisense/sdk-common@^2.1.0, @sisense/sdk-common@workspace:packages/sdk-common":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-common@workspace:packages/sdk-common"
   dependencies:
@@ -6729,13 +6723,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-data@^2.0.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
+"@sisense/sdk-data@^2.1.0, @sisense/sdk-data@workspace:^, @sisense/sdk-data@workspace:packages/sdk-data":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-data@workspace:packages/sdk-data"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^2.0.0
-    "@sisense/sdk-rest-client": ^2.0.0
+    "@sisense/sdk-common": ^2.1.0
+    "@sisense/sdk-rest-client": ^2.1.0
     "@types/lodash": ^4.14.201
     "@types/lodash-es": ^4.17.12
     "@types/numeral": 2.0.2
@@ -6749,28 +6743,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-modeling@^2.0.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
+"@sisense/sdk-modeling@^2.1.0, @sisense/sdk-modeling@workspace:packages/sdk-modeling":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-modeling@workspace:packages/sdk-modeling"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-data": ^2.0.0
+    "@sisense/sdk-data": ^2.1.0
     eslint: ^8.40.0
     prettier: ^3.2.5
     typescript: 4.8.4
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-pivot-client@^2.0.0, @sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client":
+"@sisense/sdk-pivot-client@^2.1.0, @sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client"
   dependencies:
     "@babel/preset-env": ^7.20.2
+    "@emotion/cache": ^11.11.4
     "@emotion/react": ^11.11.4
     "@emotion/styled": ^11.11.5
     "@mui/material": ^5.11.6
-    "@sisense/sdk-data": ^2.0.0
-    "@sisense/sdk-rest-client": ^2.0.0
+    "@sisense/sdk-data": ^2.1.0
+    "@sisense/sdk-rest-client": ^2.1.0
     "@sisense/sdk-shared-ui": "workspace:*"
     "@types/lodash-es": ^4.17.12
     "@types/react": ^18.3.1
@@ -6807,14 +6802,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-query-client@^2.0.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
+"@sisense/sdk-query-client@^2.1.0, @sisense/sdk-query-client@workspace:packages/sdk-query-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-query-client@workspace:packages/sdk-query-client"
   dependencies:
-    "@sisense/sdk-common": ^2.0.0
-    "@sisense/sdk-data": ^2.0.0
-    "@sisense/sdk-pivot-client": ^2.0.0
-    "@sisense/sdk-rest-client": ^2.0.0
+    "@sisense/sdk-common": ^2.1.0
+    "@sisense/sdk-data": ^2.1.0
+    "@sisense/sdk-pivot-client": ^2.1.0
+    "@sisense/sdk-rest-client": ^2.1.0
     "@sisense/task-manager": ^0.1.0
     "@types/tar": ^6.1.4
     "@types/uuid": ^9.0.0
@@ -6830,12 +6825,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-rest-client@^2.0.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
+"@sisense/sdk-rest-client@^2.1.0, @sisense/sdk-rest-client@workspace:^, @sisense/sdk-rest-client@workspace:packages/sdk-rest-client":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-rest-client@workspace:packages/sdk-rest-client"
   dependencies:
     "@babel/preset-env": ^7.20.2
-    "@sisense/sdk-common": ^2.0.0
+    "@sisense/sdk-common": ^2.1.0
     eslint: ^8.40.0
     prettier: 2.8.4
     typescript: 4.8.4
@@ -6846,6 +6841,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-shared-ui@workspace:packages/sdk-shared-ui"
   dependencies:
+    "@emotion/cache": ^11.11.4
+    "@emotion/react": ^11.11.4
     "@mui/material": ^6.2.1
     "@mui/utils": ^6.4.1
     "@storybook/addon-a11y": ^8.4.7
@@ -6883,7 +6880,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-tracking@^2.0.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
+"@sisense/sdk-tracking@^2.1.0, @sisense/sdk-tracking@workspace:^, @sisense/sdk-tracking@workspace:packages/sdk-tracking":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-tracking@workspace:packages/sdk-tracking"
   dependencies:
@@ -6928,7 +6925,7 @@ __metadata:
   dependencies:
     "@preact/preset-vite": 2.5.0
     "@sisense/sdk-data": "workspace:^"
-    "@sisense/sdk-ui": ^2.0.0
+    "@sisense/sdk-ui": ^2.1.0
     "@types/node": ^18.16.0
     eslint: ^8.40.0
     preact: ^10.13.2
@@ -6966,23 +6963,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-ui@^2.0.0, @sisense/sdk-ui@workspace:packages/sdk-ui":
+"@sisense/sdk-ui@^2.1.0, @sisense/sdk-ui@workspace:packages/sdk-ui":
   version: 0.0.0-use.local
   resolution: "@sisense/sdk-ui@workspace:packages/sdk-ui"
   dependencies:
     "@babel/preset-env": ^7.20.2
+    "@emotion/cache": ^11.10.5
     "@emotion/react": ^11.10.5
     "@emotion/styled": ^11.10.5
     "@mui/icons-material": ^6.4.6
     "@mui/material": ^5.16.7
     "@mui/system": ^5.16.7
     "@mui/x-data-grid": ^6.16.0
-    "@sisense/sdk-common": ^2.0.0
-    "@sisense/sdk-data": ^2.0.0
-    "@sisense/sdk-pivot-client": ^2.0.0
-    "@sisense/sdk-query-client": ^2.0.0
-    "@sisense/sdk-rest-client": ^2.0.0
-    "@sisense/sdk-tracking": ^2.0.0
+    "@sisense/sdk-common": ^2.1.0
+    "@sisense/sdk-data": ^2.1.0
+    "@sisense/sdk-pivot-client": ^2.1.0
+    "@sisense/sdk-query-client": ^2.1.0
+    "@sisense/sdk-rest-client": ^2.1.0
+    "@sisense/sdk-tracking": ^2.1.0
     "@sisense/sisense-charts": 5.1.1
     "@storybook/addon-actions": 7.0.24
     "@storybook/addon-docs": 7.0.24
@@ -16109,6 +16107,13 @@ __metadata:
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
   checksum: 82f391c5a093235c3bc2f664c54e009c49460778ee7d1b86c1536df9ac4d2a80d1dedc9241ac797df4a9dced936e955d9c89042fb3ac8d017b5359d1320d3c0f
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-rulesdir@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "eslint-plugin-rulesdir@npm:0.2.2"
+  checksum: 1d8c2583dccca7e167b0eaf1adb1ae0bca4ea65b3eb3e0124fc0e21382a29ca3988306419d3b34f7f984f53c2ecb16b0c6956e676e23d165c2bd629023d10704
   languageName: node
   linkType: hard
 

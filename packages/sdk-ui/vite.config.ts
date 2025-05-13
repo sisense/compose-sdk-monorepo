@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => ({
       jsAssetsFilterFunction(outputChunk) {
         return ['index.js', 'ai.js', 'ai.cjs', 'index.cjs'].includes(outputChunk.fileName);
       },
+      useStrictCSP: true,
     }),
     dts({
       insertTypesEntry: true,

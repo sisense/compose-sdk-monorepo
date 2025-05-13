@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0] - 2025-05-13
+
+### Added
+- Add `titleFontSize` property to `WidgetThemeSettings.header` for configuring widget header font size
+
+### Changed
+- Apply timezone from the date configuration correctly
+- Enable `TabberWidget` by default for better user experience
+- Fix `PivotTableWidget` height when `isAutoHeight` option is enabled
+- Prevent horizontal scrollbar from appearing on `Table` with auto column width
+- Fix bar chart labels overlap issue
+
+
 ## [2.0.0] - 2025-04-30
 
 ### Added

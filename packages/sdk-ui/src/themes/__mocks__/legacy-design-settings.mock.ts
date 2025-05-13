@@ -239,6 +239,7 @@ export const redThemeSettings: CompleteThemeSettings = {
       dividerLineColor: '#FFFFFF',
       titleAlignment: 'Left',
       titleTextColor: '#fe0000',
+      titleFontSize: 15,
     },
     shadow: 'None',
     spaceAround: 'None',

@@ -4,6 +4,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import classNames from 'classnames';
 import React, { type ForwardedRef, forwardRef } from 'react';
 
+import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { iconTheme } from './themes';
 
 export type IconProps = {
@@ -127,11 +128,13 @@ const Icon = forwardRef((props: IconProps, ref: ForwardedRef<HTMLSpanElement>) =
   const iconClassName = classNames('app-icon', `app-icon--${name}`, className);
 
   return (
-    <ThemeProvider theme={iconTheme}>
-      <span data-testid={dataTestId} {...props} ref={ref} className={iconClassName}>
-        {returnedIconComponent}
-      </span>
-    </ThemeProvider>
+    <EmotionCacheProvider>
+      <ThemeProvider theme={iconTheme}>
+        <span data-testid={dataTestId} {...props} ref={ref} className={iconClassName}>
+          {returnedIconComponent}
+        </span>
+      </ThemeProvider>
+    </EmotionCacheProvider>
   );
 });
 

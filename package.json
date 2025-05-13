@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -121,6 +121,7 @@
     "@vitest/coverage-istanbul": "2.1.9",
     "eslint": "^8.40.0",
     "eslint-plugin-i18next": "^6.1.0",
+    "eslint-plugin-rulesdir": "^0.2.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-tsdoc": "0.2.17",
     "eslint-plugin-vitest": "0.2.8",

@@ -1,7 +1,10 @@
 import { ReactNode } from 'react';
+// This is the original custom popover, it has to use MUI Popover as a base component
+// eslint-disable-next-line rulesdir/prefer-custom-popover
 import MuiPopover from '@mui/material/Popover';
 import styled from '@emotion/styled';
 
+/* eslint-disable rulesdir/opacity-zero-needs-focus-visible */
 const StyledMuiPopover = styled(MuiPopover)`
   // This fixes an issue where the popover appears before its position is calculated, causing it to 'jump' from the top-left corner.
   // Known MUI issue: https://github.com/mui/material-ui/issues/8040
@@ -10,6 +13,7 @@ const StyledMuiPopover = styled(MuiPopover)`
     opacity: 0 !important;
   }
 `;
+/* eslint-enable rulesdir/opacity-zero-needs-focus-visible */
 
 /** @internal */
 export type PopoverAnchorPosition = {

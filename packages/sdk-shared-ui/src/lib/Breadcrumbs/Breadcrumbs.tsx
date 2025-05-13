@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 import React, { ForwardedRef } from 'react';
 
+import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { Icon } from '../Icon';
 import { Typography } from '../Typography';
 import { BreadcrumbsTheme, breadcrumbsTheme } from './themes';
@@ -31,20 +32,22 @@ const Breadcrumbs = React.forwardRef(
       : breadcrumbsTheme;
 
     return (
-      <ThemeProvider theme={appliedBreadcrumbsTheme}>
-        <MuiBreadcrumbs aria-label="breadcrumb" ref={ref} {...rest} separator={separator}>
-          {breadcrumbItems.map(({ label, isActive, onClick }, index) => (
-            <Typography
-              key={`${label}-${index}`}
-              variant={isActive ? 'laccent' : 'bodyUI'}
-              onClick={onClick}
-              sx={onClick ? { cursor: 'pointer' } : {}}
-            >
-              {label}
-            </Typography>
-          ))}
-        </MuiBreadcrumbs>
-      </ThemeProvider>
+      <EmotionCacheProvider>
+        <ThemeProvider theme={appliedBreadcrumbsTheme}>
+          <MuiBreadcrumbs aria-label="breadcrumb" ref={ref} {...rest} separator={separator}>
+            {breadcrumbItems.map(({ label, isActive, onClick }, index) => (
+              <Typography
+                key={`${label}-${index}`}
+                variant={isActive ? 'laccent' : 'bodyUI'}
+                onClick={onClick}
+                sx={onClick ? { cursor: 'pointer' } : {}}
+              >
+                {label}
+              </Typography>
+            ))}
+          </MuiBreadcrumbs>
+        </ThemeProvider>
+      </EmotionCacheProvider>
     );
   },
 );

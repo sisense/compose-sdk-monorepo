@@ -1,4 +1,8 @@
 /** @type { import("eslint").Linter.Config } */
+const path = require('path');
+const rulesDirPlugin = require('eslint-plugin-rulesdir');
+rulesDirPlugin.RULES_DIR = path.join(__dirname, 'eslint-rules');
+
 module.exports = {
   root: true,
   parserOptions: {
@@ -6,13 +10,14 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  plugins: ['rulesdir'],
   overrides: [
     /**
      * Configuration for linting production source files
      */
     {
       files: ['*.{ts,js,tsx,jsx}'],
-      excludedFiles: ['**/*.config.{ts,js}', '**/*.workspace.{ts,js}'],
+      excludedFiles: ['**/*.config.{ts,js}', '**/*.workspace.{ts,js}', 'eslint-rules/**/*'],
       extends: ['@sisense/eslint-config/typescript/react', 'plugin:i18next/recommended'],
       rules: {
         'simple-import-sort/imports': 'error',
@@ -65,6 +70,10 @@ module.exports = {
             'no-implicit-globals': 'error',
             // change jsx-text-only to jsx-only for deeper analysis
             'i18next/no-literal-string': ['error', { mode: 'jsx-text-only' }],
+            'rulesdir/opacity-zero-needs-focus-visible': 'error',
+            'rulesdir/no-lodash-whole-import': 'error',
+            'rulesdir/no-mui-barrel-import': 'error',
+            'rulesdir/prefer-custom-popover': 'error',
           },
         },
         {
@@ -79,6 +88,20 @@ module.exports = {
           plugins: ['eslint-plugin-tsdoc'],
         },
         { files: ['*.{ts,tsx}'], excludedFiles: ['*.d.ts'], rules: { 'no-unused-vars': 'error' } },
+        {
+          files: ['*.tsx'],
+          rules: {
+            '@typescript-eslint/no-use-before-define': [
+              'warn',
+              {
+                functions: false,
+                classes: true,
+                variables: false,
+                typedefs: false,
+              },
+            ],
+          },
+        },
         {
           // Disable additional rules for all non-production files
           files: [

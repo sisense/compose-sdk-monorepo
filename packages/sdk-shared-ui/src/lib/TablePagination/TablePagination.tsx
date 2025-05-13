@@ -6,6 +6,7 @@ import { UsePaginationProps } from '@mui/material/usePagination/usePagination';
 import React, { ForwardedRef } from 'react';
 import { useMeasure } from 'react-use';
 
+import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { Icon, type IconProps } from '../Icon';
 import { siColors } from '../themes';
 import { Typography } from '../Typography';
@@ -95,50 +96,52 @@ const TablePagination = React.forwardRef(
     };
 
     return (
-      <ThemeProvider theme={theme}>
-        <TablePaginationContext.Provider value={paginationProps}>
-          <div className={`${RESPONSIVE_TABLE_PAGINATION_CLASS} ${breakpoint}`} ref={measureRef}>
-            <MuiTablePagination
-              ref={ref}
-              component={'div'}
-              count={count}
-              page={page - PAGE_START_ZERO_BASE_INDEX}
-              ActionsComponent={PaginationActionsComponent}
-              onPageChange={handleOnPageChange}
-              onRowsPerPageChange={handleOnRowsPerPage}
-              rowsPerPage={rowsPerPage}
-              rowsPerPageOptions={rowsPerPageOptions}
-              labelDisplayedRows={handleLabelDisplayedRows}
-              slotProps={{
-                select: {
-                  SelectDisplayProps: {
-                    'data-testid': 'TablePaginationSelect',
-                  } as MuiSelectDisplayProps,
-                  IconComponent: (props: IconProps) => (
-                    <Icon {...props} name="general-arrow-big-down" />
-                  ),
-                  renderValue: (value: unknown) => (
-                    <Typography variant={'bodyParagraph'}>{String(value)}</Typography>
-                  ),
-                  MenuProps: {
-                    sx: {
-                      '.MuiPaper-root': {
-                        fontFamily: style?.fontFamily,
+      <EmotionCacheProvider>
+        <ThemeProvider theme={theme}>
+          <TablePaginationContext.Provider value={paginationProps}>
+            <div className={`${RESPONSIVE_TABLE_PAGINATION_CLASS} ${breakpoint}`} ref={measureRef}>
+              <MuiTablePagination
+                ref={ref}
+                component={'div'}
+                count={count}
+                page={page - PAGE_START_ZERO_BASE_INDEX}
+                ActionsComponent={PaginationActionsComponent}
+                onPageChange={handleOnPageChange}
+                onRowsPerPageChange={handleOnRowsPerPage}
+                rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={rowsPerPageOptions}
+                labelDisplayedRows={handleLabelDisplayedRows}
+                slotProps={{
+                  select: {
+                    SelectDisplayProps: {
+                      'data-testid': 'TablePaginationSelect',
+                    } as MuiSelectDisplayProps,
+                    IconComponent: (props: IconProps) => (
+                      <Icon {...props} name="general-arrow-big-down" />
+                    ),
+                    renderValue: (value: unknown) => (
+                      <Typography variant={'bodyParagraph'}>{String(value)}</Typography>
+                    ),
+                    MenuProps: {
+                      sx: {
+                        '.MuiPaper-root': {
+                          fontFamily: style?.fontFamily,
+                        },
                       },
                     },
                   },
-                },
-              }}
-              labelRowsPerPage={
-                <Typography variant={'bodyParagraph'}>
-                  {breakpointIsLessThanLg ? labelRowsPerPageShort : labelRowsPerPage}
-                </Typography>
-              }
-              data-testid={dataTestId}
-            />
-          </div>
-        </TablePaginationContext.Provider>
-      </ThemeProvider>
+                }}
+                labelRowsPerPage={
+                  <Typography variant={'bodyParagraph'}>
+                    {breakpointIsLessThanLg ? labelRowsPerPageShort : labelRowsPerPage}
+                  </Typography>
+                }
+                data-testid={dataTestId}
+              />
+            </div>
+          </TablePaginationContext.Provider>
+        </ThemeProvider>
+      </EmotionCacheProvider>
     );
   },
 );

@@ -12,7 +12,7 @@ import {
 } from '@/utils/data-sources-utils';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
+import { Popover } from '@/common/components/popover';
 import List from '@mui/material/List';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
@@ -65,11 +65,23 @@ export function DataSourceSelector({
       </SelectorButton>
 
       <DataSourceSelectorPopover
-        anchorEl={anchorEl}
+        position={
+          anchorEl
+            ? {
+                anchorEl: anchorEl,
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                },
+                contentOrigin: {
+                  vertical: 'top',
+                  horizontal: 'left',
+                },
+              }
+            : undefined
+        }
         open={isOpen}
         onClose={handleClosePopover}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
         theme={themeSettings}
       >
         <DataSourcesList theme={themeSettings}>

@@ -4,6 +4,7 @@ import MuiTypography, {
 } from '@mui/material/Typography';
 import React, { ForwardedRef } from 'react';
 
+import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { type TypographyTheme, typographyTheme } from './themes';
 
 export type TypographyProps = MuiTypographyProps & {
@@ -16,11 +17,13 @@ const Typography = React.forwardRef(
     { children, theme = typographyTheme, dataTestId, ...rest }: TypographyProps,
     ref: ForwardedRef<HTMLSpanElement>,
   ) => (
-    <ThemeProvider theme={theme}>
-      <MuiTypography ref={ref} {...rest} data-testid={dataTestId}>
-        {children}
-      </MuiTypography>
-    </ThemeProvider>
+    <EmotionCacheProvider>
+      <ThemeProvider theme={theme}>
+        <MuiTypography ref={ref} {...rest} data-testid={dataTestId}>
+          {children}
+        </MuiTypography>
+      </ThemeProvider>
+    </EmotionCacheProvider>
   ),
 );
 

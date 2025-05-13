@@ -1123,6 +1123,8 @@ export type WidgetThemeSettings = {
     titleTextColor?: string;
     /** Header title alignment */
     titleAlignment?: AlignmentTypes;
+    /** Header title font size */
+    titleFontSize?: number;
     /** Toggle of the divider line between widget header and chart */
     dividerLine?: boolean;
     /** Divider line color */

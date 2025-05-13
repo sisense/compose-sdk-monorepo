@@ -112,7 +112,7 @@ const defaultDesign: CompleteFilterTileDesignOptions = {
     shouldBeShown: true,
   },
 };
-
+/* eslint-disable rulesdir/opacity-zero-needs-focus-visible */
 const GroupHoverWrapper = styled.div<{ disableHeaderGroupHover: boolean }>`
   .MuiSwitch-root {
     opacity: 0.55;
@@ -138,6 +138,7 @@ const GroupHoverWrapper = styled.div<{ disableHeaderGroupHover: boolean }>`
       `}
   }
 `;
+/* eslint-enable rulesdir/opacity-zero-needs-focus-visible */
 
 /**
  * Generic component that owns common functionality of a filter "tile" like

@@ -4,7 +4,7 @@
 //  `date-fns` library also do not mutate Date instances and always return a new Date instance.
 
 import setYear from 'date-fns/setYear';
-import formatLocalTimezone from 'date-fns-tz/format';
+import formatInTimeZone from 'date-fns-tz/formatInTimeZone';
 import { newDateFormatWithExpandedAngularTextFormats } from './angular-text-date-format-replacers';
 import {
   newDateFormatWithUnicodeMillisecondsMasks,
@@ -114,6 +114,10 @@ export function applyDateFormat(
 ): string {
   if (date.getFullYear() < 100) {
     date = setYear(date, 1900 + date.getFullYear());
+    // datetime values without a year are defaulted to the year 1111 for format unification
+    // replace 1111 with 1970 — the earliest acceptable year for formatting
+  } else if (date.getFullYear() === 1111) {
+    date = setYear(date, 1970);
   }
 
   if (!cfg.isFiscalOn) {
@@ -153,7 +157,7 @@ export function applyDateFormat(
 
   // previously was using formatInTimeZone and can revit when
   // completing cfg implementation
-  return formatLocalTimezone(date, format, {
+  return formatInTimeZone(date, cfg.timeZone, format, {
     locale,
     weekStartsOn: cfg.weekFirstDay,
   });

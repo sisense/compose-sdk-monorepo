@@ -119,6 +119,9 @@ export const getFilterListAndRelationsJaql = (
       if ('right' in node) {
         node.right = traverse(node.right);
       }
+      if ('composeCode' in node) {
+        delete node.composeCode;
+      }
       return node;
     }
   }

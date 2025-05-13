@@ -1,0 +1,8 @@
+export default {
+  rules: {
+    'opacity-zero-needs-focus-visible': require('./opacity-zero-needs-focus-visible.cjs'),
+    'no-lodash-whole-import': require('./no-lodash-whole-import.cjs'),
+    'no-mui-barrel-import': require('./no-mui-barrel-import.cjs'),
+    'prefer-custom-popover': require('./prefer-custom-popover.cjs'),
+  },
+};

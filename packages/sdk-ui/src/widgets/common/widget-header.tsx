@@ -62,7 +62,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
             ),
             color: styleOptions?.titleTextColor || themeSettings.widget.header.titleTextColor,
             fontFamily: themeSettings.typography?.fontFamily,
-            fontSize: 15,
+            fontSize: themeSettings.widget.header.titleFontSize,
           }}
         >
           {title || ''}

@@ -65,7 +65,9 @@ const entryPoints = getEntries(resolve(__dirname, 'src/lib'), fs);
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
-    cssInjectedByJsPlugin(),
+    cssInjectedByJsPlugin({
+      useStrictCSP: true,
+    }),
     copy({
       targets: [{ src: 'package.json', dest: 'dist' }],
       hook: 'writeBundle',
