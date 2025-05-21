@@ -1,7 +1,10 @@
 import merge from 'ts-deepmerge';
 import {
+  DEFAULT_DASHBOARD_BORDER_COLOR,
+  DEFAULT_DASHBOARD_BORDER_WIDTH,
   DEFAULT_DIVIDER_COLOR,
   DEFAULT_DIVIDER_WIDTH,
+  DEFAULT_FILTER_PANEL_BORDER_COLOR,
   DEFAULT_TITLE_FONT_SIZE,
   getDefaultThemeSettings,
 } from '../theme-provider/default-theme-settings';
@@ -190,11 +193,15 @@ export function convertToThemeSettings(
       backgroundColor: legacyDesignSettings.dashboards.layoutBackgroundColor,
       dividerLineWidth: DEFAULT_DIVIDER_WIDTH,
       dividerLineColor: DEFAULT_DIVIDER_COLOR,
+      borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
+      borderColor: DEFAULT_DASHBOARD_BORDER_COLOR,
     },
     filter: {
       panel: {
         titleColor: legacyDesignSettings.dashboards.panelTitleTextColor,
         backgroundColor: legacyDesignSettings.dashboards.panelBackgroundColor,
+        borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
+        borderColor: DEFAULT_FILTER_PANEL_BORDER_COLOR,
       },
     },
   };

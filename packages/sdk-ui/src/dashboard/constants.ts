@@ -1,8 +1,6 @@
 import type { DeepRequired } from 'ts-essentials';
 import { DashboardByIdConfig, DashboardConfig } from './types';
 
-export const DASHBOARD_DIVIDER_COLOR = '#d5d5d5';
-export const DASHBOARD_DIVIDER_WIDTH = 1;
 export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<DashboardConfig> = {
   filtersPanel: {
     visible: true,
@@ -31,6 +29,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<DashboardConfig> = {
   },
   widgetsPanel: {
     responsive: false,
+    editMode: false,
   },
 };
 export const DEFAULT_DASHBOARD_BY_ID_CONFIG: DeepRequired<DashboardByIdConfig> = {

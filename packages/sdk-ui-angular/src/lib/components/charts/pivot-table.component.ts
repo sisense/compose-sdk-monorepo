@@ -16,8 +16,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { SisenseContextService } from '../../services';
 import { ThemeService } from '../../services';
 
@@ -85,6 +87,7 @@ export class AnalyticsComponent {
 @Component({
   selector: 'csdk-pivot-table',
   template,
+  styles,
 })
 export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy {
   /** @internal */

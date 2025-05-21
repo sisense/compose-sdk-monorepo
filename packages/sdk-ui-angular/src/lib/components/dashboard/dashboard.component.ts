@@ -16,8 +16,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { translateToPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
@@ -88,6 +90,7 @@ export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
 @Component({
   selector: 'csdk-dashboard',
   template,
+  styles,
 })
 export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

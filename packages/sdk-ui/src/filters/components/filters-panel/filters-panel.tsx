@@ -27,11 +27,13 @@ import {
 import { FiltersPanelConfig } from './types';
 import { useDefaults } from '@/common/hooks/use-defaults';
 import { DEFAULT_FILTERS_PANEL_CONFIG } from './constants';
+import { getDividerStyle } from '@/dashboard/utils';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
   font-family: ${({ theme }) => theme.typography.fontFamily};
-  border: 1px solid #dadada;
+  border: ${({ theme }) =>
+    getDividerStyle(theme.filter.panel.borderColor, theme.filter.panel.borderWidth)};
   width: fit-content;
   min-width: 238px;
   max-height: 100%;

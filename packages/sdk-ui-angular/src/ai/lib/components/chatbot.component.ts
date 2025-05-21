@@ -20,8 +20,7 @@ import {
   type ChatbotProps as ChatbotPropsPreact,
 } from '@sisense/sdk-ui-preact/ai';
 
-import { createAiContextConnector } from '../component-wrapper-helpers';
-import { rootId, template } from '../component-wrapper-helpers/template';
+import { createAiContextConnector, rootId, styles, template } from '../component-wrapper-helpers';
 import { AiService } from '../services/ai.service';
 
 /**
@@ -70,6 +69,7 @@ export class ExampleComponent {
 @Component({
   selector: 'csdk-chatbot',
   template,
+  styles,
 })
 export class ChatbotComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

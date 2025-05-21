@@ -18,8 +18,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import { ChartEventProps, WithoutPreactChartEventProps } from '../../types/chart-event-props';
@@ -92,6 +94,7 @@ export interface ChartProps
 @Component({
   selector: 'csdk-chart',
   template,
+  styles,
 })
 export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

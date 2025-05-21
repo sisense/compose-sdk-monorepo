@@ -18,8 +18,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import type { Arguments, ArgumentsAsObject } from '../../types/utility-types';
@@ -71,6 +73,7 @@ export interface MemberFilterTileProps extends Omit<MemberFilterTilePropsPreact,
 @Component({
   selector: 'csdk-member-filter-tile',
   template,
+  styles,
 })
 export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

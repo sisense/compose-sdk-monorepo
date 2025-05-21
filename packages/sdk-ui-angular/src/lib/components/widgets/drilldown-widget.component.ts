@@ -25,12 +25,11 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
-} from '../../component-wrapper-helpers';
-import {
   rootContentId,
   rootId,
+  styles,
   templateWithContent,
-} from '../../component-wrapper-helpers/template';
+} from '../../component-wrapper-helpers';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import type { Arguments } from '../../types/utility-types';
@@ -112,6 +111,7 @@ export type CustomDrilldownResult = CustomDrilldownResultBase & {
 @Component({
   selector: 'csdk-drilldown-widget',
   template: templateWithContent,
+  styles,
 })
 export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

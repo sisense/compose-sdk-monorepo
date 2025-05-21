@@ -8,25 +8,40 @@ export type {
 } from '@/common-filters/types';
 
 /**
- * Column layout of dashboard widgets
+ * Part of Dashboard layout, which describes how widgets are arranged in a cell
+ */
+export interface WidgetsPanelCell {
+  widthPercentage: number;
+  /**
+   * @privateRemarks
+   * This value appears to be overwritten by the widget's height property.
+   * Marking as optional and internal for now.
+   * @internal
+   */
+  height?: number | string;
+  widgetId: string;
+}
+
+/**
+ * Part of Dashboard layout, which describes how widgets are arranged in a row
+ */
+export interface WidgetsPanelRow {
+  cells: WidgetsPanelCell[];
+}
+
+/**
+ * Part of Dashboard layout, which describes how widgets are arranged in a column
+ */
+export interface WidgetsPanelColumn {
+  widthPercentage: number;
+  rows: WidgetsPanelRow[];
+}
+
+/**
+ * Dashboard layout, which describes how widgets are arranged in the dashboard
  */
 export interface WidgetsPanelColumnLayout {
-  columns: {
-    widthPercentage: number;
-    rows: {
-      cells: {
-        widthPercentage: number;
-        /**
-         * @privateRemarks
-         * This value appears to be overwritten by the widget's height property.
-         * Marking as optional and internal for now.
-         * @internal
-         */
-        height?: number | string;
-        widgetId: string;
-      }[];
-    }[];
-  }[];
+  columns: WidgetsPanelColumn[];
 }
 
 /**

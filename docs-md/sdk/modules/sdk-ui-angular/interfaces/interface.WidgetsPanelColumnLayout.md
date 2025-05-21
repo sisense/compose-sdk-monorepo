@@ -4,18 +4,10 @@ title: WidgetsPanelColumnLayout
 
 # Interface WidgetsPanelColumnLayout
 
-Column layout of dashboard widgets
+Dashboard layout, which describes how widgets are arranged in the dashboard
 
 ## Properties
 
 ### columns
 
-> **columns**: \{
-  `rows`: \{
-    `cells`: \{
-      `widgetId`: `string`;
-      `widthPercentage`: `number`;
-    }[];
-  }[];
-  `widthPercentage`: `number`;
- }[]
+> **columns**: [`WidgetsPanelColumn`](../../sdk-ui/interfaces/interface.WidgetsPanelColumn.md)[]

@@ -248,11 +248,15 @@ export const redThemeSettings: CompleteThemeSettings = {
     backgroundColor: '#313138',
     dividerLineColor: '#F2F2F2',
     dividerLineWidth: 4,
+    borderColor: '#D5D5D5',
+    borderWidth: 1,
   },
   filter: {
     panel: {
       backgroundColor: '#313138',
       titleColor: '#FFFFFF',
+      borderColor: '#DADADA',
+      borderWidth: 1,
     },
   },
   aiChat: {

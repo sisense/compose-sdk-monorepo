@@ -16,8 +16,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 
@@ -71,6 +73,7 @@ export interface TableWidgetProps extends TableWidgetPropsPreact {}
 @Component({
   selector: 'csdk-table-widget',
   template,
+  styles,
 })
 export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   /** @internal */

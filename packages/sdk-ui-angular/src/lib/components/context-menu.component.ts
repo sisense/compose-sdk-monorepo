@@ -19,8 +19,11 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootContentId,
+  rootId,
+  styles,
+  templateWithContent,
 } from '../component-wrapper-helpers';
-import { rootContentId, rootId, templateWithContent } from '../component-wrapper-helpers/template';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
 import type { ArgumentsAsObject } from '../types/utility-types';
@@ -33,6 +36,7 @@ import type { ArgumentsAsObject } from '../types/utility-types';
 @Component({
   selector: 'csdk-context-menu',
   template: templateWithContent,
+  styles,
 })
 export class ContextMenuComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

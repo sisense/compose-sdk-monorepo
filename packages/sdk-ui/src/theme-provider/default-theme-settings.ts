@@ -4,6 +4,9 @@ import cloneDeep from 'lodash-es/cloneDeep';
 
 export const DEFAULT_DIVIDER_COLOR = '#F2F2F2';
 export const DEFAULT_DIVIDER_WIDTH = 4;
+export const DEFAULT_DASHBOARD_BORDER_COLOR = '#D5D5D5';
+export const DEFAULT_DASHBOARD_BORDER_WIDTH = 1;
+export const DEFAULT_FILTER_PANEL_BORDER_COLOR = '#DADADA';
 export const DEFAULT_TITLE_FONT_SIZE = 15;
 
 const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
@@ -132,11 +135,15 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     backgroundColor: '#FFFFFF',
     dividerLineWidth: DEFAULT_DIVIDER_WIDTH,
     dividerLineColor: DEFAULT_DIVIDER_COLOR,
+    borderColor: DEFAULT_DASHBOARD_BORDER_COLOR,
+    borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
   },
   filter: {
     panel: {
       titleColor: '#5B6372',
       backgroundColor: '#F6F6F6',
+      borderColor: DEFAULT_FILTER_PANEL_BORDER_COLOR,
+      borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
     },
   },
   aiChat: {
@@ -362,11 +369,15 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     backgroundColor: '#313138',
     dividerLineWidth: DEFAULT_DIVIDER_WIDTH,
     dividerLineColor: DEFAULT_DIVIDER_COLOR,
+    borderColor: DEFAULT_DASHBOARD_BORDER_COLOR,
+    borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
   },
   filter: {
     panel: {
       titleColor: '#FFFFFF',
       backgroundColor: '#313138',
+      borderColor: '#DADADA',
+      borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
     },
   },
   aiChat: {

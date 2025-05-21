@@ -17,8 +17,10 @@ import {
   createPluginsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { PluginsService } from '../../services/plugins.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
@@ -62,6 +64,7 @@ export interface DashboardByIdProps extends DashboardByIdPropsPreact {
 @Component({
   selector: 'csdk-dashboard-by-id',
   template,
+  styles,
 })
 export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

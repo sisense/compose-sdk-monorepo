@@ -18,8 +18,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../component-wrapper-helpers';
-import { rootId, template } from '../component-wrapper-helpers/template';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
 import type { Arguments, ArgumentsAsObject } from '../types/utility-types';
@@ -43,6 +45,7 @@ export interface DrilldownBreadcrumbsProps
 @Component({
   selector: 'csdk-drilldown-breadcrumbs',
   template,
+  styles,
 })
 export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

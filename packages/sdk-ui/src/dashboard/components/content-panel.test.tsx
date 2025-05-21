@@ -7,16 +7,6 @@ vi.mock('@/widgets/widget', async () => {
 });
 
 describe('ContentPanel', () => {
-  it('should render widgets without provided layout', async () => {
-    const widgets = [{ id: 'widget-1' }, { id: 'widget-2' }] as WidgetProps[];
-    const { container, getAllByTestId } = render(<ContentPanel widgets={widgets} />);
-
-    expect(container).toMatchSnapshot();
-
-    const widgetElements = getAllByTestId('widget');
-    expect(widgetElements).toHaveLength(2);
-  });
-
   it('should render widgets with provided layout', async () => {
     const widgets = [
       { id: 'widget-1' },

@@ -1,12 +1,13 @@
-import { getDefaultWidgetsPanelLayout, getDividerStyle } from '@/dashboard/utils';
+import { getDividerStyle } from '@/dashboard/utils';
 import { WidgetSpaceAround } from '@/widgets/common/widget-style-utils';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 import styled from '@emotion/styled';
 import { useThemeContext } from '@/theme-provider';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { Widget } from '@/widgets/widget';
 import isUndefined from 'lodash-es/isUndefined';
+import isNumber from 'lodash-es/isNumber';
 
 const SMALL_WIDTH = '600px';
 const MEDIUM_WIDTH = '900px';
@@ -74,7 +75,7 @@ const Subcell = styled.div<{
   height: ${({ height }) =>
     isUndefined(height)
       ? 'auto'
-      : Number.isInteger(height)
+      : isNumber(height)
       ? `calc(${height}px + 32px)`
       : `calc(${height} + 32px)`};
   @container ((min-width: ${SMALL_WIDTH}) and (max-width: ${MEDIUM_WIDTH})) {
@@ -98,7 +99,7 @@ export interface ContentPanelProps {
   /**
    * An object defining how the widgets should be laid out.
    */
-  layout?: WidgetsPanelLayout;
+  layout: WidgetsPanelLayout;
 
   /**
    * If true adjust layout based on available width of content panel.
@@ -124,21 +125,17 @@ export interface ContentPanelProps {
 export const ContentPanel = ({ layout, responsive, widgets }: ContentPanelProps) => {
   const { themeSettings } = useThemeContext();
 
-  const updatedLayout = useMemo(() => {
-    return layout ?? getDefaultWidgetsPanelLayout(widgets);
-  }, [layout, widgets]);
-
   const padding = WidgetSpaceAround[themeSettings.widget.spaceAround] || '0px';
 
   useEffect(() => {
     window.dispatchEvent(new Event('resize'));
   }, [responsive]);
 
-  const colWidths = updatedLayout.columns.map((c) => c.widthPercentage);
+  const colWidths = layout.columns.map((c) => c.widthPercentage);
 
   return (
     <GridContainer padding={padding} widths={colWidths}>
-      {updatedLayout.columns.map((column, columnIndex) => (
+      {layout.columns.map((column, columnIndex) => (
         <Column
           key={columnIndex}
           colWidths={colWidths}

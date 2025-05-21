@@ -18,8 +18,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { EventEmitterWithHasListeners } from '../../helpers';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
@@ -81,6 +83,7 @@ export class ExampleComponent {
 @Component({
   selector: 'csdk-filter-tile',
   template,
+  styles,
 })
 export class FilterTileComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**

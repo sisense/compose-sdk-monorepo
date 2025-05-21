@@ -22,8 +22,10 @@ import {
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
+  rootId,
+  styles,
+  template,
 } from '../../component-wrapper-helpers';
-import { rootId, template } from '../../component-wrapper-helpers/template';
 import { translateToPreactWidgetProps } from '../../helpers/widget-props-preact-translator';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
@@ -113,6 +115,7 @@ export class ExampleComponent {
 @Component({
   selector: 'csdk-widget',
   template,
+  styles,
 })
 export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   /** @internal */

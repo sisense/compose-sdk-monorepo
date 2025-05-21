@@ -1143,6 +1143,8 @@ export type DashboardThemeSettings = {
   backgroundColor?: string;
   dividerLineWidth?: number;
   dividerLineColor?: string;
+  borderWidth?: number;
+  borderColor?: string;
 };
 
 /**
@@ -1154,6 +1156,18 @@ export type FilterThemeSettings = {
     titleColor?: string;
     /** Background color */
     backgroundColor?: string;
+    /**
+     * Border color
+     *
+     * @internal
+     * */
+    borderColor?: string;
+    /**
+     * Border width
+     *
+     * @internal
+     * */
+    borderWidth?: number;
   };
 };
 

@@ -122,4 +122,7 @@ TypeScript interfaces for components and hooks listed above
 - [WidgetByIdProps](interface.WidgetByIdProps.md)
 - [WidgetByIdStyleOptions](interface.WidgetByIdStyleOptions.md)
 - [WidgetContainerStyleOptions](interface.WidgetContainerStyleOptions.md)
+- [WidgetsPanelCell](interface.WidgetsPanelCell.md)
+- [WidgetsPanelColumn](interface.WidgetsPanelColumn.md)
 - [WidgetsPanelColumnLayout](interface.WidgetsPanelColumnLayout.md)
+- [WidgetsPanelRow](interface.WidgetsPanelRow.md)

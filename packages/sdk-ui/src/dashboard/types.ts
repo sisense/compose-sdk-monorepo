@@ -9,7 +9,14 @@ import { DashboardChangeAction } from '@/dashboard/dashboard';
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
 
-export type { DashboardStyleOptions, WidgetsPanelColumnLayout } from '@/models';
+export type {
+  DashboardStyleOptions,
+  WidgetsPanelColumnLayout,
+  WidgetsPanelLayout,
+  WidgetsPanelCell,
+  WidgetsPanelRow,
+  WidgetsPanelColumn,
+} from '@/models';
 
 /**
  * Props of the {@link DashboardById} component.
@@ -98,6 +105,12 @@ export interface DashboardConfig {
      * If not specified, the default value is `false`.
      */
     responsive?: boolean;
+    /**
+     * If true will render editable layout.
+     *
+     * @internal
+     */
+    editMode?: boolean;
   };
 }
 

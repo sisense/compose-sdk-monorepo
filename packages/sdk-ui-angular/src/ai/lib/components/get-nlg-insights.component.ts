@@ -20,8 +20,7 @@ import {
   type GetNlgInsightsProps as GetNlgInsightsPropsPreact,
 } from '@sisense/sdk-ui-preact/ai';
 
-import { createAiContextConnector } from '../component-wrapper-helpers';
-import { rootId, template } from '../component-wrapper-helpers/template';
+import { createAiContextConnector, rootId, styles, template } from '../component-wrapper-helpers';
 import { AiService } from '../services/ai.service';
 
 /**
@@ -71,6 +70,7 @@ export class ExampleComponent {
 @Component({
   selector: 'csdk-get-nlg-insights',
   template,
+  styles,
 })
 export class GetNlgInsightsComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**
