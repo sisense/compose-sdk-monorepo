@@ -66,6 +66,7 @@ export function fromDashboardDto(
     filters: filterDtoList,
     filterRelations: filterRelationsDtoOptions,
     style,
+    settings,
   } = dashboardDto;
 
   const dataSource: DataSource = convertDataSource(jaqlDataSource);
@@ -100,6 +101,7 @@ export function fromDashboardDto(
     filters,
     widgetsOptions,
     tabbersOptions,
+    settings,
   };
 
   return dashboardModel;

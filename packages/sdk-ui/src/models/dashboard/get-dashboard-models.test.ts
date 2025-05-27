@@ -103,6 +103,7 @@ describe('getDashboardModels', () => {
             },
           }),
         },
+        settings: dashboardMock.settings,
       })),
     );
   });
@@ -145,6 +146,7 @@ describe('getDashboardModels', () => {
             },
           }),
         },
+        settings: dashboardMock.settings,
       })),
     );
   });
@@ -180,6 +182,7 @@ describe('getDashboardModels', () => {
             }
           : null),
       },
+      settings: targetDashboardMock.settings,
     });
   });
 

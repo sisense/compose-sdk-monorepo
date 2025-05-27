@@ -56,6 +56,7 @@ describe('getDashboardModel', () => {
           variantColors: dashboardMock.style!.palette!.colors,
         },
       },
+      settings: dashboardMock.settings,
     });
   });
 
@@ -93,6 +94,7 @@ describe('getDashboardModel', () => {
           variantColors: dashboardMock.style!.palette!.colors,
         },
       },
+      settings: dashboardMock.settings,
     });
   });
 
@@ -139,6 +141,7 @@ describe('getDashboardModel', () => {
           variantColors: dashboardMock.style!.palette!.colors,
         },
       },
+      settings: dashboardMock.settings,
     });
   });
 

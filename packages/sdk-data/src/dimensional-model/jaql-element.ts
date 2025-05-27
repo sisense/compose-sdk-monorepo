@@ -4,6 +4,7 @@ import {
   createMeasureHelper,
   getSortType,
 } from '../utils.js';
+import { DimensionalLevelAttribute } from './attributes.js';
 import { DimensionalElement } from './base.js';
 import { SortDirection } from './interfaces.js';
 import {
@@ -131,13 +132,15 @@ export function createDimensionalElementFromMetadataItem(item: MetadataItem) {
     return createCalculatedMeasureHelper(jaql as FormulaJaql);
   }
 
+  const granularity = DimensionalLevelAttribute.translateJaqlToGranularity(jaql);
+
   // measure
   if ('agg' in jaql && jaql.dim && jaql.datatype) {
     return createMeasureHelper({
       expression: jaql.dim,
       dataType: jaql.datatype,
       agg: jaql.agg || '',
-      granularity: jaql.level,
+      granularity: granularity,
       format: undefined,
       sort: jaql.sort,
       title: jaql.title,
@@ -150,7 +153,7 @@ export function createDimensionalElementFromMetadataItem(item: MetadataItem) {
     return createAttributeHelper({
       expression: jaql.dim,
       dataType: jaql.datatype,
-      granularity: jaql.level,
+      granularity: granularity,
       sort: jaql.sort,
       title: jaql.title,
       panel: item.panel,

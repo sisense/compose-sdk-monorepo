@@ -74,6 +74,12 @@ describe('DashboardModel', () => {
             disabled: false,
           },
         ],
+        settings: {
+          autoUpdateOnFiltersChange: true,
+          useAcceleration: true,
+          aiAssistantEnabled: true,
+          managedByTool: 'studio-assistant',
+        },
       }),
     ).toMatchSnapshot();
   });

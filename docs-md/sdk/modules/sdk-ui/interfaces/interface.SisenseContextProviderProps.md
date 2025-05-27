@@ -42,9 +42,12 @@ URL of the Sisense environment the app connects to
 
 #### onError
 
-> **onError**?: (`error`, `errorDetails`?) => `void`
+> **onError**?: (`error`, `errorDetails`?) => `ReactNode` \| `void`
 
 Callback function that is triggered when an error occurs within the Sisense context.
+
+Return React node to render a custom error UI.
+Return `undefined` to use the default error UI.
 
 This callback is useful for handling errors that happen during the initialization or runtime of the Sisense context,
 such as incorrect configuration, invalid authentication, or network-related issues.
@@ -60,7 +63,7 @@ such as incorrect configuration, invalid authentication, or network-related issu
 
 ##### Returns
 
-`void`
+`ReactNode` \| `void`
 
 ***
 

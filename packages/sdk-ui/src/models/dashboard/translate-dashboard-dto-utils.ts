@@ -16,8 +16,9 @@ import {
   RankingFilter,
   TurnOffMembersFilterJaql,
 } from '@sisense/sdk-data';
-import { CascadingFilterDto, FilterDto } from '@/api/types/dashboard-dto';
+import { CascadingFilterDto, FilterDto, LayoutDto } from '@/api/types/dashboard-dto';
 import { ConditionFilterJaql } from '@sisense/sdk-data/dist/dimensional-model/filters/utils/types';
+import { WidgetsPanelLayout } from '@/dashboard/types';
 
 /**
  * Translates a {@link Filter} to a {@link FilterDto}.
@@ -145,4 +146,24 @@ function setInnerFilter(
   } else {
     parentFilter.filter = innerFilter;
   }
+}
+
+export function layoutToLayoutDto(layout: WidgetsPanelLayout): LayoutDto {
+  const DEFAULT_HEIGHT = '500px';
+  return {
+    columns: layout.columns.map((column) => ({
+      width: column.widthPercentage,
+      cells: column.rows.map((row) => ({
+        subcells: row.cells.map((cell) => ({
+          width: cell.widthPercentage,
+          elements: [
+            {
+              widgetid: cell.widgetId,
+              height: cell.height ?? DEFAULT_HEIGHT,
+            },
+          ],
+        })),
+      })),
+    })),
+  };
 }

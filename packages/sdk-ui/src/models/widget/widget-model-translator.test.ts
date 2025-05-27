@@ -38,6 +38,8 @@ describe('WidgetModelTranslator', () => {
       // console.log(JSON.stringify(resWidgetDto, null, 2));
 
       expect(resWidgetDto.type).toBe(mockLineWidgetDto.type);
+      expect(resWidgetDto.metadata.panels[0].name).toBe('x-axis');
+      expect(resWidgetDto.metadata.panels[1].name).toBe('values');
     });
 
     it('should create a valid WidgetDto for the "table" chart', () => {

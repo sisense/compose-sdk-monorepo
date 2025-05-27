@@ -55,6 +55,13 @@ export const isCascadingFilterDto = (
   return 'levels' in filter && filter.isCascading === true;
 };
 
+export type DashboardSettings = {
+  autoUpdateOnFiltersChange?: boolean;
+  useAcceleration?: boolean;
+  aiAssistantEnabled?: boolean;
+  managedByTool?: string;
+};
+
 /**
  * @internal
  */
@@ -70,4 +77,5 @@ export type DashboardDto = {
   }[];
   layout?: LayoutDto;
   style?: DashboardStyleDto;
+  settings?: DashboardSettings;
 } & AnyObject;

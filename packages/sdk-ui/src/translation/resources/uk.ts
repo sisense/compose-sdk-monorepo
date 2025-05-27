@@ -210,6 +210,15 @@ export const translation: TranslationDictionary = {
       max: 'Максимум',
     },
   },
+  dashboard: {
+    toolbar: {
+      undo: 'Скасувати',
+      redo: 'Повторити',
+      cancel: 'Відмінити',
+      apply: 'Застосувати',
+      editLayout: 'Редагувати макет',
+    },
+  },
   unsupportedFilterMessage: 'Непідтримуваний Фільтр (застосовано до запиту даних)',
   unsupportedFilter: 'Непідтримуваний фільтр {{filter}}',
   commonFilter: {

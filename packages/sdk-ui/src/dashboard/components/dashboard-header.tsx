@@ -17,6 +17,7 @@ const DashboardHeaderContainer = styled.div<Themable>`
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  justify-content: space-between;
 `;
 
 const DashboardHeaderTitle = styled.div`
@@ -24,11 +25,12 @@ const DashboardHeaderTitle = styled.div`
   font-weight: 700;
 `;
 
-export const DashboardHeader = ({ title }: DashboardHeaderProps) => {
+export const DashboardHeader = ({ title, toolbar }: DashboardHeaderProps) => {
   const { themeSettings } = useThemeContext();
   return (
     <DashboardHeaderContainer theme={themeSettings}>
       <DashboardHeaderTitle>{title}</DashboardHeaderTitle>
+      <div>{toolbar?.()}</div>
     </DashboardHeaderContainer>
   );
 };

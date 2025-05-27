@@ -11,12 +11,15 @@ import { TabberWidget } from '@/widgets/tabber-widget';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useDefaults } from '@/common/hooks/use-defaults';
 import { DEFAULT_DASHBOARD_CONFIG } from './constants';
+import { WidgetsPanelLayout } from '@/models';
 
 export enum DashboardChangeType {
   /** Dashboard filters have been updated */
   FILTERS_UPDATE = 'FILTERS.UPDATE',
   /** Filters panel collapsed state changed */
   UI_FILTERS_PANEL_COLLAPSE = 'UI.FILTERS.PANEL.COLLAPSE',
+  /** Widgets panel layout updated */
+  WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
 }
 
 export type DashboardChangeAction =
@@ -27,6 +30,10 @@ export type DashboardChangeAction =
   | {
       type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE;
       payload: boolean;
+    }
+  | {
+      type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE;
+      payload: WidgetsPanelLayout;
     };
 
 /**

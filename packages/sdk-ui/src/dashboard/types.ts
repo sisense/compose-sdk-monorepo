@@ -8,6 +8,7 @@ import { WidgetProps } from '@/props';
 import { DashboardChangeAction } from '@/dashboard/dashboard';
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
+import { ReactNode } from 'react';
 
 export type {
   DashboardStyleOptions,
@@ -106,7 +107,7 @@ export interface DashboardConfig {
      */
     responsive?: boolean;
     /**
-     * If true will render editable layout.
+     * If true will .
      *
      * @internal
      */
@@ -192,4 +193,5 @@ export interface DashboardProps {
  */
 export interface DashboardHeaderProps {
   title: string;
+  toolbar?: () => ReactNode;
 }

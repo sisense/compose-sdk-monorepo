@@ -163,6 +163,9 @@ export interface SisenseContextProviderProps {
   /**
    * Callback function that is triggered when an error occurs within the Sisense context.
    *
+   * Return React node to render a custom error UI.
+   * Return `undefined` to use the default error UI.
+   *
    * This callback is useful for handling errors that happen during the initialization or runtime of the Sisense context,
    * such as incorrect configuration, invalid authentication, or network-related issues.
    *
@@ -178,7 +181,7 @@ export interface SisenseContextProviderProps {
       /** The props of the component that caused the error. */
       componentProps: unknown;
     },
-  ) => void;
+  ) => void | ReactNode;
 
   /**
    * Boolean flag to enable sending silent pre-authentication requests to the Sisense instance.

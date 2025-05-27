@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.1.1",
+  "version": "2.2.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
@@ -36,7 +36,7 @@
     "test:coverage": "run vitest run --coverage"
   },
   "dependencies": {
-    "@sisense/sdk-rest-client": "workspace:^"
+    "@sisense/sdk-rest-client": "workspace:*"
   },
   "devDependencies": {
     "typescript": "4.8.4",

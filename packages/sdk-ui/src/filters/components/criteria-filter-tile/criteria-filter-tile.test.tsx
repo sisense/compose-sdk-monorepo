@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedSisenseContextProvider, setup } from '../../../__test-helpers__/index.js';
 import { CriteriaFilterTile, CriteriaFilterTileProps } from './criteria-filter-tile';
@@ -231,7 +226,12 @@ describe('criteria tests', () => {
 
     render(
       <MockedSisenseContextProvider
-        errorBoundary={{ showErrorBox: false, onError: (error) => (caughtError = error) }}
+        errorBoundary={{
+          showErrorBox: false,
+          onError: (error) => {
+            caughtError = error;
+          },
+        }}
       >
         <CriteriaFilterTile {...propsWithMembersFilter} />
       </MockedSisenseContextProvider>,

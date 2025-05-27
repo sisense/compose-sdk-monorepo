@@ -17,6 +17,11 @@ export function dashboardChangeActionToUseDashboardModelAction(
       type: UseDashboardModelActionType.FILTERS_UPDATE,
       payload: action.payload,
     };
+  } else if (action.type === DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE) {
+    return {
+      type: UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE,
+      payload: action.payload,
+    };
   }
 
   return null;

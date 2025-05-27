@@ -2,6 +2,7 @@ import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { DashboardStyleOptions, TabbersOptions, WidgetModel } from '@/models';
 import { type WidgetsOptions } from './types';
 import { DashboardLayoutOptions } from '@/dashboard';
+import { DashboardSettings } from '@/api/types/dashboard-dto';
 
 /**
  * Model of Sisense Fusion dashboard defined in the abstractions of Compose SDK.
@@ -64,4 +65,11 @@ export interface DashboardModel {
    * @internal
    */
   tabbersOptions?: TabbersOptions;
+
+  /**
+   * Dashboard settings.
+   *
+   * @internal
+   */
+  settings?: DashboardSettings;
 }

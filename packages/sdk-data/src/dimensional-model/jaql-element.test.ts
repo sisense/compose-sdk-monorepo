@@ -75,6 +75,19 @@ describe('createDimensionalElementFromMetadataItem', () => {
       },
       {
         jaql: {
+          dim: '[Commerce.Date]',
+          datatype: 'datetime',
+          level: 'months',
+          title: 'months in Date',
+        },
+        format: {
+          mask: {
+            months: 'yyyy-MM',
+          },
+        },
+      },
+      {
+        jaql: {
           formula: 'QUARTILE([28B80-CD8], 2)',
           context: {
             '[28B80-CD8]': {

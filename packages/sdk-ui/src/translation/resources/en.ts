@@ -383,6 +383,15 @@ export const translation = {
     grandTotal: 'Grand Total',
     subTotal: '{{value}} Total',
   },
+  dashboard: {
+    toolbar: {
+      undo: 'Undo',
+      redo: 'Redo',
+      cancel: 'Cancel',
+      apply: 'Apply',
+      editLayout: 'Edit Layout',
+    },
+  },
 };
 
 /**

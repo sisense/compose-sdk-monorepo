@@ -64,3 +64,6 @@ packages/sdk-*/vite.config.ts.timestamp-*
 
 # generated from eslint
 .eslintcache
+
+# cursor ignore
+.cursorignore

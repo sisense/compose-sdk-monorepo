@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0] - 2025-05-27
+
+### Added
+- Add editable dashboard layout for internal testing:
+  - Add drag-and-drop and resizing capabilities for widgets
+  - Add layout history management UI in dashboard toolbar
+  - Support persistence of dashboard layout to Fusion
+
+### Changed
+- Extend the `onError` handler in `SisenseContextProviderProps` to support custom error box visualization
+- Fix a rendering issue that may occur from runtime errors happening while `showRuntimeErrors` is disabled in `SisenseContextProviderProps`
+- Migrate CSDK packages from version ranges to fixed versions to prevent internal dependency mismatches
+
 ## [2.1.0] - 2025-05-13
 
 ### Added

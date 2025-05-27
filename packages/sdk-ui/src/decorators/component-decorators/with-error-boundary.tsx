@@ -5,9 +5,9 @@ import { ComponentDecorator } from './as-sisense-component';
 /**
  * Adds error boundary to the component
  */
-export const withErrorBoundary: ComponentDecorator<{ componentName: string }> = ({
-  componentName,
-}) => {
+export const withErrorBoundary: ComponentDecorator<{
+  componentName: string;
+}> = ({ componentName }) => {
   return (Component) => {
     return function ErrorBoundaryContainer(props) {
       const context = useSisenseContext();

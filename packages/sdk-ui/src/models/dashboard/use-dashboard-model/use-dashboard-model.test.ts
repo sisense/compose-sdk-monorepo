@@ -3,6 +3,7 @@ import {
   useDashboardModel,
   UseDashboardModelActionType,
   widgetModelTranslator,
+  WidgetsPanelColumnLayout,
 } from '@/models';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { filterFactory } from '@sisense/sdk-data';
@@ -240,5 +241,53 @@ describe('useGetDashboardModel', () => {
       filters: newFilters,
     });
     expect(patchDashboardMock).toHaveBeenCalledTimes(0);
+  });
+
+  it('should update and persist dashboard layout', async () => {
+    const newLayout: WidgetsPanelColumnLayout = {
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  widgetId: 'widget-1',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const { result } = renderHook(() =>
+      useDashboardModel({
+        dashboardOid: dashboardMock.oid,
+        includeWidgets: true,
+        persist: true,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.dashboard).toBeTruthy();
+    });
+
+    const { dispatchChanges } = result.current;
+    act(() => {
+      dispatchChanges({
+        type: UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE,
+        payload: newLayout,
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.dashboard).toEqual({
+        ...dashboardMock,
+        layoutOptions: { widgetsPanel: newLayout },
+      });
+    });
+    expect(patchDashboardMock).toHaveBeenCalledTimes(1);
   });
 });

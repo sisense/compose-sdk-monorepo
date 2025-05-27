@@ -7,7 +7,7 @@ export const PrimaryButton: FunctionComponent<ButtonProps> = (props) => {
     <button
       {...props}
       className={
-        'csdk-rounded   disabled:csdk-cursor-not-allowed csdk-leading-none csdk-font-normal csdk-text-text-content  csdk-p-button csdk-bg-primary-primary csdk-h-button hover:csdk-bg-interaction-primaryHovered disabled:csdk-opacity-30 ' +
+        'csdk-rounded csdk-cursor-pointer disabled:csdk-cursor-not-allowed csdk-leading-none csdk-font-normal csdk-text-text-content  csdk-p-button csdk-bg-primary-primary csdk-h-button hover:csdk-bg-interaction-primaryHovered disabled:csdk-opacity-30 ' +
         (props.className || '')
       }
     >
@@ -25,7 +25,7 @@ export const SecondaryButton: FunctionComponent<ButtonProps> = forwardRef<
       {...props}
       ref={ref}
       className={
-        'csdk-rounded disabled:csdk-cursor-not-allowed csdk-leading-[18px] csdk-text-[13px] csdk-py-[5px] csdk-px-[8px] csdk-text-text-content disabled:csdk-opacity-30 ' +
+        'csdk-rounded csdk-cursor-pointer disabled:csdk-cursor-not-allowed csdk-leading-[18px] csdk-text-[13px] csdk-py-[5px] csdk-px-[8px] csdk-text-text-content disabled:csdk-opacity-30 ' +
         (props.className || '')
       }
     >

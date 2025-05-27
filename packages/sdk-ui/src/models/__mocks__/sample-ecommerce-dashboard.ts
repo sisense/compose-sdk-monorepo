@@ -3691,4 +3691,10 @@ export const sampleEcommerceDashboard = {
       export_dash: false,
     },
   },
+  settings: {
+    autoUpdateOnFiltersChange: true,
+    useAcceleration: true,
+    aiAssistantEnabled: true,
+    managedByTool: 'studio-assistant',
+  },
 } as unknown as DashboardDto;

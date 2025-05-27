@@ -7,7 +7,7 @@ import { FiltersPanel } from '@/filters';
 import { getDividerStyle, getDefaultWidgetsPanelLayout } from '@/dashboard/utils';
 import { HorizontalCollapse } from '@/dashboard/components/horizontal-collapse';
 import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-panel-collapsed-state';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DashboardChangeType } from '@/dashboard/dashboard';
 import { WidgetProps } from '@/props';
 import { DataSource } from '@sisense/sdk-data';
@@ -15,6 +15,17 @@ import { getDataSourceTitle } from '@/utils/data-sources-utils';
 import { Themable } from '@/theme-provider/types';
 import { EditableLayout } from '@/dashboard/components/editable-layout/editable-layout';
 import { useSyncedState } from '@/common/hooks/use-synced-state';
+import { useEditModeToolbar } from '../hooks/use-edit-mode-toolbar';
+import {
+  DashboardHeaderToolbarMenuItem,
+  useDashboardHeaderToolbar,
+} from '../hooks/use-dashboard-header-toolbar';
+import { useTranslation } from 'react-i18next';
+
+enum DashboardMode {
+  VIEW = 'view',
+  EDIT = 'edit',
+}
 
 const DashboardWrapper = styled.div<Themable>`
   max-width: 100%;
@@ -61,10 +72,47 @@ export const DashboardContainer = ({
   onChange,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
   const [internalLayout, setInternalLayout] = useSyncedState(layoutOptions?.widgetsPanel);
   const updatedLayout = useMemo(() => {
     return internalLayout ?? getDefaultWidgetsPanelLayout(widgets);
   }, [internalLayout, widgets]);
+  const [mode, setMode] = useState<DashboardMode>(DashboardMode.VIEW);
+
+  const {
+    layout: editModeLayout,
+    setLayout: setEditModeLayout,
+    toolbar: editModeToolbar,
+  } = useEditModeToolbar({
+    initialLayout: updatedLayout,
+    onApply: () => {
+      setInternalLayout(editModeLayout);
+      setMode(DashboardMode.VIEW);
+      onChange?.({
+        type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE,
+        payload: editModeLayout,
+      });
+    },
+    onCancel: () => setMode(DashboardMode.VIEW),
+  });
+
+  const headerToolbarMenuItems = useMemo(() => {
+    const items: DashboardHeaderToolbarMenuItem[] = [];
+
+    if (config?.widgetsPanel?.editMode) {
+      items.push({
+        title: t('dashboard.toolbar.editLayout'),
+        onClick: () => setMode(DashboardMode.EDIT),
+        ariaLabel: 'edit layout button',
+      });
+    }
+
+    return items;
+  }, [t, config?.widgetsPanel?.editMode]);
+
+  const { toolbar: headerToolbar } = useDashboardHeaderToolbar({
+    menuItems: headerToolbarMenuItems,
+  });
 
   const [isFilterPanelCollapsed, setIsFilterPanelCollapsed] = useFiltersPanelCollapsedState(
     config?.filtersPanel?.collapsedInitially,
@@ -78,21 +126,27 @@ export const DashboardContainer = ({
     [onChange, setIsFilterPanelCollapsed],
   );
 
+  useEffect(() => {
+    setMode(DashboardMode.VIEW);
+  }, [widgets, filters, layoutOptions, config]);
+
   const isToolbarVisible = config?.toolbar?.visible !== false;
   const isFiltersPanelVisible = config?.filtersPanel?.visible !== false;
   const isLayoutResponsive = config?.widgetsPanel?.responsive ?? false;
-  const isEditMode = config?.widgetsPanel?.editMode ?? false;
+  const isEditMode = mode === DashboardMode.EDIT;
 
   return (
     <DashboardWrapper theme={themeSettings}>
       <ContentColumn theme={themeSettings} showRightBorder={!isFiltersPanelVisible}>
-        {isToolbarVisible && <DashboardHeader title={title} />}
+        {isToolbarVisible && (
+          <DashboardHeader title={title} toolbar={isEditMode ? editModeToolbar : headerToolbar} />
+        )}
         <ContentPanelWrapper responsive={isLayoutResponsive}>
           {isEditMode ? (
             <EditableLayout
-              layout={updatedLayout}
+              layout={editModeLayout}
               widgets={widgets}
-              onLayoutChange={(updatedLayout) => setInternalLayout(updatedLayout)}
+              onLayoutChange={(updatedLayout) => setEditModeLayout(updatedLayout)}
             />
           ) : (
             <ContentPanel

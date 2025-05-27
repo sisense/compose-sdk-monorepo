@@ -2,6 +2,7 @@ import { filterFactory, measureFactory, MembersFilter } from '@sisense/sdk-data'
 import * as DM from '../../__test-helpers__/sample-ecommerce';
 import { filterToFilterDto } from '@/models/dashboard/translate-dashboard-dto-utils';
 import { CascadingFilterDto, FilterDto } from '@/api/types/dashboard-dto';
+import { layoutToLayoutDto } from '@/models/dashboard/translate-dashboard-dto-utils';
 
 describe('baseFilterToFilterDto', () => {
   it('should return correctly translated simple filter', () => {
@@ -69,6 +70,225 @@ describe('baseFilterToFilterDto', () => {
     const result = filterToFilterDto(filter);
 
     expect(result).toMatchSnapshot();
+  });
+});
+
+describe('layoutToLayoutDto', () => {
+  it('should correctly translate a simple layout with one column and one row', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '200px',
+                  widgetId: 'widget-1',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 100,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '200px',
+                      widgetid: 'widget-1',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should correctly translate a layout with multiple columns and rows', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: 300,
+                  widgetId: 'widget-1',
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  widthPercentage: 50,
+                  height: '250px',
+                  widgetId: 'widget-2',
+                },
+                {
+                  widthPercentage: 50,
+                  height: '250px',
+                  widgetId: 'widget-3',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '400px',
+                  widgetId: 'widget-4',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 50,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: 300,
+                      widgetid: 'widget-1',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              subcells: [
+                {
+                  width: 50,
+                  elements: [
+                    {
+                      height: '250px',
+                      widgetid: 'widget-2',
+                    },
+                  ],
+                },
+                {
+                  width: 50,
+                  elements: [
+                    {
+                      height: '250px',
+                      widgetid: 'widget-3',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          width: 50,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '400px',
+                      widgetid: 'widget-4',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should correctly translate an empty layout', () => {
+    const layout = {
+      columns: [],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [],
+    });
+  });
+
+  it('should correctly translate a layout with default height', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  widgetId: 'widget-1',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 100,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '500px',
+                      widgetid: 'widget-1',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
   });
 });
 

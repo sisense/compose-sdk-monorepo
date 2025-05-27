@@ -1,7 +1,7 @@
-import { DashboardModel, WidgetModel, widgetModelTranslator } from '@/models';
+import { DashboardModel, WidgetModel, widgetModelTranslator, WidgetsPanelLayout } from '@/models';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { RestApi } from '@/api/rest-api';
-import { filterToFilterDto } from '../translate-dashboard-dto-utils';
+import { filterToFilterDto, layoutToLayoutDto } from '../translate-dashboard-dto-utils';
 import {
   filterRelationRulesToFilterRelationsModel,
   splitFiltersAndRelations,
@@ -16,7 +16,6 @@ export type UseDashboardModelState = DashboardModel | null;
  */
 export enum UseDashboardModelActionTypeInternal {
   DASHBOARD_INIT = 'DASHBOARD.INIT',
-  DASHBOARD_UPDATE_LAYOUT = 'DASHBOARD.UPDATE_LAYOUT',
 }
 
 /**
@@ -27,6 +26,7 @@ export enum UseDashboardModelActionTypeInternal {
 export enum UseDashboardModelActionType {
   FILTERS_UPDATE = 'FILTERS.UPDATE',
   ADD_WIDGET = 'WIDGETS.ADD',
+  WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
 }
 
 /**
@@ -48,7 +48,8 @@ export type UseDashboardModelInternalAction =
  */
 export type UseDashboardModelAction =
   | UseDashboardModelFilterUpdateAction
-  | UseDashboardModelAddWidgetAction;
+  | UseDashboardModelAddWidgetAction
+  | UseDashboardModelLayoutUpdateAction;
 
 /**
  * Filter update actions for the dashboard model state used in {@link useDashboardModel}.
@@ -68,6 +69,16 @@ export type UseDashboardModelFilterUpdateAction = {
 export type UseDashboardModelAddWidgetAction = {
   type: UseDashboardModelActionType.ADD_WIDGET;
   payload: WidgetModel;
+};
+
+/**
+ * Layout update action for the dashboard model state used in {@link useDashboardModel}.
+ *
+ * @internal
+ */
+export type UseDashboardModelLayoutUpdateAction = {
+  type: UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE;
+  payload: WidgetsPanelLayout;
 };
 
 /**
@@ -91,6 +102,14 @@ export function dashboardReducer(
       return {
         ...(state as DashboardModel),
         filters: action.payload,
+      };
+    case UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE:
+      return {
+        ...(state as DashboardModel),
+        layoutOptions: {
+          ...(state as DashboardModel).layoutOptions,
+          widgetsPanel: action.payload,
+        },
       };
     case UseDashboardModelActionType.ADD_WIDGET: {
       const widgets = [...(state as DashboardModel).widgets, action.payload];
@@ -177,6 +196,13 @@ export async function persistDashboardModelMiddleware(
       type: UseDashboardModelActionType.ADD_WIDGET,
       payload: widgetModelTranslator.fromWidgetDto(widgetDto),
     };
+  } else if (
+    action.type === UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE &&
+    action.payload
+  ) {
+    await restApi.patchDashboard(dashboardOid, {
+      layout: layoutToLayoutDto(action.payload),
+    });
   }
 
   return action;

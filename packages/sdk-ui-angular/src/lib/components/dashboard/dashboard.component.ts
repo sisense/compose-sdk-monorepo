@@ -14,6 +14,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -21,6 +22,7 @@ import {
   template,
 } from '../../component-wrapper-helpers';
 import { translateToPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
+import { PluginsService } from '../../services/plugins.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import type { DashboardConfig } from '../../types';
@@ -147,6 +149,14 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   styleOptions: DashboardProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.tabbersOptions}
+   *
+   * @internal
+   */
+  @Input()
+  tabbersOptions: DashboardProps['tabbersOptions'];
+
   private componentAdapter: ComponentAdapter<typeof DashboardPreact>;
 
   /**
@@ -168,10 +178,18 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
      * @category Constructor
      */
     public themeService: ThemeService,
+    /**
+     * Plugin service
+     *
+     * @internal
+     * @category Constructor
+     */
+    public pluginService: PluginsService,
   ) {
     this.componentAdapter = new ComponentAdapter(DashboardPreact, [
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
+      createPluginsContextConnector(this.pluginService),
     ]);
   }
 
@@ -201,6 +219,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
       defaultDataSource: this.defaultDataSource,
       widgetsOptions: this.widgetsOptions,
       styleOptions: this.styleOptions,
+      tabbersOptions: this.tabbersOptions,
     });
   }
 

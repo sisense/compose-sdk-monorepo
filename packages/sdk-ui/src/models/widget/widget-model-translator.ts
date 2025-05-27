@@ -583,7 +583,7 @@ export function toWidgetDto(
 
   const panels: Panel[] = [];
   if (isCartesian(chartType)) {
-    const categoriesPanelName = ['chart/line', 'chart/area'].includes(widgetModel.widgetType)
+    const categoriesPanelName = ['chart/line', 'chart/area'].includes(fusionWidgetType)
       ? 'x-axis'
       : 'categories';
     const items: PanelItem[] = (widgetModel.dataOptions as CartesianChartDataOptions).category.map(

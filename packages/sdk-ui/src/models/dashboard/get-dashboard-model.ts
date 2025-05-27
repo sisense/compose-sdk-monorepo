@@ -44,7 +44,7 @@ export async function getDashboardModel(
 ): Promise<DashboardModel> {
   const { includeWidgets, includeFilters } = options;
   const api = new RestApi(http);
-  const fields = ['oid', 'title', 'datasource', 'style'];
+  const fields = ['oid', 'title', 'datasource', 'style', 'settings'];
 
   const isWat = http.auth?.type === 'wat';
 

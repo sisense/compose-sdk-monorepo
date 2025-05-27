@@ -128,6 +128,7 @@ export const SisenseContextProvider: FunctionComponent<
           error={clientApplicationError}
           onError={onError}
           isContainerComponent
+          shouldRenderChildrenWithProvidedError={!!(clientApplicationError && !showRuntimeErrors)}
         >
           <SisenseContext.Provider
             value={{
