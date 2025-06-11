@@ -37,6 +37,7 @@ const props = {
     detailedDescription: '[Commerce.Revenue] by [Commerce.Date]',
     followupQuestions: [],
     userMsg: '',
+    clarification: '',
     chartRecommendations: {
       axesMapping: {
         category: [{ name: 'Date', type: 'datetime' }],

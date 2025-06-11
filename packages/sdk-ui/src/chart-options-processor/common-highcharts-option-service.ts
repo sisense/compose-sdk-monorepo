@@ -37,3 +37,19 @@ export const applyCommonHighchartsOptions = (
     boost: { useGPUTranslations: true, usePreAllocated: true },
   });
 };
+
+/**
+ * Composable variant of applyCommonHighchartsOptions.
+ * Returns a function that applies common highcharts options to the chart options.
+ *
+ * @param themeSettings - The theme settings to use.
+ * @param accessibilityEnabled - Whether accessibility is enabled.
+ * @returns A function that applies common highcharts options to the chart.
+ */
+export function withCommonHighchartsOptions(
+  themeSettings: CompleteThemeSettings,
+  accessibilityEnabled: boolean,
+): (chartOptions: HighchartsOptionsInternal) => HighchartsOptionsInternal {
+  return (chartOptions: HighchartsOptionsInternal) =>
+    applyCommonHighchartsOptions(chartOptions, themeSettings, accessibilityEnabled);
+}

@@ -54,6 +54,7 @@ import {
   GenericDataOptions,
   IndicatorRenderOptions,
   TabberStyleProps,
+  PluginWidgetStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -1418,7 +1419,7 @@ export interface PluginWidgetProps {
    *
    * @category Data
    */
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelations;
 
   /**
    * Filters that will highlight query results
@@ -1439,7 +1440,7 @@ export interface PluginWidgetProps {
    *
    * @category Widget
    */
-  styleOptions?: unknown;
+  styleOptions?: PluginWidgetStyleOptions;
 
   /**
    * Title of the widget

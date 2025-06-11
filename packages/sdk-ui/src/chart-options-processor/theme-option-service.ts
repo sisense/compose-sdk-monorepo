@@ -121,3 +121,17 @@ export const applyThemeToChart = (
 
   return mergedOptions;
 };
+
+/**
+ * Composable variant of applyThemeToChart.
+ * Returns a function that applies theme options to the chart options.
+ *
+ * @param themeSettings - The theme settings to use.
+ * @returns A function that applies theme options to the chart options.
+ */
+export function withThemeOptions(
+  themeSettings?: CompleteThemeSettings,
+): (chartOptions: HighchartsOptionsInternal) => HighchartsOptionsInternal {
+  return (chartOptions: HighchartsOptionsInternal) =>
+    applyThemeToChart(chartOptions, themeSettings);
+}

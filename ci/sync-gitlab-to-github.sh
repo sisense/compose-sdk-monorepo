@@ -57,7 +57,7 @@ fi
 git remote add external ${GITHUB_URL}
 git fetch external
 
-# Push to GitHub target branch
+# Push to GitHub target branch with explicitly disabled push options
 git -c push.pushOption= push external HEAD:${target_github_branch} -f
 
 # Force update GitLab source branch (since the bot amended the last commit)

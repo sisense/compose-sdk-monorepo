@@ -1,5 +1,5 @@
 /* eslint-disable promise/catch-or-return */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   EVENT_SORTING_SETTINGS_CHANGED,
   type SortingSettingsChangePayload,
@@ -119,7 +119,6 @@ export const PivotTable = asSisenseComponent({
     () => pivotTableProps.styleOptions ?? {},
     [pivotTableProps.styleOptions],
   );
-  const nodeRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<ContainerSize | null>(null);
   const [pivotTotalHeight, setPivotTotalHeight] = useState<number | null>(null);
   // retrieve and validate the pivot client
@@ -163,8 +162,7 @@ export const PivotTable = asSisenseComponent({
     [onHeightChange],
   );
 
-  useRenderPivot({
-    nodeRef,
+  const { pivotElement } = useRenderPivot({
     pivotBuilder,
     dataOptions,
     styleOptions,
@@ -219,10 +217,10 @@ export const PivotTable = asSisenseComponent({
       }}
       onSizeChange={updateSize}
     >
-      <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+      <LoadingOverlay isVisible={isLoading}>
         <>
           {isNoResults && <NoResultsOverlay iconType="table" />}
-          <div ref={nodeRef} aria-label="pivot-table-root" />
+          <div aria-label="pivot-table-root">{pivotElement}</div>
         </>
       </LoadingOverlay>
     </DynamicSizeContainer>

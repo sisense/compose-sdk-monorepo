@@ -55,10 +55,10 @@ import {
 } from '@/chart-data-options/types.js';
 import {
   ChartStyleOptions,
-  ChartWidgetStyleOptions,
   CompleteThemeSettings,
   GenericDataOptions,
   PivotTableWidgetStyleOptions,
+  PluginWidgetStyleOptions,
   TableStyleOptions,
   TextWidgetStyleOptions,
 } from '@/types.js';
@@ -390,7 +390,7 @@ export function toPluginWidgetProps(widgetModel: WidgetModel): PluginWidgetProps
   return {
     pluginType: widgetModel.pluginType,
     dataOptions: widgetModel.dataOptions as GenericDataOptions,
-    styleOptions: widgetModel.styleOptions as ChartWidgetStyleOptions,
+    styleOptions: widgetModel.styleOptions as PluginWidgetStyleOptions,
     dataSource: widgetModel.dataSource,
     filters: widgetModel.filters,
     highlights: widgetModel.highlights,

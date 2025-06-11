@@ -48,18 +48,21 @@ const createAttributeEntry = (
           name: attributeName,
           expression: attributeId,
           dataSource: dataSourceConfig,
+          description: field.description,
         })
       : createAttribute({
           name: attributeName,
           type: field.dimtype === 'text' ? 'text-attribute' : 'numeric-attribute',
           expression: attributeId,
           dataSource: dataSourceConfig,
+          description: field.description,
         });
 
   return {
     dimension: {
       id: dimensionId,
       name: dimensionName,
+      description: field.tableDescription,
     },
     attribute,
   };
@@ -71,6 +74,7 @@ const createAttributeEntry = (
 type DimensionDefinition = {
   id: string;
   name: string;
+  description?: string | null;
 };
 
 type DimensionConfig = {
@@ -91,6 +95,7 @@ const groupAttributesByDimension = (
     const dimensionConfig: DimensionConfig = acc[dimension.name] || {
       name: dimension.name,
       expression: dimension.id,
+      description: dimension.description,
     };
     return {
       ...acc,

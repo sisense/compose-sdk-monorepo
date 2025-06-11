@@ -96,6 +96,37 @@ export const applyEventHandlersToChart = (
   return merge(chartOptions, eventOptions);
 };
 
+/**
+ * Composable variant of applyEventHandlersToChart.
+ * Returns a function that applies event handlers to the chart options.
+ *
+ * @param dataOptions - The data options to use.
+ * @param onDataPointClick - The event handler for data point click.
+ * @param onDataPointContextMenu - The event handler for data point context menu.
+ * @param onDataPointsSelected - The event handler for data points selected.
+ * @returns A function that applies event handlers to the chart options.
+ */
+
+export function withEventHandlers(
+  dataOptions: ChartDataOptionsInternal,
+  {
+    onDataPointClick,
+    onDataPointContextMenu,
+    onDataPointsSelected,
+  }: {
+    onDataPointClick?: SisenseChartDataPointEventHandler;
+    onDataPointContextMenu?: SisenseChartDataPointEventHandler;
+    onDataPointsSelected?: SisenseChartDataPointsEventHandler;
+  } = {},
+): (chartOptions: HighchartsOptionsInternal) => HighchartsOptionsInternal {
+  return (chartOptions) =>
+    applyEventHandlersToChart(chartOptions, dataOptions, {
+      onDataPointClick,
+      onDataPointContextMenu,
+      onDataPointsSelected,
+    });
+}
+
 const getSelectedPoints = (
   xAxis: HighchartsSelectEventAxis,
   yAxis?: HighchartsSelectEventAxis,

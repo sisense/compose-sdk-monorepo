@@ -42,6 +42,7 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
   onScrolledToBottom,
   isLoading,
   disabledAttributesConfig,
+  collapseAll,
 }) => {
   const hasDimesions = dimensions.length > 0;
   const groupedItemsBrowserProps = useMemo(() => {
@@ -52,6 +53,7 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
       attributeSecondaryActionConfig,
       onScrolledToBottom,
       disabledAttributesConfig,
+      collapseAll,
     });
   }, [
     dimensions,
@@ -60,6 +62,7 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
     attributeSecondaryActionConfig,
     onScrolledToBottom,
     disabledAttributesConfig,
+    collapseAll,
   ]);
   return (
     <>
@@ -81,9 +84,11 @@ const convertDimensionsBrowserProps = ({
   dimensionSecondaryActionConfig,
   onScrolledToBottom,
   disabledAttributesConfig,
+  collapseAll,
 }: DimensionsBrowserProps): GroupedItemsBrowserProps => {
   const findDimension = getDimensionFinder(dimensions);
   const findAttribute = getAttributeFinder(dimensions);
+
   return {
     groupedItems: convertDimensionsToGroupedItems(dimensions, disabledAttributesConfig),
     itemActionConfig:
@@ -95,6 +100,7 @@ const convertDimensionsBrowserProps = ({
       dimensionSecondaryActionConfig &&
       convertDimensionSecondaryActionConfig(dimensionSecondaryActionConfig, findDimension),
     onScrolledToBottom,
+    collapseAll,
   };
 };
 
@@ -119,6 +125,7 @@ function convertDimensionsToGroupedItems(
     return {
       title: dimension.name,
       id: dimension.name,
+      description: dimension.description,
       items: attributiveElements.map((attribute) => {
         const isDisabled = disabledAttributesConfig?.disabledAttributes.some(
           // on our default dashboards we have a case of filter attributes with table name in lowercase,
@@ -131,7 +138,9 @@ function convertDimensionsToGroupedItems(
           title: attribute.name,
           Icon: attributeIconMapping[attribute.type],
           isDisabled,
-          hoverTooltip: isDisabled ? disabledAttributesConfig?.getTooltip?.(attribute) : undefined,
+          hoverTooltip: isDisabled
+            ? disabledAttributesConfig?.getTooltip?.(attribute)
+            : attribute.description,
         };
       }),
       Icon: TableIcon,

@@ -37,11 +37,22 @@ type PopoverProps = {
   id?: string;
   position?: PopoverPosition;
   onClose?: () => void;
+  BackdropProps?: {
+    invisible?: boolean;
+    style?: React.CSSProperties;
+  };
+  style?: React.CSSProperties;
+  slotProps?: {
+    paper?: {
+      sx?: Record<string, any>;
+    };
+  };
 };
 
 /** @internal */
 export const Popover = (props: PopoverProps) => {
-  const { children, open, id, position, onClose, ...restProps } = props;
+  const { children, open, id, position, onClose, BackdropProps, style, slotProps, ...restProps } =
+    props;
   return (
     <StyledMuiPopover
       id={id}
@@ -51,8 +62,16 @@ export const Popover = (props: PopoverProps) => {
       transformOrigin={position?.contentOrigin}
       transitionDuration={0}
       open={open}
+      BackdropProps={BackdropProps}
+      style={style}
       slotProps={{
-        paper: { sx: { display: 'flex', boxShadow: '-1px -1px 10px rgba(0, 0, 0, 0.2)' } },
+        paper: {
+          sx: {
+            display: 'flex',
+            boxShadow: '-1px -1px 10px rgba(0, 0, 0, 0.2)',
+            ...slotProps?.paper?.sx,
+          },
+        },
       }}
       onClose={onClose}
       {...restProps}

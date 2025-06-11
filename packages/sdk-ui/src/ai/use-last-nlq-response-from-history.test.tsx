@@ -14,6 +14,7 @@ const isNlqMessage = isNlqMessageOriginal as unknown as Mock<typeof isNlqMessage
 describe('useLastNlqResponseFromHistory', () => {
   const nlqResponseData = {
     userMsg: '',
+    clarification: '',
     detailedDescription: '',
     followupQuestions: [],
     nlqPrompt: '',

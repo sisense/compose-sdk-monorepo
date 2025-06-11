@@ -61,7 +61,12 @@ export default defineConfig(({ mode }) => ({
     },
     rollupOptions: {
       treeshake: { preset: 'smallest' },
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: [
+        // React + all submodules
+        /^react(?:\/[\w-]+)*$/,
+        // React DOM + all submodules
+        /^react-dom(?:\/[\w-]+)*$/,
+      ],
       plugins: [
         replaceReact18Hooks(),
         // TODO: commented until we have a proper solution for `preact/compat` compatibility

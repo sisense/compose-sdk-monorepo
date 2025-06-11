@@ -9,6 +9,8 @@
 # Version format: <base-version>-<suffix>.<index>
 # Example: 2.1.0-internal.3 or 2.1.0-2025.1.0.4
 
+set -o errexit
+set -o xtrace
 set -euo pipefail
 
 # Refference package name

@@ -1,6 +1,8 @@
 import { MenuPosition, MenuItemSection } from '@/types';
 
 export type MenuOptions = {
+  /** @internal */
+  readonly id?: string;
   position: MenuPosition;
   itemSections: MenuItemSection[];
   onClose?: () => void;

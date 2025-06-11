@@ -2,71 +2,47 @@ import { useCallback, useRef } from 'react';
 import { MenuOptions } from '../components/menu/types.js';
 import { useMenu } from './use-menu.js';
 
-export type IsTargetMenuFn = (menuOptions: MenuOptions) => boolean;
-export type CombineMenusFn = (
-  currentMenuOptions: MenuOptions,
-  capturedMenuOptions: MenuOptions,
-) => MenuOptions;
+export type CombineMenusFn = (menusOptions: MenuOptions[]) => MenuOptions;
 
 export interface CombinedMenuParams {
-  /** Function to determine if the captured menu is the target menu */
-  isTargetMenu: IsTargetMenuFn;
   /** Function to combine the current menu options with the captured menu options */
   combineMenus: CombineMenusFn;
 }
 
 /**
- * Custom hook to manage a combined menu, allowing you to capture
- * other menu before openning and combine it with the current one.
+ * Custom hook to manage a combined menu flow,
+ * allowing to combine multiple menus options opened one after the other.
  *
  * @internal
  */
-export const useCombinedMenu = ({ isTargetMenu, combineMenus }: CombinedMenuParams) => {
-  const currentMenuOptions = useRef<MenuOptions | null>(null);
-  const capturedMenuOptions = useRef<MenuOptions | null>(null);
+export const useCombinedMenu = ({ combineMenus }: CombinedMenuParams) => {
+  const capturedMenusOptions = useRef<MenuOptions[]>([]);
   const menuApi = useMenu();
 
   const openCombinedMenu = useCallback(() => {
-    if (currentMenuOptions.current) {
-      const finalMenuOptions = capturedMenuOptions.current
-        ? combineMenus(currentMenuOptions.current, capturedMenuOptions.current)
-        : currentMenuOptions.current;
+    const combinedMenusOptions =
+      capturedMenusOptions.current.length === 1
+        ? capturedMenusOptions.current[0]
+        : combineMenus(capturedMenusOptions.current);
 
-      menuApi.openMenu({
-        ...finalMenuOptions,
-        onClose: () => {
-          currentMenuOptions.current = null;
-          capturedMenuOptions.current = null;
-        },
-      });
-    }
+    menuApi.openMenu({
+      ...combinedMenusOptions,
+      onClose: () => {
+        capturedMenusOptions.current = [];
+      },
+    });
   }, [menuApi, combineMenus]);
 
   const openMenu = useCallback(
     (options: MenuOptions) => {
-      currentMenuOptions.current = options;
+      capturedMenusOptions.current.push(options);
 
       openCombinedMenu();
     },
     [openCombinedMenu],
   );
 
-  const onBeforeMenuOpen = useCallback(
-    (options: MenuOptions) => {
-      if (isTargetMenu(options)) {
-        capturedMenuOptions.current = options;
-
-        openCombinedMenu();
-
-        return null;
-      }
-      return options;
-    },
-    [isTargetMenu, openCombinedMenu],
-  );
-
   return {
     openMenu,
-    onBeforeMenuOpen,
   };
 };

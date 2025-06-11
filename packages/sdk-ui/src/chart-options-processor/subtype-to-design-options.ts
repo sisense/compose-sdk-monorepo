@@ -12,9 +12,10 @@ import { AreamapType } from '../types';
  *
  * - `line/spline` - curved line from point to point.
  * - `line/basic` - straight line from point to point.
+ * - `line/step` - step line where segments create a step-like pattern.
  *
  */
-export type LineSubtype = 'line/spline' | 'line/basic';
+export type LineSubtype = 'line/spline' | 'line/basic' | 'line/step';
 
 /**
  * Property of {@link AreaStyleOptions}
@@ -174,6 +175,7 @@ export const chartSubtypeToDesignOptions = Object.freeze<
   'column/stackedcolumn100': { stackType: 'stack100' },
   'line/basic': { lineType: 'straight' },
   'line/spline': { lineType: 'smooth' },
+  'line/step': { lineType: 'straight' },
   'pie/classic': { pieType: 'classic' },
   'pie/donut': { pieType: 'donut' },
   'pie/ring': { pieType: 'ring' },

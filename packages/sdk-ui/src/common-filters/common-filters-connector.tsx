@@ -29,6 +29,7 @@ import { withCascadingFiltersConversion } from './cascading-utils';
 import { isSameAttribute, isIncludeAllFilter, clearMembersFilter } from '@/utils/filters';
 import { OpenMenuFn } from '@/common/components/menu/types';
 import { TFunction } from '@sisense/sdk-common';
+import { MenuIds } from '@/common/components/menu/menu-ids';
 
 type CommonFiltersConnectionProps = Pick<
   ChartWidgetProps,
@@ -113,17 +114,18 @@ export function prepareCommonFiltersConnectionProps(
   // registers "onDataPointsSelected" handler
   props.onDataPointsSelected = (points: DataPoint[], nativeEvent: MouseEvent) => {
     const itemSections = [];
-    const widgetSelectionsTitleMenuItem = getWidgetSelectionsTitleMenuItem(
-      widgetType,
-      dataOptions,
-      points,
-    );
-
-    if (widgetSelectionsTitleMenuItem) {
-      itemSections.push(widgetSelectionsTitleMenuItem);
-    }
 
     if (shouldWidgetAffectFilters) {
+      const widgetSelectionsTitleMenuItem = getWidgetSelectionsTitleMenuItem(
+        widgetType,
+        dataOptions,
+        points,
+      );
+
+      if (widgetSelectionsTitleMenuItem) {
+        itemSections.push(widgetSelectionsTitleMenuItem);
+      }
+
       const selections = getWidgetSelections(widgetType, dataOptions, points);
       const { filters: selectedFilters, isSelection } = createCommonFiltersOverSelections(
         selections,
@@ -141,6 +143,7 @@ export function prepareCommonFiltersConnectionProps(
 
     if (itemSections.length) {
       openMenu?.({
+        id: MenuIds.WIDGET_POINTS_CROSSFILTERING,
         position: {
           left: nativeEvent.clientX,
           top: nativeEvent.clientY,
@@ -153,17 +156,18 @@ export function prepareCommonFiltersConnectionProps(
   // registers "onDataPointContextMenu" handler
   props.onDataPointContextMenu = (point: DataPoint, nativeEvent: PointerEvent) => {
     const itemSections = [];
-    const widgetSelectionsTitleMenuItem = getWidgetSelectionsTitleMenuItem(
-      widgetType,
-      dataOptions,
-      [point],
-    );
-
-    if (widgetSelectionsTitleMenuItem) {
-      itemSections.push(widgetSelectionsTitleMenuItem);
-    }
 
     if (shouldWidgetAffectFilters) {
+      const widgetSelectionsTitleMenuItem = getWidgetSelectionsTitleMenuItem(
+        widgetType,
+        dataOptions,
+        [point],
+      );
+
+      if (widgetSelectionsTitleMenuItem) {
+        itemSections.push(widgetSelectionsTitleMenuItem);
+      }
+
       const selections = getWidgetSelections(widgetType, dataOptions, [point]);
       const { filters: selectedFilters, isSelection } = createCommonFiltersOverSelections(
         selections,
@@ -181,6 +185,7 @@ export function prepareCommonFiltersConnectionProps(
 
     if (itemSections.length) {
       openMenu?.({
+        id: MenuIds.WIDGET_POINTS_CROSSFILTERING,
         position: {
           left: nativeEvent.clientX,
           top: nativeEvent.clientY,

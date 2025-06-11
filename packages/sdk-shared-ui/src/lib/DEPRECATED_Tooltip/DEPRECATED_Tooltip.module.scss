@@ -2,7 +2,7 @@
 // @import '../style_styleguide_react/base';
 
 :global {
-  @import 'rc-tooltip/assets/bootstrap_white';
+  @import '@rc-component/tooltip/assets/bootstrap_white';
 
   $arrow-size: 8px;
   $arrow-depth: 6px; // Math.ceil(sqrt(2) * $arrow-size / 2)

@@ -10,7 +10,24 @@ describe('getChartOptions', () => {
   const chartRecommendations: ChartRecommendations = {
     chartFamily: 'cartesian',
     chartType: 'bar',
-    axesMapping: {},
+    axesMapping: {
+      category: [
+        {
+          column: { name: 'Product Category', type: 'text' },
+          enabled: true,
+        },
+      ],
+      value: [
+        {
+          column: { name: 'Sales Amount', type: 'numeric' },
+          enabled: true,
+        },
+        {
+          column: { name: 'Profit', type: 'numeric' },
+          enabled: true,
+        },
+      ],
+    },
   };
 
   it('should return chart options when useCustomizedStyleOptions is false', () => {
@@ -42,15 +59,79 @@ describe('getChartOptions', () => {
         gridLines: false,
         title: {
           enabled: true,
+          text: 'Sales Amount, Profit',
         },
       },
       xAxis: {
         gridLines: false,
         title: {
           enabled: true,
+          text: 'Product Category',
         },
       },
       subtype: 'bar/stacked',
+    });
+  });
+
+  describe('when chartType is table', () => {
+    const tableJaql: MetadataItem[] = [
+      {
+        jaql: {
+          title: 'Product Category',
+          type: 'text',
+        },
+        panel: 'dimensions',
+      },
+      {
+        jaql: {
+          title: 'Sales Amount',
+          type: 'numeric',
+        },
+        panel: 'measures',
+      },
+    ];
+
+    it('should return table data options with all columns when axesMapping is empty', () => {
+      const tableRecommendations: ChartRecommendations = {
+        chartFamily: 'table',
+        chartType: 'table',
+        axesMapping: {},
+      };
+
+      const { dataOptions, chartStyleOptions } = getChartOptions(
+        tableJaql,
+        tableRecommendations,
+        true,
+      );
+      expect(dataOptions).toBeDefined();
+      expect(chartStyleOptions).toEqual(getDefaultStyleOptions());
+    });
+
+    it('should return table data options with mapped columns when axesMapping is provided', () => {
+      const tableRecommendations: ChartRecommendations = {
+        chartFamily: 'table',
+        chartType: 'table',
+        axesMapping: {
+          columns: [
+            {
+              column: { name: 'Product Category', type: 'text' },
+              enabled: true,
+            },
+            {
+              column: { name: 'Sales Amount', type: 'numeric' },
+              enabled: true,
+            },
+          ],
+        },
+      };
+
+      const { dataOptions, chartStyleOptions } = getChartOptions(
+        tableJaql,
+        tableRecommendations,
+        true,
+      );
+      expect(dataOptions).toBeDefined();
+      expect(chartStyleOptions).toEqual(getDefaultStyleOptions());
     });
   });
 });

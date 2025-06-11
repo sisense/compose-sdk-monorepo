@@ -67,6 +67,9 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   trackingConfig: {
     enabled: true,
   },
+  jumpToDashboardConfig: {
+    enabled: false,
+  },
 };
 
 /**

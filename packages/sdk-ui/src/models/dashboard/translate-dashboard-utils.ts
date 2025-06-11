@@ -25,9 +25,13 @@ import {
 import {
   isJaqlWithFormula,
   isSharedFormulaReferenceContext,
+  JTDConfig,
+  JTDConfigDto,
+  JTDNavigateType,
   SharedFormulaReferenceContext,
   WidgetDto,
 } from '@/widget-by-id/types';
+import { SizeMeasurement } from '@/types';
 import { RestApi } from '@/api/rest-api';
 import { TabberConfig, TabberDtoStyle } from '@/types';
 
@@ -88,6 +92,40 @@ const isTabberWidgetDto = (widget: WidgetDto): widget is WidgetDto & { style: Ta
   return widget.subtype === 'WidgetsTabber';
 };
 
+const translateNavigateType = (navigateType: number): JTDNavigateType => {
+  switch (navigateType) {
+    case 1:
+      return JTDNavigateType.RIGHT_CLICK;
+    case 2:
+      return JTDNavigateType.PIVOT_LINK;
+    case 3:
+      return JTDNavigateType.CLICK;
+    case 4:
+      return JTDNavigateType.BLOX;
+    default:
+  }
+  console.warn(`Unknown navigate type: ${navigateType}, using CLICK instead`);
+  return JTDNavigateType.CLICK;
+};
+
+const translateToJTDConfig = (jtdConfigDto: JTDConfigDto): JTDConfig => {
+  const measurement = jtdConfigDto.modalWindowMeasurement || SizeMeasurement.PERCENT;
+  return {
+    ...jtdConfigDto,
+    modalWindowHeight:
+      jtdConfigDto.modalWindowHeight || (measurement === SizeMeasurement.PERCENT ? 85 : 800),
+    modalWindowWidth:
+      jtdConfigDto.modalWindowWidth || (measurement === SizeMeasurement.PERCENT ? 85 : 1200),
+    enabled: typeof jtdConfigDto.enabled === 'boolean' ? jtdConfigDto.enabled : true,
+    modalWindowMeasurement: measurement,
+    navigateType: translateNavigateType(jtdConfigDto.drillToDashboardNavigateType),
+    drillTargets: jtdConfigDto.dashboardIds.map((drillTarget) => ({
+      caption: drillTarget.caption,
+      id: drillTarget.id || drillTarget.oid,
+    })),
+  };
+};
+
 export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptions {
   const widgetsOptionsMap: WidgetsOptions = {};
 
@@ -105,6 +143,9 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
         },
         forceApplyBackgroundFilters: true,
       },
+      ...(widget?.drillToDashboardConfig && {
+        jtdConfig: translateToJTDConfig(widget.drillToDashboardConfig),
+      }),
     };
   });
 
@@ -117,7 +158,7 @@ export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersOptio
   widgets.forEach((widget: WidgetDto) => {
     if (isTabberWidgetDto(widget)) {
       tabberOptionsMap[widget.oid] = {
-        tabs: widget.style.tabs,
+        tabs: widget.style.tabs || [],
         activeTab: parseInt(widget.style.activeTab || '1', 10),
       };
     }

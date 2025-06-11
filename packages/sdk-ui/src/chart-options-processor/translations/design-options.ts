@@ -46,7 +46,10 @@ export type StackableChartDesignOptions = CartesianChartDesignOptions & {
   totalLabelRotation?: number;
 } & DesignPerSeries;
 
-export type LineChartDesignOptions = CartesianChartDesignOptions;
+export type LineChartDesignOptions = CartesianChartDesignOptions & {
+  /** Step type for step line charts: left, center, or right */
+  step?: 'left' | 'center' | 'right';
+};
 
 export type AreaChartDesignOptions = StackableChartDesignOptions;
 

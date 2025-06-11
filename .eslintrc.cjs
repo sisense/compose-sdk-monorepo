@@ -166,7 +166,7 @@ module.exports = {
             'simple-import-sort/imports': 'off',
             'simple-import-sort/exports': 'off',
           },
-        },
+        }
       ],
     },
   ],

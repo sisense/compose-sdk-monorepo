@@ -6,6 +6,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useCallback, useState } from 'react';
 import { ItemsGroup, GroupSecondaryActionConfig } from './types';
+import Tooltip from '@mui/material/Tooltip';
 
 type GroupHeaderProps = {
   isOpen: boolean;
@@ -34,28 +35,30 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       theme={themeSettings}
     >
-      <GroupHeaderContent>
-        <GroupHeaderLeftContent>
-          <ArrowIcon direction={isOpen ? 'down' : 'right'} />
+      <Tooltip title={group.description} placement="top" arrow>
+        <GroupHeaderContent>
+          <GroupHeaderLeftContent>
+            <ArrowIcon direction={isOpen ? 'down' : 'right'} />
 
-          {group.Icon && (
-            <GroupIconContainer>
-              <group.Icon />
-            </GroupIconContainer>
+            {group.Icon && (
+              <GroupIconContainer>
+                <group.Icon />
+              </GroupIconContainer>
+            )}
+            <GroupTitle>{group.title}</GroupTitle>
+          </GroupHeaderLeftContent>
+          {secondaryAction && isHovered && (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                secondaryAction.onClick(group);
+              }}
+            >
+              <secondaryAction.SecondaryActionButtonIcon group={group} />
+            </div>
           )}
-          <GroupTitle>{group.title}</GroupTitle>
-        </GroupHeaderLeftContent>
-        {secondaryAction && isHovered && (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              secondaryAction.onClick(group);
-            }}
-          >
-            <secondaryAction.SecondaryActionButtonIcon group={group} />
-          </div>
-        )}
-      </GroupHeaderContent>
+        </GroupHeaderContent>
+      </Tooltip>
     </GroupHeaderButton>
   );
 };

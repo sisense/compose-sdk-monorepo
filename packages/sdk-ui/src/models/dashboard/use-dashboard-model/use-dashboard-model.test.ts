@@ -59,7 +59,7 @@ vi.mock('@/api/rest-api', async () => {
 });
 
 vi.mock('../use-get-dashboard-model', () => ({
-  useGetDashboardModel: () => {
+  useGetDashboardModelInternal: () => {
     return {
       isLoading: false,
       isError: false,

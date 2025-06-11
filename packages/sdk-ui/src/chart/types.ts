@@ -18,5 +18,4 @@ export type ChartRendererProps = {
   onDataPointContextMenu?: ChartProps['onDataPointContextMenu'];
   onDataPointsSelected?: ChartProps['onDataPointsSelected'];
   onBeforeRender?: ChartProps['onBeforeRender'];
-  filters?: ChartProps['filters'];
 };

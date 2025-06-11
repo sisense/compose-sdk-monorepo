@@ -21,6 +21,7 @@ useGetChat.mockReturnValue({ chatId: '1', isLoading: false, isError: false });
 
 describe('useFinalNlqResponse', () => {
   const responseData = {
+    clarification: '',
     userMsg: '',
     detailedDescription: '',
     followupQuestions: [],

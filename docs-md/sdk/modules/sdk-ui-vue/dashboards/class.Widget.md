@@ -123,7 +123,7 @@ Plugin type. This is typically the name/ID of the plugin.
 
 #### styleOptions
 
-> **`readonly`** **styleOptions**?: `unknown`
+> **`readonly`** **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`PluginWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PluginWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md)
 
 Style options for both the chart and widget including the widget header
 

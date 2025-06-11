@@ -7,7 +7,6 @@ import type {
   ScattermapStyleOptions,
   StackableStyleOptions,
 } from '@/types';
-import type { SisenseChartProps } from '@/sisense-chart';
 import type { ChartRendererProps } from '@/chart';
 import type { CartesianChartData, ScattermapChartData } from '@/chart-data/types';
 import {
@@ -27,6 +26,7 @@ import { ClientApplication } from '@/app/client-application';
 import { AreamapProps } from '@/chart/restructured-charts/areamap-chart/renderer';
 import { ScattermapProps } from '@/charts/map-charts/scattermap/scattermap';
 import { AreamapData } from './areamap-chart/types';
+import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
 
 export type SupportedChartType = 'areamap' | 'column' | 'bar'; // TODO: Extend with other chart types
 
@@ -80,7 +80,7 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
   : CT extends 'scattermap'
   ? ScattermapProps
   : CT extends 'column' | 'bar'
-  ? SisenseChartProps
+  ? HighchartsBasedChartRendererProps<CT>
   : // TODO: Extend with other chart types
     never;
 

@@ -73,6 +73,7 @@ export default CodeExample;
  */
 export const Dashboard = asSisenseComponent({
   componentName: 'Dashboard',
+  shouldHaveOwnModalRoot: true,
 })(
   ({
     title = '',

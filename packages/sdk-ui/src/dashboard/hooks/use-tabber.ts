@@ -124,33 +124,31 @@ export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) =
     (layout: WidgetsPanelColumnLayout): WidgetsPanelColumnLayout => {
       return {
         ...layout,
-        columns: layout.columns
-          .map((column) => {
-            return {
-              ...column,
-              rows: column.rows
-                .map((row) => {
-                  const filteredCells = row.cells.filter((cell) => {
-                    return isVisible(cell.widgetId, tabbersConfigs, selectedTabs);
-                  });
-                  if (filteredCells.length === row.cells.length) {
-                    return row;
-                  }
-                  return filteredCells.length === row.cells.length
-                    ? row
-                    : {
-                        cells: filteredCells.map((cell) => {
-                          return {
-                            ...cell,
-                            widthPercentage: 100 / filteredCells.length,
-                          };
-                        }),
-                      };
-                })
-                .filter((row) => row.cells.length > 0),
-            };
-          })
-          .filter((column) => column.rows.length > 0),
+        columns: layout.columns.map((column) => {
+          return {
+            ...column,
+            rows: column.rows
+              .map((row) => {
+                const filteredCells = row.cells.filter((cell) => {
+                  return isVisible(cell.widgetId, tabbersConfigs, selectedTabs);
+                });
+                if (filteredCells.length === row.cells.length) {
+                  return row;
+                }
+                return filteredCells.length === row.cells.length
+                  ? row
+                  : {
+                      cells: filteredCells.map((cell) => {
+                        return {
+                          ...cell,
+                          widthPercentage: 100 / filteredCells.length,
+                        };
+                      }),
+                    };
+              })
+              .filter((row) => row.cells.length > 0),
+          };
+        }),
       };
     },
     [tabbersConfigs, selectedTabs],

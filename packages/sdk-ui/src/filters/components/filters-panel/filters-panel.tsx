@@ -155,7 +155,9 @@ export const FiltersPanel = asSisenseComponent({
               <div
                 className="csdk-mt-[6px]"
                 key={filter.config.guid}
-                ref={(el) => (filterTilesRef.current[index] = el!)}
+                ref={(el) => {
+                  filterTilesRef.current[index] = el!;
+                }}
               >
                 <FilterTile
                   onDelete={

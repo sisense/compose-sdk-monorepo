@@ -27,11 +27,16 @@ const isTextMessage = isTextMessageOriginal as unknown as Mock<typeof isTextMess
 const textMessage = { answer: 'Hello world!' };
 const textResponse: ChatMessage = { content: JSON.stringify(textMessage), role: 'assistant' };
 const nlqUserMsgResponse: ChatMessage = {
-  content: JSON.stringify({ userMsg: 'Hello, user!' }),
+  content: JSON.stringify({ userMsg: 'Hello, user!', clarification: '' }),
   role: 'assistant',
 };
 const nlqResponse: ChatMessage = {
-  content: JSON.stringify({ userMsg: '', nlqPrompt: 'something', mockedText: 'mockedNlqText' }),
+  content: JSON.stringify({
+    userMsg: '',
+    clarification: '',
+    nlqPrompt: 'something',
+    mockedText: 'mockedNlqText',
+  }),
   role: 'assistant',
 };
 

@@ -23,3 +23,5 @@ export * as dashboardComposer from './dashboard/dashboard-composer';
 export * as executeQueryComposer from './execute-query/execute-query-composer';
 
 export * from './common/custom-superjson';
+
+export * from './widget/chart-options/get-widget-options';

@@ -1,14 +1,15 @@
 import { PivotClient } from '../pivot-client';
 import { JaqlRequest } from '../data-load/types';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { EVENT_PIVOT_ELEMENT_CHANGE } from '../builders';
 
 export interface PivotBuilderDemoProps {
   jaql: JaqlRequest;
   pivotClient: PivotClient;
 }
 export function PivotBuilderDemo(pivotBuilderDemoProps: PivotBuilderDemoProps) {
-  const nodeRef = useRef<HTMLDivElement>(null);
   const { jaql, pivotClient } = pivotBuilderDemoProps;
+  const [pivotElement, setPivotElement] = useState<React.ReactElement | null>(null);
 
   const props = useMemo(() => {
     return {
@@ -23,8 +24,8 @@ export function PivotBuilderDemo(pivotBuilderDemoProps: PivotBuilderDemoProps) {
   const pivotBuilder = pivotClient.preparePivotBuilder();
 
   useEffect(() => {
-    if (nodeRef.current && jaql) {
-      pivotBuilder.render(nodeRef.current, props);
+    if (jaql) {
+      pivotBuilder.render(props);
       pivotBuilder.updateJaql(jaql);
     }
     return () => {
@@ -32,5 +33,12 @@ export function PivotBuilderDemo(pivotBuilderDemoProps: PivotBuilderDemoProps) {
     };
   }, [jaql, pivotBuilder, props]);
 
-  return <div ref={nodeRef} />;
+  useEffect(() => {
+    pivotBuilder.on(EVENT_PIVOT_ELEMENT_CHANGE, setPivotElement);
+    return () => {
+      pivotBuilder.off(EVENT_PIVOT_ELEMENT_CHANGE, setPivotElement);
+    };
+  }, [pivotBuilder]);
+
+  return pivotElement;
 }

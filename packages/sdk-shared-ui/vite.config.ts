@@ -16,6 +16,9 @@ const THRESHOLD_FUNCTIONS = parseInt(env.DEV_APP_THRESHOLD_FUNCTIONS || '50', 10
 const THRESHOLD_BRANCHES = parseInt(env.DEV_APP_THRESHOLD_BRANCHES || '70', 10);
 const THRESHOLD_STATEMENTS = parseInt(env.DEV_APP_THRESHOLD_STATEMENTS || '70', 10);
 
+// Build variant configuration
+const BUILD_VARIANT = env.BUILD_VARIANT || 'bundled'; // 'bundled' or 'lightweight'
+
 interface FileSystem {
   readdirSync(path: string): string[];
 
@@ -62,6 +65,34 @@ const getEntries = (dir: string, fs: FileSystem) => {
 
 const entryPoints = getEntries(resolve(__dirname, 'src/lib'), fs);
 
+// Base external dependencies
+const baseExternals = [
+  'classnames',
+  // React + all submodules
+  /^react(?:\/[\w-]+)*$/,
+  // React DOM + all submodules
+  /^react-dom(?:\/[\w-]+)*$/,
+];
+
+// Additional externals for the 'lightweight' variant
+const muiEmotionExternals = [
+  // All MUI packages
+  /^@mui(?:\/[\w-]+)*$/,
+  // All Emotion packages
+  /^@emotion(?:\/[\w-]+)*$/,
+];
+
+const getExternals = () => {
+  if (BUILD_VARIANT === 'lightweight') {
+    return [...baseExternals, ...muiEmotionExternals];
+  }
+  return baseExternals;
+};
+
+const getOutputDir = () => {
+  return BUILD_VARIANT === 'lightweight' ? 'dist/lightweight' : 'dist';
+};
+
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
@@ -69,25 +100,27 @@ export default defineConfig(({ mode }) => ({
       useStrictCSP: true,
     }),
     copy({
-      targets: [{ src: 'package.json', dest: 'dist' }],
+      targets: [{ src: 'package.json', dest: getOutputDir() }],
       hook: 'writeBundle',
     }),
     dts({
       entryRoot: 'src',
       tsconfigPath: join(__dirname, 'tsconfig.lib.json'),
+      outDir: getOutputDir(),
     }),
   ] as PluginOption[],
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.scss'],
   },
   build: {
+    outDir: getOutputDir(),
     lib: {
       entry: entryPoints,
       name: 'sdk-shared-ui',
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['classnames', 'react', 'react-dom', 'react/jsx-runtime'],
+      external: getExternals(),
       treeshake: 'recommended',
     },
     chunkSizeWarningLimit: 500,
@@ -102,6 +135,7 @@ export default defineConfig(({ mode }) => ({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./src/__test-helpers__/test-setup.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     coverage: {
       enabled: true,
@@ -114,6 +148,7 @@ export default defineConfig(({ mode }) => ({
       },
       exclude: [
         ...configDefaults.exclude,
+        'scripts/**',
         'src/index.ts',
         'src/lib/index.ts',
         'src/lib/**/index.ts',

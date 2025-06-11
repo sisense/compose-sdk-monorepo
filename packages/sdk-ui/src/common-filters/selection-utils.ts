@@ -32,7 +32,7 @@ import {
 import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 import { WidgetTypeInternal } from '@/models/widget/types.js';
 import { clearMembersFilter, isIncludeAllFilter } from '@/utils/filters.js';
-import { MenuIds } from '@/common/components/menu/menu-ids.js';
+import { MenuSectionIds } from '@/common/components/menu/menu-ids.js';
 import { haveSameAttribute } from '@/utils/filters-comparator.js';
 
 export const SELECTION_TITLE_MAXIMUM_ITEMS = 2;
@@ -337,7 +337,7 @@ export function getWidgetSelectionsTitleMenuItem(
     return null;
   }
   return {
-    id: MenuIds.CROSSFILTERING_CHART_POINTS_SELECTION,
+    id: MenuSectionIds.CROSSFILTERING_CHART_POINTS_SELECTION,
     sectionTitle,
   };
 }

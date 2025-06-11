@@ -7,7 +7,6 @@ import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { getDataSourceName } from '@sisense/sdk-data';
 import { WidgetContainer } from './common/widget-container';
 import { useTranslation } from 'react-i18next';
-import { WidgetStyleOptions } from '@/types';
 
 /**
  * Component that renders a plugin widget.
@@ -45,7 +44,7 @@ export const PluginWidget: React.FC<PluginWidgetProps> = (widgetProps) => {
       <WidgetContainer
         title={widgetProps.title}
         description={widgetProps.description}
-        styleOptions={widgetProps.styleOptions as WidgetStyleOptions}
+        styleOptions={widgetProps.styleOptions}
         dataSetName={dataSource && getDataSourceName(dataSource)}
       >
         {renderPlugin(pluginProps)}

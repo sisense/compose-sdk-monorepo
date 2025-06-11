@@ -1,8 +1,7 @@
 import { withLazyLoading } from '@/common/hooks/decorators/with-lazy-loading';
 import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
 import { useThemeContext } from '@/theme-provider';
-import { Themable } from '@/theme-provider/types.js';
-import styled from '@emotion/styled';
+
 import {
   DataSource,
   DataSourceField,
@@ -15,6 +14,7 @@ import { useDataSourceSelection } from '../data-source-selector/use-data-source-
 import { DimensionsBrowser } from '../dimensions-browser/dimensions-browser.js';
 import { AttributiveElement } from '../dimensions-browser/types.js';
 import { SearchInput } from '../search-input/search-input.js';
+import { DimensionsBrowserContainer } from '../data-schema-browser/data-schema-browser.styles.js';
 
 type AddFilterDataBrowserProps = {
   dataSources: DataSource[];
@@ -25,20 +25,6 @@ type AddFilterDataBrowserProps = {
   disabledAttributes?: AttributiveElement[];
   onAttributeClick: (attribute: AttributiveElement) => void;
 };
-
-const DimensionsBrowserContainer = styled.div<Themable>`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  padding: 16px 24px;
-  gap: 16px;
-  background: ${({ theme }) => theme.general.popover.content.backgroundColor};
-  color: ${({ theme }) => theme.general.popover.content.textColor};
-  svg path {
-    fill: ${({ theme }) => theme.general.popover.content.textColor};
-  }
-`;
 
 /**
  * A custom hook that fetches data source fields with lazy loading.

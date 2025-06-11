@@ -64,6 +64,7 @@ export {
   useGetDashboardModel,
   useGetDashboardModels,
   useDashboardModel,
+  useDashboardPersistence,
   getDashboardModel,
   getDashboardModels,
   useGetWidgetModel,
@@ -166,6 +167,8 @@ export { translateColumnToAttribute } from './chart-data-options/utils';
 export { isSameAttribute } from './utils/filters';
 export { updateDrilldownSelections } from './widgets/common/use-drilldown-core';
 export { getSelectionTitleMenuItem, getDrilldownMenuItems } from './widgets/hooks/use-drilldown';
+
+export { DataSchemaBrowser } from './data-browser/data-schema-browser/data-schema-browser';
 
 export {
   type TranslationDictionary,

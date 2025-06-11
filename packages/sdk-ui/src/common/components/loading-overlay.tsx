@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { CompleteThemeSettings } from '../../types';
 import { LoadingDots } from './loading-dots';
+import { useThemeContext } from '@/theme-provider';
 
 /**
  * Component that displays a loading overlay.
@@ -12,13 +12,12 @@ import { LoadingDots } from './loading-dots';
  */
 export const LoadingOverlay = ({
   isVisible,
-  themeSettings,
   children,
 }: {
   isVisible: boolean;
-  themeSettings: CompleteThemeSettings;
   children: ReactNode;
 }) => {
+  const { themeSettings } = useThemeContext();
   return (
     <div id="overlay" className="csdk-relative csdk-h-full">
       {isVisible && (

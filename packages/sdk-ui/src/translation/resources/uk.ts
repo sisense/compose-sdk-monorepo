@@ -62,6 +62,7 @@ export const translation: TranslationDictionary = {
     secondsDateTimeLevelSupportedOnlyForLive:
       "Рівень часу в секундах підтримується лише для 'live' джерела даних",
     missingMenuRoot: 'Відсутній ініціалізований корінь меню',
+    missingModalRoot: 'Відсутній ініціалізований корінь модального вікна',
     missingDataSource:
       "Значення 'dataSource' відсутнє. Воно має бути передано явно, або 'defaultDataSource' має бути вказано в SisenseContextProvider.",
     incorrectOnDataReadyHandler: "'onDataReady' має повертати дійсний об'єкт даних",
@@ -85,9 +86,12 @@ export const translation: TranslationDictionary = {
     cascadingFilterOriginalNotFound:
       'Помилка при реструктуризації каскадних фільтрів. Оригінальний фільтр не знайдено',
     dashboardLoadFailed: 'Не вдалося завантажити Dashboard. {{error}}',
+    widgetLoadFailed: 'Не вдалося завантажити віджет. {{error}}',
     dashboardWithOidNotFound: 'Dashboard з oid {{dashboardOid}} не знайдено',
     failedToAddWidget: 'Не вдалося додати віджет',
     widgetWithOidNotFound: 'Віджет з oid {{widgetOid}} не знайдено',
+    widgetWithOidNotFoundInDashboard:
+      'Віджет з oid {{widgetOid}} не знайдено в Dashboard з oid {{dashboardOid}}',
     widgetEmptyResponse: 'Пуста відповідь для віджета з oid {{widgetOid}}',
     dateFilterIncorrectOperator: 'Некорректний оператор: {{operator}}',
     synchronizedFilterInvalidProps:
@@ -107,6 +111,7 @@ export const translation: TranslationDictionary = {
       noDataSources:
         'Не знайдено жодного джерела даних. Спробуйте задати `dataSource` у віджетах або `defaultDataSource` на рівні дашборди.',
     },
+    tabberInvalidConfiguration: 'Конфігурація Tabber віджета невірна',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'Результатів немає',
@@ -390,5 +395,8 @@ export const translation: TranslationDictionary = {
     configureFilter: 'Налаштувати фільтр',
     noResults: 'Немає результатів',
     searchPlaceholder: 'Пошук',
+  },
+  jumpToDashboard: {
+    defaultCaption: 'Перейти до',
   },
 };

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ItemsGroup,
   GroupSecondaryActionConfig,
@@ -16,6 +16,7 @@ type GroupProps = {
   groupSecondaryActionConfig?: GroupSecondaryActionConfig;
   itemActionConfig?: ItemActionConfig;
   itemSecondaryActionConfig?: ItemSecondaryActionConfig;
+  collapsed?: boolean;
 };
 
 export const Group: React.FC<GroupProps> = ({
@@ -23,8 +24,14 @@ export const Group: React.FC<GroupProps> = ({
   groupSecondaryActionConfig,
   itemActionConfig,
   itemSecondaryActionConfig,
+  collapsed,
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(!collapsed);
+
+  useEffect(() => {
+    setIsOpen(!collapsed);
+  }, [collapsed]);
+
   return (
     <GroupContainer>
       <GroupHeader

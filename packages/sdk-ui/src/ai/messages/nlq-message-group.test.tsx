@@ -138,3 +138,50 @@ it('shows a text summary when the insights button is clicked', async () => {
   await user.click(screen.getByText('Insights'));
   expect(screen.queryByText(text)).toBeNull();
 });
+
+describe('show user message and clarification in the chat', () => {
+  const testCase = ({ userMsg, clarification }: { userMsg: string; clarification: string }) => {
+    const response = {
+      ...MOCK_NLQ_RESPONSE,
+      userMsg,
+      clarification,
+    };
+
+    setup(
+      <AiTestWrapper>
+        <NlqMessageGroup data={response} />
+      </AiTestWrapper>,
+    );
+  };
+  it('shows user message without clarification', async () => {
+    testCase({
+      userMsg: 'This is an answer to your question.',
+      clarification: '',
+    });
+    await waitFor(() =>
+      expect(screen.getByText('This is an answer to your question.')).toBeInTheDocument(),
+    );
+  });
+  it('shows user message concatenated with a clarification', async () => {
+    testCase({
+      userMsg: 'This is an answer to your question.',
+      clarification: 'Ask me anything.',
+    });
+    await waitFor(() =>
+      expect(
+        screen.getByText('This is an answer to your question. Ask me anything.'),
+      ).toBeInTheDocument(),
+    );
+  });
+  it('shows a default message when user message and clarification are not present', async () => {
+    testCase({
+      userMsg: '',
+      clarification: '',
+    });
+    await waitFor(() =>
+      expect(
+        screen.getByText(`Here's a column chart showing total of Revenue by years in Date.`),
+      ).toBeInTheDocument(),
+    );
+  });
+});

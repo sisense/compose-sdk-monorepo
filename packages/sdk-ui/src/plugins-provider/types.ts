@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { DataSource, Filter } from '@sisense/sdk-data';
+import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import { GenericDataOptions } from '@/types';
 
 /**
@@ -11,7 +11,7 @@ export interface PluginComponentProps<DataOptions = GenericDataOptions, StyleOpt
   dataSource?: DataSource;
   dataOptions: DataOptions;
   styleOptions: StyleOptions;
-  filters?: Filter[];
+  filters?: Filter[] | FilterRelations;
   highlights?: Filter[];
   description?: string;
 }

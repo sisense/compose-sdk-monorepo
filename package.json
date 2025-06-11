@@ -1,5 +1,5 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -76,6 +76,7 @@
     "g:cli": "yarn workspace @sisense/sdk-cli run cli",
     "version-and-publish": "./ci/version-and-publish.sh",
     "version:current": "node ./scripts/current-version.cjs",
+    "release-git-log": "./scripts/release-git-log.sh",
     "publish": "yarn workspaces foreach --no-private npm publish --tolerate-republish",
     "docs:gen": "TYPEDOC_MODE=PUBLIC typedoc --options typedoc.config.cjs",
     "docs:serve": "node ./scripts/serve-static.cjs docs",

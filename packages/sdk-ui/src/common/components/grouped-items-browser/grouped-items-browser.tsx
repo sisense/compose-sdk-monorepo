@@ -20,6 +20,7 @@ export const GroupedItemsBrowser: React.FC<GroupedItemsBrowserProps> = ({
   itemActionConfig,
   itemSecondaryActionConfig,
   onScrolledToBottom,
+  collapseAll,
 }) => {
   const handleScroll = useCallback(
     (event: React.UIEvent<HTMLUListElement>) => {
@@ -37,6 +38,7 @@ export const GroupedItemsBrowser: React.FC<GroupedItemsBrowserProps> = ({
         <Group
           key={group.id}
           group={group}
+          collapsed={collapseAll}
           groupSecondaryActionConfig={groupSecondaryActionConfig}
           itemActionConfig={itemActionConfig}
           itemSecondaryActionConfig={itemSecondaryActionConfig}

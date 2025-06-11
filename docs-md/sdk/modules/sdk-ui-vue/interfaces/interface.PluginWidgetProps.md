@@ -22,7 +22,7 @@ If not specified, the query will use the `defaultDataSource` specified in the pa
 
 #### filters
 
-> **filters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+> **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Filters that will slice query results
 
@@ -62,7 +62,7 @@ Plugin type. This is typically the name/ID of the plugin.
 
 #### styleOptions
 
-> **styleOptions**?: `unknown`
+> **styleOptions**?: [`PluginWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PluginWidgetStyleOptions.md)
 
 Style options for the plugin widget.
 

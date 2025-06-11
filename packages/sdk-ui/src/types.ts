@@ -53,6 +53,15 @@ export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
 
+/**
+ * @internal
+ * Enum for size measurement units
+ */
+export enum SizeMeasurement {
+  PERCENT = '%',
+  PIXEL = 'px',
+}
+
 export type {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
@@ -348,6 +357,17 @@ export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
   lineWidth?: LineWidth;
   /** Subtype of LineChart */
   subtype?: LineSubtype;
+  /**
+   * For step charts: defines where the step occurs (before, between, or after points)
+   * Only used when subtype is 'line/step'
+   *
+   * **Values**
+   *
+   * - `left` - step occurs before the point (default)
+   * - `center` - step occurs between points
+   * - `right` - step occurs after the point
+   */
+  stepPosition?: 'left' | 'center' | 'right';
 }
 
 /** Configuration options that define functional style of the various elements of AreaRangeChart */
@@ -1361,7 +1381,8 @@ export type CompleteThemeSettings = DeepRequired<Omit<ThemeSettings, 'typography
 
 /** Complete set of configuration options that define functional style of the various elements of the charts as well as the look and feel of widget itself and widget header. */
 export type WidgetStyleOptions =
-  | (ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions) & WidgetContainerStyleOptions;
+  | (ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions | PluginWidgetStyleOptions) &
+      WidgetContainerStyleOptions;
 
 /** Style settings defining the look and feel of widget itself and widget header */
 export interface WidgetContainerStyleOptions {
@@ -1470,6 +1491,11 @@ export type TextWidgetStyleOptions = {
   vAlign: `valign-${'middle' | 'top' | 'bottom'}`;
   bgColor: string;
 };
+
+/**
+ * Style settings defining the look and feel of PluginWidget
+ */
+export type PluginWidgetStyleOptions = Record<string, unknown> & WidgetContainerStyleOptions;
 
 /**
  * Runs type guard check for ThemeOid.
@@ -1959,8 +1985,8 @@ export type TabberTab = {
  *
  * @internal
  */
-export type TabberDtoStyle = TabberStyleProps & {
-  activeTab: string;
+export type TabberDtoStyle = Partial<TabberStyleProps> & {
+  activeTab?: string;
 };
 
 /**

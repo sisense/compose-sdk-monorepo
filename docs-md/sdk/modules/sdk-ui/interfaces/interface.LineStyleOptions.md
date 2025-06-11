@@ -60,6 +60,21 @@ Configuration for navigator - zoom/pan tool for large datasets in a chart
 
 ***
 
+### stepPosition
+
+> **stepPosition**?: `"center"` \| `"left"` \| `"right"`
+
+For step charts: defines where the step occurs (before, between, or after points)
+Only used when subtype is 'line/step'
+
+**Values**
+
+- `left` - step occurs before the point (default)
+- `center` - step occurs between points
+- `right` - step occurs after the point
+
+***
+
 ### subtype
 
 > **subtype**?: [`LineSubtype`](../type-aliases/type-alias.LineSubtype.md)

@@ -40,6 +40,12 @@ export type DimensionsBrowserProps = {
     disabledAttributes: AttributiveElement[];
     getTooltip: (attribute: AttributiveElement) => string;
   };
+
+  /**
+   * Whether to collapse all dimensions by default.
+   * @internal
+   */
+  collapseAll?: boolean;
 };
 
 /**

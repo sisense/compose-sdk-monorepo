@@ -11,7 +11,7 @@ import {
 import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { StackType } from '@/chart-options-processor/translations/translations-to-highcharts';
 import { ChartStyleOptions, StackableStyleOptions, StackableSubtype } from '@/types';
-import { shouldHaveY2Axis } from '../data-options';
+import { shouldHaveY2Axis } from '../../helpers/data-options';
 
 export function translateStackableStyleOptionsToDesignOptions(
   chartType: 'bar' | 'column',

@@ -1,5 +1,5 @@
+import type { TooltipProps } from '@rc-component/tooltip/lib/Tooltip';
 import classNames from 'classnames';
-import type { TooltipProps } from 'rc-tooltip/lib/Tooltip';
 import React from 'react';
 import ReactDOM from 'react-dom';
 

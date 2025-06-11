@@ -84,7 +84,7 @@ If this is a plugin widget, this is typically the name/ID of the plugin.
 
 ### styleOptions
 
-> **styleOptions**: `TextWidgetStyleOptions | ChartStyleOptions` & [`WidgetContainerStyleOptions`](../interfaces/interface.WidgetContainerStyleOptions.md)
+> **styleOptions**: `TextWidgetStyleOptions | PluginWidgetStyleOptions | ChartStyleOptions` & [`WidgetContainerStyleOptions`](../interfaces/interface.WidgetContainerStyleOptions.md)
 
 Widget style options.
 

@@ -46,7 +46,7 @@ import {
 import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
 import { translateRangeChartDataOptions } from './translate-range-data-options';
 import { TranslatableError } from '@/translation/translatable-error';
-import { translateCartesianChartDataOptions } from '@/chart/restructured-charts/helpers/cartesians/data-options';
+import { translateCartesianChartDataOptions } from '@/chart/restructured-charts/highchart-based-charts/cartesians/helpers/data-options';
 import { updateStyledColumnSortForTable } from '@/chart-data/table-data';
 
 export function translateChartDataOptions(

@@ -19,6 +19,9 @@ import {
 import { AxesMapping, ChartRecommendations, ExpandedQueryModel } from '@/analytics-composer/types';
 import { normalizeAnyColumn } from '@/chart-data-options/utils';
 
+/**
+ * @internal
+ */
 export const getChartRecommendationsOrDefault = (
   response: ExpandedQueryModel,
 ): ChartRecommendations => {
@@ -33,10 +36,7 @@ export const getChartRecommendationsOrDefault = (
   };
 };
 
-/**
- * @internal
- */
-export const getTableOptions = (jaql: MetadataItem[]) => {
+const getTableDataOptions = (jaql: MetadataItem[]) => {
   const columns = jaql.map(createDimensionalElementFromMetadataItem);
 
   return {
@@ -72,7 +72,16 @@ const DEFAULT_SUBTYPE_FOR = Object.freeze<Partial<Record<ChartType, ChartSubtype
   column: 'column/stackedcolumn',
 });
 
-const mapToDataOptions = (
+/**
+ * Maps the metadata items to the chart data options.
+ *
+ * @param metadataItems - metadata items
+ * @param chartFamily - chart family
+ * @param axesMapping - axes mapping
+ * @returns chart data options
+ * @internal
+ */
+export const getChartDataOptions = (
   metadataItems: MetadataItem[],
   chartFamily: string,
   axesMapping: AxesMapping,
@@ -152,7 +161,7 @@ const mapToDataOptions = (
       return intermediateOptions as ScattermapChartDataOptions;
     case 'table':
       if (Object.keys(intermediateOptions).length === 0) {
-        return getTableOptions(metadataItems).dataOptions;
+        return getTableDataOptions(metadataItems).dataOptions;
       }
       return intermediateOptions;
     case 'boxplot':
@@ -163,16 +172,66 @@ const mapToDataOptions = (
   }
 };
 
-const getAxisTitle = (chartRecommendations: ChartRecommendations, axis: 'x' | 'y') => {
+const getAxisTitle = (axesMapping: AxesMapping, axis: 'x' | 'y') => {
   if (axis === 'x') {
-    return (chartRecommendations.axesMapping.category ?? chartRecommendations.axesMapping.x)
+    return (axesMapping.category ?? axesMapping.x)
       ?.map((item) => normalizeAnyColumn(item).column.name)
       .join(', ');
   }
 
-  return (chartRecommendations.axesMapping.value ?? chartRecommendations.axesMapping.y)
+  return (axesMapping.value ?? axesMapping.y)
     ?.map((item) => normalizeAnyColumn(item).column.name)
     .join(', ');
+};
+
+/**
+ * Get chart style options for the chart widget.
+ *
+ * @param chartType - chart type
+ * @param axesMapping - axes mapping
+ * @param initialStyleOptions - initial style options
+ * @param useCustomizedStyleOptions - whether to use customized style. Charts as inline response messages use customized style. Charts for Query Composer use default style.
+ * @returns chart style options
+ * @internal
+ */
+export const getChartStyleOptions = (
+  chartType: ChartType,
+  axesMapping: AxesMapping,
+  initialStyleOptions: ChartStyleOptions,
+  useCustomizedStyleOptions: boolean,
+) => {
+  let chartStyleOptions;
+
+  if (useCustomizedStyleOptions && chartType in DEFAULT_SUBTYPE_FOR) {
+    chartStyleOptions = merge(
+      merge(DEFAULT_STYLE_OPTIONS, {
+        subtype: DEFAULT_SUBTYPE_FOR[`${chartType}`],
+      }),
+      {
+        legend: {
+          enabled: true,
+          position: 'right',
+        },
+        yAxis: {
+          title: {
+            enabled: true,
+            text: getAxisTitle(axesMapping, 'y'),
+          },
+        },
+        xAxis: {
+          title: {
+            enabled: true,
+            text: getAxisTitle(axesMapping, 'x'),
+          },
+        },
+      },
+      initialStyleOptions,
+    ) as ChartStyleOptions;
+  } else {
+    chartStyleOptions = merge(getDefaultStyleOptions(), initialStyleOptions);
+  }
+
+  return chartStyleOptions;
 };
 
 /**
@@ -188,39 +247,20 @@ export const getChartOptions = (
   chartRecommendations: ChartRecommendations,
   useCustomizedStyleOptions = true,
 ) => {
-  const { chartFamily, axesMapping = {}, styleOptions = {} } = chartRecommendations;
-  const dataOptions = mapToDataOptions(jaql, chartFamily, axesMapping);
+  const {
+    chartFamily,
+    chartType,
+    axesMapping = {},
+    styleOptions: initialStyleOptions = {},
+  } = chartRecommendations;
+  const dataOptions = getChartDataOptions(jaql, chartFamily, axesMapping);
 
-  let chartStyleOptions;
-
-  if (useCustomizedStyleOptions && chartRecommendations.chartType in DEFAULT_SUBTYPE_FOR) {
-    chartStyleOptions = merge(
-      merge(DEFAULT_STYLE_OPTIONS, {
-        subtype: DEFAULT_SUBTYPE_FOR[chartRecommendations.chartType],
-      }),
-      {
-        legend: {
-          enabled: true,
-          position: 'right',
-        },
-        yAxis: {
-          title: {
-            enabled: true,
-            text: getAxisTitle(chartRecommendations, 'y'),
-          },
-        },
-        xAxis: {
-          title: {
-            enabled: true,
-            text: getAxisTitle(chartRecommendations, 'x'),
-          },
-        },
-      },
-      styleOptions,
-    ) as ChartStyleOptions;
-  } else {
-    chartStyleOptions = merge(getDefaultStyleOptions(), styleOptions);
-  }
+  const chartStyleOptions = getChartStyleOptions(
+    chartType as ChartType,
+    axesMapping,
+    initialStyleOptions,
+    useCustomizedStyleOptions,
+  );
 
   return {
     dataOptions,

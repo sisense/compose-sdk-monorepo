@@ -213,6 +213,11 @@ export const getSeriesChartDesignOptions = (
     seriesDesignOptions.marker = getMarkers(
       lineStyleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' },
     );
+
+    if (lineStyleOptions.subtype === 'line/step') {
+      (seriesDesignOptions as LineChartDesignOptions).step =
+        lineStyleOptions.stepPosition || 'left';
+    }
   }
   return seriesDesignOptions;
 };
@@ -232,10 +237,17 @@ export const getLineChartDesignOptions = (
     getDefaultStyleOptions(),
   );
   const designPerSeries = getDesignOptionsPerSeries(dataOptions, 'line', styleOptionsWithDefaults);
-  return {
+
+  const result: LineChartDesignOptions = {
     ...style,
     designPerSeries,
   };
+
+  if (styleOptions.subtype === 'line/step') {
+    result.step = styleOptions.stepPosition || 'left';
+  }
+
+  return result;
 };
 
 export const getAreaChartDesignOptions = (

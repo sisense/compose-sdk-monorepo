@@ -177,13 +177,18 @@ export const RegularChart = (props: RegularChartProps) => {
         if (isRestructuredChartType(chartType)) {
           const chartBuilder = getChartBuilder(chartType);
           if (chartBuilder.renderer.isCorrectRendererProps(chartRendererProps)) {
-            return <chartBuilder.renderer.ChartRendererComponent {...chartRendererProps} />;
+            return (
+              <LoadingOverlay isVisible={isLoading}>
+                <chartBuilder.renderer.ChartRendererComponent {...chartRendererProps} />
+              </LoadingOverlay>
+            );
           }
+          return null;
         }
 
         if (chartType === 'scattermap' && isScattermapProps(chartRendererProps)) {
           return (
-            <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+            <LoadingOverlay isVisible={isLoading}>
               <Scattermap {...chartRendererProps} />
             </LoadingOverlay>
           );
@@ -191,7 +196,7 @@ export const RegularChart = (props: RegularChartProps) => {
 
         if (chartType === 'indicator' && isIndicatorCanvasProps(chartRendererProps)) {
           return (
-            <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+            <LoadingOverlay isVisible={isLoading}>
               <IndicatorCanvas {...chartRendererProps} />
             </LoadingOverlay>
           );
@@ -199,7 +204,7 @@ export const RegularChart = (props: RegularChartProps) => {
 
         if (isSisenseChartType(chartType) && isSisenseChartProps(chartRendererProps)) {
           return (
-            <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+            <LoadingOverlay isVisible={isLoading}>
               <SisenseChart
                 {...chartRendererProps}
                 designOptions={{

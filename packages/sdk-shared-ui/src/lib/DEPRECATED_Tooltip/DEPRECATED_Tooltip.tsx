@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import RcTooltip from '@rc-component/tooltip';
+import type { TooltipProps } from '@rc-component/tooltip/lib/Tooltip';
 import classnames from 'classnames';
-import RcTooltip from 'rc-tooltip';
-import type { TooltipProps } from 'rc-tooltip/lib/Tooltip';
 import React from 'react';
 
 import { styleguideConstants } from '../constants/styleguideConstants';
@@ -56,7 +56,7 @@ const DEPRECATED_Tooltip = (
 
   return (
     <RcTooltip
-      destroyTooltipOnHide
+      destroyOnHidden
       overlay={getOverlay()}
       {...otherProps}
       overlayClassName={overlayClasses}

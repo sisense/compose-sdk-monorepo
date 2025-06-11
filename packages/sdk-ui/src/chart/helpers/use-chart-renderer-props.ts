@@ -40,7 +40,6 @@ export function useChartRendererProps(
     onDataPointClick,
     onDataPointContextMenu,
     onDataPointsSelected,
-    filters,
   } = internalProps;
   if (!internalDataOptions || !designOptions) {
     return null;
@@ -55,6 +54,5 @@ export function useChartRendererProps(
     onDataPointClick,
     onDataPointContextMenu,
     onDataPointsSelected,
-    filters,
   };
 }

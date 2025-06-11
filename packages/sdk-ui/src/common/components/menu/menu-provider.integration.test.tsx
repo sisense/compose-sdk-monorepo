@@ -8,13 +8,17 @@ import { MenuOptions } from './types';
 
 describe('MenuProvider + useCombinedMenu', () => {
   const TestComponent = ({ menuOptions }: { menuOptions: MenuOptions }) => {
-    const { openMenu, onBeforeMenuOpen } = useCombinedMenu({
-      isTargetMenu: () => true,
-      combineMenus: (currentMenuOptions, capturedMenuOptions) => ({
+    const { openMenu } = useCombinedMenu({
+      combineMenus: ([currentMenuOptions, capturedMenuOptions]) => ({
         ...currentMenuOptions,
         itemSections: currentMenuOptions.itemSections.concat(capturedMenuOptions.itemSections),
       }),
     });
+
+    const onBeforeMenuOpen = (menuOptions: MenuOptions) => {
+      openMenu(menuOptions);
+      return null;
+    };
 
     return (
       <MenuProvider onBeforeMenuOpen={onBeforeMenuOpen}>

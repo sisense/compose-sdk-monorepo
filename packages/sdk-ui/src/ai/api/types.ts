@@ -86,6 +86,8 @@ export interface NlqResponseData extends ExpandedQueryModel {
   widgetProps?: WidgetProps | undefined;
   /** The response message for the chat  */
   userMsg: string;
+  /** @internal */
+  clarification: string;
 }
 export interface NlqResponse {
   data: NlqResponseData;

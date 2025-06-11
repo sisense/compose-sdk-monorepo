@@ -8,7 +8,7 @@ exports[`DrilldownWidget > renders breadcrumbs by default when there is a curren
     Category (drilldown.breadcrumbsAllSuffix)
   </span>,
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1ghymn0 css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1ghymn0 css-1uent87-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -24,9 +24,6 @@ exports[`DrilldownWidget > renders breadcrumbs by default when there is a curren
         style="background-color: transparent; border-top: 1px solid #F2F2F2; border-right: 1px solid #F2F2F2;"
       />
     </span>
-    <span
-      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-    />
   </button>,
 ]
 `;

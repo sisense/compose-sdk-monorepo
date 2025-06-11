@@ -252,7 +252,7 @@ export const MetadataTypes = {
    * @returns true if the object or type is a dimension - of any type
    */
   isDimension(o: any): boolean {
-    if (typeof o === 'object') {
+    if (o && typeof o === 'object') {
       o = o.type;
     }
 
@@ -299,7 +299,7 @@ export const MetadataTypes = {
    * @returns true if the object or type is a filter
    */
   isFilter(o: any): boolean {
-    if (typeof o === 'object') {
+    if (o && typeof o === 'object') {
       o = o.type;
     }
 
@@ -668,6 +668,8 @@ export type DataSourceField = {
   tableTitle?: null | string;
   title: string;
   type: string;
+  description?: null | string;
+  tableDescription?: null | string;
 };
 
 /**

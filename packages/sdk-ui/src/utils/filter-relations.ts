@@ -105,10 +105,10 @@ export function getFilterRelationsDescription(
 /**
  * Merge two arrays of filters using the specified merge strategy.
  *
- * @param {Filter[]} widgetFilters - The filters from the widget.
- * @param {Filter[]} codeFilters - The filters from the code.
- * @param {FiltersMergeStrategy} [mergeStrategy] - The strategy to use for merging filters.
- * @returns {Filter[]} The merged filters based on the selected strategy.
+ * @param widgetFilters - The filters from the widget.
+ * @param codeFilters - The filters from the code.
+ * @param mergeStrategy - The strategy to use for merging filters.
+ * @returns The merged filters based on the selected strategy.
  * @internal
  */
 export function mergeFiltersByStrategy(

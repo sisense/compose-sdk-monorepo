@@ -1,0 +1,1987 @@
+{
+  "_id": "682b70452d7f147f883dd108",
+  "title": "Sample - Ecommerce",
+  "desc": "",
+  "source": null,
+  "type": "dashboard",
+  "shares": [
+    {
+      "shareId": "682b645c97b53c6a03216a16",
+      "type": "user"
+    }
+  ],
+  "style": {},
+  "owner": "682b645c97b53c6a03216a16",
+  "userId": "682b645c97b53c6a03216a16",
+  "created": "2025-05-19T17:54:13.502Z",
+  "lastUpdated": "2025-05-29T15:59:43.153Z",
+  "layout": {
+    "columns": [
+      {
+        "width": 16.869192280200146,
+        "cells": [
+          {
+            "subcells": [
+              {
+                "width": 100,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0fb",
+                    "height": "184px"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subcells": [
+              {
+                "width": 100,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0f7",
+                    "height": "172px"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subcells": [
+              {
+                "width": 100,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0f9",
+                    "height": "172px"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subcells": [
+              {
+                "width": 100,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0f6",
+                    "height": "184px"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "width": 45.76497177043374,
+        "cells": [
+          {
+            "subcells": [
+              {
+                "width": 100,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0fd",
+                    "height": 277.87671798828126
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subcells": [
+              {
+                "width": 50.25466893039049,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0f8",
+                    "height": "384px"
+                  }
+                ]
+              },
+              {
+                "width": 49.745331069609506,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0fa",
+                    "height": "384px"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "width": 37.36583594936612,
+        "cells": [
+          {
+            "subcells": [
+              {
+                "width": 100,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0fc",
+                    "height": "392px"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subcells": [
+              {
+                "width": 100,
+                "elements": [
+                  {
+                    "widgetid": "682b70452d7f147f883dd0fe",
+                    "height": "384px"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "instanceid": "1C2B2-9C44-B5",
+    "type": "columnar"
+  },
+  "instanceType": "owner",
+  "previewLayout": [],
+  "datasource": {
+    "address": "LocalHost",
+    "title": "Sample ECommerce",
+    "id": "localhost_aSampleIAAaECommerce",
+    "database": "aSampleIAAaECommerce"
+  },
+  "editing": true,
+  "filters": [
+    {
+      "jaql": {
+        "title": "COUNTRY",
+        "dim": "[country.Country]",
+        "datatype": "text",
+        "filter": {
+          "exclude": {
+            "members": []
+          },
+          "multiSelection": true
+        },
+        "datasource": {
+          "title": "Sample ECommerce",
+          "fullname": "LocalHost/Sample ECommerce",
+          "id": "localhost_aSampleIAAaECommerce",
+          "address": "LocalHost",
+          "database": "aSampleIAAaECommerce"
+        },
+        "table": "country",
+        "column": "Country"
+      },
+      "disabled": false,
+      "instanceid": "F7F94-09A0-F6AB-74FA",
+      "isCascading": false
+    },
+    {
+      "jaql": {
+        "title": "YEARS",
+        "dim": "[Commerce.Date (Calendar)]",
+        "datatype": "datetime",
+        "level": "years",
+        "filter": {
+          "members": ["2013-01-01T00:00:00"],
+          "multiSelection": true
+        },
+        "datasource": {
+          "title": "Sample ECommerce",
+          "fullname": "LocalHost/Sample ECommerce",
+          "id": "localhost_aSampleIAAaECommerce",
+          "address": "LocalHost",
+          "database": "aSampleIAAaECommerce"
+        },
+        "table": "Commerce",
+        "column": "Date"
+      },
+      "disabled": false,
+      "instanceid": "D8267-F328-BA08-BA88",
+      "isCascading": false
+    },
+    {
+      "jaql": {
+        "title": "SALES REVENUE RANGE",
+        "dim": "[Commerce.Revenue]",
+        "datatype": "numeric",
+        "filter": {
+          "fromNotEqual": 0
+        },
+        "datasource": {
+          "title": "Sample ECommerce",
+          "fullname": "LocalHost/Sample ECommerce",
+          "id": "localhost_aSampleIAAaECommerce",
+          "address": "LocalHost",
+          "database": "aSampleIAAaECommerce"
+        },
+        "table": "Commerce",
+        "column": "Revenue"
+      },
+      "disabled": true,
+      "instanceid": "AFEC5-939B-76BE-210A",
+      "isCascading": false
+    }
+  ],
+  "isPublic": null,
+  "oid": "682b70452d7f147f883dd0f5",
+  "options": {
+    "manual": false
+  },
+  "parentFolder": null,
+  "tenantId": "682b645c97b53c6a03216a23",
+  "lastOpened": "2025-05-30T09:32:18.177Z",
+  "settings": {
+    "autoUpdateOnFiltersChange": true
+  },
+  "widgets": [
+    {
+      "_id": "682b70452d7f147f883dd109",
+      "title": "TOTAL BRANDS",
+      "type": "indicator",
+      "subtype": "indicator/gauge",
+      "oid": "682b70452d7f147f883dd0f6",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.503Z",
+      "lastUpdated": "2025-05-19T17:54:13.503Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "value",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Brand ID",
+                  "dim": "[Commerce.Brand ID]",
+                  "datatype": "numeric",
+                  "merged": true,
+                  "agg": "count",
+                  "title": "# of unique Brand ID"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  },
+                  "color": {
+                    "type": "color"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "secondary",
+            "items": []
+          },
+          {
+            "name": "min",
+            "items": [
+              {
+                "jaql": {
+                  "formula": "0",
+                  "title": "0 (default)"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "max",
+            "items": [
+              {
+                "jaql": {
+                  "type": "measure",
+                  "formula": "2500",
+                  "context": {},
+                  "title": "2500"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": []
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "title": false,
+        "dashboardFiltersMode": "filter",
+        "selector": false,
+        "allowSelector": false,
+        "disallowSelector": true,
+        "triggersDomready": true,
+        "noTitle": false
+      },
+      "size": "big",
+      "style": {
+        "indicator/pictogram": {},
+        "subtype": "round",
+        "indicator/numeric": {
+          "subtype": "simple",
+          "skin": "1",
+          "components": {
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "icon": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "skin": "1",
+        "indicator/gauge": {
+          "subtype": "round",
+          "skin": "1",
+          "components": {
+            "ticks": {
+              "inactive": false,
+              "enabled": true
+            },
+            "labels": {
+              "inactive": false,
+              "enabled": true
+            },
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "components": {
+          "ticks": {
+            "inactive": false,
+            "enabled": true
+          },
+          "labels": {
+            "inactive": false,
+            "enabled": true
+          },
+          "title": {
+            "inactive": false,
+            "enabled": false
+          },
+          "secondaryTitle": {
+            "inactive": true,
+            "enabled": true
+          }
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd10a",
+      "title": "TOTAL UNITS SOLD",
+      "type": "indicator",
+      "subtype": "indicator/gauge",
+      "oid": "682b70452d7f147f883dd0f7",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.503Z",
+      "lastUpdated": "2025-05-19T17:54:13.503Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "value",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Quantity",
+                  "dim": "[Commerce.Quantity]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Quantity"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  },
+                  "color": {
+                    "type": "color"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "secondary",
+            "items": []
+          },
+          {
+            "name": "min",
+            "items": [
+              {
+                "jaql": {
+                  "formula": "0",
+                  "title": "0 (default)"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "max",
+            "items": [
+              {
+                "jaql": {
+                  "type": "measure",
+                  "formula": "250000",
+                  "context": {},
+                  "title": "250000"
+                },
+                "format": {
+                  "mask": {
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "decimals": "auto",
+                    "number": {
+                      "separated": true
+                    },
+                    "currency": null,
+                    "percent": null,
+                    "type": null
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": []
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "title": false,
+        "dashboardFiltersMode": "filter",
+        "selector": false,
+        "allowSelector": false,
+        "disallowSelector": true,
+        "triggersDomready": true,
+        "noTitle": false
+      },
+      "size": "big",
+      "style": {
+        "indicator/pictogram": {},
+        "subtype": "round",
+        "indicator/numeric": {
+          "subtype": "simple",
+          "skin": "1",
+          "components": {
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "icon": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "skin": "1",
+        "indicator/gauge": {
+          "subtype": "round",
+          "skin": "1",
+          "components": {
+            "ticks": {
+              "inactive": false,
+              "enabled": true
+            },
+            "labels": {
+              "inactive": false,
+              "enabled": true
+            },
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "components": {
+          "ticks": {
+            "inactive": false,
+            "enabled": true
+          },
+          "labels": {
+            "inactive": false,
+            "enabled": true
+          },
+          "title": {
+            "inactive": false,
+            "enabled": false
+          },
+          "secondaryTitle": {
+            "inactive": true,
+            "enabled": true
+          }
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd10b",
+      "title": "AGE RANGE BREAKDOWN",
+      "type": "chart/pie",
+      "subtype": "pie/classic",
+      "oid": "682b70452d7f147f883dd0f8",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.503Z",
+      "lastUpdated": "2025-05-19T17:54:13.503Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "categories",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Age Range",
+                  "dim": "[Commerce.Age Range]",
+                  "datatype": "text",
+                  "merged": true,
+                  "title": "Age Range"
+                },
+                "format": {}
+              }
+            ]
+          },
+          {
+            "name": "values",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Revenue",
+                  "dim": "[Commerce.Revenue]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Revenue"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": [
+              {
+                "jaql": {
+                  "datasource": {
+                    "title": "Sample ECommerce",
+                    "fullname": "LocalHost/Sample ECommerce",
+                    "id": "localhost_aSampleIAAaECommerce",
+                    "address": "LocalHost",
+                    "database": "aSampleIAAaECommerce"
+                  },
+                  "column": "Gender",
+                  "table": "Commerce",
+                  "dim": "[Commerce.Gender]",
+                  "datatype": "text",
+                  "filter": {
+                    "explicit": false,
+                    "multiSelection": true,
+                    "exclude": {
+                      "members": ["Unspecified"]
+                    }
+                  },
+                  "title": "Gender",
+                  "collapsed": true
+                },
+                "format": {
+                  "mask": {
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "dashboardFiltersMode": "select",
+        "selector": true,
+        "triggersDomready": true
+      },
+      "style": {
+        "legend": {
+          "enabled": false,
+          "position": "bottom"
+        },
+        "labels": {
+          "enabled": true,
+          "categories": true,
+          "value": false,
+          "percent": true,
+          "decimals": false
+        },
+        "dataLimits": {
+          "seriesCapacity": 100000
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd10c",
+      "title": "TOTAL SALES",
+      "type": "indicator",
+      "subtype": "indicator/gauge",
+      "oid": "682b70452d7f147f883dd0f9",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.503Z",
+      "lastUpdated": "2025-05-19T17:54:13.503Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "value",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Visit ID",
+                  "dim": "[Commerce.Visit ID]",
+                  "datatype": "numeric",
+                  "agg": "countduplicates",
+                  "title": "# of Visit ID"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  },
+                  "color": {
+                    "type": "color"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "secondary",
+            "items": []
+          },
+          {
+            "name": "min",
+            "items": [
+              {
+                "jaql": {
+                  "formula": "0",
+                  "title": "0 (default)"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "max",
+            "items": [
+              {
+                "jaql": {
+                  "type": "measure",
+                  "formula": "100000",
+                  "context": {},
+                  "title": "100000"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": []
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "title": false,
+        "dashboardFiltersMode": "filter",
+        "selector": false,
+        "allowSelector": false,
+        "disallowSelector": true,
+        "triggersDomready": true,
+        "noTitle": false
+      },
+      "size": "big",
+      "style": {
+        "indicator/gauge": {
+          "subtype": "round",
+          "skin": "1",
+          "components": {
+            "ticks": {
+              "inactive": false,
+              "enabled": true
+            },
+            "labels": {
+              "inactive": false,
+              "enabled": true
+            },
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "indicator/numeric": {
+          "subtype": "simple",
+          "skin": "1",
+          "components": {
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "icon": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "skin": "1",
+        "subtype": "round",
+        "indicator/pictogram": {},
+        "components": {
+          "ticks": {
+            "inactive": false,
+            "enabled": true
+          },
+          "labels": {
+            "inactive": false,
+            "enabled": true
+          },
+          "title": {
+            "inactive": false,
+            "enabled": false
+          },
+          "secondaryTitle": {
+            "inactive": true,
+            "enabled": true
+          }
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd10d",
+      "title": "GENDER BREAKDOWN",
+      "type": "chart/pie",
+      "subtype": "pie/classic",
+      "oid": "682b70452d7f147f883dd0fa",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.503Z",
+      "lastUpdated": "2025-05-19T17:54:13.503Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "categories",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Gender",
+                  "dim": "[Commerce.Gender]",
+                  "datatype": "text",
+                  "merged": true,
+                  "title": "Gender"
+                },
+                "format": {}
+              }
+            ]
+          },
+          {
+            "name": "values",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Revenue",
+                  "dim": "[Commerce.Revenue]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Revenue"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": [
+              {
+                "jaql": {
+                  "datasource": {
+                    "title": "Sample ECommerce",
+                    "fullname": "LocalHost/Sample ECommerce",
+                    "id": "localhost_aSampleIAAaECommerce",
+                    "address": "LocalHost",
+                    "database": "aSampleIAAaECommerce"
+                  },
+                  "column": "Gender",
+                  "table": "Commerce",
+                  "dim": "[Commerce.Gender]",
+                  "datatype": "text",
+                  "filter": {
+                    "explicit": false,
+                    "multiSelection": true,
+                    "exclude": {
+                      "members": ["Unspecified"]
+                    }
+                  },
+                  "title": "Gender",
+                  "collapsed": true
+                },
+                "format": {
+                  "mask": {
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "dashboardFiltersMode": "select",
+        "selector": true,
+        "triggersDomready": true
+      },
+      "style": {
+        "legend": {
+          "enabled": false,
+          "position": "left"
+        },
+        "labels": {
+          "enabled": true,
+          "categories": true,
+          "value": false,
+          "percent": true,
+          "decimals": false
+        },
+        "dataLimits": {
+          "seriesCapacity": 100000
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd10e",
+      "title": "TOTAL REVENUE",
+      "type": "indicator",
+      "subtype": "indicator/gauge",
+      "oid": "682b70452d7f147f883dd0fb",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.503Z",
+      "lastUpdated": "2025-05-19T17:54:13.503Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "value",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Revenue",
+                  "dim": "[Commerce.Revenue]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Revenue"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  },
+                  "color": {
+                    "type": "color"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "secondary",
+            "items": []
+          },
+          {
+            "name": "min",
+            "items": [
+              {
+                "jaql": {
+                  "formula": "0",
+                  "title": "0 (default)"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "max",
+            "items": [
+              {
+                "jaql": {
+                  "type": "measure",
+                  "formula": "125000000",
+                  "context": {},
+                  "title": "125000000"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": false
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": []
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "title": false,
+        "dashboardFiltersMode": "filter",
+        "selector": false,
+        "allowSelector": false,
+        "disallowSelector": true,
+        "triggersDomready": true,
+        "noTitle": false
+      },
+      "size": "big",
+      "style": {
+        "indicator/gauge": {
+          "subtype": "round",
+          "skin": "1",
+          "components": {
+            "ticks": {
+              "inactive": false,
+              "enabled": true
+            },
+            "labels": {
+              "inactive": false,
+              "enabled": true
+            },
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "indicator/numeric": {
+          "subtype": "simple",
+          "skin": "1",
+          "components": {
+            "title": {
+              "inactive": false,
+              "enabled": true
+            },
+            "icon": {
+              "inactive": false,
+              "enabled": true
+            },
+            "secondaryTitle": {
+              "inactive": true,
+              "enabled": true
+            }
+          }
+        },
+        "skin": "1",
+        "subtype": "round",
+        "indicator/pictogram": {},
+        "components": {
+          "ticks": {
+            "inactive": false,
+            "enabled": true
+          },
+          "labels": {
+            "inactive": false,
+            "enabled": true
+          },
+          "title": {
+            "inactive": false,
+            "enabled": false
+          },
+          "secondaryTitle": {
+            "inactive": true,
+            "enabled": true
+          }
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd10f",
+      "title": "TOP CATEGORIES BY REVENUE, UNITS SOLD AND GENDER",
+      "type": "chart/scatter",
+      "subtype": "bubble/scatter",
+      "oid": "682b70452d7f147f883dd0fc",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.503Z",
+      "lastUpdated": "2025-05-19T17:54:13.503Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "x-axis",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Revenue",
+                  "dim": "[Commerce.Revenue]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Revenue"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "y-axis",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Quantity",
+                  "dim": "[Commerce.Quantity]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Quantity"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "point",
+            "items": [
+              {
+                "jaql": {
+                  "table": "category",
+                  "column": "Category",
+                  "dim": "[Category.Category]",
+                  "datatype": "text",
+                  "merged": true,
+                  "title": "Category"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Break By / Color",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Gender",
+                  "dim": "[Commerce.Gender]",
+                  "datatype": "text",
+                  "merged": true,
+                  "title": "Gender"
+                },
+                "format": {}
+              }
+            ]
+          },
+          {
+            "name": "size",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Cost",
+                  "dim": "[Commerce.Cost]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Cost"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": [
+              {
+                "jaql": {
+                  "datasource": {
+                    "title": "Sample ECommerce",
+                    "fullname": "LocalHost/Sample ECommerce",
+                    "id": "localhost_aSampleIAAaECommerce",
+                    "address": "LocalHost",
+                    "database": "aSampleIAAaECommerce"
+                  },
+                  "column": "Gender",
+                  "table": "Commerce",
+                  "dim": "[Commerce.Gender]",
+                  "datatype": "text",
+                  "filter": {
+                    "explicit": false,
+                    "multiSelection": true,
+                    "exclude": {
+                      "members": ["Unspecified"]
+                    }
+                  },
+                  "title": "Gender",
+                  "collapsed": true
+                },
+                "format": {
+                  "mask": {
+                    "isdefault": true
+                  }
+                }
+              },
+              {
+                "jaql": {
+                  "datasource": {
+                    "title": "Sample ECommerce",
+                    "fullname": "LocalHost/Sample ECommerce",
+                    "id": "localhost_aSampleIAAaECommerce",
+                    "address": "LocalHost",
+                    "database": "aSampleIAAaECommerce"
+                  },
+                  "column": "Category",
+                  "table": "Category",
+                  "dim": "[Category.Category]",
+                  "datatype": "text",
+                  "title": "Category",
+                  "filter": {
+                    "top": 10,
+                    "by": {
+                      "column": "Revenue",
+                      "table": "Commerce",
+                      "dim": "[Commerce.Revenue]",
+                      "datatype": "numeric",
+                      "agg": "sum",
+                      "title": "Total Revenue"
+                    }
+                  },
+                  "collapsed": false
+                },
+                "format": {
+                  "mask": {
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "dashboardFiltersMode": "select",
+        "selector": false,
+        "triggersDomready": true
+      },
+      "style": {
+        "legend": {
+          "enabled": true,
+          "position": "right"
+        },
+        "seriesLabels": {
+          "enabled": false,
+          "rotation": 0
+        },
+        "markerSize": {
+          "min": 12,
+          "max": 48,
+          "isRange": true,
+          "lowest": 10,
+          "highest": 60,
+          "step": 1,
+          "defaultSize": 10
+        },
+        "xAxis": {
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": false,
+          "logarithmic": true,
+          "title": {
+            "enabled": false,
+            "text": "SALES"
+          },
+          "intervalEnabled": false,
+          "logarithmicOld": true,
+          "hideMinMax": false
+        },
+        "yAxis": {
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": true,
+          "logarithmic": true,
+          "title": {
+            "enabled": true,
+            "text": "QUANTITY"
+          },
+          "intervalEnabled": false,
+          "logarithmicOld": true,
+          "hideMinMax": false
+        },
+        "dataLimits": {
+          "categoriesCapacityX": 500,
+          "categoriesCapacityY": 500,
+          "seriesCapacity": 50
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd110",
+      "title": "REVENUE vs.UNITS SOLD",
+      "type": "chart/line",
+      "subtype": "line/spline",
+      "oid": "682b70452d7f147f883dd0fd",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.504Z",
+      "lastUpdated": "2025-05-19T17:54:13.504Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "x-axis",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Date",
+                  "dim": "[Commerce.Date (Calendar)]",
+                  "datatype": "datetime",
+                  "merged": true,
+                  "level": "months",
+                  "title": "Months in Date"
+                },
+                "format": {
+                  "mask": {
+                    "years": "yyyy",
+                    "quarters": "yyyy Q",
+                    "months": "M-yy",
+                    "days": "shortDate"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "values",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Revenue",
+                  "dim": "[Commerce.Revenue]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Revenue"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  },
+                  "color": {
+                    "type": "color"
+                  }
+                }
+              },
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Quantity",
+                  "dim": "[Commerce.Quantity]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Quantity"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  },
+                  "color": {
+                    "type": "color"
+                  }
+                },
+                "y2": true,
+                "singleSeriesType": "column"
+              }
+            ]
+          },
+          {
+            "name": "break by",
+            "items": []
+          },
+          {
+            "name": "filters",
+            "items": []
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "dashboardFiltersMode": "filter",
+        "selector": true,
+        "triggersDomready": true
+      },
+      "style": {
+        "lineWidth": {
+          "width": "bold"
+        },
+        "legend": {
+          "enabled": true,
+          "position": "bottom"
+        },
+        "seriesLabels": {
+          "enabled": false,
+          "rotation": 0
+        },
+        "markers": {
+          "enabled": true,
+          "fill": "hollow",
+          "size": "small"
+        },
+        "xAxis": {
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": false,
+          "title": {
+            "enabled": false,
+            "text": "MONTH"
+          },
+          "x2Title": {
+            "enabled": false
+          },
+          "intervalEnabled": false
+        },
+        "yAxis": {
+          "inactive": false,
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": true,
+          "logarithmic": true,
+          "title": {
+            "enabled": true,
+            "text": "SALES"
+          },
+          "min": "",
+          "intervalEnabled": false
+        },
+        "y2Axis": {
+          "inactive": false,
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": false,
+          "logarithmic": false,
+          "title": {
+            "enabled": true,
+            "text": "QUANTITY"
+          },
+          "templateMainYHasGridLines": true,
+          "intervalEnabled": true
+        },
+        "navigator": {
+          "enabled": true
+        },
+        "dataLimits": {
+          "seriesCapacity": 50,
+          "categoriesCapacity": 100000
+        }
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    },
+    {
+      "_id": "682b70452d7f147f883dd111",
+      "title": "TOP 3 CATEGORIES BY REVENUE AND AGE",
+      "type": "chart/bar",
+      "subtype": "bar/stacked",
+      "oid": "682b70452d7f147f883dd0fe",
+      "desc": null,
+      "source": null,
+      "owner": "682b645c97b53c6a03216a16",
+      "created": "2025-05-19T17:54:13.504Z",
+      "lastUpdated": "2025-05-19T17:54:13.504Z",
+      "datasource": {
+        "address": "LocalHost",
+        "title": "Sample ECommerce",
+        "id": "localhost_aSampleIAAaECommerce",
+        "database": "aSampleIAAaECommerce"
+      },
+      "selection": null,
+      "metadata": {
+        "ignore": {
+          "dimensions": [],
+          "ids": [],
+          "all": false
+        },
+        "panels": [
+          {
+            "name": "categories",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Age Range",
+                  "dim": "[Commerce.Age Range]",
+                  "datatype": "text",
+                  "merged": true,
+                  "title": "Age Range"
+                }
+              }
+            ]
+          },
+          {
+            "name": "values",
+            "items": [
+              {
+                "jaql": {
+                  "table": "Commerce",
+                  "column": "Revenue",
+                  "dim": "[Commerce.Revenue]",
+                  "datatype": "numeric",
+                  "agg": "sum",
+                  "title": "Total Revenue"
+                },
+                "format": {
+                  "mask": {
+                    "type": "number",
+                    "abbreviations": {
+                      "t": true,
+                      "b": true,
+                      "m": true,
+                      "k": true
+                    },
+                    "separated": true,
+                    "decimals": "auto",
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "break by",
+            "items": [
+              {
+                "jaql": {
+                  "table": "category",
+                  "column": "Category",
+                  "dim": "[Category.Category]",
+                  "datatype": "text",
+                  "merged": true,
+                  "title": "Category"
+                },
+                "format": {}
+              }
+            ]
+          },
+          {
+            "name": "filters",
+            "items": [
+              {
+                "jaql": {
+                  "datasource": {
+                    "title": "Sample ECommerce",
+                    "fullname": "LocalHost/Sample ECommerce",
+                    "id": "localhost_aSampleIAAaECommerce",
+                    "address": "LocalHost",
+                    "database": "aSampleIAAaECommerce"
+                  },
+                  "table": "category",
+                  "column": "Category",
+                  "dim": "[Category.Category]",
+                  "datatype": "text",
+                  "merged": true,
+                  "title": "Category",
+                  "filter": {
+                    "top": 3,
+                    "by": {
+                      "table": "Commerce",
+                      "column": "Revenue",
+                      "dim": "[Commerce.Revenue]",
+                      "datatype": "numeric",
+                      "agg": "sum",
+                      "title": "Total Revenue"
+                    }
+                  },
+                  "collapsed": false
+                },
+                "format": {
+                  "mask": {
+                    "isdefault": true
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "dashboardid": "682b70452d7f147f883dd0f5",
+      "options": {
+        "dashboardFiltersMode": "filter",
+        "selector": true,
+        "triggersDomready": true,
+        "maxCharsPerLabelXAxis": 9
+      },
+      "style": {
+        "legend": {
+          "enabled": true,
+          "position": "bottom"
+        },
+        "seriesLabels": {
+          "enabled": false,
+          "rotation": 0
+        },
+        "xAxis": {
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": false,
+          "title": {
+            "enabled": true,
+            "text": "AGE RANGE"
+          },
+          "x2Title": {
+            "enabled": false
+          },
+          "intervalEnabled": false
+        },
+        "yAxis": {
+          "inactive": false,
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": true,
+          "logarithmic": false,
+          "title": {
+            "enabled": true,
+            "text": "SALES"
+          },
+          "intervalEnabled": true,
+          "hideMinMax": false
+        },
+        "y2Axis": {
+          "inactive": true,
+          "enabled": true,
+          "ticks": true,
+          "labels": {
+            "enabled": true,
+            "rotation": 0
+          },
+          "gridLines": false,
+          "logarithmic": false,
+          "title": {
+            "enabled": false
+          },
+          "intervalEnabled": true,
+          "hideMinMax": false
+        },
+        "dataLimits": {
+          "seriesCapacity": 50,
+          "categoriesCapacity": 100000
+        },
+        "navigator": {
+          "enabled": true
+        }
+      },
+      "viewState": {
+        "activeTab": "design"
+      },
+      "userId": "682b645c97b53c6a03216a16",
+      "instanceType": "owner"
+    }
+  ]
+}

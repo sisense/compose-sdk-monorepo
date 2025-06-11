@@ -9,6 +9,7 @@ import {
   JaqlSortDirection,
 } from '@sisense/sdk-data';
 import { HierarchyId } from '@/models/hierarchy';
+import { SizeMeasurement } from '@/types';
 
 /**
  * The type of a widget on a dashboard that is a variant of Cartesian widget.
@@ -107,6 +108,7 @@ export interface WidgetDto {
     drillHistory?: PanelItem[];
     usedFormulasMapping?: any;
   };
+  drillToDashboardConfig?: JTDConfigDto;
   style: WidgetStyle;
   title: string;
   desc: string | null;
@@ -661,4 +663,78 @@ export type TextWidgetDtoStyle = {
     bgColor: string;
     textAlign: 'center';
   };
+};
+
+export type JTDDrillTarget = {
+  caption: string;
+  id: string;
+};
+
+export type JTDConfigDto = {
+  drilledDashboardPrefix: string;
+  drilledDashboardsFolderPrefix: string;
+  displayFilterPane: boolean;
+  displayDashboardsPane: boolean;
+  displayToolbarRow: boolean;
+  displayHeaderRow: boolean;
+  volatile: boolean;
+  hideDrilledDashboards: boolean;
+  hideSharedDashboardsForNonOwner: boolean;
+  drillToDashboardRightMenuCaption: string;
+  drillToDashboardNavigateType: number;
+  drillToDashboardNavigateTypePivot: number;
+  drillToDashboardNavigateTypeCharts: number;
+  drillToDashboardNavigateTypeOthers: number;
+  drilledDashboardDisplayType: number;
+  dashboardIds: Array<{
+    oid: string;
+    caption: string;
+    id: string;
+    dashboardTitle: string;
+  }>;
+  modalWindowResize: boolean;
+  modalWindowMeasurement?: SizeMeasurement;
+  modalWindowWidth?: number;
+  modalWindowHeight?: number;
+  showFolderNameOnMenuSelection: boolean;
+  resetDashFiltersAfterJTD: boolean;
+  sameCubeRestriction: boolean;
+  showJTDIcon: boolean;
+  sendPieChartMeasureFiltersOnClick: boolean;
+  forceZeroInsteadNull: boolean;
+  mergeTargetDashboardFilters: boolean;
+  drillToDashboardByName: boolean;
+  sendBreakByValueFilter: boolean;
+  ignoreFiltersSource: boolean;
+  sendFormulaFiltersDuplicate?: number | 'none' | undefined;
+  enabled?: boolean;
+  version?: string;
+  includeDashFilterDims?: string[];
+  includeWidgetFilterDims?: string[];
+};
+
+export enum JTDNavigateType {
+  CLICK = 'click',
+  RIGHT_CLICK = 'rightclick',
+  PIVOT_LINK = 'pivotlink',
+  BLOX = 'blox',
+}
+
+export type JTDConfig = {
+  drilledDashboardPrefix?: string;
+  displayFilterPane?: boolean;
+  displayToolbarRow?: boolean;
+  drillToDashboardRightMenuCaption?: string;
+  navigateType?: JTDNavigateType;
+  includeDashFilterDims?: string[];
+  includeWidgetFilterDims?: string[];
+  drillTargets: JTDDrillTarget[];
+  modalWindowResize?: boolean;
+  modalWindowMeasurement?: SizeMeasurement;
+  modalWindowWidth?: number;
+  modalWindowHeight?: number;
+  showJTDIcon?: boolean;
+  mergeTargetDashboardFilters?: boolean;
+  sendFormulaFiltersDuplicate?: number | 'none' | undefined;
+  enabled?: boolean;
 };

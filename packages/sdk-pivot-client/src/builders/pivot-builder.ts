@@ -3,7 +3,6 @@
 import EventEmitter from 'events';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import ReactDOMClient from 'react-dom/client';
 import isEqual from 'lodash-es/isEqual.js';
 import {
   EVENT_DATA_CHUNK_LOADED,
@@ -124,6 +123,9 @@ export const EVENT_TOTAL_HEIGHT_CHANGE = 'totalHeightChange';
 export const EVENT_DOM_READY = 'domReady';
 export const EVENT_FIRST_PAGE_RENDERED = 'firstPageRendered';
 export const EVENT_TOTAL_WIDGET_RENDERED = 'totalWidgetRendered';
+
+export const EVENT_PIVOT_ELEMENT_CHANGE = 'pivotElementChange';
+
 export { EVENT_PROGRESS_ERROR } from '../data-handling/DataService.js';
 
 export type SortingSettingsChangePayload = {
@@ -206,8 +208,7 @@ export class PivotBuilder {
   /** Current component properties */
   private props: Props;
 
-  /** React root DOM element for rendering the Pivot Table */
-  private rootDom: ReactDOMClient.Root;
+  public pivotElement: React.ReactElement | undefined;
 
   /**
    * @param {DataServiceI} dataService - data service instance
@@ -291,23 +292,12 @@ export class PivotBuilder {
       this.destroyDataServiceListeners(dataService);
     }
 
-    // Prevents React warning about unmounting component while rendering
-    setTimeout(() => {
-      if (this.domElem) {
-        // See notes in the render() method
-        try {
-          this.rootDom.unmount();
-        } catch (e) {
-          ReactDOM.unmountComponentAtNode(this.domElem);
-        }
-      }
-    });
-
     if (this.currentRowsTreeService) {
       this.currentRowsTreeService.destroy();
       this.currentRowsTreeService = undefined;
     }
     this.pivot = undefined;
+    this.pivotElement = undefined;
   }
 
   on(eventName: string, callback: (...args: Array<any>) => void) {
@@ -327,12 +317,14 @@ export class PivotBuilder {
   /**
    * Render Pivot component into DOM element
    *
-   * @param {Element} domElem - DOM element to render
    * @param {object} newProps - Pivot 2 props
    * @returns {void}
    */
-  render(domElem: Element, newProps: Record<string, any>) {
-    this.domElem = domElem;
+  render(newProps: Record<string, any>) {
+    if (this.pivotElement) {
+      return this.updateProps(newProps);
+    }
+
     const nextProps = {
       ...this.props,
       ...newProps,
@@ -340,23 +332,8 @@ export class PivotBuilder {
       ref: (ref: Pivot) => (this.pivot = ref),
     };
 
-    const reactElement = React.createElement(Pivot, this.withHandlers(nextProps), null);
-
-    // ReactDOM.render is no longer supported in React 18. Use ReactDOMClient.createRoot instead
-    // See https://react.dev/blog/2022/03/08/react-18-upgrade-guide#updates-to-client-rendering-apis
-
-    // However, Preact somehow doesn't support createRoot yet
-    // See https://stackoverflow.com/questions/76202653/issue-using-preact-with-react-18-based-component
-
-    // As a workaround for Vue and Angular, fall back to ReactDOM.render when ReactDOMClient.createRoot fails.
-    try {
-      if (!this.rootDom) {
-        this.rootDom = ReactDOMClient.createRoot(this.domElem);
-      }
-      this.rootDom.render(reactElement);
-    } catch (e) {
-      ReactDOM.render(reactElement, this.domElem);
-    }
+    this.pivotElement = React.createElement(Pivot, this.withHandlers(nextProps), null);
+    this.events.emit(EVENT_PIVOT_ELEMENT_CHANGE, this.pivotElement);
 
     this.props = nextProps;
   }
@@ -448,8 +425,8 @@ export class PivotBuilder {
    * @param {object} newProps - component changed properties
    * @returns {void}
    */
-  updateProps(newProps: Record<string, any>) {
-    if (!this.domElem) {
+  private updateProps(newProps: Record<string, any>) {
+    if (!this.pivotElement) {
       return;
     }
     const nextProps = {
@@ -469,15 +446,8 @@ export class PivotBuilder {
       this.loadInitData(undefined, nextProps as Props);
     }
 
-    const reactElement = React.createElement(Pivot, this.withHandlers(nextProps), null);
-
-    // See notes in the render() method
-    try {
-      this.rootDom.render(reactElement);
-    } catch (e) {
-      ReactDOM.render(reactElement, this.domElem);
-    }
-
+    this.pivotElement = React.createElement(Pivot, this.withHandlers(nextProps), null);
+    this.events.emit(EVENT_PIVOT_ELEMENT_CHANGE, this.pivotElement);
     this.props = nextProps;
   }
 

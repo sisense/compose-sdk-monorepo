@@ -3,6 +3,7 @@ import { Themable } from '@/theme-provider/types';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FC, PropsWithChildren } from 'react';
+import Markdown from 'markdown-to-jsx';
 
 type Alignable = {
   align: 'left' | 'right' | 'full';
@@ -59,10 +60,11 @@ export const MessageContainer = styled.div<Themable & Alignable>`
 
 const TextMessage: FC<PropsWithChildren<Alignable>> = ({ align, children }) => {
   const { themeSettings } = useThemeContext();
+
   return (
     <FlexContainer theme={themeSettings} align={align}>
       <MessageContainer theme={themeSettings} align={align}>
-        {children}
+        {typeof children === 'string' ? <Markdown>{children}</Markdown> : children}
       </MessageContainer>
     </FlexContainer>
   );

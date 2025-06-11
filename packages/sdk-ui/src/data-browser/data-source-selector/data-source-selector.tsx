@@ -10,7 +10,7 @@ import {
   DataSourceObject,
   getDataSourceTitle,
 } from '@/utils/data-sources-utils';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import Button from '@mui/material/Button';
 import { Popover } from '@/common/components/popover';
 import List from '@mui/material/List';
@@ -150,7 +150,7 @@ type Selectable = {
   isSelected?: boolean;
 };
 
-const DataSourcesListItem = styled(ListItem)<Themable>`
+const DataSourcesListItem = styled(ListItemButton)<Themable>`
   padding: 2px 4px;
   gap: 4px;
   width: 100%;

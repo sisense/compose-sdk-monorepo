@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.2.0",
+  "version": "2.3.0",
   "type": "module",
   "exports": {
     ".": {
@@ -41,7 +41,8 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
     "@sisense/sdk-ui": "workspace:*",
-    "preact": "^10.13.2"
+    "preact": "^10.26.8",
+    "preact-render-to-string": "^6.5.11"
   },
   "scripts": {
     "dev": "vite dev",

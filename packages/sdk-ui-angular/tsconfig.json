@@ -19,7 +19,7 @@
     "target": "ES2022",
     "module": "es2015",
     "useDefineForClassFields": false,
-    "lib": ["dom", "es2015"],
+    "lib": ["dom", "es2018"],
     "paths": {
       "@sisense/sdk-ui-angular": ["src/public-api.ts"]
     }

@@ -1,17 +1,9 @@
-import { GetDashboardModelParams, useGetDashboardModel } from '@/models';
-import { Dispatch, useCallback, useEffect, useMemo, useReducer } from 'react';
-import { RestApiNotReadyError, useRestApi } from '@/api/rest-api';
-import {
-  dashboardReducer,
-  UseDashboardModelAction,
-  UseDashboardModelInternalAction,
-  UseDashboardModelActionTypeInternal,
-} from './use-dashboard-model-reducer';
+import { GetDashboardModelParams, useGetDashboardModelInternal } from '../use-get-dashboard-model';
 import { withTracking } from '@/decorators/hook-decorators';
-import { checkPersistenceSupport } from '@/models/dashboard/use-dashboard-model/use-dasboard-model-utils';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-
-import { persistDashboardModelMiddleware } from './use-dashboard-model-reducer';
+import {
+  useDashboardPersistence,
+  UseDashboardPersistenceResult,
+} from './use-dashboard-persistence';
 
 export interface UseDashboardModelParams extends GetDashboardModelParams {
   /**
@@ -21,6 +13,21 @@ export interface UseDashboardModelParams extends GetDashboardModelParams {
    * @internal
    */
   persist?: boolean;
+}
+
+export interface UseDashboardModelResult extends UseDashboardPersistenceResult {
+  /**
+   * Whether the dashboard model is loading
+   */
+  isLoading: boolean;
+  /**
+   * Whether the dashboard model load has failed
+   */
+  isError: boolean;
+  /**
+   * The error if any occurred during loading
+   */
+  error: Error | undefined;
 }
 
 /**
@@ -45,56 +52,30 @@ export function useDashboardModelInternal({
   includeWidgets,
   includeFilters,
   persist = true,
-}: UseDashboardModelParams) {
-  const { restApi: api, isReady: apiIsReady } = useRestApi();
-  const { app } = useSisenseContext();
-
-  const isPersistenceSupported = useMemo(
-    () => !!app?.httpClient.auth && checkPersistenceSupport(app.httpClient.auth.type, persist),
-    [app?.httpClient.auth, persist],
-  );
-  const shouldEnablePersist = persist && isPersistenceSupported;
-
-  const [dashboard, dispatch] = useReducer(dashboardReducer, null);
-
-  const persistantDispatch = useCallback(
-    async (action: UseDashboardModelInternalAction) => {
-      if (!apiIsReady || !api) {
-        throw new RestApiNotReadyError();
-      }
-      if (shouldEnablePersist) {
-        action = await persistDashboardModelMiddleware(dashboard?.oid, action, api);
-      }
-      return dispatch(action);
-    },
-    [shouldEnablePersist, dashboard?.oid, api, apiIsReady, dispatch],
-  );
-
+}: UseDashboardModelParams): UseDashboardModelResult {
+  // Pure data fetching
   const {
     dashboard: fetchedDashboard,
     isLoading,
     isError,
     error,
-  } = useGetDashboardModel({
+  } = useGetDashboardModelInternal({
     dashboardOid,
     includeWidgets,
     includeFilters,
   });
 
-  useEffect(() => {
-    if (fetchedDashboard) {
-      dispatch({
-        type: UseDashboardModelActionTypeInternal.DASHBOARD_INIT,
-        payload: fetchedDashboard,
-      });
-    }
-  }, [fetchedDashboard, dispatch]);
+  // Persistence layer
+  const { dashboard, dispatchChanges } = useDashboardPersistence({
+    dashboard: fetchedDashboard ?? null,
+    persist,
+  });
 
   return {
     dashboard,
     isLoading,
     isError,
     error,
-    dispatchChanges: persistantDispatch as Dispatch<UseDashboardModelAction>,
+    dispatchChanges,
   };
 }

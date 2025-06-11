@@ -6,7 +6,7 @@
     "url": "https://github.com/sisense/compose-sdk-monorepo",
     "directory": "packages/sdk-shared-ui"
   },
-  "version": "2.2.0",
+  "version": "2.3.0",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
@@ -172,8 +172,12 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint src/ --quiet",
     "lint:fix": "run lint --fix",
-    "build": "run type-check && vite build --mode development",
-    "build:prod": "run type-check && vite build",
+    "build": "run type-check && vite build --mode development && run build:umd && run build:lightweight",
+    "build:prod": "run type-check && vite build && run build:umd:prod && run build:lightweight:prod",
+    "build:lightweight": "BUILD_VARIANT=lightweight vite build --mode development",
+    "build:lightweight:prod": "BUILD_VARIANT=lightweight vite build",
+    "build:umd": "tsx ./scripts/vite/vite.umd.build.ts --mode development",
+    "build:umd:prod": "tsx ./scripts/vite/vite.umd.build.ts --mode production",
     "clean": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -190,19 +194,20 @@
     "@storybook/react-vite": "^8.4.7",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
-    "@types/react": "^18.3.1",
+    "@types/react": "18.3.1",
     "@types/react-custom-scrollbars": "^4.0.13",
-    "@types/react-dom": "^18.3.1",
+    "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "@vitest/coverage-v8": "^2.1.9",
     "classnames": "^2.3.1",
     "eslint": "^8.40.0",
     "prettier": "3.3.3",
-    "react": "~18.3.1",
-    "react-dom": "~18.3.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "rollup-plugin-copy": "^3.5.0",
     "sass": "^1.83.0",
     "storybook": "^8.4.7",
+    "tsx": "^4.19.4",
     "typescript": "4.8.4",
     "vite": "^5.4.11",
     "vite-plugin-css-injected-by-js": "^3.5.1",
@@ -211,17 +216,32 @@
   },
   "peerDependencies": {
     "classnames": "^2.3.1",
-    "react": "^17.0.0 || ^18.3.1",
-    "react-dom": "^17.0.0 || ^18.3.1"
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "dependenciesMeta": {
+    "@emotion/cache": {
+      "unplugged": false
+    },
+    "@emotion/react": {
+      "unplugged": false
+    },
+    "@mui/material": {
+      "unplugged": false
+    },
+    "@mui/utils": {
+      "unplugged": false
+    }
   },
   "dependencies": {
-    "@emotion/cache": "^11.11.4",
-    "@emotion/react": "^11.11.4",
-    "@mui/material": "^6.2.1",
-    "@mui/utils": "^6.4.1",
+    "@emotion/cache": "11.11.0",
+    "@emotion/react": "11.11.4",
+    "@emotion/styled": "11.11.0",
+    "@mui/material": "^6.4.11",
+    "@mui/utils": "^6.4.9",
+    "@rc-component/tooltip": "^1.2.0",
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
-    "rc-tooltip": "^6.3.2",
     "react-custom-scrollbars": "^4.2.1",
     "react-use": "^17.6.0"
   }

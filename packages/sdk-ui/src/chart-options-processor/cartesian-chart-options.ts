@@ -21,6 +21,7 @@ import {
   StackableChartDesignOptions,
   PolarType,
   CartesianChartDesignOptions,
+  LineChartDesignOptions,
 } from './translations/design-options';
 import {
   determineHighchartsChartType,
@@ -441,6 +442,10 @@ export const getCartesianChartOptions = (
           // if it missing then classic would not correct render if previously it was stacked
           stacking: stacking || undefined,
           connectNulls: false,
+          ...(chartType === 'line' &&
+            (chartDesignOptions as LineChartDesignOptions).step && {
+              step: (chartDesignOptions as LineChartDesignOptions).step,
+            }),
         },
       },
       tooltip: getTooltipSettings(undefined, dataOptions, translate),

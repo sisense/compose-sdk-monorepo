@@ -1,10 +1,9 @@
 import { Dashboard, DashboardChangeAction } from './dashboard';
 import { DashboardByIdProps, DashboardConfig } from './types';
 import { LoadingOverlay } from '@/common/components/loading-overlay';
-import { useThemeContext } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
-import { useDashboardModel } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
+import { useDashboardModelInternal } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
 import { useCallback, useMemo } from 'react';
 import { dashboardChangeActionToUseDashboardModelAction } from '@/models/dashboard/use-dashboard-model/use-dasboard-model-utils';
 import { TranslatableError } from '@/translation/translatable-error';
@@ -42,10 +41,9 @@ import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from './constants';
 export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',
 })(({ dashboardOid, config: propConfig }: DashboardByIdProps) => {
-  const { themeSettings } = useThemeContext();
   const config = useDefaults(propConfig, DEFAULT_DASHBOARD_BY_ID_CONFIG);
 
-  const { dashboard, isLoading, isError, error, dispatchChanges } = useDashboardModel({
+  const { dashboard, isLoading, isError, error, dispatchChanges } = useDashboardModelInternal({
     dashboardOid,
     includeWidgets: true,
     includeFilters: true,
@@ -75,7 +73,7 @@ export const DashboardById = asSisenseComponent({
   );
 
   return (
-    <LoadingOverlay themeSettings={themeSettings} isVisible={isLoading}>
+    <LoadingOverlay isVisible={isLoading}>
       {dashboardProps && (
         <Dashboard {...dashboardProps} onChange={handleChange} config={dashboardConfig} />
       )}

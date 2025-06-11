@@ -2,7 +2,9 @@
 import React from 'react';
 
 import styled from '@emotion/styled';
-import { TabberWidgetExtraProps, TabberWidgetProps } from '@/props';
+import { TabberWidgetProps } from '@/props';
+import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
+import { TranslatableError } from '@/translation/translatable-error';
 
 const defaultStyleOptions = {
   showTitle: false,
@@ -153,15 +155,10 @@ const Description = styled.span<{ descriptionColor: string }>`
  * @group TabberWidget
  * @internal
  */
-export const TabberWidget = ({
-  styleOptions = defaultStyleOptions,
-  description = '',
-  ...props
-}: TabberWidgetProps) => {
-  const { tabs } = styleOptions;
-  const { selectedTab, onTabSelected } = props as TabberWidgetExtraProps;
-  const finalStyle = { ...defaultStyleOptions, ...styleOptions };
-
+export const TabberWidget = withErrorBoundary({
+  componentName: 'TabberWidget',
+})((props: TabberWidgetProps) => {
+  const { styleOptions, description = '', selectedTab, onTabSelected } = props;
   const {
     showSeparators,
     showDescription,
@@ -176,7 +173,12 @@ export const TabberWidget = ({
     tabsInterval,
     tabsAlignment,
     tabCornerRadius,
-  } = finalStyle;
+    tabs,
+  } = { ...defaultStyleOptions, ...styleOptions };
+
+  if (!tabs.length) {
+    throw new TranslatableError('errors.tabberInvalidConfiguration');
+  }
 
   return (
     <ContentWrapper>
@@ -207,4 +209,4 @@ export const TabberWidget = ({
       </List>
     </ContentWrapper>
   );
-};
+});

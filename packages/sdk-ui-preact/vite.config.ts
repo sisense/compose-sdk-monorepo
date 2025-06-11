@@ -28,6 +28,8 @@ export default defineConfig(({ mode }) => ({
       react: 'preact/compat',
       'react-dom/test-utils': 'preact/test-utils',
       'react-dom': 'preact/compat',
+      'react-dom/client': 'preact/compat',
+      'react-dom/server': 'preact/compat',
       'react/jsx-runtime': 'preact/jsx-runtime',
     },
   },

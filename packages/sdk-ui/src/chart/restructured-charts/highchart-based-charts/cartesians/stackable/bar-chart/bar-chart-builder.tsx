@@ -1,19 +1,24 @@
-import { isSisenseChartProps, SisenseChart } from '@/sisense-chart';
-import { ChartBuilder } from '../types.js';
 import {
   translateCartesianChartDataOptions,
   getCartesianAttributes,
   getCartesianMeasures,
   isCartesianChartDataOptions,
   isCartesianChartDataOptionsInternal,
-} from '../helpers/cartesians/data-options.js';
-import { getCartesianChartData } from '../helpers/cartesians/data.js';
+} from '../../helpers/data-options.js';
+import { getCartesianChartData } from '../../helpers/data.js';
 import {
   translateStackableStyleOptionsToDesignOptions,
   isStackableStyleOptions,
-} from '../helpers/cartesians/stackable/design-options.js';
-import { loadDataBySingleQuery } from '../helpers/data-loading.js';
+} from '../helpers/design-options.js';
+import { loadDataBySingleQuery } from '../../../../helpers/data-loading.js';
 import curry from 'lodash-es/curry.js';
+import {
+  createHighchartsBasedChartRenderer,
+  isHighchartsBasedChartRendererProps,
+} from '../../../highcharts-based-chart-renderer/highcharts-based-chart-renderer';
+import { getCommonCartesianAlerts } from '../../helpers/alerts.js';
+import { barHighchartsOptionsBuilder } from './highcharts-options-builder.js';
+import { ChartBuilder } from '@/chart/restructured-charts/types.js';
 
 export const barChartBuilder: ChartBuilder<'bar'> = {
   dataOptions: {
@@ -31,7 +36,10 @@ export const barChartBuilder: ChartBuilder<'bar'> = {
     isCorrectStyleOptions: isStackableStyleOptions,
   },
   renderer: {
-    ChartRendererComponent: SisenseChart,
-    isCorrectRendererProps: isSisenseChartProps,
+    ChartRendererComponent: createHighchartsBasedChartRenderer({
+      highchartsOptionsBuilder: barHighchartsOptionsBuilder,
+      getAlerts: getCommonCartesianAlerts,
+    }),
+    isCorrectRendererProps: isHighchartsBasedChartRendererProps,
   },
 };

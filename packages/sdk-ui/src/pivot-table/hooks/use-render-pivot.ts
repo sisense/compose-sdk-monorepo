@@ -1,5 +1,9 @@
-import { useCallback, useMemo, useEffect } from 'react';
-import type { PivotBuilder, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import { useCallback, useMemo, useEffect, useState } from 'react';
+import {
+  EVENT_PIVOT_ELEMENT_CHANGE,
+  type PivotBuilder,
+  type PivotTreeNode,
+} from '@sisense/sdk-pivot-client';
 import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
 import type { PivotTableDataOptions, StyledColumn } from '@/chart-data-options/types';
 import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
@@ -9,8 +13,6 @@ import { useSyncedState } from '@/common/hooks/use-synced-state';
 const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
 
 type PivotRenderOptions = {
-  /** Reference to the pivot table container. */
-  nodeRef: React.RefObject<HTMLDivElement>;
   /** The pivot builder instance. */
   pivotBuilder: PivotBuilder;
   /** The pivot table data options. */
@@ -29,14 +31,16 @@ type PivotRenderOptions = {
  * A hook that renders the pivot table.
  */
 export function useRenderPivot({
-  nodeRef,
   pivotBuilder,
   dataOptions,
   styleOptions,
   themeSettings,
   size,
   onTotalHeightChange,
-}: PivotRenderOptions): void {
+}: PivotRenderOptions): {
+  pivotElement: JSX.Element | null;
+} {
+  const [pivotElement, setPivotElement] = useState<React.ReactElement | null>(null);
   const [rowsPerPage, setRowsPerPage] = useSyncedState<number>(
     styleOptions?.rowsPerPage || DEFAULT_TABLE_ROWS_PER_PAGE,
   );
@@ -113,13 +117,19 @@ export function useRenderPivot({
   ]);
 
   useEffect(() => {
-    if (nodeRef.current && props) {
-      const isPivotRendered = !!nodeRef.current.children.length;
-      if (!isPivotRendered) {
-        pivotBuilder.render(nodeRef.current, props);
-      } else {
-        pivotBuilder.updateProps(props);
-      }
+    pivotBuilder.on(EVENT_PIVOT_ELEMENT_CHANGE, setPivotElement);
+    return () => {
+      pivotBuilder.off(EVENT_PIVOT_ELEMENT_CHANGE, setPivotElement);
+    };
+  }, [pivotBuilder]);
+
+  useEffect(() => {
+    if (props) {
+      pivotBuilder.render(props);
     }
-  }, [nodeRef, pivotBuilder, props]);
+  }, [pivotBuilder, props]);
+
+  return {
+    pivotElement,
+  };
 }

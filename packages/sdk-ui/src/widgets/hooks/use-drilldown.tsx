@@ -20,7 +20,7 @@ import {
   useDrilldownCore,
 } from '../common/use-drilldown-core.js';
 import { SELECTION_TITLE_MAXIMUM_ITEMS } from '@/common-filters/selection-utils.js';
-import { MenuIds } from '@/common/components/menu/menu-ids.js';
+import { MenuIds, MenuSectionIds } from '@/common/components/menu/menu-ids.js';
 import { isSameAttribute } from '@/utils/filters.js';
 
 import '../common/drilldown.scss';
@@ -75,7 +75,7 @@ export const useDrilldown = ({
         ),
       ];
 
-      openMenu({ position, itemSections: menuItems });
+      openMenu({ id: MenuIds.WIDGET_POINTS_DRILLDOWN, position, itemSections: menuItems });
     },
     [drilldownDimension, availableDrilldownPaths, translate, selectDrilldown, openMenu],
   );
@@ -117,13 +117,13 @@ export function getSelectionTitleMenuItem(
 
   if (selectionNames.length > SELECTION_TITLE_MAXIMUM_ITEMS) {
     return {
-      id: MenuIds.DRILLDOWN_CHART_POINTS_SELECTION,
+      id: MenuSectionIds.DRILLDOWN_CHART_POINTS_SELECTION,
       sectionTitle: drilldownDimension.name,
     };
   }
 
   return {
-    id: MenuIds.DRILLDOWN_CHART_POINTS_SELECTION,
+    id: MenuSectionIds.DRILLDOWN_CHART_POINTS_SELECTION,
     sectionTitle: selectionNames.join(', '),
   };
 }
@@ -170,7 +170,7 @@ export function getDrilldownMenuItems(
   });
 
   return {
-    id: MenuIds.DRILLDOWN_DRILL_DIRECTIONS,
+    id: MenuSectionIds.DRILLDOWN_DRILL_DIRECTIONS,
     sectionTitle: translate('drilldown.drillMenuItem'),
     items: [...drilldownHierarchiesMenuItems, ...drilldownDimensionsMenuItems],
   };

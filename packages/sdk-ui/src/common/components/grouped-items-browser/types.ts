@@ -4,6 +4,7 @@ export type GroupedItemsBrowserProps = {
   itemActionConfig?: ItemActionConfig;
   itemSecondaryActionConfig?: ItemSecondaryActionConfig;
   onScrolledToBottom?: () => void;
+  collapseAll?: boolean;
 };
 
 /**
@@ -14,6 +15,7 @@ export type ItemsGroup = {
   id: string;
   items: Item[];
   Icon?: React.ComponentType;
+  description?: string;
 };
 
 /**
@@ -25,6 +27,7 @@ export type Item = {
   Icon?: React.ComponentType;
   isDisabled?: boolean;
   hoverTooltip?: string;
+  description?: string;
 };
 
 export type GroupSecondaryActionConfig = {

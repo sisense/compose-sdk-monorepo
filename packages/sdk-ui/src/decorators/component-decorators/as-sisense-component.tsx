@@ -5,6 +5,7 @@ import { withErrorBoundary } from './with-error-boundary';
 import { withSisenseContextValidation } from './with-sisense-context-validation';
 import { withDefaultTranslations } from './with-default-translations';
 import { withMenu } from './with-menu';
+import { withModal } from './with-modal';
 
 /**
  * Configuration for the {@link asSisenseComponent} decorator
@@ -24,6 +25,8 @@ export type SisenseComponentConfig = {
   customContextErrorMessageKey?: string;
   /** If set, the component will have a standalone menu root, allowing the menu to be opened even when the component is used outside of the SisenseContextProvider */
   shouldHaveOwnMenuRoot?: boolean;
+  /** If set, the component will have a standalone modal root, allowing modals to be opened even when the component is used outside of a ModalProvider */
+  shouldHaveOwnModalRoot?: boolean;
 };
 
 export type ComponentDecorator<DecoratorConfig> = (
@@ -56,6 +59,7 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
     trackingConfig = {},
     customContextErrorMessageKey,
     shouldHaveOwnMenuRoot,
+    shouldHaveOwnModalRoot,
   } = componentConfig;
   return (Component) =>
     flow(
@@ -68,5 +72,6 @@ export const asSisenseComponent: ComponentDecorator<SisenseComponentConfig> = (c
       withErrorBoundary({ componentName }),
       withDefaultTranslations(),
       withMenu({ shouldHaveOwnMenuRoot }),
+      withModal({ shouldHaveOwnModalRoot }),
     )(Component);
 };

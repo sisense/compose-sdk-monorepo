@@ -573,7 +573,7 @@ export function createDimension(json: any): Dimension {
   // attributes
   const atts: DimensionalAttribute[] = Object.getOwnPropertyNames(json)
     .map((p) => json[p])
-    .filter((v) => MetadataTypes.isAttribute(v.type));
+    .filter((v) => MetadataTypes.isAttribute(v?.type));
   if (atts.length == 0) {
     if (json.attributes) {
       let att;
@@ -602,7 +602,7 @@ export function createDimension(json: any): Dimension {
   // nested dimensions
   const dims: Dimension[] = Object.getOwnPropertyNames(json)
     .map((p) => json[p])
-    .filter((v) => MetadataTypes.isDimension(v.type));
+    .filter((v) => MetadataTypes.isDimension(v?.type));
   if (dims.length == 0 && json.dimensions) {
     for (let i = 0; i < json.dimensions.length; i++) {
       dims.push(createDimension(json.dimensions[i]));

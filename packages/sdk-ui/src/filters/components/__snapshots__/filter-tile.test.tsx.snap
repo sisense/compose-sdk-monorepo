@@ -14,7 +14,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -55,27 +55,24 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
         >
           <span
-            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
               checked=""
-              class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
               role="switch"
               type="checkbox"
             />
             <span
-              class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
             />
           </span>
           <span
-            class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
           />
         </span>
       </footer>
@@ -98,7 +95,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -139,27 +136,24 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
         >
           <span
-            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
               checked=""
-              class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
               role="switch"
               type="checkbox"
             />
             <span
-              class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
             />
           </span>
           <span
-            class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
           />
         </span>
       </footer>
@@ -182,7 +176,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -223,27 +217,24 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
         >
           <span
-            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
               checked=""
-              class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
               role="switch"
               type="checkbox"
             />
             <span
-              class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
             />
           </span>
           <span
-            class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
           />
         </span>
       </footer>
@@ -285,27 +276,24 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
         >
           <span
-            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
               checked=""
-              class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
               role="switch"
               type="checkbox"
             />
             <span
-              class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
             />
           </span>
           <span
-            class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
           />
         </span>
       </footer>
@@ -347,27 +335,24 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
         >
           <span
-            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
               checked=""
-              class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
               role="switch"
               type="checkbox"
             />
             <span
-              class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
             />
           </span>
           <span
-            class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
           />
         </span>
       </footer>
@@ -390,7 +375,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1lzjc8n-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -431,27 +416,24 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-1diaq70-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
         >
           <span
-            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
               checked=""
-              class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
               role="switch"
               type="checkbox"
             />
             <span
-              class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
             />
           </span>
           <span
-            class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
           />
         </span>
       </footer>

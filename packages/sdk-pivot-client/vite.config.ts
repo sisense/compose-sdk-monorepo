@@ -46,11 +46,12 @@ export default defineConfig(({ mode }) => ({
         preset: 'smallest',
       },
       external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        '@emotion/react',
-        '@emotion/styled',
+        // React + all submodules
+        /^react(?:\/[\w-]+)*$/,
+        // React DOM + all submodules
+        /^react-dom(?:\/[\w-]+)*$/,
+        // All Emotion packages
+        /^@emotion(?:\/[\w-]+)*$/,
         // TODO: uncomment to externalize all MUI packages after spliting
         // to client and server packages
         //
@@ -83,6 +84,18 @@ export default defineConfig(({ mode }) => ({
       // needed for socket.io-client 2.5.0
       strictRequires: true,
     },
+  },
+  resolve: {
+    alias: [
+      {
+        find: /^@sisense\/sdk-shared-ui\/(.+)$/,
+        replacement: resolve(__dirname, '../sdk-shared-ui/dist/lightweight/lib/$1/$1.js'),
+      },
+      {
+        find: '@sisense/sdk-shared-ui',
+        replacement: resolve(__dirname, '../sdk-shared-ui/dist/lightweight/index.js'),
+      },
+    ],
   },
 }));
 

@@ -1,7 +1,7 @@
 /* eslint-disable vitest/no-commented-out-tests */
 import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { useCombinedMenu, IsTargetMenuFn, CombineMenusFn } from './use-combined-menu';
+import { useCombinedMenu, CombineMenusFn } from './use-combined-menu';
 import { useMenu } from './use-menu';
 
 // Mock the useMenu hook so we can spy on its return value
@@ -21,10 +21,9 @@ describe('useCombinedMenu', () => {
   });
 
   it('should open the menu with currentMenuOptions when openMenu is called', () => {
-    const isTargetMenu: IsTargetMenuFn = () => false;
-    const combineMenus: CombineMenusFn = (current) => current;
+    const combineMenus: CombineMenusFn = (menusOptions) => menusOptions[0];
 
-    const { result } = renderHook(() => useCombinedMenu({ isTargetMenu, combineMenus }));
+    const { result } = renderHook(() => useCombinedMenu({ combineMenus }));
 
     result.current.openMenu({
       position: {

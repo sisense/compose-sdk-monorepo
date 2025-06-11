@@ -23,7 +23,7 @@ export const SortingSettingsIcon = (props: Props) => {
       placement="bottom"
       onVisibleChange={(visible?: boolean) => {}}
       trigger={['click']}
-      overlay={() => sortingPopup as React.ReactElement}
+      overlay={() => sortingPopup}
       onRequestClose={onRequestClose}
       getTooltipContainer={getTooltipContainer}
       visible={sortingPopup !== null}

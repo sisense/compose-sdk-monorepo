@@ -1,5 +1,6 @@
 import { CommonFiltersOptions } from '@/common-filters/types';
 import { ColorPaletteTheme, TabberConfig } from '@/types';
+import { JTDConfig } from '@/widget-by-id/types';
 
 export type {
   CommonFiltersOptions,
@@ -58,7 +59,17 @@ export type WidgetId = string;
  *
  * For example, how common filters defined at the dashboard level should be applied to widgets.
  */
-export type WidgetsOptions = Record<WidgetId, { filtersOptions?: CommonFiltersOptions }>;
+export type WidgetsOptions = Record<
+  WidgetId,
+  {
+    filtersOptions?: CommonFiltersOptions;
+    /**
+     * Jump to dashboard config for widgets
+      @internal
+     */
+    jtdConfig?: JTDConfig;
+  }
+>;
 /**
  * Options for TabberWidets in a dashboard
  *

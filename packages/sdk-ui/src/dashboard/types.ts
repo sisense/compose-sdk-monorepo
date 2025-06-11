@@ -107,9 +107,16 @@ export interface DashboardConfig {
      */
     responsive?: boolean;
     /**
-     * If true will .
+     * If true, an 'Edit Layout' action is visible to users on the dashboard toolbar.
+     * Clicking 'Edit Layout' opens the dashboard in editing mode, where the user can resize or reposition widgets using drag and drop.
+     * Layout changes are temporarily stored during editing, with undo/redo buttons available on the toolbar.
+     * Finally, changes are confirmed or discarded with 'Apply' or 'Cancel' buttons.
      *
-     * @internal
+     * If persistence is enabled for the dashboard, changes to the layout will be saved to Fusion on clicking the 'Apply' button.
+     *
+     * This feature is in alpha.
+     *
+     * @alpha
      */
     editMode?: boolean;
   };

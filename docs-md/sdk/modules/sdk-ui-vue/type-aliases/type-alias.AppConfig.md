@@ -60,6 +60,29 @@ Configuration of the component that is rendered in case of an error
 
 ***
 
+### `jumpToDashboardConfig`
+
+**jumpToDashboardConfig**?: `object`
+
+Configuration of the jump to dashboard feature
+Only the widgets with pre-configured JTD config will support this feature.
+You can configure the JTD config in the widget settings in Fusion UI having jump to dashboard plugin enabled.
+
+This feature is currently in alpha.
+To learn more about the jump to dashboard feature, see the [Jump to Dashboard documentation](https://docs.sisense.com/main/SisenseLinux/jump-to-dashboard.htm?tocpath=Add-ons%7C_____2#ConfiguringJTDPerWidget).
+
+> #### `jumpToDashboardConfig.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Whether to enable or disable the jump to dashboard feature
+>
+> If not specified, the default value is `false`
+>
+>
+
+***
+
 ### `loadingIndicatorConfig`
 
 **loadingIndicatorConfig**?: [`LoadingIndicatorConfig`](../../sdk-ui/type-aliases/type-alias.LoadingIndicatorConfig.md)

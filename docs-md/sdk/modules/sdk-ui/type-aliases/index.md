@@ -113,6 +113,7 @@ TypeScript type aliases for components and hooks listed above
 - [PivotRowsSort](type-alias.PivotRowsSort.md)
 - [PivotTableWidgetStyleOptions](type-alias.PivotTableWidgetStyleOptions.md)
 - [PluginComponent](type-alias.PluginComponent.md) <Badge type="alpha" text="Alpha" />
+- [PluginWidgetStyleOptions](type-alias.PluginWidgetStyleOptions.md)
 - [PolarSubtype](type-alias.PolarSubtype.md)
 - [QueryByWidgetIdQueryParams](type-alias.QueryByWidgetIdQueryParams.md)
 - [QueryByWidgetIdState](type-alias.QueryByWidgetIdState.md)

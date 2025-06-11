@@ -62,6 +62,7 @@ export const translation = {
     secondsDateTimeLevelSupportedOnlyForLive:
       "Seconds datetime level is supported only for the 'live' datasource",
     missingMenuRoot: 'Missing initialized menu root',
+    missingModalRoot: 'Missing initialized modal root',
     missingDataSource:
       "The 'dataSource' value is missing. It must be provided explicitly, or a 'defaultDataSource' should be specified in the Sisense context provider.",
     incorrectOnDataReadyHandler: "'onDataReady' handler must return a valid data object",
@@ -85,9 +86,12 @@ export const translation = {
     cascadingFilterOriginalNotFound:
       'Error in cascading filters reassembling. Original cascading filter not found',
     dashboardLoadFailed: 'Failed to load Dashboard. {{error}}',
+    widgetLoadFailed: 'Failed to load Widget. {{error}}',
     dashboardWithOidNotFound: 'Dashboard with oid {{dashboardOid}} not found',
     failedToAddWidget: 'Failed to add widget to dashboard',
     widgetWithOidNotFound: 'Widget with oid {{widgetOid}} not found',
+    widgetWithOidNotFoundInDashboard:
+      'Widget with oid {{widgetOid}} not found in dashboard with oid {{dashboardOid}}',
     widgetEmptyResponse: 'Empty response for widget with oid {{widgetOid}}',
     dateFilterIncorrectOperator: 'Incorrect operator: {{operator}}',
     synchronizedFilterInvalidProps:
@@ -107,6 +111,7 @@ export const translation = {
       noDataSources:
         'No data sources available. Try to define `dataSource` in widgets or `defaultDataSource` on the dashboard level.',
     },
+    tabberInvalidConfiguration: 'Tabber widget configuration is invalid',
   },
   errorBoxText: '$t(common:error): {{errorMessage}}',
   chartNoData: 'No Results',
@@ -391,6 +396,9 @@ export const translation = {
       apply: 'Apply',
       editLayout: 'Edit Layout',
     },
+  },
+  jumpToDashboard: {
+    defaultCaption: 'Jump to',
   },
 };
 
