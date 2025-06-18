@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.1] - 2025-06-17
+
+### Changed
+- Improve SSO authentication to be compatible with SSO Router plugin
+
+
 ## [2.3.0] - 2025-06-11
 
 ### Added
@@ -9,13 +15,11 @@
 - Add `widgetsPanel.editMode` configuration to enable editable dashboard layout (alpha)
 - Add limited `Jump To Dashboard` add-on support (alpha)
 
-
 ### Changed
 - Fix `TabberWidget` error handling for unsupported old add-on versions
 - Refactor `WidgetById` component, apply dashboard-level palette to it
 - Improve AI chat: add Markdown support in messages
 - Enable UMD build output for `@sisense/sdk-ui` package
-
 
 
 ## [2.2.0] - 2025-05-27

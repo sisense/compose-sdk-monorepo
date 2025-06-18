@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
+import { normalizeUrl } from '@sisense/sdk-common';
+
 import { isSsoAuthenticator, SsoAuthenticator } from './sso-authenticator.js';
 
 describe('SSOAuthenticator', () => {
@@ -23,7 +25,7 @@ describe('SSOAuthenticator', () => {
   });
 
   it('should authenticate successfully and return true', async () => {
-    const fakeLoginUrl = 'http://login.url';
+    const fakeLoginUrl = normalizeUrl('http://login.url');
 
     global.window = {
       location: {

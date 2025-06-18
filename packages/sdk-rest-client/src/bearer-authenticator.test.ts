@@ -5,7 +5,7 @@
 import { BearerAuthenticator, isBearerAuthenticator } from './bearer-authenticator.js';
 
 describe('BearerAuthenticator', () => {
-  const fakeDeploymentUrl = '10.0.0.1';
+  const fakeDeploymentUrl = 'https://10.0.0.1';
   const fakeToken = 'token';
 
   let auth: BearerAuthenticator;

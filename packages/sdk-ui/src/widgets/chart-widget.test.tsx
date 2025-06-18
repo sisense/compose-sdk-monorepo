@@ -30,7 +30,7 @@ vi.mock('react-i18next', async (importOriginal) => {
 
 describe('ChartWidget', () => {
   beforeEach(() => {
-    const url = 'mock-url';
+    const url = 'http://mock-url/sometenant?someparam=true';
     const contextMock: SisenseContextPayload = {
       app: {
         httpClient: new HttpClient(url, new SsoAuthenticator(url), 'test'),

@@ -1,3 +1,5 @@
+import { normalizeUrl } from '@sisense/sdk-common';
+
 import { BearerAuthenticator } from './bearer-authenticator.js';
 import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
 import { PasswordAuthenticator } from './password-authenticator.js';
@@ -52,7 +54,7 @@ describe('interceptors', () => {
       status: 401,
     } as Response;
 
-    const fakeLoginUrl = 'http://login.url';
+    const fakeLoginUrl = normalizeUrl('http://login.url');
 
     global.window = {
       location: {

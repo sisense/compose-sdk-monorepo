@@ -55,7 +55,11 @@ type MockedSisenseContextProviderProps = PropsWithChildren<
   DeepPartial<Omit<SisenseContextPayload, 'app'>>
 >;
 
-const mockHttpClient = new HttpClient('mock-url', {} as Authenticator, 'mock-env');
+const mockHttpClient = new HttpClient(
+  'http://mock-url/sometenant?someparam=true',
+  {} as Authenticator,
+  'mock-env',
+);
 export const MockedSisenseContextProvider = ({
   children,
   tracking = {

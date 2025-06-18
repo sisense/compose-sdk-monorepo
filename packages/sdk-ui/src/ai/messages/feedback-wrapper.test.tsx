@@ -23,7 +23,7 @@ const partialFeedbackPayload: Omit<SendFeedbackRequest, 'rating'> = {
 const setupFeedbackWrapper = () => {
   const httpClient = new HttpClient(
     'http://fake-url',
-    new BearerAuthenticator('http://fake-url', 'fake-token'),
+    new BearerAuthenticator('http://fake-url/', 'fake-token'),
     'mock-env',
   );
   const api = new ChatRestApi(httpClient);

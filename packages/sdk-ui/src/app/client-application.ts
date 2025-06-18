@@ -232,9 +232,10 @@ export const createClientApplication = async ({
   }
 
   const url = normalizeUrl(rawUrl);
+  const urlWithSearchParams = normalizeUrl(rawUrl, true);
 
   const auth = getAuthenticator({
-    url,
+    url: urlWithSearchParams,
     token,
     wat,
     ssoEnabled,
